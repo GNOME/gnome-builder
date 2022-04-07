@@ -6,56 +6,56 @@
         <property name="propagate-natural-width">true</property>
         <property name="propagate-natural-height">true</property>
         <property name="hscrollbar-policy">never</property>
-        <property name="visible">true</property>
         <child>
           <object class="GtkViewport">
-            <property name="visible">true</property>
             <child>
               <object class="GtkBox">
-                <property name="margin">32</property>
+                <property name="margin-top">32</property>
+                <property name="margin-bottom">32</property>
+                <property name="margin-start">32</property>
+                <property name="margin-end">32</property>
                 <property name="orientation">vertical</property>
                 <property name="valign">start</property>
                 <property name="vexpand">true</property>
-                <property name="visible">true</property>
                 <child>
                   <object class="IdeThreeGrid" id="grid">
                     <property name="column-spacing">12</property>
                     <!-- can't use row-spacing because we have to animate in
                          the revealer which messes up the margins.  -->
                     <property name="row-spacing">0</property>
-                    <property name="expand">true</property>
-                    <property name="visible">true</property>
+                    <property name="vexpand">true</property>
                     <child>
                       <object class="GtkImage" id="splash">
                         <property name="valign">end</property>
                         <property name="vexpand">true</property>
                         <property name="icon-name">builder-vcs-git-symbolic</property>
                         <property name="pixel-size">128</property>
-                        <property name="visible">true</property>
-                        <property name="margin">24</property>
+                        <property name="margin-top">24</property>
+                        <property name="margin-bottom">24</property>
+                        <property name="margin-start">24</property>
+                        <property name="margin-end">24</property>
                         <style>
                           <class name="dim-label"/>
                         </style>
+                        <layout>
+                          <property name="row">0</property>
+                          <property name="column">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">0</property>
-                        <property name="column">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="repo_label">
                         <property name="label" translatable="yes">Repository URL</property>
                         <property name="valign">center</property>
-                        <property name="visible">true</property>
                         <property name="xalign">1.0</property>
                         <style>
                           <class name="dim-label"/>
                         </style>
+                        <layout>
+                          <property name="row">1</property>
+                          <property name="column">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">1</property>
-                        <property name="column">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="uri_entry_help">
@@ -63,7 +63,6 @@
                         <property name="margin-top">3</property>
                         <property name="width-chars">40</property>
                         <property name="max-width-chars">60</property>
-                        <property name="visible">true</property>
                         <property name="wrap">true</property>
                         <property name="xalign">0.0</property>
                         <style>
@@ -72,11 +71,11 @@
                         <attributes>
                           <attribute name="scale" value="0.833333"/>
                         </attributes>
+                        <layout>
+                          <property name="row">2</property>
+                          <property name="column">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">2</property>
-                        <property name="column">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkEntry" id="uri_entry">
@@ -84,20 +83,18 @@
                         <property name="width-chars">40</property>
                         <property name="max-width-chars">50</property>
                         <property name="valign">center</property>
-                        <property name="visible">true</property>
-                        <signal name="changed" handler="ide_clone_surface_uri_entry_changed" swapped="true" object="IdeCloneSurface"/>
-                        <signal name="activate" handler="ide_clone_surface_clone" object="IdeCloneSurface" swapped="true"/>
+                        <signal name="changed" handler="gbp_vcsui_clone_widget_uri_entry_changed" swapped="true" object="GbpVcsuiCloneWidget"/>
+                        <signal name="activate" handler="gbp_vcsui_clone_widget_clone" object="GbpVcsuiCloneWidget" swapped="true"/>
+                        <layout>
+                          <property name="row">1</property>
+                          <property name="column">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">1</property>
-                        <property name="column">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkToggleButton" id="more_button">
                         <property name="halign">start</property>
                         <property name="hexpand">false</property>
-                        <property name="visible">true</property>
                         <property name="has-tooltip">true</property>
                         <property name="tooltip-text" translatable="yes">Select branch and other options.</property>
                         <style>
@@ -105,35 +102,31 @@
                         </style>
                         <child>
                           <object class="GtkImage">
-                            <property name="visible">true</property>
                             <property name="icon-name">view-more-symbolic</property>
                             <style>
                               <class name="image-button"/>
                             </style>
                           </object>
                         </child>
+                        <layout>
+                          <property name="row">1</property>
+                          <property name="column">2</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">1</property>
-                        <property name="column">2</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
                 <child>
                   <object class="GtkRevealer" id="more_revealer">
                     <property name="reveal-child" bind-source="more_button" bind-property="active"/>
-                    <property name="visible">true</property>
                     <child>
                       <object class="GtkBox">
                         <property name="margin-top">12</property>
                         <property name="orientation">vertical</property>
-                        <property name="visible">true</property>
                         <child>
                           <object class="IdeThreeGrid">
                             <property name="column-spacing">12</property>
                             <property name="row-spacing">12</property>
-                            <property name="visible">true</property>
                             <child>
                               <object class="GtkLabel" id="kind_label">
                                 <property name="label" translatable="yes">Repository Kind</property>
@@ -143,96 +136,90 @@
                                 <style>
                                   <class name="dim-label"/>
                                 </style>
+                                <layout>
+                                  <property name="row">0</property>
+                                  <property name="column">0</property>
+                                </layout>
                               </object>
-                              <packing>
-                                <property name="row">0</property>
-                                <property name="column">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="IdeRadioBox" id="kind_radio">
                                 <property name="visible">false</property>
                                 <property name="valign">center</property>
+                                <layout>
+                                  <property name="row">0</property>
+                                  <property name="column">1</property>
+                                </layout>
                               </object>
-                              <packing>
-                                <property name="row">0</property>
-                                <property name="column">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="branch_label">
                                 <property name="label" translatable="yes">Branch</property>
-                                <property name="visible">true</property>
                                 <property name="xalign">1.0</property>
                                 <property name="valign">center</property>
                                 <style>
                                   <class name="dim-label"/>
                                 </style>
+                                <layout>
+                                  <property name="row">1</property>
+                                  <property name="column">0</property>
+                                </layout>
                               </object>
-                              <packing>
-                                <property name="row">1</property>
-                                <property name="column">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkEntry" id="branch_entry">
-                                <property name="visible">true</property>
                                 <property name="valign">center</property>
+                                <layout>
+                                  <property name="row">1</property>
+                                  <property name="column">1</property>
+                                </layout>
                               </object>
-                              <packing>
-                                <property name="row">1</property>
-                                <property name="column">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="author_label">
                                 <property name="label" translatable="yes">Author Name</property>
-                                <property name="visible">true</property>
                                 <property name="xalign">1.0</property>
                                 <property name="valign">center</property>
                                 <style>
                                   <class name="dim-label"/>
                                 </style>
+                                <layout>
+                                  <property name="row">2</property>
+                                  <property name="column">0</property>
+                                </layout>
                               </object>
-                              <packing>
-                                <property name="row">2</property>
-                                <property name="column">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkEntry" id="author_entry">
-                                <property name="visible">true</property>
                                 <property name="valign">center</property>
+                                <layout>
+                                  <property name="row">2</property>
+                                  <property name="column">1</property>
+                                </layout>
                               </object>
-                              <packing>
-                                <property name="row">2</property>
-                                <property name="column">1</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkLabel" id="email_label">
                                 <property name="label" translatable="yes">Author Email</property>
-                                <property name="visible">true</property>
                                 <property name="xalign">1.0</property>
                                 <property name="valign">center</property>
                                 <style>
                                   <class name="dim-label"/>
                                 </style>
+                                <layout>
+                                  <property name="row">3</property>
+                                  <property name="column">0</property>
+                                </layout>
                               </object>
-                              <packing>
-                                <property name="row">3</property>
-                                <property name="column">0</property>
-                              </packing>
                             </child>
                             <child>
                               <object class="GtkEntry" id="email_entry">
-                                <property name="visible">true</property>
                                 <property name="valign">center</property>
+                                <layout>
+                                  <property name="row">3</property>
+                                  <property name="column">1</property>
+                                </layout>
                               </object>
-                              <packing>
-                                <property name="row">3</property>
-                                <property name="column">1</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -244,38 +231,34 @@
                   <object class="IdeThreeGrid">
                     <property name="margin-top">12</property>
                     <property name="column-spacing">12</property>
-                    <property name="visible">true</property>
                     <child>
                       <object class="GtkLabel" id="dest_label">
                         <property name="label" translatable="yes">Project Destination</property>
-                        <property name="visible">true</property>
                         <property name="xalign">1.0</property>
                         <property name="valign">center</property>
                         <style>
                           <class name="dim-label"/>
                         </style>
+                        <layout>
+                          <property name="row">0</property>
+                          <property name="column">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">0</property>
-                        <property name="column">0</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="IdeFileChooserEntry" id="destination_chooser">
                         <property name="action">select-folder</property>
                         <property name="create-folders">true</property>
                         <property name="valign">center</property>
-                        <property name="visible">true</property>
-                        <signal name="notify::file" handler="ide_clone_surface_destination_changed" object="IdeCloneSurface" swapped="true"/>
+                        <signal name="notify::file" handler="gbp_vcsui_clone_widget_destination_changed" object="GbpVcsuiCloneWidget" swapped="true"/>
+                        <layout>
+                          <property name="row">0</property>
+                          <property name="column">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">0</property>
-                        <property name="column">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="destination_label">
-                        <property name="visible">true</property>
                         <property name="xalign">0.0</property>
                         <property name="valign">center</property>
                         <property name="margin-top">3</property>
@@ -285,29 +268,26 @@
                         <attributes>
                           <attribute name="scale" value="0.83333"/>
                         </attributes>
+                        <layout>
+                          <property name="row">2</property>
+                          <property name="column">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">2</property>
-                        <property name="column">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkBox">
                         <property name="margin-top">32</property>
-                        <property name="visible">true</property>
                         <property name="orientation">horizontal</property>
                         <child>
                           <object class="GtkStack" id="button_stack">
-                            <property name="visible">true</property>
-                            <property name="homogeneous">true</property>
+                            <property name="hhomogeneous">true</property>
+                            <property name="vhomogeneous">true</property>
                             <property name="halign">end</property>
                             <child>
                               <object class="GtkButton" id="clone_button">
                                 <property name="label" translatable="yes">Clone _Project</property>
                                 <property name="use-underline">True</property>
-                                <property name="visible">true</property>
-                                <property name="can-default">True</property>
-                                <signal name="clicked" handler="ide_clone_surface_clone" object="IdeCloneSurface" swapped="true"/>
+                                <signal name="clicked" handler="gbp_vcsui_clone_widget_clone" object="GbpVcsuiCloneWidget" swapped="true"/>
                                 <style>
                                   <class name="suggested-action"/>
                                 </style>
@@ -317,28 +297,23 @@
                               <object class="GtkButton" id="cancel_button">
                                 <property name="label" translatable="yes">_Cancel</property>
                                 <property name="use-underline">True</property>
-                                <property name="visible">true</property>
                                 <style>
                                   <class name="destructive-action"/>
                                 </style>
                               </object>
                             </child>
                           </object>
-                          <packing>
-                            <property name="pack-type">end</property>
-                          </packing>
                         </child>
+                        <layout>
+                          <property name="row">3</property>
+                          <property name="column">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">3</property>
-                        <property name="column">1</property>
-                      </packing>
                     </child>
                     <child>
                       <object class="GtkLabel" id="status_message">
                         <property name="margin-top">24</property>
                         <property name="valign">center</property>
-                        <property name="visible">true</property>
                         <property name="width-chars">50</property>
                         <property name="max-width-chars">50</property>
                         <property name="wrap">true</property>
@@ -346,11 +321,11 @@
                         <style>
                           <class name="dim-label"/>
                         </style>
+                        <layout>
+                          <property name="row">4</property>
+                          <property name="column">1</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="row">4</property>
-                        <property name="column">1</property>
-                      </packing>
                     </child>
                   </object>
                 </child>
