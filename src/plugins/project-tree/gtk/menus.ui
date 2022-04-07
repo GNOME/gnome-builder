@@ -78,10 +78,9 @@
       </submenu>
     </section>
   </menu>
-  <menu id="ide-editor-page-document-menu">
-    <section id="ide-frame-menu-reveal">
-      <attribute name="after">editor-document-preferences-section</attribute>
-      <attribute name="before">editor-document-save-section</attribute>
+  <menu id="ide-editor-page-menu">
+    <section id="ide-editor-page-reveal-section">
+      <attribute name="before">ide-editor-page-save-section</attribute>
       <item>
         <attribute name="id">project-tree-reveal</attribute>
         <attribute name="label" translatable="yes">Reveal in Project Tree</attribute>
