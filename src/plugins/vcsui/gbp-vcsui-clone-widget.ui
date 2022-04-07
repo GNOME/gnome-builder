@@ -59,7 +59,8 @@
                     </child>
                     <child>
                       <object class="GtkLabel" id="uri_entry_help">
-                        <property name="label" translatable="yes">Enter the repository of the project you would like to clone. The URL should look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”.</property>
+                        <property name="label" translatable="yes">Enter the repository of the project you would like to clone.
+The URL should look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”.</property>
                         <property name="margin-top">3</property>
                         <property name="width-chars">40</property>
                         <property name="max-width-chars">40</property>
