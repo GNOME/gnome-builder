@@ -97,11 +97,10 @@ ide_editor_workspace_context_set (IdeWorkspace *workspace,
     g_object_bind_property (project_info, "name",
                             self->project_title, "title",
                             G_BINDING_SYNC_CREATE);
-  else
-    g_object_bind_property_full (context, "workdir",
-                                 self->project_title, "subtitle",
-                                 G_BINDING_SYNC_CREATE,
-                                 file_to_short_path, NULL, NULL, NULL);
+  g_object_bind_property_full (context, "workdir",
+                               self->project_title, "subtitle",
+                               G_BINDING_SYNC_CREATE,
+                               file_to_short_path, NULL, NULL, NULL);
 }
 
 static void
