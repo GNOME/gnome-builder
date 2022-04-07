@@ -202,13 +202,11 @@ gbp_editorui_workbench_addin_open_cb (GObject      *object,
       location = ide_location_new (state->file,
                                    state->at_line,
                                    state->at_line_offset);
-      ide_editor_focus_location (workspace, NULL, location);
+      ide_editor_focus_location (workspace, state->position, location);
     }
   else
     {
-      IdeFrame *frame = ide_workspace_get_most_recent_frame (workspace);
-
-      ide_editor_focus_buffer (workspace, frame, buffer);
+      ide_editor_focus_buffer (workspace, state->position, buffer);
     }
 
 failure:

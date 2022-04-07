@@ -112,17 +112,14 @@ ide_lsp_search_result_activate (IdeSearchResult *result,
 
   IdeLspSearchResult *self = (IdeLspSearchResult *)result;
   IdeWorkspace *workspace;
-  IdeFrame *frame;
 
   g_assert (IDE_IS_LSP_SEARCH_RESULT (self));
   g_assert (GTK_IS_WIDGET (last_focus));
 
-  if (!last_focus ||
-      !(workspace = ide_widget_get_workspace (last_focus)))
+  if (!last_focus || !(workspace = ide_widget_get_workspace (last_focus)))
     return;
 
-  frame = ide_workspace_get_most_recent_frame (workspace);
-  ide_editor_focus_location (workspace, frame, self->location);
+  ide_editor_focus_location (workspace, NULL, self->location);
 }
 
 static void
