@@ -253,8 +253,6 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * Builder will attempt to load. Larger files will fail to load to help
    * ensure that Builder's buffer manager does not attempt to load files that
    * will slow the buffer management beyond usefulness.
-   *
-   * Since: 3.32
    */
   properties [PROP_MAX_FILE_SIZE] =
     g_param_spec_int64 ("max-file-size",
@@ -271,11 +269,8 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    * IdeBufferManager:load-buffer:
    * @self: an #IdeBufferManager
    * @buffer: an #IdeBuffer
-   * @create_new_view: if the buffer requires a view to be created
    *
    * The "load-buffer" signal is emitted before a buffer is (re)loaded.
-   *
-   * Since: 3.32
    */
   signals [LOAD_BUFFER] =
     g_signal_new ("load-buffer",
@@ -285,7 +280,7 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
                   NULL,
                   NULL,
                   NULL,
-                  G_TYPE_NONE, 2, IDE_TYPE_BUFFER, G_TYPE_BOOLEAN);
+                  G_TYPE_NONE, 1, IDE_TYPE_BUFFER);
 
   /**
    * IdeBufferManager::buffer-loaded:
@@ -294,8 +289,6 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * The "buffer-loaded" signal is emitted when an #IdeBuffer has loaded
    * a file from storage.
-   *
-   * Since: 3.32
    */
   signals [BUFFER_LOADED] =
     g_signal_new ("buffer-loaded",
@@ -317,8 +310,6 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * The "buffer-saved" signal is emitted when an #IdeBuffer has been saved
    * to storage.
-   *
-   * Since: 3.32
    */
   signals [BUFFER_SAVED] =
     g_signal_new ("buffer-saved",
@@ -340,8 +331,6 @@ ide_buffer_manager_class_init (IdeBufferManagerClass *klass)
    *
    * The "buffer-unloaded" signal is emitted when an #IdeBuffer has been
    * unloaded from the buffer manager.
-   *
-   * Since: 3.32
    */
   signals [BUFFER_UNLOADED] =
     g_signal_new ("buffer-unloaded",
@@ -402,8 +391,6 @@ ide_buffer_manager_next_temp_file (IdeBufferManager *self)
  * Gets the #IdeBufferManager for the #IdeContext.
  *
  * Returns: (transfer none): an #IdeBufferManager
- *
- * Since: 3.32
  */
 IdeBufferManager *
 ide_buffer_manager_from_context (IdeContext *context)
@@ -427,8 +414,6 @@ ide_buffer_manager_from_context (IdeContext *context)
  * of @file.
  *
  * Returns: %TRUE if a buffer exists for @file
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_manager_has_file (IdeBufferManager *self,
@@ -469,8 +454,6 @@ ide_buffer_manager_find_buffer_cb (IdeObject  *object,
  * Locates the #IdeBuffer that matches #GFile, if any.
  *
  * Returns: (transfer full): an #IdeBuffer or %NULL
- *
- * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_manager_find_buffer (IdeBufferManager *self,
@@ -500,8 +483,6 @@ ide_buffer_manager_find_buffer (IdeBufferManager *self,
  * various subsystems.
  *
  * Returns: the max file size in bytes or -1 for unlimited
- *
- * Since: 3.32
  */
 gssize
 ide_buffer_manager_get_max_file_size (IdeBufferManager *self)
@@ -520,8 +501,6 @@ ide_buffer_manager_get_max_file_size (IdeBufferManager *self)
  * Sets the max file size that will be allowed to be loaded from disk.
  * This is useful to protect Builder from files that would overload the
  * various subsystems.
- *
- * Since: 3.32
  */
 void
 ide_buffer_manager_set_max_file_size (IdeBufferManager *self,
@@ -598,8 +577,6 @@ ide_buffer_manager_load_file_cb (GObject      *object,
  *
  * If @notif is non-NULL, it will be updated with status information while
  * loading the document.
- *
- * Since: 3.32
  */
 void
 ide_buffer_manager_load_file_async (IdeBufferManager     *self,
@@ -614,7 +591,6 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) temp_file = NULL;
   IdeBuffer *existing;
-  gboolean create_new_view = FALSE;
   gboolean is_new = FALSE;
 
   IDE_ENTRY;
@@ -673,14 +649,10 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
    */
   g_hash_table_insert (self->loading_tasks, g_file_dup (file), g_object_ref (task));
 
-  /* We might have listeners tracking new buffers. Apply some rules to
-   * determine if we need the UI to create a new view for the buffer.
-   */
+  /* Notify any listeners of new buffers */
   g_assert (buffer != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
-  create_new_view = !(flags & IDE_BUFFER_OPEN_FLAGS_NO_VIEW) &&
-                     (is_new || (flags & IDE_BUFFER_OPEN_FLAGS_BACKGROUND) == 0);
-  g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer, create_new_view);
+  g_signal_emit (self, signals [LOAD_BUFFER], 0, buffer);
 
   /* Now we can load the buffer asynchronously */
   _ide_buffer_load_file_async (buffer,
@@ -701,8 +673,6 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
  * Completes an asynchronous request to ide_buffer_manager_laod_file_async().
  *
  * Returns: (transfer full): an #IdeBuffer
- *
- * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_manager_load_file_finish (IdeBufferManager  *self,
@@ -826,8 +796,6 @@ ide_buffer_manager_save_all_foreach_cb (IdeObject *object,
  * buffers to disk.
  *
  * @callback will be executed after all the buffers have been saved.
- *
- * Since: 3.32
  */
 void
 ide_buffer_manager_save_all_async (IdeBufferManager    *self,
@@ -870,8 +838,6 @@ ide_buffer_manager_save_all_async (IdeBufferManager    *self,
  * Completes an asynchronous request to save all buffers.
  *
  * Returns: %TRUE if all the buffers were saved successfully
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_manager_save_all_finish (IdeBufferManager  *self,
@@ -1110,8 +1076,6 @@ ide_buffer_manager_apply_edits_completed_cb (IdeBufferManager *self,
  *
  * @callback should call ide_buffer_manager_apply_edits_finish() to get the
  * result of this operation.
- *
- * Since: 3.32
  */
 void
 ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
@@ -1184,11 +1148,6 @@ ide_buffer_manager_apply_edits_async (IdeBufferManager    *self,
        */
       ide_buffer_manager_load_file_async (self,
                                           file,
-                                          IDE_BUFFER_OPEN_FLAGS_NO_VIEW |
-                                          /* We are only temporary loading the buffer to replace text
-                                           * there, so let's avoid any heavy useless work that the
-                                           * buffer addins might do.
-                                           */
                                           IDE_BUFFER_OPEN_FLAGS_DISABLE_ADDINS,
                                           NULL,
                                           cancellable,
@@ -1318,8 +1277,6 @@ ide_buffer_manager_foreach_cb (IdeObject *object,
  * @user_data: closure data for @foreach_func
  *
  * Calls @foreach_func for every buffer registered.
- *
- * Since: 3.32
  */
 void
 ide_buffer_manager_foreach (IdeBufferManager     *self,

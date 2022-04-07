@@ -657,7 +657,7 @@ ide_editor_page_discard_changes_async (IdeEditorPage       *self,
 
   ide_buffer_manager_load_file_async (bufmgr,
                                       ide_buffer_get_file (self->buffer),
-                                      IDE_BUFFER_OPEN_FLAGS_FORCE_RELOAD | IDE_BUFFER_OPEN_FLAGS_NO_VIEW,
+                                      IDE_BUFFER_OPEN_FLAGS_FORCE_RELOAD,
                                       notif,
                                       cancellable,
                                       ide_editor_page_discard_changes_cb,

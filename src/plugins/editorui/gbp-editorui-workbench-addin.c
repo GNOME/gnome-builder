@@ -195,8 +195,7 @@ gbp_editorui_workbench_addin_open_cb (GObject      *object,
                                    state->at_line_offset);
       ide_editor_focus_location (workspace, NULL, location);
     }
-  else if (!(state->flags & IDE_BUFFER_OPEN_FLAGS_NO_VIEW) &&
-           !(state->flags & IDE_BUFFER_OPEN_FLAGS_BACKGROUND))
+  else
     {
       IdeFrame *frame = ide_workspace_get_most_recent_frame (workspace);
 
