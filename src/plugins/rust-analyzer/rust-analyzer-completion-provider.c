@@ -29,9 +29,11 @@ struct _RustAnalyzerCompletionProvider
 G_DEFINE_FINAL_TYPE (RustAnalyzerCompletionProvider, rust_analyzer_completion_provider, IDE_TYPE_LSP_COMPLETION_PROVIDER)
 
 static void
-rust_analyzer_completion_provider_prepare (IdeCompletionProvider *self)
+rust_analyzer_completion_provider_load (IdeLspCompletionProvider *provider)
 {
+  RustAnalyzerCompletionProvider *self = (RustAnalyzerCompletionProvider *)provider;
   RustAnalyzerService *service;
+  IdeContext *context;
 
   g_assert (RUST_IS_ANALYZER_COMPLETION_PROVIDER (self));
 
@@ -46,7 +48,7 @@ rust_analyzer_completion_provider_class_init (RustAnalyzerCompletionProviderClas
 {
   IdeLspCompletionProviderClass *provider_class = IDE_LSP_COMPLETION_PROVIDER_CLASS (klass);
 
-  provider_class->prepare = rust_analyzer_completion_provider_prepare;
+  provider_class->load = rust_analyzer_completion_provider_load;
 }
 
 static void
