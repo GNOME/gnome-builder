@@ -98,10 +98,9 @@ find_cargo_toml_from_file (GFile *file)
 }
 
 static void
-rust_analyzer_pipeline_addin_discover_workdir_cb (GtkWidget *widget,
-                                                  gpointer   user_data)
+rust_analyzer_pipeline_addin_discover_workdir_cb (IdePage  *page,
+                                                  gpointer  user_data)
 {
-  IdePage *page = (IdePage *)widget;
   GFile **workdir = user_data;
   g_autoptr(GFile) file = NULL;
   g_autoptr(GFile) cargo_toml = NULL;
