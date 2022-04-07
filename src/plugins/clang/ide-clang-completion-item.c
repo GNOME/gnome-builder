@@ -22,12 +22,13 @@
 
 #include <clang-c/Index.h>
 #include <glib/gi18n.h>
+
 #include <libide-foundry.h>
 
 #include "ide-clang-completion-item.h"
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangCompletionItem, ide_clang_completion_item, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void
 ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
@@ -253,11 +254,11 @@ get_space_before_mask (enum CXCompletionChunkKind kind)
     }
 }
 
-static IdeSnippet *
+static GtkSourceSnippet *
 ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
                                           IdeFileSettings        *file_settings)
 {
-  g_autoptr(IdeSnippet) snippet = NULL;
+  g_autoptr(GtkSourceSnippet) snippet = NULL;
   g_autoptr(GVariant) result = NULL;
   g_autoptr(GVariant) chunks = NULL;
   g_autoptr(GSettings) settings = NULL;
@@ -272,7 +273,7 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
   settings = g_settings_new ("org.gnome.builder.clang");
 
   result = ide_clang_completion_item_get_result (self);
-  snippet = ide_snippet_new (NULL, NULL);
+  snippet = gtk_source_snippet_new (NULL, NULL);
 
   if (file_settings != NULL)
     spaces = ide_file_settings_get_spaces_style (file_settings);
@@ -285,7 +286,7 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
   while ((vchunk = g_variant_iter_next_value (&iter)))
     {
       enum CXCompletionChunkKind kind;
-      IdeSnippetChunk *chunk;
+      GtkSourceSnippetChunk *chunk;
       const gchar *text;
 
       if (!g_variant_lookup (vchunk, "kind", "u", &kind))
@@ -310,9 +311,9 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
               /* Insert | cursor right before right paren if we aren't
                * adding params but parents is enabled.
                */
-              chunk = ide_snippet_chunk_new ();
-              ide_snippet_chunk_set_tab_stop (chunk, 0);
-              ide_snippet_add_chunk (snippet, chunk);
+              chunk = gtk_source_snippet_chunk_new ();
+              gtk_source_snippet_chunk_set_focus_position (chunk, 0);
+              gtk_source_snippet_add_chunk (snippet, chunk);
               g_clear_object (&chunk);
             }
         }
@@ -320,27 +321,27 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
       switch (kind)
         {
         case CXCompletionChunk_TypedText:
-          chunk = ide_snippet_chunk_new ();
-          ide_snippet_chunk_set_text (chunk, text);
-          ide_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_snippet_add_chunk (snippet, chunk);
+          chunk = gtk_source_snippet_chunk_new ();
+          gtk_source_snippet_chunk_set_text (chunk, text);
+          gtk_source_snippet_chunk_set_text_set (chunk, TRUE);
+          gtk_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
         case CXCompletionChunk_Text:
-          chunk = ide_snippet_chunk_new ();
-          ide_snippet_chunk_set_text (chunk, text);
-          ide_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_snippet_add_chunk (snippet, chunk);
+          chunk = gtk_source_snippet_chunk_new ();
+          gtk_source_snippet_chunk_set_text (chunk, text);
+          gtk_source_snippet_chunk_set_text_set (chunk, TRUE);
+          gtk_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
         case CXCompletionChunk_Placeholder:
-          chunk = ide_snippet_chunk_new ();
-          ide_snippet_chunk_set_text (chunk, text);
-          ide_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_snippet_chunk_set_tab_stop (chunk, ++tab_stop);
-          ide_snippet_add_chunk (snippet, chunk);
+          chunk = gtk_source_snippet_chunk_new ();
+          gtk_source_snippet_chunk_set_text (chunk, text);
+          gtk_source_snippet_chunk_set_text_set (chunk, TRUE);
+          gtk_source_snippet_chunk_set_focus_position (chunk, ++tab_stop);
+          gtk_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
@@ -362,31 +363,31 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
         case CXCompletionChunk_HorizontalSpace:
           if (spaces & get_space_before_mask (kind))
             {
-              chunk = ide_snippet_chunk_new ();
-              ide_snippet_chunk_set_text (chunk, " ");
-              ide_snippet_chunk_set_text_set (chunk, TRUE);
-              ide_snippet_add_chunk (snippet, chunk);
+              chunk = gtk_source_snippet_chunk_new ();
+              gtk_source_snippet_chunk_set_text (chunk, " ");
+              gtk_source_snippet_chunk_set_text_set (chunk, TRUE);
+              gtk_source_snippet_add_chunk (snippet, chunk);
               g_clear_object (&chunk);
             }
-          chunk = ide_snippet_chunk_new ();
-          ide_snippet_chunk_set_text (chunk, text);
-          ide_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_snippet_add_chunk (snippet, chunk);
+          chunk = gtk_source_snippet_chunk_new ();
+          gtk_source_snippet_chunk_set_text (chunk, text);
+          gtk_source_snippet_chunk_set_text_set (chunk, TRUE);
+          gtk_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
         case CXCompletionChunk_VerticalSpace:
           /* insert the vertical space */
-          chunk = ide_snippet_chunk_new ();
-          ide_snippet_chunk_set_text (chunk, text);
-          ide_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_snippet_add_chunk (snippet, chunk);
+          chunk = gtk_source_snippet_chunk_new ();
+          gtk_source_snippet_chunk_set_text (chunk, text);
+          gtk_source_snippet_chunk_set_text_set (chunk, TRUE);
+          gtk_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           /* now perform indentation */
-          chunk = ide_snippet_chunk_new ();
-          ide_snippet_chunk_set_text (chunk, "\t");
-          ide_snippet_chunk_set_text_set (chunk, TRUE);
-          ide_snippet_add_chunk (snippet, chunk);
+          chunk = gtk_source_snippet_chunk_new ();
+          gtk_source_snippet_chunk_set_text (chunk, "\t");
+          gtk_source_snippet_chunk_set_text_set (chunk, TRUE);
+          gtk_source_snippet_add_chunk (snippet, chunk);
           g_clear_object (&chunk);
           break;
 
@@ -434,13 +435,13 @@ ide_clang_completion_item_init (IdeClangCompletionItem *self)
  * @self: an #IdeClangCompletionItem.
  * @file_settings: (nullable): an #IdeFileSettings or %NULL
  *
- * Gets the #IdeSnippet to be inserted when expanding this completion item.
+ * Gets the #GtkSourceSnippet to be inserted when expanding this completion item.
  *
- * Returns: (transfer full): An #IdeSnippet.
+ * Returns: (transfer full): An #GtkSourceSnippet.
  *
  * Since: 3.32
  */
-IdeSnippet *
+GtkSourceSnippet *
 ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
                                        IdeFileSettings        *file_settings)
 {
