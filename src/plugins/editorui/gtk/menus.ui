@@ -70,4 +70,22 @@
       </item>
     </section>
   </menu>
+  <menu id="ide-editor-page-menu">
+    <section id="ide-editor-page-document-section">
+      <attribute name="label" translatable="yes">Document</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Frame</attribute>
+        <attribute name="id">editor-document-open-in-new-workspace</attribute>
+        <attribute name="action">editorui.open-in-new-frame</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Workspace</attribute>
+        <attribute name="id">editor-document-open-in-new-workspace</attribute>
+        <attribute name="action">editorui.open-in-new-workspace</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Print…</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
