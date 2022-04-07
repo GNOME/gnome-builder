@@ -29,6 +29,8 @@
 #include "gbp-editorui-preferences-addin.h"
 #include "gbp-editorui-preview.h"
 
+#define LANG_PATH "/org/gnome/builder/editor/language/*"
+
 struct _GbpEditoruiPreferencesAddin
 {
   GObject parent_instance;
@@ -97,27 +99,27 @@ static const IdePreferenceItemEntry lang_items[] = {
   { "languages/*", "general", "trim", 0, ide_preferences_window_toggle,
     N_("Trim Trailing Whitespace"),
     N_("Upon saving, trailing whitepsace from modified lines will be trimmed"),
-    "org.gnome.builder.editor.language", "/*", "trim-trailing-whitespace" },
+    "org.gnome.builder.editor.language", LANG_PATH, "trim-trailing-whitespace" },
 
   { "languages/*", "general", "overwrite", 0, ide_preferences_window_toggle,
     N_("Overwrite Braces"),
     N_("Overwrite closing braces"),
-    "org.gnome.builder.editor.language", "/*", "overwrite-braces" },
+    "org.gnome.builder.editor.language", LANG_PATH, "overwrite-braces" },
 
   { "languages/*", "general", "insert-matching", 0, ide_preferences_window_toggle,
     N_("Insert Matching Brace"),
     N_("Insert matching character for [[(\"'"),
-    "org.gnome.builder.editor.language", "/*", "insert-matching-brace" },
+    "org.gnome.builder.editor.language", LANG_PATH, "insert-matching-brace" },
 
   { "languages/*", "general", "insert-trailing", 0, ide_preferences_window_toggle,
     N_("Insert Trailing Newline"),
     N_("Ensure files end with a newline"),
-    "org.gnome.builder.editor.language", "/*", "insert-trailing-newline" },
+    "org.gnome.builder.editor.language", LANG_PATH, "insert-trailing-newline" },
 
   { "languages/*", "margins", "show-right-margin", 0, ide_preferences_window_toggle,
     N_("Show right margin"),
     N_("Display a margin in the editor to indicate maximum desired width"),
-    "org.gnome.builder.editor.language", "/*", "show-right-margin" },
+    "org.gnome.builder.editor.language", LANG_PATH, "show-right-margin" },
 
 #if 0
   { "languages/*", "spacing", "before-parens", 0, ide_preferences_window_toggle, "Prefer a space before opening parentheses" },
@@ -129,12 +131,12 @@ static const IdePreferenceItemEntry lang_items[] = {
   { "languages/*", "indentation", "insert-spaces", 0, ide_preferences_window_toggle,
     N_("Insert spaces instead of tabs"),
     N_("Prefer spaces over tabs"),
-    "org.gnome.builder.editor.language", "/*", "insert-spaces-instead-of-tabs" },
+    "org.gnome.builder.editor.language", LANG_PATH, "insert-spaces-instead-of-tabs" },
 
   { "languages/*", "indentation", "auto-indent", 0, ide_preferences_window_toggle,
     N_("Automatically Indent"),
     N_("Format source code as you type"),
-    "org.gnome.builder.editor.language", "/*", "auto-indent" },
+    "org.gnome.builder.editor.language", LANG_PATH, "auto-indent" },
 };
 
 
