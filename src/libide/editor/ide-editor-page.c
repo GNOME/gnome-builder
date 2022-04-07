@@ -215,6 +215,23 @@ ide_editor_page_root (GtkWidget *widget)
   IDE_EXIT;
 }
 
+static GFile *
+ide_editor_page_get_file_or_directory (IdePage *page)
+{
+  GFile *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (page));
+
+  ret = ide_buffer_get_file (IDE_EDITOR_PAGE (page)->buffer);
+
+  if (ret != NULL)
+    g_object_ref (ret);
+
+  IDE_RETURN (ret);
+}
+
 static void
 ide_editor_page_dispose (GObject *object)
 {
@@ -281,6 +298,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  IdePageClass *page_class = IDE_PAGE_CLASS (klass);
 
   object_class->dispose = ide_editor_page_dispose;
   object_class->get_property = ide_editor_page_get_property;
@@ -288,6 +306,8 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
 
   widget_class->grab_focus = ide_editor_page_grab_focus;
   widget_class->root = ide_editor_page_root;
+
+  page_class->get_file_or_directory = ide_editor_page_get_file_or_directory;
 
   /**
    * IdeEditorPage:buffer:
