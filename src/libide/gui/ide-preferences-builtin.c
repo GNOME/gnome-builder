@@ -654,8 +654,7 @@ static const IdePreferencePageEntry pages[] = {
   { NULL, "visual",   "editing",    "org.gnome.Builder-editing-symbolic",      10, N_("Editing") },
   { NULL, "visual",   "keyboard",   "org.gnome.Builder-shortcuts-symbolic",    20, N_("Shortcuts") },
   { NULL, "code",     "languages",  "org.gnome.Builder-languages-symbolic",   100, N_("Languages") },
-  { NULL, "code",     "completion", "org.gnome.Builder-completion-symbolic",  110, N_("Completion") },
-  { NULL, "code",     "insight",    "org.gnome.Builder-diagnostics-symbolic", 120, N_("Diagnostics") },
+  { NULL, "code",     "insight",    "org.gnome.Builder-diagnostics-symbolic", 120, N_("Insight") },
   { NULL, "projects", "projects",   "org.gnome.Builder-projects-symbolic",    200, N_("Projects") },
   { NULL, "tools",    "build",      "org.gnome.Builder-build-symbolic",       300, N_("Build") },
   { NULL, "tools",    "debug",      "org.gnome.Builder-debugger-symbolic",    310, N_("Debugger") },
@@ -666,7 +665,15 @@ static const IdePreferencePageEntry pages[] = {
 };
 
 static const IdePreferenceGroupEntry groups[] = {
-  { "appearance", "style",        0, N_("Appearance") },
+  { "appearance", "style",          0, N_("Appearance") },
+
+  { "insight",    "general",                0, NULL },
+  { "insight",    "completion",            10, N_("Completion") },
+  { "insight",    "completion-providers",  20, NULL },
+#if 0
+  { "insight",    "diagnostics",           30, N_("Diagnostics") },
+#endif
+  { "insight",    "diagnostics-providers", 40, N_("Diagnostics") },
 
   { "plugins",    "vcs",            0, N_("Version Control") },
   { "plugins",    "sdks",          10, N_("SDKs") },

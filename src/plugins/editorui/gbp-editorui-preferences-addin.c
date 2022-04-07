@@ -48,8 +48,6 @@ static const IdePreferenceGroupEntry groups[] = {
   { "languages/*", "spacing",     20, N_("Spacing") },
   { "languages/*", "indentation", 30, N_("Indentation") },
 
-  { "completion", "general",       0, N_("General") },
-
   { "keyboard",   "movement",      10, N_("Movements") },
 };
 
@@ -79,7 +77,7 @@ static const IdePreferenceItemEntry items[] = {
     N_("Use cursor position to highlight matching brackets, braces, parenthesis, and more"),
     "org.gnome.builder.editor", NULL, "highlight-matching-brackets" },
 
-  { "completion", "general", "interactive", 10, ide_preferences_window_toggle,
+  { "insight", "completion", "interactive-completion", 10, ide_preferences_window_toggle,
     N_("Suggest Completions While Typing"),
     N_("Automatically suggest completions while typing within the file"),
     "org.gnome.builder.editor", NULL, "interactive-completion" },
