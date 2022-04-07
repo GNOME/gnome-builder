@@ -287,6 +287,8 @@ ide_page_init (IdePage *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  panel_widget_set_kind (PANEL_WIDGET (self), PANEL_WIDGET_KIND_DOCUMENT);
+
   priv->mru_link.data = self;
 }
 
