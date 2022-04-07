@@ -1,6 +1,6 @@
-/* gbp-spell-language-popover.h
+/* editor-empty-spell-provider-private.h
  *
- * Copyright 2017 Sébastien Lafargue <slafargue@gnome.org>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,14 @@
 
 #pragma once
 
-#include <gspell/gspell.h>
+#include "editor-spell-provider.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SPELL_LANGUAGE_POPOVER (gbp_spell_language_popover_get_type())
+#define EDITOR_TYPE_EMPTY_SPELL_PROVIDER (editor_empty_spell_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSpellLanguagePopover, gbp_spell_language_popover, GBP, SPELL_LANGUAGE_POPOVER, GtkButton)
+G_DECLARE_FINAL_TYPE (EditorEmptySpellProvider, editor_empty_spell_provider, EDITOR, EMPTY_SPELL_PROVIDER, EditorSpellProvider)
 
-GbpSpellLanguagePopover *gbp_spell_language_popover_new (const GspellLanguage *language);
+EditorSpellProvider *editor_empty_spell_provider_new (void);
 
 G_END_DECLS

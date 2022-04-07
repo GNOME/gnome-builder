@@ -1,6 +1,6 @@
-/* gbp-spell-navigator.h
+/* editor-types.h
  *
- * Copyright 2016 Sebastien Lafargue <slafargue@gnome.org>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,12 @@
 
 #pragma once
 
-#include <gspell/gspell.h>
+#include <gtk/gtk.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SPELL_NAVIGATOR (gbp_spell_navigator_get_type())
-
-G_DECLARE_FINAL_TYPE (GbpSpellNavigator, gbp_spell_navigator, GBP, SPELL_NAVIGATOR, GInitiallyUnowned)
-
-GspellNavigator *gbp_spell_navigator_new                   (GtkTextView       *view);
-guint            gbp_spell_navigator_get_count             (GbpSpellNavigator *self,
-                                                            const gchar       *word);
-gboolean         gbp_spell_navigator_get_is_words_counted  (GbpSpellNavigator *self);
-gboolean         gbp_spell_navigator_goto_word_start       (GbpSpellNavigator *self);
+typedef struct _EditorSpellChecker  EditorSpellChecker;
+typedef struct _EditorSpellLanguage EditorSpellLanguage;
+typedef struct _EditorSpellProvider EditorSpellProvider;
 
 G_END_DECLS

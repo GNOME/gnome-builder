@@ -2,8 +2,5 @@
 <gresources>
   <gresource prefix="/plugins/spellcheck">
     <file>spellcheck.plugin</file>
-    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
-    <file preprocess="xml-stripblanks">gbp-spell-widget.ui</file>
-    <file>themes/shared.css</file>
   </gresource>
 </gresources>

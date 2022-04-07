@@ -1,6 +1,6 @@
-/* gbp-spell-buffer-addin.h
+/* editor-spell-language-info.h
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,17 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include "editor-types.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SPELL_BUFFER_ADDIN (gbp_spell_buffer_addin_get_type())
+#define EDITOR_TYPE_SPELL_LANGUAGE_INFO (editor_spell_language_info_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSpellBufferAddin, gbp_spell_buffer_addin, GBP, SPELL_BUFFER_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (EditorSpellLanguageInfo, editor_spell_language_info, EDITOR, SPELL_LANGUAGE_INFO, GObject)
+
+EditorSpellLanguageInfo *editor_spell_language_info_new      (const char              *name,
+                                                              const char              *code);
+const char              *editor_spell_language_info_get_name (EditorSpellLanguageInfo *self);
+const char              *editor_spell_language_info_get_code (EditorSpellLanguageInfo *self);
 
 G_END_DECLS

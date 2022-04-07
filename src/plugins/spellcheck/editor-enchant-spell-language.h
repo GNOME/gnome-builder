@@ -1,6 +1,6 @@
-/* gbp-spell-widget.h
+/* editor-enchant-spell-language.h
  *
- * Copyright 2016 Sebastien Lafargue <slafargue@gnome.org>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,16 @@
 
 #pragma once
 
-#include <libide-editor.h>
+#include "editor-spell-language.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SPELL_WIDGET (gbp_spell_widget_get_type())
+#define EDITOR_TYPE_ENCHANT_SPELL_LANGUAGE (editor_enchant_spell_language_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSpellWidget, gbp_spell_widget, GBP, SPELL_WIDGET, GtkBin)
+G_DECLARE_FINAL_TYPE (EditorEnchantSpellLanguage, editor_enchant_spell_language, EDITOR, ENCHANT_SPELL_LANGUAGE, EditorSpellLanguage)
 
-GtkWidget     *gbp_spell_widget_new        (IdeEditorPage  *editor);
-IdeEditorPage *gbp_spell_widget_get_editor (GbpSpellWidget *self);
-void           gbp_spell_widget_set_editor (GbpSpellWidget *self,
-                                            IdeEditorPage  *editor);
+EditorSpellLanguage *editor_enchant_spell_language_new        (const char                 *code,
+                                                               gpointer                    native);
+gpointer             editor_enchant_spell_language_get_native (EditorEnchantSpellLanguage *self);
 
 G_END_DECLS
