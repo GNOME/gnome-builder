@@ -334,7 +334,7 @@ ide_terminal_open_link_resolve_cb (GObject      *object,
                                  pos->line,
                                  pos->column,
                                  IDE_BUFFER_OPEN_FLAGS_NONE,
-                                 NULL, NULL, NULL);
+                                 NULL, NULL, NULL, NULL);
 
   g_slice_free (Position, pos);
 }

@@ -85,6 +85,7 @@ typedef struct
   GFile              *file;
   gchar              *hint;
   gchar              *content_type;
+  IdePanelPosition   *position;
   IdeBufferOpenFlags  flags;
   gint                at_line;
   gint                at_line_offset;
@@ -1380,7 +1381,7 @@ ide_workbench_action_open_response_cb (IdeWorkbench         *self,
 
           g_assert (G_IS_FILE (file));
 
-          ide_workbench_open_async (self, file, NULL, 0, NULL, NULL, NULL);
+          ide_workbench_open_async (self, file, NULL, 0, NULL, NULL, NULL, NULL);
         }
     }
 
@@ -1737,6 +1738,7 @@ ide_workbench_open_all_async (IdeWorkbench         *self,
                                 file,
                                 hint,
                                 IDE_BUFFER_OPEN_FLAGS_NONE,
+                                NULL,
                                 cancellable,
                                 ide_workbench_open_all_cb,
                                 g_object_ref (task));
@@ -1749,6 +1751,7 @@ ide_workbench_open_all_async (IdeWorkbench         *self,
  * @file: a #GFile
  * @hint: (nullable): an optional hint about what addin to use
  * @flags: optional flags when opening the file
+ * @position: (nullable): a position to open the page
  * @cancellable: (nullable): a #GCancellable
  * @callback: a #GAsyncReadyCallback to execute upon completion
  * @user_data: closure data for @callback
@@ -1766,6 +1769,7 @@ ide_workbench_open_async (IdeWorkbench        *self,
                           GFile               *file,
                           const gchar         *hint,
                           IdeBufferOpenFlags   flags,
+                          IdePanelPosition    *position,
                           GCancellable        *cancellable,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
@@ -1780,6 +1784,7 @@ ide_workbench_open_async (IdeWorkbench        *self,
                                -1,
                                -1,
                                flags,
+                               position,
                                cancellable,
                                callback,
                                user_data);
@@ -1842,6 +1847,7 @@ ide_workbench_open_cb (GObject      *object,
                                   o->at_line,
                                   o->at_line_offset,
                                   o->flags,
+                                  o->position,
                                   cancellable,
                                   ide_workbench_open_cb,
                                   g_steal_pointer (&task));
@@ -1959,6 +1965,7 @@ ide_workbench_open_query_info_cb (GObject      *object,
                                   o->at_line,
                                   o->at_line_offset,
                                   o->flags,
+                                  o->position,
                                   cancellable,
                                   ide_workbench_open_cb,
                                   g_steal_pointer (&task));
@@ -1995,10 +2002,12 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
                              gint                 at_line,
                              gint                 at_line_offset,
                              IdeBufferOpenFlags   flags,
+                             IdePanelPosition    *position,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
                              gpointer             user_data)
 {
+  g_autoptr(IdePanelPosition) local_position = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) addins = NULL;
   IdeWorkbench *other;
@@ -2008,6 +2017,9 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
   g_return_if_fail (G_IS_FILE (file));
   g_return_if_fail (self->unloaded == FALSE);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (position == NULL)
+    position = local_position = ide_panel_position_new ();
 
   /* Possibly re-route opening the file to another workbench if we
    * discover the file is a better fit over there.
@@ -2022,6 +2034,7 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
                                    at_line,
                                    at_line_offset,
                                    flags,
+                                   NULL,
                                    cancellable,
                                    callback,
                                    user_data);
@@ -2059,6 +2072,7 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
   o->flags = flags;
   o->at_line = at_line;
   o->at_line_offset = at_line_offset;
+  o->position = ide_panel_position_ref (position);
   ide_task_set_task_data (task, o, open_free);
 
   g_file_query_info_async (file,

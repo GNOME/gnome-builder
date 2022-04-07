@@ -76,7 +76,14 @@ new_action_completed_cb (GObject      *object,
         return;
 
       if (state->file != NULL)
-        ide_workbench_open_async (workbench, state->file, "editorui", 0, NULL, NULL, NULL);
+        ide_workbench_open_async (workbench,
+                                  state->file,
+                                  "editorui",
+                                  0,
+                                  NULL,
+                                  NULL,
+                                  NULL,
+                                  NULL);
     }
 }
 
@@ -302,7 +309,10 @@ DEFINE_ACTION_HANDLER (open, {
                             file,
                             NULL,
                             IDE_BUFFER_OPEN_FLAGS_NONE,
-                            NULL, NULL, NULL);
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL);
 });
 
 static void
@@ -464,7 +474,10 @@ DEFINE_ACTION_HANDLER (open_with_hint, {
                             file,
                             hint,
                             IDE_BUFFER_OPEN_FLAGS_NONE,
-                            NULL, NULL, NULL);
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL);
 });
 
 /* Based on gdesktopappinfo.c in GIO */
