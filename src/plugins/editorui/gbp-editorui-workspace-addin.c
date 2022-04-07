@@ -176,11 +176,10 @@ open_in_new_workspace (GSimpleAction *action,
 
   workbench = ide_workspace_get_workbench (self->workspace);
 
-  position = ide_panel_position_new ();
-  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_CENTER);
-
   workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
   ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+  position = ide_panel_position_new ();
   ide_workspace_add_page (IDE_WORKSPACE (workspace), IDE_PAGE (split), position);
 
   gtk_window_present (GTK_WINDOW (workspace));
@@ -188,9 +187,70 @@ open_in_new_workspace (GSimpleAction *action,
   IDE_EXIT;
 }
 
+static void
+new_file_cb (GObject      *object,
+             GAsyncResult *result,
+             gpointer      user_data)
+{
+  IdeBufferManager *bufmgr = (IdeBufferManager *)object;
+  g_autoptr(IdeWorkspace) workspace = user_data;
+  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(IdeBuffer) buffer = NULL;
+  g_autoptr(GError) error = NULL;
+  GtkWidget *page;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!(buffer = ide_buffer_manager_load_file_finish (bufmgr, result, &error)))
+    {
+      g_warning ("Failed to create new buffer: %s", error->message);
+      IDE_EXIT;
+    }
+
+  page = ide_editor_page_new (buffer);
+  position = ide_panel_position_new ();
+  ide_workspace_add_page (workspace, IDE_PAGE (page), position);
+
+  IDE_EXIT;
+}
+
+static void
+new_file (GSimpleAction *action,
+          GVariant      *param,
+          gpointer       user_data)
+{
+  GbpEditoruiWorkspaceAddin *self = user_data;
+  IdeBufferManager *bufmgr;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+
+  context = ide_workspace_get_context (self->workspace);
+  bufmgr = ide_buffer_manager_from_context (context);
+
+  ide_buffer_manager_load_file_async (bufmgr,
+                                      NULL,
+                                      IDE_BUFFER_OPEN_FLAGS_NONE,
+                                      NULL,
+                                      NULL,
+                                      new_file_cb,
+                                      g_object_ref (self->workspace));
+
+  IDE_EXIT;
+}
+
 static const GActionEntry actions[] = {
   { "open-in-new-frame", open_in_new_frame },
   { "open-in-new-workspace", open_in_new_workspace },
+  { "new-file", new_file },
 };
 
 static void
