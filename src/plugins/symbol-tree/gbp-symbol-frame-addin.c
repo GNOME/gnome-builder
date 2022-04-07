@@ -182,7 +182,6 @@ gbp_symbol_frame_addin_cursor_moved_cb (gpointer user_data)
 
 static void
 gbp_symbol_frame_addin_cursor_moved (GbpSymbolFrameAddin *self,
-                                     const GtkTextIter   *location,
                                      IdeBuffer           *buffer)
 {
   IdeSourceView *view;
@@ -190,7 +189,6 @@ gbp_symbol_frame_addin_cursor_moved (GbpSymbolFrameAddin *self,
   gint64 ready_time;
 
   g_assert (GBP_IS_SYMBOL_FRAME_ADDIN (self));
-  g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
   if (!IDE_IS_EDITOR_PAGE (self->page))

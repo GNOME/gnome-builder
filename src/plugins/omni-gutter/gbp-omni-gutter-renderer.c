@@ -1538,7 +1538,6 @@ gbp_omni_gutter_renderer_buffer_changed (GbpOmniGutterRenderer *self,
 
 static void
 gbp_omni_gutter_renderer_cursor_moved (GbpOmniGutterRenderer *self,
-                                       const GtkTextIter     *iter,
                                        GtkTextBuffer         *buffer)
 {
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
