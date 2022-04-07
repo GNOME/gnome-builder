@@ -149,7 +149,7 @@ gbp_editorui_workbench_addin_open_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   OpenFileTaskData *state;
-  IdeWorkspace *workspace = NULL;
+  IdeWorkspace *workspace;
 
   IDE_ENTRY;
 
@@ -173,9 +173,16 @@ gbp_editorui_workbench_addin_open_cb (GObject      *object,
   if (self->workbench == NULL)
     IDE_GOTO (failure);
 
-  ide_workbench_foreach_workspace (self->workbench,
-                                   find_preferred_workspace_cb,
-                                   &workspace);
+  workspace = ide_workbench_get_current_workspace (self->workbench);
+
+  if (!IDE_IS_PRIMARY_WORKSPACE (workspace) &&
+      !IDE_IS_EDITOR_WORKSPACE (workspace))
+    {
+      workspace = NULL;
+      ide_workbench_foreach_workspace (self->workbench,
+                                       find_preferred_workspace_cb,
+                                       &workspace);
+    }
 
   if (workspace == NULL)
     IDE_GOTO (failure);
