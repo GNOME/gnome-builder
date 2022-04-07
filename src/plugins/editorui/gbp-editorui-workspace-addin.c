@@ -24,7 +24,10 @@
 
 #include <glib/gi18n.h>
 
+#include <libide-gui.h>
 #include <libide-editor.h>
+
+#include "ide-workspace-private.h"
 
 #include "gbp-editorui-position-label.h"
 #include "gbp-editorui-workspace-addin.h"
@@ -134,10 +137,68 @@ cursor_moved_cb (GbpEditoruiWorkspaceAddin *self)
 }
 
 static void
+open_in_new_frame (GSimpleAction *action,
+                   GVariant      *param,
+                   gpointer       user_data)
+{
+  GbpEditoruiWorkspaceAddin *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+
+  IDE_EXIT;
+}
+
+static void
+open_in_new_workspace (GSimpleAction *action,
+                       GVariant      *param,
+                       gpointer       user_data)
+{
+  GbpEditoruiWorkspaceAddin *self = user_data;
+  g_autoptr(IdePanelPosition) position = NULL;
+  IdeEditorWorkspace *workspace;
+  IdeContext *context;
+  IdePage *page;
+  IdePage *split;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+
+  if (!(page = ide_workspace_get_most_recent_page (self->workspace)))
+    IDE_EXIT;
+
+  if (!(split = ide_page_create_split (page)))
+    IDE_EXIT;
+
+  context = ide_widget_get_context (GTK_WIDGET (page));
+
+  position = ide_panel_position_new ();
+  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_CENTER);
+
+  workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
+  _ide_workspace_set_context (IDE_WORKSPACE (workspace), context);
+  ide_workspace_add_page (IDE_WORKSPACE (workspace), IDE_PAGE (split), position);
+
+  gtk_window_present (GTK_WINDOW (workspace));
+
+  IDE_EXIT;
+}
+
+static const GActionEntry actions[] = {
+  { "open-in-new-frame", open_in_new_frame },
+  { "open-in-new-workspace", open_in_new_workspace },
+};
+
+static void
 gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
+  g_autoptr(GSimpleActionGroup) group = NULL;
   GtkPopover *popover;
   GMenu *menu;
 
@@ -148,6 +209,15 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
   self->statusbar = ide_workspace_get_statusbar (workspace);
+
+  group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                  "editorui",
+                                  G_ACTION_GROUP (group));
 
   self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
   ide_signal_group_connect_object (self->buffer_signals,
