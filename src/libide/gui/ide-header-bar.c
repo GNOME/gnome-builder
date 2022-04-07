@@ -279,12 +279,27 @@ failure:
 
 }
 
+static GObject *
+ide_header_bar_get_internal_child (GtkBuildable *buildable,
+                                   GtkBuilder   *builder,
+                                   const char   *name)
+{
+  IdeHeaderBar *self = (IdeHeaderBar *)buildable;
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
+
+  if (g_strcmp0 (name, "headerbar") == 0)
+    return G_OBJECT (priv->header_bar);
+
+  return buildable_parent_iface->get_internal_child (buildable, builder, name);
+}
+
 static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   buildable_parent_iface = g_type_interface_peek_parent (iface);
 
   iface->add_child = ide_header_bar_add_child;
+  iface->get_internal_child = ide_header_bar_get_internal_child;
 }
 
 #define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
