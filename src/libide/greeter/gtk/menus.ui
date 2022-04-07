@@ -10,7 +10,7 @@
       <item>
         <attribute name="id">ide-greeter-workspace-menu-clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>
-        <attribute name="action">win.page</attribute>
+        <attribute name="action">greeter.page</attribute>
         <attribute name="target" type="s">'clone'</attribute>
       </item>
     </section>
