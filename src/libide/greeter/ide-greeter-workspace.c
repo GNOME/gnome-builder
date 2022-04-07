@@ -987,3 +987,24 @@ ide_greeter_workspace_set_page_name (IdeGreeterWorkspace *self,
 
   gtk_stack_set_visible_child_name (self->pages, name);
 }
+
+void
+ide_greeter_workspace_add_page (IdeGreeterWorkspace *self,
+                                GtkWidget           *page,
+                                const char          *name)
+{
+  g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
+  g_return_if_fail (GTK_IS_WIDGET (page));
+
+  gtk_stack_add_named (self->pages, page, name);
+}
+
+void
+ide_greeter_workspace_remove_page (IdeGreeterWorkspace *self,
+                                   GtkWidget           *page)
+{
+  g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
+  g_return_if_fail (GTK_IS_WIDGET (page));
+
+  gtk_stack_remove (self->pages, page);
+}
