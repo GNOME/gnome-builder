@@ -23,6 +23,7 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#include "ide-gtk-enums.h"
 #include "ide-three-grid.h"
 
 struct _IdeThreeGridChild
@@ -590,17 +591,15 @@ ide_three_grid_layout_init (IdeThreeGridLayout *self)
 {
 }
 
-typedef struct
+struct _IdeThreeGrid
 {
-  guint column_spacing;
-  guint row_spacing;
-} IdeThreeGridPrivate;
+  GtkWidget parent_instance;
+};
 
 static void buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeThreeGrid, ide_three_grid, GTK_TYPE_WIDGET,
-                         G_ADD_PRIVATE (IdeThreeGrid)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeThreeGrid, ide_three_grid, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
 enum {
   PROP_0,
@@ -739,27 +738,6 @@ GtkWidget *
 ide_three_grid_new (void)
 {
   return g_object_new (IDE_TYPE_THREE_GRID, NULL);
-}
-
-GType
-ide_three_grid_column_get_type (void)
-{
-  static GType type_id;
-
-  if (g_once_init_enter (&type_id))
-    {
-      GType _type_id;
-      static const GEnumValue values[] = {
-        { IDE_THREE_GRID_COLUMN_LEFT, "IDE_THREE_GRID_COLUMN_LEFT", "left" },
-        { IDE_THREE_GRID_COLUMN_CENTER, "IDE_THREE_GRID_COLUMN_CENTER", "center" },
-        { IDE_THREE_GRID_COLUMN_RIGHT, "IDE_THREE_GRID_COLUMN_RIGHT", "right" },
-        { 0 }
-      };
-      _type_id = g_enum_register_static ("IdeThreeGridColumn", values);
-      g_once_init_leave (&type_id, _type_id);
-    }
-
-  return type_id;
 }
 
 static void
