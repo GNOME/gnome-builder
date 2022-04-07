@@ -3,7 +3,6 @@ Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015 Christian Hergert
 Description=Provides integration with Clang
-Depends=editor;
 Embedded=_ide_clang_register_types
 Module=clang
 Name=Clang
