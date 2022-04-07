@@ -143,3 +143,11 @@ ide_panel_position_set_depth (IdePanelPosition *self,
   self->depth = depth;
   self->depth_set = TRUE;
 }
+
+gboolean
+ide_panel_position_is_indeterminate (IdePanelPosition *self)
+{
+  g_return_val_if_fail (self != NULL, TRUE);
+
+  return !self->column_set || !self->row_set || !self->edge_set;
+}
