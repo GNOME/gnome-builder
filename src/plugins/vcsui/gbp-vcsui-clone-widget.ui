@@ -62,7 +62,7 @@
                         <property name="label" translatable="yes">Enter the repository of the project you would like to clone. The URL should look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”.</property>
                         <property name="margin-top">3</property>
                         <property name="width-chars">40</property>
-                        <property name="max-width-chars">60</property>
+                        <property name="max-width-chars">40</property>
                         <property name="wrap">true</property>
                         <property name="xalign">0.0</property>
                         <style>
@@ -94,6 +94,7 @@
                     <child>
                       <object class="GtkToggleButton" id="more_button">
                         <property name="halign">start</property>
+                        <property name="valign">center</property>
                         <property name="hexpand">false</property>
                         <property name="has-tooltip">true</property>
                         <property name="tooltip-text" translatable="yes">Select branch and other options.</property>
@@ -278,11 +279,11 @@
                       <object class="GtkBox">
                         <property name="margin-top">32</property>
                         <property name="orientation">horizontal</property>
+                        <property name="halign">end</property>
                         <child>
                           <object class="GtkStack" id="button_stack">
                             <property name="hhomogeneous">true</property>
                             <property name="vhomogeneous">true</property>
-                            <property name="halign">end</property>
                             <child>
                               <object class="GtkButton" id="clone_button">
                                 <property name="label" translatable="yes">Clone _Project</property>
