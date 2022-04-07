@@ -27,6 +27,7 @@
 #include <libpanel.h>
 
 #include "ide-page.h"
+#include "ide-panel-position.h"
 
 G_BEGIN_DECLS
 
@@ -36,6 +37,8 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeFrame, ide_frame, IDE, FRAME, PanelFrame)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_frame_new (void);
+GtkWidget        *ide_frame_new          (void);
+IDE_AVAILABLE_IN_ALL
+IdePanelPosition *ide_frame_get_position (IdeFrame *self);
 
 G_END_DECLS
