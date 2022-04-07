@@ -215,6 +215,21 @@ ide_editor_page_root (GtkWidget *widget)
   IDE_EXIT;
 }
 
+static IdePage *
+ide_editor_page_create_split (IdePage *page)
+{
+  IdeEditorPage *self = (IdeEditorPage *)page;
+  GtkWidget *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  ret = ide_editor_page_new (self->buffer);
+
+  IDE_RETURN (IDE_PAGE (ret));
+}
+
 static GFile *
 ide_editor_page_get_file_or_directory (IdePage *page)
 {
@@ -308,6 +323,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   widget_class->root = ide_editor_page_root;
 
   page_class->get_file_or_directory = ide_editor_page_get_file_or_directory;
+  page_class->create_split = ide_editor_page_create_split;
 
   /**
    * IdeEditorPage:buffer:
@@ -355,6 +371,8 @@ ide_editor_page_init (IdeEditorPage *self)
   GMenu *menu;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  ide_page_set_can_split (IDE_PAGE (self), TRUE);
 
   /* Load menus for editor pages */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-editor-page-menu");
