@@ -20,8 +20,11 @@
 
 #define G_LOG_DOMAIN "gbp-notification-addin"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+
 #include <libide-foundry.h>
 
 #include "ide-notification-addin.h"
@@ -55,7 +58,7 @@ should_supress_message (IdeNotificationAddin *self,
   g_assert (message != NULL);
 
   if (self->last_msg_body == NULL ||
-      !dzl_str_equal0 (self->last_msg_body, message) ||
+      !ide_str_equal0 (self->last_msg_body, message) ||
       self->last_time + GRACE_PERIOD_USEC < g_get_monotonic_time ())
     {
       g_free (self->last_msg_body);
