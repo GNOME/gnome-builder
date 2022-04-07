@@ -35,8 +35,8 @@ struct _GbpQuickHighlightEditorPageAddin
 
   IdeEditorPage          *view;
 
-  DzlSignalGroup         *buffer_signals;
-  DzlSignalGroup         *search_signals;
+  IdeSignalGroup         *buffer_signals;
+  IdeSignalGroup         *search_signals;
   GtkSourceSearchContext *search_context;
 
   guint                   queued_match_source;
@@ -137,25 +137,23 @@ do_delayed_quick_highlight (GbpQuickHighlightEditorPageAddin *self)
 
 static void
 buffer_cursor_moved (GbpQuickHighlightEditorPageAddin *self,
-                     const GtkTextIter                *location,
                      IdeBuffer                        *buffer)
 {
   g_assert (GBP_IS_QUICK_HIGHLIGHT_EDITOR_PAGE_ADDIN (self));
-  g_assert (location != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
   if (self->has_selection && !self->search_active)
     {
       if (self->queued_match_source == 0)
         self->queued_match_source =
-          gdk_threads_add_idle_full (G_PRIORITY_LOW + 100,
-                                     (GSourceFunc) do_delayed_quick_highlight,
-                                     g_object_ref (self),
-                                     g_object_unref);
+          g_idle_add_full (G_PRIORITY_LOW + 100,
+                           (GSourceFunc) do_delayed_quick_highlight,
+                           g_object_ref (self),
+                           g_object_unref);
     }
   else
     {
-      dzl_clear_source (&self->queued_match_source);
+      g_clear_handle_id (&self->queued_match_source, g_source_remove);
       g_clear_object (&self->search_context);
     }
 }
@@ -192,6 +190,7 @@ buffer_notify_has_selection (GbpQuickHighlightEditorPageAddin *self,
   self->has_selection = gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (buffer));
 }
 
+#if 0
 static void
 search_notify_active (GbpQuickHighlightEditorPageAddin *self,
                       GParamSpec                       *pspec,
@@ -203,6 +202,7 @@ search_notify_active (GbpQuickHighlightEditorPageAddin *self,
   self->search_active = ide_editor_search_get_active (search);
   do_delayed_quick_highlight (self);
 }
+#endif
 
 static void
 gbp_quick_highlight_editor_page_addin_load (IdeEditorPageAddin *addin,
@@ -217,32 +217,29 @@ gbp_quick_highlight_editor_page_addin_load (IdeEditorPageAddin *addin,
 
   self->settings = g_settings_new ("org.gnome.builder.editor");
 
-  self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
-
-  dzl_signal_group_connect_swapped (self->buffer_signals,
+  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
+  ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::has-selection",
                                     G_CALLBACK (buffer_notify_has_selection),
                                     self);
-
-  dzl_signal_group_connect_swapped (self->buffer_signals,
+  ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::style-scheme",
                                     G_CALLBACK (buffer_notify_style_scheme),
                                     self);
-
-  dzl_signal_group_connect_swapped (self->buffer_signals,
+  ide_signal_group_connect_swapped (self->buffer_signals,
                                     "cursor-moved",
                                     G_CALLBACK (buffer_cursor_moved),
                                     self);
+  ide_signal_group_set_target (self->buffer_signals, ide_editor_page_get_buffer (view));
 
-  self->search_signals = dzl_signal_group_new (IDE_TYPE_EDITOR_SEARCH);
-
-  dzl_signal_group_connect_swapped (self->search_signals,
+#if 0
+  self->search_signals = ide_signal_group_new (IDE_TYPE_EDITOR_SEARCH);
+  ide_signal_group_connect_swapped (self->search_signals,
                                     "notify::active",
                                     G_CALLBACK (search_notify_active),
                                     self);
-
-  dzl_signal_group_set_target (self->buffer_signals, ide_editor_page_get_buffer (view));
-  dzl_signal_group_set_target (self->search_signals, ide_editor_page_get_search (view));
+  ide_signal_group_set_target (self->search_signals, ide_editor_page_get_search (view));
+#endif
 }
 
 static void
@@ -255,12 +252,12 @@ gbp_quick_highlight_editor_page_addin_unload (IdeEditorPageAddin *addin,
   g_assert (IDE_IS_EDITOR_PAGE (view));
 
   g_clear_object (&self->search_context);
-  dzl_clear_source (&self->queued_match_source);
+  g_clear_handle_id (&self->queued_match_source, g_source_remove);
 
-  dzl_signal_group_set_target (self->buffer_signals, NULL);
+  ide_signal_group_set_target (self->buffer_signals, NULL);
   g_clear_object (&self->buffer_signals);
 
-  dzl_signal_group_set_target (self->search_signals, NULL);
+  ide_signal_group_set_target (self->search_signals, NULL);
   g_clear_object (&self->search_signals);
 
   g_clear_object (&self->settings);
@@ -276,10 +273,9 @@ editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpQuickHighlightEditorPageAddin,
-                         gbp_quick_highlight_editor_page_addin,
-                         G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN,
-                                                editor_view_addin_iface_init))
+                               gbp_quick_highlight_editor_page_addin,
+                               G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_view_addin_iface_init))
 
 static void
 gbp_quick_highlight_editor_page_addin_class_init (GbpQuickHighlightEditorPageAddinClass *klass)
