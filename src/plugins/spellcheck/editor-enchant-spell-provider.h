@@ -1,6 +1,6 @@
-/* spellcheck-plugin.c
+/* editor-enchant-spell-provider.h
  *
- * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,18 +18,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
+#pragma once
 
-#include <libpeas/peas.h>
+#include "editor-spell-provider.h"
 
-#include <libide-editor.h>
+G_BEGIN_DECLS
 
-#include "gbp-spell-buffer-addin.h"
+#define EDITOR_TYPE_ENCHANT_SPELL_PROVIDER (editor_enchant_spell_provider_get_type())
 
-_IDE_EXTERN void
-_gbp_spellcheck_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUFFER_ADDIN,
-                                              GBP_TYPE_SPELL_BUFFER_ADDIN);
-}
+G_DECLARE_FINAL_TYPE (EditorEnchantSpellProvider, editor_enchant_spell_provider, EDITOR, ENCHANT_SPELL_PROVIDER, EditorSpellProvider)
+
+EditorSpellProvider *editor_enchant_spell_provider_new (void);
+
+G_END_DECLS
