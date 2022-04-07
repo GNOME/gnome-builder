@@ -559,3 +559,43 @@ ide_page_set_progress (IdePage         *self,
                           priv->progress_bar, "fraction",
                           G_BINDING_SYNC_CREATE);
 }
+
+/**
+ * ide_page_get_position:
+ * @self: a #IdePage
+ *
+ * Gets the position of a page within the workspace.
+ *
+ * Returns: (transfer full) (nullable): an #IdePanelPosition or %NULL
+ *   if the page is not rooted.
+ */
+IdePanelPosition *
+ide_page_get_position (IdePage *self)
+{
+  IdePanelPosition *position;
+  GtkWidget *frame;
+  guint n_pages;
+
+  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
+
+  if (!(frame = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_FRAME)))
+    return NULL;
+
+  if (!(position = ide_frame_get_position (IDE_FRAME (frame))))
+    return NULL;
+
+  n_pages = panel_frame_get_n_pages (PANEL_FRAME (frame));
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      if (panel_frame_get_page (PANEL_FRAME (frame), i) == PANEL_WIDGET (self))
+        {
+          ide_panel_position_set_depth (position, i);
+          return position;
+        }
+    }
+
+  g_critical ("Failed to find page within frame");
+
+  return position;
+}
