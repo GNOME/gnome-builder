@@ -47,7 +47,7 @@ _rust_analyzer_register_types (PeasObjectModule *module)
                                               IDE_TYPE_PIPELINE_ADDIN,
                                               RUST_TYPE_ANALYZER_PIPELINE_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                               RUST_TYPE_ANALYZER_COMPLETION_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SYMBOL_RESOLVER,
