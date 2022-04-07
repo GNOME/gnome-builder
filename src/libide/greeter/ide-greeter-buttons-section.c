@@ -80,15 +80,6 @@ ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
                                                         "action-name", "win.open",
                                                         "use-underline", TRUE,
                                                         NULL));
-  ide_greeter_buttons_section_add_button (self,
-                                          100,
-                                          g_object_new (GTK_TYPE_BUTTON,
-                                                        "label", _("_Clone Repository…"),
-                                                        "visible", TRUE,
-                                                        "action-name", "win.surface",
-                                                        "action-target", g_variant_new_string ("clone"),
-                                                        "use-underline", TRUE,
-                                                        NULL));
 }
 
 #define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
