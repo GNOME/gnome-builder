@@ -159,7 +159,7 @@ open_in_new_workspace (GSimpleAction *action,
   GbpEditoruiWorkspaceAddin *self = user_data;
   g_autoptr(IdePanelPosition) position = NULL;
   IdeEditorWorkspace *workspace;
-  IdeContext *context;
+  IdeWorkbench *workbench;
   IdePage *page;
   IdePage *split;
 
@@ -174,13 +174,13 @@ open_in_new_workspace (GSimpleAction *action,
   if (!(split = ide_page_create_split (page)))
     IDE_EXIT;
 
-  context = ide_widget_get_context (GTK_WIDGET (page));
+  workbench = ide_workspace_get_workbench (self->workspace);
 
   position = ide_panel_position_new ();
   ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_CENTER);
 
   workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
-  _ide_workspace_set_context (IDE_WORKSPACE (workspace), context);
+  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
   ide_workspace_add_page (IDE_WORKSPACE (workspace), IDE_PAGE (split), position);
 
   gtk_window_present (GTK_WINDOW (workspace));
