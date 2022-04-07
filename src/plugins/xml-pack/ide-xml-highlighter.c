@@ -122,11 +122,9 @@ cleanup:
 
 static void
 ide_xml_highlighter_cursor_moved (IdeXmlHighlighter *self,
-                                  const GtkTextIter *iter,
                                   IdeBuffer         *buffer)
 {
   g_assert (IDE_IS_XML_HIGHLIGHTER (self));
-  g_assert (iter != NULL);
   g_assert (IDE_IS_BUFFER (buffer));
 
   dzl_clear_source (&self->highlight_timeout);
