@@ -5,6 +5,13 @@
     <child type="titlebar">
       <object class="IdeHeaderBar" id="header_bar">
         <property name="menu-id">ide-greeter-workspace-menu</property>
+        <child internal-child="headerbar">
+          <object class="AdwHeaderBar">
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
         <child type="title">
           <object class="AdwWindowTitle" id="title"/>
         </child>
