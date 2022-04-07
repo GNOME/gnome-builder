@@ -101,6 +101,7 @@
   <style name="right-margin"               background="dark_1" foreground="dark_1"/>
   <style name="search-match"               background="yellow_4" foreground="dark_4"/>
   <style name="text"                       background="libadwaita-dark" foreground="light_5"/>
+  <style name="cursor"                     foreground="light_5"/>
 
   <!-- Defaults -->
   <style name="def:base-n-integer"         foreground="violet_2"/>
