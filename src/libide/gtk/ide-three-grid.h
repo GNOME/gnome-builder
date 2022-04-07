@@ -28,15 +28,7 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_THREE_GRID        (ide_three_grid_get_type())
-#define IDE_TYPE_THREE_GRID_COLUMN (ide_three_grid_column_get_type())
-
-G_DECLARE_DERIVABLE_TYPE (IdeThreeGrid, ide_three_grid, IDE, THREE_GRID, GtkWidget)
-
-struct _IdeThreeGridClass
-{
-  GtkWidgetClass parent_class;
-};
+#define IDE_TYPE_THREE_GRID (ide_three_grid_get_type())
 
 typedef enum
 {
@@ -45,12 +37,17 @@ typedef enum
   IDE_THREE_GRID_COLUMN_RIGHT
 } IdeThreeGridColumn;
 
-GType      ide_three_grid_column_get_type (void);
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeThreeGrid, ide_three_grid, IDE, THREE_GRID, GtkWidget)
+
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_three_grid_new             (void);
+IDE_AVAILABLE_IN_ALL
 void       ide_three_grid_add             (IdeThreeGrid       *self,
                                            GtkWidget          *child,
                                            guint               row,
                                            IdeThreeGridColumn  column);
+IDE_AVAILABLE_IN_ALL
 void       ide_three_grid_remove          (IdeThreeGrid       *self,
                                            GtkWidget          *child);
 

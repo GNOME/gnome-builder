@@ -25,6 +25,7 @@ libide_gtk_public_headers = [
 
 libide_gtk_enum_headers = [
   'ide-animation.h',
+  'ide-three-grid.h',
 ]
 
 install_headers(libide_gtk_public_headers, subdir: libide_gtk_header_subdir)
