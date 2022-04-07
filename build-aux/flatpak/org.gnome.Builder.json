@@ -441,7 +441,7 @@
                 {
                     "type" : "git",
                     "url" : "https://github.com/ostreedev/ostree.git",
-                    "branch" : "main"
+                    "tag" : "v2022.2"
                 }
             ]
         },
