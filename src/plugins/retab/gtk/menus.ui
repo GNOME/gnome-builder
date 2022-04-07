@@ -7,7 +7,7 @@
           <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
           <item>
             <attribute name="label" translatable="yes">_Reformat tabs</attribute>
-            <attribute name="action">editor-view.retab</attribute>
+            <attribute name="action">retab.retab</attribute>
           </item>
         </section>
       </submenu>
