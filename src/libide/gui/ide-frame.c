@@ -240,3 +240,54 @@ ide_frame_addin_find_by_module_name (IdeFrame    *frame,
 
   return ret ? IDE_FRAME_ADDIN (ret) : NULL;
 }
+
+/**
+ * ide_frame_get_position:
+ * @self: a #IdeFrame
+ *
+ * Gets the position in the grid of a frame.
+ *
+ * Returns: (transfer full): a new #IdePanelPosition
+ */
+IdePanelPosition *
+ide_frame_get_position (IdeFrame *self)
+{
+  IdePanelPosition *ret;
+  PanelGrid *grid;
+  guint n_columns;
+
+  g_return_val_if_fail (IDE_IS_FRAME (self), NULL);
+
+  /* Frames are always in the center grid */
+  ret = ide_panel_position_new ();
+  ide_panel_position_set_edge (ret, PANEL_DOCK_POSITION_CENTER);
+
+  /* Implausible but handle it anyway */
+  grid = PANEL_GRID (gtk_widget_get_ancestor (GTK_WIDGET (self), PANEL_TYPE_GRID));
+  if (grid == NULL)
+    return ret;
+
+  n_columns = panel_grid_get_n_columns (grid);
+
+  for (guint c = 0; c < n_columns; c++)
+    {
+      PanelGridColumn *grid_column = panel_grid_get_column (grid, c);
+      guint n_rows = panel_grid_column_get_n_rows (grid_column);
+
+      for (guint r = 0; r < n_rows; r++)
+        {
+          PanelFrame *frame = panel_grid_column_get_row (grid_column, r);
+
+          if (frame == PANEL_FRAME (self))
+            {
+              ide_panel_position_set_column (ret, c);
+              ide_panel_position_set_row (ret, r);
+              return ret;
+            }
+        }
+    }
+
+  g_critical ("Failed to locate frame within grid");
+
+  return ret;
+}
