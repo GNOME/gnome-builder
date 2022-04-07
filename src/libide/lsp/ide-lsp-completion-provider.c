@@ -38,6 +38,7 @@ typedef struct
   char          *word;
   char         **trigger_chars;
   char          *refilter_word;
+  guint          has_loaded : 1;
 } IdeLspCompletionProviderPrivate;
 
 static void provider_iface_init (GtkSourceCompletionProviderInterface *iface);
@@ -53,6 +54,11 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_lsp_completion_provider_real_load (IdeLspCompletionProvider *self)
+{
+}
 
 static void
 ide_lsp_completion_provider_finalize (GObject *object)
@@ -113,6 +119,8 @@ ide_lsp_completion_provider_class_init (IdeLspCompletionProviderClass *klass)
   object_class->finalize = ide_lsp_completion_provider_finalize;
   object_class->get_property = ide_lsp_completion_provider_get_property;
   object_class->set_property = ide_lsp_completion_provider_set_property;
+
+  klass->load = ide_lsp_completion_provider_real_load;
 
   properties [PROP_CLIENT] =
     g_param_spec_object ("client",
@@ -274,6 +282,12 @@ ide_lsp_completion_provider_populate_async (GtkSourceCompletionProvider *provide
 
   g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+
+  if (!priv->has_loaded)
+    {
+      priv->has_loaded = TRUE;
+      IDE_LSP_COMPLETION_PROVIDER_GET_CLASS (self)->load (self);
+    }
 
   g_clear_pointer (&priv->refilter_word, g_free);
   g_clear_pointer (&priv->word, g_free);
