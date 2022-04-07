@@ -62,7 +62,7 @@ _rust_analyzer_register_types (PeasObjectModule *module)
                                               IDE_TYPE_HIGHLIGHTER,
                                               RUST_TYPE_ANALYZER_HIGHLIGHTER);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_HOVER_PROVIDER,
+                                              GTK_SOURCE_TYPE_HOVER_PROVIDER,
                                               RUST_TYPE_ANALYZER_HOVER_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RENAME_PROVIDER,
