@@ -128,5 +128,10 @@ void                ide_preferences_window_check      (const char               
                                                        const IdePreferenceItemEntry  *entry,
                                                        AdwPreferencesGroup           *group,
                                                        gpointer                       user_data);
+IDE_AVAILABLE_IN_ALL
+void                ide_preferences_window_spin       (const char                    *page_name,
+                                                       const IdePreferenceItemEntry  *entry,
+                                                       AdwPreferencesGroup           *group,
+                                                       gpointer                       user_data);
 
 G_END_DECLS

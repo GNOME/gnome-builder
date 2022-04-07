@@ -1160,6 +1160,139 @@ ide_preferences_window_check (const char                   *page_name,
                                 value ? (GDestroyNotify)g_variant_unref : NULL);
 }
 
+static void
+set_double_property (gpointer    instance,
+                     const char *property,
+                     GVariant   *value)
+{
+  GValue val = { 0 };
+  double v = 0;
+
+  g_assert (instance != NULL);
+  g_assert (property != NULL);
+  g_assert (value != NULL);
+
+  if (g_variant_is_of_type (value, G_VARIANT_TYPE_DOUBLE))
+    v = g_variant_get_double (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT16))
+    v = g_variant_get_int16 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT16))
+    v = g_variant_get_uint16 (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT32))
+    v = g_variant_get_int32 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT32))
+    v = g_variant_get_uint32 (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT64))
+    v = g_variant_get_int64 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT64))
+    v = g_variant_get_uint64 (value);
+
+  else
+    g_warning ("Unknown variant type: %s\n", (gchar *)g_variant_get_type (value));
+
+  g_value_init (&val, G_TYPE_DOUBLE);
+  g_value_set_double (&val, v);
+  g_object_set_property (instance, property, &val);
+  g_value_unset (&val);
+}
+
+static GtkAdjustment *
+create_adjustment (const char *schema_id,
+                   const char *path,
+                   const char *key)
+{
+  g_autoptr(GSettings) settings = NULL;
+  GSettingsSchema *schema = NULL;
+  GSettingsSchemaKey *schema_key = NULL;
+  GtkAdjustment *ret = NULL;
+  GVariant *range = NULL;
+  GVariant *values = NULL;
+  GVariant *lower = NULL;
+  GVariant *upper = NULL;
+  GVariantIter iter;
+  char *type = NULL;
+
+  g_assert (schema_id != NULL);
+
+  if (path)
+    settings = g_settings_new_with_path (schema_id, path);
+  else
+    settings = g_settings_new (schema_id);
+
+  g_object_get (settings, "settings-schema", &schema, NULL);
+  schema_key = g_settings_schema_get_key (schema, key);
+  range = g_settings_schema_key_get_range (schema_key);
+  g_variant_get (range, "(sv)", &type, &values);
+
+  if (!ide_str_equal0 (type, "range") ||
+      (2 != g_variant_iter_init (&iter, values)))
+    goto cleanup;
+
+  lower = g_variant_iter_next_value (&iter);
+  upper = g_variant_iter_next_value (&iter);
+
+  ret = gtk_adjustment_new (0, 0, 0, 1, 10, 0);
+  set_double_property (ret, "lower", lower);
+  set_double_property (ret, "upper", upper);
+
+  g_settings_bind (settings, key, ret, "value", G_SETTINGS_BIND_DEFAULT);
+
+cleanup:
+  g_clear_pointer (&schema_key, g_settings_schema_key_unref);
+  g_clear_pointer (&schema, g_settings_schema_unref);
+  g_clear_pointer (&range, g_variant_unref);
+  g_clear_pointer (&lower, g_variant_unref);
+  g_clear_pointer (&upper, g_variant_unref);
+  g_clear_pointer (&values, g_variant_unref);
+  g_clear_pointer (&type, g_free);
+
+  return ret;
+}
+
+void
+ide_preferences_window_spin (const char                   *page_name,
+                             const IdePreferenceItemEntry *entry,
+                             AdwPreferencesGroup          *group,
+                             gpointer                      user_data)
+{
+  IdePreferencesWindow *self = user_data;
+  g_autofree char *title_esc = NULL;
+  g_autofree char *subtitle_esc = NULL;
+  g_autoptr(GError) error = NULL;
+  GtkAdjustment *adj = NULL;
+  AdwActionRow *row;
+  GtkWidget *child;
+  GSettings *settings;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (ADW_IS_PREFERENCES_GROUP (group));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+
+  if (!(settings = ide_preferences_window_get_settings (self, entry)))
+    return;
+
+  title_esc = g_markup_escape_text (entry->title ? entry->title : "", -1);
+  subtitle_esc = g_markup_escape_text (entry->subtitle ? entry->subtitle : "", -1);
+  adj = create_adjustment (entry->schema_id, entry->path, entry->key);
+
+  child = g_object_new (GTK_TYPE_SPIN_BUTTON,
+                        "valign", GTK_ALIGN_CENTER,
+                        "adjustment", adj,
+                        NULL);
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title", title_esc,
+                      "subtitle", subtitle_esc,
+                      "activatable-widget", child,
+                      NULL);
+  adw_preferences_group_add (group, GTK_WIDGET (row));
+  adw_action_row_add_suffix (row, GTK_WIDGET (child));
+
+  g_settings_bind (settings, entry->key, adj, "value", G_SETTINGS_BIND_DEFAULT);
+}
+
 IdePreferencesMode
 ide_preferences_window_get_mode (IdePreferencesWindow *self)
 {
