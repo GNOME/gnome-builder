@@ -332,8 +332,13 @@ ide_editor_page_init (IdeEditorPage *self)
 {
   GtkSourceGutterRenderer *renderer;
   GtkSourceGutter *gutter;
+  GMenu *menu;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  /* Load menus for editor pages */
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-editor-page-menu");
+  panel_widget_set_menu_model (PANEL_WIDGET (self), G_MENU_MODEL (menu));
 
   /* Until we get the omnigutter in place */
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->view),
