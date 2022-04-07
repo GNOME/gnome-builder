@@ -23,9 +23,11 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-code.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
+#include <libide-sourceview.h>
 
 #include "ide-clang-client.h"
 #include "ide-clang-code-indexer.h"
@@ -55,7 +57,7 @@ _ide_clang_register_types (PeasObjectModule *module)
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               IDE_TYPE_CLANG_DIAGNOSTIC_PROVIDER);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                               IDE_TYPE_CLANG_COMPLETION_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,

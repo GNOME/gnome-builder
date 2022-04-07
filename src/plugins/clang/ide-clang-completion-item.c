@@ -482,3 +482,60 @@ ide_clang_completion_item_new (GVariant    *variant,
 
   return ret;
 }
+
+void
+ide_clang_completion_item_display (IdeClangCompletionItem  *self,
+                                   GtkSourceCompletionCell *cell,
+                                   const char              *typed_text)
+{
+  GtkSourceCompletionColumn column;
+
+  g_return_if_fail (IDE_IS_CLANG_COMPLETION_ITEM (self));
+  g_return_if_fail (GTK_SOURCE_IS_COMPLETION_CELL (cell));
+
+  column = gtk_source_completion_cell_get_column (cell);
+
+  switch (column)
+    {
+    case GTK_SOURCE_COMPLETION_COLUMN_ICON:
+      gtk_source_completion_cell_set_icon_name (cell, self->icon_name);
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_TYPED_TEXT:
+      {
+        PangoAttrList *attrs;
+
+        attrs = gtk_source_completion_fuzzy_highlight (self->typed_text, typed_text);
+        gtk_source_completion_cell_set_text_with_attributes (cell, self->typed_text, attrs);
+        pango_attr_list_unref (attrs);
+
+        break;
+      }
+
+    case GTK_SOURCE_COMPLETION_COLUMN_COMMENT:
+      {
+        g_autoptr(GVariant) result = ide_clang_completion_item_get_result (self);
+        const char *comment;
+
+        if (g_variant_lookup (result, "command", "&s", &comment))
+          gtk_source_completion_cell_set_text (cell, comment);
+
+        break;
+      }
+
+    case GTK_SOURCE_COMPLETION_COLUMN_DETAILS:
+      gtk_source_completion_cell_set_text (cell, NULL);
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_BEFORE:
+      gtk_source_completion_cell_set_text (cell, self->return_type);
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_AFTER:
+      gtk_source_completion_cell_set_text (cell, NULL);
+      break;
+
+    default:
+      break;
+    }
+}
