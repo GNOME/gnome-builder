@@ -610,6 +610,24 @@ ide_greeter_workspace_purge_selected_rows (GSimpleAction *action,
 }
 
 static void
+ide_greeter_workspace_page_action (GtkWidget  *widget,
+                                   const char *action_name,
+                                   GVariant   *param)
+{
+  IdeGreeterWorkspace *self = (IdeGreeterWorkspace *)widget;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  ide_greeter_workspace_set_page_name (self,
+                                       g_variant_get_string (param, NULL));
+
+  IDE_EXIT;
+}
+
+static void
 ide_greeter_workspace_dispose (GObject *object)
 {
   IdeGreeterWorkspace *self = (IdeGreeterWorkspace *)object;
@@ -718,6 +736,8 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, pages);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, title);
   gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
+
+  gtk_widget_class_install_action (widget_class, "greeter.page", "s", ide_greeter_workspace_page_action);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Left, GDK_ALT_MASK, "win.page", "s", "overview");
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_w, GDK_CONTROL_MASK, "window.close", NULL);
