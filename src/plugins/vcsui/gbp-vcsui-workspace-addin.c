@@ -30,7 +30,8 @@
 
 struct _GbpVcsuiWorkspaceAddin
 {
-  GObject parent_instance;
+  GObject              parent_instance;
+  GbpVcsuiCloneWidget *clone;
 };
 
 static void
@@ -45,10 +46,11 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   if (IDE_IS_GREETER_WORKSPACE (workspace))
     {
-      GbpVcsuiCloneWidget *clone;
-
-      clone = g_object_new (GBP_TYPE_VCSUI_CLONE_WIDGET,
-                            NULL);
+      self->clone = g_object_new (GBP_TYPE_VCSUI_CLONE_WIDGET,
+                                  NULL);
+      ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
+                                      GTK_WIDGET (self->clone),
+                                      "clone");
     }
 
   IDE_EXIT;
@@ -66,6 +68,9 @@ gbp_vcsui_workspace_addin_unload (IdeWorkspaceAddin *addin,
 
   if (IDE_IS_GREETER_WORKSPACE (workspace))
     {
+      ide_greeter_workspace_remove_page (IDE_GREETER_WORKSPACE (workspace),
+                                         GTK_WIDGET (self->clone));
+      self->clone = NULL;
     }
 
   IDE_EXIT;
