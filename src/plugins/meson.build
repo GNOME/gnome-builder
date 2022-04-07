@@ -19,7 +19,7 @@ plugins_deps = [
   libide_greeter_dep,
   libide_gui_dep,
   libide_io_dep,
-  #libide_lsp_dep,
+  libide_lsp_dep,
   libide_plugins_dep,
   libide_projects_dep,
   libide_search_dep,
