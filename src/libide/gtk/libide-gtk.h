@@ -32,6 +32,7 @@
 # include "ide-gtk-enums.h"
 # include "ide-menu-manager.h"
 # include "ide-progress-icon.h"
+# include "ide-radio-box.h"
 # include "ide-search-entry.h"
 # include "ide-three-grid.h"
 # include "ide-truncate-model.h"
