@@ -20,15 +20,16 @@
 
 #define G_LOG_DOMAIN "gbp-owe-workbench-addin"
 
+#include "config.h"
+
 #include "gbp-owe-workbench-addin.h"
 
 #include <libportal/portal.h>
-#include <libportal-gtk3/portal-gtk3.h>
+#include <libportal-gtk4/portal-gtk4.h>
 
 struct _GbpOweWorkbenchAddin
 {
-  IdeObject         parent_instance;
-
+  IdeObject parent_instance;
   XdpPortal *portal;
   IdeWorkbench *workbench;
 };
@@ -36,9 +37,9 @@ struct _GbpOweWorkbenchAddin
 static void addin_iface_init (IdeWorkbenchAddinInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpOweWorkbenchAddin,
-                         gbp_owe_workbench_addin,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, addin_iface_init))
+                               gbp_owe_workbench_addin,
+                               IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, addin_iface_init))
 
 static gboolean
 gbp_owe_workbench_addin_can_open (IdeWorkbenchAddin     *addin,
@@ -60,8 +61,9 @@ gbp_owe_workbench_addin_can_open (IdeWorkbenchAddin     *addin,
    */
   *priority = G_MAXINT / 2;
 
-  // xdp_portal_open_uri() doesn't accept opening directories, and anyway there's
-  // the Open Containing Folder entry for that purpose.
+  /* xdp_portal_open_uri() doesn't accept opening directories, and anyway there's
+   * the Open Containing Folder entry for that purpose.
+   */
   return filetype != G_FILE_TYPE_DIRECTORY;
 }
 
@@ -79,10 +81,8 @@ on_file_opened_cb (GObject      *source_object,
 
   if (!xdp_portal_open_uri_finish (portal, res, &error) &&
       !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-    {
-      ide_task_return_new_error (task, error->domain, error->code,
-                                 "Couldn't open file with external program using libportal: %s", error->message);
-    }
+    ide_task_return_new_error (task, error->domain, error->code,
+                               "Couldn't open file with external program using libportal: %s", error->message);
   else
     ide_task_return_boolean (task, TRUE);
 }
@@ -91,6 +91,8 @@ static void
 gbp_owe_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
                                     GFile                 *file,
                                     const gchar           *content_type,
+                                    int                    line,
+                                    int                    line_offset,
                                     IdeBufferOpenFlags     flags,
                                     GCancellable          *cancellable,
                                     GAsyncReadyCallback    callback,
