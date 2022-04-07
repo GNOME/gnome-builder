@@ -105,6 +105,11 @@ static void
 focus_complete (Focus        *focus,
                 const GError *error)
 {
+  IdeEditorPage *page = NULL;
+  PanelFrame *frame;
+
+  IDE_ENTRY;
+
   g_assert (focus != NULL);
   g_assert (G_IS_FILE (focus->file));
   g_assert (!focus->location || IDE_IS_LOCATION (focus->location));
@@ -120,55 +125,59 @@ focus_complete (Focus        *focus,
                            /* translators: %s is replaced with the error message */
                            _("Failed to open file: %s"),
                            error->message);
+      focus_free (focus);
+      IDE_EXIT;
     }
-  else
+
+  frame = ide_workspace_get_frame_at_position (focus->workspace, focus->position);
+
+  if (frame != NULL)
     {
-      PanelFrame *frame = ide_workspace_get_frame_at_position (focus->workspace, focus->position);
-      IdeEditorPage *page = NULL;
+      guint n_pages = panel_frame_get_n_pages (PANEL_FRAME (frame));
 
-      if (frame != NULL)
+      for (guint i = 0; i < n_pages; i++)
         {
-          guint n_pages = panel_frame_get_n_pages (PANEL_FRAME (frame));
+          PanelWidget *child = panel_frame_get_page (PANEL_FRAME (frame), i);
 
-          for (guint i = 0; i < n_pages; i++)
+          if (IDE_IS_EDITOR_PAGE (child))
             {
-              PanelWidget *child = panel_frame_get_page (PANEL_FRAME (frame), i);
+              IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (child));
 
-              if (IDE_IS_EDITOR_PAGE (child))
+              if (buffer == focus->buffer)
                 {
-                  IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (child));
-
-                  if (buffer == focus->buffer)
-                    {
-                      page = IDE_EDITOR_PAGE (child);
-                      break;
-                    }
+                  page = IDE_EDITOR_PAGE (child);
+                  break;
                 }
             }
         }
-
-      g_assert (!page || IDE_IS_EDITOR_PAGE (page));
-
-      if (page == NULL)
-        {
-          page = IDE_EDITOR_PAGE (ide_editor_page_new (focus->buffer));
-          ide_workspace_add_page (focus->workspace, IDE_PAGE (page), focus->position);
-        }
-
-      if (focus->location != NULL)
-        {
-          IdeSourceView *view = ide_editor_page_get_view (page);
-          GtkTextIter iter;
-
-          ide_buffer_get_iter_at_location (focus->buffer, &iter, focus->location);
-          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (focus->buffer), &iter, &iter);
-          ide_source_view_scroll_to_insert (view);
-        }
-
-      gtk_widget_grab_focus (GTK_WIDGET (page));
     }
 
+  g_assert (!page || IDE_IS_EDITOR_PAGE (page));
+
+  if (page == NULL)
+    {
+      page = IDE_EDITOR_PAGE (ide_editor_page_new (focus->buffer));
+      ide_workspace_add_page (focus->workspace, IDE_PAGE (page), focus->position);
+    }
+
+  if (focus->location != NULL)
+    {
+      IdeSourceView *view = ide_editor_page_get_view (page);
+      GtkTextIter iter;
+
+      ide_buffer_get_iter_at_location (focus->buffer, &iter, focus->location);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (focus->buffer), &iter, &iter);
+      ide_source_view_scroll_to_insert (view);
+    }
+
+  if (frame != NULL)
+    panel_frame_set_visible_child (frame, PANEL_WIDGET (page));
+
+  gtk_widget_grab_focus (GTK_WIDGET (page));
+
   focus_free (focus);
+
+  IDE_EXIT;
 }
 
 static void
