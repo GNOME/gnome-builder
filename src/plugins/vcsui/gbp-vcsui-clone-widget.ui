@@ -18,7 +18,7 @@
                 <property name="vexpand">true</property>
                 <property name="visible">true</property>
                 <child>
-                  <object class="DzlThreeGrid" id="grid">
+                  <object class="IdeThreeGrid" id="grid">
                     <property name="column-spacing">12</property>
                     <!-- can't use row-spacing because we have to animate in
                          the revealer which messes up the margins.  -->
@@ -130,7 +130,7 @@
                         <property name="orientation">vertical</property>
                         <property name="visible">true</property>
                         <child>
-                          <object class="DzlThreeGrid">
+                          <object class="IdeThreeGrid">
                             <property name="column-spacing">12</property>
                             <property name="row-spacing">12</property>
                             <property name="visible">true</property>
@@ -150,7 +150,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="DzlRadioBox" id="kind_radio">
+                              <object class="IdeRadioBox" id="kind_radio">
                                 <property name="visible">false</property>
                                 <property name="valign">center</property>
                               </object>
@@ -241,7 +241,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="DzlThreeGrid">
+                  <object class="IdeThreeGrid">
                     <property name="margin-top">12</property>
                     <property name="column-spacing">12</property>
                     <property name="visible">true</property>
@@ -261,7 +261,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="DzlFileChooserEntry" id="destination_chooser">
+                      <object class="IdeFileChooserEntry" id="destination_chooser">
                         <property name="action">select-folder</property>
                         <property name="create-folders">true</property>
                         <property name="valign">center</property>

@@ -24,15 +24,15 @@
 
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
+
+#include <libide-greeter.h>
 #include <libide-vcs.h>
 
 #include "gbp-vcsui-clone-widget.h"
-#include "ide-greeter-private.h"
-#include "ide-greeter-workspace.h"
 
 struct _GbpVcsuiCloneWidget
 {
-  IdeSurface           parent_instance;
+  GtkWidget            parent_instance;
 
   /* This extension set contains IdeVcsCloner implementations which we
    * use to validate URIs, as well as provide some toggles for how the
@@ -53,7 +53,7 @@ struct _GbpVcsuiCloneWidget
   GtkWidget           *scroller;
   IdeFileChooserEntry *destination_chooser;
   GtkLabel            *destination_label;
-  DzlRadioBox         *kind_radio;
+  IdeRadioBox         *kind_radio;
   GtkLabel            *kind_label;
   GtkLabel            *status_message;
   GtkEntry            *uri_entry;
@@ -68,7 +68,7 @@ struct _GbpVcsuiCloneWidget
   guint                vcs_valid : 1;
 };
 
-G_DEFINE_FINAL_TYPE (GbpVcsuiCloneWidget, gbp_vcsui_clone_widget, IDE_TYPE_SURFACE)
+G_DEFINE_FINAL_TYPE (GbpVcsuiCloneWidget, gbp_vcsui_clone_widget, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -111,7 +111,7 @@ gbp_vcsui_clone_widget_addin_added_cb (PeasExtensionSet *set,
 
   title = ide_vcs_cloner_get_title (cloner);
 
-  dzl_radio_box_add_item (self->kind_radio,
+  ide_radio_box_add_item (self->kind_radio,
                           peas_plugin_info_get_module_name (plugin_info),
                           title);
 
@@ -138,7 +138,7 @@ gbp_vcsui_clone_widget_addin_removed_cb (PeasExtensionSet *set,
 
   self->n_addins--;
 
-  dzl_radio_box_remove_item (self->kind_radio,
+  ide_radio_box_remove_item (self->kind_radio,
                              peas_plugin_info_get_module_name (plugin_info));
 
   if (self->n_addins < 2)
@@ -196,7 +196,7 @@ gbp_vcsui_clone_widget_validate (GbpVcsuiCloneWidget *self)
                                 &validate);
 
   if (validate.valid)
-    dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->uri_entry), "error");
+    gtk_widget_remove_css_class (GTK_WIDGET (self->uri_entry), "error");
   else
     gtk_widget_add_css_class (GTK_WIDGET (self->uri_entry), "error");
 
@@ -282,15 +282,15 @@ gbp_vcsui_clone_widget_destination_changed (GbpVcsuiCloneWidget *self,
                                             IdeFileChooserEntry *chooser)
 {
   g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
-  g_assert (DZL_IS_FILE_CHOOSER_ENTRY (chooser));
+  g_assert (IDE_IS_FILE_CHOOSER_ENTRY (chooser));
 
   gbp_vcsui_clone_widget_update (self);
 }
 
-static void
+static gboolean
 gbp_vcsui_clone_widget_grab_focus (GtkWidget *widget)
 {
-  gtk_widget_grab_focus (GTK_WIDGET (GBP_VCSUI_CLONE_WIDGET (widget)->uri_entry));
+  return gtk_widget_grab_focus (GTK_WIDGET (GBP_VCSUI_CLONE_WIDGET (widget)->uri_entry));
 }
 
 static void
@@ -303,6 +303,8 @@ gbp_vcsui_clone_widget_dispose (GObject *object)
 
   g_clear_object (&self->addins);
   g_clear_object (&self->destination);
+
+  g_clear_pointer ((GtkWidget **)&self->scroller, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gbp_vcsui_clone_widget_parent_class)->dispose (object);
 }
@@ -317,7 +319,7 @@ gbp_vcsui_clone_widget_context_set (GtkWidget  *widget,
   g_assert (GBP_IS_VCSUI_CLONE_WIDGET (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
-  gtk_entry_set_text (self->author_entry, g_get_real_name ());
+  gtk_editable_set_text (GTK_EDITABLE (self->author_entry), g_get_real_name ());
 
   file = g_file_new_for_path (ide_get_projects_dir ());
   ide_file_chooser_entry_set_file (self->destination_chooser, file);
@@ -478,7 +480,7 @@ gbp_vcsui_clone_widget_set_uri (GbpVcsuiCloneWidget *self,
         }
     }
 
-  gtk_entry_set_text (self->uri_entry, uri);
+  gtk_editable_set_text (GTK_EDITABLE (self->uri_entry), uri);
 }
 
 static void
@@ -543,7 +545,7 @@ gbp_vcsui_clone_widget_clone (GbpVcsuiCloneWidget *self)
 
   g_return_if_fail (GBP_IS_VCSUI_CLONE_WIDGET (self));
 
-  if (!(module_name = dzl_radio_box_get_active_id (self->kind_radio)) ||
+  if (!(module_name = ide_radio_box_get_active_id (self->kind_radio)) ||
       !(plugin_info = peas_engine_get_plugin_info (engine, module_name)) ||
       !(addin = (IdeVcsCloner *)peas_extension_set_get_extension (self->addins, plugin_info)))
     {
