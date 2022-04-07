@@ -105,7 +105,7 @@ void            ide_workspace_add_pane                 (IdeWorkspace      *self,
                                                         IdePanelPosition  *position);
 IDE_AVAILABLE_IN_ALL
 void            ide_workspace_add_page                 (IdeWorkspace      *self,
-                                                        IdePage           *pane,
+                                                        IdePage           *page,
                                                         IdePanelPosition  *position);
 IDE_AVAILABLE_IN_ALL
 PanelStatusbar *ide_workspace_get_statusbar            (IdeWorkspace      *self);

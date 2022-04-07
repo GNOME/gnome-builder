@@ -819,6 +819,17 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
   return IDE_WORKSPACE_ADDIN (ret);
 }
 
+/**
+ * ide_workspace_add_page:
+ * @self: a #IdeWorkspace
+ * @page: an #IdePage
+ * @position: the position for the page
+ *
+ * Adds @page to @workspace.
+ *
+ * In future versions, @position may be updated to reflect the
+ * postion in which @page was added.
+ */
 void
 ide_workspace_add_page (IdeWorkspace     *self,
                         IdePage          *page,
@@ -835,6 +846,17 @@ ide_workspace_add_page (IdeWorkspace     *self,
                 G_OBJECT_TYPE_NAME (self));
 }
 
+/**
+ * ide_workspace_add_pane:
+ * @self: a #IdeWorkspace
+ * @pane: an #IdePane
+ * @position: the position for the pane
+ *
+ * Adds @pane to @workspace.
+ *
+ * In future versions, @position may be updated to reflect the
+ * postion in which @pane was added.
+ */
 void
 ide_workspace_add_pane (IdeWorkspace     *self,
                         IdePane          *pane,
@@ -970,6 +992,83 @@ add_to_frame_with_depth (PanelFrame  *frame,
     panel_frame_set_visible_child (frame, previous_page);
 }
 
+static gboolean
+find_open_frame (IdeGrid *grid,
+                 guint   *column,
+                 guint   *row)
+{
+  guint n_columns;
+
+  g_assert (IDE_IS_GRID (grid));
+  g_assert (column != NULL);
+  g_assert (row != NULL);
+
+  n_columns = panel_grid_get_n_columns (PANEL_GRID (grid));
+
+  for (guint c = 0; c < n_columns; c++)
+    {
+      PanelGridColumn *grid_column = panel_grid_get_column (PANEL_GRID (grid), c);
+      guint n_rows = panel_grid_column_get_n_rows (grid_column);
+
+      for (guint r = 0; r < n_rows; r++)
+        {
+          PanelFrame *frame = panel_grid_column_get_row (grid_column, r);
+
+          if (panel_frame_get_empty (frame))
+            {
+              *column = c;
+              *row = r;
+              return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+find_most_recent_frame (IdeWorkspace *workspace,
+                        IdeGrid      *grid,
+                        guint        *column,
+                        guint        *row)
+{
+  GtkWidget *grid_column;
+  IdeFrame *frame;
+  guint n_columns;
+
+  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (IDE_IS_GRID (grid));
+  g_assert (column != NULL);
+  g_assert (row != NULL);
+
+  *column = 0;
+  *row = 0;
+
+  if (!(frame = ide_workspace_get_most_recent_frame (workspace)) ||
+      !(grid_column = gtk_widget_get_ancestor (GTK_WIDGET (frame), PANEL_TYPE_GRID_COLUMN)))
+    return;
+
+  n_columns = panel_grid_get_n_columns (PANEL_GRID (grid));
+
+  for (guint c = 0; c < n_columns; c++)
+    {
+      if (grid_column == (GtkWidget *)panel_grid_get_column (PANEL_GRID (grid), c))
+        {
+          guint n_rows = panel_grid_column_get_n_rows (PANEL_GRID_COLUMN (grid_column));
+
+          for (guint r = 0; r < n_rows; r++)
+            {
+              if ((PanelFrame *)frame == panel_grid_column_get_row (PANEL_GRID_COLUMN (grid_column), r))
+                {
+                  *column = c;
+                  *row = r;
+                  return;
+                }
+            }
+        }
+    }
+}
+
 void
 _ide_workspace_add_widget (IdeWorkspace     *self,
                            PanelWidget      *widget,
@@ -984,8 +1083,8 @@ _ide_workspace_add_widget (IdeWorkspace     *self,
   GtkWidget *parent;
   gboolean depth_set;
   guint depth;
-  guint column;
-  guint row;
+  guint column = 0;
+  guint row = 0;
   guint nth = 0;
 
   IDE_ENTRY;
@@ -999,17 +1098,41 @@ _ide_workspace_add_widget (IdeWorkspace     *self,
   g_return_if_fail (IDE_IS_GRID (grid));
 
   if (!ide_panel_position_get_edge (position, &edge))
-    edge = PANEL_DOCK_POSITION_CENTER;
+    {
+      if (IDE_IS_PAGE (widget))
+        edge = PANEL_DOCK_POSITION_CENTER;
+      else
+        edge = PANEL_DOCK_POSITION_START;
+    }
+
+  /* Force pages to be always be loaded in the center */
+  if (IDE_IS_PAGE (widget) && edge != PANEL_DOCK_POSITION_CENTER)
+    {
+      g_warning ("Attempt to add a page to a position other than center. Ignoring.");
+      edge = PANEL_DOCK_POSITION_CENTER;
+    }
+
+  /* Don't allow non-pages to be added to the center */
+  if (!IDE_IS_PAGE (widget) && edge == PANEL_DOCK_POSITION_CENTER)
+    {
+      g_warning ("Attempt to add a non-page to the center. Ignoring.");
+      edge = PANEL_DOCK_POSITION_START;
+    }
 
   if (edge == PANEL_DOCK_POSITION_CENTER)
     {
       PanelFrame *frame;
 
-      if (!ide_panel_position_get_column (position, &column))
-        column = 0;
-
-      if (!ide_panel_position_get_row (position, &row))
-        row = 0;
+      /* If we are adding a page, and no row or column is set, then the next
+       * best thing to do is to try to find an open frame. If we can't do that
+       * then we'll try to find the most recent frame.
+       */
+      if (!ide_panel_position_get_column (position, &column) &&
+          !ide_panel_position_get_row (position, &row))
+        {
+          if (!find_open_frame (grid, &column, &row))
+            find_most_recent_frame (self, grid, &column, &row);
+        }
 
       depth_set = ide_panel_position_get_depth (position, &depth);
       frame = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (grid), column), row);
