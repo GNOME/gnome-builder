@@ -31,23 +31,21 @@
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_COMPLETION_PROVIDER (ide_lsp_completion_provider_get_type())
-
 #define IDE_LSP_COMPLETION_PROVIDER_PRIORITY 200
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspCompletionProvider, ide_lsp_completion_provider, IDE, LSP_COMPLETION_PROVIDER, IdeObject)
 
 struct _IdeLspCompletionProviderClass
 {
   IdeObjectClass parent_class;
 
-  /*< private >*/
-  gpointer _reserved[8];
+  void (*load) (IdeLspCompletionProvider *self);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLspClient *ide_lsp_completion_provider_get_client (IdeLspCompletionProvider *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_lsp_completion_provider_set_client (IdeLspCompletionProvider *self,
                                                       IdeLspClient             *client);
 
