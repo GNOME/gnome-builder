@@ -27,12 +27,12 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
-void ide_editor_focus_location (IdeWorkspace *workspace,
-                                IdeFrame     *frame,
-                                IdeLocation  *location);
+void ide_editor_focus_location (IdeWorkspace     *workspace,
+                                IdePanelPosition *position,
+                                IdeLocation      *location);
 IDE_AVAILABLE_IN_ALL
-void ide_editor_focus_buffer   (IdeWorkspace *workspace,
-                                IdeFrame     *frame,
-                                IdeBuffer    *buffer);
+void ide_editor_focus_buffer   (IdeWorkspace     *workspace,
+                                IdePanelPosition *position,
+                                IdeBuffer        *buffer);
 
 G_END_DECLS
