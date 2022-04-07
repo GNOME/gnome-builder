@@ -257,8 +257,10 @@ gbp_quick_highlight_editor_page_addin_unload (IdeEditorPageAddin *addin,
   ide_signal_group_set_target (self->buffer_signals, NULL);
   g_clear_object (&self->buffer_signals);
 
+#if 0
   ide_signal_group_set_target (self->search_signals, NULL);
   g_clear_object (&self->search_signals);
+#endif
 
   g_clear_object (&self->settings);
 
