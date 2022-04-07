@@ -665,7 +665,7 @@ static const IdePreferencePageEntry pages[] = {
 };
 
 static const IdePreferenceGroupEntry groups[] = {
-  { "appearance", "style",          0, N_("Appearance") },
+  { "appearance", "style",                  0, N_("Appearance") },
 
   { "insight",    "general",                0, NULL },
   { "insight",    "completion",            10, N_("Completion") },
@@ -675,27 +675,27 @@ static const IdePreferenceGroupEntry groups[] = {
 #endif
   { "insight",    "diagnostics-providers", 40, N_("Diagnostics") },
 
-  { "plugins",    "vcs",            0, N_("Version Control") },
-  { "plugins",    "sdks",          10, N_("SDKs") },
-  { "plugins",    "lsps",          20, N_("Language Servers") },
-  { "plugins",    "devices",       30, N_("Devices & Simulators") },
-  { "plugins",    "diagnostics",   40, N_("Diagnostics") },
-  { "plugins",    "buildsystems",  50, N_("Build Systems") },
-  { "plugins",    "compilers",     60, N_("Compilers") },
-  { "plugins",    "debuggers",     70, N_("Debuggers") },
-  { "plugins",    "templates",     80, N_("Templates") },
-  { "plugins",    "editing",       90, N_("Editing & Formatting") },
-  { "plugins",    "other",        500, N_("Additional") },
+  { "plugins",    "vcs",                    0, N_("Version Control") },
+  { "plugins",    "sdks",                  10, N_("SDKs") },
+  { "plugins",    "lsps",                  20, N_("Language Servers") },
+  { "plugins",    "devices",               30, N_("Devices & Simulators") },
+  { "plugins",    "diagnostics",           40, N_("Diagnostics") },
+  { "plugins",    "buildsystems",          50, N_("Build Systems") },
+  { "plugins",    "compilers",             60, N_("Compilers") },
+  { "plugins",    "debuggers",             70, N_("Debuggers") },
+  { "plugins",    "templates",             80, N_("Templates") },
+  { "plugins",    "editing",               90, N_("Editing & Formatting") },
+  { "plugins",    "other",                500, N_("Additional") },
 
-  { "keyboard",   "keybindings",    0, N_("Keyboard Shortcuts") },
+  { "keyboard",   "keybindings",            0, N_("Keyboard Shortcuts") },
 
-  { "projects",   "workspace",      0, N_("Workspace") },
+  { "projects",   "workspace",              0, N_("Workspace") },
 
-  { "debug",      "breakpoints",    0, N_("Breakpoints") },
+  { "debug",      "breakpoints",            0, N_("Breakpoints") },
 
-  { "build",      "general",        0, N_("General") },
+  { "build",      "general",                0, N_("General") },
 
-  { "network",    "downloads",      0, N_("Downloads") },
+  { "network",    "downloads",              0, N_("Downloads") },
 };
 
 static const IdePreferenceItemEntry items[] = {
