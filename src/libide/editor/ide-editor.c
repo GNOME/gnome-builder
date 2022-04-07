@@ -29,11 +29,11 @@
 
 typedef struct _Focus
 {
-  IdeWorkspace *workspace;
-  IdeFrame     *frame;
-  IdeLocation  *location;
-  IdeBuffer    *buffer;
-  GFile        *file;
+  IdeWorkspace     *workspace;
+  IdePanelPosition *position;
+  IdeLocation      *location;
+  IdeBuffer        *buffer;
+  GFile            *file;
 } Focus;
 
 static Focus *
@@ -69,14 +69,14 @@ focus_new (IdeWorkspace *workspace,
   if (buffer == NULL)
     buffer = ide_buffer_manager_find_buffer (bufmgr, file);
 
-  if (frame == NULL)
-    frame = ide_workspace_get_most_recent_frame (workspace);
-
-  g_assert (IDE_IS_FRAME (frame));
-
   focus = g_atomic_rc_box_alloc0 (sizeof *focus);
+
+  if (frame != NULL)
+    focus->position = ide_frame_get_position (frame);
+  else
+    focus->position = ide_panel_position_new ();
+
   g_set_object (&focus->workspace, workspace);
-  g_set_object (&focus->frame, frame);
   g_set_object (&focus->buffer, buffer);
   g_set_object (&focus->location, location);
   g_set_object (&focus->file, file);
@@ -92,7 +92,6 @@ focus_finalize (gpointer data)
   g_clear_object (&focus->workspace);
   g_clear_object (&focus->location);
   g_clear_object (&focus->buffer);
-  g_clear_object (&focus->frame);
   g_clear_object (&focus->file);
 }
 
@@ -112,7 +111,7 @@ focus_complete (Focus        *focus,
   g_assert (!focus->buffer || IDE_IS_BUFFER (focus->buffer));
   g_assert (focus->buffer || error != NULL);
   g_assert (IDE_IS_WORKSPACE (focus->workspace));
-  g_assert (IDE_IS_FRAME (focus->frame));
+  g_assert (focus->position != NULL);
 
   if (error != NULL)
     {
@@ -124,21 +123,26 @@ focus_complete (Focus        *focus,
     }
   else
     {
-      guint n_pages = panel_frame_get_n_pages (PANEL_FRAME (focus->frame));
+      PanelFrame *frame = ide_workspace_get_frame_at_position (focus->workspace, focus->position);
       IdeEditorPage *page = NULL;
 
-      for (guint i = 0; i < n_pages; i++)
+      if (frame != NULL)
         {
-          PanelWidget *child = panel_frame_get_page (PANEL_FRAME (focus->frame), i);
+          guint n_pages = panel_frame_get_n_pages (PANEL_FRAME (frame));
 
-          if (IDE_IS_EDITOR_PAGE (child))
+          for (guint i = 0; i < n_pages; i++)
             {
-              IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (child));
+              PanelWidget *child = panel_frame_get_page (PANEL_FRAME (frame), i);
 
-              if (buffer == focus->buffer)
+              if (IDE_IS_EDITOR_PAGE (child))
                 {
-                  page = IDE_EDITOR_PAGE (child);
-                  break;
+                  IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (child));
+
+                  if (buffer == focus->buffer)
+                    {
+                      page = IDE_EDITOR_PAGE (child);
+                      break;
+                    }
                 }
             }
         }
@@ -148,10 +152,8 @@ focus_complete (Focus        *focus,
       if (page == NULL)
         {
           page = IDE_EDITOR_PAGE (ide_editor_page_new (focus->buffer));
-          panel_frame_add (PANEL_FRAME (focus->frame), PANEL_WIDGET (page));
+          ide_workspace_add_page (focus->workspace, IDE_PAGE (page), focus->position);
         }
-
-      panel_frame_set_visible_child (PANEL_FRAME (focus->frame), PANEL_WIDGET (page));
 
       if (focus->location != NULL)
         {
@@ -183,7 +185,7 @@ ide_editor_load_file_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (focus != NULL);
   g_assert (IDE_IS_WORKSPACE (focus->workspace));
-  g_assert (IDE_IS_FRAME (focus->frame));
+  g_assert (focus->position != NULL);
   g_assert (G_IS_FILE (focus->file));
 
   if ((buffer = ide_buffer_manager_load_file_finish (bufmgr, result, &error)))
