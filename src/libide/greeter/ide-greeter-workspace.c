@@ -1006,6 +1006,8 @@ ide_greeter_workspace_set_page_name (IdeGreeterWorkspace *self,
     name = "overview";
 
   gtk_stack_set_visible_child_name (self->pages, name);
+  gtk_widget_set_visible (GTK_WIDGET (self->back_button),
+                          !ide_str_equal0 (name, "overview"));
 }
 
 void
