@@ -7,3 +7,4 @@ Description=Provides spellchecking for documents
 Embedded=_gbp_spellcheck_register_types
 Module=spellcheck
 Name=Check Spelling
+X-Category=editing
