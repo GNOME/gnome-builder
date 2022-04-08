@@ -31,9 +31,34 @@
 
 struct _GbpSpellEditorPageAddin
 {
-  GObject parent_instance;
+  GObject              parent_instance;
   GbpSpellBufferAddin *buffer_addin;
-  GMenuModel *menu;
+  GMenuModel          *menu;
+  GSimpleActionGroup  *actions;
+};
+
+static void
+gbp_spell_editor_page_addin_add (GSimpleAction *action,
+                                 GVariant      *param,
+                                 gpointer       user_data)
+{
+  GbpSpellEditorPageAddin *self = user_data;
+  const char *word;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  word = g_variant_get_string (param, NULL);
+  gbp_spell_buffer_addin_add_word (self->buffer_addin, word);
+
+  IDE_EXIT;
+}
+
+static const GActionEntry actions[] = {
+  { "add", gbp_spell_editor_page_addin_add, "s" },
 };
 
 static void
@@ -41,6 +66,7 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
                                   IdeEditorPage      *page)
 {
   GbpSpellEditorPageAddin *self = (GbpSpellEditorPageAddin *)addin;
+  IdeBufferAddin *buffer_addin;
   IdeSourceView *view;
   IdeBuffer *buffer;
 
@@ -52,10 +78,20 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
   buffer = ide_editor_page_get_buffer (page);
   view = ide_editor_page_get_view (page);
 
-  self->buffer_addin = GBP_SPELL_BUFFER_ADDIN (ide_buffer_addin_find_by_module_name (buffer, "spellcheck"));
-  self->menu = editor_spell_menu_new ();
+  buffer_addin = ide_buffer_addin_find_by_module_name (buffer, "spellcheck");
+  self->buffer_addin = GBP_SPELL_BUFFER_ADDIN (buffer_addin);
 
+  self->menu = editor_spell_menu_new ();
   ide_source_view_append_menu (view, self->menu);
+
+  self->actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (page),
+                                  "spelling",
+                                  G_ACTION_GROUP (self->actions));
 
   IDE_EXIT;
 }
@@ -72,9 +108,13 @@ gbp_spell_editor_page_addin_unload (IdeEditorPageAddin *addin,
   g_assert (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PAGE (page));
 
+  gtk_widget_insert_action_group (GTK_WIDGET (page), "spelling", NULL);
+
   view = ide_editor_page_get_view (page);
   ide_source_view_remove_menu (view, self->menu);
+
   g_clear_object (&self->menu);
+  g_clear_object (&self->actions);
 
   self->buffer_addin = NULL;
 
