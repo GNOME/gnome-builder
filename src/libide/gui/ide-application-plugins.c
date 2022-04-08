@@ -409,7 +409,7 @@ _ide_application_load_plugins (IdeApplication *self)
       !g_irepository_require (NULL, "Gtk", "4.0", 0, &error) ||
       !g_irepository_require (NULL, "Jsonrpc", "1.0", 0, &error) ||
       !g_irepository_require (NULL, "Template", "1.0", 0, &error) ||
-      !g_irepository_require (NULL, "Vte", "4-2.91", 0, &error) ||
+      !g_irepository_require (NULL, "Vte", "3.91", 0, &error) ||
 #ifdef HAVE_WEBKIT
       !g_irepository_require (NULL, "WebKit2", "5.0", 0, &error) ||
 #endif
