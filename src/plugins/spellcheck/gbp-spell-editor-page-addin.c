@@ -246,6 +246,8 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
+  g_action_map_add_action (G_ACTION_MAP (self->actions),
+                           gbp_spell_buffer_addin_get_enabled_action (self->buffer_addin));
   gtk_widget_insert_action_group (GTK_WIDGET (page),
                                   "spelling",
                                   G_ACTION_GROUP (self->actions));

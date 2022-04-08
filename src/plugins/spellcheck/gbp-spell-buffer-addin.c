@@ -37,6 +37,7 @@ struct _GbpSpellBufferAddin
   IdeBuffer *buffer;
   EditorSpellChecker *checker;
   EditorTextBufferSpellAdapter *adapter;
+  GPropertyAction *enabled_action;
 };
 
 static void
@@ -99,6 +100,8 @@ gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
 
+  self->enabled_action = g_property_action_new ("enabled", self->adapter, "enabled");
+
   editor_text_buffer_spell_adapter_set_enabled (self->adapter, TRUE);
 
   IDE_EXIT;
@@ -121,6 +124,7 @@ gbp_spell_buffer_addin_unload (IdeBufferAddin *addin,
 
   g_clear_object (&self->checker);
   g_clear_object (&self->adapter);
+  g_clear_object (&self->enabled_action);
 
   self->buffer = NULL;
 
@@ -203,4 +207,12 @@ gbp_spell_buffer_addin_list_corrections (GbpSpellBufferAddin *self,
     return editor_spell_checker_list_corrections (self->checker, word);
 
   return NULL;
+}
+
+GAction *
+gbp_spell_buffer_addin_get_enabled_action (GbpSpellBufferAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
+
+  return G_ACTION (self->enabled_action);
 }
