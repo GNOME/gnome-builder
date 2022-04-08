@@ -30,6 +30,7 @@
 # include "ide-font-description.h"
 # include "ide-gtk.h"
 # include "ide-gtk-enums.h"
+# include "ide-joined-menu.h"
 # include "ide-menu-manager.h"
 # include "ide-progress-icon.h"
 # include "ide-radio-box.h"
