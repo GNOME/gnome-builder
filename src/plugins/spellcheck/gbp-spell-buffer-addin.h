@@ -28,7 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSpellBufferAddin, gbp_spell_buffer_addin, GBP, SPELL_BUFFER_ADDIN, GObject)
 
-void gbp_spell_buffer_addin_add_word (GbpSpellBufferAddin *self,
-                                      const char          *word);
+void gbp_spell_buffer_addin_add_word    (GbpSpellBufferAddin *self,
+                                         const char          *word);
+void gbp_spell_buffer_addin_ignore_word (GbpSpellBufferAddin *self,
+                                         const char          *word);
 
 G_END_DECLS
