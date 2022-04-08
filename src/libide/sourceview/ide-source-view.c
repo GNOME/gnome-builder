@@ -39,6 +39,8 @@ struct _IdeSourceView
   IdeJoinedMenu *joined_menu;
 };
 
+G_DEFINE_TYPE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
+
 enum {
   PROP_0,
   PROP_FONT_DESC,
@@ -48,9 +50,13 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
+enum {
+  POPULATE_MENU,
+  N_SIGNALS
+};
 
-static GParamSpec *properties [N_PROPS];
+static GParamSpec *properties[N_PROPS];
+static guint signals[N_SIGNALS];
 
 static void
 ide_source_view_update_css (IdeSourceView *self)
@@ -162,6 +168,49 @@ tweak_gutter_spacing (GtkSourceView *view)
       if (GTK_SOURCE_IS_GUTTER_RENDERER (child))
         gtk_widget_set_margin_start (child, n == 0 ? 4 : 0);
     }
+}
+
+static void
+ide_source_view_click_pressed_cb (IdeSourceView   *self,
+                                  int              n_press,
+                                  double           x,
+                                  double           y,
+                                  GtkGestureClick *click)
+{
+  GdkEventSequence *sequence;
+  g_auto(GStrv) corrections = NULL;
+  GtkTextBuffer *buffer;
+  GdkEvent *event;
+  GtkTextIter iter;
+  int buf_x, buf_y;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_GESTURE_CLICK (click));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (click));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (click), sequence);
+
+  if (n_press != 1 || !gdk_event_triggers_context_menu (event))
+    IDE_EXIT;
+
+  /* Move the cursor position to where the click occurred so that
+   * the context menu will be useful for the click location.
+   */
+  if (!gtk_text_buffer_get_has_selection (buffer))
+    {
+      gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (self),
+                                             GTK_TEXT_WINDOW_WIDGET,
+                                             x, y, &buf_x, &buf_y);
+      gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self), &iter, buf_x, buf_y);
+      gtk_text_buffer_select_range (buffer, &iter, &iter);
+    }
+
+  g_signal_emit (self, signals[POPULATE_MENU], 0);
+
+  IDE_EXIT;
 }
 
 static void
@@ -281,23 +330,59 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  /**
+   * IdeSourceView::populate-menu:
+   * @self: an #IdeSourceView
+   *
+   * The "populate-menu" signal is emitted before the context meu is shown
+   * to the user. Handlers of this signal should update any menu items they
+   * have which have been connected using ide_source_view_append_menu() or
+   * simmilar.
+   */
+  signals[POPULATE_MENU] =
+    g_signal_new_class_handler ("populate-menu",
+                                G_TYPE_FROM_CLASS (klass),
+                                G_SIGNAL_RUN_LAST,
+                                NULL,
+                                NULL, NULL,
+                                NULL,
+                                G_TYPE_NONE, 0);
+
 }
 
 static void
 ide_source_view_init (IdeSourceView *self)
 {
   GtkStyleContext *style_context;
+  GtkEventController *click;
 
+  /* Setup our extra menu so that consumers can use
+   * ide_source_view_append_men() or similar to update menus.
+   */
   self->joined_menu = ide_joined_menu_new ();
   gtk_text_view_set_extra_menu (GTK_TEXT_VIEW (self),
                                 G_MENU_MODEL (self->joined_menu));
 
+  /* Setup a handler to emit ::populate-menu */
+  click = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), 0);
+  g_signal_connect_swapped (click,
+                            "pressed",
+                            G_CALLBACK (ide_source_view_click_pressed_cb),
+                            self);
+  gtk_widget_add_controller (GTK_WIDGET (self), click);
+
+  /* This is sort of a layer vioaltion, but it's helpful for us to
+   * get the system font name and manage it invisibly.
+   */
   g_signal_connect_object (g_application_get_default (),
                            "notify::system-font-name",
                            G_CALLBACK (ide_source_view_update_css),
                            self,
                            G_CONNECT_SWAPPED);
 
+  /* Setup the CSS provider for the custom font/scale/etc. */
   self->css_provider = gtk_css_provider_new ();
   style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_provider (style_context,
