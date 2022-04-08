@@ -36,6 +36,7 @@ struct _IdeSourceView
   PangoFontDescription *font_desc;
   int font_scale;
   double line_height;
+  IdeJoinedMenu *joined_menu;
 };
 
 enum {
@@ -168,6 +169,7 @@ ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
 
+  g_clear_object (&self->joined_menu);
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->font_desc, pango_font_description_free);
 
@@ -286,6 +288,10 @@ ide_source_view_init (IdeSourceView *self)
 {
   GtkStyleContext *style_context;
 
+  self->joined_menu = ide_joined_menu_new ();
+  gtk_text_view_set_extra_menu (GTK_TEXT_VIEW (self),
+                                G_MENU_MODEL (self->joined_menu));
+
   g_signal_connect_object (g_application_get_default (),
                            "notify::system-font-name",
                            G_CALLBACK (ide_source_view_update_css),
@@ -401,4 +407,24 @@ ide_source_view_get_zoom_level (IdeSourceView *self)
   alt_size = MAX (1, size + self->font_scale);
 
   return (double)alt_size / (double)size;
+}
+
+void
+ide_source_view_append_menu (IdeSourceView *self,
+                             GMenuModel    *menu_model)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (G_IS_MENU_MODEL (menu_model));
+
+  ide_joined_menu_append_menu (self->joined_menu, menu_model);
+}
+
+void
+ide_source_view_remove_menu (IdeSourceView *self,
+                             GMenuModel    *menu_model)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (G_IS_MENU_MODEL (menu_model));
+
+  ide_joined_menu_remove_menu (self->joined_menu, menu_model);
 }
