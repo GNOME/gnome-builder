@@ -170,6 +170,18 @@ tweak_gutter_spacing (GtkSourceView *view)
     }
 }
 
+static gboolean
+show_menu_from_idle (gpointer data)
+{
+  IdeSourceView *self = data;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  gtk_widget_activate_action (GTK_WIDGET (self), "menu.popup", NULL);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_source_view_click_pressed_cb (IdeSourceView   *self,
                                   int              n_press,
@@ -209,6 +221,19 @@ ide_source_view_click_pressed_cb (IdeSourceView   *self,
     }
 
   g_signal_emit (self, signals[POPULATE_MENU], 0);
+
+  /* Steal this event and manage showing the popup ourselves without
+   * using an event to silence GTK warnings elsewise. Doing this from
+   * the idle callback is really what appears to fix the allocation
+   * issue within GTK.
+   */
+  gtk_gesture_set_sequence_state (GTK_GESTURE (click),
+                                  sequence,
+                                  GTK_EVENT_SEQUENCE_CLAIMED);
+  g_idle_add_full (G_PRIORITY_LOW+1000,
+                   show_menu_from_idle,
+                   g_object_ref (self),
+                   g_object_unref);
 
   IDE_EXIT;
 }
@@ -367,6 +392,8 @@ ide_source_view_init (IdeSourceView *self)
   /* Setup a handler to emit ::populate-menu */
   click = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), 0);
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (click),
+                                              GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (click,
                             "pressed",
                             G_CALLBACK (ide_source_view_click_pressed_cb),
