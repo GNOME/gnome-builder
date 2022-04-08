@@ -32,9 +32,12 @@
 struct _GbpSpellEditorPageAddin
 {
   GObject              parent_instance;
+  IdeEditorPage       *page;
   GbpSpellBufferAddin *buffer_addin;
+  GtkGestureClick     *click;
   GMenuModel          *menu;
   GSimpleActionGroup  *actions;
+  char                *spelling_word;
 };
 
 static void
@@ -43,16 +46,12 @@ gbp_spell_editor_page_addin_add (GSimpleAction *action,
                                  gpointer       user_data)
 {
   GbpSpellEditorPageAddin *self = user_data;
-  const char *word;
 
   IDE_ENTRY;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (param != NULL);
-  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
-  word = g_variant_get_string (param, NULL);
-  gbp_spell_buffer_addin_add_word (self->buffer_addin, word);
+  gbp_spell_buffer_addin_add_word (self->buffer_addin, self->spelling_word);
 
   IDE_EXIT;
 }
@@ -63,24 +62,150 @@ gbp_spell_editor_page_addin_ignore (GSimpleAction *action,
                                     gpointer       user_data)
 {
   GbpSpellEditorPageAddin *self = user_data;
-  const char *word;
 
   IDE_ENTRY;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (param != NULL);
-  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
-  word = g_variant_get_string (param, NULL);
-  gbp_spell_buffer_addin_ignore_word (self->buffer_addin, word);
+  gbp_spell_buffer_addin_ignore_word (self->buffer_addin, self->spelling_word);
 
   IDE_EXIT;
 }
 
+static void
+gbp_spell_editor_page_addin_correct (GSimpleAction *action,
+                                     GVariant      *param,
+                                     gpointer       user_data)
+{
+  GbpSpellEditorPageAddin *self = user_data;
+  g_autofree char *slice = NULL;
+  IdeSourceView *view;
+  GtkTextBuffer *buffer;
+  const char *word;
+  GtkTextIter begin, end;
+
+  g_assert (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+  g_assert (self->spelling_word != NULL);
+
+  view = ide_editor_page_get_view (self->page);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  word = g_variant_get_string (param, NULL);
+
+  /* We don't deal with selections (yet?) */
+  if (gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
+    return;
+
+  if (!gtk_text_iter_starts_word (&begin))
+    gtk_text_iter_backward_word_start (&begin);
+
+  if (!gtk_text_iter_ends_word (&end))
+    gtk_text_iter_forward_word_end (&end);
+
+  slice = gtk_text_iter_get_slice (&begin, &end);
+
+  if (g_strcmp0 (slice, self->spelling_word) != 0)
+    {
+      g_debug ("Words do not match, will not replace.");
+      return;
+    }
+
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_insert (buffer, &begin, word, -1);
+  gtk_text_buffer_end_user_action (buffer);
+}
+
 static const GActionEntry actions[] = {
-  { "add", gbp_spell_editor_page_addin_add, "s" },
-  { "ignore", gbp_spell_editor_page_addin_ignore, "s" },
+  { "add", gbp_spell_editor_page_addin_add },
+  { "ignore", gbp_spell_editor_page_addin_ignore },
+  { "correct", gbp_spell_editor_page_addin_correct, "s" },
 };
+
+static void
+set_action_enabled (GSimpleActionGroup *group,
+                    const char         *name,
+                    gboolean            enabled)
+{
+  GAction *action;
+
+  if ((action = g_action_map_lookup_action (G_ACTION_MAP (group), name)))
+    {
+      if (G_IS_SIMPLE_ACTION (action))
+        g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
+    }
+}
+
+static void
+on_click_pressed_cb (GtkGestureClick         *click,
+                     int                      n_press,
+                     double                   x,
+                     double                   y,
+                     GbpSpellEditorPageAddin *self)
+{
+  GdkEventSequence *sequence;
+  g_auto(GStrv) corrections = NULL;
+  g_autofree char *word = NULL;
+  IdeSourceView *view;
+  GtkTextBuffer *buffer;
+  GdkEvent *event;
+  GtkTextIter iter, begin, end;
+  int buf_x, buf_y;
+
+  g_assert (GBP_IS_SPELL_EDITOR_PAGE_ADDIN (self));
+  g_assert (GTK_IS_GESTURE_CLICK (click));
+  g_assert (IDE_IS_EDITOR_PAGE (self->page));
+
+  sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (click));
+  event = gtk_gesture_get_last_event (GTK_GESTURE (click), sequence);
+
+  if (n_press != 1 || !gdk_event_triggers_context_menu (event))
+    goto cleanup;
+
+  /* Move the cursor position to where the click occurred so that
+   * the context menu will be useful for the click location.
+   */
+  view = ide_editor_page_get_view (self->page);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  if (gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
+    goto cleanup;
+
+  gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view),
+                                         GTK_TEXT_WINDOW_WIDGET,
+                                         x, y, &buf_x, &buf_y);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view), &iter, buf_x, buf_y);
+  gtk_text_buffer_select_range (buffer, &iter, &iter);
+
+  /* Get the word under the cursor */
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, gtk_text_buffer_get_insert (buffer));
+  begin = iter;
+  if (!gtk_text_iter_starts_word (&begin))
+    gtk_text_iter_backward_word_start (&begin);
+  end = begin;
+  if (!gtk_text_iter_ends_word (&end))
+    gtk_text_iter_forward_word_end (&end);
+  if (!gtk_text_iter_equal (&begin, &end) &&
+      gtk_text_iter_compare (&begin, &iter) <= 0 &&
+      gtk_text_iter_compare (&iter, &end) <= 0)
+    {
+      word = gtk_text_iter_get_slice (&begin, &end);
+
+      if (!gbp_spell_buffer_addin_check_spelling (self->buffer_addin, word))
+        corrections = gbp_spell_buffer_addin_list_corrections (self->buffer_addin, word);
+      else
+        g_clear_pointer (&word, g_free);
+    }
+
+cleanup:
+  g_free (self->spelling_word);
+  self->spelling_word = g_steal_pointer (&word);
+
+  set_action_enabled (self->actions, "add", self->spelling_word != NULL);
+  set_action_enabled (self->actions, "ignore", self->spelling_word != NULL);
+  editor_spell_menu_set_corrections (self->menu,
+                                     self->spelling_word,
+                                     (const char * const *)corrections);
+}
 
 static void
 gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
@@ -98,9 +223,20 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
 
   buffer = ide_editor_page_get_buffer (page);
   view = ide_editor_page_get_view (page);
-
   buffer_addin = ide_buffer_addin_find_by_module_name (buffer, "spellcheck");
+
+  self->page = page;
   self->buffer_addin = GBP_SPELL_BUFFER_ADDIN (buffer_addin);
+
+  self->click = GTK_GESTURE_CLICK (gtk_gesture_click_new ());
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->click), 0);
+  g_signal_connect_object (self->click,
+                           "pressed",
+                           G_CALLBACK (on_click_pressed_cb),
+                           self,
+                           0);
+  gtk_widget_add_controller (GTK_WIDGET (view),
+                             GTK_EVENT_CONTROLLER (self->click));
 
   self->menu = editor_spell_menu_new ();
   ide_source_view_append_menu (view, self->menu);
@@ -134,10 +270,15 @@ gbp_spell_editor_page_addin_unload (IdeEditorPageAddin *addin,
   view = ide_editor_page_get_view (page);
   ide_source_view_remove_menu (view, self->menu);
 
+  gtk_widget_remove_controller (GTK_WIDGET (view),
+                                GTK_EVENT_CONTROLLER (self->click));
+  self->click = NULL;
+
   g_clear_object (&self->menu);
   g_clear_object (&self->actions);
 
   self->buffer_addin = NULL;
+  self->page = NULL;
 
   IDE_EXIT;
 }
