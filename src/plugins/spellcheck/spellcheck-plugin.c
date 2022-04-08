@@ -22,9 +22,11 @@
 
 #include <libpeas/peas.h>
 
+#include <libide-code.h>
 #include <libide-editor.h>
 
 #include "gbp-spell-buffer-addin.h"
+#include "gbp-spell-editor-page-addin.h"
 
 _IDE_EXTERN void
 _gbp_spellcheck_register_types (PeasObjectModule *module)
@@ -32,4 +34,7 @@ _gbp_spellcheck_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUFFER_ADDIN,
                                               GBP_TYPE_SPELL_BUFFER_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_EDITOR_PAGE_ADDIN,
+                                              GBP_TYPE_SPELL_EDITOR_PAGE_ADDIN);
 }
