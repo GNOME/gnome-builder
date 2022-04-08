@@ -146,3 +146,20 @@ static void
 gbp_spell_buffer_addin_init (GbpSpellBufferAddin *self)
 {
 }
+
+void
+gbp_spell_buffer_addin_add_word (GbpSpellBufferAddin *self,
+                                 const char          *word)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  if (word == NULL || word[0] == 0)
+    IDE_EXIT;
+
+  editor_spell_checker_add_word (self->checker, word);
+  editor_text_buffer_spell_adapter_invalidate_all (self->adapter);
+
+  IDE_EXIT;
+}
