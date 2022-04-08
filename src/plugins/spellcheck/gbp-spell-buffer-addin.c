@@ -180,3 +180,27 @@ gbp_spell_buffer_addin_ignore_word (GbpSpellBufferAddin *self,
 
   IDE_EXIT;
 }
+
+gboolean
+gbp_spell_buffer_addin_check_spelling (GbpSpellBufferAddin *self,
+                                       const char          *word)
+{
+  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), FALSE);
+
+  if (self->checker != NULL && word != NULL)
+    return editor_spell_checker_check_word (self->checker, word, -1);
+
+  return TRUE;
+}
+
+char **
+gbp_spell_buffer_addin_list_corrections (GbpSpellBufferAddin *self,
+                                         const char          *word)
+{
+  g_return_val_if_fail (GBP_IS_SPELL_BUFFER_ADDIN (self), NULL);
+
+  if (self->checker != NULL && word != NULL)
+    return editor_spell_checker_list_corrections (self->checker, word);
+
+  return NULL;
+}
