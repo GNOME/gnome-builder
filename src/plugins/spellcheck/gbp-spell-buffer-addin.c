@@ -52,6 +52,20 @@ check_error (GObject      *object,
     g_warning ("Failed to persist metadata: %s", error->message);
 }
 
+static gboolean
+state_to_enabled (GBinding     *binding,
+                  const GValue *from_value,
+                  GValue       *to_value,
+                  gpointer      user_data)
+{
+  if (g_value_get_enum (from_value) == IDE_BUFFER_STATE_READY)
+    g_value_set_boolean (to_value, TRUE);
+  else
+    g_value_set_boolean (to_value, FALSE);
+
+  return TRUE;
+}
+
 static void
 checker_notify_language_cb (GbpSpellBufferAddin *self,
                             GParamSpec          *pspec,
@@ -102,7 +116,9 @@ gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
 
   self->enabled_action = g_property_action_new ("enabled", self->adapter, "enabled");
 
-  editor_text_buffer_spell_adapter_set_enabled (self->adapter, TRUE);
+  g_object_bind_property_full (buffer, "state", self->adapter, "enabled",
+                               G_BINDING_SYNC_CREATE,
+                               state_to_enabled, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
