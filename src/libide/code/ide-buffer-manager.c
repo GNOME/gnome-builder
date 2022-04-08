@@ -591,7 +591,6 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) temp_file = NULL;
   IdeBuffer *existing;
-  gboolean is_new = FALSE;
 
   IDE_ENTRY;
 
@@ -641,7 +640,6 @@ ide_buffer_manager_load_file_async (IdeBufferManager     *self,
       buffer = ide_buffer_manager_create_buffer (self, file,
                                                  (flags & IDE_BUFFER_OPEN_FLAGS_DISABLE_ADDINS) == 0,
                                                  temp_file != NULL);
-      is_new = TRUE;
     }
 
   /* Save this task for later in case we get in a second request to open
