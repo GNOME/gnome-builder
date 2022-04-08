@@ -57,8 +57,29 @@ gbp_spell_editor_page_addin_add (GSimpleAction *action,
   IDE_EXIT;
 }
 
+static void
+gbp_spell_editor_page_addin_ignore (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  GbpSpellEditorPageAddin *self = user_data;
+  const char *word;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  word = g_variant_get_string (param, NULL);
+  gbp_spell_buffer_addin_ignore_word (self->buffer_addin, word);
+
+  IDE_EXIT;
+}
+
 static const GActionEntry actions[] = {
   { "add", gbp_spell_editor_page_addin_add, "s" },
+  { "ignore", gbp_spell_editor_page_addin_ignore, "s" },
 };
 
 static void
