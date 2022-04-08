@@ -13,6 +13,7 @@ plugins_sources += files([
   'editor-spell-provider.c',
   'editor-text-buffer-spell-adapter.c',
   'gbp-spell-buffer-addin.c',
+  'gbp-spell-editor-page-addin.c',
   'spellcheck-plugin.c',
 ])
 
