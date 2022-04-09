@@ -89,3 +89,7 @@ class VlsSearchProvider(Ide.LspSearchProvider):
             return
 
         VlsService.bind_client_lazy(self)
+
+class VlsCodeActionProvider(Ide.LspCodeActionProvider, Ide.CodeActionProvider):
+    def do_load(self):
+        VlsService.bind_client(self)
