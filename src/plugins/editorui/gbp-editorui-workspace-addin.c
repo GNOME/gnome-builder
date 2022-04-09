@@ -361,6 +361,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->mode_label = g_object_new (GTK_TYPE_LABEL,
                                    "label", "INS",
                                    "width-chars", 4,
+                                   "visible", FALSE,
                                    NULL);
   panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->mode_label));
 
