@@ -51,6 +51,9 @@ struct _GbpEditoruiWorkspaceAddin
   GtkMenuButton            *position;
   GbpEditoruiPositionLabel *position_label;
 
+  GtkMenuButton            *encoding;
+  GtkLabel                 *encoding_label;
+
   guint                     queued_cursor_moved;
 };
 
@@ -259,6 +262,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
   g_autoptr(GSimpleActionGroup) group = NULL;
+  g_autoptr(GMenuModel) encoding_menu = NULL;
   GtkPopover *popover;
   GMenu *menu;
 
@@ -302,6 +306,19 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    G_CALLBACK (notify_indentation_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+  /* Encoding */
+  encoding_menu = ide_editor_encoding_menu_new ("editorui.encoding");
+  self->encoding_label = g_object_new (GTK_TYPE_LABEL,
+                                       "label", "UTF-8",
+                                       NULL);
+  self->encoding = g_object_new (GTK_TYPE_MENU_BUTTON,
+                                 "menu-model", encoding_menu,
+                                 "direction", GTK_ARROW_UP,
+                                 "visible", FALSE,
+                                 "child", self->encoding_label,
+                                 NULL);
+  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->encoding));
 
   /* Line ending */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-line-ends-menu");
@@ -403,6 +420,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   gtk_widget_set_visible (GTK_WIDGET (self->indentation), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->line_ends), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->position), page != NULL);
+  gtk_widget_set_visible (GTK_WIDGET (self->encoding), page != NULL);
 }
 
 static void
