@@ -46,6 +46,44 @@ sort_by_name (gconstpointer a,
                     gtk_source_encoding_get_name (b));
 }
 
+/**
+ * ide_editor_encoding_menu_new:
+ * @action_name: the action to activate when selecting menu items
+ *
+ * Creates a new #GMenuModel with items which will activate using
+ * their encoding charset for the action @action_name target.
+ *
+ * Returns: (transfer full): a #GMenuModel
+ */
+GMenuModel *
+ide_editor_encoding_menu_new (const char *action_name)
+{
+  GMenu *menu;
+  GSList *all;
+
+  g_return_val_if_fail (action_name, NULL);
+
+  menu = g_menu_new ();
+  all = g_slist_sort (gtk_source_encoding_get_all (), sort_by_name);
+
+  for (const GSList *l = all; l; l = l->next)
+    {
+      GtkSourceEncoding *encoding = l->data;
+      char *title = g_strdup_printf ("%s (%s)",
+                                     gtk_source_encoding_get_name (encoding),
+                                     gtk_source_encoding_get_charset (encoding));
+      GMenuItem *item = g_menu_item_new (title, NULL);
+
+      g_menu_item_set_action_and_target (item, action_name, "s", gtk_source_encoding_get_charset (encoding));
+      g_menu_append_item (menu, item);
+      g_object_unref (item);
+    }
+
+  g_slist_free (all);
+
+  return G_MENU_MODEL (menu);
+}
+
 void
 ide_editor_file_chooser_add_encodings (GtkFileChooser *chooser)
 {
