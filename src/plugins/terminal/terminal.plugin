@@ -2,11 +2,11 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2014-2018 Christian Hergert
-Depends=editor;
+Depends=
 Description=Builder's terminal support
 Embedded=_gbp_terminal_register_types
 Hidden=true
 Module=terminal
 Name=Terminal
 X-At-Startup=true
-X-Workspace-Kind=editor;primary;terminal;
+X-Workspace-Kind=editor;primary;
