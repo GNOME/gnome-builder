@@ -54,6 +54,8 @@ struct _GbpEditoruiWorkspaceAddin
   GtkMenuButton            *encoding;
   GtkLabel                 *encoding_label;
 
+  GtkLabel                 *mode_label;
+
   guint                     queued_cursor_moved;
 };
 
@@ -67,6 +69,24 @@ static void
     {
       panel_statusbar_remove (statusbar, *widget);
       *widget = NULL;
+    }
+}
+
+static void
+notify_overwrite_cb (GbpEditoruiWorkspaceAddin *self)
+{
+  IdeSourceView *view;
+
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+
+  if ((view = ide_signal_group_get_target (self->view_signals)))
+    {
+      gboolean overwrite = gtk_text_view_get_overwrite (GTK_TEXT_VIEW (view));
+
+      if (overwrite)
+        gtk_label_set_label (self->mode_label, "OVR");
+      else
+        gtk_label_set_label (self->mode_label, "INS");
     }
 }
 
@@ -306,6 +326,11 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    G_CALLBACK (notify_indentation_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
+  ide_signal_group_connect_object (self->view_signals,
+                                   "notify::overwrite",
+                                   G_CALLBACK (notify_overwrite_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
 
   /* Encoding */
   encoding_menu = ide_editor_encoding_menu_new ("editorui.encoding");
@@ -332,6 +357,12 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   "child", self->line_ends_label,
                                   NULL);
   panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->line_ends));
+
+  self->mode_label = g_object_new (GTK_TYPE_LABEL,
+                                   "label", "INS",
+                                   "width-chars", 4,
+                                   NULL);
+  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->mode_label));
 
   /* Indentation status, tabs/spaces/etc */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-indent-menu");
@@ -414,6 +445,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   ide_signal_group_set_target (self->buffer_signals, buffer);
   ide_signal_group_set_target (self->view_signals, view);
 
+  notify_overwrite_cb (self);
   notify_indentation_cb (self);
   update_position (self);
 
@@ -421,6 +453,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   gtk_widget_set_visible (GTK_WIDGET (self->line_ends), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->position), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->encoding), page != NULL);
+  gtk_widget_set_visible (GTK_WIDGET (self->mode_label), page != NULL);
 }
 
 static void
