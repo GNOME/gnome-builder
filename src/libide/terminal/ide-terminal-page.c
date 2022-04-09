@@ -52,13 +52,7 @@ enum {
   N_PROPS
 };
 
-enum {
-  TEXT_INSERTED,
-  N_SIGNALS
-};
-
 static GParamSpec *properties [N_PROPS];
-static guint signals [N_SIGNALS];
 
 static void ide_terminal_page_connect_terminal (IdeTerminalPage *self,
                                                 VteTerminal     *terminal);
@@ -356,16 +350,6 @@ ide_terminal_page_context_set (GtkWidget  *widget,
     self->launcher = ide_terminal_launcher_new (context);
 }
 
-static void
-ide_terminal_page_on_text_inserted_cb (IdeTerminalPage *self,
-                                       VteTerminal     *terminal)
-{
-  g_assert (IDE_IS_TERMINAL_PAGE (self));
-  g_assert (VTE_IS_TERMINAL (terminal));
-
-  g_signal_emit (self, signals [TEXT_INSERTED], 0);
-}
-
 static GFile *
 ide_terminal_page_get_file_or_directory (IdePage *page)
 {
@@ -528,18 +512,6 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
-
-  signals [TEXT_INSERTED] =
-    g_signal_new ("text-inserted",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE, 0);
-  g_signal_set_va_marshaller (signals [TEXT_INSERTED],
-                              G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__VOIDv);
 }
 
 static void
@@ -555,12 +527,6 @@ ide_terminal_page_init (IdeTerminalPage *self)
   self->search_revealer = ide_terminal_search_get_revealer (self->tsearch);
 
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  g_signal_connect_object (self->terminal,
-                           "text-inserted",
-                           G_CALLBACK (ide_terminal_page_on_text_inserted_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-terminal-symbolic");
   ide_page_set_can_split (IDE_PAGE (self), TRUE);
