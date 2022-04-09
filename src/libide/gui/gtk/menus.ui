@@ -50,12 +50,6 @@
       </item>
     </section>
   </menu>
-  <menu id="ide-primary-workspace-new-menu">
-    <section id="new-document-section">
-    </section>
-    <section id="open-document-section">
-    </section>
-  </menu>
   <menu id="build-menu">
     <section id="build-menu-config">
       <submenu id="build-menu-configs">
@@ -209,7 +203,7 @@
   <menu id="new-document-menu">
     <section id="new-document-section"/>
     <section id="open-document-section"/>
-    <section id="terminal-section"/>
+    <section id="new-terminal-section"/>
   </menu>
   <menu id="project-tree-menu">
     <section id="project-tree-menu-placeholder0"/>

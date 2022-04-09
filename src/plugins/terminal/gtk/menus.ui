@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="new-document-menu">
-    <section id="new-document-section">
+    <section id="new-terminal-section">
       <item>
         <attribute name="id">new-terminal</attribute>
         <attribute name="after">new-file</attribute>

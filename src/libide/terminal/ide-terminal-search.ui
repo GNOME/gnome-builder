@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeTerminalSearch" parent="GtkBin">
+  <template class="IdeTerminalSearch" parent="AdwBin">
     <property name="halign">end</property>
     <property name="valign">start</property>
     <child>
@@ -105,8 +105,6 @@
                     <child>
                       <object class="GtkCheckButton" id="regex_checkbutton">
                         <property name="label" translatable="yes">Regex</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">true</property>
                         <layout>
                           <property name="column">0</property>
                           <property name="row">0</property>
@@ -116,8 +114,6 @@
                     <child>
                       <object class="GtkCheckButton" id="match_case_checkbutton">
                         <property name="label" translatable="yes">Case sensitive</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">true</property>
                         <layout>
                           <property name="column">1</property>
                           <property name="row">0</property>
@@ -127,8 +123,6 @@
                     <child>
                       <object class="GtkCheckButton" id="entire_word_checkbutton">
                         <property name="label" translatable="yes">Match whole word</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">true</property>
                         <layout>
                           <property name="column">2</property>
                           <property name="row">0</property>
@@ -138,20 +132,13 @@
                     <child>
                       <object class="GtkCheckButton" id="wrap_around_checkbutton">
                         <property name="label" translatable="yes">Wrap around</property>
-                        <property name="xalign">0</property>
-                        <property name="draw_indicator">true</property>
+                        <layout>
+                          <property name="column">3</property>
+                          <property name="row">0</property>
+                        </layout>
                       </object>
-                      <packing>
-                        <property name="left_attach">3</property>
-                        <property name="top_attach">0</property>
-                      </packing>
                     </child>
                   </object>
-                  <packing>
-                    <property name="expand">false</property>
-                    <property name="fill">true</property>
-                    <property name="position">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
