@@ -356,7 +356,7 @@ ide_terminal_search_init (IdeTerminalSearch *self)
   g_signal_connect (self->search_prev_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
   g_signal_connect (self->search_next_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
   g_signal_connect (self->close_button, "clicked", G_CALLBACK (close_clicked_cb), self);
-  g_signal_connect (self->search_entry, "search-changed", G_CALLBACK (search_text_changed_cb), self);
+  g_signal_connect (self->search_entry, "changed", G_CALLBACK (search_text_changed_cb), self);
   g_signal_connect (self->match_case_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
   g_signal_connect (self->entire_word_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
   g_signal_connect (self->regex_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
