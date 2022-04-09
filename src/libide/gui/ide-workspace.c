@@ -755,15 +755,30 @@ _ide_workspace_remove_page_mru (IdeWorkspace *self,
                                 GList        *mru_link)
 {
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  IdePage *mru_page;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (mru_link != NULL);
   g_return_if_fail (IDE_IS_PAGE (mru_link->data));
 
+  mru_page = mru_link->data;
+
   g_debug ("Removing %s from page MRU",
-           G_OBJECT_TYPE_NAME (mru_link->data));
+           G_OBJECT_TYPE_NAME (mru_page));
 
   g_queue_unlink (&priv->page_mru, mru_link);
+
+  if ((gpointer)mru_page == priv->current_page_ptr)
+    {
+      g_clear_weak_pointer (&priv->current_page_ptr);
+      ide_extension_set_adapter_foreach (priv->addins,
+                                         ide_workspace_addin_page_changed_cb,
+                                         NULL);
+    }
+
+  IDE_EXIT;
 }
 
 void
