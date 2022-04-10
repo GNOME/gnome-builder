@@ -137,6 +137,21 @@ gbp_podman_subprocess_launcher_spawn (IdeSubprocessLauncher  *launcher,
           copy_envvar (launcher, &i, "XDG_VTNR");
         }
 
+      /* we have to replicate the user path environment because we potentially start podman from
+       * within a flatpak */
+      if (ide_is_flatpak ())
+        {
+          g_autoptr(GSubprocess) process = NULL;
+          g_autofree char *user_path = NULL;
+          g_autofree char *env_path = NULL;
+
+          process = g_subprocess_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE, NULL, "/bin/sh", "--login", "-c", "echo -n $PATH", NULL);
+          g_subprocess_communicate_utf8 (process, NULL, NULL, &user_path, NULL, NULL);
+          ide_subprocess_launcher_insert_argv (launcher, i++, "--env");
+          env_path = g_strdup_printf("PATH=%s", user_path);
+          ide_subprocess_launcher_insert_argv (launcher, i++, g_steal_pointer (&env_path));
+        }
+
       if ((environ_ = ide_subprocess_launcher_get_environ (launcher)))
         {
           for (guint j = 0; environ_[j]; j++)
