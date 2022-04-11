@@ -31,10 +31,13 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
-void ide_text_util_delete_line          (GtkTextView *text_view,
-                                         int         count);
+void ide_text_util_delete_line          (GtkTextView  *text_view,
+                                         int           count);
 IDE_AVAILABLE_IN_ALL
-void ide_text_util_remove_common_prefix (GtkTextIter *begin,
-                                         const gchar *prefix);
+void ide_text_util_remove_common_prefix (GtkTextIter  *begin,
+                                         const char   *prefix);
+IDE_AVAILABLE_IN_ALL
+int  ide_text_util_int_to_string        (guint         value,
+                                         const char  **outstr);
 
 G_END_DECLS
