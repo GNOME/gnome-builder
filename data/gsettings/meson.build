@@ -35,6 +35,7 @@ schemas = [
   'org.gnome.builder.plugin.gschema.xml',
   'org.gnome.builder.project.gschema.xml',
   'org.gnome.builder.project-tree.gschema.xml',
+  'org.gnome.builder.spelling.gschema.xml',
   'org.gnome.builder.terminal.gschema.xml',
   'org.gnome.builder.workbench.gschema.xml',
 ]
