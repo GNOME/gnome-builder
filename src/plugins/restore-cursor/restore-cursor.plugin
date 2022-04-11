@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2018 Christian Hergert
-Depends=editor;
 Description=Restore cursors when a buffer is re-opened.
 Embedded=_gbp_restore_cursor_register_types
 Hidden=true
