@@ -35,6 +35,8 @@ struct _GbpRestoreCursorBufferAddin
   GObject parent_instance;
 };
 
+static GSettings *settings;
+
 static void
 gbp_restore_cursor_buffer_addin_file_saved (IdeBufferAddin *addin,
                                             IdeBuffer      *buffer,
@@ -57,6 +59,8 @@ gbp_restore_cursor_buffer_addin_file_saved (IdeBufferAddin *addin,
   position = g_strdup_printf ("%u:%u",
                               gtk_text_iter_get_line (&iter),
                               gtk_text_iter_get_line_offset (&iter));
+
+  g_debug ("Saving insert mark at %s", position);
 
   if (!g_file_set_attribute_string (file, IDE_FILE_ATTRIBUTE_POSITION, position, 0, NULL, &error))
     g_warning ("Failed to persist cursor position: %s", error->message);
@@ -98,7 +102,7 @@ gbp_restore_cursor_buffer_addin_file_loaded_cb (GObject      *object,
     {
       GtkTextIter iter;
 
-      IDE_TRACE_MSG ("Restoring insert mark to %u:%u", line + 1, line_offset + 1);
+      g_debug ("Restoring insert mark to %u:%u", line + 1, line_offset + 1);
       gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
                                                &iter,
                                                line,
@@ -116,8 +120,6 @@ gbp_restore_cursor_buffer_addin_file_loaded (IdeBufferAddin *addin,
                                              IdeBuffer      *buffer,
                                              GFile          *file)
 {
-  g_autoptr(GSettings) settings = NULL;
-
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -126,7 +128,6 @@ gbp_restore_cursor_buffer_addin_file_loaded (IdeBufferAddin *addin,
   g_assert (G_IS_FILE (file));
 
   /* Make sure our setting isn't disabled */
-  settings = g_settings_new ("org.gnome.builder.editor");
   if (!g_settings_get_boolean (settings, "restore-insert-mark"))
     IDE_EXIT;
 
@@ -159,4 +160,6 @@ gbp_restore_cursor_buffer_addin_class_init (GbpRestoreCursorBufferAddinClass *kl
 static void
 gbp_restore_cursor_buffer_addin_init (GbpRestoreCursorBufferAddin *self)
 {
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder.editor");
 }
