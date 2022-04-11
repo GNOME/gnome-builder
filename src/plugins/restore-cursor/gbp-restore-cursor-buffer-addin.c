@@ -45,6 +45,8 @@ gbp_restore_cursor_buffer_addin_file_saved (IdeBufferAddin *addin,
   GtkTextMark *insert;
   GtkTextIter iter;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_RESTORE_CURSOR_BUFFER_ADDIN (addin));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -58,6 +60,8 @@ gbp_restore_cursor_buffer_addin_file_saved (IdeBufferAddin *addin,
 
   if (!g_file_set_attribute_string (file, IDE_FILE_ATTRIBUTE_POSITION, position, 0, NULL, &error))
     g_warning ("Failed to persist cursor position: %s", error->message);
+
+  IDE_EXIT;
 }
 
 static void
@@ -73,20 +77,22 @@ gbp_restore_cursor_buffer_addin_file_loaded_cb (GObject      *object,
   guint line_offset = 0;
   guint line = 0;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_BUFFER (buffer));
 
   /* Don't do anything if the user already moved */
-  if (!_ide_buffer_can_restore_cursor (buffer))
-    return;
+  if (_ide_buffer_can_restore_cursor (buffer))
+    IDE_EXIT;
 
   if (!(file_info = g_file_query_info_finish (file, result, &error)))
-    return;
+    IDE_EXIT;
 
   if (!g_file_info_has_attribute (file_info, IDE_FILE_ATTRIBUTE_POSITION) ||
       !(attr = g_file_info_get_attribute_string (file_info, IDE_FILE_ATTRIBUTE_POSITION)))
-    return;
+    IDE_EXIT;
 
   if (sscanf (attr, "%u:%u", &line, &line_offset) >= 1)
     {
@@ -101,6 +107,8 @@ gbp_restore_cursor_buffer_addin_file_loaded_cb (GObject      *object,
 
       _ide_buffer_request_scroll_to_cursor (buffer);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -110,6 +118,8 @@ gbp_restore_cursor_buffer_addin_file_loaded (IdeBufferAddin *addin,
 {
   g_autoptr(GSettings) settings = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_RESTORE_CURSOR_BUFFER_ADDIN (addin));
   g_assert (IDE_IS_BUFFER (buffer));
@@ -118,7 +128,7 @@ gbp_restore_cursor_buffer_addin_file_loaded (IdeBufferAddin *addin,
   /* Make sure our setting isn't disabled */
   settings = g_settings_new ("org.gnome.builder.editor");
   if (!g_settings_get_boolean (settings, "restore-insert-mark"))
-    return;
+    IDE_EXIT;
 
   g_file_query_info_async (file,
                            IDE_FILE_ATTRIBUTE_POSITION,
@@ -127,6 +137,8 @@ gbp_restore_cursor_buffer_addin_file_loaded (IdeBufferAddin *addin,
                            NULL,
                            gbp_restore_cursor_buffer_addin_file_loaded_cb,
                            g_object_ref (buffer));
+
+  IDE_EXIT;
 }
 
 static void
@@ -137,7 +149,7 @@ buffer_addin_iface_init (IdeBufferAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRestoreCursorBufferAddin, gbp_restore_cursor_buffer_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
 
 static void
 gbp_restore_cursor_buffer_addin_class_init (GbpRestoreCursorBufferAddinClass *klass)
