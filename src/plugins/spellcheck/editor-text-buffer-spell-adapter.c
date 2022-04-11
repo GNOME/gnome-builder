@@ -212,7 +212,7 @@ editor_text_buffer_spell_adapter_update_range (EditorTextBufferSpellAdapter *sel
   g_assert (EDITOR_IS_TEXT_BUFFER_SPELL_ADAPTER (self));
 
   /* Ignore while we are loading or saving */
-  if (ide_buffer_get_loading (IDE_BUFFER (self->buffer)))
+  if (ide_buffer_get_state (IDE_BUFFER (self->buffer)) != IDE_BUFFER_STATE_READY)
     return TRUE;
 
   extra_word_chars = editor_spell_checker_get_extra_word_chars (self->checker);
