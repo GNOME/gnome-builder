@@ -28,9 +28,6 @@ import json
 from gi.repository import GObject
 from gi.repository import Ide
 
-_ = Ide.gettext
-
-
 SEVERITY_MAP = {
     "warning": Ide.DiagnosticSeverity.WARNING,
     "error": Ide.DiagnosticSeverity.ERROR
@@ -64,21 +61,3 @@ class StylelintDiagnosticProvider(Ide.DiagnosticTool):
                     diagnostics.add(diagnostic)
         except Exception as e:
             Ide.warning('Failed to decode stylelint json: {}'.format(e))
-
-
-class StylelintPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
-    def do_load(self, preferences):
-        self.stylelint = preferences.add_switch("code-insight",
-                                             "diagnostics",
-                                             "org.gnome.builder.plugins.stylelint",
-                                             "enable-stylelint",
-                                             None,
-                                             "false",
-                                             _("Stylelint"),
-                                             _("Enable the use of Stylelint, which may execute code in your project"),
-                                             # translators: these are keywords used to search for preferences
-                                             _("stylelint stylesheet lint code execute execution"),
-                                             500)
-
-    def do_unload(self, preferences):
-        preferences.remove_id(self.stylelint)
