@@ -280,22 +280,63 @@ ide_source_view_notify_buffer_cb (IdeSourceView *self,
     }
 }
 
+static gboolean
+ide_source_view_scroll_to_insert_in_idle_cb (gpointer user_data)
+{
+  IdeSourceView *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ide_source_view_scroll_to_insert (self);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+ide_source_view_root (GtkWidget *widget)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  GTK_WIDGET_CLASS (ide_source_view_parent_class)->root (widget);
+
+  g_idle_add_full (G_PRIORITY_LOW,
+                   ide_source_view_scroll_to_insert_in_idle_cb,
+                   g_object_ref (self),
+                   g_object_unref);
+
+  IDE_EXIT;
+}
+
 static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
+
+  IDE_ENTRY;
 
   g_clear_object (&self->joined_menu);
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->font_desc, pango_font_description_free);
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->dispose (object);
+
+  IDE_EXIT;
 }
 
 static void
 ide_source_view_finalize (GObject *object)
 {
+  IDE_ENTRY;
+
   G_OBJECT_CLASS (ide_source_view_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -362,11 +403,14 @@ static void
 ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ide_source_view_dispose;
   object_class->finalize = ide_source_view_finalize;
   object_class->get_property = ide_source_view_get_property;
   object_class->set_property = ide_source_view_set_property;
+
+  widget_class->root = ide_source_view_root;
 
   properties [PROP_LINE_HEIGHT] =
     g_param_spec_double ("line-height",
