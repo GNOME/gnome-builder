@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 #include <math.h>
 
+#include <libide-code.h>
 #include <libide-gtk.h>
 
 #include "ide-source-view.h"
@@ -239,6 +240,47 @@ ide_source_view_click_pressed_cb (IdeSourceView   *self,
 }
 
 static void
+ide_source_view_buffer_request_scroll_to_insert_cb (IdeSourceView *self,
+                                                    IdeBuffer     *buffer)
+{
+  GtkTextMark *mark;
+  GtkTextIter iter;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &iter, mark);
+  gtk_text_view_scroll_to_iter (GTK_TEXT_VIEW (self),
+                                &iter, 0.25, TRUE, 1.0, 0.5);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_notify_buffer_cb (IdeSourceView *self,
+                                  GParamSpec    *pspec,
+                                  gpointer       user_data)
+{
+  GtkTextBuffer *buffer;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  if (IDE_IS_BUFFER (buffer))
+    {
+      g_signal_connect_object (buffer,
+                               "request-scroll-to-insert",
+                               G_CALLBACK (ide_source_view_buffer_request_scroll_to_insert_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -381,6 +423,11 @@ ide_source_view_init (IdeSourceView *self)
 {
   GtkStyleContext *style_context;
   GtkEventController *click;
+
+  g_signal_connect (self,
+                    "notify::buffer",
+                    G_CALLBACK (ide_source_view_notify_buffer_cb),
+                    NULL);
 
   /* Setup our extra menu so that consumers can use
    * ide_source_view_append_men() or similar to update menus.
