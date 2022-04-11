@@ -227,14 +227,15 @@ ide_tree_model_dispose (GObject *object)
 {
   IdeTreeModel *self = (IdeTreeModel *)object;
 
-  /* Clear the model back-pointer for root so that it cannot emit anu
+  ide_clear_and_destroy_object (&self->addins);
+
+  /* Clear the model back-pointer for root so that it cannot emit any
    * further signals on our tree model.
    */
   if (self->root != NULL)
     _ide_tree_node_set_model (self->root, NULL);
 
   g_clear_object (&self->tree);
-  ide_clear_and_destroy_object (&self->addins);
   g_clear_object (&self->root);
   g_clear_pointer (&self->kind, g_free);
 
