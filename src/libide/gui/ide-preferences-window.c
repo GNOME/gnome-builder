@@ -937,6 +937,15 @@ ide_preferences_window_add_groups (IdePreferencesWindow          *self,
 
 static gboolean noop (gpointer data) { return G_SOURCE_REMOVE; };
 
+/**
+ * ide_preferences_window_add_items:
+ * @self: a #IdePreferencesWindow
+ * @items: (array length=n_items): an array of items to add
+ * @user_data: (scope async): user data for callbacks
+ * @user_data_destroy: callback to destroy user data
+ *
+ * Adds @items to the preferences window.
+ */
 void
 ide_preferences_window_add_items (IdePreferencesWindow         *self,
                                   const IdePreferenceItemEntry *items,
