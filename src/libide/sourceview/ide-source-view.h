@@ -58,5 +58,12 @@ void                        ide_source_view_append_menu         (IdeSourceView  
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_remove_menu         (IdeSourceView             *self,
                                                                  GMenuModel                *menu_model);
+IDE_AVAILABLE_IN_ALL
+void                        ide_source_view_jump_to_iter        (IdeSourceView             *self,
+                                                                 const GtkTextIter         *iter,
+                                                                 double                     within_margin,
+                                                                 gboolean                   use_align,
+                                                                 double                     xalign,
+                                                                 double                     yalign);
 
 G_END_DECLS

@@ -284,12 +284,19 @@ static gboolean
 ide_source_view_scroll_to_insert_in_idle_cb (gpointer user_data)
 {
   IdeSourceView *self = user_data;
+  GtkTextBuffer *buffer;
+  GtkTextMark *mark;
+  GtkTextIter iter;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  ide_source_view_scroll_to_insert (self);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+
+  ide_source_view_jump_to_iter (self, &iter, .25, TRUE, 1.0, 0.5);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -630,4 +637,145 @@ ide_source_view_remove_menu (IdeSourceView *self,
   g_return_if_fail (G_IS_MENU_MODEL (menu_model));
 
   ide_joined_menu_remove_menu (self->joined_menu, menu_model);
+}
+
+/**
+ * ide_source_view_jump_to_iter:
+ *
+ * The goal of this function is to be like gtk_text_view_scroll_to_iter() but
+ * without any of the scrolling animation. We use it to move to a position
+ * when animations would cause additional distractions.
+ */
+void
+ide_source_view_jump_to_iter (IdeSourceView     *self,
+                              const GtkTextIter *iter,
+                              double             within_margin,
+                              gboolean           use_align,
+                              double             xalign,
+                              double             yalign)
+{
+  GtkTextView *text_view = (GtkTextView *)self;
+  GtkAdjustment *hadj;
+  GtkAdjustment *vadj;
+  GdkRectangle rect;
+  GdkRectangle screen;
+  int xvalue = 0;
+  int yvalue = 0;
+  int scroll_dest;
+  int screen_bottom;
+  int screen_right;
+  int screen_xoffset;
+  int screen_yoffset;
+  int current_x_scroll;
+  int current_y_scroll;
+  int top_margin;
+
+  /*
+   * Many parts of this function were taken from gtk_text_view_scroll_to_iter ()
+   * https://developer.gnome.org/gtk3/stable/GtkTextView.html#gtk-text-view-scroll-to-iter
+   */
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (within_margin >= 0.0 && within_margin <= 0.5);
+  g_return_if_fail (xalign >= 0.0 && xalign <= 1.0);
+  g_return_if_fail (yalign >= 0.0 && yalign <= 1.0);
+
+  g_object_get (text_view, "top-margin", &top_margin, NULL);
+
+  hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (text_view));
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (text_view));
+
+  gtk_text_view_get_iter_location (text_view, iter, &rect);
+  gtk_text_view_get_visible_rect (text_view, &screen);
+
+  current_x_scroll = screen.x;
+  current_y_scroll = screen.y;
+
+  screen_xoffset = screen.width * within_margin;
+  screen_yoffset = screen.height * within_margin;
+
+  screen.x += screen_xoffset;
+  screen.y += screen_yoffset;
+  screen.width -= screen_xoffset * 2;
+  screen.height -= screen_yoffset * 2;
+
+
+  /* paranoia check */
+  if (screen.width < 1)
+    screen.width = 1;
+  if (screen.height < 1)
+    screen.height = 1;
+
+  /* The -1 here ensures that we leave enough space to draw the cursor
+   * when this function is used for horizontal scrolling.
+   */
+  screen_right = screen.x + screen.width - 1;
+  screen_bottom = screen.y + screen.height;
+
+
+  /* The alignment affects the point in the target character that we
+   * choose to align. If we're doing right/bottom alignment, we align
+   * the right/bottom edge of the character the mark is at; if we're
+   * doing left/top we align the left/top edge of the character; if
+   * we're doing center alignment we align the center of the
+   * character.
+   */
+
+  /* Vertical alignment */
+  scroll_dest = current_y_scroll;
+  if (use_align)
+    {
+      scroll_dest = rect.y + (rect.height * yalign) - (screen.height * yalign);
+
+      /* if scroll_dest < screen.y, we move a negative increment (up),
+       * else a positive increment (down)
+       */
+      yvalue = scroll_dest - screen.y + screen_yoffset;
+    }
+  else
+    {
+      /* move minimum to get onscreen */
+      if (rect.y < screen.y)
+        {
+          scroll_dest = rect.y;
+          yvalue = scroll_dest - screen.y - screen_yoffset;
+        }
+      else if ((rect.y + rect.height) > screen_bottom)
+        {
+          scroll_dest = rect.y + rect.height;
+          yvalue = scroll_dest - screen_bottom + screen_yoffset;
+        }
+    }
+  yvalue += current_y_scroll;
+
+  /* Horizontal alignment */
+  scroll_dest = current_x_scroll;
+  if (use_align)
+    {
+      scroll_dest = rect.x + (rect.width * xalign) - (screen.width * xalign);
+
+      /* if scroll_dest < screen.y, we move a negative increment (left),
+       * else a positive increment (right)
+       */
+      xvalue = scroll_dest - screen.x + screen_xoffset;
+    }
+  else
+    {
+      /* move minimum to get onscreen */
+      if (rect.x < screen.x)
+        {
+          scroll_dest = rect.x;
+          xvalue = scroll_dest - screen.x - screen_xoffset;
+        }
+      else if ((rect.x + rect.width) > screen_right)
+        {
+          scroll_dest = rect.x + rect.width;
+          xvalue = scroll_dest - screen_right + screen_xoffset;
+        }
+    }
+  xvalue += current_x_scroll;
+
+  gtk_adjustment_set_value (hadj, xvalue);
+  gtk_adjustment_set_value (vadj, yvalue + top_margin);
 }
