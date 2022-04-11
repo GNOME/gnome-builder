@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include <libide-code.h>
 
 #include "gbp-spell-buffer-addin.h"
@@ -38,6 +40,7 @@ struct _GbpSpellBufferAddin
   EditorSpellChecker *checker;
   EditorTextBufferSpellAdapter *adapter;
   GPropertyAction *enabled_action;
+  guint commit_funcs_handler;
   guint enabled : 1;
 };
 
@@ -116,6 +119,66 @@ checker_notify_language_cb (GbpSpellBufferAddin *self,
 }
 
 static void
+spellcheck_before_insert_text (IdeBuffer *buffer,
+                               guint      offset,
+                               guint      length,
+                               gpointer   user_data)
+{
+  GbpSpellBufferAddin *self = user_data;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  if (self->adapter)
+    editor_text_buffer_spell_adapter_before_insert_text (self->adapter, offset, length);
+}
+
+static void
+spellcheck_after_insert_text (IdeBuffer *buffer,
+                              guint      offset,
+                              guint      length,
+                              gpointer   user_data)
+{
+  GbpSpellBufferAddin *self = user_data;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  if (self->adapter)
+    editor_text_buffer_spell_adapter_after_insert_text (self->adapter, offset, length);
+}
+
+static void
+spellcheck_before_delete_range (IdeBuffer *buffer,
+                                guint      offset,
+                                guint      length,
+                                gpointer   user_data)
+{
+  GbpSpellBufferAddin *self = user_data;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  if (self->adapter)
+    editor_text_buffer_spell_adapter_before_delete_range (self->adapter, offset, length);
+}
+
+static void
+spellcheck_after_delete_range (IdeBuffer *buffer,
+                               guint      offset,
+                               guint      length,
+                               gpointer   user_data)
+{
+  GbpSpellBufferAddin *self = user_data;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  if (self->adapter)
+    editor_text_buffer_spell_adapter_after_delete_range (self->adapter, offset, length);
+}
+
+static void
 gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
                              IdeBuffer      *buffer)
 {
@@ -129,6 +192,13 @@ gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
   self->buffer = buffer;
   self->checker = editor_spell_checker_new (NULL, NULL);
   self->adapter = editor_text_buffer_spell_adapter_new (GTK_TEXT_BUFFER (buffer), self->checker);
+  self->commit_funcs_handler =
+    ide_buffer_add_commit_funcs (buffer,
+                                 spellcheck_before_insert_text,
+                                 spellcheck_after_insert_text,
+                                 spellcheck_before_delete_range,
+                                 spellcheck_after_delete_range,
+                                 self, NULL);
 
   g_signal_connect_object (self->checker,
                            "notify::language",
@@ -155,6 +225,9 @@ gbp_spell_buffer_addin_unload (IdeBufferAddin *addin,
 
   g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
+
+  ide_buffer_remove_commit_funcs (buffer, self->commit_funcs_handler);
+  self->commit_funcs_handler = 0;
 
   g_signal_handlers_disconnect_by_func (self->checker,
                                         G_CALLBACK (checker_notify_language_cb),
