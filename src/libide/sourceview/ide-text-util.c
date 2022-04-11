@@ -181,3 +181,80 @@ ide_text_util_remove_common_prefix (GtkTextIter *begin,
       *begin = rm_begin;
     }
 }
+
+/*
+ * ide_text_util_int_to_string:
+ * @value: the integer to convert to a string
+ * @outstr: (out): a location for a pointer to the result string
+ *
+ * The following implementation uses an internal cache to speed up the
+ * conversion of integers to strings by comparing the value to the
+ * previous value that was calculated.
+ *
+ * If we detect a simple increment, we can alter the previous string directly
+ * and then carry the number to each of the previous chars sequentually. If we
+ * still have a carry bit at the end of the loop, we need to move the whole
+ * string over 1 place to take account for the new "1" at the start.
+ *
+ * This function is not thread-safe, as the resulting string is stored in
+ * static data.
+ *
+ * Returns: the number of characters in the resulting string
+ */
+int
+ide_text_util_int_to_string (guint        value,
+                             const char **outstr)
+{
+  static struct {
+    guint value;
+    int len;
+    char str[12];
+  } fi;
+
+  *outstr = fi.str;
+
+  if G_LIKELY (value == fi.value + 1)
+    {
+      guint carry = 1;
+
+      for (int i = fi.len - 1; i >= 0; i--)
+        {
+          fi.str[i] += carry;
+          carry = fi.str[i] == ':';
+
+          if (carry)
+            fi.str[i] = '0';
+          else
+            break;
+        }
+
+      if G_UNLIKELY (carry)
+        {
+          for (int i = fi.len; i > 0; i--)
+            fi.str[i] = fi.str[i-1];
+
+          fi.len++;
+          fi.str[0] = '1';
+          fi.str[fi.len] = 0;
+        }
+
+      fi.value++;
+
+      return fi.len;
+    }
+  else if (value == fi.value)
+    {
+      return fi.len;
+    }
+
+#ifdef G_OS_WIN32
+  fi.len = g_snprintf (fi.str, sizeof fi.str - 1, "%u", value);
+#else
+  /* Use snprintf() directly when possible to reduce overhead */
+  fi.len = snprintf (fi.str, sizeof fi.str - 1, "%u", value);
+#endif
+  fi.str[fi.len] = 0;
+  fi.value = value;
+
+  return fi.len;
+}
