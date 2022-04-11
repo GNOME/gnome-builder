@@ -38,7 +38,28 @@ struct _GbpSpellBufferAddin
   EditorSpellChecker *checker;
   EditorTextBufferSpellAdapter *adapter;
   GPropertyAction *enabled_action;
+  guint enabled : 1;
 };
+
+enum {
+  PROP_0,
+  PROP_ENABLED,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
+static GSettings *settings;
+
+static gboolean
+gbp_spell_buffer_addin_calculate_enabled (GbpSpellBufferAddin *self)
+{
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  return self->enabled &&
+         self->adapter != NULL &&
+         self->buffer != NULL &&
+         ide_buffer_get_state (self->buffer) == IDE_BUFFER_STATE_READY;
+}
 
 static void
 check_error (GObject      *object,
@@ -58,10 +79,11 @@ state_to_enabled (GBinding     *binding,
                   GValue       *to_value,
                   gpointer      user_data)
 {
-  if (g_value_get_enum (from_value) == IDE_BUFFER_STATE_READY)
-    g_value_set_boolean (to_value, TRUE);
-  else
-    g_value_set_boolean (to_value, FALSE);
+  GbpSpellBufferAddin *self = user_data;
+
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  g_value_set_boolean (to_value, gbp_spell_buffer_addin_calculate_enabled (self));
 
   return TRUE;
 }
@@ -114,11 +136,11 @@ gbp_spell_buffer_addin_load (IdeBufferAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
 
-  self->enabled_action = g_property_action_new ("enabled", self->adapter, "enabled");
+  self->enabled_action = g_property_action_new ("enabled", self, "enabled");
 
   g_object_bind_property_full (buffer, "state", self->adapter, "enabled",
                                G_BINDING_SYNC_CREATE,
-                               state_to_enabled, NULL, NULL, NULL);
+                               state_to_enabled, NULL, self, NULL);
 
   IDE_EXIT;
 }
@@ -144,6 +166,8 @@ gbp_spell_buffer_addin_unload (IdeBufferAddin *addin,
 
   self->buffer = NULL;
 
+  self->enabled = FALSE;
+
   IDE_EXIT;
 }
 
@@ -158,13 +182,100 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSpellBufferAddin, gbp_spell_buffer_addin, G_TY
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_BUFFER_ADDIN, buffer_addin_iface_init))
 
 static void
+gbp_spell_buffer_addin_set_enabled (GbpSpellBufferAddin *self,
+                                    gboolean             enabled)
+{
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  enabled = !!enabled;
+
+  if (enabled != self->enabled)
+    {
+      self->enabled = enabled;
+      if (self->adapter != NULL)
+        editor_text_buffer_spell_adapter_set_enabled (self->adapter,
+                                                      gbp_spell_buffer_addin_calculate_enabled (self));
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENABLED]);
+    }
+}
+
+static gboolean
+gbp_spell_buffer_addin_get_enabled (GbpSpellBufferAddin *self)
+{
+  g_assert (GBP_IS_SPELL_BUFFER_ADDIN (self));
+
+  return self->enabled;
+}
+
+static void
+gbp_spell_buffer_addin_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  GbpSpellBufferAddin *self = GBP_SPELL_BUFFER_ADDIN (object);
+
+  switch (prop_id)
+    {
+    case PROP_ENABLED:
+      g_value_set_boolean (value, gbp_spell_buffer_addin_get_enabled (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gbp_spell_buffer_addin_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  GbpSpellBufferAddin *self = GBP_SPELL_BUFFER_ADDIN (object);
+
+  switch (prop_id)
+    {
+    case PROP_ENABLED:
+      gbp_spell_buffer_addin_set_enabled (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_spell_buffer_addin_class_init (GbpSpellBufferAddinClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = gbp_spell_buffer_addin_get_property;
+  object_class->set_property = gbp_spell_buffer_addin_set_property;
+
+  properties [PROP_ENABLED] =
+    g_param_spec_boolean ("enabled",
+                          "Enabled",
+                          "If spellcheck is enabled for the buffer",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 gbp_spell_buffer_addin_init (GbpSpellBufferAddin *self)
 {
+  if (settings == NULL)
+    {
+      settings = g_settings_new ("org.gnome.builder.spelling");
+      g_debug ("Spellcheck settings loaded with initial value of %s",
+               g_settings_get_boolean (settings, "check-spelling") ? "true" : "false");
+    }
+
+  g_settings_bind (settings, "check-spelling",
+                   self, "enabled",
+                   G_SETTINGS_BIND_GET);
 }
 
 void
