@@ -27,9 +27,6 @@ import json
 from gi.repository import GObject
 from gi.repository import Ide
 
-_ = Ide.gettext
-
-
 SEVERITY_MAP = {
     1: Ide.DiagnosticSeverity.WARNING,
     2: Ide.DiagnosticSeverity.ERROR
@@ -85,20 +82,3 @@ class ESLintDiagnosticProvider(Ide.DiagnosticTool):
                     diagnostics.add(diagnostic)
         except Exception as e:
             Ide.warning('Failed to decode eslint json: {}'.format(e))
-
-class ESLintPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
-    def do_load(self, preferences):
-        self.eslint = preferences.add_switch("code-insight",
-                                             "diagnostics",
-                                             "org.gnome.builder.plugins.eslint",
-                                             "enable-eslint",
-                                             None,
-                                             "false",
-                                             _("ESlint"),
-                                             _("Enable the use of ESLint, which may execute code in your project"),
-                                             # translators: these are keywords used to search for preferences
-                                             _("eslint javascript lint code execute execution"),
-                                             500)
-
-    def do_unload(self, preferences):
-        preferences.remove_id(self.eslint)
