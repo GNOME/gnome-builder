@@ -45,28 +45,14 @@ gbp_test_output_panel_class_init (GbpTestOutputPanelClass *klass)
 }
 
 static void
-gbp_testui_output_panel_save_in_file (GSimpleAction *action,
-                                      GVariant      *param,
-                                      gpointer       user_data)
+gbp_test_output_panel_save_in_file_cb (GbpTestOutputPanel   *self,
+                                       int                   res,
+                                       GtkFileChooserNative *native)
 {
-  GbpTestOutputPanel *self = user_data;
-  g_autoptr(GtkFileChooserNative) native = NULL;
-  GtkWidget *window;
-  gint res;
-
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_TEST_OUTPUT_PANEL (self));
-
-  window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
-  native = gtk_file_chooser_native_new (_("Save File"),
-                                        GTK_WINDOW (window),
-                                        GTK_FILE_CHOOSER_ACTION_SAVE,
-                                        _("_Save"),
-                                        _("_Cancel"));
-
-  res = gtk_native_dialog_run (GTK_NATIVE_DIALOG (native));
+  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
 
   if (res == GTK_RESPONSE_ACCEPT)
     {
@@ -101,6 +87,40 @@ gbp_testui_output_panel_save_in_file (GSimpleAction *action,
         }
     }
 
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_testui_output_panel_save_in_file (GSimpleAction *action,
+                                      GVariant      *param,
+                                      gpointer       user_data)
+{
+  GbpTestOutputPanel *self = user_data;
+  g_autoptr(GtkFileChooserNative) native = NULL;
+  GtkWidget *window;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_TEST_OUTPUT_PANEL (self));
+
+  window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
+  native = gtk_file_chooser_native_new (_("Save File"),
+                                        GTK_WINDOW (window),
+                                        GTK_FILE_CHOOSER_ACTION_SAVE,
+                                        _("_Save"),
+                                        _("_Cancel"));
+
+  g_signal_connect_object (native,
+                           "response",
+                           G_CALLBACK (gbp_test_output_panel_save_in_file_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
+
   IDE_EXIT;
 
 }
@@ -129,8 +149,8 @@ gbp_test_output_panel_init (GbpTestOutputPanel *self)
 
   gtk_widget_init_template (GTK_WIDGET(self));
 
-  dzl_dock_widget_set_title (DZL_DOCK_WIDGET (self), _("Unit Test Output"));
-  dzl_dock_widget_set_icon_name (DZL_DOCK_WIDGET (self), "builder-unit-tests-symbolic");
+  panel_widget_set_title (PANEL_WIDGET (self), _("Unit Test Output"));
+  panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-unit-tests-symbolic");
 
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);

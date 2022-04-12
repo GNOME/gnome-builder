@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include <libide-gui.h>
-#include <dazzle.h>
 #include <vte/vte.h>
+
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 

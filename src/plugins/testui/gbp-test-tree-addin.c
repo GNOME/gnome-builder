@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-editor.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
@@ -75,22 +76,22 @@ show_test_panel (GbpTestTreeAddin *self)
 
   if (self->panel == NULL)
     {
-      GtkWidget *surface;
-      GtkWidget *utils;
+      g_autoptr(IdePanelPosition) position = NULL;
+      IdeWorkspace *workspace;
       VtePty *pty;
 
       pty = ide_test_manager_get_pty (test_manager);
+
       self->panel = GBP_TEST_OUTPUT_PANEL (gbp_test_output_panel_new (pty));
-      g_signal_connect (self->panel,
-                        "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &self->panel);
-      surface = gtk_widget_get_ancestor (GTK_WIDGET (self->tree), IDE_TYPE_EDITOR_SURFACE);
-      utils = ide_editor_surface_get_utilities (IDE_EDITOR_SURFACE (surface));
-      gtk_container_add (GTK_CONTAINER (utils), GTK_WIDGET (self->panel));
-      gtk_widget_show (GTK_WIDGET (self->panel));
-      dzl_dock_item_present (DZL_DOCK_ITEM (self->panel));
+      g_object_ref_sink (self->panel);
+
+      workspace = ide_widget_get_workspace (GTK_WIDGET (self->tree));
+      position = ide_panel_position_new ();
+      ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
+      ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
     }
+
+  panel_widget_raise (PANEL_WIDGET (self->panel));
 }
 
 static void
@@ -320,8 +321,11 @@ gbp_test_tree_addin_unload (IdeTreeAddin *addin,
   self->tree = NULL;
   self->model = NULL;
 
-  if (self->panel != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->panel));
+  if (self->panel)
+    {
+      panel_widget_close (PANEL_WIDGET (self->panel));
+      g_clear_object (&self->panel);
+    }
 
   context = ide_object_get_context (IDE_OBJECT (model));
 
