@@ -139,6 +139,9 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                           "tab-width", self->view, "tab-width",
                           G_BINDING_SYNC_CREATE);
 
+  g_settings_bind (editor_settings, "show-line-numbers",
+                   self->view, "show-line-numbers",
+                   G_SETTINGS_BIND_GET);
   g_settings_bind (editor_settings, "show-map",
                    self->map_revealer, "reveal-child",
                    G_SETTINGS_BIND_GET);
