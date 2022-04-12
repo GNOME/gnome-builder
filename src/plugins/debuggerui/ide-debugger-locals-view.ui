@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeDebuggerLocalsView" parent="GtkBin">
+  <template class="IdeDebuggerLocalsView" parent="AdwBin">
     <child>
       <object class="GtkScrolledWindow">
         <property name="min-content-width">300</property>

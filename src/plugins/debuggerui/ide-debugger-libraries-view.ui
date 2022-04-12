@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeDebuggerLibrariesView" parent="GtkBin">
+  <template class="IdeDebuggerLibrariesView" parent="AdwBin">
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">true</property>

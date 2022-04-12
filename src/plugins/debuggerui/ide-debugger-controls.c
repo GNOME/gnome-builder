@@ -22,7 +22,7 @@
 
 struct _IdeDebuggerControls
 {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 };
 
 G_DEFINE_FINAL_TYPE (IdeDebuggerControls, ide_debugger_controls, GTK_TYPE_REVEALER)

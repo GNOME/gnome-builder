@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-debugger.h>
 #include <libide-sourceview.h>
 
@@ -32,7 +31,7 @@
 
 struct _IdeDebuggerHoverControls
 {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 
   IdeDebugManager *debug_manager;
   GFile *file;
@@ -145,7 +144,7 @@ on_toggle_cb (GtkToggleButton          *button,
       break;
     }
 
-  view = dzl_gtk_widget_get_relative (GTK_WIDGET (self), IDE_TYPE_SOURCE_VIEW);
+  view = ide_gtk_widget_get_relative (GTK_WIDGET (self), IDE_TYPE_SOURCE_VIEW);
   gtk_widget_queue_draw (view);
 
   g_signal_handlers_unblock_by_func (self->nobreak, G_CALLBACK (on_toggle_cb), self);

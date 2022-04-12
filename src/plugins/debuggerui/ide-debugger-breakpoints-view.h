@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_BREAKPOINTS_VIEW (ide_debugger_breakpoints_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerBreakpointsView, ide_debugger_breakpoints_view, IDE, DEBUGGER_BREAKPOINTS_VIEW, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeDebuggerBreakpointsView, ide_debugger_breakpoints_view, IDE, DEBUGGER_BREAKPOINTS_VIEW, AdwBin)
 
 GtkWidget   *ide_debugger_breakpoints_view_new          (void);
 IdeDebugger *ide_debugger_breakpoints_view_get_debugger (IdeDebuggerBreakpointsView *self);

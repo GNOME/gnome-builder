@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_THREADS_VIEW (ide_debugger_threads_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerThreadsView, ide_debugger_threads_view, IDE, DEBUGGER_THREADS_VIEW, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeDebuggerThreadsView, ide_debugger_threads_view, IDE, DEBUGGER_THREADS_VIEW, AdwBin)
 
 IdeDebugger *ide_debugger_threads_view_get_debugger (IdeDebuggerThreadsView *self);
 void         ide_debugger_threads_view_set_debugger (IdeDebuggerThreadsView *self,
