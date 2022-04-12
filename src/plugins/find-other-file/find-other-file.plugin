@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2017 Christian Hergert
-Depends=editor;
 Description=Allows the user to rotate through other files similarly named to the open document.
 Hidden=true
 Loader=python3

@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2018 Christian Hergert
-Depends=editor;
 Description=Support for snippets in a variety of languages
 Embedded=_gbp_snippets_register_types
 Hidden=true

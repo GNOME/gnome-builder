@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2017-2018 Christian Hergert
-Depends=editor;
 Description=Unit testing for Builder
 Embedded=_gbp_testui_register_types
 Hidden=true

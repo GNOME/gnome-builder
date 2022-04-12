@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2019 Christian Hergert
-Depends=editor;
 Description=Run shell commands from your project
 Embedded=_gbp_shellcmd_register_types
 Hidden=true

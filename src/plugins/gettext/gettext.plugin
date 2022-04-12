@@ -2,7 +2,6 @@
 Authors=Daiki Ueno
 Builtin=true
 Copyright=Copyright © 2016 Daiki Ueno
-Depends=editor;
 Description=Provides integration with Gettext
 Embedded=_ide_gettext_register_types
 Module=gettext

@@ -2,7 +2,6 @@
 Authors=Christian Hergert <chergert@redhat.com>
 Builtin=true
 Copyright=Copyright © 2017-2018 Christian Hergert
-Depends=editor;terminal;buildui;debuggerui;
 Description=Provides integration with the GNU Debugger
 Embedded=_gbp_gdb_register_types
 Module=gdb

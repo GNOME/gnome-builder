@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015 Christian Hergert
-Depends=editor;
 Description=Provides auto-indentation for the Python programming language
 Embedded=_ide_python_pack_register_types
 Module=python-pack
