@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_HOVER_CONTROLS (ide_debugger_hover_controls_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerHoverControls, ide_debugger_hover_controls, IDE, DEBUGGER_HOVER_CONTROLS, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeDebuggerHoverControls, ide_debugger_hover_controls, IDE, DEBUGGER_HOVER_CONTROLS, AdwBin)
 
 GtkWidget *ide_debugger_hover_controls_new (IdeDebugManager *debug_manager,
                                             GFile           *file,

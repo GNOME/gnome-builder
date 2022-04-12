@@ -22,16 +22,14 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "ide-debugger-breakpoints-view.h"
 
 struct _IdeDebuggerBreakpointsView
 {
-  GtkBin                 parent_instance;
+  AdwBin                 parent_instance;
 
   /* Owned references */
-  DzlSignalGroup        *debugger_signals;
+  IdeSignalGroup        *debugger_signals;
 
   /* Template references */
   GtkCellRendererText   *address_cell;
@@ -69,11 +67,11 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_debugger_breakpoints_view_bind (IdeDebuggerBreakpointsView *self,
                                     IdeDebugger                *debugger,
-                                    DzlSignalGroup             *debugger_signals)
+                                    IdeSignalGroup             *debugger_signals)
 {
   g_assert (IDE_IS_DEBUGGER_BREAKPOINTS_VIEW (self));
   g_assert (IDE_IS_DEBUGGER (debugger));
-  g_assert (DZL_IS_SIGNAL_GROUP (debugger_signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (debugger_signals));
 
   gtk_list_store_clear (self->list_store);
 }
@@ -113,7 +111,7 @@ ide_debugger_breakpoints_view_breakpoint_added (IdeDebuggerBreakpointsView *self
   g_assert (IDE_IS_DEBUGGER_BREAKPOINT (breakpoint));
   g_assert (IDE_IS_DEBUGGER (debugger));
 
-  dzl_gtk_list_store_insert_sorted (self->list_store, &iter, breakpoint, 0,
+  ide_gtk_list_store_insert_sorted (self->list_store, &iter, breakpoint, 0,
                                     (GCompareDataFunc)ide_debugger_breakpoint_compare,
                                     NULL);
 
@@ -468,38 +466,38 @@ ide_debugger_breakpoints_view_class_init (IdeDebuggerBreakpointsViewClass *klass
 static void
 ide_debugger_breakpoints_view_init (IdeDebuggerBreakpointsView *self)
 {
-  DzlShortcutController *controller;
+  IdeShortcutController *controller;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->debugger_signals = dzl_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
   g_signal_connect_swapped (self->debugger_signals,
                             "bind",
                             G_CALLBACK (ide_debugger_breakpoints_view_bind),
                             self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_breakpoints_view_running),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_breakpoints_view_stopped),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-added",
                                     G_CALLBACK (ide_debugger_breakpoints_view_breakpoint_added),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-removed",
                                     G_CALLBACK (ide_debugger_breakpoints_view_breakpoint_removed),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "breakpoint-modified",
                                     G_CALLBACK (ide_debugger_breakpoints_view_breakpoint_modified),
                                     self);
@@ -547,12 +545,12 @@ ide_debugger_breakpoints_view_init (IdeDebuggerBreakpointsView *self)
                             G_CALLBACK (ide_debugger_breakpoints_view_enabled_toggled),
                             self);
 
-  controller = dzl_shortcut_controller_find (GTK_WIDGET (self->tree_view));
+  controller = ide_shortcut_controller_find (GTK_WIDGET (self->tree_view));
 
-  dzl_shortcut_controller_add_command_callback (controller,
+  ide_shortcut_controller_add_command_callback (controller,
                                                 "org.gnome.builder.debugger.delete-breakpoint",
                                                 "Delete",
-                                                DZL_SHORTCUT_PHASE_BUBBLE,
+                                                IDE_SHORTCUT_PHASE_BUBBLE,
                                                 (GtkCallback) ide_debugger_breakpoints_view_delete_breakpoint,
                                                 self, NULL);
 }
@@ -579,7 +577,7 @@ ide_debugger_breakpoints_view_get_debugger (IdeDebuggerBreakpointsView *self)
   g_return_val_if_fail (IDE_IS_DEBUGGER_BREAKPOINTS_VIEW (self), NULL);
 
   if (self->debugger_signals != NULL)
-    return dzl_signal_group_get_target (self->debugger_signals);
+    return ide_signal_group_get_target (self->debugger_signals);
   else
     return NULL;
 }
@@ -602,7 +600,7 @@ ide_debugger_breakpoints_view_set_debugger (IdeDebuggerBreakpointsView *self,
 
   if (self->debugger_signals != NULL)
     {
-      dzl_signal_group_set_target (self->debugger_signals, debugger);
+      ide_signal_group_set_target (self->debugger_signals, debugger);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
     }
 }

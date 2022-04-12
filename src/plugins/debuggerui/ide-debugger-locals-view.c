@@ -22,19 +22,19 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <glib/gi18n.h>
+
 #include <libide-core.h>
 #include <libide-threading.h>
-#include <glib/gi18n.h>
 
 #include "ide-debugger-locals-view.h"
 
 struct _IdeDebuggerLocalsView
 {
-  GtkBin          parent_instance;
+  AdwBin          parent_instance;
 
   /* Owned references */
-  DzlSignalGroup *debugger_signals;
+  IdeSignalGroup *debugger_signals;
 
   /* Template references */
   GtkTreeStore        *tree_store;
@@ -222,14 +222,14 @@ ide_debugger_locals_view_init (IdeDebuggerLocalsView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->debugger_signals = dzl_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_locals_view_running),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_locals_view_stopped),
                                     self);
@@ -268,7 +268,7 @@ ide_debugger_locals_view_get_debugger (IdeDebuggerLocalsView *self)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER_LOCALS_VIEW (self), NULL);
 
-  return dzl_signal_group_get_target (self->debugger_signals);
+  return ide_signal_group_get_target (self->debugger_signals);
 }
 
 void
@@ -278,7 +278,7 @@ ide_debugger_locals_view_set_debugger (IdeDebuggerLocalsView *self,
   g_return_if_fail (IDE_IS_DEBUGGER_LOCALS_VIEW (self));
   g_return_if_fail (!debugger || IDE_IS_DEBUGGER (debugger));
 
-  dzl_signal_group_set_target (self->debugger_signals, debugger);
+  ide_signal_group_set_target (self->debugger_signals, debugger);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
 }
 

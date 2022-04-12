@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeDebuggerThreadsView" parent="GtkBin">
+  <template class="IdeDebuggerThreadsView" parent="AdwBin">
     <child>
-      <object class="DzlMultiPaned">
+      <object class="IdeMultiPaned">
         <property name="orientation">horizontal</property>
         <property name="visible">true</property>
         <child>

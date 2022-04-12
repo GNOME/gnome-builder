@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_LIBRARIES_VIEW (ide_debugger_libraries_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerLibrariesView, ide_debugger_libraries_view, IDE, DEBUGGER_LIBRARIES_VIEW, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeDebuggerLibrariesView, ide_debugger_libraries_view, IDE, DEBUGGER_LIBRARIES_VIEW, AdwBin)
 
 GtkWidget   *ide_debugger_libraries_view_new          (void);
 IdeDebugger *ide_debugger_libraries_view_get_debugger (IdeDebuggerLibrariesView *self);

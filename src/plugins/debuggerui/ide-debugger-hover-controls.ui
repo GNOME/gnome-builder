@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeDebuggerHoverControls" parent="GtkBin">
+  <template class="IdeDebuggerHoverControls" parent="AdwBin">
     <child>
       <object class="GtkBox">
         <property name="visible">true</property>
