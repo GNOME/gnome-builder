@@ -512,10 +512,7 @@ ide_buffer_dispose (GObject *object)
   g_clear_handle_id (&self->settling_source, g_source_remove);
   g_clear_handle_id (&self->release_in_idle, g_source_remove);
 
-  /* Remove ourselves from the object-tree if necessary */
-  if ((box = ide_object_box_from_object (object)) &&
-      !ide_object_in_destruction (IDE_OBJECT (box)))
-    ide_object_destroy (IDE_OBJECT (box));
+  g_clear_pointer (&self->commit_funcs, g_array_unref);
 
   ide_clear_and_destroy_object (&self->addins);
   ide_clear_and_destroy_object (&self->rename_provider);
@@ -523,12 +520,18 @@ ide_buffer_dispose (GObject *object)
   ide_clear_and_destroy_object (&self->formatter);
   ide_clear_and_destroy_object (&self->code_action_provider);
   ide_clear_and_destroy_object (&self->highlight_engine);
-  g_clear_object (&self->buffer_manager);
   ide_clear_and_destroy_object (&self->change_monitor);
-  g_clear_pointer (&self->content, g_bytes_unref);
-  g_clear_object (&self->diagnostics);
   ide_clear_and_destroy_object (&self->file_settings);
-  g_clear_pointer (&self->commit_funcs, g_array_unref);
+
+  g_clear_object (&self->diagnostics);
+  g_clear_object (&self->buffer_manager);
+
+  /* Remove ourselves from the object-tree if necessary */
+  if ((box = ide_object_box_from_object (object)) &&
+      !ide_object_in_destruction (IDE_OBJECT (box)))
+    ide_object_destroy (IDE_OBJECT (box));
+
+  g_clear_pointer (&self->content, g_bytes_unref);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 }
