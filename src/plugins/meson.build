@@ -176,7 +176,6 @@ status += [
   'Git .................................. : @0@'.format(get_option('plugin_git')),
   'GJS Symbols .......................... : @0@'.format(get_option('plugin_gjs_symbols')),
   'Glade ................................ : @0@'.format(get_option('plugin_glade')),
-  'GNOME Code Assistance ................ : @0@'.format(get_option('plugin_gnome_code_assistance')),
   'Gradle ............................... : @0@'.format(get_option('plugin_gradle')),
   'Grep ................................. : @0@'.format(get_option('plugin_grep')),
   'HTML Completion ...................... : @0@'.format(get_option('plugin_html_completion')),
