@@ -105,11 +105,10 @@ class CopyrightBufferAddin(Ide.Object, Ide.BufferAddin):
 
 class CopyrightPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
     def do_load(self, window):
-        window.add_group('editor', 'formatting', 0, _('Formatting'))
         Ide.add_preference_items(window, [
             {
                 'kind': 'toggle',
-                'page': 'editor',
+                'page': 'editing',
                 'group': 'formatting',
                 'name': 'update-copyright',
                 'priority': 0,
