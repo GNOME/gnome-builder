@@ -1,9 +1,0 @@
-<schemalist>
-  <schema id="org.gnome.builder.plugins.eslint" path="/org/gnome/builder/plugins/eslint/" gettext-domain="gnome-builder">
-    <key name="enable-eslint" type="b">
-      <default>false</default>
-      <summary>Enable ESLint</summary>
-      <description>Enable the use of eslint to find additional diagnostics in JavaScript files. This may result in the execution of code in your project.</description>
-    </key>
-  </schema>
-</schemalist>
