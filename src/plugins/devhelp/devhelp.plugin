@@ -2,7 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015-2018 Christian Hergert
-Depends=editor;webkit;
+Depends=webkit;
 Description=Integration with devhelp documentation
 Embedded=_gbp_devhelp_register_types
 Hidden=true

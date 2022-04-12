@@ -3,7 +3,6 @@ Authors=Alberto Fanjul Alonso <albfan@gnome.org>
 Builtin=true
 Copyright=Copyright © 2018 Alberto Fanjul Alonso
 Description=Provides integration with the Maven build tool
-Depends=editor;buildui;
 Loader=python3
 Module=maven_plugin
 Name=Maven

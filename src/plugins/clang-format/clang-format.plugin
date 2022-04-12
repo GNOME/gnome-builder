@@ -2,7 +2,6 @@
 Authors=Tomi Lähteenmäki <lihis@lihis.net>
 Builtin=true
 Copyright=Copyright © 2021 Tomi Lähteenmäki
-Depends=editor;
 Description=Format code based on project .clang-format config
 Hidden=false
 Embedded=_gb_clang_format_register_types

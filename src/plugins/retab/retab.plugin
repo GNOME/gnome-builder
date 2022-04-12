@@ -2,7 +2,6 @@
 Authors=Lucie Charvat <luci.charvat@gmail.com>
 Builtin=true
 Copyright=Copyright © 2017 Lucie Charvat
-Depends=editor
 Description=Retab lines with Builder editor.
 Embedded=_gbp_retab_register_types
 Hidden=true

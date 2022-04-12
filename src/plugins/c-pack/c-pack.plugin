@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015-2018 Christian Hergert
-Depends=editor;
 Description=Provides language support for the C programming language.
 Embedded=_ide_c_pack_register_types
 Module=c-pack

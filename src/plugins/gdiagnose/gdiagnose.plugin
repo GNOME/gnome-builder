@@ -2,7 +2,6 @@
 Authors=Christian Hergert <chergert@redhat.com>
 Builtin=true
 Copyright=Copyright © 2021 Christian Hergert
-Depends=editor;
 Description=GObject Diagnostics
 Embedded=_ide_gdiagnose_register_types
 Module=gdiagnose

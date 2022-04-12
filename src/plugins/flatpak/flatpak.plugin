@@ -2,7 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2016-2018 Christian Hergert
-Depends=buildui;editor;git;
+Depends=git;
 Description=Provides support for building with Flatpak
 Embedded=_gbp_flatpak_register_types
 Hidden=true

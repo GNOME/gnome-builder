@@ -1,10 +1,7 @@
-# BuildStream plugin
-
 [Plugin]
 Authors=Adam
 Builtin=true
 Description=Provides integration with the BuildStream build tool
-Depends=editor;buildui;
 Hidden=true
 Loader=python3
 Module=buildstream_plugin
