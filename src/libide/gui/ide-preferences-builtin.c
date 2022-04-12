@@ -667,6 +667,8 @@ static const IdePreferencePageEntry pages[] = {
 static const IdePreferenceGroupEntry groups[] = {
   { "appearance", "style",                  0, N_("Appearance") },
 
+  { "editing",    "formatting",           100, N_("Formatting") },
+
   { "insight",    "general",                0, NULL },
   { "insight",    "completion",            10, N_("Completion") },
   { "insight",    "completion-providers",  20, NULL },
