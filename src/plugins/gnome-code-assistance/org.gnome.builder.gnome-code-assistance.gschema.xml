@@ -1,9 +1,0 @@
-<schemalist>
-  <schema id="org.gnome.builder.gnome-code-assistance" path="/org/gnome/builder/plugins/gnome-code-assistance/" gettext-domain="gnome-builder">
-    <key name="enable-pylint" type="b">
-      <default>false</default>
-      <summary>Enable Pylint</summary>
-      <description>Enable the use of pylint to find additional diagnostics in Python programs. This may result in the execution of code in your project.</description>
-    </key>
-  </schema>
-</schemalist>
