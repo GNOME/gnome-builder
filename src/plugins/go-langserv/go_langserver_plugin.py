@@ -35,7 +35,7 @@ class GoService(Ide.LspService):
     def do_configure_client(self, client):
         client.add_language('go')
 
-class GoSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
+class GoSymbolResolver(Ide.LspSymbolResolver):
     def do_load(self):
         GoService.bind_client(self)
 
@@ -45,6 +45,6 @@ class GoHoverProvider(Ide.LspHoverProvider):
         self.props.priority = 100
         GoService.bind_client(self)
 
-class GoCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
-    def do_load(self, context):
+class GoCompletionProvider(Ide.LspCompletionProvider):
+    def do_load(self):
         GoService.bind_client(self)
