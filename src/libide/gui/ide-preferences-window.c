@@ -908,6 +908,33 @@ ide_preferences_window_add_pages (IdePreferencesWindow         *self,
 }
 
 void
+ide_preferences_window_add_group (IdePreferencesWindow *self,
+                                  const char           *page,
+                                  const char           *name,
+                                  int                   priority,
+                                  const char           *title)
+{
+  IdePreferenceGroupEntry entry = {0};
+
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+
+  entry.page = page;
+  entry.name = name;
+  entry.priority = priority;
+  entry.title = title;
+
+  ide_preferences_window_add_groups (self, &entry, 1, NULL);
+}
+
+/**
+ * ide_preferences_window_add_groups:
+ * @self: a #IdePreferencesWindow
+ * @groups: (array length=n_groups): the groups to add
+ * @translation_domain: (nullable): gettext translation domain for i18n
+ *
+ * Adds the groups to the preferences window pages.
+ */
+void
 ide_preferences_window_add_groups (IdePreferencesWindow          *self,
                                    const IdePreferenceGroupEntry *groups,
                                    gsize                          n_groups,
@@ -1033,6 +1060,75 @@ ide_preferences_window_add_item (IdePreferencesWindow  *self,
     }
 
   ide_preferences_window_queue_rebuild (self);
+}
+
+/**
+ * ide_preferences_window_add_toggle:
+ * @self: a #IdePreferencesWindow
+ *
+ * Helper to add a toggle.
+ *
+ * This is mostly for use by language bindings such as Python.
+ */
+void
+ide_preferences_window_add_toggle (IdePreferencesWindow         *self,
+                                   const IdePreferenceItemEntry *item)
+{
+  IdePreferenceItemEntry entry;
+
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+  g_return_if_fail (item != NULL);
+
+  entry = *item;
+  entry.callback = ide_preferences_window_toggle;
+
+  ide_preferences_window_add_items (self, &entry, 1, self, NULL);
+}
+
+/**
+ * ide_preferences_window_add_spin:
+ * @self: a #IdePreferencesWindow
+ *
+ * Helper to add a spin button.
+ *
+ * This is mostly for use by language bindings such as Python.
+ */
+void
+ide_preferences_window_add_spin (IdePreferencesWindow         *self,
+                                 const IdePreferenceItemEntry *item)
+{
+  IdePreferenceItemEntry entry;
+
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+  g_return_if_fail (item != NULL);
+
+  entry = *item;
+  entry.callback = ide_preferences_window_spin;
+
+  ide_preferences_window_add_items (self, &entry, 1, self, NULL);
+}
+
+/**
+ * ide_preferences_window_add_check:
+ * @self: a #IdePreferencesWindow
+ *
+ * Helper to add a check image.
+ *
+ * This is mostly for use by language bindings such as Python.
+ */
+void
+ide_preferences_window_add_check (IdePreferencesWindow         *self,
+                                  const IdePreferenceItemEntry *item)
+{
+  IdePreferenceItemEntry entry;
+
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+  g_return_if_fail (item != NULL);
+
+  entry = *item;
+  entry.callback = ide_preferences_window_check;
+
+  ide_preferences_window_add_items (self, &entry, 1, self, NULL);
 }
 
 void
