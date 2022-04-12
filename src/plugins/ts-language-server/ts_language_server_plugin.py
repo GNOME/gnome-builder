@@ -39,12 +39,11 @@ class TypescriptService(Ide.LspService):
         client.add_language('javascript')
         client.add_language('typescript')
 
-
-class TypescriptDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
+class TypescriptDiagnosticProvider(Ide.LspDiagnosticProvider):
     def do_load(self):
         TypescriptService.bind_client(self)
 
-class TypescriptCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
+class TypescriptCompletionProvider(Ide.LspCompletionProvider):
     def do_load(self, context):
         TypescriptService.bind_client(self)
 
@@ -53,29 +52,29 @@ class TypescriptCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProv
         # want the results. So use high priority (negative is better).
         return -1000
 
-class TypescriptSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
+class TypescriptSymbolResolver(Ide.LspSymbolResolver):
     def do_load(self):
         TypescriptService.bind_client(self)
 
-class TypescriptHighlighter(Ide.LspHighlighter, Ide.Highlighter):
+class TypescriptHighlighter(Ide.LspHighlighter):
     def do_load(self):
         TypescriptService.bind_client(self)
 
-class TypescriptFormatter(Ide.LspFormatter, Ide.Formatter):
+class TypescriptFormatter(Ide.LspFormatter):
     def do_load(self):
         TypescriptService.bind_client(self)
 
-class TypescriptHoverProvider(Ide.LspHoverProvider, Ide.HoverProvider):
+class TypescriptHoverProvider(Ide.LspHoverProvider):
     def do_prepare(self):
         self.props.category = 'Typescript'
         self.props.priority = 200
         TypescriptService.bind_client(self)
 
-class TypescriptRenameProvider(Ide.LspRenameProvider, Ide.RenameProvider):
+class TypescriptRenameProvider(Ide.LspRenameProvider):
     def do_load(self):
         TypescriptService.bind_client(self)
 
-class TypescriptCodeActionProvider(Ide.LspCodeActionProvider, Ide.CodeActionProvider):
+class TypescriptCodeActionProvider(Ide.LspCodeActionProvider):
     def do_load(self):
         TypescriptService.bind_client(self)
 
