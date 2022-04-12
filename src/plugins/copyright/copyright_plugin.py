@@ -104,18 +104,18 @@ class CopyrightBufferAddin(Ide.Object, Ide.BufferAddin):
             iter = match_end
 
 class CopyrightPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
-    def do_load(self, prefs):
-        self.update_on_save = prefs.add_switch(
-                "editor", "general",
-                "org.gnome.builder.plugins.copyright",
-                "update-on-save",
-                None,
-                "false",
-                _("Update Copyright"),
-                _("When saving a file Builder will automatically update copyright information for you"),
-                # translators: these are keywords used to search for preferences
-                _("update copyright save"),
-                10)
-
-    def do_unload(self, prefs):
-        prefs.remove_id(self.update_on_save)
+    def do_load(self, window):
+        window.add_group('editor', 'formatting', 0, _('Formatting'))
+        Ide.add_preference_items(window, [
+            {
+                'kind': 'toggle',
+                'page': 'editor',
+                'group': 'formatting',
+                'name': 'update-copyright',
+                'priority': 0,
+                'title': _('Update Copyright'),
+                'subtitle': _('Automatically update copyright headers when saving a file'),
+                'schema_id': 'org.gnome.builder.plugins.copyright',
+                'key': 'update-on-save',
+            },
+        ])
