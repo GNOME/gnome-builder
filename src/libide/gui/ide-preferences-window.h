@@ -99,6 +99,12 @@ void                ide_preferences_window_add_pages  (IdePreferencesWindow     
                                                        gsize                          n_pages,
                                                        const char                    *translation_domain);
 IDE_AVAILABLE_IN_ALL
+void                ide_preferences_window_add_group  (IdePreferencesWindow          *self,
+                                                       const char                    *page,
+                                                       const char                    *name,
+                                                       int                            priority,
+                                                       const char                    *title);
+IDE_AVAILABLE_IN_ALL
 void                ide_preferences_window_add_groups (IdePreferencesWindow          *self,
                                                        const IdePreferenceGroupEntry *groups,
                                                        gsize                          n_groups,
@@ -118,6 +124,15 @@ void                ide_preferences_window_add_item   (IdePreferencesWindow     
                                                        IdePreferenceCallback          callback,
                                                        gpointer                       user_data,
                                                        GDestroyNotify                 user_data_destroy);
+IDE_AVAILABLE_IN_ALL
+void                ide_preferences_window_add_toggle (IdePreferencesWindow          *self,
+                                                       const IdePreferenceItemEntry  *item);
+IDE_AVAILABLE_IN_ALL
+void                ide_preferences_window_add_spin   (IdePreferencesWindow          *self,
+                                                       const IdePreferenceItemEntry  *item);
+IDE_AVAILABLE_IN_ALL
+void                ide_preferences_window_add_check  (IdePreferencesWindow          *self,
+                                                       const IdePreferenceItemEntry  *item);
 IDE_AVAILABLE_IN_ALL
 void                ide_preferences_window_toggle     (const char                    *page_name,
                                                        const IdePreferenceItemEntry  *entry,

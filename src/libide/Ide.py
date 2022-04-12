@@ -201,3 +201,44 @@ Ide.debug = debug
 Ide.info = info
 Ide.message = message
 Ide.warning = warning
+
+#
+# Preference Helpers
+#
+
+def add_preference_groups(window, groups):
+    for group in groups:
+        entry = Ide.PreferenceGroupEntry()
+        entry.page = group.get('page')
+        entry.name = group.get('name')
+        entry.priority = group.get('priority', 0)
+        entry.title = group.get('title', None)
+        window.add_groups([entry])
+        del entry
+
+def add_preference_items(window, items):
+    for item in items:
+        entry = Ide.PreferenceItemEntry()
+        entry.page = item.get('page')
+        entry.group = item.get('group')
+        entry.priority = item.get('priority', 0)
+        entry.title = item.get('title', None)
+        entry.subtitle = item.get('subtitle', None)
+        entry.schema_id = item.get('schema_id', None)
+        entry.key = item.get('key', None)
+        entry.path = item.get('path', None)
+        entry.value = item.get('value', None)
+
+        if item.get('kind') == 'toggle':
+            window.add_toggle(entry)
+        elif item.get('kind') == 'spin':
+            window.add_spin(entry)
+        elif item.get('kind') == 'check':
+            window.add_check(entry)
+        else:
+            Ide.critical("Unknown preference kind %s" % item.get('kind'))
+
+        del entry
+
+Ide.add_preference_groups = add_preference_groups
+Ide.add_preference_items = add_preference_items
