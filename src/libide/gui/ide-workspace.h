@@ -82,6 +82,7 @@ struct _IdeWorkspaceClass
   gboolean    (*save_size)             (IdeWorkspace         *self,
                                         int                  *width,
                                         int                  *height);
+  gboolean    (*can_search)            (IdeWorkspace         *self);
 };
 
 IDE_AVAILABLE_IN_ALL

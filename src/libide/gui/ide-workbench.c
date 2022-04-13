@@ -112,24 +112,26 @@ enum {
   N_PROPS
 };
 
-static void ide_workbench_action_close       (IdeWorkbench *self,
-                                              GVariant     *param);
-static void ide_workbench_action_open        (IdeWorkbench *self,
-                                              GVariant     *param);
-static void ide_workbench_action_dump_tasks  (IdeWorkbench *self,
-                                              GVariant     *param);
-static void ide_workbench_action_object_tree (IdeWorkbench *self,
-                                              GVariant     *param);
-static void ide_workbench_action_inspector   (IdeWorkbench *self,
-                                              GVariant     *param);
-static void ide_workbench_action_reload_all  (IdeWorkbench *self,
-                                              GVariant     *param);
-
+static void ide_workbench_action_close         (IdeWorkbench *self,
+                                                GVariant     *param);
+static void ide_workbench_action_open          (IdeWorkbench *self,
+                                                GVariant     *param);
+static void ide_workbench_action_dump_tasks    (IdeWorkbench *self,
+                                                GVariant     *param);
+static void ide_workbench_action_object_tree   (IdeWorkbench *self,
+                                                GVariant     *param);
+static void ide_workbench_action_inspector     (IdeWorkbench *self,
+                                                GVariant     *param);
+static void ide_workbench_action_reload_all    (IdeWorkbench *self,
+                                                GVariant     *param);
+static void ide_workbench_action_global_search (IdeWorkbench *self,
+                                                GVariant     *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
   { "close", ide_workbench_action_close },
   { "open", ide_workbench_action_open },
   { "reload-files", ide_workbench_action_reload_all },
+  { "global-search", ide_workbench_action_global_search },
   { "-inspector", ide_workbench_action_inspector },
   { "-object-tree", ide_workbench_action_object_tree },
   { "-dump-tasks", ide_workbench_action_dump_tasks },
@@ -1415,6 +1417,29 @@ ide_workbench_action_open (IdeWorkbench *self,
                            G_CONNECT_SWAPPED);
 
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+}
+
+static void
+ide_workbench_action_global_search (IdeWorkbench *self,
+                                    GVariant     *param)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (param == NULL);
+
+  for (const GList *iter = self->mru_queue.head; iter; iter = iter->next)
+    {
+      IdeWorkspace *workspace = iter->data;
+
+      if (_ide_workspace_can_search (workspace))
+        {
+          _ide_workspace_begin_global_search (workspace);
+          IDE_EXIT;
+        }
+    }
+
+  IDE_EXIT;
 }
 
 /**

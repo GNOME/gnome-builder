@@ -36,6 +36,8 @@ void        _ide_workspace_move_front_page_mru (IdeWorkspace        *workspace,
                                                 GList               *mru_link);
 void        _ide_workspace_set_context         (IdeWorkspace        *workspace,
                                                 IdeContext          *context);
+gboolean    _ide_workspace_can_search          (IdeWorkspace        *self);
+void        _ide_workspace_begin_global_search (IdeWorkspace        *self);
 void        _ide_workspace_add_widget          (IdeWorkspace        *workspace,
                                                 PanelWidget         *widget,
                                                 IdePanelPosition    *position,
