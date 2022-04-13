@@ -28,7 +28,10 @@
 struct _IdeSearchPopover
 {
   GtkPopover       parent_instance;
+
   IdeSearchEngine *search_engine;
+
+  GtkSearchEntry  *entry;
 };
 
 enum {
@@ -52,6 +55,28 @@ ide_search_popover_set_search_engine (IdeSearchPopover *self,
     {
       /* TODO: Setup addins */
     }
+}
+
+static void
+ide_search_popover_show (GtkWidget *widget)
+{
+  IdeSearchPopover *self = (IdeSearchPopover *)widget;
+
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+
+  GTK_WIDGET_CLASS (ide_search_popover_parent_class)->show (widget);
+
+  gtk_widget_grab_focus (GTK_WIDGET (self->entry));
+}
+
+static gboolean
+ide_search_popover_grab_focus (GtkWidget *widget)
+{
+  IdeSearchPopover *self = (IdeSearchPopover *)widget;
+
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+
+  return gtk_widget_grab_focus (GTK_WIDGET (self->entry));
 }
 
 static void
@@ -112,6 +137,9 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   object_class->get_property = ide_search_popover_get_property;
   object_class->set_property = ide_search_popover_set_property;
 
+  widget_class->grab_focus = ide_search_popover_grab_focus;
+  widget_class->show = ide_search_popover_show;
+
   properties [PROP_SEARCH_ENGINE] =
     g_param_spec_object ("search-engine",
                          "Search Engine",
@@ -124,6 +152,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   g_resources_register (ide_search_get_resource ());
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-search/ide-search-popover.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, entry);
 }
 
 static void
