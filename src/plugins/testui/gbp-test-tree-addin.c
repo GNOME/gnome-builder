@@ -42,6 +42,7 @@ struct _GbpTestTreeAddin
   IdeTreeModel       *model;
   IdeTree            *tree;
   GbpTestOutputPanel *panel;
+  IdeTestManager     *test_manager;
 };
 
 typedef struct
@@ -279,7 +280,6 @@ gbp_test_tree_addin_load (IdeTreeAddin *addin,
                           IdeTreeModel *model)
 {
   GbpTestTreeAddin *self = (GbpTestTreeAddin *)addin;
-  IdeTestManager *test_manager;
   IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -295,9 +295,8 @@ gbp_test_tree_addin_load (IdeTreeAddin *addin,
   if (!ide_context_has_project (context))
     return;
 
-  test_manager = ide_test_manager_from_context (context);
-
-  g_signal_connect_object (test_manager,
+  self->test_manager = ide_test_manager_from_context (context);
+  g_signal_connect_object (self->test_manager,
                            "notify::loading",
                            G_CALLBACK (gbp_test_tree_addin_notify_loading),
                            self,
@@ -310,32 +309,26 @@ gbp_test_tree_addin_unload (IdeTreeAddin *addin,
                             IdeTreeModel *model)
 {
   GbpTestTreeAddin *self = (GbpTestTreeAddin *)addin;
-  IdeTestManager *test_manager;
-  IdeContext *context;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE_ADDIN (addin));
   g_assert (IDE_IS_TREE (tree));
   g_assert (IDE_IS_TREE_MODEL (model));
 
-  self->tree = NULL;
-  self->model = NULL;
-
-  if (self->panel)
+  if (self->panel != NULL)
     {
       panel_widget_close (PANEL_WIDGET (self->panel));
       g_clear_object (&self->panel);
     }
 
-  context = ide_object_get_context (IDE_OBJECT (model));
+  if (self->test_manager != NULL)
+    g_signal_handlers_disconnect_by_func (self->test_manager,
+                                          G_CALLBACK (gbp_test_tree_addin_notify_loading),
+                                          self);
 
-  if (!ide_context_has_project (context))
-    return;
-
-  test_manager = ide_test_manager_from_context (context);
-  g_signal_handlers_disconnect_by_func (test_manager,
-                                        G_CALLBACK (gbp_test_tree_addin_notify_loading),
-                                        self);
+  self->tree = NULL;
+  self->model = NULL;
+  self->test_manager = NULL;
 }
 
 static void
