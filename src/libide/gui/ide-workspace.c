@@ -462,6 +462,8 @@ ide_workspace_dispose (GObject *object)
 
   g_assert (IDE_IS_WORKSPACE (self));
 
+  g_clear_pointer ((GtkWidget **)&priv->search_popover, gtk_widget_unparent);
+
   g_clear_weak_pointer (&priv->current_page_ptr);
 
   /* Unload addins immediately */
