@@ -166,6 +166,12 @@ ide_editor_workspace_get_frame_at_position (IdeWorkspace     *workspace,
                                     self->grid);
 }
 
+static gboolean
+ide_editor_workspace_can_search (IdeWorkspace *workspace)
+{
+  return TRUE;
+}
+
 static void
 ide_editor_workspace_dispose (GObject *object)
 {
@@ -190,11 +196,12 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
 
   object_class->dispose = ide_editor_workspace_dispose;
 
-  workspace_class->context_set = ide_editor_workspace_context_set;
   workspace_class->add_page = ide_editor_workspace_add_page;
   workspace_class->add_pane = ide_editor_workspace_add_pane;
-  workspace_class->get_most_recent_frame = ide_editor_workspace_get_most_recent_frame;
+  workspace_class->can_search = ide_editor_workspace_can_search;
+  workspace_class->context_set = ide_editor_workspace_context_set;
   workspace_class->get_frame_at_position = ide_editor_workspace_get_frame_at_position;
+  workspace_class->get_most_recent_frame = ide_editor_workspace_get_most_recent_frame;
 
   ide_workspace_class_set_kind (workspace_class, "editor");
 
