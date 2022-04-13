@@ -3,6 +3,9 @@
   <template class="IdeSearchPopover" parent="GtkPopover">
     <property name="has-arrow">false</property>
     <property name="width-request">500</property>
+    <style>
+      <class name="global-search"/>
+    </style>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
