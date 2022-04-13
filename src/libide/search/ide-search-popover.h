@@ -28,6 +28,8 @@
 
 #include <libide-core.h>
 
+#include "ide-search-engine.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_POPOVER (ide_search_popover_get_type())
@@ -36,8 +38,6 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, IDE, SEARCH_POPOVER, GtkPopover)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget  *ide_search_popover_new         (IdeContext       *context);
-IDE_AVAILABLE_IN_ALL
-IdeContext *ide_search_popover_get_context (IdeSearchPopover *self);
+GtkWidget *ide_search_popover_new (IdeSearchEngine *search_engine);
 
 G_END_DECLS

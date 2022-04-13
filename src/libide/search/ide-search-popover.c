@@ -27,13 +27,13 @@
 
 struct _IdeSearchPopover
 {
-  GtkPopover  parent_instance;
-  IdeContext *context;
+  GtkPopover       parent_instance;
+  IdeSearchEngine *search_engine;
 };
 
 enum {
   PROP_0,
-  PROP_CONTEXT,
+  PROP_SEARCH_ENGINE,
   N_PROPS
 };
 
@@ -42,13 +42,13 @@ G_DEFINE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, GTK_TYPE_POPOVER)
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_search_popover_set_context (IdeSearchPopover *self,
-                                IdeContext       *context)
+ide_search_popover_set_search_engine (IdeSearchPopover *self,
+                                      IdeSearchEngine  *search_engine)
 {
   g_assert (IDE_IS_SEARCH_POPOVER (self));
-  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (IDE_IS_SEARCH_ENGINE (search_engine));
 
-  if (g_set_object (&self->context, context))
+  if (g_set_object (&self->search_engine, search_engine))
     {
       /* TODO: Setup addins */
     }
@@ -59,7 +59,7 @@ ide_search_popover_dispose (GObject *object)
 {
   IdeSearchPopover *self = (IdeSearchPopover *)object;
 
-  g_clear_object (&self->context);
+  g_clear_object (&self->search_engine);
 
   G_OBJECT_CLASS (ide_search_popover_parent_class)->dispose (object);
 }
@@ -74,8 +74,8 @@ ide_search_popover_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_CONTEXT:
-      g_value_set_object (value, ide_search_popover_get_context (self));
+    case PROP_SEARCH_ENGINE:
+      g_value_set_object (value, self->search_engine);
       break;
 
     default:
@@ -93,8 +93,8 @@ ide_search_popover_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CONTEXT:
-      ide_search_popover_set_context (self, g_value_get_object (value));
+    case PROP_SEARCH_ENGINE:
+      ide_search_popover_set_search_engine (self, g_value_get_object (value));
       break;
 
     default:
@@ -112,11 +112,11 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   object_class->get_property = ide_search_popover_get_property;
   object_class->set_property = ide_search_popover_set_property;
 
-  properties [PROP_CONTEXT] =
-    g_param_spec_object ("context",
-                         "Context",
-                         "The project context",
-                         IDE_TYPE_CONTEXT,
+  properties [PROP_SEARCH_ENGINE] =
+    g_param_spec_object ("search-engine",
+                         "Search Engine",
+                         "The search engine for the popover",
+                         IDE_TYPE_SEARCH_ENGINE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -132,18 +132,12 @@ ide_search_popover_init (IdeSearchPopover *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-/**
- * ide_search_popover_get_context:
- * @self: a #IdeSearchPopover
- *
- * Gets the context for the search popover.
- *
- * Returns: (transfer none) (nullable): an #IdeContext or %NULL
- */
-IdeContext *
-ide_search_popover_get_context (IdeSearchPopover *self)
+GtkWidget *
+ide_search_popover_new (IdeSearchEngine *search_engine)
 {
-  g_return_val_if_fail (IDE_IS_SEARCH_POPOVER (self), NULL);
+  g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (search_engine), NULL);
 
-  return self->context;
+  return g_object_new (IDE_TYPE_SEARCH_POPOVER,
+                       "search-engine", search_engine,
+                       NULL);
 }
