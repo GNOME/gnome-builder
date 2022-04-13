@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <libide-search.h>
 #include <libide-plugins.h>
 
 #include "ide-gui-global.h"
@@ -32,7 +33,6 @@
 #define MUX_ACTIONS_KEY "IDE_WORKSPACE_MUX_ACTIONS"
 #define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
 #define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
-
 
 typedef struct
 {
@@ -60,6 +60,9 @@ typedef struct
 
   /* A statusbar, if any, that was added to the workspace */
   PanelStatusbar *statusbar;
+
+  /* The global search for the workspace, if any */
+  IdeSearchPopover *search_popover;
 
   /* A MRU that is updated as pages are focused. It allows us to move through
    * the pages in the order they've been most-recently focused.
@@ -372,6 +375,14 @@ ide_workspace_size_allocate (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (ide_workspace_parent_class)->size_allocate (widget, width, height, baseline);
 
+  if (priv->search_popover != NULL)
+    {
+      GdkRectangle point = { width / 2, 100, 1, 1 };
+
+      gtk_popover_set_pointing_to (GTK_POPOVER (priv->search_popover), &point);
+      gtk_popover_present (GTK_POPOVER (priv->search_popover));
+    }
+
   if (priv->queued_window_save == 0 &&
       IDE_WORKSPACE_GET_CLASS (self)->save_size != NULL)
     priv->queued_window_save = g_timeout_add_seconds (1, ide_workspace_save_settings, self);
@@ -434,7 +445,12 @@ ide_workspace_real_get_most_recent_frame (IdeWorkspace *self)
     return NULL;
 
   return IDE_FRAME (gtk_widget_get_ancestor (GTK_WIDGET (page), IDE_TYPE_FRAME));
+}
 
+static gboolean
+ide_workspace_real_can_search (IdeWorkspace *self)
+{
+  return FALSE;
 }
 
 static void
@@ -516,13 +532,14 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
 
   window_class->close_request = ide_workspace_close_request;
 
-  klass->foreach_page = ide_workspace_real_foreach_page;
-  klass->context_set = ide_workspace_real_context_set;
   klass->agree_to_close_async = ide_workspace_agree_to_close_async;
   klass->agree_to_close_finish = ide_workspace_agree_to_close_finish;
+  klass->can_search = ide_workspace_real_can_search;
+  klass->context_set = ide_workspace_real_context_set;
+  klass->foreach_page = ide_workspace_real_foreach_page;
+  klass->get_most_recent_frame = ide_workspace_real_get_most_recent_frame;
   klass->restore_size = ide_workspace_restore_size;
   klass->save_size = ide_workspace_save_size;
-  klass->get_most_recent_frame = ide_workspace_real_get_most_recent_frame;
 
   /**
    * IdeWorkspace:context:
@@ -1238,4 +1255,32 @@ ide_workspace_get_frame_at_position (IdeWorkspace     *self,
     return IDE_WORKSPACE_GET_CLASS (self)->get_frame_at_position (self, position);
 
   return NULL;
+}
+
+gboolean
+_ide_workspace_can_search (IdeWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), FALSE);
+
+  return IDE_WORKSPACE_GET_CLASS (self)->can_search (self);
+}
+
+void
+_ide_workspace_begin_global_search (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+
+  if (priv->search_popover == NULL)
+    {
+      IdeWorkbench *workbench = ide_workspace_get_workbench (self);
+      IdeSearchEngine *search_engine = ide_workbench_get_search_engine (workbench);
+
+      priv->search_popover = IDE_SEARCH_POPOVER (ide_search_popover_new (search_engine));
+      gtk_widget_set_parent (GTK_WIDGET (priv->search_popover), GTK_WIDGET (self));
+    }
+
+  if (!gtk_widget_get_visible (GTK_WIDGET (priv->search_popover)))
+    gtk_popover_popup (GTK_POPOVER (priv->search_popover));
 }

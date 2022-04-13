@@ -149,6 +149,12 @@ ide_primary_workspace_get_frame_at_position (IdeWorkspace     *workspace,
                                     self->grid);
 }
 
+static gboolean
+ide_primary_workspace_can_search (IdeWorkspace *workspace)
+{
+  return TRUE;
+}
+
 static void
 ide_primary_workspace_dispose (GObject *object)
 {
@@ -173,11 +179,12 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 
   object_class->dispose = ide_primary_workspace_dispose;
 
-  workspace_class->context_set = ide_primary_workspace_context_set;
   workspace_class->add_page = ide_primary_workspace_add_page;
   workspace_class->add_pane = ide_primary_workspace_add_pane;
-  workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
+  workspace_class->can_search = ide_primary_workspace_can_search;
+  workspace_class->context_set = ide_primary_workspace_context_set;
   workspace_class->get_frame_at_position = ide_primary_workspace_get_frame_at_position;
+  workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
 
   ide_workspace_class_set_kind (workspace_class, "primary");
 
@@ -191,6 +198,8 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, GDK_CONTROL_MASK, "workbench.global-search", NULL);
 
   g_type_ensure (IDE_TYPE_GRID);
   g_type_ensure (IDE_TYPE_NOTIFICATIONS_BUTTON);
