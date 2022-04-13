@@ -46,3 +46,8 @@ stylevariantpreview widget.header.dark {
 stylevariantpreview widget.header.light {
   background: #cccccc;
 }
+
+window popover.global-search contents {
+  padding: 0;
+  margin: 0;
+}
