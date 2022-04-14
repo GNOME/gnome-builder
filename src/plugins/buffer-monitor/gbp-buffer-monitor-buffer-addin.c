@@ -36,6 +36,7 @@ struct _GbpBufferMonitorBufferAddin
 
   IdeBuffer    *buffer;
   GFileMonitor *monitor;
+  IdeProject   *project;
 
   GDateTime    *mtime;
   guint         mtime_set : 1;
@@ -246,7 +247,9 @@ gbp_buffer_monitor_buffer_addin_load (IdeBufferAddin *addin,
 
   context = ide_buffer_ref_context (buffer);
   project = ide_project_from_context (context);
-  g_signal_connect_object (project,
+
+  self->project = g_object_ref (project);
+  g_signal_connect_object (self->project,
                            "file-renamed",
                            G_CALLBACK (file_renamed_cb),
                            self,
@@ -258,21 +261,18 @@ gbp_buffer_monitor_buffer_addin_unload (IdeBufferAddin *addin,
                                         IdeBuffer      *buffer)
 {
   GbpBufferMonitorBufferAddin *self = (GbpBufferMonitorBufferAddin *)addin;
-  g_autoptr(IdeContext) context = NULL;
-  IdeProject *project;
 
   g_assert (GBP_IS_BUFFER_MONITOR_BUFFER_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
   gbp_buffer_monitor_buffer_addin_setup_monitor (self, NULL);
 
-  context = ide_buffer_ref_context (buffer);
-  project = ide_project_from_context (context);
-  g_signal_handlers_disconnect_by_func (project,
+  g_signal_handlers_disconnect_by_func (self->project,
                                         G_CALLBACK (file_renamed_cb),
                                         self);
 
   g_clear_pointer (&self->mtime, g_date_time_unref);
+  g_clear_object (&self->project);
   self->buffer = NULL;
 }
 
