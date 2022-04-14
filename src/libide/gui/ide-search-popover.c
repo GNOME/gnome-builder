@@ -152,7 +152,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
 
   g_resources_register (ide_search_get_resource ());
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-search/ide-search-popover.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-search-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, entry);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, nav_box);
 }
