@@ -38,6 +38,10 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, IDE, SEARCH_POPOVER, GtkPopover)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_search_popover_new (IdeSearchEngine *search_engine);
+GtkWidget *ide_search_popover_new     (IdeSearchEngine  *search_engine);
+IDE_AVAILABLE_IN_ALL
+void       ide_search_popover_present (IdeSearchPopover *self,
+                                       int               parent_width,
+                                       int               parent_height);
 
 G_END_DECLS
