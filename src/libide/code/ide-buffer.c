@@ -512,9 +512,8 @@ ide_buffer_dispose (GObject *object)
   g_clear_handle_id (&self->settling_source, g_source_remove);
   g_clear_handle_id (&self->release_in_idle, g_source_remove);
 
-  g_clear_pointer (&self->commit_funcs, g_array_unref);
-
   ide_clear_and_destroy_object (&self->addins);
+
   ide_clear_and_destroy_object (&self->rename_provider);
   ide_clear_and_destroy_object (&self->symbol_resolvers);
   ide_clear_and_destroy_object (&self->formatter);
@@ -522,6 +521,8 @@ ide_buffer_dispose (GObject *object)
   ide_clear_and_destroy_object (&self->highlight_engine);
   ide_clear_and_destroy_object (&self->change_monitor);
   ide_clear_and_destroy_object (&self->file_settings);
+
+  g_clear_pointer (&self->commit_funcs, g_array_unref);
 
   g_clear_object (&self->diagnostics);
   g_clear_object (&self->buffer_manager);
