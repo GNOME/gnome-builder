@@ -22,14 +22,11 @@
 
 #include "config.h"
 
-#include "ide-search-popover.h"
 #include "ide-search-private.h"
 #include "ide-search-resources.h"
 
 void
 _ide_search_init (void)
 {
-  g_type_ensure (IDE_TYPE_SEARCH_POPOVER);
-
   g_resources_register (ide_search_get_resource ());
 }

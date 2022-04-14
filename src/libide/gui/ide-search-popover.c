@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "ide-search-popover.h"
+#include "ide-search-popover-private.h"
 #include "ide-search-resources.h"
 
 struct _IdeSearchPopover
