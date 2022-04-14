@@ -31,6 +31,7 @@ struct _IdeSearchPopover
 
   IdeSearchEngine *search_engine;
 
+  GtkBox          *nav_box;
   GtkSearchEntry  *entry;
 };
 
@@ -153,6 +154,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-search/ide-search-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, entry);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, nav_box);
 }
 
 static void
@@ -169,4 +171,25 @@ ide_search_popover_new (IdeSearchEngine *search_engine)
   return g_object_new (IDE_TYPE_SEARCH_POPOVER,
                        "search-engine", search_engine,
                        NULL);
+}
+
+void
+ide_search_popover_present (IdeSearchPopover *self,
+                            int               parent_width,
+                            int               parent_height)
+{
+  GdkRectangle point;
+  int min_width;
+  int nat_width;
+
+  g_return_if_fail (IDE_IS_SEARCH_POPOVER (self));
+
+  gtk_widget_measure (GTK_WIDGET (self->nav_box),
+                      GTK_ORIENTATION_HORIZONTAL,
+                      -1,
+                      &min_width, &nat_width, NULL, NULL);
+
+  point = (GdkRectangle) { (parent_width - min_width) / 2, 100, 1, 1 };
+  gtk_popover_set_pointing_to (GTK_POPOVER (self), &point);
+  gtk_popover_present (GTK_POPOVER (self));
 }

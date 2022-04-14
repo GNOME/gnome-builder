@@ -376,12 +376,7 @@ ide_workspace_size_allocate (GtkWidget *widget,
   GTK_WIDGET_CLASS (ide_workspace_parent_class)->size_allocate (widget, width, height, baseline);
 
   if (priv->search_popover != NULL)
-    {
-      GdkRectangle point = { width / 2, 100, 1, 1 };
-
-      gtk_popover_set_pointing_to (GTK_POPOVER (priv->search_popover), &point);
-      gtk_popover_present (GTK_POPOVER (priv->search_popover));
-    }
+    ide_search_popover_present (priv->search_popover, width, height);
 
   if (priv->queued_window_save == 0 &&
       IDE_WORKSPACE_GET_CLASS (self)->save_size != NULL)
