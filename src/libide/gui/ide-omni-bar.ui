@@ -57,7 +57,13 @@
         <property name="margin-end">3</property>
         <property name="hexpand">true</property>
         <child>
-          <object class="IdeNotificationStack" id="notification_stack"/>
+          <object class="GtkStackPage">
+            <property name="name">notifications</property>
+            <property name="child">
+              <object class="IdeNotificationStack" id="notification_stack">
+              </object>
+            </property>
+          </object>
         </child>
       </object>
     </child>
