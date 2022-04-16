@@ -1,24 +1,24 @@
 [package]
 name = "{{name}}"
 version = "0.1.0"
-edition = "2018"
+edition = "2021"
 
 [dependencies.gtk]
-version = "0.8.1"
+version = "0.15.4"
 features = ["v3_24"]
 
 [dependencies.gdk]
-version = "0.12.1"
+version = "0.15.4"
 features = ["v3_24"]
 
 [dependencies.gio]
-version = "0.8.1"
+version = "0.15.10"
 features = ["v2_60"]
 
 [dependencies.glib]
-version = "0.9.2"
+version = "0.15.10"
 features = ["v2_60"]
 
 [dependencies.gettext-rs]
-version = "0.4.4"
+version = "0.7.0"
 features = ["gettext-system"]

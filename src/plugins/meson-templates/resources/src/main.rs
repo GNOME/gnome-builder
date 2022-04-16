@@ -10,14 +10,12 @@ fn main() {
     gtk::init().unwrap_or_else(|_| panic!("Failed to initialize GTK."));
 
     setlocale(LocaleCategory::LcAll, "");
-    bindtextdomain("{{name}}", config::LOCALEDIR);
-    textdomain("{{name}}");
 
     let res = gio::Resource::load(config::PKGDATADIR.to_owned() + "/{{name}}.gresource")
         .expect("Could not load resources");
     gio::resources_register(&res);
 
-    let app = gtk::Application::new(Some("{{appid}}"), Default::default()).unwrap();
+    let app = gtk::Application::new(Some("{{appid}}"), Default::default());
     app.connect_activate(move |app| {
         let window = Window::new();
 
@@ -26,6 +24,6 @@ fn main() {
         window.widget.present();
     });
 
-    let ret = app.run(&std::env::args().collect::<Vec<_>>());
+    let ret = app.run();
     std::process::exit(ret);
 }
