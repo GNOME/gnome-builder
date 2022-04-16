@@ -32,16 +32,32 @@
 struct _CpackCompletionProvider
 {
   IdeObject parent_instance;
+  char *word;
+  char *refilter_word;
 };
 
-static void provider_iface_init (IdeCompletionProviderInterface *iface);
+static void provider_iface_init (GtkSourceCompletionProviderInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (CpackCompletionProvider, cpack_completion_provider, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
+
+static void
+cpack_completion_provider_dispose (GObject *object)
+{
+  CpackCompletionProvider *self = (CpackCompletionProvider *)object;
+
+  g_clear_pointer (&self->word, g_free);
+  g_clear_pointer (&self->refilter_word, g_free);
+
+  G_OBJECT_CLASS (cpack_completion_provider_parent_class)->dispose (object);
+}
 
 static void
 cpack_completion_provider_class_init (CpackCompletionProviderClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = cpack_completion_provider_dispose;
 }
 
 static void
@@ -108,12 +124,13 @@ cpack_completion_provider_get_build_flags_cb (GObject      *object,
 }
 
 static void
-cpack_completion_provider_populate_async (IdeCompletionProvider *provider,
-                                          IdeCompletionContext  *context,
-                                          GCancellable          *cancellable,
-                                          GAsyncReadyCallback    callback,
-                                          gpointer               user_data)
+cpack_completion_provider_populate_async (GtkSourceCompletionProvider *provider,
+                                          GtkSourceCompletionContext  *context,
+                                          GCancellable                *cancellable,
+                                          GAsyncReadyCallback          callback,
+                                          gpointer                     user_data)
 {
+  CpackCompletionProvider *self = (CpackCompletionProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
   g_autofree gchar *prefix = NULL;
   GtkTextIter begin, end;
@@ -123,15 +140,17 @@ cpack_completion_provider_populate_async (IdeCompletionProvider *provider,
   GFile *file = NULL;
 
   g_assert (CPACK_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (provider, cancellable, callback, user_data);
   ide_task_set_source_tag (task, cpack_completion_provider_populate_async);
 
-  ide_completion_context_get_bounds (context, &begin, &end);
+  g_clear_pointer (&self->word, g_free);
 
-  buffer = ide_completion_context_get_buffer (context);
+  gtk_source_completion_context_get_bounds (context, &begin, &end);
+
+  buffer = GTK_TEXT_BUFFER (gtk_source_completion_context_get_buffer (context));
 
   if (gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), &begin, "path"))
     {
@@ -163,6 +182,8 @@ query_filesystem:
 
   g_assert (IDE_IS_BUFFER (buffer));
 
+  self->word = g_strdup (prefix);
+
   /*
    * First step is to get our list of include paths from the CFLAGS for the
    * file. After that, we can start looking for matches on the file-system
@@ -182,7 +203,7 @@ query_filesystem:
 }
 
 static GListModel *
-cpack_completion_provider_populate_finish (IdeCompletionProvider  *self,
+cpack_completion_provider_populate_finish (GtkSourceCompletionProvider  *self,
                                            GAsyncResult           *result,
                                            GError                **error)
 {
@@ -193,32 +214,31 @@ cpack_completion_provider_populate_finish (IdeCompletionProvider  *self,
 }
 
 static void
-cpack_completion_provider_display_proposal (IdeCompletionProvider   *provider,
-                                            IdeCompletionListBoxRow *row,
-                                            IdeCompletionContext    *context,
-                                            const gchar             *typed_text,
-                                            IdeCompletionProposal   *proposal)
+cpack_completion_provider_display (GtkSourceCompletionProvider *provider,
+                                   GtkSourceCompletionContext  *context,
+                                   GtkSourceCompletionProposal *proposal,
+                                   GtkSourceCompletionCell     *cell)
 {
-  g_autofree gchar *markup = NULL;
+  CpackCompletionProvider *self = (CpackCompletionProvider *)provider;
+  const char *typed_text;
 
-  g_assert (CPACK_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (CPACK_IS_COMPLETION_PROVIDER (self));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (CPACK_IS_COMPLETION_ITEM (proposal));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CELL (cell));
 
-  markup = ide_completion_fuzzy_highlight (CPACK_COMPLETION_ITEM (proposal)->name, typed_text);
+  if (self->refilter_word)
+    typed_text = self->refilter_word;
+  else
+    typed_text = self->word;
 
-  ide_completion_list_box_row_set_icon_name (row, "lang-include-symbolic");
-  ide_completion_list_box_row_set_left (row, NULL);
-  ide_completion_list_box_row_set_center_markup (row, markup);
-  ide_completion_list_box_row_set_right (row, NULL);
+  cpack_completion_item_display (CPACK_COMPLETION_ITEM (proposal), cell, typed_text);
 }
 
 static void
-cpack_completion_provider_activate_proposal (IdeCompletionProvider *provider,
-                                             IdeCompletionContext  *context,
-                                             IdeCompletionProposal *proposal,
-                                             const GdkEventKey     *key)
+cpack_completion_provider_activate (GtkSourceCompletionProvider *provider,
+                                    GtkSourceCompletionContext  *context,
+                                    GtkSourceCompletionProposal *proposal)
 {
   CpackCompletionItem *item = (CpackCompletionItem *)proposal;
   GtkTextBuffer *buffer;
@@ -226,16 +246,16 @@ cpack_completion_provider_activate_proposal (IdeCompletionProvider *provider,
   gsize len;
 
   g_assert (CPACK_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (CPACK_IS_COMPLETION_ITEM (item));
 
-  buffer = ide_completion_context_get_buffer (context);
+  buffer = GTK_TEXT_BUFFER (gtk_source_completion_context_get_buffer (context));
 
   len = strlen (item->name);
 
   gtk_text_buffer_begin_user_action (buffer);
 
-  if (ide_completion_context_get_bounds (context, &begin, &end))
+  if (gtk_source_completion_context_get_bounds (context, &begin, &end))
     gtk_text_buffer_delete (buffer, &begin, &end);
 
   /* don't insert trailing / so user does that to trigger next popup */
@@ -247,33 +267,33 @@ cpack_completion_provider_activate_proposal (IdeCompletionProvider *provider,
   gtk_text_buffer_end_user_action (buffer);
 }
 
-static gboolean
-cpack_completion_provider_refilter (IdeCompletionProvider *provider,
-                                    IdeCompletionContext  *context,
-                                    GListModel            *model)
+static void
+cpack_completion_provider_refilter (GtkSourceCompletionProvider *provider,
+                                    GtkSourceCompletionContext  *context,
+                                    GListModel                  *model)
 {
-  g_autofree gchar *word = NULL;
+  CpackCompletionProvider *self = (CpackCompletionProvider *)provider;
 
   g_assert (CPACK_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (CPACK_IS_COMPLETION_RESULTS (model));
 
-  word = ide_completion_context_get_word (context);
-  cpack_completion_results_refilter (CPACK_COMPLETION_RESULTS (model), word);
+  g_clear_pointer (&self->refilter_word, g_free);
+  self->refilter_word = gtk_source_completion_context_get_word (context);
 
-  return TRUE;
+  cpack_completion_results_refilter (CPACK_COMPLETION_RESULTS (model), self->refilter_word);
 }
 
 static gint
-cpack_completion_provider_get_priority (IdeCompletionProvider *provider,
-                                        IdeCompletionContext  *context)
+cpack_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
+                                        GtkSourceCompletionContext  *context)
 {
   /* we only activate when applicable, so high priority */
   return -100;
 }
 
 static gboolean
-cpack_completion_provider_is_trigger (IdeCompletionProvider *provider,
+cpack_completion_provider_is_trigger (GtkSourceCompletionProvider *provider,
                                       const GtkTextIter     *iter,
                                       gunichar               ch)
 {
@@ -289,13 +309,13 @@ cpack_completion_provider_is_trigger (IdeCompletionProvider *provider,
 }
 
 static void
-provider_iface_init (IdeCompletionProviderInterface *iface)
+provider_iface_init (GtkSourceCompletionProviderInterface *iface)
 {
   iface->populate_async = cpack_completion_provider_populate_async;
   iface->populate_finish = cpack_completion_provider_populate_finish;
   iface->refilter = cpack_completion_provider_refilter;
-  iface->display_proposal = cpack_completion_provider_display_proposal;
-  iface->activate_proposal = cpack_completion_provider_activate_proposal;
+  iface->display = cpack_completion_provider_display;
+  iface->activate = cpack_completion_provider_activate;
   iface->get_priority = cpack_completion_provider_get_priority;
   iface->is_trigger = cpack_completion_provider_is_trigger;
 }

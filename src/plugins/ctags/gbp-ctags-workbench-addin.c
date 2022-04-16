@@ -167,8 +167,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCtagsWorkbenchAddin, gbp_ctags_workbench_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN,
-                                                workbench_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
 gbp_ctags_workbench_addin_class_init (GbpCtagsWorkbenchAddinClass *klass)
