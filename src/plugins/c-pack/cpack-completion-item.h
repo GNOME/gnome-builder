@@ -34,6 +34,9 @@ struct _CpackCompletionItem
   gchar  *name;
 };
 
-CpackCompletionItem *cpack_completion_item_new (const gchar *word);
+CpackCompletionItem *cpack_completion_item_new     (const gchar             *word);
+void                 cpack_completion_item_display (CpackCompletionItem     *self,
+                                                    GtkSourceCompletionCell *cell,
+                                                    const char              *typed_text);
 
 G_END_DECLS
