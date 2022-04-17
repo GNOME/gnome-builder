@@ -419,6 +419,10 @@ ide_workbench_get_property (GObject    *object,
       g_value_set_object (value, ide_workbench_get_context (self));
       break;
 
+    case PROP_VCS:
+      g_value_set_object (value, ide_workbench_get_vcs (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
