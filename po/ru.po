@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-24 19:29+0000\n"
-"PO-Revision-Date: 2022-02-25 20:38+1000\n"
+"POT-Creation-Date: 2022-04-01 12:49+0000\n"
+"PO-Revision-Date: 2022-04-17 08:32+1000\n"
 "Last-Translator: Ser82-png <sw@atrus.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -323,7 +323,9 @@ msgstr "Умные кнопки Home и End"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:60
 msgid "Whether or not Home moves to first non-space character."
-msgstr "Будет ли клавиша «Home» перемещать к первому непробельному символу."
+msgstr ""
+"Определяет, будет ли клавиша «Home» перемещать к первому непробельному "
+"символу."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:64
 msgid "Show grid lines"
@@ -854,7 +856,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Загрузите или создайте палитру используя параметры"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5030
+#: src/libide/sourceview/ide-source-view.c:5029
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Переименовать"
@@ -2690,6 +2692,7 @@ msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Украсить выделенный код"
 
+#. Translators: LSP stands for Language Server Protocol
 #: src/libide/gui/ide-shortcuts-window.ui:447
 msgctxt "shortcut window"
 msgid "(LSP only) Format selected code or whole document"
@@ -2930,31 +2933,31 @@ msgstr "У_меньшить"
 msgid "_Reset"
 msgstr "_Сброс"
 
-#: src/libide/sourceview/ide-source-view.c:4444
+#: src/libide/sourceview/ide-source-view.c:4443
 #, c-format
 msgid "Insert “%s”"
 msgstr "Вставить «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4446
+#: src/libide/sourceview/ide-source-view.c:4445
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Заменить «%s» на «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4572
+#: src/libide/sourceview/ide-source-view.c:4571
 msgid "Apply Fix-It"
 msgstr "Применить «Fix-It»"
 
-#: src/libide/sourceview/ide-source-view.c:5029
+#: src/libide/sourceview/ide-source-view.c:5028
 msgid "Rename symbol"
 msgstr "Переименовать символ"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5408
+#: src/libide/sourceview/ide-source-view.c:5407
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>строка %u, столбец %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5434
+#: src/libide/sourceview/ide-source-view.c:5433
 msgid "No references were found"
 msgstr "Ссылки не найдены"
 
@@ -3650,6 +3653,11 @@ msgstr ""
 msgid "Declaration"
 msgstr "Объявление"
 
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:76
+#, c-format
+msgid "Possible typo in '%s'. Did you mean '%s'?"
+msgstr "Возможна опечатка в «%s». Вы, вероятно, имели в виду «%s»?"
+
 #: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
 msgid "Colors"
 msgstr "Цвета"
@@ -4094,7 +4102,7 @@ msgstr "Выбрать шаблон"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:50
 msgid "Start _New Project…"
-msgstr "Начать_новый проект"
+msgstr "Начать _новый проект"
 
 #: src/plugins/create-project/gtk/menus.ui:7
 #: src/plugins/create-project/gtk/menus.ui:18
@@ -4583,18 +4591,18 @@ msgstr "Emacs"
 msgid "Emulates the Emacs text editor"
 msgstr "Эмулирует текстовый редактор Emacs"
 
-#: src/plugins/eslint/eslint_plugin.py:204
+#: src/plugins/eslint/eslint_plugin.py:97
 msgid "ESlint"
 msgstr "ESLint"
 
-#: src/plugins/eslint/eslint_plugin.py:205
+#: src/plugins/eslint/eslint_plugin.py:98
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr ""
 "Включить использование ESLint, для возможности выполнения кода в вашем "
 "проекте"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/eslint/eslint_plugin.py:207
+#: src/plugins/eslint/eslint_plugin.py:100
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint код выполнить выполнение"
 
@@ -5148,7 +5156,7 @@ msgstr "На компьютере отсутствует python3-sphinx"
 msgid "(Preview)"
 msgstr "(Предпросмотр)"
 
-#: src/plugins/intelephense/intelephense.py:71
+#: src/plugins/intelephense/intelephense.py:72
 msgid "Indexing php code…"
 msgstr "Индексирование php кода…"
 
@@ -5190,59 +5198,59 @@ msgstr "Собрать проект"
 msgid "Install project"
 msgstr "Установить проект"
 
-#: src/plugins/make/make_plugin.py:343
+#: src/plugins/make/make_plugin.py:351
 msgid "Empty Makefile Project"
 msgstr "Пустой проект с использованием Makefile"
 
-#: src/plugins/make/make_plugin.py:345
+#: src/plugins/make/make_plugin.py:353
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Создать новый пустой проект, используя обычный Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:255
+#: src/plugins/meson-templates/meson_templates.py:259
 msgid "GTK Application (Legacy)"
 msgstr "Приложение GTK (Legacy)"
 
-#: src/plugins/meson-templates/meson_templates.py:257
+#: src/plugins/meson-templates/meson_templates.py:261
 msgid "Create a GTK application with GTK 3"
 msgstr "Создать приложение с GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:332
+#: src/plugins/meson-templates/meson_templates.py:336
 msgid "GTK Application"
 msgstr "Приложение GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:334
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Create a GTK application"
 msgstr "Создать приложение GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:414
+#: src/plugins/meson-templates/meson_templates.py:418
 msgid "GNOME Application"
 msgstr "Приложение GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:416
+#: src/plugins/meson-templates/meson_templates.py:420
 msgid "Create a GNOME application"
 msgstr "Создать приложение GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:496
+#: src/plugins/meson-templates/meson_templates.py:500
 msgid "Shared Library"
 msgstr "Разделяемая библиотека"
 
-#: src/plugins/meson-templates/meson_templates.py:498
+#: src/plugins/meson-templates/meson_templates.py:502
 msgid "Create a new project with a shared library"
 msgstr "Создать новый проект с библиотекой"
 
-#: src/plugins/meson-templates/meson_templates.py:515
+#: src/plugins/meson-templates/meson_templates.py:519
 msgid "Empty Project"
 msgstr "Пустой проект"
 
-#: src/plugins/meson-templates/meson_templates.py:517
+#: src/plugins/meson-templates/meson_templates.py:521
 msgid "Create a new empty project"
 msgstr "Создать новый пустой проект"
 
-#: src/plugins/meson-templates/meson_templates.py:534
+#: src/plugins/meson-templates/meson_templates.py:538
 msgid "Command Line Tool"
 msgstr "Инструмент командной строки"
 
-#: src/plugins/meson-templates/meson_templates.py:536
+#: src/plugins/meson-templates/meson_templates.py:540
 msgid "Create a new command line project"
 msgstr "Создать пустой проект для командной строки"
 
@@ -5958,18 +5966,18 @@ msgstr ""
 "информацию в файлах таблиц стилей. Это может привести к выполнению кода в "
 "вашем проекте."
 
-#: src/plugins/stylelint/stylelint_plugin.py:135
+#: src/plugins/stylelint/stylelint_plugin.py:77
 msgid "Stylelint"
 msgstr "Stylelint"
 
-#: src/plugins/stylelint/stylelint_plugin.py:136
+#: src/plugins/stylelint/stylelint_plugin.py:78
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr ""
 "Включить использование Stylelint, что может привести к выполнению кода в "
 "вашем проекте"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/stylelint/stylelint_plugin.py:138
+#: src/plugins/stylelint/stylelint_plugin.py:80
 msgid "stylelint stylesheet lint code execute execution"
 msgstr "stylelint stylesheet lint код выполнить выполнение"
 
@@ -6282,7 +6290,9 @@ msgstr "Доступно обновление"
 msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
-msgstr "Доступно обновление Builder. Builder может скачать и установить его."
+msgstr ""
+"Доступно обновление Builder. Builder может скачать и установить это "
+"обновление."
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "_Update"
