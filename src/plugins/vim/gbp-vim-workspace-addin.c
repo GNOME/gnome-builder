@@ -67,7 +67,6 @@ on_keybindings_changed_cb (GbpVimWorkspaceAddin *self,
   if (active != self->active)
     {
       self->active = active;
-      gtk_widget_set_visible (GTK_WIDGET (self->command_bar), active);
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIVE]);
     }
 }
@@ -233,7 +232,10 @@ gbp_vim_workspace_addin_set_command_bar (GbpVimWorkspaceAddin *self,
   g_return_if_fail (GBP_IS_VIM_WORKSPACE_ADDIN (self));
 
   if (self->command_bar != NULL)
-    gtk_label_set_label (self->command_bar, command_bar);
+    {
+      gtk_label_set_label (self->command_bar, command_bar);
+      gtk_widget_set_visible (GTK_WIDGET (self->command_bar), !ide_str_empty0 (command_bar));
+    }
 }
 
 gboolean
