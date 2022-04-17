@@ -33,7 +33,12 @@
 struct _GbpVcsuiWorkspaceAddin
 {
   GObject              parent_instance;
+
   GbpVcsuiCloneWidget *clone;
+
+  GtkMenuButton       *branch_button;
+  GtkLabel            *branch_label;
+  IdeBindingGroup     *vcs_bindings;
 };
 
 static void
@@ -62,6 +67,44 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                                       NULL),
                                         100);
     }
+  else if (IDE_IS_PRIMARY_WORKSPACE (workspace))
+    {
+      PanelStatusbar *statusbar;
+      IdeWorkbench *workbench;
+      GtkImage *image;
+      GtkBox *box;
+
+      statusbar = ide_workspace_get_statusbar (workspace);
+
+      box = g_object_new (GTK_TYPE_BOX,
+                          "orientation", GTK_ORIENTATION_HORIZONTAL,
+                          "spacing", 3,
+                          NULL);
+      image = g_object_new (GTK_TYPE_IMAGE,
+                            "icon-name", "builder-vcs-branch-symbolic",
+                            "pixel-size", 16,
+                            NULL);
+      self->branch_label = g_object_new (GTK_TYPE_LABEL,
+                                         "xalign", .0f,
+                                         NULL);
+      gtk_box_append (box, GTK_WIDGET (image));
+      gtk_box_append (box, GTK_WIDGET (self->branch_label));
+
+      self->branch_button = g_object_new (GTK_TYPE_MENU_BUTTON,
+                                          "child", box,
+                                          "direction", GTK_ARROW_UP,
+                                          NULL);
+      panel_statusbar_add_prefix (statusbar, GTK_WIDGET (self->branch_button));
+
+      workbench = ide_workspace_get_workbench (workspace);
+      self->vcs_bindings = ide_binding_group_new ();
+      ide_binding_group_bind (self->vcs_bindings, "branch-name",
+                              self->branch_label, "label",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (workbench, "vcs",
+                              self->vcs_bindings, "source",
+                              G_BINDING_SYNC_CREATE);
+    }
 
   IDE_EXIT;
 }
@@ -81,6 +124,10 @@ gbp_vcsui_workspace_addin_unload (IdeWorkspaceAddin *addin,
       ide_greeter_workspace_remove_page (IDE_GREETER_WORKSPACE (workspace),
                                          GTK_WIDGET (self->clone));
       self->clone = NULL;
+    }
+  else if (IDE_IS_PRIMARY_WORKSPACE (workspace))
+    {
+      g_clear_object (&self->vcs_bindings);
     }
 
   IDE_EXIT;
