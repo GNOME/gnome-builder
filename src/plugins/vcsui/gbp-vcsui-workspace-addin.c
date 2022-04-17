@@ -28,6 +28,7 @@
 #include <libide-greeter.h>
 
 #include "gbp-vcsui-clone-widget.h"
+#include "gbp-vcsui-switcher-popover.h"
 #include "gbp-vcsui-workspace-addin.h"
 
 struct _GbpVcsuiWorkspaceAddin
@@ -71,9 +72,11 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
     {
       PanelStatusbar *statusbar;
       IdeWorkbench *workbench;
+      GtkWidget *popover;
       GtkImage *image;
       GtkBox *box;
 
+      workbench = ide_workspace_get_workbench (workspace);
       statusbar = ide_workspace_get_statusbar (workspace);
 
       box = g_object_new (GTK_TYPE_BOX,
@@ -90,13 +93,18 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
       gtk_box_append (box, GTK_WIDGET (image));
       gtk_box_append (box, GTK_WIDGET (self->branch_label));
 
+      popover = gbp_vcsui_switcher_popover_new ();
+      g_object_bind_property (workbench, "vcs",
+                              popover, "vcs",
+                              G_BINDING_SYNC_CREATE);
+
       self->branch_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                           "child", box,
                                           "direction", GTK_ARROW_UP,
+                                          "popover", popover,
                                           NULL);
       panel_statusbar_add_prefix (statusbar, GTK_WIDGET (self->branch_button));
 
-      workbench = ide_workspace_get_workbench (workspace);
       self->vcs_bindings = ide_binding_group_new ();
       ide_binding_group_bind (self->vcs_bindings, "branch-name",
                               self->branch_label, "label",
@@ -146,6 +154,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVcsuiWorkspaceAddin, gbp_vcsui_workspace_addin
 static void
 gbp_vcsui_workspace_addin_class_init (GbpVcsuiWorkspaceAddinClass *klass)
 {
+  g_type_ensure (GBP_TYPE_VCSUI_SWITCHER_POPOVER);
 }
 
 static void
