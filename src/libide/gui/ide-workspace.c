@@ -426,8 +426,11 @@ ide_workspace_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (ide_workspace_parent_class)->realize (widget);
 
-  if (maximized)
-    gtk_window_maximize (GTK_WINDOW (self));
+  if (IDE_WORKSPACE_GET_CLASS (self)->restore_size)
+    {
+      if (maximized)
+        gtk_window_maximize (GTK_WINDOW (self));
+    }
 }
 
 static IdeFrame *
