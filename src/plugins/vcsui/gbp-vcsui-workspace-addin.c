@@ -103,7 +103,7 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                           "direction", GTK_ARROW_UP,
                                           "popover", popover,
                                           NULL);
-      panel_statusbar_add_prefix (statusbar, GTK_WIDGET (self->branch_button));
+      panel_statusbar_add_prefix (statusbar, G_MININT, GTK_WIDGET (self->branch_button));
 
       self->vcs_bindings = ide_binding_group_new ();
       ide_binding_group_bind (self->vcs_bindings, "branch-name",
