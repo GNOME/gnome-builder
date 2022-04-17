@@ -117,9 +117,8 @@ gbp_vim_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   statusbar = ide_workspace_get_statusbar (workspace);
 
-  /* TODO: priorities for packing */
-  panel_statusbar_add_prefix (statusbar, GTK_WIDGET (self->command_bar));
-  panel_statusbar_add_prefix (statusbar, GTK_WIDGET (self->command));
+  panel_statusbar_add_prefix (statusbar, 10000, GTK_WIDGET (self->command_bar));
+  panel_statusbar_add_suffix (statusbar, 10000, GTK_WIDGET (self->command));
 
   pango_attr_list_unref (attrs);
 

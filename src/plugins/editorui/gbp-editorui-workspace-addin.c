@@ -343,7 +343,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                  "visible", FALSE,
                                  "child", self->encoding_label,
                                  NULL);
-  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->encoding));
+  panel_statusbar_add_suffix (self->statusbar, 1000, GTK_WIDGET (self->encoding));
 
   /* Line ending */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-line-ends-menu");
@@ -356,14 +356,14 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   "visible", FALSE,
                                   "child", self->line_ends_label,
                                   NULL);
-  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->line_ends));
+  panel_statusbar_add_suffix (self->statusbar, 1001, GTK_WIDGET (self->line_ends));
 
   self->mode_label = g_object_new (GTK_TYPE_LABEL,
                                    "label", "INS",
                                    "width-chars", 4,
                                    "visible", FALSE,
                                    NULL);
-  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->mode_label));
+  panel_statusbar_add_suffix (self->statusbar, 1002, GTK_WIDGET (self->mode_label));
 
   /* Indentation status, tabs/spaces/etc */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-indent-menu");
@@ -374,7 +374,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                     "visible", FALSE,
                                     "child", self->indentation_label,
                                     NULL);
-  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->indentation));
+  panel_statusbar_add_suffix (self->statusbar, 1003, GTK_WIDGET (self->indentation));
 
   /* Label for cursor position and jump to line/column */
   popover = g_object_new (IDE_TYPE_ENTRY_POPOVER,
@@ -388,7 +388,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                  "child", self->position_label,
                                  "popover", popover,
                                  NULL);
-  panel_statusbar_add_suffix (self->statusbar, GTK_WIDGET (self->position));
+  panel_statusbar_add_suffix (self->statusbar, 1004, GTK_WIDGET (self->position));
 
   IDE_EXIT;
 }
