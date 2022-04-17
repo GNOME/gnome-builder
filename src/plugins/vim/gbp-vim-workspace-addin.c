@@ -107,7 +107,7 @@ gbp_vim_workspace_addin_load (IdeWorkspaceAddin *addin,
                                     "attributes", attrs,
                                     "hexpand", TRUE,
                                     "selectable", TRUE,
-                                    "visible", self->active,
+                                    "visible", FALSE,
                                     "xalign", .0f,
                                     NULL);
   self->command = g_object_new (GTK_TYPE_LABEL,
