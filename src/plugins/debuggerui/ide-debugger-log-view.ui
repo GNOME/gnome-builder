@@ -35,7 +35,10 @@
           <object class="GtkEntry" id="commandentry">
             <property name="primary-icon-name">pan-end-symbolic</property>
             <property name="visible">True</property>
-            <property name="margin">6</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
             <property name="hexpand">True</property>
             <signal name="activate" handler="on_entry_activate" swapped="yes" object="IdeDebuggerLogView"/>
             <style>

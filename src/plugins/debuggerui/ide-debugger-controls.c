@@ -51,6 +51,7 @@ ide_debugger_controls_class_init (IdeDebuggerControlsClass *klass)
   object_class->dispose = ide_debugger_controls_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-controls.ui");
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "idedebuggercontrols");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerControls, revealer);
 }
