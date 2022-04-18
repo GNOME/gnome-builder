@@ -276,11 +276,12 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
                                  NULL);
   ide_workspace_add_overlay (self->workspace, GTK_WIDGET (self->controls));
 
-  self->panel = g_object_new (IDE_TYPE_PANE,
-                              "title", _("Debugger"),
-                              "icon-name", "builder-debugger-symbolic",
-                              "visible", FALSE,
-                              NULL);
+  ide_pane_observe (g_object_new (IDE_TYPE_PANE,
+                                  "title", _("Debugger"),
+                                  "icon-name", "builder-debugger-symbolic",
+                                  "visible", FALSE,
+                                  NULL),
+                    (IdePanel **)&self->panel);
 
   notebook = g_object_new (GTK_TYPE_NOTEBOOK, NULL);
   panel_widget_set_child (PANEL_WIDGET (self->panel), GTK_WIDGET (notebook));
@@ -423,8 +424,8 @@ ide_debugger_workspace_addin_unload (IdeWorkspaceAddin   *addin,
   g_clear_object (&self->debugger_signals);
   g_clear_object (&self->debug_manager_signals);
 
-  g_clear_pointer ((PanelWidget **)&self->panel, panel_widget_close);
-  g_clear_pointer ((PanelWidget **)&self->disassembly_view, panel_widget_close);
+  ide_clear_pane ((IdePane **)&self->panel);
+  ide_clear_page ((IdePage **)&self->disassembly_view);
 
   ide_workspace_remove_overlay (self->workspace, GTK_WIDGET (self->controls));
 
@@ -501,7 +502,8 @@ ide_debugger_workspace_addin_disassemble_cb (GObject      *object,
     {
       g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
 
-      self->disassembly_view = g_object_new (IDE_TYPE_DEBUGGER_DISASSEMBLY_VIEW, NULL);
+      ide_page_observe (g_object_new (IDE_TYPE_DEBUGGER_DISASSEMBLY_VIEW, NULL),
+                        (IdePage **)&self->disassembly_view);
       ide_workspace_add_page (self->workspace, IDE_PAGE (self->disassembly_view), posittion);
     }
 
@@ -516,7 +518,7 @@ ide_debugger_workspace_addin_disassemble_cb (GObject      *object,
 
 void
 ide_debugger_workspace_addin_navigate_to_address (IdeDebuggerWorkspaceAddin *self,
-                                               IdeDebuggerAddress      address)
+                                                  IdeDebuggerAddress         address)
 {
   IdeDebugger *debugger;
   IdeDebuggerAddressRange range;
@@ -551,7 +553,7 @@ ide_debugger_workspace_addin_navigate_to_address (IdeDebuggerWorkspaceAddin *sel
 
 void
 ide_debugger_workspace_addin_navigate_to_breakpoint (IdeDebuggerWorkspaceAddin *self,
-                                                  IdeDebuggerBreakpoint  *breakpoint)
+                                                     IdeDebuggerBreakpoint     *breakpoint)
 {
   IdeDebuggerAddress address;
   const gchar *path;
