@@ -35,7 +35,7 @@ if get_option('webkit').enabled()
 endif
 
 subdir('auto-save')
-#subdir('autotools')
+subdir('autotools')
 #subdir('beautifier')
 #subdir('blueprint')
 subdir('buildconfig')
