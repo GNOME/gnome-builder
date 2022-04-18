@@ -43,17 +43,9 @@ G_DEFINE_TYPE (IdeGrid, ide_grid, PANEL_TYPE_GRID)
 static PanelFrame *
 ide_grid_real_create_frame (PanelGrid *grid)
 {
-  PanelFrame *frame;
-  PanelFrameHeader *header;
-
   g_assert (PANEL_IS_GRID (grid));
 
-  frame = PANEL_FRAME (ide_frame_new ());
-  header = PANEL_FRAME_HEADER (panel_frame_header_bar_new ());
-
-  panel_frame_set_header (frame, header);
-
-  return frame;
+  return PANEL_FRAME (ide_frame_new ());
 }
 
 static void

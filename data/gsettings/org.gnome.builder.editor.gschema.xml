@@ -139,5 +139,10 @@
       <summary>Minimum characters for matching selection.</summary>
       <description>Specify the minimum number of characters for selection matching.</description>
     </key>
+    <key name="use-tabbar" type="b">
+      <default>false</default>
+      <summary>Use Tabs</summary>
+      <description>Use the tabbar within the page grid.</description>
+    </key>
   </schema>
 </schemalist>
