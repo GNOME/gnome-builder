@@ -62,7 +62,11 @@
         <property name="reveal-start">true</property>
         <property name="vexpand">true</property>
         <child type="center">
-          <object class="IdeGrid" id="grid">
+          <object class="GtkOverlay" id="overlay">
+            <child>
+              <object class="IdeGrid" id="grid">
+              </object>
+            </child>
           </object>
         </child>
         <child type="start">

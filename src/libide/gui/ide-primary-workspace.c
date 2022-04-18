@@ -59,6 +59,7 @@ struct _IdePrimaryWorkspace
   PanelPaned         *edge_end;
   PanelPaned         *edge_bottom;
   IdeGrid            *grid;
+  GtkOverlay         *overlay;
 };
 
 G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
@@ -122,6 +123,28 @@ ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
                              self->grid);
 }
 
+static void
+ide_primary_workspace_add_overlay (IdeWorkspace *workspace,
+                                   GtkWidget    *overlay)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+
+  gtk_overlay_add_overlay (self->overlay, overlay);
+}
+
+static void
+ide_primary_workspace_remove_overlay (IdeWorkspace *workspace,
+                                      GtkWidget    *overlay)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+
+  gtk_overlay_remove_overlay (self->overlay, overlay);
+}
+
 static IdeFrame *
 ide_primary_workspace_get_most_recent_frame (IdeWorkspace *workspace)
 {
@@ -181,6 +204,8 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 
   workspace_class->add_page = ide_primary_workspace_add_page;
   workspace_class->add_pane = ide_primary_workspace_add_pane;
+  workspace_class->add_overlay = ide_primary_workspace_add_overlay;
+  workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
   workspace_class->can_search = ide_primary_workspace_can_search;
   workspace_class->context_set = ide_primary_workspace_context_set;
   workspace_class->get_frame_at_position = ide_primary_workspace_get_frame_at_position;
@@ -196,6 +221,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_start);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, grid);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
 
