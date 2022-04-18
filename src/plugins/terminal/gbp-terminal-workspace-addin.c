@@ -226,12 +226,13 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
                                          "manage-spawn", FALSE,
                                          "pty", pty,
                                          NULL);
-      self->run_panel = g_object_new (IDE_TYPE_PANE,
+      ide_pane_observe (g_object_new (IDE_TYPE_PANE,
                                       "child", self->run_terminal,
                                       "expand", TRUE,
                                       "icon-name", "builder-run-start-symbolic",
                                       "title", _("Application Output"),
-                                      NULL);
+                                      NULL),
+                        &self->run_panel);
 
       position = ide_panel_position_new ();
       ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
@@ -310,11 +311,13 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
                                "respawn-on-exit", TRUE,
                                "visible", TRUE,
                                NULL);
-  self->bottom_dock = g_object_new (IDE_TYPE_PANE,
-                                    "title", _("Terminal"),
-                                    "icon-name", "builder-terminal-symbolic",
-                                    "child", self->bottom,
-                                    NULL);
+  ide_pane_observe (g_object_new (IDE_TYPE_PANE,
+                                  "title", _("Terminal"),
+                                  "icon-name", "builder-terminal-symbolic",
+                                  "child", self->bottom,
+                                  NULL),
+                    &self->bottom_dock);
+
   ide_workspace_add_pane (workspace, IDE_PANE (self->bottom_dock), position);
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
@@ -369,8 +372,8 @@ gbp_terminal_workspace_addin_unload (IdeWorkspaceAddin *addin,
   for (guint i = 0; i < G_N_ELEMENTS (terminal_actions); i++)
     g_action_map_remove_action (G_ACTION_MAP (workspace), terminal_actions[i].name);
 
-  g_clear_pointer ((PanelWidget **)&self->bottom_dock, panel_widget_close);
-  g_clear_pointer ((PanelWidget **)&self->run_panel, panel_widget_close);
+  ide_clear_pane (&self->bottom_dock);
+  ide_clear_pane (&self->run_panel);
 
   self->bottom = NULL;
   self->bottom_dock = NULL;
