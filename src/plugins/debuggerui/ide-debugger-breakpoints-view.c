@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-gtk.h>
+
 #include "ide-debugger-breakpoints-view.h"
 
 struct _IdeDebuggerBreakpointsView
@@ -60,7 +62,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeDebuggerBreakpointsView, ide_debugger_breakpoints_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerBreakpointsView, ide_debugger_breakpoints_view, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -340,6 +342,7 @@ bool_property_cell_data_func (GtkCellLayout   *cell_layout,
   g_object_set_property (G_OBJECT (cell), "active", &value);
 }
 
+#if 0
 static void
 ide_debugger_breakpoints_view_delete_breakpoint (GtkTreeView                *tree_view,
                                                  IdeDebuggerBreakpointsView *self)
@@ -369,15 +372,16 @@ ide_debugger_breakpoints_view_delete_breakpoint (GtkTreeView                *tre
         ide_debugger_remove_breakpoint_async (debugger, breakpoint, NULL, NULL, NULL);
     }
 }
+#endif
 
 static void
-ide_debugger_breakpoints_view_destroy (GtkWidget *widget)
+ide_debugger_breakpoints_view_dispose (GObject *object)
 {
-  IdeDebuggerBreakpointsView *self = (IdeDebuggerBreakpointsView *)widget;
+  IdeDebuggerBreakpointsView *self = (IdeDebuggerBreakpointsView *)object;
 
   g_clear_object (&self->debugger_signals);
 
-  GTK_WIDGET_CLASS (ide_debugger_breakpoints_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_debugger_breakpoints_view_parent_class)->dispose (object);
 }
 
 static void
@@ -424,10 +428,9 @@ ide_debugger_breakpoints_view_class_init (IdeDebuggerBreakpointsViewClass *klass
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_debugger_breakpoints_view_dispose;
   object_class->get_property = ide_debugger_breakpoints_view_get_property;
   object_class->set_property = ide_debugger_breakpoints_view_set_property;
-
-  widget_class->destroy = ide_debugger_breakpoints_view_destroy;
 
   properties [PROP_DEBUGGER] =
     g_param_spec_object ("debugger",
@@ -466,8 +469,6 @@ ide_debugger_breakpoints_view_class_init (IdeDebuggerBreakpointsViewClass *klass
 static void
 ide_debugger_breakpoints_view_init (IdeDebuggerBreakpointsView *self)
 {
-  IdeShortcutController *controller;
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
@@ -544,15 +545,6 @@ ide_debugger_breakpoints_view_init (IdeDebuggerBreakpointsView *self)
                             "toggled",
                             G_CALLBACK (ide_debugger_breakpoints_view_enabled_toggled),
                             self);
-
-  controller = ide_shortcut_controller_find (GTK_WIDGET (self->tree_view));
-
-  ide_shortcut_controller_add_command_callback (controller,
-                                                "org.gnome.builder.debugger.delete-breakpoint",
-                                                "Delete",
-                                                IDE_SHORTCUT_PHASE_BUBBLE,
-                                                (GtkCallback) ide_debugger_breakpoints_view_delete_breakpoint,
-                                                self, NULL);
 }
 
 GtkWidget *

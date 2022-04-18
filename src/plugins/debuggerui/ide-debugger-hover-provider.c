@@ -40,12 +40,12 @@ struct _IdeDebuggerHoverProvider
 };
 
 static void
-ide_debugger_hover_provider_hover_async (IdeHoverProvider    *provider,
-                                         IdeHoverContext     *context,
-                                         const GtkTextIter   *iter,
-                                         GCancellable        *cancellable,
-                                         GAsyncReadyCallback  callback,
-                                         gpointer             user_data)
+ide_debugger_hover_provider_populate_async (GtkSourceHoverProvider *provider,
+                                            GtkSourceHoverContext  *context,
+                                            GtkSourceHoverDisplay  *display,
+                                            GCancellable           *cancellable,
+                                            GAsyncReadyCallback     callback,
+                                            gpointer                user_data)
 {
   IdeDebuggerHoverProvider *self = (IdeDebuggerHoverProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
@@ -53,46 +53,52 @@ ide_debugger_hover_provider_hover_async (IdeHoverProvider    *provider,
   IdeDebugManager *dbgmgr;
   const gchar *lang_id;
   IdeBuffer *buffer;
+  GtkTextIter iter;
   GFile *file;
   guint line;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_DEBUGGER_HOVER_PROVIDER (provider));
-  g_assert (IDE_IS_HOVER_CONTEXT (context));
-  g_assert (iter != NULL);
+  g_assert (GTK_SOURCE_IS_HOVER_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_HOVER_DISPLAY (display));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_debugger_hover_provider_hover_async);
+  ide_task_set_source_tag (task, ide_debugger_hover_provider_populate_async);
 
-  buffer = IDE_BUFFER (gtk_text_iter_get_buffer (iter));
+  buffer = IDE_BUFFER (gtk_source_hover_context_get_buffer (context));
 
-  if (gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), iter, "comment"))
+  if (!gtk_source_hover_context_get_iter (context, &iter) ||
+      gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), &iter, "comment"))
     {
       ide_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
     }
 
   lang_id = ide_buffer_get_language_id (buffer);
   icontext = ide_buffer_ref_context (buffer);
   dbgmgr = ide_debug_manager_from_context (icontext);
   file = ide_buffer_get_file (buffer);
-  line = gtk_text_iter_get_line (iter);
+  line = gtk_text_iter_get_line (&iter);
 
   if (ide_debug_manager_get_active(dbgmgr) && ide_debug_manager_supports_language (dbgmgr, lang_id))
     {
       GtkWidget *controls;
 
       controls = ide_debugger_hover_controls_new (dbgmgr, file, line + 1);
-      ide_hover_context_add_widget (context, DEBUGGER_HOVER_PRIORITY, _("Debugger"), controls);
+      gtk_source_hover_display_prepend (display, controls);
     }
 
   ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
 }
 
 static gboolean
-ide_debugger_hover_provider_hover_finish (IdeHoverProvider  *provider,
-                                          GAsyncResult      *result,
-                                          GError           **error)
+ide_debugger_hover_provider_populate_finish (GtkSourceHoverProvider  *provider,
+                                             GAsyncResult            *result,
+                                             GError                 **error)
 {
   g_assert (IDE_IS_DEBUGGER_HOVER_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
@@ -101,14 +107,14 @@ ide_debugger_hover_provider_hover_finish (IdeHoverProvider  *provider,
 }
 
 static void
-hover_provider_iface_init (IdeHoverProviderInterface *iface)
+hover_provider_iface_init (GtkSourceHoverProviderInterface *iface)
 {
-  iface->hover_async = ide_debugger_hover_provider_hover_async;
-  iface->hover_finish = ide_debugger_hover_provider_hover_finish;
+  iface->populate_async = ide_debugger_hover_provider_populate_async;
+  iface->populate_finish = ide_debugger_hover_provider_populate_finish;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeDebuggerHoverProvider, ide_debugger_hover_provider, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_HOVER_PROVIDER, hover_provider_iface_init))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_HOVER_PROVIDER, hover_provider_iface_init))
 
 static void
 ide_debugger_hover_provider_class_init (IdeDebuggerHoverProviderClass *klass)

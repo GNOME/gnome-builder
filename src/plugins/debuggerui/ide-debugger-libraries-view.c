@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-gtk.h>
+
 #include "ide-debugger-libraries-view.h"
 
 struct _IdeDebuggerLibrariesView
@@ -46,7 +48,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeDebuggerLibrariesView, ide_debugger_libraries_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerLibrariesView, ide_debugger_libraries_view, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -205,13 +207,13 @@ string_property_cell_data_func (GtkCellLayout   *cell_layout,
 }
 
 static void
-ide_debugger_libraries_view_destroy (GtkWidget *widget)
+ide_debugger_libraries_view_dispose (GObject *object)
 {
-  IdeDebuggerLibrariesView *self = (IdeDebuggerLibrariesView *)widget;
+  IdeDebuggerLibrariesView *self = (IdeDebuggerLibrariesView *)object;
 
   g_clear_object (&self->debugger_signals);
 
-  GTK_WIDGET_CLASS (ide_debugger_libraries_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_debugger_libraries_view_parent_class)->dispose (object);
 }
 
 static void
@@ -258,10 +260,9 @@ ide_debugger_libraries_view_class_init (IdeDebuggerLibrariesViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_debugger_libraries_view_dispose;
   object_class->get_property = ide_debugger_libraries_view_get_property;
   object_class->set_property = ide_debugger_libraries_view_set_property;
-
-  widget_class->destroy = ide_debugger_libraries_view_destroy;
 
   properties [PROP_DEBUGGER] =
     g_param_spec_object ("debugger",
