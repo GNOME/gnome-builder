@@ -20,11 +20,11 @@ class BlueprintService(Ide.LspService):
     def do_configure_launcher(self, pipeline, launcher):
         launcher.push_argv('lsp')
 
-class BlueprintDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
+class BlueprintDiagnosticProvider(Ide.LspDiagnosticProvider):
     def do_load(self):
         BlueprintService.bind_client(self)
 
-class BlueprintCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
+class BlueprintCompletionProvider(Ide.LspCompletionProvider):
     def do_load(self, context):
         BlueprintService.bind_client(self)
 
@@ -33,6 +33,6 @@ class BlueprintHoverProvider(Ide.LspHoverProvider):
         self.props.priority = 100
         BlueprintService.bind_client(self)
 
-class BlueprintCodeActionProvider(Ide.LspCodeActionProvider, Ide.CodeActionProvider):
+class BlueprintCodeActionProvider(Ide.LspCodeActionProvider):
     def do_load(self):
         BlueprintService.bind_client(self)
