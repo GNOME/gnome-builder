@@ -27,8 +27,9 @@
 #include <libide-code.h>
 #include <libide-core.h>
 #include <libide-debugger.h>
-#include <libide-workspace.h>
+#include <libide-editor.h>
 #include <libide-foundry.h>
+#include <libide-gtk.h>
 #include <libide-gui.h>
 #include <libide-io.h>
 
@@ -64,12 +65,14 @@ struct _IdeDebuggerWorkspaceAddin
   IdeWorkspace               *workspace;
   IdeWorkbench               *workbench;
 
+  IdeRunManager              *run_manager;
+
   IdeDebuggerDisassemblyView *disassembly_view;
   IdeDebuggerControls        *controls;
   IdeDebuggerBreakpointsView *breakpoints_view;
   IdeDebuggerLibrariesView   *libraries_view;
   IdeDebuggerLocalsView      *locals_view;
-  IdeDockWidget              *panel;
+  IdePane                    *panel;
   IdeDebuggerRegistersView   *registers_view;
   IdeDebuggerThreadsView     *threads_view;
   IdeDebuggerLogView         *log_view;
@@ -162,12 +165,11 @@ debug_manager_notify_debugger (IdeDebuggerWorkspaceAddin *self,
                                IdeDebugManager           *debug_manager)
 {
   IdeDebugger *debugger;
-  IdeWorkspace *workspace;
 
   g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
 
-  panel_widget_raise (self->panel);
+  panel_widget_raise (PANEL_WIDGET (self->panel));
 
   debugger = ide_debug_manager_get_debugger (debug_manager);
   gtk_widget_insert_action_group (GTK_WIDGET (self->workspace), "debugger", G_ACTION_GROUP (debugger));
@@ -204,7 +206,7 @@ debug_manager_notify_active (IdeDebuggerWorkspaceAddin *self,
       reveal_child = TRUE;
     }
 
-  gtk_revealer_set_reveal_child (GTK_REVEALER (self->controls), reveal_child);
+  ide_debugger_controls_set_reveal_child (self->controls, reveal_child);
 }
 
 static void
@@ -235,12 +237,13 @@ on_frame_activated (IdeDebuggerWorkspaceAddin *self,
   if (path != NULL)
     {
       IdeContext *context = ide_widget_get_context (GTK_WIDGET (threads_view));
-      g_autoptr(IdeLocation) location = NULL;
       g_autofree gchar *project_path = ide_context_build_filename (context, path, NULL);
       g_autoptr(GFile) file = g_file_new_for_path (project_path);
+      g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
+      g_autoptr(IdeLocation) location = NULL;
 
       location = ide_location_new (file, line, -1);
-      ide_workspace_surface_focus_location (self->workspace, location);
+      ide_editor_focus_location (self->workspace, position, location);
 
       IDE_EXIT;
     }
@@ -261,11 +264,12 @@ on_frame_activated (IdeDebuggerWorkspaceAddin *self,
 static void
 ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
 {
+  g_autoptr(IdePanelPosition) position = NULL;
   GtkNotebook *notebook;
   PanelPaned *hpaned;
 
   g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_WORKSPACE_SURFACE (self->workspace));
+  g_assert (self->workspace != NULL);
 
   self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
                                  "transition-duration", 500,
@@ -281,7 +285,7 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
                                   "icon-name", "builder-debugger-symbolic",
                                   "visible", FALSE,
                                   NULL),
-                    (IdePanel **)&self->panel);
+                    (IdePane **)&self->panel);
 
   notebook = g_object_new (GTK_TYPE_NOTEBOOK, NULL);
   panel_widget_set_child (PANEL_WIDGET (self->panel), GTK_WIDGET (notebook));
@@ -333,19 +337,18 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
 }
 
 static void
-ide_debugger_workspace_addin_load (IdeWorkspaceAddin   *addin,
-                                   IdeWorkspaceSurface *workspace)
+ide_debugger_workspace_addin_load (IdeWorkspaceAddin *addin,
+                                   IdeWorkspace      *workspace)
 {
   IdeDebuggerWorkspaceAddin *self = (IdeDebuggerWorkspaceAddin *)addin;
   IdeDebugManager *debug_manager;
   IdeRunManager *run_manager;
-  IdeWorkspace *workspace;
   IdeContext *context;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_WORKSPACE_SURFACE (workspace));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
   self->workspace = workspace;
   self->workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
@@ -356,6 +359,8 @@ ide_debugger_workspace_addin_load (IdeWorkspaceAddin   *addin,
   context = ide_widget_get_context (GTK_WIDGET (workspace));
   run_manager = ide_run_manager_from_context (context);
   debug_manager = ide_debug_manager_from_context (context);
+
+  self->run_manager = g_object_ref (run_manager);
 
   ide_debugger_workspace_addin_add_ui (self);
 
@@ -398,38 +403,32 @@ ide_debugger_workspace_addin_load (IdeWorkspaceAddin   *addin,
 }
 
 static void
-ide_debugger_workspace_addin_unload (IdeWorkspaceAddin   *addin,
-                                     IdeWorkspaceSurface *workspace)
+ide_debugger_workspace_addin_unload (IdeWorkspaceAddin *addin,
+                                     IdeWorkspace      *workspace)
 {
   IdeDebuggerWorkspaceAddin *self = (IdeDebuggerWorkspaceAddin *)addin;
-  IdeRunManager *run_manager;
-  IdeWorkspace *workspace;
-  IdeContext *context;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_WORKSPACE_SURFACE (workspace));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
   if (!ide_workbench_has_project (self->workbench))
     return;
 
   gtk_widget_insert_action_group (GTK_WIDGET (self->workspace), "debugger", NULL);
-
-  /* Remove the handler to initiate the debugger */
-  context = ide_workbench_get_context (self->workbench);
-  run_manager = ide_run_manager_from_context (context);
-  ide_run_manager_remove_handler (run_manager, "debugger");
+  ide_run_manager_remove_handler (self->run_manager, "debugger");
 
   g_clear_object (&self->debugger_signals);
   g_clear_object (&self->debug_manager_signals);
+  g_clear_object (&self->run_manager);
+
+  ide_workspace_remove_overlay (self->workspace, GTK_WIDGET (self->controls));
+  self->controls = NULL;
 
   ide_clear_pane ((IdePane **)&self->panel);
   ide_clear_page ((IdePage **)&self->disassembly_view);
 
-  ide_workspace_remove_overlay (self->workspace, GTK_WIDGET (self->controls));
-
-  self->controls = NULL;
   self->workspace = NULL;
   self->workbench = NULL;
 
@@ -479,7 +478,6 @@ ide_debugger_workspace_addin_disassemble_cb (GObject      *object,
   g_autoptr(IdeDebuggerWorkspaceAddin) self = user_data;
   g_autoptr(GPtrArray) instructions = NULL;
   g_autoptr(GError) error = NULL;
-  GtkWidget *stack;
 
   IDE_ENTRY;
 
@@ -504,7 +502,7 @@ ide_debugger_workspace_addin_disassemble_cb (GObject      *object,
 
       ide_page_observe (g_object_new (IDE_TYPE_DEBUGGER_DISASSEMBLY_VIEW, NULL),
                         (IdePage **)&self->disassembly_view);
-      ide_workspace_add_page (self->workspace, IDE_PAGE (self->disassembly_view), posittion);
+      ide_workspace_add_page (self->workspace, IDE_PAGE (self->disassembly_view), position);
     }
 
   ide_debugger_disassembly_view_set_instructions (self->disassembly_view, instructions);

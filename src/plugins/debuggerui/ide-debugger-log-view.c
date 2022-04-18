@@ -113,7 +113,7 @@ on_entry_activate_cb (GObject      *source,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_DEBUGGER_LOG_VIEW (self));
 
-  gtk_entry_set_text (self->commandentry, "");
+  gtk_editable_set_text (GTK_EDITABLE (self->commandentry), "");
   gtk_widget_set_sensitive (GTK_WIDGET (self->commandentry), TRUE);
   gtk_widget_grab_focus (GTK_WIDGET (self->commandentry));
 
@@ -137,7 +137,7 @@ on_entry_activate (IdeDebuggerLogView *self,
   g_return_if_fail (IDE_IS_DEBUGGER_LOG_VIEW (self));
   g_return_if_fail (GTK_IS_ENTRY (entry));
 
-  text = g_strstrip (g_strdup (gtk_entry_get_text (entry)));
+  text = g_strstrip (g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry))));
   if (ide_str_empty0 (text))
     return;
 

@@ -44,21 +44,22 @@ struct _IdeDebuggerDisassemblyView
 G_DEFINE_FINAL_TYPE (IdeDebuggerDisassemblyView, ide_debugger_disassembly_view, IDE_TYPE_PAGE)
 
 static void
-ide_debugger_disassembly_view_destroy (GtkWidget *widget)
+ide_debugger_disassembly_view_dispose (GObject *object)
 {
-  IdeDebuggerDisassemblyView *self = (IdeDebuggerDisassemblyView *)widget;
+  IdeDebuggerDisassemblyView *self = (IdeDebuggerDisassemblyView *)object;
 
   g_clear_pointer (&self->instructions, g_ptr_array_unref);
 
-  GTK_WIDGET_CLASS (ide_debugger_disassembly_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_debugger_disassembly_view_parent_class)->dispose (object);
 }
 
 static void
 ide_debugger_disassembly_view_class_init (IdeDebuggerDisassemblyViewClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = ide_debugger_disassembly_view_destroy;
+  object_class->dispose = ide_debugger_disassembly_view_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-disassembly-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerDisassemblyView, source_buffer);

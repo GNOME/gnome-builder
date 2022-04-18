@@ -28,10 +28,13 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_CONTROLS (ide_debugger_controls_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerControls, ide_debugger_controls, IDE, DEBUGGER_CONTROLS, GtkRevealer)
+G_DECLARE_FINAL_TYPE (IdeDebuggerControls, ide_debugger_controls, IDE, DEBUGGER_CONTROLS, GtkWidget)
 
-IdeDebugger *ide_debugger_controls_get_debugger (IdeDebuggerControls *self);
-void         ide_debugger_controls_set_debugger (IdeDebuggerControls *self,
-                                                 IdeDebugger         *debugger);
+IdeDebugger *ide_debugger_controls_get_debugger     (IdeDebuggerControls *self);
+void         ide_debugger_controls_set_debugger     (IdeDebuggerControls *self,
+                                                     IdeDebugger         *debugger);
+gboolean     ide_debugger_controls_get_reveal_child (IdeDebuggerControls *self);
+void         ide_debugger_controls_set_reveal_child (IdeDebuggerControls *self,
+                                                     gboolean             reveal_child);
 
 G_END_DECLS

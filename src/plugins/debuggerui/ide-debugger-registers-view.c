@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libide-core.h>
+#include <libide-gtk.h>
 
 #include "ide-debugger-registers-view.h"
 
@@ -50,7 +51,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeDebuggerRegistersView, ide_debugger_registers_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerRegistersView, ide_debugger_registers_view, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -172,13 +173,13 @@ string_property_cell_data_func (GtkCellLayout   *cell_layout,
 }
 
 static void
-ide_debugger_registers_view_destroy (GtkWidget *widget)
+ide_debugger_registers_view_dispose (GObject *object)
 {
-  IdeDebuggerRegistersView *self = (IdeDebuggerRegistersView *)widget;
+  IdeDebuggerRegistersView *self = (IdeDebuggerRegistersView *)object;
 
   g_clear_object (&self->debugger_signals);
 
-  GTK_WIDGET_CLASS (ide_debugger_registers_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_debugger_registers_view_parent_class)->dispose (object);
 }
 
 static void
@@ -225,10 +226,9 @@ ide_debugger_registers_view_class_init (IdeDebuggerRegistersViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_debugger_registers_view_dispose;
   object_class->get_property = ide_debugger_registers_view_get_property;
   object_class->set_property = ide_debugger_registers_view_set_property;
-
-  widget_class->destroy = ide_debugger_registers_view_destroy;
 
   properties [PROP_DEBUGGER] =
     g_param_spec_object ("debugger",
