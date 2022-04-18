@@ -20,15 +20,14 @@
 
 #define G_LOG_DOMAIN "ide-makecache-target"
 
-#include <dazzle.h>
+#include "config.h"
+
+#include <libide-io.h>
 
 #include "ide-makecache-target.h"
 
 G_DEFINE_BOXED_TYPE (IdeMakecacheTarget, ide_makecache_target,
                      ide_makecache_target_ref, ide_makecache_target_unref)
-
-DZL_DEFINE_COUNTER (instances, "IdeMakecacheTarget", "Instances",
-                    "Number of IdeMakecacheTarget instances.")
 
 struct _IdeMakecacheTarget
 {
@@ -49,8 +48,6 @@ ide_makecache_target_unref (IdeMakecacheTarget *self)
       g_free (self->subdir);
       g_free (self->target);
       g_slice_free (IdeMakecacheTarget, self);
-
-      DZL_COUNTER_DEC (instances);
     }
 }
 
@@ -80,8 +77,6 @@ ide_makecache_target_new (const gchar *subdir,
   self->ref_count = 1;
   self->subdir = g_strdup (subdir);
   self->target = g_strdup (target);
-
-  DZL_COUNTER_INC (instances);
 
   return self;
 }
