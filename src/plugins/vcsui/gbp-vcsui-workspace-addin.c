@@ -81,7 +81,7 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
       box = g_object_new (GTK_TYPE_BOX,
                           "orientation", GTK_ORIENTATION_HORIZONTAL,
-                          "spacing", 3,
+                          "spacing", 6,
                           NULL);
       image = g_object_new (GTK_TYPE_IMAGE,
                             "icon-name", "builder-vcs-branch-symbolic",
