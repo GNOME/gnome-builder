@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
 #include <libide-plugins.h>
@@ -150,14 +149,13 @@ gbp_code_index_workbench_addin_paused (GbpCodeIndexWorkbenchAddin *self,
   gbp_code_index_service_set_paused (service, g_variant_get_boolean (state));
 }
 
-DZL_DEFINE_ACTION_GROUP (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_addin, {
+IDE_DEFINE_ACTION_GROUP (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_addin, {
   { "paused", NULL, NULL, "false", gbp_code_index_workbench_addin_paused },
 })
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCodeIndexWorkbenchAddin, gbp_code_index_workbench_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
-                                                gbp_code_index_workbench_addin_init_action_group)
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_code_index_workbench_addin_init_action_group)
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
 gbp_code_index_workbench_addin_class_init (GbpCodeIndexWorkbenchAddinClass *klass)

@@ -23,10 +23,12 @@
 #include "config.h"
 
 #include <gtksourceview/gtksource.h>
+#include <libpeas/peas.h>
+
 #include <libide-core.h>
 #include <libide-foundry.h>
+#include <libide-search.h>
 #include <libide-vcs.h>
-#include <libpeas/peas.h>
 
 #include "gbp-code-index-plan.h"
 #include "ide-code-index-index.h"
@@ -184,7 +186,7 @@ gbp_code_index_plan_cull_indexed_worker (IdeTask      *task,
       g_autoptr(GFile) indexdir = NULL;
       g_autoptr(GFile) symbol_keys = NULL;
       g_autoptr(GFile) symbol_names = NULL;
-      g_autoptr(DzlFuzzyIndex) fuzzy = NULL;
+      g_autoptr(IdeFuzzyIndex) fuzzy = NULL;
       DirectoryInfo *info = value;
       GFile *directory = key;
       gboolean expired = FALSE;
@@ -249,16 +251,16 @@ gbp_code_index_plan_cull_indexed_worker (IdeTask      *task,
           continue;
         }
 
-      fuzzy = dzl_fuzzy_index_new ();
+      fuzzy = ide_fuzzy_index_new ();
 
-      if (dzl_fuzzy_index_load_file (fuzzy, symbol_names, cancellable, NULL))
+      if (ide_fuzzy_index_load_file (fuzzy, symbol_names, cancellable, NULL))
         {
           guint32 n_files;
 
           if (ide_task_return_error_if_cancelled (task))
             break;
 
-          n_files = dzl_fuzzy_index_get_metadata_uint32 (fuzzy, "n_files");
+          n_files = ide_fuzzy_index_get_metadata_uint32 (fuzzy, "n_files");
 
           if (n_files != info->plan_items->len)
             {
