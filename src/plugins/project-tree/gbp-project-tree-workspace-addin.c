@@ -44,10 +44,11 @@ gbp_project_tree_workspace_addin_load (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  self->pane = g_object_new (GBP_TYPE_PROJECT_TREE_PANE,
-                             "title", _("Project Tree"),
-                             "icon-name", "view-list-symbolic",
-                             NULL);
+  ide_pane_observe (g_object_new (GBP_TYPE_PROJECT_TREE_PANE,
+                                  "title", _("Project Tree"),
+                                  "icon-name", "view-list-symbolic",
+                                  NULL),
+                    (IdePane **)&self->pane);
 
   position = ide_panel_position_new ();
   ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_START);
@@ -66,7 +67,7 @@ gbp_project_tree_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  g_clear_pointer ((IdePane **)&self->pane, ide_pane_destroy);
+  ide_clear_pane ((IdePane **)&self->pane);
 }
 
 static void
