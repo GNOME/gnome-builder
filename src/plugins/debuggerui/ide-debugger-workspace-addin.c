@@ -280,7 +280,6 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
   ide_pane_observe (g_object_new (IDE_TYPE_PANE,
                                   "title", _("Debugger"),
                                   "icon-name", "builder-debugger-symbolic",
-                                  "visible", FALSE,
                                   NULL),
                     (IdePane **)&self->panel);
 
@@ -289,7 +288,6 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
 
   hpaned = g_object_new (PANEL_TYPE_PANED,
                          "orientation", GTK_ORIENTATION_HORIZONTAL,
-                         "visible", TRUE,
                          NULL);
   gtk_notebook_append_page (notebook, GTK_WIDGET (hpaned), gtk_label_new (_("Threads")));
 
