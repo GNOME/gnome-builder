@@ -20,8 +20,10 @@
 
 #define G_LOG_DOMAIN "gbp-meson-test-provider"
 
-#include <dazzle.h>
+#include "config.h"
+
 #include <json-glib/json-glib.h>
+
 #include <libide-threading.h>
 
 #include "gbp-meson-build-system.h"
@@ -31,7 +33,7 @@
 struct _GbpMesonTestProvider
 {
   IdeTestProvider  parent_instance;
-  DzlSignalGroup  *monitor_signals;
+  IdeSignalGroup  *monitor_signals;
   GFileMonitor    *build_ninja_monitor;
   guint            reload_source;
   guint            did_initial_load : 1;
@@ -270,7 +272,7 @@ gbp_meson_test_provider_reload (gpointer user_data)
 
   g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
 
-  dzl_clear_source (&self->reload_source);
+  g_clear_handle_id (&self->reload_source, g_source_remove);
 
   /*
    * Check that we're working with a meson build system.
@@ -302,12 +304,12 @@ gbp_meson_test_provider_queue_reload (IdeTestProvider *provider)
 
   g_assert (GBP_IS_MESON_TEST_PROVIDER (self));
 
-  dzl_clear_source (&self->reload_source);
-  self->reload_source = gdk_threads_add_timeout_full (G_PRIORITY_LOW,
-                                                      2000,
-                                                      gbp_meson_test_provider_reload,
-                                                      self,
-                                                      NULL);
+  if (self->reload_source == 0)
+    self->reload_source = g_timeout_add_full (G_PRIORITY_LOW,
+                                              2000,
+                                              gbp_meson_test_provider_reload,
+                                              self,
+                                              NULL);
 }
 
 static void
@@ -341,7 +343,7 @@ gbp_meson_test_provider_notify_pipeline (GbpMesonTestProvider *self,
     {
       g_file_monitor_cancel (self->build_ninja_monitor);
       g_clear_object (&self->build_ninja_monitor);
-      dzl_signal_group_set_target (self->monitor_signals, NULL);
+      ide_signal_group_set_target (self->monitor_signals, NULL);
     }
 
   g_assert (self->build_ninja_monitor == NULL);
@@ -354,7 +356,7 @@ gbp_meson_test_provider_notify_pipeline (GbpMesonTestProvider *self,
       build_ninja = ide_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
       file = g_file_new_for_path (build_ninja);
       self->build_ninja_monitor = g_file_monitor (file, 0, NULL, NULL);
-      dzl_signal_group_set_target (self->monitor_signals, self->build_ninja_monitor);
+      ide_signal_group_set_target (self->monitor_signals, self->build_ninja_monitor);
 
       self->did_initial_load = FALSE;
 
@@ -603,8 +605,8 @@ gbp_meson_test_provider_dispose (GObject *object)
 {
   GbpMesonTestProvider *self = (GbpMesonTestProvider *)object;
 
-  dzl_clear_source (&self->reload_source);
-  dzl_signal_group_set_target (self->monitor_signals, NULL);
+  g_clear_handle_id (&self->reload_source, g_source_remove);
+  ide_signal_group_set_target (self->monitor_signals, NULL);
 
   if (self->build_ninja_monitor)
     {
@@ -645,9 +647,9 @@ gbp_meson_test_provider_class_init (GbpMesonTestProviderClass *klass)
 static void
 gbp_meson_test_provider_init (GbpMesonTestProvider *self)
 {
-  self->monitor_signals = dzl_signal_group_new (G_TYPE_FILE_MONITOR);
+  self->monitor_signals = ide_signal_group_new (G_TYPE_FILE_MONITOR);
 
-  dzl_signal_group_connect_object (self->monitor_signals,
+  ide_signal_group_connect_object (self->monitor_signals,
                                    "changed",
                                    G_CALLBACK (build_ninja_changed_cb),
                                    self,

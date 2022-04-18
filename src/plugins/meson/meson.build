@@ -6,17 +6,18 @@ plugins_sources += files([
   'gbp-meson-build-system.c',
   'gbp-meson-build-target-provider.c',
   'gbp-meson-build-target.c',
-  'gbp-meson-config-view-addin.c',
   'gbp-meson-pipeline-addin.c',
   'gbp-meson-test-provider.c',
   'gbp-meson-test.c',
-  'gbp-meson-tool-row.c',
-  'gbp-meson-toolchain-edition-preferences-addin.c',
-  'gbp-meson-toolchain-edition-preferences-row.c',
   'gbp-meson-toolchain-provider.c',
   'gbp-meson-toolchain.c',
   'gbp-meson-utils.c',
   'meson-plugin.c',
+
+  # 'gbp-meson-config-view-addin.c',
+  # 'gbp-meson-toolchain-edition-preferences-addin.c',
+  # 'gbp-meson-toolchain-edition-preferences-row.c',
+  # 'gbp-meson-tool-row.c',
 ])
 
 plugin_meson_resources = gnome.compile_resources(
