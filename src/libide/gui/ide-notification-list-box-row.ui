@@ -22,11 +22,11 @@
             <property name="can_focus">False</property>
             <property name="valign">baseline</property>
             <property name="hexpand">True</property>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="title">
@@ -36,11 +36,11 @@
             <style>
               <class name="title"/>
             </style>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkLabel" id="body">
@@ -56,11 +56,11 @@
             <attributes>
               <attribute name="font-features" value="tnum"/>
             </attributes>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="lower_button_area">
@@ -78,18 +78,13 @@
                   <placeholder/>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">3</property>
+              <property name="column-span">2</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">3</property>
-            <property name="width">2</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="side_button_area">
@@ -99,12 +94,12 @@
             <child>
               <placeholder/>
             </child>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">0</property>
+              <property name="row-span">3</property>
+            </layout>
           </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="top_attach">0</property>
-            <property name="height">3</property>
-          </packing>
         </child>
       </object>
     </child>
