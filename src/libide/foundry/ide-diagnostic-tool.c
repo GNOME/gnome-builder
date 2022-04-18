@@ -432,8 +432,16 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
     }
 
   if ((stdin_bytes = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->get_stdin_bytes (self, file, contents, lang_id)))
-    stdin_data = g_bytes_get_data (stdin_bytes, NULL);
+    {
+      stdin_data = g_bytes_get_data (stdin_bytes, NULL);
+      if (stdin_data != NULL && stdin_data[0] == 0)
+        stdin_data = NULL;
 
+      g_object_set_data_full (G_OBJECT (task),
+                              "STDIN_UTF8_BYTES",
+                              g_steal_pointer (&stdin_bytes),
+                              (GDestroyNotify)g_bytes_unref);
+    }
 
   ide_subprocess_communicate_utf8_async (subprocess,
                                          stdin_data,
