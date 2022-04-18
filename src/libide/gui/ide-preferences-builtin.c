@@ -666,6 +666,7 @@ static const IdePreferencePageEntry pages[] = {
 
 static const IdePreferenceGroupEntry groups[] = {
   { "appearance", "style",                  0, N_("Appearance") },
+  { "appearance", "interface",           1000, N_("Interface") },
 
   { "editing",    "formatting",           100, N_("Formatting") },
 
@@ -702,6 +703,11 @@ static const IdePreferenceGroupEntry groups[] = {
 
 static const IdePreferenceItemEntry items[] = {
   { "appearance", "style", "style-variant", 0, handle_style_variant },
+
+  { "appearance", "interface", "use-tabbar", 0, ide_preferences_window_toggle,
+    N_("Use Tabs"),
+    N_("Switch pages using a tab bar"),
+    "org.gnome.builder.editor", NULL, "use-tabbar" },
 
   { "projects", "workspace", "restore", 0, ide_preferences_window_toggle,
     N_("Restore Previous Session"),

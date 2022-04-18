@@ -49,9 +49,19 @@ struct _IdeFrame
 {
   PanelFrame        parent_instance;
   PeasExtensionSet *addins;
+  guint             use_tabbar : 1;
 };
 
 G_DEFINE_TYPE (IdeFrame, ide_frame, PANEL_TYPE_FRAME)
+
+enum {
+  PROP_0,
+  PROP_USE_TABBAR,
+  N_PROPS
+};
+
+static GSettings *editor_settings;
+static GParamSpec *properties[N_PROPS];
 
 static void
 ide_frame_notify_addin_of_page (PeasExtensionSet *set,
@@ -138,31 +148,50 @@ ide_frame_addin_removed (PeasExtensionSet *set,
 }
 
 static void
+ide_frame_reload_addins (IdeFrame *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_FRAME (self));
+
+  g_clear_object (&self->addins);
+  self->addins = peas_extension_set_new (peas_engine_get_default (),
+                                         IDE_TYPE_FRAME_ADDIN,
+                                         NULL);
+  g_signal_connect (self->addins,
+                    "extension-added",
+                    G_CALLBACK (ide_frame_addin_added),
+                    self);
+  g_signal_connect (self->addins,
+                    "extension-removed",
+                    G_CALLBACK (ide_frame_addin_removed),
+                    self);
+  peas_extension_set_foreach (self->addins, ide_frame_addin_added, self);
+
+  IDE_EXIT;
+}
+
+static void
 ide_frame_constructed (GObject *object)
 {
   IdeFrame *self = (IdeFrame *)object;
+  PanelFrameHeader *header;
 
   g_assert (IDE_IS_FRAME (self));
 
   G_OBJECT_CLASS (ide_frame_parent_class)->constructed (object);
 
-  self->addins = peas_extension_set_new (peas_engine_get_default (),
-                                         IDE_TYPE_FRAME_ADDIN,
-                                         NULL);
+  self->use_tabbar = g_settings_get_boolean (editor_settings, "use-tabbar");
+  if (self->use_tabbar)
+    header = PANEL_FRAME_HEADER (panel_frame_tab_bar_new ());
+  else
+    header = PANEL_FRAME_HEADER (panel_frame_header_bar_new ());
+  panel_frame_set_header (PANEL_FRAME (self), header);
+  g_settings_bind (editor_settings, "use-tabbar",
+                   self, "use-tabbar",
+                   G_SETTINGS_BIND_GET);
 
-  g_signal_connect (self->addins,
-                    "extension-added",
-                    G_CALLBACK (ide_frame_addin_added),
-                    self);
-
-  g_signal_connect (self->addins,
-                    "extension-removed",
-                    G_CALLBACK (ide_frame_addin_removed),
-                    self);
-
-  peas_extension_set_foreach (self->addins,
-                              ide_frame_addin_added,
-                              self);
+  ide_frame_reload_addins (self);
 }
 
 static void
@@ -178,13 +207,62 @@ ide_frame_dispose (GObject *object)
 }
 
 static void
+ide_frame_get_property (GObject    *object,
+                        guint       prop_id,
+                        GValue     *value,
+                        GParamSpec *pspec)
+{
+  IdeFrame *self = IDE_FRAME (object);
+
+  switch (prop_id)
+    {
+    case PROP_USE_TABBAR:
+      g_value_set_boolean (value, ide_frame_get_use_tabbar (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_frame_set_property (GObject      *object,
+                        guint         prop_id,
+                        const GValue *value,
+                        GParamSpec   *pspec)
+{
+  IdeFrame *self = IDE_FRAME (object);
+
+  switch (prop_id)
+    {
+    case PROP_USE_TABBAR:
+      ide_frame_set_use_tabbar (self, g_value_get_boolean (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_frame_class_init (IdeFrameClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->dispose = ide_frame_dispose;
   object_class->constructed = ide_frame_constructed;
+  object_class->dispose = ide_frame_dispose;
+  object_class->get_property = ide_frame_get_property;
+  object_class->set_property = ide_frame_set_property;
+
+  properties [PROP_USE_TABBAR] =
+    g_param_spec_boolean ("use-tabbar",
+                          "Use Tabbar",
+                          "If tabs should be used",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-frame.ui");
 }
@@ -192,6 +270,9 @@ ide_frame_class_init (IdeFrameClass *klass)
 static void
 ide_frame_init (IdeFrame *self)
 {
+  if (editor_settings == NULL)
+    editor_settings = g_settings_new ("org.gnome.builder.editor");
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect (self,
@@ -290,4 +371,39 @@ ide_frame_get_position (IdeFrame *self)
   g_critical ("Failed to locate frame within grid");
 
   return ret;
+}
+
+gboolean
+ide_frame_get_use_tabbar (IdeFrame *self)
+{
+  g_return_val_if_fail (IDE_IS_FRAME (self), FALSE);
+
+  return self->use_tabbar;
+}
+
+void
+ide_frame_set_use_tabbar (IdeFrame *self,
+                          gboolean  use_tabbar)
+{
+  g_return_if_fail (IDE_IS_FRAME (self));
+
+  use_tabbar = !!use_tabbar;
+
+  if (use_tabbar != self->use_tabbar)
+    {
+      PanelFrameHeader *header;
+
+      self->use_tabbar = use_tabbar;
+
+      if (self->use_tabbar)
+        header = PANEL_FRAME_HEADER (panel_frame_tab_bar_new ());
+      else
+        header = PANEL_FRAME_HEADER (panel_frame_header_bar_new ());
+
+      panel_frame_set_header (PANEL_FRAME (self), header);
+
+      ide_frame_reload_addins (self);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_TABBAR]);
+    }
 }
