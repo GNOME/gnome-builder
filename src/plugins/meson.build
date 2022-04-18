@@ -37,7 +37,7 @@ endif
 subdir('auto-save')
 subdir('autotools')
 #subdir('beautifier')
-#subdir('blueprint')
+subdir('blueprint')
 subdir('buildconfig')
 subdir('buildstream')
 subdir('buildsystem')
