@@ -46,42 +46,68 @@ ide_codespell_diagnostic_provider_populate_diagnostics (IdeDiagnosticTool *tool,
                                                         const char        *stdout_buf,
                                                         const char        *stderr_buf)
 {
-  g_autoptr(GRegex) regex = NULL;
-  g_autoptr(GError) regex_error = NULL;
-  g_autoptr(GMatchInfo) issues = NULL;
+  static GRegex *regex;
+  GMatchInfo *issues = NULL;
 
-  regex = g_regex_new ("(([0-9]+): .+?\n\t([a-zA-Z]+) ==> ([a-zA-Z0-9]+))",
-                       G_REGEX_RAW,
-                       G_REGEX_MATCH_NEWLINE_ANY,
-                       &regex_error);
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CODESPELL_DIAGNOSTIC_PROVIDER (tool));
+  g_assert (IDE_IS_DIAGNOSTICS (diagnostics));
+  g_assert (!file || G_IS_FILE (file));
+
+  if G_UNLIKELY (regex == NULL)
+    {
+      g_autoptr(GError) error = NULL;
+      regex = g_regex_new ("(([0-9]+): .+?\n\t([a-zA-Z]+) ==> ([a-zA-Z0-9]+))",
+                           G_REGEX_RAW,
+                           G_REGEX_MATCH_NEWLINE_ANY,
+                           &error);
+      g_assert_no_error (error);
+    }
+
+  if (ide_str_empty0 (stdout_buf))
+    IDE_EXIT;
+
   g_regex_match (regex, stdout_buf, 0, &issues);
+
+  g_assert (issues != NULL);
+
   while (g_match_info_matches (issues))
     {
-      g_autofree gchar *line_word = g_match_info_fetch (issues, 2);
-      g_autofree gchar *typo_word = g_match_info_fetch (issues, 3);
-      g_autofree gchar *expected_word = g_match_info_fetch (issues, 4);
-      g_autofree gchar *diagnostic_text = NULL;
       g_autoptr(IdeDiagnostic) diag = NULL;
       g_autoptr(IdeLocation) loc = NULL;
       g_autoptr(IdeLocation) loc_end = NULL;
-      guint64 lineno = atoi (line_word);
+      g_autofree char *line_word = g_match_info_fetch (issues, 2);
+      g_autofree char *typo_word = g_match_info_fetch (issues, 3);
+      g_autofree char *expected_word = g_match_info_fetch (issues, 4);
+      g_autofree char *diagnostic_text = NULL;
+      guint64 lineno = g_ascii_strtoull (line_word, NULL, 10);
 
-      g_match_info_next (issues, NULL);
+      if (lineno != 0 &&
+          line_word != NULL &&
+          typo_word != NULL &&
+          expected_word != NULL)
+        {
+          lineno--;
 
-      if (!lineno || !line_word || !typo_word || !expected_word)
-        continue;
+          diagnostic_text = g_strdup_printf (_("Possible typo in “%s”. Did you mean “%s”?"),
+                                             typo_word, expected_word);
 
-      lineno--;
+          loc = ide_location_new (file, lineno, -1);
+          loc_end = ide_location_new (file, lineno, G_MAXINT);
 
-      diagnostic_text = g_strdup_printf (_("Possible typo in '%s'. Did you mean '%s'?"),
-                                         typo_word,
-                                         expected_word);
-      loc = ide_location_new (file, lineno, -1);
-      loc_end = ide_location_new (file, lineno, G_MAXINT);
-      diag = ide_diagnostic_new (IDE_DIAGNOSTIC_NOTE, diagnostic_text, loc);
-      ide_diagnostic_add_range (diag, ide_range_new (loc, loc_end));
-      ide_diagnostics_add (diagnostics, diag);
+          diag = ide_diagnostic_new (IDE_DIAGNOSTIC_NOTE, diagnostic_text, loc);
+          ide_diagnostic_take_range (diag, ide_range_new (loc, loc_end));
+          ide_diagnostics_take (diagnostics, g_steal_pointer (&diag));
+        }
+
+      if (!g_match_info_next (issues, NULL))
+        break;
     }
+
+  g_match_info_free (issues);
+
+  IDE_EXIT;
 }
 
 static void
