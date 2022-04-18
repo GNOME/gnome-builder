@@ -620,7 +620,7 @@ ide_page_observe (IdePage  *self,
 
   *location = self;
   g_signal_connect_swapped (self,
-                            "destroyed",
+                            "destroy",
                             G_CALLBACK (g_nullify_pointer),
                             location);
 }
