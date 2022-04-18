@@ -11,6 +11,7 @@ libide_io_public_headers = [
   'ide-directory-reaper.h',
   'ide-file-transfer.h',
   'ide-gfile.h',
+  'ide-heap.h',
   'ide-line-reader.h',
   'ide-marked-content.h',
   'ide-path.h',
@@ -20,6 +21,7 @@ libide_io_public_headers = [
   'ide-pty-intercept.h',
   'ide-recursive-file-monitor.h',
   'ide-shell.h',
+  'ide-task-cache.h',
   'libide-io.h',
 ]
 
@@ -39,6 +41,7 @@ libide_io_public_sources = [
   'ide-directory-reaper.c',
   'ide-file-transfer.c',
   'ide-gfile.c',
+  'ide-heap.c',
   'ide-line-reader.c',
   'ide-marked-content.c',
   'ide-path.c',
@@ -48,6 +51,7 @@ libide_io_public_sources = [
   'ide-pty-intercept.c',
   'ide-recursive-file-monitor.c',
   'ide-shell.c',
+  'ide-task-cache.c',
 ]
 
 libide_io_generated_headers = []
