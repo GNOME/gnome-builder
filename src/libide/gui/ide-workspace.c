@@ -1285,3 +1285,32 @@ _ide_workspace_begin_global_search (IdeWorkspace *self)
   if (!gtk_widget_get_visible (GTK_WIDGET (priv->search_popover)))
     gtk_popover_popup (GTK_POPOVER (priv->search_popover));
 }
+
+void
+ide_workspace_add_overlay (IdeWorkspace *self,
+                           GtkWidget    *overlay)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (GTK_IS_WIDGET (overlay));
+  g_return_if_fail (gtk_widget_get_parent (overlay) == NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->add_overlay == NULL)
+    g_critical ("Attempt to add overlay of type %s to workspace of type %s which does not support overlays",
+                G_OBJECT_TYPE_NAME (overlay), G_OBJECT_TYPE_NAME (self));
+  else
+    IDE_WORKSPACE_GET_CLASS (self)->add_overlay (self, overlay);
+}
+
+void
+ide_workspace_remove_overlay (IdeWorkspace *self,
+                              GtkWidget    *overlay)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (GTK_IS_WIDGET (overlay));
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->remove_overlay == NULL)
+    g_critical ("Attempt to remove overlay of type %s to workspace of type %s which does not support overlays",
+                G_OBJECT_TYPE_NAME (overlay), G_OBJECT_TYPE_NAME (self));
+  else
+    IDE_WORKSPACE_GET_CLASS (self)->remove_overlay (self, overlay);
+}
