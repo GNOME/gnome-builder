@@ -97,5 +97,15 @@ void              ide_page_set_progress          (IdePage              *self,
                                                   IdeNotification      *notification);
 IDE_AVAILABLE_IN_ALL
 IdePanelPosition *ide_page_get_position          (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_observe               (IdePage              *self,
+                                                  IdePage             **location);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_unobserve             (IdePage              *self,
+                                                  IdePage             **location);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_destroy               (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_clear_page                 (IdePage             **location);
 
 G_END_DECLS

@@ -599,3 +599,53 @@ ide_page_get_position (IdePage *self)
 
   return position;
 }
+
+void
+ide_page_destroy (IdePage *self)
+{
+  GtkWidget *frame;
+
+  g_return_if_fail (IDE_IS_PAGE (self));
+
+  if ((frame = gtk_widget_get_ancestor (GTK_WIDGET (self), PANEL_TYPE_FRAME)))
+    panel_frame_remove (PANEL_FRAME (frame), PANEL_WIDGET (self));
+}
+
+void
+ide_page_observe (IdePage  *self,
+                  IdePage **location)
+{
+  g_return_if_fail (IDE_IS_PAGE (self));
+  g_return_if_fail (location != NULL);
+
+  *location = self;
+  g_signal_connect_swapped (self,
+                            "destroyed",
+                            G_CALLBACK (g_nullify_pointer),
+                            location);
+}
+
+void
+ide_page_unobserve (IdePage  *self,
+                    IdePage **location)
+{
+  g_return_if_fail (IDE_IS_PAGE (self));
+  g_return_if_fail (location != NULL);
+
+  g_signal_handlers_disconnect_by_func (self,
+                                        G_CALLBACK (g_nullify_pointer),
+                                        location);
+  *location = NULL;
+}
+
+void
+ide_clear_page (IdePage **location)
+{
+  IdePage *self = *location;
+
+  if (self == NULL)
+    return;
+
+  ide_page_unobserve (self, location);
+  ide_page_destroy (self);
+}
