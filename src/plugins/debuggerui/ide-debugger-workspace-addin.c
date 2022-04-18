@@ -272,9 +272,6 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
   g_assert (self->workspace != NULL);
 
   self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
-                                 "transition-duration", 500,
-                                 "transition-type", GTK_REVEALER_TRANSITION_TYPE_SLIDE_UP,
-                                 "reveal-child", FALSE,
                                  "halign", GTK_ALIGN_CENTER,
                                  "valign", GTK_ALIGN_END,
                                  NULL);
