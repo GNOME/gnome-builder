@@ -98,6 +98,7 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
 
   g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
   g_assert (program_name != NULL);
+  g_assert (!file || G_IS_FILE (file));
 
   if (!(context = ide_object_ref_context (IDE_OBJECT (self))))
     {
@@ -132,7 +133,7 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
     }
 
   if (pipeline != NULL &&
-      ((program_path && ide_pipeline_contains_program_in_path (pipeline, program_path, NULL)) ||
+      ((program_path != NULL && ide_pipeline_contains_program_in_path (pipeline, program_path, NULL)) ||
       ide_pipeline_contains_program_in_path (pipeline, program_name, NULL)) &&
       (launcher = ide_pipeline_create_launcher (pipeline, NULL)))
     goto setup_launcher;
@@ -144,7 +145,8 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
        * take into account if the user has something modifying the
        * shell like .bashrc.
        */
-      if (program_path || ide_runtime_contains_program_in_path (host, program_name, NULL))
+      if (program_path != NULL ||
+          ide_runtime_contains_program_in_path (host, program_name, NULL))
         {
           launcher = ide_runtime_create_launcher (host, NULL);
           goto setup_launcher;
@@ -226,12 +228,15 @@ ide_diagnostic_tool_get_property (GObject    *object,
     case PROP_PROGRAM_NAME:
       g_value_set_string (value, ide_diagnostic_tool_get_program_name (self));
       break;
+
     case PROP_BUNDLED_PROGRAM_PATH:
       g_value_set_string (value, ide_diagnostic_tool_get_bundled_program_path (self));
       break;
+
     case PROP_LOCAL_PROGRAM_PATH:
       g_value_set_string (value, ide_diagnostic_tool_get_local_program_path (self));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -250,12 +255,15 @@ ide_diagnostic_tool_set_property (GObject      *object,
     case PROP_PROGRAM_NAME:
       ide_diagnostic_tool_set_program_name (self, g_value_get_string (value));
       break;
+
     case PROP_BUNDLED_PROGRAM_PATH:
       ide_diagnostic_tool_set_bundled_program_path (self, g_value_get_string (value));
       break;
+
     case PROP_LOCAL_PROGRAM_PATH:
       ide_diagnostic_tool_set_local_program_path (self, g_value_get_string (value));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -316,10 +324,19 @@ ide_diagnostic_tool_create_launcher (IdeDiagnosticTool  *self,
                                      GBytes             *contents,
                                      GError            **error)
 {
+  IdeSubprocessLauncher *ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
   g_assert (program_name != NULL);
+  g_assert (!file || G_IS_FILE (file));
 
-  return IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->create_launcher (self, program_name, file, contents, error);
+  ret = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->create_launcher (self, program_name, file, contents, error);
+
+  g_assert (!ret || IDE_IS_SUBPROCESS_LAUNCHER (ret));
+
+  IDE_RETURN (ret);
 }
 
 static void
@@ -349,12 +366,14 @@ ide_diagnostic_tool_communicate_cb (GObject      *object,
     }
 
   self = ide_task_get_source_object (task);
-  diagnostics = ide_diagnostics_new ();
   file = ide_task_get_task_data(task);
 
+  g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
   g_assert (!file || G_IS_FILE (file));
 
-  if (IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics != NULL)
+  diagnostics = ide_diagnostics_new ();
+
+  if (IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics)
     IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics (self, diagnostics, file, stdout_buf, stderr_buf);
 
   ide_task_return_object (task, g_steal_pointer (&diagnostics));
@@ -389,6 +408,7 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_diagnostic_tool_diagnose_async);
+  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
   if (priv->program_name == NULL)
     {
@@ -414,13 +434,12 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
   if ((stdin_bytes = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->get_stdin_bytes (self, file, contents, lang_id)))
     stdin_data = g_bytes_get_data (stdin_bytes, NULL);
 
-  ide_task_set_task_data (task, g_object_ref(file), g_object_unref);
 
   ide_subprocess_communicate_utf8_async (subprocess,
                                          stdin_data,
                                          cancellable,
                                          ide_diagnostic_tool_communicate_cb,
-                                         g_object_ref (task));
+                                         g_steal_pointer (&task));
 
   IDE_EXIT;
 }
