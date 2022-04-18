@@ -36,10 +36,10 @@ check_path_is_in_tmp_dir (const gchar *path,
 {
   g_autofree gchar *with_slash = NULL;
 
-  g_assert (!dzl_str_empty0 (path));
-  g_assert (!dzl_str_empty0 (tmp_dir));
+  g_assert (!ide_str_empty0 (path));
+  g_assert (!ide_str_empty0 (tmp_dir));
 
-  if (dzl_str_equal0 (path, tmp_dir))
+  if (ide_str_equal0 (path, tmp_dir))
     return TRUE;
 
   if (!g_str_has_suffix (tmp_dir, G_DIR_SEPARATOR_S))
@@ -125,7 +125,7 @@ gb_beautifier_helper_config_entry_remove_temp_files (GbBeautifierEditorAddin *se
         {
           const GbBeautifierCommandArg *arg = &g_array_index (config_entry->command_args, GbBeautifierCommandArg, i);
 
-          if (arg->is_temp && !dzl_str_empty0 (arg->str))
+          if (arg->is_temp && !ide_str_empty0 (arg->str))
             {
               if (check_path_is_in_tmp_dir (arg->str, self->tmp_dir))
                 g_unlink (arg->str);
@@ -181,7 +181,7 @@ gb_beautifier_helper_create_tmp_file_async (GbBeautifierEditorAddin *self,
   gint fd;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
-  g_assert (!dzl_str_empty0 (text));
+  g_assert (!ide_str_empty0 (text));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (callback != NULL);
 
@@ -235,8 +235,8 @@ gb_beautifier_helper_match_and_replace (const gchar *str,
   gchar *needle;
   gsize head_len;
 
-  g_assert (!dzl_str_empty0 (str));
-  g_assert (!dzl_str_empty0 (pattern));
+  g_assert (!ide_str_empty0 (str));
+  g_assert (!ide_str_empty0 (pattern));
 
   if (NULL != (needle = g_strstr_len (str, -1, pattern)))
     {

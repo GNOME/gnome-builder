@@ -22,10 +22,10 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+
 #include <libide-editor.h>
 
 #include "gb-beautifier-editor-addin.h"
@@ -133,7 +133,6 @@ set_default_keybinding (GbBeautifierEditorAddin *self,
                         const gchar             *action_name)
 {
   static const gchar *accel = "<primary><Alt>b";
-  DzlShortcutController *controller;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (action_name != NULL);
@@ -141,12 +140,6 @@ set_default_keybinding (GbBeautifierEditorAddin *self,
   if (self->current_view == NULL)
     return;
 
-  controller = dzl_shortcut_controller_find (GTK_WIDGET (self->current_view));
-  dzl_shortcut_controller_add_command_action (controller,
-                                              "org.gnome.builder.editor-view.beautifier-default",
-                                              I_(accel),
-                                              DZL_SHORTCUT_PHASE_CAPTURE,
-                                              action_name);
 }
 
 static void
@@ -201,7 +194,7 @@ view_populate_submenu (GbBeautifierEditorAddin *self,
   if (entries == NULL)
     return;
 
-  default_menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-beautify-default-section");
+  default_menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gb-beautify-default-section");
   g_menu_remove_all (default_menu);
 
   lang_id = gb_beautifier_helper_get_lang_id (self, view);
@@ -269,7 +262,7 @@ view_populate_popup (GbBeautifierEditorAddin *self,
   g_assert (GTK_IS_WIDGET (popup));
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
-  submenu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "gb-beautify-profiles-section");
+  submenu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "gb-beautify-profiles-section");
   g_menu_remove_all (submenu);
   view_populate_submenu (self, source_view, submenu, self->entries);
 }
@@ -336,31 +329,13 @@ cleanup_view_cb (GtkWidget               *widget,
       g_action_map_remove_action (G_ACTION_MAP (actions), "beautify");
       g_action_map_remove_action (G_ACTION_MAP (actions), "beautify-default");
     }
-
-  /* TODO: if we close the view we are fine but if we desactivate the plugin, we should remove
-   * the dzl shortcut and action mapping from the controler, dzl do not have this feature yet.
-   */
 }
-
-static const DzlShortcutEntry beautifier_shortcut_entry[] = {
-  { "org.gnome.builder.editor-view.beautifier-default",
-    0,
-    "<primary><Alt>b",
-    N_("Editor shortcuts"),
-    N_("Editing"),
-    N_("Beautify the code"),
-    N_("Trigger the default entry") },
-};
 
 static void
 add_shortcut_window_entry (GbBeautifierEditorAddin *self)
 {
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
 
-  dzl_shortcut_manager_add_shortcut_entries (NULL,
-                                             beautifier_shortcut_entry,
-                                             G_N_ELEMENTS (beautifier_shortcut_entry),
-                                             GETTEXT_PACKAGE);
 }
 
 static void
@@ -401,15 +376,15 @@ gb_beautifier_editor_addin_reap_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
-  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
   g_autoptr(GbBeautifierEditorAddin) self = user_data;
   g_autoptr(GError) error = NULL;
 
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
 
-  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+  if (!ide_directory_reaper_execute_finish (reaper, result, &error))
     g_warning ("Failed to reap old beautifier data: %s", error->message);
 
   if (g_mkdir_with_parents (self->tmp_dir, 0750) != 0)
@@ -431,7 +406,7 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
 {
   GbBeautifierEditorAddin *self = (GbBeautifierEditorAddin *)addin;
   IdeWorkbench *workbench;
-  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr(IdeDirectoryReaper) reaper = NULL;
   g_autoptr (GFile) tmp_file = NULL;
 
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
@@ -446,11 +421,11 @@ gb_beautifier_editor_addin_load (IdeEditorAddin       *addin,
     self->tmp_dir = ide_context_cache_filename (self->context, "beautifier", NULL);
 
   /* Cleanup old beautifier cache directory */
-  reaper = dzl_directory_reaper_new ();
+  reaper = ide_directory_reaper_new ();
   tmp_file = g_file_new_for_path (self->tmp_dir);
-  dzl_directory_reaper_add_directory (reaper, tmp_file, 0);
+  ide_directory_reaper_add_directory (reaper, tmp_file, 0);
 
-  dzl_directory_reaper_execute_async (reaper,
+  ide_directory_reaper_execute_async (reaper,
                                       NULL,
                                       gb_beautifier_editor_addin_reap_cb,
                                       g_object_ref (self));
