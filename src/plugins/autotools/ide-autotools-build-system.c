@@ -24,9 +24,10 @@
 
 #include <gio/gio.h>
 #include <gtksourceview/gtksource.h>
+#include <string.h>
+
 #include <libide-foundry.h>
 #include <libide-vcs.h>
-#include <string.h>
 
 #include "ide-autotools-build-system.h"
 #include "ide-autotools-makecache-stage.h"
@@ -74,8 +75,8 @@ is_configure (GFile *file)
   g_assert (G_IS_FILE (file));
 
   name = g_file_get_basename (file);
-  return dzl_str_equal0 (name, "configure.ac") ||
-         dzl_str_equal0 (name, "configure.in");
+  return ide_str_equal0 (name, "configure.ac") ||
+         ide_str_equal0 (name, "configure.in");
 }
 
 static gboolean
@@ -237,7 +238,7 @@ looks_like_makefile (IdeBuffer *buffer)
 
       lang_id = gtk_source_language_get_id (language);
 
-      if (dzl_str_equal0 (lang_id, "automake") || dzl_str_equal0 (lang_id, "makefile"))
+      if (ide_str_equal0 (lang_id, "automake") || ide_str_equal0 (lang_id, "makefile"))
         return TRUE;
     }
 
