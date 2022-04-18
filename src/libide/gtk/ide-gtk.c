@@ -227,3 +227,149 @@ ide_gtk_widget_hide_with_fade (GtkWidget *widget)
                               g_object_unref);
     }
 }
+
+static gboolean
+list_store_iter_middle (GtkListStore      *store,
+                        const GtkTreeIter *begin,
+                        const GtkTreeIter *end,
+                        GtkTreeIter       *middle)
+{
+  g_assert (store != NULL);
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+  g_assert (middle != NULL);
+  g_assert (middle->stamp == begin->stamp);
+  g_assert (middle->stamp == end->stamp);
+
+  /*
+   * middle MUST ALREADY BE VALID as it saves us some copying
+   * as well as just makes things easier when binary searching.
+   */
+
+  middle->user_data = g_sequence_range_get_midpoint (begin->user_data, end->user_data);
+
+  if (g_sequence_iter_is_end (middle->user_data))
+    {
+      middle->stamp = 0;
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static inline gboolean
+list_store_iter_equal (const GtkTreeIter *a,
+                       const GtkTreeIter *b)
+{
+  return a->user_data == b->user_data;
+}
+
+/**
+ * ide_gtk_list_store_insert_sorted: (skip)
+ * @store: A #GtkListStore
+ * @iter: (out): A location for a #GtkTextIter
+ * @key: A key to compare to when binary searching
+ * @compare_column: the column containing the data to compare
+ * @compare_func: (scope call) (closure compare_data): A callback to compare
+ * @compare_data: data for @compare_func
+ *
+ * This function will binary search the contents of @store looking for the
+ * location to insert a new row.
+ *
+ * @compare_column must be the index of a column that is a %G_TYPE_POINTER,
+ * %G_TYPE_BOXED or %G_TYPE_OBJECT based column.
+ *
+ * @compare_func will be called with @key as the first parameter and the
+ * value from the #GtkListStore row as the second parameter. The third and
+ * final parameter is @compare_data.
+ */
+void
+ide_gtk_list_store_insert_sorted (GtkListStore     *store,
+                                  GtkTreeIter      *iter,
+                                  gconstpointer     key,
+                                  guint             compare_column,
+                                  GCompareDataFunc  compare_func,
+                                  gpointer          compare_data)
+{
+  GValue value = G_VALUE_INIT;
+  gpointer (*get_func) (const GValue *) = NULL;
+  GtkTreeModel *model = (GtkTreeModel *)store;
+  GtkTreeIter begin;
+  GtkTreeIter end;
+  GtkTreeIter middle;
+  guint n_children;
+  gint cmpval = 0;
+  GType type;
+
+  g_return_if_fail (GTK_IS_LIST_STORE (store));
+  g_return_if_fail (GTK_IS_LIST_STORE (model));
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (compare_column < gtk_tree_model_get_n_columns (GTK_TREE_MODEL (store)));
+  g_return_if_fail (compare_func != NULL);
+
+  type = gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), compare_column);
+
+  if (g_type_is_a (type, G_TYPE_POINTER))
+    get_func = g_value_get_pointer;
+  else if (g_type_is_a (type, G_TYPE_BOXED))
+    get_func = g_value_get_boxed;
+  else if (g_type_is_a (type, G_TYPE_OBJECT))
+    get_func = g_value_get_object;
+  else
+    {
+      g_warning ("%s() only supports pointer, boxed, or object columns",
+                 G_STRFUNC);
+      gtk_list_store_append (store, iter);
+      return;
+    }
+
+  /* Try to get the first iter instead of calling n_children to
+   * avoid walking the GSequence all the way to the right. If this
+   * matches, we know there are some children.
+   */
+  if (!gtk_tree_model_get_iter_first (model, &begin))
+    {
+      gtk_list_store_append (store, iter);
+      return;
+    }
+
+  n_children = gtk_tree_model_iter_n_children (model, NULL);
+  if (!gtk_tree_model_iter_nth_child (model, &end, NULL, n_children - 1))
+    g_assert_not_reached ();
+
+  middle = begin;
+
+  while (list_store_iter_middle (store, &begin, &end, &middle))
+    {
+      gtk_tree_model_get_value (model, &middle, compare_column, &value);
+      cmpval = compare_func (key, get_func (&value), compare_data);
+      g_value_unset (&value);
+
+      if (cmpval == 0 || list_store_iter_equal (&begin, &end))
+        break;
+
+      if (cmpval < 0)
+        {
+          end = middle;
+
+          if (!list_store_iter_equal (&begin, &end) &&
+              !gtk_tree_model_iter_previous (model, &end))
+            break;
+        }
+      else if (cmpval > 0)
+        {
+          begin = middle;
+
+          if (!list_store_iter_equal (&begin, &end) &&
+              !gtk_tree_model_iter_next (model, &begin))
+            break;
+        }
+      else
+        g_assert_not_reached ();
+    }
+
+  if (cmpval < 0)
+    gtk_list_store_insert_before (store, iter, &middle);
+  else
+    gtk_list_store_insert_after (store, iter, &middle);
+}
