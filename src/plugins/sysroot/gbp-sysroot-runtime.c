@@ -112,7 +112,7 @@ gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
 
       pkgconfig_dirs = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, sysroot_id);
 
-      if (!dzl_str_empty0 (pkgconfig_dirs))
+      if (!ide_str_empty0 (pkgconfig_dirs))
         {
           g_autofree gchar *libdir_tmp = NULL;
 
