@@ -86,7 +86,7 @@
         <attribute name="action">build-manager.cancel</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">Pause Builds</attribute>
+        <attribute name="label" translatable="yes">Pause Build</attribute>
         <attribute name="action">build-manager.pause</attribute>
         <attribute name="role">check</attribute>
       </item>
@@ -152,12 +152,11 @@
       </submenu>
     </section>
     <section id="run-menu-observation-section">
-      <attribute name="label" translatable="yes">Observation</attribute>
       <item>
         <attribute name="id">default-run-handler</attribute>
         <attribute name="action">run-manager.handler</attribute>
-        <attribute name="target" type='s'>'disabled'</attribute>
-        <attribute name="label" translatable="yes">Disabled</attribute>
+        <attribute name="target" type='s'>'run'</attribute>
+        <attribute name="label" translatable="yes">Run</attribute>
         <attribute name="verb-icon-name">builder-run-start-symbolic</attribute>
       </item>
     </section>
