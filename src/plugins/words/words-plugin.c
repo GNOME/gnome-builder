@@ -20,8 +20,9 @@
 
 #include "config.h"
 
-#include <libide-sourceview.h>
 #include <libpeas/peas.h>
+
+#include <libide-sourceview.h>
 
 #include "gbp-word-completion-provider.h"
 
@@ -29,6 +30,6 @@ _IDE_EXTERN void
 _gbp_words_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                               GBP_TYPE_WORD_COMPLETION_PROVIDER);
 }

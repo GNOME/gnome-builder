@@ -169,7 +169,7 @@ gbp_word_proposals_backward_cb (GObject      *object,
 
   buffer = GTK_TEXT_BUFFER (gtk_source_search_context_get_buffer (search));
 
-  if (ide_source_search_context_backward_finish2 (search, result, &begin, &end, &wrapped, &error))
+  if (gtk_source_search_context_backward_finish (search, result, &begin, &end, &wrapped, &error))
     {
       guint line;
       guint line_offset;
@@ -217,7 +217,7 @@ gbp_word_proposals_backward_cb (GObject      *object,
 
   gbp_word_proposals_add (self, word);
 
-  ide_source_search_context_backward_async (search,
+  gtk_source_search_context_backward_async (search,
                                             &begin,
                                             cancellable,
                                             gbp_word_proposals_backward_cb,
@@ -225,11 +225,11 @@ gbp_word_proposals_backward_cb (GObject      *object,
 }
 
 void
-gbp_word_proposals_populate_async (GbpWordProposals     *self,
-                                   IdeCompletionContext *context,
-                                   GCancellable         *cancellable,
-                                   GAsyncReadyCallback   callback,
-                                   gpointer              user_data)
+gbp_word_proposals_populate_async (GbpWordProposals           *self,
+                                   GtkSourceCompletionContext *context,
+                                   GCancellable               *cancellable,
+                                   GAsyncReadyCallback         callback,
+                                   gpointer                    user_data)
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GtkSourceSearchContext) search = NULL;
@@ -241,7 +241,7 @@ gbp_word_proposals_populate_async (GbpWordProposals     *self,
   guint old_len;
 
   g_assert (GBP_IS_WORD_PROPOSALS (self));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -266,7 +266,7 @@ gbp_word_proposals_populate_async (GbpWordProposals     *self,
    * we'd just create a list of every word in the file. While that might
    * be interesting, it's more work than we want to do currently.
    */
-  if (!ide_completion_context_get_bounds (context, &begin, &end))
+  if (!gtk_source_completion_context_get_bounds (context, &begin, &end))
     {
       ide_task_return_boolean (task, TRUE);
       return;
@@ -281,7 +281,7 @@ gbp_word_proposals_populate_async (GbpWordProposals     *self,
   gtk_source_search_settings_set_search_text (settings, search_text);
   gtk_source_search_settings_set_wrap_around (settings, TRUE);
 
-  buffer = ide_completion_context_get_buffer (context);
+  buffer = GTK_TEXT_BUFFER (gtk_source_completion_context_get_buffer (context));
   search = gtk_source_search_context_new (GTK_SOURCE_BUFFER (buffer), settings);
   gtk_source_search_context_set_highlight (search, FALSE);
 
@@ -290,7 +290,7 @@ gbp_word_proposals_populate_async (GbpWordProposals     *self,
   g_object_ref (state->mark);
   ide_task_set_task_data (task, state, state_free);
 
-  ide_source_search_context_backward_async (search,
+  gtk_source_search_context_backward_async (search,
                                             &begin,
                                             NULL,
                                             gbp_word_proposals_backward_cb,
@@ -318,7 +318,7 @@ gbp_word_proposals_populate_finish (GbpWordProposals  *self,
       const gchar *element = g_ptr_array_index (self->unfiltered, i);
       guint priority;
 
-      if (ide_completion_fuzzy_match (element, word, &priority))
+      if (gtk_source_completion_fuzzy_match (element, word, &priority))
         {
           Item item = { element, priority };
           g_array_append_val (self->items, item);
@@ -363,7 +363,7 @@ gbp_word_proposals_refilter (GbpWordProposals *self,
         {
           Item *item = &g_array_index (self->items, Item, i - 1);
 
-          if (!ide_completion_fuzzy_match (item->word, word, &item->priority))
+          if (!gtk_source_completion_fuzzy_match (item->word, word, &item->priority))
             g_array_remove_index_fast (self->items, i - 1);
         }
     }
@@ -377,7 +377,7 @@ gbp_word_proposals_refilter (GbpWordProposals *self,
           const gchar *element = g_ptr_array_index (self->unfiltered, i);
           guint priority;
 
-          if (ide_completion_fuzzy_match (element, word, &priority))
+          if (gtk_source_completion_fuzzy_match (element, word, &priority))
             {
               Item item = { element, priority };
               g_array_append_val (self->items, item);
@@ -416,7 +416,7 @@ gbp_word_proposals_clear (GbpWordProposals *self)
 static GType
 gbp_word_proposals_get_item_type (GListModel *model)
 {
-  return IDE_TYPE_COMPLETION_PROPOSAL;
+  return GTK_SOURCE_TYPE_COMPLETION_PROPOSAL;
 }
 
 static guint
