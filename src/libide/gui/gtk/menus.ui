@@ -120,42 +120,11 @@
         <attribute name="action">runui.custom</attribute>
       </item>
     </section>
-    <section id="run-menu-device-section">
-      <submenu id="run-menu-devices">
-        <attribute name="id">run-device</attribute>
-        <attribute name="label" translatable="yes">Device (My Computer)</attribute>
-        <section id="run-menu-device-localhost">
-          <item>
-            <attribute name="label" translatable="yes">My Computer</attribute>
-            <attribute name="action">deviceui.device</attribute>
-            <attribute name="target" type="s">'host'</attribute>
-            <attribute name="role">check</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">My Computer (32-bit)</attribute>
-            <attribute name="action">deviceui.device</attribute>
-            <attribute name="target" type="s">'host-32'</attribute>
-            <attribute name="role">check</attribute>
-          </item>
-        </section>
-        <section id="run-menu-simulators-section">
-          <submenu id="run-menu-simulators">
-            <attribute name="label" translatable="yes">Simulators</attribute>
-          </submenu>
-          <submenu id="run-menu-simulators-aarch64">
-            <attribute name="label" translatable="yes">Simulators (aarch64)</attribute>
-          </submenu>
-        </section>
-        <section id="run-menu-connected-devices">
-          <attribute name="label" translatable="yes">Connected Devices</attribute>
-        </section>
-      </submenu>
-    </section>
     <section id="run-menu-observation-section">
       <item>
         <attribute name="id">default-run-handler</attribute>
-        <attribute name="action">run-manager.handler</attribute>
-        <attribute name="target" type='s'>'run'</attribute>
+        <attribute name="action">run-manager.run-with-handler</attribute>
+        <attribute name="target" type="s">'run'</attribute>
         <attribute name="label" translatable="yes">Run</attribute>
         <attribute name="verb-icon-name">builder-run-start-symbolic</attribute>
       </item>
