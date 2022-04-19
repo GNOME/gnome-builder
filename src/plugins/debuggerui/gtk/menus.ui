@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <interface>
   <menu id="run-menu">
-    <section id="run-menu-section">
+    <section id="run-menu-observation-section">
       <item>
         <attribute name="id">debugger-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
