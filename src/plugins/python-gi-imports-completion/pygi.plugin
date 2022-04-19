@@ -1,10 +1,9 @@
 [Plugin]
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
-Copyright=Copyright © 2015 Christian Hergert
+Copyright=Copyright © 2015-2022 Christian Hergert
 Description=Provides autocompletion for importing GObject Introspection enabled Libraries in Python.
-Loader=python3
-Module=python_gi_imports_completion
+Module=pygi
 Name=Python GObject Introspection Imports Auto-Completion
-X-Builder-ABI=@PACKAGE_ABI@
+Embedded=_gbp_pygi_register_types
 X-Completion-Provider-Languages=python,python3
