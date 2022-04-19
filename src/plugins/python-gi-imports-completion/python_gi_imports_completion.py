@@ -34,7 +34,7 @@ from gi.repository import Ide
 # 2 minutes
 CACHE_EXPIRE_USEC = 2 * 60 * 1000 * 1000
 
-class CompletionProvider(Ide.Object, Ide.CompletionProvider):
+class CompletionProvider(Ide.Object, GtkSource.CompletionProvider):
     _libraries = None
     _libraries_expire_at = 0
 
@@ -45,14 +45,17 @@ class CompletionProvider(Ide.Object, Ide.CompletionProvider):
         task = Ide.Task.new(self, cancellable, callback)
         task.set_name('python gi imports')
 
-        text = context.get_line_text()
+        _, begin, end = context.get_bounds()
+        begin.set_line_offset(0)
+        text = begin.get_slice(end)
+
         if not text.startswith('from gi.repository import'):
             task.return_error(Ide.NotSupportedError())
             return
 
         text = text.replace('from gi.repository import', '').strip().lower()
 
-        proposals = Gio.ListStore.new(Ide.CompletionProposal)
+        proposals = Gio.ListStore.new(GtkSource.CompletionProposal)
         for library in self.get_libraries():
             if library.matches(text):
                 proposals.append(library)
@@ -62,13 +65,17 @@ class CompletionProvider(Ide.Object, Ide.CompletionProvider):
     def do_populate_finish(self, task):
         return task.propagate_object()
 
-    def do_display_proposal(self, row, context, typed_text, proposal):
-        row.set_icon_name('lang-namespace-symbolic')
-        row.set_left(None)
-        row.set_center(proposal.completion)
-        row.set_right(None)
+    def do_display(self, context, proposal, cell):
+        column = cell.get_column()
 
-    def do_activate_proposal(self, context, proposal, key):
+        if column == GtkSource.CompletionColumn.ICON:
+            cell.set_icon_name('lang-namespace-symbolic')
+        elif column == GtkSource.CompletionColumn.TYPED_TEXT:
+            cell.set_text(proposal.completion)
+        else:
+            cell.set_text(None)
+
+    def do_activate(self, context, proposal):
         _, begin, end = context.get_bounds()
         buffer = context.get_buffer()
 
@@ -88,7 +95,6 @@ class CompletionProvider(Ide.Object, Ide.CompletionProvider):
         for library in self.get_libraries():
             if library.matches(text):
                 proposals.append(library)
-        return True
 
     def get_libraries(self):
         now = GLib.get_monotonic_time()
@@ -111,7 +117,7 @@ class CompletionProvider(Ide.Object, Ide.CompletionProvider):
 
         return self._libraries
 
-class CompletionProposal(GObject.Object, Ide.CompletionProposal):
+class CompletionProposal(GObject.Object, GtkSource.CompletionProposal):
     def __init__(self, completion, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.completion = completion
