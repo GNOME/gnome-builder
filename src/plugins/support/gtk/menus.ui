@@ -4,7 +4,7 @@
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-placeholder3">
       <item>
-        <attribute name="label" translatable="yes">Generate Support Log</attribute>
+        <attribute name="label" translatable="yes">Generate Support Log…</attribute>
         <attribute name="action">app.generate-support</attribute>
       </item>
     </section>
