@@ -42,12 +42,12 @@ class JediService(Ide.LspService):
             'autoImportModules': GLib.Variant('as', ['gi']),
         }))
 
-class JediDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
+class JediDiagnosticProvider(Ide.LspDiagnosticProvider):
     def do_load(self):
         JediService.bind_client(self)
 
-class JediCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
-    def do_load(self, context):
+class JediCompletionProvider(Ide.LspCompletionProvider):
+    def do_load(self):
         JediService.bind_client(self)
 
     def do_get_priority(self, context):
@@ -55,29 +55,29 @@ class JediCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
         # want the results. So use high priority (negative is better).
         return -1000
 
-class JediSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
+class JediSymbolResolver(Ide.LspSymbolResolver):
     def do_load(self):
         JediService.bind_client(self)
 
-class JediHighlighter(Ide.LspHighlighter, Ide.Highlighter):
+class JediHighlighter(Ide.LspHighlighter):
     def do_load(self):
         JediService.bind_client(self)
 
-class JediFormatter(Ide.LspFormatter, Ide.Formatter):
+class JediFormatter(Ide.LspFormatter):
     def do_load(self):
         JediService.bind_client(self)
 
-class JediHoverProvider(Ide.LspHoverProvider, Ide.HoverProvider):
+class JediHoverProvider(Ide.LspHoverProvider):
     def do_prepare(self):
         self.props.category = 'Python'
         self.props.priority = 200
         JediService.bind_client(self)
 
-class JediRenameProvider(Ide.LspRenameProvider, Ide.RenameProvider):
+class JediRenameProvider(Ide.LspRenameProvider):
     def do_load(self):
         JediService.bind_client(self)
 
-class JediCodeActionProvider(Ide.LspCodeActionProvider, Ide.CodeActionProvider):
+class JediCodeActionProvider(Ide.LspCodeActionProvider):
     def do_load(self):
         JediService.bind_client(self)
 
