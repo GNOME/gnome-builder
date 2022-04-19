@@ -2,7 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/flatpak">
     <file>flatpak.plugin</file>
-    <file preprocess="xml-stripblanks">gbp-flatpak-clone-widget.ui</file>
     <file preprocess="xml-stripblanks">gbp-flatpak-install-dialog.ui</file>
   </gresource>
 </gresources>

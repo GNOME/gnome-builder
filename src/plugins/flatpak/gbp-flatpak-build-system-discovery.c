@@ -202,9 +202,9 @@ gbp_flatpak_build_system_discovery_discover (IdeBuildSystemDiscovery  *discovery
         {
           gchar *ret;
 
-          if (dzl_str_equal0 (buildsystem, "cmake-ninja"))
+          if (ide_str_equal0 (buildsystem, "cmake-ninja"))
             buildsystem = "cmake";
-          else if (dzl_str_equal0 (buildsystem, "simple"))
+          else if (ide_str_equal0 (buildsystem, "simple"))
             {
               JsonNode *sdk_extensions;
               JsonArray *sdk_extensions_array;

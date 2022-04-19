@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.22.0 -->
 <interface>
-  <requires lib="gtk+" version="3.24"/>
+  <requires lib="gtk" version="4.0"/>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name name -->
@@ -13,27 +12,18 @@
     </columns>
   </object>
   <template class="GbpFlatpakInstallDialog" parent="GtkDialog">
-    <property name="can_focus">False</property>
     <property name="modal">True</property>
     <property name="type_hint">normal</property>
     <child internal-child="vbox">
       <object class="GtkBox">
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox">
-            <property name="can_focus">False</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">0</property>
-          </packing>
         </child>
         <child>
           <object class="GtkBox" id="content">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="margin_start">12</property>
             <property name="margin_end">12</property>
             <property name="margin_top">12</property>
@@ -44,23 +34,16 @@
             <child>
               <object class="GtkLabel" id="subtitle">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="margin_top">6</property>
                 <property name="label" translatable="yes">Builder needs to install the following software development kits to build your project.</property>
                 <property name="wrap">True</property>
                 <property name="max_width_chars">50</property>
                 <property name="xalign">0</property>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
             </child>
             <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
-                <property name="can_focus">True</property>
                 <property name="margin_top">12</property>
                 <property name="vexpand">True</property>
                 <property name="shadow_type">in</property>
@@ -69,7 +52,6 @@
                 <child>
                   <object class="GtkTreeView" id="runtimes">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
                     <property name="model">liststore1</property>
                     <child internal-child="selection">
                       <object class="GtkTreeSelection">
@@ -113,23 +95,10 @@
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
             </child>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </object>
-    </child>
-    <child type="titlebar">
-      <placeholder/>
     </child>
   </template>
 </interface>

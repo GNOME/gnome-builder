@@ -22,6 +22,8 @@
 
 #include <glib/gi18n.h>
 
+#include <libide-gtk.h>
+
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-download-stage.h"
 #include "gbp-flatpak-pipeline-addin.h"
@@ -196,17 +198,17 @@ reap_staging_dir_cb (GObject      *object,
                      GAsyncResult *result,
                      gpointer      user_data)
 {
-  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
   g_autoptr(IdePipelineStage) stage = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_PIPELINE_STAGE (stage));
 
-  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+  if (!ide_directory_reaper_execute_finish (reaper, result, &error))
     ide_object_warning (stage,
                         "Failed to reap staging directory: %s",
                         error->message);
@@ -258,14 +260,14 @@ check_for_build_init_files (IdePipelineStage    *stage,
 
   if (!completed && parent_exists)
     {
-      g_autoptr(DzlDirectoryReaper) reaper = NULL;
+      g_autoptr(IdeDirectoryReaper) reaper = NULL;
       g_autoptr(GFile) staging = g_file_new_for_path (staging_dir);
 
       ide_pipeline_stage_pause (stage);
 
-      reaper = dzl_directory_reaper_new ();
-      dzl_directory_reaper_add_directory (reaper, staging, 0);
-      dzl_directory_reaper_execute_async (reaper,
+      reaper = ide_directory_reaper_new ();
+      ide_directory_reaper_add_directory (reaper, staging, 0);
+      ide_directory_reaper_execute_async (reaper,
                                           cancellable,
                                           reap_staging_dir_cb,
                                           g_object_ref (stage));
@@ -274,17 +276,17 @@ check_for_build_init_files (IdePipelineStage    *stage,
 
 static void
 reap_staging_dir (IdePipelineStage      *stage,
-                  DzlDirectoryReaper *reaper,
+                  IdeDirectoryReaper *reaper,
                   const gchar        *staging_dir)
 {
   g_autoptr(GFile) dir = NULL;
 
   g_assert (IDE_IS_PIPELINE_STAGE (stage));
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (staging_dir != NULL);
 
   dir = g_file_new_for_path (staging_dir);
-  dzl_directory_reaper_add_directory (reaper, dir, 0);
+  ide_directory_reaper_add_directory (reaper, dir, 0);
 }
 
 static gboolean
@@ -338,7 +340,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
    * If we got here by using a non-flatpak configuration, then there is a
    * chance we don't have a valid app-id.
    */
-  if (dzl_str_empty0 (app_id))
+  if (ide_str_empty0 (app_id))
     app_id = "com.example.App";
 
   if (platform == NULL && sdk == NULL)
@@ -634,7 +636,7 @@ build_bundle_notify_completed (IdePipelineStage *stage,
   if (ide_pipeline_stage_get_completed (stage))
     {
       g_autoptr(GFile) file = g_file_new_for_path (dest_path);
-      dzl_file_manager_show (file, NULL);
+      ide_file_manager_show (file, NULL);
     }
 }
 

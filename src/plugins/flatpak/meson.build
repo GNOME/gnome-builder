@@ -20,7 +20,6 @@ plugins_sources += files([
   'gbp-flatpak-build-target-provider.c',
   'gbp-flatpak-build-target.c',
   'gbp-flatpak-client.c',
-  'gbp-flatpak-clone-widget.c',
   'gbp-flatpak-config-provider.c',
   'gbp-flatpak-dependency-updater.c',
   'gbp-flatpak-download-stage.c',
