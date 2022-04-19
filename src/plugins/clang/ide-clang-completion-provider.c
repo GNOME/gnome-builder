@@ -373,8 +373,8 @@ ide_clang_completion_provider_populate_async (GtkSourceCompletionProvider  *prov
    */
   if (!is_field_access (context))
     gtk_source_completion_context_set_proposals_for_provider (context,
-                                                       provider,
-                                                       G_LIST_MODEL (self->proposals));
+                                                              provider,
+                                                              G_LIST_MODEL (self->proposals));
 
   ide_clang_proposals_populate_async (self->proposals,
                                       &begin,
