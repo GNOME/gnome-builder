@@ -73,7 +73,7 @@ gbp_flatpak_install_dialog_response (GtkDialog *dialog,
   if (GTK_DIALOG_CLASS (gbp_flatpak_install_dialog_parent_class)->response)
     GTK_DIALOG_CLASS (gbp_flatpak_install_dialog_parent_class)->response (dialog, response_id);
 
-  gtk_widget_destroy (GTK_WIDGET (dialog));
+  gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
@@ -120,7 +120,7 @@ gbp_flatpak_install_dialog_init (GbpFlatpakInstallDialog *self)
   gtk_dialog_set_default_response (GTK_DIALOG (self), GTK_RESPONSE_OK);
 
   button = gtk_dialog_get_widget_for_response (GTK_DIALOG (self), GTK_RESPONSE_OK);
-  dzl_gtk_widget_add_style_class (button, "suggested-action");
+  gtk_widget_add_css_class (button, "suggested-action");
 }
 
 void

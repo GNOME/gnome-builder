@@ -98,7 +98,7 @@ ipc_flatpak_transfer_impl_handle_confirm (IpcFlatpakTransfer    *transfer,
 
   if (gbp_flatpak_install_dialog_is_empty (dialog))
     {
-      gtk_widget_destroy (GTK_WIDGET (dialog));
+      gtk_window_destroy (GTK_WINDOW (dialog));
       ipc_flatpak_transfer_complete_confirm (transfer, g_steal_pointer (&invocation));
       return TRUE;
     }

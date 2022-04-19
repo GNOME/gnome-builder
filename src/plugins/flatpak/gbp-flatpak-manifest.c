@@ -296,7 +296,7 @@ discover_primary_module (GbpFlatpakManifest  *self,
           !(name = json_object_get_string_member (obj, "name")))
         continue;
 
-      if (dzl_str_equal0 (name, dir_name))
+      if (ide_str_equal0 (name, dir_name))
         {
           self->primary_module = g_strdup (name);
           return obj;
@@ -932,9 +932,9 @@ apply_changes_to_tree (GbpFlatpakManifest *self)
       key = ide_environment_variable_get_key (var);
       value = ide_environment_variable_get_value (var);
 
-      if (dzl_str_equal0 (key, "CFLAGS"))
+      if (ide_str_equal0 (key, "CFLAGS"))
         json_object_set_string_member (build_options, "cflags", value);
-      else if (dzl_str_equal0 (key, "CXXFLAGS"))
+      else if (ide_str_equal0 (key, "CXXFLAGS"))
         json_object_set_string_member (build_options, "cxxflags", value);
       else
         json_object_set_string_member (env_obj, key, value);

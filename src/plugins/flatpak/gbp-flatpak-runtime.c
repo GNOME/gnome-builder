@@ -416,7 +416,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
 
           translated = g_build_filename (runtime_dir,
                                          "source",
-                                         path + DZL_LITERAL_LENGTH ("/run/build-runtime/"),
+                                         path + strlen ("/run/build-runtime/"),
                                          NULL);
           return g_file_new_for_path (translated);
         }
@@ -432,7 +432,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
           g_autofree gchar *translated = NULL;
 
           translated = g_build_filename (debug_dir,
-                                         path + DZL_LITERAL_LENGTH ("/usr/lib/debug/"),
+                                         path + strlen ("/usr/lib/debug/"),
                                          NULL);
           return g_file_new_for_path (translated);
         }
@@ -442,7 +442,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
     return g_object_ref (self->deploy_dir_files);
 
   if (g_str_has_prefix (path, "/usr/"))
-    return g_file_get_child (self->deploy_dir_files, path + DZL_LITERAL_LENGTH ("/usr/"));
+    return g_file_get_child (self->deploy_dir_files, path + strlen ("/usr/"));
 
   build_dir = get_staging_directory (self);
   app_files_path = g_build_filename (build_dir, "files", NULL);
@@ -455,7 +455,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
       g_autofree gchar *translated = NULL;
 
       translated = g_build_filename (app_files_path,
-                                     path + DZL_LITERAL_LENGTH ("/app/"),
+                                     path + strlen ("/app/"),
                                      NULL);
       return g_file_new_for_path (translated);
     }
