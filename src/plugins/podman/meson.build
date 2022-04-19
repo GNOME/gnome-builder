@@ -28,7 +28,7 @@ test_env_podman = [
 
 test_podman = executable('test-podman', test_sources_podman,
         c_args: test_cflags,
-  dependencies: [ libide_io, libide_foundry_dep, libjson_glib_dep ],
+  dependencies: [ libide_io_dep, libide_foundry_dep, libjson_glib_dep ],
 )
 test('test-podman', test_podman, env: test_env_podman)
 
