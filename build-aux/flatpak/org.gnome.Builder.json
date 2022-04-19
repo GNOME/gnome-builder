@@ -750,6 +750,17 @@
             ]
         },
         {
+            "name" : "d-spy",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/d-spy.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
             "name" : "gnome-builder",
             "buildsystem" : "meson",
             "builddir" : true,
