@@ -2,11 +2,11 @@
 Builtin=true
 Copyright=Copyright © 2021 Günther Wagner
 Description=Provides LSP integration for Python
-Hidden=true
 Loader=python3
 Module=jedi_language_server_plugin
-Name=Python Language Server Plugin
+Name=Jedi Python Language Server
 X-Builder-ABI=@PACKAGE_ABI@
+X-Category=lsps
 X-Completion-Provider-Languages=python,python3
 X-Symbol-Resolver-Languages=python,python3
 X-Diagnostic-Provider-Languages=python,python3
