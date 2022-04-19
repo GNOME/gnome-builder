@@ -63,7 +63,7 @@ gbp_valgrind_workbench_addin_runner_exited_cb (GbpValgrindWorkbenchAddin *self,
                             file,
                             "editorui",
                             IDE_BUFFER_OPEN_FLAGS_NONE,
-                            NULL, NULL, NULL);
+                            NULL, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
