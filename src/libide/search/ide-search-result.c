@@ -28,6 +28,7 @@ typedef struct
 {
   char         *title;
   GdkPaintable *paintable;
+  GIcon        *gicon;
   float         score;
   guint         priority;
 } IdeSearchResultPrivate;
@@ -35,6 +36,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_PAINTABLE,
+  PROP_GICON,
   PROP_PRIORITY,
   PROP_SCORE,
   PROP_TITLE,
@@ -71,6 +73,10 @@ ide_search_result_get_property (GObject    *object,
       g_value_set_object (value, ide_search_result_get_paintable (self));
       break;
 
+    case PROP_GICON:
+      g_value_set_object (value, ide_search_result_get_gicon (self));
+      break;
+
     case PROP_PRIORITY:
       g_value_set_int (value, ide_search_result_get_priority (self));
       break;
@@ -102,6 +108,10 @@ ide_search_result_set_property (GObject      *object,
       ide_search_result_set_paintable (self, g_value_get_object (value));
       break;
 
+    case PROP_GICON:
+      ide_search_result_set_gicon (self, g_value_get_object (value));
+      break;
+
     case PROP_PRIORITY:
       ide_search_result_set_priority (self, g_value_get_int (value));
       break;
@@ -130,10 +140,17 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
 
   properties [PROP_PAINTABLE] =
     g_param_spec_object ("paintable",
-                      "Paintable",
-                      "The paintable for the row icon",
-                      GDK_TYPE_PAINTABLE,
-                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         "Paintable",
+                         "The paintable for the row icon",
+                         GDK_TYPE_PAINTABLE,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_GICON] =
+    g_param_spec_object ("gicon",
+                         "GIcon",
+                         "The GIcon for the row icon",
+                         G_TYPE_ICON,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",
@@ -320,4 +337,35 @@ ide_search_result_set_title (IdeSearchResult *self,
       priv->title = g_strdup (title);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
     }
+}
+
+void
+ide_search_result_set_gicon (IdeSearchResult *self,
+                             GIcon           *gicon)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+  g_return_if_fail (!gicon || G_IS_ICON (gicon));
+
+  if (g_set_object (&priv->gicon, gicon))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GICON]);
+}
+
+/**
+ * ide_search_result_get_gicon:
+ * @self: a #IdeSearchResult
+ *
+ * Gets the #GIcon for the search result, if any.
+ *
+ * Returns: (transfer none) (nullable): a #GIcon or %NULL
+ */
+GIcon *
+ide_search_result_get_gicon (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+
+  return priv->gicon;
 }

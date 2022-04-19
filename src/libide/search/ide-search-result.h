@@ -70,6 +70,11 @@ IDE_AVAILABLE_IN_ALL
 void             ide_search_result_set_paintable (IdeSearchResult *self,
                                                   GdkPaintable    *paintable);
 IDE_AVAILABLE_IN_ALL
+GIcon           *ide_search_result_get_gicon     (IdeSearchResult *self);
+IDE_AVAILABLE_IN_ALL
+void             ide_search_result_set_gicon     (IdeSearchResult *self,
+                                                  GIcon           *gicon);
+IDE_AVAILABLE_IN_ALL
 const char      *ide_search_result_get_title     (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
 void             ide_search_result_set_title     (IdeSearchResult *self,
