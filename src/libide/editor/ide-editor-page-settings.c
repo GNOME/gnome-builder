@@ -92,6 +92,36 @@ font_name_to_font_desc (GValue   *value,
   return TRUE;
 }
 
+static void
+notify_interactive_completion_cb (IdeEditorPage *self,
+                                  const char    *key,
+                                  GSettings     *editor_settings)
+{
+  GtkSourceCompletion *completion;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (G_IS_SETTINGS (editor_settings));
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->view));
+
+  if (g_settings_get_boolean (editor_settings, "interactive-completion"))
+    {
+      if (self->completion_blocked)
+        {
+          self->completion_blocked = FALSE;
+          gtk_source_completion_unblock_interactive (completion);
+        }
+    }
+  else
+    {
+      if (!self->completion_blocked)
+        {
+          self->completion_blocked = TRUE;
+          gtk_source_completion_block_interactive (completion);
+        }
+    }
+}
+
 void
 _ide_editor_page_settings_init (IdeEditorPage *self)
 {
@@ -168,6 +198,13 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                           "overwrite-braces", self->view, "overwrite-braces",
                           G_BINDING_SYNC_CREATE);
 #endif
+
+  g_signal_connect_object (editor_settings,
+                           "changed::interactive-completion",
+                           G_CALLBACK (notify_interactive_completion_cb),
+                           self,
+                           0);
+  notify_interactive_completion_cb (self, NULL, editor_settings);
 
   _ide_editor_page_settings_reload (self);
 
