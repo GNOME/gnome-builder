@@ -6,5 +6,6 @@ Description=Provides integration with Gettext
 Embedded=_ide_gettext_register_types
 Module=gettext
 Name=Gettext
+X-Category=diagnostics
 X-Diagnostic-Provider-Languages-Priority=100
 X-Diagnostic-Provider-Languages=c,chdr,cpp,js,python,vala
