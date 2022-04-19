@@ -25,6 +25,9 @@
 #include <glib/gi18n.h>
 
 #include <libide-foundry.h>
+#include <libide-gtk.h>
+
+#include "ide-device-private.h"
 
 #include "ide-application.h"
 #include "ide-gui-global.h"
@@ -36,6 +39,7 @@ struct _IdeRunButton
   GtkWidget       parent_instance;
   AdwSplitButton *split_button;
   char           *run_handler_icon_name;
+  IdeJoinedMenu  *joined_menu;
 };
 
 G_DEFINE_FINAL_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_WIDGET)
@@ -98,11 +102,19 @@ static void
 ide_run_button_load (IdeRunButton *self,
                      IdeContext   *context)
 {
+  IdeDeviceManager *device_manager;
   IdeRunManager *run_manager;
+  GMenu *menu;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_BUTTON (self));
   g_assert (IDE_IS_CONTEXT (context));
 
+  if (!ide_context_has_project (context))
+    IDE_EXIT;
+
+  device_manager = ide_device_manager_from_context (context);
   run_manager = ide_run_manager_from_context (context);
 
   g_signal_connect_object (run_manager,
@@ -117,7 +129,13 @@ ide_run_button_load (IdeRunButton *self,
                            self,
                            G_CONNECT_SWAPPED);
 
+  /* Add devices section */
+  menu = _ide_device_manager_get_menu (device_manager);
+  ide_joined_menu_prepend_menu (self->joined_menu, G_MENU_MODEL (menu));
+
   ide_run_button_handler_set (self, NULL, run_manager);
+
+  IDE_EXIT;
 }
 
 static void
@@ -208,6 +226,7 @@ ide_run_button_dispose (GObject *object)
   IdeRunButton *self = (IdeRunButton *)object;
 
   g_clear_pointer ((GtkWidget **)&self->split_button, gtk_widget_unparent);
+  g_clear_object (&self->joined_menu);
 
   G_OBJECT_CLASS (ide_run_button_parent_class)->dispose (object);
 }
@@ -232,8 +251,13 @@ ide_run_button_init (IdeRunButton *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  self->joined_menu = ide_joined_menu_new ();
+
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "run-menu");
-  adw_split_button_set_menu_model (self->split_button, G_MENU_MODEL (menu));
+  ide_joined_menu_append_menu (self->joined_menu, G_MENU_MODEL (menu));
+
+  adw_split_button_set_menu_model (self->split_button,
+                                   G_MENU_MODEL (self->joined_menu));
 
   g_signal_connect_object (self->split_button,
                            "query-tooltip",
