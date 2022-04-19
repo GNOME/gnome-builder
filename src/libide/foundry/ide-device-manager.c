@@ -101,10 +101,10 @@ IDE_DEFINE_ACTION_GROUP (IdeDeviceManager, ide_device_manager, {
 })
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeDeviceManager, ide_device_manager, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
-                                                ide_device_manager_init_action_group)
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_init_iface)
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_init_interface))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
+                                                      ide_device_manager_init_action_group)
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_init_iface)
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_init_interface))
 
 enum {
   PROP_0,
