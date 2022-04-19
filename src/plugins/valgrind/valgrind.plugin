@@ -1,11 +1,9 @@
 [Plugin]
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
-Copyright=Copyright © 2017-2018 Christian Hergert
-Depends=buildui;editor;
+Copyright=Copyright © 2017-2022 Christian Hergert
 Description=Provides integration with valgrind
-Loader=python3
-Module=valgrind_plugin
+Embedded=_gbp_valgrind_register_types
+Module=valgrind
 Name=Valgrind
-X-Builder-ABI=@PACKAGE_ABI@
-X-Has-Resources=true
+X-Category=debuggers
