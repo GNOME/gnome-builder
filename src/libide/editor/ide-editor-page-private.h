@@ -43,6 +43,8 @@ struct _IdeEditorPage
   GtkScrolledWindow       *scroller;
   GtkSourceMap            *map;
   GtkRevealer             *map_revealer;
+
+  guint                    completion_blocked : 1;
 };
 
 void _ide_editor_page_class_actions_init (IdeEditorPageClass *klass);
