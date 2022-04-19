@@ -190,6 +190,7 @@ status += [
   'Npm .................................. : @0@'.format(get_option('plugin_npm')),
   'PHPize ............................... : @0@'.format(get_option('plugin_phpize')),
   'Podman ............................... : @0@'.format(get_option('plugin_podman')),
+  'PyGObject Imports .................... : @0@'.format(get_option('plugin_pygi')),
   'Python Pack .......................... : @0@'.format(get_option('plugin_python_pack')),
   'Qemu ................................. : @0@'.format(get_option('plugin_qemu')),
   'Quick Highlight ...................... : @0@'.format(get_option('plugin_quick_highlight')),
