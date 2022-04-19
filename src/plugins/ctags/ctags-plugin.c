@@ -22,6 +22,7 @@
 
 #include <libpeas/peas.h>
 #include <gtksourceview/gtksource.h>
+
 #include <libide-code.h>
 #include <libide-gui.h>
 #include <libide-sourceview.h>
@@ -33,21 +34,17 @@
 #include "ide-ctags-completion-provider.h"
 #include "ide-ctags-highlighter.h"
 #include "ide-ctags-index.h"
-#include "ide-ctags-preferences-addin.h"
 #include "ide-ctags-symbol-resolver.h"
 
 _IDE_EXTERN void
 _ide_ctags_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                               IDE_TYPE_CTAGS_COMPLETION_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_HIGHLIGHTER,
                                               IDE_TYPE_CTAGS_HIGHLIGHTER);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              IDE_TYPE_CTAGS_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SYMBOL_RESOLVER,
                                               IDE_TYPE_CTAGS_SYMBOL_RESOLVER);

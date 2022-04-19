@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "ide-ctags-index"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,10 +54,6 @@ static void async_initable_iface_init (GAsyncInitableIface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCtagsIndex, ide_ctags_index, IDE_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init))
-
-DZL_DEFINE_COUNTER (instances, "IdeCtagsIndex", "Instances", "Number of IdeCtagsIndex instances.")
-DZL_DEFINE_COUNTER (index_entries, "IdeCtagsIndex", "N Entries", "Number of entries in indexes.")
-DZL_DEFINE_COUNTER (heap_size, "IdeCtagsIndex", "Heap Size", "Size of index string heaps.")
 
 static GParamSpec *properties [LAST_PROP];
 
@@ -247,9 +242,6 @@ ide_ctags_index_build_index (IdeTask      *task,
   self->index = index;
   self->buffer = g_bytes_new_take (contents, length);
 
-  DZL_COUNTER_ADD (index_entries, (gint64)index->len);
-  DZL_COUNTER_ADD (heap_size, (gint64)length);
-
   ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
@@ -361,23 +353,12 @@ ide_ctags_index_finalize (GObject *object)
 {
   IdeCtagsIndex *self = (IdeCtagsIndex *)object;
 
-  if (self->index != NULL)
-    DZL_COUNTER_SUB (index_entries, (gint64)self->index->len);
-
-  if (self->buffer != NULL)
-    {
-      gsize len = g_bytes_get_size (self->buffer);
-      DZL_COUNTER_SUB (heap_size, (gint64)len);
-    }
-
   g_clear_object (&self->file);
   g_clear_pointer (&self->index, g_array_unref);
   g_clear_pointer (&self->buffer, g_bytes_unref);
   g_clear_pointer (&self->path_root, g_free);
 
   G_OBJECT_CLASS (ide_ctags_index_parent_class)->finalize (object);
-
-  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -418,7 +399,6 @@ ide_ctags_index_class_init (IdeCtagsIndexClass *klass)
 static void
 ide_ctags_index_init (IdeCtagsIndex *self)
 {
-  DZL_COUNTER_INC (instances);
 }
 
 static void

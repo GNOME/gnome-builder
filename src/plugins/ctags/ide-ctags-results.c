@@ -62,7 +62,7 @@ populate_free (Populate *state)
 static GType
 ide_ctags_results_get_item_type (GListModel *model)
 {
-  return IDE_TYPE_COMPLETION_PROPOSAL;
+  return GTK_SOURCE_TYPE_COMPLETION_PROPOSAL;
 }
 
 static gpointer
@@ -187,7 +187,7 @@ ide_ctags_results_populate_worker (IdeTask      *task,
           if (!ide_ctags_is_allowed (entry, p->suffixes))
             continue;
 
-          if (ide_completion_fuzzy_match (entry->name, p->casefold, &priority))
+          if (gtk_source_completion_fuzzy_match (entry->name, p->casefold, &priority))
             {
               Item item;
 

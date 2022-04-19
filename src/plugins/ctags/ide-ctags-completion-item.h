@@ -34,15 +34,15 @@ G_DECLARE_FINAL_TYPE (IdeCtagsCompletionItem, ide_ctags_completion_item, IDE, CT
 
 struct _IdeCtagsCompletionItem
 {
-  GObject parent_instance;
+  GObject                   parent_instance;
   const IdeCtagsIndexEntry *entry;
-  IdeCtagsResults *results;
+  IdeCtagsResults          *results;
 };
 
-IdeCtagsCompletionItem *ide_ctags_completion_item_new         (IdeCtagsResults            *results,
-                                                               const IdeCtagsIndexEntry   *entry);
-gboolean                ide_ctags_completion_item_is_function (IdeCtagsCompletionItem     *self);
-IdeSnippet             *ide_ctags_completion_item_get_snippet (IdeCtagsCompletionItem     *self,
-                                                               IdeFileSettings            *file_settings);
+IdeCtagsCompletionItem *ide_ctags_completion_item_new         (IdeCtagsResults          *results,
+                                                               const IdeCtagsIndexEntry *entry);
+gboolean                ide_ctags_completion_item_is_function (IdeCtagsCompletionItem   *self);
+GtkSourceSnippet       *ide_ctags_completion_item_get_snippet (IdeCtagsCompletionItem   *self,
+                                                               IdeFileSettings          *file_settings);
 
 G_END_DECLS
