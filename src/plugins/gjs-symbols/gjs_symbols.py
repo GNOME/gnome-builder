@@ -31,7 +31,6 @@ from gi.repository import Ide
 
 SYMBOL_PARAM_FLAGS=flags = GObject.ParamFlags.CONSTRUCT_ONLY | GObject.ParamFlags.READWRITE
 
-
 class JsSymbolNode(Ide.SymbolNode):
     file = GObject.Property(type=Gio.File, flags=SYMBOL_PARAM_FLAGS)
     line = GObject.Property(type=int, flags=SYMBOL_PARAM_FLAGS)
@@ -64,7 +63,6 @@ class JsSymbolNode(Ide.SymbolNode):
 
     def __repr__(self):
         return '<JsSymbolNode {} ({})'.format(self.props.name, self.props.kind)
-
 
 class JsSymbolTree(GObject.Object, Ide.SymbolTree):
     def __init__(self, dict_, file_):
@@ -239,7 +237,6 @@ class JsSymbolTree(GObject.Object, Ide.SymbolTree):
     def do_get_nth_child(self, node, nth):
         return node[nth] if node is not None else self.root_node[nth]
 
-
 JS_SCRIPT = \
 """var data;
 try {
@@ -255,7 +252,6 @@ try {
     imports.system.exit(1);
 }
 """.replace('\n', ' ')
-
 
 class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
     def __init__(self):
@@ -362,7 +358,6 @@ class JsCodeIndexEntries(GObject.Object, Ide.CodeIndexEntries):
 
     def do_get_file(self):
         return self.file
-
 
 class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
     active = False
