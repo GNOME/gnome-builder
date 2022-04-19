@@ -44,7 +44,7 @@ class TypescriptDiagnosticProvider(Ide.LspDiagnosticProvider):
         TypescriptService.bind_client(self)
 
 class TypescriptCompletionProvider(Ide.LspCompletionProvider):
-    def do_load(self, context):
+    def do_load(self):
         TypescriptService.bind_client(self)
 
     def do_get_priority(self, context):
