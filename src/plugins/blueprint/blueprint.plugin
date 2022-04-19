@@ -5,6 +5,7 @@ Loader=python3
 Module=blueprint_plugin
 Name=Blueprint Language Server Plugin
 X-Builder-ABI=@PACKAGE_ABI@
+X-Category=lsps
 X-Code-Action-Languages=blueprint
 X-Completion-Provider-Languages=blueprint
 X-Diagnostic-Provider-Languages-Priority=100

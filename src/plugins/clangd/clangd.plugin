@@ -6,6 +6,7 @@ Loader=python3
 Module=clangd_plugin
 Name=Clangd Language Server
 X-Builder-ABI=@PACKAGE_ABI@
+X-Category=lsps
 X-Code-Action-Languages=c,chdr,cpp,cpphdr,objc
 X-Completion-Provider-Languages=c,chdr,cpp,cpphdr,objc
 X-Diagnostic-Provider-Languages=c,chdr,cpp,cpphdr,objc
