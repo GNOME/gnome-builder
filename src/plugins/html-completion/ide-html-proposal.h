@@ -33,7 +33,7 @@ G_DECLARE_FINAL_TYPE (IdeHtmlProposal, ide_html_proposal, IDE, HTML_PROPOSAL, GO
 IdeHtmlProposal     *ide_html_proposal_new         (const gchar         *word,
                                                     IdeHtmlProposalKind  kind);
 const gchar         *ide_html_proposal_get_word    (IdeHtmlProposal     *word);
-IdeSnippet          *ide_html_proposal_get_snippet (IdeHtmlProposal     *self);
+GtkSourceSnippet    *ide_html_proposal_get_snippet (IdeHtmlProposal     *self);
 IdeHtmlProposalKind  ide_html_proposal_get_kind    (IdeHtmlProposal     *self);
 
 G_END_DECLS

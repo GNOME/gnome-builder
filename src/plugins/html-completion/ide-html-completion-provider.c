@@ -1,6 +1,6 @@
 /* ide-html-completion-provider.c
  *
- * Copyright 2014-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2014-2022 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "html-completion"
 
+#include "config.h"
+
 #include "ide-html-completion-provider.h"
 #include "ide-html-proposal.h"
 #include "ide-html-proposals.h"
@@ -30,12 +32,12 @@ struct _IdeHtmlCompletionProvider
   IdeHtmlProposals *proposals;
 };
 
-static void completion_provider_init (IdeCompletionProviderInterface *iface);
+static void completion_provider_init (GtkSourceCompletionProviderInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeHtmlCompletionProvider,
-                         ide_html_completion_provider,
-                         G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, completion_provider_init))
+                               ide_html_completion_provider,
+                               G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_init))
 
 static gboolean
 in_element (const GtkTextIter *iter)
@@ -239,17 +241,17 @@ get_element (const GtkTextIter *iter)
 }
 
 static void
-whereami (IdeCompletionContext  *context,
-          IdeHtmlProposalKind   *kind,
-          gchar                **element)
+whereami (GtkSourceCompletionContext  *context,
+          IdeHtmlProposalKind         *kind,
+          gchar                      **element)
 {
   GtkTextIter begin, end;
 
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (kind != NULL);
   g_assert (element != NULL);
 
-  ide_completion_context_get_bounds (context, &begin, &end);
+  gtk_source_completion_context_get_bounds (context, &begin, &end);
 
   *kind = get_mode (&begin);
   *element = NULL;
@@ -258,7 +260,7 @@ whereami (IdeCompletionContext  *context,
     {
     case IDE_HTML_PROPOSAL_ELEMENT_START:
     case IDE_HTML_PROPOSAL_ELEMENT_END:
-      *element = ide_completion_context_get_word (context);
+      *element = gtk_source_completion_context_get_word (context);
       break;
 
     case IDE_HTML_PROPOSAL_ATTRIBUTE_NAME:
@@ -274,12 +276,22 @@ whereami (IdeCompletionContext  *context,
     }
 }
 
+static gboolean
+is_language (GtkSourceCompletionContext *context,
+             const char                 *language_id)
+{
+  GtkSourceLanguage *language = gtk_source_completion_context_get_language (context);
+
+  return language != NULL &&
+         ide_str_equal0 (language_id, gtk_source_language_get_id (language));
+}
+
 static void
-ide_html_completion_provider_populate_async (IdeCompletionProvider *provider,
-                                             IdeCompletionContext  *context,
-                                             GCancellable          *cancellable,
-                                             GAsyncReadyCallback    callback,
-                                             gpointer               user_data)
+ide_html_completion_provider_populate_async (GtkSourceCompletionProvider *provider,
+                                             GtkSourceCompletionContext  *context,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data)
 {
   IdeHtmlCompletionProvider *self = (IdeHtmlCompletionProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
@@ -288,19 +300,19 @@ ide_html_completion_provider_populate_async (IdeCompletionProvider *provider,
   g_autofree gchar *word = NULL;
   g_autofree gchar *casefold = NULL;
 
-  g_assert (IDE_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_PROVIDER (provider));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_html_completion_provider_populate_async);
 
-  if (ide_completion_context_is_language (context, "css"))
+  if (is_language (context, "css"))
     kind = IDE_HTML_PROPOSAL_CSS_PROPERTY;
   else
     whereami (context, &kind, &element);
 
-  if ((word = ide_completion_context_get_word (context)))
+  if ((word = gtk_source_completion_context_get_word (context)))
     casefold = g_utf8_casefold (word, -1);
 
   if (self->proposals == NULL)
@@ -312,7 +324,7 @@ ide_html_completion_provider_populate_async (IdeCompletionProvider *provider,
 }
 
 static GListModel *
-ide_html_completion_provider_populate_finish (IdeCompletionProvider  *provider,
+ide_html_completion_provider_populate_finish (GtkSourceCompletionProvider  *provider,
                                               GAsyncResult           *result,
                                               GError                **error)
 {
@@ -322,10 +334,10 @@ ide_html_completion_provider_populate_finish (IdeCompletionProvider  *provider,
   return ide_task_propagate_object (IDE_TASK (result), error);
 }
 
-static gboolean
-ide_html_completion_provider_refilter (IdeCompletionProvider *provider,
-                                       IdeCompletionContext  *context,
-                                       GListModel            *proposals)
+static void
+ide_html_completion_provider_refilter (GtkSourceCompletionProvider *provider,
+                                       GtkSourceCompletionContext  *context,
+                                       GListModel                  *proposals)
 {
   IdeHtmlProposalKind kind = 0;
   g_autofree gchar *element = NULL;
@@ -333,126 +345,119 @@ ide_html_completion_provider_refilter (IdeCompletionProvider *provider,
   g_autofree gchar *casefold = NULL;
 
   g_assert (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_HTML_PROPOSALS (proposals));
 
-  if (ide_completion_context_is_language (context, "css"))
+  if (is_language (context, "css"))
     kind = IDE_HTML_PROPOSAL_CSS_PROPERTY;
   else
     whereami (context, &kind, &element);
 
-  if ((word = ide_completion_context_get_word (context)))
+  if ((word = gtk_source_completion_context_get_word (context)))
     casefold = g_utf8_casefold (word, -1);
 
   ide_html_proposals_refilter (IDE_HTML_PROPOSALS (proposals), kind, element, casefold);
-
-  return TRUE;
 }
 
 static void
-ide_html_completion_provider_activate_proposal (IdeCompletionProvider *provider,
-                                                IdeCompletionContext  *context,
-                                                IdeCompletionProposal *proposal,
-                                                const GdkEventKey     *key)
+ide_html_completion_provider_activate (GtkSourceCompletionProvider *provider,
+                                       GtkSourceCompletionContext  *context,
+                                       GtkSourceCompletionProposal *proposal)
 {
-  g_autoptr(IdeSnippet) snippet = NULL;
+  g_autoptr(GtkSourceSnippet) snippet = NULL;
   IdeHtmlProposal *item = (IdeHtmlProposal *)proposal;
   IdeHtmlProposalKind kind;
   GtkTextBuffer *buffer;
-  GtkTextView *view;
+  GtkSourceView *view;
   GtkTextIter begin, end;
 
   g_assert (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_HTML_PROPOSAL (item));
 
   snippet = ide_html_proposal_get_snippet (item);
   kind = ide_html_proposal_get_kind (item);
 
-  buffer = ide_completion_context_get_buffer (context);
-  view = ide_completion_context_get_view (context);
+  buffer = GTK_TEXT_BUFFER (gtk_source_completion_context_get_buffer (context));
+  view = gtk_source_completion_context_get_view (context);
 
   gtk_text_buffer_begin_user_action (buffer);
-  if (ide_completion_context_get_bounds (context, &begin, &end))
+  if (gtk_source_completion_context_get_bounds (context, &begin, &end))
     gtk_text_buffer_delete (buffer, &begin, &end);
 
   if (kind == IDE_HTML_PROPOSAL_ELEMENT_START && gtk_text_iter_get_char (&begin) != '>')
     {
-      g_autoptr(IdeSnippetChunk) chunk1 = ide_snippet_chunk_new ();
-      g_autoptr(IdeSnippetChunk) chunk2 = ide_snippet_chunk_new ();
+      g_autoptr(GtkSourceSnippetChunk) chunk1 = gtk_source_snippet_chunk_new ();
+      g_autoptr(GtkSourceSnippetChunk) chunk2 = gtk_source_snippet_chunk_new ();
 
-      ide_snippet_chunk_set_tab_stop (chunk1, 0);
-      ide_snippet_chunk_set_spec (chunk2, ">");
+      gtk_source_snippet_chunk_set_focus_position (chunk1, 0);
+      gtk_source_snippet_chunk_set_spec (chunk2, ">");
 
-      ide_snippet_add_chunk (snippet, chunk1);
-      ide_snippet_add_chunk (snippet, chunk2);
+      gtk_source_snippet_add_chunk (snippet, chunk1);
+      gtk_source_snippet_add_chunk (snippet, chunk2);
     }
 
   if (kind == IDE_HTML_PROPOSAL_CSS_PROPERTY)
     {
-      g_autoptr(IdeSnippetChunk) chunk1 = ide_snippet_chunk_new ();
-      g_autoptr(IdeSnippetChunk) chunk2 = ide_snippet_chunk_new ();
-      g_autoptr(IdeSnippetChunk) chunk3 = ide_snippet_chunk_new ();
+      g_autoptr(GtkSourceSnippetChunk) chunk1 = gtk_source_snippet_chunk_new ();
+      g_autoptr(GtkSourceSnippetChunk) chunk2 = gtk_source_snippet_chunk_new ();
+      g_autoptr(GtkSourceSnippetChunk) chunk3 = gtk_source_snippet_chunk_new ();
 
-      ide_snippet_chunk_set_spec (chunk1, ": ");
-      ide_snippet_chunk_set_tab_stop (chunk2, 0);
-      ide_snippet_chunk_set_spec (chunk3, ";");
+      gtk_source_snippet_chunk_set_spec (chunk1, ": ");
+      gtk_source_snippet_chunk_set_focus_position (chunk2, 0);
+      gtk_source_snippet_chunk_set_spec (chunk3, ";");
 
-      ide_snippet_add_chunk (snippet, chunk1);
-      ide_snippet_add_chunk (snippet, chunk2);
-      ide_snippet_add_chunk (snippet, chunk3);
+      gtk_source_snippet_add_chunk (snippet, chunk1);
+      gtk_source_snippet_add_chunk (snippet, chunk2);
+      gtk_source_snippet_add_chunk (snippet, chunk3);
     }
 
-  ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
+  gtk_source_view_push_snippet (view, snippet, &begin);
 
   gtk_text_buffer_end_user_action (buffer);
 }
 
 static void
-ide_html_completion_provider_display_proposal (IdeCompletionProvider   *provider,
-                                               IdeCompletionListBoxRow *row,
-                                               IdeCompletionContext    *context,
-                                               const gchar             *typed_text,
-                                               IdeCompletionProposal   *proposal)
+ide_html_completion_provider_display (GtkSourceCompletionProvider *provider,
+                                      GtkSourceCompletionContext  *context,
+                                      GtkSourceCompletionProposal *proposal,
+                                      GtkSourceCompletionCell     *cell)
 {
-  g_autofree gchar *markup = NULL;
-  const gchar *word;
-  IdeHtmlProposalKind kind;
+  GtkSourceCompletionColumn column;
 
   g_assert (IDE_IS_HTML_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_HTML_PROPOSAL (proposal));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CELL (cell));
 
-  word = ide_html_proposal_get_word (IDE_HTML_PROPOSAL (proposal));
-  markup = ide_completion_fuzzy_highlight (word, typed_text);
-  kind = ide_html_proposal_get_kind (IDE_HTML_PROPOSAL (proposal));
+  column = gtk_source_completion_cell_get_column (cell);
 
-  switch (kind)
+  if (column == GTK_SOURCE_COMPLETION_COLUMN_ICON)
     {
-    case IDE_HTML_PROPOSAL_CSS_PROPERTY:
-      /* probably could use something css specific */
-      ide_completion_list_box_row_set_icon_name (row, "ui-property-symbolic");
-      break;
+      IdeHtmlProposalKind kind = ide_html_proposal_get_kind (IDE_HTML_PROPOSAL (proposal));
 
-    case IDE_HTML_PROPOSAL_ELEMENT_START:
-    case IDE_HTML_PROPOSAL_ELEMENT_END:
-    case IDE_HTML_PROPOSAL_ATTRIBUTE_NAME:
-    case IDE_HTML_PROPOSAL_ATTRIBUTE_VALUE:
-    case IDE_HTML_PROPOSAL_NONE:
-    default:
-      ide_completion_list_box_row_set_icon_name (row, NULL);
-      break;
+      if (kind == IDE_HTML_PROPOSAL_CSS_PROPERTY)
+        gtk_source_completion_cell_set_icon_name (cell, "ui-property-symbolic");
+      else
+        gtk_source_completion_cell_set_icon_name (cell, NULL);
     }
+  else if (column == GTK_SOURCE_COMPLETION_COLUMN_TYPED_TEXT)
+    {
+      g_autofree char *typed_text = gtk_source_completion_context_get_word (context);
+      const gchar *word = ide_html_proposal_get_word (IDE_HTML_PROPOSAL (proposal));
+      g_autoptr(PangoAttrList) attrs = gtk_source_completion_fuzzy_highlight (word, typed_text);
 
-  ide_completion_list_box_row_set_left (row, NULL);
-  ide_completion_list_box_row_set_right (row, NULL);
-  ide_completion_list_box_row_set_center_markup (row, markup);
+      gtk_source_completion_cell_set_text_with_attributes (cell, word, attrs);
+    }
+  else
+    {
+      gtk_source_completion_cell_set_text (cell, NULL);
+    }
 }
 
 static gint
-ide_html_completion_provider_get_priority (IdeCompletionProvider *provider,
-                                           IdeCompletionContext  *context)
+ide_html_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
+                                           GtkSourceCompletionContext  *context)
 {
   return 200;
 }
@@ -467,7 +472,7 @@ in_comment (const GtkTextIter *iter)
 }
 
 static gboolean
-ide_html_completion_provider_is_trigger (IdeCompletionProvider *provider,
+ide_html_completion_provider_is_trigger (GtkSourceCompletionProvider *provider,
                                          const GtkTextIter     *iter,
                                          gunichar               ch)
 {
@@ -510,13 +515,13 @@ ide_html_completion_provider_init (IdeHtmlCompletionProvider *self)
 }
 
 static void
-completion_provider_init (IdeCompletionProviderInterface *iface)
+completion_provider_init (GtkSourceCompletionProviderInterface *iface)
 {
   iface->populate_async = ide_html_completion_provider_populate_async;
   iface->populate_finish = ide_html_completion_provider_populate_finish;
   iface->refilter = ide_html_completion_provider_refilter;
-  iface->activate_proposal = ide_html_completion_provider_activate_proposal;
-  iface->display_proposal = ide_html_completion_provider_display_proposal;
+  iface->activate = ide_html_completion_provider_activate;
+  iface->display = ide_html_completion_provider_display;
   iface->get_priority = ide_html_completion_provider_get_priority;
   iface->is_trigger = ide_html_completion_provider_is_trigger;
 }
