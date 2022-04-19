@@ -6,6 +6,7 @@ Loader=python3
 Module=ts_language_server_plugin
 Name=Typescript Language Server Plugin
 X-Builder-ABI=@PACKAGE_ABI@
+X-Category=lsps
 X-Code-Action-Languages=js,jsx,typescript,typescript-jsx
 X-Completion-Provider-Languages=js,jsx,typescript,typescript-jsx
 X-Diagnostic-Provider-Languages=js,jsx,typescript,typescript-jsx

@@ -6,6 +6,7 @@ Loader=python3
 Module=intelephense
 Author=Peter Maatman <blackwolf12333@gmail.com>
 X-Builder-ABI=@PACKAGE_ABI@
+X-Category=lsps
 X-Completion-Provider-Languages=php
 X-Symbol-Resolver-Languages=php
 X-Diagnostic-Provider-Languages=php

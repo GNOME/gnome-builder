@@ -7,3 +7,4 @@ Hidden=false
 Embedded=_gb_clang_format_register_types
 Module=clang-format
 Name=ClangFormat
+X-Category=editing

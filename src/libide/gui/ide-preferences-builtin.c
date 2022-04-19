@@ -688,6 +688,7 @@ static const IdePreferenceGroupEntry groups[] = {
   { "plugins",    "debuggers",             70, N_("Debuggers") },
   { "plugins",    "templates",             80, N_("Templates") },
   { "plugins",    "editing",               90, N_("Editing & Formatting") },
+  { "plugins",    "keybindings",          100, N_("Keyboard Shortcuts") },
   { "plugins",    "other",                500, N_("Additional") },
 
   { "keyboard",   "keybindings",            0, N_("Keyboard Shortcuts") },

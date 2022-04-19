@@ -8,6 +8,7 @@ Builtin=true
 Loader=python3
 Module=gvls_plugin
 X-Builder-ABI=@PACKAGE_ABI@
+X-Category=lsps
 X-Completion-Provider-Languages=vala
 X-Diagnostic-Provider-Languages=vala
 X-Diagnostic-Provider-Languages-Priority=200
