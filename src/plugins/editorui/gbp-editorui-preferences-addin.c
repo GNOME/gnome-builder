@@ -291,10 +291,15 @@ gbp_editorui_preferences_addin_load (IdePreferencesAddin  *addin,
   g_assert (GBP_IS_EDITORUI_PREFERENCES_ADDIN (self));
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
 
-  ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
-  ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
-  ide_preferences_window_add_item (window, "appearance", "preview", "scheme", 0,
-                                   ide_preferences_builtin_add_schemes, window, NULL);
+  if (ide_preferences_window_get_mode (window) == IDE_PREFERENCES_MODE_APPLICATION)
+    {
+      ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+      ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
+      ide_preferences_window_add_item (window, "appearance", "preview", "scheme", 0,
+                                       ide_preferences_builtin_add_schemes, window, NULL);
+    }
+
+  /* TODO: Apply prefix for project overrides! */
   gbp_editorui_preferences_addin_add_languages (window);
 
   IDE_EXIT;
