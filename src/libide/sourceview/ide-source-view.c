@@ -25,25 +25,7 @@
 #include <glib/gi18n.h>
 #include <math.h>
 
-#include <libide-code.h>
-#include <libide-gtk.h>
-#include <libide-plugins.h>
-
-#include "ide-source-view.h"
-
-struct _IdeSourceView
-{
-  GtkSourceView            source_view;
-
-  IdeBuffer               *buffer;
-  GtkCssProvider          *css_provider;
-  PangoFontDescription    *font_desc;
-  IdeJoinedMenu           *joined_menu;
-  IdeExtensionSetAdapter  *completion_providers;
-
-  int                      font_scale;
-  double                   line_height;
-};
+#include "ide-source-view-private.h"
 
 G_DEFINE_TYPE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
 
@@ -265,77 +247,17 @@ ide_source_view_buffer_request_scroll_to_insert_cb (IdeSourceView *self,
 }
 
 static void
-ide_source_view_completion_provider_added_cb (IdeExtensionSetAdapter *adapter,
-                                              PeasPluginInfo         *plugin_info,
-                                              PeasExtension          *exten,
-                                              gpointer                user_data)
-{
-  GtkSourceCompletionProvider *provider = (GtkSourceCompletionProvider *)exten;
-  IdeSourceView *self = user_data;
-  GtkSourceCompletion *completion;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
-  g_assert (plugin_info != NULL);
-  g_assert (GTK_SOURCE_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  g_debug ("Adding completion provider %s from module %s",
-           G_OBJECT_TYPE_NAME (provider),
-           peas_plugin_info_get_module_name (plugin_info));
-
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
-  gtk_source_completion_add_provider (completion, provider);
-
-  IDE_EXIT;
-}
-
-static void
-ide_source_view_completion_provider_removed_cb (IdeExtensionSetAdapter *adapter,
-                                                PeasPluginInfo         *plugin_info,
-                                                PeasExtension          *exten,
-                                                gpointer                user_data)
-{
-  GtkSourceCompletionProvider *provider = (GtkSourceCompletionProvider *)exten;
-  IdeSourceView *self = user_data;
-  GtkSourceCompletion *completion;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
-  g_assert (plugin_info != NULL);
-  g_assert (GTK_SOURCE_IS_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_SOURCE_VIEW (self));
-
-  g_debug ("Removing completion provider %s from module %s\n",
-           G_OBJECT_TYPE_NAME (provider),
-           peas_plugin_info_get_module_name (plugin_info));
-
-  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self));
-  gtk_source_completion_remove_provider (completion, provider);
-
-  IDE_EXIT;
-}
-
-static void
 ide_source_view_buffer_notify_language_cb (IdeSourceView *self,
                                            GParamSpec    *pspec,
                                            IdeBuffer     *buffer)
 {
-  GtkSourceLanguage *language;
-  const char *language_id = NULL;
-
   IDE_ENTRY;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
-    language_id = gtk_source_language_get_id (language);
-
-  if (self->completion_providers != NULL)
-    ide_extension_set_adapter_set_value (self->completion_providers, language_id);
+  _ide_source_view_addins_set_language (self,
+                                        gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer)));
 
   IDE_EXIT;
 }
@@ -345,17 +267,12 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                                 IdeBuffer     *buffer)
 {
   GtkSourceLanguage *language;
-  const char *language_id = NULL;
-  IdeObjectBox *parent;
 
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (self->buffer == NULL);
 
   g_set_object (&self->buffer, buffer);
-
-  /* Get a handle to the buffers "Box" on the object tree */
-  parent = ide_object_box_from_object (G_OBJECT (buffer));
 
   /* There are cases where we need to force a scroll to insert
    * from just an IdeBuffer pointer. Respond to that appropriately
@@ -375,27 +292,10 @@ ide_source_view_connect_buffer (IdeSourceView *self,
                            G_CALLBACK (ide_source_view_buffer_notify_language_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  if ((language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer))))
-    language_id = gtk_source_language_get_id (language);
 
-  /* Create our completion providers and attach them */
-  self->completion_providers =
-    ide_extension_set_adapter_new (IDE_OBJECT (parent),
-                                   peas_engine_get_default (),
-                                   GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
-                                   "Completion-Provider-Languages",
-                                   language_id);
-  g_signal_connect (self->completion_providers,
-                    "extension-added",
-                    G_CALLBACK (ide_source_view_completion_provider_added_cb),
-                    self);
-  g_signal_connect (self->completion_providers,
-                    "extension-removed",
-                    G_CALLBACK (ide_source_view_completion_provider_removed_cb),
-                    self);
-  ide_extension_set_adapter_foreach (self->completion_providers,
-                                     ide_source_view_completion_provider_added_cb,
-                                     self);
+  /* Load addins immediately */
+  language = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (buffer));
+  _ide_source_view_addins_init (self, language);
 }
 
 static void
@@ -406,7 +306,8 @@ ide_source_view_disconnect_buffer (IdeSourceView *self)
   if (self->buffer == NULL)
     return;
 
-  g_clear_object (&self->completion_providers);
+  _ide_source_view_addins_shutdown (self);
+
   g_clear_object (&self->buffer);
 }
 

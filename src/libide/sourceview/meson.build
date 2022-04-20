@@ -10,7 +10,7 @@ libide_sourceview_generated_headers = []
 #
 
 libide_sourceview_private_headers = [
-  'ide-text-util.h',
+  'ide-source-view-private.h',
 ]
 
 libide_sourceview_public_headers = [
@@ -32,6 +32,7 @@ install_headers(libide_sourceview_public_headers, subdir: libide_sourceview_head
 #
 
 libide_sourceview_private_sources = [
+  'ide-source-view-addins.c',
 ]
 
 libide_sourceview_public_sources = [
