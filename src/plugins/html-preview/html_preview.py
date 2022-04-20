@@ -362,7 +362,8 @@ class HtmlPreviewPage(Ide.Page):
         self.document = document
 
         self.webview = WebKit2.WebView()
-        self.webview.props.expand = True
+        self.webview.props.hexpand = True
+        self.webview.props.vexpand = True
         self.webview.connect('decide-policy', self.on_decide_policy_cb)
         self.add(self.webview)
         self.webview.show()
