@@ -4,7 +4,6 @@ gnome_builder_flatpak_deps = [
   libgiounix_dep,
   libflatpak_dep,
   libostree_dep,
-  libsoup_dep,
 ]
 
 ipc_flatpak_service_src = gnome.gdbus_codegen('ipc-flatpak-service',
