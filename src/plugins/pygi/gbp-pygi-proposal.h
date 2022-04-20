@@ -28,9 +28,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpPygiProposal, gbp_pygi_proposal, GBP, PYGI_PROPOSAL, GObject)
 
-GbpPygiProposal *gbp_pygi_proposal_new     (const char                 *name);
-void             gbp_pygi_proposal_display (GbpPygiProposal            *self,
-                                            GtkSourceCompletionContext *context,
-                                            GtkSourceCompletionCell    *cell);
+GbpPygiProposal *gbp_pygi_proposal_new      (const char                 *name);
+const char      *gbp_pygi_proposal_get_name (GbpPygiProposal            *self);
+void             gbp_pygi_proposal_display  (GbpPygiProposal            *self,
+                                             GtkSourceCompletionContext *context,
+                                             GtkSourceCompletionCell    *cell);
 
 G_END_DECLS

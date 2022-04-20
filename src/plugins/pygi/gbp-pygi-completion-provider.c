@@ -106,10 +106,23 @@ gbp_pygi_completion_provider_activate (GtkSourceCompletionProvider *provider,
                                        GtkSourceCompletionContext  *context,
                                        GtkSourceCompletionProposal *proposal)
 {
+  GtkSourceBuffer *buffer;
+  GtkTextIter begin, end;
+
   g_assert (GBP_IS_PYGI_COMPLETION_PROVIDER (provider));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (GBP_IS_PYGI_PROPOSAL (proposal));
 
+  buffer = gtk_source_completion_context_get_buffer (context);
+
+  gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (buffer));
+  if (gtk_source_completion_context_get_bounds (context, &begin, &end))
+    gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
+  gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer),
+                          &begin,
+                          gbp_pygi_proposal_get_name (GBP_PYGI_PROPOSAL (proposal)),
+                          -1);
+  gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
 }
 
 static void
