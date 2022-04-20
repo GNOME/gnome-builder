@@ -3,6 +3,7 @@
   <template class="GbpLsPage" parent="IdePage">
     <child>
       <object class="GtkScrolledWindow" id="scroller">
+        <property name="hexpand">true</property>
         <property name="vexpand">true</property>
         <property name="visible">true</property>
         <child>

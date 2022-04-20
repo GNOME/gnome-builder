@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-io.h>
 
 #include "gbp-ls-model.h"
@@ -86,14 +87,12 @@ gbp_ls_page_row_activated_cb (GbpLsPage         *self,
         {
           IdeWorkbench *workbench = ide_widget_get_workbench (GTK_WIDGET (self));
 
-          ide_workbench_open_async (workbench,
-                                    file,
-                                    NULL,
+          ide_workbench_open_async (workbench, file, NULL,
                                     IDE_BUFFER_OPEN_FLAGS_NONE,
-                                    NULL, NULL, NULL);
+                                    NULL, NULL, NULL, NULL);
 
           if (self->close_on_activate)
-            dzl_gtk_widget_action (GTK_WIDGET (self), "frame", "close-page", NULL);
+            panel_widget_close (PANEL_WIDGET (self));
         }
     }
 }
@@ -113,7 +112,7 @@ modified_cell_data_func (GtkCellLayout   *cell_layout,
                       -1);
 
   if (when != NULL)
-    format = dzl_g_date_time_format_for_display (when);
+    format = g_date_time_format (when, "%X %x");
 
   g_object_set (cell, "text", format, NULL);
 }
@@ -133,31 +132,6 @@ size_cell_data_func (GtkCellLayout   *cell_layout,
                       -1);
   format = g_format_size (size);
   g_object_set (cell, "text", format, NULL);
-}
-
-static void
-gbp_ls_page_style_updated (GtkWidget *widget)
-{
-  GbpLsPage *self = (GbpLsPage *)widget;
-  GtkStyleContext *style_context;
-  GtkStateFlags state;
-  GdkRGBA bg, fg;
-
-  g_assert (GBP_IS_LS_PAGE (self));
-
-  if (GTK_WIDGET_CLASS (gbp_ls_page_parent_class)->style_updated)
-    GTK_WIDGET_CLASS (gbp_ls_page_parent_class)->style_updated (widget);
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self->tree_view));
-  state = gtk_style_context_get_state (style_context);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_style_context_get_color (style_context, state, &fg);
-  gtk_style_context_get_background_color (style_context, state, &bg);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  ide_page_set_primary_color_bg (IDE_PAGE (self), &bg);
-  ide_page_set_primary_color_fg (IDE_PAGE (self), &fg);
 }
 
 static void
@@ -227,8 +201,6 @@ gbp_ls_page_class_init (GbpLsPageClass *klass)
   object_class->get_property = gbp_ls_page_get_property;
   object_class->set_property = gbp_ls_page_set_property;
 
-  widget_class->style_updated = gbp_ls_page_style_updated;
-
   properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory",
                          "Directory",
@@ -259,7 +231,7 @@ gbp_ls_page_init (GbpLsPage *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  ide_page_set_icon_name (IDE_PAGE (self), "folder-symbolic");
+  panel_widget_set_icon_name (PANEL_WIDGET (self), "folder-symbolic");
 
   g_signal_connect_object (self->tree_view,
                            "row-activated",
@@ -389,7 +361,7 @@ gbp_ls_page_set_directory (GbpLsPage *self,
     name = ide_path_collapse (g_file_peek_path (directory));
 
   title = g_strdup_printf (_("%s — Directory"), name);
-  ide_page_set_title (IDE_PAGE (self), title);
+  panel_widget_set_title (PANEL_WIDGET (self), title);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
 }
