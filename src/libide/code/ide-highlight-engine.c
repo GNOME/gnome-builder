@@ -172,9 +172,8 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
   style_name = tag_name;
 
   /*
-   * Check if this is a private tag.A tag is private if it starts with
-   * PRIVATE_TAG_PREFIX "Builder".
-   * ex: Builder:c:boolean
+   * Check if this is a private tag. A tag is private if it starts with
+   * PRIVATE_TAG_PREFIX "Builder" such as "Builder:c:boolean".
    * If the tag is private extract the original style name by moving the string
    * strlen (PRIVATE_TAG_PREFIX) + 1 (the colon) characters.
    */
@@ -192,6 +191,9 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
             fallback = NULL;
         }
     }
+
+  if (style == NULL)
+    return;
 
   g_object_get (style,
                 "background", &background,
