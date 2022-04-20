@@ -711,8 +711,8 @@ static const IdePreferenceItemEntry items[] = {
   { "appearance", "style", "style-variant", 0, handle_style_variant },
 
   { "appearance", "interface", "use-tabbar", 0, ide_preferences_window_toggle,
-    N_("Use Tabs"),
-    N_("Switch pages using a tab bar"),
+    N_("Navigate with Tab Bar"),
+    N_("Switch documents using a tabbed interface"),
     "org.gnome.builder.editor", NULL, "use-tabbar" },
 
   { "projects", "workspace", "restore", 0, ide_preferences_window_toggle,
