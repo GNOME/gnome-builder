@@ -78,7 +78,7 @@ static void
 gbp_ls_tree_view_class_init (GbpLsTreeViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GtkBindingSet *binding_set = gtk_binding_set_by_class (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->finalize = gbp_ls_tree_view_finalize;
 
@@ -87,12 +87,10 @@ gbp_ls_tree_view_class_init (GbpLsTreeViewClass *klass)
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                 G_CALLBACK (gbp_ls_tree_view_go_up),
-                                NULL, NULL,
-                                g_cclosure_marshal_VOID__VOID,
-                                G_TYPE_NONE, 0);
+                                NULL, NULL, NULL, G_TYPE_NONE, 0);
 
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Up, GDK_MOD1_MASK, "go-up", 0);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, 0, "go-up", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_Up, GDK_ALT_MASK, "go-up", 0);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_BackSpace, 0, "go-up", 0);
 }
 
 static void

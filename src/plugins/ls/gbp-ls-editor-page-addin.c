@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libide-gtk.h>
 #include <libide-editor.h>
 
 #include "gbp-ls-editor-page-addin.h"
@@ -40,17 +40,19 @@ open_directory_cb (GSimpleAction *action,
 {
   IdeEditorPage *editor = user_data;
   g_autoptr(GFile) directory = NULL;
-  GtkWidget *stack;
   GbpLsPage *page;
+  IdeBuffer *buffer;
+  IdeFrame *frame;
   GFile *file;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_EDITOR_PAGE (editor));
 
-  file = ide_editor_page_get_file (editor);
+  buffer = ide_editor_page_get_buffer (editor);
+  file = ide_buffer_get_file (buffer);
   directory = g_file_get_parent (file);
 
-  stack = gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_STACK);
+  frame = IDE_FRAME (gtk_widget_get_ancestor (GTK_WIDGET (editor), IDE_TYPE_FRAME));
   /* When used from an editor view right click menu, the folder browser acts like vim's directory
    * listing, where it closes once a file is choosen.
    */
@@ -58,8 +60,9 @@ open_directory_cb (GSimpleAction *action,
                        "close-on-activate", TRUE,
                        "visible", TRUE,
                        NULL);
-  gtk_container_add (GTK_CONTAINER (stack), GTK_WIDGET (page));
+  panel_frame_add (PANEL_FRAME (frame), PANEL_WIDGET (page));
   gbp_ls_page_set_directory (page, directory);
+  panel_widget_raise (PANEL_WIDGET (page));
 }
 
 static void
@@ -68,11 +71,13 @@ open_in_files_cb (GSimpleAction *action,
                   gpointer       user_data)
 {
   IdeEditorPage *editor = user_data;
+  IdeBuffer *buffer;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_EDITOR_PAGE (editor));
 
-  dzl_file_manager_show (ide_editor_page_get_file (editor), NULL);
+  buffer = ide_editor_page_get_buffer (editor);
+  ide_file_manager_show (ide_buffer_get_file (buffer), NULL);
 }
 
 static void
