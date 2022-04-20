@@ -38,6 +38,7 @@
 
 #include "ide-application.h"
 #include "ide-gui-global.h"
+#include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
 #include "ide-workbench-addin.h"
 #include "ide-workbench-private.h"
@@ -126,12 +127,15 @@ static void ide_workbench_action_reload_all    (IdeWorkbench *self,
                                                 GVariant     *param);
 static void ide_workbench_action_global_search (IdeWorkbench *self,
                                                 GVariant     *param);
+static void ide_workbench_action_configure     (IdeWorkbench *self,
+                                                GVariant     *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
   { "close", ide_workbench_action_close },
   { "open", ide_workbench_action_open },
   { "reload-files", ide_workbench_action_reload_all },
   { "global-search", ide_workbench_action_global_search },
+  { "configure", ide_workbench_action_configure },
   { "-inspector", ide_workbench_action_inspector },
   { "-object-tree", ide_workbench_action_object_tree },
   { "-dump-tasks", ide_workbench_action_dump_tasks },
@@ -495,6 +499,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 static void
 ide_workbench_init (IdeWorkbench *self)
 {
+  ide_workbench_set_action_enabled (self, "configure", FALSE);
 }
 
 static void
@@ -999,6 +1004,9 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
    */
   build_manager = ide_build_manager_from_context (self->context);
   _ide_build_manager_start (build_manager);
+
+  /* Enable actions that are available to projects */
+  ide_workbench_set_action_enabled (self, "configure", TRUE);
 
   ide_task_return_boolean (task, TRUE);
 }
@@ -2606,4 +2614,41 @@ ide_workbench_resolve_file_finish (IdeWorkbench  *self,
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (g_steal_pointer (&ret));
+}
+
+static void
+ide_workbench_action_configure (IdeWorkbench *self,
+                                GVariant     *param)
+{
+  GtkWindow *window;
+  GList *windows;
+  gboolean found = FALSE;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  windows = gtk_window_group_list_windows (GTK_WINDOW_GROUP (self));
+
+  for (const GList *iter = windows; iter; iter = iter->next)
+    {
+      window = iter->data;
+
+      if (IDE_IS_PREFERENCES_WINDOW (window) &&
+          ide_preferences_window_get_mode (IDE_PREFERENCES_WINDOW (window)) == IDE_PREFERENCES_MODE_PROJECT)
+        {
+          gtk_window_present (window);
+          found = TRUE;
+          break;
+        }
+    }
+
+  g_list_free (windows);
+
+  if (!found)
+    {
+      window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
+                             "mode", IDE_PREFERENCES_MODE_PROJECT,
+                             NULL);
+      gtk_window_group_add_window (GTK_WINDOW_GROUP (self), window);
+      gtk_window_present (window);
+    }
 }
