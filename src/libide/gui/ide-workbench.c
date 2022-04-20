@@ -2640,8 +2640,17 @@ ide_workbench_action_configure (IdeWorkbench *self,
 
   if (!found)
     {
+      g_autofree char *title = NULL;
+      g_autofree char *window_title = NULL;
+
+      title = ide_context_dup_title (self->context);
+      window_title = g_strdup_printf (_("Builder — %s"), title);
+
       window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
                              "mode", IDE_PREFERENCES_MODE_PROJECT,
+                             "default-width", 1050,
+                             "default-height", 700,
+                             "title", window_title,
                              NULL);
       gtk_window_group_add_window (GTK_WINDOW_GROUP (self), window);
       gtk_window_present (window);
