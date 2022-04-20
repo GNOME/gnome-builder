@@ -156,8 +156,8 @@ class PhpLspFormatter(Ide.LspFormatter):
         PhpService.bind_client(self)
 
 class PhpLspDiagnosticProvider(Ide.LspDiagnosticProvider):
-   def do_load(self):
-       PhpService.bind_client(self)
+    def do_load(self):
+        PhpService.bind_client(self)
 
 class PhpLspCompletionProvider(Ide.LspCompletionProvider):
     def do_load(self):
