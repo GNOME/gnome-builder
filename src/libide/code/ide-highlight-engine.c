@@ -33,8 +33,7 @@
 #include "ide-highlight-index.h"
 #include "ide-highlighter.h"
 
-#define HIGHLIGHT_QUANTA_USEC 5000
-#define PRIVATE_TAG_PREFIX    "gb-private-tag"
+#define PRIVATE_TAG_PREFIX "Builder"
 
 struct _IdeHighlightEngine
 {
@@ -56,7 +55,7 @@ struct _IdeHighlightEngine
 
   gint64               quanta_expiration;
 
-  guint                work_timeout;
+  gsize                work_scheduled;
 
   guint                enabled : 1;
 };
@@ -317,7 +316,8 @@ ide_highlight_engine_apply_style (const GtkTextIter *begin,
 }
 
 static gboolean
-ide_highlight_engine_tick (IdeHighlightEngine *self)
+ide_highlight_engine_tick (IdeHighlightEngine *self,
+                           gint64              deadline)
 {
   g_autoptr(GtkTextBuffer) buffer = NULL;
   GtkTextIter iter;
@@ -336,7 +336,7 @@ ide_highlight_engine_tick (IdeHighlightEngine *self)
   if (buffer == NULL)
     return G_SOURCE_REMOVE;
 
-  self->quanta_expiration = g_get_monotonic_time () + HIGHLIGHT_QUANTA_USEC;
+  self->quanta_expiration = deadline;
 
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_begin, self->invalid_begin);
   gtk_text_buffer_get_iter_at_mark (buffer, &invalid_end, self->invalid_end);
@@ -383,19 +383,20 @@ up_to_date:
 }
 
 static gboolean
-ide_highlight_engine_work_timeout_handler (gpointer data)
+ide_highlight_engine_worker (gint64   deadline,
+                             gpointer user_data)
 {
-  IdeHighlightEngine *self = data;
+  IdeHighlightEngine *self = user_data;
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
   if (self->enabled)
     {
-      if (ide_highlight_engine_tick (self))
+      if (ide_highlight_engine_tick (self, deadline))
         return G_SOURCE_CONTINUE;
     }
 
-  self->work_timeout = 0;
+  self->work_scheduled = 0;
 
   return G_SOURCE_REMOVE;
 }
@@ -408,22 +409,10 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
   buffer = g_weak_ref_get (&self->buffer_wref);
-  if (self->highlighter == NULL || buffer == NULL || self->work_timeout != 0)
+  if (self->highlighter == NULL || buffer == NULL || self->work_scheduled != 0)
     return;
 
-  /*
-   * NOTE: It would be really nice if we could use the GdkFrameClock here to
-   *       drive the next update instead of a timeout. It's possible that our
-   *       callback could get scheduled right before the frame processing would
-   *       begin. However, since that gets driven by something like a Wayland
-   *       callback, it won't yet be scheduled. So instead our function gets
-   *       called and we potentially cause a frame to drop.
-   */
-
-  self->work_timeout = g_idle_add_full (G_PRIORITY_LOW + 1,
-                                        ide_highlight_engine_work_timeout_handler,
-                                        self,
-                                        NULL);
+  self->work_scheduled = gtk_source_scheduler_add (ide_highlight_engine_worker, self);
 }
 
 /**
@@ -503,7 +492,7 @@ ide_highlight_engine_reload (IdeHighlightEngine *self)
 
   g_assert (IDE_IS_HIGHLIGHT_ENGINE (self));
 
-  g_clear_handle_id (&self->work_timeout, g_source_remove);
+  gtk_source_scheduler_clear (&self->work_scheduled);
 
   buffer = g_weak_ref_get (&self->buffer_wref);
   if (buffer == NULL)
@@ -737,7 +726,7 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
 
   text_buffer = g_weak_ref_get (&self->buffer_wref);
 
-  g_clear_handle_id (&self->work_timeout, g_source_remove);
+  gtk_source_scheduler_clear (&self->work_scheduled);
 
   if (text_buffer != NULL)
     {
