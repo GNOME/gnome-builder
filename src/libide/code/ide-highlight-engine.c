@@ -173,8 +173,8 @@ sync_tag_style (GtkSourceStyleScheme *style_scheme,
 
   /*
    * Check if this is a private tag.A tag is private if it starts with
-   * PRIVATE_TAG_PREFIX "gb-private-tag".
-   * ex: gb-private-tag:c:boolean
+   * PRIVATE_TAG_PREFIX "Builder".
+   * ex: Builder:c:boolean
    * If the tag is private extract the original style name by moving the string
    * strlen (PRIVATE_TAG_PREFIX) + 1 (the colon) characters.
    */
@@ -268,7 +268,7 @@ get_tag_from_style (IdeHighlightEngine *self,
     return NULL;
 
   /*
-   * If is private tag prepend the PRIVATE_TAG_PREFIX (gb-private-tag)
+   * If is private tag prepend the PRIVATE_TAG_PREFIX (Builder)
    * to the string.This is used because tag name is the key used
    * for saving tags in GtkTextTagTable and we dont want conflicts between
    * public and private tags.
