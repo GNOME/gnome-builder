@@ -865,7 +865,7 @@ extract_metadata (GbpMesonBuildSystem *self,
         }
     }
 
-  regex = g_regex_new ("^project\\((.*)\\)", G_REGEX_DOTALL | G_REGEX_UNGREEDY, 0, NULL);
+  regex = g_regex_new ("^project\\((.*)\\)", G_REGEX_DOTALL | G_REGEX_MULTILINE | G_REGEX_UNGREEDY, 0, NULL);
   g_regex_match (regex, contents, 0, &match_info);
   while (g_match_info_matches (match_info))
     {
