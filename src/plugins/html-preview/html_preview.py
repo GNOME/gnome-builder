@@ -30,7 +30,6 @@ import sys
 import subprocess
 import threading
 
-from gi.repository import Dazzle
 from gi.repository import GLib
 from gi.repository import Gio
 from gi.repository import Gtk
@@ -213,7 +212,8 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorPageAddin):
         self.sphinx_basedir = None
         self.sphinx_builddir = None
 
-        group = view.get_action_group('editor-page')
+        group = Gio.SimpleActionGroup()
+        view.insert_action_group('html-preview', group)
 
         self.action = Gio.SimpleAction(name='preview-as-html', enabled=True)
         self.activate_handler = self.action.connect('activate', self.preview_activated)
@@ -225,18 +225,9 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorPageAddin):
 
         self.do_language_changed(language_id)
 
-        # Add a shortcut for activation inside the editor
-        controller = Dazzle.ShortcutController.find(view)
-        controller.add_command_action('org.gnome.builder.html-preview.preview',
-                                      '<Control><Alt>p',
-                                      Dazzle.ShortcutPhase.CAPTURE,
-                                      'editor-page.preview-as-html')
-
     def do_unload(self, view):
+        view.insert_action_group('html-preview', None)
         self.action.disconnect(self.activate_handler)
-
-        group = view.get_action_group('editor-page')
-        group.remove_action('preview-as-html')
 
         self.action = None
         self.view = None
@@ -296,15 +287,12 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorPageAddin):
                                    self.sphinx_builddir,
                                    visible=True)
 
-        column = view.get_ancestor(Ide.GridColumn)
-        grid = column.get_ancestor(Ide.Grid)
-        index = grid.child_get_property(column, 'index')
+        position = view.get_position()
+        _, column = view.get_column()
+        position.set_column(column + 1)
 
-        # If we are past first stack, use the 0 column stack
-        # otherwise create or reuse a stack to the right.
-        index += -1 if index > 0 else 1
-        column = grid.get_nth_column(index)
-        column.add(web_view)
+        workspace = view.get_ancestor(Ide.Workspace)
+        workspace.add_page(web_view, position)
 
         self.action.set_enabled(False)
         web_view.connect('destroy', self.web_view_destroyed)
