@@ -53,6 +53,9 @@ void                        ide_source_view_set_font_desc       (IdeSourceView  
 IDE_AVAILABLE_IN_ALL
 const PangoFontDescription *ide_source_view_get_font_desc       (IdeSourceView             *self);
 IDE_AVAILABLE_IN_ALL
+void                        ide_source_view_prepend_menu        (IdeSourceView             *self,
+                                                                 GMenuModel                *menu_model);
+IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_append_menu         (IdeSourceView             *self,
                                                                  GMenuModel                *menu_model);
 IDE_AVAILABLE_IN_ALL

@@ -778,6 +778,16 @@ ide_source_view_get_zoom_level (IdeSourceView *self)
 }
 
 void
+ide_source_view_prepend_menu (IdeSourceView *self,
+                              GMenuModel    *menu_model)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (G_IS_MENU_MODEL (menu_model));
+
+  ide_joined_menu_prepend_menu (self->joined_menu, menu_model);
+}
+
+void
 ide_source_view_append_menu (IdeSourceView *self,
                              GMenuModel    *menu_model)
 {
