@@ -378,6 +378,10 @@ ide_editor_page_init (IdeEditorPage *self)
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-editor-page-menu");
   panel_widget_set_menu_model (PANEL_WIDGET (self), G_MENU_MODEL (menu));
 
+  /* Add menus to source view */
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-source-view-popup-menu");
+  ide_source_view_append_menu (self->view, G_MENU_MODEL (menu));
+
   /* Until we get the omnigutter in place */
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->view),
                                        GTK_TEXT_WINDOW_LEFT);
