@@ -439,28 +439,24 @@ create_uncompress_directory (GFile   *dest,
 static SoupSession *
 get_soup_session (void)
 {
-  return soup_session_new_with_options (SOUP_SESSION_USER_AGENT, PACKAGE_NAME,
+  return soup_session_new_with_options ("user-agent", PACKAGE_NAME,
                                         NULL);
 }
 
 static GBytes *
-download_uri (SoupURI  *uri,
-              GError  **error)
+download_uri (GUri    *uri,
+              GError **error)
 {
   g_autoptr(SoupSession) session = NULL;
-  g_autoptr(SoupRequest) req = NULL;
+  g_autoptr(SoupMessage) msg = NULL;
   g_autoptr(GInputStream) input = NULL;
   g_autoptr(GOutputStream) out = NULL;
 
   g_assert (uri != NULL);
 
   session = get_soup_session ();
-
-  req = soup_session_request_uri (session, uri, error);
-  if (req == NULL)
-    return NULL;
-
-  input = soup_request_send (req, NULL, error);
+  msg = soup_message_new_from_uri ("GET", uri);
+  input = soup_session_send (session, msg, NULL, error);
   if (input == NULL)
     return NULL;
 
@@ -476,7 +472,7 @@ download_uri (SoupURI  *uri,
 }
 
 static gboolean
-download_archive (SoupURI      *uri,
+download_archive (GUri         *uri,
                   const gchar  *sha,
                   GFile        *archive_file,
                   GError      **error)
@@ -577,7 +573,7 @@ gbp_flatpak_sources_fetch_archive (const gchar  *url,
 {
   g_autoptr(GFile) archive_file = NULL;
   g_autoptr(GFile) source_dir = NULL;
-  g_autoptr(SoupURI) uri = NULL;
+  g_autoptr(GUri) uri = NULL;
   g_autofree char *archive_name = NULL;
   GError *local_error = NULL;
 
@@ -593,8 +589,10 @@ gbp_flatpak_sources_fetch_archive (const gchar  *url,
       g_error_free (local_error);
     }
 
-  uri = soup_uri_new (url);
-  archive_name = g_path_get_basename (soup_uri_get_path (uri));
+  if (!(uri = g_uri_parse (url, G_URI_FLAGS_NONE, error)))
+    return NULL;
+
+  archive_name = g_path_get_basename (g_uri_get_path (uri));
   archive_file = g_file_get_child (source_dir, archive_name);
 
   if (!download_archive (uri, sha, archive_file, error))
