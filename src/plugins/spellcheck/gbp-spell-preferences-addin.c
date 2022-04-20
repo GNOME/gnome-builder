@@ -34,7 +34,7 @@ struct _GbpSpellPreferencesAddin
 };
 
 static const IdePreferenceGroupEntry groups[] = {
-  { "editing", "spelling",      0, N_("Spelling") },
+  { "editing", "spelling",      200, N_("Spelling") },
 };
 
 static const IdePreferenceItemEntry items[] = {

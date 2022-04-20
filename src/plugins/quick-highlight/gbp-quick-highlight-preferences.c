@@ -32,7 +32,7 @@ struct _GbpQuickHighlightPreferences
 };
 
 static const IdePreferenceGroupEntry groups[] = {
-  { "editing", "quick-highlight", 0, N_("Highlighting") },
+  { "editing", "quick-highlight", 300, N_("Highlighting") },
 };
 
 static const IdePreferenceItemEntry items[] = {
