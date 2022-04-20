@@ -5,7 +5,7 @@
       <item>
         <attribute name="after">editor-document-open-in-new-frame</attribute>
         <attribute name="label" translatable="yes">Open Preview</attribute>
-        <attribute name="action">editor-page.preview-as-html</attribute>
+        <attribute name="action">html-preview.preview-as-html</attribute>
       </item>
     </section>
   </menu>
