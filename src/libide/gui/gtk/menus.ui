@@ -57,7 +57,7 @@
       </submenu>
       <item>
         <attribute name="label" translatable="yes">Configure Project…</attribute>
-        <attribute name="action">buildui.configure</attribute>
+        <attribute name="action">workbench.configure</attribute>
       </item>
     </section>
     <section id="build-menu-target">

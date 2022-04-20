@@ -664,6 +664,10 @@ static const IdePreferencePageEntry pages[] = {
   { NULL, "plugins",  "plugins",    "org.gnome.Builder-plugins-symbolic",     700, N_("Plugins") },
 };
 
+static const IdePreferencePageEntry project_pages[] = {
+  { NULL, "code",     "languages",  "org.gnome.Builder-languages-symbolic",   100, N_("Languages") },
+};
+
 static const IdePreferenceGroupEntry groups[] = {
   { "appearance", "style",                  0, N_("Appearance") },
   { "appearance", "interface",           1000, N_("Interface") },
@@ -781,5 +785,6 @@ _ide_preferences_builtin_register (IdePreferencesWindow *window)
     }
   else if (mode == IDE_PREFERENCES_MODE_PROJECT)
     {
+      ide_preferences_window_add_pages (window, project_pages, G_N_ELEMENTS (project_pages), NULL);
     }
 }
