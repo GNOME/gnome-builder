@@ -17,3 +17,4 @@ X-Highlighter-Languages=c,chdr,cpp,cpphdr,objc
 X-Rename-Provider-Languages=c,chdr,cpp,cpphdr,objc
 X-Symbol-Resolver-Languages-Priority=100
 X-Symbol-Resolver-Languages=c,chdr,cpp,cpphdr,objc
+X-Preferences-Kind=application

@@ -7,3 +7,4 @@ Embedded=_gbp_shellcmd_register_types
 Hidden=true
 Module=shellcmd
 Name=Shell Commands
+X-Preferences-Kind=application;project;

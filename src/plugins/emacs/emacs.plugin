@@ -7,3 +7,4 @@ Embedded=_gbp_emacs_register_types
 Hidden=true
 Module=emacs
 Name=Emacs Emulation
+X-Preferences-Kind=application;

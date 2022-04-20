@@ -10,3 +10,4 @@ Module=terminal
 Name=Terminal
 X-At-Startup=true
 X-Workspace-Kind=editor;primary;
+X-Preferences-Kind=application;

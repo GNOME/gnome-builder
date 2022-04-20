@@ -7,3 +7,4 @@ Embedded=_gbp_sublime_register_types
 Hidden=true
 Module=sublime
 Name=Sublime Text Emulation
+X-Preferences-Kind=application;

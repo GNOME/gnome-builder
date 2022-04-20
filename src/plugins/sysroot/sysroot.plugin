@@ -8,3 +8,4 @@ Embedded=_gbp_sysroot_register_types
 Hidden=true
 Module=sysroot
 Name=Sysroot Support
+X-Preferences-Kind=application;
