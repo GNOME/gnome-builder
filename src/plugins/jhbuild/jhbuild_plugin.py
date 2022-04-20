@@ -93,7 +93,7 @@ class JhbuildRuntimeProvider(Ide.Object, Ide.RuntimeProvider):
     __gtype_name__ = 'JhbuildRuntimeProvider'
 
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.runtimes = []
 
     @staticmethod
