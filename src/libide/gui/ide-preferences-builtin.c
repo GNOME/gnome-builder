@@ -673,6 +673,7 @@ static const IdePreferenceGroupEntry groups[] = {
   { "appearance", "style",                  0, N_("Appearance") },
   { "appearance", "interface",           1000, N_("Interface") },
 
+  { "editing",    "completion",             0, N_("Completion") },
   { "editing",    "formatting",           100, N_("Formatting") },
 
   { "insight",    "general",                0, NULL },
