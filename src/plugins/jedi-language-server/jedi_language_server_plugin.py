@@ -31,7 +31,7 @@ DEV_MODE = os.getenv('DEV_MODE') and True or False
 
 class JediService(Ide.LspService):
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.set_program('jedi-language-server')
         self.set_inherit_stderr(DEV_MODE)
 

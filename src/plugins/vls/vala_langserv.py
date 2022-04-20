@@ -37,7 +37,7 @@ DEV_MODE = os.getenv('DEV_MODE') and True or False
 
 class VlsService(Ide.LspService):
     def __init__(self, *args, **kwargs):
-        super().__init__(self, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.set_program('vala-language-server')
         self.set_inherit_stderr(DEV_MODE)
 
