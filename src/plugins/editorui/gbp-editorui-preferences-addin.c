@@ -79,10 +79,15 @@ static const IdePreferenceItemEntry items[] = {
     N_("Use cursor position to highlight matching brackets, braces, parenthesis, and more"),
     "org.gnome.builder.editor", NULL, "highlight-matching-brackets" },
 
-  { "insight", "completion", "interactive-completion", 10, ide_preferences_window_toggle,
+  { "editing", "completion", "interactive-completion", 10, ide_preferences_window_toggle,
     N_("Suggest Completions While Typing"),
     N_("Automatically suggest completions while typing within the file"),
     "org.gnome.builder.editor", NULL, "interactive-completion" },
+
+  { "editing", "completion", "select-first-completion", 20, ide_preferences_window_toggle,
+    N_("Select First Completion"),
+    N_("Automatically select the first completion without activating it"),
+    "org.gnome.builder.editor", NULL, "select-first-completion" },
 
   { "keyboard", "movement", "smart-home-end", 0, ide_preferences_window_toggle,
     N_("Smart Home and End"),
