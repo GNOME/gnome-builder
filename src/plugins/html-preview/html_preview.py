@@ -365,7 +365,7 @@ class HtmlPreviewPage(Ide.Page):
         self.webview.props.hexpand = True
         self.webview.props.vexpand = True
         self.webview.connect('decide-policy', self.on_decide_policy_cb)
-        self.add(self.webview)
+        self.add_content_widget(self.webview)
         self.webview.show()
 
         settings = self.webview.get_settings()
