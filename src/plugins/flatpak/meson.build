@@ -9,7 +9,7 @@ if not libportal_dep.found()
 endif
 
 libostree_dep = dependency('ostree-1')
-libsoup_dep = dependency('libsoup-2.4', version: '>= 2.52.0')
+libsoup_dep = dependency('libsoup-3.0')
 
 subdir('daemon')
 
