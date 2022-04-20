@@ -141,7 +141,7 @@ class PhpService(Ide.Object):
         self.connect('destroy', PhpService.on_destroy)
         self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
-class PhpLspSymbolResolver(Ide.LspSymbolResolver, Ide.SymbolResolver):
+class PhpLspSymbolResolver(Ide.LspSymbolResolver):
     def do_load(self):
         PhpService.bind_client(self)
 
@@ -151,26 +151,26 @@ class PhpLspHoverProvider(Ide.LspHoverProvider):
         self.props.priority = 300
         PhpService.bind_client(self)
 
-class PhpLspFormatter(Ide.LspFormatter, Ide.Formatter):
+class PhpLspFormatter(Ide.LspFormatter):
     def do_load(self):
         PhpService.bind_client(self)
 
-class PhpLspDiagnosticProvider(Ide.LspDiagnosticProvider, Ide.DiagnosticProvider):
+class PhpLspDiagnosticProvider(Ide.LspDiagnosticProvider):
    def do_load(self):
        PhpService.bind_client(self)
 
-class PhpLspCompletionProvider(Ide.LspCompletionProvider, Ide.CompletionProvider):
-    def do_load(self, context):
-        PhpService.bind_client(self)
-
-class PhpLspHighlighter(Ide.LspHighlighter, Ide.Highlighter):
+class PhpLspCompletionProvider(Ide.LspCompletionProvider):
     def do_load(self):
         PhpService.bind_client(self)
 
-class PhpLspRenameProvider(Ide.LspRenameProvider, Ide.RenameProvider):
+class PhpLspHighlighter(Ide.LspHighlighter):
     def do_load(self):
         PhpService.bind_client(self)
 
-class PhpLspCodeActionProvider(Ide.LspCodeActionProvider, Ide.CodeActionProvider):
+class PhpLspRenameProvider(Ide.LspRenameProvider):
+    def do_load(self):
+        PhpService.bind_client(self)
+
+class PhpLspCodeActionProvider(Ide.LspCodeActionProvider):
     def do_load(self):
         PhpService.bind_client(self)
