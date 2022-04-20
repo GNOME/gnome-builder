@@ -679,9 +679,6 @@ static const IdePreferenceGroupEntry groups[] = {
   { "insight",    "general",                0, NULL },
   { "insight",    "completion",            10, N_("Completion") },
   { "insight",    "completion-providers",  20, NULL },
-#if 0
-  { "insight",    "diagnostics",           30, N_("Diagnostics") },
-#endif
   { "insight",    "diagnostics-providers", 40, N_("Diagnostics") },
 
   { "plugins",    "vcs",                    0, N_("Version Control") },
