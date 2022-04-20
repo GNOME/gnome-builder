@@ -144,5 +144,10 @@
       <summary>Use Tabs</summary>
       <description>Use the tabbar within the page grid.</description>
     </key>
+    <key name="enable-snippets" type="b">
+      <default>true</default>
+      <summary>Enable Snippets</summary>
+      <description>Allow expanding snippets from the editor by pressing tab after the snippet trigger.</description>
+    </key>
   </schema>
 </schemalist>
