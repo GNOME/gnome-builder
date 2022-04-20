@@ -31,7 +31,7 @@ plugins_deps = [
 ]
 
 if get_option('webkit').enabled()
-  #plugins_deps += [libide_webkit_dep]
+  plugins_deps += [libide_webkit_dep]
 endif
 
 subdir('auto-save')
