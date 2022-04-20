@@ -10,31 +10,19 @@ from gi.repository import Ide
 
 DEV_MODE = os.getenv('DEV_MODE') and True or False
 
-class PhpService(Ide.Object):
-    _client = None
-    _has_started = False
-    _supervisor = None
-    _context = None
-    notif = None
+class PhpService(Ide.LspService):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.set_program('intelephense')
+        self.set_inherit_stderr(DEV_MODE)
 
-    @classmethod
-    def from_context(klass, context):
-        return context.ensure_child_typed(PhpService)
+    def do_configure_client(self, client):
+        client.add_language('php')
+        client.connect('load-configuration', self._on_load_configuration)
+        client.connect('notification', self._on_notification)
 
-    @GObject.Property(type=Ide.LspClient)
-    def client(self):
-        return self._client
-
-    @client.setter
-    def client(self, value):
-        self._client = value
-        self.notify('client')
-
-    @staticmethod
-    def on_destroy(self):
-        if self._supervisor:
-            supervisor, self._supervisor = self._supervisor, None
-            supervisor.stop()
+    def do_configure_launcher(self, pipeline, launcher):
+        launcher.push_argv('--stdio')
 
     def _on_load_configuration(self, data):
         try:
@@ -73,73 +61,10 @@ class PhpService(Ide.Object):
                 has_progress=True,
                 progress_is_imprecise=True,
                 progress=0.0)
-            self.notif.attach(self._context)
+            self.notif.attach(client.get_context())
         elif name == "indexingEnded":
             if self.notif is not None:
                 self.notif.withdraw()
-
-    def _get_runtime(self):
-        config_manager = Ide.ConfigManager.from_context(self._context)
-        config = config_manager.get_current()
-        return config.get_runtime()
-
-    def _ensure_started(self):
-        # To avoid starting the process unconditionally at startup, lazily
-        # start it when the first provider tries to bind a client to its
-        # :client property.
-        if not self._has_started:
-            self._has_started = True
-
-            launcher = self._create_launcher()
-            launcher.set_clear_env(False)
-
-            # Locate the directory of the project and run intelephense from there
-            workdir = self.get_context().ref_workdir()
-            launcher.set_cwd(workdir.get_path())
-
-            launcher.push_argv("intelephense")
-            launcher.push_argv("--stdio")
-
-            # Spawn our peer process and monitor it for
-            # crashes. We may need to restart it occasionally.
-            self._supervisor = Ide.SubprocessSupervisor()
-            self._supervisor.connect('spawned', self._ls_spawned)
-            self._supervisor.set_launcher(launcher)
-            self._supervisor.start()
-
-    def _ls_spawned(self, supervisor, subprocess):
-        stdin = subprocess.get_stdin_pipe()
-        stdout = subprocess.get_stdout_pipe()
-        io_stream = Gio.SimpleIOStream.new(stdout, stdin)
-
-        if self._client:
-            self._client.stop()
-            self._client.destroy()
-
-        self._client = Ide.LspClient.new(io_stream)
-        self._client.connect('load-configuration', self._on_load_configuration)
-        self._client.connect('notification', self._on_notification)
-        self.append(self._client)
-        self._client.add_language('php')
-        self._client.start()
-        self.notify('client')
-
-    def _create_launcher(self):
-        flags = Gio.SubprocessFlags.STDIN_PIPE | Gio.SubprocessFlags.STDOUT_PIPE
-        if not DEV_MODE:
-            flags |= Gio.SubprocessFlags.STDERR_SILENCE
-        launcher = Ide.SubprocessLauncher()
-        launcher.set_flags(flags)
-        return launcher
-
-    @classmethod
-    def bind_client(klass, provider):
-        context = provider.get_context()
-        self = PhpService.from_context(context)
-        self._context = context
-        self._ensure_started()
-        self.connect('destroy', PhpService.on_destroy)
-        self.bind_property('client', provider, 'client', GObject.BindingFlags.SYNC_CREATE)
 
 class PhpLspSymbolResolver(Ide.LspSymbolResolver):
     def do_load(self):
