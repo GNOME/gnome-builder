@@ -496,6 +496,18 @@ ide_page_get_file_or_directory (IdePage *self)
   return NULL;
 }
 
+void
+ide_page_add_content_widget (IdePage   *self,
+                             GtkWidget *widget)
+{
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PAGE (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_box_append (priv->content_box, widget);
+}
+
 static void
 ide_page_add_child (GtkBuildable *buildable,
                     GtkBuilder   *builder,
@@ -503,7 +515,6 @@ ide_page_add_child (GtkBuildable *buildable,
                     const char   *name)
 {
   IdePage *self = (IdePage *)buildable;
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
 
   g_assert (IDE_IS_PAGE (self));
   g_assert (GTK_IS_BUILDER (builder));
@@ -513,7 +524,7 @@ ide_page_add_child (GtkBuildable *buildable,
     {
       if (g_strcmp0 (name, "content") == 0)
         {
-          gtk_box_append (priv->content_box, GTK_WIDGET (object));
+          ide_page_add_content_widget (self, GTK_WIDGET (object));
           return;
         }
     }
