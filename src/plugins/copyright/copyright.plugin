@@ -8,3 +8,4 @@ Module=copyright_plugin
 Name=Update Copyright
 X-Builder-ABI=@PACKAGE_ABI@
 X-Category=editing
+X-Preferences-Kind=application;
