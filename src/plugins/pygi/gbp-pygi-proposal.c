@@ -82,3 +82,11 @@ gbp_pygi_proposal_display (GbpPygiProposal            *self,
       gtk_source_completion_cell_set_text (cell, NULL);
     }
 }
+
+const char *
+gbp_pygi_proposal_get_name (GbpPygiProposal *self)
+{
+  g_return_val_if_fail (GBP_IS_PYGI_PROPOSAL (self), NULL);
+
+  return self->name;
+}
