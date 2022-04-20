@@ -1184,6 +1184,8 @@ void
 _ide_buffer_attach (IdeBuffer *self,
                     IdeObject *parent)
 {
+  const char *language_id;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_OBJECT_BOX (parent));
   g_return_if_fail (ide_object_box_contains (IDE_OBJECT_BOX (parent), self));
@@ -1193,6 +1195,10 @@ _ide_buffer_attach (IdeBuffer *self,
   g_return_if_fail (self->formatter == NULL);
   g_return_if_fail (self->rename_provider == NULL);
 
+  /* We use "--disabled--" just like sourceview does */
+  if (!(language_id = ide_buffer_get_language_id (self)))
+    language_id = "--disabled--";
+
   /* Setup the semantic highlight engine */
   self->highlight_engine = ide_highlight_engine_new (self);
 
@@ -1201,7 +1207,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                 peas_engine_get_default (),
                                                 IDE_TYPE_BUFFER_ADDIN,
                                                 "Buffer-Addin-Languages",
-                                                ide_buffer_get_language_id (self));
+                                                language_id);
   g_signal_connect (self->addins,
                     "extension-added",
                     G_CALLBACK (_ide_buffer_addin_load_cb),
@@ -1219,7 +1225,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                      peas_engine_get_default (),
                                                      IDE_TYPE_RENAME_PROVIDER,
                                                      "Rename-Provider-Languages",
-                                                     ide_buffer_get_language_id (self));
+                                                     language_id);
   g_signal_connect_object (self->rename_provider,
                            "notify::extension",
                            G_CALLBACK (ide_buffer_rename_provider_notify_extension),
@@ -1232,7 +1238,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                peas_engine_get_default (),
                                                IDE_TYPE_FORMATTER,
                                                "Formatter-Languages",
-                                               ide_buffer_get_language_id (self));
+                                               language_id);
   g_signal_connect_object (self->formatter,
                            "notify::extension",
                            G_CALLBACK (ide_buffer_formatter_notify_extension),
@@ -1245,7 +1251,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                           peas_engine_get_default (),
                                                           IDE_TYPE_CODE_ACTION_PROVIDER,
                                                           "Code-Action-Languages",
-                                                          ide_buffer_get_language_id (self));
+                                                          language_id);
 
   g_signal_connect_object (self->code_action_provider,
                            "notify::extension",
@@ -1259,7 +1265,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                           peas_engine_get_default (),
                                                           IDE_TYPE_SYMBOL_RESOLVER,
                                                           "Symbol-Resolver-Languages",
-                                                          ide_buffer_get_language_id (self));
+                                                          language_id);
   g_signal_connect_object (self->symbol_resolvers,
                            "extension-added",
                            G_CALLBACK (ide_buffer_symbol_resolver_added),
