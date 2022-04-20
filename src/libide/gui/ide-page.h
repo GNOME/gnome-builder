@@ -107,5 +107,8 @@ IDE_AVAILABLE_IN_ALL
 void              ide_page_destroy               (IdePage              *self);
 IDE_AVAILABLE_IN_ALL
 void              ide_clear_page                 (IdePage             **location);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_add_content_widget    (IdePage              *self,
+                                                  GtkWidget            *widget);
 
 G_END_DECLS
