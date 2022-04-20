@@ -126,6 +126,7 @@ void
 _ide_editor_page_settings_init (IdeEditorPage *self)
 {
   static GSettings *editor_settings;
+  GtkSourceCompletion *completion;
 
   IDE_ENTRY;
 
@@ -192,6 +193,11 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                                 G_SETTINGS_BIND_GET,
                                 font_name_to_font_desc,
                                 NULL, NULL, NULL);
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->view));
+  g_settings_bind (editor_settings, "select-first-completion",
+                   completion, "select-on-show",
+                   G_SETTINGS_BIND_GET);
 
 #if 0
   ide_binding_group_bind (self->view_file_settings,
