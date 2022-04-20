@@ -1,4 +1,19 @@
 ============
+Version 42.1
+============
+
+Changes sincec 42.0
+
+ • Meson templates updates
+ • Fix failure to load project under certain symlink situations
+ • Fix restore-cursor plugin
+ • Improve newline handling with git diffs
+ • Updated GJS snippets
+ • Fixes for podman integration
+ • Language Server Protocol enhancements
+ • Translation updates
+
+============
 Version 42.0
 ============
 
