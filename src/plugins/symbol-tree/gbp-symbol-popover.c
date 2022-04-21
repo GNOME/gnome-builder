@@ -31,6 +31,7 @@ struct _GbpSymbolPopover
   IdeSymbolResolver *symbol_resolver;
 
   GtkSearchEntry    *search_entry;
+  GtkListView       *list_view;
 };
 
 enum {
@@ -42,6 +43,37 @@ enum {
 G_DEFINE_FINAL_TYPE (GbpSymbolPopover, gbp_symbol_popover, GTK_TYPE_POPOVER)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+gbp_symbol_popover_activate_cb (GbpSymbolPopover *self,
+                                guint             position,
+                                GtkListView      *list_view)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SYMBOL_POPOVER (self));
+  g_assert (GTK_IS_LIST_VIEW (list_view));
+
+  g_debug ("Activating symbol row at position %u", position);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_symbol_popover_reload (GbpSymbolPopover *self)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SYMBOL_POPOVER (self));
+
+  if (self->symbol_resolver == NULL)
+    {
+      gtk_list_view_set_model (self->list_view, NULL);
+      IDE_EXIT;
+    }
+
+  IDE_EXIT;
+}
 
 static void
 gbp_symbol_popover_dispose (GObject *object)
@@ -112,6 +144,7 @@ gbp_symbol_popover_class_init (GbpSymbolPopoverClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/symbol-tree/gbp-symbol-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolPopover, search_entry);
+  gtk_widget_class_bind_template_callback (widget_class, gbp_symbol_popover_activate_cb);
 }
 
 static void
@@ -145,6 +178,7 @@ gbp_symbol_popover_set_symbol_resolver (GbpSymbolPopover  *self,
 
   if (g_set_object (&self->symbol_resolver, symbol_resolver))
     {
+      gbp_symbol_popover_reload (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_RESOLVER]);
     }
 }
