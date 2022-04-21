@@ -18,7 +18,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <dazzle.h>
 #include <libide-code.h>
 
 #include "ide-xml-hash-table.h"
@@ -103,7 +102,7 @@ ide_xml_hash_table_add (IdeXmlHashTable *self,
   GPtrArray *array;
 
   g_return_val_if_fail (self != NULL, FALSE);
-  g_return_val_if_fail (!dzl_str_empty0 (name), FALSE);
+  g_return_val_if_fail (!ide_str_empty0 (name), FALSE);
   g_return_val_if_fail (data != NULL, FALSE);
 
   if (NULL == (array = g_hash_table_lookup (self->table, name)))
@@ -130,7 +129,7 @@ ide_xml_hash_table_lookup (IdeXmlHashTable *self,
                            const gchar     *name)
 {
   g_return_val_if_fail (self != NULL, NULL);
-  g_return_val_if_fail (!dzl_str_empty0 (name), NULL);
+  g_return_val_if_fail (!ide_str_empty0 (name), NULL);
 
   return g_hash_table_lookup (self->table, name);
 }

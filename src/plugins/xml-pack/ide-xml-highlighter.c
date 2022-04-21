@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 
 #include "ide-xml.h"
@@ -35,7 +34,7 @@ struct _IdeXmlHighlighter
 {
   IdeObject           parent_instance;
   IdeHighlightEngine *engine;
-  DzlSignalGroup     *buffer_signals;
+  IdeSignalGroup     *buffer_signals;
   guint               highlight_timeout;
   guint               has_tags : 1;
 };
@@ -43,9 +42,9 @@ struct _IdeXmlHighlighter
 static void highlighter_iface_init (IdeHighlighterInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlHighlighter,
-                         ide_xml_highlighter,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))
+                               ide_xml_highlighter,
+                               IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))
 
 static gboolean
 ide_xml_highlighter_highlight_timeout_handler (gpointer data)
@@ -127,14 +126,14 @@ ide_xml_highlighter_cursor_moved (IdeXmlHighlighter *self,
   g_assert (IDE_IS_XML_HIGHLIGHTER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  dzl_clear_source (&self->highlight_timeout);
+  g_clear_handle_id (&self->highlight_timeout, g_source_remove);
 
   self->highlight_timeout =
-    gdk_threads_add_timeout_full (G_PRIORITY_LOW,
-                                  HIGHLIGH_TIMEOUT_MSEC,
-                                  ide_xml_highlighter_highlight_timeout_handler,
-                                  g_object_ref (self),
-                                  g_object_unref);
+    g_timeout_add_full (G_PRIORITY_LOW,
+                        HIGHLIGH_TIMEOUT_MSEC,
+                        ide_xml_highlighter_highlight_timeout_handler,
+                        g_object_ref (self),
+                        g_object_unref);
 }
 
 static void
@@ -142,7 +141,7 @@ ide_xml_highlighter_dispose (GObject *object)
 {
   IdeXmlHighlighter *self = (IdeXmlHighlighter *)object;
 
-  dzl_clear_source (&self->highlight_timeout);
+  g_clear_handle_id (&self->highlight_timeout, g_source_remove);
   g_clear_object (&self->buffer_signals);
 
   G_OBJECT_CLASS (ide_xml_highlighter_parent_class)->dispose (object);
@@ -159,9 +158,9 @@ ide_xml_highlighter_class_init (IdeXmlHighlighterClass *klass)
 static void
 ide_xml_highlighter_init (IdeXmlHighlighter *self)
 {
-  self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
 
-  dzl_signal_group_connect_object (self->buffer_signals,
+  ide_signal_group_connect_object (self->buffer_signals,
                                    "cursor-moved",
                                    G_CALLBACK (ide_xml_highlighter_cursor_moved),
                                    self,
@@ -182,14 +181,11 @@ ide_xml_highlighter_real_set_engine (IdeHighlighter     *highlighter,
 
   if (engine != NULL)
     {
-      GtkTextIter insert;
-
       buffer = ide_highlight_engine_get_buffer (engine);
-      ide_buffer_get_selection_bounds (buffer, &insert, NULL);
-      ide_xml_highlighter_cursor_moved (self, &insert, buffer);
+      ide_xml_highlighter_cursor_moved (self, buffer);
     }
 
-  dzl_signal_group_set_target (self->buffer_signals, buffer);
+  ide_signal_group_set_target (self->buffer_signals, buffer);
 }
 
 static void

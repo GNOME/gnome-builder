@@ -18,8 +18,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <dazzle.h>
-
 #include "ide-xml-rng-define.h"
 
 G_DEFINE_BOXED_TYPE (IdeXmlRngDefine, ide_xml_rng_define, ide_xml_rng_define_ref, ide_xml_rng_define_unref)
@@ -248,12 +246,12 @@ ide_xml_rng_define_is_nameclass_match (IdeXmlRngDefine  *define,
   name = ide_xml_symbol_node_get_element_name (node);
   namespace = ide_xml_symbol_node_get_namespace (node);
 
-  if (define->name != NULL && !dzl_str_equal0 (name, define->name))
+  if (define->name != NULL && !ide_str_equal0 (name, define->name))
     return FALSE;
 
-  if (!dzl_str_empty0 ((const gchar *)define->ns))
+  if (!ide_str_empty0 ((const gchar *)define->ns))
     {
-      if (namespace == NULL || !dzl_str_equal0 (define->ns, namespace))
+      if (namespace == NULL || !ide_str_equal0 (define->ns, namespace))
         return FALSE;
     }
   else if (namespace != NULL && (define->name != NULL || define->ns != NULL))

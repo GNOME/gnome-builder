@@ -139,7 +139,7 @@ subdir('vim')
 subdir('vls')
 subdir('waf')
 subdir('words')
-#subdir('xml-pack')
+subdir('xml-pack')
 
 plugins = static_library('plugins', plugins_sources,
          dependencies: plugins_deps,

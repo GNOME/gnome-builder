@@ -18,8 +18,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <dazzle.h>
-
 #include "ide-xml-completion-values.h"
 #include "ide-xml-position.h"
 
@@ -40,7 +38,7 @@ value_match_item_new (const gchar *value)
 {
   ValueMatchItem *item;
 
-  g_assert (!dzl_str_empty0 (value));
+  g_assert (!ide_str_empty0 (value));
 
   item = g_slice_new0 (ValueMatchItem);
   item->name = g_strdup (value);
@@ -125,8 +123,8 @@ process_value (MatchingState *state)
 
   value = (gchar *)state->define->name;
 
-  if (!dzl_str_empty0 (value) &&
-      (dzl_str_empty0 (state->prefix) || g_str_has_prefix (value, state->prefix)))
+  if (!ide_str_empty0 (value) &&
+      (ide_str_empty0 (state->prefix) || g_str_has_prefix (value, state->prefix)))
     {
       match_values = match_values_new ();
       item = value_match_item_new (value);

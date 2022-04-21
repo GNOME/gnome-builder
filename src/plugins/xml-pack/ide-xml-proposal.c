@@ -34,7 +34,7 @@ struct _IdeXmlProposal
 };
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlProposal, ide_xml_proposal, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void
 ide_xml_proposal_finalize (GObject *object)

@@ -36,10 +36,10 @@ struct _IdeXmlIndenter
   guint use_tabs : 1;
 };
 
-static void indenter_iface_init (IdeIndenterInterface *iface);
+static void indenter_iface_init (GtkSourceIndenterInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlIndenter, ide_xml_indenter, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_INDENTER, indenter_iface_init))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_INDENTER, indenter_iface_init))
 
 static gunichar
 text_iter_peek_next_char (const GtkTextIter *location)
@@ -371,8 +371,8 @@ ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
 }
 
 static gboolean
-ide_xml_indenter_is_trigger (IdeIndenter *indenter,
-                             GdkEventKey *event)
+ide_xml_indenter_is_trigger (GtkSourceIndenter *indenter,
+                             GdkEventKey       *event)
 {
   switch (event->keyval)
     {
@@ -390,12 +390,12 @@ ide_xml_indenter_is_trigger (IdeIndenter *indenter,
 }
 
 static gchar *
-ide_xml_indenter_format (IdeIndenter *indenter,
-                         GtkTextView *view,
-                         GtkTextIter *begin,
-                         GtkTextIter *end,
-                         gint        *cursor_offset,
-                         GdkEventKey *trigger)
+ide_xml_indenter_format (GtkSourceIndenter *indenter,
+                         GtkTextView       *view,
+                         GtkTextIter       *begin,
+                         GtkTextIter       *end,
+                         gint              *cursor_offset,
+                         GdkEventKey       *trigger)
 {
   IdeXmlIndenter *xml = (IdeXmlIndenter *)indenter;
   guint tab_width = 2;
@@ -447,7 +447,7 @@ ide_xml_indenter_format (IdeIndenter *indenter,
 }
 
 static void
-indenter_iface_init (IdeIndenterInterface *iface)
+indenter_iface_init (GtkSourceIndenterInterface *iface)
 {
   iface->format = ide_xml_indenter_format;
   iface->is_trigger = ide_xml_indenter_is_trigger;
