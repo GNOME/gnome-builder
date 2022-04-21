@@ -1,6 +1,6 @@
-/* gbp-symbol-menu-button.h
+/* gbp-symbol-workspace-addin.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,12 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SYMBOL_MENU_BUTTON (gbp_symbol_menu_button_get_type())
+#define GBP_TYPE_SYMBOL_WORKSPACE_ADDIN (gbp_symbol_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSymbolMenuButton, gbp_symbol_menu_button, GBP, SYMBOL_MENU_BUTTON, GtkMenuButton)
-
-void           gbp_symbol_menu_button_set_symbol      (GbpSymbolMenuButton *self,
-                                                       IdeSymbol           *symbol);
-IdeSymbolTree *gbp_symbol_menu_button_get_symbol_tree (GbpSymbolMenuButton *self);
-void           gbp_symbol_menu_button_set_symbol_tree (GbpSymbolMenuButton *self,
-                                                       IdeSymbolTree       *symbol_tree);
+G_DECLARE_FINAL_TYPE (GbpSymbolWorkspaceAddin, gbp_symbol_workspace_addin, GBP, SYMBOL_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

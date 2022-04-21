@@ -1,6 +1,6 @@
-/* gbp-symbol-frame-addin.h
+/* gbp-symbol-util.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,16 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SYMBOL_FRAME_ADDIN (gbp_symbol_frame_addin_get_type())
-
-G_DECLARE_FINAL_TYPE (GbpSymbolFrameAddin, gbp_symbol_frame_addin, GBP, SYMBOL_FRAME_ADDIN, GObject)
+void       gbp_symbol_find_nearest_scope_async  (IdeBuffer            *buffer,
+                                                 GCancellable         *cancellable,
+                                                 GAsyncReadyCallback   callback,
+                                                 gpointer              user_data);
+IdeSymbol *gbp_symbol_find_nearest_scope_finish (IdeBuffer            *buffer,
+                                                 GAsyncResult         *result,
+                                                 GError              **error);
 
 G_END_DECLS
