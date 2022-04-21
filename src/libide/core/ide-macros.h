@@ -35,8 +35,8 @@
 G_BEGIN_DECLS
 
 #define ide_str_empty0(str)       (!(str) || !*(str))
-#define ide_str_equal(str1,str2)  (strcmp(str1,str2)==0)
-#define ide_str_equal0(str1,str2) (g_strcmp0(str1,str2)==0)
+#define ide_str_equal(str1,str2)  (strcmp((char*)str1,(char*)str2)==0)
+#define ide_str_equal0(str1,str2) (g_strcmp0((char*)str1,(char*)str2)==0)
 #define ide_strv_empty0(strv)     (((strv) == NULL) || ((strv)[0] == NULL))
 #define ide_set_string(ptr,str)   (ide_take_string((ptr), g_strdup(str)))
 
