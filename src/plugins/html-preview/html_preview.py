@@ -288,7 +288,7 @@ class HtmlPreviewAddin(GObject.Object, Ide.EditorPageAddin):
                                    visible=True)
 
         position = view.get_position()
-        _, column = view.get_column()
+        _, column = position.get_column()
         position.set_column(column + 1)
 
         workspace = view.get_ancestor(Ide.Workspace)
