@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <dazzle.h>
+#include "config.h"
 
 #include "ide-xml-completion-attributes.h"
 #include "ide-xml-position.h"
@@ -46,7 +46,7 @@ match_item_new (IdeXmlRngDefine *define,
 {
   MatchItem *item;
 
-  g_assert (!dzl_str_empty0 (attr_name));
+  g_assert (!ide_str_empty0 (attr_name));
 
   item = g_slice_new0 (MatchItem);
 
@@ -134,7 +134,7 @@ process_attribute (MatchingState *state)
   match_children = match_children_new ();
   name = (gchar *)state->define->name;
   /* XXX: we skip element without a name for now */
-  if (dzl_str_empty0 (name))
+  if (ide_str_empty0 (name))
     return match_children;
 
   item = match_item_new (state->define, name, state->define->pos, state->is_optional);
@@ -403,7 +403,7 @@ compare_attribute_names (gpointer a,
   attr_name = (const gchar *)a;
   match = (MatchItem *)b;
 
-  return dzl_str_equal0 (match->name, attr_name);
+  return ide_str_equal0 (match->name, attr_name);
 }
 
 static gint

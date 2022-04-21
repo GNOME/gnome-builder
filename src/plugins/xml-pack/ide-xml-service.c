@@ -257,7 +257,7 @@ ide_xml_service_get_analysis_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (G_IS_TASK (task));
 
-  if (NULL == (analysis = dzl_task_cache_get_finish (cache, result, &error)))
+  if (NULL == (analysis = ide_task_cache_get_finish (cache, result, &error)))
     g_task_return_error (task, g_steal_pointer (&error));
   else
     g_task_return_pointer (task, g_steal_pointer (&analysis), (GDestroyNotify)ide_xml_analysis_unref);
@@ -280,7 +280,7 @@ ide_xml_service_get_analysis_async (IdeXmlService       *self,
   task = g_task_new (self, cancellable, callback, user_data);
   g_task_set_source_tag (task, ide_xml_service_get_analysis_async);
 
-  dzl_task_cache_get_async (self->analyses,
+  ide_task_cache_get_async (self->analyses,
                             file,
                             TRUE,
                             cancellable,
@@ -361,7 +361,7 @@ ide_xml_service_get_root_node_async (IdeXmlService       *self,
    * If we have a cached analysis with a valid root_node,
    * and it is new enough, then re-use it.
    */
-  if ((cached = dzl_task_cache_peek (self->analyses, file)))
+  if ((cached = ide_task_cache_peek (self->analyses, file)))
     {
       IdeContext *context;
       IdeUnsavedFiles *unsaved_files;
@@ -475,7 +475,7 @@ ide_xml_service_get_diagnostics_async (IdeXmlService       *self,
    * If we have a cached analysis with some diagnostics,
    * and it is new enough, then re-use it.
    */
-  if ((cached = dzl_task_cache_peek (self->analyses, file)))
+  if ((cached = ide_task_cache_peek (self->analyses, file)))
     {
       IdeContext *context;
       IdeUnsavedFiles *unsaved_files;
@@ -545,7 +545,7 @@ ide_xml_service_parent_set (IdeObject *object,
                                        "parent", self,
                                        NULL);
 
-  self->analyses = dzl_task_cache_new ((GHashFunc)g_file_hash,
+  self->analyses = ide_task_cache_new ((GHashFunc)g_file_hash,
                                        (GEqualFunc)g_file_equal,
                                        g_object_ref,
                                        g_object_unref,
@@ -556,10 +556,10 @@ ide_xml_service_parent_set (IdeObject *object,
                                        self,
                                        NULL);
 
-  dzl_task_cache_set_name (self->analyses, "xml analysis cache");
+  ide_task_cache_set_name (self->analyses, "xml analysis cache");
 
   /* There's no eviction time on this cache */
-  self->schemas = dzl_task_cache_new ((GHashFunc)g_file_hash,
+  self->schemas = ide_task_cache_new ((GHashFunc)g_file_hash,
                                       (GEqualFunc)g_file_equal,
                                       g_object_ref,
                                       g_object_unref,
@@ -570,7 +570,7 @@ ide_xml_service_parent_set (IdeObject *object,
                                       self,
                                       NULL);
 
-  dzl_task_cache_set_name (self->schemas, "xml schemas cache");
+  ide_task_cache_set_name (self->schemas, "xml schemas cache");
 
   IDE_EXIT;
 }
@@ -1072,7 +1072,7 @@ ide_xml_service_get_cached_root_node (IdeXmlService *self,
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
-  if (NULL != (analysis = dzl_task_cache_peek (self->analyses, file)) &&
+  if (NULL != (analysis = ide_task_cache_peek (self->analyses, file)) &&
       NULL != (cached = ide_xml_analysis_get_root_node (analysis)))
     return g_object_ref (cached);
 
@@ -1096,7 +1096,7 @@ ide_xml_service_get_cached_diagnostics (IdeXmlService *self,
   g_return_val_if_fail (IDE_IS_XML_SERVICE (self), NULL);
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
-  if (NULL != (analysis = dzl_task_cache_peek (self->analyses, file)) &&
+  if (NULL != (analysis = ide_task_cache_peek (self->analyses, file)) &&
       NULL != (cached = ide_xml_analysis_get_diagnostics (analysis)))
     return g_object_ref (cached);
 
