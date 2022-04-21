@@ -341,7 +341,7 @@ gbp_editor_frame_controls_set_page (GbpEditorFrameControls *self,
   if (self->page != NULL)
     {
       g_signal_handlers_disconnect_by_func (self->page,
-                                            G_CALLBACK (gtk_widget_destroyed),
+                                            G_CALLBACK (ide_gtk_widget_destroyed),
                                             &self->page);
       self->page = NULL;
     }
@@ -351,7 +351,7 @@ gbp_editor_frame_controls_set_page (GbpEditorFrameControls *self,
       self->page = page;
       g_signal_connect (page,
                         "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
+                        G_CALLBACK (ide_gtk_widget_destroyed),
                         &self->page);
       dzl_binding_group_set_source (self->buffer_bindings, page->buffer);
       dzl_signal_group_set_target (self->buffer_signals, page->buffer);

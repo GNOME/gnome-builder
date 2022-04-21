@@ -101,7 +101,7 @@ gbp_editor_frame_addin_load (IdeFrameAddin *addin,
   self->controls = g_object_new (GBP_TYPE_EDITOR_FRAME_CONTROLS, NULL);
   g_signal_connect (self->controls,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->controls);
   gtk_container_add_with_properties (GTK_CONTAINER (header), GTK_WIDGET (self->controls),
                                      "pack-type", GTK_PACK_END,

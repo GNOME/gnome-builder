@@ -336,7 +336,7 @@ gbp_glade_frame_addin_load (IdeFrameAddin *addin,
                                NULL);
   g_signal_connect (self->button,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->button);
   ide_frame_header_add_custom_title (IDE_FRAME_HEADER (header),
                                             GTK_WIDGET (self->button),
@@ -380,7 +380,7 @@ gbp_glade_frame_addin_load (IdeFrameAddin *addin,
                                       NULL);
   g_signal_connect (self->toggle_source,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->toggle_source);
   g_signal_connect_object (self->toggle_source,
                            "clicked",

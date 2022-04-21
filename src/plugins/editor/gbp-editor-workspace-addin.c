@@ -156,7 +156,7 @@ add_buttons (GbpEditorWorkspaceAddin *self,
                                    NULL);
   g_signal_connect (self->new_button,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->new_button);
   ide_header_bar_add_primary (header, GTK_WIDGET (self->new_button));
 
@@ -167,7 +167,7 @@ add_buttons (GbpEditorWorkspaceAddin *self,
                                    NULL);
   g_signal_connect (self->panels_box,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->panels_box);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->panels_box), "linked");
   ide_header_bar_add_primary (header, GTK_WIDGET (self->panels_box));
@@ -251,7 +251,7 @@ gbp_editor_workspace_addin_load (IdeWorkspaceAddin *addin,
                                 NULL);
   g_signal_connect (self->surface,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->surface);
   ide_workspace_add_surface (IDE_WORKSPACE (workspace), IDE_SURFACE (self->surface));
   ide_workspace_set_visible_surface_name (IDE_WORKSPACE (workspace), "editor");

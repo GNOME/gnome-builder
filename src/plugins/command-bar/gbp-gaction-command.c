@@ -108,7 +108,7 @@ gbp_gaction_command_finalize (GObject *object)
   if (self->widget != NULL)
     {
       g_signal_handlers_disconnect_by_func (self->widget,
-                                            G_CALLBACK (gtk_widget_destroyed),
+                                            G_CALLBACK (ide_gtk_widget_destroyed),
                                             &self->widget);
       self->widget = NULL;
     }
@@ -167,7 +167,7 @@ gbp_gaction_command_new (GtkWidget   *widget,
 
   g_signal_connect (self->widget,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->widget);
 
   return g_steal_pointer (&self);

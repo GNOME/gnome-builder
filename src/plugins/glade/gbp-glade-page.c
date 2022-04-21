@@ -122,7 +122,7 @@ gbp_glade_page_set_project (GbpGladePage *self,
                                          NULL);
           g_signal_connect (self->designer,
                             "destroy",
-                            G_CALLBACK (gtk_widget_destroyed),
+                            G_CALLBACK (ide_gtk_widget_destroyed),
                             &self->designer);
           dzl_gtk_widget_add_style_class (GTK_WIDGET (self->designer), "glade-designer");
           gtk_container_add_with_properties (GTK_CONTAINER (self->main_box), GTK_WIDGET (self->designer),
@@ -559,7 +559,7 @@ gbp_glade_page_init (GbpGladePage *self)
                                 NULL);
   g_signal_connect (self->chooser,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->chooser);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->chooser), "glade-chooser");
   gtk_container_add_with_properties (GTK_CONTAINER (self->main_box), GTK_WIDGET (self->chooser),
@@ -573,7 +573,7 @@ gbp_glade_page_init (GbpGladePage *self)
                                  NULL);
   g_signal_connect (self->designer,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->designer);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->designer), "glade-designer");
   gtk_container_add (GTK_CONTAINER (self->main_box), GTK_WIDGET (self->designer));

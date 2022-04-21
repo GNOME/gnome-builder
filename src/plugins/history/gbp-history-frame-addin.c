@@ -243,7 +243,7 @@ gbp_history_frame_addin_load (IdeFrameAddin *addin,
                                  NULL);
   g_signal_connect (self->controls,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->controls);
   dzl_gtk_widget_add_style_class (GTK_WIDGET (self->controls), "linked");
   gtk_container_add_with_properties (GTK_CONTAINER (header), GTK_WIDGET (self->controls),
@@ -260,7 +260,7 @@ gbp_history_frame_addin_load (IdeFrameAddin *addin,
                                         NULL);
   g_signal_connect (self->previous_button,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->previous_button);
   gtk_container_add (GTK_CONTAINER (self->controls), GTK_WIDGET (self->previous_button));
 
@@ -274,7 +274,7 @@ gbp_history_frame_addin_load (IdeFrameAddin *addin,
                                     NULL);
   g_signal_connect (self->next_button,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->next_button);
   gtk_container_add (GTK_CONTAINER (self->controls), GTK_WIDGET (self->next_button));
 
