@@ -78,6 +78,13 @@ ide_panel_position_set_edge (IdePanelPosition  *self,
   self->edge_set = TRUE;
 }
 
+/**
+ * ide_panel_position_get_column:
+ * @self: a #IdePanelPosition
+ * @column: (out): a location for a column
+ *
+ * Returns: %TRUE if the column is set
+ */
 gboolean
 ide_panel_position_get_column (IdePanelPosition *self,
                                guint            *column)
@@ -100,6 +107,13 @@ ide_panel_position_set_column (IdePanelPosition *self,
   self->column_set = TRUE;
 }
 
+/**
+ * ide_panel_position_get_row:
+ * @self: a #IdePanelPosition
+ * @row: (out): a location for the row
+ *
+ * Returns: %TRUE if the row is set
+ */
 gboolean
 ide_panel_position_get_row (IdePanelPosition *self,
                             guint            *row)
@@ -122,6 +136,13 @@ ide_panel_position_set_row (IdePanelPosition *self,
   self->row_set = TRUE;
 }
 
+/**
+ * ide_panel_position_get_depth:
+ * @self: a #IdePanelPosition
+ * @depth: (out): a location for the depth
+ *
+ * Returns: %TRUE if the depth is set
+ */
 gboolean
 ide_panel_position_get_depth (IdePanelPosition *self,
                               guint            *depth)
