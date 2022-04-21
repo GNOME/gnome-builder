@@ -1340,7 +1340,8 @@ set_double_property (gpointer    instance,
 static GtkAdjustment *
 create_adjustment (const char *schema_id,
                    const char *path,
-                   const char *key)
+                   const char *key,
+                   guint      *digits)
 {
   g_autoptr(GSettings) settings = NULL;
   GSettingsSchema *schema = NULL;
@@ -1376,6 +1377,13 @@ create_adjustment (const char *schema_id,
   set_double_property (ret, "lower", lower);
   set_double_property (ret, "upper", upper);
 
+  if (g_variant_is_of_type (lower, G_VARIANT_TYPE_DOUBLE) ||
+      g_variant_is_of_type (upper, G_VARIANT_TYPE_DOUBLE))
+    {
+      gtk_adjustment_set_step_increment (ret, 0.1);
+      *digits = 2;
+    }
+
   g_settings_bind (settings, key, ret, "value", G_SETTINGS_BIND_DEFAULT);
 
 cleanup:
@@ -1404,6 +1412,7 @@ ide_preferences_window_spin (const char                   *page_name,
   AdwActionRow *row;
   GtkWidget *child;
   GSettings *settings;
+  guint digits = 0;
 
   g_return_if_fail (entry != NULL);
   g_return_if_fail (ADW_IS_PREFERENCES_GROUP (group));
@@ -1414,11 +1423,12 @@ ide_preferences_window_spin (const char                   *page_name,
 
   title_esc = g_markup_escape_text (entry->title ? entry->title : "", -1);
   subtitle_esc = g_markup_escape_text (entry->subtitle ? entry->subtitle : "", -1);
-  adj = create_adjustment (entry->schema_id, entry->path, entry->key);
+  adj = create_adjustment (entry->schema_id, entry->path, entry->key, &digits);
 
   child = g_object_new (GTK_TYPE_SPIN_BUTTON,
                         "valign", GTK_ALIGN_CENTER,
                         "adjustment", adj,
+                        "digits", digits,
                         NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
                       "title", title_esc,
