@@ -20,11 +20,13 @@
 
 #pragma once
 
-#include <dazzle.h>
 #include <gtksourceview/gtksource.h>
+
+#include <libide-code.h>
+#include <libide-io.h>
+
 #include "ide-xml-position.h"
 #include "ide-xml-symbol-node.h"
-#include <libide-code.h>
 
 G_BEGIN_DECLS
 
@@ -67,6 +69,6 @@ void                ide_xml_service_get_root_node_async                (IdeXmlSe
 IdeXmlSymbolNode   *ide_xml_service_get_root_node_finish               (IdeXmlService        *self,
                                                                         GAsyncResult         *result,
                                                                         GError              **error);
-DzlTaskCache       *ide_xml_service_get_schemas_cache                  (IdeXmlService        *self);
+IdeTaskCache       *ide_xml_service_get_schemas_cache                  (IdeXmlService        *self);
 
 G_END_DECLS
