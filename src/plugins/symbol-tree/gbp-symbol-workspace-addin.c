@@ -28,6 +28,7 @@
 #include <libide-editor.h>
 #include <libide-gui.h>
 
+#include "gbp-symbol-popover.h"
 #include "gbp-symbol-workspace-addin.h"
 #include "gbp-symbol-util.h"
 
@@ -233,6 +234,8 @@ gbp_symbol_workspace_addin_load (IdeWorkspaceAddin *addin,
   gtk_box_append (box, GTK_WIDGET (self->menu_label));
   self->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "child", box,
+                                    "direction", GTK_ARROW_UP,
+                                    "popover", gbp_symbol_popover_new (),
                                     "visible", FALSE,
                                     NULL);
 
