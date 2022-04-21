@@ -80,14 +80,14 @@ typedef struct
   IdeXmlRngDefine *define;
 } CompletionItem;
 
-static void      completion_provider_init (IdeCompletionProviderInterface *iface);
-static gboolean  process_matching_state   (MatchingState                  *state,
-                                           IdeXmlRngDefine                *define);
+static void      completion_provider_init (GtkSourceCompletionProviderInterface *iface);
+static gboolean  process_matching_state   (MatchingState                        *state,
+                                           IdeXmlRngDefine                      *define);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeXmlCompletionProvider,
-                         ide_xml_completion_provider,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, completion_provider_init))
+                               ide_xml_completion_provider,
+                               IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_init))
 
 static void
 populate_state_free (PopulateState *state)
@@ -936,7 +936,7 @@ populate_cb (GObject      *object,
   if (ide_task_return_error_if_cancelled (task))
     return;
 
-  proposals = g_list_store_new (IDE_TYPE_COMPLETION_PROPOSAL);
+  proposals = g_list_store_new (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL);
 
   analysis = ide_xml_position_get_analysis (position);
   schemas = ide_xml_analysis_get_schemas (analysis);
@@ -1024,8 +1024,8 @@ cleanup:
 }
 
 static void
-ide_xml_completion_provider_populate_async (IdeCompletionProvider *provider,
-                                            IdeCompletionContext  *context,
+ide_xml_completion_provider_populate_async (GtkSourceCompletionProvider *provider,
+                                            GtkSourceCompletionContext  *context,
                                             GCancellable          *cancellable,
                                             GAsyncReadyCallback    callback,
                                             gpointer               user_data)
@@ -1039,7 +1039,7 @@ ide_xml_completion_provider_populate_async (IdeCompletionProvider *provider,
   GtkTextIter iter;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (self));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -1048,8 +1048,8 @@ ide_xml_completion_provider_populate_async (IdeCompletionProvider *provider,
   ide_context = ide_object_get_context (IDE_OBJECT (self));
   service = ide_xml_service_from_context (ide_context);
 
-  buffer = ide_completion_context_get_buffer (context);
-  ide_completion_context_get_bounds (context, &iter, NULL);
+  buffer = gtk_source_completion_context_get_buffer (context);
+  gtk_source_completion_context_get_bounds (context, &iter, NULL);
 
   state = g_slice_new0 (PopulateState);
   state->file = g_object_ref (ide_buffer_get_file (IDE_BUFFER (buffer)));
@@ -1069,7 +1069,7 @@ ide_xml_completion_provider_populate_async (IdeCompletionProvider *provider,
 }
 
 static GListModel *
-ide_xml_completion_provider_populate_finish (IdeCompletionProvider  *provider,
+ide_xml_completion_provider_populate_finish (GtkSourceCompletionProvider  *provider,
                                              GAsyncResult           *result,
                                              GError                **error)
 {
@@ -1080,8 +1080,8 @@ ide_xml_completion_provider_populate_finish (IdeCompletionProvider  *provider,
 }
 
 static gboolean
-ide_xml_completion_provider_refilter (IdeCompletionProvider *provider,
-                                      IdeCompletionContext  *context,
+ide_xml_completion_provider_refilter (GtkSourceCompletionProvider *provider,
+                                      GtkSourceCompletionContext  *context,
                                       GListModel            *model)
 {
   g_autofree gchar *word = NULL;
@@ -1089,11 +1089,11 @@ ide_xml_completion_provider_refilter (IdeCompletionProvider *provider,
   guint n_items;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (G_IS_LIST_MODEL (model));
 
   n_items = g_list_model_get_n_items (model);
-  word = ide_completion_context_get_word (context);
+  word = gtk_source_completion_context_get_word (context);
   casefold = g_utf8_casefold (word, -1);
 
   /* TODO: This doesn't work with backspace. We need to track things
@@ -1106,7 +1106,7 @@ ide_xml_completion_provider_refilter (IdeCompletionProvider *provider,
       const gchar *label = ide_xml_proposal_get_label (proposal);
       guint priority;
 
-      if (!ide_completion_fuzzy_match (label, casefold, &priority))
+      if (!gtk_source_completion_fuzzy_match (label, casefold, &priority))
         g_list_store_remove (G_LIST_STORE (model), i - 1);
     }
 
@@ -1114,33 +1114,31 @@ ide_xml_completion_provider_refilter (IdeCompletionProvider *provider,
 }
 
 static void
-ide_xml_completion_provider_display_proposal (IdeCompletionProvider   *provider,
-                                              IdeCompletionListBoxRow *row,
-                                              IdeCompletionContext    *context,
-                                              const gchar             *typed_text,
-                                              IdeCompletionProposal   *proposal)
+ide_xml_completion_provider_display (GtkSourceCompletionProvider *provider,
+                                     GtkSourceCompletionContext  *context,
+                                     GtkSourceCompletionProposal *proposal,
+                                     GtkSourceCompletionCell     *cell)
 {
   IdeXmlProposal *item = (IdeXmlProposal *)proposal;
   const gchar *label;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_COMPLETION_PROPOSAL (proposal));
+  g_assert (GTK_SOURCE_IS_COMPLETION_LIST_BOX_ROW (row));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_PROPOSAL (proposal));
 
   label = ide_xml_proposal_get_label (item);
 
-  ide_completion_list_box_row_set_icon_name (row, NULL);
-  ide_completion_list_box_row_set_left (row, NULL);
-  ide_completion_list_box_row_set_right (row, NULL);
-  ide_completion_list_box_row_set_center_markup (row, label);
+  gtk_source_completion_list_box_row_set_icon_name (row, NULL);
+  gtk_source_completion_list_box_row_set_left (row, NULL);
+  gtk_source_completion_list_box_row_set_right (row, NULL);
+  gtk_source_completion_list_box_row_set_center_markup (row, label);
 }
 
 static void
-ide_xml_completion_provider_activate_proposal (IdeCompletionProvider *provider,
-                                               IdeCompletionContext  *context,
-                                               IdeCompletionProposal *proposal,
-                                               const GdkEventKey     *key)
+ide_xml_completion_provider_activate (GtkSourceCompletionProvider *provider,
+                                      GtkSourceCompletionContext  *context,
+                                      GtkSourceCompletionProposal *proposal)
 {
   IdeXmlProposal *item = (IdeXmlProposal *)proposal;
   GtkTextBuffer *buffer;
@@ -1148,13 +1146,13 @@ ide_xml_completion_provider_activate_proposal (IdeCompletionProvider *provider,
   const gchar *text;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_COMPLETION_PROPOSAL (proposal));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_PROPOSAL (proposal));
 
   text = ide_xml_proposal_get_text (item);
 
-  buffer = ide_completion_context_get_buffer (context);
-  ide_completion_context_get_bounds (context, &begin, &end);
+  buffer = gtk_source_completion_context_get_buffer (context);
+  gtk_source_completion_context_get_bounds (context, &begin, &end);
 
   gtk_text_buffer_begin_user_action (buffer);
   gtk_text_buffer_delete (buffer, &begin, &end);
@@ -1182,10 +1180,10 @@ ide_xml_completion_provider_init (IdeXmlCompletionProvider *self)
 }
 
 static void
-completion_provider_init (IdeCompletionProviderInterface *iface)
+completion_provider_init (GtkSourceCompletionProviderInterface *iface)
 {
-  iface->activate_proposal = ide_xml_completion_provider_activate_proposal;
-  iface->display_proposal = ide_xml_completion_provider_display_proposal;
+  iface->activate = ide_xml_completion_provider_activate;
+  iface->display = ide_xml_completion_provider_display;
   iface->populate_async = ide_xml_completion_provider_populate_async;
   iface->populate_finish = ide_xml_completion_provider_populate_finish;
   iface->refilter = ide_xml_completion_provider_refilter;

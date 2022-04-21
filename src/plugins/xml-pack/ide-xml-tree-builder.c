@@ -18,8 +18,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "ide-xml-tree-builder"
 
-#include <dazzle.h>
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <libxml/parser.h>
 #include <string.h>
@@ -141,14 +143,14 @@ fetch_schemas_cb (GObject      *object,
                   GAsyncResult *result,
                   gpointer      user_data)
 {
-  DzlTaskCache *schemas_cache = (DzlTaskCache *)object;
+  IdeTaskCache *schemas_cache = (IdeTaskCache *)object;
   g_autoptr(FetchSchemasState) state = user_data;
   g_autoptr(IdeXmlSchemaCacheEntry) cache_entry = NULL;
   IdeXmlSchemaCacheEntry *entry;
   g_autoptr(GError) error = NULL;
   guint *count;
 
-  g_assert (DZL_IS_TASK_CACHE (schemas_cache));
+  g_assert (IDE_IS_TASK_CACHE (schemas_cache));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (state != NULL);
   g_assert (IDE_IS_TASK (state->task));
@@ -157,7 +159,7 @@ fetch_schemas_cb (GObject      *object,
   g_assert (state->index < state->schemas->len);
 
   entry = g_ptr_array_index (state->schemas, state->index);
-  cache_entry = dzl_task_cache_get_finish (schemas_cache, result, &error);
+  cache_entry = ide_task_cache_get_finish (schemas_cache, result, &error);
 
   if (cache_entry != NULL)
     {
@@ -205,7 +207,7 @@ fetch_schemas_async (IdeXmlTreeBuilder   *self,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) schemas_copy = NULL;
   IdeXmlService *service;
-  DzlTaskCache *schemas_cache;
+  IdeTaskCache *schemas_cache;
   IdeContext *context;
   guint *count = 0;
 
@@ -251,7 +253,7 @@ fetch_schemas_async (IdeXmlTreeBuilder   *self,
       state->index = schemas_copy->len - 1;
 
       /* TODO: peek schemas if it's already in cache */
-      dzl_task_cache_get_async (schemas_cache,
+      ide_task_cache_get_async (schemas_cache,
                                 entry->file,
                                 FALSE,
                                 cancellable,

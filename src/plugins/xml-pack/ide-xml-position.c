@@ -18,8 +18,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <dazzle.h>
-
 #include "ide-xml-position.h"
 
 G_DEFINE_BOXED_TYPE (IdeXmlPosition, ide_xml_position, ide_xml_position_ref, ide_xml_position_unref)
@@ -42,13 +40,13 @@ ide_xml_position_new (IdeXmlSymbolNode     *node,
 
   self->node = (IDE_IS_XML_SYMBOL_NODE (node)) ? g_object_ref (node) : NULL;
 
-  if (!dzl_str_empty0 (prefix))
+  if (!ide_str_empty0 (prefix))
     self->prefix = g_strdup (prefix);
 
-  if (!dzl_str_empty0 (detail_name))
+  if (!ide_str_empty0 (detail_name))
     self->detail_name = g_strdup (detail_name);
 
-  if (!dzl_str_empty0 (detail_value))
+  if (!ide_str_empty0 (detail_value))
     self->detail_value = g_strdup (detail_value);
 
   self->kind = kind;
