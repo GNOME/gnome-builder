@@ -71,10 +71,7 @@ ide_debugger_hover_provider_populate_async (GtkSourceHoverProvider *provider,
 
   if (!gtk_source_hover_context_get_iter (context, &iter) ||
       gtk_source_buffer_iter_has_context_class (GTK_SOURCE_BUFFER (buffer), &iter, "comment"))
-    {
-      ide_task_return_boolean (task, TRUE);
-      IDE_EXIT;
-    }
+    IDE_GOTO (empty);
 
   lang_id = ide_buffer_get_language_id (buffer);
   icontext = ide_buffer_ref_context (buffer);
@@ -82,15 +79,24 @@ ide_debugger_hover_provider_populate_async (GtkSourceHoverProvider *provider,
   file = ide_buffer_get_file (buffer);
   line = gtk_text_iter_get_line (&iter);
 
-  if (ide_debug_manager_get_active(dbgmgr) && ide_debug_manager_supports_language (dbgmgr, lang_id))
+  if (ide_debug_manager_get_active (dbgmgr) &&
+      ide_debug_manager_supports_language (dbgmgr, lang_id))
     {
       GtkWidget *controls;
 
       controls = ide_debugger_hover_controls_new (dbgmgr, file, line + 1);
       gtk_source_hover_display_prepend (display, controls);
+
+      ide_task_return_boolean (task, TRUE);
+
+      IDE_EXIT;
     }
 
-  ide_task_return_boolean (task, TRUE);
+empty:
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Not supported");
 
   IDE_EXIT;
 }
