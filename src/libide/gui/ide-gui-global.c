@@ -208,5 +208,5 @@ ide_widget_get_workspace (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return IDE_WORKSPACE (gtk_widget_get_native (widget));
+  return IDE_WORKSPACE (gtk_widget_get_root (widget));
 }
