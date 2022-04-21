@@ -373,3 +373,11 @@ ide_gtk_list_store_insert_sorted (GtkListStore     *store,
   else
     gtk_list_store_insert_after (store, iter, &middle);
 }
+
+void
+ide_gtk_widget_destroyed (GtkWidget  *widget,
+                          GtkWidget **location)
+{
+  if (location != NULL)
+    *location = NULL;
+}
