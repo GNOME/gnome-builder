@@ -1,6 +1,6 @@
 /* symbol-tree-plugin.c
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,19 +21,20 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
-#include <libide-sourceview.h>
-#include <libide-gui.h>
 
-#include "gbp-symbol-frame-addin.h"
+#include <libide-gui.h>
+#include <libide-sourceview.h>
+
 #include "gbp-symbol-hover-provider.h"
+#include "gbp-symbol-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_symbol_tree_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_FRAME_ADDIN,
-                                              GBP_TYPE_SYMBOL_FRAME_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_HOVER_PROVIDER,
+                                              GTK_SOURCE_TYPE_HOVER_PROVIDER,
                                               GBP_TYPE_SYMBOL_HOVER_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_SYMBOL_WORKSPACE_ADDIN);
 }

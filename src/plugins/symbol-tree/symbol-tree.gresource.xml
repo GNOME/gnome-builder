@@ -2,7 +2,5 @@
 <gresources>
   <gresource prefix="/plugins/symbol-tree">
     <file>symbol-tree.plugin</file>
-    <file>gbp-symbol-menu-button.ui</file>
-    <file>themes/shared.css</file>
   </gresource>
 </gresources>

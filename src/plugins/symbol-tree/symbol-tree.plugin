@@ -1,9 +1,10 @@
 [Plugin]
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
-Copyright=Copyright © 2015-2018 Christian Hergert
+Copyright=Copyright © 2015-2022 Christian Hergert
 Description=Provides a Symbol Tree for the currently focused document
 Embedded=_gbp_symbol_tree_register_types
-Hidden=true
 Module=symbol-tree
 Name=Symbol Tree
+X-Category=editing
+X-Workspace-Kind=primary;editor;
