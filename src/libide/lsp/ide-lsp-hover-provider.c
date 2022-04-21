@@ -86,7 +86,7 @@ parse_marked_string (GVariant *v)
   if (g_variant_is_of_type (v, G_VARIANT_TYPE_STRING))
     {
       gsize len = 0;
-      const char *str = g_variant_get_string (v, &len);
+      g_autofree char *str = g_strstrip (g_variant_dup_string (v, &len));
 
       if (str && *str == '\0')
         return NULL;
