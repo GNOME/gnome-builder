@@ -171,7 +171,7 @@ gbp_devhelp_frame_addin_set_view (IdeFrameAddin *addin,
                                        NULL);
           g_signal_connect (self->button,
                             "destroy",
-                            G_CALLBACK (gtk_widget_destroyed),
+                            G_CALLBACK (ide_gtk_widget_destroyed),
                             &self->button);
           ide_frame_header_add_custom_title (IDE_FRAME_HEADER (titlebar),
                                                     GTK_WIDGET (self->button),

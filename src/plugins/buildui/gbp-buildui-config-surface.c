@@ -129,7 +129,7 @@ gbp_buildui_config_surface_row_selected_cb (GbpBuilduiConfigSurface *self,
                                     NULL);
   g_signal_connect (self->preferences,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->preferences);
   gtk_container_add (GTK_CONTAINER (self->paned), GTK_WIDGET (self->preferences));
 

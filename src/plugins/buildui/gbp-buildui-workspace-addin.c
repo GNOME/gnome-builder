@@ -292,7 +292,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                  NULL);
   g_signal_connect (self->diag_box,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->diag_box);
   ide_omni_bar_add_status_icon (omnibar, GTK_WIDGET (self->diag_box), 0);
 
@@ -337,7 +337,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                          NULL);
   g_signal_connect (self->omni_bar_section,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->omni_bar_section);
   ide_omni_bar_add_popover_section (omnibar, GTK_WIDGET (self->omni_bar_section), 0);
   gbp_buildui_omni_bar_section_set_context (self->omni_bar_section, context);
@@ -395,7 +395,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                 NULL);
   g_signal_connect (self->surface,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->surface);
   ide_workspace_add_surface (workspace, IDE_SURFACE (self->surface));
 

@@ -71,7 +71,7 @@ gbp_glade_editor_addin_ensure_properties (GbpGladeEditorAddin *self)
                                    NULL);
   g_signal_connect (self->properties,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->properties);
   gtk_container_add (GTK_CONTAINER (transient), GTK_WIDGET (self->properties));
 

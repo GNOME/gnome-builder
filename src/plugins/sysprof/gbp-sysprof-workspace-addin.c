@@ -406,7 +406,7 @@ gbp_sysprof_workspace_addin_check_supported_cb (GObject      *object,
                                 NULL);
   g_signal_connect (self->surface,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->surface);
   ide_workspace_add_surface (self->workspace, IDE_SURFACE (self->surface));
 }

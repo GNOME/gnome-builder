@@ -110,7 +110,7 @@ gbp_shellcmd_preferences_addin_load (IdePreferencesAddin *addin,
                                NULL);
   g_signal_connect (self->editor,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->editor);
   dzl_preferences_add_custom (prefs, "shellcmd.id", "basic", GTK_WIDGET (self->editor), NULL, 0);
 }

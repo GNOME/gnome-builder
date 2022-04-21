@@ -463,7 +463,7 @@ gbp_symbol_frame_addin_load (IdeFrameAddin *addin,
   self->button = g_object_new (GBP_TYPE_SYMBOL_MENU_BUTTON, NULL);
   g_signal_connect (self->button,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->button);
   g_signal_connect_swapped (self->button,
                             "toggled",
