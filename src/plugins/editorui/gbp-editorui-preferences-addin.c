@@ -69,6 +69,11 @@ static const IdePreferenceItemEntry items[] = {
     N_("Display line numbers next to each line of source code"),
     "org.gnome.builder.editor", NULL, "show-line-numbers" },
 
+  { "appearance", "lines", "line-height", 0, ide_preferences_window_spin,
+    N_("Line Height"),
+    N_("Adjust line-height of the configured font"),
+    "org.gnome.builder.editor", NULL, "line-height" },
+
   { "appearance", "lines", "highlight-current-line", 20, ide_preferences_window_toggle,
     N_("Highlight Current Line"),
     N_("Make current line stand out with highlights"),
