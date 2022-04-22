@@ -8,7 +8,6 @@
     </section>
     <section id="ide-primary-workspace-menu-projects-section"/>
     <section id="ide-primary-workspace-menu-placeholder1"/>
-    <section id="ide-primary-workspace-menu-placeholder2"/>
     <section id="ide-primary-workspace-menu-close-section">
       <item>
         <attribute name="id">ide-primary-workspace-menu-close-project</attribute>
@@ -16,6 +15,7 @@
         <attribute name="action">workbench.close</attribute>
       </item>
     </section>
+    <section id="ide-primary-workspace-menu-placeholder2"/>
     <section id="ide-primary-workspace-menu-placeholder3"/>
     <section id="ide-primary-workspace-menu-app-section">
       <item>

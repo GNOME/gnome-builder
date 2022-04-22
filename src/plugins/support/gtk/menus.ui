@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <interface>
-  <!-- interface-requires gtk+ 3.0 -->
   <menu id="ide-primary-workspace-menu">
-    <section id="ide-primary-workspace-menu-placeholder3">
+    <section id="ide-primary-workspace-menu-placeholder2">
       <item>
         <attribute name="label" translatable="yes">Generate Support Log…</attribute>
         <attribute name="action">app.generate-support</attribute>
