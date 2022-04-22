@@ -36,17 +36,18 @@
 
 struct _GbpSymbolWorkspaceAddin
 {
-  GObject         parent_instance;
+  GObject           parent_instance;
 
-  IdeWorkspace   *workspace;
-  PanelStatusbar *statusbar;
+  IdeWorkspace     *workspace;
+  PanelStatusbar   *statusbar;
 
-  GtkMenuButton  *menu_button;
-  GtkLabel       *menu_label;
-  GtkImage       *menu_image;
+  GtkMenuButton    *menu_button;
+  GtkLabel         *menu_label;
+  GtkImage         *menu_image;
+  GbpSymbolPopover *popover;
 
-  IdeSignalGroup *buffer_signals;
-  guint           reload_timeout_source;
+  IdeSignalGroup   *buffer_signals;
+  guint             reload_timeout_source;
 };
 
 static void
@@ -80,9 +81,9 @@ gbp_symbol_workspace_addin_set_symbol (GbpSymbolWorkspaceAddin *self,
 }
 
 static void
-gbp_symbol_workspace_addin_get_symbol_cb (GObject      *object,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
+gbp_symbol_workspace_addin_find_nearest_scope_cb (GObject      *object,
+                                                  GAsyncResult *result,
+                                                  gpointer      user_data)
 {
   IdeBuffer *buffer = (IdeBuffer *)object;
   g_autoptr(GbpSymbolWorkspaceAddin) self = user_data;
@@ -134,13 +135,14 @@ gbp_symbol_workspace_addin_update (GbpSymbolWorkspaceAddin *self,
   if (!ide_buffer_has_symbol_resolvers (buffer))
     {
       gbp_symbol_workspace_addin_set_symbol (self, NULL);
+      gbp_symbol_popover_set_symbol_tree (self->popover, NULL);
       gtk_widget_hide (GTK_WIDGET (self->menu_button));
       IDE_EXIT;
     }
 
   gbp_symbol_find_nearest_scope_async (buffer,
                                        NULL,
-                                       gbp_symbol_workspace_addin_get_symbol_cb,
+                                       gbp_symbol_workspace_addin_find_nearest_scope_cb,
                                        g_object_ref (self));
 
   IDE_EXIT;
@@ -232,10 +234,11 @@ gbp_symbol_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    "ellipsize", PANGO_ELLIPSIZE_END,
                                    NULL);
   gtk_box_append (box, GTK_WIDGET (self->menu_label));
+  self->popover = GBP_SYMBOL_POPOVER (gbp_symbol_popover_new ());
   self->menu_button = g_object_new (GTK_TYPE_MENU_BUTTON,
                                     "child", box,
                                     "direction", GTK_ARROW_UP,
-                                    "popover", gbp_symbol_popover_new (),
+                                    "popover", self->popover,
                                     "visible", FALSE,
                                     NULL);
 
