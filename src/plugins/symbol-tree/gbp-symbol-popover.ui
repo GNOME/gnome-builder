@@ -7,10 +7,6 @@
         <property name="orientation">vertical</property>
         <property name="spacing">6</property>
         <child>
-          <object class="GtkSearchEntry" id="search_entry">
-          </object>
-        </child>
-        <child>
           <object class="GtkFrame">
             <child>
               <object class="GtkScrolledWindow" id="scroller">
@@ -34,6 +30,11 @@
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSearchEntry" id="search_entry">
+            <property name="placeholder-text" translatable="yes">Search Symbols…</property>
           </object>
         </child>
       </object>
