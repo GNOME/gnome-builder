@@ -24,9 +24,11 @@
 
 #include "ide-editor-page.h"
 #include "ide-editor-private.h"
+#include "ide-editor-workspace.h"
 
 void
 _ide_editor_init (void)
 {
   g_type_ensure (IDE_TYPE_EDITOR_PAGE);
+  g_type_ensure (IDE_TYPE_EDITOR_WORKSPACE);
 }
