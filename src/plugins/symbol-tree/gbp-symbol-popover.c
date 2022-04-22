@@ -26,17 +26,17 @@
 
 struct _GbpSymbolPopover
 {
-  GtkPopover         parent_instance;
+  GtkPopover      parent_instance;
 
-  IdeSymbolResolver *symbol_resolver;
+  IdeSymbolTree  *symbol_tree;
 
-  GtkSearchEntry    *search_entry;
-  GtkListView       *list_view;
+  GtkSearchEntry *search_entry;
+  GtkListView    *list_view;
 };
 
 enum {
   PROP_0,
-  PROP_SYMBOL_RESOLVER,
+  PROP_SYMBOL_TREE,
   N_PROPS
 };
 
@@ -66,7 +66,7 @@ gbp_symbol_popover_reload (GbpSymbolPopover *self)
 
   g_assert (GBP_IS_SYMBOL_POPOVER (self));
 
-  if (self->symbol_resolver == NULL)
+  if (self->symbol_tree == NULL)
     {
       gtk_list_view_set_model (self->list_view, NULL);
       IDE_EXIT;
@@ -80,7 +80,7 @@ gbp_symbol_popover_dispose (GObject *object)
 {
   GbpSymbolPopover *self = (GbpSymbolPopover *)object;
 
-  g_clear_object (&self->symbol_resolver);
+  g_clear_object (&self->symbol_tree);
 
   G_OBJECT_CLASS (gbp_symbol_popover_parent_class)->dispose (object);
 }
@@ -95,8 +95,8 @@ gbp_symbol_popover_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_SYMBOL_RESOLVER:
-      g_value_set_object (value, gbp_symbol_popover_get_symbol_resolver (self));
+    case PROP_SYMBOL_TREE:
+      g_value_set_object (value, gbp_symbol_popover_get_symbol_tree (self));
       break;
 
     default:
@@ -114,8 +114,8 @@ gbp_symbol_popover_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SYMBOL_RESOLVER:
-      gbp_symbol_popover_set_symbol_resolver (self, g_value_get_object (value));
+    case PROP_SYMBOL_TREE:
+      gbp_symbol_popover_set_symbol_tree (self, g_value_get_object (value));
       break;
 
     default:
@@ -133,11 +133,11 @@ gbp_symbol_popover_class_init (GbpSymbolPopoverClass *klass)
   object_class->get_property = gbp_symbol_popover_get_property;
   object_class->set_property = gbp_symbol_popover_set_property;
 
-  properties [PROP_SYMBOL_RESOLVER] =
-    g_param_spec_object ("symbol-resolver",
-                         "Symbol Resolver",
-                         "The symbol resolver to build a tree from",
-                         IDE_TYPE_SYMBOL_RESOLVER,
+  properties [PROP_SYMBOL_TREE] =
+    g_param_spec_object ("symbol-tree",
+                         "Symbol Tree",
+                         "The symbol tree to display",
+                         IDE_TYPE_SYMBOL_TREE,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -159,26 +159,26 @@ gbp_symbol_popover_new (void)
   return g_object_new (GBP_TYPE_SYMBOL_POPOVER, NULL);
 }
 
-IdeSymbolResolver *
-gbp_symbol_popover_get_symbol_resolver (GbpSymbolPopover *self)
+IdeSymbolTree *
+gbp_symbol_popover_get_symbol_tree (GbpSymbolPopover *self)
 {
   g_return_val_if_fail (GBP_IS_SYMBOL_POPOVER (self), NULL);
-  g_return_val_if_fail (!self->symbol_resolver ||
-                        IDE_IS_SYMBOL_RESOLVER (self->symbol_resolver), NULL);
+  g_return_val_if_fail (!self->symbol_tree ||
+                        IDE_IS_SYMBOL_TREE (self->symbol_tree), NULL);
 
-  return self->symbol_resolver;
+  return self->symbol_tree;
 }
 
 void
-gbp_symbol_popover_set_symbol_resolver (GbpSymbolPopover  *self,
-                                        IdeSymbolResolver *symbol_resolver)
+gbp_symbol_popover_set_symbol_tree (GbpSymbolPopover *self,
+                                    IdeSymbolTree    *symbol_tree)
 {
   g_return_if_fail (GBP_IS_SYMBOL_POPOVER (self));
-  g_return_if_fail (!symbol_resolver || IDE_IS_SYMBOL_RESOLVER (symbol_resolver));
+  g_return_if_fail (!symbol_tree || IDE_IS_SYMBOL_TREE (symbol_tree));
 
-  if (g_set_object (&self->symbol_resolver, symbol_resolver))
+  if (g_set_object (&self->symbol_tree, symbol_tree))
     {
       gbp_symbol_popover_reload (self);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_RESOLVER]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_TREE]);
     }
 }

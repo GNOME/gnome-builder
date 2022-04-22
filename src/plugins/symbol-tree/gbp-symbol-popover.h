@@ -30,9 +30,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSymbolPopover, gbp_symbol_popover, GBP, SYMBOL_POPOVER, GtkPopover)
 
-GtkWidget         *gbp_symbol_popover_new                 (void);
-IdeSymbolResolver *gbp_symbol_popover_get_symbol_resolver (GbpSymbolPopover  *self);
-void               gbp_symbol_popover_set_symbol_resolver (GbpSymbolPopover  *self,
-                                                           IdeSymbolResolver *symbol_resolver);
+GtkWidget     *gbp_symbol_popover_new             (void);
+IdeSymbolTree *gbp_symbol_popover_get_symbol_tree (GbpSymbolPopover *self);
+void           gbp_symbol_popover_set_symbol_tree (GbpSymbolPopover *self,
+                                                   IdeSymbolTree    *symbol_tree);
 
 G_END_DECLS
