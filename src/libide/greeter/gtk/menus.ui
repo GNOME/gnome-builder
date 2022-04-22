@@ -71,6 +71,8 @@
     </section>
   </menu>
   <menu id="ide-editor-workspace-menu">
+    <section id="ide-editor-workspace-menu-theme-section">
+    </section>
     <section id="ide-editor-workspace-menu-projects-section">
       <item>
         <attribute name="id">ide-editor-workspace-menu-open</attribute>

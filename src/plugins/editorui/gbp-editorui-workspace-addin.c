@@ -211,6 +211,29 @@ open_in_new_workspace (GSimpleAction *action,
 }
 
 static void
+new_workspace (GSimpleAction *action,
+               GVariant      *param,
+               gpointer       user_data)
+{
+  GbpEditoruiWorkspaceAddin *self = user_data;
+  IdeEditorWorkspace *workspace;
+  IdeWorkbench *workbench;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+
+  workbench = ide_workspace_get_workbench (self->workspace);
+  workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
+  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
+
+  gtk_window_present (GTK_WINDOW (workspace));
+
+  IDE_EXIT;
+}
+
+static void
 new_file_cb (GObject      *object,
              GAsyncResult *result,
              gpointer      user_data)
@@ -274,6 +297,7 @@ static const GActionEntry actions[] = {
   { "open-in-new-frame", open_in_new_frame },
   { "open-in-new-workspace", open_in_new_workspace },
   { "new-file", new_file },
+  { "new-workspace", new_workspace },
 };
 
 static void

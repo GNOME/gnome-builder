@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
+  <menu id="ide-editor-workspace-menu">
+    <section id="ide-editor-workspace-menu-theme-section">
+      <item>
+        <attribute name="custom">theme_selector</attribute>
+      </item>
+    </section>
+    <section id="ide-editor-workspace-menu-projects-section"/>
+    <section id="ide-editor-workspace-menu-placeholder1"/>
+    <section id="ide-editor-workspace-menu-placeholder2"/>
+    <section id="ide-editor-workspace-menu-open-section">
+      <attribute name="id">ide-editor-workspace-menu-open-section</attribute>
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-open</attribute>
+        <attribute name="label" translatable="yes">Open File…</attribute>
+        <attribute name="action">workbench.open</attribute>
+        <attribute name="accel">&lt;primary&gt;o</attribute>
+      </item>
+    </section>
+    <section id="ide-editor-workspace-menu-app-section">
+      <attribute name="id">ide-editor-workspace-menu-app-section</attribute>
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-preferences</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="accel">&lt;primary&gt;comma</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-shortcuts</attribute>
+        <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
+        <attribute name="action">app.shortcuts</attribute>
+        <attribute name="accel">&lt;primary&gt;question</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-help</attribute>
+        <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="action">app.help</attribute>
+        <attribute name="accel">F1</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-about</attribute>
+        <attribute name="label" translatable="yes">About Builder</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+    <section id="ide-editor-workspace-menu-quit-section">
+      <attribute name="id">ide-editor-workspace-menu-quit-section</attribute>
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-quit</attribute>
+        <attribute name="label" translatable="yes">_Quit</attribute>
+        <attribute name="action">app.quit</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="ide-editor-page-menu">
     <section id="ide-editor-page-document-section">
       <attribute name="label" translatable="yes">Document</attribute>
