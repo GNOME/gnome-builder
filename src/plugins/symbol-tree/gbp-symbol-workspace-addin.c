@@ -32,7 +32,7 @@
 #include "gbp-symbol-workspace-addin.h"
 #include "gbp-symbol-util.h"
 
-#define RELOAD_DELAY_MSEC 150
+#define RELOAD_DELAY_MSEC 500
 
 struct _GbpSymbolWorkspaceAddin
 {
