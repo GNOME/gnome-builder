@@ -97,6 +97,15 @@
       </item>
     </section>
   </menu>
+  <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-placeholder1">
+      <item>
+        <attribute name="label" translatable="yes">New Editor Workspace…</attribute>
+        <attribute name="id">ide-editor-workspace-new-workspace</attribute>
+        <attribute name="action">editorui.new-workspace</attribute>
+      </item>
+    </section>
+  </menu>
   <menu id="new-document-menu">
     <section id="new-document-section">
       <attribute name="id">new-document-section</attribute>
