@@ -102,13 +102,13 @@
                 <child>
                   <object class="GtkButton">
                     <property name="label" translatable="yes">Open File…</property>
-                    <property name="action-name">editor.open</property>
+                    <property name="action-name">workbench.open</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkButton">
                     <property name="label" translatable="yes">New Terminal</property>
-                    <property name="action-name">terminal.new</property>
+                    <property name="action-name">win.new-terminal</property>
                   </object>
                 </child>
               </object>
