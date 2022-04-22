@@ -24,12 +24,19 @@
 
 G_BEGIN_DECLS
 
-void       gbp_symbol_find_nearest_scope_async  (IdeBuffer            *buffer,
-                                                 GCancellable         *cancellable,
-                                                 GAsyncReadyCallback   callback,
-                                                 gpointer              user_data);
-IdeSymbol *gbp_symbol_find_nearest_scope_finish (IdeBuffer            *buffer,
-                                                 GAsyncResult         *result,
-                                                 GError              **error);
+void           gbp_symbol_find_nearest_scope_async  (IdeBuffer            *buffer,
+                                                     GCancellable         *cancellable,
+                                                     GAsyncReadyCallback   callback,
+                                                     gpointer              user_data);
+IdeSymbol     *gbp_symbol_find_nearest_scope_finish (IdeBuffer            *buffer,
+                                                     GAsyncResult         *result,
+                                                     GError              **error);
+void           gbp_symbol_get_symbol_tree_async     (IdeBuffer            *buffer,
+                                                     GCancellable         *cancellable,
+                                                     GAsyncReadyCallback   callback,
+                                                     gpointer              user_data);
+IdeSymbolTree *gbp_symbol_get_symbol_tree_finish    (IdeBuffer            *buffer,
+                                                     GAsyncResult         *result,
+                                                     GError              **error);
 
 G_END_DECLS
