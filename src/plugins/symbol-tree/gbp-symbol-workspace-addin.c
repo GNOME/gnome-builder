@@ -56,24 +56,30 @@ static void
 gbp_symbol_workspace_addin_set_symbol (GbpSymbolWorkspaceAddin *self,
                                        IdeSymbol               *symbol)
 {
-  const char *label;
-  const char *icon_name;
+  const char *label = NULL;
+  const char *icon_name = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self));
   g_assert (!symbol || IDE_IS_SYMBOL (symbol));
 
-  if (symbol == NULL)
+  if (symbol != NULL)
+    {
+      icon_name = ide_symbol_kind_get_icon_name (ide_symbol_get_kind (symbol));
+      label = ide_symbol_get_name (symbol);
+
+      if (ide_str_empty0 (label))
+        label = NULL;
+    }
+
+  if (label == NULL)
     {
       gtk_label_set_label (self->menu_label, _("Select Symbol…"));
       gtk_image_set_from_icon_name (self->menu_image, NULL);
       gtk_widget_hide (GTK_WIDGET (self->menu_image));
       IDE_EXIT;
     }
-
-  label = ide_symbol_get_name (symbol);
-  icon_name = ide_symbol_kind_get_icon_name (ide_symbol_get_kind (symbol));
 
   gtk_label_set_label (self->menu_label, label);
   gtk_image_set_from_icon_name (self->menu_image, icon_name);
