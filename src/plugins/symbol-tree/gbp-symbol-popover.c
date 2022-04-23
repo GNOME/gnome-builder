@@ -236,6 +236,9 @@ get_child_model (gpointer item,
   g_assert (IDE_IS_SYMBOL_NODE (node));
   g_assert (IDE_IS_SYMBOL_TREE (tree));
 
+  if (ide_symbol_tree_get_n_children (tree, node) == 0)
+    return NULL;
+
   return G_LIST_MODEL (gbp_symbol_list_model_new (tree, node));
 }
 
