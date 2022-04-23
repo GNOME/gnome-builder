@@ -107,7 +107,7 @@ gbp_grep_tree_addin_unload (IdeTreeAddin *addin,
   g_assert (IDE_IS_TREE_MODEL (model));
 
   gtk_widget_insert_action_group (GTK_WIDGET (tree), "grep", NULL);
-
+  g_clear_object (&self->group);
   self->tree = NULL;
 }
 
