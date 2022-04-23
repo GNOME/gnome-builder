@@ -30,32 +30,30 @@
 
 struct _GbpCodeuiBufferAddin
 {
-  GObject    parent_instance;
-  IdeBuffer *buffer;
-  GFile     *file;
+  GObject                parent_instance;
+  IdeDiagnosticsManager *diagnostics_manager;
+  IdeBuffer             *buffer;
+  GFile                 *file;
 };
 
 static void
 gbp_codeui_buffer_addin_queue_diagnose (GbpCodeuiBufferAddin *self,
                                         IdeBuffer            *buffer)
 {
-  g_autoptr(IdeContext) context = NULL;
-  IdeDiagnosticsManager *manager;
   g_autoptr(GBytes) contents = NULL;
   const gchar *lang_id;
   GFile *file;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODEUI_BUFFER_ADDIN (self));
+  g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self->diagnostics_manager));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  context = ide_buffer_ref_context (buffer);
-  manager = ide_diagnostics_manager_from_context (context);
   file = ide_buffer_get_file (buffer);
   lang_id = ide_buffer_get_language_id (buffer);
   contents = ide_buffer_dup_content (buffer);
 
-  _ide_diagnostics_manager_file_changed (manager, file, contents, lang_id);
+  _ide_diagnostics_manager_file_changed (self->diagnostics_manager, file, contents, lang_id);
 }
 
 static void
@@ -77,8 +75,6 @@ gbp_codeui_buffer_addin_file_loaded (IdeBufferAddin *addin,
                                      GFile          *file)
 {
   GbpCodeuiBufferAddin *self = (GbpCodeuiBufferAddin *)addin;
-  g_autoptr(IdeContext) context = NULL;
-  IdeDiagnosticsManager *manager;
   const gchar *lang_id;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -88,11 +84,9 @@ gbp_codeui_buffer_addin_file_loaded (IdeBufferAddin *addin,
 
   g_set_object (&self->file, file);
 
-  context = ide_buffer_ref_context (buffer);
-  manager = ide_diagnostics_manager_from_context (context);
   lang_id = ide_buffer_get_language_id (buffer);
 
-  _ide_diagnostics_manager_file_opened (manager, file, lang_id);
+  _ide_diagnostics_manager_file_opened (self->diagnostics_manager, file, lang_id);
 }
 
 static void
@@ -134,22 +128,19 @@ gbp_codeui_buffer_addin_language_set (IdeBufferAddin *addin,
                                       IdeBuffer      *buffer,
                                       const gchar    *language_id)
 {
-  g_autoptr(IdeContext) context = NULL;
-  IdeDiagnosticsManager *diagnostics_manager;
+  GbpCodeuiBufferAddin *self = (GbpCodeuiBufferAddin *)addin;
   GFile *file;
 
-  g_assert (GBP_IS_CODEUI_BUFFER_ADDIN (addin));
+  g_assert (GBP_IS_CODEUI_BUFFER_ADDIN (self));
+  g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self->diagnostics_manager));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  context = ide_buffer_ref_context (buffer);
   file = ide_buffer_get_file (buffer);
 
-  g_assert (IDE_IS_CONTEXT (context));
   g_assert (file != NULL);
   g_assert (G_IS_FILE (file));
 
-  diagnostics_manager = ide_diagnostics_manager_from_context (context);
-  _ide_diagnostics_manager_language_changed (diagnostics_manager, file, language_id);
+  _ide_diagnostics_manager_language_changed (self->diagnostics_manager, file, language_id);
 }
 
 static void
@@ -168,8 +159,9 @@ gbp_codeui_buffer_addin_load (IdeBufferAddin *addin,
   manager = ide_diagnostics_manager_from_context (context);
 
   self->buffer = g_object_ref (buffer);
+  self->diagnostics_manager = g_object_ref (manager);
 
-  g_signal_connect_object (manager,
+  g_signal_connect_object (self->diagnostics_manager,
                            "changed",
                            G_CALLBACK (gbp_codeui_buffer_addin_changed_cb),
                            self,
@@ -181,25 +173,22 @@ gbp_codeui_buffer_addin_unload (IdeBufferAddin *addin,
                                 IdeBuffer      *buffer)
 {
   GbpCodeuiBufferAddin *self = (GbpCodeuiBufferAddin *)addin;
-  g_autoptr(IdeContext) context = NULL;
-  IdeDiagnosticsManager *manager;
   GFile *file;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_CODEUI_BUFFER_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  context = ide_buffer_ref_context (buffer);
-  manager = ide_diagnostics_manager_from_context (context);
   file = ide_buffer_get_file (buffer);
 
-  g_signal_handlers_disconnect_by_func (manager,
+  g_signal_handlers_disconnect_by_func (self->diagnostics_manager,
                                         G_CALLBACK (gbp_codeui_buffer_addin_changed_cb),
                                         self);
 
-  _ide_diagnostics_manager_file_closed (manager, file);
+  _ide_diagnostics_manager_file_closed (self->diagnostics_manager, file);
 
   g_clear_object (&self->file);
+  g_clear_object (&self->diagnostics_manager);
 }
 
 static void
