@@ -60,11 +60,10 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
                                     GtkButton      *button)
 {
   g_autoptr(GbpGrepModel) model = NULL;
-  IdeSurface *editor;
+  g_autoptr(IdePanelPosition) position = NULL;
   IdeWorkspace *workspace;
   IdeContext *context;
   GtkWidget *panel;
-  GtkWidget *utils;
   gboolean use_regex;
   gboolean at_word_boundaries;
   gboolean case_sensitive;
@@ -74,21 +73,22 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   g_assert (GTK_IS_BUTTON (button));
 
   workspace = ide_widget_get_workspace (GTK_WIDGET (self));
-  editor = ide_workspace_get_surface_by_name (workspace, "editor");
-  utils = ide_editor_surface_get_utilities (IDE_EDITOR_SURFACE (editor));
   context = ide_widget_get_context (GTK_WIDGET (workspace));
 
-  use_regex = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->regex_button));
-  at_word_boundaries = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->whole_button));
-  case_sensitive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->case_button));
-  recursive = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->recursive_button));
+  position = ide_panel_position_new ();
+  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
+
+  use_regex = gtk_check_button_get_active (GTK_CHECK_BUTTON (self->regex_button));
+  at_word_boundaries = gtk_check_button_get_active (GTK_CHECK_BUTTON (self->whole_button));
+  case_sensitive = gtk_check_button_get_active (GTK_CHECK_BUTTON (self->case_button));
+  recursive = gtk_check_button_get_active (GTK_CHECK_BUTTON (self->recursive_button));
 
   model = gbp_grep_model_new (context);
   gbp_grep_model_set_directory (model, self->file);
   gbp_grep_model_set_use_regex (model, use_regex);
   gbp_grep_model_set_at_word_boundaries (model, at_word_boundaries);
   gbp_grep_model_set_case_sensitive (model, case_sensitive);
-  gbp_grep_model_set_query (model, gtk_entry_get_text (self->entry));
+  gbp_grep_model_set_query (model, gtk_editable_get_text (GTK_EDITABLE (self->entry)));
 
   if (gtk_widget_get_visible (GTK_WIDGET (self->recursive_button)))
     gbp_grep_model_set_recursive (model, recursive);
@@ -96,12 +96,12 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
     gbp_grep_model_set_recursive (model, FALSE);
 
   panel = gbp_grep_panel_new ();
-  gtk_container_add (GTK_CONTAINER (utils), panel);
+  ide_workspace_add_pane (workspace, IDE_PANE (panel), position);
   gbp_grep_panel_set_model (GBP_GREP_PANEL (panel), model);
-  gtk_widget_show (panel);
+  panel_widget_raise (PANEL_WIDGET (panel));
 
-  /* gtk_popover_popdown (GTK_POPOVER (self)); */
-  gtk_widget_destroy (GTK_WIDGET (self));
+  gtk_popover_popdown (GTK_POPOVER (self));
+
   gbp_grep_panel_launch_search (GBP_GREP_PANEL (panel));
 }
 

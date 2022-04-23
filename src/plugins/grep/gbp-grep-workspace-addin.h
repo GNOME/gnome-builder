@@ -1,4 +1,4 @@
-/* gbp-grep-editor-addin.h
+/* gbp-grep-workspace-addin.h
  *
  * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GREP_EDITOR_ADDIN (gbp_grep_editor_addin_get_type())
+#define GBP_TYPE_GREP_WORKSPACE_ADDIN (gbp_grep_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGrepEditorAddin, gbp_grep_editor_addin, GBP, GREP_EDITOR_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpGrepWorkspaceAddin, gbp_grep_workspace_addin, GBP, GREP_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS
