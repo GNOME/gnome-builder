@@ -30,9 +30,9 @@
 
 struct _GbpGrepTreeAddin
 {
-  GObject  parent_instance;
-
-  IdeTree *tree;
+  GObject             parent_instance;
+  IdeTree            *tree;
+  GSimpleActionGroup *group;
 };
 
 static void
@@ -73,7 +73,6 @@ gbp_grep_tree_addin_load (IdeTreeAddin *addin,
                           IdeTreeModel *model)
 {
   GbpGrepTreeAddin *self = (GbpGrepTreeAddin *)addin;
-  g_autoptr(GActionMap) group = NULL;
   static const GActionEntry actions[] = {
     { "find-in-files", find_in_files_action },
   };
@@ -85,9 +84,14 @@ gbp_grep_tree_addin_load (IdeTreeAddin *addin,
 
   self->tree = tree;
 
-  group = G_ACTION_MAP (g_simple_action_group_new ());
-  g_action_map_add_action_entries (group, actions, G_N_ELEMENTS (actions), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (tree), "grep", G_ACTION_GROUP (group));
+  self->group = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (self->group),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (tree),
+                                  "grep",
+                                  G_ACTION_GROUP (self->group));
 }
 
 static void
@@ -112,6 +116,7 @@ gbp_grep_tree_addin_selection_changed (IdeTreeAddin *addin,
                                        IdeTreeNode  *node)
 {
   GbpGrepTreeAddin *self = (GbpGrepTreeAddin *)addin;
+  GAction *action;
   gboolean enabled;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -119,10 +124,8 @@ gbp_grep_tree_addin_selection_changed (IdeTreeAddin *addin,
   g_assert (!node || IDE_IS_TREE_NODE (node));
 
   enabled = node && ide_tree_node_holds (node, IDE_TYPE_PROJECT_FILE);
-
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "grep", "find-in-files",
-                             "enabled", enabled,
-                             NULL);
+  action = g_action_map_lookup_action (G_ACTION_MAP (self->group), "find-in-files");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
 }
 
 static void
@@ -134,7 +137,7 @@ tree_addin_iface_init (IdeTreeAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGrepTreeAddin, gbp_grep_tree_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
 
 static void
 gbp_grep_tree_addin_class_init (GbpGrepTreeAddinClass *klass)
