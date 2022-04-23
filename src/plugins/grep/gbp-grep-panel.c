@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-code.h>
 #include <libide-editor.h>
 #include <libide-gui.h>
@@ -33,7 +34,7 @@
 
 struct _GbpGrepPanel
 {
-  DzlDockWidget      parent_instance;
+  IdePane            parent_instance;
 
   GCancellable      *cancellable;
 
@@ -66,7 +67,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (GbpGrepPanel, gbp_grep_panel, DZL_TYPE_DOCK_WIDGET)
+G_DEFINE_FINAL_TYPE (GbpGrepPanel, gbp_grep_panel, IDE_TYPE_PANE)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -241,13 +242,12 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
       if G_LIKELY (line != NULL)
         {
           g_autoptr(IdeLocation) location = NULL;
+          g_autoptr(IdePanelPosition) position = NULL;
           g_autoptr(GFile) child = NULL;
           IdeWorkspace *workspace;
-          IdeSurface *editor;
           guint lineno = line->line;
 
           workspace = ide_widget_get_workspace (GTK_WIDGET (self));
-          editor = ide_workspace_get_surface_by_name (workspace, "editor");
 
           if (lineno > 0)
             lineno--;
@@ -255,7 +255,8 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
           child = gbp_grep_model_get_file (GBP_GREP_MODEL (model), line->path);
           location = ide_location_new (child, lineno, -1);
 
-          ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (editor), location);
+          position = ide_panel_position_new ();
+          ide_editor_focus_location (workspace, position, location);
         }
     }
 }
@@ -289,14 +290,14 @@ static void
 gbp_grep_panel_toggle_all_cb (GbpGrepPanel      *self,
                               GtkTreeViewColumn *column)
 {
-  GtkToggleButton *toggle;
+  GtkCheckButton *toggle;
   GtkTreeModel *model;
 
   g_assert (GBP_IS_GREP_PANEL (self));
   g_assert (GTK_IS_TREE_VIEW_COLUMN (column));
 
-  toggle = GTK_TOGGLE_BUTTON (self->check);
-  gtk_toggle_button_set_active (toggle, !gtk_toggle_button_get_active (toggle));
+  toggle = GTK_CHECK_BUTTON (self->check);
+  gtk_check_button_set_active (toggle, !gtk_check_button_get_active (toggle));
 
   model = gtk_tree_view_get_model (self->tree_view);
   gbp_grep_model_toggle_mode (GBP_GREP_MODEL (model));
@@ -339,7 +340,7 @@ gbp_grep_panel_replace_clicked_cb (GbpGrepPanel *self,
   if (edits == NULL || edits->len == 0)
     return;
 
-  text = gtk_entry_get_text (self->replace_entry);
+  text = gtk_editable_get_text (GTK_EDITABLE (self->replace_entry));
 
   for (guint i = 0; i < edits->len; i++)
     {
@@ -374,7 +375,7 @@ gbp_grep_panel_find_entry_text_changed_cb (GbpGrepPanel *self,
   g_assert (GBP_IS_GREP_PANEL (self));
   g_assert (GTK_IS_ENTRY (entry));
 
-  is_query_empty = (g_strcmp0 (gtk_entry_get_text (entry), "") == 0);
+  is_query_empty = (g_strcmp0 (gtk_editable_get_text (GTK_EDITABLE (entry)), "") == 0);
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->find_button), !is_query_empty);
 }
@@ -394,7 +395,7 @@ gbp_grep_panel_close_panel_action (GSimpleAction *action,
   is_project_wide = (model == NULL || gbp_grep_model_get_directory (model) == NULL);
 
   if (!is_project_wide)
-    gtk_widget_destroy (GTK_WIDGET (self));
+    ide_pane_destroy (IDE_PANE (self));
 }
 
 static void
@@ -404,7 +405,7 @@ gbp_grep_panel_close_clicked_cb (GbpGrepPanel *self,
   g_assert (GBP_IS_GREP_PANEL (self));
   g_assert (GTK_IS_BUTTON (button));
 
-  gtk_widget_destroy (GTK_WIDGET (self));
+  ide_pane_destroy (IDE_PANE (self));
 }
 
 static void
@@ -452,9 +453,10 @@ gbp_grep_panel_scan_cb (GObject      *object,
    * box will unselect the items when it should have selected all of them. To avoid this,
    * just set back the "Select all" check box to "selected" when starting a new search.
    */
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->check), TRUE);
+  gtk_check_button_set_active (GTK_CHECK_BUTTON (self->check), TRUE);
 
-  ide_widget_reveal_and_grab (GTK_WIDGET (self->replace_entry));
+  panel_widget_raise (PANEL_WIDGET (self));
+  gtk_widget_grab_focus (GTK_WIDGET (self->replace_entry));
 }
 
 /**
@@ -485,19 +487,20 @@ gbp_grep_panel_launch_search (GbpGrepPanel *self)
   model = gbp_grep_model_new (ide_widget_get_context (GTK_WIDGET (self)));
   gbp_grep_model_set_directory (model, root_dir);
 
-  gbp_grep_model_set_use_regex (model, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->regex_button)));
-  gbp_grep_model_set_at_word_boundaries (model, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->whole_words_button)));
-  gbp_grep_model_set_case_sensitive (model, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->case_button)));
-  gbp_grep_model_set_query (model, gtk_entry_get_text (self->find_entry));
+  gbp_grep_model_set_use_regex (model, gtk_check_button_get_active (GTK_CHECK_BUTTON (self->regex_button)));
+  gbp_grep_model_set_at_word_boundaries (model, gtk_check_button_get_active (GTK_CHECK_BUTTON (self->whole_words_button)));
+  gbp_grep_model_set_case_sensitive (model, gtk_check_button_get_active (GTK_CHECK_BUTTON (self->case_button)));
+  gbp_grep_model_set_query (model, gtk_editable_get_text (GTK_EDITABLE (self->find_entry)));
 
-  gbp_grep_model_set_recursive (model, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->recursive_button)));
+  gbp_grep_model_set_recursive (model, gtk_check_button_get_active (GTK_CHECK_BUTTON (self->recursive_button)));
 
   gtk_stack_set_visible_child (self->stack, GTK_WIDGET (self->spinner));
   gtk_spinner_start (self->spinner);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), FALSE);
   gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), FALSE);
 
-  ide_widget_reveal_and_grab (GTK_WIDGET (self));
+  panel_widget_raise (PANEL_WIDGET (self));
+  gtk_widget_grab_focus (GTK_WIDGET (self));
 
   /* We allow making a new search even if there's already one running, but cancel the previous
    * one to make sure it doesn't needlessly use resources for the grep process that's still
@@ -540,14 +543,14 @@ on_entry_activate_toggle_action_button_cb (GtkEntry *entry,
     g_signal_emit_by_name (button, "activate", NULL);
 }
 
-static void
+static gboolean
 gbp_grep_panel_grab_focus (GtkWidget *widget)
 {
   GbpGrepPanel *self = (GbpGrepPanel *)widget;
 
   g_assert (GBP_IS_GREP_PANEL (self));
 
-  gtk_widget_grab_focus (GTK_WIDGET (self->find_entry));
+  return gtk_widget_grab_focus (GTK_WIDGET (self->find_entry));
 }
 
 static void
@@ -651,8 +654,6 @@ static void
 gbp_grep_panel_init (GbpGrepPanel *self)
 {
   g_autoptr(GSimpleActionGroup) group = NULL;
-  DzlShortcutController *controller;
-
   GtkTreeViewColumn *column;
   GtkCellRenderer *cell;
 
@@ -663,14 +664,9 @@ gbp_grep_panel_init (GbpGrepPanel *self)
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "grep", G_ACTION_GROUP (group));
-
-  controller = dzl_shortcut_controller_find (GTK_WIDGET (self));
-  dzl_shortcut_controller_add_command_action (controller,
-                                              I_("org.gnome.builder.grep"),
-                                              I_("Escape"),
-                                              DZL_SHORTCUT_PHASE_BUBBLE,
-                                              I_("grep.close-panel"));
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "grep",
+                                  G_ACTION_GROUP (group));
 
   g_signal_connect (self->find_entry,
                     "activate",
@@ -716,7 +712,6 @@ gbp_grep_panel_init (GbpGrepPanel *self)
                               "margin-end", 6,
                               "margin-start", 6,
                               "margin-top", 3,
-                              "visible", TRUE,
                               "active", TRUE,
                               NULL);
   self->toggle_column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN,
@@ -824,7 +819,8 @@ gbp_grep_panel_set_model (GbpGrepPanel *self,
       gtk_widget_set_sensitive (GTK_WIDGET (self->replace_button), has_item);
       gtk_widget_set_sensitive (GTK_WIDGET (self->replace_entry), has_item);
 
-      gtk_entry_set_text (self->find_entry, gbp_grep_model_get_query (model));
+      gtk_editable_set_text (GTK_EDITABLE (self->find_entry),
+                             gbp_grep_model_get_query (model));
 
       gtk_widget_set_visible (GTK_WIDGET (self->close_button), !is_initial_panel);
 
@@ -843,14 +839,15 @@ gbp_grep_panel_set_model (GbpGrepPanel *self,
 
           gtk_widget_set_visible (GTK_WIDGET (self->recursive_button), is_dir);
         }
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->regex_button),
-                                    gbp_grep_model_get_use_regex (model));
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->whole_words_button),
-                                    gbp_grep_model_get_at_word_boundaries (model));
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->case_button),
-                                    gbp_grep_model_get_case_sensitive (model));
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->recursive_button),
-                                    gbp_grep_model_get_recursive (model));
+
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (self->regex_button),
+                                   gbp_grep_model_get_use_regex (model));
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (self->whole_words_button),
+                                   gbp_grep_model_get_at_word_boundaries (model));
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (self->case_button),
+                                   gbp_grep_model_get_case_sensitive (model));
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (self->recursive_button),
+                                   gbp_grep_model_get_recursive (model));
     }
 
   gtk_tree_view_set_model (self->tree_view, GTK_TREE_MODEL (model));

@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include <libide-gui.h>
 
 #include "gbp-grep-model.h"
 
@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_GREP_PANEL (gbp_grep_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGrepPanel, gbp_grep_panel, GBP, GREP_PANEL, DzlDockWidget)
+G_DECLARE_FINAL_TYPE (GbpGrepPanel, gbp_grep_panel, GBP, GREP_PANEL, IdePane)
 
 GtkWidget    *gbp_grep_panel_new           (void);
 GbpGrepModel *gbp_grep_panel_get_model     (GbpGrepPanel *self);

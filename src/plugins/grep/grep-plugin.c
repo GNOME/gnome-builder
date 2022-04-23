@@ -20,12 +20,13 @@
 
 #include "config.h"
 
-#include <libide-tree.h>
-#include <libide-editor.h>
 #include <libpeas/peas.h>
 
+#include <libide-tree.h>
+#include <libide-editor.h>
+
 #include "gbp-grep-tree-addin.h"
-#include "gbp-grep-editor-addin.h"
+#include "gbp-grep-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_grep_register_types (PeasObjectModule *module)
@@ -34,6 +35,6 @@ _gbp_grep_register_types (PeasObjectModule *module)
                                               IDE_TYPE_TREE_ADDIN,
                                               GBP_TYPE_GREP_TREE_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_ADDIN,
-                                              GBP_TYPE_GREP_EDITOR_ADDIN);
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_GREP_WORKSPACE_ADDIN);
 }
