@@ -60,9 +60,3 @@ notificationstack button {
   padding: 0;
   background: none;
 }
-
-/* Make new libadwaita match closer to libpanel frame header */
-tabboxchild {
- margin-top: 2px;
- margin-bottom: 2px;
-}
