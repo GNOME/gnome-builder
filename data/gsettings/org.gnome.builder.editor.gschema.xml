@@ -140,7 +140,7 @@
       <description>Specify the minimum number of characters for selection matching.</description>
     </key>
     <key name="use-tabbar" type="b">
-      <default>false</default>
+      <default>true</default>
       <summary>Use Tabs</summary>
       <description>Use the tabbar within the page grid.</description>
     </key>
