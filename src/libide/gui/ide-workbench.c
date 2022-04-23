@@ -1501,6 +1501,8 @@ ide_workbench_unload_foundry_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeWorkbench *self;
 
+  IDE_ENTRY;
+
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
@@ -1516,6 +1518,8 @@ ide_workbench_unload_foundry_cb (GObject      *object,
       ide_object_destroy (IDE_OBJECT (self->context));
       g_clear_object (&self->context);
     }
+
+  IDE_EXIT;
 }
 
 static void
@@ -1523,6 +1527,8 @@ ide_workbench_unload_project_completed (IdeWorkbench *self,
                                         IdeTask      *task)
 {
   GList *copy;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_TASK (task));
@@ -1542,6 +1548,8 @@ ide_workbench_unload_project_completed (IdeWorkbench *self,
                              ide_task_get_cancellable (task),
                              ide_workbench_unload_foundry_cb,
                              g_object_ref (task));
+
+  IDE_EXIT;
 }
 static void
 ide_workbench_unload_project_cb (GObject      *object,
@@ -1553,6 +1561,8 @@ ide_workbench_unload_project_cb (GObject      *object,
   g_autoptr(GError) error = NULL;
   IdeWorkbench *self;
   GPtrArray *addins;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -1576,6 +1586,8 @@ ide_workbench_unload_project_cb (GObject      *object,
 
   if (addins->len == 0)
     ide_workbench_unload_project_completed (self, task);
+
+  IDE_EXIT;
 }
 
 /**
@@ -1600,6 +1612,8 @@ ide_workbench_unload_async (IdeWorkbench        *self,
   g_autoptr(GPtrArray) addins = NULL;
   GApplication *app;
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -1609,7 +1623,7 @@ ide_workbench_unload_async (IdeWorkbench        *self,
   if (self->unloaded)
     {
       ide_task_return_boolean (task, TRUE);
-      return;
+      IDE_EXIT;
     }
 
   self->unloaded = TRUE;
@@ -1638,7 +1652,7 @@ ide_workbench_unload_async (IdeWorkbench        *self,
   if (self->project_info == NULL)
     {
       ide_workbench_unload_project_completed (self, g_steal_pointer (&task));
-      return;
+      IDE_EXIT;
     }
 
   addins = ide_workbench_collect_addins (self);
@@ -1647,7 +1661,7 @@ ide_workbench_unload_async (IdeWorkbench        *self,
   if (addins->len == 0)
     {
       ide_workbench_unload_project_completed (self, task);
-      return;
+      IDE_EXIT;
     }
 
   for (guint i = 0; i < addins->len; i++)
@@ -1665,6 +1679,8 @@ ide_workbench_unload_async (IdeWorkbench        *self,
    * task isn't freed while it hasn't yet finished running asynchronously.
    */
   task = NULL;
+
+  IDE_EXIT;
 }
 
 /**
