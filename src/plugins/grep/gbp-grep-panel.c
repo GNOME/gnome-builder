@@ -551,7 +551,7 @@ gbp_grep_panel_grab_focus (GtkWidget *widget)
 }
 
 static void
-gbp_grep_panel_finalize (GObject *object)
+gbp_grep_panel_dispose (GObject *object)
 {
   GbpGrepPanel *self = (GbpGrepPanel *)object;
 
@@ -563,7 +563,7 @@ gbp_grep_panel_finalize (GObject *object)
       g_clear_object (&self->cancellable);
     }
 
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "grep", NULL);
+  G_OBJECT_CLASS (gbp_grep_panel_parent_class)->dispose (object);
 }
 
 static void
@@ -612,7 +612,7 @@ gbp_grep_panel_class_init (GbpGrepPanelClass *klass)
 
   object_class->get_property = gbp_grep_panel_get_property;
   object_class->set_property = gbp_grep_panel_set_property;
-  object_class->finalize = gbp_grep_panel_finalize;
+  object_class->dispose = gbp_grep_panel_dispose;
 
   widget_class->grab_focus = gbp_grep_panel_grab_focus;
 
