@@ -556,6 +556,7 @@ ide_debug_manager_finalize (GObject *object)
 
   g_clear_object (&self->debugger_signals);
   g_clear_pointer (&self->breakpoints, g_hash_table_unref);
+  g_clear_pointer (&self->supported_languages, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_debug_manager_parent_class)->finalize (object);
 }
