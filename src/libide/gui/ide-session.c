@@ -505,9 +505,8 @@ load_state_with_migrations (GBytes *bytes)
   g_autoptr(GVariant) variant = NULL;
   /* This is the value of the "data" key in the final @variant. */
   g_autoptr(GVariant) migrated_state = NULL;
-  GVariantDict state;
+  g_autoptr(GVariant) old_api_state = NULL;
   gboolean fully_migrated = FALSE;
-  GVariant *old_api_state = NULL;
 
   g_assert (bytes != NULL);
 
@@ -519,10 +518,8 @@ load_state_with_migrations (GBytes *bytes)
       return NULL;
     }
 
-  g_variant_dict_init (&state, variant);
-
   /* Handle migrations from prior to the Session API rework, where there was only GbpEditorSessionAddin that used it */
-  old_api_state = g_variant_dict_lookup_value (&state, "GbpEditorSessionAddin", G_VARIANT_TYPE ("a(siiiv)"));
+  old_api_state = g_variant_lookup_value (variant, "GbpEditorSessionAddin", G_VARIANT_TYPE ("a(siiiv)"));
   if (old_api_state)
     migrated_state = migrate_pre_api_rework (old_api_state);
   else
