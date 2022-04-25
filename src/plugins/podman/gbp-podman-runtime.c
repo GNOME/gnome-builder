@@ -188,7 +188,7 @@ get_layer_dir (const char *storage_directory,
 static char *
 find_parent_layer (GbpPodmanRuntime *runtime,
                    JsonParser       *parser,
-                   const char       *layer)
+                   char             *layer)
 {
   JsonNode *root;
   JsonArray *ar;
@@ -200,7 +200,10 @@ find_parent_layer (GbpPodmanRuntime *runtime,
   if (!(root = json_parser_get_root (parser)) ||
       !JSON_NODE_HOLDS_ARRAY (root) ||
       !(ar = json_node_get_array (root)))
-    return NULL;
+    {
+      g_free (layer);
+      return NULL;
+    }
 
   n_items = json_array_get_length (ar);
 
@@ -218,8 +221,12 @@ find_parent_layer (GbpPodmanRuntime *runtime,
           !(parent = json_object_get_string_member (item, "parent")))
         continue;
 
-      return (char *)parent;
+      g_free (layer);
+
+      return g_strdup (parent);
     }
+
+  g_free (layer);
 
   return NULL;
 }
@@ -256,7 +263,7 @@ find_image_layer (JsonParser *parser,
           !(layer = json_object_get_string_member (item, "layer")))
         continue;
 
-      return (char *)layer;
+      return g_strdup (layer);
     }
 
   return NULL;
@@ -265,26 +272,30 @@ find_image_layer (JsonParser *parser,
 static void
 resolve_overlay (GbpPodmanRuntime *runtime)
 {
-  gchar *podman_id;
-  g_autofree gchar *container_json = NULL;
-  g_autofree gchar *layer_json = NULL;
-  g_autofree gchar *image_json = NULL;
+  g_autofree char *container_json = NULL;
+  g_autofree char *layer_json = NULL;
+  g_autofree char *image_json = NULL;
   g_autofree char *storage_directory = NULL;
-  g_autoptr(JsonParser) parser;
-  g_autoptr(JsonParser) image_parser;
+  g_autoptr(JsonParser) parser = NULL;
+  g_autoptr(JsonParser) image_parser = NULL;
+  g_autoptr(JsonParser) layer_parser = NULL;
   g_autoptr(GFile) overlay = NULL;
   g_autoptr(GFileInfo) overlay_info = NULL;
   g_autoptr(GError) error = NULL;
-  const gchar *image_id = NULL;
+  const char *image_id = NULL;
+  const char *podman_id;
   JsonNode *root;
   JsonArray *containers_arr;
-  gchar *layer = NULL;
+  char *layer = NULL;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
 
   podman_id = runtime->id;
   parser = json_parser_new ();
   image_parser = json_parser_new ();
+  layer_parser = json_parser_new ();
 
   /* find storage location first */
   if ((storage_directory = get_storage_directory ()) == NULL)
@@ -308,13 +319,13 @@ resolve_overlay (GbpPodmanRuntime *runtime)
   if (error)
     {
       ide_object_warning (ide_object_get_context (IDE_OBJECT (runtime)), "Cannot read overlay folder: %s", error->message);
-      return;
+      IDE_EXIT;
     }
 
   if (!g_file_info_get_attribute_boolean (overlay_info, G_FILE_ATTRIBUTE_ACCESS_CAN_READ))
     {
       ide_object_warning (ide_object_get_context (IDE_OBJECT (runtime)), "Cannot read overlay folder: podman file translation won't work");
-      return;
+      IDE_EXIT;
     }
 
   container_json = g_build_filename (storage_directory,
@@ -339,37 +350,50 @@ resolve_overlay (GbpPodmanRuntime *runtime)
     {
       JsonObject *cont = json_array_get_object_element (containers_arr, i);
       const gchar *cid = json_object_get_string_member (cont, "id");
+
       if (ide_str_equal0 (cid, podman_id))
         {
-          const gchar *layer_id = json_object_get_string_member (cont, "layer");
-          layer = get_layer_dir (storage_directory, layer_id);
+          const char *layer_id = json_object_get_string_member (cont, "layer");
+          g_autofree char *layer_dir = get_layer_dir (storage_directory, layer_id);
+
+          if (layer_dir)
+            {
+              g_clear_pointer (&layer, g_free);
+              layer = g_steal_pointer (&layer_dir);
+            }
+
           image_id = json_object_get_string_member (cont, "image");
         }
     }
 
-  json_parser_load_from_file (parser, layer_json, &error);
-  if (error)
-    return;
+  layer_parser = json_parser_new ();
+  if (!json_parser_load_from_file (layer_parser, layer_json, &error))
+    IDE_EXIT;
 
   if (layer != NULL)
     {
       /* apply all parent layers */
       do {
-        runtime->layers = g_list_append (runtime->layers, layer);
-      } while ((layer = find_parent_layer (runtime, parser, layer)));
+        runtime->layers = g_list_append (runtime->layers, g_strdup (layer));
+      } while ((layer = find_parent_layer (runtime, layer_parser, layer)));
     }
 
+  g_assert (layer == NULL);
+
   /* apply image layer */
-  json_parser_load_from_file (image_parser, image_json, &error);
-  if (error)
-    return;
+  if (!json_parser_load_from_file (image_parser, image_json, &error))
+    IDE_EXIT;
 
   if ((layer = find_image_layer (image_parser, image_id)))
     {
       do
-        runtime->layers = g_list_append (runtime->layers, layer);
+        runtime->layers = g_list_append (runtime->layers, g_strdup (layer));
       while ((layer = find_parent_layer (runtime, parser, layer)));
     }
+
+  g_assert (layer == NULL);
+
+  IDE_EXIT;
 }
 
 /*
