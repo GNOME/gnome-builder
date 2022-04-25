@@ -416,7 +416,7 @@ ide_lsp_completion_provider_activate_proposal (IdeCompletionProvider *provider,
   GtkTextBuffer *buffer;
   GtkTextView *view;
   GtkTextIter begin, end;
-  g_autoptr(GPtrArray) additional_text_edits;
+  g_autoptr(GPtrArray) additional_text_edits = NULL;
   IdeBufferManager *buffer_manager;
   const gchar *text = NULL;
 
