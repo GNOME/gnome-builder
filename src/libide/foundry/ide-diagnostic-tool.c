@@ -37,6 +37,12 @@ typedef struct
   char *local_program_path;
 } IdeDiagnosticToolPrivate;
 
+typedef struct
+{
+  GBytes *stdin_bytes;
+  GFile  *file;
+} DiagnoseState;
+
 static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeDiagnosticTool, ide_diagnostic_tool, IDE_TYPE_OBJECT,
@@ -53,6 +59,14 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+diagnose_state_free (DiagnoseState *state)
+{
+  g_clear_pointer (&state->stdin_bytes, g_bytes_unref);
+  g_clear_object (&state->file);
+  g_slice_free (DiagnoseState, state);
+}
 
 static GBytes *
 ide_diagnostic_tool_real_get_stdin_bytes (IdeDiagnosticTool *self,
@@ -351,7 +365,7 @@ ide_diagnostic_tool_communicate_cb (GObject      *object,
   g_autofree char *stdout_buf = NULL;
   g_autofree char *stderr_buf = NULL;
   IdeDiagnosticTool *self;
-  GFile *file;
+  DiagnoseState *state;
 
   IDE_ENTRY;
 
@@ -359,22 +373,27 @@ ide_diagnostic_tool_communicate_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data(task);
+
+  g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
+  g_assert (state != NULL);
+  g_assert (!state->file || G_IS_FILE (state->file));
+  g_assert (state->file != NULL || state->stdin_bytes != NULL);
+
+  IDE_TRACE_MSG ("Completing diagnose of %s",
+                 G_OBJECT_TYPE_NAME (self));
+
   if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  self = ide_task_get_source_object (task);
-  file = ide_task_get_task_data(task);
-
-  g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
-  g_assert (!file || G_IS_FILE (file));
-
   diagnostics = ide_diagnostics_new ();
 
   if (IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics)
-    IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics (self, diagnostics, file, stdout_buf, stderr_buf);
+    IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics (self, diagnostics, state->file, stdout_buf, stderr_buf);
 
   ide_task_return_object (task, g_steal_pointer (&diagnostics));
 
@@ -396,8 +415,8 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GBytes) stdin_bytes = NULL;
-  const char *stdin_data = NULL;
+  DiagnoseState *state;
+  const char *stdin_data;
 
   IDE_ENTRY;
 
@@ -406,9 +425,16 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
   g_assert (!file || G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  IDE_TRACE_MSG ("Diagnosing %s...",
+                 G_OBJECT_TYPE_NAME (provider));
+
+  state = g_slice_new0 (DiagnoseState);
+  state->file = file ? g_object_ref (file) : NULL;
+  state->stdin_bytes = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->get_stdin_bytes (self, file, contents, lang_id);
+
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_diagnostic_tool_diagnose_async);
-  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  ide_task_set_task_data (task, state, diagnose_state_free);
 
   if (priv->program_name == NULL)
     {
@@ -431,17 +457,10 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
       IDE_EXIT;
     }
 
-  if ((stdin_bytes = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->get_stdin_bytes (self, file, contents, lang_id)))
-    {
-      stdin_data = g_bytes_get_data (stdin_bytes, NULL);
-      if (stdin_data != NULL && stdin_data[0] == 0)
-        stdin_data = NULL;
-
-      g_object_set_data_full (G_OBJECT (task),
-                              "STDIN_UTF8_BYTES",
-                              g_steal_pointer (&stdin_bytes),
-                              (GDestroyNotify)g_bytes_unref);
-    }
+  if (state->stdin_bytes != NULL)
+    stdin_data = (char *)g_bytes_get_data (state->stdin_bytes, NULL);
+  else
+    stdin_data = NULL;
 
   ide_subprocess_communicate_utf8_async (subprocess,
                                          stdin_data,
@@ -507,7 +526,8 @@ ide_diagnostic_tool_get_bundled_program_path (IdeDiagnosticTool *self)
 }
 
 void
-ide_diagnostic_tool_set_bundled_program_path (IdeDiagnosticTool *self, const char *path)
+ide_diagnostic_tool_set_bundled_program_path (IdeDiagnosticTool *self,
+                                              const char        *path)
 {
   IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
 
@@ -532,7 +552,8 @@ ide_diagnostic_tool_get_local_program_path (IdeDiagnosticTool *self)
 }
 
 void
-ide_diagnostic_tool_set_local_program_path (IdeDiagnosticTool *self, const char *path)
+ide_diagnostic_tool_set_local_program_path (IdeDiagnosticTool *self,
+                                            const char        *path)
 {
   IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
 
