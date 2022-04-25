@@ -58,9 +58,9 @@ void              ide_build_manager_invalidate          (IdeBuildManager      *s
 IDE_AVAILABLE_IN_3_32
 void              ide_build_manager_cancel              (IdeBuildManager      *self);
 IDE_AVAILABLE_IN_3_32
-IdePipeline *ide_build_manager_get_pipeline        (IdeBuildManager      *self);
+IdePipeline      *ide_build_manager_get_pipeline        (IdeBuildManager      *self);
 IDE_AVAILABLE_IN_3_32
-IdePipeline *ide_build_manager_ref_pipeline        (IdeBuildManager      *self);
+IdePipeline      *ide_build_manager_ref_pipeline        (IdeBuildManager      *self);
 IDE_AVAILABLE_IN_3_32
 void              ide_build_manager_rebuild_async       (IdeBuildManager      *self,
                                                          IdePipelinePhase         phase,
