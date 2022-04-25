@@ -128,7 +128,7 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
   if (local_program_path != NULL)
     {
       g_autofree char *local_program = g_build_filename (srcdir, local_program_path, NULL);
-      if (g_file_test (local_program, G_FILE_TEST_EXISTS))
+      if (g_file_test (local_program, G_FILE_TEST_IS_EXECUTABLE))
         program_path = g_steal_pointer (&local_program);
     }
 
