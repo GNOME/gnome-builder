@@ -77,6 +77,7 @@ populate_data_free (PopulateData *data)
   g_clear_object (&data->workdir);
   g_clear_object (&data->vcs);
   g_clear_object (&data->build_system);
+  g_clear_pointer (&data->indexers, g_ptr_array_unref);
   g_slice_free (PopulateData, data);
 }
 
