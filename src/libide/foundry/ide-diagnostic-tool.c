@@ -63,9 +63,15 @@ static GParamSpec *properties [N_PROPS];
 static void
 diagnose_state_free (DiagnoseState *state)
 {
+  IDE_ENTRY;
+
+  g_assert (state != NULL);
+
   g_clear_pointer (&state->stdin_bytes, g_bytes_unref);
   g_clear_object (&state->file);
   g_slice_free (DiagnoseState, state);
+
+  IDE_EXIT;
 }
 
 static GBytes *
@@ -74,9 +80,16 @@ ide_diagnostic_tool_real_get_stdin_bytes (IdeDiagnosticTool *self,
                                           GBytes            *contents,
                                           const char        *language_id)
 {
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (file != NULL || contents != NULL);
+
   if (contents != NULL)
-    return g_bytes_ref (contents);
-  return NULL;
+    IDE_RETURN (g_bytes_ref (contents));
+
+  IDE_RETURN (NULL);
 }
 
 static void
@@ -85,9 +98,14 @@ ide_diagnostic_tool_real_configure_launcher (IdeDiagnosticTool     *self,
                                              GFile                 *file,
                                              GBytes                *contents)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
-  g_assert (G_IS_FILE (file));
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (file != NULL || contents != NULL);
+
+  IDE_EXIT;
 }
 
 static IdeSubprocessLauncher *
@@ -201,6 +219,8 @@ setup_launcher:
 
   IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->configure_launcher (self, launcher, file, contents);
 
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+
   IDE_RETURN (g_steal_pointer (&launcher));
 }
 
@@ -214,6 +234,9 @@ ide_diagnostic_tool_constructed (GObject *object)
   if (!IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->populate_diagnostics)
     g_critical ("%s inherits from IdeDiagnosticTool but does not implement populate_diagnostics(). This will not work.",
                 G_OBJECT_TYPE_NAME (self));
+
+  IDE_TRACE_MSG ("Created diagnostic tool %s",
+                 G_OBJECT_TYPE_NAME (object));
 }
 
 static void
@@ -222,11 +245,18 @@ ide_diagnostic_tool_finalize (GObject *object)
   IdeDiagnosticTool *self = (IdeDiagnosticTool *)object;
   IdeDiagnosticToolPrivate *priv = ide_diagnostic_tool_get_instance_private (self);
 
+  IDE_ENTRY;
+
+  IDE_TRACE_MSG ("Finalizing diagnostic tool %s",
+                 G_OBJECT_TYPE_NAME (self));
+
   g_clear_pointer (&priv->program_name, g_free);
   g_clear_pointer (&priv->bundled_program_path, g_free);
   g_clear_pointer (&priv->local_program_path, g_free);
 
   G_OBJECT_CLASS (ide_diagnostic_tool_parent_class)->finalize (object);
+
+  IDE_EXIT;
 }
 
 static void
@@ -310,12 +340,14 @@ ide_diagnostic_tool_class_init (IdeDiagnosticToolClass *klass)
                          "The name of the program executable to locate",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_BUNDLED_PROGRAM_PATH] =
     g_param_spec_string ("bundled-program-path",
                          "Bundled Program Path",
                          "The path of the bundled program",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_LOCAL_PROGRAM_PATH] =
     g_param_spec_string ("local-program-path",
                          "Local Program Path",
