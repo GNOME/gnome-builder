@@ -36,7 +36,16 @@ ide_codespell_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *too
                                                       GFile                 *file,
                                                       GBytes                *contents)
 {
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CODESPELL_DIAGNOSTIC_PROVIDER (tool));
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (file != NULL || contents != NULL);
+
   ide_subprocess_launcher_push_argv (launcher, "-");
+
+  IDE_EXIT;
 }
 
 static void
