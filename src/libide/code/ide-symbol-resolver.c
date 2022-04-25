@@ -126,6 +126,37 @@ ide_symbol_resolver_real_find_nearest_scope_finish (IdeSymbolResolver  *self,
 }
 
 static void
+ide_symbol_resolver_real_lookup_symbol_async (IdeSymbolResolver   *self,
+                                              IdeLocation         *location,
+                                              GCancellable        *cancellable,
+                                              GAsyncReadyCallback  callback,
+                                              gpointer             user_data)
+{
+  g_assert (IDE_IS_SYMBOL_RESOLVER (self));
+  g_assert (location != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ide_task_report_new_error (self,
+                             callback,
+                             user_data,
+                             ide_symbol_resolver_real_lookup_symbol_async,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Not supported");
+}
+
+static IdeSymbol *
+ide_symbol_resolver_real_lookup_symbol_finish (IdeSymbolResolver  *self,
+                                               GAsyncResult       *result,
+                                               GError            **error)
+{
+  g_assert (IDE_IS_SYMBOL_RESOLVER (self));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+static void
 ide_symbol_resolver_default_init (IdeSymbolResolverInterface *iface)
 {
   iface->get_symbol_tree_async = ide_symbol_resolver_real_get_symbol_tree_async;
@@ -134,6 +165,8 @@ ide_symbol_resolver_default_init (IdeSymbolResolverInterface *iface)
   iface->find_references_finish = ide_symbol_resolver_real_find_references_finish;
   iface->find_nearest_scope_async = ide_symbol_resolver_real_find_nearest_scope_async;
   iface->find_nearest_scope_finish = ide_symbol_resolver_real_find_nearest_scope_finish;
+  iface->lookup_symbol_async = ide_symbol_resolver_real_lookup_symbol_async;
+  iface->lookup_symbol_finish = ide_symbol_resolver_real_lookup_symbol_finish;
 }
 
 /**
