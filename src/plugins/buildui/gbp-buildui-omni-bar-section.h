@@ -20,14 +20,14 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_BUILDUI_OMNI_BAR_SECTION (gbp_buildui_omni_bar_section_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuilduiOmniBarSection, gbp_buildui_omni_bar_section, GBP, BUILDUI_OMNI_BAR_SECTION, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpBuilduiOmniBarSection, gbp_buildui_omni_bar_section, GBP, BUILDUI_OMNI_BAR_SECTION, AdwBin)
 
 void gbp_buildui_omni_bar_section_set_context (GbpBuilduiOmniBarSection *self,
                                                IdeContext               *context);

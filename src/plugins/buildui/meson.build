@@ -4,7 +4,7 @@ plugins_sources += files([
   #'gbp-buildui-config-view-addin.c',
   #'gbp-buildui-editor-page-addin.c',
   'gbp-buildui-log-pane.c',
-  #'gbp-buildui-omni-bar-section.c',
+  'gbp-buildui-omni-bar-section.c',
   #'gbp-buildui-pane.c',
   #'gbp-buildui-runtime-categories.c',
   #'gbp-buildui-runtime-row.c',
