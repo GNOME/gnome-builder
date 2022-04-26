@@ -55,5 +55,7 @@ void      ide_gtk_list_store_insert_sorted   (GtkListStore      *store,
 IDE_AVAILABLE_IN_ALL
 void       ide_gtk_widget_destroyed          (GtkWidget         *widget,
                                               GtkWidget        **location);
+IDE_AVAILABLE_IN_ALL
+char      *ide_g_time_span_to_label          (GTimeSpan          span);
 
 G_END_DECLS
