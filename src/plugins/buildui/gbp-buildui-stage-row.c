@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
 #include "gbp-buildui-stage-row.h"
 
 struct _GbpBuilduiStageRow
@@ -32,7 +30,7 @@ struct _GbpBuilduiStageRow
 
   IdePipelineStage   *stage;
 
-  DzlBoldingLabel *label;
+  GtkLabel           *label;
 };
 
 enum {
@@ -46,6 +44,20 @@ G_DEFINE_FINAL_TYPE (GbpBuilduiStageRow, gbp_buildui_stage_row, GTK_TYPE_LIST_BO
 static GParamSpec *properties [N_PROPS];
 
 static void
+gbp_buildui_stage_row_notify_active (GbpBuilduiStageRow *row,
+                                     GParamSpec         *pspec,
+                                     IdePipelineStage   *stage)
+{
+  g_assert (GBP_IS_BUILDUI_STAGE_ROW (row));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
+
+  if (ide_pipeline_stage_get_active (stage))
+    gtk_widget_add_css_class (GTK_WIDGET (row->label), "heading");
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (row->label), "heading");
+}
+
+static void
 gbp_buildui_stage_row_notify_completed (GbpBuilduiStageRow *row,
                                       GParamSpec       *pspec,
                                       IdePipelineStage    *stage)
@@ -54,9 +66,9 @@ gbp_buildui_stage_row_notify_completed (GbpBuilduiStageRow *row,
   g_assert (IDE_IS_PIPELINE_STAGE (stage));
 
   if (ide_pipeline_stage_get_completed (stage))
-    dzl_gtk_widget_add_style_class (GTK_WIDGET (row->label), "dim-label");
+    gtk_widget_add_css_class (GTK_WIDGET (row->label), "dim-label");
   else
-    dzl_gtk_widget_remove_style_class (GTK_WIDGET (row->label), "dim-label");
+    gtk_widget_remove_css_class (GTK_WIDGET (row->label), "dim-label");
 }
 
 static void
@@ -75,11 +87,17 @@ gbp_buildui_stage_row_set_stage (GbpBuilduiStageRow *self,
   if (name == NULL)
     name = G_OBJECT_TYPE_NAME (stage);
 
-  gtk_label_set_label (GTK_LABEL (self->label), name);
+  gtk_label_set_label (self->label, name);
 
   g_signal_connect_object (stage,
                            "notify::completed",
                            G_CALLBACK (gbp_buildui_stage_row_notify_completed),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (stage,
+                           "notify::active",
+                           G_CALLBACK (gbp_buildui_stage_row_notify_active),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -90,13 +108,13 @@ gbp_buildui_stage_row_set_stage (GbpBuilduiStageRow *self,
 }
 
 static void
-gbp_buildui_stage_row_destroy (GtkWidget *widget)
+gbp_buildui_stage_row_dispose (GObject *object)
 {
-  GbpBuilduiStageRow *self = (GbpBuilduiStageRow *)widget;
+  GbpBuilduiStageRow *self = (GbpBuilduiStageRow *)object;
 
   g_clear_object (&self->stage);
 
-  GTK_WIDGET_CLASS (gbp_buildui_stage_row_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_buildui_stage_row_parent_class)->dispose (object);
 }
 
 static void
@@ -143,10 +161,9 @@ gbp_buildui_stage_row_class_init (GbpBuilduiStageRowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gbp_buildui_stage_row_dispose;
   object_class->get_property = gbp_buildui_stage_row_get_property;
   object_class->set_property = gbp_buildui_stage_row_set_property;
-
-  widget_class->destroy = gbp_buildui_stage_row_destroy;
 
   properties [PROP_STAGE] =
     g_param_spec_object ("stage",
@@ -175,7 +192,6 @@ gbp_buildui_stage_row_new (IdePipelineStage *stage)
 
   return g_object_new (GBP_TYPE_BUILDUI_STAGE_ROW,
                        "stage", stage,
-                       "visible", TRUE,
                        NULL);
 }
 
