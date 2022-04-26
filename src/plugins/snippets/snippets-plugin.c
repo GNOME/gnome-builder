@@ -27,7 +27,7 @@
 #include <libide-gui.h>
 #include <libide-sourceview.h>
 
-#include "ide-snippet-application-addin.h"
+#include "gbp-snippet-application-addin.h"
 #include "gbp-snippet-completion-provider.h"
 
 _IDE_EXTERN void
@@ -38,5 +38,5 @@ _gbp_snippets_register_types (PeasObjectModule *module)
                                               GBP_TYPE_SNIPPET_COMPLETION_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
-                                              IDE_TYPE_SNIPPET_APPLICATION_ADDIN);
+                                              GBP_TYPE_SNIPPET_APPLICATION_ADDIN);
 }

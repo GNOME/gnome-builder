@@ -1,6 +1,6 @@
 plugins_sources += files([
   'snippets-plugin.c',
-  'ide-snippet-application-addin.c',
+  'gbp-snippet-application-addin.c',
   'gbp-snippet-completion-provider.c',
 ])
 

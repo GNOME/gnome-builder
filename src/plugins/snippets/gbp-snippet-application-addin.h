@@ -1,4 +1,4 @@
-/* ide-snippet-application-addin.h
+/* gbp-snippet-application-addin.h
  *
  * Copyright 2022 Günther Wagner <info@gunibert.de>
  *
@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-License-Gbpntifier: GPL-3.0-or-later
  */
 
 #pragma once
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SNIPPET_APPLICATION_ADDIN (ide_snippet_application_addin_get_type())
+#define GBP_TYPE_SNIPPET_APPLICATION_ADDIN (gbp_snippet_application_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSnippetApplicationAddin, ide_snippet_application_addin, IDE, SNIPPET_APPLICATION_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpSnippetApplicationAddin, gbp_snippet_application_addin, GBP, SNIPPET_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS
