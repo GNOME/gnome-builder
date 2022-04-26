@@ -300,6 +300,7 @@ find_nearest_scope_flags_cb (GObject      *object,
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(IdeClangClient) client = NULL;
+  g_autoptr(GError) error = NULL;
   g_auto(GStrv) flags = NULL;
   IdeLocation *location;
   GCancellable *cancellable;
@@ -312,8 +313,24 @@ find_nearest_scope_flags_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
-  context = ide_object_get_context (IDE_OBJECT (build_system));
+  if (!(flags = ide_build_system_get_build_flags_finish (build_system, result, &error)))
+    {
+      if (!ide_error_ignore (error))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          return;
+        }
+    }
+
+  if (!(context = ide_object_get_context (IDE_OBJECT (build_system))))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_CANCELLED,
+                                 "Operation cancelled");
+      return;
+    }
+
   client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   cancellable = ide_task_get_cancellable (task);
   location = ide_task_get_task_data (task);
@@ -333,7 +350,7 @@ find_nearest_scope_flags_cb (GObject      *object,
 
 static void
 ide_clang_symbol_resolver_find_nearest_scope_async (IdeSymbolResolver   *symbol_resolver,
-                                                    IdeLocation   *location,
+                                                    IdeLocation         *location,
                                                     GCancellable        *cancellable,
                                                     GAsyncReadyCallback  callback,
                                                     gpointer             user_data)
