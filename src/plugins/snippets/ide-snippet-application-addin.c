@@ -23,32 +23,51 @@
 
 struct _IdeSnippetApplicationAddin
 {
-  IdeObject parent_instance;
+  GObject parent_instance;
 };
 
-void application_addin_implement_iface (IdeApplicationAddinInterface *iface);
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSnippetApplicationAddin, ide_snippet_application_addin, IDE_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_implement_iface))
-
-IdeSnippetApplicationAddin *
-ide_snippet_application_addin_new (void)
+static void
+ide_snippet_application_addin_load (IdeApplicationAddin *addin,
+                                    IdeApplication      *app)
 {
-  return g_object_new (IDE_TYPE_SNIPPET_APPLICATION_ADDIN, NULL);
+  IdeSnippetApplicationAddin *self = IDE_SNIPPET_APPLICATION_ADDIN (addin);
+  GtkSourceSnippetManager *manager;
+  char **search_path;
+  gsize len;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SNIPPET_APPLICATION_ADDIN (self));
+  g_assert (IDE_IS_APPLICATION (app));
+
+  manager = gtk_source_snippet_manager_get_default ();
+
+  search_path = g_strdupv ((char **)gtk_source_snippet_manager_get_search_path (manager));
+  len = g_strv_length (search_path);
+  search_path = g_realloc_n (search_path, len + 2, sizeof (char **));
+  search_path[len++] = g_strdup ("resource:///org/gnome/builder/snippets/");
+  search_path[len] = NULL;
+
+  gtk_source_snippet_manager_set_search_path (manager,
+                                              (const char * const *)search_path);
+
+  g_strfreev (search_path);
+
+  IDE_EXIT;
 }
 
 static void
-ide_snippet_application_addin_finalize (GObject *object)
+application_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
-  G_OBJECT_CLASS (ide_snippet_application_addin_parent_class)->finalize (object);
+  iface->load = ide_snippet_application_addin_load;
 }
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSnippetApplicationAddin, ide_snippet_application_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
 
 static void
 ide_snippet_application_addin_class_init (IdeSnippetApplicationAddinClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = ide_snippet_application_addin_finalize;
 }
 
 static void
@@ -56,25 +75,3 @@ ide_snippet_application_addin_init (IdeSnippetApplicationAddin *self)
 {
 }
 
-static void
-ide_snippet_application_addin_load (IdeApplicationAddin *addin,
-                                    IdeApplication      *app)
-{
-  IdeSnippetApplicationAddin *self = IDE_SNIPPET_APPLICATION_ADDIN (addin);
-  GtkSourceSnippetManager *snippet_manager;
-  g_autoptr(GStrvBuilder) builder = NULL;
-
-  g_return_if_fail (IDE_IS_SNIPPET_APPLICATION_ADDIN (self));
-
-  snippet_manager = gtk_source_snippet_manager_get_default ();
-  builder = g_strv_builder_new ();
-  g_strv_builder_add (builder, "resource:///org/gnome/builder/snippets/");
-
-  gtk_source_snippet_manager_set_search_path (snippet_manager, (const char * const *) g_strv_builder_end (builder));
-}
-
-void
-application_addin_implement_iface (IdeApplicationAddinInterface *iface)
-{
-  iface->load = ide_snippet_application_addin_load;
-}
