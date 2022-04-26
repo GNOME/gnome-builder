@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <dazzle.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
