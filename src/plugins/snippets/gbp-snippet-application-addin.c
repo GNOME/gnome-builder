@@ -1,4 +1,4 @@
-/* ide-snippet-application-addin.c
+/* gbp-snippet-application-addin.c
  *
  * Copyright 2022 Günther Wagner <info@gunibert.de>
  *
@@ -18,31 +18,31 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-snippet-application-addin"
+#define G_LOG_DOMAIN "gbp-snippet-application-addin"
 
 #include "config.h"
 
 #include <libide-gui.h>
 
-#include "ide-snippet-application-addin.h"
+#include "gbp-snippet-application-addin.h"
 
-struct _IdeSnippetApplicationAddin
+struct _GbpSnippetApplicationAddin
 {
   GObject parent_instance;
 };
 
 static void
-ide_snippet_application_addin_load (IdeApplicationAddin *addin,
+gbp_snippet_application_addin_load (IdeApplicationAddin *addin,
                                     IdeApplication      *app)
 {
-  IdeSnippetApplicationAddin *self = IDE_SNIPPET_APPLICATION_ADDIN (addin);
+  GbpSnippetApplicationAddin *self = (GbpSnippetApplicationAddin *)addin;
   GtkSourceSnippetManager *manager;
   char **search_path;
   gsize len;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_SNIPPET_APPLICATION_ADDIN (self));
+  g_assert (GBP_IS_SNIPPET_APPLICATION_ADDIN (self));
   g_assert (IDE_IS_APPLICATION (app));
 
   manager = gtk_source_snippet_manager_get_default ();
@@ -64,19 +64,19 @@ ide_snippet_application_addin_load (IdeApplicationAddin *addin,
 static void
 application_addin_iface_init (IdeApplicationAddinInterface *iface)
 {
-  iface->load = ide_snippet_application_addin_load;
+  iface->load = gbp_snippet_application_addin_load;
 }
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSnippetApplicationAddin, ide_snippet_application_addin, G_TYPE_OBJECT,
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSnippetApplicationAddin, gbp_snippet_application_addin, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
 
 static void
-ide_snippet_application_addin_class_init (IdeSnippetApplicationAddinClass *klass)
+gbp_snippet_application_addin_class_init (GbpSnippetApplicationAddinClass *klass)
 {
 }
 
 static void
-ide_snippet_application_addin_init (IdeSnippetApplicationAddin *self)
+gbp_snippet_application_addin_init (GbpSnippetApplicationAddin *self)
 {
 }
 
