@@ -18,11 +18,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "gbp-create-project-template"
+
+#include "config.h"
+
 #include "gbp-create-project-template-icon.h"
 
 struct _GbpCreateProjectTemplateIcon
 {
-  GtkBin              parent;
+  AdwBin              parent_instance;
 
   GtkImage           *template_icon;
   GtkLabel           *template_name;
@@ -36,9 +40,9 @@ enum {
   N_PROPS
 };
 
-static GParamSpec *properties [N_PROPS];
+G_DEFINE_FINAL_TYPE (GbpCreateProjectTemplateIcon, gbp_create_project_template_icon, ADW_TYPE_BIN)
 
-G_DEFINE_FINAL_TYPE (GbpCreateProjectTemplateIcon, gbp_create_project_template_icon, GTK_TYPE_BIN)
+static GParamSpec *properties [N_PROPS];
 
 static void
 gbp_create_project_template_icon_get_property (GObject    *object,
@@ -66,25 +70,30 @@ gbp_create_project_template_icon_set_property (GObject      *object,
                                                GParamSpec   *pspec)
 {
   GbpCreateProjectTemplateIcon *self = GBP_CREATE_PROJECT_TEMPLATE_ICON (object);
-  g_autofree gchar *icon_name = NULL;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *description = NULL;
 
   switch (prop_id)
     {
     case PROP_TEMPLATE:
-      self->template = g_value_dup_object (value);
+      {
+        g_autofree gchar *icon_name = NULL;
+        g_autofree gchar *name = NULL;
+        g_autofree gchar *description = NULL;
 
-      icon_name = ide_project_template_get_icon_name (self->template);
-      name = ide_project_template_get_name (self->template);
-      description = ide_project_template_get_description (self->template);
+        self->template = g_value_dup_object (value);
 
-      g_object_set (self->template_icon,
-                    "icon-name", icon_name,
-                    NULL);
-      gtk_label_set_text (self->template_name, name);
-      if (!ide_str_empty0 (description))
-        gtk_widget_set_tooltip_text (GTK_WIDGET (self), description);
+        icon_name = ide_project_template_get_icon_name (self->template);
+        name = ide_project_template_get_name (self->template);
+        description = ide_project_template_get_description (self->template);
+
+        g_object_set (self->template_icon,
+                      "icon-name", icon_name,
+                      NULL);
+
+        gtk_label_set_text (self->template_name, name);
+
+        if (!ide_str_empty0 (description))
+          gtk_widget_set_tooltip_text (GTK_WIDGET (self), description);
+      }
       break;
 
     default:
@@ -93,13 +102,13 @@ gbp_create_project_template_icon_set_property (GObject      *object,
 }
 
 static void
-gbp_create_project_template_icon_destroy (GtkWidget *widget)
+gbp_create_project_template_icon_dispose (GObject *object)
 {
-  GbpCreateProjectTemplateIcon *self = (GbpCreateProjectTemplateIcon *)widget;
+  GbpCreateProjectTemplateIcon *self = (GbpCreateProjectTemplateIcon *)object;
 
   g_clear_object (&self->template);
 
-  GTK_WIDGET_CLASS (gbp_create_project_template_icon_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_create_project_template_icon_parent_class)->dispose (object);
 }
 
 static void
@@ -108,10 +117,9 @@ gbp_create_project_template_icon_class_init (GbpCreateProjectTemplateIconClass *
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gbp_create_project_template_icon_dispose;
   object_class->set_property = gbp_create_project_template_icon_set_property;
   object_class->get_property = gbp_create_project_template_icon_get_property;
-
-  widget_class->destroy = gbp_create_project_template_icon_destroy;
 
   properties [PROP_TEMPLATE] =
     g_param_spec_object ("template",

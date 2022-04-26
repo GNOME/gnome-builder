@@ -23,15 +23,16 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-greeter.h>
 
-#include "gbp-create-project-surface.h"
+#include "gbp-create-project-widget.h"
 #include "gbp-create-project-workspace-addin.h"
 
 struct _GbpCreateProjectWorkspaceAddin
 {
-  GObject     parent_instance;
-  IdeSurface *surface;
+  GObject                 parent_instance;
+  GbpCreateProjectWidget *widget;
 };
 
 static void
@@ -40,12 +41,14 @@ gbp_create_project_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpCreateProjectWorkspaceAddin *self = (GbpCreateProjectWorkspaceAddin *)addin;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_CREATE_PROJECT_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_GREETER_WORKSPACE (workspace));
 
   ide_greeter_workspace_add_button (IDE_GREETER_WORKSPACE (workspace),
                                     g_object_new (GTK_TYPE_BUTTON,
-                                                  "action-name", "win.surface",
+                                                  "action-name", "greeter.page",
                                                   "action-target", g_variant_new_string ("create-project"),
                                                   "label", _("Start _New Project…"),
                                                   "use-underline", TRUE,
@@ -53,10 +56,12 @@ gbp_create_project_workspace_addin_load (IdeWorkspaceAddin *addin,
                                                   NULL),
                                     -10);
 
-  self->surface = g_object_new (GBP_TYPE_CREATE_PROJECT_SURFACE,
-                                "visible", TRUE,
-                                NULL);
-  ide_workspace_add_surface (workspace, self->surface);
+  self->widget = g_object_new (GBP_TYPE_CREATE_PROJECT_WIDGET, NULL);
+  ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
+                                  GTK_WIDGET (self->widget),
+                                  "create-project");
+
+  IDE_EXIT;
 }
 
 static void
@@ -65,10 +70,16 @@ gbp_create_project_workspace_addin_unload (IdeWorkspaceAddin *addin,
 {
   GbpCreateProjectWorkspaceAddin *self = (GbpCreateProjectWorkspaceAddin *)addin;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_CREATE_PROJECT_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_GREETER_WORKSPACE (workspace));
 
-  gtk_widget_destroy (GTK_WIDGET (self->surface));
+  ide_greeter_workspace_remove_page (IDE_GREETER_WORKSPACE (workspace),
+                                     GTK_WIDGET (self->widget));
+  self->widget = NULL;
+
+  IDE_EXIT;
 }
 
 static void
@@ -79,7 +90,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCreateProjectWorkspaceAddin, gbp_create_project_workspace_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
 gbp_create_project_workspace_addin_class_init (GbpCreateProjectWorkspaceAddinClass *klass)
