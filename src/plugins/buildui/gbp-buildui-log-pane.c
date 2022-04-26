@@ -338,28 +338,6 @@ gbp_buildui_log_pane_save_in_file (GSimpleAction *action,
 }
 
 static void
-terminal_size_allocate (GbpBuilduiLogPane *self,
-                        GtkAllocation     *allocation,
-                        IdeTerminal       *terminal)
-{
-  VtePty *pty;
-  gint rows = 0;
-  gint columns = 0;
-
-  g_assert (GBP_IS_BUILDUI_LOG_PANE (self));
-  g_assert (allocation != NULL);
-  g_assert (IDE_IS_TERMINAL (terminal));
-
-  pty = vte_terminal_get_pty (VTE_TERMINAL (self->terminal));
-
-  if (self->pipeline != NULL && pty != NULL)
-    {
-      if (vte_pty_get_size (pty, &rows, &columns, NULL))
-        _ide_pipeline_set_pty_size (self->pipeline, rows, columns);
-    }
-}
-
-static void
 gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
 {
   g_autoptr(GSimpleActionGroup) actions = NULL;
@@ -371,12 +349,6 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-build-info-symbolic");
-
-  g_signal_connect_object (self->terminal,
-                           "size-allocate",
-                           G_CALLBACK (terminal_size_allocate),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (self->terminal,
                            "window-title-changed",
