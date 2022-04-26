@@ -20,13 +20,15 @@
 
 #pragma once
 
+#include <adwaita.h>
+
 #include <libide-projects.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_CREATE_PROJECT_TEMPLATE_ICON (gbp_create_project_template_icon_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpCreateProjectTemplateIcon, gbp_create_project_template_icon, GBP, CREATE_PROJECT_TEMPLATE_ICON, GtkBin)
+G_DECLARE_FINAL_TYPE (GbpCreateProjectTemplateIcon, gbp_create_project_template_icon, GBP, CREATE_PROJECT_TEMPLATE_ICON, AdwBin)
 
 IdeProjectTemplate *gbp_create_project_template_icon_get_template (GbpCreateProjectTemplateIcon *self);
 
