@@ -27,14 +27,15 @@
 #include <libide-gui.h>
 #include <libide-tree.h>
 
-#include "gbp-buildui-config-view-addin.h"
-#include "gbp-buildui-editor-page-addin.h"
-#include "gbp-buildui-workspace-addin.h"
-#include "gbp-buildui-tree-addin.h"
+//#include "gbp-buildui-config-view-addin.h"
+//#include "gbp-buildui-editor-page-addin.h"
+//#include "gbp-buildui-workspace-addin.h"
+//#include "gbp-buildui-tree-addin.h"
 
 _IDE_EXTERN void
 _gbp_buildui_register_types (PeasObjectModule *module)
 {
+#if 0
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIG_VIEW_ADDIN,
                                               GBP_TYPE_BUILDUI_CONFIG_VIEW_ADDIN);
@@ -47,4 +48,5 @@ _gbp_buildui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TREE_ADDIN,
                                               GBP_TYPE_BUILDUI_TREE_ADDIN);
+#endif
 }
