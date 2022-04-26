@@ -3,11 +3,9 @@
   <template class="GbpBuilduiStageRow" parent="GtkListBoxRow">
     <child>
       <object class="GtkBox">
-        <property name="visible">true</property>
         <property name="orientation">horizontal</property>
         <child>
-          <object class="DzlBoldingLabel" id="label">
-            <property name="visible">true</property>
+          <object class="GtkLabel" id="label">
             <property name="xalign">0.0</property>
           </object>
         </child>

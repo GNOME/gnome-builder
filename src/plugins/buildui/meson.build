@@ -8,7 +8,7 @@ plugins_sources += files([
   #'gbp-buildui-pane.c',
   #'gbp-buildui-runtime-categories.c',
   #'gbp-buildui-runtime-row.c',
-  #'gbp-buildui-stage-row.c',
+  'gbp-buildui-stage-row.c',
   #'gbp-buildui-tree-addin.c',
   #'gbp-buildui-workspace-addin.c',
 ])
