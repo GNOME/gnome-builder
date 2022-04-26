@@ -121,7 +121,7 @@ gbp_symbol_workspace_addin_find_nearest_scope_cb (GObject      *object,
 
 failure:
 
-  /* Raced against another query and lost, just bail */
+  /* Raced against another query or cleanup and lost, just bail */
   if (ide_signal_group_get_target (self->buffer_signals) != buffer)
     IDE_EXIT;
 
@@ -164,7 +164,7 @@ gbp_symbol_workspace_addin_get_symbol_tree_cb (GObject      *object,
 failure:
 
   /* Raced against another query and lost, just bail */
-  if (ide_signal_group_get_target (self->buffer_signals) != buffer)
+  if ((gpointer)buffer != ide_signal_group_get_target (self->buffer_signals))
     IDE_EXIT;
 
   gbp_symbol_popover_set_symbol_tree (self->popover, NULL);
@@ -313,23 +313,6 @@ gbp_symbol_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->workspace = workspace;
   self->statusbar = ide_workspace_get_statusbar (workspace);
 
-  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
-  g_signal_connect_object (self->buffer_signals,
-                           "bind",
-                           G_CALLBACK (gbp_symbol_workspace_addin_buffer_bind_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->buffer_signals,
-                                   "cursor-moved",
-                                   G_CALLBACK (gbp_symbol_workspace_addin_buffer_cursor_moved_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->buffer_signals,
-                                   "changed",
-                                   G_CALLBACK (gbp_symbol_workspace_addin_buffer_changed_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_HORIZONTAL,
                       "spacing", 6,
@@ -370,10 +353,10 @@ gbp_symbol_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (PANEL_IS_STATUSBAR (self->statusbar));
   g_assert (workspace == self->workspace);
 
+  ide_signal_group_set_target (self->buffer_signals, NULL);
+
   g_clear_handle_id (&self->nearest_scope_timeout_source, g_source_remove);
   g_clear_handle_id (&self->symbol_tree_timeout_source, g_source_remove);
-
-  g_clear_object (&self->buffer_signals);
 
   panel_statusbar_remove (self->statusbar, GTK_WIDGET (self->menu_button));
 
@@ -421,11 +404,41 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSymbolWorkspaceAddin, gbp_symbol_workspace_add
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
+gbp_symbol_workspace_addin_finalize (GObject *object)
+{
+  GbpSymbolWorkspaceAddin *self = (GbpSymbolWorkspaceAddin *)object;
+
+  g_clear_object (&self->buffer_signals);
+
+  G_OBJECT_CLASS (gbp_symbol_workspace_addin_parent_class)->finalize (object);
+}
+
+static void
 gbp_symbol_workspace_addin_class_init (GbpSymbolWorkspaceAddinClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gbp_symbol_workspace_addin_finalize;
 }
 
 static void
 gbp_symbol_workspace_addin_init (GbpSymbolWorkspaceAddin *self)
 {
+  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
+  g_signal_connect_object (self->buffer_signals,
+                           "bind",
+                           G_CALLBACK (gbp_symbol_workspace_addin_buffer_bind_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  ide_signal_group_connect_object (self->buffer_signals,
+                                   "cursor-moved",
+                                   G_CALLBACK (gbp_symbol_workspace_addin_buffer_cursor_moved_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  ide_signal_group_connect_object (self->buffer_signals,
+                                   "changed",
+                                   G_CALLBACK (gbp_symbol_workspace_addin_buffer_changed_cb),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+
 }
