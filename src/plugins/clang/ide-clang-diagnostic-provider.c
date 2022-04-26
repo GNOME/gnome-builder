@@ -20,7 +20,10 @@
 
 #define G_LOG_DOMAIN "ide-clang-diagnostic-provider"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
+
 #include <libide-foundry.h>
 
 #include "ide-clang-client.h"
@@ -30,8 +33,6 @@ struct _IdeClangDiagnosticProvider
 {
   IdeObject parent_instance;
 };
-
-static void diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface);
 
 static void
 ide_clang_diagnostic_provider_diagnose_cb (GObject      *object,
@@ -43,6 +44,8 @@ ide_clang_diagnostic_provider_diagnose_cb (GObject      *object,
   g_autoptr(IdeDiagnostics) diagnostics = NULL;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_CLIENT (client));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
@@ -53,6 +56,8 @@ ide_clang_diagnostic_provider_diagnose_cb (GObject      *object,
     ide_task_return_pointer (task,
                              IDE_OBJECT (g_steal_pointer (&diagnostics)),
                              ide_object_unref_and_destroy);
+
+  IDE_EXIT;
 }
 
 static void
@@ -67,6 +72,8 @@ diagnose_get_build_flags_cb (GObject      *object,
   GCancellable *cancellable;
   IdeContext *context;
   GFile *file;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (G_IS_ASYNC_RESULT (result));
@@ -84,6 +91,8 @@ diagnose_get_build_flags_cb (GObject      *object,
                                    cancellable,
                                    ide_clang_diagnostic_provider_diagnose_cb,
                                    g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -100,6 +109,8 @@ ide_clang_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   IdeBuildSystem *build_system;
   IdeContext *context;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self));
   g_assert (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (self));
 
@@ -115,6 +126,8 @@ ide_clang_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
                                           cancellable,
                                           diagnose_get_build_flags_cb,
                                           g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static IdeDiagnostics *
@@ -122,10 +135,16 @@ ide_clang_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provider,
                                                GAsyncResult           *result,
                                                GError                **error)
 {
+  IdeDiagnostics *ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_CLANG_DIAGNOSTIC_PROVIDER (provider), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
@@ -136,10 +155,10 @@ diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangDiagnosticProvider,
-                         ide_clang_diagnostic_provider,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER,
-                                                diagnostic_provider_iface_init))
+                               ide_clang_diagnostic_provider,
+                               IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER,
+                                                      diagnostic_provider_iface_init))
 
 static void
 ide_clang_diagnostic_provider_class_init (IdeClangDiagnosticProviderClass *klass)
