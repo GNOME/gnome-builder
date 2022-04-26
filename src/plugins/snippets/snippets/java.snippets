@@ -1,57 +1,62 @@
-snippet class
-- scope java, groovy
-- desc Create class definition
-	package ${$relative_dirname|descend_path|descend_path|descend_path|slash_to_dots};
-
-	public class ${$filename|stripsuffix} {
-	    $0
-	}
-snippet iface
-- scope java, groovy
-- desc Create interface definition
-	package ${$relative_dirname|descend_path|descend_path|descend_path|slash_to_dots};
-
-	public interface ${$filename|stripsuffix} {
-	    $0
-	}
-snippet psvm
-- scope java, groovy
-- desc Create main java method
-	public static void main(String[] args) {
-	    $0
-	}
-snippet itar
-- scope java, groovy
-- desc Create a for loop
-	for (int ${1:i = 0}; ${2:i < }; ${3:i++}) {
-	    $0
-	}
-snippet iter
-- scope java, groovy
-- desc Create a for each loop on a collection
-	for (${2:type} ${3:var}: ${1:collection}) {
-	    $0
-	}
-snippet itit
-- scope java, groovy
-- desc Create a for loop on an iterator
-	while (${1:it}.hasNext()) {
-	    Object next = $1.next();
-	    $0
-	}
-snippet comment
-- scope java, groovy
-	/*
-	 * $0
-	 */
-snippet javadoc
-- scope java, groovy
-	/**
-	 * $0
-	 */
-snippet sout
-- scope java
-	System.out.println($0);
-snippet serr
-- scope java
-	System.err.println($0);
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+  <snippet _name="class" trigger="class" _description="Create class definition">
+    <text languages="java;groovy;"><![CDATA[package ${$relative_dirname|descend_path|descend_path|descend_path|slash_to_dots};
+public class ${$filename|stripsuffix} {
+    $0
+}
+]]></text>
+  </snippet>
+  <snippet _name="iface" trigger="iface" _description="Create interface definition">
+    <text languages="java;groovy;"><![CDATA[package ${$relative_dirname|descend_path|descend_path|descend_path|slash_to_dots};
+public interface ${$filename|stripsuffix} {
+    $0
+}
+]]></text>
+  </snippet>
+  <snippet _name="psvm" trigger="psvm" _description="Create main java method">
+    <text languages="java;groovy;"><![CDATA[public static void main(String[] args) {
+    $0
+}
+]]></text>
+  </snippet>
+  <snippet _name="itar" trigger="itar" _description="Create a for loop">
+    <text languages="java;groovy;"><![CDATA[for (int ${1:i = 0}; ${2:i < }; ${3:i++}) {
+    $0
+}
+]]></text>
+  </snippet>
+  <snippet _name="iter" trigger="iter" _description="Create a for each loop on a collection">
+    <tooltip position="1" text="the collection to iterate"/>
+    <tooltip position="2" text="the type of the element"/>
+    <tooltip position="3" text="the variable name"/>
+    <text languages="java;groovy;"><![CDATA[for (${2:type} ${3:var}: ${1:collection}) {
+    $0
+}
+]]></text>
+  </snippet>
+  <snippet _name="itit" trigger="itit" _description="Create a for loop on an iterator">
+    <tooltip position="1" text="the name of the iterator"/>
+    <text languages="java;groovy;"><![CDATA[while (${1:it}.hasNext()) {
+    Object next = $1.next();
+    $0
+}
+]]></text>
+  </snippet>
+  <snippet _name="comment" trigger="comment" _description="">
+    <text languages="java;groovy;"><![CDATA[/*
+ * $0
+ */
+]]></text>
+  </snippet>
+  <snippet _name="javadoc" trigger="javadoc" _description="">
+    <text languages="java;groovy;"><![CDATA[/**
+ * $0
+ */
+]]></text>
+  </snippet>
+  <snippet _name="sout" trigger="sout" _description="">
+    <text languages="java;"><![CDATA[System.out.println($0);
+]]></text>
+  </snippet>
+</snippets>
