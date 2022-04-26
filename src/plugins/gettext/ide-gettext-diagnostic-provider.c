@@ -21,7 +21,6 @@
 
 #define G_LOG_DOMAIN "ide-gettext-diagnostic-provider"
 
-#include <dazzle.h>
 #include <errno.h>
 #include <glib/gi18n.h>
 #include <stdlib.h>
@@ -30,7 +29,7 @@
 
 struct _IdeGettextDiagnosticProvider
 {
-  IdeObject parent_instance;
+  IdeDiagnosticTool parent_instance;
 };
 
 static const gchar *
@@ -59,7 +58,7 @@ id_to_xgettext_language (const gchar *id)
     {
       for (guint i = 0; i < G_N_ELEMENTS (id_to_lang); i++)
         {
-          if (dzl_str_equal0 (id, id_to_lang[i].id))
+          if (ide_str_equal0 (id, id_to_lang[i].id))
             return id_to_lang[i].lang;
         }
     }
@@ -69,38 +68,23 @@ id_to_xgettext_language (const gchar *id)
 
 
 static void
-ide_gettext_diagnostic_provider_communicate_cb (GObject      *object,
-                                                GAsyncResult *result,
-                                                gpointer      user_data)
+ide_gettext_diagnostic_provider_populate_diagnostics (IdeDiagnosticTool *tool,
+                                                      IdeDiagnostics    *diagnostics,
+                                                      GFile             *file,
+                                                      const char        *stdout_buf,
+                                                      const char        *stderr_buf)
 {
-  IdeSubprocess *subprocess = (IdeSubprocess *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(IdeDiagnostics) ret = NULL;
-  g_autoptr(GError) error = NULL;
-  g_autofree gchar *stderr_buf = NULL;
-  g_autofree gchar *stdout_buf = NULL;
   IdeLineReader reader;
-  GFile *file;
   gchar *line;
   gsize len;
 
-  g_assert (IDE_IS_SUBPROCESS (subprocess));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
+  IDE_ENTRY;
 
-  if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, &stderr_buf, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
+  g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (tool));
+  g_assert (IDE_IS_DIAGNOSTICS (diagnostics));
+  g_assert (!file || G_IS_FILE (file));
 
-  file = ide_task_get_task_data (task);
-  g_assert (file != NULL);
-  g_assert (G_IS_FILE (file));
-
-  ret = ide_diagnostics_new ();
-
-  ide_line_reader_init (&reader, stderr_buf, -1);
+  ide_line_reader_init (&reader, (char *)stderr_buf, -1);
 
   while (NULL != (line = ide_line_reader_next (&reader, &len)))
     {
@@ -134,65 +118,56 @@ ide_gettext_diagnostic_provider_communicate_cb (GObject      *object,
 
       loc = ide_location_new (file, lineno, -1);
       diag = ide_diagnostic_new (IDE_DIAGNOSTIC_WARNING, line, loc);
-      ide_diagnostics_add (ret, diag);
+      ide_diagnostics_add (diagnostics, diag);
     }
 
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&ret),
-                           g_object_unref);
+  IDE_EXIT;
+}
+
+static gboolean
+ide_gettext_diagnostic_provider_can_diagnose (IdeDiagnosticTool *tool,
+                                              GFile             *file,
+                                              GBytes            *contents,
+                                              const char        *language_id)
+{
+  const char *xgettext_id;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (tool));
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (file != NULL || contents != NULL);
+
+  if (!(xgettext_id = id_to_xgettext_language (language_id)))
+    IDE_RETURN (FALSE);
+
+  IDE_RETURN (TRUE);
 }
 
 static void
-ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
-                                                GFile                 *file,
-                                                GBytes                *contents,
-                                                const gchar           *lang_id,
-                                                GCancellable          *cancellable,
-                                                GAsyncReadyCallback    callback,
-                                                gpointer               user_data)
+ide_gettext_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *tool,
+                                                    IdeSubprocessLauncher *launcher,
+                                                    GFile                 *file,
+                                                    GBytes                *contents,
+                                                    const char            *language_id)
 {
-  IdeGettextDiagnosticProvider *self = (IdeGettextDiagnosticProvider *)provider;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GError) error = NULL;
-  const gchar *xgettext_id;
+  const char *xgettext_id;
 
-  g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (self));
-  g_assert (G_IS_FILE (file));
-  g_assert (contents != NULL);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  IDE_ENTRY;
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_gettext_diagnostic_provider_diagnose_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
-  ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (tool));
+  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (file != NULL || contents != NULL);
 
-  /* Figure out what language xgettext should use */
-  if (!(xgettext_id = id_to_xgettext_language (lang_id)))
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_NOT_SUPPORTED,
-                                 "Language %s is not supported",
-                                 lang_id ?: "plain-text");
-      return;
-    }
+  if (!(xgettext_id = id_to_xgettext_language (language_id)))
+    g_assert_not_reached ();
 
-  /* Return an empty set if we failed to locate any buffer contents */
-  if (g_bytes_get_size (contents) == 0)
-    {
-      ide_task_return_pointer (task,
-                               ide_diagnostics_new (),
-                               g_object_unref);
-      return;
-    }
+  ide_subprocess_launcher_set_flags (launcher,
+                                     (G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                      G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
+                                      G_SUBPROCESS_FLAGS_STDERR_PIPE));
 
-  launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDIN_PIPE |
-                                          G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
-                                          G_SUBPROCESS_FLAGS_STDERR_PIPE);
-
-  ide_subprocess_launcher_push_argv (launcher, "xgettext");
   ide_subprocess_launcher_push_argv (launcher, "--check=ellipsis-unicode");
   ide_subprocess_launcher_push_argv (launcher, "--check=quote-unicode");
   ide_subprocess_launcher_push_argv (launcher, "--check=space-ellipsis");
@@ -205,54 +180,23 @@ ide_gettext_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *provider,
   ide_subprocess_launcher_push_argv (launcher, "-");
   ide_subprocess_launcher_push_argv (launcher, "-");
 
-  /* Spawn the process of fail immediately */
-  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  /* Write the buffer contents to the subprocess and wait for the result
-   * from xgettext. We'll parse the result after the process exits.
-   */
-  ide_subprocess_communicate_utf8_async (subprocess,
-                                         (const gchar *)g_bytes_get_data (contents, NULL),
-                                         cancellable,
-                                         ide_gettext_diagnostic_provider_communicate_cb,
-                                         g_steal_pointer (&task));
+  IDE_EXIT;
 }
 
-static IdeDiagnostics *
-ide_gettext_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *provider,
-                                                 GAsyncResult           *result,
-                                                 GError                **error)
-{
-  g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (provider));
-  g_assert (IDE_IS_TASK (result));
-  g_assert (ide_task_is_valid (IDE_TASK (result), provider));
-
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
-}
-
-static void
-diagnostic_provider_iface_init (IdeDiagnosticProviderInterface *iface)
-{
-  iface->diagnose_async = ide_gettext_diagnostic_provider_diagnose_async;
-  iface->diagnose_finish = ide_gettext_diagnostic_provider_diagnose_finish;
-}
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeGettextDiagnosticProvider,
-                         ide_gettext_diagnostic_provider,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_DIAGNOSTIC_PROVIDER,
-                                                diagnostic_provider_iface_init))
+G_DEFINE_FINAL_TYPE (IdeGettextDiagnosticProvider, ide_gettext_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
 
 static void
 ide_gettext_diagnostic_provider_class_init (IdeGettextDiagnosticProviderClass *klass)
 {
+  IdeDiagnosticToolClass *tool_class = IDE_DIAGNOSTIC_TOOL_CLASS (klass);
+
+  tool_class->can_diagnose = ide_gettext_diagnostic_provider_can_diagnose;
+  tool_class->configure_launcher = ide_gettext_diagnostic_provider_configure_launcher;
+  tool_class->populate_diagnostics = ide_gettext_diagnostic_provider_populate_diagnostics;
 }
 
 static void
 ide_gettext_diagnostic_provider_init (IdeGettextDiagnosticProvider *self)
 {
+  ide_diagnostic_tool_set_program_name (IDE_DIAGNOSTIC_TOOL (self), "xgettext");
 }

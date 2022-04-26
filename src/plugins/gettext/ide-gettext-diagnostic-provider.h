@@ -21,12 +21,12 @@
 
 #pragma once
 
-#include <libide-code.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_GETTEXT_DIAGNOSTIC_PROVIDER (ide_gettext_diagnostic_provider_get_type ())
 
-G_DECLARE_FINAL_TYPE (IdeGettextDiagnosticProvider, ide_gettext_diagnostic_provider, IDE, GETTEXT_DIAGNOSTIC_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (IdeGettextDiagnosticProvider, ide_gettext_diagnostic_provider, IDE, GETTEXT_DIAGNOSTIC_PROVIDER, IdeDiagnosticTool)
 
 G_END_DECLS
