@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 #include <libide-editor.h>
 #include <libide-foundry.h>
+#include <libide-gtk.h>
 
 #include "ide-pipeline-stage-private.h"
 
@@ -38,15 +39,17 @@ struct _GbpBuilduiPane
   /* Owned references */
   GHashTable          *diags_hash;
   IdePipeline    *pipeline;
-  DzlSignalGroup      *pipeline_signals;
+  IdeSignalGroup      *pipeline_signals;
 
   /* Template widgets */
   GtkLabel            *build_status_label;
   GtkLabel            *time_completed_label;
   GtkNotebook         *notebook;
   GtkScrolledWindow   *errors_page;
+  GtkLabel            *errors_page_label;
   IdeFancyTreeView    *errors_tree_view;
   GtkScrolledWindow   *warnings_page;
+  GtkLabel            *warnings_page_label;
   IdeFancyTreeView    *warnings_tree_view;
   GtkListStore        *diagnostics_store;
   GtkListBox          *stages_list_box;
@@ -71,24 +74,6 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-set_warnings_label (GbpBuilduiPane *self,
-                    const gchar   *label)
-{
-  gtk_container_child_set (GTK_CONTAINER (self->notebook), GTK_WIDGET (self->warnings_page),
-                           "tab-label", label,
-                           NULL);
-}
-
-static void
-set_errors_label (GbpBuilduiPane *self,
-                  const gchar   *label)
-{
-  gtk_container_child_set (GTK_CONTAINER (self->notebook), GTK_WIDGET (self->errors_page),
-                           "tab-label", label,
-                           NULL);
-}
-
-static void
 gbp_buildui_pane_diagnostic (GbpBuilduiPane   *self,
                              IdeDiagnostic    *diagnostic,
                              IdePipeline *pipeline)
@@ -111,7 +96,7 @@ gbp_buildui_pane_diagnostic (GbpBuilduiPane   *self,
       self->warning_count++;
 
       label = g_strdup_printf ("%s (%u)", _("Warnings"), self->warning_count);
-      set_warnings_label (self, label);
+      gtk_label_set_label (self->warnings_page_label, label);
     }
   else if (severity == IDE_DIAGNOSTIC_ERROR || severity == IDE_DIAGNOSTIC_FATAL)
     {
@@ -120,7 +105,7 @@ gbp_buildui_pane_diagnostic (GbpBuilduiPane   *self,
       self->error_count++;
 
       label = g_strdup_printf ("%s (%u)", _("Errors"), self->error_count);
-      set_errors_label (self, label);
+      gtk_label_set_label (self->errors_page_label, label);
     }
   else
     {
@@ -133,7 +118,7 @@ gbp_buildui_pane_diagnostic (GbpBuilduiPane   *self,
     {
       GtkTreeIter iter;
 
-      dzl_gtk_list_store_insert_sorted (self->diagnostics_store,
+      ide_gtk_list_store_insert_sorted (self->diagnostics_store,
                                         &iter,
                                         diagnostic,
                                         COLUMN_DIAGNOSTIC,
@@ -164,7 +149,7 @@ gbp_buildui_pane_update_running_time (GbpBuilduiPane *self)
       build_manager = ide_build_manager_from_context (context);
 
       span = ide_build_manager_get_running_time (build_manager);
-      text = dzl_g_time_span_to_label (span);
+      text = ide_g_time_span_to_label (span);
       gtk_label_set_label (self->time_completed_label, text);
     }
   else
@@ -186,8 +171,8 @@ gbp_buildui_pane_started (GbpBuilduiPane   *self,
       self->error_count = 0;
       self->warning_count = 0;
 
-      set_warnings_label (self, _("Warnings"));
-      set_errors_label (self, _("Errors"));
+      gtk_label_set_label (self->warnings_page_label, _("Warnings"));
+      gtk_label_set_label (self->errors_page_label, _("Errors"));
 
       gtk_list_store_clear (self->diagnostics_store);
       g_hash_table_remove_all (self->diags_hash);
@@ -211,20 +196,20 @@ gbp_buildui_pane_create_stage_row_cb (gpointer data,
 static void
 gbp_buildui_pane_bind_pipeline (GbpBuilduiPane   *self,
                                 IdePipeline *pipeline,
-                                DzlSignalGroup   *signals)
+                                IdeSignalGroup   *signals)
 {
   g_assert (GBP_IS_BUILDUI_PANE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (G_IS_LIST_MODEL (pipeline));
   g_assert (self->pipeline == NULL);
-  g_assert (DZL_IS_SIGNAL_GROUP (signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (signals));
 
   self->pipeline = g_object_ref (pipeline);
   self->error_count = 0;
   self->warning_count = 0;
 
-  set_warnings_label (self, _("Warnings"));
-  set_errors_label (self, _("Errors"));
+  gtk_label_set_label (self->warnings_page_label, _("Warnings"));
+  gtk_label_set_label (self->errors_page_label, _("Errors"));
 
   gtk_label_set_label (self->time_completed_label, "—");
   gtk_label_set_label (self->build_status_label, "—");
@@ -239,7 +224,7 @@ gbp_buildui_pane_bind_pipeline (GbpBuilduiPane   *self,
 
 static void
 gbp_buildui_pane_unbind_pipeline (GbpBuilduiPane *self,
-                                  DzlSignalGroup *signals)
+                                  IdeSignalGroup *signals)
 {
   g_return_if_fail (GBP_IS_BUILDUI_PANE (self));
   g_return_if_fail (!self->pipeline || IDE_IS_PIPELINE (self->pipeline));
@@ -248,11 +233,14 @@ gbp_buildui_pane_unbind_pipeline (GbpBuilduiPane *self,
 
   if (!gtk_widget_in_destruction (GTK_WIDGET (self)))
     {
+      GtkWidget *child;
+
       g_hash_table_remove_all (self->diags_hash);
       gtk_list_store_clear (self->diagnostics_store);
-      gtk_container_foreach (GTK_CONTAINER (self->stages_list_box),
-                             (GtkCallback) gtk_widget_destroy,
-                             NULL);
+
+      while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->stages_list_box))) != NULL)
+        gtk_list_box_remove (self->stages_list_box, child);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
     }
 }
@@ -265,7 +253,7 @@ gbp_buildui_pane_set_pipeline (GbpBuilduiPane   *self,
   g_return_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline));
 
   if (self->pipeline_signals != NULL)
-    dzl_signal_group_set_target (self->pipeline_signals, pipeline);
+    ide_signal_group_set_target (self->pipeline_signals, pipeline);
 }
 
 static void
@@ -274,11 +262,11 @@ gbp_buildui_pane_diagnostic_activated (GbpBuilduiPane    *self,
                                        GtkTreeViewColumn *colun,
                                        GtkTreeView       *tree_view)
 {
+  g_autoptr(IdePanelPosition) position = NULL;
   g_autoptr(IdeDiagnostic) diagnostic = NULL;
   IdeWorkspace *workspace;
   IdeLocation *loc;
   GtkTreeModel *model;
-  IdeSurface *surface;
   GtkTreeIter iter;
 
   IDE_ENTRY;
@@ -300,8 +288,8 @@ gbp_buildui_pane_diagnostic_activated (GbpBuilduiPane    *self,
     IDE_EXIT;
 
   workspace = ide_widget_get_workspace (GTK_WIDGET (self));
-  surface = ide_workspace_get_surface_by_name (workspace, "editor");
-  ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (surface), loc);
+  position = ide_panel_position_new ();
+  ide_editor_focus_location (workspace, position, loc);
 
   IDE_EXIT;
 }
@@ -362,7 +350,6 @@ gbp_buildui_pane_notify_message (GbpBuilduiPane  *self,
 {
   g_autofree gchar *message = NULL;
   IdePipeline *pipeline;
-  GtkStyleContext *style;
 
   g_assert (GBP_IS_BUILDUI_PANE (self));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
@@ -372,12 +359,10 @@ gbp_buildui_pane_notify_message (GbpBuilduiPane  *self,
 
   gtk_label_set_label (self->build_status_label, message);
 
-  style = gtk_widget_get_style_context (GTK_WIDGET (self->build_status_label));
-
   if (ide_pipeline_get_phase (pipeline) == IDE_PIPELINE_PHASE_FAILED)
-    gtk_style_context_add_class (style, GTK_STYLE_CLASS_ERROR);
+    gtk_widget_add_css_class (GTK_WIDGET (self->build_status_label), "error");
   else
-    gtk_style_context_remove_class (style, GTK_STYLE_CLASS_ERROR);
+    gtk_widget_remove_css_class (GTK_WIDGET (self->build_status_label), "error");
 }
 
 static void
@@ -536,19 +521,19 @@ gbp_buildui_pane_stage_row_activated (GbpBuilduiPane     *self,
 }
 
 static void
-gbp_buildui_pane_destroy (GtkWidget *widget)
+gbp_buildui_pane_dispose (GObject *object)
 {
-  GbpBuilduiPane *self = (GbpBuilduiPane *)widget;
+  GbpBuilduiPane *self = (GbpBuilduiPane *)object;
 
   if (self->pipeline_signals != NULL)
-    dzl_signal_group_set_target (self->pipeline_signals, NULL);
+    ide_signal_group_set_target (self->pipeline_signals, NULL);
 
   g_clear_pointer (&self->diags_hash, g_hash_table_unref);
 
   g_clear_object (&self->pipeline_signals);
   g_clear_object (&self->pipeline);
 
-  GTK_WIDGET_CLASS (gbp_buildui_pane_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_buildui_pane_parent_class)->dispose (object);
 }
 
 static void
@@ -595,8 +580,7 @@ gbp_buildui_pane_class_init (GbpBuilduiPaneClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  widget_class->destroy = gbp_buildui_pane_destroy;
-
+  object_class->dispose = gbp_buildui_pane_dispose;
   object_class->get_property = gbp_buildui_pane_get_property;
   object_class->set_property = gbp_buildui_pane_set_property;
 
@@ -615,8 +599,10 @@ gbp_buildui_pane_class_init (GbpBuilduiPaneClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, time_completed_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, notebook);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, errors_page);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, errors_page_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, errors_tree_view);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, warnings_page);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, warnings_page_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, warnings_tree_view);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, diagnostics_store);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, stages_list_box);
@@ -633,7 +619,7 @@ gbp_buildui_pane_init (GbpBuilduiPane *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_PIPELINE);
+  self->pipeline_signals = ide_signal_group_new (IDE_TYPE_PIPELINE);
 
   g_signal_connect_object (self->pipeline_signals,
                            "bind",
@@ -647,13 +633,13 @@ gbp_buildui_pane_init (GbpBuilduiPane *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "diagnostic",
                                    G_CALLBACK (gbp_buildui_pane_diagnostic),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "started",
                                    G_CALLBACK (gbp_buildui_pane_started),
                                    self,
