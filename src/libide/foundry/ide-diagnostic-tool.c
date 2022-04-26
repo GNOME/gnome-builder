@@ -535,10 +535,16 @@ ide_diagnostic_tool_diagnose_finish (IdeDiagnosticProvider  *provider,
                                      GAsyncResult           *result,
                                      GError                **error)
 {
+  IdeDiagnostics *ret;
+
+  IDE_ENTRY;
+
   g_assert (IDE_IS_DIAGNOSTIC_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
 
-  return ide_task_propagate_object (IDE_TASK (result), error);
+  ret = ide_task_propagate_object (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 static void
