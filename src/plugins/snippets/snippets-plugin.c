@@ -24,7 +24,6 @@
 #include <libide-sourceview.h>
 #include <libpeas/peas.h>
 
-#include "ide-snippet-preferences-addin.h"
 #include "ide-snippet-application-addin.h"
 
 _IDE_EXTERN void
@@ -33,9 +32,6 @@ _gbp_snippets_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                               GTK_SOURCE_TYPE_COMPLETION_SNIPPETS);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              IDE_TYPE_SNIPPET_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_APPLICATION_ADDIN,
                                               IDE_TYPE_SNIPPET_APPLICATION_ADDIN);
