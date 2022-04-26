@@ -43,6 +43,11 @@ IdeBuffer     *ide_editor_page_get_buffer             (IdeEditorPage        *sel
 IDE_AVAILABLE_IN_ALL
 IdeSourceView *ide_editor_page_get_view               (IdeEditorPage        *self);
 IDE_AVAILABLE_IN_ALL
+IdeGutter     *ide_editor_page_get_gutter             (IdeEditorPage        *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_editor_page_set_gutter             (IdeEditorPage        *self,
+                                                       IdeGutter            *gutter);
+IDE_AVAILABLE_IN_ALL
 void           ide_editor_page_discard_changes_async  (IdeEditorPage        *self,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,

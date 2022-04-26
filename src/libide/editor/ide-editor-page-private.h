@@ -33,6 +33,7 @@ struct _IdeEditorPage
   /* Owned references */
   IdeExtensionSetAdapter  *addins;
   IdeBuffer               *buffer;
+  IdeGutter               *gutter;
 
   /* Settings Management */
   IdeBindingGroup         *buffer_file_settings;
@@ -47,8 +48,12 @@ struct _IdeEditorPage
   guint                    completion_blocked : 1;
 };
 
-void _ide_editor_page_class_actions_init (IdeEditorPageClass *klass);
-void _ide_editor_page_settings_init      (IdeEditorPage *self);
-void _ide_editor_page_settings_reload    (IdeEditorPage *self);
+void _ide_editor_page_class_actions_init         (IdeEditorPageClass *klass);
+void _ide_editor_page_settings_init              (IdeEditorPage      *self);
+void _ide_editor_page_settings_reload            (IdeEditorPage      *self);
+void _ide_editor_page_settings_connect_gutter    (IdeEditorPage      *self,
+                                                  IdeGutter          *gutter);
+void _ide_editor_page_settings_disconnect_gutter (IdeEditorPage      *self,
+                                                  IdeGutter          *gutter);
 
 G_END_DECLS
