@@ -226,6 +226,21 @@ setup_launcher:
   IDE_RETURN (g_steal_pointer (&launcher));
 }
 
+static gboolean
+ide_diagnostic_tool_real_can_diagnose (IdeDiagnosticTool *self,
+                                       GFile             *file,
+                                       GBytes            *bytes,
+                                       const char        *language_id)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
+  g_assert (!file || G_IS_FILE (file));
+  g_assert (file != NULL || bytes != NULL);
+
+  IDE_RETURN (TRUE);
+}
+
 static void
 ide_diagnostic_tool_constructed (GObject *object)
 {
@@ -328,6 +343,7 @@ ide_diagnostic_tool_class_init (IdeDiagnosticToolClass *klass)
   klass->create_launcher = ide_diagnostic_tool_real_create_launcher;
   klass->configure_launcher = ide_diagnostic_tool_real_configure_launcher;
   klass->get_stdin_bytes = ide_diagnostic_tool_real_get_stdin_bytes;
+  klass->can_diagnose = ide_diagnostic_tool_real_can_diagnose;
 
   /**
    * IdeDiagnosticTool:program-name:
@@ -465,6 +481,14 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_diagnostic_tool_diagnose_async);
 
+  if (!IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->can_diagnose (self, file, contents, lang_id))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Not supported");
+      IDE_EXIT;
+    }
 
   state = g_slice_new0 (DiagnoseState);
   state->file = file ? g_object_ref (file) : NULL;

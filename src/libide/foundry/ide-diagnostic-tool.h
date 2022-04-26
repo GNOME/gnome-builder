@@ -55,6 +55,10 @@ struct _IdeDiagnosticToolClass
                                                   GFile                  *file,
                                                   const char             *stdout_buf,
                                                   const char             *stderr_buf);
+  gboolean               (*can_diagnose)         (IdeDiagnosticTool      *self,
+                                                  GFile                  *file,
+                                                  GBytes                 *contents,
+                                                  const char             *language_id);
 };
 
 IDE_AVAILABLE_IN_42
