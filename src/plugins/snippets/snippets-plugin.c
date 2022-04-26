@@ -18,11 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "snippets-plugin"
+
 #include "config.h"
+
+#include <libpeas/peas.h>
 
 #include <libide-gui.h>
 #include <libide-sourceview.h>
-#include <libpeas/peas.h>
 
 #include "ide-snippet-application-addin.h"
 
