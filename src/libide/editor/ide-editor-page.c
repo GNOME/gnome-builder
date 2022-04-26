@@ -33,6 +33,7 @@
 enum {
   PROP_0,
   PROP_BUFFER,
+  PROP_GUTTER,
   PROP_VIEW,
   N_PROPS
 };
@@ -54,6 +55,18 @@ ide_editor_page_modified_changed_cb (IdeEditorPage *self,
                              gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)));
 
   IDE_EXIT;
+}
+
+static void
+ide_editor_page_style_scheme_changed_cb (IdeEditorPage *self,
+                                         GParamSpec    *pspec,
+                                         IdeBuffer     *buffer)
+{
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  if (self->gutter != NULL)
+    ide_gutter_style_changed (self->gutter);
 }
 
 static void
@@ -80,6 +93,12 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
       g_signal_connect_object (buffer,
                                "notify::file-settings",
                                G_CALLBACK (_ide_editor_page_settings_reload),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (buffer,
+                               "notify::style-scheme",
+                               G_CALLBACK (ide_editor_page_style_scheme_changed_cb),
                                self,
                                G_CONNECT_SWAPPED);
 
@@ -252,6 +271,8 @@ ide_editor_page_dispose (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
 
+  ide_editor_page_set_gutter (self, NULL);
+
   ide_clear_and_destroy_object (&self->addins);
 
   g_clear_object (&self->buffer_file_settings);
@@ -280,6 +301,10 @@ ide_editor_page_get_property (GObject    *object,
       g_value_set_object (value, ide_editor_page_get_buffer (self));
       break;
 
+    case PROP_GUTTER:
+      g_value_set_object (value, ide_editor_page_get_gutter (self));
+      break;
+
     case PROP_VIEW:
       g_value_set_object (value, ide_editor_page_get_view (self));
       break;
@@ -301,6 +326,10 @@ ide_editor_page_set_property (GObject      *object,
     {
     case PROP_BUFFER:
       ide_editor_page_set_buffer (self, g_value_get_object (value));
+      break;
+
+    case PROP_GUTTER:
+      ide_editor_page_set_gutter (self, g_value_get_object (value));
       break;
 
     default:
@@ -336,6 +365,22 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
                          "The buffer to be displayed within the page",
                          IDE_TYPE_BUFFER,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeEditorPage:gutter:
+   *
+   * The "gutter" property contains an #IdeGutter or %NULL, which is a
+   * specialized renderer for the sourceview which can bring together a number
+   * of types of content which needs to be displayed, in a single renderer.
+   */
+  properties [PROP_GUTTER] =
+    g_param_spec_object ("gutter",
+                         "Gutter",
+                         "The primary gutter renderer in the left gutter window",
+                         IDE_TYPE_GUTTER,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   /**
    * IdeEditorPage:view:
@@ -685,4 +730,57 @@ ide_editor_page_discard_changes_finish (IdeEditorPage  *self,
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+/**
+ * ide_editor_page_get_gutter:
+ * @self: a #IdeEditorPage
+ *
+ * Gets the #IdeGutter displayed in the editor page.
+ *
+ * Returns: (transfer none) (nullable): an #IdeGutter or %NULL
+ */
+IdeGutter *
+ide_editor_page_get_gutter (IdeEditorPage *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_PAGE (self), NULL);
+
+  return self->gutter;
+}
+
+void
+ide_editor_page_set_gutter (IdeEditorPage *self,
+                            IdeGutter     *gutter)
+{
+  GtkSourceGutter *container;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (!gutter || IDE_IS_GUTTER (self));
+
+  if (gutter == self->gutter)
+    IDE_EXIT;
+
+  container = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->view),
+                                          GTK_TEXT_WINDOW_LEFT);
+
+  if (self->gutter)
+    {
+      gtk_source_gutter_remove (container, GTK_SOURCE_GUTTER_RENDERER (self->gutter));
+      _ide_editor_page_settings_disconnect_gutter (self, self->gutter);
+      g_clear_object (&self->gutter);
+    }
+
+  if (gutter)
+    {
+      g_set_object (&self->gutter, gutter);
+      gtk_source_gutter_insert (container, GTK_SOURCE_GUTTER_RENDERER (self->gutter), 0);
+      _ide_editor_page_settings_connect_gutter (self, self->gutter);
+      ide_gutter_style_changed (self->gutter);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GUTTER]);
+
+  IDE_EXIT;
 }

@@ -24,6 +24,8 @@
 
 #include "ide-editor-page-private.h"
 
+static GSettings *editor_settings;
+
 static gboolean
 indent_style_to_insert_spaces (GBinding     *binding,
                                const GValue *from,
@@ -95,16 +97,16 @@ font_name_to_font_desc (GValue   *value,
 static void
 notify_interactive_completion_cb (IdeEditorPage *self,
                                   const char    *key,
-                                  GSettings     *editor_settings)
+                                  GSettings     *settings)
 {
   GtkSourceCompletion *completion;
 
   g_assert (IDE_IS_EDITOR_PAGE (self));
-  g_assert (G_IS_SETTINGS (editor_settings));
+  g_assert (G_IS_SETTINGS (settings));
 
   completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->view));
 
-  if (g_settings_get_boolean (editor_settings, "interactive-completion"))
+  if (g_settings_get_boolean (settings, "interactive-completion"))
     {
       if (self->completion_blocked)
         {
@@ -125,7 +127,6 @@ notify_interactive_completion_cb (IdeEditorPage *self,
 void
 _ide_editor_page_settings_init (IdeEditorPage *self)
 {
-  static GSettings *editor_settings;
   GtkSourceCompletion *completion;
 
   IDE_ENTRY;
@@ -170,9 +171,6 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                           "tab-width", self->view, "tab-width",
                           G_BINDING_SYNC_CREATE);
 
-  g_settings_bind (editor_settings, "show-line-numbers",
-                   self->view, "show-line-numbers",
-                   G_SETTINGS_BIND_GET);
   g_settings_bind (editor_settings, "show-map",
                    self->map_revealer, "reveal-child",
                    G_SETTINGS_BIND_GET);
@@ -219,6 +217,48 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
   notify_interactive_completion_cb (self, NULL, editor_settings);
 
   _ide_editor_page_settings_reload (self);
+
+  IDE_EXIT;
+}
+
+void
+_ide_editor_page_settings_connect_gutter (IdeEditorPage *self,
+                                          IdeGutter     *gutter)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (IDE_IS_GUTTER (gutter));
+
+  g_settings_bind (editor_settings, "show-line-numbers",
+                   gutter, "show-line-numbers",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "show-line-changes",
+                   gutter, "show-line-changes",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "show-relative-line-numbers",
+                   gutter, "show-relative-line-numbers",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "show-line-diagnostics",
+                   gutter, "show-line-diagnostics",
+                   G_SETTINGS_BIND_GET);
+
+  IDE_EXIT;
+}
+
+void
+_ide_editor_page_settings_disconnect_gutter (IdeEditorPage *self,
+                                             IdeGutter     *gutter)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (IDE_IS_GUTTER (gutter));
+
+  g_settings_unbind (gutter, "show-line-changes");
+  g_settings_unbind (gutter, "show-line-numbers");
+  g_settings_unbind (gutter, "show-relative-line-numbers");
+  g_settings_unbind (gutter, "show-line-diagnostics");
 
   IDE_EXIT;
 }
