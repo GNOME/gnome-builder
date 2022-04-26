@@ -39,11 +39,13 @@ struct _IdeDiagnosticToolClass
                                                   const char             *program_name,
                                                   GFile                  *file,
                                                   GBytes                 *contents,
+                                                  const char             *language_id,
                                                   GError                **error);
   void                   (*configure_launcher)   (IdeDiagnosticTool      *self,
                                                   IdeSubprocessLauncher  *launcher,
                                                   GFile                  *file,
-                                                  GBytes                 *contents);
+                                                  GBytes                 *contents,
+                                                  const char             *language_id);
   GBytes                *(*get_stdin_bytes)      (IdeDiagnosticTool      *self,
                                                   GFile                  *file,
                                                   GBytes                 *contents,

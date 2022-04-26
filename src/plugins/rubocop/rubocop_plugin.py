@@ -43,7 +43,7 @@ class RubocopDiagnosticProvider(Ide.DiagnosticTool):
         super().__init__(*args, **kwargs)
         self.set_program_name('rubocop')
 
-    def do_configure_launcher(self, launcher, file, contents):
+    def do_configure_launcher(self, launcher, file, contents, language_id):
         launcher.push_args(('--format', 'json'))
         if contents is not None:
             self.is_stdin = True

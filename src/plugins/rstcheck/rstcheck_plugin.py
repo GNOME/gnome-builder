@@ -18,7 +18,7 @@ class RstcheckDiagnosticProvider(Ide.DiagnosticTool):
         super().__init__(*args, **kwargs)
         self.set_program_name('rstcheck')
 
-    def do_configure_launcher(self, launcher, file, contents):
+    def do_configure_launcher(self, launcher, file, contents, language_id):
         # rstcheck - signifies that stdin will be used
         launcher.push_argv('-')
 

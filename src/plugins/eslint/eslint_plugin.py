@@ -45,7 +45,7 @@ class ESLintDiagnosticProvider(Ide.DiagnosticTool):
         self.set_bundled_program_path(BUNDLED_ESLINT)
         self.set_local_program_path(os.path.join('node_modules', '.bin', 'eslint'))
 
-    def do_configure_launcher(self, launcher, file, contents):
+    def do_configure_launcher(self, launcher, file, contents, language_id):
         launcher.push_args(('-f', 'json',
             '--ignore-pattern', '!node_modules/*',
             '--ignore-pattern', '!bower_components/*'))

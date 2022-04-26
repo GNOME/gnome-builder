@@ -42,7 +42,7 @@ class StylelintDiagnosticProvider(Ide.DiagnosticTool):
         self.set_program_name('stylelint')
         self.set_local_program_path(os.path.join('node_modules', '.bin', 'stylelint'))
 
-    def do_configure_launcher(self, launcher, file, contents):
+    def do_configure_launcher(self, launcher, file, contents, language_id):
         launcher.push_args(('--formatter', 'json'))
         if contents is not None:
             launcher.push_args(('--stdin', '--stdin-filename=' + file.get_path()))

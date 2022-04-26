@@ -96,7 +96,8 @@ static void
 ide_diagnostic_tool_real_configure_launcher (IdeDiagnosticTool     *self,
                                              IdeSubprocessLauncher *launcher,
                                              GFile                 *file,
-                                             GBytes                *contents)
+                                             GBytes                *contents,
+                                             const char            *language_id)
 {
   IDE_ENTRY;
 
@@ -113,6 +114,7 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
                                           const char         *program_name,
                                           GFile              *file,
                                           GBytes             *contents,
+                                          const char         *language_id,
                                           GError            **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
@@ -217,7 +219,7 @@ setup_launcher:
                                       G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                       G_SUBPROCESS_FLAGS_STDERR_PIPE));
 
-  IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->configure_launcher (self, launcher, file, contents);
+  IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->configure_launcher (self, launcher, file, contents, language_id);
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
@@ -368,6 +370,7 @@ ide_diagnostic_tool_create_launcher (IdeDiagnosticTool  *self,
                                      const char         *program_name,
                                      GFile              *file,
                                      GBytes             *contents,
+                                     const char         *language_id,
                                      GError            **error)
 {
   IdeSubprocessLauncher *ret;
@@ -378,7 +381,7 @@ ide_diagnostic_tool_create_launcher (IdeDiagnosticTool  *self,
   g_assert (program_name != NULL);
   g_assert (!file || G_IS_FILE (file));
 
-  ret = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->create_launcher (self, program_name, file, contents, error);
+  ret = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->create_launcher (self, program_name, file, contents, language_id, error);
 
   g_assert (!ret || IDE_IS_SUBPROCESS_LAUNCHER (ret));
 
@@ -457,15 +460,15 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
   g_assert (!file || G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_TRACE_MSG ("Diagnosing %s...",
-                 G_OBJECT_TYPE_NAME (provider));
+  IDE_TRACE_MSG ("Diagnosing %s...", G_OBJECT_TYPE_NAME (provider));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_diagnostic_tool_diagnose_async);
+
 
   state = g_slice_new0 (DiagnoseState);
   state->file = file ? g_object_ref (file) : NULL;
   state->stdin_bytes = IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->get_stdin_bytes (self, file, contents, lang_id);
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_diagnostic_tool_diagnose_async);
   ide_task_set_task_data (task, state, diagnose_state_free);
 
   if (priv->program_name == NULL)
@@ -477,7 +480,7 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
       IDE_EXIT;
     }
 
-  if (!(launcher = ide_diagnostic_tool_create_launcher (self, priv->program_name, file, contents, &error)))
+  if (!(launcher = ide_diagnostic_tool_create_launcher (self, priv->program_name, file, contents, lang_id, &error)))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
