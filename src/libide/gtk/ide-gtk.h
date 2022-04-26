@@ -52,6 +52,7 @@ void      ide_gtk_list_store_insert_sorted   (GtkListStore      *store,
                                               guint              compare_column,
                                               GCompareDataFunc   compare_func,
                                               gpointer           compare_data);
+IDE_AVAILABLE_IN_ALL
 void       ide_gtk_widget_destroyed          (GtkWidget         *widget,
                                               GtkWidget        **location);
 
