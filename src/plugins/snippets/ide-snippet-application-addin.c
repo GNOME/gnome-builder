@@ -18,8 +18,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "ide-snippet-application-addin"
+
+#include "config.h"
+
+#include <libide-gui.h>
+
 #include "ide-snippet-application-addin.h"
-#include "libide-gui.h"
 
 struct _IdeSnippetApplicationAddin
 {
