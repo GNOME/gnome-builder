@@ -35,8 +35,13 @@
 struct _GbpBuilduiTreeAddin
 {
   GObject       parent_instance;
+
+  /* Borrowed references */
   IdeTree      *tree;
   IdeTreeModel *model;
+
+  /* Owned references */
+  GActionGroup *group;
 };
 
 typedef struct
@@ -304,7 +309,6 @@ gbp_buildui_tree_addin_load (IdeTreeAddin *addin,
                              IdeTreeModel *model)
 {
   GbpBuilduiTreeAddin *self = (GbpBuilduiTreeAddin *)addin;
-  g_autoptr(GSimpleActionGroup) group = NULL;
   IdeContext *context;
   static const GActionEntry actions[] = {
     { "build", gbp_buildui_tree_addin_action_build },
@@ -325,12 +329,12 @@ gbp_buildui_tree_addin_load (IdeTreeAddin *addin,
   if (!ide_context_has_project (context))
     return;
 
-  group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group),
+  self->group = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (self->group),
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
-  gtk_widget_insert_action_group (GTK_WIDGET (tree), "buildui", G_ACTION_GROUP (group));
+  gtk_widget_insert_action_group (GTK_WIDGET (tree), "buildui", self->group);
 }
 
 static void
@@ -347,6 +351,7 @@ gbp_buildui_tree_addin_unload (IdeTreeAddin *addin,
 
   gtk_widget_insert_action_group (GTK_WIDGET (tree), "buildui", NULL);
 
+  g_clear_object (&self->group);
   self->model = NULL;
   self->tree = NULL;
 }
@@ -358,6 +363,7 @@ gbp_buildui_tree_addin_selection_changed (IdeTreeAddin *addin,
   GbpBuilduiTreeAddin *self = (GbpBuilduiTreeAddin *)addin;
   IdeBuildTarget *target;
   IdeContext *context;
+  GAction *action;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_TREE_ADDIN (self));
@@ -368,19 +374,21 @@ gbp_buildui_tree_addin_selection_changed (IdeTreeAddin *addin,
   if (!ide_context_has_project (context))
     return;
 
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "buildui", "build",
-                             "enabled", node && ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET),
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "buildui", "rebuild",
-                             "enabled", node && ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET),
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "buildui", "run-with-handler",
-                             "enabled", node &&
-                                        ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET) &&
-                                        (target = ide_tree_node_get_item (node)) &&
-                                        ide_build_target_get_install (target) &&
-                                        ide_build_target_get_kind (target) == IDE_ARTIFACT_KIND_EXECUTABLE,
-                             NULL);
+  action = g_action_map_lookup_action (G_ACTION_MAP (self->group), "build");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+                               node && ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (self->group), "rebuild");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+                               node && ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (self->group), "run-with-handler");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+                               node &&
+                               ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET) &&
+                               (target = ide_tree_node_get_item (node)) &&
+                               ide_build_target_get_install (target) &&
+                               ide_build_target_get_kind (target) == IDE_ARTIFACT_KIND_EXECUTABLE);
 }
 
 static void
