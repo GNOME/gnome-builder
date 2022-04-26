@@ -25,6 +25,7 @@
 #endif
 
 #include "ide-application.h"
+#include "ide-omni-bar.h"
 #include "ide-workspace.h"
 
 G_BEGIN_DECLS
@@ -33,5 +34,8 @@ G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE, PRIMARY_WORKSPACE, IdeWorkspace)
+
+IDE_AVAILABLE_IN_ALL
+IdeOmniBar *ide_primary_workspace_get_omni_bar (IdePrimaryWorkspace *self);
 
 G_END_DECLS
