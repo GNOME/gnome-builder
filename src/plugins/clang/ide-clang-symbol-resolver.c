@@ -29,13 +29,73 @@
 
 struct _IdeClangSymbolResolver
 {
-  IdeObject parent_instance;
+  IdeObject       parent_instance;
+  IdeBuildSystem *build_system;
+  IdeClangClient *client;
 };
 
 static void symbol_resolver_iface_init (IdeSymbolResolverInterface *iface);
 
-G_DEFINE_TYPE_EXTENDED (IdeClangSymbolResolver, ide_clang_symbol_resolver, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangSymbolResolver, ide_clang_symbol_resolver, IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_SYMBOL_RESOLVER, symbol_resolver_iface_init))
+
+static gboolean
+ide_clang_symbol_resolver_check_status (IdeClangSymbolResolver *self,
+                                        IdeTask *task)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
+  g_assert (IDE_IS_TASK (task));
+
+  if (self->client == NULL || self->build_system == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_CANCELLED,
+                                 "Operation cancelled");
+      IDE_RETURN (FALSE);
+    }
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+ide_clang_symbol_resolver_load (IdeSymbolResolver *resolver)
+{
+  IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)resolver;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(IdeClangClient) client = NULL;
+  IdeBuildSystem *build_system;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+  build_system = ide_build_system_from_context (context);
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
+
+  g_set_object (&self->build_system, build_system);
+  g_set_object (&self->client, client);
+
+  IDE_EXIT;
+}
+
+static void
+ide_clang_symbol_resolver_unload (IdeSymbolResolver *resolver)
+{
+  IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)resolver;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
+
+  g_clear_object (&self->build_system);
+  g_clear_object (&self->client);
+
+  IDE_EXIT;
+}
 
 static void
 ide_clang_symbol_resolver_lookup_symbol_cb (GObject      *object,
@@ -70,11 +130,11 @@ lookup_symbol_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(IdeClangClient) client = NULL;
+  g_autoptr(GError) error = NULL;
   g_auto(GStrv) flags = NULL;
-  IdeLocation *location;
+  IdeClangSymbolResolver *self;
   GCancellable *cancellable;
-  IdeContext *context;
+  IdeLocation *location;
   GFile *file;
   guint line;
   guint column;
@@ -85,16 +145,31 @@ lookup_symbol_flags_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
-  context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
+  self = ide_task_get_source_object (task);
   cancellable = ide_task_get_cancellable (task);
   location = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_LOCATION (location));
+
+  if (!(flags = ide_build_system_get_build_flags_finish (build_system, result, &error)))
+    {
+      if (!ide_error_ignore (error))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
+    }
+
+  if (!ide_clang_symbol_resolver_check_status (self, task))
+    IDE_EXIT;
+
   file = ide_location_get_file (location);
   line = ide_location_get_line (location);
   column = ide_location_get_line_offset (location);
 
-  ide_clang_client_locate_symbol_async (client,
+  ide_clang_client_locate_symbol_async (self->client,
                                         file,
                                         (const gchar * const *)flags,
                                         line + 1,
@@ -115,9 +190,6 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
 {
   IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)resolver;
   g_autoptr(IdeTask) task = NULL;
-  IdeBuildSystem *build_system;
-  IdeContext *context;
-  GFile *file;
 
   IDE_ENTRY;
 
@@ -128,16 +200,13 @@ ide_clang_symbol_resolver_lookup_symbol_async (IdeSymbolResolver   *resolver,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, ide_clang_symbol_resolver_lookup_symbol_async);
-  ide_task_set_task_data (task,
-                          g_object_ref (location),
-                          g_object_unref);
+  ide_task_set_task_data (task, g_object_ref (location), g_object_unref);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_build_system_from_context (context);
-  file = ide_location_get_file (location);
+  if (!ide_clang_symbol_resolver_check_status (self, task))
+    IDE_EXIT;
 
-  ide_build_system_get_build_flags_async (build_system,
-                                          file,
+  ide_build_system_get_build_flags_async (self->build_system,
+                                          ide_location_get_file (location),
                                           cancellable,
                                           lookup_symbol_flags_cb,
                                           g_steal_pointer (&task));
@@ -193,28 +262,46 @@ get_symbol_tree_flags_cb (GObject      *object,
 {
   IdeBuildSystem *build_system = (IdeBuildSystem *)object;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(IdeClangClient) client = NULL;
+  g_autoptr(GError) error = NULL;
   g_auto(GStrv) flags = NULL;
+  IdeClangSymbolResolver *self;
   GCancellable *cancellable;
-  IdeContext *context;
   GFile *file;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_BUILD_SYSTEM (build_system));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  flags = ide_build_system_get_build_flags_finish (build_system, result, NULL);
-  context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
+  self = ide_task_get_source_object (task);
   cancellable = ide_task_get_cancellable (task);
   file = ide_task_get_task_data (task);
 
-  ide_clang_client_get_symbol_tree_async (client,
+  g_assert (IDE_IS_CLANG_SYMBOL_RESOLVER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (G_IS_FILE (file));
+
+  if (!(flags = ide_build_system_get_build_flags_finish (build_system, result, &error)))
+    {
+      if (!ide_error_ignore (error))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
+    }
+
+  if (!ide_clang_symbol_resolver_check_status (self, task))
+    IDE_EXIT;
+
+  ide_clang_client_get_symbol_tree_async (self->client,
                                           file,
                                           (const gchar * const *)flags,
                                           cancellable,
                                           ide_clang_symbol_resolver_get_symbol_tree_cb,
                                           g_steal_pointer (&task));
+
+  IDE_EXIT;
 }
 
 static void
@@ -227,8 +314,6 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
 {
   IdeClangSymbolResolver *self = (IdeClangSymbolResolver *)resolver;
   g_autoptr(IdeTask) task = NULL;
-  IdeBuildSystem *build_system;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -241,10 +326,10 @@ ide_clang_symbol_resolver_get_symbol_tree_async (IdeSymbolResolver   *resolver,
   ide_task_set_source_tag (task, ide_clang_symbol_resolver_get_symbol_tree_async);
   ide_task_set_task_data (task, g_object_ref (file), g_object_unref);
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  build_system = ide_build_system_from_context (context);
+  if (!ide_clang_symbol_resolver_check_status (self, task))
+    IDE_EXIT;
 
-  ide_build_system_get_build_flags_async (build_system,
+  ide_build_system_get_build_flags_async (self->build_system,
                                           file,
                                           cancellable,
                                           get_symbol_tree_flags_cb,
@@ -411,6 +496,8 @@ ide_clang_symbol_resolver_class_init (IdeClangSymbolResolverClass *klass)
 static void
 symbol_resolver_iface_init (IdeSymbolResolverInterface *iface)
 {
+  iface->load = ide_clang_symbol_resolver_load;
+  iface->unload = ide_clang_symbol_resolver_unload;
   iface->lookup_symbol_async = ide_clang_symbol_resolver_lookup_symbol_async;
   iface->lookup_symbol_finish = ide_clang_symbol_resolver_lookup_symbol_finish;
   iface->get_symbol_tree_async = ide_clang_symbol_resolver_get_symbol_tree_async;
