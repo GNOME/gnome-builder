@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
@@ -32,9 +31,9 @@
 
 struct _GbpBuilduiOmniBarSection
 {
-  GtkBin          parent_instance;
+  AdwBin          parent_instance;
 
-  DzlSignalGroup *build_manager_signals;
+  IdeSignalGroup *build_manager_signals;
 
   GtkButton      *configure_button;
   GtkLabel       *config_ready_label;
@@ -52,7 +51,7 @@ struct _GbpBuilduiOmniBarSection
   GtkRevealer    *popover_details_revealer;
 };
 
-G_DEFINE_FINAL_TYPE (GbpBuilduiOmniBarSection, gbp_buildui_omni_bar_section, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (GbpBuilduiOmniBarSection, gbp_buildui_omni_bar_section, ADW_TYPE_BIN)
 
 static void
 gbp_buildui_omni_bar_section_notify_can_build (GbpBuilduiOmniBarSection *self,
@@ -203,7 +202,7 @@ gbp_buildui_omni_bar_section_build_started (GbpBuilduiOmniBarSection *self,
   gtk_revealer_set_reveal_child (self->popover_details_revealer, TRUE);
 
   gtk_label_set_label (self->popover_build_result_label, _("Building…"));
-  dzl_gtk_widget_remove_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
+  gtk_widget_remove_css_class (GTK_WIDGET (self->popover_build_result_label), "error");
 
   IDE_EXIT;
 }
@@ -221,7 +220,7 @@ gbp_buildui_omni_bar_section_build_failed (GbpBuilduiOmniBarSection *self,
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
 
   gtk_label_set_label (self->popover_build_result_label, _("Failed"));
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self->popover_build_result_label), "error");
+  gtk_widget_add_css_class (GTK_WIDGET (self->popover_build_result_label), "error");
 
   IDE_EXIT;
 }
@@ -246,7 +245,7 @@ gbp_buildui_omni_bar_section_build_finished (GbpBuilduiOmniBarSection *self,
 static void
 gbp_buildui_omni_bar_section_bind_build_manager (GbpBuilduiOmniBarSection *self,
                                                  IdeBuildManager          *build_manager,
-                                                 DzlSignalGroup           *signals)
+                                                 IdeSignalGroup           *signals)
 {
   IdeContext *context;
   IdeVcs *vcs;
@@ -254,7 +253,7 @@ gbp_buildui_omni_bar_section_bind_build_manager (GbpBuilduiOmniBarSection *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_OMNI_BAR_SECTION (self));
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-  g_assert (DZL_IS_SIGNAL_GROUP (signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (signals));
 
   gbp_buildui_omni_bar_section_notify_can_build (self, NULL, build_manager);
   gbp_buildui_omni_bar_section_notify_pipeline (self, NULL, build_manager);
@@ -276,27 +275,28 @@ gbp_buildui_omni_bar_section_bind_build_manager (GbpBuilduiOmniBarSection *self,
 }
 
 static void
-gbp_buildui_omni_bar_section_destroy (GtkWidget *widget)
+gbp_buildui_omni_bar_section_dispose (GObject *object)
 {
-  GbpBuilduiOmniBarSection *self = (GbpBuilduiOmniBarSection *)widget;
+  GbpBuilduiOmniBarSection *self = (GbpBuilduiOmniBarSection *)object;
 
   g_assert (GBP_IS_BUILDUI_OMNI_BAR_SECTION (self));
 
   if (self->build_manager_signals)
     {
-      dzl_signal_group_set_target (self->build_manager_signals, NULL);
+      ide_signal_group_set_target (self->build_manager_signals, NULL);
       g_clear_object (&self->build_manager_signals);
     }
 
-  GTK_WIDGET_CLASS (gbp_buildui_omni_bar_section_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (gbp_buildui_omni_bar_section_parent_class)->dispose (object);
 }
 
 static void
 gbp_buildui_omni_bar_section_class_init (GbpBuilduiOmniBarSectionClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = gbp_buildui_omni_bar_section_destroy;
+  object_class->dispose = gbp_buildui_omni_bar_section_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-omni-bar-section.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, config_ready_label);
@@ -319,53 +319,53 @@ gbp_buildui_omni_bar_section_init (GbpBuilduiOmniBarSection *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->build_manager_signals = dzl_signal_group_new (IDE_TYPE_BUILD_MANAGER);
+  self->build_manager_signals = ide_signal_group_new (IDE_TYPE_BUILD_MANAGER);
   g_signal_connect_object (self->build_manager_signals,
                            "bind",
                            G_CALLBACK (gbp_buildui_omni_bar_section_bind_build_manager),
                            self,
                            G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "notify::can-build",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_can_build),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "notify::message",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_message),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "notify::pipeline",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_pipeline),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "notify::error-count",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_error_count),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "notify::warning-count",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_warning_count),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "notify::last-build-time",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_notify_last_build_time),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "build-started",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_build_started),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "build-failed",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_build_failed),
                                    self,
                                    G_CONNECT_SWAPPED);
-  dzl_signal_group_connect_object (self->build_manager_signals,
+  ide_signal_group_connect_object (self->build_manager_signals,
                                    "build-finished",
                                    G_CALLBACK (gbp_buildui_omni_bar_section_build_finished),
                                    self,
@@ -382,5 +382,5 @@ gbp_buildui_omni_bar_section_set_context (GbpBuilduiOmniBarSection *self,
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
   build_manager = ide_build_manager_from_context (context);
-  dzl_signal_group_set_target (self->build_manager_signals, build_manager);
+  ide_signal_group_set_target (self->build_manager_signals, build_manager);
 }
