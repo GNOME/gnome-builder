@@ -28,7 +28,9 @@
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
+#if 0 /* TODO: port GbpBuilduiConfigSurface */
 #include "gbp-buildui-config-surface.h"
+#endif
 #include "gbp-buildui-log-pane.h"
 #include "gbp-buildui-omni-bar-section.h"
 #include "gbp-buildui-pane.h"
@@ -40,7 +42,9 @@ struct _GbpBuilduiWorkspaceAddin
 
   /* Borrowed references */
   IdeWorkspace             *workspace;
+#if 0 /* TODO: port GbpBuilduiConfigSurface */
   GbpBuilduiConfigSurface  *surface;
+#endif
   GbpBuilduiOmniBarSection *omni_bar_section;
   GbpBuilduiLogPane        *log_pane;
   GbpBuilduiPane           *pane;
@@ -177,6 +181,7 @@ on_view_output_cb (GSimpleAction *action,
   ide_widget_reveal_and_grab (GTK_WIDGET (self->log_pane));
 }
 
+#if 0 /* TODO: port GbpBuilduiConfigSurface */
 static void
 on_edit_config_cb (GSimpleAction *action,
                    GVariant      *param,
@@ -202,9 +207,12 @@ on_edit_config_cb (GSimpleAction *action,
   if (config != NULL)
     gbp_buildui_config_surface_set_config (self->surface, config);
 }
+#endif
 
 static const GActionEntry actions[] = {
+#if 0 /* TODO: port GbpBuilduiConfigSurface */
   { "edit-config", on_edit_config_cb, "s" },
+#endif
   { "view-output", on_view_output_cb },
 };
 
@@ -242,7 +250,9 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
   GbpBuilduiWorkspaceAddin *self = (GbpBuilduiWorkspaceAddin *)addin;
+#if 0 /* TODO: port GbpBuilduiConfigSurface */
   IdeConfigManager *config_manager;
+#endif
   PangoAttrList *small_attrs = NULL;
   DzlShortcutController *shortcuts;
   IdeEditorSidebar *sidebar;
@@ -281,7 +291,9 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
   context = ide_workbench_get_context (workbench);
   build_manager = ide_build_manager_from_context (context);
+#if 0 /* TODO: port GbpBuilduiConfigSurface */
   config_manager = ide_config_manager_from_context (context);
+#endif
 
   small_attrs = pango_attr_list_new ();
   pango_attr_list_insert (small_attrs, pango_attr_scale_new (0.833333));
@@ -386,6 +398,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   GTK_WIDGET (self->pane),
                                   100);
 
+#if 0 /* TODO: port GbpBuilduiConfigSurface */
   self->surface = g_object_new (GBP_TYPE_BUILDUI_CONFIG_SURFACE,
                                 "config-manager", config_manager,
                                 "icon-name", "builder-build-configure-symbolic",
@@ -398,6 +411,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                     G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->surface);
   ide_workspace_add_surface (workspace, IDE_SURFACE (self->surface));
+#endif
 
   self->build_manager_signals = dzl_signal_group_new (IDE_TYPE_BUILD_MANAGER);
   g_signal_connect_object (self->build_manager_signals,
@@ -451,8 +465,10 @@ gbp_buildui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   if (self->diag_box)
     gtk_widget_destroy (GTK_WIDGET (self->diag_box));
 
+#if 0 /* TODO: port GbpBuilduiConfigSurface */
   if (self->surface)
     gtk_widget_destroy (GTK_WIDGET (self->surface));
+#endif
 
   dzl_signal_group_set_target (self->build_manager_signals, NULL);
   g_clear_object (&self->build_manager_signals);
