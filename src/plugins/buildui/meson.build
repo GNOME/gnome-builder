@@ -10,7 +10,7 @@ plugins_sources += files([
   #'gbp-buildui-runtime-row.c',
   'gbp-buildui-stage-row.c',
   #'gbp-buildui-tree-addin.c',
-  #'gbp-buildui-workspace-addin.c',
+  'gbp-buildui-workspace-addin.c',
 ])
 
 plugin_buildui_resources = gnome.compile_resources(
