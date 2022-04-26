@@ -1,20 +1,17 @@
-snippet class
-- scope vala
-- desc Create class
-	class ${1:$filename|stripsuffix|camelize} : ${2:Object} {
-		public $1 () {
-			$0
-		}
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+  <snippet _name="class" trigger="class" _description="Create class">
+    <text languages="vala;"><![CDATA[class ${1:$filename|stripsuffix|camelize} : ${2:Object} {
+	public $1 () {
+		$0
 	}
-snippet comment
-- scope vala
-- desc Insert a multiline comment.
-	/*
-	 * $0
-	 */
-snippet async
-- scope vala
-- desc Call an async function
-	${1:func}.begin (${2:args, }(obj, res) => {
-		${3:var result = }$1.end (res);$0
-	});
+}
+]]></text>
+  </snippet>
+  <snippet _name="comment" trigger="comment" _description="Insert a multiline comment.">
+    <text languages="vala;"><![CDATA[/*
+ * $0
+ */
+]]></text>
+  </snippet>
+</snippets>

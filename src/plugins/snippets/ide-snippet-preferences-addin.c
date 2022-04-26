@@ -33,39 +33,36 @@ struct _IdeSnippetPreferencesAddin
   guint enabled_id;
 };
 
+static const IdePreferenceGroupEntry groups[] = {
+  { "insight", "snippets", 1000, N_("Snippets") },
+};
+
+static const IdePreferenceItemEntry items[] = {
+  { "insight", "completion-providers", "enable-snippets", 0, ide_preferences_window_toggle,
+    N_("Suggest Completions from Snippets"),
+    N_("Use registered snippets to suggest completion proposals"),
+    "org.gnome.builder.extension-type",
+    "/org/gnome/builder/extension-types/snippets/GtkSourceCompletionProvider/",
+    "enabled" }
+};
+
 static void
-ide_snippet_preferences_addin_load (IdePreferencesAddin *addin,
-                                    DzlPreferences      *prefs)
+ide_snippet_preferences_addin_load (IdePreferencesAddin  *addin,
+                                    IdePreferencesWindow *window)
 {
-  IdeSnippetPreferencesAddin *self = (IdeSnippetPreferencesAddin *)addin;
-
   g_assert (IDE_IS_SNIPPET_PREFERENCES_ADDIN (addin));
-  g_assert (DZL_IS_PREFERENCES (prefs));
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
 
-  self->enabled_id =
-    dzl_preferences_add_switch (prefs,
-                                "completion",
-                                "providers",
-                                "org.gnome.builder.extension-type",
-                                "enabled",
-                                "/org/gnome/builder/extension-types/snippets-plugin/IdeCompletionProvider/",
-                                NULL,
-                                _("Suggest Completions from Snippets"),
-                                _("Use registered snippets to suggest completion proposals"),
-                                NULL,
-                                10);
+  ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+  ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
 }
 
 static void
-ide_snippet_preferences_addin_unload (IdePreferencesAddin *addin,
-                                      DzlPreferences      *prefs)
+ide_snippet_preferences_addin_unload (IdePreferencesAddin  *addin,
+                                      IdePreferencesWindow *window)
 {
-  IdeSnippetPreferencesAddin *self = (IdeSnippetPreferencesAddin *)addin;
-
   g_assert (IDE_IS_SNIPPET_PREFERENCES_ADDIN (addin));
-  g_assert (DZL_IS_PREFERENCES (prefs));
-
-  dzl_preferences_remove_id (prefs, self->enabled_id);
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
 }
 
 static void
@@ -76,7 +73,7 @@ prefs_addin_iface_init (IdePreferencesAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSnippetPreferencesAddin, ide_snippet_preferences_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, prefs_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, prefs_addin_iface_init))
 
 static void
 ide_snippet_preferences_addin_class_init (IdeSnippetPreferencesAddinClass *klass)

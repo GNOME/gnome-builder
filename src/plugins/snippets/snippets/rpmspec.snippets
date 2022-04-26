@@ -1,155 +1,130 @@
-snippet minimal
-	Name:          ${1:$filename|stripsuffix}
-	Version:       ${2:1.0}
-	Release:       ${3:1}%{?dist}
-	Summary:       ${4:Minimal test package}
-	
-	License:       ${5:Public Domain}
-	URL:           ${6:https://fedoraproject.org/}
-	Source0:       ${7}
-	
-	BuildRequires: ${8}
-	Requires:      ${9}
-	
-	%description
-	${10:$4}
-	
-	%prep
-	%setup -q
-	
-	%build
-	%configure
-	make %{?_smp_mflags}
-	
-	%install
-	%make_install
-	
-	%files
-	%doc ${11}
-	${12}
-	
-	%changelog
-	* $shortweekday $shortmonth $day $year ${13:$fullname} <${14:$email}> - $2-$3
-	- Initial package$0
-snippet library
-	Name:          ${1:$filename|stripsuffix}
-	Version:       ${2:1.0}
-	Release:       ${3:1}%{?dist}
-	Summary:       ${4:Minimal test package}
-	
-	License:       ${5:Public Domain}
-	URL:           ${6:https://fedoraproject.org/}
-	Source0:       ${7}
-	
-	BuildRequires: ${8}
-	Requires:      ${9}
-	
-	%description
-	${10:$4}
-	
-	%package       devel
-	Summary:       Development files for %{name}
-	Requires:      %{name}%{?_isa} = %{version}-%{release}
-	
-	%description   devel
-	The %{name}-devel package contains libraries and header files for
-	developing applications that use %{name}.
-	
-	%prep
-	%setup -q
-	
-	%build
-	%configure --disable-static
-	make %{?_smp_mflags}
-	
-	%install
-	%make_install
-	find %{buildroot} -name '*.la' -exec rm -f {} ';'
-	
-	%post -p /sbin/ldconfig
-	%postun -p /sbin/ldconfig
-	
-	%files
-	%doc ${11}
-	%{_libdir}/${12:*}.so.*
-	${13}
-	
-	%files devel
-	%doc ${14}
-	%{_includedir}/${15:*}
-	%{_libdir}/${16:$12}.so
-	${17}
-	
-	%changelog
-	* $shortweekday $shortmonth $day $year ${18:$fullname} <${19:$email}> - $2-$3
-	- Initial package$0
-snippet python-arch
-	%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-	%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-	Name:          ${1:$filename|stripsuffix}
-	Version:       ${2:1.0}
-	Release:       ${3:1}%{?dist}
-	Summary:       ${4:Minimal python arch-specific package}
-	
-	License:       ${5:Public Domain}
-	URL:           ${6:https://fedoraproject.org/}
-	Source0:       ${7}
-	
-	BuildRequires: ${8}
-	Requires:      ${9}
-	BuildArch:     ${10:%{ix86} x86_64}
-	
-	%description
-	${11:$4}
-	
-	%prep
-	%setup -q
-	
-	%build
-	CFLAGS=%{optflags} %{__python} setup.py build
-	
-	%install
-	%{__python} setup.py install -O1 --skip-build --root %{buildroot}
-	
-	%files
-	%doc ${12}
-	%{python_sitearch}/${14:*}
-	${15}
-	
-	%changelog
-	* $shortweekday $shortmonth $day $year ${16:$fullname} <${17:$email}> - $2-$3
-	- Initial package$0
-snippet python-noarch
-	Name:          ${1:$filename|stripsuffix}
-	Version:       ${2:1.0}
-	Release:       ${3:1}%{?dist}
-	Summary:       ${4:Minimal python package}
-	
-	License:       ${5:Public Domain}
-	URL:           ${6:https://fedoraproject.org/}
-	Source0:       ${7}
-	
-	BuildRequires: ${8}
-	Requires:      ${9}
-	BuildArch:     noarch
-	
-	%description
-	${10:$4}
-	
-	%prep
-	%setup -q
-	
-	%build
-	%{__python} setup.py build
-	
-	%install
-	%{__python} setup.py install -O1 --skip-build --root %{buildroot}
-	
-	%files
-	%doc ${12}
-	%{python_sitelib}/${14:*}
-	${15}
-	
-	%changelog
-	* $shortweekday $shortmonth $day $year ${16:$fullname} <${17:$email}> - $2-$3
-	- Initial package$0
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+  <snippet _name="minimal" trigger="minimal" _description="">
+    <text languages="rpmspec"><![CDATA[Name:          ${1:$filename|stripsuffix}
+Version:       ${2:1.0}
+Release:       ${3:1}%{?dist}
+Summary:       ${4:Minimal test package}
+
+License:       ${5:Public Domain}
+URL:           ${6:https://fedoraproject.org/}
+Source0:       ${7}
+
+BuildRequires: ${8}
+Requires:      ${9}
+
+%description
+${10:$4}
+
+%prep
+%setup -q
+
+%build
+%configure
+make %{?_smp_mflags}
+
+%install
+%make_install
+
+%files
+%doc ${11}
+${12}
+
+%changelog
+* $shortweekday $shortmonth $day $year ${13:$fullname} <${14:$email}> - $2-$3
+- Initial package$0
+]]></text>
+  </snippet>
+  <snippet _name="library" trigger="library" _description="">
+    <text languages="rpmspec"><![CDATA[Name:          ${1:$filename|stripsuffix}
+Version:       ${2:1.0}
+Release:       ${3:1}%{?dist}
+Summary:       ${4:Minimal test package}
+
+License:       ${5:Public Domain}
+URL:           ${6:https://fedoraproject.org/}
+Source0:       ${7}
+
+BuildRequires: ${8}
+Requires:      ${9}
+
+%description
+${10:$4}
+
+%package       devel
+Summary:       Development files for %{name}
+Requires:      %{name}%{?_isa} = %{version}-%{release}
+
+%description   devel
+The %{name}-devel package contains libraries and header files for
+developing applications that use %{name}.
+
+%prep
+%setup -q
+
+%build
+%configure --disable-static
+make %{?_smp_mflags}
+
+%install
+%make_install
+find %{buildroot} -name '*.la' -exec rm -f {} ';'
+
+%post -p /sbin/ldconfig
+%postun -p /sbin/ldconfig
+
+%files
+%doc ${11}
+%{_libdir}/${12:*}.so.*
+${13}
+
+%files devel
+%doc ${14}
+%{_includedir}/${15:*}
+%{_libdir}/${16:$12}.so
+${17}
+
+%changelog
+* $shortweekday $shortmonth $day $year ${18:$fullname} <${19:$email}> - $2-$3
+- Initial package$0
+]]></text>
+  </snippet>
+  <snippet _name="python-arch" trigger="python-arch" _description="">
+    <text languages="rpmspec"><![CDATA[%{!?python_sitelib: %global python_sitelib %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
+%{!?python_sitearch: %global python_sitearch %(%{__python} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+Name:          ${1:$filename|stripsuffix}
+Version:       ${2:1.0}
+Release:       ${3:1}%{?dist}
+Summary:       ${4:Minimal python arch-specific package}
+
+License:       ${5:Public Domain}
+URL:           ${6:https://fedoraproject.org/}
+Source0:       ${7}
+
+BuildRequires: ${8}
+Requires:      ${9}
+BuildArch:     ${10:%{ix86} x86_64}
+
+%description
+${11:$4}
+
+%prep
+%setup -q
+
+%build
+CFLAGS=%{optflags} %{__python} setup.py build
+
+%install
+%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+
+%files
+%doc ${12}
+%{python_sitearch}/${14:*}
+${15}
+
+%changelog
+* $shortweekday $shortmonth $day $year ${16:$fullname} <${17:$email}> - $2-$3
+- Initial package$0
+]]></text>
+  </snippet>
+</snippets>
