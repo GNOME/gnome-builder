@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_SNIPPET_APPLICATION_ADDIN (ide_snippet_application_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSnippetApplicationAddin, ide_snippet_application_addin, IDE, SNIPPET_APPLICATION_ADDIN, IdeObject)
-
-IdeSnippetApplicationAddin *ide_snippet_application_addin_new (void);
+G_DECLARE_FINAL_TYPE (IdeSnippetApplicationAddin, ide_snippet_application_addin, IDE, SNIPPET_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS
