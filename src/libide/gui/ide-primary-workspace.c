@@ -60,6 +60,7 @@ struct _IdePrimaryWorkspace
   PanelPaned         *edge_bottom;
   IdeGrid            *grid;
   GtkOverlay         *overlay;
+  IdeOmniBar         *omni_bar;
 };
 
 G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
@@ -221,6 +222,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_start);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, grid);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, omni_bar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
@@ -244,4 +246,20 @@ ide_primary_workspace_init (IdePrimaryWorkspace *self)
   gtk_menu_button_set_menu_model (self->add_button, G_MENU_MODEL (menu));
 
   _ide_primary_workspace_init_actions (self);
+}
+
+/**
+ * ide_primary_workspace_get_omni_bar:
+ * @self: an #IdePrimaryWorkspace
+ *
+ * Retrieves the #IdeOmniBar of @self.
+ *
+ * Returns: (transfer none): an #IdeOmniBar
+ */
+IdeOmniBar *
+ide_primary_workspace_get_omni_bar (IdePrimaryWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_PRIMARY_WORKSPACE (self), NULL);
+
+  return self->omni_bar;
 }
