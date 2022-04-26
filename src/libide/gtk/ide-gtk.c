@@ -381,3 +381,37 @@ ide_gtk_widget_destroyed (GtkWidget  *widget,
   if (location != NULL)
     *location = NULL;
 }
+
+/**
+ * ide_g_time_span_to_label:
+ * @span: the span of time
+ *
+ * Creates a string describing the time span in hours, minutes, and seconds.
+ * For example, a time span of three and a half minutes would be "3:30".
+ * 2 days, 3 hours, 6 minutes, and 20 seconds would be "51:06:20".
+ *
+ * Returns: (transfer full): A newly allocated string describing the time span.
+ */
+char *
+ide_g_time_span_to_label (GTimeSpan span)
+{
+  gint64 hours;
+  gint64 minutes;
+  gint64 seconds;
+
+  span = ABS (span);
+
+  hours = span / G_TIME_SPAN_HOUR;
+  minutes = (span % G_TIME_SPAN_HOUR) / G_TIME_SPAN_MINUTE;
+  seconds = (span % G_TIME_SPAN_MINUTE) / G_TIME_SPAN_SECOND;
+
+  g_assert (minutes < 60);
+  g_assert (seconds < 60);
+
+  if (hours == 0)
+    return g_strdup_printf ("%02"G_GINT64_FORMAT":%02"G_GINT64_FORMAT,
+                            minutes, seconds);
+  else
+    return g_strdup_printf ("%02"G_GINT64_FORMAT":%02"G_GINT64_FORMAT":%02"G_GINT64_FORMAT,
+                            hours, minutes, seconds);
+}
