@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -74,8 +73,8 @@ struct _GbpOmniGutterRenderer
 
   GArray *lines;
 
-  DzlSignalGroup *view_signals;
-  DzlSignalGroup *buffer_signals;
+  IdeSignalGroup *view_signals;
+  IdeSignalGroup *buffer_signals;
 
   /*
    * A scaled font description that matches the size of the text
@@ -863,43 +862,6 @@ gbp_omni_gutter_renderer_query_activatable (GtkSourceGutterRenderer *renderer,
 }
 
 static void
-animate_at_iter (GbpOmniGutterRenderer *self,
-                 GdkRectangle          *area,
-                 GtkTextIter           *iter)
-{
-  DzlBoxTheatric *theatric;
-  GtkTextView *view;
-
-  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-  g_assert (area != NULL);
-  g_assert (iter != NULL);
-
-  /* Show a little bullet animation shooting right */
-
-  view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-
-  theatric = g_object_new (DZL_TYPE_BOX_THEATRIC,
-                           "alpha", 0.3,
-                           "background", "#729fcf",
-                           "height", area->height,
-                           "target", view,
-                           "width", area->width,
-                           "x", area->x,
-                           "y", area->y,
-                           NULL);
-
-  dzl_object_animate_full (theatric,
-                           DZL_ANIMATION_EASE_IN_CUBIC,
-                           100,
-                           gtk_widget_get_frame_clock (GTK_WIDGET (view)),
-                           g_object_unref,
-                           theatric,
-                           "x", area->x + 250,
-                           "alpha", 0.0,
-                           NULL);
-}
-
-static void
 gbp_omni_gutter_renderer_activate (GtkSourceGutterRenderer *renderer,
                                    GtkTextIter             *iter,
                                    GdkRectangle            *area,
@@ -976,10 +938,7 @@ gbp_omni_gutter_renderer_activate (GtkSourceGutterRenderer *renderer,
     case IDE_DEBUGGER_BREAK_COUNTPOINT:
     case IDE_DEBUGGER_BREAK_WATCHPOINT:
       if (breakpoint != NULL)
-        {
-          _ide_debug_manager_remove_breakpoint (debug_manager, breakpoint);
-          animate_at_iter (self, area, iter);
-        }
+        _ide_debug_manager_remove_breakpoint (debug_manager, breakpoint);
       break;
 
     default:
@@ -1021,15 +980,15 @@ draw_breakpoint_bg (GbpOmniGutterRenderer        *self,
 
   cairo_move_to (cr, area.x, area.y);
   cairo_line_to (cr,
-                 dzl_cairo_rectangle_x2 (&area) - ARROW_WIDTH,
+                 ide_cairo_rectangle_x2 (&area) - ARROW_WIDTH,
                  area.y);
   cairo_line_to (cr,
-                 dzl_cairo_rectangle_x2 (&area),
-                 dzl_cairo_rectangle_middle (&area));
+                 ide_cairo_rectangle_x2 (&area),
+                 ide_cairo_rectangle_middle (&area));
   cairo_line_to (cr,
-                 dzl_cairo_rectangle_x2 (&area) - ARROW_WIDTH,
-                 dzl_cairo_rectangle_y2 (&area));
-  cairo_line_to (cr, area.x, dzl_cairo_rectangle_y2 (&area));
+                 ide_cairo_rectangle_x2 (&area) - ARROW_WIDTH,
+                 ide_cairo_rectangle_y2 (&area));
+  cairo_line_to (cr, area.x, ide_cairo_rectangle_y2 (&area));
   cairo_close_path (cr);
 
   if (info->is_countpoint)
@@ -1476,7 +1435,7 @@ gbp_omni_gutter_renderer_notify_buffer (GbpOmniGutterRenderer *self,
       if (!IDE_IS_BUFFER (buffer))
         buffer = NULL;
 
-      dzl_signal_group_set_target (self->buffer_signals, buffer);
+      ide_signal_group_set_target (self->buffer_signals, buffer);
       gbp_omni_gutter_renderer_reload (self);
     }
 }
@@ -1484,11 +1443,11 @@ gbp_omni_gutter_renderer_notify_buffer (GbpOmniGutterRenderer *self,
 static void
 gbp_omni_gutter_renderer_bind_view (GbpOmniGutterRenderer *self,
                                     IdeSourceView         *view,
-                                    DzlSignalGroup        *view_signals)
+                                    IdeSignalGroup        *view_signals)
 {
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (IDE_IS_SOURCE_VIEW (view));
-  g_assert (DZL_IS_SIGNAL_GROUP (view_signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (view_signals));
 
   gbp_omni_gutter_renderer_notify_buffer (self, NULL, view);
 }
@@ -1504,7 +1463,7 @@ gbp_omni_gutter_renderer_notify_view (GbpOmniGutterRenderer *self)
   if (!IDE_IS_SOURCE_VIEW (view))
     view = NULL;
 
-  dzl_signal_group_set_target (self->view_signals, view);
+  ide_signal_group_set_target (self->view_signals, view);
 }
 
 static gboolean
@@ -1530,10 +1489,10 @@ gbp_omni_gutter_renderer_buffer_changed (GbpOmniGutterRenderer *self,
 
   /* Run immediately at the end of this main loop iteration */
   if (self->resize_source == 0)
-    self->resize_source = gdk_threads_add_idle_full (G_PRIORITY_HIGH,
-                                                     gbp_omni_gutter_renderer_do_recalc,
-                                                     g_object_ref (self),
-                                                     g_object_unref);
+    self->resize_source = g_idle_add_full (G_PRIORITY_HIGH,
+                                           gbp_omni_gutter_renderer_do_recalc,
+                                           g_object_ref (self),
+                                           g_object_unref);
 }
 
 static void
@@ -1567,11 +1526,11 @@ gbp_omni_gutter_renderer_notify_style_scheme (GbpOmniGutterRenderer *self,
 static void
 gbp_omni_gutter_renderer_bind_buffer (GbpOmniGutterRenderer *self,
                                       IdeBuffer             *buffer,
-                                      DzlSignalGroup        *buffer_signals)
+                                      IdeSignalGroup        *buffer_signals)
 {
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (DZL_IS_SIGNAL_GROUP (buffer_signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (buffer_signals));
 
   gbp_omni_gutter_renderer_notify_style_scheme (self, NULL, buffer);
 }
@@ -1587,7 +1546,7 @@ gbp_omni_gutter_renderer_constructed (GObject *object)
   G_OBJECT_CLASS (gbp_omni_gutter_renderer_parent_class)->constructed (object);
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  dzl_signal_group_set_target (self->view_signals, view);
+  ide_signal_group_set_target (self->view_signals, view);
 
   self->settings = g_settings_new ("org.gnome.builder.editor");
 }
@@ -1597,7 +1556,7 @@ gbp_omni_gutter_renderer_dispose (GObject *object)
 {
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)object;
 
-  dzl_clear_source (&self->resize_source);
+  g_clear_handle_id (&self->resize_source, g_source_remove);
 
   g_clear_object (&self->settings);
   g_clear_object (&self->breakpoints);
@@ -1734,51 +1693,51 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
                     G_CALLBACK (gbp_omni_gutter_renderer_notify_view),
                     NULL);
 
-  self->buffer_signals = dzl_signal_group_new (IDE_TYPE_BUFFER);
+  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
 
   g_signal_connect_swapped (self->buffer_signals,
                             "bind",
                             G_CALLBACK (gbp_omni_gutter_renderer_bind_buffer),
                             self);
 
-  dzl_signal_group_connect_swapped (self->buffer_signals,
+  ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::file",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->buffer_signals,
+  ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::language",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->buffer_signals,
+  ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::style-scheme",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_style_scheme),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->buffer_signals,
+  ide_signal_group_connect_swapped (self->buffer_signals,
                                     "changed",
                                     G_CALLBACK (gbp_omni_gutter_renderer_buffer_changed),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->buffer_signals,
+  ide_signal_group_connect_swapped (self->buffer_signals,
                                     "cursor-moved",
                                     G_CALLBACK (gbp_omni_gutter_renderer_cursor_moved),
                                     self);
 
-  self->view_signals = dzl_signal_group_new (IDE_TYPE_SOURCE_VIEW);
+  self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
 
   g_signal_connect_swapped (self->view_signals,
                             "bind",
                             G_CALLBACK (gbp_omni_gutter_renderer_bind_view),
                             self);
 
-  dzl_signal_group_connect_swapped (self->view_signals,
+  ide_signal_group_connect_swapped (self->view_signals,
                                     "notify::buffer",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_buffer),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->view_signals,
+  ide_signal_group_connect_swapped (self->view_signals,
                                     "notify::font-desc",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_font_desc),
                                     self);
