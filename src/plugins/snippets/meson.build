@@ -1,6 +1,7 @@
 plugins_sources += files([
   'snippets-plugin.c',
   'ide-snippet-application-addin.c',
+  'gbp-snippet-completion-provider.c',
 ])
 
 snippets_resources = gnome.compile_resources(
