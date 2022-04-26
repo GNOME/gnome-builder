@@ -34,7 +34,8 @@ static void
 ide_codespell_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *tool,
                                                       IdeSubprocessLauncher *launcher,
                                                       GFile                 *file,
-                                                      GBytes                *contents)
+                                                      GBytes                *contents,
+                                                      const char            *language_id)
 {
   IDE_ENTRY;
 
