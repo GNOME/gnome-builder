@@ -43,6 +43,20 @@ struct _IdeDebuggerDisassemblyView
 
 G_DEFINE_FINAL_TYPE (IdeDebuggerDisassemblyView, ide_debugger_disassembly_view, IDE_TYPE_PAGE)
 
+static gboolean
+style_scheme_name_to_object (GBinding     *binding,
+                             const GValue *from_value,
+                             GValue       *to_value,
+                             gpointer      user_data)
+{
+  GtkSourceStyleSchemeManager *manager = gtk_source_style_scheme_manager_get_default ();
+  GtkSourceStyleScheme *scheme = gtk_source_style_scheme_manager_get_scheme (manager, g_value_get_string (from_value));
+
+  g_value_set_object (to_value, scheme);
+
+  return TRUE;
+}
+
 static void
 ide_debugger_disassembly_view_dispose (GObject *object)
 {
@@ -70,6 +84,12 @@ static void
 ide_debugger_disassembly_view_init (IdeDebuggerDisassemblyView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_object_bind_property_full (IDE_APPLICATION_DEFAULT, "style-scheme",
+                               self->source_buffer, "style-scheme",
+                               G_BINDING_SYNC_CREATE,
+                               style_scheme_name_to_object,
+                               NULL, NULL, NULL);
 }
 
 void
