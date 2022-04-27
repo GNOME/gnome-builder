@@ -80,6 +80,19 @@ show_map_to_vscrollbar_policy (GValue   *value,
 }
 
 static gboolean
+grid_lines_to_background_pattern (GValue   *value,
+                                  GVariant *variant,
+                                  gpointer  user_data)
+{
+  if (g_variant_get_boolean (variant))
+    g_value_set_enum (value, GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID);
+  else
+    g_value_set_enum (value, GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+
+  return TRUE;
+}
+
+static gboolean
 font_name_to_font_desc (GValue   *value,
                         GVariant *variant,
                         gpointer  user_data)
@@ -181,6 +194,11 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                                 self->scroller, "vscrollbar-policy",
                                 G_SETTINGS_BIND_GET,
                                 show_map_to_vscrollbar_policy,
+                                NULL, NULL, NULL);
+  g_settings_bind_with_mapping (editor_settings, "show-grid-lines",
+                                self->view, "background-pattern",
+                                G_SETTINGS_BIND_GET,
+                                grid_lines_to_background_pattern,
                                 NULL, NULL, NULL);
   g_settings_bind (editor_settings, "enable-snippets",
                    self->view, "enable-snippets",
