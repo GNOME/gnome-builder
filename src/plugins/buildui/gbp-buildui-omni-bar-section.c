@@ -262,7 +262,7 @@ gbp_buildui_omni_bar_section_bind_build_manager (GbpBuilduiOmniBarSection *self,
   gbp_buildui_omni_bar_section_notify_warning_count (self, NULL, build_manager);
   gbp_buildui_omni_bar_section_notify_last_build_time (self, NULL, build_manager);
 
-  context = ide_widget_get_context (GTK_WIDGET (self));
+  context = ide_object_get_context (IDE_OBJECT (build_manager));
   vcs = ide_vcs_from_context (context);
 
   g_object_bind_property (context, "title",
