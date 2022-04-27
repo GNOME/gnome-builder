@@ -809,7 +809,7 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   /* Create a new layout for rendering lines to */
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "");
   pango_layout_set_alignment (self->layout, PANGO_ALIGN_RIGHT);
-  pango_layout_set_width (self->layout, (width - CHANGE_WIDTH) * PANGO_SCALE);
+  pango_layout_set_width (self->layout, (width - CHANGE_WIDTH - 2) * PANGO_SCALE);
 }
 
 static gboolean
