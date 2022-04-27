@@ -21,6 +21,7 @@
 #pragma once
 
 #include <gtk/gtk.h>
+
 #include <libide-core.h>
 
 #include "ide-tree-node.h"
