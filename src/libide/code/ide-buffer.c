@@ -50,14 +50,14 @@
 
 #define SETTLING_DELAY_MSEC  333
 
-#define TAG_ERROR            "diagnostician::error"
-#define TAG_WARNING          "diagnostician::warning"
-#define TAG_DEPRECATED       "diagnostician::deprecated"
-#define TAG_UNUSED           "diagnostician::unused"
-#define TAG_NOTE             "diagnostician::note"
-#define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
-#define TAG_DEFINITION       "action::hover-definition"
-#define TAG_CURRENT_BKPT     "debugger::current-breakpoint"
+#define TAG_ERROR            "-Builder:error"
+#define TAG_WARNING          "-Builder:warning"
+#define TAG_DEPRECATED       "-Builder:deprecated"
+#define TAG_UNUSED           "-Builder:unused"
+#define TAG_NOTE             "-Builder:note"
+#define TAG_SNIPPET_TAB_STOP "-Builder:tab-stop"
+#define TAG_DEFINITION       "-Builder:hover-definition"
+#define TAG_CURRENT_BKPT     "-Builder:current-breakpoint"
 
 #define DEPRECATED_COLOR     "#babdb6"
 #define UNUSED_COLOR         "#c17d11"

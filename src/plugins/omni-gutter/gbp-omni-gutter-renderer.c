@@ -470,47 +470,47 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   if (!style_get_is_bold (scheme, "current-line-number", &self->current.bold))
     self->current.bold = TRUE;
 
-  /* These gutter:: prefix values come from Builder's style-scheme xml
+  /* These -0uilder: prefix values come from Builder's style-scheme xml
    * files, but other style schemes may also support them now too.
    */
-  if (!get_style_rgba (scheme, "gutter::added-line", FOREGROUND, &self->changes.add) &&
+  if (!get_style_rgba (scheme, "-Builder:added-line", FOREGROUND, &self->changes.add) &&
       !get_style_rgba (scheme, "diff:added-line", FOREGROUND, &self->changes.add))
     gdk_rgba_parse (&self->changes.add, IDE_LINE_CHANGES_FALLBACK_ADDED);
 
-  if (!get_style_rgba (scheme, "gutter::changed-line", FOREGROUND, &self->changes.change) &&
+  if (!get_style_rgba (scheme, "-Builder:changed-line", FOREGROUND, &self->changes.change) &&
       !get_style_rgba (scheme, "diff:changed-line", FOREGROUND, &self->changes.change))
     gdk_rgba_parse (&self->changes.change, IDE_LINE_CHANGES_FALLBACK_CHANGED);
 
-  if (!get_style_rgba (scheme, "gutter::removed-line", FOREGROUND, &self->changes.remove) &&
+  if (!get_style_rgba (scheme, "-Builder:removed-line", FOREGROUND, &self->changes.remove) &&
       !get_style_rgba (scheme, "diff:removed-line", FOREGROUND, &self->changes.remove))
     gdk_rgba_parse (&self->changes.remove, IDE_LINE_CHANGES_FALLBACK_REMOVED);
 
   /*
-   * These debugger:: prefix values come from Builder's style-scheme xml
+   * These -Builder: prefix values come from Builder's style-scheme xml
    * as well as in the IdeBuffer class. Other style schemes may also
    * support them, though.
    */
-  if (!get_style_rgba (scheme, "debugger::current-breakpoint", BACKGROUND, &self->stopped_bg))
+  if (!get_style_rgba (scheme, "-Builder:current-breakpoint", BACKGROUND, &self->stopped_bg))
     gdk_rgba_parse (&self->stopped_bg, IDE_LINE_CHANGES_FALLBACK_CHANGED);
 
-  if (!get_style_rgba (scheme, "debugger::breakpoint", FOREGROUND, &self->bkpt.fg) &&
+  if (!get_style_rgba (scheme, "-Builder:breakpoint", FOREGROUND, &self->bkpt.fg) &&
       !get_style_rgba (scheme, "selection", FOREGROUND, &self->bkpt.fg))
     self->bkpt.fg = fg;
 
-  if (!get_style_rgba (scheme, "debugger::breakpoint", BACKGROUND, &self->bkpt.bg) &&
+  if (!get_style_rgba (scheme, "-Builder:breakpoint", BACKGROUND, &self->bkpt.bg) &&
       !get_style_rgba (scheme, "selection", BACKGROUND, &self->bkpt.bg))
     {
       gdk_rgba_parse (&self->bkpt.bg, "#1c71d8");
       gdk_rgba_parse (&self->bkpt.fg, "#ffffff");
     }
 
-  if (!style_get_is_bold (scheme, "debugger::breakpoint", &self->bkpt.bold))
+  if (!style_get_is_bold (scheme, "-Builder:breakpoint", &self->bkpt.bold))
     self->bkpt.bold = TRUE;
 
   /* Slight different color for countpoint, fallback to mix(selection,diff:add) */
-  if (!get_style_rgba (scheme, "debugger::countpoint", FOREGROUND, &self->ctpt.fg))
+  if (!get_style_rgba (scheme, "-Builder:countpoint", FOREGROUND, &self->ctpt.fg))
     get_style_rgba (scheme, "selection", FOREGROUND, &self->ctpt.fg);
-  if (!get_style_rgba (scheme, "debugger::countpoint", BACKGROUND, &self->ctpt.bg))
+  if (!get_style_rgba (scheme, "-Builder:countpoint", BACKGROUND, &self->ctpt.bg))
     {
       if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->ctpt.bg))
         self->ctpt.bg = self->bkpt.bg;
@@ -519,7 +519,7 @@ reload_style_colors (GbpOmniGutterRenderer *self,
       self->ctpt.bg.green = (self->ctpt.bg.green + self->changes.add.green) / 2.0;
       self->ctpt.bg.blue = (self->ctpt.bg.blue + self->changes.add.blue) / 2.0;
     }
-  if (!style_get_is_bold (scheme, "debugger::countpoint", &self->ctpt.bold))
+  if (!style_get_is_bold (scheme, "-Builder:countpoint", &self->ctpt.bold))
     self->ctpt.bold = FALSE;
 }
 

@@ -747,7 +747,7 @@ init_color_tags (IdeXmlParser *self)
       tag_set = FALSE;
       if (scheme != NULL)
         {
-          tag_name = g_strconcat ("symboltree::", tag_ptr->name, NULL);
+          tag_name = g_strconcat ("-Builder:", tag_ptr->name, NULL);
           if (NULL != (style = gtk_source_style_scheme_get_style (scheme, tag_name)))
             {
               g_object_get (style, "foreground", &foreground, NULL);
