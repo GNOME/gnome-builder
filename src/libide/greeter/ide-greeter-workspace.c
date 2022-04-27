@@ -1013,12 +1013,16 @@ ide_greeter_workspace_set_page_name (IdeGreeterWorkspace *self,
 void
 ide_greeter_workspace_add_page (IdeGreeterWorkspace *self,
                                 GtkWidget           *page,
-                                const char          *name)
+                                const char          *name,
+                                const char          *title)
 {
+  GtkStackPage *child;
+
   g_return_if_fail (IDE_IS_GREETER_WORKSPACE (self));
   g_return_if_fail (GTK_IS_WIDGET (page));
 
-  gtk_stack_add_named (self->pages, page, name);
+  child = gtk_stack_add_named (self->pages, page, name);
+  gtk_stack_page_set_title (child, title);
 }
 
 void

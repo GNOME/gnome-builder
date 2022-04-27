@@ -58,7 +58,8 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   NULL);
       ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
                                       GTK_WIDGET (self->clone),
-                                      "clone");
+                                      "clone",
+                                      _("Clone Repository"));
       ide_greeter_workspace_add_button (IDE_GREETER_WORKSPACE (workspace),
                                         g_object_new (GTK_TYPE_BUTTON,
                                                       "label", _("_Clone Repository…"),

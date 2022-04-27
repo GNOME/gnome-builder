@@ -59,7 +59,8 @@ gbp_create_project_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->widget = g_object_new (GBP_TYPE_CREATE_PROJECT_WIDGET, NULL);
   ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
                                   GTK_WIDGET (self->widget),
-                                  "create-project");
+                                  "create-project",
+                                  _("Start New Project"));
 
   IDE_EXIT;
 }
