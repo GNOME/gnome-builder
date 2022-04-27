@@ -755,7 +755,7 @@ ide_editor_page_set_gutter (IdeEditorPage *self,
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
-  g_return_if_fail (!gutter || IDE_IS_GUTTER (self));
+  g_return_if_fail (!gutter || IDE_IS_GUTTER (gutter));
 
   if (gutter == self->gutter)
     IDE_EXIT;
