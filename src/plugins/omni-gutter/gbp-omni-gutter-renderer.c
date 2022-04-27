@@ -285,6 +285,68 @@ int_to_string (guint         value,
   return fi.len;
 }
 
+static void
+gbp_omni_gutter_renderer_set_change_monitor (GbpOmniGutterRenderer  *self,
+                                             IdeBufferChangeMonitor *change_monitor)
+{
+  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
+  g_assert (!change_monitor || IDE_IS_BUFFER_CHANGE_MONITOR (change_monitor));
+
+  if (self->change_monitor == change_monitor)
+    return;
+
+  if (self->change_monitor != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->change_monitor,
+                                            G_CALLBACK (gtk_widget_queue_draw),
+                                            self);
+      g_clear_object (&self->change_monitor);
+    }
+
+  if (change_monitor != NULL)
+    {
+      self->change_monitor = g_object_ref (change_monitor);
+      g_signal_connect_object (change_monitor,
+                               "changed",
+                               G_CALLBACK (gtk_widget_queue_draw),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+gbp_omni_gutter_renderer_set_breakpoints (GbpOmniGutterRenderer  *self,
+                                          IdeDebuggerBreakpoints *breakpoints)
+{
+  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
+  g_assert (!breakpoints || IDE_IS_DEBUGGER_BREAKPOINTS (breakpoints));
+
+  if (self->breakpoints == breakpoints)
+    return;
+
+  if (self->breakpoints != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (self->breakpoints,
+                                            G_CALLBACK (gtk_widget_queue_draw),
+                                            self);
+      g_clear_object (&self->breakpoints);
+    }
+
+  if (breakpoints != NULL)
+    {
+      self->breakpoints = g_object_ref (breakpoints);
+      g_signal_connect_object (breakpoints,
+                               "changed",
+                               G_CALLBACK (gtk_widget_queue_draw),
+                               self,
+                               G_CONNECT_SWAPPED);
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
 /*
  * style_get_is_bold:
  *
@@ -1249,25 +1311,8 @@ gbp_omni_gutter_renderer_do_reload (GbpOmniGutterRenderer *self)
         }
     }
 
-  if (change_monitor != self->change_monitor)
-    {
-      if (self->change_monitor != NULL)
-        g_signal_handlers_disconnect_by_func (self->change_monitor,
-                                              G_CALLBACK (gtk_widget_queue_draw),
-                                              self);
-      g_set_object (&self->change_monitor, change_monitor);
-      if (change_monitor)
-        g_signal_connect_object (change_monitor,
-                                 "changed",
-                                 G_CALLBACK (gtk_widget_queue_draw),
-                                 self,
-                                 G_CONNECT_SWAPPED);
-      gtk_widget_queue_draw (GTK_WIDGET (self));
-    }
-
-  /* Replace our previous breakpoints */
-  if (g_set_object (&self->breakpoints, breakpoints))
-    gtk_widget_queue_draw (GTK_WIDGET (self));
+  gbp_omni_gutter_renderer_set_change_monitor (self, change_monitor);
+  gbp_omni_gutter_renderer_set_breakpoints (self, breakpoints);
 
   /* Reload icons and then recalcuate our physical size */
   gbp_omni_gutter_renderer_measure (self);
@@ -1382,8 +1427,9 @@ gbp_omni_gutter_renderer_dispose (GObject *object)
   g_clear_handle_id (&self->resize_source, g_source_remove);
   g_clear_handle_id (&self->reload_source, g_source_remove);
 
-  g_clear_object (&self->change_monitor);
-  g_clear_object (&self->breakpoints);
+  gbp_omni_gutter_renderer_set_change_monitor (self, NULL);
+  gbp_omni_gutter_renderer_set_breakpoints (self, NULL);
+
   g_clear_pointer (&self->lines, g_array_unref);
 
   g_clear_object (&self->view_signals);
@@ -1524,6 +1570,11 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
                                     "notify::change-monitor",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
+  ide_signal_group_connect_object (self->buffer_signals,
+                                   "notify::diagnostics",
+                                   G_CALLBACK (gtk_widget_queue_draw),
+                                   self,
+                                   G_CONNECT_SWAPPED);
   ide_signal_group_connect_swapped (self->buffer_signals,
                                     "changed",
                                     G_CALLBACK (gbp_omni_gutter_renderer_buffer_changed),
