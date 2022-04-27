@@ -756,6 +756,7 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
    * match the font styling as much as possible.
    */
   layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), numbers);
+  pango_layout_set_single_paragraph_mode (layout, TRUE);
 
   /*
    * Now cache the width of the text layout so we can simplify our
