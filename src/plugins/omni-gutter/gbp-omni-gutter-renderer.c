@@ -165,6 +165,9 @@ struct _GbpOmniGutterRenderer
   guint show_line_numbers : 1;
   guint show_relative_line_numbers : 1;
   guint show_line_diagnostics : 1;
+
+  /* Delayed reload timeout source */
+  guint reload_source;
 };
 
 enum {
@@ -641,7 +644,7 @@ calculate_diagnostics_size (gint height)
 }
 
 static void
-gbp_omni_gutter_renderer_recalculate_size (GbpOmniGutterRenderer *self)
+gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
 {
   g_autofree gchar *numbers = NULL;
   GtkTextBuffer *buffer;
@@ -727,7 +730,7 @@ gbp_omni_gutter_renderer_notify_font_desc (GbpOmniGutterRenderer *self,
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
-  gbp_omni_gutter_renderer_recalculate_size (self);
+  gbp_omni_gutter_renderer_measure (self);
   gbp_omni_gutter_renderer_reload_icons (self);
 }
 
@@ -1209,14 +1212,18 @@ gbp_omni_gutter_renderer_reload_icons (GbpOmniGutterRenderer *self)
   self->error_selected = get_icon_paintable (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, TRUE);
 }
 
-static void
-gbp_omni_gutter_renderer_reload (GbpOmniGutterRenderer *self)
+static gboolean
+gbp_omni_gutter_renderer_do_reload (GbpOmniGutterRenderer *self)
 {
   g_autoptr(IdeDebuggerBreakpoints) breakpoints = NULL;
   GtkTextBuffer *buffer;
   GtkSourceView *view;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
+
+  self->reload_source = 0;
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
@@ -1243,58 +1250,31 @@ gbp_omni_gutter_renderer_reload (GbpOmniGutterRenderer *self)
   g_set_object (&self->breakpoints, breakpoints);
 
   /* Reload icons and then recalcuate our physical size */
-  gbp_omni_gutter_renderer_recalculate_size (self);
+  gbp_omni_gutter_renderer_measure (self);
   gbp_omni_gutter_renderer_reload_icons (self);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 static void
-gbp_omni_gutter_renderer_notify_buffer (GbpOmniGutterRenderer *self,
-                                        GParamSpec            *pspec,
-                                        IdeSourceView         *view)
+gbp_omni_gutter_renderer_reload (GbpOmniGutterRenderer *self)
 {
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-  g_assert (IDE_IS_SOURCE_VIEW (view));
 
-  if (self->buffer_signals != NULL)
-    {
-      GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  /* Ignore if we aren't fully setup or are tearing down */
+  if (gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self)) == NULL ||
+      gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self)) == NULL)
+    return;
 
-      if (!IDE_IS_BUFFER (buffer))
-        buffer = NULL;
-
-      ide_signal_group_set_target (self->buffer_signals, buffer);
-      gbp_omni_gutter_renderer_reload (self);
-    }
-}
-
-static void
-gbp_omni_gutter_renderer_bind_view (GbpOmniGutterRenderer *self,
-                                    IdeSourceView         *view,
-                                    IdeSignalGroup        *view_signals)
-{
-  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-  g_assert (IDE_IS_SOURCE_VIEW (view));
-  g_assert (IDE_IS_SIGNAL_GROUP (view_signals));
-
-  gbp_omni_gutter_renderer_notify_buffer (self, NULL, view);
-}
-
-static void
-gbp_omni_gutter_renderer_notify_view (GbpOmniGutterRenderer *self)
-{
-  GtkSourceView *view;
-
-  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-
-  view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  if (!IDE_IS_SOURCE_VIEW (view))
-    view = NULL;
-
-  ide_signal_group_set_target (self->view_signals, view);
+  if (self->reload_source == 0)
+    self->reload_source = g_idle_add_full (G_PRIORITY_DEFAULT,
+                                           (GSourceFunc) gbp_omni_gutter_renderer_do_reload,
+                                           self,
+                                           NULL);
 }
 
 static gboolean
-gbp_omni_gutter_renderer_do_recalc (gpointer data)
+gbp_omni_gutter_renderer_do_measure_in_idle (gpointer data)
 {
   GbpOmniGutterRenderer *self = data;
 
@@ -1302,7 +1282,7 @@ gbp_omni_gutter_renderer_do_recalc (gpointer data)
 
   self->resize_source = 0;
 
-  gbp_omni_gutter_renderer_recalculate_size (self);
+  gbp_omni_gutter_renderer_measure (self);
 
   return G_SOURCE_REMOVE;
 }
@@ -1317,7 +1297,7 @@ gbp_omni_gutter_renderer_buffer_changed (GbpOmniGutterRenderer *self,
   /* Run immediately at the end of this main loop iteration */
   if (self->resize_source == 0)
     self->resize_source = g_idle_add_full (G_PRIORITY_HIGH,
-                                           gbp_omni_gutter_renderer_do_recalc,
+                                           gbp_omni_gutter_renderer_do_measure_in_idle,
                                            g_object_ref (self),
                                            g_object_unref);
 }
@@ -1333,17 +1313,45 @@ gbp_omni_gutter_renderer_cursor_moved (GbpOmniGutterRenderer *self,
 }
 
 static void
-gbp_omni_gutter_renderer_constructed (GObject *object)
+gbp_omni_gutter_renderer_change_buffer (GtkSourceGutterRenderer *renderer,
+                                        GtkSourceBuffer         *old_buffer)
 {
-  GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)object;
-  GtkSourceView *view;
+  GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)renderer;
+  GtkSourceBuffer *buffer;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
+  g_assert (!old_buffer || GTK_SOURCE_IS_BUFFER (old_buffer));
 
-  G_OBJECT_CLASS (gbp_omni_gutter_renderer_parent_class)->constructed (object);
+  buffer = gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self));
+  ide_signal_group_set_target (self->buffer_signals, buffer);
+
+  gbp_omni_gutter_renderer_reload (self);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_omni_gutter_renderer_change_view (GtkSourceGutterRenderer *renderer,
+                                      GtkSourceView           *old_view)
+{
+  GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)renderer;
+  GtkSourceView *view;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
+  g_assert (!old_view || GTK_SOURCE_IS_VIEW (old_view));
+
+  GTK_SOURCE_GUTTER_RENDERER_CLASS (gbp_omni_gutter_renderer_parent_class)->change_view (renderer, old_view);
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   ide_signal_group_set_target (self->view_signals, view);
+
+  gbp_omni_gutter_renderer_reload (self);
+
+  IDE_EXIT;
 }
 
 static void
@@ -1352,6 +1360,7 @@ gbp_omni_gutter_renderer_dispose (GObject *object)
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)object;
 
   g_clear_handle_id (&self->resize_source, g_source_remove);
+  g_clear_handle_id (&self->reload_source, g_source_remove);
 
   g_clear_object (&self->breakpoints);
   g_clear_pointer (&self->lines, g_array_unref);
@@ -1440,7 +1449,6 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkSourceGutterRendererClass *renderer_class = GTK_SOURCE_GUTTER_RENDERER_CLASS (klass);
 
-  object_class->constructed = gbp_omni_gutter_renderer_constructed;
   object_class->dispose = gbp_omni_gutter_renderer_dispose;
   object_class->get_property = gbp_omni_gutter_renderer_get_property;
   object_class->set_property = gbp_omni_gutter_renderer_set_property;
@@ -1450,6 +1458,8 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
   renderer_class->end = gbp_omni_gutter_renderer_end;
   renderer_class->query_activatable = gbp_omni_gutter_renderer_query_activatable;
   renderer_class->activate = gbp_omni_gutter_renderer_activate;
+  renderer_class->change_buffer = gbp_omni_gutter_renderer_change_buffer;
+  renderer_class->change_view = gbp_omni_gutter_renderer_change_view;
 
   properties [PROP_SHOW_LINE_CHANGES] =
     g_param_spec_boolean ("show-line-changes", NULL, NULL, TRUE,
@@ -1480,45 +1490,25 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
 
   self->lines = g_array_new (FALSE, FALSE, sizeof (LineInfo));
 
-  g_signal_connect (self,
-                    "notify::view",
-                    G_CALLBACK (gbp_omni_gutter_renderer_notify_view),
-                    NULL);
-
   self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
-
   ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::file",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
-
   ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::language",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
-
   ide_signal_group_connect_swapped (self->buffer_signals,
                                     "changed",
                                     G_CALLBACK (gbp_omni_gutter_renderer_buffer_changed),
                                     self);
-
   ide_signal_group_connect_swapped (self->buffer_signals,
                                     "cursor-moved",
                                     G_CALLBACK (gbp_omni_gutter_renderer_cursor_moved),
                                     self);
 
   self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
-
-  g_signal_connect_swapped (self->view_signals,
-                            "bind",
-                            G_CALLBACK (gbp_omni_gutter_renderer_bind_view),
-                            self);
-
-  ide_signal_group_connect_swapped (self->view_signals,
-                                    "notify::buffer",
-                                    G_CALLBACK (gbp_omni_gutter_renderer_notify_buffer),
-                                    self);
-
   ide_signal_group_connect_swapped (self->view_signals,
                                     "notify::font-desc",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_font_desc),
@@ -1578,7 +1568,7 @@ gbp_omni_gutter_renderer_set_show_line_changes (GbpOmniGutterRenderer *self,
     {
       self->show_line_changes = show_line_changes;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_CHANGES]);
-      gbp_omni_gutter_renderer_recalculate_size (self);
+      gbp_omni_gutter_renderer_measure (self);
     }
 }
 
@@ -1594,7 +1584,7 @@ gbp_omni_gutter_renderer_set_show_line_diagnostics (GbpOmniGutterRenderer *self,
     {
       self->show_line_diagnostics = show_line_diagnostics;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_DIAGNOSTICS]);
-      gbp_omni_gutter_renderer_recalculate_size (self);
+      gbp_omni_gutter_renderer_measure (self);
     }
 }
 
@@ -1610,7 +1600,7 @@ gbp_omni_gutter_renderer_set_show_line_numbers (GbpOmniGutterRenderer *self,
     {
       self->show_line_numbers = show_line_numbers;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_LINE_NUMBERS]);
-      gbp_omni_gutter_renderer_recalculate_size (self);
+      gbp_omni_gutter_renderer_measure (self);
     }
 }
 
@@ -1643,7 +1633,7 @@ gbp_omni_gutter_renderer_style_changed (IdeGutter *gutter)
   scheme = gtk_source_buffer_get_style_scheme (buffer);
 
   reload_style_colors (self, scheme);
-  gbp_omni_gutter_renderer_recalculate_size (self);
+  gbp_omni_gutter_renderer_measure (self);
   gbp_omni_gutter_renderer_reload_icons (self);
 }
 
