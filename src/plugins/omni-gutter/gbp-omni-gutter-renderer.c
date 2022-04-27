@@ -52,9 +52,11 @@
  * Since: 3.32
  */
 
-#define CHANGE_WIDTH     2
-#define DELETE_WIDTH     2
-#define DELETE_HEIGHT    2
+#define CHANGE_WIDTH 2
+#define DELETE_WIDTH 5
+#define DELETE_HEIGHT 2
+#define BREAKPOINT_XPAD 2
+#define BREAKPOINT_CORNER_RADIUS 7
 
 #define IS_BREAKPOINT(i)  ((i)->is_breakpoint || (i)->is_countpoint || (i)->is_watchpoint)
 #define IS_DIAGNOSTIC(i)  ((i)->is_error || (i)->is_warning || (i)->is_note)
@@ -491,10 +493,14 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   if (!get_style_rgba (scheme, "debugger::current-breakpoint", BACKGROUND, &self->stopped_bg))
     gdk_rgba_parse (&self->stopped_bg, "#fcaf3e");
 
-  if (!get_style_rgba (scheme, "debugger::breakpoint", FOREGROUND, &self->bkpt.fg))
-    get_style_rgba (scheme, "selection", FOREGROUND, &self->bkpt.fg);
-  if (!get_style_rgba (scheme, "debugger::breakpoint", BACKGROUND, &self->bkpt.bg))
-    get_style_rgba (scheme, "selection", BACKGROUND, &self->bkpt.bg);
+  if (!get_style_rgba (scheme, "debugger::breakpoint", FOREGROUND, &self->bkpt.fg) &&
+      !get_style_rgba (scheme, "selection", FOREGROUND, &self->bkpt.fg))
+    self->bkpt.fg = fg;
+
+  if (!get_style_rgba (scheme, "debugger::breakpoint", BACKGROUND, &self->bkpt.bg) &&
+      !get_style_rgba (scheme, "selection", BACKGROUND, &self->bkpt.bg))
+    self->bkpt.bg = self->current.bg;
+
   if (!style_get_is_bold (scheme, "debugger::breakpoint", &self->bkpt.bold))
     self->bkpt.bold = FALSE;
 
@@ -503,7 +509,9 @@ reload_style_colors (GbpOmniGutterRenderer *self,
     get_style_rgba (scheme, "selection", FOREGROUND, &self->ctpt.fg);
   if (!get_style_rgba (scheme, "debugger::countpoint", BACKGROUND, &self->ctpt.bg))
     {
-      get_style_rgba (scheme, "selection", BACKGROUND, &self->ctpt.bg);
+      if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->ctpt.bg))
+        self->ctpt.bg = self->bkpt.bg;
+
       self->ctpt.bg.red = (self->ctpt.bg.red + self->changes.add.red) / 2.0;
       self->ctpt.bg.green = (self->ctpt.bg.green + self->changes.add.green) / 2.0;
       self->ctpt.bg.blue = (self->ctpt.bg.blue + self->changes.add.blue) / 2.0;
@@ -994,6 +1002,7 @@ draw_breakpoint_bg (GbpOmniGutterRenderer *self,
                     gboolean               is_prelit,
                     const LineInfo        *info)
 {
+  GskRoundedRect rounded_rect;
   GdkRGBA rgba;
 
   if (info->is_countpoint)
@@ -1009,11 +1018,15 @@ draw_breakpoint_bg (GbpOmniGutterRenderer *self,
         rgba.alpha *= 0.4;
     }
 
-  /* TODO: Mabye do a rounded rect here? */
+  rounded_rect = GSK_ROUNDED_RECT_INIT (BREAKPOINT_XPAD, line_y, width - BREAKPOINT_XPAD, height);
+  rounded_rect.corner[0] = GRAPHENE_SIZE_INIT (BREAKPOINT_CORNER_RADIUS, BREAKPOINT_CORNER_RADIUS);
+  rounded_rect.corner[3] = GRAPHENE_SIZE_INIT (BREAKPOINT_CORNER_RADIUS, BREAKPOINT_CORNER_RADIUS);
 
+  gtk_snapshot_push_rounded_clip (snapshot, &rounded_rect);
   gtk_snapshot_append_color (snapshot,
                              &rgba,
-                             &GRAPHENE_RECT_INIT (0, line_y, width, height));
+                             &GRAPHENE_RECT_INIT (0, line_y, width + 10, height));
+  gtk_snapshot_pop (snapshot);
 }
 
 static void
