@@ -227,9 +227,9 @@ static void gbp_omni_gutter_renderer_reload_icons (GbpOmniGutterRenderer *self);
 static void gutter_iface_init                     (IdeGutterInterface    *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpOmniGutterRenderer,
-                         gbp_omni_gutter_renderer,
-                         GTK_SOURCE_TYPE_GUTTER_RENDERER,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_GUTTER, gutter_iface_init))
+                               gbp_omni_gutter_renderer,
+                               GTK_SOURCE_TYPE_GUTTER_RENDERER,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_GUTTER, gutter_iface_init))
 
 static GParamSpec *properties [N_PROPS];
 
