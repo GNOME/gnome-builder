@@ -107,13 +107,6 @@ struct _GbpOmniGutterRenderer
    */
   PangoLayout *layout;
 
-  /*
-   * We reuse a simple bold attr list for the current line number
-   * information.  This way we don't have to do any pango markup
-   * parsing.
-   */
-  PangoAttrList *bold_attrs;
-
   /* We stash a copy of how long the line numbers could be. 1000 => 4. */
   guint n_chars;
 
@@ -232,6 +225,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpOmniGutterRenderer,
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_GUTTER, gutter_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+static PangoAttrList *bold_attrs;
 
 static int
 int_to_string (guint         value,
@@ -755,6 +749,7 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
    * align to the right to reduce the draw overhead.
    */
   pango_layout_get_pixel_size (layout, &self->number_width, &height);
+  pango_layout_set_attributes (layout, bold_attrs);
 
   /*
    * Calculate the nearest size for diagnostics so they scale somewhat
@@ -1205,8 +1200,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
               bold = self->text.bold;
             }
 
-          if (!bold)
-            bold = gtk_source_gutter_lines_is_cursor (lines, line);
+          pango_layout_set_attributes (self->layout, bold ? bold_attrs : NULL);
 
           gtk_snapshot_save (snapshot);
           gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, line_y));
@@ -1443,7 +1437,6 @@ gbp_omni_gutter_renderer_dispose (GObject *object)
   g_clear_object (&self->error_selected);
 
   g_clear_object (&self->layout);
-  g_clear_pointer (&self->bold_attrs, pango_attr_list_unref);
 
   G_OBJECT_CLASS (gbp_omni_gutter_renderer_parent_class)->dispose (object);
 }
@@ -1545,6 +1538,9 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
                           G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  bold_attrs = pango_attr_list_new ();
+  pango_attr_list_insert (bold_attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
 }
 
 static void
@@ -1589,9 +1585,6 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
                                     "notify::font-desc",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_font_desc),
                                     self);
-
-  self->bold_attrs = pango_attr_list_new ();
-  pango_attr_list_insert (self->bold_attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
 }
 
 GbpOmniGutterRenderer *
