@@ -100,6 +100,9 @@ struct _GbpOmniGutterRenderer
   /* Tracks changes to the buffer to give us line marks */
   IdeBufferChangeMonitor *change_monitor;
 
+  /* The last line that was cursor to help avoid redraws */
+  guint last_cursor_line;
+
   /*
    * We need to reuse a single pango layout while drawing all the lines
    * to keep the overhead low. We don't have pixel caching on the gutter
@@ -1365,10 +1368,26 @@ static void
 gbp_omni_gutter_renderer_cursor_moved (GbpOmniGutterRenderer *self,
                                        GtkTextBuffer         *buffer)
 {
-  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
+  GtkTextMark *mark;
+  GtkTextIter iter;
+  guint line;
 
-  if (self->show_relative_line_numbers)
-    gtk_widget_queue_draw (GTK_WIDGET (self));
+  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  mark = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  line = gtk_text_iter_get_line (&iter);
+
+  if (line != self->last_cursor_line)
+    {
+      self->last_cursor_line = line;
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
+  else if (self->show_relative_line_numbers)
+    {
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
 }
 
 static void
