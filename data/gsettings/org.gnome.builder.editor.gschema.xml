@@ -60,7 +60,7 @@
       <description>Whether or not Home moves to first non-space character.</description>
     </key>
     <key name="show-grid-lines" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Show grid lines</summary>
       <description>If enabled, the editor will show grid lines in the document.</description>
     </key>
