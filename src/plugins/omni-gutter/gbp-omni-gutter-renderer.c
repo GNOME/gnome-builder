@@ -424,7 +424,7 @@ get_style_rgba (GtkSourceStyleScheme *scheme,
       if (str != NULL)
         gdk_rgba_parse (rgba, str);
 
-      return set;
+      return set && rgba->alpha > .0;
     }
 
   return FALSE;
@@ -460,7 +460,7 @@ reload_style_colors (GbpOmniGutterRenderer *self,
     self->text.bold = FALSE;
 
   if (!get_style_rgba (scheme, "current-line-number", FOREGROUND, &self->current.fg))
-    self->current.fg = fg;
+    self->current.fg = self->text.fg;
 
   if (!get_style_rgba (scheme, "current-line-number", BACKGROUND, &self->current.bg))
     self->current.bg = transparent;
