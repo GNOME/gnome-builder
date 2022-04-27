@@ -52,10 +52,9 @@
  * Since: 3.32
  */
 
-#define ARROW_WIDTH      5
 #define CHANGE_WIDTH     2
-#define DELETE_WIDTH     5.0
-#define DELETE_HEIGHT    8.0
+#define DELETE_WIDTH     2
+#define DELETE_HEIGHT    2
 
 #define IS_BREAKPOINT(i)  ((i)->is_breakpoint || (i)->is_countpoint || (i)->is_watchpoint)
 #define IS_DIAGNOSTIC(i)  ((i)->is_error || (i)->is_warning || (i)->is_note)
@@ -66,9 +65,6 @@ struct _GbpOmniGutterRenderer
 {
   GtkSourceGutterRenderer parent_instance;
 
-  GSettings *settings;
-  gint line_spacing;
-
   IdeDebuggerBreakpoints *breakpoints;
 
   GArray *lines;
@@ -76,23 +72,12 @@ struct _GbpOmniGutterRenderer
   IdeSignalGroup *view_signals;
   IdeSignalGroup *buffer_signals;
 
-  /*
-   * A scaled font description that matches the size of the text
-   * within the source view. Cached to avoid recreating it on ever
-   * frame render.
-   */
-  PangoFontDescription *scaled_font_desc;
-
-  /* TODO: It would be nice to use some basic caching here
-   *       so we don't waste 6Kb-12Kb of data on these surfaces.
-   *       But that can be done later after this patch set merges.
-   */
-  cairo_surface_t *note_surface;
-  cairo_surface_t *warning_surface;
-  cairo_surface_t *error_surface;
-  cairo_surface_t *note_selected_surface;
-  cairo_surface_t *warning_selected_surface;
-  cairo_surface_t *error_selected_surface;
+  GdkPaintable *note;
+  GdkPaintable *warning;
+  GdkPaintable *error;
+  GdkPaintable *note_selected;
+  GdkPaintable *warning_selected;
+  GdkPaintable *error_selected;
 
   /*
    * We cache various colors we need from the style scheme to avoid
@@ -384,11 +369,10 @@ static void
 reload_style_colors (GbpOmniGutterRenderer *self,
                      GtkSourceStyleScheme  *scheme)
 {
+  static GdkRGBA transparent;
   GtkStyleContext *context;
-  GtkTextView *view;
-  GtkStateFlags state;
+  GtkSourceView *view;
   GdkRGBA fg;
-  GdkRGBA bg;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (!scheme || GTK_SOURCE_IS_STYLE_SCHEME (scheme));
@@ -398,18 +382,14 @@ reload_style_colors (GbpOmniGutterRenderer *self,
     return;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (view));
-  state = gtk_style_context_get_state (context);
-  gtk_style_context_get_color (context, state, &fg);
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  gtk_style_context_get_background_color (context, state, &bg);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+  gtk_style_context_get_color (context, &fg);
 
   /* Extract common values from style schemes. */
   if (!get_style_rgba (scheme, "line-numbers", FOREGROUND, &self->text.fg))
     self->text.fg = fg;
 
   if (!get_style_rgba (scheme, "line-numbers", BACKGROUND, &self->text.bg))
-    self->text.bg = bg;
+    self->text.bg = transparent;
 
   if (!style_get_is_bold (scheme, "line-numbers", &self->text.bold))
     self->text.bold = FALSE;
@@ -418,7 +398,7 @@ reload_style_colors (GbpOmniGutterRenderer *self,
     self->current.fg = fg;
 
   if (!get_style_rgba (scheme, "current-line-number", BACKGROUND, &self->current.bg))
-    self->current.bg = bg;
+    self->current.bg = transparent;
 
   if (!style_get_is_bold (scheme, "current-line-number", &self->current.bold))
     self->current.bold = TRUE;
@@ -665,12 +645,13 @@ gbp_omni_gutter_renderer_recalculate_size (GbpOmniGutterRenderer *self)
 {
   g_autofree gchar *numbers = NULL;
   GtkTextBuffer *buffer;
-  GtkTextView *view;
+  GtkSourceView *view;
   PangoLayout *layout;
   GtkTextIter end;
   guint line;
   int height;
-  gint size = 0;
+  int size = 0;
+  int old_width;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
 
@@ -679,6 +660,8 @@ gbp_omni_gutter_renderer_recalculate_size (GbpOmniGutterRenderer *self)
   if (!IDE_IS_SOURCE_VIEW (view))
     return;
 
+  gtk_widget_get_size_request (GTK_WIDGET (self), &old_width, NULL);
+
   /*
    * First, we need to get the size of the text for the last line of the
    * buffer (which will be the longest). We size the font with '9' since it
@@ -686,7 +669,7 @@ gbp_omni_gutter_renderer_recalculate_size (GbpOmniGutterRenderer *self)
    * "support" * monospace anyway, so it shouldn't be drastic if we're off.
    */
 
-  buffer = gtk_text_view_get_buffer (view);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   gtk_text_buffer_get_end_iter (buffer, &end);
   line = gtk_text_iter_get_line (&end) + 1;
 
@@ -694,17 +677,10 @@ gbp_omni_gutter_renderer_recalculate_size (GbpOmniGutterRenderer *self)
   numbers = g_strnfill (self->n_chars, '9');
 
   /*
-   * Stash the font description for future use.
-   */
-  g_clear_pointer (&self->scaled_font_desc, pango_font_description_free);
-  self->scaled_font_desc = ide_source_view_get_scaled_font_desc (IDE_SOURCE_VIEW (view));
-
-  /*
    * Get the font description used by the IdeSourceView so we can
    * match the font styling as much as possible.
    */
-  layout = gtk_widget_create_pango_layout (GTK_WIDGET (view), numbers);
-  pango_layout_set_font_description (layout, self->scaled_font_desc);
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), numbers);
 
   /*
    * Now cache the width of the text layout so we can simplify our
@@ -730,14 +706,15 @@ gbp_omni_gutter_renderer_recalculate_size (GbpOmniGutterRenderer *self)
   /* The arrow overlaps the changes if we can have breakpoints,
    * otherwise we just need the space for the line changes.
    */
-  if (self->breakpoints != NULL)
-    size += ARROW_WIDTH + 2;
-  else if (self->show_line_changes)
+  if (self->show_line_changes)
     size += CHANGE_WIDTH + 2;
 
-  /* Update the size and ensure we are re-drawn */
-  gtk_source_gutter_renderer_set_size (GTK_SOURCE_GUTTER_RENDERER (self), size);
-  gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (self));
+  if (size != old_width)
+    {
+      /* Update the size and ensure we are re-drawn */
+      gtk_widget_set_size_request (GTK_WIDGET (self), size, -1);
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+    }
 
   g_clear_object (&layout);
 }
@@ -766,11 +743,7 @@ gbp_omni_gutter_renderer_end (GtkSourceGutterRenderer *renderer)
 
 static void
 gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
-                                cairo_t                 *cr,
-                                GdkRectangle            *bg_area,
-                                GdkRectangle            *cell_area,
-                                GtkTextIter             *begin,
-                                GtkTextIter             *end)
+                                GtkSourceGutterLines    *lines)
 {
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)renderer;
   GtkTextTagTable *table;
@@ -778,21 +751,13 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   IdeSourceView *view;
   GtkTextTag *tag;
   GtkTextIter bkpt;
+  GtkTextIter begin;
+  GtkTextIter end;
   guint end_line;
+  int width;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (renderer));
-  g_assert (cr != NULL);
-  g_assert (bg_area != NULL);
-  g_assert (cell_area != NULL);
-  g_assert (begin != NULL);
-  g_assert (end != NULL);
-
-  /* Draw the full background color up front */
-  gdk_cairo_rectangle (cr, cell_area);
-  gdk_cairo_set_source_rgba (cr, &self->text.bg);
-  cairo_fill (cr);
-
-  self->line_spacing = g_settings_get_int (self->settings, "line-spacing");
+  g_assert (lines != NULL);
 
   /*
    * This is the start of our draw process. The first thing we want to
@@ -804,13 +769,19 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
 
   self->stopped_line = -1;
 
+  width = gtk_widget_get_width (GTK_WIDGET (self));
+  self->begin_line = gtk_source_gutter_lines_get_first (lines);
+  end_line = gtk_source_gutter_lines_get_last (lines);
+
   /* Locate the current stopped breakpoint if any. */
-  buffer = gtk_text_iter_get_buffer (begin);
+  buffer = GTK_TEXT_BUFFER (gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (renderer)));
+  gtk_text_buffer_get_iter_at_line (buffer, &begin, self->begin_line);
+  gtk_text_buffer_get_iter_at_line (buffer, &end, end_line);
   table = gtk_text_buffer_get_tag_table (buffer);
   tag = gtk_text_tag_table_lookup (table, "debugger::current-breakpoint");
   if (tag != NULL)
     {
-      bkpt = *begin;
+      bkpt = begin;
       gtk_text_iter_backward_char (&bkpt);
       if (gtk_text_iter_forward_to_tag_toggle (&bkpt, tag) &&
           gtk_text_iter_starts_tag (&bkpt, tag))
@@ -825,9 +796,6 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
 
   view = IDE_SOURCE_VIEW (gtk_source_gutter_renderer_get_view (renderer));
 
-  self->begin_line = gtk_text_iter_get_line (begin);
-  end_line = gtk_text_iter_get_line (end);
-
   ide_source_view_get_visual_position (view, &self->cursor_line, NULL);
 
   /* Give ourselves a fresh array to stash our line info */
@@ -835,26 +803,23 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   memset (self->lines->data, 0, self->lines->len * sizeof (LineInfo));
 
   /* Now load breakpoints, diagnostics, and line changes */
-  gbp_omni_gutter_renderer_load_basic (self, begin, self->lines);
-  gbp_omni_gutter_renderer_load_breakpoints (self, begin, end, self->lines);
+  gbp_omni_gutter_renderer_load_basic (self, &begin, self->lines);
+  gbp_omni_gutter_renderer_load_breakpoints (self, &begin, &end, self->lines);
 
   /* Create a new layout for rendering lines to */
-  self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (view), "");
+  self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "");
   pango_layout_set_alignment (self->layout, PANGO_ALIGN_RIGHT);
-  pango_layout_set_font_description (self->layout, self->scaled_font_desc);
-  pango_layout_set_width (self->layout, (cell_area->width - ARROW_WIDTH - 4) * PANGO_SCALE);
+  pango_layout_set_width (self->layout, (width - CHANGE_WIDTH) * PANGO_SCALE);
 }
 
 static gboolean
 gbp_omni_gutter_renderer_query_activatable (GtkSourceGutterRenderer *renderer,
                                             GtkTextIter             *begin,
-                                            GdkRectangle            *area,
-                                            GdkEvent                *event)
+                                            GdkRectangle            *area)
 {
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (renderer));
   g_assert (begin != NULL);
   g_assert (area != NULL);
-  g_assert (event != NULL);
 
   /* Clicking will move the cursor, so always TRUE */
 
@@ -865,7 +830,9 @@ static void
 gbp_omni_gutter_renderer_activate (GtkSourceGutterRenderer *renderer,
                                    GtkTextIter             *iter,
                                    GdkRectangle            *area,
-                                   GdkEvent                *event)
+                                   guint                    button,
+                                   GdkModifierType          state,
+                                   int                      n_presses)
 {
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)renderer;
   IdeDebuggerBreakpoint *breakpoint;
@@ -884,7 +851,6 @@ gbp_omni_gutter_renderer_activate (GtkSourceGutterRenderer *renderer,
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (iter != NULL);
   g_assert (area != NULL);
-  g_assert (event != NULL);
 
   /* TODO: We could check for event->button.button to see if we
    *       can display a popover with information such as
@@ -955,53 +921,22 @@ gbp_omni_gutter_renderer_activate (GtkSourceGutterRenderer *renderer,
 }
 
 static void
-draw_breakpoint_bg (GbpOmniGutterRenderer        *self,
-                    cairo_t                      *cr,
-                    GdkRectangle                 *bg_area,
-                    LineInfo                     *info,
-                    GtkSourceGutterRendererState  state)
+draw_breakpoint_bg (GbpOmniGutterRenderer *self,
+                    GtkSnapshot           *snapshot,
+                    int                    line_y,
+                    int                    width,
+                    int                    height,
+                    gboolean               is_prelit,
+                    const LineInfo        *info)
 {
-  GdkRectangle area;
   GdkRGBA rgba;
-
-  g_assert (GTK_SOURCE_IS_GUTTER_RENDERER (self));
-  g_assert (cr != NULL);
-  g_assert (bg_area != NULL);
-
-  /*
-   * This draws a little arrow starting from the left and pointing
-   * over the line changes portion of the gutter.
-   */
-
-  area.x = bg_area->x;
-  area.y = bg_area->y;
-  area.height = bg_area->height;
-  area.width = bg_area->width;
-
-  cairo_move_to (cr, area.x, area.y);
-  cairo_line_to (cr,
-                 ide_cairo_rectangle_x2 (&area) - ARROW_WIDTH,
-                 area.y);
-  cairo_line_to (cr,
-                 ide_cairo_rectangle_x2 (&area),
-                 ide_cairo_rectangle_middle (&area));
-  cairo_line_to (cr,
-                 ide_cairo_rectangle_x2 (&area) - ARROW_WIDTH,
-                 ide_cairo_rectangle_y2 (&area));
-  cairo_line_to (cr, area.x, ide_cairo_rectangle_y2 (&area));
-  cairo_close_path (cr);
 
   if (info->is_countpoint)
     rgba = self->ctpt.bg;
   else
     rgba = self->bkpt.bg;
 
-  /*
-   * Tweak the brightness based on if we are in pre-light and
-   * if we are also still an active breakpoint.
-   */
-
-  if ((state & GTK_SOURCE_GUTTER_RENDERER_STATE_PRELIT) != 0)
+  if (is_prelit)
     {
       if (IS_BREAKPOINT (info))
         rgba.alpha *= 0.8;
@@ -1009,169 +944,102 @@ draw_breakpoint_bg (GbpOmniGutterRenderer        *self,
         rgba.alpha *= 0.4;
     }
 
-  /* And draw... */
+  /* TODO: Mabye do a rounded rect here? */
 
-  gdk_cairo_set_source_rgba (cr, &rgba);
-  cairo_fill (cr);
+  gtk_snapshot_append_color (snapshot,
+                             &rgba,
+                             &GRAPHENE_RECT_INIT (0, line_y, width, height));
 }
 
 static void
-draw_line_change (GbpOmniGutterRenderer        *self,
-                  cairo_t                      *cr,
-                  GdkRectangle                 *area,
-                  LineInfo                     *info,
-                  guint                         line,
-                  GtkSourceGutterRendererState  state)
+draw_line_change (GbpOmniGutterRenderer *self,
+                  GtkSnapshot           *snapshot,
+                  int                    line_y,
+                  int                    width,
+                  int                    height,
+                  gboolean               is_prelit,
+                  const LineInfo        *info)
 {
-  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-  g_assert (cr != NULL);
-  g_assert (area != NULL);
-
-  /*
-   * Draw a simple line with the appropriate color from the style scheme
-   * based on the type of change we have.
-   */
-
   if (info->is_add || info->is_change)
     {
-      cairo_rectangle (cr,
-                       area->x + area->width - 2 - CHANGE_WIDTH,
-                       area->y,
-                       CHANGE_WIDTH,
-                       area->y + area->height);
-
-      if (info->is_add)
-        gdk_cairo_set_source_rgba (cr, &self->changes.add);
-      else
-        gdk_cairo_set_source_rgba (cr, &self->changes.change);
-
-      cairo_fill (cr);
+      gtk_snapshot_append_color (snapshot,
+                                 info->is_add ? &self->changes.add : &self->changes.change,
+                                 &GRAPHENE_RECT_INIT (width - CHANGE_WIDTH, line_y, CHANGE_WIDTH, height));
     }
 
-  if (line == 0 && info->is_prev_delete)
+  if (info->is_prev_delete)
     {
-      cairo_move_to (cr,
-                     area->x + area->width,
-                     area->y);
-      cairo_line_to (cr,
-                     area->x + area->width - DELETE_WIDTH,
-                     area->y + DELETE_HEIGHT / 2);
-      cairo_line_to (cr,
-                     area->x + area->width - DELETE_WIDTH,
-                     area->y);
-      cairo_line_to (cr,
-                     area->x + area->width,
-                     area->y);
-      gdk_cairo_set_source_rgba (cr, &self->changes.remove);
-      cairo_fill (cr);
+      gtk_snapshot_append_color (snapshot,
+                                 &self->changes.remove,
+                                 &GRAPHENE_RECT_INIT (width - DELETE_WIDTH, line_y, DELETE_WIDTH, DELETE_HEIGHT));
     }
 
-  if (info->is_next_delete && !info->is_delete)
+  if (info->is_next_delete)
     {
-      cairo_move_to (cr,
-                     area->x + area->width,
-                     area->y + area->height);
-      cairo_line_to (cr,
-                     area->x + area->width - DELETE_WIDTH,
-                     area->y + area->height);
-      cairo_line_to (cr,
-                     area->x + area->width - DELETE_WIDTH,
-                     area->y + area->height - (DELETE_HEIGHT / 2));
-      cairo_line_to (cr,
-                     area->x + area->width,
-                     area->y + area->height);
-      gdk_cairo_set_source_rgba (cr, &self->changes.remove);
-      cairo_fill (cr);
-    }
-
-  if (info->is_delete && !info->is_prev_delete)
-    {
-      cairo_move_to (cr,
-                     area->x + area->width,
-                     area->y);
-      cairo_line_to (cr,
-                     area->x + area->width - DELETE_WIDTH,
-                     area->y);
-      cairo_line_to (cr,
-                     area->x + area->width - DELETE_WIDTH,
-                     area->y + (DELETE_HEIGHT / 2));
-      cairo_line_to (cr,
-                     area->x + area->width,
-                     area->y);
-      gdk_cairo_set_source_rgba (cr, &self->changes.remove);
-      cairo_fill (cr);
+      gtk_snapshot_append_color (snapshot,
+                                 &self->changes.remove,
+                                 &GRAPHENE_RECT_INIT (width - DELETE_WIDTH, line_y + height - DELETE_HEIGHT, DELETE_WIDTH, DELETE_HEIGHT));
     }
 }
 
 static void
-draw_diagnostic (GbpOmniGutterRenderer        *self,
-                 cairo_t                      *cr,
-                 GdkRectangle                 *area,
-                 LineInfo                     *info,
-                 gint                          diag_size,
-                 GtkSourceGutterRendererState  state)
+draw_diagnostic (GbpOmniGutterRenderer *self,
+                 GtkSnapshot           *snapshot,
+                 int                    line_y,
+                 int                    width,
+                 int                    height,
+                 gboolean               is_prelit,
+                 const LineInfo        *info)
 {
-  cairo_surface_t *surface = NULL;
+  GdkPaintable *paintable = NULL;
 
-  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-  g_assert (cr != NULL);
-  g_assert (area != NULL);
-  g_assert (diag_size > 0);
-
-  if (IS_BREAKPOINT (info) || (state & GTK_SOURCE_GUTTER_RENDERER_STATE_PRELIT))
+  if (IS_BREAKPOINT (info) || is_prelit)
     {
       if (info->is_error)
-        surface = self->error_selected_surface;
+        paintable = self->error_selected;
       else if (info->is_warning)
-        surface = self->warning_selected_surface;
+        paintable = self->warning_selected;
       else if (info->is_note)
-        surface = self->note_selected_surface;
+        paintable = self->note_selected;
     }
   else
     {
       if (info->is_error)
-        surface = self->error_surface;
+        paintable = self->error;
       else if (info->is_warning)
-        surface = self->warning_surface;
+        paintable = self->warning;
       else if (info->is_note)
-        surface = self->note_surface;
+        paintable = self->note;
     }
 
-  if (surface != NULL)
+  if (paintable != NULL)
     {
-      cairo_rectangle (cr,
-                       area->x + 2,
-                       area->y + ((area->height - diag_size) / 2),
-                       diag_size, diag_size);
-      cairo_set_source_surface (cr,
-                                surface,
-                                area->x + 2,
-                                area->y + ((area->height - diag_size) / 2));
-      cairo_paint (cr);
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot,
+                              &GRAPHENE_POINT_INIT (2,
+                                                    line_y + ((height - self->diag_size) / 2)));
+      gdk_paintable_snapshot (paintable, GDK_SNAPSHOT (snapshot), self->diag_size, self->diag_size);
+      gtk_snapshot_restore (snapshot);
     }
 }
 
 static void
-gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
-                               cairo_t                      *cr,
-                               GdkRectangle                 *bg_area,
-                               GdkRectangle                 *cell_area,
-                               GtkTextIter                  *begin,
-                               GtkTextIter                  *end,
-                               GtkSourceGutterRendererState  state)
+gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
+                                        GtkSnapshot             *snapshot,
+                                        GtkSourceGutterLines    *lines,
+                                        guint                    line)
 {
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)renderer;
-  GtkTextView *view;
+  GtkSourceView *view;
   gboolean has_focus;
   gboolean highlight_line;
-  guint line;
+  int line_y;
+  int line_height;
+  int width;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-  g_assert (cr != NULL);
-  g_assert (bg_area != NULL);
-  g_assert (cell_area != NULL);
-  g_assert (begin != NULL);
-  g_assert (end != NULL);
+  g_assert (GTK_IS_SNAPSHOT (snapshot));
+  g_assert (lines != NULL);
 
   /*
    * This is our primary draw routine. It is called for every line that
@@ -1184,12 +1052,13 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
   highlight_line = gtk_source_view_get_highlight_current_line (GTK_SOURCE_VIEW (view));
   has_focus = gtk_widget_has_focus (GTK_WIDGET (view));
 
-  line = gtk_text_iter_get_line (begin);
+  gtk_source_gutter_lines_get_line_yrange (lines, line, GTK_SOURCE_GUTTER_RENDERER_ALIGNMENT_MODE_CELL, &line_y, &line_height);
+  width = gtk_widget_get_width (GTK_WIDGET (renderer));
 
   if ((line - self->begin_line) < self->lines->len)
     {
       LineInfo *info = &g_array_index (self->lines, LineInfo, line - self->begin_line);
-      gboolean active = state & GTK_SOURCE_GUTTER_RENDERER_STATE_PRELIT;
+      gboolean active = gtk_source_gutter_lines_is_prelit (lines, line);
       gboolean has_breakpoint = FALSE;
       gboolean bold = FALSE;
 
@@ -1200,23 +1069,19 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
        * the view is drawing the highlight line first.
        */
       if (line == self->stopped_line)
-        {
-          gdk_cairo_rectangle (cr, bg_area);
-          gdk_cairo_set_source_rgba (cr, &self->stopped_bg);
-          cairo_fill (cr);
-        }
-      else if (highlight_line && has_focus && (state & GTK_SOURCE_GUTTER_RENDERER_STATE_CURSOR))
-        {
-          gdk_cairo_rectangle (cr, bg_area);
-          gdk_cairo_set_source_rgba (cr, &self->current.bg);
-          cairo_fill (cr);
-        }
+        gtk_snapshot_append_color (snapshot,
+                                   &self->stopped_bg,
+                                   &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
+      else if (highlight_line && has_focus && gtk_source_gutter_lines_is_cursor (lines, line))
+        gtk_snapshot_append_color (snapshot,
+                                   &self->current.bg,
+                                   &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
 
       /* Draw line changes next so it will show up underneath the
        * breakpoint arrows.
        */
       if (self->show_line_changes && IS_LINE_CHANGE (info))
-        draw_line_change (self, cr, cell_area, info, line, state);
+        draw_line_change (self, snapshot, line_y, width, line_height, active, info);
 
       /* Draw breakpoint arrows if we have any breakpoints that could
        * potentially match.
@@ -1225,7 +1090,7 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
         {
           has_breakpoint = IS_BREAKPOINT (info);
           if (has_breakpoint || active)
-            draw_breakpoint_bg (self, cr, cell_area, info, state);
+            draw_breakpoint_bg (self, snapshot, line_y, width, line_height, active, info);
         }
 
       /* Now that we might have an altered background for the line,
@@ -1233,7 +1098,7 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
        * color for symbolic icon).
        */
       if (self->show_line_diagnostics && IS_DIAGNOSTIC (info))
-        draw_diagnostic (self, cr, cell_area, info, self->diag_size, state);
+        draw_diagnostic (self, snapshot, line_y, width, line_height, active, info);
 
       /*
        * Now draw the line numbers if we are showing them. Ensure
@@ -1242,6 +1107,7 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
        */
       if (self->show_line_numbers)
         {
+          const GdkRGBA *rgba;
           const gchar *linestr = NULL;
           gint len;
           guint shown_line;
@@ -1256,130 +1122,91 @@ gbp_omni_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
           len = int_to_string (shown_line, &linestr);
           pango_layout_set_text (self->layout, linestr, len);
 
-          cairo_move_to (cr, cell_area->x, cell_area->y);
-
           if (has_breakpoint || (self->breakpoints != NULL && active))
             {
-              gdk_cairo_set_source_rgba (cr, &self->bkpt.fg);
+              rgba = &self->bkpt.fg;
               bold = self->bkpt.bold;
             }
-          else if (state & GTK_SOURCE_GUTTER_RENDERER_STATE_CURSOR)
+          else if (gtk_source_gutter_lines_is_cursor (lines, line))
             {
-              gdk_cairo_set_source_rgba (cr, &self->current.fg);
+              rgba = &self->current.fg;
               bold = self->current.bold;
             }
           else
             {
-              gdk_cairo_set_source_rgba (cr, &self->text.fg);
+              rgba = &self->text.fg;
               bold = self->text.bold;
             }
 
-          /* Current line is always bold */
-          if (state & GTK_SOURCE_GUTTER_RENDERER_STATE_CURSOR)
-            bold |= self->current.bold;
+          if (!bold)
+            bold = gtk_source_gutter_lines_is_cursor (lines, line);
 
-          cairo_move_to (cr, cell_area->x, cell_area->y + self->line_spacing);
-          pango_layout_set_attributes (self->layout, bold ? self->bold_attrs : NULL);
-          pango_cairo_show_layout (cr, self->layout);
+          gtk_snapshot_save (snapshot);
+          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, line_y));
+          gtk_snapshot_append_layout (snapshot, self->layout, rgba);
+          gtk_snapshot_restore (snapshot);
         }
     }
 }
 
-static cairo_surface_t *
-get_icon_surface (GbpOmniGutterRenderer *self,
-                  GtkWidget             *widget,
-                  const gchar           *icon_name,
-                  gint                   size,
-                  gboolean               selected)
+static GdkPaintable *
+get_icon_paintable (GbpOmniGutterRenderer *self,
+                    GtkWidget             *widget,
+                    const gchar           *icon_name,
+                    gint                   size,
+                    gboolean               selected)
 {
-  g_autoptr(GtkIconInfo) info = NULL;
+  GtkIconPaintable *paintable;
+  GtkTextDirection direction;
   GtkIconTheme *icon_theme;
-  GdkScreen *screen;
-  GtkIconLookupFlags flags;
-  gint scale;
+  GdkDisplay *display;
+  int scale;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (icon_name != NULL);
   g_assert (size > 0);
 
-  /*
-   * This deals with loading a given icon by icon name and trying to
-   * apply our current style as the symbolic colors. We do not support
-   * error/warning/etc for symbolic icons so they are all replaced with
-   * the proper foreground color.
-   *
-   * If selected is set, we alter the color to make sure it will look
-   * good on top of a breakpoint arrow.
-   */
-
-  screen = gtk_widget_get_screen (widget);
-  icon_theme = gtk_icon_theme_get_for_screen (screen);
-
-  flags = GTK_ICON_LOOKUP_USE_BUILTIN;
+  display = gtk_widget_get_display (widget);
+  icon_theme = gtk_icon_theme_get_for_display (display);
   scale = gtk_widget_get_scale_factor (widget);
+  direction = gtk_widget_get_direction (widget);
+  paintable = gtk_icon_theme_lookup_icon (icon_theme,
+                                          icon_name,
+                                          NULL,
+                                          16,
+                                          scale,
+                                          direction,
+                                          GTK_ICON_LOOKUP_PRELOAD);
 
-  info = gtk_icon_theme_lookup_icon_for_scale (icon_theme, icon_name, size, scale, flags);
-
-  if (info != NULL)
-    {
-      g_autoptr(GdkPixbuf) pixbuf = NULL;
-
-      if (gtk_icon_info_is_symbolic (info))
-        {
-          GdkRGBA fg;
-
-          if (selected)
-            fg = self->bkpt.fg;
-          else
-            fg = self->text.fg;
-
-          pixbuf = gtk_icon_info_load_symbolic (info, &fg, &fg, &fg, &fg, NULL, NULL);
-        }
-      else
-        pixbuf = gtk_icon_info_load_icon (info, NULL);
-
-      if (pixbuf != NULL)
-        return gdk_cairo_surface_create_from_pixbuf (pixbuf, scale, NULL);
-    }
-
-  return NULL;
+  return GDK_PAINTABLE (paintable);
 }
 
 static void
 gbp_omni_gutter_renderer_reload_icons (GbpOmniGutterRenderer *self)
 {
-  GtkTextView *view;
+  GtkSourceView *view;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
 
-  /*
-   * This isn't ideal (we should find a better way to cache icons that
-   * is safe with scale and foreground color changes we need).
-   *
-   * TODO: Create something similar to pixbuf helpers that allow for
-   *       more control over the cache key so it can be shared between
-   *       multiple instances.
-   */
-
-  g_clear_pointer (&self->note_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->warning_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->error_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->note_selected_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->warning_selected_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->error_selected_surface, cairo_surface_destroy);
+  g_clear_object (&self->note);
+  g_clear_object (&self->warning);
+  g_clear_object (&self->error);
+  g_clear_object (&self->note_selected);
+  g_clear_object (&self->warning_selected);
+  g_clear_object (&self->error_selected);
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   if (view == NULL)
     return;
 
-  self->note_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, FALSE);
-  self->warning_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, FALSE);
-  self->error_surface = get_icon_surface (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, FALSE);
+  self->note = get_icon_paintable (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, FALSE);
+  self->warning = get_icon_paintable (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, FALSE);
+  self->error = get_icon_paintable (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, FALSE);
 
-  self->note_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, TRUE);
-  self->warning_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, TRUE);
-  self->error_selected_surface = get_icon_surface (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, TRUE);
+  self->note_selected = get_icon_paintable (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, TRUE);
+  self->warning_selected = get_icon_paintable (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, TRUE);
+  self->error_selected = get_icon_paintable (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, TRUE);
 }
 
 static void
@@ -1387,12 +1214,12 @@ gbp_omni_gutter_renderer_reload (GbpOmniGutterRenderer *self)
 {
   g_autoptr(IdeDebuggerBreakpoints) breakpoints = NULL;
   GtkTextBuffer *buffer;
-  GtkTextView *view;
+  GtkSourceView *view;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  buffer = gtk_text_view_get_buffer (view);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
   if (IDE_IS_BUFFER (buffer))
     {
@@ -1455,7 +1282,7 @@ gbp_omni_gutter_renderer_bind_view (GbpOmniGutterRenderer *self,
 static void
 gbp_omni_gutter_renderer_notify_view (GbpOmniGutterRenderer *self)
 {
-  GtkTextView *view;
+  GtkSourceView *view;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
 
@@ -1502,44 +1329,14 @@ gbp_omni_gutter_renderer_cursor_moved (GbpOmniGutterRenderer *self,
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
 
   if (self->show_relative_line_numbers)
-    gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (self));
-}
-
-static void
-gbp_omni_gutter_renderer_notify_style_scheme (GbpOmniGutterRenderer *self,
-                                              GParamSpec            *pspec,
-                                              IdeBuffer             *buffer)
-{
-  GtkSourceStyleScheme *scheme;
-
-  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-
-  /* Update our cached rgba colors */
-  scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
-  reload_style_colors (self, scheme);
-
-  /* Regenerate icons matching the scheme colors */
-  gbp_omni_gutter_renderer_reload_icons (self);
-}
-
-static void
-gbp_omni_gutter_renderer_bind_buffer (GbpOmniGutterRenderer *self,
-                                      IdeBuffer             *buffer,
-                                      IdeSignalGroup        *buffer_signals)
-{
-  g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (IDE_IS_SIGNAL_GROUP (buffer_signals));
-
-  gbp_omni_gutter_renderer_notify_style_scheme (self, NULL, buffer);
+    gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
 static void
 gbp_omni_gutter_renderer_constructed (GObject *object)
 {
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)object;
-  GtkTextView *view;
+  GtkSourceView *view;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
 
@@ -1547,8 +1344,6 @@ gbp_omni_gutter_renderer_constructed (GObject *object)
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   ide_signal_group_set_target (self->view_signals, view);
-
-  self->settings = g_settings_new ("org.gnome.builder.editor");
 }
 
 static void
@@ -1558,21 +1353,18 @@ gbp_omni_gutter_renderer_dispose (GObject *object)
 
   g_clear_handle_id (&self->resize_source, g_source_remove);
 
-  g_clear_object (&self->settings);
   g_clear_object (&self->breakpoints);
   g_clear_pointer (&self->lines, g_array_unref);
-
-  g_clear_pointer (&self->scaled_font_desc, pango_font_description_free);
 
   g_clear_object (&self->view_signals);
   g_clear_object (&self->buffer_signals);
 
-  g_clear_pointer (&self->note_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->warning_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->error_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->note_selected_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->warning_selected_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->error_selected_surface, cairo_surface_destroy);
+  g_clear_object (&self->note);
+  g_clear_object (&self->warning);
+  g_clear_object (&self->error);
+  g_clear_object (&self->note_selected);
+  g_clear_object (&self->warning_selected);
+  g_clear_object (&self->error_selected);
 
   g_clear_object (&self->layout);
   g_clear_pointer (&self->bold_attrs, pango_attr_list_unref);
@@ -1653,7 +1445,7 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
   object_class->get_property = gbp_omni_gutter_renderer_get_property;
   object_class->set_property = gbp_omni_gutter_renderer_set_property;
 
-  renderer_class->draw = gbp_omni_gutter_renderer_draw;
+  renderer_class->snapshot_line = gbp_omni_gutter_renderer_snapshot_line;
   renderer_class->begin = gbp_omni_gutter_renderer_begin;
   renderer_class->end = gbp_omni_gutter_renderer_end;
   renderer_class->query_activatable = gbp_omni_gutter_renderer_query_activatable;
@@ -1695,11 +1487,6 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
 
   self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
 
-  g_signal_connect_swapped (self->buffer_signals,
-                            "bind",
-                            G_CALLBACK (gbp_omni_gutter_renderer_bind_buffer),
-                            self);
-
   ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::file",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
@@ -1708,11 +1495,6 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
   ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::language",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
-                                    self);
-
-  ide_signal_group_connect_swapped (self->buffer_signals,
-                                    "notify::style-scheme",
-                                    G_CALLBACK (gbp_omni_gutter_renderer_notify_style_scheme),
                                     self);
 
   ide_signal_group_connect_swapped (self->buffer_signals,
@@ -1844,7 +1626,7 @@ gbp_omni_gutter_renderer_set_show_relative_line_numbers (GbpOmniGutterRenderer *
     {
       self->show_relative_line_numbers = show_relative_line_numbers;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_RELATIVE_LINE_NUMBERS]);
-      gtk_source_gutter_renderer_queue_draw (GTK_SOURCE_GUTTER_RENDERER (self));
+      gtk_widget_queue_draw (GTK_WIDGET (self));
     }
 }
 
@@ -1852,9 +1634,15 @@ static void
 gbp_omni_gutter_renderer_style_changed (IdeGutter *gutter)
 {
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)gutter;
+  GtkSourceStyleScheme *scheme;
+  GtkSourceBuffer *buffer;
 
   g_return_if_fail (GBP_IS_OMNI_GUTTER_RENDERER (self));
 
+  buffer = gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self));
+  scheme = gtk_source_buffer_get_style_scheme (buffer);
+
+  reload_style_colors (self, scheme);
   gbp_omni_gutter_renderer_recalculate_size (self);
   gbp_omni_gutter_renderer_reload_icons (self);
 }
