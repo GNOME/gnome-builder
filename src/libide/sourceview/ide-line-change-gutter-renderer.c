@@ -163,13 +163,13 @@ connect_style_scheme (IdeLineChangeGutterRenderer *self)
   scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
 
   if (!get_style_rgba (scheme, "gutter::added-line", FOREGROUND, &self->changes.add))
-    gdk_rgba_parse (&self->changes.add, "#8ae234");
+    gdk_rgba_parse (&self->changes.add, IDE_LINE_CHANGES_FALLBACK_ADDED);
 
   if (!get_style_rgba (scheme, "gutter::changed-line", FOREGROUND, &self->changes.change))
-    gdk_rgba_parse (&self->changes.change, "#fcaf3e");
+    gdk_rgba_parse (&self->changes.change, IDE_LINE_CHANGES_FALLBACK_CHANGED);
 
   if (!get_style_rgba (scheme, "gutter::removed-line", FOREGROUND, &self->changes.remove))
-    gdk_rgba_parse (&self->changes.remove, "#ef2929");
+    gdk_rgba_parse (&self->changes.remove, IDE_LINE_CHANGES_FALLBACK_REMOVED);
 }
 
 static void

@@ -475,15 +475,15 @@ reload_style_colors (GbpOmniGutterRenderer *self,
    */
   if (!get_style_rgba (scheme, "gutter::added-line", FOREGROUND, &self->changes.add) &&
       !get_style_rgba (scheme, "diff:added-line", FOREGROUND, &self->changes.add))
-    gdk_rgba_parse (&self->changes.add, "#8ae234");
+    gdk_rgba_parse (&self->changes.add, IDE_LINE_CHANGES_FALLBACK_ADDED);
 
   if (!get_style_rgba (scheme, "gutter::changed-line", FOREGROUND, &self->changes.change) &&
       !get_style_rgba (scheme, "diff:changed-line", FOREGROUND, &self->changes.change))
-    gdk_rgba_parse (&self->changes.change, "#fcaf3e");
+    gdk_rgba_parse (&self->changes.change, IDE_LINE_CHANGES_FALLBACK_CHANGED);
 
   if (!get_style_rgba (scheme, "gutter::removed-line", FOREGROUND, &self->changes.remove) &&
       !get_style_rgba (scheme, "diff:removed-line", FOREGROUND, &self->changes.remove))
-    gdk_rgba_parse (&self->changes.remove, "#ef2929");
+    gdk_rgba_parse (&self->changes.remove, IDE_LINE_CHANGES_FALLBACK_REMOVED);
 
   /*
    * These debugger:: prefix values come from Builder's style-scheme xml
@@ -491,7 +491,7 @@ reload_style_colors (GbpOmniGutterRenderer *self,
    * support them, though.
    */
   if (!get_style_rgba (scheme, "debugger::current-breakpoint", BACKGROUND, &self->stopped_bg))
-    gdk_rgba_parse (&self->stopped_bg, "#fcaf3e");
+    gdk_rgba_parse (&self->stopped_bg, IDE_LINE_CHANGES_FALLBACK_CHANGED);
 
   if (!get_style_rgba (scheme, "debugger::breakpoint", FOREGROUND, &self->bkpt.fg) &&
       !get_style_rgba (scheme, "selection", FOREGROUND, &self->bkpt.fg))
