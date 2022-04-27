@@ -20,8 +20,8 @@
     "sources" : [
         {
             "type": "archive",
-            "url": "https://registry.npmjs.org/intelephense/-/intelephense-1.7.1.tgz",
-            "sha256": "ce89dc2a505fa978b92880cf3456de66598a3d79bcef3a17312ceb50400d533a",
+            "url": "https://registry.npmjs.org/intelephense/-/intelephense-1.8.2.tgz",
+            "sha256": "e9de8720349d1544844495d9a3802d87bf0c34a6d6ada8b16b04b0f7b52ee63e",
             "dest": "intelephense"
         },
         "intelephense-language-server-deps.json"
