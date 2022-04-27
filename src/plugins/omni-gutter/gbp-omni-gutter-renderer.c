@@ -499,10 +499,13 @@ reload_style_colors (GbpOmniGutterRenderer *self,
 
   if (!get_style_rgba (scheme, "debugger::breakpoint", BACKGROUND, &self->bkpt.bg) &&
       !get_style_rgba (scheme, "selection", BACKGROUND, &self->bkpt.bg))
-    self->bkpt.bg = self->current.bg;
+    {
+      gdk_rgba_parse (&self->bkpt.bg, "#1c71d8");
+      gdk_rgba_parse (&self->bkpt.fg, "#ffffff");
+    }
 
   if (!style_get_is_bold (scheme, "debugger::breakpoint", &self->bkpt.bold))
-    self->bkpt.bold = FALSE;
+    self->bkpt.bold = TRUE;
 
   /* Slight different color for countpoint, fallback to mix(selection,diff:add) */
   if (!get_style_rgba (scheme, "debugger::countpoint", FOREGROUND, &self->ctpt.fg))
