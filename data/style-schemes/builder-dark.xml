@@ -81,24 +81,24 @@
   <style name="draw-spaces"                 foreground="aluminium5"/>
   <style name="background-pattern"          background="#202020"/>
   <style name="map-overlay"                 background="#rgba(136,138,133,0.25)"/>
+  <style name="snippet-focus"               background="orange3" foreground="aluminium6"/>
 
-  <!-- Diagnostics Underlining -->
-  <style name="diagnostician::deprecated"   underline="error" underline-color="aluminium3"/>
-  <style name="diagnostician::unused"       underline="error" underline-color="chocolate2"/>
-  <style name="diagnostician::error"        underline="error" underline-color="red1"/>
-  <style name="diagnostician::note"         underline="error" underline-color="skyblue1"/>
-  <style name="diagnostician::warning"      underline="error" underline-color="orange1"/>
-
-  <!-- Snippets -->
-  <style name="snippet::tab-stop"           background="orange3" foreground="aluminium6"/>
-  <style name="snippet::area"               background="#rgba(86,114,151,.5)"/>
-
-  <!-- Debugger -->
-  <style name="debugger::current-breakpoint" foreground="#2e3436" background="#fcaf3e"/>
-  <style name="debugger::breakpoint"         foreground="#ffffff" background="#204a87"/>
-
-  <!-- Hover links -->
-  <style name="action::hover-definition"    background="#41464c" underline="true"/>
+  <!-- Builder Overrides -->
+  <style name="-Builder:deprecated"         underline="error" underline-color="aluminium3"/>
+  <style name="-Builder:unused"             underline="error" underline-color="chocolate2"/>
+  <style name="-Builder:error"              underline="error" underline-color="red1"/>
+  <style name="-Builder:note"               underline="error" underline-color="skyblue1"/>
+  <style name="-Builder:warning"            underline="error" underline-color="orange1"/>
+  <style name="-Builder:current-breakpoint" foreground="#2e3436" background="#fcaf3e"/>
+  <style name="-Builder:breakpoint"         foreground="#ffffff" background="#204a87"/>
+  <style name="-Builder:hover-definition"   background="#41464c" underline="true"/>
+  <style name="-Builder:label"              foreground="#000000" background="#D5E7FC"/>
+  <style name="-Builder:id"                 foreground="#000000" background="#D9E7BD"/>
+  <style name="-Builder:style-class"        foreground="#000000" background="#DFCD9B"/>
+  <style name="-Builder:type"               foreground="#000000" background="#F4DAC3"/>
+  <style name="-Builder:parent"             foreground="#000000" background="#DEBECF"/>
+  <style name="-Builder:class"              foreground="#000000" background="#FFEF98"/>
+  <style name="-Builder:attribute"          foreground="#000000" background="#F0E68C"/>
 
   <!-- Bracket Matching -->
   <style name="bracket-match"               foreground="chocolate2" bold="true"/>
@@ -220,15 +220,6 @@
   <style name="xml:attribute-name"          foreground="#orange3" bold="false"/>
   <style name="xml:attribute-value"         foreground="#669900"/>
   <style name="xml:tag-match"               background="#rgba(114,159,207,.20)"/>
-
-  <!-- Symbol-tree xml-pack coloring -->
-  <style name="symboltree::label"           foreground="#000000" background="#D5E7FC"/>
-  <style name="symboltree::id"              foreground="#000000" background="#D9E7BD"/>
-  <style name="symboltree::style-class"     foreground="#000000" background="#DFCD9B"/>
-  <style name="symboltree::type"            foreground="#000000" background="#F4DAC3"/>
-  <style name="symboltree::parent"          foreground="#000000" background="#DEBECF"/>
-  <style name="symboltree::class"           foreground="#000000" background="#FFEF98"/>
-  <style name="symboltree::attribute"       foreground="#000000" background="#F0E68C"/>
 
 </style-scheme>
 
