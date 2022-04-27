@@ -157,6 +157,9 @@ struct _GbpOmniGutterRenderer
    */
   guint cursor_line;
 
+  /* Delayed reload timeout source */
+  guint reload_source;
+
   /*
    * Some users might want to toggle off individual features of the
    * omni gutter, and these boolean properties provide that. Other
@@ -166,9 +169,6 @@ struct _GbpOmniGutterRenderer
   guint show_line_numbers : 1;
   guint show_relative_line_numbers : 1;
   guint show_line_diagnostics : 1;
-
-  /* Delayed reload timeout source */
-  guint reload_source;
 };
 
 enum {
