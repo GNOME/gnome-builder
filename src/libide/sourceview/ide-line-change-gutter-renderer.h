@@ -28,6 +28,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER (ide_line_change_gutter_renderer_get_type())
 
+#define IDE_LINE_CHANGES_FALLBACK_ADDED   "#26a269"
+#define IDE_LINE_CHANGES_FALLBACK_CHANGED "#e5a50a"
+#define IDE_LINE_CHANGES_FALLBACK_REMOVED "#c01c28"
+
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer, IDE, LINE_CHANGE_GUTTER_RENDERER, GtkSourceGutterRenderer)
 
