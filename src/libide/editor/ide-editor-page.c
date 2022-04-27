@@ -425,14 +425,6 @@ ide_editor_page_init (IdeEditorPage *self)
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-source-view-popup-menu");
   ide_source_view_append_menu (self->view, G_MENU_MODEL (menu));
 
-  /* Until we get the omnigutter in place */
-  gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->view),
-                                       GTK_TEXT_WINDOW_LEFT);
-  renderer = g_object_new (IDE_TYPE_LINE_CHANGE_GUTTER_RENDERER,
-                           "width-request", 2,
-                           NULL);
-  gtk_source_gutter_insert (gutter, renderer, 100);
-
   /* Add gutter changes to the overview map */
   gutter = gtk_source_view_get_gutter (GTK_SOURCE_VIEW (self->map),
                                        GTK_TEXT_WINDOW_LEFT);
