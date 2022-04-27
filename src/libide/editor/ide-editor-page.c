@@ -380,8 +380,6 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
                          IDE_TYPE_GUTTER,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, N_PROPS, properties);
-
   /**
    * IdeEditorPage:view:
    *
