@@ -56,6 +56,7 @@
 #define DELETE_WIDTH 5
 #define DELETE_HEIGHT 2
 #define BREAKPOINT_XPAD (CHANGE_WIDTH + 1)
+#define BREAKPOINT_YPAD 1
 #define BREAKPOINT_CORNER_RADIUS 5
 
 #define IS_BREAKPOINT(i)  ((i)->is_breakpoint || (i)->is_countpoint || (i)->is_watchpoint)
@@ -1020,7 +1021,7 @@ draw_breakpoint_bg (GbpOmniGutterRenderer *self,
         rgba.alpha *= 0.4;
     }
 
-  rounded_rect = GSK_ROUNDED_RECT_INIT (0, line_y, width - BREAKPOINT_XPAD, height);
+  rounded_rect = GSK_ROUNDED_RECT_INIT (0, line_y, width - BREAKPOINT_XPAD, height - BREAKPOINT_YPAD);
   rounded_rect.corner[1] = GRAPHENE_SIZE_INIT (BREAKPOINT_CORNER_RADIUS, BREAKPOINT_CORNER_RADIUS);
   rounded_rect.corner[2] = GRAPHENE_SIZE_INIT (BREAKPOINT_CORNER_RADIUS, BREAKPOINT_CORNER_RADIUS);
 
