@@ -54,6 +54,10 @@
         <child type="end">
           <object class="PanelPaned" id="edge_end">
             <property name="orientation">vertical</property>
+            <child>
+              <object class="PanelFrame">
+              </object>
+            </child>
           </object>
         </child>
         <child type="bottom">
