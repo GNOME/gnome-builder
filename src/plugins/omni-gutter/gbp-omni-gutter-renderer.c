@@ -854,7 +854,7 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   gtk_text_buffer_get_iter_at_line (buffer, &begin, self->begin_line);
   gtk_text_buffer_get_iter_at_line (buffer, &end, end_line);
   table = gtk_text_buffer_get_tag_table (buffer);
-  tag = gtk_text_tag_table_lookup (table, "debugger::current-breakpoint");
+  tag = gtk_text_tag_table_lookup (table, "-Builder:current-breakpoint");
   if (tag != NULL)
     {
       bkpt = begin;
