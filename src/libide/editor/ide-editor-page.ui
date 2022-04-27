@@ -12,8 +12,7 @@
                 <property name="monospace">true</property>
                 <property name="hexpand">true</property>
                 <property name="vexpand">true</property>
-                <!-- until we have custom gutter renderer ported -->
-                <property name="show-line-numbers">true</property>
+                <property name="show-line-numbers">false</property>
                 <child>
                   <object class="GtkEventControllerFocus">
                     <signal name="enter" handler="ide_editor_page_focus_enter_cb" swapped="true" object="IdeEditorPage"/>
