@@ -55,8 +55,8 @@
 #define CHANGE_WIDTH 2
 #define DELETE_WIDTH 5
 #define DELETE_HEIGHT 2
-#define BREAKPOINT_XPAD 2
-#define BREAKPOINT_CORNER_RADIUS 7
+#define BREAKPOINT_XPAD (CHANGE_WIDTH + 1)
+#define BREAKPOINT_CORNER_RADIUS 5
 
 #define IS_BREAKPOINT(i)  ((i)->is_breakpoint || (i)->is_countpoint || (i)->is_watchpoint)
 #define IS_DIAGNOSTIC(i)  ((i)->is_error || (i)->is_warning || (i)->is_note)
@@ -882,7 +882,7 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   /* Create a new layout for rendering lines to */
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "");
   pango_layout_set_alignment (self->layout, PANGO_ALIGN_RIGHT);
-  pango_layout_set_width (self->layout, (width - CHANGE_WIDTH - 2) * PANGO_SCALE);
+  pango_layout_set_width (self->layout, (width - BREAKPOINT_XPAD - 4) * PANGO_SCALE);
 }
 
 static gboolean
@@ -1018,14 +1018,14 @@ draw_breakpoint_bg (GbpOmniGutterRenderer *self,
         rgba.alpha *= 0.4;
     }
 
-  rounded_rect = GSK_ROUNDED_RECT_INIT (BREAKPOINT_XPAD, line_y, width - BREAKPOINT_XPAD, height);
-  rounded_rect.corner[0] = GRAPHENE_SIZE_INIT (BREAKPOINT_CORNER_RADIUS, BREAKPOINT_CORNER_RADIUS);
-  rounded_rect.corner[3] = GRAPHENE_SIZE_INIT (BREAKPOINT_CORNER_RADIUS, BREAKPOINT_CORNER_RADIUS);
+  rounded_rect = GSK_ROUNDED_RECT_INIT (0, line_y, width - BREAKPOINT_XPAD, height);
+  rounded_rect.corner[1] = GRAPHENE_SIZE_INIT (BREAKPOINT_CORNER_RADIUS, BREAKPOINT_CORNER_RADIUS);
+  rounded_rect.corner[2] = GRAPHENE_SIZE_INIT (BREAKPOINT_CORNER_RADIUS, BREAKPOINT_CORNER_RADIUS);
 
   gtk_snapshot_push_rounded_clip (snapshot, &rounded_rect);
   gtk_snapshot_append_color (snapshot,
                              &rgba,
-                             &GRAPHENE_RECT_INIT (0, line_y, width + 10, height));
+                             &GRAPHENE_RECT_INIT (0, line_y, width, height));
   gtk_snapshot_pop (snapshot);
 }
 
