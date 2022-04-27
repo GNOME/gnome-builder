@@ -97,6 +97,9 @@ struct _GbpOmniGutterRenderer
     GdkRGBA change;
   } changes;
 
+  /* Tracks changes to the buffer to give us line marks */
+  IdeBufferChangeMonitor *change_monitor;
+
   /*
    * We need to reuse a single pango layout while drawing all the lines
    * to keep the overhead low. We don't have pixel caching on the gutter
@@ -571,7 +574,6 @@ gbp_omni_gutter_renderer_load_basic (GbpOmniGutterRenderer *self,
                                      GtkTextIter           *begin,
                                      GArray                *lines)
 {
-  IdeBufferChangeMonitor *monitor;
   IdeDiagnostics *diagnostics;
   GtkTextBuffer *buffer;
   GFile *file;
@@ -604,8 +606,8 @@ gbp_omni_gutter_renderer_load_basic (GbpOmniGutterRenderer *self,
                                            populate_diagnostics_cb,
                                            &state);
 
-  if ((monitor = ide_buffer_get_change_monitor (IDE_BUFFER (buffer))))
-    ide_buffer_change_monitor_foreach_change (monitor,
+  if (self->change_monitor != NULL)
+    ide_buffer_change_monitor_foreach_change (self->change_monitor,
                                               state.begin_line,
                                               state.end_line,
                                               populate_changes_cb,
@@ -1216,8 +1218,8 @@ static gboolean
 gbp_omni_gutter_renderer_do_reload (GbpOmniGutterRenderer *self)
 {
   g_autoptr(IdeDebuggerBreakpoints) breakpoints = NULL;
-  GtkTextBuffer *buffer;
-  GtkSourceView *view;
+  IdeBufferChangeMonitor *change_monitor = NULL;
+  GtkSourceBuffer *buffer;
 
   IDE_ENTRY;
 
@@ -1225,8 +1227,7 @@ gbp_omni_gutter_renderer_do_reload (GbpOmniGutterRenderer *self)
 
   self->reload_source = 0;
 
-  view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+  buffer = gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self));
 
   if (IDE_IS_BUFFER (buffer))
     {
@@ -1235,8 +1236,10 @@ gbp_omni_gutter_renderer_do_reload (GbpOmniGutterRenderer *self)
       const gchar *lang_id;
 
       context = ide_buffer_ref_context (IDE_BUFFER (buffer));
-      debug_manager = ide_debug_manager_from_context (context);
+      change_monitor = ide_buffer_get_change_monitor (IDE_BUFFER (buffer));
       lang_id = ide_buffer_get_language_id (IDE_BUFFER (buffer));
+
+      debug_manager = ide_debug_manager_from_context (context);
 
       if (ide_debug_manager_supports_language (debug_manager, lang_id))
         {
@@ -1246,8 +1249,25 @@ gbp_omni_gutter_renderer_do_reload (GbpOmniGutterRenderer *self)
         }
     }
 
+  if (change_monitor != self->change_monitor)
+    {
+      if (self->change_monitor != NULL)
+        g_signal_handlers_disconnect_by_func (self->change_monitor,
+                                              G_CALLBACK (gtk_widget_queue_draw),
+                                              self);
+      g_set_object (&self->change_monitor, change_monitor);
+      if (change_monitor)
+        g_signal_connect_object (change_monitor,
+                                 "changed",
+                                 G_CALLBACK (gtk_widget_queue_draw),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
+
   /* Replace our previous breakpoints */
-  g_set_object (&self->breakpoints, breakpoints);
+  if (g_set_object (&self->breakpoints, breakpoints))
+    gtk_widget_queue_draw (GTK_WIDGET (self));
 
   /* Reload icons and then recalcuate our physical size */
   gbp_omni_gutter_renderer_measure (self);
@@ -1362,6 +1382,7 @@ gbp_omni_gutter_renderer_dispose (GObject *object)
   g_clear_handle_id (&self->resize_source, g_source_remove);
   g_clear_handle_id (&self->reload_source, g_source_remove);
 
+  g_clear_object (&self->change_monitor);
   g_clear_object (&self->breakpoints);
   g_clear_pointer (&self->lines, g_array_unref);
 
@@ -1497,6 +1518,10 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
                                     self);
   ide_signal_group_connect_swapped (self->buffer_signals,
                                     "notify::language",
+                                    G_CALLBACK (gbp_omni_gutter_renderer_reload),
+                                    self);
+  ide_signal_group_connect_swapped (self->buffer_signals,
+                                    "notify::change-monitor",
                                     G_CALLBACK (gbp_omni_gutter_renderer_reload),
                                     self);
   ide_signal_group_connect_swapped (self->buffer_signals,
