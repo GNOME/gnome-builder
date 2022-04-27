@@ -146,7 +146,6 @@ tweak_gutter_spacing (GtkSourceView *view)
 
   /* Ensure we have a line gutter renderer to tweak */
   gutter = gtk_source_view_get_gutter (view, GTK_TEXT_WINDOW_LEFT);
-  gtk_source_view_set_show_line_numbers (view, TRUE);
 
   /* Add margin to first gutter renderer */
   for (child = gtk_widget_get_first_child (GTK_WIDGET (gutter));
