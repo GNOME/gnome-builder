@@ -130,7 +130,7 @@ struct _GbpOmniGutterRenderer
    * TODO: Add a callback to the debug manager to avoid querying this
    *       information on every draw cycle.
    */
-  gint stopped_line;
+  int stopped_line;
 
   /*
    * To avoid doing multiple line recalculations inline, we defer our
@@ -146,13 +146,13 @@ struct _GbpOmniGutterRenderer
    * as the underlying components will automatically deal with scaling
    * for us (as necessary).
    */
-  gint number_width;
+  int number_width;
 
   /*
    * Calculated size for diagnostics, to be a nearest icon-size based
    * on the height of the line text.
    */
-  gint diag_size;
+  int diag_size;
 
   /*
    * Line that the cursor is on. Used for relative line number rendering.
@@ -233,7 +233,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpOmniGutterRenderer,
 
 static GParamSpec *properties [N_PROPS];
 
-static gint
+static int
 int_to_string (guint         value,
                const gchar **outstr)
 {
@@ -252,7 +252,7 @@ int_to_string (guint         value,
     {
       guint carry = 1;
 
-      for (gint i = fi.len - 1; i >= 0; i--)
+      for (int i = fi.len - 1; i >= 0; i--)
         {
           fi.str[i] += carry;
           carry = fi.str[i] == ':';
@@ -676,8 +676,8 @@ gbp_omni_gutter_renderer_load_basic (GbpOmniGutterRenderer *self,
                                               &state);
 }
 
-static inline gint
-count_num_digits (gint num_lines)
+static inline int
+count_num_digits (int num_lines)
 {
   if (num_lines < 100)
     return 2;
@@ -693,8 +693,8 @@ count_num_digits (gint num_lines)
     return 10;
 }
 
-static gint
-calculate_diagnostics_size (gint height)
+static int
+calculate_diagnostics_size (int height)
 {
   static guint sizes[] = { 64, 48, 32, 24, 16, 8 };
 
@@ -1176,7 +1176,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
         {
           const GdkRGBA *rgba;
           const gchar *linestr = NULL;
-          gint len;
+          int len;
           guint shown_line;
 
           if (!self->show_relative_line_numbers || line == self->cursor_line)
@@ -1220,7 +1220,7 @@ static GdkPaintable *
 get_icon_paintable (GbpOmniGutterRenderer *self,
                     GtkWidget             *widget,
                     const gchar           *icon_name,
-                    gint                   size,
+                    int                    size,
                     gboolean               selected)
 {
   GtkIconPaintable *paintable;
