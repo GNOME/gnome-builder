@@ -145,6 +145,7 @@ struct _GbpOmniGutterRenderer
    * for us (as necessary).
    */
   int number_width;
+  int number_height;
 
   /*
    * Calculated size for diagnostics, to be a nearest icon-size based
@@ -152,9 +153,7 @@ struct _GbpOmniGutterRenderer
    */
   int diag_size;
 
-  /*
-   * Line that the cursor is on. Used for relative line number rendering.
-   */
+  /* Line that the cursor is on. Used for relative line number rendering. */
   guint cursor_line;
 
   /* Delayed reload timeout source */
@@ -724,7 +723,6 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
   PangoLayout *layout;
   GtkTextIter end;
   guint line;
-  int height;
   int size = 0;
   int old_width;
 
@@ -763,14 +761,14 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
    * positioning later. We simply size everything the same and then
    * align to the right to reduce the draw overhead.
    */
-  pango_layout_get_pixel_size (layout, &self->number_width, &height);
+  pango_layout_get_pixel_size (layout, &self->number_width, &self->number_height);
   pango_layout_set_attributes (layout, bold_attrs);
 
   /*
    * Calculate the nearest size for diagnostics so they scale somewhat
    * reasonable with the character size.
    */
-  self->diag_size = calculate_diagnostics_size (MAX (16, height));
+  self->diag_size = calculate_diagnostics_size (MAX (16, self->number_height));
   g_assert (self->diag_size > 0);
 
   /* Now calculate the size based on enabled features */
@@ -1191,8 +1189,8 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
         {
           const GdkRGBA *rgba;
           const gchar *linestr = NULL;
-          int len;
           guint shown_line;
+          int len;
 
           if (!self->show_relative_line_numbers || line == self->cursor_line)
             shown_line = line + 1;
@@ -1223,7 +1221,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
           pango_layout_set_attributes (self->layout, bold ? bold_attrs : NULL);
 
           gtk_snapshot_save (snapshot);
-          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, line_y));
+          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, line_y + ((line_height - self->number_height) / 2)));
           gtk_snapshot_append_layout (snapshot, self->layout, rgba);
           gtk_snapshot_restore (snapshot);
         }
