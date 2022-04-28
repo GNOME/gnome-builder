@@ -615,6 +615,7 @@ ide_tree_init (IdeTree *self)
 
   cell = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
                        "ellipsize", PANGO_ELLIPSIZE_END,
+                       "ypad", 6,
                        NULL);
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, text_cell_func, self, NULL);
