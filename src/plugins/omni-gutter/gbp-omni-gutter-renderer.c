@@ -92,7 +92,7 @@ struct _GbpOmniGutterRenderer
     GdkRGBA fg;
     GdkRGBA bg;
     gboolean bold;
-  } text, current, bkpt, ctpt;
+  } text, current, bkpt, ctpt, sel;
   GdkRGBA stopped_bg;
   struct {
     GdkRGBA add;
@@ -159,6 +159,11 @@ struct _GbpOmniGutterRenderer
 
   /* Delayed reload timeout source */
   guint reload_source;
+
+  /* Cached information for drawing */
+  double draw_width;
+  double draw_width_with_margin;
+  guint draw_has_focus : 1;
 
   /*
    * Some users might want to toggle off individual features of the
@@ -230,6 +235,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpOmniGutterRenderer,
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_GUTTER, gutter_iface_init))
 
 static GParamSpec *properties [N_PROPS];
+static GQuark selection_quark;
 static PangoAttrList *bold_attrs;
 
 static int
@@ -450,6 +456,12 @@ reload_style_colors (GbpOmniGutterRenderer *self,
 
   context = gtk_widget_get_style_context (GTK_WIDGET (view));
   gtk_style_context_get_color (context, &fg);
+
+  if (!get_style_rgba (scheme, "selection", FOREGROUND, &self->sel.fg))
+    gtk_style_context_lookup_color (context, "theme_selected_fg_color", &self->sel.fg);
+
+  if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->sel.bg))
+    gtk_style_context_lookup_color (context, "theme_selected_bg_color", &self->sel.bg);
 
   /* Extract common values from style schemes. */
   if (!get_style_rgba (scheme, "line-numbers", FOREGROUND, &self->text.fg))
@@ -827,10 +839,11 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   IdeSourceView *view;
   GtkTextTag *tag;
   GtkTextIter bkpt;
-  GtkTextIter begin;
-  GtkTextIter end;
+  GtkTextIter begin, end;
+  GtkTextIter sel_begin, sel_end;
   guint end_line;
   int width;
+  int left_margin;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (renderer));
   g_assert (lines != NULL);
@@ -845,7 +858,14 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
 
   self->stopped_line = -1;
 
+  view = IDE_SOURCE_VIEW (gtk_source_gutter_renderer_get_view (renderer));
+  left_margin = gtk_text_view_get_left_margin (GTK_TEXT_VIEW (view));
   width = gtk_widget_get_width (GTK_WIDGET (self));
+
+  self->draw_width = width;
+  self->draw_width_with_margin = width + left_margin;
+  self->draw_has_focus = gtk_widget_has_focus (GTK_WIDGET (view));
+
   self->begin_line = gtk_source_gutter_lines_get_first (lines);
   end_line = gtk_source_gutter_lines_get_last (lines);
 
@@ -864,14 +884,41 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
         self->stopped_line = gtk_text_iter_get_line (&bkpt);
     }
 
+  /* Add quark for line selections which will display all the way to the
+   * left margin so that we can draw selection borders (rounded corners
+   * which extend under the line numbers).
+   */
+  if (gtk_text_buffer_get_selection_bounds (buffer, &sel_begin, &sel_end))
+    {
+      int first_sel = -1, last_sel = -1;
+
+      gtk_text_iter_order (&sel_begin, &sel_end);
+
+      if (gtk_text_iter_starts_line (&sel_begin))
+        first_sel = gtk_text_iter_get_line (&sel_begin);
+      else if (gtk_text_iter_get_line (&sel_begin) != gtk_text_iter_get_line (&sel_end))
+        first_sel = gtk_text_iter_get_line (&sel_begin) + 1;
+
+      if (!gtk_text_iter_starts_line (&sel_end))
+        last_sel = gtk_text_iter_get_line (&sel_end);
+      else if (gtk_text_iter_get_line (&sel_begin) != gtk_text_iter_get_line (&sel_end))
+        last_sel = gtk_text_iter_get_line (&sel_end) - 1;
+
+      if (first_sel != -1 && last_sel != -1)
+        {
+          first_sel = MAX (first_sel, gtk_source_gutter_lines_get_first (lines));
+          last_sel = MIN (last_sel, gtk_source_gutter_lines_get_last (lines));
+
+          for (int i = first_sel; i <= last_sel; i++)
+            gtk_source_gutter_lines_add_qclass (lines, i, selection_quark);
+        }
+    }
+
   /*
    * This function is called before we render any of the lines in
    * the gutter. To reduce our overhead, we want to collect information
    * for all of the line numbers upfront.
    */
-
-  view = IDE_SOURCE_VIEW (gtk_source_gutter_renderer_get_view (renderer));
-
   ide_source_view_get_visual_position (view, &self->cursor_line, NULL);
 
   /* Give ourselves a fresh array to stash our line info */
@@ -997,6 +1044,32 @@ gbp_omni_gutter_renderer_activate (GtkSourceGutterRenderer *renderer,
 }
 
 static void
+draw_selection_bg (GbpOmniGutterRenderer *self,
+                   GtkSnapshot           *snapshot,
+                   double                 line_y,
+                   double                 width,
+                   double                 height,
+                   gboolean               is_first_line,
+                   gboolean               is_last_last)
+{
+  GskRoundedRect rounded_rect;
+
+  rounded_rect = GSK_ROUNDED_RECT_INIT (2, line_y, width - 2, height);
+
+  if (is_first_line)
+    rounded_rect.corner[0] = GRAPHENE_SIZE_INIT (9, 9);
+
+  if (is_last_last)
+    rounded_rect.corner[3] = GRAPHENE_SIZE_INIT (9, 9);
+
+  gtk_snapshot_push_rounded_clip (snapshot, &rounded_rect);
+  gtk_snapshot_append_color (snapshot,
+                             &self->sel.bg,
+                             &GRAPHENE_RECT_INIT (2, line_y, width - 2, height));
+  gtk_snapshot_pop (snapshot);
+}
+
+static void
 draw_breakpoint_bg (GbpOmniGutterRenderer *self,
                     GtkSnapshot           *snapshot,
                     int                    line_y,
@@ -1112,7 +1185,6 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
 {
   GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)renderer;
   GtkSourceView *view;
-  gboolean has_focus;
   gboolean highlight_line;
   int line_y;
   int line_height;
@@ -1131,10 +1203,9 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   highlight_line = gtk_source_view_get_highlight_current_line (GTK_SOURCE_VIEW (view));
-  has_focus = gtk_widget_has_focus (GTK_WIDGET (view));
 
   gtk_source_gutter_lines_get_line_yrange (lines, line, GTK_SOURCE_GUTTER_RENDERER_ALIGNMENT_MODE_CELL, &line_y, &line_height);
-  width = gtk_widget_get_width (GTK_WIDGET (renderer));
+  width = self->draw_width;
 
   if ((line - self->begin_line) < self->lines->len)
     {
@@ -1142,6 +1213,15 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
       gboolean active = gtk_source_gutter_lines_is_prelit (lines, line);
       gboolean has_breakpoint = FALSE;
       gboolean bold = FALSE;
+
+      /* Draw our selection edges which overlap the gutter */
+      if (gtk_source_gutter_lines_has_qclass (lines, line, selection_quark))
+        {
+          gboolean is_first = line == 0 || line == gtk_source_gutter_lines_get_first (lines) || !gtk_source_gutter_lines_has_qclass (lines, line - 1, selection_quark);
+          gboolean is_last = line == gtk_source_gutter_lines_get_last (lines) || !gtk_source_gutter_lines_has_qclass (lines, line + 1, selection_quark);
+
+          draw_selection_bg (self, snapshot, line_y, self->draw_width_with_margin, line_height, is_first, is_last);
+        }
 
       /*
        * Draw some background for the line so that it looks like the
@@ -1153,7 +1233,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
         gtk_snapshot_append_color (snapshot,
                                    &self->stopped_bg,
                                    &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
-      else if (highlight_line && has_focus && gtk_source_gutter_lines_is_cursor (lines, line))
+      else if (highlight_line && self->draw_has_focus && gtk_source_gutter_lines_is_cursor (lines, line))
         gtk_snapshot_append_color (snapshot,
                                    &self->current.bg,
                                    &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
@@ -1384,26 +1464,23 @@ static void
 gbp_omni_gutter_renderer_cursor_moved (GbpOmniGutterRenderer *self,
                                        GtkTextBuffer         *buffer)
 {
-  GtkTextMark *mark;
   GtkTextIter iter;
+  GtkTextMark *insert;
   guint line;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  mark = gtk_text_buffer_get_insert (buffer);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
   line = gtk_text_iter_get_line (&iter);
 
-  if (line != self->last_cursor_line)
-    {
-      self->last_cursor_line = line;
-      gtk_widget_queue_draw (GTK_WIDGET (self));
-    }
-  else if (self->show_relative_line_numbers)
-    {
-      gtk_widget_queue_draw (GTK_WIDGET (self));
-    }
+  if (line != self->last_cursor_line ||
+      self->show_relative_line_numbers ||
+      gtk_text_buffer_get_has_selection (buffer))
+    gtk_widget_queue_draw (GTK_WIDGET (self));
+
+  self->last_cursor_line = line;
 }
 
 static void
@@ -1577,6 +1654,8 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
 
   bold_attrs = pango_attr_list_new ();
   pango_attr_list_insert (bold_attrs, pango_attr_weight_new (PANGO_WEIGHT_BOLD));
+
+  selection_quark = g_quark_from_static_string ("omni-selection");
 }
 
 static void
