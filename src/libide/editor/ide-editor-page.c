@@ -476,6 +476,24 @@ ide_editor_page_get_buffer (IdeEditorPage *self)
   return self->buffer;
 }
 
+/**
+ * ide_editor_page_get_file:
+ * @self: a #IdeEditorPage
+ *
+ * Gets the file for the document.
+ *
+ * This is a convenience function around ide_buffer_get_file().
+ *
+ * Returns: (transfer none): a #GFile
+ */
+GFile *
+ide_editor_page_get_file (IdeEditorPage *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_PAGE (self), NULL);
+
+  return ide_buffer_get_file (self->buffer);
+}
+
 static void
 ide_editor_page_save_cb (GObject      *object,
                          GAsyncResult *result,
