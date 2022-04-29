@@ -592,7 +592,7 @@ _gbp_project_tree_pane_init_actions (GbpProjectTreePane *self)
                                    self);
   g_action_map_add_action (G_ACTION_MAP (actions), ignored_action);
   g_action_map_add_action (G_ACTION_MAP (actions), sort_action);
-  gtk_widget_insert_action_group (GTK_WIDGET (self->tree),
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "project-tree",
                                   G_ACTION_GROUP (actions));
 
