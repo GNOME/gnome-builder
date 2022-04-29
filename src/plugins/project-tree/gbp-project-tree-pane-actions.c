@@ -243,10 +243,28 @@ gbp_project_tree_pane_actions_new (GbpProjectTreePane *self,
 }
 
 static void
+rename_save_cb (GObject      *object,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdePage) page = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_PAGE (page));
+
+  if (!ide_buffer_save_file_finish (buffer, result, &error))
+    g_warning ("Failed to save file before rename: %s", error->message);
+
+  panel_widget_close (PANEL_WIDGET (page));
+}
+
+static void
 close_matching_pages (IdePage  *page,
                       gpointer  user_data)
 {
-#if 0
   GFile *file = user_data;
   GFile *this_file;
 
@@ -256,17 +274,17 @@ close_matching_pages (IdePage  *page,
   if (!IDE_IS_EDITOR_PAGE (page))
     return;
 
-  this_file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page));
-  if (this_file == NULL)
+  if (!(this_file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page))))
     return;
 
   if (g_file_equal (this_file, file))
     {
       IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
-      ide_buffer_save_file_async (buffer, NULL, NULL, NULL, NULL, NULL);
-      gtk_widget_destroy (widget);
+      ide_buffer_save_file_async (buffer, NULL, NULL,
+                                  NULL,
+                                  rename_save_cb,
+                                  g_object_ref (page));
     }
-#endif
 }
 
 #define DEFINE_ACTION_HANDLER(short_name, BODY)                       \
