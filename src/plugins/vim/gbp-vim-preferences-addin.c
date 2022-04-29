@@ -42,7 +42,8 @@ static const IdePreferenceItemEntry items[] = {
 
 static void
 gbp_vim_preferences_addin_load (IdePreferencesAddin  *addin,
-                                IdePreferencesWindow *window)
+                                IdePreferencesWindow *window,
+                                IdeContext           *context)
 {
   GbpVimPreferencesAddin *self = (GbpVimPreferencesAddin *)addin;
 
@@ -58,7 +59,8 @@ gbp_vim_preferences_addin_load (IdePreferencesAddin  *addin,
 
 static void
 gbp_vim_preferences_addin_unload (IdePreferencesAddin  *addin,
-                                  IdePreferencesWindow *window)
+                                  IdePreferencesWindow *window,
+                                  IdeContext           *context)
 {
   GbpVimPreferencesAddin *self = (GbpVimPreferencesAddin *)addin;
 

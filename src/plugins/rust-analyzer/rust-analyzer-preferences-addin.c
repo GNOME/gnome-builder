@@ -51,7 +51,8 @@ static const IdePreferenceItemEntry items[] = {
 
 static void
 rust_analyzer_preferences_addin_load (IdePreferencesAddin  *addin,
-                                      IdePreferencesWindow *window)
+                                      IdePreferencesWindow *window,
+                                      IdeContext           *context)
 {
   RustAnalyzerPreferencesAddin *self = (RustAnalyzerPreferencesAddin *)addin;
 
@@ -68,7 +69,8 @@ rust_analyzer_preferences_addin_load (IdePreferencesAddin  *addin,
 
 static void
 rust_analyzer_preferences_addin_unload (IdePreferencesAddin  *addin,
-                                        IdePreferencesWindow *window)
+                                        IdePreferencesWindow *window,
+                                        IdeContext           *context)
 {
   IDE_ENTRY;
 

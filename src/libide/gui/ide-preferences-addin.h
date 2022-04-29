@@ -40,16 +40,20 @@ struct _IdePreferencesAddinInterface
   GTypeInterface parent_interface;
 
   void (*load)   (IdePreferencesAddin  *self,
-                  IdePreferencesWindow *preferences);
+                  IdePreferencesWindow *preferences,
+                  IdeContext           *context);
   void (*unload) (IdePreferencesAddin  *self,
-                  IdePreferencesWindow *preferences);
+                  IdePreferencesWindow *preferences,
+                  IdeContext           *context);
 };
 
 IDE_AVAILABLE_IN_ALL
 void ide_preferences_addin_load   (IdePreferencesAddin  *self,
-                                   IdePreferencesWindow *preferences);
+                                   IdePreferencesWindow *preferences,
+                                   IdeContext           *context);
 IDE_AVAILABLE_IN_ALL
 void ide_preferences_addin_unload (IdePreferencesAddin  *self,
-                                   IdePreferencesWindow *preferences);
+                                   IdePreferencesWindow *preferences,
+                                   IdeContext           *context);
 
 G_END_DECLS

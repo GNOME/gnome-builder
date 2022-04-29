@@ -53,7 +53,8 @@ static const IdePreferenceItemEntry items[] = {
 
 static void
 gbp_quick_highlight_preferences_load (IdePreferencesAddin  *addin,
-                                      IdePreferencesWindow *window)
+                                      IdePreferencesWindow *window,
+                                      IdeContext           *context)
 {
   GbpQuickHighlightPreferences *self = (GbpQuickHighlightPreferences *)addin;
 

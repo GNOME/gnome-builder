@@ -40,6 +40,7 @@ struct _IdePreferencesWindow
   IdePreferencesMode mode;
 
   IdeExtensionSetAdapter *addins;
+  IdeContext             *context;
 
   GtkToggleButton    *search_button;
   GtkButton          *back_button;
@@ -87,6 +88,7 @@ G_DEFINE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, ADW_TYPE_APPL
 
 enum {
   PROP_0,
+  PROP_CONTEXT,
   PROP_MODE,
   N_PROPS
 };
@@ -297,7 +299,7 @@ ide_preferences_window_extension_added (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_PREFERENCES_WINDOW (self));
   g_assert (IDE_IS_PREFERENCES_ADDIN (exten));
 
-  ide_preferences_addin_load (IDE_PREFERENCES_ADDIN (exten), self);
+  ide_preferences_addin_load (IDE_PREFERENCES_ADDIN (exten), self, self->context);
 
   IDE_EXIT;
 }
@@ -317,7 +319,7 @@ ide_preferences_window_extension_removed (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_PREFERENCES_WINDOW (self));
   g_assert (IDE_IS_PREFERENCES_ADDIN (exten));
 
-  ide_preferences_addin_unload (IDE_PREFERENCES_ADDIN (exten), self);
+  ide_preferences_addin_unload (IDE_PREFERENCES_ADDIN (exten), self, self->context);
 
   IDE_EXIT;
 }
@@ -377,6 +379,8 @@ ide_preferences_window_dispose (GObject *object)
 
   ide_clear_and_destroy_object (&self->addins);
 
+  g_clear_object (&self->context);
+
   g_clear_pointer (&self->settings, g_hash_table_unref);
   g_clear_handle_id (&self->rebuild_source, g_source_remove);
 
@@ -421,6 +425,10 @@ ide_preferences_window_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CONTEXT:
+      g_value_set_object (value, self->context);
+      break;
+
     case PROP_MODE:
       g_value_set_enum (value, self->mode);
       break;
@@ -440,6 +448,10 @@ ide_preferences_window_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CONTEXT:
+      self->context = g_value_dup_object (value);
+      break;
+
     case PROP_MODE:
       self->mode = g_value_get_enum (value);
       break;
@@ -468,6 +480,13 @@ ide_preferences_window_class_init (IdePreferencesWindowClass *klass)
                        IDE_TYPE_PREFERENCES_MODE,
                        IDE_PREFERENCES_MODE_EMPTY,
                        (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CONTEXT] =
+    g_param_spec_object ("context",
+                         "Context",
+                         "The project context, if any",
+                         IDE_TYPE_CONTEXT,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -500,9 +519,11 @@ ide_preferences_window_init (IdePreferencesWindow *self)
 }
 
 GtkWidget *
-ide_preferences_window_new (IdePreferencesMode mode)
+ide_preferences_window_new (IdePreferencesMode  mode,
+                            IdeContext         *context)
 {
   return g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
+                       "context", context,
                        "mode", mode,
                        NULL);
 }

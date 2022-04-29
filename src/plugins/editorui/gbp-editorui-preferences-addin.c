@@ -250,11 +250,13 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
 }
 
 static void
-gbp_editorui_preferences_addin_add_languages (IdePreferencesWindow *window)
+gbp_editorui_preferences_addin_add_languages (IdePreferencesWindow *window,
+                                              const char           *lang_path)
 {
   GtkSourceLanguageManager *langs;
   const char * const *lang_ids;
   IdePreferencePageEntry *lpages;
+  IdePreferenceItemEntry _items[G_N_ELEMENTS (lang_items)];
   guint j = 0;
 
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
@@ -287,8 +289,12 @@ gbp_editorui_preferences_addin_add_languages (IdePreferencesWindow *window)
   for (guint i = 0; i < j; i++)
     lpages[i].priority = i;
 
+  memcpy (_items, lang_items, sizeof _items);
+  for (guint i = 0; i < G_N_ELEMENTS (_items); i++)
+    _items[i].path = lang_path;
+
   ide_preferences_window_add_pages (window, lpages, j, NULL);
-  ide_preferences_window_add_items (window, lang_items, G_N_ELEMENTS (lang_items), window, NULL);
+  ide_preferences_window_add_items (window, _items, G_N_ELEMENTS (_items), window, NULL);
 
   g_free (lpages);
 }
@@ -296,26 +302,36 @@ gbp_editorui_preferences_addin_add_languages (IdePreferencesWindow *window)
 
 static void
 gbp_editorui_preferences_addin_load (IdePreferencesAddin  *addin,
-                                     IdePreferencesWindow *window)
+                                     IdePreferencesWindow *window,
+                                     IdeContext           *context)
 {
   GbpEditoruiPreferencesAddin *self = (GbpEditoruiPreferencesAddin *)addin;
+  IdePreferencesMode mode;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_EDITORUI_PREFERENCES_ADDIN (self));
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+  g_assert (!context || IDE_IS_CONTEXT (context));
 
-  if (ide_preferences_window_get_mode (window) == IDE_PREFERENCES_MODE_APPLICATION)
+  mode = ide_preferences_window_get_mode (window);
+
+  if (mode == IDE_PREFERENCES_MODE_APPLICATION)
     {
       ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
       ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
       ide_preferences_window_add_item (window, "appearance", "preview", "scheme", 0,
                                        ide_preferences_builtin_add_schemes, window, NULL);
+      gbp_editorui_preferences_addin_add_languages (window, LANG_PATH);
     }
+  else if (mode == IDE_PREFERENCES_MODE_PROJECT && IDE_IS_CONTEXT (context))
+    {
+      g_autofree char *project_id = ide_context_dup_project_id (context);
+      g_autofree char *project_lang_path = g_strdup_printf ("/org/gnome/builder/projects/%s/languages/*", project_id);
 
-  /* TODO: Apply prefix for project overrides! */
-  gbp_editorui_preferences_addin_add_languages (window);
+      gbp_editorui_preferences_addin_add_languages (window, project_lang_path);
+    }
 
   IDE_EXIT;
 }

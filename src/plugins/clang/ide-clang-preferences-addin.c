@@ -70,12 +70,14 @@ static const IdePreferenceItemEntry items[] = {
 
 static void
 ide_clang_preferences_addin_load (IdePreferencesAddin  *addin,
-                                  IdePreferencesWindow *window)
+                                  IdePreferencesWindow *window,
+                                  IdeContext           *context)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+  g_assert (!context || IDE_IS_CONTEXT (context));
 
   ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
   ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
@@ -85,12 +87,14 @@ ide_clang_preferences_addin_load (IdePreferencesAddin  *addin,
 
 static void
 ide_clang_preferences_addin_unload (IdePreferencesAddin  *addin,
-                                    IdePreferencesWindow *window)
+                                    IdePreferencesWindow *window,
+                                    IdeContext           *context)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+  g_assert (!context || IDE_IS_CONTEXT (context));
 
   /* TODO: Remove gsettings switches */
 
