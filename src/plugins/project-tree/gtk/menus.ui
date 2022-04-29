@@ -46,6 +46,14 @@
         <attribute name="action">project-tree.open-in-terminal</attribute>
       </item>
     </section>
+    <section id="project-tree-menu-find-section">
+      <attribute name="after">project-tree-menu-open-section</attribute>
+      <attribute name="before">project-tree-menu-foundry-section</attribute>
+    </section>
+    <section id="project-tree-menu-foundry-section">
+      <attribute name="after">project-tree-menu-find-section</attribute>
+      <attribute name="before">project-tree-menu-destructive-section</attribute>
+    </section>
     <section id="project-tree-menu-destructive-section">
       <item>
         <attribute name="id">project-tree-menu-rename</attribute>

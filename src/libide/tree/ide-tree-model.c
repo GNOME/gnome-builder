@@ -56,9 +56,9 @@ static void tree_drag_dest_iface_init   (GtkTreeDragDestIface   *iface);
 static void tree_drag_source_iface_init (GtkTreeDragSourceIface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTreeModel, ide_tree_model, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, tree_model_iface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST, tree_drag_dest_iface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE, tree_drag_source_iface_init))
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, tree_model_iface_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST, tree_drag_dest_iface_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE, tree_drag_source_iface_init))
 
 enum {
   PROP_0,

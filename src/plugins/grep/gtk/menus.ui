@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <interface>
   <menu id="project-tree-menu">
-    <section id="project-tree-menu-placeholder2">
+    <section id="project-tree-menu-find-section">
       <item>
         <attribute name="hidden-when">action-disabled</attribute>
         <attribute name="label" translatable="yes">_Find in Files</attribute>

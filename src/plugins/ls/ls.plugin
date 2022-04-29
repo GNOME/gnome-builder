@@ -2,6 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2018 Christian Hergert
+Depends=project-tree;
 Description=List files in a directory as a view
 Embedded=_gbp_ls_register_types
 Hidden=true

@@ -14,7 +14,7 @@
     </section>
   </menu>
   <menu id="project-tree-menu">
-    <section id="project-tree-menu-buildui">
+    <section id="project-tree-menu-foundry-section">
       <item>
         <attribute name="id">project-tree-menu-build</attribute>
         <attribute name="hidden-when">action-disabled</attribute>

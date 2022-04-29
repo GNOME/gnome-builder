@@ -426,7 +426,7 @@ gbp_rename_file_popover_init (GbpRenameFilePopover *self)
                            G_CONNECT_SWAPPED);
 
   controller = gtk_event_controller_focus_new ();
-  g_signal_connect_object (self->entry,
+  g_signal_connect_object (controller,
                            "enter",
                            G_CALLBACK (gbp_rename_file_popover__entry_focus_in_event),
                            self,
