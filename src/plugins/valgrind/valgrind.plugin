@@ -2,7 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2017-2022 Christian Hergert
-Depends=project-tree;
+Depends=project-tree;buidui;
 Description=Provides integration with valgrind
 Embedded=_gbp_valgrind_register_types
 Module=valgrind
