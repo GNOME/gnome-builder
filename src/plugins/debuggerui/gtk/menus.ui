@@ -22,7 +22,6 @@
             <attribute name="label" translatable="yes">Run with _Debugger</attribute>
             <attribute name="action">buildui.run-with-handler</attribute>
             <attribute name="target" type="s">'debugger'</attribute>
-            <attribute name="hidden-when">action-disabled</attribute>
           </item>
         </section>
       </submenu>
