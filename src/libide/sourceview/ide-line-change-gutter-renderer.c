@@ -354,6 +354,7 @@ ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *kl
   renderer_class->begin = ide_line_change_gutter_renderer_begin;
   renderer_class->snapshot_line = ide_line_change_gutter_renderer_snapshot_line;
   renderer_class->change_buffer = ide_line_change_gutter_renderer_change_buffer;
+  renderer_class->query_data = NULL; /* opt out */
 
   added_quark = g_quark_from_static_string ("added");
   changed_quark = g_quark_from_static_string ("changed");

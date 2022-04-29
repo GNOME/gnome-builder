@@ -1555,6 +1555,7 @@ gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
   renderer_class->activate = gbp_omni_gutter_renderer_activate;
   renderer_class->change_buffer = gbp_omni_gutter_renderer_change_buffer;
   renderer_class->change_view = gbp_omni_gutter_renderer_change_view;
+  renderer_class->query_data = NULL; /* opt out */
 
   properties [PROP_SHOW_LINE_CHANGES] =
     g_param_spec_boolean ("show-line-changes", NULL, NULL, TRUE,
