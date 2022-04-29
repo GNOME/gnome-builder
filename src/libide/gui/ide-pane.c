@@ -22,13 +22,105 @@
 
 #include "config.h"
 
+#include <libide-tree.h>
+
 #include "ide-pane.h"
 
-G_DEFINE_TYPE (IdePane, ide_pane, PANEL_TYPE_WIDGET)
+typedef struct
+{
+  GList *popovers;
+} IdePanePrivate;
+
+static void popover_positioner_iface_init (IdePopoverPositionerInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (IdePane, ide_pane, PANEL_TYPE_WIDGET,
+                         G_ADD_PRIVATE (IdePane)
+                         G_IMPLEMENT_INTERFACE (IDE_TYPE_POPOVER_POSITIONER, popover_positioner_iface_init))
+
+static void
+ide_pane_popover_closed_cb (IdePane    *self,
+                            GtkPopover *popover)
+{
+  IdePanePrivate *priv = ide_pane_get_instance_private (self);
+
+  g_assert (IDE_IS_PANE (self));
+  g_assert (GTK_IS_POPOVER (popover));
+
+  g_signal_handlers_disconnect_by_func (popover,
+                                        G_CALLBACK (ide_pane_popover_closed_cb),
+                                        self);
+  priv->popovers = g_list_remove (priv->popovers, popover);
+  gtk_widget_unparent (GTK_WIDGET (popover));
+}
+
+static void
+ide_pane_popover_positioner_present (IdePopoverPositioner *positioner,
+                                     GtkPopover           *popover,
+                                     GtkWidget            *relative_to,
+                                     const GdkRectangle   *pointing_to)
+{
+  IdePane *self = (IdePane *)positioner;
+  IdePanePrivate *priv = ide_pane_get_instance_private (self);
+  GdkRectangle translated;
+  double x, y;
+
+  g_assert (IDE_IS_PANE (self));
+  g_assert (GTK_IS_POPOVER (popover));
+  g_assert (GTK_IS_WIDGET (relative_to));
+  g_assert (pointing_to != NULL);
+
+  gtk_widget_translate_coordinates (GTK_WIDGET (relative_to),
+                                    GTK_WIDGET (self),
+                                    pointing_to->x, pointing_to->y,
+                                    &x, &y);
+  translated = (GdkRectangle) { x, y, pointing_to->width, pointing_to->height };
+  gtk_popover_set_pointing_to (popover, &translated);
+
+  priv->popovers = g_list_append (priv->popovers, popover);
+  gtk_widget_set_parent (GTK_WIDGET (popover), GTK_WIDGET (self));
+  g_signal_connect_object (popover,
+                           "closed",
+                           G_CALLBACK (ide_pane_popover_closed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_popover_popup (popover);
+}
+
+static void
+popover_positioner_iface_init (IdePopoverPositionerInterface *iface)
+{
+  iface->present = ide_pane_popover_positioner_present;
+}
+
+static void
+ide_pane_size_allocate (GtkWidget *widget,
+                        int        width,
+                        int        height,
+                        int        baseline)
+{
+  IdePane *self = (IdePane *)widget;
+  IdePanePrivate *priv = ide_pane_get_instance_private (self);
+
+  g_assert (IDE_IS_PANE (self));
+
+  GTK_WIDGET_CLASS (ide_pane_parent_class)->size_allocate (widget, width, height, baseline);
+
+  for (const GList *iter = priv->popovers; iter != NULL; iter = iter->next)
+    {
+      GtkPopover *popover = iter->data;
+
+      g_assert (GTK_IS_POPOVER (popover));
+
+      gtk_popover_present (popover);
+    }
+}
 
 static void
 ide_pane_class_init (IdePaneClass *klass)
 {
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->size_allocate = ide_pane_size_allocate;
 }
 
 static void
