@@ -2,7 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2016-2018 Christian Hergert
-Depends=buildui;
+Depends=buildui;project-tree;
 Description=Integration with the Sysprof system profiler
 Embedded=_gbp_sysprof_register_types
 Hidden=true
