@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include <libide-gui.h>
 #include <libide-projects.h>
 #include <libide-tree.h>
 
@@ -72,10 +73,12 @@ gbp_grep_tree_addin_load (IdeTreeAddin *addin,
                           IdeTree      *tree,
                           IdeTreeModel *model)
 {
-  GbpGrepTreeAddin *self = (GbpGrepTreeAddin *)addin;
   static const GActionEntry actions[] = {
     { "find-in-files", find_in_files_action },
   };
+
+  GbpGrepTreeAddin *self = (GbpGrepTreeAddin *)addin;
+  GtkWidget *pane;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GREP_TREE_ADDIN (self));
@@ -83,6 +86,9 @@ gbp_grep_tree_addin_load (IdeTreeAddin *addin,
   g_assert (IDE_IS_TREE_MODEL (model));
 
   self->tree = tree;
+
+  pane = gtk_widget_get_ancestor (GTK_WIDGET (tree), IDE_TYPE_PANE);
+  g_assert (IDE_IS_PANE (pane));
 
   self->group = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (self->group),
