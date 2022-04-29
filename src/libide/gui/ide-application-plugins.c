@@ -226,9 +226,9 @@ _ide_application_load_plugin (IdeApplication *self,
 }
 
 static void
-ide_application_plugins_load_plugin_cb (IdeApplication *self,
-                                        PeasPluginInfo *plugin_info,
-                                        PeasEngine     *engine)
+ide_application_plugins_load_plugin_after_cb (IdeApplication *self,
+                                              PeasPluginInfo *plugin_info,
+                                              PeasEngine     *engine)
 {
   const gchar *data_dir;
   const gchar *module_dir;
@@ -265,15 +265,23 @@ ide_application_plugins_load_plugin_cb (IdeApplication *self,
 }
 
 static void
-ide_application_plugins_unload_plugin_cb (IdeApplication *self,
-                                          PeasPluginInfo *plugin_info,
-                                          PeasEngine     *engine)
+ide_application_plugins_unload_plugin_after_cb (IdeApplication *self,
+                                                PeasPluginInfo *plugin_info,
+                                                PeasEngine     *engine)
 {
+  const gchar *module_dir;
+  const gchar *module_name;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (plugin_info != NULL);
   g_assert (PEAS_IS_ENGINE (engine));
 
+  module_dir = peas_plugin_info_get_module_dir (plugin_info);
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+
+  g_debug ("Unloaded plugin \"%s\" with module-dir \"%s\"",
+           module_name, module_dir);
 }
 
 /**
@@ -296,15 +304,15 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
 
   g_signal_connect_object (engine,
                            "load-plugin",
-                           G_CALLBACK (ide_application_plugins_load_plugin_cb),
+                           G_CALLBACK (ide_application_plugins_load_plugin_after_cb),
                            self,
-                           G_CONNECT_SWAPPED);
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (engine,
                            "unload-plugin",
-                           G_CALLBACK (ide_application_plugins_unload_plugin_cb),
+                           G_CALLBACK (ide_application_plugins_unload_plugin_after_cb),
                            self,
-                           G_CONNECT_SWAPPED);
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   /* Ensure that our embedded plugins are allowed early access to
    * start loading (before we ever look at anything on disk). This
