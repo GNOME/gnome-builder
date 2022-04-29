@@ -375,6 +375,82 @@ ide_source_view_root (GtkWidget *widget)
 }
 
 static void
+ide_source_view_menu_popup_action (GtkWidget  *widget,
+                                   const char *action_name,
+                                   GVariant   *param)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  GtkTextView *text_view = (GtkTextView *)widget;
+  GtkTextBuffer *buffer;
+  GtkTextIter iter;
+  GdkRectangle iter_location;
+  GdkRectangle visible_rect;
+  gboolean is_visible;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (ide_str_equal0 (action_name, "menu.popup"));
+  g_assert (param == NULL);
+
+  if (self->popup_menu == NULL)
+    {
+      GMenuModel *model;
+
+      model = G_MENU_MODEL (self->joined_menu);
+      self->popup_menu = GTK_POPOVER (gtk_popover_menu_new_from_model (model));
+      gtk_widget_set_parent (GTK_WIDGET (self->popup_menu), widget);
+      gtk_popover_set_position (self->popup_menu, GTK_POS_BOTTOM);
+      gtk_popover_set_has_arrow (self->popup_menu, FALSE);
+      gtk_widget_set_halign (GTK_WIDGET (self->popup_menu), GTK_ALIGN_START);
+    }
+
+  buffer = gtk_text_view_get_buffer (text_view);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter,
+                                    gtk_text_buffer_get_insert (buffer));
+  gtk_text_view_get_iter_location (text_view, &iter, &iter_location);
+  gtk_text_view_get_visible_rect (text_view, &visible_rect);
+
+  is_visible = (iter_location.x + iter_location.width > visible_rect.x &&
+                iter_location.x < visible_rect.x + visible_rect.width &&
+                iter_location.y + iter_location.height > visible_rect.y &&
+                iter_location.y < visible_rect.y + visible_rect.height);
+
+  if (is_visible)
+    {
+      gtk_text_view_buffer_to_window_coords (text_view,
+                                             GTK_TEXT_WINDOW_WIDGET,
+                                             iter_location.x,
+                                             iter_location.y,
+                                             &iter_location.x,
+                                             &iter_location.y);
+
+      gtk_popover_set_pointing_to (self->popup_menu, &iter_location);
+    }
+
+  gtk_popover_popup (self->popup_menu);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_size_allocate (GtkWidget *widget,
+                               int        width,
+                               int        height,
+                               int        baseline)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_WIDGET (widget));
+
+  GTK_WIDGET_CLASS (ide_source_view_parent_class)->size_allocate (widget, width, height, baseline);
+
+  if (self->popup_menu != NULL)
+    gtk_popover_present (self->popup_menu);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -386,6 +462,7 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&self->joined_menu);
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->font_desc, pango_font_description_free);
+  g_clear_pointer ((GtkWidget **)&self->popup_menu, gtk_widget_unparent);
 
   g_assert (self->completion_providers == NULL);
 
@@ -476,6 +553,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   object_class->set_property = ide_source_view_set_property;
 
   widget_class->root = ide_source_view_root;
+  widget_class->size_allocate = ide_source_view_size_allocate;
 
   properties [PROP_LINE_HEIGHT] =
     g_param_spec_double ("line-height",
@@ -506,6 +584,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, ide_source_view_menu_popup_action);
 
   /**
    * IdeSourceView::populate-menu:
@@ -539,7 +619,7 @@ ide_source_view_init (IdeSourceView *self)
                     NULL);
 
   /* Setup our extra menu so that consumers can use
-   * ide_source_view_append_men() or similar to update menus.
+   * ide_source_view_append_menu() or similar to update menus.
    */
   self->joined_menu = ide_joined_menu_new ();
   gtk_text_view_set_extra_menu (GTK_TEXT_VIEW (self),

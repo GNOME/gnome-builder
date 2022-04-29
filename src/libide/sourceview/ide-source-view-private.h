@@ -53,6 +53,7 @@ struct _IdeSourceView
    * addins to extend it.
    */
   IdeJoinedMenu *joined_menu;
+  GtkPopover *popup_menu;
 
   /* Various addins for different ways of extending the
    * GtkSourceView. These are managed in ide-source-view-addins.c

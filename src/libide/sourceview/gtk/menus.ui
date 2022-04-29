@@ -51,8 +51,6 @@
         <attribute name="accel">Delete</attribute>
       </item>
     </section>
-    <section id="ide-source-view-popup-menu-spellcheck-section">
-    </section>
     <section id="ide-source-view-popup-menu-highlighting-section">
       <submenu id="ide-source-view-popup-menu-highlighting-submenu">
         <attribute name="label" translatable="yes">_Highlighting</attribute>
