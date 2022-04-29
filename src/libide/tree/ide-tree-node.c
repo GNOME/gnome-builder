@@ -24,6 +24,7 @@
 
 #include <glib/gi18n.h>
 
+#include "ide-popover-positioner.h"
 #include "ide-tree-model.h"
 #include "ide-tree-node.h"
 #include "ide-tree-private.h"
@@ -1664,10 +1665,10 @@ ide_tree_node_get_path (IdeTreeNode *self)
   return NULL;
 }
 
-static void
-ide_tree_node_get_area (IdeTreeNode  *node,
-                        IdeTree      *tree,
-                        GdkRectangle *area)
+void
+_ide_tree_node_get_area (IdeTreeNode  *node,
+                         IdeTree      *tree,
+                         GdkRectangle *area)
 {
   GtkTreeViewColumn *column;
   g_autoptr(GtkTreePath) path = NULL;
@@ -1692,6 +1693,7 @@ static gboolean
 ide_tree_node_show_popover_timeout_cb (gpointer data)
 {
   PopupRequest *popreq = data;
+  GtkWidget *positioner;
   GdkRectangle rect;
   GtkAllocation alloc;
 
@@ -1699,7 +1701,7 @@ ide_tree_node_show_popover_timeout_cb (gpointer data)
   g_assert (IDE_IS_TREE_NODE (popreq->self));
   g_assert (GTK_IS_POPOVER (popreq->popover));
 
-  ide_tree_node_get_area (popreq->self, popreq->tree, &rect);
+  _ide_tree_node_get_area (popreq->self, popreq->tree, &rect);
   gtk_widget_get_allocation (GTK_WIDGET (popreq->tree), &alloc);
 
   if ((rect.x + rect.width) > (alloc.x + alloc.width))
@@ -1723,8 +1725,11 @@ ide_tree_node_show_popover_timeout_cb (gpointer data)
       break;
     }
 
-  gtk_popover_set_pointing_to (popreq->popover, &rect);
-  gtk_popover_popup (popreq->popover);
+  if ((positioner = gtk_widget_get_ancestor (GTK_WIDGET (popreq->tree), IDE_TYPE_POPOVER_POSITIONER)))
+    ide_popover_positioner_present (IDE_POPOVER_POSITIONER (positioner),
+                                    popreq->popover,
+                                    GTK_WIDGET (popreq->tree),
+                                    &rect);
 
   g_clear_object (&popreq->self);
   g_clear_object (&popreq->popover);
@@ -1747,7 +1752,7 @@ _ide_tree_node_show_popover (IdeTreeNode *self,
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
   gtk_tree_view_get_visible_rect (GTK_TREE_VIEW (tree), &visible_rect);
-  ide_tree_node_get_area (self, tree, &cell_area);
+  _ide_tree_node_get_area (self, tree, &cell_area);
   gtk_tree_view_convert_bin_window_to_tree_coords (GTK_TREE_VIEW (tree),
                                                    cell_area.x,
                                                    cell_area.y,

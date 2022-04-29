@@ -27,6 +27,7 @@
 #include <libide-threading.h>
 
 #include "ide-cell-renderer-status.h"
+#include "ide-popover-positioner.h"
 #include "ide-tree.h"
 #include "ide-tree-model.h"
 #include "ide-tree-node.h"
@@ -59,9 +60,6 @@ typedef struct
 
   /* Our context menu popover */
   GtkPopover *popover;
-
-  /* Temporary for show_at_node API */
-  GtkPopover *show_at_node_popover;
 
   /* Stashed drop information to propagate on drop */
   GdkDragAction drop_action;
@@ -406,17 +404,31 @@ ide_tree_popup (IdeTree        *self,
                 double          target_y)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  const GdkRectangle area = { target_x, target_y, 0, 0 };
+  GdkRectangle area;
+  GtkTextDirection dir;
+  GtkWidget *positioner;
 
   g_assert (IDE_IS_TREE (self));
   g_assert (IDE_IS_TREE_NODE (node));
 
-  if (priv->popover == NULL)
+  if (priv->context_menu == NULL)
     return;
 
-  gtk_popover_set_pointing_to (priv->popover, &area);
+  if (!(positioner = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_POPOVER_POSITIONER)))
+    return;
 
-  ide_tree_show_popover_at_node (self, node, priv->popover);
+  priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (priv->context_menu)));
+  g_object_ref_sink (priv->popover);
+
+  dir = gtk_widget_get_direction (GTK_WIDGET (self));
+  gtk_popover_set_position (priv->popover, dir == GTK_TEXT_DIR_LTR ? GTK_POS_RIGHT : GTK_POS_LEFT);
+
+  _ide_tree_node_get_area (node, self, &area);
+
+  ide_popover_positioner_present (IDE_POPOVER_POSITIONER (positioner),
+                                  priv->popover,
+                                  GTK_WIDGET (self),
+                                  &area);
 }
 
 static void
@@ -509,26 +521,6 @@ ide_tree_query_tooltip (GtkWidget  *widget,
 }
 
 static void
-ide_tree_size_allocate (GtkWidget *widget,
-                        int        width,
-                        int        height,
-                        int        baseline)
-{
-  IdeTree *self = (IdeTree *)widget;
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-
-  g_assert (IDE_IS_TREE (self));
-
-  GTK_WIDGET_CLASS (ide_tree_parent_class)->size_allocate (widget, width, height, baseline);
-
-  if (priv->popover != NULL)
-    gtk_popover_present (priv->popover);
-
-  if (priv->show_at_node_popover != NULL)
-    gtk_popover_present (priv->show_at_node_popover);
-}
-
-static void
 ide_tree_dispose (GObject *object)
 {
   IdeTree *self = (IdeTree *)object;
@@ -540,8 +532,7 @@ ide_tree_dispose (GObject *object)
   if ((model = ide_tree_get_model (self)))
     _ide_tree_model_release_addins (model);
 
-  g_clear_pointer ((GtkWidget **)&priv->popover, gtk_widget_unparent);
-  g_clear_pointer ((GtkWidget **)&priv->show_at_node_popover, gtk_widget_unparent);
+  g_clear_object (&priv->popover);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (self), NULL);
 
@@ -567,7 +558,6 @@ ide_tree_class_init (IdeTreeClass *klass)
   object_class->dispose = ide_tree_dispose;
 
   widget_class->query_tooltip = ide_tree_query_tooltip;
-  widget_class->size_allocate = ide_tree_size_allocate;
 
   tree_view_class->row_activated = ide_tree_row_activated;
   tree_view_class->row_expanded = ide_tree_row_expanded;
@@ -641,27 +631,6 @@ ide_tree_new (void)
   return g_object_new (IDE_TYPE_TREE, NULL);
 }
 
-static void
-ide_tree_popover_closed_cb (IdeTree    *self,
-                            GtkPopover *popover)
-{
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-
-  g_assert (IDE_IS_TREE (self));
-  g_assert (GTK_IS_POPOVER (popover));
-
-  if (priv->popover == popover)
-    {
-      gtk_widget_unparent (GTK_WIDGET (popover));
-      priv->popover = NULL;
-    }
-  else if (priv->show_at_node_popover == popover)
-    {
-      gtk_widget_unparent (GTK_WIDGET (popover));
-      priv->show_at_node_popover = NULL;
-    }
-}
-
 void
 ide_tree_set_context_menu (IdeTree *self,
                            GMenu   *menu)
@@ -672,17 +641,7 @@ ide_tree_set_context_menu (IdeTree *self,
   g_return_if_fail (!menu || G_IS_MENU (menu));
 
   if (g_set_object (&priv->context_menu, menu))
-    {
-      GtkTextDirection dir;
-
-      if (priv->popover != NULL)
-        gtk_widget_unparent (GTK_WIDGET (priv->popover));
-
-      priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (priv->context_menu)));
-      dir = gtk_widget_get_direction (GTK_WIDGET (self));
-      gtk_popover_set_position (priv->popover, dir == GTK_TEXT_DIR_LTR ? GTK_POS_RIGHT : GTK_POS_LEFT);
-      gtk_widget_set_parent (GTK_WIDGET (priv->popover), GTK_WIDGET (self));
-    }
+    g_clear_object (&priv->popover);
 }
 
 void
@@ -690,21 +649,10 @@ ide_tree_show_popover_at_node (IdeTree     *self,
                                IdeTreeNode *node,
                                GtkPopover  *popover)
 {
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
   g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (popover)) == NULL);
-
-  g_clear_pointer ((GtkWidget **)&priv->show_at_node_popover, gtk_widget_unparent);
-  priv->show_at_node_popover = popover;
-  gtk_widget_set_parent (GTK_WIDGET (popover), GTK_WIDGET (self));
-  g_signal_connect_object (popover,
-                           "closed",
-                           G_CALLBACK (ide_tree_popover_closed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   _ide_tree_node_show_popover (node, self, popover);
 }
