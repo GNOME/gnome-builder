@@ -41,6 +41,7 @@ struct _GbpBuilduiTreeAddin
   IdeTreeModel *model;
 
   /* Owned references */
+  GtkWidget    *pane;
   GActionGroup *group;
 };
 
@@ -310,6 +311,7 @@ gbp_buildui_tree_addin_load (IdeTreeAddin *addin,
 {
   GbpBuilduiTreeAddin *self = (GbpBuilduiTreeAddin *)addin;
   IdeContext *context;
+  GtkWidget *pane;
   static const GActionEntry actions[] = {
     { "build", gbp_buildui_tree_addin_action_build },
     { "rebuild", gbp_buildui_tree_addin_action_rebuild },
@@ -329,12 +331,16 @@ gbp_buildui_tree_addin_load (IdeTreeAddin *addin,
   if (!ide_context_has_project (context))
     return;
 
+  pane = gtk_widget_get_ancestor (GTK_WIDGET (tree), IDE_TYPE_PANE);
+  g_assert (IDE_IS_PANE (pane));
+
+  self->pane = g_object_ref (pane);
   self->group = G_ACTION_GROUP (g_simple_action_group_new ());
   g_action_map_add_action_entries (G_ACTION_MAP (self->group),
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
-  gtk_widget_insert_action_group (GTK_WIDGET (tree), "buildui", self->group);
+  gtk_widget_insert_action_group (pane, "buildui", self->group);
 }
 
 static void
@@ -349,8 +355,9 @@ gbp_buildui_tree_addin_unload (IdeTreeAddin *addin,
   g_assert (IDE_IS_TREE (tree));
   g_assert (IDE_IS_TREE_MODEL (model));
 
-  gtk_widget_insert_action_group (GTK_WIDGET (tree), "buildui", NULL);
+  gtk_widget_insert_action_group (self->pane, "buildui", NULL);
 
+  g_clear_object (&self->pane);
   g_clear_object (&self->group);
   self->model = NULL;
   self->tree = NULL;
