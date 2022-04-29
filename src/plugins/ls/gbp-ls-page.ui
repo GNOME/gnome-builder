@@ -16,6 +16,7 @@
               <object class="GtkTreeViewColumn" id="name_column">
                 <property name="title" translatable="yes">Name</property>
                 <property name="expand">true</property>
+                <property name="resizable">true</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkCellRendererPixbuf" id="pixbuf_cell">
@@ -45,6 +46,7 @@
             <child>
               <object class="GtkTreeViewColumn" id="size_column">
                 <property name="title" translatable="yes">Size</property>
+                <property name="resizable">true</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkCellRendererText" id="size_cell">
@@ -58,6 +60,7 @@
             <child>
               <object class="GtkTreeViewColumn" id="modified_column">
                 <property name="title" translatable="yes">Modified</property>
+                <property name="resizable">true</property>
                 <property name="visible">true</property>
                 <child>
                   <object class="GtkCellRendererText" id="modified_cell">
