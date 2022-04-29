@@ -112,7 +112,7 @@ modified_cell_data_func (GtkCellLayout   *cell_layout,
                       -1);
 
   if (when != NULL)
-    format = g_date_time_format (when, "%X %x");
+    format = ide_g_date_time_format_for_display (when);
 
   g_object_set (cell, "text", format, NULL);
 }
