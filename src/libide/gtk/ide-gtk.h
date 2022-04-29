@@ -31,31 +31,33 @@
 G_BEGIN_DECLS
 
 IDE_AVAILABLE_IN_ALL
-gboolean ide_gtk_show_uri_on_window          (GtkWindow        *window,
-                                              const char       *uri,
-                                              gint64            timestamp,
-                                              GError           **error);
+gboolean ide_gtk_show_uri_on_window           (GtkWindow        *window,
+                                               const char       *uri,
+                                               gint64            timestamp,
+                                               GError           **error);
 IDE_AVAILABLE_IN_ALL
-void     ide_gtk_window_present              (GtkWindow         *window);
+void     ide_gtk_window_present               (GtkWindow         *window);
 IDE_AVAILABLE_IN_ALL
-void      ide_gtk_progress_bar_start_pulsing (GtkProgressBar    *progress);
+void      ide_gtk_progress_bar_start_pulsing  (GtkProgressBar    *progress);
 IDE_AVAILABLE_IN_ALL
-void      ide_gtk_progress_bar_stop_pulsing  (GtkProgressBar    *progress);
+void      ide_gtk_progress_bar_stop_pulsing   (GtkProgressBar    *progress);
 IDE_AVAILABLE_IN_ALL
-void      ide_gtk_widget_show_with_fade      (GtkWidget         *widget);
+void      ide_gtk_widget_show_with_fade       (GtkWidget         *widget);
 IDE_AVAILABLE_IN_ALL
-void      ide_gtk_widget_hide_with_fade      (GtkWidget         *widget);
+void      ide_gtk_widget_hide_with_fade       (GtkWidget         *widget);
 IDE_AVAILABLE_IN_ALL
-void      ide_gtk_list_store_insert_sorted   (GtkListStore      *store,
-                                              GtkTreeIter       *iter,
-                                              gconstpointer      key,
-                                              guint              compare_column,
-                                              GCompareDataFunc   compare_func,
-                                              gpointer           compare_data);
+void      ide_gtk_list_store_insert_sorted    (GtkListStore      *store,
+                                               GtkTreeIter       *iter,
+                                               gconstpointer      key,
+                                               guint              compare_column,
+                                               GCompareDataFunc   compare_func,
+                                               gpointer           compare_data);
 IDE_AVAILABLE_IN_ALL
-void       ide_gtk_widget_destroyed          (GtkWidget         *widget,
-                                              GtkWidget        **location);
+void       ide_gtk_widget_destroyed           (GtkWidget         *widget,
+                                               GtkWidget        **location);
 IDE_AVAILABLE_IN_ALL
-char      *ide_g_time_span_to_label          (GTimeSpan          span);
+char      *ide_g_time_span_to_label           (GTimeSpan          span);
+IDE_AVAILABLE_IN_ALL
+char      *ide_g_date_time_format_for_display (GDateTime         *self);
 
 G_END_DECLS

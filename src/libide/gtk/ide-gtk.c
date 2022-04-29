@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-threading.h>
 
 #include "ide-animation.h"
@@ -414,4 +416,53 @@ ide_g_time_span_to_label (GTimeSpan span)
   else
     return g_strdup_printf ("%02"G_GINT64_FORMAT":%02"G_GINT64_FORMAT":%02"G_GINT64_FORMAT,
                             hours, minutes, seconds);
+}
+
+/**
+ * ide_g_date_time_format_for_display:
+ * @self: A #GDateTime
+ *
+ * Helper function to create a human-friendly string describing approximately
+ * how long ago a #GDateTime is.
+ *
+ * Returns: (transfer full): A newly allocated string describing the
+ *   date and time imprecisely such as "Yesterday".
+ */
+char *
+ide_g_date_time_format_for_display (GDateTime *self)
+{
+  g_autoptr(GDateTime) now = NULL;
+  GTimeSpan diff;
+  gint years;
+
+  /*
+   * TODO:
+   *
+   * There is probably a lot more we can do here to be friendly for
+   * various locales, but this will get us started.
+   */
+
+  g_return_val_if_fail (self != NULL, NULL);
+
+  now = g_date_time_new_now_utc ();
+  diff = g_date_time_difference (now, self) / G_USEC_PER_SEC;
+
+  if (diff < 0)
+    return g_strdup ("");
+  else if (diff < (60 * 45))
+    return g_strdup (_("Just now"));
+  else if (diff < (60 * 90))
+    return g_strdup (_("An hour ago"));
+  else if (diff < (60 * 60 * 24 * 2))
+    return g_strdup (_("Yesterday"));
+  else if (diff < (60 * 60 * 24 * 7))
+    return g_date_time_format (self, "%A");
+  else if (diff < (60 * 60 * 24 * 365))
+    return g_date_time_format (self, "%OB");
+  else if (diff < (60 * 60 * 24 * 365 * 1.5))
+    return g_strdup (_("About a year ago"));
+
+  years = MAX (2, diff / (60 * 60 * 24 * 365));
+
+  return g_strdup_printf (ngettext ("About %u year ago", "About %u years ago", years), years);
 }
