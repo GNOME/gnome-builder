@@ -35,6 +35,7 @@ ide_preferences_addin_default_init (IdePreferencesAddinInterface *iface)
  * ide_preferences_addin_load:
  * @self: An #IdePreferencesAddin.
  * @preferences: The preferences container implementation.
+ * @context: (nullable): an #IdeContext or %NULL
  *
  * This interface method is called when a preferences addin is initialized. It
  * could be initialized from multiple preferences implementations, so consumers
@@ -42,19 +43,22 @@ ide_preferences_addin_default_init (IdePreferencesAddinInterface *iface)
  */
 void
 ide_preferences_addin_load (IdePreferencesAddin  *self,
-                            IdePreferencesWindow *preferences)
+                            IdePreferencesWindow *preferences,
+                            IdeContext           *context)
 {
   g_return_if_fail (IDE_IS_PREFERENCES_ADDIN (self));
   g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (preferences));
+  g_return_if_fail (!context || IDE_IS_CONTEXT (context));
 
   if (IDE_PREFERENCES_ADDIN_GET_IFACE (self)->load)
-    IDE_PREFERENCES_ADDIN_GET_IFACE (self)->load (self, preferences);
+    IDE_PREFERENCES_ADDIN_GET_IFACE (self)->load (self, preferences, context);
 }
 
 /**
  * ide_preferences_addin_unload:
  * @self: An #IdePreferencesAddin.
  * @preferences: The preferences container implementation.
+ * @context: (nullable): an #IdeContext or %NULL
  *
  * This interface method is called when the preferences addin should remove all
  * controls added to @preferences. This could happen during desctruction of
@@ -62,11 +66,13 @@ ide_preferences_addin_load (IdePreferencesAddin  *self,
  */
 void
 ide_preferences_addin_unload (IdePreferencesAddin  *self,
-                              IdePreferencesWindow *preferences)
+                              IdePreferencesWindow *preferences,
+                              IdeContext           *context)
 {
   g_return_if_fail (IDE_IS_PREFERENCES_ADDIN (self));
   g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (preferences));
+  g_return_if_fail (!context || IDE_IS_CONTEXT (context));
 
   if (IDE_PREFERENCES_ADDIN_GET_IFACE (self)->unload)
-    IDE_PREFERENCES_ADDIN_GET_IFACE (self)->unload (self, preferences);
+    IDE_PREFERENCES_ADDIN_GET_IFACE (self)->unload (self, preferences, context);
 }

@@ -2664,6 +2664,7 @@ ide_workbench_action_configure (IdeWorkbench *self,
 
       window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
                              "mode", IDE_PREFERENCES_MODE_PROJECT,
+                             "context", self->context,
                              "default-width", 1050,
                              "default-height", 700,
                              "title", window_title,

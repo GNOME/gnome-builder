@@ -90,7 +90,8 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePreferencesWindow, ide_preferences_window, IDE, PREFERENCES_WINDOW, AdwApplicationWindow)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget          *ide_preferences_window_new        (IdePreferencesMode             mode);
+GtkWidget          *ide_preferences_window_new        (IdePreferencesMode             mode,
+                                                       IdeContext                    *context);
 IDE_AVAILABLE_IN_ALL
 IdePreferencesMode  ide_preferences_window_get_mode   (IdePreferencesWindow          *self);
 IDE_AVAILABLE_IN_ALL

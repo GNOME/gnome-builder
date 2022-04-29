@@ -46,7 +46,8 @@ static const IdePreferenceItemEntry items[] = {
 
 static void
 gbp_spell_preferences_addin_load (IdePreferencesAddin  *addin,
-                                  IdePreferencesWindow *window)
+                                  IdePreferencesWindow *window,
+                                  IdeContext           *context)
 {
   GbpSpellPreferencesAddin *self = (GbpSpellPreferencesAddin *)addin;
 
@@ -63,7 +64,8 @@ gbp_spell_preferences_addin_load (IdePreferencesAddin  *addin,
 
 static void
 gbp_spell_preferences_addin_unload (IdePreferencesAddin  *addin,
-                                    IdePreferencesWindow *window)
+                                    IdePreferencesWindow *window,
+                                    IdeContext           *context)
 {
   GbpSpellPreferencesAddin *self = (GbpSpellPreferencesAddin *)addin;
 

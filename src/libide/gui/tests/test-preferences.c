@@ -111,7 +111,7 @@ main (int argc,
   g_resources_register (ide_gui_get_resource ());
 
   main_loop = g_main_loop_new (NULL, FALSE);
-  window = IDE_PREFERENCES_WINDOW (ide_preferences_window_new (IDE_PREFERENCES_MODE_EMPTY));
+  window = IDE_PREFERENCES_WINDOW (ide_preferences_window_new (IDE_PREFERENCES_MODE_EMPTY, NULL));
 
   gtk_window_set_default_size (GTK_WINDOW (window), 1200, 900);
 
