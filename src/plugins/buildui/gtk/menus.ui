@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="ide-primary-workspace-surfaces-menu">
-    <section id="ide-primary-workspace-surfaces-menu-section">
-      <item>
-        <attribute name="accel">&lt;alt&gt;comma</attribute>
-        <attribute name="id">surface-menu-config</attribute>
-        <attribute name="label" translatable="yes">Build Preferences</attribute>
-        <attribute name="role">normal</attribute>
-        <attribute name="action">win.surface</attribute>
-        <attribute name="target">buildui</attribute>
-        <attribute name="verb-icon-name">builder-build-configure-symbolic</attribute>
-      </item>
-    </section>
-  </menu>
   <menu id="project-tree-menu">
     <section id="project-tree-menu-foundry-section">
       <item>
