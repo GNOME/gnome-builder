@@ -66,5 +66,8 @@ GIcon        *_ide_tree_node_apply_emblems            (IdeTreeNode     *self,
                                                        GIcon           *base);
 void          _ide_tree_node_apply_colors             (IdeTreeNode     *self,
                                                        GtkCellRenderer *cell);
+void          _ide_tree_node_get_area                 (IdeTreeNode     *self,
+                                                       IdeTree         *tree,
+                                                       GdkRectangle    *area);
 
 G_END_DECLS
