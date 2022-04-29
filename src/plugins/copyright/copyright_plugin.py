@@ -104,7 +104,7 @@ class CopyrightBufferAddin(Ide.Object, Ide.BufferAddin):
             iter = match_end
 
 class CopyrightPreferencesAddin(GObject.Object, Ide.PreferencesAddin):
-    def do_load(self, window):
+    def do_load(self, window, context):
         Ide.add_preference_items(window, [
             {
                 'kind': 'toggle',
