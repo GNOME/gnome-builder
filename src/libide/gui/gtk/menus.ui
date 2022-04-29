@@ -173,18 +173,5 @@
     <section id="open-document-section"/>
     <section id="new-terminal-section"/>
   </menu>
-  <menu id="project-tree-menu">
-    <section id="project-tree-menu-placeholder0"/>
-    <section id="project-tree-menu-new-section"/>
-    <section id="project-tree-menu-placeholder1"/>
-    <section id="project-tree-menu-open-section"/>
-    <section id="project-tree-menu-buildui"/>
-    <section id="project-tree-menu-vcs"/>
-    <section id="project-tree-menu-placeholder2"/>
-    <section id="project-tree-menu-destructive-section"/>
-    <section id="project-tree-menu-placeholder3"/>
-    <section id="project-tree-menu-display-options-parent-section"/>
-    <section id="project-tree-menu-placeholder4"/>
-  </menu>
 </interface>
 
