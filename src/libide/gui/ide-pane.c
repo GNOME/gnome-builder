@@ -37,11 +37,31 @@ G_DEFINE_TYPE_WITH_CODE (IdePane, ide_pane, PANEL_TYPE_WIDGET,
                          G_ADD_PRIVATE (IdePane)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_POPOVER_POSITIONER, popover_positioner_iface_init))
 
+static gboolean
+release_popover_in_idle (gpointer data)
+{
+  struct {
+    IdePane *self;
+    GtkPopover *popover;
+  } *pair = data;
+
+  gtk_widget_unparent (GTK_WIDGET (pair->popover));
+  g_clear_object (&pair->self);
+  g_clear_object (&pair->popover);
+  g_slice_free1 (sizeof *pair, pair);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_pane_popover_closed_cb (IdePane    *self,
                             GtkPopover *popover)
 {
   IdePanePrivate *priv = ide_pane_get_instance_private (self);
+  struct {
+    IdePane *self;
+    GtkPopover *popover;
+  } *pair;
 
   g_assert (IDE_IS_PANE (self));
   g_assert (GTK_IS_POPOVER (popover));
@@ -50,7 +70,19 @@ ide_pane_popover_closed_cb (IdePane    *self,
                                         G_CALLBACK (ide_pane_popover_closed_cb),
                                         self);
   priv->popovers = g_list_remove (priv->popovers, popover);
-  gtk_widget_unparent (GTK_WIDGET (popover));
+
+  /* Perform the unparent from the idle as the popover menu will not be
+   * activating the action until after the popover is closed. That way
+   * we don't lose our action muxer before the action is fired.
+   */
+  pair = g_slice_alloc0 (sizeof *pair);
+  pair->self = g_object_ref (self);
+  pair->popover = g_object_ref (popover);
+  g_idle_add_full (G_PRIORITY_HIGH,
+                   release_popover_in_idle,
+                   pair,
+                   NULL);
+
 }
 
 static void
