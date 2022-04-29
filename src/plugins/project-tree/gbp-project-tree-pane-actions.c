@@ -703,8 +703,6 @@ _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self)
         }
     }
 
-  g_print ("Update actions: is_file=%d is_dir=%d\n", is_file, is_dir);
-
   action_map_set (G_ACTION_MAP (self->actions), "new-file",
                   "enabled", is_file,
                   NULL);
