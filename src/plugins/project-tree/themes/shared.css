@@ -1,7 +1,0 @@
-ideeditorsidebar treeview.project-tree {
-  -GtkTreeView-expander-size: 0;
-  -GtkTreeView-horizontal-separator: 0;
-  -GtkTreeView-vertical-separator: 6;
-  -gtk-icon-source: none;
-  padding-left: 6px;
-}
