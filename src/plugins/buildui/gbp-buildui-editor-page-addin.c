@@ -63,16 +63,17 @@ parse_version (const gchar *str,
 
 static void
 on_push_snippet_cb (GbpBuilduiEditorPageAddin *self,
-                    IdeSnippet                *snippet,
-                    const GtkTextIter         *iter,
+                    GtkSourceSnippet          *snippet,
+                    GtkTextIter               *iter,
                     IdeSourceView             *view)
 {
   g_autoptr(IdeContext) context = NULL;
   g_autofree gchar *project_version = NULL;
+  GtkSourceSnippetContext *snippet_context;
   GtkTextBuffer *buffer;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_SNIPPET (snippet));
+  g_assert (GTK_SOURCE_IS_SNIPPET (snippet));
   g_assert (IDE_IS_SOURCE_VIEW (view));
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
@@ -105,9 +106,10 @@ on_push_snippet_cb (GbpBuilduiEditorPageAddin *self,
         }
     }
 
-  ide_snippet_context_add_variable (ide_snippet_get_context (snippet),
-                                    "project_version",
-                                    project_version ?: "");
+  snippet_context = gtk_source_snippet_get_context (snippet);
+  gtk_source_snippet_context_set_variable (snippet_context,
+                                           "project_version",
+                                           project_version ?: "");
 }
 
 static void
