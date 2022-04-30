@@ -467,6 +467,10 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->sel.bg))
     gtk_style_context_lookup_color (context, "theme_selected_bg_color", &self->sel.bg);
 
+  /* Make selection translucent like main area */
+  if (self->sel.bg.alpha == 1.)
+    self->sel.bg.alpha = .3;
+
   /* Extract common values from style schemes. */
   if (!get_style_rgba (scheme, "line-numbers", FOREGROUND, &self->text.fg))
     self->text.fg = fg;
