@@ -13,6 +13,7 @@
                 <property name="hexpand">true</property>
                 <property name="vexpand">true</property>
                 <property name="show-line-numbers">false</property>
+                <property name="left-margin">0</property>
                 <child>
                   <object class="GtkEventControllerFocus">
                     <signal name="enter" handler="ide_editor_page_focus_enter_cb" swapped="true" object="IdeEditorPage"/>
