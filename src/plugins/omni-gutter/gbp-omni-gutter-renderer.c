@@ -95,6 +95,8 @@ struct _GbpOmniGutterRenderer
     gboolean bold;
   } text, current, bkpt, ctpt, sel;
   GdkRGBA stopped_bg;
+  GdkRGBA current_line;
+  GdkRGBA view_bg;
   struct {
     GdkRGBA add;
     GdkRGBA remove;
@@ -459,6 +461,12 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   context = gtk_widget_get_style_context (GTK_WIDGET (view));
   gtk_style_context_get_color (context, &fg);
 
+  if (!get_style_rgba (scheme, "text", BACKGROUND, &self->view_bg))
+    {
+      if (!gtk_style_context_lookup_color (context, "view_bg_color", &self->view_bg))
+        self->view_bg.alpha = .0;
+    }
+
   if (!get_style_rgba (scheme, "selection", FOREGROUND, &self->sel.fg))
     {
       if (!gtk_style_context_lookup_color (context, "theme_selected_fg_color", &self->sel.fg))
@@ -490,6 +498,9 @@ reload_style_colors (GbpOmniGutterRenderer *self,
 
   if (!style_get_is_bold (scheme, "current-line-number", &self->current.bold))
     self->current.bold = TRUE;
+
+  if (!get_style_rgba (scheme, "current-line", BACKGROUND, &self->current_line))
+    self->current_line = transparent;
 
   /* These -0uilder: prefix values come from Builder's style-scheme xml
    * files, but other style schemes may also support them now too.
@@ -1191,6 +1202,21 @@ draw_diagnostic (GbpOmniGutterRenderer *self,
 }
 
 static void
+gbp_omni_gutter_renderer_snapshot (GtkWidget   *widget,
+                                   GtkSnapshot *snapshot)
+{
+  GbpOmniGutterRenderer *self = (GbpOmniGutterRenderer *)widget;
+  int width = gtk_widget_get_width (widget);
+  int height = gtk_widget_get_height (widget);
+
+  gtk_snapshot_append_color (snapshot,
+                             &self->view_bg,
+                             &GRAPHENE_RECT_INIT (width - RIGHT_MARGIN - CHANGE_WIDTH, 0, RIGHT_MARGIN + CHANGE_WIDTH, height));
+
+  GTK_WIDGET_CLASS (gbp_omni_gutter_renderer_parent_class)->snapshot (widget, snapshot);
+}
+
+static void
 gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
                                         GtkSnapshot             *snapshot,
                                         GtkSourceGutterLines    *lines,
@@ -1215,7 +1241,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
    */
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  highlight_line = !self->draw_has_selection && gtk_source_view_get_highlight_current_line (GTK_SOURCE_VIEW (view));
+  highlight_line = gtk_source_view_get_highlight_current_line (GTK_SOURCE_VIEW (view));
 
   gtk_source_gutter_lines_get_line_yrange (lines, line, GTK_SOURCE_GUTTER_RENDERER_ALIGNMENT_MODE_CELL, &line_y, &line_height);
   width = self->draw_width;
@@ -1224,11 +1250,20 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
     {
       LineInfo *info = &g_array_index (self->lines, LineInfo, line - self->begin_line);
       gboolean active = gtk_source_gutter_lines_is_prelit (lines, line);
+      gboolean is_cursor = gtk_source_gutter_lines_is_cursor (lines, line);
+      gboolean is_selected_line = gtk_source_gutter_lines_has_qclass (lines, line, selection_quark);
       gboolean has_breakpoint = FALSE;
       gboolean bold = FALSE;
 
+
+      if (!self->draw_has_selection && is_cursor)
+        gtk_snapshot_append_color (snapshot,
+                                   &self->current_line,
+                                   &GRAPHENE_RECT_INIT (width - RIGHT_MARGIN - CHANGE_WIDTH, line_y,
+                                                        RIGHT_MARGIN + CHANGE_WIDTH, line_height));
+
       /* Draw our selection edges which overlap the gutter */
-      if (gtk_source_gutter_lines_has_qclass (lines, line, selection_quark))
+      if (is_selected_line)
         {
           gboolean is_first = line == 0 || line == gtk_source_gutter_lines_get_first (lines) || !gtk_source_gutter_lines_has_qclass (lines, line - 1, selection_quark);
           gboolean is_last = line == gtk_source_gutter_lines_get_last (lines) || !gtk_source_gutter_lines_has_qclass (lines, line + 1, selection_quark);
@@ -1246,10 +1281,12 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
         gtk_snapshot_append_color (snapshot,
                                    &self->stopped_bg,
                                    &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
-      else if (highlight_line && !self->draw_has_selection && gtk_source_gutter_lines_is_cursor (lines, line))
+      else if (highlight_line &&
+               !self->draw_has_selection &&
+               gtk_source_gutter_lines_is_cursor (lines, line))
         gtk_snapshot_append_color (snapshot,
                                    &self->current.bg,
-                                   &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
+                                   &GRAPHENE_RECT_INIT (0, line_y, width - RIGHT_MARGIN, line_height));
 
       /* Draw line changes next so it will show up underneath the
        * breakpoint arrows.
@@ -1638,11 +1675,14 @@ static void
 gbp_omni_gutter_renderer_class_init (GbpOmniGutterRendererClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkSourceGutterRendererClass *renderer_class = GTK_SOURCE_GUTTER_RENDERER_CLASS (klass);
 
   object_class->dispose = gbp_omni_gutter_renderer_dispose;
   object_class->get_property = gbp_omni_gutter_renderer_get_property;
   object_class->set_property = gbp_omni_gutter_renderer_set_property;
+
+  widget_class->snapshot = gbp_omni_gutter_renderer_snapshot;
 
   renderer_class->snapshot_line = gbp_omni_gutter_renderer_snapshot_line;
   renderer_class->begin = gbp_omni_gutter_renderer_begin;
