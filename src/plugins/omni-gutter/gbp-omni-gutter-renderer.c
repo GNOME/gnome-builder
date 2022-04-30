@@ -1276,7 +1276,6 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
       gboolean has_breakpoint = FALSE;
       gboolean bold = FALSE;
 
-
       if (!self->draw_has_selection && is_cursor)
         gtk_snapshot_append_color (snapshot,
                                    &self->current_line,
@@ -1319,7 +1318,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
         {
           has_breakpoint = IS_BREAKPOINT (info);
           if (has_breakpoint || active)
-            draw_breakpoint_bg (self, snapshot, line_y, width - RIGHT_MARGIN, line_height, active, info);
+            draw_breakpoint_bg (self, snapshot, line_y, width, line_height, active, info);
         }
 
       /*
