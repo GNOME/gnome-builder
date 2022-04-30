@@ -474,7 +474,10 @@ reload_style_colors (GbpOmniGutterRenderer *self,
     }
 
   if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->sel.bg))
-    gtk_style_context_lookup_color (context, "theme_selected_bg_color", &self->sel.bg);
+    {
+      if (!gtk_style_context_lookup_color (context, "theme_selected_bg_color", &self->sel.bg))
+        gtk_style_context_lookup_color (context, "accent_bg_color", &self->sel.bg);
+    }
 
   /* Make selection translucent like main area */
   if (self->sel.bg.alpha == 1.)
