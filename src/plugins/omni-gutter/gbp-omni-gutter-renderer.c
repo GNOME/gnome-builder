@@ -1163,7 +1163,7 @@ draw_line_change (GbpOmniGutterRenderer *self,
     {
       gtk_snapshot_append_color (snapshot,
                                  info->is_add ? &self->changes.add : &self->changes.change,
-                                 &GRAPHENE_RECT_INIT (width - CHANGE_WIDTH, line_y, CHANGE_WIDTH, height));
+                                 &GRAPHENE_RECT_INIT (width - CHANGE_WIDTH - 1, line_y, CHANGE_WIDTH, height));
     }
 
   if (info->is_prev_delete)
