@@ -52,6 +52,7 @@
  * Since: 3.32
  */
 
+#define RIGHT_MARGIN 4
 #define CHANGE_WIDTH 2
 #define DELETE_WIDTH 5
 #define DELETE_HEIGHT 2
@@ -805,6 +806,9 @@ gbp_omni_gutter_renderer_measure (GbpOmniGutterRenderer *self)
   if (self->show_line_changes)
     size += CHANGE_WIDTH + 2;
 
+  /* Extra margin */
+  size += RIGHT_MARGIN;
+
   if (size != old_width)
     {
       /* Update the size and ensure we are re-drawn */
@@ -941,7 +945,7 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   /* Create a new layout for rendering lines to */
   self->layout = gtk_widget_create_pango_layout (GTK_WIDGET (self), "");
   pango_layout_set_alignment (self->layout, PANGO_ALIGN_RIGHT);
-  pango_layout_set_width (self->layout, (width - BREAKPOINT_XPAD - 4) * PANGO_SCALE);
+  pango_layout_set_width (self->layout, (width - BREAKPOINT_XPAD - RIGHT_MARGIN - 4) * PANGO_SCALE);
 }
 
 static gboolean
@@ -1251,7 +1255,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
        * breakpoint arrows.
        */
       if (self->show_line_changes && IS_LINE_CHANGE (info))
-        draw_line_change (self, snapshot, line_y, width, line_height, active, info);
+        draw_line_change (self, snapshot, line_y, width - RIGHT_MARGIN, line_height, active, info);
 
       /* Draw breakpoint arrows if we have any breakpoints that could
        * potentially match.
@@ -1260,7 +1264,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
         {
           has_breakpoint = IS_BREAKPOINT (info);
           if (has_breakpoint || active)
-            draw_breakpoint_bg (self, snapshot, line_y, width, line_height, active, info);
+            draw_breakpoint_bg (self, snapshot, line_y, width - RIGHT_MARGIN, line_height, active, info);
         }
 
       /* Now that we might have an altered background for the line,
@@ -1268,7 +1272,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
        * color for symbolic icon).
        */
       if (self->show_line_diagnostics && IS_DIAGNOSTIC (info))
-        draw_diagnostic (self, snapshot, line_y, width, line_height, active, info);
+        draw_diagnostic (self, snapshot, line_y, width - RIGHT_MARGIN, line_height, active, info);
 
       /*
        * Now draw the line numbers if we are showing them. Ensure
