@@ -93,10 +93,9 @@ struct _GbpOmniGutterRenderer
     GdkRGBA fg;
     GdkRGBA bg;
     gboolean bold;
-  } text, current, bkpt, ctpt, sel;
+  } text, current, bkpt, ctpt, sel, view;
   GdkRGBA stopped_bg;
   GdkRGBA current_line;
-  GdkRGBA view_bg;
   struct {
     GdkRGBA add;
     GdkRGBA remove;
@@ -450,6 +449,7 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   GtkStyleContext *context;
   GtkSourceView *view;
   GdkRGBA fg;
+  gboolean had_sel_fg = FALSE;
 
   g_assert (GBP_IS_OMNI_GUTTER_RENDERER (self));
   g_assert (!scheme || GTK_SOURCE_IS_STYLE_SCHEME (scheme));
@@ -461,10 +461,16 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   context = gtk_widget_get_style_context (GTK_WIDGET (view));
   gtk_style_context_get_color (context, &fg);
 
-  if (!get_style_rgba (scheme, "text", BACKGROUND, &self->view_bg))
+  if (!get_style_rgba (scheme, "text", BACKGROUND, &self->view.bg))
     {
-      if (!gtk_style_context_lookup_color (context, "view_bg_color", &self->view_bg))
-        self->view_bg.alpha = .0;
+      if (!gtk_style_context_lookup_color (context, "view_bg_color", &self->view.bg))
+        self->view.bg.alpha = .0;
+    }
+
+  if (!get_style_rgba (scheme, "text", FOREGROUND, &self->view.fg))
+    {
+      if (!gtk_style_context_lookup_color (context, "view_fg_color", &self->view.fg))
+        self->view.fg = fg;
     }
 
   if (!get_style_rgba (scheme, "selection", FOREGROUND, &self->sel.fg))
@@ -472,16 +478,23 @@ reload_style_colors (GbpOmniGutterRenderer *self,
       if (!gtk_style_context_lookup_color (context, "theme_selected_fg_color", &self->sel.fg))
         self->sel.fg = fg;
     }
+  else
+    {
+      had_sel_fg = FALSE;
+    }
 
   if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->sel.bg))
     {
       if (!gtk_style_context_lookup_color (context, "theme_selected_bg_color", &self->sel.bg))
         gtk_style_context_lookup_color (context, "accent_bg_color", &self->sel.bg);
+      /* Make selection like libadwaita would */
+      self->sel.bg.alpha = .3;
     }
-
-  /* Make selection translucent like main area */
-  if (self->sel.bg.alpha == 1.)
-    self->sel.bg.alpha = .3;
+  else if (!had_sel_fg)
+    {
+      /* gtksourceview will fixup bad selections */
+      self->sel.bg.alpha = .3;
+    }
 
   /* Extract common values from style schemes. */
   if (!get_style_rgba (scheme, "line-numbers", FOREGROUND, &self->text.fg))
@@ -1076,24 +1089,29 @@ draw_selection_bg (GbpOmniGutterRenderer *self,
                    double                 line_y,
                    double                 width,
                    double                 height,
-                   gboolean               is_first_line,
-                   gboolean               is_last_last)
+                   GtkSourceGutterLines  *lines,
+                   guint                  line)
 {
-  GskRoundedRect rounded_rect;
+  if (self->sel.bg.alpha == .0)
+    return;
 
-  rounded_rect = GSK_ROUNDED_RECT_INIT (2, line_y, width - 2, height);
+  {
+    GskRoundedRect rounded_rect = GSK_ROUNDED_RECT_INIT (2, line_y, width - 2, height);
+    gboolean is_first_line = line == 0 || line == gtk_source_gutter_lines_get_first (lines) || !gtk_source_gutter_lines_has_qclass (lines, line - 1, selection_quark);
+    gboolean is_last_line = line == gtk_source_gutter_lines_get_last (lines) || !gtk_source_gutter_lines_has_qclass (lines, line + 1, selection_quark);
 
-  if (is_first_line)
-    rounded_rect.corner[0] = GRAPHENE_SIZE_INIT (9, 9);
+    if (is_first_line)
+      rounded_rect.corner[0] = GRAPHENE_SIZE_INIT (9, 9);
 
-  if (is_last_last)
-    rounded_rect.corner[3] = GRAPHENE_SIZE_INIT (9, 9);
+    if (is_last_line)
+      rounded_rect.corner[3] = GRAPHENE_SIZE_INIT (9, 9);
 
-  gtk_snapshot_push_rounded_clip (snapshot, &rounded_rect);
-  gtk_snapshot_append_color (snapshot,
-                             &self->sel.bg,
-                             &GRAPHENE_RECT_INIT (2, line_y, width - 2, height));
-  gtk_snapshot_pop (snapshot);
+    gtk_snapshot_push_rounded_clip (snapshot, &rounded_rect);
+    gtk_snapshot_append_color (snapshot,
+                               &self->sel.bg,
+                               &GRAPHENE_RECT_INIT (2, line_y, width - 2, height));
+    gtk_snapshot_pop (snapshot);
+  }
 }
 
 static void
@@ -1213,7 +1231,7 @@ gbp_omni_gutter_renderer_snapshot (GtkWidget   *widget,
   int height = gtk_widget_get_height (widget);
 
   gtk_snapshot_append_color (snapshot,
-                             &self->view_bg,
+                             &self->view.bg,
                              &GRAPHENE_RECT_INIT (width - RIGHT_MARGIN - CHANGE_WIDTH, 0, RIGHT_MARGIN + CHANGE_WIDTH, height));
 
   GTK_WIDGET_CLASS (gbp_omni_gutter_renderer_parent_class)->snapshot (widget, snapshot);
@@ -1265,15 +1283,6 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
                                    &GRAPHENE_RECT_INIT (width - RIGHT_MARGIN - CHANGE_WIDTH, line_y,
                                                         RIGHT_MARGIN + CHANGE_WIDTH, line_height));
 
-      /* Draw our selection edges which overlap the gutter */
-      if (is_selected_line)
-        {
-          gboolean is_first = line == 0 || line == gtk_source_gutter_lines_get_first (lines) || !gtk_source_gutter_lines_has_qclass (lines, line - 1, selection_quark);
-          gboolean is_last = line == gtk_source_gutter_lines_get_last (lines) || !gtk_source_gutter_lines_has_qclass (lines, line + 1, selection_quark);
-
-          draw_selection_bg (self, snapshot, line_y, self->draw_width_with_margin, line_height, is_first, is_last);
-        }
-
       /*
        * Draw some background for the line so that it looks like the
        * breakpoint arrow draws over it. Debugger break line takes
@@ -1291,6 +1300,12 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
                                    &self->current.bg,
                                    &GRAPHENE_RECT_INIT (0, line_y, width - RIGHT_MARGIN, line_height));
 
+      /* If the selection bg is solid, we need to draw it under the line text
+       * and various other line features.
+       */
+      if (is_selected_line && self->sel.bg.alpha == 1.)
+        draw_selection_bg (self, snapshot, line_y, self->draw_width_with_margin, line_height, lines, line);
+
       /* Draw line changes next so it will show up underneath the
        * breakpoint arrows.
        */
@@ -1306,13 +1321,6 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
           if (has_breakpoint || active)
             draw_breakpoint_bg (self, snapshot, line_y, width - RIGHT_MARGIN, line_height, active, info);
         }
-
-      /* Now that we might have an altered background for the line,
-       * we can draw the diagnostic icon (with possibly altered
-       * color for symbolic icon).
-       */
-      if (self->show_line_diagnostics && IS_DIAGNOSTIC (info))
-        draw_diagnostic (self, snapshot, line_y, width - RIGHT_MARGIN, line_height, active, info);
 
       /*
        * Now draw the line numbers if we are showing them. Ensure
@@ -1349,7 +1357,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
             }
           else if (gtk_source_gutter_lines_has_qclass (lines, line, selection_quark))
             {
-              rgba = &self->sel.fg;
+              rgba = &self->view.fg;
               bold = self->text.bold;
             }
           else
@@ -1365,6 +1373,20 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
           gtk_snapshot_append_layout (snapshot, self->layout, rgba);
           gtk_snapshot_restore (snapshot);
         }
+
+      /* Draw our selection edges which overlap the gutter. This is drawn last since
+       * they will have alpha to draw over the original text and we want it to blend
+       * in a similar way to the text within the document.
+       */
+      if (is_selected_line && self->sel.bg.alpha < 1.)
+        draw_selection_bg (self, snapshot, line_y, self->draw_width_with_margin, line_height, lines, line);
+
+      /* Now that we might have an altered background for the line,
+       * we can draw the diagnostic icon (with possibly altered
+       * color for symbolic icon).
+       */
+      if (self->show_line_diagnostics && IS_DIAGNOSTIC (info))
+        draw_diagnostic (self, snapshot, line_y, width - RIGHT_MARGIN, line_height, active, info);
     }
 }
 
