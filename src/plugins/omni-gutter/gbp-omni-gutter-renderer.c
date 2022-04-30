@@ -164,6 +164,7 @@ struct _GbpOmniGutterRenderer
   double draw_width;
   double draw_width_with_margin;
   guint draw_has_focus : 1;
+  guint draw_has_selection : 1;
 
   /*
    * Some users might want to toggle off individual features of the
@@ -458,7 +459,10 @@ reload_style_colors (GbpOmniGutterRenderer *self,
   gtk_style_context_get_color (context, &fg);
 
   if (!get_style_rgba (scheme, "selection", FOREGROUND, &self->sel.fg))
-    gtk_style_context_lookup_color (context, "theme_selected_fg_color", &self->sel.fg);
+    {
+      if (!gtk_style_context_lookup_color (context, "theme_selected_fg_color", &self->sel.fg))
+        self->sel.fg = fg;
+    }
 
   if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->sel.bg))
     gtk_style_context_lookup_color (context, "theme_selected_bg_color", &self->sel.bg);
@@ -858,6 +862,7 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
 
   self->stopped_line = -1;
 
+  buffer = GTK_TEXT_BUFFER (gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (renderer)));
   view = IDE_SOURCE_VIEW (gtk_source_gutter_renderer_get_view (renderer));
   left_margin = gtk_text_view_get_left_margin (GTK_TEXT_VIEW (view));
   width = gtk_widget_get_width (GTK_WIDGET (self));
@@ -865,12 +870,12 @@ gbp_omni_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
   self->draw_width = width;
   self->draw_width_with_margin = width + left_margin;
   self->draw_has_focus = gtk_widget_has_focus (GTK_WIDGET (view));
+  self->draw_has_selection = gtk_text_buffer_get_has_selection (buffer);
 
   self->begin_line = gtk_source_gutter_lines_get_first (lines);
   end_line = gtk_source_gutter_lines_get_last (lines);
 
   /* Locate the current stopped breakpoint if any. */
-  buffer = GTK_TEXT_BUFFER (gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (renderer)));
   gtk_text_buffer_get_iter_at_line (buffer, &begin, self->begin_line);
   gtk_text_buffer_get_iter_at_line (buffer, &end, end_line);
   table = gtk_text_buffer_get_tag_table (buffer);
@@ -1202,7 +1207,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
    */
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-  highlight_line = gtk_source_view_get_highlight_current_line (GTK_SOURCE_VIEW (view));
+  highlight_line = !self->draw_has_selection && gtk_source_view_get_highlight_current_line (GTK_SOURCE_VIEW (view));
 
   gtk_source_gutter_lines_get_line_yrange (lines, line, GTK_SOURCE_GUTTER_RENDERER_ALIGNMENT_MODE_CELL, &line_y, &line_height);
   width = self->draw_width;
@@ -1233,7 +1238,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
         gtk_snapshot_append_color (snapshot,
                                    &self->stopped_bg,
                                    &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
-      else if (highlight_line && self->draw_has_focus && gtk_source_gutter_lines_is_cursor (lines, line))
+      else if (highlight_line && !self->draw_has_selection && gtk_source_gutter_lines_is_cursor (lines, line))
         gtk_snapshot_append_color (snapshot,
                                    &self->current.bg,
                                    &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
@@ -1283,15 +1288,21 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
           len = int_to_string (shown_line, &linestr);
           pango_layout_set_text (self->layout, linestr, len);
 
+
           if (has_breakpoint || (self->breakpoints != NULL && active))
             {
               rgba = &self->bkpt.fg;
               bold = self->bkpt.bold;
             }
-          else if (gtk_source_gutter_lines_is_cursor (lines, line))
+          else if (!self->draw_has_selection && gtk_source_gutter_lines_is_cursor (lines, line))
             {
               rgba = &self->current.fg;
               bold = self->current.bold;
+            }
+          else if (gtk_source_gutter_lines_has_qclass (lines, line, selection_quark))
+            {
+              rgba = &self->sel.fg;
+              bold = self->text.bold;
             }
           else
             {
@@ -1683,6 +1694,11 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
                                     self);
   ide_signal_group_connect_object (self->buffer_signals,
                                    "notify::diagnostics",
+                                   G_CALLBACK (gtk_widget_queue_draw),
+                                   self,
+                                   G_CONNECT_SWAPPED);
+  ide_signal_group_connect_object (self->buffer_signals,
+                                   "notify::has-selection",
                                    G_CALLBACK (gtk_widget_queue_draw),
                                    self,
                                    G_CONNECT_SWAPPED);
