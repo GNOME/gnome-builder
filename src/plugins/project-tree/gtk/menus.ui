@@ -96,7 +96,7 @@
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-files-section">
       <item>
-        <attribute name="label" translatable="yes">Reveal File in Project _Tree</attribute>
+        <attribute name="label" translatable="yes">Reveal in Project _Tree</attribute>
         <attribute name="action">project-tree.reveal</attribute>
       </item>
     </section>
