@@ -93,6 +93,8 @@ ide_pane_popover_positioner_present (IdePopoverPositioner *positioner,
 {
   IdePane *self = (IdePane *)positioner;
   IdePanePrivate *priv = ide_pane_get_instance_private (self);
+  g_autoptr(IdePanelPosition) position = NULL;
+  PanelDockPosition edge = 0;
   GdkRectangle translated;
   double x, y;
 
@@ -100,6 +102,15 @@ ide_pane_popover_positioner_present (IdePopoverPositioner *positioner,
   g_assert (GTK_IS_POPOVER (popover));
   g_assert (GTK_IS_WIDGET (relative_to));
   g_assert (pointing_to != NULL);
+
+  if ((position = ide_pane_get_position (self)) &&
+      ide_panel_position_get_edge (position, &edge))
+    {
+      if (edge == PANEL_DOCK_POSITION_START)
+        gtk_popover_set_position (popover, GTK_POS_RIGHT);
+      else
+        gtk_popover_set_position (popover, GTK_POS_LEFT);
+    }
 
   gtk_widget_translate_coordinates (GTK_WIDGET (relative_to),
                                     GTK_WIDGET (self),
