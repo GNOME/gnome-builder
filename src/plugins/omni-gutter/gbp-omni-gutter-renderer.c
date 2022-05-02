@@ -1276,7 +1276,12 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
       gboolean has_breakpoint = FALSE;
       gboolean bold = FALSE;
 
-      if (!self->draw_has_selection && is_cursor)
+      /* Fill in gap for what would look like the "highlight-current-line"
+       * within the textarea that we are pretending to look like.
+       */
+      if (highlight_line &&
+          !self->draw_has_selection &&
+          is_cursor)
         gtk_snapshot_append_color (snapshot,
                                    &self->current_line,
                                    &GRAPHENE_RECT_INIT (width - RIGHT_MARGIN - CHANGE_WIDTH, line_y,
@@ -1294,7 +1299,7 @@ gbp_omni_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
                                    &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
       else if (highlight_line &&
                !self->draw_has_selection &&
-               gtk_source_gutter_lines_is_cursor (lines, line))
+               is_cursor)
         gtk_snapshot_append_color (snapshot,
                                    &self->current.bg,
                                    &GRAPHENE_RECT_INIT (0, line_y, width - RIGHT_MARGIN, line_height));
@@ -1787,6 +1792,10 @@ gbp_omni_gutter_renderer_init (GbpOmniGutterRenderer *self)
   ide_signal_group_connect_swapped (self->view_signals,
                                     "notify::font-desc",
                                     G_CALLBACK (gbp_omni_gutter_renderer_notify_font_desc),
+                                    self);
+  ide_signal_group_connect_swapped (self->view_signals,
+                                    "notify::highlight-current-line",
+                                    G_CALLBACK (gtk_widget_queue_draw),
                                     self);
 }
 
