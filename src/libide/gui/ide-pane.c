@@ -225,3 +225,74 @@ ide_clear_pane (IdePane **location)
   ide_pane_unobserve (self, location);
   ide_pane_destroy (self);
 }
+
+/**
+ * ide_pane_get_position:
+ * @self: a #IdePane
+ *
+ * Gets the position of the panel or %NULL
+ *
+ * Returns: (transfer full) (nullable): an #IdePanelPosition or %NULL
+ */
+IdePanelPosition *
+ide_pane_get_position (IdePane *self)
+{
+  static GType dock_child_type = G_TYPE_INVALID;
+  PanelDockPosition position;
+  IdePanelPosition *ret;
+  GtkWidget *frame;
+  GtkWidget *paned;
+  GtkWidget *edge;
+  guint n_pages;
+  int depth = 0;
+  int row_or_column = 0;
+
+  g_return_val_if_fail (IDE_IS_PANE (self), NULL);
+
+  if (dock_child_type == G_TYPE_INVALID)
+    {
+      if (!(dock_child_type = g_type_from_name ("PanelDockChild")))
+        g_return_val_if_reached (NULL);
+    }
+
+  if (!(frame = gtk_widget_get_ancestor (GTK_WIDGET (self), PANEL_TYPE_FRAME)))
+    g_return_val_if_reached (NULL);
+
+  n_pages = panel_frame_get_n_pages (PANEL_FRAME (frame));
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      if (panel_frame_get_page (PANEL_FRAME (frame), i) == PANEL_WIDGET (self))
+        {
+          depth = i;
+          break;
+        }
+    }
+
+  if (!(paned = gtk_widget_get_ancestor (frame, PANEL_TYPE_PANED)))
+    g_return_val_if_reached (NULL);
+
+  for (GtkWidget *child = gtk_widget_get_first_child (paned);
+       child != NULL && !gtk_widget_is_ancestor (frame, child);
+       child = gtk_widget_get_next_sibling (child))
+    row_or_column++;
+
+  if (!(edge = gtk_widget_get_ancestor (paned, dock_child_type)))
+    g_return_val_if_reached (NULL);
+
+  g_object_get (edge,
+                "position", &position,
+                NULL);
+
+  ret = ide_panel_position_new ();
+  ide_panel_position_set_edge (ret, position);
+  ide_panel_position_set_depth (ret, depth);
+
+  if (position == PANEL_DOCK_POSITION_START ||
+      position == PANEL_DOCK_POSITION_END)
+    ide_panel_position_set_row (ret, row_or_column);
+  else
+    ide_panel_position_set_column (ret, row_or_column);
+
+  return ret;
+}
