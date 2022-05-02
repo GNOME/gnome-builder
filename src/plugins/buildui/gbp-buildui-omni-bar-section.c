@@ -35,7 +35,6 @@ struct _GbpBuilduiOmniBarSection
 
   IdeSignalGroup *build_manager_signals;
 
-  GtkButton      *configure_button;
   GtkLabel       *config_ready_label;
   GtkLabel       *popover_branch_label;
   GtkLabel       *popover_build_message;
@@ -77,7 +76,6 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
   IdePipeline *pipeline;
   const gchar *device_name = NULL;
   const gchar *runtime_name = NULL;
-  const gchar *config_id = "";
   const gchar *display_name = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -90,7 +88,6 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
       IdeRuntime *runtime = ide_config_get_runtime (config);
       IdeDevice *device = ide_pipeline_get_device (pipeline);
 
-      config_id = ide_config_get_id (config);
       display_name = ide_config_get_display_name (config);
 
       if (runtime != NULL)
@@ -106,7 +103,6 @@ gbp_buildui_omni_bar_section_notify_pipeline (GbpBuilduiOmniBarSection *self,
 
   gtk_label_set_label (self->popover_config_label, display_name);
   gtk_label_set_label (self->popover_device_label, device_name);
-  gtk_actionable_set_action_target (GTK_ACTIONABLE (self->configure_button), "s", config_id);
 
   if (runtime_name != NULL)
     {
@@ -300,7 +296,6 @@ gbp_buildui_omni_bar_section_class_init (GbpBuilduiOmniBarSectionClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-omni-bar-section.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, config_ready_label);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, configure_button);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_branch_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_build_message);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiOmniBarSection, popover_build_result_label);
