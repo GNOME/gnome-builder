@@ -58,6 +58,17 @@
         <attribute name="action">build-manager.clean</attribute>
       </item>
     </section>
+    <section id="build-export">
+      <item>
+        <!-- TODO: Instead of having a generic Export via the build-manager,
+          this should move into the Flatpak plugin and have it use
+          flatpak-builder directly (reusing our cachepoints) so that
+          the output is the same as using flatpak-builder from Flathub, etc.
+        -->
+        <attribute name="label" translatable="yes">_Export</attribute>
+        <attribute name="action">build-manager.export</attribute>
+      </item>
+    </section>
     <section id="build-cork">
       <item>
         <attribute name="label" translatable="yes">Stop Build</attribute>
@@ -86,7 +97,6 @@
         <attribute name="action">foundryui.manage-sdks</attribute>
       </item>
     </section>
-    <section id="build-export"/>
   </menu>
   <menu id="run-menu">
     <section id="run-command-section">
