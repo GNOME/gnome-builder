@@ -318,8 +318,14 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
           gboolean selected;
 
           g_object_get (child, "selected", &selected, NULL);
+
           if (selected)
-            infos = g_list_prepend (infos, ide_greeter_row_get_project_info (IDE_GREETER_ROW (child)));
+            {
+              IdeProjectInfo *info;
+
+              if ((info = ide_greeter_row_get_project_info (IDE_GREETER_ROW (child))))
+                infos = g_list_prepend (infos, g_object_ref (info));
+            }
         }
     }
 
