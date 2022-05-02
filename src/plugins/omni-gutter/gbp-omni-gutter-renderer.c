@@ -410,7 +410,10 @@ get_style_rgba (GtkSourceStyleScheme *scheme,
                 int                   type,
                 GdkRGBA              *rgba)
 {
-  GtkSourceStyle *style;
+  GtkSourceLanguageManager *langs;
+  GtkSourceLanguage *def;
+  GtkSourceStyle *style = NULL;
+  const char *fallback = style_name;
 
   g_assert (!scheme || GTK_SOURCE_IS_STYLE_SCHEME (scheme));
   g_assert (style_name != NULL);
@@ -422,7 +425,18 @@ get_style_rgba (GtkSourceStyleScheme *scheme,
   if (scheme == NULL)
     return FALSE;
 
-  if (NULL != (style = gtk_source_style_scheme_get_style (scheme, style_name)))
+  langs = gtk_source_language_manager_get_default ();
+  def = gtk_source_language_manager_get_language (langs, "def");
+
+  g_assert (def != NULL);
+
+  while (style == NULL && fallback != NULL)
+    {
+      if (!(style = gtk_source_style_scheme_get_style (scheme, fallback)))
+        fallback = gtk_source_language_get_style_fallback (def, fallback);
+    }
+
+  if (style != NULL)
     {
       g_autofree gchar *str = NULL;
       gboolean set = FALSE;
