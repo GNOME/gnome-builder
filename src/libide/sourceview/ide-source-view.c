@@ -532,8 +532,12 @@ ide_source_view_set_property (GObject      *object,
       break;
 
     case PROP_LINE_HEIGHT:
-      self->line_height = g_value_get_double (value);
-      ide_source_view_update_css (self);
+      if (self->line_height != g_value_get_double (value))
+        {
+          self->line_height = g_value_get_double (value);
+          ide_source_view_update_css (self);
+          g_object_notify_by_pspec (G_OBJECT (self), pspec);
+        }
       break;
 
     default:
@@ -560,28 +564,28 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                          "Line height",
                          "The line height of all lines",
                          0.5, 10.0, 1.2,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FONT_DESC] =
     g_param_spec_boxed ("font-desc",
                          "Font Description",
                          "The font to use for text within the editor",
                          PANGO_TYPE_FONT_DESCRIPTION,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FONT_SCALE] =
     g_param_spec_int ("font-scale",
                       "Font Scale",
                       "The font scale",
                       G_MININT, G_MAXINT, 0,
-                      (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                      (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ZOOM_LEVEL] =
     g_param_spec_double ("zoom-level",
                          "Zoom Level",
                          "Zoom Level",
                          -G_MAXDOUBLE, G_MAXDOUBLE, 1.0,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
