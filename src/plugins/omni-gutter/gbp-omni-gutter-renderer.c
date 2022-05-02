@@ -52,7 +52,7 @@
  * Since: 3.32
  */
 
-#define RIGHT_MARGIN 4
+#define RIGHT_MARGIN 2
 #define CHANGE_WIDTH 2
 #define DELETE_WIDTH 5
 #define DELETE_HEIGHT 2
