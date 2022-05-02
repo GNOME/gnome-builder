@@ -216,7 +216,7 @@ static const GActionEntry actions[] = {
 #if 0 /* TODO: port GbpBuilduiConfigSurface */
   { "edit-config", on_edit_config_cb, "s" },
 #endif
-  { "view-output", on_view_output_cb },
+  { "show-build-log", on_view_output_cb },
 };
 
 static void
