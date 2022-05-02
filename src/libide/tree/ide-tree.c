@@ -654,6 +654,11 @@ ide_tree_show_popover_at_node (IdeTree     *self,
   g_return_if_fail (GTK_IS_POPOVER (popover));
   g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (popover)) == NULL);
 
+#if 0
+  /* Once this is in GTK, uncomment */
+  gtk_widget_set_action_parent (GTK_WIDGET (popover), GTK_WIDGET (self));
+#endif
+
   _ide_tree_node_show_popover (node, self, popover);
 }
 
