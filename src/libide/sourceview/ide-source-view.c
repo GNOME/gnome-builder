@@ -35,7 +35,10 @@ enum {
   PROP_FONT_SCALE,
   PROP_LINE_HEIGHT,
   PROP_ZOOM_LEVEL,
-  N_PROPS
+  N_PROPS,
+
+  /* Property Overrides */
+  PROP_HIGHLIGHT_CURRENT_LINE,
 };
 
 enum {
@@ -434,6 +437,35 @@ ide_source_view_menu_popup_action (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_focus_enter_cb (IdeSourceView           *self,
+                                GtkEventControllerFocus *focus)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_EVENT_CONTROLLER_FOCUS (focus));
+
+  if (self->highlight_current_line)
+    gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_focus_leave_cb (IdeSourceView           *self,
+                                GtkEventControllerFocus *focus)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_EVENT_CONTROLLER_FOCUS (focus));
+
+  gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self), FALSE);
+
+  IDE_EXIT;
+}
+
+static void
 ide_source_view_size_allocate (GtkWidget *widget,
                                int        width,
                                int        height,
@@ -499,6 +531,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_int (value, self->font_scale);
       break;
 
+    case PROP_HIGHLIGHT_CURRENT_LINE:
+      g_value_set_boolean (value, ide_source_view_get_highlight_current_line (self));
+      break;
+
     case PROP_LINE_HEIGHT:
       g_value_set_double (value, self->line_height);
       break;
@@ -531,6 +567,10 @@ ide_source_view_set_property (GObject      *object,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ZOOM_LEVEL]);
       break;
 
+    case PROP_HIGHLIGHT_CURRENT_LINE:
+      ide_source_view_set_highlight_current_line (self, g_value_get_boolean (value));
+      break;
+
     case PROP_LINE_HEIGHT:
       if (self->line_height != g_value_get_double (value))
         {
@@ -558,6 +598,10 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->root = ide_source_view_root;
   widget_class->size_allocate = ide_source_view_size_allocate;
+
+  g_object_class_override_property (object_class,
+                                    PROP_HIGHLIGHT_CURRENT_LINE,
+                                    "highlight-current-line");
 
   properties [PROP_LINE_HEIGHT] =
     g_param_spec_double ("line-height",
@@ -616,6 +660,7 @@ ide_source_view_init (IdeSourceView *self)
 {
   GtkStyleContext *style_context;
   GtkEventController *click;
+  GtkEventController *focus;
 
   g_signal_connect (self,
                     "notify::buffer",
@@ -639,6 +684,18 @@ ide_source_view_init (IdeSourceView *self)
                             G_CALLBACK (ide_source_view_click_pressed_cb),
                             self);
   gtk_widget_add_controller (GTK_WIDGET (self), click);
+
+  /* Setup focus tracking */
+  focus = gtk_event_controller_focus_new ();
+  g_signal_connect_swapped (focus,
+                            "enter",
+                            G_CALLBACK (ide_source_view_focus_enter_cb),
+                            self);
+  g_signal_connect_swapped (focus,
+                            "leave",
+                            G_CALLBACK (ide_source_view_focus_leave_cb),
+                            self);
+  gtk_widget_add_controller (GTK_WIDGET (self), focus);
 
   /* This is sort of a layer vioaltion, but it's helpful for us to
    * get the system font name and manage it invisibly.
@@ -930,4 +987,32 @@ ide_source_view_jump_to_iter (IdeSourceView     *self,
 
   gtk_adjustment_set_value (hadj, xvalue);
   gtk_adjustment_set_value (vadj, yvalue + top_margin);
+}
+
+gboolean
+ide_source_view_get_highlight_current_line (IdeSourceView *self)
+{
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return self->highlight_current_line;
+}
+
+void
+ide_source_view_set_highlight_current_line (IdeSourceView *self,
+                                            gboolean       highlight_current_line)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  highlight_current_line = !!highlight_current_line;
+
+  if (highlight_current_line != self->highlight_current_line)
+    {
+      self->highlight_current_line = highlight_current_line;
+
+      if (gtk_widget_has_focus (GTK_WIDGET (self)))
+        gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self),
+                                                    highlight_current_line);
+      else
+        g_object_notify (G_OBJECT (self), "highlight-current-line");
+    }
 }
