@@ -46,6 +46,11 @@ void                        ide_source_view_get_visual_position (IdeSourceView  
                                                                  guint                     *line,
                                                                  guint                     *line_column);
 IDE_AVAILABLE_IN_ALL
+gboolean                    ide_source_view_get_highlight_current_line (IdeSourceView *self);
+IDE_AVAILABLE_IN_ALL
+void                        ide_source_view_set_highlight_current_line (IdeSourceView *self,
+                                                                        gboolean highlight_current_line);
+IDE_AVAILABLE_IN_ALL
 double                      ide_source_view_get_zoom_level      (IdeSourceView             *self);
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_set_font_desc       (IdeSourceView             *self,
