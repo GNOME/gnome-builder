@@ -226,15 +226,16 @@ select_range_in_idle_cb (GtkEntry *entry)
 }
 
 static void
-gbp_rename_file_popover__entry_focus_in_event (GbpRenameFilePopover *self,
-                                               GtkEntry             *entry)
+gbp_rename_file_popover__entry_focus_in_event (GbpRenameFilePopover    *self,
+                                               GtkEventControllerFocus *focus)
 {
   g_assert (GBP_IS_RENAME_FILE_POPOVER (self));
-  g_assert (GTK_IS_ENTRY (entry));
+  g_assert (GTK_IS_EVENT_CONTROLLER_FOCUS (focus));
+  g_assert (GTK_IS_ENTRY (self->entry));
 
   g_idle_add_full (G_PRIORITY_DEFAULT,
                    (GSourceFunc) select_range_in_idle_cb,
-                   g_object_ref (entry),
+                   g_object_ref (self->entry),
                    g_object_unref);
 }
 
