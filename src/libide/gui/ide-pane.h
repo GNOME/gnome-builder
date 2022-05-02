@@ -28,6 +28,8 @@
 
 #include <libide-core.h>
 
+#include "ide-panel-position.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PANE (ide_pane_get_type())
@@ -52,5 +54,7 @@ void       ide_pane_unobserve (IdePane  *self,
                                IdePane **location);
 IDE_AVAILABLE_IN_ALL
 void       ide_clear_pane     (IdePane **location);
+IDE_AVAILABLE_IN_ALL
+IdePanelPosition *ide_pane_get_position (IdePane *self);
 
 G_END_DECLS
