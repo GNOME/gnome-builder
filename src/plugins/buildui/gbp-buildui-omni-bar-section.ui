@@ -20,44 +20,10 @@
                     <property name="valign">baseline</property>
                     <property name="hexpand">True</property>
                     <property name="xalign">0</property>
+                    <property name="margin-bottom">12</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
                     </attributes>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton">
-                    <property name="focus_on_click">False</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Update project dependencies</property>
-                    <property name="valign">baseline</property>
-                    <property name="action_name">win.update-dependencies</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon_name">software-update-available-symbolic</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="image-button"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="configure_button">
-                    <property name="focus_on_click">False</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip_text" translatable="yes">Configure build preferences</property>
-                    <property name="valign">baseline</property>
-                    <property name="action_name">win.edit-config</property>
-                    <property name="action_target">''</property>
-                    <child>
-                      <object class="GtkImage">
-                        <property name="icon_name">builder-build-configure-symbolic</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="image-button"/>
-                    </style>
                   </object>
                 </child>
               </object>
@@ -66,6 +32,7 @@
               <object class="GtkGrid">
                 <property name="row_spacing">6</property>
                 <property name="column_spacing">18</property>
+                <property name="margin-bottom">12</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="label" translatable="yes">Branch</property>
@@ -207,24 +174,6 @@
                         <property name="xalign">0</property>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="focus_on_click">False</property>
-                        <property name="receives_default">False</property>
-                        <property name="tooltip_text" translatable="yes">View build console contents</property>
-                        <property name="halign">end</property>
-                        <property name="valign">baseline</property>
-                        <property name="action_name">win.view-output</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon_name">builder-build-info-symbolic</property>
-                          </object>
-                        </child>
-                        <style>
-                          <class name="image-button"/>
-                        </style>
-                      </object>
-                    </child>
                   </object>
                 </child>
                 <child>
@@ -335,51 +284,6 @@
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="margin_start">24</property>
-            <property name="margin_end">24</property>
-            <property name="margin_top">24</property>
-            <property name="spacing">6</property>
-            <!-- TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing -->
-            <property name="homogeneous" translatable="yes">True</property>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Build</property>
-                <property name="use-underline">True</property>
-                <property name="receives_default">True</property>
-                <property name="action_name">build-manager.build</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Rebuild</property>
-                <property name="use-underline">True</property>
-                <property name="receives_default">True</property>
-                <property name="action_name">build-manager.rebuild</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Clean</property>
-                <property name="use-underline">True</property>
-                <property name="receives_default">True</property>
-                <property name="action_name">build-manager.clean</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton">
-                <property name="label" translatable="yes">_Export Bundle</property>
-                <property name="use-underline">True</property>
-                <property name="receives_default">True</property>
-                <property name="action_name">build-manager.export</property>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
               </object>
             </child>
           </object>
