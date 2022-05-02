@@ -90,6 +90,11 @@ ide_clang_client_sync_buffers (IdeClangClient *self)
 
   g_assert (IDE_IS_CLANG_CLIENT (self));
 
+  /* Bail if we're in destruction */
+  if (self->state == STATE_SHUTDOWN ||
+      !(context = ide_object_get_context (IDE_OBJECT (self))))
+    return;
+
   /*
    * We need to sync buffers to the subprocess, but only those that are of any
    * consequence to us. So that means C, C++, or Obj-C files and headers.
@@ -103,7 +108,6 @@ ide_clang_client_sync_buffers (IdeClangClient *self)
    * be used on subsequence commands).
    */
 
-  context = ide_object_get_context (IDE_OBJECT (self));
   ufs = ide_unsaved_files_from_context (context);
   ar = ide_unsaved_files_to_array (ufs);
   IDE_PTR_ARRAY_SET_FREE_FUNC (ar, ide_unsaved_file_unref);
