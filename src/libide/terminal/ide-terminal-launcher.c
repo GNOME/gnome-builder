@@ -899,6 +899,8 @@ ide_terminal_launcher_new_for_runner (IdeRuntime *runtime)
   self->runtime = g_object_ref (runtime);
   self->kind = LAUNCHER_KIND_RUNNER;
 
+  ide_terminal_launcher_set_title (self, ide_runtime_get_name (runtime));
+
   return g_steal_pointer (&self);
 }
 
