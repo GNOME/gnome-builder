@@ -46,7 +46,8 @@ IdeCommand        *ide_command_manager_get_command_by_id (IdeCommandManager    *
 IDE_AVAILABLE_IN_ALL
 void               ide_command_manager_execute           (IdeCommandManager    *self,
                                                           GtkWidget            *widget,
-                                                          const char           *command_id);
+                                                          const char           *command_id,
+                                                          GVariant             *params);
 IDE_AVAILABLE_IN_ALL
 void               ide_command_manager_load_shortcuts    (IdeCommandManager    *self,
                                                           GtkNative            *native);

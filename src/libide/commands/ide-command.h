@@ -40,6 +40,7 @@ struct _IdeCommandInterface
   char     *(*get_title)     (IdeCommand           *self);
   char     *(*get_subtitle)  (IdeCommand           *self);
   void      (*run_async)     (IdeCommand           *self,
+                              GVariant             *params,
                               GCancellable         *cancellable,
                               GAsyncReadyCallback   callback,
                               gpointer              user_data);
@@ -60,6 +61,7 @@ IDE_AVAILABLE_IN_ALL
 char     *ide_command_get_subtitle (IdeCommand           *self);
 IDE_AVAILABLE_IN_ALL
 void      ide_command_run_async    (IdeCommand           *self,
+                                    GVariant             *params,
                                     GCancellable         *cancellable,
                                     GAsyncReadyCallback   callback,
                                     gpointer              user_data);

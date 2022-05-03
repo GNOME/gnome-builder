@@ -28,6 +28,7 @@ G_DEFINE_INTERFACE (IdeCommand, ide_command, IDE_TYPE_OBJECT)
 
 static void
 ide_command_real_run_async (IdeCommand          *self,
+                            GVariant            *params,
                             GCancellable        *cancellable,
                             GAsyncReadyCallback  callback,
                             gpointer             user_data)
@@ -66,6 +67,7 @@ ide_command_default_init (IdeCommandInterface *iface)
 /**
  * ide_command_run_async:
  * @self: an #IdeCommand
+ * @params: (nullable): a #GVariant or %NULL
  * @cancellable: (nullable): a #GCancellable
  * @callback: a #GAsyncReadyCallback to execute upon completion
  * @user_data: closure data for @callback
@@ -76,6 +78,7 @@ ide_command_default_init (IdeCommandInterface *iface)
  */
 void
 ide_command_run_async (IdeCommand          *self,
+                       GVariant            *params,
                        GCancellable        *cancellable,
                        GAsyncReadyCallback  callback,
                        gpointer             user_data)
@@ -83,7 +86,7 @@ ide_command_run_async (IdeCommand          *self,
   g_return_if_fail (IDE_IS_COMMAND (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_COMMAND_GET_IFACE (self)->run_async (self, cancellable, callback, user_data);
+  IDE_COMMAND_GET_IFACE (self)->run_async (self, params, cancellable, callback, user_data);
 }
 
 /**
