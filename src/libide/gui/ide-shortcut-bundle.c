@@ -39,6 +39,7 @@ typedef struct
   const char *when;
   const char *command;
   const char *action;
+  const char *phase;
 } Shortcut;
 
 static guint
@@ -168,7 +169,8 @@ populate_from_object (IdeShortcutBundle  *self,
   if (!get_string_member (obj, "key", &shortcut.key, error) ||
       !get_string_member (obj, "when", &shortcut.when, error) ||
       !get_string_member (obj, "command", &shortcut.command, error) ||
-      !get_string_member (obj, "action", &shortcut.action, error))
+      !get_string_member (obj, "action", &shortcut.action, error) ||
+      !get_string_member (obj, "phase", &shortcut.phase, error))
     return FALSE;
 
   g_ptr_array_add (self->items, g_slice_dup (Shortcut, &shortcut));
