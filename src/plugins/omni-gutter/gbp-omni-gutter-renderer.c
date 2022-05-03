@@ -494,7 +494,7 @@ reload_style_colors (GbpOmniGutterRenderer *self,
     }
   else
     {
-      had_sel_fg = FALSE;
+      had_sel_fg = TRUE;
     }
 
   if (!get_style_rgba (scheme, "selection", BACKGROUND, &self->sel.bg))
