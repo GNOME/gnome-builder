@@ -509,13 +509,18 @@ ide_command_manager_execute_cb (GObject      *object,
 void
 ide_command_manager_execute (IdeCommandManager *self,
                              GtkWidget         *widget,
-                             const char        *command_id)
+                             const char        *command_id,
+                             GVariant          *params)
 {
   g_autoptr(IdeCommand) command = NULL;
+  g_autoptr(GVariant) freeme = NULL;
 
   g_return_if_fail (IDE_IS_COMMAND_MANAGER (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (command_id != NULL);
+
+  if (g_variant_is_floating (params))
+    freeme = g_variant_ref_sink (params);
 
   if (!(command = ide_command_manager_get_command_by_id (self, widget, command_id)))
     {
@@ -529,6 +534,7 @@ ide_command_manager_execute (IdeCommandManager *self,
     ide_object_append (IDE_OBJECT (self), IDE_OBJECT (command));
 
   ide_command_run_async (command,
+                         params,
                          NULL,
                          ide_command_manager_execute_cb,
                          g_object_ref (self));
