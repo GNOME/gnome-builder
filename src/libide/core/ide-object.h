@@ -149,6 +149,9 @@ void          ide_object_log                    (gpointer            instance,
                                                  const gchar        *domain,
                                                  const gchar        *format,
                                                  ...) G_GNUC_PRINTF (4, 5);
+IDE_AVAILABLE_IN_ALL
+gboolean      ide_object_check_ready            (IdeObject          *self,
+                                                 GError            **error);
 
 #ifdef __cplusplus
 #define ide_object_message(instance, format, ...) ide_object_log(instance, G_LOG_LEVEL_MESSAGE, G_LOG_DOMAIN, format __VA_OPT__(,) __VA_ARGS__)
