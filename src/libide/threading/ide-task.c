@@ -1341,6 +1341,7 @@ ide_task_return_new_error (IdeTask     *self,
 gboolean
 ide_task_return_error_if_cancelled (IdeTask *self)
 {
+  GError *error = NULL;
   gboolean failed;
 
   g_return_val_if_fail (IDE_IS_TASK (self), FALSE);
@@ -1348,14 +1349,19 @@ ide_task_return_error_if_cancelled (IdeTask *self)
   g_mutex_lock (&self->mutex);
   failed = g_cancellable_is_cancelled (self->cancellable) ||
     (IDE_IS_OBJECT (self->source_object) &&
-     ide_object_in_destruction (IDE_OBJECT (self->source_object)));
+     !ide_object_check_ready (IDE_OBJECT (self->source_object), &error));
   g_mutex_unlock (&self->mutex);
 
   if (failed)
-    ide_task_return_new_error (self,
-                               G_IO_ERROR,
-                               G_IO_ERROR_CANCELLED,
-                               "The task was cancelled");
+    {
+      if (error != NULL)
+        ide_task_return_error (self, g_steal_pointer (&error));
+      else
+        ide_task_return_new_error (self,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_CANCELLED,
+                                   "The task was cancelled");
+    }
 
   return failed;
 }
