@@ -229,7 +229,11 @@ ide_widget_get_workbench (GtkWidget *widget)
 IdeWorkspace *
 ide_widget_get_workspace (GtkWidget *widget)
 {
+  GtkRoot *root;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  return IDE_WORKSPACE (gtk_widget_get_root (widget));
+  root = gtk_widget_get_root (widget);
+
+  return IDE_IS_WORKSPACE (root) ? IDE_WORKSPACE (root) : NULL;
 }
