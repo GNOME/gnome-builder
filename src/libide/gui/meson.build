@@ -54,6 +54,9 @@ libide_gui_private_headers = [
   'ide-recoloring-private.h',
   'ide-search-popover-private.h',
   'ide-session-private.h',
+  'ide-shortcut-private.h',
+  'ide-shortcut-model-private.h',
+  'ide-shortcut-controller-private.h',
   'ide-style-variant-preview-private.h',
 ]
 
@@ -71,6 +74,9 @@ libide_gui_private_sources = [
   'ide-recoloring.c',
   'ide-search-popover.c',
   'ide-session.c',
+  'ide-shortcut.c',
+  'ide-shortcut-model.c',
+  'ide-shortcut-controller.c',
   'ide-style-variant-preview.c',
   'ide-workspace-actions.c',
 ]
