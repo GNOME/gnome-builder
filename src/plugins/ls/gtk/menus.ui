@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="project-tree-menu">
-    <section id="project-tree-menu-open-section">
-      <item>
-        <attribute name="id">project-tree-menu-open-editor</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Open in _Folder Listing</attribute>
-        <attribute name="action">project-tree.open-with-hint</attribute>
-        <attribute name="target" type="s">'ls'</attribute>
-      </item>
-    </section>
+  <menu id="project-tree-menu-open-containing-folder-menu">
+    <item>
+      <attribute name="id">project-tree-menu-open-editor</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+      <attribute name="label" translatable="yes">With _Folder Listing</attribute>
+      <attribute name="action">project-tree.open-with-hint</attribute>
+      <attribute name="target" type="s">'ls'</attribute>
+    </item>
   </menu>
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-files-section">
