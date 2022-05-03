@@ -144,6 +144,8 @@ ide_widget_set_context_handler (gpointer                widget,
     ide_widget_notify_root_cb (widget, NULL, NULL);
 }
 
+static gboolean dummy_cb (gpointer) { return G_SOURCE_REMOVE; }
+
 /**
  * ide_widget_get_context:
  * @widget: a #GtkWidget
@@ -163,6 +165,27 @@ ide_widget_get_context (GtkWidget *widget)
 
   if (IDE_IS_WORKSPACE (toplevel))
     return ide_workspace_get_context (IDE_WORKSPACE (toplevel));
+
+  if (toplevel != NULL)
+    {
+      GObjectClass *object_class = G_OBJECT_GET_CLASS (toplevel);
+      GParamSpec *pspec = g_object_class_find_property (object_class, "context");
+
+      if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
+          g_type_is_a (pspec->value_type, IDE_TYPE_CONTEXT))
+        {
+          g_auto(GValue) value = G_VALUE_INIT;
+          IdeContext *ret;
+
+          g_value_init (&value, IDE_TYPE_CONTEXT);
+          g_object_get_property (G_OBJECT (toplevel), "context", &value);
+
+          ret = g_value_dup_object (&value);
+          g_idle_add_full (G_PRIORITY_LOW, dummy_cb, ret, g_object_unref);
+
+          return ret;
+        }
+    }
 
   return NULL;
 }
