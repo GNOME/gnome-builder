@@ -283,6 +283,7 @@ ide_clang_highlighter_destroy (IdeObject *object)
 {
   IdeClangHighlighter *self = (IdeClangHighlighter *)object;
 
+  g_clear_handle_id (&self->queued_source, g_source_remove);
   g_clear_pointer (&self->index, ide_highlight_index_unref);
   g_clear_weak_pointer (&self->engine);
 
