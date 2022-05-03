@@ -351,7 +351,8 @@ ide_clang_highlighter_queue_udpate (IdeClangHighlighter *self)
 {
   g_assert (IDE_IS_CLANG_HIGHLIGHTER (self));
 
-  if (self->queued_source != 0)
+  if (self->queued_source != 0 ||
+      ide_object_in_destruction (IDE_OBJECT (self)))
     return;
 
   self->queued_source =
