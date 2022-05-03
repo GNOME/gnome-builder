@@ -55,6 +55,7 @@ libide_gui_private_headers = [
   'ide-search-popover-private.h',
   'ide-session-private.h',
   'ide-shortcut-private.h',
+  'ide-shortcut-bundle-private.h',
   'ide-shortcut-model-private.h',
   'ide-shortcut-controller-private.h',
   'ide-style-variant-preview-private.h',
@@ -75,6 +76,7 @@ libide_gui_private_sources = [
   'ide-search-popover.c',
   'ide-session.c',
   'ide-shortcut.c',
+  'ide-shortcut-bundle.c',
   'ide-shortcut-model.c',
   'ide-shortcut-controller.c',
   'ide-style-variant-preview.c',
@@ -158,6 +160,7 @@ libide_gui_deps = [
   libadwaita_dep,
   libpanel_dep,
   libpeas_dep,
+  libjson_glib_dep,
 
   dependency('libcmark', version: '>= 0.29.0'),
 
