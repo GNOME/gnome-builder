@@ -38,13 +38,13 @@
         <item>
           <attribute name="id">project-tree-menu-open-folder</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
-          <attribute name="label" translatable="yes">With File _Browser</attribute>
+          <attribute name="label" translatable="yes">With File _Browser…</attribute>
           <attribute name="action">project-tree.open-containing-folder</attribute>
         </item>
         <item>
           <attribute name="id">project-tree-menu-open-terminal</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
-          <attribute name="label" translatable="yes">With _Terminal</attribute>
+          <attribute name="label" translatable="yes">With _Terminal…</attribute>
           <attribute name="action">project-tree.open-in-terminal</attribute>
         </item>
       </submenu>
