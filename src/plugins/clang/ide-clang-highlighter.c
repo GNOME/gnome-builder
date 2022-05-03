@@ -128,11 +128,19 @@ get_index_flags_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  flags = ide_build_system_get_build_flags_finish (build_system, result, &error);
-  context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   file = ide_task_get_task_data (task);
   cancellable = ide_task_get_cancellable (task);
+
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  flags = ide_build_system_get_build_flags_finish (build_system, result, &error);
+
+  if (ide_task_return_error_if_cancelled (task))
+    return;
+
+  context = ide_object_get_context (IDE_OBJECT (build_system));
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
 
   ide_clang_client_get_highlight_index_async (client,
                                               file,
@@ -324,7 +332,8 @@ ide_clang_highlighter_do_update (IdeClangHighlighter *self)
 
   self->queued_source = 0;
 
-  if (self->engine == NULL ||
+  if (!ide_object_check_ready (IDE_OBJECT (self), NULL) ||
+      self->engine == NULL ||
       !(buffer = ide_highlight_engine_get_buffer (self->engine)) ||
       !(file = ide_buffer_get_file (buffer)) ||
       !(context = ide_object_get_context (IDE_OBJECT (self))) ||
