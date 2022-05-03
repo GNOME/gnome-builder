@@ -1370,3 +1370,32 @@ ide_object_log (gpointer        instance,
       va_end (args);
     }
 }
+
+gboolean
+ide_object_check_ready (IdeObject  *self,
+                        GError    **error)
+{
+  IdeObjectPrivate *priv = ide_object_get_instance_private (self);
+  g_autoptr(IdeObject) root = NULL;
+
+  if (self == NULL ||
+      priv->in_destruction ||
+      priv->destroyed)
+    goto failure;
+
+  if (!(root = ide_object_ref_root (self)))
+    goto failure;
+
+  if (!IDE_IS_CONTEXT (root))
+    goto failure;
+
+  return TRUE;
+
+failure:
+  g_set_error (error,
+               G_IO_ERROR,
+               G_IO_ERROR_CANCELLED,
+               "Operation cancelled or in shutdown");
+
+  return FALSE;
+}
