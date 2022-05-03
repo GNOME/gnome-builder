@@ -294,7 +294,7 @@ libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.42.0')
 libm_dep = cc.find_library('m', required: false)
 libpeas_dep = dependency('libpeas-1.0', version: '>= 1.32.0')
 libportal_dep = dependency('libportal-gtk4', required: false)
-libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
+libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.35.0')
 libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.69.0')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
