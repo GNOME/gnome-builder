@@ -56,7 +56,7 @@ struct _IdeObjectClass
                           IdeObject         *child);
   void     (*parent_set) (IdeObject         *self,
                           IdeObject         *parent);
-  gchar  *(*repr)        (IdeObject         *self);
+  char    *(*repr)       (IdeObject         *self);
 
   /*< private */
   gpointer _reserved[16];
