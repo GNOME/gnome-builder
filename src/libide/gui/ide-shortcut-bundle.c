@@ -45,6 +45,25 @@ typedef struct
   GtkPropagationPhase  phase;
 } IdeShortcut;
 
+static TmplScope *imports_scope;
+static const struct {
+  const char *name;
+  const char *version;
+} imports[] = {
+  { "Adw", "1" },
+  { "GLib", "2.0" },
+  { "Gdk", "4.0" },
+  { "Gio", "2.0" },
+  { "Gsk", "4.0" },
+  { "Gtk", "4.0" },
+  { "GtkSource", "5" },
+  { "Ide", PACKAGE_ABI_S },
+  { "Json", "1.0" },
+  { "Jsonrpc", "1.0" },
+  { "Template", "1.0" },
+  { "Vte", "3.91" },
+};
+
 static IdeShortcut *
 ide_shortcut_new (const char          *action,
                   GVariant            *args,
@@ -100,8 +119,10 @@ ide_shortcut_activate (GtkWidget *widget,
 
   if (shortcut->when != NULL)
     {
+      g_autoptr(TmplScope) scope = tmpl_scope_new_with_parent (imports_scope);
+      g_autoptr(GError) error = NULL;
       g_auto(GValue) enabled = G_VALUE_INIT;
-      g_autoptr(TmplScope) scope = tmpl_scope_new ();
+
       IdeWorkspace *workspace = ide_widget_get_workspace (widget);
       IdeWorkbench *workbench = ide_widget_get_workbench (widget);
       IdePage *page = workspace ? ide_workspace_get_most_recent_page (workspace) : NULL;
@@ -111,8 +132,11 @@ ide_shortcut_activate (GtkWidget *widget,
       set_object (scope, "workspace", IDE_TYPE_WORKSPACE, workspace);
       set_object (scope, "page", IDE_TYPE_PAGE, page);
 
-      if (!tmpl_expr_eval (shortcut->when, scope, &enabled, NULL))
-        return FALSE;
+      if (!tmpl_expr_eval (shortcut->when, scope, &enabled, &error))
+        {
+          g_warning ("Failure to eval \"when\": %s", error->message);
+          return FALSE;
+        }
 
       if (!G_VALUE_HOLDS_BOOLEAN (&enabled))
         {
@@ -196,6 +220,20 @@ ide_shortcut_bundle_class_init (IdeShortcutBundleClass *klass)
 static void
 ide_shortcut_bundle_init (IdeShortcutBundle *self)
 {
+  if (g_once_init_enter (&imports_scope))
+    {
+      TmplScope *scope = tmpl_scope_new ();
+
+      for (guint i = 0; i < G_N_ELEMENTS (imports); i++)
+        {
+          if (!tmpl_scope_require (scope, imports[i].name, imports[i].version))
+            g_warning ("Failed to import %s@%s into template scope",
+                       imports[i].name, imports[i].version);
+        }
+
+      g_once_init_leave (&imports_scope, scope);
+    }
+
   self->items = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
