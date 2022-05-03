@@ -192,6 +192,7 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
                                   IdeEditorPage      *page)
 {
   GbpSpellEditorPageAddin *self = (GbpSpellEditorPageAddin *)addin;
+  g_autoptr(GMenu) spell_section = NULL;
   IdeBufferAddin *buffer_addin;
   IdeSourceView *view;
   IdeBuffer *buffer;
@@ -209,7 +210,9 @@ gbp_spell_editor_page_addin_load (IdeEditorPageAddin *addin,
   self->buffer_addin = GBP_SPELL_BUFFER_ADDIN (buffer_addin);
 
   self->menu = editor_spell_menu_new ();
-  ide_source_view_append_menu (view, self->menu);
+  spell_section = g_menu_new ();
+  g_menu_append_section (spell_section, NULL, self->menu);
+  ide_source_view_append_menu (view, G_MENU_MODEL (spell_section));
 
   self->actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
