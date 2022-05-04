@@ -1,14 +1,26 @@
-template_libdir = dependency('template-glib-1.0').get_variable('libdir')
-gsv_libdir = dependency('gtksourceview-5').get_variable('libdir')
-
-typelib_dirs = [
+gi_typelib_path = [
   '@0@/src'.format(meson.project_build_root()),
-  join_paths(template_libdir, 'girepository-1.0'),
-  join_paths(gsv_libdir, 'girepository-1.0'),
 ]
 
+typelib_deps = [
+  libadwaita_dep,
+  libgio_dep,
+  libgtk_dep,
+  libgtksource_dep,
+  libjson_glib_dep,
+  libjsonrpc_glib_dep,
+  libpanel_dep,
+  libpeas_dep,
+  libtemplate_glib_dep,
+  libvte_dep,
+]
+
+foreach typelib_dep: typelib_deps
+  gi_typelib_path += [join_paths(typelib_dep.get_variable('libdir'), 'girepository-1.0')]
+endforeach
+
 test_env = [
-  'GI_TYPELIB_PATH="@0@:$(GI_TYPELIB_PATH)"'.format(':'.join(typelib_dirs)),
+  'GI_TYPELIB_PATH=@0@'.format(':'.join(gi_typelib_path)),
   'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
   'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
   'G_DEBUG=gc-friendly',
