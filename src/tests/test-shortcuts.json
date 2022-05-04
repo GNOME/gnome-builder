@@ -2,7 +2,7 @@
   {
     "action" : "test.open",
     /* This doesn't work yet */
-    "when" : "typeof(workspace) != Ide.GreeterWorkspace",
+    "when" : "true",
     "trigger" : "<ctrl>o",
     "phase" : "bubble"
   }
