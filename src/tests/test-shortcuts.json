@@ -1,9 +1,14 @@
 [
   {
     "action" : "test.open",
-    /* This doesn't work yet */
-    "when" : "true",
+    "when" : "true && false",
     "trigger" : "<ctrl>o",
     "phase" : "bubble"
+  },
+  {
+    "action" : "test.open",
+    "when" : "false || true",
+    "trigger" : "<ctrl>p",
+    "phase" : "capture"
   }
 ]

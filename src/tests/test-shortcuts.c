@@ -77,12 +77,20 @@ test_parse_bundle (void)
 
   g_assert_true (G_IS_LIST_MODEL (bundle));
   g_assert_true (g_list_model_get_item_type (G_LIST_MODEL (bundle)) == GTK_TYPE_SHORTCUT);
-  g_assert_cmpint (g_list_model_get_n_items (G_LIST_MODEL (bundle)), ==, 1);
+  g_assert_cmpint (g_list_model_get_n_items (G_LIST_MODEL (bundle)), ==, 2);
+
+  shortcut = g_list_model_get_item (G_LIST_MODEL (bundle), pos++);
+  g_assert_nonnull (shortcut);
+  g_assert_true (GTK_IS_SHORTCUT (shortcut));
+  g_assert_false (gtk_shortcut_action_activate (gtk_shortcut_get_action (shortcut), 0, widget, NULL));
+  g_assert_cmpint (state.open, ==, 0);
+  g_object_unref (shortcut);
 
   shortcut = g_list_model_get_item (G_LIST_MODEL (bundle), pos++);
   g_assert_nonnull (shortcut);
   g_assert_true (GTK_IS_SHORTCUT (shortcut));
   g_assert_true (gtk_shortcut_action_activate (gtk_shortcut_get_action (shortcut), 0, widget, NULL));
+  g_assert_cmpint (state.open, ==, 1);
   g_object_unref (shortcut);
 
   shortcut = g_list_model_get_item (G_LIST_MODEL (bundle), pos++);
