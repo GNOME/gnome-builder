@@ -1,9 +1,8 @@
 template_libdir = dependency('template-glib-1.0').get_variable('libdir')
-gsv_libdir = dependency('gtksourceview-4').get_variable('libdir')
+gsv_libdir = dependency('gtksourceview-5').get_variable('libdir')
 
 typelib_dirs = [
-  '@0@/src/libide'.format(meson.project_build_root()),
-  '@0@/src/gstyle'.format(meson.project_build_root()),
+  '@0@/src'.format(meson.project_build_root()),
   join_paths(template_libdir, 'girepository-1.0'),
   join_paths(gsv_libdir, 'girepository-1.0'),
 ]
