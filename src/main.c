@@ -283,8 +283,9 @@ main (gint   argc,
   /* Initialize thread pools */
   _ide_thread_pool_init (FALSE);
 
-  /* Guess the user shell early */
+  /* Guess the user $SHELL and $PATH early */
   _ide_guess_shell ();
+  _ide_guess_user_path ();
 
   /* Ensure availability of some symbols possibly dropped in link */
   _ide_gtk_init ();

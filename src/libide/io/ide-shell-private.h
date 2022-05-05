@@ -24,6 +24,7 @@
 
 G_BEGIN_DECLS
 
-void _ide_guess_shell (void);
+void _ide_guess_shell     (void);
+void _ide_guess_user_path (void);
 
 G_END_DECLS
