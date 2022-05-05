@@ -100,11 +100,10 @@ set_object (TmplScope  *scope,
             GType       type,
             gpointer    object)
 {
-  g_auto(GValue) value = G_VALUE_INIT;
-
-  g_value_init (&value, type);
-  g_value_set_object (&value, object);
-  tmpl_scope_set_value (scope, name, &value);
+  if (object != NULL)
+    tmpl_scope_set_object (scope, name, object);
+  else
+    tmpl_scope_set_null (scope, name);
 }
 
 static gboolean
