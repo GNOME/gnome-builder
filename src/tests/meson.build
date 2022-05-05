@@ -81,7 +81,7 @@ test('test-task', test_task, env: test_env)
 
 test_subprocess_launcher = executable('test-subprocess-launcher', 'test-subprocess-launcher.c',
         c_args: test_cflags,
-  dependencies: [ libide_threading_dep ],
+  dependencies: [ libide_threading_dep, libide_io_dep ],
 )
 test('test-subprocess-launcher', test_subprocess_launcher, env: test_env)
 
