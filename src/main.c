@@ -205,8 +205,6 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
-  g_autofree gchar *plugin = NULL;
-  g_autofree gchar *type = NULL;
   IdeApplication *app;
   const gchar *desktop;
   gboolean standalone = FALSE;
