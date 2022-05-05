@@ -78,6 +78,8 @@ ide_guess_shell_communicate_cb (GObject      *object,
       if (stdout_buf[0] == '/')
         user_shell = g_steal_pointer (&stdout_buf);
     }
+
+  g_debug ("Guessed user shell as \"%s\"", user_shell);
 }
 
 void
@@ -88,10 +90,14 @@ _ide_guess_shell (void)
   g_autofree gchar *command = NULL;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) argv = NULL;
-  g_autofree gchar *shell = NULL;
 
+#ifdef __APPLE__
+  command = g_strdup_printf ("sh -c 'dscacheutil -q user -a name %s | grep ^shell: | cut -f 2 -d \" \"'",
+                             g_get_user_name ());
+#else
   command = g_strdup_printf ("sh -c 'getent passwd %s | head -n1 | cut -f 7 -d :'",
                              g_get_user_name ());
+#endif
 
   if (!g_shell_parse_argv (command, NULL, &argv, &error))
     {
