@@ -30,5 +30,7 @@ IDE_AVAILABLE_IN_ALL
 gboolean    ide_shell_supports_dash_login (const char *shell);
 IDE_AVAILABLE_IN_ALL
 const char *ide_get_user_shell            (void);
+IDE_AVAILABLE_IN_ALL
+const char *ide_get_user_default_path     (void);
 
 G_END_DECLS
