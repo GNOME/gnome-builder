@@ -42,6 +42,9 @@
 #include "ide-simple-subprocess-private.h"
 #include "ide-subprocess-launcher.h"
 
+/* This comes from libide-io but we need access to it */
+#include "../io/ide-shell.h"
+
 #define is_flatpak() (ide_get_process_kind() == IDE_PROCESS_KIND_FLATPAK)
 
 typedef struct
@@ -415,7 +418,7 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
        * that it can get /app/bin too. Since it chains up to us, we wont
        * overwrite PATH in that case (which is what we want).
        */
-      ide_subprocess_launcher_setenv (self, "PATH", SAFE_PATH, FALSE);
+      ide_subprocess_launcher_setenv (self, "PATH", ide_get_user_default_path (), FALSE);
       ide_subprocess_launcher_setenv (self, "HOME", g_get_home_dir (), FALSE);
       ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
       ide_subprocess_launcher_setenv (self, "LANG", g_getenv ("LANG"), FALSE);
