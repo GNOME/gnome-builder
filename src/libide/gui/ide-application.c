@@ -122,14 +122,6 @@ ide_application_startup (GApplication *app)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
-  /*
-   * We require a desktop session that provides a properly working
-   * D-Bus environment. Bail if for some reason that is not the case.
-   */
-  if (g_getenv ("DBUS_SESSION_BUS_ADDRESS") == NULL)
-    g_warning ("%s",
-               _("GNOME Builder requires a session with D-Bus which was not found. Please set DBUS_SESSION_BUS_ADDRESS. Some features may not be available."));
-
   G_APPLICATION_CLASS (ide_application_parent_class)->startup (app);
 
   /* Setup access to private icons dir */
