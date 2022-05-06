@@ -46,6 +46,14 @@ G_DEFINE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, GTK_TYPE_POPOVER)
 static GParamSpec *properties [N_PROPS];
 
 static void
+ide_search_popover_hide_action (GtkWidget  *widget,
+                                const char *action_Name,
+                                GVariant   *param)
+{
+  gtk_popover_popdown (GTK_POPOVER (widget));
+}
+
+static void
 ide_search_popover_set_search_engine (IdeSearchPopover *self,
                                       IdeSearchEngine  *search_engine)
 {
@@ -155,6 +163,8 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-search-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, entry);
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, nav_box);
+
+  gtk_widget_class_install_action (widget_class, "search.hide", NULL, ide_search_popover_hide_action);
 }
 
 static void
