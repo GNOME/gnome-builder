@@ -14,45 +14,45 @@ require Template  version "1.0"
 require Vte       version "3.91"
 
 def inEditor()
-  focus != null && typeof(focus).is_a(typeof(Ide.SourceView))
+  (focus != null) && typeof(focus).is_a(typeof(Ide.SourceView))
 end
 
 def inTerminal()
-  focus != null && typeof(focus).is_a(typeof(Ide.Terminal))
+  (focus != null) && typeof(focus).is_a(typeof(Ide.Terminal))
 end
 
 def inGrid()
-  focus != null && (focus.get_ancestor(typeof(Ide.Grid)) != null)
+  (focus != null) && (focus.get_ancestor(typeof(Ide.Grid)) != null)
 end
 
 def hasProject()
-  workbench != null && workbench.has_project()
+  (workbench != null) && workbench.has_project()
 end
 
 def canEdit()
-  workspace != null && typeof(workspace) != typeof(Ide.GreeterWorkspace)
+  (workspace != null) && typeof(workspace) != typeof(Ide.GreeterWorkspace)
 end
 
 def canSearch()
-  workspace != null && typeof(workspace) != typeof(Ide.GreeterWorkspace)
+  (workspace != null) && typeof(workspace) != typeof(Ide.GreeterWorkspace)
 end
 
 def inPopover()
-  focus != null && focus.get_ancestor(typeof(Gtk.Popover)) != null
+  (focus != null) && (focus.get_ancestor(typeof(Gtk.Popover)) != null)
 end
 
 def inSearch()
-  focus != null && focus.get_ancestor(typeof(Ide.SearchPopover)) != null
+  (focus != null) && (focus.get_ancestor(typeof(Ide.SearchPopover)) != null)
 end
 
 def isBuilding()
-  workbench != null && workbench.has_project() && Ide.BuildManager.from_context(workbench.context).get_busy()
+  (workbench != null) && workbench.has_project() && Ide.BuildManager.from_context(workbench.context).get_busy()
 end
 
 def isRunning()
-  workbench != null && workbench.has_project() && Ide.RunManager.from_context(workbench.context).get_busy()
+  (workbench != null) && workbench.has_project() && Ide.RunManager.from_context(workbench.context).get_busy()
 end
 
 def isDebugging()
-  workbench != null && workbench.has_project() && Ide.DebugManager.from_context(workbench.context).get_active()
+  (workbench != null) && workbench.has_project() && Ide.DebugManager.from_context(workbench.context).get_active()
 end
