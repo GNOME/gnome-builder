@@ -607,3 +607,19 @@ ide_terminal_page_get_current_directory_uri (IdeTerminalPage *self)
 
   return vte_terminal_get_current_directory_uri (VTE_TERMINAL (self->terminal));
 }
+
+/**
+ * ide_terminal_page_get_launcher:
+ * @self: a #IdeTerminalPage
+ *
+ * Gets the launcher for the page.
+ *
+ * Returns: (transfer none) (nullable): an #IdeTerminalLauncher or %NULL
+ */
+IdeTerminalLauncher *
+ide_terminal_page_get_launcher (IdeTerminalPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TERMINAL_PAGE (self), NULL);
+
+  return self->launcher;
+}

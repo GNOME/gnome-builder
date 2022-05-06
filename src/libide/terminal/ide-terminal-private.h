@@ -22,8 +22,12 @@
 
 #include <glib.h>
 
+#include "ide-terminal-launcher.h"
+
 G_BEGIN_DECLS
 
-void _ide_terminal_init (void);
+void     _ide_terminal_init                 (void);
+gboolean _ide_terminal_launcher_are_similar (IdeTerminalLauncher *a,
+                                             IdeTerminalLauncher *b);
 
 G_END_DECLS
