@@ -4,3 +4,7 @@
 { "trigger" : "<Control><Alt>t", "action" : "win.new-terminal-in-runner", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
 { "trigger" : "<Control>n", "action" : "editorui.new-file", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "bubble" },
 
+/* IdeTerminal */
+{ "trigger" : "<Control><Shift>c", "action" : "terminal.copy-clipboard", "when" : "typeof(focus).is_a(typeof(Ide.Terminal))", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>v", "action" : "terminal.paste-clipboard", "when" : "typeof(focus).is_a(typeof(Ide.Terminal))", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>f", "action" : "terminal.search-reveal", "when" : "typeof(focus).is_a(typeof(Ide.Terminal))", "phase" : "capture" },
