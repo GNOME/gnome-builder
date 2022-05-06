@@ -61,6 +61,8 @@ IdeWorkspace    *ide_workbench_get_workspace_by_type (IdeWorkbench         *self
 IDE_AVAILABLE_IN_ALL
 IdeSearchEngine *ide_workbench_get_search_engine     (IdeWorkbench         *self);
 IDE_AVAILABLE_IN_ALL
+GListModel      *ide_workbench_get_shortcuts         (IdeWorkbench         *self);
+IDE_AVAILABLE_IN_ALL
 IdeWorkbench    *ide_workbench_from_widget           (GtkWidget            *widget);
 IDE_AVAILABLE_IN_ALL
 void             ide_workbench_add_workspace         (IdeWorkbench         *self,
