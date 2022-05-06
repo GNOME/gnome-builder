@@ -1,2 +1,2 @@
-{ "key" : "<Ctrl>Enter", "action" : "workbench.global-search", "when" : "!inWorkspaceTyped(greeter)", "phase" : "capture" },
+{ "trigger" : "<Control>Return", "action" : "workbench.global-search", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
 
