@@ -5,6 +5,7 @@
   </gresource>
   <gresource prefix="/org/gnome/libide-gui">
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file>gtk/keybindings.json</file>
     <file>images/style-preview-dark.png</file>
     <file>images/style-preview-default.png</file>
     <file>images/style-preview-light.png</file>
