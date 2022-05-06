@@ -112,6 +112,7 @@ ide_shortcut_activate (GtkWidget *widget,
                        gpointer   user_data)
 {
   IdeShortcut *shortcut = user_data;
+  GtkWidget *focus = NULL;
 
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (shortcut != NULL);
@@ -126,7 +127,11 @@ ide_shortcut_activate (GtkWidget *widget,
       IdeWorkbench *workbench = ide_widget_get_workbench (widget);
       IdePage *page = workspace ? ide_workspace_get_most_recent_page (workspace) : NULL;
 
-      set_object (scope, "focus", GTK_TYPE_WIDGET, widget);
+      focus = gtk_root_get_focus (GTK_ROOT (workspace));
+      if (focus == NULL)
+        focus = widget;
+
+      set_object (scope, "focus", GTK_TYPE_WIDGET, focus);
       set_object (scope, "workbench", IDE_TYPE_WORKBENCH, workbench);
       set_object (scope, "workspace", IDE_TYPE_WORKSPACE, workspace);
       set_object (scope, "page", IDE_TYPE_PAGE, page);
@@ -157,7 +162,7 @@ ide_shortcut_activate (GtkWidget *widget,
 
   return gtk_shortcut_action_activate (shortcut->action,
                                        GTK_SHORTCUT_ACTION_EXCLUSIVE,
-                                       widget,
+                                       focus,
                                        shortcut->args);
 }
 
