@@ -30,11 +30,11 @@ def hasProject()
 end
 
 def canEdit()
-  (workspace != null) && typeof(workspace) != typeof(Ide.GreeterWorkspace)
+  (workspace != null) && (typeof(workspace) != typeof(Ide.GreeterWorkspace))
 end
 
 def canSearch()
-  (workspace != null) && typeof(workspace) != typeof(Ide.GreeterWorkspace)
+  (workspace != null) && (typeof(workspace) != typeof(Ide.GreeterWorkspace))
 end
 
 def inPopover()
