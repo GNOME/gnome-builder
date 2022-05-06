@@ -40,6 +40,8 @@ G_DECLARE_FINAL_TYPE (IdeTerminalPage, ide_terminal_page, IDE, TERMINAL_PAGE, Id
 IDE_AVAILABLE_IN_3_34
 void         ide_terminal_page_set_launcher              (IdeTerminalPage     *self,
                                                           IdeTerminalLauncher *launcher);
+IDE_AVAILABLE_IN_ALL
+IdeTerminalLauncher *ide_terminal_page_get_launcher (IdeTerminalPage *self);
 IDE_AVAILABLE_IN_3_32
 void         ide_terminal_page_set_pty                   (IdeTerminalPage     *self,
                                                           VtePty              *pty);

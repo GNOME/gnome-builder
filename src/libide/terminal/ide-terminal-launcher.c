@@ -934,3 +934,34 @@ ide_terminal_launcher_set_args (IdeTerminalLauncher *self,
       g_strfreev (freeme);
     }
 }
+
+gboolean
+_ide_terminal_launcher_are_similar (IdeTerminalLauncher *a,
+                                    IdeTerminalLauncher *b)
+{
+  g_return_val_if_fail (IDE_IS_TERMINAL_LAUNCHER (a), FALSE);
+  g_return_val_if_fail (IDE_IS_TERMINAL_LAUNCHER (b), FALSE);
+
+  if (a->kind != b->kind)
+    return FALSE;
+
+  switch (a->kind)
+    {
+      case LAUNCHER_KIND_HOST:
+      case LAUNCHER_KIND_DEBUG:
+        return TRUE;
+
+      case LAUNCHER_KIND_RUNTIME:
+      case LAUNCHER_KIND_RUNNER:
+        return a->runtime == b->runtime;
+
+      case LAUNCHER_KIND_CONFIG:
+        return a->config == b->config;
+
+      case LAUNCHER_KIND_LAUNCHER:
+        return FALSE;
+
+      default:
+        return FALSE;
+    }
+}
