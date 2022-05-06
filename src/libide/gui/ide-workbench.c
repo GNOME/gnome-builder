@@ -786,6 +786,7 @@ ide_workbench_add_workspace (IdeWorkbench *self,
 {
   g_autoptr(GPtrArray) addins = NULL;
   IdeCommandManager *command_manager;
+  GtkEventController *shortcuts;
   GList *mru_link;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
@@ -827,6 +828,12 @@ ide_workbench_add_workspace (IdeWorkbench *self,
    */
   if (self->project_info != NULL)
     insert_action_groups_foreach_cb (workspace, self);
+
+  /* Setup shortcut controller for workspace */
+  /* TODO: do separate for capture/bubble w/ filter list model */
+  shortcuts = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (self->shortcuts));
+  gtk_event_controller_set_name (shortcuts, "ide-shortcuts");
+  gtk_widget_add_controller (GTK_WIDGET (workspace), shortcuts);
 
   /* Track toplevel focus changes to maintain a most-recently-used queue. */
   g_signal_connect_object (workspace,
