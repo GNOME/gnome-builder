@@ -27,6 +27,7 @@
 #include <tmpl-glib.h>
 
 #include "ide-gui-global.h"
+#include "ide-gui-resources.h"
 #include "ide-shortcut-bundle-private.h"
 #include "ide-workbench.h"
 #include "ide-workspace.h"
@@ -46,23 +47,6 @@ typedef struct
 } IdeShortcut;
 
 static TmplScope *imports_scope;
-static const struct {
-  const char *name;
-  const char *version;
-} imports[] = {
-  { "Adw", "1" },
-  { "GLib", "2.0" },
-  { "Gdk", "4.0" },
-  { "Gio", "2.0" },
-  { "Gsk", "4.0" },
-  { "Gtk", "4.0" },
-  { "GtkSource", "5" },
-  { "Ide", PACKAGE_ABI_S },
-  { "Json", "1.0" },
-  { "Jsonrpc", "1.0" },
-  { "Template", "1.0" },
-  { "Vte", "3.91" },
-};
 
 static IdeShortcut *
 ide_shortcut_new (const char          *action,
@@ -221,6 +205,8 @@ ide_shortcut_bundle_class_init (IdeShortcutBundleClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_shortcut_bundle_dispose;
+
+  g_resources_register (ide_gui_get_resource ());
 }
 
 static void
@@ -228,14 +214,17 @@ ide_shortcut_bundle_init (IdeShortcutBundle *self)
 {
   if (g_once_init_enter (&imports_scope))
     {
+      g_autoptr(GBytes) bytes = g_resources_lookup_data ("/org/gnome/libide-gui/gtk/keybindings.gsl", 0, NULL);
+      const char *str = (const char *)g_bytes_get_data (bytes, NULL);
+      g_autoptr(TmplExpr) expr = NULL;
+      g_autoptr(GError) error = NULL;
+      g_auto(GValue) return_value = G_VALUE_INIT;
       TmplScope *scope = tmpl_scope_new ();
 
-      for (guint i = 0; i < G_N_ELEMENTS (imports); i++)
-        {
-          if (!tmpl_scope_require (scope, imports[i].name, imports[i].version))
-            g_warning ("Failed to import %s@%s into template scope",
-                       imports[i].name, imports[i].version);
-        }
+      if (!(expr = tmpl_expr_from_string (str, &error)))
+        g_critical ("Failed to parse keybindings.gsl: %s", error->message);
+      else if (!tmpl_expr_eval (expr, scope, &return_value, &error))
+        g_critical ("Failed to eval keybindings.gsl: %s", error->message);
 
       g_once_init_leave (&imports_scope, scope);
     }
