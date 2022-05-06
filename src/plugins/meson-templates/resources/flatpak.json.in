@@ -15,7 +15,7 @@
         "--socket=fallback-x11",
 {{if (template == "gnome-app-gtk4") || (template == "gnome-app-adwaita")}}
         "--device=dri",
-{{endif}}
+{{end}}
         "--socket=wayland"
     ],
 {{if language == "rust"}}
