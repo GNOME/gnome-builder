@@ -127,7 +127,9 @@ ide_shortcut_activate (GtkWidget *widget,
       IdeWorkbench *workbench = ide_widget_get_workbench (widget);
       IdePage *page = workspace ? ide_workspace_get_most_recent_page (workspace) : NULL;
 
-      focus = gtk_root_get_focus (GTK_ROOT (workspace));
+      if (GTK_IS_ROOT (widget))
+        focus = gtk_root_get_focus (GTK_ROOT (widget));
+
       if (focus == NULL)
         focus = widget;
 
