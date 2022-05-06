@@ -1,2 +1,5 @@
 { "trigger" : "<Control>Return", "action" : "workbench.global-search", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>t", "action" : "win.new-terminal", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
+{ "trigger" : "<Control><Alt><Shift>t", "action" : "win.new-terminal-in-config", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
+{ "trigger" : "<Control><Alt>t", "action" : "win.new-terminal-in-runner", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
 
