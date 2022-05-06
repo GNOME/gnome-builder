@@ -182,8 +182,8 @@ new_terminal_activate (GSimpleAction *action,
     position = ide_panel_position_new ();
 
   ide_workspace_add_page (self->workspace, page, position);
-
   panel_widget_raise (PANEL_WIDGET (page));
+  gtk_widget_grab_focus (GTK_WIDGET (page));
 }
 
 static void
