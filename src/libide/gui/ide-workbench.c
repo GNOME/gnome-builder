@@ -40,6 +40,7 @@
 #include "ide-gui-global.h"
 #include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
+#include "ide-shortcut-bundle-private.h"
 #include "ide-workbench-addin.h"
 #include "ide-workbench-private.h"
 #include "ide-workspace-private.h"
@@ -66,17 +67,19 @@ struct _IdeWorkbench
   GQueue            mru_queue;
 
   /* Owned references */
-  PeasExtensionSet *addins;
-  GCancellable     *cancellable;
-  IdeContext       *context;
-  IdeBuildSystem   *build_system;
-  IdeProjectInfo   *project_info;
-  IdeVcs           *vcs;
-  IdeVcsMonitor    *vcs_monitor;
-  IdeSearchEngine  *search_engine;
+  PeasExtensionSet    *addins;
+  GCancellable        *cancellable;
+  IdeContext          *context;
+  IdeBuildSystem      *build_system;
+  IdeProjectInfo      *project_info;
+  IdeVcs              *vcs;
+  IdeVcsMonitor       *vcs_monitor;
+  IdeSearchEngine     *search_engine;
+  GListStore          *shortcut_bundles;
+  GtkFlattenListModel *shortcuts;
 
   /* Various flags */
-  guint             unloaded : 1;
+  guint                unloaded : 1;
 };
 
 typedef struct
@@ -142,8 +145,7 @@ IDE_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
 })
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeWorkbench, ide_workbench, GTK_TYPE_WINDOW_GROUP,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
-                                                ide_workbench_init_action_group))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_workbench_init_action_group))
 
 static GParamSpec *properties [N_PROPS];
 
@@ -179,6 +181,26 @@ ignore_error (GError *error)
 {
   return g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
          g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED);
+}
+
+static IdeShortcutBundle *
+get_internal_shortcuts (void)
+{
+  static IdeShortcutBundle *internal_shortcuts;
+
+  if (internal_shortcuts == NULL)
+    {
+      g_autoptr(GFile) file = NULL;
+      g_autoptr(GError) error = NULL;
+
+      file = g_file_new_for_uri ("resource:///org/gnome/libide-gui/gtk/keybindings.json");
+      internal_shortcuts = ide_shortcut_bundle_new ();
+
+      if (!ide_shortcut_bundle_parse (internal_shortcuts, file, &error))
+        g_critical ("Failed to parse keybindings.json: %s", error->message);
+    }
+
+  return internal_shortcuts;
 }
 
 /**
@@ -397,6 +419,8 @@ ide_workbench_finalize (GObject *object)
   if (self->context != NULL)
     g_object_set_data (G_OBJECT (self->context), "WORKBENCH", NULL);
 
+  g_clear_object (&self->shortcut_bundles);
+  g_clear_object (&self->shortcuts);
   g_clear_object (&self->build_system);
   g_clear_object (&self->vcs);
   g_clear_object (&self->search_engine);
@@ -500,6 +524,11 @@ static void
 ide_workbench_init (IdeWorkbench *self)
 {
   ide_workbench_set_action_enabled (self, "configure", FALSE);
+
+  /* Setup shortcuts */
+  self->shortcut_bundles = g_list_store_new (IDE_TYPE_SHORTCUT_BUNDLE);
+  g_list_store_append (self->shortcut_bundles, get_internal_shortcuts ());
+  self->shortcuts = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->shortcut_bundles)));
 }
 
 static void
@@ -2672,4 +2701,20 @@ ide_workbench_action_configure (IdeWorkbench *self,
       gtk_window_group_add_window (GTK_WINDOW_GROUP (self), window);
       gtk_window_present (window);
     }
+}
+
+/**
+ * ide_workbench_get_shortcuts:
+ * @self: a #IdeWorkbench
+ *
+ * Gets a [iface@Gio.ListModel] of [class@Gtk.Shortcut]s.
+ *
+ * Returns: (transfer none): a #GListModel
+ */
+GListModel *
+ide_workbench_get_shortcuts (IdeWorkbench *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
+
+  return G_LIST_MODEL (self->shortcuts);
 }
