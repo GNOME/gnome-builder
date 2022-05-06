@@ -42,7 +42,6 @@ struct _IdeTerminalClass
                                    GtkWidget   *widget);
   void     (*select_all)          (IdeTerminal *self,
                                    gboolean     all);
-  void     (*search_reveal)       (IdeTerminal *self);
   gboolean (*open_link)           (IdeTerminal *self);
   gboolean (*copy_link_address)   (IdeTerminal *self);
 };
