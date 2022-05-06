@@ -29,6 +29,22 @@ def hasProject()
   workbench != null && workbench.has_project()
 end
 
+def canEdit()
+  workspace != null && typeof(workspace) != typeof(Ide.GreeterWorkspace)
+end
+
+def canSearch()
+  workspace != null && typeof(workspace) != typeof(Ide.GreeterWorkspace)
+end
+
+def inPopover()
+  focus != null && focus.get_ancestor(typeof(Gtk.Popover)) != null
+end
+
+def inSearch()
+  focus != null && focus.get_ancestor(typeof(Ide.SearchPopover)) != null
+end
+
 def isBuilding()
   workbench != null && workbench.has_project() && Ide.BuildManager.from_context(workbench.context).get_busy()
 end
