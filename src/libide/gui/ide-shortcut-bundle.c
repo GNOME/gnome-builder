@@ -405,6 +405,7 @@ populate_from_object (IdeShortcutBundle  *self,
                                       (GDestroyNotify) ide_shortcut_free);
   shortcut = gtk_shortcut_new (g_steal_pointer (&trigger),
                                g_steal_pointer (&callback));
+  g_object_set_data (G_OBJECT (shortcut), "PHASE", GINT_TO_POINTER (phase));
   g_ptr_array_add (self->items, g_steal_pointer (&shortcut));
 
   return TRUE;

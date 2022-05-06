@@ -773,6 +773,21 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
     }
 }
 
+static gboolean
+shortcut_phase_filter (gpointer item,
+                       gpointer user_data)
+{
+  return g_object_get_data (item, "PHASE") == user_data;
+}
+
+static GtkFilter *
+create_shortcut_filter (GtkPropagationPhase phase)
+{
+  return GTK_FILTER (gtk_custom_filter_new (shortcut_phase_filter,
+                                            GINT_TO_POINTER (phase),
+                                            NULL));
+}
+
 /**
  * ide_workbench_add_workspace:
  * @self: an #IdeWorkbench
@@ -785,6 +800,8 @@ ide_workbench_add_workspace (IdeWorkbench *self,
                              IdeWorkspace *workspace)
 {
   g_autoptr(GPtrArray) addins = NULL;
+  g_autoptr(GtkFilterListModel) capture = NULL;
+  g_autoptr(GtkFilterListModel) bubble = NULL;
   IdeCommandManager *command_manager;
   GtkEventController *shortcuts;
   GList *mru_link;
@@ -829,10 +846,20 @@ ide_workbench_add_workspace (IdeWorkbench *self,
   if (self->project_info != NULL)
     insert_action_groups_foreach_cb (workspace, self);
 
-  /* Setup shortcut controller for workspace */
-  /* TODO: do separate for capture/bubble w/ filter list model */
-  shortcuts = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (self->shortcuts));
-  gtk_event_controller_set_name (shortcuts, "ide-shortcuts");
+  /* Setup capture shortcut controller for workspace */
+  capture = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (self->shortcuts)),
+                                       create_shortcut_filter (GTK_PHASE_CAPTURE));
+  shortcuts = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&capture)));
+  gtk_event_controller_set_name (shortcuts, "ide-shortcuts-capture");
+  gtk_event_controller_set_propagation_phase (shortcuts, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (workspace), shortcuts);
+
+  /* Setup bubble shortcut controller for workspace */
+  bubble = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (self->shortcuts)),
+                                      create_shortcut_filter (GTK_PHASE_BUBBLE));
+  shortcuts = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&bubble)));
+  gtk_event_controller_set_name (shortcuts, "ide-shortcuts-bubble");
+  gtk_event_controller_set_propagation_phase (shortcuts, GTK_PHASE_BUBBLE);
   gtk_widget_add_controller (GTK_WIDGET (workspace), shortcuts);
 
   /* Track toplevel focus changes to maintain a most-recently-used queue. */
