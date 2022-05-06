@@ -1,0 +1,42 @@
+require Ide
+
+require Adw       version "1"
+require GLib      version "2.0"
+require Gdk       version "4.0"
+require Gio       version "2.0"
+require Gsk       version "4.0"
+require Gtk       version "4.0"
+require GtkSource version "5"
+require Json      version "1.0"
+require Jsonrpc   version "1.0"
+require Panel     version "1"
+require Template  version "1.0"
+require Vte       version "3.91"
+
+def inEditor()
+  focus != null && typeof(focus).is_a(typeof(Ide.SourceView))
+end
+
+def inTerminal()
+  focus != null && typeof(focus).is_a(typeof(Ide.Terminal))
+end
+
+def inGrid()
+  focus != null && (focus.get_ancestor(typeof(Ide.Grid)) != null)
+end
+
+def hasProject()
+  workbench != null && workbench.has_project()
+end
+
+def isBuilding()
+  workbench != null && workbench.has_project() && Ide.BuildManager.from_context(workbench.context).get_busy()
+end
+
+def isRunning()
+  workbench != null && workbench.has_project() && Ide.RunManager.from_context(workbench.context).get_busy()
+end
+
+def isDebugging()
+  workbench != null && workbench.has_project() && Ide.DebugManager.from_context(workbench.context).get_active()
+end
