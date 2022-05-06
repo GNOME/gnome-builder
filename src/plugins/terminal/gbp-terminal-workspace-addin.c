@@ -28,6 +28,8 @@
 #include <libide-terminal.h>
 #include <libide-gui.h>
 
+#include "ide-terminal-private.h"
+
 #include "gbp-terminal-workspace-addin.h"
 
 struct _GbpTerminalWorkspaceAddin
@@ -85,6 +87,7 @@ new_terminal_activate (GSimpleAction *action,
   GbpTerminalWorkspaceAddin *self = user_data;
   g_autoptr(IdeTerminalLauncher) launcher = NULL;
   g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(GFile) workdir = NULL;
   g_autofree gchar *cwd = NULL;
   IdePage *page;
   IdeRuntime *runtime = NULL;
@@ -102,13 +105,10 @@ new_terminal_activate (GSimpleAction *action,
    * focused, then try to copy some details from that terminal.
    */
   if ((current_page = ide_workspace_get_most_recent_page (self->workspace)))
-    {
-      if (IDE_IS_TERMINAL_PAGE (current_page))
-        uri = ide_terminal_page_get_current_directory_uri (IDE_TERMINAL_PAGE (current_page));
-      current_frame = gtk_widget_get_ancestor (GTK_WIDGET (current_page), IDE_TYPE_FRAME);
-    }
+    current_frame = gtk_widget_get_ancestor (GTK_WIDGET (current_page), IDE_TYPE_FRAME);
 
   context = ide_workspace_get_context (self->workspace);
+  workdir = ide_context_ref_workdir (context);
   name = g_action_get_name (G_ACTION (action));
 
   /* Only allow plain terminals unless this is a project */
@@ -139,8 +139,7 @@ new_terminal_activate (GSimpleAction *action,
       runtime = find_runtime (self->workspace);
       launcher = ide_terminal_launcher_new_for_runner (runtime);
     }
-
-  if (ide_str_equal0 (name, "new-terminal-in-dir"))
+  else if (ide_str_equal0 (name, "new-terminal-in-dir"))
     {
       page = ide_workspace_get_most_recent_page (self->workspace);
 
@@ -157,17 +156,31 @@ new_terminal_activate (GSimpleAction *action,
             }
         }
     }
-
-  if (cwd != NULL)
+  else
     {
-      ide_terminal_launcher_set_cwd (launcher, cwd);
+      launcher = ide_terminal_launcher_new (context);
+      cwd = g_file_get_path (workdir);
     }
-  else if (uri != NULL)
+
+  if (IDE_IS_TERMINAL_PAGE (current_page))
+    {
+      if (_ide_terminal_launcher_are_similar (launcher,
+                                              ide_terminal_page_get_launcher (IDE_TERMINAL_PAGE (current_page))))
+        uri = ide_terminal_page_get_current_directory_uri (IDE_TERMINAL_PAGE (current_page));
+    }
+
+  if (uri != NULL)
     {
       g_autoptr(GFile) file = g_file_new_for_uri (uri);
 
       if (g_file_is_native (file))
         ide_terminal_launcher_set_cwd (launcher, g_file_peek_path (file));
+      else if (cwd != NULL)
+        ide_terminal_launcher_set_cwd (launcher, cwd);
+    }
+  else if (cwd != NULL)
+    {
+      ide_terminal_launcher_set_cwd (launcher, cwd);
     }
 
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
