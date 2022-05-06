@@ -27,6 +27,7 @@
 #include <libide-gui.h>
 
 #include "ide-terminal.h"
+#include "ide-terminal-search.h"
 
 #define BUILDER_PCRE2_MULTILINE 0x00000400u
 #define BUILDER_PCRE2_UCP 0x00020000u
@@ -404,8 +405,11 @@ find_child_typed (GtkWidget *parent,
 }
 
 static void
-ide_terminal_real_search_reveal (IdeTerminal *self)
+ide_terminal_search_reveal (GtkWidget  *widget,
+                            const char *action_name,
+                            GVariant   *param)
 {
+  IdeTerminal *self = (IdeTerminal *)widget;
   GtkWidget *parent_overlay;
 
   g_assert (IDE_IS_TERMINAL (self));
@@ -414,10 +418,15 @@ ide_terminal_real_search_reveal (IdeTerminal *self)
 
   if (parent_overlay != NULL)
     {
-      GtkRevealer *revealer = GTK_REVEALER (find_child_typed (parent_overlay, GTK_TYPE_REVEALER));
+      IdeTerminalSearch *search = IDE_TERMINAL_SEARCH (find_child_typed (parent_overlay, IDE_TYPE_TERMINAL_SEARCH));
 
-      if (revealer != NULL && !gtk_revealer_get_child_revealed (revealer))
-        gtk_revealer_set_reveal_child (revealer, TRUE);
+      if (search != NULL)
+        {
+          GtkRevealer *revealer = ide_terminal_search_get_revealer (search);
+
+          if (!gtk_revealer_get_child_revealed (revealer))
+            gtk_revealer_set_reveal_child (revealer, TRUE);
+        }
     }
 }
 
@@ -490,6 +499,22 @@ update_scrollback_cb (IdeTerminal *self,
 }
 
 static void
+copy_clipboard_action (GtkWidget  *widget,
+                       const char *action_name,
+                       GVariant   *param)
+{
+  g_signal_emit_by_name (widget, "copy-clipboard");
+}
+
+static void
+paste_clipboard_action (GtkWidget  *widget,
+                        const char *action_name,
+                        GVariant   *param)
+{
+  g_signal_emit_by_name (widget, "paste-clipboard");
+}
+
+static void
 ide_terminal_dispose (GObject *object)
 {
   IdeTerminal *self = (IdeTerminal *)object;
@@ -515,7 +540,6 @@ ide_terminal_class_init (IdeTerminalClass *klass)
   klass->copy_link_address = ide_terminal_copy_link_address;
   klass->open_link = ide_terminal_open_link;
   klass->select_all = ide_terminal_real_select_all;
-  klass->search_reveal = ide_terminal_real_search_reveal;
 
   filename_regex = g_regex_new (FILENAME_PLUS_LOCATION, 0, 0, NULL);
   g_assert (filename_regex != NULL);
@@ -535,15 +559,6 @@ ide_terminal_class_init (IdeTerminalClass *klass)
                   G_STRUCT_OFFSET (IdeTerminalClass, copy_link_address),
                   NULL, NULL, NULL,
                   G_TYPE_BOOLEAN,
-                  0);
-
-  signals [SEARCH_REVEAL] =
-    g_signal_new ("search-reveal",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeTerminalClass, search_reveal),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
                   0);
 
   signals [OPEN_LINK] =
@@ -575,9 +590,9 @@ ide_terminal_class_init (IdeTerminalClass *klass)
                   1,
                   G_TYPE_BOOLEAN);
 
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_c, GDK_SHIFT_MASK|GDK_CONTROL_MASK, "copy-clipboard", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_v, GDK_SHIFT_MASK|GDK_CONTROL_MASK, "paste-clipboard", NULL);
-  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_f, GDK_SHIFT_MASK|GDK_CONTROL_MASK, "search-reveal", NULL);
+  gtk_widget_class_install_action (widget_class, "terminal.copy-clipboard", NULL, copy_clipboard_action);
+  gtk_widget_class_install_action (widget_class, "terminal.paste-clipboard", NULL, paste_clipboard_action);
+  gtk_widget_class_install_action (widget_class, "terminal.search-reveal", NULL, ide_terminal_search_reveal);
 }
 
 static void
