@@ -1,22 +1,27 @@
-{ "trigger" : "<Control>Return", "action" : "workbench.global-search", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
+/* Global Search */
+{ "trigger" : "<Control>Return", "action" : "workbench.global-search", "when" : "canSearch()", "phase" : "capture" },
+{ "trigger" : "Escape", "action" : "search.hide", "when" : "inSearch()", "phase" : "capture" },
+
+/* New Files */
+{ "trigger" : "<Control>n", "action" : "editorui.new-file", "when" : "canEdit()", "phase" : "bubble" },
+
+/* Switching pages in grid */
+{ "trigger" : "<Alt>1", "action" : "frame.page", "args" : "1", "when" : "inGrid()", "phase" : "capture" },
+{ "trigger" : "<Alt>2", "action" : "frame.page", "args" : "2", "when" : "inGrid()", "phase" : "capture" },
+{ "trigger" : "<Alt>3", "action" : "frame.page", "args" : "3", "when" : "inGrid()", "phase" : "capture" },
+{ "trigger" : "<Alt>4", "action" : "frame.page", "args" : "4", "when" : "inGrid()", "phase" : "capture" },
+{ "trigger" : "<Alt>5", "action" : "frame.page", "args" : "5", "when" : "inGrid()", "phase" : "capture" },
+{ "trigger" : "<Alt>6", "action" : "frame.page", "args" : "6", "when" : "inGrid()", "phase" : "capture" },
+{ "trigger" : "<Alt>7", "action" : "frame.page", "args" : "7", "when" : "inGrid()", "phase" : "capture" },
+{ "trigger" : "<Alt>8", "action" : "frame.page", "args" : "8", "when" : "inGrid()", "phase" : "capture" },
+{ "trigger" : "<Alt>9", "action" : "frame.page", "args" : "9", "when" : "inGrid()", "phase" : "capture" },
+
+/* New Terminal Actions */
 { "trigger" : "<Control><Shift>t", "action" : "win.new-terminal", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
 { "trigger" : "<Control><Alt><Shift>t", "action" : "win.new-terminal-in-config", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
 { "trigger" : "<Control><Alt>t", "action" : "win.new-terminal-in-runner", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
-{ "trigger" : "<Control>n", "action" : "editorui.new-file", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "bubble" },
-
-/* Switching pages in editor */
-{ "trigger" : "<Alt>1", "action" : "frame.page", "args" : "1", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-{ "trigger" : "<Alt>2", "action" : "frame.page", "args" : "2", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-{ "trigger" : "<Alt>3", "action" : "frame.page", "args" : "3", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-{ "trigger" : "<Alt>4", "action" : "frame.page", "args" : "4", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-{ "trigger" : "<Alt>5", "action" : "frame.page", "args" : "5", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-{ "trigger" : "<Alt>6", "action" : "frame.page", "args" : "6", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-{ "trigger" : "<Alt>7", "action" : "frame.page", "args" : "7", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-{ "trigger" : "<Alt>8", "action" : "frame.page", "args" : "8", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-{ "trigger" : "<Alt>9", "action" : "frame.page", "args" : "9", "when" : "focus.get_ancestor(typeof(Ide.Frame)) != null", "phase" : "capture" },
-
 
 /* IdeTerminal */
-{ "trigger" : "<Control><Shift>c", "action" : "terminal.copy-clipboard", "when" : "typeof(focus).is_a(typeof(Ide.Terminal))", "phase" : "capture" },
-{ "trigger" : "<Control><Shift>v", "action" : "terminal.paste-clipboard", "when" : "typeof(focus).is_a(typeof(Ide.Terminal))", "phase" : "capture" },
-{ "trigger" : "<Control><Shift>f", "action" : "terminal.search-reveal", "when" : "typeof(focus).is_a(typeof(Ide.Terminal))", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>c", "action" : "terminal.copy-clipboard", "when" : "inTerminal()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>v", "action" : "terminal.paste-clipboard", "when" : "inTerminal()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>f", "action" : "terminal.search-reveal", "when" : "inTerminal()", "phase" : "capture" },
