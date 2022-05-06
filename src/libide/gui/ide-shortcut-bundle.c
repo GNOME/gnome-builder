@@ -459,22 +459,28 @@ ide_shortcut_bundle_parse (IdeShortcutBundle  *self,
 {
   g_autoptr(JsonParser) parser = NULL;
   g_autofree char *data = NULL;
+  g_autofree char *expanded = NULL;
   JsonNode *root;
   gsize len = 0;
 
   g_return_val_if_fail (IDE_IS_SHORTCUT_BUNDLE (self), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
 
+  /* @data is always \0 terminated by g_file_load_contents() */
   if (!g_file_load_contents (file, NULL, &data, &len, NULL, error))
     return FALSE;
 
-  /* TODO: We sort of want to look like keybindings.json style, which could
+  /* We sort of want to look like keybindings.json style, which could
    * mean some munging for trailing , and missing [].
    */
+  g_strstrip (data);
+  len = strlen (data);
+  if (len > 0 && data[len-1] == ',')
+    data[len-1] = 0;
+  expanded = g_strdup_printf ("[%s]", data);
 
   parser = json_parser_new ();
-
-  if (!json_parser_load_from_data (parser, data, len, error))
+  if (!json_parser_load_from_data (parser, expanded, -1, error))
     return FALSE;
 
   /* Nothing to do if the contents are empty */
