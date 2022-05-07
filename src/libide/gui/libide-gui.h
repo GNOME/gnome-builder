@@ -51,6 +51,7 @@
 # include "ide-preferences-window.h"
 # include "ide-primary-workspace.h"
 # include "ide-run-button.h"
+# include "ide-search-popover.h"
 # include "ide-session-addin.h"
 # include "ide-workbench.h"
 # include "ide-workbench-addin.h"
