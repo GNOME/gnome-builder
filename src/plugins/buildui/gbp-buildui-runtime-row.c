@@ -26,15 +26,14 @@
 
 struct _GbpBuilduiRuntimeRow
 {
-  GtkListBoxRow  parent_instance;
+  AdwActionRow  parent_instance;
 
   gchar         *runtime_id;
 
-  GtkLabel      *label;
   GtkImage      *image;
 };
 
-G_DEFINE_FINAL_TYPE (GbpBuilduiRuntimeRow, gbp_buildui_runtime_row, GTK_TYPE_LIST_BOX_ROW)
+G_DEFINE_FINAL_TYPE (GbpBuilduiRuntimeRow, gbp_buildui_runtime_row, ADW_TYPE_ACTION_ROW)
 
 static void
 gbp_buildui_runtime_row_finalize (GObject *object)
@@ -57,30 +56,11 @@ gbp_buildui_runtime_row_class_init (GbpBuilduiRuntimeRowClass *klass)
 static void
 gbp_buildui_runtime_row_init (GbpBuilduiRuntimeRow *self)
 {
-  GtkWidget *box;
-
-  box = g_object_new (GTK_TYPE_BOX,
-                      "margin", 10,
-                      "orientation", GTK_ORIENTATION_HORIZONTAL,
-                      "spacing", 6,
-                      "visible", TRUE,
-                      NULL);
-  gtk_container_add (GTK_CONTAINER (self), box);
-
-  self->label = g_object_new (GTK_TYPE_LABEL,
-                              "visible", TRUE,
-                              "use-markup", TRUE,
-                              "xalign", 0.0f,
-                              NULL);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->label));
-
   self->image = g_object_new (GTK_TYPE_IMAGE,
-                              "visible", TRUE,
-                              "halign", GTK_ALIGN_START,
-                              "hexpand", TRUE,
+                              "valign", GTK_ALIGN_CENTER,
                               "icon-name", "object-select-symbolic",
                               NULL);
-  gtk_container_add (GTK_CONTAINER (box), GTK_WIDGET (self->image));
+  adw_action_row_add_suffix (ADW_ACTION_ROW (self), GTK_WIDGET (self->image));
 }
 
 static void
@@ -97,8 +77,8 @@ notify_config_runtime_id (GbpBuilduiRuntimeRow *self,
 }
 
 GtkWidget *
-gbp_buildui_runtime_row_new (IdeRuntime       *runtime,
-                             IdeConfig *config)
+gbp_buildui_runtime_row_new (IdeRuntime *runtime,
+                             IdeConfig  *config)
 {
   GbpBuilduiRuntimeRow *self;
   gboolean sensitive;
@@ -110,11 +90,10 @@ gbp_buildui_runtime_row_new (IdeRuntime       *runtime,
 
   self = g_object_new (GBP_TYPE_BUILDUI_RUNTIME_ROW,
                        "sensitive", sensitive,
-                       "visible", TRUE,
                        NULL);
   self->runtime_id = g_strdup (ide_runtime_get_id (runtime));
-  gtk_label_set_label (self->label,
-                       ide_runtime_get_display_name (runtime));
+  adw_preferences_row_set_title (ADW_PREFERENCES_ROW (self),
+                                 ide_runtime_get_display_name (runtime));
 
   g_signal_connect_object (config,
                            "notify::runtime-id",
