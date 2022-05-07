@@ -172,6 +172,19 @@ ide_frame_reload_addins (IdeFrame *self)
 }
 
 static void
+status_page_pressed_cb (IdeFrame        *self,
+                        double           x,
+                        double           y,
+                        int              n_press,
+                        GtkGestureClick *click)
+{
+  g_assert (IDE_IS_FRAME (self));
+  g_assert (GTK_IS_GESTURE_CLICK (click));
+
+  gtk_widget_child_focus (GTK_WIDGET (self), GTK_DIR_TAB_FORWARD);
+}
+
+static void
 ide_frame_constructed (GObject *object)
 {
   IdeFrame *self = (IdeFrame *)object;
@@ -265,6 +278,7 @@ ide_frame_class_init (IdeFrameClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-frame.ui");
+  gtk_widget_class_bind_template_callback (widget_class, status_page_pressed_cb);
 }
 
 static void

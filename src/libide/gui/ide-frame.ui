@@ -115,6 +115,12 @@
             </child>
           </object>
         </property>
+        <child>
+          <object class="GtkGestureClick">
+            <property name="propagation-phase">bubble</property>
+            <signal name="pressed" handler="status_page_pressed_cb" swapped="true" object="IdeFrame"/>
+          </object>
+        </child>
       </object>
     </property>
   </template>
