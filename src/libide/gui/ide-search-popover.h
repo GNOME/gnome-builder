@@ -1,4 +1,4 @@
-/* ide-search-popover-private.h
+/* ide-search-popover.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,14 +20,20 @@
 
 #pragma once
 
-#include "ide-search-popover.h"
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
+#include <gtk/gtk.h>
+
+#include <libide-core.h>
+#include <libide-search.h>
 
 G_BEGIN_DECLS
 
-GtkWidget *ide_search_popover_new     (IdeSearchEngine  *search_engine);
-void       ide_search_popover_present (IdeSearchPopover *self,
-                                       int               parent_width,
-                                       int               parent_height);
+#define IDE_TYPE_SEARCH_POPOVER (ide_search_popover_get_type())
 
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, IDE, SEARCH_POPOVER, GtkPopover)
 
 G_END_DECLS

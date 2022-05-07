@@ -41,8 +41,16 @@ def inPopover()
   (focus != null) && (focus.get_ancestor(typeof(Gtk.Popover)) != null)
 end
 
-def inSearch()
+def inPopoverSearch()
   (focus != null) && (focus.get_ancestor(typeof(Ide.SearchPopover)) != null)
+end
+
+def inPageSearch()
+  ((page != null) && \
+   (focus != null) && \
+   focus.is_ancestor(page) && \
+   (focus.get_ancestor(typeof(Gtk.Revealer)) != null) && \
+   !page.is_ancestor(focus.get_ancestor(typeof(Gtk.Revealer))))
 end
 
 def isBuilding()

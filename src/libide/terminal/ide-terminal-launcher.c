@@ -30,6 +30,7 @@
 #include "ide-private.h"
 
 #include "ide-terminal-launcher.h"
+#include "ide-terminal-private.h"
 #include "ide-terminal-util.h"
 
 typedef enum

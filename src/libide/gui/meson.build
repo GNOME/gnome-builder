@@ -29,6 +29,7 @@ libide_gui_public_headers = [
   'ide-preferences-window.h',
   'ide-primary-workspace.h',
   'ide-run-button.h',
+  'ide-search-popover.h',
   'ide-session-addin.h',
   'ide-workbench.h',
   'ide-workbench-addin.h',

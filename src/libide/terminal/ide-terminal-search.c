@@ -257,6 +257,17 @@ search_revealer_cb (GtkRevealer       *search_revealer,
 }
 
 static void
+search_hide_action (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  IdeTerminalSearch *self = IDE_TERMINAL_SEARCH (widget);
+
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
+}
+
+static void
 ide_terminal_search_connect_terminal (IdeTerminalSearch *self)
 {
   g_signal_connect_object (self,
@@ -321,6 +332,8 @@ ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, reveal_button);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_options);
+
+  gtk_widget_class_install_action (widget_class, "search.hide", NULL, search_hide_action);
 
   signals[SEARCH] =
     g_signal_new ("search",

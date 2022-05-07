@@ -1,6 +1,6 @@
 /* Global Search */
 { "trigger" : "<Control>Return", "action" : "workbench.global-search", "when" : "canSearch()", "phase" : "capture" },
-{ "trigger" : "Escape", "action" : "search.hide", "when" : "inSearch()", "phase" : "capture" },
+{ "trigger" : "Escape", "action" : "search.hide", "when" : "inPopoverSearch() || inPageSearch()", "phase" : "capture" },
 
 /* New Files */
 { "trigger" : "<Control>n", "action" : "editorui.new-file", "when" : "canEdit()", "phase" : "bubble" },
