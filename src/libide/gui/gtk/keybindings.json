@@ -5,6 +5,9 @@
 /* New Files */
 { "trigger" : "<Control>n", "action" : "editorui.new-file", "when" : "canEdit()", "phase" : "bubble" },
 
+/* Open Files */
+{ "trigger" : "<Control>o", "action" : "workbench.open", "when" : "canEdit()", "phase" : "bubble" },
+
 /* Switching pages in grid */
 { "trigger" : "<Alt>1", "action" : "frame.page", "args" : "1", "when" : "inGrid()", "phase" : "capture" },
 { "trigger" : "<Alt>2", "action" : "frame.page", "args" : "2", "when" : "inGrid()", "phase" : "capture" },
