@@ -60,3 +60,26 @@ notificationstack button {
   padding: 0;
   background: none;
 }
+
+/* Styling for search bars */
+.searchbar {
+  background-color: @popover_bg_color;
+  background-clip: padding-box;
+  color: @popover_fg_color;
+  padding: 6px;
+  border-style: solid;
+  border-color: alpha(black, .14);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-radius: 0 0 12px 12px;
+  margin: 0 10px 20px 10px;
+  box-shadow: 0 1px 5px 1px alpha(black, .09),
+              0 2px 14px 3px alpha(black, .05);
+}
+.searchbar button.flat.circular {
+  min-width: 24px;
+  min-height: 24px;
+  margin: 0px;
+  padding: 3px;
+}
