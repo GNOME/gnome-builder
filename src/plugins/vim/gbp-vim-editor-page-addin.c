@@ -402,7 +402,7 @@ gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
       ide_editor_page_discard_changes_async (self->page,
                                              NULL,
                                              gbp_vim_editor_page_addin_discard_cb,
-                                             NULL);
+                                             g_object_ref (self));
       IDE_RETURN (TRUE);
     }
 
