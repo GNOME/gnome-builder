@@ -90,15 +90,14 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeShortcutManager, ide_shortcut_manager, IDE_TYP
                                G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 static GListModel *
-get_internal_models (void)
+get_internal_shortcuts (void)
 {
-  static GListStore *internal_models;
+  static GtkFlattenListModel *flatten;
 
-  if (internal_models == NULL)
+  if (flatten == NULL)
     {
-      static const char *names[] = {
-        "libide-gui",
-      };
+      static const char *names[] = { "libide-gui", };
+      GListStore *internal_models;
 
       internal_models = g_list_store_new (G_TYPE_LIST_MODEL);
 
@@ -117,9 +116,11 @@ get_internal_models (void)
           else
             g_list_store_append (internal_models, bundle);
         }
+
+      flatten = gtk_flatten_list_model_new (G_LIST_MODEL (internal_models));
     }
 
-  return G_LIST_MODEL (internal_models);
+  return G_LIST_MODEL (flatten);
 }
 
 static void
@@ -155,10 +156,16 @@ ide_shortcut_manager_class_init (IdeShortcutManagerClass *klass)
 static void
 ide_shortcut_manager_init (IdeShortcutManager *self)
 {
+  GtkFlattenListModel *flatten;
+
   self->toplevel = g_list_store_new (G_TYPE_LIST_MODEL);
   self->plugin_models = g_list_store_new (G_TYPE_LIST_MODEL);
-  g_list_store_append (self->toplevel, G_LIST_MODEL (self->plugin_models));
-  g_list_store_append (self->toplevel, get_internal_models ());
+
+  flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->plugin_models)));
+  g_list_store_append (self->toplevel, flatten);
+  g_object_unref (flatten);
+
+  g_list_store_append (self->toplevel, get_internal_shortcuts ());
 
   self->flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->toplevel)));
   g_signal_connect_object (self->flatten,
