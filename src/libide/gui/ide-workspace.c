@@ -27,7 +27,6 @@
 
 #include "ide-gui-global.h"
 #include "ide-search-popover-private.h"
-#include "ide-shortcut-controller-private.h"
 #include "ide-workspace-addin.h"
 #include "ide-workspace-private.h"
 #include "ide-workbench-private.h"
@@ -565,7 +564,6 @@ static void
 ide_workspace_init (IdeWorkspace *self)
 {
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  GtkEventController *shortcuts;
   g_autofree gchar *app_id = NULL;
 
 #ifdef DEVELOPMENT_BUILD
@@ -600,10 +598,6 @@ ide_workspace_init (IdeWorkspace *self)
 
   /* Initialize GActions for workspace */
   _ide_workspace_init_actions (self);
-
-  /* Initialize shortcuts for the window */
-  shortcuts = ide_shortcut_controller_new_for_window (GTK_WINDOW (self));
-  gtk_widget_add_controller (GTK_WIDGET (self), shortcuts);
 }
 
 GList *

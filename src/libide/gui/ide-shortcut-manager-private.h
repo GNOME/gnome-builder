@@ -1,4 +1,4 @@
-/* ide-shortcut-controller-private.h
+/* ide-shortcut-manager-private.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,10 +20,20 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <libpeas/peas.h>
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-GtkEventController *ide_shortcut_controller_new_for_window (GtkWindow *window);
+#define IDE_TYPE_SHORTCUT_MANAGER (ide_shortcut_manager_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeShortcutManager, ide_shortcut_manager, IDE, SHORTCUT_MANAGER, IdeObject)
+
+IdeShortcutManager *ide_shortcut_manager_from_context    (IdeContext           *context);
+void                ide_shortcut_manager_add_plugin      (IdeShortcutManager   *self,
+                                                          const PeasPluginInfo *plugin_info);
+void                ide_shortcut_manager_remove_plugin   (IdeShortcutManager   *self,
+                                                          const PeasPluginInfo *plugin_info);
 
 G_END_DECLS

@@ -56,8 +56,7 @@ libide_gui_private_headers = [
   'ide-search-popover-private.h',
   'ide-session-private.h',
   'ide-shortcut-bundle-private.h',
-  'ide-shortcut-model-private.h',
-  'ide-shortcut-controller-private.h',
+  'ide-shortcut-manager-private.h',
   'ide-style-variant-preview-private.h',
 ]
 
@@ -76,8 +75,7 @@ libide_gui_private_sources = [
   'ide-search-popover.c',
   'ide-session.c',
   'ide-shortcut-bundle.c',
-  'ide-shortcut-model.c',
-  'ide-shortcut-controller.c',
+  'ide-shortcut-manager.c',
   'ide-style-variant-preview.c',
   'ide-workspace-actions.c',
 ]
