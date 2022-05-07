@@ -40,7 +40,7 @@
 #include "ide-gui-global.h"
 #include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
-#include "ide-shortcut-bundle-private.h"
+#include "ide-shortcut-manager-private.h"
 #include "ide-workbench-addin.h"
 #include "ide-workbench-private.h"
 #include "ide-workspace-private.h"
@@ -75,8 +75,6 @@ struct _IdeWorkbench
   IdeVcs              *vcs;
   IdeVcsMonitor       *vcs_monitor;
   IdeSearchEngine     *search_engine;
-  GListStore          *shortcut_bundles;
-  GtkFlattenListModel *shortcuts;
 
   /* Various flags */
   guint                unloaded : 1;
@@ -181,26 +179,6 @@ ignore_error (GError *error)
 {
   return g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) ||
          g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED);
-}
-
-static IdeShortcutBundle *
-get_internal_shortcuts (void)
-{
-  static IdeShortcutBundle *internal_shortcuts;
-
-  if (internal_shortcuts == NULL)
-    {
-      g_autoptr(GFile) file = NULL;
-      g_autoptr(GError) error = NULL;
-
-      file = g_file_new_for_uri ("resource:///org/gnome/libide-gui/gtk/keybindings.json");
-      internal_shortcuts = ide_shortcut_bundle_new ();
-
-      if (!ide_shortcut_bundle_parse (internal_shortcuts, file, &error))
-        g_critical ("Failed to parse keybindings.json: %s", error->message);
-    }
-
-  return internal_shortcuts;
 }
 
 /**
@@ -419,8 +397,6 @@ ide_workbench_finalize (GObject *object)
   if (self->context != NULL)
     g_object_set_data (G_OBJECT (self->context), "WORKBENCH", NULL);
 
-  g_clear_object (&self->shortcut_bundles);
-  g_clear_object (&self->shortcuts);
   g_clear_object (&self->build_system);
   g_clear_object (&self->vcs);
   g_clear_object (&self->search_engine);
@@ -524,11 +500,6 @@ static void
 ide_workbench_init (IdeWorkbench *self)
 {
   ide_workbench_set_action_enabled (self, "configure", FALSE);
-
-  /* Setup shortcuts */
-  self->shortcut_bundles = g_list_store_new (IDE_TYPE_SHORTCUT_BUNDLE);
-  g_list_store_append (self->shortcut_bundles, get_internal_shortcuts ());
-  self->shortcuts = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->shortcut_bundles)));
 }
 
 static void
@@ -802,8 +773,9 @@ ide_workbench_add_workspace (IdeWorkbench *self,
   g_autoptr(GPtrArray) addins = NULL;
   g_autoptr(GtkFilterListModel) capture = NULL;
   g_autoptr(GtkFilterListModel) bubble = NULL;
+  IdeShortcutManager *shortcuts;
+  GtkEventController *controller;
   IdeCommandManager *command_manager;
-  GtkEventController *shortcuts;
   GList *mru_link;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
@@ -847,20 +819,21 @@ ide_workbench_add_workspace (IdeWorkbench *self,
     insert_action_groups_foreach_cb (workspace, self);
 
   /* Setup capture shortcut controller for workspace */
-  capture = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (self->shortcuts)),
+  shortcuts = ide_shortcut_manager_from_context (self->context);
+  capture = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (shortcuts)),
                                        create_shortcut_filter (GTK_PHASE_CAPTURE));
-  shortcuts = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&capture)));
-  gtk_event_controller_set_name (shortcuts, "ide-shortcuts-capture");
-  gtk_event_controller_set_propagation_phase (shortcuts, GTK_PHASE_CAPTURE);
-  gtk_widget_add_controller (GTK_WIDGET (workspace), shortcuts);
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&capture)));
+  gtk_event_controller_set_name (controller, "ide-shortcuts-capture");
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_widget_add_controller (GTK_WIDGET (workspace), controller);
 
   /* Setup bubble shortcut controller for workspace */
-  bubble = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (self->shortcuts)),
+  bubble = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (shortcuts)),
                                       create_shortcut_filter (GTK_PHASE_BUBBLE));
-  shortcuts = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&bubble)));
-  gtk_event_controller_set_name (shortcuts, "ide-shortcuts-bubble");
-  gtk_event_controller_set_propagation_phase (shortcuts, GTK_PHASE_BUBBLE);
-  gtk_widget_add_controller (GTK_WIDGET (workspace), shortcuts);
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&bubble)));
+  gtk_event_controller_set_name (controller, "ide-shortcuts-bubble");
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
+  gtk_widget_add_controller (GTK_WIDGET (workspace), controller);
 
   /* Track toplevel focus changes to maintain a most-recently-used queue. */
   g_signal_connect_object (workspace,
@@ -2740,20 +2713,4 @@ ide_workbench_action_configure (IdeWorkbench *self,
       gtk_window_group_add_window (GTK_WINDOW_GROUP (self), window);
       gtk_window_present (window);
     }
-}
-
-/**
- * ide_workbench_get_shortcuts:
- * @self: a #IdeWorkbench
- *
- * Gets a [iface@Gio.ListModel] of [class@Gtk.Shortcut]s.
- *
- * Returns: (transfer none): a #GListModel
- */
-GListModel *
-ide_workbench_get_shortcuts (IdeWorkbench *self)
-{
-  g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
-
-  return G_LIST_MODEL (self->shortcuts);
 }
