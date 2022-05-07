@@ -20,9 +20,9 @@
 { "trigger" : "<Alt>9", "action" : "frame.page", "args" : "9", "when" : "inGrid()", "phase" : "capture" },
 
 /* New Terminal Actions */
-{ "trigger" : "<Control><Shift>t", "action" : "win.new-terminal", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
-{ "trigger" : "<Control><Alt><Shift>t", "action" : "win.new-terminal-in-config", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
-{ "trigger" : "<Control><Alt>t", "action" : "win.new-terminal-in-runner", "when" : "typeof(workspace) != typeof(Ide.GreeterWorkspace)", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>t", "action" : "win.new-terminal", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Alt><Shift>t", "action" : "win.new-terminal-in-config", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Alt>t", "action" : "win.new-terminal-in-runner", "when" : "canEdit()", "phase" : "capture" },
 
 /* IdeTerminal */
 { "trigger" : "<Control><Shift>c", "action" : "terminal.copy-clipboard", "when" : "inTerminal()", "phase" : "capture" },
