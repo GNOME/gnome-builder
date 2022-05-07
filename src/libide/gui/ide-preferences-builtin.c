@@ -720,17 +720,17 @@ static const IdePreferenceItemEntry items[] = {
 
   { "debug", "breakpoints", "break-on-main", 0, ide_preferences_window_toggle,
     N_("Break on Main"),
-    N_("Automatically insert a breakpoint at the start of teh application"),
+    N_("Automatically insert a breakpoint at the start of the application"),
     "org.gnome.builder.build", NULL, "debugger-breakpoint-on-main" },
 
   { "build", "general", "clear-build-logs", 10, ide_preferences_window_toggle,
     N_("Clear Build Logs"),
-    N_("Upon rebulding the project the build log will be cleared"),
+    N_("Upon rebuilding the project the build log will be cleared"),
     "org.gnome.builder.build", NULL, "clear-build-log-pane" },
 
   { "build", "general", "clear-build-cache", 20, ide_preferences_window_toggle,
     N_("Clear Expired Artifacts"),
-    N_("Artifcats which have expired will be deleted when Builder is started"),
+    N_("Artifacts which have expired will be deleted when Builder is started"),
     "org.gnome.builder", NULL, "clear-cache-at-startup" },
 
   { "network", "downloads", "metered", 0, ide_preferences_window_toggle,
