@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-editor-frame-addin.h"
+#define G_LOG_DOMAIN "gbp-editor-frame-addin"
 
 #include "config.h"
 

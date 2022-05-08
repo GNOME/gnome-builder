@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-lsp-completion-results.h"
+#define G_LOG_DOMAIN "ide-lsp-completion-results"
 
 #include "config.h"
 
