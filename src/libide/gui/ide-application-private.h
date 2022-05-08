@@ -114,5 +114,7 @@ void            _ide_application_command_line             (IdeApplication       
                                                            GApplicationCommandLine *cmdline);
 void            _ide_application_add_resources            (IdeApplication          *self,
                                                            const char              *path);
+void            _ide_application_remove_resources         (IdeApplication          *self,
+                                                           const char              *path);
 
 G_END_DECLS

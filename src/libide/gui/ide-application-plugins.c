@@ -280,6 +280,8 @@ ide_application_plugins_unload_plugin_after_cb (IdeApplication *self,
   module_dir = peas_plugin_info_get_module_dir (plugin_info);
   module_name = peas_plugin_info_get_module_name (plugin_info);
 
+  _ide_application_remove_resources (self, module_dir);
+
   g_debug ("Unloaded plugin \"%s\" with module-dir \"%s\"",
            module_name, module_dir);
 }
