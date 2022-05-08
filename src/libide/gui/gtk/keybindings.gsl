@@ -64,3 +64,11 @@ end
 def isDebugging()
   (workbench != null) && workbench.has_project() && Ide.DebugManager.from_context(workbench.context).get_active()
 end
+
+def inEditorWithLanguage(language_id)
+  inEditor() && (page.get_buffer().get_language_id() == language_id)
+end
+
+def hasSelection()
+  inEditor() && page.get_buffer().get_has_selection()
+end
