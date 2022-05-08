@@ -141,7 +141,7 @@ libide_gui_enums = gnome.mkenums_simple('ide-gui-enums',
      install_dir: libide_gui_header_dir,
 )
 libide_gui_generated_headers += [libide_gui_enums[1]]
-libide_gui_sources += [libide_gui_enums[0]]
+libide_gui_sources += libide_gui_enums
 
 
 #
