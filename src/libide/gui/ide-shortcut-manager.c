@@ -89,6 +89,8 @@ list_model_iface_init (GListModelInterface *iface)
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeShortcutManager, ide_shortcut_manager, IDE_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
+static GListStore *plugin_models;
+
 static GListModel *
 get_internal_shortcuts (void)
 {
@@ -158,8 +160,11 @@ ide_shortcut_manager_init (IdeShortcutManager *self)
 {
   GtkFlattenListModel *flatten;
 
+  if (plugin_models == NULL)
+    plugin_models = g_list_store_new (G_TYPE_LIST_MODEL);
+
   self->toplevel = g_list_store_new (G_TYPE_LIST_MODEL);
-  self->plugin_models = g_list_store_new (G_TYPE_LIST_MODEL);
+  self->plugin_models = g_object_ref (plugin_models);
 
   flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->plugin_models)));
   g_list_store_append (self->toplevel, flatten);
@@ -200,4 +205,65 @@ ide_shortcut_manager_from_context (IdeContext *context)
     }
 
   return ret;
+}
+
+void
+ide_shortcut_manager_add_resources (const char *resource_path)
+{
+  g_autoptr(GFile) keybindings_json = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree char *keybindings_json_path = NULL;
+  g_autoptr(IdeShortcutBundle) bundle = NULL;
+
+  g_return_if_fail (resource_path != NULL);
+
+  keybindings_json_path = g_build_filename (resource_path, "keybindings.json", NULL);
+
+  if (g_str_has_prefix (resource_path, "resource://"))
+    keybindings_json = g_file_new_for_uri (keybindings_json_path);
+  else
+    keybindings_json = g_file_new_for_path (keybindings_json_path);
+
+  if (!g_file_query_exists (keybindings_json, NULL))
+    return;
+
+  bundle = ide_shortcut_bundle_new ();
+
+  if (!ide_shortcut_bundle_parse (bundle, keybindings_json, &error))
+    {
+      g_warning ("Failed to parse %s: %s", resource_path, error->message);
+      return;
+    }
+
+  g_object_set_data_full (G_OBJECT (bundle),
+                          "RESOURCE_PATH",
+                          g_strdup (resource_path),
+                          g_free);
+
+  if (plugin_models == NULL)
+    plugin_models = g_list_store_new (G_TYPE_LIST_MODEL);
+
+  g_list_store_append (plugin_models, bundle);
+}
+
+void
+ide_shortcut_manager_remove_resources (const char *resource_path)
+{
+  guint n_items;
+
+  g_return_if_fail (resource_path != NULL);
+  g_return_if_fail (plugin_models != NULL);
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (plugin_models));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeShortcutBundle) bundle = g_list_model_get_item (G_LIST_MODEL (plugin_models), i);
+
+      if (g_strcmp0 (resource_path, g_object_get_data (G_OBJECT (bundle), "RESOURCE_PATH")) == 0)
+        {
+          g_list_store_remove (plugin_models, i);
+          return;
+        }
+    }
 }

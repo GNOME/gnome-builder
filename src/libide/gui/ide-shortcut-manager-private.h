@@ -30,10 +30,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeShortcutManager, ide_shortcut_manager, IDE, SHORTCUT_MANAGER, IdeObject)
 
-IdeShortcutManager *ide_shortcut_manager_from_context    (IdeContext           *context);
-void                ide_shortcut_manager_add_plugin      (IdeShortcutManager   *self,
-                                                          const PeasPluginInfo *plugin_info);
-void                ide_shortcut_manager_remove_plugin   (IdeShortcutManager   *self,
-                                                          const PeasPluginInfo *plugin_info);
+IdeShortcutManager *ide_shortcut_manager_from_context     (IdeContext *context);
+void                ide_shortcut_manager_add_resources    (const char *resource_path);
+void                ide_shortcut_manager_remove_resources (const char *resource_path);
 
 G_END_DECLS
