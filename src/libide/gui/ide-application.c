@@ -27,6 +27,7 @@
 #endif
 
 #include <glib/gi18n.h>
+
 #include <libpeas/peas-autocleanups.h>
 
 #include "ide-language-defaults.h"
@@ -36,6 +37,7 @@
 #include "ide-application-private.h"
 #include "ide-gui-global.h"
 #include "ide-primary-workspace.h"
+#include "ide-shortcut-manager-private.h"
 
 typedef struct
 {
@@ -326,6 +328,8 @@ _ide_application_add_resources (IdeApplication *self,
           gtk_css_provider_load_from_path (provider, css_path);
         }
     }
+
+  ide_shortcut_manager_add_resources (resource_path);
 }
 
 static void
