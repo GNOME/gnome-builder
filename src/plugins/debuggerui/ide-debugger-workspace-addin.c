@@ -265,6 +265,7 @@ static void
 ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
 {
   g_autoptr(IdePanelPosition) position = NULL;
+  IdeHeaderBar *header_bar;
   GtkNotebook *notebook;
   PanelPaned *hpaned;
 
@@ -272,10 +273,14 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
   g_assert (self->workspace != NULL);
 
   self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
-                                 "halign", GTK_ALIGN_CENTER,
-                                 "valign", GTK_ALIGN_END,
+                                 "visible", FALSE,
                                  NULL);
-  ide_workspace_add_overlay (self->workspace, GTK_WIDGET (self->controls));
+
+  header_bar = ide_workspace_get_header_bar (self->workspace);
+  ide_header_bar_add (header_bar,
+                      IDE_HEADER_BAR_POSITION_RIGHT_OF_CENTER,
+                      100,
+                      GTK_WIDGET (self->controls));
 
   ide_pane_observe (g_object_new (IDE_TYPE_PANE,
                                   "title", _("Debugger"),
@@ -402,6 +407,7 @@ ide_debugger_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                      IdeWorkspace      *workspace)
 {
   IdeDebuggerWorkspaceAddin *self = (IdeDebuggerWorkspaceAddin *)addin;
+  IdeHeaderBar *header_bar;
 
   IDE_ENTRY;
 
@@ -414,12 +420,13 @@ ide_debugger_workspace_addin_unload (IdeWorkspaceAddin *addin,
   gtk_widget_insert_action_group (GTK_WIDGET (self->workspace), "debugger", NULL);
   ide_run_manager_remove_handler (self->run_manager, "debugger");
 
+  header_bar = ide_workspace_get_header_bar (workspace);
+  ide_header_bar_remove (header_bar, GTK_WIDGET (self->controls));
+  self->controls = NULL;
+
   g_clear_object (&self->debugger_signals);
   g_clear_object (&self->debug_manager_signals);
   g_clear_object (&self->run_manager);
-
-  ide_workspace_remove_overlay (self->workspace, GTK_WIDGET (self->controls));
-  self->controls = NULL;
 
   ide_clear_pane ((IdePane **)&self->panel);
   ide_clear_page ((IdePage **)&self->disassembly_view);
