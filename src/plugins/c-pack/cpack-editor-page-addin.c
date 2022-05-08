@@ -41,13 +41,11 @@ format_decls_cb (GSimpleAction *action,
   g_autofree gchar *input = NULL;
   g_autofree gchar *output = NULL;
   IdeBuffer *buffer;
-  IdeSourceView *sourceview;
   GtkTextIter begin, end;
 
   g_assert (IDE_IS_EDITOR_PAGE (view));
 
   buffer = ide_editor_page_get_buffer (view);
-  sourceview = ide_editor_page_get_view (view);
 
   /* We require a selection */
   if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end))
