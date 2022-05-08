@@ -62,7 +62,6 @@ format_decls_cb (GSimpleAction *action,
       gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
       gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &begin, output, -1);
       gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
-      g_signal_emit_by_name (sourceview, "reset");
     }
 }
 
