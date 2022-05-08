@@ -56,6 +56,9 @@ void        ide_header_bar_add         (IdeHeaderBar         *self,
                                         int                   priority,
                                         GtkWidget            *widget);
 IDE_AVAILABLE_IN_ALL
+void        ide_header_bar_remove      (IdeHeaderBar         *self,
+                                        GtkWidget            *widget);
+IDE_AVAILABLE_IN_ALL
 const char *ide_header_bar_get_menu_id (IdeHeaderBar *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_header_bar_set_menu_id (IdeHeaderBar *self,
