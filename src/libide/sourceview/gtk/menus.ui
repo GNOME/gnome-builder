@@ -31,24 +31,19 @@
     <section id="ide-source-view-popup-menu-clipboard-section">
       <item>
         <attribute name="label" translatable="yes">C_ut</attribute>
-        <attribute name="action">sourceview.cut-clipboard</attribute>
+        <attribute name="action">clipboard.cut</attribute>
         <attribute name="accel">&lt;control&gt;x</attribute>
       </item>
       <item>
         <attribute name="id">copy</attribute>
         <attribute name="label" translatable="yes">_Copy</attribute>
-        <attribute name="action">sourceview.copy-clipboard</attribute>
+        <attribute name="action">clipboard.copy</attribute>
         <attribute name="accel">&lt;control&gt;c</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Paste</attribute>
-        <attribute name="action">sourceview.paste-clipboard</attribute>
+        <attribute name="action">clipboard.paste</attribute>
         <attribute name="accel">&lt;control&gt;v</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Delete</attribute>
-        <attribute name="action">sourceview.delete-selection</attribute>
-        <attribute name="accel">Delete</attribute>
       </item>
     </section>
     <section id="ide-source-view-popup-menu-highlighting-section">
