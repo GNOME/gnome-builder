@@ -288,7 +288,9 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
                                   NULL),
                     (IdePane **)&self->panel);
 
-  notebook = g_object_new (GTK_TYPE_NOTEBOOK, NULL);
+  notebook = g_object_new (GTK_TYPE_NOTEBOOK,
+                           "show-border", FALSE,
+                           NULL);
   panel_widget_set_child (PANEL_WIDGET (self->panel), GTK_WIDGET (notebook));
 
   hpaned = g_object_new (PANEL_TYPE_PANED,
