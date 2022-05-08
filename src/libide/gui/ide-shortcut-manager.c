@@ -217,7 +217,7 @@ ide_shortcut_manager_add_resources (const char *resource_path)
 
   g_return_if_fail (resource_path != NULL);
 
-  keybindings_json_path = g_build_filename (resource_path, "keybindings.json", NULL);
+  keybindings_json_path = g_build_filename (resource_path, "gtk", "keybindings.json", NULL);
 
   if (g_str_has_prefix (resource_path, "resource://"))
     keybindings_json = g_file_new_for_uri (keybindings_json_path);
