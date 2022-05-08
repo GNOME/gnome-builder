@@ -18,7 +18,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-rename-provider.h"
+#define G_LOG_DOMAIN "ide-rename-provider"
 
 #include "config.h"
 
