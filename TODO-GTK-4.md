@@ -9,16 +9,17 @@ This document is meant to help keep track of things that we will need to come ba
 
 ## Shortcuts
 
-We still need a Shortcuts manager and a way to define shortcuts, especially by users.
-My plan so far is to have an IdeShortcut which is has a few things in it:
+We have a shortcut manager now, but we probably need a way to get a shortcut
+trigger from an action name so that we can show accel previews in various
+menu models. We might also want a way to get description/etc for a shortcut
+search with the upcoming global search.
 
- * "action" or "command" property of what to activate
- * "params" which is the GVariant parameters
- * "when" which is a simple set of rules we can apply if we can activate it
-   such as `inWorkspace(primary)` or `inPage(editor)` or `hasProject()`.
- * A "phase" that allows changing bubble/capture semantics
- * A list model to filter all of these out based on workspace status/focus/etc
- * A custom GtkShortcutController to apply these rules from the model
+Plugins need to be ported to add a gtk/keybindings.json file with their
+given trigger/action mappings.
+
+Some objects were using helpers that exported action signals as actions and
+those need to be updated to use proper actions. Many just need to be converted
+as GTK itself provides actions now.
 
 ## Editor Search
 
@@ -115,7 +116,4 @@ all the keybindings in our new syntax.
 ## Sysprof
 
 Port to use IdePage and get rid of the whole surface madness.
-
-
-
 
