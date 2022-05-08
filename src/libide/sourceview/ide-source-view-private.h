@@ -62,6 +62,10 @@ struct _IdeSourceView
   IdeExtensionSetAdapter *completion_providers;
   IdeExtensionSetAdapter *hover_providers;
 
+  /* Mouse click position */
+  double click_x;
+  double click_y;
+
   /* Bitfield values go here */
   guint highlight_current_line : 1;
 };
