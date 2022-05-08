@@ -379,3 +379,29 @@ ide_header_bar_add (IdeHeaderBar         *self,
       gtk_box_insert_child_after (box, widget, sibling);
     }
 }
+
+void
+ide_header_bar_remove (IdeHeaderBar *self,
+                       GtkWidget    *widget)
+{
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
+  GtkBox *box;
+
+  g_return_if_fail (IDE_IS_HEADER_BAR (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_ancestor (widget, IDE_TYPE_HEADER_BAR) == GTK_WIDGET (self));
+
+  box = GTK_BOX (gtk_widget_get_ancestor (widget, GTK_TYPE_BOX));
+
+  if (box == priv->left ||
+      box == priv->right ||
+      box == priv->left_of_center ||
+      box == priv->right_of_center)
+    {
+      gtk_box_remove (box, widget);
+      return;
+    }
+
+  g_warning ("Failed to locate widget of type %s within headerbar",
+             G_OBJECT_TYPE_NAME (widget));
+}
