@@ -332,6 +332,17 @@ _ide_application_add_resources (IdeApplication *self,
   ide_shortcut_manager_add_resources (resource_path);
 }
 
+void
+_ide_application_remove_resources (IdeApplication *self,
+                                   const char     *resource_path)
+{
+  g_return_if_fail (IDE_IS_APPLICATION (self));
+  g_return_if_fail (resource_path != NULL);
+
+  /* Unmerge menus, keybindings, etc */
+  g_warning ("TODO: implement resource unloading for plugins: %s", resource_path);
+}
+
 static void
 ide_application_get_property (GObject    *object,
                               guint       prop_id,
