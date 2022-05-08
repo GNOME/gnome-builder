@@ -265,7 +265,6 @@ static void
 ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
 {
   g_autoptr(IdePanelPosition) position = NULL;
-  IdeHeaderBar *header_bar;
   GtkNotebook *notebook;
   PanelPaned *hpaned;
 
@@ -275,12 +274,6 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
   self->controls = g_object_new (IDE_TYPE_DEBUGGER_CONTROLS,
                                  "visible", FALSE,
                                  NULL);
-
-  header_bar = ide_workspace_get_header_bar (self->workspace);
-  ide_header_bar_add (header_bar,
-                      IDE_HEADER_BAR_POSITION_RIGHT_OF_CENTER,
-                      100,
-                      GTK_WIDGET (self->controls));
 
   ide_pane_observe (g_object_new (IDE_TYPE_PANE,
                                   "title", _("Debugger"),
@@ -292,6 +285,8 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
                            "show-border", FALSE,
                            NULL);
   panel_widget_set_child (PANEL_WIDGET (self->panel), GTK_WIDGET (notebook));
+
+  gtk_notebook_set_action_widget (notebook, GTK_WIDGET (self->controls), GTK_PACK_START);
 
   hpaned = g_object_new (PANEL_TYPE_PANED,
                          "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -409,7 +404,6 @@ ide_debugger_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                      IdeWorkspace      *workspace)
 {
   IdeDebuggerWorkspaceAddin *self = (IdeDebuggerWorkspaceAddin *)addin;
-  IdeHeaderBar *header_bar;
 
   IDE_ENTRY;
 
@@ -422,8 +416,6 @@ ide_debugger_workspace_addin_unload (IdeWorkspaceAddin *addin,
   gtk_widget_insert_action_group (GTK_WIDGET (self->workspace), "debugger", NULL);
   ide_run_manager_remove_handler (self->run_manager, "debugger");
 
-  header_bar = ide_workspace_get_header_bar (workspace);
-  ide_header_bar_remove (header_bar, GTK_WIDGET (self->controls));
   self->controls = NULL;
 
   g_clear_object (&self->debugger_signals);
