@@ -360,7 +360,6 @@ void
 _ide_application_load_plugins (IdeApplication *self)
 {
   g_autofree gchar *user_plugins_dir = NULL;
-  g_autoptr(GError) error = NULL;
   const GList *plugins;
   PeasEngine *engine;
 
@@ -404,28 +403,7 @@ _ide_application_load_plugins (IdeApplication *self)
                                        NULL);
   peas_engine_prepend_search_path (engine, user_plugins_dir, NULL);
 
-  /* Ensure that we have all our required GObject Introspection packages
-   * loaded so that plugins don't need to require_version() as that is
-   * tedious and annoying to keep up to date.
-   *
-   * If we can't load any of our dependent packages, then fail to load
-   * python3 plugins altogether to avoid loading anything improper into
-   * the process space.
-   */
-  g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
-  if (!g_irepository_require (NULL, "GtkSource", "5", 0, &error) ||
-      !g_irepository_require (NULL, "Gio", "2.0", 0, &error) ||
-      !g_irepository_require (NULL, "GLib", "2.0", 0, &error) ||
-      !g_irepository_require (NULL, "Gtk", "4.0", 0, &error) ||
-      !g_irepository_require (NULL, "Jsonrpc", "1.0", 0, &error) ||
-      !g_irepository_require (NULL, "Template", "1.0", 0, &error) ||
-      !g_irepository_require (NULL, "Vte", "3.91", 0, &error) ||
-#ifdef HAVE_WEBKIT
-      !g_irepository_require (NULL, "WebKit2", "5.0", 0, &error) ||
-#endif
-      !g_irepository_require (NULL, "Ide", PACKAGE_ABI_S, 0, &error))
-    g_critical ("Cannot enable Python 3 plugins: %s", error->message);
-  else
+  if (self->loaded_typelibs)
     peas_engine_enable_loader (engine, "python3");
 
   peas_engine_rescan_plugins (engine);

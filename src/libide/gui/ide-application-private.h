@@ -97,6 +97,9 @@ struct _IdeApplication
   /* If we've detected we lost network access */
   GNetworkMonitor *network_monitor;
   guint has_network : 1;
+
+  /* If all our typelibs were loaded successfully */
+  guint loaded_typelibs : 1;
 };
 
 IdeApplication *_ide_application_new                      (gboolean                 standalone);
