@@ -191,6 +191,9 @@ ide_source_view_click_pressed_cb (IdeSourceView   *self,
   g_assert (IDE_IS_SOURCE_VIEW (self));
   g_assert (GTK_IS_GESTURE_CLICK (click));
 
+  self->click_x = x;
+  self->click_y = y;
+
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (click));
   event = gtk_gesture_get_last_event (GTK_GESTURE (click), sequence);
@@ -403,7 +406,7 @@ ide_source_view_menu_popup_action (GtkWidget  *widget,
       model = G_MENU_MODEL (self->joined_menu);
       self->popup_menu = GTK_POPOVER (gtk_popover_menu_new_from_model (model));
       gtk_widget_set_parent (GTK_WIDGET (self->popup_menu), widget);
-      gtk_popover_set_position (self->popup_menu, GTK_POS_BOTTOM);
+      gtk_popover_set_position (self->popup_menu, GTK_POS_RIGHT);
       gtk_popover_set_has_arrow (self->popup_menu, FALSE);
       gtk_widget_set_halign (GTK_WIDGET (self->popup_menu), GTK_ALIGN_START);
     }
@@ -429,6 +432,11 @@ ide_source_view_menu_popup_action (GtkWidget  *widget,
                                              &iter_location.y);
 
       gtk_popover_set_pointing_to (self->popup_menu, &iter_location);
+    }
+  else
+    {
+      gtk_popover_set_pointing_to (self->popup_menu,
+                                   &(GdkRectangle) { self->click_x, self->click_y, 1, 1 });
     }
 
   gtk_popover_popup (self->popup_menu);
