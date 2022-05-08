@@ -172,6 +172,12 @@ ide_editor_workspace_can_search (IdeWorkspace *workspace)
   return TRUE;
 }
 
+static IdeHeaderBar *
+ide_editor_workspace_get_header_bar (IdeWorkspace *workspace)
+{
+  return IDE_EDITOR_WORKSPACE (workspace)->header_bar;
+}
+
 static void
 ide_editor_workspace_dispose (GObject *object)
 {
@@ -202,6 +208,7 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
   workspace_class->context_set = ide_editor_workspace_context_set;
   workspace_class->get_frame_at_position = ide_editor_workspace_get_frame_at_position;
   workspace_class->get_most_recent_frame = ide_editor_workspace_get_most_recent_frame;
+  workspace_class->get_header_bar = ide_editor_workspace_get_header_bar;
 
   ide_workspace_class_set_kind (workspace_class, "editor");
 

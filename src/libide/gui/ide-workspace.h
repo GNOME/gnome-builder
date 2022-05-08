@@ -54,39 +54,40 @@ struct _IdeWorkspaceClass
   guint has_statusbar : 1;
   guint _unused_flags : 31;
 
-  void        (*context_set)           (IdeWorkspace         *self,
-                                        IdeContext           *context);
-  void        (*foreach_page)          (IdeWorkspace         *self,
-                                        IdePageCallback       callback,
-                                        gpointer              user_data);
-  IdePage    *(*get_most_recent_page)  (IdeWorkspace         *self);
-  IdeFrame   *(*get_most_recent_frame) (IdeWorkspace         *self);
-  void        (*agree_to_close_async)  (IdeWorkspace         *self,
-                                        GCancellable         *cancellable,
-                                        GAsyncReadyCallback   callback,
-                                        gpointer              user_data);
-  gboolean    (*agree_to_close_finish) (IdeWorkspace         *self,
-                                        GAsyncResult         *result,
-                                        GError              **error);
-  void        (*add_pane)              (IdeWorkspace         *self,
-                                        IdePane              *pane,
-                                        IdePanelPosition     *position);
-  void        (*add_page)              (IdeWorkspace         *self,
-                                        IdePage              *page,
-                                        IdePanelPosition     *position);
-  void        (*add_overlay)           (IdeWorkspace         *self,
-                                        GtkWidget            *overlay);
-  void        (*remove_overlay)        (IdeWorkspace         *self,
-                                        GtkWidget            *overlay);
-  PanelFrame *(*get_frame_at_position) (IdeWorkspace         *self,
-                                        IdePanelPosition     *position);
-  void        (*restore_size)          (IdeWorkspace         *self,
-                                        int                   width,
-                                        int                   height);
-  gboolean    (*save_size)             (IdeWorkspace         *self,
-                                        int                  *width,
-                                        int                  *height);
-  gboolean    (*can_search)            (IdeWorkspace         *self);
+  void          (*context_set)           (IdeWorkspace         *self,
+                                          IdeContext           *context);
+  void          (*foreach_page)          (IdeWorkspace         *self,
+                                          IdePageCallback       callback,
+                                          gpointer              user_data);
+  IdeHeaderBar *(*get_header_bar)        (IdeWorkspace         *self);
+  IdePage      *(*get_most_recent_page)  (IdeWorkspace         *self);
+  IdeFrame     *(*get_most_recent_frame) (IdeWorkspace         *self);
+  void          (*agree_to_close_async)  (IdeWorkspace         *self,
+                                          GCancellable         *cancellable,
+                                          GAsyncReadyCallback   callback,
+                                          gpointer              user_data);
+  gboolean      (*agree_to_close_finish) (IdeWorkspace         *self,
+                                          GAsyncResult         *result,
+                                          GError              **error);
+  void          (*add_pane)              (IdeWorkspace         *self,
+                                          IdePane              *pane,
+                                          IdePanelPosition     *position);
+  void          (*add_page)              (IdeWorkspace         *self,
+                                          IdePage              *page,
+                                          IdePanelPosition     *position);
+  void          (*add_overlay)           (IdeWorkspace         *self,
+                                          GtkWidget            *overlay);
+  void          (*remove_overlay)        (IdeWorkspace         *self,
+                                          GtkWidget            *overlay);
+  PanelFrame   *(*get_frame_at_position) (IdeWorkspace         *self,
+                                          IdePanelPosition     *position);
+  void          (*restore_size)          (IdeWorkspace         *self,
+                                          int                   width,
+                                          int                   height);
+  gboolean      (*save_size)             (IdeWorkspace         *self,
+                                          int                  *width,
+                                          int                  *height);
+  gboolean      (*can_search)            (IdeWorkspace         *self);
 };
 
 IDE_AVAILABLE_IN_ALL

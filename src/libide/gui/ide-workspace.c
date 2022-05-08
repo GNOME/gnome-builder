@@ -452,6 +452,12 @@ ide_workspace_real_can_search (IdeWorkspace *self)
   return FALSE;
 }
 
+static IdeHeaderBar *
+ide_workspace_real_get_header_bar (IdeWorkspace *workspace)
+{
+  return NULL;
+}
+
 static void
 ide_workspace_dispose (GObject *object)
 {
@@ -541,6 +547,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   klass->get_most_recent_frame = ide_workspace_real_get_most_recent_frame;
   klass->restore_size = ide_workspace_restore_size;
   klass->save_size = ide_workspace_save_size;
+  klass->get_header_bar = ide_workspace_real_get_header_bar;
 
   /**
    * IdeWorkspace:context:
@@ -701,16 +708,9 @@ ide_workspace_foreach_page (IdeWorkspace    *self,
 IdeHeaderBar *
 ide_workspace_get_header_bar (IdeWorkspace *self)
 {
-  GtkWidget *ret = NULL;
-
   g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
 
-  ret = gtk_window_get_titlebar (GTK_WINDOW (self));
-
-  if (IDE_IS_HEADER_BAR (ret))
-    return IDE_HEADER_BAR (ret);
-
-  return NULL;
+  return IDE_WORKSPACE_GET_CLASS (self)->get_header_bar (self);
 }
 
 /**
