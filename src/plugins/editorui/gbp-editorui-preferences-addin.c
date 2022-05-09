@@ -45,12 +45,14 @@ static const IdePreferenceGroupEntry groups[] = {
   { "appearance", "brackets",     60, NULL },
   { "appearance", "accessories", 100, NULL },
 
+  { "keyboard",   "movement",      10, N_("Movements") },
+};
+
+static const IdePreferenceGroupEntry lang_groups[] = {
   { "languages/*", "general",      0, N_("General") },
   { "languages/*", "margins",     10, N_("Margins") },
   { "languages/*", "spacing",     20, N_("Spacing") },
   { "languages/*", "indentation", 30, N_("Indentation") },
-
-  { "keyboard",   "movement",      10, N_("Movements") },
 };
 
 static const IdePreferenceItemEntry items[] = {
@@ -294,6 +296,7 @@ gbp_editorui_preferences_addin_add_languages (IdePreferencesWindow *window,
     _items[i].path = lang_path;
 
   ide_preferences_window_add_pages (window, lpages, j, NULL);
+  ide_preferences_window_add_groups (window, lang_groups, G_N_ELEMENTS (lang_groups), NULL);
   ide_preferences_window_add_items (window, _items, G_N_ELEMENTS (_items), window, NULL);
 
   g_free (lpages);
@@ -328,7 +331,7 @@ gbp_editorui_preferences_addin_load (IdePreferencesAddin  *addin,
   else if (mode == IDE_PREFERENCES_MODE_PROJECT && IDE_IS_CONTEXT (context))
     {
       g_autofree char *project_id = ide_context_dup_project_id (context);
-      g_autofree char *project_lang_path = g_strdup_printf ("/org/gnome/builder/projects/%s/languages/*", project_id);
+      g_autofree char *project_lang_path = g_strdup_printf ("/org/gnome/builder/projects/%s/language/*", project_id);
 
       gbp_editorui_preferences_addin_add_languages (window, project_lang_path);
     }
