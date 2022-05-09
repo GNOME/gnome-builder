@@ -510,8 +510,8 @@ ide_tree_query_tooltip (GtkWidget  *widget,
           if (node != NULL)
             {
               gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
-              gtk_tooltip_set_text (tooltip,
-                                    ide_tree_node_get_display_name (node));
+              gtk_tooltip_set_markup (tooltip,
+                                      ide_tree_node_get_display_name (node));
               return TRUE;
             }
         }
