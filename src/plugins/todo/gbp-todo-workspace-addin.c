@@ -148,6 +148,7 @@ gbp_todo_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   position = ide_panel_position_new ();
   ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_START);
+  ide_panel_position_set_row (position, 0);
   ide_panel_position_set_depth (position, 2);
 
   ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
