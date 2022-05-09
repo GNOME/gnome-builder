@@ -327,35 +327,26 @@ ide_preferences_window_extension_removed (IdeExtensionSetAdapter *set,
 static void
 ide_preferences_window_load_addins (IdePreferencesWindow *self)
 {
+  IdeContext *context = NULL;
+  const char *kind = "application";
+
   g_assert (IDE_IS_PREFERENCES_WINDOW (self));
   g_assert (self->addins == NULL);
 
   _ide_preferences_builtin_register (self);
 
-  if (self->mode == IDE_PREFERENCES_MODE_APPLICATION)
-    {
-      self->addins = ide_extension_set_adapter_new (NULL,
-                                                    peas_engine_get_default (),
-                                                    IDE_TYPE_PREFERENCES_ADDIN,
-                                                    "Preferences-Kind", "application");
-    }
-  else if (self->mode == IDE_PREFERENCES_MODE_PROJECT)
+  if (self->mode == IDE_PREFERENCES_MODE_PROJECT)
     {
       IdeWorkbench *workbench = IDE_WORKBENCH (gtk_window_get_group (GTK_WINDOW (self)));
-      IdeContext *context = ide_workbench_get_context (workbench);
 
-      self->addins = ide_extension_set_adapter_new (IDE_OBJECT (context),
-                                                    peas_engine_get_default (),
-                                                    IDE_TYPE_PREFERENCES_ADDIN,
-                                                    "Preferences-Kind", "project");
-
-      /* TODO: This also needs configurations, but that could be under a page
-       *       if we wanted to.
-       */
+      context = ide_workbench_get_context (workbench);
+      kind = "project";
     }
 
-  if (self->addins == NULL)
-    return;
+  self->addins = ide_extension_set_adapter_new (IDE_OBJECT (context),
+                                                peas_engine_get_default (),
+                                                IDE_TYPE_PREFERENCES_ADDIN,
+                                                "Preferences-Kind", kind);
 
   g_signal_connect (self->addins,
                     "extension-added",
