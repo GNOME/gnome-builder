@@ -351,7 +351,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   pane_position = ide_panel_position_new ();
   ide_panel_position_set_edge (pane_position, PANEL_DOCK_POSITION_START);
-  ide_panel_position_set_depth (pane_position, 2);
+  ide_panel_position_set_depth (pane_position, 1);
 
   self->pane = g_object_new (GBP_TYPE_BUILDUI_PANE, NULL);
   ide_workspace_add_pane (workspace, IDE_PANE (self->pane), pane_position);

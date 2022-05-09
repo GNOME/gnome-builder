@@ -56,6 +56,8 @@ gbp_project_tree_workspace_addin_load (IdeWorkspaceAddin *addin,
   ide_panel_position_set_depth (position, 0);
 
   ide_workspace_add_pane (workspace, IDE_PANE (self->pane), position);
+
+  panel_widget_raise (PANEL_WIDGET (self->pane));
 }
 
 static void
@@ -78,7 +80,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpProjectTreeWorkspaceAddin, gbp_project_tree_workspace_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
 gbp_project_tree_workspace_addin_class_init (GbpProjectTreeWorkspaceAddinClass *klass)
