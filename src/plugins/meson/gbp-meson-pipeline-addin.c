@@ -77,12 +77,11 @@ on_build_stage_query (IdePipelineStage *stage,
 
           if (GBP_IS_MESON_BUILD_TARGET (target))
             {
-              const gchar *filename;
+              const char *builddir = ide_pipeline_get_builddir (pipeline);
+              const char *filename = gbp_meson_build_target_get_filename (GBP_MESON_BUILD_TARGET (target));
 
-              filename = gbp_meson_build_target_get_filename (GBP_MESON_BUILD_TARGET (target));
-
-              if (filename != NULL)
-                ide_subprocess_launcher_push_argv (launcher, filename);
+              if (filename != NULL && g_str_has_prefix (filename, builddir))
+                ide_subprocess_launcher_push_argv (launcher, g_path_skip_root (filename + strlen (builddir)));
             }
         }
     }
