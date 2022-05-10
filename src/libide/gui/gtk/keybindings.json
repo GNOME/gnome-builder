@@ -19,6 +19,10 @@
 { "trigger" : "<Alt>8", "action" : "frame.page", "args" : "8", "when" : "inGrid()", "phase" : "capture" },
 { "trigger" : "<Alt>9", "action" : "frame.page", "args" : "9", "when" : "inGrid()", "phase" : "capture" },
 
+/* Workspace Actions */
+{ "trigger" : "<Control>comma", "action" : "app.preferences", "phase" : "capture" },
+{ "trigger" : "<Alt>comma", "action" : "workbench.configure", "phase" : "capture" },
+
 /* Build Actions */
 { "trigger" : "<Control><Shift>l", "action" : "win.show-build-log", "when" : "hasProject()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>r", "action" : "build-manager.rebuild", "when" : "hasProject()", "phase" : "capture" },
