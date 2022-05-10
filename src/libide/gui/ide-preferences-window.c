@@ -1286,7 +1286,7 @@ ide_preferences_window_check (const char                   *page_name,
                         "valign", GTK_ALIGN_CENTER,
                         "can-target", FALSE,
                         NULL);
-  gtk_widget_add_css_class (child, "preferences-check");
+  gtk_widget_add_css_class (child, "checkimage");
   row = g_object_new (ADW_TYPE_ACTION_ROW,
                       "title", title_esc,
                       "subtitle", subtitle_esc,

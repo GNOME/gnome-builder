@@ -9,7 +9,7 @@ window.preferences list.boxed-list.style-variant button {
 window.preferences list.boxed-list.style-variant button:checked {
   border-color: @theme_selected_bg_color;
 }
-window.preferences list check {
+.checkimage check {
   background: none;
   outline: none;
   box-shadow: none;
@@ -18,7 +18,7 @@ window.preferences list check {
   -gtk-icon-source: none;
   -gtk-icon-size: 18px;
 }
-window.preferences list check:checked {
+.checkimage check:checked {
   -gtk-icon-source: -gtk-icontheme('object-select-symbolic');
 }
 stylevariantpreview widget.wallpaper {
