@@ -9,3 +9,4 @@ Hidden=true
 Module=buildui
 Name=Build user interface components
 X-Workspace-Kind=primary;
+X-Preferences-Kind=project;
