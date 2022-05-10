@@ -23,14 +23,18 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 
 #include <libide-core.h>
 #include <libide-code.h>
+#include <libide-plugins.h>
 #include <libide-threading.h>
 #include <libide-vcs.h>
 
 #include "ide-build-manager.h"
 #include "ide-build-private.h"
+#include "ide-build-target.h"
+#include "ide-build-target-provider.h"
 #include "ide-config-manager.h"
 #include "ide-config.h"
 #include "ide-device-info.h"
@@ -74,6 +78,9 @@ struct _IdeBuildManager
   IdePipeline      *pipeline;
   GDateTime        *last_build_time;
   IdeSignalGroup   *pipeline_signals;
+
+  IdeExtensionSetAdapter
+                   *build_target_providers;
 
   char             *branch_name;
 
@@ -850,6 +857,7 @@ ide_build_manager_finalize (GObject *object)
 {
   IdeBuildManager *self = (IdeBuildManager *)object;
 
+  ide_clear_and_destroy_object (&self->build_target_providers);
   ide_clear_and_destroy_object (&self->pipeline);
   g_clear_object (&self->pipeline_signals);
   g_clear_object (&self->cancellable);
@@ -1928,4 +1936,186 @@ _ide_build_manager_start (IdeBuildManager *self)
   self->started = TRUE;
 
   ide_build_manager_invalidate (self);
+}
+
+static void
+ensure_build_target_providers (IdeBuildManager *self)
+{
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  if (self->build_target_providers != NULL)
+    return;
+
+  self->build_target_providers =
+    ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                   peas_engine_get_default (),
+                                   IDE_TYPE_BUILD_TARGET_PROVIDER,
+                                   NULL, NULL);
+}
+
+typedef struct
+{
+  GListStore *store;
+  guint n_active;
+} ListTargets;
+
+static void
+list_targets_free (ListTargets *state)
+{
+  g_clear_object (&state->store);
+  g_slice_free (ListTargets, state);
+}
+
+static void
+ide_build_manager_list_targets_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)object;
+  g_autoptr(GPtrArray) targets = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  ListTargets *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (G_IS_LIST_STORE (state->store));
+
+  targets = ide_build_target_provider_get_targets_finish (provider, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (targets, g_object_unref);
+
+  if (targets != NULL)
+    {
+      for (guint i = 0; i < targets->len; i++)
+        {
+          IdeBuildTarget *target = g_ptr_array_index (targets, i);
+
+          g_list_store_append (state->store, target);
+        }
+    }
+
+  state->n_active--;
+
+  if (state->n_active == 0)
+    {
+      if (g_list_model_get_n_items (G_LIST_MODEL (state->store)) > 0)
+        ide_task_return_object (task, g_steal_pointer (&state->store));
+      else
+        ide_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_NOT_SUPPORTED,
+                                   "No build targets could be located, perhaps project needs to be configured");
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_build_manager_list_targets_foreach_cb (IdeExtensionSetAdapter *set,
+                                           PeasPluginInfo         *plugin_info,
+                                           PeasExtension          *exten,
+                                           gpointer                user_data)
+{
+  IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)exten;
+  IdeTask *task = user_data;
+  ListTargets *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (G_IS_LIST_STORE (state->store));
+
+  state->n_active++;
+
+  ide_build_target_provider_get_targets_async (provider,
+                                               ide_task_get_cancellable (task),
+                                               ide_build_manager_list_targets_cb,
+                                               g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+void
+ide_build_manager_list_targets_async (IdeBuildManager     *self,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  ListTargets *state;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (ListTargets);
+  state->store = g_list_store_new (IDE_TYPE_BUILD_TARGET);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_manager_list_targets_async);
+  ide_task_set_task_data (task, state, list_targets_free);
+
+  ensure_build_target_providers (self);
+
+  ide_extension_set_adapter_foreach (self->build_target_providers,
+                                     ide_build_manager_list_targets_foreach_cb,
+                                     task);
+
+  if (state->n_active == 0)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "No build target providers found");
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_build_manager_list_targets_finish:
+ * @self: a #IdeBuildManager
+ * @error: a location for a #GError
+ *
+ * Lists available build targets.
+ *
+ * Completes a request to list available build targets that was started with
+ * ide_build_manager_list_targets_async(). If no build targetproviders were
+ * discovered or no build targets were found, this will return %NULL and @error
+ * will be set to %G_IO_ERROR_NOT_SUPPORTED.
+ *
+ * Otherwise, a non-empty #GListModel of #IdeBuildTarget will be returned.
+ *
+ * Returns: (transfer full): a #GListModel of #IdeBuildTarget if successful;
+ *   otherwise %NULL and @error is set.
+ */
+GListModel *
+ide_build_manager_list_targets_finish (IdeBuildManager  *self,
+                                       GAsyncResult     *result,
+                                       GError          **error)
+{
+  GListModel *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  ret = ide_task_propagate_object (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
