@@ -15,7 +15,12 @@
           <object class="AdwPreferencesPage">
             <child>
               <object class="AdwPreferencesGroup">
-                <property name="title" translatable="yes">Build Targets</property>
+                <property name="title" translatable="yes">Available Build Targets</property>
+                <property name="header-suffix">
+                  <object class="GtkSpinner" id="spinner">
+                    <property name="spinning" bind-source="GbpBuilduiTargetsDialog" bind-property="busy" bind-flags="sync-create"/>
+                  </object>
+                </property>
                 <child>
                   <object class="GtkListBox" id="list_box">
                     <style>

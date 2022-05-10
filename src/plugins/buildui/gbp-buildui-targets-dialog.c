@@ -34,15 +34,20 @@
 struct _GbpBuilduiTargetsDialog
 {
   AdwWindow               parent_instance;
+
   GtkListBox             *list_box;
+  GtkSpinner             *spinner;
   GListStore             *store;
   IdeExtensionSetAdapter *set;
+
+  guint                   busy_count;
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiTargetsDialog, gbp_buildui_targets_dialog, ADW_TYPE_WINDOW)
 
 enum {
   PROP_0,
+  PROP_BUSY,
   PROP_CONTEXT,
   N_PROPS
 };
@@ -53,9 +58,31 @@ static GtkWidget *
 create_target_row (gpointer item,
                    gpointer user_data)
 {
-  return g_object_new (ADW_TYPE_ACTION_ROW,
-                       "title", ide_build_target_get_display_name (item),
-                       NULL);
+  IdeBuildTarget *target = item;
+  g_autoptr(GVariant) namev = NULL;
+  AdwActionRow *row;
+  const char *name;
+  GtkWidget *check;
+
+  g_assert (IDE_IS_BUILD_TARGET (target));
+
+  name = ide_build_target_get_name (target);
+  namev = g_variant_take_ref (g_variant_new_string (name ? name : ""));
+
+  check = g_object_new (GTK_TYPE_CHECK_BUTTON,
+                        "action-name", "build-manager.default-build-target",
+                        "action-target", namev,
+                        "valign", GTK_ALIGN_CENTER,
+                        "can-focus", FALSE,
+                        NULL);
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title", ide_build_target_get_display_name (item),
+                      "activatable-widget", check,
+                      NULL);
+  gtk_widget_add_css_class (check, "checkimage");
+  adw_action_row_add_suffix (row, check);
+
+  return GTK_WIDGET (row);
 }
 
 static void
@@ -86,6 +113,10 @@ gbp_buildui_targets_dialog_get_targets_cb (GObject      *object,
         }
     }
 
+  self->busy_count--;
+
+  if (self->busy_count == 0)
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 }
 
 static void
@@ -102,10 +133,15 @@ gbp_buildui_targets_dialog_foreach_cb (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
   g_assert (GBP_IS_BUILDUI_TARGETS_DIALOG (self));
 
+  self->busy_count++;
+
   ide_build_target_provider_get_targets_async (provider,
                                                NULL,
                                                gbp_buildui_targets_dialog_get_targets_cb,
                                                g_object_ref (self));
+
+  if (self->busy_count == 1)
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 }
 
 static void
@@ -146,6 +182,25 @@ gbp_buildui_targets_dialog_dispose (GObject *object)
 }
 
 static void
+gbp_buildui_targets_dialog_get_property (GObject    *object,
+                                         guint       prop_id,
+                                         GValue     *value,
+                                         GParamSpec *pspec)
+{
+  GbpBuilduiTargetsDialog *self = GBP_BUILDUI_TARGETS_DIALOG (object);
+
+  switch (prop_id)
+    {
+    case PROP_BUSY:
+      g_value_set_boolean (value, self->busy_count > 0);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_buildui_targets_dialog_set_property (GObject      *object,
                                          guint         prop_id,
                                          const GValue *value,
@@ -171,12 +226,16 @@ gbp_buildui_targets_dialog_class_init (GbpBuilduiTargetsDialogClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = gbp_buildui_targets_dialog_dispose;
+  object_class->get_property = gbp_buildui_targets_dialog_get_property;
   object_class->set_property = gbp_buildui_targets_dialog_set_property;
 
+  properties [PROP_BUSY] =
+    g_param_spec_boolean ("busy", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_CONTEXT] =
-    g_param_spec_object ("context",
-                         "Context",
-                         "The context for the build targets",
+    g_param_spec_object ("context", NULL, NULL,
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
@@ -184,6 +243,7 @@ gbp_buildui_targets_dialog_class_init (GbpBuilduiTargetsDialogClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-targets-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, spinner);
 }
 
 static void
