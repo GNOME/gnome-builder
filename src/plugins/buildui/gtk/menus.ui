@@ -36,6 +36,7 @@
       <item>
         <attribute name="label" translatable="yes">Configure Project…</attribute>
         <attribute name="action">workbench.configure</attribute>
+        <attribute name="accel">&lt;alt&gt;comma</attribute>
       </item>
     </section>
     <section id="build-menu-target">
