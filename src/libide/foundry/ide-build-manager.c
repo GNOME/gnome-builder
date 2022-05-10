@@ -108,6 +108,14 @@ struct _IdeBuildManager
   guint             has_configured : 1;
 };
 
+typedef struct
+{
+  IdePipeline      *pipeline;
+  GPtrArray        *targets;
+  char             *default_target;
+  IdePipelinePhase  phase;
+} BuildState;
+
 static void initable_iface_init                           (GInitableIface  *iface);
 static void ide_build_manager_set_can_build               (IdeBuildManager *self,
                                                            gboolean         can_build);
@@ -164,6 +172,15 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+build_state_free (BuildState *state)
+{
+  g_clear_pointer (&state->default_target, g_free);
+  g_clear_pointer (&state->targets, g_ptr_array_unref);
+  g_clear_object (&state->pipeline);
+  g_slice_free (BuildState, state);
+}
 
 static void
 ide_build_manager_action_default_build_target (IdeBuildManager *self,
@@ -1458,6 +1475,102 @@ failure:
 }
 
 static void
+ide_build_manager_build_list_targets_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeBuildManager *self = (IdeBuildManager *)object;
+  g_autoptr(GListModel) targets = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  BuildState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->targets == NULL);
+  g_assert (state->default_target != NULL);
+  g_assert (IDE_IS_PIPELINE (state->pipeline));
+
+  if ((targets = ide_build_manager_list_targets_finish (self, result, &error)))
+    {
+      guint n_items = g_list_model_get_n_items (targets);
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(IdeBuildTarget) target = g_list_model_get_item (targets, i);
+          const char *name = ide_build_target_get_name (target);
+
+          if (g_strcmp0 (name, state->default_target) == 0)
+            {
+              state->targets = g_ptr_array_new_with_free_func (g_object_unref);
+              g_ptr_array_add (state->targets, g_steal_pointer (&target));
+              break;
+            }
+        }
+    }
+
+  if (error != NULL && !ide_error_ignore (error))
+    g_warning ("Failed to list build targets: %s", error->message);
+
+  ide_pipeline_build_targets_async (state->pipeline,
+                                    state->phase,
+                                    state->targets,
+                                    ide_task_get_cancellable (task),
+                                    ide_build_manager_build_targets_cb,
+                                    g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+ide_build_manager_build_after_save (IdeTask *task)
+{
+  IdeBuildManager *self;
+  BuildState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_PIPELINE (state->pipeline));
+
+  /* If a default build target was preferred instead of the build system
+   * default then we need to go fetch that from the build target providers.
+   * However, we can only do this if we are just building. Anything requiring
+   * us to install means that we have to do regular builds as that will happen
+   * anyway as part of the install process.
+   */
+  if (state->targets == NULL &&
+      state->default_target != NULL &&
+      state->phase < IDE_PIPELINE_PHASE_INSTALL)
+    ide_build_manager_list_targets_async (self,
+                                          ide_task_get_cancellable (task),
+                                          ide_build_manager_build_list_targets_cb,
+                                          g_object_ref (task));
+  else
+    ide_pipeline_build_targets_async (state->pipeline,
+                                      state->phase,
+                                      state->targets,
+                                      ide_task_get_cancellable (task),
+                                      ide_build_manager_build_targets_cb,
+                                      g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
 ide_build_manager_save_all_cb (GObject      *object,
                                GAsyncResult *result,
                                gpointer      user_data)
@@ -1466,9 +1579,6 @@ ide_build_manager_save_all_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeBuildManager *self;
-  GCancellable *cancellable;
-  GPtrArray *targets;
-  IdePipelinePhase phase;
 
   IDE_ENTRY;
 
@@ -1476,30 +1586,15 @@ ide_build_manager_save_all_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   self = ide_task_get_source_object (task);
-  cancellable = ide_task_get_cancellable (task);
-  targets = ide_task_get_task_data (task);
-
-  g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (!ide_buffer_manager_save_all_finish (buffer_manager, result, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  phase = ide_pipeline_get_requested_phase (self->pipeline);
-
-  ide_pipeline_build_targets_async (self->pipeline,
-                                    phase,
-                                    targets,
-                                    cancellable,
-                                    ide_build_manager_build_targets_cb,
-                                    g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+
+  if (!ide_buffer_manager_save_all_finish (buffer_manager, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_build_manager_build_after_save (task);
 
   IDE_EXIT;
 }
@@ -1530,8 +1625,7 @@ ide_build_manager_build_async (IdeBuildManager     *self,
                                gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  IdeBufferManager *buffer_manager;
-  IdeContext *context;
+  BuildState *state;
 
   IDE_ENTRY;
 
@@ -1545,9 +1639,6 @@ ide_build_manager_build_async (IdeBuildManager     *self,
   ide_task_set_source_tag (task, ide_build_manager_build_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_return_on_cancel (task, TRUE);
-
-  if (targets != NULL)
-    ide_task_set_task_data (task, _g_ptr_array_copy_objects (targets), g_ptr_array_unref);
 
   if (self->pipeline == NULL ||
       self->can_build == FALSE ||
@@ -1565,6 +1656,17 @@ ide_build_manager_build_async (IdeBuildManager     *self,
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
+
+  /* Setup our state for the build process. We try to cache everything
+   * we need up front so that we don't need to deal with races between
+   * asynchronous operations.
+   */
+  state = g_slice_new0 (BuildState);
+  state->phase = phase;
+  state->default_target = g_strdup (self->default_build_target);
+  state->targets = targets ? _g_ptr_array_copy_objects (targets) : NULL;
+  state->pipeline = g_object_ref (self->pipeline);
+  ide_task_set_task_data (task, state, build_state_free);
 
   /*
    * Only update our "build time" if we are advancing to IDE_PIPELINE_PHASE_BUILD,
@@ -1589,8 +1691,9 @@ ide_build_manager_build_async (IdeBuildManager     *self,
    */
   if ((phase & IDE_PIPELINE_PHASE_MASK) >= IDE_PIPELINE_PHASE_BUILD)
     {
-      context = ide_object_get_context (IDE_OBJECT (self));
-      buffer_manager = ide_buffer_manager_from_context (context);
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeBufferManager *buffer_manager = ide_buffer_manager_from_context (context);
+
       ide_buffer_manager_save_all_async (buffer_manager,
                                          NULL,
                                          ide_build_manager_save_all_cb,
@@ -1598,12 +1701,7 @@ ide_build_manager_build_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  ide_pipeline_build_targets_async (self->pipeline,
-                                    phase,
-                                    targets,
-                                    cancellable,
-                                    ide_build_manager_build_targets_cb,
-                                    g_steal_pointer (&task));
+  ide_build_manager_build_after_save (task);
 
   IDE_EXIT;
 }
