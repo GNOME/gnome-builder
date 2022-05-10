@@ -96,15 +96,6 @@
                         <style>
                           <class name="boxed-list"/>
                         </style>
-                        <child type="placeholder">
-                          <object class="GtkLabel">
-                            <style>
-                              <class name="dim-label"/>
-                            </style>
-                            <property name="label" translatable="yes">Build pipeline is empty</property>
-                            <property name="xalign">0.5</property>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>
