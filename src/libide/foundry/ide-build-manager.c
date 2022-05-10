@@ -75,7 +75,15 @@ struct _IdeBuildManager
   GDateTime        *last_build_time;
   IdeSignalGroup   *pipeline_signals;
 
-  gchar            *branch_name;
+  char             *branch_name;
+
+  /* The name of the default build target to build if no targets
+   * are specified. Setting to NULL (or empty string) implies that
+   * no target should be specified and therefore the build system
+   * should attempt a "full build" such as you would get by running
+   * `make` or `ninja`.
+   */
+  char             *default_build_target;
 
   GTimer           *running_time;
 
@@ -93,21 +101,23 @@ struct _IdeBuildManager
   guint             has_configured : 1;
 };
 
-static void initable_iface_init              (GInitableIface  *iface);
-static void ide_build_manager_set_can_build  (IdeBuildManager *self,
-                                              gboolean         can_build);
-static void ide_build_manager_action_build   (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_rebuild (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_cancel  (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_clean   (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_export  (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_install (IdeBuildManager *self,
-                                              GVariant        *param);
+static void initable_iface_init                           (GInitableIface  *iface);
+static void ide_build_manager_set_can_build               (IdeBuildManager *self,
+                                                           gboolean         can_build);
+static void ide_build_manager_action_build                (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_rebuild              (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_cancel               (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_clean                (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_export               (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_install              (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_default_build_target (IdeBuildManager *self,
+                                                           GVariant        *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
   { "build", ide_build_manager_action_build },
@@ -116,6 +126,7 @@ IDE_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
   { "export", ide_build_manager_action_export },
   { "install", ide_build_manager_action_install },
   { "rebuild", ide_build_manager_action_rebuild },
+  { "default-build-target", ide_build_manager_action_default_build_target, "s", "''" },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
@@ -146,6 +157,30 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+ide_build_manager_action_default_build_target (IdeBuildManager *self,
+                                               GVariant        *param)
+{
+  const char *str;
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  str = g_variant_get_string (param, NULL);
+  if (ide_str_empty0 (str))
+    str = NULL;
+
+  if (g_strcmp0 (str, self->default_build_target) != 0)
+    {
+      g_free (self->default_build_target);
+      self->default_build_target = g_strdup (str);
+      ide_build_manager_set_action_state (self,
+                                          "default-build-target",
+                                          g_variant_new_string (str ? str : ""));
+    }
+}
 
 static void
 ide_build_manager_rediagnose (IdeBuildManager *self)
@@ -821,6 +856,7 @@ ide_build_manager_finalize (GObject *object)
   g_clear_pointer (&self->last_build_time, g_date_time_unref);
   g_clear_pointer (&self->running_time, g_timer_destroy);
   g_clear_pointer (&self->branch_name, g_free);
+  g_clear_pointer (&self->default_build_target, g_free);
   g_clear_handle_id (&self->timer_source, g_source_remove);
 
   G_OBJECT_CLASS (ide_build_manager_parent_class)->finalize (object);
