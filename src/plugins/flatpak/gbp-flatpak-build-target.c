@@ -48,7 +48,8 @@ gbp_flatpak_build_target_get_name (IdeBuildTarget *build_target)
 {
   GbpFlatpakBuildTarget *self = GBP_FLATPAK_BUILD_TARGET (build_target);
 
-  return g_strdup (self->command);
+  /* This should be namespaced at least */
+  return g_strdup_printf ("flatpak:%s", self->command);
 }
 
 static gchar **
