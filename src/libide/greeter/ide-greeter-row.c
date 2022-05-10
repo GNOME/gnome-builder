@@ -310,10 +310,10 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
               GtkLabel *tag;
 
               tag = g_object_new (GTK_TYPE_LABEL,
-                                  "css-name", "button",
                                   "label", key,
+                                  "css-name", "button",
+                                  "css-classes", (const char * const []) { "pill", "small", NULL },
                                   NULL);
-              gtk_widget_add_css_class (GTK_WIDGET (tag), "pill");
               gtk_box_append (priv->tags, GTK_WIDGET (tag));
             }
 
