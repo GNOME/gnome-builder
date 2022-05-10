@@ -23,24 +23,19 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
 #include <libide-gui.h>
-#include <libide-plugins.h>
-#include <libide-threading.h>
 
 #include "gbp-buildui-targets-dialog.h"
 
 struct _GbpBuilduiTargetsDialog
 {
-  AdwWindow               parent_instance;
-
-  GtkListBox             *list_box;
-  GtkSpinner             *spinner;
-  GListStore             *store;
-  IdeExtensionSetAdapter *set;
-
-  guint                   busy_count;
+  AdwWindow   parent_instance;
+  GtkListBox *list_box;
+  GtkSpinner *spinner;
+  guint       busy : 1;
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiTargetsDialog, gbp_buildui_targets_dialog, ADW_TYPE_WINDOW)
@@ -86,62 +81,35 @@ create_target_row (gpointer item,
 }
 
 static void
-gbp_buildui_targets_dialog_get_targets_cb (GObject      *object,
-                                           GAsyncResult *result,
-                                           gpointer      user_data)
+gbp_buildui_targets_dialog_list_targets_cb (GObject      *object,
+                                            GAsyncResult *result,
+                                            gpointer      user_data)
 {
-  IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)object;
+  IdeBuildManager *build_manager = (IdeBuildManager *)object;
   g_autoptr(GbpBuilduiTargetsDialog) self = user_data;
-  g_autoptr(GPtrArray) targets = NULL;
+  g_autoptr(GListModel) model = NULL;
   g_autoptr(GError) error = NULL;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_BUILDUI_TARGETS_DIALOG (self));
 
-  targets = ide_build_target_provider_get_targets_finish (provider, result, &error);
-  IDE_PTR_ARRAY_SET_FREE_FUNC (targets, g_object_unref);
+  self->busy = FALSE;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 
-  if (targets != NULL)
+  if (!(model = ide_build_manager_list_targets_finish (build_manager, result, &error)))
     {
-      for (guint i = 0; i < targets->len; i++)
-        {
-          IdeBuildTarget *target = g_ptr_array_index (targets, i);
-
-          g_list_store_append (self->store, target);
-        }
+      if (!ide_error_ignore (error))
+        ide_object_warning (build_manager,
+                            /* translators: %s is replaced with the error message */
+                            _("Failed to list build targets: %s"),
+                            error->message);
+      IDE_EXIT;
     }
 
-  self->busy_count--;
+  gtk_list_box_bind_model (self->list_box, model, create_target_row, NULL, NULL);
 
-  if (self->busy_count == 0)
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
-}
-
-static void
-gbp_buildui_targets_dialog_foreach_cb (IdeExtensionSetAdapter *set,
-                                       PeasPluginInfo         *plugin_info,
-                                       PeasExtension          *exten,
-                                       gpointer                user_data)
-{
-  IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)exten;
-  GbpBuilduiTargetsDialog *self = user_data;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
-  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
-  g_assert (GBP_IS_BUILDUI_TARGETS_DIALOG (self));
-
-  self->busy_count++;
-
-  ide_build_target_provider_get_targets_async (provider,
-                                               NULL,
-                                               gbp_buildui_targets_dialog_get_targets_cb,
-                                               g_object_ref (self));
-
-  if (self->busy_count == 1)
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+  IDE_EXIT;
 }
 
 static void
@@ -154,38 +122,24 @@ gbp_buildui_targets_dialog_set_context (GbpBuilduiTargetsDialog *self,
 
   g_assert (GBP_IS_BUILDUI_TARGETS_DIALOG (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
-  g_assert (self->set == NULL);
 
   if (context == NULL)
     IDE_EXIT;
+
+  self->busy = TRUE;
 
   build_manager = ide_build_manager_from_context (context);
   gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "build-manager",
                                   G_ACTION_GROUP (build_manager));
+  ide_build_manager_list_targets_async (build_manager,
+                                        NULL,
+                                        gbp_buildui_targets_dialog_list_targets_cb,
+                                        g_object_ref (self));
 
-  self->set = ide_extension_set_adapter_new (IDE_OBJECT (context),
-                                             peas_engine_get_default (),
-                                             IDE_TYPE_BUILD_TARGET_PROVIDER,
-                                             NULL, NULL);
-
-
-  ide_extension_set_adapter_foreach (self->set,
-                                     gbp_buildui_targets_dialog_foreach_cb,
-                                     self);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 
   IDE_EXIT;
-}
-
-static void
-gbp_buildui_targets_dialog_dispose (GObject *object)
-{
-  GbpBuilduiTargetsDialog *self = (GbpBuilduiTargetsDialog *)object;
-
-  g_clear_object (&self->store);
-  ide_clear_and_destroy_object (&self->set);
-
-  G_OBJECT_CLASS (gbp_buildui_targets_dialog_parent_class)->dispose (object);
 }
 
 static void
@@ -199,7 +153,7 @@ gbp_buildui_targets_dialog_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_BUSY:
-      g_value_set_boolean (value, self->busy_count > 0);
+      g_value_set_boolean (value, self->busy);
       break;
 
     default:
@@ -232,7 +186,6 @@ gbp_buildui_targets_dialog_class_init (GbpBuilduiTargetsDialogClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = gbp_buildui_targets_dialog_dispose;
   object_class->get_property = gbp_buildui_targets_dialog_get_property;
   object_class->set_property = gbp_buildui_targets_dialog_set_property;
 
@@ -257,7 +210,4 @@ static void
 gbp_buildui_targets_dialog_init (GbpBuilduiTargetsDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  self->store = g_list_store_new (IDE_TYPE_BUILD_TARGET);
-  gtk_list_box_bind_model (self->list_box, G_LIST_MODEL (self->store), create_target_row, NULL, NULL);
 }
