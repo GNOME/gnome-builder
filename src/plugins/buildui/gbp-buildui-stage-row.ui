@@ -6,6 +6,10 @@
         <property name="orientation">horizontal</property>
         <child>
           <object class="GtkLabel" id="label">
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">9</property>
+            <property name="margin-bottom">9</property>
             <property name="xalign">0.0</property>
           </object>
         </child>
