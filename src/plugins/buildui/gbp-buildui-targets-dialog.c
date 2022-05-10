@@ -148,6 +148,8 @@ static void
 gbp_buildui_targets_dialog_set_context (GbpBuilduiTargetsDialog *self,
                                         IdeContext              *context)
 {
+  IdeBuildManager *build_manager;
+
   IDE_ENTRY;
 
   g_assert (GBP_IS_BUILDUI_TARGETS_DIALOG (self));
@@ -156,6 +158,11 @@ gbp_buildui_targets_dialog_set_context (GbpBuilduiTargetsDialog *self,
 
   if (context == NULL)
     IDE_EXIT;
+
+  build_manager = ide_build_manager_from_context (context);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "build-manager",
+                                  G_ACTION_GROUP (build_manager));
 
   self->set = ide_extension_set_adapter_new (IDE_OBJECT (context),
                                              peas_engine_get_default (),
