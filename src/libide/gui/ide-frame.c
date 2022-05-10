@@ -178,10 +178,13 @@ status_page_pressed_cb (IdeFrame        *self,
                         int              n_press,
                         GtkGestureClick *click)
 {
+  GtkRoot *root;
+
   g_assert (IDE_IS_FRAME (self));
   g_assert (GTK_IS_GESTURE_CLICK (click));
 
-  gtk_widget_child_focus (GTK_WIDGET (self), GTK_DIR_TAB_FORWARD);
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+  gtk_root_set_focus (root, NULL);
 }
 
 static void
