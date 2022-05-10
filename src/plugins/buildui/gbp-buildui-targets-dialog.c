@@ -238,6 +238,8 @@ gbp_buildui_targets_dialog_class_init (GbpBuilduiTargetsDialogClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-targets-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, spinner);
