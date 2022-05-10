@@ -63,6 +63,13 @@ notificationstack button {
   background: none;
 }
 
+button.pill.small {
+  font-size: .83333em;
+  border-radius: 99px;
+  margin: 0;
+  padding: 3px 12px;
+}
+
 /* Styling for search bars */
 .searchbar {
   background-color: @popover_bg_color;
