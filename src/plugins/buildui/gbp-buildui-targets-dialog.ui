@@ -23,7 +23,24 @@
                   </object>
                 </property>
                 <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Build System Default</property>
+                    <property name="activatable-widget">default_target</property>
+                    <child type="suffix">
+                      <object class="GtkCheckButton" id="default_target">
+                        <property name="action-name">build-manager.default-build-target</property>
+                        <property name="action-target">''</property>
+                        <style>
+                          <class name="checkimage"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkListBox" id="list_box">
+                    <property name="margin-top">12</property>
+                    <property name="selection-mode">none</property>
                     <style>
                       <class name="boxed-list"/>
                     </style>
