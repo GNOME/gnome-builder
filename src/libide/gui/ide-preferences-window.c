@@ -1419,7 +1419,6 @@ ide_preferences_window_spin (const char                   *page_name,
   IdePreferencesWindow *self = user_data;
   g_autofree char *title_esc = NULL;
   g_autofree char *subtitle_esc = NULL;
-  g_autoptr(GError) error = NULL;
   GtkAdjustment *adj = NULL;
   AdwActionRow *row;
   GtkWidget *child;

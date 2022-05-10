@@ -35,16 +35,6 @@ struct _GbpBuilduiRuntimeCategories
   IdeRuntimeManager *runtime_manager;
 };
 
-static gboolean
-filter_by_category (GObject *object,
-                    gpointer user_data)
-{
-  const gchar *category = user_data;
-  IdeRuntime *runtime = IDE_RUNTIME (object);
-
-  return ide_str_equal0 (category, ide_runtime_get_category (runtime));
-}
-
 static GType
 gbp_buildui_runtime_categories_get_item_type (GListModel *model)
 {
@@ -224,7 +214,8 @@ gbp_buildui_runtime_categories_create_child_model (GbpBuilduiRuntimeCategories *
 {
   g_autofree gchar *prefix = NULL;
   g_autofree gchar *name = NULL;
-  DzlListModelFilter *filter;
+  GtkFilterListModel *filter_model;
+  GtkStringFilter *filter;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_BUILDUI_RUNTIME_CATEGORIES (self));
@@ -240,12 +231,9 @@ gbp_buildui_runtime_categories_create_child_model (GbpBuilduiRuntimeCategories *
   if (g_str_has_suffix (category, "/"))
     return G_LIST_MODEL (gbp_buildui_runtime_categories_new (self->runtime_manager, prefix));
 
-  filter = dzl_list_model_filter_new (G_LIST_MODEL (self->runtime_manager));
+  filter = gtk_string_filter_new (gtk_property_expression_new (IDE_TYPE_RUNTIME, NULL, "caregory"));
+  filter_model = gtk_filter_list_model_new (G_LIST_MODEL (self->runtime_manager), GTK_FILTER (filter));
   g_object_set_data_full (G_OBJECT (filter), "CATEGORY", g_steal_pointer (&name), g_free);
-  dzl_list_model_filter_set_filter_func (filter,
-                                         filter_by_category,
-                                         g_strdup (prefix),
-                                         g_free);
 
-  return G_LIST_MODEL (g_steal_pointer (&filter));
+  return G_LIST_MODEL (g_steal_pointer (&filter_model));
 }

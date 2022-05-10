@@ -1,6 +1,7 @@
-/* gbp-buildui-runtime-row.h
+/* gbp-buildui-preferences-addin.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Georges Basile Stavracas Neto <georges.stavracas@gmail.com>
+ *           2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +21,11 @@
 
 #pragma once
 
-#include <adwaita.h>
-#include <libide-foundry.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_BUILDUI_RUNTIME_ROW (gbp_buildui_runtime_row_get_type())
-
-G_DECLARE_FINAL_TYPE (GbpBuilduiRuntimeRow, gbp_buildui_runtime_row, GBP, BUILDUI_RUNTIME_ROW, AdwActionRow)
-
-GtkWidget   *gbp_buildui_runtime_row_new    (IdeRuntime           *runtime,
-                                             IdeConfig     *config);
-const gchar *gbp_buildui_runtime_row_get_id (GbpBuilduiRuntimeRow *self);
+#define GBP_TYPE_BUILDUI_PREFERENCES_ADDIN (gbp_buildui_preferences_addin_get_type())
+G_DECLARE_FINAL_TYPE (GbpBuilduiPreferencesAddin, gbp_buildui_preferences_addin, GBP, BUILDUI_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS

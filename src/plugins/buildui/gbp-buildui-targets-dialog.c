@@ -125,6 +125,8 @@ gbp_buildui_targets_dialog_list_targets_cb (GObject      *object,
   g_autoptr(GListModel) model = NULL;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_BUILD_MANAGER (build_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_BUILDUI_TARGETS_DIALOG (self));
