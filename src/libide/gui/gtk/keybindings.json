@@ -19,6 +19,11 @@
 { "trigger" : "<Alt>8", "action" : "frame.page", "args" : "8", "when" : "inGrid()", "phase" : "capture" },
 { "trigger" : "<Alt>9", "action" : "frame.page", "args" : "9", "when" : "inGrid()", "phase" : "capture" },
 
+/* Build Actions */
+{ "trigger" : "<Control><Shift>l", "action" : "win.show-build-log", "when" : "hasProject()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>r", "action" : "build-manager.rebuild", "when" : "hasProject()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>space", "action" : "build-manager.build", "when" : "hasProject()", "phase" : "capture" },
+
 /* New Terminal Actions */
 { "trigger" : "<Control><Shift>t", "action" : "win.new-terminal", "when" : "canEdit()", "phase" : "capture" },
 { "trigger" : "<Control><Alt><Shift>t", "action" : "win.new-terminal-in-config", "when" : "canEdit()", "phase" : "capture" },
