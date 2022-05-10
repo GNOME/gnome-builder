@@ -93,5 +93,14 @@ IDE_AVAILABLE_IN_ALL
 gboolean          ide_build_manager_clean_finish        (IdeBuildManager      *self,
                                                          GAsyncResult         *result,
                                                          GError              **error);
+IDE_AVAILABLE_IN_ALL
+void              ide_build_manager_list_targets_async  (IdeBuildManager      *self,
+                                                         GCancellable         *cancellable,
+                                                         GAsyncReadyCallback   callback,
+                                                         gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+GListModel       *ide_build_manager_list_targets_finish (IdeBuildManager      *self,
+                                                         GAsyncResult         *result,
+                                                         GError              **error);
 
 G_END_DECLS
