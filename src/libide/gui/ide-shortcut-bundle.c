@@ -148,7 +148,7 @@ ide_shortcut_activate (GtkWidget *widget,
 
   return gtk_shortcut_action_activate (shortcut->action,
                                        GTK_SHORTCUT_ACTION_EXCLUSIVE,
-                                       focus,
+                                       focus ? focus : widget,
                                        shortcut->args);
 }
 
