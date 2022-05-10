@@ -55,9 +55,11 @@ create_target_row (gpointer item,
 {
   IdeBuildTarget *target = item;
   g_autoptr(GVariant) namev = NULL;
+  IdeArtifactKind kind;
   AdwActionRow *row;
   const char *name;
   GtkWidget *check;
+  const char *pill_label;
 
   g_assert (IDE_IS_BUILD_TARGET (target));
 
@@ -66,15 +68,48 @@ create_target_row (gpointer item,
 
   check = g_object_new (GTK_TYPE_CHECK_BUTTON,
                         "action-name", "build-manager.default-build-target",
+                        "css-classes", (const char * const[]) { "checkimage", NULL },
                         "action-target", namev,
                         "valign", GTK_ALIGN_CENTER,
                         "can-focus", FALSE,
                         NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
                       "title", ide_build_target_get_display_name (item),
+                      "subtitle", G_OBJECT_TYPE_NAME (target),
                       "activatable-widget", check,
                       NULL);
-  gtk_widget_add_css_class (check, "checkimage");
+
+  kind = ide_build_target_get_kind (target);
+
+  switch (kind)
+    {
+    case IDE_ARTIFACT_KIND_SHARED_LIBRARY:
+      pill_label = _("Shared");
+      break;
+
+    case IDE_ARTIFACT_KIND_STATIC_LIBRARY:
+      pill_label = _("Static");
+      break;
+
+    case IDE_ARTIFACT_KIND_EXECUTABLE:
+      pill_label = _("Executable");
+      break;
+
+    case IDE_ARTIFACT_KIND_FILE:
+    case IDE_ARTIFACT_KIND_NONE:
+    default:
+      pill_label = NULL;
+      break;
+    }
+
+  if (pill_label != NULL)
+    adw_action_row_add_suffix (row,
+                               g_object_new (GTK_TYPE_LABEL,
+                                             "label", pill_label,
+                                             "css-name", "button",
+                                             "css-classes", (const char * const []) { "pill", "small", NULL },
+                                             "valign", GTK_ALIGN_CENTER,
+                                             NULL));
   adw_action_row_add_suffix (row, check);
 
   return GTK_WIDGET (row);
