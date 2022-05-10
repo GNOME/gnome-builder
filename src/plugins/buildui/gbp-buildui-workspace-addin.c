@@ -30,9 +30,11 @@
 #if 0 /* TODO: port GbpBuilduiConfigSurface */
 #include "gbp-buildui-config-surface.h"
 #endif
+
 #include "gbp-buildui-log-pane.h"
 #include "gbp-buildui-omni-bar-section.h"
 #include "gbp-buildui-pane.h"
+#include "gbp-buildui-targets-dialog.h"
 #include "gbp-buildui-workspace-addin.h"
 
 struct _GbpBuilduiWorkspaceAddin
@@ -212,11 +214,33 @@ on_edit_config_cb (GSimpleAction *action,
 }
 #endif
 
+static void
+select_build_target_action (GSimpleAction *action,
+                            GVariant      *param,
+                            gpointer       user_data)
+{
+  GbpBuilduiWorkspaceAddin *self = user_data;
+  GbpBuilduiTargetsDialog *dialog;
+  IdeContext *context;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  context = ide_workspace_get_context (self->workspace);
+  dialog = g_object_new (GBP_TYPE_BUILDUI_TARGETS_DIALOG,
+                         "context", context,
+                         "transient-for", self->workspace,
+                         "modal", TRUE,
+                         NULL);
+
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
 static const GActionEntry actions[] = {
 #if 0 /* TODO: port GbpBuilduiConfigSurface */
   { "edit-config", on_edit_config_cb, "s" },
 #endif
   { "show-build-log", on_view_output_cb },
+  { "select-build-target", select_build_target_action },
 };
 
 static void

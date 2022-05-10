@@ -39,9 +39,10 @@
       </item>
     </section>
     <section id="build-menu-target">
-      <submenu id="build-menu-targets">
-        <attribute name="label" translatable="yes">Build Target</attribute>
-      </submenu>
+      <item>
+        <attribute name="label" translatable="yes">Select Build Target…</attribute>
+        <attribute name="action">win.select-build-target</attribute>
+      </item>
     </section>
     <section id="build-commands">
       <item>
