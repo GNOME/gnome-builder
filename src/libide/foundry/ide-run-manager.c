@@ -64,6 +64,7 @@ struct _IdeRunManager
   guint64                  pending_last_change_seq;
 
   guint                    busy : 1;
+  guint                    messages_debug_all : 1;
 };
 
 typedef struct
@@ -73,18 +74,21 @@ typedef struct
   guint      active;
 } DiscoverState;
 
-static void initable_iface_init                      (GInitableIface *iface);
-static void ide_run_manager_actions_run              (IdeRunManager  *self,
-                                                      GVariant       *param);
-static void ide_run_manager_actions_run_with_handler (IdeRunManager  *self,
-                                                      GVariant       *param);
-static void ide_run_manager_actions_stop             (IdeRunManager  *self,
-                                                      GVariant       *param);
+static void initable_iface_init                        (GInitableIface *iface);
+static void ide_run_manager_actions_run                (IdeRunManager  *self,
+                                                        GVariant       *param);
+static void ide_run_manager_actions_run_with_handler   (IdeRunManager  *self,
+                                                        GVariant       *param);
+static void ide_run_manager_actions_stop               (IdeRunManager  *self,
+                                                        GVariant       *param);
+static void ide_run_manager_actions_messages_debug_all (IdeRunManager  *self,
+                                                        GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run", ide_run_manager_actions_run },
   { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
   { "stop", ide_run_manager_actions_stop },
+  { "messages-debug-all", ide_run_manager_actions_messages_debug_all, NULL, "false" },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
@@ -125,8 +129,17 @@ static void
 ide_run_manager_real_run (IdeRunManager *self,
                           IdeRunner     *runner)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (IDE_IS_RUNNER (runner));
+
+  /* Setup G_MESSAGES_DEBUG environment variable if necessary */
+  if (self->messages_debug_all)
+    {
+      IdeEnvironment *env = ide_runner_get_environment (runner);
+      ide_environment_setenv (env, "G_MESSAGES_DEBUG", "all");
+    }
 
   /*
    * If the current handler has a callback specified (our default "run" handler
@@ -134,6 +147,8 @@ ide_run_manager_real_run (IdeRunManager *self,
    */
   if (self->handler != NULL && self->handler->handler != NULL)
     self->handler->handler (self, runner, self->handler->handler_data);
+
+  IDE_EXIT;
 }
 
 static void
@@ -1374,4 +1389,20 @@ _ide_run_manager_drop_caches (IdeRunManager *self)
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
 
   self->last_change_seq = 0;
+}
+
+static void
+ide_run_manager_actions_messages_debug_all (IdeRunManager *self,
+                                            GVariant      *param)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  self->messages_debug_all = !self->messages_debug_all;
+  ide_run_manager_set_action_state (self,
+                                    "messages-debug-all",
+                                    g_variant_new_boolean (self->messages_debug_all));
+
+  IDE_EXIT;
 }

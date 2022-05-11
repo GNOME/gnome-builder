@@ -1020,9 +1020,6 @@ ide_debug_manager_start (IdeDebugManager  *self,
 
   environment = ide_runner_get_environment (runner);
 
-  /* TODO: Make this toggle-able */
-  ide_environment_setenv (environment, "G_MESSAGES_DEBUG", "all");
-
   if (self->stop_at_criticals)
     ide_environment_setenv (environment, "G_DEBUG", "fatal-criticals");
   else if (self->stop_at_warnings)
