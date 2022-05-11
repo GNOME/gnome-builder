@@ -3,6 +3,7 @@
   <gresource prefix="/plugins/debuggerui">
     <file>debuggerui.plugin</file>
     <file>gtk/menus.ui</file>
+    <file>gtk/keybindings.json</file>
     <file>style.css</file>
     <file preprocess="xml-stripblanks">ide-debugger-breakpoints-view.ui</file>
     <file preprocess="xml-stripblanks">ide-debugger-controls.ui</file>
