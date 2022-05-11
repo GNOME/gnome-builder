@@ -24,6 +24,7 @@
 
 #include <libide-sourceview.h>
 
+#include "gbp-debuggerui-resources.h"
 #include "ide-debugger-disassembly-view.h"
 #include "ide-debugger-instruction.h"
 
@@ -78,12 +79,22 @@ ide_debugger_disassembly_view_class_init (IdeDebuggerDisassemblyViewClass *klass
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-disassembly-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerDisassemblyView, source_buffer);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerDisassemblyView, source_view);
+
+  g_resources_register (gbp_debuggerui_get_resource ());
 }
 
 static void
 ide_debugger_disassembly_view_init (IdeDebuggerDisassemblyView *self)
 {
+  GtkSourceLanguageManager *langs;
+  GtkSourceLanguage *lang;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  langs = gtk_source_language_manager_get_default ();
+  lang = gtk_source_language_manager_get_language (langs, "builder-disassembly");
+  g_assert (lang != NULL);
+  gtk_source_buffer_set_language (self->source_buffer, lang);
 
   g_object_bind_property_full (IDE_APPLICATION_DEFAULT, "style-scheme",
                                self->source_buffer, "style-scheme",
@@ -144,7 +155,7 @@ ide_debugger_disassembly_view_set_instructions (IdeDebuggerDisassemblyView *self
       for (guint i = 0; i < self->instructions->len; i++)
         {
           IdeDebuggerInstruction *inst = g_ptr_array_index (self->instructions, i);
-          g_autofree gchar *str = g_strdup_printf ("0x%"G_GINT64_MODIFIER"x <+%03"G_GINT64_MODIFIER"u>:  %s\n",
+          g_autofree gchar *str = g_strdup_printf ("0x%"G_GINT64_MODIFIER"x <+%03"G_GINT64_MODIFIER"u>:\t%s\n",
                                                    ide_debugger_instruction_get_address (inst),
                                                    ide_debugger_instruction_get_address (inst) - first,
                                                    ide_debugger_instruction_get_display (inst));

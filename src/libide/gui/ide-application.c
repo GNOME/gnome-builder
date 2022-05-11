@@ -157,6 +157,7 @@ ide_application_startup (GApplication *app)
   IdeApplication *self = (IdeApplication *)app;
   g_autofree gchar *style_path = NULL;
   GtkSourceStyleSchemeManager *styles;
+  GtkSourceLanguageManager *langs;
   GtkIconTheme *icon_theme;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -173,6 +174,10 @@ ide_application_startup (GApplication *app)
   style_path = g_build_filename (g_get_home_dir (), ".local", "share", "gtksourceview-5", "styles", NULL);
   gtk_source_style_scheme_manager_append_search_path (styles, style_path);
   gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gtksourceview-5/styles/");
+
+  /* Add custom locations for language specs */
+  langs = gtk_source_language_manager_get_default ();
+  gtk_source_language_manager_append_search_path (langs, "resource:///org/gnome/builder/gtksourceview/language-specs");
 
   /* Setup access to portal settings */
   _ide_application_init_settings (self);
