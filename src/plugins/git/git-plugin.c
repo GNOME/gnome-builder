@@ -30,6 +30,7 @@
 #include "gbp-git-buffer-addin.h"
 #include "gbp-git-dependency-updater.h"
 #include "gbp-git-pipeline-addin.h"
+#include "gbp-git-preferences-addin.h"
 #include "gbp-git-vcs-cloner.h"
 #include "gbp-git-vcs-config.h"
 #include "gbp-git-vcs-initializer.h"
@@ -61,4 +62,7 @@ _gbp_git_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_GIT_WORKBENCH_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PREFERENCES_ADDIN,
+                                              GBP_TYPE_GIT_PREFERENCES_ADDIN);
 }
