@@ -56,6 +56,8 @@ struct _GbpEditoruiWorkspaceAddin
 
   GtkLabel                 *mode_label;
 
+  GSettings                *editor_settings;
+
   guint                     queued_cursor_moved;
 };
 
@@ -416,6 +418,8 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                  NULL);
   panel_statusbar_add_suffix (self->statusbar, 1004, GTK_WIDGET (self->position));
 
+  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
+
   IDE_EXIT;
 }
 
@@ -432,6 +436,7 @@ gbp_editorui_workspace_addin_unload (IdeWorkspaceAddin *addin,
 
   g_clear_object (&self->buffer_signals);
   g_clear_object (&self->view_signals);
+  g_clear_object (&self->editor_settings);
 
   g_clear_handle_id (&self->queued_cursor_moved, g_source_remove);
 
@@ -452,6 +457,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
                                            IdePage           *page)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
+  g_autofree char *keybindings = NULL;
   IdeSourceView *view = NULL;
   IdeBuffer *buffer = NULL;
 
@@ -476,11 +482,13 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   notify_indentation_cb (self);
   update_position (self);
 
+  keybindings = g_settings_get_string (self->editor_settings, "keybindings");
+
   gtk_widget_set_visible (GTK_WIDGET (self->indentation), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->line_ends), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->position), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->encoding), page != NULL);
-  gtk_widget_set_visible (GTK_WIDGET (self->mode_label), page != NULL);
+  gtk_widget_set_visible (GTK_WIDGET (self->mode_label), page != NULL && !ide_str_equal0 (keybindings, "vim"));
 }
 
 static void
