@@ -34,12 +34,14 @@
 # include <sysprof-capture.h>
 #endif
 #include <sched.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "ide-application-private.h"
 #include "ide-build-ident.h"
 #include "ide-editor-private.h"
 #include "ide-gtk-private.h"
+#include "ide-log-private.h"
 #include "ide-search-private.h"
 #include "ide-shell-private.h"
 #include "ide-terminal-private.h"
@@ -205,10 +207,17 @@ gint
 main (gint   argc,
       gchar *argv[])
 {
+  g_autofree char *messages_debug = NULL;
   IdeApplication *app;
   const gchar *desktop;
   gboolean standalone = FALSE;
   int ret;
+
+  /* Get environment variable early and clear it from GLib. We want to be
+   * certain we don't pass this on to child processes so we clear it upfront.
+   */
+  messages_debug = g_strdup (getenv ("G_MESSAGES_DEBUG"));
+  unsetenv ("G_MESSAGES_DEBUG");
 
   /* Setup our gdb fork()/exec() helper if we're in a terminal */
   if (is_running_in_shell ())
@@ -235,7 +244,7 @@ main (gint   argc,
    * format. If we deferred this to GApplication, we'd get them in
    * multiple formats.
    */
-  ide_log_init (TRUE, NULL);
+  ide_log_init (TRUE, NULL, messages_debug);
 
   /* Extract options like -vvvv */
   early_params_check (&argc, &argv, &standalone);

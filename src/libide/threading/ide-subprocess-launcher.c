@@ -622,12 +622,6 @@ ide_subprocess_launcher_init (IdeSubprocessLauncher *self)
   g_ptr_array_add (priv->argv, NULL);
 
   priv->cwd = g_strdup (".");
-  /* Prevent inheritance of G_MESSAGES_DEBUG because it brings a lot of problems with IPC
-   * over stdout/stdin because all the debug messages would go to stdout, which means
-   * that the connection would be closed because of invalid data. If needed it can still
-   * be set back if needed, but at least it's a good default.
-   */
-  ide_subprocess_launcher_setenv (self, "G_MESSAGES_DEBUG", "", TRUE);
 }
 
 void

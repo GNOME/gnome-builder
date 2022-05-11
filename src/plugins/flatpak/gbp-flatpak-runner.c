@@ -181,11 +181,6 @@ gbp_flatpak_runner_fixup_launcher (IdeRunner             *runner,
         }
     }
 
-  /* Disable G_MESSAGES_DEBUG as it could cause 'flatpak build' to spew info
-   * and mess up systems that need a clean stdin/stdout/stderr.
-   */
-  ide_subprocess_launcher_setenv (launcher, "G_MESSAGES_DEBUG", NULL, TRUE);
-
   ide_subprocess_launcher_insert_argv (launcher, i++, self->build_path);
 }
 
