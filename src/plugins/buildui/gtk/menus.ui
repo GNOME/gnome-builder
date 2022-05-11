@@ -157,6 +157,16 @@
           <attribute name="target" type="s">'rtl'</attribute>
         </item>
       </submenu>
+      <submenu id="run-menu-logging-submenu">
+        <attribute name="label" translatable="yes">Logging</attribute>
+        <section id="run-menu-logging-section">
+          <item>
+            <attribute name="label" translatable="yes">Verbose Log Output</attribute>
+            <attribute name="action">run-manager.messages-debug-all</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
   </menu>
 </interface>
