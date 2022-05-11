@@ -29,6 +29,10 @@ def hasProject()
   (workbench != null) && workbench.has_project()
 end
 
+def canBuild()
+  hasProject() && Ide.BuildManager.from_context(workbench.context).get_can_build()
+end
+
 def canEdit()
   (workspace != null) && (typeof(workspace) != typeof(Ide.GreeterWorkspace))
 end
