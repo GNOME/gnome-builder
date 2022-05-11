@@ -665,8 +665,9 @@ static const IdePreferencePageEntry pages[] = {
 };
 
 static const IdePreferencePageEntry project_pages[] = {
-  { NULL, "config", "build",          "builder-build-symbolic",                 0, N_("Configurations") },
-  { NULL, "code",   "languages",      "org.gnome.Builder-languages-symbolic", 100, N_("Languages") },
+  { NULL, "config", "overview",       "org.gnome.Builder-overview-symbolic",    0, N_("Overview") },
+  { NULL, "config", "build",          "builder-build-symbolic",               100, N_("Configurations") },
+  { NULL, "code",   "languages",      "org.gnome.Builder-languages-symbolic", 200, N_("Languages") },
 };
 
 static const IdePreferenceGroupEntry groups[] = {
