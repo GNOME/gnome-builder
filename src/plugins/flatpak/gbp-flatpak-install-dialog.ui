@@ -13,7 +13,6 @@
   </object>
   <template class="GbpFlatpakInstallDialog" parent="GtkDialog">
     <property name="modal">True</property>
-    <property name="type_hint">normal</property>
     <child internal-child="vbox">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
