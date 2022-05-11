@@ -36,6 +36,78 @@ struct _GbpBuilduiPreferencesAddin
   GObject parent_instance;
 };
 
+static GtkWidget *
+create_overview_row (const char *title,
+                     const char *value)
+{
+  GtkWidget *row;
+
+  row = g_object_new (ADW_TYPE_ENTRY_ROW,
+                      "title", title,
+                      "text", value,
+                      "editable", FALSE,
+                      "show-apply-button", FALSE,
+                      NULL);
+
+  return row;
+}
+
+static void
+overview_func (const char                   *page_name,
+               const IdePreferenceItemEntry *entry,
+               AdwPreferencesGroup          *group,
+               gpointer                      user_data)
+{
+  IdeContext *context = user_data;
+
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (ADW_IS_PREFERENCES_GROUP (group));
+
+  if (FALSE) {}
+  else if (g_strcmp0 (entry->name, "kind") == 0)
+    {
+      IdeBuildSystem *build_system = ide_build_system_from_context (context);
+      g_autofree char *name = ide_build_system_get_display_name (build_system);
+
+      adw_preferences_group_add (group, create_overview_row (entry->title, name));
+    }
+  else if (g_strcmp0 (entry->name, "srcdir") == 0)
+    {
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
+      g_autofree char *text = NULL;
+
+      if (g_file_is_native (workdir))
+        text = ide_path_collapse (g_file_peek_path (workdir));
+      else
+        text = g_file_get_uri (workdir);
+
+      adw_preferences_group_add (group, create_overview_row (entry->title, text));
+    }
+  else if (g_strcmp0 (entry->name, "vcsuri") == 0)
+    {
+      IdeVcs *vcs = ide_vcs_from_context (context);
+      g_autofree char *name = NULL;
+
+      if (vcs != NULL)
+        name = ide_vcs_get_display_name (vcs);
+      else
+        name = g_strdup (_("No Version Control"));
+
+      adw_preferences_group_add (group, create_overview_row (entry->title, name));
+    }
+}
+
+static const IdePreferenceGroupEntry overview_groups[] = {
+  { "overview", "project",        0, N_("Project") },
+  { "overview", "runtime",      100, N_("Runtime") },
+};
+
+static const IdePreferenceItemEntry overview_items[] = {
+  { "overview", "project", "kind", 0, overview_func, N_("Build System") },
+  { "overview", "project", "srcdir", 0, overview_func, N_("Source Directory") },
+  { "overview", "project", "vcsuri", 0, overview_func, N_("Version Control") },
+};
+
 static gboolean
 treat_null_as_empty (GBinding     *binding,
                      const GValue *from_value,
@@ -327,6 +399,16 @@ gbp_buildui_preferences_addin_load (IdePreferencesAddin  *addin,
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
   g_assert (!context || IDE_IS_CONTEXT (context));
   g_assert (ide_preferences_window_get_mode (window) == IDE_PREFERENCES_MODE_PROJECT);
+
+  ide_preferences_window_add_groups (window,
+                                     overview_groups,
+                                     G_N_ELEMENTS (overview_groups),
+                                     NULL);
+  ide_preferences_window_add_items (window,
+                                    overview_items,
+                                    G_N_ELEMENTS (overview_items),
+                                    g_object_ref (context),
+                                    g_object_unref);
 
   config_manager = ide_config_manager_from_context (context);
   n_configs = g_list_model_get_n_items (G_LIST_MODEL (config_manager));
