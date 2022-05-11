@@ -19,12 +19,12 @@
     <section id="ide-source-view-popup-menu-undo-section">
       <item>
         <attribute name="label" translatable="yes">_Undo</attribute>
-        <attribute name="action">sourceview.undo</attribute>
+        <attribute name="action">text.undo</attribute>
         <attribute name="accel">&lt;control&gt;z</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Redo</attribute>
-        <attribute name="action">sourceview.redo</attribute>
+        <attribute name="action">text.redo</attribute>
         <attribute name="accel">&lt;control&gt;&lt;shift&gt;z</attribute>
       </item>
     </section>
