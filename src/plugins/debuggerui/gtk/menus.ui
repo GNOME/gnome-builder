@@ -13,24 +13,21 @@
       </item>
     </section>
   </menu>
-  <menu id="run-menu-settings-section">
-    <submenu id="run-menu-debug-submenu">
-      <attribute name="after">run-menu-a11y</attribute>
+  <menu id="run-menu-logging-submenu">
+    <section id="run-menu-logging-debug-section">
+      <attribute name="after">run-menu-logging-section</attribute>
       <attribute name="label" translatable="yes">Debugger</attribute>
-      <section id="run-menu-debug-breakpoints-section">
-        <attribute name="label" translatable="yes">Breakpoints</attribute>
-        <item>
-          <attribute name="label" translatable="yes">Stop at Warnings</attribute>
-          <attribute name="action">debug-manager.stop-at-warnings</attribute>
-          <attribute name="role">check</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Stop at Criticals</attribute>
-          <attribute name="action">debug-manager.stop-at-criticals</attribute>
-          <attribute name="role">check</attribute>
-        </item>
-      </section>
-    </submenu>
+      <item>
+        <attribute name="label" translatable="yes">Stop at Warnings</attribute>
+        <attribute name="action">debug-manager.stop-at-warnings</attribute>
+        <attribute name="role">check</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Stop at Criticals</attribute>
+        <attribute name="action">debug-manager.stop-at-criticals</attribute>
+        <attribute name="role">check</attribute>
+      </item>
+    </section>
   </menu>
   <menu id="project-tree-menu">
     <section id="project-tree-menu-foundry-section">
