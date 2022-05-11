@@ -75,7 +75,6 @@ create_target_row (gpointer item,
                         NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
                       "title", ide_build_target_get_display_name (item),
-                      "subtitle", G_OBJECT_TYPE_NAME (target),
                       "activatable-widget", check,
                       NULL);
 
