@@ -1,0 +1,1 @@
+{ "trigger" : "F5", "action" : "run-manager.run-with-handler", "args" : "'debugger'", "when" : "canBuild()", "phase" : "capture" },
