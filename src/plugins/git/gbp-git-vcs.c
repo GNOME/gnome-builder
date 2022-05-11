@@ -530,9 +530,16 @@ gbp_git_vcs_list_status_finish (IdeVcs        *vcs,
   return ide_task_propagate_object (IDE_TASK (result), error);
 }
 
+static char *
+gbp_git_vcs_get_display_name (IdeVcs *vcs)
+{
+  return g_strdup (_("Git"));
+}
+
 static void
 vcs_iface_init (IdeVcsInterface *iface)
 {
+  iface->get_display_name = gbp_git_vcs_get_display_name;
   iface->get_workdir = gbp_git_vcs_get_workdir;
   iface->is_ignored = gbp_git_vcs_is_ignored;
   iface->get_config = gbp_git_vcs_get_config;
