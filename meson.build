@@ -25,10 +25,13 @@ pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-
 glib_req_version = '2.70.0'
 gtk_req_version = '4.7'
 gtksourceview_req_version = '5.5'
+libadwaita_req_version = '1.2.alpha'
 
 glib_req = '>= @0@'.format(glib_req_version)
 gtk_req = '>= @0@'.format(gtk_req_version)
 gtksourceview_req = '>= @0@'.format(gtksourceview_req_version)
+libadwaita_req = '>= @0@'.format(libadwaita_req_version)
+
 glib_major = glib_req_version.split('.')[0].to_int()
 glib_minor = glib_req_version.split('.')[1].to_int()
 gtk_major = gtk_req_version.split('.')[0].to_int()
@@ -286,7 +289,7 @@ libglib_dep = dependency('glib-2.0', version: glib_req)
 libgio_dep = dependency('gio-2.0', version: glib_req)
 libgiounix_dep = dependency('gio-unix-2.0', version: glib_req)
 libgtk_dep = dependency('gtk4', version: gtk_req)
-libadwaita_dep = dependency('libadwaita-1')
+libadwaita_dep = dependency('libadwaita-1', version: libadwaita_req)
 libpanel_dep = dependency('libpanel-1')
 libgtksource_dep = dependency('gtksourceview-5', version: gtksourceview_req)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
