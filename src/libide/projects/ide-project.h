@@ -30,27 +30,37 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeProject, ide_project, IDE, PROJECT, IdeObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeProject *ide_project_from_context       (IdeContext           *context);
+IdeProject *ide_project_from_context         (IdeContext           *context);
 IDE_AVAILABLE_IN_ALL
-void        ide_project_rename_file_async  (IdeProject           *self,
-                                            GFile                *orig_file,
-                                            GFile                *new_file,
-                                            GCancellable         *cancellable,
-                                            GAsyncReadyCallback   callback,
-                                            gpointer              user_data);
+void        ide_project_rename_file_async    (IdeProject           *self,
+                                              GFile                *orig_file,
+                                              GFile                *new_file,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean    ide_project_rename_file_finish (IdeProject           *self,
-                                            GAsyncResult         *result,
-                                            GError              **error);
+gboolean    ide_project_rename_file_finish   (IdeProject           *self,
+                                              GAsyncResult         *result,
+                                              GError              **error);
 IDE_AVAILABLE_IN_ALL
-void        ide_project_trash_file_async   (IdeProject           *self,
-                                            GFile                *file,
-                                            GCancellable         *cancellable,
-                                            GAsyncReadyCallback   callback,
-                                            gpointer              user_data);
+void        ide_project_trash_file_async     (IdeProject           *self,
+                                              GFile                *file,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean    ide_project_trash_file_finish  (IdeProject           *self,
-                                            GAsyncResult         *result,
-                                            GError              **error);
+gboolean    ide_project_trash_file_finish    (IdeProject           *self,
+                                              GAsyncResult         *result,
+                                              GError              **error);
+IDE_AVAILABLE_IN_ALL
+void         ide_project_list_similar_async  (IdeProject           *self,
+                                              GFile                *file,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+GListModel  *ide_project_list_similar_finish (IdeProject           *self,
+                                              GAsyncResult         *result,
+                                              GError              **error);
 
 G_END_DECLS
