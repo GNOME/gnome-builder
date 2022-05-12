@@ -745,21 +745,6 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
     }
 }
 
-static gboolean
-shortcut_phase_filter (gpointer item,
-                       gpointer user_data)
-{
-  return g_object_get_data (item, "PHASE") == user_data;
-}
-
-static GtkFilter *
-create_shortcut_filter (GtkPropagationPhase phase)
-{
-  return GTK_FILTER (gtk_custom_filter_new (shortcut_phase_filter,
-                                            GINT_TO_POINTER (phase),
-                                            NULL));
-}
-
 /**
  * ide_workbench_add_workspace:
  * @self: an #IdeWorkbench
@@ -775,7 +760,6 @@ ide_workbench_add_workspace (IdeWorkbench *self,
   g_autoptr(GtkFilterListModel) capture = NULL;
   g_autoptr(GtkFilterListModel) bubble = NULL;
   IdeShortcutManager *shortcuts;
-  GtkEventController *controller;
   IdeCommandManager *command_manager;
   GList *mru_link;
 
@@ -821,22 +805,7 @@ ide_workbench_add_workspace (IdeWorkbench *self,
 
   /* Setup capture shortcut controller for workspace */
   shortcuts = ide_shortcut_manager_from_context (self->context);
-  capture = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (shortcuts)),
-                                       create_shortcut_filter (GTK_PHASE_CAPTURE));
-  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&capture)));
-  gtk_event_controller_set_name (controller, "ide-shortcuts-capture");
-  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
-  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
-  gtk_widget_add_controller (GTK_WIDGET (workspace), controller);
-
-  /* Setup bubble shortcut controller for workspace */
-  bubble = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (shortcuts)),
-                                      create_shortcut_filter (GTK_PHASE_BUBBLE));
-  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&bubble)));
-  gtk_event_controller_set_name (controller, "ide-shortcuts-bubble");
-  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
-  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
-  gtk_widget_add_controller (GTK_WIDGET (workspace), controller);
+  _ide_workspace_set_shortcut_model (workspace, G_LIST_MODEL (shortcuts));
 
   /* Track toplevel focus changes to maintain a most-recently-used queue. */
   g_signal_connect_object (workspace,

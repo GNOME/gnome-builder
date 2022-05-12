@@ -51,5 +51,7 @@ PanelFrame *_ide_workspace_find_frame          (IdeWorkspace        *workspace,
                                                 PanelPaned          *dock_end,
                                                 PanelPaned          *dock_bottom,
                                                 IdeGrid             *grid);
+void        _ide_workspace_set_shortcut_model  (IdeWorkspace        *self,
+                                                GListModel          *shortcuts);
 
 G_END_DECLS
