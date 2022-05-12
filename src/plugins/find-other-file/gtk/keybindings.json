@@ -1,0 +1,1 @@
+{ "trigger" : "F4", "action" : "win.find-other-file", "when" : "canEdit()", "phase" : "capture" },
