@@ -157,18 +157,18 @@ static gboolean dummy_cb (gpointer) { return G_SOURCE_REMOVE; }
 IdeContext *
 ide_widget_get_context (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkRoot *root;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
+  root = gtk_widget_get_root (widget);
 
-  if (IDE_IS_WORKSPACE (toplevel))
-    return ide_workspace_get_context (IDE_WORKSPACE (toplevel));
+  if (IDE_IS_WORKSPACE (root))
+    return ide_workspace_get_context (IDE_WORKSPACE (root));
 
-  if (toplevel != NULL)
+  if (root != NULL)
     {
-      GObjectClass *object_class = G_OBJECT_GET_CLASS (toplevel);
+      GObjectClass *object_class = G_OBJECT_GET_CLASS (root);
       GParamSpec *pspec = g_object_class_find_property (object_class, "context");
 
       if (G_IS_PARAM_SPEC_OBJECT (pspec) &&
@@ -178,7 +178,7 @@ ide_widget_get_context (GtkWidget *widget)
           IdeContext *ret;
 
           g_value_init (&value, IDE_TYPE_CONTEXT);
-          g_object_get_property (G_OBJECT (toplevel), "context", &value);
+          g_object_get_property (G_OBJECT (root), "context", &value);
 
           ret = g_value_dup_object (&value);
           g_idle_add_full (G_PRIORITY_LOW, dummy_cb, ret, g_object_unref);
