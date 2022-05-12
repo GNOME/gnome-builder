@@ -136,6 +136,7 @@ gbp_symbol_popover_dispose (GObject *object)
 
   g_clear_object (&self->filter);
   g_clear_object (&self->symbol_tree);
+  g_clear_pointer (&self->search_needle, g_strfreev);
 
   G_OBJECT_CLASS (gbp_symbol_popover_parent_class)->dispose (object);
 }
@@ -281,7 +282,7 @@ filter_by_name (gpointer item,
   if (!self->search_needle || !self->search_needle[0] || !*self->search_needle[0])
     return TRUE;
 
-  /* Show a row if itself of any parent matches */
+  /* Show a row if itself or any parent matches */
   for (parent = row; parent; parent = gtk_tree_list_row_get_parent (parent))
     {
       node = gtk_tree_list_row_get_item (parent);
