@@ -27,6 +27,7 @@
 
 #include "ide-gui-global.h"
 #include "ide-search-popover-private.h"
+#include "ide-shortcut-bundle-private.h"
 #include "ide-workspace-addin.h"
 #include "ide-workspace-private.h"
 #include "ide-workbench-private.h"
@@ -65,6 +66,10 @@ typedef struct
   /* The global search for the workspace, if any */
   IdeSearchPopover *search_popover;
 
+  /* GListModel of GtkShortcut w/ capture/bubble filters */
+  GtkFilterListModel *shortcut_model_bubble;
+  GtkFilterListModel *shortcut_model_capture;
+
   /* A MRU that is updated as pages are focused. It allows us to move through
    * the pages in the order they've been most-recently focused.
    */
@@ -100,6 +105,31 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICAT
 
 static GParamSpec *properties [N_PROPS];
 static GSettings *settings;
+
+static void
+ide_workspace_attach_shortcuts (IdeWorkspace *self,
+                                GtkWidget    *widget)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GtkEventController *controller;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (G_IS_LIST_MODEL (priv->shortcut_model_bubble));
+  g_assert (G_IS_LIST_MODEL (priv->shortcut_model_capture));
+
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (priv->shortcut_model_capture));
+  gtk_event_controller_set_name (controller, "ide-shortcuts-capture");
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
+  gtk_widget_add_controller (widget, g_steal_pointer (&controller));
+
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (priv->shortcut_model_bubble));
+  gtk_event_controller_set_name (controller, "ide-shortcuts-bubble");
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
+  gtk_widget_add_controller (widget, g_steal_pointer (&controller));
+}
 
 static IdePage *
 ide_workspace_get_focus_page (IdeWorkspace *self)
@@ -1280,6 +1310,12 @@ _ide_workspace_begin_global_search (IdeWorkspace *self)
 
       priv->search_popover = IDE_SEARCH_POPOVER (ide_search_popover_new (search_engine));
       gtk_widget_set_parent (GTK_WIDGET (priv->search_popover), GTK_WIDGET (self));
+
+      /* Popovers don't appear (as of GTK 4.7) to capture/bubble from the GtkRoot
+       * when running controllers. So we need to manually attach them for the popovers
+       * that are important enough to care about.
+       */
+      ide_workspace_attach_shortcuts (self, GTK_WIDGET (priv->search_popover));
     }
 
   if (!gtk_widget_get_visible (GTK_WIDGET (priv->search_popover)))
@@ -1313,4 +1349,36 @@ ide_workspace_remove_overlay (IdeWorkspace *self,
                 G_OBJECT_TYPE_NAME (overlay), G_OBJECT_TYPE_NAME (self));
   else
     IDE_WORKSPACE_GET_CLASS (self)->remove_overlay (self, overlay);
+}
+
+static gboolean
+shortcut_phase_filter (gpointer item,
+                       gpointer user_data)
+{
+  return ide_shortcut_is_phase (item, user_data);
+}
+
+void
+_ide_workspace_set_shortcut_model (IdeWorkspace *self,
+                                   GListModel   *model)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  static GtkCustomFilter *bubble_filter;
+  static GtkCustomFilter *capture_filter;
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (G_IS_LIST_MODEL (model));
+
+  if (bubble_filter == NULL)
+    bubble_filter = gtk_custom_filter_new (shortcut_phase_filter, GINT_TO_POINTER (GTK_PHASE_BUBBLE), NULL);
+
+  if (capture_filter == NULL)
+    capture_filter = gtk_custom_filter_new (shortcut_phase_filter, GINT_TO_POINTER (GTK_PHASE_CAPTURE), NULL);
+
+  priv->shortcut_model_capture = gtk_filter_list_model_new (g_object_ref (model),
+                                                            g_object_ref (GTK_FILTER (capture_filter)));
+  priv->shortcut_model_bubble = gtk_filter_list_model_new (g_object_ref (model),
+                                                           g_object_ref (GTK_FILTER (bubble_filter)));
+
+  ide_workspace_attach_shortcuts (self, GTK_WIDGET (self));
 }

@@ -33,4 +33,7 @@ gboolean           ide_shortcut_bundle_parse (IdeShortcutBundle  *self,
                                               GFile              *file,
                                               GError            **error);
 
+#define ide_shortcut_is_phase(obj,pha) \
+  (g_object_get_data(G_OBJECT(obj), "PHASE") == pha)
+
 G_END_DECLS
