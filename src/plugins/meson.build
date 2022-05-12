@@ -215,7 +215,6 @@ status += [
   'gpls ............................ (Go) : @0@'.format(get_option('plugin_go_langserv')),
   'intelephense ....................(PHP) : @0@'.format(get_option('plugin_intelephense')),
   'jedi-language-server ........ (Python) : @0@'.format(get_option('plugin_jedi_language_server')),
-  'rls ........................... (Rust) : @0@ (Not Suggested)'.format(get_option('plugin_rls')),
   'rstcheck ...........(reStructuredText) : @0@'.format(get_option('plugin_rstcheck')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
