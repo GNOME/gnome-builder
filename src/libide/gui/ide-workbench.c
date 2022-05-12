@@ -826,6 +826,7 @@ ide_workbench_add_workspace (IdeWorkbench *self,
   controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&capture)));
   gtk_event_controller_set_name (controller, "ide-shortcuts-capture");
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   gtk_widget_add_controller (GTK_WIDGET (workspace), controller);
 
   /* Setup bubble shortcut controller for workspace */
@@ -834,6 +835,7 @@ ide_workbench_add_workspace (IdeWorkbench *self,
   controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (g_steal_pointer (&bubble)));
   gtk_event_controller_set_name (controller, "ide-shortcuts-bubble");
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   gtk_widget_add_controller (GTK_WIDGET (workspace), controller);
 
   /* Track toplevel focus changes to maintain a most-recently-used queue. */
