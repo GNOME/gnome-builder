@@ -71,19 +71,6 @@ gbp_find_other_file_popover_activate_cb (GbpFindOtherFilePopover *self,
   IDE_EXIT;
 }
 
-static void
-gbp_find_other_file_popover_search_changed_cb (GbpFindOtherFilePopover *self,
-                                               GtkSearchEntry          *search_entry)
-{
-  const char *text;
-
-  g_assert (GBP_IS_FIND_OTHER_FILE_POPOVER (self));
-  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
-
-  text = gtk_editable_get_text (GTK_EDITABLE (search_entry));
-
-}
-
 static gpointer
 file_to_found_file (gpointer item,
                     gpointer user_data)
@@ -189,7 +176,6 @@ gbp_find_other_file_popover_class_init (GbpFindOtherFilePopoverClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/find-other-file/gbp-find-other-file-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpFindOtherFilePopover, list_view);
   gtk_widget_class_bind_template_callback (widget_class, gbp_find_other_file_popover_activate_cb);
-  gtk_widget_class_bind_template_callback (widget_class, gbp_find_other_file_popover_search_changed_cb);
 
   g_type_ensure (GBP_TYPE_FOUND_FILE);
 }
