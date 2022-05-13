@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/plugins/symbol-tree">
     <file>symbol-tree.plugin</file>
+    <file>gtk/keybindings.json</file>
     <file preprocess="xml-stripblanks">gbp-symbol-popover.ui</file>
     <file preprocess="xml-stripblanks">gbp-symbol-popover-row.ui</file>
   </gresource>

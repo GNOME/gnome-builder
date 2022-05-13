@@ -1,0 +1,1 @@
+{ "trigger" : "<Control><Shift>k", "action" : "win.focus-symbol-tree", "when" : "canEdit()", "phase" : "capture" },
