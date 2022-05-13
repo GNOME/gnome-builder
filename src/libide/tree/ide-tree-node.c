@@ -1746,6 +1746,7 @@ _ide_tree_node_show_popover (IdeTreeNode *self,
   GdkRectangle cell_area;
   GdkRectangle visible_rect;
   PopupRequest *popreq;
+  GtkAdjustment *vadj;
 
   g_return_if_fail (IDE_IS_TREE_NODE (self));
   g_return_if_fail (IDE_IS_TREE (tree));
@@ -1764,37 +1765,19 @@ _ide_tree_node_show_popover (IdeTreeNode *self,
   popreq->tree = g_object_ref (tree);
   popreq->popover = g_object_ref (popover);
 
-  /*
-   * If the node is not on screen, we need to animate until we get there.
+  vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree));
+
+  /* Animating to position in GTK appears to break, so just manually
+   * scroll to the right position.
    */
-  if ((cell_area.y < visible_rect.y) ||
-      ((cell_area.y + cell_area.height) >
-       (visible_rect.y + visible_rect.height)))
-    {
-      GtkTreePath *path;
+  if (cell_area.y < visible_rect.y)
+    gtk_adjustment_set_value (vadj, cell_area.y);
+  else if (cell_area.y + cell_area.height > visible_rect.y + visible_rect.height)
+    gtk_adjustment_set_value (vadj, cell_area.y + cell_area.height - visible_rect.height);
 
-      path = ide_tree_node_get_path (self);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (tree), path, NULL, FALSE, 0, 0);
-      g_clear_pointer (&path, gtk_tree_path_free);
-
-      /*
-       * FIXME: Time period comes from gtk animation duration.
-       *        Not curently available in pubic API.
-       *        We need to be greater than the max timeout it
-       *        could take to move, since we must have it
-       *        on screen by then.
-       *
-       *        One alternative might be to check the result
-       *        and if we are still not on screen, then just
-       *        pin it to a row-height from the top or bottom.
-       */
-      g_timeout_add (300,
-                     ide_tree_node_show_popover_timeout_cb,
-                     popreq);
-
-      return;
-    }
-
+  /* FIXME: We could get rid of our allocated state here now that we
+   * no longer animate because of breakage in GTK.
+   */
   ide_tree_node_show_popover_timeout_cb (g_steal_pointer (&popreq));
 }
 
