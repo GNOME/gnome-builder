@@ -59,5 +59,9 @@ IDE_AVAILABLE_IN_ALL
 char      *ide_g_time_span_to_label           (GTimeSpan          span);
 IDE_AVAILABLE_IN_ALL
 char      *ide_g_date_time_format_for_display (GDateTime         *self);
+IDE_AVAILABLE_IN_ALL
+void       ide_gtk_list_view_move_next        (GtkListView       *view);
+IDE_AVAILABLE_IN_ALL
+void       ide_gtk_list_view_move_previous    (GtkListView       *view);
 
 G_END_DECLS
