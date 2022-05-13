@@ -135,6 +135,38 @@ gbp_symbol_popover_grab_focus (GtkWidget *widget)
   return gtk_widget_grab_focus (GTK_WIDGET (GBP_SYMBOL_POPOVER (widget)->search_entry));
 }
 
+static gboolean
+on_search_key_pressed_cb (GbpSymbolPopover      *self,
+                          guint                  keyval,
+                          guint                  keycode,
+                          GdkModifierType        state,
+                          GtkEventControllerKey *key)
+{
+  g_assert (GBP_IS_SYMBOL_POPOVER (self));
+  g_assert (GTK_IS_EVENT_CONTROLLER_KEY (key));
+
+  if ((state & (GDK_CONTROL_MASK | GDK_ALT_MASK)) == 0)
+    {
+      switch (keyval)
+        {
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+          ide_gtk_list_view_move_previous (self->list_view);
+          return TRUE;
+
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+          ide_gtk_list_view_move_next (self->list_view);
+          return TRUE;
+
+        default:
+          break;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 gbp_symbol_popover_dispose (GObject *object)
 {
@@ -211,6 +243,7 @@ gbp_symbol_popover_class_init (GbpSymbolPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolPopover, search_entry);
   gtk_widget_class_bind_template_callback (widget_class, gbp_symbol_popover_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, gbp_symbol_popover_search_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_key_pressed_cb);
 }
 
 static void
