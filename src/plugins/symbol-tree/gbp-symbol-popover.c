@@ -129,6 +129,12 @@ gbp_symbol_popover_search_changed_cb (GbpSymbolPopover *self,
     gtk_filter_changed (self->filter, GTK_FILTER_CHANGE_DIFFERENT);
 }
 
+static gboolean
+gbp_symbol_popover_grab_focus (GtkWidget *widget)
+{
+  return gtk_widget_grab_focus (GTK_WIDGET (GBP_SYMBOL_POPOVER (widget)->search_entry));
+}
+
 static void
 gbp_symbol_popover_dispose (GObject *object)
 {
@@ -188,6 +194,8 @@ gbp_symbol_popover_class_init (GbpSymbolPopoverClass *klass)
   object_class->dispose = gbp_symbol_popover_dispose;
   object_class->get_property = gbp_symbol_popover_get_property;
   object_class->set_property = gbp_symbol_popover_set_property;
+
+  widget_class->grab_focus = gbp_symbol_popover_grab_focus;
 
   properties [PROP_SYMBOL_TREE] =
     g_param_spec_object ("symbol-tree",
