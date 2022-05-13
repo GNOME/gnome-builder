@@ -466,3 +466,49 @@ ide_g_date_time_format_for_display (GDateTime *self)
 
   return g_strdup_printf (ngettext ("About %u year ago", "About %u years ago", years), years);
 }
+
+void
+ide_gtk_list_view_move_next (GtkListView *view)
+{
+  GtkSelectionModel *model;
+  GtkBitset *bitset;
+  guint pos = 0;
+
+  g_return_if_fail (GTK_IS_LIST_VIEW (view));
+
+  if (!(model = gtk_list_view_get_model (view)))
+    return;
+
+  bitset = gtk_selection_model_get_selection (model);
+  if (!gtk_bitset_is_empty (bitset))
+    pos = gtk_bitset_get_minimum (bitset) + 1;
+
+  if (pos < g_list_model_get_n_items (G_LIST_MODEL (model)))
+    {
+      gtk_selection_model_select_item (model, pos, TRUE);
+      gtk_widget_activate_action (GTK_WIDGET (view), "list.scroll-to-item", "u", pos);
+    }
+}
+
+void
+ide_gtk_list_view_move_previous (GtkListView *view)
+{
+  GtkSelectionModel *model;
+  GtkBitset *bitset;
+  guint pos = 0;
+
+  g_return_if_fail (GTK_IS_LIST_VIEW (view));
+
+  if (!(model = gtk_list_view_get_model (view)))
+    return;
+
+  bitset = gtk_selection_model_get_selection (model);
+  if (!gtk_bitset_is_empty (bitset))
+    pos = gtk_bitset_get_minimum (bitset);
+
+  if (pos > 0)
+    {
+      gtk_selection_model_select_item (model, pos-1, TRUE);
+      gtk_widget_activate_action (GTK_WIDGET (view), "list.scroll-to-item", "u", pos-1);
+    }
+}
