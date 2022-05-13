@@ -512,3 +512,23 @@ ide_gtk_list_view_move_previous (GtkListView *view)
       gtk_widget_activate_action (GTK_WIDGET (view), "list.scroll-to-item", "u", pos-1);
     }
 }
+
+gboolean
+ide_gtk_list_view_get_selected_row (GtkListView *view,
+                                    guint       *position)
+{
+  GtkSelectionModel *model;
+  GtkBitset *bitset;
+
+  g_return_val_if_fail (GTK_IS_LIST_VIEW (view), FALSE);
+
+  if (!(model = gtk_list_view_get_model (view)))
+    return FALSE;
+
+  bitset = gtk_selection_model_get_selection (model);
+  if (gtk_bitset_is_empty (bitset))
+    return FALSE;
+
+  *position = gtk_bitset_get_minimum (bitset);
+  return TRUE;
+}
