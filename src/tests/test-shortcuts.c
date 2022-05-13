@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <girepository.h>
+
 #include <libide-gui.h>
 
 #include "ide-shortcut-bundle-private.h"
@@ -106,7 +108,16 @@ int
 main (int   argc,
       char *argv[])
 {
+  g_autofree char *path = NULL;
+  g_autoptr(GError) error = NULL;
+
   g_assert_nonnull (g_getenv ("G_TEST_SRCDIR"));
+  g_assert_nonnull (g_getenv ("G_TEST_BUILDDIR"));
+
+  path = g_build_filename (g_getenv ("G_TEST_BUILDDIR"), "../", NULL);
+  g_irepository_prepend_search_path (path);
+  g_irepository_require (NULL, "Ide", PACKAGE_ABI_S, 0, &error);
+  g_assert_no_error (error);
 
   gtk_init ();
   g_test_init (&argc, &argv, NULL);
