@@ -162,6 +162,18 @@ on_search_key_pressed_cb (GbpSymbolPopover      *self,
     {
       switch (keyval)
         {
+        case GDK_KEY_Escape:
+          {
+            IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+            IdePage *page = ide_workspace_get_most_recent_page (workspace);
+
+            gtk_popover_popdown (GTK_POPOVER (self));
+            if (page)
+              gtk_widget_grab_focus (GTK_WIDGET (page));
+
+            return TRUE;
+          }
+
         case GDK_KEY_Up:
         case GDK_KEY_KP_Up:
           ide_gtk_list_view_move_previous (self->list_view);
