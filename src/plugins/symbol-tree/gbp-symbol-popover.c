@@ -111,6 +111,19 @@ gbp_symbol_popover_activate_cb (GbpSymbolPopover *self,
 }
 
 static void
+gbp_symbol_popover_search_activate_cb (GbpSymbolPopover *self,
+                                       GtkSearchEntry   *search_entry)
+{
+  guint position;
+
+  g_assert (GBP_IS_SYMBOL_POPOVER (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (search_entry));
+
+  if (ide_gtk_list_view_get_selected_row (self->list_view, &position))
+    gbp_symbol_popover_activate_cb (self, position, self->list_view);
+}
+
+static void
 gbp_symbol_popover_search_changed_cb (GbpSymbolPopover *self,
                                       GtkSearchEntry   *search_entry)
 {
@@ -242,6 +255,7 @@ gbp_symbol_popover_class_init (GbpSymbolPopoverClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolPopover, list_view);
   gtk_widget_class_bind_template_child (widget_class, GbpSymbolPopover, search_entry);
   gtk_widget_class_bind_template_callback (widget_class, gbp_symbol_popover_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, gbp_symbol_popover_search_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, gbp_symbol_popover_search_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_search_key_pressed_cb);
 }
