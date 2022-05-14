@@ -29,6 +29,7 @@
 #include "daemon/ipc-git-config.h"
 
 #include "gbp-git-client.h"
+#include "gbp-git-vcs.h"
 #include "gbp-git-vcs-config.h"
 
 struct _GbpGitVcsConfig
@@ -73,18 +74,46 @@ get_config (GbpGitVcsConfig  *self,
   context = ide_object_get_context (IDE_OBJECT (self));
   client = gbp_git_client_from_context (context);
 
-  if (!self->is_global)
-    {
-      /* TODO: get config from repository */
-    }
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (GBP_IS_GIT_CLIENT (client));
 
   if (!(service = gbp_git_client_get_service (client, cancellable, error)))
     return NULL;
 
-  if (!ipc_git_service_call_load_config_sync (service, &obj_path, cancellable, error))
-    return NULL;
+  if (!self->is_global)
+    {
+      IdeVcs *vcs;
+      IpcGitRepository *repository;
+
+      vcs = ide_vcs_from_context (context);
+      g_assert (GBP_IS_GIT_VCS (vcs));
+
+      repository = gbp_git_vcs_get_repository (GBP_GIT_VCS (vcs));
+      g_assert (!repository || IPC_IS_GIT_REPOSITORY (repository));
+
+      if (repository == NULL)
+        {
+          g_set_error (error,
+                       G_IO_ERROR,
+                       G_IO_ERROR_NOT_SUPPORTED,
+                       "Failed to load git repository");
+          return NULL;
+        }
+
+      if (!ipc_git_repository_call_load_config_sync (repository, &obj_path, cancellable, error))
+        return NULL;
+    }
+  else
+    {
+      if (!ipc_git_service_call_load_config_sync (service, &obj_path, cancellable, error))
+        return NULL;
+    }
+
+  g_assert (obj_path != NULL);
+  g_assert (g_variant_is_object_path (obj_path));
 
   connection = g_dbus_proxy_get_connection (G_DBUS_PROXY (service));
+  g_assert (G_IS_DBUS_CONNECTION (connection));
 
   return ipc_git_config_proxy_new_sync (connection,
                                         G_DBUS_PROXY_FLAGS_NONE,
@@ -92,7 +121,6 @@ get_config (GbpGitVcsConfig  *self,
                                         obj_path,
                                         cancellable,
                                         error);
-
 }
 
 static void
