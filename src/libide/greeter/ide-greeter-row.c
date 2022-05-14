@@ -312,7 +312,7 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
               tag = g_object_new (GTK_TYPE_LABEL,
                                   "label", key,
                                   "css-name", "button",
-                                  "css-classes", (const char * const []) { "pill", "small", NULL },
+                                  "css-classes", IDE_STRV_INIT ("pill", "small"),
                                   NULL);
               gtk_box_append (priv->tags, GTK_WIDGET (tag));
             }
