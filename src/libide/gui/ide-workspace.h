@@ -75,6 +75,8 @@ struct _IdeWorkspaceClass
   void          (*add_page)              (IdeWorkspace         *self,
                                           IdePage              *page,
                                           IdePanelPosition     *position);
+  void          (*add_grid_column)       (IdeWorkspace         *self,
+                                          guint                 column);
   void          (*add_overlay)           (IdeWorkspace         *self,
                                           GtkWidget            *overlay);
   void          (*remove_overlay)        (IdeWorkspace         *self,
@@ -118,6 +120,9 @@ IDE_AVAILABLE_IN_ALL
 void            ide_workspace_add_page                 (IdeWorkspace      *self,
                                                         IdePage           *page,
                                                         IdePanelPosition  *position);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_add_grid_column          (IdeWorkspace      *self,
+                                                        guint              position);
 IDE_AVAILABLE_IN_ALL
 PanelStatusbar *ide_workspace_get_statusbar            (IdeWorkspace      *self);
 IDE_AVAILABLE_IN_ALL

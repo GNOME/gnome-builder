@@ -125,6 +125,13 @@ ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
 }
 
 static void
+ide_primary_workspace_add_grid_column (IdeWorkspace *workspace,
+                                       guint         position)
+{
+  panel_grid_insert_column (PANEL_GRID (IDE_PRIMARY_WORKSPACE (workspace)->grid), position);
+}
+
+static void
 ide_primary_workspace_add_overlay (IdeWorkspace *workspace,
                                    GtkWidget    *overlay)
 {
@@ -212,6 +219,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->add_page = ide_primary_workspace_add_page;
   workspace_class->add_pane = ide_primary_workspace_add_pane;
   workspace_class->add_overlay = ide_primary_workspace_add_overlay;
+  workspace_class->add_grid_column = ide_primary_workspace_add_grid_column;
   workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
   workspace_class->can_search = ide_primary_workspace_can_search;
   workspace_class->context_set = ide_primary_workspace_context_set;
