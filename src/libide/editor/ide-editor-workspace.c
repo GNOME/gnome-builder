@@ -139,6 +139,13 @@ ide_editor_workspace_add_pane (IdeWorkspace     *workspace,
                              self->grid);
 }
 
+static void
+ide_editor_workspace_add_grid_column (IdeWorkspace *workspace,
+                                      guint         position)
+{
+  panel_grid_insert_column (PANEL_GRID (IDE_EDITOR_WORKSPACE (workspace)->grid), position);
+}
+
 static IdeFrame *
 ide_editor_workspace_get_most_recent_frame (IdeWorkspace *workspace)
 {
@@ -204,6 +211,7 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
 
   workspace_class->add_page = ide_editor_workspace_add_page;
   workspace_class->add_pane = ide_editor_workspace_add_pane;
+  workspace_class->add_grid_column = ide_editor_workspace_add_grid_column;
   workspace_class->can_search = ide_editor_workspace_can_search;
   workspace_class->context_set = ide_editor_workspace_context_set;
   workspace_class->get_frame_at_position = ide_editor_workspace_get_frame_at_position;

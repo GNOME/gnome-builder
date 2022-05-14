@@ -1208,12 +1208,14 @@ _ide_workspace_find_frame (IdeWorkspace     *self,
 
   if (edge == PANEL_DOCK_POSITION_CENTER)
     {
+      gboolean has_column = ide_panel_position_get_column (position, &column);
+      gboolean has_row = ide_panel_position_get_row (position, &row);
+
       /* If we are adding a page, and no row or column is set, then the next
        * best thing to do is to try to find an open frame. If we can't do that
        * then we'll try to find the most recent frame.
        */
-      if (!ide_panel_position_get_column (position, &column) &&
-          !ide_panel_position_get_row (position, &row))
+      if (!has_column && !has_row)
         {
           if (!find_open_frame (grid, &column, &row))
             find_most_recent_frame (self, grid, &column, &row);
@@ -1381,4 +1383,14 @@ _ide_workspace_set_shortcut_model (IdeWorkspace *self,
                                                            g_object_ref (GTK_FILTER (bubble_filter)));
 
   ide_workspace_attach_shortcuts (self, GTK_WIDGET (self));
+}
+
+void
+ide_workspace_add_grid_column (IdeWorkspace *self,
+                               guint         position)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_WORKSPACE_GET_CLASS (self)->add_grid_column);
+
+  IDE_WORKSPACE_GET_CLASS (self)->add_grid_column (self, position);
 }

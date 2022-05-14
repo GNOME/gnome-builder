@@ -88,16 +88,6 @@ ide_frame_notify_visible_child (IdeFrame   *self,
 
   g_assert (IDE_IS_FRAME (self));
 
-#if 0
-  /* FIXME: We can probably this differently in GTK 4
-   *
-   * Mux/Proxy actions to our level so that they also be activated
-   * from the header bar without any weirdness by the View.
-   */
-  dzl_gtk_widget_mux_action_groups (GTK_WIDGET (self), visible_child,
-                                    "IDE_FRAME_MUXED_ACTION");
-#endif
-
   visible_child = panel_frame_get_visible_child (PANEL_FRAME (self));
 
   if (self->addins != NULL)
