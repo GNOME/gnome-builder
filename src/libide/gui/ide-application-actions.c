@@ -33,6 +33,7 @@
 #include "ide-application-private.h"
 #include "ide-gui-global.h"
 #include "ide-preferences-window.h"
+#include "ide-primary-workspace.h"
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -40,6 +41,7 @@ ide_application_actions_preferences (GSimpleAction *action,
                                      gpointer       user_data)
 {
   IdeApplication *self = user_data;
+  IdeContext *context = NULL;
   GtkWindow *toplevel = NULL;
   GtkWindow *window;
   GList *windows;
@@ -63,15 +65,20 @@ ide_application_actions_preferences (GSimpleAction *action,
           return;
         }
 
-      if (toplevel == NULL && IDE_IS_WORKBENCH (win))
+      if (toplevel == NULL && IDE_IS_PRIMARY_WORKSPACE (win))
         toplevel = win;
     }
+
+  /* We want to make a context available if necessary */
+  if (IDE_IS_WORKSPACE (toplevel))
+    context = ide_workspace_get_context (IDE_WORKSPACE (toplevel));
 
   /* Create a new window for preferences, with enough space for
    * 2 columns of preferences. The window manager will automatically
    * maximize the window if necessary.
    */
   window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
+                         "context", context,
                          "mode", IDE_PREFERENCES_MODE_APPLICATION,
                          "transient-for", toplevel,
                          "default-width", 1050,
