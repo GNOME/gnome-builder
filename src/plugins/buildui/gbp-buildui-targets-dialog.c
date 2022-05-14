@@ -68,7 +68,7 @@ create_target_row (gpointer item,
 
   check = g_object_new (GTK_TYPE_CHECK_BUTTON,
                         "action-name", "build-manager.default-build-target",
-                        "css-classes", (const char * const[]) { "checkimage", NULL },
+                        "css-classes", IDE_STRV_INIT ("checkimage"),
                         "action-target", namev,
                         "valign", GTK_ALIGN_CENTER,
                         "can-focus", FALSE,
@@ -106,7 +106,7 @@ create_target_row (gpointer item,
                                g_object_new (GTK_TYPE_LABEL,
                                              "label", pill_label,
                                              "css-name", "button",
-                                             "css-classes", (const char * const []) { "pill", "small", NULL },
+                                             "css-classes", IDE_STRV_INIT ("pill", "small"),
                                              "valign", GTK_ALIGN_CENTER,
                                              NULL));
   adw_action_row_add_suffix (row, check);

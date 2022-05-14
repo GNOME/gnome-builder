@@ -168,7 +168,7 @@ create_entry_row (const char                   *page_name,
         title = _("The Git configuration options above effect global defaults.");
 
       label = g_object_new (GTK_TYPE_LABEL,
-                            "css-classes", (const char * const[]) { "caption", "dim-label", NULL },
+                            "css-classes", IDE_STRV_INIT ("caption", "dim-label"),
                             "xalign", .0f,
                             "margin-top", 15,
                             "single-line-mode", TRUE,

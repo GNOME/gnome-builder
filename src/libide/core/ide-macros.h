@@ -270,6 +270,8 @@ ide_object_array_unref (IdeObjectArray *ar)
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeObjectArray, g_ptr_array_unref)
 
+#define IDE_STRV_INIT(...) ((const char * const[]) { __VA_ARGS__, NULL})
+
 G_END_DECLS
 
 #endif /* __GI_SCANNER__ */
