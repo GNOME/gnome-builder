@@ -1452,6 +1452,96 @@ ide_preferences_window_spin (const char                   *page_name,
   g_settings_bind (settings, entry->key, adj, "value", G_SETTINGS_BIND_DEFAULT);
 }
 
+static void
+on_font_response_cb (GtkFontChooserDialog *dialog,
+                     int                   response_id,
+                     GSettings            *settings)
+{
+  const char *key = g_object_get_data (G_OBJECT (dialog), "SETTINGS_KEY");
+  const char *font = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (dialog));
+
+  if (response_id == GTK_RESPONSE_OK)
+    g_settings_set_string (settings, key, font);
+
+  gtk_window_destroy (GTK_WINDOW (dialog));
+}
+
+static void
+on_font_activate (GtkButton *button,
+                  GSettings *settings)
+{
+  const char *key;
+  GtkWidget *dialog;
+  GtkRoot *root;
+
+  g_assert (GTK_IS_BUTTON (button));
+  g_assert (G_IS_SETTINGS (settings));
+
+  key = g_object_get_data (G_OBJECT (button), "SETTINGS_KEY");
+
+  root = gtk_widget_get_root (GTK_WIDGET (button));
+  dialog = gtk_font_chooser_dialog_new (_("Select Font"), GTK_WINDOW (root));
+  g_settings_bind (settings, key, dialog, "font", G_SETTINGS_BIND_GET);
+
+  g_signal_connect_object (dialog,
+                           "response",
+                           G_CALLBACK (on_font_response_cb),
+                           settings,
+                           0);
+
+  g_object_set_data (G_OBJECT (dialog),
+                     "SETTINGS_KEY",
+                     (char *)g_intern_string (key));
+
+  gtk_window_present (GTK_WINDOW (dialog));
+}
+
+void
+ide_preferences_window_font (const char                   *page_name,
+                             const IdePreferenceItemEntry *entry,
+                             AdwPreferencesGroup          *group,
+                             gpointer                      user_data)
+{
+  IdePreferencesWindow *self = user_data;
+  g_autofree char *title_esc = NULL;
+  g_autofree char *subtitle_esc = NULL;
+  AdwActionRow *row;
+  GSettings *settings;
+  GtkWidget *child;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (ADW_IS_PREFERENCES_GROUP (group));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+
+  if (!(settings = ide_preferences_window_get_settings (self, entry)))
+    return;
+
+  title_esc = g_markup_escape_text (entry->title ? entry->title : "", -1);
+  subtitle_esc = g_markup_escape_text (entry->subtitle ? entry->subtitle : "", -1);
+
+  child = g_object_new (GTK_TYPE_BUTTON,
+                        "valign", GTK_ALIGN_CENTER,
+                        NULL);
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title", title_esc,
+                      "subtitle", subtitle_esc,
+                      "activatable-widget", child,
+                      NULL);
+  adw_action_row_add_suffix (row, child);
+  adw_preferences_group_add (group, GTK_WIDGET (row));
+
+  g_settings_bind (settings, entry->key, child, "label", G_SETTINGS_BIND_GET);
+  g_object_set_data (G_OBJECT (child),
+                     "SETTINGS_KEY",
+                     (char *)g_intern_string (entry->key));
+
+  g_signal_connect_object (child,
+                           "clicked",
+                           G_CALLBACK (on_font_activate),
+                           settings,
+                           0);
+}
+
 IdePreferencesMode
 ide_preferences_window_get_mode (IdePreferencesWindow *self)
 {
