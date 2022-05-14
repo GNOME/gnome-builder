@@ -364,7 +364,17 @@ gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
       g_str_equal (command, ":quit") ||
       g_str_equal (command, "^Wc"))
     {
+      IdeGrid *grid = IDE_GRID (gtk_widget_get_ancestor (GTK_WIDGET (self->page), IDE_TYPE_GRID));
+      PanelGridColumn *column = PANEL_GRID_COLUMN (gtk_widget_get_ancestor (GTK_WIDGET (self->page), PANEL_TYPE_GRID_COLUMN));
+      IdeFrame *frame = IDE_FRAME (gtk_widget_get_ancestor (GTK_WIDGET (self->page), IDE_TYPE_FRAME));
+
       panel_widget_close (PANEL_WIDGET (self->page));
+
+      if (panel_frame_get_empty (PANEL_FRAME (frame)) &&
+          (panel_grid_get_n_columns (PANEL_GRID (grid)) > 1 ||
+           panel_grid_column_get_n_rows (column) > 1))
+        gtk_widget_activate_action (GTK_WIDGET (frame), "frame.close", NULL);
+
       IDE_RETURN (TRUE);
     }
 
