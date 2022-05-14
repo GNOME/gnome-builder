@@ -532,7 +532,7 @@ ide_clang_completion_item_display (IdeClangCompletionItem  *self,
       break;
 
     case GTK_SOURCE_COMPLETION_COLUMN_AFTER:
-      gtk_source_completion_cell_set_text (cell, NULL);
+      gtk_source_completion_cell_set_text (cell, self->params);
       break;
 
     default:
