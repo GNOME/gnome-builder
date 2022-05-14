@@ -35,7 +35,6 @@ struct _GbpGitPreferencesAddin
   GObject parent_instance;
 };
 
-
 typedef struct
 {
   IdeVcsConfig *config;
@@ -47,7 +46,7 @@ config_key_state_free (gpointer data)
 {
   ConfigKeyState *state = data;
 
-  g_clear_object (&state->config);
+  ide_clear_and_destroy_object (&state->config);
   g_slice_free (ConfigKeyState, state);
 }
 
@@ -111,18 +110,41 @@ create_entry_row (const char                   *page_name,
                   AdwPreferencesGroup          *group,
                   gpointer                      user_data)
 {
-  IdeContext *context = user_data;
-  IdeVcs *vcs = ide_vcs_from_context (context);
   g_autoptr(IdeVcsConfig) config = NULL;
+  IdePreferencesWindow *window = user_data;
+  IdePreferencesMode mode;
+  IdeContext *context;
+
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+
+  /* We should always have a context, even if we're showing
+   * global preferences.
+   */
+  mode = ide_preferences_window_get_mode (window);
+  context = ide_preferences_window_get_context (window);
 
   g_assert (IDE_IS_CONTEXT (context));
-  g_assert (IDE_IS_VCS (vcs));
 
-  if (!GBP_IS_GIT_VCS (vcs))
-    return;
+  if (mode == IDE_PREFERENCES_MODE_PROJECT)
+    {
+      IdeVcs *vcs = ide_vcs_from_context (context);
 
-  if (!(config = ide_vcs_get_config (vcs)))
-    return;
+      if (!GBP_IS_GIT_VCS (vcs))
+        return;
+
+      if (!(config = ide_vcs_get_config (vcs)))
+        return;
+
+      gbp_git_vcs_config_set_global (GBP_GIT_VCS_CONFIG (config), FALSE);
+    }
+  else
+    {
+      config = g_object_new (GBP_TYPE_GIT_VCS_CONFIG,
+                             "parent", context,
+                             NULL);
+    }
+
+  g_assert (GBP_IS_GIT_VCS_CONFIG (config));
 
   if (FALSE) {}
   else if (g_strcmp0 (entry->name, "name") == 0)
@@ -132,7 +154,7 @@ create_entry_row (const char                   *page_name,
 }
 
 static const IdePreferencePageEntry pages[] = {
-  { NULL, "sharing", "git", "builder-vcs-git-symbolic", 500, N_("Git Version Control") },
+  { NULL, "sharing", "git", "builder-vcs-git-symbolic", 500, N_("Version Control") },
 };
 
 static const IdePreferenceGroupEntry groups[] = {
@@ -151,12 +173,19 @@ gbp_git_preferences_addin_load (IdePreferencesAddin  *addin,
 {
   g_assert (GBP_IS_GIT_PREFERENCES_ADDIN (addin));
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
-  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  /* We can only show Git information if we have a project open as we need
+   * access to a gnome-builder-git daemon. If no context is available, then
+   * that means we got here by showing preferences with --preferences or
+   * soemthing like that. In that (unlikely) case, we have to bail.
+   */
+  if (context == NULL)
+    return;
 
   ide_preferences_window_add_pages (window, pages, G_N_ELEMENTS (pages), NULL);
   ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
-  ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items),
-                                    g_object_ref (context), g_object_unref);
+  ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
 }
 
 static void
@@ -166,7 +195,7 @@ gbp_git_preferences_addin_unload (IdePreferencesAddin  *addin,
 {
   g_assert (GBP_IS_GIT_PREFERENCES_ADDIN (addin));
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
-  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (!context || IDE_IS_CONTEXT (context));
 
 }
 
