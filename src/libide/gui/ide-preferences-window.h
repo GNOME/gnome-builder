@@ -95,6 +95,8 @@ GtkWidget          *ide_preferences_window_new        (IdePreferencesMode       
 IDE_AVAILABLE_IN_ALL
 IdePreferencesMode  ide_preferences_window_get_mode   (IdePreferencesWindow          *self);
 IDE_AVAILABLE_IN_ALL
+IdeContext         *ide_preferences_window_get_context (IdePreferencesWindow          *self);
+IDE_AVAILABLE_IN_ALL
 void                ide_preferences_window_add_pages  (IdePreferencesWindow          *self,
                                                        const IdePreferencePageEntry  *pages,
                                                        gsize                          n_pages,
