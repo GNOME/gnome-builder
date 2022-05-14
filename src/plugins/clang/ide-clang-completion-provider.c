@@ -175,6 +175,7 @@ ide_clang_completion_provider_activate (GtkSourceCompletionProvider *provider,
   GtkSourceBuffer *buffer;
   GtkSourceView *view;
   GtkTextIter begin, end;
+  guint n_chunks;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
@@ -213,17 +214,18 @@ ide_clang_completion_provider_activate (GtkSourceCompletionProvider *provider,
     gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
 
   snippet = ide_clang_completion_item_get_snippet (item, file_settings);
+  n_chunks = gtk_source_snippet_get_n_chunks (snippet);
 
   /* Check the last snippet chunk and see if it matches our current
    * position so we can omit it.
    */
-  if (gtk_source_snippet_get_n_chunks (snippet) > 0)
+  if (n_chunks > 0)
     {
       GtkSourceSnippetChunk *chunk;
       const gchar *text;
       GtkTextIter limit;
 
-      chunk = gtk_source_snippet_get_nth_chunk (snippet, gtk_source_snippet_get_n_chunks (snippet) - 1);
+      chunk = gtk_source_snippet_get_nth_chunk (snippet, n_chunks-1);
       text = gtk_source_snippet_chunk_get_text (chunk);
       limit = end;
 
