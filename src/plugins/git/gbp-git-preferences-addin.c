@@ -146,11 +146,38 @@ create_entry_row (const char                   *page_name,
 
   g_assert (GBP_IS_GIT_VCS_CONFIG (config));
 
-  if (FALSE) {}
-  else if (g_strcmp0 (entry->name, "name") == 0)
-    adw_preferences_group_add (group, create_entry (config, _("Author"), IDE_VCS_CONFIG_FULL_NAME));
-  else if (g_strcmp0 (entry->name, "email") == 0)
-    adw_preferences_group_add (group, create_entry (config, _("Email"), IDE_VCS_CONFIG_EMAIL));
+  if (g_strcmp0 (entry->name, "name") == 0)
+    {
+      adw_preferences_group_add (group, create_entry (config, _("Author"), IDE_VCS_CONFIG_FULL_NAME));
+      return;
+    }
+
+  if (g_strcmp0 (entry->name, "email") == 0)
+    {
+      const char *title;
+      GtkWidget *label;
+
+      adw_preferences_group_add (group, create_entry (config, _("Email"), IDE_VCS_CONFIG_EMAIL));
+
+      /* After the email row, we want to add a blurb about whether this
+       * will affect the global or per-project settings.
+       */
+      if (mode == IDE_PREFERENCES_MODE_PROJECT)
+        title = _("The Git configuration options above effect current project only.");
+      else
+        title = _("The Git configuration options above effect global defaults.");
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "css-classes", (const char * const[]) { "caption", "dim-label", NULL },
+                            "xalign", .0f,
+                            "margin-top", 15,
+                            "single-line-mode", TRUE,
+                            "label", title,
+                            NULL);
+      adw_preferences_group_add (group, label);
+
+      return;
+    }
 }
 
 static const IdePreferencePageEntry pages[] = {
