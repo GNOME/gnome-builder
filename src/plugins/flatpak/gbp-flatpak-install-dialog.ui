@@ -13,13 +13,9 @@
   </object>
   <template class="GbpFlatpakInstallDialog" parent="GtkDialog">
     <property name="modal">True</property>
-    <child internal-child="vbox">
+    <child internal-child="content_area">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <child internal-child="action_area">
-          <object class="GtkButtonBox">
-          </object>
-        </child>
         <child>
           <object class="GtkBox" id="content">
             <property name="visible">True</property>
@@ -45,7 +41,6 @@
                 <property name="visible">True</property>
                 <property name="margin_top">12</property>
                 <property name="vexpand">True</property>
-                <property name="shadow_type">in</property>
                 <property name="propagate_natural_width">True</property>
                 <property name="propagate_natural_height">True</property>
                 <child>
