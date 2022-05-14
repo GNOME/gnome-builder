@@ -513,6 +513,8 @@ GtkWidget *
 ide_preferences_window_new (IdePreferencesMode  mode,
                             IdeContext         *context)
 {
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+
   return g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
                        "context", context,
                        "mode", mode,
@@ -1548,4 +1550,25 @@ ide_preferences_window_get_mode (IdePreferencesWindow *self)
   g_return_val_if_fail (IDE_IS_PREFERENCES_WINDOW (self), 0);
 
   return self->mode;
+}
+
+/**
+ * ide_preferences_window_get_context:
+ * @self: a #IdePreferencesWindow
+ *
+ * Gets the context for the preferences window, if any.
+ *
+ * This will always return non-%NULL if the mode is %IDE_PREFERENCES_MODE_PROJECT.
+ *
+ * Otherwise, it will only return non-%NULL if the preferences window was
+ * opened while a project is open.
+ *
+ * Returns: (transfer none) (nullable): an #IdeContext or %NULL
+ */
+IdeContext *
+ide_preferences_window_get_context (IdePreferencesWindow *self)
+{
+  g_return_val_if_fail (IDE_IS_PREFERENCES_WINDOW (self), NULL);
+
+  return self->context;
 }
