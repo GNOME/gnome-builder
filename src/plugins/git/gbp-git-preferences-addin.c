@@ -27,35 +27,108 @@
 #include <libide-gui.h>
 
 #include "gbp-git-preferences-addin.h"
+#include "gbp-git-vcs.h"
+#include "gbp-git-vcs-config.h"
 
 struct _GbpGitPreferencesAddin
 {
   GObject parent_instance;
 };
 
-static void
-create_entry (const char                   *page_name,
-              const IdePreferenceItemEntry *entry,
-              AdwPreferencesGroup          *group,
-              gpointer                      user_data)
+
+typedef struct
 {
-  IDE_TODO ("Git: setup bindings for author info");
+  IdeVcsConfig *config;
+  IdeVcsConfigType key;
+} ConfigKeyState;
+
+static void
+config_key_state_free (gpointer data)
+{
+  ConfigKeyState *state = data;
+
+  g_clear_object (&state->config);
+  g_slice_free (ConfigKeyState, state);
+}
+
+static void
+entry_config_changed (GtkEditable    *editable,
+                      ConfigKeyState *state)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+  const char *text;
+
+  g_assert (GTK_IS_EDITABLE (editable));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_VCS_CONFIG (state->config));
+
+  text = gtk_editable_get_text (editable);
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_string (&value, text);
+
+  ide_vcs_config_set_config (state->config, state->key, &value);
+}
+
+static GtkWidget *
+create_entry (IdeVcsConfig     *config,
+              const char       *title,
+              IdeVcsConfigType  type)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+  AdwEntryRow *entry;
+  const char *text = NULL;
+  ConfigKeyState *state;
+
+  g_assert (GBP_IS_GIT_VCS_CONFIG (config));
+
+  g_value_init (&value, G_TYPE_STRING);
+  ide_vcs_config_get_config (config, type, &value);
+  text = g_value_get_string (&value);
+
+  entry = g_object_new (ADW_TYPE_ENTRY_ROW,
+                        "title", title,
+                        "text", text,
+                        NULL);
+
+  state = g_slice_new (ConfigKeyState);
+  state->config = g_object_ref (config);
+  state->key = type;
+
+  g_signal_connect_data (entry,
+                         "changed",
+                         G_CALLBACK (entry_config_changed),
+                         state,
+                         (GClosureNotify)config_key_state_free,
+                         G_CONNECT_AFTER);
+
+  return GTK_WIDGET (entry);
+}
+
+static void
+create_entry_row (const char                   *page_name,
+                  const IdePreferenceItemEntry *entry,
+                  AdwPreferencesGroup          *group,
+                  gpointer                      user_data)
+{
+  IdeContext *context = user_data;
+  IdeVcs *vcs = ide_vcs_from_context (context);
+  g_autoptr(IdeVcsConfig) config = NULL;
+
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (IDE_IS_VCS (vcs));
+
+  if (!GBP_IS_GIT_VCS (vcs))
+    return;
+
+  if (!(config = ide_vcs_get_config (vcs)))
+    return;
 
   if (FALSE) {}
   else if (g_strcmp0 (entry->name, "name") == 0)
-    {
-      adw_preferences_group_add (group,
-                                 g_object_new (ADW_TYPE_ENTRY_ROW,
-                                               "title", entry->title,
-                                               NULL));
-    }
+    adw_preferences_group_add (group, create_entry (config, _("Author"), IDE_VCS_CONFIG_FULL_NAME));
   else if (g_strcmp0 (entry->name, "email") == 0)
-    {
-      adw_preferences_group_add (group,
-                                 g_object_new (ADW_TYPE_ENTRY_ROW,
-                                               "title", entry->title,
-                                               NULL));
-    }
+    adw_preferences_group_add (group, create_entry (config, _("Email"), IDE_VCS_CONFIG_EMAIL));
 }
 
 static const IdePreferencePageEntry pages[] = {
@@ -67,8 +140,8 @@ static const IdePreferenceGroupEntry groups[] = {
 };
 
 static const IdePreferenceItemEntry items[] = {
-  { "git", "author", "name", 0, create_entry, N_("Full Name") },
-  { "git", "author", "email", 10, create_entry, N_("Email Address") },
+  { "git", "author", "name", 0, create_entry_row, N_("Full Name") },
+  { "git", "author", "email", 10, create_entry_row, N_("Email Address") },
 };
 
 static void
