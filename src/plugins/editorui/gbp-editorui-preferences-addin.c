@@ -56,6 +56,11 @@ static const IdePreferenceGroupEntry lang_groups[] = {
 };
 
 static const IdePreferenceItemEntry items[] = {
+  { "appearance", "font", "font-name", 0, ide_preferences_window_font,
+    N_("Editor Font"),
+    N_("The font used within the source code editor"),
+    "org.gnome.builder.editor", NULL, "font-name" },
+
   { "appearance", "effects", "show-grid-lines", 10, ide_preferences_window_toggle,
     N_("Show Grid Pattern"),
     N_("Display a grid pattern underneath source code"),

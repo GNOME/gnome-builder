@@ -743,6 +743,12 @@ static const IdePreferenceItemEntry items[] = {
     N_("Builder"),
     N_("Keyboard shortcuts similar to GNOME Text Editor"),
     "org.gnome.builder.editor", NULL, "keybindings", "'default'" },
+
+  /* TODO: This belongs in plugins/terminal after it is ported */
+  { "appearance", "font", "terminal-font", 10, ide_preferences_window_font,
+    N_("Terminal Font"),
+    N_("The font used within terminals"),
+    "org.gnome.builder.terminal", NULL, "font-name" },
 };
 
 static gboolean
