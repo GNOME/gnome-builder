@@ -89,13 +89,12 @@
         <section id="ide-source-view-popup-menu-line-section">
           <item>
             <attribute name="label" translatable="yes">_Join Lines</attribute>
-            <attribute name="action">sourceview.join-lines</attribute>
+            <attribute name="action">selection.join</attribute>
             <attribute name="accel">&lt;control&gt;j</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">S_ort Lines</attribute>
-            <attribute name="action">sourceview.sort</attribute>
-            <attribute name="target" type="(bb)">(false,false)</attribute>
+            <attribute name="action">selection.sort</attribute>
             <attribute name="accel">&lt;shift&gt;&lt;control&gt;j</attribute>
           </item>
         </section>

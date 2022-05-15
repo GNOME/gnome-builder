@@ -491,6 +491,49 @@ ide_source_view_size_allocate (GtkWidget *widget,
 }
 
 static void
+ide_source_view_selection_sort (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *params)
+{
+  //gtk_source_buffer_sort_lines (buffer, &begin, &end, flags, column);
+}
+
+static void
+ide_source_view_selection_join (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *param)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  GtkTextBuffer *buffer;
+  GtkTextMark *mark;
+  GtkTextIter begin;
+  GtkTextIter end;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  gtk_text_iter_order (&begin, &end);
+
+  /*
+   * We want to leave the cursor inbetween the joined lines, so lets create an
+   * insert mark and delete it later after we reposition the cursor.
+   */
+  mark = gtk_text_buffer_create_mark (buffer, NULL, &end, TRUE);
+
+  /* join lines and restore the insert mark inbetween joined lines. */
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_source_buffer_join_lines (GTK_SOURCE_BUFFER (buffer), &begin, &end);
+  gtk_text_buffer_get_iter_at_mark (buffer, &end, mark);
+  gtk_text_buffer_select_range (buffer, &end, &end);
+  gtk_text_buffer_end_user_action (buffer);
+
+  /* Remove our temporary mark. */
+  gtk_text_buffer_delete_mark (buffer, mark);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -642,6 +685,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, ide_source_view_menu_popup_action);
+  gtk_widget_class_install_action (widget_class, "selection.sort", NULL, ide_source_view_selection_sort);
+  gtk_widget_class_install_action (widget_class, "selection.join", NULL, ide_source_view_selection_join);
 
   /**
    * IdeSourceView::populate-menu:
