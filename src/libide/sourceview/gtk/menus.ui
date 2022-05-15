@@ -46,11 +46,6 @@
         <attribute name="accel">&lt;control&gt;v</attribute>
       </item>
     </section>
-    <section id="ide-source-view-popup-menu-highlighting-section">
-      <submenu id="ide-source-view-popup-menu-highlighting-submenu">
-        <attribute name="label" translatable="yes">_Highlighting</attribute>
-      </submenu>
-    </section>
     <section id="ide-source-view-popup-menu-selection-section">
       <submenu id="ide-source-view-popup-menu-selection-submenu">
         <attribute name="label" translatable="yes">_Selection</attribute>
