@@ -95,6 +95,7 @@
           <item>
             <attribute name="label" translatable="yes">S_ort Lines</attribute>
             <attribute name="action">selection.sort</attribute>
+            <attribute name="target" type="(bb)">(false, false)</attribute>
             <attribute name="accel">&lt;shift&gt;&lt;control&gt;j</attribute>
           </item>
         </section>
