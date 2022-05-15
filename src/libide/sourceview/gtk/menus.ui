@@ -51,39 +51,32 @@
         <attribute name="label" translatable="yes">_Selection</attribute>
         <item>
           <attribute name="label" translatable="yes">Select _All</attribute>
-          <attribute name="action">sourceview.select-all</attribute>
-          <attribute name="target" type="(b)">(true,)</attribute>
+          <attribute name="action">selection.select-all</attribute>
           <attribute name="accel">&lt;control&gt;a</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Select _None</attribute>
-          <attribute name="action">sourceview.select-all</attribute>
-          <attribute name="target" type="(b)">(false,)</attribute>
-          <attribute name="accel">&lt;control&gt;backslash</attribute>
         </item>
         <section id="ide-source-view-popup-menu-case-section">
           <item>
             <attribute name="label" translatable="yes">All _Upper Case</attribute>
-            <attribute name="action">sourceview.change-case</attribute>
-            <attribute name="target" type="(u)">(1,)</attribute>
+            <attribute name="action">source.change-case</attribute>
+            <attribute name="target" type="s">'upper'</attribute>
             <attribute name="accel">&lt;control&gt;u</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">All _Lower Case</attribute>
-            <attribute name="action">sourceview.change-case</attribute>
-            <attribute name="target" type="(u)">(0,)</attribute>
+            <attribute name="action">source.change-case</attribute>
+            <attribute name="target" type="s">'lower'</attribute>
             <attribute name="accel">&lt;control&gt;l</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">In_vert Case</attribute>
-            <attribute name="action">sourceview.change-case</attribute>
-            <attribute name="target" type="(u)">(2,)</attribute>
+            <attribute name="action">source.change-case</attribute>
+            <attribute name="target" type="s">'toggle'</attribute>
             <attribute name="accel">&lt;control&gt;asciitilde</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">_Title Case</attribute>
-            <attribute name="action">sourceview.change-case</attribute>
-            <attribute name="target" type="(u)">(3,)</attribute>
+            <attribute name="action">source.change-case</attribute>
+            <attribute name="target" type="s">'title'</attribute>
           </item>
         </section>
         <section id="ide-source-view-popup-menu-line-section">
