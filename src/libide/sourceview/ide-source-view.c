@@ -493,9 +493,38 @@ ide_source_view_size_allocate (GtkWidget *widget,
 static void
 ide_source_view_selection_sort (GtkWidget  *widget,
                                 const char *action_name,
-                                GVariant   *params)
+                                GVariant   *param)
 {
-  //gtk_source_buffer_sort_lines (buffer, &begin, &end, flags, column);
+  IdeSourceView *self = (IdeSourceView *)widget;
+  GtkSourceSortFlags sort_flags = GTK_SOURCE_SORT_FLAGS_NONE;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin;
+  GtkTextIter end;
+  gboolean ignore_case;
+  gboolean reverse;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE ("(bb)")));
+
+  g_variant_get (param, "(bb)", &ignore_case, &reverse);
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (gtk_text_iter_equal (&begin, &end))
+    gtk_text_buffer_get_bounds (buffer, &begin, &end);
+
+  if (!ignore_case)
+    sort_flags |= GTK_SOURCE_SORT_FLAGS_CASE_SENSITIVE;
+
+  if (reverse)
+    sort_flags |= GTK_SOURCE_SORT_FLAGS_REVERSE_ORDER;
+
+  gtk_source_buffer_sort_lines (GTK_SOURCE_BUFFER (buffer),
+                                &begin,
+                                &end,
+                                sort_flags,
+                                0);
 }
 
 static void
@@ -685,7 +714,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_install_action (widget_class, "menu.popup", NULL, ide_source_view_menu_popup_action);
-  gtk_widget_class_install_action (widget_class, "selection.sort", NULL, ide_source_view_selection_sort);
+  gtk_widget_class_install_action (widget_class, "selection.sort", "(bb)", ide_source_view_selection_sort);
   gtk_widget_class_install_action (widget_class, "selection.join", NULL, ide_source_view_selection_join);
 
   /**
