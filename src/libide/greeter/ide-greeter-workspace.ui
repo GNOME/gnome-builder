@@ -4,12 +4,10 @@
   <template class="IdeGreeterWorkspace" parent="IdeWorkspace">
     <child type="titlebar">
       <object class="IdeHeaderBar" id="header_bar">
+        <property name="flat">true</property>
         <property name="menu-id">ide-greeter-workspace-menu</property>
         <child internal-child="headerbar">
           <object class="AdwHeaderBar">
-            <style>
-              <class name="flat"/>
-            </style>
           </object>
         </child>
         <child type="title">
