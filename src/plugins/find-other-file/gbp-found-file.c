@@ -34,15 +34,26 @@ struct _GbpFoundFile
 
 enum {
   PROP_0,
-  PROP_GICON,
   PROP_DISPLAY_NAME,
   PROP_FILE,
+  PROP_GICON,
+  PROP_IS_DIRECTORY,
   N_PROPS
 };
 
 G_DEFINE_FINAL_TYPE (GbpFoundFile, gbp_found_file, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+
+static gboolean
+gbp_found_file_get_is_directory (GbpFoundFile *self)
+{
+  g_assert (GBP_IS_FOUND_FILE (self));
+
+  return self->info != NULL ?
+         g_file_info_get_file_type (self->info) == G_FILE_TYPE_DIRECTORY :
+         FALSE;
+}
 
 static void
 gbp_found_file_query_info_cb (GObject      *object,
@@ -61,6 +72,9 @@ gbp_found_file_query_info_cb (GObject      *object,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GICON]);
+
+  if (gbp_found_file_get_is_directory (self))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IS_DIRECTORY]);
 }
 
 static void
@@ -75,7 +89,8 @@ gbp_found_file_constructed (GObject *object)
 
   g_file_query_info_async (self->file,
                            G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME","
-                           G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON,
+                           G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON","
+                           G_FILE_ATTRIBUTE_STANDARD_TYPE,
                            G_FILE_QUERY_INFO_NONE,
                            G_PRIORITY_LOW,
                            NULL,
@@ -119,6 +134,10 @@ gbp_found_file_get_property (GObject    *object,
     case PROP_GICON:
       if (self->info != NULL)
         g_value_set_object (value, g_file_info_get_attribute_object (self->info, G_FILE_ATTRIBUTE_STANDARD_SYMBOLIC_ICON));
+      break;
+
+    case PROP_IS_DIRECTORY:
+      g_value_set_boolean (value, gbp_found_file_get_is_directory (self));
       break;
 
     default:
@@ -169,6 +188,11 @@ gbp_found_file_class_init (GbpFoundFileClass *klass)
     g_param_spec_object ("gicon", NULL, NULL,
                          G_TYPE_ICON,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_IS_DIRECTORY] =
+    g_param_spec_boolean ("is-directory", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
