@@ -25,9 +25,6 @@
           <object class="GtkImage" id="image">
             <property name="visible">false</property>
             <property name="margin-end">18</property>
-            <style>
-              <class name="lowres-icon"/>
-            </style>
           </object>
         </child>
         <child>
