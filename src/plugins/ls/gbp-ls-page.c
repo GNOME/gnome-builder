@@ -231,7 +231,7 @@ gbp_ls_page_init (GbpLsPage *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  panel_widget_set_icon_name (PANEL_WIDGET (self), "folder-symbolic");
+  panel_widget_set_icon_name (PANEL_WIDGET (self), "folder-open-symbolic");
 
   g_signal_connect_object (self->tree_view,
                            "row-activated",
