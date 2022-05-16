@@ -75,9 +75,13 @@ static gpointer
 file_to_found_file (gpointer item,
                     gpointer user_data)
 {
-  GbpFoundFile *found = gbp_found_file_new (user_data, item);
-  g_object_unref (item);
-  return found;
+  GFile *workdir = user_data;
+  g_autoptr(GFile) file = item;
+
+  g_assert (G_IS_FILE (workdir));
+  g_assert (G_IS_FILE (file));
+
+  return gbp_found_file_new (workdir, file);
 }
 
 void
