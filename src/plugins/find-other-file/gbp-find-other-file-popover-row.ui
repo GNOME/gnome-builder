@@ -21,9 +21,20 @@
         <child>
           <object class="GtkLabel">
             <property name="halign">start</property>
+            <property name="hexpand">true</property>
             <property name="ellipsize">start</property>
             <binding name="label">
               <lookup name="display-name" type="GbpFoundFile">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">go-next-symbolic</property>
+            <binding name="visible">
+              <lookup name="is-directory" type="GbpFoundFile">
                 <lookup name="item">GtkListItem</lookup>
               </lookup>
             </binding>
