@@ -65,6 +65,8 @@ struct _IdeGreeterWorkspace
   AdwWindowTitle           *title;
   IdeGreeterButtonsSection *buttons_section;
   AdwStatusPage            *empty_state;
+  GtkScrolledWindow        *scroller;
+  GtkSeparator             *separator;
 
   guint                     selection_mode : 1;
 };
@@ -628,6 +630,19 @@ ide_greeter_workspace_page_action (GtkWidget  *widget,
 }
 
 static void
+on_scroller_value_changed_cb (IdeGreeterWorkspace *self,
+                              GtkAdjustment       *adj)
+{
+  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+  g_assert (GTK_IS_ADJUSTMENT (adj));
+
+  if (gtk_adjustment_get_value (adj) > .0)
+    gtk_widget_remove_css_class (GTK_WIDGET (self->separator), "transparent");
+  else
+    gtk_widget_add_css_class (GTK_WIDGET (self->separator), "transparent");
+}
+
+static void
 ide_greeter_workspace_dispose (GObject *object)
 {
   IdeGreeterWorkspace *self = (IdeGreeterWorkspace *)object;
@@ -729,11 +744,13 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, empty_state);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, left_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, pages);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, projects_action_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, scroller);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, search_entry);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, sections);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, select_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, pages);
+  gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, separator);
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, title);
   gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
 
@@ -757,9 +774,17 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
   };
 
   g_autoptr(GPropertyAction) selection_action = NULL;
+  GtkAdjustment *vadj;
   GtkGesture *gesture;
 
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  vadj = gtk_scrolled_window_get_vadjustment (self->scroller);
+  g_signal_connect_object (vadj,
+                           "value-changed",
+                           G_CALLBACK (on_scroller_value_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   selection_action = g_property_action_new ("selection-mode", G_OBJECT (self), "selection-mode");
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (selection_action));

@@ -59,7 +59,14 @@
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkScrolledWindow">
+                  <object class="GtkSeparator" id="separator">
+                    <style>
+                      <class name="transparent"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="scroller">
                     <property name="vexpand">true</property>
                     <property name="hscrollbar-policy">never</property>
                     <child>

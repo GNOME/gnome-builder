@@ -63,6 +63,10 @@ notificationstack button {
   background: none;
 }
 
+separator.transparent {
+  opacity: 0;
+}
+
 button.pill.small {
   font-size: .83333em;
   border-radius: 99px;
