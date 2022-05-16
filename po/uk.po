@@ -6,15 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-21 19:11+0000\n"
-"PO-Revision-Date: 2022-02-23 09:11+0200\n"
+"POT-Creation-Date: 2022-04-24 11:26+0000\n"
+"PO-Revision-Date: 2022-05-16 10:26+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
+"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Lokalize 20.12.0\n"
 "X-Project-Style: gnome\n"
 
@@ -863,7 +864,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Завантажити або створити палітру за налаштуваннями"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5030
+#: src/libide/sourceview/ide-source-view.c:5029
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Перейменувати"
@@ -885,7 +886,7 @@ msgstr "_Перейменувати"
 msgid "unsaved file %u"
 msgstr "незбережений файл %u"
 
-#: src/libide/code/ide-buffer.c:3635
+#: src/libide/code/ide-buffer.c:3720
 msgid "The current language lacks a symbol resolver."
 msgstr "Цій мові бракує розпізнавання символів."
 
@@ -1461,7 +1462,7 @@ msgstr "Неочікуване завершення роботи процесу"
 msgid "Host Operating System"
 msgstr "Основна операційна система"
 
-#: src/libide/foundry/ide-runtime.c:571
+#: src/libide/foundry/ide-runtime.c:575
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Основна система"
@@ -2700,6 +2701,7 @@ msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Форматувати позначений код"
 
+#. Translators: LSP stands for Language Server Protocol
 #: src/libide/gui/ide-shortcuts-window.ui:447
 msgctxt "shortcut window"
 msgid "(LSP only) Format selected code or whole document"
@@ -2835,7 +2837,7 @@ msgstr[2] "Встановлюємо %u пакунків"
 msgstr[3] "Встановлюємо %u пакунок"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1473
+#: src/libide/lsp/ide-lsp-client.c:1481
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
@@ -2941,31 +2943,31 @@ msgstr "Ві_ддалити"
 msgid "_Reset"
 msgstr "С_кинути"
 
-#: src/libide/sourceview/ide-source-view.c:4444
+#: src/libide/sourceview/ide-source-view.c:4443
 #, c-format
 msgid "Insert “%s”"
 msgstr "Вставити «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4446
+#: src/libide/sourceview/ide-source-view.c:4445
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Замінити «%s» на «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4572
+#: src/libide/sourceview/ide-source-view.c:4571
 msgid "Apply Fix-It"
 msgstr "Застосувати латку"
 
-#: src/libide/sourceview/ide-source-view.c:5029
+#: src/libide/sourceview/ide-source-view.c:5028
 msgid "Rename symbol"
 msgstr "Перейменувати символ"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5408
+#: src/libide/sourceview/ide-source-view.c:5407
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>рядок %u, позиція %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5434
+#: src/libide/sourceview/ide-source-view.c:5433
 msgid "No references were found"
 msgstr "Посилань не знайдено"
 
@@ -2988,7 +2990,6 @@ msgstr "Вибір"
 
 #: src/libide/terminal/ide-terminal-launcher.c:339
 #: src/libide/terminal/ide-terminal-launcher.c:439
-#| msgid "Rustup not installed"
 msgid "Requested runtime is not installed"
 msgstr "Потрібне середовище виконання не встановлено"
 
@@ -3005,24 +3006,24 @@ msgstr "Термінал без назви"
 msgid "Save Terminal Content As"
 msgstr "Зберегти вміст терміналу як"
 
-#: src/libide/terminal/ide-terminal-page.c:112
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:301
-msgid "Untitled terminal"
-msgstr "Термінал без назви"
-
-#. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:114
-msgid "Exited"
-msgstr "Вихід"
-
-#: src/libide/terminal/ide-terminal-page.c:121
+#: src/libide/terminal/ide-terminal-page.c:125
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Не вдалося запустити підпроцес. Можливо, вам слід повторно зібрати ваш "
 "проєкт."
 
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:130
+#: src/libide/terminal/ide-terminal-page.c:165
+#: src/libide/terminal/ide-terminal-page.c:336
+msgid "Untitled terminal"
+msgstr "Термінал без назви"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:132
+msgid "Exited"
+msgstr "Вихід"
+
+#: src/libide/terminal/ide-terminal-page.c:152
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr ""
 "Надто швидке завершення роботи засобу запуску підпроцесу. Перезапуск не "
@@ -3272,7 +3273,7 @@ msgid "_Beautify"
 msgstr "_Форматування"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:663
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:705
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (копія)"
@@ -3658,6 +3659,11 @@ msgstr ""
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
 msgstr "Оголошення"
+
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:93
+#, c-format
+msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr "Можлива друкарська помилка у «%s». Ви мали на увазі «%s»?"
 
 #: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
 msgid "Colors"
@@ -4501,7 +4507,8 @@ msgstr "Вибрати назву шини для інтроспекції ву�
 
 #: src/plugins/editor/gbp-confirm-save-dialog.c:260
 msgid "There is a file with unsaved changes. Save changes before closing?"
-msgid_plural "There are files with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are files with unsaved changes. Save changes before closing?"
 msgstr[0] "Зміни до деяких файлів не збережено. Зберегти зміни до закриття?"
 msgstr[1] "Зміни до деяких файлів не збережено. Зберегти зміни до закриття?"
 msgstr[2] "Зміни до деяких файлів не збережено. Зберегти зміни до закриття?"
@@ -4591,16 +4598,16 @@ msgstr "Emacs"
 msgid "Emulates the Emacs text editor"
 msgstr "Емулює текстовий редактор Emacs"
 
-#: src/plugins/eslint/eslint_plugin.py:204
+#: src/plugins/eslint/eslint_plugin.py:97
 msgid "ESlint"
 msgstr "ESlint"
 
-#: src/plugins/eslint/eslint_plugin.py:205
+#: src/plugins/eslint/eslint_plugin.py:98
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr "Увімкнути ESLint, який може виконувати код у вашому проєкті"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/eslint/eslint_plugin.py:207
+#: src/plugins/eslint/eslint_plugin.py:100
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint код виконати виконання"
 
@@ -5150,7 +5157,7 @@ msgstr "На комп'ютері не встановлено python3-sphinx"
 msgid "(Preview)"
 msgstr "(Перегляд)"
 
-#: src/plugins/intelephense/intelephense.py:71
+#: src/plugins/intelephense/intelephense.py:72
 msgid "Indexing php code…"
 msgstr "Індексування коду php…"
 
@@ -5192,59 +5199,59 @@ msgstr "Зібрати проєкт"
 msgid "Install project"
 msgstr "Встановити проєкт"
 
-#: src/plugins/make/make_plugin.py:343
+#: src/plugins/make/make_plugin.py:351
 msgid "Empty Makefile Project"
 msgstr "Порожній проект Makefile"
 
-#: src/plugins/make/make_plugin.py:345
+#: src/plugins/make/make_plugin.py:353
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Створити порожній проєкт з використанням простого Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:255
+#: src/plugins/meson-templates/meson_templates.py:259
 msgid "GTK Application (Legacy)"
 msgstr "Програма GTK (застаріла)"
 
-#: src/plugins/meson-templates/meson_templates.py:257
+#: src/plugins/meson-templates/meson_templates.py:261
 msgid "Create a GTK application with GTK 3"
 msgstr "Створити програму GTK з GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:332
+#: src/plugins/meson-templates/meson_templates.py:336
 msgid "GTK Application"
 msgstr "Програма GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:334
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Create a GTK application"
 msgstr "Створити програму GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:414
+#: src/plugins/meson-templates/meson_templates.py:418
 msgid "GNOME Application"
 msgstr "Програма GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:416
+#: src/plugins/meson-templates/meson_templates.py:420
 msgid "Create a GNOME application"
 msgstr "Створити програму GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:496
+#: src/plugins/meson-templates/meson_templates.py:500
 msgid "Shared Library"
 msgstr "Спільні бібліотеки"
 
-#: src/plugins/meson-templates/meson_templates.py:498
+#: src/plugins/meson-templates/meson_templates.py:502
 msgid "Create a new project with a shared library"
 msgstr "Створити проєкт із бібліотекою спільного використання"
 
-#: src/plugins/meson-templates/meson_templates.py:515
+#: src/plugins/meson-templates/meson_templates.py:519
 msgid "Empty Project"
 msgstr "Порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:517
+#: src/plugins/meson-templates/meson_templates.py:521
 msgid "Create a new empty project"
 msgstr "Створити порожній проєкт"
 
-#: src/plugins/meson-templates/meson_templates.py:534
+#: src/plugins/meson-templates/meson_templates.py:538
 msgid "Command Line Tool"
 msgstr "Засіб командного рядка"
 
-#: src/plugins/meson-templates/meson_templates.py:536
+#: src/plugins/meson-templates/meson_templates.py:540
 msgid "Create a new command line project"
 msgstr "Створити проєкт програми для роботи у командному рядку"
 
@@ -5968,16 +5975,16 @@ msgstr ""
 "інформації у файлах таблиць стилів. Це може призвести до виконання коду у "
 "вашому проєкті."
 
-#: src/plugins/stylelint/stylelint_plugin.py:135
+#: src/plugins/stylelint/stylelint_plugin.py:77
 msgid "Stylelint"
 msgstr "Stylelint"
 
-#: src/plugins/stylelint/stylelint_plugin.py:136
+#: src/plugins/stylelint/stylelint_plugin.py:78
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr "Увімкнути Stylelint, який може виконувати код у вашому проєкті"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/stylelint/stylelint_plugin.py:138
+#: src/plugins/stylelint/stylelint_plugin.py:80
 msgid "stylelint stylesheet lint code execute execution"
 msgstr "stylelint таблиця стилів lint перевірка код виконання виконати"
 
