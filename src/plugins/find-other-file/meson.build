@@ -1,6 +1,7 @@
 plugins_sources += files([
   'find-other-file-plugin.c',
   'gbp-simple-similar-file-locator.c',
+  'gbp-find-other-file-browser.c',
   'gbp-find-other-file-popover.c',
   'gbp-find-other-file-workspace-addin.c',
   'gbp-found-file.c',
