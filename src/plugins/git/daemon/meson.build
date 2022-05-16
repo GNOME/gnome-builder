@@ -89,7 +89,7 @@ gnome_builder_git = executable('gnome-builder-git', gnome_builder_git_sources,
       dependencies: gnome_builder_git_deps,
 )
 
-test_sources = [
+test_git_sources = [
   ipc_git_change_monitor_src,
   ipc_git_config_src,
   ipc_git_progress_src,
@@ -97,11 +97,11 @@ test_sources = [
   ipc_git_service_src,
 ]
 
-test_git = executable('test-git', 'test-git.c', test_sources,
+test_git = executable('test-git', 'test-git.c', test_git_sources,
   dependencies: [ libgiounix_dep ],
 )
 
-test_clone = executable('test-clone', 'test-clone.c', test_sources,
+test_clone = executable('test-clone', 'test-clone.c', test_git_sources,
   dependencies: [ libgiounix_dep ],
 )
 
