@@ -28,6 +28,7 @@
 #include <libide-editor.h>
 #include <libide-projects.h>
 
+#include "gbp-find-other-file-browser.h"
 #include "gbp-find-other-file-popover.h"
 #include "gbp-find-other-file-workspace-addin.h"
 
@@ -38,6 +39,7 @@ struct _GbpFindOtherFileWorkspaceAddin
   GtkMenuButton           *menu_button;
   GtkLabel                *label;
   GtkImage                *image;
+  GbpFindOtherFileBrowser *browser;
   GbpFindOtherFilePopover *popover;
 };
 
@@ -66,6 +68,22 @@ gbp_find_other_file_workspace_addin_clear (GbpFindOtherFileWorkspaceAddin *self)
 
   gtk_widget_hide (GTK_WIDGET (self->menu_button));
   gbp_find_other_file_popover_set_model (self->popover, NULL);
+  gbp_find_other_file_browser_set_file (self->browser, NULL);
+}
+
+static GListModel *
+join_models (GListModel *a,
+             GListModel *b)
+{
+  GListStore *joined = g_list_store_new (G_TYPE_LIST_MODEL);
+
+  g_assert (G_IS_LIST_MODEL (a));
+  g_assert (G_IS_LIST_MODEL (b));
+
+  g_list_store_append (joined, a);
+  g_list_store_append (joined, b);
+
+  return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (joined)));
 }
 
 static void
@@ -76,6 +94,7 @@ gbp_find_other_file_workspace_addin_list_similar_cb (GObject      *object,
   IdeProject *project = (IdeProject *)object;
   g_autoptr(GbpFindOtherFileWorkspaceAddin) self = user_data;
   g_autoptr(GListModel) model = NULL;
+  g_autoptr(GListModel) joined = NULL;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -96,7 +115,8 @@ gbp_find_other_file_workspace_addin_list_similar_cb (GObject      *object,
       IDE_EXIT;
     }
 
-  gbp_find_other_file_popover_set_model (self->popover, model);
+  joined = join_models (G_LIST_MODEL (self->browser), model);
+  gbp_find_other_file_popover_set_model (self->popover, joined);
   gtk_widget_show (GTK_WIDGET (self->menu_button));
 
   IDE_EXIT;
@@ -126,6 +146,8 @@ gbp_find_other_file_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   project = ide_project_from_context (context);
   file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page));
 
+  gbp_find_other_file_browser_set_file (self->browser, file);
+
   ide_project_list_similar_async (project,
                                   file,
                                   NULL,
@@ -140,7 +162,9 @@ gbp_find_other_file_workspace_addin_load (IdeWorkspaceAddin *addin,
                                           IdeWorkspace      *workspace)
 {
   GbpFindOtherFileWorkspaceAddin *self = (GbpFindOtherFileWorkspaceAddin *)addin;
+  g_autoptr(GFile) workdir = NULL;
   PanelStatusbar *statusbar;
+  IdeContext *context;
   GtkBox *box;
 
   IDE_ENTRY;
@@ -149,6 +173,12 @@ gbp_find_other_file_workspace_addin_load (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   self->workspace = workspace;
+
+  context = ide_workspace_get_context (workspace);
+  workdir = ide_context_ref_workdir (context);
+
+  self->browser = gbp_find_other_file_browser_new ();
+  gbp_find_other_file_browser_set_root (self->browser, workdir);
 
   self->popover = g_object_new (GBP_TYPE_FIND_OTHER_FILE_POPOVER,
                                 NULL);
@@ -198,6 +228,8 @@ gbp_find_other_file_workspace_addin_unload (IdeWorkspaceAddin *addin,
 
   g_assert (GBP_IS_FIND_OTHER_FILE_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
+
+  g_clear_object (&self->browser);
 
   for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
     g_action_map_remove_action (G_ACTION_MAP (workspace), actions[i].name);
