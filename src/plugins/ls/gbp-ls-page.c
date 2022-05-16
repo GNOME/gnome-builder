@@ -310,7 +310,6 @@ void
 gbp_ls_page_set_directory (GbpLsPage *self,
                            GFile     *directory)
 {
-  g_autofree gchar *title = NULL;
   g_autofree gchar *name = NULL;
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(GFile) home = NULL;
@@ -360,8 +359,7 @@ gbp_ls_page_set_directory (GbpLsPage *self,
   else
     name = ide_path_collapse (g_file_peek_path (directory));
 
-  title = g_strdup_printf (_("%s — Directory"), name);
-  panel_widget_set_title (PANEL_WIDGET (self), title);
+  panel_widget_set_title (PANEL_WIDGET (self), name);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
 }
