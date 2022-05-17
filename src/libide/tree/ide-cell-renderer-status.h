@@ -26,12 +26,8 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_CELL_RENDERER_STATUS (ide_cell_renderer_status_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeCellRendererStatus, ide_cell_renderer_status, IDE, CELL_RENDERER_STATUS, GtkCellRenderer)
-
 GtkCellRenderer *ide_cell_renderer_status_new       (void);
-void             ide_cell_renderer_status_set_flags (IdeCellRendererStatus *self,
-                                                     IdeTreeNodeFlags       flags);
+void             ide_cell_renderer_status_set_flags (GtkCellRenderer  *cell,
+                                                     IdeTreeNodeFlags  flags);
 
 G_END_DECLS
