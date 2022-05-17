@@ -27,6 +27,7 @@
 #include <libide-gtk.h>
 #include <libide-threading.h>
 
+#include "ide-application.h"
 #include "ide-gui-global.h"
 #include "ide-page.h"
 #include "ide-workspace-private.h"
@@ -314,7 +315,13 @@ ide_page_set_menu_id (IdePage    *self,
 
   if (menu_id != priv->menu_id)
     {
+      GMenu *menu;
+
       priv->menu_id = menu_id;
+
+      menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, menu_id);
+      panel_widget_set_menu_model (PANEL_WIDGET (self), G_MENU_MODEL (menu));
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MENU_ID]);
     }
 }
