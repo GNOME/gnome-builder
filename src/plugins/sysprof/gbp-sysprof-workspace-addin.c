@@ -23,8 +23,10 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <sysprof-ui.h>
 
+#include "gbp-sysprof-page.h"
 #include "gbp-sysprof-workspace-addin.h"
 
 struct _GbpSysprofWorkspaceAddin
@@ -215,6 +217,9 @@ static void
 gbp_sysprof_workspace_addin_open (GbpSysprofWorkspaceAddin *self,
                                   GFile                    *file)
 {
+  g_autoptr(IdePanelPosition) position = NULL;
+  GbpSysprofPage *page;
+
   IDE_ENTRY;
 
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
@@ -224,13 +229,15 @@ gbp_sysprof_workspace_addin_open (GbpSysprofWorkspaceAddin *self,
     IDE_EXIT;
 
   if (!g_file_is_native (file))
-    g_warning ("Can only open local sysprof capture files.");
-  else
-#if 0
-    gbp_sysprof_surface_open (self->surface, file);
-#else
-  g_printerr ("TODO: Open %s with GbpSysprofPage\n", g_file_peek_path (file));
-#endif
+    {
+      g_warning ("Can only open local sysprof capture files.");
+      return;
+    }
+
+  position = ide_panel_position_new ();
+  page = gbp_sysprof_page_new_for_file (file);
+
+  ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
 
   IDE_EXIT;
 }
