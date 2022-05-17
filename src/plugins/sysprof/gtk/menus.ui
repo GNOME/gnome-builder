@@ -6,30 +6,17 @@
         <attribute name="id">open-sysprof-capture</attribute>
         <attribute name="after">open-file</attribute>
         <attribute name="label" translatable="yes" context="menu label">Open _Sysprof Capture…</attribute>
-        <attribute name="action">profiler.open-profile</attribute>
-      </item>
-    </section>
-  </menu>
-  <menu id="ide-primary-workspace-surfaces-menu">
-    <section id="ide-primary-workspace-surfaces-menu-section">
-      <item>
-        <attribute name="accel">&lt;alt&gt;2</attribute>
-        <attribute name="before">surface-menu-config</attribute>
-        <attribute name="id">surface-menu-profiler</attribute>
-        <attribute name="label" translatable="yes">Profiler</attribute>
-        <attribute name="role">normal</attribute>
-        <attribute name="action">profiler.show</attribute>
-        <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
+        <attribute name="action">sysprof.open-capture</attribute>
       </item>
     </section>
   </menu>
   <menu id="run-menu">
-    <section id="run-menu-section">
+    <section id="run-menu-observation-section">
       <item>
-        <attribute name="id">profiler-run-handler</attribute>
+        <attribute name="id">sysprof-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
-        <attribute name="action">profiler.run</attribute>
-        <attribute name="label" translatable="yes">Run with Profiler</attribute>
+        <attribute name="action">sysprof.run</attribute>
+        <attribute name="label" translatable="yes">Run with Sysprof</attribute>
         <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
         <attribute name="accel">&lt;Control&gt;F8</attribute>
       </item>
@@ -41,7 +28,7 @@
         <attribute name="id">project-tree-menu-profiler</attribute>
         <attribute name="label" translatable="yes">Run with _Profiler</attribute>
         <attribute name="action">buildui.run-with-handler</attribute>
-        <attribute name="target" type="s">'profiler'</attribute>
+        <attribute name="target" type="s">'sysprof'</attribute>
       </item>
     </section>
   </menu>

@@ -3,7 +3,5 @@
   <gresource prefix="/plugins/sysprof">
     <file>sysprof.plugin</file>
     <file>gtk/menus.ui</file>
-    <file>themes/shared.css</file>
-    <file>gbp-sysprof-surface.ui</file>
   </gresource>
 </gresources>
