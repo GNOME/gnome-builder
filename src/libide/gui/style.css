@@ -63,8 +63,8 @@ notificationstack button {
   background: none;
 }
 
-separator.transparent {
-  opacity: 0;
+scrolledwindow.shadow-when-scroll undershoot.top {
+  box-shadow: inset 0px 5px 14px -14px rgba(0,0,0,.9);
 }
 
 button.pill.small {
