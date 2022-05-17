@@ -98,5 +98,16 @@ void           ide_application_set_style_scheme          (IdeApplication        
                                                           const char               *style_scheme);
 IDE_AVAILABLE_IN_ALL
 gboolean       ide_application_get_dark                  (IdeApplication           *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_application_install_schemes_async     (IdeApplication           *self,
+                                                          GFile                   **files,
+                                                          guint                     n_files,
+                                                          GCancellable             *cancellable,
+                                                          GAsyncReadyCallback       callback,
+                                                          gpointer                  user_data);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_application_install_schemes_finish    (IdeApplication           *self,
+                                                          GAsyncResult             *result,
+                                                          GError                  **error);
 
 G_END_DECLS
