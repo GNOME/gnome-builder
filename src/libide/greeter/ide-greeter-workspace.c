@@ -369,6 +369,7 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
       ide_greeter_workspace_end (self);
     }
 
+  ide_workbench_remove_workspace (workbench, IDE_WORKSPACE (self));
   gtk_window_destroy (GTK_WINDOW (self));
 
   IDE_EXIT;
