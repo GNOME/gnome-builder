@@ -138,6 +138,8 @@ gbp_sysprof_page_init (GbpSysprofPage *self)
 {
   self->display = SYSPROF_DISPLAY (sysprof_display_new ());
   g_object_bind_property (self->display, "title", self, "title", 0);
+  gtk_widget_set_hexpand (GTK_WIDGET (self->display), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (self->display), TRUE);
   ide_page_add_content_widget (IDE_PAGE (self), GTK_WIDGET (self->display));
 
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-profiler-symbolic");
