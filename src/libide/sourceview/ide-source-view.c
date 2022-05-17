@@ -584,16 +584,6 @@ ide_source_view_dispose (GObject *object)
 }
 
 static void
-ide_source_view_finalize (GObject *object)
-{
-  IDE_ENTRY;
-
-  G_OBJECT_CLASS (ide_source_view_parent_class)->finalize (object);
-
-  IDE_EXIT;
-}
-
-static void
 ide_source_view_get_property (GObject    *object,
                               guint       prop_id,
                               GValue     *value,
@@ -622,6 +612,7 @@ ide_source_view_get_property (GObject    *object,
     case PROP_ZOOM_LEVEL:
       g_value_set_double (value, ide_source_view_get_zoom_level (self));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -672,7 +663,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ide_source_view_dispose;
-  object_class->finalize = ide_source_view_finalize;
   object_class->get_property = ide_source_view_get_property;
   object_class->set_property = ide_source_view_set_property;
 
