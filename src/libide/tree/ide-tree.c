@@ -144,7 +144,7 @@ state_cell_func (GtkCellLayout   *layout,
   if ((node = ide_tree_model_get_node (IDE_TREE_MODEL (model), iter)))
     flags = ide_tree_node_get_flags (node);
 
-  ide_cell_renderer_status_set_flags (IDE_CELL_RENDERER_STATUS (cell), flags);
+  ide_cell_renderer_status_set_flags (cell, flags);
 }
 
 static void
@@ -610,7 +610,7 @@ ide_tree_init (IdeTree *self)
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, text_cell_func, self, NULL);
 
-  cell = g_object_new (IDE_TYPE_CELL_RENDERER_STATUS, NULL);
+  cell = ide_cell_renderer_status_new ();
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, state_cell_func, self, NULL);
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, FALSE);
 
