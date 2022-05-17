@@ -563,6 +563,48 @@ ide_source_view_selection_join (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_set_font_scale (IdeSourceView *self,
+                                int            font_scale)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (self->font_scale != font_scale)
+    {
+      self->font_scale = font_scale;
+      ide_source_view_update_css (self);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FONT_SCALE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ZOOM_LEVEL]);
+    }
+}
+
+static void
+ide_source_view_zoom_in_action (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *param)
+{
+  IdeSourceView *self = IDE_SOURCE_VIEW (widget);
+  ide_source_view_set_font_scale (self, self->font_scale + 1);
+}
+
+static void
+ide_source_view_zoom_out_action (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *param)
+{
+  IdeSourceView *self = IDE_SOURCE_VIEW (widget);
+  ide_source_view_set_font_scale (self, self->font_scale - 1);
+}
+
+static void
+ide_source_view_zoom_one_action (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *param)
+{
+  IdeSourceView *self = IDE_SOURCE_VIEW (widget);
+  ide_source_view_set_font_scale (self, 1);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -577,6 +619,7 @@ ide_source_view_dispose (GObject *object)
   g_clear_pointer ((GtkWidget **)&self->popup_menu, gtk_widget_unparent);
 
   g_assert (self->completion_providers == NULL);
+  g_assert (self->hover_providers == NULL);
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->dispose (object);
 
@@ -703,10 +746,6 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, ide_source_view_menu_popup_action);
-  gtk_widget_class_install_action (widget_class, "selection.sort", "(bb)", ide_source_view_selection_sort);
-  gtk_widget_class_install_action (widget_class, "selection.join", NULL, ide_source_view_selection_join);
-
   /**
    * IdeSourceView::populate-menu:
    * @self: an #IdeSourceView
@@ -725,6 +764,16 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                                 NULL,
                                 G_TYPE_NONE, 0);
 
+  gtk_widget_class_install_action (widget_class, "menu.popup", NULL, ide_source_view_menu_popup_action);
+  gtk_widget_class_install_action (widget_class, "zoom.in", NULL, ide_source_view_zoom_in_action);
+  gtk_widget_class_install_action (widget_class, "zoom.out", NULL, ide_source_view_zoom_out_action);
+  gtk_widget_class_install_action (widget_class, "zoom.one", NULL, ide_source_view_zoom_one_action);
+  gtk_widget_class_install_action (widget_class, "selection.sort", "(bb)", ide_source_view_selection_sort);
+  gtk_widget_class_install_action (widget_class, "selection.join", NULL, ide_source_view_selection_join);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_plus, GDK_CONTROL_MASK, "zoom.in", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, GDK_CONTROL_MASK, "zoom.out", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_0, GDK_CONTROL_MASK, "zoom.one", NULL);
 }
 
 static void
