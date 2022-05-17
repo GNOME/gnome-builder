@@ -888,3 +888,137 @@ ide_application_get_system_font_name (IdeApplication *self)
 
   return self->system_font_name;
 }
+
+static GFile *
+get_user_style_file (GFile *file)
+{
+  static GFile *style_dir;
+  g_autofree char *basename = NULL;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  if G_UNLIKELY (style_dir == NULL)
+    {
+      if (ide_is_flatpak ())
+        style_dir = g_file_new_build_filename (g_get_home_dir (),
+                                               ".local",
+                                               "share",
+                                               "gtksourceview-5",
+                                               "styles",
+                                               NULL);
+      else
+        style_dir = g_file_new_build_filename (g_get_user_data_dir (),
+                                               "gtksourceview-5",
+                                               "styles",
+                                               NULL);
+    }
+
+  basename = g_file_get_basename (file);
+
+  return g_file_get_child (style_dir, basename);
+}
+
+static void
+ide_application_install_schemes_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GFile) dst = NULL;
+  GPtrArray *ar;
+  GFile *src;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  ar = g_task_get_task_data (task);
+
+  g_assert (ar != NULL);
+  g_assert (ar->len > 0);
+  g_assert (G_IS_FILE (g_ptr_array_index (ar, ar->len-1)));
+
+  g_ptr_array_remove_index (ar, ar->len-1);
+
+  if (!g_file_copy_finish (file, result, &error))
+    g_warning ("Failed to copy file: %s", error->message);
+
+  if (ar->len == 0)
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  src = g_ptr_array_index (ar, ar->len-1);
+  dst = get_user_style_file (src);
+
+  g_file_copy_async (src, dst,
+                     G_FILE_COPY_OVERWRITE | G_FILE_COPY_BACKUP,
+                     G_PRIORITY_LOW,
+                     g_task_get_cancellable (task),
+                     NULL, NULL,
+                     ide_application_install_schemes_cb,
+                     g_object_ref (task));
+}
+
+void
+ide_application_install_schemes_async (IdeApplication       *self,
+                                       GFile               **files,
+                                       guint                 n_files,
+                                       GCancellable         *cancellable,
+                                       GAsyncReadyCallback   callback,
+                                       gpointer              user_data)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GFile) dst = NULL;
+  g_autoptr(GFile) dir = NULL;
+  GFile *src;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_APPLICATION (self));
+  g_return_if_fail (files != NULL);
+  g_return_if_fail (n_files > 0);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
+  for (guint i = 0; i < n_files; i++)
+    g_ptr_array_add (ar, g_object_ref (files[i]));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_application_install_schemes_async);
+  g_task_set_task_data (task, g_ptr_array_ref (ar), (GDestroyNotify) g_ptr_array_unref);
+
+  src = g_ptr_array_index (ar, ar->len-1);
+  dst = get_user_style_file (src);
+  dir = g_file_get_parent (dst);
+
+  if (!g_file_query_exists (dir, NULL) &&
+      !g_file_make_directory_with_parents (dir, cancellable, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  g_file_copy_async (src, dst,
+                     G_FILE_COPY_OVERWRITE | G_FILE_COPY_BACKUP,
+                     G_PRIORITY_LOW,
+                     cancellable,
+                     NULL, NULL,
+                     ide_application_install_schemes_cb,
+                     g_steal_pointer (&task));
+}
+
+gboolean
+ide_application_install_schemes_finish (IdeApplication  *self,
+                                        GAsyncResult    *result,
+                                        GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
