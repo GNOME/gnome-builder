@@ -66,6 +66,18 @@ gbp_sysprof_page_set_file (GbpSysprofPage *self,
 
   g_set_object (&self->file, file);
   sysprof_display_open (self->display, file);
+  ide_page_set_can_split (IDE_PAGE (self), TRUE);
+}
+
+static IdePage *
+gbp_sysprof_page_create_split (IdePage *page)
+{
+  GbpSysprofPage *self = (GbpSysprofPage *)page;
+
+  g_assert (GBP_IS_SYSPROF_PAGE (page));
+  g_assert (G_IS_FILE (self->file));
+
+  return IDE_PAGE (gbp_sysprof_page_new_for_file (self->file));
 }
 
 static void
@@ -120,10 +132,13 @@ static void
 gbp_sysprof_page_class_init (GbpSysprofPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdePageClass *page_class = IDE_PAGE_CLASS (klass);
 
   object_class->dispose = gbp_sysprof_page_dispose;
   object_class->get_property = gbp_sysprof_page_get_property;
   object_class->set_property = gbp_sysprof_page_set_property;
+
+  page_class->create_split = gbp_sysprof_page_create_split;
 
   properties [PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,
