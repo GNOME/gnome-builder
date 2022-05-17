@@ -76,4 +76,35 @@
       </item>
     </section>
   </menu>
+  <menu id="gbp-sysprof-page-menu">
+    <section id="gbp-sysprof-page-section">
+      <attribute name="label" translatable="yes">Profiler</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Frame</attribute>
+        <attribute name="action">sysprof.open-in-new-frame</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Workspace…</attribute>
+        <attribute name="action">sysprof.open-in-new-workspace</attribute>
+      </item>
+    </section>
+    <section id="gbp-sysprof-page-file-section">
+      <item>
+        <attribute name="label" translatable="yes">Save As…</attribute>
+        <attribute name="action">sysprof.save-as</attribute>
+      </item>
+    </section>
+    <section id="gbp-sysprof-page-record-section">
+      <item>
+        <attribute name="label" translatable="yes">Record Again…</attribute>
+        <attribute name="action">sysprof.record-again</attribute>
+      </item>
+    </section>
+    <section id="gbp-sysprof-page-close-section">
+      <item>
+        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="action">frame.close-page-or-frame</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
