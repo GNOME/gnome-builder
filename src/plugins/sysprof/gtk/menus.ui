@@ -16,10 +16,54 @@
         <attribute name="id">sysprof-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">sysprof.run</attribute>
-        <attribute name="label" translatable="yes">Run with Sysprof</attribute>
+        <attribute name="label" translatable="yes">Run with Profiler</attribute>
         <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
         <attribute name="accel">&lt;Control&gt;F8</attribute>
       </item>
+    </section>
+  </menu>
+  <menu id="run-menu">
+    <section id="run-menu-settings-section">
+      <submenu id="run-menu-sysprof-submenu">
+        <attribute name="before">run-menu-verbose-logging</attribute>
+        <attribute name="label" translatable="yes">Profiler</attribute>
+        <section id="run-menu-sysprof-threads-section">
+          <attribute name="label" translatable="yes">Thread Sampling</attribute>
+          <item>
+            <attribute name="label" translatable="yes">CPU Performance</attribute>
+            <attribute name="action">sysprof.perf-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Memory Allocations</attribute>
+            <attribute name="action">sysprof.memprof-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-sysprof-counters-section">
+          <attribute name="label" translatable="yes">Counters</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Storage I/O</attribute>
+            <attribute name="action">sysprof.diskstat-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Network I/O</attribute>
+            <attribute name="action">sysprof.netstat-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Energy Usage</attribute>
+            <attribute name="action">sysprof.energy-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Battery Usage</attribute>
+            <attribute name="action">sysprof.battery-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
   </menu>
   <menu id="project-tree-run-with-submenu">
