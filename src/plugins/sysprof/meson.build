@@ -8,6 +8,7 @@ plugins_deps += [
 plugins_sources += files([
   'sysprof-plugin.c',
   'gbp-sysprof-page.c',
+  'gbp-sysprof-workbench-addin.c',
   'gbp-sysprof-workspace-addin.c',
 ])
 
