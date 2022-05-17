@@ -22,27 +22,20 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <sysprof-ui.h>
 
-#include "gbp-sysprof-surface.h"
 #include "gbp-sysprof-workspace-addin.h"
 
 struct _GbpSysprofWorkspaceAddin
 {
-  GObject                parent_instance;
+  GObject             parent_instance;
 
-  GSimpleActionGroup    *actions;
+  IdeWorkspace       *workspace;
 
-  GbpSysprofSurface     *surface;
-  IdeWorkspace          *workspace;
+  GSimpleActionGroup *actions;
+  IdeRunManager      *run_manager;
 };
-
-static void workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface);
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSysprofWorkspaceAddin, gbp_sysprof_workspace_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
 profiler_child_spawned (IdeRunner       *runner,
@@ -215,26 +208,56 @@ profiler_run_handler (IdeRunManager *run_manager,
 
   sysprof_spawnable_foreach_fd (spawnable, foreach_fd, runner);
 
-  gbp_sysprof_surface_add_profiler (self->surface, profiler);
-
-  ide_workspace_set_visible_surface (self->workspace, IDE_SURFACE (self->surface));
+  //gbp_sysprof_surface_add_profiler (self->surface, profiler);
 }
 
 static void
 gbp_sysprof_workspace_addin_open (GbpSysprofWorkspaceAddin *self,
                                   GFile                    *file)
 {
+  IDE_ENTRY;
+
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (G_IS_FILE (file));
+
+  if (self->workspace == NULL)
+    IDE_EXIT;
 
   if (!g_file_is_native (file))
     g_warning ("Can only open local sysprof capture files.");
   else
+#if 0
     gbp_sysprof_surface_open (self->surface, file);
+#else
+  g_printerr ("TODO: Open %s with GbpSysprofPage\n", g_file_peek_path (file));
+#endif
+
+  IDE_EXIT;
 }
 
 static void
-open_profile_action (GSimpleAction *action,
+on_native_dialog_respnose_cb (GbpSysprofWorkspaceAddin *self,
+                              int                       response_id,
+                              GtkFileChooserNative     *native)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
+
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    {
+      g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
+
+      if (G_IS_FILE (file))
+        gbp_sysprof_workspace_addin_open (self, file);
+    }
+
+  gtk_native_dialog_hide (GTK_NATIVE_DIALOG (native));
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+}
+
+static void
+open_capture_action (GSimpleAction *action,
                      GVariant      *variant,
                      gpointer       user_data)
 {
@@ -243,14 +266,10 @@ open_profile_action (GSimpleAction *action,
   GtkFileChooserNative *native;
   GtkFileFilter *filter;
   IdeContext *context;
-  gint ret;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (self->workspace));
-  g_assert (GBP_IS_SYSPROF_SURFACE (self->surface));
-
-  ide_workspace_set_visible_surface (self->workspace, IDE_SURFACE (self->surface));
 
   context = ide_workspace_get_context (self->workspace);
   workdir = ide_context_ref_workdir (context);
@@ -260,7 +279,7 @@ open_profile_action (GSimpleAction *action,
                                         GTK_FILE_CHOOSER_ACTION_OPEN,
                                         _("Open"),
                                         _("Cancel"));
-  gtk_file_chooser_set_current_folder_file (GTK_FILE_CHOOSER (native), workdir, NULL);
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (native), workdir, NULL);
 
   /* Add our filter for sysprof capture files.  */
   filter = gtk_file_filter_new ();
@@ -274,22 +293,13 @@ open_profile_action (GSimpleAction *action,
   gtk_file_filter_add_pattern (filter, "*");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
 
-  /* Unlike gtk_dialog_run(), this will handle processing
-   * various I/O events and so should be safe to use.
-   */
-  ret = gtk_native_dialog_run (GTK_NATIVE_DIALOG (native));
+  g_signal_connect_object (native,
+                           "response",
+                           G_CALLBACK (on_native_dialog_respnose_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  if (ret == GTK_RESPONSE_ACCEPT)
-    {
-      g_autoptr(GFile) file = NULL;
-
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
-      if (G_IS_FILE (file))
-        gbp_sysprof_workspace_addin_open (self, file);
-    }
-
-  gtk_native_dialog_hide (GTK_NATIVE_DIALOG (native));
-  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
 }
 
 static void
@@ -300,64 +310,11 @@ run_cb (GSimpleAction *action,
   GbpSysprofWorkspaceAddin *self = user_data;
 
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+  g_assert (IDE_IS_RUN_MANAGER (self->run_manager));
 
-  if (self->workspace != NULL)
-    dzl_gtk_widget_action (GTK_WIDGET (self->workspace),
-                           "run-manager",
-                           "run-with-handler",
-                           g_variant_new_string ("profiler"));
-}
-
-static void
-show_cb (GSimpleAction *action,
-         GVariant      *param,
-         gpointer       user_data)
-{
-  GbpSysprofWorkspaceAddin *self = user_data;
-
-  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-
-  if (self->workspace != NULL)
-    ide_workspace_set_visible_surface (self->workspace, IDE_SURFACE (self->surface));
-}
-
-static void
-gbp_sysprof_workspace_addin_finalize (GObject *object)
-{
-  GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)object;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-
-  g_clear_object (&self->actions);
-
-  G_OBJECT_CLASS (gbp_sysprof_workspace_addin_parent_class)->finalize (object);
-}
-
-static void
-gbp_sysprof_workspace_addin_class_init (GbpSysprofWorkspaceAddinClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gbp_sysprof_workspace_addin_finalize;
-}
-
-static void
-gbp_sysprof_workspace_addin_init (GbpSysprofWorkspaceAddin *self)
-{
-  static const GActionEntry entries[] = {
-    { "open-profile", open_profile_action },
-    { "run", run_cb },
-    { "show", show_cb },
-  };
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-
-  self->actions = g_simple_action_group_new ();
-
-  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
-                                   entries,
-                                   G_N_ELEMENTS (entries),
-                                   self);
+  ide_run_manager_set_handler (self->run_manager, "sysprof");
+  ide_run_manager_run_async (self->run_manager, NULL, NULL, NULL, NULL);
 }
 
 static void
@@ -367,55 +324,55 @@ gbp_sysprof_workspace_addin_check_supported_cb (GObject      *object,
 {
   g_autoptr(GbpSysprofWorkspaceAddin) self = user_data;
   g_autoptr(GError) error = NULL;
-  IdeRunManager *run_manager;
-  IdeContext *context;
 
-  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_ASYNC_RESULT (result));
-
-  /* Check if we're unloaded */
-  if (self->workspace == NULL)
-    return;
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
 
   if (!sysprof_check_supported_finish (result, &error))
     {
       g_warning ("Sysprof-3 is not supported, will not enable profiler: %s",
                  error->message);
-      return;
+      IDE_EXIT;
     }
 
-  gtk_widget_insert_action_group (GTK_WIDGET (self->workspace),
-                                  "profiler",
-                                  G_ACTION_GROUP (self->actions));
+  if (self->workspace == NULL)
+    IDE_EXIT;
 
-  /* Register our custom run handler to activate the profiler. */
-  context = ide_workspace_get_context (self->workspace);
-  run_manager = ide_run_manager_from_context (context);
-  ide_run_manager_add_handler (run_manager,
-                               "profiler",
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+  g_assert (IDE_IS_RUN_MANAGER (self->run_manager));
+
+  gtk_widget_insert_action_group (GTK_WIDGET (self->workspace),
+                                  "sysprof",
+                                  G_ACTION_GROUP (self->actions));
+  ide_run_manager_add_handler (self->run_manager,
+                               "sysprof",
                                _("Run with Profiler"),
                                "builder-profiler-symbolic",
-                               "<primary>F8",
+                               "<Control>F8",
                                profiler_run_handler,
                                self,
                                NULL);
 
-  /* Add the surface to the workspace. */
-  self->surface = g_object_new (GBP_TYPE_SYSPROF_SURFACE,
-                                "visible", TRUE,
-                                NULL);
-  g_signal_connect (self->surface,
-                    "destroy",
-                    G_CALLBACK (ide_gtk_widget_destroyed),
-                    &self->surface);
-  ide_workspace_add_surface (self->workspace, IDE_SURFACE (self->surface));
+  IDE_EXIT;
 }
+
+static const GActionEntry entries[] = {
+  { "open-capture", open_capture_action },
+  { "run", run_cb },
+};
 
 static void
 gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
   GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
+  IdeRunManager *run_manager;
+  IdeContext *context;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
@@ -423,9 +380,22 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
 
+  context = ide_workspace_get_context (workspace);
+  run_manager = ide_run_manager_from_context (context);
+
+  self->run_manager = g_object_ref (run_manager);
+  self->actions = g_simple_action_group_new ();
+
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                   entries,
+                                   G_N_ELEMENTS (entries),
+                                   self);
+
   sysprof_check_supported_async (NULL,
                                  gbp_sysprof_workspace_addin_check_supported_cb,
                                  g_object_ref (self));
+
+  IDE_EXIT;
 }
 
 static void
@@ -433,24 +403,21 @@ gbp_sysprof_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                     IdeWorkspace      *workspace)
 {
   GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
-  IdeRunManager *run_manager;
-  IdeContext *context;
+
+  IDE_ENTRY;
 
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  context = ide_workspace_get_context (workspace);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "sysprof", NULL);
+  ide_run_manager_remove_handler (self->run_manager, "sysprof");
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "profiler", NULL);
+  g_clear_object (&self->actions);
+  g_clear_object (&self->run_manager);
 
-  run_manager = ide_run_manager_from_context (context);
-  ide_run_manager_remove_handler (run_manager, "profiler");
-
-  if (self->surface != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->surface));
-
-  self->surface = NULL;
   self->workspace = NULL;
+
+  IDE_EXIT;
 }
 
 static void
@@ -459,3 +426,17 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
   iface->load = gbp_sysprof_workspace_addin_load;
   iface->unload = gbp_sysprof_workspace_addin_unload;
 }
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSysprofWorkspaceAddin, gbp_sysprof_workspace_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
+
+static void
+gbp_sysprof_workspace_addin_class_init (GbpSysprofWorkspaceAddinClass *klass)
+{
+}
+
+static void
+gbp_sysprof_workspace_addin_init (GbpSysprofWorkspaceAddin *self)
+{
+}
+
