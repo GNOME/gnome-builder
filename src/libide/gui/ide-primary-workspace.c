@@ -193,6 +193,14 @@ ide_primary_workspace_get_header_bar (IdeWorkspace *workspace)
 }
 
 static void
+ide_primary_workspace_foreach_page (IdeWorkspace    *workspace,
+                                    IdePageCallback  callback,
+                                    gpointer         user_data)
+{
+  ide_grid_foreach_page (IDE_PRIMARY_WORKSPACE (workspace)->grid, callback, user_data);
+}
+
+static void
 ide_primary_workspace_dispose (GObject *object)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)object;
@@ -216,16 +224,17 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 
   object_class->dispose = ide_primary_workspace_dispose;
 
+  workspace_class->add_grid_column = ide_primary_workspace_add_grid_column;
+  workspace_class->add_overlay = ide_primary_workspace_add_overlay;
   workspace_class->add_page = ide_primary_workspace_add_page;
   workspace_class->add_pane = ide_primary_workspace_add_pane;
-  workspace_class->add_overlay = ide_primary_workspace_add_overlay;
-  workspace_class->add_grid_column = ide_primary_workspace_add_grid_column;
-  workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
   workspace_class->can_search = ide_primary_workspace_can_search;
   workspace_class->context_set = ide_primary_workspace_context_set;
+  workspace_class->foreach_page = ide_primary_workspace_foreach_page;
   workspace_class->get_frame_at_position = ide_primary_workspace_get_frame_at_position;
-  workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
   workspace_class->get_header_bar = ide_primary_workspace_get_header_bar;
+  workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
+  workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
 
   ide_workspace_class_set_kind (workspace_class, "primary");
 
