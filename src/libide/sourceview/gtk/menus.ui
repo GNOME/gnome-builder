@@ -1,52 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="ide-source-view-popup-menu">
-    <section id="ide-source-view-popup-menu-jump-section">
-      <item>
-        <attribute name="id">source-view-goto-def</attribute>
-        <attribute name="label" translatable="yes">_Go to Definition</attribute>
-        <attribute name="action">sourceview.goto-definition</attribute>
-        <attribute name="accel">&lt;alt&gt;period</attribute>
-      </item>
-      <item>
-        <attribute name="id">source-view-find-references</attribute>
-        <attribute name="label" translatable="yes">_Find references</attribute>
-        <attribute name="action">sourceview.find-references</attribute>
-        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;space</attribute>
-      </item>
-    </section>
-    <section id="ide-source-view-popup-menu-files-section"/>
-    <section id="ide-source-view-popup-menu-undo-section">
-      <item>
-        <attribute name="label" translatable="yes">_Undo</attribute>
-        <attribute name="action">text.undo</attribute>
-        <attribute name="accel">&lt;control&gt;z</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Redo</attribute>
-        <attribute name="action">text.redo</attribute>
-        <attribute name="accel">&lt;control&gt;&lt;shift&gt;z</attribute>
-      </item>
-    </section>
     <section id="ide-source-view-popup-menu-clipboard-section">
+      <attribute name="display-hint">inline-buttons</attribute>
       <item>
+        <attribute name="verb-icon" type="s">'edit-cut-symbolic'</attribute>
         <attribute name="label" translatable="yes">C_ut</attribute>
         <attribute name="action">clipboard.cut</attribute>
-        <attribute name="accel">&lt;control&gt;x</attribute>
       </item>
       <item>
-        <attribute name="id">copy</attribute>
+        <attribute name="verb-icon" type="s">'edit-copy-symbolic'</attribute>
         <attribute name="label" translatable="yes">_Copy</attribute>
         <attribute name="action">clipboard.copy</attribute>
-        <attribute name="accel">&lt;control&gt;c</attribute>
       </item>
       <item>
+        <attribute name="verb-icon" type="s">'edit-paste-symbolic'</attribute>
         <attribute name="label" translatable="yes">_Paste</attribute>
         <attribute name="action">clipboard.paste</attribute>
-        <attribute name="accel">&lt;control&gt;v</attribute>
       </item>
-    </section>
-    <section id="ide-source-view-popup-menu-selection-section">
       <submenu id="ide-source-view-popup-menu-selection-submenu">
         <attribute name="label" translatable="yes">_Selection</attribute>
         <item>
@@ -94,27 +65,55 @@
         </section>
       </submenu>
     </section>
-    <section id="ide-source-view-popup-menu-zoom-section">
-      <submenu id="ide-source-view-popup-menu-zoom-section-submenu">
-        <attribute name="label" translatable="yes">_Zoom</attribute>
-        <item>
-          <attribute name="label" translatable="yes">Zoom _In</attribute>
-          <attribute name="action">sourceview.increase-font-size</attribute>
-          <attribute name="accel">&lt;control&gt;plus</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Zoom _Out</attribute>
-          <attribute name="action">sourceview.decrease-font-size</attribute>
-            <attribute name="accel">&lt;control&gt;minus</attribute>
-        </item>
-        <section id="ide-source-view-popup-menu-zoom-section-submenu-reset">
-          <item>
-            <attribute name="label" translatable="yes">_Reset</attribute>
-            <attribute name="action">sourceview.reset-font-size</attribute>
-            <attribute name="accel">&lt;control&gt;0</attribute>
-          </item>
-        </section>
-      </submenu>
+    <section id="ide-source-view-popup-menu-undo-section">
+      <attribute name="display-hint">inline-buttons</attribute>
+      <attribute name="label" translatable="yes">Undo</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Undo</attribute>
+        <attribute name="action">text.undo</attribute>
+        <attribute name="verb-icon">edit-undo-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Redo</attribute>
+        <attribute name="action">text.redo</attribute>
+        <attribute name="verb-icon">edit-redo-symbolic</attribute>
+      </item>
     </section>
+    <section id="ide-source-view-popup-menu-zoom-section">
+      <attribute name="label" translatable="yes">Zoom</attribute>
+      <attribute name="display-hint">inline-buttons</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Zoom Out</attribute>
+        <attribute name="verb-icon">zoom-out-symbolic</attribute>
+        <attribute name="action">zoom.out</attribute>
+        <attribute name="accel">&lt;control&gt;minus</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Reset Zoom</attribute>
+        <attribute name="verb-icon">zoom-original-symbolic</attribute>
+        <attribute name="action">zoom.one</attribute>
+        <attribute name="accel">&lt;control&gt;0</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Zoom In</attribute>
+        <attribute name="verb-icon">zoom-in-symbolic</attribute>
+        <attribute name="action">zoom.in</attribute>
+        <attribute name="accel">&lt;control&gt;plus</attribute>
+      </item>
+    </section>
+    <section id="ide-source-view-popup-menu-jump-section">
+      <item>
+        <attribute name="id">source-view-goto-def</attribute>
+        <attribute name="label" translatable="yes">_Go to Definition</attribute>
+        <attribute name="action">sourceview.goto-definition</attribute>
+        <attribute name="accel">&lt;alt&gt;period</attribute>
+      </item>
+      <item>
+        <attribute name="id">source-view-find-references</attribute>
+        <attribute name="label" translatable="yes">_Find references</attribute>
+        <attribute name="action">sourceview.find-references</attribute>
+      </item>
+    </section>
+    <section id="ide-source-view-popup-menu-files-section"/>
   </menu>
 </interface>

@@ -1,24 +1,20 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="ide-source-view-popup-menu">
-    <section id="ide-source-view-popup-menu-selection-section">
-      <submenu id="ide-source-view-popup-menu-selection-submenu">
-        <section id="ide-source-view-popup-menu-selection-comment-code-section">
-          <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
-          <item>
-            <attribute name="label" translatable="yes">_Comment code</attribute>
-            <attribute name="action">comment-code.comment-code</attribute>
-            <attribute name="target" type="s">'0'</attribute>
-            <attribute name="accel">&lt;control&gt;m</attribute>
-          </item>
-          <item>
-            <attribute name="label" translatable="yes">Unco_mment code</attribute>
-            <attribute name="action">comment-code.comment-code</attribute>
-            <attribute name="target" type="s">'1'</attribute>
-            <attribute name="accel">&lt;control&gt;&lt;shift&gt;m</attribute>
-          </item>
-        </section>
-      </submenu>
+  <menu id="ide-source-view-popup-menu-selection-submenu">
+    <section id="ide-source-view-popup-menu-selection-comment-code-section">
+      <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
+      <item>
+        <attribute name="label" translatable="yes">_Comment code</attribute>
+        <attribute name="action">comment-code.comment-code</attribute>
+        <attribute name="target" type="s">'0'</attribute>
+        <attribute name="accel">&lt;control&gt;m</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Unco_mment code</attribute>
+        <attribute name="action">comment-code.comment-code</attribute>
+        <attribute name="target" type="s">'1'</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;m</attribute>
+      </item>
     </section>
   </menu>
 </interface>
