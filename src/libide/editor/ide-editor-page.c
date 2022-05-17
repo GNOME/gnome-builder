@@ -416,10 +416,7 @@ ide_editor_page_init (IdeEditorPage *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   ide_page_set_can_split (IDE_PAGE (self), TRUE);
-
-  /* Load menus for editor pages */
-  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-editor-page-menu");
-  panel_widget_set_menu_model (PANEL_WIDGET (self), G_MENU_MODEL (menu));
+  ide_page_set_menu_id (IDE_PAGE (self), "ide-editor-page-menu");
 
   /* Add menus to source view */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-source-view-popup-menu");
