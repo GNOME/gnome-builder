@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSysprofPage, gbp_sysprof_page, GBP, SYSPROF_PAGE, IdePage)
 
-GbpSysprofPage *gbp_sysprof_page_new_for_file (GFile *file);
+GbpSysprofPage *gbp_sysprof_page_new_for_file (GFile          *file);
+GFile          *gbp_sysprof_page_get_file     (GbpSysprofPage *self);
 
 G_END_DECLS
