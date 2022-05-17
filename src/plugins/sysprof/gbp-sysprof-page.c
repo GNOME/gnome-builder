@@ -45,10 +45,10 @@ G_DEFINE_TYPE (GbpSysprofPage, gbp_sysprof_page, IDE_TYPE_PAGE)
 
 static GParamSpec *properties [N_PROPS];
 
-static GFile *
+GFile *
 gbp_sysprof_page_get_file (GbpSysprofPage *self)
 {
-  g_assert (GBP_IS_SYSPROF_PAGE (self));
+  g_return_val_if_fail (GBP_IS_SYSPROF_PAGE (self), NULL);
 
   return self->file;
 }
