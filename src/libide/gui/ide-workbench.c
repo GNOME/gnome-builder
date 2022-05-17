@@ -660,6 +660,26 @@ ide_workbench_foreach_workspace (IdeWorkbench         *self,
   g_list_free (copy);
 }
 
+typedef struct
+{
+  IdePageCallback callback;
+  gpointer user_data;
+} ForeachPage;
+
+static void
+ide_workbench_foreach_page_cb (IdeWorkspace *workspace,
+                               gpointer      user_data)
+{
+  ForeachPage *state = user_data;
+
+  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (state != NULL);
+  g_assert (state->callback != NULL);
+
+  ide_workspace_foreach_page (workspace, state->callback, state->user_data);
+}
+
+
 /**
  * ide_workbench_foreach_page:
  * @self: a #IdeWorkbench
@@ -674,20 +694,12 @@ ide_workbench_foreach_page (IdeWorkbench    *self,
                             IdePageCallback  callback,
                             gpointer         user_data)
 {
-  GList *copy;
+  ForeachPage state = {callback, user_data};
 
   g_return_if_fail (IDE_IS_WORKBENCH (self));
   g_return_if_fail (callback != NULL);
 
-  /* Make a copy to be safe against auto-cleanup removals */
-  copy = g_list_copy (self->mru_queue.head);
-  for (const GList *iter = copy; iter; iter = iter->next)
-    {
-      IdeWorkspace *workspace = iter->data;
-      g_assert (IDE_IS_WORKSPACE (workspace));
-      ide_workspace_foreach_page (workspace, callback, user_data);
-    }
-  g_list_free (copy);
+  ide_workbench_foreach_workspace (self, ide_workbench_foreach_page_cb, &state);
 }
 
 static void
