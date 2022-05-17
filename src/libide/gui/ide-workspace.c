@@ -265,6 +265,7 @@ ide_workspace_close_request_cb (GObject      *object,
         }
 
       g_cancellable_cancel (priv->cancellable);
+      ide_workbench_remove_workspace (workbench, self);
       gtk_window_destroy (GTK_WINDOW (self));
     }
 }
