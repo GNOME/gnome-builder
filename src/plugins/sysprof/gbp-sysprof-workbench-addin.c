@@ -34,6 +34,33 @@ struct _GbpSysprofWorkbenchAddin
   IdeWorkbench *workbench;
 };
 
+typedef struct
+{
+  GFile          *file;
+  GbpSysprofPage *page;
+} FindPageWithFile;
+
+static void
+find_page_with_file (IdePage *page,
+                     gpointer user_data)
+{
+  FindPageWithFile *find = user_data;
+  GFile *file;
+
+  g_assert (find != NULL);
+  g_assert (!find->page || GBP_IS_SYSPROF_PAGE (find->page));
+  g_assert (G_IS_FILE (find->file));
+
+  if (find->page != NULL || !GBP_IS_SYSPROF_PAGE (page))
+    return;
+
+  if (!(file = gbp_sysprof_page_get_file (GBP_SYSPROF_PAGE (page))))
+    return;
+
+  if (g_file_equal (file, find->file))
+    find->page = GBP_SYSPROF_PAGE (page);
+}
+
 static void
 gbp_sysprof_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
                                         GFile               *file,
@@ -48,8 +75,8 @@ gbp_sysprof_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
 {
   GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
-  GbpSysprofPage *page;
   IdeWorkspace *workspace;
+  FindPageWithFile find = {file, NULL};
 
   IDE_ENTRY;
 
@@ -58,12 +85,23 @@ gbp_sysprof_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
   g_assert (G_IS_FILE (file));
   g_assert (IDE_IS_WORKBENCH (self->workbench));
 
-  workspace = ide_workbench_get_current_workspace (self->workbench);
-  page = gbp_sysprof_page_new_for_file (file);
-  ide_workspace_add_page (workspace, IDE_PAGE (page), position);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_sysprof_workbench_addin_open_async);
+
+  ide_workbench_foreach_page (self->workbench, find_page_with_file, &find);
+
+  if (find.page == NULL)
+    {
+      workspace = ide_workbench_get_current_workspace (self->workbench);
+      find.page = gbp_sysprof_page_new_for_file (file);
+      ide_workspace_add_page (workspace, IDE_PAGE (find.page), position);
+    }
+
+  workspace = ide_widget_get_workspace (GTK_WIDGET (find.page));
+  panel_widget_raise (PANEL_WIDGET (find.page));
+  gtk_window_present (GTK_WINDOW (workspace));
+
   ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
