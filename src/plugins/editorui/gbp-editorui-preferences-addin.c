@@ -200,6 +200,94 @@ notify_style_scheme_cb (IdeApplication *app,
     }
 }
 
+static gboolean
+can_install_scheme (GtkSourceStyleSchemeManager *manager,
+                    const char * const          *scheme_ids,
+                    GFile                       *file)
+{
+  g_autofree char *uri = NULL;
+  const char *path;
+
+  g_assert (GTK_SOURCE_IS_STYLE_SCHEME_MANAGER (manager));
+  g_assert (G_IS_FILE (file));
+
+  uri = g_file_get_uri (file);
+
+  /* Don't allow resources, which would be weird anyway */
+  if (g_str_has_prefix (uri, "resource://"))
+    return FALSE;
+
+  /* Make sure it's in the form of name.xml as we will require
+   * that elsewhere anyway.
+   */
+  if (!g_str_has_suffix (uri, ".xml"))
+    return FALSE;
+
+  /* Not a native file, so likely not already installed */
+  if (!g_file_is_native (file))
+    return TRUE;
+
+  path = g_file_peek_path (file);
+  scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+  for (guint i = 0; scheme_ids[i] != NULL; i++)
+    {
+      GtkSourceStyleScheme *scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_ids[i]);
+      const char *filename = gtk_source_style_scheme_get_filename (scheme);
+
+      /* If we have already loaded this scheme, then ignore it */
+      if (g_strcmp0 (filename, path) == 0)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+drop_scheme_cb (GtkDropTarget *drop_target,
+                const GValue  *value,
+                double         x,
+                double         y,
+                gpointer       user_data)
+{
+  g_assert (GTK_IS_DROP_TARGET (drop_target));
+
+  if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    {
+      GSList *list = g_value_get_boxed (value);
+      g_autoptr(GPtrArray) to_install = NULL;
+      GtkSourceStyleSchemeManager *manager;
+      const char * const *scheme_ids;
+
+      if (list == NULL)
+        return FALSE;
+
+      manager = gtk_source_style_scheme_manager_get_default ();
+      scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+      to_install = g_ptr_array_new_with_free_func (g_object_unref);
+
+      for (const GSList *iter = list; iter; iter = iter->next)
+        {
+          GFile *file = iter->data;
+
+          if (can_install_scheme (manager, scheme_ids, file))
+            g_ptr_array_add (to_install, g_object_ref (file));
+        }
+
+      if (to_install->len == 0)
+        return FALSE;
+
+      /* TODO: We need to reload the preferences */
+      ide_application_install_schemes_async (IDE_APPLICATION_DEFAULT,
+                                             (GFile **)(gpointer)to_install->pdata,
+                                             to_install->len,
+                                             NULL, NULL, NULL);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ide_preferences_builtin_add_schemes (const char                   *page_name,
                                      const IdePreferenceItemEntry *entry,
@@ -209,6 +297,7 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
   IdePreferencesWindow *window = user_data;
   GtkSourceStyleSchemeManager *manager;
   const char * const *scheme_ids;
+  GtkDropTarget *drop_target;
   GtkFlowBox *flowbox;
   GtkWidget *preview;
 
@@ -232,6 +321,14 @@ ide_preferences_builtin_add_schemes (const char                   *page_name,
                           "max-children-per-line", 4,
                           NULL);
   gtk_widget_add_css_class (GTK_WIDGET (flowbox), "style-schemes");
+
+  /* Setup DnD for schemes to be dropped onto the section */
+  drop_target = gtk_drop_target_new (GDK_TYPE_FILE_LIST, GDK_ACTION_COPY);
+  g_signal_connect (drop_target,
+                    "drop",
+                    G_CALLBACK (drop_scheme_cb),
+                    NULL);
+  gtk_widget_add_controller (GTK_WIDGET (flowbox), GTK_EVENT_CONTROLLER (drop_target));
 
   for (guint i = 0; scheme_ids[i]; i++)
     {
