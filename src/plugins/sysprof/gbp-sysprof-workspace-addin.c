@@ -40,6 +40,36 @@ struct _GbpSysprofWorkspaceAddin
 };
 
 static void
+set_state (GSimpleAction *action,
+           GVariant      *param,
+           gpointer       user_data)
+{
+  g_simple_action_set_state (action, param);
+}
+
+static gboolean
+get_state (GbpSysprofWorkspaceAddin *self,
+           const char               *action_name)
+{
+  g_autoptr(GVariant) state = NULL;
+  GAction *action;
+
+  g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
+  g_assert (action_name != NULL);
+
+  if (!(action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), action_name)))
+    g_return_val_if_reached (FALSE);
+
+  if (!(state = g_action_get_state (action)))
+    g_return_val_if_reached (FALSE);
+
+  if (!g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
+    g_return_val_if_reached (FALSE);
+
+  return g_variant_get_boolean (state);
+}
+
+static void
 profiler_child_spawned (IdeRunner       *runner,
                         const gchar     *identifier,
                         SysprofProfiler *profiler)
@@ -100,7 +130,6 @@ profiler_run_handler (IdeRunManager *run_manager,
 {
   GbpSysprofWorkspaceAddin *self = user_data;
   g_autoptr(SysprofProfiler) profiler = NULL;
-  g_autoptr(SysprofSource) app_source = NULL;
   g_autoptr(SysprofSpawnable) spawnable = NULL;
   g_autoptr(IdePanelPosition) position = NULL;
   g_autoptr(GPtrArray) sources = NULL;
@@ -129,23 +158,52 @@ profiler_run_handler (IdeRunManager *run_manager,
 #ifdef __linux__
   {
     g_ptr_array_add (sources, sysprof_proc_source_new ());
-    g_ptr_array_add (sources, sysprof_perf_source_new ());
-    g_ptr_array_add (sources, sysprof_hostinfo_source_new ());
-    g_ptr_array_add (sources, sysprof_memory_source_new ());
-    g_ptr_array_add (sources, sysprof_proxy_source_new (G_BUS_TYPE_SYSTEM,
-                                                        "org.gnome.Sysprof3",
-                                                        "/org/gnome/Sysprof3/RAPL"));
-    g_ptr_array_add (sources, sysprof_netdev_source_new ());
+
+    if (get_state (self, "cpu-aid"))
+      g_ptr_array_add (sources, sysprof_hostinfo_source_new ());
+
+    if (get_state (self, "perf-aid"))
+      g_ptr_array_add (sources, sysprof_perf_source_new ());
+
+    if (get_state (self, "memory-aid"))
+      g_ptr_array_add (sources, sysprof_memory_source_new ());
+
+    if (get_state (self, "energy-aid"))
+      g_ptr_array_add (sources, sysprof_proxy_source_new (G_BUS_TYPE_SYSTEM,
+                                                          "org.gnome.Sysprof3",
+                                                          "/org/gnome/Sysprof3/RAPL"));
+
+    if (get_state (self, "battery-aid"))
+      g_ptr_array_add (sources, sysprof_battery_source_new ());
+
+    if (get_state (self, "netstat-aid"))
+      g_ptr_array_add (sources, sysprof_netdev_source_new ());
+
+    if (get_state (self, "diskstat-aid"))
+      g_ptr_array_add (sources, sysprof_diskstat_source_new ());
+
+    if (!get_state (self, "allow-throttle"))
+      {
+        SysprofSource *governor = sysprof_governor_source_new ();
+        sysprof_governor_source_set_disable_governor (SYSPROF_GOVERNOR_SOURCE (governor), TRUE);
+        g_ptr_array_add (sources, governor);
+      }
   }
 #endif
+
+  if (get_state (self, "memprof-aid"))
+    g_ptr_array_add (sources, sysprof_memprof_source_new ());
 
   g_ptr_array_add (sources, sysprof_gjs_source_new ());
   g_ptr_array_add (sources, sysprof_symbols_source_new ());
 
   /* Allow the app to submit us data if it supports "SYSPROF_TRACE_FD" */
-  app_source = sysprof_tracefd_source_new ();
-  sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (app_source), "SYSPROF_TRACE_FD");
-  g_ptr_array_add (sources, g_object_ref (app_source));
+  if (get_state (self, "allow-tracefd"))
+    {
+      SysprofSource *app_source = sysprof_tracefd_source_new ();
+      sysprof_tracefd_source_set_envvar (SYSPROF_TRACEFD_SOURCE (app_source), "SYSPROF_TRACE_FD");
+      g_ptr_array_add (sources, app_source);
+    }
 
   /*
    * TODO:
@@ -373,6 +431,17 @@ gbp_sysprof_workspace_addin_check_supported_cb (GObject      *object,
 static const GActionEntry entries[] = {
   { "open-capture", open_capture_action },
   { "run", run_cb },
+  { "cpu-aid", NULL, NULL, "true", set_state },
+  { "perf-aid", NULL, NULL, "true", set_state },
+  { "memory-aid", NULL, NULL, "true", set_state },
+  { "memprof-aid", NULL, NULL, "false", set_state },
+  { "diskstat-aid", NULL, NULL, "true", set_state },
+  { "netstat-aid", NULL, NULL, "true", set_state },
+  { "energy-aid", NULL, NULL, "false", set_state },
+  { "battery-aid", NULL, NULL, "false", set_state },
+  { "compositor-aid", NULL, NULL, "false", set_state },
+  { "allow-throttle", NULL, NULL, "true", set_state },
+  { "allow-tracefd", NULL, NULL, "true", set_state },
 };
 
 static void
