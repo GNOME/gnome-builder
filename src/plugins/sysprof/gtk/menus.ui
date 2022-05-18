@@ -40,8 +40,26 @@
             <attribute name="role">check</attribute>
           </item>
         </section>
+        <section id="run-menu-sysprof-graphics-section">
+          <attribute name="label" translatable="yes">Graphics</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Display Timings</attribute>
+            <attribute name="action">sysprof.compositor-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
         <section id="run-menu-sysprof-counters-section">
           <attribute name="label" translatable="yes">Counters</attribute>
+          <item>
+            <attribute name="label" translatable="yes">CPU Usage</attribute>
+            <attribute name="action">sysprof.cpu-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Memory Usage</attribute>
+            <attribute name="action">sysprof.memory-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
           <item>
             <attribute name="label" translatable="yes">Storage I/O</attribute>
             <attribute name="action">sysprof.diskstat-aid</attribute>
@@ -52,14 +70,29 @@
             <attribute name="action">sysprof.netstat-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
+        </section>
+        <section id="run-menu-sysprof-energy-section">
+          <attribute name="label" translatable="yes">Energy</attribute>
           <item>
-            <attribute name="label" translatable="yes">Energy Usage</attribute>
+            <attribute name="label" translatable="yes">Consumption</attribute>
             <attribute name="action">sysprof.energy-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
-            <attribute name="label" translatable="yes">Battery Usage</attribute>
+            <attribute name="label" translatable="yes">Battery Charge</attribute>
             <attribute name="action">sysprof.battery-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-sysprof-misc-section">
+          <item>
+            <attribute name="label" translatable="yes">Allow Application Integration</attribute>
+            <attribute name="action">sysprof.allow-tracefd</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Allow CPU Throttling</attribute>
+            <attribute name="action">sysprof.allow-throttle</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
