@@ -30,11 +30,12 @@
 
 struct _GbpSysprofPage
 {
-  IdePage         parent_instance;
+  IdePage             parent_instance;
 
-  GFile          *file;
+  GFile              *file;
+  GSimpleActionGroup *actions;
 
-  SysprofDisplay *display;
+  SysprofDisplay     *display;
 };
 
 enum {
@@ -67,6 +68,21 @@ gbp_sysprof_page_create_split (IdePage *page)
 }
 
 static void
+on_notify_can_replay_cb (GbpSysprofPage *self,
+                         GParamSpec     *pspec,
+                         SysprofDisplay *display)
+{
+  GAction *action;
+
+  g_assert (GBP_IS_SYSPROF_PAGE (self));
+  g_assert (SYSPROF_IS_DISPLAY (display));
+
+  action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), "record-again");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
+                               sysprof_display_get_can_replay (display));
+}
+
+static void
 gbp_sysprof_page_set_display (GbpSysprofPage *self,
                               SysprofDisplay *display)
 {
@@ -75,6 +91,13 @@ gbp_sysprof_page_set_display (GbpSysprofPage *self,
 
   self->display = display;
 
+  g_signal_connect_object (display,
+                           "notify::can-replay",
+                           G_CALLBACK (on_notify_can_replay_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  on_notify_can_replay_cb (self, NULL, display);
+
   g_object_bind_property (display, "title", self, "title", G_BINDING_SYNC_CREATE);
   gtk_widget_set_hexpand (GTK_WIDGET (display), TRUE);
   gtk_widget_set_vexpand (GTK_WIDGET (display), TRUE);
@@ -82,11 +105,45 @@ gbp_sysprof_page_set_display (GbpSysprofPage *self,
 }
 
 static void
+record_again_action (GSimpleAction *action,
+                     GVariant      *param,
+                     gpointer       user_data)
+{
+  GbpSysprofPage *self = user_data;
+  g_autoptr(IdePanelPosition) position = NULL;
+  GbpSysprofPage *new_page;
+  SysprofDisplay *display;
+  IdeWorkspace *workspace;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  if (!sysprof_display_get_can_replay (self->display))
+    return;
+
+  if (!(display = sysprof_display_replay (self->display)))
+    return;
+
+  new_page = g_object_new (GBP_TYPE_SYSPROF_PAGE, NULL);
+  g_set_object (&new_page->file, self->file);
+  gbp_sysprof_page_set_display (new_page, display);
+
+  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+  position = ide_page_get_position (IDE_PAGE (self));
+  ide_panel_position_set_depth (position, 0);
+  ide_workspace_add_page (workspace, IDE_PAGE (new_page), position);
+}
+
+static const GActionEntry actions[] = {
+  { "record-again", record_again_action },
+};
+
+static void
 gbp_sysprof_page_dispose (GObject *object)
 {
   GbpSysprofPage *self = (GbpSysprofPage *)object;
 
   g_clear_object (&self->file);
+  g_clear_object (&self->actions);
 
   G_OBJECT_CLASS (gbp_sysprof_page_parent_class)->dispose (object);
 }
@@ -134,6 +191,13 @@ gbp_sysprof_page_init (GbpSysprofPage *self)
 {
   ide_page_set_menu_id (IDE_PAGE (self), "gbp-sysprof-page-menu");
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-profiler-symbolic");
+
+  self->actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "sysprof", G_ACTION_GROUP (self->actions));
 }
 
 GbpSysprofPage *
