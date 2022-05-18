@@ -102,9 +102,11 @@ profiler_run_handler (IdeRunManager *run_manager,
   g_autoptr(SysprofProfiler) profiler = NULL;
   g_autoptr(SysprofSource) app_source = NULL;
   g_autoptr(SysprofSpawnable) spawnable = NULL;
+  g_autoptr(IdePanelPosition) position = NULL;
   g_autoptr(GPtrArray) sources = NULL;
   g_auto(GStrv) argv = NULL;
   const gchar * const *env;
+  GbpSysprofPage *page;
   IdeEnvironment *ienv;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -210,7 +212,9 @@ profiler_run_handler (IdeRunManager *run_manager,
 
   sysprof_spawnable_foreach_fd (spawnable, foreach_fd, runner);
 
-  //gbp_sysprof_surface_add_profiler (self->surface, profiler);
+  page = gbp_sysprof_page_new_for_profiler (profiler);
+  position = ide_panel_position_new ();
+  ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
 }
 
 static void

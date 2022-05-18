@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <sysprof-ui.h>
 
 #include "gbp-sysprof-page.h"
@@ -53,22 +55,6 @@ gbp_sysprof_page_get_file (GbpSysprofPage *self)
   return self->file;
 }
 
-static void
-gbp_sysprof_page_set_file (GbpSysprofPage *self,
-                           GFile          *file)
-{
-  g_assert (GBP_IS_SYSPROF_PAGE (self));
-  g_assert (!file || G_IS_FILE (file));
-  g_assert (self->file == NULL);
-
-  if (file == NULL)
-    return;
-
-  g_set_object (&self->file, file);
-  sysprof_display_open (self->display, file);
-  ide_page_set_can_split (IDE_PAGE (self), TRUE);
-}
-
 static IdePage *
 gbp_sysprof_page_create_split (IdePage *page)
 {
@@ -78,6 +64,21 @@ gbp_sysprof_page_create_split (IdePage *page)
   g_assert (G_IS_FILE (self->file));
 
   return IDE_PAGE (gbp_sysprof_page_new_for_file (self->file));
+}
+
+static void
+gbp_sysprof_page_set_display (GbpSysprofPage *self,
+                              SysprofDisplay *display)
+{
+  g_assert (GBP_IS_SYSPROF_PAGE (self));
+  g_assert (SYSPROF_IS_DISPLAY (display));
+
+  self->display = display;
+
+  g_object_bind_property (display, "title", self, "title", G_BINDING_SYNC_CREATE);
+  gtk_widget_set_hexpand (GTK_WIDGET (display), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (display), TRUE);
+  ide_page_add_content_widget (IDE_PAGE (self), GTK_WIDGET (display));
 }
 
 static void
@@ -110,25 +111,6 @@ gbp_sysprof_page_get_property (GObject    *object,
 }
 
 static void
-gbp_sysprof_page_set_property (GObject      *object,
-                               guint         prop_id,
-                               const GValue *value,
-                               GParamSpec   *pspec)
-{
-  GbpSysprofPage *self = GBP_SYSPROF_PAGE (object);
-
-  switch (prop_id)
-    {
-    case PROP_FILE:
-      gbp_sysprof_page_set_file (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gbp_sysprof_page_class_init (GbpSysprofPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -136,14 +118,13 @@ gbp_sysprof_page_class_init (GbpSysprofPageClass *klass)
 
   object_class->dispose = gbp_sysprof_page_dispose;
   object_class->get_property = gbp_sysprof_page_get_property;
-  object_class->set_property = gbp_sysprof_page_set_property;
 
   page_class->create_split = gbp_sysprof_page_create_split;
 
   properties [PROP_FILE] =
     g_param_spec_object ("file", NULL, NULL,
                          G_TYPE_FILE,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -151,23 +132,42 @@ gbp_sysprof_page_class_init (GbpSysprofPageClass *klass)
 static void
 gbp_sysprof_page_init (GbpSysprofPage *self)
 {
-  self->display = SYSPROF_DISPLAY (sysprof_display_new ());
-  g_object_bind_property (self->display, "title", self, "title", 0);
-  gtk_widget_set_hexpand (GTK_WIDGET (self->display), TRUE);
-  gtk_widget_set_vexpand (GTK_WIDGET (self->display), TRUE);
-  ide_page_add_content_widget (IDE_PAGE (self), GTK_WIDGET (self->display));
   ide_page_set_menu_id (IDE_PAGE (self), "gbp-sysprof-page-menu");
-
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-profiler-symbolic");
 }
 
 GbpSysprofPage *
 gbp_sysprof_page_new_for_file (GFile *file)
 {
+  GbpSysprofPage *self;
+  SysprofDisplay *display;
+
   g_return_val_if_fail (G_IS_FILE (file), NULL);
   g_return_val_if_fail (g_file_is_native (file), NULL);
 
-  return g_object_new (GBP_TYPE_SYSPROF_PAGE,
-                       "file", file,
-                       NULL);
+  self = g_object_new (GBP_TYPE_SYSPROF_PAGE, NULL);
+  g_set_object (&self->file, file);
+  ide_page_set_can_split (IDE_PAGE (self), TRUE);
+
+  display = SYSPROF_DISPLAY (sysprof_display_new ());
+  sysprof_display_open (display, file);
+
+  gbp_sysprof_page_set_display (self, display);
+
+  return self;
+}
+
+GbpSysprofPage *
+gbp_sysprof_page_new_for_profiler (SysprofProfiler *profiler)
+{
+  GbpSysprofPage *self;
+  SysprofDisplay *display;
+
+  g_return_val_if_fail (SYSPROF_IS_PROFILER (profiler), NULL);
+
+  self = g_object_new (GBP_TYPE_SYSPROF_PAGE, NULL);
+  display = SYSPROF_DISPLAY (sysprof_display_new_for_profiler (profiler));
+  gbp_sysprof_page_set_display (self, display);
+
+  return self;
 }
