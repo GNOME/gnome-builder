@@ -1,1 +1,3 @@
 { "trigger" : "<Control>s", "action" : "sysprof.save-as", "when" : "inPageWithTypeName(\"GbpSysprofPage\")", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>F8", "action" : "sysprof.record-again", "when" : "inPageWithTypeName(\"GbpSysprofPage\")", "phase" : "capture" },
+{ "trigger" : "<Control>F8", "action" : "sysprof.run", "when" : "hasProject()", "phase" : "capture" },
