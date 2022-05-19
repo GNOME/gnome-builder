@@ -106,7 +106,9 @@ gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
 
   /* Setup arguments to valgrind so it writes output to temp file. Add in
    * reverse order so we can just use prepend() repeatedly */
+  /* TODO: These should be options in the run menu */
   ide_runner_prepend_argv (runner, "--track-origins=yes");
+  ide_runner_prepend_argv (runner, "--leak-check=full");
   ide_runner_prepend_argv (runner, log_fd_param);
   ide_runner_prepend_argv (runner, "valgrind");
 
