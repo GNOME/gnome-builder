@@ -3,5 +3,6 @@
   <gresource prefix="/plugins/sysprof">
     <file>sysprof.plugin</file>
     <file>gtk/menus.ui</file>
+    <file>gtk/keybindings.json</file>
   </gresource>
 </gresources>
