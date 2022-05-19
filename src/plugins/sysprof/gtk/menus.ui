@@ -110,17 +110,6 @@
     </section>
   </menu>
   <menu id="gbp-sysprof-page-menu">
-    <section id="gbp-sysprof-page-section">
-      <attribute name="label" translatable="yes">Profiler</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Open in New Frame</attribute>
-        <attribute name="action">sysprof.open-in-new-frame</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Open in New Workspace…</attribute>
-        <attribute name="action">sysprof.open-in-new-workspace</attribute>
-      </item>
-    </section>
     <section id="gbp-sysprof-page-file-section">
       <item>
         <attribute name="label" translatable="yes">Save</attribute>
