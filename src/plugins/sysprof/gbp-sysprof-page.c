@@ -133,8 +133,22 @@ record_again_action (GSimpleAction *action,
   ide_workspace_add_page (workspace, IDE_PAGE (new_page), position);
 }
 
+static void
+save_as_action (GSimpleAction *action,
+                GVariant      *param,
+                gpointer       user_data)
+{
+  GbpSysprofPage *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  if (sysprof_display_get_can_save (self->display))
+    sysprof_display_save (self->display);
+}
+
 static const GActionEntry actions[] = {
   { "record-again", record_again_action },
+  { "save-as", save_as_action },
 };
 
 static void
