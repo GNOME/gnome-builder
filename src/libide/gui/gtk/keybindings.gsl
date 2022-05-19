@@ -76,3 +76,7 @@ end
 def hasSelection()
   inEditor() && page.get_buffer().get_has_selection()
 end
+
+def inPageWithTypeName(name)
+  (page != null) && (typeof(page).name() == name) && (focus != null) && focus.is_ancestor(page)
+end
