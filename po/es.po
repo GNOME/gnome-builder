@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-21 19:11+0000\n"
-"PO-Revision-Date: 2022-02-24 12:35+0100\n"
+"POT-Creation-Date: 2022-05-18 13:09+0000\n"
+"PO-Revision-Date: 2022-05-19 09:19+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 41.0\n"
+"X-Generator: Gtranslator 42.0\n"
 "X-DL-Team: es\n"
 "X-DL-Module: gnome-builder\n"
 "X-DL-Branch: master\n"
@@ -867,7 +867,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Cargar o generar una paleta usando las preferencias"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5030
+#: src/libide/sourceview/ide-source-view.c:5029
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renombrar"
@@ -889,7 +889,7 @@ msgstr "_Renombrar"
 msgid "unsaved file %u"
 msgstr "%u archivos sin guardar"
 
-#: src/libide/code/ide-buffer.c:3635
+#: src/libide/code/ide-buffer.c:3720
 msgid "The current language lacks a symbol resolver."
 msgstr "Al lenguaje actual le falta un resolutor de símbolos."
 
@@ -934,7 +934,7 @@ msgstr "Sin título"
 msgid "_Cancel"
 msgstr "_Cancelar"
 
-#: src/libide/debugger/ide-debug-manager.c:1001
+#: src/libide/debugger/ide-debug-manager.c:1002
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "No se ha encontrado un depurador adecuado."
@@ -1467,7 +1467,7 @@ msgstr "El proceso ha terminado de manera inesperada"
 msgid "Host Operating System"
 msgstr "Sistema operativo del equipo anfitrión"
 
-#: src/libide/foundry/ide-runtime.c:571
+#: src/libide/foundry/ide-runtime.c:575
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Equipo anfitrión"
@@ -2722,6 +2722,7 @@ msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Embellecer el código seleccionado"
 
+#. Translators: LSP stands for Language Server Protocol
 #: src/libide/gui/ide-shortcuts-window.ui:447
 msgctxt "shortcut window"
 msgid "(LSP only) Format selected code or whole document"
@@ -2855,7 +2856,7 @@ msgstr[0] "Instalando %u paquete"
 msgstr[1] "Instalando %u paquetes"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1473
+#: src/libide/lsp/ide-lsp-client.c:1481
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Falló al inicializar el lenguaje del servidor: %s"
@@ -2961,31 +2962,31 @@ msgstr "_Reducir"
 msgid "_Reset"
 msgstr "_Reiniciar"
 
-#: src/libide/sourceview/ide-source-view.c:4444
+#: src/libide/sourceview/ide-source-view.c:4443
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insertar «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4446
+#: src/libide/sourceview/ide-source-view.c:4445
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Reemplazar «%s» con «%s»"
 
-#: src/libide/sourceview/ide-source-view.c:4572
+#: src/libide/sourceview/ide-source-view.c:4571
 msgid "Apply Fix-It"
 msgstr "Aplicar corrección"
 
-#: src/libide/sourceview/ide-source-view.c:5029
+#: src/libide/sourceview/ide-source-view.c:5028
 msgid "Rename symbol"
 msgstr "Renombrar símbolo"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5408
+#: src/libide/sourceview/ide-source-view.c:5407
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Línea %u, columna %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5434
+#: src/libide/sourceview/ide-source-view.c:5433
 msgid "No references were found"
 msgstr "No se han encontrado referencias"
 
@@ -3008,7 +3009,6 @@ msgstr "Selección"
 
 #: src/libide/terminal/ide-terminal-launcher.c:339
 #: src/libide/terminal/ide-terminal-launcher.c:439
-#| msgid "Rustup not installed"
 msgid "Requested runtime is not installed"
 msgstr "La rutina solicitada no está instalada"
 
@@ -3025,24 +3025,24 @@ msgstr "Terminal sin título"
 msgid "Save Terminal Content As"
 msgstr "Guardar contenido de la terminal como"
 
-#: src/libide/terminal/ide-terminal-page.c:112
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:301
-msgid "Untitled terminal"
-msgstr "Terminal sin título"
-
-#. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:114
-msgid "Exited"
-msgstr "Termiando"
-
-#: src/libide/terminal/ide-terminal-page.c:121
+#: src/libide/terminal/ide-terminal-page.c:125
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Falló al lanzar el subproceso. Puede que necesite volver a construir el "
 "proyecto."
 
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:130
+#: src/libide/terminal/ide-terminal-page.c:165
+#: src/libide/terminal/ide-terminal-page.c:336
+msgid "Untitled terminal"
+msgstr "Terminal sin título"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:132
+msgid "Exited"
+msgstr "Termiando"
+
+#: src/libide/terminal/ide-terminal-page.c:152
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "El lanzar del subproceso ha fallado demasiado pronto, no reaparecerá."
 
@@ -3294,7 +3294,7 @@ msgid "_Beautify"
 msgstr "_Embellecer"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:663
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:705
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (copiar)"
@@ -3683,6 +3683,11 @@ msgstr ""
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
 msgstr "Declaración"
+
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#, c-format
+msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr "Posible errata en «%s». ¿Quiso decir «%s»?"
 
 #: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
 msgid "Colors"
@@ -4614,16 +4619,16 @@ msgstr "Emacs"
 msgid "Emulates the Emacs text editor"
 msgstr "Emula el editor de texto Emacs"
 
-#: src/plugins/eslint/eslint_plugin.py:204
+#: src/plugins/eslint/eslint_plugin.py:97
 msgid "ESlint"
 msgstr "ESlint"
 
-#: src/plugins/eslint/eslint_plugin.py:205
+#: src/plugins/eslint/eslint_plugin.py:98
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr "Activar el uso de ESLint, que puede ejecutar código en su proyecto"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/eslint/eslint_plugin.py:207
+#: src/plugins/eslint/eslint_plugin.py:100
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint código ejecutar ejecución"
 
@@ -5173,8 +5178,7 @@ msgstr "Su equipo no tiene python3-sphinx"
 msgid "(Preview)"
 msgstr "(Vista previa)"
 
-#: src/plugins/intelephense/intelephense.py:71
-#| msgid "Indexing php code..."
+#: src/plugins/intelephense/intelephense.py:72
 msgid "Indexing php code…"
 msgstr "Indexando codigo php…"
 
@@ -5216,64 +5220,59 @@ msgstr "Construir proyecto"
 msgid "Install project"
 msgstr "Instalar proyecto"
 
-#: src/plugins/make/make_plugin.py:343
+#: src/plugins/make/make_plugin.py:351
 msgid "Empty Makefile Project"
 msgstr "Proyecto Makefile vacío"
 
-#: src/plugins/make/make_plugin.py:345
+#: src/plugins/make/make_plugin.py:353
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Crear un nuevo proyecto vacío usando un Makefile sencillo"
 
-#: src/plugins/meson-templates/meson_templates.py:255
-#| msgid "GNOME Application (Legacy)"
+#: src/plugins/meson-templates/meson_templates.py:259
 msgid "GTK Application (Legacy)"
 msgstr "Aplicación de GTK (Heredada)"
 
-#: src/plugins/meson-templates/meson_templates.py:257
-#| msgid "Create a GNOME application with GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:261
 msgid "Create a GTK application with GTK 3"
 msgstr "Crear una nueva aplicación de GTK con GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:332
-#| msgid "GNOME Application"
+#: src/plugins/meson-templates/meson_templates.py:336
 msgid "GTK Application"
 msgstr "Aplicación de GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:334
-#| msgid "Create a GNOME application with GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Create a GTK application"
 msgstr "Crear una aplicación de GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:414
+#: src/plugins/meson-templates/meson_templates.py:418
 msgid "GNOME Application"
 msgstr "Aplicación de GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:416
-#| msgid "Create a GNOME application with GTK 3"
+#: src/plugins/meson-templates/meson_templates.py:420
 msgid "Create a GNOME application"
 msgstr "Crear una nueva aplicación de GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:496
+#: src/plugins/meson-templates/meson_templates.py:500
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:498
+#: src/plugins/meson-templates/meson_templates.py:502
 msgid "Create a new project with a shared library"
 msgstr "Crear un proyecto nuevo con una biblioteca compartida"
 
-#: src/plugins/meson-templates/meson_templates.py:515
+#: src/plugins/meson-templates/meson_templates.py:519
 msgid "Empty Project"
 msgstr "Proyecto vacío"
 
-#: src/plugins/meson-templates/meson_templates.py:517
+#: src/plugins/meson-templates/meson_templates.py:521
 msgid "Create a new empty project"
 msgstr "Crear un nuevo proyecto vacío"
 
-#: src/plugins/meson-templates/meson_templates.py:534
+#: src/plugins/meson-templates/meson_templates.py:538
 msgid "Command Line Tool"
 msgstr "Herramienta de línea de comandos"
 
-#: src/plugins/meson-templates/meson_templates.py:536
+#: src/plugins/meson-templates/meson_templates.py:540
 msgid "Create a new command line project"
 msgstr "Crear un proyecto de línea de comandos nuevo"
 
@@ -5546,12 +5545,12 @@ msgid "Bootstrapping project"
 msgstr "Inicializando proyecto"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:499
+#: src/plugins/podman/gbp-podman-runtime.c:523
 msgid "Containers/Toolbox"
 msgstr "Contenedores/Caja de herramientas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:505
+#: src/plugins/podman/gbp-podman-runtime.c:529
 msgid "Containers/Podman"
 msgstr "Contenedores/Podman"
 
@@ -5994,16 +5993,16 @@ msgstr ""
 "Activar el uso de stylelint, para buscar diagnósticos adicionales en "
 "archivos de hojas de estilos. Esto puede ejecutar código en su proyecto."
 
-#: src/plugins/stylelint/stylelint_plugin.py:135
+#: src/plugins/stylelint/stylelint_plugin.py:77
 msgid "Stylelint"
 msgstr "Stylelint"
 
-#: src/plugins/stylelint/stylelint_plugin.py:136
+#: src/plugins/stylelint/stylelint_plugin.py:78
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr "Activar el uso de Stylelint, que puede ejecutar código en su proyecto"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/stylelint/stylelint_plugin.py:138
+#: src/plugins/stylelint/stylelint_plugin.py:80
 msgid "stylelint stylesheet lint code execute execution"
 msgstr "stylelint hoja de estilos lint código ejecutar ejecución"
 
@@ -6327,8 +6326,8 @@ msgstr "Act_ualizar"
 msgid "Vagrant"
 msgstr "Vagrant"
 
+#: src/plugins/valgrind/gbp-valgrind-workbench-addin.c:152
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Ejecutar con Valgrind"
 
@@ -7677,10 +7676,6 @@ msgstr ""
 
 #~ msgid "Developer SDKs"
 #~ msgstr "SDK para desarrolladores"
-
-#~| msgid "Replace “%s” with “%s”"
-#~ msgid "Installing “%s” from “%s”"
-#~ msgstr "Instalando «%s» desde «%s»"
 
 #~| msgid "Failed to load file: %s: %s"
 #~ msgid "Failed to locate %s/%s/%s"
