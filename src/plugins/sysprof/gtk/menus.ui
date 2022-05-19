@@ -123,20 +123,23 @@
     </section>
     <section id="gbp-sysprof-page-file-section">
       <item>
-        <attribute name="label" translatable="yes">Save As…</attribute>
+        <attribute name="label" translatable="yes">Save</attribute>
         <attribute name="action">sysprof.save-as</attribute>
+        <attribute name="accel">&lt;control&gt;s</attribute>
       </item>
     </section>
     <section id="gbp-sysprof-page-record-section">
       <item>
         <attribute name="label" translatable="yes">Record Again…</attribute>
         <attribute name="action">sysprof.record-again</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;F8</attribute>
       </item>
     </section>
     <section id="gbp-sysprof-page-close-section">
       <item>
         <attribute name="label" translatable="yes">Close</attribute>
         <attribute name="action">frame.close-page-or-frame</attribute>
+        <attribute name="accel">&lt;control&gt;w</attribute>
       </item>
     </section>
   </menu>
