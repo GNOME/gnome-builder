@@ -36,18 +36,18 @@
 
 struct _GbpBuilduiWorkspaceAddin
 {
-  GObject                   parent_instance;
+  GObject                    parent_instance;
 
   /* Borrowed references */
-  IdeWorkspace             *workspace;
-  GbpBuilduiOmniBarSection *omni_bar_section;
-  GbpBuilduiLogPane        *log_pane;
-  GbpBuilduiPane           *pane;
-  GtkBox                   *diag_box;
-  GtkImage                 *error_image;
-  GtkLabel                 *error_label;
-  GtkImage                 *warning_image;
-  GtkLabel                 *warning_label;
+  IdeWorkspace              *workspace;
+  GbpBuilduiOmniBarSection  *omni_bar_section;
+  GbpBuilduiLogPane         *log_pane;
+  GbpBuilduiPane            *pane;
+  GtkBox                    *diag_box;
+  GtkImage                  *error_image;
+  GtkLabel                  *error_label;
+  GtkImage                  *warning_image;
+  GtkLabel                  *warning_label;
   GbpBuilduiStatusIndicator *status_indicator;
   GtkMenuButton             *status_button;
 
