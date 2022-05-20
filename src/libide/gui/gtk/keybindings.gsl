@@ -26,7 +26,7 @@ def inGrid()
 end
 
 def hasProject()
-  (workbench != null) && workbench.has_project()
+  workbench.has_project()
 end
 
 def canBuild()
@@ -58,15 +58,15 @@ def inPageSearch()
 end
 
 def isBuilding()
-  (workbench != null) && workbench.has_project() && Ide.BuildManager.from_context(workbench.context).get_busy()
+  workbench.has_project() && Ide.BuildManager.from_context(workbench.context).get_busy()
 end
 
 def isRunning()
-  (workbench != null) && workbench.has_project() && Ide.RunManager.from_context(workbench.context).get_busy()
+  workbench.has_project() && Ide.RunManager.from_context(workbench.context).get_busy()
 end
 
 def isDebugging()
-  (workbench != null) && workbench.has_project() && Ide.DebugManager.from_context(workbench.context).get_active()
+  workbench.has_project() && Ide.DebugManager.from_context(workbench.context).get_active()
 end
 
 def inEditorWithLanguage(language_id)
@@ -79,4 +79,12 @@ end
 
 def inPageWithTypeName(name)
   (page != null) && (typeof(page).name() == name) && (focus != null) && focus.is_ancestor(page)
+end
+
+def hasErrors()
+  workbench.has_project() && (Ide.BuildManager.from_context(workbench.context).get_error_count() > 0)
+end
+
+def hasWarnings()
+  workbench.has_project() && (Ide.BuildManager.from_context(workbench.context).get_warning_count() > 0)
 end
