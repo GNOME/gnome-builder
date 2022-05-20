@@ -1,13 +1,16 @@
 if get_option('plugin_rstcheck')
 
-install_data('rstcheck_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'rstcheck-plugin.c',
+  'gbp-rstcheck-diagnostic-provider.c',
+])
 
-configure_file(
-          input: 'rstcheck.plugin',
-         output: 'rstcheck.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_rstcheck_resources = gnome.compile_resources(
+  'rstcheck-resources',
+  'rstcheck.gresource.xml',
+  c_name: 'gbp_rstcheck',
 )
+
+plugins_sources += plugin_rstcheck_resources
 
 endif
