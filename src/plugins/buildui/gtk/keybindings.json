@@ -1,0 +1,2 @@
+{ "trigger" : "<Control><Shift>e", "action" : "win.show-build-status-popover", "args" : "'errors'", "when" : "hasErrors() || hasWarnings()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>w", "action" : "win.show-build-status-popover", "args" : "'warnings'", "when" : "hasErrors() || hasWarnings()", "phase" : "capture" },
