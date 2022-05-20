@@ -13,6 +13,42 @@
       </item>
     </section>
   </menu>
+  <menu id="run-menu">
+    <section id="run-menu-settings-section">
+      <submenu id="run-menu-valgrind-submenu">
+        <attribute name="before">run-menu-verbose-logging</attribute>
+        <attribute name="label" translatable="yes">Valgrind</attribute>
+        <section id="run-menu-valgrind-origins-section">
+          <item>
+            <attribute name="label" translatable="yes">Track Origins</attribute>
+            <attribute name="action">valgrind.track-origins</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-valgrind-leak-check">
+          <attribute name="label" translatable="yes">Leak Checks</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Summary</attribute>
+            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="target" type="s">'summary'</attribute>
+            <attribute name="role">radio</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Full</attribute>
+            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="target" type="s">'full'</attribute>
+            <attribute name="role">radio</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Disabled</attribute>
+            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="target" type="s">'no'</attribute>
+            <attribute name="role">radio</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
   <menu id="project-tree-menu">
     <section id="project-tree-menu-foundry-section">
       <submenu id="project-tree-run-with-submenu">
