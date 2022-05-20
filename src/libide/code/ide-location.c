@@ -501,3 +501,30 @@ ide_location_hash (IdeLocation *self)
 
   return g_file_hash (priv->file) ^ g_int_hash (&priv->line) ^ g_int_hash (&priv->line_offset);
 }
+
+gboolean
+ide_location_equal (IdeLocation *a,
+                    IdeLocation *b)
+{
+  IdeLocationPrivate *a_priv = ide_location_get_instance_private (a);
+  IdeLocationPrivate *b_priv = ide_location_get_instance_private (b);
+
+  g_return_val_if_fail (!a || IDE_IS_LOCATION (a), FALSE);
+  g_return_val_if_fail (!b || IDE_IS_LOCATION (b), FALSE);
+
+  if (a == NULL || b == NULL)
+    return FALSE;
+
+  if (a_priv->file == NULL || b_priv->file == NULL)
+    return FALSE;
+
+  if (G_OBJECT_TYPE (a) != G_OBJECT_TYPE (b))
+    return FALSE;
+
+  if (!g_file_equal (a_priv->file, b_priv->file))
+    return FALSE;
+
+  return a_priv->line == b_priv->line &&
+         a_priv->line_offset == b_priv->line_offset &&
+         a_priv->offset == b_priv->offset;
+}

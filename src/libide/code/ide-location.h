@@ -71,5 +71,8 @@ gboolean     ide_location_compare          (IdeLocation *a,
                                             IdeLocation *b);
 IDE_AVAILABLE_IN_3_32
 guint        ide_location_hash             (IdeLocation *self);
+IDE_AVAILABLE_IN_ALL
+gboolean     ide_location_equal            (IdeLocation *a,
+                                            IdeLocation *b);
 
 G_END_DECLS
