@@ -30,6 +30,7 @@
 #include "gbp-buildui-log-pane.h"
 #include "gbp-buildui-omni-bar-section.h"
 #include "gbp-buildui-pane.h"
+#include "gbp-buildui-status-indicator.h"
 #include "gbp-buildui-targets-dialog.h"
 #include "gbp-buildui-workspace-addin.h"
 
@@ -47,6 +48,8 @@ struct _GbpBuilduiWorkspaceAddin
   GtkLabel                 *error_label;
   GtkImage                 *warning_image;
   GtkLabel                 *warning_label;
+  GbpBuilduiStatusIndicator *status_indicator;
+  GtkMenuButton             *status_button;
 
   /* Owned references */
   IdeSignalGroup           *build_manager_signals;
@@ -243,6 +246,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   g_autoptr(IdePanelPosition) log_position = NULL;
   PangoAttrList *small_attrs = NULL;
   IdeBuildManager *build_manager;
+  PanelStatusbar *statusbar;
   IdeWorkbench *workbench;
   IdeOmniBar *omnibar;
   IdeContext *context;
@@ -261,6 +265,13 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
   context = ide_workbench_get_context (workbench);
   build_manager = ide_build_manager_from_context (context);
+
+  statusbar = ide_workspace_get_statusbar (workspace);
+  self->status_indicator = gbp_buildui_status_indicator_new (context);
+  self->status_button = g_object_new (GTK_TYPE_MENU_BUTTON,
+                                      "child", self->status_indicator,
+                                      NULL);
+  panel_statusbar_add_prefix (statusbar, 1000, GTK_WIDGET (self->status_button));
 
   small_attrs = pango_attr_list_new ();
   pango_attr_list_insert (small_attrs, pango_attr_scale_new (0.833333));
@@ -375,9 +386,15 @@ gbp_buildui_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                     IdeWorkspace      *workspace)
 {
   GbpBuilduiWorkspaceAddin *self = (GbpBuilduiWorkspaceAddin *)addin;
+  PanelStatusbar *statusbar;
 
   g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace));
+
+  statusbar = ide_workspace_get_statusbar (workspace);
+  panel_statusbar_remove (statusbar, GTK_WIDGET (self->status_button));
+  self->status_button = NULL;
+  self->status_indicator = NULL;
 
   for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
     g_action_map_remove_action (G_ACTION_MAP (workspace), actions[i].name);
