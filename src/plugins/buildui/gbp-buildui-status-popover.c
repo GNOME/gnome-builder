@@ -160,10 +160,7 @@ gbp_buildui_status_popover_closed (GtkPopover *popover)
 
   if ((workspace = ide_widget_get_workspace (GTK_WIDGET (self))) &&
       (page = ide_workspace_get_most_recent_page (workspace)))
-    {
-      panel_widget_raise (PANEL_WIDGET (page));
-      gtk_widget_grab_focus (GTK_WIDGET (page));
-    }
+    gtk_widget_grab_focus (GTK_WIDGET (page));
 }
 
 static void
@@ -273,6 +270,7 @@ gbp_buildui_status_popover_set_page (GbpBuilduiStatusPopover *self,
   g_return_if_fail (page != NULL);
 
   gtk_stack_set_visible_child_name (self->stack, page);
-  visible_child = gtk_stack_get_visible_child (self->stack);
-  gtk_widget_grab_focus (visible_child);
+
+  if ((visible_child = gtk_stack_get_visible_child (self->stack)))
+    gtk_widget_child_focus (visible_child, GTK_DIR_TAB_FORWARD);
 }
