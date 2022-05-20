@@ -63,6 +63,10 @@
     </section>
     <section id="build-export">
       <item>
+        <attribute name="label" translatable="yes">_Install</attribute>
+        <attribute name="action">build-manager.install</attribute>
+      </item>
+      <item>
         <!-- TODO: Instead of having a generic Export via the build-manager,
           this should move into the Flatpak plugin and have it use
           flatpak-builder directly (reusing our cachepoints) so that
