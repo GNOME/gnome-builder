@@ -150,11 +150,29 @@ is_error (gpointer data,
 }
 
 static void
+gbp_buildui_status_popover_closed (GtkPopover *popover)
+{
+  GbpBuilduiStatusPopover *self = (GbpBuilduiStatusPopover *)popover;
+  IdeWorkspace *workspace;
+  IdePage *page;
+
+  g_assert (GBP_IS_BUILDUI_STATUS_POPOVER (self));
+
+  if ((workspace = ide_widget_get_workspace (GTK_WIDGET (self))) &&
+      (page = ide_workspace_get_most_recent_page (workspace)))
+    {
+      panel_widget_raise (PANEL_WIDGET (page));
+      gtk_widget_grab_focus (GTK_WIDGET (page));
+    }
+}
+
+static void
 gbp_buildui_status_popover_dispose (GObject *object)
 {
   GbpBuilduiStatusPopover *self = (GbpBuilduiStatusPopover *)object;
 
   g_clear_object (&self->pipeline_signals);
+  g_clear_pointer (&self->deduplicator, g_hash_table_unref);
 
   G_OBJECT_CLASS (gbp_buildui_status_popover_parent_class)->dispose (object);
 }
@@ -164,8 +182,11 @@ gbp_buildui_status_popover_class_init (GbpBuilduiStatusPopoverClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkPopoverClass *popover_class = GTK_POPOVER_CLASS (klass);
 
   object_class->dispose = gbp_buildui_status_popover_dispose;
+
+  popover_class->closed = gbp_buildui_status_popover_closed;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-status-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, diagnostics);
