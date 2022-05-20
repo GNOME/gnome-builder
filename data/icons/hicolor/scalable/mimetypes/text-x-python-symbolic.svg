@@ -1,1 +1,65 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M170.162 341.994A.938.938 0 0 0 170 342h-4s-1 0-1 1v2h-2c-1 0-1 1-1 1v4c0 1 1 1 1 1h2v-1c0-2 2-2 2-2h3s1 0 1.053-.918c0 0-.053-1.817-.053-2.082v-2c.033-.862-.546-.994-.838-1.006zM167 343a1 1 0 0 1 1 1 1 1 0 0 1-1 1 1 1 0 0 1-1-1 1 1 0 0 1 1-1z" style="fill:#2e3436;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" transform="translate(-160 -340)"/><path d="M171 344v2h1.5c.417 0 .35.06.418.197s.082.303.082.303v3s-.014.166-.082.303c-.068.136-.001.197-.418.197H171a1 1 0 0 0-1 1v1.5c0 .417-.06.35-.197.418s-.303.082-.303.082h-3s-.166-.014-.303-.082c-.136-.068-.197-.001-.197-.418V351h-2v1.5c0 1.083.69 1.9 1.303 2.207.613.307 1.197.293 1.197.293h3s.584.014 1.197-.293c.614-.307 1.303-1.124 1.303-2.207v-.5h.5c1.083 0 1.9-.69 2.207-1.303.307-.613.293-1.197.293-1.197v-3s.014-.584-.293-1.197c-.307-.614-1.124-1.303-2.207-1.303Z" style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000;solid-opacity:1;vector-effect:none;fill:#2e3436;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" transform="translate(-160 -340)"/><path d="M166.5 341s-.584-.014-1.197.293c-.614.307-1.303 1.124-1.303 2.207v.5h-.5c-1.083 0-1.9.69-2.207 1.303-.307.613-.293 1.197-.293 1.197v3c0 1.083.69 1.9 1.303 2.207.613.307 1.197.293 1.197.293h1.5a1 1 0 0 0 1-1v-.5c0-.917.31-1.1.697-1.293.387-.193.803-.207.803-.207h2c1.083 0 1.9-.69 2.207-1.303.307-.613.293-1.197.293-1.197v-3c0-1.083-.69-1.9-1.303-2.207-.613-.307-1.197-.293-1.197-.293Zm0 2h3s.166.014.303.082c.136.068.197.001.197.418v3s-.014.166-.082.303c-.068.136-.001.197-.418.197h-2s-.834-.014-1.697.418c-.754.377-1.463 1.315-1.657 2.582h-.646s-.166-.014-.303-.082c-.136-.068-.197-.001-.197-.418v-3s.014-.166.082-.303c.068-.136.001-.197.418-.197h1.5a1 1 0 0 0 1-1v-1.5c0-.417.06-.35.197-.418s.303-.082.303-.082Z" style="color:#000;font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:medium;line-height:normal;font-family:sans-serif;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration:none;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;letter-spacing:normal;word-spacing:normal;text-transform:none;writing-mode:lr-tb;direction:ltr;text-orientation:mixed;dominant-baseline:auto;baseline-shift:baseline;text-anchor:start;white-space:normal;shape-padding:0;clip-rule:nonzero;display:inline;overflow:visible;visibility:visible;opacity:1;isolation:auto;mix-blend-mode:normal;color-interpolation:sRGB;color-interpolation-filters:linearRGB;solid-color:#000;solid-opacity:1;vector-effect:none;fill:#2e3436;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;color-rendering:auto;image-rendering:auto;shape-rendering:auto;text-rendering:auto;enable-background:accumulate" transform="translate(-160 -340)"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <filter id="a" height="100%" width="100%" x="0%" y="0%">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <mask id="b">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.3"/>
+        </g>
+    </mask>
+    <clipPath id="c">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="d">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="e">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="f">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="g">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="h">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="i">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="j">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="k">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <g clip-path="url(#c)" mask="url(#b)" transform="matrix(1 0 0 1 -240 -620)">
+        <path d="m 142.5 351 h 10.449219 c -1.183594 0.492188 -1.296875 2.457031 0 3 h -10.449219 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#e)" mask="url(#d)" transform="matrix(1 0 0 1 -240 -620)">
+        <path d="m 104 502 c 0 0.550781 -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 s 1 0.449219 1 1 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#g)" mask="url(#f)" transform="matrix(1 0 0 1 -240 -620)">
+        <path d="m 106 501 v 2 h 8 v -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g clip-path="url(#i)" mask="url(#h)" transform="matrix(1 0 0 1 -240 -620)">
+        <path d="m 104 514 c 0 0.550781 -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 s 1 0.449219 1 1 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#k)" mask="url(#j)" transform="matrix(1 0 0 1 -240 -620)">
+        <path d="m 106 513 v 2 h 8 v -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g fill="#2e3436" fill-rule="evenodd">
+        <path d="m 6.5 1 s -0.582031 -0.015625 -1.199219 0.292969 c -0.613281 0.308593 -1.300781 1.125 -1.300781 2.207031 v 0.5 h -0.5 c -1.082031 0 -1.898438 0.6875 -2.207031 1.300781 c -0.308594 0.617188 -0.292969 1.199219 -0.292969 1.199219 v 3 c 0 1.082031 0.6875 1.898438 1.300781 2.207031 c 0.617188 0.308594 1.199219 0.292969 1.199219 0.292969 h 1.5 c 0.550781 0 1 -0.449219 1 -1 v -0.5 c 0 -0.917969 0.3125 -1.101562 0.699219 -1.292969 c 0.382812 -0.191406 0.800781 -0.207031 0.800781 -0.207031 h 2 c 1.082031 0 1.898438 -0.6875 2.207031 -1.300781 c 0.308594 -0.617188 0.292969 -1.199219 0.292969 -1.199219 v -3 c 0 -1.082031 -0.6875 -1.898438 -1.300781 -2.207031 c -0.617188 -0.308594 -1.199219 -0.292969 -1.199219 -0.292969 z m 0.5 2 c 0.550781 0 1 0.449219 1 1 s -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 z m 0 0"/>
+        <path d="m 11 4 v 2 h 1.5 c 0.417969 0 0.351562 0.0625 0.417969 0.199219 c 0.066406 0.132812 0.082031 0.300781 0.082031 0.300781 v 3 s -0.015625 0.167969 -0.082031 0.300781 c -0.066407 0.136719 0 0.199219 -0.417969 0.199219 h -1.5 c -0.550781 0 -1 0.449219 -1 1 v 1.5 c 0 0.417969 -0.0625 0.351562 -0.199219 0.417969 c -0.132812 0.066406 -0.300781 0.082031 -0.300781 0.082031 h -3 s -0.167969 -0.015625 -0.300781 -0.082031 c -0.136719 -0.066407 -0.199219 0 -0.199219 -0.417969 v -1.5 h -2 v 1.5 c 0 1.082031 0.6875 1.898438 1.300781 2.207031 c 0.617188 0.308594 1.199219 0.292969 1.199219 0.292969 h 3 s 0.582031 0.015625 1.199219 -0.292969 c 0.613281 -0.308593 1.300781 -1.125 1.300781 -2.207031 v -0.5 h 0.5 c 1.082031 0 1.898438 -0.6875 2.207031 -1.300781 c 0.308594 -0.617188 0.292969 -1.199219 0.292969 -1.199219 v -3 s 0.015625 -0.582031 -0.292969 -1.199219 c -0.308593 -0.613281 -1.125 -1.300781 -2.207031 -1.300781 z m 0 0"/>
+    </g>
+</svg>

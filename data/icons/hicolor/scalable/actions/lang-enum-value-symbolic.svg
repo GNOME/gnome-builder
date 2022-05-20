@@ -1,1 +1,62 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><path d="M7.943 1c-3.854 0-7 3.146-7 7s3.146 7 7 7c3.855 0 7-3.146 7-7s-3.145-7-7-7zM7 4h2s.707-.013 1.445.352c.74.365 1.562 1.296 1.576 2.625v.015L11.98 9H6s.014.291.145.553c.13.261.188.447.855.447h3v2H7c-1.333 0-2.275-.814-2.645-1.553C3.986 9.71 4 9 4 9V7s-.014-.709.355-1.447C4.725 4.814 5.667 4 7 4zm0 2c-.667 0-.725.186-.855.447C6.014 6.71 6 7 6 7h4.021v-.002c-.007-.658-.194-.722-.46-.854A1.587 1.587 0 0 0 9 6z" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal" color="#000" font-weight="400" font-family="sans-serif" overflow="visible" fill="#2e3436"/></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <filter id="a" height="100%" width="100%" x="0%" y="0%">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <mask id="b">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.3"/>
+        </g>
+    </mask>
+    <clipPath id="c">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="d">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="e">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="f">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="g">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="h">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="i">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="j">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="k">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <g clip-path="url(#c)" mask="url(#b)" transform="matrix(1 0 0 1 -140 -420)">
+        <path d="m 142.5 351 h 10.449219 c -1.183594 0.492188 -1.296875 2.457031 0 3 h -10.449219 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#e)" mask="url(#d)" transform="matrix(1 0 0 1 -140 -420)">
+        <path d="m 104 502 c 0 0.550781 -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 s 1 0.449219 1 1 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#g)" mask="url(#f)" transform="matrix(1 0 0 1 -140 -420)">
+        <path d="m 106 501 v 2 h 8 v -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g clip-path="url(#i)" mask="url(#h)" transform="matrix(1 0 0 1 -140 -420)">
+        <path d="m 104 514 c 0 0.550781 -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 s 1 0.449219 1 1 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#k)" mask="url(#j)" transform="matrix(1 0 0 1 -140 -420)">
+        <path d="m 106 513 v 2 h 8 v -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <path d="m 7.964844 1 c -3.855469 0 -7 3.144531 -7 7 s 3.144531 7 7 7 c 3.855468 0 7 -3.144531 7 -7 s -3.144532 -7 -7 -7 z m -0.941406 3 h 2 s 0.703124 -0.011719 1.441406 0.351562 c 0.742187 0.363282 1.5625 1.296876 1.578125 2.625 v 0.015626 l -0.042969 2.007812 h -5.976562 s 0.011718 0.292969 0.140624 0.550781 c 0.132813 0.261719 0.191407 0.449219 0.859376 0.449219 h 3 v 2 h -3 c -1.335938 0 -2.277344 -0.8125 -2.644532 -1.550781 c -0.371094 -0.742188 -0.355468 -1.449219 -0.355468 -1.449219 v -2 s -0.015626 -0.707031 0.355468 -1.449219 c 0.367188 -0.738281 1.308594 -1.550781 2.644532 -1.550781 z m 0 2 c -0.667969 0 -0.726563 0.1875 -0.859376 0.449219 c -0.128906 0.257812 -0.140624 0.550781 -0.140624 0.550781 h 4.019531 v -0.003906 c -0.007813 -0.65625 -0.195313 -0.71875 -0.460938 -0.851563 c -0.265625 -0.132812 -0.558593 -0.144531 -0.558593 -0.144531 z m 0 0" fill="#2e3436"/>
+</svg>
