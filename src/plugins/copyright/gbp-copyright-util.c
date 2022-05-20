@@ -102,9 +102,14 @@ gbp_update_copyright (const char *input,
     regex = g_regex_new ("([0-9]{4})", G_REGEX_OPTIMIZE, 0, NULL);
 
   tokens = g_regex_split (regex, input, 0);
-  n_tokens = g_strv_length (tokens);
 
-  if (n_tokens < 2 || n_tokens > 6)
+  /* n_tokens > 2 */
+  if (tokens == NULL || tokens[0] == NULL || tokens[1] == NULL)
+    return NULL;
+
+  /* Sanity check */
+  n_tokens = g_strv_length (tokens);
+  if (n_tokens > 6)
     return NULL;
 
   return replace_copyright_year ((const char * const *)tokens, n_tokens, with_year);
