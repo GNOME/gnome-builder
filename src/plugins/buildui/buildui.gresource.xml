@@ -2,7 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/buildui">
     <file>buildui.plugin</file>
-    <file preprocess="xml-stripblanks">gbp-buildui-config-surface.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-log-pane.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-omni-bar-section.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-pane.ui</file>

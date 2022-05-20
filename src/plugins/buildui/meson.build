@@ -1,6 +1,5 @@
 plugins_sources += files([
   'buildui-plugin.c',
-  #'gbp-buildui-config-surface.c',
   #'gbp-buildui-config-view-addin.c',
   'gbp-buildui-editor-page-addin.c',
   'gbp-buildui-log-pane.c',
