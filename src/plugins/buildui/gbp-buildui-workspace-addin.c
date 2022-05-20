@@ -31,6 +31,7 @@
 #include "gbp-buildui-omni-bar-section.h"
 #include "gbp-buildui-pane.h"
 #include "gbp-buildui-status-indicator.h"
+#include "gbp-buildui-status-popover.h"
 #include "gbp-buildui-targets-dialog.h"
 #include "gbp-buildui-workspace-addin.h"
 
@@ -48,7 +49,6 @@ struct _GbpBuilduiWorkspaceAddin
   GtkLabel                  *error_label;
   GtkImage                  *warning_image;
   GtkLabel                  *warning_label;
-  GbpBuilduiStatusIndicator *status_indicator;
   GtkMenuButton             *status_button;
 
   /* Owned references */
@@ -267,9 +267,11 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   build_manager = ide_build_manager_from_context (context);
 
   statusbar = ide_workspace_get_statusbar (workspace);
-  self->status_indicator = gbp_buildui_status_indicator_new (context);
   self->status_button = g_object_new (GTK_TYPE_MENU_BUTTON,
-                                      "child", self->status_indicator,
+                                      "child", gbp_buildui_status_indicator_new (context),
+                                      "popover", gbp_buildui_status_popover_new (context),
+                                      "direction", GTK_ARROW_UP,
+                                      "focus-on-click", FALSE,
                                       NULL);
   panel_statusbar_add_prefix (statusbar, 1000, GTK_WIDGET (self->status_button));
 
@@ -394,7 +396,6 @@ gbp_buildui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   statusbar = ide_workspace_get_statusbar (workspace);
   panel_statusbar_remove (statusbar, GTK_WIDGET (self->status_button));
   self->status_button = NULL;
-  self->status_indicator = NULL;
 
   for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
     g_action_map_remove_action (G_ACTION_MAP (workspace), actions[i].name);
