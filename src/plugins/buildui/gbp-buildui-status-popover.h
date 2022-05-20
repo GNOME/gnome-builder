@@ -30,6 +30,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpBuilduiStatusPopover, gbp_buildui_status_popover, GBP, BUILDUI_STATUS_POPOVER, GtkPopover)
 
-GbpBuilduiStatusPopover *gbp_buildui_status_popover_new (IdeContext *context);
+GbpBuilduiStatusPopover *gbp_buildui_status_popover_new      (IdeContext              *context);
+void                     gbp_buildui_status_popover_set_page (GbpBuilduiStatusPopover *self,
+                                                              const char              *page);
 
 G_END_DECLS
