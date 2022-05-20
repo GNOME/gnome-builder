@@ -38,6 +38,7 @@ enum {
   PROP_LINE,
   PROP_LINE_OFFSET,
   PROP_OFFSET,
+  PROP_TITLE,
   N_PROPS
 };
 
@@ -126,6 +127,10 @@ ide_location_get_property (GObject    *object,
       g_value_set_int (value, ide_location_get_offset (self));
       break;
 
+    case PROP_TITLE:
+      g_value_take_string (value, ide_location_dup_title (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -170,6 +175,13 @@ ide_location_class_init (IdeLocationClass *klass)
   object_class->dispose = ide_location_dispose;
   object_class->get_property = ide_location_get_property;
   object_class->set_property = ide_location_set_property;
+
+  properties [PROP_TITLE] =
+    g_param_spec_string ("title",
+                         "Title",
+                         "The title of the location",
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FILE] =
     g_param_spec_object ("file",
@@ -527,4 +539,37 @@ ide_location_equal (IdeLocation *a,
   return a_priv->line == b_priv->line &&
          a_priv->line_offset == b_priv->line_offset &&
          a_priv->offset == b_priv->offset;
+}
+
+/**
+ * ide_location_dup_title:
+ * @self: a #IdeLocation
+ *
+ * Gets a title string for the location, usually in the form of
+ *   shortname:line:column
+ *
+ * Returns: (transfer full) (nullable): A new string containing the
+ *   something suitable to be used as a title for diagnostics.
+ */
+char *
+ide_location_dup_title (IdeLocation *self)
+{
+  IdeLocationPrivate *priv = ide_location_get_instance_private (self);
+  g_autofree char *name = NULL;
+
+  g_return_val_if_fail (IDE_IS_LOCATION (self), NULL);
+
+  if (priv->file == NULL)
+    return NULL;
+
+  if (!(name = g_file_get_basename (priv->file)))
+    return NULL;
+
+  if (priv->line >= 0 && priv->line_offset >= 0)
+    return g_strdup_printf ("%s:%d:%d", name, priv->line, priv->line_offset);
+
+  if (priv->line >= 0)
+    return g_strdup_printf ("%s:%d", name, priv->line);
+
+  return g_steal_pointer (&name);
 }
