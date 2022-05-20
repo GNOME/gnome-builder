@@ -34,15 +34,68 @@
 
 struct _GbpValgrindWorkbenchAddin
 {
-  GObject          parent_instance;
+  GObject             parent_instance;
 
-  IdeWorkbench    *workbench;
-  IdeRunManager   *run_manager;
-  IdeBuildManager *build_manager;
-  char            *log_name;
+  IdeWorkbench       *workbench;
+  IdeRunManager      *run_manager;
+  IdeBuildManager    *build_manager;
+  char               *log_name;
+  GSimpleActionGroup *actions;
 
-  guint            has_handler : 1;
+  guint               has_handler : 1;
 };
+
+static void
+set_state (GSimpleAction *action,
+           GVariant      *param,
+           gpointer       user_data)
+{
+  g_simple_action_set_state (action, param);
+}
+
+static gboolean
+get_bool (GbpValgrindWorkbenchAddin *self,
+          const char                *action_name)
+{
+  g_autoptr(GVariant) state = NULL;
+  GAction *action;
+
+  g_assert (GBP_IS_VALGRIND_WORKBENCH_ADDIN (self));
+  g_assert (action_name != NULL);
+
+  if (!(action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), action_name)))
+    g_return_val_if_reached (FALSE);
+
+  if (!(state = g_action_get_state (action)))
+    g_return_val_if_reached (FALSE);
+
+  if (!g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
+    g_return_val_if_reached (FALSE);
+
+  return g_variant_get_boolean (state);
+}
+
+static const char *
+get_string (GbpValgrindWorkbenchAddin *self,
+            const char                *action_name)
+{
+  g_autoptr(GVariant) state = NULL;
+  GAction *action;
+
+  g_assert (GBP_IS_VALGRIND_WORKBENCH_ADDIN (self));
+  g_assert (action_name != NULL);
+
+  if (!(action = g_action_map_lookup_action (G_ACTION_MAP (self->actions), action_name)))
+    g_return_val_if_reached (NULL);
+
+  if (!(state = g_action_get_state (action)))
+    g_return_val_if_reached (NULL);
+
+  if (!g_variant_is_of_type (state, G_VARIANT_TYPE_STRING))
+    g_return_val_if_reached (NULL);
+
+  return g_variant_get_string (state, NULL);
+}
 
 static void
 gbp_valgrind_workbench_addin_runner_exited_cb (GbpValgrindWorkbenchAddin *self,
@@ -76,6 +129,8 @@ gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
   GbpValgrindWorkbenchAddin *self = user_data;
   g_autoptr(GError) error = NULL;
   g_autofree char *name = NULL;
+  g_autofree char *track_origins = NULL;
+  g_autofree char *leak_check = NULL;
   char log_fd_param[32];
   int map_fd;
   int fd;
@@ -104,11 +159,13 @@ gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
   map_fd = ide_runner_take_fd (runner, fd, -1);
   g_snprintf (log_fd_param, sizeof log_fd_param, "--log-fd=%d", map_fd);
 
-  /* Setup arguments to valgrind so it writes output to temp file. Add in
-   * reverse order so we can just use prepend() repeatedly */
-  /* TODO: These should be options in the run menu */
-  ide_runner_prepend_argv (runner, "--track-origins=yes");
-  ide_runner_prepend_argv (runner, "--leak-check=full");
+  /* Convert action state to command-line arguments */
+  track_origins = g_strdup_printf ("--track-origins=%s", get_bool (self, "track-origins") ? "yes" : "no");
+  leak_check = g_strdup_printf ("--leak-check=%s", get_string (self, "leak-check"));
+
+  /* Reverse order so we can continually use prepend */
+  ide_runner_prepend_argv (runner, track_origins);
+  ide_runner_prepend_argv (runner, leak_check);
   ide_runner_prepend_argv (runner, log_fd_param);
   ide_runner_prepend_argv (runner, "valgrind");
 
@@ -197,6 +254,11 @@ gbp_valgrind_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
   IDE_EXIT;
 }
 
+static const GActionEntry actions[] = {
+  { "track-origins", NULL, NULL, "true", set_state },
+  { "leak-check", NULL, "s", "'summary'", set_state },
+};
+
 static void
 gbp_valgrind_workbench_addin_load (IdeWorkbenchAddin *addin,
                                    IdeWorkbench      *workbench)
@@ -209,6 +271,12 @@ gbp_valgrind_workbench_addin_load (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_WORKBENCH (workbench));
 
   self->workbench = workbench;
+
+  self->actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
 
   IDE_EXIT;
 }
@@ -241,7 +309,43 @@ gbp_valgrind_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   g_clear_pointer (&self->log_name, g_free);
 
+  g_clear_object (&self->actions);
+
   self->workbench = NULL;
+
+  IDE_EXIT;
+}
+
+static void
+gbp_valgrind_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
+                                              IdeWorkspace      *workspace)
+{
+  GbpValgrindWorkbenchAddin *self = (GbpValgrindWorkbenchAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_VALGRIND_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                  "valgrind",
+                                  G_ACTION_GROUP (self->actions));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_valgrind_workbench_addin_workspace_removed (IdeWorkbenchAddin *addin,
+                                                IdeWorkspace      *workspace)
+{
+  GbpValgrindWorkbenchAddin *self = (GbpValgrindWorkbenchAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_VALGRIND_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "valgrind", NULL);
 
   IDE_EXIT;
 }
@@ -252,6 +356,8 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->load = gbp_valgrind_workbench_addin_load;
   iface->unload = gbp_valgrind_workbench_addin_unload;
   iface->project_loaded = gbp_valgrind_workbench_addin_project_loaded;
+  iface->workspace_added = gbp_valgrind_workbench_addin_workspace_added;
+  iface->workspace_removed = gbp_valgrind_workbench_addin_workspace_removed;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpValgrindWorkbenchAddin, gbp_valgrind_workbench_addin, G_TYPE_OBJECT,
