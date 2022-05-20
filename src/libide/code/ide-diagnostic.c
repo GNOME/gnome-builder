@@ -590,6 +590,34 @@ ide_diagnostic_hash (IdeDiagnostic *self)
   return priv->hash;
 }
 
+gboolean
+ide_diagnostic_equal (IdeDiagnostic *a,
+                      IdeDiagnostic *b)
+{
+  IdeDiagnosticPrivate *a_priv = ide_diagnostic_get_instance_private (a);
+  IdeDiagnosticPrivate *b_priv = ide_diagnostic_get_instance_private (b);
+
+  g_return_val_if_fail (!a || IDE_IS_DIAGNOSTIC (a), FALSE);
+  g_return_val_if_fail (!b || IDE_IS_DIAGNOSTIC (b), FALSE);
+
+  if (a == NULL || b == NULL)
+    return FALSE;
+
+  if (G_OBJECT_TYPE (a) != G_OBJECT_TYPE (b))
+    return FALSE;
+
+  if (ide_diagnostic_hash (a) != ide_diagnostic_hash (b))
+    return FALSE;
+
+  if (g_strcmp0 (a_priv->text, b_priv->text) != 0)
+    return FALSE;
+
+  if (!ide_location_equal (a_priv->location, b_priv->location))
+    return FALSE;
+
+  return TRUE;
+}
+
 /**
  * ide_diagnostic_to_variant:
  * @self: a #IdeDiagnostic

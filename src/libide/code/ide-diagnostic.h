@@ -63,6 +63,9 @@ IDE_AVAILABLE_IN_3_32
 IdeDiagnostic         *ide_diagnostic_new_from_variant     (GVariant              *variant);
 IDE_AVAILABLE_IN_3_32
 guint                  ide_diagnostic_hash                 (IdeDiagnostic         *self);
+IDE_AVAILABLE_IN_ALL
+gboolean               ide_diagnostic_equal                (IdeDiagnostic         *a,
+                                                            IdeDiagnostic         *b);
 IDE_AVAILABLE_IN_3_32
 IdeLocation           *ide_diagnostic_get_location         (IdeDiagnostic         *self);
 IDE_AVAILABLE_IN_3_32
