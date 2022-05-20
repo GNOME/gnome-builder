@@ -27,10 +27,6 @@
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
-#if 0 /* TODO: port GbpBuilduiConfigSurface */
-#include "gbp-buildui-config-surface.h"
-#endif
-
 #include "gbp-buildui-log-pane.h"
 #include "gbp-buildui-omni-bar-section.h"
 #include "gbp-buildui-pane.h"
@@ -43,9 +39,6 @@ struct _GbpBuilduiWorkspaceAddin
 
   /* Borrowed references */
   IdeWorkspace             *workspace;
-#if 0 /* TODO: port GbpBuilduiConfigSurface */
-  GbpBuilduiConfigSurface  *surface;
-#endif
   GbpBuilduiOmniBarSection *omni_bar_section;
   GbpBuilduiLogPane        *log_pane;
   GbpBuilduiPane           *pane;
@@ -186,34 +179,6 @@ on_view_output_cb (GSimpleAction *action,
   gtk_widget_grab_focus (GTK_WIDGET (self->log_pane));
 }
 
-#if 0 /* TODO: port GbpBuilduiConfigSurface */
-static void
-on_edit_config_cb (GSimpleAction *action,
-                   GVariant      *param,
-                   gpointer       user_data)
-{
-  GbpBuilduiWorkspaceAddin *self = user_data;
-  IdeConfigManager *config_manager;
-  IdeConfig *config;
-  IdeContext *context;
-  const gchar *id;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
-  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
-
-  ide_workspace_set_visible_surface_name (self->workspace, "buildui");
-
-  context = ide_widget_get_context (GTK_WIDGET (self->workspace));
-  config_manager = ide_config_manager_from_context (context);
-  id = g_variant_get_string (param, NULL);
-  config = ide_config_manager_get_config (config_manager, id);
-
-  if (config != NULL)
-    gbp_buildui_config_surface_set_config (self->surface, config);
-}
-#endif
-
 static void
 select_build_target_action (GSimpleAction *action,
                             GVariant      *param,
@@ -236,9 +201,6 @@ select_build_target_action (GSimpleAction *action,
 }
 
 static const GActionEntry actions[] = {
-#if 0 /* TODO: port GbpBuilduiConfigSurface */
-  { "edit-config", on_edit_config_cb, "s" },
-#endif
   { "show-build-log", on_view_output_cb },
   { "select-build-target", select_build_target_action },
 };
@@ -277,9 +239,6 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
   GbpBuilduiWorkspaceAddin *self = (GbpBuilduiWorkspaceAddin *)addin;
-#if 0 /* TODO: port GbpBuilduiConfigSurface */
-  IdeConfigManager *config_manager;
-#endif
   g_autoptr(IdePanelPosition) pane_position = NULL;
   g_autoptr(IdePanelPosition) log_position = NULL;
   PangoAttrList *small_attrs = NULL;
@@ -302,9 +261,6 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
   context = ide_workbench_get_context (workbench);
   build_manager = ide_build_manager_from_context (context);
-#if 0 /* TODO: port GbpBuilduiConfigSurface */
-  config_manager = ide_config_manager_from_context (context);
-#endif
 
   small_attrs = pango_attr_list_new ();
   pango_attr_list_insert (small_attrs, pango_attr_scale_new (0.833333));
@@ -380,21 +336,6 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->pane = g_object_new (GBP_TYPE_BUILDUI_PANE, NULL);
   ide_workspace_add_pane (workspace, IDE_PANE (self->pane), pane_position);
 
-#if 0 /* TODO: port GbpBuilduiConfigSurface */
-  self->surface = g_object_new (GBP_TYPE_BUILDUI_CONFIG_SURFACE,
-                                "config-manager", config_manager,
-                                "icon-name", "builder-build-configure-symbolic",
-                                "title", _("Build Preferences"),
-                                "name", "buildui",
-                                "visible", TRUE,
-                                NULL);
-  g_signal_connect (self->surface,
-                    "destroy",
-                    G_CALLBACK (ide_gtk_widget_destroyed),
-                    &self->surface);
-  ide_workspace_add_surface (workspace, IDE_SURFACE (self->surface));
-#endif
-
   self->build_manager_signals = ide_signal_group_new (IDE_TYPE_BUILD_MANAGER);
   g_signal_connect_object (self->build_manager_signals,
                            "bind",
@@ -446,11 +387,6 @@ gbp_buildui_workspace_addin_unload (IdeWorkspaceAddin *addin,
 
   if (self->diag_box)
     gtk_widget_unparent (GTK_WIDGET (self->diag_box));
-
-#if 0 /* TODO: port GbpBuilduiConfigSurface */
-  if (self->surface)
-    gtk_widget_destroy (GTK_WIDGET (self->surface));
-#endif
 
   ide_signal_group_set_target (self->build_manager_signals, NULL);
   g_clear_object (&self->build_manager_signals);
