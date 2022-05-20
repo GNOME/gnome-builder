@@ -4,148 +4,97 @@
     <property name="title" translatable="yes">Build Issues</property>
     <property name="icon-name">builder-build-issues-symbolic</property>
     <child>
-      <object class="PanelPaned">
-        <property name="orientation">vertical</property>
+      <object class="GtkScrolledWindow">
+        <property name="propagate-natural-height">true</property>
         <child>
-          <object class="GtkScrolledWindow">
-            <property name="propagate-natural-height">true</property>
+          <object class="GtkGrid">
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">6</property>
+            <property name="hexpand">false</property>
+            <property name="vexpand">false</property>
             <child>
-              <object class="GtkGrid">
-                <property name="margin-top">6</property>
-                <property name="margin-bottom">6</property>
-                <property name="margin-start">6</property>
-                <property name="margin-end">6</property>
-                <property name="column-spacing">6</property>
-                <property name="row-spacing">6</property>
-                <property name="hexpand">false</property>
-                <property name="vexpand">false</property>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Build status:</property>
-                    <property name="xalign">1.0</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                    <attributes>
-                      <attribute name="scale" value="0.8333"/>
-                    </attributes>
-                    <layout>
-                      <property name="row">0</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="yes">Time completed:</property>
-                    <property name="xalign">1.0</property>
-                    <style>
-                      <class name="dim-label"/>
-                    </style>
-                    <attributes>
-                      <attribute name="scale" value="0.8333"/>
-                    </attributes>
-                    <layout>
-                      <property name="row">1</property>
-                      <property name="column">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="build_status_label">
-                    <property name="label" translatable="yes">—</property>
-                    <property name="hexpand">true</property>
-                    <property name="xalign">0.0</property>
-                    <attributes>
-                      <attribute name="scale" value="0.8333"/>
-                    </attributes>
-                    <layout>
-                      <property name="row">0</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="time_completed_label">
-                    <property name="label" translatable="yes">—</property>
-                    <property name="hexpand">true</property>
-                    <property name="xalign">0.0</property>
-                    <attributes>
-                      <attribute name="scale" value="0.8333"/>
-                    </attributes>
-                    <layout>
-                      <property name="row">1</property>
-                      <property name="column">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwPreferencesGroup">
-                    <property name="title" translatable="yes">Build Pipeline</property>
-                    <layout>
-                      <property name="row">2</property>
-                      <property name="column">0</property>
-                      <property name="column-span">2</property>
-                    </layout>
-                    <child>
-                      <object class="GtkListBox" id="stages_list_box">
-                        <property name="margin-bottom">6</property>
-                        <property name="margin-start">6</property>
-                        <property name="margin-end">6</property>
-                        <property name="selection-mode">none</property>
-                        <style>
-                          <class name="boxed-list"/>
-                        </style>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Build status:</property>
+                <property name="xalign">1.0</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="scale" value="0.8333"/>
+                </attributes>
+                <layout>
+                  <property name="row">0</property>
+                  <property name="column">0</property>
+                </layout>
               </object>
             </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkNotebook" id="notebook">
-            <property name="show-border">false</property>
-            <property name="vexpand">true</property>
             <child>
-              <object class="GtkScrolledWindow" id="warnings_page">
-                <child>
-                  <object class="IdeFancyTreeView" id="warnings_tree_view">
-                    <property name="has-tooltip">true</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection">
-                        <property name="mode">none</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Time completed:</property>
+                <property name="xalign">1.0</property>
+                <style>
+                  <class name="dim-label"/>
+                </style>
+                <attributes>
+                  <attribute name="scale" value="0.8333"/>
+                </attributes>
+                <layout>
+                  <property name="row">1</property>
+                  <property name="column">0</property>
+                </layout>
               </object>
             </child>
-            <child type="tab">
-              <object class="GtkLabel" id="warnings_page_label">
+            <child>
+              <object class="GtkLabel" id="build_status_label">
+                <property name="label" translatable="yes">—</property>
                 <property name="hexpand">true</property>
-                <property name="label" translatable="yes">Warnings</property>
+                <property name="xalign">0.0</property>
+                <attributes>
+                  <attribute name="scale" value="0.8333"/>
+                </attributes>
+                <layout>
+                  <property name="row">0</property>
+                  <property name="column">1</property>
+                </layout>
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow" id="errors_page">
-                <child>
-                  <object class="IdeFancyTreeView" id="errors_tree_view">
-                    <property name="has-tooltip">true</property>
-                    <child internal-child="selection">
-                      <object class="GtkTreeSelection">
-                        <property name="mode">none</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+              <object class="GtkLabel" id="time_completed_label">
+                <property name="label" translatable="yes">—</property>
+                <property name="hexpand">true</property>
+                <property name="xalign">0.0</property>
+                <attributes>
+                  <attribute name="scale" value="0.8333"/>
+                </attributes>
+                <layout>
+                  <property name="row">1</property>
+                  <property name="column">1</property>
+                </layout>
               </object>
             </child>
-            <child type="tab">
-              <object class="GtkLabel" id="errors_page_label">
-                <property name="hexpand">true</property>
-                <property name="label" translatable="yes">Errors</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Build Pipeline</property>
+                <layout>
+                  <property name="row">2</property>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                </layout>
+                <child>
+                  <object class="GtkListBox" id="stages_list_box">
+                    <property name="margin-bottom">6</property>
+                    <property name="margin-start">6</property>
+                    <property name="margin-end">6</property>
+                    <property name="selection-mode">none</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -153,9 +102,4 @@
       </object>
     </child>
   </template>
-  <object class="GtkListStore" id="diagnostics_store">
-    <columns>
-      <column type="IdeDiagnostic"/>
-    </columns>
-  </object>
 </interface>
