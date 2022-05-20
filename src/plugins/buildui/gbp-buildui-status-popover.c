@@ -30,16 +30,17 @@
 
 struct _GbpBuilduiStatusPopover
 {
-  GtkPopover      parent_instance;
+  GtkPopover       parent_instance;
 
   /* Owned references */
   IdeSignalGroup  *pipeline_signals;
   GHashTable      *deduplicator;
-  GtkCustomFilter *error_filter;
-  GtkCustomFilter *warning_filter;
 
   /* Template references */
-  GListStore     *diagnostics;
+  GListStore      *diagnostics;
+  GtkStack        *stack;
+  GtkCustomFilter *error_filter;
+  GtkCustomFilter *warning_filter;
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiStatusPopover, gbp_buildui_status_popover, GTK_TYPE_POPOVER)
@@ -169,6 +170,7 @@ gbp_buildui_status_popover_class_init (GbpBuilduiStatusPopoverClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-status-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, diagnostics);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, error_filter);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, warning_filter);
   gtk_widget_class_bind_template_callback (widget_class, gbp_buildui_status_popover_activate_cb);
 
@@ -238,4 +240,18 @@ gbp_buildui_status_popover_new (IdeContext *context)
   gbp_buildui_status_popover_connect (self, context);
 
   return self;
+}
+
+void
+gbp_buildui_status_popover_set_page (GbpBuilduiStatusPopover *self,
+                                     const char              *page)
+{
+  GtkWidget *visible_child;
+
+  g_return_if_fail (GBP_IS_BUILDUI_STATUS_POPOVER (self));
+  g_return_if_fail (page != NULL);
+
+  gtk_stack_set_visible_child_name (self->stack, page);
+  visible_child = gtk_stack_get_visible_child (self->stack);
+  gtk_widget_grab_focus (visible_child);
 }
