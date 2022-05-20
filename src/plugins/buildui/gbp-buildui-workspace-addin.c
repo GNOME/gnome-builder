@@ -203,9 +203,32 @@ select_build_target_action (GSimpleAction *action,
   gtk_window_present (GTK_WINDOW (dialog));
 }
 
+static void
+show_status_popover (GSimpleAction *action,
+                     GVariant      *param,
+                     gpointer       user_data)
+{
+  GbpBuilduiWorkspaceAddin *self = user_data;
+  GtkPopover *popover;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+  g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
+
+  popover = gtk_menu_button_get_popover (self->status_button);
+  gbp_buildui_status_popover_set_page (GBP_BUILDUI_STATUS_POPOVER (popover),
+                                       g_variant_get_string (param, NULL));
+  gtk_menu_button_popup (self->status_button);
+
+  IDE_EXIT;
+}
+
 static const GActionEntry actions[] = {
   { "show-build-log", on_view_output_cb },
   { "select-build-target", select_build_target_action },
+  { "show-build-status-popover", show_status_popover, "s" },
 };
 
 static void
