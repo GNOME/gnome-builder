@@ -1,13 +1,16 @@
 if get_option('plugin_mono')
 
-install_data('mono_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'mono-plugin.c',
+  'gbp-mono-pipeline-addin.c',
+])
 
-configure_file(
-          input: 'mono.plugin',
-         output: 'mono.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_mono_resources = gnome.compile_resources(
+  'mono-resources',
+  'mono.gresource.xml',
+  c_name: 'gbp_mono',
 )
+
+plugins_sources += plugin_mono_resources
 
 endif
