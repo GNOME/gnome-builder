@@ -23,23 +23,18 @@
 
 #include "config.h"
 
-#include <string.h>
-
-#include <gio/gio.h>
-#include <glib.h>
-#include <glib-object.h>
 #include <glib/gi18n.h>
 
 #include <libide-code.h>
 #include <libide-gui.h>
 
 #include "gbp-copyright-buffer-addin.h"
+#include "gbp-copyright-util.h"
 
 #define MAX_LINE 100
 #define MAX_BYTES_IN_SCAN (64 << 10) /* 64kb */
 
 static GSettings *copyright_settings;
-static GRegex *year_regex;
 
 struct _GbpCopyrightBufferAddin
 {
@@ -47,26 +42,14 @@ struct _GbpCopyrightBufferAddin
 };
 
 static void
-gbp_copyright_buffer_addin_load (IdeBufferAddin *addin,
-                                 IdeBuffer      *buffer)
-{
-}
-
-static void
-gbp_copyright_buffer_addin_unload (IdeBufferAddin *addin,
-                                   IdeBuffer      *buffer)
-{
-}
-
-static void
 gbp_copyright_buffer_addin_save_file (IdeBufferAddin *addin,
                                       IdeBuffer      *buffer,
                                       GFile          *file)
 {
   GbpCopyrightBufferAddin *self = GBP_COPYRIGHT_BUFFER_ADDIN (addin);
-  const char *name;
   g_autoptr(GDateTime) now = NULL;
   g_autofree char *year = NULL;
+  const char *name;
   GtkTextIter iter, limit;
 
   IDE_ENTRY;
@@ -80,7 +63,7 @@ gbp_copyright_buffer_addin_save_file (IdeBufferAddin *addin,
     IDE_EXIT;
 
   name = g_get_real_name ();
-  if (g_strcmp0 (name, "Unknown") == 0)
+  if (ide_str_equal0 (name, "Unknown"))
     IDE_EXIT;
 
   now = g_date_time_new_now_local ();
@@ -96,9 +79,8 @@ gbp_copyright_buffer_addin_save_file (IdeBufferAddin *addin,
   while (gtk_text_iter_compare (&iter, &limit) < 0)
     {
       GtkTextIter match_begin, match_end;
-      g_auto(GStrv) tokens = NULL;
-      guint tokens_len;
       g_autofree char *text = NULL;
+      g_autofree char *replace = NULL;
 
       if (!gtk_text_iter_forward_search (&iter, name, GTK_TEXT_SEARCH_TEXT_ONLY, &match_begin, &match_end, &limit))
         continue;
@@ -109,57 +91,13 @@ gbp_copyright_buffer_addin_save_file (IdeBufferAddin *addin,
 
       text = gtk_text_iter_get_slice (&match_begin, &match_end);
 
-      tokens = g_regex_split (year_regex, text, 0);
-      /* Constant check for strv length < 2 */
-      if (tokens[0] == NULL || tokens[1] == NULL)
-        continue;
-
-      tokens_len = g_strv_length (tokens);
-
-      for (guint i = 0; i < tokens_len; i++)
+      if ((replace = gbp_update_copyright (text, year)))
         {
-          if (strstr (tokens[i], year))
-            IDE_EXIT;
-        }
-
-      if (tokens_len >= 2)
-        {
-          g_autofree char *new_text = NULL;
-          g_auto(GStrv) new_tokens = g_new0 (char *, tokens_len + 1);
-          guint dash_idx = 0;
-          gboolean found_dash = FALSE;
-
-          for (guint i = 0; i < tokens_len; i++)
-            {
-              if (tokens[i][0] == '-' && tokens[i][1] == 0)
-                {
-                  dash_idx = i;
-                  found_dash = TRUE;
-
-                  break;
-                }
-
-              new_tokens[i] = tokens[i];
-            }
-
-          if (found_dash)
-            {
-              new_tokens[dash_idx + 1] = year;
-            }
-          else
-            {
-              new_tokens[2] = (char *) "-";
-              new_tokens[3] = year;
-            }
-
-          new_text = g_strjoinv (NULL, new_tokens);
-
           gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (buffer));
           gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &match_begin, &match_end);
-          gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &match_begin, new_text, -1);
+          gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &match_begin, replace, -1);
           gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
-
-          break;
+          IDE_EXIT;
         }
 
       iter = match_end;
@@ -171,8 +109,6 @@ gbp_copyright_buffer_addin_save_file (IdeBufferAddin *addin,
 static void
 buffer_addin_init (IdeBufferAddinInterface *iface)
 {
-  iface->load = gbp_copyright_buffer_addin_load;
-  iface->unload = gbp_copyright_buffer_addin_unload;
   iface->save_file = gbp_copyright_buffer_addin_save_file;
 }
 
@@ -183,7 +119,6 @@ static void
 gbp_copyright_buffer_addin_class_init (GbpCopyrightBufferAddinClass *klass)
 {
   copyright_settings = g_settings_new("org.gnome.builder.plugins.copyright");
-  year_regex = g_regex_new("([0-9]{4})", G_REGEX_OPTIMIZE, 0, NULL);
 }
 
 static void
