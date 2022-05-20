@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-editor.h>
 #include <libide-foundry.h>
 #include <libide-gtk.h>
@@ -37,33 +38,16 @@ struct _GbpBuilduiPane
   IdePane              parent_instance;
 
   /* Owned references */
-  GHashTable          *diags_hash;
-  IdePipeline    *pipeline;
+  IdePipeline         *pipeline;
   IdeSignalGroup      *pipeline_signals;
 
   /* Template widgets */
   GtkLabel            *build_status_label;
   GtkLabel            *time_completed_label;
-  GtkNotebook         *notebook;
-  GtkScrolledWindow   *errors_page;
-  GtkLabel            *errors_page_label;
-  IdeFancyTreeView    *errors_tree_view;
-  GtkScrolledWindow   *warnings_page;
-  GtkLabel            *warnings_page_label;
-  IdeFancyTreeView    *warnings_tree_view;
-  GtkListStore        *diagnostics_store;
   GtkListBox          *stages_list_box;
-
-  guint                error_count;
-  guint                warning_count;
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiPane, gbp_buildui_pane, IDE_TYPE_PANE)
-
-enum {
-  COLUMN_DIAGNOSTIC,
-  LAST_COLUMN
-};
 
 enum {
   PROP_0,
@@ -72,65 +56,6 @@ enum {
 };
 
 static GParamSpec *properties [N_PROPS];
-
-static void
-gbp_buildui_pane_diagnostic (GbpBuilduiPane   *self,
-                             IdeDiagnostic    *diagnostic,
-                             IdePipeline *pipeline)
-{
-  IdeDiagnosticSeverity severity;
-  guint hash;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_BUILDUI_PANE (self));
-  g_assert (diagnostic != NULL);
-  g_assert (IDE_IS_PIPELINE (pipeline));
-
-  severity = ide_diagnostic_get_severity (diagnostic);
-
-  if (severity == IDE_DIAGNOSTIC_WARNING)
-    {
-      g_autofree gchar *label = NULL;
-
-      self->warning_count++;
-
-      label = g_strdup_printf ("%s (%u)", _("Warnings"), self->warning_count);
-      gtk_label_set_label (self->warnings_page_label, label);
-    }
-  else if (severity == IDE_DIAGNOSTIC_ERROR || severity == IDE_DIAGNOSTIC_FATAL)
-    {
-      g_autofree gchar *label = NULL;
-
-      self->error_count++;
-
-      label = g_strdup_printf ("%s (%u)", _("Errors"), self->error_count);
-      gtk_label_set_label (self->errors_page_label, label);
-    }
-  else
-    {
-      /* TODO: Figure out design for "Others" Column like Notes? */
-    }
-
-  hash = ide_diagnostic_hash (diagnostic);
-
-  if (g_hash_table_insert (self->diags_hash, GUINT_TO_POINTER (hash), NULL))
-    {
-      GtkTreeIter iter;
-
-      ide_gtk_list_store_insert_sorted (self->diagnostics_store,
-                                        &iter,
-                                        diagnostic,
-                                        COLUMN_DIAGNOSTIC,
-                                        (GCompareDataFunc)ide_diagnostic_compare,
-                                        NULL);
-      gtk_list_store_set (self->diagnostics_store, &iter,
-                          COLUMN_DIAGNOSTIC, diagnostic,
-                          -1);
-    }
-
-  IDE_EXIT;
-}
 
 static void
 gbp_buildui_pane_update_running_time (GbpBuilduiPane *self)
@@ -156,34 +81,9 @@ gbp_buildui_pane_update_running_time (GbpBuilduiPane *self)
     gtk_label_set_label (self->time_completed_label, "—");
 }
 
-static void
-gbp_buildui_pane_started (GbpBuilduiPane   *self,
-                          IdePipelinePhase     phase,
-                          IdePipeline *pipeline)
-{
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_BUILDUI_PANE (self));
-  g_assert (IDE_IS_PIPELINE (pipeline));
-
-  if (phase >= IDE_PIPELINE_PHASE_BUILD)
-    {
-      self->error_count = 0;
-      self->warning_count = 0;
-
-      gtk_label_set_label (self->warnings_page_label, _("Warnings"));
-      gtk_label_set_label (self->errors_page_label, _("Errors"));
-
-      gtk_list_store_clear (self->diagnostics_store);
-      g_hash_table_remove_all (self->diags_hash);
-    }
-
-  IDE_EXIT;
-}
-
 static GtkWidget *
 gbp_buildui_pane_create_stage_row_cb (gpointer data,
-                                     gpointer user_data)
+                                      gpointer user_data)
 {
   IdePipelineStage *stage = data;
 
@@ -194,9 +94,9 @@ gbp_buildui_pane_create_stage_row_cb (gpointer data,
 }
 
 static void
-gbp_buildui_pane_bind_pipeline (GbpBuilduiPane   *self,
-                                IdePipeline *pipeline,
-                                IdeSignalGroup   *signals)
+gbp_buildui_pane_bind_pipeline (GbpBuilduiPane *self,
+                                IdePipeline    *pipeline,
+                                IdeSignalGroup *signals)
 {
   g_assert (GBP_IS_BUILDUI_PANE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
@@ -205,11 +105,6 @@ gbp_buildui_pane_bind_pipeline (GbpBuilduiPane   *self,
   g_assert (IDE_IS_SIGNAL_GROUP (signals));
 
   self->pipeline = g_object_ref (pipeline);
-  self->error_count = 0;
-  self->warning_count = 0;
-
-  gtk_label_set_label (self->warnings_page_label, _("Warnings"));
-  gtk_label_set_label (self->errors_page_label, _("Errors"));
 
   gtk_label_set_label (self->time_completed_label, "—");
   gtk_label_set_label (self->build_status_label, "—");
@@ -235,9 +130,6 @@ gbp_buildui_pane_unbind_pipeline (GbpBuilduiPane *self,
     {
       GtkWidget *child;
 
-      g_hash_table_remove_all (self->diags_hash);
-      gtk_list_store_clear (self->diagnostics_store);
-
       while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->stages_list_box))) != NULL)
         gtk_list_box_remove (self->stages_list_box, child);
 
@@ -254,93 +146,6 @@ gbp_buildui_pane_set_pipeline (GbpBuilduiPane   *self,
 
   if (self->pipeline_signals != NULL)
     ide_signal_group_set_target (self->pipeline_signals, pipeline);
-}
-
-static void
-gbp_buildui_pane_diagnostic_activated (GbpBuilduiPane    *self,
-                                       GtkTreePath       *path,
-                                       GtkTreeViewColumn *colun,
-                                       GtkTreeView       *tree_view)
-{
-  g_autoptr(IdePanelPosition) position = NULL;
-  g_autoptr(IdeDiagnostic) diagnostic = NULL;
-  IdeWorkspace *workspace;
-  IdeLocation *loc;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_BUILDUI_PANE (self));
-  g_assert (path != NULL);
-  g_assert (GTK_IS_TREE_VIEW_COLUMN (colun));
-  g_assert (GTK_IS_TREE_VIEW (tree_view));
-
-  model = gtk_tree_view_get_model (tree_view);
-  if (!gtk_tree_model_get_iter (model, &iter, path))
-    IDE_EXIT;
-
-  gtk_tree_model_get (model, &iter,
-                      COLUMN_DIAGNOSTIC, &diagnostic,
-                      -1);
-
-  if (diagnostic == NULL || !(loc = ide_diagnostic_get_location (diagnostic)))
-    IDE_EXIT;
-
-  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
-  position = ide_panel_position_new ();
-  ide_editor_focus_location (workspace, position, loc);
-
-  IDE_EXIT;
-}
-
-static void
-gbp_buildui_pane_text_func (GtkCellLayout   *layout,
-                            GtkCellRenderer *renderer,
-                            GtkTreeModel    *model,
-                            GtkTreeIter     *iter,
-                            gpointer         user_data)
-{
-  IdeCellRendererFancy *fancy = (IdeCellRendererFancy *)renderer;
-  g_autoptr(IdeDiagnostic) diagnostic = NULL;
-
-  gtk_tree_model_get (model, iter,
-                      COLUMN_DIAGNOSTIC, &diagnostic,
-                      -1);
-
-  if G_LIKELY (diagnostic != NULL)
-    {
-      g_autofree gchar *title = NULL;
-      g_autofree gchar *name = NULL;
-      IdeLocation *location;
-      const gchar *text;
-      GFile *file = NULL;
-      guint line = 0;
-      guint column = 0;
-
-      location = ide_diagnostic_get_location (diagnostic);
-
-      if (location != NULL)
-        {
-          if ((file = ide_location_get_file (location)))
-            {
-              name = g_file_get_basename (file);
-              line = ide_location_get_line (location);
-              column = ide_location_get_line_offset (location);
-            }
-        }
-
-      title = g_strdup_printf ("%s:%u:%u", name ?: "", line + 1, column + 1);
-      ide_cell_renderer_fancy_take_title (fancy, g_steal_pointer (&title));
-
-      text = ide_diagnostic_get_text (diagnostic);
-      ide_cell_renderer_fancy_set_body (fancy, text);
-    }
-  else
-    {
-      ide_cell_renderer_fancy_set_title (fancy, NULL);
-      ide_cell_renderer_fancy_set_body (fancy, NULL);
-    }
 }
 
 static void
@@ -415,86 +220,6 @@ gbp_buildui_pane_context_handler (GtkWidget  *widget,
   IDE_EXIT;
 }
 
-static gboolean
-gbp_buildui_pane_diagnostic_tooltip (GbpBuilduiPane *self,
-                                     gint            x,
-                                     gint            y,
-                                     gboolean        keyboard_mode,
-                                     GtkTooltip     *tooltip,
-                                     GtkTreeView    *tree_view)
-{
-  g_autoptr(GtkTreePath) path = NULL;
-  GtkTreeModel *model = NULL;
-
-  g_assert (GBP_IS_BUILDUI_PANE (self));
-  g_assert (GTK_IS_TOOLTIP (tooltip));
-  g_assert (GTK_IS_TREE_VIEW (tree_view));
-
-  if (NULL == (model = gtk_tree_view_get_model (tree_view)))
-    return FALSE;
-
-  if (gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, NULL, NULL, NULL))
-    {
-      GtkTreeIter iter;
-
-      if (gtk_tree_model_get_iter (model, &iter, path))
-        {
-	  g_autoptr(IdeDiagnostic) diag = NULL;
-
-	  gtk_tree_model_get (model, &iter,
-			      COLUMN_DIAGNOSTIC, &diag,
-			      -1);
-
-	  if (diag != NULL)
-	    {
-	      g_autofree gchar *text = ide_diagnostic_get_text_for_display (diag);
-
-	      gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
-	      gtk_tooltip_set_text (tooltip, text);
-	      return TRUE;
-	    }
-	}
-    }
-
-  return FALSE;
-}
-
-static gboolean
-diagnostic_is_warning (GtkTreeModel *model,
-                       GtkTreeIter  *iter,
-                       gpointer      user_data)
-{
-  g_autoptr(IdeDiagnostic) diag = NULL;
-  IdeDiagnosticSeverity severity = 0;
-
-  gtk_tree_model_get (model, iter,
-                      COLUMN_DIAGNOSTIC, &diag,
-                      -1);
-
-  if (diag != NULL)
-    severity = ide_diagnostic_get_severity (diag);
-
-  return severity <= IDE_DIAGNOSTIC_WARNING;
-}
-
-static gboolean
-diagnostic_is_error (GtkTreeModel *model,
-                     GtkTreeIter  *iter,
-                     gpointer      user_data)
-{
-  g_autoptr(IdeDiagnostic) diag = NULL;
-  IdeDiagnosticSeverity severity = 0;
-
-  gtk_tree_model_get (model, iter,
-                      COLUMN_DIAGNOSTIC, &diag,
-                      -1);
-
-  if (diag != NULL)
-    severity = ide_diagnostic_get_severity (diag);
-
-  return severity > IDE_DIAGNOSTIC_WARNING;
-}
-
 static void
 gbp_buildui_pane_stage_row_activated (GbpBuilduiPane     *self,
                                       GbpBuilduiStageRow *row,
@@ -516,8 +241,8 @@ gbp_buildui_pane_stage_row_activated (GbpBuilduiPane     *self,
   phase = _ide_pipeline_stage_get_phase (stage);
 
   ide_pipeline_build_async (self->pipeline,
-                                  phase & IDE_PIPELINE_PHASE_MASK,
-                                  NULL, NULL, NULL);
+                            phase & IDE_PIPELINE_PHASE_MASK,
+                            NULL, NULL, NULL);
 }
 
 static void
@@ -527,8 +252,6 @@ gbp_buildui_pane_dispose (GObject *object)
 
   if (self->pipeline_signals != NULL)
     ide_signal_group_set_target (self->pipeline_signals, NULL);
-
-  g_clear_pointer (&self->diags_hash, g_hash_table_unref);
 
   g_clear_object (&self->pipeline_signals);
   g_clear_object (&self->pipeline);
@@ -597,97 +320,31 @@ gbp_buildui_pane_class_init (GbpBuilduiPaneClass *klass)
   gtk_widget_class_set_css_name (widget_class, "buildpanel");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, build_status_label);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, time_completed_label);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, notebook);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, errors_page);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, errors_page_label);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, errors_tree_view);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, warnings_page);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, warnings_page_label);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, warnings_tree_view);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, diagnostics_store);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiPane, stages_list_box);
 
-  g_type_ensure (IDE_TYPE_CELL_RENDERER_FANCY);
   g_type_ensure (IDE_TYPE_DIAGNOSTIC);
-  g_type_ensure (IDE_TYPE_FANCY_TREE_VIEW);
 }
 
 static void
 gbp_buildui_pane_init (GbpBuilduiPane *self)
 {
-  GtkTreeModel *filter;
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->pipeline_signals = ide_signal_group_new (IDE_TYPE_PIPELINE);
-
   g_signal_connect_object (self->pipeline_signals,
                            "bind",
                            G_CALLBACK (gbp_buildui_pane_bind_pipeline),
                            self,
                            G_CONNECT_SWAPPED);
-
   g_signal_connect_object (self->pipeline_signals,
                            "unbind",
                            G_CALLBACK (gbp_buildui_pane_unbind_pipeline),
                            self,
                            G_CONNECT_SWAPPED);
 
-  ide_signal_group_connect_object (self->pipeline_signals,
-                                   "diagnostic",
-                                   G_CALLBACK (gbp_buildui_pane_diagnostic),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
-  ide_signal_group_connect_object (self->pipeline_signals,
-                                   "started",
-                                   G_CALLBACK (gbp_buildui_pane_started),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-
-  self->diags_hash = g_hash_table_new (NULL, NULL);
-
-  g_object_set (self, "title", _("Build Issues"), NULL);
+  panel_widget_set_title (PANEL_WIDGET (self), _("Build Pipeline"));
 
   ide_widget_set_context_handler (self, gbp_buildui_pane_context_handler);
-
-  g_signal_connect_swapped (self->warnings_tree_view,
-                           "row-activated",
-                           G_CALLBACK (gbp_buildui_pane_diagnostic_activated),
-                           self);
-
-  g_signal_connect_swapped (self->warnings_tree_view,
-                           "query-tooltip",
-                           G_CALLBACK (gbp_buildui_pane_diagnostic_tooltip),
-                           self);
-
-  g_signal_connect_swapped (self->errors_tree_view,
-                           "row-activated",
-                           G_CALLBACK (gbp_buildui_pane_diagnostic_activated),
-                           self);
-
-  g_signal_connect_swapped (self->errors_tree_view,
-                           "query-tooltip",
-                           G_CALLBACK (gbp_buildui_pane_diagnostic_tooltip),
-                           self);
-
-  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (self->diagnostics_store), NULL);
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
-                                          diagnostic_is_warning, NULL, NULL);
-  gtk_tree_view_set_model (GTK_TREE_VIEW (self->warnings_tree_view), GTK_TREE_MODEL (filter));
-  g_object_unref (filter);
-
-  filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (self->diagnostics_store), NULL);
-  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (filter),
-                                          diagnostic_is_error, NULL, NULL);
-  gtk_tree_view_set_model (GTK_TREE_VIEW (self->errors_tree_view), GTK_TREE_MODEL (filter));
-  g_object_unref (filter);
-
-  ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->warnings_tree_view),
-                                     gbp_buildui_pane_text_func, self, NULL);
-
-  ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->errors_tree_view),
-                                     gbp_buildui_pane_text_func, self, NULL);
 
   g_signal_connect_swapped (self->stages_list_box,
                             "row-activated",
