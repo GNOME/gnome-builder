@@ -172,6 +172,12 @@ ide_run_command_init (IdeRunCommand *self)
 {
 }
 
+IdeRunCommand *
+ide_run_command_new (void)
+{
+  return g_object_new (IDE_TYPE_RUN_COMMAND, NULL);
+}
+
 const char *
 ide_run_command_get_id (IdeRunCommand *self)
 {
