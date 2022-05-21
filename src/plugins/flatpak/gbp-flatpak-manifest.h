@@ -37,6 +37,7 @@ GFile               *gbp_flatpak_manifest_get_file           (GbpFlatpakManifest
 const gchar         *gbp_flatpak_manifest_get_primary_module (GbpFlatpakManifest   *self);
 const gchar         *gbp_flatpak_manifest_get_command        (GbpFlatpakManifest   *self);
 gchar               *gbp_flatpak_manifest_get_path           (GbpFlatpakManifest   *self);
+const gchar * const *gbp_flatpak_manifest_get_x_run_args     (GbpFlatpakManifest   *self);
 const gchar * const *gbp_flatpak_manifest_get_build_args     (GbpFlatpakManifest   *self);
 const gchar * const *gbp_flatpak_manifest_get_finish_args    (GbpFlatpakManifest   *self);
 const gchar * const *gbp_flatpak_manifest_get_sdk_extensions (GbpFlatpakManifest   *self);
