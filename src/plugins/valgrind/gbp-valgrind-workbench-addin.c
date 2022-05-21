@@ -131,6 +131,8 @@ gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
   g_autofree char *name = NULL;
   g_autofree char *track_origins = NULL;
   g_autofree char *leak_check = NULL;
+  g_autofree char *show_leak_kinds = NULL;
+  g_autoptr(GString) leak_kinds = NULL;
   char log_fd_param[32];
   int map_fd;
   int fd;
@@ -159,13 +161,23 @@ gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
   map_fd = ide_runner_take_fd (runner, fd, -1);
   g_snprintf (log_fd_param, sizeof log_fd_param, "--log-fd=%d", map_fd);
 
+  leak_kinds = g_string_new (NULL);
+  if (get_bool (self, "leak-kind-definite")) g_string_append (leak_kinds, "definite,");
+  if (get_bool (self, "leak-kind-possible")) g_string_append (leak_kinds, "possible,");
+  if (get_bool (self, "leak-kind-indirect")) g_string_append (leak_kinds, "indirect,");
+  if (get_bool (self, "leak-kind-reachable")) g_string_append (leak_kinds, "reachable,");
+  if (leak_kinds->len > 0)
+    g_string_truncate (leak_kinds, leak_kinds->len-1);
+
   /* Convert action state to command-line arguments */
   track_origins = g_strdup_printf ("--track-origins=%s", get_bool (self, "track-origins") ? "yes" : "no");
   leak_check = g_strdup_printf ("--leak-check=%s", get_string (self, "leak-check"));
+  show_leak_kinds = g_strdup_printf ("--show-leak-kinds=%s", leak_kinds->str);
 
   /* Reverse order so we can continually use prepend */
   ide_runner_prepend_argv (runner, track_origins);
   ide_runner_prepend_argv (runner, leak_check);
+  ide_runner_prepend_argv (runner, show_leak_kinds);
   ide_runner_prepend_argv (runner, log_fd_param);
   ide_runner_prepend_argv (runner, "valgrind");
 
@@ -257,6 +269,10 @@ gbp_valgrind_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
 static const GActionEntry actions[] = {
   { "track-origins", NULL, NULL, "true", set_state },
   { "leak-check", NULL, "s", "'summary'", set_state },
+  { "leak-kind-definite", NULL, NULL, "true", set_state },
+  { "leak-kind-possible", NULL, NULL, "true", set_state },
+  { "leak-kind-indirect", NULL, NULL, "false", set_state },
+  { "leak-kind-reachable", NULL, NULL, "false", set_state },
 };
 
 static void
