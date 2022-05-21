@@ -45,6 +45,7 @@ struct _GbpFlatpakManifest
    */
   gchar           **build_args;
   gchar            *command;
+  gchar           **x_run_args;
   gchar           **finish_args;
   gchar            *runtime;
   gchar            *runtime_version;
@@ -425,6 +426,7 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   discover_strv_field (root_obj, "build-args", &self->build_args);
   discover_strv_field (root_obj, "finish-args", &self->finish_args);
   discover_strv_field (root_obj, "sdk-extensions", &self->sdk_extensions);
+  discover_strv_field (root_obj, "x-run-args", &self->x_run_args);
 
   if (discover_strv_as_quoted (root_obj, "x-run-args", &run_args))
     ide_config_set_run_opts (IDE_CONFIG (self), run_args);
@@ -1212,4 +1214,12 @@ gbp_flatpak_manifest_get_branch (GbpFlatpakManifest *self)
   g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
 
   return self->runtime_version;
+}
+
+const char * const *
+gbp_flatpak_manifest_get_x_run_args (GbpFlatpakManifest *self)
+{
+  g_return_val_if_fail (GBP_IS_FLATPAK_MANIFEST (self), NULL);
+
+  return (const char * const *)self->x_run_args;
 }
