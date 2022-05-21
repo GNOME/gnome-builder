@@ -26,6 +26,7 @@
 
 typedef struct
 {
+  char *id;
   char *display_name;
   char **env;
   char **argv;
@@ -37,6 +38,7 @@ enum {
   PROP_ARGV,
   PROP_DISPLAY_NAME,
   PROP_ENV,
+  PROP_ID,
   PROP_PRIORITY,
   N_PROPS
 };
@@ -80,6 +82,10 @@ ide_run_command_get_property (GObject    *object,
       g_value_set_boxed (value, ide_run_command_get_env (self));
       break;
 
+    case PROP_ID:
+      g_value_set_string (value, ide_run_command_get_id (self));
+      break;
+
     case PROP_PRIORITY:
       g_value_set_int (value, ide_run_command_get_priority (self));
       break;
@@ -109,6 +115,10 @@ ide_run_command_set_property (GObject      *object,
 
     case PROP_ENV:
       ide_run_command_set_env (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_ID:
+      ide_run_command_set_id (self, g_value_get_string (value));
       break;
 
     case PROP_PRIORITY:
@@ -144,6 +154,11 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
@@ -155,6 +170,32 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
 static void
 ide_run_command_init (IdeRunCommand *self)
 {
+}
+
+const char *
+ide_run_command_get_id (IdeRunCommand *self)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), NULL);
+
+  return priv->id;
+}
+
+void
+ide_run_command_set_id (IdeRunCommand *self,
+                        const char    *id)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+
+  if (g_strcmp0 (priv->id, id) != 0)
+    {
+      g_free (priv->id);
+      priv->id = g_strdup (id);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
+    }
 }
 
 const char *
