@@ -210,7 +210,7 @@ not_found:
                                      "valgrind",
                                      _("Run with Valgrind"),
                                      "system-run-symbolic",
-                                     "<Primary>F10",
+                                     "<Control><Shift><Alt>v",
                                      gbp_valgrind_workbench_addin_run_handler,
                                      g_object_ref (self),
                                      g_object_unref);
