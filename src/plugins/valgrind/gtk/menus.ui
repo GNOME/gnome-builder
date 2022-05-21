@@ -9,7 +9,7 @@
         <attribute name="target" type="s">'valgrind'</attribute>
         <attribute name="label" translatable="yes">Run with Valgrind</attribute>
         <attribute name="verb-icon-name">system-run-symbolic</attribute>
-        <attribute name="accel">&lt;Primary&gt;F10</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;v</attribute>
       </item>
     </section>
   </menu>
