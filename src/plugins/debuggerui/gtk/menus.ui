@@ -9,7 +9,7 @@
         <attribute name="target">debugger</attribute>
         <attribute name="label" translatable="yes">Run with Debugger</attribute>
         <attribute name="verb-icon-name">builder-debugger-symbolic</attribute>
-        <attribute name="accel">F5</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;d</attribute>
       </item>
     </section>
   </menu>
