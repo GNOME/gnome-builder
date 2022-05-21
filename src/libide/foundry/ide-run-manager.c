@@ -68,6 +68,15 @@ struct _IdeRunManager
   guint64                  last_change_seq;
   guint64                  pending_last_change_seq;
 
+  /* The id of the default run command to execute or NULL if we should
+   * discover it each time we try to run.
+   *
+   * TODO: We probably need a way to determine if an install is required
+   *       to run a particular command, as for some that may not be necessary
+   *       (like running tests).
+   */
+  char                    *default_run_command;
+
   guint                    busy : 1;
   guint                    messages_debug_all : 1;
 };
@@ -79,21 +88,24 @@ typedef struct
   guint      active;
 } DiscoverState;
 
-static void initable_iface_init                        (GInitableIface *iface);
-static void ide_run_manager_actions_run                (IdeRunManager  *self,
-                                                        GVariant       *param);
-static void ide_run_manager_actions_run_with_handler   (IdeRunManager  *self,
-                                                        GVariant       *param);
-static void ide_run_manager_actions_stop               (IdeRunManager  *self,
-                                                        GVariant       *param);
-static void ide_run_manager_actions_messages_debug_all (IdeRunManager  *self,
-                                                        GVariant       *param);
+static void initable_iface_init                         (GInitableIface *iface);
+static void ide_run_manager_actions_run                 (IdeRunManager  *self,
+                                                         GVariant       *param);
+static void ide_run_manager_actions_run_with_handler    (IdeRunManager  *self,
+                                                         GVariant       *param);
+static void ide_run_manager_actions_stop                (IdeRunManager  *self,
+                                                         GVariant       *param);
+static void ide_run_manager_actions_messages_debug_all  (IdeRunManager  *self,
+                                                         GVariant       *param);
+static void ide_run_manager_actions_default_run_command (IdeRunManager  *self,
+                                                         GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run", ide_run_manager_actions_run },
   { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
   { "stop", ide_run_manager_actions_stop },
   { "messages-debug-all", ide_run_manager_actions_messages_debug_all, NULL, "false" },
+  { "default-run-command", ide_run_manager_actions_default_run_command, "s", "''" },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
@@ -128,6 +140,30 @@ discover_state_free (gpointer data)
   g_list_free_full (state->providers, g_object_unref);
   g_clear_pointer (&state->results, g_ptr_array_unref);
   g_slice_free (DiscoverState, state);
+}
+
+static void
+ide_run_manager_actions_default_run_command (IdeRunManager *self,
+                                             GVariant      *param)
+{
+  const char *str;
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  str = g_variant_get_string (param, NULL);
+  if (ide_str_empty0 (str))
+    str = NULL;
+
+  if (g_strcmp0 (str, self->default_run_command) != 0)
+    {
+      g_free (self->default_run_command);
+      self->default_run_command = g_strdup (str);
+      ide_run_manager_set_action_state (self,
+                                        "default-run-command",
+                                        g_variant_new_string (str ? str : ""));
+    }
 }
 
 static void
@@ -178,6 +214,8 @@ ide_run_manager_dispose (GObject *object)
   IdeRunManager *self = (IdeRunManager *)object;
 
   self->handler = NULL;
+
+  g_clear_pointer (&self->default_run_command, g_free);
 
   g_clear_object (&self->cancellable);
   ide_clear_and_destroy_object (&self->build_target);
