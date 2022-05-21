@@ -67,6 +67,10 @@
         <attribute name="action">build-manager.install</attribute>
       </item>
       <item>
+        <attribute name="label" translatable="yes">Deploy to Device…</attribute>
+        <attribute name="action">device-manager.deploy</attribute>
+      </item>
+      <item>
         <!-- TODO: Instead of having a generic Export via the build-manager,
           this should move into the Flatpak plugin and have it use
           flatpak-builder directly (reusing our cachepoints) so that
