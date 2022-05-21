@@ -46,6 +46,29 @@
             <attribute name="role">radio</attribute>
           </item>
         </section>
+        <section id="run-menu-valgrind-leak-kinds">
+          <attribute name="label" translatable="yes">Leak Kinds</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Definite</attribute>
+            <attribute name="action">valgrind.leak-kind-definite</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Indirect</attribute>
+            <attribute name="action">valgrind.leak-kind-indirect</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Possible</attribute>
+            <attribute name="action">valgrind.leak-kind-possible</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Reachable</attribute>
+            <attribute name="action">valgrind.leak-kind-reachable</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
       </submenu>
     </section>
   </menu>
