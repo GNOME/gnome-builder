@@ -23,10 +23,13 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
 #include <libpeas/peas.h>
 #include <libpeas/peas-autocleanups.h>
 
 #include <libide-core.h>
+#include <libide-plugins.h>
 #include <libide-threading.h>
 #include <libide-vcs.h>
 
@@ -40,6 +43,7 @@
 #include "ide-config.h"
 #include "ide-device-manager.h"
 #include "ide-foundry-compat.h"
+#include "ide-run-command-provider.h"
 #include "ide-run-manager-private.h"
 #include "ide-run-manager.h"
 #include "ide-runner.h"
@@ -52,6 +56,7 @@ struct _IdeRunManager
   GCancellable            *cancellable;
   IdeBuildTarget          *build_target;
   IdeNotification         *notif;
+  IdeExtensionSetAdapter  *run_command_providers;
 
   const IdeRunHandlerInfo *handler;
   GList                   *handlers;
@@ -177,6 +182,8 @@ ide_run_manager_dispose (GObject *object)
   g_clear_object (&self->cancellable);
   ide_clear_and_destroy_object (&self->build_target);
 
+  ide_clear_and_destroy_object (&self->run_command_providers);
+
   g_list_free_full (self->handlers, ide_run_handler_info_free);
   self->handlers = NULL;
 
@@ -243,6 +250,11 @@ initable_init (GInitable     *initable,
                            G_CONNECT_SWAPPED);
 
   ide_run_manager_update_action_enabled (self);
+
+  self->run_command_providers = ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                                               peas_engine_get_default (),
+                                                               IDE_TYPE_RUN_COMMAND_PROVIDER,
+                                                               NULL, NULL);
 
   IDE_RETURN (TRUE);
 }
@@ -1405,4 +1417,151 @@ ide_run_manager_actions_messages_debug_all (IdeRunManager *self,
                                     g_variant_new_boolean (self->messages_debug_all));
 
   IDE_EXIT;
+}
+
+typedef struct
+{
+  GString *errors;
+  GListStore *store;
+  int n_active;
+} ListCommands;
+
+static void
+list_commands_free (ListCommands *state)
+{
+  g_assert (state != NULL);
+  g_assert (state->n_active == 0);
+
+  g_string_free (state->errors, TRUE);
+  state->errors = NULL;
+  g_clear_object (&state->store);
+  g_slice_free (ListCommands, state);
+}
+
+static void
+ide_run_manager_list_commands_cb (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      user_data)
+{
+  IdeRunCommandProvider *provider = (IdeRunCommandProvider *)object;
+  g_autoptr(GListModel) model = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  ListCommands *state;
+
+  g_assert (IDE_IS_RUN_COMMAND_PROVIDER (provider));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->n_active > 0);
+  g_assert (G_IS_LIST_STORE (state->store));
+
+  if (!(model = ide_run_command_provider_list_commands_finish (provider, result, &error)))
+    {
+      if (!ide_error_ignore (error))
+        {
+          if (state->errors->len > 0)
+            g_string_append (state->errors, "; ");
+          g_string_append (state->errors, error->message);
+        }
+    }
+  else
+    {
+      g_list_store_append (state->store, model);
+    }
+
+  state->n_active--;
+
+  if (state->n_active == 0)
+    {
+      if (state->errors->len > 0)
+        ide_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_FAILED,
+                                   "%s",
+                                   state->errors->str);
+      else
+        ide_task_return_pointer (task,
+                                 gtk_flatten_list_model_new (G_LIST_MODEL (g_steal_pointer (&state->store))),
+                                 g_object_unref);
+    }
+}
+
+static void
+ide_run_manager_list_commands_foreach_cb (IdeExtensionSetAdapter *set,
+                                          PeasPluginInfo         *plugin_info,
+                                          PeasExtension          *exten,
+                                          gpointer                user_data)
+{
+  IdeRunCommandProvider *provider = (IdeRunCommandProvider *)exten;
+  IdeTask *task = user_data;
+  ListCommands *state;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_RUN_COMMAND_PROVIDER (provider));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+  state->n_active++;
+
+  ide_run_command_provider_list_commands_async (provider,
+                                                ide_task_get_cancellable (task),
+                                                ide_run_manager_list_commands_cb,
+                                                g_object_ref (task));
+}
+
+void
+ide_run_manager_list_commands_async (IdeRunManager       *self,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  ListCommands *state;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (ListCommands);
+  state->store = g_list_store_new (G_TYPE_LIST_MODEL);
+  state->errors = g_string_new (NULL);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_run_manager_list_commands_async);
+  ide_task_set_task_data (task, state, list_commands_free);
+
+  if (self->run_command_providers)
+    ide_extension_set_adapter_foreach (self->run_command_providers,
+                                       ide_run_manager_list_commands_foreach_cb,
+                                       task);
+
+  if (state->n_active == 0)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "No run command providers available");
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_run_manager_list_commands_finish:
+ *
+ * Returns: (transfer full): a #GListModel of #IdeRunCommand
+ */
+GListModel *
+ide_run_manager_list_commands_finish (IdeRunManager  *self,
+                                      GAsyncResult   *result,
+                                      GError        **error)
+{
+  g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
