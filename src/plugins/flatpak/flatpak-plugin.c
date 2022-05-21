@@ -34,6 +34,7 @@
 #include "gbp-flatpak-config-provider.h"
 #include "gbp-flatpak-dependency-updater.h"
 #include "gbp-flatpak-pipeline-addin.h"
+#include "gbp-flatpak-run-command-provider.h"
 #include "gbp-flatpak-runtime-provider.h"
 
 _IDE_EXTERN void
@@ -47,6 +48,9 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_TARGET_PROVIDER,
                                               GBP_TYPE_FLATPAK_BUILD_TARGET_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUN_COMMAND_PROVIDER,
+                                              GBP_TYPE_FLATPAK_RUN_COMMAND_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIG_PROVIDER,
                                               GBP_TYPE_FLATPAK_CONFIG_PROVIDER);
