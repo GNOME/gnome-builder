@@ -39,6 +39,8 @@ struct _IdeRunCommandClass
 };
 
 IDE_AVAILABLE_IN_ALL
+IdeRunCommand      *ide_run_command_new              (void);
+IDE_AVAILABLE_IN_ALL
 const char         *ide_run_command_get_id           (IdeRunCommand      *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_id           (IdeRunCommand      *self,
