@@ -111,12 +111,9 @@
   </menu>
   <menu id="run-menu">
     <section id="run-command-section">
-      <submenu id="run-commands">
-        <attribute name="label" translatable="yes">Run Command</attribute>
-      </submenu>
       <item>
-        <attribute name="label" translatable="yes">Custom Command…</attribute>
-        <attribute name="action">runui.custom</attribute>
+        <attribute name="label" translatable="yes">Select Run Command…</attribute>
+        <attribute name="action">win.select-run-command</attribute>
       </item>
     </section>
     <section id="run-menu-observation-section">
