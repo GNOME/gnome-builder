@@ -148,7 +148,7 @@ ide_run_manager_actions_default_run_command (IdeRunManager *self,
 {
   const char *str;
 
-  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (param != NULL);
   g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
