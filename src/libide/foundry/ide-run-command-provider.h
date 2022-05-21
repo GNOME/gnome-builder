@@ -35,6 +35,8 @@ G_DECLARE_INTERFACE (IdeRunCommandProvider, ide_run_command_provider, IDE, RUN_C
 
 struct _IdeRunCommandProviderInterface
 {
+  GTypeInterface parent_iface;
+
   void        (*list_commands_async)  (IdeRunCommandProvider  *self,
                                        GCancellable           *cancellable,
                                        GAsyncReadyCallback     callback,
