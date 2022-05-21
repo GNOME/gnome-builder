@@ -55,6 +55,8 @@ G_BEGIN_DECLS
 #include "ide-pipeline-stage-transfer.h"
 #include "ide-pipeline-stage.h"
 #include "ide-pipeline.h"
+#include "ide-run-command.h"
+#include "ide-run-command-provider.h"
 #include "ide-run-manager.h"
 #include "ide-runner-addin.h"
 #include "ide-runner.h"
