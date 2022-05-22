@@ -27,6 +27,7 @@
 typedef struct
 {
   char *id;
+  char *cwd;
   char *display_name;
   char **env;
   char **argv;
@@ -36,6 +37,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_ARGV,
+  PROP_CWD,
   PROP_DISPLAY_NAME,
   PROP_ENV,
   PROP_ID,
@@ -53,6 +55,8 @@ ide_run_command_finalize (GObject *object)
   IdeRunCommand *self = (IdeRunCommand *)object;
   IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
 
+  g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->cwd, g_free);
   g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->env, g_strfreev);
   g_clear_pointer (&priv->argv, g_strfreev);
@@ -70,6 +74,10 @@ ide_run_command_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CWD:
+      g_value_set_string (value, ide_run_command_get_cwd (self));
+      break;
+
     case PROP_DISPLAY_NAME:
       g_value_set_string (value, ide_run_command_get_display_name (self));
       break;
@@ -105,6 +113,10 @@ ide_run_command_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CWD:
+      ide_run_command_set_cwd (self, g_value_get_string (value));
+      break;
+
     case PROP_DISPLAY_NAME:
       ide_run_command_set_display_name (self, g_value_get_string (value));
       break;
@@ -143,6 +155,11 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
     g_param_spec_boxed ("argv", NULL, NULL,
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CWD] =
+    g_param_spec_string ("cwd", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name", NULL, NULL,
@@ -201,6 +218,32 @@ ide_run_command_set_id (IdeRunCommand *self,
       g_free (priv->id);
       priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
+    }
+}
+
+const char *
+ide_run_command_get_cwd (IdeRunCommand *self)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), NULL);
+
+  return priv->cwd;
+}
+
+void
+ide_run_command_set_cwd (IdeRunCommand *self,
+                         const char    *cwd)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+
+  if (g_strcmp0 (priv->cwd, cwd) != 0)
+    {
+      g_free (priv->cwd);
+      priv->cwd = g_strdup (cwd);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CWD]);
     }
 }
 
