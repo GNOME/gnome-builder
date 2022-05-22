@@ -100,7 +100,7 @@ gbp_flatpak_run_command_provider_list_commands_async (IdeRunCommandProvider *pro
   ide_run_command_set_id (command, "flatpak:");
   ide_run_command_set_priority (command, -1000);
   ide_run_command_set_display_name (command, _("Flatpak Application"));
-  ide_run_command_set_argv (command, (const char * const *)x_run_args);
+  ide_run_command_set_argv (command, (const char * const *)argv);
   g_list_store_append (store, command);
 
   ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
