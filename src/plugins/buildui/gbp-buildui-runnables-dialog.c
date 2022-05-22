@@ -55,6 +55,8 @@ create_run_command_row (gpointer item,
 {
   IdeRunCommand *run_command = item;
   g_autoptr(GVariant) idv = NULL;
+  g_autoptr(GString) subtitle = NULL;
+  const char * const *argv;
   AdwActionRow *row;
   const char *id;
   GtkWidget *check;
@@ -63,6 +65,38 @@ create_run_command_row (gpointer item,
 
   id = ide_run_command_get_id (run_command);
   idv = g_variant_take_ref (g_variant_new_string (id ? id : ""));
+  argv = ide_run_command_get_argv (run_command);
+
+  if (argv != NULL)
+    {
+      subtitle = g_string_new (NULL);
+
+      for (guint i = 0; argv[i]; i++)
+        {
+          const char *arg = argv[i];
+          g_autofree char *quote = NULL;
+
+          if (i > 0)
+            g_string_append_c (subtitle, ' ');
+
+          /* NOTE: Params can be file-system encoding, but everywhere we run
+           * that is UTF-8. May need to adjust should that change.
+           */
+          for (const char *c = arg; *c; c = g_utf8_next_char (c))
+            {
+              if (*c == ' ' || *c == '"' || *c == '\'')
+                {
+                  quote = g_shell_quote (arg);
+                  break;
+                }
+            }
+
+          if (quote)
+            g_string_append (subtitle, quote);
+          else
+            g_string_append (subtitle, arg);
+        }
+    }
 
   check = g_object_new (GTK_TYPE_CHECK_BUTTON,
                         "action-name", "run-manager.default-run-command",
@@ -73,6 +107,7 @@ create_run_command_row (gpointer item,
                         NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
                       "title", ide_run_command_get_display_name (item),
+                      "subtitle", subtitle ? subtitle->str : NULL,
                       "activatable-widget", check,
                       NULL);
   adw_action_row_add_suffix (row, check);
