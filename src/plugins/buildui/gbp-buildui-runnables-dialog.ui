@@ -39,6 +39,15 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkButton">
+                    <property name="margin-top">12</property>
+                    <property name="margin-bottom">12</property>
+                    <property name="use-underline">true</property>
+                    <property name="label" translatable="yes">_Custom Command…</property>
+                    <property name="halign">end</property>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkListBox" id="list_box">
                     <property name="margin-top">12</property>
                     <property name="selection-mode">none</property>
