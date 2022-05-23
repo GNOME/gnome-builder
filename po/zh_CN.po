@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-21 19:11+0000\n"
-"PO-Revision-Date: 2022-02-22 19:39+0800\n"
+"POT-Creation-Date: 2022-05-18 13:09+0000\n"
+"PO-Revision-Date: 2022-05-22 09:04+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0\n"
-"X-Generator: Gtranslator 41.0\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -815,7 +815,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "使用配置加载或生成调色板"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5030
+#: src/libide/sourceview/ide-source-view.c:5029
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "重命名"
@@ -837,7 +837,7 @@ msgstr "重命名(_R)"
 msgid "unsaved file %u"
 msgstr "未保存文件 %u"
 
-#: src/libide/code/ide-buffer.c:3635
+#: src/libide/code/ide-buffer.c:3720
 msgid "The current language lacks a symbol resolver."
 msgstr "当前语言缺少符号解析器。"
 
@@ -880,7 +880,7 @@ msgstr "无标题"
 msgid "_Cancel"
 msgstr "取消(_C)"
 
-#: src/libide/debugger/ide-debug-manager.c:1001
+#: src/libide/debugger/ide-debug-manager.c:1002
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "未发现适合的调试器。"
@@ -1404,7 +1404,7 @@ msgstr "进程意外退出"
 msgid "Host Operating System"
 msgstr "主机操作系统"
 
-#: src/libide/foundry/ide-runtime.c:571
+#: src/libide/foundry/ide-runtime.c:575
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "主机系统"
@@ -2636,6 +2636,7 @@ msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "美化选中代码"
 
+#. Translators: LSP stands for Language Server Protocol
 #: src/libide/gui/ide-shortcuts-window.ui:447
 msgctxt "shortcut window"
 msgid "(LSP only) Format selected code or whole document"
@@ -2768,7 +2769,7 @@ msgid_plural "Installing %u packages"
 msgstr[0] "正在安装 %u 个软件包"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1473
+#: src/libide/lsp/ide-lsp-client.c:1481
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "无法初始化语言服务器：%s"
@@ -2874,31 +2875,31 @@ msgstr "缩小(_O)"
 msgid "_Reset"
 msgstr "重置(_R)"
 
-#: src/libide/sourceview/ide-source-view.c:4444
+#: src/libide/sourceview/ide-source-view.c:4443
 #, c-format
 msgid "Insert “%s”"
 msgstr "插入 “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4446
+#: src/libide/sourceview/ide-source-view.c:4445
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "替换 “%s” 为 “%s”"
 
-#: src/libide/sourceview/ide-source-view.c:4572
+#: src/libide/sourceview/ide-source-view.c:4571
 msgid "Apply Fix-It"
 msgstr "应用 Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:5029
+#: src/libide/sourceview/ide-source-view.c:5028
 msgid "Rename symbol"
 msgstr "重命名符号"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5408
+#: src/libide/sourceview/ide-source-view.c:5407
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>行 %u, 列 %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5434
+#: src/libide/sourceview/ide-source-view.c:5433
 msgid "No references were found"
 msgstr "没有发现引用"
 
@@ -2921,7 +2922,6 @@ msgstr "选择"
 
 #: src/libide/terminal/ide-terminal-launcher.c:339
 #: src/libide/terminal/ide-terminal-launcher.c:439
-#| msgid "Rustup not installed"
 msgid "Requested runtime is not installed"
 msgstr "请求的运行时未安装"
 
@@ -2938,22 +2938,22 @@ msgstr "无标题终端"
 msgid "Save Terminal Content As"
 msgstr "保存终端内容为"
 
-#: src/libide/terminal/ide-terminal-page.c:112
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:301
+#: src/libide/terminal/ide-terminal-page.c:125
+msgid "Failed to launch subprocess. You may need to rebuild your project."
+msgstr "启动子进程失败。您可能需要重新构建您的工程。"
+
+#: src/libide/terminal/ide-terminal-page.c:130
+#: src/libide/terminal/ide-terminal-page.c:165
+#: src/libide/terminal/ide-terminal-page.c:336
 msgid "Untitled terminal"
 msgstr "无标题终端"
 
 #. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:114
+#: src/libide/terminal/ide-terminal-page.c:132
 msgid "Exited"
 msgstr "已退出"
 
-#: src/libide/terminal/ide-terminal-page.c:121
-msgid "Failed to launch subprocess. You may need to rebuild your project."
-msgstr "启动子进程失败。您可能需要重新构建您的工程。"
-
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:152
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "子进程启动失败太快，将不会复位。"
 
@@ -3185,7 +3185,7 @@ msgid "_Beautify"
 msgstr "美化(_B)"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:663
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:705
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s（副本）"
@@ -3566,6 +3566,11 @@ msgstr "搜索、诊断和自动补全可能会被限制直到完成。"
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
 msgstr "声明"
+
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#, c-format
+msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr "在“%s”中可能有拼写错误。是否为“%s”？"
 
 #: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
 msgid "Colors"
@@ -4482,16 +4487,16 @@ msgstr "Emacs"
 msgid "Emulates the Emacs text editor"
 msgstr "模拟 Emacs 文本编辑器"
 
-#: src/plugins/eslint/eslint_plugin.py:204
+#: src/plugins/eslint/eslint_plugin.py:97
 msgid "ESlint"
 msgstr "ESlint"
 
-#: src/plugins/eslint/eslint_plugin.py:205
+#: src/plugins/eslint/eslint_plugin.py:98
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr "启用 ESLint，可能会执行工程中的代码"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/eslint/eslint_plugin.py:207
+#: src/plugins/eslint/eslint_plugin.py:100
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint 代码 分析 执行 可执行 code execute execution"
 
@@ -5027,7 +5032,7 @@ msgstr "您的电脑上没有安装 python3-sphinx"
 msgid "(Preview)"
 msgstr "（预览）"
 
-#: src/plugins/intelephense/intelephense.py:71
+#: src/plugins/intelephense/intelephense.py:72
 msgid "Indexing php code…"
 msgstr "正在索引 php 代码…"
 
@@ -5069,59 +5074,59 @@ msgstr "构建工程"
 msgid "Install project"
 msgstr "安装工程"
 
-#: src/plugins/make/make_plugin.py:343
+#: src/plugins/make/make_plugin.py:351
 msgid "Empty Makefile Project"
 msgstr "空白 Makefile 工程"
 
-#: src/plugins/make/make_plugin.py:345
+#: src/plugins/make/make_plugin.py:353
 msgid "Create a new empty project using a simple Makefile"
 msgstr "使用一个简单 Makefile 新建空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:255
+#: src/plugins/meson-templates/meson_templates.py:259
 msgid "GTK Application (Legacy)"
 msgstr "GTK 应用程序（过时）"
 
-#: src/plugins/meson-templates/meson_templates.py:257
+#: src/plugins/meson-templates/meson_templates.py:261
 msgid "Create a GTK application with GTK 3"
 msgstr "使用 GTK 3 创建 GTK 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:332
+#: src/plugins/meson-templates/meson_templates.py:336
 msgid "GTK Application"
 msgstr "GTK 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:334
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Create a GTK application"
 msgstr "创建 GTK 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:414
+#: src/plugins/meson-templates/meson_templates.py:418
 msgid "GNOME Application"
 msgstr "GNOME 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:416
+#: src/plugins/meson-templates/meson_templates.py:420
 msgid "Create a GNOME application"
 msgstr "创建 GNOME 应用程序"
 
-#: src/plugins/meson-templates/meson_templates.py:496
+#: src/plugins/meson-templates/meson_templates.py:500
 msgid "Shared Library"
 msgstr "已共享库"
 
-#: src/plugins/meson-templates/meson_templates.py:498
+#: src/plugins/meson-templates/meson_templates.py:502
 msgid "Create a new project with a shared library"
 msgstr "用已共享库新建工程"
 
-#: src/plugins/meson-templates/meson_templates.py:515
+#: src/plugins/meson-templates/meson_templates.py:519
 msgid "Empty Project"
 msgstr "空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:517
+#: src/plugins/meson-templates/meson_templates.py:521
 msgid "Create a new empty project"
 msgstr "创建新的空白工程"
 
-#: src/plugins/meson-templates/meson_templates.py:534
+#: src/plugins/meson-templates/meson_templates.py:538
 msgid "Command Line Tool"
 msgstr "命令行工具"
 
-#: src/plugins/meson-templates/meson_templates.py:536
+#: src/plugins/meson-templates/meson_templates.py:540
 msgid "Create a new command line project"
 msgstr "创建一个新的命令行工程"
 
@@ -5388,12 +5393,12 @@ msgid "Bootstrapping project"
 msgstr "自举工程"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:499
+#: src/plugins/podman/gbp-podman-runtime.c:523
 msgid "Containers/Toolbox"
 msgstr "容器/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:505
+#: src/plugins/podman/gbp-podman-runtime.c:529
 msgid "Containers/Podman"
 msgstr "容器/Podman"
 
@@ -5822,16 +5827,16 @@ msgstr ""
 "启用 stylelint 以在 stylesheet 文件中查找附加诊断。这样可能会导致执行您工程中"
 "的代码。"
 
-#: src/plugins/stylelint/stylelint_plugin.py:135
+#: src/plugins/stylelint/stylelint_plugin.py:77
 msgid "Stylelint"
 msgstr "Stylelint"
 
-#: src/plugins/stylelint/stylelint_plugin.py:136
+#: src/plugins/stylelint/stylelint_plugin.py:78
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr "启用 Stylelint，可能会使其执行您工程中的代码"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/stylelint/stylelint_plugin.py:138
+#: src/plugins/stylelint/stylelint_plugin.py:80
 msgid "stylelint stylesheet lint code execute execution"
 msgstr "stylelint stylesheet lint code execute execution 代码 执行 运行"
 
@@ -6145,8 +6150,8 @@ msgstr "更新(_U)"
 msgid "Vagrant"
 msgstr "Vagrant"
 
+#: src/plugins/valgrind/gbp-valgrind-workbench-addin.c:152
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "带 Valgrind 运行"
 
@@ -7413,10 +7418,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Target"
 #~ msgstr "目标"
-
-#, fuzzy
-#~ msgid "Installing “%s” from “%s”"
-#~ msgstr "替换 “%s” 为 “%s”"
 
 #, fuzzy
 #~ msgid "Failed to locate %s/%s/%s"
