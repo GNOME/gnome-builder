@@ -49,6 +49,32 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeRunCommand, ide_run_command, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 
+static char **
+ide_run_command_real_get_arguments (IdeRunCommand      *self,
+                                    const char * const *wrapper)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+  GPtrArray *ar;
+
+  g_assert (IDE_IS_RUN_COMMAND (self));
+
+  if (wrapper == NULL || wrapper[0] == NULL)
+    return g_strdupv (priv->argv);
+
+  ar = g_ptr_array_new ();
+  for (guint i = 0; wrapper[i]; i++)
+    g_ptr_array_add (ar, g_strdup (wrapper[i]));
+  if (priv->argv != NULL)
+    {
+      for (guint i = 0; priv->argv[i]; i++)
+        g_ptr_array_add (ar, g_strdup (priv->argv[i]));
+    }
+
+  g_ptr_array_add (ar, NULL);
+
+  return (char **)g_ptr_array_free (ar, FALSE);
+}
+
 static void
 ide_run_command_finalize (GObject *object)
 {
@@ -150,6 +176,8 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
   object_class->finalize = ide_run_command_finalize;
   object_class->get_property = ide_run_command_get_property;
   object_class->set_property = ide_run_command_set_property;
+
+  klass->get_arguments = ide_run_command_real_get_arguments;
 
   properties [PROP_ARGV] =
     g_param_spec_boxed ("argv", NULL, NULL,
@@ -348,4 +376,30 @@ ide_run_command_set_priority (IdeRunCommand *self,
       priv->priority = priority;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIORITY]);
     }
+}
+
+/**
+ * ide_run_command_get_arguments:
+ * @self: a #IdeRunCommand
+ * @wrapper: (nullable) (array zero-terminated=1): optional wrapper
+ *   argument vector for the command, such as "gdb" or "valgrind"
+ *
+ * Creates an argument vector for the command which contains the
+ * wrapper program inserted into the correct position to control
+ * the target run command.
+ *
+ * Some command providers may use this to place @wrapper inside
+ * an argument to another program such as
+ * "meson test --wrapper='shell command'".
+ *
+ * Returns: (transfer full) (array zero-terminated=1) (element-type utf8): A
+ *   %NULL-terminated array containing the arguments to execute the program.
+ */
+char **
+ide_run_command_get_arguments (IdeRunCommand      *self,
+                               const char * const *wrapper)
+{
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), NULL);
+
+  return IDE_RUN_COMMAND_GET_CLASS (self)->get_arguments (self, wrapper);
 }
