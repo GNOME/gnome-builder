@@ -525,15 +525,15 @@ ide_debugger_workspace_addin_navigate_to_address (IdeDebuggerWorkspaceAddin *sel
   if (NULL == (debugger = ide_signal_group_get_target (self->debugger_signals)))
     IDE_EXIT;
 
-  if (address < 0x10)
+  if (address < 0x80)
     range.from = 0;
   else
-    range.from = address - 0x10;
+    range.from = address - 0x80;
 
-  if (G_MAXUINT64 - 0x20 < address)
+  if (G_MAXUINT64 - 0x80 < address)
     range.to = G_MAXUINT64;
   else
-    range.to = address + 0x20;
+    range.to = address + 0x80;
 
   ide_debugger_disassemble_async (debugger,
                                   &range,
