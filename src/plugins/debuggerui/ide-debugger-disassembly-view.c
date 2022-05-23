@@ -125,6 +125,38 @@ notify_style_scheme_cb (IdeDebuggerDisassemblyView *self,
   setup_breakpoint_tag (self);
 }
 
+static gboolean
+scroll_to_insert_in_idle_cb (gpointer user_data)
+{
+  IdeDebuggerDisassemblyView *self = user_data;
+  GtkTextMark *mark;
+  GtkTextIter iter;
+
+  g_assert (IDE_IS_DEBUGGER_DISASSEMBLY_VIEW (self));
+
+  mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self->source_buffer));
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self->source_buffer), &iter, mark);
+  ide_source_view_jump_to_iter (GTK_TEXT_VIEW (self->source_view), &iter,
+                                0.0, TRUE, 1.0, 0.5);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_debugger_disassembly_view_root (GtkWidget *widget)
+{
+  IdeDebuggerDisassemblyView *self = (IdeDebuggerDisassemblyView *)widget;
+
+  g_assert (IDE_IS_DEBUGGER_DISASSEMBLY_VIEW (self));
+
+  GTK_WIDGET_CLASS (ide_debugger_disassembly_view_parent_class)->root (widget);
+
+  g_idle_add_full (G_PRIORITY_LOW,
+                   scroll_to_insert_in_idle_cb,
+                   g_object_ref (self),
+                   g_object_unref);
+}
+
 static void
 ide_debugger_disassembly_view_dispose (GObject *object)
 {
@@ -142,6 +174,8 @@ ide_debugger_disassembly_view_class_init (IdeDebuggerDisassemblyViewClass *klass
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = ide_debugger_disassembly_view_dispose;
+
+  widget_class->root = ide_debugger_disassembly_view_root;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-disassembly-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerDisassemblyView, source_buffer);
