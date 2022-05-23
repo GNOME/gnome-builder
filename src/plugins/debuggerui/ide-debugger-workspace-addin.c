@@ -76,6 +76,8 @@ struct _IdeDebuggerWorkspaceAddin
   IdeDebuggerRegistersView   *registers_view;
   IdeDebuggerThreadsView     *threads_view;
   IdeDebuggerLogView         *log_view;
+
+  IdeDebuggerAddress          current_address;
 };
 
 static void
@@ -502,8 +504,7 @@ ide_debugger_workspace_addin_disassemble_cb (GObject      *object,
     }
 
   ide_debugger_disassembly_view_set_instructions (self->disassembly_view, instructions);
-
-  /* TODO: Set current instruction */
+  ide_debugger_disassembly_view_set_current_address (self->disassembly_view, self->current_address);
 
   panel_widget_raise (PANEL_WIDGET (self->disassembly_view));
 
@@ -534,6 +535,8 @@ ide_debugger_workspace_addin_navigate_to_address (IdeDebuggerWorkspaceAddin *sel
     range.to = G_MAXUINT64;
   else
     range.to = address + 0x80;
+
+  self->current_address = address;
 
   ide_debugger_disassemble_async (debugger,
                                   &range,

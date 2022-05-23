@@ -28,6 +28,9 @@
 #include "ide-debugger-disassembly-view.h"
 #include "ide-debugger-instruction.h"
 
+#define TAG_CURRENT_BKPT "-Builder:current-breakpoint"
+#define TAG_CURRENT_LINE "current-line"
+
 struct _IdeDebuggerDisassemblyView
 {
   IdePage             parent_instance;
@@ -38,11 +41,14 @@ struct _IdeDebuggerDisassemblyView
   /* Template references */
   GtkSourceView      *source_view;
   GtkSourceBuffer    *source_buffer;
+  GtkTextTag         *breakpoint;
 
   IdeDebuggerAddress  current_address;
 };
 
 G_DEFINE_FINAL_TYPE (IdeDebuggerDisassemblyView, ide_debugger_disassembly_view, IDE_TYPE_PAGE)
+
+static GdkRGBA fallback_paragraph_bg;
 
 static gboolean
 style_scheme_name_to_object (GBinding     *binding,
@@ -56,6 +62,67 @@ style_scheme_name_to_object (GBinding     *binding,
   g_value_set_object (to_value, scheme);
 
   return TRUE;
+}
+
+static void
+setup_breakpoint_tag (IdeDebuggerDisassemblyView *self)
+{
+  GtkSourceStyleScheme *scheme;
+  GtkSourceStyle *style;
+
+  g_assert (IDE_IS_DEBUGGER_DISASSEMBLY_VIEW (self));
+
+  if (self->breakpoint == NULL)
+    self->breakpoint = gtk_text_buffer_create_tag (GTK_TEXT_BUFFER (self->source_buffer), NULL, NULL);
+  else
+    g_object_set (self->breakpoint,
+                  "paragraph-background", NULL,
+                  "background", NULL,
+                  "foreground", NULL,
+                  "paragraph-background-set", FALSE,
+                  "background-set", FALSE,
+                  "foreground-set", FALSE,
+                  NULL);
+
+  if ((scheme = gtk_source_buffer_get_style_scheme (self->source_buffer)))
+    {
+      if ((style = gtk_source_style_scheme_get_style (scheme, TAG_CURRENT_BKPT)))
+        gtk_source_style_apply (style, self->breakpoint);
+      else if ((style = gtk_source_style_scheme_get_style (scheme, TAG_CURRENT_LINE)))
+        {
+          g_autoptr(GdkRGBA) background = NULL;
+          gboolean background_set = FALSE;
+
+          gtk_source_style_apply (style, self->breakpoint);
+
+          g_object_get (self->breakpoint,
+                        "background-rgba", &background,
+                        "background-set", &background_set,
+                        NULL);
+
+          /* Use paragraph background instead of background */
+          if (background_set)
+            g_object_set (self->breakpoint,
+                          "background-set", FALSE,
+                          "paragraph-background-rgba", background,
+                          NULL);
+        }
+      else
+        g_object_set (self->breakpoint,
+                      "paragraph-background-rgba", &fallback_paragraph_bg,
+                      NULL);
+    }
+}
+
+static void
+notify_style_scheme_cb (IdeDebuggerDisassemblyView *self,
+                        GParamSpec                 *pspec,
+                        GtkSourceBuffer            *buffer)
+{
+  g_assert (IDE_IS_DEBUGGER_DISASSEMBLY_VIEW (self));
+  g_assert (GTK_SOURCE_IS_BUFFER (buffer));
+
+  setup_breakpoint_tag (self);
 }
 
 static void
@@ -79,8 +146,11 @@ ide_debugger_disassembly_view_class_init (IdeDebuggerDisassemblyViewClass *klass
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-disassembly-view.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerDisassemblyView, source_buffer);
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerDisassemblyView, source_view);
+  gtk_widget_class_bind_template_callback (widget_class, notify_style_scheme_cb);
 
   g_resources_register (gbp_debuggerui_get_resource ());
+
+  gdk_rgba_parse (&fallback_paragraph_bg, "#ffff0099");
 }
 
 static void
@@ -103,15 +173,50 @@ ide_debugger_disassembly_view_init (IdeDebuggerDisassemblyView *self)
                                NULL, NULL, NULL);
 }
 
+static void
+apply_breakpoint_tag (IdeDebuggerDisassemblyView *self,
+                      const GtkTextIter          *begin,
+                      const GtkTextIter          *end)
+{
+  g_assert (IDE_IS_DEBUGGER_DISASSEMBLY_VIEW (self));
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+
+  setup_breakpoint_tag (self);
+  gtk_text_buffer_apply_tag (GTK_TEXT_BUFFER (self->source_buffer),
+                             self->breakpoint,
+                             begin, end);
+}
+
 void
 ide_debugger_disassembly_view_set_current_address (IdeDebuggerDisassemblyView *self,
                                                    IdeDebuggerAddress          current_address)
 {
+  g_autofree char *key = NULL;
+  GtkTextIter iter;
+  GtkTextIter limit;
+  GtkTextIter begin;
+  GtkTextIter end;
+
   g_return_if_fail (IDE_IS_DEBUGGER_DISASSEMBLY_VIEW (self));
 
   self->current_address = current_address;
 
-  /* Update gutter/etc */
+  gtk_text_buffer_get_bounds (GTK_TEXT_BUFFER (self->source_buffer), &iter, &limit);
+  key = g_strdup_printf ("0x%"G_GINT64_MODIFIER"x", current_address);
+  while (gtk_text_iter_forward_search (&iter, key, 0, &begin, &end, &limit))
+    {
+      if (gtk_text_iter_starts_line (&begin))
+        {
+          end = begin;
+          gtk_text_iter_forward_line (&end);
+          apply_breakpoint_tag (self, &begin, &end);
+          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->source_buffer), &begin, &begin);
+          break;
+        }
+
+      iter = end;
+    }
 }
 
 /**
@@ -166,5 +271,8 @@ ide_debugger_disassembly_view_set_instructions (IdeDebuggerDisassemblyView *self
       trim = iter;
       gtk_text_iter_backward_char (&iter);
       gtk_text_buffer_delete (GTK_TEXT_BUFFER (self->source_buffer), &iter, &trim);
+
+      gtk_text_buffer_get_start_iter (GTK_TEXT_BUFFER (self->source_buffer), &iter);
+      gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->source_buffer), &iter, &iter);
     }
 }
