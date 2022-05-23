@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-foundry-enums.h"
 #include "ide-run-command.h"
 
 typedef struct
@@ -32,6 +33,7 @@ typedef struct
   char **env;
   char **argv;
   int priority;
+  IdeRunCommandKind kind;
 } IdeRunCommandPrivate;
 
 enum {
@@ -41,6 +43,7 @@ enum {
   PROP_DISPLAY_NAME,
   PROP_ENV,
   PROP_ID,
+  PROP_KIND,
   PROP_PRIORITY,
   N_PROPS
 };
@@ -120,6 +123,10 @@ ide_run_command_get_property (GObject    *object,
       g_value_set_string (value, ide_run_command_get_id (self));
       break;
 
+    case PROP_KIND:
+      g_value_set_enum (value, ide_run_command_get_kind (self));
+      break;
+
     case PROP_PRIORITY:
       g_value_set_int (value, ide_run_command_get_priority (self));
       break;
@@ -157,6 +164,10 @@ ide_run_command_set_property (GObject      *object,
 
     case PROP_ID:
       ide_run_command_set_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_KIND:
+      ide_run_command_set_kind (self, g_value_get_enum (value));
       break;
 
     case PROP_PRIORITY:
@@ -203,6 +214,12 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
     g_param_spec_string ("id", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_KIND] =
+    g_param_spec_enum ("kind", NULL, NULL,
+                       IDE_TYPE_RUN_COMMAND_KIND,
+                       IDE_RUN_COMMAND_KIND_UNKNOWN,
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority", NULL, NULL,
@@ -402,4 +419,41 @@ ide_run_command_get_arguments (IdeRunCommand      *self,
   g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), NULL);
 
   return IDE_RUN_COMMAND_GET_CLASS (self)->get_arguments (self, wrapper);
+}
+
+IdeRunCommandKind
+ide_run_command_get_kind (IdeRunCommand *self)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), 0);
+
+  return priv->kind;
+}
+
+/**
+ * ide_run_command_set_kind:
+ * @self: a #IdeRunCommand
+ *
+ * Sets the kind of command.
+ *
+ * This is useful for #IdeRunCommandProvider that want to specify
+ * the type of command that is being provided. Doing so allows tooling
+ * in Builder to treat that information specially, such as showing tags
+ * next to the row in UI or including it in "Unit Test" browsers.
+ */
+void
+ide_run_command_set_kind (IdeRunCommand     *self,
+                          IdeRunCommandKind  kind)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+  g_return_if_fail (kind <= IDE_RUN_COMMAND_KIND_USER_DEFINED);
+
+  if (priv->kind != kind)
+    {
+      priv->kind = kind;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KIND]);
+    }
 }

@@ -30,6 +30,15 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RUN_COMMAND (ide_run_command_get_type())
 
+typedef enum
+{
+  IDE_RUN_COMMAND_KIND_UNKNOWN = 0,
+  IDE_RUN_COMMAND_KIND_APPLICATION,
+  IDE_RUN_COMMAND_KIND_UTILITY,
+  IDE_RUN_COMMAND_KIND_TEST_SUITE,
+  IDE_RUN_COMMAND_KIND_USER_DEFINED,
+} IdeRunCommandKind;
+
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeRunCommand, ide_run_command, IDE, RUN_COMMAND, GObject)
 
@@ -76,5 +85,10 @@ void                ide_run_command_set_priority     (IdeRunCommand      *self,
 IDE_AVAILABLE_IN_ALL
 char              **ide_run_command_get_arguments    (IdeRunCommand      *self,
                                                       const char * const *wrapper);
+IDE_AVAILABLE_IN_ALL
+IdeRunCommandKind   ide_run_command_get_kind         (IdeRunCommand      *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_run_command_set_kind         (IdeRunCommand      *self,
+                                                      IdeRunCommandKind   kind);
 
 G_END_DECLS
