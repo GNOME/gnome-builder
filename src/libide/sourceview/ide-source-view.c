@@ -356,7 +356,7 @@ ide_source_view_scroll_to_insert_in_idle_cb (gpointer user_data)
   mark = gtk_text_buffer_get_insert (buffer);
   gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
 
-  ide_source_view_jump_to_iter (self, &iter, .25, TRUE, 1.0, 0.5);
+  ide_source_view_jump_to_iter (GTK_TEXT_VIEW (self), &iter, .25, TRUE, 1.0, 0.5);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -977,14 +977,13 @@ ide_source_view_remove_menu (IdeSourceView *self,
  * when animations would cause additional distractions.
  */
 void
-ide_source_view_jump_to_iter (IdeSourceView     *self,
+ide_source_view_jump_to_iter (GtkTextView       *text_view,
                               const GtkTextIter *iter,
                               double             within_margin,
                               gboolean           use_align,
                               double             xalign,
                               double             yalign)
 {
-  GtkTextView *text_view = (GtkTextView *)self;
   GtkAdjustment *hadj;
   GtkAdjustment *vadj;
   GdkRectangle rect;
