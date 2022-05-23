@@ -71,6 +71,7 @@
   <color name="skyblue3"                  value="#204A87"/>
   <color name="text1"                     value="#4D4E53"/>
   <color name="white"                     value="#FFFFFF"/>
+  <color name="black"                     value="#000000"/>
   <color name="yellow1"                   value="#FFF9E5"/>
 
   <!-- Global Styles -->
@@ -97,7 +98,8 @@
   <style name="-Builder:added-line"       foreground="chameleon1"/>
   <style name="-Builder:changed-line"     foreground="orange1"/>
   <style name="-Builder:removed-line"     foreground="scarletred1"/>
-  <style name="-Builder:breakpoint"       background="#4A90D9" foreground="white"/>
+  <style name="-Builder:current-breakpoint" line-background="#f5c211" foreground="black"/>
+  <style name="-Builder:breakpoint"         line-background="#4A90D9" foreground="white"/>
   <style name="-Builder:deprecated"       underline="error" underline-color="aluminium3"/>
   <style name="-Builder:error"            underline="error" underline-color="red1"/>
   <style name="-Builder:note"             underline="error" underline-color="blue1"/>
