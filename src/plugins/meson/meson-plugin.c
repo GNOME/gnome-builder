@@ -33,6 +33,7 @@
 #include "gbp-meson-config-view-addin.h"
 #include "gbp-meson-pipeline-addin.h"
 #include "gbp-meson-test-provider.h"
+#include "gbp-meson-run-command-provider.h"
 #include "gbp-meson-toolchain-provider.h"
 
 #if 0
@@ -57,6 +58,9 @@ _gbp_meson_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_TARGET_PROVIDER,
                                               GBP_TYPE_MESON_BUILD_TARGET_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUN_COMMAND_PROVIDER,
+                                              GBP_TYPE_MESON_RUN_COMMAND_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TEST_PROVIDER,
                                               GBP_TYPE_MESON_TEST_PROVIDER);

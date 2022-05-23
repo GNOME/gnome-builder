@@ -7,6 +7,8 @@ plugins_sources += files([
   'gbp-meson-build-target-provider.c',
   'gbp-meson-build-target.c',
   'gbp-meson-pipeline-addin.c',
+  'gbp-meson-run-command.c',
+  'gbp-meson-run-command-provider.c',
   'gbp-meson-test-provider.c',
   'gbp-meson-test.c',
   'gbp-meson-toolchain-provider.c',
