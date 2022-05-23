@@ -11,16 +11,19 @@
   </menu>
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-files-section">
-      <item>
-        <attribute name="id">source-view-open-directory</attribute>
-        <attribute name="label" translatable="yes">Open in _Folder Listing</attribute>
-        <attribute name="action">ls.open-directory</attribute>
-      </item>
-      <item>
-        <attribute name="id">source-view-open-in-files</attribute>
-        <attribute name="label" translatable="yes">Open Containing _Folder</attribute>
-        <attribute name="action">ls.open-in-files</attribute>
-      </item>
+      <submenu id="ide-source-view-popup-menu-open-containing-folder-section">
+        <attribute name="label" translatable="yes">Open Containing Folder</attribute>
+        <item>
+          <attribute name="id">source-view-open-directory</attribute>
+          <attribute name="label" translatable="yes">With _Folder Listing</attribute>
+          <attribute name="action">ls.open-directory</attribute>
+        </item>
+        <item>
+          <attribute name="id">source-view-open-in-files</attribute>
+          <attribute name="label" translatable="yes">With File _Browser…</attribute>
+          <attribute name="action">ls.open-in-files</attribute>
+        </item>
+      </submenu>
     </section>
   </menu>
 </interface>
