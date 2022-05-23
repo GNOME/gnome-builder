@@ -67,7 +67,7 @@ IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_remove_menu         (IdeSourceView             *self,
                                                                  GMenuModel                *menu_model);
 IDE_AVAILABLE_IN_ALL
-void                        ide_source_view_jump_to_iter        (IdeSourceView             *self,
+void                        ide_source_view_jump_to_iter        (GtkTextView               *text_view,
                                                                  const GtkTextIter         *iter,
                                                                  double                     within_margin,
                                                                  gboolean                   use_align,
