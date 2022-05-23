@@ -10,6 +10,7 @@
         <child>
           <object class="GtkSourceView" id="source_view">
             <property name="show-line-numbers">true</property>
+            <property name="left-margin">0</property>
             <property name="editable">false</property>
             <property name="monospace">true</property>
             <property name="buffer">source_buffer</property>
@@ -19,5 +20,6 @@
     </child>
   </template>
   <object class="GtkSourceBuffer" id="source_buffer">
+    <signal name="notify::style-scheme" handler="notify_style_scheme_cb" swapped="true" object="IdeDebuggerDisassemblyView"/>
   </object>
 </interface>
