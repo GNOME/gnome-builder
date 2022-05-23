@@ -182,6 +182,7 @@ struct _GbpOmniGutterRenderer
 enum {
   FOREGROUND,
   BACKGROUND,
+  LINE_BACKGROUND,
 };
 
 enum {
@@ -397,7 +398,7 @@ style_get_is_bold (GtkSourceStyleScheme *scheme,
  *
  * Gets a #GdkRGBA for a particular field of a style within @scheme.
  *
- * @type should be set to BACKGROUND or FOREGROUND.
+ * @type should be set to BACKGROUND or FOREGROUND or LINE_BACKGROUND.
  *
  * If we fail to locate the style, @rgba is set to transparent black.
  * such as #rgba(0,0,0,0).
@@ -417,7 +418,7 @@ get_style_rgba (GtkSourceStyleScheme *scheme,
 
   g_assert (!scheme || GTK_SOURCE_IS_STYLE_SCHEME (scheme));
   g_assert (style_name != NULL);
-  g_assert (type == FOREGROUND || type == BACKGROUND);
+  g_assert (type == FOREGROUND || type == BACKGROUND || type == LINE_BACKGROUND);
   g_assert (rgba != NULL);
 
   memset (rgba, 0, sizeof *rgba);
@@ -438,12 +439,33 @@ get_style_rgba (GtkSourceStyleScheme *scheme,
 
   if (style != NULL)
     {
+      const char *name;
+      const char *name_set;
       g_autofree gchar *str = NULL;
       gboolean set = FALSE;
 
+      switch (type)
+        {
+        default:
+        case FOREGROUND:
+          name = "foreground";
+          name_set = "foreground-set";
+          break;
+
+        case BACKGROUND:
+          name = "background";
+          name_set = "background-set";
+          break;
+
+        case LINE_BACKGROUND:
+          name = "line-background";
+          name_set = "line-background-set";
+          break;
+        }
+
       g_object_get (style,
-                    type ? "background" : "foreground", &str,
-                    type ? "background-set" : "foreground-set", &set,
+                    name, &str,
+                    name_set, &set,
                     NULL);
 
       if (str != NULL)
@@ -552,14 +574,14 @@ reload_style_colors (GbpOmniGutterRenderer *self,
    * as well as in the IdeBuffer class. Other style schemes may also
    * support them, though.
    */
-  if (!get_style_rgba (scheme, "-Builder:current-breakpoint", BACKGROUND, &self->stopped_bg))
+  if (!get_style_rgba (scheme, "-Builder:current-breakpoint", LINE_BACKGROUND, &self->stopped_bg))
     gdk_rgba_parse (&self->stopped_bg, IDE_LINE_CHANGES_FALLBACK_CHANGED);
 
   if (!get_style_rgba (scheme, "-Builder:breakpoint", FOREGROUND, &self->bkpt.fg) &&
       !get_style_rgba (scheme, "selection", FOREGROUND, &self->bkpt.fg))
     self->bkpt.fg = fg;
 
-  if (!get_style_rgba (scheme, "-Builder:breakpoint", BACKGROUND, &self->bkpt.bg) &&
+  if (!get_style_rgba (scheme, "-Builder:breakpoint", LINE_BACKGROUND, &self->bkpt.bg) &&
       !get_style_rgba (scheme, "selection", BACKGROUND, &self->bkpt.bg))
     {
       gdk_rgba_parse (&self->bkpt.bg, "#1c71d8");
