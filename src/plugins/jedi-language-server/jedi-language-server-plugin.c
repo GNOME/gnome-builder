@@ -41,8 +41,6 @@
 _IDE_EXTERN void
 _gbp_jedi_register_types (PeasObjectModule *module)
 {
-  ide_g_file_add_ignored_pattern (".cache");
-
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               GBP_TYPE_JEDI_DIAGNOSTIC_PROVIDER);
