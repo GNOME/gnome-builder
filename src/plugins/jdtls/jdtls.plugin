@@ -1,0 +1,16 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Description=Language server integration for the Java programming language using jdtls
+Embedded=_gbp_jdtls_register_types
+Module=jdtls
+Name=Java Language Server
+X-Category=lsps
+X-Completion-Provider-Languages=java
+X-Symbol-Resolver-Languages=java
+X-Diagnostic-Provider-Languages=java
+X-Highlighter-Languages=java
+X-Hover-Provider-Languages=java
+X-Rename-Provider-Languages=java
+X-Formatter-Languages=java
+X-Code-Action-Languages=java
