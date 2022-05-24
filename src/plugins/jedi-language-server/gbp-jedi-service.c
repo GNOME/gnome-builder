@@ -39,11 +39,12 @@ gbp_jedi_service_configure_client (IdeLspService *service,
 {
   g_autoptr(GVariant) params = NULL;
 
+  IDE_ENTRY;
+
   g_assert (GBP_IS_JEDI_SERVICE (service));
   g_assert (IDE_IS_LSP_CLIENT (client));
 
   ide_lsp_client_add_language (client, "python");
-  ide_lsp_client_add_language (client, "python3");
 
   params = JSONRPC_MESSAGE_NEW (
     "autoImportModules", "[",
@@ -52,6 +53,8 @@ gbp_jedi_service_configure_client (IdeLspService *service,
   );
 
   ide_lsp_client_set_initialization_options (client, params);
+
+  IDE_EXIT;
 }
 
 static void
