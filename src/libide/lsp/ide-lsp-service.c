@@ -28,8 +28,6 @@
  * SECTION:ide-lsp-service
  * @title: IdeLspService
  * @short_description: Service integration for LSPs
- *
- * Since: 42.0
  */
 
 typedef struct

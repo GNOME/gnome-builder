@@ -215,8 +215,6 @@ ide_diagnostic_init (IdeDiagnostic *self)
  * See also: ide_diagnostic_get_range().
  *
  * Returns: (transfer none) (nullable): an #IdeLocation or %NULL
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_diagnostic_get_location (IdeDiagnostic *self)
@@ -244,8 +242,6 @@ ide_diagnostic_get_location (IdeDiagnostic *self)
  * Gets the file containing the diagnostic, if any.
  *
  * Returns: (transfer none) (nullable): an #IdeLocation or %NULL
- *
- * Since: 3.32
  */
 GFile *
 ide_diagnostic_get_file (IdeDiagnostic *self)
@@ -273,8 +269,6 @@ ide_diagnostic_get_file (IdeDiagnostic *self)
  *
  * Returns: (transfer full): string containing the text formatted for
  *   display.
- *
- * Since: 3.32
  */
 gchar *
 ide_diagnostic_get_text_for_display (IdeDiagnostic *self)
@@ -306,8 +300,6 @@ ide_diagnostic_get_text_for_display (IdeDiagnostic *self)
  * Returns a string suitable to represent the diagnsotic severity.
  *
  * Returns: a string
- *
- * Since: 3.32
  */
 const gchar *
 ide_diagnostic_severity_to_string (IdeDiagnosticSeverity severity)
@@ -357,8 +349,6 @@ ide_diagnostic_get_n_ranges (IdeDiagnostic *self)
  * function with a value greater or equal to ide_diagnostic_get_n_ranges().
  *
  * Returns: (transfer none) (nullable): An #IdeRange
- *
- * Since: 3.32
  */
 IdeRange *
 ide_diagnostic_get_range (IdeDiagnostic *self,
@@ -396,8 +386,6 @@ ide_diagnostic_get_n_fixits (IdeDiagnostic *self)
  * returned from ide_diagnostic_get_n_fixits().
  *
  * Returns: (transfer none) (nullable): An #IdeTextEdit
- *
- * Since: 3.32
  */
 IdeTextEdit *
 ide_diagnostic_get_fixit (IdeDiagnostic *self,
@@ -468,8 +456,6 @@ ide_diagnostic_get_severity (IdeDiagnostic *self)
  * @range: an #IdeRange
  *
  * Adds a source range to the diagnostic.
- *
- * Since: 3.32
  */
 void
 ide_diagnostic_add_range (IdeDiagnostic *self,
@@ -492,8 +478,6 @@ ide_diagnostic_add_range (IdeDiagnostic *self,
  *
  * Adds a source range to the diagnostic, but does not increment the
  * reference count of @range.
- *
- * Since: 3.32
  */
 void
 ide_diagnostic_take_range (IdeDiagnostic *self,
@@ -515,8 +499,6 @@ ide_diagnostic_take_range (IdeDiagnostic *self,
  * @fixit: an #IdeTextEdit
  *
  * Adds a source fixit to the diagnostic.
- *
- * Since: 3.32
  */
 void
 ide_diagnostic_add_fixit (IdeDiagnostic *self,
@@ -539,8 +521,6 @@ ide_diagnostic_add_fixit (IdeDiagnostic *self,
  *
  * Adds a source fixit to the diagnostic, but does not increment the
  * reference count of @fixit.
- *
- * Since: 3.32
  */
 void
 ide_diagnostic_take_fixit (IdeDiagnostic *self,
@@ -628,8 +608,6 @@ ide_diagnostic_equal (IdeDiagnostic *a,
  * This function will never return a floating variant.
  *
  * Returns: (transfer full): a #GVariant
- *
- * Since: 3.32
  */
 GVariant *
 ide_diagnostic_to_variant (IdeDiagnostic *self)
@@ -699,8 +677,6 @@ ide_diagnostic_to_variant (IdeDiagnostic *self)
  * If @variant is %NULL or Upon failure, %NULL is returned.
  *
  * Returns: (nullable) (transfer full): a #IdeDiagnostic or %NULL
- *
- * Since: 3.32
  */
 IdeDiagnostic *
 ide_diagnostic_new_from_variant (GVariant *variant)

@@ -496,8 +496,6 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
    * The "device" property indicates the currently selected device by the
    * user. This is the device we will try to deploy to when running, and
    * execute the application on.
-   *
-   * Since: 3.32
    */
   properties [PROP_DEVICE] =
     g_param_spec_object ("device",
@@ -511,8 +509,6 @@ ide_device_manager_class_init (IdeDeviceManagerClass *klass)
    *
    * The "progress" property is updated with a value between 0.0 and 1.0 while
    * the deployment is in progress.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROGRESS] =
     g_param_spec_double ("progress",
@@ -562,8 +558,6 @@ ide_device_manager_init (IdeDeviceManager *self)
  * Fetches the first device that matches the device identifier @device_id.
  *
  * Returns: (transfer none): An #IdeDevice or %NULL.
- *
- * Since: 3.32
  */
 IdeDevice *
 ide_device_manager_get_device_by_id (IdeDeviceManager *self,
@@ -594,8 +588,6 @@ ide_device_manager_get_device_by_id (IdeDeviceManager *self,
  * Usually, this is an #IdeLocalDevice.
  *
  * Returns: (transfer none) (not nullable): an #IdeDevice
- *
- * Since: 3.32
  */
 IdeDevice *
 ide_device_manager_get_device (IdeDeviceManager *self)
@@ -629,8 +621,6 @@ ide_device_manager_get_device (IdeDeviceManager *self)
  * the devices architecture and operating system.
  *
  * If @device is %NULL, the local device will be used.
- *
- * Since: 3.32
  */
 void
 ide_device_manager_set_device (IdeDeviceManager *self,
@@ -904,8 +894,6 @@ ide_device_manager_deploy_completed (IdeDeviceManager *self,
  * Requests that the application be deployed to the device. This may need to
  * be done before running the application so that the device has the most
  * up to date build.
- *
- * Since: 3.32
  */
 void
 ide_device_manager_deploy_async (IdeDeviceManager    *self,
@@ -983,8 +971,6 @@ ide_device_manager_deploy_async (IdeDeviceManager    *self,
  * Completes a request to deploy the application to the device.
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set
- *
- * Since: 3.32
  */
 gboolean
 ide_device_manager_deploy_finish (IdeDeviceManager  *self,
@@ -1122,8 +1108,6 @@ ide_device_manager_create_runner_tick (IdeTask *task)
  *
  * Requests an #IdeRunner that runs on the current device, if a runner
  * other than the default is required.
- *
- * Since: 41
  */
 void
 ide_device_manager_create_runner_async (IdeDeviceManager    *self,
@@ -1190,8 +1174,6 @@ ide_device_manager_create_runner_async (IdeDeviceManager    *self,
  * Completes a request to create an #IdeRunner to run on the device.
  *
  * Returns: (transfer full): An #IdeRunner or %NULL.
- *
- * Since: 41
  */
 IdeRunner *
 ide_device_manager_create_runner_finish (IdeDeviceManager  *self,

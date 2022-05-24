@@ -42,8 +42,6 @@ ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
    *
    * This signal should be emitted by diagnostic providers when they know their
    * diagnostics have been invalidated out-of-band.
-   *
-   * Since: 3.32
    */
   signals [INVALIDATED] =
     g_signal_new ("invalidated",
@@ -57,8 +55,6 @@ ide_diagnostic_provider_default_init (IdeDiagnosticProviderInterface *iface)
  * @self: a #IdeDiagnosticProvider
  *
  * Loads the provider, discovering any necessary resources.
- *
- * Since: 3.32
  */
 void
 ide_diagnostic_provider_load (IdeDiagnosticProvider *self)
@@ -74,8 +70,6 @@ ide_diagnostic_provider_load (IdeDiagnosticProvider *self)
  * @self: a #IdeDiagnosticProvider
  *
  * Unloads the provider and any allocated resources.
- *
- * Since: 3.32
  */
 void
 ide_diagnostic_provider_unload (IdeDiagnosticProvider *self)
@@ -101,8 +95,6 @@ ide_diagnostic_provider_unload (IdeDiagnosticProvider *self)
  *
  * @callback is executed upon completion, and the caller should call
  * ide_diagnostic_provider_diagnose_finish() to get the result.
- *
- * Since: 3.32
  */
 void
 ide_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *self,
@@ -133,8 +125,6 @@ ide_diagnostic_provider_diagnose_async (IdeDiagnosticProvider *self,
  * Completes an asynchronous request to diagnose a file.
  *
  * Returns: (transfer full): an #IdeDiagnostics or %NULL and @error is set.
- *
- * Since: 3.32
  */
 IdeDiagnostics *
 ide_diagnostic_provider_diagnose_finish (IdeDiagnosticProvider  *self,

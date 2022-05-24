@@ -93,8 +93,6 @@ get_child_typed_borrowed (IdeContext *context,
  * @context: a #IdeContext
  *
  * Returns: (transfer none): an #IdeBuildManager
- *
- * Since: 3.32
  */
 IdeBuildManager *
 ide_build_manager_from_context (IdeContext *context)
@@ -109,8 +107,6 @@ ide_build_manager_from_context (IdeContext *context)
  * @context: a #IdeContext
  *
  * Returns: (transfer full): an #IdeBuildManager
- *
- * Since: 3.32
  */
 IdeBuildManager *
 ide_build_manager_ref_from_context (IdeContext *context)
@@ -128,8 +124,6 @@ ide_build_manager_ref_from_context (IdeContext *context)
  * registered, then this returns %NULL.
  *
  * Returns: (transfer none) (nullable): an #IdeBuildSystem
- *
- * Since: 3.32
  */
 IdeBuildSystem *
 ide_build_system_from_context (IdeContext *context)
@@ -144,8 +138,6 @@ ide_build_system_from_context (IdeContext *context)
  * @context: a #IdeContext
  *
  * Returns: (transfer none): an #IdeConfigManager
- *
- * Since: 3.32
  */
 IdeConfigManager *
 ide_config_manager_from_context (IdeContext *context)
@@ -160,8 +152,6 @@ ide_config_manager_from_context (IdeContext *context)
  * @context: a #IdeContext
  *
  * Returns: (transfer none): an #IdeDeviceManager
- *
- * Since: 3.32
  */
 IdeDeviceManager *
 ide_device_manager_from_context (IdeContext *context)
@@ -176,8 +166,6 @@ ide_device_manager_from_context (IdeContext *context)
  * @context: a #IdeContext
  *
  * Returns: (transfer none): an #IdeToolchainManager
- *
- * Since: 3.32
  */
 IdeToolchainManager *
 ide_toolchain_manager_from_context (IdeContext *context)
@@ -192,8 +180,6 @@ ide_toolchain_manager_from_context (IdeContext *context)
  * @context: a #IdeContext
  *
  * Returns: (transfer none): an #IdeRunManager
- *
- * Since: 3.32
  */
 IdeRunManager *
 ide_run_manager_from_context (IdeContext *context)
@@ -208,8 +194,6 @@ ide_run_manager_from_context (IdeContext *context)
  * @context: a #IdeContext
  *
  * Returns: (transfer none): an #IdeRuntimeManager
- *
- * Since: 3.32
  */
 IdeRuntimeManager *
 ide_runtime_manager_from_context (IdeContext *context)
@@ -224,8 +208,6 @@ ide_runtime_manager_from_context (IdeContext *context)
  * @context: a #IdeContext
  *
  * Returns: (transfer none): an #IdeTestManager
- *
- * Since: 3.32
  */
 IdeTestManager *
 ide_test_manager_from_context (IdeContext *context)

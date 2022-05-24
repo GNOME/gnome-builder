@@ -438,8 +438,6 @@ ide_clang_completion_item_init (IdeClangCompletionItem *self)
  * Gets the #GtkSourceSnippet to be inserted when expanding this completion item.
  *
  * Returns: (transfer full): An #GtkSourceSnippet.
- *
- * Since: 3.32
  */
 GtkSourceSnippet *
 ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
@@ -460,8 +458,6 @@ ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
  * The @keyword parameter is not copied, it is expected to be valid
  * string found within @variant (and therefore associated with its
  * life-cycle).
- *
- * Since: 3.32
  */
 IdeClangCompletionItem *
 ide_clang_completion_item_new (GVariant    *variant,

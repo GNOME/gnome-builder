@@ -426,8 +426,6 @@ ide_highlight_engine_queue_work (IdeHighlightEngine *self)
  *
  * If they return from their update function without advancing, nothing will
  * happen until they call this method to proceed.
- *
- * Since: 3.32
  */
 void
 ide_highlight_engine_advance (IdeHighlightEngine *self)
@@ -1021,8 +1019,6 @@ ide_highlight_engine_new (IdeBuffer *buffer)
  * Gets the IdeHighlightEngine:highlighter property.
  *
  * Returns: (transfer none): An #IdeHighlighter.
- *
- * Since: 3.32
  */
 IdeHighlighter *
 ide_highlight_engine_get_highlighter (IdeHighlightEngine *self)
@@ -1039,8 +1035,6 @@ ide_highlight_engine_get_highlighter (IdeHighlightEngine *self)
  * Gets the IdeHighlightEngine:buffer property.
  *
  * Returns: (transfer none): An #IdeBuffer.
- *
- * Since: 3.32
  */
 IdeBuffer *
 ide_highlight_engine_get_buffer (IdeHighlightEngine *self)
@@ -1098,8 +1092,6 @@ ide_highlight_engine_rebuild (IdeHighlightEngine *self)
  * Updating the invalidated region of the buffer may take some time, as it is
  * important that the highlighter does not block for more than 1-2 milliseconds
  * to avoid dropping frames.
- *
- * Since: 3.32
  */
 void
 ide_highlight_engine_invalidate (IdeHighlightEngine *self,
@@ -1147,8 +1139,6 @@ ide_highlight_engine_invalidate (IdeHighlightEngine *self,
  * A #GtkTextTag for @style_name.
  *
  * Returns: (transfer none): a #GtkTextTag.
- *
- * Since: 3.32
  */
 GtkTextTag *
 ide_highlight_engine_get_style (IdeHighlightEngine *self,

@@ -145,8 +145,6 @@ ide_cancellable_weak_cb (gpointer  data,
  * ]|
  *
  * Returns: (transfer none) (nullable): a #GCancellable or %NULL
- *
- * Since: 3.28
  */
 GCancellable *
 ide_cancellable_chain (GCancellable *self,

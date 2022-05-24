@@ -132,8 +132,6 @@ setup_buttons_locked (IdeNotificationListBoxRow *self)
  * Create a new #IdeNotificationListBoxRow.
  *
  * Returns: (transfer full): a newly created #IdeNotificationListBoxRow
- *
- * Since: 3.32
  */
 GtkWidget *
 ide_notification_list_box_row_new (IdeNotification *notification)
@@ -303,8 +301,6 @@ ide_notification_list_box_row_init (IdeNotificationListBoxRow *self)
  * @self: a #IdeNotificationListBoxRow
  *
  * Returns: (transfer none) (nullable): an #IdeNotification
- *
- * Since: 3.32
  */
 IdeNotification *
 ide_notification_list_box_row_get_notification (IdeNotificationListBoxRow *self)

@@ -653,8 +653,6 @@ ide_clang_index_file_visitor (CXCursor     cursor,
  * from queue, else this will do Breadth first traversal on AST till it finds a
  * declaration.  On next request when decl_cursors is empty it will continue
  * traversal from where it has stopped in previously.
- *
- * Since: 3.32
  */
 static IdeCodeIndexEntry *
 ide_clang_index_file_next_entry (IndexFile                *state,
@@ -853,8 +851,6 @@ ide_clang_index_file_worker (IdeTask      *task,
  * Asynchronously requests that indexable entries are extracted from the file
  * found at @path. The results (an array of #IdeCodeIndexEntry) can be accessed
  * via ide_clang_index_file_finish() using the result provided to @callback
- *
- * Since: 3.32
  */
 void
 ide_clang_index_file_async (IdeClang            *self,
@@ -900,8 +896,6 @@ ide_clang_index_file_async (IdeClang            *self,
  * Finishes a request to index a file.
  *
  * Returns: (transfer full): a #GPtrArray of #IdeCodeIndexEntry
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_clang_index_file_finish (IdeClang      *self,
@@ -1186,8 +1180,6 @@ ide_clang_diagnose_worker (IdeTask      *task,
  * Asynchronously requests that the file be diagnosed.
  *
  * This generates diagnostics related to the file after parsing it.
- *
- * Since: 3.32
  */
 void
 ide_clang_diagnose_async (IdeClang            *self,
@@ -1237,8 +1229,6 @@ ide_clang_diagnose_async (IdeClang            *self,
  *
  * Returns: (transfer full) (element-type Ide.Diagnostic):
  *   a #GPtrArray of #IdeDiagnostic
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_clang_diagnose_finish (IdeClang      *self,
@@ -2317,8 +2307,6 @@ ide_clang_get_index_key_async (IdeClang            *self,
  * at a given source location.
  *
  * Returns: (transfer full): the key, or %NULL and @error is set
- *
- * Since: 3.32
  */
 gchar *
 ide_clang_get_index_key_finish (IdeClang      *self,

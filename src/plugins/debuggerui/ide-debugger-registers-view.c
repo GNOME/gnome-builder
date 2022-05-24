@@ -305,8 +305,6 @@ ide_debugger_registers_view_new (void)
  *
  *
  * Returns: (transfer none) (nullable): An #IdeDebugger or %NULL
- *
- * Since: 3.32
  */
 IdeDebugger *
 ide_debugger_registers_view_get_debugger (IdeDebuggerRegistersView *self)

@@ -243,8 +243,6 @@ gbp_new_file_popover_get_property (GObject    *object,
  * @pspec: (in): a #ParamSpec.
  *
  * Set a given #GObject property.
- *
- * Since: 3.32
  */
 static void
 gbp_new_file_popover_set_property (GObject      *object,
@@ -382,8 +380,6 @@ gbp_new_file_popover_set_directory (GbpNewFilePopover *self,
  * gbp_new_file_popover_get_directory:
  *
  * Returns: (transfer none) (nullable): a #GFile or %NULL.
- *
- * Since: 3.32
  */
 GFile *
 gbp_new_file_popover_get_directory (GbpNewFilePopover *self)

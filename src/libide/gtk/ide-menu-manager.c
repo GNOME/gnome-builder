@@ -60,8 +60,6 @@ G_DEFINE_TYPE (IdeMenuManager, ide_menu_manager, G_TYPE_OBJECT)
  * ide_menu_manager_get_menu_by_id() will always return a #GMenu, however
  * that menu may contain no children until something has extended it later
  * on during the application process.
- *
- * Since: 3.26
  */
 
 static const gchar *
@@ -577,8 +575,6 @@ ide_menu_manager_merge (IdeMenuManager *self,
  * This removes items from menus that were added as part of a previous
  * menu merge. Use the value returned from ide_menu_manager_merge() as
  * the @merge_id.
- *
- * Since: 3.26
  */
 void
 ide_menu_manager_remove (IdeMenuManager *self,

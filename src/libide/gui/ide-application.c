@@ -628,8 +628,6 @@ ide_application_remove_workbench (IdeApplication *self,
  * @user_data: user data for @callback
  *
  * Calls @callback for each of the registered workbenches.
- *
- * Since: 3.32
  */
 void
 ide_application_foreach_workbench (IdeApplication *self,
@@ -655,8 +653,6 @@ ide_application_foreach_workbench (IdeApplication *self,
  * next workspace upon handling files from command-line arguments. This is
  * reset after the files are opened and is generally only useful from
  * #IdeApplicationAddin's who need to alter the default workspace.
- *
- * Since: 3.32
  */
 void
 ide_application_set_workspace_type (IdeApplication *self,
@@ -688,8 +684,6 @@ ide_application_network_changed_cb (IdeApplication  *self,
  * the wild that make determining if we have network access difficult.
  *
  * Returns: %TRUE if we think there is network access.
- *
- * Since: 3.32
  */
 gboolean
 ide_application_has_network (IdeApplication *self)
@@ -733,8 +727,6 @@ ide_application_has_network (IdeApplication *self)
  * Gets the time the application was started.
  *
  * Returns: (transfer none): a #GDateTime
- *
- * Since: 3.32
  */
 GDateTime *
 ide_application_get_started_at (IdeApplication *self)
@@ -754,8 +746,6 @@ ide_application_get_started_at (IdeApplication *self)
  * If no workbench is the root of @file, then %NULL is returned.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
- *
- * Since: 3.32
  */
 IdeWorkbench *
 ide_application_find_workbench_for_file (IdeApplication *self,
@@ -832,8 +822,6 @@ ide_application_get_command_line_handled (IdeApplication          *self,
  *
  * Returns: (transfer none) (type IdeApplicationAddin) (nullable): an
  *   #IdeApplicationAddin or %NULL.
- *
- * Since: 3.34
  */
 gpointer
 ide_application_find_addin_by_module_name (IdeApplication *self,

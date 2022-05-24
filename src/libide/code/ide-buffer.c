@@ -700,8 +700,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * Sets the "buffer-manager" property, which is used by the buffer to
    * clean-up state when the buffer is no longer in use.
-   *
-   * Since: 3.32
    */
   properties [PROP_BUFFER_MANAGER] =
     g_param_spec_object ("buffer-manager",
@@ -716,8 +714,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "change-monitor" property is an #IdeBufferChangeMonitor that will be
    * used to track changes in the #IdeBuffer. This can be used to show line
    * changes in the editor gutter.
-   *
-   * Since: 3.32
    */
   properties [PROP_CHANGE_MONITOR] =
     g_param_spec_object ("change-monitor",
@@ -732,8 +728,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "changed-on-volume" property is set to %TRUE when it has been
    * discovered that the file represented by the #IdeBuffer has changed
    * externally to Builder.
-   *
-   * Since: 3.32
    */
   properties [PROP_CHANGED_ON_VOLUME] =
     g_param_spec_boolean ("changed-on-volume",
@@ -748,8 +742,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "enable-addins" property determines whether addins will be aware of
    * this buffer. When set to %FALSE no ide_buffer_addin_*() functions will be
    * called on this buffer.
-   *
-   * Since: 41.0
    */
   properties [PROP_ENABLE_ADDINS] =
     g_param_spec_boolean ("enable-addins",
@@ -763,8 +755,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "diagnostics" property contains an #IdeDiagnostics that represent
    * the diagnostics found in the buffer.
-   *
-   * Since: 3.32
    */
   properties [PROP_DIAGNOSTICS] =
     g_param_spec_object ("diagnostics",
@@ -778,8 +768,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "failed" property is %TRUE when the buffer has entered a failed
    * state such as when loading or saving the buffer to disk.
-   *
-   * Since: 3.32
    */
   properties [PROP_FAILED] =
     g_param_spec_boolean ("failed",
@@ -792,8 +780,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * IdeBuffer:file:
    *
    * The "file" property is the underlying file represented by the buffer.
-   *
-   * Since: 3.32
    */
   properties [PROP_FILE] =
     g_param_spec_object ("file",
@@ -810,8 +796,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * These are automatically discovered and kept up to date based on the
    * #IdeFileSettings extension points.
-   *
-   * Since: 3.32
    */
   properties [PROP_FILE_SETTINGS] =
     g_param_spec_object ("file-settings",
@@ -825,8 +809,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "has-diagnostics" property denotes that there are a non-zero number
    * of diangostics registered for the buffer.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_DIAGNOSTICS] =
     g_param_spec_boolean ("has-diagnostics",
@@ -840,8 +822,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "has-symbol-resolvers" property is %TRUE if there are any symbol
    * resolvers loaded.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_SYMBOL_RESOLVERS] =
     g_param_spec_boolean ("has-symbol-resolvers",
@@ -855,8 +835,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "highlight-diagnostics" property indicates that diagnostics which
    * are discovered should be styled.
-   *
-   * Since: 3.32
    */
   properties [PROP_HIGHLIGHT_DIAGNOSTICS] =
     g_param_spec_boolean ("highlight-diagnostics",
@@ -874,8 +852,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * to select the destination file.
    *
    * Upon saving the file, the property will change to %FALSE.
-   *
-   * Since: 3.32
    */
   properties [PROP_IS_TEMPORARY] =
     g_param_spec_boolean ("is-temporary",
@@ -889,8 +865,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "language-id" property is a convenience property to set the
    * #GtkSourceBuffer:langauge property using a string name.
-   *
-   * Since: 3.32
    */
   properties [PROP_LANGUAGE_ID] =
     g_param_spec_string ("language-id",
@@ -905,8 +879,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "read-only" property is set to %TRUE when it has been
    * discovered that the file represented by the #IdeBuffer is read-only
    * on the underlying storage.
-   *
-   * Since: 3.32
    */
   properties [PROP_READ_ONLY] =
     g_param_spec_boolean ("read-only",
@@ -921,8 +893,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "state" property can be used to determine if the buffer is
    * currently performing any specific background work, such as loading
    * from or saving a buffer to storage.
-   *
-   * Since: 3.32
    */
   properties [PROP_STATE] =
     g_param_spec_enum ("state",
@@ -938,8 +908,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "style-scheme-name" is the name of the style scheme that is used.
    * It is a convenience property so that you do not need to use the
    * #GtkSourceStyleSchemeManager to lookup style schemes.
-   *
-   * Since: 3.32
    */
   properties [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
@@ -953,8 +921,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "title" for the buffer which includes some variant of the path
    * to the underlying file.
-   *
-   * Since: 3.32
    */
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -973,8 +939,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * being edited for a short period of time. This is useful to connect
    * to when you want to perform work as the user is editing, but you
    * don't want to get in the way of their editing.
-   *
-   * Since: 3.32
    */
   signals [CHANGE_SETTLED] =
     g_signal_new ("change-settled",
@@ -995,8 +959,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "line-flags-changed" signal is emitted when the buffer has detected
    * ancillary information has changed for lines in the buffer. Such information
    * might include diagnostics or version control information.
-   *
-   * Since: 3.32
    */
   signals [LINE_FLAGS_CHANGED] =
     g_signal_new_class_handler ("line-flags-changed",
@@ -1018,8 +980,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * This is useful to watch if you want to perform a given action but do
    * not want to interfere with buffer loading.
-   *
-   * Since: 3.32
    */
   signals [LOADED] =
     g_signal_new_class_handler ("loaded",
@@ -1039,8 +999,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * Requests that attached views scroll to insert location.
    *
    * This is generally only used when loading a buffer.
-   *
-   * Since: 3.32
    */
   signals [REQUEST_SCROLL_TO_INSERT] =
     g_signal_new_class_handler ("request-scroll-to-insert",
@@ -1288,8 +1246,6 @@ _ide_buffer_attach (IdeBuffer *self,
  * Gets the #IdeBuffer:file property.
  *
  * Returns: (transfer none): a #GFile
- *
- * Since: 3.32
  */
 GFile *
 ide_buffer_get_file (IdeBuffer *self)
@@ -1313,8 +1269,6 @@ ide_buffer_get_file (IdeBuffer *self)
  * Gets the URI for the underlying file and returns a copy of it.
  *
  * Returns: (transfer full): a new string
- *
- * Since: 3.32
  */
 gchar *
 ide_buffer_dup_uri (IdeBuffer *self)
@@ -1333,8 +1287,6 @@ ide_buffer_dup_uri (IdeBuffer *self)
  * when the user requests to save the buffer.
  *
  * Returns: %TRUE if the buffer is for a temporary file
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_is_temporary (IdeBuffer *self)
@@ -1354,8 +1306,6 @@ ide_buffer_get_is_temporary (IdeBuffer *self)
  * This will changed while files are loaded or saved to disk.
  *
  * Returns: an #IdeBufferState
- *
- * Since: 3.32
  */
 IdeBufferState
 ide_buffer_get_state (IdeBuffer *self)
@@ -1517,8 +1467,6 @@ _ide_buffer_load_file_async (IdeBuffer            *self,
  * that the completion of signals and addins may be notified.
  *
  * Returns: %TRUE if the file was successfully loaded
- *
- * Since: 3.32
  */
 gboolean
 _ide_buffer_load_file_finish (IdeBuffer     *self,
@@ -1687,8 +1635,6 @@ ide_buffer_save_file_settle_cb (GObject      *object,
  *
  * @callback is executed upon completion and should call
  * ide_buffer_save_file_finish() to get the result of the operation.
- *
- * Since: 3.32
  */
 void
 ide_buffer_save_file_async (IdeBuffer            *self,
@@ -1813,8 +1759,6 @@ set_out_param:
  * ide_buffer_save_file_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_save_file_finish (IdeBuffer     *self,
@@ -1835,8 +1779,6 @@ ide_buffer_save_file_finish (IdeBuffer     *self,
  * A helper to get the language identifier of the buffers current language.
  *
  * Returns: (nullable): a string containing the language id, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_buffer_get_language_id (IdeBuffer *self)
@@ -1905,8 +1847,6 @@ _ide_buffer_set_failure (IdeBuffer    *self,
  * buffer.
  *
  * Returns: (transfer none): a #GError, or %NULL
- *
- * Since: 3.32
  */
 const GError *
 ide_buffer_get_failure (IdeBuffer *self)
@@ -1925,8 +1865,6 @@ ide_buffer_get_failure (IdeBuffer *self)
  * in some aspect such as loading or saving.
  *
  * Returns: %TRUE if the buffer is in a failed state
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_failed (IdeBuffer *self)
@@ -1994,8 +1932,6 @@ ide_buffer_reload_file_settings (IdeBuffer *self)
  * to calling ide_buffer_get_state() and checking for %IDE_BUFFER_STATE_LOADING.
  *
  * Returns: %TRUE if the buffer is loading; otherwise %FALSE.
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_loading (IdeBuffer *self)
@@ -2142,8 +2078,6 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
  * externally from this #IdeBuffer.
  *
  * Returns: %TRUE if @self is known to be modified on storage
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_changed_on_volume (IdeBuffer *self)
@@ -2163,8 +2097,6 @@ ide_buffer_get_changed_on_volume (IdeBuffer *self)
  *
  * Set this to %TRUE if the buffer has been discovered to have changed
  * outside of this buffer.
- *
- * Since: 3.32
  */
 void
 _ide_buffer_set_changed_on_volume (IdeBuffer *self,
@@ -2192,8 +2124,6 @@ _ide_buffer_set_changed_on_volume (IdeBuffer *self,
  * the user about saving the file.
  *
  * Returns: %TRUE if the underlying file is read-only
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_read_only (IdeBuffer *self)
@@ -2211,8 +2141,6 @@ ide_buffer_get_read_only (IdeBuffer *self)
  *
  * Sets the #IdeBuffer:read-only property, which should be set when the buffer
  * has been discovered to be read-only on disk.
- *
- * Since: 3.32
  */
 void
 _ide_buffer_set_read_only (IdeBuffer *self,
@@ -2238,8 +2166,6 @@ _ide_buffer_set_read_only (IdeBuffer *self,
  * property.
  *
  * Returns: (nullable): a string containing the style scheme or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_buffer_get_style_scheme_name (IdeBuffer *self)
@@ -2262,8 +2188,6 @@ ide_buffer_get_style_scheme_name (IdeBuffer *self)
  *
  * Sets the #IdeBuffer:style-scheme property by locating the style scheme
  * matching @style_scheme_name.
- *
- * Since: 3.32
  */
 void
 ide_buffer_set_style_scheme_name (IdeBuffer   *self,
@@ -2290,8 +2214,6 @@ ide_buffer_set_style_scheme_name (IdeBuffer   *self,
  * make this relative to the project workdir if possible.
  *
  * Returns: (transfer full): a string containing a title
- *
- * Since: 3.32
  */
 gchar *
 ide_buffer_dup_title (IdeBuffer *self)
@@ -2339,8 +2261,6 @@ ide_buffer_dup_title (IdeBuffer *self)
  * Checks if diagnostics should be highlighted.
  *
  * Returns: %TRUE if diagnostics should be highlighted
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
@@ -2358,8 +2278,6 @@ ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
  * Sets the #IdeBuffer:highlight-diagnostics property.
  *
  * If set to %TRUE, diagnostics will be styled in the buffer.
- *
- * Since: 3.32
  */
 void
 ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
@@ -2387,8 +2305,6 @@ ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
  * Gets an #IdeLocation for the position represented by @iter.
  *
  * Returns: (transfer full): an #IdeLocation
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_buffer_get_iter_location (IdeBuffer         *self,
@@ -2410,8 +2326,6 @@ ide_buffer_get_iter_location (IdeBuffer         *self,
  * Gets an #IdeRange to represent the current buffer selection.
  *
  * Returns: (transfer full): an #IdeRange
- *
- * Since: 3.32
  */
 IdeRange *
 ide_buffer_get_selection_range (IdeBuffer *self)
@@ -2439,8 +2353,6 @@ ide_buffer_get_selection_range (IdeBuffer *self)
  * Gets the monotonic change count for the buffer.
  *
  * Returns: the change count for the buffer
- *
- * Since: 3.32
  */
 guint
 ide_buffer_get_change_count (IdeBuffer *self)
@@ -2490,8 +2402,6 @@ ide_buffer_delay_settling (IdeBuffer *self)
  * Sets the #IdeDiagnostics for the buffer. These will be used to highlight
  * the buffer for errors and warnings if #IdeBuffer:highlight-diagnostics
  * is %TRUE.
- *
- * Since: 3.32
  */
 void
 ide_buffer_set_diagnostics (IdeBuffer      *self,
@@ -2533,8 +2443,6 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
  * Gets the #IdeDiagnostics for the buffer if any have been registered.
  *
  * Returns: (transfer none) (nullable): an #IdeDiagnostics or %NULL
- *
- * Since: 3.32
  */
 IdeDiagnostics *
 ide_buffer_get_diagnostics (IdeBuffer *self)
@@ -2552,8 +2460,6 @@ ide_buffer_get_diagnostics (IdeBuffer *self)
  * Returns %TRUE if any diagnostics have been registered for the buffer.
  *
  * Returns: %TRUE if there are a non-zero number of diagnostics.
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_has_diagnostics (IdeBuffer *self)
@@ -2740,8 +2646,6 @@ ide_buffer_apply_diagnostics (IdeBuffer *self)
  * @location: a #IdeLocation
  *
  * Set @iter to the position designated by @location.
- *
- * Since: 3.32
  */
 void
 ide_buffer_get_iter_at_location (IdeBuffer   *self,
@@ -2783,8 +2687,6 @@ ide_buffer_get_iter_at_location (IdeBuffer   *self,
  * Gets the #IdeBuffer:change-monitor for the buffer.
  *
  * Returns: (transfer none) (nullable): an #IdeBufferChangeMonitor or %NULL
- *
- * Since: 3.32
  */
 IdeBufferChangeMonitor *
 ide_buffer_get_change_monitor (IdeBuffer *self)
@@ -2800,8 +2702,6 @@ ide_buffer_get_change_monitor (IdeBuffer *self)
  * @change_monitor: (nullable): an #IdeBufferChangeMonitor or %NULL
  *
  * Sets an #IdeBufferChangeMonitor to use for the buffer.
- *
- * Since: 3.32
  */
 void
 ide_buffer_set_change_monitor (IdeBuffer              *self,
@@ -2872,8 +2772,6 @@ ide_buffer_can_do_newline_hack (IdeBuffer *self,
  * if the content is out of sync.
  *
  * Returns: (transfer full): a #GBytes containing the buffer content.
- *
- * Since: 3.32
  */
 GBytes *
 ide_buffer_dup_content (IdeBuffer *self)
@@ -2987,8 +2885,6 @@ ide_buffer_format_selection_range_cb (GObject      *object,
  * @user_data: user data for @callback
  *
  * Formats the selection using an available #IdeFormatter for the buffer.
- *
- * Since: 3.32
  */
 void
 ide_buffer_format_selection_async (IdeBuffer           *self,
@@ -3062,8 +2958,6 @@ ide_buffer_format_selection_async (IdeBuffer           *self,
  * Completes an asynchronous request to ide_buffer_format_selection_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_format_selection_finish (IdeBuffer     *self,
@@ -3114,8 +3008,6 @@ ide_buffer_query_code_action_cb(GObject      *object,
  * @user_data: user data for @callback
  *
  * Queries for code actions in the current buffer.
- *
- * Since: 42.0
  */
 void
 ide_buffer_code_action_query_async(IdeBuffer           *self,
@@ -3169,8 +3061,6 @@ ide_buffer_code_action_query_async(IdeBuffer           *self,
  * Completes an asynchronous request to ide_buffer_query_code_action_async().
  *
  * Returns: (transfer full) (element-type IdeCodeAction): a #GPtrArray of #IdeCodeAction.
- *
- * Since: 42.0
  */
 GPtrArray*
 ide_buffer_code_action_query_finish(IdeBuffer     *self,
@@ -3196,8 +3086,6 @@ ide_buffer_code_action_query_finish(IdeBuffer     *self,
  * Gets the location of the insert mark as an #IdeLocation.
  *
  * Returns: (transfer full): An #IdeLocation
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_buffer_get_insert_location (IdeBuffer *self)
@@ -3222,8 +3110,6 @@ ide_buffer_get_insert_location (IdeBuffer *self)
  * Gets the word found under the position denoted by @iter.
  *
  * Returns: (transfer full): A newly allocated string.
- *
- * Since: 3.32
  */
 gchar *
 ide_buffer_get_word_at_iter (IdeBuffer         *self,
@@ -3255,8 +3141,6 @@ ide_buffer_get_word_at_iter (IdeBuffer         *self,
  *
  * Returns: (nullable) (transfer none): An #IdeRenameProvider or %NULL if
  *   there is no #IdeRenameProvider that can statisfy the buffer.
- *
- * Since: 3.32
  */
 IdeRenameProvider *
 ide_buffer_get_rename_provider (IdeBuffer *self)
@@ -3280,8 +3164,6 @@ ide_buffer_get_rename_provider (IdeBuffer *self)
  * syntax are chnaged.
  *
  * Returns: (transfer none) (nullable): an #IdeFileSettings or %NULL
- *
- * Since: 3.32
  */
 IdeFileSettings *
 ide_buffer_get_file_settings (IdeBuffer *self)
@@ -3298,8 +3180,6 @@ ide_buffer_get_file_settings (IdeBuffer *self)
  * Locates the #IdeContext for the buffer and returns it.
  *
  * Returns: (transfer full): an #IdeContext
- *
- * Since: 3.32
  */
 IdeContext *
 ide_buffer_ref_context (IdeBuffer *self)
@@ -3562,8 +3442,6 @@ ide_buffer_init_tags (IdeBuffer *self)
  * Gets an #IdeFormatter for the buffer, if any.
  *
  * Returns: (transfer none) (nullable): an #IdeFormatter or %NULL
- *
- * Since: 3.32
  */
 IdeFormatter *
 ide_buffer_get_formatter (IdeBuffer *self)
@@ -3593,8 +3471,6 @@ _ide_buffer_sync_to_unsaved_files (IdeBuffer *self)
  * @self: an #IdeBuffer
  *
  * Force @self to rebuild the highlighted words.
- *
- * Since: 3.32
  */
 void
 ide_buffer_rehighlight (IdeBuffer *self)
@@ -3695,8 +3571,6 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
  * @user_data: a #gpointer to hold user data
  *
  * Asynchronously get a possible symbol at @location.
- *
- * Since: 3.32
  */
 void
 ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
@@ -3777,8 +3651,6 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
  * Completes an asynchronous request to locate a symbol at a location.
  *
  * Returns: (transfer full): An #IdeSymbol or %NULL.
- *
- * Since: 3.32
  */
 IdeSymbol *
 ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
@@ -3804,8 +3676,6 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
  *
  * Calling gtk_text_iter_order() with the results of this function would be
  * equivalent to calling gtk_text_buffer_get_selection_bounds().
- *
- * Since: 3.32
  */
 void
 ide_buffer_get_selection_bounds (IdeBuffer   *self,
@@ -3857,8 +3727,6 @@ ide_buffer_get_symbol_resolvers_cb (IdeExtensionSetAdapter *set,
  *
  * Returns: (transfer full) (element-type IdeSymbolResolver): a #GPtrArray
  *   of #IdeSymbolResolver.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_buffer_get_symbol_resolvers (IdeBuffer *self)
@@ -3887,8 +3755,6 @@ ide_buffer_get_symbol_resolvers (IdeBuffer *self)
  *
  * Returns: (transfer full) (nullable): a string containing the line's text
  *   or %NULL if the line does not exist.
- *
- * Since: 3.32
  */
 gchar *
 ide_buffer_get_line_text (IdeBuffer *self,
@@ -3998,8 +3864,6 @@ _ide_buffer_cancel_cursor_restore (IdeBuffer *self)
  * When the hold count reaches zero, the buffer will be destroyed.
  *
  * Returns: (transfer full): @self
- *
- * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_hold (IdeBuffer *self)
@@ -4038,8 +3902,6 @@ ide_buffer_release_in_idle (gpointer data)
  *
  * The buffer will be destroyed and unloaded when the hold count
  * reaches zero.
- *
- * Since: 3.32
  */
 void
 ide_buffer_release (IdeBuffer *self)
@@ -4089,8 +3951,6 @@ _ide_buffer_line_flags_changed (IdeBuffer *self)
  * Checks if any symbol resolvers are available.
  *
  * Returns: %TRUE if at least one symbol resolvers is available
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_has_symbol_resolvers (IdeBuffer *self)

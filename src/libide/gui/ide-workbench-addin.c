@@ -291,8 +291,6 @@ ide_workbench_addin_open_finish (IdeWorkbenchAddin  *self,
  *
  * This is helpful for plugins that want to react to VCS changes such as
  * changing branches, or tracking commits.
- *
- * Since: 3.32
  */
 void
 ide_workbench_addin_vcs_changed (IdeWorkbenchAddin *self,
@@ -315,8 +313,6 @@ ide_workbench_addin_vcs_changed (IdeWorkbenchAddin *self,
  * It is useful for situations where you do not need to influence the
  * project loading, but do need to perform operations after it has
  * completed.
- *
- * Since: 3.32
  */
 void
 ide_workbench_addin_project_loaded (IdeWorkbenchAddin *self,

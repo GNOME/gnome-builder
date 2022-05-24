@@ -41,8 +41,6 @@
  * not, the users preference will be returned. Setting a preference via
  * #IdeSettings will always modify the projects setting, not the users default
  * settings.
- *
- * Since: 3.32
  */
 
 struct _IdeSettings
@@ -555,8 +553,6 @@ ide_settings_bind (IdeSettings        *self,
  * @get_mapping and @set_mapping transformation functions.
  *
  * Call ide_settings_unbind() to unbind the mapping.
- *
- * Since: 3.32
  */
 void
 ide_settings_bind_with_mapping (IdeSettings             *self,

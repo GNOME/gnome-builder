@@ -142,8 +142,6 @@ ide_directory_reaper_class_init (IdeDirectoryReaperClass *klass)
    * The "remove-file" signal is emitted for each file that is removed by the
    * #IdeDirectoryReaper instance. This may be useful if you want to show the
    * user what was processed by the reaper.
-   *
-   * Since: 3.32
    */
   signals [REMOVE_FILE] =
     g_signal_new_class_handler ("remove-file",

@@ -56,8 +56,6 @@ ide_object_notify_in_main_cb (gpointer data)
  *
  * Like g_object_notify_by_pspec() if the caller is in the main-thread.
  * Otherwise, the request is deferred to the main thread.
- *
- * Since: 3.32
  */
 void
 ide_object_notify_by_pspec (gpointer    instance,
@@ -94,8 +92,6 @@ ide_object_notify_by_pspec (gpointer    instance,
  *
  * This will *always* return to the default main context, and never
  * emit ::notify immediately.
- *
- * Since: 3.32
  */
 void
 ide_object_notify_in_main (gpointer    instance,

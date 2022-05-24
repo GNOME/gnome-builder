@@ -194,8 +194,6 @@ ide_buffer_change_monitor_reload (IdeBufferChangeMonitor *self)
  *
  * Calls @callback for every line between @line_begin and @line_end that have
  * an addition, deletion, or change.
- *
- * Since: 3.32
  */
 void
 ide_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            *self,
@@ -219,8 +217,6 @@ ide_buffer_change_monitor_foreach_change (IdeBufferChangeMonitor            *sel
  * Gets the #IdeBufferChangeMonitor:buffer property.
  *
  * Returns: (transfer none): an #IdeBuffer
- *
- * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_change_monitor_get_buffer (IdeBufferChangeMonitor *self)

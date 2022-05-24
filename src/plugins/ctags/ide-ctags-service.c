@@ -856,8 +856,6 @@ ide_ctags_service_init (IdeCtagsService *self)
  * Note: this does not sort the indexes by importance.
  *
  * Returns: (transfer container) (element-type Ide.CtagsIndex): An array of indexes.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_ctags_service_get_indexes (IdeCtagsService *self)

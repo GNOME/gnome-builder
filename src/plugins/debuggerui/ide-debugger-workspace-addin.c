@@ -51,8 +51,6 @@
  * This class allows the debugger widgetry to hook into the workspace. We add
  * various panels to the workspace perpective and ensure they are only visible
  * when the process is being debugged.
- *
- * Since: 3.32
  */
 
 struct _IdeDebuggerWorkspaceAddin

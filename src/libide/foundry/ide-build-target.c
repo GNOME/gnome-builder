@@ -50,8 +50,6 @@ ide_build_target_default_init (IdeBuildTargetInterface *iface)
  * ide_build_target_get_install_directory:
  *
  * Returns: (nullable) (transfer full): a #GFile or %NULL.
- *
- * Since: 3.32
  */
 GFile *
 ide_build_target_get_install_directory (IdeBuildTarget *self)
@@ -71,8 +69,6 @@ ide_build_target_get_install_directory (IdeBuildTarget *self)
  * Checks if the #IdeBuildTarget gets installed.
  *
  * Returns: %TRUE if the build target is installed
- *
- * Since: 3.32
  */
 gboolean
 ide_build_target_get_install (IdeBuildTarget *self)
@@ -92,8 +88,6 @@ ide_build_target_get_install (IdeBuildTarget *self)
  *
  * Returns: (nullable) (transfer full): A display name for the build
  *   target to be displayed in UI. May contain pango markup.
- *
- * Since: 3.32
  */
 gchar *
 ide_build_target_get_display_name (IdeBuildTarget *self)
@@ -110,8 +104,6 @@ ide_build_target_get_display_name (IdeBuildTarget *self)
  * ide_build_target_get_name:
  *
  * Returns: (nullable) (transfer full): A filename or %NULL.
- *
- * Since: 3.32
  */
 gchar *
 ide_build_target_get_name (IdeBuildTarget *self)
@@ -133,8 +125,6 @@ ide_build_target_get_name (IdeBuildTarget *self)
  * as the default run target by Builder.
  *
  * Returns: the priority of the build target
- *
- * Since: 3.32
  */
 gint
 ide_build_target_get_priority (IdeBuildTarget *self)
@@ -153,8 +143,6 @@ ide_build_target_get_priority (IdeBuildTarget *self)
  * Gets the kind of artifact.
  *
  * Returns: an #IdeArtifactKind
- *
- * Since: 3.32
  */
 IdeArtifactKind
 ide_build_target_get_kind (IdeBuildTarget *self)
@@ -183,8 +171,6 @@ ide_build_target_compare (const IdeBuildTarget *left,
  *
  * Returns: (transfer full): A #GStrv containing the arguments to
  *   run the target.
- *
- * Since: 3.32
  */
 gchar **
 ide_build_target_get_argv (IdeBuildTarget *self)
@@ -231,8 +217,6 @@ ide_build_target_get_argv (IdeBuildTarget *self)
  * in the host system, or the flatpak sandbox home under flatpak).
  *
  * Returns: (nullable) (transfer full): the working directory to use for this target
- *
- * Since: 3.32
  */
 gchar *
 ide_build_target_get_cwd (IdeBuildTarget *self)
@@ -260,8 +244,6 @@ ide_build_target_get_cwd (IdeBuildTarget *self)
  * an unspecified language that compiles to native code.
  *
  * Returns: (transfer full): the programming language of this target
- *
- * Since: 3.32
  */
 gchar *
 ide_build_target_get_language (IdeBuildTarget *self)

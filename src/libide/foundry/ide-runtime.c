@@ -664,8 +664,6 @@ ide_runtime_new (const gchar *id,
  * side effects.
  *
  * Returns: (transfer full): An #IdeSubprocessLauncher or %NULL upon failure.
- *
- * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_runtime_create_launcher (IdeRuntime  *self,
@@ -700,8 +698,6 @@ ide_runtime_prepare_configuration (IdeRuntime       *self,
  *
  * Returns: (transfer full) (nullable): An #IdeRunner if successful, otherwise
  *   %NULL and @error is set.
- *
- * Since: 3.32
  */
 IdeRunner *
 ide_runtime_create_runner (IdeRuntime     *self,
@@ -733,8 +729,6 @@ ide_runtime_error_quark (void)
  * be accessed from the host system.
  *
  * Returns: (transfer full) (not nullable): a #GFile.
- *
- * Since: 3.32
  */
 GFile *
 ide_runtime_translate_file (IdeRuntime *self,
@@ -763,8 +757,6 @@ ide_runtime_translate_file (IdeRuntime *self,
  *
  * Returns: (transfer full) (array zero-terminated=1): A newly allocated
  *   string containing the include dirs.
- *
- * Since: 3.32
  */
 gchar **
 ide_runtime_get_system_include_dirs (IdeRuntime *self)
@@ -790,8 +782,6 @@ ide_runtime_get_system_include_dirs (IdeRuntime *self)
  *
  * Returns: (transfer full) (not nullable): the architecture triplet the runtime
  * will build for.
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_runtime_get_triplet (IdeRuntime *self)
@@ -823,8 +813,6 @@ ide_runtime_get_triplet (IdeRuntime *self)
  *
  * Returns: (transfer full) (not nullable): the name of the architecture
  * the runtime will build for.
- *
- * Since: 3.32
  */
 gchar *
 ide_runtime_get_arch (IdeRuntime *self)
@@ -848,8 +836,6 @@ ide_runtime_get_arch (IdeRuntime *self)
  * Informs wether a toolchain is supported by this.
  *
  * Returns: %TRUE if the toolchain is supported
- *
- * Since: 3.32
  */
 gboolean
 ide_runtime_supports_toolchain (IdeRuntime   *self,

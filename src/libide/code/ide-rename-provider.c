@@ -84,8 +84,6 @@ ide_rename_provider_default_init (IdeRenameProviderInterface *iface)
  * project to perform the renaming of a symbol found at @location.
  *
  * Use ide_rename_provider_rename_finish() to get the results.
- *
- * Since: 3.32
  */
 void
 ide_rename_provider_rename_async (IdeRenameProvider   *self,
@@ -122,8 +120,6 @@ ide_rename_provider_rename_async (IdeRenameProvider   *self,
  *
  * Returns: %TRUE if successful and @edits is set. Otherwise %FALSE and @error
  *   is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_rename_provider_rename_finish (IdeRenameProvider  *self,

@@ -79,8 +79,6 @@
  * If a function has been deprecated in a newer version of Builder,
  * it is possible to use this symbol to avoid the compiler warnings
  * without disabling warning for every deprecated function.
- *
- * Since: 3.32
  */
 #ifndef IDE_VERSION_MIN_REQUIRED
 # define IDE_VERSION_MIN_REQUIRED (IDE_VERSION_CUR_STABLE)
@@ -100,8 +98,6 @@
  * If a function has been introduced in a newer version of Builder,
  * it is possible to use this symbol to get compiler warnings when
  * trying to use that function.
- *
- * Since: 3.32
  */
 #ifndef IDE_VERSION_MAX_ALLOWED
 # if IDE_VERSION_MIN_REQUIRED > IDE_VERSION_PREV_STABLE

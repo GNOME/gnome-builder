@@ -55,8 +55,6 @@ ide_project_tree_addin_default_init (IdeProjectTreeAddinInterface *iface)
  * them when unloading.
  *
  * See also: ide_project_tree_addin_unload()
- *
- * Since: 3.32
  */
 void
 ide_project_tree_addin_load (IdeProjectTreeAddin *self,
@@ -81,8 +79,6 @@ ide_project_tree_addin_load (IdeProjectTreeAddin *self,
  * should be undone here.
  *
  * See also: ide_project_tree_addin_load()
- *
- * Since: 3.32
  */
 void
 ide_project_tree_addin_unload (IdeProjectTreeAddin *self,

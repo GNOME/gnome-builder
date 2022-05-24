@@ -122,8 +122,6 @@ ide_tree_addin_default_init (IdeTreeAddinInterface *iface)
  *
  * This function will call the synchronous form of
  * IdeTreeAddin.build_children() if no asynchronous form is available.
- *
- * Since: 3.32
  */
 void
 ide_tree_addin_build_children_async (IdeTreeAddin        *self,
@@ -149,8 +147,6 @@ ide_tree_addin_build_children_async (IdeTreeAddin        *self,
  * Completes an asynchronous request to ide_tree_addin_build_children_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_addin_build_children_finish (IdeTreeAddin  *self,
@@ -176,8 +172,6 @@ ide_tree_addin_build_children_finish (IdeTreeAddin  *self,
  *
  * You may want to use ide_tree_node_holds() to determine if the node
  * contains an item that you are interested in.
- *
- * Since: 3.32
  */
 void
 ide_tree_addin_build_node (IdeTreeAddin *self,
@@ -206,8 +200,6 @@ ide_tree_addin_build_node (IdeTreeAddin *self,
  * respond to the action.
  *
  * Returns: %TRUE if the activation was handled, otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_addin_node_activated (IdeTreeAddin *self,

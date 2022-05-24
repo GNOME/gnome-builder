@@ -39,8 +39,6 @@ ide_vcs_tag_default_init (IdeVcsTagInterface *iface)
  * to display to the user.
  *
  * Returns: (transfer full): a string containing the tag name
- *
- * Since: 3.32
  */
 gchar *
 ide_vcs_tag_get_name (IdeVcsTag *self)

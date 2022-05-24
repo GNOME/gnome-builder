@@ -151,8 +151,6 @@ ide_test_class_init (IdeTestClass *klass)
    *
    * The "display-name" property contains the display name of the test as
    * the user is expected to read in UI elements.
-   *
-   * Since: 3.32
    */
   properties [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
@@ -165,8 +163,6 @@ ide_test_class_init (IdeTestClass *klass)
    * IdeTest:id:
    *
    * The "id" property contains the unique identifier of the test.
-   *
-   * Since: 3.32
    */
   properties [PROP_ID] =
     g_param_spec_string ("id",
@@ -180,8 +176,6 @@ ide_test_class_init (IdeTestClass *klass)
    *
    * The "group" property contains the name of the gruop the test belongs
    * to, if any.
-   *
-   * Since: 3.32
    */
   properties [PROP_GROUP] =
     g_param_spec_string ("group",
@@ -195,8 +189,6 @@ ide_test_class_init (IdeTestClass *klass)
    *
    * The "status" property contains the status of the test, updated by
    * providers when they have run the test.
-   *
-   * Since: 3.32
    */
   properties [PROP_STATUS] =
     g_param_spec_enum ("status",
@@ -243,8 +235,6 @@ _ide_test_set_provider (IdeTest         *self,
  * Gets the "display-name" property of the test.
  *
  * Returns: (nullable): The display_name of the test or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_test_get_display_name (IdeTest *self)
@@ -262,8 +252,6 @@ ide_test_get_display_name (IdeTest *self)
  * @display_name: (nullable): The display_name of the test, or %NULL to unset
  *
  * Sets the "display-name" property of the unit test.
- *
- * Since: 3.32
  */
 void
 ide_test_set_display_name (IdeTest     *self,
@@ -290,8 +278,6 @@ ide_test_set_display_name (IdeTest     *self,
  * The group name is used to group tests together.
  *
  * Returns: (nullable): The group name or %NULL.
- *
- * Since: 3.32
  */
 const gchar *
 ide_test_get_group (IdeTest *self)
@@ -311,8 +297,6 @@ ide_test_get_group (IdeTest *self)
  * Sets the #IdeTest:group property.
  *
  * The group property is used to group related tests together.
- *
- * Since: 3.32
  */
 void
 ide_test_set_group (IdeTest     *self,
@@ -337,8 +321,6 @@ ide_test_set_group (IdeTest     *self,
  * Gets the #IdeTest:id property.
  *
  * Returns: (nullable): The id of the test, or %NULL if it has not been set.
- *
- * Since: 3.32
  */
 const gchar *
 ide_test_get_id (IdeTest *self)
@@ -358,8 +340,6 @@ ide_test_get_id (IdeTest *self)
  * Sets the #IdeTest:id property.
  *
  * The id property is used to uniquely identify the test.
- *
- * Since: 3.32
  */
 void
 ide_test_set_id (IdeTest     *self,

@@ -381,8 +381,6 @@ ide_terminal_search_init (IdeTerminalSearch *self)
 /**
  * ide_terminal_search_set_terminal:
  * @self: a #IdeTerminalSearch
- *
- * Since: 3.32
  */
 void
 ide_terminal_search_set_terminal (IdeTerminalSearch *self,
@@ -399,8 +397,6 @@ ide_terminal_search_set_terminal (IdeTerminalSearch *self,
  * @self: a #IdeTerminalSearch
  *
  * Returns: (transfer none) (nullable): a #VteRegex or %NULL.
- *
- * Since: 3.32
  */
 VteRegex *
 ide_terminal_search_get_regex (IdeTerminalSearch *self)
@@ -415,7 +411,6 @@ ide_terminal_search_get_regex (IdeTerminalSearch *self)
  * @self: a #IdeTerminalSearch
  *
  *
- * Since: 3.32
  */
 gboolean
 ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
@@ -432,8 +427,6 @@ ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
  * Gets the revealer widget used for the terminal search.
  *
  * Returns: (transfer none): a #GtkRevealer
- *
- * Since: 3.32
  */
 GtkRevealer *
 ide_terminal_search_get_revealer (IdeTerminalSearch *self)

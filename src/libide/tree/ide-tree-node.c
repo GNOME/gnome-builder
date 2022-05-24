@@ -42,8 +42,6 @@
  * Plugins that want to add items to the tree should implement the
  * #IdeTreeAddin interface and register it during plugin
  * initialization.
- *
- * Since: 3.32
  */
 
 struct _IdeTreeNode
@@ -157,8 +155,6 @@ ide_tree_node_get_model (IdeTreeNode *self)
  * Create a new #IdeTreeNode.
  *
  * Returns: (transfer full): a newly created #IdeTreeNode
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_node_new (void)
@@ -378,8 +374,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    * The "children-possible" property denotes if the node may have children
    * even if it doesn't have children yet. This is useful for delayed loading
    * of children nodes.
-   *
-   * Since: 3.32
    */
   properties [PROP_CHILDREN_POSSIBLE] =
     g_param_spec_boolean ("children-possible",
@@ -393,8 +387,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * If %TRUE and #IdeTreeNode:item is an #IdeObject, it will be destroyed
    * when the node is destroyed.
-   *
-   * Since: 3.32
    */
   properties [PROP_DESTROY_ITEM] =
     g_param_spec_boolean ("destroy-item",
@@ -408,8 +400,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * The "display-name" property is the name for the node as it should be
    * displayed in the tree.
-   *
-   * Since: 3.32
    */
   properties [PROP_DISPLAY_NAME] =
     g_param_spec_string ("display-name",
@@ -423,8 +413,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * The "expanded-icon" property is the icon that should be displayed to the
    * user in the tree for this node.
-   *
-   * Since: 3.32
    */
   properties [PROP_EXPANDED_ICON] =
     g_param_spec_object ("expanded-icon",
@@ -438,8 +426,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * The "expanded-icon-name" is a convenience property to set the
    * #IdeTreeNode:expanded-icon property using an icon-name.
-   *
-   * Since: 3.32
    */
   properties [PROP_EXPANDED_ICON_NAME] =
     g_param_spec_string ("expanded-icon-name",
@@ -454,8 +440,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    * The "has-error" property is true if the node should be rendered with
    * an error styling. This is useful when errors are known by the diagnostics
    * manager for a given file or folder.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_ERROR] =
     g_param_spec_boolean ("has-error",
@@ -469,8 +453,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * The "icon" property is the icon that should be displayed to the
    * user in the tree for this node.
-   *
-   * Since: 3.32
    */
   properties [PROP_ICON] =
     g_param_spec_object ("icon",
@@ -484,8 +466,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * The "icon-name" is a convenience property to set the #IdeTreeNode:icon
    * property using an icon-name.
-   *
-   * Since: 3.32
    */
   properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
@@ -499,8 +479,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * The "is-header" property denotes the node should be styled as a group
    * header.
-   *
-   * Since: 3.32
    */
   properties [PROP_IS_HEADER] =
     g_param_spec_boolean ("is-header",
@@ -515,8 +493,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    * The "item" property is an optional #GObject that can be used to
    * store information about the node, which is sometimes useful when
    * creating #IdeTreeAddin plugins.
-   *
-   * Since: 3.32
    */
   properties [PROP_ITEM] =
     g_param_spec_object ("item",
@@ -530,8 +506,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * The "reset-on-collapse" denotes that children should be removed when
    * the node is collapsed.
-   *
-   * Since: 3.32
    */
   properties [PROP_RESET_ON_COLLAPSE] =
     g_param_spec_boolean ("reset-on-collapse",
@@ -547,8 +521,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    * object to assign to #IdeTreeNode:item.
    *
    * See ide_tree_node_is_tag() to match a tag when building.
-   *
-   * Since: 3.32
    */
   properties [PROP_TAG] =
     g_param_spec_string ("tag",
@@ -562,8 +534,6 @@ ide_tree_node_class_init (IdeTreeNodeClass *klass)
    *
    * If #TRUE, the "use-markup" property denotes that #IdeTreeNode:display-name
    * contains pango markup.
-   *
-   * Since: 3.32
    */
   properties [PROP_USE_MARKUP] =
     g_param_spec_boolean ("use-markup",
@@ -589,8 +559,6 @@ ide_tree_node_init (IdeTreeNode *self)
  * Gets the #IdeTreeNode:display-name property.
  *
  * Returns: (nullable): a string containing the display name
- *
- * Since: 3.32
  */
 const gchar *
 ide_tree_node_get_display_name (IdeTreeNode *self)
@@ -605,8 +573,6 @@ ide_tree_node_get_display_name (IdeTreeNode *self)
  *
  * Sets the #IdeTreeNode:display-name property, which is the text to
  * use when displaying the item in the tree.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_set_display_name (IdeTreeNode *self,
@@ -630,8 +596,6 @@ ide_tree_node_set_display_name (IdeTreeNode *self,
  * Gets the icon associated with the tree node.
  *
  * Returns: (transfer none) (nullable): a #GIcon or %NULL
- *
- * Since: 3.32
  */
 GIcon *
 ide_tree_node_get_icon (IdeTreeNode *self)
@@ -647,8 +611,6 @@ ide_tree_node_get_icon (IdeTreeNode *self)
  * @icon: (nullable): a #GIcon or %NULL
  *
  * Sets the icon for the tree node.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_set_icon (IdeTreeNode *self,
@@ -670,8 +632,6 @@ ide_tree_node_set_icon (IdeTreeNode *self,
  * Gets the expanded icon associated with the tree node.
  *
  * Returns: (transfer none) (nullable): a #GIcon or %NULL
- *
- * Since: 3.32
  */
 GIcon *
 ide_tree_node_get_expanded_icon (IdeTreeNode *self)
@@ -687,8 +647,6 @@ ide_tree_node_get_expanded_icon (IdeTreeNode *self)
  * @expanded_icon: (nullable): a #GIcon or %NULL
  *
  * Sets the expanded icon for the tree node.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_set_expanded_icon (IdeTreeNode *self,
@@ -711,8 +669,6 @@ ide_tree_node_set_expanded_icon (IdeTreeNode *self,
  *
  * Returns: (transfer none) (type GObject.Object) (nullable): a #GObject
  *   if the item has been previously set.
- *
- * Since: 3.32
  */
 gpointer
 ide_tree_node_get_item (IdeTreeNode *self)
@@ -823,8 +779,6 @@ _ide_tree_node_set_model (IdeTreeNode  *self,
  * Prepends @child as a child of @self at the 0 index.
  *
  * This operation is O(1).
- *
- * Since: 3.32
  */
 void
 ide_tree_node_prepend (IdeTreeNode *self,
@@ -849,8 +803,6 @@ ide_tree_node_prepend (IdeTreeNode *self,
  * Appends @child as a child of @self at the last position.
  *
  * This operation is O(1).
- *
- * Since: 3.32
  */
 void
 ide_tree_node_append (IdeTreeNode *self,
@@ -876,8 +828,6 @@ ide_tree_node_append (IdeTreeNode *self,
  * Insert @child as a child of @self at the sorted position determined by @cmpfn
  *
  * This operation is O(n).
- *
- * Since: 3.32
  */
 void
 ide_tree_node_insert_sorted (IdeTreeNode        *self,
@@ -906,8 +856,6 @@ ide_tree_node_insert_sorted (IdeTreeNode        *self,
  * Inserts @child directly before @self by adding it to the parent of @self.
  *
  * This operation is O(1).
- *
- * Since: 3.32
  */
 void
 ide_tree_node_insert_before (IdeTreeNode *self,
@@ -933,8 +881,6 @@ ide_tree_node_insert_before (IdeTreeNode *self,
  * Inserts @child directly after @self by adding it to the parent of @self.
  *
  * This operation is O(1).
- *
- * Since: 3.32
  */
 void
 ide_tree_node_insert_after (IdeTreeNode *self,
@@ -960,8 +906,6 @@ ide_tree_node_insert_after (IdeTreeNode *self,
  * Removes the child node @child from @self. @self must be the parent of @child.
  *
  * This function is O(1).
- *
- * Since: 3.32
  */
 void
 ide_tree_node_remove (IdeTreeNode *self,
@@ -993,8 +937,6 @@ ide_tree_node_remove (IdeTreeNode *self,
  * Gets the parent node of @self.
  *
  * Returns: (transfer none) (nullable): a #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_node_get_parent (IdeTreeNode *self)
@@ -1012,8 +954,6 @@ ide_tree_node_get_parent (IdeTreeNode *self)
  * properties of each node.
  *
  * Returns: (transfer none) (nullable): a #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_node_get_root (IdeTreeNode *self)
@@ -1037,8 +977,6 @@ ide_tree_node_get_root (IdeTreeNode *self)
  * or is a subclass of @type.
  *
  * Returns: %TRUE if @self holds a @type item
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_holds (IdeTreeNode *self,
@@ -1056,8 +994,6 @@ ide_tree_node_holds (IdeTreeNode *self,
  * Gets the position of the @self.
  *
  * Returns: the offset of @self with it's siblings.
- *
- * Since: 3.32
  */
 guint
 ide_tree_node_get_index (IdeTreeNode *self)
@@ -1078,8 +1014,6 @@ ide_tree_node_get_index (IdeTreeNode *self)
  * Gets the @nth child of the tree node or %NULL if it does not exist.
  *
  * Returns: (transfer none) (nullable): a #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_node_get_nth_child (IdeTreeNode *self,
@@ -1097,8 +1031,6 @@ ide_tree_node_get_nth_child (IdeTreeNode *self,
  * Gets the next sibling after @self.
  *
  * Returns: (transfer none) (nullable): a #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_node_get_next (IdeTreeNode *self)
@@ -1118,8 +1050,6 @@ ide_tree_node_get_next (IdeTreeNode *self)
  * Gets the previous sibling before @self.
  *
  * Returns: (transfer none) (nullable): a #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_node_get_previous (IdeTreeNode *self)
@@ -1140,8 +1070,6 @@ ide_tree_node_get_previous (IdeTreeNode *self)
  * It may not actually have children yet.
  *
  * Returns: %TRUE if the children may have children
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_get_children_possible (IdeTreeNode *self)
@@ -1157,8 +1085,6 @@ ide_tree_node_get_children_possible (IdeTreeNode *self)
  * @children_possible: if children are possible
  *
  * Sets if the children are possible for the node.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_set_children_possible (IdeTreeNode *self,
@@ -1197,8 +1123,6 @@ ide_tree_node_set_children_possible (IdeTreeNode *self,
  * Checks if @self has any children.
  *
  * Returns: %TRUE if @self has one or more children.
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_has_child (IdeTreeNode *self)
@@ -1215,8 +1139,6 @@ ide_tree_node_has_child (IdeTreeNode *self)
  * Gets the number of children that @self contains.
  *
  * Returns: the number of children
- *
- * Since: 3.32
  */
 guint
 ide_tree_node_get_n_children (IdeTreeNode *self)
@@ -1236,8 +1158,6 @@ ide_tree_node_get_n_children (IdeTreeNode *self)
  * styling for group headers.
  *
  * Returns: %TRUE if @self is a header.
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_get_is_header (IdeTreeNode *self)
@@ -1252,8 +1172,6 @@ ide_tree_node_get_is_header (IdeTreeNode *self)
  * @self: a #IdeTreeNode
  *
  * Sets the #IdeTreeNode:is-header property.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_set_is_header (IdeTreeNode *self,
@@ -1344,8 +1262,6 @@ finish:
  * type, flags, and depth.
  *
  * Traversal is stopped if @traverse_func returns %TRUE.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_traverse (IdeTreeNode         *self,
@@ -1382,8 +1298,6 @@ ide_tree_node_traverse (IdeTreeNode         *self,
  * "(Empty)" contents and show a proper expander arrow.
  *
  * Returns: %TRUE if @self is a synthesized empty node.
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_is_empty (IdeTreeNode *self)
@@ -1416,8 +1330,6 @@ _ide_tree_node_set_needs_build_children (IdeTreeNode *self,
  * @icon_name: (nullable): the name of the icon, or %NULL
  *
  * Sets the #IdeTreeNode:icon property using an icon-name.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_set_icon_name (IdeTreeNode *self,
@@ -1438,8 +1350,6 @@ ide_tree_node_set_icon_name (IdeTreeNode *self,
  * @expanded_icon_name: (nullable): the name of the icon, or %NULL
  *
  * Sets the #IdeTreeNode:icon property using an icon-name.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_set_expanded_icon_name (IdeTreeNode *self,
@@ -1461,8 +1371,6 @@ ide_tree_node_set_expanded_icon_name (IdeTreeNode *self,
  * Checks if @self is the root node, meaning it has no parent.
  *
  * Returns: %TRUE if @self has no parent.
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_is_root (IdeTreeNode *self)
@@ -1479,8 +1387,6 @@ ide_tree_node_is_root (IdeTreeNode *self)
  * Checks if @self is the first sibling.
  *
  * Returns: %TRUE if @self is the first sibling
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_is_first (IdeTreeNode *self)
@@ -1497,8 +1403,6 @@ ide_tree_node_is_first (IdeTreeNode *self)
  * Checks if @self is the last sibling.
  *
  * Returns: %TRUE if @self is the last sibling
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_is_last (IdeTreeNode *self)
@@ -1607,8 +1511,6 @@ _ide_tree_node_remove_all (IdeTreeNode *self)
  * Checks if the node should have all children removed when collapsed.
  *
  * Returns: %TRUE if children are removed on collapse
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_node_get_reset_on_collapse (IdeTreeNode *self)
@@ -1624,8 +1526,6 @@ ide_tree_node_get_reset_on_collapse (IdeTreeNode *self)
  * @reset_on_collapse: if the children should be removed on collapse
  *
  * If %TRUE, then children will be removed when the row is collapsed.
- *
- * Since: 3.32
  */
 void
 ide_tree_node_set_reset_on_collapse (IdeTreeNode *self,
@@ -1649,8 +1549,6 @@ ide_tree_node_set_reset_on_collapse (IdeTreeNode *self,
  * Gets the path for the tree node.
  *
  * Returns: (transfer full) (nullable): a path or %NULL
- *
- * Since: 3.32
  */
 GtkTreePath *
 ide_tree_node_get_path (IdeTreeNode *self)

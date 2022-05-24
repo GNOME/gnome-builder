@@ -145,8 +145,6 @@ ide_text_edit_init (IdeTextEdit *self)
  * Gets the text for the edit.
  *
  * Returns: (nullable): the text to replace, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_text_edit_get_text (IdeTextEdit *self)
@@ -165,8 +163,6 @@ ide_text_edit_get_text (IdeTextEdit *self)
  * Gets the range for the edit.
  *
  * Returns: (transfer none) (nullable): the range for the replacement, or %NULL
- *
- * Since: 3.32
  */
 IdeRange *
 ide_text_edit_get_range (IdeTextEdit *self)
@@ -248,8 +244,6 @@ ide_text_edit_new (IdeRange    *range,
  * This function will never return a floating variant.
  *
  * Returns: (transfer full): a #GVariant
- *
- * Since: 3.32
  */
 GVariant *
 ide_text_edit_to_variant (IdeTextEdit *self)
@@ -279,8 +273,6 @@ ide_text_edit_to_variant (IdeTextEdit *self)
  * If @variant is %NULL, %NULL is returned.
  *
  * Returns: (transfer full) (nullable): an #IdeTextEdit or %NULL
- *
- * Since: 3.32
  */
 IdeTextEdit *
 ide_text_edit_new_from_variant (GVariant *variant)

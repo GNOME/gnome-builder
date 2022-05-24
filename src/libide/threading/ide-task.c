@@ -65,8 +65,6 @@
  * to copy the result to another task. Additionally, ide_task_return_object()
  * provides a simplified API over ide_task_return_pointer() which also allows
  * copying the result to chained tasks.
- *
- * Since: 3.32
  */
 
 typedef struct
@@ -711,8 +709,6 @@ ide_task_init (IdeTask *self)
  * release the object in a manner that is unsafe for the source object.
  *
  * Returns: (transfer none) (nullable) (type GObject.Object): a #GObject or %NULL
- *
- * Since: 3.32
  */
 gpointer
 ide_task_get_source_object (IdeTask *self)
@@ -743,8 +739,6 @@ ide_task_get_source_object (IdeTask *self)
  * the task itself.
  *
  * Returns: (transfer full): an #IdeTask
- *
- * Since: 3.32
  */
 IdeTask *
 (ide_task_new) (gpointer             source_object,
@@ -778,8 +772,6 @@ IdeTask *
  * Checks if @source_object matches the object the task was created with.
  *
  * Returns: %TRUE is source_object matches
- *
- * Since: 3.32
  */
 gboolean
 ide_task_is_valid (gpointer self,
@@ -799,8 +791,6 @@ ide_task_is_valid (gpointer self,
  * same #GMainContext as the callback.
  *
  * Returns: %TRUE if the task has completed
- *
- * Since: 3.32
  */
 gboolean
 ide_task_get_completed (IdeTask *self)
@@ -873,8 +863,6 @@ ide_task_set_complete_priority (IdeTask *self,
  * Gets the #GCancellable for the task.
  *
  * Returns: (transfer none) (nullable): a #GCancellable or %NULL
- *
- * Since: 3.32
  */
 GCancellable *
 ide_task_get_cancellable (IdeTask *self)
@@ -1130,8 +1118,6 @@ ide_task_return (IdeTask       *self,
  *
  * Other tasks depending on the result will be notified after returning
  * to the #GMainContext of the task.
- *
- * Since: 3.32
  */
 void
 ide_task_return_int (IdeTask *self,
@@ -1157,8 +1143,6 @@ ide_task_return_int (IdeTask *self,
  *
  * Other tasks depending on the result will be notified after returning
  * to the #GMainContext of the task.
- *
- * Since: 3.32
  */
 void
 ide_task_return_boolean (IdeTask  *self,
@@ -1184,8 +1168,6 @@ ide_task_return_boolean (IdeTask  *self,
  * This is similar to ide_task_return_pointer(), but allows the task to
  * know the boxed #GType so that the result may be propagated to chained
  * tasks.
- *
- * Since: 3.32
  */
 void
 ide_task_return_boxed (IdeTask  *self,
@@ -1215,8 +1197,6 @@ ide_task_return_boxed (IdeTask  *self,
  *
  * Takes ownership of @instance to allow saving a reference increment and
  * decrement by the caller.
- *
- * Since: 3.32
  */
 void
 ide_task_return_object (IdeTask  *self,
@@ -1249,8 +1229,6 @@ ide_task_return_object (IdeTask  *self,
  *
  * If you need task chaining with pointers, see ide_task_return_boxed()
  * or ide_task_return_object().
- *
- * Since: 3.32
  */
 void
 (ide_task_return_pointer) (IdeTask        *self,
@@ -1275,8 +1253,6 @@ void
  * @error: (transfer full): a #GError
  *
  * Sets @error as the result of the #IdeTask
- *
- * Since: 3.32
  */
 void
 ide_task_return_error (IdeTask *self,
@@ -1301,8 +1277,6 @@ ide_task_return_error (IdeTask *self,
  * @format: the printf-style format string
  *
  * Creates a new #GError and sets it as the result for the task.
- *
- * Since: 3.32
  */
 void
 ide_task_return_new_error (IdeTask     *self,
@@ -1335,8 +1309,6 @@ ide_task_return_new_error (IdeTask     *self,
  * a cancellation state.
  *
  * Returns: %TRUE if the task was cancelled and error returned.
- *
- * Since: 3.32
  */
 gboolean
 ide_task_return_error_if_cancelled (IdeTask *self)
@@ -1378,8 +1350,6 @@ ide_task_return_error_if_cancelled (IdeTask *self)
  *
  * Generally, you want to leave this as %TRUE to ensure thread-safety on the
  * dependent objects and task data.
- *
- * Since: 3.32
  */
 void
 ide_task_set_release_on_propagate (IdeTask  *self,
@@ -1401,8 +1371,6 @@ ide_task_set_release_on_propagate (IdeTask  *self,
  *
  * Sets the source tag for the task. Generally this is a function pointer
  * of the function that created the task.
- *
- * Since: 3.32
  */
 void
 ide_task_set_source_tag (IdeTask  *self,
@@ -1424,8 +1392,6 @@ ide_task_set_source_tag (IdeTask  *self,
  * #GCancellable used when creating the #IdeTask is checked for cancellation
  * before propagating a result. If cancelled, an error will be returned
  * instead of the result.
- *
- * Since: 3.32
  */
 void
 ide_task_set_check_cancellable (IdeTask  *self,
@@ -1450,8 +1416,6 @@ ide_task_set_check_cancellable (IdeTask  *self,
  * @thread_func must complete the task from the worker thread using one of
  * ide_task_return_boolean(), ide_task_return_int(), or
  * ide_task_return_pointer().
- *
- * Since: 3.32
  */
 void
 ide_task_run_in_thread (IdeTask           *self,
@@ -1631,8 +1595,6 @@ ide_task_propagate_int (IdeTask  *self,
  *
  * Returns: (transfer full) (type GObject.Object): a #GObject or %NULL
  *   and @error may be set.
- *
- * Since: 3.32
  */
 gpointer
 ide_task_propagate_object (IdeTask  *self,
@@ -1686,8 +1648,6 @@ ide_task_propagate_pointer (IdeTask  *self,
  * Users of this API must make sure one of two things is true. Either they
  * have called ide_task_set_release_on_propagate() with @self and set
  * release_on_propagate to %FALSE, or @self has not yet completed.
- *
- * Since: 3.32
  */
 void
 ide_task_chain (IdeTask *self,
@@ -1769,8 +1729,6 @@ ide_task_set_kind (IdeTask     *self,
  * Gets the task data previously set with ide_task_set_task_data().
  *
  * Returns: (transfer none): previously registered task data or %NULL
- *
- * Since: 3.32
  */
 gpointer
 ide_task_get_task_data (IdeTask *self)
@@ -1887,8 +1845,6 @@ ide_task_cancellable_cancelled_cb (GCancellable  *cancellable,
  *
  * Gets the return_on_cancel value, which means the task will return
  * immediately when the #GCancellable is cancelled.
- *
- * Since: 3.32
  */
 gboolean
 ide_task_get_return_on_cancel (IdeTask *self)
@@ -1917,8 +1873,6 @@ ide_task_get_return_on_cancel (IdeTask *self)
  * Setting this requires that the caller can ensure the configured #GMainContext
  * will outlive the threaded worker so that task state can be freed in a delayed
  * fashion.
- *
- * Since: 3.32
  */
 void
 ide_task_set_return_on_cancel (IdeTask  *self,
@@ -1999,8 +1953,6 @@ ide_task_report_new_error (gpointer              source_object,
  * Gets the name assigned for the task.
  *
  * Returns: (nullable): a string or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_task_get_name (IdeTask *self)
@@ -2031,8 +1983,6 @@ ide_task_get_name (IdeTask *self)
  *
  * If using #IdeTask from C, a default name is set using the source
  * file name and line number.
- *
- * Since: 3.32
  */
 void
 ide_task_set_name (IdeTask *self,
@@ -2058,8 +2008,6 @@ ide_task_set_name (IdeTask *self,
  * Checks to see if the task had an error.
  *
  * Returns: %TRUE if an error has occurred
- *
- * Since: 3.32
  */
 gboolean
 ide_task_had_error (IdeTask *self)

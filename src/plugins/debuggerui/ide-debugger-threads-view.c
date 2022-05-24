@@ -809,8 +809,6 @@ ide_debugger_threads_view_init (IdeDebuggerThreadsView *self)
  * Gets the debugger that is being observed.
  *
  * Returns: (transfer none) (nullable): An #IdeDebugger or %NULL
- *
- * Since: 3.32
  */
 IdeDebugger *
 ide_debugger_threads_view_get_debugger (IdeDebuggerThreadsView *self)

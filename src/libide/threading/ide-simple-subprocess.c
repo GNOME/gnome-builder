@@ -418,8 +418,6 @@ subprocess_iface_init (IdeSubprocessInterface *iface)
  * Creates a new #IdeSimpleSubprocess wrapping the #GSubprocess.
  *
  * Returns: (transfer full): A new #IdeSubprocess
- *
- * Since: 3.32
  */
 IdeSubprocess *
 ide_simple_subprocess_new (GSubprocess *subprocess)

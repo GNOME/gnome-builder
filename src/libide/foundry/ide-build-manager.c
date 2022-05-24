@@ -65,8 +65,6 @@
  * The #IdePipeline is used to specify how and when build operations
  * should occur. Plugins attach build stages to the pipeline to perform
  * build actions.
- *
- * Since: 3.32
  */
 
 struct _IdeBuildManager
@@ -953,8 +951,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    *
    * This might be false if the required runtime is not available or other
    * errors in setting up the build pipeline.
-   *
-   * Since: 3.32
    */
   properties [PROP_CAN_BUILD] =
     g_param_spec_boolean ("can-build",
@@ -970,8 +966,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    * executing. This can be bound to UI elements to display to the
    * user that a build is active (and therefore other builds cannot
    * be activated at the moment).
-   *
-   * Since: 3.32
    */
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
@@ -984,8 +978,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    * IdeBuildManager:error-count:
    *
    * The number of errors discovered during the build process.
-   *
-   * Since: 3.32
    */
   properties [PROP_ERROR_COUNT] =
     g_param_spec_uint ("error-count",
@@ -999,8 +991,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    *
    * The "has-diagnostics" property indicates that there have been
    * diagnostics found during the last execution of the build pipeline.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_DIAGNOSTICS] =
     g_param_spec_boolean ("has-diagnostics",
@@ -1014,8 +1004,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    *
    * The "last-build-time" property contains a #GDateTime of the time
    * the last build request was submitted.
-   *
-   * Since: 3.32
    */
   properties [PROP_LAST_BUILD_TIME] =
     g_param_spec_boxed ("last-build-time",
@@ -1030,8 +1018,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    * The "message" property contains a string message describing
    * the current state of the build process. This may be bound to
    * UI elements to notify the user of the buid progress.
-   *
-   * Since: 3.32
    */
   properties [PROP_MESSAGE] =
     g_param_spec_string ("message",
@@ -1045,8 +1031,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    *
    * The "pipeline" property is the build pipeline that the build manager
    * is currently managing.
-   *
-   * Since: 3.32
    */
   properties [PROP_PIPELINE] =
     g_param_spec_object ("pipeline",
@@ -1066,8 +1050,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    * The value of this property is a #GTimeSpan, which are 64-bit signed
    * integers with microsecond precision. See %G_USEC_PER_SEC for a constant
    * to tranform this to seconds.
-   *
-   * Since: 3.32
    */
   properties [PROP_RUNNING_TIME] =
     g_param_spec_int64 ("running-time",
@@ -1083,8 +1065,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    *
    * The "warning-count" property contains the number of warnings that have
    * been discovered in the current build request.
-   *
-   * Since: 3.32
    */
   properties [PROP_WARNING_COUNT] =
     g_param_spec_uint ("warning-count",
@@ -1103,8 +1083,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    * The "build-started" signal is emitted when a new build has started.
    * The build may be an incremental build. The @pipeline instance is
    * the build pipeline which is being executed.
-   *
-   * Since: 3.32
    */
   signals [BUILD_STARTED] =
     g_signal_new_class_handler ("build-started",
@@ -1126,8 +1104,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    *
    * Contrast this with #IdeBuildManager::build-finished for a successful
    * build.
-   *
-   * Since: 3.32
    */
   signals [BUILD_FAILED] =
     g_signal_new_class_handler ("build-failed",
@@ -1145,8 +1121,6 @@ ide_build_manager_class_init (IdeBuildManagerClass *klass)
    *
    * The "build-finished" signal is emitted when a build completed
    * successfully.
-   *
-   * Since: 3.32
    */
   signals [BUILD_FINISHED] =
     g_signal_new_class_handler ("build-finished",
@@ -1289,8 +1263,6 @@ ide_build_manager_init (IdeBuildManager *self)
  * Gets if the #IdeBuildManager is currently busy building the project.
  *
  * See #IdeBuildManager:busy for more information.
- *
- * Since: 3.32
  */
 gboolean
 ide_build_manager_get_busy (IdeBuildManager *self)
@@ -1312,8 +1284,6 @@ ide_build_manager_get_busy (IdeBuildManager *self)
  * See #IdeBuildManager:message for more information.
  *
  * Returns: (transfer full): A string containing the build message or %NULL
- *
- * Since: 3.32
  */
 gchar *
 ide_build_manager_get_message (IdeBuildManager *self)
@@ -1336,8 +1306,6 @@ ide_build_manager_get_message (IdeBuildManager *self)
  * See #IdeBuildManager:last-build-time for more information.
  *
  * Returns: (nullable) (transfer none): a #GDateTime or %NULL.
- *
- * Since: 3.32
  */
 GDateTime *
 ide_build_manager_get_last_build_time (IdeBuildManager *self)
@@ -1354,8 +1322,6 @@ ide_build_manager_get_last_build_time (IdeBuildManager *self)
  * #GTimeSpan.
  *
  * Returns: a #GTimeSpan containing the elapsed time of the build.
- *
- * Since: 3.32
  */
 GTimeSpan
 ide_build_manager_get_running_time (IdeBuildManager *self)
@@ -1376,8 +1342,6 @@ ide_build_manager_get_running_time (IdeBuildManager *self)
  *
  * You may also activate this using the "cancel" #GAction provided
  * by the #GActionGroup interface.
- *
- * Since: 3.32
  */
 void
 ide_build_manager_cancel (IdeBuildManager *self)
@@ -1410,8 +1374,6 @@ ide_build_manager_cancel (IdeBuildManager *self)
  * reloaded as build configurations change.
  *
  * Returns: (transfer none) (nullable): An #IdePipeline.
- *
- * Since: 3.32
  */
 IdePipeline *
 ide_build_manager_get_pipeline (IdeBuildManager *self)
@@ -1429,8 +1391,6 @@ ide_build_manager_get_pipeline (IdeBuildManager *self)
  * A thread-safe variant of ide_build_manager_get_pipeline().
  *
  * Returns: (transfer full) (nullable): an #IdePipeline or %NULL
- *
- * Since: 3.32
  */
 IdePipeline *
 ide_build_manager_ref_pipeline (IdeBuildManager *self)
@@ -1613,8 +1573,6 @@ ide_build_manager_save_all_cb (GObject      *object,
  * build pipeline and execute a build. Upon completion, @callback will be
  * executed and it can determine the success or failure of the operation
  * using ide_build_manager_build_finish().
- *
- * Since: 3.32
  */
 void
 ide_build_manager_build_async (IdeBuildManager     *self,
@@ -1715,8 +1673,6 @@ ide_build_manager_build_async (IdeBuildManager     *self,
  * Completes a request to ide_build_manager_build_async().
  *
  * Returns: %TRUE if successful, otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_build_manager_build_finish (IdeBuildManager  *self,
@@ -1769,8 +1725,6 @@ ide_build_manager_clean_cb (GObject      *object,
  * Asynchronously requests that the build pipeline clean up to @phase.
  *
  * See ide_pipeline_clean_async() for more information.
- *
- * Since: 3.32
  */
 void
 ide_build_manager_clean_async (IdeBuildManager     *self,
@@ -1823,8 +1777,6 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
  * Completes an asynchronous request to ide_build_manager_clean_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_build_manager_clean_finish (IdeBuildManager  *self,
@@ -1881,8 +1833,6 @@ ide_build_manager_rebuild_cb (GObject      *object,
  * to allow for the rebuild process.
  *
  * See ide_pipeline_rebuild_async() for more information.
- *
- * Since: 3.32
  */
 void
 ide_build_manager_rebuild_async (IdeBuildManager     *self,
@@ -1937,8 +1887,6 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
  * Completes an asynchronous request to ide_build_manager_rebuild_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_build_manager_rebuild_finish (IdeBuildManager  *self,
@@ -1964,8 +1912,6 @@ ide_build_manager_rebuild_finish (IdeBuildManager  *self,
  * Checks if the current pipeline is ready to build.
  *
  * Returns: %TRUE if a build operation can advance the pipeline.
- *
- * Since: 3.32
  */
 gboolean
 ide_build_manager_get_can_build (IdeBuildManager *self)
@@ -1997,8 +1943,6 @@ ide_build_manager_set_can_build (IdeBuildManager *self,
  *
  * Requests that the #IdeBuildManager invalidate the current pipeline and
  * setup a new pipeline.
- *
- * Since: 3.32
  */
 void
 ide_build_manager_invalidate (IdeBuildManager *self)

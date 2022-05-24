@@ -691,8 +691,6 @@ ide_clang_client_index_file_async (IdeClangClient      *self,
  *
  * Returns: (transfer full): a #GVariant containing the indexed data
  *   or %NULL in case of failure.
- *
- * Since: 3.32
  */
 GVariant *
 ide_clang_client_index_file_finish (IdeClangClient  *self,

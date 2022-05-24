@@ -47,8 +47,6 @@
  * called. When the object is destroyed, the #GCancellable::cancel signal
  * is emitted. This allows automatic cleanup of asynchronous operations
  * when used properly.
- *
- * Since: 3.32
  */
 
 typedef struct
@@ -462,8 +460,6 @@ ide_object_class_init (IdeObjectClass *klass)
    * IdeObject:parent:
    *
    * The parent #IdeObject, if any.
-   *
-   * Since: 3.32
    */
   properties [PROP_PARENT] =
     g_param_spec_object ("parent",
@@ -480,8 +476,6 @@ ide_object_class_init (IdeObjectClass *klass)
    *
    * This is convenient when you want operations to automatically be cancelled when
    * part of teh object tree is segmented.
-   *
-   * Since: 3.32
    */
   properties [PROP_CANCELLABLE] =
     g_param_spec_object ("cancellable",
@@ -503,8 +497,6 @@ ide_object_class_init (IdeObjectClass *klass)
    * If you do not want to receive the "destroy" signal, then you must
    * manually remove the object from the tree using ide_object_remove()
    * while holding a reference to the object.
-   *
-   * Since: 3.32
    */
   signals [DESTROY] =
     g_signal_new ("destroy",
@@ -541,8 +533,6 @@ ide_object_init (IdeObject *self)
  * other thread would potentially risk being disposed before returning.
  *
  * Returns: (transfer full) (type IdeObject): a new #IdeObject
- *
- * Since: 3.32
  */
 gpointer
 ide_object_new (GType      type,
@@ -568,8 +558,6 @@ ide_object_new (GType      type,
  * Gets the number of children for an object.
  *
  * Returns: the number of children
- *
- * Since: 3.32
  */
 guint
 ide_object_get_n_children (IdeObject *self)
@@ -596,8 +584,6 @@ ide_object_get_n_children (IdeObject *self)
  * A full reference to the child is returned.
  *
  * Returns: (transfer full) (nullable): an #IdeObject or %NULL
- *
- * Since: 3.32
  */
 IdeObject *
 ide_object_get_nth_child (IdeObject *self,
@@ -626,8 +612,6 @@ ide_object_get_nth_child (IdeObject *self,
  * Gets the position of @self within the parent node.
  *
  * Returns: the position, starting from 0
- *
- * Since: 3.32
  */
 guint
 ide_object_get_position (IdeObject *self)
@@ -660,8 +644,6 @@ ide_object_get_position (IdeObject *self)
  * Call ide_object_unlock() to release the lock.
  *
  * The synchronization used is a #GRecMutex.
- *
- * Since: 3.32
  */
 void
 ide_object_lock (IdeObject *self)
@@ -680,8 +662,6 @@ ide_object_lock (IdeObject *self)
  * Releases a previously acuiqred lock from ide_object_lock().
  *
  * The synchronization used is a #GRecMutex.
- *
- * Since: 3.32
  */
 void
 ide_object_unlock (IdeObject *self)
@@ -700,8 +680,6 @@ ide_object_unlock (IdeObject *self)
  * Gets a #GCancellable for the object.
  *
  * Returns: (transfer none) (not nullable): a #GCancellable
- *
- * Since: 3.32
  */
 GCancellable *
 ide_object_ref_cancellable (IdeObject *self)
@@ -729,8 +707,6 @@ ide_object_ref_cancellable (IdeObject *self)
  * This function may only be called from the main thread.
  *
  * Returns: (transfer none) (nullable): an #IdeObject or %NULL
- *
- * Since: 3.32
  */
 IdeObject *
 ide_object_get_parent (IdeObject *self)
@@ -755,8 +731,6 @@ ide_object_get_parent (IdeObject *self)
  * Gets the parent #IdeObject, if any.
  *
  * Returns: (transfer full) (nullable): an #IdeObject or %NULL
- *
- * Since: 3.32
  */
 IdeObject *
 ide_object_ref_parent (IdeObject *self)
@@ -780,8 +754,6 @@ ide_object_ref_parent (IdeObject *self)
  * Checks if @self is root, meaning it has no parent.
  *
  * Returns: %TRUE if @self has no parent
- *
- * Since: 3.32
  */
 gboolean
 ide_object_is_root (IdeObject *self)
@@ -813,8 +785,6 @@ ide_object_is_root (IdeObject *self)
  *
  * This function is primarily meant for consumers that don't know the
  * relative position they need until runtime.
- *
- * Since: 3.32
  */
 void
 ide_object_add (IdeObject         *self,
@@ -843,8 +813,6 @@ ide_object_add (IdeObject         *self,
  *
  * If @child is a borrowed reference, it may be finalized before this
  * function returns.
- *
- * Since: 3.32
  */
 void
 ide_object_remove (IdeObject *self,
@@ -862,8 +830,6 @@ ide_object_remove (IdeObject *self,
  * @child: an #IdeObject
  *
  * Inserts @child as the last child of @self.
- *
- * Since: 3.32
  */
 void
 ide_object_append (IdeObject *self,
@@ -878,8 +844,6 @@ ide_object_append (IdeObject *self,
  * @child: an #IdeObject
  *
  * Inserts @child as the first child of @self.
- *
- * Since: 3.32
  */
 void
 ide_object_prepend (IdeObject *self,
@@ -897,8 +861,6 @@ ide_object_prepend (IdeObject *self,
  * Inserts @child into @self's children, directly before @sibling.
  *
  * @sibling MUST BE a child of @self.
- *
- * Since: 3.32
  */
 void
 ide_object_insert_before (IdeObject *self,
@@ -917,8 +879,6 @@ ide_object_insert_before (IdeObject *self,
  * Inserts @child into @self's children, directly after @sibling.
  *
  * @sibling MUST BE a child of @self.
- *
- * Since: 3.32
  */
 void
 ide_object_insert_after (IdeObject *self,
@@ -938,8 +898,6 @@ ide_object_insert_after (IdeObject *self,
  *
  * Locates the proper sibling for @child by using @func amongst @self's
  * children #IdeObject. Those objects must already be sorted.
- *
- * Since: 3.32
  */
 void
 ide_object_insert_sorted (IdeObject        *self,
@@ -994,8 +952,6 @@ unlock:
  * @callback is allowed to remove children from @self, but only as long as they are
  * the child passed to callback (or child itself). See g_queue_foreach() for more
  * details about what is allowed.
- *
- * Since: 3.32
  */
 void
 ide_object_foreach (IdeObject *self,
@@ -1034,8 +990,6 @@ get_child_typed_cb (gpointer data,
  * Finds the first child of @self that is of @type.
  *
  * Returns: (transfer full) (type IdeObject) (nullable): an #IdeObject or %NULL
- *
- * Since: 3.32
  */
 gpointer
 ide_object_get_child_typed (IdeObject *self,
@@ -1071,8 +1025,6 @@ get_children_typed_cb (gpointer data,
  *
  * Returns: (transfer full) (element-type IdeObject): a #GPtrArray of
  *   #IdeObject matching @type.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_object_get_children_typed (IdeObject *self,
@@ -1101,8 +1053,6 @@ ide_object_get_children_typed (IdeObject *self,
  * Finds and returns the toplevel object in the tree.
  *
  * Returns: (transfer full): an #IdeObject
- *
- * Since: 3.32
  */
 IdeObject *
 ide_object_ref_root (IdeObject *self)
@@ -1154,8 +1104,6 @@ ide_object_async_init_cb (GObject      *object,
  * @type if it is missing.
  *
  * Returns: (transfer full) (nullable) (type IdeObject): an #IdeObject or %NULL
- *
- * Since: 3.32
  */
 gpointer
 ide_object_ensure_child_typed (IdeObject *self,
@@ -1205,8 +1153,6 @@ ide_object_ensure_child_typed (IdeObject *self,
  * address of your object variable as user data. Then when the object is
  * destroyed, the variable will be set to NULL. Useful for example to avoid
  * multiple copies of the same dialog.
- *
- * Since: 3.32
  */
 void
 ide_object_destroyed (IdeObject **object_pointer)
@@ -1232,8 +1178,6 @@ static gboolean dummy (gpointer p) { return G_SOURCE_REMOVE; }
  * Gets the #IdeContext for the object.
  *
  * Returns: (transfer none) (nullable): an #IdeContext
- *
- * Since: 3.32
  */
 IdeContext *
 ide_object_get_context (IdeObject *object)
@@ -1267,8 +1211,6 @@ ide_object_get_context (IdeObject *object)
  * Gets the root #IdeContext for the object, if any.
  *
  * Returns: (transfer full) (nullable): an #IdeContext or %NULL
- *
- * Since: 3.32
  */
 IdeContext *
 ide_object_ref_context (IdeObject *self)
@@ -1308,8 +1250,6 @@ ide_object_in_destruction (IdeObject *self)
  *
  * Returns: (transfer full): a string containing the string representation
  *   of the #IdeObject
- *
- * Since: 3.32
  */
 gchar *
 ide_object_repr (IdeObject *self)

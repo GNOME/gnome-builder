@@ -28,8 +28,6 @@
  * SECTION:ide-frame-addin
  * @title: IdeFrameAddin
  * @short_description: addins created for every #IdeFrame
- *
- * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeFrameAddin, ide_frame_addin, G_TYPE_OBJECT)
@@ -50,8 +48,6 @@ ide_frame_addin_default_init (IdeFrameAddinInterface *iface)
  * This virtual method is called when the plugin should load itself.
  * A new instance of the plugin is created for every #IdeFrame
  * that is created in Builder.
- *
- * Since: 3.32
  */
 void
 ide_frame_addin_load (IdeFrameAddin *self,
@@ -74,8 +70,6 @@ ide_frame_addin_load (IdeFrameAddin *self,
  *
  * This virtual method is called when the plugin should unload itself.
  * It should revert anything performed via ide_frame_addin_load().
- *
- * Since: 3.32
  */
 void
 ide_frame_addin_unload (IdeFrameAddin *self,
@@ -96,8 +90,6 @@ ide_frame_addin_unload (IdeFrameAddin *self,
  * This virtual method is called whenever the active page changes
  * in the #IdePage. Plugins may want to alter what controls
  * are displayed on the frame based on the current page.
- *
- * Since: 3.32
  */
 void
 ide_frame_addin_set_page (IdeFrameAddin *self,

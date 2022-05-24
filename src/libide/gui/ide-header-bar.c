@@ -168,8 +168,6 @@ ide_header_bar_new (void)
  * Gets the menu-id to show in the workspace window.
  *
  * Returns: (nullable): a string containing the menu-id, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_header_bar_get_menu_id (IdeHeaderBar *self)
@@ -215,8 +213,6 @@ menu_has_custom (GMenuModel *model,
  * Sets the menu-id to display in the window.
  *
  * Set to %NULL to hide the workspace menu.
- *
- * Since: 3.32
  */
 void
 ide_header_bar_set_menu_id (IdeHeaderBar *self,

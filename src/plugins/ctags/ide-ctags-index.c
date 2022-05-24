@@ -625,8 +625,6 @@ ide_ctags_index_get_mtime (IdeCtagsIndex *self)
  *
  * Returns: (transfer container) (element-type Ide.CtagsIndexEntry): An array
  *   of items matching the relative path.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_ctags_index_find_with_path (IdeCtagsIndex *self,

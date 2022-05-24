@@ -277,8 +277,6 @@ ide_symbol_node_get_location_async (IdeSymbolNode       *self,
  * Completes the request to gets the location for the symbol node.
  *
  * Returns: (transfer full) (nullable): An #IdeLocation or %NULL.
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_symbol_node_get_location_finish (IdeSymbolNode  *self,

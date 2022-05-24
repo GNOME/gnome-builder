@@ -311,8 +311,6 @@ ide_persistent_map_builder_write_async (IdePersistentMapBuilder *self,
  *
  * Returns: %TRUE if the while was written successfully; otherwise %FALSE
  *   and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_persistent_map_builder_write_finish (IdePersistentMapBuilder  *self,

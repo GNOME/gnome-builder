@@ -64,8 +64,6 @@ ide_highlighter_default_init (IdeHighlighterInterface *iface)
  *
  * If processing the entire range was successful, then @location should be set
  * to @range_end.
- *
- * Since: 3.32
  */
 void
 ide_highlighter_update (IdeHighlighter       *self,

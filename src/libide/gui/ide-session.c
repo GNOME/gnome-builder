@@ -666,8 +666,6 @@ on_session_cache_loaded_cb (GObject      *object,
  * the point it was last saved (typically upon shutdown). This includes
  * open documents and editor splits to the degree possible. Adding support
  * for a new page type requires implementing an #IdeSessionAddin.
- *
- * Since: 41
  */
 void
 ide_session_restore_async (IdeSession          *self,
@@ -937,8 +935,6 @@ foreach_page_in_grid_save_cb (IdePage  *page,
  * This function will save the position and content of the pages in the @grid,
  * which can then be restored with ide_session_restore_async(), asking the
  * content of the pages to the appropriate #IdeSessionAddin.
- *
- * Since: 41
  */
 void
 ide_session_save_async (IdeSession          *self,

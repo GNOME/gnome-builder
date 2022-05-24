@@ -62,8 +62,6 @@ get_ignored_locked (void)
  * to the application, so they should only include well-known ignored files
  * such as those internal to a build system, or version control system, and
  * similar.
- *
- * Since: 3.32
  */
 void
 ide_g_file_add_ignored_pattern (const gchar *pattern)
@@ -81,8 +79,6 @@ ide_g_file_add_ignored_pattern (const gchar *pattern)
  * ignores registered with Builder.
  *
  * Returns: %TRUE if @path should be ignored, otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_path_is_ignored (const gchar *path)
@@ -133,8 +129,6 @@ ide_path_is_ignored (const gchar *path)
  * care about the version control system, see #IdeVcs and ide_vcs_is_ignored().
  *
  * Returns: %TRUE if @file should be ignored; otherwise %FALSE.
- *
- * Since: 3.32
  */
 gboolean
 ide_g_file_is_ignored (GFile *file)
@@ -193,8 +187,6 @@ ide_g_file_is_ignored (GFile *file)
  *
  * Returns: (nullable): A relative path, or %NULL if no common ancestor was
  *   found for the relative path.
- *
- * Since: 3.32
  */
 gchar *
 ide_g_file_get_uncanonical_relative_path (GFile *file,
@@ -352,8 +344,6 @@ delayed_run (gpointer data)
  *
  * This can be convenient when you know you need all of the #GFileInfo
  * accessable at once, or the size will be small.
- *
- * Since: 3.32
  */
 void
 ide_g_file_get_children_async (GFile               *file,
@@ -402,8 +392,6 @@ ide_g_file_get_children_async (GFile               *file,
  *
  * Returns: (transfer full) (element-type Gio.FileInfo): A #GPtrArray
  *   of #GFileInfo if successful, otherwise %NULL.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_g_file_get_children_finish (GFile         *file,
@@ -530,8 +518,6 @@ ide_g_file_find_worker (IdeTask      *task,
  *
  *
  * Returns: (transfer full) (element-type GFile): a #GPtrArray of #GFile.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_g_file_find_with_depth (GFile        *file,
@@ -574,8 +560,6 @@ ide_g_file_find_with_depth (GFile        *file,
  * @max_depth is zero, then all directories will be searched.
  *
  * You may only match on the filename, not the directory.
- *
- * Since: 3.32
  */
 void
 ide_g_file_find_with_depth_async (GFile               *file,
@@ -628,8 +612,6 @@ ide_g_file_find_with_depth_async (GFile               *file,
  * Searches descendants of @file for files matching @pattern.
  *
  * You may only match on the filename, not the directory.
- *
- * Since: 3.32
  */
 void
 ide_g_file_find_async (GFile               *file,
@@ -650,8 +632,6 @@ ide_g_file_find_async (GFile               *file,
  * Gets the files that were found which matched the pattern.
  *
  * Returns: (transfer full) (element-type Gio.File): A #GPtrArray of #GFile
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_g_file_find_finish (GFile         *file,
@@ -679,8 +659,6 @@ ide_g_file_find_finish (GFile         *file,
  * the file from the host, rather than our mount namespace.
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_g_host_file_get_contents (const gchar  *path,
@@ -760,8 +738,6 @@ failure:
  *
  * If @ignore_file is set, this function will check to see if that file exists
  * within @directory and skip it (and all descendants) if discovered.
- *
- * Since: 3.34
  */
 void
 ide_g_file_walk_with_ignore (GFile               *directory,
@@ -869,8 +845,6 @@ ide_g_file_walk_with_ignore (GFile               *directory,
  *
  * All of the fileinfo for the directory will be provided to the callback for
  * each directory.
- *
- * Since: 3.32
  */
 void
 ide_g_file_walk (GFile               *directory,
@@ -1026,8 +1000,6 @@ ide_g_file_find_in_ancestors_async (GFile               *directory,
  *
  * Returns: (transfer full): a #GFile if successful; otherwise %NULL
  *   and @error is et.
- *
- * Since: 3.34
  */
 GFile *
 ide_g_file_find_in_ancestors_finish (GAsyncResult  *result,

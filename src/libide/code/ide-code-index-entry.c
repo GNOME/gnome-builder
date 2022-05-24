@@ -34,8 +34,6 @@
  * indexed in the code index. It is an immutable data object so that it can be
  * passed between threads where data is indexed. Plugins should use
  * #IdeCodeIndexEntryBuilder to create index entries.
- *
- * Since: 3.32
  */
 
 struct _IdeCodeIndexEntry
@@ -131,8 +129,6 @@ ide_code_index_entry_get_flags (const IdeCodeIndexEntry *self)
  * @begin_line_offset: (out): first line offset
  * @end_line: (out): last line
  * @end_line_offset: (out): last line offset
- *
- * Since: 3.32
  */
 void
 ide_code_index_entry_get_range (const IdeCodeIndexEntry *self,
@@ -239,8 +235,6 @@ ide_code_index_entry_builder_set_kind (IdeCodeIndexEntryBuilder *builder,
  * Creates an immutable #IdeCodeIndexEntry from the builder content.
  *
  * Returns: (transfer full): an #IdeCodeIndexEntry
- *
- * Since: 3.32
  */
 IdeCodeIndexEntry *
 ide_code_index_entry_builder_build (IdeCodeIndexEntryBuilder *builder)
@@ -255,8 +249,6 @@ ide_code_index_entry_builder_build (IdeCodeIndexEntryBuilder *builder)
  * @builder: a #IdeCodeIndexEntryBuilder
  *
  * Returns: (transfer full): a deep copy of @builder
- *
- * Since: 3.32
  */
 IdeCodeIndexEntryBuilder *
 ide_code_index_entry_builder_copy (IdeCodeIndexEntryBuilder *builder)

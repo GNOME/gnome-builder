@@ -776,8 +776,6 @@ ide_file_transfer_execute_finish (IdeFileTransfer  *self,
  * @stat_buf: (out): a #IdeFileTransferStat
  *
  * Gets statistics about the transfer progress.
- *
- * Since: 3.28
  */
 void
 ide_file_transfer_stat (IdeFileTransfer     *self,

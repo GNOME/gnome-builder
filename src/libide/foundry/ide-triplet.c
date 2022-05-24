@@ -64,8 +64,6 @@ _ide_triplet_construct (void)
  * (like "i686-pc-linux-gnu")
  *
  * Returns: (transfer full): An #IdeTriplet.
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_triplet_new (const gchar *full_name)
@@ -112,8 +110,6 @@ ide_triplet_new (const gchar *full_name)
  * Creates a new #IdeTriplet from a the current system information
  *
  * Returns: (transfer full): An #IdeTriplet.
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_triplet_new_from_system (void)
@@ -137,8 +133,6 @@ ide_triplet_new_from_system (void)
  * (like "x86_64-linux-gnu")
  *
  * Returns: (transfer full): An #IdeTriplet.
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_triplet_new_with_triplet (const gchar *arch,
@@ -184,8 +178,6 @@ ide_triplet_new_with_triplet (const gchar *arch,
  * "arch-vendor-kernel-os" (like "i686-pc-linux-gnu")
  *
  * Returns: (transfer full): An #IdeTriplet.
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_triplet_new_with_quadruplet (const gchar *arch,
@@ -243,8 +235,6 @@ ide_triplet_finalize (IdeTriplet *self)
  * Increases the reference count of @self
  *
  * Returns: (transfer none): An #IdeTriplet.
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_triplet_ref (IdeTriplet *self)
@@ -263,8 +253,6 @@ ide_triplet_ref (IdeTriplet *self)
  *
  * Decreases the reference count of @self
  * Once the reference count reaches 0, the object is freed.
- *
- * Since: 3.32
  */
 void
 ide_triplet_unref (IdeTriplet *self)
@@ -284,8 +272,6 @@ ide_triplet_unref (IdeTriplet *self)
  * a duet, a triplet or a quadruplet).
  *
  * Returns: (transfer none): The full name of the machine configuration name
- *
- * Since: 3.32
  */
 const gchar *
 ide_triplet_get_full_name (IdeTriplet *self)
@@ -302,8 +288,6 @@ ide_triplet_get_full_name (IdeTriplet *self)
  * Gets the architecture name of the machine
  *
  * Returns: (transfer none): The architecture name of the machine
- *
- * Since: 3.32
  */
 const gchar *
 ide_triplet_get_arch (IdeTriplet *self)
@@ -320,8 +304,6 @@ ide_triplet_get_arch (IdeTriplet *self)
  * Gets the vendor name of the machine
  *
  * Returns: (transfer none) (nullable): The vendor name of the machine
- *
- * Since: 3.32
  */
 const gchar *
 ide_triplet_get_vendor (IdeTriplet *self)
@@ -338,8 +320,6 @@ ide_triplet_get_vendor (IdeTriplet *self)
  * Gets name of the kernel of the machine
  *
  * Returns: (transfer none) (nullable): The name of the kernel of the machine
- *
- * Since: 3.32
  */
 const gchar *
 ide_triplet_get_kernel (IdeTriplet *self)
@@ -356,8 +336,6 @@ ide_triplet_get_kernel (IdeTriplet *self)
  * Gets name of the operating system of the machine
  *
  * Returns: (transfer none) (nullable): The name of the operating system of the machine
- *
- * Since: 3.32
  */
 const gchar *
 ide_triplet_get_operating_system (IdeTriplet *self)
@@ -375,8 +353,6 @@ ide_triplet_get_operating_system (IdeTriplet *self)
  * Gets whether this is the same architecture as the system
  *
  * Returns: %TRUE if this is the same architecture as the system, %FALSE otherwise
- *
- * Since: 3.32
  */
 gboolean
 ide_triplet_is_system (IdeTriplet *self)

@@ -548,8 +548,6 @@ ide_file_chooser_entry_new (const gchar          *title,
  * Gets the entry used by the #GtkEntry.
  *
  * Returns: (transfer none): a #GtkEntry
- *
- * Since: 3.32
  */
 GtkEntry *
 ide_file_chooser_entry_get_entry (IdeFileChooserEntry *self)

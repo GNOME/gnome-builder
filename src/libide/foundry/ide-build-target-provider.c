@@ -70,8 +70,6 @@ ide_build_target_provider_default_init (IdeBuildTargetProviderInterface *iface)
  * complete the asynchronous operation.
  *
  * See also: ide_build_target_provider_get_targets_finish()
- *
- * Since: 3.32
  */
 void
 ide_build_target_provider_get_targets_async (IdeBuildTargetProvider *self,
@@ -100,8 +98,6 @@ ide_build_target_provider_get_targets_async (IdeBuildTargetProvider *self,
  *
  * Returns: (transfer full) (element-type Ide.BuildTarget): The array of
  *   build targets or %NULL upon failure and @error is set.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_build_target_provider_get_targets_finish (IdeBuildTargetProvider  *self,

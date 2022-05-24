@@ -675,8 +675,6 @@ gb_color_picker_document_monitor_queue_oper_cb (gpointer data)
  * This queues a region to be recolorized but does so after returning
  * to the main loop. This can be useful for situations where you do not
  * know if you are in a path that must retain a valid GtkTextIter.
- *
- * Since: 3.26
  */
 static void
 gb_color_picker_document_monitor_queue_oper (GbColorPickerDocumentMonitor *self,
@@ -723,8 +721,6 @@ gb_color_picker_document_monitor_queue_oper (GbColorPickerDocumentMonitor *self,
  * This queues a region to be recolorized but does so after returning
  * to the main loop. This can be useful for situations where you do not
  * know if you are in a path that must retain a valid GtkTextIter.
- *
- * Since: 3.26
  */
 void
 gb_color_picker_document_monitor_queue_colorize (GbColorPickerDocumentMonitor *self,
@@ -741,8 +737,6 @@ gb_color_picker_document_monitor_queue_colorize (GbColorPickerDocumentMonitor *s
  * This queues a region to be uncolorized but does so after returning
  * to the main loop. This can be useful for situations where you do not
  * know if you are in a path that must retain a valid GtkTextIter.
- *
- * Since: 3.26
  */
 void
 gb_color_picker_document_monitor_queue_uncolorize (GbColorPickerDocumentMonitor *self,

@@ -48,8 +48,6 @@
  * be easier for the user with increased hit-targets.
  *
  * Additionally, we can render faster because we can coalesce work.
- *
- * Since: 3.32
  */
 
 #define RIGHT_MARGIN 2
