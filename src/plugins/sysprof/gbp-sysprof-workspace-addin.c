@@ -471,6 +471,12 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    G_N_ELEMENTS (entries),
                                    self);
 
+  g_object_bind_property (self->run_manager,
+                          "busy",
+                          g_action_map_lookup_action (G_ACTION_MAP (self->actions), "run"),
+                          "enabled",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+
   sysprof_check_supported_async (NULL,
                                  gbp_sysprof_workspace_addin_check_supported_cb,
                                  g_object_ref (self));
