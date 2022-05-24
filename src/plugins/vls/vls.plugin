@@ -1,6 +1,6 @@
 [Plugin]
 Name=Vala Language Server
-Description=Vala code intelligence provided by VLS.
+Description=Vala code intelligence provided by vala-language-server
 Authors=Princeton Ferro, Ben Iofel
 Copyright=Copyright © 2020
 Module=vls
