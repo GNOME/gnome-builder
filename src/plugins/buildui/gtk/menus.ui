@@ -49,7 +49,7 @@
       <item>
         <attribute name="label" translatable="yes">_Build</attribute>
         <attribute name="action">build-manager.build</attribute>
-        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;space</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;b</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Rebuild</attribute>
@@ -122,7 +122,8 @@
         <attribute name="action">run-manager.run-with-handler</attribute>
         <attribute name="target" type="s">'run'</attribute>
         <attribute name="label" translatable="yes">Run</attribute>
-        <attribute name="verb-icon-name">builder-run-start-symbolic</attribute>
+        <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;space</attribute>
+        <attribute name="verb-icon">builder-run-start-symbolic</attribute>
       </item>
     </section>
     <section id="run-menu-settings-section">
