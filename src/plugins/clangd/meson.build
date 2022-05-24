@@ -1,13 +1,24 @@
 if get_option('plugin_clangd')
 
-install_data('clangd_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'clangd-plugin.c',
+  'gbp-clangd-code-action-provider.c',
+  'gbp-clangd-completion-provider.c',
+  'gbp-clangd-diagnostic-provider.c',
+  'gbp-clangd-formatter.c',
+  'gbp-clangd-highlighter.c',
+  'gbp-clangd-hover-provider.c',
+  'gbp-clangd-rename-provider.c',
+  'gbp-clangd-symbol-resolver.c',
+  'gbp-clangd-service.c',
+])
 
-configure_file(
-          input: 'clangd.plugin',
-         output: 'clangd.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_clangd_resources = gnome.compile_resources(
+  'clangd-resources',
+  'clangd.gresource.xml',
+  c_name: 'gbp_clangd',
 )
+
+plugins_sources += plugin_clangd_resources
 
 endif
