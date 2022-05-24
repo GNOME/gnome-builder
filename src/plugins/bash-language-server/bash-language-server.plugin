@@ -1,0 +1,16 @@
+[Plugin]
+Builtin=true
+Copyright=Copyright © 2021 Günther Wagner, Copyright © 2022 Christian Hergert
+Description=Provides integration with bash-language-server for Bash
+Embedded=_gbp_bash_register_types
+Module=bash-language-server
+Name=Bash Language Server
+X-Category=lsps
+X-Completion-Provider-Languages=sh
+X-Symbol-Resolver-Languages=sh
+X-Diagnostic-Provider-Languages=sh
+X-Highlighter-Languages=sh
+X-Hover-Provider-Languages=sh
+X-Rename-Provider-Languages=sh
+X-Formatter-Languages=sh
+X-Code-Action-Languages=sh

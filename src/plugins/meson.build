@@ -36,6 +36,7 @@ endif
 
 subdir('auto-save')
 subdir('autotools')
+subdir('bash-language-server')
 #subdir('beautifier')
 subdir('blueprint')
 subdir('buildconfig')
@@ -206,6 +207,7 @@ status += [
   '',
   'Language Servers:',
   '',
+  'bash-language-server .......... (Bash) : @0@'.format(get_option('plugin_bash_language_server')),
   'blueprint ................ (Blueprint) : @0@'.format(get_option('plugin_blueprint')),
   'clangd ............... (C, C++, Obj-C) : @0@ **'.format(get_option('plugin_clangd')),
   'gnome-builder-clang .. (C, C++, Obj-C) : @0@'.format(get_option('plugin_clang')),
