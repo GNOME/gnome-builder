@@ -22,6 +22,7 @@ option('ctags_path', type: 'string', value: '')
 option('webkit', type: 'feature', value: 'enabled', description: 'Enable features which require WebKit')
 
 option('plugin_autotools', type: 'boolean')
+option('plugin_bash_language_server', type: 'boolean')
 option('plugin_beautifier', type: 'boolean')
 option('plugin_blueprint', type: 'boolean')
 option('plugin_c_pack', type: 'boolean')
