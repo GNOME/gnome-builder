@@ -18,7 +18,7 @@
         <attribute name="action">sysprof.run</attribute>
         <attribute name="label" translatable="yes">Run with Profiler</attribute>
         <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
-        <attribute name="accel">&lt;Control&gt;F8</attribute>
+        <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;&lt;Alt&gt;p</attribute>
       </item>
     </section>
   </menu>
@@ -121,7 +121,6 @@
       <item>
         <attribute name="label" translatable="yes">Record Again…</attribute>
         <attribute name="action">sysprof.record-again</attribute>
-        <attribute name="accel">&lt;control&gt;&lt;shift&gt;F8</attribute>
       </item>
     </section>
     <section id="gbp-sysprof-page-close-section">
