@@ -78,7 +78,6 @@ subdir('gettext')
 subdir('git')
 #subdir('glade')
 subdir('go-langserv')
-subdir('gjs-symbols')
 subdir('gradle')
 subdir('greeter')
 subdir('grep')
@@ -170,7 +169,6 @@ status += [
   'GDB .................................. : @0@'.format(get_option('plugin_gdb')),
   'Gettext .............................. : @0@'.format(get_option('plugin_gettext')),
   'Git .................................. : @0@'.format(get_option('plugin_git')),
-  'GJS Symbols .......................... : @0@'.format(get_option('plugin_gjs_symbols')),
   'Glade ................................ : @0@'.format(get_option('plugin_glade')),
   'Gradle ............................... : @0@'.format(get_option('plugin_gradle')),
   'Grep ................................. : @0@'.format(get_option('plugin_grep')),
