@@ -209,7 +209,7 @@ status += [
   '',
   'blueprint ................ (Blueprint) : @0@'.format(get_option('plugin_blueprint')),
   'gnome-builder-clang .. (C, C++, Obj-C) : @0@'.format(get_option('plugin_clang')),
-  'clangd ............... (C, C++, Obj-C) : @0@ (Not Suggested)'.format(get_option('plugin_clangd')),
+  'clangd ............... (C, C++, Obj-C) : @0@ (Testing Only)'.format(get_option('plugin_clangd')),
   'gpls ............................ (Go) : @0@'.format(get_option('plugin_go_langserv')),
   'intelephense ................... (PHP) : @0@'.format(get_option('plugin_intelephense')),
   'jedi-language-server ........ (Python) : @0@'.format(get_option('plugin_jedi_language_server')),
