@@ -1,4 +1,4 @@
-if get_option('plugin_go_langserv')
+if get_option('plugin_gopls')
 
 install_data('go_langserver_plugin.py', install_dir: plugindir)
 
