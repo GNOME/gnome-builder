@@ -1,13 +1,12 @@
 [Plugin]
 Authors=Patrick Griffis <tingping@tingping.se>
 Builtin=true
-Copyright=Copyright © 2017 Patrick Griffis
+Copyright=Copyright © 2017 Patrick Griffis, Copyright © 2022 Christian Hergert
 Description=Provides a symbol resolver for JavaScript using GJS.
-Loader=python3
-Module=gjs_symbols
+Embedded=_gbp_gjs_symbols_register_types
+Module=gjs-symbols
 Name=GJS Symbol Resolver
 X-Code-Indexer-Languages-Priority=0
 X-Code-Indexer-Languages=js
 X-Symbol-Resolver-Languages-Priority=0
 X-Symbol-Resolver-Languages=js
-X-Builder-ABI=@PACKAGE_ABI@

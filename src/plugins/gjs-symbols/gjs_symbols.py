@@ -42,7 +42,7 @@ class JsSymbolNode(Ide.SymbolNode):
         self.children = children
 
     def do_get_location_async(self, cancellable, callback, user_data=None):
-        task = Gio.Task.new(self, cancellable, callback)
+        task = Ide.Task.new(self, cancellable, callback)
         task.return_boolean(True)
 
     def do_get_location_finish(self, result):
@@ -248,97 +248,73 @@ try {
         data = ARGV[0];
     }
     print(JSON.stringify(Reflect.parse(data, {source: '%s'})));
+
+    subprocess =
 } catch (e) {
     imports.system.exit(1);
 }
 """.replace('\n', ' ')
 
+def _get_launcher(context, file_):
+    file_path = file_.get_path()
+    script = JS_SCRIPT % file_path.replace('\\', '\\\\').replace("'", "\\'")
+    unsaved_file = Ide.UnsavedFiles.from_context(context).get_unsaved_file(file_)
+    srcdir = context.ref_workdir().get_path()
+    launcher = None
+
+    if context.has_project():
+        pipeline = Ide.BuildManager.from_context(context).get_pipeline()
+        if pipeline is not None and pipeline.contains_program_in_path('gjs'):
+            launcher = pipeline.create_launcher()
+            srcdir = pipeline.get_srcdir()
+
+    if launcher is None:
+        launcher = Ide.SubprocessLauncher.new(0)
+
+    launcher.set_cwd(srcdir)
+    launcher.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
+    launcher.push_args(('gjs', '-c', script))
+
+    if unsaved_file is not None:
+        launcher.push_argv(unsaved_file.get_content().get_data().decode('utf-8'))
+    else:
+        launcher.push_args(('--file', file_path))
+
+    return launcher
+
+def _get_tree_thread(task, launcher, file_):
+    try:
+        proc = launcher.spawn()
+        success, stdout, stderr = proc.communicate_utf8(None, None)
+
+        if not success:
+            task.return_error(GLib.Error('Failed to run gjs'))
+            return
+
+        task.symbol_tree = JsSymbolTree(json.loads(stdout), file_)
+    except GLib.Error as err:
+        task.return_error(err)
+    except (json.JSONDecodeError, UnicodeDecodeError) as e:
+        task.return_error(GLib.Error('Failed to decode gjs json: {}'.format(e)))
+    except (IndexError, KeyError) as e:
+        task.return_error(GLib.Error('Failed to extract information from ast: {}'.format(e)))
+    else:
+        task.return_boolean(True)
+
+
 class GjsSymbolProvider(Ide.Object, Ide.SymbolResolver):
-    def __init__(self):
-        super().__init__()
 
-    @staticmethod
-    def _get_launcher(context, file_):
-        file_path = file_.get_path()
-        script = JS_SCRIPT % file_path.replace('\\', '\\\\').replace("'", "\\'")
-        unsaved_file = Ide.UnsavedFiles.from_context(context).get_unsaved_file(file_)
-        srcdir = context.ref_workdir().get_path()
-        launcher = None
+    def do_get_symbol_tree_async(self, file_, buffer_, cancellable, callback, data):
+        task = Ide.Task.new(self, cancellable, callback)
+        launcher = _get_launcher(self.get_context(), file_)
 
-        if context.has_project():
-            pipeline = Ide.BuildManager.from_context(context).get_pipeline()
-            if pipeline is not None and pipeline.contains_program_in_path('gjs'):
-                launcher = pipeline.create_launcher()
-                srcdir = pipeline.get_srcdir()
-
-        if launcher is None:
-            launcher = Ide.SubprocessLauncher.new(0)
-
-        launcher.set_cwd(srcdir)
-        launcher.set_flags(Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE)
-        launcher.push_args(('gjs', '-c', script))
-
-        if unsaved_file is not None:
-            launcher.push_argv(unsaved_file.get_content().get_data().decode('utf-8'))
-        else:
-            launcher.push_args(('--file', file_path))
-
-        return launcher
-
-    def do_lookup_symbol_async(self, location, cancellable, callback, user_data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.return_error(GLib.Error('Not implemented'))
-
-    def do_lookup_symbol_finish(self, result):
-        result.propagate_boolean()
-        return None
-
-    def do_get_symbol_tree_async(self, file_, buffer_, cancellable, callback, user_data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        launcher = self._get_launcher(self.get_context(), file_)
-
-        threading.Thread(target=self._get_tree_thread, args=(task, launcher, file_),
+        threading.Thread(target=_get_tree_thread,
+                         args=(task, launcher, file_),
                          name='gjs-symbols-thread').start()
-
-    def _get_tree_thread(self, task, launcher, file_):
-        try:
-            proc = launcher.spawn()
-            success, stdout, stderr = proc.communicate_utf8(None, None)
-
-            if not success:
-                task.return_error(GLib.Error('Failed to run gjs'))
-                return
-
-            task.symbol_tree = JsSymbolTree(json.loads(stdout), file_)
-        except GLib.Error as err:
-            task.return_error(err)
-        except (json.JSONDecodeError, UnicodeDecodeError) as e:
-            task.return_error(GLib.Error('Failed to decode gjs json: {}'.format(e)))
-        except (IndexError, KeyError) as e:
-            task.return_error(GLib.Error('Failed to extract information from ast: {}'.format(e)))
-        else:
-            task.return_boolean(True)
 
     def do_get_symbol_tree_finish(self, result):
         if result.propagate_boolean():
             return result.symbol_tree
-
-    def do_load(self):
-        pass
-
-    def do_find_references_async(self, location, language_id, cancellable, callback, user_data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.return_error(GLib.Error('Not implemented'))
-
-    def do_find_references_finish(self, result):
-        return result.propagate_boolean()
-
-    def do_find_nearest_scope_async(self, location, cancellable, callback, user_data=None):
-        task = Gio.Task.new(self, cancellable, callback)
-        task.return_error(GLib.Error('Not implemented'))
-
-    def do_find_nearest_scope_finish(self, result):
-        return result.propagate_boolean()
 
 
 class JsCodeIndexEntries(GObject.Object, Ide.CodeIndexEntries):
@@ -430,7 +406,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
             self.active = False
 
     def do_index_file_async(self, file_, build_flags, cancellable, callback, data):
-        task = Gio.Task.new(self, cancellable, callback)
+        task = Ide.Task.new(self, cancellable, callback)
         task.entries = None
         task.file = file_
 
@@ -450,7 +426,7 @@ class GjsCodeIndexer(Ide.Object, Ide.CodeIndexer):
 
     def do_generate_key_async(self, location, flags, cancellable, callback, user_data=None):
         # print('generate key')
-        task = Gio.Task.new(self, cancellable, callback)
+        task = Ide.Task.new(self, cancellable, callback)
         task.return_error(GLib.Error('Not implemented'))
 
     def do_generate_key_finish(self, result):
