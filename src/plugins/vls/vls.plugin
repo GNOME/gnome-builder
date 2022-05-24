@@ -3,10 +3,8 @@ Name=Vala Language Server
 Description=Vala code intelligence provided by VLS.
 Authors=Princeton Ferro, Ben Iofel
 Copyright=Copyright © 2020
-
-Loader=python3
-Module=vala_langserv
-X-Builder-ABI=@PACKAGE_ABI@
+Module=vls
+Embedded=_gbp_vls_register_types
 X-Category=lsps
 X-Code-Action-Languages=vala
 X-Completion-Provider-Languages=vala
