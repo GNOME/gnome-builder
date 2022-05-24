@@ -604,27 +604,6 @@
             ]
         },
         {
-            "name" : "gvls",
-            "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized",
-                "-Dui=false",
-                "-Dui-tests=false",
-                "-Ddocs=false",
-                "-Dintrospection=false",
-                "-Dgedit-plugin=false"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/esodan/gvls.git",
-                    "tag" : "gvls-20.1"
-                }
-            ]
-        },
-        {
             "name" : "libportal",
             "config-opts" : [
                 "--libdir=/app/lib",

@@ -81,7 +81,6 @@ subdir('gopls')
 subdir('gradle')
 subdir('greeter')
 subdir('grep')
-#subdir('gvls')
 subdir('html-completion')
 subdir('html-preview')
 subdir('intelephense')
@@ -211,7 +210,6 @@ status += [
   'clangd ............... (C, C++, Obj-C) : @0@ **'.format(get_option('plugin_clangd')),
   'gnome-builder-clang .. (C, C++, Obj-C) : @0@'.format(get_option('plugin_clang')),
   'gopls ........................... (Go) : @0@'.format(get_option('plugin_gopls')),
-  'gvls .......................... (Vala) : @0@ **'.format(get_option('plugin_gvls')),
   'intelephense ................... (PHP) : @0@'.format(get_option('plugin_intelephense')),
   'jedi-language-server ........ (Python) : @0@'.format(get_option('plugin_jedi_language_server')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
