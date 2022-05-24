@@ -26,7 +26,10 @@
 /* Build Actions */
 { "trigger" : "<Control><Shift>l", "action" : "win.show-build-log", "when" : "hasProject()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>r", "action" : "build-manager.rebuild", "when" : "hasProject()", "phase" : "capture" },
-{ "trigger" : "<Control><Shift>space", "action" : "build-manager.build", "when" : "hasProject()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>b", "action" : "build-manager.build", "when" : "hasProject()", "phase" : "capture" },
+
+/* Run Actions */
+{ "trigger" : "<Control><Shift>space", "action" : "run-manager.run", "when" : "hasProject()", "phase" : "capture" },
 
 /* New Terminal Actions */
 { "trigger" : "<Control><Shift>t", "action" : "win.new-terminal", "when" : "canEdit()", "phase" : "capture" },
