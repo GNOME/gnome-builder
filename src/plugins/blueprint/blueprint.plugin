@@ -1,10 +1,9 @@
 [Plugin]
 Builtin=true
 Description=Provides integration with the blueprint language server
-Loader=python3
-Module=blueprint_plugin
+Embedded=_gbp_blueprint_register_types
+Module=blueprint
 Name=Blueprint Language Server
-X-Builder-ABI=@PACKAGE_ABI@
 X-Category=lsps
 X-Code-Action-Languages=blueprint
 X-Completion-Provider-Languages=blueprint

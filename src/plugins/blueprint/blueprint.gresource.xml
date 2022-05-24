@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/blueprint">
+    <file>blueprint.plugin</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/gtksourceview/language-specs">
+    <file>blueprint.lang</file>
+  </gresource>
+</gresources>
