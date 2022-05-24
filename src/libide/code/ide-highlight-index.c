@@ -139,8 +139,6 @@ ide_highlight_index_insert (IdeHighlightIndex *self,
  * internal structures or strings they know about to optimize later work.
  *
  * Returns: (transfer none) (nullable): Highlighter specific tag.
- *
- * Since: 3.32
  */
 gpointer
 ide_highlight_index_lookup (IdeHighlightIndex *self,
@@ -199,8 +197,6 @@ ide_highlight_index_dump (IdeHighlightIndex *self)
  * Creates a variant to represent the index. Useful to transport across IPC boundaries.
  *
  * Returns: (transfer full): a #GVariant
- *
- * Since: 3.32
  */
 GVariant *
 ide_highlight_index_to_variant (IdeHighlightIndex *self)

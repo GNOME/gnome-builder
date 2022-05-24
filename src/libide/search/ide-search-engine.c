@@ -216,8 +216,6 @@ ide_search_engine_new (void)
  * Checks if the #IdeSearchEngine is currently executing a query.
  *
  * Returns: %TRUE if queries are being processed.
- *
- * Since: 3.32
  */
 gboolean
 ide_search_engine_get_busy (IdeSearchEngine *self)
@@ -391,8 +389,6 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
  * The result is a #GListModel of #IdeSearchResult when successful.
  *
  * Returns: (transfer full): a #GListModel of #IdeSearchResult items.
- *
- * Since: 3.32
  */
 GListModel *
 ide_search_engine_search_finish (IdeSearchEngine  *self,
@@ -412,8 +408,6 @@ ide_search_engine_search_finish (IdeSearchEngine  *self,
  *
  * Adds a custom search provider to the #IdeSearchEngine. This enables
  * to bring in custom #IdeSearchProvider during the runtime.
- *
- * Since: 3.38
  */
 void
 ide_search_engine_add_provider (IdeSearchEngine   *self,
@@ -432,8 +426,6 @@ ide_search_engine_add_provider (IdeSearchEngine   *self,
  *
  * Remove a custom search provider from the #IdeSearchEngine. This removes
  * custom #IdeSearchProvider during the runtime.
- *
- * Since: 3.38
  */
 void
 ide_search_engine_remove_provider (IdeSearchEngine   *self,

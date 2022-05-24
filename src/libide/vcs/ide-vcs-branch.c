@@ -39,8 +39,6 @@ ide_vcs_branch_default_init (IdeVcsBranchInterface *iface)
  * to display to the user.
  *
  * Returns: (transfer full): a string containing the branch name
- *
- * Since: 3.32
  */
 gchar *
 ide_vcs_branch_get_name (IdeVcsBranch *self)
@@ -60,8 +58,6 @@ ide_vcs_branch_get_name (IdeVcsBranch *self)
  * Gets the identifier of the branch.
  *
  * Returns: (transfer full): a string containing the branch identifier
- *
- * Since: 3.34
  */
 gchar *
 ide_vcs_branch_get_id (IdeVcsBranch *self)

@@ -151,8 +151,6 @@ gbp_command_bar_suggestion_init (GbpCommandBarSuggestion *self)
  * @self: a #GbpCommandBarSuggestion
  *
  * Returns: (transfer none): an #IdeCommand
- *
- * Since: 3.32
  */
 IdeCommand *
 gbp_command_bar_suggestion_get_command (GbpCommandBarSuggestion *self)

@@ -553,8 +553,6 @@ ide_terminal_launcher_spawn_async (IdeTerminalLauncher *self,
  *
  * Returns: %TRUE if the process executed successfully; otherwise %FALSE
  *   and @error is set.
- *
- * Since: 3.34
  */
 gboolean
 ide_terminal_launcher_spawn_finish (IdeTerminalLauncher  *self,
@@ -792,8 +790,6 @@ ide_terminal_launcher_new (IdeContext *context)
  * using the provided #IdeSubprocessLauncher.
  *
  * Returns: (transfer full): an #IdeTerminalLauncher
- *
- * Since: 3.34
  */
 IdeTerminalLauncher *
 ide_terminal_launcher_new_for_launcher (IdeSubprocessLauncher *launcher)

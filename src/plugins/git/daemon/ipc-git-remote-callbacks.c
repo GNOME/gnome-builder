@@ -227,8 +227,6 @@ ipc_git_remote_callbacks_init (IpcGitRemoteCallbacks *self)
  *
  * This function should be called when a clone was canceled so that we can
  * avoid dispatching more events.
- *
- * Since: 3.32
  */
 void
 ipc_git_remote_callbacks_cancel (IpcGitRemoteCallbacks *self)

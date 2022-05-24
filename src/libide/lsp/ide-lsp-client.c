@@ -1282,8 +1282,6 @@ ide_lsp_client_class_init (IdeLspClientClass *klass)
    *
    * Returns: (transfer full): a #GVariant containing the result or %NULL
    *   to proceed to the next signal handler.
-   *
-   * Since: 3.36
    */
   signals [LOAD_CONFIGURATION] =
     g_signal_new ("load-configuration",
@@ -1861,8 +1859,6 @@ ide_lsp_client_queue_message (IdeLspClient *self,
  * Asynchronously queries the Language Server using the JSON-RPC protocol.
  *
  * If @params is floating, it's floating reference is consumed.
- *
- * Since: 3.26
  */
 void
 ide_lsp_client_call_async (IdeLspClient        *self,
@@ -1969,8 +1965,6 @@ ide_lsp_client_send_notification_cb (GObject      *object,
  * Asynchronously sends a notification to the Language Server.
  *
  * If @params is floating, it's reference is consumed.
- *
- * Since: 3.26
  */
 void
 ide_lsp_client_send_notification_async (IdeLspClient        *self,
@@ -2166,8 +2160,6 @@ ide_lsp_client_set_root_uri (IdeLspClient *self,
  *
  * Returns: (transfer none) (nullable): a #GVariant that is a
  *   %G_VARIANT_TYPE_VARDICT or %NULL.
- *
- * Since: 3.36
  */
 GVariant *
 ide_lsp_client_get_server_capabilities (IdeLspClient *self)
@@ -2190,8 +2182,6 @@ ide_lsp_client_get_server_capabilities (IdeLspClient *self)
  * if @options is floating, the floating reference will be taken
  * when calling this function otherwise the reference count of
  * @options will be incremented by one.
- *
- * Since: 42.0
  */
 void
 ide_lsp_client_set_initialization_options (IdeLspClient *self,

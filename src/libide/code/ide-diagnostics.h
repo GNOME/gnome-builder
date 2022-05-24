@@ -44,8 +44,6 @@ G_DECLARE_DERIVABLE_TYPE (IdeDiagnostics, ide_diagnostics, IDE, DIAGNOSTICS, Ide
  *
  * This function prototype is used to notify a caller of every line that has a
  * diagnostic, and the most severe #IdeDiagnosticSeverity for that line.
- *
- * Since: 3.32
  */
 typedef void (*IdeDiagnosticsLineCallback) (guint                 line,
                                             IdeDiagnosticSeverity severity,

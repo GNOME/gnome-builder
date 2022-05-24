@@ -260,8 +260,6 @@ ide_debugger_locals_view_new (void)
  * Gets the debugger instance.
  *
  * Returns: (transfer none): An #IdeDebugger
- *
- * Since: 3.32
  */
 IdeDebugger *
 ide_debugger_locals_view_get_debugger (IdeDebuggerLocalsView *self)

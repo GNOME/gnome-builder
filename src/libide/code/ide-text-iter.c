@@ -132,8 +132,6 @@ ide_text_iter_line_is_empty (GtkTextIter *iter)
  * Searches backwards until we find the beginning of a paragraph.
  *
  * Returns: %TRUE if we are not at the beginning of the buffer; otherwise %FALSE.
- *
- * Since: 3.32
  */
 gboolean
 ide_text_iter_backward_paragraph_start (GtkTextIter *iter)
@@ -161,8 +159,6 @@ ide_text_iter_backward_paragraph_start (GtkTextIter *iter)
  * Searches forward until the end of a paragraph has been hit.
  *
  * Returns: %TRUE if we are not at the end of the buffer; otherwise %FALSE.
- *
- * Since: 3.32
  */
 gboolean
 ide_text_iter_forward_paragraph_end (GtkTextIter *iter)
@@ -635,8 +631,6 @@ matches_pred (GtkTextIter              *iter,
  * lets us acces to the iter in the predicate.
  *
  * Returns: %TRUE if found
- *
- * Since: 3.32
  */
 gboolean
 ide_text_iter_forward_find_char (GtkTextIter              *iter,
@@ -667,8 +661,6 @@ ide_text_iter_forward_find_char (GtkTextIter              *iter,
 /**
  * ide_text_iter_backward_find_char:
  * @pred: (scope call):
- *
- * Since: 3.32
  */
 gboolean
 ide_text_iter_backward_find_char (GtkTextIter              *iter,
@@ -704,8 +696,6 @@ ide_text_iter_backward_find_char (GtkTextIter              *iter,
  * Check if @iter position in the buffer is part of @str.
  *
  * Returns: %TRUE if case of succes, %FALSE otherwise.
- *
- * Since: 3.32
  */
 gboolean
 ide_text_iter_in_string (GtkTextIter *iter,
@@ -806,8 +796,6 @@ ide_text_iter_in_string (GtkTextIter *iter,
  * Notice that for @str to be found, @iter need to be at least on the @str last char
  *
  * Returns: %TRUE if case of succes, %FALSE otherwise.
- *
- * Since: 3.32
  */
 gboolean
 ide_text_iter_find_chars_backward (GtkTextIter *iter,
@@ -878,8 +866,6 @@ ide_text_iter_find_chars_backward (GtkTextIter *iter,
  * otherwise, its position is undefined.
  *
  * Returns: %TRUE if case of succes, %FALSE otherwise.
- *
- * Since: 3.32
  */
 gboolean
 ide_text_iter_find_chars_forward (GtkTextIter *iter,

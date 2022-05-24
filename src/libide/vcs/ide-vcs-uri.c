@@ -470,8 +470,6 @@ ide_vcs_uri_is_valid (const gchar *uri_string)
  *
  * Returns: (transfer full) (nullable): a string containing the suggested
  *   clone directory name, or %NULL.
- *
- * Since: 3.32
  */
 gchar *
 ide_vcs_uri_get_clone_name (const IdeVcsUri *self)

@@ -53,8 +53,6 @@ static GParamSpec *properties [N_PROPS];
  * Gets the #IdeClangSymbolTree:file property.
  *
  * Returns: (transfer none): a #GFile.
- *
- * Since: 3.32
  */
 GFile *
 ide_clang_symbol_tree_get_file (IdeClangSymbolTree *self)

@@ -93,8 +93,6 @@ G_DEFINE_QUARK (ide_build_error, ide_build_error)
  * ide_pipeline_stage_set_transient(). This may be useful to perform operations
  * such as an "export tarball" stage which should only run once as determined
  * by the user requesting a "make dist" style operation.
- *
- * Since: 3.32
  */
 
 typedef struct
@@ -840,8 +838,6 @@ ide_pipeline_check_ready (IdePipeline *self,
  *
  * Gets the current phase that is executing. This is only useful during
  * execution of the pipeline.
- *
- * Since: 3.32
  */
 IdePipelinePhase
 ide_pipeline_get_phase (IdePipeline *self)
@@ -864,8 +860,6 @@ ide_pipeline_get_phase (IdePipeline *self)
  * Gets the #IdeConfig to use for the pipeline.
  *
  * Returns: (transfer none): An #IdeConfig
- *
- * Since: 3.32
  */
 IdeConfig *
 ide_pipeline_get_config (IdePipeline *self)
@@ -1215,8 +1209,6 @@ ide_pipeline_load_cb (IdleLoadState *state)
  * enable/disable the pipeline as the IdeConfig:ready property changes.
  * This could happen when the device or runtime is added/removed while the
  * application is running.
- *
- * Since: 3.32
  */
 static void
 ide_pipeline_load (IdePipeline *self)
@@ -1347,8 +1339,6 @@ ide_pipeline_begin_load (IdePipeline *self)
  * This function is safe to run even if load has not been called. We will not
  * clean things up if the pipeline is currently executing (we can wait until
  * its finished or dispose/finalize to cleanup up further.
- *
- * Since: 3.32
  */
 static void
 ide_pipeline_unload (IdePipeline *self)
@@ -1625,8 +1615,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * IdePipeline:busy:
    *
    * Gets the "busy" property. If %TRUE, the pipeline is busy executing.
-   *
-   * Since: 3.32
    */
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
@@ -1639,8 +1627,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * IdePipeline:configuration:
    *
    * The configuration to use for the build pipeline.
-   *
-   * Since: 3.32
    */
   properties [PROP_CONFIG] =
     g_param_spec_object ("config",
@@ -1653,8 +1639,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * IdePipeline:device:
    *
    * The "device" property is the device we are compiling for.
-   *
-   * Since: 3.32
    */
   properties [PROP_DEVICE] =
     g_param_spec_object ("device",
@@ -1668,8 +1652,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * The "message" property is descriptive text about what the the
    * pipeline is doing or it's readiness status.
-   *
-   * Since: 3.32
    */
   properties [PROP_MESSAGE] =
     g_param_spec_string ("message",
@@ -1682,8 +1664,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * IdePipeline:phase:
    *
    * The current build phase during execution of the pipeline.
-   *
-   * Since: 3.32
    */
   properties [PROP_PHASE] =
     g_param_spec_flags ("phase",
@@ -1698,8 +1678,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * The "pty" property is the #VtePty that is used by build stages that
    * build subprocesses with a pseudo terminal.
-   *
-   * Since: 3.32
    */
   properties [PROP_PTY] =
     g_param_spec_object ("pty",
@@ -1717,8 +1695,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * This signal is emitted when a plugin has detected a diagnostic while
    * building the pipeline.
-   *
-   * Since: 3.32
    */
   signals [DIAGNOSTIC] =
     g_signal_new_class_handler ("diagnostic",
@@ -1734,8 +1710,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * This signal is emitted when the pipeline has started executing in
    * response to ide_pipeline_build_async() being called.
-   *
-   * Since: 3.32
    */
   signals [STARTED] =
     g_signal_new_class_handler ("started",
@@ -1753,8 +1727,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * This signal is emitted when the build process has finished executing.
    * If the build failed to complete all requested stages, then @failed will
    * be set to %TRUE, otherwise %FALSE.
-   *
-   * Since: 3.32
    */
   signals [FINISHED] =
     g_signal_new_class_handler ("finished",
@@ -1769,8 +1741,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * The "loaded" signal is emitted after the pipeline has finished
    * loading addins.
-   *
-   * Since: 3.32
    */
   signals [LOADED] =
     g_signal_new_class_handler ("loaded",
@@ -1788,8 +1758,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * #IdeSubprocessLauncher is created by the pipeline. This may be useful
    * to plugins that wan to modify the launcher in a consistent way for all
    * pipeline consumers.
-   *
-   * Since: 3.34
    */
   signals [LAUNCHER_CREATED] =
     g_signal_new_class_handler ("launcher-created",
@@ -2114,8 +2082,6 @@ ide_pipeline_task_notify_completed (IdePipeline *self,
  * Upon completion, @callback will be buildd and should call
  * ide_pipeline_build_finish() to get the status of the
  * operation.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_build_targets_async (IdePipeline         *self,
@@ -2197,8 +2163,6 @@ short_circuit:
  * Returns: %TRUE if the build stages were buildd successfully
  *   up to the requested build phase provided to
  *   ide_pipeline_build_targets_async().
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_build_targets_finish (IdePipeline   *self,
@@ -2240,8 +2204,6 @@ ide_pipeline_build_targets_finish (IdePipeline   *self,
  * Upon completion, @callback will be buildd and should call
  * ide_pipeline_build_finish() to get the status of the
  * operation.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_build_async (IdePipeline         *self,
@@ -2265,8 +2227,6 @@ ide_pipeline_build_async (IdePipeline         *self,
  * Returns: %TRUE if the build stages were buildd successfully
  *   up to the requested build phase provided to
  *   ide_pipeline_build_async().
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_build_finish (IdePipeline   *self,
@@ -2477,8 +2437,6 @@ ide_pipeline_queue_flush (IdePipeline *self)
  * stages that are part of the same phase.
  *
  * Returns: A stage_id that may be passed to ide_pipeline_detach().
- *
- * Since: 3.32
  */
 guint
 ide_pipeline_attach (IdePipeline      *self,
@@ -2575,8 +2533,6 @@ cleanup:
  * function.
  *
  * Returns: A stage_id that may be passed to ide_pipeline_remove().
- *
- * Since: 3.32
  */
 guint
 ide_pipeline_attach_launcher (IdePipeline           *self,
@@ -2608,8 +2564,6 @@ ide_pipeline_attach_launcher (IdePipeline           *self,
  * including all stages that were previously invalidated.
  *
  * Returns: %TRUE if a stage is known to require execution.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_request_phase (IdePipeline      *self,
@@ -2689,8 +2643,6 @@ cleanup:
  * the location that build systems will use for out-of-tree builds.
  *
  * Returns: the path of the build directory
- *
- * Since: 3.32
  */
 const gchar *
 ide_pipeline_get_builddir (IdePipeline *self)
@@ -2708,8 +2660,6 @@ ide_pipeline_get_builddir (IdePipeline *self)
  * IdeVcs:working-directory property as a string.
  *
  * Returns: the path of the source directory
- *
- * Since: 3.32
  */
 const gchar *
 ide_pipeline_get_srcdir (IdePipeline *self)
@@ -2749,8 +2699,6 @@ ide_pipeline_build_path_va_list (const gchar *prefix,
  * working directory of the source tree.
  *
  * Returns: (transfer full): A newly allocated string.
- *
- * Since: 3.32
  */
 gchar *
 ide_pipeline_build_srcdir_path (IdePipeline *self,
@@ -2781,8 +2729,6 @@ ide_pipeline_build_srcdir_path (IdePipeline *self,
  * result of ide_pipeline_get_builddir() as the first parameter.
  *
  * Returns: (transfer full): A newly allocated string.
- *
- * Since: 3.32
  */
 gchar *
 ide_pipeline_build_builddir_path (IdePipeline *self,
@@ -2814,8 +2760,6 @@ ide_pipeline_build_builddir_path (IdePipeline *self,
  *
  * Plugins should use this function to remove their stages when the plugin
  * is unloading.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_detach (IdePipeline *self,
@@ -2853,8 +2797,6 @@ ide_pipeline_detach (IdePipeline *self,
  * upon discovering its state is no longer valid. Such an example might be
  * invalidating the %IDE_PIPELINE_PHASE_AUTOGEN phase when the an autotools
  * projects autogen.sh file has been changed.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_invalidate_phase (IdePipeline *self,
@@ -2881,8 +2823,6 @@ ide_pipeline_invalidate_phase (IdePipeline *self,
  *
  * Returns: (transfer none) (nullable): An #IdePipelineStage or %NULL if the
  *   stage could not be found.
- *
- * Since: 3.32
  */
 IdePipelineStage *
 ide_pipeline_get_stage_by_id (IdePipeline *self,
@@ -2908,8 +2848,6 @@ ide_pipeline_get_stage_by_id (IdePipeline *self,
  * A convenience function to get the runtime for a build pipeline.
  *
  * Returns: (transfer none) (nullable): An #IdeRuntime or %NULL
- *
- * Since: 3.32
  */
 IdeRuntime *
 ide_pipeline_get_runtime (IdePipeline *self)
@@ -2926,8 +2864,6 @@ ide_pipeline_get_runtime (IdePipeline *self)
  * A convenience function to get the toolchain for a build pipeline.
  *
  * Returns: (transfer none): An #IdeToolchain
- *
- * Since: 3.32
  */
 IdeToolchain *
 ide_pipeline_get_toolchain (IdePipeline *self)
@@ -2945,8 +2881,6 @@ ide_pipeline_get_toolchain (IdePipeline *self)
  * using the configuration and runtime associated with the pipeline.
  *
  * Returns: (transfer full): An #IdeSubprocessLauncher.
- *
- * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_pipeline_create_launcher (IdePipeline  *self,
@@ -3000,8 +2934,6 @@ ide_pipeline_create_launcher (IdePipeline  *self,
  * Attaches a PTY to stdin/stdout/stderr of the #IdeSubprocessLauncher.
  * This is useful if the application can take advantage of a PTY for
  * features like colors and other escape sequences.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_attach_pty (IdePipeline      *self,
@@ -3050,8 +2982,6 @@ ide_pipeline_attach_pty (IdePipeline      *self,
  * guaranteed to happen at object creation time.
  *
  * Returns: (transfer none) (nullable): a #VtePty or %NULL
- *
- * Since: 3.32
  */
 VtePty *
 ide_pipeline_get_pty (IdePipeline *self)
@@ -3131,8 +3061,6 @@ ide_pipeline_emit_diagnostic (IdePipeline   *self,
  *
  * Returns: an error format id that may be passed to
  *   ide_pipeline_remove_error_format().
- *
- * Since: 3.32
  */
 guint
 ide_pipeline_add_error_format (IdePipeline        *self,
@@ -3168,8 +3096,6 @@ ide_pipeline_add_error_format (IdePipeline        *self,
  * ide_pipeline_add_error_format().
  *
  * Returns: %TRUE if the error format was removed.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_remove_error_format (IdePipeline *self,
@@ -3210,8 +3136,6 @@ ide_pipeline_get_busy (IdePipeline *self)
  *
  * Returns: (nullable) (transfer full): A string representing the
  *   current stage of the build, or %NULL.
- *
- * Since: 3.32
  */
 gchar *
 ide_pipeline_get_message (IdePipeline *self)
@@ -3315,8 +3239,6 @@ ide_pipeline_get_message (IdePipeline *self)
  *
  * This function will call @stage_callback for every #IdePipelineStage registered
  * in the pipeline.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_foreach_stage (IdePipeline *self,
@@ -3701,8 +3623,6 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
  *
  * Asynchronously starts the build pipeline after cleaning any
  * existing build artifacts.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_rebuild_async (IdePipeline         *self,
@@ -3771,8 +3691,6 @@ ide_pipeline_rebuild_finish (IdePipeline  *self,
  * sensitivity of a button.
  *
  * Returns: %TRUE if there are export pipeline stages.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_get_can_export (IdePipeline *self)
@@ -3841,8 +3759,6 @@ _ide_pipeline_cancel (IdePipeline *self)
  * the configure stage has been reached.
  *
  * Returns: %TRUE if %IDE_PIPELINE_PHASE_CONFIGURE has been reached.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_has_configured (IdePipeline *self)
@@ -3960,8 +3876,6 @@ list_model_iface_init (GListModelInterface *iface)
  * get an idea of where the build pipeline will attempt to advance.
  *
  * Returns: an #IdePipelinePhase
- *
- * Since: 3.32
  */
 IdePipelinePhase
 ide_pipeline_get_requested_phase (IdePipeline *self)
@@ -4038,8 +3952,6 @@ _ide_pipeline_set_toolchain (IdePipeline *self,
  * Thread-safe variant of ide_pipeline_get_toolchain().
  *
  * Returns: (transfer full) (nullable): an #IdeToolchain or %NULL
- *
- * Since: 3.32
  */
 IdeToolchain *
 ide_pipeline_ref_toolchain (IdePipeline *self)
@@ -4120,8 +4032,6 @@ _ide_pipeline_check_toolchain (IdePipeline   *self,
  * Gets the device that the pipeline is building for.
  *
  * Returns: (transfer none): an #IdeDevice.
- *
- * Since: 3.32
  */
 IdeDevice *
 ide_pipeline_get_device (IdePipeline *self)
@@ -4138,8 +4048,6 @@ ide_pipeline_get_device (IdePipeline *self)
  * Gets the device info for the current device.
  *
  * Returns: (nullable) (transfer none): an #IdeDeviceInfo or %NULL
- *
- * Since: 3.32
  */
 IdeDeviceInfo *
 ide_pipeline_get_device_info (IdePipeline *self)
@@ -4157,8 +4065,6 @@ ide_pipeline_get_device_info (IdePipeline *self)
  * due to various initialization routines that need to complete.
  *
  * Returns: %TRUE if the pipeline has loaded, otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_is_ready (IdePipeline *self)
@@ -4178,8 +4084,6 @@ ide_pipeline_is_ready (IdePipeline *self)
  * set for the build pipeline.
  *
  * Returns: (transfer none): an #IdeTriplet
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_pipeline_get_host_triplet (IdePipeline *self)
@@ -4198,8 +4102,6 @@ ide_pipeline_get_host_triplet (IdePipeline *self)
  * work by avoiding some cross-compiling work.
  *
  * Returns: %FALSE if we're possibly cross-compiling, otherwise %TRUE
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_is_native (IdePipeline *self)
@@ -4268,8 +4170,6 @@ contains_in_runtime_with_alt_path (IdeRuntime *runtime,
  * @name that may be executed.
  *
  * Returns: %TRUE if @name was found; otherwise %FALSE
- *
- * Since: 3.34
  */
 gboolean
 ide_pipeline_contains_program_in_path (IdePipeline  *self,
@@ -4331,8 +4231,6 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
  * Finds the addin (if any) matching the plugin's @module_name.
  *
  * Returns: (transfer none) (nullable): an #IdePipelineAddin or %NULL
- *
- * Since: 3.40
  */
 IdePipelineAddin *
 ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,

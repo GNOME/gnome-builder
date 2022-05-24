@@ -101,8 +101,6 @@ ide_code_action_provider_query_async (IdeCodeActionProvider *self,
  * Completes an asynchronous request to ide_code_action_provider_query_async().
  *
  * Returns: (transfer full) (element-type IdeCodeAction): a #GPtrArray of #IdeCodeAction.
- *
- * Since: 42.0
  */
 GPtrArray*
 ide_code_action_provider_query_finish (IdeCodeActionProvider  *self,

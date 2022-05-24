@@ -231,8 +231,6 @@ ide_location_init (IdeLocation *self)
  * Gets the file within the location.
  *
  * Returns: (transfer none) (nullable): a #GFile or %NULL
- *
- * Since: 3.32
  */
 GFile *
 ide_location_get_file (IdeLocation *self)
@@ -251,8 +249,6 @@ ide_location_get_file (IdeLocation *self)
  * Gets the line within the #IdeLocation:file, or -1 if it is unknown.
  *
  * Returns: the line number, or -1.
- *
- * Since: 3.32
  */
 gint
 ide_location_get_line (IdeLocation *self)
@@ -271,8 +267,6 @@ ide_location_get_line (IdeLocation *self)
  * Gets the offset within the #IdeLocation:line, or -1 if it is unknown.
  *
  * Returns: the line offset, or -1.
- *
- * Since: 3.32
  */
 gint
 ide_location_get_line_offset (IdeLocation *self)
@@ -291,8 +285,6 @@ ide_location_get_line_offset (IdeLocation *self)
  * Gets the offset within the file in characters, or -1 if it is unknown.
  *
  * Returns: the line offset, or -1.
- *
- * Since: 3.32
  */
 gint
 ide_location_get_offset (IdeLocation *self)
@@ -311,8 +303,6 @@ ide_location_get_offset (IdeLocation *self)
  * Makes a deep copy of @self.
  *
  * Returns: (transfer full): a new #IdeLocation
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_location_dup (IdeLocation *self)
@@ -342,8 +332,6 @@ ide_location_dup (IdeLocation *self)
  * This function will never return a variant with a floating reference.
  *
  * Returns: (transfer full): a #GVariant
- *
- * Since: 3.32
  */
 GVariant *
 ide_location_to_variant (IdeLocation *self)
@@ -390,8 +378,6 @@ ide_location_new (GFile *file,
  * @offset: a charcter offset in file starting from 0, or -1 if unknown
  *
  * Returns: (transfer full): an #IdeLocation
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_location_new_with_offset (GFile *file,
@@ -426,8 +412,6 @@ ide_location_new_with_offset (GFile *file,
  *
  * Returns: (transfer full) (nullable): a #GVariant if succesful;
  *   otherwise %NULL.
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_location_new_from_variant (GVariant *variant)

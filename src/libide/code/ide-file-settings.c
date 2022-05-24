@@ -143,8 +143,6 @@ void ide_file_settings_set_##name##_set (IdeFileSettings *self, \
  * implementation might look for ".editorconfig" files.
  *
  * Returns: (transfer none): An #IdeFile.
- *
- * Since: 3.32
  */
 GFile *
 ide_file_settings_get_file (IdeFileSettings *self)
@@ -177,8 +175,6 @@ ide_file_settings_set_file (IdeFileSettings *self,
  * the language identifier known to GtkSourceView such as "c" or "sh".
  *
  * Returns: (nullable): a string containing the language id or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_file_settings_get_language (IdeFileSettings *self)
@@ -219,8 +215,6 @@ ide_file_settings_set_language (IdeFileSettings *self,
  * settled.
  *
  * Returns: %TRUE if all the settings have loaded.
- *
- * Since: 3.32
  */
 gboolean
 ide_file_settings_get_settled (IdeFileSettings *self)

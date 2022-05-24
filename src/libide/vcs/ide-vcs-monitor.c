@@ -428,8 +428,6 @@ ide_vcs_monitor_class_init (IdeVcsMonitorClass *klass)
    *
    * The "root" property is the root of the file-system to begin
    * monitoring for changes.
-   *
-   * Since: 3.32
    */
   properties [PROP_ROOT] =
     g_param_spec_object ("root",
@@ -444,8 +442,6 @@ ide_vcs_monitor_class_init (IdeVcsMonitorClass *klass)
    * The "vcs" property is the version control system to be queried for
    * additional status information when a file has been discovered to
    * have been changed.
-   *
-   * Since: 3.32
    */
   properties [PROP_VCS] =
     g_param_spec_object ("vcs",
@@ -465,8 +461,6 @@ ide_vcs_monitor_class_init (IdeVcsMonitorClass *klass)
    *
    * The "changed" signal is emitted when a file has been discovered to
    * have been changed on disk.
-   *
-   * Since: 3.32
    */
   signals [CHANGED] =
     g_signal_new ("changed",
@@ -485,8 +479,6 @@ ide_vcs_monitor_class_init (IdeVcsMonitorClass *klass)
    * @self: an #IdeVcsMonitor
    *
    * The "reloaded" signal is emitted when the monitor has been reloaded.
-   *
-   * Since: 3.32
    */
   signals [RELOADED] =
     g_signal_new ("reloaded",
@@ -529,8 +521,6 @@ ide_vcs_monitor_init (IdeVcsMonitor *self)
  * the info to be there.
  *
  * Returns: (transfer full) (nullable): an #IdeVcsFileInfo or %NULL
- *
- * Since: 3.32
  */
 IdeVcsFileInfo *
 ide_vcs_monitor_ref_info (IdeVcsMonitor *self,
@@ -559,8 +549,6 @@ ide_vcs_monitor_ref_info (IdeVcsMonitor *self,
  * #IdeVcsMonitor and returns it.
  *
  * Returns: (transfer full) (nullable): an #IdeVcs or %NULL
- *
- * Since: 3.32
  */
 IdeVcs *
 ide_vcs_monitor_ref_vcs (IdeVcsMonitor *self)
@@ -584,8 +572,6 @@ ide_vcs_monitor_ref_vcs (IdeVcsMonitor *self)
  * count of the #GFile by one.
  *
  * Returns: (transfer full) (nullable): a #GFile or %NULL
- *
- * Since: 3.32
  */
 GFile *
 ide_vcs_monitor_ref_root (IdeVcsMonitor *self)
@@ -652,8 +638,6 @@ ide_vcs_monitor_get_sequence (IdeVcsMonitor *self)
  * Gets the #IdeVcsMonitor for a context.
  *
  * Returns: (nullable) (transfer none): an #IdeVcsMonitor
- *
- * Since: 3.32
  */
 IdeVcsMonitor *
 ide_vcs_monitor_from_context (IdeContext *context)

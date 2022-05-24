@@ -133,8 +133,6 @@ ide_config_provider_default_init (IdeConfigProviderInterface *iface)
    *
    * The "added" signal is emitted when a configuration
    * has been added to a configuration provider.
-   *
-   * Since: 3.32
    */
   signals [ADDED] =
     g_signal_new ("added",
@@ -155,8 +153,6 @@ ide_config_provider_default_init (IdeConfigProviderInterface *iface)
    *
    * The "removed" signal is emitted when a configuration
    * has been removed from a configuration provider.
-   *
-   * Since: 3.32
    */
   signals [REMOVED] =
     g_signal_new ("removed",
@@ -185,8 +181,6 @@ ide_config_provider_default_init (IdeConfigProviderInterface *iface)
  * ide_config_provider_emit_added() before completing the
  * asynchronous function so that the configuration manager may be made
  * aware of the configurations.
- *
- * Since: 3.32
  */
 void
 ide_config_provider_load_async (IdeConfigProvider *self,
@@ -210,8 +204,6 @@ ide_config_provider_load_async (IdeConfigProvider *self,
  * Completes an asynchronous request to ide_config_provider_load_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_config_provider_load_finish (IdeConfigProvider  *self,
@@ -235,8 +227,6 @@ ide_config_provider_load_finish (IdeConfigProvider  *self,
  * Implementations of #IdeConfigProvider should emit removed
  * for every configuration they have registered so that the
  * #IdeConfigManager has correct information.
- *
- * Since: 3.32
  */
 void
 ide_config_provider_unload (IdeConfigProvider *self)
@@ -259,8 +249,6 @@ ide_config_provider_unload (IdeConfigProvider *self)
  *
  * This function will be called before unloading the configuration provider
  * so that it has a chance to persist any outstanding changes.
- *
- * Since: 3.32
  */
 void
 ide_config_provider_save_async (IdeConfigProvider *self,
@@ -284,8 +272,6 @@ ide_config_provider_save_async (IdeConfigProvider *self,
  * Completes an asynchronous request to ide_config_provider_save_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_config_provider_save_finish (IdeConfigProvider  *self,
@@ -306,8 +292,6 @@ ide_config_provider_save_finish (IdeConfigProvider  *self,
  *
  * #IdeConfigProvider implementations should call this function with
  * a @config when it has discovered a new configuration.
- *
- * Since: 3.32
  */
 void
 ide_config_provider_emit_added (IdeConfigProvider *self,
@@ -326,8 +310,6 @@ ide_config_provider_emit_added (IdeConfigProvider *self,
  *
  * #IdeConfigProvider implementations should call this function with
  * a @config when it has discovered it was removed.
- *
- * Since: 3.32
  */
 void
 ide_config_provider_emit_removed (IdeConfigProvider *self,
@@ -348,8 +330,6 @@ ide_config_provider_emit_removed (IdeConfigProvider *self,
  *
  * ide_config_provider_save_async() will be called by the
  * #IdeConfigManager after calling this function.
- *
- * Since: 3.32
  */
 void
 ide_config_provider_delete (IdeConfigProvider *self,
@@ -382,8 +362,6 @@ ide_config_provider_delete (IdeConfigProvider *self,
  *
  * It is expected that the #IdeConfigProvider will emit
  * #IdeConfigProvider::added with the new configuration.
- *
- * Since: 3.32
  */
 void
 ide_config_provider_duplicate (IdeConfigProvider *self,

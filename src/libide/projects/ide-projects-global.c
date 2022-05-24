@@ -58,8 +58,6 @@ on_projects_directory_changed_cb (GSettings   *settings,
  * If the GSetting was empty, the translated name "Projects" is returned.
  *
  * Returns: (not nullable) (transfer full): a #GFile
- *
- * Since: 3.32
  */
 const gchar *
 ide_get_projects_dir (void)
@@ -120,8 +118,6 @@ completed:
  * name should be used.
  *
  * Returns: (transfer full): a new string
- *
- * Since: 3.32
  */
 gchar *
 ide_create_project_id (const gchar *name)

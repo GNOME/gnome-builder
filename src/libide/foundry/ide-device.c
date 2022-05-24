@@ -58,8 +58,6 @@ static GParamSpec *properties [N_PROPS];
  * has been probed from the device.
  *
  * Returns: (nullable): A string containing the display name for the device.
- *
- * Since: 3.32
  */
 const gchar *
 ide_device_get_display_name (IdeDevice *device)
@@ -95,8 +93,6 @@ ide_device_set_display_name (IdeDevice   *device,
  * Gets the icon to use when displaying the device in UI elements.
  *
  * Returns: (nullable): an icon-name or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_device_get_icon_name (IdeDevice *self)
@@ -115,8 +111,6 @@ ide_device_get_icon_name (IdeDevice *self)
  * Sets the icon-name property.
  *
  * This is the icon that is displayed with the device name in UI elements.
- *
- * Since: 3.32
  */
 void
 ide_device_set_icon_name (IdeDevice   *self,
@@ -141,8 +135,6 @@ ide_device_set_icon_name (IdeDevice   *self,
  * user friendly name as it is often a guid.
  *
  * Returns: A unique identifier for the device.
- *
- * Since: 3.32
  */
 const gchar *
 ide_device_get_id (IdeDevice *device)
@@ -282,8 +274,6 @@ ide_device_class_init (IdeDeviceClass *klass)
    *
    * The "icon-name" property is the icon to display with the device in
    * various UI elements of Builder.
-   *
-   * Since: 3.32
    */
   properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
@@ -341,8 +331,6 @@ ide_device_error_quark (void)
  * Some information may not be available until after a connection
  * has been established. This allows the device to connect before
  * fetching that information.
- *
- * Since: 3.32
  */
 void
 ide_device_get_info_async (IdeDevice           *self,
@@ -369,8 +357,6 @@ ide_device_get_info_async (IdeDevice           *self,
  * Completes an asynchronous request to load the information about a device.
  *
  * Returns: (transfer full): an #IdeDeviceInfo or %NULL and @error is set
- *
- * Since: 3.32
  */
 IdeDeviceInfo *
 ide_device_get_info_finish (IdeDevice     *self,

@@ -62,8 +62,6 @@ struct _IdeHighlighterInterface
    *
    * @location should be set to the position that the highlighter got to
    * before yielding back to the engine.
-   *
-   * Since: 3.32
    */
   void (*update)     (IdeHighlighter       *self,
                       IdeHighlightCallback  callback,

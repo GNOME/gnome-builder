@@ -173,8 +173,6 @@ ide_range_new (IdeLocation *begin,
  * @self: a #IdeRange
  *
  * Returns: (transfer none): the beginning of the range
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_range_get_begin (IdeRange *self)
@@ -191,8 +189,6 @@ ide_range_get_begin (IdeRange *self)
  * @self: a #IdeRange
  *
  * Returns: (transfer none): the end of the range
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_range_get_end (IdeRange *self)
@@ -213,8 +209,6 @@ ide_range_get_end (IdeRange *self)
  * This function will never return a floating variant.
  *
  * Returns: (transfer full): a #GVariant
- *
- * Since: 3.32
  */
 GVariant *
 ide_range_to_variant (IdeRange *self)
@@ -250,8 +244,6 @@ ide_range_to_variant (IdeRange *self)
  * @variant: a #GVariant
  *
  * Returns: (transfer full) (nullable): a new range or %NULL
- *
- * Since: 3.32
  */
 IdeRange *
 ide_range_new_from_variant (GVariant *variant)

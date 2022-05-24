@@ -47,8 +47,6 @@
  * to a number of strings during the lifetime of the object, for each
  * of the compile commands. On larger projects, this can be the order
  * of a couple of megabytes.
- *
- * Since: 3.32
  */
 
 struct _IdeCompileCommands
@@ -133,8 +131,6 @@ ide_compile_commands_init (IdeCompileCommands *self)
  * clang-style compile commands database files (compile_commands.json).
  *
  * Returns: The newly created #IdeCompileCommands
- *
- * Since: 3.32
  */
 IdeCompileCommands *
 ide_compile_commands_new (void)
@@ -317,8 +313,6 @@ ide_compile_commands_load_worker (IdeTask      *task,
  * See also: ide_compile_commands_load_async()
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_compile_commands_load (IdeCompileCommands  *self,
@@ -365,8 +359,6 @@ ide_compile_commands_load (IdeCompileCommands  *self,
  * instead of calling this function again.
  *
  * See also: ide_compile_commands_load_finish()
- *
- * Since: 3.32
  */
 void
 ide_compile_commands_load_async (IdeCompileCommands  *self,
@@ -407,8 +399,6 @@ ide_compile_commands_load_async (IdeCompileCommands  *self,
  *
  * Returns: %TRUE if the file was loaded successfully; otherwise %FALSE
  *   and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_compile_commands_load_finish (IdeCompileCommands  *self,
@@ -675,8 +665,6 @@ find_with_alternates (IdeCompileCommands *self,
  *
  * Returns: (nullable) (transfer full): A string array or %NULL if
  *   there was a failure to locate or parse the command.
- *
- * Since: 3.32
  */
 gchar **
 ide_compile_commands_lookup (IdeCompileCommands   *self,

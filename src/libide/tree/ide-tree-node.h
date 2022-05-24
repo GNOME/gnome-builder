@@ -53,8 +53,6 @@ typedef enum
  * This function prototype is used to traverse a tree of #IdeTreeNode.
  *
  * Returns: #IdeTreeNodeVisit, %IDE_TREE_NODE_VISIT_BREAK to stop traversal.
- *
- * Since: 3.32
  */
 typedef IdeTreeNodeVisit (*IdeTreeTraverseFunc) (IdeTreeNode *node,
                                                  gpointer     user_data);
@@ -69,8 +67,6 @@ typedef IdeTreeNodeVisit (*IdeTreeTraverseFunc) (IdeTreeNode *node,
  * This callback function is a convenience wrapper around GCompareFunc
  *
  * Returns: int
- *
- * Since: 3.32
  */
 typedef int (*IdeTreeNodeCompare) (IdeTreeNode *node,
                                    IdeTreeNode *child);

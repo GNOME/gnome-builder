@@ -669,8 +669,6 @@ ide_tree_show_popover_at_node (IdeTree     *self,
  * Gets the currently selected node, or %NULL
  *
  * Returns: (transfer none) (nullable): an #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_get_selected_node (IdeTree *self)

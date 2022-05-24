@@ -32,8 +32,6 @@ G_BEGIN_DECLS
  *   used to troubleshoot the debugger.
  *
  * The type of stream for the log message.
- *
- * Since: 3.32
  */
 typedef enum
 {
@@ -56,8 +54,6 @@ typedef enum
  * @IDE_DEBUGGER_MOVEMENT_FINISH: Run until the function returns.
  *
  * Describes the style of movement that should be performed by the debugger.
- *
- * Since: 3.32
  */
 typedef enum
 {
@@ -80,8 +76,6 @@ typedef enum
  *    received a death signal.
  *
  * Represents the reason a process has stopped executing in the debugger.
- *
- * Since: 3.32
  */
 typedef enum
 {
@@ -119,8 +113,6 @@ typedef enum
  *   specification matching.
  *
  * The type of breakpoint.
- *
- * Since: 3.32
  */
 typedef enum
 {
@@ -139,8 +131,6 @@ typedef enum
  * @IDE_DEBUGGER_BREAKPOINT_CHANGE_ENABLED: change the enabled state
  *
  * Describes the type of modification to perform on a breakpoint.
- *
- * Since: 3.32
  */
 typedef enum
 {
@@ -164,8 +154,6 @@ typedef enum
  *
  * The disposition determines what should happen to the breakpoint at the next
  * stop of the debugger.
- *
- * Since: 3.32
  */
 typedef enum
 {

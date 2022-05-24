@@ -95,8 +95,6 @@ ide_code_index_entries_default_init (IdeCodeIndexEntriesInterface *iface)
  * When all of the entries have been exhausted, %NULL should be returned.
  *
  * Returns: (nullable) (transfer full): An #IdeCodeIndexEntry.
- *
- * Since: 3.32
  */
 IdeCodeIndexEntry *
 ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self)
@@ -114,8 +112,6 @@ ide_code_index_entries_get_next_entry (IdeCodeIndexEntries *self)
  * The file that was indexed.
  *
  * Returns: (transfer full): a #GFile
- *
- * Since: 3.32
  */
 GFile *
 ide_code_index_entries_get_file (IdeCodeIndexEntries *self)
@@ -136,8 +132,6 @@ ide_code_index_entries_get_file (IdeCodeIndexEntries *self)
  * Requests the next set of results from the code index asynchronously.
  * This allows implementations to possibly process data off the main thread
  * without blocking the main loop.
- *
- * Since: 3.32
  */
 void
 ide_code_index_entries_next_entries_async (IdeCodeIndexEntries *self,
@@ -162,8 +156,6 @@ ide_code_index_entries_next_entries_async (IdeCodeIndexEntries *self,
  *
  * Returns: (transfer full) (element-type IdeCodeIndexEntry): a #GPtrArray
  *   of #IdeCodeIndexEntry.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_code_index_entries_next_entries_finish (IdeCodeIndexEntries  *self,
@@ -225,8 +217,6 @@ ide_code_index_entries_collect_cb (GObject      *object,
  *
  * Calls ide_code_index_entries_next_entries_async() repeatedly until all
  * entries have been retrieved. After that, the async operation will complete.
- *
- * Since: 3.32
  */
 void
 ide_code_index_entries_collect_async (IdeCodeIndexEntries *self,
@@ -252,8 +242,6 @@ ide_code_index_entries_collect_async (IdeCodeIndexEntries *self,
  *
  * Returns: (transfer full) (element-type IdeCodeIndexEntry): an array of #IdeCodeIndexEntry
  *   or %NULL and @error is set
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_code_index_entries_collect_finish (IdeCodeIndexEntries  *self,

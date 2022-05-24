@@ -134,8 +134,6 @@ ide_template_base_mkdirs_finish (IdeTemplateBase  *self,
  * Fetches the #TmplTemplateLocator used for resolving templates.
  *
  * Returns: (transfer none) (nullable): a #TmplTemplateLocator or %NULL.
- *
- * Since: 3.32
  */
 TmplTemplateLocator *
 ide_template_base_get_locator (IdeTemplateBase *self)
@@ -246,8 +244,6 @@ ide_template_base_class_init (IdeTemplateBaseClass *klass)
    * that should be used to resolve template includes. If %NULL, templates
    * will not be allowed to include other templates.
    * directive.
-   *
-   * Since: 3.32
    */
   properties [PROP_LOCATOR] =
     g_param_spec_object ("locator",

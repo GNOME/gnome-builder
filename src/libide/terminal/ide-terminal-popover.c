@@ -208,8 +208,6 @@ ide_terminal_popover_new (void)
  * @self: a #IdeTerminalPopover
  *
  * Returns: (transfer none): an #IdeRuntime or %NULL
- *
- * Since: 3.32
  */
 IdeRuntime *
 ide_terminal_popover_get_runtime (IdeTerminalPopover *self)

@@ -204,8 +204,6 @@ gbp_buildui_stage_row_new (IdePipelineStage *stage)
  * Gets the stage for the row.
  *
  * Returns: (transfer none): an #IdePipelineStage
- *
- * Since: 3.32
  */
 IdePipelineStage *
 gbp_buildui_stage_row_get_stage (GbpBuilduiStageRow *self)

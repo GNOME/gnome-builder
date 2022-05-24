@@ -38,8 +38,6 @@
  * This is only designed for use on Linux, where we are using a single inotify
  * FD. You can still hit the max watch limit, but it is much higher than the FD
  * limit.
- *
- * Since: 3.28
  */
 
 struct _IdeRecursiveFileMonitor
@@ -555,8 +553,6 @@ ide_recursive_file_monitor_class_init (IdeRecursiveFileMonitorClass *klass)
    *
    * This event is similar to #GFileMonitor::changed but can be fired from
    * any of the monitored directories in the recursive mount.
-   *
-   * Since: 3.28
    */
   signals [CHANGED] =
     g_signal_new ("changed",
@@ -592,8 +588,6 @@ ide_recursive_file_monitor_new (GFile *file)
  * @self: a #IdeRecursiveFileMonitor
  *
  * Cancels the recursive file monitor.
- *
- * Since: 3.28
  */
 void
 ide_recursive_file_monitor_cancel (IdeRecursiveFileMonitor *self)
@@ -610,8 +604,6 @@ ide_recursive_file_monitor_cancel (IdeRecursiveFileMonitor *self)
  * Gets the root directory used forthe file monitor.
  *
  * Returns: (transfer none): a #GFile
- *
- * Since: 3.28
  */
 GFile *
 ide_recursive_file_monitor_get_root (IdeRecursiveFileMonitor *self)
@@ -635,8 +627,6 @@ ide_recursive_file_monitor_get_root (IdeRecursiveFileMonitor *self)
  *
  * If @ignore_func is %NULL, it is set to the default which does not
  * ignore any files or directories.
- *
- * Since: 3.28
  */
 void
 ide_recursive_file_monitor_set_ignore_func (IdeRecursiveFileMonitor *self,

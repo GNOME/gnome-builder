@@ -150,8 +150,6 @@ gbp_create_project_template_icon_init (GbpCreateProjectTemplateIcon *self)
  * Gets the template for the item.
  *
  * Returns: (transfer none): an #IdeProjectTemplate
- *
- * Since: 3.32
  */
 IdeProjectTemplate *
 gbp_create_project_template_icon_get_template (GbpCreateProjectTemplateIcon *self)

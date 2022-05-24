@@ -38,8 +38,6 @@
  *
  * The #IdeContext object is the root object for a project. Everything
  * in a project is contained by this object.
- *
- * Since: 3.32
  */
 
 struct _IdeContext
@@ -290,8 +288,6 @@ ide_context_class_init (IdeContextClass *klass)
    *
    * Before any project has loaded, this is "empty" to allow flexibility
    * for non-project use.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROJECT_ID] =
     g_param_spec_string ("project-id",
@@ -304,8 +300,6 @@ ide_context_class_init (IdeContextClass *klass)
    * IdeContext:title:
    *
    * The "title" property is a descriptive name for the project.
-   *
-   * Since: 3.32
    */
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -320,8 +314,6 @@ ide_context_class_init (IdeContextClass *klass)
    * The "workdir" property is the best guess at the working directory for the
    * context. This may be discovered using a common parent if multiple files
    * are opened without a project.
-   *
-   * Since: 3.32
    */
   properties [PROP_WORKDIR] =
     g_param_spec_object ("workdir",
@@ -340,8 +332,6 @@ ide_context_class_init (IdeContextClass *klass)
    * @message: the log message
    *
    * This signal is emitted when a log item has been added for the context.
-   *
-   * Since: 3.32
    */
   signals [LOG] =
     g_signal_new_class_handler ("log",
@@ -379,8 +369,6 @@ ide_context_init (IdeContext *self)
  * g_async_initable_init_async().
  *
  * Returns: (transfer full): an #IdeContext
- *
- * Since: 3.32
  */
 IdeContext *
 ide_context_new (void)
@@ -423,8 +411,6 @@ ide_context_peek_child_typed_cb (IdeObject *object,
  *
  * Returns: (transfer none) (type IdeObject) (nullable): an #IdeObject that
  *   matches @type if successful; otherwise %NULL
- *
- * Since: 3.32
  */
 gpointer
 ide_context_peek_child_typed (IdeContext *self,
@@ -452,8 +438,6 @@ ide_context_peek_child_typed (IdeContext *self,
  * Copies the project-id and returns it to the caller.
  *
  * Returns: (transfer full): a project-id as a string
- *
- * Since: 3.32
  */
 gchar *
 ide_context_dup_project_id (IdeContext *self)
@@ -478,8 +462,6 @@ ide_context_dup_project_id (IdeContext *self)
  * Sets the project-id for the context.
  *
  * Generally, this should only be done once after loading a project.
- *
- * Since: 3.32
  */
 void
 ide_context_set_project_id (IdeContext  *self,
@@ -508,8 +490,6 @@ ide_context_set_project_id (IdeContext  *self,
  * reference count by one.
  *
  * Returns: (transfer full): a #GFile
- *
- * Since: 3.32
  */
 GFile *
 ide_context_ref_workdir (IdeContext *self)
@@ -536,8 +516,6 @@ ide_context_ref_workdir (IdeContext *self)
  *
  * In future releases, changes may be made to change this in support of
  * git-worktrees or similar workflows.
- *
- * Since: 3.32
  */
 void
 ide_context_set_workdir (IdeContext *self,
@@ -560,8 +538,6 @@ ide_context_set_workdir (IdeContext *self,
  * Like ide_context_cache_filename() but returns a #GFile.
  *
  * Returns: (transfer full): a #GFile for the cache file
- *
- * Since: 3.32
  */
 GFile *
 ide_context_cache_file (IdeContext  *self,
@@ -617,8 +593,6 @@ ide_context_cache_file (IdeContext  *self,
  * of g_get_user_cache_dir().
  *
  * Returns: (transfer full): A new string containing the cache filename
- *
- * Since: 3.32
  */
 gchar *
 ide_context_cache_filename (IdeContext  *self,
@@ -669,8 +643,6 @@ ide_context_cache_filename (IdeContext  *self,
  * - Otherwise, a #GFile child of #IdeContext:workdir is returned.
  *
  * Returns: (transfer full): a #GFile
- *
- * Since: 3.32
  */
 GFile *
 ide_context_build_file (IdeContext  *self,
@@ -701,8 +673,6 @@ ide_context_build_file (IdeContext  *self,
  * loaded project.
  *
  * Returns: (transfer full): a string containing the new path
- *
- * Since: 3.32
  */
 gchar *
 ide_context_build_filename (IdeContext  *self,
@@ -750,8 +720,6 @@ ide_context_build_filename (IdeContext  *self,
  * This creates a new #GSettings instance for the project.
  *
  * Returns: (transfer full): a #GSettings
- *
- * Since: 3.32
  */
 GSettings *
 ide_context_ref_project_settings (IdeContext *self)
@@ -772,8 +740,6 @@ ide_context_ref_project_settings (IdeContext *self)
  * @self: a #IdeContext
  *
  * Returns: (transfer full): a string containing the title
- *
- * Since: 3.32
  */
 gchar *
 ide_context_dup_title (IdeContext *self)
@@ -797,8 +763,6 @@ ide_context_dup_title (IdeContext *self)
  * Sets the #IdeContext:title property. This is used by various
  * components to show the user the name of the project. This may
  * include the omnibar and the window title.
- *
- * Since: 3.32
  */
 void
 ide_context_set_title (IdeContext  *self,
@@ -837,8 +801,6 @@ ide_context_log (IdeContext     *self,
  * Checks to see if a project has been loaded in @context.
  *
  * Returns: %TRUE if a project has been, or is currently, loading.
- *
- * Since: 3.32
  */
 gboolean
 ide_context_has_project (IdeContext *self)
@@ -872,8 +834,6 @@ _ide_context_set_has_project (IdeContext *self)
  * Finds the addin (if any) matching the plugin's @module_name.
  *
  * Returns: (transfer none) (nullable): an #IdeContextAddin or %NULL
- *
- * Since: 3.40
  */
 IdeContextAddin *
 ide_context_addin_find_by_module_name (IdeContext  *context,

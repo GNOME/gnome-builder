@@ -147,8 +147,6 @@ ide_application_open_project_async (IdeApplication      *self,
  *
  * Returns: (transfer full): an #IdeWorkbench or %NULL on failure and @error
  *   is set.
- *
- * Since: 3.32
  */
 IdeWorkbench *
 ide_application_open_project_finish (IdeApplication  *self,

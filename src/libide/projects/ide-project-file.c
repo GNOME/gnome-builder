@@ -178,8 +178,6 @@ ide_project_file_init (IdeProjectFile *self)
  * Gets the project file.
  *
  * Returns: (transfer none): an #IdeProjectFile
- *
- * Since: 3.32
  */
 GFile *
 ide_project_file_get_directory (IdeProjectFile *self)
@@ -198,8 +196,6 @@ ide_project_file_get_directory (IdeProjectFile *self)
  * Gets the file for the #IdeProjectFile.
  *
  * Returns: (transfer full): a #GFile
- *
- * Since: 3.32
  */
 GFile *
 ide_project_file_ref_file (IdeProjectFile *self)
@@ -220,8 +216,6 @@ ide_project_file_ref_file (IdeProjectFile *self)
  * file, such as via #IdeProjectFile:file.
  *
  * Returns: (transfer none): a #GFileInfo
- *
- * Since: 3.32
  */
 GFileInfo *
 ide_project_file_get_info (IdeProjectFile *self)
@@ -240,8 +234,6 @@ ide_project_file_get_info (IdeProjectFile *self)
  * Gets the name for the file, which matches the encoding on disk.
  *
  * Returns: a string containing the name
- *
- * Since: 3.32
  */
 const gchar *
 ide_project_file_get_name (IdeProjectFile *self)
@@ -260,8 +252,6 @@ ide_project_file_get_name (IdeProjectFile *self)
  * Gets the display-name for the file, which should be shown to users.
  *
  * Returns: a string containing the display name
- *
- * Since: 3.32
  */
 const gchar *
 ide_project_file_get_display_name (IdeProjectFile *self)
@@ -281,8 +271,6 @@ ide_project_file_get_display_name (IdeProjectFile *self)
  * %TRUE, this may still return %TRUE.
  *
  * Returns: %TRUE if @self is a directory, or symlink to a directory
- *
- * Since: 3.32
  */
 gboolean
 ide_project_file_is_directory (IdeProjectFile *self)
@@ -302,8 +290,6 @@ ide_project_file_is_directory (IdeProjectFile *self)
  * Checks if @self represents a symlink.
  *
  * Returns: %TRUE if @self is a symlink
- *
- * Since: 3.32
  */
 gboolean
 ide_project_file_is_symlink (IdeProjectFile *self)
@@ -364,8 +350,6 @@ ide_project_file_compare_directories_first (IdeProjectFile *a,
  * Gets the symbolic icon to represent the file.
  *
  * Returns: (transfer none) (nullable): a #GIcon or %NULL
- *
- * Since: 3.32
  */
 GIcon *
 ide_project_file_get_symbolic_icon (IdeProjectFile *self)
@@ -450,8 +434,6 @@ ide_project_file_list_children_cb (GObject      *object,
  *
  * Call ide_project_file_list_children_finish() to get the result
  * of this operation.
- *
- * Since: 3.32
  */
 void
 ide_project_file_list_children_async (IdeProjectFile      *self,
@@ -490,8 +472,6 @@ ide_project_file_list_children_async (IdeProjectFile      *self,
  *
  * Returns: (transfer full) (element-type IdeProjectFile): a #GPtrArray
  *   of #IdeProjectFile
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_project_file_list_children_finish (IdeProjectFile  *self,
@@ -575,8 +555,6 @@ ide_project_file_trash_finish (IdeProjectFile  *self,
  * Creates a new child project file of @self.
  *
  * Returns: (transfer full): an #IdeProjectFile
- *
- * Since: 3.32
  */
 IdeProjectFile *
 ide_project_file_create_child (IdeProjectFile *self,
@@ -601,8 +579,6 @@ ide_project_file_create_child (IdeProjectFile *self,
  * Creates a new project file for a child of @directory.
  *
  * Returns: (transfer full): an #IdeProjectFile
- *
- * Since: 3.32
  */
 IdeProjectFile *
 ide_project_file_new (GFile     *directory,

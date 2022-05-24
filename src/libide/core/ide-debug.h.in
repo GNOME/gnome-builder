@@ -37,8 +37,6 @@ G_BEGIN_DECLS
  * These tracing macros will compile out when Builder is configured for a
  * release build. Otherwise, running Builder with the "-vvvv" command line
  * argument will show tracing output.
- *
- * Since: 3.18
  */
 
 /**
@@ -46,8 +44,6 @@ G_BEGIN_DECLS
  *
  * Traces the entry into a function. Place this at the beginning of your
  * function above pre-condition checks.
- *
- * Since: 3.18
  */
 
 /**
@@ -55,16 +51,12 @@ G_BEGIN_DECLS
  *
  * Traces the exit from a function. Use this instead of "return" to return
  * and log the function exiting.
- *
- * Since: 3.18
  */
 
 /**
  * IDE_RETURN: (skip)
  *
  * Similar to %IDE_EXIT but allows providing a return value.
- *
- * Since: 3.18
  */
 
 /**
@@ -73,8 +65,6 @@ G_BEGIN_DECLS
  *
  * Appends to the jump to label to the tracing log and then jumps
  * to the label @_l.
- *
- * Since: 3.18
  */
 
 /**
@@ -83,24 +73,18 @@ G_BEGIN_DECLS
  *
  * Appends to the tracing log that unsupported code has been
  * reached.
- *
- * Since: 3.18
  */
 
 /**
  * IDE_PROBE: (skip)
  *
  * Appends to the tracing log that a line of code was reached.
- *
- * Since: 3.18
  */
 
 /**
  * IDE_TRACE_MSG: (skip)
  *
  * Similar to %IDE_PROBE but allows specifying a log message.
- *
- * Since: 3.18
  */
 
 #ifndef IDE_ENABLE_TRACE

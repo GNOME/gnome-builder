@@ -360,8 +360,6 @@ ide_cell_renderer_fancy_get_title (IdeCellRendererFancy *self)
  *
  * Like ide_cell_renderer_fancy_set_title() but takes ownership
  * of @title, saving a string copy.
- *
- * Since: 3.32
  */
 void
 ide_cell_renderer_fancy_take_title (IdeCellRendererFancy *self,

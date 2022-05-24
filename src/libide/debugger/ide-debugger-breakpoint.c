@@ -232,8 +232,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    * The address of the breakpoint, if available.
    *
    * Builder only supports up to 64-bit addresses at this time.
-   *
-   * Since: 3.32
    */
   properties [PROP_ADDRESS] =
     g_param_spec_uint64 ("address",
@@ -248,8 +246,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    * The number of times the breakpoint has been reached.
    *
    * This is backend specific, and may not be supported by all backends.
-   *
-   * Since: 3.32
    */
   properties [PROP_COUNT] =
     g_param_spec_int64 ("count",
@@ -270,8 +266,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    *
    * This is backend specific, and not all values may be supported by all
    * backends.
-   *
-   * Since: 3.32
    */
   properties [PROP_DISPOSITION] =
     g_param_spec_enum ("disposition",
@@ -285,8 +279,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    * IdeDebuggerBreakpoint:enabled:
    *
    * This property is %TRUE when the breakpoint is enabled.
-   *
-   * Since: 3.32
    */
   properties [PROP_ENABLED] =
     g_param_spec_boolean ("enabled",
@@ -302,8 +294,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    *
    * The value of this is backend specific and may look vastly different
    * based on the language being debugged.
-   *
-   * Since: 3.32
    */
   properties [PROP_FUNCTION] =
     g_param_spec_string ("function",
@@ -318,8 +308,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    * The identifier of the breakpoint.
    *
    * This is backend specific.
-   *
-   * Since: 3.32
    */
   properties [PROP_ID] =
     g_param_spec_string ("id",
@@ -335,8 +323,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    *
    * If the breakpoint exists at an assembly instruction that cannot be
    * represented by a file, this will be %NULL.
-   *
-   * Since: 3.32
    */
   properties [PROP_FILE] =
     g_param_spec_string ("file",
@@ -350,8 +336,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    *
    * The line number within #IdeDebuggerBreakpoint:file where the
    * breakpoint exists.
-   *
-   * Since: 3.32
    */
   properties [PROP_LINE] =
     g_param_spec_uint ("line",
@@ -364,8 +348,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    * IdeDebuggerBreakpoint:mode:
    *
    * The mode of the breakpoint, such as a breakpoint, countpoint, or watchpoint.
-   *
-   * Since: 3.32
    */
   properties [PROP_MODE] =
     g_param_spec_enum ("mode",
@@ -380,8 +362,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    *
    * The specification for the breakpoint, which may be used by watchpoints
    * to determine of the breakpoint should be applied while executing.
-   *
-   * Since: 3.32
    */
   properties [PROP_SPEC] =
     g_param_spec_string ("spec",
@@ -394,8 +374,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    * IdeDebuggerBreakpoint:thread:
    *
    * The thread the breakpoint is currently stopped in, or %NULL.
-   *
-   * Since: 3.32
    */
   properties [PROP_THREAD] =
     g_param_spec_string ("thread",
@@ -414,8 +392,6 @@ ide_debugger_breakpoint_class_init (IdeDebuggerBreakpointClass *klass)
    * breakpoint can reset any internal state. This allows the breakpoint to be
    * propagated to the next debugger instance, allowing the user to move
    * between debugger sessions without loosing state.
-   *
-   * Since: 3.32
    */
   signals [RESET] =
     g_signal_new ("reset",
@@ -452,8 +428,6 @@ ide_debugger_breakpoint_new (const gchar *id)
  * Gets the identifier for the breakpoint that is backend specific.
  *
  * Returns: the id of the breakpoint
- *
- * Since: 3.32
  */
 const gchar *
 ide_debugger_breakpoint_get_id (IdeDebuggerBreakpoint *self)
@@ -475,8 +449,6 @@ ide_debugger_breakpoint_get_id (IdeDebuggerBreakpoint *self)
  * Builder only supports up to 64-bit addresses at this time.
  *
  * Returns: The address of the breakpoint, if any.
- *
- * Since: 3.32
  */
 IdeDebuggerAddress
 ide_debugger_breakpoint_get_address (IdeDebuggerBreakpoint *self)
@@ -494,8 +466,6 @@ ide_debugger_breakpoint_get_address (IdeDebuggerBreakpoint *self)
  * @address: The address of the breakpoint
  *
  * Sets the address of the breakpoint, if any.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_address (IdeDebuggerBreakpoint *self,
@@ -521,8 +491,6 @@ ide_debugger_breakpoint_set_address (IdeDebuggerBreakpoint *self,
  * address.
  *
  * Returns: (nullable): The file containing the breakpoint, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_debugger_breakpoint_get_file (IdeDebuggerBreakpoint *self)
@@ -540,8 +508,6 @@ ide_debugger_breakpoint_get_file (IdeDebuggerBreakpoint *self)
  * @file: (nullable): the file containing the breakpoint, or %NULL
  *
  * Sets the file that contains the breakpoint, if any.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_file (IdeDebuggerBreakpoint *self,
@@ -569,8 +535,6 @@ ide_debugger_breakpoint_set_file (IdeDebuggerBreakpoint *self,
  * %IDE_DEBUGGER_BREAK_WATCHPOINT.
  *
  * Returns: (nullable): A string containing the spec, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_debugger_breakpoint_get_spec (IdeDebuggerBreakpoint *self)
@@ -590,8 +554,6 @@ ide_debugger_breakpoint_get_spec (IdeDebuggerBreakpoint *self)
  * Sets the specification for the debugger breakpoint. This describes
  * a statement which the debugger can use to determine of the breakpoint
  * should be applied when stopping the debugger.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_spec (IdeDebuggerBreakpoint *self,
@@ -617,8 +579,6 @@ ide_debugger_breakpoint_set_spec (IdeDebuggerBreakpoint *self,
  *
  * Returns: An integer greater than or equal to zero representing the
  *   number of times the breakpoint has been reached.
- *
- * Since: 3.32
  */
 gint64
 ide_debugger_breakpoint_get_count (IdeDebuggerBreakpoint *self)
@@ -636,8 +596,6 @@ ide_debugger_breakpoint_get_count (IdeDebuggerBreakpoint *self)
  * Sets the number of times the breakpoint has been reached if the
  * breakpoint is a countpoint (or if the backend supports counting of
  * regular breakpoints).
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_count (IdeDebuggerBreakpoint *self,
@@ -663,8 +621,6 @@ ide_debugger_breakpoint_set_count (IdeDebuggerBreakpoint *self,
  * See also: #IdeDebuggerBreakMode
  *
  * Returns: The mode of the breakpoint
- *
- * Since: 3.32
  */
 IdeDebuggerBreakMode
 ide_debugger_breakpoint_get_mode (IdeDebuggerBreakpoint *self)
@@ -687,8 +643,6 @@ ide_debugger_breakpoint_get_mode (IdeDebuggerBreakpoint *self)
  *
  * For example, if it is a countpoint (a breakpoint which increments a
  * counter), you would use %IDE_DEBUGGER_BREAK_COUNTPOINT.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_mode (IdeDebuggerBreakpoint *self,
@@ -713,8 +667,6 @@ ide_debugger_breakpoint_set_mode (IdeDebuggerBreakpoint *self,
  * Gets the "disposition" property of the breakpoint.
  *
  * Returns: An #IdeDebugerDisposition
- *
- * Since: 3.32
  */
 IdeDebuggerDisposition
 ide_debugger_breakpoint_get_disposition (IdeDebuggerBreakpoint *self)
@@ -735,8 +687,6 @@ ide_debugger_breakpoint_get_disposition (IdeDebuggerBreakpoint *self)
  *
  * The disposition property is used to to track what should happen to a
  * breakpoint when movements are made in the debugger.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_disposition (IdeDebuggerBreakpoint  *self,
@@ -761,8 +711,6 @@ ide_debugger_breakpoint_set_disposition (IdeDebuggerBreakpoint  *self,
  * Checks if the breakpoint is enabled.
  *
  * Returns: %TRUE if the breakpoint is enabled
- *
- * Since: 3.32
  */
 gboolean
 ide_debugger_breakpoint_get_enabled (IdeDebuggerBreakpoint *self)
@@ -783,8 +731,6 @@ ide_debugger_breakpoint_get_enabled (IdeDebuggerBreakpoint *self)
  *
  * You must call ide_debugger_breakpoint_modify_breakpoint_async() to actually
  * modify the breakpoint in the backend.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_enabled (IdeDebuggerBreakpoint *self,
@@ -810,8 +756,6 @@ ide_debugger_breakpoint_set_enabled (IdeDebuggerBreakpoint *self,
  * Gets the "function" property of the breakpoint.
  *
  * This is a user-readable value representing the name of the function.
- *
- * Since: 3.32
  */
 const gchar *
 ide_debugger_breakpoint_get_function (IdeDebuggerBreakpoint *self)
@@ -830,8 +774,6 @@ ide_debugger_breakpoint_get_function (IdeDebuggerBreakpoint *self)
  *
  * Sets the "function" property, which is a user-readable value representing
  * the name of the function.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_function (IdeDebuggerBreakpoint *self,
@@ -859,8 +801,6 @@ ide_debugger_breakpoint_set_function (IdeDebuggerBreakpoint *self,
  * This value is indexed from 1, and 0 indicates that the value is unset.
  *
  * Returns: An integer greater than 0 if set, otherwise 0.
- *
- * Since: 3.32
  */
 guint
 ide_debugger_breakpoint_get_line (IdeDebuggerBreakpoint *self)
@@ -877,8 +817,6 @@ ide_debugger_breakpoint_get_line (IdeDebuggerBreakpoint *self)
  * @self: An #IdeDebuggerBreakpoint
  *
  * Sets the line for the breakpoint. A value of 0 means the line is unset.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_line (IdeDebuggerBreakpoint *self,
@@ -903,8 +841,6 @@ ide_debugger_breakpoint_set_line (IdeDebuggerBreakpoint *self,
  * currently stopped in (if any).
  *
  * Returns: (nullable): the thread identifier or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_debugger_breakpoint_get_thread (IdeDebuggerBreakpoint *self)
@@ -922,8 +858,6 @@ ide_debugger_breakpoint_get_thread (IdeDebuggerBreakpoint *self)
  * Sets the thread that the breakpoint is currently stopped in.
  *
  * This should generally only be used by debugger implementations.
- *
- * Since: 3.32
  */
 void
 ide_debugger_breakpoint_set_thread (IdeDebuggerBreakpoint *self,

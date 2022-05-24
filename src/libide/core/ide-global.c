@@ -68,8 +68,6 @@ ide_init_ctor (void)
  * currently running within.
  *
  * Returns: (transfer none): a #GThread
- *
- * Since: 3.32
  */
 GThread *
 ide_get_main_thread (void)
@@ -83,8 +81,6 @@ ide_get_main_thread (void)
  * Gets the kind of process we're running as.
  *
  * Returns: an #IdeProcessKind
- *
- * Since: 3.32
  */
 IdeProcessKind
 ide_get_process_kind (void)
@@ -108,8 +104,6 @@ ide_get_application_id (void)
  * has connected to the D-Bus.
  *
  * The default is "org.gnome.Builder".
- *
- * Since: 3.32
  */
 void
 ide_set_application_id (const gchar *app_id)
@@ -226,8 +220,6 @@ get_base_path (const gchar *name)
  * Gets the path to a resource that may be relocatable at runtime.
  *
  * Returns: (transfer full): a new string containing the path
- *
- * Since: 3.32
  */
 gchar *
 ide_get_relocatable_path (const gchar *path)

@@ -100,8 +100,6 @@ ide_project_init (IdeProject *self)
  * Gets the project for an #IdeContext.
  *
  * Returns: (transfer none): an #IdeProject
- *
- * Since: 3.32
  */
 IdeProject *
 ide_project_from_context (IdeContext *context)

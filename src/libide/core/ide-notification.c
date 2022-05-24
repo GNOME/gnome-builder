@@ -228,8 +228,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    *
    * The "body" property is the main body of text for the notification.
    * Not all notifications need this, but more complex notifications might.
-   *
-   * Since: 3.32
    */
   properties [PROP_BODY] =
     g_param_spec_string ("body",
@@ -243,8 +241,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    *
    * The "has-progress" property denotes the notification will receive
    * updates to the #IdeNotification:progress property.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_PROGRESS] =
     g_param_spec_boolean ("has-progress",
@@ -258,8 +254,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    *
    * The "icon" property is an optional icon that may be shown next to
    * the notification title and body under certain senarios.
-   *
-   * Since: 3.32
    */
   properties [PROP_ICON] =
     g_param_spec_object ("icon",
@@ -273,8 +267,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    *
    * The "icon-name" property is a helper to make setting #IdeNotification:icon
    * more convenient.
-   *
-   * Since: 3.32
    */
   properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
@@ -288,8 +280,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    *
    * The "id" property is an optional identifier that can be used to locate
    * the notification later.
-   *
-   * Since: 3.32
    */
   properties [PROP_ID] =
     g_param_spec_string ("id",
@@ -306,8 +296,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    *
    * You may also use the #IdeNotification:urgent property to raise the
    * importance of a message to the user.
-   *
-   * Since: 3.32
    */
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",
@@ -323,8 +311,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    * the operation for which the notification represents.
    *
    * This property is ignored if #IdeNotification:has-progress is unset.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROGRESS] =
     g_param_spec_double ("progress",
@@ -340,8 +326,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    * progress, but it is imprecise.
    *
    * The UI may show a bouncing progress bar if set.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROGRESS_IS_IMPRECISE] =
     g_param_spec_boolean ("progress-is-imprecise",
@@ -355,8 +339,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    *
    * The "title" property is the main text to show the user. It may be
    * displayed more prominently such as in the titlebar.
-   *
-   * Since: 3.32
    */
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -370,8 +352,6 @@ ide_notification_class_init (IdeNotificationClass *klass)
    *
    * If the notification is urgent. These notifications will be displayed with
    * higher priority than those without the urgent property set.
-   *
-   * Since: 3.32
    */
   properties [PROP_URGENT] =
     g_param_spec_boolean ("urgent",
@@ -403,8 +383,6 @@ ide_notification_init (IdeNotification *self)
  * setup_notification (notify);
  * ide_notification_attach (notif, IDE_OBJECT (some_object));
  * ```
- *
- * Since: 3.32
  */
 IdeNotification *
 ide_notification_new (void)
@@ -419,8 +397,6 @@ ide_notification_new (void)
  *
  * This function will locate the #IdeNotifications object starting from
  * @object and attach @self as a child to that object.
- *
- * Since: 3.32
  */
 void
 ide_notification_attach (IdeNotification *self,
@@ -446,8 +422,6 @@ ide_notification_attach (IdeNotification *self,
  *
  * Copies the id of the notification and returns it to the caller after locking
  * the object. A copy is used to avoid thread-races.
- *
- * Since: 3.32
  */
 gchar *
 ide_notification_dup_id (IdeNotification *self)
@@ -470,8 +444,6 @@ ide_notification_dup_id (IdeNotification *self)
  * @id: (nullable): a string containing the id, or %NULL
  *
  * Sets the #IdeNotification:id property.
- *
- * Since: 3.32
  */
 void
 ide_notification_set_id (IdeNotification *self,
@@ -496,8 +468,6 @@ ide_notification_set_id (IdeNotification *self,
  *
  * Copies the current title and returns it to the caller after locking the
  * object. A copy is used to avoid thread-races.
- *
- * Since: 3.32
  */
 gchar *
 ide_notification_dup_title (IdeNotification *self)
@@ -520,8 +490,6 @@ ide_notification_dup_title (IdeNotification *self)
  * @title: (nullable): a string containing the title text, or %NULL
  *
  * Sets the #IdeNotification:title property.
- *
- * Since: 3.32
  */
 void
 ide_notification_set_title (IdeNotification *self,
@@ -546,8 +514,6 @@ ide_notification_set_title (IdeNotification *self,
  *
  * Copies the current body and returns it to the caller after locking the
  * object. A copy is used to avoid thread-races.
- *
- * Since: 3.32
  */
 gchar *
 ide_notification_dup_body (IdeNotification *self)
@@ -570,8 +536,6 @@ ide_notification_dup_body (IdeNotification *self)
  * @body: (nullable): a string containing the body text, or %NULL
  *
  * Sets the #IdeNotification:body property.
- *
- * Since: 3.32
  */
 void
 ide_notification_set_body (IdeNotification *self,
@@ -598,8 +562,6 @@ ide_notification_set_body (IdeNotification *self,
  * to the #GIcon.
  *
  * Returns: (transfer full) (nullable): a #GIcon or %NULL
- *
- * Since: 3.32
  */
 GIcon *
 ide_notification_ref_icon (IdeNotification *self)
@@ -749,8 +711,6 @@ ide_notification_get_n_buttons (IdeNotification *self)
  * and ide_object_unlock().
  *
  * Returns: %TRUE if @button was found; otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_notification_get_button (IdeNotification  *self,
@@ -798,8 +758,6 @@ ide_notification_get_button (IdeNotification  *self,
  * Adds a new button that may be displayed with the notification.
  *
  * See also: ide_notification_add_button_with_target_value().
- *
- * Since: 3.32
  */
 void
 ide_notification_add_button (IdeNotification *self,
@@ -832,8 +790,6 @@ ide_notification_add_button (IdeNotification *self,
  *
  * Adds a new button, used the parsed #GVariant format for the action
  * target.
- *
- * Since: 3.32
  */
 void
 ide_notification_add_button_with_target_value (IdeNotification *self,
@@ -965,8 +921,6 @@ ide_notification_compare (IdeNotification *a,
  * Gets the progress for the notification.
  *
  * Returns: a value between 0.0 and 1.0
- *
- * Since: 3.32
  */
 gdouble
 ide_notification_get_progress (IdeNotification *self)
@@ -989,8 +943,6 @@ ide_notification_get_progress (IdeNotification *self)
  * @progress: a value between 0.0 and 1.0
  *
  * Sets the progress for the notification.
- *
- * Since: 3.32
  */
 void
 ide_notification_set_progress (IdeNotification *self,
@@ -1018,8 +970,6 @@ ide_notification_set_progress (IdeNotification *self,
  * Gets if the notification supports progress updates.
  *
  * Returns: %TRUE if progress updates are supported.
- *
- * Since: 3.32
  */
 gboolean
 ide_notification_get_has_progress (IdeNotification *self)
@@ -1042,8 +992,6 @@ ide_notification_get_has_progress (IdeNotification *self)
  * @has_progress: if @notification supports progress
  *
  * Set to %TRUE if the notification supports progress updates.
- *
- * Since: 3.32
  */
 void
 ide_notification_set_has_progress (IdeNotification *self,
@@ -1104,8 +1052,6 @@ ide_notification_set_progress_is_imprecise (IdeNotification *self,
  *
  * Withdraws the notification by removing it from the #IdeObject parent it
  * belongs to.
- *
- * Since: 3.32
  */
 void
 ide_notification_withdraw (IdeNotification *self)
@@ -1138,8 +1084,6 @@ do_withdrawal (gpointer data)
  *   sensible default.
  *
  * Withdraws @self from it's #IdeObject parent after @seconds have passed.
- *
- * Since: 3.32
  */
 void
 ide_notification_withdraw_in_seconds (IdeNotification *self,
@@ -1165,8 +1109,6 @@ ide_notification_withdraw_in_seconds (IdeNotification *self,
  *
  * Remember to make sure to unref the #IdeNotification instance with
  * g_object_unref() during the #GDestroyNotify.
- *
- * Since: 3.32
  */
 void
 ide_notification_file_progress_callback (goffset  current_num_bytes,

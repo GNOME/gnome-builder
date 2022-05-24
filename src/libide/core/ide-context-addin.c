@@ -70,8 +70,6 @@ ide_context_addin_default_init (IdeContextAddinInterface *iface)
    * being successfully loaded first. Every addin's
    * ide_context_addin_load_project_async() will have been called and completed
    * before this signal is emitted.
-   *
-   * Since: 3.32
    */
   signals [PROJECT_LOADED] =
     g_signal_new ("project-loaded",
@@ -97,8 +95,6 @@ ide_context_addin_default_init (IdeContextAddinInterface *iface)
  * Requests to load a project with the #IdeContextAddin.
  *
  * This function is called when the #IdeContext requests loading a project.
- *
- * Since: 3.32
  */
 void
 ide_context_addin_load_project_async (IdeContextAddin     *self,
@@ -126,8 +122,6 @@ ide_context_addin_load_project_async (IdeContextAddin     *self,
  * ide_context_addin_load_project_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_context_addin_load_project_finish (IdeContextAddin  *self,
@@ -150,8 +144,6 @@ ide_context_addin_load_project_finish (IdeContextAddin  *self,
  * This is called when the #IdeContext is created. If you would rather wait
  * until a project is loaded, then use #IdeContextAddin::project-loaded to
  * load runtime features.
- *
- * Since: 3.32
  */
 void
 ide_context_addin_load (IdeContextAddin *self,
@@ -171,8 +163,6 @@ ide_context_addin_load (IdeContextAddin *self,
  *
  * Requests that the #IdeContextAddin unloads any previously loaded
  * resources.
- *
- * Since: 3.32
  */
 void
 ide_context_addin_unload (IdeContextAddin *self,
@@ -193,8 +183,6 @@ ide_context_addin_unload (IdeContextAddin *self,
  * Emits the #IdeContextAddin::project-loaded signal.
  *
  * This is called when the context has completed loading a project.
- *
- * Since: 3.32
  */
 void
 ide_context_addin_project_loaded (IdeContextAddin *self,

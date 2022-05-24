@@ -321,8 +321,6 @@ ide_tree_model_class_init (IdeTreeModelClass *klass)
    * The "root" property contains the root #IdeTreeNode that is used to build
    * the tree. It should contain an object for the #IdeTreeNode:item property
    * so that #IdeTreeAddin's may use it to build the node and any children.
-   *
-   * Since: 3.32
    */
   properties [PROP_ROOT] =
     g_param_spec_object ("root",
@@ -340,8 +338,6 @@ ide_tree_model_class_init (IdeTreeModelClass *klass)
    *
    * For example, to extend the project-tree, plugins should set
    * "X-Tree-Kind=project-tree" in their .plugin manifest.
-   *
-   * Since: 3.32
    */
   properties [PROP_KIND] =
     g_param_spec_string ("kind",
@@ -690,8 +686,6 @@ tree_model_iface_init (GtkTreeModelIface *iface)
  * Gets the #GtkTreePath pointing at @node.
  *
  * Returns: (transfer full) (nullable): a new #GtkTreePath
- *
- * Since: 3.32
  */
 GtkTreePath *
 ide_tree_model_get_path_for_node (IdeTreeModel *self,
@@ -717,8 +711,6 @@ ide_tree_model_get_path_for_node (IdeTreeModel *self,
  * Gets a #GtkTreeIter that points at @node.
  *
  * Returns: %TRUE if @iter was set; otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_model_get_iter_for_node (IdeTreeModel *self,
@@ -745,8 +737,6 @@ ide_tree_model_get_iter_for_node (IdeTreeModel *self,
  * is used to build the immediate children which are displayed in the tree.
  *
  * Returns: (transfer none) (not nullable): an #IdeTreeNode
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_model_get_root (IdeTreeModel *self)
@@ -825,8 +815,6 @@ ide_tree_model_set_root (IdeTreeModel *self,
  * for more information.
  *
  * Returns: (nullable): a string containing the kind, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_tree_model_get_kind (IdeTreeModel *self)
@@ -846,8 +834,6 @@ ide_tree_model_get_kind (IdeTreeModel *self)
  *
  * This should be set before adding the #IdeTreeModel to an #IdeObject to
  * ensure the tree builds the proper contents.
- *
- * Since: 3.32
  */
 void
 ide_tree_model_set_kind (IdeTreeModel *self,
@@ -931,8 +917,6 @@ _ide_tree_model_row_activated (IdeTreeModel *self,
  * Gets the #IdeTreeNode found at @iter.
  *
  * Returns: (transfer none) (nullable): an #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_model_get_node (IdeTreeModel *self,
@@ -1121,8 +1105,6 @@ ide_tree_model_invalidate_traverse_cb (IdeTreeNode *node,
  * are rebuilt using the configured tree addins.
  *
  * If @node is %NULL, the root of the tree is invalidated.
- *
- * Since: 3.32
  */
 void
 ide_tree_model_invalidate (IdeTreeModel *self,
@@ -1272,8 +1254,6 @@ _ide_tree_model_row_collapsed (IdeTreeModel *self,
  * @self: a #IdeTreeModel
  *
  * Returns: (transfer none): an #IdeTree
- *
- * Since: 3.32
  */
 IdeTree *
 ide_tree_model_get_tree (IdeTreeModel *self)

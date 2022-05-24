@@ -45,7 +45,6 @@ typedef enum
  * @user_data: (closure) (transfer full): The closure for the callback.
  *
  *
- * Since: 3.32
  */
 typedef void (*IdeThreadFunc) (gpointer user_data);
 

@@ -367,8 +367,6 @@ gbp_meson_toolchain_edition_preferences_row_finalize (GObject *object)
  * @self: a #GbpMesonToolchainEditionPreferencesRow
  *
  * Requests the configuration popover the be shown over the widget.
- *
- * Since: 3.32
  */
 void
 gbp_meson_toolchain_edition_preferences_row_show_popup (GbpMesonToolchainEditionPreferencesRow *self)

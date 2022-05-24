@@ -46,8 +46,6 @@ ide_vcs_cloner_default_init (IdeVcsClonerInterface *iface)
  * describing how the URI is invalid.
  *
  * Returns: %TRUE if @uri is valid, otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_vcs_cloner_validate_uri (IdeVcsCloner  *self,
@@ -75,8 +73,6 @@ ide_vcs_cloner_validate_uri (IdeVcsCloner  *self,
  * @progress: (nullable): a location for an #IdeNotification, or %NULL
  * @callback: a #GAsyncReadyCallback to execute upon completion
  * @user_data: closure data for @callback
- *
- * Since: 3.32
  */
 void
 ide_vcs_cloner_clone_async (IdeVcsCloner         *self,
@@ -113,8 +109,6 @@ ide_vcs_cloner_clone_async (IdeVcsCloner         *self,
  * @error: a location for a #GError, or %NULL
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_vcs_cloner_clone_finish (IdeVcsCloner  *self,
@@ -136,8 +130,6 @@ ide_vcs_cloner_clone_finish (IdeVcsCloner  *self,
  * titles might be "Subversion" or "CVS".
  *
  * Returns: (transfer full): a string containing the title
- *
- * Since: 3.32
  */
 gchar *
 ide_vcs_cloner_get_title (IdeVcsCloner *self)

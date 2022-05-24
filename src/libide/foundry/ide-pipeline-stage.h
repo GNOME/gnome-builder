@@ -48,8 +48,6 @@ struct _IdePipelineStageClass
    * vfuncs.
    *
    * Only use thread-safe API from this function.
-   *
-   * Since: 3.32
    */
   gboolean (*build)          (IdePipelineStage     *self,
                               IdePipeline          *pipeline,
@@ -61,8 +59,6 @@ struct _IdePipelineStageClass
    *
    * Asynchronous version of the #IdePipelineStage API. This is the preferred
    * way to subclass #IdePipelineStage.
-   *
-   * Since: 3.32
    */
   void     (*build_async)    (IdePipelineStage     *self,
                               IdePipeline          *pipeline,
@@ -77,8 +73,6 @@ struct _IdePipelineStageClass
    *
    * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
    *   Upon failure, the pipeline will be stopped.
-   *
-   * Since: 3.32
    */
   gboolean (*build_finish)   (IdePipelineStage     *self,
                               GAsyncResult         *result,
@@ -93,8 +87,6 @@ struct _IdePipelineStageClass
    * @user_data: user data for @callback
    *
    * This function will perform the clean operation.
-   *
-   * Since: 3.32
    */
   void     (*clean_async)    (IdePipelineStage     *self,
                               IdePipeline          *pipeline,
@@ -111,8 +103,6 @@ struct _IdePipelineStageClass
    * Completes an async operation to ide_pipeline_stage_clean_async().
    *
    * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
-   *
-   * Since: 3.32
    */
   gboolean (*clean_finish)   (IdePipelineStage     *self,
                               GAsyncResult         *result,

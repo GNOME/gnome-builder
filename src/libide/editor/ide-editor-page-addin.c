@@ -90,8 +90,6 @@ ide_editor_page_addin_frame_set (IdeEditorPageAddin *self,
  * #IdeEditorPageAddinInterface, then %NULL is returned.
  *
  * Returns: (transfer none) (nullable): An #IdeEditorPageAddin or %NULL
- *
- * Since: 3.32
  */
 IdeEditorPageAddin *
 ide_editor_page_addin_find_by_module_name (IdeEditorPage *page,

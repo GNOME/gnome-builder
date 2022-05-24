@@ -263,8 +263,6 @@ ide_debugger_disassembly_view_set_current_address (IdeDebuggerDisassemblyView *s
  *
  * This will take a reference to @instructions if non-%NULL so it is
  * important that you do not modify @instructions after calling this.
- *
- * Since: 3.32
  */
 void
 ide_debugger_disassembly_view_set_instructions (IdeDebuggerDisassemblyView *self,

@@ -300,8 +300,6 @@ gbp_todo_model_init (GbpTodoModel *self)
  * Creates a new #GbpTodoModel.
  *
  * Returns: (transfer full): A newly created #GbpTodoModel.
- *
- * Since: 3.32
  */
 GbpTodoModel *
 gbp_todo_model_new (IdeVcs *vcs)
@@ -638,8 +636,6 @@ is_typed (IdeVcs      *vcs,
  *
  * If @file is not a native file (meaning it is accessable on the
  * normal, mounted, local file-system) this operation will fail.
- *
- * Since: 3.32
  */
 void
 gbp_todo_model_mine_async (GbpTodoModel        *self,
@@ -690,8 +686,6 @@ gbp_todo_model_mine_async (GbpTodoModel        *self,
  * Completes an asynchronous request to gbp_todo_model_mine_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 gbp_todo_model_mine_finish (GbpTodoModel  *self,

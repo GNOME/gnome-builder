@@ -42,8 +42,6 @@ G_DECLARE_INTERFACE (IdeApplicationAddin, ide_application_addin, IDE, APPLICATIO
  *   g_application_add_main_option_entries().
  * @handle_command_line: Set this virtual method to handle parsing command
  *   line arguments.
- *
- * Since: 3.32
  */
 struct _IdeApplicationAddinInterface
 {

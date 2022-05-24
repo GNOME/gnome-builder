@@ -54,8 +54,6 @@ add_option_entries_foreach_cb (PeasExtensionSet *set,
  *
  * Inflate all early stage plugins asking them to let us know about what
  * command-line options they support.
- *
- * Since: 3.32
  */
 void
 _ide_application_add_option_entries (IdeApplication *self)
@@ -130,8 +128,6 @@ ide_application_command_line_open_project_cb (GObject      *object,
  * plugins who have elected to handle command-line options. Some
  * of them, like the greeter, may create an initial workbench
  * and workspace window in response.
- *
- * Since: 3.32
  */
 void
 _ide_application_command_line (IdeApplication          *self,
@@ -230,8 +226,6 @@ _ide_application_command_line (IdeApplication          *self,
  *
  * Returns: (transfer full) (nullable) (array zero-terminated=1): an
  *   array of strings or %NULL
- *
- * Since: 3.32
  */
 gchar **
 ide_application_get_argv (IdeApplication          *self,

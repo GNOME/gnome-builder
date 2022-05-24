@@ -153,8 +153,6 @@ ide_greeter_row_class_init (IdeGreeterRowClass *klass)
    *
    * The "project-info" property contains information about the project
    * to be displayed.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
@@ -225,8 +223,6 @@ ide_greeter_row_clear (IdeGreeterRow *self)
  * Gets the #IdeGreeterRow:project-info property.
  *
  * Returns: (transfer none) (nullable): an #IdeProjectInfo or %NULL
- *
- * Since: 3.32
  */
 IdeProjectInfo *
 ide_greeter_row_get_project_info (IdeGreeterRow *self)
@@ -336,8 +332,6 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
  * Gets a new string containing the search text for the greeter row.
  *
  * Returns: (transfer full) (nullable): a string or %NULL
- *
- * Since: 3.32
  */
 gchar *
 ide_greeter_row_get_search_text (IdeGreeterRow *self)

@@ -46,8 +46,6 @@ ide_build_system_discovery_default_init (IdeBuildSystemDiscoveryInterface *iface
  *
  * Returns: (transfer full): The hint for the build system, which should match what
  *   the build system returns from ide_build_system_get_id().
- *
- * Since: 3.32
  */
 gchar *
 ide_build_system_discovery_discover (IdeBuildSystemDiscovery  *self,

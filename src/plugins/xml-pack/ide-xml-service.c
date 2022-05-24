@@ -1123,8 +1123,6 @@ ide_xml_service_get_schemas_cache (IdeXmlService *self)
  * @context: an #IdeContext
  *
  * Returns: (transfer none): an #IdeXmlService
- *
- * Since: 3.32
  */
 IdeXmlService *
 ide_xml_service_from_context (IdeContext *context)

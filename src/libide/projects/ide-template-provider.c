@@ -49,8 +49,6 @@ ide_template_provider_default_init (IdeTemplateProviderInterface *iface)
  *
  * Returns: (transfer full) (element-type Ide.ProjectTemplate): a #GList of
  *   #IdeProjectTemplate instances.
- *
- * Since: 3.32
  */
 GList *
 ide_template_provider_get_project_templates (IdeTemplateProvider *self)

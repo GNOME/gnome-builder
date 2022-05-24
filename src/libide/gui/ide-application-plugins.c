@@ -293,8 +293,6 @@ ide_application_plugins_unload_plugin_after_cb (IdeApplication *self,
  * early-stage initialization. Usually, that is any plugin that has a
  * command-line handler and uses "X-At-Startup=true" in their .plugin
  * manifest.
- *
- * Since: 3.32
  */
 void
 _ide_application_load_plugins_for_startup (IdeApplication *self)
@@ -353,8 +351,6 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
  *
  * This function loads any additional plugins that have not yet been
  * loaded during early startup.
- *
- * Since: 3.32
  */
 void
 _ide_application_load_plugins (IdeApplication *self)
@@ -460,8 +456,6 @@ ide_application_addin_removed_cb (PeasExtensionSet *set,
  * @self: a #IdeApplication
  *
  * Loads the #IdeApplicationAddin's for this application.
- *
- * Since: 3.32
  */
 void
 _ide_application_load_addins (IdeApplication *self)
@@ -494,8 +488,6 @@ _ide_application_load_addins (IdeApplication *self)
  * @self: a #IdeApplication
  *
  * Unloads all of the previously loaded #IdeApplicationAddin.
- *
- * Since: 3.32
  */
 void
 _ide_application_unload_addins (IdeApplication *self)
