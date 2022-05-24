@@ -77,7 +77,7 @@ subdir('gdiagnose')
 subdir('gettext')
 subdir('git')
 #subdir('glade')
-subdir('go-langserv')
+subdir('gopls')
 subdir('gradle')
 subdir('greeter')
 subdir('grep')
@@ -210,7 +210,7 @@ status += [
   'blueprint ................ (Blueprint) : @0@'.format(get_option('plugin_blueprint')),
   'clangd ............... (C, C++, Obj-C) : @0@ **'.format(get_option('plugin_clangd')),
   'gnome-builder-clang .. (C, C++, Obj-C) : @0@'.format(get_option('plugin_clang')),
-  'gpls ............................ (Go) : @0@'.format(get_option('plugin_go_langserv')),
+  'gopls ........................... (Go) : @0@'.format(get_option('plugin_gopls')),
   'gvls .......................... (Vala) : @0@ **'.format(get_option('plugin_gvls')),
   'intelephense ................... (PHP) : @0@'.format(get_option('plugin_intelephense')),
   'jedi-language-server ........ (Python) : @0@'.format(get_option('plugin_jedi_language_server')),
