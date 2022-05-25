@@ -1,11 +1,11 @@
 [Plugin]
-Authors=Adam
+Authors=Adam, Christian Hergert
 Builtin=true
-Description=Provides integration with the BuildStream build tool
-Hidden=true
-Loader=python3
-Module=buildstream_plugin
+Copyright=Copyright 2019 Adam, 2022 Christian Hergert <chergert@redhat.com>
+Description=Provides integration with BuildStream projects
+Embedded=_gbp_buildstream_register_types
+Module=buildstream
 Name=BuildStream
-X-Builder-ABI=@PACKAGE_ABI@
+X-Category=buildsystems
 X-Project-File-Filter-Name=BuildStream (project.conf)
 X-Project-File-Filter-Pattern=project.conf
