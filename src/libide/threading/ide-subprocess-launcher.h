@@ -112,6 +112,10 @@ void                   ide_subprocess_launcher_push_args            (IdeSubproce
 IDE_AVAILABLE_IN_3_32
 void                   ide_subprocess_launcher_push_argv            (IdeSubprocessLauncher  *self,
                                                                      const gchar            *argv);
+IDE_AVAILABLE_IN_ALL
+void                   ide_subprocess_launcher_push_argv_format     (IdeSubprocessLauncher  *self,
+                                                                     const char             *format,
+                                                                     ...) G_GNUC_PRINTF (2, 3);
 IDE_AVAILABLE_IN_3_32
 gchar                 *ide_subprocess_launcher_pop_argv             (IdeSubprocessLauncher  *self) G_GNUC_WARN_UNUSED_RESULT;
 IDE_AVAILABLE_IN_3_32

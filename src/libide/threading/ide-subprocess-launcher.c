@@ -1225,3 +1225,34 @@ ide_subprocess_launcher_join_args_for_sh_c (IdeSubprocessLauncher *self,
   g_ptr_array_add (priv->argv, g_string_free (g_steal_pointer (&str), FALSE));
   g_ptr_array_add (priv->argv, NULL);
 }
+
+/**
+ * ide_subprocess_launcher_push_argv_format: (skip)
+ * @self: a #IdeSubprocessLauncher
+ * @format: a printf-style format string
+ *
+ * Convenience function which allows combining a g_strdup_printf() and
+ * call to ide_subprocess_launcher_push_argv() into one call.
+ *
+ * @format is used to build the argument string which is added using
+ * ide_subprocess_launcher_push_argv() and then freed.
+ */
+void
+ide_subprocess_launcher_push_argv_format (IdeSubprocessLauncher  *self,
+                                          const char             *format,
+                                          ...)
+{
+  g_autofree char *arg = NULL;
+  va_list args;
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+  g_return_if_fail (format != NULL);
+
+  va_start (args, format);
+  arg = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  g_return_if_fail (arg != NULL);
+
+  ide_subprocess_launcher_push_argv (self, arg);
+}
