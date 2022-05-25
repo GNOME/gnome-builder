@@ -2936,8 +2936,8 @@ ide_pipeline_create_launcher (IdePipeline  *self,
  * features like colors and other escape sequences.
  */
 void
-ide_pipeline_attach_pty (IdePipeline      *self,
-                               IdeSubprocessLauncher *launcher)
+ide_pipeline_attach_pty (IdePipeline           *self,
+                         IdeSubprocessLauncher *launcher)
 {
   GSubprocessFlags flags;
 
