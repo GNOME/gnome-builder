@@ -77,7 +77,7 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   g_autoptr(IdeSubprocessLauncher) fetch_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
-  IdePipelineStage *stage;
+  g_autoptr(IdePipelineStage) stage = NULL;
   g_autofree char *project_dir = NULL;
   g_autofree char *cargo = NULL;
   IdeBuildSystem *build_system;
