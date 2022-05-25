@@ -151,6 +151,7 @@ status += [
   '',
   'Autotools ............................ : @0@'.format(get_option('plugin_autotools')),
   'Beautifier ........................... : @0@'.format(get_option('plugin_beautifier')),
+  'BuildStream .......................... : @0@'.format(get_option('plugin_buildstream')),
   'C Pack ............................... : @0@'.format(get_option('plugin_c_pack')),
   'Cargo ................................ : @0@'.format(get_option('plugin_cargo')),
   'Clang Format ......................... : @0@'.format(get_option('plugin_clang_format')),
