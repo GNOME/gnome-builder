@@ -1,13 +1,18 @@
 if get_option('plugin_phpize')
 
-install_data('phpize_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'phpize-plugin.c',
+  'gbp-phpize-build-system-discovery.c',
+  'gbp-phpize-build-system.c',
+  'gbp-phpize-pipeline-addin.c',
+])
 
-configure_file(
-          input: 'phpize.plugin',
-         output: 'phpize.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_phpize_resources = gnome.compile_resources(
+  'phpize-resources',
+  'phpize.gresource.xml',
+  c_name: 'gbp_phpize',
 )
+
+plugins_sources += plugin_phpize_resources
 
 endif
