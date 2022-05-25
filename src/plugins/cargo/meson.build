@@ -1,13 +1,20 @@
 if get_option('plugin_cargo')
 
-install_data('cargo_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'cargo-plugin.c',
+  'gbp-cargo-build-system-discovery.c',
+  'gbp-cargo-build-system.c',
+  'gbp-cargo-dependency-updater.c',
+  'gbp-cargo-pipeline-addin.c',
+  'gbp-cargo-run-command-provider.c',
+])
 
-configure_file(
-          input: 'cargo.plugin',
-         output: 'cargo.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_cargo_resources = gnome.compile_resources(
+  'cargo-resources',
+  'cargo.gresource.xml',
+  c_name: 'gbp_cargo',
 )
+
+plugins_sources += plugin_cargo_resources
 
 endif
