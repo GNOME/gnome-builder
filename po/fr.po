@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-03-10 05:16+0000\n"
-"PO-Revision-Date: 2022-03-15 12:09+0100\n"
+"POT-Creation-Date: 2022-05-16 07:27+0000\n"
+"PO-Revision-Date: 2022-05-24 11:02+0200\n"
 "Last-Translator: Alexandre Franke <afranke@gnome.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "Language: fr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Gtranslator 40.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -875,7 +875,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Charger ou générer une palette selon les préférences"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5030
+#: src/libide/sourceview/ide-source-view.c:5029
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Renommer"
@@ -897,7 +897,7 @@ msgstr "_Renommer"
 msgid "unsaved file %u"
 msgstr "fichier non enregistré %u"
 
-#: src/libide/code/ide-buffer.c:3639
+#: src/libide/code/ide-buffer.c:3720
 msgid "The current language lacks a symbol resolver."
 msgstr "Le langage actuel ne possède pas de résolveur de symboles."
 
@@ -940,7 +940,7 @@ msgstr "Sans titre"
 msgid "_Cancel"
 msgstr "A_nnuler"
 
-#: src/libide/debugger/ide-debug-manager.c:1001
+#: src/libide/debugger/ide-debug-manager.c:1002
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "Impossible de trouver un débogueur adapté."
@@ -1475,7 +1475,7 @@ msgstr "Le processus a quitté de manière inattendue"
 msgid "Host Operating System"
 msgstr "Système d’exploitation hôte"
 
-#: src/libide/foundry/ide-runtime.c:571
+#: src/libide/foundry/ide-runtime.c:575
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Système hôte"
@@ -2872,7 +2872,7 @@ msgstr[0] "Installation d’un paquet"
 msgstr[1] "Installation de %u paquets"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1474
+#: src/libide/lsp/ide-lsp-client.c:1481
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Échec à l’initialisation du serveur de langage : %s"
@@ -2978,31 +2978,31 @@ msgstr "Zoom a_rrière"
 msgid "_Reset"
 msgstr "_Réinitialiser"
 
-#: src/libide/sourceview/ide-source-view.c:4444
+#: src/libide/sourceview/ide-source-view.c:4443
 #, c-format
 msgid "Insert “%s”"
 msgstr "Insérer « %s »"
 
-#: src/libide/sourceview/ide-source-view.c:4446
+#: src/libide/sourceview/ide-source-view.c:4445
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Remplacer « %s » par « %s »"
 
-#: src/libide/sourceview/ide-source-view.c:4572
+#: src/libide/sourceview/ide-source-view.c:4571
 msgid "Apply Fix-It"
 msgstr "Appliquer la correction automatique"
 
-#: src/libide/sourceview/ide-source-view.c:5029
+#: src/libide/sourceview/ide-source-view.c:5028
 msgid "Rename symbol"
 msgstr "Renommer le symbole"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5408
+#: src/libide/sourceview/ide-source-view.c:5407
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Ligne %u, colonne %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5434
+#: src/libide/sourceview/ide-source-view.c:5433
 msgid "No references were found"
 msgstr "Aucune référence trouvée"
 
@@ -3224,7 +3224,7 @@ msgstr ""
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
 msgid "beautifier program missing, you must install it: "
-msgstr "Le programme enjoliveur est manquant, il vous faut l’installer :"
+msgstr "Le programme enjoliveur est manquant, il vous faut l’installer : "
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
@@ -3309,7 +3309,7 @@ msgid "_Beautify"
 msgstr "En_joliver"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:663
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:705
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (copie)"
@@ -3697,6 +3697,11 @@ msgstr ""
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
 msgstr "Déclaration"
+
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#, c-format
+msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr "Possible faute de frappe dans « %s ». Voulez-vous dire « %s » ?"
 
 #: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
 msgid "Colors"
@@ -4641,18 +4646,18 @@ msgstr "Emacs"
 msgid "Emulates the Emacs text editor"
 msgstr "Émule l’éditeur de texte Emacs"
 
-#: src/plugins/eslint/eslint_plugin.py:204
+#: src/plugins/eslint/eslint_plugin.py:97
 msgid "ESlint"
 msgstr "ESLint"
 
-#: src/plugins/eslint/eslint_plugin.py:205
+#: src/plugins/eslint/eslint_plugin.py:98
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr ""
 "Activer l’utilisation de ESLint, ce qui peut exécuter du code dans votre "
 "projet"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/eslint/eslint_plugin.py:207
+#: src/plugins/eslint/eslint_plugin.py:100
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript lint code exécuter exécution"
 
@@ -5257,51 +5262,51 @@ msgstr "Projet vide utilisant Makefile"
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Créer un nouveau projet vide utilisant simplement un Makefile"
 
-#: src/plugins/meson-templates/meson_templates.py:257
+#: src/plugins/meson-templates/meson_templates.py:259
 msgid "GTK Application (Legacy)"
 msgstr "Application GTK (ancien)"
 
-#: src/plugins/meson-templates/meson_templates.py:259
+#: src/plugins/meson-templates/meson_templates.py:261
 msgid "Create a GTK application with GTK 3"
 msgstr "Créer une application GTK avec GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:334
+#: src/plugins/meson-templates/meson_templates.py:336
 msgid "GTK Application"
 msgstr "Application GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:336
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Create a GTK application"
 msgstr "Créer une application GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:416
+#: src/plugins/meson-templates/meson_templates.py:418
 msgid "GNOME Application"
 msgstr "Application GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:418
+#: src/plugins/meson-templates/meson_templates.py:420
 msgid "Create a GNOME application"
 msgstr "Créer une application GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:498
+#: src/plugins/meson-templates/meson_templates.py:500
 msgid "Shared Library"
 msgstr "Bibliothèque partagée"
 
-#: src/plugins/meson-templates/meson_templates.py:500
+#: src/plugins/meson-templates/meson_templates.py:502
 msgid "Create a new project with a shared library"
 msgstr "Créer un nouveau projet avec une bibliothèque partagée"
 
-#: src/plugins/meson-templates/meson_templates.py:517
+#: src/plugins/meson-templates/meson_templates.py:519
 msgid "Empty Project"
 msgstr "Projet vide"
 
-#: src/plugins/meson-templates/meson_templates.py:519
+#: src/plugins/meson-templates/meson_templates.py:521
 msgid "Create a new empty project"
 msgstr "Créer un nouveau projet vide"
 
-#: src/plugins/meson-templates/meson_templates.py:536
+#: src/plugins/meson-templates/meson_templates.py:538
 msgid "Command Line Tool"
 msgstr "Outil en ligne de commande"
 
-#: src/plugins/meson-templates/meson_templates.py:538
+#: src/plugins/meson-templates/meson_templates.py:540
 msgid "Create a new command line project"
 msgstr "Créer un nouveau projet en ligne de commande"
 
@@ -5572,12 +5577,12 @@ msgid "Bootstrapping project"
 msgstr "Amorçage du projet"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:499
+#: src/plugins/podman/gbp-podman-runtime.c:523
 msgid "Containers/Toolbox"
 msgstr "Conteneurs/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:505
+#: src/plugins/podman/gbp-podman-runtime.c:529
 msgid "Containers/Podman"
 msgstr "Conteneurs/Podman"
 
@@ -5773,7 +5778,7 @@ msgstr "_Reformater les tabulations"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
 msgid "Rust Analyzer: Cargo command for diagnostics"
-msgstr "Rust Analyzer : commandes Cargo pour les diagnostics "
+msgstr "Rust Analyzer : commandes Cargo pour les diagnostics"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
 msgid "the default cargo command"
@@ -6027,18 +6032,18 @@ msgstr ""
 "supplémentaires dans les fichiers de feuille de style. Cela peut amener à "
 "l’exécution de code dans votre projet."
 
-#: src/plugins/stylelint/stylelint_plugin.py:135
+#: src/plugins/stylelint/stylelint_plugin.py:77
 msgid "Stylelint"
 msgstr "Stylelint"
 
-#: src/plugins/stylelint/stylelint_plugin.py:136
+#: src/plugins/stylelint/stylelint_plugin.py:78
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr ""
 "Activer l’utilisation de Stylelint, ce qui peut exécuter du code dans votre "
 "projet"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/stylelint/stylelint_plugin.py:138
+#: src/plugins/stylelint/stylelint_plugin.py:80
 msgid "stylelint stylesheet lint code execute execution"
 msgstr "stylelint feuille de style lint code exécuter exécution"
 
@@ -6364,8 +6369,8 @@ msgstr "Mettre à _jour"
 msgid "Vagrant"
 msgstr "Vagrant"
 
+#: src/plugins/valgrind/gbp-valgrind-workbench-addin.c:152
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Lancer avec Valgrind"
 
