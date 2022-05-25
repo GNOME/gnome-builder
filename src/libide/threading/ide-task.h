@@ -163,6 +163,17 @@ void          ide_task_report_new_error          (gpointer              source_o
                                                   const gchar          *format,
                                                   ...) G_GNUC_PRINTF (7, 8);
 
+static inline void
+ide_task_return_unsupported_error (IdeTask *task)
+{
+  g_assert (IDE_IS_TASK (task));
+
+  ide_task_return_error (task,
+                         g_error_new_literal (G_IO_ERROR,
+                                              G_IO_ERROR_NOT_SUPPORTED,
+                                              "Not Supported"));
+}
+
 #ifdef __GNUC__
 # define ide_task_new(self, cancellable, callback, user_data)                      \
   ({                                                                               \
