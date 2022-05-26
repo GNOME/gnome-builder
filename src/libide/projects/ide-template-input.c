@@ -28,7 +28,6 @@
 #define DEFAULT_USE_VERSION_CONTROL TRUE
 #define DEFAULT_PROJECT_VERSION "0.1.0"
 #define DEFAULT_LANGUAGE "C"
-#define DEFAULT_APP_ID "org.example.App"
 #define DEFAULT_LICECNSE_NAME "gpl_3"
 
 struct _IdeTemplateInput
@@ -208,11 +207,11 @@ ide_template_input_class_init (IdeTemplateInputClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_NAME] =
-    g_param_spec_string ("name", NULL, NULL, NULL,
+    g_param_spec_string ("name", NULL, NULL, "",
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_APP_ID] =
-    g_param_spec_string ("app-id", NULL, NULL, DEFAULT_APP_ID,
+    g_param_spec_string ("app-id", NULL, NULL, "",
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PROJECT_VERSION] =
@@ -237,9 +236,10 @@ ide_template_input_class_init (IdeTemplateInputClass *klass)
 static void
 ide_template_input_init (IdeTemplateInput *self)
 {
+  self->name = g_strdup ("");
   self->directory = g_file_new_for_path (ide_get_projects_dir ());
   self->author = g_strdup (g_get_real_name ());
-  self->app_id = g_strdup (DEFAULT_APP_ID);
+  self->app_id = g_strdup ("");
   self->language = g_strdup (DEFAULT_LANGUAGE);
   self->license_name = g_strdup (DEFAULT_LICECNSE_NAME);
   self->project_version = g_strdup (DEFAULT_PROJECT_VERSION);
