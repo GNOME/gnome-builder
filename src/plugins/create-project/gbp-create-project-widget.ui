@@ -2,336 +2,157 @@
 <interface>
   <template class="GbpCreateProjectWidget" parent="GtkWidget">
     <child>
-      <object class="GtkScrolledWindow" id="scroller">
-        <property name="propagate-natural-height">true</property>
-        <property name="propagate-natural-width">true</property>
-        <property name="hscrollbar-policy">never</property>
+      <object class="AdwClamp" id="main">
+        <property name="orientation">horizontal</property>
+        <property name="maximum-size">550</property>
         <child>
           <object class="GtkBox">
-            <property name="orientation">vertical</property>
-            <property name="hexpand">true</property>
-            <property name="vexpand">true</property>
-            <property name="margin-top">72</property>
-            <property name="margin-start">64</property>
-            <property name="margin-end">64</property>
+            <property name="margin-top">64</property>
             <property name="margin-bottom">64</property>
-            <property name="valign">start</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">24</property>
             <child>
-              <object class="IdeThreeGrid" id="three_grid">
-                <property name="column-spacing">12</property>
-                <property name="row-spacing">24</property>
+              <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="GtkLabel" id="project_name_label">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Project Name</property>
-                    <property name="valign">start</property>
-                    <layout>
-                      <property name="column">left</property>
-                      <property name="row">0</property>
-                    </layout>
+                  <object class="AdwEntryRow" id="project_name">
+                    <property name="title" translatable="yes">Project Name</property>
+                    <property name="text" bind-source="input" bind-property="name" bind-flags="sync-create|bidirectional"/>
                   </object>
                 </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="spacing">6</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkEntry" id="project_name_entry">
-                        <property name="width-chars">50</property>
-                        <property name="hexpand">true</property>
-                        <property name="vexpand">true</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="xalign">0.0</property>
-                        <property name="wrap">true</property>
-                        <property name="max-width-chars">60</property>
-                        <property name="label" translatable="yes">Unique name that is used for your project’s folder and other technical resources. Should be in lower case without spaces and may not start with a number.</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                        <attributes>
-                          <attribute name="scale" value="0.833333"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="column">center</property>
-                      <property name="row">0</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="app_id_label">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Application ID</property>
-                    <property name="valign">start</property>
-                    <layout>
-                      <property name="column">left</property>
-                      <property name="row">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="spacing">6</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="GtkEntry" id="app_id_entry">
-                        <property name="width-chars">50</property>
-                        <property name="hexpand">true</property>
-                        <property name="vexpand">true</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel">
-                        <property name="xalign">0.0</property>
-                        <property name="wrap">true</property>
-                        <property name="max-width-chars">60</property>
-                        <property name="label" translatable="yes">The Application ID is a reverse domain-name identifier used to uniquely identify your application such as “org.gnome.Builder” and may not contain dashes.</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                        <attributes>
-                          <attribute name="scale" value="0.833333"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="column">center</property>
-                      <property name="row">1</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="project_location_label">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Project Location</property>
-                    <property name="valign">start</property>
-                    <layout>
-                      <property name="column">left</property>
-                      <property name="row">2</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="spacing">6</property>
-                    <property name="orientation">vertical</property>
-                    <child>
-                      <object class="IdeFileChooserEntry" id="project_location_entry">
-                        <property name="action">select-folder</property>
-                        <property name="title" translatable="yes">Select Project Directory</property>
-                        <property name="hexpand">true</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="destination_label">
-                        <property name="xalign">0.0</property>
-                        <property name="wrap">true</property>
-                        <property name="max-width-chars">60</property>
-                        <property name="label" translatable="yes">Your project will be created within a new child directory.</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                        <attributes>
-                          <attribute name="scale" value="0.833333"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="column">center</property>
-                      <property name="row">2</property>
-                    </layout>
-                  </object>
-                </child>
-
-                <child>
-                  <object class="GtkLabel" id="language_label">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Language</property>
-                    <property name="valign">start</property>
-                    <layout>
-                      <property name="column">left</property>
-                      <property name="row">3</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="IdeRadioBox" id="project_language_chooser">
-                    <property name="hexpand">true</property>
-                    <layout>
-                      <property name="column">center</property>
-                      <property name="row">3</property>
-                    </layout>
-                  </object>
-                </child>
-
-                <child>
-                  <object class="GtkLabel" id="license_label">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">License</property>
-                    <property name="valign">start</property>
-                    <layout>
-                      <property name="column">left</property>
-                      <property name="row">4</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="IdeRadioBox" id="license_chooser">
-                    <property name="active-id">gpl_3</property>
-                    <property name="hexpand">true</property>
-                    <layout>
-                      <property name="column">center</property>
-                      <property name="row">4</property>
-                    </layout>
-                  </object>
-                </child>
-
                 <child>
                   <object class="GtkLabel">
-                    <property name="halign">end</property>
-                    <property name="label" translatable="yes">Version Control</property>
-                    <layout>
-                      <property name="column">left</property>
-                      <property name="row">5</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox" id="versioning_box">
-                    <property name="orientation">horizontal</property>
-                    <child>
-                      <object class="GtkSwitch" id="versioning_switch">
-                        <property name="active">true</property>
-                        <property name="halign">start</property>
-                      </object>
-                    </child>
-                    <child type="end">
-                      <object class="GtkLabel">
-                        <property name="label" translatable="yes">Uses the Git version control system</property>
-                        <property name="margin-start">12</property>
-                        <property name="halign">center</property>
-                        <style>
-                          <class name="dim-label"/>
-                        </style>
-                        <attributes>
-                          <attribute name="scale" value="0.833333"/>
-                        </attributes>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="column">center</property>
-                      <property name="row">5</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <child>
-                      <object class="GtkToggleButton" id="license_more">
-                        <property name="active" bind-source="license_chooser" bind-property="show-more" bind-flags="bidirectional"/>
-                        <property name="sensitive" bind-source="license_chooser" bind-property="has-more"/>
-                        <property name="valign">start</property>
-                        <property name="vexpand">false</property>
-                        <property name="focus-on-click">false</property>
-                        <style>
-                          <class name="flat"/>
-                          <class name="image-button"/>
-                        </style>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">view-more-symbolic</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="column">right</property>
-                      <property name="row">4</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <child>
-                      <object class="GtkToggleButton" id="language_more">
-                        <property name="active" bind-source="project_language_chooser" bind-property="show-more" bind-flags="bidirectional"/>
-                        <property name="sensitive" bind-source="project_language_chooser" bind-property="has-more"/>
-                        <property name="valign">start</property>
-                        <property name="vexpand">false</property>
-                        <property name="focus-on-click">false</property>
-                        <style>
-                          <class name="flat"/>
-                          <class name="image-button"/>
-                        </style>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">view-more-symbolic</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="column">right</property>
-                      <property name="row">3</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkBox">
-                    <property name="orientation">horizontal</property>
+                    <property name="label" translatable="yes">A unique name that is used for the project folder and other resources. The name should be in lower case without spaces and should not start with a number.</property>
                     <property name="margin-top">12</property>
-                    <property name="hexpand">true</property>
-                    <child type="end">
-                      <object class="GtkButton" id="create_button">
-                        <property name="label" translatable="yes">_Create Project</property>
-                        <property name="use-underline">True</property>
-                        <property name="halign">end</property>
-                        <style>
-                          <class name="suggested-action"/>
-                        </style>
-                      </object>
-                    </child>
-                    <layout>
-                      <property name="column">1</property>
-                      <property name="row">6</property>
-                    </layout>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <property name="hexpand">true</property>
-                <property name="vexpand">true</property>
-                <property name="valign">start</property>
-                <property name="spacing">12</property>
-                <property name="margin-top">24</property>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="application_id">
+                    <property name="title" translatable="yes">Application ID…</property>
+                    <property name="text" bind-source="input" bind-property="app-id" bind-flags="sync-create|bidirectional"/>
+                  </object>
+                </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">Select a Template</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <property name="label" translatable="yes">A reverse domain-name identifier used to identify the application, such as "org.gnome.Builder".</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
                     <style>
+                      <class name="caption"/>
                       <class name="dim-label"/>
                     </style>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="GtkFlowBox" id="project_template_chooser">
-                    <property name="column-spacing">12</property>
-                    <property name="row-spacing">12</property>
-                    <property name="max-children-per-line">4</property>
-                    <property name="min-children-per-line">4</property>
-                    <property name="halign">center</property>
-                    <property name="valign">start</property>
+                  <object class="AdwEntryRow" id="location">
+                    <property name="title" translatable="yes">Location</property>
+                    <property name="text">~/Projects</property>
+                    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="action-name">create-project.select-folder</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">folder-symbolic</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                    </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">The project will be created in a new subdirectory.</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Language</property>
+                    <child type="suffix">
+                      <object class="GtkMenuButton">
+                        <property name="valign">center</property>
+                        <property name="label">C</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">License</property>
+                    <child type="suffix">
+                      <object class="GtkMenuButton">
+                        <property name="valign">center</property>
+                        <property name="label">GPLv3+</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Version Control</property>
+                    <child type="suffix">
+                      <object class="GtkSwitch">
+                        <property name="valign">center</property>
+                        <property name="active" bind-source="input" bind-property="use-version-control" bind-flags="sync-create"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Template</property>
+                    <child type="suffix">
+                      <object class="GtkMenuButton">
+                        <property name="valign">center</property>
+                        <property name="label">GNOME Application</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">create-project.expand</property>
+                <property name="label" translatable="yes">Create Project</property>
+                <property name="margin-top">12</property>
+                <property name="halign">end</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
               </object>
             </child>
           </object>
@@ -339,15 +160,6 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup">
-    <property name="mode">vertical</property>
-    <widgets>
-      <widget name="project_name_label"/>
-      <widget name="app_id_label"/>
-      <widget name="project_name_entry"/>
-      <widget name="project_location_label"/>
-      <widget name="license_label"/>
-      <widget name="language_label"/>
-    </widgets>
+  <object class="IdeTemplateInput" id="input">
   </object>
 </interface>
