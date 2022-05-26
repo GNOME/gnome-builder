@@ -1,21 +1,22 @@
 if get_option('plugin_make')
 
-make_resources = gnome.compile_resources(
-  'make_plugin',
+plugins_sources += files([
+  'make-plugin.c',
+  'gbp-make-build-system-discovery.c',
+  'gbp-make-build-system.c',
+  'gbp-make-build-target.c',
+  'gbp-make-build-target-provider.c',
+  'gbp-make-pipeline-addin.c',
+  'gbp-make-run-command-provider.c',
+  'gbp-make-template-provider.c',
+])
+
+plugin_make_resources = gnome.compile_resources(
+  'make-resources',
   'make.gresource.xml',
-  gresource_bundle: true,
-           install: true,
-       install_dir: plugindir,
+  c_name: 'gbp_make',
 )
 
-install_data('make_plugin.py', install_dir: plugindir)
-
-configure_file(
-          input: 'make.plugin',
-         output: 'make.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
-)
+plugins_sources += plugin_make_resources
 
 endif
