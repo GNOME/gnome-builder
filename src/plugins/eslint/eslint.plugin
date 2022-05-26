@@ -5,5 +5,6 @@ Description=Provides linting of JavaScript and TypeScript files using eslint
 Embedded=_gbp_eslint_register_types
 Module=eslint
 Name=ESLint
+X-Category=diagnostics
 X-Diagnostic-Provider-Languages-Priority=100
 X-Diagnostic-Provider-Languages=js,typescript
