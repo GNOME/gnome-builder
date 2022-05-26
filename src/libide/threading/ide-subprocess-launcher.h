@@ -113,6 +113,9 @@ IDE_AVAILABLE_IN_3_32
 void                   ide_subprocess_launcher_push_argv            (IdeSubprocessLauncher  *self,
                                                                      const gchar            *argv);
 IDE_AVAILABLE_IN_ALL
+void                   ide_subprocess_launcher_push_argv_parsed     (IdeSubprocessLauncher  *self,
+                                                                     const char             *args_to_parse);
+IDE_AVAILABLE_IN_ALL
 void                   ide_subprocess_launcher_push_argv_format     (IdeSubprocessLauncher  *self,
                                                                      const char             *format,
                                                                      ...) G_GNUC_PRINTF (2, 3);
