@@ -1256,3 +1256,22 @@ ide_subprocess_launcher_push_argv_format (IdeSubprocessLauncher  *self,
 
   ide_subprocess_launcher_push_argv (self, arg);
 }
+
+void
+ide_subprocess_launcher_push_argv_parsed (IdeSubprocessLauncher *self,
+                                          const char            *args_to_parse)
+{
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  if (!ide_str_empty0 (args_to_parse))
+    {
+      g_autoptr(GError) error = NULL;
+      g_auto(GStrv) argv = NULL;
+      int argc;
+
+      if (!g_shell_parse_argv (args_to_parse, &argc, &argv, &error))
+        g_warning ("Failed to parse args: %s", error->message);
+      else
+        ide_subprocess_launcher_push_args (self, (const char * const *)argv);
+    }
+}
