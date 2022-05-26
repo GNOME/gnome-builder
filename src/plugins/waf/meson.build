@@ -1,13 +1,21 @@
 if get_option('plugin_waf')
 
-install_data('waf_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'waf-plugin.c',
+  'gbp-waf-build-system-discovery.c',
+  'gbp-waf-build-system.c',
+  'gbp-waf-build-target.c',
+  'gbp-waf-build-target-provider.c',
+  'gbp-waf-pipeline-addin.c',
+  'gbp-waf-run-command-provider.c',
+])
 
-configure_file(
-          input: 'waf.plugin',
-         output: 'waf.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_waf_resources = gnome.compile_resources(
+  'waf-resources',
+  'waf.gresource.xml',
+  c_name: 'gbp_waf',
 )
+
+plugins_sources += plugin_waf_resources
 
 endif
