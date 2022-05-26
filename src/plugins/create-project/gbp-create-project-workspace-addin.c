@@ -50,7 +50,7 @@ gbp_create_project_workspace_addin_load (IdeWorkspaceAddin *addin,
                                     g_object_new (GTK_TYPE_BUTTON,
                                                   "action-name", "greeter.page",
                                                   "action-target", g_variant_new_string ("create-project"),
-                                                  "label", _("Start _New Project…"),
+                                                  "label", _("Create _New Project…"),
                                                   "use-underline", TRUE,
                                                   "visible", TRUE,
                                                   NULL),
@@ -60,7 +60,7 @@ gbp_create_project_workspace_addin_load (IdeWorkspaceAddin *addin,
   ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
                                   GTK_WIDGET (self->widget),
                                   "create-project",
-                                  _("Start New Project"));
+                                  _("Create New Project"));
 
   IDE_EXIT;
 }
