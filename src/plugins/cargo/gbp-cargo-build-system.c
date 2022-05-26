@@ -220,7 +220,6 @@ gbp_cargo_build_system_locate_cargo (GbpCargoBuildSystem *self,
                                      IdeConfig           *config)
 {
   g_autofree char *cargo_in_home = NULL;
-  IdeRuntime *runtime = NULL;
   const char *envvar;
 
   g_return_val_if_fail (!self || GBP_IS_CARGO_BUILD_SYSTEM (self), NULL);
