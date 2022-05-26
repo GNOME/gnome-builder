@@ -136,14 +136,7 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   /* Configure Options get passed to "cargo build" because there is no
    * equivalent "configure stage" for cargo.
    */
-  if (!ide_str_empty0 (config_opts))
-    {
-      g_auto(GStrv) args = NULL;
-      int argc;
-
-      if (g_shell_parse_argv (config_opts, &argc, &args, NULL))
-        ide_subprocess_launcher_push_args (build_launcher, (const char * const *)args);
-    }
+  ide_subprocess_launcher_push_argv_parsed (build_launcher, config_opts);
 
   clean_launcher = create_launcher (pipeline, project_dir, cargo);
   ide_subprocess_launcher_push_argv (clean_launcher, "clean");
