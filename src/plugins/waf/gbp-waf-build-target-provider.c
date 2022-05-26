@@ -101,7 +101,6 @@ gbp_waf_build_target_provider_get_targets_async (IdeBuildTargetProvider *provide
   g_autoptr(IdeSubprocessLauncher) launcher  = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeBuildTarget) build_target = NULL;
-  g_autoptr(GListStore) store = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree char *waf = NULL;
