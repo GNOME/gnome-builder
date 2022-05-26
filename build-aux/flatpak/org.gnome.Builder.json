@@ -365,8 +365,8 @@
             "config-opts" : [
                 "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
-                "-Denable_gtk=true",
-                "-Dwith_sysprofd=host"
+                "-Dgtk=true",
+                "-Dsysprofd=host"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
