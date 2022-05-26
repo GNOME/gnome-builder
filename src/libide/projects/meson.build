@@ -17,6 +17,7 @@ libide_projects_public_headers = [
   'ide-recent-projects.h',
   'ide-similar-file-locator.h',
   'ide-template-base.h',
+  'ide-template-input.h',
   'ide-template-locator.h',
   'ide-template-provider.h',
   'libide-projects.h',
@@ -47,6 +48,7 @@ libide_projects_public_sources = [
   'ide-recent-projects.c',
   'ide-similar-file-locator.c',
   'ide-template-base.c',
+  'ide-template-input.c',
   'ide-template-locator.c',
   'ide-template-provider.c',
 ]
