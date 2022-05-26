@@ -86,9 +86,9 @@ gbp_cargo_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
 }
 
 static GListModel *
-gbp_cargo_run_command_provider_list_commands_finish (IdeRunCommandProvider *provider,
-                                                     GAsyncResult *result,
-                                                     GError **error)
+gbp_cargo_run_command_provider_list_commands_finish (IdeRunCommandProvider  *provider,
+                                                     GAsyncResult           *result,
+                                                     GError                **error)
 {
   GListModel *ret;
 
