@@ -64,7 +64,6 @@ gbp_phpize_pipeline_addin_load (IdePipelineAddin *addin,
   g_autoptr(IdePipelineStage) install_stage = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree char *configure_path = NULL;
-  g_auto(GStrv) config_argv = NULL;
   IdeBuildSystem *build_system;
   const char *builddir;
   const char *srcdir;
@@ -93,20 +92,6 @@ gbp_phpize_pipeline_addin_load (IdePipelineAddin *addin,
   configure_path = g_build_filename (srcdir, "configure", NULL);
   prefix = ide_config_get_prefix (config);
 
-  if (!ide_str_empty0 (config_opts))
-    {
-      int argc;
-
-      if (!g_shell_parse_argv (config_opts, &argc, &config_argv, &error))
-        {
-          ide_object_message (addin,
-                              "%s: %s",
-                              _("Cannot parse arguments to configure"),
-                              error->message);
-          IDE_EXIT;
-        }
-    }
-
   g_assert (IDE_IS_CONFIG (config));
   g_assert (srcdir != NULL);
   g_assert (builddir != NULL);
@@ -124,8 +109,7 @@ gbp_phpize_pipeline_addin_load (IdePipelineAddin *addin,
   config_launcher = ide_pipeline_create_launcher (pipeline, NULL);
   ide_subprocess_launcher_push_argv (config_launcher, configure_path);
   ide_subprocess_launcher_push_argv_format (config_launcher, "--prefix=%s", prefix);
-  if (config_argv)
-    ide_subprocess_launcher_push_args (config_launcher, (const char * const *)config_argv);
+  ide_subprocess_launcher_push_argv_parsed (config_launcher, config_opts);
   config_stage = ide_pipeline_stage_launcher_new (context, config_launcher);
   ide_pipeline_stage_set_name (config_stage, _("Configuring project"));
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_CONFIGURE, 0, config_stage);
