@@ -102,6 +102,8 @@ status += [
   '',
   'Help Docs ............. : @0@'.format(get_option('help')),
   'API Docs .............. : @0@'.format(get_option('docs')),
+  '',
+  'WebKit ................ : @0@'.format(get_option('webkit').enabled()),
   '', ''
 ]
 

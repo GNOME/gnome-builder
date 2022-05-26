@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeWebkitPage" parent="IdePage">
+    <child>
+      <object class="WebKitWebView" id="webview">
+        <property name="hexpand">true</property>
+        <property name="vexpand">true</property>
+      </object>
+    </child>
+  </template>
+</interface>

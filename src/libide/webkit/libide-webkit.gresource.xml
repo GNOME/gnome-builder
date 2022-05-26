@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/webkit">
     <file>webkit.plugin</file>
+    <file preprocess="xml-stripblanks">ide-webkit-page.ui</file>
   </gresource>
 </gresources>
