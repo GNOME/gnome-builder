@@ -1252,6 +1252,9 @@ draw_diagnostic (GbpOmniGutterRenderer *self,
                               &GRAPHENE_POINT_INIT (2,
                                                     line_y + ((height - self->diag_size) / 2)));
       gdk_paintable_snapshot (paintable, GDK_SNAPSHOT (snapshot), self->diag_size, self->diag_size);
+#if 0
+      gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, self->diag_size, self->diag_size,  colors, n_colors);
+#endif
       gtk_snapshot_restore (snapshot);
     }
 }
