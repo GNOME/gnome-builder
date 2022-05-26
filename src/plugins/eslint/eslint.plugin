@@ -1,11 +1,9 @@
 [Plugin]
-Authors=Georg Vienna <georg.vienna@himbarsoft.com>
-Copyright=Copyright © 2017 Georg Vienna <georg.vienna@himbarsoft.com>
-Description=Provides javascript lints
-Loader=python3
-Hidden=true
-Module=eslint_plugin
-Name=eslint
+Authors=Georg Vienna <georg.vienna@himbarsoft.com>, Christian Hergert <chergert@redhat.com>
+Copyright=Copyright © 2017 Georg Vienna, Copyright © 2022 Christian Hergert
+Description=Provides linting of JavaScript and TypeScript files using eslint
+Embedded=_gbp_eslint_register_types
+Module=eslint
+Name=ESLint
 X-Diagnostic-Provider-Languages-Priority=100
 X-Diagnostic-Provider-Languages=js,typescript
-X-Builder-ABI=@PACKAGE_ABI@
