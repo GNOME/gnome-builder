@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/plugins/make_plugin">
+  <gresource prefix="/plugins/make">
+    <file>make.plugin</file>
     <file compressed="true">resources/Makefile</file>
     <file compressed="true">resources/main.c</file>
     <file compressed="true">resources/main.cpp</file>
