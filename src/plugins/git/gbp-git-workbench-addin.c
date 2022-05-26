@@ -112,8 +112,8 @@ gbp_git_workbench_addin_load_project_discover_cb (GObject      *object,
 
   if (!ipc_git_service_call_discover_finish (service, &git_location, result, &error))
     {
-      g_dbus_error_strip_remote_error (error);
-      ide_task_return_error (task, g_steal_pointer (&error));
+      g_debug ("Not a git repository: %s", error->message);
+      ide_task_return_unsupported_error (task);
       return;
     }
 
@@ -239,7 +239,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitWorkbenchAddin, gbp_git_workbench_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
 gbp_git_workbench_addin_class_init (GbpGitWorkbenchAddinClass *klass)
