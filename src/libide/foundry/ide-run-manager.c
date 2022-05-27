@@ -101,6 +101,8 @@ static void ide_run_manager_actions_default_run_command (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_color_scheme        (IdeRunManager  *self,
                                                          GVariant       *param);
+static void ide_run_manager_actions_high_contrast       (IdeRunManager  *self,
+                                                         GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run", ide_run_manager_actions_run },
@@ -109,6 +111,7 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "messages-debug-all", ide_run_manager_actions_messages_debug_all, NULL, "false" },
   { "default-run-command", ide_run_manager_actions_default_run_command, "s", "''" },
   { "color-scheme", ide_run_manager_actions_color_scheme, "s", "'follow'" },
+  { "high-contrast", ide_run_manager_actions_high_contrast, NULL, "false" },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
@@ -142,6 +145,20 @@ discover_state_free (gpointer data)
   g_list_free_full (state->providers, g_object_unref);
   g_clear_pointer (&state->results, g_ptr_array_unref);
   g_slice_free (DiscoverState, state);
+}
+
+static void
+ide_run_manager_actions_high_contrast (IdeRunManager *self,
+                                       GVariant      *param)
+{
+  GVariant *state;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  state = ide_run_manager_get_action_state (self, "high-contrast");
+  ide_run_manager_set_action_state (self,
+                                    "high-contrast",
+                                    g_variant_new_boolean (!g_variant_get_boolean (state)));
 }
 
 static void
@@ -574,12 +591,38 @@ apply_color_scheme (IdeEnvironment *env,
   IDE_EXIT;
 }
 
+static void
+apply_high_contrast (IdeEnvironment *env,
+                     gboolean        high_contrast)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_ENVIRONMENT (env));
+
+  g_debug ("Applying high-contrast %d", high_contrast);
+
+  if (high_contrast)
+    ide_environment_setenv (env, "ADW_DEBUG_HIGH_CONTRAST", "1");
+  else
+    ide_environment_setenv (env, "ADW_DEBUG_HIGH_CONTRAST", NULL);
+
+  IDE_EXIT;
+}
+
 static inline const char *
 get_action_state_string (IdeRunManager *self,
                          const char    *action_name)
 {
   GVariant *state = ide_run_manager_get_action_state (self, action_name);
   return g_variant_get_string (state, NULL);
+}
+
+static inline gboolean
+get_action_state_bool (IdeRunManager *self,
+                       const char    *action_name)
+{
+  GVariant *state = ide_run_manager_get_action_state (self, action_name);
+  return g_variant_get_boolean (state);
 }
 
 static void
@@ -673,6 +716,7 @@ create_runner_cb (GObject      *object,
   /* Add debugging overrides */
   color_scheme = get_action_state_string (self, "color-scheme");
   apply_color_scheme (environment, color_scheme);
+  apply_high_contrast (environment, get_action_state_bool (self, "high-contrast"));
 
   g_signal_emit (self, signals [RUN], 0, runner);
 
