@@ -242,17 +242,81 @@ select_folder_action (GtkWidget  *widget,
 }
 
 static void
+gbp_create_project_widget_expand_cb (GObject      *object,
+                                     GAsyncResult *result,
+                                     gpointer      user_data)
+{
+  IdeTemplateInput *input = (IdeTemplateInput *)object;
+  g_autoptr(IdeGreeterWorkspace) greeter = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) directory = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TEMPLATE_INPUT (input));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_GREETER_WORKSPACE (greeter));
+
+  if (!(directory = ide_template_input_expand_finish (input, result, &error)))
+    {
+      /* Make sure it wasn't closed/cancelled */
+      if (gtk_widget_get_visible (GTK_WIDGET (greeter)))
+        {
+          GtkWidget *dialog;
+
+          dialog = gtk_message_dialog_new (GTK_WINDOW (greeter),
+                                           (GTK_DIALOG_MODAL |
+                                            GTK_DIALOG_DESTROY_WITH_PARENT |
+                                            GTK_DIALOG_USE_HEADER_BAR),
+                                           GTK_MESSAGE_ERROR,
+                                           GTK_BUTTONS_CLOSE,
+                                           "%s",
+                                           _("New Project Creation Failed"));
+          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                                    "%s", error->message);
+          g_signal_connect (dialog,
+                            "response",
+                            G_CALLBACK (gtk_window_destroy),
+                            NULL);
+          gtk_window_present (GTK_WINDOW (dialog));
+        }
+    }
+  else
+    {
+      g_autoptr(IdeProjectInfo) project_info = NULL;
+
+      project_info = ide_project_info_new ();
+      ide_project_info_set_file (project_info, directory);
+      ide_project_info_set_directory (project_info, directory);
+
+      ide_greeter_workspace_open_project (greeter, project_info);
+    }
+
+  ide_greeter_workspace_end (greeter);
+
+  IDE_EXIT;
+}
+
+static void
 expand_action (GtkWidget  *widget,
                const char *action_name,
                GVariant   *param)
 {
   GbpCreateProjectWidget *self = (GbpCreateProjectWidget *)widget;
+  IdeGreeterWorkspace *greeter;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
-  g_print ("Go\n");
+  greeter = IDE_GREETER_WORKSPACE (ide_widget_get_workspace (widget));
+  ide_greeter_workspace_begin (greeter);
+
+  gtk_widget_action_set_enabled (widget, "create-project.expand", FALSE);
+  ide_template_input_expand_async (self->input,
+                                   ide_workspace_get_cancellable (IDE_WORKSPACE (greeter)),
+                                   gbp_create_project_widget_expand_cb,
+                                   g_object_ref (greeter));
 
   IDE_EXIT;
 }
