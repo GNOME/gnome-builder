@@ -99,7 +99,7 @@ class MesonTemplate(Ide.ProjectTemplate):
         # meson reserves the name 'test'
         if name == 'test':
             return False
-        return super().do_validate_name(name)
+        return Ide.ProjectTemplate.do_validate_name(self, name);
 
     def do_expand_async(self, params, cancellable, callback, data):
         self.reset()
