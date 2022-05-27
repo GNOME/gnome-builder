@@ -580,13 +580,21 @@ apply_color_scheme (IdeEnvironment *env,
   g_debug ("Applying color-scheme \"%s\"", color_scheme);
 
   if (ide_str_equal0 (color_scheme, "follow"))
-    ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", NULL);
+    {
+      ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", NULL);
+      ide_environment_setenv (env, "HDY_DEBUG_COLOR_SCHEME", NULL);
+    }
   else if (ide_str_equal0 (color_scheme, "force-light"))
-    ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", "prefer-light");
+    {
+      ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", "prefer-light");
+      ide_environment_setenv (env, "HDY_DEBUG_COLOR_SCHEME", "prefer-light");
+    }
   else if (ide_str_equal0 (color_scheme, "force-dark"))
-    ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", "prefer-dark");
-  else
-    g_warn_if_reached ();
+    {
+      ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", "prefer-dark");
+      ide_environment_setenv (env, "HDY_DEBUG_COLOR_SCHEME", "prefer-dark");
+    }
+  else g_warn_if_reached ();
 
   IDE_EXIT;
 }
@@ -602,9 +610,15 @@ apply_high_contrast (IdeEnvironment *env,
   g_debug ("Applying high-contrast %d", high_contrast);
 
   if (high_contrast)
-    ide_environment_setenv (env, "ADW_DEBUG_HIGH_CONTRAST", "1");
+    {
+      ide_environment_setenv (env, "ADW_DEBUG_HIGH_CONTRAST", "1");
+      ide_environment_setenv (env, "HDY_DEBUG_HIGH_CONTRAST", "1");
+    }
   else
-    ide_environment_setenv (env, "ADW_DEBUG_HIGH_CONTRAST", NULL);
+    {
+      ide_environment_setenv (env, "ADW_DEBUG_HIGH_CONTRAST", NULL);
+      ide_environment_setenv (env, "HDY_DEBUG_HIGH_CONTRAST", NULL);
+    }
 
   IDE_EXIT;
 }
