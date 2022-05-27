@@ -579,6 +579,34 @@ ide_template_input_set_directory (IdeTemplateInput *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
 }
 
+static void
+auto_select_template (IdeTemplateInput *self)
+{
+  g_autofree char *first_id = NULL;
+  GListModel *model;
+  guint n_items;
+
+  g_assert (IDE_IS_TEMPLATE_INPUT (self));
+
+  model = G_LIST_MODEL (self->filtered_templates);
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeProjectTemplate) template = g_list_model_get_item (model, i);
+      g_autofree char *id = ide_project_template_get_id (template);
+
+      if (ide_str_equal0 (id, self->template))
+        return;
+
+      if (first_id == NULL)
+        first_id = g_steal_pointer (&id);
+    }
+
+  if (first_id != NULL)
+    ide_template_input_set_template (self, first_id);
+}
+
 void
 ide_template_input_set_language (IdeTemplateInput *self,
                                  const char       *language)
@@ -589,10 +617,13 @@ ide_template_input_set_language (IdeTemplateInput *self,
     {
       g_free (self->language);
       self->language = g_strdup (language);
+
       gtk_custom_filter_set_filter_func (self->template_filter,
                                          template_filter_func,
                                          g_strdup (language),
                                          g_free);
+      auto_select_template (self);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGE]);
     }
 }
