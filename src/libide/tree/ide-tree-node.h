@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TREE_NODE (ide_tree_node_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTreeNode, ide_tree_node, IDE, TREE_NODE, GObject)
 
 typedef enum
@@ -71,142 +71,142 @@ typedef IdeTreeNodeVisit (*IdeTreeTraverseFunc) (IdeTreeNode *node,
 typedef int (*IdeTreeNodeCompare) (IdeTreeNode *node,
                                    IdeTreeNode *child);
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTreeNode      *ide_tree_node_new                    (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_get_has_error          (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_has_error          (IdeTreeNode         *self,
                                                         gboolean             has_error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar      *ide_tree_node_get_tag                (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_tag                (IdeTreeNode         *self,
                                                         const gchar         *tag);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_is_tag                 (IdeTreeNode         *self,
                                                         const gchar         *tag);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkTreePath      *ide_tree_node_get_path               (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar      *ide_tree_node_get_display_name       (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_display_name       (IdeTreeNode         *self,
                                                         const gchar         *display_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_get_is_header          (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_is_header          (IdeTreeNode         *self,
                                                         gboolean             header);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GIcon            *ide_tree_node_get_icon               (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_icon               (IdeTreeNode         *self,
                                                         GIcon               *icon);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_icon_name          (IdeTreeNode         *self,
                                                         const gchar         *icon_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GIcon            *ide_tree_node_get_expanded_icon      (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_expanded_icon      (IdeTreeNode         *self,
                                                         GIcon               *expanded_icon);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_expanded_icon_name (IdeTreeNode         *self,
                                                         const gchar         *expanded_icon_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gpointer          ide_tree_node_get_item               (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_item               (IdeTreeNode         *self,
                                                         gpointer             item);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_get_children_possible  (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_children_possible  (IdeTreeNode         *self,
                                                         gboolean             children_possible);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_is_empty               (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_has_child              (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint             ide_tree_node_get_n_children         (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTreeNode      *ide_tree_node_get_next               (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTreeNode      *ide_tree_node_get_previous           (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint             ide_tree_node_get_index              (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTreeNode      *ide_tree_node_get_nth_child          (IdeTreeNode         *self,
                                                         guint                index_);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_prepend                (IdeTreeNode         *self,
                                                         IdeTreeNode         *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_append                 (IdeTreeNode         *self,
                                                         IdeTreeNode         *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_insert_sorted          (IdeTreeNode         *self,
                                                         IdeTreeNode         *child,
                                                         IdeTreeNodeCompare   cmpfn);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_insert_before          (IdeTreeNode         *self,
                                                         IdeTreeNode         *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_insert_after           (IdeTreeNode         *self,
                                                         IdeTreeNode         *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_remove                 (IdeTreeNode         *self,
                                                         IdeTreeNode         *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTreeNode      *ide_tree_node_get_parent             (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_is_root                (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_is_first               (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_is_last                (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTreeNode      *ide_tree_node_get_root               (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_holds                  (IdeTreeNode         *self,
                                                         GType                type);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_traverse               (IdeTreeNode         *self,
                                                         GTraverseType        traverse_type,
                                                         GTraverseFlags       traverse_flags,
                                                         gint                 max_depth,
                                                         IdeTreeTraverseFunc  traverse_func,
                                                         gpointer             user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_add_emblem             (IdeTreeNode         *self,
                                                         GEmblem             *emblem);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_get_reset_on_collapse  (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_reset_on_collapse  (IdeTreeNode         *self,
                                                         gboolean             reset_on_collapse);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const GdkRGBA    *ide_tree_node_get_background_rgba    (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_background_rgba    (IdeTreeNode         *self,
                                                         const GdkRGBA       *background_rgba);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const GdkRGBA    *ide_tree_node_get_foreground_rgba    (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_foreground_rgba    (IdeTreeNode         *self,
                                                         const GdkRGBA       *foreground_rgba);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_is_selected            (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tree_node_get_use_markup         (IdeTreeNode         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_use_markup         (IdeTreeNode         *self,
                                                         gboolean             use_markup);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void              ide_tree_node_set_flags              (IdeTreeNode         *self,
                                                         IdeTreeNodeFlags     flags);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeTreeNodeFlags  ide_tree_node_get_flags              (IdeTreeNode         *self);
 
 G_END_DECLS

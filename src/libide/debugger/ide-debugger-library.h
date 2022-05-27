@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_LIBRARY (ide_debugger_library_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerLibrary, ide_debugger_library, IDE, DEBUGGER_LIBRARY, GObject)
 
 struct _IdeDebuggerLibraryClass
@@ -39,26 +39,26 @@ struct _IdeDebuggerLibraryClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint                ide_debugger_library_compare         (IdeDebuggerLibrary            *a,
                                                           IdeDebuggerLibrary            *b);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerLibrary *ide_debugger_library_new             (const gchar                   *id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar        *ide_debugger_library_get_id          (IdeDebuggerLibrary            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray          *ide_debugger_library_get_ranges      (IdeDebuggerLibrary            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_debugger_library_add_range       (IdeDebuggerLibrary            *self,
                                                           const IdeDebuggerAddressRange *range);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar        *ide_debugger_library_get_host_name   (IdeDebuggerLibrary            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_debugger_library_set_host_name   (IdeDebuggerLibrary            *self,
                                                           const gchar                   *host_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar        *ide_debugger_library_get_target_name (IdeDebuggerLibrary            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_debugger_library_set_target_name (IdeDebuggerLibrary            *self,
                                                           const gchar                   *target_name);
 

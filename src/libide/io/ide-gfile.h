@@ -40,38 +40,38 @@ typedef void (*IdeFileWalkCallback) (GFile     *directory,
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean   ide_path_is_ignored                      (const gchar          *path);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean   ide_g_file_is_ignored                    (GFile                *file);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_g_file_add_ignored_pattern           (const gchar          *pattern);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar     *ide_g_file_get_uncanonical_relative_path (GFile                *file,
                                                      GFile                *other);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray *ide_g_file_find_with_depth               (GFile                *file,
                                                      const gchar          *pattern,
                                                      guint                 max_depth,
                                                      GCancellable         *cancellable);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_g_file_find_with_depth_async         (GFile                *file,
                                                      const gchar          *pattern,
                                                      guint                 max_depth,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_g_file_find_async                    (GFile                *file,
                                                      const gchar          *pattern,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray *ide_g_file_find_finish                   (GFile                *file,
                                                      GAsyncResult         *result,
                                                      GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_g_file_get_children_async            (GFile                *file,
                                                      const gchar          *attributes,
                                                      GFileQueryInfoFlags   flags,
@@ -79,35 +79,35 @@ void       ide_g_file_get_children_async            (GFile                *file,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray *ide_g_file_get_children_finish           (GFile                *file,
                                                      GAsyncResult         *result,
                                                      GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean   ide_g_host_file_get_contents             (const gchar          *path,
                                                      gchar               **contents,
                                                      gsize                *len,
                                                      GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_g_file_walk                          (GFile                *directory,
                                                      const gchar          *attributes,
                                                      GCancellable         *cancellable,
                                                      IdeFileWalkCallback   callback,
                                                      gpointer              callback_data);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void       ide_g_file_walk_with_ignore              (GFile                *directory,
                                                      const gchar          *attributes,
                                                      const gchar          *ignore_file,
                                                      GCancellable         *cancellable,
                                                      IdeFileWalkCallback   callback,
                                                      gpointer              callback_data);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void       ide_g_file_find_in_ancestors_async       (GFile                *directory,
                                                      const gchar          *name,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 GFile     *ide_g_file_find_in_ancestors_finish      (GAsyncResult         *result,
                                                      GError              **error);
 

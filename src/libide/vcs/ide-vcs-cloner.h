@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_CLONER (ide_vcs_cloner_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeVcsCloner, ide_vcs_cloner, IDE, VCS_CLONER, IdeObject)
 
 struct _IdeVcsClonerInterface
@@ -50,9 +50,9 @@ struct _IdeVcsClonerInterface
                              GError              **error);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar    *ide_vcs_cloner_get_title    (IdeVcsCloner         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void      ide_vcs_cloner_clone_async  (IdeVcsCloner         *self,
                                        const gchar          *uri,
                                        const gchar          *destination,
@@ -61,15 +61,15 @@ void      ide_vcs_cloner_clone_async  (IdeVcsCloner         *self,
                                        GCancellable         *cancellable,
                                        GAsyncReadyCallback   callback,
                                        gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_vcs_cloner_clone_finish (IdeVcsCloner         *self,
                                        GAsyncResult         *result,
                                        GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_vcs_cloner_validate_uri (IdeVcsCloner         *self,
                                        const gchar          *uri,
                                        gchar               **errmsg);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_vcs_cloner_clone_simple (IdeContext           *context,
                                        const gchar          *module_name,
                                        const gchar          *url,

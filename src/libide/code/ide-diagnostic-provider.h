@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTIC_PROVIDER (ide_diagnostic_provider_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeDiagnosticProvider, ide_diagnostic_provider, IDE, DIAGNOSTIC_PROVIDER, IdeObject)
 
 struct _IdeDiagnosticProviderInterface
@@ -53,13 +53,13 @@ struct _IdeDiagnosticProviderInterface
                                       GError                **error);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostic_provider_load             (IdeDiagnosticProvider  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostic_provider_unload           (IdeDiagnosticProvider  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostic_provider_emit_invalidated (IdeDiagnosticProvider  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostic_provider_diagnose_async   (IdeDiagnosticProvider  *self,
                                                           GFile                  *file,
                                                           GBytes                 *contents,
@@ -67,7 +67,7 @@ void            ide_diagnostic_provider_diagnose_async   (IdeDiagnosticProvider 
                                                           GCancellable           *cancellable,
                                                           GAsyncReadyCallback     callback,
                                                           gpointer                user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostics *ide_diagnostic_provider_diagnose_finish  (IdeDiagnosticProvider  *self,
                                                           GAsyncResult           *result,
                                                           GError                **error);

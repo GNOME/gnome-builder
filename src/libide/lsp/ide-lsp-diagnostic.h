@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_DIAGNOSTIC (ide_lsp_diagnostic_get_type())
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspDiagnostic, ide_lsp_diagnostic, IDE, LSP_DIAGNOSTIC, IdeDiagnostic)
 
 struct _IdeLspDiagnosticClass
@@ -41,12 +41,12 @@ struct _IdeLspDiagnosticClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 IdeLspDiagnostic *ide_lsp_diagnostic_new     (IdeDiagnosticSeverity  severity,
                                               const gchar           *message,
                                               IdeLocation           *location,
                                               GVariant              *raw_value);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 GVariant         *ide_lsp_diagnostic_dup_raw (IdeLspDiagnostic      *self);
 
 G_END_DECLS

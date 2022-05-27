@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PIPELINE_STAGE_MKDIRS (ide_pipeline_stage_mkdirs_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdePipelineStageMkdirs, ide_pipeline_stage_mkdirs, IDE, PIPELINE_STAGE_MKDIRS, IdePipelineStage)
 
 struct _IdePipelineStageMkdirsClass
@@ -43,9 +43,9 @@ struct _IdePipelineStageMkdirsClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePipelineStage *ide_pipeline_stage_mkdirs_new      (IdeContext             *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_pipeline_stage_mkdirs_add_path (IdePipelineStageMkdirs *self,
                                                       const gchar            *path,
                                                       gboolean                with_parents,

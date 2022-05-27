@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TEST_PROVIDER (ide_test_provider_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeTestProvider, ide_test_provider, IDE, TEST_PROVIDER, IdeObject)
 
 struct _IdeTestProviderClass
@@ -55,20 +55,20 @@ struct _IdeTestProviderClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_test_provider_get_loading (IdeTestProvider      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_set_loading (IdeTestProvider      *self,
                                         gboolean              loading);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_clear       (IdeTestProvider      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_add         (IdeTestProvider      *self,
                                         IdeTest              *test);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_remove      (IdeTestProvider      *self,
                                         IdeTest              *test);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_run_async   (IdeTestProvider      *self,
                                         IdeTest              *test,
                                         IdePipeline          *pipeline,
@@ -76,11 +76,11 @@ void     ide_test_provider_run_async   (IdeTestProvider      *self,
                                         GCancellable         *cancellable,
                                         GAsyncReadyCallback   callback,
                                         gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_test_provider_run_finish  (IdeTestProvider      *self,
                                         GAsyncResult         *result,
                                         GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_test_provider_reload      (IdeTestProvider      *self);
 
 G_END_DECLS

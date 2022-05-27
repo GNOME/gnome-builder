@@ -34,17 +34,17 @@ G_BEGIN_DECLS
 #define IDE_RECENT_PROJECTS_DIRECTORY                      "X-GNOME-Builder-Directory:"
 #define IDE_RECENT_PROJECTS_BOOKMARK_FILENAME              "recent-projects.xbel"
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeRecentProjects, ide_recent_projects, IDE, RECENT_PROJECTS, GObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeRecentProjects *ide_recent_projects_get_default       (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeRecentProjects *ide_recent_projects_new               (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void               ide_recent_projects_remove            (IdeRecentProjects *self,
                                                           GList             *project_infos);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar             *ide_recent_projects_find_by_directory (IdeRecentProjects *self,
                                                           const gchar       *directory);
 

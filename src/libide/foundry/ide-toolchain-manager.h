@@ -34,13 +34,13 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TOOLCHAIN_MANAGER (ide_toolchain_manager_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeToolchainManager, ide_toolchain_manager, IDE, TOOLCHAIN_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeToolchain *ide_toolchain_manager_get_toolchain (IdeToolchainManager *self,
                                                    const gchar         *id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean      ide_toolchain_manager_is_loaded     (IdeToolchainManager *self);
 
 G_END_DECLS

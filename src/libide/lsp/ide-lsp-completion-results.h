@@ -30,12 +30,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_COMPLETION_RESULTS (ide_lsp_completion_results_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLspCompletionResults, ide_lsp_completion_results, IDE, LSP_COMPLETION_RESULTS, GObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLspCompletionResults *ide_lsp_completion_results_new      (GVariant                *results);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                     ide_lsp_completion_results_refilter (IdeLspCompletionResults *self,
                                                               const char              *typed_text);
 

@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_TAG (ide_vcs_tag_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeVcsTag, ide_vcs_tag, IDE, VCS_TAG, GObject)
 
 struct _IdeVcsTagInterface
@@ -36,7 +36,7 @@ struct _IdeVcsTagInterface
   gchar *(*get_name) (IdeVcsTag *self);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar *ide_vcs_tag_get_name (IdeVcsTag *self);
 
 G_END_DECLS

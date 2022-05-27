@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PIPELINE_STAGE_LAUNCHER (ide_pipeline_stage_launcher_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdePipelineStageLauncher, ide_pipeline_stage_launcher, IDE, PIPELINE_STAGE_LAUNCHER, IdePipelineStage)
 
 struct _IdePipelineStageLauncherClass
@@ -44,27 +44,27 @@ struct _IdePipelineStageLauncherClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePipelineStage         *ide_pipeline_stage_launcher_new                    (IdeContext            *context,
                                                                         IdeSubprocessLauncher *launcher);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_pipeline_stage_launcher_get_launcher           (IdePipelineStageLauncher *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_stage_launcher_set_launcher           (IdePipelineStageLauncher *self,
                                                                         IdeSubprocessLauncher *launcher);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_pipeline_stage_launcher_get_clean_launcher     (IdePipelineStageLauncher *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_stage_launcher_set_clean_launcher     (IdePipelineStageLauncher *self,
                                                                         IdeSubprocessLauncher *clean_launcher);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_stage_launcher_get_ignore_exit_status (IdePipelineStageLauncher *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_stage_launcher_set_ignore_exit_status (IdePipelineStageLauncher *self,
                                                                         gboolean               ignore_exit_status);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_stage_launcher_get_use_pty            (IdePipelineStageLauncher *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_stage_launcher_set_use_pty            (IdePipelineStageLauncher *self,
                                                                         gboolean               use_pty);
 

@@ -28,20 +28,20 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTICS_MANAGER (ide_diagnostics_manager_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeDiagnosticsManager, ide_diagnostics_manager, IDE, DIAGNOSTICS_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDiagnosticsManager *ide_diagnostics_manager_from_context             (IdeContext            *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_diagnostics_manager_get_busy                 (IdeDiagnosticsManager *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostics        *ide_diagnostics_manager_get_diagnostics_for_file (IdeDiagnosticsManager *self,
                                                                          GFile                 *file);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint                  ide_diagnostics_manager_get_sequence_for_file    (IdeDiagnosticsManager *self,
                                                                          GFile                 *file);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_diagnostics_manager_rediagnose               (IdeDiagnosticsManager *self,
                                                                          IdeBuffer             *buffer);
 

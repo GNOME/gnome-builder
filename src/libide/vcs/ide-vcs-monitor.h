@@ -33,25 +33,25 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_MONITOR (ide_vcs_monitor_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeVcsMonitor, ide_vcs_monitor, IDE, VCS_MONITOR, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeVcsMonitor  *ide_vcs_monitor_from_context (IdeContext    *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeVcsFileInfo *ide_vcs_monitor_ref_info     (IdeVcsMonitor *self,
                                               GFile         *file);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFile          *ide_vcs_monitor_ref_root     (IdeVcsMonitor *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_vcs_monitor_set_root     (IdeVcsMonitor *self,
                                               GFile         *file);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeVcs         *ide_vcs_monitor_ref_vcs      (IdeVcsMonitor *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_vcs_monitor_set_vcs      (IdeVcsMonitor *self,
                                               IdeVcs        *vcs);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint64         ide_vcs_monitor_get_sequence (IdeVcsMonitor *self);
 
 G_END_DECLS

@@ -33,36 +33,36 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRIPLET (ide_triplet_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GType        ide_triplet_get_type             (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTriplet  *ide_triplet_new                  (const gchar *full_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTriplet  *ide_triplet_new_from_system      (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTriplet  *ide_triplet_new_with_triplet     (const gchar *arch,
                                                const gchar *kernel,
                                                const gchar *operating_system);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTriplet  *ide_triplet_new_with_quadruplet  (const gchar *arch,
                                                const gchar *vendor,
                                                const gchar *kernel,
                                                const gchar *operating_system);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTriplet  *ide_triplet_ref                  (IdeTriplet  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_triplet_unref                (IdeTriplet  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_triplet_get_full_name        (IdeTriplet  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_triplet_get_arch             (IdeTriplet  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_triplet_get_vendor           (IdeTriplet  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_triplet_get_kernel           (IdeTriplet  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_triplet_get_operating_system (IdeTriplet  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_triplet_is_system            (IdeTriplet  *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeTriplet, ide_triplet_unref)

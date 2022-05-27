@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar *ide_language_format_header (GtkSourceLanguage *language,
                                    const gchar       *header);
 

@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_ACTION_PROVIDER (ide_code_action_provider_get_type())
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeCodeActionProvider, ide_code_action_provider, IDE, CODE_ACTION_PROVIDER, IdeObject)
 
 struct _IdeCodeActionProviderInterface
@@ -54,19 +54,19 @@ struct _IdeCodeActionProviderInterface
                                     IdeDiagnostics         *diags);
 };
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void       ide_code_action_provider_load            (IdeCodeActionProvider  *self);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void       ide_code_action_provider_query_async     (IdeCodeActionProvider  *self,
                                                      IdeBuffer              *buffer,
                                                      GCancellable           *cancellable,
                                                      GAsyncReadyCallback     callback,
                                                      gpointer                user_data);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 GPtrArray *ide_code_action_provider_query_finish    (IdeCodeActionProvider  *self,
                                                      GAsyncResult           *result,
                                                      GError                **error);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void       ide_code_action_provider_set_diagnostics (IdeCodeActionProvider  *self,
                                                      IdeDiagnostics         *diags);
 

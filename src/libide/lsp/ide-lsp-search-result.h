@@ -31,10 +31,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_SEARCH_RESULT (ide_lsp_search_result_get_type())
 
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLspSearchResult, ide_lsp_search_result, IDE, LSP_SEARCH_RESULT, IdeSearchResult)
 
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 IdeLspSearchResult *ide_lsp_search_result_new (const gchar *title,
                                                const gchar *subtitle,
                                                IdeLocation *location,

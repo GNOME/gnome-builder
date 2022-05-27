@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_SEARCH_PROVIDER (ide_lsp_search_provider_get_type())
 
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspSearchProvider, ide_lsp_search_provider, IDE, LSP_SEARCH_PROVIDER, IdeObject)
 
 struct _IdeLspSearchProviderClass
@@ -41,9 +41,9 @@ struct _IdeLspSearchProviderClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 IdeLspClient               *ide_lsp_search_provider_get_client (IdeLspSearchProvider *self);
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 void                        ide_lsp_search_provider_set_client (IdeLspSearchProvider *self,
                                                                       IdeLspClient               *client);
 

@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TEXT_EDIT (ide_text_edit_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeTextEdit, ide_text_edit, IDE, TEXT_EDIT, IdeObject)
 
 struct _IdeTextEditClass
@@ -43,22 +43,22 @@ struct _IdeTextEditClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTextEdit *ide_text_edit_new              (IdeRange    *range,
                                              const gchar *text);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTextEdit *ide_text_edit_new_from_variant (GVariant    *variant);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_text_edit_get_text         (IdeTextEdit *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_text_edit_set_text         (IdeTextEdit *self,
                                              const gchar *text);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeRange    *ide_text_edit_get_range        (IdeTextEdit *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_text_edit_set_range        (IdeTextEdit *self,
                                              IdeRange    *range);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GVariant    *ide_text_edit_to_variant       (IdeTextEdit *self);
 
 G_END_DECLS

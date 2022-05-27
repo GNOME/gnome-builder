@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_PROVIDER (ide_search_provider_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE, SEARCH_PROVIDER, IdeObject)
 
 struct _IdeSearchProviderInterface
@@ -50,17 +50,17 @@ struct _IdeSearchProviderInterface
                                GError              **error);
 };
 
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 void       ide_search_provider_load          (IdeSearchProvider *self,
                                               IdeContext        *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_search_provider_search_async  (IdeSearchProvider    *self,
                                               const gchar          *query,
                                               guint                 max_results,
                                               GCancellable         *cancellable,
                                               GAsyncReadyCallback   callback,
                                               gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray *ide_search_provider_search_finish (IdeSearchProvider    *self,
                                               GAsyncResult         *result,
                                               GError              **error);

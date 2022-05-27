@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_TARGET (ide_build_target_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeBuildTarget, ide_build_target, IDE, BUILD_TARGET, IdeObject)
 
 typedef enum
@@ -58,25 +58,25 @@ struct _IdeBuildTargetInterface
   IdeArtifactKind   (*get_kind)              (IdeBuildTarget *self);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFile            *ide_build_target_get_install_directory (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar            *ide_build_target_get_name              (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar            *ide_build_target_get_display_name      (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint              ide_build_target_get_priority          (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar           **ide_build_target_get_argv              (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar            *ide_build_target_get_cwd               (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar            *ide_build_target_get_language          (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_build_target_get_install           (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeArtifactKind   ide_build_target_get_kind              (IdeBuildTarget       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_build_target_compare               (const IdeBuildTarget *left,
                                                           const IdeBuildTarget *right);
 

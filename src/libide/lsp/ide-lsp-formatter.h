@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_FORMATTER (ide_lsp_formatter_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspFormatter, ide_lsp_formatter, IDE, LSP_FORMATTER, IdeObject)
 
 struct _IdeLspFormatterClass
@@ -40,10 +40,10 @@ struct _IdeLspFormatterClass
   IdeObjectClass parent_class;
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_lsp_formatter_set_client (IdeLspFormatter *self,
                                             IdeLspClient    *client);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLspClient *ide_lsp_formatter_get_client (IdeLspFormatter *self);
 
 G_END_DECLS

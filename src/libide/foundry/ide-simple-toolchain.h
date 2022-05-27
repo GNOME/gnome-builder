@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SIMPLE_TOOLCHAIN (ide_simple_toolchain_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSimpleToolchain, ide_simple_toolchain, IDE, SIMPLE_TOOLCHAIN, IdeToolchain)
 
 struct _IdeSimpleToolchainClass
@@ -45,10 +45,10 @@ struct _IdeSimpleToolchainClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSimpleToolchain *ide_simple_toolchain_new                   (const gchar        *id,
                                                                 const gchar        *display_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_simple_toolchain_set_tool_for_language (IdeSimpleToolchain *self,
                                                                 const gchar        *language,
                                                                 const gchar        *tool_id,
