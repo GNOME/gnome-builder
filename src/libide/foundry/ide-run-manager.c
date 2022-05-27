@@ -99,6 +99,8 @@ static void ide_run_manager_actions_messages_debug_all  (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_default_run_command (IdeRunManager  *self,
                                                          GVariant       *param);
+static void ide_run_manager_actions_color_scheme        (IdeRunManager  *self,
+                                                         GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run", ide_run_manager_actions_run },
@@ -106,12 +108,12 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "stop", ide_run_manager_actions_stop },
   { "messages-debug-all", ide_run_manager_actions_messages_debug_all, NULL, "false" },
   { "default-run-command", ide_run_manager_actions_default_run_command, "s", "''" },
+  { "color-scheme", ide_run_manager_actions_color_scheme, "s", "'follow'" },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
-                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
-                                               ide_run_manager_init_action_group))
+                        G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_run_manager_init_action_group))
 
 enum {
   PROP_0,
@@ -140,6 +142,25 @@ discover_state_free (gpointer data)
   g_list_free_full (state->providers, g_object_unref);
   g_clear_pointer (&state->results, g_ptr_array_unref);
   g_slice_free (DiscoverState, state);
+}
+
+static void
+ide_run_manager_actions_color_scheme (IdeRunManager *self,
+                                      GVariant      *param)
+{
+  const char *str;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  str = g_variant_get_string (param, NULL);
+  if (!g_strv_contains (IDE_STRV_INIT ("follow", "force-light", "force-dark"), str))
+    str = "follow";
+
+  ide_run_manager_set_action_state (self,
+                                    "color-scheme",
+                                    g_variant_new_string (str));
 }
 
 static void
