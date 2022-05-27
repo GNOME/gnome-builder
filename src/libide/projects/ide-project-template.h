@@ -27,21 +27,22 @@
 #include <libide-core.h>
 #include <gtk/gtk.h>
 
+#include "ide-template-base.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PROJECT_TEMPLATE (ide_project_template_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeProjectTemplate, ide_project_template, IDE, PROJECT_TEMPLATE, GObject)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (IdeProjectTemplate, ide_project_template, IDE, PROJECT_TEMPLATE, IdeTemplateBase)
 
-struct _IdeProjectTemplateInterface
+struct _IdeProjectTemplateClass
 {
-  GTypeInterface parent;
+  IdeTemplateBaseClass parent_instance;
 
   gchar      *(*get_id)          (IdeProjectTemplate   *self);
   gchar      *(*get_name)        (IdeProjectTemplate   *self);
   gchar      *(*get_description) (IdeProjectTemplate   *self);
-  GtkWidget  *(*get_widget)      (IdeProjectTemplate   *self);
   gchar     **(*get_languages)   (IdeProjectTemplate   *self);
   gchar      *(*get_icon_name)   (IdeProjectTemplate   *self);
   void        (*expand_async)    (IdeProjectTemplate   *self,
@@ -55,31 +56,29 @@ struct _IdeProjectTemplateInterface
   gint        (*get_priority)    (IdeProjectTemplate   *self);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_id          (IdeProjectTemplate   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint        ide_project_template_get_priority    (IdeProjectTemplate   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_name        (IdeProjectTemplate   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_description (IdeProjectTemplate   *self);
-IDE_AVAILABLE_IN_3_32
-GtkWidget  *ide_project_template_get_widget      (IdeProjectTemplate   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar     **ide_project_template_get_languages   (IdeProjectTemplate   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_icon_name   (IdeProjectTemplate   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_project_template_expand_async    (IdeProjectTemplate   *self,
                                                   GHashTable           *params,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean    ide_project_template_expand_finish   (IdeProjectTemplate   *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint        ide_project_template_compare         (IdeProjectTemplate   *a,
                                                   IdeProjectTemplate   *b);
 

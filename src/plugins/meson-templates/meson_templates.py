@@ -64,7 +64,7 @@ class MesonTemplateLocator(Template.TemplateLocator):
         return super().do_locate(self, path)
 
 
-class MesonTemplate(Ide.TemplateBase, Ide.ProjectTemplate):
+class MesonTemplate(Ide.ProjectTemplate):
     def __init__(self, id, name, icon_name, description, languages, priority):
         super().__init__()
         self.id = id

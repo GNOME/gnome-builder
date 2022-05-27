@@ -24,10 +24,60 @@
 
 #include "ide-project-template.h"
 
-G_DEFINE_INTERFACE (IdeProjectTemplate, ide_project_template, G_TYPE_OBJECT)
+G_DEFINE_TYPE (IdeProjectTemplate, ide_project_template, IDE_TYPE_TEMPLATE_BASE)
+
+enum {
+  PROP_0,
+  PROP_ID,
+  PROP_NAME,
+  N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
 
 static void
-ide_project_template_default_init (IdeProjectTemplateInterface *iface)
+ide_project_template_get_property (GObject    *object,
+                                   guint       prop_id,
+                                   GValue     *value,
+                                   GParamSpec *pspec)
+{
+  IdeProjectTemplate *self = IDE_PROJECT_TEMPLATE (object);
+
+  switch (prop_id)
+    {
+    case PROP_ID:
+      g_value_take_string (value, ide_project_template_get_id (self));
+      break;
+
+    case PROP_NAME:
+      g_value_take_string (value, ide_project_template_get_name (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_project_template_class_init (IdeProjectTemplateClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->get_property = ide_project_template_get_property;
+
+  properties [PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_NAME] =
+    g_param_spec_string ("name", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+}
+
+static void
+ide_project_template_init (IdeProjectTemplate *self)
 {
 }
 
@@ -36,7 +86,7 @@ ide_project_template_get_id (IdeProjectTemplate *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_id (self);
+  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_id (self);
 }
 
 gchar *
@@ -44,7 +94,7 @@ ide_project_template_get_name (IdeProjectTemplate *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_name (self);
+  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_name (self);
 }
 
 gchar *
@@ -52,23 +102,7 @@ ide_project_template_get_description (IdeProjectTemplate *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_description (self);
-}
-
-/**
- * ide_project_template_get_widget:
- * @self: An #IdeProjectTemplate
- *
- * Get's the configuration widget for the template if there is one.
- *
- * Returns: (transfer none): a #GtkWidget.
- */
-GtkWidget *
-ide_project_template_get_widget (IdeProjectTemplate *self)
-{
-  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
-
-  return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_widget (self);
+  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_description (self);
 }
 
 /**
@@ -86,7 +120,7 @@ ide_project_template_get_languages (IdeProjectTemplate *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_languages (self);
+  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_languages (self);
 }
 
 gchar *
@@ -94,7 +128,7 @@ ide_project_template_get_icon_name (IdeProjectTemplate *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_icon_name (self);
+  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_icon_name (self);
 }
 
 /**
@@ -124,7 +158,7 @@ ide_project_template_expand_async (IdeProjectTemplate  *self,
   g_return_if_fail (g_hash_table_contains (params, "name"));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_PROJECT_TEMPLATE_GET_IFACE (self)->expand_async (self, params, cancellable, callback, user_data);
+  IDE_PROJECT_TEMPLATE_GET_CLASS (self)->expand_async (self, params, cancellable, callback, user_data);
 }
 
 gboolean
@@ -135,7 +169,7 @@ ide_project_template_expand_finish (IdeProjectTemplate  *self,
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), FALSE);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
-  return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->expand_finish (self, result, error);
+  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->expand_finish (self, result, error);
 }
 
 /**
@@ -152,8 +186,8 @@ ide_project_template_get_priority (IdeProjectTemplate *self)
 {
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), 0);
 
-  if (IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_priority)
-    return IDE_PROJECT_TEMPLATE_GET_IFACE (self)->get_priority (self);
+  if (IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_priority)
+    return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_priority (self);
 
   return 0;
 }
