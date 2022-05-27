@@ -50,23 +50,23 @@
 /**
  * IDE_MAJOR_VERSION:
  *
- * libide major version component (e.g. 1 if %IDE_VERSION is 1.2.3)
+ * libide major version component (e.g. 43 if %IDE_VERSION is 43.1)
  */
-#define IDE_MAJOR_VERSION (@MAJOR_VERSION@)
+#define IDE_MAJOR_VERSION @MAJOR_VERSION@
 
 /**
  * IDE_MINOR_VERSION:
  *
- * libide minor version component (e.g. 2 if %IDE_VERSION is 1.2.3)
+ * libide minor version component (e.g. 1 if %IDE_VERSION is 43.1)
  */
-#define IDE_MINOR_VERSION (@MINOR_VERSION@)
+#define IDE_MINOR_VERSION @MINOR_VERSION@
 
 /**
  * IDE_VERSION
  *
  * libide version.
  */
-#define IDE_VERSION (@VERSION@)
+#define IDE_VERSION @VERSION@
 
 /**
  * IDE_VERSION_S:

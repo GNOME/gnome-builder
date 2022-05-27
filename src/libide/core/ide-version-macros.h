@@ -25,44 +25,27 @@
 #include "ide-version.h"
 
 #ifndef _IDE_EXTERN
-#define _IDE_EXTERN extern
+# define _IDE_EXTERN extern
 #endif
+
+#define IDE_VERSION_CUR_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION, 0))
 
 #ifdef IDE_DISABLE_DEPRECATION_WARNINGS
-#define IDE_DEPRECATED _IDE_EXTERN
-#define IDE_DEPRECATED_FOR(f) _IDE_EXTERN
-#define IDE_UNAVAILABLE(maj,min) _IDE_EXTERN
+# define IDE_DEPRECATED _IDE_EXTERN
+# define IDE_DEPRECATED_FOR(f) _IDE_EXTERN
+# define IDE_UNAVAILABLE(maj,min) _IDE_EXTERN
 #else
-#define IDE_DEPRECATED G_DEPRECATED _IDE_EXTERN
-#define IDE_DEPRECATED_FOR(f) G_DEPRECATED_FOR(f) _IDE_EXTERN
-#define IDE_UNAVAILABLE(maj,min) G_UNAVAILABLE(maj,min) _IDE_EXTERN
+# define IDE_DEPRECATED G_DEPRECATED _IDE_EXTERN
+# define IDE_DEPRECATED_FOR(f) G_DEPRECATED_FOR (f) _IDE_EXTERN
+# define IDE_UNAVAILABLE(maj,min) G_UNAVAILABLE (maj, min) _IDE_EXTERN
 #endif
 
-#define IDE_VERSION_3_28 (G_ENCODE_VERSION (3, 28))
-#define IDE_VERSION_3_30 (G_ENCODE_VERSION (3, 30))
-#define IDE_VERSION_3_32 (G_ENCODE_VERSION (3, 32))
-#define IDE_VERSION_3_34 (G_ENCODE_VERSION (3, 34))
-#define IDE_VERSION_3_36 (G_ENCODE_VERSION (3, 36))
-#define IDE_VERSION_3_38 (G_ENCODE_VERSION (3, 38))
-#define IDE_VERSION_3_40 (G_ENCODE_VERSION (3, 40))
-#define IDE_VERSION_41 (G_ENCODE_VERSION (41, 0))
-#define IDE_VERSION_42 (G_ENCODE_VERSION (42, 0))
 #define IDE_VERSION_43 (G_ENCODE_VERSION (43, 0))
 
-#if (IDE_MINOR_VERSION == 99)
-# define IDE_VERSION_CUR_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION + 1, 0))
-#elif (IDE_MINOR_VERSION % 2)
-# define IDE_VERSION_CUR_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION, IDE_MINOR_VERSION + 1))
+#if IDE_MAJOR_VERSION == IDE_VERSION_43
+# define IDE_VERSION_PREV_STABLE (IDE_VERSION_43)
 #else
-# define IDE_VERSION_CUR_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION, IDE_MINOR_VERSION))
-#endif
-
-#if (IDE_MINOR_VERSION == 99)
-# define IDE_VERSION_PREV_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION + 1, 0))
-#elif (IDE_MINOR_VERSION % 2)
-# define IDE_VERSION_PREV_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION, IDE_MINOR_VERSION - 1))
-#else
-# define IDE_VERSION_PREV_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION, IDE_MINOR_VERSION - 2))
+# define IDE_VERSION_PREV_STABLE (G_ENCODE_VERSION (IDE_MAJOR_VERSION - 1, 0))
 #endif
 
 /**
@@ -72,7 +55,7 @@
  * the ide.h header.
  *
  * The definition should be one of the predefined IDE version
- * macros: %IDE_VERSION_3_28, ...
+ * macros: %IDE_VERSION_43, ...
  *
  * This macro defines the lower bound for the Builder API to use.
  *
@@ -91,7 +74,7 @@
  * the ide.h header.
 
  * The definition should be one of the predefined Builder version
- * macros: %IDE_VERSION_1_0, %IDE_VERSION_1_2,...
+ * macros: %IDE_VERSION_43, %IDE_VERSION_44,...
  *
  * This macro defines the upper bound for the IDE API to use.
  *
@@ -107,151 +90,17 @@
 # endif
 #endif
 
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_MIN_REQUIRED
-#error "IDE_VERSION_MAX_ALLOWED must be >= IDE_VERSION_MIN_REQUIRED"
-#endif
-#if IDE_VERSION_MIN_REQUIRED < IDE_VERSION_3_28
-#error "IDE_VERSION_MIN_REQUIRED must be >= IDE_VERSION_3_28"
-#endif
-
-#define IDE_AVAILABLE_IN_ALL                   _IDE_EXTERN
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_28
-# define IDE_DEPRECATED_IN_3_28                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_3_28_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_3_28                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_3_28_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_28
-# define IDE_AVAILABLE_IN_3_28                 IDE_UNAVAILABLE(3, 28)
-#else
-# define IDE_AVAILABLE_IN_3_28                 _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_30
-# define IDE_DEPRECATED_IN_3_30                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_3_30_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_3_30                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_3_30_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_30
-# define IDE_AVAILABLE_IN_3_30                 IDE_UNAVAILABLE(3, 30)
-#else
-# define IDE_AVAILABLE_IN_3_30                 _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_32
-# define IDE_DEPRECATED_IN_3_32                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_3_32_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_3_32                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_3_32_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_32
-# define IDE_AVAILABLE_IN_3_32                 IDE_UNAVAILABLE(3, 32)
-#else
-# define IDE_AVAILABLE_IN_3_32                 _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_34
-# define IDE_DEPRECATED_IN_3_34                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_3_34_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_3_34                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_3_34_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_34
-# define IDE_AVAILABLE_IN_3_34                 IDE_UNAVAILABLE(3, 34)
-#else
-# define IDE_AVAILABLE_IN_3_34                 _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_36
-# define IDE_DEPRECATED_IN_3_36                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_3_36_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_3_36                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_3_36_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_36
-# define IDE_AVAILABLE_IN_3_36                 IDE_UNAVAILABLE(3, 36)
-#else
-# define IDE_AVAILABLE_IN_3_36                 _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_38
-# define IDE_DEPRECATED_IN_3_38                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_3_38_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_3_38                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_3_38_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_38
-# define IDE_AVAILABLE_IN_3_38                 IDE_UNAVAILABLE(3, 38)
-#else
-# define IDE_AVAILABLE_IN_3_38                 _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_3_40
-# define IDE_DEPRECATED_IN_3_40                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_3_40_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_3_40                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_3_40_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_3_40
-# define IDE_AVAILABLE_IN_3_40                 IDE_UNAVAILABLE(3, 40)
-#else
-# define IDE_AVAILABLE_IN_3_40                 _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_41
-# define IDE_DEPRECATED_IN_41                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_41_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_41                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_41_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_41
-# define IDE_AVAILABLE_IN_41                 IDE_UNAVAILABLE(41, 0)
-#else
-# define IDE_AVAILABLE_IN_41                 _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_42
-# define IDE_DEPRECATED_IN_42                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_42_FOR(f)         IDE_DEPRECATED_FOR(f)
-#else
-# define IDE_DEPRECATED_IN_42                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_42_FOR(f)         _IDE_EXTERN
-#endif
-
-#if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_42
-# define IDE_AVAILABLE_IN_42                 IDE_UNAVAILABLE(42, 0)
-#else
-# define IDE_AVAILABLE_IN_42                 _IDE_EXTERN
-#endif
+#define IDE_AVAILABLE_IN_ALL _IDE_EXTERN
 
 #if IDE_VERSION_MIN_REQUIRED >= IDE_VERSION_43
-# define IDE_DEPRECATED_IN_43                IDE_DEPRECATED
-# define IDE_DEPRECATED_IN_43_FOR(f)         IDE_DEPRECATED_FOR(f)
+# define IDE_DEPRECATED_IN_43 IDE_DEPRECATED
+# define IDE_DEPRECATED_IN_43_FOR(f) IDE_DEPRECATED_FOR(f)
 #else
-# define IDE_DEPRECATED_IN_43                _IDE_EXTERN
-# define IDE_DEPRECATED_IN_43_FOR(f)         _IDE_EXTERN
+# define IDE_DEPRECATED_IN_43 _IDE_EXTERN
+# define IDE_DEPRECATED_IN_43_FOR(f) _IDE_EXTERN
 #endif
-
 #if IDE_VERSION_MAX_ALLOWED < IDE_VERSION_43
-# define IDE_AVAILABLE_IN_43                 IDE_UNAVAILABLE(43, 0)
+# define IDE_AVAILABLE_IN_43 IDE_UNAVAILABLE(43, 0)
 #else
-# define IDE_AVAILABLE_IN_43                 _IDE_EXTERN
+# define IDE_AVAILABLE_IN_43 _IDE_EXTERN
 #endif
