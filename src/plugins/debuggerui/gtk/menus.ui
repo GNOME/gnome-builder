@@ -18,16 +18,19 @@
       <submenu id="run-menu-debugger-submenu">
         <attribute name="before">run-menu-verbose-logging</attribute>
         <attribute name="label" translatable="yes">Debugger</attribute>
-        <item>
-          <attribute name="label" translatable="yes">Stop at Warnings</attribute>
-          <attribute name="action">debug-manager.stop-at-warnings</attribute>
-          <attribute name="role">check</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Stop at Criticals</attribute>
-          <attribute name="action">debug-manager.stop-at-criticals</attribute>
-          <attribute name="role">check</attribute>
-        </item>
+        <section id="run-menu-debugger-logging-breakpoints">
+          <attribute name="label" translatable="yes">Logging Breakpoints</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Automatically Break at Warnings</attribute>
+            <attribute name="action">debug-manager.stop-at-warnings</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Automatically Break at Criticals</attribute>
+            <attribute name="action">debug-manager.stop-at-criticals</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
       </submenu>
     </section>
   </menu>
