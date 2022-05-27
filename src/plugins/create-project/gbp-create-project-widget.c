@@ -38,10 +38,16 @@ struct _GbpCreateProjectWidget
 
   GtkWidget        *main;
   IdeTemplateInput *input;
-  AdwEntryRow      *location;
   GtkMenuButton    *template_button;
   GtkMenuButton    *language_button;
   GtkMenuButton    *licenses_button;
+  GtkImage         *directory_clash;
+
+  AdwEntryRow      *app_id_row;
+  AdwEntryRow      *language_row;
+  AdwEntryRow      *location_row;
+  AdwEntryRow      *name_row;
+  AdwEntryRow      *template_row;
 };
 
 enum {
@@ -53,6 +59,9 @@ enum {
 G_DEFINE_FINAL_TYPE (GbpCreateProjectWidget, gbp_create_project_widget, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
+
+#define ADD_ERROR(widget) gtk_widget_add_css_class(GTK_WIDGET(widget),"error")
+#define REMOVE_ERROR(widget) gtk_widget_remove_css_class(GTK_WIDGET(widget),"error")
 
 static gboolean
 gbp_create_project_widget_check_ready (GbpCreateProjectWidget *self)
@@ -124,8 +133,8 @@ license_activated_cb (GbpCreateProjectWidget *self,
 }
 
 static void
-on_location_changed_cb (GbpCreateProjectWidget *self,
-                        GtkEditable            *editable)
+location_row_changed_cb (GbpCreateProjectWidget *self,
+                         GtkEditable            *editable)
 {
   g_autofree char *expanded = NULL;
   g_autoptr(GFile) directory = NULL;
@@ -142,6 +151,50 @@ on_location_changed_cb (GbpCreateProjectWidget *self,
 }
 
 static void
+input_notify_cb (GbpCreateProjectWidget *self,
+                 GParamSpec             *pspec,
+                 IdeTemplateInput       *input)
+{
+  IdeTemplateInputValidation flags;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (IDE_IS_TEMPLATE_INPUT (input));
+
+  flags = ide_template_input_validate (input);
+
+#define CHECK_FLAG(FLAG,widget)                         \
+  G_STMT_START {                                        \
+    if ((flags & IDE_TEMPLATE_INPUT_INVAL_##FLAG) != 0) \
+      ADD_ERROR(widget);                                \
+    else                                                \
+      REMOVE_ERROR(widget);                             \
+  } G_STMT_END
+
+  CHECK_FLAG (APP_ID, self->app_id_row);
+  CHECK_FLAG (LANGUAGE, self->language_row);
+  CHECK_FLAG (LOCATION, self->location_row);
+  CHECK_FLAG (NAME, self->name_row);
+  CHECK_FLAG (TEMPLATE, self->template_row);
+
+#undef CHECK_FLAG
+
+  if ((flags & IDE_TEMPLATE_INPUT_INVAL_LOCATION) &&
+      !(flags & IDE_TEMPLATE_INPUT_INVAL_NAME))
+    {
+      ADD_ERROR (self->name_row);
+      gtk_widget_show (GTK_WIDGET (self->directory_clash));
+    }
+  else
+    {
+      gtk_widget_hide (GTK_WIDGET (self->directory_clash));
+    }
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self),
+                                 "create-project.expand",
+                                 flags == IDE_TEMPLATE_INPUT_VALID);
+}
+
+static void
 select_folder_response_cb (GbpCreateProjectWidget *self,
                            int                     response_id,
                            GtkFileChooserNative   *native)
@@ -154,7 +207,7 @@ select_folder_response_cb (GbpCreateProjectWidget *self,
       g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
       g_autofree char *path = ide_path_collapse (g_file_peek_path (file));
 
-      gtk_editable_set_text (GTK_EDITABLE (self->location), path);
+      gtk_editable_set_text (GTK_EDITABLE (self->location_row), path);
     }
 
   gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
@@ -186,6 +239,22 @@ select_folder_action (GtkWidget  *widget,
                            self,
                            G_CONNECT_SWAPPED);
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
+}
+
+static void
+expand_action (GtkWidget  *widget,
+               const char *action_name,
+               GVariant   *param)
+{
+  GbpCreateProjectWidget *self = (GbpCreateProjectWidget *)widget;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+
+  g_print ("Go\n");
+
+  IDE_EXIT;
 }
 
 static void
@@ -234,20 +303,28 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/create-project/gbp-create-project-widget.ui");
 
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, app_id_row);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, directory_clash);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, input);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, location);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, main);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, language_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, language_row);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, licenses_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, location_row);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, main);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, name_row);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, template_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, template_row);
 
   gtk_widget_class_bind_template_callback (widget_class, template_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, language_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, license_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, location_row_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, input_notify_cb);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 
   gtk_widget_class_install_action (widget_class, "create-project.select-folder", NULL, select_folder_action);
+  gtk_widget_class_install_action (widget_class, "create-project.expand", NULL, expand_action);
 
   g_type_ensure (IDE_TYPE_TEMPLATE_INPUT);
 }
@@ -259,11 +336,10 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (self->location,
-                           "changed",
-                           G_CALLBACK (on_location_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  gtk_editable_set_text (GTK_EDITABLE (self->location_row), projects_dir);
 
-  gtk_editable_set_text (GTK_EDITABLE (self->location), projects_dir);
+  /* Always start disabled */
+  gtk_widget_action_set_enabled (GTK_WIDGET (self),
+                                 "create-project.expand",
+                                 FALSE);
 }
