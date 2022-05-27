@@ -154,7 +154,7 @@
         <item>
           <attribute name="label" translatable="yes">High Contrast</attribute>
           <attribute name="role">check</attribute>
-          <attribute name="action">runui.high-contrast</attribute>
+          <attribute name="action">run-manager.high-contrast</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">Right-to-Left</attribute>
