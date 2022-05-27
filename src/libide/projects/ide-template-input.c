@@ -22,8 +22,11 @@
 
 #include "config.h"
 
+#include <libpeas/peas.h>
+
 #include "ide-projects-global.h"
 #include "ide-template-input.h"
+#include "ide-template-provider.h"
 
 #define DEFAULT_USE_VERSION_CONTROL TRUE
 #define DEFAULT_PROJECT_VERSION "0.1.0"
@@ -33,6 +36,8 @@
 struct _IdeTemplateInput
 {
   GObject parent_instance;
+
+  GListStore *templates;
 
   GFile *directory;
 
@@ -57,6 +62,8 @@ enum {
   PROP_NAME,
   PROP_PROJECT_VERSION,
   PROP_TEMPLATE,
+  PROP_TEMPLATE_NAME,
+  PROP_TEMPLATES_MODEL,
   PROP_USE_VERSION_CONTROL,
   N_PROPS
 };
@@ -64,6 +71,102 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeTemplateInput, ide_template_input, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+
+static char *
+get_template_name (IdeTemplateInput *self)
+{
+  guint n_items;
+
+  g_assert (IDE_IS_TEMPLATE_INPUT (self));
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->templates));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeProjectTemplate) template = g_list_model_get_item (G_LIST_MODEL (self->templates), i);
+      g_autofree char *id = ide_project_template_get_id (template);
+
+      if (g_strcmp0 (id, self->template) == 0)
+        return ide_project_template_get_name (template);
+    }
+
+  return NULL;
+}
+
+static int
+sort_by_priority (gconstpointer aptr,
+                  gconstpointer bptr)
+{
+  IdeProjectTemplate *a = *(IdeProjectTemplate **)aptr;
+  IdeProjectTemplate *b = *(IdeProjectTemplate **)bptr;
+
+  return ide_project_template_compare (a, b);
+}
+
+static void
+ide_template_input_set_templates (IdeTemplateInput *self,
+                                  GPtrArray        *templates)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TEMPLATE_INPUT (self));
+  g_assert (templates != NULL);
+
+  g_ptr_array_sort (templates, sort_by_priority);
+
+  for (guint i = 0; i < templates->len; i++)
+    {
+      IdeProjectTemplate *template = g_ptr_array_index (templates, i);
+
+      g_list_store_append (self->templates, template);
+    }
+
+  if (templates->len > 0)
+    {
+      g_autofree char *id = ide_project_template_get_id (g_ptr_array_index (templates, 0));
+      ide_template_input_set_template (self, id);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+foreach_template_provider_cb (PeasExtensionSet *set,
+                              PeasPluginInfo   *plugin_info,
+                              PeasExtension    *exten,
+                              gpointer          user_data)
+{
+  IdeTemplateProvider *provider = (IdeTemplateProvider *)exten;
+  GPtrArray *templates = user_data;
+  GList *list;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TEMPLATE_PROVIDER (provider));
+
+  list = ide_template_provider_get_project_templates (provider);
+  for (GList *iter = list; iter; iter = iter->next)
+    g_ptr_array_add (templates, g_steal_pointer (&iter->data));
+  g_list_free (list);
+}
+
+static void
+ide_template_input_constructed (GObject *object)
+{
+  IdeTemplateInput *self = (IdeTemplateInput *)object;
+  g_autoptr(PeasExtensionSet) set = NULL;
+  g_autoptr(GPtrArray) templates = NULL;
+
+  G_OBJECT_CLASS (ide_template_input_parent_class)->constructed (object);
+
+  templates = g_ptr_array_new_with_free_func (g_object_unref);
+  set = peas_extension_set_new (peas_engine_get_default (),
+                                IDE_TYPE_TEMPLATE_PROVIDER,
+                                NULL);
+  peas_extension_set_foreach (set, foreach_template_provider_cb, templates);
+
+  ide_template_input_set_templates (self, templates);
+}
 
 static void
 ide_template_input_dispose (GObject *object)
@@ -122,6 +225,14 @@ ide_template_input_get_property (GObject    *object,
 
     case PROP_TEMPLATE:
       g_value_set_string (value, self->template);
+      break;
+
+    case PROP_TEMPLATE_NAME:
+      g_value_take_string (value, get_template_name (self));
+      break;
+
+    case PROP_TEMPLATES_MODEL:
+      g_value_set_object (value, self->templates);
       break;
 
     case PROP_USE_VERSION_CONTROL:
@@ -190,6 +301,7 @@ ide_template_input_class_init (IdeTemplateInputClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_template_input_constructed;
   object_class->dispose = ide_template_input_dispose;
   object_class->get_property = ide_template_input_get_property;
   object_class->set_property = ide_template_input_set_property;
@@ -226,6 +338,14 @@ ide_template_input_class_init (IdeTemplateInputClass *klass)
     g_param_spec_string ("template", NULL, NULL, NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_TEMPLATE_NAME] =
+    g_param_spec_string ("template-name", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TEMPLATES_MODEL] =
+    g_param_spec_object ("templates-model", NULL, NULL, G_TYPE_LIST_MODEL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_USE_VERSION_CONTROL] =
     g_param_spec_boolean ("use-version-control", NULL, NULL, DEFAULT_USE_VERSION_CONTROL,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
@@ -244,6 +364,7 @@ ide_template_input_init (IdeTemplateInput *self)
   self->license_name = g_strdup (DEFAULT_LICECNSE_NAME);
   self->project_version = g_strdup (DEFAULT_PROJECT_VERSION);
   self->use_version_control = DEFAULT_USE_VERSION_CONTROL;
+  self->templates = g_list_store_new (IDE_TYPE_PROJECT_TEMPLATE);
 }
 
 const char *
@@ -435,6 +556,7 @@ ide_template_input_set_template (IdeTemplateInput *self,
       g_free (self->template);
       self->template = g_strdup (template);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEMPLATE]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEMPLATE_NAME]);
     }
 }
 
@@ -630,4 +752,18 @@ ide_template_input_to_scope (IdeTemplateInput *self)
   scope_take_string (scope, "Spaces", g_strnfill (strlen (Prefix), ' '));
 
   return g_steal_pointer (&scope);
+}
+
+/**
+ * ide_template_input_get_templates_model:
+ * @self: a #IdeTemplateInput
+ *
+ * Returns: (transfer none): A #GListModel
+ */
+GListModel *
+ide_template_input_get_templates_model (IdeTemplateInput *self)
+{
+  g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), NULL);
+
+  return G_LIST_MODEL (self->templates);
 }

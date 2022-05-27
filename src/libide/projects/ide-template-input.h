@@ -83,6 +83,8 @@ IDE_AVAILABLE_IN_ALL
 void              ide_template_input_set_template            (IdeTemplateInput *self,
                                                               const char       *template);
 IDE_AVAILABLE_IN_ALL
+GListModel       *ide_template_input_get_templates_model     (IdeTemplateInput *self);
+IDE_AVAILABLE_IN_ALL
 TmplScope        *ide_template_input_to_scope                (IdeTemplateInput *self);
 
 G_END_DECLS
