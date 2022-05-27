@@ -151,6 +151,7 @@ gbp_intelephense_service_configure_launcher (IdeLspService         *service,
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
   ide_subprocess_launcher_push_argv (launcher, "--stdio");
+  ide_subprocess_launcher_append_path (launcher, "/app/bin");
 
   IDE_EXIT;
 }
