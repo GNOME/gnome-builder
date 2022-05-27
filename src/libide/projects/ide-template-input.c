@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 
 #include "ide-projects-global.h"
+#include "ide-project-template.h"
 #include "ide-template-input.h"
 #include "ide-template-provider.h"
 
@@ -41,6 +42,8 @@ struct _IdeTemplateInput
   GListStore *templates;
   GtkStringList *languages;
   GtkStringList *licenses;
+  GtkFilterListModel *filtered_templates;
+  GtkCustomFilter *template_filter;
 
   GFile *directory;
 
@@ -181,6 +184,22 @@ ide_template_input_set_templates (IdeTemplateInput *self,
   IDE_EXIT;
 }
 
+static gboolean
+template_filter_func (gpointer item,
+                      gpointer user_data)
+{
+  IdeProjectTemplate *template = item;
+  const char *language = user_data;
+  g_auto(GStrv) languages = NULL;
+
+  g_assert (IDE_IS_PROJECT_TEMPLATE (template));
+  g_assert (language != NULL);
+
+  languages = ide_project_template_get_languages (template);
+
+  return g_strv_contains ((const char * const *)languages, language);
+}
+
 static void
 foreach_template_provider_cb (PeasExtensionSet *set,
                               PeasPluginInfo   *plugin_info,
@@ -224,6 +243,8 @@ ide_template_input_dispose (GObject *object)
 {
   IdeTemplateInput *self = (IdeTemplateInput *)object;
 
+  g_clear_object (&self->template_filter);
+  g_clear_object (&self->filtered_templates);
   g_clear_object (&self->directory);
   g_clear_object (&self->templates);
   g_clear_object (&self->languages);
@@ -286,7 +307,7 @@ ide_template_input_get_property (GObject    *object,
       break;
 
     case PROP_TEMPLATES_MODEL:
-      g_value_set_object (value, self->templates);
+      g_value_set_object (value, self->filtered_templates);
       break;
 
     case PROP_LANGUAGES_MODEL:
@@ -440,6 +461,14 @@ ide_template_input_init (IdeTemplateInput *self)
 
   for (guint i = 0; i < G_N_ELEMENTS (licenses); i++)
     gtk_string_list_append (self->licenses, g_dgettext (GETTEXT_PACKAGE, licenses[i].spdx));
+
+  self->template_filter = gtk_custom_filter_new (template_filter_func,
+                                                 g_strdup (self->language),
+                                                 g_free);
+  self->filtered_templates = g_object_new (GTK_TYPE_FILTER_LIST_MODEL,
+                                           "filter", self->template_filter,
+                                           "model", self->templates,
+                                           NULL);
 }
 
 const char *
@@ -560,6 +589,10 @@ ide_template_input_set_language (IdeTemplateInput *self,
     {
       g_free (self->language);
       self->language = g_strdup (language);
+      gtk_custom_filter_set_filter_func (self->template_filter,
+                                         template_filter_func,
+                                         g_strdup (language),
+                                         g_free);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGE]);
     }
 }
@@ -840,7 +873,7 @@ ide_template_input_get_templates_model (IdeTemplateInput *self)
 {
   g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), NULL);
 
-  return G_LIST_MODEL (self->templates);
+  return G_LIST_MODEL (self->filtered_templates);
 }
 
 /**
