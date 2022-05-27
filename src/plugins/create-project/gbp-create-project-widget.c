@@ -39,6 +39,7 @@ struct _GbpCreateProjectWidget
   GtkWidget        *main;
   IdeTemplateInput *input;
   AdwEntryRow      *location;
+  GtkMenuButton    *template_button;
 };
 
 enum {
@@ -57,6 +58,27 @@ gbp_create_project_widget_check_ready (GbpCreateProjectWidget *self)
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
   return TRUE;
+}
+
+static void
+template_activated_cb (GbpCreateProjectWidget *self,
+                       guint                   position,
+                       GtkListView            *list_view)
+{
+  g_autoptr(IdeProjectTemplate) template = NULL;
+  g_autofree char *id = NULL;
+  GListModel *model;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GTK_IS_LIST_VIEW (list_view));
+
+  model = G_LIST_MODEL (gtk_list_view_get_model (list_view));
+  template = g_list_model_get_item (model, position);
+
+  gtk_menu_button_popdown (self->template_button);
+
+  id = ide_project_template_get_id (template);
+  ide_template_input_set_template (self->input, id);
 }
 
 static void
@@ -173,6 +195,9 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, input);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, location);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, main);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, template_button);
+
+  gtk_widget_class_bind_template_callback (widget_class, template_activated_cb);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 
