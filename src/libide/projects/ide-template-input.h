@@ -48,59 +48,66 @@ G_DECLARE_FINAL_TYPE (IdeTemplateInput, ide_template_input, IDE, TEMPLATE_INPUT,
 IDE_AVAILABLE_IN_ALL
 IdeTemplateInput           *ide_template_input_new                     (void);
 IDE_AVAILABLE_IN_ALL
-const char                 *ide_template_input_get_author              (IdeTemplateInput *self);
+const char                 *ide_template_input_get_author              (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_author              (IdeTemplateInput *self,
-                                                                        const char       *author);
+void                        ide_template_input_set_author              (IdeTemplateInput     *self,
+                                                                        const char           *author);
 IDE_AVAILABLE_IN_ALL
-GFile                      *ide_template_input_get_directory           (IdeTemplateInput *self);
+GFile                      *ide_template_input_get_directory           (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_directory           (IdeTemplateInput *self,
-                                                                        GFile            *directory);
+void                        ide_template_input_set_directory           (IdeTemplateInput     *self,
+                                                                        GFile                *directory);
 IDE_AVAILABLE_IN_ALL
-const char                 *ide_template_input_get_language            (IdeTemplateInput *self);
+const char                 *ide_template_input_get_language            (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_language            (IdeTemplateInput *self,
-                                                                        const char       *language);
+void                        ide_template_input_set_language            (IdeTemplateInput     *self,
+                                                                        const char           *language);
 IDE_AVAILABLE_IN_ALL
-gboolean                    ide_template_input_get_use_version_control (IdeTemplateInput *self);
+gboolean                    ide_template_input_get_use_version_control (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_use_version_control (IdeTemplateInput *self,
-                                                                        gboolean          use_version_control);
+void                        ide_template_input_set_use_version_control (IdeTemplateInput     *self,
+                                                                        gboolean              use_version_control);
 IDE_AVAILABLE_IN_ALL
-const char                 *ide_template_input_get_name                (IdeTemplateInput *self);
+const char                 *ide_template_input_get_name                (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_name                (IdeTemplateInput *self,
-                                                                        const char       *name);
+void                        ide_template_input_set_name                (IdeTemplateInput     *self,
+                                                                        const char           *name);
 IDE_AVAILABLE_IN_ALL
-const char                 *ide_template_input_get_app_id              (IdeTemplateInput *self);
+const char                 *ide_template_input_get_app_id              (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_app_id              (IdeTemplateInput *self,
-                                                                        const char       *app_id);
+void                        ide_template_input_set_app_id              (IdeTemplateInput     *self,
+                                                                        const char           *app_id);
 IDE_AVAILABLE_IN_ALL
-const char                 *ide_template_input_get_project_version     (IdeTemplateInput *self);
+const char                 *ide_template_input_get_project_version     (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_project_version     (IdeTemplateInput *self,
-                                                                        const char       *project_version);
+void                        ide_template_input_set_project_version     (IdeTemplateInput     *self,
+                                                                        const char           *project_version);
 IDE_AVAILABLE_IN_ALL
-const char                 *ide_template_input_get_license_name        (IdeTemplateInput *self);
+const char                 *ide_template_input_get_license_name        (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_license_name        (IdeTemplateInput *self,
-                                                                        const char       *license_name);
+void                        ide_template_input_set_license_name        (IdeTemplateInput     *self,
+                                                                        const char           *license_name);
 IDE_AVAILABLE_IN_ALL
-const char                 *ide_template_input_get_template            (IdeTemplateInput *self);
+const char                 *ide_template_input_get_template            (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-void                        ide_template_input_set_template            (IdeTemplateInput *self,
-                                                                        const char       *template);
+void                        ide_template_input_set_template            (IdeTemplateInput     *self,
+                                                                        const char           *template);
 IDE_AVAILABLE_IN_ALL
-GListModel                 *ide_template_input_get_templates_model     (IdeTemplateInput *self);
+GListModel                 *ide_template_input_get_templates_model     (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-GListModel                 *ide_template_input_get_languages_model     (IdeTemplateInput *self);
+GListModel                 *ide_template_input_get_languages_model     (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-GListModel                 *ide_template_input_get_licenses_model      (IdeTemplateInput *self);
+GListModel                 *ide_template_input_get_licenses_model      (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-TmplScope                  *ide_template_input_to_scope                (IdeTemplateInput *self);
+IdeTemplateInputValidation  ide_template_input_validate                (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
-IdeTemplateInputValidation  ide_template_input_validate                (IdeTemplateInput *self);
+void                        ide_template_input_expand_async            (IdeTemplateInput     *self,
+                                                                        GCancellable         *cancellable,
+                                                                        GAsyncReadyCallback   callback,
+                                                                        gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+GFile                      *ide_template_input_expand_finish           (IdeTemplateInput     *self,
+                                                                        GAsyncResult         *result,
+                                                                        GError              **error);
 
 G_END_DECLS

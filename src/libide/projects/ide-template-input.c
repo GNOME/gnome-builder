@@ -22,8 +22,10 @@
 
 #include "config.h"
 
-#include <libpeas/peas.h>
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
+
+#include <libide-threading.h>
 
 #include "ide-projects-global.h"
 #include "ide-project-template.h"
@@ -841,15 +843,7 @@ functify (const gchar *input)
   return g_string_free (str, FALSE);
 }
 
-/**
- * ide_template_input_to_scope:
- * @self: a #IdeTemplateInput
- *
- * Generates a #TmplScope with various state from the template input.
- *
- * Returns: (transfer full): a #TmplScope that can be used to expand templates
- */
-TmplScope *
+static TmplScope *
 ide_template_input_to_scope (IdeTemplateInput *self)
 {
   g_autoptr(TmplScope) scope = NULL;
@@ -996,4 +990,81 @@ ide_template_input_validate (IdeTemplateInput *self)
     flags |= IDE_TEMPLATE_INPUT_INVAL_LANGUAGE;
 
   return flags;
+}
+
+void
+ide_template_input_expand_async (IdeTemplateInput    *self,
+                                 GCancellable        *cancellable,
+                                 GAsyncReadyCallback  callback,
+                                 gpointer             user_data)
+{
+  g_autoptr(IdeProjectTemplate) template = NULL;
+  g_autoptr(TmplScope) scope = NULL;
+  g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_template_input_expand_async);
+
+  if (ide_template_input_validate (self) != IDE_TEMPLATE_INPUT_VALID)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "Template input is not valid");
+      IDE_EXIT;
+    }
+
+  if (!(template = find_template (self, self->template)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "Failed to locate template");
+      IDE_EXIT;
+    }
+
+  if (!(scope = ide_template_input_to_scope (self)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVAL,
+                                 "Failed to create scope for template");
+      IDE_EXIT;
+    }
+
+  /* TODO: Expand, VCS, etc */
+  ide_task_return_new_error (task,
+                             G_IO_ERROR,
+                             G_IO_ERROR_NOT_SUPPORTED,
+                             "Work in Progress");
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_template_input_expand_finish:
+ *
+ * Returns: (transfer full): a #GFile or %NULL and @error is set.
+ */
+GFile *
+ide_template_input_expand_finish (IdeTemplateInput  *self,
+                                  GAsyncResult      *result,
+                                  GError           **error)
+{
+  GFile *ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TEMPLATE_INPUT (self));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
