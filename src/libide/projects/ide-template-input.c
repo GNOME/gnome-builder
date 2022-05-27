@@ -978,7 +978,9 @@ ide_template_input_validate (IdeTemplateInput *self)
   if (template && !ide_project_template_validate_app_id (template, self->app_id))
     flags |= IDE_TEMPLATE_INPUT_INVAL_APP_ID;
 
-  if (template && !ide_project_template_validate_name (template, self->name))
+  if (ide_str_empty0 (self->name))
+    flags |= IDE_TEMPLATE_INPUT_INVAL_NAME;
+  else if (template && !ide_project_template_validate_name (template, self->name))
     flags |= IDE_TEMPLATE_INPUT_INVAL_NAME;
 
   if (self->directory == NULL ||
