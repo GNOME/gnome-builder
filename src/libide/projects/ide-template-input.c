@@ -38,6 +38,7 @@ struct _IdeTemplateInput
   GObject parent_instance;
 
   GListStore *templates;
+  GtkStringList *languages;
 
   GFile *directory;
 
@@ -58,6 +59,7 @@ enum {
   PROP_AUTHOR,
   PROP_DIRECTORY,
   PROP_LANGUAGE,
+  PROP_LANGUAGES_MODEL,
   PROP_LICENSE_NAME,
   PROP_NAME,
   PROP_PROJECT_VERSION,
@@ -103,22 +105,44 @@ sort_by_priority (gconstpointer aptr,
   return ide_project_template_compare (a, b);
 }
 
+static int
+sort_strings (const char * const *a,
+              const char * const *b)
+{
+  return g_strcmp0 (*a, *b);
+}
+
 static void
 ide_template_input_set_templates (IdeTemplateInput *self,
                                   GPtrArray        *templates)
 {
+  g_autoptr(GHashTable) seen_languages = NULL;
+  g_autofree char **sorted_langs = NULL;
+  guint len;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_TEMPLATE_INPUT (self));
   g_assert (templates != NULL);
 
+  seen_languages = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   g_ptr_array_sort (templates, sort_by_priority);
 
   for (guint i = 0; i < templates->len; i++)
     {
       IdeProjectTemplate *template = g_ptr_array_index (templates, i);
+      g_auto(GStrv) langs = ide_project_template_get_languages (template);
 
       g_list_store_append (self->templates, template);
+
+      if (langs == NULL)
+        continue;
+
+      for (guint j = 0; langs[j]; j++)
+        {
+          if (!g_hash_table_contains (seen_languages, langs[j]))
+            g_hash_table_insert (seen_languages, g_strdup (langs[j]), NULL);
+        }
     }
 
   if (templates->len > 0)
@@ -126,6 +150,16 @@ ide_template_input_set_templates (IdeTemplateInput *self,
       g_autofree char *id = ide_project_template_get_id (g_ptr_array_index (templates, 0));
       ide_template_input_set_template (self, id);
     }
+
+  sorted_langs = (char **)g_hash_table_get_keys_as_array (seen_languages, &len);
+  g_qsort_with_data (sorted_langs,
+                     len,
+                     sizeof (char *),
+                     (GCompareDataFunc) sort_strings,
+                     NULL);
+
+  gtk_string_list_splice (self->languages, 0, 0,
+                          (const char * const *)sorted_langs);
 
   IDE_EXIT;
 }
@@ -174,6 +208,8 @@ ide_template_input_dispose (GObject *object)
   IdeTemplateInput *self = (IdeTemplateInput *)object;
 
   g_clear_object (&self->directory);
+  g_clear_object (&self->templates);
+  g_clear_object (&self->languages);
 
   g_clear_pointer (&self->author, g_free);
   g_clear_pointer (&self->language, g_free);
@@ -233,6 +269,10 @@ ide_template_input_get_property (GObject    *object,
 
     case PROP_TEMPLATES_MODEL:
       g_value_set_object (value, self->templates);
+      break;
+
+    case PROP_LANGUAGES_MODEL:
+      g_value_set_object (value, self->languages);
       break;
 
     case PROP_USE_VERSION_CONTROL:
@@ -346,6 +386,10 @@ ide_template_input_class_init (IdeTemplateInputClass *klass)
     g_param_spec_object ("templates-model", NULL, NULL, G_TYPE_LIST_MODEL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_LANGUAGES_MODEL] =
+    g_param_spec_object ("languages-model", NULL, NULL, G_TYPE_LIST_MODEL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_USE_VERSION_CONTROL] =
     g_param_spec_boolean ("use-version-control", NULL, NULL, DEFAULT_USE_VERSION_CONTROL,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
@@ -365,6 +409,7 @@ ide_template_input_init (IdeTemplateInput *self)
   self->project_version = g_strdup (DEFAULT_PROJECT_VERSION);
   self->use_version_control = DEFAULT_USE_VERSION_CONTROL;
   self->templates = g_list_store_new (IDE_TYPE_PROJECT_TEMPLATE);
+  self->languages = gtk_string_list_new (NULL);
 }
 
 const char *
@@ -766,4 +811,18 @@ ide_template_input_get_templates_model (IdeTemplateInput *self)
   g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), NULL);
 
   return G_LIST_MODEL (self->templates);
+}
+
+/**
+ * ide_template_input_get_languages_model:
+ * @self: a #IdeTemplateInput
+ *
+ * Returns: (transfer none): A #GListModel
+ */
+GListModel *
+ide_template_input_get_languages_model (IdeTemplateInput *self)
+{
+  g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), NULL);
+
+  return G_LIST_MODEL (self->languages);
 }
