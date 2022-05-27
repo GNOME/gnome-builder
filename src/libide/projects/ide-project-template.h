@@ -54,6 +54,10 @@ struct _IdeProjectTemplateClass
                                   GAsyncResult         *result,
                                   GError              **error);
   gint        (*get_priority)    (IdeProjectTemplate   *self);
+  gboolean    (*validate_name)   (IdeProjectTemplate   *self,
+                                  const char           *name);
+  gboolean    (*validate_app_id) (IdeProjectTemplate   *self,
+                                  const char           *app_id);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -81,5 +85,11 @@ gboolean    ide_project_template_expand_finish   (IdeProjectTemplate   *self,
 IDE_AVAILABLE_IN_ALL
 gint        ide_project_template_compare         (IdeProjectTemplate   *a,
                                                   IdeProjectTemplate   *b);
+IDE_AVAILABLE_IN_ALL
+gboolean    ide_project_template_validate_name   (IdeProjectTemplate   *self,
+                                                  const char           *name);
+IDE_AVAILABLE_IN_ALL
+gboolean    ide_project_template_validate_app_id (IdeProjectTemplate   *self,
+                                                  const char           *app_id);
 
 G_END_DECLS

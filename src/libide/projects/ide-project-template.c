@@ -36,6 +36,74 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
+static gboolean
+ide_project_template_real_validate_name (IdeProjectTemplate *self,
+                                         const char         *name)
+{
+  g_assert (IDE_IS_PROJECT_TEMPLATE (self));
+
+  if (name == NULL)
+    return FALSE;
+
+  if (g_unichar_isdigit (g_utf8_get_char (name)))
+    return FALSE;
+
+  /* TODO: Move this check to Meson template subclass */
+  if (ide_str_equal0 (name, "test"))
+    return FALSE;
+
+  for (const char *c = name; *c; c = g_utf8_next_char (c))
+    {
+      gunichar ch = g_utf8_get_char (c);
+
+      if (g_unichar_isspace (ch))
+        return FALSE;
+
+      if (ch == '/')
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+ide_project_template_real_validate_app_id (IdeProjectTemplate *self,
+                                           const char         *app_id)
+{
+  guint n_dots = 0;
+
+  g_assert (IDE_IS_PROJECT_TEMPLATE (self));
+
+  /* Rely on defaults if empty */
+  if (ide_str_empty0 (app_id))
+    return TRUE;
+
+  if (!g_application_id_is_valid (app_id))
+    return FALSE;
+
+  /* Flatpak's require at least 3 parts to be valid, which is more than
+   * what g_application_id_is_valid() will require. Additionally, you
+   * cannot have "-" in Flatpak app ids.
+   */
+  for (const char *c = app_id; *c; c = g_utf8_next_char (c))
+    {
+      switch (*c)
+        {
+        case '-':
+          return FALSE;
+
+        case '.':
+          n_dots++;
+          break;
+
+        default:
+          break;
+        }
+    }
+
+  return n_dots >= 2;
+}
+
 static void
 ide_project_template_get_property (GObject    *object,
                                    guint       prop_id,
@@ -69,6 +137,9 @@ ide_project_template_class_init (IdeProjectTemplateClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->get_property = ide_project_template_get_property;
+
+  klass->validate_name = ide_project_template_real_validate_name;
+  klass->validate_app_id = ide_project_template_real_validate_app_id;
 
   properties [PROP_ID] =
     g_param_spec_string ("id", NULL, NULL, NULL,
@@ -220,4 +291,22 @@ ide_project_template_compare (IdeProjectTemplate *a,
     }
 
   return ret;
+}
+
+gboolean
+ide_project_template_validate_name (IdeProjectTemplate *self,
+                                    const char         *name)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), FALSE);
+
+  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->validate_name (self, name);
+}
+
+gboolean
+ide_project_template_validate_app_id (IdeProjectTemplate *self,
+                                      const char         *app_id)
+{
+  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), FALSE);
+
+  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->validate_app_id (self, app_id);
 }
