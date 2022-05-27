@@ -156,12 +156,21 @@
           <attribute name="role">check</attribute>
           <attribute name="action">run-manager.high-contrast</attribute>
         </item>
-        <item>
-          <attribute name="label" translatable="yes">Right-to-Left</attribute>
-          <attribute name="role">check</attribute>
-          <attribute name="action">runui.textdir</attribute>
-          <attribute name="target" type="s">'rtl'</attribute>
-        </item>
+        <section id="run-menu-a11y-text-direction">
+          <attribute name="label" translatable="yes">Text Direction</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Left-to-Right</attribute>
+            <attribute name="role">check</attribute>
+            <attribute name="action">run-manager.text-direction</attribute>
+            <attribute name="target" type="s">'ltr'</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Right-to-Left</attribute>
+            <attribute name="role">check</attribute>
+            <attribute name="action">run-manager.text-direction</attribute>
+            <attribute name="target" type="s">'rtl'</attribute>
+          </item>
+        </section>
       </submenu>
       <item>
         <attribute name="id">run-menu-verbose-logging</attribute>
