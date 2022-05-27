@@ -563,25 +563,13 @@ apply_color_scheme (IdeEnvironment *env,
   g_debug ("Applying color-scheme \"%s\"", color_scheme);
 
   if (ide_str_equal0 (color_scheme, "follow"))
-    {
-      /* Clear any overrides that somehow leaked into our process */
-      ide_environment_setenv (env, "ADW_DBG_FORCE_LIGHT", NULL);
-      ide_environment_setenv (env, "ADW_DBG_FORCE_DARK", NULL);
-    }
+    ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", NULL);
   else if (ide_str_equal0 (color_scheme, "force-light"))
-    {
-      ide_environment_setenv (env, "ADW_DBG_FORCE_LIGHT", "1");
-      ide_environment_setenv (env, "ADW_DBG_FORCE_DARK", NULL);
-    }
+    ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", "prefer-light");
   else if (ide_str_equal0 (color_scheme, "force-dark"))
-    {
-      ide_environment_setenv (env, "ADW_DBG_FORCE_LIGHT", NULL);
-      ide_environment_setenv (env, "ADW_DBG_FORCE_DARK", "1");
-    }
+    ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", "prefer-dark");
   else
-    {
-      g_warn_if_reached ();
-    }
+    g_warn_if_reached ();
 
   IDE_EXIT;
 }
