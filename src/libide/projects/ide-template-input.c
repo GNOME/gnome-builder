@@ -934,3 +934,64 @@ ide_template_input_get_licenses_model (IdeTemplateInput *self)
 
   return G_LIST_MODEL (self->licenses);
 }
+
+static IdeProjectTemplate *
+find_template (IdeTemplateInput *self,
+               const char       *template_id)
+{
+  GListModel *model;
+  guint n_items;
+
+  g_assert (IDE_IS_TEMPLATE_INPUT (self));
+
+  if (template_id == NULL)
+    return NULL;
+
+  model = G_LIST_MODEL (self->templates);
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeProjectTemplate) template = g_list_model_get_item (model, i);
+      g_autofree char *id = ide_project_template_get_id (template);
+
+      if (ide_str_equal0 (template_id, id))
+        return g_steal_pointer (&template);
+    }
+
+  return NULL;
+}
+
+IdeTemplateInputValidation
+ide_template_input_validate (IdeTemplateInput *self)
+{
+  IdeTemplateInputValidation flags = 0;
+  IdeProjectTemplate *template;
+  g_autoptr(GFile) dest = NULL;
+  g_auto(GStrv) languages = NULL;
+
+  g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), 0);
+
+  if (!(template = find_template (self, self->template)))
+    flags |= IDE_TEMPLATE_INPUT_INVAL_TEMPLATE;
+
+  if (template && !ide_project_template_validate_app_id (template, self->app_id))
+    flags |= IDE_TEMPLATE_INPUT_INVAL_APP_ID;
+
+  if (template && !ide_project_template_validate_name (template, self->name))
+    flags |= IDE_TEMPLATE_INPUT_INVAL_NAME;
+
+  if (self->directory == NULL ||
+      self->name == NULL ||
+      !(dest = g_file_get_child (self->directory, self->name)) ||
+      g_file_query_exists (dest, NULL))
+    flags |= IDE_TEMPLATE_INPUT_INVAL_LOCATION;
+
+  if (self->language == NULL ||
+      self->template == NULL ||
+      !(languages = ide_project_template_get_languages (template)) ||
+      !g_strv_contains ((const char * const *)languages, self->language))
+    flags |= IDE_TEMPLATE_INPUT_INVAL_LANGUAGE;
+
+  return flags;
+}
