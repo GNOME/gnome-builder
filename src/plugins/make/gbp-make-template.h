@@ -20,17 +20,12 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include <libide-projects.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_MAKE_TEMPLATE (gbp_make_template_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (GbpMakeTemplate, gbp_make_template, GBP, MAKE_TEMPLATE, GObject)
-
-struct _GbpMakeTemplateClass
-{
-  GObjectClass parent_class;
-};
+G_DECLARE_FINAL_TYPE (GbpMakeTemplate, gbp_make_template, GBP, MAKE_TEMPLATE, IdeProjectTemplate)
 
 G_END_DECLS
