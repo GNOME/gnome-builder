@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+#include <glib/gi18n.h>
 
 #include "ide-projects-global.h"
 #include "ide-template-input.h"
@@ -31,7 +32,7 @@
 #define DEFAULT_USE_VERSION_CONTROL TRUE
 #define DEFAULT_PROJECT_VERSION "0.1.0"
 #define DEFAULT_LANGUAGE "C"
-#define DEFAULT_LICECNSE_NAME "gpl_3"
+#define DEFAULT_LICECNSE_NAME "GPL-3.0-or-later"
 
 struct _IdeTemplateInput
 {
@@ -39,6 +40,7 @@ struct _IdeTemplateInput
 
   GListStore *templates;
   GtkStringList *languages;
+  GtkStringList *licenses;
 
   GFile *directory;
 
@@ -61,6 +63,7 @@ enum {
   PROP_LANGUAGE,
   PROP_LANGUAGES_MODEL,
   PROP_LICENSE_NAME,
+  PROP_LICENSES_MODEL,
   PROP_NAME,
   PROP_PROJECT_VERSION,
   PROP_TEMPLATE,
@@ -73,6 +76,20 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeTemplateInput, ide_template_input, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+static const struct {
+  const char *spdx;
+  const char *short_path;
+  const char *full_path;
+} licenses[] = {
+  { N_("AGPL-3.0-or-later"), "agpl_3_short", "agpl_3_full" },
+  { N_("Apache-2.0"), "apache_2_short", "apache_2_full" },
+  { N_("GPL-2.0-or-later"), "gpl_2_short", "gpl_2_full" },
+  { N_("GPL-3.0-or-later"), "gpl_3_short", "gpl_3_full" },
+  { N_("LGPL-2.1-or-later"), "lgpl_2_1_short", "lgpl_2_1_full" },
+  { N_("LGPL-3.0-or-later"), "lgpl_3_full", "lgpl_3_short" },
+  { N_("MIT"), "mit_x11_short", "mit_x11_full" },
+  { N_("No License"), NULL, NULL },
+};
 
 static char *
 get_template_name (IdeTemplateInput *self)
@@ -210,6 +227,7 @@ ide_template_input_dispose (GObject *object)
   g_clear_object (&self->directory);
   g_clear_object (&self->templates);
   g_clear_object (&self->languages);
+  g_clear_object (&self->licenses);
 
   g_clear_pointer (&self->author, g_free);
   g_clear_pointer (&self->language, g_free);
@@ -273,6 +291,10 @@ ide_template_input_get_property (GObject    *object,
 
     case PROP_LANGUAGES_MODEL:
       g_value_set_object (value, self->languages);
+      break;
+
+    case PROP_LICENSES_MODEL:
+      g_value_set_object (value, self->licenses);
       break;
 
     case PROP_USE_VERSION_CONTROL:
@@ -390,6 +412,10 @@ ide_template_input_class_init (IdeTemplateInputClass *klass)
     g_param_spec_object ("languages-model", NULL, NULL, G_TYPE_LIST_MODEL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_LICENSES_MODEL] =
+    g_param_spec_object ("licenses-model", NULL, NULL, G_TYPE_LIST_MODEL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_USE_VERSION_CONTROL] =
     g_param_spec_boolean ("use-version-control", NULL, NULL, DEFAULT_USE_VERSION_CONTROL,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
@@ -410,6 +436,10 @@ ide_template_input_init (IdeTemplateInput *self)
   self->use_version_control = DEFAULT_USE_VERSION_CONTROL;
   self->templates = g_list_store_new (IDE_TYPE_PROJECT_TEMPLATE);
   self->languages = gtk_string_list_new (NULL);
+  self->licenses = gtk_string_list_new (NULL);
+
+  for (guint i = 0; i < G_N_ELEMENTS (licenses); i++)
+    gtk_string_list_append (self->licenses, g_dgettext (GETTEXT_PACKAGE, licenses[i].spdx));
 }
 
 const char *
@@ -825,4 +855,18 @@ ide_template_input_get_languages_model (IdeTemplateInput *self)
   g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), NULL);
 
   return G_LIST_MODEL (self->languages);
+}
+
+/**
+ * ide_template_input_get_licenses_model:
+ * @self: a #IdeTemplateInput
+ *
+ * Returns: (transfer none): A #GListModel
+ */
+GListModel *
+ide_template_input_get_licenses_model (IdeTemplateInput *self)
+{
+  g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), NULL);
+
+  return G_LIST_MODEL (self->licenses);
 }

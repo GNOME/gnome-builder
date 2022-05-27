@@ -41,6 +41,7 @@ struct _GbpCreateProjectWidget
   AdwEntryRow      *location;
   GtkMenuButton    *template_button;
   GtkMenuButton    *language_button;
+  GtkMenuButton    *licenses_button;
 };
 
 enum {
@@ -100,6 +101,26 @@ language_activated_cb (GbpCreateProjectWidget *self,
 
   ide_template_input_set_language (self->input,
                                    gtk_string_object_get_string (string));
+}
+
+static void
+license_activated_cb (GbpCreateProjectWidget *self,
+                      guint                   position,
+                      GtkListView            *list_view)
+{
+  g_autoptr(GtkStringObject) string = NULL;
+  GListModel *model;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (GTK_IS_LIST_VIEW (list_view));
+
+  model = G_LIST_MODEL (gtk_list_view_get_model (list_view));
+  string = g_list_model_get_item (model, position);
+
+  gtk_menu_button_popdown (self->licenses_button);
+
+  ide_template_input_set_license_name (self->input,
+                                       gtk_string_object_get_string (string));
 }
 
 static void
@@ -217,10 +238,12 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, location);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, main);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, language_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, licenses_button);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, template_button);
 
   gtk_widget_class_bind_template_callback (widget_class, template_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, language_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, license_activated_cb);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 

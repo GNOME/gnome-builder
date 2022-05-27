@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/libide-projects">
+    <file>licenses/agpl_3_full</file>
+    <file>licenses/agpl_3_short</file>
+    <file>licenses/apache_2_full</file>
+    <file>licenses/apache_2_short</file>
+    <file>licenses/gpl_2_full</file>
+    <file>licenses/gpl_2_short</file>
+    <file>licenses/gpl_3_full</file>
+    <file>licenses/gpl_3_short</file>
+    <file>licenses/lgpl_2_1_full</file>
+    <file>licenses/lgpl_2_1_short</file>
+    <file>licenses/lgpl_3_full</file>
+    <file>licenses/lgpl_3_short</file>
+    <file>licenses/mit_x11_full</file>
+    <file>licenses/mit_x11_short</file>
+  </gresource>
+</gresources>
