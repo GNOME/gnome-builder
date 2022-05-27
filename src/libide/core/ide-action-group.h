@@ -96,6 +96,15 @@ _##prefix##_get_action_info (GActionGroup *group,                               
   return info;                                                                    \
 }                                                                                 \
                                                                                   \
+static inline GVariant *                                                          \
+prefix##_get_action_state (Type *self,                                            \
+                           const gchar *name)                                     \
+{                                                                                 \
+  Type##ActionInfo *info = _##prefix##_get_action_info (G_ACTION_GROUP (self),    \
+                                                        name);                    \
+  return info->state;                                                             \
+}                                                                                 \
+                                                                                  \
 static inline void                                                                \
 prefix##_set_action_state (Type *self,                                            \
                            const gchar *name,                                     \
