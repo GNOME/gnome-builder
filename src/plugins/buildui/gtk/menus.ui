@@ -140,7 +140,7 @@
           <attribute name="label">Force Light</attribute>
           <attribute name="role">radio</attribute>
           <attribute name="action">run-manager.color-scheme</attribute>
-          <attribute name="target" type="s">'force-dark'</attribute>
+          <attribute name="target" type="s">'force-light'</attribute>
         </item>
         <item>
           <attribute name="label">Force Dark</attribute>
