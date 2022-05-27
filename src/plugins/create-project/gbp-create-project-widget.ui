@@ -14,9 +14,16 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="project_name">
+                  <object class="AdwEntryRow" id="name_row">
                     <property name="title" translatable="yes">Project Name</property>
                     <property name="text" bind-source="input" bind-property="name" bind-flags="sync-create|bidirectional"/>
+                    <child type="suffix">
+                      <object class="GtkImage" id="directory_clash">
+                        <property name="visible">false</property>
+                        <property name="icon-name">dialog-error-symbolic</property>
+                        <property name="tooltip-text" translatable="yes">A subdirectory with this name already exists</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
@@ -36,14 +43,14 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="application_id">
+                  <object class="AdwEntryRow" id="app_id_row">
                     <property name="title" translatable="yes">Application ID…</property>
                     <property name="text" bind-source="input" bind-property="app-id" bind-flags="sync-create|bidirectional"/>
                   </object>
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">A reverse domain-name identifier used to identify the application, such as "org.gnome.Builder".</property>
+                    <property name="label" translatable="yes">A reverse domain-name identifier used to identify the application, such as "org.gnome.Builder". It may not contain dashes.</property>
                     <property name="margin-top">12</property>
                     <property name="wrap">true</property>
                     <property name="xalign">0</property>
@@ -58,9 +65,9 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="location">
+                  <object class="AdwEntryRow" id="location_row">
                     <property name="title" translatable="yes">Location</property>
-                    <property name="text">~/Projects</property>
+                    <signal name="changed" handler="location_row_changed_cb" swapped="true" object="GbpCreateProjectWidget"/>
                     <child type="suffix">
                       <object class="GtkButton">
                         <property name="action-name">create-project.select-folder</property>
@@ -90,7 +97,7 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdwActionRow" id="language_row">
                     <property name="title" translatable="yes">Language</property>
                     <child type="suffix">
                       <object class="GtkMenuButton" id="language_button">
@@ -257,7 +264,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdwActionRow" id="template_row">
                     <property name="title" translatable="yes">Template</property>
                     <child type="suffix">
                       <object class="GtkMenuButton" id="template_button">
@@ -369,5 +376,6 @@
     </child>
   </template>
   <object class="IdeTemplateInput" id="input">
+    <signal name="notify" handler="input_notify_cb" swapped="true" object="GbpCreateProjectWidget"/>
   </object>
 </interface>
