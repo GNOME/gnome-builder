@@ -28,6 +28,7 @@ G_DEFINE_TYPE (IdeProjectTemplate, ide_project_template, IDE_TYPE_TEMPLATE_BASE)
 
 enum {
   PROP_0,
+  PROP_DESCRIPTION,
   PROP_ID,
   PROP_NAME,
   N_PROPS
@@ -45,6 +46,10 @@ ide_project_template_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DESCRIPTION:
+      g_value_take_string (value, ide_project_template_get_description (self));
+      break;
+
     case PROP_ID:
       g_value_take_string (value, ide_project_template_get_id (self));
       break;
@@ -71,6 +76,10 @@ ide_project_template_class_init (IdeProjectTemplateClass *klass)
 
   properties [PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_DESCRIPTION] =
+    g_param_spec_string ("description", NULL, NULL, NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
