@@ -140,7 +140,7 @@ gbp_cargo_dependency_updater_update_finish (IdeDependencyUpdater  *updater,
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_CARGO_BUILD_SYSTEM (updater));
+  g_assert (GBP_IS_CARGO_DEPENDENCY_UPDATER (updater));
   g_assert (IDE_IS_TASK (result));
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
