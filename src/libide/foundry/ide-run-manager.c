@@ -552,6 +552,49 @@ copy_builtin_envvars (IdeEnvironment *environment)
 }
 
 static void
+apply_color_scheme (IdeEnvironment *env,
+                    const char     *color_scheme)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_ENVIRONMENT (env));
+  g_assert (color_scheme != NULL);
+
+  g_debug ("Applying color-scheme \"%s\"", color_scheme);
+
+  if (ide_str_equal0 (color_scheme, "follow"))
+    {
+      /* Clear any overrides that somehow leaked into our process */
+      ide_environment_setenv (env, "ADW_DBG_FORCE_LIGHT", NULL);
+      ide_environment_setenv (env, "ADW_DBG_FORCE_DARK", NULL);
+    }
+  else if (ide_str_equal0 (color_scheme, "force-light"))
+    {
+      ide_environment_setenv (env, "ADW_DBG_FORCE_LIGHT", "1");
+      ide_environment_setenv (env, "ADW_DBG_FORCE_DARK", NULL);
+    }
+  else if (ide_str_equal0 (color_scheme, "force-dark"))
+    {
+      ide_environment_setenv (env, "ADW_DBG_FORCE_LIGHT", NULL);
+      ide_environment_setenv (env, "ADW_DBG_FORCE_DARK", "1");
+    }
+  else
+    {
+      g_warn_if_reached ();
+    }
+
+  IDE_EXIT;
+}
+
+static inline const char *
+get_action_state_string (IdeRunManager *self,
+                         const char    *action_name)
+{
+  GVariant *state = ide_run_manager_get_action_state (self, action_name);
+  return g_variant_get_string (state, NULL);
+}
+
+static void
 create_runner_cb (GObject      *object,
                   GAsyncResult *result,
                   gpointer      user_data)
@@ -570,7 +613,8 @@ create_runner_cb (GObject      *object,
   IdeRuntime *runtime;
   g_autoptr(IdeRunner) runner = NULL;
   GCancellable *cancellable;
-  const gchar *run_opts;
+  const char *color_scheme;
+  const char *run_opts;
 
   IDE_ENTRY;
 
@@ -637,6 +681,10 @@ create_runner_cb (GObject      *object,
   environment = ide_runner_get_environment (runner);
   copy_builtin_envvars (environment);
   ide_environment_copy_into (ide_config_get_runtime_environment (config), environment, TRUE);
+
+  /* Add debugging overrides */
+  color_scheme = get_action_state_string (self, "color-scheme");
+  apply_color_scheme (environment, color_scheme);
 
   g_signal_emit (self, signals [RUN], 0, runner);
 
