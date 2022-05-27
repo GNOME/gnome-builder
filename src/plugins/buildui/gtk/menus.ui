@@ -133,19 +133,19 @@
         <item>
           <attribute name="label">Follow System Style</attribute>
           <attribute name="role">radio</attribute>
-          <attribute name="action">runui.color-scheme</attribute>
-          <attribute name="target" type="s">'default'</attribute>
+          <attribute name="action">run-manager.color-scheme</attribute>
+          <attribute name="target" type="s">'follow'</attribute>
         </item>
         <item>
           <attribute name="label">Force Light</attribute>
           <attribute name="role">radio</attribute>
-          <attribute name="action">runui.color-scheme</attribute>
+          <attribute name="action">run-manager.color-scheme</attribute>
           <attribute name="target" type="s">'force-dark'</attribute>
         </item>
         <item>
           <attribute name="label">Force Dark</attribute>
           <attribute name="role">radio</attribute>
-          <attribute name="action">runui.color-scheme</attribute>
+          <attribute name="action">run-manager.color-scheme</attribute>
           <attribute name="target" type="s">'force-dark'</attribute>
         </item>
       </submenu>
