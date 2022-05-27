@@ -95,6 +95,12 @@ class MesonTemplate(Ide.ProjectTemplate):
     def do_get_priority(self):
         return self.priority
 
+    def do_validate_name(self, name):
+        # meson reserves the name 'test'
+        if name == 'test':
+            return False
+        return super().do_validate_name(name)
+
     def do_expand_async(self, params, cancellable, callback, data):
         self.reset()
 

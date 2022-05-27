@@ -48,10 +48,6 @@ ide_project_template_real_validate_name (IdeProjectTemplate *self,
   if (g_unichar_isdigit (g_utf8_get_char (name)))
     return FALSE;
 
-  /* TODO: Move this check to Meson template subclass */
-  if (ide_str_equal0 (name, "test"))
-    return FALSE;
-
   for (const char *c = name; *c; c = g_utf8_next_char (c))
     {
       gunichar ch = g_utf8_get_char (c);
