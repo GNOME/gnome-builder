@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_SYMBOL_RESOLVER (ide_lsp_symbol_resolver_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspSymbolResolver, ide_lsp_symbol_resolver, IDE, LSP_SYMBOL_RESOLVER, IdeObject)
 
 struct _IdeLspSymbolResolverClass
@@ -43,9 +43,9 @@ struct _IdeLspSymbolResolverClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLspClient *ide_lsp_symbol_resolver_get_client (IdeLspSymbolResolver *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_lsp_symbol_resolver_set_client (IdeLspSymbolResolver *self,
                                                   IdeLspClient         *client);
 

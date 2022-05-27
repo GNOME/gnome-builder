@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIG_PROVIDER (ide_config_provider_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeConfigProvider, ide_config_provider, IDE, CONFIG_PROVIDER, IdeObject)
 
 struct _IdeConfigProviderInterface
@@ -65,36 +65,36 @@ struct _IdeConfigProviderInterface
   void     (*unload)         (IdeConfigProvider  *self);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_config_provider_emit_added   (IdeConfigProvider    *self,
                                            IdeConfig            *config);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_config_provider_emit_removed (IdeConfigProvider    *self,
                                            IdeConfig            *config);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_config_provider_load_async   (IdeConfigProvider    *self,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
                                            gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_config_provider_load_finish  (IdeConfigProvider    *self,
                                            GAsyncResult         *result,
                                            GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_config_provider_save_async   (IdeConfigProvider    *self,
                                            GCancellable         *cancellable,
                                            GAsyncReadyCallback   callback,
                                            gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_config_provider_save_finish  (IdeConfigProvider    *self,
                                            GAsyncResult         *result,
                                            GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_config_provider_delete       (IdeConfigProvider    *self,
                                            IdeConfig            *config);
 void     ide_config_provider_duplicate    (IdeConfigProvider    *self,
                                            IdeConfig            *config);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_config_provider_unload       (IdeConfigProvider    *self);
 
 G_END_DECLS

@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 int ide_vte_pty_create_producer (VtePty *pty);
 
 G_END_DECLS

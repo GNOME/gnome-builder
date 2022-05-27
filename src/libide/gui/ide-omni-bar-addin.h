@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_OMNI_BAR_ADDIN (ide_omni_bar_addin_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeOmniBarAddin, ide_omni_bar_addin, IDE, OMNI_BAR_ADDIN, GObject)
 
 struct _IdeOmniBarAddinInterface
@@ -45,10 +45,10 @@ struct _IdeOmniBarAddinInterface
                   IdeOmniBar      *omni_bar);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_omni_bar_addin_load   (IdeOmniBarAddin *self,
                                 IdeOmniBar      *omni_bar);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_omni_bar_addin_unload (IdeOmniBarAddin *self,
                                 IdeOmniBar      *omni_bar);
 

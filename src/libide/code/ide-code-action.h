@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_ACTION (ide_code_action_get_type())
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeCodeAction, ide_code_action, IDE, CODE_ACTION, IdeObject)
 
 struct _IdeCodeActionInterface
@@ -50,14 +50,14 @@ struct _IdeCodeActionInterface
                                   GError              **error);
 };
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_code_action_get_title      (IdeCodeAction        *self);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void         ide_code_action_execute_async  (IdeCodeAction        *self,
                                              GCancellable         *cancellable,
                                              GAsyncReadyCallback   callback,
                                              gpointer              user_data);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_code_action_execute_finish (IdeCodeAction        *self,
                                              GAsyncResult          *result,
                                              GError               **error);

@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_SERVICE (ide_lsp_service_get_type())
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspService, ide_lsp_service, IDE, LSP_SERVICE, IdeObject)
 
 struct _IdeLspServiceClass
@@ -52,27 +52,27 @@ struct _IdeLspServiceClass
                                                   IdeLspClient            *client);
 };
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void                ide_lsp_service_class_bind_client      (IdeLspServiceClass *klass,
                                                             IdeObject          *provider);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void                ide_lsp_service_class_bind_client_lazy (IdeLspServiceClass *klass,
                                                             IdeObject          *provider);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void                ide_lsp_service_set_inherit_stderr     (IdeLspService      *self,
                                                             gboolean            inherit_stderr);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 gboolean            ide_lsp_service_get_inherit_stderr     (IdeLspService      *self);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void                ide_lsp_service_restart                (IdeLspService      *self);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 const char         *ide_lsp_service_get_program            (IdeLspService      *self);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void                ide_lsp_service_set_program            (IdeLspService      *self,
                                                             const char         *program);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 const char * const *ide_lsp_service_get_search_path        (IdeLspService      *self);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void                ide_lsp_service_set_search_path        (IdeLspService      *self,
                                                             const char * const *search_path);
 

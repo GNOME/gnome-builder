@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CODE_INDEXER (ide_code_indexer_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeCodeIndexer, ide_code_indexer, IDE, CODE_INDEXER, IdeObject)
 
 struct _IdeCodeIndexerInterface
@@ -59,25 +59,25 @@ struct _IdeCodeIndexerInterface
                                                   GError              **error);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_code_indexer_index_file_async    (IdeCodeIndexer       *self,
                                                            GFile                *file,
                                                            const gchar * const  *build_flags,
                                                            GCancellable         *cancellable,
                                                            GAsyncReadyCallback   callback,
                                                            gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeCodeIndexEntries *ide_code_indexer_index_file_finish   (IdeCodeIndexer       *self,
                                                            GAsyncResult         *result,
                                                            GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_code_indexer_generate_key_async  (IdeCodeIndexer       *self,
                                                            IdeLocation          *location,
                                                            const gchar * const  *build_flags,
                                                            GCancellable         *cancellable,
                                                            GAsyncReadyCallback   callback,
                                                            gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar               *ide_code_indexer_generate_key_finish (IdeCodeIndexer       *self,
                                                            GAsyncResult         *result,
                                                            GError              **error);

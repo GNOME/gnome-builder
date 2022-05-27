@@ -32,54 +32,54 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_UNSAVED_FILES (ide_unsaved_files_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeUnsavedFiles, ide_unsaved_files, IDE, UNSAVED_FILES, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeUnsavedFiles *ide_unsaved_files_from_context     (IdeContext           *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_unsaved_files_update           (IdeUnsavedFiles      *self,
                                                      GFile                *file,
                                                      GBytes               *content);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_unsaved_files_remove           (IdeUnsavedFiles      *self,
                                                      GFile                *file);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_unsaved_files_save_async       (IdeUnsavedFiles      *files,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_unsaved_files_save_finish      (IdeUnsavedFiles      *files,
                                                      GAsyncResult         *result,
                                                      GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_unsaved_files_restore_async    (IdeUnsavedFiles      *files,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_unsaved_files_restore_finish   (IdeUnsavedFiles      *files,
                                                      GAsyncResult         *result,
                                                      GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray       *ide_unsaved_files_to_array         (IdeUnsavedFiles      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint64           ide_unsaved_files_get_sequence     (IdeUnsavedFiles      *files);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeUnsavedFile  *ide_unsaved_files_get_unsaved_file (IdeUnsavedFiles      *self,
                                                      GFile                *file);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_unsaved_files_clear            (IdeUnsavedFiles      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_unsaved_files_contains         (IdeUnsavedFiles      *self,
                                                      GFile                *file);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_unsaved_files_reap_async       (IdeUnsavedFiles      *self,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_unsaved_files_reap_finish      (IdeUnsavedFiles      *self,
                                                      GAsyncResult         *result,
                                                      GError              **error);

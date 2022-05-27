@@ -28,11 +28,11 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind ide_lsp_decode_symbol_kind     (guint     kind);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind ide_lsp_decode_completion_kind (guint     kind);
-IDE_AVAILABLE_IN_41
+IDE_AVAILABLE_IN_ALL
 IdeTextEdit  *ide_lsp_decode_text_edit       (GVariant *text_edit,
                                               GFile    *gfile);
 

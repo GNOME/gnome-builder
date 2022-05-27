@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PIPELINE_ADDIN (ide_pipeline_addin_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdePipelineAddin, ide_pipeline_addin, IDE, PIPELINE_ADDIN, IdeObject)
 
 struct _IdePipelineAddinInterface
@@ -47,19 +47,19 @@ struct _IdePipelineAddinInterface
                    IdePipeline      *pipeline);
 };
 
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 IdePipelineAddin *ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,
                                                           const gchar *module_name);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void              ide_pipeline_addin_prepare             (IdePipelineAddin *self,
                                                           IdePipeline      *pipeline);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_pipeline_addin_load                (IdePipelineAddin *self,
                                                           IdePipeline      *pipeline);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_pipeline_addin_unload              (IdePipelineAddin *self,
                                                           IdePipeline      *pipeline);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_pipeline_addin_track               (IdePipelineAddin *self,
                                                           guint             stage_id);
 

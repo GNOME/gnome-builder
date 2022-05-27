@@ -82,24 +82,24 @@ pty_fd_clear (IdePtyFd *fd)
 
 G_DEFINE_AUTO_CLEANUP_CLEAR_FUNC (IdePtyFd, pty_fd_clear)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePtyFd ide_pty_intercept_create_master (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePtyFd ide_pty_intercept_create_slave  (IdePtyFd                 master_fd,
                                           gboolean                 blocking);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_pty_intercept_init          (IdePtyIntercept         *self,
                                           IdePtyFd                 fd,
                                           GMainContext            *main_context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePtyFd ide_pty_intercept_get_fd        (IdePtyIntercept         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_pty_intercept_set_size      (IdePtyIntercept         *self,
                                           guint                    rows,
                                           guint                    columns);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_pty_intercept_clear         (IdePtyIntercept         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_pty_intercept_set_callback  (IdePtyIntercept         *self,
                                           IdePtyInterceptSide     *side,
                                           IdePtyInterceptCallback  callback,

@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RUNTIME_PROVIDER (ide_runtime_provider_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeRuntimeProvider, ide_runtime_provider, IDE, RUNTIME_PROVIDER, IdeObject)
 
 struct _IdeRuntimeProviderInterface
@@ -55,22 +55,22 @@ struct _IdeRuntimeProviderInterface
                                    GError              **error);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_runtime_provider_load             (IdeRuntimeProvider   *self,
                                                    IdeRuntimeManager    *manager);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_runtime_provider_unload           (IdeRuntimeProvider   *self,
                                                    IdeRuntimeManager    *manager);
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 gboolean    ide_runtime_provider_provides         (IdeRuntimeProvider   *self,
                                                    const gchar          *runtime_id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_runtime_provider_bootstrap_async  (IdeRuntimeProvider   *self,
                                                    IdePipeline          *pipeline,
                                                    GCancellable         *cancellable,
                                                    GAsyncReadyCallback   callback,
                                                    gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeRuntime *ide_runtime_provider_bootstrap_finish (IdeRuntimeProvider   *self,
                                                    GAsyncResult         *result,
                                                    GError              **error);

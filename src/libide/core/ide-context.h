@@ -30,56 +30,56 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONTEXT (ide_context_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeContext, ide_context, IDE, CONTEXT, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeContext *ide_context_new                  (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean    ide_context_has_project          (IdeContext     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gpointer    ide_context_peek_child_typed     (IdeContext     *self,
                                               GType           type);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_context_dup_project_id       (IdeContext     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_context_set_project_id       (IdeContext     *self,
                                               const gchar    *project_id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_context_dup_title            (IdeContext     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_context_set_title            (IdeContext     *self,
                                               const gchar    *title);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFile      *ide_context_ref_workdir          (IdeContext     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_context_set_workdir          (IdeContext     *self,
                                               GFile          *workdir);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFile      *ide_context_build_file           (IdeContext     *self,
                                               const gchar    *path);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_context_build_filename       (IdeContext     *self,
                                               const gchar    *first_part,
                                               ...) G_GNUC_NULL_TERMINATED;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFile      *ide_context_cache_file           (IdeContext     *self,
                                               const gchar    *first_part,
                                               ...) G_GNUC_NULL_TERMINATED;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar      *ide_context_cache_filename       (IdeContext     *self,
                                               const gchar    *first_part,
                                               ...) G_GNUC_NULL_TERMINATED;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GSettings  *ide_context_ref_project_settings (IdeContext     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeContext *ide_object_ref_context           (IdeObject      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeContext *ide_object_get_context           (IdeObject      *object);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_object_set_context           (IdeObject      *object,
                                               IdeContext     *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void        ide_context_log                  (IdeContext     *self,
                                               GLogLevelFlags  level,
                                               const gchar    *domain,

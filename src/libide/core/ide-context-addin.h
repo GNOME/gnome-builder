@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONTEXT_ADDIN (ide_context_addin_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeContextAddin, ide_context_addin, IDE, CONTEXT_ADDIN, GObject)
 
 struct _IdeContextAddinInterface
@@ -50,26 +50,26 @@ struct _IdeContextAddinInterface
                                    IdeContext           *context);
 };
 
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
 IdeContextAddin *ide_context_addin_find_by_module_name (IdeContext  *context,
                                                         const gchar *module_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_context_addin_load_project_async  (IdeContextAddin      *self,
                                                         IdeContext           *context,
                                                         GCancellable         *cancellable,
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_context_addin_load_project_finish (IdeContextAddin      *self,
                                                         GAsyncResult         *result,
                                                         GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_context_addin_load                (IdeContextAddin      *self,
                                                         IdeContext           *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_context_addin_unload              (IdeContextAddin      *self,
                                                         IdeContext           *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_context_addin_project_loaded      (IdeContextAddin      *self,
                                                         IdeContext           *context);
 

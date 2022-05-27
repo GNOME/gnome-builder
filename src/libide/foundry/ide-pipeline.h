@@ -53,150 +53,150 @@ typedef enum
   IDE_BUILD_ERROR_NEEDS_REBUILD,
 } IdeBuildError;
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePipeline, ide_pipeline, IDE, PIPELINE, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GQuark                 ide_build_error_quark                 (void) G_GNUC_CONST;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar                 *ide_pipeline_get_arch                 (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_is_native                (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_is_ready                 (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_get_busy                 (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeConfig             *ide_pipeline_get_config               (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDevice             *ide_pipeline_get_device               (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDeviceInfo         *ide_pipeline_get_device_info          (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTriplet            *ide_pipeline_get_host_triplet         (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeRuntime            *ide_pipeline_get_runtime              (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeToolchain          *ide_pipeline_get_toolchain            (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeToolchain          *ide_pipeline_ref_toolchain            (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar           *ide_pipeline_get_builddir             (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar           *ide_pipeline_get_srcdir               (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar                 *ide_pipeline_get_message              (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePipelinePhase       ide_pipeline_get_phase                (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_get_can_export           (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 VtePty                *ide_pipeline_get_pty                  (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_pipeline_create_launcher          (IdePipeline            *self,
                                                               GError                **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar                 *ide_pipeline_build_srcdir_path        (IdePipeline            *self,
                                                               const gchar            *first_part,
                                                               ...) G_GNUC_NULL_TERMINATED;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar                 *ide_pipeline_build_builddir_path      (IdePipeline            *self,
                                                               const gchar            *first_part,
                                                               ...) G_GNUC_NULL_TERMINATED;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_invalidate_phase         (IdePipeline            *self,
                                                               IdePipelinePhase        phases);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_request_phase            (IdePipeline            *self,
                                                               IdePipelinePhase        phase);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint                  ide_pipeline_attach                   (IdePipeline            *self,
                                                               IdePipelinePhase        phase,
                                                               gint                    priority,
                                                               IdePipelineStage       *stage);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint                  ide_pipeline_attach_launcher          (IdePipeline            *self,
                                                               IdePipelinePhase        phase,
                                                               gint                    priority,
                                                               IdeSubprocessLauncher  *launcher);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_detach                   (IdePipeline            *self,
                                                               guint                   stage_id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePipelineStage      *ide_pipeline_get_stage_by_id          (IdePipeline            *self,
                                                               guint                   stage_id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint                  ide_pipeline_add_log_observer         (IdePipeline            *self,
                                                               IdeBuildLogObserver     observer,
                                                               gpointer                observer_data,
                                                               GDestroyNotify          observer_data_destroy);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_remove_log_observer      (IdePipeline            *self,
                                                               guint                   observer_id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_emit_diagnostic          (IdePipeline            *self,
                                                               IdeDiagnostic          *diagnostic);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint                  ide_pipeline_add_error_format         (IdePipeline            *self,
                                                               const gchar            *regex,
                                                               GRegexCompileFlags      flags);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_remove_error_format      (IdePipeline            *self,
                                                               guint                   error_format_id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_build_async              (IdePipeline            *self,
                                                               IdePipelinePhase        phase,
                                                               GCancellable           *cancellable,
                                                               GAsyncReadyCallback     callback,
                                                               gpointer                user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_build_finish             (IdePipeline            *self,
                                                               GAsyncResult           *result,
                                                               GError                **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_build_targets_async      (IdePipeline            *self,
                                                               IdePipelinePhase        phase,
                                                               GPtrArray              *targets,
                                                               GCancellable           *cancellable,
                                                               GAsyncReadyCallback     callback,
                                                               gpointer                user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_build_targets_finish     (IdePipeline            *self,
                                                               GAsyncResult           *result,
                                                               GError                **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_foreach_stage            (IdePipeline            *self,
                                                               GFunc                   stage_callback,
                                                               gpointer                user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_clean_async              (IdePipeline            *self,
                                                               IdePipelinePhase        phase,
                                                               GCancellable           *cancellable,
                                                               GAsyncReadyCallback     callback,
                                                               gpointer                user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_clean_finish             (IdePipeline            *self,
                                                               GAsyncResult           *result,
                                                               GError                **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_rebuild_async            (IdePipeline            *self,
                                                               IdePipelinePhase        phase,
                                                               GPtrArray              *targets,
                                                               GCancellable           *cancellable,
                                                               GAsyncReadyCallback     callback,
                                                               gpointer                user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_rebuild_finish           (IdePipeline            *self,
                                                               GAsyncResult           *result,
                                                               GError                **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_attach_pty               (IdePipeline            *self,
                                                               IdeSubprocessLauncher  *launcher);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_has_configured           (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePipelinePhase       ide_pipeline_get_requested_phase      (IdePipeline            *self);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_contains_program_in_path (IdePipeline            *self,
                                                               const gchar            *name,
                                                               GCancellable           *cancellable);

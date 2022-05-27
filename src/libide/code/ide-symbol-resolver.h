@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL_RESOLVER (ide_symbol_resolver_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeSymbolResolver, ide_symbol_resolver, IDE, SYMBOL_RESOLVER, IdeObject)
 
 struct _IdeSymbolResolverInterface
@@ -77,49 +77,49 @@ struct _IdeSymbolResolverInterface
                                               GError              **error);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_load                      (IdeSymbolResolver    *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_unload                    (IdeSymbolResolver    *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_lookup_symbol_async       (IdeSymbolResolver    *self,
                                                               IdeLocation          *location,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbol     *ide_symbol_resolver_lookup_symbol_finish      (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_get_symbol_tree_async     (IdeSymbolResolver    *self,
                                                               GFile                *file,
                                                               GBytes               *contents,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolTree *ide_symbol_resolver_get_symbol_tree_finish    (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_find_references_async     (IdeSymbolResolver    *self,
                                                               IdeLocation          *location,
                                                               const gchar          *language_id,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray     *ide_symbol_resolver_find_references_finish    (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_symbol_resolver_find_nearest_scope_async  (IdeSymbolResolver    *self,
                                                               IdeLocation          *location,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbol     *ide_symbol_resolver_find_nearest_scope_finish (IdeSymbolResolver    *self,
                                                               GAsyncResult         *result,
                                                               GError              **error);

@@ -30,16 +30,16 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_OBJECT_BOX (ide_object_box_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeObjectBox, ide_object_box, IDE, OBJECT_BOX, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeObjectBox *ide_object_box_new         (GObject      *object);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gpointer      ide_object_box_ref_object  (IdeObjectBox *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeObjectBox *ide_object_box_from_object (GObject      *object);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean      ide_object_box_contains    (IdeObjectBox *self,
                                           gpointer      instance);
 

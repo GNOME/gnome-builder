@@ -27,21 +27,21 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_NOTIFICATIONS (ide_notifications_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeNotifications, ide_notifications, IDE, NOTIFICATIONS, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeNotifications *ide_notifications_new                       (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_notifications_add_notification          (IdeNotifications *self,
                                                                IdeNotification  *notification);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gdouble           ide_notifications_get_progress              (IdeNotifications *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_notifications_get_has_progress          (IdeNotifications *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_notifications_get_progress_is_imprecise (IdeNotifications *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeNotification  *ide_notifications_find_by_id                (IdeNotifications *self,
                                                                const gchar      *id);
 

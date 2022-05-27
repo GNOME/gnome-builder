@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_REGISTER (ide_debugger_register_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDebuggerRegister, ide_debugger_register, IDE, DEBUGGER_REGISTER, GObject)
 
 struct _IdeDebuggerRegisterClass
@@ -37,21 +37,21 @@ struct _IdeDebuggerRegisterClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint                 ide_debugger_register_compare   (IdeDebuggerRegister *a,
                                                       IdeDebuggerRegister *b);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDebuggerRegister *ide_debugger_register_new       (const gchar         *id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_register_get_id    (IdeDebuggerRegister *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_register_get_name  (IdeDebuggerRegister *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_register_set_name  (IdeDebuggerRegister *self,
                                                       const gchar         *name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_debugger_register_get_value (IdeDebuggerRegister *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_debugger_register_set_value (IdeDebuggerRegister *self,
                                                       const gchar         *value);
 

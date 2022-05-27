@@ -25,29 +25,29 @@
 
 #define IDE_TYPE_PERSISTENT_MAP (ide_persistent_map_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePersistentMap, ide_persistent_map, IDE, PERSISTENT_MAP, GObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePersistentMap *ide_persistent_map_new                        (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_persistent_map_load_file                  (IdePersistentMap     *self,
                                                                  GFile                *file,
                                                                  GCancellable         *cancellable,
                                                                  GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_persistent_map_load_file_async            (IdePersistentMap     *self,
                                                                  GFile                *file,
                                                                  GCancellable         *cancellable,
                                                                  GAsyncReadyCallback   callback,
                                                                  gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_persistent_map_load_file_finish           (IdePersistentMap     *self,
                                                                  GAsyncResult         *result,
                                                                  GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GVariant         *ide_persistent_map_lookup_value               (IdePersistentMap     *self,
                                                                  const gchar          *key);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint64            ide_persistent_map_builder_get_metadata_int64 (IdePersistentMap     *self,
                                                                  const gchar          *key);

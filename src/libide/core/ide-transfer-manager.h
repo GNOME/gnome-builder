@@ -31,26 +31,26 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TRANSFER_MANAGER (ide_transfer_manager_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTransferManager, ide_transfer_manager, IDE, TRANSFER_MANAGER, GObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTransferManager *ide_transfer_manager_get_default    (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gdouble             ide_transfer_manager_get_progress   (IdeTransferManager   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean            ide_transfer_manager_get_has_active (IdeTransferManager   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_transfer_manager_cancel_all     (IdeTransferManager   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_transfer_manager_clear          (IdeTransferManager   *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_transfer_manager_execute_async  (IdeTransferManager   *self,
                                                          IdeTransfer          *transfer,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
                                                          gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean            ide_transfer_manager_execute_finish (IdeTransferManager   *self,
                                                          GAsyncResult         *result,
                                                          GError              **error);

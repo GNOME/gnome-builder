@@ -27,50 +27,50 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL_LAUNCHER (ide_terminal_launcher_get_type())
 
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTerminalLauncher, ide_terminal_launcher, IDE, TERMINAL_LAUNCHER, GObject)
 
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeTerminalLauncher *ide_terminal_launcher_new              (IdeContext             *context);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeTerminalLauncher *ide_terminal_launcher_new_for_launcher (IdeSubprocessLauncher  *launcher);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 IdeTerminalLauncher *ide_terminal_launcher_new_for_config   (IdeConfig              *config);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeTerminalLauncher *ide_terminal_launcher_new_for_debug    (void);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeTerminalLauncher *ide_terminal_launcher_new_for_runtime  (IdeRuntime             *runtime);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 IdeTerminalLauncher *ide_terminal_launcher_new_for_runner   (IdeRuntime             *runtime);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 gboolean             ide_terminal_launcher_can_respawn      (IdeTerminalLauncher    *self);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 const gchar * const *ide_terminal_launcher_get_args         (IdeTerminalLauncher    *self);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void                 ide_terminal_launcher_set_args         (IdeTerminalLauncher    *self,
                                                              const gchar * const    *args);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_terminal_launcher_get_cwd          (IdeTerminalLauncher    *self);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void                 ide_terminal_launcher_set_cwd          (IdeTerminalLauncher    *self,
                                                              const gchar            *cwd);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_terminal_launcher_get_shell        (IdeTerminalLauncher    *self);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void                 ide_terminal_launcher_set_shell        (IdeTerminalLauncher    *self,
                                                              const gchar            *shell);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 const gchar         *ide_terminal_launcher_get_title        (IdeTerminalLauncher    *self);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void                 ide_terminal_launcher_set_title        (IdeTerminalLauncher    *self,
                                                              const gchar            *title);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 void                 ide_terminal_launcher_spawn_async      (IdeTerminalLauncher    *self,
                                                              VtePty                 *pty,
                                                              GCancellable           *cancellable,
                                                              GAsyncReadyCallback     callback,
                                                              gpointer                user_data);
-IDE_AVAILABLE_IN_3_34
+IDE_AVAILABLE_IN_ALL
 gboolean             ide_terminal_launcher_spawn_finish     (IdeTerminalLauncher    *self,
                                                              GAsyncResult           *result,
                                                              GError                **error);

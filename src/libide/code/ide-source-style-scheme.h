@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_source_style_scheme_apply_style (GtkSourceStyleScheme *style_scheme,
                                               const gchar          *style,
                                               GtkTextTag           *tag);

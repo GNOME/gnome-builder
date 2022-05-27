@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_DIAGNOSTIC_PROVIDER (ide_lsp_diagnostic_provider_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspDiagnosticProvider, ide_lsp_diagnostic_provider, IDE, LSP_DIAGNOSTIC_PROVIDER, IdeObject)
 
 struct _IdeLspDiagnosticProviderClass
@@ -43,9 +43,9 @@ struct _IdeLspDiagnosticProviderClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLspClient *ide_lsp_diagnostic_provider_get_client (IdeLspDiagnosticProvider *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_lsp_diagnostic_provider_set_client (IdeLspDiagnosticProvider *self,
                                                       IdeLspClient             *client);
 
