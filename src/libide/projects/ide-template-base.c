@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "ide-template-base.h"
+#include "ide-template-locator.h"
 
 #define TIMEOUT_INTERVAL_MSEC 17
 #define TIMEOUT_DURATION_MSEC  2
@@ -259,6 +260,8 @@ static void
 ide_template_base_init (IdeTemplateBase *self)
 {
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
+
+  priv->locator = TMPL_TEMPLATE_LOCATOR (ide_template_locator_new ());
 
   priv->files = g_array_new (FALSE, TRUE, sizeof (FileExpansion));
   g_array_set_clear_func (priv->files, clear_file_expansion);
