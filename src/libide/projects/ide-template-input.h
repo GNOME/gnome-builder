@@ -101,6 +101,8 @@ GListModel                 *ide_template_input_get_licenses_model      (IdeTempl
 IDE_AVAILABLE_IN_ALL
 IdeTemplateInputValidation  ide_template_input_validate                (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
+char                       *ide_template_input_get_license_path        (IdeTemplateInput     *self);
+IDE_AVAILABLE_IN_ALL
 void                        ide_template_input_expand_async            (IdeTemplateInput     *self,
                                                                         GCancellable         *cancellable,
                                                                         GAsyncReadyCallback   callback,
