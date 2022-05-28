@@ -3,8 +3,6 @@
   <gresource prefix="/plugins/create-project">
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
     <file preprocess="xml-stripblanks">gbp-create-project-widget.ui</file>
-    <file preprocess="xml-stripblanks">gbp-create-project-template-icon.ui</file>
     <file>create-project.plugin</file>
-    <file>themes/shared.css</file>
   </gresource>
 </gresources>

@@ -1,7 +1,6 @@
 plugins_sources += files([
   'create-project-plugin.c',
   'gbp-create-project-application-addin.c',
-  'gbp-create-project-template-icon.c',
   'gbp-create-project-widget.c',
   'gbp-create-project-workspace-addin.c',
 ])
