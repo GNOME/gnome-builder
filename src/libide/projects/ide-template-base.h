@@ -24,8 +24,9 @@
 # error "Only <libide-projects.h> can be included directly."
 #endif
 
-#include <libide-core.h>
 #include <tmpl-glib.h>
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
