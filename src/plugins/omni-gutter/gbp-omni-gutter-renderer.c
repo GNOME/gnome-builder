@@ -77,9 +77,6 @@ struct _GbpOmniGutterRenderer
   GdkPaintable *note;
   GdkPaintable *warning;
   GdkPaintable *error;
-  GdkPaintable *note_selected;
-  GdkPaintable *warning_selected;
-  GdkPaintable *error_selected;
 
   /*
    * We cache various colors we need from the style scheme to avoid
@@ -1225,24 +1222,28 @@ draw_diagnostic (GbpOmniGutterRenderer *self,
                  const LineInfo        *info)
 {
   GdkPaintable *paintable = NULL;
+  GdkRGBA colors[4];
 
-  if (IS_BREAKPOINT (info) || is_prelit)
+  if (info->is_error)
+    paintable = self->error;
+  else if (info->is_warning)
+    paintable = self->warning;
+  else if (info->is_note)
+    paintable = self->note;
+
+  if (IS_BREAKPOINT (info))
     {
-      if (info->is_error)
-        paintable = self->error_selected;
-      else if (info->is_warning)
-        paintable = self->warning_selected;
-      else if (info->is_note)
-        paintable = self->note_selected;
+      colors[0] = self->sel.fg;
+      colors[1] = self->sel.bg;
+      colors[2] = self->changes.change;
+      colors[3] = self->changes.remove;
     }
   else
     {
-      if (info->is_error)
-        paintable = self->error;
-      else if (info->is_warning)
-        paintable = self->warning;
-      else if (info->is_note)
-        paintable = self->note;
+      colors[0] = self->text.fg;
+      colors[1] = self->text.bg;
+      colors[2] = self->changes.change;
+      colors[3] = self->changes.remove;
     }
 
   if (paintable != NULL)
@@ -1251,10 +1252,7 @@ draw_diagnostic (GbpOmniGutterRenderer *self,
       gtk_snapshot_translate (snapshot,
                               &GRAPHENE_POINT_INIT (2,
                                                     line_y + ((height - self->diag_size) / 2)));
-      gdk_paintable_snapshot (paintable, GDK_SNAPSHOT (snapshot), self->diag_size, self->diag_size);
-#if 0
-      gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, self->diag_size, self->diag_size,  colors, n_colors);
-#endif
+      gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, self->diag_size, self->diag_size,  colors, G_N_ELEMENTS (colors));
       gtk_snapshot_restore (snapshot);
     }
 }
@@ -1474,9 +1472,6 @@ gbp_omni_gutter_renderer_reload_icons (GbpOmniGutterRenderer *self)
   g_clear_object (&self->note);
   g_clear_object (&self->warning);
   g_clear_object (&self->error);
-  g_clear_object (&self->note_selected);
-  g_clear_object (&self->warning_selected);
-  g_clear_object (&self->error_selected);
 
   view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
   if (view == NULL)
@@ -1485,10 +1480,6 @@ gbp_omni_gutter_renderer_reload_icons (GbpOmniGutterRenderer *self)
   self->note = get_icon_paintable (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, FALSE);
   self->warning = get_icon_paintable (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, FALSE);
   self->error = get_icon_paintable (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, FALSE);
-
-  self->note_selected = get_icon_paintable (self, GTK_WIDGET (view), "dialog-information-symbolic", self->diag_size, TRUE);
-  self->warning_selected = get_icon_paintable (self, GTK_WIDGET (view), "dialog-warning-symbolic", self->diag_size, TRUE);
-  self->error_selected = get_icon_paintable (self, GTK_WIDGET (view), "builder-build-stop-symbolic", self->diag_size, TRUE);
 }
 
 static gboolean
@@ -1666,9 +1657,6 @@ gbp_omni_gutter_renderer_dispose (GObject *object)
   g_clear_object (&self->note);
   g_clear_object (&self->warning);
   g_clear_object (&self->error);
-  g_clear_object (&self->note_selected);
-  g_clear_object (&self->warning_selected);
-  g_clear_object (&self->error_selected);
 
   g_clear_object (&self->layout);
 
