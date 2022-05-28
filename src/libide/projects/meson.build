@@ -53,7 +53,13 @@ libide_projects_public_sources = [
   'ide-template-provider.c',
 ]
 
-libide_projects_sources = libide_projects_public_sources + libide_projects_private_sources
+libide_projects_resources = gnome.compile_resources(
+  'ide-projects-resources',
+  'libide-projects.gresource.xml',
+  c_name: 'ide_projects',
+)
+
+libide_projects_sources = libide_projects_public_sources + libide_projects_private_sources + libide_projects_resources
 
 #
 # Dependencies
