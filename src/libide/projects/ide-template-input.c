@@ -1097,7 +1097,7 @@ ide_template_input_expand_cb (GObject      *object,
   directory = ide_task_get_task_data (task);
   g_assert (G_IS_FILE (directory));
 
-  if (ide_project_template_expand_finish (template, result, &error))
+  if (!ide_project_template_expand_finish (template, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_pointer (task, g_object_ref (directory), g_object_unref);
