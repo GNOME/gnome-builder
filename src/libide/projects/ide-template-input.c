@@ -892,6 +892,24 @@ get_short_license (IdeTemplateInput *self)
   return g_strdup ("");
 }
 
+static char *
+get_spdx_id (IdeTemplateInput *self)
+{
+  g_assert (IDE_IS_TEMPLATE_INPUT (self));
+
+  for (guint i = 0; i < G_N_ELEMENTS (licenses); i++)
+    {
+      if (g_strcmp0 (licenses[i].spdx, self->license_name) == 0)
+        {
+          if (licenses[i].short_path != NULL)
+            return g_strdup (licenses[i].spdx);
+          break;
+        }
+    }
+
+  return g_strdup ("LicenseRef-proprietary");
+}
+
 static TmplScope *
 ide_template_input_to_scope (IdeTemplateInput *self)
 {
@@ -945,7 +963,7 @@ ide_template_input_to_scope (IdeTemplateInput *self)
   scope_take_string (scope, "spaces", g_strnfill (strlen (prefix_), ' '));
   scope_take_string (scope, "Spaces", g_strnfill (strlen (PreFix), ' '));
 
-  scope_take_string (scope, "project_license", get_short_license (self));
+  scope_take_string (scope, "project_license", get_spdx_id (self));
 
   return g_steal_pointer (&scope);
 }
