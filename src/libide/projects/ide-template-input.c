@@ -30,6 +30,7 @@
 #include "ide-projects-global.h"
 #include "ide-project-template.h"
 #include "ide-template-input.h"
+#include "ide-template-locator.h"
 #include "ide-template-provider.h"
 
 #define DEFAULT_USE_VERSION_CONTROL TRUE
@@ -1077,6 +1078,33 @@ ide_template_input_validate (IdeTemplateInput *self)
   return flags;
 }
 
+static void
+ide_template_input_expand_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IdeProjectTemplate *template = (IdeProjectTemplate *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GFile *directory;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_PROJECT_TEMPLATE (template));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  directory = ide_task_get_task_data (task);
+  g_assert (G_IS_FILE (directory));
+
+  if (ide_project_template_expand_finish (template, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, g_object_ref (directory), g_object_unref);
+
+  IDE_EXIT;
+}
+
 void
 ide_template_input_expand_async (IdeTemplateInput    *self,
                                  GCancellable        *cancellable,
@@ -1086,6 +1114,7 @@ ide_template_input_expand_async (IdeTemplateInput    *self,
   g_autoptr(IdeProjectTemplate) template = NULL;
   g_autoptr(TmplScope) scope = NULL;
   g_autoptr(IdeTask) task = NULL;
+  TmplTemplateLocator *locator;
 
   IDE_ENTRY;
 
@@ -1095,6 +1124,9 @@ ide_template_input_expand_async (IdeTemplateInput    *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_template_input_expand_async);
+  ide_task_set_task_data (task,
+                          g_file_get_child (self->directory, self->name),
+                          g_object_unref);
 
   if (ide_template_input_validate (self) != IDE_TEMPLATE_INPUT_VALID)
     {
@@ -1123,11 +1155,19 @@ ide_template_input_expand_async (IdeTemplateInput    *self,
       IDE_EXIT;
     }
 
-  /* TODO: Expand, VCS, etc */
-  ide_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "Work in Progress");
+  if ((locator = ide_template_base_get_locator (IDE_TEMPLATE_BASE (template))) &&
+      IDE_IS_TEMPLATE_LOCATOR (locator))
+    {
+      g_autofree char *license_text = get_short_license (self);
+      ide_template_locator_set_license_text (IDE_TEMPLATE_LOCATOR (locator), license_text);
+    }
+
+  ide_project_template_expand_async (template,
+                                     self,
+                                     scope,
+                                     cancellable,
+                                     ide_template_input_expand_cb,
+                                     g_steal_pointer (&task));
 
   IDE_EXIT;
 }

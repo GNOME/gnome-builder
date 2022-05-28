@@ -24,10 +24,13 @@
 # error "Only <libide-projects.h> can be included directly."
 #endif
 
-#include <libide-core.h>
 #include <gtk/gtk.h>
+#include <tmpl-glib.h>
+
+#include <libide-core.h>
 
 #include "ide-template-base.h"
+#include "ide-template-input.h"
 
 G_BEGIN_DECLS
 
@@ -46,7 +49,8 @@ struct _IdeProjectTemplateClass
   gchar     **(*get_languages)   (IdeProjectTemplate   *self);
   gchar      *(*get_icon_name)   (IdeProjectTemplate   *self);
   void        (*expand_async)    (IdeProjectTemplate   *self,
-                                  GHashTable           *params,
+                                  IdeTemplateInput     *input,
+                                  TmplScope            *scope,
                                   GCancellable         *cancellable,
                                   GAsyncReadyCallback   callback,
                                   gpointer              user_data);
@@ -74,7 +78,8 @@ IDE_AVAILABLE_IN_ALL
 gchar      *ide_project_template_get_icon_name   (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_project_template_expand_async    (IdeProjectTemplate   *self,
-                                                  GHashTable           *params,
+                                                  IdeTemplateInput     *input,
+                                                  TmplScope            *scope,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);

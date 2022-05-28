@@ -210,7 +210,8 @@ ide_project_template_get_icon_name (IdeProjectTemplate *self)
 /**
  * ide_project_template_expand_async:
  * @self: an #IdeProjectTemplate
- * @params: (element-type utf8 GLib.Variant): A hashtable of template parameters.
+ * @input: the template input
+ * @scope: scope for the template
  * @cancellable: (nullable): a #GCancellable or %NULL.
  * @callback: the callback for the asynchronous operation.
  * @user_data: user data for @callback.
@@ -224,17 +225,18 @@ ide_project_template_get_icon_name (IdeProjectTemplate *self)
  */
 void
 ide_project_template_expand_async (IdeProjectTemplate  *self,
-                                   GHashTable          *params,
+                                   IdeTemplateInput    *input,
+                                   TmplScope           *scope,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
                                    gpointer             user_data)
 {
   g_return_if_fail (IDE_IS_PROJECT_TEMPLATE (self));
-  g_return_if_fail (params != NULL);
-  g_return_if_fail (g_hash_table_contains (params, "name"));
+  g_return_if_fail (IDE_IS_TEMPLATE_INPUT (input));
+  g_return_if_fail (scope != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  IDE_PROJECT_TEMPLATE_GET_CLASS (self)->expand_async (self, params, cancellable, callback, user_data);
+  IDE_PROJECT_TEMPLATE_GET_CLASS (self)->expand_async (self, input, scope, cancellable, callback, user_data);
 }
 
 gboolean

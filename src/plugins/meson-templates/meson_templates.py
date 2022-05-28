@@ -41,29 +41,6 @@ class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
                 CLIProjectTemplate(),
                 EmptyProjectTemplate()]
 
-class MesonTemplateLocator(Template.TemplateLocator):
-    license = None
-
-    def empty(self):
-        return Gio.MemoryInputStream()
-
-    def do_locate(self, path):
-        if path.startswith('license.'):
-            filename = GLib.basename(path)
-            manager = GtkSource.LanguageManager.get_default()
-            language = manager.guess_language(filename, None)
-
-            if self.license is None or language is None:
-                return self.empty()
-
-            header = Ide.language_format_header(language, self.license)
-            gbytes = GLib.Bytes(header.encode())
-
-            return Gio.MemoryInputStream.new_from_bytes(gbytes)
-
-        return super().do_locate(self, path)
-
-
 class MesonTemplate(Ide.ProjectTemplate):
     def __init__(self, id, name, icon_name, description, languages, priority):
         super().__init__()
@@ -73,9 +50,6 @@ class MesonTemplate(Ide.ProjectTemplate):
         self.description = description
         self.languages = languages
         self.priority = priority
-        self.locator = MesonTemplateLocator()
-
-        self.props.locator = self.locator
 
     def do_get_id(self):
         return self.id
@@ -101,82 +75,34 @@ class MesonTemplate(Ide.ProjectTemplate):
             return False
         return Ide.ProjectTemplate.do_validate_name(self, name);
 
-    def do_expand_async(self, params, cancellable, callback, data):
+    def do_expand_async(self, input, scope, cancellable, callback, data):
         self.reset()
 
         task = Ide.Task.new(self, cancellable, callback)
 
-        if 'language' in params:
-            self.language = params['language'].get_string().lower()
-        else:
-            self.language = 'c'
-
-        if self.language not in ('c', 'c♯', 'c++', 'javascript', 'python', 'vala', 'rust'):
-            task.return_error(GLib.Error('Language %s not supported' % self.language))
-            return
-
-        if 'versioning' in params:
-            self.versioning = params['versioning'].get_string()
-        else:
-            self.versioning = ''
-
-        if 'author' in params:
-            author_name = params['author'].get_string()
-        else:
-            author_name = GLib.get_real_name()
-
-        scope = Template.Scope.new()
-        scope.get('template').assign_string(self.id)
-
-        name = params['name'].get_string().lower()
-        name_ = ''.join([c if c.isalnum() else '_' for c in name])
-        scope.get('name').assign_string(name)
-        scope.get('name_').assign_string(name_)
-        scope.get('NAME').assign_string(name_.upper())
-        scope.get('year').assign_string(time.strftime('%Y'))
-
-        if 'app-id' in params:
-            appid = params['app-id'].get_string()
-        else:
-            appid = 'org.example.App'
-        appid_path = '/' + appid.replace('.', '/')
-        scope.get('appid').assign_string(appid)
-        scope.get('appid_path').assign_string(appid_path)
-
-        prefix = name_ if not name_.endswith('_glib') else name_[:-5]
-        PREFIX = prefix.upper()
-        prefix_ = prefix.lower()
-        PreFix = ''.join([word.capitalize() for word in prefix.lower().split('_')])
-
-        scope.get('prefix').assign_string(prefix)
-        scope.get('Prefix').assign_string(prefix.capitalize())
-        scope.get('PreFix').assign_string(PreFix)
-        scope.get('prefix_').assign_string(prefix_)
-        scope.get('PREFIX').assign_string(PREFIX)
-        scope.get('spaces').assign_string(" " * len(prefix_))
-        scope.get('Spaces').assign_string(" " * len(PreFix))
+        prefix = scope.dup_string('prefix')
+        appid = scope.dup_string('appid')
+        name_ = scope.dup_string('name_')
+        name = scope.dup_string('name')
+        language = input.props.language.lower()
 
         enable_gnome = (isinstance(self, GnomeProjectTemplate) or
                         isinstance(self, GnomeGTK4ProjectTemplate) or
                         isinstance(self, GnomeAdwaitaProjectTemplate))
-        scope.get('project_version').assign_string('0.1.0')
         scope.get('enable_i18n').assign_boolean(enable_gnome)
         scope.get('enable_gnome').assign_boolean(enable_gnome)
-        scope.get('language').assign_string(self.language)
-        scope.get('author').assign_string(author_name)
 
         scope.get('is_adwaita').assign_boolean(True if isinstance(self, GnomeAdwaitaProjectTemplate) else False)
 
         # Just avoiding dealing with template bugs
-        if self.language in ('c', 'c++'):
-            ui_file = prefix + '-window.ui'
-        elif self.language in ('c♯',):
-            ui_file = ""
+        if language in ('c', 'c++'):
+            scope.set_string('ui_file', prefix + '-window.ui')
+        elif language in ('C♯',):
+            scope.set_string('ui_file', '')
         else:
-            ui_file = 'window.ui'
-        scope.get('ui_file').assign_string(ui_file)
+            scope.set_string('ui_file', 'window.ui')
 
-        exec_name = appid if self.language == 'javascript' else name
+        exec_name = appid if language == 'javascript' else name
         scope.get('exec_name').assign_string(exec_name)
 
         modes = {
@@ -199,44 +125,20 @@ class MesonTemplate(Ide.ProjectTemplate):
             'resources/meson.build': 'meson.build',
 
         }
-        self.prepare_files(files)
+        self.prepare_files(files, language)
 
-        # No explicit license == proprietary
-        spdx_license = 'LicenseRef-proprietary'
+        license_resource = input.get_license_path()
+        if license_resource is not None:
+            files[license_resource] = 'COPYING'
 
-        # https://spdx.org/licenses/
-        LICENSE_TO_SPDX = {
-            'agpl_3': 'AGPL-3.0-or-later',
-            'gpl_3': 'GPL-3.0-or-later',
-            'lgpl_2_1': 'LGPL-2.1-or-later',
-            'lgpl_3': 'LGPL-3.0-or-later',
-            'mit_x11': 'MIT',
-            'apache': 'Apache-2.0',
-        }
-
-        if 'license_full' in params:
-            license_full_path = params['license_full'].get_string()
-            files[license_full_path] = 'COPYING'
-
-        if 'license_short' in params:
-            license_short_path = params['license_short'].get_string()
-            license_base = Gio.resources_lookup_data(license_short_path[11:], 0).get_data().decode()
-            self.locator.license = license_base
-            license_name = license_short_path.rsplit('/', 1)[1]
-            spdx_license = LICENSE_TO_SPDX.get(license_name, '')
-
-        scope.get('project_license').assign_string(spdx_license)
-
-        if 'path' in params:
-            dir_path = params['path'].get_string()
-        else:
-            dir_path = name
-        directory = Gio.File.new_for_path(dir_path)
-        scope.get('project_path').assign_string(directory.get_path())
+        directory = input.props.directory.get_child(name)
 
         for src, dst in files.items():
+            #print('adding', src, '=>', dst % expands)
             destination = directory.get_child(dst % expands)
-            if src.startswith('resource://'):
+            if src[0] == '/':
+                self.add_resource(src, destination, scope, modes.get(src, 0))
+            elif src.startswith('resource://'):
                 self.add_resource(src[11:], destination, scope, modes.get(src, 0))
             else:
                 path = os.path.join('/plugins/meson_templates', src)
@@ -269,7 +171,7 @@ class GnomeProjectTemplate(MesonTemplate):
             0
          )
 
-    def prepare_files(self, files):
+    def prepare_files(self, files, language):
         # Shared files
         files['resources/flatpak.json'] = '%(appid)s.json'
         files['resources/data/hello.desktop.in'] = 'data/%(appid)s.desktop.in'
@@ -286,40 +188,40 @@ class GnomeProjectTemplate(MesonTemplate):
         resource_name = 'src/%(prefix)s.gresource.xml'
         meson_file = 'resources/src/meson-c-vala.build'
 
-        if self.language == 'c':
+        if language == 'c':
             files['resources/src/main.c'] = 'src/main.c'
             files['resources/src/window.c'] = 'src/%(prefix)s-window.c'
             files['resources/src/window.h'] = 'src/%(prefix)s-window.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
-        elif self.language == 'c++':
+        elif language == 'c++':
             files['resources/src/main.cpp'] = 'src/main.cpp'
             files['resources/src/window.cpp'] = 'src/%(prefix)s-window.cpp'
             files['resources/src/window.hpp'] = 'src/%(prefix)s-window.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
-        elif self.language == 'c♯':
+        elif language == 'c♯':
             files['resources/src/main.cs'] = 'src/main.cs'
             files['resources/src/application.in'] = 'src/%(exec_name)s.in'
             files['resources/flatpak-gtksharp.json.tmpl'] = '%(appid)s.json'
             meson_file = 'resources/src/meson-cs.build'
             resource_name = None
             window_ui_name = None
-        elif self.language == 'vala':
+        elif language == 'vala':
             files['resources/src/main.vala'] = 'src/main.vala'
             files['resources/src/window.vala'] = 'src/window.vala'
-        elif self.language == 'javascript':
+        elif language == 'javascript':
             files['resources/src/main.js.tmpl'] = 'src/main.js'
             files['resources/src/hello.js.in'] = 'src/%(appid)s.in'
             files['resources/src/window.js.tmpl'] = 'src/window.js'
             files['resources/src/hello.src.gresource.xml'] = 'src/%(appid)s.src.gresource.xml'
             resource_name = 'src/%(appid)s.data.gresource.xml'
             meson_file = 'resources/src/meson-js.build'
-        elif self.language == 'python':
+        elif language == 'python':
             files['resources/src/hello.py.in'] = 'src/%(name)s.in'
             files['resources/src/__init__.py'] = 'src/__init__.py'
             files['resources/src/window.py'] = 'src/window.py'
             files['resources/src/main.py'] = 'src/main.py'
             meson_file = 'resources/src/meson-py.build'
-        elif self.language == 'rust':
+        elif language == 'rust':
             files['resources/src/config.rs.in'] = 'src/config.rs.in'
             files['resources/src/main.rs'] = 'src/main.rs'
             files['resources/src/window.rs'] = 'src/window.rs'
@@ -346,7 +248,7 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
             0
          )
 
-    def prepare_files(self, files):
+    def prepare_files(self, files, language):
         # Shared files
         files['resources/flatpak.json'] = '%(appid)s.json'
         files['resources/data/hello.desktop.in'] = 'data/%(appid)s.desktop.in'
@@ -364,43 +266,43 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
         resource_name = 'src/%(prefix)s.gresource.xml'
         meson_file = 'resources/src/meson-c-vala.build'
 
-        if self.language == 'c':
+        if language == 'c':
             files['resources/src/main-gtk4.c'] = 'src/main.c'
             files['resources/src/window.c'] = 'src/%(prefix)s-window.c'
             files['resources/src/window.h'] = 'src/%(prefix)s-window.h'
             files['resources/src/application.c'] = 'src/%(prefix)s-application.c'
             files['resources/src/application.h'] = 'src/%(prefix)s-application.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
-        elif self.language == 'c++':
+        elif language == 'c++':
             files['resources/src/main.cpp'] = 'src/main.cpp'
             files['resources/src/window.cpp'] = 'src/%(prefix)s-window.cpp'
             files['resources/src/window.hpp'] = 'src/%(prefix)s-window.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
-        elif self.language == 'c♯':
+        elif language == 'c♯':
             files['resources/src/main.cs'] = 'src/main.cs'
             files['resources/src/application.in'] = 'src/%(exec_name)s.in'
             files['resources/flatpak-gtksharp.json.tmpl'] = '%(appid)s.json'
             meson_file = 'resources/src/meson-cs.build'
             resource_name = None
             window_ui_name = None
-        elif self.language == 'vala':
+        elif language == 'vala':
             files['resources/src/main-gtk4.vala'] = 'src/main.vala'
             files['resources/src/window-gtk4.vala'] = 'src/window.vala'
             files['resources/src/application-gtk4.vala'] = 'src/application.vala'
-        elif self.language == 'javascript':
+        elif language == 'javascript':
             files['resources/src/main-gtk4.js.tmpl'] = 'src/main.js'
             files['resources/src/hello.js.in'] = 'src/%(appid)s.in'
             files['resources/src/window.js.tmpl'] = 'src/window.js'
             files['resources/src/hello.src.gresource.xml'] = 'src/%(appid)s.src.gresource.xml'
             resource_name = 'src/%(appid)s.data.gresource.xml'
             meson_file = 'resources/src/meson-js.build'
-        elif self.language == 'python':
+        elif language == 'python':
             files['resources/src/hello.py.in'] = 'src/%(name)s.in'
             files['resources/src/__init__.py'] = 'src/__init__.py'
             files['resources/src/window-gtk4.py'] = 'src/window.py'
             files['resources/src/main-gtk4.py'] = 'src/main.py'
             meson_file = 'resources/src/meson-py-gtk4.build'
-        elif self.language == 'rust':
+        elif language == 'rust':
             files['resources/src/application.rs'] = 'src/application.rs'
             files['resources/src/config-gtk4.rs.in'] = 'src/config.rs.in'
             files['resources/src/main-gtk4.rs'] = 'src/main.rs'
@@ -428,7 +330,7 @@ class GnomeAdwaitaProjectTemplate(MesonTemplate):
             0
          )
 
-    def prepare_files(self, files):
+    def prepare_files(self, files, language):
         # Shared files
         files['resources/flatpak.json'] = '%(appid)s.json'
         files['resources/data/hello.desktop.in'] = 'data/%(appid)s.desktop.in'
@@ -446,43 +348,43 @@ class GnomeAdwaitaProjectTemplate(MesonTemplate):
         resource_name = 'src/%(prefix)s.gresource.xml'
         meson_file = 'resources/src/meson-c-vala.build'
 
-        if self.language == 'c':
+        if language == 'c':
             files['resources/src/main-gtk4.c'] = 'src/main.c'
             files['resources/src/window.c'] = 'src/%(prefix)s-window.c'
             files['resources/src/window.h'] = 'src/%(prefix)s-window.h'
             files['resources/src/application.c'] = 'src/%(prefix)s-application.c'
             files['resources/src/application.h'] = 'src/%(prefix)s-application.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
-        elif self.language == 'c++':
+        elif language == 'c++':
             files['resources/src/main.cpp'] = 'src/main.cpp'
             files['resources/src/window.cpp'] = 'src/%(prefix)s-window.cpp'
             files['resources/src/window.hpp'] = 'src/%(prefix)s-window.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
-        elif self.language == 'c♯':
+        elif language == 'c♯':
             files['resources/src/main.cs'] = 'src/main.cs'
             files['resources/src/application.in'] = 'src/%(exec_name)s.in'
             files['resources/flatpak-gtksharp.json.tmpl'] = '%(appid)s.json'
             meson_file = 'resources/src/meson-cs.build'
             resource_name = None
             window_ui_name = None
-        elif self.language == 'vala':
+        elif language == 'vala':
             files['resources/src/main-gtk4.vala'] = 'src/main.vala'
             files['resources/src/window-gtk4.vala'] = 'src/window.vala'
             files['resources/src/application-gtk4.vala'] = 'src/application.vala'
-        elif self.language == 'javascript':
+        elif language == 'javascript':
             files['resources/src/main-gtk4.js.tmpl'] = 'src/main.js'
             files['resources/src/hello.js.in'] = 'src/%(appid)s.in'
             files['resources/src/window.js.tmpl'] = 'src/window.js'
             files['resources/src/hello.src.gresource.xml'] = 'src/%(appid)s.src.gresource.xml'
             resource_name = 'src/%(appid)s.data.gresource.xml'
             meson_file = 'resources/src/meson-js.build'
-        elif self.language == 'python':
+        elif language == 'python':
             files['resources/src/hello.py.in'] = 'src/%(name)s.in'
             files['resources/src/__init__.py'] = 'src/__init__.py'
             files['resources/src/window-gtk4.py'] = 'src/window.py'
             files['resources/src/main-gtk4.py'] = 'src/main.py'
             meson_file = 'resources/src/meson-py-gtk4.build'
-        elif self.language == 'rust':
+        elif language == 'rust':
             files['resources/src/application.rs'] = 'src/application.rs'
             files['resources/src/config-gtk4.rs.in'] = 'src/config.rs.in'
             files['resources/src/main-gtk4.rs'] = 'src/main.rs'
@@ -510,8 +412,8 @@ class LibraryProjectTemplate(MesonTemplate):
             100
          )
 
-    def prepare_files(self, files):
-        if self.language == 'c':
+    def prepare_files(self, files, language):
+        if language == 'c':
             files['resources/src/meson-clib.build'] = 'src/meson.build'
             files['resources/src/hello.c'] = 'src/%(name)s.c'
             files['resources/src/hello.h'] = 'src/%(name)s.h'
@@ -529,10 +431,10 @@ class EmptyProjectTemplate(MesonTemplate):
             200
          )
 
-    def prepare_files(self, files):
+    def prepare_files(self, files, language):
         files['resources/src/meson-empty.build'] = 'src/meson.build'
 
-        if self.language == 'rust':
+        if language == 'rust':
             files['resources/src/Cargo.lock'] = 'Cargo.lock'
             files['resources/src/Cargo-cli.toml'] = 'Cargo.toml'
 
@@ -548,24 +450,24 @@ class CLIProjectTemplate(MesonTemplate):
             200
          )
 
-    def prepare_files(self, files):
-        if self.language == 'python':
+    def prepare_files(self, files, language):
+        if language == 'python':
             files['resources/src/meson-py-cli.build'] = 'src/meson.build'
         else:
             files['resources/src/meson-cli.build'] = 'src/meson.build'
 
-        if self.language == 'c':
+        if language == 'c':
             files['resources/src/main-cli.c'] = 'src/main.c'
-        elif self.language == 'c++':
+        elif language == 'c++':
             files['resources/src/main-cli.cpp'] = 'src/main.cpp'
-        elif self.language == 'vala':
+        elif language == 'vala':
             files['resources/src/main-cli.vala'] = 'src/main.vala'
-        elif self.language == 'rust':
+        elif language == 'rust':
             files['resources/src/main-cli.rs'] = 'src/main.rs'
             files['resources/src/Cargo.lock'] = 'Cargo.lock'
             files['resources/src/Cargo-cli.toml'] = 'Cargo.toml'
             files['resources/build-aux/cargo.sh'] = 'build-aux/cargo.sh'
-        elif self.language == 'python':
+        elif language == 'python':
             files['resources/src/hello-cli.py.in'] = 'src/%(name)s.in'
             files['resources/src/__init__.py'] = 'src/__init__.py'
             files['resources/src/main-cli.py'] = 'src/main.py'
