@@ -293,6 +293,9 @@ ide_template_base_parse_worker (IdeTask      *task,
 
       if (!tmpl_template_parse_file (template, fexp->file, cancellable, &error))
         {
+          g_debug ("Failed to parse template: %s: %s",
+                   g_file_peek_path (fexp->file),
+                   error->message);
           ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }
