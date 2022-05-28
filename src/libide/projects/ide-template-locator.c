@@ -177,3 +177,9 @@ ide_template_locator_set_license_text (IdeTemplateLocator *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LICENSE_TEXT]);
     }
 }
+
+IdeTemplateLocator *
+ide_template_locator_new (void)
+{
+  return g_object_new (IDE_TYPE_TEMPLATE_LOCATOR, NULL);
+}
