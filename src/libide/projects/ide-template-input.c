@@ -87,14 +87,14 @@ static const struct {
   const char *short_path;
   const char *full_path;
 } licenses[] = {
-  { N_("AGPL-3.0-or-later"), "agpl_3_short", "agpl_3_full" },
-  { N_("Apache-2.0"), "apache_2_short", "apache_2_full" },
-  { N_("GPL-2.0-or-later"), "gpl_2_short", "gpl_2_full" },
-  { N_("GPL-3.0-or-later"), "gpl_3_short", "gpl_3_full" },
-  { N_("LGPL-2.1-or-later"), "lgpl_2_1_short", "lgpl_2_1_full" },
-  { N_("LGPL-3.0-or-later"), "lgpl_3_full", "lgpl_3_short" },
-  { N_("MIT"), "mit_x11_short", "mit_x11_full" },
-  { N_("No License"), NULL, NULL },
+  { "AGPL-3.0-or-later", "agpl_3_short", "agpl_3_full" },
+  { "Apache-2.0", "apache_2_short", "apache_2_full" },
+  { "GPL-2.0-or-later", "gpl_2_short", "gpl_2_full" },
+  { "GPL-3.0-or-later", "gpl_3_short", "gpl_3_full" },
+  { "LGPL-2.1-or-later", "lgpl_2_1_short", "lgpl_2_1_full" },
+  { "LGPL-3.0-or-later", "lgpl_3_full", "lgpl_3_short" },
+  { "MIT", "mit_x11_short", "mit_x11_full" },
+  { "No License", NULL, NULL },
 };
 
 static char *
@@ -463,7 +463,7 @@ ide_template_input_init (IdeTemplateInput *self)
   self->licenses = gtk_string_list_new (NULL);
 
   for (guint i = 0; i < G_N_ELEMENTS (licenses); i++)
-    gtk_string_list_append (self->licenses, g_dgettext (GETTEXT_PACKAGE, licenses[i].spdx));
+    gtk_string_list_append (self->licenses, licenses[i].spdx);
 
   self->template_filter = gtk_custom_filter_new (template_filter_func,
                                                  g_strdup (self->language),
