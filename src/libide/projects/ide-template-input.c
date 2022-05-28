@@ -843,20 +843,76 @@ functify (const gchar *input)
   return g_string_free (str, FALSE);
 }
 
+static char *
+build_app_path (const char *app_id)
+{
+  GString *str = g_string_new ("/");
+
+  for (const char *c = app_id; *c; c = g_utf8_next_char (c))
+    {
+      if (*c == '.')
+        g_string_append_c (str, '/');
+      else
+        g_string_append_unichar (str, g_utf8_get_char (c));
+    }
+
+  return g_string_free (str, FALSE);
+}
+
+static char *
+get_short_license (IdeTemplateInput *self)
+{
+  g_assert (IDE_IS_TEMPLATE_INPUT (self));
+
+  for (guint i = 0; i < G_N_ELEMENTS (licenses); i++)
+    {
+      if (g_strcmp0 (licenses[i].spdx, self->license_name) == 0)
+        {
+          g_autofree char *resource_path = NULL;
+          g_autoptr(GBytes) bytes = NULL;
+          const guint8 *data;
+          gsize len;
+
+          if (licenses[i].short_path == NULL)
+            break;
+
+          resource_path = g_strdup_printf ("/org/gnome/libide-projects/licenses/%s",
+                                           licenses[i].short_path);
+          bytes = g_resources_lookup_data (resource_path, 0, NULL);
+
+          if (bytes == NULL)
+            break;
+
+          data = g_bytes_get_data (bytes, &len);
+          return (char *)g_memdup2 (data, len);
+        }
+    }
+
+  return g_strdup ("");
+}
+
 static TmplScope *
 ide_template_input_to_scope (IdeTemplateInput *self)
 {
   g_autoptr(TmplScope) scope = NULL;
   g_autoptr(GDateTime) now = NULL;
   g_autofree char *name_lower = NULL;
+  g_autofree char *prefix_ = NULL;
   g_autofree char *prefix = NULL;
   g_autofree char *Prefix = NULL;
+  g_autofree char *PreFix = NULL;
+  const char *app_id;
 
   g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), NULL);
 
   now = g_date_time_new_now_local ();
   scope = tmpl_scope_new ();
 
+  app_id = !ide_str_empty0 (self->app_id) ? self->app_id : "org.gnome.Example";
+  tmpl_scope_set_string (scope, "appid", app_id);
+  scope_take_string (scope, "appid_path", build_app_path (app_id));
+
+  tmpl_scope_set_string (scope, "template", self->template);
   tmpl_scope_set_string (scope, "author", self->author);
   tmpl_scope_set_string (scope, "project_version", self->project_version);
   scope_take_string (scope, "language", g_utf8_strdown (self->language, -1));
@@ -868,21 +924,27 @@ ide_template_input_to_scope (IdeTemplateInput *self)
   tmpl_scope_set_string (scope, "name", name_lower);
   scope_take_string (scope, "name_", functify (name_lower));
   scope_take_string (scope, "NAME", g_utf8_strup (name_lower, -1));
+  scope_take_string (scope, "year", g_date_time_format (now, "%Y"));
   scope_take_string (scope, "YEAR", g_date_time_format (now, "%Y"));
 
   if (g_str_has_suffix (name_lower, "_glib"))
     prefix = g_strndup (name_lower, strlen (name_lower) - 5);
   else
     prefix = g_strdup (name_lower);
-  Prefix = camelize (prefix);
+  Prefix = capitalize (prefix);
+  PreFix = camelize (prefix);
+  prefix_ = g_utf8_strdown (prefix, -1);
 
   /* Various prefixes for use as namespaces, etc */
   tmpl_scope_set_string (scope, "prefix", prefix);
-  scope_take_string (scope, "prefix_", g_utf8_strdown (prefix, -1));
+  tmpl_scope_set_string (scope, "prefix_", prefix_);
   scope_take_string (scope, "PREFIX", g_utf8_strup (prefix, -1));
-  tmpl_scope_set_string (scope, "PreFix", Prefix);
-  scope_take_string (scope, "spaces", g_strnfill (strlen (prefix), ' '));
-  scope_take_string (scope, "Spaces", g_strnfill (strlen (Prefix), ' '));
+  tmpl_scope_set_string (scope, "Prefix", Prefix);
+  tmpl_scope_set_string (scope, "PreFix", PreFix);
+  scope_take_string (scope, "spaces", g_strnfill (strlen (prefix_), ' '));
+  scope_take_string (scope, "Spaces", g_strnfill (strlen (PreFix), ' '));
+
+  scope_take_string (scope, "project_license", get_short_license (self));
 
   return g_steal_pointer (&scope);
 }
