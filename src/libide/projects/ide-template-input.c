@@ -888,6 +888,29 @@ ide_template_input_to_scope (IdeTemplateInput *self)
 }
 
 /**
+ * ide_template_input_get_license_path:
+ * @self: a #IdeTemplateInput
+ *
+ * Gets a path to a #GResource containing the full license text.
+ *
+ * Returns: (transfer full) (nullable): a resource path or %NULL
+ */
+char *
+ide_template_input_get_license_path (IdeTemplateInput *self)
+{
+  g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), NULL);
+
+  for (guint i = 0; i < G_N_ELEMENTS (licenses); i++)
+    {
+      if (g_strcmp0 (licenses[i].spdx, self->license_name) == 0)
+        return g_strdup_printf ("/org/gnome/libide-projects/licenses/%s",
+                                licenses[i].full_path);
+    }
+
+  return NULL;
+}
+
+/**
  * ide_template_input_get_templates_model:
  * @self: a #IdeTemplateInput
  *
