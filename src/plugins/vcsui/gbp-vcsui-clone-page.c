@@ -39,6 +39,7 @@ struct _GbpVcsuiClonePage
   AdwEntryRow *location_row;
   AdwEntryRow *author_name_row;
   AdwEntryRow *author_email_row;
+  GtkStack    *stack;
   VteTerminal *terminal;
 };
 
@@ -113,6 +114,30 @@ select_folder_action (GtkWidget  *widget,
 }
 
 static void
+clone_action (GtkWidget  *widget,
+              const char *action_name,
+              GVariant   *param)
+{
+  GbpVcsuiClonePage *self = (GbpVcsuiClonePage *)widget;
+  static guint count;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
+
+  if (count++ % 2 == 0)
+  {
+    gtk_stack_set_visible_child_name (self->stack, "progress");
+  }
+  else
+  {
+    gtk_stack_set_visible_child_name (self->stack, "details");
+  }
+
+  IDE_EXIT;
+}
+
+static void
 gbp_vcsui_clone_page_dispose (GObject *object)
 {
   GbpVcsuiClonePage *self = (GbpVcsuiClonePage *)object;
@@ -133,15 +158,17 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/vcsui/gbp-vcsui-clone-page.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, main);
-  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, location_row);
-  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_name_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_email_row);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_name_row);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, location_row);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, main);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, terminal);
 
   gtk_widget_class_bind_template_callback (widget_class, location_row_changed_cb);
 
   gtk_widget_class_install_action (widget_class, "clone-page.select-folder", NULL, select_folder_action);
+  gtk_widget_class_install_action (widget_class, "clone-page.clone", NULL, clone_action);
 
   g_type_ensure (VTE_TYPE_TERMINAL);
 }
