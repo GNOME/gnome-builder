@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="Adw" version="1.0"/>
+  <template class="GbpVcsuiClonePage" parent="GtkWidget">
+    <child>
+      <object class="AdwClamp" id="main">
+        <property name="orientation">horizontal</property>
+        <property name="maximum-size">550</property>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-top">64</property>
+            <property name="margin-bottom">64</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">24</property>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="uri_row">
+                    <property name="title" translatable="yes">Repository URL</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="xalign">0</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="label" translatable="yes">Enter the URL of the source code repository for the project you would like to clone.</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="location_row">
+                    <property name="title" translatable="yes">Location</property>
+                    <signal name="changed" handler="location_row_changed_cb" swapped="true" object="GbpVcsuiClonePage"/>
+                    <child type="suffix">
+                      <object class="GtkButton">
+                        <property name="action-name">clone-page.select-folder</property>
+                        <property name="valign">center</property>
+                        <property name="icon-name">folder-symbolic</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">The repository will be cloned into a new subdirectory.</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Repository Details</property>
+                <child>
+                  <object class="AdwEntryRow" id="branch_row">
+                    <property name="title" translatable="yes">Branch</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="xalign">0</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="label" translatable="yes">Specify a branch to clone if necessary. Unless specified, the default branch will be used.</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwEntryRow" id="author_name_row">
+                    <property name="title" translatable="yes">Author</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwEntryRow" id="author_email_row">
+                    <property name="title" translatable="yes">Email</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="xalign">0</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="label" translatable="yes">You may specify authorship information to override defaults.</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">clone-page.clone</property>
+                <property name="label" translatable="yes">Clone Repository</property>
+                <property name="margin-top">12</property>
+                <property name="halign">end</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
