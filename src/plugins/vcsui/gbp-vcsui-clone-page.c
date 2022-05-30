@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 
 #include <adwaita.h>
+#include <vte/vte.h>
 
 #include <libide-projects.h>
 
@@ -38,6 +39,7 @@ struct _GbpVcsuiClonePage
   AdwEntryRow *location_row;
   AdwEntryRow *author_name_row;
   AdwEntryRow *author_email_row;
+  VteTerminal *terminal;
 };
 
 G_DEFINE_FINAL_TYPE (GbpVcsuiClonePage, gbp_vcsui_clone_page, GTK_TYPE_WIDGET)
@@ -135,19 +137,26 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, location_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_name_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_email_row);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, terminal);
 
   gtk_widget_class_bind_template_callback (widget_class, location_row_changed_cb);
 
   gtk_widget_class_install_action (widget_class, "clone-page.select-folder", NULL, select_folder_action);
+
+  g_type_ensure (VTE_TYPE_TERMINAL);
 }
 
 static void
 gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
 {
   g_autofree char *projects_dir = ide_path_collapse (ide_get_projects_dir ());
+  static GdkRGBA transparent = {0, 0, 0, 0};
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_editable_set_text (GTK_EDITABLE (self->location_row), projects_dir);
   gtk_editable_set_text (GTK_EDITABLE (self->author_name_row), g_get_real_name ());
+
+  vte_terminal_set_colors (self->terminal, NULL, &transparent, NULL, 0);
+  vte_terminal_feed (self->terminal, "Cloning git repository…\r\n", -1);
 }
