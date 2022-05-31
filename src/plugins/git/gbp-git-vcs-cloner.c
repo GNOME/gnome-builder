@@ -309,7 +309,8 @@ should_ignore (const char *name)
   if (name == NULL)
     return TRUE;
 
-  if (g_str_has_prefix (name, "refs/merge-requests/"))
+  if (g_str_has_prefix (name, "refs/merge-requests/") ||
+      g_str_has_prefix (name, "refs/tags/"))
     return TRUE;
 
   return FALSE;
