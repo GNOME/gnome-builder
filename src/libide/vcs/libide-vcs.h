@@ -28,6 +28,7 @@
 #include "ide-directory-vcs.h"
 #include "ide-vcs-branch.h"
 #include "ide-vcs-cloner.h"
+#include "ide-vcs-clone-request.h"
 #include "ide-vcs-config.h"
 #include "ide-vcs-enums.h"
 #include "ide-vcs-initializer.h"
