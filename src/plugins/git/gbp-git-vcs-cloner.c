@@ -26,7 +26,9 @@
 #include <libide-threading.h>
 
 #include "daemon/ipc-git-service.h"
+#include "daemon/ipc-git-types.h"
 
+#include "gbp-git-branch.h"
 #include "gbp-git-client.h"
 #include "gbp-git-progress.h"
 #include "gbp-git-vcs-cloner.h"
@@ -49,7 +51,21 @@ typedef struct
 static void vcs_cloner_iface_init (IdeVcsClonerInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitVcsCloner, gbp_git_vcs_cloner, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_CLONER, vcs_cloner_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_CLONER, vcs_cloner_iface_init))
+
+static const char *
+guess_ssh_user_from_host (const char *host)
+{
+  if (host != NULL)
+    {
+      /* TODO: check .ssh/config for User mappings */
+      if (strstr (host, "gitlab.") != NULL ||
+          strstr (host, "github.") != NULL)
+        return "git";
+    }
+
+  return g_get_user_name ();
+}
 
 static void
 clone_request_free (gpointer data)
@@ -287,6 +303,145 @@ gbp_git_vcs_cloner_clone_finish (IdeVcsCloner  *cloner,
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }
 
+static gboolean
+should_ignore (const char *name)
+{
+  if (name == NULL)
+    return TRUE;
+
+  if (g_str_has_prefix (name, "refs/merge-requests/"))
+    return TRUE;
+
+  return FALSE;
+}
+
+static void
+gbp_git_vcs_cloner_list_remote_refs_by_kind_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  IpcGitService *service = (IpcGitService *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GListStore) store = NULL;
+  g_auto(GStrv) refs = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IPC_IS_GIT_SERVICE (service));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ipc_git_service_call_list_remote_refs_by_kind_finish (service, &refs, result, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  g_qsort_with_data (refs, g_strv_length (refs), sizeof (char *),
+                     (GCompareDataFunc)g_strcmp0, NULL);
+  store = g_list_store_new (GBP_TYPE_GIT_BRANCH);
+
+  for (guint i = 0; refs[i]; i++)
+    {
+      g_autoptr(GbpGitBranch) branch = NULL;
+
+      if (should_ignore (refs[i]))
+        continue;
+
+      branch = gbp_git_branch_new (refs[i]);
+      g_list_store_append (store, branch);
+    }
+
+  ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_git_vcs_cloner_list_branches_async (IdeVcsCloner        *cloner,
+                                        IdeVcsUri           *uri,
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
+{
+  GbpGitVcsCloner *self = (GbpGitVcsCloner *)cloner;
+  g_autoptr(IpcGitService) service = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree char *uri_str = NULL;
+  GbpGitClient *client;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GIT_VCS_CLONER (cloner));
+  g_assert (uri != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_git_vcs_cloner_list_branches_async);
+
+  if (!(context = ide_object_get_context (IDE_OBJECT (self))) ||
+      !(client = gbp_git_client_from_context (context)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to locate git client object within context");
+      IDE_EXIT;
+    }
+
+  /* We can make this async if/when necessary. It just spawns the process and
+   * sets up a GDBusProxy to the subprocess. Not ideal, but we do it elsewhere
+   * too when accessing the service.
+   */
+  if (!(service = gbp_git_client_get_service (client, cancellable, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  /* Always set a username if the transport is SSH */
+  if (g_strcmp0 ("ssh", ide_vcs_uri_get_scheme (uri)) == 0)
+    {
+      if (ide_vcs_uri_get_user (uri) == NULL)
+        {
+          const char *host = ide_vcs_uri_get_host (uri);
+          ide_vcs_uri_set_user (uri, guess_ssh_user_from_host (host));
+        }
+    }
+
+  uri_str = ide_vcs_uri_to_string (uri);
+
+  ipc_git_service_call_list_remote_refs_by_kind (service,
+                                                 uri_str,
+                                                 IPC_GIT_REF_BRANCH,
+                                                 cancellable,
+                                                 gbp_git_vcs_cloner_list_remote_refs_by_kind_cb,
+                                                 g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static GListModel *
+gbp_git_vcs_cloner_list_branches_finish (IdeVcsCloner  *cloner,
+                                         GAsyncResult  *result,
+                                         GError       **error)
+{
+  GListModel *ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_GIT_VCS_CLONER (cloner));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+  g_assert (!ret || G_IS_LIST_MODEL (ret));
+
+  IDE_RETURN (ret);
+}
+
 static void
 vcs_cloner_iface_init (IdeVcsClonerInterface *iface)
 {
@@ -294,4 +449,6 @@ vcs_cloner_iface_init (IdeVcsClonerInterface *iface)
   iface->validate_uri = gbp_git_vcs_cloner_validate_uri;
   iface->clone_async = gbp_git_vcs_cloner_clone_async;
   iface->clone_finish = gbp_git_vcs_cloner_clone_finish;
+  iface->list_branches_async = gbp_git_vcs_cloner_list_branches_async;
+  iface->list_branches_finish = gbp_git_vcs_cloner_list_branches_finish;
 }

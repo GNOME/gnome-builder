@@ -70,5 +70,10 @@
     <method name="LoadConfig">
       <arg name="config_path" direction="out" type="o"/>
     </method>
+    <method name="ListRemoteRefsByKind">
+      <arg name="url" direction="in" type="s"/>
+      <arg name="kind" direction="in" type="u"/>
+      <arg name="refs" direction="out" type="as"/>
+    </method>
   </interface>
 </node>
