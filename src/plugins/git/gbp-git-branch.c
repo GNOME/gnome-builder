@@ -30,44 +30,84 @@
 struct _GbpGitBranch
 {
   GObject parent_instance;
-  gchar *id;
+  char *id;
 };
 
-static gchar *
-gbp_git_branch_get_id (IdeVcsBranch *branch)
-{
-  return g_strdup (GBP_GIT_BRANCH (branch)->id);
-}
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitBranch, gbp_git_branch, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_BRANCH, NULL))
 
-static gchar *
-gbp_git_branch_get_name (IdeVcsBranch *branch)
-{
-  const gchar *id = GBP_GIT_BRANCH (branch)->id;
+enum {
+  PROP_0,
+  PROP_ID,
+  PROP_NAME,
+  N_PROPS
+};
 
-  if (id && g_str_has_prefix (id, "refs/heads/"))
+static GParamSpec *properties [N_PROPS];
+
+static const char *
+gbp_git_branch_get_name (GbpGitBranch *self)
+{
+  const char *id;
+
+  g_assert (GBP_IS_GIT_BRANCH (self));
+
+  if ((id = self->id) && g_str_has_prefix (id, "refs/heads/"))
     id += strlen ("refs/heads/");
 
-  return g_strdup (id);
+  return id;
 }
 
 static void
-vcs_branch_iface_init (IdeVcsBranchInterface *iface)
-{
-  iface->get_name = gbp_git_branch_get_name;
-  iface->get_id = gbp_git_branch_get_id;
-}
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitBranch, gbp_git_branch, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_BRANCH, vcs_branch_iface_init))
-
-static void
-gbp_git_branch_finalize (GObject *object)
+gbp_git_branch_dispose (GObject *object)
 {
   GbpGitBranch *self = (GbpGitBranch *)object;
 
-  g_clear_pointer (&self->id, g_free);
+  ide_clear_string (&self->id);
 
-  G_OBJECT_CLASS (gbp_git_branch_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gbp_git_branch_parent_class)->dispose (object);
+}
+
+static void
+gbp_git_branch_get_property (GObject    *object,
+                             guint       prop_id,
+                             GValue     *value,
+                             GParamSpec *pspec)
+{
+  GbpGitBranch *self = GBP_GIT_BRANCH (object);
+
+  switch (prop_id)
+    {
+    case PROP_ID:
+      g_value_set_string (value, self->id);
+      break;
+
+    case PROP_NAME:
+      g_value_set_string (value, gbp_git_branch_get_name (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gbp_git_branch_set_property (GObject      *object,
+                             guint         prop_id,
+                             const GValue *value,
+                             GParamSpec   *pspec)
+{
+  GbpGitBranch *self = GBP_GIT_BRANCH (object);
+
+  switch (prop_id)
+    {
+    case PROP_ID:
+      self->id = g_value_dup_string (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -75,7 +115,19 @@ gbp_git_branch_class_init (GbpGitBranchClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gbp_git_branch_finalize;
+  object_class->dispose = gbp_git_branch_dispose;
+  object_class->get_property = gbp_git_branch_get_property;
+  object_class->set_property = gbp_git_branch_set_property;
+
+  properties [PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL, NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_NAME] =
+    g_param_spec_string ("name", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -84,12 +136,9 @@ gbp_git_branch_init (GbpGitBranch *self)
 }
 
 GbpGitBranch *
-gbp_git_branch_new (const gchar *id)
+gbp_git_branch_new (const char *id)
 {
-  GbpGitBranch *self;
-
-  self = g_object_new (GBP_TYPE_GIT_BRANCH, NULL);
-  self->id = g_strdup (id);
-
-  return g_steal_pointer (&self);
+  return g_object_new (GBP_TYPE_GIT_BRANCH,
+                       "id", id,
+                       NULL);
 }

@@ -293,7 +293,7 @@ gbp_vcsui_tree_addin_list_branches_cb (GObject      *object,
       for (guint i = 0; i < branches->len; i++)
         {
           IdeVcsBranch *branch = g_ptr_array_index (branches, i);
-          g_autofree gchar *name = ide_vcs_branch_get_name (branch);
+          g_autofree gchar *name = ide_vcs_branch_dup_name (branch);
           g_autoptr(IdeTreeNode) child = NULL;
 
           child = g_object_new (IDE_TYPE_TREE_NODE,

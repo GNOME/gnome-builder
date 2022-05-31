@@ -28,6 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpGitBranch, gbp_git_branch, GBP, GIT_BRANCH, GObject)
 
-GbpGitBranch *gbp_git_branch_new (const gchar *id);
+GbpGitBranch *gbp_git_branch_new (const char *id);
 
 G_END_DECLS
