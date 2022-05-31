@@ -43,6 +43,8 @@ struct _IdeVcsCloneRequest
   char         *branch_name;
   char         *module_name;
   char         *uri;
+
+  guint         fetching_branches;
 };
 
 enum {
@@ -51,6 +53,7 @@ enum {
   PROP_AUTHOR_NAME,
   PROP_CAN_SELECT_BRANCH,
   PROP_BRANCH_MODEL,
+  PROP_BRANCH_MODEL_BUSY,
   PROP_BRANCH_NAME,
   PROP_DIRECTORY,
   PROP_MODULE_NAME,
@@ -134,6 +137,10 @@ ide_vcs_clone_request_get_property (GObject    *object,
 
     case PROP_BRANCH_MODEL:
       g_value_set_object (value, ide_vcs_clone_request_get_branch_model (self));
+      break;
+
+    case PROP_BRANCH_MODEL_BUSY:
+      g_value_set_boolean (value, self->fetching_branches);
       break;
 
     case PROP_BRANCH_NAME:
@@ -236,13 +243,17 @@ ide_vcs_clone_request_class_init (IdeVcsCloneRequestClass *klass)
     g_param_spec_object ("branch-model", NULL, NULL, G_TYPE_LIST_MODEL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_CAN_SELECT_BRANCH] =
-    g_param_spec_boolean ("can-select-branch", NULL, NULL, FALSE,
+  properties [PROP_BRANCH_MODEL_BUSY] =
+    g_param_spec_boolean ("branch-model-busy", NULL, NULL, FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_BRANCH_NAME] =
     g_param_spec_string ("branch-name", NULL, NULL, NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CAN_SELECT_BRANCH] =
+    g_param_spec_boolean ("can-select-branch", NULL, NULL, FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DIRECTORY] =
     g_param_spec_object ("directory", NULL, NULL, G_TYPE_FILE,
@@ -466,6 +477,9 @@ ide_vcs_clone_request_populate_branches_cb (GObject *object,
   if (g_set_object (&self->branch_model, branches))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH_MODEL]);
 
+  self->fetching_branches--;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH_MODEL_BUSY]);
+
   IDE_EXIT;
 }
 
@@ -498,11 +512,15 @@ ide_vcs_clone_request_populate_branches (IdeVcsCloneRequest *self)
   g_clear_object (&self->cancellable);
   self->cancellable = g_cancellable_new ();
 
+  self->fetching_branches++;
+
   ide_vcs_cloner_list_branches_async (self->cloner,
                                       uri,
                                       self->cancellable,
                                       ide_vcs_clone_request_populate_branches_cb,
                                       g_object_ref (self));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BRANCH_MODEL_BUSY]);
 
   IDE_EXIT;
 }
