@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 #define ide_str_equal(str1,str2)  (strcmp((char*)str1,(char*)str2)==0)
 #define ide_str_equal0(str1,str2) (g_strcmp0((char*)str1,(char*)str2)==0)
 #define ide_strv_empty0(strv)     (((strv) == NULL) || ((strv)[0] == NULL))
-#define ide_set_string(ptr,str)   (ide_take_string((ptr), g_strdup(str)))
 
 #define ide_clear_param(pptr, pval) \
   G_STMT_START { if (pptr) { *(pptr) = pval; }; } G_STMT_END
@@ -89,24 +88,35 @@ _g_object_unref0 (gpointer instance)
 }
 
 static inline gboolean
-ide_take_string (gchar **ptr,
-                 gchar  *str)
+ide_set_string (char       **ptr,
+                const char  *str)
 {
-  if (*ptr != str)
-    {
-      g_free (*ptr);
-      *ptr = str;
-      return TRUE;
-    }
+  if (*ptr == str || g_strcmp0 (*ptr, str) == 0)
+    return FALSE;
 
-  return FALSE;
+  g_clear_pointer (ptr, g_free);
+  *ptr = g_strdup (str);
+  return TRUE;
 }
 
 static inline void
-ide_clear_string (gchar **ptr)
+ide_take_string (char **ptr,
+                 char  *str)
 {
-  g_free (*ptr);
-  *ptr = NULL;
+  if (*ptr == str || g_strcmp0 (*ptr, str) == 0)
+    {
+      g_free (str);
+      return;
+    }
+
+  g_clear_pointer (ptr, g_free);
+  *ptr = g_steal_pointer (&str);
+}
+
+static inline void
+ide_clear_string (char **ptr)
+{
+  g_clear_pointer (ptr, g_free);
 }
 
 static inline GList *
