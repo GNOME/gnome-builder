@@ -27,20 +27,24 @@
 #include <adwaita.h>
 #include <vte/vte.h>
 
+#include <libide-gui.h>
 #include <libide-projects.h>
 
 #include "gbp-vcsui-clone-page.h"
 
 struct _GbpVcsuiClonePage
 {
-  GtkWidget    parent_instance;
+  GtkWidget           parent_instance;
 
-  GtkWidget   *main;
-  AdwEntryRow *location_row;
-  AdwEntryRow *author_name_row;
-  AdwEntryRow *author_email_row;
-  GtkStack    *stack;
-  VteTerminal *terminal;
+  AdwEntryRow        *author_email_row;
+  AdwEntryRow        *author_name_row;
+  GtkMenuButton      *branch_button;
+  AdwEntryRow        *location_row;
+  GtkWidget          *main;
+  GtkStack           *stack;
+  VteTerminal        *terminal;
+
+  IdeVcsCloneRequest *request;
 };
 
 G_DEFINE_FINAL_TYPE (GbpVcsuiClonePage, gbp_vcsui_clone_page, GTK_TYPE_WIDGET)
@@ -60,7 +64,7 @@ location_row_changed_cb (GbpVcsuiClonePage *self,
   expanded = ide_path_expand (text);
   directory = g_file_new_for_path (expanded);
 
-  /* TODO: set value for clone input */
+  ide_vcs_clone_request_set_directory (self->request, directory);
 }
 
 static void
@@ -138,10 +142,62 @@ clone_action (GtkWidget  *widget,
 }
 
 static void
+branch_activated_cb (GbpVcsuiClonePage *self,
+                     guint              position,
+                     GtkListView       *list_view)
+{
+  g_autoptr(IdeVcsBranch) branch = NULL;
+  g_autofree char *branch_id = NULL;
+  GListModel *model;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
+  g_assert (GTK_IS_LIST_VIEW (list_view));
+
+  model = G_LIST_MODEL (gtk_list_view_get_model (list_view));
+  branch = g_list_model_get_item (model, position);
+  branch_id = ide_vcs_branch_dup_id (branch);
+
+  ide_vcs_clone_request_set_branch_name (self->request, branch_id);
+
+  IDE_EXIT;
+}
+
+static void
+branch_popover_show_cb (GbpVcsuiClonePage *self,
+                        GtkPopover        *popover)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
+  g_assert (GTK_IS_POPOVER (popover));
+
+  ide_vcs_clone_request_populate_branches (self->request);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_vcsui_clone_page_root (GtkWidget *widget)
+{
+  GbpVcsuiClonePage *self = (GbpVcsuiClonePage *)widget;
+  IdeContext *context;
+
+  g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
+
+  GTK_WIDGET_CLASS (gbp_vcsui_clone_page_parent_class)->root (widget);
+
+  if ((context = ide_widget_get_context (widget)))
+    ide_object_append (IDE_OBJECT (context), IDE_OBJECT (self->request));
+}
+
+static void
 gbp_vcsui_clone_page_dispose (GObject *object)
 {
   GbpVcsuiClonePage *self = (GbpVcsuiClonePage *)object;
 
+  ide_object_destroy (IDE_OBJECT (self->request));
   g_clear_pointer (&self->main, gtk_widget_unparent);
 
   G_OBJECT_CLASS (gbp_vcsui_clone_page_parent_class)->dispose (object);
@@ -155,22 +211,29 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
 
   object_class->dispose = gbp_vcsui_clone_page_dispose;
 
+  widget_class->root = gbp_vcsui_clone_page_root;
+
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/vcsui/gbp-vcsui-clone-page.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_email_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_name_row);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, branch_button);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, location_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, main);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, request);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, terminal);
 
   gtk_widget_class_bind_template_callback (widget_class, location_row_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, branch_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, branch_popover_show_cb);
 
   gtk_widget_class_install_action (widget_class, "clone-page.select-folder", NULL, select_folder_action);
   gtk_widget_class_install_action (widget_class, "clone-page.clone", NULL, clone_action);
 
   g_type_ensure (VTE_TYPE_TERMINAL);
+  g_type_ensure (IDE_TYPE_VCS_CLONE_REQUEST);
 }
 
 static void
