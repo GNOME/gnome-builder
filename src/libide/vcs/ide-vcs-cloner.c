@@ -304,3 +304,44 @@ ide_vcs_cloner_clone_simple (IdeContext       *context,
   return TRUE;
 }
 
+void
+ide_vcs_cloner_list_branches_async (IdeVcsCloner        *self,
+                                    IdeVcsUri           *uri,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_VCS_CLONER (self));
+  g_return_if_fail (uri != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_VCS_CLONER_GET_IFACE (self)->list_branches_async (self, uri, cancellable, callback, user_data);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_vcs_cloner_list_branches_finish:
+ *
+ * Returns: (transfer full): a #GListModel of #IdeVcsBranch
+ */
+GListModel *
+ide_vcs_cloner_list_branches_finish (IdeVcsCloner  *self,
+                                     GAsyncResult  *result,
+                                     GError       **error)
+{
+  GListModel *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_VCS_CLONER (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  ret = IDE_VCS_CLONER_GET_IFACE (self)->list_branches_finish (self, result, error);
+
+  g_return_val_if_fail (!ret || G_IS_LIST_MODEL (ret), NULL);
+
+  IDE_RETURN (ret);
+}
