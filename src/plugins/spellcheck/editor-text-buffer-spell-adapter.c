@@ -387,12 +387,17 @@ apply_error_style_cb (GtkSourceBuffer *buffer,
 {
   GtkSourceStyleScheme *scheme;
   GtkSourceStyle *style;
+  static GdkRGBA error_color;
 
   g_assert (GTK_SOURCE_IS_BUFFER (buffer));
   g_assert (GTK_IS_TEXT_TAG (tag));
 
+  if G_UNLIKELY (error_color.alpha == .0)
+    gdk_rgba_parse (&error_color, "#e01b24");
+
   g_object_set (tag,
-                "underline", PANGO_UNDERLINE_ERROR,
+                "underline", PANGO_UNDERLINE_ERROR_LINE,
+                "underline-rgba", &error_color,
                 "background-set", FALSE,
                 "foreground-set", FALSE,
                 "weight-set", FALSE,
