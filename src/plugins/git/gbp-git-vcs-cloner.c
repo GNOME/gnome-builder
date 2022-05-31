@@ -316,6 +316,80 @@ should_ignore (const char *name)
   return FALSE;
 }
 
+enum {
+  CLASS_HEAD,
+  CLASS_MAIN,
+  CLASS_MASTER,
+  CLASS_FEATURE,
+  CLASS_GNOME,
+  CLASS_OTHER,
+  CLASS_WIP,
+};
+
+static int
+classify_branch_name (const char *branch)
+{
+  switch (branch[0])
+    {
+    case 'H':
+      if (strcmp (branch, "HEAD") == 0)
+        return CLASS_HEAD;
+      break;
+
+    case 'm':
+      if (strcmp (branch, "main") == 0)
+        return CLASS_MAIN;
+      else if (strcmp (branch, "master") == 0)
+        return CLASS_MASTER;
+      break;
+
+    case 'w':
+      if (g_str_has_prefix (branch, "wip/"))
+        return CLASS_WIP;
+      break;
+
+    case 'f':
+      if (g_str_has_prefix (branch, "feature/"))
+        return CLASS_FEATURE;
+      break;
+
+    case 'g':
+      if (g_str_has_prefix (branch, "gnome-"))
+        return CLASS_GNOME;
+      break;
+
+    default:
+      break;
+    }
+
+  return CLASS_OTHER;
+}
+
+static inline const char *
+get_name (const char *ref)
+{
+  if (ref[0] == 'r' && g_str_has_prefix (ref, "refs/heads/"))
+    return ref + strlen ("refs/heads/");
+  return ref;
+}
+
+static int
+strptrcmp (const char * const *ptra,
+           const char * const *ptrb)
+{
+  const char *name_a = get_name (*ptra);
+  const char *name_b = get_name (*ptrb);
+  int class_a = classify_branch_name (name_a);
+  int class_b = classify_branch_name (name_b);
+
+  if (class_a < class_b)
+    return -1;
+  else if (class_a > class_b)
+    return 1;
+  else
+    return strcmp (name_a, name_b);
+}
+
 static void
 gbp_git_vcs_cloner_list_remote_refs_by_kind_cb (GObject      *object,
                                                 GAsyncResult *result,
@@ -340,7 +414,7 @@ gbp_git_vcs_cloner_list_remote_refs_by_kind_cb (GObject      *object,
     }
 
   g_qsort_with_data (refs, g_strv_length (refs), sizeof (char *),
-                     (GCompareDataFunc)g_strcmp0, NULL);
+                     (GCompareDataFunc)strptrcmp, NULL);
   store = g_list_store_new (GBP_TYPE_GIT_BRANCH);
 
   for (guint i = 0; refs[i]; i++)
