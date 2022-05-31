@@ -66,5 +66,7 @@ IDE_AVAILABLE_IN_ALL
 gsize           ide_get_system_page_size (void) G_GNUC_CONST;
 IDE_AVAILABLE_IN_ALL
 gchar          *ide_get_relocatable_path (const gchar *path);
+IDE_AVAILABLE_IN_ALL
+const char     *ide_get_projects_dir     (void);
 
 G_END_DECLS
