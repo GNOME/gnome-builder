@@ -39,6 +39,9 @@ struct _GbpEditoruiWorkspaceAddin
   IdeWorkspace             *workspace;
   PanelStatusbar           *statusbar;
 
+  GSimpleActionGroup       *actions;
+
+  IdeBindingGroup          *buffer_bindings;
   IdeSignalGroup           *buffer_signals;
   IdeSignalGroup           *view_signals;
 
@@ -309,7 +312,6 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
-  g_autoptr(GSimpleActionGroup) group = NULL;
   g_autoptr(GMenuModel) encoding_menu = NULL;
   GtkPopover *popover;
   GMenu *menu;
@@ -322,14 +324,18 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->workspace = workspace;
   self->statusbar = ide_workspace_get_statusbar (workspace);
 
-  group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group),
+  self->encoding_label = g_object_new (GTK_TYPE_LABEL,
+                                       "label", "UTF-8",
+                                       NULL);
+
+  self->actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    self);
   gtk_widget_insert_action_group (GTK_WIDGET (workspace),
                                   "editorui",
-                                  G_ACTION_GROUP (group));
+                                  G_ACTION_GROUP (self->actions));
 
   self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
   ide_signal_group_connect_object (self->buffer_signals,
@@ -337,6 +343,11 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    G_CALLBACK (cursor_moved_cb),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+  self->buffer_bindings = ide_binding_group_new ();
+  ide_binding_group_bind (self->buffer_bindings, "charset",
+                          self->encoding_label, "label",
+                          G_BINDING_SYNC_CREATE);
 
   self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
   ide_signal_group_connect_object (self->view_signals,
@@ -362,9 +373,6 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   /* Encoding */
   encoding_menu = ide_editor_encoding_menu_new ("editorui.encoding");
-  self->encoding_label = g_object_new (GTK_TYPE_LABEL,
-                                       "label", "UTF-8",
-                                       NULL);
   self->encoding = g_object_new (GTK_TYPE_MENU_BUTTON,
                                  "menu-model", encoding_menu,
                                  "direction", GTK_ARROW_UP,
@@ -434,6 +442,9 @@ gbp_editorui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "editorui", NULL);
+
+  g_clear_object (&self->buffer_bindings);
   g_clear_object (&self->buffer_signals);
   g_clear_object (&self->view_signals);
   g_clear_object (&self->editor_settings);
@@ -466,15 +477,24 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
 
   g_clear_handle_id (&self->queued_cursor_moved, g_source_remove);
 
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "encoding");
+
   if (!IDE_IS_EDITOR_PAGE (page))
     page = NULL;
 
   if (page != NULL)
     {
+      g_autoptr(GPropertyAction) encoding_action = NULL;
+
       view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
       buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
+
+      /* Export charset control via action */
+      encoding_action = g_property_action_new ("encoding", buffer, "charset");
+      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (encoding_action));
     }
 
+  ide_binding_group_set_source (self->buffer_bindings, buffer);
   ide_signal_group_set_target (self->buffer_signals, buffer);
   ide_signal_group_set_target (self->view_signals, view);
 
