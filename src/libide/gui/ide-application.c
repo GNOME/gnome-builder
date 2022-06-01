@@ -173,7 +173,7 @@ ide_application_startup (GApplication *app)
   styles = gtk_source_style_scheme_manager_get_default ();
   style_path = g_build_filename (g_get_home_dir (), ".local", "share", "gtksourceview-5", "styles", NULL);
   gtk_source_style_scheme_manager_append_search_path (styles, style_path);
-  gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gtksourceview-5/styles/");
+  gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gnome-builder/styles/");
 
   /* Add custom locations for language specs */
   langs = gtk_source_language_manager_get_default ();
