@@ -139,11 +139,10 @@ gbp_find_other_file_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_FIND_OTHER_FILE_WORKSPACE_ADDIN (self));
   g_assert (!page || IDE_IS_PAGE (page));
 
+  gbp_find_other_file_workspace_addin_clear (self);
+
   if (!IDE_IS_EDITOR_PAGE (page))
-    {
-      gbp_find_other_file_workspace_addin_clear (self);
-      IDE_EXIT;
-    }
+    IDE_EXIT;
 
   context = ide_workspace_get_context (self->workspace);
   project = ide_project_from_context (context);
