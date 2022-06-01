@@ -27,6 +27,7 @@
 #include <adwaita.h>
 #include <vte/vte.h>
 
+#include <libide-gtk.h>
 #include <libide-gui.h>
 #include <libide-projects.h>
 
@@ -45,6 +46,7 @@ struct _GbpVcsuiClonePage
   GtkStack           *stack;
   VteTerminal        *terminal;
   AdwEntryRow        *uri_row;
+  IdeProgressIcon    *progress;
 
   IdeVcsCloneRequest *request;
 };
@@ -105,12 +107,9 @@ select_folder_action (GtkWidget  *widget,
                                         GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
                                         _("Select"),
                                         _("Cancel"));
-  /* TODO: Apply folder from clone input */
-#if 0
   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (native),
-                                       ide_template_input_get_directory (self->input),
+                                       ide_vcs_clone_request_get_directory (self->request),
                                        NULL);
-#endif
   g_signal_connect_object (native,
                            "response",
                            G_CALLBACK (select_folder_response_cb),
@@ -120,25 +119,117 @@ select_folder_action (GtkWidget  *widget,
 }
 
 static void
+gbp_vcsui_clone_page_clone_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
+{
+  IdeVcsCloneRequest *request = (IdeVcsCloneRequest *)object;
+  g_autoptr(GbpVcsuiClonePage) self = user_data;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) directory = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_VCS_CLONE_REQUEST (request));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
+
+  gtk_widget_hide (GTK_WIDGET (self->progress));
+
+  if (!(directory = ide_vcs_clone_request_clone_finish (request, result, &error)))
+    {
+      g_message ("Failed to clone repository: %s", error->message);
+      gtk_stack_set_visible_child_name (self->stack, "details");
+      IDE_GOTO (failure);
+    }
+  else
+    {
+      g_debug ("Clone request complete\n");
+    }
+
+failure:
+  IDE_EXIT;
+}
+
+static void
+notify_progress_cb (IdeNotification *notif,
+                    GParamSpec      *pspec,
+                    IdeProgressIcon *icon)
+{
+  IdeAnimation *anim;
+  double progress;
+
+  g_assert (IDE_IS_NOTIFICATION (notif));
+  g_assert (IDE_IS_PROGRESS_ICON (icon));
+
+  anim = g_object_get_data (G_OBJECT (icon), "ANIMATION");
+  if (anim != NULL)
+    ide_animation_stop (anim);
+
+  progress = ide_notification_get_progress (notif);
+  anim = ide_object_animate (icon,
+                             IDE_ANIMATION_LINEAR,
+                             200,
+                             NULL,
+                             "progress", progress,
+                             NULL);
+  g_object_set_data_full (G_OBJECT (icon),
+                          "ANIMATION",
+                          g_object_ref (anim),
+                          g_object_unref);
+}
+
+static void
+notify_body_cb (IdeNotification *notif,
+                GParamSpec      *pspec,
+                VteTerminal     *terminal)
+{
+  g_autofree char *body = NULL;
+
+  g_assert (IDE_IS_NOTIFICATION (notif));
+  g_assert (VTE_IS_TERMINAL (terminal));
+
+  /* TODO: we need to plumb something better than IdeNotification to pass
+   * essentially PTY data between the worker and the UI process. but this
+   * will be fine for now until we can get to it.
+   */
+
+  if ((body = ide_notification_dup_body (notif)))
+    vte_terminal_feed (terminal, body, -1);
+}
+
+static void
 clone_action (GtkWidget  *widget,
               const char *action_name,
               GVariant   *param)
 {
   GbpVcsuiClonePage *self = (GbpVcsuiClonePage *)widget;
-  static guint count;
+  g_autoptr(IdeNotification) notif = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
 
-  if (count++ % 2 == 0)
-  {
-    gtk_stack_set_visible_child_name (self->stack, "progress");
-  }
-  else
-  {
-    gtk_stack_set_visible_child_name (self->stack, "details");
-  }
+  gtk_stack_set_visible_child_name (self->stack, "progress");
+  gtk_widget_show (GTK_WIDGET (self->progress));
+
+  notif = ide_notification_new ();
+  g_signal_connect_object (notif,
+                           "notify::progress",
+                           G_CALLBACK (notify_progress_cb),
+                           self->progress,
+                           0);
+  g_signal_connect_object (notif,
+                           "notify::body",
+                           G_CALLBACK (notify_body_cb),
+                           self->terminal,
+                           0);
+
+  ide_vcs_clone_request_clone_async (self->request,
+                                     notif,
+                                     NULL,
+                                     gbp_vcsui_clone_page_clone_cb,
+                                     g_object_ref (self));
 
   IDE_EXIT;
 }
@@ -281,6 +372,7 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, branch_label);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, location_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, main);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, progress);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, request);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, terminal);
@@ -295,6 +387,7 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
   gtk_widget_class_install_action (widget_class, "clone-page.select-folder", NULL, select_folder_action);
   gtk_widget_class_install_action (widget_class, "clone-page.clone", NULL, clone_action);
 
+  g_type_ensure (IDE_TYPE_PROGRESS_ICON);
   g_type_ensure (VTE_TYPE_TERMINAL);
   g_type_ensure (IDE_TYPE_VCS_CLONE_REQUEST);
 }
@@ -311,5 +404,4 @@ gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
   gtk_editable_set_text (GTK_EDITABLE (self->author_name_row), g_get_real_name ());
 
   vte_terminal_set_colors (self->terminal, NULL, &transparent, NULL, 0);
-  vte_terminal_feed (self->terminal, "Cloning git repository…\r\n", -1);
 }
