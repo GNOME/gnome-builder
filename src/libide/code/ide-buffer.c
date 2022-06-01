@@ -71,6 +71,8 @@ struct _IdeBuffer
 {
   GtkSourceBuffer         parent_instance;
 
+  const GtkSourceEncoding *encoding;
+
   /* Owned references */
   IdeExtensionSetAdapter *addins;
   IdeExtensionSetAdapter *symbol_resolvers;
@@ -147,6 +149,7 @@ enum {
   PROP_BUFFER_MANAGER,
   PROP_CHANGE_MONITOR,
   PROP_CHANGED_ON_VOLUME,
+  PROP_CHARSET,
   PROP_ENABLE_ADDINS,
   PROP_DIAGNOSTICS,
   PROP_FAILED,
@@ -567,6 +570,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_boolean (value, ide_buffer_get_changed_on_volume (self));
       break;
 
+    case PROP_CHARSET:
+      g_value_set_string (value, ide_buffer_get_charset (self));
+      break;
+
     case PROP_ENABLE_ADDINS:
       g_value_set_boolean (value, self->enable_addins);
       break;
@@ -646,6 +653,10 @@ ide_buffer_set_property (GObject      *object,
       ide_buffer_set_change_monitor (self, g_value_get_object (value));
       break;
 
+    case PROP_CHARSET:
+      ide_buffer_set_charset (self, g_value_get_string (value));
+      break;
+
     case PROP_ENABLE_ADDINS:
       self->enable_addins = g_value_get_boolean (value);
       break;
@@ -720,6 +731,20 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          "Change Monitor",
                          "Change Monitor",
                          IDE_TYPE_BUFFER_CHANGE_MONITOR,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeBuffer:charset:
+   *
+   * Sets the encoding to use for the buffer based on the "charset"
+   * specified. This is useful to ensure that characters may not be
+   * lost from the original encoding.
+   */
+  properties [PROP_CHARSET] =
+    g_param_spec_string ("charset",
+                         "Character Set",
+                         "The encoding character set",
+                         "UTF-8",
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
@@ -1600,12 +1625,18 @@ ide_buffer_save_file_settle_cb (GObject      *object,
     }
 
   saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (self), state->source_file);
+
   /* At this point, we've notified the user of changes to the underlying file using
    * the infobar, so just save the file knowing that we are overwriting things.
    */
   gtk_source_file_saver_set_flags (saver,
                                    (GTK_SOURCE_FILE_SAVER_FLAGS_IGNORE_INVALID_CHARS |
                                     GTK_SOURCE_FILE_SAVER_FLAGS_IGNORE_MODIFICATION_TIME));
+
+  /* Propagate the requested encoding, if necessary */
+  if (self->encoding != NULL)
+    gtk_source_file_saver_set_encoding (saver, self->encoding);
+
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
                                     ide_task_get_cancellable (task),
@@ -4153,4 +4184,45 @@ ide_buffer_remove_commit_funcs (IdeBuffer *self,
     }
 
   g_warning ("Failed to locate commit handler %u", commit_funcs_handler);
+}
+
+const char *
+ide_buffer_get_charset (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return self->encoding
+         ? gtk_source_encoding_get_charset (self->encoding)
+         : "UTF-8";
+}
+
+void
+ide_buffer_set_charset (IdeBuffer  *self,
+                        const char *charset)
+{
+  GSList *all;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  if (charset == NULL || charset[0] == 0)
+    charset = "UTF-8";
+
+  all = gtk_source_encoding_get_all ();
+
+  for (const GSList *iter = all; iter; iter = iter->next)
+    {
+      const GtkSourceEncoding *encoding = iter->data;
+
+      if (g_strcmp0 (charset, gtk_source_encoding_get_charset (encoding)) == 0)
+        {
+          if (self->encoding != encoding)
+            {
+              self->encoding = encoding;
+              g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHARSET]);
+              break;
+            }
+        }
+    }
+
+  g_slist_free (all);
 }

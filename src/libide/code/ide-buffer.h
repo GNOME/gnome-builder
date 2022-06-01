@@ -198,5 +198,10 @@ guint                   ide_buffer_add_commit_funcs              (IdeBuffer     
 IDE_AVAILABLE_IN_ALL
 void                    ide_buffer_remove_commit_funcs           (IdeBuffer               *self,
                                                                   guint                    commit_funcs_handler);
+IDE_AVAILABLE_IN_ALL
+const char             *ide_buffer_get_charset                   (IdeBuffer               *self);
+IDE_AVAILABLE_IN_ALL
+void                    ide_buffer_set_charset                   (IdeBuffer               *self,
+                                                                  const char              *charset);
 
 G_END_DECLS
