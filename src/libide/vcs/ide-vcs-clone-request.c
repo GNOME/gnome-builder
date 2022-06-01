@@ -637,11 +637,11 @@ ide_vcs_clone_request_clone_async (IdeVcsCloneRequest  *self,
   g_variant_dict_init (&params, NULL);
   if (!ide_str_empty0 (author_name) &&
       !ide_str_equal0 (author_name, g_get_real_name ()))
-    g_variant_dict_insert (&params, "s", "user.name", author_name);
+    g_variant_dict_insert (&params, "user.name", "s", author_name);
   if (!ide_str_empty0 (self->author_email))
-    g_variant_dict_insert (&params, "s", "user.email", self->author_email);
+    g_variant_dict_insert (&params, "user.email", "s", self->author_email);
   if (!ide_str_empty0 (self->branch_name))
-    g_variant_dict_insert (&params, "s", "branch", self->branch_name);
+    g_variant_dict_insert (&params, "branch", "s", self->branch_name);
 
   ide_vcs_cloner_clone_async (self->cloner,
                               uri_str,
