@@ -77,6 +77,31 @@ static void
     }
 }
 
+static gboolean
+newline_type_to_label (GBinding     *binding,
+                       const GValue *from_value,
+                       GValue       *to_value,
+                       gpointer      user_data)
+{
+  GtkSourceNewlineType newline_type = g_value_get_enum (from_value);
+
+  switch (newline_type)
+    {
+    default:
+    case GTK_SOURCE_NEWLINE_TYPE_LF:
+      g_value_set_static_string (to_value, "LF");
+      return TRUE;
+
+    case GTK_SOURCE_NEWLINE_TYPE_CR:
+      g_value_set_static_string (to_value, "CR");
+      return TRUE;
+
+    case GTK_SOURCE_NEWLINE_TYPE_CR_LF:
+      g_value_set_static_string (to_value, "CR/LF");
+      return TRUE;
+    }
+}
+
 static void
 notify_overwrite_cb (GbpEditoruiWorkspaceAddin *self)
 {
@@ -324,9 +349,8 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->workspace = workspace;
   self->statusbar = ide_workspace_get_statusbar (workspace);
 
-  self->encoding_label = g_object_new (GTK_TYPE_LABEL,
-                                       "label", "UTF-8",
-                                       NULL);
+  self->encoding_label = g_object_new (GTK_TYPE_LABEL, NULL);
+  self->line_ends_label = g_object_new (GTK_TYPE_LABEL, NULL);
 
   self->actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
@@ -348,6 +372,11 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   ide_binding_group_bind (self->buffer_bindings, "charset",
                           self->encoding_label, "label",
                           G_BINDING_SYNC_CREATE);
+  ide_binding_group_bind_full (self->buffer_bindings, "newline-type",
+                               self->line_ends_label, "label",
+                               G_BINDING_SYNC_CREATE,
+                               newline_type_to_label,
+                               NULL, NULL, NULL);
 
   self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
   ide_signal_group_connect_object (self->view_signals,
@@ -383,9 +412,6 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   /* Line ending */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-line-ends-menu");
-  self->line_ends_label = g_object_new (GTK_TYPE_LABEL,
-                                        "label", "LF",
-                                        NULL);
   self->line_ends = g_object_new (GTK_TYPE_MENU_BUTTON,
                                   "menu-model", menu,
                                   "direction", GTK_ARROW_UP,
@@ -477,7 +503,9 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
 
   g_clear_handle_id (&self->queued_cursor_moved, g_source_remove);
 
+  /* Remove now invalid actions */
   g_action_map_remove_action (G_ACTION_MAP (self->actions), "encoding");
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "newline-type");
 
   if (!IDE_IS_EDITOR_PAGE (page))
     page = NULL;
@@ -485,6 +513,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   if (page != NULL)
     {
       g_autoptr(GPropertyAction) encoding_action = NULL;
+      g_autoptr(GPropertyAction) newline_action = NULL;
 
       view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
       buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
@@ -492,6 +521,10 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
       /* Export charset control via action */
       encoding_action = g_property_action_new ("encoding", buffer, "charset");
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (encoding_action));
+
+      /* Export newline-type via action */
+      newline_action = g_property_action_new ("newline-type", buffer, "newline-type");
+      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (newline_action));
     }
 
   ide_binding_group_set_source (self->buffer_bindings, buffer);

@@ -367,7 +367,7 @@ update_menus (IdeApplication *app)
 
   menu = ide_application_get_menu_by_id (app, "editorui-line-ends-section");
   lf = g_menu_item_new (lf_name, NULL);
-  g_menu_item_set_action_and_target (lf, "editor.newline", "s", "lf");
+  g_menu_item_set_action_and_target (lf, "editorui.newline-type", "s", "lf");
   g_menu_prepend_item (menu, lf);
 }
 
