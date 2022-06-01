@@ -145,7 +145,17 @@ gbp_symbol_popover_search_changed_cb (GbpSymbolPopover *self,
 static gboolean
 gbp_symbol_popover_grab_focus (GtkWidget *widget)
 {
-  return gtk_widget_grab_focus (GTK_WIDGET (GBP_SYMBOL_POPOVER (widget)->search_entry));
+  GbpSymbolPopover *self = (GbpSymbolPopover *)widget;
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SYMBOL_POPOVER (self));
+
+  ret = gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
+  gtk_editable_select_region (GTK_EDITABLE (self->search_entry), 0, -1);
+
+  IDE_RETURN (ret);
 }
 
 static gboolean
