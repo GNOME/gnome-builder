@@ -97,159 +97,17 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwActionRow" id="language_row">
+                  <object class="AdwComboRow" id="language_row">
                     <property name="title" translatable="yes">Language</property>
-                    <child type="suffix">
-                      <object class="GtkMenuButton" id="language_button">
-                        <property name="valign">center</property>
-                        <property name="label" bind-source="input" bind-property="language" bind-flags="sync-create"/>
-                        <style>
-                          <class name="flat"/>
-                        </style>
-                        <property name="popover">
-                          <object class="GtkPopover">
-                            <child>
-                              <object class="GtkFrame">
-                                <property name="margin-bottom">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-start">6</property>
-                                <property name="margin-top">6</property>
-                                <child>
-                                  <object class="GtkScrolledWindow">
-                                    <property name="propagate-natural-height">true</property>
-                                    <property name="propagate-natural-width">true</property>
-                                    <property name="min-content-width">150</property>
-                                    <property name="min-content-height">200</property>
-                                    <child>
-                                      <object class="GtkListView">
-                                        <signal name="activate" handler="language_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
-                                        <property name="model">
-                                          <object class="GtkSingleSelection">
-                                            <property name="model" bind-source="input" bind-property="languages-model" bind-flags="sync-create"/>
-                                          </object>
-                                        </property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="single-click-activate">true</property>
-                                        <property name="factory">
-                                          <object class="GtkBuilderListItemFactory">
-                                            <property name="bytes"><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<interface>
-  <template class="GtkListItem">
-    <property name="child">
-      <object class="GtkBox">
-        <property name="spacing">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="xalign">0</property>
-            <property name="hexpand">true</property>
-            <binding name="label">
-              <lookup name="string" type="GtkStringObject">
-                <lookup name="item">GtkListItem</lookup>
-              </lookup>
-            </binding>
-          </object>
-        </child>
-      </object>
-    </property>
-  </template>
-</interface>
-]]>
-                                            </property>
-                                          </object>
-                                        </property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
+                    <property name="model" bind-source="input" bind-property="languages-model" bind-flags="sync-create"/>
+                    <signal name="notify::selected-item" handler="language_changed_cb" swapped="true" object="GbpCreateProjectWidget"/>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow">
+                  <object class="AdwComboRow">
                     <property name="title" translatable="yes">License</property>
-                    <child type="suffix">
-                      <object class="GtkMenuButton" id="licenses_button">
-                        <property name="valign">center</property>
-                        <property name="label" bind-source="input" bind-property="license-name" bind-flags="sync-create"/>
-                        <style>
-                          <class name="flat"/>
-                        </style>
-                        <property name="popover">
-                          <object class="GtkPopover">
-                            <child>
-                              <object class="GtkFrame">
-                                <property name="margin-bottom">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-start">6</property>
-                                <property name="margin-top">6</property>
-                                <child>
-                                  <object class="GtkScrolledWindow">
-                                    <property name="propagate-natural-height">true</property>
-                                    <property name="propagate-natural-width">true</property>
-                                    <property name="min-content-width">200</property>
-                                    <property name="min-content-height">200</property>
-                                    <child>
-                                      <object class="GtkListView">
-                                        <signal name="activate" handler="license_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
-                                        <property name="model">
-                                          <object class="GtkSingleSelection">
-                                            <property name="model" bind-source="input" bind-property="licenses-model" bind-flags="sync-create"/>
-                                          </object>
-                                        </property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="single-click-activate">true</property>
-                                        <property name="factory">
-                                          <object class="GtkBuilderListItemFactory">
-                                            <property name="bytes"><![CDATA[
-<?xml version="1.0" encoding="UTF-8"?>
-<interface>
-  <template class="GtkListItem">
-    <property name="child">
-      <object class="GtkBox">
-        <property name="spacing">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
-        <child>
-          <object class="GtkLabel">
-            <property name="xalign">0</property>
-            <property name="hexpand">true</property>
-            <binding name="label">
-              <lookup name="string" type="GtkStringObject">
-                <lookup name="item">GtkListItem</lookup>
-              </lookup>
-            </binding>
-          </object>
-        </child>
-      </object>
-    </property>
-  </template>
-</interface>
-]]>
-                                            </property>
-                                          </object>
-                                        </property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
+                    <property name="model" bind-source="input" bind-property="licenses-model" bind-flags="sync-create"/>
+                    <signal name="notify::selected-item" handler="license_changed_cb" swapped="true" object="GbpCreateProjectWidget"/>
                   </object>
                 </child>
                 <child>
@@ -264,53 +122,22 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwActionRow" id="template_row">
+                  <object class="AdwComboRow" id="template_row">
                     <property name="title" translatable="yes">Template</property>
-                    <child type="suffix">
-                      <object class="GtkMenuButton" id="template_button">
-                        <property name="valign">center</property>
-                        <property name="label" bind-source="input" bind-property="template-name" bind-flags="sync-create"/>
-                        <style>
-                          <class name="flat"/>
-                        </style>
-                        <property name="popover">
-                          <object class="GtkPopover">
-                            <child>
-                              <object class="GtkFrame">
-                                <property name="margin-bottom">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-start">6</property>
-                                <property name="margin-top">6</property>
-                                <child>
-                                  <object class="GtkScrolledWindow">
-                                    <property name="propagate-natural-height">true</property>
-                                    <property name="propagate-natural-width">true</property>
-                                    <property name="min-content-width">300</property>
-                                    <property name="min-content-height">200</property>
-                                    <child>
-                                      <object class="GtkListView">
-                                        <signal name="activate" handler="template_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
-                                        <property name="model">
-                                          <object class="GtkSingleSelection">
-                                            <property name="model" bind-source="input" bind-property="templates-model" bind-flags="sync-create"/>
-                                          </object>
-                                        </property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="single-click-activate">true</property>
-                                        <property name="factory">
-                                          <object class="GtkBuilderListItemFactory">
-                                            <property name="bytes"><![CDATA[
+                    <property name="model" bind-source="input" bind-property="templates-model" bind-flags="sync-create"/>
+                    <property name="expression">
+                      <lookup name="name" type="IdeProjectTemplate"/>
+                    </property>
+                    <signal name="notify::selected-item" handler="template_changed_cb" swapped="true" object="GbpCreateProjectWidget"/>
+                    <property name="list-factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
         <child>
           <object class="GtkLabel">
             <property name="xalign">0</property>
@@ -342,19 +169,9 @@
   </template>
 </interface>
 ]]>
-                                            </property>
-                                          </object>
-                                        </property>
-                                      </object>
-                                    </child>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                          </object>
                         </property>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
               </object>
