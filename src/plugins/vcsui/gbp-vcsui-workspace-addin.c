@@ -27,7 +27,7 @@
 #include <libide-gui.h>
 #include <libide-greeter.h>
 
-#include "gbp-vcsui-clone-widget.h"
+#include "gbp-vcsui-clone-page.h"
 #include "gbp-vcsui-switcher-popover.h"
 #include "gbp-vcsui-workspace-addin.h"
 
@@ -35,7 +35,7 @@ struct _GbpVcsuiWorkspaceAddin
 {
   GObject              parent_instance;
 
-  GbpVcsuiCloneWidget *clone;
+  GbpVcsuiClonePage   *clone;
 
   GtkMenuButton       *branch_button;
   GtkLabel            *branch_label;
@@ -54,7 +54,7 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   if (IDE_IS_GREETER_WORKSPACE (workspace))
     {
-      self->clone = g_object_new (GBP_TYPE_VCSUI_CLONE_WIDGET,
+      self->clone = g_object_new (GBP_TYPE_VCSUI_CLONE_PAGE,
                                   NULL);
       ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
                                       GTK_WIDGET (self->clone),
