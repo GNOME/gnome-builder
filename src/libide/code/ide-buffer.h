@@ -203,5 +203,10 @@ const char             *ide_buffer_get_charset                   (IdeBuffer     
 IDE_AVAILABLE_IN_ALL
 void                    ide_buffer_set_charset                   (IdeBuffer               *self,
                                                                   const char              *charset);
+IDE_AVAILABLE_IN_ALL
+GtkSourceNewlineType    ide_buffer_get_newline_type              (IdeBuffer               *self);
+IDE_AVAILABLE_IN_ALL
+void                    ide_buffer_set_newline_type              (IdeBuffer               *self,
+                                                                  GtkSourceNewlineType     newline_type);
 
 G_END_DECLS

@@ -108,6 +108,7 @@ struct _IdeBuffer
   guint                   changed_on_volume : 1;
   guint                   read_only : 1;
   guint                   highlight_diagnostics : 1;
+  GtkSourceNewlineType    newline_type : 2;
 };
 
 typedef struct
@@ -160,6 +161,7 @@ enum {
   PROP_HIGHLIGHT_DIAGNOSTICS,
   PROP_IS_TEMPORARY,
   PROP_LANGUAGE_ID,
+  PROP_NEWLINE_TYPE,
   PROP_READ_ONLY,
   PROP_STATE,
   PROP_STYLE_SCHEME_NAME,
@@ -610,6 +612,10 @@ ide_buffer_get_property (GObject    *object,
       g_value_set_string (value, ide_buffer_get_language_id (self));
       break;
 
+    case PROP_NEWLINE_TYPE:
+      g_value_set_enum (value, ide_buffer_get_newline_type (self));
+      break;
+
     case PROP_IS_TEMPORARY:
       g_value_set_boolean (value, ide_buffer_get_is_temporary (self));
       break;
@@ -675,6 +681,10 @@ ide_buffer_set_property (GObject      *object,
 
     case PROP_LANGUAGE_ID:
       ide_buffer_set_language_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_NEWLINE_TYPE:
+      ide_buffer_set_newline_type (self, g_value_get_enum (value));
       break;
 
     case PROP_IS_TEMPORARY:
@@ -899,6 +909,28 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
+   * IdeBuffer:newline-type:
+   *
+   * Sets the style of newline to append to each line.
+   *
+   * This sets the style of newlines to use within the file. Generally,
+   * only LF should be used (\n) as it is common on Unix, Linux, and most
+   * editors at this point.
+   *
+   * Older Windows editors might prefer CR+LF (\r\n) which is similar to what
+   * is displayed in a raw terminal without a \n line discipline.
+   *
+   * Really old Mac Classic systems use just a \r.
+   */
+  properties [PROP_NEWLINE_TYPE] =
+    g_param_spec_enum ("newline-type",
+                       "Newline Type",
+                       "The style of newlines to append at the end of each line",
+                       GTK_SOURCE_TYPE_NEWLINE_TYPE,
+                       GTK_SOURCE_NEWLINE_TYPE_LF,
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
    * IdeBuffer:read-only:
    *
    * The "read-only" property is set to %TRUE when it has been
@@ -1048,6 +1080,7 @@ ide_buffer_init (IdeBuffer *self)
   self->can_restore_cursor = TRUE;
   self->highlight_diagnostics = TRUE;
   self->enable_addins = TRUE;
+  self->newline_type = GTK_SOURCE_NEWLINE_TYPE_LF;
 
   self->commit_funcs = g_array_new (FALSE, FALSE, sizeof (CommitHooks));
   g_array_set_clear_func (self->commit_funcs, clear_commit_func);
@@ -1636,6 +1669,9 @@ ide_buffer_save_file_settle_cb (GObject      *object,
   /* Propagate the requested encoding, if necessary */
   if (self->encoding != NULL)
     gtk_source_file_saver_set_encoding (saver, self->encoding);
+
+  /* Same for newlines */
+  gtk_source_file_saver_set_newline_type (saver, self->newline_type);
 
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
@@ -4225,4 +4261,28 @@ ide_buffer_set_charset (IdeBuffer  *self,
     }
 
   g_slist_free (all);
+}
+
+GtkSourceNewlineType
+ide_buffer_get_newline_type (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), GTK_SOURCE_NEWLINE_TYPE_LF);
+
+  return self->newline_type;
+}
+
+void
+ide_buffer_set_newline_type (IdeBuffer            *self,
+                             GtkSourceNewlineType  newline_type)
+{
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (newline_type == GTK_SOURCE_NEWLINE_TYPE_LF ||
+                    newline_type == GTK_SOURCE_NEWLINE_TYPE_CR ||
+                    newline_type == GTK_SOURCE_NEWLINE_TYPE_CR_LF);
+
+  if (newline_type == self->newline_type)
+    return;
+
+  self->newline_type = newline_type;
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_NEWLINE_TYPE]);
 }
