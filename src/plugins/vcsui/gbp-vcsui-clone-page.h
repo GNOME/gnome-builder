@@ -30,4 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpVcsuiClonePage, gbp_vcsui_clone_page, GBP, VCSUI_CLONE_PAGE, GtkWidget)
 
+void gbp_vcsui_clone_page_set_uri (GbpVcsuiClonePage *self,
+                                   const char        *uri);
+
 G_END_DECLS
