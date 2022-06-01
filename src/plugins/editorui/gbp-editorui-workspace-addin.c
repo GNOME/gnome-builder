@@ -406,15 +406,12 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  /* Encoding */
-  encoding_menu = ide_editor_encoding_menu_new ("editorui.encoding");
-  self->encoding = g_object_new (GTK_TYPE_MENU_BUTTON,
-                                 "menu-model", encoding_menu,
-                                 "direction", GTK_ARROW_UP,
-                                 "visible", FALSE,
-                                 "child", self->encoding_label,
-                                 NULL);
-  panel_statusbar_add_suffix (self->statusbar, 1000, GTK_WIDGET (self->encoding));
+  self->mode_label = g_object_new (GTK_TYPE_LABEL,
+                                   "label", "INS",
+                                   "width-chars", 4,
+                                   "visible", FALSE,
+                                   NULL);
+  panel_statusbar_add_suffix (self->statusbar, 1001, GTK_WIDGET (self->mode_label));
 
   /* Line ending */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-line-ends-menu");
@@ -424,14 +421,17 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   "visible", FALSE,
                                   "child", self->line_ends_label,
                                   NULL);
-  panel_statusbar_add_suffix (self->statusbar, 1001, GTK_WIDGET (self->line_ends));
+  panel_statusbar_add_suffix (self->statusbar, 1002, GTK_WIDGET (self->line_ends));
 
-  self->mode_label = g_object_new (GTK_TYPE_LABEL,
-                                   "label", "INS",
-                                   "width-chars", 4,
-                                   "visible", FALSE,
-                                   NULL);
-  panel_statusbar_add_suffix (self->statusbar, 1002, GTK_WIDGET (self->mode_label));
+  /* Encoding */
+  encoding_menu = ide_editor_encoding_menu_new ("editorui.encoding");
+  self->encoding = g_object_new (GTK_TYPE_MENU_BUTTON,
+                                 "menu-model", encoding_menu,
+                                 "direction", GTK_ARROW_UP,
+                                 "visible", FALSE,
+                                 "child", self->encoding_label,
+                                 NULL);
+  panel_statusbar_add_suffix (self->statusbar, 1003, GTK_WIDGET (self->encoding));
 
   /* Indentation status, tabs/spaces/etc */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-indent-menu");
@@ -442,7 +442,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                     "visible", FALSE,
                                     "child", self->indentation_label,
                                     NULL);
-  panel_statusbar_add_suffix (self->statusbar, 1003, GTK_WIDGET (self->indentation));
+  panel_statusbar_add_suffix (self->statusbar, 1004, GTK_WIDGET (self->indentation));
 
   /* Label for cursor position and jump to line/column */
   popover = g_object_new (IDE_TYPE_ENTRY_POPOVER,
@@ -456,7 +456,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                  "child", self->position_label,
                                  "popover", popover,
                                  NULL);
-  panel_statusbar_add_suffix (self->statusbar, 1004, GTK_WIDGET (self->position));
+  panel_statusbar_add_suffix (self->statusbar, 1005, GTK_WIDGET (self->position));
 
   self->editor_settings = g_settings_new ("org.gnome.builder.editor");
 
