@@ -7,7 +7,7 @@
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">run-manager.run-with-handler</attribute>
         <attribute name="target" type="s">'valgrind'</attribute>
-        <attribute name="label" translatable="yes">Run with Valgrind</attribute>
+        <attribute name="label" translatable="yes">Run with Leak Detector</attribute>
         <attribute name="verb-icon-name">system-run-symbolic</attribute>
         <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;v</attribute>
       </item>
@@ -17,16 +17,16 @@
     <section id="run-menu-tools-section">
       <submenu id="run-menu-valgrind-submenu">
         <attribute name="before">run-menu-verbose-logging</attribute>
-        <attribute name="label" translatable="yes">Valgrind</attribute>
+        <attribute name="label" translatable="yes">Leak Detector</attribute>
         <section id="run-menu-valgrind-origins-section">
           <item>
-            <attribute name="label" translatable="yes">Track Origins</attribute>
+            <attribute name="label" translatable="yes">Track Origin of Leaks</attribute>
             <attribute name="action">valgrind.track-origins</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
         <section id="run-menu-valgrind-leak-check">
-          <attribute name="label" translatable="yes">Leak Checks</attribute>
+          <attribute name="label" translatable="yes">Report Leaks</attribute>
           <item>
             <attribute name="label" translatable="yes">Summary</attribute>
             <attribute name="action">valgrind.leak-check</attribute>
@@ -78,7 +78,7 @@
         <section id="project-tree-menu-run-with-section">
           <item>
             <attribute name="id">project-tree-menu-valgrind</attribute>
-            <attribute name="label" translatable="yes">Run with Valgrind</attribute>
+            <attribute name="label" translatable="yes">Run with Leak Detector</attribute>
             <attribute name="action">buildui.run-with-handler</attribute>
             <attribute name="target" type="s">'valgrind'</attribute>
           </item>
