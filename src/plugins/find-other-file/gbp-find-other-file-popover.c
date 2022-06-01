@@ -106,6 +106,10 @@ gbp_find_other_file_popover_set_model (GbpFindOtherFilePopover *self,
                                         g_object_unref);
           selection = gtk_no_selection_new (G_LIST_MODEL (map));
         }
+      else
+        {
+          selection = gtk_no_selection_new (G_LIST_MODEL (g_list_store_new (GBP_TYPE_FOUND_FILE)));
+        }
 
       gtk_list_view_set_model (self->list_view, GTK_SELECTION_MODEL (selection));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODEL]);
