@@ -521,24 +521,10 @@ static char *
 gbp_git_vcs_cloner_get_directory_name (IdeVcsCloner *cloner,
                                        IdeVcsUri    *uri)
 {
-  g_autofree char *name = NULL;
-  const char *path;
-  char *dot;
-
   g_assert (GBP_IS_GIT_VCS_CLONER (cloner));
   g_assert (uri != NULL);
 
-  /* Make sure we have a path to use as a name */
-  path = ide_vcs_uri_get_path (uri);
-  if (ide_str_empty0 (path))
-    return NULL;
-
-  /* Remove trailing .git if necessary */
-  name = g_path_get_basename (path);
-  if ((dot = strrchr (name, '.')) && ide_str_equal0 (dot, ".git"))
-    *dot = 0;
-
-  return g_steal_pointer (&name);
+  return ide_vcs_uri_get_clone_name (uri);
 }
 
 static void
