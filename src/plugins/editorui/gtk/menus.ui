@@ -56,10 +56,12 @@
   <menu id="editorui-line-ends-menu">
     <section id="editorui-line-ends-section">
       <attribute name="label">Line Ending</attribute>
-      <item>
+      <!--item>
+        This item is inserted automatically when the application starts
+        so that we can alter what label is shown.
         <attribute name="label">Linux (LF)</attribute>
         <attribute name="action">editorui.newline('lf')</attribute>
-      </item>
+      </item-->
       <item>
         <attribute name="label">Windows (CR/LF)</attribute>
         <attribute name="action">editorui.newline('crlf')</attribute>

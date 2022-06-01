@@ -341,6 +341,24 @@ new_editor_workspace_action (GSimpleAction *action,
   ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
 }
 
+static void
+update_menus (IdeApplication *app)
+{
+  g_autoptr(GMenuItem) lf = NULL;
+  GMenu *menu;
+
+  g_assert (IDE_IS_APPLICATION (app));
+
+  menu = ide_application_get_menu_by_id (app, "editorui-line-ends-section");
+#if !defined(G_OS_UNIX) || defined(__linux__)
+  lf = g_menu_item_new ("Linux (LF)", NULL);
+#else
+  lf = g_menu_item_new ("Unix (LF)", NULL);
+#endif
+  g_menu_item_set_action_and_target (lf, "editor.newline", "s", "lf");
+  g_menu_prepend_item (menu, lf);
+}
+
 static GActionEntry actions[] = {
   { "new-editor-workspace", new_editor_workspace_action },
 };
@@ -357,6 +375,8 @@ gbp_editorui_application_addin_load (IdeApplicationAddin *addin,
                                    actions,
                                    G_N_ELEMENTS (actions),
                                    addin);
+
+  update_menus (application);
 }
 
 static void
