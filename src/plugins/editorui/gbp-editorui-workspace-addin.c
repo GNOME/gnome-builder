@@ -57,6 +57,9 @@ struct _GbpEditoruiWorkspaceAddin
   GtkMenuButton            *encoding;
   GtkLabel                 *encoding_label;
 
+  GtkLabel                 *syntax_label;
+  GtkMenuButton            *syntax;
+
   GtkLabel                 *mode_label;
 
   GSettings                *editor_settings;
@@ -75,6 +78,23 @@ static void
       panel_statusbar_remove (statusbar, *widget);
       *widget = NULL;
     }
+}
+
+static gboolean
+language_to_label (GBinding     *binding,
+                   const GValue *from_value,
+                   GValue       *to_value,
+                   gpointer      user_data)
+{
+  GtkSourceLanguage *language = g_value_get_object (from_value);
+
+  if (language != NULL)
+    g_value_set_string (to_value, gtk_source_language_get_name (language));
+  else
+    /* translators: "Text" means plaintext or text/plain */
+    g_value_set_static_string (to_value, _("Text"));
+
+  return TRUE;
 }
 
 static gboolean
@@ -344,6 +364,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
   g_autoptr(GMenuModel) encoding_menu = NULL;
+  g_autoptr(GMenuModel) syntax_menu = NULL;
   GtkPopover *popover;
   GMenu *menu;
 
@@ -357,6 +378,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->encoding_label = g_object_new (GTK_TYPE_LABEL, NULL);
   self->line_ends_label = g_object_new (GTK_TYPE_LABEL, NULL);
+  self->syntax_label = g_object_new (GTK_TYPE_LABEL, NULL);
 
   self->actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
@@ -383,6 +405,11 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                G_BINDING_SYNC_CREATE,
                                newline_type_to_label,
                                NULL, NULL, NULL);
+  ide_binding_group_bind_full (self->buffer_bindings, "language",
+                               self->syntax_label, "label",
+                               G_BINDING_SYNC_CREATE,
+                               language_to_label,
+                               NULL, NULL, NULL);
 
   self->view_signals = ide_signal_group_new (IDE_TYPE_SOURCE_VIEW);
   ide_signal_group_connect_object (self->view_signals,
@@ -406,12 +433,15 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  self->mode_label = g_object_new (GTK_TYPE_LABEL,
-                                   "label", "INS",
-                                   "width-chars", 4,
-                                   "visible", FALSE,
-                                   NULL);
-  panel_statusbar_add_suffix (self->statusbar, 1001, GTK_WIDGET (self->mode_label));
+  /* Language Syntax */
+  syntax_menu = ide_editor_syntax_menu_new ("editorui.language");
+  self->syntax = g_object_new (GTK_TYPE_MENU_BUTTON,
+                               "menu-model", syntax_menu,
+                               "direction", GTK_ARROW_UP,
+                               "visible", FALSE,
+                               "child", self->syntax_label,
+                               NULL);
+  panel_statusbar_add_suffix (self->statusbar, 1001, GTK_WIDGET (self->syntax));
 
   /* Line ending */
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "editorui-line-ends-menu");
@@ -457,6 +487,13 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                  "popover", popover,
                                  NULL);
   panel_statusbar_add_suffix (self->statusbar, 1005, GTK_WIDGET (self->position));
+
+  self->mode_label = g_object_new (GTK_TYPE_LABEL,
+                                   "label", "INS",
+                                   "width-chars", 4,
+                                   "visible", FALSE,
+                                   NULL);
+  panel_statusbar_add_suffix (self->statusbar, 1006, GTK_WIDGET (self->mode_label));
 
   self->editor_settings = g_settings_new ("org.gnome.builder.editor");
 
@@ -515,6 +552,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   g_action_map_remove_action (G_ACTION_MAP (self->actions), "indent-width");
   g_action_map_remove_action (G_ACTION_MAP (self->actions), "tab-width");
   g_action_map_remove_action (G_ACTION_MAP (self->actions), "use-spaces");
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "language");
 
   if (!IDE_IS_EDITOR_PAGE (page))
     page = NULL;
@@ -526,6 +564,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
       g_autoptr(GPropertyAction) indent_width = NULL;
       g_autoptr(GPropertyAction) tab_width = NULL;
       g_autoptr(GPropertyAction) tabs_v_spaces = NULL;
+      g_autoptr(GPropertyAction) language = NULL;
 
       view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
       buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
@@ -535,12 +574,14 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
       indent_width = g_property_action_new ("indent-width", view, "indent-width");
       tab_width = g_property_action_new ("tab-width", view, "tab-width");
       tabs_v_spaces = g_property_action_new ("use-spaces", view, "insert-spaces-instead-of-tabs");
+      language = g_property_action_new ("language", buffer, "language-id");
 
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (encoding_action));
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (newline_action));
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (tab_width));
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (indent_width));
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (tabs_v_spaces));
+      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (language));
     }
 
   ide_binding_group_set_source (self->buffer_bindings, buffer);
@@ -558,6 +599,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   gtk_widget_set_visible (GTK_WIDGET (self->position), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->encoding), page != NULL);
   gtk_widget_set_visible (GTK_WIDGET (self->mode_label), page != NULL && !ide_str_equal0 (keybindings, "vim"));
+  gtk_widget_set_visible (GTK_WIDGET (self->syntax), page != NULL);
 }
 
 static void
