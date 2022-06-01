@@ -108,41 +108,34 @@
                         </style>
                         <property name="popover">
                           <object class="GtkPopover">
+                            <style>
+                              <class name="menu"/>
+                            </style>
                             <child>
-                              <object class="GtkFrame">
-                                <property name="margin-bottom">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-start">6</property>
-                                <property name="margin-top">6</property>
+                              <object class="GtkScrolledWindow">
+                                <property name="propagate-natural-height">true</property>
+                                <property name="propagate-natural-width">true</property>
+                                <property name="min-content-width">150</property>
+                                <property name="min-content-height">200</property>
                                 <child>
-                                  <object class="GtkScrolledWindow">
-                                    <property name="propagate-natural-height">true</property>
-                                    <property name="propagate-natural-width">true</property>
-                                    <property name="min-content-width">150</property>
-                                    <property name="min-content-height">200</property>
-                                    <child>
-                                      <object class="GtkListView">
-                                        <signal name="activate" handler="language_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
-                                        <property name="model">
-                                          <object class="GtkSingleSelection">
-                                            <property name="model" bind-source="input" bind-property="languages-model" bind-flags="sync-create"/>
-                                          </object>
-                                        </property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="single-click-activate">true</property>
-                                        <property name="factory">
-                                          <object class="GtkBuilderListItemFactory">
-                                            <property name="bytes"><![CDATA[
+                                  <object class="GtkListView">
+                                    <signal name="activate" handler="language_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
+                                    <property name="model">
+                                      <object class="GtkSingleSelection">
+                                        <property name="model" bind-source="input" bind-property="languages-model" bind-flags="sync-create"/>
+                                      </object>
+                                    </property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="single-click-activate">true</property>
+                                    <property name="factory">
+                                      <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkBox">
         <property name="spacing">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
         <child>
           <object class="GtkLabel">
             <property name="xalign">0</property>
@@ -159,11 +152,9 @@
   </template>
 </interface>
 ]]>
-                                            </property>
-                                          </object>
                                         </property>
                                       </object>
-                                    </child>
+                                    </property>
                                   </object>
                                 </child>
                               </object>
@@ -186,41 +177,34 @@
                         </style>
                         <property name="popover">
                           <object class="GtkPopover">
+                            <style>
+                              <class name="menu"/>
+                            </style>
                             <child>
-                              <object class="GtkFrame">
-                                <property name="margin-bottom">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-start">6</property>
-                                <property name="margin-top">6</property>
+                              <object class="GtkScrolledWindow">
+                                <property name="propagate-natural-height">true</property>
+                                <property name="propagate-natural-width">true</property>
+                                <property name="min-content-width">200</property>
+                                <property name="min-content-height">200</property>
                                 <child>
-                                  <object class="GtkScrolledWindow">
-                                    <property name="propagate-natural-height">true</property>
-                                    <property name="propagate-natural-width">true</property>
-                                    <property name="min-content-width">200</property>
-                                    <property name="min-content-height">200</property>
-                                    <child>
-                                      <object class="GtkListView">
-                                        <signal name="activate" handler="license_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
-                                        <property name="model">
-                                          <object class="GtkSingleSelection">
-                                            <property name="model" bind-source="input" bind-property="licenses-model" bind-flags="sync-create"/>
-                                          </object>
-                                        </property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="single-click-activate">true</property>
-                                        <property name="factory">
-                                          <object class="GtkBuilderListItemFactory">
-                                            <property name="bytes"><![CDATA[
+                                  <object class="GtkListView">
+                                    <signal name="activate" handler="license_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
+                                    <property name="model">
+                                      <object class="GtkSingleSelection">
+                                        <property name="model" bind-source="input" bind-property="licenses-model" bind-flags="sync-create"/>
+                                      </object>
+                                    </property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="single-click-activate">true</property>
+                                    <property name="factory">
+                                      <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkBox">
         <property name="spacing">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
         <child>
           <object class="GtkLabel">
             <property name="xalign">0</property>
@@ -237,11 +221,9 @@
   </template>
 </interface>
 ]]>
-                                            </property>
-                                          </object>
                                         </property>
                                       </object>
-                                    </child>
+                                    </property>
                                   </object>
                                 </child>
                               </object>
@@ -275,42 +257,34 @@
                         </style>
                         <property name="popover">
                           <object class="GtkPopover">
+                            <style>
+                              <class name="menu"/>
+                            </style>
                             <child>
-                              <object class="GtkFrame">
-                                <property name="margin-bottom">6</property>
-                                <property name="margin-end">6</property>
-                                <property name="margin-start">6</property>
-                                <property name="margin-top">6</property>
+                              <object class="GtkScrolledWindow">
+                                <property name="propagate-natural-height">true</property>
+                                <property name="propagate-natural-width">true</property>
+                                <property name="min-content-width">300</property>
+                                <property name="min-content-height">200</property>
                                 <child>
-                                  <object class="GtkScrolledWindow">
-                                    <property name="propagate-natural-height">true</property>
-                                    <property name="propagate-natural-width">true</property>
-                                    <property name="min-content-width">300</property>
-                                    <property name="min-content-height">200</property>
-                                    <child>
-                                      <object class="GtkListView">
-                                        <signal name="activate" handler="template_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
-                                        <property name="model">
-                                          <object class="GtkSingleSelection">
-                                            <property name="model" bind-source="input" bind-property="templates-model" bind-flags="sync-create"/>
-                                          </object>
-                                        </property>
-                                        <property name="orientation">vertical</property>
-                                        <property name="single-click-activate">true</property>
-                                        <property name="factory">
-                                          <object class="GtkBuilderListItemFactory">
-                                            <property name="bytes"><![CDATA[
+                                  <object class="GtkListView">
+                                    <signal name="activate" handler="template_activated_cb" swapped="true" object="GbpCreateProjectWidget"/>
+                                    <property name="model">
+                                      <object class="GtkSingleSelection">
+                                        <property name="model" bind-source="input" bind-property="templates-model" bind-flags="sync-create"/>
+                                      </object>
+                                    </property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="single-click-activate">true</property>
+                                    <property name="factory">
+                                      <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="GtkListItem">
     <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
-        <property name="spacing">6</property>
-        <property name="margin-top">6</property>
-        <property name="margin-bottom">6</property>
-        <property name="margin-start">6</property>
-        <property name="margin-end">6</property>
         <child>
           <object class="GtkLabel">
             <property name="xalign">0</property>
@@ -342,11 +316,9 @@
   </template>
 </interface>
 ]]>
-                                            </property>
-                                          </object>
                                         </property>
                                       </object>
-                                    </child>
+                                    </property>
                                   </object>
                                 </child>
                               </object>
