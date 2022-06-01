@@ -3,7 +3,6 @@
   <gresource prefix="/plugins/vcsui">
     <file>vcsui.plugin</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
-    <file preprocess="xml-stripblanks">gbp-vcsui-clone-widget.ui</file>
     <file preprocess="xml-stripblanks">gbp-vcsui-clone-page.ui</file>
     <file preprocess="xml-stripblanks">gbp-vcsui-switcher-popover.ui</file>
   </gresource>
