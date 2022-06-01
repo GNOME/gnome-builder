@@ -491,6 +491,8 @@ ide_buffer_notify_language (IdeBuffer  *self,
 
   if (self->code_action_provider)
     ide_extension_adapter_set_value (self->code_action_provider, lang_id);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGE_ID]);
 }
 
 static void
