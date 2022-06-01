@@ -39,6 +39,7 @@ struct _GbpVcsuiClonePage
   AdwEntryRow        *author_email_row;
   AdwEntryRow        *author_name_row;
   GtkMenuButton      *branch_button;
+  GtkLabel           *branch_label;
   AdwEntryRow        *location_row;
   GtkWidget          *main;
   GtkStack           *stack;
@@ -161,6 +162,8 @@ branch_activated_cb (GbpVcsuiClonePage *self,
 
   ide_vcs_clone_request_set_branch_name (self->request, branch_id);
 
+  gtk_menu_button_popdown (self->branch_button);
+
   IDE_EXIT;
 }
 
@@ -176,6 +179,31 @@ branch_popover_show_cb (GbpVcsuiClonePage *self,
   ide_vcs_clone_request_populate_branches (self->request);
 
   IDE_EXIT;
+}
+
+static void
+branch_name_changed_cb (GbpVcsuiClonePage  *self,
+                        GParamSpec         *pspec,
+                        IdeVcsCloneRequest *request)
+{
+  const char *branch_name;
+  gboolean empty;
+
+  g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
+  g_assert (IDE_IS_VCS_CLONE_REQUEST (request));
+
+  branch_name = ide_vcs_clone_request_get_branch_name (request);
+
+  /* Very much a git-ism, but that's all we support right now */
+  if (branch_name != NULL && g_str_has_prefix (branch_name, "refs/heads/"))
+    branch_name += strlen ("refs/heads/");
+
+  empty = ide_str_empty0 (branch_name);
+
+  gtk_widget_set_tooltip_text (GTK_WIDGET (self->branch_label),
+                               empty ? NULL : branch_name);
+  gtk_label_set_label (self->branch_label, branch_name);
+  gtk_widget_set_visible (GTK_WIDGET (self->branch_label), !empty);
 }
 
 static void
@@ -219,6 +247,7 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_email_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, author_name_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, branch_button);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, branch_label);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, location_row);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, main);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, request);
@@ -227,6 +256,7 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, location_row_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, branch_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, branch_name_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, branch_popover_show_cb);
 
   gtk_widget_class_install_action (widget_class, "clone-page.select-folder", NULL, select_folder_action);
