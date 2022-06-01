@@ -74,6 +74,9 @@ IDE_AVAILABLE_IN_ALL
 void                 ide_greeter_workspace_set_page           (IdeGreeterWorkspace *self,
                                                                GtkWidget           *page);
 IDE_AVAILABLE_IN_ALL
+GtkWidget           *ide_greeter_workspace_get_page_named     (IdeGreeterWorkspace *self,
+                                                               const char          *page_name);
+IDE_AVAILABLE_IN_ALL
 const char          *ide_greeter_workspace_get_page_name      (IdeGreeterWorkspace *self);
 IDE_AVAILABLE_IN_ALL
 void                 ide_greeter_workspace_set_page_name      (IdeGreeterWorkspace *self,
