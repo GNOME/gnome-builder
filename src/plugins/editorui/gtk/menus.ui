@@ -19,37 +19,66 @@
         <attribute name="label" translatable="yes">Spaces per Tab</attribute>
         <item>
           <attribute name="label" translatable="yes">2</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">2</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">3</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">3</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">4</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">4</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">5</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">5</attribute>
         </item>
         <item>
           <attribute name="label" translatable="yes">8</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">8</attribute>
         </item>
       </submenu>
       <submenu id="editorui-indent-submenu">
         <attribute name="label" translatable="yes">Indentation Size</attribute>
-        <item>
-          <attribute name="label" translatable="yes">2</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">3</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">4</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">5</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">8</attribute>
-        </item>
+        <section id="indent-inherit-size-section">
+          <item>
+            <attribute name="label" translatable="yes">Same as Tab Width</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">-1</attribute>
+          </item>
+        </section>
+        <section id="indent-common-sizes-section">
+          <item>
+            <attribute name="label" translatable="yes">2</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">2</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">3</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">3</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">4</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">4</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">5</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">5</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">8</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">8</attribute>
+          </item>
+        </section>
       </submenu>
     </section>
   </menu>
