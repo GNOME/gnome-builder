@@ -188,6 +188,7 @@
                 <property name="vhomogeneous">true</property>
                 <property name="transition-type">crossfade</property>
                 <property name="transition-duration">300</property>
+                <property name="vexpand">false</property>
                 <child>
                   <object class="GtkStackPage">
                     <property name="name">details</property>
@@ -238,6 +239,7 @@
                             <property name="max-content-height">300</property>
                             <property name="vscrollbar-policy">external</property>
                             <property name="hscrollbar-policy">never</property>
+                            <property name="vexpand">true</property>
                             <child>
                               <object class="VteTerminal" id="terminal">
                                 <property name="margin-top">9</property>
@@ -255,14 +257,24 @@
               </object>
             </child>
             <child>
-              <object class="GtkButton">
-                <property name="action-name">clone-page.clone</property>
-                <property name="label" translatable="yes">Clone Repository</property>
-                <property name="margin-top">12</property>
+              <object class="GtkBox">
                 <property name="halign">end</property>
-                <style>
-                  <class name="suggested-action"/>
-                </style>
+                <property name="margin-top">12</property>
+                <property name="spacing">16</property>
+                <child>
+                  <object class="IdeProgressIcon" id="progress">
+                    <property name="visible">false</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="action-name">clone-page.clone</property>
+                    <property name="label" translatable="yes">Clone Repository</property>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
