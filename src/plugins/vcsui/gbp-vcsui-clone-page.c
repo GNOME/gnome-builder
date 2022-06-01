@@ -27,6 +27,7 @@
 #include <adwaita.h>
 #include <vte/vte.h>
 
+#include <libide-greeter.h>
 #include <libide-gtk.h>
 #include <libide-gui.h>
 #include <libide-projects.h>
@@ -125,6 +126,7 @@ gbp_vcsui_clone_page_clone_cb (GObject      *object,
 {
   IdeVcsCloneRequest *request = (IdeVcsCloneRequest *)object;
   g_autoptr(GbpVcsuiClonePage) self = user_data;
+  IdeGreeterWorkspace *greeter;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) directory = NULL;
 
@@ -133,6 +135,8 @@ gbp_vcsui_clone_page_clone_cb (GObject      *object,
   g_assert (IDE_IS_VCS_CLONE_REQUEST (request));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
+
+  greeter = IDE_GREETER_WORKSPACE (ide_widget_get_workspace (GTK_WIDGET (self)));
 
   gtk_widget_hide (GTK_WIDGET (self->progress));
 
@@ -144,10 +148,20 @@ gbp_vcsui_clone_page_clone_cb (GObject      *object,
     }
   else
     {
+      g_autoptr(IdeProjectInfo) project_info = NULL;
+
       g_debug ("Clone request complete\n");
+
+      project_info = ide_project_info_new ();
+      ide_project_info_set_file (project_info, directory);
+      ide_project_info_set_directory (project_info, directory);
+
+      ide_greeter_workspace_open_project (greeter, project_info);
     }
 
 failure:
+  ide_greeter_workspace_end (greeter);
+
   IDE_EXIT;
 }
 
@@ -205,6 +219,7 @@ clone_action (GtkWidget  *widget,
 {
   GbpVcsuiClonePage *self = (GbpVcsuiClonePage *)widget;
   g_autoptr(IdeNotification) notif = NULL;
+  IdeGreeterWorkspace *greeter;
 
   IDE_ENTRY;
 
@@ -224,6 +239,10 @@ clone_action (GtkWidget  *widget,
                            G_CALLBACK (notify_body_cb),
                            self->terminal,
                            0);
+
+  greeter = IDE_GREETER_WORKSPACE (ide_widget_get_workspace (widget));
+  ide_greeter_workspace_begin (greeter);
+  gtk_widget_action_set_enabled (widget, "clone-page.clone", FALSE);
 
   ide_vcs_clone_request_clone_async (self->request,
                                      notif,
