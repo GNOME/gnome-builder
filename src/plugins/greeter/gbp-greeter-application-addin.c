@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-greeter.h>
 #include <libide-gui.h>
 
@@ -132,14 +133,6 @@ gbp_greeter_application_addin_add_option_entries (IdeApplicationAddin *addin,
                                  G_OPTION_ARG_NONE,
                                  _("Display a new greeter window"),
                                  NULL);
-
-  g_application_add_main_option (G_APPLICATION (app),
-                                 "clone",
-                                 0,
-                                 G_OPTION_FLAG_IN_MAIN,
-                                 G_OPTION_ARG_STRING,
-                                 _("Begin cloning project from URI"),
-                                 "URI");
 }
 
 static void
@@ -150,8 +143,7 @@ gbp_greeter_application_addin_handle_command_line (IdeApplicationAddin     *addi
   GbpGreeterApplicationAddin *self = (GbpGreeterApplicationAddin *)addin;
   g_auto(GStrv) argv = NULL;
   GVariantDict *dict;
-  const gchar *clone_uri = NULL;
-  gint argc;
+  int argc;
 
   g_assert (GBP_IS_GREETER_APPLICATION_ADDIN (self));
   g_assert (IDE_IS_APPLICATION (application));
@@ -173,35 +165,6 @@ gbp_greeter_application_addin_handle_command_line (IdeApplicationAddin     *addi
     {
       present_greeter_with_page (NULL, NULL, addin);
       return;
-    }
-
-  /*
-   * If the --clone=URI option was provided, switch the greeter to the
-   * clone page and begin cloning.
-   */
-  if (dict != NULL && g_variant_dict_lookup (dict, "clone", "&s", &clone_uri))
-    {
-#if 0
-      /* TODO: Move to vcsuti */
-
-      IdeGreeterWorkspace *workspace;
-      IdeWorkbench *workbench;
-      GtkWidget *page;
-
-      workbench = ide_workbench_new ();
-      ide_application_add_workbench (self->application, workbench);
-
-      workspace = ide_greeter_workspace_new (self->application);
-      ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
-
-      ide_greeter_workspace_set_page_name (workspace, "clone");
-      page = ide_greeter_workspace_get_page (workspace, clone);
-
-      if (IDE_IS_CLONE_SURFACE (page))
-        ide_clone_surface_set_uri (IDE_CLONE_SURFACE (page), clone_uri);
-
-      ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
-#endif
     }
 }
 
@@ -262,7 +225,7 @@ application_addin_iface_init (IdeApplicationAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGreeterApplicationAddin, gbp_greeter_application_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
 
 static void
 gbp_greeter_application_addin_class_init (GbpGreeterApplicationAddinClass *klass)
