@@ -1003,3 +1003,21 @@ ide_greeter_workspace_remove_page (IdeGreeterWorkspace *self,
 
   gtk_stack_remove (self->pages, page);
 }
+
+/**
+ * ide_greeter_workspace_get_page_named:
+ * @self: a #IdeGreeterWorkspace
+ *
+ * Gets a page that was added, by it's name.
+ *
+ * Returns: (transfer none) (nullable): a #GtkWidget or %NULL
+ */
+GtkWidget *
+ide_greeter_workspace_get_page_named (IdeGreeterWorkspace *self,
+                                      const char          *page_name)
+{
+  g_return_val_if_fail (IDE_IS_GREETER_WORKSPACE (self), NULL);
+  g_return_val_if_fail (page_name != NULL, NULL);
+
+  return gtk_stack_get_child_by_name (self->pages, page_name);
+}
