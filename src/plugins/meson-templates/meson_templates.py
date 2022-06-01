@@ -243,7 +243,7 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
             'gnome-app-gtk4',
             _('GTK Application'),
             'pattern-gtk',
-            _('Create a GTK application'),
+            _('Create a GTK application with GTK 4'),
             ['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
             0
          )
@@ -325,7 +325,7 @@ class GnomeAdwaitaProjectTemplate(MesonTemplate):
             'gnome-app-adwaita',
             _('GNOME Application'),
             'pattern-gnome',
-            _('Create a GNOME application'),
+            _('Create a GNOME application with libadwaita'),
             ['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
             0
          )
