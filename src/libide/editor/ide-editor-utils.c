@@ -74,6 +74,7 @@ ide_editor_encoding_menu_new (const char *action_name)
     g_autoptr(GMenuItem) item = g_menu_item_new ("UTF-8", NULL);
 
     g_menu_item_set_action_and_target (item, action_name, "s", "UTF-8");
+    g_menu_item_set_attribute (item, "role", "s", "check");
     g_menu_append_item (section, item);
     g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
   }
@@ -99,6 +100,7 @@ ide_editor_encoding_menu_new (const char *action_name)
         }
 
       g_menu_item_set_action_and_target (item, action_name, "s", gtk_source_encoding_get_charset (encoding));
+      g_menu_item_set_attribute (item, "role", "s", "check");
       g_menu_append_item (submenu, item);
     }
 
