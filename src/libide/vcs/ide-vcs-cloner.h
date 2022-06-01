@@ -58,6 +58,8 @@ struct _IdeVcsClonerInterface
   GListModel *(*list_branches_finish) (IdeVcsCloner         *self,
                                        GAsyncResult         *result,
                                        GError              **error);
+  char       *(*get_directory_name)   (IdeVcsCloner         *self,
+                                       IdeVcsUri            *uri);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -85,6 +87,9 @@ IDE_AVAILABLE_IN_ALL
 GListModel *ide_vcs_cloner_list_branches_finish (IdeVcsCloner         *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
+IDE_AVAILABLE_IN_ALL
+char       *ide_vcs_cloner_get_directory_name   (IdeVcsCloner         *self,
+                                                 IdeVcsUri            *uri);
 IDE_AVAILABLE_IN_ALL
 gboolean    ide_vcs_cloner_validate_uri         (IdeVcsCloner         *self,
                                                  const char           *uri,
