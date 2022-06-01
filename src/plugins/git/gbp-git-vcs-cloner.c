@@ -517,6 +517,30 @@ gbp_git_vcs_cloner_list_branches_finish (IdeVcsCloner  *cloner,
   IDE_RETURN (ret);
 }
 
+static char *
+gbp_git_vcs_cloner_get_directory_name (IdeVcsCloner *cloner,
+                                       IdeVcsUri    *uri)
+{
+  g_autofree char *name = NULL;
+  const char *path;
+  char *dot;
+
+  g_assert (GBP_IS_GIT_VCS_CLONER (cloner));
+  g_assert (uri != NULL);
+
+  /* Make sure we have a path to use as a name */
+  path = ide_vcs_uri_get_path (uri);
+  if (ide_str_empty0 (path))
+    return NULL;
+
+  /* Remove trailing .git if necessary */
+  name = g_path_get_basename (path);
+  if ((dot = strrchr (name, '.')) && ide_str_equal0 (dot, ".git"))
+    *dot = 0;
+
+  return g_steal_pointer (&name);
+}
+
 static void
 vcs_cloner_iface_init (IdeVcsClonerInterface *iface)
 {
@@ -526,4 +550,5 @@ vcs_cloner_iface_init (IdeVcsClonerInterface *iface)
   iface->clone_finish = gbp_git_vcs_cloner_clone_finish;
   iface->list_branches_async = gbp_git_vcs_cloner_list_branches_async;
   iface->list_branches_finish = gbp_git_vcs_cloner_list_branches_finish;
+  iface->get_directory_name = gbp_git_vcs_cloner_get_directory_name;
 }
