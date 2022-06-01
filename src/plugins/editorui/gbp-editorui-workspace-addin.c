@@ -143,9 +143,15 @@ notify_indentation_cb (GbpEditoruiWorkspaceAddin *self)
       if (indent_width <= 0)
         indent_width = tab_width;
 
-      label = g_strdup_printf ("%s %u:%u",
-                               insert_spaces_instead_of_tabs ?  _("Space") : _("Tab"),
-                               indent_width, tab_width);
+      if (indent_width < 0 || indent_width == (int)tab_width)
+        label = g_strdup_printf ("%s: %u",
+                                 insert_spaces_instead_of_tabs ? _("Spaces") : _("Tabs"),
+                                 tab_width);
+      else
+        label = g_strdup_printf ("%s: %u:%u",
+                                 insert_spaces_instead_of_tabs ?  _("Spaces") : _("Tabs"),
+                                 tab_width, indent_width);
+
       gtk_label_set_label (self->indentation_label, label);
     }
 }
