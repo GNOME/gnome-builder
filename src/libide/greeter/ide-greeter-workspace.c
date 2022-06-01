@@ -405,41 +405,9 @@ ide_greeter_workspace_real_open_project (IdeGreeterWorkspace *self,
         {
           g_autoptr(GFile) directory = g_file_new_for_path (checkout);
           ide_project_info_set_directory (project_info, directory);
+          IDE_RETURN (FALSE);
         }
     }
-
-  return FALSE;
-
-#if 0
-  /*
-   * to switch to the clone dialog. However, we can use the VCS Uri to
-   * determine what the check-out directory would be, and if so, we can
-   * just open that directory.
-   */
-  if (!ide_project_info_get_file (project_info) &&
-      !ide_project_info_get_directory (project_info) &&
-      (vcs_uri = ide_project_info_get_vcs_uri (project_info)))
-    {
-      g_autoptr(IdeVcsUri) uri = ide_vcs_uri_new (vcs_uri);
-      g_autofree gchar *suggested = NULL;
-      g_autofree gchar *checkout = NULL;
-
-      if (uri != NULL &&
-          (suggested = ide_vcs_uri_get_clone_name (uri)) &&
-          (checkout = g_build_filename (ide_get_projects_dir (), suggested, NULL)) &&
-          g_file_test (checkout, G_FILE_TEST_IS_DIR))
-        {
-          g_autoptr(GFile) directory = g_file_new_for_path (checkout);
-          ide_project_info_set_directory (project_info, directory);
-        }
-      else
-        {
-          ide_clone_page_set_uri (self->clone_page, vcs_uri);
-          ide_greeter_workspace_set_page_name (self, "clone");
-          return;
-        }
-    }
-#endif
 
   IDE_RETURN (FALSE);
 }
