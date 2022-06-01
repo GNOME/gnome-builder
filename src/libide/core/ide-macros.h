@@ -282,6 +282,25 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeObjectArray, g_ptr_array_unref)
 
 #define IDE_STRV_INIT(...) ((const char * const[]) { __VA_ARGS__, NULL})
 
+static inline int
+ide_strv_qsort_compare_element (const char * const *a,
+                                const char * const *b,
+                                gpointer            sort_data)
+{
+  return strcmp (*a, *b);
+}
+
+static inline void
+ide_strv_sort (char   **strv,
+               gssize   len)
+{
+  if (len < 0)
+    len = g_strv_length (strv);
+  g_qsort_with_data (strv, len, sizeof (char*),
+                     (GCompareDataFunc)ide_strv_qsort_compare_element,
+                     NULL);
+}
+
 G_END_DECLS
 
 #endif /* __GI_SCANNER__ */
