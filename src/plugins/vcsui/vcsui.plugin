@@ -8,4 +8,5 @@ Embedded=_gbp_vcsui_register_types
 Hidden=true
 Module=vcsui
 Name=VCS interface extensions
+X-At-Startup=true
 X-Workspace-Kind=primary;greeter;
