@@ -2,9 +2,9 @@
 Authors=Christian Hergert <chergert@redhat.com>
 Builtin=true
 Copyright=Copyright © 2017-2018 Christian Hergert
-Description=Provides integration with the GNU Debugger
+Description=Provides debugger integration with gdb
 Embedded=_gbp_gdb_register_types
 Module=gdb
-Name=Gdb
+Name=GNU Debugger
 X-Category=debuggers
 X-Debugger-Languages=c,chdr,cpp,cpphdr,fortran,rust,vala,asm
