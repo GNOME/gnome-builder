@@ -58,27 +58,51 @@ sort_by_name (gconstpointer a,
 GMenuModel *
 ide_editor_encoding_menu_new (const char *action_name)
 {
+  GHashTable *submenus;
   GMenu *menu;
   GSList *all;
 
   g_return_val_if_fail (action_name, NULL);
 
+  submenus = g_hash_table_new (g_str_hash, g_str_equal);
   menu = g_menu_new ();
   all = g_slist_sort (gtk_source_encoding_get_all (), sort_by_name);
+
+  /* Always place UTF8 at the top in it's own section */
+  {
+    g_autoptr(GMenu) section = g_menu_new ();
+    g_autoptr(GMenuItem) item = g_menu_item_new ("UTF-8", NULL);
+
+    g_menu_item_set_action_and_target (item, action_name, "s", "UTF-8");
+    g_menu_append_item (section, item);
+    g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+  }
 
   for (const GSList *l = all; l; l = l->next)
     {
       GtkSourceEncoding *encoding = l->data;
-      char *title = g_strdup_printf ("%s (%s)",
-                                     gtk_source_encoding_get_name (encoding),
-                                     gtk_source_encoding_get_charset (encoding));
-      GMenuItem *item = g_menu_item_new (title, NULL);
+      const char *name = gtk_source_encoding_get_name (encoding);
+      const char *charset = gtk_source_encoding_get_charset (encoding);
+      g_autofree char *title = g_strdup_printf ("%s (%s)", name, charset);
+      g_autoptr(GMenuItem) item = g_menu_item_new (title, NULL);
+      GMenu *submenu;
+
+      if (name == NULL || charset == NULL)
+        continue;
+
+      if (!(submenu = g_hash_table_lookup (submenus, name)))
+        {
+          submenu = g_menu_new ();
+          g_menu_append_submenu (menu, name, G_MENU_MODEL (submenu));
+          g_hash_table_insert (submenus, (char *)name, submenu);
+          g_object_unref (submenu);
+        }
 
       g_menu_item_set_action_and_target (item, action_name, "s", gtk_source_encoding_get_charset (encoding));
-      g_menu_append_item (menu, item);
-      g_object_unref (item);
+      g_menu_append_item (submenu, item);
     }
 
+  g_hash_table_unref (submenus);
   g_slist_free (all);
 
   return G_MENU_MODEL (menu);
