@@ -38,9 +38,6 @@ struct _GbpCreateProjectWidget
 
   GtkWidget        *main;
   IdeTemplateInput *input;
-  GtkMenuButton    *template_button;
-  GtkMenuButton    *language_button;
-  GtkMenuButton    *licenses_button;
   GtkImage         *directory_clash;
 
   AdwEntryRow      *app_id_row;
@@ -72,61 +69,49 @@ gbp_create_project_widget_check_ready (GbpCreateProjectWidget *self)
 }
 
 static void
-template_activated_cb (GbpCreateProjectWidget *self,
-                       guint                   position,
-                       GtkListView            *list_view)
+template_changed_cb (GbpCreateProjectWidget *self,
+                     GParamSpec             *pspec,
+                     AdwComboRow            *row)
 {
-  g_autoptr(IdeProjectTemplate) template = NULL;
+  IdeProjectTemplate *template;
   g_autofree char *id = NULL;
-  GListModel *model;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (GTK_IS_LIST_VIEW (list_view));
+  g_assert (ADW_IS_COMBO_ROW (row));
 
-  model = G_LIST_MODEL (gtk_list_view_get_model (list_view));
-  template = g_list_model_get_item (model, position);
-
-  gtk_menu_button_popdown (self->template_button);
+  template = adw_combo_row_get_selected_item (row);
 
   id = ide_project_template_get_id (template);
   ide_template_input_set_template (self->input, id);
 }
 
 static void
-language_activated_cb (GbpCreateProjectWidget *self,
-                       guint                   position,
-                       GtkListView            *list_view)
+language_changed_cb (GbpCreateProjectWidget *self,
+                     GParamSpec             *pspec,
+                     AdwComboRow            *row)
 {
-  g_autoptr(GtkStringObject) string = NULL;
-  GListModel *model;
+  GtkStringObject *string;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (GTK_IS_LIST_VIEW (list_view));
+  g_assert (ADW_IS_COMBO_ROW (row));
 
-  model = G_LIST_MODEL (gtk_list_view_get_model (list_view));
-  string = g_list_model_get_item (model, position);
-
-  gtk_menu_button_popdown (self->language_button);
+  string = adw_combo_row_get_selected_item (row);
 
   ide_template_input_set_language (self->input,
                                    gtk_string_object_get_string (string));
 }
 
 static void
-license_activated_cb (GbpCreateProjectWidget *self,
-                      guint                   position,
-                      GtkListView            *list_view)
+license_changed_cb (GbpCreateProjectWidget *self,
+                    GParamSpec             *pspec,
+                    AdwComboRow            *row)
 {
-  g_autoptr(GtkStringObject) string = NULL;
-  GListModel *model;
+  GtkStringObject *string;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
-  g_assert (GTK_IS_LIST_VIEW (list_view));
+  g_assert (ADW_IS_COMBO_ROW (row));
 
-  model = G_LIST_MODEL (gtk_list_view_get_model (list_view));
-  string = g_list_model_get_item (model, position);
-
-  gtk_menu_button_popdown (self->licenses_button);
+  string = adw_combo_row_get_selected_item (row);
 
   ide_template_input_set_license_name (self->input,
                                        gtk_string_object_get_string (string));
@@ -370,18 +355,15 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, app_id_row);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, directory_clash);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, input);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, language_button);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, language_row);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, licenses_button);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, location_row);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, main);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, name_row);
-  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, template_button);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, template_row);
 
-  gtk_widget_class_bind_template_callback (widget_class, template_activated_cb);
-  gtk_widget_class_bind_template_callback (widget_class, language_activated_cb);
-  gtk_widget_class_bind_template_callback (widget_class, license_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, template_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, language_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, license_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, location_row_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, input_notify_cb);
 
