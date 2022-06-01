@@ -514,6 +514,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   g_action_map_remove_action (G_ACTION_MAP (self->actions), "newline-type");
   g_action_map_remove_action (G_ACTION_MAP (self->actions), "indent-width");
   g_action_map_remove_action (G_ACTION_MAP (self->actions), "tab-width");
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "use-spaces");
 
   if (!IDE_IS_EDITOR_PAGE (page))
     page = NULL;
@@ -524,6 +525,7 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
       g_autoptr(GPropertyAction) newline_action = NULL;
       g_autoptr(GPropertyAction) indent_width = NULL;
       g_autoptr(GPropertyAction) tab_width = NULL;
+      g_autoptr(GPropertyAction) tabs_v_spaces = NULL;
 
       view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
       buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
@@ -532,11 +534,13 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
       newline_action = g_property_action_new ("newline-type", buffer, "newline-type");
       indent_width = g_property_action_new ("indent-width", view, "indent-width");
       tab_width = g_property_action_new ("tab-width", view, "tab-width");
+      tabs_v_spaces = g_property_action_new ("use-spaces", view, "insert-spaces-instead-of-tabs");
 
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (encoding_action));
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (newline_action));
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (tab_width));
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (indent_width));
+      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (tabs_v_spaces));
     }
 
   ide_binding_group_set_source (self->buffer_bindings, buffer);

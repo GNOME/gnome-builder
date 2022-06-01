@@ -4,14 +4,8 @@
     <section id="editorui-indent-section">
       <attribute name="label" translatable="yes">Indentation</attribute>
       <item>
-        <attribute name="label" translatable="yes">Tabs</attribute>
-        <attribute name="action">indent.style('tabs')</attribute>
-        <attribute name="role">radio</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Spaces</attribute>
-        <attribute name="action">indent.style('spaces')</attribute>
-        <attribute name="role">radio</attribute>
+        <attribute name="label" translatable="yes">Indent Using Spaces</attribute>
+        <attribute name="action">editorui.use-spaces</attribute>
       </item>
     </section>
     <section id="editorui-tab-section">
