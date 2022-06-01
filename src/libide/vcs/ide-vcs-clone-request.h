@@ -42,42 +42,51 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeVcsCloneRequest, ide_vcs_clone_request, IDE, VCS_CLONE_REQUEST, IdeObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeVcsCloneRequest *ide_vcs_clone_request_new               (void);
+IdeVcsCloneRequest           *ide_vcs_clone_request_new               (void);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_vcs_clone_request_get_module_name   (IdeVcsCloneRequest *self);
+const char                   *ide_vcs_clone_request_get_module_name   (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_vcs_clone_request_set_module_name   (IdeVcsCloneRequest *self,
-                                                             const char         *module_name);
+void                          ide_vcs_clone_request_set_module_name   (IdeVcsCloneRequest   *self,
+                                                                       const char           *module_name);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_vcs_clone_request_get_author_name   (IdeVcsCloneRequest *self);
+const char                   *ide_vcs_clone_request_get_author_name   (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_vcs_clone_request_set_author_name   (IdeVcsCloneRequest *self,
-                                                             const char         *author_name);
+void                          ide_vcs_clone_request_set_author_name   (IdeVcsCloneRequest   *self,
+                                                                       const char           *author_name);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_vcs_clone_request_get_author_email  (IdeVcsCloneRequest *self);
+const char                   *ide_vcs_clone_request_get_author_email  (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_vcs_clone_request_set_author_email  (IdeVcsCloneRequest *self,
-                                                             const char         *author_email);
-GListModel         *ide_vcs_clone_request_get_branch_model  (IdeVcsCloneRequest *self);
+void                          ide_vcs_clone_request_set_author_email  (IdeVcsCloneRequest   *self,
+                                                                       const char           *author_email);
+GListModel                   *ide_vcs_clone_request_get_branch_model  (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_vcs_clone_request_get_branch_name   (IdeVcsCloneRequest *self);
+const char                   *ide_vcs_clone_request_get_branch_name   (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_vcs_clone_request_set_branch_name   (IdeVcsCloneRequest *self,
-                                                             const char         *branch_name);
+void                          ide_vcs_clone_request_set_branch_name   (IdeVcsCloneRequest   *self,
+                                                                       const char           *branch_name);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_vcs_clone_request_get_uri           (IdeVcsCloneRequest *self);
+const char                   *ide_vcs_clone_request_get_uri           (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_vcs_clone_request_set_uri           (IdeVcsCloneRequest *self,
-                                                             const char         *uri);
+void                          ide_vcs_clone_request_set_uri           (IdeVcsCloneRequest   *self,
+                                                                       const char           *uri);
 IDE_AVAILABLE_IN_ALL
-GFile              *ide_vcs_clone_request_get_directory     (IdeVcsCloneRequest *self);
+GFile                        *ide_vcs_clone_request_get_directory     (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_vcs_clone_request_set_directory     (IdeVcsCloneRequest *self,
-                                                             GFile              *directory);
+void                          ide_vcs_clone_request_set_directory     (IdeVcsCloneRequest   *self,
+                                                                       GFile                *directory);
 IDE_AVAILABLE_IN_ALL
-void                ide_vcs_clone_request_populate_branches (IdeVcsCloneRequest *self);
+void                          ide_vcs_clone_request_populate_branches (IdeVcsCloneRequest   *self);
 IDE_AVAILABLE_IN_ALL
-IdeVcsCloneRequestValidation
-                    ide_vcs_clone_request_validate          (IdeVcsCloneRequest *self);
+IdeVcsCloneRequestValidation  ide_vcs_clone_request_validate          (IdeVcsCloneRequest   *self);
+IDE_AVAILABLE_IN_ALL
+void                          ide_vcs_clone_request_clone_async       (IdeVcsCloneRequest   *self,
+                                                                       IdeNotification      *notif,
+                                                                       GCancellable         *cancellable,
+                                                                       GAsyncReadyCallback   callback,
+                                                                       gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+GFile                        *ide_vcs_clone_request_clone_finish      (IdeVcsCloneRequest   *self,
+                                                                       GAsyncResult         *result,
+                                                                       GError              **error);
 
 G_END_DECLS

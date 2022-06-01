@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libide-plugins.h>
+#include <libide-threading.h>
 
 #include "ide-vcs-cloner.h"
 #include "ide-vcs-clone-request.h"
@@ -543,13 +544,17 @@ ide_vcs_clone_request_validate (IdeVcsCloneRequest *self)
     {
       const char *path;
 
-      if ((path = ide_vcs_uri_get_path (uri)))
+      if ((path = ide_vcs_uri_get_path (uri)) && !ide_str_empty0 (path))
         {
           g_autofree char *name = ide_vcs_cloner_get_directory_name (self->cloner, uri);
-          g_autoptr(GFile) new_directory = g_file_get_child (self->directory, name);
 
-          if (g_file_query_exists (new_directory, NULL))
-            flags |= IDE_VCS_CLONE_REQUEST_INVAL_DIRECTORY;
+          if (!ide_str_empty0 (name))
+            {
+              g_autoptr(GFile) new_directory = g_file_get_child (self->directory, name);
+
+              if (g_file_query_exists (new_directory, NULL))
+                flags |= IDE_VCS_CLONE_REQUEST_INVAL_DIRECTORY;
+            }
         }
     }
 
@@ -559,4 +564,124 @@ ide_vcs_clone_request_validate (IdeVcsCloneRequest *self)
     flags |= IDE_VCS_CLONE_REQUEST_INVAL_EMAIL;
 
   return flags;
+}
+
+static void
+ide_vcs_clone_request_clone_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
+{
+  IdeVcsCloner *cloner = (IdeVcsCloner *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GFile *file;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_VCS_CLONER (cloner));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  file = ide_task_get_task_data (task);
+  g_assert (G_IS_FILE (file));
+
+  if (!ide_vcs_cloner_clone_finish (cloner, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, g_object_ref (file), g_object_unref);
+
+  IDE_EXIT;
+}
+
+void
+ide_vcs_clone_request_clone_async (IdeVcsCloneRequest  *self,
+                                   IdeNotification     *notif,
+                                   GCancellable        *cancellable,
+                                   GAsyncReadyCallback  callback,
+                                   gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(IdeVcsUri) uri = NULL;
+  g_autoptr(GFile) clone_dir = NULL;
+  g_autofree char *name = NULL;
+  GVariantDict params;
+  const char *uri_str;
+  const char *author_name;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_VCS_CLONE_REQUEST (self));
+  g_return_if_fail (IDE_IS_NOTIFICATION (notif));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_vcs_clone_request_clone_async);
+
+  if (ide_vcs_clone_request_validate (self) != 0)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_INVALID_ARGUMENT,
+                                 "Cannot clone, invalid arguments for request");
+      IDE_EXIT;
+    }
+
+  author_name = ide_vcs_clone_request_get_author_name (self);
+
+  uri_str = ide_vcs_clone_request_get_uri (self);
+  uri = ide_vcs_uri_new (uri_str);
+  name = ide_vcs_cloner_get_directory_name (self->cloner, uri);
+  clone_dir = g_file_get_child (self->directory, name);
+  ide_task_set_task_data (task, g_object_ref (clone_dir), g_object_unref);
+
+  g_variant_dict_init (&params, NULL);
+  if (!ide_str_empty0 (author_name) &&
+      !ide_str_equal0 (author_name, g_get_real_name ()))
+    g_variant_dict_insert (&params, "s", "user.name", author_name);
+  if (!ide_str_empty0 (self->author_email))
+    g_variant_dict_insert (&params, "s", "user.email", self->author_email);
+  if (!ide_str_empty0 (self->branch_name))
+    g_variant_dict_insert (&params, "s", "branch", self->branch_name);
+
+  ide_vcs_cloner_clone_async (self->cloner,
+                              uri_str,
+                              g_file_peek_path (clone_dir),
+                              g_variant_dict_end (&params),
+                              notif,
+                              cancellable,
+                              ide_vcs_clone_request_clone_cb,
+                              g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_vcs_clone_request_clone_finish:
+ * @self: a #IdeVcsCloneRequest
+ * @result: a #GAsyncResult
+ * @error: a location for a #GError
+ *
+ * Complete a clone request.
+ *
+ * The result of the request is the directory that the clone was
+ * completed within. This is the subdirectory within
+ * #IdeVcsCloneRequest:directory.
+ *
+ * Returns: (transfer full): a #GFile or %NULL and @error is set.
+ */
+GFile *
+ide_vcs_clone_request_clone_finish (IdeVcsCloneRequest  *self,
+                                    GAsyncResult        *result,
+                                    GError             **error)
+{
+  GFile *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_VCS_CLONE_REQUEST (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
