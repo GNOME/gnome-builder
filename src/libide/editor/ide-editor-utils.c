@@ -22,9 +22,11 @@
 
 #include "config.h"
 
-#include <glib/gi18n.h>
 #include <string.h>
 #include <math.h>
+
+#include <glib/gi18n.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-editor-utils.h"
 
@@ -233,4 +235,70 @@ ide_editor_file_chooser_get_line_ending (GtkFileChooser *chooser)
     }
 
   return GTK_SOURCE_NEWLINE_TYPE_LF;
+}
+
+/**
+ * ide_editor_syntax_menu_new:
+ * @action_name: the action to activate when selecting menu items
+ *
+ * Creates a new #GMenuModel with items which will activate using
+ * their syntax id for the action @action_name target.
+ *
+ * Returns: (transfer full): a #GMenuModel
+ */
+GMenuModel *
+ide_editor_syntax_menu_new (const char *action_name)
+{
+  GtkSourceLanguageManager *manager;
+  const char * const *language_ids;
+  g_autofree char **sections = NULL;
+  GHashTable *submenus;
+  GMenu *menu;
+  guint len = 0;
+
+  g_return_val_if_fail (action_name, NULL);
+
+  manager = gtk_source_language_manager_get_default ();
+  language_ids = gtk_source_language_manager_get_language_ids (manager);
+  submenus = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
+  menu = g_menu_new ();
+
+  for (guint i = 0; language_ids[i]; i++)
+    {
+      const char *language_id = language_ids[i];
+      GtkSourceLanguage *language = gtk_source_language_manager_get_language (manager, language_id);
+      g_autoptr(GMenuItem) item = NULL;
+      const char *name;
+      const char *section;
+      GMenu *submenu;
+
+      if (gtk_source_language_get_hidden (language))
+        continue;
+
+      name = gtk_source_language_get_name (language);
+      section = gtk_source_language_get_section (language);
+
+      if (!(submenu = g_hash_table_lookup (submenus, section)))
+        {
+          submenu = g_menu_new ();
+          g_hash_table_insert (submenus, (char *)section, submenu);
+        }
+
+      item = g_menu_item_new (name, NULL);
+      g_menu_item_set_action_and_target (item, action_name, "s", language_id);
+      g_menu_append_item (submenu, item);
+    }
+
+  sections = (char **)g_hash_table_get_keys_as_array (submenus, &len);
+  ide_strv_sort ((char **)sections, len);
+
+  for (guint i = 0; sections[i]; i++)
+    {
+      GMenu *submenu = g_hash_table_lookup (submenus, sections[i]);
+      g_menu_append_submenu (menu, sections[i], G_MENU_MODEL (submenu));
+    }
+
+  g_hash_table_unref (submenus);
+
+  return G_MENU_MODEL (menu);
 }

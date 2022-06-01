@@ -36,5 +36,6 @@ void                     ide_editor_file_chooser_add_line_endings  (GtkFileChoos
 const GtkSourceEncoding *ide_editor_file_chooser_get_encoding      (GtkFileChooser       *chooser);
 GtkSourceNewlineType     ide_editor_file_chooser_get_line_ending   (GtkFileChooser       *chooser);
 GMenuModel              *ide_editor_encoding_menu_new              (const char           *action_name);
+GMenuModel              *ide_editor_syntax_menu_new                (const char           *action_name);
 
 G_END_DECLS
