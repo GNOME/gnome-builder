@@ -345,3 +345,31 @@ ide_vcs_cloner_list_branches_finish (IdeVcsCloner  *self,
 
   IDE_RETURN (ret);
 }
+
+/**
+ * ide_vcs_cloner_get_directory_name:
+ * @self: a #IdeVcsCloner
+ * @uri: an #IdeVcsUri
+ *
+ * Gets the directory name that will be used to clone from @uri.
+ *
+ * If the path has "foo.git", this function would be expected to
+ * return "foo".
+ *
+ * Returns: (transfer full): a string containing the directory name
+ */
+char *
+ide_vcs_cloner_get_directory_name (IdeVcsCloner *self,
+                                   IdeVcsUri    *uri)
+{
+  char *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_VCS_CLONER (self), NULL);
+  g_return_val_if_fail (uri != NULL, NULL);
+
+  ret = IDE_VCS_CLONER_GET_IFACE (self)->get_directory_name (self, uri);
+
+  IDE_RETURN (ret);
+}
