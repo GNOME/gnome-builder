@@ -430,3 +430,15 @@ gbp_vcsui_clone_page_init (GbpVcsuiClonePage *self)
 
   vte_terminal_set_colors (self->terminal, NULL, &transparent, NULL, 0);
 }
+
+void
+gbp_vcsui_clone_page_set_uri (GbpVcsuiClonePage *self,
+                              const char        *uri)
+{
+  g_return_if_fail (GBP_IS_VCSUI_CLONE_PAGE (self));
+
+  if (uri == NULL)
+    uri = "";
+
+  gtk_editable_set_text (GTK_EDITABLE (self->uri_row), uri);
+}
