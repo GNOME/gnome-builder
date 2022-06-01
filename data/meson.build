@@ -2,7 +2,7 @@ subdir('appdata')
 subdir('fonts')
 subdir('gsettings')
 subdir('icons')
-subdir('style-schemes')
+subdir('styles')
 
 # Desktop launcher and description file.
 desktop_file = i18n.merge_file(
