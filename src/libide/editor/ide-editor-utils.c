@@ -58,14 +58,16 @@ sort_by_name (gconstpointer a,
 GMenuModel *
 ide_editor_encoding_menu_new (const char *action_name)
 {
+  g_autoptr(GMenu) menu = NULL;
   GHashTable *submenus;
-  GMenu *menu;
+  GMenu *top_menu;
   GSList *all;
 
   g_return_val_if_fail (action_name, NULL);
 
+  top_menu = g_menu_new ();
+
   submenus = g_hash_table_new (g_str_hash, g_str_equal);
-  menu = g_menu_new ();
   all = g_slist_sort (gtk_source_encoding_get_all (), sort_by_name);
 
   /* Always place UTF8 at the top in it's own section */
@@ -76,8 +78,11 @@ ide_editor_encoding_menu_new (const char *action_name)
     g_menu_item_set_action_and_target (item, action_name, "s", "UTF-8");
     g_menu_item_set_attribute (item, "role", "s", "check");
     g_menu_append_item (section, item);
-    g_menu_append_section (menu, NULL, G_MENU_MODEL (section));
+    g_menu_append_section (top_menu, NULL, G_MENU_MODEL (section));
   }
+
+  menu = g_menu_new ();
+  g_menu_append_section (top_menu, NULL, G_MENU_MODEL (menu));
 
   for (const GSList *l = all; l; l = l->next)
     {
@@ -107,7 +112,7 @@ ide_editor_encoding_menu_new (const char *action_name)
   g_hash_table_unref (submenus);
   g_slist_free (all);
 
-  return G_MENU_MODEL (menu);
+  return G_MENU_MODEL (top_menu);
 }
 
 void
