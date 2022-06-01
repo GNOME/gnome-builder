@@ -524,3 +524,39 @@ ide_vcs_clone_request_populate_branches (IdeVcsCloneRequest *self)
 
   IDE_EXIT;
 }
+
+IdeVcsCloneRequestValidation
+ide_vcs_clone_request_validate (IdeVcsCloneRequest *self)
+{
+  IdeVcsCloneRequestValidation flags = 0;
+  g_autoptr(IdeVcsUri) uri = NULL;
+
+  g_return_val_if_fail (IDE_IS_VCS_CLONE_REQUEST (self), 0);
+  g_return_val_if_fail (IDE_IS_VCS_CLONER (self->cloner), 0);
+
+  if (ide_str_empty0 (self->uri) || !ide_vcs_uri_is_valid (self->uri))
+    flags |= IDE_VCS_CLONE_REQUEST_INVAL_URI;
+  else
+    uri = ide_vcs_uri_new (self->uri);
+
+  if (uri != NULL)
+    {
+      const char *path;
+
+      if ((path = ide_vcs_uri_get_path (uri)))
+        {
+          g_autofree char *name = ide_vcs_cloner_get_directory_name (self->cloner, uri);
+          g_autoptr(GFile) new_directory = g_file_get_child (self->directory, name);
+
+          if (g_file_query_exists (new_directory, NULL))
+            flags |= IDE_VCS_CLONE_REQUEST_INVAL_DIRECTORY;
+        }
+    }
+
+  /* I mean, who really wants to validate email anyway */
+  if (!ide_str_empty0 (self->author_email) &&
+      strchr (self->author_email, '@') == NULL)
+    flags |= IDE_VCS_CLONE_REQUEST_INVAL_EMAIL;
+
+  return flags;
+}

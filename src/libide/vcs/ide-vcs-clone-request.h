@@ -30,6 +30,14 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_CLONE_REQUEST (ide_vcs_clone_request_get_type())
 
+typedef enum
+{
+  IDE_VCS_CLONE_REQUEST_VALID           = 0,
+  IDE_VCS_CLONE_REQUEST_INVAL_URI       = 1 << 0,
+  IDE_VCS_CLONE_REQUEST_INVAL_DIRECTORY = 1 << 1,
+  IDE_VCS_CLONE_REQUEST_INVAL_EMAIL     = 1 << 2,
+} IdeVcsCloneRequestValidation;
+
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeVcsCloneRequest, ide_vcs_clone_request, IDE, VCS_CLONE_REQUEST, IdeObject)
 
@@ -68,5 +76,8 @@ void                ide_vcs_clone_request_set_directory     (IdeVcsCloneRequest 
                                                              GFile              *directory);
 IDE_AVAILABLE_IN_ALL
 void                ide_vcs_clone_request_populate_branches (IdeVcsCloneRequest *self);
+IDE_AVAILABLE_IN_ALL
+IdeVcsCloneRequestValidation
+                    ide_vcs_clone_request_validate          (IdeVcsCloneRequest *self);
 
 G_END_DECLS
