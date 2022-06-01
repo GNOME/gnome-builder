@@ -647,7 +647,9 @@ static void
 apply_text_direction (IdeEnvironment *env,
                       const char     *text_dir_str)
 {
+  g_autofree char *value = NULL;
   GtkTextDirection dir;
+  const char *gtk_debug;
 
   if (ide_str_equal0 (text_dir_str, "rtl"))
     dir = GTK_TEXT_DIR_RTL;
@@ -657,9 +659,14 @@ apply_text_direction (IdeEnvironment *env,
     g_return_if_reached ();
 
   if (dir == gtk_widget_get_default_direction ())
-    text_dir_str = NULL;
+    return;
 
-  ide_environment_setenv (env, "GTK_DEBUG_TEXT_DIR", text_dir_str);
+  if ((gtk_debug = ide_environment_getenv (env, "GTK_DEBUG")))
+    value = g_strdup_printf ("%s:invert-text-dir", gtk_debug);
+  else
+    value = g_strdup ("invert-text-dir");
+
+  ide_environment_setenv (env, "GTK_DEBUG", value);
 }
 
 static inline const char *
