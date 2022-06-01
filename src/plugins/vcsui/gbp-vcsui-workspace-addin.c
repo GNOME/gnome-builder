@@ -42,6 +42,31 @@ struct _GbpVcsuiWorkspaceAddin
   IdeBindingGroup     *vcs_bindings;
 };
 
+static gboolean
+greeter_open_project_cb (GbpVcsuiWorkspaceAddin *self,
+                         IdeProjectInfo         *project_info,
+                         IdeGreeterWorkspace    *greeter)
+{
+  const char *vcs_uri;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_VCSUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_PROJECT_INFO (project_info));
+  g_assert (IDE_IS_GREETER_WORKSPACE (greeter));
+
+  if (!ide_project_info_get_file (project_info) &&
+      !ide_project_info_get_directory (project_info) &&
+      (vcs_uri = ide_project_info_get_vcs_uri (project_info)))
+    {
+      gbp_vcsui_clone_page_set_uri (self->clone, vcs_uri);
+      ide_greeter_workspace_set_page_name (greeter, "clone");
+      IDE_RETURN (TRUE);
+    }
+
+  IDE_RETURN (FALSE);
+}
+
 static void
 gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                 IdeWorkspace      *workspace)
@@ -54,6 +79,11 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   if (IDE_IS_GREETER_WORKSPACE (workspace))
     {
+      g_signal_connect_object (workspace,
+                               "open-project",
+                               G_CALLBACK (greeter_open_project_cb),
+                               self,
+                               G_CONNECT_AFTER | G_CONNECT_SWAPPED);
       self->clone = g_object_new (GBP_TYPE_VCSUI_CLONE_PAGE,
                                   NULL);
       ide_greeter_workspace_add_page (IDE_GREETER_WORKSPACE (workspace),
