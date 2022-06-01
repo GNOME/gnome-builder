@@ -345,16 +345,28 @@ static void
 update_menus (IdeApplication *app)
 {
   g_autoptr(GMenuItem) lf = NULL;
+  const char *lf_name = NULL;
   GMenu *menu;
 
   g_assert (IDE_IS_APPLICATION (app));
 
-  menu = ide_application_get_menu_by_id (app, "editorui-line-ends-section");
-#if !defined(G_OS_UNIX) || defined(__linux__)
-  lf = g_menu_item_new ("Linux (LF)", NULL);
+#if defined(G_OS_UNIX)
+# if defined(__APPLE__)
+  lf_name = "macOS (LF)";
+# elif  defined(__linux__)
+  lf_name = "Linux (LF)";
+# else
+  lf_name = "Unix (LF)";
+# endif
 #else
-  lf = g_menu_item_new ("Unix (LF)", NULL);
+  /* G_OS_WIN32 */
+  lf_name = "Linux (LF)";
 #endif
+
+  g_assert (lf_name != NULL);
+
+  menu = ide_application_get_menu_by_id (app, "editorui-line-ends-section");
+  lf = g_menu_item_new (lf_name, NULL);
   g_menu_item_set_action_and_target (lf, "editor.newline", "s", "lf");
   g_menu_prepend_item (menu, lf);
 }
