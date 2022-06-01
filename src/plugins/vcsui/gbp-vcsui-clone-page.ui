@@ -278,5 +278,9 @@
     -->
     <property name="module-name">git</property>
     <signal name="notify::branch-name" handler="branch_name_changed_cb" swapped="true" object="GbpVcsuiClonePage"/>
+    <!-- All the following queue validation requests -->
+    <signal name="notify::author-email" handler="request_notify_cb" swapped="true" object="GbpVcsuiClonePage"/>
+    <signal name="notify::directory" handler="request_notify_cb" swapped="true" object="GbpVcsuiClonePage"/>
+    <signal name="notify::uri" handler="request_notify_cb" swapped="true" object="GbpVcsuiClonePage"/>
   </object>
 </interface>

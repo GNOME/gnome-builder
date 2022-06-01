@@ -44,6 +44,7 @@ struct _GbpVcsuiClonePage
   GtkWidget          *main;
   GtkStack           *stack;
   VteTerminal        *terminal;
+  AdwEntryRow        *uri_row;
 
   IdeVcsCloneRequest *request;
 };
@@ -207,6 +208,36 @@ branch_name_changed_cb (GbpVcsuiClonePage  *self,
 }
 
 static void
+request_notify_cb (GbpVcsuiClonePage  *self,
+                   GParamSpec         *pspec,
+                   IdeVcsCloneRequest *request)
+{
+  IdeVcsCloneRequestValidation flags = 0;
+
+  g_assert (GBP_IS_VCSUI_CLONE_PAGE (self));
+  g_assert (IDE_IS_VCS_CLONE_REQUEST (request));
+
+  flags = ide_vcs_clone_request_validate (request);
+
+  if (flags & IDE_VCS_CLONE_REQUEST_INVAL_URI)
+    gtk_widget_add_css_class (GTK_WIDGET (self->uri_row), "error");
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (self->uri_row), "error");
+
+  if (flags & IDE_VCS_CLONE_REQUEST_INVAL_DIRECTORY)
+    gtk_widget_add_css_class (GTK_WIDGET (self->location_row), "error");
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (self->location_row), "error");
+
+  if (flags & IDE_VCS_CLONE_REQUEST_INVAL_EMAIL)
+    gtk_widget_add_css_class (GTK_WIDGET (self->author_email_row), "error");
+  else
+    gtk_widget_remove_css_class (GTK_WIDGET (self->author_email_row), "error");
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clone-page.clone", flags == 0);
+}
+
+static void
 gbp_vcsui_clone_page_root (GtkWidget *widget)
 {
   GbpVcsuiClonePage *self = (GbpVcsuiClonePage *)widget;
@@ -253,11 +284,13 @@ gbp_vcsui_clone_page_class_init (GbpVcsuiClonePageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, request);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, terminal);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiClonePage, uri_row);
 
   gtk_widget_class_bind_template_callback (widget_class, location_row_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, branch_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, branch_name_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, branch_popover_show_cb);
+  gtk_widget_class_bind_template_callback (widget_class, request_notify_cb);
 
   gtk_widget_class_install_action (widget_class, "clone-page.select-folder", NULL, select_folder_action);
   gtk_widget_class_install_action (widget_class, "clone-page.clone", NULL, clone_action);
