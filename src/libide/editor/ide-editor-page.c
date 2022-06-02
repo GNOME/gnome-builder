@@ -789,3 +789,18 @@ ide_editor_page_set_gutter (IdeEditorPage *self,
 
   IDE_EXIT;
 }
+
+void
+ide_editor_page_scroll_to_visual_position (IdeEditorPage *self,
+                                           guint          line,
+                                           guint          column)
+{
+  GtkTextIter iter;
+
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+
+  ide_source_view_get_iter_at_visual_position (self->view, &iter, line, column);
+  gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
+  gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self->view),
+                                      gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self->buffer)));
+}
