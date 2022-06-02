@@ -445,11 +445,27 @@ show_go_to_line_cb (GbpEditoruiWorkspaceAddin *self,
   ide_entry_popover_select_all (popover);
 }
 
+static void
+show_go_to_line (GSimpleAction *action,
+                 GVariant      *param,
+                 gpointer       user_data)
+{
+  GbpEditoruiWorkspaceAddin *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  if (self->page == NULL)
+    return;
+
+  gtk_menu_button_popup (self->position);
+}
+
 static const GActionEntry actions[] = {
   { "open-in-new-frame", open_in_new_frame },
   { "open-in-new-workspace", open_in_new_workspace },
   { "new-file", new_file },
   { "new-workspace", new_workspace },
+  { "show-go-to-line", show_go_to_line },
 };
 
 static void

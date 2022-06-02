@@ -4,6 +4,7 @@
     <file>editorui.plugin</file>
     <file>style.css</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file>gtk/keybindings.json</file>
     <file preprocess="xml-stripblanks">gbp-editorui-position-label.ui</file>
   </gresource>
 </gresources>
