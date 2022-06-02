@@ -46,6 +46,8 @@ struct _GbpCreateProjectWidget
   AdwEntryRow      *location_row;
   AdwEntryRow      *name_row;
   AdwEntryRow      *template_row;
+
+  guint             loaded : 1;
 };
 
 enum {
@@ -145,6 +147,9 @@ input_notify_cb (GbpCreateProjectWidget *self,
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
   g_assert (IDE_IS_TEMPLATE_INPUT (input));
+
+  if (!self->loaded)
+    return;
 
   flags = ide_template_input_validate (input);
 
@@ -406,14 +411,16 @@ static void
 gbp_create_project_widget_init (GbpCreateProjectWidget *self)
 {
   g_autofree char *projects_dir = ide_path_collapse (ide_get_projects_dir ());
+  g_autoptr(GSettings) settings = g_settings_new ("org.gnome.builder");
+  g_autofree char *default_license = g_settings_get_string (settings, "default-license");
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_editable_set_text (GTK_EDITABLE (self->location_row), projects_dir);
-  adw_combo_row_set_selected (self->license_row, find_license (self, "GPL-3.0-or-later"));
+  adw_combo_row_set_selected (self->license_row, find_license (self, default_license));
 
   /* Always start disabled */
-  gtk_widget_action_set_enabled (GTK_WIDGET (self),
-                                 "create-project.expand",
-                                 FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "create-project.expand", FALSE);
+
+  self->loaded = TRUE;
 }
