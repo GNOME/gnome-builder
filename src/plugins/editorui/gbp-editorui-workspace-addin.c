@@ -460,12 +460,77 @@ show_go_to_line (GSimpleAction *action,
   gtk_menu_button_popup (self->position);
 }
 
+static void
+format_cb (GObject      *object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdeSourceView) view = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SOURCE_VIEW (view));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_buffer_format_selection_finish (buffer, result, &error))
+    {
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+        g_warning ("%s", error->message);
+    }
+
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (view), TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+format (GSimpleAction *action,
+        GVariant      *param,
+        gpointer user_data)
+{
+  IdeSourceView *view = NULL;
+  GbpEditoruiWorkspaceAddin *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+
+  if (self->page == NULL)
+      return;
+
+  if ((view = ide_signal_group_get_target (self->view_signals)))
+    {
+      IdeBuffer *buffer = NULL;
+      IdeFormatterOptions *options = NULL;
+      gboolean insert_spaces_instead_of_tabs;
+      guint tab_width;
+      int indent_width;
+
+      buffer = ide_editor_page_get_buffer (self->page);
+      options = ide_formatter_options_new ();
+      g_object_get (view,
+                    "tab-width", &tab_width,
+                    "indent-width", &indent_width,
+                    "insert-spaces-instead-of-tabs", &insert_spaces_instead_of_tabs,
+                    NULL);
+      ide_formatter_options_set_tab_width (options, tab_width);
+      ide_formatter_options_set_insert_spaces (options, insert_spaces_instead_of_tabs);
+      gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
+      ide_buffer_format_selection_async (buffer,
+                                         options,
+                                         NULL,
+                                         format_cb,
+                                         g_object_ref (view));
+    }
+}
+
 static const GActionEntry actions[] = {
   { "open-in-new-frame", open_in_new_frame },
   { "open-in-new-workspace", open_in_new_workspace },
   { "new-file", new_file },
   { "new-workspace", new_workspace },
   { "show-go-to-line", show_go_to_line },
+  { "format", format},
 };
 
 static void
