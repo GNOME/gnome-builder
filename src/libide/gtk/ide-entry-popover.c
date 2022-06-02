@@ -403,7 +403,7 @@ ide_entry_popover_init (IdeEntryPopover *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  g_signal_connect_object (priv->entry,
+  g_signal_connect_object (gtk_editable_get_delegate (GTK_EDITABLE (priv->entry)),
                            "insert-text",
                            G_CALLBACK (ide_entry_popover_entry_insert_text),
                            self,
