@@ -73,5 +73,10 @@ void                        ide_source_view_jump_to_iter        (GtkTextView    
                                                                  gboolean                   use_align,
                                                                  double                     xalign,
                                                                  double                     yalign);
+IDE_AVAILABLE_IN_ALL
+void                        ide_source_view_get_iter_at_visual_position (IdeSourceView *self,
+                                                                         GtkTextIter   *iter,
+                                                                         guint          line,
+                                                                         guint          line_offset);
 
 G_END_DECLS
