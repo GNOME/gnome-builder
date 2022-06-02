@@ -351,6 +351,54 @@ new_file (GSimpleAction *action,
   IDE_EXIT;
 }
 
+static gboolean
+go_to_line_insert_text_cb (GbpEditoruiWorkspaceAddin *self,
+                           guint                      pos,
+                           const char                *str,
+                           guint                      n_chars,
+                           IdeEntryPopover           *entry)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_ENTRY_POPOVER (entry));
+
+  for (const char *iter = str; *iter; iter = g_utf8_next_char (iter))
+    {
+      if (*iter != ':' && !g_ascii_isdigit (*iter))
+        IDE_RETURN (GDK_EVENT_STOP);
+    }
+
+  IDE_RETURN (GDK_EVENT_PROPAGATE);
+}
+
+static void
+go_to_line_changed_cb (GbpEditoruiWorkspaceAddin *self,
+                       IdeEntryPopover           *entry)
+{
+  const char *text;
+  int line = -1;
+  int column = -1;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_ENTRY_POPOVER (entry));
+
+  text = ide_entry_popover_get_text (entry);
+
+  if (ide_str_empty0 (text) ||
+      sscanf (text, "%d:%d", &line, &column) < 1)
+    {
+      ide_entry_popover_set_ready (entry, FALSE);
+      IDE_EXIT;
+    }
+
+  ide_entry_popover_set_ready (entry, TRUE);
+
+  IDE_EXIT;
+}
+
 static const GActionEntry actions[] = {
   { "open-in-new-frame", open_in_new_frame },
   { "open-in-new-workspace", open_in_new_workspace },
@@ -479,6 +527,16 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                           "button-text", _("Go"),
                           "title", _("Go to Line"),
                           NULL);
+  g_signal_connect_object (popover,
+                           "changed",
+                           G_CALLBACK (go_to_line_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (popover,
+                           "insert-text",
+                           G_CALLBACK (go_to_line_insert_text_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   self->position_label = g_object_new (GBP_TYPE_EDITORUI_POSITION_LABEL, NULL);
   self->position = g_object_new (GTK_TYPE_MENU_BUTTON,
                                  "direction", GTK_ARROW_UP,
