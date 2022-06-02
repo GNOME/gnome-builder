@@ -1136,3 +1136,41 @@ ide_source_view_set_highlight_current_line (IdeSourceView *self,
         g_object_notify (G_OBJECT (self), "highlight-current-line");
     }
 }
+
+void
+ide_source_view_get_iter_at_visual_position (IdeSourceView *self,
+                                             GtkTextIter   *iter,
+                                             guint          line,
+                                             guint          line_offset)
+{
+  guint tab_width;
+  guint pos = 0;
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (iter != NULL);
+
+  tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (self));
+  gtk_text_buffer_get_iter_at_line (GTK_TEXT_BUFFER (self->buffer), iter, line);
+
+  while (pos < line_offset)
+    {
+      gunichar ch = gtk_text_iter_get_char (iter);
+
+      switch (ch)
+        {
+        case '\t':
+          pos += tab_width - (pos % tab_width);
+          break;
+
+        case 0:
+        case '\n':
+          return;
+
+        default:
+          pos++;
+          break;
+        }
+
+      gtk_text_iter_forward_char (iter);
+    }
+}
