@@ -46,5 +46,20 @@
     <key name="format-on-save" type="b">
       <default>false</default>
     </key>
+    <key name="default-license" type="s">
+      <choices>
+        <choice value="AGPL-3.0-or-later"/>
+        <choice value="Apache-2.0"/>
+        <choice value="GPL-2.0-or-later"/>
+        <choice value="GPL-3.0-or-later"/>
+        <choice value="LGPL-2.1-or-later"/>
+        <choice value="LGPL-3.0-or-later"/>
+        <choice value="MIT"/>
+        <choice value="No License"/>
+      </choices>
+      <default>'GPL-3.0-or-later'</default>
+      <summary>Default License</summary>
+      <description>THe default license to use for new projects</description>
+    </key>
   </schema>
 </schemalist>
