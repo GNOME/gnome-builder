@@ -22,13 +22,14 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "gbp-editorui-position-label.h"
 
 struct _GbpEditoruiPositionLabel
 {
   GtkWidget parent_instance;
-  GtkLabel *line;
-  GtkLabel *column;
+  GtkLabel *label;
 };
 
 G_DEFINE_TYPE (GbpEditoruiPositionLabel, gbp_editorui_position_label, GTK_TYPE_WIDGET)
@@ -37,10 +38,9 @@ static void
 gbp_editorui_position_label_dispose (GObject *object)
 {
   GbpEditoruiPositionLabel *self = (GbpEditoruiPositionLabel *)object;
-  GtkWidget *child;
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self))))
-    gtk_widget_unparent (child);
+  gtk_widget_unparent (GTK_WIDGET (self->label));
+  self->label = NULL;
 
   G_OBJECT_CLASS (gbp_editorui_position_label_parent_class)->dispose (object);
 }
@@ -53,10 +53,9 @@ gbp_editorui_position_label_class_init (GbpEditoruiPositionLabelClass *klass)
 
   object_class->dispose = gbp_editorui_position_label_dispose;
 
-  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/editorui/gbp-editorui-position-label.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpEditoruiPositionLabel, line);
-  gtk_widget_class_bind_template_child (widget_class, GbpEditoruiPositionLabel, column);
+  gtk_widget_class_bind_template_child (widget_class, GbpEditoruiPositionLabel, label);
 }
 
 static void
@@ -70,13 +69,11 @@ gbp_editorui_position_label_update (GbpEditoruiPositionLabel *self,
                                     guint                     line,
                                     guint                     column)
 {
-  char str[32];
+  char str[64];
 
   g_return_if_fail (GBP_IS_EDITORUI_POSITION_LABEL (self));
 
-  g_snprintf (str, sizeof str, "%u", line + 1);
-  gtk_label_set_label (self->line, str);
-
-  g_snprintf (str, sizeof str, "%u", column + 1);
-  gtk_label_set_label (self->column, str);
+  /* translators: the first %u is replaced with the line number and the second with the column. */
+  g_snprintf (str, sizeof str, _("Ln %u, Col %u"), line + 1, column + 1);
+  gtk_label_set_label (self->label, str);
 }
