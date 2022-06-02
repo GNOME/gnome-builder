@@ -426,6 +426,25 @@ go_to_line_changed_cb (GbpEditoruiWorkspaceAddin *self,
   IDE_EXIT;
 }
 
+static void
+show_go_to_line_cb (GbpEditoruiWorkspaceAddin *self,
+                    IdeEntryPopover           *popover)
+{
+  g_autofree char *text = NULL;
+  IdeSourceView *view;
+  guint line;
+  guint column;
+
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_ENTRY_POPOVER (popover));
+
+  view = ide_editor_page_get_view (self->page);
+  ide_source_view_get_visual_position (view, &line, &column);
+  text = g_strdup_printf ("%u:%u", line+1, column+1);
+  ide_entry_popover_set_text (popover, text);
+  ide_entry_popover_select_all (popover);
+}
+
 static const GActionEntry actions[] = {
   { "open-in-new-frame", open_in_new_frame },
   { "open-in-new-workspace", open_in_new_workspace },
@@ -554,6 +573,11 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                           "button-text", _("Go"),
                           "title", _("Go to Line"),
                           NULL);
+  g_signal_connect_object (popover,
+                           "show",
+                           G_CALLBACK (show_go_to_line_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   g_signal_connect_object (popover,
                            "changed",
                            G_CALLBACK (go_to_line_changed_cb),
