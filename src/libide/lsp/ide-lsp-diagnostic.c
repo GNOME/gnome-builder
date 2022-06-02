@@ -137,7 +137,7 @@ ide_lsp_diagnostic_init (IdeLspDiagnostic *self)
  * Increments the reference count of the underlying diagnostic variant and
  * returns it.
  *
- * Returns: (transfer full): a #GVariant with it's reference count incremented
+ * Returns: (transfer full) (nullable): a #GVariant with it's reference count incremented
  *
  * Since: 42.0
  */

@@ -694,6 +694,8 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
       const gchar *source = NULL;
       g_autoptr(GVariantIter) tags = NULL;
       GVariant *current_tag;
+      g_autoptr(GVariantIter) related_information = NULL;
+      GVariant *current_related;
       gint64 severity = 0;
       gboolean success;
       struct {
@@ -711,6 +713,7 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
       JSONRPC_MESSAGE_PARSE (value, "severity", JSONRPC_MESSAGE_GET_INT64 (&severity));
       JSONRPC_MESSAGE_PARSE (value, "source", JSONRPC_MESSAGE_GET_STRING (&source));
       JSONRPC_MESSAGE_PARSE (value, "tags", JSONRPC_MESSAGE_GET_ITER (&tags));
+      JSONRPC_MESSAGE_PARSE (value, "relatedInformation", JSONRPC_MESSAGE_GET_ITER (&related_information));
 
       /* Extract location information */
       success = JSONRPC_MESSAGE_PARSE (range,
@@ -771,6 +774,48 @@ ide_lsp_client_translate_diagnostics (IdeLspClient *self,
       ide_diagnostic_take_range (IDE_DIAGNOSTIC (diag), ide_range_new (begin_loc, end_loc));
 
       g_ptr_array_add (ar, g_steal_pointer (&diag));
+
+      while (related_information != NULL && g_variant_iter_loop (related_information, "v", &current_related))
+        {
+          g_autoptr(IdeLocation) related_begin_loc = NULL;
+          g_autoptr(IdeLocation) related_end_loc = NULL;
+          g_autoptr(GFile) related_file = NULL;
+          const char *uri = NULL;
+
+          success = JSONRPC_MESSAGE_PARSE (current_related, "message", JSONRPC_MESSAGE_GET_STRING (&message));
+          if (success)
+            {
+              success = JSONRPC_MESSAGE_PARSE (current_related,
+                "location", "{",
+                  "uri", JSONRPC_MESSAGE_GET_STRING (&uri),
+                  "range", "{",
+                    "start", "{",
+                      "line", JSONRPC_MESSAGE_GET_INT64 (&begin.line),
+                      "character", JSONRPC_MESSAGE_GET_INT64 (&begin.column),
+                    "}",
+                    "end", "{",
+                      "line", JSONRPC_MESSAGE_GET_INT64 (&end.line),
+                      "character", JSONRPC_MESSAGE_GET_INT64 (&end.column),
+                    "}",
+                  "}",
+                "}"
+              );
+            }
+
+          if (!success)
+            continue;
+
+          related_file = g_file_new_for_uri (uri);
+          related_begin_loc = ide_location_new (related_file, begin.line, begin.column);
+          related_end_loc = ide_location_new (related_file, end.line, end.column);
+
+          diag = ide_lsp_diagnostic_new (IDE_DIAGNOSTIC_NOTE, message, related_begin_loc, NULL);
+          if (priv->use_markdown_in_diagnostics)
+            ide_diagnostic_set_marked_kind (IDE_DIAGNOSTIC (diag), IDE_MARKED_KIND_MARKDOWN);
+          ide_diagnostic_take_range (IDE_DIAGNOSTIC (diag), ide_range_new (related_begin_loc, related_end_loc));
+
+          g_ptr_array_add (ar, g_steal_pointer (&diag));
+        }
     }
 
   ret = ide_diagnostics_new ();
