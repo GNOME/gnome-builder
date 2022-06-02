@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <string.h>
 #include <math.h>
 
@@ -253,7 +255,8 @@ ide_editor_syntax_menu_new (const char *action_name)
   const char * const *language_ids;
   g_autofree char **sections = NULL;
   GHashTable *submenus;
-  GMenu *menu;
+  g_autoptr(GMenu) top_section = NULL;
+  GMenu *top_menu;
   guint len = 0;
 
   g_return_val_if_fail (action_name, NULL);
@@ -261,7 +264,10 @@ ide_editor_syntax_menu_new (const char *action_name)
   manager = gtk_source_language_manager_get_default ();
   language_ids = gtk_source_language_manager_get_language_ids (manager);
   submenus = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
-  menu = g_menu_new ();
+  top_menu = g_menu_new ();
+  top_section = g_menu_new ();
+
+  g_menu_append_section (top_menu, _("Language"), G_MENU_MODEL (top_section));
 
   for (guint i = 0; language_ids[i]; i++)
     {
@@ -295,10 +301,10 @@ ide_editor_syntax_menu_new (const char *action_name)
   for (guint i = 0; sections[i]; i++)
     {
       GMenu *submenu = g_hash_table_lookup (submenus, sections[i]);
-      g_menu_append_submenu (menu, sections[i], G_MENU_MODEL (submenu));
+      g_menu_append_submenu (top_section, sections[i], G_MENU_MODEL (submenu));
     }
 
   g_hash_table_unref (submenus);
 
-  return G_MENU_MODEL (menu);
+  return G_MENU_MODEL (top_menu);
 }
