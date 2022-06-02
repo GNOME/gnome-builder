@@ -76,26 +76,28 @@ IDE_AVAILABLE_IN_ALL
 const gchar *ide_entry_popover_get_text        (IdeEntryPopover *self);
 IDE_AVAILABLE_IN_ALL
 void         ide_entry_popover_set_text        (IdeEntryPopover *self,
-                                                 const gchar     *text);
+                                                const gchar     *text);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_entry_popover_get_message     (IdeEntryPopover *self);
 IDE_AVAILABLE_IN_ALL
 void         ide_entry_popover_set_message     (IdeEntryPopover *self,
-                                                 const gchar     *message);
+                                                const gchar     *message);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_entry_popover_get_title       (IdeEntryPopover *self);
 IDE_AVAILABLE_IN_ALL
 void         ide_entry_popover_set_title       (IdeEntryPopover *self,
-                                                 const gchar     *title);
+                                                const gchar     *title);
 IDE_AVAILABLE_IN_ALL
 const gchar *ide_entry_popover_get_button_text (IdeEntryPopover *self);
 IDE_AVAILABLE_IN_ALL
 void         ide_entry_popover_set_button_text (IdeEntryPopover *self,
-                                                 const gchar     *button_text);
+                                                const gchar     *button_text);
 IDE_AVAILABLE_IN_ALL
 gboolean     ide_entry_popover_get_ready       (IdeEntryPopover *self);
 IDE_AVAILABLE_IN_ALL
 void         ide_entry_popover_set_ready       (IdeEntryPopover *self,
-                                                 gboolean         ready);
+                                                gboolean         ready);
+IDE_AVAILABLE_IN_ALL
+void         ide_entry_popover_select_all      (IdeEntryPopover *self);
 
 G_END_DECLS

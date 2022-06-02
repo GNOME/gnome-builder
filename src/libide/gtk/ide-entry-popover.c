@@ -415,3 +415,13 @@ ide_entry_popover_new (void)
 {
   return g_object_new (IDE_TYPE_ENTRY_POPOVER, NULL);
 }
+
+void
+ide_entry_popover_select_all (IdeEntryPopover *self)
+{
+  IdeEntryPopoverPrivate *priv = ide_entry_popover_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_ENTRY_POPOVER (self));
+
+  gtk_editable_select_region (GTK_EDITABLE (priv->entry), 0, -1);
+}
