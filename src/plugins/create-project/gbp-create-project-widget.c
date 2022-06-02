@@ -42,6 +42,7 @@ struct _GbpCreateProjectWidget
 
   AdwEntryRow      *app_id_row;
   AdwEntryRow      *language_row;
+  AdwComboRow      *license_row;
   AdwEntryRow      *location_row;
   AdwEntryRow      *name_row;
   AdwEntryRow      *template_row;
@@ -306,6 +307,31 @@ expand_action (GtkWidget  *widget,
   IDE_EXIT;
 }
 
+static guint
+find_license (GbpCreateProjectWidget *self,
+              const char             *license)
+{
+  GListModel *model;
+  guint n_items;
+
+  g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
+  g_assert (license != NULL);
+
+  model = ide_template_input_get_licenses_model (self->input);
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(GtkStringObject) strobj = g_list_model_get_item (model, i);
+      const char *str = gtk_string_object_get_string (strobj);
+
+      if (ide_str_equal0 (str, license))
+        return i;
+    }
+
+  return 0;
+}
+
 static void
 gbp_create_project_widget_dispose (GObject *object)
 {
@@ -356,6 +382,7 @@ gbp_create_project_widget_class_init (GbpCreateProjectWidgetClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, directory_clash);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, input);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, language_row);
+  gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, license_row);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, location_row);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, main);
   gtk_widget_class_bind_template_child (widget_class, GbpCreateProjectWidget, name_row);
@@ -383,6 +410,7 @@ gbp_create_project_widget_init (GbpCreateProjectWidget *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_editable_set_text (GTK_EDITABLE (self->location_row), projects_dir);
+  adw_combo_row_set_selected (self->license_row, find_license (self, "GPL-3.0-or-later"));
 
   /* Always start disabled */
   gtk_widget_action_set_enabled (GTK_WIDGET (self),

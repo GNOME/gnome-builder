@@ -104,7 +104,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwComboRow">
+                  <object class="AdwComboRow" id="license_row">
                     <property name="title" translatable="yes">License</property>
                     <property name="model" bind-source="input" bind-property="licenses-model" bind-flags="sync-create"/>
                     <signal name="notify::selected-item" handler="license_changed_cb" swapped="true" object="GbpCreateProjectWidget"/>
