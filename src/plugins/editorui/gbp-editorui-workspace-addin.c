@@ -65,6 +65,8 @@ struct _GbpEditoruiWorkspaceAddin
   GSettings                *editor_settings;
 
   guint                     queued_cursor_moved;
+
+  IdeEditorPage            *page;
 };
 
 #define clear_from_statusbar(s,w) clear_from_statusbar(s, (GtkWidget **)w)
@@ -351,6 +353,31 @@ new_file (GSimpleAction *action,
   IDE_EXIT;
 }
 
+static void
+go_to_line_activate_cb (GbpEditoruiWorkspaceAddin *self,
+                        const char                *str,
+                        IdeEntryPopover           *entry)
+{
+  int line = -1;
+  int column = -1;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_ENTRY_POPOVER (entry));
+
+  if (ide_str_empty0 (str) || sscanf (str, "%d:%d", &line, &column) < 1)
+    IDE_EXIT;
+
+  line--;
+  column--;
+
+  ide_editor_page_scroll_to_visual_position (self->page, MAX (0, line), MAX (0, column));
+  gtk_widget_grab_focus (GTK_WIDGET (self->page));
+
+  IDE_EXIT;
+}
+
 static gboolean
 go_to_line_insert_text_cb (GbpEditoruiWorkspaceAddin *self,
                            guint                      pos,
@@ -537,6 +564,11 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                            G_CALLBACK (go_to_line_insert_text_cb),
                            self,
                            G_CONNECT_SWAPPED);
+  g_signal_connect_object (popover,
+                           "activate",
+                           G_CALLBACK (go_to_line_activate_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   self->position_label = g_object_new (GBP_TYPE_EDITORUI_POSITION_LABEL, NULL);
   self->position = g_object_new (GTK_TYPE_MENU_BUTTON,
                                  "direction", GTK_ARROW_UP,
@@ -614,6 +646,8 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
 
   if (!IDE_IS_EDITOR_PAGE (page))
     page = NULL;
+
+  self->page = IDE_EDITOR_PAGE (page);
 
   if (page != NULL)
     {
