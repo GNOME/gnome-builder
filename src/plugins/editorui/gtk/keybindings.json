@@ -1,1 +1,2 @@
 { "trigger" : "<Control>i", "action" : "editorui.show-go-to-line", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Shift><Alt>f", "action": "editorui.format", "when" : "canEdit()", "phase" : "capture" },
