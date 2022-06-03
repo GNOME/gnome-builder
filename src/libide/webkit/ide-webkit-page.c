@@ -125,21 +125,6 @@ toolbar_notify_visible_cb (IdeWebkitPage *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_TOOLBAR]);
 }
 
-static void
-ide_webkit_page_constructed (GObject *object)
-{
-  IdeWebkitPage *self = (IdeWebkitPage *)object;
-  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
-  GtkStyleContext *context;
-  GdkRGBA color;
-
-  G_OBJECT_CLASS (ide_webkit_page_parent_class)->constructed (object);
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (priv->web_view));
-  if (gtk_style_context_lookup_color (context, "theme_base_color", &color))
-    webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (priv->web_view), &color);
-}
-
 static gboolean
 ide_webkit_page_grab_focus (GtkWidget *widget)
 {
@@ -155,6 +140,21 @@ ide_webkit_page_grab_focus (GtkWidget *widget)
     return gtk_widget_grab_focus (GTK_WIDGET (priv->url_bar));
   else
     return gtk_widget_grab_focus (GTK_WIDGET (priv->web_view));
+}
+
+static void
+ide_webkit_page_constructed (GObject *object)
+{
+  IdeWebkitPage *self = (IdeWebkitPage *)object;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  GtkStyleContext *context;
+  GdkRGBA color;
+
+  G_OBJECT_CLASS (ide_webkit_page_parent_class)->constructed (object);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (priv->web_view));
+  if (gtk_style_context_lookup_color (context, "theme_base_color", &color))
+    webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (priv->web_view), &color);
 }
 
 static void
