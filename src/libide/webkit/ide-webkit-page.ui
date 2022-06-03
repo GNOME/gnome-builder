@@ -81,6 +81,7 @@
               <object class="GtkMenuButton">
                 <property name="icon-name">open-menu-symbolic</property>
                 <property name="menu-model">primary_menu</property>
+                <property name="direction">up</property>
               </object>
             </child>
           </object>
