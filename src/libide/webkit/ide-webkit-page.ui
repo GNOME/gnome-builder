@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeWebkitPage" parent="IdePage">
+    <property name="icon-name">web-browser-symbolic</property>
+    <property name="title" translatable="yes">Blank page</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
