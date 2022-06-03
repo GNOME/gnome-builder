@@ -38,10 +38,13 @@ static void web_browser_new_page_action      (GbpWebBrowserWorkspaceAddin *self,
                                               GVariant                    *param);
 static void web_browser_focus_address_action (GbpWebBrowserWorkspaceAddin *self,
                                               GVariant                    *param);
+static void web_browser_reload_action        (GbpWebBrowserWorkspaceAddin *self,
+                                              GVariant                    *param);
 
 IDE_DEFINE_ACTION_GROUP (GbpWebBrowserWorkspaceAddin, gbp_web_browser_workspace_addin, {
   { "new-page", web_browser_new_page_action },
   { "focus-address", web_browser_focus_address_action },
+  { "reload", web_browser_reload_action, "b" },
 })
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWebBrowserWorkspaceAddin, gbp_web_browser_workspace_addin, G_TYPE_OBJECT,
@@ -142,6 +145,36 @@ web_browser_focus_address_action (GbpWebBrowserWorkspaceAddin *self,
     IDE_EXIT;
 
   ide_webkit_page_focus_address (IDE_WEBKIT_PAGE (page));
+
+  IDE_EXIT;
+}
+
+static void
+web_browser_reload_action (GbpWebBrowserWorkspaceAddin *self,
+                           GVariant                    *param)
+{
+  IdePage *page;
+  gboolean ignore_cache;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_WEB_BROWSER_WORKSPACE_ADDIN (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_BOOLEAN));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+
+  if (!(page = ide_workspace_get_most_recent_page (self->workspace)))
+    IDE_EXIT;
+
+  if (!IDE_IS_WEBKIT_PAGE (page))
+    IDE_EXIT;
+
+  ignore_cache = g_variant_get_boolean (param);
+
+  if (ignore_cache)
+    ide_webkit_page_reload_ignoring_cache (IDE_WEBKIT_PAGE (page));
+  else
+    ide_webkit_page_reload (IDE_WEBKIT_PAGE (page));
 
   IDE_EXIT;
 }
