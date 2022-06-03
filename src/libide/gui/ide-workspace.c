@@ -26,6 +26,7 @@
 #include <libide-plugins.h>
 
 #include "ide-gui-global.h"
+#include "ide-page-private.h"
 #include "ide-search-popover-private.h"
 #include "ide-shortcut-bundle-private.h"
 #include "ide-workspace-addin.h"
@@ -309,6 +310,9 @@ ide_workspace_notify_focus_widget (IdeWorkspace *self,
 
       /* Focus changed, and we have a new widget */
       g_set_weak_pointer (&priv->current_page_ptr, focus);
+
+      /* And move this page to the front of the MRU */
+      _ide_workspace_move_front_page_mru (self, _ide_page_get_mru_link (focus));
 
       if (priv->addins != NULL)
         {
