@@ -33,12 +33,15 @@ struct _GbpWebBrowserWorkspaceAddin
   IdeWorkspace *workspace;
 };
 
-static void workspace_addin_iface_init  (IdeWorkspaceAddinInterface  *iface);
-static void web_browser_new_page_action (GbpWebBrowserWorkspaceAddin *self,
-                                         GVariant                    *param);
+static void workspace_addin_iface_init       (IdeWorkspaceAddinInterface  *iface);
+static void web_browser_new_page_action      (GbpWebBrowserWorkspaceAddin *self,
+                                              GVariant                    *param);
+static void web_browser_focus_address_action (GbpWebBrowserWorkspaceAddin *self,
+                                              GVariant                    *param);
 
 IDE_DEFINE_ACTION_GROUP (GbpWebBrowserWorkspaceAddin, gbp_web_browser_workspace_addin, {
   { "new-page", web_browser_new_page_action },
+  { "focus-address", web_browser_focus_address_action },
 })
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWebBrowserWorkspaceAddin, gbp_web_browser_workspace_addin, G_TYPE_OBJECT,
@@ -119,6 +122,28 @@ web_browser_new_page_action (GbpWebBrowserWorkspaceAddin *self,
   ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
   panel_widget_raise (PANEL_WIDGET (page));
   gtk_widget_grab_focus (GTK_WIDGET (page));
+
+  IDE_EXIT;
+}
+
+static void
+web_browser_focus_address_action (GbpWebBrowserWorkspaceAddin *self,
+                                  GVariant                    *param)
+{
+  IdePage *page;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_WEB_BROWSER_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+
+  if (!(page = ide_workspace_get_most_recent_page (self->workspace)))
+    IDE_EXIT;
+
+  if (!IDE_IS_WEBKIT_PAGE (page))
+    IDE_EXIT;
+
+  ide_webkit_page_focus_address (IDE_WEBKIT_PAGE (page));
 
   IDE_EXIT;
 }
