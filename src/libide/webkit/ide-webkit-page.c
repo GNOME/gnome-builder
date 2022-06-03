@@ -140,10 +140,21 @@ ide_webkit_page_constructed (GObject *object)
     webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (priv->web_view), &color);
 }
 
-static void
-ide_webkit_page_dispose (GObject *object)
+static gboolean
+ide_webkit_page_grab_focus (GtkWidget *widget)
 {
-  G_OBJECT_CLASS (ide_webkit_page_parent_class)->dispose (object);
+  IdeWebkitPage *self = (IdeWebkitPage *)widget;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  const char *uri;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  uri = webkit_web_view_get_uri (priv->web_view);
+
+  if (ide_str_empty0 (uri))
+    return gtk_widget_grab_focus (GTK_WIDGET (priv->url_bar));
+  else
+    return gtk_widget_grab_focus (GTK_WIDGET (priv->web_view));
 }
 
 static void
@@ -191,9 +202,10 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ide_webkit_page_constructed;
-  object_class->dispose = ide_webkit_page_dispose;
   object_class->get_property = ide_webkit_page_get_property;
   object_class->set_property = ide_webkit_page_set_property;
+
+  widget_class->grab_focus = ide_webkit_page_grab_focus;
 
   properties [PROP_SHOW_TOOLBAR] =
     g_param_spec_boolean ("show-toolbar",
