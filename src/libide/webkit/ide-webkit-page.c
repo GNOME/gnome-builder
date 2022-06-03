@@ -32,6 +32,7 @@ typedef struct
   GtkStack           *reload_stack;
   GtkCenterBox       *toolbar;
   IdeUrlBar          *url_bar;
+  WebKitSettings     *web_settings;
   WebKitWebView      *web_view;
 
   GSimpleActionGroup *actions;
@@ -296,6 +297,23 @@ ide_webkit_page_update_reload (IdeWebkitPage *self)
 }
 
 static void
+add_property_action (gpointer    object,
+                     const char *property_name,
+                     GActionMap *action_map)
+{
+  g_autoptr(GPropertyAction) action = NULL;
+
+  g_assert (G_IS_OBJECT (object));
+  g_assert (property_name != NULL);
+  g_assert (G_IS_ACTION_MAP (action_map));
+
+  action = g_property_action_new (property_name, object, property_name);
+
+  if (action != NULL)
+    g_action_map_add_action (action_map, G_ACTION (action));
+}
+
+static void
 ide_webkit_page_constructed (GObject *object)
 {
   IdeWebkitPage *self = (IdeWebkitPage *)object;
@@ -386,10 +404,12 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, reload_stack);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, toolbar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, url_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, web_settings);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, web_view);
   gtk_widget_class_bind_template_callback (widget_class, on_toolbar_notify_visible_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_webkit_page_update_reload);
 
+  g_type_ensure (WEBKIT_TYPE_SETTINGS);
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
   g_type_ensure (IDE_TYPE_URL_BAR);
 }
@@ -417,6 +437,10 @@ ide_webkit_page_init (IdeWebkitPage *self)
   gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "web",
                                   G_ACTION_GROUP (priv->actions));
+
+  add_property_action (priv->web_settings,
+                       "enable-javascript",
+                       G_ACTION_MAP (priv->actions));
 
   list = webkit_web_view_get_back_forward_list (priv->web_view);
   g_signal_connect_object (list,

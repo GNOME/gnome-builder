@@ -8,6 +8,7 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="WebKitWebView" id="web_view">
+            <property name="settings">web_settings</property>
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
             <signal name="notify::is-loading" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
@@ -76,9 +77,25 @@
                 <property name="web_view">web_view</property>
               </object>
             </child>
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="menu-model">primary_menu</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
     </child>
   </template>
+  <object class="WebKitSettings" id="web_settings"/>
+  <menu id="primary_menu">
+    <section>
+      <attribute name="label" translatable="yes">Settings</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Allow JavaScript</attribute>
+        <attribute name="action">web.enable-javascript</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
