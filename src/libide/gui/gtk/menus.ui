@@ -53,6 +53,7 @@
   <menu id="new-document-menu">
     <section id="new-document-section"/>
     <section id="open-document-section"/>
+    <section id="new-browser-section"/>
     <section id="new-terminal-section"/>
   </menu>
 </interface>
