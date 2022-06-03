@@ -290,3 +290,45 @@ ide_webkit_page_focus_address (IdeWebkitPage *self)
 
   return gtk_widget_grab_focus (GTK_WIDGET (priv->url_bar));
 }
+
+void
+ide_webkit_page_go_back (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  WebKitBackForwardList *list;
+  WebKitBackForwardListItem *item;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_WEBKIT_PAGE (self));
+
+  list = webkit_web_view_get_back_forward_list (priv->web_view);
+  item = webkit_back_forward_list_get_back_item (list);
+
+  g_return_if_fail (item != NULL);
+
+  webkit_web_view_go_to_back_forward_list_item (priv->web_view, item);
+
+  IDE_EXIT;
+}
+
+void
+ide_webkit_page_go_forward (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  WebKitBackForwardList *list;
+  WebKitBackForwardListItem *item;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_WEBKIT_PAGE (self));
+
+  list = webkit_web_view_get_back_forward_list (priv->web_view);
+  item = webkit_back_forward_list_get_forward_item (list);
+
+  g_return_if_fail (item != NULL);
+
+  webkit_web_view_go_to_back_forward_list_item (priv->web_view, item);
+
+  IDE_EXIT;
+}
