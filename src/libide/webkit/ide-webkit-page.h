@@ -46,5 +46,9 @@ gboolean       ide_webkit_page_get_show_toolbar (IdeWebkitPage *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_webkit_page_set_show_toolbar (IdeWebkitPage *self,
                                                  gboolean       show_toolbar);
+IDE_AVAILABLE_IN_ALL
+void           ide_webkit_page_go_back          (IdeWebkitPage *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_webkit_page_go_forward       (IdeWebkitPage *self);
 
 G_END_DECLS
