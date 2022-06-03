@@ -29,9 +29,10 @@
 
 typedef struct
 {
-  GtkCenterBox  *toolbar;
-  IdeUrlBar     *url_bar;
-  WebKitWebView *web_view;
+  GtkCenterBox       *toolbar;
+  IdeUrlBar          *url_bar;
+  WebKitWebView      *web_view;
+  GSimpleActionGroup *actions;
 } IdeWebkitPagePrivate;
 
 enum {
@@ -143,6 +144,112 @@ ide_webkit_page_grab_focus (GtkWidget *widget)
 }
 
 static void
+go_forward_action (GSimpleAction *action,
+                   GVariant      *param,
+                   gpointer       user_data)
+{
+  IdeWebkitPage *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  ide_webkit_page_go_forward (self);
+
+  IDE_EXIT;
+}
+
+static void
+go_back_action (GSimpleAction *action,
+                GVariant      *param,
+                gpointer       user_data)
+{
+  IdeWebkitPage *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  ide_webkit_page_go_back (self);
+
+  IDE_EXIT;
+}
+
+static void
+reload_action (GSimpleAction *action,
+               GVariant      *param,
+               gpointer       user_data)
+{
+  IdeWebkitPage *self = user_data;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  webkit_web_view_reload (priv->web_view);
+
+  IDE_EXIT;
+}
+
+static const GActionEntry actions[] = {
+  { "go-forward", go_forward_action },
+  { "go-back", go_back_action },
+  { "reload", reload_action },
+};
+
+static void
+set_action_enabled (IdeWebkitPage *self,
+                    const char    *action_name,
+                    gboolean       enabled)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  GAction *action;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (action_name != NULL);
+
+  if (!(action = g_action_map_lookup_action (G_ACTION_MAP (priv->actions), action_name)))
+    {
+      g_critical ("Failed to locate action %s", action_name);
+      return;
+    }
+
+  if (!G_IS_SIMPLE_ACTION (action))
+    {
+      g_critical ("Implausible, %s is not a GSimpleAction",
+                  G_OBJECT_TYPE_NAME (action));
+      return;
+    }
+
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), enabled);
+}
+
+static void
+on_back_forward_list_changed_cb (IdeWebkitPage             *self,
+                                 WebKitBackForwardListItem *item_added,
+                                 const GList               *items_removed,
+                                 WebKitBackForwardList     *list)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (WEBKIT_IS_BACK_FORWARD_LIST (list));
+
+  set_action_enabled (self, "go-forward",
+                      webkit_web_view_can_go_forward (priv->web_view));
+  set_action_enabled (self, "go-back",
+                      webkit_web_view_can_go_back (priv->web_view));
+
+  IDE_EXIT;
+}
+
+static void
 ide_webkit_page_constructed (GObject *object)
 {
   IdeWebkitPage *self = (IdeWebkitPage *)object;
@@ -231,6 +338,7 @@ static void
 ide_webkit_page_init (IdeWebkitPage *self)
 {
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  WebKitBackForwardList *list;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -240,6 +348,23 @@ ide_webkit_page_init (IdeWebkitPage *self)
   g_object_bind_property_full (priv->web_view, "favicon", self, "icon", 0,
                                transform_cairo_surface_to_gicon,
                                NULL, self, NULL);
+
+  priv->actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (priv->actions),
+                                   actions,
+                                   G_N_ELEMENTS (actions),
+                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "web",
+                                  G_ACTION_GROUP (priv->actions));
+
+  list = webkit_web_view_get_back_forward_list (priv->web_view);
+  g_signal_connect_object (list,
+                           "changed",
+                           G_CALLBACK (on_back_forward_list_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  on_back_forward_list_changed_cb (self, NULL, NULL, list);
 }
 
 IdeWebkitPage *
