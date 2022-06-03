@@ -264,3 +264,13 @@ ide_webkit_page_set_show_toolbar (IdeWebkitPage *self,
 
   gtk_widget_set_visible (GTK_WIDGET (priv->toolbar), show_toolbar);
 }
+
+gboolean
+ide_webkit_page_focus_address (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WEBKIT_PAGE (self), FALSE);
+
+  return gtk_widget_grab_focus (GTK_WIDGET (priv->url_bar));
+}
