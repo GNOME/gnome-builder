@@ -10,6 +10,8 @@
           <object class="WebKitWebView" id="web_view">
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
+            <signal name="notify::is-loading" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
+            <signal name="notify::uri" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
           </object>
         </child>
         <child>
@@ -17,7 +19,7 @@
         </child>
         <child>
           <object class="GtkCenterBox" id="toolbar">
-            <signal name="notify::visible" handler="toolbar_notify_visible_cb" swapped="true" object="IdeWebkitPage"/>
+            <signal name="notify::visible" handler="on_toolbar_notify_visible_cb" swapped="true" object="IdeWebkitPage"/>
             <property name="orientation">horizontal</property>
             <style>
               <class name="toolbar"/>
