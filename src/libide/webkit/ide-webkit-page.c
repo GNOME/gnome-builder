@@ -480,3 +480,29 @@ ide_webkit_page_go_forward (IdeWebkitPage *self)
 
   IDE_EXIT;
 }
+
+void
+ide_webkit_page_reload (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WEBKIT_PAGE (self));
+
+  if (webkit_web_view_is_loading (priv->web_view))
+    webkit_web_view_stop_loading (priv->web_view);
+
+  webkit_web_view_reload (priv->web_view);
+}
+
+void
+ide_webkit_page_reload_ignoring_cache (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WEBKIT_PAGE (self));
+
+  if (webkit_web_view_is_loading (priv->web_view))
+    webkit_web_view_stop_loading (priv->web_view);
+
+  webkit_web_view_reload_bypass_cache (priv->web_view);
+}
