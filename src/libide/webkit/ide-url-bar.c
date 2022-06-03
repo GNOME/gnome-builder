@@ -218,6 +218,21 @@ ide_url_bar_grab_focus (GtkWidget *widget)
   return TRUE;
 }
 
+static gboolean
+focus_view_callback (GtkWidget *widget,
+                     GVariant  *params,
+                     gpointer   user_data)
+{
+  IdeUrlBar *self = (IdeUrlBar *)widget;
+
+  g_assert (IDE_IS_URL_BAR (self));
+
+  if (self->web_view != NULL)
+    return gtk_widget_grab_focus (GTK_WIDGET (self->web_view));
+
+  return FALSE;
+}
+
 static void
 ide_url_bar_dispose (GObject *object)
 {
@@ -301,6 +316,8 @@ ide_url_bar_class_init (IdeUrlBarClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_editable_focus_enter_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_editable_focus_leave_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_editable_activate_cb);
+
+  gtk_widget_class_add_binding (widget_class, GDK_KEY_Escape, 0, focus_view_callback, NULL);
 }
 
 static void
