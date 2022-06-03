@@ -46,9 +46,9 @@ static GParamSpec *properties [N_PROPS];
 
 static gboolean
 transform_title_with_fallback (GBinding     *binding,
-                                  const GValue *from_value,
-                                  GValue       *to_value,
-                                  gpointer      user_data)
+                               const GValue *from_value,
+                               GValue       *to_value,
+                               gpointer      user_data)
 {
   IdeWebkitPage *self = user_data;
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
