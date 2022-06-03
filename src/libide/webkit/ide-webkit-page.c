@@ -28,7 +28,7 @@
 
 typedef struct
 {
-  GtkBox        *toolbar;
+  GtkCenterBox  *toolbar;
   WebKitWebView *web_view;
 } IdeWebkitPagePrivate;
 
@@ -89,10 +89,10 @@ transform_cairo_surface_to_gicon (GBinding     *binding,
 static void
 toolbar_notify_visible_cb (IdeWebkitPage *self,
                            GParamSpec    *pspec,
-                           WebKitWebView *web_view)
+                           GtkWidget     *toolbar)
 {
   g_assert (IDE_IS_WEBKIT_PAGE (self));
-  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+  g_assert (GTK_IS_WIDGET (toolbar));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_TOOLBAR]);
 }
