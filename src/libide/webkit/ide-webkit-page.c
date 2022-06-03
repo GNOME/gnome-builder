@@ -420,6 +420,8 @@ ide_webkit_page_init (IdeWebkitPage *self)
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
   WebKitBackForwardList *list;
 
+  panel_widget_set_can_maximize (PANEL_WIDGET (self), TRUE);
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_object_bind_property_full (priv->web_view, "title", self, "title", 0,
