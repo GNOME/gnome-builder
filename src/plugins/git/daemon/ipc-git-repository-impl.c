@@ -124,6 +124,7 @@ translate_status (GgitStatusFlags flags)
     case GGIT_STATUS_INDEX_TYPECHANGE:
     case GGIT_STATUS_WORKING_TREE_MODIFIED:
     case GGIT_STATUS_WORKING_TREE_TYPECHANGE:
+    case GGIT_STATUS_CONFLICTED:
       return FILE_STATUS_CHANGED;
 
     case GGIT_STATUS_IGNORED:
@@ -132,6 +133,8 @@ translate_status (GgitStatusFlags flags)
     case GGIT_STATUS_CURRENT:
       return FILE_STATUS_UNCHANGED;
 
+    case GGIT_STATUS_WORKING_TREE_RENAMED:
+    case GGIT_STATUS_WORKING_TREE_UNREADABLE:
     default:
       return FILE_STATUS_UNTRACKED;
     }
