@@ -12,6 +12,7 @@ libide_include_directories += include_directories('.')
 
 libide_webkit_private_sources = [
   'ide-webkit-plugin.c',
+  'ide-url-bar.c',
 ]
 
 #
