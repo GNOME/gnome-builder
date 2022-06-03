@@ -46,4 +46,5 @@ _ide_webkit_register_types (PeasObjectModule *module)
 
   context = webkit_web_context_get_default ();
   webkit_web_context_set_sandbox_enabled (context, TRUE);
+  webkit_web_context_set_favicon_database_directory (context, NULL);
 }
