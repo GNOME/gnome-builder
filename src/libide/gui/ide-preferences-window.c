@@ -30,6 +30,7 @@
 #include "ide-config-view-addin.h"
 #include "ide-preferences-addin.h"
 #include "ide-preferences-builtin-private.h"
+#include "ide-preferences-choice-row.h"
 #include "ide-preferences-window.h"
 #include "ide-workbench.h"
 
@@ -1542,6 +1543,37 @@ ide_preferences_window_font (const char                   *page_name,
                            G_CALLBACK (on_font_activate),
                            settings,
                            0);
+}
+
+void
+ide_preferences_window_combo (const char                   *page_name,
+                              const IdePreferenceItemEntry *entry,
+                              AdwPreferencesGroup          *group,
+                              gpointer                      user_data)
+{
+  IdePreferencesWindow *self = user_data;
+  g_autofree char *title_esc = NULL;
+  g_autofree char *subtitle_esc = NULL;
+  AdwComboRow *row;
+  GSettings *settings;
+
+  g_return_if_fail (entry != NULL);
+  g_return_if_fail (ADW_IS_PREFERENCES_GROUP (group));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+
+  if (!(settings = ide_preferences_window_get_settings (self, entry)))
+    return;
+
+  title_esc = g_markup_escape_text (entry->title ? entry->title : "", -1);
+  subtitle_esc = g_markup_escape_text (entry->subtitle ? entry->subtitle : "", -1);
+
+  row = g_object_new (IDE_TYPE_PREFERENCES_CHOICE_ROW,
+                      "key", entry->key,
+                      "settings", settings,
+                      "subtitle", subtitle_esc,
+                      "title", title_esc,
+                      NULL);
+  adw_preferences_group_add (group, GTK_WIDGET (row));
 }
 
 IdePreferencesMode
