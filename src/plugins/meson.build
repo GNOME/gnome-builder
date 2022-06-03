@@ -136,6 +136,7 @@ subdir('vcsui')
 subdir('vim')
 subdir('vls')
 subdir('waf')
+subdir('web-browser')
 subdir('words')
 subdir('xml-pack')
 

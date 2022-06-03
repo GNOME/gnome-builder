@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Description=Integrates a WebKit-based web browser
+Embedded=_gbp_web_browser_register_types
+Module=web-browser
+Name=Web Browser
+X-Category=other
+X-Workspace-Kind=primary;editor;
