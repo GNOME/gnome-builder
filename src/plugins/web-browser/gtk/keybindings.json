@@ -1,1 +1,2 @@
 { "trigger" : "<Control><Shift><Alt>b", "action" : "web-browser.new-page", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control>l", "action" : "web-browser.focus-address", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
