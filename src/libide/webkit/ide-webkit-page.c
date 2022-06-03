@@ -25,10 +25,12 @@
 #include <webkit2/webkit2.h>
 
 #include "ide-webkit-page.h"
+#include "ide-url-bar.h"
 
 typedef struct
 {
   GtkCenterBox  *toolbar;
+  IdeUrlBar     *url_bar;
   WebKitWebView *web_view;
 } IdeWebkitPagePrivate;
 
@@ -179,10 +181,12 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/webkit/ide-webkit-page.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, toolbar);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, url_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, web_view);
   gtk_widget_class_bind_template_callback (widget_class, toolbar_notify_visible_cb);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
+  g_type_ensure (IDE_TYPE_URL_BAR);
 }
 
 static void
