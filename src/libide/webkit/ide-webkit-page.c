@@ -81,14 +81,18 @@ transform_cairo_surface_to_gicon (GBinding     *binding,
   int height;
 
   g_assert (G_IS_BINDING (binding));
-  g_assert (from_value != NULL);
-  g_assert (to_value != NULL);
+  g_assert (G_VALUE_HOLDS_POINTER (from_value));
+  g_assert (G_VALUE_HOLDS_OBJECT (to_value));
   g_assert (IDE_IS_WEBKIT_PAGE (self));
 
   /* No ownership transfer */
   surface = g_value_get_pointer (from_value);
+
   if (surface == NULL)
-    return TRUE;
+    {
+      g_value_take_object (to_value, g_themed_icon_new ("web-browser-symbolic"));
+      return TRUE;
+    }
 
   width = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
   height = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
