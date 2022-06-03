@@ -117,6 +117,8 @@ web_browser_new_page_action (GbpWebBrowserWorkspaceAddin *self,
   ide_webkit_page_load_uri (page, "https://google.com/");
 
   ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
+  panel_widget_raise (PANEL_WIDGET (page));
+  gtk_widget_grab_focus (GTK_WIDGET (page));
 
   IDE_EXIT;
 }
