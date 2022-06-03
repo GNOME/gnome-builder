@@ -35,6 +35,14 @@ struct _IdeWebkitPageClass
 };
 
 IDE_AVAILABLE_IN_ALL
-IdeWebkitPage *ide_webkit_page_new (void);
+IdeWebkitPage *ide_webkit_page_new              (void);
+IDE_AVAILABLE_IN_ALL
+void           ide_webkit_page_load_uri         (IdeWebkitPage *self,
+                                                 const char    *uri);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_webkit_page_get_show_toolbar (IdeWebkitPage *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_webkit_page_set_show_toolbar (IdeWebkitPage *self,
+                                                 gboolean       show_toolbar);
 
 G_END_DECLS

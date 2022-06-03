@@ -28,17 +28,88 @@
 
 typedef struct
 {
-  WebKitWebView *webview;
+  GtkBox        *toolbar;
+  WebKitWebView *web_view;
 } IdeWebkitPagePrivate;
 
 enum {
   PROP_0,
+  PROP_SHOW_TOOLBAR,
   N_PROPS
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeWebkitPage, ide_webkit_page, IDE_TYPE_PAGE)
 
 static GParamSpec *properties [N_PROPS];
+
+static gboolean
+transform_cairo_surface_to_gicon (GBinding     *binding,
+                                  const GValue *from_value,
+                                  GValue       *to_value,
+                                  gpointer      user_data)
+{
+  IdeWebkitPage *self = user_data;
+  cairo_surface_t *surface;
+  GdkPixbuf *pixbuf;
+  int favicon_width;
+  int favicon_height;
+  int width;
+  int height;
+
+  g_assert (G_IS_BINDING (binding));
+  g_assert (from_value != NULL);
+  g_assert (to_value != NULL);
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  width = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
+  height = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
+
+  if (!(surface = g_value_get_boxed (from_value)))
+    return TRUE;
+
+  favicon_width = cairo_image_surface_get_width (surface);
+  favicon_height = cairo_image_surface_get_height (surface);
+  pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, favicon_width, favicon_height);
+
+  if ((favicon_width != width || favicon_height != height))
+    {
+      GdkPixbuf *scaled_pixbuf = gdk_pixbuf_scale_simple (pixbuf, width, height, GDK_INTERP_BILINEAR);
+      g_object_unref (pixbuf);
+      pixbuf = scaled_pixbuf;
+    }
+
+  g_assert (!pixbuf || G_IS_ICON (pixbuf));
+
+  g_value_take_object (to_value, pixbuf);
+
+  return TRUE;
+}
+
+static void
+toolbar_notify_visible_cb (IdeWebkitPage *self,
+                           GParamSpec    *pspec,
+                           WebKitWebView *web_view)
+{
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_TOOLBAR]);
+}
+
+static void
+ide_webkit_page_constructed (GObject *object)
+{
+  IdeWebkitPage *self = (IdeWebkitPage *)object;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  GtkStyleContext *context;
+  GdkRGBA color;
+
+  G_OBJECT_CLASS (ide_webkit_page_parent_class)->constructed (object);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (priv->web_view));
+  if (gtk_style_context_lookup_color (context, "theme_base_color", &color))
+    webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (priv->web_view), &color);
+}
 
 static void
 ide_webkit_page_dispose (GObject *object)
@@ -56,6 +127,10 @@ ide_webkit_page_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_SHOW_TOOLBAR:
+      g_value_set_boolean (value, ide_webkit_page_get_show_toolbar (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -71,6 +146,10 @@ ide_webkit_page_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_SHOW_TOOLBAR:
+      ide_webkit_page_set_show_toolbar (self, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -82,12 +161,25 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = ide_webkit_page_constructed;
   object_class->dispose = ide_webkit_page_dispose;
   object_class->get_property = ide_webkit_page_get_property;
   object_class->set_property = ide_webkit_page_set_property;
 
+  properties [PROP_SHOW_TOOLBAR] =
+    g_param_spec_boolean ("show-toolbar",
+                          "Show Toolbar",
+                          "Show Toolbar",
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/webkit/ide-webkit-page.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, webview);
+
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, toolbar);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, web_view);
+  gtk_widget_class_bind_template_callback (widget_class, toolbar_notify_visible_cb);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
 }
@@ -95,11 +187,51 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
 static void
 ide_webkit_page_init (IdeWebkitPage *self)
 {
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  g_object_bind_property (priv->web_view, "title", self, "title", 0);
+  g_object_bind_property_full (priv->web_view, "favicon", self, "icon", 0,
+                               transform_cairo_surface_to_gicon,
+                               NULL, self, NULL);
 }
 
 IdeWebkitPage *
 ide_webkit_page_new (void)
 {
   return g_object_new (IDE_TYPE_WEBKIT_PAGE, NULL);
+}
+
+void
+ide_webkit_page_load_uri (IdeWebkitPage *self,
+                          const char    *uri)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WEBKIT_PAGE (self));
+  g_return_if_fail (uri != NULL);
+
+  webkit_web_view_load_uri (priv->web_view, uri);
+}
+
+gboolean
+ide_webkit_page_get_show_toolbar (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WEBKIT_PAGE (self), FALSE);
+
+  return gtk_widget_get_visible (GTK_WIDGET (priv->toolbar));
+}
+
+void
+ide_webkit_page_set_show_toolbar (IdeWebkitPage *self,
+                                  gboolean       show_toolbar)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WEBKIT_PAGE (self));
+
+  gtk_widget_set_visible (GTK_WIDGET (priv->toolbar), show_toolbar);
 }
