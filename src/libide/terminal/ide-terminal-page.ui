@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTerminalPage" parent="IdePage">
+    <property name="can-maximize">true</property>
     <property name="hexpand">true</property>
     <property name="vexpand">true</property>
     <child>
