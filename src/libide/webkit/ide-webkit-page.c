@@ -45,6 +45,28 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeWebkitPage, ide_webkit_page, IDE_TYPE_PAGE)
 static GParamSpec *properties [N_PROPS];
 
 static gboolean
+transform_title_with_fallback (GBinding     *binding,
+                                  const GValue *from_value,
+                                  GValue       *to_value,
+                                  gpointer      user_data)
+{
+  IdeWebkitPage *self = user_data;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  const char *title;
+
+  g_assert (G_IS_BINDING (binding));
+  g_assert (G_VALUE_HOLDS_STRING (from_value));
+  g_assert (G_VALUE_HOLDS_STRING (to_value));
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  title = g_value_get_string (from_value);
+  if (ide_str_empty0 (title))
+    title = webkit_web_view_get_uri (priv->web_view);
+  g_value_set_string (to_value, title);
+  return TRUE;
+}
+
+static gboolean
 transform_cairo_surface_to_gicon (GBinding     *binding,
                                   const GValue *from_value,
                                   GValue       *to_value,
@@ -196,7 +218,9 @@ ide_webkit_page_init (IdeWebkitPage *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_object_bind_property (priv->web_view, "title", self, "title", 0);
+  g_object_bind_property_full (priv->web_view, "title", self, "title", 0,
+                               transform_title_with_fallback,
+                               NULL, self, NULL);
   g_object_bind_property_full (priv->web_view, "favicon", self, "icon", 0,
                                transform_cairo_surface_to_gicon,
                                NULL, self, NULL);
