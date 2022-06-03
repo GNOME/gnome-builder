@@ -697,7 +697,8 @@ static const IdePreferenceGroupEntry groups[] = {
 
   { "keyboard",   "keybindings",            0, N_("Keyboard Shortcuts") },
 
-  { "projects",   "workspace",              0, N_("Workspace") },
+  { "projects",   "session",                0, N_("Behavior") },
+  { "projects",   "templates",             10, N_("Templates") },
 
   { "debug",      "breakpoints",            0, N_("Breakpoints") },
 
@@ -714,10 +715,15 @@ static const IdePreferenceItemEntry items[] = {
     N_("Switch documents using a tabbed interface"),
     "org.gnome.builder.editor", NULL, "use-tabbar" },
 
-  { "projects", "workspace", "restore", 0, ide_preferences_window_toggle,
+  { "projects", "session", "restore", 0, ide_preferences_window_toggle,
     N_("Restore Previous Session"),
     N_("Open previously opened files when loading a project"),
     "org.gnome.builder", NULL, "restore-previous-files" },
+
+  { "projects", "templates", "default-license", 0, ide_preferences_window_combo,
+    N_("License"),
+    N_("The default license when creating new projects"),
+    "org.gnome.builder", NULL, "default-license" },
 
   { "debug", "breakpoints", "break-on-main", 0, ide_preferences_window_toggle,
     N_("Break on Main"),
