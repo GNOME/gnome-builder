@@ -26,6 +26,10 @@
 #include <webkit2/webkit2.h>
 #include <girepository.h>
 
+#include <libide-core.h>
+
+#include "ide-webkit-page.h"
+
 _IDE_EXTERN void _ide_webkit_register_types (PeasObjectModule *module);
 
 void
@@ -35,6 +39,7 @@ _ide_webkit_register_types (PeasObjectModule *module)
   g_autoptr(GError) error = NULL;
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
+  g_type_ensure (IDE_TYPE_WEBKIT_PAGE);
 
   if (!g_irepository_require (NULL, "WebKit2", "5.0", 0, &error))
     g_warning ("%s", error->message);
