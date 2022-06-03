@@ -13,6 +13,9 @@
           </object>
         </child>
         <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
           <object class="GtkCenterBox" id="toolbar">
             <signal name="notify::visible" handler="toolbar_notify_visible_cb" swapped="true" object="IdeWebkitPage"/>
             <property name="orientation">horizontal</property>
