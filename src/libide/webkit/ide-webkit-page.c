@@ -29,9 +29,11 @@
 
 typedef struct
 {
+  GtkStack           *reload_stack;
   GtkCenterBox       *toolbar;
   IdeUrlBar          *url_bar;
   WebKitWebView      *web_view;
+
   GSimpleActionGroup *actions;
 } IdeWebkitPagePrivate;
 
@@ -195,10 +197,29 @@ reload_action (GSimpleAction *action,
   IDE_EXIT;
 }
 
+static void
+stop_action (GSimpleAction *action,
+             GVariant      *param,
+             gpointer       user_data)
+{
+  IdeWebkitPage *self = user_data;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  webkit_web_view_stop_loading (priv->web_view);
+
+  IDE_EXIT;
+}
+
 static const GActionEntry actions[] = {
   { "go-forward", go_forward_action },
   { "go-back", go_back_action },
   { "reload", reload_action },
+  { "stop", stop_action },
 };
 
 static void
@@ -264,6 +285,12 @@ ide_webkit_page_update_reload (IdeWebkitPage *self)
   uri = webkit_web_view_get_uri (priv->web_view);
 
   set_action_enabled (self, "reload", !loading && !ide_str_empty0 (uri));
+  set_action_enabled (self, "stop", loading);
+
+  if (loading)
+    gtk_stack_set_visible_child_name (priv->reload_stack, "stop");
+  else
+    gtk_stack_set_visible_child_name (priv->reload_stack, "reload");
 
   IDE_EXIT;
 }
@@ -281,6 +308,17 @@ ide_webkit_page_constructed (GObject *object)
   context = gtk_widget_get_style_context (GTK_WIDGET (priv->web_view));
   if (gtk_style_context_lookup_color (context, "theme_base_color", &color))
     webkit_web_view_set_background_color (WEBKIT_WEB_VIEW (priv->web_view), &color);
+}
+
+static void
+ide_webkit_page_dispose (GObject *object)
+{
+  IdeWebkitPage *self = (IdeWebkitPage *)object;
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_clear_object (&priv->actions);
+
+  G_OBJECT_CLASS (ide_webkit_page_parent_class)->dispose (object);
 }
 
 static void
@@ -328,6 +366,7 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->constructed = ide_webkit_page_constructed;
+  object_class->dispose = ide_webkit_page_dispose;
   object_class->get_property = ide_webkit_page_get_property;
   object_class->set_property = ide_webkit_page_set_property;
 
@@ -344,6 +383,7 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/webkit/ide-webkit-page.ui");
 
+  gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, reload_stack);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, toolbar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, url_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, web_view);
@@ -388,6 +428,7 @@ ide_webkit_page_init (IdeWebkitPage *self)
   set_action_enabled (self, "go-forward", FALSE);
   set_action_enabled (self, "go-back", FALSE);
   set_action_enabled (self, "reload", FALSE);
+  set_action_enabled (self, "stop", FALSE);
 }
 
 IdeWebkitPage *
