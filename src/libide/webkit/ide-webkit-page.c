@@ -116,9 +116,9 @@ transform_cairo_surface_to_gicon (GBinding     *binding,
 }
 
 static void
-toolbar_notify_visible_cb (IdeWebkitPage *self,
-                           GParamSpec    *pspec,
-                           GtkWidget     *toolbar)
+on_toolbar_notify_visible_cb (IdeWebkitPage *self,
+                              GParamSpec    *pspec,
+                              GtkWidget     *toolbar)
 {
   g_assert (IDE_IS_WEBKIT_PAGE (self));
   g_assert (GTK_IS_WIDGET (toolbar));
@@ -250,6 +250,25 @@ on_back_forward_list_changed_cb (IdeWebkitPage             *self,
 }
 
 static void
+ide_webkit_page_update_reload (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+  const char *uri;
+  gboolean loading;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+
+  loading = webkit_web_view_is_loading (priv->web_view);
+  uri = webkit_web_view_get_uri (priv->web_view);
+
+  set_action_enabled (self, "reload", !loading && !ide_str_empty0 (uri));
+
+  IDE_EXIT;
+}
+
+static void
 ide_webkit_page_constructed (GObject *object)
 {
   IdeWebkitPage *self = (IdeWebkitPage *)object;
@@ -328,7 +347,8 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, toolbar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, url_bar);
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, web_view);
-  gtk_widget_class_bind_template_callback (widget_class, toolbar_notify_visible_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_toolbar_notify_visible_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_webkit_page_update_reload);
 
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
   g_type_ensure (IDE_TYPE_URL_BAR);
@@ -364,7 +384,10 @@ ide_webkit_page_init (IdeWebkitPage *self)
                            G_CALLBACK (on_back_forward_list_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  on_back_forward_list_changed_cb (self, NULL, NULL, list);
+
+  set_action_enabled (self, "go-forward", FALSE);
+  set_action_enabled (self, "go-back", FALSE);
+  set_action_enabled (self, "reload", FALSE);
 }
 
 IdeWebkitPage *
