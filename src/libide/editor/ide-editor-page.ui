@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeEditorPage" parent="IdePage">
+    <property name="can-maximize">true</property>
     <child type="content">
       <object class="GtkBox">
         <property name="orientation">horizontal</property>
