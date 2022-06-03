@@ -2,9 +2,43 @@
 <interface>
   <template class="IdeWebkitPage" parent="IdePage">
     <child>
-      <object class="WebKitWebView" id="webview">
-        <property name="hexpand">true</property>
-        <property name="vexpand">true</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkCenterBox" id="toolbar">
+            <signal name="notify::visible" handler="toolbar_notify_visible_cb" swapped="true" object="IdeWebkitPage"/>
+            <property name="orientation">horizontal</property>
+            <style>
+              <class name="toolbar"/>
+            </style>
+            <child type="start">
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="spacing">3</property>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">go-previous-symbolic</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">go-next-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry">
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="WebKitWebView" id="web_view">
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>
