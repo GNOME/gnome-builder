@@ -51,6 +51,7 @@ libide_gui_private_headers = [
   'ide-notification-list-box-row-private.h',
   'ide-notification-stack-private.h',
   'ide-notification-view-private.h',
+  'ide-page-private.h',
   'ide-preferences-builtin-private.h',
   'ide-primary-workspace-private.h',
   'ide-recoloring-private.h',

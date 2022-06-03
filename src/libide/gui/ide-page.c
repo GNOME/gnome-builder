@@ -70,6 +70,14 @@ static GtkBuildableIface *parent_buildable;
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
+GList *
+_ide_page_get_mru_link (IdePage *self)
+{
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+  g_assert (IDE_IS_PAGE (self));
+  return &priv->mru_link;
+}
+
 static void
 ide_page_real_agree_to_close_async (IdePage             *self,
                                     GCancellable        *cancellable,
