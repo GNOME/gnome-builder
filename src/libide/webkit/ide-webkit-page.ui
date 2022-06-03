@@ -42,9 +42,29 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
-                    <property name="icon-name">view-refresh-symbolic</property>
-                    <property name="action-name">web.reload</property>
+                  <object class="GtkStack" id="reload_stack">
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">reload</property>
+                        <property name="child">
+                          <object class="GtkButton">
+                            <property name="icon-name">view-refresh-symbolic</property>
+                            <property name="action-name">web.reload</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">stop</property>
+                        <property name="child">
+                          <object class="GtkButton">
+                            <property name="icon-name">stop-sign-symbolic</property>
+                            <property name="action-name">web.stop</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
