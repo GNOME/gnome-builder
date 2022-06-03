@@ -1,0 +1,1 @@
+{ "trigger" : "<Control><Shift><Alt>b", "action" : "web-browser.new-page", "when" : "canEdit()", "phase" : "capture" },
