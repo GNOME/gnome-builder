@@ -25,6 +25,10 @@ def inGrid()
   (focus != null) && (focus.get_ancestor(typeof(Ide.Grid)) != null)
 end
 
+def inPage()
+  (focus != null) && (focus.get_ancestor(typeof(Ide.Page)) != null)
+end
+
 def hasProject()
   workbench.has_project()
 end
