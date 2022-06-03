@@ -49,12 +49,11 @@
       <item>
         <attribute name="label" translatable="yes">_Build</attribute>
         <attribute name="action">build-manager.build</attribute>
-        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;b</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;&lt;shift&gt;b</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Rebuild</attribute>
         <attribute name="action">build-manager.rebuild</attribute>
-        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;r</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Clean</attribute>
