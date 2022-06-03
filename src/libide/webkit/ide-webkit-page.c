@@ -61,12 +61,13 @@ transform_cairo_surface_to_gicon (GBinding     *binding,
   g_assert (to_value != NULL);
   g_assert (IDE_IS_WEBKIT_PAGE (self));
 
-  width = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
-  height = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
-
-  if (!(surface = g_value_get_boxed (from_value)))
+  /* No ownership transfer */
+  surface = g_value_get_pointer (from_value);
+  if (surface == NULL)
     return TRUE;
 
+  width = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
+  height = 16 * gtk_widget_get_scale_factor (GTK_WIDGET (self));
   favicon_width = cairo_image_surface_get_width (surface);
   favicon_height = cairo_image_surface_get_height (surface);
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, favicon_width, favicon_height);
