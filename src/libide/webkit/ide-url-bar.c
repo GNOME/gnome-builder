@@ -46,6 +46,7 @@ struct _IdeUrlBar
   GtkLabel       *url_display;
   GtkText        *url_editable;
   GtkProgressBar *load_progress;
+  GtkImage       *security_image;
 };
 
 enum {
@@ -57,6 +58,60 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeUrlBar, ide_url_bar, GTK_TYPE_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
+
+static const char *
+get_security_icon_name (IdeWebkitSecurityLevel security_level)
+{
+  switch (security_level)
+    {
+    case IDE_WEBKIT_SECURITY_LEVEL_LOCAL_PAGE:
+    case IDE_WEBKIT_SECURITY_LEVEL_TO_BE_DETERMINED:
+      return NULL;
+
+    case IDE_WEBKIT_SECURITY_LEVEL_NONE:
+    case IDE_WEBKIT_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE:
+      return "lock-small-open-symbolic";
+
+    case IDE_WEBKIT_SECURITY_LEVEL_STRONG_SECURITY:
+      return "lock-small-symbolic";
+
+    default:
+      return NULL;
+    }
+}
+
+static void
+on_web_view_load_changed_cb (IdeUrlBar       *self,
+                             WebKitLoadEvent  load_event,
+                             WebKitWebView   *web_view)
+{
+  g_assert (IDE_IS_URL_BAR (self));
+  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+
+  switch (load_event)
+    {
+    case WEBKIT_LOAD_COMMITTED:
+    case WEBKIT_LOAD_FINISHED: {
+      IdeWebkitSecurityLevel security_level;
+
+      security_level = ide_webkit_util_get_security_level (web_view);
+      g_object_set (self->security_image,
+                    "icon-name", get_security_icon_name (security_level),
+                    NULL);
+      break;
+    }
+
+    case WEBKIT_LOAD_REDIRECTED:
+    case WEBKIT_LOAD_STARTED:
+      g_object_set (self->security_image,
+                    "icon-name", "content-loading-symbolic",
+                    NULL);
+      break;
+
+    default:
+      break;
+    }
+}
 
 static void
 on_editable_focus_enter_cb (IdeUrlBar               *self,
@@ -311,6 +366,7 @@ ide_url_bar_class_init (IdeUrlBarClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeUrlBar, url_editable);
   gtk_widget_class_bind_template_child (widget_class, IdeUrlBar, load_progress);
   gtk_widget_class_bind_template_child (widget_class, IdeUrlBar, overlay);
+  gtk_widget_class_bind_template_child (widget_class, IdeUrlBar, security_image);
   gtk_widget_class_bind_template_child (widget_class, IdeUrlBar, stack);
   gtk_widget_class_bind_template_callback (widget_class, on_click_gesture_pressed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_editable_focus_enter_cb);
@@ -334,6 +390,11 @@ ide_url_bar_init (IdeUrlBar *self)
   g_signal_group_connect_object (self->web_view_signals,
                                  "notify::is-loading",
                                  G_CALLBACK (on_web_view_notify_is_loading_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+  g_signal_group_connect_object (self->web_view_signals,
+                                 "load-changed",
+                                 G_CALLBACK (on_web_view_load_changed_cb),
                                  self,
                                  G_CONNECT_SWAPPED);
 
@@ -367,6 +428,9 @@ ide_url_bar_set_web_view (IdeUrlBar     *self,
 
       gtk_widget_hide (GTK_WIDGET (self->load_progress));
       gtk_widget_set_can_focus (GTK_WIDGET (self), web_view != NULL);
+      g_object_set (self->security_image,
+                    "icon-name", NULL,
+                    NULL);
 
       if (self->web_view != NULL)
         {
@@ -378,6 +442,10 @@ ide_url_bar_set_web_view (IdeUrlBar     *self,
             gtk_editable_select_region (GTK_EDITABLE (self->url_editable), 0, -1);
 
           on_web_view_notify_estimated_load_progress_cb (self, NULL, self->web_view);
+
+          /* TODO: Update security image if we ever share a url bar for multiple
+           *       web views.
+           */
         }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WEB_VIEW]);
