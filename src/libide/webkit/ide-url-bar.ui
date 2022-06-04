@@ -37,8 +37,7 @@
                         <property name="margin-end">6</property>
                         <property name="spacing">3</property>
                         <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">lock-small-open-symbolic</property>
+                          <object class="GtkImage" id="security_image">
                           </object>
                         </child>
                       </object>
