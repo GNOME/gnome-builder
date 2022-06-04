@@ -223,3 +223,58 @@ ide_webkit_util_normalize_address (const char *input_address)
 
   return effective_address ? effective_address : g_strdup (address);
 }
+
+static char *
+hostname_to_tld (const char *hostname)
+{
+  g_auto(GStrv) parts = NULL;
+  guint length;
+
+  parts = g_strsplit (hostname, ".", 0);
+  length = g_strv_length (parts);
+
+  if (length >= 1)
+    return g_strdup (parts[length - 1]);
+
+  return g_strdup ("");
+}
+
+IdeWebkitSecurityLevel
+ide_webkit_util_get_security_level (WebKitWebView *web_view)
+{
+  IdeWebkitSecurityLevel security_level;
+  GTlsCertificateFlags tls_errors = 0;
+  WebKitSecurityManager *security_manager;
+  WebKitWebContext *web_context;
+  GTlsCertificate *certificate = NULL;
+  g_autoptr(GUri) guri = NULL;
+  g_autofree char *tld = NULL;
+  const char *uri;
+
+  g_return_val_if_fail (WEBKIT_IS_WEB_VIEW (web_view), 0);
+
+  uri = webkit_web_view_get_uri (web_view);
+  web_context = webkit_web_view_get_context (web_view);
+  security_manager = webkit_web_context_get_security_manager (web_context);
+  guri = g_uri_parse (uri, G_URI_FLAGS_NONE, NULL);
+
+  if (guri && g_uri_get_host (guri))
+    tld = hostname_to_tld (g_uri_get_host (guri));
+
+  if (!guri ||
+      g_strcmp0 (tld, "127.0.0.1") == 0 ||
+      g_strcmp0 (tld, "::1") == 0 ||
+      g_strcmp0 (tld, "localhost") == 0 || /* We trust localhost to be local since glib!616. */
+      webkit_security_manager_uri_scheme_is_local (security_manager, g_uri_get_scheme (guri)) ||
+      webkit_security_manager_uri_scheme_is_empty_document (security_manager, g_uri_get_scheme (guri)))
+    security_level = IDE_WEBKIT_SECURITY_LEVEL_LOCAL_PAGE;
+  else if (webkit_web_view_get_tls_info (web_view, &certificate, &tls_errors))
+    security_level = tls_errors == 0 ?
+                     IDE_WEBKIT_SECURITY_LEVEL_STRONG_SECURITY : IDE_WEBKIT_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE;
+  else if (webkit_web_view_is_loading (web_view))
+    security_level = IDE_WEBKIT_SECURITY_LEVEL_TO_BE_DETERMINED;
+  else
+    security_level = IDE_WEBKIT_SECURITY_LEVEL_NONE;
+
+  return security_level;
+}

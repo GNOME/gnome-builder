@@ -20,10 +20,20 @@
 
 #pragma once
 
-#include <glib.h>
+#include <webkit2/webkit2.h>
 
 G_BEGIN_DECLS
 
-char *ide_webkit_util_normalize_address (const char *input_address);
+typedef enum
+{
+  IDE_WEBKIT_SECURITY_LEVEL_NONE,
+  IDE_WEBKIT_SECURITY_LEVEL_LOCAL_PAGE,
+  IDE_WEBKIT_SECURITY_LEVEL_STRONG_SECURITY,
+  IDE_WEBKIT_SECURITY_LEVEL_UNACCEPTABLE_CERTIFICATE,
+  IDE_WEBKIT_SECURITY_LEVEL_TO_BE_DETERMINED,
+} IdeWebkitSecurityLevel;
+
+char                   *ide_webkit_util_normalize_address  (const char    *input_address);
+IdeWebkitSecurityLevel  ide_webkit_util_get_security_level (WebKitWebView *web_view);
 
 G_END_DECLS
