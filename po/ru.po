@@ -8,17 +8,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-04-01 12:49+0000\n"
-"PO-Revision-Date: 2022-04-17 08:32+1000\n"
-"Last-Translator: Ser82-png <sw@atrus.ru>\n"
+"POT-Creation-Date: 2022-05-26 20:31+0000\n"
+"PO-Revision-Date: 2022-05-30 21:18+0300\n"
+"Last-Translator: Aleksandr Melman <Alexmelman88@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 2.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -878,7 +878,7 @@ msgstr "_Переименовать"
 msgid "unsaved file %u"
 msgstr "несохранённый файл %u"
 
-#: src/libide/code/ide-buffer.c:3639
+#: src/libide/code/ide-buffer.c:3720
 msgid "The current language lacks a symbol resolver."
 msgstr "В текущем языке отсутствует распознаватель символов."
 
@@ -921,7 +921,7 @@ msgstr "Безымянный"
 msgid "_Cancel"
 msgstr "_Отмена"
 
-#: src/libide/debugger/ide-debug-manager.c:1001
+#: src/libide/debugger/ide-debug-manager.c:1002
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "Подходящий отладчик не был найден."
@@ -1450,7 +1450,7 @@ msgstr "Процесс неожиданно завершил работу"
 msgid "Host Operating System"
 msgstr "Операционная система хоста"
 
-#: src/libide/foundry/ide-runtime.c:571
+#: src/libide/foundry/ide-runtime.c:575
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Операционная система хоста"
@@ -2827,7 +2827,7 @@ msgstr[1] "Устанавливается %u пакета"
 msgstr[2] "Устанавливается %u пакетов"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1474
+#: src/libide/lsp/ide-lsp-client.c:1481
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не удалось инициализировать сервер языковой поддержки: %s"
@@ -3268,7 +3268,7 @@ msgid "_Beautify"
 msgstr "_Украсить"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:663
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:705
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (копия)"
@@ -3653,10 +3653,10 @@ msgstr ""
 msgid "Declaration"
 msgstr "Объявление"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:76
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
 #, c-format
-msgid "Possible typo in '%s'. Did you mean '%s'?"
-msgstr "Возможна опечатка в «%s». Вы, вероятно, имели в виду «%s»?"
+msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr "Возможна опечатка в \"%s\". Вы, вероятно, имели в виду \"%s\"?"
 
 #: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
 msgid "Colors"
@@ -4102,7 +4102,7 @@ msgstr "Выбрать шаблон"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:50
 msgid "Start _New Project…"
-msgstr "Начать _новый проект"
+msgstr "Начать _новый проект…"
 
 #: src/plugins/create-project/gtk/menus.ui:7
 #: src/plugins/create-project/gtk/menus.ui:18
@@ -4687,7 +4687,7 @@ msgstr "Загрузка зависимостей"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:510
 msgid "Building dependencies"
-msgstr "Построение зависимостей…"
+msgstr "Построение зависимостей"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
 msgid "Finalizing flatpak build"
@@ -5037,7 +5037,7 @@ msgstr "Завершить"
 
 #: src/plugins/greeter/gtk/menus.ui:66 src/plugins/greeter/gtk/menus.ui:82
 msgid "Open a _Project…"
-msgstr "Открыть _проект"
+msgstr "Открыть _проект…"
 
 #: src/plugins/grep/gbp-grep-editor-addin.c:57
 msgid "Show Find in Project panel"
@@ -5515,15 +5515,15 @@ msgstr "_Внешняя программа…"
 
 #: src/plugins/phpize/phpize_plugin.py:191
 msgid "Bootstrapping project"
-msgstr "Начальная настройка проекта…"
+msgstr "Начальная настройка проекта"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:499
+#: src/plugins/podman/gbp-podman-runtime.c:523
 msgid "Containers/Toolbox"
 msgstr "Контейнеры/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:505
+#: src/plugins/podman/gbp-podman-runtime.c:529
 msgid "Containers/Podman"
 msgstr "Контейнеры/Podman"
 
@@ -6303,8 +6303,8 @@ msgstr "_Обновить"
 msgid "Vagrant"
 msgstr "Vagrant"
 
+#: src/plugins/valgrind/gbp-valgrind-workbench-addin.c:152
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Запустить с помощью Valgrind"
 
@@ -7270,8 +7270,8 @@ msgstr "Файл должен быть сохранен локально для 
 #~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
 #~ "with profiler</a> from the run menu to begin"
 #~ msgstr ""
-#~ "Выберите <a href=\"action://run-manager.run-with-handler::profiler"
-#~ "\">Запустить с помощью профайлера</a> из меню запуска чтобы начать"
+#~ "Выберите <a href=\"action://run-manager.run-with-handler::"
+#~ "profiler\">Запустить с помощью профайлера</a> из меню запуска чтобы начать"
 
 #~ msgid "CPU"
 #~ msgstr "ЦПУ"
