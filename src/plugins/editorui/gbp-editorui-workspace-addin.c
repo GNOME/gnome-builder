@@ -774,6 +774,8 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
       indent_width = g_property_action_new ("indent-width", view, "indent-width");
       tab_width = g_property_action_new ("tab-width", view, "tab-width");
       tabs_v_spaces = g_property_action_new ("use-spaces", view, "insert-spaces-instead-of-tabs");
+
+      /* TODO: This needs a transform to handle NULL */
       language = g_property_action_new ("language", buffer, "language-id");
 
       g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (encoding_action));
