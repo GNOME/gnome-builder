@@ -127,21 +127,31 @@ ide_menu_manager_menu_contains (IdeMenuManager *self,
                                 GMenu          *menu,
                                 GMenuItem      *item)
 {
-  const gchar *link_id;
-  const gchar *label;
+  const char *id;
+  const char *label;
+  const char *link_id;
 
   g_assert (IDE_IS_MENU_MANAGER (self));
   g_assert (G_IS_MENU (menu));
   g_assert (G_IS_MENU_ITEM (item));
 
-  /* try to find  match by item label */
-  if (g_menu_item_get_attribute (item, G_MENU_ATTRIBUTE_LABEL, "&s", &label) &&
-      (find_with_attribute_string (G_MENU_MODEL (menu), G_MENU_ATTRIBUTE_LABEL, label) >= 0))
-    return TRUE;
-
   /* try to find match by item link */
   if (g_menu_item_get_attribute (item, "ide-link-id", "&s", &link_id) &&
       (find_with_attribute_string (G_MENU_MODEL (menu), "ide-link-id", link_id) >= 0))
+    return TRUE;
+
+  /* if this item has an "id" and that id is not found in the model,
+   * then assume it is different even if another item with the same label
+   * appears, as that could be an item that gets hidden.
+   */
+  if (g_menu_item_get_attribute (item, "id", "&s", &id) &&
+      !ide_str_empty0 (id) &&
+      (find_with_attribute_string (G_MENU_MODEL (menu), "id", id) < 0))
+    return FALSE;
+
+  /* try to find  match by item label */
+  if (g_menu_item_get_attribute (item, G_MENU_ATTRIBUTE_LABEL, "&s", &label) &&
+      (find_with_attribute_string (G_MENU_MODEL (menu), G_MENU_ATTRIBUTE_LABEL, label) >= 0))
     return TRUE;
 
   return FALSE;
