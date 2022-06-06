@@ -548,27 +548,6 @@
             ]
         },
         {
-            "name" : "glade",
-            "cleanup" : [
-                "/share/applications",
-                "/share/help",
-                "/share/metainfo",
-                "/bin/glade"
-            ],
-            "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/glade.git"
-                }
-            ]
-        },
-        {
             "name" : "deviced",
             "config-opts" : [
                 "--libdir=/app/lib",
