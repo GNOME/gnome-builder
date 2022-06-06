@@ -499,10 +499,15 @@ ide_clang_completion_item_display (IdeClangCompletionItem  *self,
 
     case GTK_SOURCE_COMPLETION_COLUMN_TYPED_TEXT:
       {
+        g_autofree char *with_params = NULL;
+        const char *text = self->typed_text;
         PangoAttrList *attrs;
 
+        if (text != NULL && self->params != NULL)
+          text = with_params = g_strdup_printf ("%s %s", text, self->params);
+
         attrs = gtk_source_completion_fuzzy_highlight (self->typed_text, typed_text);
-        gtk_source_completion_cell_set_text_with_attributes (cell, self->typed_text, attrs);
+        gtk_source_completion_cell_set_text_with_attributes (cell, text, attrs);
         pango_attr_list_unref (attrs);
 
         break;
@@ -528,7 +533,7 @@ ide_clang_completion_item_display (IdeClangCompletionItem  *self,
       break;
 
     case GTK_SOURCE_COMPLETION_COLUMN_AFTER:
-      gtk_source_completion_cell_set_text (cell, self->params);
+      gtk_source_completion_cell_set_text (cell, NULL);
       break;
 
     default:
