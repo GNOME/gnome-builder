@@ -57,18 +57,12 @@
     <section id="ide-editor-page-document-section">
       <attribute name="label" translatable="yes">Document</attribute>
     </section>
-    <section id="ide-editor-page-properties-section">
+    <section id="ide-editor-page-preview-section">
       <attribute name="after">ide-editor-page-document-section</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Document Properties…</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Open Preview…</attribute>
-      </item>
     </section>
     <section id="ide-editor-page-reveal-section"/>
     <section id="ide-editor-page-save-section">
-      <attribute name="after">ide-editor-page-properties-section</attribute>
+      <attribute name="after">ide-editor-page-reveal-section</attribute>
       <item>
         <attribute name="label" translatable="yes">Save</attribute>
       </item>
