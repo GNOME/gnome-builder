@@ -44,7 +44,7 @@ static char *markdown_html_prefix;
 static char *markdown_html_suffix;
 
 IDE_DEFINE_ACTION_GROUP (GbpMarkdownPreviewWorkspaceAddin, gbp_markdown_preview_workspace_addin, {
-  { "live-preview", live_preview_action },
+  { "markdown-preview", live_preview_action },
 })
 
 static void
@@ -55,7 +55,7 @@ gbp_markdown_preview_workspace_addin_set_language (GbpMarkdownPreviewWorkspaceAd
 
   IDE_TRACE_MSG ("Switching language-id to %s", language_id ? language_id : "NULL");
   gbp_markdown_preview_workspace_addin_set_action_enabled (self,
-                                                           "live-preview",
+                                                           "markdown-preview",
                                                            ide_str_equal0 ("markdown", language_id));
 }
 
@@ -252,6 +252,7 @@ live_preview_action (GbpMarkdownPreviewWorkspaceAddin *self,
   ide_panel_position_set_depth (position, 0);
 
   ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
+  panel_widget_raise (PANEL_WIDGET (page));
 
   IDE_EXIT;
 }
