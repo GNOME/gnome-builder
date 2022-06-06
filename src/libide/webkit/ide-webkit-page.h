@@ -26,6 +26,9 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_WEBKIT_PAGE (ide_webkit_page_get_type())
 
+typedef char *(*IdeHtmlTransformFunc) (const char *input,
+                                       gpointer    user_data);
+
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeWebkitPage, ide_webkit_page, IDE, WEBKIT_PAGE, IdePage)
 
@@ -37,24 +40,27 @@ struct _IdeWebkitPageClass
 IDE_AVAILABLE_IN_ALL
 IdeWebkitPage *ide_webkit_page_new                   (void);
 IDE_AVAILABLE_IN_ALL
-IdeWebkitPage *ide_webkit_page_new_for_buffer        (GtkTextBuffer *buffer);
+IdeWebkitPage *ide_webkit_page_new_for_buffer        (GtkTextBuffer        *buffer,
+                                                      IdeHtmlTransformFunc  transform_func,
+                                                      gpointer              transform_data,
+                                                      GDestroyNotify        transform_data_destroy);
 IDE_AVAILABLE_IN_ALL
-void           ide_webkit_page_load_uri              (IdeWebkitPage *self,
-                                                      const char    *uri);
+void           ide_webkit_page_load_uri              (IdeWebkitPage        *self,
+                                                      const char           *uri);
 IDE_AVAILABLE_IN_ALL
-gboolean       ide_webkit_page_focus_address         (IdeWebkitPage *self);
+gboolean       ide_webkit_page_focus_address         (IdeWebkitPage        *self);
 IDE_AVAILABLE_IN_ALL
-gboolean       ide_webkit_page_get_show_toolbar      (IdeWebkitPage *self);
+gboolean       ide_webkit_page_get_show_toolbar      (IdeWebkitPage        *self);
 IDE_AVAILABLE_IN_ALL
-void           ide_webkit_page_set_show_toolbar      (IdeWebkitPage *self,
-                                                      gboolean       show_toolbar);
+void           ide_webkit_page_set_show_toolbar      (IdeWebkitPage        *self,
+                                                      gboolean              show_toolbar);
 IDE_AVAILABLE_IN_ALL
-void           ide_webkit_page_go_back               (IdeWebkitPage *self);
+void           ide_webkit_page_go_back               (IdeWebkitPage        *self);
 IDE_AVAILABLE_IN_ALL
-void           ide_webkit_page_go_forward            (IdeWebkitPage *self);
+void           ide_webkit_page_go_forward            (IdeWebkitPage        *self);
 IDE_AVAILABLE_IN_ALL
-void           ide_webkit_page_reload                (IdeWebkitPage *self);
+void           ide_webkit_page_reload                (IdeWebkitPage        *self);
 IDE_AVAILABLE_IN_ALL
-void           ide_webkit_page_reload_ignoring_cache (IdeWebkitPage *self);
+void           ide_webkit_page_reload_ignoring_cache (IdeWebkitPage        *self);
 
 G_END_DECLS

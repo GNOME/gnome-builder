@@ -40,8 +40,11 @@ typedef struct
   GSimpleActionGroup *actions;
 
   /* Used for pages linked to buffers */
-  GtkTextBuffer      *buffer;
-  guint               queued_update_source;
+  GtkTextBuffer        *buffer;
+  IdeHtmlTransformFunc  transform_func;
+  gpointer              transform_data;
+  GDestroyNotify        transform_data_destroy;
+  guint                 queued_update_source;
 } IdeWebkitPagePrivate;
 
 enum {
@@ -340,6 +343,14 @@ ide_webkit_page_dispose (GObject *object)
   IdeWebkitPage *self = (IdeWebkitPage *)object;
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
 
+  if (priv->transform_data_destroy)
+    {
+      GDestroyNotify notify = g_steal_pointer (&priv->transform_data_destroy);
+      gpointer data = g_steal_pointer (&priv->transform_data);
+      priv->transform_func = NULL;
+      notify (data);
+    }
+
   g_clear_object (&priv->actions);
   g_clear_object (&priv->buffer);
   g_clear_handle_id (&priv->queued_update_source, g_source_remove);
@@ -603,6 +614,12 @@ ide_webkit_page_do_update_cb (gpointer user_data)
   if (IDE_IS_BUFFER (priv->buffer))
     base_uri = g_file_get_uri (ide_buffer_get_file (IDE_BUFFER (priv->buffer)));
 
+  if (priv->transform_func != NULL)
+    {
+      g_autofree char *input = g_steal_pointer (&text);
+      text = priv->transform_func (input, priv->transform_data);
+    }
+
   webkit_web_view_load_html (priv->web_view, text, base_uri);
 
   return G_SOURCE_REMOVE;
@@ -625,7 +642,10 @@ ide_webkit_page_buffer_changed_cb (IdeWebkitPage *self,
 }
 
 IdeWebkitPage *
-ide_webkit_page_new_for_buffer (GtkTextBuffer *buffer)
+ide_webkit_page_new_for_buffer (GtkTextBuffer        *buffer,
+                                IdeHtmlTransformFunc  transform_func,
+                                gpointer              transform_data,
+                                GDestroyNotify        transform_data_destroy)
 {
   IdeWebkitPage *self;
   IdeWebkitPagePrivate *priv;
@@ -634,6 +654,10 @@ ide_webkit_page_new_for_buffer (GtkTextBuffer *buffer)
 
   self = ide_webkit_page_new ();
   priv = ide_webkit_page_get_instance_private (self);
+
+  priv->transform_func = transform_func;
+  priv->transform_data = transform_data;
+  priv->transform_data_destroy = transform_data_destroy;
 
   priv->buffer = g_object_ref (buffer);
   g_signal_connect_object (buffer,
