@@ -86,7 +86,6 @@ gbp_editorui_workbench_addin_can_open (IdeWorkbenchAddin *addin,
                                        gint              *priority)
 {
   const char *path;
-  const char *suffix;
 
   g_assert (GBP_IS_EDITORUI_WORKBENCH_ADDIN (addin));
   g_assert (G_IS_FILE (file));
@@ -109,16 +108,23 @@ gbp_editorui_workbench_addin_can_open (IdeWorkbenchAddin *addin,
     }
 
   /* Escape hatch in case shared-mime-info fails us */
-  suffix = strrchr (path, '.');
-  if (suffix && g_hash_table_contains (overrides, suffix))
-    return TRUE;
+  if (path != NULL)
+    {
+      const char *suffix = strrchr (path, '.');
+
+      if (suffix && g_hash_table_contains (overrides, suffix))
+        return TRUE;
+    }
 
   if (content_type != NULL)
     {
-      g_autofree gchar *text_type = NULL;
+      static char *text_plain_type;
 
-      text_type = g_content_type_from_mime_type ("text/plain");
-      return g_content_type_is_a (content_type, text_type);
+      if G_UNLIKELY (text_plain_type)
+        text_plain_type = g_content_type_from_mime_type ("text/plain");
+
+      if (g_content_type_is_a (content_type, text_plain_type))
+        return TRUE;
     }
 
   return FALSE;
