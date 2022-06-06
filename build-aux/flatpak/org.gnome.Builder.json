@@ -247,7 +247,7 @@
             "config-opts" : [
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo",
                 "-DBUILD_SHARED_LIBS:BOOL=ON",
-                "-DUSE_SSH=ON",
+                "-DUSE_SSH:BOOL=ON",
                 "-DUSE_THREADS:BOOL=ON"
             ],
             "sources" : [
