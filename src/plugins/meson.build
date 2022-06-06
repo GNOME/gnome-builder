@@ -77,7 +77,6 @@ subdir('gdb')
 subdir('gdiagnose')
 subdir('gettext')
 subdir('git')
-#subdir('glade')
 subdir('gopls')
 subdir('gradle')
 subdir('greeter')
@@ -172,7 +171,6 @@ status += [
   'GDB .................................. : @0@'.format(get_option('plugin_gdb')),
   'Gettext .............................. : @0@'.format(get_option('plugin_gettext')),
   'Git .................................. : @0@'.format(get_option('plugin_git')),
-  'Glade ................................ : @0@'.format(get_option('plugin_glade')),
   'Gradle ............................... : @0@'.format(get_option('plugin_gradle')),
   'Grep ................................. : @0@'.format(get_option('plugin_grep')),
   'HTML Completion ...................... : @0@'.format(get_option('plugin_html_completion')),
