@@ -43,7 +43,7 @@ static void live_preview_action (GbpHtmlPreviewWorkspaceAddin *self,
                                  GVariant                     *params);
 
 IDE_DEFINE_ACTION_GROUP (GbpHtmlPreviewWorkspaceAddin, gbp_html_preview_workspace_addin, {
-  { "live-preview", live_preview_action },
+  { "html-preview", live_preview_action },
 })
 
 static void
@@ -59,7 +59,7 @@ gbp_html_preview_workspace_addin_set_language (GbpHtmlPreviewWorkspaceAddin *sel
   enabled = language_id != NULL &&
             g_hash_table_contains (known_languages, language_id);
 
-  gbp_html_preview_workspace_addin_set_action_enabled (self, "live-preview", enabled);
+  gbp_html_preview_workspace_addin_set_action_enabled (self, "html-preview", enabled);
 }
 
 static void
@@ -236,6 +236,7 @@ live_preview_action (GbpHtmlPreviewWorkspaceAddin *self,
   ide_panel_position_set_depth (position, 0);
 
   ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
+  panel_widget_raise (PANEL_WIDGET (page));
 
   IDE_EXIT;
 }

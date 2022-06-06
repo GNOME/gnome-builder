@@ -1,10 +1,13 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="ide-editor-page-preview-section">
-    <item>
-      <attribute name="label" translatable="yes">Open Preview…</attribute>
-      <attribute name="action">html-preview.live-preview</attribute>
-      <attribute name="hidden-when">action-disabled</attribute>
-    </item>
+  <menu id="ide-editor-page-menu">
+    <section id="ide-editor-page-preview-section">
+      <item>
+        <attribute name="id">html-preview-item</attribute>
+        <attribute name="label" translatable="yes">Open Preview…</attribute>
+        <attribute name="action">html-preview.html-preview</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
   </menu>
 </interface>
