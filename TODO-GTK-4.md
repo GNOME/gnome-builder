@@ -36,12 +36,6 @@ the dummy popover window.
 I also want to add a secondary popover that allows us to animate in a display
 of file content for the selected entry with highlighting.
 
-## Find Other File
-
-This supports F4 for switching between source/header/ui files and what not.
-It used to build on the global search, and perhaps we would still want to
-do that in some sort of way.
-
 ## Configuration Editing
 
 This is still needed in the "Configure Project" window although I'm not sure
@@ -67,15 +61,6 @@ This probably can use a lot of simplification from a rewrite as well.
 ## Command Bar
 
 This will go away, and become part of the global search.
-
-## Glade
-
-This will go away, and instead use Drafting.
-
-## GVls
-
-Not sure what is needed here, but it should definitely be ported to
-IdeLspService at minimum. We don't enable it in our builds anyway.
 
 ## Editor
 
@@ -112,8 +97,3 @@ with the updated shortcut controller work.
 
 Port to the new shortcuts engine. Can probably become a .json file descripting
 all the keybindings in our new syntax.
-
-## Sysprof
-
-Port to use IdePage and get rid of the whole surface madness.
-
