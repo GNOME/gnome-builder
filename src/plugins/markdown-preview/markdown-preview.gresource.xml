@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/markdown-preview">
+    <file>markdown-preview.plugin</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file>css/markdown.css</file>
+    <file>js/markdown-view.js</file>
+    <file>js/marked.js</file>
+  </gresource>
+</gresources>
