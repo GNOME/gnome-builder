@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="ide-editor-page-preview-section">
+    <item>
+      <attribute name="label" translatable="yes">Open Preview…</attribute>
+      <attribute name="action">markdown-preview.live-preview</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+    </item>
+  </menu>
+</interface>
