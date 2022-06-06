@@ -118,6 +118,8 @@ static void ide_workbench_action_close         (IdeWorkbench *self,
                                                 GVariant     *param);
 static void ide_workbench_action_open          (IdeWorkbench *self,
                                                 GVariant     *param);
+static void ide_workbench_action_open_uri      (IdeWorkbench *self,
+                                                GVariant     *param);
 static void ide_workbench_action_dump_tasks    (IdeWorkbench *self,
                                                 GVariant     *param);
 static void ide_workbench_action_object_tree   (IdeWorkbench *self,
@@ -134,6 +136,7 @@ static void ide_workbench_action_configure     (IdeWorkbench *self,
 IDE_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
   { "close", ide_workbench_action_close },
   { "open", ide_workbench_action_open },
+  { "open-uri", ide_workbench_action_open_uri, "s" },
   { "reload-files", ide_workbench_action_reload_all },
   { "global-search", ide_workbench_action_global_search },
   { "configure", ide_workbench_action_configure },
@@ -1449,6 +1452,23 @@ ide_workbench_action_open (IdeWorkbench *self,
                            G_CONNECT_SWAPPED);
 
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+}
+
+static void
+ide_workbench_action_open_uri (IdeWorkbench *self,
+                               GVariant     *param)
+{
+  g_autoptr(GFile) file = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  file = g_file_new_for_uri (g_variant_get_string (param, NULL));
+  ide_workbench_open_async (self, file, NULL, 0, NULL, NULL, NULL, NULL);
+
+  IDE_EXIT;
 }
 
 static void
