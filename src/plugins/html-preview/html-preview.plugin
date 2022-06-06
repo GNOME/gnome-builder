@@ -2,7 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015-2022 Christian Hergert
-Depends=webkit;
+Depends=editorui;webkit;
 Description=Live preview of HTML documents
 Embedded=_gbp_html_preview_register_types
 Module=html-preview
