@@ -211,6 +211,7 @@ gbp_markdown_preview_workspace_addin_class_init (GbpMarkdownPreviewWorkspaceAddi
 static void
 gbp_markdown_preview_workspace_addin_init (GbpMarkdownPreviewWorkspaceAddin *self)
 {
+  gbp_markdown_preview_workspace_addin_set_action_enabled (self, "markdown-preview", FALSE);
 }
 
 static char *
