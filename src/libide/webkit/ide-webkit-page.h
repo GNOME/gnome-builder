@@ -37,6 +37,8 @@ struct _IdeWebkitPageClass
 IDE_AVAILABLE_IN_ALL
 IdeWebkitPage *ide_webkit_page_new                   (void);
 IDE_AVAILABLE_IN_ALL
+IdeWebkitPage *ide_webkit_page_new_for_buffer        (GtkTextBuffer *buffer);
+IDE_AVAILABLE_IN_ALL
 void           ide_webkit_page_load_uri              (IdeWebkitPage *self,
                                                       const char    *uri);
 IDE_AVAILABLE_IN_ALL
