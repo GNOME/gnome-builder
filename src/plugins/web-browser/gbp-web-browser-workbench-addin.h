@@ -1,4 +1,4 @@
-/* web-browser-plugin.c
+/* gbp-web-browser-workbench-addin.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -18,23 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
+#pragma once
 
-#include <libpeas/peas.h>
+#include <glib-object.h>
 
-#include <libide-gui.h>
-#include <libide-webkit.h>
+G_BEGIN_DECLS
 
-#include "gbp-web-browser-workbench-addin.h"
-#include "gbp-web-browser-workspace-addin.h"
+#define GBP_TYPE_WEB_BROWSER_WORKBENCH_ADDIN (gbp_web_browser_workbench_addin_get_type())
 
-_IDE_EXTERN void
-_gbp_web_browser_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_WEB_BROWSER_WORKBENCH_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKSPACE_ADDIN,
-                                              GBP_TYPE_WEB_BROWSER_WORKSPACE_ADDIN);
-}
+G_DECLARE_FINAL_TYPE (GbpWebBrowserWorkbenchAddin, gbp_web_browser_workbench_addin, GBP, WEB_BROWSER_WORKBENCH_ADDIN, GObject)
+
+G_END_DECLS

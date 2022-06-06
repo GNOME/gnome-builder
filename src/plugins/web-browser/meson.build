@@ -2,6 +2,7 @@ if get_option('webkit').enabled()
 
 plugins_sources += files([
   'web-browser-plugin.c',
+  'gbp-web-browser-workbench-addin.c',
   'gbp-web-browser-workspace-addin.c',
 ])
 
