@@ -13,6 +13,7 @@
             <property name="vexpand">true</property>
             <signal name="notify::is-loading" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
             <signal name="notify::uri" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
+            <signal name="decide-policy" handler="on_web_view_decide_policy_cb" swapped="true" object="IdeWebkitPage"/>
           </object>
         </child>
         <child>
