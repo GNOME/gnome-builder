@@ -1,3 +1,11 @@
+if get_option('plugin_meson_templates')
+
+plugins_sources += files([
+  'meson-templates-plugin.c',
+  'gbp-meson-template.c',
+  'gbp-meson-template-provider.c',
+])
+
 flatpak_json_data = configuration_data()
 flatpak_json_data.set('gnome_sdk_version', get_option('gnome_sdk_version'))
 flatpak_json = configure_file(
@@ -5,21 +13,13 @@ flatpak_json = configure_file(
   output: 'flatpak.json',
   configuration: flatpak_json_data)
 
-meson_templates_resources = gnome.compile_resources(
-  'meson_templates',
+plugin_meson_templates_resources = gnome.compile_resources(
+  'gbp-meson-templates',
   'meson-templates.gresource.xml',
-  gresource_bundle: true,
-           install: true,
-       install_dir: plugindir,
-      dependencies: [flatpak_json],
+        c_name: 'gbp_meson_templates',
+  dependencies: [flatpak_json],
 )
 
-install_data('meson_templates.py', install_dir: plugindir)
+plugins_sources += plugin_meson_templates_resources
 
-configure_file(
-          input: 'meson-templates.plugin',
-         output: 'meson-templates.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
-)
+endif

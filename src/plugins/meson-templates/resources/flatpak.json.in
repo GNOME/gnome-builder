@@ -13,7 +13,7 @@
         "--share=network",
         "--share=ipc",
         "--socket=fallback-x11",
-{{if (template == "gnome-app-gtk4") || (template == "gnome-app-adwaita")}}
+{{if is_gtk4}}
         "--device=dri",
 {{end}}
         "--socket=wayland"
