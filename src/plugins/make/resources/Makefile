@@ -14,16 +14,15 @@ STANDARD = -std=c++2a
 {{end}}
 
 {{if language == "c"}}
-{{exec_name}}: Makefile {{exec_name}}.c
-	$(CC) -o $@ $(WARNINGS) $(DEBUG) $(OPTIMIZE) {{exec_name}}.c
+{{exec_name}}: Makefile main.c
+	$(CC) -o $@ $(WARNINGS) $(DEBUG) $(OPTIMIZE) main.c
 {{else if language == "c++"}}
-{{exec_name}}: Makefile {{exec_name}}.cpp
-	$(CXX) -o $@ $(WARNINGS) $(DEBUG) $(OPTIMIZE) $(STANDARD) {{exec_name}}.cpp
+{{exec_name}}: Makefile main.cpp
+	$(CXX) -o $@ $(WARNINGS) $(DEBUG) $(OPTIMIZE) $(STANDARD) main.cpp
 {{end}}
 
 clean:
 	rm -f {{exec_name}}
-
 
 # Builder will call this to install the application before running.
 install:
