@@ -29,7 +29,7 @@
 
 #include "ide-application.h"
 #include "ide-gui-global.h"
-#include "ide-page.h"
+#include "ide-page-private.h"
 #include "ide-workspace-private.h"
 
 typedef struct
