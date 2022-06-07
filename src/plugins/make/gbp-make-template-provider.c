@@ -23,8 +23,11 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-projects.h>
 
+#include "gbp-make-template.h"
 #include "gbp-make-template-provider.h"
 
 struct _GbpMakeTemplateProvider
@@ -32,9 +35,29 @@ struct _GbpMakeTemplateProvider
   GObject parent_instance;
 };
 
+GList *
+gbp_make_template_provider_get_project_templates (IdeTemplateProvider *provider)
+{
+  GList *list = NULL;
+
+  g_assert (GBP_IS_MAKE_TEMPLATE_PROVIDER (provider));
+
+  list = g_list_prepend (list,
+                         g_object_new (GBP_TYPE_MAKE_TEMPLATE,
+                                       "id", "empty-makefile",
+                                       "name", _("Empty Makefile Project"),
+                                       "description", _("Create a new empty project using a simple Makefile"),
+                                       "languages", IDE_STRV_INIT ("C", "C++"),
+                                       "priority", 1000,
+                                       NULL));
+
+  return list;
+}
+
 static void
 template_provider_iface_init (IdeTemplateProviderInterface *iface)
 {
+  iface->get_project_templates = gbp_make_template_provider_get_project_templates;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMakeTemplateProvider, gbp_make_template_provider, G_TYPE_OBJECT,
