@@ -117,6 +117,7 @@ subdir('rust-analyzer')
 #subdir('shellcmd')
 subdir('snippets')
 subdir('spellcheck')
+subdir('sphinx-preview')
 subdir('stylelint')
 #subdir('sublime')
 subdir('support')
@@ -194,6 +195,7 @@ status += [
   'Quick Highlight ...................... : @0@'.format(get_option('plugin_quick_highlight')),
   'Retab ................................ : @0@'.format(get_option('plugin_retab')),
   'rstcheck ............................. : @0@'.format(get_option('plugin_rstcheck')),
+  'Sphinx Preview (reStructuredText) .... : @0@'.format(get_option('plugin_sphinx_preview')),
   'Rubocop .............................. : @0@'.format(get_option('plugin_rubocop')),
   'Spellcheck ........................... : @0@'.format(get_option('plugin_spellcheck')),
   'Stylelint ............................ : @0@'.format(get_option('plugin_stylelint')),
