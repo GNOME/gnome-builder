@@ -27,8 +27,6 @@
 #include "ide-webkit-page.h"
 #include "ide-url-bar.h"
 
-#define UPDATE_DELAY_MSEC 250
-
 typedef struct
 {
   GtkStack           *reload_stack;
@@ -39,12 +37,11 @@ typedef struct
 
   GSimpleActionGroup *actions;
 
-  /* Used for pages linked to buffers */
-  GtkTextBuffer        *buffer;
-  IdeHtmlTransformFunc  transform_func;
-  gpointer              transform_data;
-  GDestroyNotify        transform_data_destroy;
-  guint                 queued_update_source;
+  IdeHtmlGenerator   *generator;
+
+  guint               dirty : 1;
+  guint               generating : 1;
+  guint               disposed : 1;
 } IdeWebkitPagePrivate;
 
 enum {
@@ -343,17 +340,10 @@ ide_webkit_page_dispose (GObject *object)
   IdeWebkitPage *self = (IdeWebkitPage *)object;
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
 
-  if (priv->transform_data_destroy)
-    {
-      GDestroyNotify notify = g_steal_pointer (&priv->transform_data_destroy);
-      gpointer data = g_steal_pointer (&priv->transform_data);
-      priv->transform_func = NULL;
-      notify (data);
-    }
+  priv->disposed = TRUE;
 
+  g_clear_object (&priv->generator);
   g_clear_object (&priv->actions);
-  g_clear_object (&priv->buffer);
-  g_clear_handle_id (&priv->queued_update_source, g_source_remove);
 
   G_OBJECT_CLASS (ide_webkit_page_parent_class)->dispose (object);
 }
@@ -593,79 +583,91 @@ ide_webkit_page_reload_ignoring_cache (IdeWebkitPage *self)
   webkit_web_view_reload_bypass_cache (priv->web_view);
 }
 
-static gboolean
-ide_webkit_page_do_update_cb (gpointer user_data)
+static void
+ide_webkit_page_generate_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
 {
-  IdeWebkitPage *self = user_data;
+  IdeHtmlGenerator *generator = (IdeHtmlGenerator *)object;
+  g_autoptr(IdeWebkitPage) self = user_data;
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
-  g_autofree char *base_uri = NULL;
-  g_autofree char *text = NULL;
-  GtkTextIter begin, end;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GBytes) bytes = NULL;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_HTML_GENERATOR (generator));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_WEBKIT_PAGE (self));
-  g_assert (GTK_IS_TEXT_BUFFER (priv->buffer));
 
-  priv->queued_update_source = 0;
+  priv->generating = FALSE;
 
-  gtk_text_buffer_get_bounds (priv->buffer, &begin, &end);
-  text = gtk_text_iter_get_slice (&begin, &end);
-
-  if (IDE_IS_BUFFER (priv->buffer))
-    base_uri = g_file_get_uri (ide_buffer_get_file (IDE_BUFFER (priv->buffer)));
-
-  if (priv->transform_func != NULL)
+  if (!(bytes = ide_html_generator_generate_finish (generator, result, &error)))
     {
-      g_autofree char *input = g_steal_pointer (&text);
-      text = priv->transform_func (input, priv->transform_data);
+      /* Don't try to spin again in this case by checking dirty */
+      g_warning ("Failed to generate HTML: %s", error->message);
+      return;
     }
 
-  webkit_web_view_load_html (priv->web_view, text, base_uri);
+  if (priv->disposed)
+    return;
 
-  return G_SOURCE_REMOVE;
+  webkit_web_view_load_html (priv->web_view,
+                             (const char *)g_bytes_get_data (bytes, NULL),
+                             ide_html_generator_get_base_uri (generator));
+
+  /* See if we need to run again, and check for re-entrantcy */
+  if (priv->dirty && !priv->generating)
+    {
+      priv->dirty = FALSE;
+      priv->generating = TRUE;
+      ide_html_generator_generate_async (generator,
+                                         NULL,
+                                         ide_webkit_page_generate_cb,
+                                         g_steal_pointer (&self));
+    }
 }
 
 static void
-ide_webkit_page_buffer_changed_cb (IdeWebkitPage *self,
-                                   GtkTextBuffer *buffer)
+ide_webkit_page_generator_invalidate_cb (IdeWebkitPage    *self,
+                                         IdeHtmlGenerator *generator)
 {
   IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_WEBKIT_PAGE (self));
-  g_assert (GTK_IS_TEXT_BUFFER (buffer));
+  g_assert (IDE_IS_HTML_GENERATOR (generator));
 
-  if (priv->queued_update_source == 0)
-    priv->queued_update_source = g_timeout_add (UPDATE_DELAY_MSEC,
-                                                ide_webkit_page_do_update_cb,
-                                                self);
+  priv->dirty = TRUE;
+
+  if (priv->generating)
+    return;
+
+  priv->generating = TRUE;
+  priv->dirty = FALSE;
+
+  ide_html_generator_generate_async (generator,
+                                     NULL,
+                                     ide_webkit_page_generate_cb,
+                                     g_object_ref (self));
 }
 
 IdeWebkitPage *
-ide_webkit_page_new_for_buffer (GtkTextBuffer        *buffer,
-                                IdeHtmlTransformFunc  transform_func,
-                                gpointer              transform_data,
-                                GDestroyNotify        transform_data_destroy)
+ide_webkit_page_new_for_generator (IdeHtmlGenerator *generator)
 {
   IdeWebkitPage *self;
   IdeWebkitPagePrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
+  g_return_val_if_fail (IDE_IS_HTML_GENERATOR (generator), NULL);
 
   self = ide_webkit_page_new ();
   priv = ide_webkit_page_get_instance_private (self);
 
-  priv->transform_func = transform_func;
-  priv->transform_data = transform_data;
-  priv->transform_data_destroy = transform_data_destroy;
-
-  priv->buffer = g_object_ref (buffer);
-  g_signal_connect_object (buffer,
-                           "changed",
-                           G_CALLBACK (ide_webkit_page_buffer_changed_cb),
+  priv->generator = g_object_ref (generator);
+  g_signal_connect_object (priv->generator,
+                           "invalidate",
+                           G_CALLBACK (ide_webkit_page_generator_invalidate_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  ide_webkit_page_buffer_changed_cb (self, buffer);
+  ide_webkit_page_generator_invalidate_cb (self, generator);
 
   return self;
 }
