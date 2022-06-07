@@ -943,7 +943,7 @@ ide_template_input_to_scope (IdeTemplateInput *self)
   name_lower = g_utf8_strdown (self->name ? self->name : "example", -1);
   tmpl_scope_set_string (scope, "name", name_lower);
   scope_take_string (scope, "name_", functify (name_lower));
-  scope_take_string (scope, "NAME", g_utf8_strup (name_lower, -1));
+  scope_take_string (scope, "NAME", g_strdelimit (g_utf8_strup (name_lower, -1), "-", '_'));
   scope_take_string (scope, "year", g_date_time_format (now, "%Y"));
   scope_take_string (scope, "YEAR", g_date_time_format (now, "%Y"));
 
@@ -953,12 +953,12 @@ ide_template_input_to_scope (IdeTemplateInput *self)
     prefix = g_strdup (name_lower);
   Prefix = capitalize (prefix);
   PreFix = camelize (prefix);
-  prefix_ = g_utf8_strdown (prefix, -1);
+  prefix_ = g_strdelimit (g_utf8_strdown (prefix, -1), "-", '_');
 
   /* Various prefixes for use as namespaces, etc */
   tmpl_scope_set_string (scope, "prefix", prefix);
   tmpl_scope_set_string (scope, "prefix_", prefix_);
-  scope_take_string (scope, "PREFIX", g_utf8_strup (prefix, -1));
+  scope_take_string (scope, "PREFIX", g_strdelimit (g_utf8_strup (prefix, -1), "-", '_'));
   tmpl_scope_set_string (scope, "Prefix", Prefix);
   tmpl_scope_set_string (scope, "PreFix", PreFix);
   scope_take_string (scope, "spaces", g_strnfill (strlen (prefix_), ' '));
