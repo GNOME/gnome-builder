@@ -27,6 +27,7 @@
 #include <libide-gui.h>
 #include <libide-webkit.h>
 
+#include "gbp-markdown-html-generator.h"
 #include "gbp-markdown-preview-workspace-addin.h"
 
 struct _GbpMarkdownPreviewWorkspaceAddin
@@ -39,9 +40,6 @@ struct _GbpMarkdownPreviewWorkspaceAddin
 
 static void live_preview_action (GbpMarkdownPreviewWorkspaceAddin *self,
                                  GVariant                     *params);
-
-static char *markdown_html_prefix;
-static char *markdown_html_suffix;
 
 IDE_DEFINE_ACTION_GROUP (GbpMarkdownPreviewWorkspaceAddin, gbp_markdown_preview_workspace_addin, {
   { "markdown-preview", live_preview_action },
@@ -191,21 +189,6 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMarkdownPreviewWorkspaceAddin, gbp_markdown_pr
 static void
 gbp_markdown_preview_workspace_addin_class_init (GbpMarkdownPreviewWorkspaceAddinClass *klass)
 {
-  g_autoptr(GBytes) markdown_view_js = g_resources_lookup_data ("/plugins/markdown-preview/js/markdown-view.js", 0, NULL);
-  g_autoptr(GBytes) markdown_css = g_resources_lookup_data ("/plugins/markdown-preview/css/markdown.css", 0, NULL);
-  g_autoptr(GBytes) marked_js = g_resources_lookup_data ("/plugins/markdown-preview/js/marked.js", 0, NULL);
-
-  markdown_html_prefix = g_strconcat ("<html>\n",
-                                      " <head>\n",
-                                      "  <style>", g_bytes_get_data (markdown_css, NULL), "</style>\n",
-                                      "  <script>", g_bytes_get_data (marked_js, NULL), "</script>\n",
-                                      "  <script>", g_bytes_get_data (markdown_view_js, NULL), "</script>\n",
-                                      " </head>\n",
-                                      " <body onload=\"preview()\">\n",
-                                      "  <div class=\"markdown-body\" id=\"preview\"></div>\n",
-                                      "  <div id=\"markdown-source\">",
-                                      NULL);
-  markdown_html_suffix = (char *)"</div>\n </body>\n</html>\n";
 }
 
 static void
@@ -214,20 +197,11 @@ gbp_markdown_preview_workspace_addin_init (GbpMarkdownPreviewWorkspaceAddin *sel
   gbp_markdown_preview_workspace_addin_set_action_enabled (self, "markdown-preview", FALSE);
 }
 
-static char *
-transform_content_to_html (const char *content,
-                           gpointer    user_data)
-{
-  return g_strconcat (markdown_html_prefix,
-                      content,
-                      markdown_html_suffix,
-                      NULL);
-}
-
 static void
 live_preview_action (GbpMarkdownPreviewWorkspaceAddin *self,
                      GVariant                     *params)
 {
+  g_autoptr(IdeHtmlGenerator) generator = NULL;
   g_autoptr(IdePanelPosition) position = NULL;
   g_autoptr(IdeBuffer) buffer = NULL;
   IdeWebkitPage *page;
@@ -241,9 +215,10 @@ live_preview_action (GbpMarkdownPreviewWorkspaceAddin *self,
   g_assert (IDE_IS_EDITOR_PAGE (self->editor_page));
 
   buffer = g_signal_group_dup_target (self->buffer_signals);
-  page = ide_webkit_page_new_for_buffer (GTK_TEXT_BUFFER (buffer),
-                                         transform_content_to_html,
-                                         NULL, NULL);
+  generator = g_object_new (GBP_TYPE_MARKDOWN_HTML_GENERATOR,
+                            "buffer", buffer,
+                            NULL);
+  page = ide_webkit_page_new_for_generator (generator);
   position = ide_page_get_position (IDE_PAGE (self->editor_page));
 
   if (!ide_panel_position_get_column (position, &column))
