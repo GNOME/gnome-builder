@@ -104,6 +104,7 @@ IDE_AVAILABLE_IN_ALL
 char                       *ide_template_input_get_license_path        (IdeTemplateInput     *self);
 IDE_AVAILABLE_IN_ALL
 void                        ide_template_input_expand_async            (IdeTemplateInput     *self,
+                                                                        IdeContext           *context,
                                                                         GCancellable         *cancellable,
                                                                         GAsyncReadyCallback   callback,
                                                                         gpointer              user_data);
