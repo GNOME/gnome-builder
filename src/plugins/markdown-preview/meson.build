@@ -6,6 +6,7 @@ endif
 
 plugins_sources += files([
   'markdown-preview-plugin.c',
+  'gbp-markdown-html-generator.c',
   'gbp-markdown-preview-workspace-addin.c',
 ])
 
