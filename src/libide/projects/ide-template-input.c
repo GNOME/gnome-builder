@@ -97,7 +97,7 @@ static const struct {
   { "No License", NULL, NULL },
 };
 
-static char *
+static const char *
 get_template_name (IdeTemplateInput *self)
 {
   guint n_items;
@@ -109,7 +109,7 @@ get_template_name (IdeTemplateInput *self)
   for (guint i = 0; i < n_items; i++)
     {
       g_autoptr(IdeProjectTemplate) template = g_list_model_get_item (G_LIST_MODEL (self->templates), i);
-      g_autofree char *id = ide_project_template_get_id (template);
+      const char *id = ide_project_template_get_id (template);
 
       if (g_strcmp0 (id, self->template) == 0)
         return ide_project_template_get_name (template);
@@ -154,7 +154,7 @@ ide_template_input_set_templates (IdeTemplateInput *self,
   for (guint i = 0; i < templates->len; i++)
     {
       IdeProjectTemplate *template = g_ptr_array_index (templates, i);
-      g_auto(GStrv) langs = ide_project_template_get_languages (template);
+      const char * const *langs = ide_project_template_get_languages (template);
 
       g_list_store_append (self->templates, template);
 
@@ -170,7 +170,7 @@ ide_template_input_set_templates (IdeTemplateInput *self,
 
   if (templates->len > 0)
     {
-      g_autofree char *id = ide_project_template_get_id (g_ptr_array_index (templates, 0));
+      const char *id = ide_project_template_get_id (g_ptr_array_index (templates, 0));
       ide_template_input_set_template (self, id);
     }
 
@@ -193,14 +193,15 @@ template_filter_func (gpointer item,
 {
   IdeProjectTemplate *template = item;
   const char *language = user_data;
-  g_auto(GStrv) languages = NULL;
+  const char * const *languages;
 
   g_assert (IDE_IS_PROJECT_TEMPLATE (template));
   g_assert (language != NULL);
 
-  languages = ide_project_template_get_languages (template);
+  if ((languages = ide_project_template_get_languages (template)))
+    return g_strv_contains (languages, language);
 
-  return g_strv_contains ((const char * const *)languages, language);
+  return FALSE;
 }
 
 static void
@@ -306,7 +307,7 @@ ide_template_input_get_property (GObject    *object,
       break;
 
     case PROP_TEMPLATE_NAME:
-      g_value_take_string (value, get_template_name (self));
+      g_value_set_string (value, get_template_name (self));
       break;
 
     case PROP_TEMPLATES_MODEL:
@@ -585,7 +586,7 @@ ide_template_input_set_directory (IdeTemplateInput *self,
 static void
 auto_select_template (IdeTemplateInput *self)
 {
-  g_autofree char *first_id = NULL;
+  const char *first_id = NULL;
   GListModel *model;
   guint n_items;
 
@@ -597,13 +598,13 @@ auto_select_template (IdeTemplateInput *self)
   for (guint i = 0; i < n_items; i++)
     {
       g_autoptr(IdeProjectTemplate) template = g_list_model_get_item (model, i);
-      g_autofree char *id = ide_project_template_get_id (template);
+      const char *id = ide_project_template_get_id (template);
 
       if (ide_str_equal0 (id, self->template))
         return;
 
       if (first_id == NULL)
-        first_id = g_steal_pointer (&id);
+        first_id = id;
     }
 
   if (first_id != NULL)
@@ -726,7 +727,7 @@ scope_take_string (TmplScope  *scope,
   g_free (value);
 }
 
-static gchar *
+static char *
 capitalize (const gchar *input)
 {
   gunichar c;
@@ -806,7 +807,7 @@ camelize (const char *input)
   return g_string_free (str, FALSE);
 }
 
-static gchar *
+static char *
 functify (const gchar *input)
 {
   gunichar last = 0;
@@ -1051,7 +1052,7 @@ find_template (IdeTemplateInput *self,
   for (guint i = 0; i < n_items; i++)
     {
       g_autoptr(IdeProjectTemplate) template = g_list_model_get_item (model, i);
-      g_autofree char *id = ide_project_template_get_id (template);
+      const char *id = ide_project_template_get_id (template);
 
       if (ide_str_equal0 (template_id, id))
         return g_steal_pointer (&template);
@@ -1066,7 +1067,7 @@ ide_template_input_validate (IdeTemplateInput *self)
   IdeTemplateInputValidation flags = 0;
   IdeProjectTemplate *template;
   g_autoptr(GFile) dest = NULL;
-  g_auto(GStrv) languages = NULL;
+  const char * const *languages;
 
   g_return_val_if_fail (IDE_IS_TEMPLATE_INPUT (self), 0);
 
@@ -1087,10 +1088,10 @@ ide_template_input_validate (IdeTemplateInput *self)
       g_file_query_exists (dest, NULL))
     flags |= IDE_TEMPLATE_INPUT_INVAL_LOCATION;
 
-  if (self->language == NULL ||
-      self->template == NULL ||
-      !(languages = ide_project_template_get_languages (template)) ||
-      !g_strv_contains ((const char * const *)languages, self->language))
+  if (template != NULL && /* ignore if template is not set*/
+      (self->language == NULL ||
+       !(languages = ide_project_template_get_languages (template)) ||
+       !g_strv_contains (languages, self->language)))
     flags |= IDE_TEMPLATE_INPUT_INVAL_LANGUAGE;
 
   return flags;

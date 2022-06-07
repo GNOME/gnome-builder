@@ -31,53 +31,9 @@ struct _GbpMakeTemplate
 
 G_DEFINE_FINAL_TYPE (GbpMakeTemplate, gbp_make_template, IDE_TYPE_PROJECT_TEMPLATE)
 
-enum {
-  PROP_0,
-  N_PROPS
-};
-
-static GParamSpec *properties [N_PROPS];
-
-static void
-gbp_make_template_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (gbp_make_template_parent_class)->finalize (object);
-}
-
-static void
-gbp_make_template_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gbp_make_template_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
 static void
 gbp_make_template_class_init (GbpMakeTemplateClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gbp_make_template_finalize;
-  object_class->get_property = gbp_make_template_get_property;
-  object_class->set_property = gbp_make_template_set_property;
 }
 
 static void
