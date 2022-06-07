@@ -26,6 +26,7 @@
 #include <libpeas/peas.h>
 
 #include <libide-threading.h>
+#include <libide-vcs.h>
 
 #include "ide-projects-global.h"
 #include "ide-project-template.h"
@@ -37,6 +38,7 @@
 #define DEFAULT_PROJECT_VERSION "0.1.0"
 #define DEFAULT_LANGUAGE "C"
 #define DEFAULT_LICECNSE_NAME "GPL-3.0-or-later"
+#define DEFAULT_VCS_MODULE_NAME "git"
 
 struct _IdeTemplateInput
 {
@@ -1098,13 +1100,48 @@ ide_template_input_validate (IdeTemplateInput *self)
 }
 
 static void
+ide_template_input_initialize_vcs_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  IdeVcsInitializer *initializer = (IdeVcsInitializer *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  GFile *directory;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_VCS_INITIALIZER (initializer));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  directory = ide_task_get_task_data (task);
+  g_assert (G_IS_FILE (directory));
+
+  if (!ide_vcs_initializer_initialize_finish (initializer, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, g_object_ref (directory), g_object_unref);
+
+  ide_object_destroy (IDE_OBJECT (initializer));
+
+  IDE_EXIT;
+}
+
+static void
 ide_template_input_expand_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
 {
+  g_autoptr(IdeVcsInitializer) initializer = NULL;
   IdeProjectTemplate *template = (IdeProjectTemplate *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeTemplateInput *self;
+  PeasPluginInfo *plugin_info;
+  GCancellable *cancellable;
+  IdeContext *context = NULL;
+  PeasEngine *engine;
   GFile *directory;
 
   IDE_ENTRY;
@@ -1113,13 +1150,61 @@ ide_template_input_expand_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  self = ide_task_get_source_object (task);
   directory = ide_task_get_task_data (task);
+  cancellable = ide_task_get_cancellable (task);
+  context = g_object_get_data (G_OBJECT (task), "CONTEXT");
+
+  g_assert (IDE_IS_TEMPLATE_INPUT (self));
   g_assert (G_IS_FILE (directory));
+  g_assert (G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_CONTEXT (context));
 
   if (!ide_project_template_expand_finish (template, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, g_object_ref (directory), g_object_unref);
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (self->use_version_control == FALSE)
+    {
+      ide_task_return_pointer (task, g_object_ref (directory), g_object_unref);
+      IDE_EXIT;
+    }
+
+  engine = peas_engine_get_default ();
+
+  if (!(plugin_info = peas_engine_get_plugin_info (engine, DEFAULT_VCS_MODULE_NAME)))
+    {
+      /* Just continue without creating the VCS backend. Not like this can really
+       * hit in production use anyway.
+       */
+      ide_task_return_pointer (task, g_object_ref (directory), g_object_unref);
+      IDE_EXIT;
+    }
+
+  initializer = (IdeVcsInitializer *)
+    peas_engine_create_extension (engine,
+                                  plugin_info,
+                                  IDE_TYPE_VCS_INITIALIZER,
+                                  "parent", context,
+                                  NULL);
+
+  if (initializer == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to create initializer for %s version control",
+                                 DEFAULT_VCS_MODULE_NAME);
+      IDE_EXIT;
+    }
+
+  ide_vcs_initializer_initialize_async (initializer,
+                                        directory,
+                                        cancellable,
+                                        ide_template_input_initialize_vcs_cb,
+                                        g_steal_pointer (&task));
 
   IDE_EXIT;
 }
