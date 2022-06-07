@@ -152,6 +152,40 @@ ide_webkit_page_grab_focus (GtkWidget *widget)
     return gtk_widget_grab_focus (GTK_WIDGET (priv->web_view));
 }
 
+static gboolean
+on_web_view_decide_policy_cb (IdeWebkitPage            *self,
+                              WebKitPolicyDecision     *decision,
+                              WebKitPolicyDecisionType  decision_type,
+                              WebKitWebView            *web_view)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_assert (IDE_IS_WEBKIT_PAGE (self));
+  g_assert (WEBKIT_IS_POLICY_DECISION (decision));
+  g_assert (WEBKIT_IS_WEB_VIEW (web_view));
+
+  if (priv->generator == NULL)
+    return FALSE;
+
+  if (decision_type == WEBKIT_POLICY_DECISION_TYPE_NAVIGATION_ACTION)
+    {
+      WebKitNavigationAction *action = webkit_navigation_policy_decision_get_navigation_action (WEBKIT_NAVIGATION_POLICY_DECISION (decision));
+      WebKitURIRequest *request = webkit_navigation_action_get_request (action);
+      const char *uri = webkit_uri_request_get_uri (request);
+      const char *base_uri = ide_html_generator_get_base_uri (priv->generator);
+
+      if (!ide_str_equal0 (uri, base_uri))
+        {
+          GtkRoot *root = gtk_widget_get_root (GTK_WIDGET (self));
+          ide_gtk_show_uri_on_window (GTK_WINDOW (root), uri, g_get_monotonic_time (), NULL);
+          webkit_policy_decision_ignore (decision);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 go_forward_action (GSimpleAction *action,
                    GVariant      *param,
@@ -417,6 +451,7 @@ ide_webkit_page_class_init (IdeWebkitPageClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdeWebkitPage, web_view);
   gtk_widget_class_bind_template_callback (widget_class, on_toolbar_notify_visible_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_webkit_page_update_reload);
+  gtk_widget_class_bind_template_callback (widget_class, on_web_view_decide_policy_cb);
 
   g_type_ensure (WEBKIT_TYPE_SETTINGS);
   g_type_ensure (WEBKIT_TYPE_WEB_VIEW);
