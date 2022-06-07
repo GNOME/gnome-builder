@@ -262,7 +262,7 @@ gbp_create_project_widget_expand_cb (GObject      *object,
                                            GTK_MESSAGE_ERROR,
                                            GTK_BUTTONS_CLOSE,
                                            "%s",
-                                           _("New Project Creation Failed"));
+                                           _("Failed to Create Project"));
           gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                                     "%s", error->message);
           g_signal_connect (dialog,
