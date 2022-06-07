@@ -44,7 +44,7 @@ gbp_make_template_provider_get_project_templates (IdeTemplateProvider *provider)
 
   list = g_list_prepend (list,
                          g_object_new (GBP_TYPE_MAKE_TEMPLATE,
-                                       "id", "empty-makefile",
+                                       "id", "make-templates:empty",
                                        "name", _("Empty Makefile Project"),
                                        "description", _("Create a new empty project using a simple Makefile"),
                                        "languages", IDE_STRV_INIT ("C", "C++"),

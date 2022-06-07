@@ -8,8 +8,6 @@ plugins_sources += files([
   'gbp-make-build-target-provider.c',
   'gbp-make-pipeline-addin.c',
   'gbp-make-run-command-provider.c',
-  'gbp-make-template.c',
-  'gbp-make-template-provider.c',
 ])
 
 plugin_make_resources = gnome.compile_resources(

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/make-templates">
+    <file>make-templates.plugin</file>
+    <file compressed="true">resources/Makefile</file>
+    <file compressed="true">resources/main.c</file>
+    <file compressed="true">resources/main.cpp</file>
+    <file compressed="true">resources/.gitignore</file>
+  </gresource>
+</gresources>

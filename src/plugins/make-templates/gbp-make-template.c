@@ -39,9 +39,9 @@ static const struct {
   const char *path;
   int mode;
 } mappings[] = {
-  { NULL, "/plugins/make/resources/Makefile", "Makefile", 0640 },
-  { "C", "/plugins/make/resources/main.c", "main.c", 0640 },
-  { "C++", "/plugins/make/resources/main.cpp", "main.cpp", 0640 },
+  { NULL, "/plugins/make-templates/resources/Makefile", "Makefile", 0640 },
+  { "C", "/plugins/make-templates/resources/main.c", "main.c", 0640 },
+  { "C++", "/plugins/make-templates/resources/main.cpp", "main.cpp", 0640 },
 };
 
 static void

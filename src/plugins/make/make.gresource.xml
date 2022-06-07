@@ -2,9 +2,5 @@
 <gresources>
   <gresource prefix="/plugins/make">
     <file>make.plugin</file>
-    <file compressed="true">resources/Makefile</file>
-    <file compressed="true">resources/main.c</file>
-    <file compressed="true">resources/main.cpp</file>
-    <file compressed="true">resources/.gitignore</file>
   </gresource>
 </gresources>
