@@ -184,6 +184,7 @@ status += [
   'Markdown Preview ..................... : @0@'.format(get_option('plugin_markdown_preview')),
   'Maven ................................ : @0@'.format(get_option('plugin_maven')),
   'Meson ................................ : @0@'.format(get_option('plugin_meson')),
+  'Meson Templates ...................... : @0@'.format(get_option('plugin_meson_templates')),
   'Modelines ............................ : @0@'.format(get_option('plugin_modelines')),
   'Mono ................................. : @0@'.format(get_option('plugin_mono')),
   'Newcomers ............................ : @0@'.format(get_option('plugin_newcomers')),

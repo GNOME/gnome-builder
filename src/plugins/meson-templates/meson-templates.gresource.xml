@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/plugins/meson_templates">
+  <gresource prefix="/plugins/meson-templates">
+    <file>meson-templates.plugin</file>
     <file compressed="true">resources/src/window.ui</file>
     <file compressed="true">resources/src/window-gtk4.ui</file>
     <file compressed="true">resources/src/help-overlay.ui</file>
@@ -77,16 +78,7 @@
     <file compressed="true">resources/po/POTFILES</file>
     <file compressed="true">resources/po/LINGUAS</file>
   </gresource>
-  <gresource prefix="/plugins/meson_templates/resources">
+  <gresource prefix="/plugins/meson-templates/resources">
     <file compressed="true">flatpak.json</file>
-  </gresource>
-  <gresource prefix="/org/gnome/builder">
-    <file compressed="true">icons/scalable/actions/pattern-legacy.svg</file>
-    <file compressed="true">icons/scalable/actions/pattern-library.svg</file>
-    <file compressed="true">icons/scalable/actions/pattern-grid.svg</file>
-    <file compressed="true">icons/scalable/actions/pattern-browse.svg</file>
-    <file compressed="true">icons/scalable/actions/pattern-cli.svg</file>
-    <file compressed="true">icons/scalable/actions/pattern-gnome.svg</file>
-    <file compressed="true">icons/scalable/actions/pattern-gtk.svg</file>
   </gresource>
 </gresources>

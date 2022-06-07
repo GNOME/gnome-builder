@@ -1,11 +1,10 @@
 [Plugin]
-Authors=Patrick Griffis <tingping@tingping.se>
-Copyright=Copyright © 2016 Patrick Griffis
+Authors=Patrick Griffis <tingping@tingping.se>, Christian hergert <chergert@redhat.com>
+Builtin=true
+Copyright=Copyright © 2016 Patrick Griffis, Copyright © 2022 Christian Hergert
 Depends=create-project;
-Description=Provides templates for creating meson projects
-Loader=python3
-Module=meson_templates
-Name=Meson Templates
+Description=Provides templates for creating new meson projects
+Embedded=_gbp_meson_templates_register_types
+Module=meson-templates
+Name=Meson Project Templates
 X-Category=templates
-X-Builder-ABI=@PACKAGE_ABI@
-X-Has-Resources=true

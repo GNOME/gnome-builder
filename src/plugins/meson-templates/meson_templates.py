@@ -326,18 +326,6 @@ class GnomeAdwaitaProjectTemplate(MesonTemplate):
             files['resources/src/application.c'] = 'src/%(prefix)s-application.c'
             files['resources/src/application.h'] = 'src/%(prefix)s-application.h'
             window_ui_name = 'src/%(prefix)s-window.ui'
-        elif language == 'c++':
-            files['resources/src/main.cpp'] = 'src/main.cpp'
-            files['resources/src/window.cpp'] = 'src/%(prefix)s-window.cpp'
-            files['resources/src/window.hpp'] = 'src/%(prefix)s-window.h'
-            window_ui_name = 'src/%(prefix)s-window.ui'
-        elif language == 'c♯':
-            files['resources/src/main.cs'] = 'src/main.cs'
-            files['resources/src/application.in'] = 'src/%(exec_name)s.in'
-            files['resources/flatpak-gtksharp.json.tmpl'] = '%(appid)s.json'
-            meson_file = 'resources/src/meson-cs.build'
-            resource_name = None
-            window_ui_name = None
         elif language == 'vala':
             files['resources/src/main-gtk4.vala'] = 'src/main.vala'
             files['resources/src/window-gtk4.vala'] = 'src/window.vala'
