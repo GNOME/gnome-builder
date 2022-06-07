@@ -99,6 +99,33 @@ gbp_markdown_html_generator_generate_finish (IdeHtmlGenerator  *generator,
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
+static gboolean
+file_to_base_uri (GBinding     *binding,
+                  const GValue *from,
+                  GValue       *to,
+                  gpointer      user_data)
+{
+  g_value_set_string (to, g_file_get_uri (g_value_get_object (from)));
+  return TRUE;
+}
+
+static void
+gbp_markdown_html_generator_set_buffer (GbpMarkdownHtmlGenerator *self,
+                                        IdeBuffer                *buffer)
+{
+  g_assert (GBP_IS_MARKDOWN_HTML_GENERATOR (self));
+  g_assert (!buffer || IDE_IS_BUFFER (buffer));
+
+  g_signal_group_set_target (self->buffer_signals, buffer);
+
+  if (IDE_IS_BUFFER (buffer))
+    g_object_bind_property_full (buffer, "file",
+                                 self, "base-uri",
+                                 G_BINDING_SYNC_CREATE,
+                                 file_to_base_uri,
+                                 NULL, NULL, NULL);
+}
+
 static void
 gbp_markdown_html_generator_dispose (GObject *object)
 {
@@ -139,7 +166,7 @@ gbp_markdown_html_generator_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_BUFFER:
-      g_signal_group_set_target (self->buffer_signals, g_value_get_object (value));
+      gbp_markdown_html_generator_set_buffer (self, g_value_get_object (value));
       break;
 
     default:
