@@ -226,7 +226,7 @@ ipc_git_repository_impl_handle_switch_branch (IpcGitRepository      *repository,
     return complete_wrapped_error (invocation, error);
 
   if (!(shortname = ggit_ref_get_shorthand (ref)))
-    shortname = "master";
+    shortname = "main";
 
   workdir = ggit_repository_get_workdir (self->repository);
 
@@ -1175,7 +1175,7 @@ ipc_git_repository_impl_open (GFile   *location,
         branch = g_strdup (ggit_ref_get_shorthand (ref));
 
       if (branch == NULL)
-        branch = g_strdup ("master");
+        branch = g_strdup ("main");
     }
 
   workdir = ggit_repository_get_workdir (repository);
