@@ -77,7 +77,7 @@ template_changed_cb (GbpCreateProjectWidget *self,
                      AdwComboRow            *row)
 {
   IdeProjectTemplate *template;
-  g_autofree char *id = NULL;
+  const char *id;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
   g_assert (ADW_IS_COMBO_ROW (row));

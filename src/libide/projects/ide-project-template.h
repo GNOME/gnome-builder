@@ -43,11 +43,10 @@ struct _IdeProjectTemplateClass
 {
   IdeTemplateBaseClass parent_instance;
 
-  gchar      *(*get_id)          (IdeProjectTemplate   *self);
-  gchar      *(*get_name)        (IdeProjectTemplate   *self);
-  gchar      *(*get_description) (IdeProjectTemplate   *self);
-  gchar     **(*get_languages)   (IdeProjectTemplate   *self);
-  gchar      *(*get_icon_name)   (IdeProjectTemplate   *self);
+  gboolean    (*validate_name)   (IdeProjectTemplate   *self,
+                                  const char           *name);
+  gboolean    (*validate_app_id) (IdeProjectTemplate   *self,
+                                  const char           *app_id);
   void        (*expand_async)    (IdeProjectTemplate   *self,
                                   IdeTemplateInput     *input,
                                   TmplScope            *scope,
@@ -57,44 +56,37 @@ struct _IdeProjectTemplateClass
   gboolean    (*expand_finish)   (IdeProjectTemplate   *self,
                                   GAsyncResult         *result,
                                   GError              **error);
-  gint        (*get_priority)    (IdeProjectTemplate   *self);
-  gboolean    (*validate_name)   (IdeProjectTemplate   *self,
-                                  const char           *name);
-  gboolean    (*validate_app_id) (IdeProjectTemplate   *self,
-                                  const char           *app_id);
 };
 
 IDE_AVAILABLE_IN_ALL
-gchar      *ide_project_template_get_id          (IdeProjectTemplate   *self);
+const char         *ide_project_template_get_id          (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_ALL
-gint        ide_project_template_get_priority    (IdeProjectTemplate   *self);
+int                 ide_project_template_get_priority    (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_ALL
-gchar      *ide_project_template_get_name        (IdeProjectTemplate   *self);
+const char         *ide_project_template_get_name        (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_ALL
-gchar      *ide_project_template_get_description (IdeProjectTemplate   *self);
+const char         *ide_project_template_get_description (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_ALL
-gchar     **ide_project_template_get_languages   (IdeProjectTemplate   *self);
+const char * const *ide_project_template_get_languages   (IdeProjectTemplate   *self);
 IDE_AVAILABLE_IN_ALL
-gchar      *ide_project_template_get_icon_name   (IdeProjectTemplate   *self);
+void                ide_project_template_expand_async    (IdeProjectTemplate   *self,
+                                                          IdeTemplateInput     *input,
+                                                          TmplScope            *scope,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-void        ide_project_template_expand_async    (IdeProjectTemplate   *self,
-                                                  IdeTemplateInput     *input,
-                                                  TmplScope            *scope,
-                                                  GCancellable         *cancellable,
-                                                  GAsyncReadyCallback   callback,
-                                                  gpointer              user_data);
+gboolean            ide_project_template_expand_finish   (IdeProjectTemplate   *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
 IDE_AVAILABLE_IN_ALL
-gboolean    ide_project_template_expand_finish   (IdeProjectTemplate   *self,
-                                                  GAsyncResult         *result,
-                                                  GError              **error);
+int                 ide_project_template_compare         (IdeProjectTemplate   *a,
+                                                          IdeProjectTemplate   *b);
 IDE_AVAILABLE_IN_ALL
-gint        ide_project_template_compare         (IdeProjectTemplate   *a,
-                                                  IdeProjectTemplate   *b);
+gboolean            ide_project_template_validate_name   (IdeProjectTemplate   *self,
+                                                          const char           *name);
 IDE_AVAILABLE_IN_ALL
-gboolean    ide_project_template_validate_name   (IdeProjectTemplate   *self,
-                                                  const char           *name);
-IDE_AVAILABLE_IN_ALL
-gboolean    ide_project_template_validate_app_id (IdeProjectTemplate   *self,
-                                                  const char           *app_id);
+gboolean            ide_project_template_validate_app_id (IdeProjectTemplate   *self,
+                                                          const char           *app_id);
 
 G_END_DECLS

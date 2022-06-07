@@ -42,32 +42,6 @@ class LibraryTemplateProvider(GObject.Object, Ide.TemplateProvider):
                 EmptyProjectTemplate()]
 
 class MesonTemplate(Ide.ProjectTemplate):
-    def __init__(self, id, name, icon_name, description, languages, priority):
-        super().__init__()
-        self.id = id
-        self.name = name
-        self.icon_name = icon_name
-        self.description = description
-        self.languages = languages
-        self.priority = priority
-
-    def do_get_id(self):
-        return self.id
-
-    def do_get_name(self):
-        return self.name
-
-    def do_get_icon_name(self):
-        return self.icon_name
-
-    def do_get_description(self):
-        return self.description
-
-    def do_get_languages(self):
-        return self.languages
-
-    def do_get_priority(self):
-        return self.priority
 
     def do_validate_name(self, name):
         # meson reserves the name 'test'
@@ -163,12 +137,11 @@ class MesonTemplate(Ide.ProjectTemplate):
 class GnomeProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
-            'gnome-app',
-            _('GTK Application (Legacy)'),
-            'pattern-legacy',
-            _('Create a GTK application with GTK 3'),
-            ['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala', 'Rust'],
-            0
+            id='gnome-app',
+            name=_('GTK Application (Legacy)'),
+            description=_('Create a GTK application with GTK 3'),
+            languages=['C', 'C++', 'C♯', 'Python', 'JavaScript', 'Vala', 'Rust'],
+            priority=0
          )
 
     def prepare_files(self, files, language):
@@ -240,12 +213,11 @@ class GnomeProjectTemplate(MesonTemplate):
 class GnomeGTK4ProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
-            'gnome-app-gtk4',
-            _('GTK Application'),
-            'pattern-gtk',
-            _('Create a GTK application with GTK 4'),
-            ['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
-            0
+            id='gnome-app-gtk4',
+            name=_('GTK Application'),
+            description=_('Create a GTK application with GTK 4'),
+            languages=['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
+            priority=0
          )
 
     def prepare_files(self, files, language):
@@ -322,12 +294,11 @@ class GnomeGTK4ProjectTemplate(MesonTemplate):
 class GnomeAdwaitaProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
-            'gnome-app-adwaita',
-            _('GNOME Application'),
-            'pattern-gnome',
-            _('Create a GNOME application with libadwaita'),
-            ['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
-            0
+            id='gnome-app-adwaita',
+            name=_('GNOME Application'),
+            description=_('Create a GNOME application with libadwaita'),
+            languages=['C', 'JavaScript', 'Rust', 'Python', 'Vala'],
+            priority=0
          )
 
     def prepare_files(self, files, language):
@@ -404,12 +375,11 @@ class GnomeAdwaitaProjectTemplate(MesonTemplate):
 class LibraryProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
-            'shared-library',
-            _("Shared Library"),
-            'pattern-library',
-            _("Create a new project with a shared library"),
-            ['C'],
-            100
+            id='shared-library',
+            name=_("Shared Library"),
+            description=_("Create a new project with a shared library"),
+            languages=['C'],
+            priority=100
          )
 
     def prepare_files(self, files, language):
@@ -423,12 +393,11 @@ class LibraryProjectTemplate(MesonTemplate):
 class EmptyProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
-            'empty',
-            _('Empty Project'),
-            'pattern-cli',
-            _('Create a new empty project'),
-            ['C', 'C++', 'C♯', 'JavaScript', 'Python', 'Vala', 'Rust'],
-            200
+            id='empty',
+            name=_('Empty Project'),
+            description=_('Create a new empty project'),
+            languages=['C', 'C++', 'C♯', 'JavaScript', 'Python', 'Vala', 'Rust'],
+            priority=200
          )
 
     def prepare_files(self, files, language):
@@ -442,12 +411,11 @@ class EmptyProjectTemplate(MesonTemplate):
 class CLIProjectTemplate(MesonTemplate):
     def __init__(self):
         super().__init__(
-            'cli',
-            _('Command Line Tool'),
-            'pattern-cli',
-            _('Create a new command line project'),
-            ['C', 'C++', 'Vala', 'Rust', 'Python'],
-            200
+            id='cli',
+            name=_('Command Line Tool'),
+            description=_('Create a new command line project'),
+            languages=['C', 'C++', 'Vala', 'Rust', 'Python'],
+            priority=200
          )
 
     def prepare_files(self, files, language):

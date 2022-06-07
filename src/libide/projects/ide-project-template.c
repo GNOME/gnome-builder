@@ -24,13 +24,24 @@
 
 #include "ide-project-template.h"
 
-G_DEFINE_TYPE (IdeProjectTemplate, ide_project_template, IDE_TYPE_TEMPLATE_BASE)
+typedef struct
+{
+  char *id;
+  char *name;
+  char *description;
+  char **languages;
+  int priority;
+} IdeProjectTemplatePrivate;
+
+G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeProjectTemplate, ide_project_template, IDE_TYPE_TEMPLATE_BASE)
 
 enum {
   PROP_0,
   PROP_DESCRIPTION,
   PROP_ID,
   PROP_NAME,
+  PROP_LANGUAGES,
+  PROP_PRIORITY,
   N_PROPS
 };
 
@@ -101,6 +112,20 @@ ide_project_template_real_validate_app_id (IdeProjectTemplate *self,
 }
 
 static void
+ide_project_template_dispose (GObject *object)
+{
+  IdeProjectTemplate *self = (IdeProjectTemplate *)object;
+  IdeProjectTemplatePrivate *priv = ide_project_template_get_instance_private (self);
+
+  g_clear_pointer (&priv->id, g_free);
+  g_clear_pointer (&priv->name, g_free);
+  g_clear_pointer (&priv->description, g_free);
+  g_clear_pointer (&priv->languages, g_strfreev);
+
+  G_OBJECT_CLASS (ide_project_template_parent_class)->dispose (object);
+}
+
+static void
 ide_project_template_get_property (GObject    *object,
                                    guint       prop_id,
                                    GValue     *value,
@@ -111,15 +136,59 @@ ide_project_template_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_DESCRIPTION:
-      g_value_take_string (value, ide_project_template_get_description (self));
+      g_value_set_string (value, ide_project_template_get_description (self));
       break;
 
     case PROP_ID:
-      g_value_take_string (value, ide_project_template_get_id (self));
+      g_value_set_string (value, ide_project_template_get_id (self));
       break;
 
     case PROP_NAME:
-      g_value_take_string (value, ide_project_template_get_name (self));
+      g_value_set_string (value, ide_project_template_get_name (self));
+      break;
+
+    case PROP_LANGUAGES:
+      g_value_set_boxed (value, ide_project_template_get_languages (self));
+      break;
+
+    case PROP_PRIORITY:
+      g_value_set_int (value, ide_project_template_get_priority (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_project_template_set_property (GObject      *object,
+                                   guint         prop_id,
+                                   const GValue *value,
+                                   GParamSpec   *pspec)
+{
+  IdeProjectTemplate *self = IDE_PROJECT_TEMPLATE (object);
+  IdeProjectTemplatePrivate *priv = ide_project_template_get_instance_private (self);
+
+  switch (prop_id)
+    {
+    case PROP_DESCRIPTION:
+      priv->description = g_value_dup_string (value);
+      break;
+
+    case PROP_ID:
+      priv->id = g_value_dup_string (value);
+      break;
+
+    case PROP_NAME:
+      priv->name = g_value_dup_string (value);
+      break;
+
+    case PROP_LANGUAGES:
+      priv->languages = g_value_dup_boxed (value);
+      break;
+
+    case PROP_PRIORITY:
+      priv->priority = g_value_get_int (value);
       break;
 
     default:
@@ -132,22 +201,44 @@ ide_project_template_class_init (IdeProjectTemplateClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = ide_project_template_dispose;
   object_class->get_property = ide_project_template_get_property;
+  object_class->set_property = ide_project_template_set_property;
 
   klass->validate_name = ide_project_template_real_validate_name;
   klass->validate_app_id = ide_project_template_real_validate_app_id;
 
   properties [PROP_ID] =
     g_param_spec_string ("id", NULL, NULL, NULL,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
 
   properties [PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL, NULL,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
 
   properties [PROP_DESCRIPTION] =
     g_param_spec_string ("description", NULL, NULL, NULL,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_LANGUAGES] =
+    g_param_spec_boxed ("languages", NULL, NULL,
+                        G_TYPE_STRV,
+                        (G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_PRIORITY] =
+    g_param_spec_int ("priority", NULL, NULL,
+                      G_MININT, G_MAXINT, 0,
+                      (G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY |
+                       G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -157,28 +248,34 @@ ide_project_template_init (IdeProjectTemplate *self)
 {
 }
 
-gchar *
+const char *
 ide_project_template_get_id (IdeProjectTemplate *self)
 {
+  IdeProjectTemplatePrivate *priv = ide_project_template_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_id (self);
+  return priv->id;
 }
 
-gchar *
+const char *
 ide_project_template_get_name (IdeProjectTemplate *self)
 {
+  IdeProjectTemplatePrivate *priv = ide_project_template_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_name (self);
+  return priv->name;
 }
 
-gchar *
+const char *
 ide_project_template_get_description (IdeProjectTemplate *self)
 {
+  IdeProjectTemplatePrivate *priv = ide_project_template_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_description (self);
+  return priv->description;
 }
 
 /**
@@ -188,23 +285,26 @@ ide_project_template_get_description (IdeProjectTemplate *self)
  * Gets the list of languages that this template can support when generating
  * the project.
  *
- * Returns: (transfer full): A newly allocated, NULL terminated list of
- *   supported languages.
+ * Returns: (transfer none) (nullable): an array of language names
  */
-gchar **
+const char * const *
 ide_project_template_get_languages (IdeProjectTemplate *self)
 {
+  IdeProjectTemplatePrivate *priv = ide_project_template_get_instance_private (self);
+
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
 
-  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_languages (self);
+  return (const char * const *)priv->languages;
 }
 
-gchar *
-ide_project_template_get_icon_name (IdeProjectTemplate *self)
+int
+ide_project_template_get_priority (IdeProjectTemplate *self)
 {
-  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), NULL);
+  IdeProjectTemplatePrivate *priv = ide_project_template_get_instance_private (self);
 
-  return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_icon_name (self);
+  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), 0);
+
+  return priv->priority;
 }
 
 /**
@@ -250,45 +350,30 @@ ide_project_template_expand_finish (IdeProjectTemplate  *self,
   return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->expand_finish (self, result, error);
 }
 
-/**
- * ide_project_template_get_priority:
- * @self: a #IdeProjectTemplate
- *
- * Gets the priority of the template. This can be used to sort the templates
- * in the "new project" view.
- *
- * Returns: the priority of the template
- */
-gint
-ide_project_template_get_priority (IdeProjectTemplate *self)
-{
-  g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (self), 0);
-
-  if (IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_priority)
-    return IDE_PROJECT_TEMPLATE_GET_CLASS (self)->get_priority (self);
-
-  return 0;
-}
-
-gint
+int
 ide_project_template_compare (IdeProjectTemplate *a,
                               IdeProjectTemplate *b)
 {
-  gint ret;
+  const char *a_name;
+  const char *b_name;
+  int prio_a;
+  int prio_b;
 
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (a), 0);
   g_return_val_if_fail (IDE_IS_PROJECT_TEMPLATE (b), 0);
 
-  ret = ide_project_template_get_priority (a) - ide_project_template_get_priority (b);
+  prio_a = ide_project_template_get_priority (a);
+  prio_b = ide_project_template_get_priority (b);
 
-  if (ret == 0)
-    {
-      g_autofree gchar *a_name = ide_project_template_get_name (a);
-      g_autofree gchar *b_name = ide_project_template_get_name (b);
-      ret = g_utf8_collate (a_name, b_name);
-    }
+  if (prio_a < prio_b)
+    return -1;
+  else if (prio_a > prio_b)
+    return 1;
 
-  return ret;
+  a_name = ide_project_template_get_name (a);
+  b_name = ide_project_template_get_name (b);
+
+  return g_utf8_collate (a_name, b_name);
 }
 
 gboolean
