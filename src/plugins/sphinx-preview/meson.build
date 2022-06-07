@@ -6,6 +6,7 @@ endif
 
 plugins_sources += files([
   'sphinx-preview-plugin.c',
+  'gbp-rst-html-generator.c',
   'gbp-sphinx-compiler.c',
   'gbp-sphinx-html-generator.c',
   'gbp-sphinx-preview-workspace-addin.c',

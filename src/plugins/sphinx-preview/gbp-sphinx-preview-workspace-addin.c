@@ -27,6 +27,7 @@
 #include <libide-gui.h>
 #include <libide-webkit.h>
 
+#include "gbp-rst-html-generator.h"
 #include "gbp-sphinx-compiler.h"
 #include "gbp-sphinx-html-generator.h"
 #include "gbp-sphinx-preview-workspace-addin.h"
@@ -259,8 +260,9 @@ open_rst_preview (GbpSphinxPreviewWorkspaceAddin *self,
   g_assert (GBP_IS_SPHINX_PREVIEW_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  /* TODO: docutils translation with python in subprocess */
-  generator = ide_html_generator_new_for_buffer (GTK_TEXT_BUFFER (buffer));
+  generator = g_object_new (GBP_TYPE_RST_HTML_GENERATOR,
+                            "buffer", buffer,
+                            NULL);
   page = ide_webkit_page_new_for_generator (generator);
 
   IDE_RETURN (IDE_PAGE (page));
