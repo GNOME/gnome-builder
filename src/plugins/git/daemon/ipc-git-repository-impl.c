@@ -64,9 +64,10 @@ static void
 ipc_git_repository_impl_monitor_changed_cb (IpcGitRepositoryImpl *self,
                                             IpcGitIndexMonitor   *monitor)
 {
+  g_autoptr(GgitRef) head_ref = NULL;
+  const char *shortname = NULL;
   GHashTableIter iter;
   gpointer key;
-  g_autoptr(GgitRef) head_ref = NULL;
 
   g_assert (IPC_IS_GIT_REPOSITORY_IMPL (self));
   g_assert (IPC_IS_GIT_INDEX_MONITOR (monitor));
@@ -79,9 +80,16 @@ ipc_git_repository_impl_monitor_changed_cb (IpcGitRepositoryImpl *self,
       ipc_git_change_monitor_impl_reset (change_monitor);
     }
 
-  head_ref = ggit_repository_get_head (self->repository, NULL);
-  g_assert (GGIT_IS_REF (head_ref));
-  ipc_git_repository_set_branch ((IpcGitRepository *)self, ggit_ref_get_shorthand (head_ref));
+  if ((head_ref = ggit_repository_get_head (self->repository, NULL)))
+    {
+      g_assert (GGIT_IS_REF (head_ref));
+      shortname = ggit_ref_get_shorthand (head_ref);
+    }
+
+  if (shortname == NULL)
+    shortname = "main";
+
+  ipc_git_repository_set_branch ((IpcGitRepository *)self, shortname);
   ipc_git_repository_emit_changed (IPC_GIT_REPOSITORY (self));
 }
 
