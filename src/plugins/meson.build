@@ -89,6 +89,7 @@ subdir('jedi-language-server')
 subdir('jhbuild')
 subdir('ls')
 subdir('make')
+subdir('make-templates')
 subdir('markdown-preview')
 subdir('maven')
 subdir('meson')
@@ -179,6 +180,7 @@ status += [
   'HTML Preview ......................... : @0@'.format(get_option('plugin_html_preview')),
   'JHBuild .............................. : @0@'.format(get_option('plugin_jhbuild')),
   'Make ................................. : @0@'.format(get_option('plugin_make')),
+  'Make Templates ....................... : @0@'.format(get_option('plugin_make_templates')),
   'Markdown Preview ..................... : @0@'.format(get_option('plugin_markdown_preview')),
   'Maven ................................ : @0@'.format(get_option('plugin_maven')),
   'Meson ................................ : @0@'.format(get_option('plugin_meson')),

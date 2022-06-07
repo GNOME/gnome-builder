@@ -34,7 +34,6 @@
 #include "gbp-make-build-target-provider.h"
 #include "gbp-make-pipeline-addin.h"
 #include "gbp-make-run-command-provider.h"
-#include "gbp-make-template-provider.h"
 
 _IDE_EXTERN void
 _gbp_make_register_types (PeasObjectModule *module)
@@ -54,7 +53,4 @@ _gbp_make_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUN_COMMAND_PROVIDER,
                                               GBP_TYPE_MAKE_RUN_COMMAND_PROVIDER);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_TEMPLATE_PROVIDER,
-                                              GBP_TYPE_MAKE_TEMPLATE_PROVIDER);
 }

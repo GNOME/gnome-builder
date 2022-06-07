@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Matthew Leeds <mleeds@redhat.com>, Christian Hergert <chergert@redhat.com>
+Builtin=true
+Copyright=Copyright © 2017 Matthew Leeds, Copyright © 2022 Christian Hergert
+Depends=create-project;
+Description=Provides templates for creating Makefile-based projects
+Embedded=_gbp_make_templates_register_types
+Module=make-templates
+Name=Makefile Templates
+X-Category=templates
