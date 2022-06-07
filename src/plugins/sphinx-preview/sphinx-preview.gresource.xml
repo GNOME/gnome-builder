@@ -3,5 +3,6 @@
   <gresource prefix="/plugins/sphinx-preview">
     <file>sphinx-preview.plugin</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file>rst2html.py</file>
   </gresource>
 </gresources>
