@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="ide-editor-page-menu">
+    <section id="ide-editor-page-preview-section">
+      <item>
+        <attribute name="id">sphinx-preview-item</attribute>
+        <attribute name="label" translatable="yes">Open Preview…</attribute>
+        <attribute name="action">sphinx-preview.sphinx-preview</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
