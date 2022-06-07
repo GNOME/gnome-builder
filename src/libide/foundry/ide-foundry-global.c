@@ -239,6 +239,9 @@ ide_foundry_bytes_to_memfd (GBytes     *bytes,
       return -1;
     }
 
+  /* Make sure we are set at the start */
+  lseek (fd, SEEK_SET, 0);
+
   return fd;
 }
 
