@@ -1,0 +1,6266 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
+"POT-Creation-Date: 2022-06-05 12:22+0000\n"
+"PO-Revision-Date: 2022-06-07 13:51+0200\n"
+"Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
+"Language-Team: Georgian <(nothing)>\n"
+"Language: ka\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: src/libide/gui/ide-preferences-builtin.c:144 src/main.c:235
+#: src/plugins/newcomers/gbp-newcomers-section.ui:47
+msgid "Builder"
+msgstr "Builder"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:8
+#: src/libide/gui/ide-application-actions.c:142
+msgid "An IDE for GNOME"
+msgstr "პროგრამისტის სამუშაო გარემო GNOME-სთვის"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:9
+msgid "Christian Hergert, et al."
+msgstr "Christian Hergert და სხვ."
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:12
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:18
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:22
+msgid "Features:"
+msgstr "თვისებები:"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:24
+msgid "Built in syntax highlighting for many languages"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:25
+msgid "Side-by-side code editors"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:26
+msgid "Multi-monitor support"
+msgstr "მრავალი ეკრანის მხარდაჭერა"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:27
+msgid "Code overview mini-map"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:28
+msgid "Integration with Git"
+msgstr "Git-თან ინტეგრაცია"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:29
+msgid ""
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
+"PHPize, and Waf"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:30
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:31
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:32
+msgid "Vala based auto-completion and diagnostics"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:33
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:34
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:35
+msgid "Optional Vim, Emacs, and SublimeText style editing"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:36
+msgid "An integrated software profiler for native applications"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:37
+msgid "An integrated debugger for native applications"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:38
+msgid "Support for building with jhbuild and flatpak runtimes"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:39
+msgid "Support for viewing TODOs found within your code base"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:40
+msgid "Fast fuzzy text search across files and symbols"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:46
+msgid "Quickly access your projects"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:50
+msgid "Create new projects from a variety of templates"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:54
+msgid "Integration with Git to clone your projects"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:58
+msgid "The source code editor"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:62
+msgid "Fast global fuzzy search"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:66
+msgid "Debug with the GNU debugger"
+msgstr ""
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in:70
+msgid "Use the minimap to see more of the file"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+msgid "Build Parallelism"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+#: src/libide/gui/ide-preferences-builtin.c:418
+msgid "Clear build logs"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid "If enabled, build log pane will be cleared on rebuild."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Allow network when metered"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:21
+msgid "Debugger Breakpoint on Main"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:22
+msgid "Debugger should automatically insert breakpoint on main function."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Ctags based autocompletion"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Use Ctags for autocompletion."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Enable semantic highlighting"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Path to ctags executable"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "The path to the ctags executable on the system."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:19
+msgid "Restore last position"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:20
+msgid "Jump to the last position when reopening a file"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+msgid "Show modified lines"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+msgid "Show diagnostics next to line number"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show diagnostics to the left to the line numbers."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+#: src/libide/editor/ide-editor-settings-dialog.ui:116
+msgid "Highlight current line"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+msgid "Highlight matching brackets"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+msgid "Show line numbers"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "If enabled, the editor will show line numbers."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+msgid "Show relative line numbers"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+msgid "If enabled, the editor will show relative line numbers."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: src/libide/gui/ide-preferences-builtin.c:148
+msgid "Smart Backspace"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
+#: src/libide/gui/ide-preferences-builtin.c:147
+msgid "Smart Home and End"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
+msgid "Whether or not Home moves to first non-space character."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
+msgid "Show grid lines"
+msgstr "ბადის ხაზების ჩვენება"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:79
+#: src/libide/gui/ide-preferences-builtin.c:181
+msgid "Show overview map"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+msgid ""
+"If enabled, Builder will display an overview map of the source file next to "
+"the editor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+msgid "Automatically Hide Overview Map"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+msgid ""
+"If enabled, Builder will automatically hide the overview map when mouse "
+"focus leaves the editor, or a timeout occurs."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
+msgid "Draw Spaces"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+msgid "The various types of space to draw in the editor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+#: src/libide/gui/ide-preferences-builtin.c:163
+msgid "Overscroll"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+msgid "The number of lines to scroll beyond the end of the buffer."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+msgid "Wrap Text"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+msgid "The way to wrap a long line of text for a better visibility."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
+#: src/libide/gui/ide-preferences-builtin.c:194
+msgid "Autosave Enabled"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+msgid "Enable or disable autosave feature."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
+#: src/libide/gui/ide-preferences-builtin.c:195
+msgid "Autosave Frequency"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+msgid "The number of seconds after modification before auto saving."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
+msgid "Completion Row Count"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+msgid "The number of completion rows to display to the user."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
+#: src/libide/gui/ide-preferences-builtin.c:111
+msgid "Line Spacing"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+msgid "The number of pixels to include above and below lines in the editor."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:133
+#: src/libide/gui/ide-preferences-builtin.c:216
+msgid "Interactive Completion"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+msgid ""
+"If enabled, Builder will automatically display completion proposals as you "
+"type."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
+msgid "Minimum characters for matching selection."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+msgid "Specify the minimum number of characters for selection matching."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
+msgid "Spaces Style"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
+msgid "How to apply spaces when reformatting text."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+msgid "Enabled"
+msgstr "ჩართულია"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr "ფანჯრის ზომა"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr "ფანჯრის ზომა (სიგანე, სიმაღლე)"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window position"
+msgstr "ფანჯრის მდებარეობა"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window position (x and y)."
+msgstr "ფანჯრის მდებარეობა (x და y)"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:15
+msgid "Window maximized"
+msgstr "გადიდებული ფანჯარა"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:16
+msgid "Window maximized state"
+msgstr "ფანჯრის სრულად გაშლილი მდგომარეობა"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:25
+msgid "Style Variant"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:26
+msgid ""
+"Use the light or dark variant of the GTK theme and/or GtkSourceView style "
+"scheme."
+msgstr ""
+
+#. Translators: This is the default directory name for user’s
+#. projects. Do NOT change the ASCII double quotes ("") to your
+#. language’s convention, e.g. do not use “” or »«.
+#: data/gsettings/org.gnome.builder.gschema.xml:32
+msgid "\"Projects\""
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:33
+#: src/libide/gui/ide-preferences-builtin.c:435
+msgid "Projects directory"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:34
+msgid "Directory for all Builder projects."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:38
+msgid "Restore Previous Files"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:39
+msgid "Restore previously opened files when loading a project."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:43
+msgid "Show Open Files"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:44
+msgid "Display the open files list in the project sidebar."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:48
+msgid "Clear build caches at startup"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:49
+msgid "If enabled, Builder will clear build caches upon startup."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Plugin enabled"
+msgstr "დამატება ჩართულია"
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+msgid "If the plugin should be enabled"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+msgid "Show Icons"
+msgstr "ხატულების ჩვენება"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "This setting is deprecated and no longer in use."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+msgid "Show Ignored Files"
+msgstr "იგნორირებული ფაილების ჩვენება"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+msgid "Sort Directories First"
+msgstr "ჯერ საქაღალდეების დალაგება"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:7
+msgid "Selected configuration for building"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:8
+msgid ""
+"The configuration that has been selected and will be restored the next time "
+"the project loads."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
+msgid "Show Left Panel"
+msgstr "მარცხენა პანელის ჩვენება"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
+msgid "If enabled, the left panel will be displayed."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
+msgid "Left Panel Position"
+msgstr "მარცხენა პანელის მდებარეობა"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
+msgid "The width in pixel units of the left panel."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
+msgid "Show Right Panel"
+msgstr "მარჯვენა პანელის ჩვენება"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
+msgid "If enabled, the right panel will be displayed."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
+msgid "Right Panel Position"
+msgstr "მარჯვენა პანელის მდებარეობა"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
+msgid "The width in pixel units of the right panel."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
+msgid "Show Bottom Panel"
+msgstr "ქვედა პანელის ჩვენება"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
+msgid "If enabled, the bottom panel will be displayed."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
+msgid "Bottom Panel Position"
+msgstr "ქვედა პანელის მდებარეობა"
+
+#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
+msgid "The height in pixel units of the bottom panel."
+msgstr ""
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr ""
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Build;Develop;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "პროექტის გახსნა"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "ახალი პროექტი"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+msgid "Clone Repository"
+msgstr "რეპოზიტორიის დაკლონვა"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr ""
+
+#: data/org.gnome.Builder.desktop.in.in:36
+#: src/plugins/dspy/gbp-dspy-workspace.ui:13
+msgid "D-Bus Inspector"
+msgstr ""
+
+#: src/gstyle/gstyle-color-panel.c:959
+msgid "Palette: "
+msgstr "პალიტრა: "
+
+#: src/gstyle/gstyle-color-panel.c:961
+msgid "Palette"
+msgstr "პალიტრა"
+
+#: src/gstyle/gstyle-color-plane.c:1612
+msgid "Color Plane"
+msgstr ""
+
+#: src/gstyle/gstyle-color-widget-actions.c:68
+msgid "Color name"
+msgstr "ფერის სახელი"
+
+#: src/gstyle/gstyle-color-widget-actions.c:70
+msgid "Enter a new name for the color"
+msgstr ""
+
+#: src/gstyle/gstyle-palette-widget.c:981
+#, c-format
+msgid "Unsaved palette %u"
+msgstr ""
+
+#: src/gstyle/gstyle-palette.c:494 src/gstyle/gstyle-palette.c:560
+#, c-format
+msgid "failed to parse line %i\n"
+msgstr ""
+
+#: src/gstyle/gstyle-palette.c:615
+#, c-format
+msgid "%s: palette is empty\n"
+msgstr "პალიტრა ცარიელია: %s\n"
+
+#: src/gstyle/gstyle-palette.c:721
+#, c-format
+msgid "%s: failed to parse\n"
+msgstr ""
+
+#: src/gstyle/gstyle-palette.c:729
+#, c-format
+msgid "Unable to open %s\n"
+msgstr ""
+
+#: src/gstyle/gstyle-palette.c:767
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr ""
+
+#: src/gstyle/gstyle-palette.c:824
+#, c-format
+msgid "failed to parse\n"
+msgstr ""
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: src/gstyle/gstyle-palette.c:831
+msgid "Generated"
+msgstr "გენერირებული"
+
+#: src/gstyle/gstyle-palette.c:935
+#, c-format
+msgid "Unable to save %s\n"
+msgstr "'%s'-ის შენახვა შეუძლებელია\n"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:64
+msgid "Hue"
+msgstr "ჰუე"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:75
+msgid "Saturation"
+msgstr "გაჯერებულობა"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:86
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:179
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
+msgid "Value"
+msgstr "მნიშვნელობა"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:97
+msgid "Cielab l"
+msgstr ""
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:108
+msgid "Cielab a"
+msgstr ""
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:119
+msgid "Cielab b"
+msgstr ""
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:130
+msgid "Red"
+msgstr "წითელი"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:141
+msgid "Green"
+msgstr "მწვანე"
+
+#: src/gstyle/tests/data/gstyle-color-editor.ui:152
+msgid "Blue"
+msgstr "ლურჯი"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr ""
+
+#: src/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "შ"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr "a*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "მარჯ"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:451
+msgid "G"
+msgstr "G"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:573
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:433
+msgid "Color strings"
+msgstr "ფერადი სტრიქონები"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:634
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:490
+msgid "HEX3"
+msgstr "HEX3"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:645
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:507
+msgid "HEX6"
+msgstr "HEX6"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:656
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:524
+msgid "RGB"
+msgstr "RGB"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:667
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:541
+msgid "RGBA"
+msgstr "RGBA"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:678
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:558
+msgid "HSL"
+msgstr "HSL"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:689
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:575
+msgid "HSLA"
+msgstr "HSLA"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "პალიტრები"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:946
+#: src/plugins/color-picker/gtk/color-picker.ui:49
+msgid "No open palettes"
+msgstr "ღია პალიტრების გარეშე"
+
+#: src/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr ""
+
+#: src/gstyle/ui/gstyle-color-widget.ui:13
+#: src/libide/sourceview/ide-source-view.c:5029
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+msgid "Rename"
+msgstr "ვიეტნამური"
+
+#: src/gstyle/ui/gstyle-color-widget.ui:19
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "წაშლა"
+
+#: src/gstyle/ui/gstyle-rename-popover.ui:35
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:35
+#: src/plugins/project-tree/gtk/menus.ui:53
+msgid "_Rename"
+msgstr "სახელის შეცვლა"
+
+#. translators: %u is replaced with an incrementing number
+#: src/libide/code/ide-buffer-manager.c:392
+#, c-format
+msgid "unsaved file %u"
+msgstr "შეუნახავი ფაილი %u"
+
+#: src/libide/code/ide-buffer.c:3720
+msgid "The current language lacks a symbol resolver."
+msgstr ""
+
+#: src/libide/code/ide-language-defaults.c:219
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr ""
+
+#: src/libide/code/ide-language-defaults.c:234
+#, c-format
+msgid "Failed to parse integer from “%s”"
+msgstr ""
+
+#: src/libide/code/ide-language-defaults.c:309
+msgid "language defaults missing version in [global] group."
+msgstr ""
+
+#: src/libide/code/ide-language-defaults.c:403
+msgid "Failed to initialize defaults."
+msgstr ""
+
+#. translators: %s is replaced with the error message
+#: src/libide/code/ide-unsaved-files.c:254
+#, c-format
+msgid "Failed to save draft: %s"
+msgstr ""
+
+#: src/libide/core/ide-context.c:366 src/libide/core/ide-context.c:810
+msgid "Untitled"
+msgstr "უსახელო"
+
+#: src/libide/core/ide-transfer.c:549 src/libide/editor/ide-editor-page.ui:51
+#: src/libide/greeter/ide-clone-surface.ui:319
+#: src/libide/greeter/ide-greeter-workspace-actions.c:126
+#: src/libide/gui/ide-workbench.c:1410
+#: src/plugins/buildui/gbp-buildui-log-pane.c:284
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
+#: src/plugins/testui/gbp-test-output-panel.c:67
+msgid "_Cancel"
+msgstr "_გაუქმება"
+
+#: src/libide/debugger/ide-debug-manager.c:1002
+#, c-format
+msgid "A suitable debugger was not found."
+msgstr ""
+
+#. translators: %s is the error message
+#: src/libide/editor/ide-editor-page-actions.c:73
+#, c-format
+msgid "Failed to load file: %s"
+msgstr ""
+
+#. translators: %s is the error message
+#: src/libide/editor/ide-editor-page-actions.c:163
+#, c-format
+msgid "Print failed: %s"
+msgstr ""
+
+#. translators: %s is the error message
+#. translators: %s is the underlying error message
+#: src/libide/editor/ide-editor-page-actions.c:234
+#: src/libide/editor/ide-editor-page-actions.c:342
+#, c-format
+msgid "Failed to save file: %s"
+msgstr ""
+
+#: src/libide/editor/ide-editor-page-actions.c:278
+#: src/plugins/buildui/gbp-buildui-log-pane.c:280
+#: src/plugins/testui/gbp-test-output-panel.c:63
+msgid "Save File"
+msgstr "ფაილის შენახვა"
+
+#: src/libide/editor/ide-editor-page-actions.c:281
+#: src/libide/editor/ide-editor-page-actions.c:380
+#: src/libide/terminal/ide-terminal-page-actions.c:277
+#: src/plugins/color-picker/gb-color-picker-prefs.c:236
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: src/plugins/editor/gbp-confirm-save-dialog.c:199
+msgid "Save"
+msgstr "შენახვა"
+
+#: src/libide/editor/ide-editor-page-actions.c:281
+#: src/libide/editor/ide-editor-page-actions.c:381
+#: src/libide/editor/ide-editor-surface-actions.c:76
+#: src/libide/greeter/ide-greeter-workspace.c:536
+#: src/libide/terminal/ide-terminal-page-actions.c:276
+#: src/plugins/color-picker/gb-color-picker-prefs.c:97
+#: src/plugins/color-picker/gb-color-picker-prefs.c:213
+#: src/plugins/color-picker/gb-color-picker-prefs.c:240
+#: src/plugins/dspy/libdspy/dspy-method-view.c:274
+#: src/plugins/editor/gbp-confirm-save-dialog.c:198
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:262
+msgid "Cancel"
+msgstr "გაუქმება"
+
+#: src/libide/editor/ide-editor-page-actions.c:377
+msgid "Save a Copy"
+msgstr "ასლის შენახვა"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:33
+#: src/libide/editor/ide-editor-page-shortcuts.c:39
+#: src/libide/editor/ide-editor-page-shortcuts.c:45
+#: src/libide/editor/ide-editor-page-shortcuts.c:51
+#: src/libide/editor/ide-editor-page-shortcuts.c:57
+#: src/libide/editor/ide-editor-page-shortcuts.c:63
+#: src/libide/editor/ide-editor-page-shortcuts.c:69
+#: src/libide/editor/ide-editor-page-shortcuts.c:75
+#: src/libide/editor/ide-editor-page-shortcuts.c:81
+#: src/libide/editor/ide-editor-surface-shortcuts.c:35
+#: src/libide/editor/ide-editor-surface-shortcuts.c:41
+#: src/libide/editor/ide-editor-surface-shortcuts.c:47
+#: src/libide/editor/ide-editor-surface-shortcuts.c:53
+#: src/libide/editor/ide-editor-surface-shortcuts.c:59
+#: src/libide/gui/ide-frame-shortcuts.c:35
+#: src/libide/gui/ide-frame-shortcuts.c:42
+#: src/libide/gui/ide-frame-shortcuts.c:49
+#: src/libide/gui/ide-frame-shortcuts.c:56
+#: src/libide/gui/ide-frame-shortcuts.c:63
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:349
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:370
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:376
+#: src/plugins/grep/gbp-grep-editor-addin.c:55
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:102
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:56
+msgid "Editor shortcuts"
+msgstr "რედაქტორის მალსახმობები"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:34
+#: src/libide/editor/ide-editor-page-shortcuts.c:40
+#: src/libide/editor/ide-editor-page-shortcuts.c:46
+#: src/libide/editor/ide-editor-surface-shortcuts.c:36
+#: src/libide/editor/ide-editor-surface-shortcuts.c:42
+#: src/libide/editor/ide-editor-surface-shortcuts.c:60
+#: src/libide/gui/ide-frame-shortcuts.c:36
+#: src/libide/gui/ide-frame-shortcuts.c:43
+#: src/libide/gui/ide-frame-shortcuts.c:50
+#: src/libide/gui/ide-frame-shortcuts.c:57
+#: src/libide/gui/ide-frame-shortcuts.c:64
+#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+msgid "Files"
+msgstr "ფაილები"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:35
+msgid "Save the document"
+msgstr "დოკუმენტის შენახვა"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:41
+msgid "Save the document with a new name"
+msgstr ""
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:47
+msgid "Print the document"
+msgstr "დოკუმენტის დაბეჭდვა"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:52
+#: src/libide/editor/ide-editor-page-shortcuts.c:58
+#: src/libide/editor/ide-editor-page-shortcuts.c:59
+#: src/libide/editor/ide-editor-page-shortcuts.c:64
+#: src/libide/editor/ide-editor-page-shortcuts.c:70
+#: src/libide/editor/ide-editor-page-shortcuts.c:76
+#: src/libide/editor/ide-editor-page-shortcuts.c:82
+msgid "Find and replace"
+msgstr "ძებნა და ჩანაცვლება"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:53
+msgid "Find"
+msgstr "ძიება"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:65
+msgid "Move to the next match"
+msgstr "შემდეგ დამთხვევაზე გადასვლა"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:71
+msgid "Move to the previous match"
+msgstr "წინა დამთხვევაზე გადასვლა"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:77
+msgid "Move to the next error"
+msgstr "შემდეგ შეცდომაზე გადასვლა"
+
+#: src/libide/editor/ide-editor-page-shortcuts.c:83
+msgid "Move to the previous error"
+msgstr "წინა შეცდომაზე გადასვლა"
+
+#: src/libide/editor/ide-editor-page.ui:43
+msgid "_Reload"
+msgstr "_გადატვირთვა"
+
+#: src/libide/editor/ide-editor-page.ui:64
+msgid ""
+"Builder has discovered that this file has been modified externally. Would "
+"you like to reload the file?"
+msgstr ""
+
+#: src/libide/editor/ide-editor-search-bar.c:180
+msgid "Regular expressions"
+msgstr "რეგულარული გამოსახულებები"
+
+#: src/libide/editor/ide-editor-search-bar.c:185
+#: src/libide/terminal/ide-terminal-search.ui:166
+msgid "Case sensitive"
+msgstr "დიდი და პატარა ასოების განსხვავება"
+
+#: src/libide/editor/ide-editor-search-bar.c:190
+msgid "Match whole word only"
+msgstr "მხოლოდ მთლიანი სიტყვის დამთხვევა"
+
+#: src/libide/editor/ide-editor-search-bar.c:352
+#, c-format
+msgid "%u of %u"
+msgstr "%u %u-დან"
+
+#: src/libide/editor/ide-editor-search-bar.ui:116
+msgid "_Replace"
+msgstr "_გამოცვალე"
+
+#: src/libide/editor/ide-editor-search-bar.ui:128
+msgid "Replace _All"
+msgstr "ყველ_აფრის ჩანაცვლება"
+
+#: src/libide/editor/ide-editor-search-bar.ui:148
+msgid "Switch between Search and Search-and-Replace"
+msgstr ""
+
+#: src/libide/editor/ide-editor-search-bar.ui:169
+#: src/libide/terminal/ide-terminal-search.ui:100
+msgid "Show or hide search options such as case sensitivity"
+msgstr ""
+
+#: src/libide/editor/ide-editor-search-bar.ui:202
+msgid "Regular _expressions"
+msgstr "_რეგულარული გამოსახულებები"
+
+#: src/libide/editor/ide-editor-search-bar.ui:217
+msgid "_Case sensitive"
+msgstr "_დიდი და პატარა ასოების განსხვავება"
+
+#: src/libide/editor/ide-editor-search-bar.ui:231
+msgid "_Match whole word only"
+msgstr "_მხოლოდ მთლიანი სიტყვის დამთხვევა"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:6
+#: src/plugins/editor/gtk/menus.ui:165
+msgid "Document Properties"
+msgstr "დოკუმენტის თვისებები"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:22
+msgid "Highlight Mode"
+msgstr "გამოკვე_თის რეჟიმი"
+
+#. Add our pages
+#: src/libide/editor/ide-editor-settings-dialog.ui:80
+#: src/libide/gui/ide-header-bar-shortcuts.c:35
+#: src/libide/gui/ide-header-bar-shortcuts.c:41
+#: src/libide/gui/ide-preferences-builtin.c:156
+#: src/libide/gui/ide-preferences-builtin.c:214
+#: src/libide/gui/ide-preferences-builtin.c:337
+#: src/libide/gui/ide-preferences-builtin.c:409
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:373
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:379
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:385
+msgid "General"
+msgstr "ძირითადი"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:95
+msgid "Display line numbers"
+msgstr "ხაზების ნომრების ჩვენება"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:102
+msgid "Display relative line numbers"
+msgstr ""
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:109
+msgid "Display right margin"
+msgstr ""
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:123
+msgid "Automatic indentation"
+msgstr "ავტომატური სწორება"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:130
+msgid "Smart backspace"
+msgstr "ჭკვიანი backspace"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:132
+msgid "Enabling smart backspace will treat multiple spaces as a tabs"
+msgstr ""
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:140
+msgid "Insert trailing newline"
+msgstr "მომყოლი ახალ ხაზზე გადაყვანის ჩასმა"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:147
+msgid "Overwrite trailing braces and quotations"
+msgstr ""
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:159
+#: src/libide/gui/ide-preferences-builtin.c:347
+msgid "Indentation"
+msgstr "სწორება"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:186
+msgid "2"
+msgstr "2"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:196
+msgid "3"
+msgstr "3"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:206
+msgid "4"
+msgstr "4"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:216
+msgid "8"
+msgstr "8"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:243
+#: src/libide/gui/ide-preferences-builtin.c:185
+msgid "Spaces"
+msgstr "სივრცეები"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:254
+#: src/libide/gui/ide-preferences-builtin.c:186
+msgid "Tabs"
+msgstr "ჩანართები"
+
+#: src/libide/editor/ide-editor-settings-dialog.ui:271
+msgid "Spaces per tab"
+msgstr "გამოტოვებების რაოდენობა ტაბულაციაში"
+
+#. List of pages that are open
+#: src/libide/editor/ide-editor-sidebar.ui:31
+#: src/libide/gui/ide-frame-header.ui:21
+msgid "Open Pages"
+msgstr "გვერდების გახსნა"
+
+#: src/libide/editor/ide-editor-surface-actions.c:72
+msgid "Open File"
+msgstr "ფაილის გახსნა"
+
+#: src/libide/editor/ide-editor-surface-actions.c:75
+#: src/plugins/color-picker/gb-color-picker-prefs.c:209
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:261
+msgid "Open"
+msgstr "გახსნა"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:37
+msgid "Create a new document"
+msgstr "ახალი დოკუმენტის შექმნა"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:43
+msgid "Open a document"
+msgstr "დოკუმენტის გახსნა"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:48
+#: src/libide/editor/ide-editor-surface-shortcuts.c:54
+#: src/plugins/grep/gbp-grep-editor-addin.c:56
+msgid "Panels"
+msgstr "პანელები"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:49
+msgid "Toggle navigation panel"
+msgstr "ნავიგაციის პანელის ჩართ/გამორთ"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:55
+msgid "Toggle utilities panel"
+msgstr "ხელსაწყოების პანელის ჩართ/გამორთ"
+
+#: src/libide/editor/ide-editor-surface-shortcuts.c:61
+msgid "Close all files"
+msgstr "ყველა ფაილის დახურვა"
+
+#: src/libide/editor/ide-editor-surface.c:669
+#: src/libide/gui/ide-preferences-builtin.c:106
+#: src/libide/gui/ide-preferences-builtin.c:110
+#: src/libide/gui/ide-preferences-builtin.c:154
+#: src/plugins/editor/gtk/menus.ui:73 src/plugins/editor/gtk/menus.ui:88
+msgid "Editor"
+msgstr "რედაქტორი"
+
+#: src/libide/editor/ide-editor-surface.ui:14
+msgid "Restoring previous session"
+msgstr "წინა სესიის აღდგენა"
+
+#: src/libide/editor/ide-editor-surface.ui:15
+msgid "Your previous session will be ready in a moment."
+msgstr ""
+
+#: src/libide/editor/ide-editor-workspace.ui:21
+#: src/libide/gui/ide-primary-workspace.ui:21
+msgid "Switch surface"
+msgstr "ზედაპირის გადართვა"
+
+#: src/libide/editor/ide-editor-workspace.ui:64
+#: src/libide/gui/ide-primary-workspace.ui:71
+#: src/libide/terminal/ide-terminal-workspace.ui:41
+msgid "Search your project"
+msgstr "პროექტის ძებნა"
+
+#: src/libide/foundry/ide-build-manager.c:419
+#, c-format
+msgid "Failed to initialize build pipeline: %s"
+msgstr ""
+
+#: src/libide/foundry/ide-build-manager.c:560
+#, c-format
+msgid "Failed to get device information: %s"
+msgstr ""
+
+#. translators: %s is replaced with the external device name
+#: src/libide/foundry/ide-device-manager.c:162
+#, c-format
+msgid "Discovered device “%s”"
+msgstr ""
+
+#: src/libide/foundry/ide-device-manager.c:553
+msgid "Devices"
+msgstr "მოწყობილობები"
+
+#: src/libide/foundry/ide-device-manager.c:733
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr ""
+
+#: src/libide/foundry/ide-fallback-build-system.c:145
+#: src/libide/greeter/ide-greeter-row.c:260
+msgid "Fallback"
+msgstr ""
+
+#. translators: %s is replaced with the host name
+#: src/libide/foundry/ide-local-device.c:140
+#, c-format
+msgid "My Computer (%s)"
+msgstr "ჩემი კომპიუტერი (%s)"
+
+#. translators: first %s is replaced with the host name, second with CPU architecture
+#: src/libide/foundry/ide-local-device.c:150
+#, c-format
+msgid "My Computer (%s) — %s"
+msgstr "ჩემი კომპიუტერი (%s) - %s"
+
+#: src/libide/foundry/ide-pipeline.c:824
+msgid "The build pipeline is in a failed state"
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:834
+msgid "The build configuration has errors"
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:3033
+msgid "Pseudo terminal creation failed. Terminal features will be limited."
+msgstr ""
+
+#: src/libide/foundry/ide-pipeline.c:3239
+msgid "Cleaning…"
+msgstr "გასუფთავება…"
+
+#: src/libide/foundry/ide-pipeline.c:3243
+#: src/libide/foundry/ide-pipeline.c:3300
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:223
+msgid "Failed"
+msgstr "შეცდომა"
+
+#: src/libide/foundry/ide-pipeline.c:3245
+#: src/libide/foundry/ide-pipeline.c:3308
+msgid "Ready"
+msgstr "მზადაა"
+
+#: src/libide/foundry/ide-pipeline.c:3260
+msgid "Downloading…"
+msgstr "გადმოწერა…"
+
+#: src/libide/foundry/ide-pipeline.c:3264
+msgid "Building dependencies…"
+msgstr "დამოკიდებულებების აგება…"
+
+#: src/libide/foundry/ide-pipeline.c:3268
+msgid "Bootstrapping…"
+msgstr "საწყისი მომზადება…"
+
+#: src/libide/foundry/ide-pipeline.c:3272
+msgid "Configuring…"
+msgstr "მორგება…"
+
+#: src/libide/foundry/ide-pipeline.c:3276
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:205
+msgid "Building…"
+msgstr "აგება…"
+
+#: src/libide/foundry/ide-pipeline.c:3280
+msgid "Installing…"
+msgstr "დაყენება…"
+
+#: src/libide/foundry/ide-pipeline.c:3284
+msgid "Committing…"
+msgstr "კომიტი…"
+
+#: src/libide/foundry/ide-pipeline.c:3288
+msgid "Exporting…"
+msgstr "გატანა…"
+
+#: src/libide/foundry/ide-pipeline.c:3292
+#: src/libide/foundry/ide-pipeline.c:3296
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:241
+msgid "Success"
+msgstr "წარმატება"
+
+#: src/libide/foundry/ide-pipeline.c:3304
+msgid "Preparing…"
+msgstr "მომზადება…"
+
+#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
+msgid "Cannot build transfer while on metered connection"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:387
+msgid "Cannot run target, another target is running"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:526
+msgid "Failed to locate runtime"
+msgstr ""
+
+#. translators: %s is replaced with the name of the users executable
+#: src/libide/foundry/ide-run-manager.c:577
+#, c-format
+msgid "Running %s…"
+msgstr "%s გაშვებულია…"
+
+#. translators: %s is replaced with the specific error reason
+#: src/libide/foundry/ide-run-manager.c:727
+#, c-format
+msgid "The build target failed to build: %s"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:992
+#: src/libide/gui/ide-application-shortcuts.c:45
+#: src/libide/gui/ide-application-shortcuts.c:56
+#: src/libide/gui/ide-application-shortcuts.c:67
+msgid "Workbench shortcuts"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:993
+msgid "Build and Run"
+msgstr "აგება და გაშვება"
+
+#: src/libide/foundry/ide-run-manager.c:1155
+#: src/libide/foundry/ide-run-manager.c:1221
+msgid "Failed to locate a build target"
+msgstr ""
+
+#: src/libide/foundry/ide-run-manager.c:1357 src/libide/gui/gtk/menus.ui:67
+msgid "Run"
+msgstr "გაშვება"
+
+#: src/libide/foundry/ide-runner.c:185
+msgid "Process quit unexpectedly"
+msgstr ""
+
+#: src/libide/foundry/ide-runtime-manager.c:138
+msgid "Host Operating System"
+msgstr "ჰოსტის ოპერაციული სისტემა"
+
+#: src/libide/foundry/ide-runtime.c:575
+#: src/plugins/jhbuild/jhbuild_plugin.py:123
+msgid "Host System"
+msgstr "ჰოსტს სისტემა"
+
+#: src/libide/foundry/ide-toolchain-manager.c:329
+msgid "Default (Host operating system)"
+msgstr ""
+
+#. translators: %s is replaced with the path to the project
+#: src/libide/greeter/ide-clone-surface.c:251
+#, c-format
+msgid "The directory “%s” already exists. Please choose another directory."
+msgstr ""
+
+#. translators: %s is replaced with the path to the project
+#: src/libide/greeter/ide-clone-surface.c:259
+#, c-format
+msgid "Your project will be created at %s"
+msgstr ""
+
+#: src/libide/greeter/ide-clone-surface.ui:48
+msgid "Repository URL"
+msgstr "რეპოზიტორიის URL"
+
+#: src/libide/greeter/ide-clone-surface.ui:63
+msgid ""
+"Enter the repository of the project you would like to clone. The URL should "
+"look similar to “https://gitlab.gnome.org/GNOME/gnome-builder.git”."
+msgstr ""
+
+#: src/libide/greeter/ide-clone-surface.ui:84
+msgid "user@host:repository.git"
+msgstr "user@host:repository.git"
+
+#: src/libide/greeter/ide-clone-surface.ui:103
+msgid "Select branch and other options."
+msgstr ""
+
+#: src/libide/greeter/ide-clone-surface.ui:140
+msgid "Repository Kind"
+msgstr "რეპოზიტორიის ტიპი"
+
+#: src/libide/greeter/ide-clone-surface.ui:165
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:111
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:104
+msgid "Branch"
+msgstr "ბრენჩი"
+
+#: src/libide/greeter/ide-clone-surface.ui:190
+msgid "Author Name"
+msgstr "ავტორის სახელი"
+
+#: src/libide/greeter/ide-clone-surface.ui:215
+msgid "Author Email"
+msgstr "ავტორის ელფოსტა"
+
+#: src/libide/greeter/ide-clone-surface.ui:251
+msgid "Project Destination"
+msgstr "პროექტის დანიშნულება"
+
+#: src/libide/greeter/ide-clone-surface.ui:307
+msgid "Clone _Project"
+msgstr "პროექტის კლონირება"
+
+#: src/libide/greeter/ide-greeter-buttons-section.c:62
+msgid "Select a _Folder…"
+msgstr "აირჩიეთ _საქაღალდე…"
+
+#: src/libide/greeter/ide-greeter-buttons-section.c:70
+#: src/plugins/greeter/gtk/menus.ui:7 src/plugins/greeter/gtk/menus.ui:72
+#: src/plugins/greeter/gtk/menus.ui:88
+msgid "_Clone Repository…"
+msgstr "_რეპოზიტორიის კლონირება…"
+
+#: src/libide/greeter/ide-greeter-row.c:259
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:92
+msgid "Directory"
+msgstr "საქაღალდე"
+
+#: src/libide/greeter/ide-greeter-workspace-actions.c:89
+#: src/libide/greeter/ide-greeter-workspace-actions.c:122
+msgid "Select Project Folder"
+msgstr "აირციეთ პროექტის საქაღალდე"
+
+#: src/libide/greeter/ide-greeter-workspace-actions.c:94
+msgid "Select Project File"
+msgstr "აირჩიეთ პროექტის ფაილი"
+
+#: src/libide/greeter/ide-greeter-workspace-actions.c:127
+#: src/libide/gui/ide-workbench.c:1409
+msgid "_Open"
+msgstr "_გახსნა"
+
+#: src/libide/greeter/ide-greeter-workspace-actions.c:138
+msgid "All Project Types"
+msgstr "პროექტის ყველა ტიპი"
+
+#: src/libide/greeter/ide-greeter-workspace.c:219
+#: src/libide/gui/ide-workbench.c:315 src/libide/gui/ide-workbench.c:839
+#, c-format
+msgid "Builder — %s"
+msgstr "Builder — %s"
+
+#: src/libide/greeter/ide-greeter-workspace.c:327
+msgid "Failed to load the project"
+msgstr "პროექტის ჩატვირთვის შეცდომა"
+
+#: src/libide/greeter/ide-greeter-workspace.c:533
+msgid ""
+"Removing project sources will delete them from your computer and cannot be "
+"undone."
+msgstr ""
+
+#: src/libide/greeter/ide-greeter-workspace.c:537
+msgid "Delete Project Sources"
+msgstr ""
+
+#: src/libide/greeter/ide-greeter-workspace.ui:25
+msgid "Go back"
+msgstr "უკან გადასვლა"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgctxt "title"
+msgid "Open a Project"
+msgstr "პროექტის გახსნა"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:101
+msgid "Search all Builder projects…"
+msgstr ""
+
+#: src/libide/greeter/ide-greeter-workspace.ui:118
+msgid "No Projects Found"
+msgstr "პროექტები არ მოიძებნა"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:154
+msgid "_Remove Projects"
+msgstr "პროექტების წაშლა"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:166
+msgid "Remove Projects and Sources…"
+msgstr "პროექტებისა და წყაროს წაშლა…"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:188
+msgctxt "title"
+msgid "Clone Repository"
+msgstr "რეპოზიტორიის დაკლონვა"
+
+#: src/libide/gui/gtk/menus.ui:5 src/plugins/editor/gtk/menus.ui:84
+msgid "Switch Surface"
+msgstr "ზედაპირის გადართვა"
+
+#: src/libide/gui/gtk/menus.ui:16
+msgid "Close Project"
+msgstr "პროექტის დახურვა"
+
+#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-application-shortcuts.c:57
+#: src/libide/gui/ide-preferences-window.ui:10
+#: src/plugins/editor/gtk/menus.ui:36 src/plugins/greeter/gtk/menus.ui:22
+msgid "Preferences"
+msgstr "მორგება"
+
+#: src/libide/gui/gtk/menus.ui:30 src/plugins/editor/gtk/menus.ui:42
+#: src/plugins/greeter/gtk/menus.ui:28
+msgid "Keyboard Shortcuts"
+msgstr "კლავიატურის მალსახმობები"
+
+#: src/libide/gui/gtk/menus.ui:36 src/libide/gui/ide-application-shortcuts.c:46
+#: src/libide/gui/ide-application-shortcuts.c:68
+#: src/plugins/editor/gtk/menus.ui:48 src/plugins/greeter/gtk/menus.ui:34
+msgid "Help"
+msgstr "დახმარება"
+
+#: src/libide/gui/gtk/menus.ui:42 src/plugins/editor/gtk/menus.ui:54
+#: src/plugins/greeter/gtk/menus.ui:40
+msgid "About Builder"
+msgstr "Builder-ს შესახებ"
+
+#: src/libide/gui/gtk/menus.ui:49 src/plugins/editor/gtk/menus.ui:62
+msgid "_Quit"
+msgstr "_გასვლა"
+
+#: src/libide/gui/gtk/menus.ui:62
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:485
+msgid "Run Options"
+msgstr "გასვების პარამეტრები"
+
+#: src/libide/gui/ide-application-actions.c:79
+msgid "Builder — Preferences"
+msgstr "Builder — მორგება"
+
+#: src/libide/gui/ide-application-actions.c:148
+msgid "GNOME Builder"
+msgstr "GNOME Builder"
+
+#: src/libide/gui/ide-application-actions.c:150
+msgid "translator-credits"
+msgstr "თემური დოღონაძე"
+
+#: src/libide/gui/ide-application-actions.c:154
+msgid "Learn more about GNOME Builder"
+msgstr ""
+
+#: src/libide/gui/ide-application-actions.c:157
+msgid "Funded By"
+msgstr "დაფინანსებულია"
+
+#: src/libide/gui/ide-application-command-line.c:64
+msgid "Show the application preferences"
+msgstr "აპლიკაციის პარამეტრების ჩვენება"
+
+#: src/libide/gui/ide-application-command-line.c:65
+msgid "Open project in new workbench"
+msgstr "პროექტის ახალ სამუშაო მაგიდაზე გახსნა"
+
+#: src/libide/gui/ide-application-command-line.c:65
+msgid "FILE"
+msgstr "ფაილი"
+
+#: src/libide/gui/ide-application-command-line.c:66
+msgid "Print version information and exit"
+msgstr "ვერსიის ჩვენება და გასვლა"
+
+#. Verbose is handled in main(), but we need to add to --help here
+#: src/libide/gui/ide-application-command-line.c:68
+msgid "Increase log verbosity (may be repeated)"
+msgstr ""
+
+#: src/libide/gui/ide-application-command-line.c:118
+#, c-format
+msgid "Failed to open project: %s"
+msgstr "პროექტის გახსნის შეცდომა: %s"
+
+#: src/libide/gui/ide-application-shortcuts.c:47
+msgid "Show the help window"
+msgstr "დახმარების ფანჯრის ჩვენება"
+
+#: src/libide/gui/ide-application-shortcuts.c:58
+msgid "Show the preferences window"
+msgstr "პარამეტრების ფანჯრის ჩვენება"
+
+#: src/libide/gui/ide-application-shortcuts.c:69
+msgid "Show the shortcuts window"
+msgstr "მალსახმობების ფანჯრის ჩვენება"
+
+#: src/libide/gui/ide-application.c:173
+msgid ""
+"GNOME Builder requires a session with D-Bus which was not found. Please set "
+"DBUS_SESSION_BUS_ADDRESS. Some features may not be available."
+msgstr ""
+
+#: src/libide/gui/ide-command-manager.c:491
+msgid "Command failed"
+msgstr "ბრძანება ვერ შესრულდა"
+
+#: src/libide/gui/ide-command-manager.c:513
+#, c-format
+msgid "Failed to locate command “%s”"
+msgstr "ბრძანების პოვნის შეცდომა: %s"
+
+#: src/libide/gui/ide-environment-editor-row.ui:33
+msgid "Remove environment variable"
+msgstr "გარემოს ცვლადის წაშლა"
+
+#: src/libide/gui/ide-environment-editor.c:71
+msgid "New variable…"
+msgstr "ახალი ცვლადი…"
+
+#: src/libide/gui/ide-frame-empty-state.ui:16
+msgid "Open a File or Terminal"
+msgstr "ფაილის ან ტერმინალის გახსნა"
+
+#: src/libide/gui/ide-frame-empty-state.ui:30
+msgid "Use the page switcher above or use one of the following:"
+msgstr ""
+
+#: src/libide/gui/ide-frame-empty-state.ui:45
+#: src/libide/gui/ide-search-button.c:50
+msgid "Search"
+msgstr "ძებნა"
+
+#: src/libide/gui/ide-frame-empty-state.ui:54
+msgid "Project sidebar"
+msgstr "პროექტის გვერდითი პანელი"
+
+#: src/libide/gui/ide-frame-empty-state.ui:63
+msgid "File chooser"
+msgstr "ფაილის ამრჩევი"
+
+#: src/libide/gui/ide-frame-empty-state.ui:72
+msgid "New terminal"
+msgstr "ახალი ტერმინალი"
+
+#: src/libide/gui/ide-frame-empty-state.ui:88
+#: src/plugins/editor/gtk/menus.ui:111
+msgid "_Open File…"
+msgstr "_ფაილის გახსნა…"
+
+#: src/libide/gui/ide-frame-empty-state.ui:96
+msgid "_New Terminal"
+msgstr "_ახალი ტერმინალი"
+
+#: src/libide/gui/ide-frame-shortcuts.c:37
+msgid "Move document to the right"
+msgstr "დოკუმენტის მარჯვნივ გაწევა"
+
+#: src/libide/gui/ide-frame-shortcuts.c:44
+msgid "Move document to the left"
+msgstr "დოკუმენტის მარცხნივ გაწევა"
+
+#: src/libide/gui/ide-frame-shortcuts.c:51
+msgid "Switch to the previous document"
+msgstr "წინა დოკუმენტენტზე გადასვლა"
+
+#: src/libide/gui/ide-frame-shortcuts.c:58
+msgid "Switch to the next document"
+msgstr "შემდეგ დოკუმენტზე გადასვლა"
+
+#: src/libide/gui/ide-frame-shortcuts.c:65
+msgid "Close the document"
+msgstr "დოკუმენტის დახურვა"
+
+#: src/libide/gui/ide-frame.c:179 src/libide/gui/ide-frame.ui:8
+msgid "No Open Pages"
+msgstr "ღია გვერდების გარეშე"
+
+#: src/libide/gui/ide-frame.ui:37
+msgid "Uh oh, something went wrong"
+msgstr "რაღაც გაფუჭდა"
+
+#: src/libide/gui/ide-frame.ui:38
+msgid "There was a failure while trying to perform the operation."
+msgstr "შეცდომა ოპერაციის შესრულებისას."
+
+#: src/libide/gui/ide-header-bar-shortcuts.c:34
+#: src/libide/gui/ide-header-bar-shortcuts.c:40
+msgid "Window shortcuts"
+msgstr "ფანჯრის მალსახმობები"
+
+#: src/libide/gui/ide-header-bar-shortcuts.c:36
+msgid "Show window menu"
+msgstr "ფანჯრის მენიუს ჩვენება"
+
+#: src/libide/gui/ide-header-bar-shortcuts.c:42
+msgid "Toggle window to fullscreen"
+msgstr "მთელ ეკრანზე გატანის ჩართ/გამორთ"
+
+#: src/libide/gui/ide-marked-view.c:399
+msgid "Cannot load HTML. Missing WebKit support."
+msgstr "HTML-ის ჩატვირთვის შეცდომა. WebKit-ის მხარდაჭერა ვერ ვიპოვე."
+
+#: src/libide/gui/ide-preferences-builtin.c:62
+#: src/libide/gui/ide-preferences-builtin.c:63
+msgid "Extensions"
+msgstr "გაფართოებები"
+
+#: src/libide/gui/ide-preferences-builtin.c:99
+msgid "Appearance"
+msgstr "გარემოს იერსახე"
+
+#: src/libide/gui/ide-preferences-builtin.c:101
+msgid "Style"
+msgstr "სტილი"
+
+#: src/libide/gui/ide-preferences-builtin.c:102
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:253
+msgid "System"
+msgstr "სისტემა"
+
+#: src/libide/gui/ide-preferences-builtin.c:102
+msgid "follow"
+msgstr "მიყოლა"
+
+#: src/libide/gui/ide-preferences-builtin.c:103
+msgid "Light"
+msgstr "მსუბუქი"
+
+#: src/libide/gui/ide-preferences-builtin.c:104
+msgid "Dark"
+msgstr "ბნელი"
+
+#: src/libide/gui/ide-preferences-builtin.c:107
+msgid "Grid Pattern"
+msgstr "ბადის შაბლონი"
+
+#: src/libide/gui/ide-preferences-builtin.c:107
+msgid "Display a grid pattern underneath source code"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:109
+msgid "Font"
+msgstr "შრიფტი"
+
+#: src/libide/gui/ide-preferences-builtin.c:110
+msgctxt "Keywords"
+msgid "editor font monospace"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:111
+msgid "Number of pixels above and below editor lines"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:111
+msgctxt "Keywords"
+msgid "editor line spacing font monospace"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:116
+msgid "Color Scheme"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:141
+msgid "Keyboard"
+msgstr "კლავიატურა"
+
+#: src/libide/gui/ide-preferences-builtin.c:143
+msgid "Emulation"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:144
+msgid "Default keybinding mode which mimics gedit"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:146
+msgid "Movement"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:147
+msgid "Home moves to first non-whitespace character"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:148
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:157
+msgid "Display list of open files"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:157
+msgid "Display the list of all open files in the project sidebar"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:158
+msgid "Reformat code on save"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:158
+msgid "Reformat current file on save"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:160
+msgid "Cursor"
+msgstr "კურსორი"
+
+#: src/libide/gui/ide-preferences-builtin.c:161
+msgid "Restore cursor position"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:161
+msgid "Restore cursor position when a file is reopened"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:162
+msgid "Scroll Offset"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:162
+msgid "Minimum number of lines to keep above and below the cursor"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:163
+msgid "Allow the editor to scroll past the end of the buffer"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:165
+msgid "Text Wrapping"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:166
+msgid "Never"
+msgstr "არასდროს"
+
+#: src/libide/gui/ide-preferences-builtin.c:167
+msgid "In Between Words"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:168
+msgid "Always"
+msgstr "ყოველთვის"
+
+#: src/libide/gui/ide-preferences-builtin.c:170
+msgid "Line Information"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:171
+msgid "Line numbers"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:171
+msgid "Show line number at beginning of each line"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:172
+msgid "Relative line numbers"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:172
+msgid "Show line numbers relative to the cursor line"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:173
+msgid "Line changes"
+msgstr "სტრიქონის ცვლილებები"
+
+#: src/libide/gui/ide-preferences-builtin.c:173
+msgid "Show if a line was added or modified next to line number"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:174
+msgid "Line diagnostics"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:174
+msgid "Show an icon next to line numbers indicating type of diagnostic"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:176
+msgid "Highlight"
+msgstr "გამოკვეთა"
+
+#: src/libide/gui/ide-preferences-builtin.c:177
+msgid "Current line"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:177
+msgid "Make current line stand out with highlights"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:178
+msgid "Matching brackets"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:178
+msgid "Highlight matching brackets based on cursor position"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:180
+msgid "Code Overview"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:181
+msgid "A zoomed out view to enhance navigating source code"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:182
+msgid "Automatically hide overview map"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:182
+msgid "Automatically hide map when editor loses focus"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:184
+msgid "Visible Whitespace Characters"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:187
+msgid "New line and carriage return"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:188
+msgid "Non-breaking spaces"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:189
+msgid "Spaces inside of text"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:190
+msgid "Trailing Only"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:191
+msgid "Leading Only"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:193
+msgid "Autosave"
+msgstr "ავტომატური შენახვა"
+
+#: src/libide/gui/ide-preferences-builtin.c:194
+msgid "Enable or disable autosave feature"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:195
+msgid "The number of seconds after modification before auto saving"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:201
+msgid "Code Insight"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:203
+msgid "Highlighting"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:204
+msgid "Semantic Highlighting"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:204
+msgid ""
+"Use code insight to highlight additional information discovered in source "
+"file"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:206
+#: src/plugins/editor/gbp-editor-hover-provider.c:86
+msgid "Diagnostics"
+msgstr "დიაგნოსტიკა"
+
+#: src/libide/gui/ide-preferences-builtin.c:212
+msgid "Completion"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:215
+msgid "Completions Display Size"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:215
+msgid "Number of completions to display"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:216
+msgid "Display code suggestions interactively as you type"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:218
+msgid "Completion Providers"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:224
+msgid "Snippets"
+msgstr "ფრაგმენტები"
+
+#: src/libide/gui/ide-preferences-builtin.c:267
+msgid "Programming Languages"
+msgstr ""
+
+#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
+#: src/libide/gui/ide-preferences-builtin.c:278
+msgid "Search languages…"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:338
+msgid "Trim trailing whitespace"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:338
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:339
+msgid "Overwrite Braces"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:339
+msgid "Overwrite closing braces"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:340
+msgid "Insert Matching Brace"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:340
+msgid "Insert matching character for { [ ( or \""
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:341
+msgid "Insert Trailing Newline"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:341
+msgid "Ensure files end with a newline"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:343
+msgid "Margins"
+msgstr "გვერდის ველები"
+
+#: src/libide/gui/ide-preferences-builtin.c:344
+msgid "Show right margin"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:345
+msgid "Right margin position"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:345
+msgid "Position in spaces for the right margin"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:348
+msgid "Tab width"
+msgstr "ტაბულაციის სიგანე"
+
+#: src/libide/gui/ide-preferences-builtin.c:348
+msgid "Width of a tab character in spaces"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:349
+msgid "Insert spaces instead of tabs"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:349
+msgid "Prefer spaces over use of tabs"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:350
+msgid "Automatically indent"
+msgstr "ავტომატური სწორება"
+
+#: src/libide/gui/ide-preferences-builtin.c:350
+msgid "Indent source code as you type"
+msgstr "აკრეფის დროს კოდის სწორება"
+
+#: src/libide/gui/ide-preferences-builtin.c:352
+msgid "Spacing"
+msgstr "დაშორება"
+
+#: src/libide/gui/ide-preferences-builtin.c:353
+msgid "Space before opening parentheses"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:354
+msgid "Space before opening brackets"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:355
+msgid "Space before opening braces"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:356
+msgid "Space before opening angles"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:357
+msgid "Prefer a space before colons"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:358
+msgid "Prefer a space before commas"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:359
+msgid "Prefer a space before semicolons"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:369
+#: src/libide/gui/ide-preferences-builtin.c:387
+msgid "Default"
+msgstr "ნაგულისხმევი"
+
+#: src/libide/gui/ide-preferences-builtin.c:374
+#: src/libide/gui/ide-preferences-builtin.c:392
+msgid "Number of CPU"
+msgstr "CPU-ების რაოდენობა"
+
+#: src/libide/gui/ide-preferences-builtin.c:407
+msgid "Build"
+msgstr "აგება"
+
+#: src/libide/gui/ide-preferences-builtin.c:410
+msgid "Build Workers"
+msgstr "აგების დამხმარე პროცესები"
+
+#: src/libide/gui/ide-preferences-builtin.c:410
+msgid "Number of parallel build workers"
+msgstr "აგების დამხმარე პროცესების რიცხვი"
+
+#: src/libide/gui/ide-preferences-builtin.c:418
+msgid "Clear build log pane on rebuild"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:419
+msgid "Clear build cache at startup"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:419
+msgid "Expired caches will be purged when Builder is started"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:421
+msgid "Network"
+msgstr "ქსელი"
+
+#: src/libide/gui/ide-preferences-builtin.c:422
+msgid "Allow downloads over metered connections"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:422
+msgid ""
+"Allow the use of metered network connections when automatically downloading "
+"dependencies"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:300
+#: src/plugins/debuggerui/ide-debugger-hover-provider.c:86
+msgid "Debugger"
+msgstr "გამმართველი"
+
+#: src/libide/gui/ide-preferences-builtin.c:425
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:342
+msgid "Breakpoints"
+msgstr "შეჩერების წერტილები"
+
+#: src/libide/gui/ide-preferences-builtin.c:426
+msgid "Insert Breakpoint at Start of Application"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:426
+msgid ""
+"Automatically stop execution at the start of the applications main function"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:432
+#: src/libide/projects/ide-projects-global.c:105
+msgid "Projects"
+msgstr "პროექტები"
+
+#: src/libide/gui/ide-preferences-builtin.c:434
+msgid "Workspace"
+msgstr "სამუშაო სივრცე"
+
+#: src/libide/gui/ide-preferences-builtin.c:435
+msgid "A place for all your projects"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:436
+msgid "Restore previously opened files"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:436
+msgid "Open previously opened files when loading a project"
+msgstr ""
+
+#: src/libide/gui/ide-preferences-builtin.c:558
+#: src/plugins/create-project/gbp-create-project-surface.ui:222
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:379
+msgid "Version Control"
+msgstr "ვერსიის კონტროლი"
+
+#. only the page goes here, plugins will fill in the details
+#: src/libide/gui/ide-preferences-builtin.c:571
+msgid "SDKs"
+msgstr ""
+
+#: src/libide/gui/ide-primary-workspace-actions.c:132
+msgid "Updating Dependencies…"
+msgstr ""
+
+#: src/libide/gui/ide-primary-workspace-actions.c:133
+msgid "Builder is updating your projects configured dependencies."
+msgstr ""
+
+#: src/libide/gui/ide-run-button.c:168
+msgid "Stop running"
+msgstr ""
+
+#: src/libide/gui/ide-run-button.ui:6
+msgid "The project cannot be run while the build pipeline is being set up"
+msgstr ""
+
+#: src/libide/gui/ide-run-button.ui:39
+msgid "Change run options"
+msgstr ""
+
+#: src/libide/gui/ide-search-button.c:49
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:372
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:378
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:384
+msgid "Workspace shortcuts"
+msgstr ""
+
+#: src/libide/gui/ide-search-button.c:51
+msgid "Focus to the global search entry"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:10
+msgctxt "shortcut window"
+msgid "Editor Shortcuts"
+msgstr "რედაქტორის მალსახმობები"
+
+#: src/libide/gui/ide-shortcuts-window.ui:14
+#: src/libide/gui/ide-shortcuts-window.ui:600
+msgctxt "shortcut window"
+msgid "General"
+msgstr "ძირითადი"
+
+#: src/libide/gui/ide-shortcuts-window.ui:18
+msgctxt "shortcut window"
+msgid "Show help"
+msgstr "დახმარების ჩვენება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:25
+msgctxt "shortcut window"
+msgid "Toggle primary menu"
+msgstr "ძირითადი მენიუს ჩართ/გამორთ"
+
+#: src/libide/gui/ide-shortcuts-window.ui:32
+#: src/libide/gui/ide-shortcuts-window.ui:604
+msgctxt "shortcut window"
+msgid "Global Search"
+msgstr "გლობალური ძებნა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:39
+#: src/libide/gui/ide-shortcuts-window.ui:611
+msgctxt "shortcut window"
+msgid "Preferences"
+msgstr "მორგება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:46
+#: src/libide/gui/ide-shortcuts-window.ui:618
+msgctxt "shortcut window"
+msgid "Command Bar"
+msgstr "ბრძანებების ველი"
+
+#: src/libide/gui/ide-shortcuts-window.ui:53
+#: src/libide/gui/ide-shortcuts-window.ui:625
+msgctxt "shortcut window"
+msgid "Terminal"
+msgstr "ტერმინალი"
+
+#: src/libide/gui/ide-shortcuts-window.ui:60
+#: src/libide/gui/ide-shortcuts-window.ui:632
+msgctxt "shortcut window"
+msgid "Terminal in Build Runtime"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:67
+#: src/libide/gui/ide-shortcuts-window.ui:639
+msgctxt "shortcut window"
+msgid "Keyboard Shortcuts"
+msgstr "კლავიატურის მალსახმობები"
+
+#: src/libide/gui/ide-shortcuts-window.ui:74
+msgctxt "shortcut window"
+msgid "Toggle Focus Mode"
+msgstr "ფოკუსის რეჟიმის გადართვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:83
+msgctxt "shortcut window"
+msgid "Panels"
+msgstr "პანელები"
+
+#: src/libide/gui/ide-shortcuts-window.ui:87
+msgctxt "shortcut window"
+msgid "Toggle left panel"
+msgstr "მარცხენა პანელის გადართვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:94
+msgctxt "shortcut window"
+msgid "Toggle bottom panel"
+msgstr "ქვედა პანელის გადართვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:101
+msgctxt "shortcut window"
+msgid "Show Find in Project panel"
+msgstr "პროექტის პანელზე ძებნის ჩვენება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:110
+msgctxt "shortcut window"
+msgid "Files"
+msgstr "ფაილები"
+
+#: src/libide/gui/ide-shortcuts-window.ui:115
+msgctxt "shortcut window"
+msgid "Create new document"
+msgstr "ახალი დოკუმენტის შექმნა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:122
+msgctxt "shortcut window"
+msgid "Open a document"
+msgstr "დოკუმენტის გახსნა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:129
+msgctxt "shortcut window"
+msgid "Save the document"
+msgstr "დოკუმენტის შენახვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:136
+msgctxt "shortcut window"
+msgid "Save a copy of the document"
+msgstr "მიმდინარე დოკუმენტის ასლის შენახვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:143
+msgctxt "shortcut window"
+msgid "Save all documents"
+msgstr "ყველა დოკუმენტის შენახვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:150
+msgctxt "shortcut window"
+msgid "Print the document"
+msgstr "დოკუმენტის დაბეჭდვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:157
+msgctxt "shortcut window"
+msgid "Close the document"
+msgstr "დოკუმენტის დახურვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:164
+msgctxt "shortcut window"
+msgid "Close all documents"
+msgstr "ყველა დოკუმენტის დახურვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:171
+msgctxt "shortcut window"
+msgid "Switch to the next document"
+msgstr "შემდეგ დოკუმენტზე გადასვლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:178
+msgctxt "shortcut window"
+msgid "Switch to the previous document"
+msgstr "წინა დოკუმენტენტზე გადასვლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:185
+msgctxt "shortcut window"
+msgid "Show list of open documents"
+msgstr "ღია დოკუმენტების სიის ჩვენება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:192
+msgctxt "shortcut window"
+msgid "Show document outline or symbol tree"
+msgstr "დოკუმენტის საზღვრის ან სიმბოლოების ხის ჩვენება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:200
+#: src/libide/gui/ide-shortcuts-window.ui:219
+msgctxt "shortcut window"
+msgid "Find and replace"
+msgstr "ძებნა და ჩანაცვლება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:205
+msgctxt "shortcut window"
+msgid "Goto Line"
+msgstr "გადასვლა ხაზზე"
+
+#: src/libide/gui/ide-shortcuts-window.ui:212
+msgctxt "shortcut window"
+msgid "Find"
+msgstr "ძიება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:226
+msgctxt "shortcut window"
+msgid "Find the next match"
+msgstr "შემდეგ დამთხვევაზე გადასვლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:233
+msgctxt "shortcut window"
+msgid "Find the previous match"
+msgstr "წინა დამთხვევაზე გადასვლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:240
+msgctxt "shortcut window"
+msgid "Clear highlight"
+msgstr "გამოკვეთილის გასუფთავება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:248
+#: src/libide/gui/ide-shortcuts-window.ui:648
+msgctxt "shortcut window"
+msgid "Copy and Paste"
+msgstr "კოპირება და ჩასმა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:253
+#: src/libide/gui/ide-shortcuts-window.ui:653
+msgctxt "shortcut window"
+msgid "Copy selected text to clipboard"
+msgstr "მონიშნული ტექსტის გაცვლის ბუფერში კოპირება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:260
+msgctxt "shortcut window"
+msgid "Cut selected text to clipboard"
+msgstr "მონიშნული ტექსტის გაცვლის ბუფერში ამოჭრა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:267
+#: src/libide/gui/ide-shortcuts-window.ui:660
+msgctxt "shortcut window"
+msgid "Paste text from clipboard"
+msgstr "გაცვლის ბუფერიდან ტექსტის ჩასმა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:274
+msgctxt "shortcut window"
+msgid "Duplicate current line or selection"
+msgstr "მინდინარე ხაზის ან მონიშნულის დუბლირება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:282
+msgctxt "shortcut window"
+msgid "Undo and Redo"
+msgstr "გაუქმება/გამეორება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:287
+msgctxt "shortcut window"
+msgid "Undo previous command"
+msgstr "წინა ბრძანების გაუქმება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:294
+msgctxt "shortcut window"
+msgid "Redo previous command"
+msgstr "წინა ბრძანების დაბრუნება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:302
+msgctxt "shortcut window"
+msgid "Zoom"
+msgstr "გადიდება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:307
+msgctxt "shortcut window"
+msgid "Zoom In"
+msgstr "შემცირება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:314
+msgctxt "shortcut window"
+msgid "Zoom Out"
+msgstr "დაპატარავება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:321
+msgctxt "shortcut window"
+msgid "Reset Zoom"
+msgstr "გადიდების საწყისი პარამეტრები"
+
+#: src/libide/gui/ide-shortcuts-window.ui:329
+msgctxt "shortcut window"
+msgid "Editing"
+msgstr "ჩასწორება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:334
+msgctxt "shortcut window"
+msgid "Increment number at cursor"
+msgstr "კურსორთან მყოფი რიცხვის გადიდება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:341
+msgctxt "shortcut window"
+msgid "Decrement number at cursor"
+msgstr "კურსორთან მყოფი რიცხვის დაპატარავება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:348
+msgctxt "shortcut window"
+msgid "Join selected lines"
+msgstr "მონიშნული ხაზების შეერთება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:355
+msgctxt "shortcut window"
+msgid "Sort selected lines"
+msgstr "მონიშნული ხაზების დალაგება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:362
+msgctxt "shortcut window"
+msgid "Make selection upper case"
+msgstr "დიდ ასოებში გადაყვანა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:369
+msgctxt "shortcut window"
+msgid "Make selection lower case"
+msgstr "პატარა ასოებში გადაყვანა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:376
+msgctxt "shortcut window"
+msgid "Invert selection case"
+msgstr "მონიშვნის ინვერსია"
+
+#: src/libide/gui/ide-shortcuts-window.ui:383
+msgctxt "shortcut window"
+msgid "Show completion window"
+msgstr "დასრულების ფანჯრის ჩვენება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:390
+msgctxt "shortcut window"
+msgid "Toggle opacity of completion window"
+msgstr "დასრულების ფანჯრის სიმღვრივის გადართვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:397
+msgctxt "shortcut window"
+msgid "Toggle overwrite"
+msgstr "გადაწერის გადართვა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:404
+msgctxt "shortcut window"
+msgid "Reindent line"
+msgstr "ხაზის თავიდან სწორება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:411
+msgctxt "shortcut window"
+msgid "Delete line"
+msgstr "ხაზის წაშლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:418
+msgctxt "shortcut window"
+msgid "Rename symbol"
+msgstr "სიმბოლოს სახელის გადარქმევა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:419
+msgctxt "shortcut window"
+msgid "Requires semantic language support"
+msgstr "სემანტიკური ენის მოთხოვნა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:426
+msgctxt "shortcut window"
+msgid "Comment code"
+msgstr "კოდის დაკომენტარება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:433
+msgctxt "shortcut window"
+msgid "Uncomment code"
+msgstr "კოდის განკომენტარება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:440
+msgctxt "shortcut window"
+msgid "Beautify selected code"
+msgstr "მონიშნული კოდის გალამაზება"
+
+#. Translators: LSP stands for Language Server Protocol
+#: src/libide/gui/ide-shortcuts-window.ui:447
+msgctxt "shortcut window"
+msgid "(LSP only) Format selected code or whole document"
+msgstr "(მხოლოდ LSP) მონიშნული კოდის ან მთელი დოკუმენტის ფორმატირება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:455
+msgctxt "shortcut window"
+msgid "Navigation"
+msgstr "ნავიგაცია"
+
+#: src/libide/gui/ide-shortcuts-window.ui:460
+msgctxt "shortcut window"
+msgid "Move to next error in file"
+msgstr "ფაილში შემდეგ შეცდომაზე გადასვლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:467
+msgctxt "shortcut window"
+msgid "Move to previous error in file"
+msgstr "ფაილში წინა შეცდომაზე გადასვლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:474
+msgctxt "shortcut window"
+msgid "Move to previous edit location"
+msgstr "წინა ჩასწორების მდებარეობაზე გადასვლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:481
+msgctxt "shortcut window"
+msgid "Move to next edit location"
+msgstr "შემდეგი ჩასწორების მდებარეობაზე გადასვლა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:488
+msgctxt "shortcut window"
+msgid "Jump to definition of symbol"
+msgstr "სიმბოლოს აღწერაზე გადასვლა"
+
+#. FIXME: find references of what? it doesn't seem to work here, there's always no results.
+#: src/libide/gui/ide-shortcuts-window.ui:496
+msgctxt "shortcut window"
+msgid "Find references"
+msgstr "მიბმების პოვნა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:503
+msgctxt "shortcut window"
+msgid "Move viewport up within the file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:510
+msgctxt "shortcut window"
+msgid "Move viewport down within the file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:517
+msgctxt "shortcut window"
+msgid "Move viewport to end of file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:524
+msgctxt "shortcut window"
+msgid "Move viewport to beginning of file"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:531
+msgctxt "shortcut window"
+msgid "Move to matching bracket"
+msgstr ""
+
+#: src/libide/gui/ide-shortcuts-window.ui:539
+msgctxt "shortcut window"
+msgid "Selections"
+msgstr "მონიშნულები"
+
+#: src/libide/gui/ide-shortcuts-window.ui:544
+msgctxt "shortcut window"
+msgid "Select all"
+msgstr "ყველას მონიშვნა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:551
+msgctxt "shortcut window"
+msgid "Unselect all"
+msgstr "მონიშვნის ყველაფერზე მოხსნა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:559
+msgctxt "shortcut window"
+msgid "Build and Run"
+msgstr "აგება და გაშვება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:564
+msgctxt "shortcut window"
+msgid "Build"
+msgstr "აგება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:571
+msgctxt "shortcut window"
+msgid "Rebuild"
+msgstr "თავიდან აგება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:578
+msgctxt "shortcut window"
+msgid "Run"
+msgstr "გაშვება"
+
+#: src/libide/gui/ide-shortcuts-window.ui:585
+msgctxt "shortcut window"
+msgid "Profile"
+msgstr "პროფილი"
+
+#: src/libide/gui/ide-shortcuts-window.ui:596
+msgctxt "shortcut window"
+msgid "Terminal Shortcuts"
+msgstr "ტერმინალის მალსახმობები"
+
+#: src/libide/gui/ide-shortcuts-window.ui:668
+msgctxt "shortcut window"
+msgid "Search"
+msgstr "ძებნა"
+
+#: src/libide/gui/ide-shortcuts-window.ui:673
+msgctxt "shortcut window"
+msgid "Find text within terminal"
+msgstr "ტერმინალში ტექსტის ძებნა"
+
+#: src/libide/gui/ide-workbench.c:1406 src/plugins/editor/gtk/menus.ui:27
+msgid "Open File…"
+msgstr "ფაილის გახსნა…"
+
+#: src/libide/io/ide-pkcon-transfer.c:56
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "%u პაკეტის დაყენება"
+
+#. translators: %s is replaced with the error message
+#: src/libide/lsp/ide-lsp-client.c:1526
+#, c-format
+msgid "Failed to initialize language server: %s"
+msgstr ""
+
+#: src/libide/projects/ide-project.c:181
+msgid "Destination file must be within the project tree."
+msgstr ""
+
+#: src/libide/projects/ide-project.c:418
+msgid "File must be within the project tree."
+msgstr ""
+
+#: src/libide/projects/xml-reader.c:329
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr ""
+
+#: src/libide/sourceview/gtk/menus.ui:7
+msgid "_Go to Definition"
+msgstr "_აღწერაზე გადასვლა"
+
+#: src/libide/sourceview/gtk/menus.ui:13
+msgid "_Find references"
+msgstr "_ბმის პოვნა"
+
+#: src/libide/sourceview/gtk/menus.ui:21
+msgid "_Undo"
+msgstr "_დაბრუნება"
+
+#: src/libide/sourceview/gtk/menus.ui:26
+msgid "_Redo"
+msgstr "_გამეორება"
+
+#: src/libide/sourceview/gtk/menus.ui:33
+msgid "C_ut"
+msgstr "ამ_ოჭრა"
+
+#: src/libide/sourceview/gtk/menus.ui:39 src/libide/terminal/gtk/menus.ui:38
+msgid "_Copy"
+msgstr "კოპირება"
+
+#: src/libide/sourceview/gtk/menus.ui:44 src/libide/terminal/gtk/menus.ui:42
+msgid "_Paste"
+msgstr "_ჩასმა"
+
+#: src/libide/sourceview/gtk/menus.ui:49
+msgid "_Delete"
+msgstr "_წაშლა"
+
+#: src/libide/sourceview/gtk/menus.ui:58
+msgid "_Highlighting"
+msgstr "_გამოკვეთა"
+
+#: src/libide/sourceview/gtk/menus.ui:63
+msgid "_Selection"
+msgstr "მონიშნული"
+
+#: src/libide/sourceview/gtk/menus.ui:65 src/libide/terminal/gtk/menus.ui:50
+msgid "Select _All"
+msgstr "_ყველაფრის მონიშვნა"
+
+#: src/libide/sourceview/gtk/menus.ui:71 src/libide/terminal/gtk/menus.ui:55
+msgid "Select _None"
+msgstr "მონიშვნის _მოხსნა"
+
+#: src/libide/sourceview/gtk/menus.ui:78
+msgid "All _Upper Case"
+msgstr "დიდ ასოებში გადაყვანა"
+
+#: src/libide/sourceview/gtk/menus.ui:84
+msgid "All _Lower Case"
+msgstr "პატარა ასოებში გადაყვანა"
+
+#: src/libide/sourceview/gtk/menus.ui:90
+msgid "In_vert Case"
+msgstr "სიმბოლოების ზომის ინვერსია"
+
+#: src/libide/sourceview/gtk/menus.ui:96
+msgid "_Title Case"
+msgstr "სათაურის ზომა"
+
+#: src/libide/sourceview/gtk/menus.ui:103
+msgid "_Join Lines"
+msgstr "ხაზების შეერთება"
+
+#: src/libide/sourceview/gtk/menus.ui:108
+msgid "S_ort Lines"
+msgstr "ხაზების დალაგება"
+
+#: src/libide/sourceview/gtk/menus.ui:118
+msgid "_Zoom"
+msgstr "გადიდება"
+
+#: src/libide/sourceview/gtk/menus.ui:120
+msgid "Zoom _In"
+msgstr "გა_დიდება"
+
+#: src/libide/sourceview/gtk/menus.ui:125
+msgid "Zoom _Out"
+msgstr "და_პატარავება"
+
+#: src/libide/sourceview/gtk/menus.ui:131
+msgid "_Reset"
+msgstr "_საწყისი მნიშვნელობებზე დაბრუნება"
+
+#: src/libide/sourceview/ide-source-view.c:4443
+#, c-format
+msgid "Insert “%s”"
+msgstr "\"%s\"-ის ჩასმა"
+
+#: src/libide/sourceview/ide-source-view.c:4445
+#, c-format
+msgid "Replace “%s” with “%s”"
+msgstr "\"%s\"-ის \"%s\"-ით ჩანაცვლება"
+
+#: src/libide/sourceview/ide-source-view.c:4571
+msgid "Apply Fix-It"
+msgstr ""
+
+#: src/libide/sourceview/ide-source-view.c:5028
+msgid "Rename symbol"
+msgstr "სიმბოლოს სახელის გადარქმევა"
+
+#. translators: %s is the filename, then line number, column number. <> are pango markup
+#: src/libide/sourceview/ide-source-view.c:5407
+#, c-format
+msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
+msgstr ""
+
+#: src/libide/sourceview/ide-source-view.c:5433
+msgid "No references were found"
+msgstr ""
+
+#: src/libide/terminal/gtk/menus.ui:17 src/plugins/devhelp/gtk/menus.ui:11
+#: src/plugins/editor/gtk/menus.ui:188 src/plugins/greeter/gtk/menus.ui:15
+msgid "Close"
+msgstr "დახურვა"
+
+#: src/libide/terminal/gtk/menus.ui:25
+msgid "_Open Link"
+msgstr "_ბმულის გახსნა"
+
+#: src/libide/terminal/gtk/menus.ui:30
+msgid "_Copy Link Address"
+msgstr "დაა_კოპირე ბმულის მისამართი"
+
+#: src/libide/terminal/gtk/menus.ui:48
+msgid "Selection"
+msgstr "მონიშნული"
+
+#: src/libide/terminal/ide-terminal-launcher.c:339
+#: src/libide/terminal/ide-terminal-launcher.c:439
+msgid "Requested runtime is not installed"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-launcher.c:351
+#, c-format
+msgid "Failed to create shell within runtime “%s”"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-launcher.c:692
+msgid "Untitled Terminal"
+msgstr "უსახელო ტერმინალი"
+
+#: src/libide/terminal/ide-terminal-page-actions.c:268
+msgid "Save Terminal Content As"
+msgstr "ტერმინალის შემცველობის შენახვა, როგორც"
+
+#: src/libide/terminal/ide-terminal-page.c:125
+msgid "Failed to launch subprocess. You may need to rebuild your project."
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-page.c:130
+#: src/libide/terminal/ide-terminal-page.c:165
+#: src/libide/terminal/ide-terminal-page.c:336
+msgid "Untitled terminal"
+msgstr "უსახელო ტერმინალი"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:132
+msgid "Exited"
+msgstr "დასრულდა"
+
+#: src/libide/terminal/ide-terminal-page.c:152
+msgid "Subprocess launcher failed too quickly, will not respawn."
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-popover.ui:12
+msgid "Search runtimes"
+msgstr ""
+
+#: src/libide/terminal/ide-terminal-search.ui:152
+msgid "Regex"
+msgstr "რეგექსი"
+
+#: src/libide/terminal/ide-terminal-search.ui:180
+msgid "Match whole word"
+msgstr "მხოლოდ მთლიანი სიტყვის დამთხვევა"
+
+#: src/libide/terminal/ide-terminal-search.ui:194
+msgid "Wrap around"
+msgstr "სიტყვების გადატანა"
+
+#: src/libide/tree/ide-tree-node.c:1180 src/libide/tree/ide-tree-node.c:1565
+#: src/libide/tree/ide-tree-node.c:1594
+msgid "(Empty)"
+msgstr "(ცარიელი)"
+
+#: src/libide/tree/ide-tree-node.c:1563
+msgid "Loading…"
+msgstr "ჩატვირთვა…"
+
+#: src/libide/vcs/ide-directory-vcs.c:57
+msgid "unversioned"
+msgstr "ვერსიის გარეშე"
+
+#: src/main.c:148
+msgid "Run a new instance of Builder"
+msgstr "Builder-ის ახალი ასლის გაშვება"
+
+#: src/plugins/autotools/ide-autotools-makecache-stage.c:198
+msgid "Building cache…"
+msgstr "ქეშის აგება…"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
+msgid "Bootstrapping build system"
+msgstr "საწყისი მომზადების აგების სისტემა"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:264
+#: src/plugins/phpize/phpize_plugin.py:207
+msgid "Configuring project"
+msgstr "პროექტის მორგება"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
+#: src/plugins/buildstream/buildstream_plugin.py:48
+#: src/plugins/cargo/cargo_plugin.py:145
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
+#: src/plugins/gradle/gradle_plugin.py:99 src/plugins/maven/maven_plugin.py:89
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:293
+#: src/plugins/phpize/phpize_plugin.py:219
+msgid "Building project"
+msgstr "პროექტის აგება"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:365
+msgid "Caching build commands"
+msgstr "აგების ბრძანებების ქეშირება"
+
+#. translators: %s and %s are replaced with source file path and the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:157
+#, c-format
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgstr ""
+
+#. translators: %s is replaced with the source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:165
+#, c-format
+msgid "Beautifier plugin: error creating temporary config file for “%s”"
+msgstr ""
+
+#. translators: %s is replaced with the .ini source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:209
+#, c-format
+msgid "Beautifier plugin: Can’t read .ini file: %s"
+msgstr ""
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:257
+#, c-format
+msgid ""
+"Beautifier plugin: neither command nor command-pattern keys found: entry "
+"“%s” disabled"
+msgstr ""
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:267
+#, c-format
+msgid ""
+"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
+"disabled"
+msgstr ""
+
+#. translators: %s and %s are replaced with the config path and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:291
+#, c-format
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgstr ""
+
+#. translators: %s is replaced with the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:308
+#, c-format
+msgid ""
+"Beautifier plugin: command key out of possible values: entry “%s” disabled"
+msgstr ""
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:333
+#, c-format
+msgid ""
+"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
+"entry “%s” disabled"
+msgstr ""
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:365
+#, c-format
+msgid ""
+"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
+msgstr ""
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:407
+#, c-format
+msgid "Beautifier plugin: “%s”"
+msgstr ""
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:508
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
+#, c-format
+msgid "Beautifier plugin: %s"
+msgstr ""
+
+#. translators: %s is replaced with a path name
+#: src/plugins/beautifier/gb-beautifier-config.c:547
+#, c-format
+msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+msgid "beautifier program missing, you must install it: "
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
+msgid "Beautifier Plugin: the view is not a GtkSourceView"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
+msgid "Beautifier Plugin: no default beautifier found"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
+msgid "Beautifier Plugin: the buffer is not writable"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
+msgid "Beautifier Plugin: Nothing selected"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:250
+#, c-format
+msgid "No beautifier available for “%s”"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:252
+#, c-format
+msgid "No beautifier available"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:350
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:371
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:377
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:103
+msgid "Editing"
+msgstr "ჩასწორება"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:351
+msgid "Beautify the code"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:352
+msgid "Trigger the default entry"
+msgstr ""
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:381
+#, c-format
+msgid "Beautifier plugin: no valid entries, disabling: %s"
+msgstr ""
+
+#. translators: %s and %s are replaced with the temporary dir and the file path
+#: src/plugins/beautifier/gb-beautifier-helper.c:63
+#: src/plugins/beautifier/gb-beautifier-helper.c:88
+#: src/plugins/beautifier/gb-beautifier-helper.c:114
+#: src/plugins/beautifier/gb-beautifier-helper.c:135
+#, c-format
+msgid ""
+"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+"temporary directory: “%s”"
+msgstr ""
+
+#. translators: %s is replaced with the command error message
+#: src/plugins/beautifier/gb-beautifier-process.c:281
+#, c-format
+msgid ""
+"Beautifier plugin: command error output:\n"
+"%s"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-process.c:291
+msgid "Beautifier plugin: the command output is empty"
+msgstr ""
+
+#: src/plugins/beautifier/gb-beautifier-process.c:318
+msgid "Beautify plugin: the output is not a valid UTF-8 text"
+msgstr ""
+
+#: src/plugins/beautifier/gtk/menus.ui:9
+msgid "_Beautify"
+msgstr ""
+
+#. translators: %s is replaced with the name of the configuration
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:705
+#, c-format
+msgid "%s (Copy)"
+msgstr "%s (კოპირება)"
+
+#: src/plugins/buildui/gbp-buildui-config-surface.c:115
+msgid "No build configuration"
+msgstr "აგების კონფიგურაცის გარეშე"
+
+#: src/plugins/buildui/gbp-buildui-config-surface.c:116
+msgid "Select a build configuration from the sidebar to modify."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-config-surface.c:218
+msgid "Build Configurations"
+msgstr "აგების კონფიგურაციები"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
+msgid "All Runtimes"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
+msgid "Make _Active"
+msgstr "გააქტიურება"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
+msgid "Select this configuration as the active configuration."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
+msgid "_Duplicate"
+msgstr "_დუბლირება"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
+msgid ""
+"Duplicating the configuration allows making changes without modifying this "
+"configuration."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+msgid "_Remove"
+msgstr "_წაშლა"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
+msgid "Removes the configuration and cannot be undone."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:178
+msgid "Environment"
+msgstr "გარემო"
+
+#. Add groups to pages
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
+msgid "Overview"
+msgstr "მიმოხილვა"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:429
+msgid "Build Environment"
+msgstr "აგების გარემო"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
+msgid "Runtime Environment"
+msgstr ""
+
+#. Add description info
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:39
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
+#: src/plugins/ls/gbp-ls-page.ui:16
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
+msgid "Name"
+msgstr "სახელი"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
+msgid "Source Directory"
+msgstr "წყაროს საქაღალდე:"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
+msgid "Build System"
+msgstr "აგების სისტემა"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:467
+msgid "Install Prefix"
+msgstr "დაყენების პრეფიქსი"
+
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
+msgid "Configure Options"
+msgstr "პარამეტრების მორგება"
+
+#. Setup runtime selection
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:490
+msgid "Application Runtime"
+msgstr ""
+
+#. Setup toolchain selection
+#: src/plugins/buildui/gbp-buildui-config-view-addin.c:494
+msgid "Build Toolchain"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-log-pane.c:283
+#: src/plugins/editor/gtk/menus.ui:174 src/plugins/glade/gtk/menus.ui:8
+#: src/plugins/testui/gbp-test-output-panel.c:66
+msgid "_Save"
+msgstr "შენახვა"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.c:371
+msgid "Build Output"
+msgstr "აგების გამონატანი"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:40
+msgid "Clear build log"
+msgstr "აგების ჟურნალის გასუფთავება"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:57
+msgid "Cancel build"
+msgstr "აგების გაუქმება"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:74
+msgid "Save build log"
+msgstr "აგების ჟურნალის შენახვა"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:118
+msgid "Missing"
+msgstr "აკლია"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:48
+msgid "Update project dependencies"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:73
+msgid "Configure build preferences"
+msgstr "აგების პარამეტრების მორგება"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:138
+msgid "Build Profile"
+msgstr "აგების პროფილი"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:165
+msgid "Runtime"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:193
+msgid "Device"
+msgstr "მოწყობილობა"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:235
+msgid "There is a problem with the current build configuration."
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:273
+msgid "Build status"
+msgstr "აგების სტატუსი"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:305
+msgid "View build console contents"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:344
+msgid "Last build"
+msgstr "ბოლო აგება"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:373
+msgid "Build result"
+msgstr "აგების შედეგი"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:402
+#: src/plugins/buildui/gbp-buildui-pane.c:122
+#: src/plugins/buildui/gbp-buildui-pane.c:190
+#: src/plugins/buildui/gbp-buildui-pane.c:227
+#: src/plugins/buildui/gbp-buildui-pane.ui:161
+msgid "Errors"
+msgstr "შეცდომა"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:432
+#: src/plugins/buildui/gbp-buildui-pane.c:113
+#: src/plugins/buildui/gbp-buildui-pane.c:189
+#: src/plugins/buildui/gbp-buildui-pane.c:226
+#: src/plugins/buildui/gbp-buildui-pane.ui:140
+msgid "Warnings"
+msgstr "გაფრთხილებები"
+
+#. TRANSLATORS: valid values are True or False. DO NOT TRANSLATE False and True, otherwise it'll break the layout of the button. If the buttons in the build popover are too large because of translations, set to False to disable homogeneous sizing
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:482
+msgid "True"
+msgstr "სიმართლე"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:485
+#: src/plugins/buildui/gtk/menus.ui:21
+msgid "_Build"
+msgstr "აგება"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:499
+msgid "_Rebuild"
+msgstr "თავიდან აგება"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:513
+msgid "_Clean"
+msgstr "გასუფთავება"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:527
+msgid "_Export Bundle"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-pane.c:664
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:383
+msgid "Build Issues"
+msgstr "აგების პრობლემები"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:17
+msgid "Build status:"
+msgstr "აგების სტატუსი:"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:34
+msgid "Time completed:"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:51
+#: src/plugins/buildui/gbp-buildui-pane.ui:66
+msgid "—"
+msgstr "—"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:82
+msgid "Build Details"
+msgstr "აგების დეტალები"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:96
+msgid "Build pipeline is empty"
+msgstr ""
+
+#: src/plugins/buildui/gbp-buildui-tree-addin.c:163
+msgid "Build Targets"
+msgstr "აგების სამიზნეები"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:392
+#: src/plugins/buildui/gtk/menus.ui:8
+msgid "Build Preferences"
+msgstr "აგების პარამეტრები"
+
+#: src/plugins/buildui/gtk/menus.ui:27
+msgid "R_ebuild"
+msgstr "თავიდან აგება"
+
+#: src/plugins/buildui/gtk/menus.ui:33
+msgid "_Run"
+msgstr "_გაშვება"
+
+#: src/plugins/buildui/gtk/menus.ui:38
+msgid "R_un With…"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:68
+msgid "Clang"
+msgstr "Clang"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:69
+msgid "Show errors and warnings provided by Clang"
+msgstr ""
+
+#. translators: keywords used when searching for preferences
+#: src/plugins/clang/ide-clang-preferences-addin.c:71
+msgid "clang diagnostics warnings errors"
+msgstr "clan-ის დიაგნოსტიკა, გაფრთხილებები, შეცდომები"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:81
+msgid "Suggest completions using Clang"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:82
+msgid "Use Clang to suggest completions for C and C++ languages"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:86
+msgid "Clang Options"
+msgstr "Clang-ის პარამეტრები"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:95
+msgid "Complete Parenthesis"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:96
+msgid "Include parenthesis when completing clang proposals"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:107
+msgid "Complete Parameters"
+msgstr "სრული პარამეტრები"
+
+#: src/plugins/clang/ide-clang-preferences-addin.c:108
+msgid "Include parameters and types when completing clang proposals"
+msgstr ""
+
+#: src/plugins/clang/ide-clang-symbol-node.c:55
+msgid "anonymous"
+msgstr "ანონიმური"
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
+msgid "Complete parentheses"
+msgstr ""
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
+msgid "If parentheses should be included when completing."
+msgstr ""
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
+msgid "Complete parameters"
+msgstr "სრული პარამეტრები"
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
+msgid ""
+"If parameters should be included when completing. Requires complete-"
+"parentheses."
+msgstr ""
+
+#: src/plugins/cmake/gbp-cmake-build-system.c:423
+msgid "CMake"
+msgstr "CMake"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:206
+msgid "Configure project"
+msgstr "პროექტის მორგება"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
+#: src/plugins/maven/maven_plugin.py:100
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:303
+#: src/plugins/phpize/phpize_plugin.py:229
+msgid "Installing project"
+msgstr "პროექტის დაყენება"
+
+#: src/plugins/cmake/gbp-cmake-toolchain.c:220
+#, c-format
+msgid "%s (CMake)"
+msgstr "%s (CMake)"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:53
+msgid "Create or update code-index for project file"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:54
+msgid "PROJECT_FILE"
+msgstr "პროექტის_ფაილი"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:152
+#, c-format
+msgid "Failed to load flags for plan: %s"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:195
+#, c-format
+msgid "Failed to cull index plan: %s"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:230
+#, c-format
+msgid "Failed to populate index plan: %s"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:265
+#, c-format
+msgid "Failed to load project: %s"
+msgstr ""
+
+#. Now we can drop our paused state
+#: src/plugins/code-index/gbp-code-index-service.c:209
+#: src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/ctags/ide-ctags-service.c:998
+msgid "Indexing Source Code"
+msgstr ""
+
+#: src/plugins/code-index/gbp-code-index-service.c:210
+msgid "Search, diagnostics, and autocompletion may be limited until complete."
+msgstr ""
+
+#. translators: "Declaration" is describing a function that is defined in a header
+#. *              file (.h) rather than a source file (.c).
+#.
+#: src/plugins/code-index/ide-code-index-index.c:343
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
+msgid "Declaration"
+msgstr "დეკლარაცია"
+
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#, c-format
+msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr ""
+
+#: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
+msgid "Colors"
+msgstr "ფერები"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+msgid "Palette name"
+msgstr "პალიტრის სახელი"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
+msgid "Enter a new name for the palette"
+msgstr ""
+
+#. translators: %s is replaced with the name of the color palette.
+#: src/plugins/color-picker/gb-color-picker-prefs.c:88
+#, c-format
+msgid "Save changes to palette “%s” before closing?"
+msgstr ""
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:96
+#: src/plugins/editor/gbp-confirm-save-dialog.c:197
+msgid "Close without Saving"
+msgstr "დახურვა შენახვის გარეშე"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:98
+msgid "Save As…"
+msgstr "შენახვა, როგორც…"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:206
+msgid "Load palette"
+msgstr "პალიტრის ჩატვირთვა"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:233
+msgid "Save palette"
+msgstr "პალიტრის შენახვა"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:706
+msgid "All files"
+msgstr "ყველა ფაილი"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:710
+msgid "All supported palettes formats"
+msgstr "პალიტრის ყველა მხარდაჭერილი ფორმატი"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:715
+msgid "GIMP palette"
+msgstr "GIMP-ის პალიტრა"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:719
+msgid "GNOME Builder palette"
+msgstr "GNOME Builder palette-ის პალიტრა"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+msgid "HSV visibility"
+msgstr "HSV-ის ხილვადობა"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+msgid "If the HSV components are visible."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "LAB visibility"
+msgstr "LAB-ის ხილვადობა"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+msgid "If the LAB components are visible."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "RGB visibility"
+msgstr "RGB-ის ხილვადობა"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+msgid "If the RGB components are visible."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+msgid "RGB unit"
+msgstr "RGB ერთეული"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+msgid "Selected palette ID"
+msgstr "პალიტრის არჩეული ID"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+msgid "Color strings visibility"
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+msgid "The visible color strings."
+msgstr ""
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+msgid "Color filter"
+msgstr "ფერის ფილტრი"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr "ფერის კომპონენტები"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "ხილვადობა:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
+msgid "HSV"
+msgstr "HSV"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
+msgid "Hue Saturation Value"
+msgstr "ტონის და გაჯერებულობის მნიშვნელობა"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "წითელი მწვანე ლურჯი"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "ერთეულები:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "პროცენტი"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "ფილტრები:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or “None”."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "არცერთი"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:615
+msgid "Palette view mode:"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "სია"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "ჩატვირთვა"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-preview.ui:45
+msgid "No selected palettes"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/color-picker.ui:62
+msgid "Try loading or generating a palette using the menu"
+msgstr ""
+
+#: src/plugins/color-picker/gtk/menus.ui:7
+msgid "Highlight _colors"
+msgstr ""
+
+#: src/plugins/command-bar/gbp-command-bar-shortcuts.c:36
+msgid "Workspace Shortcuts"
+msgstr ""
+
+#: src/plugins/command-bar/gbp-command-bar-shortcuts.c:37
+msgid "Command Bar"
+msgstr "ბრძანებების ველი"
+
+#: src/plugins/command-bar/gbp-command-bar-shortcuts.c:38
+msgid "Show the workspace command bar"
+msgstr ""
+
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:372
+msgid "Comment the code"
+msgstr "კოდის დაკომენტარება"
+
+#: src/plugins/comment-code/gbp-comment-code-editor-page-addin.c:378
+msgid "Uncomment the code"
+msgstr "კოდის განკომენტარება"
+
+#: src/plugins/comment-code/gtk/menus.ui:9
+msgid "_Comment code"
+msgstr "კოდის დაკომენტარება"
+
+#: src/plugins/comment-code/gtk/menus.ui:15
+msgid "Unco_mment code"
+msgstr "Unco_mment code"
+
+#: src/plugins/copyright/copyright_plugin.py:114
+msgid "Update Copyright"
+msgstr "ლიცენზიის განახლება"
+
+#: src/plugins/copyright/copyright_plugin.py:115
+msgid ""
+"When saving a file Builder will automatically update copyright information "
+"for you"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/copyright/copyright_plugin.py:117
+msgid "update copyright save"
+msgstr ""
+
+#: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
+msgid "Update Copyright before Saving"
+msgstr ""
+
+#: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:6
+msgid "Updates the copyright for the user before saving to disk."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-application-addin.c:48
+msgid "Display the project creation guide"
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:223
+msgid ""
+"Characters were used which might cause technical issues as a project name"
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:226
+#: src/plugins/create-project/gbp-create-project-surface.ui:146
+msgid "Your project will be created within a new child directory."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:232
+msgid "Directory already exists with that name"
+msgstr ""
+
+#. translators: %s is replaced with a short-form file-system path to the project
+#: src/plugins/create-project/gbp-create-project-surface.c:250
+#, c-format
+msgid "Your project will be created within %s."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.c:301
+msgid "Application ID is not valid."
+msgstr "აპლიკაციის ID არასწორია."
+
+#: src/plugins/create-project/gbp-create-project-surface.c:641
+msgctxt "title"
+msgid "Start New Project"
+msgstr "ახალი პროექტი"
+
+#: src/plugins/create-project/gbp-create-project-surface.c:810
+msgid "A failure occurred while initializing version control"
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:28
+msgid "Project Name"
+msgstr "პროექტის სახელი"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:55
+msgid ""
+"Unique name that is used for your project’s folder and other technical "
+"resources. Should be in lower case without spaces and may not start with a "
+"number."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:73
+msgid "Application ID"
+msgstr "აპლიკაციის ID"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:100
+msgid ""
+"The Application ID is a reverse domain-name identifier used to uniquely "
+"identify your application such as “org.gnome.Builder” and may not contain "
+"dashes."
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:118
+msgid "Project Location"
+msgstr "პროექტის მდებარეობა"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:135
+msgid "Select Project Directory"
+msgstr "აირჩიეთ პროექტის საქაღალდე"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:165
+msgid "Language"
+msgstr "ენა"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:188
+msgid "License"
+msgstr "ლიცენზია"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:203
+msgid "GPLv3+"
+msgstr "GPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:204
+msgid "LGPLv3+"
+msgstr "LGPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:205
+msgid "AGPLv3+"
+msgstr "AGPLv3+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:206
+msgid "MIT/X11"
+msgstr "MIT/X11"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:207
+msgid "Apache 2.0"
+msgstr "Apache 2.0"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:208
+msgid "GPLv2+"
+msgstr "GPLv2+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:209
+msgid "LGPLv2.1+"
+msgstr "LGPLv2.1+"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:210
+msgid "No license"
+msgstr "ლიცენზიის გარეშე"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:243
+msgid "Uses the Git version control system"
+msgstr ""
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:328
+msgid "_Create Project"
+msgstr "პროექტის შექმნა"
+
+#: src/plugins/create-project/gbp-create-project-surface.ui:358
+msgid "Select a Template"
+msgstr "აირჩიეთ შაბლონი"
+
+#: src/plugins/create-project/gbp-create-project-workspace-addin.c:50
+msgid "Start _New Project…"
+msgstr "ახალი პროექტის დაწყება…"
+
+#: src/plugins/create-project/gtk/menus.ui:7
+#: src/plugins/create-project/gtk/menus.ui:18
+#: src/plugins/create-project/gtk/menus.ui:29
+msgid "_Start New Project…"
+msgstr "ახალი პროექტის დაწყება…"
+
+#: src/plugins/ctags/ide-ctags-preferences-addin.c:53
+msgid "Suggest completions using Ctags"
+msgstr ""
+
+#: src/plugins/ctags/ide-ctags-preferences-addin.c:54
+msgid "Use Ctags to suggest completions for a variety of languages"
+msgstr ""
+
+#: src/plugins/ctags/ide-ctags-service.c:132
+msgid ""
+"Search, autocompletion, and symbol information may be limited until Ctags "
+"indexing is complete."
+msgstr ""
+
+#: src/plugins/ctags/ide-ctags-service.c:955
+msgid "Indexing Source Code (Paused)"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:10
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:404
+msgid "Run with Debugger"
+msgstr ""
+
+#: src/plugins/debuggerui/gtk/menus.ui:20
+msgid "Run with _Debugger"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
+msgid "ID"
+msgstr "ID"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:34
+msgid "File"
+msgstr "ფაილი"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:46
+msgid "Line"
+msgstr "ხაზი"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:58
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:76
+msgid "Function"
+msgstr "ფუნქცია"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:70
+msgid "Address"
+msgstr "მისამართი"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:81
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:28
+msgid "Type"
+msgstr "ტიპი"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:91
+msgid "Hits"
+msgstr "მინიშნებები"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:102
+msgid "Expression"
+msgstr "გამოსახულება"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:17
+msgid "Interrupt the program"
+msgstr "პროგრამის შეწყვეტა"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:30
+msgid "Continue running the program"
+msgstr "პროგრამის შესრულების გაგრძელება"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:71
+msgid "Execute the current line, stepping into any function calls"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:84
+msgid "Execute the current line, stepping over any function calls"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:97
+msgid "Run until the end of the function"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
+msgid "Disassembly"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:150
+msgid "Failed to start the debugger"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:316
+msgid "Threads"
+msgstr "ნაკადები"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:350
+msgid "Libraries"
+msgstr "ბიბლიოთეკები"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:358
+msgid "Registers"
+msgstr "რეგსტრები"
+
+#: src/plugins/debuggerui/ide-debugger-editor-addin.c:365
+msgid "Console"
+msgstr "კონსოლი"
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
+msgid "No break"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
+msgid "Breakpoint"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
+msgid "Countpoint"
+msgstr ""
+
+#: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
+msgid "Library"
+msgstr "ბიბლიოთეკა"
+
+#: src/plugins/debuggerui/ide-debugger-libraries-view.ui:26
+msgid "Address Range"
+msgstr "მისამართის დიაპაზონი"
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.c:314
+msgid "Locals"
+msgstr "ლოკალურები"
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.c:369
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:90
+msgid "Parameters"
+msgstr "პარამეტრები"
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:16
+msgid "Variable"
+msgstr "ცვლადი"
+
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
+msgid "Register"
+msgstr "რეგისტრაცია"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:19
+msgid "Group"
+msgstr "ჯგუფი"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:42
+msgid "Thread"
+msgstr "ნაკადი"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:64
+#: src/plugins/editor/gtk/menus.ui:120
+msgid "Frame"
+msgstr "კადრი"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:88
+msgid "Arguments"
+msgstr "არგუმენტები"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:101
+#: src/plugins/grep/gbp-grep-panel.c:749
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
+msgid "Location"
+msgstr "მდებარეობა"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:112
+msgid "Binary"
+msgstr "ბინარული"
+
+#: src/plugins/devhelp/gbp-devhelp-hover-provider.c:131
+msgid "Devhelp"
+msgstr "Devhelp"
+
+#: src/plugins/devhelp/gbp-devhelp-menu-button.ui:25
+msgid "_Select Documentation…"
+msgstr "აირჩიეთ დოკუმენტაცია…"
+
+#: src/plugins/devhelp/gbp-devhelp-page.c:381
+#: src/plugins/devhelp/gtk/menus.ui:5
+msgid "Documentation"
+msgstr "დოკუმენტაცია"
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:29
+msgid "Reveal search bar with Ctrl+F"
+msgstr ""
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:48
+msgid "Previous search result (Ctrl+Shift+G)"
+msgstr ""
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:68
+msgid "Next search result (Ctrl+G)"
+msgstr ""
+
+#: src/plugins/devhelp/gbp-devhelp-search.ui:96
+msgid "Close search bar (Escape key)"
+msgstr ""
+
+#: src/plugins/devhelp/gtk/menus.ui:7 src/plugins/editor/gtk/menus.ui:157
+msgid "Print…"
+msgstr "ბეჭდვა…"
+
+#: src/plugins/devhelp/gtk/menus.ui:21
+msgid "New _Documentation Page"
+msgstr ""
+
+#: src/plugins/dspy/gbp-dspy-application-addin.c:47
+msgid "Display D-Bus inspector"
+msgstr ""
+
+#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
+msgid "D-Bus Inspector…"
+msgstr ""
+
+#. translators: %s is replaced with the address of the D-Bus bus
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:81
+#, c-format
+msgid "Connected to “%s”"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:255
+msgid "Session"
+msgstr "სესია"
+
+#: src/plugins/dspy/libdspy/dspy-connection-button.c:257
+msgid "Other"
+msgstr "სხვები"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.c:192
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:130
+msgid "Execute"
+msgstr "გაშვება"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:12
+#: src/plugins/dspy/libdspy/dspy-tree-view.c:314
+msgid "Object Path"
+msgstr "ობიექტის ბილიკი"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:38
+msgid "Interface"
+msgstr "ინტერფეისი"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:64
+msgid "Method"
+msgstr "მეთოდი"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:145
+msgid "Result"
+msgstr "შედეგი"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:186
+#: src/plugins/glade/gtk/menus.ui:27
+msgid "Copy"
+msgstr "დააკოპირე"
+
+#: src/plugins/dspy/libdspy/dspy-method-view.ui:198
+msgid "Elapsed Time"
+msgstr "გასული დრო"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:14
+msgid "Bus Address"
+msgstr "მატარებლის მისამართი"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:64
+msgid "Owner"
+msgstr "მფლობელი"
+
+#: src/plugins/dspy/libdspy/dspy-name-marquee.ui:89
+msgid "Process ID"
+msgstr "პროცესის ID"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+#, c-format
+msgid "%s: %s"
+msgstr "%s: %s"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "Activatable"
+msgstr "გააქტიურებადი"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:80
+msgid "Yes"
+msgstr "დიახ"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:82
+msgid "No"
+msgstr "არა"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+#, c-format
+msgid "%s: %u"
+msgstr "%s: %u"
+
+#: src/plugins/dspy/libdspy/dspy-name-row.c:87
+msgid "PID"
+msgstr "PID"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:409
+msgid "read/write"
+msgstr "ჩაწერადი"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:411
+msgid "write-only"
+msgstr "მხოლოდ-ჩაწერადი"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:413
+msgid "read-only"
+msgstr "მხოლოდ-წაკითხვადი"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:528
+msgid "Interfaces"
+msgstr "ინტერფეისები"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:531
+msgid "Methods"
+msgstr "მეთოდები"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:537
+msgid "Properties"
+msgstr "პარამეტრები"
+
+#: src/plugins/dspy/libdspy/dspy-node.c:553
+#: src/plugins/glade/gbp-glade-editor-addin.c:79
+msgid "Signals"
+msgstr "სიგნალები"
+
+#. translators: %s is replaced with the simple D-Bus type string
+#: src/plugins/dspy/libdspy/dspy-signature.c:79
+#, c-format
+msgid "Array of [%s]"
+msgstr "[%s]-ის მასივი"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:153
+msgid "Access Denied by Peer"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:155
+msgid "Authentication Failed"
+msgstr "ავთენტიკაციის შეცდომა"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:157
+msgid "Operation Timed Out"
+msgstr "ოპერაციის ვადა გავიდა"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:159
+msgid "Lost Connection to Bus"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:161
+msgid "D-Bus Connection Failed"
+msgstr "D-Bus-თან კავშირის შეცდომა"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:460
+msgid "Connect"
+msgstr "დაკავშირება"
+
+#: src/plugins/dspy/libdspy/dspy-view.c:461
+msgid "Provide the address of the message bus"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.c:463
+#: src/plugins/dspy/libdspy/gtk/menus.ui:5
+msgid "Connect to Other Bus"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:45
+msgid "Search Bus Names"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:59
+msgid "Bus Names"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:123
+msgid "Select a Bus Name"
+msgstr ""
+
+#: src/plugins/dspy/libdspy/dspy-view.ui:124
+msgid "Select a bus name to introspect the peer."
+msgstr ""
+
+#: src/plugins/editor/gbp-confirm-save-dialog.c:260
+msgid "There is a file with unsaved changes. Save changes before closing?"
+msgid_plural ""
+"There are files with unsaved changes. Save changes before closing?"
+msgstr[0] ""
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:27
+msgid "Select the files to save:"
+msgstr ""
+
+#: src/plugins/editor/gbp-confirm-save-dialog.ui:80
+msgid "If you close without saving, all your changes will be permanently lost."
+msgstr ""
+
+#: src/plugins/editor/gbp-editor-application-addin.c:138
+msgid "Use minimal editor interface"
+msgstr ""
+
+#. translators: the user selected a number outside the value range for the document.
+#: src/plugins/editor/gbp-editor-frame-controls.c:190
+#, c-format
+msgid "Provide a number between 1 and %u"
+msgstr ""
+
+#: src/plugins/editor/gbp-editor-frame-controls.ui:23
+msgid "Go to line number"
+msgstr "ხაზის ნომერზე გადასვლა"
+
+#: src/plugins/editor/gbp-editor-frame-controls.ui:82
+msgid "Go to Line"
+msgstr "ხაზზე გადასვლა"
+
+#: src/plugins/editor/gbp-editor-frame-controls.ui:83
+msgid "_Go"
+msgstr "გადასვლა"
+
+#: src/plugins/editor/gtk/menus.ui:8 src/plugins/editor/gtk/menus.ui:18
+msgid "New Editor Workspace…"
+msgstr "რედაქტორის ახალი სამუშაო მაგიდა"
+
+#: src/plugins/editor/gtk/menus.ui:102
+msgid "New _File"
+msgstr "ახალი ფაილი"
+
+#: src/plugins/editor/gtk/menus.ui:122
+msgid "Move Page Left"
+msgstr "გვერდის მარცხნივ გაწევა"
+
+#: src/plugins/editor/gtk/menus.ui:126
+msgid "Move Page Right"
+msgstr "გვერდის მარჯვნივ გაწევა"
+
+#: src/plugins/editor/gtk/menus.ui:131
+msgid "Close Frame"
+msgstr "ჩარჩოს დახურვა"
+
+#: src/plugins/editor/gtk/menus.ui:138
+msgid "Document"
+msgstr "დოკუმენტი"
+
+#: src/plugins/editor/gtk/menus.ui:141 src/plugins/terminal/gtk/menus.ui:34
+msgid "Open in New Frame"
+msgstr "ახალი ჩარჩოში გახსნა"
+
+#: src/plugins/editor/gtk/menus.ui:147
+msgid "Open in New Workspace"
+msgstr "ახალ სამუშაო მაგიდაზე გახსნა"
+
+#: src/plugins/editor/gtk/menus.ui:151 src/plugins/terminal/gtk/menus.ui:39
+msgid "Split"
+msgstr "გაყოფა"
+
+#: src/plugins/editor/gtk/menus.ui:179
+msgid "Save _As"
+msgstr "_შენახვა, როგორც"
+
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+msgid "No file was provided."
+msgstr "ფაილები მითითებული არაა."
+
+#: src/plugins/emacs/gbp-emacs-preferences-addin.c:52
+msgid "Emacs"
+msgstr "Emacs"
+
+#: src/plugins/emacs/gbp-emacs-preferences-addin.c:53
+msgid "Emulates the Emacs text editor"
+msgstr ""
+
+#: src/plugins/eslint/eslint_plugin.py:97
+msgid "ESlint"
+msgstr "ESlint"
+
+#: src/plugins/eslint/eslint_plugin.py:98
+msgid "Enable the use of ESLint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/eslint/eslint_plugin.py:100
+msgid "eslint javascript lint code execute execution"
+msgstr ""
+
+#: src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:5
+msgid "Enable ESLint"
+msgstr "ESLint-ის ჩართვა"
+
+#: src/plugins/eslint/org.gnome.builder.plugins.eslint.gschema.xml:6
+msgid ""
+"Enable the use of eslint to find additional diagnostics in JavaScript files. "
+"This may result in the execution of code in your project."
+msgstr ""
+
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+msgid "Installation failed"
+msgstr "დაყენების შეცდოა"
+
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+msgid "Installation complete"
+msgstr "ინსტალაცია დასრულებულია"
+
+#: src/plugins/flatpak/gbp-flatpak-client.c:454
+#: src/plugins/git/gbp-git-client.c:328
+msgid "The client has been closed"
+msgstr "კლიენტი დაიხურა"
+
+#. translators: %s is replaced with the name of the flatpak manifest
+#: src/plugins/flatpak/gbp-flatpak-clone-widget.c:144
+#, c-format
+msgid "Cloning project %s"
+msgstr "პროექტის კლონირება: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-clone-widget.ui:33
+msgid "Downloading application sources…"
+msgstr "აპლიკაციის წყაროების გადმოწერა…"
+
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:680
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Flatpak-ის მანისფესტის წაშლის შეცდომა: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
+msgid "Network is not available, skipping downloads"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
+msgid "Install or Update SDK?"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+msgid "_Install"
+msgstr "_დაყენება"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:49
+msgid ""
+"Builder needs to install the following software development kits to build "
+"your project."
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:93
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
+msgid "Architecture"
+msgstr "არქიტექტურა"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:179
+msgid "Creating flatpak workspace"
+msgstr "Flatpak-ის სამუშაო გარემოს შექმნა"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:381
+msgid "Preparing build directory"
+msgstr "აგების საქაღალდის მომზადება"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:431
+msgid "Downloading dependencies"
+msgstr "დამოკიდებულებების გადმოწერა"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:510
+msgid "Building dependencies"
+msgstr "დამოკიდებულებების აგება"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:561
+msgid "Finalizing flatpak build"
+msgstr "Flatpak-ის აგების დასრულება"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:606
+msgid "Exporting staging directory"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:691
+msgid "Creating flatpak bundle"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:788
+#, c-format
+msgid "%s <b>%s</b>"
+msgstr "%s <b>%s</b>"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:790
+#, c-format
+msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime.c:792
+msgid "Flatpak"
+msgstr "Flat pak"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
+msgid "Installing Necessary SDKs"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
+msgid ""
+"Builder is installing Software Development Kits necessary for building your "
+"application."
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
+#, c-format
+msgid "Failed to update SDKs: %s"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
+msgid "Updating Necessary SDKs"
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
+msgid ""
+"Builder is updating Software Development Kits necessary for building your "
+"application."
+msgstr ""
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
+msgid "Updating SDK Runtime"
+msgstr ""
+
+#: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
+#, c-format
+msgid "GCC %s Cross-Compiler (System)"
+msgstr ""
+
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
+#, c-format
+msgid "No repository to access file contents"
+msgstr ""
+
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
+#, c-format
+msgid "No contents have been set to diff"
+msgstr ""
+
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
+#: src/plugins/git/daemon/ipc-git-util.h:33
+#, c-format
+msgid "The operation failed. The original error was \"%s\""
+msgstr ""
+
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#, c-format
+msgid "The operation has been canceled"
+msgstr ""
+
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#, c-format
+msgid ""
+"Builder failed to provide appropriate credentials when cloning the "
+"repository."
+msgstr ""
+
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:608
+#, c-format
+msgid "Cannot set AMEND and GPG_SIGN flags"
+msgstr ""
+
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:617
+#, c-format
+msgid "Cannot sign commit without GPG_KEY_ID"
+msgstr ""
+
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:403
+#, c-format
+msgid "Cannot monitor files outside the working directory"
+msgstr ""
+
+#: src/plugins/git/gbp-git-dependency-updater.c:92
+msgid "Git version control is not in use"
+msgstr ""
+
+#: src/plugins/git/gbp-git-dependency-updater.c:100
+msgid "Updating Git Submodules"
+msgstr ""
+
+#: src/plugins/git/gbp-git-submodule-stage.c:136
+msgid "Network is not available, skipping submodule update"
+msgstr ""
+
+#: src/plugins/git/gbp-git-submodule-stage.c:208
+msgid "Initialize git submodules"
+msgstr "Git-ის ქვემოდულების ინიციალიზაცია"
+
+#: src/plugins/git/gbp-git-vcs.c:206
+msgid "Pushed."
+msgstr "პუში წარმატებულია."
+
+#: src/plugins/git/gbp-git-vcs.c:244
+#, c-format
+msgid "Pushing ref “%s”"
+msgstr ""
+
+#: src/plugins/git/gbp-git-vcs.c:508
+msgid "Directory is not within repository"
+msgstr "საქაღალდე რეპოზიტორიაში არაა"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:133
+#, c-format
+msgid "A repository could not be found at “%s”."
+msgstr ""
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#, c-format
+msgid "The protocol “%s” is not supported."
+msgstr ""
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:224
+msgid "Cloning repository"
+msgstr "რეპოზიტორიის კლონირება"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:240
+msgid "A valid Git URL is required"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:92
+msgid "Select Widget…"
+msgstr "აირჩიეთ ვიჯეტი…"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:360
+msgid "_Select Widget…"
+msgstr "_აირჩიეთ ვიჯეტი…"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:457
+msgid "_View Design"
+msgstr "დიზაინის ნახვა"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:459
+msgid "Switch to UI designer"
+msgstr "UI-ის დიზაინერზე გადართვა"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:467
+msgid "_View Source"
+msgstr "წყაროს ნახვა"
+
+#: src/plugins/glade/gbp-glade-frame-addin.c:469
+msgid "Switch to source code editor"
+msgstr "საწყისი კოდის რედაქტორზე გადართვა"
+
+#. translators: %s is replaced with the specific error message
+#: src/plugins/glade/gbp-glade-page-actions.c:42
+#, c-format
+msgid "Failed to save glade document: %s"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:36
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:42
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:48
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:54
+msgid "Glade shortcuts"
+msgstr "Glade-ის მალსახმობები"
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:37
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:43
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:49
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:55
+msgid "Designer"
+msgstr "დიზაინერი"
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:38
+msgid "Save the interface design"
+msgstr "ინტერფეისის დიზაინის შენახვა"
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:44
+msgid "Preview the interface design"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:50
+msgid "Undo the last command"
+msgstr "ბოლო ბრძანების გაუქმება"
+
+#: src/plugins/glade/gbp-glade-page-shortcuts.c:56
+msgid "Redo the next command"
+msgstr "შემდეგი ბრძანების დაბრუნება"
+
+#: src/plugins/glade/gbp-glade-page.c:494
+msgid "Switch to selection mode"
+msgstr "არჩევის რეჟიმზე გადართვა"
+
+#: src/plugins/glade/gbp-glade-page.c:495
+msgid "Switch to drag-resize mode"
+msgstr "გადათრევა/ზომის შეცვლის რეჟიმზე გადართვა"
+
+#: src/plugins/glade/gbp-glade-page.c:496
+msgid "Switch to margin editor"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-page.c:497
+msgid "Switch to alignment editor"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-page.c:502
+msgid "Unnamed Glade project"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-properties.c:69
+msgid "Unnamed Glade Project"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-properties.ui:36
+msgid "Widget specific properties"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-properties.ui:46
+msgid "Container child properties"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-properties.ui:56
+msgid "Styling, alignment, and other common properties"
+msgstr ""
+
+#: src/plugins/glade/gbp-glade-properties.ui:66
+msgid "Accessibility properties"
+msgstr "წვდომადობის თვისებები"
+
+#: src/plugins/glade/gtk/menus.ui:5
+msgid "Glade"
+msgstr "Glade"
+
+#: src/plugins/glade/gtk/menus.ui:15
+msgid "Open _Preview"
+msgstr "გადახედვის გახსნა"
+
+#: src/plugins/glade/gtk/menus.ui:22
+msgid "Cut"
+msgstr "ამოჭრა"
+
+#: src/plugins/glade/gtk/menus.ui:32
+msgid "Paste"
+msgstr "ჩასმა"
+
+#: src/plugins/glade/gtk/menus.ui:37
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
+msgid "Delete"
+msgstr "წაშლა"
+
+#: src/plugins/glade/gtk/menus.ui:44
+msgid "Undo"
+msgstr "დაბრუნება"
+
+#: src/plugins/glade/gtk/menus.ui:49
+msgid "Redo"
+msgstr "ბრძანების აღდგენა"
+
+#: src/plugins/glade/gtk/menus.ui:61
+msgid "UI Designer"
+msgstr "UI-ის დიზაინერი"
+
+#: src/plugins/glade/gtk/menus.ui:75
+msgid "_UI Designer"
+msgstr "_UI-ის დიზაინერი"
+
+#: src/plugins/gnome-code-assistance/ide-gca-diagnostic-provider.c:367
+msgid "Code assistance requires a local file."
+msgstr ""
+
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:64
+msgid "Pylint"
+msgstr "Pylint"
+
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:65
+msgid "Enable the use of pylint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/gnome-code-assistance/ide-gca-preferences-addin.c:67
+msgid "pylint python lint code execute execution"
+msgstr ""
+
+#: src/plugins/gnome-code-assistance/ide-gca-service.c:183
+msgid "No language specified"
+msgstr ""
+
+#: src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:5
+msgid "Enable Pylint"
+msgstr "Pylint-ის ჩართვა"
+
+#: src/plugins/gnome-code-assistance/org.gnome.builder.gnome-code-assistance.gschema.xml:6
+msgid ""
+"Enable the use of pylint to find additional diagnostics in Python programs. "
+"This may result in the execution of code in your project."
+msgstr ""
+
+#: src/plugins/gradle/gradle_plugin.py:85
+msgid "Gradle Wrapper"
+msgstr ""
+
+#: src/plugins/greeter/gbp-greeter-application-addin.c:133
+msgid "Display a new greeter window"
+msgstr ""
+
+#: src/plugins/greeter/gbp-greeter-application-addin.c:141
+msgid "Begin cloning project from URI"
+msgstr ""
+
+#: src/plugins/greeter/gtk/menus.ui:47
+msgid "Quit"
+msgstr "გასვლა"
+
+#: src/plugins/greeter/gtk/menus.ui:66 src/plugins/greeter/gtk/menus.ui:82
+msgid "Open a _Project…"
+msgstr "პროექტის გახსნა…"
+
+#: src/plugins/grep/gbp-grep-editor-addin.c:57
+msgid "Show Find in Project panel"
+msgstr "პროექტის პანელზე ძებნის ჩვენება"
+
+#: src/plugins/grep/gbp-grep-panel.c:761
+msgid "Match"
+msgstr "დამთხვევა"
+
+#: src/plugins/grep/gbp-grep-panel.c:773
+msgid "Path"
+msgstr "კონტური"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:836
+#, c-format
+msgid "_Find in %s"
+msgstr "%s-ში მოძებნა"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:838
+#, c-format
+msgid "_Replace in %s"
+msgstr "%s-ში ჩანაცვლება"
+
+#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
+msgid "Find in Files"
+msgstr "ფაილებში ძებნა"
+
+#: src/plugins/grep/gbp-grep-panel.ui:50
+msgid "Find and Replace"
+msgstr "ძებნა და ჩანაცვლება"
+
+#: src/plugins/grep/gbp-grep-panel.ui:72
+msgid "R_ecursive"
+msgstr "რეკურსიული"
+
+#: src/plugins/grep/gbp-grep-panel.ui:80
+msgid "Match _Case"
+msgstr "დიდი და პატარა ასოების სხვაობის დამთხვევა"
+
+#: src/plugins/grep/gbp-grep-panel.ui:87
+msgid "Match _Words"
+msgstr "სიტყვების დამთხვევა"
+
+#: src/plugins/grep/gbp-grep-panel.ui:94
+msgid "Regular E_xpressions"
+msgstr "რეგულარული გამოსახულებები"
+
+#: src/plugins/grep/gbp-grep-panel.ui:103
+msgid "Close the panel (Escape key)"
+msgstr "პანელის დახურვა (ღილაკი Escape)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:141
+msgid "_Find in Project"
+msgstr "პროექტში მოძებნა"
+
+#: src/plugins/grep/gbp-grep-panel.ui:166
+msgid "_Replace in Project"
+msgstr "პროექტში ჩანაცვლება"
+
+#: src/plugins/grep/gbp-grep-popover.ui:28
+msgid "Search for…"
+msgstr "მოძებნა…"
+
+#: src/plugins/grep/gbp-grep-popover.ui:38
+msgid "_Find"
+msgstr "_ძებნა"
+
+#: src/plugins/grep/gbp-grep-popover.ui:55
+msgid "Search _recursively through folders"
+msgstr "საქაღალდეებში რეკურსიულად ძებნა"
+
+#: src/plugins/grep/gbp-grep-popover.ui:62
+msgid "Match _case when searching"
+msgstr "ძებნისას დიდი და პატარა ასოების სხვაობის დამთხვევა"
+
+#: src/plugins/grep/gbp-grep-popover.ui:70
+msgid "Match _whole words"
+msgstr "სიტყვების სრული დამთხვევა"
+
+#: src/plugins/grep/gbp-grep-popover.ui:77
+msgid "Allow regular _expressions"
+msgstr "რეგულარული გამოსახულებების დაშვება"
+
+#: src/plugins/grep/gtk/menus.ui:7
+msgid "_Find in Files"
+msgstr "ფაილებში ძებნა"
+
+#: src/plugins/html-preview/gtk/menus.ui:7
+msgid "Open Preview"
+msgstr "გადახედვის გახსნა"
+
+#: src/plugins/html-preview/html_preview.py:342
+msgid "Your computer is missing python3-docutils"
+msgstr "თქვენს კომპიუტერში python3-docutils არ აყენია"
+
+#: src/plugins/html-preview/html_preview.py:343
+#: src/plugins/html-preview/html_preview.py:353
+msgid ""
+"This package is necessary to provide previews of markup-based documents."
+msgstr ""
+
+#: src/plugins/html-preview/html_preview.py:346
+#: src/plugins/html-preview/html_preview.py:356
+msgid "Install Package"
+msgstr "პაკეტის დაყენება"
+
+#: src/plugins/html-preview/html_preview.py:352
+msgid "Your computer is missing python3-sphinx"
+msgstr "თქვენს კომპიუტერში python3-sphinx არ აყენია"
+
+#: src/plugins/html-preview/html_preview.py:422
+msgid "(Preview)"
+msgstr "(გადახედვა)"
+
+#: src/plugins/intelephense/intelephense.py:72
+msgid "Indexing php code…"
+msgstr "PHP კოდის ინდექსაცია…"
+
+#: src/plugins/ls/gbp-ls-page.c:319
+#, c-format
+msgid "Failed to load directory: %s"
+msgstr "საქაღალდის ჩატვირთვის შეცდომა: %s"
+
+#: src/plugins/ls/gbp-ls-page.c:391
+#, c-format
+msgid "%s — Directory"
+msgstr "%s — საქაღალდე"
+
+#: src/plugins/ls/gbp-ls-page.ui:46
+msgid "Size"
+msgstr "ზომა"
+
+#: src/plugins/ls/gbp-ls-page.ui:59
+msgid "Modified"
+msgstr "შეცვლილია"
+
+#: src/plugins/ls/gtk/menus.ui:8
+msgid "_Browse Folder"
+msgstr "საქაღალდეში ძებნა"
+
+#: src/plugins/ls/gtk/menus.ui:18
+msgid "S_witch to Folder"
+msgstr "საქაღალდეზე გადასვლა"
+
+#: src/plugins/ls/gtk/menus.ui:23
+msgid "_Open Containing Folder"
+msgstr "შემცველი _საქაღალდის გახსნა"
+
+#: src/plugins/make/make_plugin.py:104
+msgid "Build project"
+msgstr "პროექტის აგება"
+
+#: src/plugins/make/make_plugin.py:121
+msgid "Install project"
+msgstr "პროექტის დაყენება"
+
+#: src/plugins/make/make_plugin.py:351
+msgid "Empty Makefile Project"
+msgstr "Makefile-ის ცარიელი პროექტის შექმნა"
+
+#: src/plugins/make/make_plugin.py:353
+msgid "Create a new empty project using a simple Makefile"
+msgstr ""
+
+#: src/plugins/meson-templates/meson_templates.py:259
+msgid "GTK Application (Legacy)"
+msgstr "GTK აპლიკაცია (მოძველებული)"
+
+#: src/plugins/meson-templates/meson_templates.py:261
+msgid "Create a GTK application with GTK 3"
+msgstr ""
+
+#: src/plugins/meson-templates/meson_templates.py:336
+msgid "GTK Application"
+msgstr "GTK აპლიკაცია"
+
+#: src/plugins/meson-templates/meson_templates.py:338
+msgid "Create a GTK application"
+msgstr "GTK აპლიკაციის შექმნა"
+
+#: src/plugins/meson-templates/meson_templates.py:418
+msgid "GNOME Application"
+msgstr "GNOME-ის აპლიკაცია"
+
+#: src/plugins/meson-templates/meson_templates.py:420
+msgid "Create a GNOME application"
+msgstr "GNOME-ის აპლიკაციის შექმნა"
+
+#: src/plugins/meson-templates/meson_templates.py:500
+msgid "Shared Library"
+msgstr "გაზიარებული ბიბლიოთეკა"
+
+#: src/plugins/meson-templates/meson_templates.py:502
+msgid "Create a new project with a shared library"
+msgstr ""
+
+#: src/plugins/meson-templates/meson_templates.py:519
+msgid "Empty Project"
+msgstr "ცარიელი პროექტი"
+
+#: src/plugins/meson-templates/meson_templates.py:521
+msgid "Create a new empty project"
+msgstr "ახალი ცარიელი პროექტის შექმნა"
+
+#: src/plugins/meson-templates/meson_templates.py:538
+msgid "Command Line Tool"
+msgstr "ბრძანების სტრიქონის ხელსაწყო"
+
+#: src/plugins/meson-templates/meson_templates.py:540
+msgid "Create a new command line project"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-build-system.c:470
+#: src/plugins/meson/gbp-meson-config-view-addin.c:57
+msgid "Meson"
+msgstr "Meson"
+
+#: src/plugins/meson/gbp-meson-config-view-addin.c:58
+msgid "Meson Options"
+msgstr "Meson-ის პარამეტრები"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:192
+msgid "A Meson-based project is loaded but meson could not be found."
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:211
+msgid "A Meson-based project is loaded but Ninja could not be found."
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-tool-row.ui:25
+msgid "Delete Tool"
+msgstr "ხელსაწყოს წაშლა"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:106
+msgid "Add toolchain"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:113
+msgid "Define a new custom toolchain targeting a specific platform"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:204
+msgid "Toolchain"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:410
+msgid "No Provided Tool"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
+msgid "A name to identify the sysroot."
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
+msgid "The system architecture of the sysroot."
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
+msgid "Add Tool:"
+msgstr "ხელსაწყოს დამატება:"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "კომპილატორი"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr "პრეპროცესორი"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr "არქივატორი"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr "მიმბმელი"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr "სტრიპი"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
+msgid "Any language"
+msgstr "ნებისმიერი ენა"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
+msgid "C"
+msgstr "C"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
+msgid "C++"
+msgstr "C++"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
+msgid "Python"
+msgstr "Python"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
+msgid "Vala"
+msgstr "Vala"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
+msgid "Fortran"
+msgstr "Fortran"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
+msgid "D"
+msgstr "D"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
+msgid "Add Tool"
+msgstr "ხელსაწყოს დამატება"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
+msgid "Delete Toolchain"
+msgstr ""
+
+#: src/plugins/meson/gbp-meson-toolchain.c:61
+#, c-format
+msgid "%s (Meson)"
+msgstr "%s (Meson)"
+
+#: src/plugins/messages/gbp-messages-panel.ui:5
+msgid "Messages"
+msgstr "შეტყობინებები"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:18
+msgid "Suggested GNOME Projects"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:37
+msgid "Boxes"
+msgstr "ყუთები"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:38
+msgid "A simple GNOME 3 application to access remote or virtual systems"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:48
+msgid "An IDE for writing GNOME-based software"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Calendar"
+msgstr "კალენდერი"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "Calendar application for GNOME"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:68
+msgid "Clocks"
+msgstr "საათები"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:69
+msgid "A simple clock application for GNOME"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:78
+msgid "Gitg"
+msgstr "Gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:79
+msgid "Gitg is a graphical Git client"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:88
+msgid "Maps"
+msgstr "რუკები"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:89
+msgid "A simple GNOME 3 maps application"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:99
+msgid "Music"
+msgstr "მუსიკა"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:100
+msgid "Music player and management application"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:109
+msgid "Nautilus"
+msgstr "Nautilus"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:110
+msgid "Default file manager for GNOME"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:119
+msgid "Photos"
+msgstr "ფოტოები"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:120
+msgid "Access, organize and share your photos on GNOME"
+msgstr "ფოტოებთან წვდომა, მათი დალაგება და გაზიარება GNOME პლატფორმაზე"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:129
+msgid "Polari"
+msgstr "Polari"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:130
+msgid "An IRC Client for GNOME"
+msgstr ""
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:140
+msgid "Sound Recorder"
+msgstr "ხმის ჩამწერი"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:141
+msgid "A simple and modern sound recorder"
+msgstr ""
+
+#: src/plugins/notification/ide-notification-addin.c:104
+msgid "Build successful"
+msgstr "აგება წარმატებულია"
+
+#: src/plugins/notification/ide-notification-addin.c:105
+#, c-format
+msgid "Project “%s” has completed building"
+msgstr ""
+
+#: src/plugins/notification/ide-notification-addin.c:109
+#: src/plugins/notification/ide-notification-addin.c:191
+msgid "Build failed"
+msgstr "აგების შეცდომა"
+
+#: src/plugins/notification/ide-notification-addin.c:110
+#, c-format
+msgid "Project “%s” failed to build"
+msgstr ""
+
+#: src/plugins/notification/ide-notification-addin.c:182
+msgid "Build succeeded"
+msgstr "აგება წარმატებულია"
+
+#: src/plugins/notification/ide-notification-addin.c:184
+msgid "Build configured"
+msgstr "აგება მორგებულია"
+
+#: src/plugins/notification/ide-notification-addin.c:186
+msgid "Build bootstrapped"
+msgstr "აგების საწყისი მომზადება დასრულდა"
+
+#: src/plugins/npm/npm_plugin.py:96
+msgid "Downloading npm dependencies"
+msgstr "NPM დამოკიდებულებების გადმოწერა"
+
+#: src/plugins/open-with-external/gtk/menus.ui:9
+msgid "_External Program…"
+msgstr "გარე პროგრამა"
+
+#: src/plugins/phpize/phpize_plugin.py:191
+msgid "Bootstrapping project"
+msgstr "პროექტის საწყისი მომზადება"
+
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:523
+msgid "Containers/Toolbox"
+msgstr "კონტეინერები/Toolbox"
+
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:529
+msgid "Containers/Podman"
+msgstr "კონტეინერები/Podman"
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:127
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
+msgid "A folder with that name already exists."
+msgstr "საქაღალდე ამ სახელით უკვე არსებობს."
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:130
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
+msgid "A file with that name already exists."
+msgstr "ფაილი ამ სახელით უკვე არსებობს."
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:356
+#: src/plugins/project-tree/gbp-new-file-popover.ui:13
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:13
+msgid "File Name"
+msgstr "ფაილის სახელი"
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:358
+msgid "Folder Name"
+msgstr "საქაღალდის სახელი"
+
+#: src/plugins/project-tree/gbp-new-file-popover.ui:35
+msgid "_Create"
+msgstr "შექმნა"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:677
+#, c-format
+msgid "Copying 1 file"
+msgstr "1 ფაილის კოპირება"
+
+#. translators: first %s is replaced with completed number of files, second %s with total number of files
+#: src/plugins/project-tree/gbp-project-tree-addin.c:680
+#, c-format
+msgid "Copying %s of %s files"
+msgstr "%s ფაილის კოპირება %s-დან"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:716
+msgid "Failed to copy files"
+msgstr "ფაილების კოპირების შეცდომა"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:726
+msgid "Files copied"
+msgstr "ფაილი დაკოპირდა"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:730
+#, c-format
+msgid "Copied %s file"
+msgid_plural "Copied %s files"
+msgstr[0] "%s ფაილი დაკოპირდა"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:922
+msgid "Copying files…"
+msgstr "ფაილების კოპირება…"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:923
+msgid "Files will be copied in a moment"
+msgstr "ფაილების კოპირება მალე დაწყება"
+
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:65
+msgid "Project Tree"
+msgstr "პროექტის ხე"
+
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
+#, c-format
+msgid "Rename %s"
+msgstr "გადარქმევა %s"
+
+#: src/plugins/project-tree/gtk/menus.ui:8
+msgid "New Fil_e…"
+msgstr "ახალი ფაილი…"
+
+#: src/plugins/project-tree/gtk/menus.ui:14
+msgid "New F_older…"
+msgstr "ახალი საქაღალდე…"
+
+#: src/plugins/project-tree/gtk/menus.ui:22
+msgid "O_pen"
+msgstr "გახსნა"
+
+#: src/plugins/project-tree/gtk/menus.ui:26
+msgid "Open _With…"
+msgstr "გამხსნელი პროგრამა…"
+
+#: src/plugins/project-tree/gtk/menus.ui:30
+msgid "_Source Code Editor"
+msgstr "საწყისი კოდის რედაქტორი"
+
+#: src/plugins/project-tree/gtk/menus.ui:39
+msgid "Open _Containing Folder"
+msgstr "შემცველი _საქაღალდის გახსნა"
+
+#: src/plugins/project-tree/gtk/menus.ui:45
+msgid "Open in _Terminal"
+msgstr "ტერმინალში გახსნა"
+
+#: src/plugins/project-tree/gtk/menus.ui:59
+msgid "_Move to Trash"
+msgstr "_სანაგვე ყუთში გადატანა"
+
+#: src/plugins/project-tree/gtk/menus.ui:65
+msgid "_Display Options"
+msgstr "ჩვენების მორგება"
+
+#: src/plugins/project-tree/gtk/menus.ui:69
+msgid "S_how Ignored Files"
+msgstr "იგნორირებული ფაილების ჩვენება"
+
+#: src/plugins/project-tree/gtk/menus.ui:74
+msgid "S_ort Directories First"
+msgstr "ჯერ საქაღალდეების დალაგება"
+
+#: src/plugins/project-tree/gtk/menus.ui:87
+msgid "Reveal in Project Tree"
+msgstr "პროექტის ხეში ჩვენება"
+
+#: src/plugins/project-tree/gtk/menus.ui:96
+msgid "Reveal File in Project _Tree"
+msgstr "პროექტის ხეში ჩვენება"
+
+#. translators: format is "CPU emulation". Only translate "emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+msgid "Aarch64 Emulation"
+msgstr "Aarch64-ის ემულაცია"
+
+#: src/plugins/qemu/gbp-qemu-device-provider.c:43
+msgid "Arm Emulation"
+msgstr "Arm-ის ემულაცია"
+
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#: src/plugins/qemu/gbp-qemu-device-provider.c:160
+#, c-format
+msgid "My Computer (%s) %s"
+msgstr "ჩემი კომპუტერი (%s) %s"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:51
+msgid "Words matching selection"
+msgstr "სიტყვები, რომელიც მონიშნულს ემთხვევა"
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:52
+msgid "Highlight all occurrences of words matching the current selection"
+msgstr ""
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:54
+msgid "quick highlight words matching current selection"
+msgstr ""
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:64
+msgid "Minimum length for highlight"
+msgstr ""
+
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:65
+msgid "Highlight words matching at least this number of characters"
+msgstr ""
+
+#. Translators: the following are keywords used for searching to locate this preference
+#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:67
+msgid "quick highlight words matching current selection minimum length"
+msgstr ""
+
+#. translators: %s is replaced with the path of the file to be deleted and \n for a new line
+#: src/plugins/recent/gbp-recent-section.c:349
+#: src/plugins/recent/gbp-recent-section.c:356
+#, c-format
+msgid "Removing %s\n"
+msgstr "%s-ის წაშლა\n"
+
+#: src/plugins/recent/gbp-recent-section.c:468
+msgid "Removing Files…"
+msgstr "ფაილების წაშლა…"
+
+#: src/plugins/recent/gbp-recent-section.c:470
+msgid "_Close"
+msgstr "_დახურვა"
+
+#: src/plugins/recent/gbp-recent-section.ui:28
+msgid "Recent Projects"
+msgstr "ახლახანს გახსნილი პროექტები"
+
+#: src/plugins/retab/gtk/menus.ui:9
+msgid "_Reformat tabs"
+msgstr "ჩანართების გადაფორმატება"
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:57
+msgid "Rust Analyzer: Cargo command for diagnostics"
+msgstr ""
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:66
+msgid "the default cargo command"
+msgstr ""
+
+#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:76
+msgid ""
+"clippy adds additional lints to catch common mistakes but is in general "
+"slower"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:344
+msgid "Shell command"
+msgstr "გარსის ბრძანება"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:577
+msgid ""
+"Cannot spawn terminal in runtime environment because build pipeline is not "
+"initialized"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command.c:655
+msgid "Cannot spawn process because build pipeline is not yet available"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.c:130
+msgid "Change Shortcut"
+msgstr "მალსახმობის შეცვლა"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:11
+msgid "Title"
+msgstr "სათაური"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:23
+msgid "Shell Command"
+msgstr "გარსის ბრძანება"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:36
+msgid ""
+"The command will be executed using a shell like “/bin/sh -c\". You may use "
+"variable expansion like “$SHELL”. Both “$SRCDIR” and “$BUILDDIR” are "
+"automatically set for the command."
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:52
+msgid "Command Locality"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:68
+msgid "On Host"
+msgstr "ჰოსტზე"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:76
+msgid "In Build Environment"
+msgstr "აგების გარემოში"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:84
+msgid "In Runtime Environment"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:105
+msgid ""
+"If the directory is not an absolute-path, it will be relative to the source "
+"or build directory depending on the command locality."
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:121
+msgid "Close on Exit"
+msgstr "დახურვა გასვლისას"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:135
+msgid "If enabled, the terminal page will close after the command executes."
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:151
+msgid "Keyboard Shortcut"
+msgstr "კლავიატურის მალსახმობი"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:164
+msgid "Change"
+msgstr "შეცვლა"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-editor.ui:198
+msgid "Delete Command"
+msgstr "ბრძანების წაშლა"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:91
+msgid "Run in host environment"
+msgstr "ჰოსტის გარემოში გაშვება"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:101
+msgid "Run in build environment"
+msgstr "აგების გარემოში გაშვება"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-provider.c:108
+msgid "Run in runtime environment"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:113
+msgid "New command"
+msgstr "ახალი ბრძანება"
+
+#: src/plugins/shellcmd/gbp-shellcmd-list.c:134
+msgid "Click + to add an external command"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:94
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:95
+msgid "External Commands"
+msgstr "გარე ბრძანებები"
+
+#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:106
+msgid "Command"
+msgstr "ბრძანება"
+
+#: src/plugins/snippets/ide-snippet-completion-item.c:114
+#, c-format
+msgid "Failed to parse snippet “%s”"
+msgstr ""
+
+#: src/plugins/snippets/ide-snippet-preferences-addin.c:53
+msgid "Suggest Completions from Snippets"
+msgstr ""
+
+#: src/plugins/snippets/ide-snippet-preferences-addin.c:54
+msgid "Use registered snippets to suggest completion proposals"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-editor-addin.c:53
+msgid "Spelling"
+msgstr "მართლწერა"
+
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:104
+msgid "Show the spellchecker panel"
+msgstr "მართლწერის პანელის ჩვენება"
+
+#. We might find ourselves in a race here and the buffer
+#. * addins are already in destruction. Therefore, silently
+#. * fail any further setup.
+#.
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:141
+#: src/plugins/spellcheck/gbp-spell-editor-page-addin.c:248
+msgid "Failed to initialize spellchecking, disabling"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-language-popover.c:235
+msgid "No language selected"
+msgstr "ენა არჩეული არაა"
+
+#: src/plugins/spellcheck/gbp-spell-navigator.c:482
+msgid "No language set. Check your dictionary installation."
+msgstr "ენა არჩეული არაა. შეამოწმეთ, ლექსიკონი დაყენებულია, თუ არა"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:121
+msgid "No suggestions"
+msgstr "რჩევების გარეშე"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:214
+msgid "Completed spell checking"
+msgstr "მართლწერის შემოწმება დასრულებულია"
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:257
+msgid "The word is not in the dictionary"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:428
+msgid "This word is already in the personal dictionary"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.c:431
+#, c-format
+msgid "This word is already in the %s dictionary"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:17
+msgid "Misspelled"
+msgstr "არასწორი მართლწერა"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:86
+msgid "_Ignore"
+msgstr "_იგნორი"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:95
+msgid "Ignore _All"
+msgstr "ყველას იგნორი"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:114
+msgid "Change _to"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:147
+msgid "Cha_nge"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:156
+msgid "Change A_ll"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:175
+msgid "_Suggestions"
+msgstr ""
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:212
+msgid "Add Word"
+msgstr "სიტყვის დამატება"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:238
+msgid "A_dd"
+msgstr "_დამატება"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:254
+msgid "Dictionary"
+msgstr "ლექსიკონი"
+
+#: src/plugins/spellcheck/gbp-spell-widget.ui:304
+msgid "_Language"
+msgstr "ე_ნა"
+
+#: src/plugins/spellcheck/gtk/menus.ui:6
+msgid "Check _Spelling"
+msgstr "მართლწერის შემოწმება"
+
+#: src/plugins/spellcheck/gtk/menus.ui:13
+msgid "_Underline misspelled words"
+msgstr "_მონიშნე არასწორად დაწერილი სიტყვები"
+
+#: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:5
+msgid "Enable Stylelint"
+msgstr ""
+
+#: src/plugins/stylelint/org.gnome.builder.plugins.stylelint.gschema.xml:6
+msgid ""
+"Enable the use of stylelint to find additional diagnostics in stylesheet "
+"files. This may result in the execution of code in your project."
+msgstr ""
+
+#: src/plugins/stylelint/stylelint_plugin.py:77
+msgid "Stylelint"
+msgstr ""
+
+#: src/plugins/stylelint/stylelint_plugin.py:78
+msgid "Enable the use of Stylelint, which may execute code in your project"
+msgstr ""
+
+#. translators: these are keywords used to search for preferences
+#: src/plugins/stylelint/stylelint_plugin.py:80
+msgid "stylelint stylesheet lint code execute execution"
+msgstr ""
+
+#: src/plugins/sublime/gbp-sublime-preferences-addin.c:52
+msgid "Sublime Text"
+msgstr "Sublime Text"
+
+#: src/plugins/sublime/gbp-sublime-preferences-addin.c:53
+msgid "Emulates the Sublime Text editor"
+msgstr ""
+
+#: src/plugins/support/gtk/menus.ui:7
+msgid "Generate Support Log"
+msgstr ""
+
+#: src/plugins/support/ide-support-application-addin.c:84
+#, c-format
+msgid ""
+"The support log file has been written to “%s”. Please provide this file as "
+"an attachment on your bug report or support request."
+msgstr ""
+
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:57
+msgid "Symbols"
+msgstr "სიმბოლოები"
+
+#: src/plugins/symbol-tree/gbp-symbol-frame-addin.c:58
+msgid "Search symbols within document"
+msgstr ""
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:113
+msgid "Unnamed Symbol"
+msgstr ""
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:154
+msgid "Symbol"
+msgstr "სიმბოლო"
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.c:315
+msgid "_Select Symbol…"
+msgstr ""
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:13
+msgid "Document Outline"
+msgstr ""
+
+#: src/plugins/symbol-tree/gbp-symbol-menu-button.ui:78
+msgid "_Document Outline"
+msgstr ""
+
+#: src/plugins/sysprof/gbp-sysprof-surface.c:56
+#: src/plugins/sysprof/gtk/menus.ui:19
+msgid "Profiler"
+msgstr ""
+
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:258
+msgid "Open Sysprof Capture…"
+msgstr ""
+
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:267
+msgid "Sysprof Capture (*.syscap)"
+msgstr ""
+
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:273
+msgid "All Files"
+msgstr "ყველა ფაილი"
+
+#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:396
+#: src/plugins/sysprof/gtk/menus.ui:32
+msgid "Run with Profiler"
+msgstr ""
+
+#: src/plugins/sysprof/gtk/menus.ui:8
+msgctxt "menu label"
+msgid "Open _Sysprof Capture…"
+msgstr ""
+
+#: src/plugins/sysprof/gtk/menus.ui:42
+msgid "Run with _Profiler"
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
+msgid "Add sysroot"
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:90
+msgid "Define a new sysroot target to build against a different target"
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:138
+msgid "Sysroots"
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
+msgid "An absolute file-system path to the sysroot."
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
+msgid "Package Config Path"
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
+msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
+msgstr ""
+
+#: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
+#, c-format
+msgid "%s (Sysroot SDK)"
+msgstr "%s (Sysroot SDK)"
+
+#: src/plugins/terminal/gbp-terminal-application-addin.c:97
+msgid "Use terminal interface"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:374
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:454
+#: src/plugins/terminal/gtk/menus.ui:31
+msgid "Terminal"
+msgstr "ტერმინალი"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
+msgid "Scrollback"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
+msgid "Terminal Font"
+msgstr "ტერმინალის ფონტი"
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:60
+msgctxt "Keywords"
+msgid "terminal font monospace"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:70
+msgid "Bold text in terminals"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:71
+msgid "If terminals are allowed to display bold text"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:72
+msgctxt "Keywords"
+msgid "terminal allow bold"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:81
+msgid "Show hyperlinks"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:82
+msgid ""
+"When enabled hyperlinks (OSC 8 escape sequences) are recognized and displayed"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:83
+msgctxt "Keywords"
+msgid "terminal show hyperlinks links urls"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:93
+msgid "Scroll on output"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:94
+msgid ""
+"When enabled the terminal will scroll to the bottom when new output is "
+"displayed"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:95
+msgctxt "Keywords"
+msgid "scroll on output"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:104
+msgid "Scroll on keystroke"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:105
+msgid "When enabled the terminal will scroll to the bottom when typing"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:106
+msgctxt "Keywords"
+msgid "scroll on keystroke"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:115
+msgid "Limit Scrollback"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:116
+msgid ""
+"When enabled terminal scrollback will be limited to the number of lines "
+"specified below"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:117
+msgctxt "Keywords"
+msgid "scrollback limit"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:125
+msgid "Scrollback Lines"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:126
+msgid "The number of lines to keep available for scrolling"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:127
+msgctxt "Keywords"
+msgid "scrollback lines"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:303
+msgid "Application Output"
+msgstr "აპლიკაციის გამონატანი"
+
+#. translators: %s is replaced with the current local time of day
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:333
+#, c-format
+msgid "Application started at %s\r\n"
+msgstr "აპლიკაციის გაშვების დრო: %s\n"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:354
+msgid "Application exited\r\n"
+msgstr "აპლკაცია დასრულდა\n"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:380
+msgid "Terminal in Build Runtime"
+msgstr ""
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:386
+msgid "Terminal in Runtime"
+msgstr ""
+
+#: src/plugins/terminal/gtk/menus.ui:9
+msgid "New _Terminal"
+msgstr "ახალი _ტერმინალი"
+
+#: src/plugins/terminal/gtk/menus.ui:16
+msgid "New _Build Terminal"
+msgstr "აგების ახალი ტერმინალი"
+
+#: src/plugins/terminal/gtk/menus.ui:23
+msgid "New _Runtime Terminal"
+msgstr ""
+
+#: src/plugins/testui/gbp-test-output-panel.c:132
+msgid "Unit Test Output"
+msgstr ""
+
+#: src/plugins/testui/gbp-test-output-panel.ui:34
+msgid "Clear test output"
+msgstr "ტესტების გამონატანის გასუფთავება"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:51
+msgid "Cancel tests"
+msgstr "ტესტების გაუქმება"
+
+#: src/plugins/testui/gbp-test-output-panel.ui:68
+msgid "Save test output"
+msgstr "ტესტის გამონატანის შენახვა"
+
+#: src/plugins/testui/gbp-test-tree-addin.c:197
+msgid "Unit Tests"
+msgstr "ერთეულის ტესტები"
+
+#. translators: %s is replaced with the name of the unit test
+#: src/plugins/testui/gbp-test-tree-addin.c:408
+#, c-format
+msgid "Running test “%s”…"
+msgstr "გაშვებულია ტესტი \"%s\"…"
+
+#: src/plugins/todo/gbp-todo-panel.c:299
+msgid "Loading TODOs…"
+msgstr ""
+
+#: src/plugins/todo/gbp-todo-panel.c:300
+msgid "Please wait while we scan your project"
+msgstr ""
+
+#: src/plugins/todo/gbp-todo-workspace-addin.c:157
+msgid "TODO/FIXMEs"
+msgstr ""
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
+msgid "Updating Builder"
+msgstr "Builder-ის განახლება"
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:166
+msgid "Update Available"
+msgstr "ხელმისაწვდომია განახლება"
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
+msgid ""
+"An update to Builder is available. Builder can download and install it for "
+"you."
+msgstr ""
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
+msgid "_Update"
+msgstr "_განახლება"
+
+#: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:52
+#: src/plugins/vagrant/gbp-vagrant-runtime-provider.c:113
+msgid "Vagrant"
+msgstr "Vagrant"
+
+#: src/plugins/valgrind/gbp-valgrind-workbench-addin.c:152
+#: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
+msgid "Run with Valgrind"
+msgstr "Valgrind-ით გაშვება"
+
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:419
+msgid "Branches"
+msgstr "ბრენჩი"
+
+#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:429
+msgid "Tags"
+msgstr "ჭდეები"
+
+#: src/plugins/vcsui/gtk/menus.ui:7
+msgid "_Switch to branch"
+msgstr ""
+
+#: src/plugins/vcsui/gtk/menus.ui:12
+msgid "_Push to origin"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:105
+#, c-format
+msgid "Number required"
+msgstr "საჭიროა რიცხვი"
+
+#: src/plugins/vim/gb-vim.c:115
+#, c-format
+msgid "%s is invalid for %s"
+msgstr "%s არასწორია %s-სთვის"
+
+#: src/plugins/vim/gb-vim.c:173
+#, c-format
+msgid "Cannot find language “%s”"
+msgstr "ენა ნაპოვნი არაა: '%s'"
+
+#: src/plugins/vim/gb-vim.c:352
+#, c-format
+msgid "This command requires a GtkSourceView to be focused"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:363
+#, c-format
+msgid "This command requires a view to be focused"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:420
+#, c-format
+msgid "Unknown option: %s"
+msgstr "უცნობი პარამეტრი %s"
+
+#: src/plugins/vim/gb-vim.c:463
+#, c-format
+msgid "Cannot find colorscheme “%s”"
+msgstr "ფერების სქემის პოვნა შეუძლებელია: \"%s\""
+
+#: src/plugins/vim/gb-vim.c:499 src/plugins/vim/gb-vim.c:622
+#, c-format
+msgid "Failed to locate working directory"
+msgstr "სამუშაო საქაღალდის მოძიების შეცდომა"
+
+#: src/plugins/vim/gb-vim.c:788
+#, c-format
+msgid "Invalid :syntax subcommand: %s"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1225
+#, c-format
+msgid "Invalid search and replace request"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1235
+msgid "Change the pages colorscheme"
+msgstr "გვერდის ფერების სქემის შეცვლა"
+
+#: src/plugins/vim/gb-vim.c:1239
+msgid "Build the project"
+msgstr "პროექტის აგება"
+
+#: src/plugins/vim/gb-vim.c:1240
+msgid "Clear search highlighting"
+msgstr "ძიების გამოკვეთის გასუფთავება"
+
+#: src/plugins/vim/gb-vim.c:1241
+msgid "Open a file by path"
+msgstr "ფაილის ზუსტი ბილიკით გახსნა"
+
+#: src/plugins/vim/gb-vim.c:1242
+msgid "Close the page"
+msgstr "გვერდის დახურვა"
+
+#: src/plugins/vim/gb-vim.c:1243
+msgid "Set various buffer options"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1244
+msgid "Sort the selected lines"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1245
+msgid "Create a split page below the current page"
+msgstr ""
+
+#: src/plugins/vim/gb-vim.c:1246
+msgid "Toggle syntax highlighting"
+msgstr "სინტაქსის გამოკვეთის გადართვა"
+
+#: src/plugins/vim/gb-vim.c:1250
+msgid "Save and close the current page"
+msgstr "მიმდინარე გვერდის შენახვა და დახურვა"
+
+#: src/plugins/vim/gb-vim.c:1251
+msgid "Save the current page"
+msgstr "მიმდინარე გვერდის შენახვა"
+
+#: src/plugins/vim/gb-vim.c:1335
+#, c-format
+msgid "Not a command: %s"
+msgstr "უცნობი ბრძანება: %s"
+
+#: src/plugins/vim/gbp-vim-preferences-addin.c:52
+msgid "Vim"
+msgstr "Vim"
+
+#: src/plugins/vim/gbp-vim-preferences-addin.c:53
+msgid "Emulates the Vim text editor"
+msgstr ""
+
+#: src/plugins/waf/waf_plugin.py:125
+msgid "Building project…"
+msgstr "პროექტის აგება…"
+
+#: src/plugins/waf/waf_plugin.py:135
+msgid "Installing project…"
+msgstr "პროექტის დაყენება…"
+
+#: src/plugins/xml-pack/ide-xml-parser.c:605
+#: src/plugins/xml-pack/ide-xml-tree-builder.c:520
+msgid "Failed to create the XML tree."
+msgstr ""
+
+#: src/plugins/xml-pack/ide-xml-service.c:91
+msgid "File must be saved locally to parse."
+msgstr ""
