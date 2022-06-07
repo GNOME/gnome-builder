@@ -130,12 +130,20 @@ ide_html_generator_class_init (IdeHtmlGeneratorClass *klass)
   klass->generate_async = ide_html_generator_real_generate_async;
   klass->generate_finish = ide_html_generator_real_generate_finish;
 
+  properties [PROP_BASE_URI] =
+    g_param_spec_string ("base-uri", NULL, NULL, NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_EXPLICIT_NOTIFY |
+                          G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
   /**
    * IdeHtmlGenerator::invalidate:
    *
    * The "invalidate" signal is emitted when contents have changed.
    *
-   * This signal is emmitted by subclasses when the contents have changed
+   * This signal will be emitted by subclasses when the contents have changed
    * and HTML will need to be regenerated.
    */
   signals [INVALIDATE] =
