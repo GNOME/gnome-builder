@@ -214,6 +214,7 @@ static void
 live_preview_action (GbpHtmlPreviewWorkspaceAddin *self,
                      GVariant                     *params)
 {
+  g_autoptr(IdeHtmlGenerator) generator = NULL;
   g_autoptr(IdePanelPosition) position = NULL;
   g_autoptr(IdeBuffer) buffer = NULL;
   IdeWebkitPage *page;
@@ -227,7 +228,8 @@ live_preview_action (GbpHtmlPreviewWorkspaceAddin *self,
   g_assert (IDE_IS_EDITOR_PAGE (self->editor_page));
 
   buffer = g_signal_group_dup_target (self->buffer_signals);
-  page = ide_webkit_page_new_for_buffer (GTK_TEXT_BUFFER (buffer), NULL, NULL, NULL);
+  generator = ide_html_generator_new_for_buffer (GTK_TEXT_BUFFER (buffer));
+  page = ide_webkit_page_new_for_generator (generator);
   position = ide_page_get_position (IDE_PAGE (self->editor_page));
 
   if (!ide_panel_position_get_column (position, &column))
