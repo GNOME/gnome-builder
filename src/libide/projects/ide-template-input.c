@@ -1126,6 +1126,7 @@ ide_template_input_expand_cb (GObject      *object,
 
 void
 ide_template_input_expand_async (IdeTemplateInput    *self,
+                                 IdeContext          *context,
                                  GCancellable        *cancellable,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
@@ -1139,12 +1140,17 @@ ide_template_input_expand_async (IdeTemplateInput    *self,
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_TEMPLATE_INPUT (self));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_template_input_expand_async);
   ide_task_set_task_data (task,
                           g_file_get_child (self->directory, self->name),
+                          g_object_unref);
+  g_object_set_data_full (G_OBJECT (task),
+                          "CONTEXT",
+                          g_object_ref (context),
                           g_object_unref);
 
   if (ide_template_input_validate (self) != IDE_TEMPLATE_INPUT_VALID)

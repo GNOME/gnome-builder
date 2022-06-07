@@ -295,16 +295,20 @@ expand_action (GtkWidget  *widget,
 {
   GbpCreateProjectWidget *self = (GbpCreateProjectWidget *)widget;
   IdeGreeterWorkspace *greeter;
+  IdeContext *context;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_CREATE_PROJECT_WIDGET (self));
 
   greeter = IDE_GREETER_WORKSPACE (ide_widget_get_workspace (widget));
+  context = ide_workspace_get_context (IDE_WORKSPACE (greeter));
+
   ide_greeter_workspace_begin (greeter);
 
   gtk_widget_action_set_enabled (widget, "create-project.expand", FALSE);
   ide_template_input_expand_async (self->input,
+                                   context,
                                    ide_workspace_get_cancellable (IDE_WORKSPACE (greeter)),
                                    gbp_create_project_widget_expand_cb,
                                    g_object_ref (greeter));
