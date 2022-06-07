@@ -13,6 +13,7 @@ libide_include_directories += include_directories('.')
 libide_webkit_private_sources = [
   'ide-webkit-plugin.c',
   'ide-webkit-util.c',
+  'ide-text-buffer-html-generator.c',
   'ide-url-bar.c',
 ]
 
@@ -22,10 +23,12 @@ libide_webkit_private_sources = [
 
 libide_webkit_public_headers = [
   'libide-webkit.h',
+  'ide-html-generator.h',
   'ide-webkit-page.h',
 ]
 
 libide_webkit_public_sources = [
+  'ide-html-generator.c',
   'ide-webkit-page.c',
 ]
 

@@ -22,12 +22,11 @@
 
 #include <libide-gui.h>
 
+#include "ide-html-generator.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_WEBKIT_PAGE (ide_webkit_page_get_type())
-
-typedef char *(*IdeHtmlTransformFunc) (const char *input,
-                                       gpointer    user_data);
 
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeWebkitPage, ide_webkit_page, IDE, WEBKIT_PAGE, IdePage)
@@ -40,10 +39,7 @@ struct _IdeWebkitPageClass
 IDE_AVAILABLE_IN_ALL
 IdeWebkitPage *ide_webkit_page_new                   (void);
 IDE_AVAILABLE_IN_ALL
-IdeWebkitPage *ide_webkit_page_new_for_buffer        (GtkTextBuffer        *buffer,
-                                                      IdeHtmlTransformFunc  transform_func,
-                                                      gpointer              transform_data,
-                                                      GDestroyNotify        transform_data_destroy);
+IdeWebkitPage *ide_webkit_page_new_for_generator     (IdeHtmlGenerator     *generator);
 IDE_AVAILABLE_IN_ALL
 void           ide_webkit_page_load_uri              (IdeWebkitPage        *self,
                                                       const char           *uri);
