@@ -1,32 +1,19 @@
 {{name_}}_sources = [
 {{if language == "c"}}
   'main.c',
-{{if is_gtk4}}
   '{{prefix}}-application.c',
-{{end}}
   '{{prefix}}-window.c',
-{{else if language == "c++"}}
-  'main.cpp',
-  '{{prefix}}-window.cpp',
 {{else if language == "vala"}}
   'main.vala',
-{{if is_gtk4}}
   'application.vala',
-{{end}}
   'window.vala',
 {{end}}
 ]
 
 {{name_}}_deps = [
+  dependency('gtk4'),
 {{if is_adwaita}}
   dependency('libadwaita-1'),
-{{else if is_gtk4}}
-  dependency('gtk4'),
-{{else if language == "c++"}}
-  dependency('gtkmm-3.0', version: '>= 3.18'),
-{{else}}
-  dependency('gio-2.0', version: '>= 2.50'),
-  dependency('gtk+-3.0', version: '>= 3.22'),
 {{end}}
 ]
 
@@ -36,7 +23,6 @@
 )
 
 executable('{{name}}', {{name_}}_sources,
-{{if language == "vala"}}  vala_args: '--target-glib=2.50',{{end}}
   dependencies: {{name_}}_deps,
-  install: true,
+       install: true,
 )

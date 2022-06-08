@@ -64,14 +64,14 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "src/help-overlay.ui",                                 "src/gtk/help-overlay.ui" },
 
   /* C */
-  { "src/application.c", "src/{{prefix}}-application.c", IDE_STRV_INIT ("C") },
-  { "src/application.h", "src/{{prefix}}-application.h", IDE_STRV_INIT ("C") },
+  { "src/application-gtk4.c", "src/{{prefix}}-application.c", IDE_STRV_INIT ("C") },
+  { "src/application-gtk4.h", "src/{{prefix}}-application.h", IDE_STRV_INIT ("C") },
   { "src/hello.gresource.xml", "src/{{prefix}}.gresource.xml", IDE_STRV_INIT ("C") },
   { "src/main-gtk4.c", "src/main.c", IDE_STRV_INIT ("C") },
   { "src/meson-c-vala.build", "src/meson.build", IDE_STRV_INIT ("C") },
   { "src/window-gtk4.ui", "src/{{prefix}}-window.ui", IDE_STRV_INIT ("C") },
-  { "src/window.c", "src/{{prefix}}-window.c", IDE_STRV_INIT ("C") },
-  { "src/window.h", "src/{{prefix}}-window.h", IDE_STRV_INIT ("C") },
+  { "src/window-gtk4.c", "src/{{prefix}}-window.c", IDE_STRV_INIT ("C") },
+  { "src/window-gtk4.h", "src/{{prefix}}-window.h", IDE_STRV_INIT ("C") },
 
   /* JavaScript */
   { "src/hello.gresource.xml", "src/{{appid}}.data.gresource.xml", IDE_STRV_INIT ("JavaScript") },
@@ -81,7 +81,7 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "src/main-gtk4.js.tmpl", "src/main.js", IDE_STRV_INIT ("JavaScript") },
   { "src/meson-js.build", "src/meson.build", IDE_STRV_INIT ("JavaScript") },
   { "src/window-gtk4.ui", "src/window.ui", IDE_STRV_INIT ("JavaScript") },
-  { "src/window.js.tmpl", "src/window.js", IDE_STRV_INIT ("JavaScript") },
+  { "src/window-gtk4.js", "src/window.js", IDE_STRV_INIT ("JavaScript") },
 
   /* Python */
   { "src/__init__.py", "src/__init__.py", IDE_STRV_INIT ("Python") },
@@ -95,7 +95,7 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "build-aux/cargo.sh", "build-aux/cargo.sh", IDE_STRV_INIT ("Rust") },
   { "src/Cargo-gtk4.toml", "Cargo.toml", IDE_STRV_INIT ("Rust") },
   { "src/Cargo.lock", "Cargo.lock", IDE_STRV_INIT ("Rust") },
-  { "src/application.rs", "src/application.rs", IDE_STRV_INIT ("Rust") },
+  { "src/application-gtk4.rs", "src/application.rs", IDE_STRV_INIT ("Rust") },
   { "src/config-gtk4.rs.in", "src/config.rs.in", IDE_STRV_INIT ("Rust") },
   { "src/hello.gresource.xml", "src/{{prefix}}.gresource.xml", IDE_STRV_INIT ("Rust") },
   { "src/main-gtk4.rs", "src/main.rs", IDE_STRV_INIT ("Rust") },
