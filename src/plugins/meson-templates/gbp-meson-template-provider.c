@@ -48,7 +48,7 @@ typedef struct _GbpMesonTemplateInfo
   const char * const                  *extra_scope;
 } GbpMesonTemplateInfo;
 
-static GbpMesonTemplateExpansion adwaita_expansions[] = {
+static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "meson.build",                                         "meson.build" },
   { "flatpak.json",                                        "{{appid}}.json" },
   { "data/hello.desktop.in",                               "data/{{appid}}.desktop.in" },
@@ -109,23 +109,36 @@ static GbpMesonTemplateExpansion adwaita_expansions[] = {
   { "src/window-gtk4.vala", "src/window.vala", IDE_STRV_INIT ("Vala") },
 };
 
-static const GbpMesonTemplateLanguageScope adwaita_language_scope[] = {
+static const GbpMesonTemplateLanguageScope gtk4_language_scope[] = {
   { "C",          IDE_STRV_INIT ("ui_file={{prefix}}-window.ui") },
-  { "C++",        IDE_STRV_INIT ("ui_file={{prefix}}-window.ui") },
-  { "C♯",         IDE_STRV_INIT ("ui_file=") },
   { "JavaScript", IDE_STRV_INIT ("exec_name={{appid}}") },
 };
 
 static const GbpMesonTemplateInfo templates[] = {
   {
     -1000,
-    N_("adwaita"),
+    "adwaita",
     N_("GNOME Application"),
-    N_("A Meson-based project for GNOME using libadwaita"),
+    N_("A Meson-based project for GNOME using GTK 4 and libadwaita"),
     IDE_STRV_INIT ("C", "JavaScript", "Python", "Rust", "Vala"),
-    adwaita_expansions, G_N_ELEMENTS (adwaita_expansions),
-    adwaita_language_scope, G_N_ELEMENTS (adwaita_language_scope),
+    gtk4_expansions, G_N_ELEMENTS (gtk4_expansions),
+    gtk4_language_scope, G_N_ELEMENTS (gtk4_language_scope),
     IDE_STRV_INIT ("is_adwaita=true",
+                   "is_gtk4=true",
+                   "enable_i18n=true",
+                   "enable_gnome=true",
+                   "ui_file=window.ui",
+                   "exec_name={{name}}"),
+  },
+  {
+    -900,
+    "gtk4",
+    N_("GTK 4 Application"),
+    N_("A Meson-based project using GTK 4"),
+    IDE_STRV_INIT ("C", "JavaScript", "Python", "Rust", "Vala"),
+    gtk4_expansions, G_N_ELEMENTS (gtk4_expansions),
+    gtk4_language_scope, G_N_ELEMENTS (gtk4_language_scope),
+    IDE_STRV_INIT ("is_adwaita=false",
                    "is_gtk4=true",
                    "enable_i18n=true",
                    "enable_gnome=true",
@@ -165,22 +178,6 @@ gbp_meson_template_provider_get_project_templates (IdeTemplateProvider *provider
     }
 
 #if 0
-  list = g_list_prepend (list,
-                         g_object_new (GBP_TYPE_MESON_TEMPLATE,
-                                       "id", "meson-templates:adwaita",
-                                       "name", _("GNOME Application"),
-                                       "description",
-                                       "languages", IDE_STRV_INIT ("C", "JavaScript", "Python", "Rust", "Vala"),
-                                       "priority", -1000,
-                                       NULL));
-  list = g_list_prepend (list,
-                         g_object_new (GBP_TYPE_MESON_TEMPLATE,
-                                       "id", "meson-templates:gtk4",
-                                       "name", _("GTK Application"),
-                                       "description", _("A Meson-based project using GTK 4"),
-                                       "languages", IDE_STRV_INIT ("C", "JavaScript", "Python", "Rust", "Vala"),
-                                       "priority", -900,
-                                       NULL));
   list = g_list_prepend (list,
                          g_object_new (GBP_TYPE_MESON_TEMPLATE,
                                        "id", "meson-templates:shared-library",
