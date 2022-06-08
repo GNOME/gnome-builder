@@ -8,7 +8,8 @@ gnome_builder_private_sources = []
 gnome_builder_private_headers = []
 gnome_builder_generated_sources = []
 gnome_builder_generated_headers = []
-gnome_builder_gir_extra_args = ['--pkg-export=gnome-builder-1.0']
+gnome_builder_gir_extra_args = []
+
 # To allow all resources to be initialized with static constructors
 # inside the final executable, we delay compiling them until the
 # final binary (otherwise they are silenty dropped when linking).
