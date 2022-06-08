@@ -1,19 +1,19 @@
 {{name_}}_sources = [
 {{if language == "c"}}
   'main.c',
-  '{{prefix}}-window.c',
 {{if is_gtk4}}
   '{{prefix}}-application.c',
 {{end}}
+  '{{prefix}}-window.c',
 {{else if language == "c++"}}
   'main.cpp',
   '{{prefix}}-window.cpp',
 {{else if language == "vala"}}
   'main.vala',
-  'window.vala',
 {{if is_gtk4}}
   'application.vala',
 {{end}}
+  'window.vala',
 {{end}}
 ]
 
