@@ -79,6 +79,7 @@ gbp_make_template_expand_async (IdeProjectTemplate  *template,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) destdir = NULL;
   g_autofree char *exec_name = NULL;
+  g_autofree char *license_path = NULL;
   const char *language;
   const char *name;
   GFile *directory;
@@ -107,6 +108,13 @@ gbp_make_template_expand_async (IdeProjectTemplate  *template,
 
   exec_name = g_strdelimit (g_strstrip (g_strdup (name)), " \t\n", '-');
   tmpl_scope_set_string (scope, "exec_name", exec_name);
+
+  if ((license_path = ide_template_input_get_license_path (input)))
+    {
+      g_autoptr(GFile) copying = g_file_get_child (destdir, "COPYING");
+      ide_template_base_add_resource (IDE_TEMPLATE_BASE (self),
+                                      license_path, copying, scope, 0);
+    }
 
   for (guint i = 0; i < G_N_ELEMENTS (mappings); i++)
     {
