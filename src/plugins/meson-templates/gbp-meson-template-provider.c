@@ -123,6 +123,16 @@ static GbpMesonTemplateExpansion library_expansions[] = {
   { "src/hello-version.h.in", "src/{{name}}-version.h.in" },
 };
 
+static GbpMesonTemplateExpansion empty_expansions[] = {
+  /* Shared */
+  { "meson.build", "meson.build" },
+  { "src/meson-empty.build", "src/meson.build" },
+
+  /* Rust */
+  { "src/Cargo.lock", "Cargo.lock", IDE_STRV_INIT ("Rust") },
+  { "src/Cargo-cli.toml", "Cargo.toml", IDE_STRV_INIT ("Rust") },
+};
+
 static const GbpMesonTemplateInfo templates[] = {
   {
     -1000,
@@ -162,6 +172,14 @@ static const GbpMesonTemplateInfo templates[] = {
     IDE_STRV_INIT ("C"),
     library_expansions, G_N_ELEMENTS (library_expansions),
   },
+  {
+    -600,
+    "empty",
+    N_("Empty Meson Project"),
+    N_("An empty Meson project skeleton"),
+    IDE_STRV_INIT ("C", "C++", "C♯", "JavaScript", "Python", "Rust", "Vala"),
+    empty_expansions, G_N_ELEMENTS (empty_expansions),
+  },
 };
 
 static GList *
@@ -197,14 +215,6 @@ gbp_meson_template_provider_get_project_templates (IdeTemplateProvider *provider
 #if 0
   list = g_list_prepend (list,
                          g_object_new (GBP_TYPE_MESON_TEMPLATE,
-                                       "id", "meson-templates:shared-library",
-                                       "name", _("Shared Library"),
-                                       "description", _("A Meson-based project for a shared-library"),
-                                       "languages", IDE_STRV_INIT ("C"),
-                                       "priority", -800,
-                                       NULL));
-  list = g_list_prepend (list,
-                         g_object_new (GBP_TYPE_MESON_TEMPLATE,
                                        "id", "meson-templates:cli",
                                        "name", _("Command Line Tool"),
                                        "description", _("A Meson-based project creating a command-line program"),
@@ -218,14 +228,6 @@ gbp_meson_template_provider_get_project_templates (IdeTemplateProvider *provider
                                        "description", _("A Meson-based project using GTK 3"),
                                        "languages", IDE_STRV_INIT ("C", "C++", "C♯", "JavaScript", "Python", "Rust", "Vala"),
                                        "priority", -600,
-                                       NULL));
-  list = g_list_prepend (list,
-                         g_object_new (GBP_TYPE_MESON_TEMPLATE,
-                                       "id", "meson-templates:empty",
-                                       "name", _("Empty Meson Project"),
-                                       "description", _("A empty Meson-based project"),
-                                       "languages", IDE_STRV_INIT ("C", "C++", "C♯", "JavaScript", "Python", "Rust", "Vala"),
-                                       "priority", -500,
                                        NULL));
 #endif
 
