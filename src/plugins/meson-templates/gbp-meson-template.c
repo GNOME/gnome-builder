@@ -131,6 +131,7 @@ gbp_meson_template_expand_async (IdeProjectTemplate  *template,
                                  gpointer             user_data)
 {
   GbpMesonTemplate *self = (GbpMesonTemplate *)template;
+  g_autofree char *license_path = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) destdir = NULL;
   const char *language;
@@ -156,6 +157,14 @@ gbp_meson_template_expand_async (IdeProjectTemplate  *template,
     {
       ide_task_return_unsupported_error (task);
       IDE_EXIT;
+    }
+
+  /* Setup our license for the project */
+  if ((license_path = ide_template_input_get_license_path (input)))
+    {
+      g_autoptr(GFile) copying = g_file_get_child (destdir, "COPYING");
+      ide_template_base_add_resource (IDE_TEMPLATE_BASE (self),
+                                      license_path, copying, scope, 0);
     }
 
   /* First setup some defaults for our scope */
