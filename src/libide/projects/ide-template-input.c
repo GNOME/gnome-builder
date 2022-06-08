@@ -948,6 +948,7 @@ ide_template_input_to_scope (IdeTemplateInput *self)
   scope_take_string (scope, "NAME", g_strdelimit (g_utf8_strup (name_lower, -1), "-", '_'));
   scope_take_string (scope, "year", g_date_time_format (now, "%Y"));
   scope_take_string (scope, "YEAR", g_date_time_format (now, "%Y"));
+  scope_take_string (scope, "Title", capitalize (self->name));
 
   if (g_str_has_suffix (name_lower, "_glib"))
     prefix = g_strndup (name_lower, strlen (name_lower) - 5);
