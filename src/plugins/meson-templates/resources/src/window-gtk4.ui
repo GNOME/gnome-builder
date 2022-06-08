@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk" version="4.0"/>
-  <template class="{{PreFix}}Window" parent="GtkApplicationWindow">
+{{if is_adwaita}}
+  <requires lib="Adw" version="1.0"/>
+{{end}}
+  <template class="{{PreFix}}Window" parent="{{if is_adwaita}}Adw{{else}}Gtk{{end}}ApplicationWindow">
     <property name="default-width">600</property>
     <property name="default-height">300</property>
+{{if is_adwaita}}
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkHeaderBar" id="header_bar">
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="menu-model">primary_menu</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="label">Hello, World!</property>
+            <property name="vexpand">true</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+              <attribute name="scale" value="2"/>
+            </attributes>
+          </object>
+        </child>
+      </object>
+    </child>
+{{else}}
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header_bar">
         <child type="end">
@@ -23,8 +53,8 @@
         </attributes>
       </object>
     </child>
+{{end}}
   </template>
-
   <menu id="primary_menu">
     <section>
       <item>
@@ -36,7 +66,7 @@
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_About {{name}}</attribute>
+        <attribute name="label" translatable="yes">_About {{Title}}</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>
