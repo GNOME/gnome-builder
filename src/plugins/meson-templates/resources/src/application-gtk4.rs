@@ -1,3 +1,5 @@
+{{include "license.rs"}}
+
 use glib::clone;
 use gtk::prelude::*;
 use gtk::subclass::prelude::*;

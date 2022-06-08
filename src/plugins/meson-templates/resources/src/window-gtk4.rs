@@ -1,3 +1,5 @@
+{{include "license.rs"}}
+
 {{if is_adwaita}}
 use adw::subclass::prelude::*;
 {{end}}
