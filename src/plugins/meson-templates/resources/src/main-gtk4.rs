@@ -1,3 +1,5 @@
+{{include "license.rs"}}
+
 mod application;
 mod config;
 mod window;
