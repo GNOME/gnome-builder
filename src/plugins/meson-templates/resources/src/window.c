@@ -1,6 +1,7 @@
 {{include "license.c"}}
 
-#include "{{prefix}}-config.h"
+#include "config.h"
+
 #include "{{prefix}}-window.h"
 
 struct _{{PreFix}}Window
