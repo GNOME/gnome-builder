@@ -5,14 +5,14 @@
 
 struct _{{PreFix}}Window
 {
-  GtkApplicationWindow  parent_instance;
+  {{if is_adwaita}}Adw{{else}}Gtk{{end}}ApplicationWindow  parent_instance;
 
   /* Template widgets */
   GtkHeaderBar        *header_bar;
   GtkLabel            *label;
 };
 
-G_DEFINE_TYPE ({{PreFix}}Window, {{prefix_}}_window, GTK_TYPE_APPLICATION_WINDOW)
+G_DEFINE_FINAL_TYPE ({{PreFix}}Window, {{prefix_}}_window, {{if is_adwaita}}ADW{{else}}GTK{{end}}_TYPE_APPLICATION_WINDOW)
 
 static void
 {{prefix_}}_window_class_init ({{PreFix}}WindowClass *klass)
