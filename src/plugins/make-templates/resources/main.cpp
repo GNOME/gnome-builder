@@ -1,6 +1,5 @@
 {{include "license.cpp"}}
 
-
 #include <iostream>
 #include <cstdlib>
 
