@@ -54,8 +54,8 @@ subdir('po')
 
 {{if enable_gnome}}
 gnome.post_install(
-  glib_compile_schemas: true,
-  gtk_update_icon_cache: true,
+    glib_compile_schemas: true,
+   gtk_update_icon_cache: true,
   update_desktop_database: true,
 )
 {{end}}
