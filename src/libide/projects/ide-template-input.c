@@ -988,8 +988,13 @@ ide_template_input_get_license_path (IdeTemplateInput *self)
   for (guint i = 0; i < G_N_ELEMENTS (licenses); i++)
     {
       if (g_strcmp0 (licenses[i].spdx, self->license_name) == 0)
-        return g_strdup_printf ("/org/gnome/libide-projects/licenses/%s",
-                                licenses[i].full_path);
+        {
+          if (licenses[i].full_path == NULL)
+            return NULL;
+
+          return g_strdup_printf ("/org/gnome/libide-projects/licenses/%s",
+                                  licenses[i].full_path);
+        }
     }
 
   return NULL;
