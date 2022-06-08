@@ -4,7 +4,7 @@ moduledir = join_paths(pkgdatadir, '{{name_}}')
 python = import('python')
 
 conf = configuration_data()
-conf.set('PYTHON', python.find_installation('python3').path())
+conf.set('PYTHON', python.find_installation('python3').full_path())
 conf.set('pkgdatadir', pkgdatadir)
 configure_file(
             input: '{{name}}.in',
