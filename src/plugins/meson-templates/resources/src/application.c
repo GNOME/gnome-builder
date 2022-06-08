@@ -5,7 +5,11 @@
 
 struct _{{PreFix}}Application
 {
+{{if is_adwaita}}
+  AdwApplication parent_instance;
+{{else}}
   GtkApplication parent_instance;
+{{end}}
 };
 
 G_DEFINE_TYPE ({{PreFix}}Application, {{prefix_}}_application, {{if is_adwaita}}ADW_TYPE_APPLICATION{{else}}GTK_TYPE_APPLICATION{{end}})
