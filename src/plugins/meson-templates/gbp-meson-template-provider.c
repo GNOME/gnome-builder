@@ -123,6 +123,36 @@ static GbpMesonTemplateExpansion library_expansions[] = {
   { "src/hello-version.h.in", "src/{{name}}-version.h.in" },
 };
 
+static GbpMesonTemplateExpansion cli_expansions[] = {
+  /* Shared */
+  { "meson.build", "meson.build" },
+
+  /* C */
+  { "src/meson-cli.build", "src/meson.build", IDE_STRV_INIT ("C") },
+  { "src/main-cli.c", "src/main.c", IDE_STRV_INIT ("C") },
+
+  /* C++ */
+  { "src/meson-cli.build", "src/meson.build", IDE_STRV_INIT ("C++") },
+  { "src/main-cli.cpp", "src/main.cpp", IDE_STRV_INIT ("C++") },
+
+  /* Python */
+  { "src/meson-py-cli.build", "src/meson.build", IDE_STRV_INIT ("Python") },
+  { "src/hello-cli.py.in", "src/{{name}}.in", IDE_STRV_INIT ("Python") },
+  { "src/__init__.py", "src/__init__.py", IDE_STRV_INIT ("Python") },
+  { "src/main-cli.py", "src/main.py", IDE_STRV_INIT ("Python") },
+
+  /* Rust */
+  { "src/meson-cli.build", "src/meson.build", IDE_STRV_INIT ("Rust") },
+  { "src/Cargo.lock", "Cargo.lock", IDE_STRV_INIT ("Rust") },
+  { "src/Cargo-cli.toml", "Cargo.toml", IDE_STRV_INIT ("Rust") },
+  { "src/main-cli.rs", "src/main.rs", IDE_STRV_INIT ("Rust") },
+  { "build-aux/cargo.sh", "build-aux/cargo.sh", IDE_STRV_INIT ("Rust") },
+
+  /* Vala */
+  { "src/meson-cli.build", "src/meson.build", IDE_STRV_INIT ("Vala") },
+  { "src/main-cli.vala", "src/main.vala", IDE_STRV_INIT ("Vala") },
+};
+
 static GbpMesonTemplateExpansion empty_expansions[] = {
   /* Shared */
   { "meson.build", "meson.build" },
@@ -173,6 +203,14 @@ static const GbpMesonTemplateInfo templates[] = {
     library_expansions, G_N_ELEMENTS (library_expansions),
   },
   {
+    -700,
+    "empty",
+    N_("Command Line Toool"),
+    N_("An Meson-based project for a command-line program"),
+    IDE_STRV_INIT ("C", "C++", "Python", "Rust", "Vala"),
+    cli_expansions, G_N_ELEMENTS (cli_expansions),
+  },
+  {
     -600,
     "empty",
     N_("Empty Meson Project"),
@@ -211,25 +249,6 @@ gbp_meson_template_provider_get_project_templates (IdeTemplateProvider *provider
                                              templates[i].n_language_scope);
       list = g_list_prepend (list, g_steal_pointer (&template));
     }
-
-#if 0
-  list = g_list_prepend (list,
-                         g_object_new (GBP_TYPE_MESON_TEMPLATE,
-                                       "id", "meson-templates:cli",
-                                       "name", _("Command Line Tool"),
-                                       "description", _("A Meson-based project creating a command-line program"),
-                                       "languages", IDE_STRV_INIT ("C", "C++", "Python", "Rust", "Vala"),
-                                       "priority", -700,
-                                       NULL));
-  list = g_list_prepend (list,
-                         g_object_new (GBP_TYPE_MESON_TEMPLATE,
-                                       "id", "meson-templates:gtk3",
-                                       "name", _("GTK Application (Legacy)"),
-                                       "description", _("A Meson-based project using GTK 3"),
-                                       "languages", IDE_STRV_INIT ("C", "C++", "C♯", "JavaScript", "Python", "Rust", "Vala"),
-                                       "priority", -600,
-                                       NULL));
-#endif
 
   return list;
 }
