@@ -114,6 +114,14 @@ static const GbpMesonTemplateLanguageScope gtk4_language_scope[] = {
   { "JavaScript", IDE_STRV_INIT ("exec_name={{appid}}") },
 };
 
+static GbpMesonTemplateExpansion library_expansions[] = {
+  { "meson.build", "meson.build" },
+  { "src/meson-clib.build", "src/meson.build" },
+  { "src/hello.c", "src/{{name}}.c" },
+  { "src/hello.h", "src/{{name}}.h" },
+  { "src/hello-version.h.in", "src/{{name}}-version.h.in" },
+};
+
 static const GbpMesonTemplateInfo templates[] = {
   {
     -1000,
@@ -144,6 +152,14 @@ static const GbpMesonTemplateInfo templates[] = {
                    "enable_gnome=true",
                    "ui_file=window.ui",
                    "exec_name={{name}}"),
+  },
+  {
+    -800,
+    "library",
+    N_("Shared Library"),
+    N_("A Meson-based project for a shared library"),
+    IDE_STRV_INIT ("C"),
+    library_expansions, G_N_ELEMENTS (library_expansions),
   },
 };
 
