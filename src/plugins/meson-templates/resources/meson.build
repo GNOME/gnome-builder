@@ -2,15 +2,7 @@ project('{{name}}',{{if language == "c"}} 'c',{{else if language == "c++"}} ['cp
 
           version: '{{project_version}}',
     meson_version: '>= 0.59.0',
-  default_options: [ 'warning_level=2',
-                     'werror=false',
-{{if language == "c"}}
-                     'c_std=gnu11',
-{{end}}
-{{if language == "c++"}}
-                     'cpp_std=gnu++2a',
-{{end}}
-                   ],
+  default_options: [ 'warning_level=2', 'werror=false',{{if language == "c"}} 'c_std=gnu11',{{else if language == "c++"}} 'cpp_std=gnu++2a',{{end}} ],
 )
 
 {{if enable_i18n}}
