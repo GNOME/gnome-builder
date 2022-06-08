@@ -257,6 +257,9 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
       ide_terminal_page_set_pty (self->run_terminal, pty);
     }
 
+  if (self->run_panel != NULL)
+    panel_widget_raise (PANEL_WIDGET (self->run_panel));
+
   ide_runner_set_pty (runner, pty);
 
   env = ide_runner_get_environment (runner);
