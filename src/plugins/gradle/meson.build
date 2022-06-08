@@ -1,13 +1,19 @@
 if get_option('plugin_gradle')
 
-install_data('gradle_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'gradle-plugin.c',
+  'gbp-gradle-build-system-discovery.c',
+  'gbp-gradle-build-system.c',
+  'gbp-gradle-pipeline-addin.c',
+  'gbp-gradle-run-command-provider.c',
+])
 
-configure_file(
-          input: 'gradle.plugin',
-         output: 'gradle.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_gradle_resources = gnome.compile_resources(
+  'gradle-resources',
+  'gradle.gresource.xml',
+  c_name: 'gbp_gradle',
 )
+
+plugins_sources += plugin_gradle_resources
 
 endif
