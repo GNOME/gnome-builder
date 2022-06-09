@@ -86,11 +86,11 @@ gbp_gradle_pipeline_addin_load (IdePipelineAddin *addin,
   ide_pipeline_addin_track (addin, id);
 
   build_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (wrapper_launcher, srcdir);
+  ide_subprocess_launcher_set_cwd (build_launcher, srcdir);
   ide_subprocess_launcher_push_args (build_launcher, IDE_STRV_INIT ("./gradlew", "build"));
 
   clean_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (wrapper_launcher, srcdir);
+  ide_subprocess_launcher_set_cwd (clean_launcher, srcdir);
   ide_subprocess_launcher_push_args (clean_launcher, IDE_STRV_INIT ("./gradlew", "clean"));
 
   build_stage = ide_pipeline_stage_launcher_new (context, build_launcher);
