@@ -44,6 +44,7 @@ static const char * const npm_standard_scripts[] = {
   "test", "start", "stop", "restart",
   NULL
 };
+static const char *npm_start = "start";
 
 static gboolean
 is_ignored_script (const char         *script,
@@ -87,7 +88,7 @@ gbp_npm_run_command_provider_list_commands_worker (IdeTask      *task,
   g_autoptr(GFile) server_js = NULL;
   g_autoptr(JsonParser) parser = NULL;
   g_autoptr(GListStore) store = NULL;
-  g_autoptr(GPtrArray) all_scripts = NULL;
+  g_autoptr(GArray) all_scripts = NULL;
   g_autoptr(GError) error = NULL;
   JsonObject *root_obj;
   JsonArray *scripts_ar;
@@ -132,34 +133,34 @@ gbp_npm_run_command_provider_list_commands_worker (IdeTask      *task,
     IDE_GOTO (complete);
 
   n_items = json_array_get_length (scripts_ar);
-  all_scripts = g_ptr_array_new_null_terminated (n_items, NULL, TRUE);
+  all_scripts = g_array_sized_new (TRUE, FALSE, sizeof (char *), n_items);
 
   for (guint i = 0; i < n_items; i++)
     {
       JsonNode *node = json_array_get_element (scripts_ar, i);
       const char *str;
       if (JSON_NODE_HOLDS_VALUE (node) && (str = json_node_get_string (node)))
-        g_ptr_array_add (all_scripts, (char *)str);
+        g_array_append_val (all_scripts, str);
     }
 
   /* if no start script is specified, but server.js exists,
    * we can still run "npm start".
    */
-  if (!g_strv_contains ((const char * const *)all_scripts->pdata, "start") &&
+  if (!g_strv_contains ((const char * const *)(gpointer)all_scripts->data, "start") &&
       g_file_query_exists (server_js, NULL))
-    g_ptr_array_add (all_scripts, (char *)"start");
+    g_array_append_val (all_scripts, npm_start);
 
-  ide_strv_sort ((char **)all_scripts->pdata, all_scripts->len);
+  ide_strv_sort ((char **)(gpointer)all_scripts->data, all_scripts->len);
 
   for (guint i = 0; i < all_scripts->len; i++)
     {
-      const char *script = g_ptr_array_index (all_scripts, i);
+      const char *script = g_array_index (all_scripts, const char *, i);
       g_autoptr(IdeRunCommand) run_command = NULL;
       g_autofree char *id = NULL;
       g_autofree char *display_name = NULL;
       int priority;
 
-      if (is_ignored_script (script, (const char * const *)all_scripts->pdata))
+      if (is_ignored_script (script, (const char * const *)all_scripts->data))
         continue;
 
       id = g_strconcat ("npm:", script, NULL);
