@@ -26,6 +26,6 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_GRADLE_TEST_PROVIDER (gbp_gradle_test_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGradleTestProvider, gbp_gradle_test_provider, GBP, GRADLE_TEST_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpGradleTestProvider, gbp_gradle_test_provider, GBP, GRADLE_TEST_PROVIDER, IdeTestProvider)
 
 G_END_DECLS
