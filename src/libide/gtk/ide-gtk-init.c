@@ -29,6 +29,7 @@
 #include "ide-file-chooser-entry.h"
 #include "ide-gtk-private.h"
 #include "ide-cell-renderer-fancy.h"
+#include "ide-enum-object.h"
 #include "ide-fancy-tree-view.h"
 #include "ide-progress-icon.h"
 #include "ide-radio-box.h"
@@ -41,6 +42,7 @@ _ide_gtk_init (void)
 {
   g_type_ensure (IDE_TYPE_ANIMATION);
   g_type_ensure (IDE_TYPE_CELL_RENDERER_FANCY);
+  g_type_ensure (IDE_TYPE_ENUM_OBJECT);
   g_type_ensure (IDE_TYPE_ENTRY_POPOVER);
   g_type_ensure (IDE_TYPE_FANCY_TREE_VIEW);
   g_type_ensure (IDE_TYPE_FILE_CHOOSER_ENTRY);

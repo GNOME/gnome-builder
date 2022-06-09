@@ -1,4 +1,4 @@
-/* libide-gtk.h
+/* ide-enum-object.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,22 +20,24 @@
 
 #pragma once
 
-#define IDE_GTK_INSIDE
-# include "ide-animation.h"
-# include "ide-cell-renderer-fancy.h"
-# include "ide-entry-popover.h"
-# include "ide-enum-object.h"
-# include "ide-fancy-tree-view.h"
-# include "ide-file-chooser-entry.h"
-# include "ide-file-manager.h"
-# include "ide-font-description.h"
-# include "ide-gtk.h"
-# include "ide-gtk-enums.h"
-# include "ide-joined-menu.h"
-# include "ide-menu-manager.h"
-# include "ide-progress-icon.h"
-# include "ide-radio-box.h"
-# include "ide-search-entry.h"
-# include "ide-three-grid.h"
-# include "ide-truncate-model.h"
-#undef IDE_GTK_INSIDE
+#include <libide-core.h>
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_ENUM_OBJECT (ide_enum_object_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeEnumObject, ide_enum_object, IDE, ENUM_OBJECT, GObject)
+
+IDE_AVAILABLE_IN_ALL
+IdeEnumObject *ide_enum_object_new             (const char    *nick,
+                                                const char    *title,
+                                                const char    *description);
+IDE_AVAILABLE_IN_ALL
+const char    *ide_enum_object_get_description (IdeEnumObject *self);
+IDE_AVAILABLE_IN_ALL
+const char    *ide_enum_object_get_nick        (IdeEnumObject *self);
+IDE_AVAILABLE_IN_ALL
+const char    *ide_enum_object_get_title       (IdeEnumObject *self);
+
+G_END_DECLS
