@@ -7,5 +7,5 @@ Embedded=_ide_autotools_register_types
 Hidden=true
 Module=autotools
 Name=Autotools
-X-Project-File-Filter-Name=Autotools Project (configure.ac)
+X-Project-File-Filter-Name=Autotools (configure.ac)
 X-Project-File-Filter-Pattern=configure.ac,configure.in

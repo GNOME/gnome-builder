@@ -7,5 +7,5 @@ Loader=python3
 Module=npm_plugin
 Name=NPM/nodejs
 X-Builder-ABI=@PACKAGE_ABI@
-X-Project-File-Filter-Name=NPM package (package.json)
+X-Project-File-Filter-Name=NPM Package (package.json)
 X-Project-File-Filter-Pattern=package.json
