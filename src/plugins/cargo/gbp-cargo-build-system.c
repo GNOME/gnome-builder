@@ -165,7 +165,7 @@ gbp_cargo_build_system_get_project_dir (GbpCargoBuildSystem *self)
 
   base = g_file_get_basename (self->project_file);
 
-  if (strcasecmp (base, "Cargo.toml") != 0)
+  if (strcasecmp (base, "Cargo.toml") == 0)
     {
       g_autoptr(GFile) parent = g_file_get_parent (self->project_file);
       return g_file_get_path (parent);
