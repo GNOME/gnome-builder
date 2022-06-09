@@ -6,5 +6,5 @@ Embedded=_gbp_waf_register_types
 Module=waf
 Name=Waf
 X-Category=buildsystems
-X-Project-File-Filter-Name=Waf (waf)
+X-Project-File-Filter-Name=Waf (wscript)
 X-Project-File-Filter-Pattern=wscript
