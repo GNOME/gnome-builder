@@ -56,7 +56,7 @@ gbp_gradle_test_provider_add (GbpGradleTestProvider *self,
   if ((dot = strrchr (class_name, '.')))
     *dot = 0;
 
-  full_name = g_strconcat (class_name, ".", "test_name", NULL);
+  full_name = g_strconcat (class_name, ".", test_name, NULL);
   id = g_strconcat ("gradle:%s", full_name, NULL);
   test = gbp_gradle_test_new (full_name);
 
