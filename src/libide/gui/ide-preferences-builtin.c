@@ -650,24 +650,25 @@ handle_style_variant (const char                   *page_name,
 }
 
 static const IdePreferencePageEntry pages[] = {
-  { NULL, "visual",   "appearance", "org.gnome.Builder-appearance-symbolic",    0, N_("Appearance") },
-  { NULL, "visual",   "editing",    "org.gnome.Builder-editing-symbolic",      10, N_("Editing") },
-  { NULL, "visual",   "keyboard",   "org.gnome.Builder-shortcuts-symbolic",    20, N_("Shortcuts") },
-  { NULL, "code",     "languages",  "org.gnome.Builder-languages-symbolic",   100, N_("Languages") },
-  { NULL, "code",     "insight",    "org.gnome.Builder-diagnostics-symbolic", 120, N_("Insight") },
-  { NULL, "projects", "projects",   "org.gnome.Builder-projects-symbolic",    200, N_("Projects") },
-  { NULL, "tools",    "build",      "org.gnome.Builder-build-symbolic",       300, N_("Build") },
-  { NULL, "tools",    "debug",      "org.gnome.Builder-debugger-symbolic",    310, N_("Debugger") },
-  { NULL, "tools",    "commands",   "org.gnome.Builder-command-symbolic",     320, N_("Commands") },
-  { NULL, "tools",    "sdks",       "org.gnome.Builder-sdk-symbolic",         500, N_("SDKs") },
-  { NULL, "network",  "network",    "org.gnome.Builder-network-symbolic",     600, N_("Network") },
-  { NULL, "plugins",  "plugins",    "org.gnome.Builder-plugins-symbolic",     700, N_("Plugins") },
+  { NULL, "visual",   "appearance", "preferences-desktop-appearance-symbolic",           0, N_("Appearance") },
+  { NULL, "visual",   "editing",    "document-edit-symbolic",                           10, N_("Editing") },
+  { NULL, "visual",   "keyboard",   "preferences-desktop-keyboard-shortcuts-symbolic",  20, N_("Shortcuts") },
+  { NULL, "code",     "languages",  "text-x-javascript-symbolic",                      100, N_("Languages") },
+  { NULL, "code",     "insight",    "folder-saved-search-symbolic",                    120, N_("Insight") },
+  { NULL, "projects", "projects",   "folder-symbolic",                                 200, N_("Projects") },
+  { NULL, "tools",    "build",      "builder-build-symbolic",                          300, N_("Build") },
+  { NULL, "tools",    "debug",      "builder-debugger-symbolic",                       310, N_("Debugger") },
+  { NULL, "tools",    "commands",   "text-x-script-symbolic",                          320, N_("Commands") },
+  { NULL, "tools",    "sdks",       "package-x-generic-symbolic",                      500, N_("SDKs") },
+  { NULL, "network",  "network",    "folder-download-symbolic",                        600, N_("Network") },
+  { NULL, "plugins",  "plugins",    "builder-plugin-symbolic",                         700, N_("Plugins") },
 };
 
 static const IdePreferencePageEntry project_pages[] = {
-  { NULL, "config", "overview",       "org.gnome.Builder-overview-symbolic",    0, N_("Overview") },
+  { NULL, "config", "overview",       "info-symbolic",                          0, N_("Overview") },
   { NULL, "config", "build",          "builder-build-symbolic",               100, N_("Configurations") },
-  { NULL, "code",   "languages",      "org.gnome.Builder-languages-symbolic", 200, N_("Languages") },
+  { NULL, "code",   "languages",      "text-x-javascript-symbolic",           200, N_("Languages") },
+  { NULL, "tools",  "commands",       "text-x-script-symbolic",               300, N_("Commands") },
 };
 
 static const IdePreferenceGroupEntry groups[] = {
