@@ -104,7 +104,8 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">Manage SDKs…</attribute>
-        <attribute name="action">foundryui.manage-sdks</attribute>
+        <attribute name="action">app.preferences-page</attribute>
+        <attribute name="target" type="s">'sdks'</attribute>
       </item>
     </section>
   </menu>
