@@ -688,21 +688,17 @@ get_project_title (IdePreferencesWindow *self)
 }
 
 static void
-ide_preferences_window_page_activated_cb (IdePreferencesWindow *self,
-                                          GtkListBoxRow        *row,
-                                          GtkListBox           *list_box)
+ide_preferences_window_set_page_entry (IdePreferencesWindow         *self,
+                                       const IdePreferencePageEntry *entry)
 {
   g_autofree char *project_title = NULL;
-  const IdePreferencePageEntry *entry;
   const IdePreferencePageEntry *parent;
   AdwPreferencesPage *page;
   GtkWidget *visible_child;
 
   g_assert (IDE_IS_PREFERENCES_WINDOW (self));
-  g_assert (GTK_IS_LIST_BOX_ROW (row));
-  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (entry != NULL);
 
-  entry = g_object_get_data (G_OBJECT (row), "ENTRY");
   if (entry == self->current_page)
     return;
 
@@ -793,6 +789,25 @@ ide_preferences_window_page_activated_cb (IdePreferencesWindow *self,
 }
 
 static void
+ide_preferences_window_page_activated_cb (IdePreferencesWindow *self,
+                                          GtkListBoxRow        *row,
+                                          GtkListBox           *list_box)
+{
+  const IdePreferencePageEntry *entry;
+
+  g_assert (IDE_IS_PREFERENCES_WINDOW (self));
+  g_assert (GTK_IS_LIST_BOX_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  entry = g_object_get_data (G_OBJECT (row), "ENTRY");
+
+  if (entry == self->current_page)
+    return;
+
+  ide_preferences_window_set_page_entry (self, entry);
+}
+
+static void
 create_navigation_page (IdePreferencesWindow  *self,
                         Page                 **out_page)
 {
@@ -848,6 +863,8 @@ ide_preferences_window_rebuild (IdePreferencesWindow *self)
   Page *page;
 
   g_assert (IDE_IS_PREFERENCES_WINDOW (self));
+
+  g_clear_handle_id (&self->rebuild_source, g_source_remove);
 
   /* Remove old widgets */
   for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->pages_stack));
@@ -1603,4 +1620,19 @@ ide_preferences_window_get_context (IdePreferencesWindow *self)
   g_return_val_if_fail (IDE_IS_PREFERENCES_WINDOW (self), NULL);
 
   return self->context;
+}
+
+void
+ide_preferences_window_set_page (IdePreferencesWindow *self,
+                                 const char           *page)
+{
+  const IdePreferencePageEntry *p;
+
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (self));
+  g_return_if_fail (page != NULL);
+
+  ide_preferences_window_rebuild (self);
+
+  if ((p = get_page (self, page)))
+    ide_preferences_window_set_page_entry (self, p);
 }

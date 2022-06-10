@@ -97,6 +97,9 @@ IdePreferencesMode  ide_preferences_window_get_mode   (IdePreferencesWindow     
 IDE_AVAILABLE_IN_ALL
 IdeContext         *ide_preferences_window_get_context (IdePreferencesWindow          *self);
 IDE_AVAILABLE_IN_ALL
+void                ide_preferences_window_set_page   (IdePreferencesWindow          *self,
+                                                       const char                    *page);
+IDE_AVAILABLE_IN_ALL
 void                ide_preferences_window_add_pages  (IdePreferencesWindow          *self,
                                                        const IdePreferencePageEntry  *pages,
                                                        gsize                          n_pages,
