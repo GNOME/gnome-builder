@@ -2,7 +2,5 @@
 <gresources>
   <gresource prefix="/plugins/shellcmd">
     <file>shellcmd.plugin</file>
-    <file preprocess="xml-stripblanks">gbp-shellcmd-command-editor.ui</file>
-    <file preprocess="xml-stripblanks">gbp-shellcmd-command-row.ui</file>
   </gresource>
 </gresources>
