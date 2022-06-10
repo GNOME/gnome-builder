@@ -26,6 +26,7 @@
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
 
+#include <libide-gtk.h>
 #include <libide-gui.h>
 
 #include "gbp-buildui-runnables-dialog.h"
@@ -35,6 +36,7 @@ struct _GbpBuilduiRunnablesDialog
   AdwWindow   parent_instance;
   GtkListBox *list_box;
   GtkSpinner *spinner;
+  GtkStack   *stack;
   guint       busy : 1;
 };
 
@@ -51,7 +53,7 @@ static GParamSpec *properties [N_PROPS];
 
 static GtkWidget *
 create_run_command_row (gpointer item,
-                   gpointer user_data)
+                        gpointer user_data)
 {
   IdeRunCommand *run_command = item;
   g_autoptr(GVariant) idv = NULL;
@@ -150,6 +152,32 @@ gbp_buildui_runnables_dialog_list_commands_cb (GObject      *object,
 }
 
 static void
+gbp_buildui_runnables_dialog_set_page (GbpBuilduiRunnablesDialog *self,
+                                       const char                *page)
+{
+  g_assert (GBP_IS_BUILDUI_RUNNABLES_DIALOG (self));
+  g_assert (page != NULL);
+
+  gtk_stack_set_visible_child_name (self->stack, page);
+}
+
+static void
+new_run_command_action (GtkWidget  *widget,
+                        const char *action_name,
+                        GVariant   *param)
+{
+  gbp_buildui_runnables_dialog_set_page (GBP_BUILDUI_RUNNABLES_DIALOG (widget), "new");
+}
+
+static void
+list_run_command_action (GtkWidget  *widget,
+                         const char *action_name,
+                         GVariant   *param)
+{
+  gbp_buildui_runnables_dialog_set_page (GBP_BUILDUI_RUNNABLES_DIALOG (widget), "list");
+}
+
+static void
 gbp_buildui_runnables_dialog_set_context (GbpBuilduiRunnablesDialog *self,
                                           IdeContext                *context)
 {
@@ -238,15 +266,27 @@ gbp_buildui_runnables_dialog_class_init (GbpBuilduiRunnablesDialogClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_install_action (widget_class, "run-command.new", NULL, new_run_command_action);
+  gtk_widget_class_install_action (widget_class, "run-command.list", NULL, list_run_command_action);
+
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-runnables-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, spinner);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, stack);
+
+  g_type_ensure (IDE_TYPE_ENUM_OBJECT);
 }
 
 static void
 gbp_buildui_runnables_dialog_init (GbpBuilduiRunnablesDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+#ifdef DEVELOPMENT_BUILD
+  gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
+#endif
+
+  gbp_buildui_runnables_dialog_set_page (self, "list");
 }
