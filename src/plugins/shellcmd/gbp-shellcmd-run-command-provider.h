@@ -1,6 +1,6 @@
-/* shellcmd-plugin.c
+/* gbp-shellcmd-run-command-provider.h
  *
- * Copyright 2019-2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,18 +18,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "config.h"
-
-#include <libpeas/peas.h>
+#pragma once
 
 #include <libide-foundry.h>
 
-#include "gbp-shellcmd-run-command-provider.h"
+G_BEGIN_DECLS
 
-_IDE_EXTERN void
-_gbp_shellcmd_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_RUN_COMMAND_PROVIDER,
-                                              GBP_TYPE_SHELLCMD_RUN_COMMAND_PROVIDER);
-}
+#define GBP_TYPE_SHELLCMD_RUN_COMMAND_PROVIDER (gbp_shellcmd_run_command_provider_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpShellcmdRunCommandProvider, gbp_shellcmd_run_command_provider, GBP, SHELLCMD_RUN_COMMAND_PROVIDER, IdeObject)
+
+char *gbp_shellcmd_run_command_provider_create_settings_path (IdeContext *context);
+
+G_END_DECLS
