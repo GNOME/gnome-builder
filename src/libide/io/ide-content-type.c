@@ -44,6 +44,14 @@ static const struct {
   { "LICENSE", "text-x-copying-symbolic" },
   { "AUTHORS", "text-x-authors-symbolic" },
   { "MAINTAINERS", "text-x-authors-symbolic" },
+  { "Dockerfile", "text-makefile-symbolic" },
+};
+
+static const struct {
+  const char *suffix;
+  const char *content_type;
+} suffix_content_type_overrides[] = {
+  { ".md", "text-markdown-symbolic" },
 };
 
 #if defined (G_HAS_CONSTRUCTORS)
@@ -67,7 +75,16 @@ ide_io_init_ctor (void)
    * Adwaita generic icons before our hicolor specific icons).
    */
 #define ADD_ICON(t, n, v) g_hash_table_insert (t, (gpointer)n, v ? (gpointer)v : (gpointer)n)
+  /* We don't get GThemedIcon fallbacks in an order that prioritizes some
+   * applications over something more generic like text-x-script, so we need
+   * to map the higher priority symbolic first.
+   */
   ADD_ICON (bundled_by_content_type, "application-x-php-symbolic", NULL);
+  ADD_ICON (bundled_by_content_type, "application-x-ruby-symbolic", "text-x-ruby-symbolic");
+  ADD_ICON (bundled_by_content_type, "application-javascript-symbolic", "text-x-javascript-symbolic");
+  ADD_ICON (bundled_by_content_type, "application-json-symbolic", "text-x-javascript-symbolic");
+  ADD_ICON (bundled_by_content_type, "application-sql-symbolic", "text-sql-symbolic");
+
   ADD_ICON (bundled_by_content_type, "text-css-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-html-symbolic", NULL);
   ADD_ICON (bundled_by_content_type, "text-markdown-symbolic", NULL);
@@ -122,17 +139,11 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
                                       const gchar *filename)
 {
   g_autoptr(GIcon) icon = NULL;
+  const char * const *names;
+  const char *replacement_by_filename;
+  const char *suffix;
 
   g_return_val_if_fail (content_type != NULL, NULL);
-
-  /*
-   * Basically just steal the name if we get something that is not generic,
-   * because that is the only way we can somewhat ensure that we don't use
-   * the Adwaita fallback for generic when what we want is the *exact* match
-   * from our hicolor/ bundle.
-   */
-
-  icon = g_content_type_get_symbolic_icon (content_type);
 
   /* Special case folders to never even try to use an overridden icon. For
    * example in the case of the LICENSES folder required by the REUSE licensing
@@ -141,30 +152,46 @@ ide_g_content_type_get_symbolic_icon (const gchar *content_type,
    * confusing to have a folder without a folder icon, especially since it becomes
    * an expanded folder icon when opening it in the project tree.
    */
-  if (g_strcmp0 (content_type, "inode/directory") == 0)
-    return g_steal_pointer (&icon);
+  if (strcmp (content_type, "inode/directory") == 0)
+    return g_content_type_get_symbolic_icon (content_type);
+
+  /* Special case some weird content-types in the wild, particularly when Wine is
+   * installed and taking over a content-type we would otherwise not expect.
+   */
+  if ((suffix = filename ? strrchr (filename, '.') : NULL))
+    {
+      for (guint i = 0; i < G_N_ELEMENTS (suffix_content_type_overrides); i++)
+        {
+          if (strcmp (suffix, suffix_content_type_overrides[i].suffix) == 0)
+            {
+              content_type = suffix_content_type_overrides[i].content_type;
+              break;
+            }
+        }
+    }
+
+  icon = g_content_type_get_symbolic_icon (content_type);
+
+  if (filename != NULL && bundled_lookup_table [(guint8)filename[0]])
+    {
+      for (guint j = 0; j < G_N_ELEMENTS (bundled_check_by_name_prefix); j++)
+        {
+          const gchar *searched_prefix = bundled_check_by_name_prefix[j].searched_prefix;
+
+          /* Check prefix but ignore case, because there might be some files named e.g. ReadMe.txt */
+          if (g_ascii_strncasecmp (filename, searched_prefix, strlen (searched_prefix)) == 0)
+            return g_icon_new_for_string (bundled_check_by_name_prefix[j].icon_name, NULL);
+        }
+    }
+
+  if (filename != NULL)
+    {
+      if ((replacement_by_filename = g_hash_table_lookup (bundled_by_full_filename, filename)))
+        return g_icon_new_for_string (replacement_by_filename, NULL);
+    }
 
   if (G_IS_THEMED_ICON (icon))
     {
-      const gchar * const *names;
-      const gchar *replacement_by_filename;
-
-      if (filename != NULL && bundled_lookup_table [(guint8)filename[0]])
-        {
-          for (guint j = 0; j < G_N_ELEMENTS (bundled_check_by_name_prefix); j++)
-            {
-              const gchar *searched_prefix = bundled_check_by_name_prefix[j].searched_prefix;
-
-              /* Check prefix but ignore case, because there might be some files named e.g. ReadMe.txt */
-              if (g_ascii_strncasecmp (filename, searched_prefix, strlen (searched_prefix)) == 0)
-                return g_icon_new_for_string (bundled_check_by_name_prefix[j].icon_name, NULL);
-            }
-        }
-
-      replacement_by_filename = g_hash_table_lookup (bundled_by_full_filename, filename);
-      if (replacement_by_filename)
-        return g_icon_new_for_string (replacement_by_filename, NULL);
-
       names = g_themed_icon_get_names (G_THEMED_ICON (icon));
 
       if (names != NULL)
