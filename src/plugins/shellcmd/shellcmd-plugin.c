@@ -23,12 +23,17 @@
 #include <libpeas/peas.h>
 
 #include <libide-foundry.h>
+#include <libide-gui.h>
 
+#include "gbp-shellcmd-preferences-addin.h"
 #include "gbp-shellcmd-run-command-provider.h"
 
 _IDE_EXTERN void
 _gbp_shellcmd_register_types (PeasObjectModule *module)
 {
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PREFERENCES_ADDIN,
+                                              GBP_TYPE_SHELLCMD_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUN_COMMAND_PROVIDER,
                                               GBP_TYPE_SHELLCMD_RUN_COMMAND_PROVIDER);
