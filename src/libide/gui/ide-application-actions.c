@@ -41,6 +41,7 @@ ide_application_actions_preferences (GSimpleAction *action,
                                      gpointer       user_data)
 {
   IdeApplication *self = user_data;
+  const char *page = NULL;
   IdeContext *context = NULL;
   GtkWindow *toplevel = NULL;
   GtkWindow *window;
@@ -50,6 +51,10 @@ ide_application_actions_preferences (GSimpleAction *action,
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_APPLICATION (self));
+
+  if (parameter != NULL &&
+      g_variant_is_of_type (parameter, G_VARIANT_TYPE_STRING))
+    page = g_variant_get_string (parameter, NULL);
 
   /* Locate a toplevel for a transient-for property, or a previous
    * preferences window to display.
@@ -87,6 +92,9 @@ ide_application_actions_preferences (GSimpleAction *action,
                          NULL);
   gtk_application_add_window (GTK_APPLICATION (self), window);
   ide_gtk_window_present (window);
+
+  if (page != NULL)
+    ide_preferences_window_set_page (IDE_PREFERENCES_WINDOW (window), page);
 
   IDE_EXIT;
 }
@@ -356,12 +364,13 @@ ide_application_actions_stats (GSimpleAction *action,
 }
 
 static const GActionEntry IdeApplicationActions[] = {
-  { "about:types",  ide_application_actions_stats },
-  { "about",        ide_application_actions_about },
+  { "about:types", ide_application_actions_stats },
+  { "about", ide_application_actions_about },
   { "load-project", ide_application_actions_load_project, "s"},
-  { "preferences",  ide_application_actions_preferences },
-  { "quit",         ide_application_actions_quit },
-  { "help",         ide_application_actions_help },
+  { "preferences", ide_application_actions_preferences },
+  { "preferences-page", ide_application_actions_preferences, "s" },
+  { "quit", ide_application_actions_quit },
+  { "help", ide_application_actions_help },
 };
 
 void
