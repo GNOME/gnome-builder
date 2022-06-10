@@ -33,6 +33,8 @@
                         <property name="header-suffix">
                           <object class="GtkSpinner" id="spinner">
                             <property name="spinning" bind-source="GbpBuilduiRunnablesDialog" bind-property="busy" bind-flags="sync-create"/>
+                            <property name="halign">end</property>
+                            <property name="valign">start</property>
                           </object>
                         </property>
                         <child>
