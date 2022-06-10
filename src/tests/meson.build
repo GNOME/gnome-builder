@@ -71,4 +71,4 @@ test_shortcuts = executable('test-shortcuts', 'test-shortcuts.c',
         c_args: test_cflags,
   dependencies: [ libgtk_dep, libide_gui_dep ],
 )
-test('test-shortcuts', test_shortcuts, env: test_env)
+test('test-shortcuts', test_shortcuts, env: test_env, depends: [libide_gir])
