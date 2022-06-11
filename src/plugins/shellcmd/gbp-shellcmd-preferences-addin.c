@@ -27,7 +27,9 @@
 #include <libide-gui.h>
 
 #include "gbp-shellcmd-list.h"
+#include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-preferences-addin.h"
+#include "gbp-shellcmd-run-command.h"
 
 struct _GbpShellcmdPreferencesAddin
 {
@@ -36,6 +38,100 @@ struct _GbpShellcmdPreferencesAddin
   GSettings            *settings;
 };
 
+static gboolean
+argv_to_string (GBinding     *binding,
+                const GValue *from_value,
+                GValue       *to_value,
+                gpointer      user_data)
+{
+  const char * const *argv = g_value_get_boxed (from_value);
+  if (argv != NULL)
+    g_value_take_string (to_value, g_strjoinv (" ", (char **)argv));
+  return TRUE;
+}
+
+static void
+on_items_changed_cb (GListModel *model,
+                     guint       removed,
+                     guint       added,
+                     GtkWidget  *widget)
+{
+  gboolean was_visible = gtk_widget_get_visible (widget);
+  gboolean is_visible = added > 0 || g_list_model_get_n_items (model) > 0;
+
+  if (was_visible != is_visible)
+    gtk_widget_set_visible (widget, is_visible);
+}
+
+static void
+bind_visibility_to_nonempty (GtkWidget  *widget,
+                             GListModel *model)
+{
+  gtk_widget_set_visible (widget, g_list_model_get_n_items (model) > 0);
+  g_signal_connect_object (model,
+                           "items-changed",
+                           G_CALLBACK (on_items_changed_cb),
+                           widget,
+                           0);
+}
+
+static GtkWidget *
+gbp_shellcmd_preferences_addin_create_row_cb (gpointer item,
+                                              gpointer item_data)
+{
+  GbpShellcmdRunCommand *command = item;
+  AdwActionRow *row;
+
+  g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (command));
+
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "activatable", TRUE,
+                      NULL);
+  g_object_bind_property (command, "display-name", row, "title",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (command, "argv", row, "subtitle",
+                               G_BINDING_SYNC_CREATE,
+                               argv_to_string, NULL, NULL, NULL);
+  adw_action_row_add_suffix (row,
+                             g_object_new (GTK_TYPE_IMAGE,
+                                           "icon-name", "go-next-symbolic",
+                                           NULL));
+  g_object_set_data_full (G_OBJECT (row),
+                          "COMMAND",
+                          g_object_ref (command),
+                          g_object_unref);
+
+  return GTK_WIDGET (row);
+}
+
+static void
+on_row_activated_cb (GtkListBox           *list_box,
+                     AdwActionRow         *row,
+                     IdePreferencesWindow *window)
+{
+  GbpShellcmdRunCommand *command;
+
+  IDE_ENTRY;
+
+  g_assert (GTK_IS_LIST_BOX (list_box));
+  g_assert (ADW_IS_ACTION_ROW (row));
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+
+  command = g_object_get_data (G_OBJECT (row), "COMMAND");
+  g_assert (!command || GBP_IS_SHELLCMD_RUN_COMMAND (command));
+
+  if (command == NULL)
+    {
+      /* TODO: create new command */
+    }
+  else
+    {
+      /* TODO: edit existing command */
+    }
+
+  IDE_EXIT;
+}
+
 static void
 handle_shellcmd_list (const char                   *page_name,
                       const IdePreferenceItemEntry *entry,
@@ -43,6 +139,12 @@ handle_shellcmd_list (const char                   *page_name,
                       gpointer                      user_data)
 {
   IdePreferencesWindow *window = user_data;
+  GbpShellcmdCommandModel *model;
+  IdePreferencesMode mode;
+  AdwActionRow *create_row;
+  IdeContext *context;
+  GtkListBox *list_box;
+  GtkLabel *label;
 
   IDE_ENTRY;
 
@@ -50,28 +152,81 @@ handle_shellcmd_list (const char                   *page_name,
   g_assert (ADW_IS_PREFERENCES_GROUP (group));
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
 
-  adw_preferences_group_set_header_suffix (group,
-                                           g_object_new (GTK_TYPE_BUTTON,
-                                                         "valign", GTK_ALIGN_CENTER,
-                                                         "icon-name", "list-add-symbolic",
-                                                         "css-classes", IDE_STRV_INIT ("flat"),
-                                                         NULL));
+  context = ide_preferences_window_get_context (window);
+  mode = ide_preferences_window_get_mode (window);
 
-  adw_preferences_group_add (group,
-                             g_object_new (GBP_TYPE_SHELLCMD_LIST,
+  if (mode == IDE_PREFERENCES_MODE_PROJECT)
+    {
+      model = gbp_shellcmd_command_model_new_for_project (context);
+      adw_preferences_group_set_title (group, _("Project Commands"));
+    }
+  else
+    {
+      model = gbp_shellcmd_command_model_new_for_app ();
+      adw_preferences_group_set_title (group, _("Shared Commands"));
+    }
+
+  list_box = g_object_new (GTK_TYPE_LIST_BOX,
+                           "css-classes", IDE_STRV_INIT ("boxed-list"),
+                           "selection-mode", GTK_SELECTION_NONE,
+                           NULL);
+  create_row = g_object_new (ADW_TYPE_ACTION_ROW,
+                             "activatable", TRUE,
+                             "title", _("Create Command"),
+                             "subtitle", _("Commands can be used to build, run, or modify your projects"),
+                             NULL);
+  adw_action_row_add_suffix (create_row,
+                             g_object_new (GTK_TYPE_IMAGE,
+                                           "icon-name", "go-next-symbolic",
                                            NULL));
+  g_signal_connect_object (list_box,
+                           "row-activated",
+                           G_CALLBACK (on_row_activated_cb),
+                           window,
+                           0);
+  gtk_list_box_append (list_box, GTK_WIDGET (create_row));
+  adw_preferences_group_add (group, GTK_WIDGET (list_box));
+
+  label = g_object_new (GTK_TYPE_LABEL,
+                        "css-classes", IDE_STRV_INIT ("dim-label", "caption"),
+                        "margin-top", 6,
+                        "xalign", .0f,
+                        NULL);
+  if (mode == IDE_PREFERENCES_MODE_PROJECT)
+    gtk_label_set_label (label,
+                         _("These commands may be run from this project only."));
+  else
+    gtk_label_set_label (label,
+                         _("These commands may be shared across any project in Builder."));
+  adw_preferences_group_add (group, GTK_WIDGET (label));
+
+  list_box = g_object_new (GTK_TYPE_LIST_BOX,
+                           "css-classes", IDE_STRV_INIT ("boxed-list"),
+                           "selection-mode", GTK_SELECTION_NONE,
+                           "margin-top", 18,
+                           NULL);
+  gtk_list_box_bind_model (list_box,
+                           G_LIST_MODEL (model),
+                           gbp_shellcmd_preferences_addin_create_row_cb,
+                           NULL, NULL);
+  adw_preferences_group_add (group, GTK_WIDGET (list_box));
+  bind_visibility_to_nonempty (GTK_WIDGET (list_box), G_LIST_MODEL (model));
+  g_signal_connect_object (list_box,
+                           "row-activated",
+                           G_CALLBACK (on_row_activated_cb),
+                           window,
+                           0);
+
 
   IDE_EXIT;
 }
 
 static const IdePreferenceGroupEntry groups[] = {
-  { "commands", "build", 0, N_("Build Commands") },
-  { "commands", "run", 0, N_("Run Commands") },
+  { "commands", "shellcmd", 0 },
 };
 
 static const IdePreferenceItemEntry items[] = {
-  { "commands", "build", "list", 0, handle_shellcmd_list },
-  { "commands", "run", "list", 0, handle_shellcmd_list },
+  { "commands", "shellcmd", "list", 0, handle_shellcmd_list },
 };
 
 static void
