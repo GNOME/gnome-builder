@@ -322,8 +322,46 @@ gbp_shellcmd_command_model_new_for_project (IdeContext *context)
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
   project_id = ide_context_dup_project_id (context);
-  project_settings_path = g_strconcat (SHELLCMD_SETTINGS_BASE, "projects/", project_id, "/", NULL);
+  project_settings_path = g_strconcat (SHELLCMD_SETTINGS_BASE"projects/", project_id, "/", NULL);
   settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", project_settings_path);
 
   return gbp_shellcmd_command_model_new (settings, "run-commands");
+}
+
+GbpShellcmdRunCommand *
+gbp_shellcmd_run_command_create (IdeContext *context)
+{
+  g_autofree char *uuid = NULL;
+  g_autofree char *project_id = NULL;
+  g_autofree char *settings_path = NULL;
+  g_autofree char *parent_path = NULL;
+  g_autoptr(GStrvBuilder) builder = NULL;
+  g_autoptr(GSettings) settings = NULL;
+  g_auto(GStrv) strv = NULL;
+
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+
+  uuid = g_uuid_string_random ();
+  if (context != NULL)
+    project_id = ide_context_dup_project_id (context);
+
+  if (project_id == NULL)
+    parent_path = g_strdup (SHELLCMD_SETTINGS_BASE);
+  else
+    parent_path = g_strconcat (SHELLCMD_SETTINGS_BASE"projects/", project_id, "/", NULL);
+
+  settings_path = g_strconcat (parent_path, uuid, "/", NULL);
+  settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", parent_path);
+  strv = g_settings_get_strv (settings, "run-commands");
+
+  builder = g_strv_builder_new ();
+  g_strv_builder_addv (builder, (const char **)strv);
+  g_strv_builder_add (builder, uuid);
+
+  g_clear_pointer (&strv, g_strfreev);
+  strv = g_strv_builder_end (builder);
+
+  g_settings_set_strv (settings, "run-commands", (const char * const *)strv);
+
+  return gbp_shellcmd_run_command_new (settings_path);
 }
