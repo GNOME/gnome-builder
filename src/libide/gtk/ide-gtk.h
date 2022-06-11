@@ -66,5 +66,8 @@ void       ide_gtk_list_view_move_previous    (GtkListView       *view);
 IDE_AVAILABLE_IN_ALL
 gboolean   ide_gtk_list_view_get_selected_row (GtkListView       *view,
                                                guint             *position);
+IDE_AVAILABLE_IN_ALL
+void       ide_gtk_widget_hide_when_empty     (GtkWidget         *widget,
+                                               GListModel        *model);
 
 G_END_DECLS
