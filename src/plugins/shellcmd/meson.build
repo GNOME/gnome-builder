@@ -2,6 +2,7 @@ if get_option('plugin_shellcmd')
 
 plugins_sources += files([
   'shellcmd-plugin.c',
+  'gbp-shellcmd-command-dialog.c',
   'gbp-shellcmd-command-model.c',
   'gbp-shellcmd-preferences-addin.c',
   'gbp-shellcmd-run-command.c',
