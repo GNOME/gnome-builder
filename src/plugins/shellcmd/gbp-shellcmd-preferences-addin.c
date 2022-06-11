@@ -26,7 +26,6 @@
 
 #include <libide-gui.h>
 
-#include "gbp-shellcmd-list.h"
 #include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-preferences-addin.h"
 #include "gbp-shellcmd-run-command.h"
