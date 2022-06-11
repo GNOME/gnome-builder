@@ -166,7 +166,20 @@ new_run_command_action (GtkWidget  *widget,
                         const char *action_name,
                         GVariant   *param)
 {
-  gbp_buildui_runnables_dialog_set_page (GBP_BUILDUI_RUNNABLES_DIALOG (widget), "new");
+  GbpBuilduiRunnablesDialog *self = (GbpBuilduiRunnablesDialog *)widget;
+  IdeWorkspace *workspace;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_BUILDUI_RUNNABLES_DIALOG (self));
+
+  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+  gtk_widget_activate_action (GTK_WIDGET (workspace),
+                              "workbench.configure-page",
+                              "s", "commands");
+  gtk_window_destroy (GTK_WINDOW (self));
+
+  IDE_EXIT;
 }
 
 static void
