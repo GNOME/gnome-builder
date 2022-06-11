@@ -532,3 +532,32 @@ ide_gtk_list_view_get_selected_row (GtkListView *view,
   *position = gtk_bitset_get_minimum (bitset);
   return TRUE;
 }
+
+static void
+on_items_changed_cb (GListModel *model,
+                     guint       position,
+                     guint       removed,
+                     guint       added,
+                     GtkWidget  *widget)
+{
+  gboolean was_visible = gtk_widget_get_visible (widget);
+  gboolean is_visible = added > 0 || g_list_model_get_n_items (model) > 0;
+
+  if (was_visible != is_visible)
+    gtk_widget_set_visible (widget, is_visible);
+}
+
+void
+ide_gtk_widget_hide_when_empty (GtkWidget  *widget,
+                                GListModel *model)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (G_IS_LIST_MODEL (model));
+
+  gtk_widget_set_visible (widget, g_list_model_get_n_items (model) > 0);
+  g_signal_connect_object (model,
+                           "items-changed",
+                           G_CALLBACK (on_items_changed_cb),
+                           widget,
+                           0);
+}
