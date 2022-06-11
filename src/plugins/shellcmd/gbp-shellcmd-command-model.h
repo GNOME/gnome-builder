@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -28,7 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShellcmdCommandModel, gbp_shellcmd_command_model, GBP, SHELLCMD_COMMAND_MODEL, GObject)
 
-GbpShellcmdCommandModel *gbp_shellcmd_command_model_new (GSettings  *settings,
-                                                         const char *key);
+GbpShellcmdCommandModel *gbp_shellcmd_command_model_new_for_app     (void);
+GbpShellcmdCommandModel *gbp_shellcmd_command_model_new_for_project (IdeContext *context);
+GbpShellcmdCommandModel *gbp_shellcmd_command_model_new             (GSettings  *settings,
+                                                                     const char *key);
 
 G_END_DECLS

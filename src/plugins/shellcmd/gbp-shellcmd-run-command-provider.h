@@ -28,6 +28,4 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShellcmdRunCommandProvider, gbp_shellcmd_run_command_provider, GBP, SHELLCMD_RUN_COMMAND_PROVIDER, IdeObject)
 
-char *gbp_shellcmd_run_command_provider_create_settings_path (IdeContext *context);
-
 G_END_DECLS
