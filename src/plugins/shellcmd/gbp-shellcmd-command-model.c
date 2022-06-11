@@ -25,6 +25,8 @@
 #include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-run-command.h"
 
+#define SHELLCMD_SETTINGS_BASE "/org/gnome/builder/shellcmd/"
+
 struct _GbpShellcmdCommandModel
 {
   GObject      parent_instance;
@@ -299,4 +301,29 @@ gbp_shellcmd_command_model_new (GSettings  *settings,
                        "settings", settings,
                        "key", key,
                        NULL);
+}
+
+GbpShellcmdCommandModel *
+gbp_shellcmd_command_model_new_for_app (void)
+{
+  g_autoptr(GSettings) settings = NULL;
+
+  settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", SHELLCMD_SETTINGS_BASE);
+  return gbp_shellcmd_command_model_new (settings, "run-commands");
+}
+
+GbpShellcmdCommandModel *
+gbp_shellcmd_command_model_new_for_project (IdeContext *context)
+{
+  g_autofree char *project_id = NULL;
+  g_autofree char *project_settings_path = NULL;
+  g_autoptr(GSettings) settings = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  project_id = ide_context_dup_project_id (context);
+  project_settings_path = g_strconcat (SHELLCMD_SETTINGS_BASE, "projects/", project_id, "/", NULL);
+  settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", project_settings_path);
+
+  return gbp_shellcmd_command_model_new (settings, "run-commands");
 }

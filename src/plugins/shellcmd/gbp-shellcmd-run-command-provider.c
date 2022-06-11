@@ -19,7 +19,6 @@
  */
 
 #define G_LOG_DOMAIN "gbp-shellcmd-run-command-provider"
-#define SHELLCMD_SETTINGS_BASE "/org/gnome/builder/shellcmd/"
 
 #include "config.h"
 
@@ -43,11 +42,7 @@ gbp_shellcmd_run_command_provider_list_commands_async (IdeRunCommandProvider *pr
   g_autoptr(GbpShellcmdCommandModel) app_commands = NULL;
   g_autoptr(GbpShellcmdCommandModel) project_commands = NULL;
   g_autoptr(GListStore) store = NULL;
-  g_autoptr(GSettings) app_settings = NULL;
-  g_autoptr(GSettings) project_settings = NULL;
   g_autoptr(IdeTask) task = NULL;
-  g_autofree char *project_id = NULL;
-  g_autofree char *project_settings_path = NULL;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -59,14 +54,9 @@ gbp_shellcmd_run_command_provider_list_commands_async (IdeRunCommandProvider *pr
   ide_task_set_source_tag (task, gbp_shellcmd_run_command_provider_list_commands_async);
 
   context = ide_object_get_context (IDE_OBJECT (provider));
-  project_id = ide_context_dup_project_id (context);
-  project_settings_path = g_strconcat (SHELLCMD_SETTINGS_BASE, "projects/", project_id, "/", NULL);
 
-  app_settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", SHELLCMD_SETTINGS_BASE);
-  project_settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", project_settings_path);
-
-  app_commands = gbp_shellcmd_command_model_new (app_settings, "run-commands");
-  project_commands = gbp_shellcmd_command_model_new (project_settings, "run-commands");
+  app_commands = gbp_shellcmd_command_model_new_for_app ();
+  project_commands = gbp_shellcmd_command_model_new_for_project (context);
 
   store = g_list_store_new (G_TYPE_LIST_MODEL);
   g_list_store_append (store, project_commands);
@@ -116,22 +106,4 @@ gbp_shellcmd_run_command_provider_class_init (GbpShellcmdRunCommandProviderClass
 static void
 gbp_shellcmd_run_command_provider_init (GbpShellcmdRunCommandProvider *self)
 {
-}
-
-char *
-gbp_shellcmd_run_command_provider_create_settings_path (IdeContext *context)
-{
-  g_autofree char *uuid = NULL;
-
-  g_assert (!context || IDE_IS_CONTEXT (context));
-
-  uuid = g_uuid_string_random ();
-
-  if (ide_context_has_project (context))
-    {
-      g_autofree char *project_id = ide_context_dup_project_id (context);
-      return g_strconcat (SHELLCMD_SETTINGS_BASE, "projects/", project_id, "/", uuid, "/", NULL);
-    }
-
-  return g_strconcat (SHELLCMD_SETTINGS_BASE, "/", uuid, "/", NULL);
 }
