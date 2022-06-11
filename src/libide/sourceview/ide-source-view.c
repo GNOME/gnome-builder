@@ -605,6 +605,48 @@ ide_source_view_zoom_one_action (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_push_snippet (GtkSourceView    *source_view,
+                              GtkSourceSnippet *snippet,
+                              GtkTextIter      *location)
+{
+  IdeSourceView *self = (IdeSourceView *)source_view;
+  GtkSourceSnippetContext *context;
+  GFile *file = NULL;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_SOURCE_IS_SNIPPET (snippet));
+  g_assert (location != NULL);
+
+  context = gtk_source_snippet_get_context (snippet);
+
+  if (self->buffer != NULL)
+    {
+      if ((file = ide_buffer_get_file (self->buffer)))
+        {
+          g_autoptr(GFile) parent = g_file_get_parent (file);
+          g_autofree gchar *basename = g_file_get_basename (file);
+          IdeContext *ide_context;
+
+          gtk_source_snippet_context_set_constant (context, "filename", basename);
+          gtk_source_snippet_context_set_constant (context, "dirname", g_file_peek_path (parent));
+          gtk_source_snippet_context_set_constant (context, "path", g_file_peek_path (file));
+
+          if ((ide_context = ide_buffer_ref_context (self->buffer)))
+            {
+              g_autoptr(GFile) workdir = ide_context_ref_workdir (ide_context);
+              g_autofree gchar *relative_path = g_file_get_relative_path (workdir, file);
+              g_autofree gchar *relative_dirname = g_file_get_relative_path (workdir, parent);
+
+              gtk_source_snippet_context_set_constant (context, "relative_path", relative_path);
+              gtk_source_snippet_context_set_constant (context, "relative_dirname", relative_dirname);
+            }
+        }
+    }
+
+  GTK_SOURCE_VIEW_CLASS (ide_source_view_parent_class)->push_snippet (source_view, snippet, location);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -704,6 +746,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkSourceViewClass *source_view_class = GTK_SOURCE_VIEW_CLASS (klass);
 
   object_class->dispose = ide_source_view_dispose;
   object_class->get_property = ide_source_view_get_property;
@@ -711,6 +754,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->root = ide_source_view_root;
   widget_class->size_allocate = ide_source_view_size_allocate;
+
+  source_view_class->push_snippet = ide_source_view_push_snippet;
 
   g_object_class_override_property (object_class,
                                     PROP_HIGHLIGHT_CURRENT_LINE,
