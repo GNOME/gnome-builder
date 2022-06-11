@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpShellcmdList" parent="GtkWidget">
+    <child>
+      <object class="GtkStack" id="stack">
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">empty</property>
+            <property name="child">
+              <object class="GtkListBox">
+                <style>
+                  <class name="boxed-list"/>
+                </style>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">No Commands</property>
+                    <property name="sensitive">false</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">list</property>
+            <property name="child">
+              <object class="GtkListView" id="list_view">
+                <style>
+                  <class name="boxed-list"/>
+                </style>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

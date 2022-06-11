@@ -26,6 +26,7 @@
 
 #include <libide-gui.h>
 
+#include "gbp-shellcmd-list.h"
 #include "gbp-shellcmd-preferences-addin.h"
 
 struct _GbpShellcmdPreferencesAddin
@@ -56,7 +57,9 @@ handle_shellcmd_list (const char                   *page_name,
                                                          "css-classes", IDE_STRV_INIT ("flat"),
                                                          NULL));
 
-  adw_preferences_group_add (group, gtk_label_new ("empty"));
+  adw_preferences_group_add (group,
+                             g_object_new (GBP_TYPE_SHELLCMD_LIST,
+                                           NULL));
 
   IDE_EXIT;
 }
