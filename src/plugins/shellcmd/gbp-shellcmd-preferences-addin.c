@@ -32,6 +32,7 @@ struct _GbpShellcmdPreferencesAddin
 {
   GObject               parent_instance;
   IdePreferencesWindow *window;
+  GSettings            *settings;
 };
 
 static void
@@ -52,6 +53,7 @@ handle_shellcmd_list (const char                   *page_name,
                                            g_object_new (GTK_TYPE_BUTTON,
                                                          "valign", GTK_ALIGN_CENTER,
                                                          "icon-name", "list-add-symbolic",
+                                                         "css-classes", IDE_STRV_INIT ("flat"),
                                                          NULL));
 
   adw_preferences_group_add (group, gtk_label_new ("empty"));
