@@ -26,6 +26,7 @@
 
 #include <libide-gui.h>
 
+#include "gbp-shellcmd-command-dialog.h"
 #include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-preferences-addin.h"
 #include "gbp-shellcmd-run-command.h"
@@ -47,31 +48,6 @@ argv_to_string (GBinding     *binding,
   if (argv != NULL)
     g_value_take_string (to_value, g_strjoinv (" ", (char **)argv));
   return TRUE;
-}
-
-static void
-on_items_changed_cb (GListModel *model,
-                     guint       removed,
-                     guint       added,
-                     GtkWidget  *widget)
-{
-  gboolean was_visible = gtk_widget_get_visible (widget);
-  gboolean is_visible = added > 0 || g_list_model_get_n_items (model) > 0;
-
-  if (was_visible != is_visible)
-    gtk_widget_set_visible (widget, is_visible);
-}
-
-static void
-bind_visibility_to_nonempty (GtkWidget  *widget,
-                             GListModel *model)
-{
-  gtk_widget_set_visible (widget, g_list_model_get_n_items (model) > 0);
-  g_signal_connect_object (model,
-                           "items-changed",
-                           G_CALLBACK (on_items_changed_cb),
-                           widget,
-                           0);
 }
 
 static GtkWidget *
@@ -108,7 +84,9 @@ on_row_activated_cb (GtkListBox           *list_box,
                      AdwActionRow         *row,
                      IdePreferencesWindow *window)
 {
+  g_autoptr(GbpShellcmdRunCommand) new_command = NULL;
   GbpShellcmdRunCommand *command;
+  GbpShellcmdCommandDialog *dialog;
 
   IDE_ENTRY;
 
@@ -117,16 +95,29 @@ on_row_activated_cb (GtkListBox           *list_box,
   g_assert (IDE_IS_PREFERENCES_WINDOW (window));
 
   command = g_object_get_data (G_OBJECT (row), "COMMAND");
+
   g_assert (!command || GBP_IS_SHELLCMD_RUN_COMMAND (command));
 
   if (command == NULL)
     {
-      /* TODO: create new command */
+      IdePreferencesMode mode = ide_preferences_window_get_mode (window);
+      IdeContext *context = ide_preferences_window_get_context (window);
+      g_autofree char *settings_path = NULL;
+
+      if (mode == IDE_PREFERENCES_MODE_PROJECT)
+        new_command = gbp_shellcmd_run_command_create (context);
+      else
+        new_command = gbp_shellcmd_run_command_create (NULL);
+
+      command = new_command;
     }
-  else
-    {
-      /* TODO: edit existing command */
-    }
+
+  dialog = gbp_shellcmd_command_dialog_new (command);
+  gtk_window_set_title (GTK_WINDOW (dialog),
+                        new_command ? _("Create Command") : _("Edit Command"));
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+  gtk_window_present (GTK_WINDOW (dialog));
 
   IDE_EXIT;
 }
@@ -209,7 +200,7 @@ handle_shellcmd_list (const char                   *page_name,
                            gbp_shellcmd_preferences_addin_create_row_cb,
                            NULL, NULL);
   adw_preferences_group_add (group, GTK_WIDGET (list_box));
-  bind_visibility_to_nonempty (GTK_WIDGET (list_box), G_LIST_MODEL (model));
+  ide_gtk_widget_hide_when_empty (GTK_WIDGET (list_box), G_LIST_MODEL (model));
   g_signal_connect_object (list_box,
                            "row-activated",
                            G_CALLBACK (on_row_activated_cb),
