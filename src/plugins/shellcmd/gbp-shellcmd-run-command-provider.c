@@ -25,6 +25,7 @@
 
 #include <libide-threading.h>
 
+#include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-run-command.h"
 #include "gbp-shellcmd-run-command-provider.h"
 
@@ -34,40 +35,16 @@ struct _GbpShellcmdRunCommandProvider
 };
 
 static void
-gbp_shellcmd_run_command_provider_populate (GListStore *store,
-                                            const char *settings_path)
-{
-  g_autoptr(GSettings) settings = NULL;
-  g_auto(GStrv) run_commands = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_LIST_STORE (store));
-  g_assert (settings_path != NULL);
-
-  IDE_TRACE_MSG ("Adding commands to GListStore %p from %s", store, settings_path);
-
-  settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", settings_path);
-  run_commands = g_settings_get_strv (settings, "run-commands");
-
-  for (guint i = 0; run_commands[i]; i++)
-    {
-      g_autofree char *run_settings_path = g_strconcat (settings_path, run_commands[i], "/", NULL);
-      g_autoptr(GbpShellcmdRunCommand) run_command = gbp_shellcmd_run_command_new (run_settings_path);
-
-      g_list_store_append (store, run_command);
-    }
-
-  IDE_EXIT;
-}
-
-static void
 gbp_shellcmd_run_command_provider_list_commands_async (IdeRunCommandProvider *provider,
                                                        GCancellable          *cancellable,
                                                        GAsyncReadyCallback    callback,
                                                        gpointer               user_data)
 {
+  g_autoptr(GbpShellcmdCommandModel) app_commands = NULL;
+  g_autoptr(GbpShellcmdCommandModel) project_commands = NULL;
   g_autoptr(GListStore) store = NULL;
+  g_autoptr(GSettings) app_settings = NULL;
+  g_autoptr(GSettings) project_settings = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autofree char *project_id = NULL;
   g_autofree char *project_settings_path = NULL;
@@ -81,18 +58,25 @@ gbp_shellcmd_run_command_provider_list_commands_async (IdeRunCommandProvider *pr
   task = ide_task_new (provider, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_shellcmd_run_command_provider_list_commands_async);
 
-  store = g_list_store_new (IDE_TYPE_RUN_COMMAND);
-
-  /* Add project shell commands so they resolve first */
   context = ide_object_get_context (IDE_OBJECT (provider));
   project_id = ide_context_dup_project_id (context);
   project_settings_path = g_strconcat (SHELLCMD_SETTINGS_BASE, "projects/", project_id, "/", NULL);
-  gbp_shellcmd_run_command_provider_populate (store, project_settings_path);
 
-  /* Then application-wide commands for lower priority */
-  gbp_shellcmd_run_command_provider_populate (store, SHELLCMD_SETTINGS_BASE);
+  app_settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", SHELLCMD_SETTINGS_BASE);
+  project_settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", project_settings_path);
 
-  ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
+  app_commands = gbp_shellcmd_command_model_new (app_settings, "run-commands");
+  project_commands = gbp_shellcmd_command_model_new (project_settings, "run-commands");
+
+  store = g_list_store_new (G_TYPE_LIST_MODEL);
+  g_list_store_append (store, project_commands);
+  g_list_store_append (store, app_commands);
+
+  ide_task_return_pointer (task,
+                           g_object_new (GTK_TYPE_FLATTEN_LIST_MODEL,
+                                         "model", store,
+                                         NULL),
+                           g_object_unref);
 
   IDE_EXIT;
 }
