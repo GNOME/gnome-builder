@@ -140,6 +140,7 @@ IDE_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
   { "reload-files", ide_workbench_action_reload_all },
   { "global-search", ide_workbench_action_global_search },
   { "configure", ide_workbench_action_configure },
+  { "configure-page", ide_workbench_action_configure, "s" },
   { "-inspector", ide_workbench_action_inspector },
   { "-object-tree", ide_workbench_action_object_tree },
   { "-dump-tasks", ide_workbench_action_dump_tasks },
@@ -2676,11 +2677,15 @@ static void
 ide_workbench_action_configure (IdeWorkbench *self,
                                 GVariant     *param)
 {
+  const char *page = NULL;
   GtkWindow *window;
   GList *windows;
   gboolean found = FALSE;
 
   g_assert (IDE_IS_WORKBENCH (self));
+
+  if (param && g_variant_is_of_type (param, G_VARIANT_TYPE_STRING))
+    page = g_variant_get_string (param, NULL);
 
   windows = gtk_window_group_list_windows (GTK_WINDOW_GROUP (self));
 
@@ -2717,4 +2722,7 @@ ide_workbench_action_configure (IdeWorkbench *self,
       gtk_window_group_add_window (GTK_WINDOW_GROUP (self), window);
       gtk_window_present (window);
     }
+
+  if (page != NULL)
+    ide_preferences_window_set_page (IDE_PREFERENCES_WINDOW (window), page);
 }
