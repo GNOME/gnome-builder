@@ -727,7 +727,7 @@ static const IdePreferenceItemEntry items[] = {
     "org.gnome.builder", NULL, "default-license" },
 
   { "debug", "breakpoints", "break-on-main", 0, ide_preferences_window_toggle,
-    N_("Break on Main"),
+    N_("Stop After Launching Program"),
     N_("Automatically insert a breakpoint at the start of the application"),
     "org.gnome.builder.build", NULL, "debugger-breakpoint-on-main" },
 
