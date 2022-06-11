@@ -43,6 +43,54 @@ G_DEFINE_TYPE (IdeEditorPage, ide_editor_page, IDE_TYPE_PAGE)
 static GParamSpec *properties [N_PROPS];
 
 static void
+ide_editor_page_query_file_info_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(IdeEditorPage) self = user_data;
+  g_autoptr(GFileInfo) info = NULL;
+  g_autoptr(GIcon) icon = NULL;
+  const char *content_type;
+  const char *name;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  if (!(info = g_file_query_info_finish (file, result, NULL)))
+    return;
+
+  content_type = g_file_info_get_content_type (info);
+  name = g_file_info_get_name (info);
+  icon = ide_g_content_type_get_symbolic_icon (content_type, name);
+
+  panel_widget_set_icon (PANEL_WIDGET (self), icon);
+}
+
+static void
+ide_editor_page_notify_file_cb (IdeEditorPage *self,
+                                GParamSpec    *pspec,
+                                IdeBuffer     *buffer)
+{
+  GFile *file;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  file = ide_buffer_get_file (buffer);
+
+  g_file_query_info_async (file,
+                           G_FILE_ATTRIBUTE_STANDARD_NAME","
+                           G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                           G_FILE_QUERY_INFO_NONE,
+                           G_PRIORITY_DEFAULT,
+                           NULL,
+                           ide_editor_page_query_file_info_cb,
+                           g_object_ref (self));
+}
+
+static void
 ide_editor_page_modified_changed_cb (IdeEditorPage *self,
                                      IdeBuffer     *buffer)
 {
@@ -91,6 +139,12 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
                                G_CONNECT_SWAPPED);
 
       g_signal_connect_object (buffer,
+                               "notify::file",
+                               G_CALLBACK (ide_editor_page_notify_file_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (buffer,
                                "notify::file-settings",
                                G_CALLBACK (_ide_editor_page_settings_reload),
                                self,
@@ -106,6 +160,7 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
                               self, "title",
                               G_BINDING_SYNC_CREATE);
 
+      ide_editor_page_notify_file_cb (self, NULL, buffer);
       ide_editor_page_modified_changed_cb (self, buffer);
       _ide_editor_page_settings_init (self);
     }
