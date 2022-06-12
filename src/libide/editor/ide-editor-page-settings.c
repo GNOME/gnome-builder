@@ -231,7 +231,7 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                            "changed::interactive-completion",
                            G_CALLBACK (notify_interactive_completion_cb),
                            self,
-                           0);
+                           G_CONNECT_SWAPPED);
   notify_interactive_completion_cb (self, NULL, editor_settings);
 
   _ide_editor_page_settings_reload (self);
