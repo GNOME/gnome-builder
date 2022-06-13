@@ -41,13 +41,13 @@
           </object>
         </child>
         <child type="right">
+          <object class="IdeNotificationsButton" id="notifications_button"/>
+        </child>
+        <child type="right">
           <object class="GtkButton" id="search_button">
             <property name="action-name">workbench.global-search</property>
             <property name="icon-name">edit-find-symbolic</property>
           </object>
-        </child>
-        <child type="right">
-          <object class="IdeNotificationsButton" id="notifications_button"/>
         </child>
         <child type="right">
           <object class="PanelDockSwitcher">
