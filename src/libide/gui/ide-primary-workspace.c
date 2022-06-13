@@ -61,6 +61,7 @@ struct _IdePrimaryWorkspace
   IdeGrid            *grid;
   GtkOverlay         *overlay;
   IdeOmniBar         *omni_bar;
+  IdeJoinedMenu      *build_menu;
 };
 
 G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
@@ -70,8 +71,10 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
                                    IdeContext   *context)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+  IdeConfigManager *config_manager;
   IdeProjectInfo *project_info;
   IdeWorkbench *workbench;
+  GMenuModel *config_menu;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
@@ -86,6 +89,10 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
     g_object_bind_property (project_info, "name",
                             self->project_title, "label",
                             G_BINDING_SYNC_CREATE);
+
+  config_manager = ide_config_manager_from_context (context);
+  config_menu = ide_config_manager_get_menu (config_manager);
+  ide_joined_menu_prepend_menu (self->build_menu, G_MENU_MODEL (config_menu));
 }
 
 static void
@@ -240,6 +247,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-primary-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, add_button);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, build_menu);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, dock);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_bottom);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_end);
@@ -262,12 +270,16 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 static void
 ide_primary_workspace_init (IdePrimaryWorkspace *self)
 {
+  GMenu *build_menu;
   GMenu *menu;
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "new-document-menu");
   gtk_menu_button_set_menu_model (self->add_button, G_MENU_MODEL (menu));
+
+  build_menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "build-menu");
+  ide_joined_menu_append_menu (self->build_menu, G_MENU_MODEL (build_menu));
 
   _ide_primary_workspace_init_actions (self);
 }
