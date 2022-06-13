@@ -29,11 +29,11 @@
 struct _GbpGitTag
 {
   GObject parent_instance;
-  gchar *name;
+  char *name;
 };
 
-static gchar *
-gbp_git_tag_get_name (IdeVcsTag *tag)
+static char *
+gbp_git_tag_dup_name (IdeVcsTag *tag)
 {
   return g_strdup (GBP_GIT_TAG (tag)->name);
 }
@@ -41,11 +41,19 @@ gbp_git_tag_get_name (IdeVcsTag *tag)
 static void
 vcs_tag_iface_init (IdeVcsTagInterface *iface)
 {
-  iface->get_name = gbp_git_tag_get_name;
+  iface->dup_name = gbp_git_tag_dup_name;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGitTag, gbp_git_tag, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_TAG, vcs_tag_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_VCS_TAG, vcs_tag_iface_init))
+
+enum {
+  PROP_0,
+  PROP_NAME,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
 
 static void
 gbp_git_tag_finalize (GObject *object)
@@ -58,11 +66,37 @@ gbp_git_tag_finalize (GObject *object)
 }
 
 static void
+gbp_git_tag_get_property (GObject    *object,
+                          guint       prop_id,
+                          GValue     *value,
+                          GParamSpec *pspec)
+{
+  GbpGitTag *self = GBP_GIT_TAG (object);
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      g_value_set_string (value, self->name);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_git_tag_class_init (GbpGitTagClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_git_tag_finalize;
+  object_class->get_property = gbp_git_tag_get_property;
+
+  properties [PROP_NAME] =
+    g_param_spec_string ("name", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void

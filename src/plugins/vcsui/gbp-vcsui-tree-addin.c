@@ -333,7 +333,7 @@ gbp_vcsui_tree_addin_list_tags_cb (GObject      *object,
       for (guint i = 0; i < tags->len; i++)
         {
           IdeVcsTag *tag = g_ptr_array_index (tags, i);
-          g_autofree gchar *name = ide_vcs_tag_get_name (tag);
+          g_autofree gchar *name = ide_vcs_tag_dup_name (tag);
           g_autoptr(IdeTreeNode) child = NULL;
 
           child = g_object_new (IDE_TYPE_TREE_NODE,

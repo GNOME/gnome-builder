@@ -29,10 +29,13 @@ G_DEFINE_INTERFACE (IdeVcsTag, ide_vcs_tag, G_TYPE_OBJECT)
 static void
 ide_vcs_tag_default_init (IdeVcsTagInterface *iface)
 {
+  g_object_interface_install_property (iface,
+                                       g_param_spec_string ("name", NULL, NULL, NULL,
+                                                            (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS)));
 }
 
 /**
- * ide_vcs_tag_get_name:
+ * ide_vcs_tag_dup_name:
  * @self: an #IdeVcsTag
  *
  * Gets the name of the tag, which is used in various UI elements
@@ -40,13 +43,13 @@ ide_vcs_tag_default_init (IdeVcsTagInterface *iface)
  *
  * Returns: (transfer full): a string containing the tag name
  */
-gchar *
-ide_vcs_tag_get_name (IdeVcsTag *self)
+char *
+ide_vcs_tag_dup_name (IdeVcsTag *self)
 {
   g_return_val_if_fail (IDE_IS_VCS_TAG (self), NULL);
 
-  if (IDE_VCS_TAG_GET_IFACE (self)->get_name)
-    return IDE_VCS_TAG_GET_IFACE (self)->get_name (self);
+  if (IDE_VCS_TAG_GET_IFACE (self)->dup_name)
+    return IDE_VCS_TAG_GET_IFACE (self)->dup_name (self);
 
   return NULL;
 }
