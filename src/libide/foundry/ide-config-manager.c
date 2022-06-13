@@ -912,6 +912,8 @@ ide_config_manager_set_current (IdeConfigManager *self,
 
   if (self->current != current)
     {
+      const char *id = "";
+
       if (self->current != NULL)
         {
           g_signal_handlers_disconnect_by_func (self->current,
@@ -943,7 +945,11 @@ ide_config_manager_set_current (IdeConfigManager *self,
               g_autofree gchar *new_id = g_strdup (ide_config_get_id (current));
               g_settings_set_string (self->project_settings, "config-id", new_id);
             }
+
+          id = ide_config_get_id (self->current);
         }
+
+      ide_config_manager_set_action_state (self, "current", g_variant_new_string (id));
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_DISPLAY_NAME]);
