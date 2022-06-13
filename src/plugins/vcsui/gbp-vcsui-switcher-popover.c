@@ -27,7 +27,13 @@
 struct _GbpVcsuiSwitcherPopover
 {
   GtkPopover parent_instance;
+
   IdeVcs *vcs;
+
+  GtkListView *branches_view;
+  GListStore  *branches_model;
+  GtkListView *tags_view;
+  GListStore  *tags_model;
 };
 
 enum {
@@ -41,6 +47,70 @@ G_DEFINE_FINAL_TYPE (GbpVcsuiSwitcherPopover, gbp_vcsui_switcher_popover, GTK_TY
 static GParamSpec *properties [N_PROPS];
 
 static void
+gbp_vcsui_switcher_popover_list_branches_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
+{
+  IdeVcs *vcs = (IdeVcs *)object;
+  g_autoptr(GbpVcsuiSwitcherPopover) self = user_data;
+  g_autoptr(GListStore) store = NULL;
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_VCS (vcs));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_VCSUI_SWITCHER_POPOVER (self));
+
+  if (!(ar = ide_vcs_list_branches_finish (vcs, result, &error)))
+    {
+      g_warning ("Failed to list branches: %s\n", error->message);
+      IDE_EXIT;
+    }
+
+  g_ptr_array_set_free_func (ar, g_object_unref);
+  g_list_store_remove_all (self->branches_model);
+
+  for (guint i = 0; i < ar->len; i++)
+    g_list_store_append (self->branches_model, g_ptr_array_index (ar, i));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_vcsui_switcher_popover_list_tags_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeVcs *vcs = (IdeVcs *)object;
+  g_autoptr(GbpVcsuiSwitcherPopover) self = user_data;
+  g_autoptr(GListStore) store = NULL;
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_VCS (vcs));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_VCSUI_SWITCHER_POPOVER (self));
+
+  if (!(ar = ide_vcs_list_tags_finish (vcs, result, &error)))
+    {
+      g_warning ("Failed to list tags: %s\n", error->message);
+      IDE_EXIT;
+    }
+
+  g_ptr_array_set_free_func (ar, g_object_unref);
+  g_list_store_remove_all (self->tags_model);
+
+  for (guint i = 0; i < ar->len; i++)
+    g_list_store_append (self->tags_model, g_ptr_array_index (ar, i));
+
+  IDE_EXIT;
+}
+
+static void
 gbp_vcsui_switcher_popover_dispose (GObject *object)
 {
   GbpVcsuiSwitcherPopover *self = (GbpVcsuiSwitcherPopover *)object;
@@ -48,6 +118,32 @@ gbp_vcsui_switcher_popover_dispose (GObject *object)
   g_clear_object (&self->vcs);
 
   G_OBJECT_CLASS (gbp_vcsui_switcher_popover_parent_class)->dispose (object);
+}
+
+static void
+gbp_vcsui_switcher_popover_show (GtkWidget *widget)
+{
+  GbpVcsuiSwitcherPopover *self = (GbpVcsuiSwitcherPopover *)widget;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_VCSUI_SWITCHER_POPOVER (self));
+
+  if (self->vcs != NULL)
+    {
+      ide_vcs_list_branches_async (self->vcs,
+                                   NULL,
+                                   gbp_vcsui_switcher_popover_list_branches_cb,
+                                   g_object_ref (self));
+      ide_vcs_list_tags_async (self->vcs,
+                               NULL,
+                               gbp_vcsui_switcher_popover_list_tags_cb,
+                               g_object_ref (self));
+    }
+
+  GTK_WIDGET_CLASS (gbp_vcsui_switcher_popover_parent_class)->show (widget);
+
+  IDE_EXIT;
 }
 
 static void
@@ -98,6 +194,8 @@ gbp_vcsui_switcher_popover_class_init (GbpVcsuiSwitcherPopoverClass *klass)
   object_class->get_property = gbp_vcsui_switcher_popover_get_property;
   object_class->set_property = gbp_vcsui_switcher_popover_set_property;
 
+  widget_class->show = gbp_vcsui_switcher_popover_show;
+
   properties [PROP_VCS] =
     g_param_spec_object ("vcs",
                          "Vcs",
@@ -108,6 +206,10 @@ gbp_vcsui_switcher_popover_class_init (GbpVcsuiSwitcherPopoverClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/vcsui/gbp-vcsui-switcher-popover.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiSwitcherPopover, branches_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiSwitcherPopover, branches_model);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiSwitcherPopover, tags_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpVcsuiSwitcherPopover, tags_model);
 }
 
 static void
