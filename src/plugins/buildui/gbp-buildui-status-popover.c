@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-editor.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
@@ -41,9 +43,39 @@ struct _GbpBuilduiStatusPopover
   GtkStack        *stack;
   GtkCustomFilter *error_filter;
   GtkCustomFilter *warning_filter;
+  GtkStackPage    *errors;
+  GListModel      *errors_model;
+  GtkStackPage    *warnings;
+  GListModel      *warnings_model;
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiStatusPopover, gbp_buildui_status_popover, GTK_TYPE_POPOVER)
+
+static gboolean
+warnings_title_cb (GBinding     *binding,
+                   const GValue *from_value,
+                   GValue       *to_value,
+                   gpointer      user_data)
+{
+  guint n_items = g_value_get_uint (from_value);
+  g_value_take_string (to_value,
+                       /* translators: %u is replaced with the number of warnings */
+                       g_strdup_printf (_("Warnings (%u)"), n_items));
+  return TRUE;
+}
+
+static gboolean
+errors_title_cb (GBinding     *binding,
+                 const GValue *from_value,
+                 GValue       *to_value,
+                 gpointer      user_data)
+{
+  guint n_items = g_value_get_uint (from_value);
+  g_value_take_string (to_value,
+                       /* translators: %u is replaced with the number of errors */
+                       g_strdup_printf (_("Errors (%u)"), n_items));
+  return TRUE;
+}
 
 static void
 gbp_buildui_status_popover_clear (GbpBuilduiStatusPopover *self)
@@ -188,8 +220,12 @@ gbp_buildui_status_popover_class_init (GbpBuilduiStatusPopoverClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-status-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, diagnostics);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, error_filter);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, errors);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, errors_model);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, stack);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, warning_filter);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, warnings);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiStatusPopover, warnings_model);
   gtk_widget_class_bind_template_callback (widget_class, gbp_buildui_status_popover_activate_cb);
 
   g_type_ensure (IDE_TYPE_DIAGNOSTIC);
@@ -224,6 +260,15 @@ gbp_buildui_status_popover_init (GbpBuilduiStatusPopover *self)
                                    G_CALLBACK (gbp_buildui_status_popover_add_diagnsotic),
                                    self,
                                    G_CONNECT_SWAPPED);
+
+  g_object_bind_property_full (self->warnings_model, "n-items",
+                               self->warnings, "title",
+                               G_BINDING_SYNC_CREATE,
+                               warnings_title_cb, NULL, NULL, NULL);
+  g_object_bind_property_full (self->errors_model, "n-items",
+                               self->errors, "title",
+                               G_BINDING_SYNC_CREATE,
+                               errors_title_cb, NULL, NULL, NULL);
 }
 
 static void
