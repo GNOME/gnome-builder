@@ -29,16 +29,11 @@
     </section>
   </menu>
   <menu id="build-menu">
-    <section id="build-menu-config">
-      <submenu id="build-menu-configs">
-        <attribute name="label" translatable="yes">Active Configuration</attribute>
-      </submenu>
-      <item>
-        <attribute name="label" translatable="yes">Configure Project…</attribute>
-        <attribute name="action">workbench.configure</attribute>
-        <attribute name="accel">&lt;alt&gt;comma</attribute>
-      </item>
-    </section>
+    <item>
+      <attribute name="label" translatable="yes">Configure Project…</attribute>
+      <attribute name="action">workbench.configure</attribute>
+      <attribute name="accel">&lt;alt&gt;comma</attribute>
+    </item>
     <section id="build-menu-target">
       <item>
         <attribute name="label" translatable="yes">Select Build Target…</attribute>
