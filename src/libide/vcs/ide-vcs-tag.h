@@ -33,10 +33,10 @@ struct _IdeVcsTagInterface
 {
   GTypeInterface parent;
 
-  gchar *(*get_name) (IdeVcsTag *self);
+  char *(*dup_name) (IdeVcsTag *self);
 };
 
 IDE_AVAILABLE_IN_ALL
-gchar *ide_vcs_tag_get_name (IdeVcsTag *self);
+char *ide_vcs_tag_dup_name (IdeVcsTag *self);
 
 G_END_DECLS
