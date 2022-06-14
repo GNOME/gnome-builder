@@ -29,6 +29,7 @@ struct _GbpShellcmdRunCommand
   IdeRunCommand  parent_instance;
   char          *settings_path;
   GSettings     *settings;
+  char          *id;
 };
 
 enum {
@@ -51,12 +52,16 @@ gbp_shellcmd_run_command_constructed (GObject *object)
 
   g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (self));
   g_assert (self->settings_path != NULL);
+  g_assert (g_str_has_suffix (self->settings_path, "/"));
 
   self->settings = g_settings_new_with_path ("org.gnome.builder.shellcmd.command", self->settings_path);
 
   path_split = g_strsplit (self->settings_path, "/", 0);
   n_parts = g_strv_length (path_split);
-  id = g_strdup_printf ("shellcmd:%s", path_split[n_parts-1]);
+  g_assert (n_parts >= 2);
+
+  self->id = g_strdup (path_split[n_parts-2]);
+  id = g_strdup_printf ("shellcmd:%s", self->id);
 
   ide_run_command_set_id (IDE_RUN_COMMAND (self), id);
   g_settings_bind (self->settings, "display-name", self, "display-name", G_SETTINGS_BIND_DEFAULT);
@@ -70,6 +75,7 @@ gbp_shellcmd_run_command_dispose (GObject *object)
 {
   GbpShellcmdRunCommand *self = (GbpShellcmdRunCommand *)object;
 
+  g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->settings_path, g_free);
   g_clear_object (&self->settings);
 
@@ -144,4 +150,46 @@ gbp_shellcmd_run_command_new (const char *settings_path)
   return g_object_new (GBP_TYPE_SHELLCMD_RUN_COMMAND,
                        "settings-path", settings_path,
                        NULL);
+}
+
+void
+gbp_shellcmd_run_command_delete (GbpShellcmdRunCommand *self)
+{
+  g_autoptr(GSettingsSchema) schema = NULL;
+  g_autoptr(GStrvBuilder) builder = NULL;
+  g_autoptr(GSettings) list = NULL;
+  g_autoptr(GString) parent_path = NULL;
+  g_auto(GStrv) commands = NULL;
+  g_auto(GStrv) keys = NULL;
+
+  g_return_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self));
+
+  /* Get parent settings path */
+  parent_path = g_string_new (self->settings_path);
+  if (parent_path->len)
+    g_string_truncate (parent_path, parent_path->len-1);
+  while (parent_path->len && parent_path->str[parent_path->len-1] != '/')
+    g_string_truncate (parent_path, parent_path->len-1);
+
+  /* First remove the item from the parent list of commands */
+  list = g_settings_new_with_path ("org.gnome.builder.shellcmd", parent_path->str);
+  commands = g_settings_get_strv (list, "run-commands");
+  builder = g_strv_builder_new ();
+  for (guint i = 0; commands[i]; i++)
+    {
+      g_print ("%s %s\n", commands[i], self->id);
+      if (!ide_str_equal0 (commands[i], self->id))
+        g_strv_builder_add (builder, commands[i]);
+    }
+  g_clear_pointer (&commands, g_strfreev);
+  commands = g_strv_builder_end (builder);
+  g_settings_set_strv (list, "run-commands", (const char * const *)commands);
+
+  /* Now reset the keys so the entry does not take up space in storage */
+  g_object_get (self->settings,
+                "settings-schema", &schema,
+                NULL);
+  keys = g_settings_schema_list_keys (schema);
+  for (guint i = 0; keys[i]; i++)
+    g_settings_reset (self->settings, keys[i]);
 }
