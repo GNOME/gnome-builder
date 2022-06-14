@@ -86,8 +86,8 @@ ide_application_actions_preferences (GSimpleAction *action,
                          "context", context,
                          "mode", IDE_PREFERENCES_MODE_APPLICATION,
                          "transient-for", toplevel,
-                         "default-width", 1050,
-                         "default-height", 700,
+                         "default-width", 1080,
+                         "default-height", 720,
                          "title", _("Builder — Preferences"),
                          NULL);
   gtk_application_add_window (GTK_APPLICATION (self), window);
