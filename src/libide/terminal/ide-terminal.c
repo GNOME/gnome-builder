@@ -244,6 +244,7 @@ ide_terminal_popup_menu (GtkWidget *widget)
 
   return TRUE;
 }
+#endif
 
 static void
 ide_terminal_click_pressed_cb (IdeTerminal     *self,
@@ -252,9 +253,10 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
                                double           y,
                                GtkGestureClick *click)
 {
-  IdeTerminal *self = (IdeTerminal *)widget;
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
   int button;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (GTK_IS_GESTURE_CLICK (click));
@@ -264,19 +266,36 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
   if (button == 1)
     {
       g_autofree gchar *pattern = NULL;
+      glong cell_width = vte_terminal_get_char_width (VTE_TERMINAL (self));
+      glong cell_height = vte_terminal_get_char_height (VTE_TERMINAL (self));
+      glong column, row;
+      int tag = 0;
 
-      pattern = vte_terminal_match_check_event (VTE_TERMINAL (self), (GdkEvent *)button, NULL);
+      /* crappy way to do this, but i dont see another option right
+       * now given we have to go through deprecated APIs in Vte
+       * until it gets things together for GTK 4.
+       */
+      column = x / cell_width;
+      row = y / cell_height;
+
+      /* no other option in VTE for GTK 4 right now */
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      pattern = vte_terminal_match_check (VTE_TERMINAL (self), column, row, &tag);
+      G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (pattern != NULL)
         {
           gboolean ret = GDK_EVENT_PROPAGATE;
 
-          g_free (priv->url);
-          priv->url = g_steal_pointer (&pattern);
+          ide_set_string (&priv->url, pattern);
 
-          g_signal_emit (self, signals [OPEN_LINK], 0, &ret);
+          g_signal_emit (self, signals[OPEN_LINK], 0, &ret);
+
+          if (ret)
+            gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
         }
     }
+#if 0
   else if (button == 3)
     {
       if (!gtk_widget_has_focus (GTK_WIDGET (self)))
@@ -284,8 +303,10 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
 
       ide_terminal_do_popup (self, (GdkEvent *)button);
     }
-}
 #endif
+
+  IDE_EXIT;
+}
 
 static void
 ide_terminal_real_select_all (IdeTerminal *self,
@@ -566,9 +587,9 @@ ide_terminal_class_init (IdeTerminalClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (IdeTerminalClass, open_link),
-                  NULL, NULL, NULL,
-                  G_TYPE_BOOLEAN,
-                  0);
+                  g_signal_accumulator_true_handled, NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN, 0);
 
   signals [POPULATE_POPUP] =
     g_signal_new ("populate-popup",
@@ -599,6 +620,15 @@ static void
 ide_terminal_init (IdeTerminal *self)
 {
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+  GtkEventController *gesture;
+
+  gesture = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+  g_signal_connect_object (gesture,
+                           "pressed",
+                           G_CALLBACK (ide_terminal_click_pressed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (self), g_steal_pointer (&gesture));
 
   for (guint i = 0; i < G_N_ELEMENTS (url_regexes); i++)
     {
