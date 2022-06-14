@@ -104,11 +104,13 @@
                 <property name="title" translatable="yes">Environment</property>
                 <property name="header-suffix">
                   <object class="GtkMenuButton">
-                    <style>
-                      <class name="flat"/>
-                    </style>
                     <property name="direction">left</property>
-                    <property name="icon-name">list-add-symbolic</property>
+                    <property name="child">
+                      <object class="GtkLabel">
+                        <property name="label" translatable="yes">Add _Variable</property>
+                        <property name="use-underline">true</property>
+                      </object>
+                    </property>
                     <property name="popover">
                       <object class="IdeEntryPopover">
                         <property name="title" translatable="yes">Add Environment Variable</property>
