@@ -66,7 +66,7 @@ bug_buddy_init (void)
    * Everything needs to be prepared at startup so that we can avoid using
    * any malloc, locks, etc in our SIGSEGV handler. So we'll find gdb right
    * now and stash the location for later. If it disappears during runtime,
-   * that's fine, we just wont be able to invoke gdb.
+   * that's fine, we just won't be able to invoke gdb.
    */
 
   gdb_path = g_find_program_in_path ("gdb");
