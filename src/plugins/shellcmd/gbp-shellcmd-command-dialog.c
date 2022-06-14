@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-gtk.h>
 
 #include "gbp-shellcmd-command-dialog.h"
@@ -32,8 +34,14 @@ struct _GbpShellcmdCommandDialog
 
   GbpShellcmdRunCommand *command;
 
+  AdwEntryRow           *argv;
+  AdwEntryRow           *location;
+  AdwEntryRow           *name;
   GtkStringList         *envvars;
   GtkListBox            *envvars_list_box;
+  GtkLabel              *shortcut_label;
+
+  char                  *accel;
 };
 
 enum {
@@ -117,12 +125,213 @@ on_env_entry_activate_cb (GbpShellcmdCommandDialog *self,
   IDE_EXIT;
 }
 
+static char *
+normalize_argv (const char * const *argv)
+{
+  g_autofree char *joined = NULL;
+  g_auto(GStrv) parsed = NULL;
+  int argc;
+
+  if (argv == NULL || argv[0] == NULL)
+    return g_strdup ("");
+
+  /* The goal here is to only quote the argv if the string would
+   * parse back differently than it's initial form.
+   */
+  joined = g_strjoinv (" ", (char **)argv);
+  if (!g_shell_parse_argv (joined, &argc, &parsed, NULL) ||
+      !g_strv_equal ((const char * const *)parsed, argv))
+    {
+      GString *str = g_string_new (NULL);
+
+      for (guint i = 0; argv[i]; i++)
+        {
+          g_autofree char *quoted = g_shell_quote (argv[i]);
+
+          if (str->len > 0)
+            g_string_append_c (str, ' ');
+          g_string_append (str, quoted);
+        }
+
+      return g_string_free (str, FALSE);
+    }
+
+  return g_steal_pointer (&joined);
+}
+
+static void
+set_accel (GbpShellcmdCommandDialog *self,
+           const char               *accel)
+{
+  g_autofree char *label = NULL;
+  guint keyval;
+  GdkModifierType state;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+
+  if (ide_str_equal0 (self->accel, accel))
+    return;
+
+  g_free (self->accel);
+  self->accel = g_strdup (accel);
+
+  if (accel && gtk_accelerator_parse (accel, &keyval, &state))
+    label = gtk_accelerator_get_label (keyval, state);
+
+  gtk_label_set_label (self->shortcut_label, label);
+}
+
+static void
+gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
+                                         GbpShellcmdRunCommand    *command)
+{
+  g_autofree char *argvstr = NULL;
+  const char * const *argv;
+  const char *accel;
+  const char *name;
+  const char *cwd;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+  g_assert (!command || GBP_IS_SHELLCMD_RUN_COMMAND (command));
+
+  if (!g_set_object (&self->command, command))
+    IDE_EXIT;
+
+  name = ide_run_command_get_display_name (IDE_RUN_COMMAND (command));
+  argv = ide_run_command_get_argv (IDE_RUN_COMMAND (command));
+  cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (command));
+#if 0
+  accel = ide_run_command_get_accelerator (IDE_RUN_COMMAND (command));
+#else
+  accel = "<Control>space";
+#endif
+
+  argvstr = normalize_argv (argv);
+
+  gtk_editable_set_text (GTK_EDITABLE (self->argv), argvstr);
+  gtk_editable_set_text (GTK_EDITABLE (self->location), cwd);
+  gtk_editable_set_text (GTK_EDITABLE (self->name), name);
+  set_accel (self, accel);
+
+  IDE_EXIT;
+}
+
+static void
+on_shortcut_dialog_respnose (GbpShellcmdCommandDialog *self,
+                             int                       response_id,
+                             IdeShortcutAccelDialog   *dialog)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+  g_assert (IDE_IS_SHORTCUT_ACCEL_DIALOG (dialog));
+
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    {
+      const char *accel;
+
+      accel = ide_shortcut_accel_dialog_get_accelerator (dialog);
+      set_accel (self, accel);
+    }
+
+  gtk_window_destroy (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
+}
+
+static void
+on_shortcut_activated_cb (GbpShellcmdCommandDialog *self,
+                          AdwActionRow             *shortcut_row)
+{
+  IdeShortcutAccelDialog *dialog;
+  const char *name;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+  g_assert (ADW_IS_ACTION_ROW (shortcut_row));
+
+  name = gtk_editable_get_text (GTK_EDITABLE (self->name));
+  if (ide_str_empty0 (name))
+    name = _("Untitled Command");
+
+  dialog = g_object_new (IDE_TYPE_SHORTCUT_ACCEL_DIALOG,
+                         "accelerator", self->accel,
+                         "transient-for", self,
+                         "modal", TRUE,
+                         "shortcut-title", name,
+                         "title", _("Set Shortcut"),
+                         "use-header-bar", 1,
+                         NULL);
+  g_signal_connect_object (dialog,
+                           "response",
+                           G_CALLBACK (on_shortcut_dialog_respnose),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_window_present (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
+}
+
+static void
+command_delete_action (GtkWidget  *widget,
+                       const char *action_name,
+                       GVariant   *param)
+{
+  GbpShellcmdCommandDialog *self = (GbpShellcmdCommandDialog *)widget;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+
+  gbp_shellcmd_run_command_delete (self->command);
+
+  gtk_window_destroy (GTK_WINDOW (self));
+
+  IDE_EXIT;
+}
+
+static void
+command_save_action (GtkWidget  *widget,
+                     const char *action_name,
+                     GVariant   *param)
+{
+  GbpShellcmdCommandDialog *self = (GbpShellcmdCommandDialog *)widget;
+  g_auto(GStrv) argv = NULL;
+  const char *argvstr;
+  int argc;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+
+  argvstr = gtk_editable_get_text (GTK_EDITABLE (self->argv));
+  if (g_shell_parse_argv (argvstr, &argc, &argv, NULL))
+    ide_run_command_set_argv (IDE_RUN_COMMAND (self->command), (const char * const *)argv);
+
+  ide_run_command_set_display_name (IDE_RUN_COMMAND (self->command),
+                                    gtk_editable_get_text (GTK_EDITABLE (self->name)));
+  ide_run_command_set_cwd (IDE_RUN_COMMAND (self->command),
+                           gtk_editable_get_text (GTK_EDITABLE (self->location)));
+
+#if 0
+  ide_run_command_set_accelerator (IDE_RUN_COMMAND (self->command), self->accel);
+#endif
+
+  gtk_window_destroy (GTK_WINDOW (self));
+
+  IDE_EXIT;
+}
+
 static void
 gbp_shellcmd_command_dialog_dispose (GObject *object)
 {
   GbpShellcmdCommandDialog *self = (GbpShellcmdCommandDialog *)object;
 
   g_clear_object (&self->command);
+  g_clear_pointer (&self->accel, g_free);
 
   G_OBJECT_CLASS (gbp_shellcmd_command_dialog_parent_class)->dispose (object);
 }
@@ -157,7 +366,7 @@ gbp_shellcmd_command_dialog_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_COMMAND:
-      self->command = g_value_dup_object (value);
+      gbp_shellcmd_command_dialog_set_command (self, g_value_get_object (value));
       break;
 
     default:
@@ -184,11 +393,19 @@ gbp_shellcmd_command_dialog_class_init (GbpShellcmdCommandDialogClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_install_action (widget_class, "command.save", NULL, command_save_action);
+  gtk_widget_class_install_action (widget_class, "command.delete", NULL, command_delete_action);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shellcmd/gbp-shellcmd-command-dialog.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, argv);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, envvars);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, envvars_list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, location);
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, name);
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, shortcut_label);
   gtk_widget_class_bind_template_callback (widget_class, on_env_entry_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_env_entry_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_shortcut_activated_cb);
 }
 
 static void
