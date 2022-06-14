@@ -6,5 +6,6 @@ Description=Provides integration with the Gradle build tool
 Embedded=_gbp_gradle_register_types
 Module=gradle
 Name=Gradle
+X-Category=buildsystems
 X-Project-File-Filter-Name=Gradle (build.gradle)
 X-Project-File-Filter-Pattern=build.gradle

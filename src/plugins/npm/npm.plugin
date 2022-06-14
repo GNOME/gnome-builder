@@ -6,5 +6,6 @@ Description=Provides integration with the NPM package system
 Embedded=_gbp_npm_register_types
 Module=npm
 Name=NPM
+X-Category=buildsystems
 X-Project-File-Filter-Name=NPM Package (package.json)
 X-Project-File-Filter-Pattern=package.json
