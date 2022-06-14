@@ -267,7 +267,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   argv = ide_run_command_get_argv (IDE_RUN_COMMAND (command));
   env = ide_run_command_get_env (IDE_RUN_COMMAND (command));
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (command));
-  accel = ide_run_command_get_accelerator (IDE_RUN_COMMAND (command));
+  accel = gbp_shellcmd_run_command_get_accelerator (command);
 
   argvstr = normalize_argv (argv);
 
@@ -403,7 +403,7 @@ command_save_action (GtkWidget  *widget,
                                     gtk_editable_get_text (GTK_EDITABLE (self->name)));
   ide_run_command_set_cwd (IDE_RUN_COMMAND (self->command),
                            gtk_editable_get_text (GTK_EDITABLE (self->location)));
-  ide_run_command_set_accelerator (IDE_RUN_COMMAND (self->command), self->accel);
+  gbp_shellcmd_run_command_set_accelerator (self->command, self->accel);
 
   env = string_list_to_strv (self->envvars);
   ide_run_command_set_env (IDE_RUN_COMMAND (self->command),

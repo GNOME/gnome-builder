@@ -27,7 +27,6 @@
 
 typedef struct
 {
-  char *accelerator;
   char *id;
   char *cwd;
   char *display_name;
@@ -39,7 +38,6 @@ typedef struct
 
 enum {
   PROP_0,
-  PROP_ACCELERATOR,
   PROP_ARGV,
   PROP_CWD,
   PROP_DISPLAY_NAME,
@@ -86,7 +84,6 @@ ide_run_command_finalize (GObject *object)
   IdeRunCommand *self = (IdeRunCommand *)object;
   IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
 
-  g_clear_pointer (&priv->accelerator, g_free);
   g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->cwd, g_free);
   g_clear_pointer (&priv->display_name, g_free);
@@ -106,10 +103,6 @@ ide_run_command_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ACCELERATOR:
-      g_value_set_string (value, ide_run_command_get_accelerator (self));
-      break;
-
     case PROP_CWD:
       g_value_set_string (value, ide_run_command_get_cwd (self));
       break;
@@ -153,10 +146,6 @@ ide_run_command_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACCELERATOR:
-      ide_run_command_set_accelerator (self, g_value_get_string (value));
-      break;
-
     case PROP_CWD:
       ide_run_command_set_cwd (self, g_value_get_string (value));
       break;
@@ -200,11 +189,6 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
   object_class->set_property = ide_run_command_set_property;
 
   klass->get_arguments = ide_run_command_real_get_arguments;
-
-  properties [PROP_ACCELERATOR] =
-    g_param_spec_string ("accelerator", NULL, NULL,
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ARGV] =
     g_param_spec_boxed ("argv", NULL, NULL,
@@ -279,32 +263,6 @@ ide_run_command_set_id (IdeRunCommand *self,
       g_free (priv->id);
       priv->id = g_strdup (id);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
-    }
-}
-
-const char *
-ide_run_command_get_accelerator (IdeRunCommand *self)
-{
-  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), NULL);
-
-  return priv->accelerator;
-}
-
-void
-ide_run_command_set_accelerator (IdeRunCommand *self,
-                                 const char    *accelerator)
-{
-  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
-
-  if (g_strcmp0 (priv->accelerator, accelerator) != 0)
-    {
-      g_free (priv->accelerator);
-      priv->accelerator = g_strdup (accelerator);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACCELERATOR]);
     }
 }
 

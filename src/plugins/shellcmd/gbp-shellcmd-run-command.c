@@ -30,10 +30,12 @@ struct _GbpShellcmdRunCommand
   char          *settings_path;
   GSettings     *settings;
   char          *id;
+  char          *accelerator;
 };
 
 enum {
   PROP_0,
+  PROP_ACCELERATOR,
   PROP_ACCELERATOR_LABEL,
   PROP_SETTINGS_PATH,
   PROP_SUBTITLE,
@@ -113,14 +115,13 @@ accelerator_label_changed_cb (GbpShellcmdRunCommand *self)
 static char *
 get_accelerator_label (GbpShellcmdRunCommand *self)
 {
-  const char *accelerator = ide_run_command_get_accelerator (IDE_RUN_COMMAND (self));
   GdkModifierType state;
   guint keyval;
 
-  if (ide_str_empty0 (accelerator))
+  if (ide_str_empty0 (self->accelerator))
     return NULL;
 
-  if (gtk_accelerator_parse (accelerator, &keyval, &state))
+  if (gtk_accelerator_parse (self->accelerator, &keyval, &state))
     return gtk_accelerator_get_label (keyval, state);
 
   return NULL;
@@ -131,6 +132,7 @@ gbp_shellcmd_run_command_dispose (GObject *object)
 {
   GbpShellcmdRunCommand *self = (GbpShellcmdRunCommand *)object;
 
+  g_clear_pointer (&self->accelerator, g_free);
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->settings_path, g_free);
   g_clear_object (&self->settings);
@@ -148,6 +150,10 @@ gbp_shellcmd_run_command_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACCELERATOR:
+      g_value_set_string (value, gbp_shellcmd_run_command_get_accelerator (self));
+      break;
+
     case PROP_ACCELERATOR_LABEL:
       g_value_take_string (value, get_accelerator_label (self));
       break;
@@ -175,6 +181,10 @@ gbp_shellcmd_run_command_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ACCELERATOR:
+      gbp_shellcmd_run_command_set_accelerator (self, g_value_get_string (value));
+      break;
+
     case PROP_SETTINGS_PATH:
       self->settings_path = g_value_dup_string (value);
       break;
@@ -193,6 +203,10 @@ gbp_shellcmd_run_command_class_init (GbpShellcmdRunCommandClass *klass)
   object_class->dispose = gbp_shellcmd_run_command_dispose;
   object_class->get_property = gbp_shellcmd_run_command_get_property;
   object_class->set_property = gbp_shellcmd_run_command_set_property;
+
+  properties [PROP_ACCELERATOR] =
+    g_param_spec_string ("accelerator", NULL, NULL, NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ACCELERATOR_LABEL] =
     g_param_spec_string ("accelerator-label", NULL, NULL, NULL,
@@ -264,4 +278,25 @@ gbp_shellcmd_run_command_delete (GbpShellcmdRunCommand *self)
   keys = g_settings_schema_list_keys (schema);
   for (guint i = 0; keys[i]; i++)
     g_settings_reset (self->settings, keys[i]);
+}
+
+const char *
+gbp_shellcmd_run_command_get_accelerator (GbpShellcmdRunCommand *self)
+{
+  g_return_val_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self), NULL);
+
+  return self->accelerator;
+}
+
+void
+gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunCommand *self,
+                                          const char            *accelerator)
+{
+  g_return_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self));
+
+  if (ide_set_string (&self->accelerator, accelerator))
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCELERATOR]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCELERATOR_LABEL]);
+    }
 }
