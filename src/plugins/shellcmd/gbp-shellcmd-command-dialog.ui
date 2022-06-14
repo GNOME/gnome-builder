@@ -140,7 +140,7 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkButton">
+                  <object class="GtkButton" id="delete_button">
                     <property name="label" translatable="yes">_Delete Command</property>
                     <property name="use-underline">true</property>
                     <property name="action-name">command.delete</property>
