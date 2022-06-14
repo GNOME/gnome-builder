@@ -28,8 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShellcmdRunCommand, gbp_shellcmd_run_command, GBP, SHELLCMD_RUN_COMMAND, IdeRunCommand)
 
-GbpShellcmdRunCommand *gbp_shellcmd_run_command_new    (const char            *settings_path);
-GbpShellcmdRunCommand *gbp_shellcmd_run_command_create (IdeContext            *context);
-void                   gbp_shellcmd_run_command_delete (GbpShellcmdRunCommand *self);
+GbpShellcmdRunCommand *gbp_shellcmd_run_command_new             (const char            *settings_path);
+GbpShellcmdRunCommand *gbp_shellcmd_run_command_create          (IdeContext            *context);
+void                   gbp_shellcmd_run_command_delete          (GbpShellcmdRunCommand *self);
+const char            *gbp_shellcmd_run_command_get_accelerator (GbpShellcmdRunCommand *self);
+void                   gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunCommand *self,
+                                                                 const char            *accelerator);
 
 G_END_DECLS

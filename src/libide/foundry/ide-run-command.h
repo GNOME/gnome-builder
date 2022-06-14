@@ -64,11 +64,6 @@ IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_cwd          (IdeRunCommand      *self,
                                                       const char         *cwd);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_run_command_get_accelerator  (IdeRunCommand      *self);
-IDE_AVAILABLE_IN_ALL
-void                ide_run_command_set_accelerator  (IdeRunCommand      *self,
-                                                      const char         *accelerator);
-IDE_AVAILABLE_IN_ALL
 const char         *ide_run_command_get_display_name (IdeRunCommand      *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_display_name (IdeRunCommand      *self,
