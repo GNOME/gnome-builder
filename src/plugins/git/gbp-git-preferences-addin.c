@@ -181,7 +181,7 @@ create_entry_row (const char                   *page_name,
 }
 
 static const IdePreferencePageEntry pages[] = {
-  { NULL, "sharing", "git", "builder-vcs-git-symbolic", 500, N_("Version Control") },
+  { NULL, "projects", "git", "builder-vcs-git-symbolic", 210, N_("Version Control") },
 };
 
 static const IdePreferenceGroupEntry groups[] = {

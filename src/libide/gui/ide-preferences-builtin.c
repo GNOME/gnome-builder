@@ -659,7 +659,7 @@ static const IdePreferencePageEntry pages[] = {
   { NULL, "tools",    "build",      "builder-build-symbolic",                          300, N_("Build") },
   { NULL, "tools",    "debug",      "builder-debugger-symbolic",                       310, N_("Debugger") },
   { NULL, "tools",    "commands",   "text-x-script-symbolic",                          320, N_("Commands") },
-  { NULL, "tools",    "sdks",       "package-x-generic-symbolic",                      500, N_("SDKs") },
+  { NULL, "network",  "sdks",       "package-x-generic-symbolic",                      500, N_("SDKs") },
   { NULL, "network",  "network",    "folder-download-symbolic",                        600, N_("Network") },
   { NULL, "plugins",  "plugins",    "builder-plugin-symbolic",                         700, N_("Plugins") },
 };
