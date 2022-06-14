@@ -40,13 +40,17 @@ struct _GbpShellcmdCommandDialog
   GtkStringList         *envvars;
   GtkListBox            *envvars_list_box;
   GtkLabel              *shortcut_label;
+  GtkButton             *save;
 
   char                  *accel;
+
+  guint                  delete_on_cancel : 1;
 };
 
 enum {
   PROP_0,
   PROP_COMMAND,
+  PROP_DELETE_ON_CANCEL,
   N_PROPS
 };
 
@@ -290,6 +294,25 @@ command_delete_action (GtkWidget  *widget,
 }
 
 static void
+command_cancel_action (GtkWidget  *widget,
+                       const char *action_name,
+                       GVariant   *param)
+{
+  GbpShellcmdCommandDialog *self = (GbpShellcmdCommandDialog *)widget;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+
+  if (self->delete_on_cancel)
+    gbp_shellcmd_run_command_delete (self->command);
+
+  gtk_window_destroy (GTK_WINDOW (self));
+
+  IDE_EXIT;
+}
+
+static void
 command_save_action (GtkWidget  *widget,
                      const char *action_name,
                      GVariant   *param)
@@ -343,6 +366,10 @@ gbp_shellcmd_command_dialog_get_property (GObject    *object,
       g_value_set_object (value, self->command);
       break;
 
+    case PROP_DELETE_ON_CANCEL:
+      g_value_set_boolean (value, self->delete_on_cancel);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -360,6 +387,15 @@ gbp_shellcmd_command_dialog_set_property (GObject      *object,
     {
     case PROP_COMMAND:
       gbp_shellcmd_command_dialog_set_command (self, g_value_get_object (value));
+      break;
+
+    case PROP_DELETE_ON_CANCEL:
+      self->delete_on_cancel = g_value_get_boolean (value);
+      if (self->delete_on_cancel)
+        {
+          gtk_window_set_title (GTK_WINDOW (self), _("Create Command"));
+          gtk_button_set_label (self->save, _("Cre_ate"));
+        }
       break;
 
     default:
@@ -384,10 +420,17 @@ gbp_shellcmd_command_dialog_class_init (GbpShellcmdCommandDialogClass *klass)
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_DELETE_ON_CANCEL] =
+    g_param_spec_boolean ("delete-on-cancel", NULL, NULL, FALSE,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_install_action (widget_class, "command.save", NULL, command_save_action);
   gtk_widget_class_install_action (widget_class, "command.delete", NULL, command_delete_action);
+  gtk_widget_class_install_action (widget_class, "command.cancel", NULL, command_cancel_action);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shellcmd/gbp-shellcmd-command-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, argv);
@@ -395,6 +438,7 @@ gbp_shellcmd_command_dialog_class_init (GbpShellcmdCommandDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, envvars_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, location);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, name);
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, save);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, shortcut_label);
   gtk_widget_class_bind_template_callback (widget_class, on_env_entry_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_env_entry_activate_cb);
@@ -419,11 +463,13 @@ gbp_shellcmd_command_dialog_init (GbpShellcmdCommandDialog *self)
 }
 
 GbpShellcmdCommandDialog *
-gbp_shellcmd_command_dialog_new (GbpShellcmdRunCommand *command)
+gbp_shellcmd_command_dialog_new (GbpShellcmdRunCommand *command,
+                                 gboolean               delete_on_cancel)
 {
   g_return_val_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (command), NULL);
 
   return g_object_new (GBP_TYPE_SHELLCMD_COMMAND_DIALOG,
                        "command", command,
+                       "delete-on-cancel", delete_on_cancel,
                        NULL);
 }

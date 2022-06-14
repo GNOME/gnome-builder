@@ -32,6 +32,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShellcmdCommandDialog, gbp_shellcmd_command_dialog, GBP, SHELLCMD_COMMAND_DIALOG, AdwWindow)
 
-GbpShellcmdCommandDialog *gbp_shellcmd_command_dialog_new (GbpShellcmdRunCommand *command);
+GbpShellcmdCommandDialog *gbp_shellcmd_command_dialog_new (GbpShellcmdRunCommand *command,
+                                                           gboolean               delete_on_cancel);
 
 G_END_DECLS
