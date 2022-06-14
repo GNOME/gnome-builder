@@ -41,6 +41,7 @@ struct _GbpShellcmdCommandDialog
   GtkListBox            *envvars_list_box;
   GtkLabel              *shortcut_label;
   GtkButton             *save;
+  GtkButton             *delete_button;
 
   char                  *accel;
 
@@ -435,6 +436,7 @@ gbp_shellcmd_command_dialog_set_property (GObject      *object,
         {
           gtk_window_set_title (GTK_WINDOW (self), _("Create Command"));
           gtk_button_set_label (self->save, _("Cre_ate"));
+          gtk_widget_hide (GTK_WIDGET (self->delete_button));
         }
       break;
 
@@ -474,6 +476,7 @@ gbp_shellcmd_command_dialog_class_init (GbpShellcmdCommandDialogClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shellcmd/gbp-shellcmd-command-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, argv);
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, delete_button);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, envvars);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, envvars_list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, location);
