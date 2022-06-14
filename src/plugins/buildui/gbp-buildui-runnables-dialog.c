@@ -71,12 +71,13 @@ create_run_command_row (gpointer item,
 
   if (argv != NULL)
     {
-      subtitle = g_string_new (NULL);
+      subtitle = g_string_new ("<tt>");
 
       for (guint i = 0; argv[i]; i++)
         {
           const char *arg = argv[i];
           g_autofree char *quote = NULL;
+          g_autofree char *arg_escaped = NULL;
 
           if (i > 0)
             g_string_append_c (subtitle, ' ');
@@ -93,11 +94,15 @@ create_run_command_row (gpointer item,
                 }
             }
 
-          if (quote)
-            g_string_append (subtitle, quote);
+          if (quote != NULL)
+            arg_escaped = g_markup_escape_text (quote, -1);
           else
-            g_string_append (subtitle, arg);
+            arg_escaped = g_markup_escape_text (arg, -1);
+
+          g_string_append (subtitle, arg_escaped);
         }
+
+      g_string_append (subtitle, "</tt>");
     }
 
   check = g_object_new (GTK_TYPE_CHECK_BUTTON,
