@@ -202,11 +202,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   name = ide_run_command_get_display_name (IDE_RUN_COMMAND (command));
   argv = ide_run_command_get_argv (IDE_RUN_COMMAND (command));
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (command));
-#if 0
   accel = ide_run_command_get_accelerator (IDE_RUN_COMMAND (command));
-#else
-  accel = "<Control>space";
-#endif
 
   argvstr = normalize_argv (argv);
 
@@ -315,10 +311,7 @@ command_save_action (GtkWidget  *widget,
                                     gtk_editable_get_text (GTK_EDITABLE (self->name)));
   ide_run_command_set_cwd (IDE_RUN_COMMAND (self->command),
                            gtk_editable_get_text (GTK_EDITABLE (self->location)));
-
-#if 0
   ide_run_command_set_accelerator (IDE_RUN_COMMAND (self->command), self->accel);
-#endif
 
   gtk_window_destroy (GTK_WINDOW (self));
 
