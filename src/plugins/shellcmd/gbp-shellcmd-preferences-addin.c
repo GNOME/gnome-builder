@@ -108,9 +108,7 @@ on_row_activated_cb (GtkListBox           *list_box,
       command = new_command;
     }
 
-  dialog = gbp_shellcmd_command_dialog_new (command);
-  gtk_window_set_title (GTK_WINDOW (dialog),
-                        new_command ? _("Create Command") : _("Edit Command"));
+  dialog = gbp_shellcmd_command_dialog_new (command, new_command != NULL);
   gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (window));
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_window_present (GTK_WINDOW (dialog));
