@@ -38,24 +38,13 @@ struct _GbpShellcmdPreferencesAddin
   GSettings            *settings;
 };
 
-static gboolean
-argv_to_string (GBinding     *binding,
-                const GValue *from_value,
-                GValue       *to_value,
-                gpointer      user_data)
-{
-  const char * const *argv = g_value_get_boxed (from_value);
-  if (argv != NULL)
-    g_value_take_string (to_value, g_strjoinv (" ", (char **)argv));
-  return TRUE;
-}
-
 static GtkWidget *
 gbp_shellcmd_preferences_addin_create_row_cb (gpointer item,
                                               gpointer item_data)
 {
   GbpShellcmdRunCommand *command = item;
   AdwActionRow *row;
+  GtkLabel *accel;
 
   g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (command));
 
@@ -64,9 +53,16 @@ gbp_shellcmd_preferences_addin_create_row_cb (gpointer item,
                       NULL);
   g_object_bind_property (command, "display-name", row, "title",
                           G_BINDING_SYNC_CREATE);
-  g_object_bind_property_full (command, "argv", row, "subtitle",
-                               G_BINDING_SYNC_CREATE,
-                               argv_to_string, NULL, NULL, NULL);
+  g_object_bind_property (command, "subtitle", row, "subtitle",
+                          G_BINDING_SYNC_CREATE);
+
+  accel = g_object_new (GTK_TYPE_LABEL,
+                        "margin-start", 6,
+                        "margin-end", 6,
+                        NULL);
+  g_object_bind_property (command, "accelerator-label", accel, "label",
+                          G_BINDING_SYNC_CREATE);
+  adw_action_row_add_suffix (row, GTK_WIDGET (accel));
   adw_action_row_add_suffix (row,
                              g_object_new (GTK_TYPE_IMAGE,
                                            "icon-name", "go-next-symbolic",

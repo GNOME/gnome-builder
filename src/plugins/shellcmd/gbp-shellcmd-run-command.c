@@ -34,7 +34,9 @@ struct _GbpShellcmdRunCommand
 
 enum {
   PROP_0,
+  PROP_ACCELERATOR_LABEL,
   PROP_SETTINGS_PATH,
+  PROP_SUBTITLE,
   N_PROPS
 };
 
@@ -72,6 +74,59 @@ gbp_shellcmd_run_command_constructed (GObject *object)
 }
 
 static void
+subtitle_changed_cb (GbpShellcmdRunCommand *self)
+{
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUBTITLE]);
+}
+
+static char *
+get_subtitle (GbpShellcmdRunCommand *self)
+{
+  g_autofree char *joined = NULL;
+  const char * const *argv;
+  const char *cwd;
+
+  g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (self));
+
+  argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self));
+  cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
+
+  if (argv != NULL)
+    joined = g_strjoinv (" ", (char **)argv);
+
+  if (joined && cwd)
+    /* something like a bash prompt */
+    return g_strdup_printf ("<tt>%s&gt; %s</tt>", cwd, joined);
+
+  if (cwd)
+    return g_strdup_printf ("%s&gt; ", cwd);
+
+  return g_steal_pointer (&joined);
+}
+
+static void
+accelerator_label_changed_cb (GbpShellcmdRunCommand *self)
+{
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCELERATOR_LABEL]);
+}
+
+static char *
+get_accelerator_label (GbpShellcmdRunCommand *self)
+{
+  const char *accelerator = ide_run_command_get_accelerator (IDE_RUN_COMMAND (self));
+  GdkModifierType state;
+  guint keyval;
+
+  if (ide_str_empty0 (accelerator))
+    return NULL;
+
+  if (gtk_accelerator_parse (accelerator, &keyval, &state))
+    return gtk_accelerator_get_label (keyval, state);
+
+  return NULL;
+}
+
+static void
 gbp_shellcmd_run_command_dispose (GObject *object)
 {
   GbpShellcmdRunCommand *self = (GbpShellcmdRunCommand *)object;
@@ -93,8 +148,16 @@ gbp_shellcmd_run_command_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ACCELERATOR_LABEL:
+      g_value_take_string (value, get_accelerator_label (self));
+      break;
+
     case PROP_SETTINGS_PATH:
       g_value_set_string (value, self->settings_path);
+      break;
+
+    case PROP_SUBTITLE:
+      g_value_take_string (value, get_subtitle (self));
       break;
 
     default:
@@ -131,11 +194,17 @@ gbp_shellcmd_run_command_class_init (GbpShellcmdRunCommandClass *klass)
   object_class->get_property = gbp_shellcmd_run_command_get_property;
   object_class->set_property = gbp_shellcmd_run_command_set_property;
 
+  properties [PROP_ACCELERATOR_LABEL] =
+    g_param_spec_string ("accelerator-label", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_SETTINGS_PATH] =
     g_param_spec_string ("settings-path", NULL, NULL, NULL,
-                         (G_PARAM_READWRITE |
-                          G_PARAM_CONSTRUCT_ONLY |
-                          G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SUBTITLE] =
+    g_param_spec_string ("subtitle", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -143,6 +212,9 @@ gbp_shellcmd_run_command_class_init (GbpShellcmdRunCommandClass *klass)
 static void
 gbp_shellcmd_run_command_init (GbpShellcmdRunCommand *self)
 {
+  g_signal_connect (self, "notify::accelerator", G_CALLBACK (accelerator_label_changed_cb), NULL);
+  g_signal_connect (self, "notify::cwd", G_CALLBACK (subtitle_changed_cb), NULL);
+  g_signal_connect (self, "notify::argv", G_CALLBACK (subtitle_changed_cb), NULL);
 }
 
 GbpShellcmdRunCommand *
