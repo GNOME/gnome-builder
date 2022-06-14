@@ -21,6 +21,7 @@ libide_gtk_public_headers = [
   'ide-progress-icon.h',
   'ide-radio-box.h',
   'ide-search-entry.h',
+  'ide-shortcut-accel-dialog.h',
   'ide-three-grid.h',
   'ide-truncate-model.h',
   'libide-gtk.h',
@@ -52,6 +53,7 @@ libide_gtk_public_sources = [
   'ide-progress-icon.c',
   'ide-radio-box.c',
   'ide-search-entry.c',
+  'ide-shortcut-accel-dialog.c',
   'ide-three-grid.c',
   'ide-truncate-model.c',
 ]

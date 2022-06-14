@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="IdeShortcutAccelDialog" parent="GtkDialog">
+    <property name="resizable">false</property>
+    <property name="modal">true</property>
+    <property name="width-request">400</property>
+    <property name="height-request">300</property>
+    <child>
+      <object class="GtkEventControllerKey">
+        <property name="propagation-phase">capture</property>
+        <signal name="key-pressed" handler="ide_shortcut_accel_dialog_key_pressed" swapped="true" object="IdeShortcutAccelDialog"/>
+        <signal name="key-released" handler="ide_shortcut_accel_dialog_key_released" swapped="true" object="IdeShortcutAccelDialog"/>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar">
+        <property name="show-title-buttons">false</property>
+        <child type="start">
+          <object class="GtkButton" id="cancel_button">
+            <property name="label" translatable="yes">_Cancel</property>
+            <property name="use-underline">true</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkButton" id="accept_button">
+            <property name="label" translatable="yes">_Set</property>
+            <property name="use-underline">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="content_area">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkStack" id="stack">
+            <property name="hhomogeneous">true</property>
+            <property name="vhomogeneous">true</property>
+            <property name="margin-top">24</property>
+            <property name="margin-bottom">24</property>
+            <property name="margin-start">24</property>
+            <property name="margin-end">24</property>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">selection</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkLabel" id="selection_label">
+                        <property name="xalign">0.5</property>
+                        <property name="use-markup">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="resource">/org/gnome/libide-gtk/icons/enter-keyboard-shortcut.svg</property>
+                        <property name="hexpand">true</property>
+                        <property name="vexpand">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="xalign">0.5</property>
+                        <property name="label" translatable="yes">Press Escape to cancel or Backspace to disable.</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkStackPage">
+                <property name="name">display</property>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">18</property>
+                    <child>
+                      <object class="GtkLabel" id="display_label">
+                        <property name="xalign">0.5</property>
+                        <property name="use-markup">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkShortcutLabel" id="display_shortcut">
+                        <property name="halign">center</property>
+                        <style>
+                          <class name="dim-label"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="cancel">cancel_button</action-widget>
+      <action-widget response="accept">accept_button</action-widget>
+    </action-widgets>
+  </template>
+  <object class="GtkSizeGroup">
+    <widgets>
+      <widget name="cancel_button"/>
+      <widget name="accept_button"/>
+    </widgets>
+  </object>
+</interface>
