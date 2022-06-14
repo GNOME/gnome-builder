@@ -101,7 +101,7 @@ static const IdePreferenceItemEntry items[] = {
     N_("Automatically select the first completion when displayed"),
     "org.gnome.builder.editor", NULL, "select-first-completion" },
 
-  { "editing", "completion", "enable-snippets", 30, ide_preferences_window_toggle,
+  { "editing", "snippets", "enable-snippets", 0, ide_preferences_window_toggle,
     N_("Expand Snippets"),
     N_("Use “Tab” to expand configured snippets in the editor"),
     "org.gnome.builder.editor", NULL, "enable-snippets" },
