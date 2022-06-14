@@ -177,7 +177,6 @@ gbp_shellcmd_run_command_delete (GbpShellcmdRunCommand *self)
   builder = g_strv_builder_new ();
   for (guint i = 0; commands[i]; i++)
     {
-      g_print ("%s %s\n", commands[i], self->id);
       if (!ide_str_equal0 (commands[i], self->id))
         g_strv_builder_add (builder, commands[i]);
     }
