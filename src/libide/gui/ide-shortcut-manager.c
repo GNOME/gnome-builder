@@ -24,8 +24,11 @@
 
 #include <gtk/gtk.h>
 
+#include <libide-plugins.h>
+
 #include "ide-shortcut-bundle-private.h"
 #include "ide-shortcut-manager-private.h"
+#include "ide-shortcut-provider.h"
 
 struct _IdeShortcutManager
 {
@@ -47,6 +50,10 @@ struct _IdeShortcutManager
 
   /* A flattened list model we proxy through our interface */
   GtkFlattenListModel *flatten;
+
+  /* Extension set of IdeShortcutProvider */
+  IdeExtensionSetAdapter *providers;
+  GListStore *providers_models;
 };
 
 static GType
@@ -136,10 +143,104 @@ ide_shortcut_manager_items_changed_cb (IdeShortcutManager *self,
 }
 
 static void
+on_provider_added_cb (IdeExtensionSetAdapter *set,
+                      PeasPluginInfo         *plugin_info,
+                      PeasExtension          *exten,
+                      gpointer                user_data)
+{
+  IdeShortcutProvider *provider = (IdeShortcutProvider *)exten;
+  IdeShortcutManager *self = user_data;
+  g_autoptr(GListModel) model = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SHORTCUT_PROVIDER (provider));
+
+  if ((model = ide_shortcut_provider_list_shortcuts (provider)))
+    {
+      g_object_set_data (G_OBJECT (provider), "SHORTCUTS_MODEL", model);
+      g_list_store_append (self->providers_models, model);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+on_provider_removed_cb (IdeExtensionSetAdapter *set,
+                        PeasPluginInfo         *plugin_info,
+                        PeasExtension          *exten,
+                        gpointer                user_data)
+{
+  IdeShortcutProvider *provider = (IdeShortcutProvider *)exten;
+  IdeShortcutManager *self = user_data;
+  GListModel *model;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SHORTCUT_PROVIDER (provider));
+
+  if ((model = g_object_get_data (G_OBJECT (provider), "SHORTCUTS_MODEL")))
+    {
+      guint n_items = g_list_model_get_n_items (G_LIST_MODEL (self->providers_models));
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(GListModel) item = g_list_model_get_item (G_LIST_MODEL (self->providers_models), i);
+
+          if (item == model)
+            {
+              g_list_store_remove (self->providers_models, i);
+              break;
+            }
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_shortcut_manager_parent_set (IdeObject *object,
+                                 IdeObject *parent)
+{
+  IdeShortcutManager *self = (IdeShortcutManager *)object;
+
+  g_assert (IDE_IS_SHORTCUT_MANAGER (self));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (parent == NULL)
+    return;
+
+  if (self->providers == NULL)
+    {
+      self->providers = ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                                       peas_engine_get_default (),
+                                                       IDE_TYPE_SHORTCUT_PROVIDER,
+                                                       NULL, NULL);
+      g_signal_connect (self->providers,
+                        "extension-added",
+                        G_CALLBACK (on_provider_added_cb),
+                        self);
+      g_signal_connect (self->providers,
+                        "extension-removed",
+                        G_CALLBACK (on_provider_removed_cb),
+                        self);
+      ide_extension_set_adapter_foreach_by_priority (self->providers,
+                                                     on_provider_added_cb,
+                                                     self);
+    }
+}
+
+static void
 ide_shortcut_manager_dispose (GObject *object)
 {
   IdeShortcutManager *self = (IdeShortcutManager *)object;
 
+  g_clear_object (&self->providers);
+  g_clear_object (&self->providers_models);
   g_clear_object (&self->toplevel);
   g_clear_object (&self->plugin_models);
   g_clear_object (&self->flatten);
@@ -151,8 +252,13 @@ static void
 ide_shortcut_manager_class_init (IdeShortcutManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_shortcut_manager_dispose;
+
+  i_object_class->parent_set = ide_shortcut_manager_parent_set;
+
+  g_type_ensure (IDE_TYPE_SHORTCUT_PROVIDER);
 }
 
 static void
@@ -165,6 +271,9 @@ ide_shortcut_manager_init (IdeShortcutManager *self)
 
   self->toplevel = g_list_store_new (G_TYPE_LIST_MODEL);
   self->plugin_models = g_object_ref (plugin_models);
+  self->providers_models = g_list_store_new (G_TYPE_LIST_MODEL);
+
+  g_list_store_append (self->toplevel, self->providers_models);
 
   flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->plugin_models)));
   g_list_store_append (self->toplevel, flatten);
