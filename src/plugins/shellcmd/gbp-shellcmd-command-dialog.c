@@ -57,17 +57,48 @@ enum {
 G_DEFINE_FINAL_TYPE (GbpShellcmdCommandDialog, gbp_shellcmd_command_dialog, ADW_TYPE_WINDOW)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+delete_envvar_cb (GbpShellcmdCommandDialog *self,
+                  GtkButton                *button)
+{
+  const char *envvar;
+  guint n_items;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+  g_assert (GTK_IS_BUTTON (button));
+
+  envvar = g_object_get_data (G_OBJECT (button), "ENVVAR");
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (self->envvars));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(GtkStringObject) str = g_list_model_get_item (G_LIST_MODEL (self->envvars), i);
+
+      if (g_strcmp0 (envvar, gtk_string_object_get_string (str)) == 0)
+        {
+          gtk_string_list_remove (self->envvars, i);
+          break;
+        }
+    }
+}
+
 static GtkWidget *
 create_envvar_row_cb (gpointer item,
                       gpointer user_data)
 {
+  GbpShellcmdCommandDialog *self = user_data;
   GtkStringObject *obj = item;
   const char *str = gtk_string_object_get_string (obj);
+  g_autofree char *markup = NULL;
+  g_autofree char *escaped = NULL;
   AdwActionRow *row;
   GtkButton *button;
 
+  escaped = g_markup_escape_text (str, -1);
+  markup = g_strdup_printf ("<tt>%s</tt>", escaped);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
-                      "title", str,
+                      "title", markup,
                       "title-selectable", TRUE,
                       NULL);
   button = g_object_new (GTK_TYPE_BUTTON,
@@ -75,6 +106,15 @@ create_envvar_row_cb (gpointer item,
                          "css-classes", IDE_STRV_INIT ("flat", "circular"),
                          "valign", GTK_ALIGN_CENTER,
                          NULL);
+  g_object_set_data_full (G_OBJECT (button),
+                          "ENVVAR",
+                          g_strdup (str),
+                          g_free);
+  g_signal_connect_object (button,
+                           "clicked",
+                           G_CALLBACK (delete_envvar_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   adw_action_row_add_suffix (row, GTK_WIDGET (button));
 
   return GTK_WIDGET (row);
@@ -457,7 +497,7 @@ gbp_shellcmd_command_dialog_init (GbpShellcmdCommandDialog *self)
   gtk_list_box_bind_model (self->envvars_list_box,
                            G_LIST_MODEL (self->envvars),
                            create_envvar_row_cb,
-                           NULL, NULL);
+                           self, NULL);
   ide_gtk_widget_hide_when_empty (GTK_WIDGET (self->envvars_list_box),
                                   G_LIST_MODEL (self->envvars));
 }
