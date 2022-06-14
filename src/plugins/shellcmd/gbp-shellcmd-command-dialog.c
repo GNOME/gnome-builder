@@ -59,6 +59,24 @@ G_DEFINE_FINAL_TYPE (GbpShellcmdCommandDialog, gbp_shellcmd_command_dialog, ADW_
 
 static GParamSpec *properties [N_PROPS];
 
+static char **
+string_list_to_strv (GtkStringList *strlist)
+{
+  g_autoptr(GStrvBuilder) builder = g_strv_builder_new ();
+  GListModel *model = G_LIST_MODEL (strlist);
+  guint n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(GtkStringObject) strobj = g_list_model_get_item (model, i);
+      const char *str = gtk_string_object_get_string (strobj);
+
+      g_strv_builder_add (builder, str);
+    }
+
+  return g_strv_builder_end (builder);
+}
+
 static void
 delete_envvar_cb (GbpShellcmdCommandDialog *self,
                   GtkButton                *button)
@@ -232,6 +250,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
 {
   g_autofree char *argvstr = NULL;
   const char * const *argv;
+  const char * const *env;
   const char *accel;
   const char *name;
   const char *cwd;
@@ -246,6 +265,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
 
   name = ide_run_command_get_display_name (IDE_RUN_COMMAND (command));
   argv = ide_run_command_get_argv (IDE_RUN_COMMAND (command));
+  env = ide_run_command_get_env (IDE_RUN_COMMAND (command));
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (command));
   accel = ide_run_command_get_accelerator (IDE_RUN_COMMAND (command));
 
@@ -255,6 +275,12 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   gtk_editable_set_text (GTK_EDITABLE (self->location), cwd);
   gtk_editable_set_text (GTK_EDITABLE (self->name), name);
   set_accel (self, accel);
+
+  if (env != NULL)
+    {
+      for (guint i = 0; env[i]; i++)
+        gtk_string_list_append (self->envvars, env[i]);
+    }
 
   IDE_EXIT;
 }
@@ -359,7 +385,9 @@ command_save_action (GtkWidget  *widget,
                      GVariant   *param)
 {
   GbpShellcmdCommandDialog *self = (GbpShellcmdCommandDialog *)widget;
+  g_autoptr(GStrvBuilder) builder = NULL;
   g_auto(GStrv) argv = NULL;
+  g_auto(GStrv) env = NULL;
   const char *argvstr;
   int argc;
 
@@ -376,6 +404,10 @@ command_save_action (GtkWidget  *widget,
   ide_run_command_set_cwd (IDE_RUN_COMMAND (self->command),
                            gtk_editable_get_text (GTK_EDITABLE (self->location)));
   ide_run_command_set_accelerator (IDE_RUN_COMMAND (self->command), self->accel);
+
+  env = string_list_to_strv (self->envvars);
+  ide_run_command_set_env (IDE_RUN_COMMAND (self->command),
+                           (const char * const *)env);
 
   gtk_window_destroy (GTK_WINDOW (self));
 
