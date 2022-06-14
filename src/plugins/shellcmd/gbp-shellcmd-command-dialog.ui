@@ -14,15 +14,14 @@
               <object class="GtkButton" id="cancel">
                 <property name="label" translatable="yes">_Cancel</property>
                 <property name="use-underline">true</property>
-                <property name="width-request">100</property>
                 <property name="action-name">window.close</property>
               </object>
             </child>
             <child type="end">
               <object class="GtkButton" id="save">
                 <property name="label" translatable="yes">_Apply</property>
+                <property name="action-name">command.save</property>
                 <property name="use-underline">true</property>
-                <property name="width-request">100</property>
                 <style>
                   <class name="suggested-action"/>
                 </style>
@@ -36,7 +35,7 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="display_name">
+                  <object class="AdwEntryRow" id="name">
                     <property name="title" translatable="yes">Name</property>
                   </object>
                 </child>
@@ -45,7 +44,7 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="command">
+                  <object class="AdwEntryRow" id="argv">
                     <property name="title" translatable="yes">Command</property>
                   </object>
                 </child>
@@ -85,11 +84,14 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwActionRow" id="shortcut">
+                  <object class="AdwActionRow" id="shortcut_row">
+                    <signal name="activated" handler="on_shortcut_activated_cb" swapped="true" object="GbpShellcmdCommandDialog"/>
+                    <property name="activatable">true</property>
                     <property name="title" translatable="yes">Keyboard Shortcut</property>
                     <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
                     <child type="suffix">
-                      <object class="GtkShortcutsShortcut">
+                      <object class="GtkLabel" id="shortcut_label">
+                        <property name="valign">center</property>
                       </object>
                     </child>
                   </object>
@@ -147,7 +149,8 @@
             </style>
             <child>
               <object class="GtkButton">
-                <property name="label" translatable="yes">Delete Command</property>
+                <property name="label" translatable="yes">Delete</property>
+                <property name="action-name">command.delete</property>
                 <property name="halign">end</property>
                 <property name="hexpand">true</property>
                 <style>
@@ -161,7 +164,6 @@
     </child>
   </template>
   <object class="GtkSizeGroup">
-    <property name="mode">horizontal</property>
     <widgets>
       <widget name="save"/>
       <widget name="cancel"/>
