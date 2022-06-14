@@ -332,6 +332,10 @@ ide_shortcut_accel_dialog_init (IdeShortcutAccelDialog *self)
   g_object_bind_property (self, "accelerator",
                           self->display_shortcut, "accelerator",
                           G_BINDING_SYNC_CREATE);
+
+#ifdef DEVELOPMENT_BUILD
+  gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
+#endif
 }
 
 gchar *
