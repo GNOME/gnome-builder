@@ -3,5 +3,7 @@
   <gresource prefix="/org/gnome/libide-gtk">
     <file preprocess="xml-stripblanks">ide-entry-popover.ui</file>
     <file preprocess="xml-stripblanks">ide-search-entry.ui</file>
+    <file preprocess="xml-stripblanks">ide-shortcut-accel-dialog.ui</file>
+    <file preprocess="xml-stripblanks">icons/enter-keyboard-shortcut.svg</file>
   </gresource>
 </gresources>

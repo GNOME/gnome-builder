@@ -36,6 +36,7 @@
 # include "ide-progress-icon.h"
 # include "ide-radio-box.h"
 # include "ide-search-entry.h"
+# include "ide-shortcut-accel-dialog.h"
 # include "ide-three-grid.h"
 # include "ide-truncate-model.h"
 #undef IDE_GTK_INSIDE
