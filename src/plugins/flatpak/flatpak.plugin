@@ -5,7 +5,6 @@ Copyright=Copyright © 2016-2018 Christian Hergert
 Depends=git;
 Description=Provides support for building with Flatpak
 Embedded=_gbp_flatpak_register_types
-Hidden=true
 Module=flatpak
 Name=Flatpak
 X-At-Startup=true

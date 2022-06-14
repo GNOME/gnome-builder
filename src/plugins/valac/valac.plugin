@@ -5,5 +5,5 @@ Copyright=Copyright © 2015-2022 Christian Hergert
 Description=Extracts build errors from the vala compiler
 Embedded=_gbp_valac_register_types
 Module=valac
-Name=Vala Compiler
+Name=Vala
 X-Category=compilers
