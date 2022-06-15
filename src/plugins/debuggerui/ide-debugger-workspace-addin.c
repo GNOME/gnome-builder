@@ -365,7 +365,6 @@ ide_debugger_workspace_addin_load (IdeWorkspaceAddin *addin,
                                "debugger",
                                _("Run with Debugger"),
                                "builder-debugger-symbolic",
-                               "F5",
                                debugger_run_handler,
                                g_object_ref (self),
                                g_object_unref);

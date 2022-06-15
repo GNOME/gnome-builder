@@ -258,7 +258,6 @@ ide_run_handler_info_free (gpointer data)
   g_free (info->id);
   g_free (info->title);
   g_free (info->icon_name);
-  g_free (info->accel);
 
   if (info->handler_data_destroy)
     info->handler_data_destroy (info->handler_data);
@@ -1180,7 +1179,6 @@ ide_run_manager_add_handler (IdeRunManager  *self,
                              const gchar    *id,
                              const gchar    *title,
                              const gchar    *icon_name,
-                             const gchar    *accel,
                              IdeRunHandler   run_handler,
                              gpointer        user_data,
                              GDestroyNotify  user_data_destroy)
@@ -1195,38 +1193,11 @@ ide_run_manager_add_handler (IdeRunManager  *self,
   info->id = g_strdup (id);
   info->title = g_strdup (title);
   info->icon_name = g_strdup (icon_name);
-  info->accel = g_strdup (accel);
   info->handler = run_handler;
   info->handler_data = user_data;
   info->handler_data_destroy = user_data_destroy;
 
   self->handlers = g_list_append (self->handlers, info);
-
-  /* FIXME: We need a new way to do this for GTK 4. */
-#if 0
-  DzlShortcutManager *manager;
-  DzlShortcutTheme *theme;
-  g_autofree gchar *action_name = NULL;
-  GApplication *app;
-
-  app = g_application_get_default ();
-  manager = dzl_application_get_shortcut_manager (DZL_APPLICATION (app));
-  theme = g_object_ref (dzl_shortcut_manager_get_theme (manager));
-
-  action_name = g_strdup_printf ("run-manager.run-with-handler('%s')", id);
-
-  dzl_shortcut_manager_add_action (manager,
-                                   action_name,
-                                   N_("Workbench shortcuts"),
-                                   N_("Build and Run"),
-                                   g_dgettext (GETTEXT_PACKAGE, title),
-                                   NULL);
-
-  dzl_shortcut_theme_set_accel_for_action (theme,
-                                           action_name,
-                                           accel,
-                                           DZL_SHORTCUT_PHASE_GLOBAL | DZL_SHORTCUT_PHASE_CAPTURE);
-#endif
 
   if (self->handler == NULL)
     self->handler = info;
@@ -1592,7 +1563,6 @@ ide_run_manager_init (IdeRunManager *self)
                                "run",
                                _("Run"),
                                "builder-run-start-symbolic",
-                               "<primary>F5",
                                NULL,
                                NULL,
                                NULL);

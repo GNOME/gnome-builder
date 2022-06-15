@@ -26,10 +26,9 @@ G_BEGIN_DECLS
 
 typedef struct
 {
-  gchar          *id;
-  gchar          *title;
-  gchar          *icon_name;
-  gchar          *accel;
+  char           *id;
+  char           *title;
+  char           *icon_name;
   gint            priority;
   IdeRunHandler   handler;
   gpointer        handler_data;

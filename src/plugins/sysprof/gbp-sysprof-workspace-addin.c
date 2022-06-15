@@ -420,7 +420,6 @@ gbp_sysprof_workspace_addin_check_supported_cb (GObject      *object,
                                "sysprof",
                                _("Run with Profiler"),
                                "builder-profiler-symbolic",
-                               "<Control>F8",
                                profiler_run_handler,
                                self,
                                NULL);
