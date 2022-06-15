@@ -118,8 +118,6 @@ gbp_waf_run_command_provider_list_commands_async (IdeRunCommandProvider *provide
   GbpWafRunCommandProvider *self = (GbpWafRunCommandProvider *)provider;
   g_autoptr(IdeSubprocessLauncher) launcher  = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(IdeRunCommand) run_command = NULL;
-  g_autoptr(GListStore) store = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree char *waf = NULL;

@@ -180,7 +180,6 @@ ide_source_view_click_pressed_cb (IdeSourceView   *self,
                                   GtkGestureClick *click)
 {
   GdkEventSequence *sequence;
-  g_auto(GStrv) corrections = NULL;
   GtkTextBuffer *buffer;
   GdkEvent *event;
   GtkTextIter iter;

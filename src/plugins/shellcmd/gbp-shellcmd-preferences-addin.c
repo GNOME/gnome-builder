@@ -98,7 +98,6 @@ on_row_activated_cb (GtkListBox           *list_box,
     {
       IdePreferencesMode mode = ide_preferences_window_get_mode (window);
       IdeContext *context = ide_preferences_window_get_context (window);
-      g_autofree char *settings_path = NULL;
 
       if (mode == IDE_PREFERENCES_MODE_PROJECT)
         new_command = gbp_shellcmd_run_command_create (context);

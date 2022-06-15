@@ -160,7 +160,7 @@ gbp_npm_run_command_provider_list_commands_worker (IdeTask      *task,
       g_autofree char *display_name = NULL;
       int priority;
 
-      if (is_ignored_script (script, (const char * const *)all_scripts->data))
+      if (is_ignored_script (script, (const char * const *)(gpointer)all_scripts->data))
         continue;
 
       id = g_strconcat ("npm:", script, NULL);

@@ -62,7 +62,6 @@ gbp_phpize_pipeline_addin_load (IdePipelineAddin *addin,
   g_autoptr(IdePipelineStage) config_stage = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
   g_autoptr(IdePipelineStage) install_stage = NULL;
-  g_autoptr(GError) error = NULL;
   g_autofree char *configure_path = NULL;
   IdeBuildSystem *build_system;
   const char *builddir;

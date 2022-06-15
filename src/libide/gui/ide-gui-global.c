@@ -144,7 +144,7 @@ ide_widget_set_context_handler (gpointer                widget,
     ide_widget_notify_root_cb (widget, NULL, NULL);
 }
 
-static gboolean dummy_cb (gpointer) { return G_SOURCE_REMOVE; }
+static gboolean dummy_cb (gpointer data) { return G_SOURCE_REMOVE; }
 
 /**
  * ide_widget_get_context:
