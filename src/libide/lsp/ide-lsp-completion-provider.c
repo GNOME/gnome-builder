@@ -369,7 +369,6 @@ ide_lsp_completion_provider_refilter (GtkSourceCompletionProvider *provider,
   IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
   IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
   IdeLspCompletionResults *results = (IdeLspCompletionResults *)model;
-  g_autofree char *word = NULL;
 
   g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (self));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));

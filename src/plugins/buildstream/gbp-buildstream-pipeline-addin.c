@@ -53,9 +53,7 @@ static void
 gbp_buildstream_pipeline_addin_load (IdePipelineAddin *addin,
                                      IdePipeline      *pipeline)
 {
-  g_autoptr(IdeSubprocessLauncher) fetch_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
