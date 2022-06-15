@@ -22,7 +22,11 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
+#include <libide-editor.h>
 #include <libide-gui.h>
+#include <libide-terminal.h>
 
 #include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-run-command.h"
@@ -40,8 +44,12 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
                             gpointer   user_data)
 {
   GbpShellcmdRunCommand *command = user_data;
+  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(IdeTerminalLauncher) launcher = NULL;
   IdeWorkspace *workspace;
   IdeContext *context;
+  const char *title;
+  IdePage *page;
 
   IDE_ENTRY;
 
@@ -57,11 +65,27 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
       !(context = ide_workspace_get_context (workspace)))
     IDE_RETURN (FALSE);
 
-  /* Commands executed through shortcuts do not run with the run-manager
-   * (where as they can be run through that too). Instead we just create
-   * a new terminal pane if necessary and add them to that.
-   */
-  g_print ("TODO: Run shortcut command\n");
+  if (!IDE_IS_PRIMARY_WORKSPACE (workspace) &&
+      !IDE_IS_EDITOR_WORKSPACE (workspace))
+    IDE_RETURN (FALSE);
+
+  if (!(title = ide_run_command_get_display_name (IDE_RUN_COMMAND (command))))
+    title = _("Untitled command");
+
+  launcher = gbp_shellcmd_run_command_create_launcher (command, context);
+  page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                       "icon-name", "text-x-script-symbolic",
+                       "title", title,
+                       "launcher", launcher,
+                       "manage-spawn", TRUE,
+                       "respawn-on-exit", FALSE,
+                       NULL);
+
+  position = ide_panel_position_new ();
+
+  ide_workspace_add_page (workspace, page, position);
+  panel_widget_raise (PANEL_WIDGET (page));
+  gtk_widget_grab_focus (GTK_WIDGET (page));
 
   IDE_RETURN (TRUE);
 }
