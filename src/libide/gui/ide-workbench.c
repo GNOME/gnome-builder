@@ -773,8 +773,6 @@ ide_workbench_add_workspace (IdeWorkbench *self,
                              IdeWorkspace *workspace)
 {
   g_autoptr(GPtrArray) addins = NULL;
-  g_autoptr(GtkFilterListModel) capture = NULL;
-  g_autoptr(GtkFilterListModel) bubble = NULL;
   IdeShortcutManager *shortcuts;
   IdeCommandManager *command_manager;
   GList *mru_link;
