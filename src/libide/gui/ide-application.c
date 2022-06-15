@@ -113,6 +113,43 @@ ide_application_local_command_line (GApplication   *app,
   return G_APPLICATION_CLASS (ide_application_parent_class)->local_command_line (app, arguments, exit_status);
 }
 
+G_GNUC_NULL_TERMINATED
+static gboolean
+ide_application_load_all_typelibs (GError **error, ...)
+{
+  g_autoptr(GString) msg = g_string_new (NULL);
+  const char *typelib;
+  gboolean had_failure = FALSE;
+  va_list args;
+
+  va_start (args, error);
+  while ((typelib = va_arg (args, const char *)))
+    {
+      const char *version = va_arg (args, const char *);
+      g_autoptr(GError) local_error = NULL;
+
+      if (!g_irepository_require (NULL, typelib, version, 0, &local_error))
+        {
+          if (msg->len)
+            g_string_append (msg, "; ");
+          g_string_append (msg, local_error->message);
+          had_failure = TRUE;
+        }
+    }
+  va_end (args);
+
+  if (had_failure)
+    {
+      g_set_error_literal (error,
+                           G_IREPOSITORY_ERROR,
+                           G_IREPOSITORY_ERROR_TYPELIB_NOT_FOUND,
+                           msg->str);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 ide_application_load_typelibs (IdeApplication *self)
 {
@@ -133,17 +170,19 @@ ide_application_load_typelibs (IdeApplication *self)
    * python3 plugins altogether to avoid loading anything improper into
    * the process space.
    */
-  if (!g_irepository_require (NULL, "GtkSource", "5", 0, &error) ||
-      !g_irepository_require (NULL, "Gio", "2.0", 0, &error) ||
-      !g_irepository_require (NULL, "GLib", "2.0", 0, &error) ||
-      !g_irepository_require (NULL, "Gtk", "4.0", 0, &error) ||
-      !g_irepository_require (NULL, "Jsonrpc", "1.0", 0, &error) ||
-      !g_irepository_require (NULL, "Template", "1.0", 0, &error) ||
-      !g_irepository_require (NULL, "Vte", "3.91", 0, &error) ||
+  if (!ide_application_load_all_typelibs (&error,
+                                          "Gio", "2.0",
+                                          "GLib", "2.0",
+                                          "Gtk", "4.0",
+                                          "GtkSource", "5",
+                                          "Jsonrpc", "1.0",
+                                          "Template", "1.0",
+                                          "Vte", "3.91",
 #ifdef HAVE_WEBKIT
-      !g_irepository_require (NULL, "WebKit2", "5.0", 0, &error) ||
+                                          "WebKit2", "5.0",
 #endif
-      !g_irepository_require (NULL, "Ide", PACKAGE_ABI_S, 0, &error))
+                                          "Ide", PACKAGE_ABI_S,
+                                          NULL))
     g_critical ("Cannot enable Python 3 plugins: %s", error->message);
   else
     self->loaded_typelibs = TRUE;
