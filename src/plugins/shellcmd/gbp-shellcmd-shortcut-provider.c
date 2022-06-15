@@ -74,11 +74,12 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
 
   launcher = gbp_shellcmd_run_command_create_launcher (command, context);
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                       "close-on-exit", FALSE,
                        "icon-name", "text-x-script-symbolic",
-                       "title", title,
                        "launcher", launcher,
                        "manage-spawn", TRUE,
                        "respawn-on-exit", FALSE,
+                       "title", title,
                        NULL);
 
   position = ide_panel_position_new ();
