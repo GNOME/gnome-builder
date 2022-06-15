@@ -165,7 +165,6 @@ gbp_shellcmd_command_model_constructed (GObject *object)
 {
   GbpShellcmdCommandModel *self = (GbpShellcmdCommandModel *)object;
   g_autofree char *signal_name = NULL;
-  g_auto(GStrv) commands = NULL;
 
   G_OBJECT_CLASS (gbp_shellcmd_command_model_parent_class)->constructed (object);
 

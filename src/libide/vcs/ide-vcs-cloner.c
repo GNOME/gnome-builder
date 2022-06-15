@@ -162,7 +162,6 @@ ide_vcs_cloner_clone_simple_clone_cb (GObject      *object,
                                       gpointer      user_data)
 {
   IdeVcsCloner *cloner = (IdeVcsCloner *)object;
-  g_autoptr(GError) error = NULL;
   CloneSimple *state = user_data;
 
   g_assert (IDE_IS_VCS_CLONER (cloner));

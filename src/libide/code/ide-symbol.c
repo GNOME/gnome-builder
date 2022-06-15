@@ -462,10 +462,8 @@ ide_symbol_new_from_variant (GVariant *variant)
   g_autoptr(GVariant) unboxed = NULL;
   g_autoptr(GVariant) vdecl = NULL;
   g_autoptr(GVariant) vdef = NULL;
-  g_autoptr(GVariant) vcanon = NULL;
   g_autoptr(IdeLocation) decl = NULL;
   g_autoptr(IdeLocation) def = NULL;
-  g_autoptr(IdeLocation) canon = NULL;
   const gchar *name;
   IdeSymbolKind kind;
   IdeSymbolFlags flags;

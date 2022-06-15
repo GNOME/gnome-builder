@@ -73,8 +73,6 @@ gbp_waf_build_target_provider_list_cb (GObject      *object,
 
   while ((line = ide_line_reader_next (&reader, &line_len)))
     {
-      g_autoptr(IdeBuildTarget) build_target = NULL;
-
       line[line_len] = 0;
 
       g_strstrip (line);
@@ -100,7 +98,6 @@ gbp_waf_build_target_provider_get_targets_async (IdeBuildTargetProvider *provide
   GbpWafBuildTargetProvider *self = (GbpWafBuildTargetProvider *)provider;
   g_autoptr(IdeSubprocessLauncher) launcher  = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(IdeBuildTarget) build_target = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree char *waf = NULL;

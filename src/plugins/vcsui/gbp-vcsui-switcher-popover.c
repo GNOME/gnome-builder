@@ -53,7 +53,6 @@ gbp_vcsui_switcher_popover_list_branches_cb (GObject      *object,
 {
   IdeVcs *vcs = (IdeVcs *)object;
   g_autoptr(GbpVcsuiSwitcherPopover) self = user_data;
-  g_autoptr(GListStore) store = NULL;
   g_autoptr(GPtrArray) ar = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -85,7 +84,6 @@ gbp_vcsui_switcher_popover_list_tags_cb (GObject      *object,
 {
   IdeVcs *vcs = (IdeVcs *)object;
   g_autoptr(GbpVcsuiSwitcherPopover) self = user_data;
-  g_autoptr(GListStore) store = NULL;
   g_autoptr(GPtrArray) ar = NULL;
   g_autoptr(GError) error = NULL;
 

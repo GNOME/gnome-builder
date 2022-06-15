@@ -385,7 +385,6 @@ command_save_action (GtkWidget  *widget,
                      GVariant   *param)
 {
   GbpShellcmdCommandDialog *self = (GbpShellcmdCommandDialog *)widget;
-  g_autoptr(GStrvBuilder) builder = NULL;
   g_auto(GStrv) argv = NULL;
   g_auto(GStrv) env = NULL;
   const char *argvstr;
