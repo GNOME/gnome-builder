@@ -21,6 +21,7 @@
 #pragma once
 
 #include <libide-foundry.h>
+#include <libide-terminal.h>
 
 G_BEGIN_DECLS
 
@@ -34,5 +35,7 @@ void                   gbp_shellcmd_run_command_delete          (GbpShellcmdRunC
 const char            *gbp_shellcmd_run_command_get_accelerator (GbpShellcmdRunCommand *self);
 void                   gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunCommand *self,
                                                                  const char            *accelerator);
+IdeTerminalLauncher   *gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
+                                                                 IdeContext            *context);
 
 G_END_DECLS
