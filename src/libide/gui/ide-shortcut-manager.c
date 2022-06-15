@@ -78,11 +78,12 @@ ide_shortcut_manager_get_item (GListModel *model,
                                guint       position)
 {
   IdeShortcutManager *self = IDE_SHORTCUT_MANAGER (model);
+  GtkShortcut *ret = NULL;
 
   if (self->flatten)
-    return g_list_model_get_item (G_LIST_MODEL (self->flatten), position);
+    ret = g_list_model_get_item (G_LIST_MODEL (self->flatten), position);
 
-  return NULL;
+  return ret;
 }
 
 static void
@@ -139,6 +140,9 @@ ide_shortcut_manager_items_changed_cb (IdeShortcutManager *self,
                                        guint               added,
                                        GListModel         *model)
 {
+  g_assert (IDE_IS_SHORTCUT_MANAGER (self));
+  g_assert (G_IS_LIST_MODEL (model));
+
   g_list_model_items_changed (G_LIST_MODEL (self), position, removed, added);
 }
 
@@ -160,7 +164,13 @@ on_provider_added_cb (IdeExtensionSetAdapter *set,
 
   if ((model = ide_shortcut_provider_list_shortcuts (provider)))
     {
-      g_object_set_data (G_OBJECT (provider), "SHORTCUTS_MODEL", model);
+      IDE_TRACE_MSG ("Adding shortcut model for %s with %d items",
+                     peas_plugin_info_get_module_name (plugin_info),
+                     g_list_model_get_n_items (model));
+      g_object_set_data_full (G_OBJECT (provider),
+                              "SHORTCUTS_MODEL",
+                              g_object_ref (model),
+                              g_object_unref);
       g_list_store_append (self->providers_models, model);
     }
 
@@ -183,9 +193,16 @@ on_provider_removed_cb (IdeExtensionSetAdapter *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_SHORTCUT_PROVIDER (provider));
 
+  if (self->providers_models == NULL)
+    IDE_EXIT;
+
   if ((model = g_object_get_data (G_OBJECT (provider), "SHORTCUTS_MODEL")))
     {
-      guint n_items = g_list_model_get_n_items (G_LIST_MODEL (self->providers_models));
+      guint n_items;
+
+      g_assert (G_IS_LIST_MODEL (model));
+
+      n_items = g_list_model_get_n_items (G_LIST_MODEL (self->providers_models));
 
       for (guint i = 0; i < n_items; i++)
         {
@@ -194,7 +211,7 @@ on_provider_removed_cb (IdeExtensionSetAdapter *set,
           if (item == model)
             {
               g_list_store_remove (self->providers_models, i);
-              break;
+              IDE_EXIT;
             }
         }
     }
@@ -273,7 +290,9 @@ ide_shortcut_manager_init (IdeShortcutManager *self)
   self->plugin_models = g_object_ref (plugin_models);
   self->providers_models = g_list_store_new (G_TYPE_LIST_MODEL);
 
-  g_list_store_append (self->toplevel, self->providers_models);
+  flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->providers_models)));
+  g_list_store_append (self->toplevel, flatten);
+  g_object_unref (flatten);
 
   flatten = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->plugin_models)));
   g_list_store_append (self->toplevel, flatten);
