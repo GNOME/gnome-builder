@@ -623,3 +623,11 @@ ide_terminal_page_get_launcher (IdeTerminalPage *self)
 
   return self->launcher;
 }
+
+gboolean
+ide_terminal_page_has_exited (IdeTerminalPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TERMINAL_PAGE (self), FALSE);
+
+  return self->exited;
+}
