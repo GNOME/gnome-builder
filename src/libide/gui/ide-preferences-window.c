@@ -490,6 +490,8 @@ ide_preferences_window_class_init (IdePreferencesWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesWindow, search_button);
   gtk_widget_class_bind_template_child (widget_class, IdePreferencesWindow, back_button);
   gtk_widget_class_bind_template_callback (widget_class, go_back_cb);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_w, GDK_CONTROL_MASK, "window.close", NULL);
 }
 
 static void
