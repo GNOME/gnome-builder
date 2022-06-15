@@ -50,7 +50,6 @@ gbp_make_build_target_provider_get_targets_async (IdeBuildTargetProvider *provid
   GbpMakeBuildTargetProvider *self = (GbpMakeBuildTargetProvider *)provider;
   g_autoptr(GPtrArray) targets = NULL;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GError) error = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
 
