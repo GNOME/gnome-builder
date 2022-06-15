@@ -302,31 +302,38 @@ gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunCommand *self,
 }
 
 static char *
-expand_cwd (const char *cwd,
+expand_arg (const char *arg,
             ...)
 {
   va_list args;
   const char *key;
   char *ret = NULL;
 
-  if (cwd == NULL)
+  if (arg == NULL)
     return g_strdup (g_get_home_dir ());
 
-  if (cwd[0] == '~')
-    return ide_path_expand (cwd);
+  if (arg[0] == '~' && arg[1] == '/')
+    return ide_path_expand (arg);
 
-  if (cwd[0] != '$')
-    return g_strdup (cwd);
+  if (strchr (arg, '$') == NULL)
+    return g_strdup (arg);
 
-  va_start (args, cwd);
+  ret = g_strdup (arg);
+
+  va_start (args, arg);
   while ((key = va_arg (args, const char *)))
     {
       const char *value = va_arg (args, const char *);
 
-      if (g_str_has_prefix (cwd, key))
+      if (value == NULL)
+        continue;
+
+      if (strstr (ret, key) != NULL)
         {
-          ret = g_build_filename (value, cwd + strlen (key), NULL);
-          break;
+          GString *gstr = g_string_new (ret);
+          g_string_replace (gstr, key, value, 0);
+          g_free (ret);
+          ret = g_string_free (gstr, FALSE);
         }
     }
   va_end (args);
@@ -340,6 +347,8 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GStrvBuilder) argv_builder = NULL;
+  g_auto(GStrv) argv_expanded = NULL;
   g_autofree char *cwd_expanded = NULL;
   const char * const *argv;
   const char * const *env;
@@ -377,15 +386,42 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
   env = ide_run_command_get_env (IDE_RUN_COMMAND (self));
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
 
-  cwd_expanded = expand_cwd (cwd,
+  g_return_val_if_fail (argv != NULL, NULL);
+
+  argv_builder = g_strv_builder_new ();
+  for (guint i = 0; argv[i]; i++)
+    {
+      g_autofree char *expanded = NULL;
+
+      expanded = expand_arg (argv[i],
+                             "$HOME", home,
+                             "$BUILDDIR", builddir,
+                             "$SRCDIR", srcdir,
+                             NULL);
+      g_strv_builder_add (argv_builder, expanded);
+    }
+  argv_expanded = g_strv_builder_end (argv_builder);
+
+  cwd_expanded = expand_arg (cwd,
                              "$HOME", home,
                              "$BUILDDIR", builddir,
                              "$SRCDIR", srcdir,
                              NULL);
 
   ide_subprocess_launcher_set_cwd (launcher, cwd_expanded);
-  ide_subprocess_launcher_push_args (launcher, argv);
-  ide_subprocess_launcher_set_environ (launcher, env);
+  ide_subprocess_launcher_push_args (launcher, (const char * const *)argv_expanded);
+
+  if (env != NULL)
+    {
+      for (guint i = 0; env[i]; i++)
+        {
+          g_autofree char *key = NULL;
+          g_autofree char *value = NULL;
+
+          if (ide_environ_parse (env[i], &key, &value))
+            ide_subprocess_launcher_setenv (launcher, key, value, TRUE);
+        }
+    }
 
   return ide_terminal_launcher_new_for_launcher (launcher);
 }
