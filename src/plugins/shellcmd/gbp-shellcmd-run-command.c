@@ -300,3 +300,92 @@ gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunCommand *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACCELERATOR_LABEL]);
     }
 }
+
+static char *
+expand_cwd (const char *cwd,
+            ...)
+{
+  va_list args;
+  const char *key;
+  char *ret = NULL;
+
+  if (cwd == NULL)
+    return g_strdup (g_get_home_dir ());
+
+  if (cwd[0] == '~')
+    return ide_path_expand (cwd);
+
+  if (cwd[0] != '$')
+    return g_strdup (cwd);
+
+  va_start (args, cwd);
+  while ((key = va_arg (args, const char *)))
+    {
+      const char *value = va_arg (args, const char *);
+
+      if (g_str_has_prefix (cwd, key))
+        {
+          ret = g_build_filename (value, cwd + strlen (key), NULL);
+          break;
+        }
+    }
+  va_end (args);
+
+  return ret;
+}
+
+IdeTerminalLauncher *
+gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
+                                          IdeContext            *context)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autofree char *cwd_expanded = NULL;
+  const char * const *argv;
+  const char * const *env;
+  const char *cwd;
+  const char *builddir;
+  const char *srcdir;
+  const char *home;
+
+  g_return_val_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self), NULL);
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  workdir = ide_context_ref_workdir (context);
+  home = g_get_home_dir ();
+  srcdir = g_file_peek_path (workdir);
+  builddir = g_file_peek_path (workdir);
+
+  if (ide_context_has_project (context))
+    {
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+      IdePipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
+
+      if (pipeline != NULL)
+        {
+          launcher = ide_pipeline_create_launcher (pipeline, NULL);
+          builddir = ide_pipeline_get_builddir (pipeline);
+          srcdir = ide_pipeline_get_srcdir (pipeline);
+        }
+    }
+
+  if (launcher == NULL)
+    launcher = ide_subprocess_launcher_new (0);
+
+  cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
+  argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self));
+  env = ide_run_command_get_env (IDE_RUN_COMMAND (self));
+  cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
+
+  cwd_expanded = expand_cwd (cwd,
+                             "$HOME", home,
+                             "$BUILDDIR", builddir,
+                             "$SRCDIR", srcdir,
+                             NULL);
+
+  ide_subprocess_launcher_set_cwd (launcher, cwd_expanded);
+  ide_subprocess_launcher_set_argv (launcher, argv);
+  ide_subprocess_launcher_set_environ (launcher, env);
+
+  return ide_terminal_launcher_new_for_launcher (launcher);
+}
