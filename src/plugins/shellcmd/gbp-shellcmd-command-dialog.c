@@ -395,6 +395,8 @@ command_save_action (GtkWidget  *widget,
 
   g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
 
+  g_object_freeze_notify (G_OBJECT (self->command));
+
   argvstr = gtk_editable_get_text (GTK_EDITABLE (self->argv));
   if (g_shell_parse_argv (argvstr, &argc, &argv, NULL))
     ide_run_command_set_argv (IDE_RUN_COMMAND (self->command), (const char * const *)argv);
@@ -408,6 +410,8 @@ command_save_action (GtkWidget  *widget,
   env = string_list_to_strv (self->envvars);
   ide_run_command_set_env (IDE_RUN_COMMAND (self->command),
                            (const char * const *)env);
+
+  g_object_thaw_notify (G_OBJECT (self->command));
 
   gtk_window_destroy (GTK_WINDOW (self));
 
