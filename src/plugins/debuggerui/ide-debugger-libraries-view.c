@@ -287,7 +287,16 @@ ide_debugger_libraries_view_class_init (IdeDebuggerLibrariesViewClass *klass)
 static void
 ide_debugger_libraries_view_init (IdeDebuggerLibrariesView *self)
 {
+  g_autoptr(PangoAttrList) tt_attrs = NULL;
+
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  tt_attrs = pango_attr_list_new ();
+  pango_attr_list_insert (tt_attrs, pango_attr_family_new ("Monospace"));
+  pango_attr_list_insert (tt_attrs, pango_attr_scale_new (0.83333));
+  g_object_set (self->range_cell,
+                "attributes", tt_attrs,
+                NULL);
 
   self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
