@@ -9,3 +9,6 @@
 { "trigger" : "<Control><Shift>f", "action" : "terminal.search-reveal", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>braceleft", "action" : "page.move-left", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>braceright", "action" : "page.move-right", "when" : "inTerminal()", "phase" : "capture" },
+
+/* Allow closing exited terminals with ctrl+w */
+{ "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "(typeof(page) == typeof(Ide.TerminalPage)) && page.has_exited()", "phase" : "capture" },
