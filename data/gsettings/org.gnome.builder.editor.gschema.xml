@@ -65,7 +65,7 @@
       <description>If enabled, the editor will show grid lines in the document.</description>
     </key>
     <key name="font-name" type="s">
-      <default>"Monospace 11"</default>
+      <default>"Monospace 10"</default>
     </key>
     <key name="style-scheme-name" type="s">
       <default>"Adwaita"</default>
