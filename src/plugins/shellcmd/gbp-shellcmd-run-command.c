@@ -384,7 +384,7 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
                              NULL);
 
   ide_subprocess_launcher_set_cwd (launcher, cwd_expanded);
-  ide_subprocess_launcher_set_argv (launcher, argv);
+  ide_subprocess_launcher_push_args (launcher, argv);
   ide_subprocess_launcher_set_environ (launcher, env);
 
   return ide_terminal_launcher_new_for_launcher (launcher);
