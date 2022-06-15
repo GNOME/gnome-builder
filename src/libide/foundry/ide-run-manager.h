@@ -57,10 +57,9 @@ void            ide_run_manager_set_handler                    (IdeRunManager   
                                                                 const gchar          *id);
 IDE_AVAILABLE_IN_ALL
 void            ide_run_manager_add_handler                    (IdeRunManager        *self,
-                                                                const gchar          *id,
-                                                                const gchar          *title,
-                                                                const gchar          *icon_name,
-                                                                const gchar          *accel,
+                                                                const char           *id,
+                                                                const char           *title,
+                                                                const char           *icon_name,
                                                                 IdeRunHandler         run_handler,
                                                                 gpointer              user_data,
                                                                 GDestroyNotify        user_data_destroy);

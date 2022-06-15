@@ -186,8 +186,6 @@ ide_run_button_query_tooltip (IdeRunButton *self,
 
       if (g_strcmp0 (info->id, handler) == 0)
         {
-          g_autofree char *text = NULL;
-
           gboolean enabled;
 
           /* Figure out if the run action is enabled. If it
@@ -208,12 +206,7 @@ ide_run_button_query_tooltip (IdeRunButton *self,
               return TRUE;
             }
 
-          if (info->accel && info->title)
-            text = g_strdup_printf ("%s %s", info->accel, info->title);
-          else if (info->title)
-            text = g_strdup (info->title);
-
-          gtk_tooltip_set_text (tooltip, text);
+          gtk_tooltip_set_text (tooltip, info->title);
         }
     }
 
