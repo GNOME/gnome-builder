@@ -172,7 +172,6 @@ test_c_args = [
   '-Werror=return-type',
   '-Werror=sequence-point',
   '-Werror=shadow',
-  '-Werror=strict-prototypes',
   '-Werror=trigraphs',
   '-Werror=undef',
   '-Werror=write-strings',
