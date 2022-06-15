@@ -45,6 +45,8 @@ enum {
   N_PROPS
 };
 
+static GParamSpec *properties [N_PROPS];
+
 static gpointer
 gbp_shellcmd_command_model_get_item (GListModel *model,
                                      guint       position)
@@ -100,14 +102,12 @@ list_model_iface_init (GListModelInterface *iface)
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpShellcmdCommandModel, gbp_shellcmd_command_model, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
-static GParamSpec *properties [N_PROPS];
-
 static void
 gbp_shellcmd_command_model_replace (GbpShellcmdCommandModel  *self,
                                     char                    **commands)
 {
+  g_auto(GStrv) old_ids = NULL;
   guint old_len;
-  guint new_len;
 
   g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
   g_assert (self->ids != NULL);
@@ -120,22 +120,27 @@ gbp_shellcmd_command_model_replace (GbpShellcmdCommandModel  *self,
       return;
     }
 
-  old_len = g_strv_length (self->ids);
-  new_len = g_strv_length (commands);
+  old_ids = g_steal_pointer (&self->ids);
+  old_len = self->n_items;
 
-  for (guint i = 0; i < self->n_items; i++)
+  self->ids = g_steal_pointer (&commands);
+  self->n_items = g_strv_length (self->ids);
+
+  g_assert (g_strv_length (old_ids) == old_len);
+  g_assert (g_strv_length (self->ids) == self->n_items);
+  g_assert (g_hash_table_size (self->id_to_command) <= old_len);
+
+  for (guint i = 0; old_ids[i]; i++)
     {
-      if (!g_strv_contains ((const char * const *)commands, self->ids[i]))
-        g_hash_table_remove (self->id_to_command, self->ids[i]);
+      if (!g_strv_contains ((const char * const *)self->ids, old_ids[i]))
+        g_hash_table_remove (self->id_to_command, old_ids[i]);
     }
 
-  g_strfreev (self->ids);
-  self->ids = g_steal_pointer (&commands);
-  self->n_items = new_len;
+  g_assert (g_hash_table_size (self->id_to_command) <= self->n_items);
 
-  g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, new_len);
+  g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->n_items);
 
-  if (old_len != new_len)
+  if (old_len != self->n_items)
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_N_ITEMS]);
 }
 
@@ -150,7 +155,7 @@ gbp_shellcmd_command_model_settings_changed_cb (GbpShellcmdCommandModel *self,
   g_assert (ide_str_equal0 (key, self->key));
   g_assert (G_IS_SETTINGS (settings));
 
-  commands = g_settings_get_strv (settings, key);
+  commands = g_settings_get_strv (settings, self->key);
 
   gbp_shellcmd_command_model_replace (self, g_steal_pointer (&commands));
 }
@@ -167,16 +172,15 @@ gbp_shellcmd_command_model_constructed (GObject *object)
   g_assert (self->key != NULL);
   g_assert (G_IS_SETTINGS (self->settings));
 
-  signal_name = g_strconcat ("changed::", self->key, NULL);
+  self->ids = g_settings_get_strv (self->settings, self->key);
+  self->n_items = g_strv_length (self->ids);
 
+  signal_name = g_strconcat ("changed::", self->key, NULL);
   g_signal_connect_object (self->settings,
                            signal_name,
                            G_CALLBACK (gbp_shellcmd_command_model_settings_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-
-  self->ids = g_settings_get_strv (self->settings, self->key);
-  self->n_items = g_strv_length (self->ids);
 }
 
 static void
