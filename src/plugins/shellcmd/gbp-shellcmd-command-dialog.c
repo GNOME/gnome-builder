@@ -412,9 +412,61 @@ command_save_action (GtkWidget  *widget,
 
   g_object_thaw_notify (G_OBJECT (self->command));
 
-  gtk_window_destroy (GTK_WINDOW (self));
+ gtk_window_destroy (GTK_WINDOW (self));
 
   IDE_EXIT;
+}
+
+static void
+select_folder_response_cb (GtkFileChooserNative *native,
+                           int                   response_id,
+                           AdwEntryRow          *row)
+{
+  g_assert (ADW_IS_ENTRY_ROW (row));
+  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
+
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    {
+      g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
+      g_autofree char *path = ide_path_collapse (g_file_peek_path (file));
+
+      gtk_editable_set_text (GTK_EDITABLE (row), path);
+    }
+
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+}
+
+static void
+select_folder_action (GtkWidget  *widget,
+                      const char *action_name,
+                      GVariant   *param)
+{
+  GbpShellcmdCommandDialog *self = (GbpShellcmdCommandDialog *)widget;
+  GtkFileChooserNative *native;
+  g_autofree char *expanded = NULL;
+  g_autoptr(GFile) file = NULL;
+  const char *cwd;
+  GtkRoot *root;
+
+  g_assert (GBP_IS_SHELLCMD_COMMAND_DIALOG (self));
+
+  cwd = gtk_editable_get_text (GTK_EDITABLE (self->location));
+  expanded = ide_path_expand (cwd);
+  file = g_file_new_for_path (expanded);
+
+  root = gtk_widget_get_root (widget);
+  native = gtk_file_chooser_native_new (_("Select Working Directory"),
+                                        GTK_WINDOW (root),
+                                        GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
+                                        _("Select"),
+                                        _("Cancel"));
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (native), file, NULL);
+  g_signal_connect_object (native,
+                           "response",
+                           G_CALLBACK (select_folder_response_cb),
+                           self->location,
+                           0);
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
 }
 
 static void
@@ -508,6 +560,7 @@ gbp_shellcmd_command_dialog_class_init (GbpShellcmdCommandDialogClass *klass)
   gtk_widget_class_install_action (widget_class, "command.save", NULL, command_save_action);
   gtk_widget_class_install_action (widget_class, "command.delete", NULL, command_delete_action);
   gtk_widget_class_install_action (widget_class, "command.cancel", NULL, command_cancel_action);
+  gtk_widget_class_install_action (widget_class, "command.select-folder", NULL, select_folder_action);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shellcmd/gbp-shellcmd-command-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, argv);

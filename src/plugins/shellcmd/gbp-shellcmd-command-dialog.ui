@@ -90,6 +90,7 @@
                     <property name="title" translatable="yes">Working Directory</property>
                     <child type="suffix">
                       <object class="GtkButton">
+                        <property name="action-name">command.select-folder</property>
                         <property name="valign">center</property>
                         <property name="icon-name">folder-symbolic</property>
                         <style>
