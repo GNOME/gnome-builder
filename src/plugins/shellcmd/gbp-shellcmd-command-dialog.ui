@@ -113,10 +113,70 @@
                     </style>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
+                <child>
+                  <object class="AdwComboRow" id="locality">
+                    <property name="title" translatable="yes">Locality</property>
+                    <property name="subtitle" translatable="yes">Builder can run your command from a number of localities including the host system or build containers.</property>
+                    <property name="model">localities</property>
+                    <property name="expression">
+                      <lookup name="title" type="IdeEnumObject"/>
+                    </property>
+                    <property name="list-factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="hexpand">true</property>
+            <binding name="label">
+              <lookup name="title" type="IdeEnumObject">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="hexpand">true</property>
+            <style>
+              <class name="caption"/>
+              <class name="dim-label"/>
+            </style>
+            <binding name="label">
+              <lookup name="description" type="IdeEnumObject">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+]]>
+                        </property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPreferencesGroup">
                 <child>
                   <object class="GtkListBox" id="envvars_list_box">
                     <property name="selection-mode">none</property>
-                    <property name="margin-top">12</property>
                     <style>
                       <class name="boxed-list"/>
                     </style>
@@ -178,5 +238,35 @@
     </widgets>
   </object>
   <object class="GtkStringList" id="envvars">
+  </object>
+  <object class="GListStore" id="localities">
+    <child>
+      <object class="IdeEnumObject">
+        <property name="nick">host</property>
+        <property name="title" translatable="yes">Host System</property>
+        <property name="description" translatable="yes">Runs the command on the host system.</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeEnumObject">
+        <property name="nick">pipeline</property>
+        <property name="title" translatable="yes">Build Pipeline</property>
+        <property name="description" translatable="yes">Runs the command within the build pipeline.</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeEnumObject">
+        <property name="nick">runner</property>
+        <property name="title" translatable="yes">As Target Application</property>
+        <property name="description" translatable="yes">Runs the command as if it were the target application.</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeEnumObject">
+        <property name="nick">internal</property>
+        <property name="title" translatable="yes">Subprocess</property>
+        <property name="description" translatable="yes">Runs the command as a subprocess of Builder.</property>
+      </object>
+    </child>
   </object>
 </interface>
