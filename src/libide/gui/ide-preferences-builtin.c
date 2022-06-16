@@ -668,7 +668,7 @@ static const IdePreferencePageEntry project_pages[] = {
   { NULL, "config", "overview",       "info-symbolic",                          0, N_("Overview") },
   { NULL, "config", "build",          "builder-build-symbolic",               100, N_("Configurations") },
   { NULL, "code",   "languages",      "text-x-javascript-symbolic",           200, N_("Languages") },
-  { NULL, "tools",  "debug",          "builder-debugger-symbolic",            310, N_("Debugger") },
+  { NULL, "tools",  "application",    "builder-run-start-symbolic",           310, N_("Application") },
   { NULL, "tools",  "commands",       "text-x-script-symbolic",               320, N_("Commands") },
 };
 
@@ -711,7 +711,7 @@ static const IdePreferenceGroupEntry groups[] = {
 };
 
 static const IdePreferenceGroupEntry project_groups[] = {
-  { "debug", "running", 0, N_("Behavior") },
+  { "application", "start-stop", 0, N_("Starting & Stopping") },
 };
 
 static const IdePreferenceItemEntry items[] = {
@@ -765,7 +765,7 @@ static const IdePreferenceItemEntry items[] = {
 };
 
 static const IdePreferenceItemEntry project_items[] = {
-  { "debug", "running", "stop-signal", 0, ide_preferences_window_combo,
+  { "application", "start-stop", "stop-signal", 0, ide_preferences_window_combo,
     N_("Stop Signal"),
     N_("Send the signal to the target application when requesting the application stop."),
     "org.gnome.builder.project", NULL, "stop-signal" },
