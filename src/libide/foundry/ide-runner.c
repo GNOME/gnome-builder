@@ -399,8 +399,8 @@ ide_runner_real_force_quit (IdeRunner *self)
 {
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
   g_autoptr(GSettings) settings = NULL;
+  g_autofree char *stop_signal = NULL;
   IdeContext *context;
-  const char *stop_signal;
   int signum;
 
   IDE_ENTRY;
@@ -410,7 +410,7 @@ ide_runner_real_force_quit (IdeRunner *self)
   if (priv->subprocess == NULL)
     IDE_EXIT;
 
-  if (!priv->sent_force_exit_once)
+  if (priv->sent_force_exit_once)
     {
       ide_subprocess_force_exit (priv->subprocess);
       IDE_EXIT;
@@ -420,7 +420,7 @@ ide_runner_real_force_quit (IdeRunner *self)
 
   context = ide_object_get_context (IDE_OBJECT (self));
   settings = ide_context_ref_project_settings (context);
-  stop_signal = g_settings_get_string (settings, NULL);
+  stop_signal = g_settings_get_string (settings, "stop-signal");
 
   if (0) {}
   else if (ide_str_equal0 (stop_signal, "SIGKILL")) signum = SIGKILL;

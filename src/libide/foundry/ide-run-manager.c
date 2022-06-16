@@ -61,6 +61,8 @@ struct _IdeRunManager
   const IdeRunHandlerInfo *handler;
   GList                   *handlers;
 
+  IdeRunner               *current_runner;
+
   /* Keep track of last change sequence from the file monitor
    * so that we can maybe skip past install phase and make
    * secondary execution time faster.
@@ -534,6 +536,8 @@ ide_run_manager_run_cb (GObject      *object,
       g_clear_object (&self->notif);
     }
 
+  g_clear_object (&self->current_runner);
+
   if (!ide_runner_run_finish (runner, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
@@ -801,6 +805,8 @@ create_runner_cb (GObject      *object,
   title = g_strdup_printf (_("Running %s…"), name);
   ide_notification_set_title (self->notif, title);
   ide_notification_attach (self->notif, IDE_OBJECT (self));
+
+  g_set_object (&self->current_runner, runner);
 
   ide_runner_run_async (runner,
                         cancellable,
@@ -1143,7 +1149,18 @@ ide_run_manager_cancel (IdeRunManager *self)
 {
   IDE_ENTRY;
 
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
+
+  /* If the runner is still active, we can just force_exit that instead
+   * of cancelling a bunch of in-flight things. This is more useful since
+   * it means that we can override the exit signal.
+   */
+  if (self->current_runner != NULL)
+    {
+      ide_runner_force_quit (self->current_runner);
+      IDE_EXIT;
+    }
 
   if (self->cancellable != NULL)
     g_timeout_add (0, do_cancel_in_timeout, g_steal_pointer (&self->cancellable));
