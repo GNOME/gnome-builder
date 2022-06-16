@@ -465,9 +465,13 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
 
   ide_subprocess_launcher_set_cwd (launcher, cwd_expanded);
   ide_subprocess_launcher_push_args (launcher, (const char * const *)argv_expanded);
-  ide_subprocess_launcher_set_run_on_host (launcher, ide_runner_get_run_on_host (runner));
-  ide_subprocess_launcher_set_clear_env (launcher, ide_runner_get_clear_env (runner));
-  ide_subprocess_launcher_overlay_environment (launcher, ide_runner_get_environment (runner));
+
+  if (runner != NULL)
+    {
+      ide_subprocess_launcher_set_run_on_host (launcher, ide_runner_get_run_on_host (runner));
+      ide_subprocess_launcher_set_clear_env (launcher, ide_runner_get_clear_env (runner));
+      ide_subprocess_launcher_overlay_environment (launcher, ide_runner_get_environment (runner));
+    }
 
   if (env != NULL)
     {
