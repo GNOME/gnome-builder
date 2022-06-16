@@ -157,45 +157,6 @@ gbp_buildui_runnables_dialog_list_commands_cb (GObject      *object,
 }
 
 static void
-gbp_buildui_runnables_dialog_set_page (GbpBuilduiRunnablesDialog *self,
-                                       const char                *page)
-{
-  g_assert (GBP_IS_BUILDUI_RUNNABLES_DIALOG (self));
-  g_assert (page != NULL);
-
-  gtk_stack_set_visible_child_name (self->stack, page);
-}
-
-static void
-new_run_command_action (GtkWidget  *widget,
-                        const char *action_name,
-                        GVariant   *param)
-{
-  GbpBuilduiRunnablesDialog *self = (GbpBuilduiRunnablesDialog *)widget;
-  IdeWorkspace *workspace;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_BUILDUI_RUNNABLES_DIALOG (self));
-
-  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
-  gtk_widget_activate_action (GTK_WIDGET (workspace),
-                              "workbench.configure-page",
-                              "s", "commands");
-  gtk_window_destroy (GTK_WINDOW (self));
-
-  IDE_EXIT;
-}
-
-static void
-list_run_command_action (GtkWidget  *widget,
-                         const char *action_name,
-                         GVariant   *param)
-{
-  gbp_buildui_runnables_dialog_set_page (GBP_BUILDUI_RUNNABLES_DIALOG (widget), "list");
-}
-
-static void
 gbp_buildui_runnables_dialog_set_context (GbpBuilduiRunnablesDialog *self,
                                           IdeContext                *context)
 {
@@ -284,9 +245,6 @@ gbp_buildui_runnables_dialog_class_init (GbpBuilduiRunnablesDialogClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_install_action (widget_class, "run-command.new", NULL, new_run_command_action);
-  gtk_widget_class_install_action (widget_class, "run-command.list", NULL, list_run_command_action);
-
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-runnables-dialog.ui");
@@ -305,6 +263,4 @@ gbp_buildui_runnables_dialog_init (GbpBuilduiRunnablesDialog *self)
 #ifdef DEVELOPMENT_BUILD
   gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
 #endif
-
-  gbp_buildui_runnables_dialog_set_page (self, "list");
 }
