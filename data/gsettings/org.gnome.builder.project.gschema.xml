@@ -8,5 +8,20 @@
       <description>The configuration that has been selected and will be restored the next time the project loads.</description>
     </key>
 
+    <key name="stop-signal" type="s">
+      <choices>
+        <choice value="SIGKILL"/>
+        <choice value="SIGINT"/>
+        <choice value="SIGHUP"/>
+        <choice value="SIGUSR1"/>
+        <choice value="SIGUSR2"/>
+        <choice value="SIGABRT"/>
+        <choice value="SIGQUIT"/>
+      </choices>
+      <default>"SIGKILL"</default>
+      <summary>The signal to send the app to stop</summary>
+      <description>This allows sending something other than sigkill to stop the target application. That might be useful when you want to gracefully shutdown a server process.</description>
+    </key>
+
   </schema>
 </schemalist>
