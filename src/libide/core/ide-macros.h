@@ -301,6 +301,14 @@ ide_strv_sort (char   **strv,
                      NULL);
 }
 
+static inline int
+ide_steal_fd (int *fd)
+{
+  int ret = *fd;
+  *fd = -1;
+  return ret;
+}
+
 G_END_DECLS
 
 #endif /* __GI_SCANNER__ */
