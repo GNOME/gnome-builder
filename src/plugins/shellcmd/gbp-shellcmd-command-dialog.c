@@ -562,6 +562,8 @@ gbp_shellcmd_command_dialog_class_init (GbpShellcmdCommandDialogClass *klass)
   gtk_widget_class_install_action (widget_class, "command.cancel", NULL, command_cancel_action);
   gtk_widget_class_install_action (widget_class, "command.select-folder", NULL, select_folder_action);
 
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "command.cancel", NULL);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/shellcmd/gbp-shellcmd-command-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, argv);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, delete_button);
