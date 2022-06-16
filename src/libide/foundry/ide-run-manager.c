@@ -1006,6 +1006,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
                                        IdeTask       *task)
 {
   g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GSettings) project_settings = NULL;
   IdeBuildManager *build_manager;
   IdeVcsMonitor *monitor;
   guint64 sequence = 0;
@@ -1019,6 +1020,7 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
   context = ide_object_ref_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
   monitor = ide_vcs_monitor_from_context (context);
+  project_settings = ide_context_ref_project_settings (context);
 
   /*
    * First we need to make sure the target is up to date and installed
@@ -1036,6 +1038,21 @@ ide_run_manager_do_install_before_run (IdeRunManager *self,
 
   if (monitor != NULL)
     sequence = ide_vcs_monitor_get_sequence (monitor);
+
+  /* If the user requests that we don't do install before running, then they probably
+   * have a work flow that allows them to do that. Just skip build/install and try
+   * to run it directly instead. We do need to do it once however to get the
+   * current build target (although that may change soon).
+   */
+  if (self->build_target != NULL &&
+      !g_settings_get_boolean (project_settings, "install-before-run"))
+    {
+      g_debug ("Skipping install phase as requested in project settings");
+      ide_run_manager_update_action_enabled (self);
+      ide_task_set_task_data (task, g_object_ref (self->build_target), g_object_unref);
+      do_run_async (self, task);
+      IDE_EXIT;
+    }
 
   /*
    * If we detect that nothing has changed in the project directory since the

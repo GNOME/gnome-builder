@@ -711,7 +711,8 @@ static const IdePreferenceGroupEntry groups[] = {
 };
 
 static const IdePreferenceGroupEntry project_groups[] = {
-  { "application", "start-stop", 0, N_("Starting & Stopping") },
+  { "application", "install",  0, N_("Starting & Stopping") },
+  { "application", "stop",    10 },
 };
 
 static const IdePreferenceItemEntry items[] = {
@@ -765,7 +766,12 @@ static const IdePreferenceItemEntry items[] = {
 };
 
 static const IdePreferenceItemEntry project_items[] = {
-  { "application", "start-stop", "stop-signal", 0, ide_preferences_window_combo,
+  { "application", "install", "install-before-run", 0, ide_preferences_window_toggle,
+    N_("Install Before Running"),
+    N_("Installs the application before running. This is necessary for most projects unless run commands are used."),
+    "org.gnome.builder.project", NULL, "install-before-run" },
+
+  { "application", "stop", "stop-signal", 0, ide_preferences_window_combo,
     N_("Stop Signal"),
     N_("Send the signal to the target application when requesting the application stop."),
     "org.gnome.builder.project", NULL, "stop-signal" },
