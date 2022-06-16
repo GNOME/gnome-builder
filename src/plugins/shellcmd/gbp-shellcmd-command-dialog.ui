@@ -242,6 +242,13 @@
   <object class="GListStore" id="localities">
     <child>
       <object class="IdeEnumObject">
+        <property name="nick">internal</property>
+        <property name="title" translatable="yes">Subprocess</property>
+        <property name="description" translatable="yes">Runs the command as a subprocess of Builder.</property>
+      </object>
+    </child>
+    <child>
+      <object class="IdeEnumObject">
         <property name="nick">host</property>
         <property name="title" translatable="yes">Host System</property>
         <property name="description" translatable="yes">Runs the command on the host system.</property>
@@ -259,13 +266,6 @@
         <property name="nick">runner</property>
         <property name="title" translatable="yes">As Target Application</property>
         <property name="description" translatable="yes">Runs the command as if it were the target application.</property>
-      </object>
-    </child>
-    <child>
-      <object class="IdeEnumObject">
-        <property name="nick">internal</property>
-        <property name="title" translatable="yes">Subprocess</property>
-        <property name="description" translatable="yes">Runs the command as a subprocess of Builder.</property>
       </object>
     </child>
   </object>

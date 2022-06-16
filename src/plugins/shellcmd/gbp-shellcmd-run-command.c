@@ -22,21 +22,26 @@
 
 #include "config.h"
 
+#include "gbp-shellcmd-enums.h"
 #include "gbp-shellcmd-run-command.h"
 
 struct _GbpShellcmdRunCommand
 {
-  IdeRunCommand  parent_instance;
-  char          *settings_path;
-  GSettings     *settings;
-  char          *id;
-  char          *accelerator;
+  IdeRunCommand        parent_instance;
+
+  char                *settings_path;
+  GSettings           *settings;
+  char                *id;
+  char                *accelerator;
+
+  GbpShellcmdLocality  locality;
 };
 
 enum {
   PROP_0,
   PROP_ACCELERATOR,
   PROP_ACCELERATOR_LABEL,
+  PROP_LOCALITY,
   PROP_SETTINGS_PATH,
   PROP_SUBTITLE,
   N_PROPS
@@ -158,6 +163,10 @@ gbp_shellcmd_run_command_get_property (GObject    *object,
       g_value_take_string (value, get_accelerator_label (self));
       break;
 
+    case PROP_LOCALITY:
+      g_value_set_enum (value, gbp_shellcmd_run_command_get_locality (self));
+      break;
+
     case PROP_SETTINGS_PATH:
       g_value_set_string (value, self->settings_path);
       break;
@@ -183,6 +192,10 @@ gbp_shellcmd_run_command_set_property (GObject      *object,
     {
     case PROP_ACCELERATOR:
       gbp_shellcmd_run_command_set_accelerator (self, g_value_get_string (value));
+      break;
+
+    case PROP_LOCALITY:
+      gbp_shellcmd_run_command_set_locality (self, g_value_get_enum (value));
       break;
 
     case PROP_SETTINGS_PATH:
@@ -212,6 +225,12 @@ gbp_shellcmd_run_command_class_init (GbpShellcmdRunCommandClass *klass)
     g_param_spec_string ("accelerator-label", NULL, NULL, NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_LOCALITY] =
+    g_param_spec_enum ("locality", NULL, NULL,
+                       GBP_TYPE_SHELLCMD_LOCALITY,
+                       GBP_SHELLCMD_LOCALITY_PIPELINE,
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_SETTINGS_PATH] =
     g_param_spec_string ("settings-path", NULL, NULL, NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
@@ -226,6 +245,8 @@ gbp_shellcmd_run_command_class_init (GbpShellcmdRunCommandClass *klass)
 static void
 gbp_shellcmd_run_command_init (GbpShellcmdRunCommand *self)
 {
+  self->locality = GBP_SHELLCMD_LOCALITY_PIPELINE;
+
   g_signal_connect (self, "notify::accelerator", G_CALLBACK (accelerator_label_changed_cb), NULL);
   g_signal_connect (self, "notify::cwd", G_CALLBACK (subtitle_changed_cb), NULL);
   g_signal_connect (self, "notify::argv", G_CALLBACK (subtitle_changed_cb), NULL);
@@ -424,4 +445,25 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
     }
 
   return ide_terminal_launcher_new_for_launcher (launcher);
+}
+
+GbpShellcmdLocality
+gbp_shellcmd_run_command_get_locality (GbpShellcmdRunCommand *self)
+{
+  g_return_val_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self), 0);
+
+  return self->locality;
+}
+
+void
+gbp_shellcmd_run_command_set_locality (GbpShellcmdRunCommand *self,
+                                       GbpShellcmdLocality    locality)
+{
+  g_return_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self));
+
+  if (locality != self->locality)
+    {
+      self->locality = locality;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LOCALITY]);
+    }
 }
