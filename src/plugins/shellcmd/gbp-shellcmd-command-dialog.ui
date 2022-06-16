@@ -242,7 +242,7 @@
   <object class="GListStore" id="localities">
     <child>
       <object class="IdeEnumObject">
-        <property name="nick">internal</property>
+        <property name="nick">subprocess</property>
         <property name="title" translatable="yes">Subprocess</property>
         <property name="description" translatable="yes">Runs the command as a subprocess of Builder.</property>
       </object>
