@@ -45,7 +45,7 @@ typedef struct
   IdeEnvironment *env;
   IdeBuildTarget *build_target;
 
-  GArray *fd_mapping;
+  IdeUnixFDMap *unix_fd_map;
 
   gchar *cwd;
 
@@ -70,12 +70,6 @@ typedef struct
   GSList *prehook_queue;
   GSList *posthook_queue;
 } IdeRunnerRunState;
-
-typedef struct
-{
-  gint source_fd;
-  gint dest_fd;
-} FdMapping;
 
 enum {
   PROP_0,
@@ -220,15 +214,16 @@ ide_runner_real_run_async (IdeRunner           *self,
                            gpointer             user_data)
 {
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
-  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GError) error = NULL;
   IdeConfigManager *config_manager;
-  IdeConfig *config;
   const gchar *identifier;
   IdeContext *context;
   IdeRuntime *runtime;
-  g_autoptr(GError) error = NULL;
+  IdeConfig *config;
+  guint length;
 
   IDE_ENTRY;
 
@@ -285,19 +280,15 @@ ide_runner_real_run_async (IdeRunner           *self,
         ide_subprocess_launcher_take_stderr_fd (launcher, dup (priv->child_fd));
     }
 
-  /*
-   * Now map in any additionally requested FDs.
-   */
-  if (priv->fd_mapping != NULL)
+  /* Now map in any additionally requested FDs. */
+  length = ide_unix_fd_map_get_length (priv->unix_fd_map);
+  for (guint i = 0; i < length; i++)
     {
-      g_autoptr(GArray) ar = g_steal_pointer (&priv->fd_mapping);
+      int source_fd;
+      int dest_fd;
 
-      for (guint i = 0; i < ar->len; i++)
-        {
-          FdMapping *map = &g_array_index (ar, FdMapping, i);
-
-          ide_subprocess_launcher_take_fd (launcher, map->source_fd, map->dest_fd);
-        }
+      if (-1 != (source_fd = ide_unix_fd_map_steal (priv->unix_fd_map, i, &dest_fd)))
+        ide_subprocess_launcher_take_fd (launcher, source_fd, dest_fd);
     }
 
   /*
@@ -503,34 +494,18 @@ ide_runner_finalize (GObject *object)
 {
   IdeRunner *self = (IdeRunner *)object;
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+  int child_fd;
 
   g_queue_foreach (&priv->argv, (GFunc)g_free, NULL);
   g_queue_clear (&priv->argv);
   g_clear_object (&priv->env);
   g_clear_object (&priv->subprocess);
   g_clear_object (&priv->build_target);
+  g_clear_object (&priv->unix_fd_map);
 
-  if (priv->child_fd != -1)
-    {
-      close (priv->child_fd);
-      priv->child_fd = -1;
-    }
+  if (-1 != (child_fd = ide_steal_fd (&priv->child_fd)))
+    close (child_fd);
 
-  if (priv->fd_mapping != NULL)
-    {
-      for (guint i = 0; i < priv->fd_mapping->len; i++)
-        {
-          FdMapping *map = &g_array_index (priv->fd_mapping, FdMapping, i);
-
-          if (map->source_fd != -1)
-            {
-              close (map->source_fd);
-              map->source_fd = -1;
-            }
-        }
-    }
-
-  g_clear_pointer (&priv->fd_mapping, g_array_unref);
   g_clear_object (&priv->pty);
 
   G_OBJECT_CLASS (ide_runner_parent_class)->finalize (object);
@@ -753,6 +728,7 @@ ide_runner_init (IdeRunner *self)
 
   g_queue_init (&priv->argv);
 
+  priv->unix_fd_map = ide_unix_fd_map_new ();
   priv->env = ide_environment_new ();
   priv->child_fd = -1;
   priv->flags = 0;
@@ -1236,16 +1212,6 @@ ide_runner_get_pty (IdeRunner *self)
   return priv->pty;
 }
 
-static gint
-sort_fd_mapping (gconstpointer a,
-                 gconstpointer b)
-{
-  const FdMapping *map_a = a;
-  const FdMapping *map_b = b;
-
-  return map_a->dest_fd - map_b->dest_fd;
-}
-
 /**
  * ide_runner_take_fd:
  * @self: An #IdeRunner
@@ -1259,44 +1225,21 @@ sort_fd_mapping (gconstpointer a,
  *
  * Returns: @dest_fd or the FD or the next available dest_fd.
  */
-gint
+int
 ide_runner_take_fd (IdeRunner *self,
-                    gint       source_fd,
-                    gint       dest_fd)
+                    int        source_fd,
+                    int        dest_fd)
 {
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
-  FdMapping map = { -1, -1 };
 
   g_return_val_if_fail (IDE_IS_RUNNER (self), -1);
-  g_return_val_if_fail (source_fd > -1, -1);
+  g_return_val_if_fail (source_fd >= 0, -1);
+  g_return_val_if_fail (dest_fd >= -1, -1);
 
-  if (priv->fd_mapping == NULL)
-    priv->fd_mapping = g_array_new (FALSE, FALSE, sizeof (FdMapping));
+  if (dest_fd == -1)
+    dest_fd = ide_unix_fd_map_get_max_dest_fd (priv->unix_fd_map) + 1;
 
-  /*
-   * Quick and dirty hack to take the next FD, won't deal with people mapping
-   * to 1024 well, but we can fix that when we come across it.
-   */
-  if (dest_fd < 0)
-    {
-      gint max_fd = 2;
-
-      for (guint i = 0; i < priv->fd_mapping->len; i++)
-        {
-          FdMapping *entry = &g_array_index (priv->fd_mapping, FdMapping, i);
-
-          if (entry->dest_fd > max_fd)
-            max_fd = entry->dest_fd;
-        }
-
-      dest_fd = max_fd + 1;
-    }
-
-  map.source_fd = source_fd;
-  map.dest_fd = dest_fd;
-
-  g_array_append_val (priv->fd_mapping, map);
-  g_array_sort (priv->fd_mapping, sort_fd_mapping);
+  ide_unix_fd_map_take (priv->unix_fd_map, source_fd, dest_fd);
 
   return dest_fd;
 }
@@ -1504,20 +1447,8 @@ gint
 ide_runner_get_max_fd (IdeRunner *self)
 {
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
-  gint max_fd = 2;
 
   g_return_val_if_fail (IDE_IS_RUNNER (self), 2);
 
-  if (priv->fd_mapping != NULL)
-    {
-      for (guint i = 0; i < priv->fd_mapping->len; i++)
-        {
-          const FdMapping *map = &g_array_index (priv->fd_mapping, FdMapping, i);
-
-          if (map->dest_fd > max_fd)
-            max_fd = map->dest_fd;
-        }
-    }
-
-  return max_fd;
+  return ide_unix_fd_map_get_max_dest_fd (priv->unix_fd_map);
 }
