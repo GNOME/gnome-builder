@@ -62,6 +62,7 @@ typedef struct
   guint failed : 1;
   guint run_on_host : 1;
   guint disable_pty : 1;
+  guint sent_force_exit_once : 1;
 } IdeRunnerPrivate;
 
 typedef struct
@@ -397,13 +398,41 @@ static void
 ide_runner_real_force_quit (IdeRunner *self)
 {
   IdeRunnerPrivate *priv = ide_runner_get_instance_private (self);
+  g_autoptr(GSettings) settings = NULL;
+  IdeContext *context;
+  const char *stop_signal;
+  int signum;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUNNER (self));
 
-  if (priv->subprocess != NULL)
-    ide_subprocess_force_exit (priv->subprocess);
+  if (priv->subprocess == NULL)
+    IDE_EXIT;
+
+  if (!priv->sent_force_exit_once)
+    {
+      ide_subprocess_force_exit (priv->subprocess);
+      IDE_EXIT;
+    }
+
+  priv->sent_force_exit_once = TRUE;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  settings = ide_context_ref_project_settings (context);
+  stop_signal = g_settings_get_string (settings, NULL);
+
+  if (0) {}
+  else if (ide_str_equal0 (stop_signal, "SIGKILL")) signum = SIGKILL;
+  else if (ide_str_equal0 (stop_signal, "SIGINT"))  signum = SIGINT;
+  else if (ide_str_equal0 (stop_signal, "SIGHUP"))  signum = SIGHUP;
+  else if (ide_str_equal0 (stop_signal, "SIGUSR1")) signum = SIGUSR1;
+  else if (ide_str_equal0 (stop_signal, "SIGUSR2")) signum = SIGUSR2;
+  else if (ide_str_equal0 (stop_signal, "SIGABRT")) signum = SIGABRT;
+  else if (ide_str_equal0 (stop_signal, "SIGQUIT")) signum = SIGQUIT;
+  else signum = SIGKILL;
+
+  ide_subprocess_send_signal (priv->subprocess, signum);
 
   IDE_EXIT;
 }
