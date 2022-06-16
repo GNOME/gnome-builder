@@ -8,6 +8,12 @@
       <description>The configuration that has been selected and will be restored the next time the project loads.</description>
     </key>
 
+    <key name="install-before-run" type="b">
+      <default>true</default>
+      <summary>Install Project Before Running</summary>
+      <description>Run the pipelines install phase before running the project. Only use this if you know what you're doing with your project.</description>
+    </key>
+
     <key name="stop-signal" type="s">
       <choices>
         <choice value="SIGKILL"/>
