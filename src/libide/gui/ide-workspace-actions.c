@@ -22,8 +22,6 @@
 
 #include "config.h"
 
-#include <libide-commands.h>
-
 #include "ide-gui-global.h"
 #include "ide-workspace-private.h"
 
@@ -40,41 +38,8 @@ ide_workspace_actions_close (GSimpleAction *action,
   gtk_window_close (GTK_WINDOW (self));
 }
 
-static void
-ide_workspace_actions_command (GSimpleAction *action,
-                               GVariant      *param,
-                               gpointer       user_data)
-{
-  IdeCommandManager *command_manager;
-  IdeWorkspace *self = user_data;
-  IdeContext *context;
-  g_autoptr(GVariant) str = NULL;
-  g_autoptr(GVariant) maybe = NULL;
-  g_autoptr(GVariant) params = NULL;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (param != NULL);
-  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE ("(smv)")));
-  g_assert (IDE_IS_WORKSPACE (self));
-
-  context = ide_widget_get_context (GTK_WIDGET (self));
-  command_manager = ide_command_manager_from_context (context);
-
-  str = g_variant_get_child_value (param, 0);
-  maybe = g_variant_get_child_value (param, 1);
-
-  if (maybe != NULL && g_variant_n_children (maybe) == 1)
-    params = g_variant_get_child_value (maybe, 0);
-
-  ide_command_manager_execute (command_manager,
-                               GTK_WIDGET (self),
-                               g_variant_get_string (str, NULL),
-                               params);
-}
-
 static const GActionEntry actions[] = {
   { "close", ide_workspace_actions_close },
-  { "command", ide_workspace_actions_command, "s" },
 };
 
 void
