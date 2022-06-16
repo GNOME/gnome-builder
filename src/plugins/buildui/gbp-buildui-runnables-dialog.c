@@ -187,6 +187,27 @@ gbp_buildui_runnables_dialog_set_context (GbpBuilduiRunnablesDialog *self,
 }
 
 static void
+new_run_command_action (GtkWidget  *widget,
+                        const char *action_name,
+                        GVariant   *param)
+{
+  GbpBuilduiRunnablesDialog *self = (GbpBuilduiRunnablesDialog *)widget;
+  IdeWorkspace *workspace;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_BUILDUI_RUNNABLES_DIALOG (self));
+
+  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+  gtk_widget_activate_action (GTK_WIDGET (workspace),
+                              "workbench.configure-page",
+                              "s", "commands");
+  gtk_window_destroy (GTK_WINDOW (self));
+
+  IDE_EXIT;
+}
+
+static void
 gbp_buildui_runnables_dialog_get_property (GObject    *object,
                                            guint       prop_id,
                                            GValue     *value,
@@ -244,6 +265,8 @@ gbp_buildui_runnables_dialog_class_init (GbpBuilduiRunnablesDialogClass *klass)
                          (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  gtk_widget_class_install_action (widget_class, "run-command.new", NULL, new_run_command_action);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 
