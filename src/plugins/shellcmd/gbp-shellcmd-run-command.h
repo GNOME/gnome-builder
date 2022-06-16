@@ -25,6 +25,21 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GbpShellcmdLocality:
+ * %GBP_SHELLCMD_LOCALITY_SUBPROCESS: run as a subprocess of builder
+ * %GBP_SHELLCMD_LOCALITY_HOST: run on the host system, possibly bypassing container
+ * %GBP_SHELLCMD_LOCALITY_PIPELINE: run from build pipeline
+ * %GBP_SHELLCMD_LOCALITY_RUNNER: run from an application IdeRunner
+ */
+typedef enum
+{
+  GBP_SHELLCMD_LOCALITY_SUBPROCESS = 0,
+  GBP_SHELLCMD_LOCALITY_HOST,
+  GBP_SHELLCMD_LOCALITY_PIPELINE,
+  GBP_SHELLCMD_LOCALITY_RUNNER,
+} GbpShellcmdLocality;
+
 #define GBP_TYPE_SHELLCMD_RUN_COMMAND (gbp_shellcmd_run_command_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpShellcmdRunCommand, gbp_shellcmd_run_command, GBP, SHELLCMD_RUN_COMMAND, IdeRunCommand)
@@ -35,6 +50,9 @@ void                   gbp_shellcmd_run_command_delete          (GbpShellcmdRunC
 const char            *gbp_shellcmd_run_command_get_accelerator (GbpShellcmdRunCommand *self);
 void                   gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunCommand *self,
                                                                  const char            *accelerator);
+GbpShellcmdLocality    gbp_shellcmd_run_command_get_locality    (GbpShellcmdRunCommand *self);
+void                   gbp_shellcmd_run_command_set_locality    (GbpShellcmdRunCommand *self,
+                                                                 GbpShellcmdLocality    locality);
 IdeTerminalLauncher   *gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
                                                                  IdeContext            *context);
 

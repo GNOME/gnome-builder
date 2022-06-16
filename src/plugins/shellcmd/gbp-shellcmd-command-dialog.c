@@ -27,6 +27,7 @@
 #include <libide-gtk.h>
 
 #include "gbp-shellcmd-command-dialog.h"
+#include "gbp-shellcmd-enums.h"
 
 struct _GbpShellcmdCommandDialog
 {
@@ -37,6 +38,7 @@ struct _GbpShellcmdCommandDialog
   AdwEntryRow           *argv;
   AdwEntryRow           *location;
   AdwEntryRow           *name;
+  AdwComboRow           *locality;
   GtkStringList         *envvars;
   GtkListBox            *envvars_list_box;
   GtkLabel              *shortcut_label;
@@ -249,6 +251,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
                                          GbpShellcmdRunCommand    *command)
 {
   g_autofree char *argvstr = NULL;
+  GbpShellcmdLocality locality;
   const char * const *argv;
   const char * const *env;
   const char *accel;
@@ -268,6 +271,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   env = ide_run_command_get_env (IDE_RUN_COMMAND (command));
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (command));
   accel = gbp_shellcmd_run_command_get_accelerator (command);
+  locality = gbp_shellcmd_run_command_get_locality (command);
 
   argvstr = normalize_argv (argv);
 
@@ -275,6 +279,9 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   gtk_editable_set_text (GTK_EDITABLE (self->location), cwd);
   gtk_editable_set_text (GTK_EDITABLE (self->name), name);
   set_accel (self, accel);
+
+  /* locality value equates to position in list model for simplicity */
+  adw_combo_row_set_selected (self->locality, locality);
 
   if (env != NULL)
     {
@@ -385,9 +392,13 @@ command_save_action (GtkWidget  *widget,
                      GVariant   *param)
 {
   GbpShellcmdCommandDialog *self = (GbpShellcmdCommandDialog *)widget;
+  g_autoptr(GEnumClass) enum_class = NULL;
   g_auto(GStrv) argv = NULL;
   g_auto(GStrv) env = NULL;
   const char *argvstr;
+  IdeEnumObject *item;
+  const char *nick;
+  GEnumValue *value;
   int argc;
 
   IDE_ENTRY;
@@ -409,6 +420,12 @@ command_save_action (GtkWidget  *widget,
   env = string_list_to_strv (self->envvars);
   ide_run_command_set_env (IDE_RUN_COMMAND (self->command),
                            (const char * const *)env);
+
+  item = adw_combo_row_get_selected_item (self->locality);
+  nick = ide_enum_object_get_nick (item);
+  enum_class = g_type_class_ref (GBP_TYPE_SHELLCMD_LOCALITY);
+  value = g_enum_get_value_by_nick (enum_class, nick);
+  gbp_shellcmd_run_command_set_locality (self->command, value->value);
 
   g_object_thaw_notify (G_OBJECT (self->command));
 
@@ -569,6 +586,7 @@ gbp_shellcmd_command_dialog_class_init (GbpShellcmdCommandDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, delete_button);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, envvars);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, envvars_list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, locality);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, location);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, name);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, save);
