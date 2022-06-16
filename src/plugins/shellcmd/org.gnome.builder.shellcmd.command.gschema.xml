@@ -21,5 +21,15 @@
       <default>[]</default>
       <summary>Command Environment</summary>
     </key>
+    <key name="locality" type="s">
+      <choices>
+        <choice value="host"/>
+        <choice value="pipeline"/>
+        <choice value="runner"/>
+        <choice value="subprocess"/>
+      </choices>
+      <default>'pipeline'</default>
+      <summary>Command Locality</summary>
+    </key>
   </schema>
 </schemalist>

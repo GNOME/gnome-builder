@@ -78,6 +78,7 @@ gbp_shellcmd_run_command_constructed (GObject *object)
   g_settings_bind (self->settings, "argv", self, "argv", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (self->settings, "cwd", self, "cwd", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (self->settings, "accelerator", self, "accelerator", G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (self->settings, "locality", self, "locality", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
