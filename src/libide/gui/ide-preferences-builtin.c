@@ -668,7 +668,8 @@ static const IdePreferencePageEntry project_pages[] = {
   { NULL, "config", "overview",       "info-symbolic",                          0, N_("Overview") },
   { NULL, "config", "build",          "builder-build-symbolic",               100, N_("Configurations") },
   { NULL, "code",   "languages",      "text-x-javascript-symbolic",           200, N_("Languages") },
-  { NULL, "tools",  "commands",       "text-x-script-symbolic",               300, N_("Commands") },
+  { NULL, "tools",  "debug",          "builder-debugger-symbolic",            310, N_("Debugger") },
+  { NULL, "tools",  "commands",       "text-x-script-symbolic",               320, N_("Commands") },
 };
 
 static const IdePreferenceGroupEntry groups[] = {
@@ -707,6 +708,10 @@ static const IdePreferenceGroupEntry groups[] = {
   { "build",      "general",                0, N_("General") },
 
   { "network",    "downloads",              0, N_("Downloads") },
+};
+
+static const IdePreferenceGroupEntry project_groups[] = {
+  { "debug", "running", 0, N_("Behavior") },
 };
 
 static const IdePreferenceItemEntry items[] = {
@@ -759,6 +764,13 @@ static const IdePreferenceItemEntry items[] = {
     "org.gnome.builder.terminal", NULL, "font-name" },
 };
 
+static const IdePreferenceItemEntry project_items[] = {
+  { "debug", "running", "stop-signal", 0, ide_preferences_window_combo,
+    N_("Stop Signal"),
+    N_("Send the signal to the target application when requesting the application stop."),
+    "org.gnome.builder.project", NULL, "stop-signal" },
+};
+
 static gboolean
 is_plugin_category (const char *name)
 {
@@ -784,10 +796,12 @@ void
 _ide_preferences_builtin_register (IdePreferencesWindow *window)
 {
   IdePreferencesMode mode;
+  IdeContext *context;
 
   g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (window));
 
   mode = ide_preferences_window_get_mode (window);
+  context = ide_preferences_window_get_context (window);
 
   if (mode == IDE_PREFERENCES_MODE_APPLICATION)
     {
@@ -799,6 +813,28 @@ _ide_preferences_builtin_register (IdePreferencesWindow *window)
     }
   else if (mode == IDE_PREFERENCES_MODE_PROJECT)
     {
+      g_autoptr(GArray) copy = g_array_new (FALSE, FALSE, sizeof (IdePreferenceItemEntry));
+      g_autofree char *project_id = ide_context_dup_project_id (context);
+      g_autofree char *project_settings_path = g_strdup_printf ("/org/gnome/builder/projects/%s/", project_id);
+
       ide_preferences_window_add_pages (window, project_pages, G_N_ELEMENTS (project_pages), NULL);
+      ide_preferences_window_add_groups (window, project_groups, G_N_ELEMENTS (project_groups), NULL);
+
+      for (guint i = 0; i < G_N_ELEMENTS (project_items); i++)
+        {
+          IdePreferenceItemEntry *item;
+
+          g_array_append_val (copy, project_items[i]);
+          item = &g_array_index (copy, IdePreferenceItemEntry, i);
+
+          if (ide_str_equal0 (item->schema_id, "org.gnome.builder.project"))
+            item->path = project_settings_path;
+        }
+
+      ide_preferences_window_add_items (window,
+                                        &g_array_index (copy, IdePreferenceItemEntry, 0),
+                                        copy->len,
+                                        window,
+                                        NULL);
     }
 }
