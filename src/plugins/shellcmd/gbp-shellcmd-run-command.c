@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "gbp-shellcmd-enums.h"
 #include "gbp-shellcmd-run-command.h"
 
@@ -367,11 +369,16 @@ IdeTerminalLauncher *
 gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
                                           IdeContext            *context)
 {
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GFile) workdir = NULL;
-  g_autoptr(GStrvBuilder) argv_builder = NULL;
-  g_auto(GStrv) argv_expanded = NULL;
   g_autofree char *cwd_expanded = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(GStrvBuilder) argv_builder = NULL;
+  g_autoptr(IdeRunner) runner = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_auto(GStrv) argv_expanded = NULL;
+  IdeBuildManager *build_manager = NULL;
+  IdePipeline *pipeline = NULL;
+  IdeRuntime *runtime = NULL;
   const char * const *argv;
   const char * const *env;
   const char *cwd;
@@ -389,19 +396,38 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
 
   if (ide_context_has_project (context))
     {
-      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
-      IdePipeline *pipeline = ide_build_manager_get_pipeline (build_manager);
-
-      if (pipeline != NULL)
-        {
-          launcher = ide_pipeline_create_launcher (pipeline, NULL);
-          builddir = ide_pipeline_get_builddir (pipeline);
-          srcdir = ide_pipeline_get_srcdir (pipeline);
-        }
+      build_manager = ide_build_manager_from_context (context);
+      pipeline = ide_build_manager_get_pipeline (build_manager);
+      builddir = ide_pipeline_get_builddir (pipeline);
+      srcdir = ide_pipeline_get_srcdir (pipeline);
     }
 
-  if (launcher == NULL)
-    launcher = ide_subprocess_launcher_new (0);
+  switch (self->locality)
+    {
+    case GBP_SHELLCMD_LOCALITY_PIPELINE:
+      if (pipeline == NULL ||
+          !(launcher = ide_pipeline_create_launcher (pipeline, &error)))
+        goto handle_error;
+      break;
+
+    case GBP_SHELLCMD_LOCALITY_HOST:
+      launcher = ide_subprocess_launcher_new (0);
+      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      break;
+
+    case GBP_SHELLCMD_LOCALITY_SUBPROCESS:
+      launcher = ide_subprocess_launcher_new (0);
+      break;
+
+    case GBP_SHELLCMD_LOCALITY_RUNNER:
+      if (!(runtime = ide_pipeline_get_runtime (pipeline)) ||
+          !(runner = ide_runtime_create_runner (runtime, NULL)))
+        goto handle_error;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
 
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
   argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self));
@@ -430,6 +456,13 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
                              "$SRCDIR", srcdir,
                              NULL);
 
+  g_assert (runner != NULL || launcher != NULL);
+
+  if (runner != NULL)
+    launcher = IDE_RUNNER_GET_CLASS (runner)->create_launcher (runner);
+
+  g_assert (launcher != NULL);
+
   ide_subprocess_launcher_set_cwd (launcher, cwd_expanded);
   ide_subprocess_launcher_push_args (launcher, (const char * const *)argv_expanded);
 
@@ -445,7 +478,19 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
         }
     }
 
+  if (runner != NULL)
+    IDE_RUNNER_GET_CLASS (runner)->fixup_launcher (runner, launcher);
+
   return ide_terminal_launcher_new_for_launcher (launcher);
+
+handle_error:
+  if (error != NULL)
+    ide_object_warning (context,
+                        "%s: %s",
+                        _("Failed to launch command"),
+                        error->message);
+
+  return NULL;
 }
 
 GbpShellcmdLocality
