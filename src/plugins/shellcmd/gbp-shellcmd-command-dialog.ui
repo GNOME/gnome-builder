@@ -45,8 +45,17 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="argv">
-                    <property name="title" translatable="yes">Command</property>
+                  <object class="AdwActionRow" id="shortcut_row">
+                    <signal name="activated" handler="on_shortcut_activated_cb" swapped="true" object="GbpShellcmdCommandDialog"/>
+                    <property name="activatable">true</property>
+                    <property name="title" translatable="yes">Keyboard Shortcut</property>
+                    <property name="subtitle" translatable="yes">An optional shourtcut to run the command</property>
+                    <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+                    <child type="suffix">
+                      <object class="GtkLabel" id="shortcut_label">
+                        <property name="valign">center</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
@@ -54,22 +63,13 @@
             <child>
               <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwEntryRow" id="location">
-                    <property name="title" translatable="yes">Location</property>
-                    <child type="suffix">
-                      <object class="GtkButton">
-                        <property name="valign">center</property>
-                        <property name="icon-name">folder-symbolic</property>
-                        <style>
-                          <class name="flat"/>
-                        </style>
-                      </object>
-                    </child>
+                  <object class="AdwEntryRow" id="argv">
+                    <property name="title" translatable="yes">Shell Command</property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label" translatable="yes">The command will be run from this location. Use &lt;tt&gt;$BUILDDIR&lt;/tt&gt;, &lt;tt&gt;$SRCDIR&lt;/tt&gt;, or &lt;tt&gt;$HOME&lt;/tt&gt; for a relative path.</property>
+                    <property name="label" translatable="yes">You may use single or double quotes for parameters.</property>
                     <property name="use-markup">true</property>
                     <property name="margin-top">12</property>
                     <property name="wrap">true</property>
@@ -84,27 +84,48 @@
             </child>
             <child>
               <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Environment</property>
                 <child>
-                  <object class="AdwActionRow" id="shortcut_row">
-                    <signal name="activated" handler="on_shortcut_activated_cb" swapped="true" object="GbpShellcmdCommandDialog"/>
-                    <property name="activatable">true</property>
-                    <property name="title" translatable="yes">Keyboard Shortcut</property>
-                    <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+                  <object class="AdwEntryRow" id="location">
+                    <property name="title" translatable="yes">Working Directory</property>
                     <child type="suffix">
-                      <object class="GtkLabel" id="shortcut_label">
+                      <object class="GtkButton">
                         <property name="valign">center</property>
+                        <property name="icon-name">folder-symbolic</property>
+                        <style>
+                          <class name="flat"/>
+                        </style>
                       </object>
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
-                <property name="title" translatable="yes">Environment</property>
-                <property name="header-suffix">
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label" translatable="yes">The command will be run from this location. Use &lt;tt&gt;$BUILDDIR&lt;/tt&gt;, &lt;tt&gt;$SRCDIR&lt;/tt&gt;, or &lt;tt&gt;$HOME&lt;/tt&gt; to define a relative path.</property>
+                    <property name="use-markup">true</property>
+                    <property name="margin-top">12</property>
+                    <property name="wrap">true</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="caption"/>
+                      <class name="dim-label"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBox" id="envvars_list_box">
+                    <property name="selection-mode">none</property>
+                    <property name="margin-top">12</property>
+                    <style>
+                      <class name="boxed-list"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkMenuButton">
                     <property name="direction">left</property>
+                    <property name="margin-top">12</property>
+                    <property name="halign">end</property>
                     <property name="child">
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Add _Variable</property>
@@ -113,20 +134,12 @@
                     </property>
                     <property name="popover">
                       <object class="IdeEntryPopover">
-                        <property name="title" translatable="yes">Add Environment Variable</property>
+                        <property name="title" translatable="yes">Add Variable</property>
                         <property name="button-text" translatable="yes">_Add</property>
                         <signal name="changed" handler="on_env_entry_changed_cb" swapped="true" object="GbpShellcmdCommandDialog"/>
                         <signal name="activate" handler="on_env_entry_activate_cb" swapped="true" object="GbpShellcmdCommandDialog"/>
                       </object>
                     </property>
-                  </object>
-                </property>
-                <child>
-                  <object class="GtkListBox" id="envvars_list_box">
-                    <property name="selection-mode">none</property>
-                    <style>
-                      <class name="boxed-list"/>
-                    </style>
                   </object>
                 </child>
               </object>
