@@ -21,6 +21,7 @@
 #pragma once
 
 #include "ide-subprocess.h"
+#include "ide-unix-fd-map.h"
 
 G_BEGIN_DECLS
 
@@ -28,23 +29,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeFlatpakSubprocess, ide_flatpak_subprocess, IDE, FLATPAK_SUBPROCESS, GObject)
 
-typedef struct
-{
-  gint source_fd;
-  gint dest_fd;
-} IdeBreakoutFdMapping;
-
-IdeSubprocess *_ide_flatpak_subprocess_new (const gchar                 *cwd,
-                                             const gchar * const         *argv,
-                                             const gchar * const         *env,
-                                             GSubprocessFlags             flags,
-                                             gboolean                     clear_flags,
-                                             gint                         stdin_fd,
-                                             gint                         stdout_fd,
-                                             gint                         stderr_fd,
-                                             const IdeBreakoutFdMapping  *fd_map,
-                                             guint                        fd_map_len,
-                                             GCancellable                *cancellable,
-                                             GError                     **error) G_GNUC_INTERNAL;
+IdeSubprocess *_ide_flatpak_subprocess_new (const char          *cwd,
+                                            const char * const  *argv,
+                                            const char * const  *env,
+                                            GSubprocessFlags     flags,
+                                            gboolean             clear_flags,
+                                            IdeUnixFDMap        *unix_fd_map,
+                                            GCancellable        *cancellable,
+                                            GError             **error);
 
 G_END_DECLS
