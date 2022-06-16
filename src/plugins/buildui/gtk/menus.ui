@@ -79,11 +79,6 @@
         <attribute name="label" translatable="yes">Stop Build</attribute>
         <attribute name="action">build-manager.cancel</attribute>
       </item>
-      <item>
-        <attribute name="label" translatable="yes">Pause Build</attribute>
-        <attribute name="action">build-manager.pause</attribute>
-        <attribute name="role">check</attribute>
-      </item>
     </section>
     <section id="build-output">
       <item>
