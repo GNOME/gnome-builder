@@ -38,7 +38,7 @@ G_DECLARE_FINAL_TYPE (IdeRunContext, ide_run_context, IDE, RUN_CONTEXT, GObject)
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error must be set.
  */
-typedef gboolean (*IdeRunContextHandler) (IdeRunContext       *self,
+typedef gboolean (*IdeRunContextHandler) (IdeRunContext       *run_context,
                                           const char * const  *argv,
                                           const char * const  *env,
                                           const char          *cwd,
@@ -77,6 +77,10 @@ IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_take_fd            (IdeRunContext         *self,
                                                            int                    source_fd,
                                                            int                    dest_fd);
+IDE_AVAILABLE_IN_ALL
+gboolean               ide_run_context_merge_unix_fd_map  (IdeRunContext         *self,
+                                                           IdeUnixFDMap          *unix_fd_map,
+                                                           GError               **error);
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_prepend_argv       (IdeRunContext         *self,
                                                            const char            *arg);
