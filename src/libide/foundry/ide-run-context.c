@@ -427,7 +427,7 @@ ide_run_context_getenv (IdeRunContext *self,
 
   keylen = strlen (key);
 
-  for (guint i = 0; i < layer->env->len-1; i++)
+  for (guint i = 0; i < layer->env->len; i++)
     {
       const char *envvar = g_array_index (layer->env, const char *, i);
 
