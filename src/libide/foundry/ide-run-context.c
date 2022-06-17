@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "ide-run-context.h"
 
 typedef struct
@@ -299,7 +301,24 @@ const char *
 ide_run_context_getenv (IdeRunContext *self,
                         const char    *key)
 {
-  /* TODO: */
+  IdeRunContextLayer *layer;
+  gsize keylen;
+
+  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  layer = ide_run_context_current_layer (self);
+
+  keylen = strlen (key);
+
+  for (guint i = 0; i < layer->env->len-1; i++)
+    {
+      const char *envvar = g_array_index (layer->env, const char *, i);
+
+      if (strncmp (key, envvar, keylen) == 0 && envvar[keylen] == '=')
+        return &envvar[keylen+1];
+    }
+
   return NULL;
 }
 
@@ -308,14 +327,62 @@ ide_run_context_setenv (IdeRunContext *self,
                         const char    *key,
                         const char    *value)
 {
-  /* TODO */
+  IdeRunContextLayer *layer;
+  char *element;
+  gsize keylen;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+  g_return_if_fail (key != NULL);
+
+  if (value == NULL)
+    {
+      ide_run_context_unsetenv (self, key);
+      return;
+    }
+
+  layer = ide_run_context_current_layer (self);
+
+  keylen = strlen (key);
+  element = g_strconcat (key, "=", value, NULL);
+
+  g_array_append_val (layer->env, element);
+
+  for (guint i = 0; i < layer->env->len-1; i++)
+    {
+      const char *envvar = g_array_index (layer->env, const char *, i);
+
+      if (strncmp (key, envvar, keylen) == 0 && envvar[keylen] == '=')
+        {
+          g_array_remove_index_fast (layer->env, i);
+          break;
+        }
+    }
 }
 
 void
 ide_run_context_unsetenv (IdeRunContext *self,
                           const char    *key)
 {
-  /* TODO */
+  IdeRunContextLayer *layer;
+  gsize len;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+  g_return_if_fail (key != NULL);
+
+  layer = ide_run_context_current_layer (self);
+
+  len = strlen (key);
+
+  for (guint i = 0; i < layer->env->len; i++)
+    {
+      const char *envvar = g_array_index (layer->env, const char *, i);
+
+      if (strncmp (key, envvar, len) == 0 && envvar[len] == '=')
+        {
+          g_array_remove_index_fast (layer->env, i);
+          return;
+        }
+    }
 }
 
 /**
