@@ -42,11 +42,6 @@ typedef void (*IdeRunHandler) (IdeRunManager *self,
 IDE_AVAILABLE_IN_ALL
 IdeRunManager  *ide_run_manager_from_context                   (IdeContext           *context);
 IDE_AVAILABLE_IN_ALL
-IdeBuildTarget *ide_run_manager_get_build_target               (IdeRunManager        *self);
-IDE_AVAILABLE_IN_ALL
-void            ide_run_manager_set_build_target               (IdeRunManager        *self,
-                                                                IdeBuildTarget       *build_target);
-IDE_AVAILABLE_IN_ALL
 void            ide_run_manager_cancel                         (IdeRunManager        *self);
 IDE_AVAILABLE_IN_ALL
 gboolean        ide_run_manager_get_busy                       (IdeRunManager        *self);
@@ -68,21 +63,11 @@ void            ide_run_manager_remove_handler                 (IdeRunManager   
                                                                 const gchar          *id);
 IDE_AVAILABLE_IN_ALL
 void            ide_run_manager_run_async                      (IdeRunManager        *self,
-                                                                IdeBuildTarget       *build_target,
                                                                 GCancellable         *cancellable,
                                                                 GAsyncReadyCallback   callback,
                                                                 gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
 gboolean        ide_run_manager_run_finish                     (IdeRunManager        *self,
-                                                                GAsyncResult         *result,
-                                                                GError              **error);
-IDE_AVAILABLE_IN_ALL
-void            ide_run_manager_discover_default_target_async  (IdeRunManager        *self,
-                                                                GCancellable         *cancellable,
-                                                                GAsyncReadyCallback   callback,
-                                                                gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-IdeBuildTarget *ide_run_manager_discover_default_target_finish (IdeRunManager        *self,
                                                                 GAsyncResult         *result,
                                                                 GError              **error);
 IDE_AVAILABLE_IN_ALL

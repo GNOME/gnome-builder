@@ -37,8 +37,6 @@
 
 #include "ide-build-manager.h"
 #include "ide-build-system.h"
-#include "ide-build-target-provider.h"
-#include "ide-build-target.h"
 #include "ide-config-manager.h"
 #include "ide-config.h"
 #include "ide-deploy-strategy.h"
@@ -56,7 +54,6 @@ struct _IdeRunManager
   IdeObject                parent_instance;
 
   GCancellable            *cancellable;
-  IdeBuildTarget          *build_target;
   IdeNotification         *notif;
   IdeExtensionSetAdapter  *run_command_providers;
 
@@ -80,13 +77,6 @@ struct _IdeRunManager
   guint                    messages_debug_all : 1;
   guint                    has_installed_once : 1;
 };
-
-typedef struct
-{
-  GList     *providers;
-  GPtrArray *results;
-  guint      active;
-} DiscoverState;
 
 static void initable_iface_init                         (GInitableIface *iface);
 static void ide_run_manager_actions_run                 (IdeRunManager  *self,
@@ -125,7 +115,6 @@ enum {
   PROP_0,
   PROP_BUSY,
   PROP_HANDLER,
-  PROP_BUILD_TARGET,
   N_PROPS
 };
 
@@ -137,18 +126,6 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
-
-static void
-discover_state_free (gpointer data)
-{
-  DiscoverState *state = data;
-
-  g_assert (state->active == 0);
-
-  g_list_free_full (state->providers, g_object_unref);
-  g_clear_pointer (&state->results, g_ptr_array_unref);
-  g_slice_free (DiscoverState, state);
-}
 
 static void
 ide_run_manager_actions_high_contrast (IdeRunManager *self,
@@ -332,7 +309,6 @@ ide_run_manager_dispose (GObject *object)
   g_clear_pointer (&self->default_run_command, g_free);
 
   g_clear_object (&self->cancellable);
-  ide_clear_and_destroy_object (&self->build_target);
 
   g_clear_object (&self->current_run_command);
   g_clear_object (&self->current_runner);
@@ -418,31 +394,8 @@ ide_run_manager_get_property (GObject    *object,
       g_value_set_string (value, ide_run_manager_get_handler (self));
       break;
 
-    case PROP_BUILD_TARGET:
-      g_value_set_object (value, ide_run_manager_get_build_target (self));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_run_manager_set_property (GObject      *object,
-                              guint         prop_id,
-                              const GValue *value,
-                              GParamSpec   *pspec)
-{
-  IdeRunManager *self = IDE_RUN_MANAGER (object);
-
-  switch (prop_id)
-    {
-    case PROP_BUILD_TARGET:
-      ide_run_manager_set_build_target (self, g_value_get_object (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     }
 }
 
@@ -453,7 +406,6 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
 
   object_class->dispose = ide_run_manager_dispose;
   object_class->get_property = ide_run_manager_get_property;
-  object_class->set_property = ide_run_manager_set_property;
 
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
@@ -468,13 +420,6 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
                          "Handler",
                          "run",
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_BUILD_TARGET] =
-    g_param_spec_object ("build-target",
-                         "Build Target",
-                         "The IdeBuildTarget that will be run",
-                         IDE_TYPE_BUILD_TARGET,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -1043,7 +988,6 @@ ide_run_manager_run_install_cb (GObject      *object,
 
 void
 ide_run_manager_run_async (IdeRunManager       *self,
-                           IdeBuildTarget      *build_target,
                            GCancellable        *cancellable,
                            GAsyncReadyCallback  callback,
                            gpointer             user_data)
@@ -1059,7 +1003,6 @@ ide_run_manager_run_async (IdeRunManager       *self,
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
-  g_return_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
@@ -1244,220 +1187,6 @@ ide_run_manager_remove_handler (IdeRunManager *self,
     }
 }
 
-/**
- * ide_run_manager_get_build_target:
- *
- * Gets the build target that will be executed by the run manager which
- * was either specified to ide_run_manager_run_async() or determined by
- * the build system.
- *
- * Returns: (transfer none): An #IdeBuildTarget or %NULL if no build target
- *   has been set.
- */
-IdeBuildTarget *
-ide_run_manager_get_build_target (IdeRunManager *self)
-{
-  g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
-
-  return self->build_target;
-}
-
-void
-ide_run_manager_set_build_target (IdeRunManager  *self,
-                                  IdeBuildTarget *build_target)
-{
-  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
-  g_return_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target));
-
-  if (build_target == self->build_target)
-    return;
-
-  if (self->build_target)
-    ide_clear_and_destroy_object (&self->build_target);
-
-  if (build_target)
-    self->build_target = g_object_ref (build_target);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_TARGET]);
-}
-
-static gint
-compare_targets (gconstpointer a,
-                 gconstpointer b)
-{
-  const IdeBuildTarget * const *a_target = a;
-  const IdeBuildTarget * const *b_target = b;
-
-  return ide_build_target_compare (*a_target, *b_target);
-}
-
-static void
-collect_extensions (PeasExtensionSet *set,
-                    PeasPluginInfo   *plugin_info,
-                    PeasExtension    *exten,
-                    gpointer          user_data)
-{
-  DiscoverState *state = user_data;
-
-  g_assert (state != NULL);
-  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (exten));
-
-  state->providers = g_list_append (state->providers, g_object_ref (exten));
-  state->active++;
-}
-
-static void
-ide_run_manager_provider_get_targets_cb (GObject      *object,
-                                         GAsyncResult *result,
-                                         gpointer      user_data)
-{
-  IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)object;
-  g_autoptr(IdeBuildTarget) first = NULL;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GPtrArray) ret = NULL;
-  g_autoptr(GError) error = NULL;
-  IdeRunManager *self;
-  DiscoverState *state;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  self = ide_task_get_source_object (task);
-  state = ide_task_get_task_data (task);
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (state != NULL);
-  g_assert (state->active > 0);
-  g_assert (g_list_find (state->providers, provider) != NULL);
-
-  ret = ide_build_target_provider_get_targets_finish (provider, result, &error);
-  IDE_PTR_ARRAY_SET_FREE_FUNC (ret, g_object_unref);
-
-  if (ret != NULL)
-    {
-      for (guint i = 0; i < ret->len; i++)
-        {
-          IdeBuildTarget *target = g_ptr_array_index (ret, i);
-
-          if (ide_object_is_root (IDE_OBJECT (target)))
-            ide_object_append (IDE_OBJECT (self), IDE_OBJECT (target));
-
-          g_ptr_array_add (state->results, g_object_ref (target));
-        }
-    }
-
-  ide_object_destroy (IDE_OBJECT (provider));
-
-  state->active--;
-
-  if (state->active > 0)
-    return;
-
-  if (state->results->len == 0)
-    {
-      if (error != NULL)
-        ide_task_return_error (task, g_steal_pointer (&error));
-      else
-        ide_task_return_new_error (task,
-                                   IDE_RUNTIME_ERROR,
-                                   IDE_RUNTIME_ERROR_TARGET_NOT_FOUND,
-                                   _("Failed to locate a build target"));
-      IDE_EXIT;
-    }
-
-  g_ptr_array_sort (state->results, compare_targets);
-
-  /* Steal the first item so that it is not destroyed */
-  first = ide_ptr_array_steal_index (state->results,
-                                     0,
-                                     (GDestroyNotify)ide_object_unref_and_destroy);
-  ide_task_return_pointer (task,
-                           IDE_OBJECT (g_steal_pointer (&first)),
-                           ide_object_unref_and_destroy);
-
-  IDE_EXIT;
-}
-
-void
-ide_run_manager_discover_default_target_async (IdeRunManager       *self,
-                                               GCancellable        *cancellable,
-                                               GAsyncReadyCallback  callback,
-                                               gpointer             user_data)
-{
-  g_autoptr(PeasExtensionSet) set = NULL;
-  g_autoptr(IdeTask) task = NULL;
-  DiscoverState *state;
-
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_run_manager_discover_default_target_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
-
-  set = peas_extension_set_new (peas_engine_get_default (),
-                                IDE_TYPE_BUILD_TARGET_PROVIDER,
-                                NULL);
-
-  state = g_slice_new0 (DiscoverState);
-  state->results = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_object_unref_and_destroy);
-  state->providers = NULL;
-  state->active = 0;
-
-  peas_extension_set_foreach (set, collect_extensions, state);
-
-  for (const GList *iter = state->providers; iter; iter = iter->next)
-    ide_object_append (IDE_OBJECT (self), IDE_OBJECT (iter->data));
-
-  ide_task_set_task_data (task, state, discover_state_free);
-
-  for (const GList *iter = state->providers; iter != NULL; iter = iter->next)
-    {
-      IdeBuildTargetProvider *provider = iter->data;
-
-      ide_build_target_provider_get_targets_async (provider,
-                                                   cancellable,
-                                                   ide_run_manager_provider_get_targets_cb,
-                                                   g_object_ref (task));
-    }
-
-  if (state->active == 0)
-    ide_task_return_new_error (task,
-                               IDE_RUNTIME_ERROR,
-                               IDE_RUNTIME_ERROR_TARGET_NOT_FOUND,
-                               _("Failed to locate a build target"));
-
-  IDE_EXIT;
-}
-
-/**
- * ide_run_manager_discover_default_target_finish:
- *
- * Returns: (transfer full): An #IdeBuildTarget if successful; otherwise %NULL
- *   and @error is set.
- */
-IdeBuildTarget *
-ide_run_manager_discover_default_target_finish (IdeRunManager  *self,
-                                                GAsyncResult   *result,
-                                                GError        **error)
-{
-  IdeBuildTarget *ret;
-
-  IDE_ENTRY;
-
-  g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
-
-  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
-
-  IDE_RETURN (ret);
-}
-
 const GList *
 _ide_run_manager_get_handlers (IdeRunManager *self)
 {
@@ -1506,7 +1235,6 @@ ide_run_manager_actions_run (IdeRunManager *self,
 
   ide_run_manager_run_async (self,
                              NULL,
-                             NULL,
                              ide_run_manager_run_action_cb,
                              NULL);
 
@@ -1536,7 +1264,6 @@ ide_run_manager_actions_run_with_handler (IdeRunManager *self,
     ide_run_manager_set_handler (self, handler);
 
   ide_run_manager_run_async (self,
-                             NULL,
                              NULL,
                              ide_run_manager_run_action_cb,
                              NULL);
