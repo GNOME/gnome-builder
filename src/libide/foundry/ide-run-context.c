@@ -504,10 +504,8 @@ ide_run_context_unsetenv (IdeRunContext *self,
 void
 ide_run_context_environ_to_argv (IdeRunContext *self)
 {
-  static const char *envstr = "env";
   IdeRunContextLayer *layer;
-  char **args;
-  gsize len;
+  const char **copy;
 
   g_assert (IDE_IS_RUN_CONTEXT (self));
 
@@ -516,10 +514,14 @@ ide_run_context_environ_to_argv (IdeRunContext *self)
   if (layer->env->len == 0)
     return;
 
-  args = g_array_steal (layer->env, &len);
-  g_array_insert_vals (layer->argv, 0, args, len);
-  g_array_insert_val (layer->argv, 0, envstr);
-  g_free (args);
+  copy = (const char **)g_new0 (char *, layer->env->len + 2);
+  copy[0] = "env";
+  for (guint i = 0; i < layer->env->len; i++)
+    copy[1+i] = g_array_index (layer->env, const char *, i);
+  ide_run_context_prepend_args (self, (const char * const *)copy);
+  g_free (copy);
+
+  g_array_set_size (layer->env, 0);
 }
 
 static gboolean
