@@ -50,6 +50,10 @@ int           ide_unix_fd_map_steal_stdout    (IdeUnixFDMap  *self);
 IDE_AVAILABLE_IN_ALL
 int           ide_unix_fd_map_steal_stderr    (IdeUnixFDMap  *self);
 IDE_AVAILABLE_IN_ALL
+gboolean      ide_unix_fd_map_steal_from      (IdeUnixFDMap  *self,
+                                               IdeUnixFDMap  *other,
+                                               GError       **error);
+IDE_AVAILABLE_IN_ALL
 int           ide_unix_fd_map_peek            (IdeUnixFDMap  *self,
                                                guint          index,
                                                int           *dest_fd);
@@ -73,7 +77,7 @@ gboolean      ide_unix_fd_map_open_file       (IdeUnixFDMap  *self,
                                                int            dest_fd,
                                                GError       **error);
 IDE_AVAILABLE_IN_ALL
-int           ide_unix_fd_map_get_max_dest_fd (IdeUnixFDMap *self);
+int           ide_unix_fd_map_get_max_dest_fd (IdeUnixFDMap  *self);
 IDE_AVAILABLE_IN_ALL
 gboolean      ide_unix_fd_map_stdin_isatty    (IdeUnixFDMap  *self);
 IDE_AVAILABLE_IN_ALL
