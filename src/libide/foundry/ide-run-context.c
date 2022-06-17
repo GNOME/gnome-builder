@@ -173,7 +173,7 @@ ide_run_context_get_argv (IdeRunContext *self)
 
   layer = ide_run_context_current_layer (self);
 
-  return (const char * const *)&g_array_index (layer->argv, char *, 0);
+  return (const char * const *)(gpointer)layer->argv->data;
 }
 
 void
@@ -205,7 +205,7 @@ ide_run_context_get_environ (IdeRunContext *self)
 
   layer = ide_run_context_current_layer (self);
 
-  return (const char * const *)&g_array_index (layer->env, char *, 0);
+  return (const char * const *)(gpointer)layer->env->data;
 }
 
 void
@@ -585,16 +585,16 @@ ide_run_context_callback_layer (IdeRunContext       *self,
   gpointer handler_data;
   gboolean ret;
 
-  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), FALSE);
-  g_return_val_if_fail (layer != NULL, FALSE);
-  g_return_val_if_fail (layer != &self->root, FALSE);
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+  g_assert (layer != NULL);
+  g_assert (layer != &self->root);
 
   handler = layer->handler ? layer->handler : ide_run_context_default_handler;
   handler_data = layer->handler ? layer->handler_data : NULL;
 
   ret = handler (self,
-                 (const char * const *)&g_array_index (layer->argv, const char *, 0),
-                 (const char * const *)&g_array_index (layer->env, const char *, 0),
+                 (const char * const *)(gpointer)layer->argv->data,
+                 (const char * const *)(gpointer)layer->env->data,
                  layer->cwd,
                  layer->unix_fd_map,
                  handler_data,
