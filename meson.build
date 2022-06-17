@@ -292,7 +292,7 @@ libvte_dep = dependency('vte-2.91', version: '>= 0.65.0')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
 if get_option('webkit').enabled()
-  libwebkit_dep = dependency('webkit2gtk-4.0', version: '>= 2.26')
+  libwebkit_dep = dependency('webkit2gtk-4.1')
   config_h.set10('HAVE_WEBKIT', 1)
 endif
 
