@@ -383,7 +383,7 @@ run_cb (GSimpleAction *action,
   g_assert (IDE_IS_RUN_MANAGER (self->run_manager));
 
   ide_run_manager_set_handler (self->run_manager, "sysprof");
-  ide_run_manager_run_async (self->run_manager, NULL, NULL, NULL, NULL);
+  ide_run_manager_run_async (self->run_manager, NULL, NULL, NULL);
 }
 
 static void

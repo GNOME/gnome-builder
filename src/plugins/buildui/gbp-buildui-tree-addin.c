@@ -264,47 +264,6 @@ gbp_buildui_tree_addin_action_rebuild (GSimpleAction *action,
 }
 
 static void
-gbp_buildui_tree_addin_action_run (GSimpleAction *action,
-                                   GVariant      *param,
-                                   gpointer       user_data)
-{
-  GbpBuilduiTreeAddin *self = user_data;
-  IdeBuildManager *build_manager;
-  IdeBuildTarget *target;
-  IdeRunManager *run_manager;
-  IdeTreeNode *node;
-  IdeContext *context;
-  const gchar *handler;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (param != NULL);
-  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
-  g_assert (GBP_IS_BUILDUI_TREE_ADDIN (self));
-
-  if (!(context = ide_widget_get_context (GTK_WIDGET (self->tree))) ||
-      !(build_manager = ide_build_manager_from_context (context)) ||
-      !(node = ide_tree_get_selected_node (self->tree)) ||
-      !ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET) ||
-      !(target = ide_tree_node_get_item (node)))
-    return;
-
-  run_manager = ide_run_manager_from_context (context);
-  handler = g_variant_get_string (param, NULL);
-
-  if (ide_str_empty0 (handler))
-    ide_run_manager_set_handler (run_manager, NULL);
-  else
-    ide_run_manager_set_handler (run_manager, handler);
-
-  ide_run_manager_run_async (run_manager,
-                             target,
-                             NULL,
-                             NULL,
-                             NULL);
-}
-
-static void
 gbp_buildui_tree_addin_load (IdeTreeAddin *addin,
                              IdeTree      *tree,
                              IdeTreeModel *model)
@@ -315,7 +274,6 @@ gbp_buildui_tree_addin_load (IdeTreeAddin *addin,
   static const GActionEntry actions[] = {
     { "build", gbp_buildui_tree_addin_action_build },
     { "rebuild", gbp_buildui_tree_addin_action_rebuild },
-    { "run-with-handler", gbp_buildui_tree_addin_action_run, "s" },
   };
 
   g_assert (IDE_IS_MAIN_THREAD ());
