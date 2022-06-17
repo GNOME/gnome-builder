@@ -37,6 +37,7 @@
 #include "ide-config.h"
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
+#include "ide-runtime.h"
 #include "ide-toolchain.h"
 
 G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)

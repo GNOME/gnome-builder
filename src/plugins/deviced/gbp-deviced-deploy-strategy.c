@@ -99,12 +99,16 @@ gbp_deviced_deploy_strategy_load_async (IdeDeployStrategy   *strategy,
 }
 
 static gboolean
-gbp_deviced_deploy_strategy_load_finish (IdeDeployStrategy *self,
-                                         GAsyncResult *result,
-                                         GError **error)
+gbp_deviced_deploy_strategy_load_finish (IdeDeployStrategy  *self,
+                                         GAsyncResult       *result,
+                                         int                *priority,
+                                         GError            **error)
 {
-  g_return_val_if_fail (GBP_IS_DEVICED_DEPLOY_STRATEGY (self), FALSE);
-  g_return_val_if_fail (ide_task_is_valid (result, self), FALSE);
+  g_assert (GBP_IS_DEVICED_DEPLOY_STRATEGY (self));
+  g_assert (ide_task_is_valid (result, self));
+  g_assert (priority != NULL);
+
+  *priority = -100;
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
 }

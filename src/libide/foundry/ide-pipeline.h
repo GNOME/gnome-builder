@@ -24,19 +24,15 @@
 # error "Only <libide-foundry.h> can be included directly."
 #endif
 
+#include <vte/vte.h>
+
 #include <libide-core.h>
 #include <libide-code.h>
 #include <libide-threading.h>
-#include <vte/vte.h>
-
-#include "ide-foundry-types.h"
 
 #include "ide-build-log.h"
-#include "ide-config.h"
-#include "ide-pipeline-stage.h"
+#include "ide-foundry-types.h"
 #include "ide-pipeline-phase.h"
-#include "ide-runtime.h"
-#include "ide-triplet.h"
 
 G_BEGIN_DECLS
 
@@ -200,5 +196,7 @@ IDE_AVAILABLE_IN_ALL
 gboolean               ide_pipeline_contains_program_in_path (IdePipeline            *self,
                                                               const gchar            *name,
                                                               GCancellable           *cancellable);
+IDE_AVAILABLE_IN_ALL
+IdeDeployStrategy     *ide_pipeline_get_deploy_strategy      (IdePipeline            *self);
 
 G_END_DECLS

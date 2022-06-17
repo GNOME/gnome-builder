@@ -48,6 +48,7 @@
 #include "ide-runtime.h"
 #include "ide-toolchain-manager.h"
 #include "ide-toolchain-private.h"
+#include "ide-triplet.h"
 
 /**
  * SECTION:ide-build-manager
