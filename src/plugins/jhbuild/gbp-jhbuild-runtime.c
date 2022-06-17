@@ -82,6 +82,72 @@ gbp_jhbuild_runtime_create_runner (IdeRuntime     *runtime,
 }
 
 static gboolean
+gbp_jhbuild_runtime_run_handler (IdeRunContext       *run_context,
+                                 const char * const  *argv,
+                                 const char * const  *env,
+                                 const char          *cwd,
+                                 IdeUnixFDMap        *unix_fd_map,
+                                 gpointer             user_data,
+                                 GError             **error)
+{
+  GbpJhbuildRuntime *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_JHBUILD_RUNTIME (run_context));
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  /* First merge our FDs so we can be sure there are no collisions (there
+   * shouldn't be because we didn't set anything here).
+   */
+  if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
+    return FALSE;
+
+  /* We always take the CWD of the upper layer */
+  ide_run_context_set_cwd (run_context, cwd);
+
+  /* We rewrite the argv to be "jhbuild run ..." */
+  ide_run_context_set_argv (run_context, IDE_STRV_INIT (self->executable_path, "run"));
+
+  /* If there is an environment to deliver, then we want that passed to the
+   * subprocess but not to affect the parent process (jhbuild). So it will now
+   * look something like "jhbuild run env FOO=BAR ..."
+   */
+  if (env != NULL && env[0] != NULL)
+    {
+      ide_run_context_append_argv (run_context, "env");
+      ide_run_context_append_args (run_context, env);
+    }
+
+  /* And now we can add the argv of the upper layers so it might look something
+   * like "jhbuild run env FOO=BAR valgrind env BAR=BAZ my-program"
+   */
+  ide_run_context_append_args (run_context, argv);
+
+  IDE_RETURN (TRUE);
+}
+
+static IdeRunContext *
+gbp_jhbuild_runtime_create_run_context (IdeRuntime *runtime)
+{
+  GbpJhbuildRuntime *self = (GbpJhbuildRuntime *)runtime;
+  IdeRunContext *run_context;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_JHBUILD_RUNTIME (self));
+
+  run_context = ide_run_context_new ();
+
+  ide_run_context_push (run_context,
+                        gbp_jhbuild_runtime_run_handler,
+                        g_object_ref (self),
+                        g_object_unref);
+
+  IDE_RETURN (run_context);
+}
+
+static gboolean
 gbp_jhbuild_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                               const char   *program,
                                               GCancellable *cancellable)
@@ -192,6 +258,7 @@ gbp_jhbuild_runtime_class_init (GbpJhbuildRuntimeClass *klass)
 
   runtime_class->contains_program_in_path = gbp_jhbuild_runtime_contains_program_in_path;
   runtime_class->create_launcher = gbp_jhbuild_runtime_create_launcher;
+  runtime_class->create_run_context = gbp_jhbuild_runtime_create_run_context;
   runtime_class->create_runner = gbp_jhbuild_runtime_create_runner;
   runtime_class->prepare_configuration = gbp_jhbuild_runtime_prepare_configuration;
 
