@@ -42,7 +42,7 @@ typedef gboolean (*IdeRunContextHandler) (IdeRunContext       *self,
                                           const char * const  *argv,
                                           const char * const  *env,
                                           const char          *cwd,
-                                          IdeUnixFDMap        *fd_map,
+                                          IdeUnixFDMap        *unix_fd_map,
                                           gpointer             user_data,
                                           GError             **error);
 
@@ -64,6 +64,11 @@ IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_set_environ        (IdeRunContext         *self,
                                                            const char * const    *environ);
 IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_add_environ        (IdeRunContext         *self,
+                                                           const char * const    *environ);
+IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_environ_to_argv    (IdeRunContext         *self);
+IDE_AVAILABLE_IN_ALL
 const char            *ide_run_context_get_cwd            (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_set_cwd            (IdeRunContext         *self,
@@ -75,6 +80,9 @@ void                   ide_run_context_take_fd            (IdeRunContext        
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_prepend_argv       (IdeRunContext         *self,
                                                            const char            *arg);
+IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_prepend_args       (IdeRunContext         *self,
+                                                           const char * const    *args);
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_append_argv        (IdeRunContext         *self,
                                                            const char            *arg);

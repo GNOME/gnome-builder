@@ -72,3 +72,9 @@ test_shortcuts = executable('test-shortcuts', 'test-shortcuts.c',
   dependencies: [ libgtk_dep, libide_gui_dep ],
 )
 test('test-shortcuts', test_shortcuts, env: test_env, depends: [libide_gir])
+
+test_run_context = executable('test-run-context', 'test-run-context.c',
+        c_args: test_cflags,
+  dependencies: [ libide_foundry_dep ],
+)
+test('test-run-context', test_run_context, env: test_env)
