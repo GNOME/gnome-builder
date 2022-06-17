@@ -43,6 +43,7 @@
 #include "ide-config.h"
 #include "ide-device-manager.h"
 #include "ide-foundry-compat.h"
+#include "ide-run-command.h"
 #include "ide-run-command-provider.h"
 #include "ide-run-manager-private.h"
 #include "ide-run-manager.h"
@@ -1771,4 +1772,127 @@ ide_run_manager_list_commands_finish (IdeRunManager  *self,
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+static void
+ide_run_manager_discover_run_command_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeRunManager *self = (IdeRunManager *)object;
+  g_autoptr(IdeRunCommand) best = NULL;
+  g_autoptr(GListModel) model = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  const char *default_id;
+  guint n_items;
+  int best_priority = G_MAXINT;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!(model = ide_run_manager_list_commands_finish (self, result, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  default_id = ide_task_get_task_data (task);
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeRunCommand) run_command = g_list_model_get_item (model, i);
+      const char *id;
+      int priority;
+
+      g_assert (IDE_IS_RUN_COMMAND (run_command));
+
+      id = ide_run_command_get_id (run_command);
+      priority = ide_run_command_get_priority (run_command);
+
+      if (!ide_str_empty0 (id) &&
+          !ide_str_empty0 (default_id) &&
+          strcmp (default_id, id) == 0)
+        {
+          ide_task_return_pointer (task,
+                                   g_steal_pointer (&run_command),
+                                   g_object_unref);
+          IDE_EXIT;
+        }
+
+      if (best == NULL || priority < best_priority)
+        {
+          g_set_object (&best, run_command);
+          best_priority = priority;
+        }
+    }
+
+  if (best != NULL)
+    ide_task_return_pointer (task,
+                             g_steal_pointer (&best),
+                             g_object_unref);
+  else
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_FOUND,
+                               "No run command discovered. Set one manually.");
+
+  IDE_EXIT;
+}
+
+void
+ide_run_manager_discover_run_command_async (IdeRunManager       *self,
+                                            GCancellable        *cancellable,
+                                            GAsyncReadyCallback  callback,
+                                            gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_run_manager_discover_run_command_async);
+  ide_task_set_task_data (task, g_strdup (self->default_run_command), g_free);
+
+  ide_run_manager_list_commands_async (self,
+                                       cancellable,
+                                       ide_run_manager_discover_run_command_cb,
+                                       g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_run_manager_discover_run_command_finish:
+ * @self: a #IdeRunManager
+ *
+ * Complete request to discover the default run command.
+ *
+ * Returns: (transfer full): an #IdeRunCommand if successful; otherwise
+ *   %NULL and @error is set.
+ */
+IdeRunCommand *
+ide_run_manager_discover_run_command_finish (IdeRunManager  *self,
+                                             GAsyncResult   *result,
+                                             GError        **error)
+{
+  IdeRunCommand *run_command;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  run_command = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  g_return_val_if_fail (!run_command || IDE_IS_RUN_COMMAND (run_command), NULL);
+
+  IDE_RETURN (run_command);
 }
