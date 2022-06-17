@@ -48,6 +48,12 @@ struct _IdeRunContext
 
 G_DEFINE_FINAL_TYPE (IdeRunContext, ide_run_context, G_TYPE_OBJECT)
 
+IdeRunContext *
+ide_run_context_new (void)
+{
+  return g_object_new (IDE_TYPE_RUN_CONTEXT, NULL);
+}
+
 static void
 ide_run_context_layer_clear (IdeRunContextLayer *layer)
 {
@@ -55,6 +61,9 @@ ide_run_context_layer_clear (IdeRunContextLayer *layer)
   g_assert (layer->qlink.data == layer);
   g_assert (layer->qlink.prev == NULL);
   g_assert (layer->qlink.next == NULL);
+
+  if (layer->handler_data_destroy)
+    g_clear_pointer (&layer->handler_data, layer->handler_data_destroy);
 
   g_clear_pointer (&layer->cwd, g_free);
   g_clear_pointer (&layer->argv, g_array_unref);
@@ -66,12 +75,37 @@ static void
 ide_run_context_layer_free (IdeRunContextLayer *layer)
 {
   ide_run_context_layer_clear (layer);
+
   g_slice_free (IdeRunContextLayer, layer);
+}
+
+static void
+strptr_free (gpointer data)
+{
+  char **strptr = data;
+  g_clear_pointer (strptr, g_free);
+}
+
+static void
+ide_run_context_layer_init (IdeRunContextLayer *layer)
+{
+  g_assert (layer != NULL);
+
+  layer->qlink.data = layer;
+  layer->argv = g_array_new (TRUE, TRUE, sizeof (char *));
+  layer->env = g_array_new (TRUE, TRUE, sizeof (char *));
+  layer->unix_fd_map = ide_unix_fd_map_new ();
+
+  g_array_set_clear_func (layer->argv, strptr_free);
+  g_array_set_clear_func (layer->env, strptr_free);
 }
 
 static IdeRunContextLayer *
 ide_run_context_current_layer (IdeRunContext *self)
 {
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+  g_assert (self->layers.length > 0);
+
   return self->layers.head->data;
 }
 
@@ -104,15 +138,9 @@ ide_run_context_class_init (IdeRunContextClass *klass)
 static void
 ide_run_context_init (IdeRunContext *self)
 {
-  self->root.qlink.data = self;
-  g_queue_push_head_link (&self->layers, &self->root.qlink);
-}
+  ide_run_context_layer_init (&self->root);
 
-static void
-strptr_free (gpointer data)
-{
-  char **strptr = data;
-  g_clear_pointer (strptr, g_free);
+  g_queue_push_head_link (&self->layers, &self->root.qlink);
 }
 
 void
@@ -126,16 +154,12 @@ ide_run_context_push (IdeRunContext        *self,
   g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
 
   layer = g_slice_new0 (IdeRunContextLayer);
-  layer->qlink.data = layer;
-  layer->argv = g_array_new (TRUE, FALSE, sizeof (char *));
-  layer->env = g_array_new (TRUE, FALSE, sizeof (char *));
-  layer->unix_fd_map = ide_unix_fd_map_new ();
+
+  ide_run_context_layer_init (layer);
+
   layer->handler = handler;
   layer->handler_data = handler_data;
   layer->handler_data_destroy = handler_data_destroy;
-
-  g_array_set_clear_func (layer->argv, strptr_free);
-  g_array_set_clear_func (layer->env, strptr_free);
 
   g_queue_push_head_link (&self->layers, &layer->qlink);
 }
@@ -150,6 +174,26 @@ ide_run_context_get_argv (IdeRunContext *self)
   layer = ide_run_context_current_layer (self);
 
   return (const char * const *)&g_array_index (layer->argv, char *, 0);
+}
+
+void
+ide_run_context_set_argv (IdeRunContext      *self,
+                          const char * const *argv)
+{
+  IdeRunContextLayer *layer;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  layer = ide_run_context_current_layer (self);
+
+  g_array_set_size (layer->argv, 0);
+
+  if (argv != NULL)
+    {
+      char **copy = g_strdupv ((char **)argv);
+      g_array_append_vals (layer->argv, copy, g_strv_length (copy));
+      g_free (copy);
+    }
 }
 
 const char * const *
@@ -176,10 +220,58 @@ ide_run_context_set_environ (IdeRunContext      *self,
 
   g_array_set_size (layer->env, 0);
 
-  if (environ != NULL)
+  if (environ != NULL && environ[0] != NULL)
     {
       char **copy = g_strdupv ((char **)environ);
       g_array_append_vals (layer->env, copy, g_strv_length (copy));
+      g_free (copy);
+    }
+}
+
+void
+ide_run_context_add_environ (IdeRunContext      *self,
+                             const char * const *environ)
+{
+  IdeRunContextLayer *layer;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  if (environ == NULL || environ[0] == NULL)
+    return;
+
+  layer = ide_run_context_current_layer (self);
+
+  for (guint i = 0; environ[i]; i++)
+    {
+      const char *pair = environ[i];
+      const char *eq = strchr (pair, '=');
+      char **dest = NULL;
+      gsize keylen;
+
+      if (eq == NULL)
+        continue;
+
+      keylen = eq - pair;
+
+      for (guint j = 0; j < layer->env->len; j++)
+        {
+          const char *ele = g_array_index (layer->env, const char *, j);
+
+          if (strncmp (pair, ele, keylen) == 0 && ele[keylen] == '=')
+            {
+              dest = &g_array_index (layer->env, char *, j);
+              break;
+            }
+        }
+
+      if (dest == NULL)
+        {
+          g_array_set_size (layer->env, layer->env->len + 1);
+          dest = &g_array_index (layer->env, char *, layer->env->len - 1);
+        }
+
+      g_clear_pointer (dest, g_free);
+      *dest = g_strdup (pair);
     }
 }
 
@@ -229,6 +321,25 @@ ide_run_context_prepend_argv (IdeRunContext *self,
 }
 
 void
+ide_run_context_prepend_args (IdeRunContext      *self,
+                              const char * const *args)
+{
+  IdeRunContextLayer *layer;
+  char **copy;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  if (args == NULL || args[0] == NULL)
+    return;
+
+  layer = ide_run_context_current_layer (self);
+
+  copy = g_strdupv ((char **)args);
+  g_array_insert_vals (layer->argv, 0, copy, g_strv_length (copy));
+  g_free (copy);
+}
+
+void
 ide_run_context_append_argv (IdeRunContext *self,
                              const char    *arg)
 {
@@ -252,12 +363,15 @@ ide_run_context_append_args (IdeRunContext      *self,
   char **copy;
 
   g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
-  g_return_if_fail (args != NULL);
+
+  if (args == NULL || args[0] == NULL)
+    return;
 
   layer = ide_run_context_current_layer (self);
 
   copy = g_strdupv ((char **)args);
   g_array_append_vals (layer->argv, copy, g_strv_length (copy));
+  g_free (copy);
 }
 
 gboolean
@@ -272,11 +386,13 @@ ide_run_context_append_args_parsed (IdeRunContext  *self,
   g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), FALSE);
   g_return_val_if_fail (args != NULL, FALSE);
 
+  layer = ide_run_context_current_layer (self);
+
   if (!g_shell_parse_argv (args, &argc, &argv, error))
     return FALSE;
 
-  layer = ide_run_context_current_layer (self);
   g_array_append_vals (layer->argv, argv, argc);
+  g_free (argv);
 
   return TRUE;
 }
@@ -385,6 +501,110 @@ ide_run_context_unsetenv (IdeRunContext *self,
     }
 }
 
+void
+ide_run_context_environ_to_argv (IdeRunContext *self)
+{
+  static const char *envstr = "env";
+  IdeRunContextLayer *layer;
+  char **args;
+  gsize len;
+
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+
+  layer = ide_run_context_current_layer (self);
+
+  if (layer->env->len == 0)
+    return;
+
+  args = g_array_steal (layer->env, &len);
+  g_array_insert_vals (layer->argv, 0, args, len);
+  g_array_insert_val (layer->argv, 0, envstr);
+  g_free (args);
+}
+
+static gboolean
+ide_run_context_default_handler (IdeRunContext       *self,
+                                 const char * const  *argv,
+                                 const char * const  *env,
+                                 const char          *cwd,
+                                 IdeUnixFDMap        *unix_fd_map,
+                                 gpointer             user_data,
+                                 GError             **error)
+{
+  IdeRunContextLayer *layer;
+
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+  g_assert (argv != NULL);
+  g_assert (env != NULL);
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  layer = ide_run_context_current_layer (self);
+
+  if (cwd != NULL)
+    {
+      /* If the working directories do not match, we can't satisfy this and
+       * need to error out.
+       */
+      if (layer->cwd != NULL && !ide_str_equal (cwd, layer->cwd))
+        {
+          g_set_error (error,
+                       G_IO_ERROR,
+                       G_IO_ERROR_INVALID_ARGUMENT,
+                       "Cannot resolve differently requested cwd: %s and %s",
+                       cwd, layer->cwd);
+          return FALSE;
+        }
+
+      ide_run_context_set_cwd (self, cwd);
+    }
+
+  /* Merge all the FDs unless there are collisions */
+  if (!ide_unix_fd_map_steal_from (layer->unix_fd_map, unix_fd_map, error))
+    return FALSE;
+
+  /* Replace environment for this layer to use "env FOO=Bar" style subcommand
+   * so that it's evironment doesn't attach to the parent program.
+   */
+  ide_run_context_environ_to_argv (self);
+
+  /* Then make sure the higher layer's environment has higher priority */
+  ide_run_context_set_environ (self, env);
+
+  /* Now prepend the arguments and set new working dir */
+  ide_run_context_prepend_args (self, argv);
+
+  return TRUE;
+}
+
+static gboolean
+ide_run_context_callback_layer (IdeRunContext       *self,
+                                IdeRunContextLayer  *layer,
+                                GError             **error)
+{
+  IdeRunContextHandler handler;
+  gpointer handler_data;
+  gboolean ret;
+
+  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), FALSE);
+  g_return_val_if_fail (layer != NULL, FALSE);
+  g_return_val_if_fail (layer != &self->root, FALSE);
+
+  handler = layer->handler ? layer->handler : ide_run_context_default_handler;
+  handler_data = layer->handler ? layer->handler_data : NULL;
+
+  ret = handler (self,
+                 (const char * const *)&g_array_index (layer->argv, const char *, 0),
+                 (const char * const *)&g_array_index (layer->env, const char *, 0),
+                 layer->cwd,
+                 layer->unix_fd_map,
+                 handler_data,
+                 error);
+
+  ide_run_context_layer_free (layer);
+
+  return ret;
+}
+
 /**
  * ide_run_context_end:
  * @self: a #IdeRunContext
@@ -396,12 +616,28 @@ IdeSubprocessLauncher *
 ide_run_context_end (IdeRunContext  *self,
                      GError        **error)
 {
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+
   g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
   g_return_val_if_fail (self->ended == FALSE, NULL);
 
   self->ended = TRUE;
 
-  /* TODO: Process layers */
+  while (self->layers.length > 1)
+    {
+      IdeRunContextLayer *layer = ide_run_context_current_layer (self);
 
-  return NULL;
+      g_queue_unlink (&self->layers, &layer->qlink);
+
+      if (!ide_run_context_callback_layer (self, layer, error))
+        return FALSE;
+    }
+
+  launcher = ide_subprocess_launcher_new (0);
+
+  ide_subprocess_launcher_set_argv (launcher, ide_run_context_get_argv (self));
+  ide_subprocess_launcher_set_environ (launcher, ide_run_context_get_environ (self));
+  ide_subprocess_launcher_set_cwd (launcher, ide_run_context_get_cwd (self));
+
+  return g_steal_pointer (&launcher);
 }
