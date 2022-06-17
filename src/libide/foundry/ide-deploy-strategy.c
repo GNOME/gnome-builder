@@ -29,7 +29,7 @@ G_DEFINE_ABSTRACT_TYPE (IdeDeployStrategy, ide_deploy_strategy, IDE_TYPE_OBJECT)
 
 static void
 ide_deploy_strategy_real_load_async (IdeDeployStrategy   *self,
-                                     IdePipeline    *pipeline,
+                                     IdePipeline         *pipeline,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
@@ -45,18 +45,21 @@ ide_deploy_strategy_real_load_async (IdeDeployStrategy   *self,
 static gboolean
 ide_deploy_strategy_real_load_finish (IdeDeployStrategy  *self,
                                       GAsyncResult       *result,
+                                      int                *priority,
                                       GError            **error)
 {
   g_assert (IDE_IS_DEPLOY_STRATEGY (self));
   g_assert (G_IS_TASK (result));
   g_assert (g_task_is_valid (G_TASK (result), self));
 
+  *priority = G_MAXINT;
+
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
 ide_deploy_strategy_real_deploy_async (IdeDeployStrategy     *self,
-                                       IdePipeline      *pipeline,
+                                       IdePipeline           *pipeline,
                                        GFileProgressCallback  progress,
                                        gpointer               progress_data,
                                        GDestroyNotify         progress_data_destroy,
@@ -114,7 +117,7 @@ ide_deploy_strategy_real_create_runner_finish (IdeDeployStrategy  *self,
   g_assert (IDE_IS_TASK (result));
   g_assert (ide_task_is_valid (G_TASK (result), self));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 static void
@@ -154,7 +157,7 @@ ide_deploy_strategy_init (IdeDeployStrategy *self)
  */
 void
 ide_deploy_strategy_load_async (IdeDeployStrategy   *self,
-                                IdePipeline    *pipeline,
+                                IdePipeline         *pipeline,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
@@ -184,6 +187,7 @@ ide_deploy_strategy_load_async (IdeDeployStrategy   *self,
 gboolean
 ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
                                  GAsyncResult       *result,
+                                 int                *priority,
                                  GError            **error)
 {
   gboolean ret;
@@ -192,8 +196,9 @@ ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
 
   g_assert (IDE_IS_DEPLOY_STRATEGY (self));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (priority != NULL);
 
-  ret = IDE_DEPLOY_STRATEGY_GET_CLASS (self)->load_finish (self, result, error);
+  ret = IDE_DEPLOY_STRATEGY_GET_CLASS (self)->load_finish (self, result, priority, error);
 
   IDE_RETURN (ret);
 }
@@ -218,7 +223,7 @@ ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
  */
 void
 ide_deploy_strategy_deploy_async (IdeDeployStrategy     *self,
-                                  IdePipeline      *pipeline,
+                                  IdePipeline           *pipeline,
                                   GFileProgressCallback  progress,
                                   gpointer               progress_data,
                                   GDestroyNotify         progress_data_destroy,
@@ -264,8 +269,8 @@ ide_deploy_strategy_deploy_finish (IdeDeployStrategy  *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_DEPLOY_STRATEGY (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
+  g_return_val_if_fail (IDE_IS_DEPLOY_STRATEGY (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   ret = IDE_DEPLOY_STRATEGY_GET_CLASS (self)->deploy_finish (self, result, error);
 

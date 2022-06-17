@@ -35,7 +35,8 @@
 #include <libide-threading.h>
 
 #include "ide-build-log-private.h"
-#include "ide-build-log.h"
+#include "ide-config.h"
+#include "ide-deploy-strategy.h"
 #include "ide-pipeline-addin.h"
 #include "ide-pipeline.h"
 #include "ide-build-private.h"
@@ -47,6 +48,8 @@
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
 #include "ide-foundry-enums.h"
+#include "ide-local-deploy-strategy.h"
+#include "ide-local-device.h"
 #include "ide-run-manager-private.h"
 #include "ide-runtime.h"
 #include "ide-toolchain-manager.h"
@@ -97,16 +100,16 @@ G_DEFINE_QUARK (ide_build_error, ide_build_error)
 
 typedef struct
 {
-  guint          id;
+  guint             id;
   IdePipelinePhase  phase;
-  gint           priority;
+  int               priority;
   IdePipelineStage *stage;
 } PipelineEntry;
 
 typedef struct
 {
   IdePipeline *self;
-  GPtrArray        *addins;
+  GPtrArray   *addins;
 } IdleLoadState;
 
 typedef struct
@@ -132,6 +135,15 @@ struct _IdePipeline
    * add error formats, or just monitor logs.
    */
   IdeExtensionSetAdapter *addins;
+
+  /*
+   * Deployment stategies help discover how to make a deployment to
+   * a device which might require sending data to another system such
+   * as a phone or tablet.
+   */
+  IdeExtensionSetAdapter *deploy_strategies;
+  IdeDeployStrategy *best_strategy;
+  int best_strategy_priority;
 
   /*
    * This is the configuration for the build. It is a snapshot of
@@ -1156,6 +1168,60 @@ collect_pipeline_addins (IdeExtensionSetAdapter *set,
   g_ptr_array_add (addins, g_object_ref (exten));
 }
 
+static void
+ide_pipeline_deploy_strategy_load_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  IdeDeployStrategy *strategy = (IdeDeployStrategy *)object;
+  g_autoptr(IdePipeline) self = user_data;
+  g_autoptr(GError) error = NULL;
+  int priority = 0;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_PIPELINE (self));
+
+  if (ide_deploy_strategy_load_finish (strategy, result, &priority, &error))
+    {
+      if (self->best_strategy == NULL || priority < self->best_strategy_priority)
+        {
+          g_set_object (&self->best_strategy, strategy);
+          self->best_strategy_priority = priority;
+          IDE_EXIT;
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_pipeline_deploy_strategy_added_cb (IdeExtensionSetAdapter *set,
+                                       PeasPluginInfo         *plugin_info,
+                                       PeasExtension          *exten,
+                                       gpointer                user_data)
+{
+  IdePipeline *self = user_data;
+  IdeDeployStrategy *strategy = (IdeDeployStrategy *)exten;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
+  g_assert (IDE_IS_PIPELINE (self));
+
+  ide_deploy_strategy_load_async (strategy,
+                                  self,
+                                  self->cancellable,
+                                  ide_pipeline_deploy_strategy_load_cb,
+                                  g_object_ref (self));
+
+  IDE_EXIT;
+}
+
 static gboolean
 ide_pipeline_load_cb (IdleLoadState *state)
 {
@@ -1191,6 +1257,15 @@ ide_pipeline_load_cb (IdleLoadState *state)
         return G_SOURCE_CONTINUE;
     }
 
+  /* Now setup deployment strategies */
+  g_signal_connect (state->self->deploy_strategies,
+                    "extension-added",
+                    G_CALLBACK (ide_pipeline_deploy_strategy_added_cb),
+                    state->self);
+  ide_extension_set_adapter_foreach (state->self->deploy_strategies,
+                                     ide_pipeline_deploy_strategy_added_cb,
+                                     state);
+
   state->self->loaded = TRUE;
   state->self->idle_addins_load_source = 0;
 
@@ -1213,7 +1288,6 @@ ide_pipeline_load_cb (IdleLoadState *state)
 static void
 ide_pipeline_load (IdePipeline *self)
 {
-  g_autoptr(GPtrArray) addins = NULL;
   IdleLoadState *state;
   IdeContext *context;
 
@@ -1229,42 +1303,39 @@ ide_pipeline_load (IdePipeline *self)
   register_build_commands_stage (self, context);
   register_post_install_commands_stage (self, context);
 
+  /* Setup pipeline addins */
   self->addins = ide_extension_set_adapter_new (IDE_OBJECT (self),
                                                 peas_engine_get_default (),
                                                 IDE_TYPE_PIPELINE_ADDIN,
                                                 NULL, NULL);
-
   g_signal_connect (self->addins,
                     "extension-added",
                     G_CALLBACK (ide_pipeline_extension_prepare),
                     self);
-
   ide_extension_set_adapter_foreach (self->addins,
                                      ide_pipeline_extension_prepare,
                                      self);
-
   g_signal_connect_after (self->addins,
                           "extension-added",
                           G_CALLBACK (ide_pipeline_extension_added),
                           self);
-
   g_signal_connect (self->addins,
                     "extension-removed",
                     G_CALLBACK (ide_pipeline_extension_removed),
                     self);
 
-  /* Collect our addins so we can incrementally load them in an
-   * idle callback to reduce chances of stalling the main loop.
-   */
-  addins = g_ptr_array_new_with_free_func (g_object_unref);
-  ide_extension_set_adapter_foreach (self->addins,
-                                     collect_pipeline_addins,
-                                     addins);
+  /* Create deployment strategies */
+  self->deploy_strategies = ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                                           peas_engine_get_default (),
+                                                           IDE_TYPE_DEPLOY_STRATEGY,
+                                                           NULL, NULL);
 
   state = g_slice_new0 (IdleLoadState);
   state->self = g_object_ref (self);
-  state->addins = g_steal_pointer (&addins);
-
+  state->addins = g_ptr_array_new_with_free_func (g_object_unref);
+  ide_extension_set_adapter_foreach (self->addins,
+                                     collect_pipeline_addins,
+                                     state->addins);
   self->idle_addins_load_source =
     g_idle_add_full (G_PRIORITY_LOW,
                      (GSourceFunc) ide_pipeline_load_cb,
@@ -1347,7 +1418,10 @@ ide_pipeline_unload (IdePipeline *self)
 
   g_assert (IDE_IS_PIPELINE (self));
 
+  g_clear_object (&self->best_strategy);
+
   ide_clear_and_destroy_object (&self->addins);
+  ide_clear_and_destroy_object (&self->deploy_strategies);
 
   IDE_EXIT;
 }
@@ -1779,6 +1853,9 @@ ide_pipeline_init (IdePipeline *self)
   self->position = -1;
   self->pty_slave = -1;
 
+  self->best_strategy_priority = G_MAXINT;
+  self->best_strategy = ide_local_deploy_strategy_new ();
+
   self->pipeline = g_array_new (FALSE, FALSE, sizeof (PipelineEntry));
   g_array_set_clear_func (self->pipeline, clear_pipeline_entry);
 
@@ -1792,8 +1869,8 @@ ide_pipeline_init (IdePipeline *self)
 
 static void
 ide_pipeline_stage_build_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
+                             GAsyncResult *result,
+                             gpointer      user_data)
 {
   IdePipelineStage *stage = (IdePipelineStage *)object;
   IdePipeline *self;
@@ -4221,6 +4298,25 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
     }
 
   return FALSE;
+}
+
+/**
+ * ide_pipeline_get_deploy_strategy:
+ * @self: a #IdePipeline
+ *
+ * Gets the best discovered deployment strategry.
+ *
+ * Returns: (transfer none) (nullable): the best deployment strategy
+ *   if any are supported for the current configuration.
+ */
+IdeDeployStrategy *
+ide_pipeline_get_deploy_strategy (IdePipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
+  g_return_val_if_fail (!self->best_strategy ||
+                        IDE_IS_DEPLOY_STRATEGY (self->best_strategy), NULL);
+
+  return self->best_strategy;
 }
 
 /**

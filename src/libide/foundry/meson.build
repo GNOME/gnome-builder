@@ -69,6 +69,7 @@ libide_foundry_private_headers = [
   'ide-config-private.h',
   'ide-device-private.h',
   'ide-foundry-init.h',
+  'ide-local-deploy-strategy.h',
   'ide-run-manager-private.h',
   'ide-runtime-private.h',
   'ide-toolchain-private.h',
@@ -144,6 +145,7 @@ libide_foundry_private_sources = [
   'ide-build-log.c',
   'ide-build-utils.c',
   'ide-foundry-init.c',
+  'ide-local-deploy-strategy.c',
 ]
 
 libide_foundry_sources += libide_foundry_public_sources

@@ -38,33 +38,34 @@ struct _IdeDeployStrategyClass
 {
   IdeObjectClass parent;
 
-  void     (*load_async)    (IdeDeployStrategy     *self,
-                             IdePipeline      *pipeline,
-                             GCancellable          *cancellable,
-                             GAsyncReadyCallback    callback,
-                             gpointer               user_data);
-  gboolean (*load_finish)   (IdeDeployStrategy     *self,
-                             GAsyncResult          *result,
-                             GError               **error);
-  void     (*deploy_async)  (IdeDeployStrategy     *self,
-                             IdePipeline      *pipeline,
-                             GFileProgressCallback  progress,
-                             gpointer               progress_data,
-                             GDestroyNotify         progress_data_destroy,
-                             GCancellable          *cancellable,
-                             GAsyncReadyCallback    callback,
-                             gpointer               user_data);
-  gboolean (*deploy_finish) (IdeDeployStrategy     *self,
-                             GAsyncResult          *result,
-                             GError               **error);
-  void       (*create_runner_async)  (IdeDeployStrategy   *self,
-                                      IdePipeline         *pipeline,
-                                      GCancellable        *cancellable,
-                                      GAsyncReadyCallback  callback,
-                                      gpointer             user_data);
-  IdeRunner *(*create_runner_finish) (IdeDeployStrategy   *self,
-                                      GAsyncResult        *result,
-                                      GError             **error);
+  void           (*load_async)           (IdeDeployStrategy      *self,
+                                          IdePipeline            *pipeline,
+                                          GCancellable           *cancellable,
+                                          GAsyncReadyCallback     callback,
+                                          gpointer                user_data);
+  gboolean       (*load_finish)          (IdeDeployStrategy      *self,
+                                          GAsyncResult           *result,
+                                          int                    *priority,
+                                          GError                **error);
+  void           (*deploy_async)         (IdeDeployStrategy      *self,
+                                          IdePipeline            *pipeline,
+                                          GFileProgressCallback   progress,
+                                          gpointer                progress_data,
+                                          GDestroyNotify          progress_data_destroy,
+                                          GCancellable           *cancellable,
+                                          GAsyncReadyCallback     callback,
+                                          gpointer                user_data);
+  gboolean       (*deploy_finish)        (IdeDeployStrategy      *self,
+                                          GAsyncResult           *result,
+                                          GError                **error);
+  void           (*create_runner_async)  (IdeDeployStrategy      *self,
+                                          IdePipeline            *pipeline,
+                                          GCancellable           *cancellable,
+                                          GAsyncReadyCallback     callback,
+                                          gpointer                user_data);
+  IdeRunner     *(*create_runner_finish) (IdeDeployStrategy      *self,
+                                          GAsyncResult           *result,
+                                          GError                **error);
 
   gpointer _reserved[16];
 };
@@ -78,6 +79,7 @@ void     ide_deploy_strategy_load_async    (IdeDeployStrategy      *self,
 IDE_AVAILABLE_IN_ALL
 gboolean ide_deploy_strategy_load_finish   (IdeDeployStrategy      *self,
                                             GAsyncResult           *result,
+                                            int                    *priority,
                                             GError                **error);
 IDE_AVAILABLE_IN_ALL
 void     ide_deploy_strategy_deploy_async  (IdeDeployStrategy      *self,
