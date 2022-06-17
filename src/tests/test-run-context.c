@@ -149,6 +149,56 @@ test_run_context_default_handler (void)
   g_assert_finalize_object (run_context);
 }
 
+static gboolean
+custom_handler (IdeRunContext       *run_context,
+                const char * const  *argv,
+                const char * const  *env,
+                const char          *cwd,
+                IdeUnixFDMap        *unix_fd_map,
+                gpointer             user_data,
+                GError             **error)
+{
+  const char * const *subenv = ide_run_context_get_environ (run_context);
+
+  for (guint i = 0; subenv[i]; i++)
+    {
+      g_autofree char *arg = g_strdup_printf ("--env=%s", subenv[i]);
+      ide_run_context_prepend_argv (run_context, arg);
+    }
+
+  ide_run_context_prepend_args (run_context, argv);
+  ide_run_context_set_environ (run_context, env);
+
+  return TRUE;
+}
+
+static void
+test_run_context_custom_handler (void)
+{
+  IdeRunContext *run_context;
+  IdeSubprocessLauncher *launcher;
+  g_autoptr(GError) error = NULL;
+
+  run_context = ide_run_context_new ();
+
+  ide_run_context_set_argv (run_context, IDE_STRV_INIT ("ls", "-lsah"));
+  ide_run_context_setenv (run_context, "USER", "user");
+  ide_run_context_setenv (run_context, "UID", "1000");
+
+  ide_run_context_push (run_context, custom_handler, NULL, NULL);
+  ide_run_context_set_argv (run_context, IDE_STRV_INIT ("flatpak", "build"));
+
+  launcher = ide_run_context_end (run_context, &error);
+  g_assert_no_error (error);
+  g_assert_true (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+
+  g_assert_true (g_strv_equal (ide_subprocess_launcher_get_argv (launcher),
+                               IDE_STRV_INIT ("flatpak", "build", "--env=UID=1000", "--env=USER=user", "ls", "-lsah")));
+
+  g_assert_finalize_object (launcher);
+  g_assert_finalize_object (run_context);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -157,5 +207,6 @@ main (int   argc,
   g_test_add_func ("/Ide/Foundry/RunContext/environ", test_run_context_environ);
   g_test_add_func ("/Ide/Foundry/RunContext/argv", test_run_context_argv);
   g_test_add_func ("/Ide/Foundry/RunContext/default_handler", test_run_context_default_handler);
+  g_test_add_func ("/Ide/Foundry/RunContext/custom_handler", test_run_context_custom_handler);
   return g_test_run ();
 }
