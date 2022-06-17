@@ -41,6 +41,7 @@
 #include "ide-build-target.h"
 #include "ide-config-manager.h"
 #include "ide-config.h"
+#include "ide-deploy-strategy.h"
 #include "ide-device-manager.h"
 #include "ide-foundry-compat.h"
 #include "ide-run-command.h"
@@ -63,6 +64,7 @@ struct _IdeRunManager
   GList                   *handlers;
 
   IdeRunner               *current_runner;
+  IdeRunCommand           *current_run_command;
 
   /* Keep track of last change sequence from the file monitor
    * so that we can maybe skip past install phase and make
@@ -71,17 +73,12 @@ struct _IdeRunManager
   guint64                  last_change_seq;
   guint64                  pending_last_change_seq;
 
-  /* The id of the default run command to execute or NULL if we should
-   * discover it each time we try to run.
-   *
-   * TODO: We probably need a way to determine if an install is required
-   *       to run a particular command, as for some that may not be necessary
-   *       (like running tests).
-   */
   char                    *default_run_command;
 
-  guint                    busy : 1;
+  guint                    busy;
+
   guint                    messages_debug_all : 1;
+  guint                    has_installed_once : 1;
 };
 
 typedef struct
@@ -269,26 +266,6 @@ ide_run_handler_info_free (gpointer data)
 }
 
 static void
-ide_run_manager_dispose (GObject *object)
-{
-  IdeRunManager *self = (IdeRunManager *)object;
-
-  self->handler = NULL;
-
-  g_clear_pointer (&self->default_run_command, g_free);
-
-  g_clear_object (&self->cancellable);
-  ide_clear_and_destroy_object (&self->build_target);
-
-  ide_clear_and_destroy_object (&self->run_command_providers);
-
-  g_list_free_full (self->handlers, ide_run_handler_info_free);
-  self->handlers = NULL;
-
-  G_OBJECT_CLASS (ide_run_manager_parent_class)->dispose (object);
-}
-
-static void
 ide_run_manager_update_action_enabled (IdeRunManager *self)
 {
   IdeBuildManager *build_manager;
@@ -302,10 +279,70 @@ ide_run_manager_update_action_enabled (IdeRunManager *self)
   can_build = ide_build_manager_get_can_build (build_manager);
 
   ide_run_manager_set_action_enabled (self, "run",
-                                      self->busy == FALSE && can_build == TRUE);
+                                      self->busy == 0 && can_build == TRUE);
   ide_run_manager_set_action_enabled (self, "run-with-handler",
-                                      self->busy == FALSE && can_build == TRUE);
-  ide_run_manager_set_action_enabled (self, "stop", self->busy == TRUE);
+                                      self->busy == 0 && can_build == TRUE);
+  ide_run_manager_set_action_enabled (self, "stop", self->busy > 0);
+}
+
+
+static void
+ide_run_manager_mark_busy (IdeRunManager *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  self->busy++;
+
+  if (self->busy == 1)
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BUSY]);
+      ide_run_manager_update_action_enabled (self);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_run_manager_unmark_busy (IdeRunManager *self)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  self->busy--;
+
+  if (self->busy == 0)
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BUSY]);
+      ide_run_manager_update_action_enabled (self);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_run_manager_dispose (GObject *object)
+{
+  IdeRunManager *self = (IdeRunManager *)object;
+
+  self->handler = NULL;
+
+  g_clear_pointer (&self->default_run_command, g_free);
+
+  g_clear_object (&self->cancellable);
+  ide_clear_and_destroy_object (&self->build_target);
+
+  g_clear_object (&self->current_run_command);
+  g_clear_object (&self->current_runner);
+
+  ide_clear_and_destroy_object (&self->run_command_providers);
+
+  g_list_free_full (self->handlers, ide_run_handler_info_free);
+  self->handlers = NULL;
+
+  G_OBJECT_CLASS (ide_run_manager_parent_class)->dispose (object);
 }
 
 static void
@@ -491,7 +528,7 @@ ide_run_manager_get_busy (IdeRunManager *self)
 {
   g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), FALSE);
 
-  return self->busy;
+  return self->busy > 0;
 }
 
 static gboolean
@@ -512,43 +549,6 @@ ide_run_manager_check_busy (IdeRunManager  *self,
     }
 
   return FALSE;
-}
-
-static void
-ide_run_manager_run_cb (GObject      *object,
-                        GAsyncResult *result,
-                        gpointer      user_data)
-{
-  IdeRunner *runner = (IdeRunner *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  IdeRunManager *self;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUNNER (runner));
-  g_assert (IDE_IS_TASK (task));
-
-  self = ide_task_get_source_object (task);
-
-  if (self->notif != NULL)
-    {
-      ide_notification_withdraw (self->notif);
-      g_clear_object (&self->notif);
-    }
-
-  g_clear_object (&self->current_runner);
-
-  if (!ide_runner_run_finish (runner, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_boolean (task, TRUE);
-
-  g_signal_emit (self, signals [STOPPED], 0);
-
-  ide_object_destroy (IDE_OBJECT (runner));
-
-  IDE_EXIT;
 }
 
 static void
@@ -690,74 +690,160 @@ get_action_state_bool (IdeRunManager *self,
 }
 
 static void
-create_runner_cb (GObject      *object,
-                  GAsyncResult *result,
-                  gpointer      user_data)
+ide_run_manager_install_cb (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      user_data)
 {
-  IdeRunManager *self;
-  IdeDeviceManager *device_manager = (IDE_DEVICE_MANAGER (object));
+  IdeBuildManager *build_manager = (IdeBuildManager *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autofree gchar *name = NULL;
-  g_autofree gchar *title = NULL;
-  IdeBuildTarget *build_target;
-  IdeContext *context;
-  IdeConfigManager *config_manager;
-  IdeConfig *config;
-  IdeEnvironment *environment;
-  IdeRuntime *runtime;
-  g_autoptr(IdeRunner) runner = NULL;
-  GCancellable *cancellable;
-  const char *color_scheme;
-  const char *run_opts;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!ide_build_manager_build_finish (build_manager, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+ide_run_manager_install_async (IdeRunManager       *self,
+                               GCancellable        *cancellable,
+                               GAsyncReadyCallback  callback,
+                               gpointer             user_data)
+{
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GSettings) project_settings = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  IdeBuildManager *build_manager;
+  IdeVcsMonitor *monitor;
+  guint64 sequence = 0;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_run_manager_install_async);
+
+  project_settings = ide_context_ref_project_settings (context);
+  if (!g_settings_get_boolean (project_settings, "install-before-run"))
+    {
+      ide_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
+
+  monitor = ide_vcs_monitor_from_context (context);
+  if (monitor != NULL)
+    sequence = ide_vcs_monitor_get_sequence (monitor);
+
+  if (self->has_installed_once && sequence == self->last_change_seq)
+    {
+      ide_task_return_boolean (task, TRUE);
+      IDE_EXIT;
+    }
+
+  self->pending_last_change_seq = sequence;
+
+  build_manager = ide_build_manager_from_context (context);
+  ide_build_manager_build_async (build_manager,
+                                 IDE_PIPELINE_PHASE_INSTALL,
+                                 NULL,
+                                 cancellable,
+                                 ide_run_manager_install_cb,
+                                 g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static gboolean
+ide_run_manager_install_finish (IdeRunManager  *self,
+                                GAsyncResult   *result,
+                                GError        **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+ide_run_manager_run_runner_run_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeRunner *runner = (IdeRunner *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeRunManager *self;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUNNER (runner));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   self = ide_task_get_source_object (task);
+
   g_assert (IDE_IS_RUN_MANAGER (self));
 
-  runner = ide_device_manager_create_runner_finish (device_manager, result, &error);
-
-  if (error != NULL)
+  if (self->notif != NULL)
     {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
     }
 
-  build_target = ide_task_get_task_data (task);
+  g_clear_object (&self->current_runner);
+
+  if (!ide_runner_run_finish (runner, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  g_signal_emit (self, signals[STOPPED], 0);
+
+  ide_object_destroy (IDE_OBJECT (runner));
+
+  IDE_EXIT;
+}
+
+static gboolean
+ide_run_manager_prepare_runner (IdeRunManager  *self,
+                                IdeRunner      *runner,
+                                GError        **error)
+{
+  g_autofree char *title = NULL;
+  IdeConfigManager *config_manager;
+  IdeEnvironment *environment;
+  IdeContext *context;
+  const char *color_scheme;
+  const char *run_opts;
+  const char *name;
+  IdeConfig *config;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (IDE_IS_RUNNER (runner));
+
   context = ide_object_get_context (IDE_OBJECT (self));
-
-  g_assert (IDE_IS_BUILD_TARGET (build_target));
-  g_assert (IDE_IS_CONTEXT (context));
-
   config_manager = ide_config_manager_from_context (context);
   config = ide_config_manager_get_current (config_manager);
-  runtime = ide_config_get_runtime (config);
-
-  if (runner == NULL)
-    {
-      if (runtime == NULL)
-        {
-          ide_task_return_new_error (task,
-                                     IDE_RUNTIME_ERROR,
-                                     IDE_RUNTIME_ERROR_NO_SUCH_RUNTIME,
-                                     "%s “%s”",
-                                     _("Failed to locate runtime"),
-                                     ide_config_get_runtime_id (config));
-          IDE_EXIT;
-        }
-
-      runner = ide_runtime_create_runner (runtime, build_target);
-    }
-
-  cancellable = ide_task_get_cancellable (task);
-
-  g_assert (IDE_IS_RUNNER (runner));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Add our run arguments if specified in the config. */
   if (NULL != (run_opts = ide_config_get_run_opts (config)))
@@ -787,11 +873,11 @@ create_runner_cb (GObject      *object,
 
   if (ide_runner_get_failed (runner))
     {
-      ide_task_return_new_error (task,
-                                 IDE_RUNTIME_ERROR,
-                                 IDE_RUNTIME_ERROR_SPAWN_FAILED,
-                                 "Failed to execute the application");
-      IDE_EXIT;
+      g_set_error (error,
+                   IDE_RUNTIME_ERROR,
+                   IDE_RUNTIME_ERROR_SPAWN_FAILED,
+                   "Failed to execute the application");
+      IDE_RETURN (FALSE);
     }
 
   if (self->notif != NULL)
@@ -801,7 +887,7 @@ create_runner_cb (GObject      *object,
     }
 
   self->notif = ide_notification_new ();
-  name = ide_build_target_get_name (build_target);
+  name = ide_run_command_get_display_name (self->current_run_command);
   /* translators: %s is replaced with the name of the users executable */
   title = g_strdup_printf (_("Running %s…"), name);
   ide_notification_set_title (self->notif, title);
@@ -809,278 +895,148 @@ create_runner_cb (GObject      *object,
 
   g_set_object (&self->current_runner, runner);
 
+  IDE_RETURN (TRUE);
+}
+
+static void
+ide_run_manager_run_create_runner_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  IdeDeviceManager *device_manager = (IdeDeviceManager *)object;
+  g_autoptr(IdeRunner) runner = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeRunManager *self;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  if (!(runner = ide_device_manager_create_runner_finish (device_manager, result, &error)) ||
+      !ide_run_manager_prepare_runner (self, runner, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
   ide_runner_run_async (runner,
-                        cancellable,
-                        ide_run_manager_run_cb,
+                        ide_task_get_cancellable (task),
+                        ide_run_manager_run_runner_run_cb,
                         g_object_ref (task));
 
   IDE_EXIT;
 }
 
 static void
-deploy_cb (GObject      *object,
-           GAsyncResult *result,
-           gpointer      user_data)
+ide_run_manager_run_deploy_cb (GObject      *object,
+                               GAsyncResult *result,
+                               gpointer      user_data)
 {
   IdeDeviceManager *device_manager = (IdeDeviceManager *)object;
-  IdeBuildManager *build_manager;
-  IdeContext *context;
-  IdePipeline *pipeline;
-  IdeRunManager *self;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdePipeline *pipeline;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  pipeline = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
   if (!ide_device_manager_deploy_finish (device_manager, result, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_RUN_MANAGER (self));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  build_manager = ide_build_manager_from_context (context);
-  pipeline = ide_build_manager_get_pipeline (build_manager);
-
-  ide_device_manager_create_runner_async (device_manager,
-                                          pipeline,
-                                          ide_task_get_cancellable (task),
-                                          create_runner_cb,
-                                          g_object_ref (task));
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_device_manager_create_runner_async (device_manager,
+                                            pipeline,
+                                            ide_task_get_cancellable (task),
+                                            ide_run_manager_run_create_runner_cb,
+                                            g_object_ref (task));
 
   IDE_EXIT;
 }
 
 static void
-do_run_async (IdeRunManager *self,
-              IdeTask       *task)
+ide_run_manager_run_discover_run_command_cb (GObject      *object,
+                                             GAsyncResult *result,
+                                             gpointer      user_data)
 {
-  IdeBuildManager *build_manager;
-  IdeContext *context;
+  IdeRunManager *self = (IdeRunManager *)object;
+  g_autoptr(IdeRunCommand) run_command = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
   IdeDeviceManager *device_manager;
   IdePipeline *pipeline;
-  GCancellable *cancellable;
+  IdeContext *context;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
+  if (!(run_command = ide_run_manager_discover_run_command_finish (self, result, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  g_set_object (&self->current_run_command, run_command);
+
+  pipeline = ide_task_get_task_data (task);
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  build_manager = ide_build_manager_from_context (context);
-  pipeline = ide_build_manager_get_pipeline (build_manager);
   device_manager = ide_device_manager_from_context (context);
-
-  cancellable = ide_task_get_cancellable (task);
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
 
   ide_device_manager_deploy_async (device_manager,
                                    pipeline,
-                                   cancellable,
-                                   deploy_cb,
+                                   ide_task_get_cancellable (task),
+                                   ide_run_manager_run_deploy_cb,
                                    g_object_ref (task));
 
   IDE_EXIT;
 }
 
 static void
-ide_run_manager_run_discover_cb (GObject      *object,
-                                 GAsyncResult *result,
-                                 gpointer      user_data)
+ide_run_manager_run_install_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
 {
   IdeRunManager *self = (IdeRunManager *)object;
-  g_autoptr(IdeBuildTarget) build_target = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  build_target = ide_run_manager_discover_default_target_finish (self, result, &error);
-
-  if (build_target == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  ide_run_manager_set_build_target (self, build_target);
-
-  ide_task_set_task_data (task, g_steal_pointer (&build_target), g_object_unref);
-
-  do_run_async (self, task);
-
-  IDE_EXIT;
-}
-
-static void
-ide_run_manager_install_cb (GObject      *object,
-                            GAsyncResult *result,
-                            gpointer      user_data)
-{
-  IdeBuildManager *build_manager = (IdeBuildManager *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  IdeRunManager *self;
-  IdeBuildTarget *build_target;
-  GCancellable *cancellable;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_BUILD_MANAGER (build_manager));
-  g_assert (IDE_IS_TASK (task));
-
-  self = ide_task_get_source_object (task);
-  g_assert (IDE_IS_RUN_MANAGER (self));
-
-  if (!ide_build_manager_build_finish (build_manager, result, &error))
-    {
-      /* We want to let the consumer know there was a build error
-       * (but don't need to pass the specific error code) so that
-       * they have an error code to check against.
-       */
-      ide_task_return_new_error (task,
-                                 IDE_RUNTIME_ERROR,
-                                 IDE_RUNTIME_ERROR_BUILD_FAILED,
-                                 /* translators: %s is replaced with the specific error reason */
-                                 _("The build target failed to build: %s"),
-                                 error->message);
-      IDE_EXIT;
-    }
-
-  self->last_change_seq = self->pending_last_change_seq;
-
-  build_target = ide_run_manager_get_build_target (self);
-
-  if (build_target == NULL)
-    {
-      cancellable = ide_task_get_cancellable (task);
-      g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-      ide_run_manager_discover_default_target_async (self,
-                                                     cancellable,
-                                                     ide_run_manager_run_discover_cb,
-                                                     g_steal_pointer (&task));
-      IDE_EXIT;
-    }
-
-  ide_task_set_task_data (task, g_object_ref (build_target), g_object_unref);
-
-  do_run_async (self, task);
-
-  IDE_EXIT;
-}
-
-static void
-ide_run_manager_task_completed (IdeRunManager *self,
-                                GParamSpec    *pspec,
-                                IdeTask       *task)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (pspec != NULL);
-  g_assert (IDE_IS_TASK (task));
-
-  self->busy = FALSE;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
-
-  ide_run_manager_update_action_enabled (self);
-
-  IDE_EXIT;
-}
-
-static void
-ide_run_manager_do_install_before_run (IdeRunManager *self,
-                                       IdeTask       *task)
-{
-  g_autoptr(IdeContext) context = NULL;
-  g_autoptr(GSettings) project_settings = NULL;
-  IdeBuildManager *build_manager;
-  IdeVcsMonitor *monitor;
-  guint64 sequence = 0;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  context = ide_object_ref_context (IDE_OBJECT (self));
-  build_manager = ide_build_manager_from_context (context);
-  monitor = ide_vcs_monitor_from_context (context);
-  project_settings = ide_context_ref_project_settings (context);
-
-  /*
-   * First we need to make sure the target is up to date and installed
-   * so that all the dependent resources are available.
-   */
-
-  self->busy = TRUE;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
-
-  g_signal_connect_object (task,
-                           "notify::completed",
-                           G_CALLBACK (ide_run_manager_task_completed),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  if (monitor != NULL)
-    sequence = ide_vcs_monitor_get_sequence (monitor);
-
-  /* If the user requests that we don't do install before running, then they probably
-   * have a work flow that allows them to do that. Just skip build/install and try
-   * to run it directly instead. We do need to do it once however to get the
-   * current build target (although that may change soon).
-   */
-  if (self->build_target != NULL &&
-      !g_settings_get_boolean (project_settings, "install-before-run"))
-    {
-      g_debug ("Skipping install phase as requested in project settings");
-      ide_run_manager_update_action_enabled (self);
-      ide_task_set_task_data (task, g_object_ref (self->build_target), g_object_unref);
-      do_run_async (self, task);
-      IDE_EXIT;
-    }
-
-  /*
-   * If we detect that nothing has changed in the project directory since the
-   * last time we ran, we can avoid installing the project. This will not help
-   * in situations where external resources have changed outside of builders
-   * control, but users can simply force a Build in that case.
-   */
-  if (self->build_target != NULL && sequence == self->last_change_seq)
-    {
-      g_debug ("Skipping install phase as no files appear to have changed "
-               "(sequence %"G_GUINT64_FORMAT")", sequence);
-      ide_run_manager_update_action_enabled (self);
-      ide_task_set_task_data (task, g_object_ref (self->build_target), g_object_unref);
-      do_run_async (self, task);
-      IDE_EXIT;
-    }
-
-  self->pending_last_change_seq = sequence;
-
-  ide_build_manager_build_async (build_manager,
-                                 IDE_PIPELINE_PHASE_INSTALL,
-                                 NULL,
-                                 ide_task_get_cancellable (task),
-                                 ide_run_manager_install_cb,
-                                 g_object_ref (task));
-
-  ide_run_manager_update_action_enabled (self);
+  if (!ide_run_manager_install_finish (self, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_run_manager_discover_run_command_async (self,
+                                                ide_task_get_cancellable (task),
+                                                ide_run_manager_run_discover_run_command_cb,
+                                                g_object_ref (task));
 
   IDE_EXIT;
 }
@@ -1095,6 +1051,9 @@ ide_run_manager_run_async (IdeRunManager       *self,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GCancellable) local_cancellable = NULL;
   g_autoptr(GError) error = NULL;
+  IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -1106,12 +1065,10 @@ ide_run_manager_run_async (IdeRunManager       *self,
 
   if (cancellable == NULL)
     cancellable = local_cancellable = g_cancellable_new ();
-
   ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_run_manager_run_async);
-  ide_task_set_priority (task, G_PRIORITY_LOW);
 
   if (ide_task_return_error_if_cancelled (task))
     IDE_EXIT;
@@ -1122,10 +1079,32 @@ ide_run_manager_run_async (IdeRunManager       *self,
       IDE_EXIT;
     }
 
-  if (build_target != NULL)
-    ide_run_manager_set_build_target (self, build_target);
+  ide_run_manager_mark_busy (self);
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_run_manager_unmark_busy),
+                           self,
+                           G_CONNECT_SWAPPED);
 
-  ide_run_manager_do_install_before_run (self, task);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  if (pipeline == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_FOUND,
+                                 "A pipeline cannot be found");
+      IDE_EXIT;
+    }
+
+  ide_task_set_task_data (task, g_object_ref (pipeline), g_object_unref);
+
+  ide_run_manager_install_async (self,
+                                 cancellable,
+                                 ide_run_manager_run_install_cb,
+                                 g_steal_pointer (&task));
 
   IDE_EXIT;
 }
