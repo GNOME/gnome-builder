@@ -382,3 +382,39 @@ ide_unix_fd_map_open_file (IdeUnixFDMap  *self,
 
   return TRUE;
 }
+
+gboolean
+ide_unix_fd_map_steal_from (IdeUnixFDMap  *self,
+                            IdeUnixFDMap  *other,
+                            GError       **error)
+{
+  g_return_val_if_fail (IDE_IS_UNIX_FD_MAP (self), FALSE);
+  g_return_val_if_fail (IDE_IS_UNIX_FD_MAP (other), FALSE);
+
+  for (guint i = 0; i < other->map->len; i++)
+    {
+      IdeUnixFDMapItem *item = &g_array_index (other->map, IdeUnixFDMapItem, i);
+
+      if (item->source_fd != -1)
+        {
+          for (guint j = 0; j < self->map->len; j++)
+            {
+              IdeUnixFDMapItem *ele = &g_array_index (self->map, IdeUnixFDMapItem, j);
+
+              if (ele->dest_fd == item->dest_fd && ele->source_fd != -1)
+                {
+                  g_set_error (error,
+                               G_IO_ERROR,
+                               G_IO_ERROR_INVALID_ARGUMENT,
+                               "Attempt to merge overlapping destination FDs for %d",
+                               item->dest_fd);
+                  return FALSE;
+                }
+            }
+
+          ide_unix_fd_map_take (self, ide_steal_fd (&item->source_fd), item->dest_fd);
+        }
+    }
+
+  return TRUE;
+}
