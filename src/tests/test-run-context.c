@@ -99,6 +99,25 @@ test_run_context_environ (void)
 }
 
 static void
+test_run_context_argv (void)
+{
+  IdeRunContext *run_context;
+
+  run_context = ide_run_context_new ();
+
+  ide_run_context_prepend_argv (run_context, "1");
+  ide_run_context_prepend_argv (run_context, "0");
+  ide_run_context_append_argv (run_context, "2");
+  ide_run_context_append_args (run_context, IDE_STRV_INIT ("3", "4"));
+  ide_run_context_prepend_args (run_context, IDE_STRV_INIT ("a", "b"));
+
+  g_assert_true (g_strv_equal (ide_run_context_get_argv (run_context),
+                               IDE_STRV_INIT ("a", "b", "0", "1", "2", "3", "4")));
+
+  g_assert_finalize_object (run_context);
+}
+
+static void
 test_run_context_default_handler (void)
 {
   IdeRunContext *run_context;
@@ -136,6 +155,7 @@ main (int   argc,
 {
   g_test_init (&argc, &argv, NULL);
   g_test_add_func ("/Ide/Foundry/RunContext/environ", test_run_context_environ);
+  g_test_add_func ("/Ide/Foundry/RunContext/argv", test_run_context_argv);
   g_test_add_func ("/Ide/Foundry/RunContext/default_handler", test_run_context_default_handler);
   return g_test_run ();
 }
