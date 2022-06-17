@@ -94,6 +94,15 @@ IDE_AVAILABLE_IN_ALL
 GListModel     *ide_run_manager_list_commands_finish           (IdeRunManager        *self,
                                                                 GAsyncResult         *result,
                                                                 GError              **error);
+IDE_AVAILABLE_IN_ALL
+void            ide_run_manager_discover_run_command_async     (IdeRunManager        *self,
+                                                                GCancellable         *cancellable,
+                                                                GAsyncReadyCallback   callback,
+                                                                gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+IdeRunCommand  *ide_run_manager_discover_run_command_finish    (IdeRunManager        *self,
+                                                                GAsyncResult         *result,
+                                                                GError              **error);
 
 
 G_END_DECLS
