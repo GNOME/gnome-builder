@@ -35,6 +35,7 @@
 #include "ide-build-target.h"
 #include "ide-config.h"
 #include "ide-config-manager.h"
+#include "ide-run-context.h"
 #include "ide-runtime.h"
 #include "ide-runner.h"
 #include "ide-toolchain.h"
@@ -82,13 +83,21 @@ ide_runtime_real_create_launcher (IdeRuntime  *self,
     }
   else
     {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_FAILED,
-                   "An unknown error ocurred");
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           "An unknown error ocurred");
     }
 
   IDE_RETURN (ret);
+}
+
+static IdeRunContext *
+ide_runtime_real_create_run_context (IdeRuntime *self)
+{
+  g_assert (IDE_IS_RUNTIME (self));
+
+  return ide_run_context_new ();
 }
 
 static gboolean
@@ -449,6 +458,7 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
   i_object_class->repr = ide_runtime_repr;
 
   klass->create_launcher = ide_runtime_real_create_launcher;
+  klass->create_run_context = ide_runtime_real_create_run_context;
   klass->create_runner = ide_runtime_real_create_runner;
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
   klass->prepare_configuration = ide_runtime_real_prepare_configuration;
@@ -854,4 +864,20 @@ ide_runtime_supports_toolchain (IdeRuntime   *self,
     return IDE_RUNTIME_GET_CLASS (self)->supports_toolchain (self, toolchain);
 
   return TRUE;
+}
+
+/**
+ * ide_runtime_create_run_context:
+ * @self: a #IdeRuntime
+ *
+ * Creates a new #IdeRunContext for the runtime.
+ *
+ * Returns: (transfer full): an #IdeRunContext
+ */
+IdeRunContext *
+ide_runtime_create_run_context (IdeRuntime *self)
+{
+  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
+
+  return IDE_RUNTIME_GET_CLASS (self)->create_run_context (self);
 }

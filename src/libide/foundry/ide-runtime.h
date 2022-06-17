@@ -55,7 +55,8 @@ struct _IdeRuntimeClass
   IdeSubprocessLauncher  *(*create_launcher)          (IdeRuntime           *self,
                                                        GError              **error);
   void                    (*prepare_configuration)    (IdeRuntime           *self,
-                                                       IdeConfig     *configuration);
+                                                       IdeConfig            *config);
+  IdeRunContext          *(*create_run_context)       (IdeRuntime           *self);
   IdeRunner              *(*create_runner)            (IdeRuntime           *self,
                                                        IdeBuildTarget       *build_target);
   GFile                  *(*translate_file)           (IdeRuntime           *self,
@@ -78,6 +79,8 @@ gboolean                ide_runtime_contains_program_in_path (IdeRuntime      *s
 IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher  *ide_runtime_create_launcher          (IdeRuntime      *self,
                                                               GError         **error);
+IDE_AVAILABLE_IN_ALL
+IdeRunContext          *ide_runtime_create_run_context       (IdeRuntime      *self);
 IDE_AVAILABLE_IN_ALL
 IdeRunner              *ide_runtime_create_runner            (IdeRuntime      *self,
                                                               IdeBuildTarget  *build_target);
