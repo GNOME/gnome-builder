@@ -643,3 +643,35 @@ ide_run_context_end (IdeRunContext  *self,
 
   return g_steal_pointer (&launcher);
 }
+
+/**
+ * ide_run_context_merge_unix_fd_map:
+ * @self: a #IdeRunContext
+ * @unix_fd_map: a #IdeUnixFDMap
+ * @error: a #GError, or %NULL
+ *
+ * Merges the #IdeUnixFDMap into the current layer.
+ *
+ * If there are collisions in destination FDs, then that may cause an
+ * error and %FALSE is returned.
+ *
+ * @unix_fd_map will have the FDs stolen using ide_unix_fd_map_steal_from()
+ * which means that if successful, @unix_fd_map will not have any open
+ * file-descriptors after calling this function.
+ *
+ * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
+ */
+gboolean
+ide_run_context_merge_unix_fd_map (IdeRunContext  *self,
+                                   IdeUnixFDMap   *unix_fd_map,
+                                   GError        **error)
+{
+  IdeRunContextLayer *layer;
+
+  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), FALSE);
+  g_return_val_if_fail (IDE_IS_UNIX_FD_MAP (unix_fd_map), FALSE);
+
+  layer = ide_run_context_current_layer (self);
+
+  return ide_unix_fd_map_steal_from (layer->unix_fd_map, unix_fd_map, error);
+}
