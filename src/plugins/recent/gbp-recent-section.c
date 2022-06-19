@@ -242,12 +242,16 @@ gbp_recent_section_reap_cb (GObject      *object,
   IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
   g_autoptr(GPtrArray) directories = user_data;
   g_autoptr(GError) error = NULL;
+  GtkDialog *dialog;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (directories != NULL);
+
+  if ((dialog = g_object_get_data (G_OBJECT (reaper), "DIALOG")))
+    gtk_window_set_title (GTK_WINDOW (dialog), _("Removed Files"));
 
   if (!ide_directory_reaper_execute_finish (reaper, result, &error))
     {
@@ -416,28 +420,39 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
       GtkWidget *content_area;
       GtkTextBuffer *buffer;
 
-      dialog = GTK_DIALOG (gtk_dialog_new ());
-      gtk_window_set_title (GTK_WINDOW (dialog), _("Removing Files…"));
-      gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (workspace));
+      dialog = g_object_new (GTK_TYPE_DIALOG,
+                             "title", _("Removing Files…"),
+                             "transient-for", workspace,
+                             "default-width", 700,
+                             "default-height", 500,
+                             "use-header-bar", TRUE,
+                             NULL);
+#if DEVELOPMENT_BUILD
+      gtk_widget_add_css_class (GTK_WIDGET (dialog), "devel");
+#endif
       gtk_dialog_add_button (dialog, _("_Close"), GTK_RESPONSE_CLOSE);
-      gtk_window_set_default_size (GTK_WINDOW (dialog), 700, 500);
       content_area = gtk_dialog_get_content_area (dialog);
       g_object_set (content_area,
-                    "margin-top", 12,
-                    "margin-bottom", 12,
-                    "margin-start", 12,
-                    "margin-end", 12,
+                    "margin-top", 0,
+                    "margin-bottom", 0,
+                    "margin-start", 0,
+                    "margin-end", 0,
                     NULL);
-      gtk_box_set_spacing (GTK_BOX (content_area), 12);
+      gtk_box_set_spacing (GTK_BOX (content_area), 0);
 
       scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW, NULL);
       gtk_widget_set_vexpand (scroller, TRUE);
       gtk_box_append (GTK_BOX (content_area), scroller);
       gtk_widget_show (scroller);
 
-      view = gtk_text_view_new ();
-      gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
-      gtk_text_view_set_cursor_visible (GTK_TEXT_VIEW (view), FALSE);
+      view = g_object_new (GTK_TYPE_TEXT_VIEW,
+                           "editable", FALSE,
+                           "cursor-visible", FALSE,
+                           "left-margin", 12,
+                           "right-margin", 12,
+                           "top-margin", 12,
+                           "bottom-margin", 12,
+                           NULL);
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
       gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroller), view);
       gtk_widget_show (view);
@@ -452,6 +467,11 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
                         "response",
                         G_CALLBACK (gtk_window_destroy),
                         NULL);
+
+      g_object_set_data_full (G_OBJECT (reaper),
+                              "DIALOG",
+                              g_object_ref (dialog),
+                              g_object_unref);
 
       ide_gtk_window_present (GTK_WINDOW (dialog));
     }
