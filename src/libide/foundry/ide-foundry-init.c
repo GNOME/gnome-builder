@@ -74,6 +74,8 @@ ide_foundry_init_async_cb (GObject      *init_object,
 
       if (G_IS_ASYNC_INITABLE (object))
         {
+          g_debug ("Initializing %s asynchronously",
+                   G_OBJECT_TYPE_NAME (object));
           g_async_initable_init_async (G_ASYNC_INITABLE (object),
                                        G_PRIORITY_DEFAULT,
                                        cancellable,
@@ -83,7 +85,11 @@ ide_foundry_init_async_cb (GObject      *init_object,
         }
 
       if (G_IS_INITABLE (object))
-        g_initable_init (G_INITABLE (object), NULL, NULL);
+        {
+          g_debug ("Initializing %s synchronously",
+                   G_OBJECT_TYPE_NAME (object));
+          g_initable_init (G_INITABLE (object), NULL, NULL);
+        }
     }
 
   ide_task_return_boolean (task, TRUE);
@@ -120,12 +126,12 @@ _ide_foundry_init_async (IdeContext          *context,
     {
       g_autoptr(IdeObject) object = NULL;
 
-      /* Skip if plugins already forced this subsystem to load */
-      if ((object = ide_object_get_child_typed (IDE_OBJECT (context), foundry_types[i])))
-        continue;
+      if (!(object = ide_object_get_child_typed (IDE_OBJECT (context), foundry_types[i])))
+        {
+          object = g_object_new (foundry_types[i], NULL);
+          ide_object_append (IDE_OBJECT (context), object);
+        }
 
-      object = g_object_new (foundry_types[i], NULL);
-      ide_object_append (IDE_OBJECT (context), object);
       g_queue_push_tail (&state->to_init, g_steal_pointer (&object));
     }
 
@@ -135,6 +141,8 @@ _ide_foundry_init_async (IdeContext          *context,
 
       if (G_IS_ASYNC_INITABLE (object))
         {
+          g_debug ("Initializing %s asynchronously",
+                   G_OBJECT_TYPE_NAME (object));
           g_async_initable_init_async (G_ASYNC_INITABLE (object),
                                        G_PRIORITY_DEFAULT,
                                        NULL,
@@ -144,7 +152,11 @@ _ide_foundry_init_async (IdeContext          *context,
         }
 
       if (G_IS_INITABLE (object))
-        g_initable_init (G_INITABLE (object), NULL, NULL);
+        {
+          g_debug ("Initializing %s synchronously",
+                   G_OBJECT_TYPE_NAME (object));
+          g_initable_init (G_INITABLE (object), NULL, NULL);
+        }
     }
 
   ide_task_return_boolean (task, TRUE);
