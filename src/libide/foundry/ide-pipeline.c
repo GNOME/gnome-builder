@@ -1264,7 +1264,7 @@ ide_pipeline_load_cb (IdleLoadState *state)
                     state->self);
   ide_extension_set_adapter_foreach (state->self->deploy_strategies,
                                      ide_pipeline_deploy_strategy_added_cb,
-                                     state);
+                                     state->self);
 
   state->self->loaded = TRUE;
   state->self->idle_addins_load_source = 0;
