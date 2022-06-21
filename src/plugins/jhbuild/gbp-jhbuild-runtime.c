@@ -127,24 +127,23 @@ gbp_jhbuild_runtime_run_handler (IdeRunContext       *run_context,
   IDE_RETURN (TRUE);
 }
 
-static IdeRunContext *
-gbp_jhbuild_runtime_create_run_context (IdeRuntime *runtime)
+static void
+gbp_jhbuild_runtime_prepare_run_context (IdeRuntime    *runtime,
+                                         IdeRunContext *run_context)
 {
   GbpJhbuildRuntime *self = (GbpJhbuildRuntime *)runtime;
-  IdeRunContext *run_context;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_JHBUILD_RUNTIME (self));
-
-  run_context = ide_run_context_new ();
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   ide_run_context_push (run_context,
                         gbp_jhbuild_runtime_run_handler,
                         g_object_ref (self),
                         g_object_unref);
 
-  IDE_RETURN (run_context);
+  IDE_EXIT;
 }
 
 static gboolean
@@ -258,9 +257,9 @@ gbp_jhbuild_runtime_class_init (GbpJhbuildRuntimeClass *klass)
 
   runtime_class->contains_program_in_path = gbp_jhbuild_runtime_contains_program_in_path;
   runtime_class->create_launcher = gbp_jhbuild_runtime_create_launcher;
-  runtime_class->create_run_context = gbp_jhbuild_runtime_create_run_context;
   runtime_class->create_runner = gbp_jhbuild_runtime_create_runner;
   runtime_class->prepare_configuration = gbp_jhbuild_runtime_prepare_configuration;
+  runtime_class->prepare_run_context = gbp_jhbuild_runtime_prepare_run_context;
 
   properties [PROP_EXECUTABLE_PATH] =
     g_param_spec_string ("executable-path", NULL, NULL,

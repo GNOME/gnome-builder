@@ -92,14 +92,6 @@ ide_runtime_real_create_launcher (IdeRuntime  *self,
   IDE_RETURN (ret);
 }
 
-static IdeRunContext *
-ide_runtime_real_create_run_context (IdeRuntime *self)
-{
-  g_assert (IDE_IS_RUNTIME (self));
-
-  return ide_run_context_new ();
-}
-
 static gboolean
 ide_runtime_real_contains_program_in_path (IdeRuntime   *self,
                                            const gchar  *program,
@@ -458,7 +450,6 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
   i_object_class->repr = ide_runtime_repr;
 
   klass->create_launcher = ide_runtime_real_create_launcher;
-  klass->create_run_context = ide_runtime_real_create_run_context;
   klass->create_runner = ide_runtime_real_create_runner;
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
   klass->prepare_configuration = ide_runtime_real_prepare_configuration;
@@ -867,17 +858,29 @@ ide_runtime_supports_toolchain (IdeRuntime   *self,
 }
 
 /**
- * ide_runtime_create_run_context:
+ * ide_runtime_prepare_run_context:
  * @self: a #IdeRuntime
+ * @run_context: an #IdeRunContext
  *
- * Creates a new #IdeRunContext for the runtime.
+ * Prepares a run context to run within the runtime.
  *
- * Returns: (transfer full): an #IdeRunContext
+ * The virtual function implementation should add to the run context anything
+ * necessary to be able to run within the runtime.
+ *
+ * That might include pushing a new layer so that the command will run within
+ * a subcommand such as "flatpak", "jhbuild", or "podman".
  */
-IdeRunContext *
-ide_runtime_create_run_context (IdeRuntime *self)
+void
+ide_runtime_prepare_run_context (IdeRuntime    *self,
+                                 IdeRunContext *run_context)
 {
-  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
+  IDE_ENTRY;
 
-  return IDE_RUNTIME_GET_CLASS (self)->create_run_context (self);
+  g_return_if_fail (IDE_IS_RUNTIME (self));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (IDE_RUNTIME_GET_CLASS (self)->prepare_run_context)
+    IDE_RUNTIME_GET_CLASS (self)->prepare_run_context (self, run_context);
+
+  IDE_EXIT;
 }
