@@ -22,8 +22,10 @@
 
 #include "config.h"
 
-#include "ide-pipeline.h"
 #include "ide-deploy-strategy.h"
+#include "ide-pipeline.h"
+#include "ide-run-context.h"
+#include "ide-runtime.h"
 
 G_DEFINE_ABSTRACT_TYPE (IdeDeployStrategy, ide_deploy_strategy, IDE_TYPE_OBJECT)
 
@@ -121,6 +123,30 @@ ide_deploy_strategy_real_create_runner_finish (IdeDeployStrategy  *self,
 }
 
 static void
+ide_deploy_strategy_real_prepare_run_context (IdeDeployStrategy *self,
+                                              IdePipeline       *pipeline,
+                                              IdeRunContext     *run_context)
+{
+  IdeRuntime *runtime;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEPLOY_STRATEGY (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  /* In the default implementation, for running locally, we just defer to
+   * the pipeline's runtime for how to create a run context.
+   */
+  if ((runtime = ide_pipeline_get_runtime (pipeline)))
+    ide_runtime_prepare_run_context (runtime, run_context);
+  else
+    g_return_if_reached ();
+
+  IDE_EXIT;
+}
+
+static void
 ide_deploy_strategy_class_init (IdeDeployStrategyClass *klass)
 {
   klass->load_async = ide_deploy_strategy_real_load_async;
@@ -129,6 +155,7 @@ ide_deploy_strategy_class_init (IdeDeployStrategyClass *klass)
   klass->deploy_finish = ide_deploy_strategy_real_deploy_finish;
   klass->create_runner_async = ide_deploy_strategy_real_create_runner_async;
   klass->create_runner_finish = ide_deploy_strategy_real_create_runner_finish;
+  klass->prepare_run_context = ide_deploy_strategy_real_prepare_run_context;
 }
 
 static void
@@ -336,4 +363,31 @@ ide_deploy_strategy_create_runner_finish (IdeDeployStrategy  *self,
   ret = IDE_DEPLOY_STRATEGY_GET_CLASS (self)->create_runner_finish (self, result, error);
 
   IDE_RETURN (ret);
+}
+
+/**
+ * ide_deploy_strategy_prepare_run_context:
+ * @self: a #IdeDeployStrategy
+ * @pipeline: an #IdePipeline
+ * @run_context: an #IdeRunContext
+ *
+ * Prepare an #IdeRunContext to run on a device.
+ *
+ * This virtual function should be implemented by device strategies to prepare
+ * a run context for running on a device or deployment situation.
+ *
+ * Typically this is either nothing (in the case of running locally) or pushing
+ * a layer into the run context which is a command to deliver the command to
+ * another device/container/simulator/etc.
+ */
+void
+ide_deploy_strategy_prepare_run_context (IdeDeployStrategy *self,
+                                         IdePipeline       *pipeline,
+                                         IdeRunContext     *run_context)
+{
+  g_return_if_fail (IDE_IS_DEPLOY_STRATEGY (self));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  IDE_DEPLOY_STRATEGY_GET_CLASS (self)->prepare_run_context (self, pipeline, run_context);
 }
