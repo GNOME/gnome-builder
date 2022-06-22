@@ -30,7 +30,7 @@ typedef struct
   char *id;
   char *cwd;
   char *display_name;
-  char **env;
+  char **environ;
   char **argv;
   int priority;
   IdeRunCommandKind kind;
@@ -41,7 +41,7 @@ enum {
   PROP_ARGV,
   PROP_CWD,
   PROP_DISPLAY_NAME,
-  PROP_ENV,
+  PROP_ENVIRON,
   PROP_ID,
   PROP_KIND,
   PROP_PRIORITY,
@@ -87,7 +87,7 @@ ide_run_command_finalize (GObject *object)
   g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->cwd, g_free);
   g_clear_pointer (&priv->display_name, g_free);
-  g_clear_pointer (&priv->env, g_strfreev);
+  g_clear_pointer (&priv->environ, g_strfreev);
   g_clear_pointer (&priv->argv, g_strfreev);
 
   G_OBJECT_CLASS (ide_run_command_parent_class)->finalize (object);
@@ -115,8 +115,8 @@ ide_run_command_get_property (GObject    *object,
       g_value_set_boxed (value, ide_run_command_get_argv (self));
       break;
 
-    case PROP_ENV:
-      g_value_set_boxed (value, ide_run_command_get_env (self));
+    case PROP_ENVIRON:
+      g_value_set_boxed (value, ide_run_command_get_environ (self));
       break;
 
     case PROP_ID:
@@ -158,8 +158,8 @@ ide_run_command_set_property (GObject      *object,
       ide_run_command_set_argv (self, g_value_get_boxed (value));
       break;
 
-    case PROP_ENV:
-      ide_run_command_set_env (self, g_value_get_boxed (value));
+    case PROP_ENVIRON:
+      ide_run_command_set_environ (self, g_value_get_boxed (value));
       break;
 
     case PROP_ID:
@@ -205,8 +205,8 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_ENV] =
-    g_param_spec_boxed ("env", NULL, NULL,
+  properties [PROP_ENVIRON] =
+    g_param_spec_boxed ("environ", NULL, NULL,
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
@@ -345,29 +345,29 @@ ide_run_command_set_argv (IdeRunCommand      *self,
 }
 
 const char * const *
-ide_run_command_get_env (IdeRunCommand *self)
+ide_run_command_get_environ (IdeRunCommand *self)
 {
   IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), NULL);
 
-  return (const char * const *)priv->env;
+  return (const char * const *)priv->environ;
 }
 
 void
-ide_run_command_set_env (IdeRunCommand      *self,
-                          const char * const *env)
+ide_run_command_set_environ (IdeRunCommand      *self,
+                             const char * const *environ)
 {
   IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_RUN_COMMAND (self));
 
-  if (env == (const char * const *)priv->env)
+  if (environ == (const char * const *)priv->environ)
     return;
 
-  g_strfreev (priv->env);
-  priv->env = g_strdupv ((char **)env);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENV]);
+  g_strfreev (priv->environ);
+  priv->environ = g_strdupv ((char **)environ);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENVIRON]);
 }
 
 int

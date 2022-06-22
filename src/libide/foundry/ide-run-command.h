@@ -74,10 +74,10 @@ IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_argv         (IdeRunCommand      *self,
                                                       const char * const *argv);
 IDE_AVAILABLE_IN_ALL
-const char * const *ide_run_command_get_env          (IdeRunCommand      *self);
+const char * const *ide_run_command_get_environ      (IdeRunCommand      *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_run_command_set_env          (IdeRunCommand      *self,
-                                                      const char * const *env);
+void                ide_run_command_set_environ      (IdeRunCommand      *self,
+                                                      const char * const *environ);
 IDE_AVAILABLE_IN_ALL
 int                 ide_run_command_get_priority     (IdeRunCommand      *self);
 IDE_AVAILABLE_IN_ALL

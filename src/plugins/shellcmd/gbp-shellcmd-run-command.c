@@ -76,7 +76,7 @@ gbp_shellcmd_run_command_constructed (GObject *object)
 
   ide_run_command_set_id (IDE_RUN_COMMAND (self), id);
   g_settings_bind (self->settings, "display-name", self, "display-name", G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (self->settings, "env", self, "env", G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (self->settings, "env", self, "environ", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (self->settings, "argv", self, "argv", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (self->settings, "cwd", self, "cwd", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (self->settings, "accelerator", self, "accelerator", G_SETTINGS_BIND_DEFAULT);
@@ -431,7 +431,7 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
 
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
   argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self));
-  env = ide_run_command_get_env (IDE_RUN_COMMAND (self));
+  env = ide_run_command_get_environ (IDE_RUN_COMMAND (self));
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
 
   g_return_val_if_fail (argv != NULL, NULL);
