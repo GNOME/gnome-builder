@@ -58,6 +58,9 @@ void                   ide_run_context_push               (IdeRunContext        
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_push_host          (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_push_expansion     (IdeRunContext         *self,
+                                                           const char * const    *environ);
+IDE_AVAILABLE_IN_ALL
 const char * const    *ide_run_context_get_argv           (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_set_argv           (IdeRunContext         *self,
