@@ -94,7 +94,9 @@ gbp_jhbuild_runtime_run_handler (IdeRunContext       *run_context,
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_JHBUILD_RUNTIME (run_context));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_JHBUILD_RUNTIME (self));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
 
   /* First merge our FDs so we can be sure there are no collisions (there
