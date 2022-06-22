@@ -54,10 +54,7 @@ void                   ide_run_context_push               (IdeRunContext        
                                                            gpointer               handler_data,
                                                            GDestroyNotify         handler_data_destroy);
 IDE_AVAILABLE_IN_ALL
-gboolean               ide_run_context_get_run_on_host    (IdeRunContext         *self);
-IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_set_run_on_host    (IdeRunContext         *self,
-                                                           gboolean               run_on_host);
+void                   ide_run_context_push_host          (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
 const char * const    *ide_run_context_get_argv           (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL

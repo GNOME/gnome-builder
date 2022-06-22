@@ -48,7 +48,6 @@ struct _IdeRunContext
   GQueue             layers;
   IdeRunContextLayer root;
   guint              ended : 1;
-  guint              run_on_host : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeRunContext, ide_run_context, G_TYPE_OBJECT)
@@ -169,6 +168,84 @@ ide_run_context_push (IdeRunContext        *self,
   g_queue_push_head_link (&self->layers, &layer->qlink);
 }
 
+static gboolean
+ide_run_context_host_handler (IdeRunContext       *self,
+                              const char * const  *argv,
+                              const char * const  *env,
+                              const char          *cwd,
+                              IdeUnixFDMap        *unix_fd_map,
+                              gpointer             user_data,
+                              GError             **error)
+{
+  guint length;
+
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+  g_assert (argv != NULL);
+  g_assert (env != NULL);
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+  g_assert (ide_is_flatpak ());
+
+  ide_run_context_append_argv (self, "flatpak-spawn");
+  ide_run_context_append_argv (self, "--host");
+  ide_run_context_append_argv (self, "--clear-env");
+  ide_run_context_append_argv (self, "--share-pids");
+  ide_run_context_append_argv (self, "--watch-bus");
+
+  if (env != NULL)
+    {
+      for (guint i = 0; env[i]; i++)
+        ide_run_context_append_formatted (self, "--env=%s", env[i]);
+    }
+
+  if (cwd != NULL)
+    ide_run_context_append_formatted (self, "--directory=%s", cwd);
+
+  if ((length = ide_unix_fd_map_get_length (unix_fd_map)))
+    {
+      if (!ide_run_context_merge_unix_fd_map (self, unix_fd_map, error))
+        return FALSE;
+
+      for (guint i = 0; i < length; i++)
+        {
+          int source_fd;
+          int dest_fd;
+
+          source_fd = ide_unix_fd_map_peek (unix_fd_map, i, &dest_fd);
+
+          if (source_fd != -1 && dest_fd != -1)
+            ide_run_context_append_formatted (self, "--forward-fd=%d", dest_fd);
+        }
+    }
+
+  /* Now append the arguments */
+  ide_run_context_append_args (self, argv);
+
+  return TRUE;
+}
+
+/**
+ * ide_run_context_push_host:
+ * @self: a #IdeRunContext
+ *
+ * Pushes handler to transform command to run on host.
+ *
+ * If necessary, a layer is pushed to ensure the command is run on the
+ * host instead of the application container.
+ *
+ * If Builder is running on the host already, this function does nothing.
+ */
+void
+ide_run_context_push_host (IdeRunContext *self)
+{
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  if (ide_is_flatpak ())
+    ide_run_context_push (self,
+                          ide_run_context_host_handler,
+                          NULL,
+                          NULL);
+}
+
 const char * const *
 ide_run_context_get_argv (IdeRunContext *self)
 {
@@ -278,23 +355,6 @@ ide_run_context_add_environ (IdeRunContext      *self,
       g_clear_pointer (dest, g_free);
       *dest = g_strdup (pair);
     }
-}
-
-gboolean
-ide_run_context_get_run_on_host (IdeRunContext *self)
-{
-  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), FALSE);
-
-  return self->run_on_host;
-}
-
-void
-ide_run_context_set_run_on_host (IdeRunContext *self,
-                                 gboolean       run_on_host)
-{
-  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
-
-  self->run_on_host = !!run_on_host;
 }
 
 const char *
@@ -716,7 +776,6 @@ ide_run_context_end (IdeRunContext  *self,
   ide_subprocess_launcher_set_argv (launcher, ide_run_context_get_argv (self));
   ide_subprocess_launcher_set_environ (launcher, ide_run_context_get_environ (self));
   ide_subprocess_launcher_set_cwd (launcher, cwd);
-  ide_subprocess_launcher_set_run_on_host (launcher, self->run_on_host);
 
   return g_steal_pointer (&launcher);
 }
