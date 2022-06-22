@@ -201,19 +201,18 @@ new_terminal_activate (GSimpleAction *action,
 
 static void
 on_run_manager_run (GbpTerminalWorkspaceAddin *self,
-                    IdeRunner                 *runner,
+                    IdeRunContext             *run_context,
                     IdeRunManager             *run_manager)
 {
-  IdeEnvironment *env;
-  VtePty *pty = NULL;
   g_autoptr(GDateTime) now = NULL;
-  g_autofree gchar *formatted = NULL;
-  g_autofree gchar *tmp = NULL;
+  g_autofree char *formatted = NULL;
+  g_autofree char *tmp = NULL;
+  VtePty *pty = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
   /*
@@ -223,9 +222,7 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
    * terminal instance.
    */
 
-  pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
-
-  if (pty == NULL)
+  if (!(pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL)))
     {
       g_warning ("Failed to allocate PTY for run output");
       IDE_GOTO (failure);
@@ -260,11 +257,10 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
   if (self->run_panel != NULL)
     panel_widget_raise (PANEL_WIDGET (self->run_panel));
 
-  ide_runner_set_pty (runner, pty);
-
-  env = ide_runner_get_environment (runner);
-  ide_environment_setenv (env, "TERM", "xterm-256color");
-  ide_environment_setenv (env, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
+  ide_run_context_push (run_context, NULL, NULL, NULL);
+  ide_run_context_set_pty (run_context, vte_pty_get_fd (pty));
+  ide_run_context_setenv (run_context, "TERM", "xterm-256color");
+  ide_run_context_setenv (run_context, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
 
   now = g_date_time_new_now_local ();
   tmp = g_date_time_format (now, "%X");
