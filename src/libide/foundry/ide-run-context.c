@@ -707,39 +707,6 @@ ide_run_context_callback_layer (IdeRunContext       *self,
   return ret;
 }
 
-static char *
-ide_run_context_expand_cwd (IdeRunContext *self)
-{
-  g_autoptr(GString) str = NULL;
-  const char *envval;
-  const char *cwd;
-
-  g_assert (IDE_IS_RUN_CONTEXT (self));
-
-  if (!(cwd = ide_run_context_get_cwd (self)))
-    return NULL;
-
-  str = g_string_new (cwd);
-
-  if ((envval = ide_run_context_getenv (self, "BUILDDIR")))
-    g_string_replace (str, "$BUILDDIR", envval, 0);
-
-  if ((envval = ide_run_context_getenv (self, "SRCDIR")))
-    g_string_replace (str, "$SRCDIR", envval, 0);
-
-  if ((envval = ide_run_context_getenv (self, "HOME")))
-    g_string_replace (str, "$HOME", envval, 0);
-  else
-    g_string_replace (str, "$HOME", g_get_home_dir (), 0);
-
-  if ((envval = ide_run_context_getenv (self, "USER")))
-    g_string_replace (str, "$USER", envval, 0);
-  else
-    g_string_replace (str, "$USER", g_get_user_name (), 0);
-
-  return ide_path_expand (str->str);
-}
-
 /**
  * ide_run_context_end:
  * @self: a #IdeRunContext
@@ -752,7 +719,6 @@ ide_run_context_end (IdeRunContext  *self,
                      GError        **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autofree char *cwd = NULL;
 
   g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
   g_return_val_if_fail (self->ended == FALSE, NULL);
@@ -769,13 +735,11 @@ ide_run_context_end (IdeRunContext  *self,
         return FALSE;
     }
 
-  cwd = ide_run_context_expand_cwd (self);
-
   launcher = ide_subprocess_launcher_new (0);
 
   ide_subprocess_launcher_set_argv (launcher, ide_run_context_get_argv (self));
   ide_subprocess_launcher_set_environ (launcher, ide_run_context_get_environ (self));
-  ide_subprocess_launcher_set_cwd (launcher, cwd);
+  ide_subprocess_launcher_set_cwd (launcher, ide_run_context_get_cwd (self));
 
   return g_steal_pointer (&launcher);
 }
