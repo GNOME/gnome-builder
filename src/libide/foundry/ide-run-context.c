@@ -48,6 +48,7 @@ struct _IdeRunContext
   GQueue             layers;
   IdeRunContextLayer root;
   guint              ended : 1;
+  guint              run_on_host : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeRunContext, ide_run_context, G_TYPE_OBJECT)
@@ -277,6 +278,23 @@ ide_run_context_add_environ (IdeRunContext      *self,
       g_clear_pointer (dest, g_free);
       *dest = g_strdup (pair);
     }
+}
+
+gboolean
+ide_run_context_get_run_on_host (IdeRunContext *self)
+{
+  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), FALSE);
+
+  return self->run_on_host;
+}
+
+void
+ide_run_context_set_run_on_host (IdeRunContext *self,
+                                 gboolean       run_on_host)
+{
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  self->run_on_host = !!run_on_host;
 }
 
 const char *
@@ -644,6 +662,7 @@ ide_run_context_end (IdeRunContext  *self,
   ide_subprocess_launcher_set_argv (launcher, ide_run_context_get_argv (self));
   ide_subprocess_launcher_set_environ (launcher, ide_run_context_get_environ (self));
   ide_subprocess_launcher_set_cwd (launcher, ide_run_context_get_cwd (self));
+  ide_subprocess_launcher_set_run_on_host (launcher, self->run_on_host);
 
   return g_steal_pointer (&launcher);
 }
