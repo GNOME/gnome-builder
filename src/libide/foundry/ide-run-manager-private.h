@@ -29,7 +29,7 @@ typedef struct
   char           *id;
   char           *title;
   char           *icon_name;
-  gint            priority;
+  int             priority;
   IdeRunHandler   handler;
   gpointer        handler_data;
   GDestroyNotify  handler_data_destroy;
