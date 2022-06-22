@@ -258,7 +258,7 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
     panel_widget_raise (PANEL_WIDGET (self->run_panel));
 
   ide_run_context_push (run_context, NULL, NULL, NULL);
-  ide_run_context_set_pty (run_context, vte_pty_get_fd (pty));
+  ide_run_context_set_pty (run_context, pty);
   ide_run_context_setenv (run_context, "TERM", "xterm-256color");
   ide_run_context_setenv (run_context, "INSIDE_GNOME_BUILDER", PACKAGE_VERSION);
 
