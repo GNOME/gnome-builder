@@ -246,6 +246,164 @@ ide_run_context_push_host (IdeRunContext *self)
                           NULL);
 }
 
+static gboolean
+next_variable (const char *str,
+               guint      *cursor,
+               guint      *begin)
+{
+  for (guint i = *cursor; str[i]; i++)
+    {
+      /* Skip past escaped $ */
+      if (str[i] == '\\' && str[i+1] == '$')
+        {
+          i++;
+          continue;
+        }
+
+      if (str[i] == '$')
+        {
+          *begin = i;
+          *cursor = i;
+
+          for (guint j = i+1; str[j]; j++)
+            {
+              if (!g_ascii_isalnum (str[j]) && str[j] != '_')
+                {
+                  *cursor = j;
+                  break;
+                }
+            }
+
+          if (*cursor > ((*begin) + 1))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static char *
+wordexp_with_environ (const char         *input,
+                      const char * const *environ)
+{
+  g_autoptr(GString) str = NULL;
+  guint cursor = 0;
+  guint begin;
+
+  g_assert (input != NULL);
+  g_assert (environ != NULL);
+
+  str = g_string_new (input);
+
+  while (next_variable (str->str, &cursor, &begin))
+    {
+      g_autofree char *key = NULL;
+      guint key_len = cursor - begin;
+      const char *value;
+      guint value_len;
+
+      g_assert (str->str[begin] == '$');
+
+      key = g_strndup (str->str + begin, key_len);
+      value = g_environ_getenv ((char **)environ, key+1);
+      value_len = value ? strlen (value) : 0;
+
+      if (value != NULL)
+        {
+          g_string_erase (str, begin, key_len);
+          g_string_insert_len (str, begin, value, value_len);
+
+          if (value_len > key_len)
+            cursor += (value_len - key_len);
+          else if (value_len < key_len)
+            cursor -= (key_len - value_len);
+        }
+    }
+
+  return g_string_free (g_steal_pointer (&str), FALSE);
+}
+
+static gboolean
+ide_run_context_expansion_handler (IdeRunContext       *self,
+                                   const char * const  *argv,
+                                   const char * const  *env,
+                                   const char          *cwd,
+                                   IdeUnixFDMap        *unix_fd_map,
+                                   gpointer             user_data,
+                                   GError             **error)
+{
+  const char * const *environ = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+  g_assert (argv != NULL);
+  g_assert (environ != NULL);
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  if (!ide_run_context_merge_unix_fd_map (self, unix_fd_map, error))
+    IDE_RETURN (FALSE);
+
+  if (cwd != NULL)
+    {
+      g_autofree char *newcwd = wordexp_with_environ (cwd, environ);
+      g_autofree char *expanded = ide_path_expand (newcwd);
+
+      ide_run_context_set_cwd (self, expanded);
+    }
+
+  if (env != NULL)
+    {
+      g_autoptr(GArray) newenv = g_array_new (TRUE, TRUE, sizeof (char *));
+
+      for (guint i = 0; env[i]; i++)
+        {
+          char *expanded = wordexp_with_environ (env[i], environ);
+          g_array_append_val (newenv, expanded);
+        }
+
+      ide_run_context_set_environ (self, (const char * const *)(gpointer)newenv->data);
+    }
+
+  if (argv != NULL)
+    {
+      g_autoptr(GArray) newargv = g_array_new (TRUE, TRUE, sizeof (char *));
+
+      for (guint i = 0; argv[i]; i++)
+        {
+          char *expanded = wordexp_with_environ (argv[i], environ);
+          g_array_append_val (newargv, expanded);
+        }
+
+      ide_run_context_set_argv (self, (const char * const *)(gpointer)newargv->data);
+    }
+
+  IDE_RETURN (TRUE);
+}
+
+/**
+ * ide_run_context_push_expansion:
+ * @self: a #IdeRunContext
+ *
+ * Pushes a layer to expand known environment variables.
+ *
+ * The command argv and cwd will have `$FOO` style environment
+ * variables expanded that are known. This can be useful to allow
+ * things like `$BUILDDIR` be expanded at this layer.
+ */
+void
+ide_run_context_push_expansion (IdeRunContext      *self,
+                                const char * const *environ)
+{
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  if (environ != NULL)
+    ide_run_context_push (self,
+                          ide_run_context_expansion_handler,
+                          g_strdupv ((char **)environ),
+                          (GDestroyNotify)g_strfreev);
+}
+
 const char * const *
 ide_run_context_get_argv (IdeRunContext *self)
 {
