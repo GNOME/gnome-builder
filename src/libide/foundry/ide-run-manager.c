@@ -37,13 +37,12 @@
 
 #include "ide-build-manager.h"
 #include "ide-build-system.h"
-#include "ide-config-manager.h"
-#include "ide-config.h"
 #include "ide-deploy-strategy.h"
 #include "ide-device-manager.h"
 #include "ide-foundry-compat.h"
 #include "ide-run-command.h"
 #include "ide-run-command-provider.h"
+#include "ide-run-context.h"
 #include "ide-run-manager-private.h"
 #include "ide-run-manager.h"
 #include "ide-runner.h"
@@ -60,7 +59,7 @@ struct _IdeRunManager
   const IdeRunHandlerInfo *handler;
   GList                   *handlers;
 
-  IdeRunner               *current_runner;
+  IdeSubprocess           *current_subprocess;
   IdeRunCommand           *current_run_command;
 
   /* Keep track of last change sequence from the file monitor
@@ -202,42 +201,21 @@ ide_run_manager_actions_default_run_command (IdeRunManager *self,
 }
 
 static void
-ide_run_manager_real_run (IdeRunManager *self,
-                          IdeRunner     *runner)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (IDE_IS_RUNNER (runner));
-
-  /* Setup G_MESSAGES_DEBUG environment variable if necessary */
-  if (self->messages_debug_all)
-    {
-      IdeEnvironment *env = ide_runner_get_environment (runner);
-      ide_environment_setenv (env, "G_MESSAGES_DEBUG", "all");
-    }
-
-  /*
-   * If the current handler has a callback specified (our default "run" handler
-   * does not), then we need to allow that handler to prepare the runner.
-   */
-  if (self->handler != NULL && self->handler->handler != NULL)
-    self->handler->handler (self, runner, self->handler->handler_data);
-
-  IDE_EXIT;
-}
-
-static void
 ide_run_handler_info_free (gpointer data)
 {
   IdeRunHandlerInfo *info = data;
 
-  g_free (info->id);
-  g_free (info->title);
-  g_free (info->icon_name);
+  g_clear_pointer (&info->id, g_free);
+  g_clear_pointer (&info->title, g_free);
+  g_clear_pointer (&info->icon_name, g_free);
 
   if (info->handler_data_destroy)
-    info->handler_data_destroy (info->handler_data);
+    {
+      GDestroyNotify notify = g_steal_pointer (&info->handler_data_destroy);
+      gpointer notify_data = g_steal_pointer (&info->handler_data);
+
+      notify (notify_data);
+    }
 
   g_slice_free (IdeRunHandlerInfo, info);
 }
@@ -309,9 +287,8 @@ ide_run_manager_dispose (GObject *object)
   g_clear_pointer (&self->default_run_command, g_free);
 
   g_clear_object (&self->cancellable);
-
   g_clear_object (&self->current_run_command);
-  g_clear_object (&self->current_runner);
+  g_clear_object (&self->current_subprocess);
 
   ide_clear_and_destroy_object (&self->run_command_providers);
 
@@ -426,29 +403,26 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
   /**
    * IdeRunManager::run:
    * @self: An #IdeRunManager
-   * @runner: An #IdeRunner
+   * @run_context: An #IdeRunContext
    *
-   * This signal is emitted right before ide_runner_run_async() is called
-   * on an #IdeRunner. It can be used by plugins to tweak things right
-   * before the runner is executed.
+   * This signal is emitted to allow plugins to add additional settings to a
+   * run context before a launcher is created.
    *
-   * The current run handler (debugger, profiler, etc) is run as the default
-   * handler for this function. So connect with %G_SIGNAL_AFTER if you want
-   * to be nofied after the run handler has executed. It's unwise to change
-   * things that the run handler might expect. Generally if you want to
-   * change settings, do that before the run handler has exected.
+   * Generally this can only be used in certain situations and you probably
+   * want to modify the run context in another way such as a deploy strategry,
+   * runtime, or similar.
    */
   signals [RUN] =
     g_signal_new_class_handler ("run",
                                 G_TYPE_FROM_CLASS (klass),
                                 G_SIGNAL_RUN_LAST,
-                                G_CALLBACK (ide_run_manager_real_run),
+                                NULL,
                                 NULL,
                                 NULL,
                                 NULL,
                                 G_TYPE_NONE,
                                 1,
-                                IDE_TYPE_RUNNER);
+                                IDE_TYPE_RUN_CONTEXT);
 
   /**
    * IdeRunManager::stopped:
@@ -497,9 +471,9 @@ ide_run_manager_check_busy (IdeRunManager  *self,
 }
 
 static void
-copy_builtin_envvars (IdeEnvironment *environment)
+setup_basic_environment (IdeRunContext *run_context)
 {
-  static const gchar *copy_env[] = {
+  static const char *copy_env[] = {
     "AT_SPI_BUS_ADDRESS",
     "COLORTERM",
     "DBUS_SESSION_BUS_ADDRESS",
@@ -515,7 +489,10 @@ copy_builtin_envvars (IdeEnvironment *environment)
     "XDG_CURRENT_DESKTOP",
     "XDG_MENU_PREFIX",
 #if 0
-    /* Can't copy these as they could mess up Flatpak */
+    /* Can't copy these as they could mess up Flatpak. We might
+     * be able to add something to run-context to allow the flatpak
+     * plugin to filter them out without affecting others.
+     */
     "XDG_DATA_DIRS",
     "XDG_RUNTIME_DIR",
 #endif
@@ -529,76 +506,95 @@ copy_builtin_envvars (IdeEnvironment *environment)
 
   for (guint i = 0; i < G_N_ELEMENTS (copy_env); i++)
     {
-      const gchar *key = copy_env[i];
-      const gchar *val = g_environ_getenv ((gchar **)host_environ, key);
+      const char *key = copy_env[i];
+      const char *val = g_environ_getenv ((char **)host_environ, key);
 
-      if (val != NULL && ide_environment_getenv (environment, key) == NULL)
-        ide_environment_setenv (environment, key, val);
+      if (val != NULL)
+        ide_run_context_setenv (run_context, key, val);
     }
 }
 
 static void
-apply_color_scheme (IdeEnvironment *env,
-                    const char     *color_scheme)
+apply_messages_debug (IdeRunContext *run_context,
+                      gboolean       messages_debug_all)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_ENVIRONMENT (env));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (messages_debug_all)
+    ide_run_context_setenv (run_context, "G_MESSAGES_DEBUG", "all");
+
+  IDE_EXIT;
+}
+
+static void
+apply_color_scheme (IdeRunContext *run_context,
+                    const char    *color_scheme)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (color_scheme != NULL);
 
   g_debug ("Applying color-scheme \"%s\"", color_scheme);
 
   if (ide_str_equal0 (color_scheme, "follow"))
     {
-      ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", NULL);
-      ide_environment_setenv (env, "HDY_DEBUG_COLOR_SCHEME", NULL);
+      ide_run_context_unsetenv (run_context, "ADW_DEBUG_COLOR_SCHEME");
+      ide_run_context_unsetenv (run_context, "HDY_DEBUG_COLOR_SCHEME");
     }
   else if (ide_str_equal0 (color_scheme, "force-light"))
     {
-      ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", "prefer-light");
-      ide_environment_setenv (env, "HDY_DEBUG_COLOR_SCHEME", "prefer-light");
+      ide_run_context_setenv (run_context, "ADW_DEBUG_COLOR_SCHEME", "prefer-light");
+      ide_run_context_setenv (run_context, "HDY_DEBUG_COLOR_SCHEME", "prefer-light");
     }
   else if (ide_str_equal0 (color_scheme, "force-dark"))
     {
-      ide_environment_setenv (env, "ADW_DEBUG_COLOR_SCHEME", "prefer-dark");
-      ide_environment_setenv (env, "HDY_DEBUG_COLOR_SCHEME", "prefer-dark");
+      ide_run_context_setenv (run_context, "ADW_DEBUG_COLOR_SCHEME", "prefer-dark");
+      ide_run_context_setenv (run_context, "HDY_DEBUG_COLOR_SCHEME", "prefer-dark");
     }
-  else g_warn_if_reached ();
+  else
+    {
+      g_warn_if_reached ();
+    }
 
   IDE_EXIT;
 }
 
 static void
-apply_high_contrast (IdeEnvironment *env,
-                     gboolean        high_contrast)
+apply_high_contrast (IdeRunContext *run_context,
+                     gboolean       high_contrast)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_ENVIRONMENT (env));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   g_debug ("Applying high-contrast %d", high_contrast);
 
   if (high_contrast)
     {
-      ide_environment_setenv (env, "ADW_DEBUG_HIGH_CONTRAST", "1");
-      ide_environment_setenv (env, "HDY_DEBUG_HIGH_CONTRAST", "1");
+      ide_run_context_setenv (run_context, "ADW_DEBUG_HIGH_CONTRAST", "1");
+      ide_run_context_setenv (run_context, "HDY_DEBUG_HIGH_CONTRAST", "1");
     }
   else
     {
-      ide_environment_setenv (env, "ADW_DEBUG_HIGH_CONTRAST", NULL);
-      ide_environment_setenv (env, "HDY_DEBUG_HIGH_CONTRAST", NULL);
+      ide_run_context_unsetenv (run_context, "ADW_DEBUG_HIGH_CONTRAST");
+      ide_run_context_unsetenv (run_context, "HDY_DEBUG_HIGH_CONTRAST");
     }
 
   IDE_EXIT;
 }
 
 static void
-apply_text_direction (IdeEnvironment *env,
-                      const char     *text_dir_str)
+apply_text_direction (IdeRunContext *run_context,
+                      const char    *text_dir_str)
 {
-  g_autofree char *value = NULL;
   GtkTextDirection dir;
-  const char *gtk_debug;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   if (ide_str_equal0 (text_dir_str, "rtl"))
     dir = GTK_TEXT_DIR_RTL;
@@ -607,15 +603,10 @@ apply_text_direction (IdeEnvironment *env,
   else
     g_return_if_reached ();
 
-  if (dir == gtk_widget_get_default_direction ())
-    return;
+  if (dir != gtk_widget_get_default_direction ())
+    ide_run_context_setenv (run_context, "GTK_DEBUG", "invert-text-dir");
 
-  if ((gtk_debug = ide_environment_getenv (env, "GTK_DEBUG")))
-    value = g_strdup_printf ("%s:invert-text-dir", gtk_debug);
-  else
-    value = g_strdup ("invert-text-dir");
-
-  ide_environment_setenv (env, "GTK_DEBUG", value);
+  IDE_EXIT;
 }
 
 static inline const char *
@@ -728,154 +719,112 @@ ide_run_manager_install_finish (IdeRunManager  *self,
 }
 
 static void
-ide_run_manager_run_runner_run_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
+ide_run_manager_run_subprocess_wait_check_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
 {
-  IdeRunner *runner = (IdeRunner *)object;
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeRunManager *self;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   self = ide_task_get_source_object (task);
-
   g_assert (IDE_IS_RUN_MANAGER (self));
 
   if (self->notif != NULL)
-    {
-      ide_notification_withdraw (self->notif);
-      g_clear_object (&self->notif);
-    }
+    ide_notification_withdraw (self->notif);
 
-  g_clear_object (&self->current_runner);
+  g_clear_object (&self->notif);
+  g_clear_object (&self->current_subprocess);
 
-  if (!ide_runner_run_finish (runner, result, &error))
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
 
   g_signal_emit (self, signals[STOPPED], 0);
 
-  ide_object_destroy (IDE_OBJECT (runner));
-
   IDE_EXIT;
 }
 
-static gboolean
-ide_run_manager_prepare_runner (IdeRunManager  *self,
-                                IdeRunner      *runner,
-                                GError        **error)
-{
-  g_autofree char *title = NULL;
-  IdeConfigManager *config_manager;
-  IdeEnvironment *environment;
-  IdeContext *context;
-  const char *color_scheme;
-  const char *run_opts;
-  const char *name;
-  IdeConfig *config;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (IDE_IS_RUNNER (runner));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  config_manager = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (config_manager);
-
-  /* Add our run arguments if specified in the config. */
-  if (NULL != (run_opts = ide_config_get_run_opts (config)))
-    {
-      g_auto(GStrv) argv = NULL;
-      gint argc;
-
-      if (g_shell_parse_argv (run_opts, &argc, &argv, NULL))
-        {
-          for (gint i = 0; i < argc; i++)
-            ide_runner_append_argv (runner, argv[i]);
-        }
-    }
-
-  /* Add our runtime environment variables. */
-  environment = ide_runner_get_environment (runner);
-  copy_builtin_envvars (environment);
-  ide_environment_copy_into (ide_config_get_runtime_environment (config), environment, TRUE);
-
-  /* Add debugging overrides */
-  color_scheme = get_action_state_string (self, "color-scheme");
-  apply_color_scheme (environment, color_scheme);
-  apply_high_contrast (environment, get_action_state_bool (self, "high-contrast"));
-  apply_text_direction (environment, get_action_state_string (self, "text-direction"));
-
-  g_signal_emit (self, signals [RUN], 0, runner);
-
-  if (ide_runner_get_failed (runner))
-    {
-      g_set_error (error,
-                   IDE_RUNTIME_ERROR,
-                   IDE_RUNTIME_ERROR_SPAWN_FAILED,
-                   "Failed to execute the application");
-      IDE_RETURN (FALSE);
-    }
-
-  if (self->notif != NULL)
-    {
-      ide_notification_withdraw (self->notif);
-      g_clear_object (&self->notif);
-    }
-
-  self->notif = ide_notification_new ();
-  name = ide_run_command_get_display_name (self->current_run_command);
-  /* translators: %s is replaced with the name of the users executable */
-  title = g_strdup_printf (_("Running %s…"), name);
-  ide_notification_set_title (self->notif, title);
-  ide_notification_attach (self->notif, IDE_OBJECT (self));
-
-  g_set_object (&self->current_runner, runner);
-
-  IDE_RETURN (TRUE);
-}
-
 static void
-ide_run_manager_run_create_runner_cb (GObject      *object,
-                                      GAsyncResult *result,
-                                      gpointer      user_data)
+ide_run_manager_prepare_run_context (IdeRunManager *self,
+                                     IdeRunContext *run_context,
+                                     IdeRunCommand *run_command)
 {
-  IdeDeviceManager *device_manager = (IdeDeviceManager *)object;
-  g_autoptr(IdeRunner) runner = NULL;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  IdeRunManager *self;
-
   IDE_ENTRY;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  self = ide_task_get_source_object (task);
-
   g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (IDE_IS_RUN_COMMAND (run_command));
 
-  if (!(runner = ide_device_manager_create_runner_finish (device_manager, result, &error)) ||
-      !ide_run_manager_prepare_runner (self, runner, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
+  /* The very first thing we need to do is allow the current run handler
+   * to inject any command wrapper it needs. This might be something like
+   * gdb, or valgrind, etc.
+   */
+  if (self->handler && self->handler->handler)
+    self->handler->handler (self, run_context, self->handler->handler_data);
 
-  ide_runner_run_async (runner,
-                        ide_task_get_cancellable (task),
-                        ide_run_manager_run_runner_run_cb,
-                        g_object_ref (task));
+  /* First we need to setup our basic runtime envronment so that we can be
+   * reasonably certain the application can access the desktop session.
+   */
+  setup_basic_environment (run_context);
+
+  /* Now push a new layer so that we can keep those values separate from
+   * what is configured in the run command. The run-command's environment
+   * will override anything set in our layer above.
+   */
+  ide_run_context_push (run_context, NULL, NULL, NULL);
+
+  /* Setup working directory */
+  {
+    const char *cwd = ide_run_command_get_cwd (run_command);
+
+    if (cwd != NULL)
+      ide_run_context_set_cwd (run_context, cwd);
+  }
+
+  /* Setup command arguments */
+  {
+    const char * const *argv = ide_run_command_get_argv (run_command);
+
+    if (argv != NULL && argv[0] != NULL)
+      ide_run_context_append_args (run_context, argv);
+  }
+
+  /* Setup command environment */
+  {
+    const char * const *env = ide_run_command_get_environ (run_command);
+
+    if (env != NULL && env[0] != NULL)
+      ide_run_context_add_environ (run_context, env);
+  }
+
+  /* Now overlay runtime-tweaks as needed. Put this in a layer so that
+   * we can debug where things are set/changed to help us when we need
+   * to track down bugs in handlers/runtimes/devices/etc. All of our
+   * changes will get persisted to the lower layer when merging anyway.
+   *
+   * TODO: These could probably be moved into a plugin rather than in
+   * the foundry itself. That way they can be disabled by users who are
+   * doing nothing with GTK/GNOME applications.
+   */
+  ide_run_context_push (run_context, NULL, NULL, NULL);
+  apply_color_scheme (run_context, get_action_state_string (self, "color-scheme"));
+  apply_high_contrast (run_context, get_action_state_bool (self, "high-contrast"));
+  apply_text_direction (run_context, get_action_state_string (self, "text-direction"));
+  apply_messages_debug (run_context, self->messages_debug_all);
+
+  /* Allow plugins to track anything in the mix. For example the
+   * terminal plugin will attach a PTY here for stdin/stdout/stderr.
+   */
+  g_signal_emit (self, signals [RUN], 0, run_context);
 
   IDE_EXIT;
 }
@@ -885,30 +834,91 @@ ide_run_manager_run_deploy_cb (GObject      *object,
                                GAsyncResult *result,
                                gpointer      user_data)
 {
-  IdeDeviceManager *device_manager = (IdeDeviceManager *)object;
+  IdeDeployStrategy *deploy_strategy = (IdeDeployStrategy *)object;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeNotification *notif;
+  IdeRunManager *self;
   IdePipeline *pipeline;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+  g_assert (IDE_IS_DEPLOY_STRATEGY (deploy_strategy));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
+  self = ide_task_get_source_object (task);
   pipeline = ide_task_get_task_data (task);
+  notif = g_object_get_data (G_OBJECT (deploy_strategy), "PROGRESS");
 
+  g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_NOTIFICATION (notif));
 
-  if (!ide_device_manager_deploy_finish (device_manager, result, &error))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_device_manager_create_runner_async (device_manager,
-                                            pipeline,
-                                            ide_task_get_cancellable (task),
-                                            ide_run_manager_run_create_runner_cb,
-                                            g_object_ref (task));
+  /* Withdraw our deploy notification */
+  ide_notification_withdraw (notif);
+  ide_object_destroy (IDE_OBJECT (notif));
+
+  if (!ide_deploy_strategy_deploy_finish (deploy_strategy, result, &error))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (self->current_run_command == NULL)
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_CANCELLED,
+                                 "The operation was cancelled");
+      IDE_EXIT;
+    }
+
+  /* Setup the run context */
+  run_context = ide_run_context_new ();
+  ide_deploy_strategy_prepare_run_context (deploy_strategy, pipeline, run_context);
+  ide_run_manager_prepare_run_context (self, run_context, self->current_run_command);
+
+  /* Now setup our launcher and bail if there was a failure */
+  if (!(launcher = ide_run_context_end (run_context, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  /* Bail if we couldn't actually launch anything */
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  if (self->notif != NULL)
+    ide_notification_withdraw (self->notif);
+
+  /* Setup notification */
+  {
+    const char *name = ide_run_command_get_display_name (self->current_run_command);
+    /* translators: %s is replaced with the name of the users run command */
+    g_autofree char *title = g_strdup_printf (_("Running %s…"), name);
+
+    g_clear_object (&self->notif);
+    self->notif = g_object_new (IDE_TYPE_NOTIFICATION,
+                                "id", "org.gnome.builder.run-manager.run",
+                                "title", title,
+                                NULL);
+    ide_notification_attach (self->notif, IDE_OBJECT (self));
+  }
+
+  /* Wait for the application to finish running */
+  ide_subprocess_wait_check_async (subprocess,
+                                   ide_task_get_cancellable (task),
+                                   ide_run_manager_run_subprocess_wait_check_cb,
+                                   g_object_ref (task));
 
   IDE_EXIT;
 }
@@ -919,10 +929,12 @@ ide_run_manager_run_discover_run_command_cb (GObject      *object,
                                              gpointer      user_data)
 {
   IdeRunManager *self = (IdeRunManager *)object;
+  g_autoptr(IdeNotification) notif = NULL;
   g_autoptr(IdeRunCommand) run_command = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  IdeDeviceManager *device_manager;
+  IdeDeployStrategy *deploy_strategy;
+  GCancellable *cancellable;
   IdePipeline *pipeline;
   IdeContext *context;
 
@@ -941,20 +953,39 @@ ide_run_manager_run_discover_run_command_cb (GObject      *object,
 
   g_set_object (&self->current_run_command, run_command);
 
+  cancellable = ide_task_get_cancellable (task);
+  g_assert (!cancellable || G_IS_CANCELLABLE (task));
+
   pipeline = ide_task_get_task_data (task);
   g_assert (IDE_IS_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (pipeline));
   g_assert (IDE_IS_CONTEXT (context));
 
-  device_manager = ide_device_manager_from_context (context);
-  g_assert (IDE_IS_DEVICE_MANAGER (device_manager));
+  deploy_strategy = ide_pipeline_get_deploy_strategy (pipeline);
+  g_assert (IDE_IS_DEPLOY_STRATEGY (deploy_strategy));
 
-  ide_device_manager_deploy_async (device_manager,
-                                   pipeline,
-                                   ide_task_get_cancellable (task),
-                                   ide_run_manager_run_deploy_cb,
-                                   g_object_ref (task));
+  notif = g_object_new (IDE_TYPE_NOTIFICATION,
+                        "id", "org.gnome.builder.run-manager.deploy",
+                        "title", _("Deploying to device…"),
+                        "icon-name", "package-x-generic-symbolic",
+                        "has-progress", TRUE,
+                        "progress-is-imprecise", FALSE,
+                        NULL);
+  ide_notification_attach (notif, IDE_OBJECT (context));
+  g_object_set_data_full (G_OBJECT (deploy_strategy),
+                          "PROGRESS",
+                          g_object_ref (notif),
+                          g_object_unref);
+
+  ide_deploy_strategy_deploy_async (deploy_strategy,
+                                    pipeline,
+                                    ide_notification_file_progress_callback,
+                                    g_object_ref (notif),
+                                    g_object_unref,
+                                    cancellable,
+                                    ide_run_manager_run_deploy_cb,
+                                    g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -1096,12 +1127,13 @@ ide_run_manager_cancel (IdeRunManager *self)
    * of cancelling a bunch of in-flight things. This is more useful since
    * it means that we can override the exit signal.
    */
-  if (self->current_runner != NULL)
+  if (self->current_subprocess != NULL)
     {
-      ide_runner_force_quit (self->current_runner);
+      ide_subprocess_force_exit (self->current_subprocess);
       IDE_EXIT;
     }
 
+  /* Make sure tasks are cancelled too */
   if (self->cancellable != NULL)
     g_timeout_add (0, do_cancel_in_timeout, g_steal_pointer (&self->cancellable));
   self->cancellable = g_cancellable_new ();

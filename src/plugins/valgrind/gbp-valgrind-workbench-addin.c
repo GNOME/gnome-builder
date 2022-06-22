@@ -123,9 +123,11 @@ gbp_valgrind_workbench_addin_runner_exited_cb (GbpValgrindWorkbenchAddin *self,
 
 static void
 gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
-                                          IdeRunner     *runner,
+                                          IdeRunContext *run_context,
                                           gpointer       user_data)
 {
+  g_printerr ("TODO: valgrind not ported run context yet!\n");
+#if 0
   GbpValgrindWorkbenchAddin *self = user_data;
   g_autoptr(GError) error = NULL;
   g_autofree char *name = NULL;
@@ -191,6 +193,7 @@ gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
                            G_CONNECT_SWAPPED);
 
   IDE_EXIT;
+#endif
 }
 
 static void

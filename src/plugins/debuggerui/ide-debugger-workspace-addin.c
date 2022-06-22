@@ -128,7 +128,7 @@ send_notification (IdeDebuggerWorkspaceAddin *self,
 
 static void
 debugger_run_handler (IdeRunManager *run_manager,
-                      IdeRunner     *runner,
+                      IdeRunContext *run_context,
                       gpointer       user_data)
 {
   IdeDebuggerWorkspaceAddin *self = user_data;
@@ -139,7 +139,7 @@ debugger_run_handler (IdeRunManager *run_manager,
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
 
   /*
@@ -149,12 +149,15 @@ debugger_run_handler (IdeRunManager *run_manager,
   context = ide_object_get_context (IDE_OBJECT (run_manager));
   debug_manager = ide_debug_manager_from_context (context);
 
-  if (!ide_debug_manager_start (debug_manager, runner, &error))
+  g_printerr ("debugger not ported to run context yet!\n");
+#if 0
+  if (!ide_debug_manager_start (debug_manager, run_context, &error))
     send_notification (self,
                        _("Failed to start the debugger"),
                        error->message,
                        "computer-fail-symbolic",
                        TRUE);
+#endif
 
   IDE_EXIT;
 }

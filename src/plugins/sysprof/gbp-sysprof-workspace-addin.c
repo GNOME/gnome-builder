@@ -125,9 +125,12 @@ foreach_fd (gint     dest_fd,
 
 static void
 profiler_run_handler (IdeRunManager *run_manager,
-                      IdeRunner     *runner,
+                      IdeRunContext *run_context,
                       gpointer       user_data)
 {
+  g_printerr ("TODO: sysprof not ported to run context yet!\n");
+
+#if 0
   GbpSysprofWorkspaceAddin *self = user_data;
   g_autoptr(SysprofProfiler) profiler = NULL;
   g_autoptr(SysprofSpawnable) spawnable = NULL;
@@ -140,7 +143,7 @@ profiler_run_handler (IdeRunManager *run_manager,
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
   sources = g_ptr_array_new_with_free_func (g_object_unref);
@@ -273,6 +276,7 @@ profiler_run_handler (IdeRunManager *run_manager,
   page = gbp_sysprof_page_new_for_profiler (profiler);
   position = ide_panel_position_new ();
   ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
+#endif
 }
 
 static void
