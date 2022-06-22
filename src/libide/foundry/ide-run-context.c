@@ -378,6 +378,24 @@ ide_run_context_append_argv (IdeRunContext *self,
 }
 
 void
+ide_run_context_append_formatted (IdeRunContext *self,
+                                  const char    *format,
+                                  ...)
+{
+  g_autofree char *arg = NULL;
+  va_list args;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+  g_return_if_fail (format != NULL);
+
+  va_start (args, format);
+  arg = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  ide_run_context_append_argv (self, arg);
+}
+
+void
 ide_run_context_append_args (IdeRunContext      *self,
                              const char * const *args)
 {

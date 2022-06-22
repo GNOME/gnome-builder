@@ -106,6 +106,10 @@ gboolean               ide_run_context_append_args_parsed (IdeRunContext        
                                                            const char            *args,
                                                            GError               **error);
 IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_append_formatted   (IdeRunContext         *self,
+                                                           const char            *format,
+                                                           ...) G_GNUC_PRINTF (2, 3);
+IDE_AVAILABLE_IN_ALL
 const char            *ide_run_context_getenv             (IdeRunContext         *self,
                                                            const char            *key);
 IDE_AVAILABLE_IN_ALL
