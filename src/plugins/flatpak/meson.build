@@ -34,6 +34,7 @@ plugins_sources += files([
   'gbp-flatpak-sources.c',
   'gbp-flatpak-subprocess-launcher.c',
   'gbp-flatpak-util.c',
+  'gbp-flatpak-workbench-addin.c',
   'ipc-flatpak-transfer-impl.c',
 ])
 

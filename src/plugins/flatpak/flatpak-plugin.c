@@ -36,6 +36,7 @@
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-run-command-provider.h"
 #include "gbp-flatpak-runtime-provider.h"
+#include "gbp-flatpak-workbench-addin.h"
 
 _IDE_EXTERN void
 _gbp_flatpak_register_types (PeasObjectModule *module)
@@ -63,6 +64,9 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PIPELINE_ADDIN,
                                               GBP_TYPE_FLATPAK_PIPELINE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_FLATPAK_WORKBENCH_ADDIN);
 
   gbp_flatpak_aux_init ();
 
