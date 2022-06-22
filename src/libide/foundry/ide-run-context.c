@@ -22,7 +22,11 @@
 
 #include "config.h"
 
+#include <errno.h>
 #include <string.h>
+#include <unistd.h>
+
+#include <libide-io.h>
 
 #include "ide-run-context.h"
 
@@ -674,4 +678,53 @@ ide_run_context_merge_unix_fd_map (IdeRunContext  *self,
   layer = ide_run_context_current_layer (self);
 
   return ide_unix_fd_map_steal_from (layer->unix_fd_map, unix_fd_map, error);
+}
+
+/**
+ * ide_run_context_set_pty:
+ * @self: an #IdeRunContext
+ * @consumer_fd: the FD of the PTY controller
+ *
+ * Sets up a PTY for the run context that will communicate with the
+ * consumer. It is set for stdin/stdout/stderr.
+ */
+void
+ide_run_context_set_pty (IdeRunContext *self,
+                         int            consumer_fd)
+{
+  int stdin_fd = -1;
+  int stdout_fd = -1;
+  int stderr_fd = -1;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  if (consumer_fd < 0)
+    return;
+
+  if (-1 == (stdin_fd = ide_pty_intercept_create_producer (consumer_fd, TRUE)))
+    {
+      int errsv = errno;
+      g_critical ("Failed to create PTY device: %s", g_strerror (errsv));
+      return;
+    }
+
+  if (-1 == (stdout_fd = dup (stdin_fd)))
+    {
+      int errsv = errno;
+      g_critical ("Failed to dup stdout FD: %s", g_strerror (errsv));
+    }
+
+  if (-1 == (stderr_fd = dup (stdin_fd)))
+    {
+      int errsv = errno;
+      g_critical ("Failed to dup stderr FD: %s", g_strerror (errsv));
+    }
+
+  g_assert (stdin_fd > -1);
+  g_assert (stdout_fd > -1);
+  g_assert (stderr_fd > -1);
+
+  ide_run_context_take_fd (self, stdin_fd, STDIN_FILENO);
+  ide_run_context_take_fd (self, stdout_fd, STDOUT_FILENO);
+  ide_run_context_take_fd (self, stderr_fd, STDERR_FILENO);
 }
