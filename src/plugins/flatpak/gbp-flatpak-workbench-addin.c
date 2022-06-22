@@ -62,7 +62,7 @@ gbp_flatpak_workbench_addin_run_cb (GbpFlatpakWorkbenchAddin *self,
    * the GLib GKeyFile-based settings file.
    */
 
-  if (!(context = ide_object_get_context (IDE_OBJECT (self))) ||
+  if (!(context = ide_object_get_context (IDE_OBJECT (run_manager))) ||
       !(config_manager = ide_config_manager_from_context (context)) ||
       !(config = ide_config_manager_get_current (config_manager)) ||
       !GBP_IS_FLATPAK_MANIFEST (config) ||
