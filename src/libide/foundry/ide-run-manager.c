@@ -517,16 +517,6 @@ setup_basic_environment (IdeRunContext *run_context)
 }
 
 static void
-setup_pipeline_environment (IdeRunContext *run_context,
-                            IdePipeline   *pipeline)
-{
-  ide_run_context_setenv (run_context, "BUILDDIR", ide_pipeline_get_builddir (pipeline));
-  ide_run_context_setenv (run_context, "SRCDIR", ide_pipeline_get_srcdir (pipeline));
-  ide_run_context_setenv (run_context, "HOME", g_get_home_dir ());
-  ide_run_context_setenv (run_context, "USER", g_get_user_name ());
-}
-
-static void
 apply_messages_debug (IdeRunContext *run_context,
                       gboolean       messages_debug_all)
 {
@@ -765,45 +755,14 @@ ide_run_manager_run_subprocess_wait_check_cb (GObject      *object,
   IDE_EXIT;
 }
 
-
-static char *
-expand_variables (IdePipeline *pipeline,
-                  const char  *spec)
-{
-  g_autoptr(GString) str = g_string_new (spec);
-  static char uidstr[32];
-  const struct {
-    const char *needle;
-    const char *replacement;
-  } replacements[] = {
-    { "$BUILDDIR", ide_pipeline_get_builddir (pipeline) },
-    { "$SRCDIR", ide_pipeline_get_srcdir (pipeline) },
-    { "$HOME", g_get_home_dir () },
-    { "$USER", g_get_user_name () },
-    { "$UID", uidstr },
-  };
-
-  if (uidstr[0] == 0)
-    g_snprintf (uidstr, sizeof uidstr, "%u", getuid ());
-
-  if (strchr (str->str, '$') != NULL)
-    {
-      for (guint i = 0; i < G_N_ELEMENTS (replacements); i++)
-        g_string_replace (str,
-                          replacements[i].needle,
-                          replacements[i].replacement,
-                          0);
-    }
-
-  return g_string_free (g_steal_pointer (&str), FALSE);
-}
-
 static void
 ide_run_manager_prepare_run_context (IdeRunManager *self,
                                      IdeRunContext *run_context,
                                      IdeRunCommand *run_command,
                                      IdePipeline   *pipeline)
 {
+  g_auto(GStrv) environ = NULL;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
@@ -824,22 +783,22 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   setup_basic_environment (run_context);
 
   /* Now push a new layer so that we can keep those values separate from
-   * what is configured in the run command. The run-command's environment
-   * will override anything set in our layer above.
+   * what is configured in the run command. We use an expansion layer so
+   * that we can expand common variables at this layer and not allow them
+   * to be visible at lower layers.
    */
-  ide_run_context_push (run_context, NULL, NULL, NULL);
+  environ = g_environ_setenv (environ, "BUILDDIR", ide_pipeline_get_builddir (pipeline), TRUE);
+  environ = g_environ_setenv (environ, "SRCDIR", ide_pipeline_get_srcdir (pipeline), TRUE);
+  environ = g_environ_setenv (environ, "HOME", g_get_home_dir (), TRUE);
+  environ = g_environ_setenv (environ, "USER", g_get_user_name (), TRUE);
+  ide_run_context_push_expansion (run_context, (const char * const *)environ);
 
   /* Setup working directory */
   {
     const char *cwd = ide_run_command_get_cwd (run_command);
 
     if (cwd != NULL)
-      {
-        g_autofree char *expand1 = expand_variables (pipeline, cwd);
-        g_autofree char *expand2 = ide_path_expand (expand1);
-
-        ide_run_context_set_cwd (run_context, expand2);
-      }
+      ide_run_context_set_cwd (run_context, cwd);
   }
 
   /* Setup command arguments */
@@ -847,13 +806,7 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
     const char * const *argv = ide_run_command_get_argv (run_command);
 
     if (argv != NULL)
-      {
-        for (guint i = 0; argv[i]; i++)
-          {
-            g_autofree char *expanded = expand_variables (pipeline, argv[i]);
-            ide_run_context_append_argv (run_context, expanded);
-          }
-      }
+      ide_run_context_append_args (run_context, argv);
   }
 
   /* Setup command environment */
@@ -937,7 +890,6 @@ ide_run_manager_run_deploy_cb (GObject      *object,
 
   /* Setup the run context */
   run_context = ide_run_context_new ();
-  setup_pipeline_environment (run_context, pipeline);
   ide_deploy_strategy_prepare_run_context (deploy_strategy, pipeline, run_context);
   ide_run_manager_prepare_run_context (self, run_context, self->current_run_command, pipeline);
 
