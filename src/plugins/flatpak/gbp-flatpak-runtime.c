@@ -387,6 +387,7 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   ide_run_context_append_argv (run_context, "build");
   ide_run_context_append_argv (run_context, "--with-appdir");
   ide_run_context_append_argv (run_context, "--allow=devel");
+  ide_run_context_append_argv (run_context, "--die-with-parent");
 
   /* Make sure we have access to the document portal */
   doc_portal_arg = g_strdup_printf ("--bind-mount=/run/user/%u/doc=/run/user/%u/doc/by-app/%s",
