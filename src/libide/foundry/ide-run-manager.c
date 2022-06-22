@@ -515,6 +515,16 @@ setup_basic_environment (IdeRunContext *run_context)
 }
 
 static void
+setup_pipeline_environment (IdeRunContext *run_context,
+                            IdePipeline   *pipeline)
+{
+  ide_run_context_setenv (run_context, "BUILDDIR", ide_pipeline_get_builddir (pipeline));
+  ide_run_context_setenv (run_context, "SRCDIR", ide_pipeline_get_srcdir (pipeline));
+  ide_run_context_setenv (run_context, "HOME", g_get_home_dir ());
+  ide_run_context_setenv (run_context, "USER", g_get_user_name ());
+}
+
+static void
 apply_messages_debug (IdeRunContext *run_context,
                       gboolean       messages_debug_all)
 {
@@ -880,6 +890,7 @@ ide_run_manager_run_deploy_cb (GObject      *object,
 
   /* Setup the run context */
   run_context = ide_run_context_new ();
+  setup_pipeline_environment (run_context, pipeline);
   ide_deploy_strategy_prepare_run_context (deploy_strategy, pipeline, run_context);
   ide_run_manager_prepare_run_context (self, run_context, self->current_run_command);
 
