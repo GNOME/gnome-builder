@@ -845,7 +845,6 @@ ide_run_manager_run_deploy_cb (GObject      *object,
                                gpointer      user_data)
 {
   IdeDeployStrategy *deploy_strategy = (IdeDeployStrategy *)object;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeTask) task = user_data;
@@ -894,19 +893,15 @@ ide_run_manager_run_deploy_cb (GObject      *object,
   ide_deploy_strategy_prepare_run_context (deploy_strategy, pipeline, run_context);
   ide_run_manager_prepare_run_context (self, run_context, self->current_run_command);
 
-  /* Now setup our launcher and bail if there was a failure */
-  if (!(launcher = ide_run_context_end (run_context, &error)))
+  /* Now spawn the subprocess or bail if there was a failure to build command */
+  if (!(subprocess = ide_run_context_spawn (run_context, &error)))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  /* Bail if we couldn't actually launch anything */
-  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
+  /* Keep subprocess around for send_signal/force_exit */
+  g_set_object (&self->current_subprocess, subprocess);
 
   if (self->notif != NULL)
     ide_notification_withdraw (self->notif);
