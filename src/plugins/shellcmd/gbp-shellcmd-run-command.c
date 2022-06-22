@@ -325,72 +325,27 @@ gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunCommand *self,
     }
 }
 
-static char *
-expand_arg (const char *arg,
-            ...)
-{
-  va_list args;
-  const char *key;
-  char *ret = NULL;
-
-  if (arg == NULL)
-    return g_strdup (g_get_home_dir ());
-
-  if (arg[0] == '~' && arg[1] == '/')
-    return ide_path_expand (arg);
-
-  if (strchr (arg, '$') == NULL)
-    return g_strdup (arg);
-
-  ret = g_strdup (arg);
-
-  va_start (args, arg);
-  while ((key = va_arg (args, const char *)))
-    {
-      const char *value = va_arg (args, const char *);
-
-      if (value == NULL)
-        continue;
-
-      if (strstr (ret, key) != NULL)
-        {
-          GString *gstr = g_string_new (ret);
-          g_string_replace (gstr, key, value, 0);
-          g_free (ret);
-          ret = g_string_free (gstr, FALSE);
-        }
-    }
-  va_end (args);
-
-  return ret;
-}
-
 IdeTerminalLauncher *
 gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
                                           IdeContext            *context)
 {
-  g_autofree char *cwd_expanded = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GStrvBuilder) argv_builder = NULL;
-  g_autoptr(IdeRunner) runner = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) workdir = NULL;
-  g_auto(GStrv) argv_expanded = NULL;
   IdeBuildManager *build_manager = NULL;
+  g_auto(GStrv) environ = NULL;
   IdePipeline *pipeline = NULL;
-  IdeRuntime *runtime = NULL;
   const char * const *argv;
   const char * const *env;
-  const char *cwd;
   const char *builddir;
   const char *srcdir;
-  const char *home;
+  const char *cwd;
 
   g_return_val_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self), NULL);
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
   workdir = ide_context_ref_workdir (context);
-  home = g_get_home_dir ();
   srcdir = g_file_peek_path (workdir);
   builddir = g_file_peek_path (workdir);
 
@@ -402,91 +357,54 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
       srcdir = ide_pipeline_get_srcdir (pipeline);
     }
 
+  environ = g_environ_setenv (environ, "BUILDDIR", builddir, TRUE);
+  environ = g_environ_setenv (environ, "SRCDIR", srcdir, TRUE);
+  environ = g_environ_setenv (environ, "USER", g_get_user_name (), TRUE);
+  environ = g_environ_setenv (environ, "HOME", g_get_home_dir (), TRUE);
+
+  run_context = ide_run_context_new ();
+
   switch (self->locality)
     {
     case GBP_SHELLCMD_LOCALITY_PIPELINE:
       if (pipeline == NULL ||
           !(launcher = ide_pipeline_create_launcher (pipeline, &error)))
         goto handle_error;
+      ide_pipeline_prepare_run_context (pipeline, run_context);
       break;
 
     case GBP_SHELLCMD_LOCALITY_HOST:
-      launcher = ide_subprocess_launcher_new (0);
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      ide_run_context_push_host (run_context);
       break;
 
     case GBP_SHELLCMD_LOCALITY_SUBPROCESS:
-      launcher = ide_subprocess_launcher_new (0);
       break;
 
-    case GBP_SHELLCMD_LOCALITY_RUNNER:
-      if (!(runtime = ide_pipeline_get_runtime (pipeline)) ||
-          !(runner = ide_runtime_create_runner (runtime, NULL)))
+    case GBP_SHELLCMD_LOCALITY_RUNNER: {
+      IdeRuntime *runtime = ide_pipeline_get_runtime (pipeline);
+      if (runtime == NULL)
         goto handle_error;
+      ide_runtime_prepare_run_context (runtime, run_context);
       break;
+    }
 
     default:
       g_assert_not_reached ();
     }
 
-  cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
-  argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self));
-  env = ide_run_command_get_environ (IDE_RUN_COMMAND (self));
-  cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
+  ide_run_context_push_expansion (run_context, (const char * const *)environ);
 
-  g_return_val_if_fail (argv != NULL, NULL);
+  if ((cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self))))
+    ide_run_context_set_cwd (run_context, cwd);
 
-  argv_builder = g_strv_builder_new ();
-  for (guint i = 0; argv[i]; i++)
-    {
-      g_autofree char *expanded = NULL;
+  if ((argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self))))
+    ide_run_context_append_args (run_context, argv);
 
-      expanded = expand_arg (argv[i],
-                             "$HOME", home,
-                             "$BUILDDIR", builddir,
-                             "$SRCDIR", srcdir,
-                             NULL);
-      g_strv_builder_add (argv_builder, expanded);
-    }
-  argv_expanded = g_strv_builder_end (argv_builder);
+  if ((env = ide_run_command_get_environ (IDE_RUN_COMMAND (self))))
+    ide_run_context_add_environ (run_context, env);
 
-  cwd_expanded = expand_arg (cwd,
-                             "$HOME", home,
-                             "$BUILDDIR", builddir,
-                             "$SRCDIR", srcdir,
-                             NULL);
-
-  g_assert (runner != NULL || launcher != NULL);
-
-  if (runner != NULL)
-    launcher = IDE_RUNNER_GET_CLASS (runner)->create_launcher (runner);
-
-  g_assert (launcher != NULL);
-
-  ide_subprocess_launcher_set_cwd (launcher, cwd_expanded);
-  ide_subprocess_launcher_push_args (launcher, (const char * const *)argv_expanded);
-
-  if (runner != NULL)
-    {
-      ide_subprocess_launcher_set_run_on_host (launcher, ide_runner_get_run_on_host (runner));
-      ide_subprocess_launcher_set_clear_env (launcher, ide_runner_get_clear_env (runner));
-      ide_subprocess_launcher_overlay_environment (launcher, ide_runner_get_environment (runner));
-    }
-
-  if (env != NULL)
-    {
-      for (guint i = 0; env[i]; i++)
-        {
-          g_autofree char *key = NULL;
-          g_autofree char *value = NULL;
-
-          if (ide_environ_parse (env[i], &key, &value))
-            ide_subprocess_launcher_setenv (launcher, key, value, TRUE);
-        }
-    }
-
-  if (runner != NULL)
-    IDE_RUNNER_GET_CLASS (runner)->fixup_launcher (runner, launcher);
+  if (!(launcher = ide_run_context_end (run_context, &error)))
+    goto handle_error;
 
   return ide_terminal_launcher_new_for_launcher (launcher);
 
