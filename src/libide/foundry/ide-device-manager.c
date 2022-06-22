@@ -788,7 +788,7 @@ ide_device_manager_deploy_completed (IdeDeviceManager *self,
  */
 void
 ide_device_manager_deploy_async (IdeDeviceManager    *self,
-                                 IdePipeline    *pipeline,
+                                 IdePipeline         *pipeline,
                                  GCancellable        *cancellable,
                                  GAsyncReadyCallback  callback,
                                  gpointer             user_data)
