@@ -75,6 +75,7 @@ struct _IdeRunManager
 
   guint                    messages_debug_all : 1;
   guint                    has_installed_once : 1;
+  guint                    sent_signal : 1;
 };
 
 static void initable_iface_init                         (GInitableIface *iface);
@@ -1047,6 +1048,8 @@ ide_run_manager_run_async (IdeRunManager       *self,
     cancellable = local_cancellable = g_cancellable_new ();
   ide_cancellable_chain (cancellable, self->cancellable);
 
+  self->sent_signal = FALSE;
+
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_run_manager_run_async);
 
@@ -1121,6 +1124,33 @@ do_cancel_in_timeout (gpointer user_data)
   IDE_RETURN (G_SOURCE_REMOVE);
 }
 
+static int
+ide_run_manager_get_exit_signal (IdeRunManager *self)
+{
+  g_autoptr(GSettings) settings = NULL;
+  g_autofree char *stop_signal = NULL;
+  IdeContext *context;
+  int signum;
+
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  settings = ide_context_ref_project_settings (context);
+  stop_signal = g_settings_get_string (settings, "stop-signal");
+
+  if (0) {}
+  else if (ide_str_equal0 (stop_signal, "SIGKILL")) signum = SIGKILL;
+  else if (ide_str_equal0 (stop_signal, "SIGINT"))  signum = SIGINT;
+  else if (ide_str_equal0 (stop_signal, "SIGHUP"))  signum = SIGHUP;
+  else if (ide_str_equal0 (stop_signal, "SIGUSR1")) signum = SIGUSR1;
+  else if (ide_str_equal0 (stop_signal, "SIGUSR2")) signum = SIGUSR2;
+  else if (ide_str_equal0 (stop_signal, "SIGABRT")) signum = SIGABRT;
+  else if (ide_str_equal0 (stop_signal, "SIGQUIT")) signum = SIGQUIT;
+  else signum = SIGKILL;
+
+  return signum;
+}
+
 void
 ide_run_manager_cancel (IdeRunManager *self)
 {
@@ -1129,14 +1159,16 @@ ide_run_manager_cancel (IdeRunManager *self)
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
 
-  /* If the runner is still active, we can just force_exit that instead
-   * of cancelling a bunch of in-flight things. This is more useful since
-   * it means that we can override the exit signal.
-   */
   if (self->current_subprocess != NULL)
     {
-      ide_subprocess_force_exit (self->current_subprocess);
-      IDE_EXIT;
+      int exit_signal = ide_run_manager_get_exit_signal (self);
+
+      if (!self->sent_signal)
+        ide_subprocess_send_signal (self->current_subprocess, exit_signal);
+      else
+        ide_subprocess_force_exit (self->current_subprocess);
+
+      self->sent_signal = TRUE;
     }
 
   /* Make sure tasks are cancelled too */
