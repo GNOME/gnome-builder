@@ -124,5 +124,8 @@ void                   ide_run_context_unsetenv           (IdeRunContext        
 IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_run_context_end                (IdeRunContext         *self,
                                                            GError               **error);
+IDE_AVAILABLE_IN_ALL
+IdeSubprocess         *ide_run_context_spawn              (IdeRunContext         *self,
+                                                           GError               **error);
 
 G_END_DECLS

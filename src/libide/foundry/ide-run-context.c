@@ -781,6 +781,42 @@ ide_run_context_end (IdeRunContext  *self,
 }
 
 /**
+ * ide_run_context_spawn:
+ * @self: a #IdeRunContext
+ *
+ * Spwans the run command.
+ *
+ * If there is a failure to build the command into a subprocess launcher,
+ * then %NULL is returned and @error is set.
+ *
+ * If the subprocess fails to launch, then %NULL is returned and @error is set.
+ *
+ * Returns: (transfer full): an #IdeSubprocess if successful; otherwise %NULL
+ *   and @error is set.
+ */
+IdeSubprocess *
+ide_run_context_spawn (IdeRunContext  *self,
+                       GError        **error)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocess) ret = NULL;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
+
+  if (!(launcher = ide_run_context_end (self, error)))
+    IDE_RETURN (NULL);
+
+  if (!(ret = ide_subprocess_launcher_spawn (launcher, NULL, error)))
+    IDE_RETURN (NULL);
+
+  g_return_val_if_fail (IDE_IS_SUBPROCESS (ret), NULL);
+
+  IDE_RETURN (g_steal_pointer (&ret));
+}
+
+/**
  * ide_run_context_merge_unix_fd_map:
  * @self: a #IdeRunContext
  * @unix_fd_map: a #IdeUnixFDMap
