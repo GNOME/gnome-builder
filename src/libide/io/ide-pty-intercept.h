@@ -88,6 +88,11 @@ IDE_AVAILABLE_IN_ALL
 IdePtyFd ide_pty_intercept_create_slave  (IdePtyFd                 master_fd,
                                           gboolean                 blocking);
 IDE_AVAILABLE_IN_ALL
+IdePtyFd ide_pty_intercept_create_consumer (void);
+IDE_AVAILABLE_IN_ALL
+IdePtyFd ide_pty_intercept_create_producer (IdePtyFd                 consumer_fd,
+                                            gboolean                 blocking);
+IDE_AVAILABLE_IN_ALL
 gboolean ide_pty_intercept_init          (IdePtyIntercept         *self,
                                           IdePtyFd                 fd,
                                           GMainContext            *main_context);

@@ -79,8 +79,8 @@ _ide_pty_intercept_set_raw (IdePtyFd fd)
 }
 
 /**
- * ide_pty_intercept_create_slave:
- * @master_fd: a pty master
+ * ide_pty_intercept_create_producer:
+ * @consumer_fd: a pty
  * @blocking: use %FALSE to set O_NONBLOCK
  *
  * This creates a new slave to the PTY master @master_fd.
@@ -92,8 +92,8 @@ _ide_pty_intercept_set_raw (IdePtyFd fd)
  *   Upon error, %IDE_PTY_FD_INVALID (-1) is returned.
  */
 IdePtyFd
-ide_pty_intercept_create_slave (IdePtyFd master_fd,
-                                gboolean blocking)
+ide_pty_intercept_create_producer (IdePtyFd consumer_fd,
+                                   gboolean blocking)
 {
   g_auto(IdePtyFd) ret = IDE_PTY_FD_INVALID;
   gint extra = blocking ? 0 : O_NONBLOCK;
@@ -103,25 +103,25 @@ ide_pty_intercept_create_slave (IdePtyFd master_fd,
   const char *name;
 #endif
 
-  g_assert (master_fd != -1);
+  g_assert (consumer_fd != -1);
 
-  if (grantpt (master_fd) != 0)
+  if (grantpt (consumer_fd) != 0)
     return IDE_PTY_FD_INVALID;
 
-  if (unlockpt (master_fd) != 0)
+  if (unlockpt (consumer_fd) != 0)
     return IDE_PTY_FD_INVALID;
 
 #ifdef HAVE_PTSNAME_R
-  if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
+  if (ptsname_r (consumer_fd, name, sizeof name - 1) != 0)
     return IDE_PTY_FD_INVALID;
   name[sizeof name - 1] = '\0';
 #elif defined(__FreeBSD__)
-  if (fdevname_r (master_fd, name + 5, sizeof name - 6) == NULL)
+  if (fdevname_r (consumer_fd, name + 5, sizeof name - 6) == NULL)
     return IDE_PTY_FD_INVALID;
   memcpy (name, "/dev/", 5);
   name[sizeof name - 1] = '\0';
 #else
-  if (NULL == (name = ptsname (master_fd)))
+  if (NULL == (name = ptsname (consumer_fd)))
     return IDE_PTY_FD_INVALID;
 #endif
 
@@ -156,10 +156,17 @@ ide_pty_intercept_create_slave (IdePtyFd master_fd,
   return pty_fd_steal (&ret);
 }
 
+IdePtyFd
+ide_pty_intercept_create_slave (IdePtyFd consumer_fd,
+                                gboolean blocking)
+{
+  return ide_pty_intercept_create_producer (consumer_fd, blocking);
+}
+
 /**
- * ide_pty_intercept_create_master:
+ * ide_pty_intercept_create_consumer:
  *
- * Creates a new PTY master using posix_openpt(). Some fallbacks are
+ * Creates a new PTY consumer using posix_openpt(). Some fallbacks are
  * provided for non-Linux systems where O_CLOEXEC and O_NONBLOCK may
  * not be supported.
  *
@@ -167,7 +174,7 @@ ide_pty_intercept_create_slave (IdePtyFd master_fd,
  *   Upon error, %IDE_PTY_FD_INVALID (-1) is returned.
  */
 IdePtyFd
-ide_pty_intercept_create_master (void)
+ide_pty_intercept_create_consumer (void)
 {
   g_auto(IdePtyFd) master_fd = IDE_PTY_FD_INVALID;
 
@@ -203,6 +210,13 @@ ide_pty_intercept_create_master (void)
 #endif
 
   return pty_fd_steal (&master_fd);
+}
+
+/* Until we can port code over */
+IdePtyFd
+ide_pty_intercept_create_master (void)
+{
+  return ide_pty_intercept_create_consumer ();
 }
 
 static void
@@ -493,7 +507,7 @@ ide_pty_intercept_init (IdePtyIntercept *self,
   memset (self, 0, sizeof *self);
   self->magic = IDE_PTY_INTERCEPT_MAGIC;
 
-  slave_fd = ide_pty_intercept_create_slave (fd, FALSE);
+  slave_fd = ide_pty_intercept_create_producer (fd, FALSE);
   if (slave_fd == IDE_PTY_FD_INVALID)
     return FALSE;
 
@@ -504,7 +518,7 @@ ide_pty_intercept_init (IdePtyIntercept *self,
   if (!_ide_pty_intercept_set_raw (slave_fd))
     return FALSE;
 
-  master_fd = ide_pty_intercept_create_master ();
+  master_fd = ide_pty_intercept_create_consumer ();
   if (master_fd == IDE_PTY_FD_INVALID)
     return FALSE;
 
