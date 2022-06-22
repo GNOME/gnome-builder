@@ -360,7 +360,7 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
 
-  /* TODO: need way to specify to run on host */
+  ide_run_context_set_run_on_host (run_context, TRUE);
 
   /* Pass through the FD mappings */
   if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
