@@ -1116,12 +1116,19 @@ ide_notification_file_progress_callback (goffset  current_num_bytes,
                                          gpointer user_data)
 {
   IdeNotification *self = user_data;
-  gdouble fraction = 0.0;
+  double fraction;
 
   g_return_if_fail (IDE_IS_NOTIFICATION (self));
 
   if (total_num_bytes)
-    fraction = (gdouble)current_num_bytes / (gdouble)total_num_bytes;
+    fraction = (double)current_num_bytes / (double)total_num_bytes;
+  else
+    fraction = .0;
+
+  if (fraction < .0)
+    fraction = .0;
+  else if (fraction > 1.)
+    fraction = 1.;
 
   ide_notification_set_progress (self, fraction);
 }
