@@ -74,6 +74,9 @@ IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_set_cwd            (IdeRunContext         *self,
                                                            const char            *cwd);
 IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_set_pty            (IdeRunContext         *self,
+                                                           int                    consumer_fd);
+IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_take_fd            (IdeRunContext         *self,
                                                            int                    source_fd,
                                                            int                    dest_fd);
