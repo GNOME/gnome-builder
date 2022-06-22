@@ -268,7 +268,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
 
   name = ide_run_command_get_display_name (IDE_RUN_COMMAND (command));
   argv = ide_run_command_get_argv (IDE_RUN_COMMAND (command));
-  env = ide_run_command_get_env (IDE_RUN_COMMAND (command));
+  env = ide_run_command_get_environ (IDE_RUN_COMMAND (command));
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (command));
   accel = gbp_shellcmd_run_command_get_accelerator (command);
   locality = gbp_shellcmd_run_command_get_locality (command);
@@ -418,8 +418,8 @@ command_save_action (GtkWidget  *widget,
   gbp_shellcmd_run_command_set_accelerator (self->command, self->accel);
 
   env = string_list_to_strv (self->envvars);
-  ide_run_command_set_env (IDE_RUN_COMMAND (self->command),
-                           (const char * const *)env);
+  ide_run_command_set_environ (IDE_RUN_COMMAND (self->command),
+                               (const char * const *)env);
 
   item = adw_combo_row_get_selected_item (self->locality);
   nick = ide_enum_object_get_nick (item);
