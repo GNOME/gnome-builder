@@ -90,6 +90,96 @@ gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
   return launcher;
 }
 
+static gboolean
+gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
+                                   const char * const  *argv,
+                                   const char * const  *env,
+                                   const char          *cwd,
+                                   IdeUnixFDMap        *unix_fd_map,
+                                   gpointer             user_data,
+                                   GError             **error)
+{
+  GbpPodmanRuntime *self = user_data;
+  int max_dest_fd;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_PODMAN_RUNTIME (self));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (argv != NULL);
+  g_assert (env != NULL);
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  /* Make sure we can pass the FDs down */
+  if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
+    IDE_RETURN (FALSE);
+
+  /* Setup basic podman-exec command */
+  ide_run_context_append_args (run_context, IDE_STRV_INIT ("podman", "exec"));
+  ide_run_context_append_argv (run_context, "--privileged");
+  ide_run_context_append_argv (run_context, "--interactive");
+  ide_run_context_append_formatted (run_context, "--user=%s", g_get_user_name ());
+
+  /* Make sure that we request TTY ioctls if necessary */
+  if (ide_unix_fd_map_stdin_isatty (unix_fd_map) ||
+      ide_unix_fd_map_stdout_isatty (unix_fd_map) ||
+      ide_unix_fd_map_stderr_isatty (unix_fd_map))
+    ide_run_context_append_argv (run_context, "--tty");
+
+  /* Specify working directory inside the container */
+  if (cwd != NULL)
+    {
+      g_autofree char *cwd_absolute = g_canonicalize_filename (cwd, NULL);
+      ide_run_context_append_formatted (run_context, "--workdir=%s", cwd_absolute);
+    }
+
+  /* From podman-exec(1):
+   *
+   * Pass down to the process N additional file descriptors (in addition to
+   * 0, 1, 2).  The total FDs will be 3+N.
+   */
+  if ((max_dest_fd = ide_unix_fd_map_get_max_dest_fd (unix_fd_map)) > 2)
+    ide_run_context_append_formatted (run_context, "--preserve-fds=%d", max_dest_fd-2);
+
+  /* Append --env=FOO=BAR environment variables */
+  for (guint i = 0; env[i]; i++)
+    ide_run_context_append_formatted (run_context, "--env=%s", env[i]);
+
+  /* Ensure we have access to the desired PATH from the host */
+  if (g_environ_getenv ((char **)env, "PATH") == NULL)
+    ide_run_context_append_formatted (run_context, "--env=PATH=%s", ide_get_user_default_path ());
+
+  /* Now specify our runtime identifier. Note that self->id is
+   * like :id but w/o podman: prefix */
+  ide_run_context_append_argv (run_context, self->id);
+
+  /* Finally, propagate the upper layer's command arguments */
+  ide_run_context_append_args (run_context, argv);
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+gbp_podman_runtime_prepare_run_context (IdeRuntime    *runtime,
+                                        IdeRunContext *run_context)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  /* Our commands will need to be run from the host */
+  ide_run_context_push_host (run_context);
+
+  /* And now push our handler to translate to "podman exec" */
+  ide_run_context_push (run_context,
+                        gbp_podman_runtime_run_handler_cb,
+                        g_object_ref (runtime),
+                        g_object_unref);
+
+  IDE_EXIT;
+}
+
 char *
 _gbp_podman_runtime_parse_toml_line (const char *line)
 {
@@ -462,6 +552,7 @@ gbp_podman_runtime_class_init (GbpPodmanRuntimeClass *klass)
 
   runtime_class->create_launcher = gbp_podman_runtime_create_launcher;
   runtime_class->translate_file = gbp_podman_runtime_translate_file;
+  runtime_class->prepare_run_context = gbp_podman_runtime_prepare_run_context;
 }
 
 static void
