@@ -576,8 +576,8 @@ ide_run_context_default_handler (IdeRunContext       *self,
   /* Then make sure the higher layer's environment has higher priority */
   ide_run_context_set_environ (self, env);
 
-  /* Now prepend the arguments and set new working dir */
-  ide_run_context_prepend_args (self, argv);
+  /* Now append the arguments */
+  ide_run_context_append_args (self, argv);
 
   return TRUE;
 }
