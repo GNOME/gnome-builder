@@ -813,16 +813,18 @@ ide_run_context_merge_unix_fd_map (IdeRunContext  *self,
 }
 
 /**
- * ide_run_context_set_pty:
+ * ide_run_context_set_pty_fd:
  * @self: an #IdeRunContext
- * @consumer_fd: the FD of the PTY controller
+ * @consumer_fd: the FD of the PTY consumer
  *
  * Sets up a PTY for the run context that will communicate with the
- * consumer. It is set for stdin/stdout/stderr.
+ * consumer. The consumer is the generally the widget that is rendering
+ * the PTY contents and the producer is the FD that is connected to the
+ * subprocess.
  */
 void
-ide_run_context_set_pty (IdeRunContext *self,
-                         int            consumer_fd)
+ide_run_context_set_pty_fd (IdeRunContext *self,
+                            int            consumer_fd)
 {
   int stdin_fd = -1;
   int stdout_fd = -1;
@@ -859,4 +861,25 @@ ide_run_context_set_pty (IdeRunContext *self,
   ide_run_context_take_fd (self, stdin_fd, STDIN_FILENO);
   ide_run_context_take_fd (self, stdout_fd, STDOUT_FILENO);
   ide_run_context_take_fd (self, stderr_fd, STDERR_FILENO);
+}
+
+/**
+ * ide_run_context_set_pty:
+ * @self: a #IdeRunContext
+ *
+ * Sets the PTY for a run context.
+ */
+void
+ide_run_context_set_pty (IdeRunContext *self,
+                         VtePty        *pty)
+{
+  int consumer_fd;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+  g_return_if_fail (VTE_IS_PTY (pty));
+
+  consumer_fd = vte_pty_get_fd (pty);
+
+  if (consumer_fd != -1)
+    ide_run_context_set_pty_fd (self, consumer_fd);
 }

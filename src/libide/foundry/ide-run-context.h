@@ -24,6 +24,8 @@
 # error "Only <libide-foundry.h> can be included directly."
 #endif
 
+#include <vte/vte.h>
+
 #include <libide-threading.h>
 
 G_BEGIN_DECLS
@@ -76,8 +78,11 @@ IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_set_cwd            (IdeRunContext         *self,
                                                            const char            *cwd);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_set_pty            (IdeRunContext         *self,
+void                   ide_run_context_set_pty_fd         (IdeRunContext         *self,
                                                            int                    consumer_fd);
+IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_set_pty            (IdeRunContext         *self,
+                                                           VtePty                *pty);
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_take_fd            (IdeRunContext         *self,
                                                            int                    source_fd,
