@@ -954,7 +954,7 @@ ide_run_manager_run_discover_run_command_cb (GObject      *object,
   g_set_object (&self->current_run_command, run_command);
 
   cancellable = ide_task_get_cancellable (task);
-  g_assert (!cancellable || G_IS_CANCELLABLE (task));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   pipeline = ide_task_get_task_data (task);
   g_assert (IDE_IS_PIPELINE (pipeline));
