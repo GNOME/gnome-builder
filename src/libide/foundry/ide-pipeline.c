@@ -50,6 +50,7 @@
 #include "ide-foundry-enums.h"
 #include "ide-local-deploy-strategy.h"
 #include "ide-local-device.h"
+#include "ide-run-context.h"
 #include "ide-run-manager-private.h"
 #include "ide-runtime.h"
 #include "ide-toolchain-manager.h"
@@ -4349,4 +4350,27 @@ ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,
     ret = ide_extension_set_adapter_get_extension (pipeline->addins, plugin_info);
 
   return IDE_PIPELINE_ADDIN (ret);
+}
+
+void
+ide_pipeline_prepare_run_context (IdePipeline   *self,
+                                  IdeRunContext *run_context)
+{
+  IdeRuntime *runtime;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_PIPELINE (self));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (!(runtime = ide_pipeline_get_runtime (self)))
+    {
+      g_critical ("Attempt to prepare a run context before pipeline has a runtime!");
+      return;
+    }
+
+  /* TODO: setup run context for building instead of running */
+  ide_runtime_prepare_run_context (runtime, run_context);
+
+  ide_run_context_setenv (run_context, "BUILDDIR", ide_pipeline_get_builddir (self));
+  ide_run_context_setenv (run_context, "SRCDIR", ide_pipeline_get_srcdir (self));
 }

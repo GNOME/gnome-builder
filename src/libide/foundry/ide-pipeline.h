@@ -92,6 +92,9 @@ IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_pipeline_create_launcher          (IdePipeline            *self,
                                                               GError                **error);
 IDE_AVAILABLE_IN_ALL
+void                   ide_pipeline_prepare_run_context      (IdePipeline            *self,
+                                                              IdeRunContext          *run_context);
+IDE_AVAILABLE_IN_ALL
 gchar                 *ide_pipeline_build_srcdir_path        (IdePipeline            *self,
                                                               const gchar            *first_part,
                                                               ...) G_GNUC_NULL_TERMINATED;
