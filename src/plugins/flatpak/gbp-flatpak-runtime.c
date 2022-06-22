@@ -360,8 +360,6 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
 
-  ide_run_context_set_run_on_host (run_context, TRUE);
-
   /* Pass through the FD mappings */
   if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
     return FALSE;
@@ -456,6 +454,10 @@ gbp_flatpak_runtime_prepare_run_context (IdeRuntime    *runtime,
   g_assert (GBP_IS_FLATPAK_RUNTIME (runtime));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
+  /* We have to run "flatpak build" from the host */
+  ide_run_context_push_host (run_context);
+
+  /* Handle the upper layer to rewrite the command using "flatpak build" */
   ide_run_context_push (run_context,
                         gbp_flatpak_runtime_handle_run_context_cb,
                         g_object_ref (runtime),
