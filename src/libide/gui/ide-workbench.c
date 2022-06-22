@@ -2486,19 +2486,24 @@ ide_workbench_resolve_file_worker (IdeTask      *task,
   g_assert (rf->roots != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  basename = g_path_get_basename (rf->path);
-
   for (guint i = 0; i < rf->roots->len; i++)
     {
       GFile *root = g_ptr_array_index (rf->roots, i);
       g_autoptr(GFile) child = g_file_get_child (root, rf->path);
-      g_autoptr(GPtrArray) found = NULL;
 
       if (g_file_query_exists (child, cancellable))
         {
           ide_task_return_pointer (task, g_steal_pointer (&child), g_object_unref);
           return;
         }
+    }
+
+  basename = g_path_get_basename (rf->path);
+
+  for (guint i = 0; i < rf->roots->len; i++)
+    {
+      GFile *root = g_ptr_array_index (rf->roots, i);
+      g_autoptr(GPtrArray) found = NULL;
 
       found = ide_g_file_find_with_depth (root, basename, 0, cancellable);
       IDE_PTR_ARRAY_SET_FREE_FUNC (found, g_object_unref);
