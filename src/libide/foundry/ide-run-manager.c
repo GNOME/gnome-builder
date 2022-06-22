@@ -24,6 +24,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <unistd.h>
 
 #include <libpeas/peas.h>
 #include <libpeas/peas-autocleanups.h>
@@ -764,16 +765,51 @@ ide_run_manager_run_subprocess_wait_check_cb (GObject      *object,
   IDE_EXIT;
 }
 
+
+static char *
+expand_variables (IdePipeline *pipeline,
+                  const char  *spec)
+{
+  g_autoptr(GString) str = g_string_new (spec);
+  static char uidstr[32];
+  const struct {
+    const char *needle;
+    const char *replacement;
+  } replacements[] = {
+    { "$BUILDDIR", ide_pipeline_get_builddir (pipeline) },
+    { "$SRCDIR", ide_pipeline_get_srcdir (pipeline) },
+    { "$HOME", g_get_home_dir () },
+    { "$USER", g_get_user_name () },
+    { "$UID", uidstr },
+  };
+
+  if (uidstr[0] == 0)
+    g_snprintf (uidstr, sizeof uidstr, "%u", getuid ());
+
+  if (strchr (str->str, '$') != NULL)
+    {
+      for (guint i = 0; i < G_N_ELEMENTS (replacements); i++)
+        g_string_replace (str,
+                          replacements[i].needle,
+                          replacements[i].replacement,
+                          0);
+    }
+
+  return g_string_free (g_steal_pointer (&str), FALSE);
+}
+
 static void
 ide_run_manager_prepare_run_context (IdeRunManager *self,
                                      IdeRunContext *run_context,
-                                     IdeRunCommand *run_command)
+                                     IdeRunCommand *run_command,
+                                     IdePipeline   *pipeline)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_RUN_COMMAND (run_command));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   /* The very first thing we need to do is allow the current run handler
    * to inject any command wrapper it needs. This might be something like
@@ -798,15 +834,26 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
     const char *cwd = ide_run_command_get_cwd (run_command);
 
     if (cwd != NULL)
-      ide_run_context_set_cwd (run_context, cwd);
+      {
+        g_autofree char *expand1 = expand_variables (pipeline, cwd);
+        g_autofree char *expand2 = ide_path_expand (expand1);
+
+        ide_run_context_set_cwd (run_context, expand2);
+      }
   }
 
   /* Setup command arguments */
   {
     const char * const *argv = ide_run_command_get_argv (run_command);
 
-    if (argv != NULL && argv[0] != NULL)
-      ide_run_context_append_args (run_context, argv);
+    if (argv != NULL)
+      {
+        for (guint i = 0; argv[i]; i++)
+          {
+            g_autofree char *expanded = expand_variables (pipeline, argv[i]);
+            ide_run_context_append_argv (run_context, expanded);
+          }
+      }
   }
 
   /* Setup command environment */
@@ -892,7 +939,7 @@ ide_run_manager_run_deploy_cb (GObject      *object,
   run_context = ide_run_context_new ();
   setup_pipeline_environment (run_context, pipeline);
   ide_deploy_strategy_prepare_run_context (deploy_strategy, pipeline, run_context);
-  ide_run_manager_prepare_run_context (self, run_context, self->current_run_command);
+  ide_run_manager_prepare_run_context (self, run_context, self->current_run_command, pipeline);
 
   /* Now spawn the subprocess or bail if there was a failure to build command */
   if (!(subprocess = ide_run_context_spawn (run_context, &error)))
