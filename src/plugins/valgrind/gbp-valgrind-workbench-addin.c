@@ -191,6 +191,10 @@ gbp_valgrind_workbench_addin_run_handler_cb (IdeRunContext       *run_context,
 
   if (env[0] != NULL)
     {
+      /* If we have to exec "env" to pass environment variables, then we
+       * must follow children to get to our target executable.
+       */
+      ide_run_context_append_argv (run_context, "--trace-children=yes");
       ide_run_context_append_argv (run_context, "env");
       ide_run_context_append_args (run_context, env);
     }
