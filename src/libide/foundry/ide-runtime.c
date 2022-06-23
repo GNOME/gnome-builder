@@ -858,29 +858,63 @@ ide_runtime_supports_toolchain (IdeRuntime   *self,
 }
 
 /**
- * ide_runtime_prepare_run_context:
+ * ide_runtime_prepare_to_run:
  * @self: a #IdeRuntime
  * @run_context: an #IdeRunContext
  *
- * Prepares a run context to run within the runtime.
+ * Prepares a run context to run an application.
  *
  * The virtual function implementation should add to the run context anything
  * necessary to be able to run within the runtime.
  *
  * That might include pushing a new layer so that the command will run within
  * a subcommand such as "flatpak", "jhbuild", or "podman".
+ *
+ * This is meant to be able to run applications, so additional work is expected
+ * of runtimes to ensure access to things like graphical displays.
  */
 void
-ide_runtime_prepare_run_context (IdeRuntime    *self,
-                                 IdeRunContext *run_context)
+ide_runtime_prepare_to_run (IdeRuntime    *self,
+                            IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_RUNTIME (self));
   g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
 
-  if (IDE_RUNTIME_GET_CLASS (self)->prepare_run_context)
-    IDE_RUNTIME_GET_CLASS (self)->prepare_run_context (self, run_context);
+  if (IDE_RUNTIME_GET_CLASS (self)->prepare_to_run)
+    IDE_RUNTIME_GET_CLASS (self)->prepare_to_run (self, run_context);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_runtime_prepare_to_build:
+ * @self: a #IdeRuntime
+ * @run_context: an #IdeRunContext
+ *
+ * Prepares a run context for running a build command.
+ *
+ * The virtual function implementation should add to the run context anything
+ * necessary to be able to run within the runtime.
+ *
+ * That might include pushing a new layer so that the command will run within
+ * a subcommand such as "flatpak", "jhbuild", or "podman".
+ *
+ * This is meant to be able to run a build command, so it may not require
+ * access to some features like network or graphical displays.
+ */
+void
+ide_runtime_prepare_to_build (IdeRuntime    *self,
+                              IdeRunContext *run_context)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_RUNTIME (self));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (IDE_RUNTIME_GET_CLASS (self)->prepare_to_build)
+    IDE_RUNTIME_GET_CLASS (self)->prepare_to_build (self, run_context);
 
   IDE_EXIT;
 }

@@ -160,8 +160,8 @@ gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
 }
 
 static void
-gbp_podman_runtime_prepare_run_context (IdeRuntime    *runtime,
-                                        IdeRunContext *run_context)
+gbp_podman_runtime_prepare_to_run (IdeRuntime    *runtime,
+                                   IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
@@ -552,7 +552,7 @@ gbp_podman_runtime_class_init (GbpPodmanRuntimeClass *klass)
 
   runtime_class->create_launcher = gbp_podman_runtime_create_launcher;
   runtime_class->translate_file = gbp_podman_runtime_translate_file;
-  runtime_class->prepare_run_context = gbp_podman_runtime_prepare_run_context;
+  runtime_class->prepare_to_run = gbp_podman_runtime_prepare_to_run;
 }
 
 static void

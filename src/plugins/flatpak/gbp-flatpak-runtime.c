@@ -447,8 +447,8 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
 }
 
 static void
-gbp_flatpak_runtime_prepare_run_context (IdeRuntime    *runtime,
-                                         IdeRunContext *run_context)
+gbp_flatpak_runtime_prepare_to_run (IdeRuntime    *runtime,
+                                    IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
@@ -846,7 +846,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->create_runner = gbp_flatpak_runtime_create_runner;
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
-  runtime_class->prepare_run_context = gbp_flatpak_runtime_prepare_run_context;
+  runtime_class->prepare_to_run = gbp_flatpak_runtime_prepare_to_run;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
   runtime_class->get_system_include_dirs = gbp_flatpak_runtime_get_system_include_dirs;
   runtime_class->get_triplet = gbp_flatpak_runtime_real_get_triplet;

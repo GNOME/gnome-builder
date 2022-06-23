@@ -4368,8 +4368,7 @@ ide_pipeline_prepare_run_context (IdePipeline   *self,
       return;
     }
 
-  /* TODO: setup run context for building instead of running */
-  ide_runtime_prepare_run_context (runtime, run_context);
+  ide_runtime_prepare_to_build (runtime, run_context);
 
   ide_run_context_setenv (run_context, "BUILDDIR", ide_pipeline_get_builddir (self));
   ide_run_context_setenv (run_context, "SRCDIR", ide_pipeline_get_srcdir (self));
