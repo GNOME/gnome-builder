@@ -101,214 +101,177 @@ on_install_stage_query (IdePipelineStage *stage,
   ide_pipeline_stage_set_completed (stage, FALSE);
 }
 
+G_GNUC_NULL_TERMINATED
+static IdeRunContext *
+create_run_context (GbpMesonPipelineAddin *self,
+                    IdePipeline           *pipeline,
+                    const char            *argv,
+                    ...)
+{
+  IdeRunContext *run_context;
+  va_list args;
+
+  g_assert (GBP_IS_MESON_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, run_context);
+
+  va_start (args, argv);
+  while (argv != NULL)
+    {
+      ide_run_context_append_argv (run_context, argv);
+      argv = va_arg (args, const char *);
+    }
+  va_end (args);
+
+  return run_context;
+}
+
+static IdePipelineStage *
+attach_run_context (GbpMesonPipelineAddin *self,
+                    IdePipeline           *pipeline,
+                    IdeRunContext         *build_context,
+                    IdeRunContext         *clean_context,
+                    const char            *title,
+                    IdePipelinePhase       phase)
+{
+  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
+  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
+  g_autoptr(IdePipelineStage) stage = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeContext *context;
+  guint id;
+
+  g_assert (GBP_IS_MESON_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (!build_context || IDE_IS_RUN_CONTEXT (build_context));
+  g_assert (!clean_context || IDE_IS_RUN_CONTEXT (clean_context));
+
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  stage = ide_pipeline_stage_launcher_new (context, NULL);
+
+  if (build_context != NULL)
+    {
+      if (!(build_launcher = ide_run_context_end (build_context, &error)))
+        {
+          g_critical ("Failed to create launcher from run context: %s",
+                      error->message);
+          return NULL;
+        }
+    }
+
+  if (clean_context != NULL)
+    {
+      if (!(clean_launcher = ide_run_context_end (clean_context, &error)))
+        {
+          g_critical ("Failed to create launcher from run context: %s",
+                      error->message);
+          return NULL;
+        }
+    }
+
+  g_object_set (stage,
+                "launcher", build_launcher,
+                "clean-launcher", clean_launcher,
+                "name", title,
+                NULL);
+
+  id = ide_pipeline_attach (pipeline, phase, 0, stage);
+  ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), id);
+
+  /* We return a borrowed instance */
+  return stage;
+}
+
 static void
 gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
   GbpMesonPipelineAddin *self = (GbpMesonPipelineAddin *)addin;
-  g_autoptr(IdeSubprocessLauncher) config_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) install_launcher = NULL;
-  g_autoptr(IdePipelineStage) build_stage = NULL;
-  g_autoptr(IdePipelineStage) config_stage = NULL;
-  g_autoptr(IdePipelineStage) install_stage = NULL;
-  g_autoptr(GError) error = NULL;
-  g_autofree gchar *build_ninja = NULL;
-  g_autofree gchar *crossbuild_file = NULL;
-  g_autofree gchar *meson_build = NULL;
-  g_autofree gchar *alt_meson_build = NULL;
+  g_autoptr(IdeRunContext) build_context = NULL;
+  g_autoptr(IdeRunContext) clean_context = NULL;
+  g_autoptr(IdeRunContext) config_context = NULL;
+  g_autoptr(IdeRunContext) install_context = NULL;
+  IdePipelineStage *stage;
+  g_autofree char *build_dot_ninja = NULL;
+  g_autofree char *crossbuild_file = NULL;
+  g_autofree char *meson = NULL;
+  g_autofree char *ninja = NULL;
   IdeBuildSystem *build_system;
-  IdeConfig *config;
-  IdeContext *context;
-  IdeRuntime *runtime;
   IdeToolchain *toolchain;
-  IdeWorkbench *workbench;
-  IdeProjectInfo *project_info;
-  g_autoptr(GFile) project_dir = NULL;
-  g_autoptr(GFile) alt_meson_build_file = NULL;
-  const gchar *config_opts;
-  const gchar *ninja = NULL;
-  const gchar *prefix;
-  const gchar *srcdir;
-  const gchar *meson;
-  GFile *project_file;
-  guint id;
-  gint parallel;
+  IdeContext *context;
+  const char *config_opts;
+  const char *prefix;
+  const char *srcdir;
+  IdeConfig *config;
+  int parallel;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_MESON_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  build_system = ide_build_system_from_context (context);
-  if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
-    IDE_GOTO (failure);
-
   config = ide_pipeline_get_config (pipeline);
-  runtime = ide_pipeline_get_runtime (pipeline);
-  toolchain = ide_pipeline_get_toolchain (pipeline);
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  build_system = ide_build_system_from_context (context);
+
+  if (!GBP_IS_MESON_BUILD_SYSTEM (build_system))
+    IDE_EXIT;
+
   srcdir = ide_pipeline_get_srcdir (pipeline);
-  workbench = ide_workbench_from_context (context);
-  project_info = ide_workbench_get_project_info (workbench);
-  project_file = ide_project_info_get_file (project_info);
-
-  if (project_file != NULL)
-    {
-      GFileType file_type = g_file_query_file_type (project_file, 0, NULL);
-
-      if (file_type == G_FILE_TYPE_DIRECTORY)
-        project_dir = g_object_ref (project_file);
-      else
-        project_dir = g_file_get_parent (project_file);
-
-      alt_meson_build_file = g_file_get_child (project_dir, "meson.build");
-      alt_meson_build = g_file_get_path (alt_meson_build_file);
-    }
-
-  g_assert (IDE_IS_CONFIG (config));
-  g_assert (IDE_IS_RUNTIME (runtime));
-  g_assert (srcdir != NULL);
-
-  /* If the srcdir does not contain the meson.build, perhaps the project's
-   * "Project File" directory does (and that could be in a sub-directory).
-   */
-  meson_build = g_build_filename (srcdir, "meson.build", NULL);
-  if (!g_file_test (meson_build, G_FILE_TEST_EXISTS) &&
-      alt_meson_build != NULL &&
-      project_dir != NULL &&
-      g_file_test (alt_meson_build, G_FILE_TEST_EXISTS))
-    srcdir = g_file_get_path (project_dir);
-
-  if (NULL == (meson = ide_config_getenv (config, "MESON")))
-    meson = "meson";
-
-  /* Warn about not finding Meson, but continue setting up */
-  if (!ide_runtime_contains_program_in_path (runtime, meson, NULL))
-    ide_context_warning (context,
-                         _("A Meson-based project is loaded but meson could not be found."));
-
-  /* Requires NULL check so we can use g_strv_contains() elsewhere */
-  for (guint i = 0; ninja_names[i]; i++)
-    {
-      if (ide_runtime_contains_program_in_path (runtime, ninja_names[i], NULL))
-        {
-          ninja = ninja_names[i];
-          break;
-        }
-    }
-
-  if (ninja == NULL)
-    ninja = ide_config_getenv (config, "NINJA");
-
-  /* Warn about not finding ninja, but continue setting up */
-  if (ninja == NULL)
-    {
-      ide_context_warning (context,
-                           _("A Meson-based project is loaded but Ninja could not be found."));
-      ninja = "ninja";
-    }
-
-  /* Create all our launchers up front */
-  if (NULL == (config_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (build_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (clean_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (install_launcher = ide_pipeline_create_launcher (pipeline, &error)))
-    IDE_GOTO (failure);
-
-  prefix = ide_config_get_prefix (config);
   config_opts = ide_config_get_config_opts (config);
+  prefix = ide_config_get_prefix (config);
+  build_dot_ninja = ide_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
   parallel = ide_config_get_parallelism (config);
+  toolchain = ide_pipeline_get_toolchain (pipeline);
+
+  /* Discover program locations for meson/ninja */
+  meson = gbp_meson_build_system_locate_meson (GBP_MESON_BUILD_SYSTEM (build_system), pipeline);
+  ninja = gbp_meson_build_system_locate_ninja (GBP_MESON_BUILD_SYSTEM (build_system), pipeline);
 
   /* Create the toolchain file if required */
   if (GBP_IS_MESON_TOOLCHAIN (toolchain))
-    crossbuild_file = g_strdup (gbp_meson_toolchain_get_file_path (GBP_MESON_TOOLCHAIN (toolchain)));
+    {
+      crossbuild_file = g_strdup (gbp_meson_toolchain_get_file_path (GBP_MESON_TOOLCHAIN (toolchain)));
+    }
   else if (g_strcmp0 (ide_toolchain_get_id (toolchain), "default") != 0)
     {
-      GbpMesonBuildStageCrossFile *cross_file_stage;
-      cross_file_stage = gbp_meson_build_stage_cross_file_new (toolchain);
+      g_autoptr(GbpMesonBuildStageCrossFile) cross_file_stage = gbp_meson_build_stage_cross_file_new (toolchain);
+      guint id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 0, IDE_PIPELINE_STAGE (cross_file_stage));
       crossbuild_file = gbp_meson_build_stage_cross_file_get_path (cross_file_stage, pipeline);
-
-      id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 0, IDE_PIPELINE_STAGE (cross_file_stage));
       ide_pipeline_addin_track (addin, id);
     }
 
-  /* Setup our meson configure stage. */
-
-  ide_subprocess_launcher_push_argv (config_launcher, meson);
-  ide_subprocess_launcher_push_argv (config_launcher, srcdir);
-  ide_subprocess_launcher_push_argv (config_launcher, ".");
-  ide_subprocess_launcher_push_argv (config_launcher, "--prefix");
-  ide_subprocess_launcher_push_argv (config_launcher, prefix);
+  /* Setup our configure stage */
+  config_context = create_run_context (self, pipeline, meson, srcdir, ".", "--prefix", prefix, NULL);
   if (crossbuild_file != NULL)
-    {
-      ide_subprocess_launcher_push_argv (config_launcher, "--cross-file");
-      ide_subprocess_launcher_push_argv (config_launcher, crossbuild_file);
-    }
-
+    ide_run_context_append_formatted (config_context, "--cross-file=%s", crossbuild_file);
   if (!ide_str_empty0 (config_opts))
-    {
-      g_auto(GStrv) argv = NULL;
-      gint argc;
+    ide_run_context_append_args_parsed (config_context, config_opts, NULL);
+  stage = attach_run_context (self, pipeline, config_context, NULL,
+                              _("Configure project"), IDE_PIPELINE_PHASE_CONFIGURE);
+  if (g_file_test (build_dot_ninja, G_FILE_TEST_EXISTS))
+    ide_pipeline_stage_set_completed (stage, TRUE);
 
-      if (!g_shell_parse_argv (config_opts, &argc, &argv, &error))
-        IDE_GOTO (failure);
-
-      ide_subprocess_launcher_push_args (config_launcher, (const gchar * const *)argv);
-    }
-
-  config_stage = ide_pipeline_stage_launcher_new (context, config_launcher);
-  ide_pipeline_stage_set_name (config_stage, _("Configuring project"));
-  build_ninja = ide_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
-  if (g_file_test (build_ninja, G_FILE_TEST_IS_REGULAR))
-    ide_pipeline_stage_set_completed (config_stage, TRUE);
-
-  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_CONFIGURE, 0, config_stage);
-  ide_pipeline_addin_track (addin, id);
-
-  /*
-   * Register the build launcher which will perform the incremental
-   * build of the project when the IDE_PIPELINE_PHASE_BUILD phase is
-   * requested of the pipeline.
-   */
-  ide_subprocess_launcher_push_argv (build_launcher, ninja);
-  ide_subprocess_launcher_push_argv (clean_launcher, ninja);
-
+  /* Setup our Build/Clean stage */
+  clean_context = create_run_context (self, pipeline, ninja, "clean", NULL);
+  build_context = create_run_context (self, pipeline, ninja, NULL);
   if (parallel > 0)
-    {
-      g_autofree gchar *j = g_strdup_printf ("-j%u", parallel);
+    ide_run_context_append_formatted (build_context, "-j%u", parallel);
+  stage = attach_run_context (self, pipeline, build_context, clean_context,
+                              _("Build project"), IDE_PIPELINE_PHASE_BUILD);
+  ide_pipeline_stage_set_check_stdout (stage, TRUE);
+  g_signal_connect (stage, "query", G_CALLBACK (on_build_stage_query), NULL);
 
-      ide_subprocess_launcher_push_argv (build_launcher, j);
-      ide_subprocess_launcher_push_argv (clean_launcher, j);
-    }
-
-  ide_subprocess_launcher_push_argv (clean_launcher, "clean");
-
-  build_stage = ide_pipeline_stage_launcher_new (context, build_launcher);
-  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (build_stage), clean_launcher);
-  ide_pipeline_stage_set_check_stdout (build_stage, TRUE);
-  ide_pipeline_stage_set_name (build_stage, _("Building project"));
-  g_signal_connect (build_stage, "query", G_CALLBACK (on_build_stage_query), NULL);
-
-  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, build_stage);
-  ide_pipeline_addin_track (addin, id);
-
-  /* Setup our install stage */
-  ide_subprocess_launcher_push_argv (install_launcher, ninja);
-  ide_subprocess_launcher_push_argv (install_launcher, "install");
-  install_stage = ide_pipeline_stage_launcher_new (context, install_launcher);
-  ide_pipeline_stage_set_name (install_stage, _("Installing project"));
-  g_signal_connect (install_stage, "query", G_CALLBACK (on_install_stage_query), NULL);
-  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_INSTALL, 0, install_stage);
-  ide_pipeline_addin_track (addin, id);
+  /* Setup our Install stage */
+  install_context = create_run_context (self, pipeline, ninja, "install", NULL);
+  stage = attach_run_context (self, pipeline, install_context, NULL,
+                              _("Install project"), IDE_PIPELINE_PHASE_INSTALL);
+  g_signal_connect (stage, "query", G_CALLBACK (on_install_stage_query), NULL);
 
   IDE_EXIT;
-
-failure:
-  if (error != NULL)
-    g_warning ("Failed to setup meson build pipeline: %s", error->message);
 }
 
 static void
@@ -318,8 +281,7 @@ pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonPipelineAddin, gbp_meson_pipeline_addin, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN,
-                                                pipeline_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, pipeline_addin_iface_init))
 
 static void
 gbp_meson_pipeline_addin_class_init (GbpMesonPipelineAddinClass *klass)
