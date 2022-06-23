@@ -34,25 +34,86 @@ struct _GbpCargoPipelineAddin
   IdeObject parent_instance;
 };
 
-static IdeSubprocessLauncher *
-create_launcher (IdePipeline *pipeline,
-                 const char  *project_dir,
-                 const char  *cargo)
+G_GNUC_NULL_TERMINATED
+static IdeRunContext *
+create_run_context (IdePipeline *pipeline,
+                    const char  *project_dir,
+                    const char  *argv,
+                    ...)
 {
-  IdeSubprocessLauncher *ret;
+  IdeRunContext *ret;
   const char *builddir;
+  va_list args;
 
   g_assert (IDE_IS_PIPELINE (pipeline));
 
-  if (!(ret = ide_pipeline_create_launcher (pipeline, NULL)))
-    return NULL;
+  ret = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, ret);
 
   builddir = ide_pipeline_get_builddir (pipeline);
-  ide_subprocess_launcher_setenv (ret, "CARGO_TARGET_DIR", builddir, TRUE);
-  ide_subprocess_launcher_set_cwd (ret, project_dir);
-  ide_subprocess_launcher_push_argv (ret, cargo);
+  ide_run_context_setenv (ret, "CARGO_TARGET_DIR", builddir);
+  ide_run_context_set_cwd (ret, project_dir);
+
+  va_start (args, argv);
+  while (argv != NULL)
+    {
+      ide_run_context_append_argv (ret, argv);
+      argv = va_arg (args, const char *);
+    }
+  va_end (args);
 
   return ret;
+}
+
+static IdePipelineStage *
+attach_run_context (GbpCargoPipelineAddin *self,
+                    IdePipeline           *pipeline,
+                    IdePipelinePhase       phase,
+                    IdeRunContext         *build_context,
+                    IdeRunContext         *clean_context,
+                    const char            *title)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
+  g_autoptr(IdePipelineStage) stage = NULL;
+  g_autoptr(GError) error = NULL;
+  IdeContext *context;
+  guint id;
+
+  g_assert (GBP_IS_CARGO_PIPELINE_ADDIN (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_CONTEXT (build_context));
+  g_assert (!clean_context || IDE_IS_RUN_CONTEXT (clean_context));
+
+  if (!(launcher = ide_run_context_end (build_context, &error)))
+    {
+      g_critical ("Failed to create launcher from run context: %s",
+                  error->message);
+      return NULL;
+    }
+
+  if (clean_context != NULL &&
+      !(clean_launcher = ide_run_context_end (clean_context, &error)))
+    {
+      g_critical ("Failed to create launcher from run context: %s",
+                  error->message);
+      return NULL;
+    }
+
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  stage = ide_pipeline_stage_launcher_new (context, NULL);
+
+  g_object_set (stage,
+                "launcher", launcher,
+                "clean-launcher", clean_launcher,
+                "name", title,
+                NULL);
+
+  id = ide_pipeline_attach (pipeline, phase, 0, stage);
+  ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), id);
+
+  /* return borrowed reference */
+  return stage;
 }
 
 static void
@@ -74,9 +135,13 @@ static void
 gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
+  GbpCargoPipelineAddin *self = (GbpCargoPipelineAddin *)addin;
   g_autoptr(IdeSubprocessLauncher) fetch_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
   g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
+  g_autoptr(IdeRunContext) fetch_context = NULL;
+  g_autoptr(IdeRunContext) build_context = NULL;
+  g_autoptr(IdeRunContext) clean_context = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
   g_autofree char *project_dir = NULL;
   g_autofree char *cargo = NULL;
@@ -84,11 +149,10 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   const char *config_opts;
   IdeContext *context;
   IdeConfig *config;
-  guint id;
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_CARGO_PIPELINE_ADDIN (addin));
+  g_assert (GBP_IS_CARGO_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
   context = ide_object_get_context (IDE_OBJECT (addin));
@@ -106,47 +170,39 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (IDE_IS_CONFIG (config));
   g_assert (cargo != NULL);
 
-  fetch_launcher = create_launcher (pipeline, project_dir, cargo);
-  ide_subprocess_launcher_push_argv (fetch_launcher, "fetch");
-  id = ide_pipeline_attach_launcher (pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, 0, fetch_launcher);
-  ide_pipeline_addin_track (addin, id);
+  fetch_context = create_run_context (pipeline, project_dir, cargo, "fetch", NULL);
+  attach_run_context (self, pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, fetch_context, NULL, _("Fetch dependencies"));
 
-  build_launcher = create_launcher (pipeline, project_dir, cargo);
-  ide_subprocess_launcher_push_argv (build_launcher, "build");
-  ide_subprocess_launcher_push_argv (build_launcher, "--message-format");
-  ide_subprocess_launcher_push_argv (build_launcher, "human");
+  build_context = create_run_context (pipeline, project_dir, cargo, "build", "--message-format", "human", NULL);
+  clean_context = create_run_context (pipeline, project_dir, cargo, "clean", NULL);
 
   if (!ide_pipeline_is_native (pipeline))
     {
       IdeTriplet *triplet = ide_pipeline_get_host_triplet (pipeline);
 
-      ide_subprocess_launcher_push_argv (build_launcher, "--target");
-      ide_subprocess_launcher_push_argv (build_launcher, ide_triplet_get_full_name (triplet));
+      ide_run_context_append_argv (build_context, "--target");
+      ide_run_context_append_argv (build_context, ide_triplet_get_full_name (triplet));
     }
 
   if (ide_config_get_parallelism (config) > 0)
     {
       int j = ide_config_get_parallelism (config);
-      ide_subprocess_launcher_push_argv_format (build_launcher, "-j%d", j);
+      ide_run_context_append_formatted (build_context, "-j%d", j);
     }
 
   if (!ide_config_get_debug (config))
-    ide_subprocess_launcher_push_argv (build_launcher, "--release");
+    ide_run_context_append_argv (build_context, "--release");
 
   /* Configure Options get passed to "cargo build" because there is no
    * equivalent "configure stage" for cargo.
    */
-  ide_subprocess_launcher_push_argv_parsed (build_launcher, config_opts);
+  if (!ide_str_empty0 (config_opts))
+    ide_run_context_append_args_parsed (build_context, config_opts, NULL);
 
-  clean_launcher = create_launcher (pipeline, project_dir, cargo);
-  ide_subprocess_launcher_push_argv (clean_launcher, "clean");
-
-  stage = ide_pipeline_stage_launcher_new (context, build_launcher);
-  ide_pipeline_stage_set_name (stage, _("Building project"));
-  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (stage), clean_launcher);
+  stage = attach_run_context (self, pipeline, IDE_PIPELINE_PHASE_BUILD,
+                              build_context, clean_context,
+                              _("Build project"));
   g_signal_connect (stage, "query", G_CALLBACK (query_cb), NULL);
-  id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, stage);
-  ide_pipeline_addin_track (addin, id);
 
   IDE_EXIT;
 }
