@@ -42,6 +42,9 @@ struct _GbpValgrindWorkbenchAddin
   char               *log_name;
   GSimpleActionGroup *actions;
 
+  gulong              notify_pipeline_handler;
+  gulong              stopped_handler;
+
   guint               has_handler : 1;
 };
 
@@ -98,15 +101,15 @@ get_string (GbpValgrindWorkbenchAddin *self,
 }
 
 static void
-gbp_valgrind_workbench_addin_runner_exited_cb (GbpValgrindWorkbenchAddin *self,
-                                               IdeRunner                 *runner)
+gbp_valgrind_workbench_addin_stop_cb (GbpValgrindWorkbenchAddin *self,
+                                      IdeRunManager             *run_manager)
 {
   g_autoptr(GFile) file = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_VALGRIND_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
   if (self->workbench == NULL || self->log_name == NULL)
     IDE_EXIT;
@@ -117,50 +120,53 @@ gbp_valgrind_workbench_addin_runner_exited_cb (GbpValgrindWorkbenchAddin *self,
                             "editorui",
                             IDE_BUFFER_OPEN_FLAGS_NONE,
                             NULL, NULL, NULL, NULL);
+  g_clear_pointer (&self->log_name, g_free);
 
   IDE_EXIT;
 }
 
-static void
-gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
-                                          IdeRunContext *run_context,
-                                          gpointer       user_data)
+static gboolean
+gbp_valgrind_workbench_addin_run_handler_cb (IdeRunContext       *run_context,
+                                             const char * const  *argv,
+                                             const char * const  *env,
+                                             const char          *cwd,
+                                             IdeUnixFDMap        *unix_fd_map,
+                                             gpointer             user_data,
+                                             GError             **error)
 {
-  g_printerr ("TODO: valgrind not ported run context yet!\n");
-#if 0
   GbpValgrindWorkbenchAddin *self = user_data;
-  g_autoptr(GError) error = NULL;
   g_autofree char *name = NULL;
   g_autofree char *track_origins = NULL;
   g_autofree char *leak_check = NULL;
   g_autoptr(GString) leak_kinds = NULL;
-  char log_fd_param[32];
-  int map_fd;
-  int fd;
+  int source_fd;
+  int dest_fd;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_RUN_MANAGER (run_manager));
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+  g_assert (argv != NULL);
+  g_assert (env != NULL);
   g_assert (GBP_IS_VALGRIND_WORKBENCH_ADDIN (self));
 
+  if (cwd != NULL)
+    ide_run_context_set_cwd (run_context, cwd);
+
+  dest_fd = ide_unix_fd_map_get_max_dest_fd (unix_fd_map) + 1;
+  if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
+    IDE_RETURN (FALSE);
+
   /* Create a temp file to write to and an FD to access it */
-  errno = 0;
-  fd = g_file_open_tmp ("gnome-builder-valgrind-XXXXXX.txt", &name, &error);
-  if (fd < 0)
-    {
-      g_warning ("Failed to create FD to communicate with Valgrind: %s: %s",
-                 g_strerror (errno), error->message);
-      IDE_EXIT;
-    }
+  if (-1 == (source_fd = g_file_open_tmp ("gnome-builder-valgrind-XXXXXX.txt", &name, error)))
+    IDE_RETURN (FALSE);
+
+  /* Set our FD for valgrind to log to */
+  ide_run_context_take_fd (run_context, source_fd, dest_fd);
 
   /* Save the filename so we can open it after exiting */
   g_clear_pointer (&self->log_name, g_free);
   self->log_name = g_steal_pointer (&name);
-
-  /* Get the FD number as it will exist within the subprocess */
-  map_fd = ide_runner_take_fd (runner, fd, -1);
-  g_snprintf (log_fd_param, sizeof log_fd_param, "--log-fd=%d", map_fd);
 
   /* Convert action state to command-line arguments */
   track_origins = g_strdup_printf ("--track-origins=%s", get_bool (self, "track-origins") ? "yes" : "no");
@@ -171,29 +177,48 @@ gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
   if (get_bool (self, "leak-kind-possible")) g_string_append (leak_kinds, "possible,");
   if (get_bool (self, "leak-kind-indirect")) g_string_append (leak_kinds, "indirect,");
   if (get_bool (self, "leak-kind-reachable")) g_string_append (leak_kinds, "reachable,");
+
+  ide_run_context_append_argv (run_context, "valgrind");
+  ide_run_context_append_formatted (run_context, "--log-fd=%d", dest_fd);
+  ide_run_context_append_argv (run_context, leak_check);
+  ide_run_context_append_argv (run_context, track_origins);
+
   if (leak_kinds->len > 0)
     {
-      g_autofree char *show_leak_kinds = NULL;
-
       g_string_truncate (leak_kinds, leak_kinds->len-1);
-      show_leak_kinds = g_strdup_printf ("--show-leak-kinds=%s", leak_kinds->str);
-      ide_runner_prepend_argv (runner, show_leak_kinds);
+      ide_run_context_append_formatted (run_context, "--show-leak-kinds=%s", leak_kinds->str);
     }
 
-  /* Reverse order so we can continually use prepend */
-  ide_runner_prepend_argv (runner, track_origins);
-  ide_runner_prepend_argv (runner, leak_check);
-  ide_runner_prepend_argv (runner, log_fd_param);
-  ide_runner_prepend_argv (runner, "valgrind");
+  if (env[0] != NULL)
+    {
+      ide_run_context_append_argv (run_context, "env");
+      ide_run_context_append_args (run_context, env);
+    }
 
-  g_signal_connect_object (runner,
-                           "exited",
-                           G_CALLBACK (gbp_valgrind_workbench_addin_runner_exited_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  ide_run_context_append_args (run_context, argv);
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
+                                          IdeRunContext *run_context,
+                                          gpointer       user_data)
+{
+  GbpValgrindWorkbenchAddin *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (GBP_IS_VALGRIND_WORKBENCH_ADDIN (self));
+
+  ide_run_context_push (run_context,
+                        gbp_valgrind_workbench_addin_run_handler_cb,
+                        g_object_ref (self),
+                        g_object_unref);
 
   IDE_EXIT;
-#endif
 }
 
 static void
@@ -260,11 +285,19 @@ gbp_valgrind_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
   g_set_object (&self->build_manager, build_manager);
   g_set_object (&self->run_manager, run_manager);
 
-  g_signal_connect_object (build_manager,
-                           "notify::pipeline",
-                           G_CALLBACK (gbp_valgrind_workbench_addin_notify_pipeline_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+  self->notify_pipeline_handler =
+    g_signal_connect_object (build_manager,
+                             "notify::pipeline",
+                             G_CALLBACK (gbp_valgrind_workbench_addin_notify_pipeline_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
+
+  self->stopped_handler =
+    g_signal_connect_object (run_manager,
+                             "stopped",
+                             G_CALLBACK (gbp_valgrind_workbench_addin_stop_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
 
   gbp_valgrind_workbench_addin_notify_pipeline_cb (self, NULL, build_manager);
 
@@ -315,16 +348,17 @@ gbp_valgrind_workbench_addin_unload (IdeWorkbenchAddin *addin,
 
   if (self->build_manager != NULL)
     {
-      g_signal_handlers_disconnect_by_func (self->build_manager,
-                                            G_CALLBACK (gbp_valgrind_workbench_addin_notify_pipeline_cb),
-                                            self);
+      g_clear_signal_handler (&self->notify_pipeline_handler, self->build_manager);
       g_clear_object (&self->build_manager);
     }
 
   if (self->run_manager != NULL)
     {
+      g_clear_signal_handler (&self->stopped_handler, self->run_manager);
+
       if (self->has_handler)
         ide_run_manager_remove_handler (self->run_manager, "valgrind");
+
       g_clear_object (&self->run_manager);
     }
 
