@@ -56,7 +56,9 @@ struct _IdeRuntimeClass
                                                        GError              **error);
   void                    (*prepare_configuration)    (IdeRuntime           *self,
                                                        IdeConfig            *config);
-  void                    (*prepare_run_context)      (IdeRuntime           *self,
+  void                    (*prepare_to_run)           (IdeRuntime           *self,
+                                                       IdeRunContext        *run_context);
+  void                    (*prepare_to_build)         (IdeRuntime           *self,
                                                        IdeRunContext        *run_context);
   IdeRunner              *(*create_runner)            (IdeRuntime           *self,
                                                        IdeBuildTarget       *build_target);
@@ -81,7 +83,10 @@ IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher  *ide_runtime_create_launcher          (IdeRuntime      *self,
                                                               GError         **error);
 IDE_AVAILABLE_IN_ALL
-void                    ide_runtime_prepare_run_context      (IdeRuntime      *self,
+void                    ide_runtime_prepare_to_run           (IdeRuntime      *self,
+                                                              IdeRunContext   *run_context);
+IDE_AVAILABLE_IN_ALL
+void                    ide_runtime_prepare_to_build         (IdeRuntime      *self,
                                                               IdeRunContext   *run_context);
 IDE_AVAILABLE_IN_ALL
 IdeRunner              *ide_runtime_create_runner            (IdeRuntime      *self,

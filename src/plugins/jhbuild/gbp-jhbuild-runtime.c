@@ -130,8 +130,8 @@ gbp_jhbuild_runtime_run_handler (IdeRunContext       *run_context,
 }
 
 static void
-gbp_jhbuild_runtime_prepare_run_context (IdeRuntime    *runtime,
-                                         IdeRunContext *run_context)
+gbp_jhbuild_runtime_prepare_to_run (IdeRuntime    *runtime,
+                                    IdeRunContext *run_context)
 {
   GbpJhbuildRuntime *self = (GbpJhbuildRuntime *)runtime;
 
@@ -261,7 +261,7 @@ gbp_jhbuild_runtime_class_init (GbpJhbuildRuntimeClass *klass)
   runtime_class->create_launcher = gbp_jhbuild_runtime_create_launcher;
   runtime_class->create_runner = gbp_jhbuild_runtime_create_runner;
   runtime_class->prepare_configuration = gbp_jhbuild_runtime_prepare_configuration;
-  runtime_class->prepare_run_context = gbp_jhbuild_runtime_prepare_run_context;
+  runtime_class->prepare_to_run = gbp_jhbuild_runtime_prepare_to_run;
 
   properties [PROP_EXECUTABLE_PATH] =
     g_param_spec_string ("executable-path", NULL, NULL,
