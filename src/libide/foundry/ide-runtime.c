@@ -32,9 +32,11 @@
 # include "../terminal/ide-terminal-util.h"
 #undef IDE_TERMINAL_INSIDE
 
+#include "ide-build-manager.h"
 #include "ide-build-target.h"
 #include "ide-config.h"
 #include "ide-config-manager.h"
+#include "ide-pipeline.h"
 #include "ide-run-context.h"
 #include "ide-runtime.h"
 #include "ide-runner.h"
@@ -860,6 +862,7 @@ ide_runtime_supports_toolchain (IdeRuntime   *self,
 /**
  * ide_runtime_prepare_to_run:
  * @self: a #IdeRuntime
+ * @pipeline: (nullable): an #IdePipeline or %NULL for the current
  * @run_context: an #IdeRunContext
  *
  * Prepares a run context to run an application.
@@ -875,15 +878,30 @@ ide_runtime_supports_toolchain (IdeRuntime   *self,
  */
 void
 ide_runtime_prepare_to_run (IdeRuntime    *self,
+                            IdePipeline   *pipeline,
                             IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_RUNTIME (self));
+  g_return_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
 
-  if (IDE_RUNTIME_GET_CLASS (self)->prepare_to_run)
-    IDE_RUNTIME_GET_CLASS (self)->prepare_to_run (self, run_context);
+  if (IDE_RUNTIME_GET_CLASS (self)->prepare_to_run == NULL)
+    IDE_EXIT;
+
+  if (pipeline == NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+
+      pipeline = ide_build_manager_get_pipeline (build_manager);
+    }
+
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (ide_pipeline_get_runtime (pipeline) == self);
+
+  IDE_RUNTIME_GET_CLASS (self)->prepare_to_run (self, pipeline, run_context);
 
   IDE_EXIT;
 }
@@ -891,6 +909,7 @@ ide_runtime_prepare_to_run (IdeRuntime    *self,
 /**
  * ide_runtime_prepare_to_build:
  * @self: a #IdeRuntime
+ * @pipeline: (nullable): an #IdePipeline or %NULL for the current
  * @run_context: an #IdeRunContext
  *
  * Prepares a run context for running a build command.
@@ -906,15 +925,30 @@ ide_runtime_prepare_to_run (IdeRuntime    *self,
  */
 void
 ide_runtime_prepare_to_build (IdeRuntime    *self,
+                              IdePipeline   *pipeline,
                               IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_RUNTIME (self));
+  g_return_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
 
-  if (IDE_RUNTIME_GET_CLASS (self)->prepare_to_build)
-    IDE_RUNTIME_GET_CLASS (self)->prepare_to_build (self, run_context);
+  if (IDE_RUNTIME_GET_CLASS (self)->prepare_to_build == NULL)
+    IDE_EXIT;
+
+  if (pipeline == NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+
+      pipeline = ide_build_manager_get_pipeline (build_manager);
+    }
+
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (ide_pipeline_get_runtime (pipeline) == self);
+
+  IDE_RUNTIME_GET_CLASS (self)->prepare_to_build (self, pipeline, run_context);
 
   IDE_EXIT;
 }

@@ -139,7 +139,7 @@ ide_deploy_strategy_real_prepare_run_context (IdeDeployStrategy *self,
    * the pipeline's runtime for how to create a run context.
    */
   if ((runtime = ide_pipeline_get_runtime (pipeline)))
-    ide_runtime_prepare_to_run (runtime, run_context);
+    ide_runtime_prepare_to_run (runtime, pipeline, run_context);
   else
     g_return_if_reached ();
 

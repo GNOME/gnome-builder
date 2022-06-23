@@ -384,7 +384,7 @@ gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
       IdeRuntime *runtime = ide_pipeline_get_runtime (pipeline);
       if (runtime == NULL)
         goto handle_error;
-      ide_runtime_prepare_to_run (runtime, run_context);
+      ide_runtime_prepare_to_run (runtime, pipeline, run_context);
       break;
     }
 
