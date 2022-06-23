@@ -877,6 +877,7 @@ ide_run_context_end (IdeRunContext  *self,
                      GError        **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  guint length;
 
   g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
   g_return_val_if_fail (self->ended == FALSE, NULL);
@@ -898,6 +899,28 @@ ide_run_context_end (IdeRunContext  *self,
   ide_subprocess_launcher_set_argv (launcher, ide_run_context_get_argv (self));
   ide_subprocess_launcher_set_environ (launcher, ide_run_context_get_environ (self));
   ide_subprocess_launcher_set_cwd (launcher, ide_run_context_get_cwd (self));
+
+  length = ide_unix_fd_map_get_length (self->root.unix_fd_map);
+
+  for (guint i = 0; i < length; i++)
+    {
+      int source_fd;
+      int dest_fd;
+
+      source_fd = ide_unix_fd_map_steal (self->root.unix_fd_map, i, &dest_fd);
+
+      if (source_fd != -1 && dest_fd != -1)
+        {
+          if (dest_fd == STDIN_FILENO)
+            ide_subprocess_launcher_take_stdin_fd (launcher, source_fd);
+          else if (dest_fd == STDOUT_FILENO)
+            ide_subprocess_launcher_take_stdout_fd (launcher, source_fd);
+          else if (dest_fd == STDERR_FILENO)
+            ide_subprocess_launcher_take_stderr_fd (launcher, source_fd);
+          else
+            ide_subprocess_launcher_take_fd (launcher, source_fd, dest_fd);
+        }
+    }
 
   return g_steal_pointer (&launcher);
 }
