@@ -777,11 +777,6 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   if (self->handler && self->handler->handler)
     self->handler->handler (self, run_context, self->handler->handler_data);
 
-  /* First we need to setup our basic runtime envronment so that we can be
-   * reasonably certain the application can access the desktop session.
-   */
-  setup_basic_environment (run_context);
-
   /* Now push a new layer so that we can keep those values separate from
    * what is configured in the run command. We use an expansion layer so
    * that we can expand common variables at this layer and not allow them
@@ -792,6 +787,11 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   environ = g_environ_setenv (environ, "HOME", g_get_home_dir (), TRUE);
   environ = g_environ_setenv (environ, "USER", g_get_user_name (), TRUE);
   ide_run_context_push_expansion (run_context, (const char * const *)environ);
+
+  /* First we need to setup our basic runtime envronment so that we can be
+   * reasonably certain the application can access the desktop session.
+   */
+  setup_basic_environment (run_context);
 
   /* Setup working directory */
   {
