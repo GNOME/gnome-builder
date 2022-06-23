@@ -20,8 +20,11 @@
 
 #define G_LOG_DOMAIN "gbp-meson-build-system"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
+#include <string.h>
 
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-build-target.h"
@@ -29,20 +32,20 @@
 
 struct _GbpMesonBuildSystem
 {
-  IdeObject           parent_instance;
-  GFile              *project_file;
-  IdeCompileCommands *compile_commands;
-  GFileMonitor       *monitor;
-  gchar              *project_version;
-  gchar             **languages;
+  IdeObject            parent_instance;
+  GFile               *project_file;
+  IdeCompileCommands  *compile_commands;
+  GFileMonitor        *monitor;
+  char                *project_version;
+  char               **languages;
 };
 
 static void async_initable_iface_init (GAsyncInitableIface     *iface);
 static void build_system_iface_init   (IdeBuildSystemInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonBuildSystem, gbp_meson_build_system, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM, build_system_iface_init))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ASYNC_INITABLE, async_initable_iface_init)
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_BUILD_SYSTEM, build_system_iface_init))
 
 enum {
   PROP_0,
@@ -982,4 +985,98 @@ gbp_meson_build_system_get_languages (GbpMesonBuildSystem *self)
   g_return_val_if_fail (GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
 
   return (const gchar * const *)self->languages;
+}
+
+char *
+gbp_meson_build_system_get_project_dir (GbpMesonBuildSystem *self)
+{
+  g_autoptr(GFile) workdir = NULL;
+  g_autofree char *base = NULL;
+  IdeContext *context;
+
+  g_return_val_if_fail (GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  workdir = ide_context_ref_workdir (context);
+
+  if (self->project_file == NULL)
+    return g_strdup (g_file_peek_path (workdir));
+
+  base = g_file_get_basename (self->project_file);
+
+  if (strcasecmp (base, "meson.build") == 0)
+    {
+      g_autoptr(GFile) parent = g_file_get_parent (self->project_file);
+      return g_file_get_path (parent);
+    }
+
+  return g_file_get_path (self->project_file);
+}
+
+char *
+gbp_meson_build_system_locate_meson (GbpMesonBuildSystem *self,
+                                     IdePipeline         *pipeline)
+{
+  IdeConfig *config = NULL;
+
+  g_return_val_if_fail (!self || GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
+  g_return_val_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline), NULL);
+
+  if (pipeline != NULL && config == NULL)
+    config = ide_pipeline_get_config (pipeline);
+
+  /* First check MESON=path override in IdeConfig */
+  if (config != NULL)
+    {
+      const char *envvar = ide_config_getenv (config, "MESON");
+
+      if (envvar != NULL)
+        return g_strdup (envvar);
+    }
+
+  /* Next see if the pipeline or one of it's extensions has Meson */
+  if (pipeline != NULL)
+    {
+      if (ide_pipeline_contains_program_in_path (pipeline, "meson", NULL))
+        return g_strdup ("meson");
+    }
+
+  /* Fallback to "meson" and hope for the best */
+  return g_strdup ("meson");
+}
+
+char *
+gbp_meson_build_system_locate_ninja (GbpMesonBuildSystem *self,
+                                     IdePipeline         *pipeline)
+{
+  IdeConfig *config = NULL;
+
+  g_return_val_if_fail (!self || GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
+  g_return_val_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline), NULL);
+
+  if (pipeline != NULL && config == NULL)
+    config = ide_pipeline_get_config (pipeline);
+
+  /* First check NINJA=path override in IdeConfig */
+  if (config != NULL)
+    {
+      const char *envvar = ide_config_getenv (config, "NINJA");
+
+      if (envvar != NULL)
+        return g_strdup (envvar);
+    }
+
+  if (pipeline != NULL)
+    {
+      static const char *known_aliases[] = { "ninja", "ninja-build" };
+
+      for (guint i = 0; i < G_N_ELEMENTS (known_aliases); i++)
+        {
+          if (ide_pipeline_contains_program_in_path (pipeline, known_aliases[i], NULL))
+            return g_strdup (known_aliases[i]);
+        }
+    }
+
+  /* Fallback to "ninja" and hope for the best */
+  return g_strdup ("ninja");
 }

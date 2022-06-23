@@ -27,6 +27,12 @@ G_BEGIN_DECLS
 #define GBP_TYPE_MESON_BUILD_SYSTEM (gbp_meson_build_system_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpMesonBuildSystem, gbp_meson_build_system, GBP, MESON_BUILD_SYSTEM, IdeObject)
-const gchar * const * gbp_meson_build_system_get_languages (GbpMesonBuildSystem *self);
+
+const gchar * const *gbp_meson_build_system_get_languages   (GbpMesonBuildSystem *self);
+char                *gbp_meson_build_system_get_project_dir (GbpMesonBuildSystem *self);
+char                *gbp_meson_build_system_locate_meson    (GbpMesonBuildSystem *self,
+                                                             IdePipeline         *pipeline);
+char                *gbp_meson_build_system_locate_ninja    (GbpMesonBuildSystem *self,
+                                                             IdePipeline         *pipeline);
 
 G_END_DECLS
