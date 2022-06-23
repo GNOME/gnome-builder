@@ -4352,6 +4352,19 @@ ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,
   return IDE_PIPELINE_ADDIN (ret);
 }
 
+/**
+ * ide_pipeline_prepare_run_context:
+ * @self: a #IdePipeline
+ * @run_context: an #IdeRunContext
+ *
+ * Prepares #IdeRunContext to build within the pipeline.
+ *
+ * You should use this to prepare a new #IdeRunContext to run within the
+ * build pipeline environment before adding arguments and other settings
+ * to the context.
+ *
+ * The runtime will be consulted to modify any commands necessary.
+ */
 void
 ide_pipeline_prepare_run_context (IdePipeline   *self,
                                   IdeRunContext *run_context)
