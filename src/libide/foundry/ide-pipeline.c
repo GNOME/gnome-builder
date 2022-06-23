@@ -4385,4 +4385,5 @@ ide_pipeline_prepare_run_context (IdePipeline   *self,
 
   ide_run_context_setenv (run_context, "BUILDDIR", ide_pipeline_get_builddir (self));
   ide_run_context_setenv (run_context, "SRCDIR", ide_pipeline_get_srcdir (self));
+  ide_run_context_set_cwd (run_context, ide_pipeline_get_builddir (self));
 }
