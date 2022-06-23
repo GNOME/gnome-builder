@@ -342,38 +342,34 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
                                            gpointer             user_data,
                                            GError             **error)
 {
-  GbpFlatpakRuntime *self = user_data;
-  IdeConfigManager *config_manager;
+  IdePipeline *pipeline = user_data;
+  GbpFlatpakRuntime *self;
   g_autofree char *project_build_dir_arg = NULL;
   g_autofree char *project_build_dir = NULL;
   g_autofree char *doc_portal_arg = NULL;
   g_autofree char *staging_dir = NULL;
-  IdeBuildManager *build_manager;
-  IdePipeline *pipeline;
   const char *app_id;
   IdeContext *context;
   IdeConfig *config;
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  self = GBP_FLATPAK_RUNTIME (ide_pipeline_get_runtime (pipeline));
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_CONTEXT (context));
 
   /* Pass through the FD mappings */
   if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
     return FALSE;
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  /* Get the the staging directory for "flatpak build" to use */
-  build_manager = ide_build_manager_from_context (context);
-  pipeline = ide_build_manager_get_pipeline (build_manager);
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
-
-  /* Get the app-id and access to config for finish-args */
-  config_manager = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (config_manager);
+  config = ide_pipeline_get_config (pipeline);
   app_id = ide_config_get_app_id (config);
 
   /* Make sure our worker has access to our Builder-specific Flatpak repository */
@@ -448,11 +444,13 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
 
 static void
 gbp_flatpak_runtime_prepare_to_run (IdeRuntime    *runtime,
+                                    IdePipeline   *pipeline,
                                     IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (runtime));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   /* We have to run "flatpak build" from the host */
@@ -461,7 +459,7 @@ gbp_flatpak_runtime_prepare_to_run (IdeRuntime    *runtime,
   /* Handle the upper layer to rewrite the command using "flatpak build" */
   ide_run_context_push (run_context,
                         gbp_flatpak_runtime_handle_run_context_cb,
-                        g_object_ref (runtime),
+                        g_object_ref (pipeline),
                         g_object_unref);
 
   IDE_EXIT;
@@ -476,12 +474,10 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
                                              gpointer             user_data,
                                              GError             **error)
 {
-  GbpFlatpakRuntime *self = user_data;
-  IdeConfigManager *config_manager;
+  IdePipeline *pipeline = user_data;
+  GbpFlatpakRuntime *self;
   g_autofree char *staging_dir = NULL;
   g_autofree char *ccache_dir = NULL;
-  IdeBuildManager *build_manager;
-  IdePipeline *pipeline;
   const char *srcdir;
   const char *builddir;
   IdeContext *context;
@@ -489,26 +485,24 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  self = GBP_FLATPAK_RUNTIME (ide_pipeline_get_runtime (pipeline));
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_CONTEXT (context));
 
   /* Pass through the FD mappings */
   if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
     return FALSE;
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-
-  /* Get the the staging directory for "flatpak build" to use */
-  build_manager = ide_build_manager_from_context (context);
-  pipeline = ide_build_manager_get_pipeline (build_manager);
   staging_dir = gbp_flatpak_get_staging_dir (pipeline);
   srcdir = ide_pipeline_get_srcdir (pipeline);
   builddir = ide_pipeline_get_builddir (pipeline);
-
-  /* Get the app-id and access to config for finish-args */
-  config_manager = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (config_manager);
+  config = ide_pipeline_get_config (pipeline);
 
   /* Make sure our worker has access to our Builder-specific Flatpak repository */
   ide_run_context_setenv (run_context, "FLATPAK_CONFIG_DIR", gbp_flatpak_get_config_dir ());
@@ -578,11 +572,13 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
 
 static void
 gbp_flatpak_runtime_prepare_to_build (IdeRuntime    *runtime,
+                                      IdePipeline   *pipeline,
                                       IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (runtime));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   /* We have to run "flatpak build" from the host */
@@ -591,7 +587,7 @@ gbp_flatpak_runtime_prepare_to_build (IdeRuntime    *runtime,
   /* Handle the upper layer to rewrite the command using "flatpak build" */
   ide_run_context_push (run_context,
                         gbp_flatpak_runtime_handle_build_context_cb,
-                        g_object_ref (runtime),
+                        g_object_ref (pipeline),
                         g_object_unref);
 
   IDE_EXIT;

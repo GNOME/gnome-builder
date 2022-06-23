@@ -161,11 +161,13 @@ gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
 
 static void
 gbp_podman_runtime_prepare_run_context (IdeRuntime    *runtime,
+                                        IdePipeline   *pipeline,
                                         IdeRunContext *run_context)
 {
   IDE_ENTRY;
 
   g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   /* Our commands will need to be run from the host */

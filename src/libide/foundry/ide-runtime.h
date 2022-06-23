@@ -57,8 +57,10 @@ struct _IdeRuntimeClass
   void                    (*prepare_configuration)    (IdeRuntime           *self,
                                                        IdeConfig            *config);
   void                    (*prepare_to_run)           (IdeRuntime           *self,
+                                                       IdePipeline          *pipeline,
                                                        IdeRunContext        *run_context);
   void                    (*prepare_to_build)         (IdeRuntime           *self,
+                                                       IdePipeline          *pipeline,
                                                        IdeRunContext        *run_context);
   IdeRunner              *(*create_runner)            (IdeRuntime           *self,
                                                        IdeBuildTarget       *build_target);
@@ -84,9 +86,11 @@ IdeSubprocessLauncher  *ide_runtime_create_launcher          (IdeRuntime      *s
                                                               GError         **error);
 IDE_AVAILABLE_IN_ALL
 void                    ide_runtime_prepare_to_run           (IdeRuntime      *self,
+                                                              IdePipeline     *pipeline,
                                                               IdeRunContext   *run_context);
 IDE_AVAILABLE_IN_ALL
 void                    ide_runtime_prepare_to_build         (IdeRuntime      *self,
+                                                              IdePipeline     *pipeline,
                                                               IdeRunContext   *run_context);
 IDE_AVAILABLE_IN_ALL
 IdeRunner              *ide_runtime_create_runner            (IdeRuntime      *self,

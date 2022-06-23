@@ -131,6 +131,7 @@ gbp_jhbuild_runtime_run_handler (IdeRunContext       *run_context,
 
 static void
 gbp_jhbuild_runtime_prepare_run_context (IdeRuntime    *runtime,
+                                         IdePipeline   *pipeline,
                                          IdeRunContext *run_context)
 {
   GbpJhbuildRuntime *self = (GbpJhbuildRuntime *)runtime;
@@ -138,6 +139,7 @@ gbp_jhbuild_runtime_prepare_run_context (IdeRuntime    *runtime,
   IDE_ENTRY;
 
   g_assert (GBP_IS_JHBUILD_RUNTIME (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   ide_run_context_push (run_context,
