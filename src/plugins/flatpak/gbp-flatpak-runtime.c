@@ -402,7 +402,7 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   project_build_dir_arg = g_strdup_printf ("--filesystem=%s", project_build_dir);
   ide_run_context_append_argv (run_context, project_build_dir_arg);
 
-  /* Concvert environment from upper level into --env=FOO=BAR */
+  /* Convert environment from upper level into --env=FOO=BAR */
   if (env != NULL)
     {
       for (guint i = 0; env[i]; i++)
@@ -461,6 +461,136 @@ gbp_flatpak_runtime_prepare_to_run (IdeRuntime    *runtime,
   /* Handle the upper layer to rewrite the command using "flatpak build" */
   ide_run_context_push (run_context,
                         gbp_flatpak_runtime_handle_run_context_cb,
+                        g_object_ref (runtime),
+                        g_object_unref);
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
+                                             const char * const  *argv,
+                                             const char * const  *env,
+                                             const char          *cwd,
+                                             IdeUnixFDMap        *unix_fd_map,
+                                             gpointer             user_data,
+                                             GError             **error)
+{
+  GbpFlatpakRuntime *self = user_data;
+  IdeConfigManager *config_manager;
+  g_autofree char *staging_dir = NULL;
+  g_autofree char *ccache_dir = NULL;
+  IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
+  const char *srcdir;
+  const char *builddir;
+  IdeContext *context;
+  IdeConfig *config;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  /* Pass through the FD mappings */
+  if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
+    return FALSE;
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+
+  /* Get the the staging directory for "flatpak build" to use */
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+  staging_dir = gbp_flatpak_get_staging_dir (pipeline);
+  srcdir = ide_pipeline_get_srcdir (pipeline);
+  builddir = ide_pipeline_get_builddir (pipeline);
+
+  /* Get the app-id and access to config for finish-args */
+  config_manager = ide_config_manager_from_context (context);
+  config = ide_config_manager_get_current (config_manager);
+
+  /* Make sure our worker has access to our Builder-specific Flatpak repository */
+  ide_run_context_setenv (run_context, "FLATPAK_CONFIG_DIR", gbp_flatpak_get_config_dir ());
+
+  /* We might need access to ccache configs inside the build environ.
+   * Usually, this is set by flatpak-builder, but since we are running
+   * the incremental build, we need to take care of that too.
+   *
+   * See https://bugzilla.gnome.org/show_bug.cgi?id=780153
+   */
+  ccache_dir = g_build_filename (g_get_user_cache_dir (),
+                                 ide_get_program_name (),
+                                 "flatpak-builder",
+                                 "ccache",
+                                 NULL);
+  ide_run_context_setenv (run_context, "CCACHE_DIR", ccache_dir);
+
+  /* We can pass the CWD directory down just fine */
+  ide_run_context_set_cwd (run_context, cwd);
+
+  /* Now setup our basic arguments for the application */
+  ide_run_context_append_argv (run_context, "flatpak");
+  ide_run_context_append_argv (run_context, "build");
+  ide_run_context_append_argv (run_context, "--with-appdir");
+  ide_run_context_append_argv (run_context, "--allow=devel");
+  ide_run_context_append_argv (run_context, "--die-with-parent");
+
+  /* Make sure we have access to the build directory */
+  ide_run_context_append_formatted (run_context, "--filesystem=%s", srcdir);
+  ide_run_context_append_formatted (run_context, "--filesystem=%s", builddir);
+  ide_run_context_append_formatted (run_context, "--filesystem=%s/gnome-builder", g_get_user_cache_dir ());
+  ide_run_context_append_argv (run_context, "--nofilesystem=host");
+
+  /* Ensure build-args are passed down */
+  if (GBP_IS_FLATPAK_MANIFEST (config))
+    {
+      const char * const *build_args = gbp_flatpak_manifest_get_build_args (GBP_FLATPAK_MANIFEST (config));
+      if (build_args != NULL)
+        ide_run_context_append_args (run_context, build_args);
+    }
+  else
+    {
+      /* Somehow got here w/o a manifest, give network access to be nice so
+       * things like meson subprojects work and git submodules work.
+       */
+      ide_run_context_append_argv (run_context, "--share=network");
+    }
+
+  /* Convert environment from upper level into --env=FOO=BAR */
+  if (env != NULL)
+    {
+      for (guint i = 0; env[i]; i++)
+        {
+          g_autofree char *arg = g_strconcat ("--env=", env[i], NULL);
+          ide_run_context_append_argv (run_context, arg);
+        }
+    }
+
+  /* And last, before our child command, is the staging directory */
+  ide_run_context_append_argv (run_context, staging_dir);
+
+  /* And now the upper layer's command arguments */
+  ide_run_context_append_args (run_context, argv);
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+gbp_flatpak_runtime_prepare_to_build (IdeRuntime    *runtime,
+                                      IdeRunContext *run_context)
+{
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_FLATPAK_RUNTIME (runtime));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  /* We have to run "flatpak build" from the host */
+  ide_run_context_push_host (run_context);
+
+  /* Handle the upper layer to rewrite the command using "flatpak build" */
+  ide_run_context_push (run_context,
+                        gbp_flatpak_runtime_handle_build_context_cb,
                         g_object_ref (runtime),
                         g_object_unref);
 
@@ -846,6 +976,7 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   runtime_class->create_runner = gbp_flatpak_runtime_create_runner;
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
+  runtime_class->prepare_to_build = gbp_flatpak_runtime_prepare_to_build;
   runtime_class->prepare_to_run = gbp_flatpak_runtime_prepare_to_run;
   runtime_class->translate_file = gbp_flatpak_runtime_translate_file;
   runtime_class->get_system_include_dirs = gbp_flatpak_runtime_get_system_include_dirs;
