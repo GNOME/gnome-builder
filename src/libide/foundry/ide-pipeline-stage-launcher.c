@@ -589,7 +589,7 @@ ide_pipeline_stage_launcher_set_clean_launcher (IdePipelineStageLauncher *self,
   IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_PIPELINE_STAGE_LAUNCHER (self));
-  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (clean_launcher));
+  g_return_if_fail (!clean_launcher || IDE_IS_SUBPROCESS_LAUNCHER (clean_launcher));
 
   if (g_set_object (&priv->clean_launcher, clean_launcher))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAN_LAUNCHER]);
