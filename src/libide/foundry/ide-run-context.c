@@ -886,6 +886,30 @@ ide_run_context_end (IdeRunContext  *self,
   g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
   g_return_val_if_fail (self->ended == FALSE, NULL);
 
+#if 0
+  {
+    guint j = 0;
+    for (const GList *iter = self->layers.head;
+         iter != NULL;
+         iter = iter->next)
+      {
+        IdeRunContextLayer *layer = iter->data;
+
+        g_print ("[%d]:    CWD: %s\n", j++, layer->cwd);
+        g_print ("        N FDS: %u\n", ide_unix_fd_map_get_length (layer->unix_fd_map));
+        g_print ("  Environment: ");
+        for (guint i = 0; i < layer->env->len; i++)
+          g_print ("%s ", g_array_index (layer->env, char *, i));
+        g_print ("\n");
+        g_print ("  Arguments: ");
+        for (guint i = 0; i < layer->argv->len; i++)
+          g_print ("%s ", g_array_index (layer->argv, char *, i));
+        g_print ("\n");
+
+      }
+  }
+#endif
+
   self->ended = TRUE;
 
   while (self->layers.length > 1)
