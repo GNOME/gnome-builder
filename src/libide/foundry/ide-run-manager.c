@@ -774,8 +774,12 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
    * to inject any command wrapper it needs. This might be something like
    * gdb, or valgrind, etc.
    */
-  if (self->handler && self->handler->handler)
-    self->handler->handler (self, run_context, self->handler->handler_data);
+  if (self->handler != NULL && self->handler->handler != NULL)
+    self->handler->handler (self,
+                            pipeline,
+                            run_command,
+                            run_context,
+                            self->handler->handler_data);
 
   /* Now push a new layer so that we can keep those values separate from
    * what is configured in the run command. We use an expansion layer so
