@@ -822,16 +822,17 @@ ide_run_context_default_handler (IdeRunContext       *self,
   if (!ide_unix_fd_map_steal_from (layer->unix_fd_map, unix_fd_map, error))
     return FALSE;
 
-  /* Replace environment for this layer to use "env FOO=Bar" style subcommand
-   * so that it's evironment doesn't attach to the parent program.
-   */
-  ide_run_context_environ_to_argv (self);
-
-  /* Then make sure the higher layer's environment has higher priority */
-  ide_run_context_set_environ (self, env);
-
-  /* Now append the arguments */
-  ide_run_context_append_args (self, argv);
+  if (argv != NULL && argv[0] != NULL)
+    {
+      /* Convert environment into "env FOO=BAR subcommand" style */
+      ide_run_context_environ_to_argv (self);
+      ide_run_context_append_args (self, argv);
+    }
+  else
+    {
+      /* No argv was provided, just merge environments */
+      ide_run_context_add_environ (self, env);
+    }
 
   return TRUE;
 }
