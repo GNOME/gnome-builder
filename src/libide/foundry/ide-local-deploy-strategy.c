@@ -144,55 +144,6 @@ ide_local_deploy_strategy_deploy_finish (IdeDeployStrategy  *strategy,
 }
 
 static void
-ide_local_deploy_strategy_create_runner_async (IdeDeployStrategy   *strategy,
-                                               IdePipeline         *pipeline,
-                                               GCancellable        *cancellable,
-                                               GAsyncReadyCallback  callback,
-                                               gpointer             user_data)
-{
-  g_autoptr(IdeRunner) runner = NULL;
-  g_autoptr(IdeTask) task = NULL;
-  IdeRuntime *runtime;
-
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_LOCAL_DEPLOY_STRATEGY (strategy));
-  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (strategy, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_local_deploy_strategy_create_runner_async);
-
-  if (!(runtime = ide_pipeline_get_runtime (pipeline)) ||
-      !(runner = ide_runtime_create_runner (runtime, NULL)))
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Failed to create IdeRunner for pipeline");
-  else
-    ide_task_return_pointer (task, g_steal_pointer (&runner), g_object_unref);
-
-  IDE_EXIT;
-}
-
-static IdeRunner *
-ide_local_deploy_strategy_create_runner_finish (IdeDeployStrategy  *strategy,
-                                                GAsyncResult       *result,
-                                                GError            **error)
-{
-  IdeRunner *ret;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
-  g_assert (IDE_IS_TASK (result));
-
-  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
-
-  IDE_RETURN (ret);
-}
-
-static void
 ide_local_deploy_strategy_class_init (IdeLocalDeployStrategyClass *klass)
 {
   IdeDeployStrategyClass *deploy_strategy_class = IDE_DEPLOY_STRATEGY_CLASS (klass);
@@ -201,8 +152,6 @@ ide_local_deploy_strategy_class_init (IdeLocalDeployStrategyClass *klass)
   deploy_strategy_class->load_finish = ide_local_deploy_strategy_load_finish;
   deploy_strategy_class->deploy_async = ide_local_deploy_strategy_deploy_async;
   deploy_strategy_class->deploy_finish = ide_local_deploy_strategy_deploy_finish;
-  deploy_strategy_class->create_runner_async = ide_local_deploy_strategy_create_runner_async;
-  deploy_strategy_class->create_runner_finish = ide_local_deploy_strategy_create_runner_finish;
 }
 
 static void

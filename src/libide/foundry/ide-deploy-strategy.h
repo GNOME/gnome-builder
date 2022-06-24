@@ -59,56 +59,38 @@ struct _IdeDeployStrategyClass
   gboolean       (*deploy_finish)        (IdeDeployStrategy      *self,
                                           GAsyncResult           *result,
                                           GError                **error);
-  void           (*create_runner_async)  (IdeDeployStrategy      *self,
-                                          IdePipeline            *pipeline,
-                                          GCancellable           *cancellable,
-                                          GAsyncReadyCallback     callback,
-                                          gpointer                user_data);
-  IdeRunner     *(*create_runner_finish) (IdeDeployStrategy      *self,
-                                          GAsyncResult           *result,
-                                          GError                **error);
   void           (*prepare_run_context)  (IdeDeployStrategy      *self,
                                           IdePipeline            *pipeline,
                                           IdeRunContext          *run_context);
 };
 
 IDE_AVAILABLE_IN_ALL
-void     ide_deploy_strategy_load_async    (IdeDeployStrategy      *self,
-                                            IdePipeline       *pipeline,
-                                            GCancellable           *cancellable,
-                                            GAsyncReadyCallback     callback,
-                                            gpointer                user_data);
+void     ide_deploy_strategy_load_async          (IdeDeployStrategy      *self,
+                                                  IdePipeline            *pipeline,
+                                                  GCancellable           *cancellable,
+                                                  GAsyncReadyCallback     callback,
+                                                  gpointer                user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean ide_deploy_strategy_load_finish   (IdeDeployStrategy      *self,
-                                            GAsyncResult           *result,
-                                            int                    *priority,
-                                            GError                **error);
+gboolean ide_deploy_strategy_load_finish         (IdeDeployStrategy      *self,
+                                                  GAsyncResult           *result,
+                                                  int                    *priority,
+                                                  GError                **error);
 IDE_AVAILABLE_IN_ALL
-void     ide_deploy_strategy_deploy_async  (IdeDeployStrategy      *self,
-                                            IdePipeline       *pipeline,
-                                            GFileProgressCallback   progress,
-                                            gpointer                progress_data,
-                                            GDestroyNotify          progress_data_destroy,
-                                            GCancellable           *cancellable,
-                                            GAsyncReadyCallback     callback,
-                                            gpointer                user_data);
+void     ide_deploy_strategy_deploy_async        (IdeDeployStrategy      *self,
+                                                  IdePipeline            *pipeline,
+                                                  GFileProgressCallback   progress,
+                                                  gpointer                progress_data,
+                                                  GDestroyNotify          progress_data_destroy,
+                                                  GCancellable           *cancellable,
+                                                  GAsyncReadyCallback     callback,
+                                                  gpointer                user_data);
 IDE_AVAILABLE_IN_ALL
-gboolean ide_deploy_strategy_deploy_finish (IdeDeployStrategy      *self,
-                                            GAsyncResult           *result,
-                                            GError                **error);
+gboolean ide_deploy_strategy_deploy_finish       (IdeDeployStrategy      *self,
+                                                  GAsyncResult           *result,
+                                                  GError                **error);
 IDE_AVAILABLE_IN_ALL
-void       ide_deploy_strategy_create_runner_async  (IdeDeployStrategy   *self,
-                                                     IdePipeline         *pipeline,
-                                                     GCancellable        *cancellable,
-                                                     GAsyncReadyCallback  callback,
-                                                     gpointer             user_data);
-IDE_AVAILABLE_IN_ALL
-IdeRunner *ide_deploy_strategy_create_runner_finish (IdeDeployStrategy  *self,
-                                                     GAsyncResult       *result,
-                                                     GError            **error);
-IDE_AVAILABLE_IN_ALL
-void       ide_deploy_strategy_prepare_run_context  (IdeDeployStrategy  *self,
-                                                     IdePipeline        *pipeline,
-                                                     IdeRunContext      *run_context);
+void     ide_deploy_strategy_prepare_run_context (IdeDeployStrategy      *self,
+                                                  IdePipeline            *pipeline,
+                                                  IdeRunContext          *run_context);
 
 G_END_DECLS

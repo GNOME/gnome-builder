@@ -57,15 +57,5 @@ IDE_AVAILABLE_IN_ALL
 gboolean          ide_device_manager_deploy_finish        (IdeDeviceManager     *self,
                                                            GAsyncResult         *result,
                                                            GError              **error);
-IDE_AVAILABLE_IN_ALL
-void              ide_device_manager_create_runner_async  (IdeDeviceManager     *self,
-                                                           IdePipeline          *pipeline,
-                                                           GCancellable         *cancellable,
-                                                           GAsyncReadyCallback   callback,
-                                                           gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-IdeRunner        *ide_device_manager_create_runner_finish (IdeDeviceManager     *self,
-                                                           GAsyncResult         *result,
-                                                           GError              **error);
 
 G_END_DECLS

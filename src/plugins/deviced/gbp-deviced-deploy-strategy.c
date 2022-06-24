@@ -25,7 +25,6 @@
 
 #include "gbp-deviced-deploy-strategy.h"
 #include "gbp-deviced-device.h"
-#include "gbp-deviced-runner.h"
 
 struct _GbpDevicedDeployStrategy
 {
@@ -377,54 +376,6 @@ gbp_deviced_deploy_strategy_deploy_finish (IdeDeployStrategy *self,
 }
 
 static void
-gbp_deviced_deploy_strategy_create_runner_async (IdeDeployStrategy   *strategy,
-                                                 IdePipeline         *pipeline,
-                                                 GCancellable        *cancellable,
-                                                 GAsyncReadyCallback  callback,
-                                                 gpointer             user_data)
-{
-  GbpDevicedDeployStrategy *self = (GbpDevicedDeployStrategy *)strategy;
-  g_autoptr(IdeTask) task = NULL;
-  IdeDevice *device = NULL;
-  IdeConfig *config = NULL;
-  GbpDevicedRunner *runner;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_DEVICED_DEPLOY_STRATEGY (self));
-  g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_deviced_deploy_strategy_create_runner_async);
-
-  device = ide_pipeline_get_device (pipeline);
-  config = ide_pipeline_get_config (pipeline);
-
-  g_assert (GBP_IS_FLATPAK_MANIFEST (config));
-  g_assert (GBP_IS_DEVICED_DEVICE (device));
-
-  g_assert (IDE_IS_CONTEXT (ide_object_get_context (IDE_OBJECT (self))));
-
-  runner = gbp_deviced_runner_new (GBP_DEVICED_DEVICE (device));
-  ide_object_append (IDE_OBJECT (pipeline), IDE_OBJECT (runner));
-  ide_task_return_object (task, runner);
-
-  IDE_EXIT;
-}
-
-static IdeRunner *
-gbp_deviced_deploy_strategy_create_runner_finish (IdeDeployStrategy  *self,
-                                                  GAsyncResult       *result,
-                                                  GError            **error)
-{
-  g_return_val_if_fail (GBP_IS_DEVICED_DEPLOY_STRATEGY (self), FALSE);
-  g_return_val_if_fail (ide_task_is_valid (result, self), FALSE);
-
-  return ide_task_propagate_object (IDE_TASK (result), error);
-}
-
-static void
 gbp_deviced_deploy_strategy_class_init (GbpDevicedDeployStrategyClass *klass)
 {
   IdeDeployStrategyClass *strategy_class = IDE_DEPLOY_STRATEGY_CLASS (klass);
@@ -433,8 +384,6 @@ gbp_deviced_deploy_strategy_class_init (GbpDevicedDeployStrategyClass *klass)
   strategy_class->load_finish = gbp_deviced_deploy_strategy_load_finish;
   strategy_class->deploy_async = gbp_deviced_deploy_strategy_deploy_async;
   strategy_class->deploy_finish = gbp_deviced_deploy_strategy_deploy_finish;
-  strategy_class->create_runner_async = gbp_deviced_deploy_strategy_create_runner_async;
-  strategy_class->create_runner_finish = gbp_deviced_deploy_strategy_create_runner_finish;
 }
 
 static void
