@@ -362,7 +362,7 @@ ide_run_context_expansion_handler (IdeRunContext       *self,
           g_array_append_val (newenv, expanded);
         }
 
-      ide_run_context_set_environ (self, (const char * const *)(gpointer)newenv->data);
+      ide_run_context_add_environ (self, (const char * const *)(gpointer)newenv->data);
     }
 
   if (argv != NULL)
@@ -375,7 +375,7 @@ ide_run_context_expansion_handler (IdeRunContext       *self,
           g_array_append_val (newargv, expanded);
         }
 
-      ide_run_context_set_argv (self, (const char * const *)(gpointer)newargv->data);
+      ide_run_context_append_args (self, (const char * const *)(gpointer)newargv->data);
     }
 
   IDE_RETURN (TRUE);
