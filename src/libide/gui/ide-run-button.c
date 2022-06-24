@@ -38,44 +38,15 @@ struct _IdeRunButton
 {
   GtkWidget       parent_instance;
   AdwSplitButton *split_button;
-  char           *run_handler_icon_name;
   IdeJoinedMenu  *joined_menu;
 };
 
 G_DEFINE_FINAL_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_WIDGET)
 
 static void
-ide_run_button_handler_set (IdeRunButton  *self,
-                            GParamSpec    *pspec,
-                            IdeRunManager *run_manager)
-{
-  const GList *list;
-  const GList *iter;
-  const gchar *handler;
-
-  g_assert (IDE_IS_RUN_BUTTON (self));
-  g_assert (IDE_IS_RUN_MANAGER (run_manager));
-
-  handler = ide_run_manager_get_handler (run_manager);
-  list = _ide_run_manager_get_handlers (run_manager);
-
-  for (iter = list; iter; iter = iter->next)
-    {
-      const IdeRunHandlerInfo *info = iter->data;
-
-      if (g_strcmp0 (info->id, handler) == 0)
-        {
-          self->run_handler_icon_name = g_strdup (info->icon_name);
-          g_object_set (self->split_button, "icon-name", info->icon_name, NULL);
-          break;
-        }
-    }
-}
-
-static void
-on_run_busy_state_changed_cb (IdeRunButton  *self,
-                              GParamSpec    *pspec,
-                              IdeRunManager *run_manager)
+on_icon_state_changed_cb (IdeRunButton  *self,
+                          GParamSpec    *pspec,
+                          IdeRunManager *run_manager)
 {
   const char *icon_name;
   const char *action_name;
@@ -85,7 +56,7 @@ on_run_busy_state_changed_cb (IdeRunButton  *self,
 
   if (!ide_run_manager_get_busy (run_manager))
     {
-      icon_name = self->run_handler_icon_name;
+      icon_name = ide_run_manager_get_icon_name (run_manager);
       action_name = "run-manager.run";
     }
   else
@@ -94,8 +65,10 @@ on_run_busy_state_changed_cb (IdeRunButton  *self,
       action_name = "run-manager.stop";
     }
 
-  g_object_set (self->split_button, "icon-name", icon_name, NULL);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (self->split_button), action_name);
+  g_object_set (self->split_button,
+                "action-name", action_name,
+                "icon-name", icon_name,
+                NULL);
 }
 
 static void
@@ -114,26 +87,24 @@ ide_run_button_load (IdeRunButton *self,
   if (!ide_context_has_project (context))
     IDE_EXIT;
 
-  device_manager = ide_device_manager_from_context (context);
+  /* Setup button action/icon */
   run_manager = ide_run_manager_from_context (context);
-
   g_signal_connect_object (run_manager,
                            "notify::busy",
-                           G_CALLBACK (on_run_busy_state_changed_cb),
+                           G_CALLBACK (on_icon_state_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-
   g_signal_connect_object (run_manager,
-                           "notify::handler",
-                           G_CALLBACK (ide_run_button_handler_set),
+                           "notify::icon-name",
+                           G_CALLBACK (on_icon_state_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
+  on_icon_state_changed_cb (self, NULL, run_manager);
 
   /* Add devices section */
+  device_manager = ide_device_manager_from_context (context);
   menu = _ide_device_manager_get_menu (device_manager);
   ide_joined_menu_prepend_menu (self->joined_menu, G_MENU_MODEL (menu));
-
-  ide_run_button_handler_set (self, NULL, run_manager);
 
   IDE_EXIT;
 }
@@ -160,9 +131,6 @@ ide_run_button_query_tooltip (IdeRunButton *self,
                               GtkButton    *button)
 {
   IdeRunManager *run_manager;
-  const GList *list;
-  const GList *iter;
-  const gchar *handler;
   IdeContext *context;
 
   g_assert (IDE_IS_RUN_BUTTON (self));
@@ -171,46 +139,13 @@ ide_run_button_query_tooltip (IdeRunButton *self,
 
   context = ide_widget_get_context (GTK_WIDGET (self));
   run_manager = ide_run_manager_from_context (context);
-  handler = ide_run_manager_get_handler (run_manager);
-  list = _ide_run_manager_get_handlers (run_manager);
 
   if (ide_run_manager_get_busy (run_manager))
-    {
-      gtk_tooltip_set_text (tooltip, _("Stop running"));
-      return TRUE;
-    }
+    gtk_tooltip_set_text (tooltip, _("Stop running"));
+  else
+    gtk_tooltip_set_text (tooltip, _("Run project"));
 
-  for (iter = list; iter; iter = iter->next)
-    {
-      const IdeRunHandlerInfo *info = iter->data;
-
-      if (g_strcmp0 (info->id, handler) == 0)
-        {
-          gboolean enabled;
-
-          /* Figure out if the run action is enabled. If it
-           * is not, then we should inform the user that
-           * the project cannot be run yet because the
-           * build pipeline is not yet configured. */
-          g_action_group_query_action (G_ACTION_GROUP (run_manager),
-                                       "run",
-                                       &enabled,
-                                       NULL,
-                                       NULL,
-                                       NULL,
-                                       NULL);
-
-          if (!enabled)
-            {
-              gtk_tooltip_set_text (tooltip, _("Invalid project configuration"));
-              return TRUE;
-            }
-
-          gtk_tooltip_set_text (tooltip, info->title);
-        }
-    }
-
-  return FALSE;
+  return TRUE;
 }
 
 static void

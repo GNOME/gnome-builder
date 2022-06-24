@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include <libide-plugins.h>
 
 #include "ide-foundry-types.h"
 
@@ -35,34 +36,17 @@ G_BEGIN_DECLS
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeRunManager, ide_run_manager, IDE, RUN_MANAGER, IdeObject)
 
-typedef void (*IdeRunHandler) (IdeRunManager *self,
-                               IdePipeline   *pipeline,
-                               IdeRunCommand *run_command,
-                               IdeRunContext *run_context,
-                               gpointer       user_data);
-
 IDE_AVAILABLE_IN_ALL
 IdeRunManager  *ide_run_manager_from_context                   (IdeContext           *context);
 IDE_AVAILABLE_IN_ALL
 void            ide_run_manager_cancel                         (IdeRunManager        *self);
 IDE_AVAILABLE_IN_ALL
+const char     *ide_run_manager_get_icon_name                  (IdeRunManager        *self);
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_run_manager_get_busy                       (IdeRunManager        *self);
 IDE_AVAILABLE_IN_ALL
-const gchar    *ide_run_manager_get_handler                    (IdeRunManager        *self);
-IDE_AVAILABLE_IN_ALL
-void            ide_run_manager_set_handler                    (IdeRunManager        *self,
-                                                                const gchar          *id);
-IDE_AVAILABLE_IN_ALL
-void            ide_run_manager_add_handler                    (IdeRunManager        *self,
-                                                                const char           *id,
-                                                                const char           *title,
-                                                                const char           *icon_name,
-                                                                IdeRunHandler         run_handler,
-                                                                gpointer              user_data,
-                                                                GDestroyNotify        user_data_destroy);
-IDE_AVAILABLE_IN_ALL
-void            ide_run_manager_remove_handler                 (IdeRunManager        *self,
-                                                                const gchar          *id);
+void            ide_run_manager_set_run_tool_from_plugin_info  (IdeRunManager        *self,
+                                                                PeasPluginInfo       *plugin_info);
 IDE_AVAILABLE_IN_ALL
 void            ide_run_manager_run_async                      (IdeRunManager        *self,
                                                                 GCancellable         *cancellable,

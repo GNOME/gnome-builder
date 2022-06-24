@@ -41,11 +41,13 @@
 #include "ide-deploy-strategy.h"
 #include "ide-device-manager.h"
 #include "ide-foundry-compat.h"
+#include "ide-no-tool-private.h"
 #include "ide-run-command.h"
 #include "ide-run-command-provider.h"
 #include "ide-run-context.h"
 #include "ide-run-manager-private.h"
 #include "ide-run-manager.h"
+#include "ide-run-tool-private.h"
 #include "ide-runner.h"
 #include "ide-runtime.h"
 
@@ -56,9 +58,8 @@ struct _IdeRunManager
   GCancellable            *cancellable;
   IdeNotification         *notif;
   IdeExtensionSetAdapter  *run_command_providers;
-
-  const IdeRunHandlerInfo *handler;
-  GList                   *handlers;
+  IdeExtensionSetAdapter  *run_tools;
+  IdeRunTool              *run_tool;
 
   IdeSubprocess           *current_subprocess;
   IdeRunCommand           *current_run_command;
@@ -115,7 +116,8 @@ G_DEFINE_TYPE_EXTENDED (IdeRunManager, ide_run_manager, IDE_TYPE_OBJECT, G_TYPE_
 enum {
   PROP_0,
   PROP_BUSY,
-  PROP_HANDLER,
+  PROP_ICON_NAME,
+  PROP_RUN_TOOL,
   N_PROPS
 };
 
@@ -128,6 +130,57 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static IdeRunTool *
+ide_run_manager_get_run_tool (IdeRunManager *self)
+{
+  g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (IDE_IS_RUN_TOOL (self->run_tool));
+
+  return self->run_tool;
+}
+
+void
+ide_run_manager_set_run_tool_from_plugin_info (IdeRunManager  *self,
+                                               PeasPluginInfo *plugin_info)
+{
+  g_autoptr(IdeRunTool) no_tool = NULL;
+  PeasExtension *exten = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  if (plugin_info != NULL)
+    exten = ide_extension_set_adapter_get_extension (self->run_tools, plugin_info);
+
+  if (exten == NULL)
+    {
+      if (IDE_IS_NO_TOOL (self->run_tool))
+        return;
+      no_tool = ide_no_tool_new ();
+      exten = (PeasExtension *)no_tool;
+    }
+
+  if (g_set_object (&self->run_tool, IDE_RUN_TOOL (exten)))
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RUN_TOOL]);
+}
+
+static void
+ide_run_manager_set_run_tool_from_module_name (IdeRunManager *self,
+                                               const char    *name)
+{
+  PeasPluginInfo *plugin_info = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  g_debug ("Looking for run-tool from module %s", name);
+
+  if (!ide_str_empty0 (name))
+    plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (), name);
+
+  ide_run_manager_set_run_tool_from_plugin_info (self, plugin_info);
+}
 
 static void
 ide_run_manager_actions_high_contrast (IdeRunManager *self,
@@ -204,26 +257,6 @@ ide_run_manager_actions_default_run_command (IdeRunManager *self,
 }
 
 static void
-ide_run_handler_info_free (gpointer data)
-{
-  IdeRunHandlerInfo *info = data;
-
-  g_clear_pointer (&info->id, g_free);
-  g_clear_pointer (&info->title, g_free);
-  g_clear_pointer (&info->icon_name, g_free);
-
-  if (info->handler_data_destroy)
-    {
-      GDestroyNotify notify = g_steal_pointer (&info->handler_data_destroy);
-      gpointer notify_data = g_steal_pointer (&info->handler_data);
-
-      notify (notify_data);
-    }
-
-  g_slice_free (IdeRunHandlerInfo, info);
-}
-
-static void
 ide_run_manager_update_action_enabled (IdeRunManager *self)
 {
   IdeBuildManager *build_manager;
@@ -285,18 +318,15 @@ ide_run_manager_dispose (GObject *object)
 {
   IdeRunManager *self = (IdeRunManager *)object;
 
-  self->handler = NULL;
-
   g_clear_pointer (&self->default_run_command, g_free);
 
   g_clear_object (&self->cancellable);
   g_clear_object (&self->current_run_command);
   g_clear_object (&self->current_subprocess);
+  g_clear_object (&self->run_tool);
 
   ide_clear_and_destroy_object (&self->run_command_providers);
-
-  g_list_free_full (self->handlers, ide_run_handler_info_free);
-  self->handlers = NULL;
+  ide_clear_and_destroy_object (&self->run_tools);
 
   G_OBJECT_CLASS (ide_run_manager_parent_class)->dispose (object);
 }
@@ -315,6 +345,17 @@ ide_run_manager_notify_can_build (IdeRunManager   *self,
   ide_run_manager_update_action_enabled (self);
 
   IDE_EXIT;
+}
+
+const char *
+ide_run_manager_get_icon_name (IdeRunManager *self)
+{
+  g_assert (IDE_IS_RUN_MANAGER (self));
+
+  if (self->run_tool == NULL)
+    return NULL;
+
+  return ide_run_tool_get_icon_name (self->run_tool);
 }
 
 static gboolean
@@ -347,6 +388,11 @@ initable_init (GInitable     *initable,
                                                                IDE_TYPE_RUN_COMMAND_PROVIDER,
                                                                NULL, NULL);
 
+  self->run_tools = ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                                   peas_engine_get_default (),
+                                                   IDE_TYPE_RUN_TOOL,
+                                                   NULL, NULL);
+
   IDE_RETURN (TRUE);
 }
 
@@ -370,8 +416,12 @@ ide_run_manager_get_property (GObject    *object,
       g_value_set_boolean (value, ide_run_manager_get_busy (self));
       break;
 
-    case PROP_HANDLER:
-      g_value_set_string (value, ide_run_manager_get_handler (self));
+    case PROP_ICON_NAME:
+      g_value_set_string (value, ide_run_manager_get_icon_name (self));
+      break;
+
+    case PROP_RUN_TOOL:
+      g_value_set_object (value, ide_run_manager_get_run_tool (self));
       break;
 
     default:
@@ -388,17 +438,18 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
   object_class->get_property = ide_run_manager_get_property;
 
   properties [PROP_BUSY] =
-    g_param_spec_boolean ("busy",
-                          "Busy",
-                          "Busy",
+    g_param_spec_boolean ("busy", NULL, NULL,
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_HANDLER] =
-    g_param_spec_string ("handler",
-                         "Handler",
-                         "Handler",
-                         "run",
+  properties [PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_RUN_TOOL] =
+    g_param_spec_object ("run-tool", NULL, NULL,
+                         IDE_TYPE_RUN_TOOL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
@@ -745,6 +796,7 @@ ide_run_manager_run_subprocess_wait_check_cb (GObject      *object,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
@@ -762,6 +814,8 @@ ide_run_manager_run_subprocess_wait_check_cb (GObject      *object,
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
+
+  _ide_run_tool_emit_stopped (self->run_tool);
 
   g_signal_emit (self, signals[STOPPED], 0);
 
@@ -782,17 +836,16 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_RUN_COMMAND (run_command));
   g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_TOOL (self->run_tool));
 
-  /* The very first thing we need to do is allow the current run handler
+  g_debug ("Preparing run context using run tool %s",
+           G_OBJECT_TYPE_NAME (self->run_tool));
+
+  /* The very first thing we need to do is allow the current run tool
    * to inject any command wrapper it needs. This might be something like
    * gdb, or valgrind, etc.
    */
-  if (self->handler != NULL && self->handler->handler != NULL)
-    self->handler->handler (self,
-                            pipeline,
-                            run_command,
-                            run_context,
-                            self->handler->handler_data);
+  ide_run_tool_prepare_to_run (self->run_tool, pipeline, run_command, run_context);
 
   /* Now push a new layer so that we can keep those values separate from
    * what is configured in the run command. We use an expansion layer so
@@ -936,6 +989,8 @@ ide_run_manager_run_deploy_cb (GObject      *object,
                                 NULL);
     ide_notification_attach (self->notif, IDE_OBJECT (self));
   }
+
+  _ide_run_tool_emit_started (self->run_tool, subprocess);
 
   g_signal_emit (self, signals[STARTED], 0);
 
@@ -1182,9 +1237,9 @@ ide_run_manager_cancel (IdeRunManager *self)
       int exit_signal = ide_run_manager_get_exit_signal (self);
 
       if (!self->sent_signal)
-        ide_subprocess_send_signal (self->current_subprocess, exit_signal);
+        ide_run_tool_send_signal (self->run_tool, exit_signal);
       else
-        ide_subprocess_force_exit (self->current_subprocess);
+        ide_run_tool_force_exit (self->run_tool);
 
       self->sent_signal = TRUE;
     }
@@ -1195,103 +1250,6 @@ ide_run_manager_cancel (IdeRunManager *self)
   self->cancellable = g_cancellable_new ();
 
   IDE_EXIT;
-}
-
-void
-ide_run_manager_set_handler (IdeRunManager *self,
-                             const gchar   *id)
-{
-  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
-
-  self->handler = NULL;
-
-  for (GList *iter = self->handlers; iter; iter = iter->next)
-    {
-      const IdeRunHandlerInfo *info = iter->data;
-
-      if (g_strcmp0 (info->id, id) == 0)
-        {
-          self->handler = info;
-          IDE_TRACE_MSG ("run handler set to %s", info->title);
-          g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HANDLER]);
-          break;
-        }
-    }
-}
-
-void
-ide_run_manager_add_handler (IdeRunManager  *self,
-                             const gchar    *id,
-                             const gchar    *title,
-                             const gchar    *icon_name,
-                             IdeRunHandler   run_handler,
-                             gpointer        user_data,
-                             GDestroyNotify  user_data_destroy)
-{
-  IdeRunHandlerInfo *info;
-
-  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
-  g_return_if_fail (id != NULL);
-  g_return_if_fail (title != NULL);
-
-  info = g_slice_new0 (IdeRunHandlerInfo);
-  info->id = g_strdup (id);
-  info->title = g_strdup (title);
-  info->icon_name = g_strdup (icon_name);
-  info->handler = run_handler;
-  info->handler_data = user_data;
-  info->handler_data_destroy = user_data_destroy;
-
-  self->handlers = g_list_append (self->handlers, info);
-
-  if (self->handler == NULL)
-    self->handler = info;
-}
-
-void
-ide_run_manager_remove_handler (IdeRunManager *self,
-                                const gchar   *id)
-{
-  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
-  g_return_if_fail (id != NULL);
-
-  for (GList *iter = self->handlers; iter; iter = iter->next)
-    {
-      IdeRunHandlerInfo *info = iter->data;
-
-      if (g_strcmp0 (info->id, id) == 0)
-        {
-          self->handlers = g_list_delete_link (self->handlers, iter);
-
-          if (self->handler == info && self->handlers != NULL)
-            self->handler = self->handlers->data;
-          else
-            self->handler = NULL;
-
-          ide_run_handler_info_free (info);
-
-          break;
-        }
-    }
-}
-
-const GList *
-_ide_run_manager_get_handlers (IdeRunManager *self)
-{
-  g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
-
-  return self->handlers;
-}
-
-const gchar *
-ide_run_manager_get_handler (IdeRunManager *self)
-{
-  g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
-
-  if (self->handler != NULL)
-    return self->handler->id;
-
-  return NULL;
 }
 
 static void
@@ -1333,23 +1291,13 @@ static void
 ide_run_manager_actions_run_with_handler (IdeRunManager *self,
                                           GVariant      *param)
 {
-  const gchar *handler = NULL;
-  g_autoptr(GVariant) sunk = NULL;
-
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_MANAGER (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
-  if (param != NULL)
-  {
-    handler = g_variant_get_string (param, NULL);
-    if (g_variant_is_floating (param))
-      sunk = g_variant_ref_sink (param);
-  }
-
-  /* Use specified handler, if provided */
-  if (!ide_str_empty0 (handler))
-    ide_run_manager_set_handler (self, handler);
+  ide_run_manager_set_run_tool_from_module_name (self, g_variant_get_string (param, NULL));
 
   ide_run_manager_run_async (self,
                              NULL,
@@ -1378,6 +1326,7 @@ ide_run_manager_init (IdeRunManager *self)
   GtkTextDirection text_dir;
 
   self->cancellable = g_cancellable_new ();
+  self->run_tool = ide_no_tool_new ();
 
   /* Setup initial text direction state */
   text_dir = gtk_widget_get_default_direction ();
@@ -1387,14 +1336,6 @@ ide_run_manager_init (IdeRunManager *self)
                                       text_dir == GTK_TEXT_DIR_LTR ?
                                         g_variant_new_string ("ltr") :
                                         g_variant_new_string ("rtl"));
-
-  ide_run_manager_add_handler (self,
-                               "run",
-                               _("Run"),
-                               "builder-run-start-symbolic",
-                               NULL,
-                               NULL,
-                               NULL);
 }
 
 void

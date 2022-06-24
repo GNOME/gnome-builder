@@ -2,6 +2,7 @@ if get_option('plugin_valgrind')
 
 plugins_sources += files([
   'valgrind-plugin.c',
+  'gbp-valgrind-tool.c',
   'gbp-valgrind-workbench-addin.c',
 ])
 
@@ -12,5 +13,7 @@ plugin_valgrind_resources = gnome.compile_resources(
 )
 
 plugins_sources += plugin_valgrind_resources
+
+install_data(['org.gnome.builder.valgrind.gschema.xml'], install_dir: schema_dir)
 
 endif

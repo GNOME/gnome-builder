@@ -27,6 +27,7 @@
 
 #include <libide-gui.h>
 
+#include "gbp-sysprof-tool.h"
 #include "gbp-sysprof-workbench-addin.h"
 #include "gbp-sysprof-workspace-addin.h"
 
@@ -35,6 +36,9 @@ _gbp_sysprof_register_types (PeasObjectModule *module)
 {
   sysprof_clock_init ();
 
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUN_TOOL,
+                                              GBP_TYPE_SYSPROF_TOOL);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_SYSPROF_WORKBENCH_ADDIN);
