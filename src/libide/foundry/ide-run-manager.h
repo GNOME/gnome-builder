@@ -36,6 +36,8 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeRunManager, ide_run_manager, IDE, RUN_MANAGER, IdeObject)
 
 typedef void (*IdeRunHandler) (IdeRunManager *self,
+                               IdePipeline   *pipeline,
+                               IdeRunCommand *run_command,
                                IdeRunContext *run_context,
                                gpointer       user_data);
 
