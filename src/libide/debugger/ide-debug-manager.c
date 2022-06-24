@@ -969,7 +969,7 @@ _ide_debug_manager_prepare (IdeDebugManager  *self,
       g_set_error_literal (error,
                            G_IO_ERROR,
                            G_IO_ERROR_NOT_SUPPORTED,
-                           _("A suitable debugger was not found."));
+                           _("A suitable debugger could not be found."));
       IDE_RETURN (FALSE);
     }
 
