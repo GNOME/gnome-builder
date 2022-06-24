@@ -91,5 +91,10 @@ IdeRunCommandKind   ide_run_command_get_kind         (IdeRunCommand      *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_kind         (IdeRunCommand      *self,
                                                       IdeRunCommandKind   kind);
+IDE_AVAILABLE_IN_ALL
+const char * const *ide_run_command_get_languages    (IdeRunCommand      *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_run_command_set_languages    (IdeRunCommand      *self,
+                                                      const char * const *languages);
 
 G_END_DECLS
