@@ -121,6 +121,7 @@ enum {
 
 enum {
   RUN,
+  STARTED,
   STOPPED,
   N_SIGNALS
 };
@@ -427,21 +428,33 @@ ide_run_manager_class_init (IdeRunManagerClass *klass)
                                 IDE_TYPE_RUN_CONTEXT);
 
   /**
+   * IdeRunManager::started:
+   *
+   * This signal is emitted when the run manager has spawned a new subprocess.
+   */
+  signals [STARTED] =
+    g_signal_new ("started",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  /**
    * IdeRunManager::stopped:
    *
-   * This signal is emitted when the run manager has stopped the currently
-   * executing inferior.
+   * This signal is emitted when the run manager has detected the running
+   * subprocess has exited.
    */
   signals [STOPPED] =
     g_signal_new ("stopped",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   0,
+                  NULL, NULL,
                   NULL,
-                  NULL,
-                  NULL,
-                  G_TYPE_NONE,
-                  0);
+                  G_TYPE_NONE, 0);
 }
 
 gboolean
@@ -923,6 +936,8 @@ ide_run_manager_run_deploy_cb (GObject      *object,
                                 NULL);
     ide_notification_attach (self->notif, IDE_OBJECT (self));
   }
+
+  g_signal_emit (self, signals[STARTED], 0);
 
   /* Wait for the application to finish running */
   ide_subprocess_wait_check_async (subprocess,
