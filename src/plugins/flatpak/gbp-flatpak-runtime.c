@@ -375,6 +375,11 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   /* Make sure our worker has access to our Builder-specific Flatpak repository */
   ide_run_context_setenv (run_context, "FLATPAK_CONFIG_DIR", gbp_flatpak_get_config_dir ());
 
+  /* We need access to a few things for "flatpak build" to work and give us
+   * access to the display/etc.
+   */
+  ide_run_context_add_minimal_environment (run_context);
+
   /* We can pass the CWD directory down just fine */
   ide_run_context_set_cwd (run_context, cwd);
 
