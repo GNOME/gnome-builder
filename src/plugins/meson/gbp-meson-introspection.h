@@ -20,22 +20,15 @@
 
 #pragma once
 
-#include <gio/gio.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_MESON_INTROSPECTION (gbp_meson_introspection_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpMesonIntrospection, gbp_meson_introspection, GBP, MESON_INTROSPECTION, GObject)
+G_DECLARE_FINAL_TYPE (GbpMesonIntrospection, gbp_meson_introspection, GBP, MESON_INTROSPECTION, IdePipelineStage)
 
-GbpMesonIntrospection *gbp_meson_introspection_new              (void);
-void                   gbp_meson_introspection_load_file_async  (GbpMesonIntrospection  *self,
-                                                                 const char             *path,
-                                                                 GCancellable           *cancellable,
-                                                                 GAsyncReadyCallback     callback,
-                                                                 gpointer                user_data);
-gboolean               gbp_meson_introspection_load_file_finish (GbpMesonIntrospection  *self,
-                                                                 GAsyncResult           *result,
-                                                                 GError                **error);
+GbpMesonIntrospection *gbp_meson_introspection_new               (void);
+GListModel            *gbp_meson_introspection_list_run_commands (GbpMesonIntrospection *self);
 
 G_END_DECLS
