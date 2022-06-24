@@ -250,6 +250,9 @@ gbp_shellcmd_run_command_init (GbpShellcmdRunCommand *self)
 {
   self->locality = GBP_SHELLCMD_LOCALITY_PIPELINE;
 
+  ide_run_command_set_kind (IDE_RUN_COMMAND (self),
+                            IDE_RUN_COMMAND_KIND_USER_DEFINED);
+
   g_signal_connect (self, "notify::accelerator", G_CALLBACK (accelerator_label_changed_cb), NULL);
   g_signal_connect (self, "notify::cwd", G_CALLBACK (subtitle_changed_cb), NULL);
   g_signal_connect (self, "notify::argv", G_CALLBACK (subtitle_changed_cb), NULL);
