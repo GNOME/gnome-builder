@@ -28,6 +28,8 @@
 
 #include <libide-io.h>
 
+#include "ide-private.h"
+
 #include "ide-run-context.h"
 
 typedef struct
@@ -56,6 +58,57 @@ IdeRunContext *
 ide_run_context_new (void)
 {
   return g_object_new (IDE_TYPE_RUN_CONTEXT, NULL);
+}
+
+/**
+ * ide_run_context_add_minimal_environment:
+ * @self: a #IdeRunContext
+ *
+ * Adds a minimal set of environment variables.
+ *
+ * This is useful to get access to things like the display or other
+ * expected variables.
+ */
+void
+ide_run_context_add_minimal_environment (IdeRunContext *self)
+{
+  const gchar * const *host_environ = _ide_host_environ ();
+  static const char *copy_env[] = {
+    "AT_SPI_BUS_ADDRESS",
+    "COLORTERM",
+    "DBUS_SESSION_BUS_ADDRESS",
+    "DBUS_SYSTEM_BUS_ADDRESS",
+    "DESKTOP_SESSION",
+    "DISPLAY",
+    "LANG",
+    "SHELL",
+    "SSH_AUTH_SOCK",
+    "USER",
+    "WAYLAND_DISPLAY",
+    "XAUTHORITY",
+    "XDG_CURRENT_DESKTOP",
+    "XDG_MENU_PREFIX",
+    "XDG_SEAT",
+    "XDG_SESSION_DESKTOP",
+    "XDG_SESSION_ID",
+    "XDG_SESSION_TYPE",
+    "XDG_VTNR",
+  };
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  for (guint i = 0; i < G_N_ELEMENTS (copy_env); i++)
+    {
+      const char *key = copy_env[i];
+      const char *val = g_environ_getenv ((char **)host_environ, key);
+
+      if (val != NULL)
+        ide_run_context_setenv (self, key, val);
+    }
+
+  IDE_EXIT;
 }
 
 static void
