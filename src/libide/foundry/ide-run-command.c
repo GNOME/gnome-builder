@@ -32,6 +32,7 @@ typedef struct
   char *display_name;
   char **environ;
   char **argv;
+  char **languages;
   int priority;
   IdeRunCommandKind kind;
 } IdeRunCommandPrivate;
@@ -44,6 +45,7 @@ enum {
   PROP_ENVIRON,
   PROP_ID,
   PROP_KIND,
+  PROP_LANGUAGES,
   PROP_PRIORITY,
   N_PROPS
 };
@@ -89,6 +91,7 @@ ide_run_command_finalize (GObject *object)
   g_clear_pointer (&priv->display_name, g_free);
   g_clear_pointer (&priv->environ, g_strfreev);
   g_clear_pointer (&priv->argv, g_strfreev);
+  g_clear_pointer (&priv->languages, g_strfreev);
 
   G_OBJECT_CLASS (ide_run_command_parent_class)->finalize (object);
 }
@@ -125,6 +128,10 @@ ide_run_command_get_property (GObject    *object,
 
     case PROP_KIND:
       g_value_set_enum (value, ide_run_command_get_kind (self));
+      break;
+
+    case PROP_LANGUAGES:
+      g_value_set_boxed (value, ide_run_command_get_languages (self));
       break;
 
     case PROP_PRIORITY:
@@ -168,6 +175,10 @@ ide_run_command_set_property (GObject      *object,
 
     case PROP_KIND:
       ide_run_command_set_kind (self, g_value_get_enum (value));
+      break;
+
+    case PROP_LANGUAGES:
+      ide_run_command_set_languages (self, g_value_get_boxed (value));
       break;
 
     case PROP_PRIORITY:
@@ -220,6 +231,21 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
                        IDE_TYPE_RUN_COMMAND_KIND,
                        IDE_RUN_COMMAND_KIND_UNKNOWN,
                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeRunCommand:languages:
+   *
+   * Contains the programming languages used.
+   *
+   * This is to be set by run command providers when they know what languages
+   * are used to create the program spawned by the run command. This can be
+   * used by debuggers to ensure that a suitable debugger is chosen for a given
+   * language used.
+   */
+  properties [PROP_LANGUAGES] =
+    g_param_spec_boxed ("languages", NULL, NULL,
+                        G_TYPE_STRV,
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority", NULL, NULL,
@@ -456,4 +482,33 @@ ide_run_command_set_kind (IdeRunCommand     *self,
       priv->kind = kind;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KIND]);
     }
+}
+
+const char * const *
+ide_run_command_get_languages (IdeRunCommand *self)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), NULL);
+
+  return (const char * const *)priv->languages;
+}
+
+void
+ide_run_command_set_languages (IdeRunCommand      *self,
+                               const char * const *languages)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+
+  if (languages == (const char * const *)priv->languages ||
+      (languages != NULL &&
+       priv->languages != NULL &&
+       g_strv_equal ((const char * const *)priv->languages, languages)))
+    return;
+
+  g_strfreev (priv->languages);
+  priv->languages = g_strdupv ((char **)languages);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGES]);
 }
