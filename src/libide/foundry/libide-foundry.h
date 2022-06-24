@@ -59,6 +59,7 @@ G_BEGIN_DECLS
 #include "ide-run-command-provider.h"
 #include "ide-run-context.h"
 #include "ide-run-manager.h"
+#include "ide-run-tool.h"
 #include "ide-runner-addin.h"
 #include "ide-runner.h"
 #include "ide-runtime-manager.h"

@@ -44,6 +44,7 @@ libide_foundry_public_headers = [
   'ide-run-command-provider.h',
   'ide-run-context.h',
   'ide-run-manager.h',
+  'ide-run-tool.h',
   'ide-runner-addin.h',
   'ide-runner.h',
   'ide-runtime-manager.h',
@@ -70,7 +71,9 @@ libide_foundry_private_headers = [
   'ide-device-private.h',
   'ide-foundry-init.h',
   'ide-local-deploy-strategy.h',
+  'ide-no-tool-private.h',
   'ide-run-manager-private.h',
+  'ide-run-tool-private.h',
   'ide-runtime-private.h',
   'ide-toolchain-private.h',
 ]
@@ -123,6 +126,7 @@ libide_foundry_public_sources = [
   'ide-run-command-provider.c',
   'ide-run-context.c',
   'ide-run-manager.c',
+  'ide-run-tool.c',
   'ide-runner-addin.c',
   'ide-runner.c',
   'ide-runtime-manager.c',
@@ -146,6 +150,7 @@ libide_foundry_private_sources = [
   'ide-build-utils.c',
   'ide-foundry-init.c',
   'ide-local-deploy-strategy.c',
+  'ide-no-tool.c',
 ]
 
 libide_foundry_sources += libide_foundry_public_sources
