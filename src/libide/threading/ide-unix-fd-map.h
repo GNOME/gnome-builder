@@ -84,5 +84,10 @@ IDE_AVAILABLE_IN_ALL
 gboolean      ide_unix_fd_map_stdout_isatty   (IdeUnixFDMap  *self);
 IDE_AVAILABLE_IN_ALL
 gboolean      ide_unix_fd_map_stderr_isatty   (IdeUnixFDMap  *self);
+IDE_AVAILABLE_IN_ALL
+GIOStream    *ide_unix_fd_map_create_stream   (IdeUnixFDMap  *self,
+                                               int            dest_read_fd,
+                                               int            dest_write_fd,
+                                               GError       **error);
 
 G_END_DECLS

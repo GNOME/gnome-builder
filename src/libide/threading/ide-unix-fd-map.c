@@ -26,6 +26,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <gio/gunixinputstream.h>
+#include <gio/gunixoutputstream.h>
+
 #include "ide-unix-fd-map.h"
 
 typedef struct
@@ -115,7 +118,6 @@ ide_unix_fd_map_take (IdeUnixFDMap *self,
   IdeUnixFDMapItem insert;
 
   g_return_if_fail (IDE_IS_UNIX_FD_MAP (self));
-  g_return_if_fail (source_fd > -1);
   g_return_if_fail (dest_fd > -1);
 
   for (guint i = 0; i < self->map->len; i++)
@@ -417,4 +419,74 @@ ide_unix_fd_map_steal_from (IdeUnixFDMap  *self,
     }
 
   return TRUE;
+}
+
+/**
+ * ide_unix_fd_map_create_stream:
+ * @self: a #IdeUnixFdMap
+ * @dest_read_fd: the FD number in the destination process for the read side (stdin)
+ * @dest_write_fd: the FD number in the destinatino process for the write side (stdout)
+ *
+ * Creates a #GIOStream to communicate with another process.
+ *
+ * Use this to create a #GIOStream to use from the calling process to communicate
+ * with a subprocess. Generally, you should pass STDIN_FILENO for @dest_read_fd
+ * and STDOUT_FILENO for @dest_write_fd.
+ *
+ * Returns: (transfer full): a #GIOStream if successful; otherwise %NULL and
+ *   @error is set.
+ */
+GIOStream *
+ide_unix_fd_map_create_stream (IdeUnixFDMap  *self,
+                               int            dest_read_fd,
+                               int            dest_write_fd,
+                               GError       **error)
+{
+  g_autoptr(GIOStream) ret = NULL;
+  g_autoptr(GInputStream) input = NULL;
+  g_autoptr(GOutputStream) output = NULL;
+  int stdin_pair[2] = {-1,-1};
+  int stdout_pair[2] = {-1,-1};
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_UNIX_FD_MAP (self), NULL);
+  g_return_val_if_fail (dest_read_fd > -1, NULL);
+  g_return_val_if_fail (dest_write_fd > -1, NULL);
+
+  if (pipe2 (stdin_pair, O_CLOEXEC) != 0 ||
+      pipe2 (stdout_pair, O_CLOEXEC) != 0)
+    {
+      int errsv = errno;
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           g_io_error_from_errno (errsv),
+                           g_strerror (errsv));
+      IDE_GOTO (failure);
+    }
+
+  ide_unix_fd_map_take (self, ide_steal_fd (&stdin_pair[0]), dest_read_fd);
+  ide_unix_fd_map_take (self, ide_steal_fd (&stdout_pair[1]), dest_write_fd);
+
+  if (!g_unix_set_fd_nonblocking (stdin_pair[1], TRUE, error) ||
+      !g_unix_set_fd_nonblocking (stdout_pair[0], TRUE, error))
+    IDE_GOTO (failure);
+
+  output = g_unix_output_stream_new (ide_steal_fd (&stdin_pair[1]), TRUE);
+  input = g_unix_input_stream_new (ide_steal_fd (&stdout_pair[0]), TRUE);
+
+  ret = g_simple_io_stream_new (input, output);
+
+failure:
+
+  if (stdin_pair[0] != -1)
+    close (stdin_pair[0]);
+  if (stdin_pair[1] != -1)
+    close (stdin_pair[1]);
+  if (stdout_pair[0] != -1)
+    close (stdout_pair[0]);
+  if (stdout_pair[1] != -1)
+    close (stdout_pair[1]);
+
+  IDE_RETURN (g_steal_pointer (&ret));
 }
