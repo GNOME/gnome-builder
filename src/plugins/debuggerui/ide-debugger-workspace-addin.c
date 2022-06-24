@@ -33,6 +33,8 @@
 #include <libide-gui.h>
 #include <libide-io.h>
 
+#include "ide-debug-manager-private.h"
+
 #include "ide-debugger-breakpoints-view.h"
 #include "ide-debugger-controls.h"
 #include "ide-debugger-disassembly-view.h"
@@ -128,17 +130,21 @@ send_notification (IdeDebuggerWorkspaceAddin *self,
 
 static void
 debugger_run_handler (IdeRunManager *run_manager,
+                      IdePipeline   *pipeline,
+                      IdeRunCommand *run_command,
                       IdeRunContext *run_context,
                       gpointer       user_data)
 {
   IdeDebuggerWorkspaceAddin *self = user_data;
+  g_autoptr(GError) error = NULL;
   IdeDebugManager *debug_manager;
   IdeContext *context;
-  g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_COMMAND (run_command));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
 
@@ -149,15 +155,12 @@ debugger_run_handler (IdeRunManager *run_manager,
   context = ide_object_get_context (IDE_OBJECT (run_manager));
   debug_manager = ide_debug_manager_from_context (context);
 
-  g_printerr ("debugger not ported to run context yet!\n");
-#if 0
-  if (!ide_debug_manager_start (debug_manager, run_context, &error))
+  if (!_ide_debug_manager_prepare (debug_manager, pipeline, run_command, run_context, &error))
     send_notification (self,
                        _("Failed to start the debugger"),
                        error->message,
                        "computer-fail-symbolic",
                        TRUE);
-#endif
 
   IDE_EXIT;
 }
@@ -337,6 +340,34 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
 }
 
 static void
+ide_debugger_workspace_addin_started_cb (IdeDebugManager *debug_manager,
+                                         IdeRunManager   *run_manager)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+
+  _ide_debug_manager_started (debug_manager);
+
+  IDE_EXIT;
+}
+
+static void
+ide_debugger_workspace_addin_stopped_cb (IdeDebugManager *debug_manager,
+                                         IdeRunManager   *run_manager)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+
+  _ide_debug_manager_stopped (debug_manager);
+
+  IDE_EXIT;
+}
+
+static void
 ide_debugger_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
@@ -371,6 +402,18 @@ ide_debugger_workspace_addin_load (IdeWorkspaceAddin *addin,
                                debugger_run_handler,
                                g_object_ref (self),
                                g_object_unref);
+
+  g_signal_connect_object (run_manager,
+                           "started",
+                           G_CALLBACK (ide_debugger_workspace_addin_started_cb),
+                           debug_manager,
+                           G_CONNECT_SWAPPED);
+
+  g_signal_connect_object (run_manager,
+                           "stopped",
+                           G_CALLBACK (ide_debugger_workspace_addin_stopped_cb),
+                           debug_manager,
+                           G_CONNECT_SWAPPED);
 
   self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
