@@ -162,7 +162,10 @@ ide_run_manager_set_run_tool_from_plugin_info (IdeRunManager  *self,
     }
 
   if (g_set_object (&self->run_tool, IDE_RUN_TOOL (exten)))
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RUN_TOOL]);
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RUN_TOOL]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_NAME]);
+    }
 }
 
 static void
