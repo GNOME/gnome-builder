@@ -20,7 +20,6 @@
 
 #pragma once
 
-#include <libide-core.h>
 #include <libide-foundry.h>
 
 #include "ide-debugger.h"
@@ -41,19 +40,10 @@ IdeDebugger            *ide_debug_manager_get_debugger             (IdeDebugMana
 IDE_AVAILABLE_IN_ALL
 gboolean                ide_debug_manager_get_active               (IdeDebugManager  *self);
 IDE_AVAILABLE_IN_ALL
-gboolean                ide_debug_manager_start                    (IdeDebugManager  *self,
-                                                                    IdeRunner        *runner,
-                                                                    GError          **error);
-IDE_AVAILABLE_IN_ALL
-void                    ide_debug_manager_stop                     (IdeDebugManager  *self);
-IDE_AVAILABLE_IN_ALL
 IdeDebuggerBreakpoints *ide_debug_manager_get_breakpoints_for_file (IdeDebugManager  *self,
                                                                     GFile            *file);
 IDE_AVAILABLE_IN_ALL
 gboolean                ide_debug_manager_supports_language        (IdeDebugManager  *self,
                                                                     const gchar      *language_id);
-IDE_AVAILABLE_IN_ALL
-IdeDebugger            *ide_debug_manager_find_debugger            (IdeDebugManager  *self,
-                                                                    IdeRunner        *runner);
 
 G_END_DECLS

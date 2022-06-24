@@ -32,7 +32,7 @@
 
 #include "ide-buffer-private.h"
 
-#include "ide-debug-manager.h"
+#include "ide-debug-manager-private.h"
 #include "ide-debugger.h"
 #include "ide-debugger-private.h"
 
@@ -58,8 +58,9 @@ typedef struct
 {
   IdeDebugManager *self;
   IdeDebugger     *debugger;
-  IdeRunner       *runner;
-  gint             priority;
+  IdePipeline     *pipeline;
+  IdeRunCommand   *run_command;
+  int              priority;
 } DebuggerLookup;
 
 enum {
@@ -91,8 +92,7 @@ IDE_DEFINE_ACTION_GROUP (IdeDebugManager, ide_debug_manager, {
 })
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
-                                                      ide_debug_manager_init_action_group))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_debug_manager_init_action_group))
 
 static gint
 compare_language_id (gconstpointer a,
@@ -727,27 +727,6 @@ ide_debug_manager_init (IdeDebugManager *self)
                                     self);
 }
 
-static gboolean
-debugger_supports_language (PeasPluginInfo *plugin_info,
-                            const gchar    *language)
-{
-  const gchar *supported;
-
-  supported = peas_plugin_info_get_external_data (plugin_info, "Debugger-Languages");
-
-  if (supported != NULL)
-    {
-      g_auto(GStrv) languages = g_strsplit (supported, ",", 0);
-      for (guint i = 0; languages[i]; i++)
-        {
-          if (g_strcmp0 (languages[i], language) == 0)
-            return TRUE;
-        }
-    }
-
-  return FALSE;
-}
-
 static void
 debugger_lookup (PeasExtensionSet *set,
                  PeasPluginInfo   *plugin_info,
@@ -765,18 +744,8 @@ debugger_lookup (PeasExtensionSet *set,
 
   ide_object_append (IDE_OBJECT (lookup->self), IDE_OBJECT (debugger));
 
-  if (ide_debugger_supports_runner (debugger, lookup->runner, &priority))
+  if (ide_debugger_supports_run_command (debugger, lookup->pipeline, lookup->run_command, &priority))
     {
-      IdeBuildTarget *build_target = ide_runner_get_build_target (lookup->runner);
-
-      if (build_target != NULL)
-        {
-          g_autofree gchar *language = ide_build_target_get_language (build_target);
-
-          if (!debugger_supports_language (plugin_info, language))
-            goto failure;
-        }
-
       if (lookup->debugger == NULL || priority < lookup->priority)
         {
           ide_clear_and_destroy_object (&lookup->debugger);
@@ -786,33 +755,25 @@ debugger_lookup (PeasExtensionSet *set,
         }
     }
 
-failure:
   ide_object_destroy (IDE_OBJECT (debugger));
 }
 
-/**
- * ide_debug_manager_find_debugger:
- * @self: a #IdeDebugManager
- * @runner: An #IdeRunner
- *
- * Locates a debugger for the given runner, or %NULL if no debugger
- * supports the runner.
- *
- * Returns: (transfer full) (nullable): An #IdeDebugger or %NULL
- */
-IdeDebugger *
+static IdeDebugger *
 ide_debug_manager_find_debugger (IdeDebugManager *self,
-                                 IdeRunner       *runner)
+                                 IdePipeline     *pipeline,
+                                 IdeRunCommand   *run_command)
 {
   g_autoptr(PeasExtensionSet) set = NULL;
   DebuggerLookup lookup;
 
-  g_return_val_if_fail (IDE_IS_DEBUG_MANAGER (self), NULL);
-  g_return_val_if_fail (IDE_IS_RUNNER (runner), NULL);
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_COMMAND (run_command));
 
   lookup.self = self;
   lookup.debugger = NULL;
-  lookup.runner = runner;
+  lookup.run_command = run_command;
+  lookup.pipeline = pipeline;
   lookup.priority = G_MAXINT;
 
   set = peas_extension_set_new (peas_engine_get_default (),
@@ -928,34 +889,38 @@ ide_debug_manager_sync_breakpoints (IdeDebugManager *self)
   IDE_EXIT;
 }
 
-static void
-ide_debug_manager_runner_spawned (IdeDebugManager *self,
-                                  const gchar     *identifier,
-                                  IdeRunner       *runner)
+void
+_ide_debug_manager_started (IdeDebugManager *self)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_DEBUG_MANAGER (self));
-  g_assert (identifier != NULL);
-  g_assert (IDE_IS_RUNNER (runner));
+
+  if (self->debugger == NULL)
+    IDE_EXIT;
 
   ide_debug_manager_sync_breakpoints (self);
+
+  IDE_EXIT;
 }
 
-static void
-ide_debug_manager_runner_exited (IdeDebugManager *self,
-                                 IdeRunner       *runner)
+void
+_ide_debug_manager_stopped (IdeDebugManager *self)
 {
   g_autoptr(IdeDebugger) debugger = NULL;
-  g_autoptr(IdeRunner) hold_runner = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_DEBUG_MANAGER (self));
-  g_assert (IDE_IS_RUNNER (runner));
+
+  if (self->debugger == NULL)
+    IDE_EXIT;
 
   /*
    * Keep debugger alive so that listeners to :debugger property can
    * properly disconnect signals when we clear the debugger instance.
    */
   debugger = g_steal_pointer (&self->debugger);
-  hold_runner = g_steal_pointer (&self->runner);
 
   ide_debug_manager_set_active (self, FALSE);
   ide_debug_manager_reset_breakpoints (self);
@@ -964,99 +929,65 @@ ide_debug_manager_runner_exited (IdeDebugManager *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
 
   ide_clear_and_destroy_object (&debugger);
-  ide_clear_and_destroy_object (&hold_runner);
+
+  IDE_EXIT;
 }
 
-/**
- * ide_debug_manager_start:
+/* _ide_debug_manager_prepare:
  * @self: an #IdeDebugManager
- * @runner: an #IdeRunner
+ * @pipeline: an #IdePipeline
+ * @run_command: an #IdeRunCommand
+ * @run_context: an #IdeRunContext
  * @error: A location for an @error
  *
- * Attempts to start a runner using a discovered debugger backend.
+ * Locates a suitable debugger and prepares it.
+ *
+ * A suitable debugger is located and prepared to run so that when
+ * @run_context is spawned, the debug manager can communicate with
+ * the inferior process.
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
  */
 gboolean
-ide_debug_manager_start (IdeDebugManager  *self,
-                         IdeRunner        *runner,
-                         GError          **error)
+_ide_debug_manager_prepare (IdeDebugManager  *self,
+                            IdePipeline      *pipeline,
+                            IdeRunCommand    *run_command,
+                            IdeRunContext    *run_context,
+                            GError          **error)
 {
   g_autoptr(IdeDebugger) debugger = NULL;
-  IdeEnvironment *environment;
-  gboolean ret = FALSE;
 
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_DEBUG_MANAGER (self), FALSE);
-  g_return_val_if_fail (IDE_IS_RUNNER (runner), FALSE);
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (run_command), FALSE);
+  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (run_context), FALSE);
   g_return_val_if_fail (self->debugger == NULL, FALSE);
 
-  debugger = ide_debug_manager_find_debugger (self, runner);
-
-  if (debugger == NULL)
+  if (!(debugger = ide_debug_manager_find_debugger (self, pipeline, run_command)))
     {
-      ide_runner_set_failed (runner, TRUE);
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_NOT_SUPPORTED,
-                   _("A suitable debugger was not found."));
-      IDE_GOTO (failure);
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_NOT_SUPPORTED,
+                           _("A suitable debugger was not found."));
+      IDE_RETURN (FALSE);
     }
 
-  environment = ide_runner_get_environment (runner);
+  ide_debugger_prepare_for_run (debugger, pipeline, run_context);
 
   if (self->stop_at_criticals)
-    ide_environment_setenv (environment, "G_DEBUG", "fatal-criticals");
+    ide_run_context_setenv (run_context, "G_DEBUG", "fatal-criticals");
   else if (self->stop_at_warnings)
-    ide_environment_setenv (environment, "G_DEBUG", "fatal-warnings");
+    ide_run_context_setenv (run_context, "G_DEBUG", "fatal-warnings");
 
-  ide_debugger_prepare (debugger, runner);
-
-  g_signal_connect_object (runner,
-                           "spawned",
-                           G_CALLBACK (ide_debug_manager_runner_spawned),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (runner,
-                           "exited",
-                           G_CALLBACK (ide_debug_manager_runner_exited),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-
-  self->runner = g_object_ref (runner);
-  self->debugger = g_steal_pointer (&debugger);
-
-  ide_signal_group_set_target (self->debugger_signals, self->debugger);
+  if (g_set_object (&self->debugger, debugger))
+    ide_signal_group_set_target (self->debugger_signals, self->debugger);
 
   ide_debug_manager_set_active (self, TRUE);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
 
-  ret = TRUE;
-
-failure:
-  IDE_RETURN (ret);
-}
-
-void
-ide_debug_manager_stop (IdeDebugManager *self)
-{
-  g_return_if_fail (IDE_IS_DEBUG_MANAGER (self));
-
-  ide_signal_group_set_target (self->debugger_signals, NULL);
-
-  if (self->runner != NULL)
-    {
-      ide_runner_force_quit (self->runner);
-      ide_clear_and_destroy_object (&self->runner);
-    }
-
-  ide_clear_and_destroy_object (&self->debugger);
-  ide_debug_manager_reset_breakpoints (self);
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
+  IDE_RETURN (TRUE);
 }
 
 gboolean
