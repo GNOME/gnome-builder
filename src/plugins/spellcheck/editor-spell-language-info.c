@@ -27,6 +27,7 @@ struct _EditorSpellLanguageInfo
   GObject parent_instance;
   char *name;
   char *code;
+  char *group;
 };
 
 G_DEFINE_TYPE (EditorSpellLanguageInfo, editor_spell_language_info, G_TYPE_OBJECT)
@@ -34,6 +35,7 @@ G_DEFINE_TYPE (EditorSpellLanguageInfo, editor_spell_language_info, G_TYPE_OBJEC
 enum {
   PROP_0,
   PROP_CODE,
+  PROP_GROUP,
   PROP_NAME,
   N_PROPS
 };
@@ -49,11 +51,13 @@ static GParamSpec *properties [N_PROPS];
  */
 EditorSpellLanguageInfo *
 editor_spell_language_info_new (const char *name,
-                                const char *code)
+                                const char *code,
+                                const char *group)
 {
   return g_object_new (EDITOR_TYPE_SPELL_LANGUAGE_INFO,
                        "name", name,
                        "code", code,
+                       "group", group,
                        NULL);
 }
 
@@ -64,6 +68,7 @@ editor_spell_language_info_finalize (GObject *object)
 
   g_clear_pointer (&self->name, g_free);
   g_clear_pointer (&self->code, g_free);
+  g_clear_pointer (&self->group, g_free);
 
   G_OBJECT_CLASS (editor_spell_language_info_parent_class)->finalize (object);
 }
@@ -84,6 +89,10 @@ editor_spell_language_info_get_property (GObject    *object,
 
     case PROP_CODE:
       g_value_set_string (value, editor_spell_language_info_get_code (self));
+      break;
+
+    case PROP_GROUP:
+      g_value_set_string (value, editor_spell_language_info_get_group (self));
       break;
 
     default:
@@ -107,6 +116,10 @@ editor_spell_language_info_set_property (GObject      *object,
 
     case PROP_CODE:
       self->code = g_value_dup_string (value);
+      break;
+
+    case PROP_GROUP:
+      self->group = g_value_dup_string (value);
       break;
 
     default:
@@ -137,6 +150,13 @@ editor_spell_language_info_class_init (EditorSpellLanguageInfoClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_GROUP] =
+    g_param_spec_string ("group",
+                         "Group",
+                         "A group for sorting, usually the country name",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -159,4 +179,12 @@ editor_spell_language_info_get_code (EditorSpellLanguageInfo *self)
   g_return_val_if_fail (EDITOR_IS_SPELL_LANGUAGE_INFO (self), NULL);
 
   return self->code;
+}
+
+const char *
+editor_spell_language_info_get_group (EditorSpellLanguageInfo *self)
+{
+  g_return_val_if_fail (EDITOR_IS_SPELL_LANGUAGE_INFO (self), NULL);
+
+  return self->group;
 }

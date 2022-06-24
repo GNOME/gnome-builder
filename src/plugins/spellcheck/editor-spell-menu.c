@@ -161,37 +161,102 @@ editor_spell_corrections_new (void)
   return g_object_new (EDITOR_TYPE_SPELL_CORRECTIONS, NULL);
 }
 
+static int
+count_groups (GPtrArray *infos)
+{
+  g_autoptr(GHashTable) groups = g_hash_table_new (g_str_hash, g_str_equal);
+
+  g_assert (infos != NULL);
+
+  for (guint i = 0; i < infos->len; i++)
+    {
+      EditorSpellLanguageInfo *info = g_ptr_array_index (infos, i);
+      const char *group = editor_spell_language_info_get_group (info);
+
+      if (group != NULL && group[0] != 0 && !g_hash_table_contains (groups, group))
+        g_hash_table_insert (groups, (char *)group, NULL);
+    }
+
+  return g_hash_table_size (groups);
+}
+
 static void
 populate_languages (GMenu *menu)
 {
   EditorSpellProvider *provider = editor_spell_provider_get_default ();
   g_autoptr(GPtrArray) infos = editor_spell_provider_list_languages (provider);
+  g_autoptr(GHashTable) groups = NULL;
 
   if (infos == NULL)
     return;
+
+  groups = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
+
+  /* First setup our groups. We do that up front so we can avoid
+   * checking below, but also so we can hoist a single group up
+   * into the parent menu if necessary.
+   */
+  if (count_groups (infos) > 1)
+    {
+      for (guint i = 0; i < infos->len; i++)
+        {
+          EditorSpellLanguageInfo *info = g_ptr_array_index (infos, i);
+          const char *group = editor_spell_language_info_get_group (info);
+          GMenu *group_menu;
+
+          if (group == NULL || group[0] == 0)
+            continue;
+
+          if (!g_hash_table_contains (groups, group))
+            {
+              group_menu = g_menu_new ();
+              g_menu_append_submenu (menu, group, G_MENU_MODEL (group_menu));
+              g_hash_table_insert (groups,
+                                   g_strdup (group),
+                                   g_steal_pointer (&group_menu));
+            }
+        }
+    }
 
   for (guint i = 0; i < infos->len; i++)
     {
       EditorSpellLanguageInfo *info = g_ptr_array_index (infos, i);
       const char *name = editor_spell_language_info_get_name (info);
+      const char *group = editor_spell_language_info_get_group (info);
       const char *code = editor_spell_language_info_get_code (info);
-      g_autoptr(GMenuItem) item = g_menu_item_new (name, NULL);
+      g_autoptr(GMenuItem) item = NULL;
+      GMenu *group_menu;
 
+      if (group == NULL || !(group_menu = g_hash_table_lookup (groups, group)))
+        group_menu = menu;
+
+      g_assert (G_IS_MENU (group_menu));
+
+      item = g_menu_item_new (name, NULL);
       g_menu_item_set_action_and_target (item, "spelling.language", "s", code);
-      g_menu_append_item (menu, item);
+      g_menu_append_item (group_menu, item);
     }
 }
 
 GMenuModel *
 editor_spell_menu_new (void)
 {
+  static GMenu *languages_menu;
+  static GMenuItem *languages_item;
   g_autoptr(GMenu) menu = g_menu_new ();
   g_autoptr(GMenuModel) corrections_menu = editor_spell_corrections_new ();
-  g_autoptr(GMenu) languages_menu = g_menu_new ();
-  g_autoptr(GMenuItem) languages_item = g_menu_item_new_submenu (_("Languages"), G_MENU_MODEL (languages_menu));
   g_autoptr(GMenuItem) add_item = g_menu_item_new (_("Add to Dictionary"), "spelling.add");
   g_autoptr(GMenuItem) ignore_item = g_menu_item_new (_("Ignore"), "spelling.ignore");
   g_autoptr(GMenuItem) check_item = g_menu_item_new (_("Check Spelling"), "spelling.enabled");
+
+  if (languages_menu == NULL)
+    {
+      languages_menu = g_menu_new ();
+      populate_languages (languages_menu);
+    }
+
+  if (languages_item == NULL)
+    languages_item = g_menu_item_new_submenu (_("Languages"), G_MENU_MODEL (languages_menu));
 
   g_menu_item_set_attribute (add_item, "hidden-when", "s", "action-disabled");
   g_menu_item_set_attribute (ignore_item, "hidden-when", "s", "action-disabled");
@@ -203,13 +268,6 @@ editor_spell_menu_new (void)
   g_menu_append_item (menu, ignore_item);
   g_menu_append_item (menu, check_item);
   g_menu_append_item (menu, languages_item);
-
-  populate_languages (languages_menu);
-
-  g_object_set_data_full (G_OBJECT (menu),
-                          "LANGUAGES_MENU",
-                          g_object_ref (languages_menu),
-                          g_object_unref);
 
   g_object_set_data_full (G_OBJECT (menu),
                           "CORRECTIONS_MENU",

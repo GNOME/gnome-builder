@@ -28,9 +28,11 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (EditorSpellLanguageInfo, editor_spell_language_info, EDITOR, SPELL_LANGUAGE_INFO, GObject)
 
-EditorSpellLanguageInfo *editor_spell_language_info_new      (const char              *name,
-                                                              const char              *code);
-const char              *editor_spell_language_info_get_name (EditorSpellLanguageInfo *self);
-const char              *editor_spell_language_info_get_code (EditorSpellLanguageInfo *self);
+EditorSpellLanguageInfo *editor_spell_language_info_new       (const char              *name,
+                                                               const char              *code,
+                                                               const char              *group);
+const char              *editor_spell_language_info_get_group (EditorSpellLanguageInfo *self);
+const char              *editor_spell_language_info_get_name  (EditorSpellLanguageInfo *self);
+const char              *editor_spell_language_info_get_code  (EditorSpellLanguageInfo *self);
 
 G_END_DECLS
