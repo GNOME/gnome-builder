@@ -346,8 +346,8 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   GbpFlatpakRuntime *self;
   g_autofree char *project_build_dir_arg = NULL;
   g_autofree char *project_build_dir = NULL;
-  g_autofree char *doc_portal_arg = NULL;
   g_autofree char *staging_dir = NULL;
+  const char *wayland_display;
   const char *app_id;
   IdeContext *context;
   IdeConfig *config;
@@ -386,9 +386,15 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   ide_run_context_append_argv (run_context, "--die-with-parent");
 
   /* Make sure we have access to the document portal */
-  doc_portal_arg = g_strdup_printf ("--bind-mount=/run/user/%u/doc=/run/user/%u/doc/by-app/%s",
+  ide_run_context_append_formatted (run_context,
+                                    "--bind-mount=/run/user/%u/doc=/run/user/%u/doc/by-app/%s",
                                     getuid (), getuid (), app_id);
-  ide_run_context_append_argv (run_context, doc_portal_arg);
+
+  /* Make sure wayland socket is available. */
+  if ((wayland_display = g_getenv ("WAYLAND_DISPLAY")))
+    ide_run_context_append_formatted (run_context,
+                                      "--bind-mount=/run/user/%u/%s=/run/user/%u/%s",
+                                      getuid (), wayland_display, getuid (), wayland_display);
 
   /* Make sure we have access to fonts and such */
   gbp_flatpak_aux_append_to_run_context (run_context);
