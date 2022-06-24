@@ -185,7 +185,6 @@
 
   <style name="diff:added-line"             foreground="chameleon2"/>
   <style name="diff:removed-line"           foreground="plum1"/>
-  <style name="diff:changed-line"           foreground="blue1"/>
   <style name="diff:diff-file"              foreground="chameleon1" bold="true"/>
   <style name="diff:location"               foreground="chameleon1"/>
   <style name="diff:special-case"           foreground="white" bold="true"/>
