@@ -206,6 +206,8 @@ gbp_valgrind_workbench_addin_run_handler_cb (IdeRunContext       *run_context,
 
 static void
 gbp_valgrind_workbench_addin_run_handler (IdeRunManager *run_manager,
+                                          IdePipeline   *pipeline,
+                                          IdeRunCommand *run_command,
                                           IdeRunContext *run_context,
                                           gpointer       user_data)
 {
