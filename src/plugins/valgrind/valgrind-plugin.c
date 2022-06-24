@@ -26,11 +26,15 @@
 
 #include <libide-gui.h>
 
+#include "gbp-valgrind-tool.h"
 #include "gbp-valgrind-workbench-addin.h"
 
 _IDE_EXTERN void
 _gbp_valgrind_register_types (PeasObjectModule *module)
 {
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUN_TOOL,
+                                              GBP_TYPE_VALGRIND_TOOL);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_VALGRIND_WORKBENCH_ADDIN);

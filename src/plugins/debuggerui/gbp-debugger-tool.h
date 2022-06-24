@@ -1,6 +1,6 @@
-/* ide-run-manager-private.h
+/* gbp-debugger-tool.h
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,12 @@
 
 #pragma once
 
-#include "ide-run-manager.h"
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-void _ide_run_manager_drop_caches (IdeRunManager *self);
+#define GBP_TYPE_DEBUGGER_TOOL (gbp_debugger_tool_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpDebuggerTool, gbp_debugger_tool, GBP, DEBUGGER_TOOL, IdeRunTool)
 
 G_END_DECLS

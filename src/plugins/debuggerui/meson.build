@@ -1,5 +1,6 @@
 plugins_sources += files([
   'debuggerui-plugin.c',
+  'gbp-debugger-tool.c',
   'ide-debugger-breakpoints-view.c',
   'ide-debugger-controls.c',
   'ide-debugger-disassembly-view.c',

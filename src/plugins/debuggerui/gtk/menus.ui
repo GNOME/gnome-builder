@@ -6,7 +6,7 @@
         <attribute name="id">debugger-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">run-manager.run-with-handler</attribute>
-        <attribute name="target">debugger</attribute>
+        <attribute name="target" type="s">'debuggerui'</attribute>
         <attribute name="label" translatable="yes">Run with Debugger</attribute>
         <attribute name="verb-icon-name">builder-debugger-symbolic</attribute>
         <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;d</attribute>
@@ -42,7 +42,7 @@
             <attribute name="id">project-tree-menu-debug</attribute>
             <attribute name="label" translatable="yes">Run with _Debugger</attribute>
             <attribute name="action">buildui.run-with-handler</attribute>
-            <attribute name="target" type="s">'debugger'</attribute>
+            <attribute name="target" type="s">'debuggerui'</attribute>
           </item>
         </section>
       </submenu>

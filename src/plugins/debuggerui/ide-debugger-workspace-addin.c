@@ -65,8 +65,6 @@ struct _IdeDebuggerWorkspaceAddin
   IdeWorkspace               *workspace;
   IdeWorkbench               *workbench;
 
-  IdeRunManager              *run_manager;
-
   IdeDebuggerDisassemblyView *disassembly_view;
   IdeDebuggerControls        *controls;
   IdeDebuggerBreakpointsView *breakpoints_view;
@@ -95,72 +93,6 @@ debugger_stopped (IdeDebuggerWorkspaceAddin *self,
 
   if (breakpoint != NULL)
     ide_debugger_workspace_addin_navigate_to_breakpoint (self, breakpoint);
-
-  IDE_EXIT;
-}
-
-static void
-send_notification (IdeDebuggerWorkspaceAddin *self,
-                   const gchar            *title,
-                   const gchar            *body,
-                   const gchar            *icon_name,
-                   gboolean                urgent)
-{
-  g_autoptr(IdeNotification) notif = NULL;
-  g_autoptr(GIcon) icon = NULL;
-  IdeContext *context;
-
-  g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
-
-  context = ide_workbench_get_context (self->workbench);
-
-  if (icon_name)
-    icon = g_themed_icon_new (icon_name);
-
-  notif = g_object_new (IDE_TYPE_NOTIFICATION,
-                        "has-progress", FALSE,
-                        "icon", icon,
-                        "title", title,
-                        "body", body,
-                        "urgent", TRUE,
-                        NULL);
-  ide_notification_attach (notif, IDE_OBJECT (context));
-  ide_notification_withdraw_in_seconds (notif, 30);
-}
-
-static void
-debugger_run_handler (IdeRunManager *run_manager,
-                      IdePipeline   *pipeline,
-                      IdeRunCommand *run_command,
-                      IdeRunContext *run_context,
-                      gpointer       user_data)
-{
-  IdeDebuggerWorkspaceAddin *self = user_data;
-  g_autoptr(GError) error = NULL;
-  IdeDebugManager *debug_manager;
-  IdeContext *context;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUN_MANAGER (run_manager));
-  g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_RUN_COMMAND (run_command));
-  g_assert (IDE_IS_RUN_CONTEXT (run_context));
-  g_assert (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
-
-  /*
-   * Get the currently configured debugger and attach it to our runner.
-   * It might need to prepend arguments like `gdb', `pdb', `mdb', etc.
-   */
-  context = ide_object_get_context (IDE_OBJECT (run_manager));
-  debug_manager = ide_debug_manager_from_context (context);
-
-  if (!_ide_debug_manager_prepare (debug_manager, pipeline, run_command, run_context, &error))
-    send_notification (self,
-                       _("Failed to start the debugger"),
-                       error->message,
-                       "computer-fail-symbolic",
-                       TRUE);
 
   IDE_EXIT;
 }
@@ -340,40 +272,11 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
 }
 
 static void
-ide_debugger_workspace_addin_started_cb (IdeDebugManager *debug_manager,
-                                         IdeRunManager   *run_manager)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
-  g_assert (IDE_IS_RUN_MANAGER (run_manager));
-
-  _ide_debug_manager_started (debug_manager);
-
-  IDE_EXIT;
-}
-
-static void
-ide_debugger_workspace_addin_stopped_cb (IdeDebugManager *debug_manager,
-                                         IdeRunManager   *run_manager)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_DEBUG_MANAGER (debug_manager));
-  g_assert (IDE_IS_RUN_MANAGER (run_manager));
-
-  _ide_debug_manager_stopped (debug_manager);
-
-  IDE_EXIT;
-}
-
-static void
 ide_debugger_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   IdeDebuggerWorkspaceAddin *self = (IdeDebuggerWorkspaceAddin *)addin;
   IdeDebugManager *debug_manager;
-  IdeRunManager *run_manager;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -388,32 +291,9 @@ ide_debugger_workspace_addin_load (IdeWorkspaceAddin *addin,
     return;
 
   context = ide_widget_get_context (GTK_WIDGET (workspace));
-  run_manager = ide_run_manager_from_context (context);
   debug_manager = ide_debug_manager_from_context (context);
 
-  self->run_manager = g_object_ref (run_manager);
-
   ide_debugger_workspace_addin_add_ui (self);
-
-  ide_run_manager_add_handler (run_manager,
-                               "debugger",
-                               _("Run with Debugger"),
-                               "builder-debugger-symbolic",
-                               debugger_run_handler,
-                               g_object_ref (self),
-                               g_object_unref);
-
-  g_signal_connect_object (run_manager,
-                           "started",
-                           G_CALLBACK (ide_debugger_workspace_addin_started_cb),
-                           debug_manager,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (run_manager,
-                           "stopped",
-                           G_CALLBACK (ide_debugger_workspace_addin_stopped_cb),
-                           debug_manager,
-                           G_CONNECT_SWAPPED);
 
   self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
@@ -459,13 +339,11 @@ ide_debugger_workspace_addin_unload (IdeWorkspaceAddin *addin,
     return;
 
   gtk_widget_insert_action_group (GTK_WIDGET (self->workspace), "debugger", NULL);
-  ide_run_manager_remove_handler (self->run_manager, "debugger");
 
   self->controls = NULL;
 
   g_clear_object (&self->debugger_signals);
   g_clear_object (&self->debug_manager_signals);
-  g_clear_object (&self->run_manager);
 
   ide_clear_pane ((IdePane **)&self->panel);
   ide_clear_page ((IdePage **)&self->disassembly_view);
