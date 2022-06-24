@@ -22,16 +22,23 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
 #include <json-glib/json-glib.h>
 
 #include <libide-core.h>
+#include <libide-foundry.h>
 #include <libide-threading.h>
 
+#include "gbp-meson-build-system.h"
 #include "gbp-meson-introspection.h"
 
 struct _GbpMesonIntrospection
 {
-  GObject parent_instance;
+  IdePipelineStage parent_instance;
+
+  char *etag;
+
+  GListStore *run_commands;
 
   char *descriptive_name;
   char *subproject_dir;
@@ -40,32 +47,7 @@ struct _GbpMesonIntrospection
   guint loaded : 1;
 };
 
-G_DEFINE_FINAL_TYPE (GbpMesonIntrospection, gbp_meson_introspection, G_TYPE_OBJECT)
-
-static void
-gbp_meson_introspection_dispose (GObject *object)
-{
-  GbpMesonIntrospection *self = (GbpMesonIntrospection *)object;
-
-  g_clear_pointer (&self->descriptive_name, g_free);
-  g_clear_pointer (&self->subproject_dir, g_free);
-  g_clear_pointer (&self->version, g_free);
-
-  G_OBJECT_CLASS (gbp_meson_introspection_parent_class)->dispose (object);
-}
-
-static void
-gbp_meson_introspection_class_init (GbpMesonIntrospectionClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->dispose = gbp_meson_introspection_dispose;
-}
-
-static void
-gbp_meson_introspection_init (GbpMesonIntrospection *self)
-{
-}
+G_DEFINE_FINAL_TYPE (GbpMesonIntrospection, gbp_meson_introspection, IDE_TYPE_PIPELINE_STAGE)
 
 static gboolean
 get_string_member (JsonObject  *object,
@@ -203,11 +185,13 @@ static void
 gbp_meson_introspection_load_test (GbpMesonIntrospection *self,
                                    JsonObject            *test)
 {
+  g_autoptr(IdeRunCommand) run_command = NULL;
   g_auto(GStrv) cmd = NULL;
   g_auto(GStrv) env = NULL;
   g_auto(GStrv) suite = NULL;
   g_autofree char *name = NULL;
   g_autofree char *workdir = NULL;
+  g_autofree char *id = NULL;
 
   IDE_ENTRY;
 
@@ -219,6 +203,18 @@ gbp_meson_introspection_load_test (GbpMesonIntrospection *self,
   get_environ_member (test, "env", &env);
   get_string_member (test, "name", &name);
   get_string_member (test, "workdir", &workdir);
+
+  id = g_strdup_printf ("meson:%s", name);
+
+  run_command = ide_run_command_new ();
+  ide_run_command_set_id (run_command, id);
+  ide_run_command_set_kind (run_command, IDE_RUN_COMMAND_KIND_TEST);
+  ide_run_command_set_display_name (run_command, name);
+  ide_run_command_set_environ (run_command, (const char * const *)env);
+  ide_run_command_set_argv (run_command, (const char * const *)cmd);
+  ide_run_command_set_cwd (run_command, workdir);
+
+  g_list_store_append (self->run_commands, run_command);
 
   IDE_EXIT;
 }
@@ -274,75 +270,253 @@ gbp_meson_introspection_load_installed (GbpMesonIntrospection *self,
   IDE_EXIT;
 }
 
-static void
-gbp_meson_introspection_load_file_worker (IdeTask      *task,
-                                          gpointer      source_object,
-                                          gpointer      task_data,
-                                          GCancellable *cancellable)
+static char *
+get_current_etag (IdePipeline *pipeline)
 {
-  g_autoptr(JsonParser) parser = NULL;
-  g_autoptr(GError) error = NULL;
-  GbpMesonIntrospection *self = source_object;
-  const char *filename = task_data;
-  JsonObject *obj;
-  JsonNode *root;
+  g_autofree char *build_dot_ninja = NULL;
+  g_autoptr(GFileInfo) info = NULL;
+  g_autoptr(GFile) file = NULL;
+
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  build_dot_ninja = ide_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
+  file = g_file_new_for_path (build_dot_ninja);
+  info = g_file_query_info (file,
+                            G_FILE_ATTRIBUTE_ETAG_VALUE,
+                            G_FILE_QUERY_INFO_NONE,
+                            NULL, NULL);
+
+  if (info == NULL)
+    return NULL;
+
+  return g_strdup (g_file_info_get_etag (info));
+}
+
+static void
+gbp_meson_introspection_query (IdePipelineStage *stage,
+                               IdePipeline      *pipeline,
+                               GPtrArray        *targets,
+                               GCancellable     *cancellable)
+{
+  GbpMesonIntrospection *self = (GbpMesonIntrospection *)stage;
+  g_autofree char *etag = NULL;
+
+  g_assert (GBP_IS_MESON_INTROSPECTION (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  etag = get_current_etag (pipeline);
+
+  ide_pipeline_stage_set_completed (stage,
+                                    ide_str_equal0 (etag, self->etag));
+}
+
+static void
+gbp_meson_introspection_load_json (GbpMesonIntrospection *self,
+                                   JsonObject            *root)
+{
   JsonNode *member;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_MESON_INTROSPECTION (self));
-  g_assert (filename != NULL);
+  g_assert (root != NULL);
 
-  g_debug ("Loading meson introspection from %s", filename);
+  if (json_object_has_member (root, "buildoptions") &&
+      (member = json_object_get_member (root, "buildoptions")) &&
+      JSON_NODE_HOLDS_ARRAY (member))
+    gbp_meson_introspection_load_buildoptions (self, json_node_get_array (member));
 
-  parser = json_parser_new ();
+  if (json_object_has_member (root, "projectinfo") &&
+      (member = json_object_get_member (root, "projectinfo")) &&
+      JSON_NODE_HOLDS_OBJECT (member))
+    gbp_meson_introspection_load_projectinfo (self, json_node_get_object (member));
 
-  if (!json_parser_load_from_mapped_file (parser, filename, &error))
+  if (json_object_has_member (root, "tests") &&
+      (member = json_object_get_member (root, "tests")) &&
+      JSON_NODE_HOLDS_ARRAY (member))
+    gbp_meson_introspection_load_tests (self, json_node_get_array (member));
+
+  if (json_object_has_member (root, "benchmarks") &&
+      (member = json_object_get_member (root, "benchmarks")) &&
+      JSON_NODE_HOLDS_ARRAY (member))
+    gbp_meson_introspection_load_benchmarks (self, json_node_get_array (member));
+
+  if (json_object_has_member (root, "installed") &&
+      (member = json_object_get_member (root, "installed")) &&
+      JSON_NODE_HOLDS_OBJECT (member))
+    gbp_meson_introspection_load_installed (self, json_node_get_object (member));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_meson_introspection_load_stream_cb (GObject      *object,
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
+{
+  JsonParser *parser = (JsonParser *)object;
+  GbpMesonIntrospection *self;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  const char *etag;
+  JsonObject *obj;
+  JsonNode *root;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (JSON_IS_PARSER (parser));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!json_parser_load_from_stream_finish (parser, result, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  if (!(root = json_parser_get_root (parser)) ||
-      !JSON_NODE_HOLDS_OBJECT (root) ||
-      !(obj = json_node_get_object (root)))
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_INVALID_DATA,
-                                 "Root json node is not an object");
-      IDE_EXIT;
-    }
+  self = ide_task_get_source_object (task);
+  etag = ide_task_get_task_data (task);
 
-  if (json_object_has_member (obj, "buildoptions") &&
-      (member = json_object_get_member (obj, "buildoptions")) &&
-      JSON_NODE_HOLDS_ARRAY (member))
-    gbp_meson_introspection_load_buildoptions (self, json_node_get_array (member));
+  g_assert (GBP_IS_MESON_INTROSPECTION (self));
+  g_assert (etag != NULL);
 
-  if (json_object_has_member (obj, "projectinfo") &&
-      (member = json_object_get_member (obj, "projectinfo")) &&
-      JSON_NODE_HOLDS_OBJECT (member))
-    gbp_meson_introspection_load_projectinfo (self, json_node_get_object (member));
+  /* Clear all of our previously loaded state */
+  ide_set_string (&self->etag, etag);
+  g_list_store_remove_all (self->run_commands);
 
-  if (json_object_has_member (obj, "tests") &&
-      (member = json_object_get_member (obj, "tests")) &&
-      JSON_NODE_HOLDS_ARRAY (member))
-    gbp_meson_introspection_load_tests (self, json_node_get_array (member));
-
-  if (json_object_has_member (obj, "benchmarks") &&
-      (member = json_object_get_member (obj, "benchmarks")) &&
-      JSON_NODE_HOLDS_ARRAY (member))
-    gbp_meson_introspection_load_benchmarks (self, json_node_get_array (member));
-
-  if (json_object_has_member (obj, "installed") &&
-      (member = json_object_get_member (obj, "installed")) &&
-      JSON_NODE_HOLDS_OBJECT (member))
-    gbp_meson_introspection_load_installed (self, json_node_get_object (member));
+  if ((root = json_parser_get_root (parser)) &&
+      JSON_NODE_HOLDS_OBJECT (root) &&
+      (obj = json_node_get_object (root)))
+    gbp_meson_introspection_load_json (self, obj);
 
   ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
+}
+
+static void
+gbp_meson_introspection_build_async (IdePipelineStage    *stage,
+                                     IdePipeline         *pipeline,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  GbpMesonIntrospection *self = (GbpMesonIntrospection *)stage;
+  g_autoptr(IdeRunContext) run_context = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(JsonParser) parser = NULL;
+  g_autoptr(GIOStream) io_stream = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree char *meson = NULL;
+  IdeBuildSystem *build_system;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_MESON_INTROSPECTION (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_meson_introspection_build_async);
+  ide_task_set_task_data (task, get_current_etag (pipeline), g_free);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_build_system_from_context (context);
+  meson = gbp_meson_build_system_locate_meson (GBP_MESON_BUILD_SYSTEM (build_system), pipeline);
+
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (GBP_IS_MESON_BUILD_SYSTEM (build_system));
+  g_assert (meson != NULL);
+
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, run_context);
+  ide_run_context_append_args (run_context, IDE_STRV_INIT (meson, "introspect", "--all", "--force-object-output"));
+
+  /* Create a stream to communicate with the subprocess and then spawn it */
+  if (!(io_stream = ide_run_context_create_stdio_stream (run_context, &error)) ||
+      !(subprocess = ide_run_context_spawn (run_context, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
+  /* Keep stream alive for duration of operation */
+  g_object_set_data_full (G_OBJECT (task),
+                          "IO_STREAM",
+                          g_object_ref (io_stream),
+                          g_object_unref);
+
+  /* Start parsing our input stream */
+  parser = json_parser_new ();
+  json_parser_load_from_stream_async (parser,
+                                      g_io_stream_get_input_stream (io_stream),
+                                      cancellable,
+                                      gbp_meson_introspection_load_stream_cb,
+                                      g_steal_pointer (&task));
+
+  /* Make sure something watches the child */
+  ide_subprocess_wait_async (subprocess, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_meson_introspection_build_finish (IdePipelineStage  *stage,
+                                      GAsyncResult      *result,
+                                      GError           **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_MESON_INTROSPECTION (stage));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+gbp_meson_introspection_dispose (GObject *object)
+{
+  GbpMesonIntrospection *self = (GbpMesonIntrospection *)object;
+
+  g_clear_object (&self->run_commands);
+
+  g_clear_pointer (&self->descriptive_name, g_free);
+  g_clear_pointer (&self->subproject_dir, g_free);
+  g_clear_pointer (&self->version, g_free);
+  g_clear_pointer (&self->etag, g_free);
+
+  G_OBJECT_CLASS (gbp_meson_introspection_parent_class)->dispose (object);
+}
+
+static void
+gbp_meson_introspection_class_init (GbpMesonIntrospectionClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdePipelineStageClass *pipeline_stage_class = IDE_PIPELINE_STAGE_CLASS (klass);
+
+  object_class->dispose = gbp_meson_introspection_dispose;
+
+  pipeline_stage_class->query = gbp_meson_introspection_query;
+  pipeline_stage_class->build_async = gbp_meson_introspection_build_async;
+  pipeline_stage_class->build_finish = gbp_meson_introspection_build_finish;
+}
+
+static void
+gbp_meson_introspection_init (GbpMesonIntrospection *self)
+{
+  self->run_commands = g_list_store_new (IDE_TYPE_RUN_COMMAND);
+
+  ide_pipeline_stage_set_name (IDE_PIPELINE_STAGE (self),
+                               _("Load Meson Introspection"));
 }
 
 GbpMesonIntrospection *
@@ -351,54 +525,10 @@ gbp_meson_introspection_new (void)
   return g_object_new (GBP_TYPE_MESON_INTROSPECTION, NULL);
 }
 
-void
-gbp_meson_introspection_load_file_async (GbpMesonIntrospection *self,
-                                         const char            *path,
-                                         GCancellable          *cancellable,
-                                         GAsyncReadyCallback    callback,
-                                         gpointer               user_data)
+GListModel *
+gbp_meson_introspection_list_run_commands (GbpMesonIntrospection *self)
 {
-  g_autoptr(IdeTask) task = NULL;
+  g_return_val_if_fail (GBP_IS_MESON_INTROSPECTION (self), NULL);
 
-  IDE_ENTRY;
-
-  g_return_if_fail (GBP_IS_MESON_INTROSPECTION (self));
-  g_return_if_fail (path != NULL);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (task, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_meson_introspection_load_file_async);
-
-  if (self->loaded)
-    {
-      ide_task_return_new_error (task,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_INVAL,
-                                 "Already initialized");
-      IDE_EXIT;
-    }
-
-  self->loaded = TRUE;
-
-  ide_task_set_task_data (task, g_strdup (path), g_free);
-  ide_task_run_in_thread (task, gbp_meson_introspection_load_file_worker);
-
-  IDE_EXIT;
-}
-
-gboolean
-gbp_meson_introspection_load_file_finish (GbpMesonIntrospection *self,
-                                          GAsyncResult *result,
-                                          GError **error)
-{
-  gboolean ret;
-
-  IDE_ENTRY;
-
-  g_return_val_if_fail (GBP_IS_MESON_INTROSPECTION (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
-
-  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
-
-  IDE_RETURN (ret);
+  return g_object_ref (G_LIST_MODEL (self->run_commands));
 }
