@@ -651,6 +651,14 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
 
   ide_debugger_emit_thread_selected (IDE_DEBUGGER (self), thread);
   ide_debugger_emit_stopped (IDE_DEBUGGER (self), stop_reason, breakpoint);
+
+  /* Currently, we expect to have gdb exit with the program. We might change that
+   * at some point, but it's currently the expectation.
+   */
+  if (stop_reason == IDE_DEBUGGER_STOP_EXITED_SIGNALED ||
+      stop_reason == IDE_DEBUGGER_STOP_EXITED_NORMALLY ||
+      stop_reason == IDE_DEBUGGER_STOP_EXITED)
+    gbp_gdb_debugger_exec_async (self, "-gdb-exit", NULL, NULL, NULL);
 }
 
 static void
