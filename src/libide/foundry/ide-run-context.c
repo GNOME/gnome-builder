@@ -188,7 +188,6 @@ ide_run_context_host_handler (IdeRunContext       *self,
   ide_run_context_append_argv (self, "flatpak-spawn");
   ide_run_context_append_argv (self, "--host");
   ide_run_context_append_argv (self, "--clear-env");
-  ide_run_context_append_argv (self, "--share-pids");
   ide_run_context_append_argv (self, "--watch-bus");
 
   if (env != NULL)
