@@ -537,50 +537,6 @@ ide_run_manager_check_busy (IdeRunManager  *self,
 }
 
 static void
-setup_basic_environment (IdeRunContext *run_context)
-{
-  static const char *copy_env[] = {
-    "AT_SPI_BUS_ADDRESS",
-    "COLORTERM",
-    "DBUS_SESSION_BUS_ADDRESS",
-    "DBUS_SYSTEM_BUS_ADDRESS",
-    "DESKTOP_SESSION",
-    "DISPLAY",
-    "LANG",
-    "SHELL",
-    "SSH_AUTH_SOCK",
-    "USER",
-    "WAYLAND_DISPLAY",
-    "XAUTHORITY",
-    "XDG_CURRENT_DESKTOP",
-    "XDG_MENU_PREFIX",
-#if 0
-    /* Can't copy these as they could mess up Flatpak. We might
-     * be able to add something to run-context to allow the flatpak
-     * plugin to filter them out without affecting others.
-     */
-    "XDG_DATA_DIRS",
-    "XDG_RUNTIME_DIR",
-#endif
-    "XDG_SEAT",
-    "XDG_SESSION_DESKTOP",
-    "XDG_SESSION_ID",
-    "XDG_SESSION_TYPE",
-    "XDG_VTNR",
-  };
-  const gchar * const *host_environ = _ide_host_environ ();
-
-  for (guint i = 0; i < G_N_ELEMENTS (copy_env); i++)
-    {
-      const char *key = copy_env[i];
-      const char *val = g_environ_getenv ((char **)host_environ, key);
-
-      if (val != NULL)
-        ide_run_context_setenv (run_context, key, val);
-    }
-}
-
-static void
 apply_messages_debug (IdeRunContext *run_context,
                       gboolean       messages_debug_all)
 {
@@ -861,7 +817,7 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   /* First we need to setup our basic runtime envronment so that we can be
    * reasonably certain the application can access the desktop session.
    */
-  setup_basic_environment (run_context);
+  ide_run_context_add_minimal_environment (run_context);
 
   /* Setup working directory */
   {
