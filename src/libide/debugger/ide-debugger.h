@@ -81,11 +81,13 @@ struct _IdeDebuggerClass
 
   /* Virtual Functions */
 
-  gboolean   (*supports_runner)          (IdeDebugger                  *self,
-                                          IdeRunner                    *runner,
-                                          gint                         *priority);
-  void       (*prepare)                  (IdeDebugger                  *self,
-                                          IdeRunner                    *runner);
+  gboolean   (*supports_run_command)     (IdeDebugger                  *self,
+                                          IdePipeline                  *pipeline,
+                                          IdeRunCommand                *run_command,
+                                          int                          *priority);
+  void       (*prepare_for_run)          (IdeDebugger                  *self,
+                                          IdePipeline                  *pipeline,
+                                          IdeRunContext                *run_context);
   gboolean   (*get_can_move)             (IdeDebugger                  *self,
                                           IdeDebuggerMovement           movement);
   void       (*move_async)               (IdeDebugger                  *self,
@@ -145,7 +147,7 @@ struct _IdeDebuggerClass
                                           GAsyncResult                   *result,
                                           GError                        **error);
   void       (*send_signal_async)        (IdeDebugger                    *self,
-                                          gint                            signum,
+                                          int                             signum,
                                           GCancellable                   *cancellable,
                                           GAsyncReadyCallback             callback,
                                           gpointer                        user_data);
@@ -199,12 +201,14 @@ struct _IdeDebuggerClass
 };
 
 IDE_AVAILABLE_IN_ALL
-gboolean           ide_debugger_supports_runner           (IdeDebugger                    *self,
-                                                           IdeRunner                      *runner,
-                                                           gint                           *priority);
+gboolean           ide_debugger_supports_run_command      (IdeDebugger                    *self,
+                                                           IdePipeline                    *pipeline,
+                                                           IdeRunCommand                  *run_command,
+                                                           int                            *priority);
 IDE_AVAILABLE_IN_ALL
-void               ide_debugger_prepare                   (IdeDebugger                    *self,
-                                                           IdeRunner                      *runner);
+void               ide_debugger_prepare_for_run           (IdeDebugger                    *self,
+                                                           IdePipeline                    *pipeline,
+                                                           IdeRunContext                  *run_context);
 IDE_AVAILABLE_IN_ALL
 GListModel        *ide_debugger_get_breakpoints           (IdeDebugger                    *self);
 IDE_AVAILABLE_IN_ALL
@@ -336,7 +340,7 @@ gboolean           ide_debugger_move_finish               (IdeDebugger          
                                                            GError                        **error);
 IDE_AVAILABLE_IN_ALL
 void               ide_debugger_send_signal_async         (IdeDebugger                    *self,
-                                                           gint                            signum,
+                                                           int                             signum,
                                                            GCancellable                   *cancellable,
                                                            GAsyncReadyCallback             callback,
                                                            gpointer                        user_data);
