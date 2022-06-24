@@ -51,6 +51,31 @@ get_broker (void)
 }
 
 static char *
+_icu_uchar_to_char (const UChar *input,
+                    gsize        max_input_len)
+{
+  GString *str;
+
+  g_assert (input != NULL);
+  g_assert (max_input_len > 0);
+
+  if (input[0] == 0)
+    return NULL;
+
+  str = g_string_new (NULL);
+
+  for (gsize i = 0; i < max_input_len; i++)
+    {
+      if (input[i] == 0)
+        break;
+
+      g_string_append_unichar (str, input[i]);
+    }
+
+  return g_string_free (str, FALSE);
+}
+
+static char *
 get_display_name (const char *code)
 {
   const char * const *names = g_get_language_names ();
@@ -59,20 +84,26 @@ get_display_name (const char *code)
     {
       UChar ret[256];
       UErrorCode status = U_ZERO_ERROR;
-
-      ret[0] = 0;
       uloc_getDisplayName (code, names[i], ret, G_N_ELEMENTS (ret), &status);
-      ret[G_N_ELEMENTS (ret)-1] = 0;
+      if (status == U_ZERO_ERROR)
+        return _icu_uchar_to_char (ret, G_N_ELEMENTS (ret));
+    }
 
-      if (status == U_ZERO_ERROR && ret[0] != 0)
-        {
-          GString *str = g_string_new (NULL);
+  return NULL;
+}
 
-          for (guint j = 0; ret[j]; j++)
-            g_string_append_unichar (str, ret[j]);
+static char *
+get_display_language (const char *code)
+{
+  const char * const *names = g_get_language_names ();
 
-          return g_string_free (str, FALSE);
-        }
+  for (guint i = 0; names[i]; i++)
+    {
+      UChar ret[256];
+      UErrorCode status = U_ZERO_ERROR;
+      uloc_getDisplayLanguage (code, names[i], ret, G_N_ELEMENTS (ret), &status);
+      if (status == U_ZERO_ERROR)
+        return _icu_uchar_to_char (ret, G_N_ELEMENTS (ret));
     }
 
   return NULL;
@@ -112,12 +143,13 @@ list_languages_cb (const char * const  lang_tag,
 {
   GPtrArray *ar = user_data;
   char *name = get_display_name (lang_tag);
+  char *group = get_display_language (lang_tag);
 
   if (name != NULL)
-    {
-      g_ptr_array_add (ar, editor_spell_language_info_new (name, lang_tag));
-      g_free (name);
-    }
+    g_ptr_array_add (ar, editor_spell_language_info_new (name, lang_tag, group));
+
+  g_free (name);
+  g_free (group);
 }
 
 static GPtrArray *
