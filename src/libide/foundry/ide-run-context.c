@@ -1145,3 +1145,32 @@ ide_run_context_set_pty (IdeRunContext *self,
   if (consumer_fd != -1)
     ide_run_context_set_pty_fd (self, consumer_fd);
 }
+
+/**
+ * ide_run_context_create_stdio_stream:
+ * @self: a #IdeRunContext
+ * @error: a location for a #GError
+ *
+ * Creates a stream to communicate with the subprocess using stdin/stdout.
+ *
+ * The stream is created using UNIX pipes which are attached to the
+ * stdin/stdout of the child process.
+ *
+ * Returns: (transfer full): a #GIOStream if successful; otherwise
+ *   %NULL and @error is set.
+ */
+GIOStream *
+ide_run_context_create_stdio_stream (IdeRunContext  *self,
+                                     GError        **error)
+{
+  IdeRunContextLayer *layer;
+
+  g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
+
+  layer = ide_run_context_current_layer (self);
+
+  return ide_unix_fd_map_create_stream (layer->unix_fd_map,
+                                        STDIN_FILENO,
+                                        STDOUT_FILENO,
+                                        error);
+}
