@@ -195,9 +195,6 @@ struct _IdeDebuggerClass
   gboolean   (*interpret_finish)         (IdeDebugger                    *self,
                                           GAsyncResult                   *result,
                                           GError                        **error);
-
-  /*< private >*/
-  gpointer _reserved[32];
 };
 
 IDE_AVAILABLE_IN_ALL

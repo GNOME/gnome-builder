@@ -1878,7 +1878,7 @@ ide_debugger_supports_run_command (IdeDebugger   *self,
  * ide_debugger_prepare_for_run:
  * @self: an #IdeDebugger
  * @pipeline: an #IdePipeline
- * @run_command: an #IdeRunContext
+ * @run_context: an #IdeRunContext
  *
  * Prepares the runner to launch a debugger and target process.
  */
