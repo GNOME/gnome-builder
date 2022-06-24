@@ -326,7 +326,6 @@ gbp_buildui_tree_addin_selection_changed (IdeTreeAddin *addin,
                                           IdeTreeNode  *node)
 {
   GbpBuilduiTreeAddin *self = (GbpBuilduiTreeAddin *)addin;
-  IdeBuildTarget *target;
   IdeContext *context;
   GAction *action;
 
@@ -346,14 +345,6 @@ gbp_buildui_tree_addin_selection_changed (IdeTreeAddin *addin,
   action = g_action_map_lookup_action (G_ACTION_MAP (self->group), "rebuild");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
                                node && ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET));
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (self->group), "run-with-handler");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action),
-                               node &&
-                               ide_tree_node_holds (node, IDE_TYPE_BUILD_TARGET) &&
-                               (target = ide_tree_node_get_item (node)) &&
-                               ide_build_target_get_install (target) &&
-                               ide_build_target_get_kind (target) == IDE_ARTIFACT_KIND_EXECUTABLE);
 }
 
 static void
