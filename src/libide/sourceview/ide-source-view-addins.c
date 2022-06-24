@@ -70,7 +70,7 @@ ide_source_view_completion_provider_removed_cb (IdeExtensionSetAdapter *adapter,
   g_assert (GTK_SOURCE_IS_COMPLETION_PROVIDER (provider));
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  g_debug ("Removing completion provider %s from module %s\n",
+  g_debug ("Removing completion provider %s from module %s",
            G_OBJECT_TYPE_NAME (provider),
            peas_plugin_info_get_module_name (plugin_info));
 
