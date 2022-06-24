@@ -37,7 +37,6 @@
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
 #include "ide-local-device.h"
-#include "ide-runner.h"
 #include "ide-triplet.h"
 
 struct _IdeDeviceManager
@@ -858,103 +857,6 @@ ide_device_manager_deploy_finish (IdeDeviceManager  *self,
   g_return_val_if_fail (ide_task_is_valid (IDE_TASK (result), self), FALSE);
 
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
-
-  IDE_RETURN (ret);
-}
-
-static void
-ide_device_manager_create_runner_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
-{
-  IdeDeployStrategy *strategy = (IdeDeployStrategy *)object;
-  g_autoptr(IdeRunner) runner = NULL;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TASK (task));
-
-  if (!(runner = ide_deploy_strategy_create_runner_finish (strategy, result, &error)))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, g_steal_pointer (&runner), g_object_unref);
-
-  IDE_EXIT;
-}
-
-/**
- * ide_device_manager_create_runner_async:
- * @self: a #IdeDeviceManager
- * @pipeline: an #IdePipeline
- * @cancellable: a #GCancellable, or %NULL
- * @callback: a #GAsyncReadyCallback
- * @user_data: closure data for @callback
- *
- * Requests an #IdeRunner that runs on the current device, if a runner
- * other than the default is required.
- */
-void
-ide_device_manager_create_runner_async (IdeDeviceManager    *self,
-                                        IdePipeline         *pipeline,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-  IdeDeployStrategy *strategy;
-
-  IDE_ENTRY;
-
-  g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
-  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_device_manager_create_runner_async);
-
-  if (!(strategy = ide_pipeline_get_deploy_strategy (pipeline)))
-    ide_task_return_new_error (task,
-                               G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
-                               "Missing device in pipeline");
-  else
-    ide_deploy_strategy_create_runner_async (strategy,
-                                             pipeline,
-                                             cancellable,
-                                             ide_device_manager_create_runner_cb,
-                                             g_steal_pointer (&task));
-
-  IDE_EXIT;
-}
-
-/**
- * ide_device_manager_create_runner_finish:
- * @self: a #IdeDeviceManager
- * @result: a #GAsyncResult provided to callback
- * @error: a location for a #GError, or %NULL
- *
- * Completes a request to create an #IdeRunner to run on the device.
- *
- * Returns: (transfer full): An #IdeRunner or %NULL.
- */
-IdeRunner *
-ide_device_manager_create_runner_finish (IdeDeviceManager  *self,
-                                         GAsyncResult      *result,
-                                         GError           **error)
-{
-  IdeRunner *ret;
-
-  IDE_ENTRY;
-
-  g_return_val_if_fail (IDE_IS_DEVICE_MANAGER (self), FALSE);
-  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
-  g_return_val_if_fail (ide_task_is_valid (IDE_TASK (result), self), FALSE);
-
-  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }
