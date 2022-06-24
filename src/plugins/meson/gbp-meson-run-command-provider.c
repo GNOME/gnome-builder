@@ -22,6 +22,8 @@
 
 #include <libide-threading.h>
 
+#include "gbp-meson-introspection.h"
+#include "gbp-meson-pipeline-addin.h"
 #include "gbp-meson-run-command-provider.h"
 
 struct _GbpMesonRunCommandProvider
@@ -36,20 +38,43 @@ gbp_meson_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
                                                     gpointer               user_data)
 {
   GbpMesonRunCommandProvider *self = (GbpMesonRunCommandProvider *)provider;
+  g_autoptr(GListModel) run_commands = NULL;
+  GbpMesonIntrospection *introspection;
   g_autoptr(IdeTask) task = NULL;
+  IdePipelineAddin *addin;
+  IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
+  IdeContext *context;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_COMMAND_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_meson_run_command_provider_list_commands_async);
 
-  ide_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "Not yet supported");
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
+
+  if (pipeline == NULL ||
+      !(addin = ide_pipeline_addin_find_by_module_name (pipeline, "meson")))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Cannot list run commands without a pipeline");
+      IDE_EXIT;
+    }
+
+  introspection = gbp_meson_pipeline_addin_get_introspection (GBP_MESON_PIPELINE_ADDIN (addin));
+  run_commands = gbp_meson_introspection_list_run_commands (introspection);
+
+  ide_task_return_pointer (task,
+                           g_steal_pointer (&run_commands),
+                           g_object_unref);
 
   IDE_EXIT;
 }
