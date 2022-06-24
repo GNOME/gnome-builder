@@ -29,11 +29,13 @@
 #include "gbp-meson-build-stage-cross-file.h"
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-build-target.h"
+#include "gbp-meson-introspection.h"
 #include "gbp-meson-pipeline-addin.h"
 
 struct _GbpMesonPipelineAddin
 {
-  IdeObject parent_instance;
+  IdeObject              parent_instance;
+  GbpMesonIntrospection *introspection;
 };
 
 static const gchar *ninja_names[] = { "ninja", "ninja-build", NULL };
@@ -205,6 +207,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   const char *prefix;
   const char *srcdir;
   IdeConfig *config;
+  guint id;
   int parallel;
 
   IDE_ENTRY;
@@ -239,7 +242,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   else if (g_strcmp0 (ide_toolchain_get_id (toolchain), "default") != 0)
     {
       g_autoptr(GbpMesonBuildStageCrossFile) cross_file_stage = gbp_meson_build_stage_cross_file_new (toolchain);
-      guint id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 0, IDE_PIPELINE_STAGE (cross_file_stage));
+      id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_PREPARE, 0, IDE_PIPELINE_STAGE (cross_file_stage));
       crossbuild_file = gbp_meson_build_stage_cross_file_get_path (cross_file_stage, pipeline);
       ide_pipeline_addin_track (addin, id);
     }
@@ -271,6 +274,14 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
                               _("Install project"), IDE_PIPELINE_PHASE_INSTALL);
   g_signal_connect (stage, "query", G_CALLBACK (on_install_stage_query), NULL);
 
+  /* Setup our introspection stage */
+  self->introspection = gbp_meson_introspection_new ();
+  id = ide_pipeline_attach (pipeline,
+                            IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER,
+                            0,
+                            IDE_PIPELINE_STAGE (self->introspection));
+  ide_pipeline_addin_track (addin, id);
+
   IDE_EXIT;
 }
 
@@ -284,11 +295,32 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonPipelineAddin, gbp_meson_pipeline_addin, 
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, pipeline_addin_iface_init))
 
 static void
+gbp_meson_pipeline_addin_dispose (GObject *object)
+{
+  GbpMesonPipelineAddin *self = (GbpMesonPipelineAddin *)object;
+
+  g_clear_object (&self->introspection);
+
+  G_OBJECT_CLASS (gbp_meson_pipeline_addin_parent_class)->dispose (object);
+}
+
+static void
 gbp_meson_pipeline_addin_class_init (GbpMesonPipelineAddinClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = gbp_meson_pipeline_addin_dispose;
 }
 
 static void
 gbp_meson_pipeline_addin_init (GbpMesonPipelineAddin *self)
 {
+}
+
+GbpMesonIntrospection *
+gbp_meson_pipeline_addin_get_introspection (GbpMesonPipelineAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_MESON_PIPELINE_ADDIN (self), NULL);
+
+  return self->introspection;
 }

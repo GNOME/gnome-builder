@@ -22,10 +22,14 @@
 
 #include <libide-foundry.h>
 
+#include "gbp-meson-introspection.h"
+
 G_BEGIN_DECLS
 
 #define GBP_TYPE_MESON_PIPELINE_ADDIN (gbp_meson_pipeline_addin_get_type())
 
 G_DECLARE_FINAL_TYPE (GbpMesonPipelineAddin, gbp_meson_pipeline_addin, GBP, MESON_PIPELINE_ADDIN, IdeObject)
+
+GbpMesonIntrospection *gbp_meson_pipeline_addin_get_introspection (GbpMesonPipelineAddin *self);
 
 G_END_DECLS
