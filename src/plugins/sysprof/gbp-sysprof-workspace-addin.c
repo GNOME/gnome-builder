@@ -125,6 +125,8 @@ foreach_fd (gint     dest_fd,
 
 static void
 profiler_run_handler (IdeRunManager *run_manager,
+                      IdePipeline   *pipeline,
+                      IdeRunCommand *run_command,
                       IdeRunContext *run_context,
                       gpointer       user_data)
 {
