@@ -127,6 +127,9 @@ IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_unsetenv                (IdeRunContext         *self,
                                                                 const char            *key);
 IDE_AVAILABLE_IN_ALL
+GIOStream             *ide_run_context_create_stdio_stream     (IdeRunContext         *self,
+                                                                GError               **error);
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_run_context_end                     (IdeRunContext         *self,
                                                                 GError               **error);
 IDE_AVAILABLE_IN_ALL
