@@ -822,17 +822,21 @@ ide_run_context_default_handler (IdeRunContext       *self,
   if (!ide_unix_fd_map_steal_from (layer->unix_fd_map, unix_fd_map, error))
     return FALSE;
 
-  if (argv != NULL && argv[0] != NULL)
+  if (env[0] != NULL)
     {
-      /* Convert environment into "env FOO=BAR subcommand" style */
-      ide_run_context_environ_to_argv (self);
-      ide_run_context_append_args (self, argv);
+      if (argv[0] == NULL)
+        {
+          ide_run_context_add_environ (self, env);
+        }
+      else
+        {
+          ide_run_context_append_argv (self, "env");
+          ide_run_context_append_args (self, env);
+        }
     }
-  else
-    {
-      /* No argv was provided, just merge environments */
-      ide_run_context_add_environ (self, env);
-    }
+
+  if (argv[0] != NULL)
+    ide_run_context_append_args (self, argv);
 
   return TRUE;
 }
