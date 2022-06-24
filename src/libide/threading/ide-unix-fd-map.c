@@ -26,6 +26,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#include <glib-unix.h>
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 
