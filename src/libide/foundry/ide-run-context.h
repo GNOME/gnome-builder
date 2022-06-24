@@ -49,86 +49,88 @@ typedef gboolean (*IdeRunContextHandler) (IdeRunContext       *run_context,
                                           GError             **error);
 
 IDE_AVAILABLE_IN_ALL
-IdeRunContext         *ide_run_context_new                (void);
+IdeRunContext         *ide_run_context_new                     (void);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_push               (IdeRunContext         *self,
-                                                           IdeRunContextHandler   handler,
-                                                           gpointer               handler_data,
-                                                           GDestroyNotify         handler_data_destroy);
+void                   ide_run_context_push                    (IdeRunContext         *self,
+                                                                IdeRunContextHandler   handler,
+                                                                gpointer               handler_data,
+                                                                GDestroyNotify         handler_data_destroy);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_push_host          (IdeRunContext         *self);
+void                   ide_run_context_push_host               (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_push_expansion     (IdeRunContext         *self,
-                                                           const char * const    *environ);
+void                   ide_run_context_push_expansion          (IdeRunContext         *self,
+                                                                const char * const    *environ);
 IDE_AVAILABLE_IN_ALL
-const char * const    *ide_run_context_get_argv           (IdeRunContext         *self);
+const char * const    *ide_run_context_get_argv                (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_set_argv           (IdeRunContext         *self,
-                                                           const char * const    *argv);
+void                   ide_run_context_set_argv                (IdeRunContext         *self,
+                                                                const char * const    *argv);
 IDE_AVAILABLE_IN_ALL
-const char * const    *ide_run_context_get_environ        (IdeRunContext         *self);
+const char * const    *ide_run_context_get_environ             (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_set_environ        (IdeRunContext         *self,
-                                                           const char * const    *environ);
+void                   ide_run_context_set_environ             (IdeRunContext         *self,
+                                                                const char * const    *environ);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_add_environ        (IdeRunContext         *self,
-                                                           const char * const    *environ);
+void                   ide_run_context_add_environ             (IdeRunContext         *self,
+                                                                const char * const    *environ);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_environ_to_argv    (IdeRunContext         *self);
+void                   ide_run_context_add_minimal_environment (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
-const char            *ide_run_context_get_cwd            (IdeRunContext         *self);
+void                   ide_run_context_environ_to_argv         (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_set_cwd            (IdeRunContext         *self,
-                                                           const char            *cwd);
+const char            *ide_run_context_get_cwd                 (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_set_pty_fd         (IdeRunContext         *self,
-                                                           int                    consumer_fd);
+void                   ide_run_context_set_cwd                 (IdeRunContext         *self,
+                                                                const char            *cwd);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_set_pty            (IdeRunContext         *self,
-                                                           VtePty                *pty);
+void                   ide_run_context_set_pty_fd              (IdeRunContext         *self,
+                                                                int                    consumer_fd);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_take_fd            (IdeRunContext         *self,
-                                                           int                    source_fd,
-                                                           int                    dest_fd);
+void                   ide_run_context_set_pty                 (IdeRunContext         *self,
+                                                                VtePty                *pty);
 IDE_AVAILABLE_IN_ALL
-gboolean               ide_run_context_merge_unix_fd_map  (IdeRunContext         *self,
-                                                           IdeUnixFDMap          *unix_fd_map,
-                                                           GError               **error);
+void                   ide_run_context_take_fd                 (IdeRunContext         *self,
+                                                                int                    source_fd,
+                                                                int                    dest_fd);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_prepend_argv       (IdeRunContext         *self,
-                                                           const char            *arg);
+gboolean               ide_run_context_merge_unix_fd_map       (IdeRunContext         *self,
+                                                                IdeUnixFDMap          *unix_fd_map,
+                                                                GError               **error);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_prepend_args       (IdeRunContext         *self,
-                                                           const char * const    *args);
+void                   ide_run_context_prepend_argv            (IdeRunContext         *self,
+                                                                const char            *arg);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_append_argv        (IdeRunContext         *self,
-                                                           const char            *arg);
+void                   ide_run_context_prepend_args            (IdeRunContext         *self,
+                                                                const char * const    *args);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_append_args        (IdeRunContext         *self,
-                                                           const char * const    *args);
+void                   ide_run_context_append_argv             (IdeRunContext         *self,
+                                                                const char            *arg);
 IDE_AVAILABLE_IN_ALL
-gboolean               ide_run_context_append_args_parsed (IdeRunContext         *self,
-                                                           const char            *args,
-                                                           GError               **error);
+void                   ide_run_context_append_args             (IdeRunContext         *self,
+                                                                const char * const    *args);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_append_formatted   (IdeRunContext         *self,
-                                                           const char            *format,
-                                                           ...) G_GNUC_PRINTF (2, 3);
+gboolean               ide_run_context_append_args_parsed      (IdeRunContext         *self,
+                                                                const char            *args,
+                                                                GError               **error);
 IDE_AVAILABLE_IN_ALL
-const char            *ide_run_context_getenv             (IdeRunContext         *self,
-                                                           const char            *key);
+void                   ide_run_context_append_formatted        (IdeRunContext         *self,
+                                                                const char            *format,
+                                                                ...) G_GNUC_PRINTF (2, 3);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_setenv             (IdeRunContext         *self,
-                                                           const char            *key,
-                                                           const char            *value);
+const char            *ide_run_context_getenv                  (IdeRunContext         *self,
+                                                                const char            *key);
 IDE_AVAILABLE_IN_ALL
-void                   ide_run_context_unsetenv           (IdeRunContext         *self,
-                                                           const char            *key);
+void                   ide_run_context_setenv                  (IdeRunContext         *self,
+                                                                const char            *key,
+                                                                const char            *value);
 IDE_AVAILABLE_IN_ALL
-IdeSubprocessLauncher *ide_run_context_end                (IdeRunContext         *self,
-                                                           GError               **error);
+void                   ide_run_context_unsetenv                (IdeRunContext         *self,
+                                                                const char            *key);
 IDE_AVAILABLE_IN_ALL
-IdeSubprocess         *ide_run_context_spawn              (IdeRunContext         *self,
-                                                           GError               **error);
+IdeSubprocessLauncher *ide_run_context_end                     (IdeRunContext         *self,
+                                                                GError               **error);
+IDE_AVAILABLE_IN_ALL
+IdeSubprocess         *ide_run_context_spawn                   (IdeRunContext         *self,
+                                                                GError               **error);
 
 G_END_DECLS
