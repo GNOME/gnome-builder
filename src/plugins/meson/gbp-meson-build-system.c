@@ -1017,16 +1017,12 @@ char *
 gbp_meson_build_system_locate_meson (GbpMesonBuildSystem *self,
                                      IdePipeline         *pipeline)
 {
-  IdeConfig *config = NULL;
+  IdeConfig *config;
 
   g_return_val_if_fail (!self || GBP_IS_MESON_BUILD_SYSTEM (self), NULL);
   g_return_val_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline), NULL);
 
-  if (pipeline != NULL && config == NULL)
-    config = ide_pipeline_get_config (pipeline);
-
-  /* First check MESON=path override in IdeConfig */
-  if (config != NULL)
+  if ((config = ide_pipeline_get_config (pipeline)))
     {
       const char *envvar = ide_config_getenv (config, "MESON");
 
@@ -1034,14 +1030,6 @@ gbp_meson_build_system_locate_meson (GbpMesonBuildSystem *self,
         return g_strdup (envvar);
     }
 
-  /* Next see if the pipeline or one of it's extensions has Meson */
-  if (pipeline != NULL)
-    {
-      if (ide_pipeline_contains_program_in_path (pipeline, "meson", NULL))
-        return g_strdup ("meson");
-    }
-
-  /* Fallback to "meson" and hope for the best */
   return g_strdup ("meson");
 }
 
