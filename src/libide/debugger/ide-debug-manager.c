@@ -45,7 +45,6 @@ struct _IdeDebugManager
   GHashTable     *breakpoints;
   IdeDebugger    *debugger;
   IdeSignalGroup *debugger_signals;
-  IdeRunner      *runner;
   GQueue          pending_breakpoints;
   GPtrArray      *supported_languages;
 
@@ -296,9 +295,6 @@ ide_debug_manager_debugger_stopped (IdeDebugManager       *self,
     case IDE_DEBUGGER_STOP_EXITED:
     case IDE_DEBUGGER_STOP_EXITED_NORMALLY:
     case IDE_DEBUGGER_STOP_EXITED_SIGNALED:
-      /* Cleanup any lingering debugger process */
-      if (self->runner != NULL)
-        ide_runner_force_quit (self->runner);
       break;
 
     case IDE_DEBUGGER_STOP_BREAKPOINT_HIT:
@@ -557,7 +553,6 @@ ide_debug_manager_dispose (GObject *object)
   g_hash_table_remove_all (self->breakpoints);
   ide_signal_group_set_target (self->debugger_signals, NULL);
   ide_clear_and_destroy_object (&self->debugger);
-  ide_clear_and_destroy_object (&self->runner);
 
   G_OBJECT_CLASS (ide_debug_manager_parent_class)->dispose (object);
 }
