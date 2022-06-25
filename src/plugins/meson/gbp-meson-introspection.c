@@ -259,6 +259,57 @@ gbp_meson_introspection_load_benchmarks (GbpMesonIntrospection *self,
 }
 
 static void
+gbp_meson_introspection_load_targets (GbpMesonIntrospection *self,
+                                      JsonArray             *targets)
+{
+  guint length;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_MESON_INTROSPECTION (self));
+  g_assert (targets != NULL);
+
+  length = json_array_get_length (targets);
+
+  for (guint i = 0; i < length; i++)
+    {
+      JsonNode *node = json_array_get_element (targets, i);
+      g_autofree char *id = NULL;
+      g_autofree char *name = NULL;
+      g_autofree char *type = NULL;
+      JsonObject *obj;
+
+      if (!JSON_NODE_HOLDS_OBJECT (node) || !(obj = json_node_get_object (node)))
+        continue;
+
+      get_string_member (obj, "id", &id);
+      get_string_member (obj, "name", &name);
+      get_string_member (obj, "type", &type);
+
+      if (ide_str_equal0 (type, "executable"))
+        {
+          g_auto(GStrv) filename = NULL;
+
+          get_strv_member (obj, "filename", &filename);
+
+          if (filename != NULL && filename[0] != NULL)
+            {
+              g_autoptr(IdeRunCommand) run_command = ide_run_command_new ();
+
+              ide_run_command_set_kind (run_command, IDE_RUN_COMMAND_KIND_UTILITY);
+              ide_run_command_set_id (run_command, id);
+              ide_run_command_set_display_name (run_command, name);
+              ide_run_command_set_argv (run_command, IDE_STRV_INIT (filename[0]));
+
+              g_list_store_append (self->run_commands, run_command);
+            }
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
 gbp_meson_introspection_load_installed (GbpMesonIntrospection *self,
                                         JsonObject            *installed)
 {
@@ -347,6 +398,11 @@ gbp_meson_introspection_load_json (GbpMesonIntrospection *self,
       (member = json_object_get_member (root, "installed")) &&
       JSON_NODE_HOLDS_OBJECT (member))
     gbp_meson_introspection_load_installed (self, json_node_get_object (member));
+
+  if (json_object_has_member (root, "targets") &&
+      (member = json_object_get_member (root, "targets")) &&
+      JSON_NODE_HOLDS_ARRAY (member))
+    gbp_meson_introspection_load_targets (self, json_node_get_array (member));
 
   IDE_EXIT;
 }
