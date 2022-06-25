@@ -63,6 +63,7 @@ create_run_command_row (gpointer item,
   AdwActionRow *row;
   const char *id;
   GtkWidget *check;
+  GtkWidget *label = NULL;
 
   g_assert (IDE_IS_RUN_COMMAND (run_command));
 
@@ -106,6 +107,14 @@ create_run_command_row (gpointer item,
       g_string_append (subtitle, "</tt>");
     }
 
+  if (ide_run_command_get_kind (run_command) == IDE_RUN_COMMAND_KIND_TEST)
+    label = g_object_new (GTK_TYPE_LABEL,
+                          "css-name", "button",
+                          "css-classes", IDE_STRV_INIT ("pill", "small"),
+                          "label", _("Test"),
+                          "valign", GTK_ALIGN_CENTER,
+                          NULL);
+
   check = g_object_new (GTK_TYPE_CHECK_BUTTON,
                         "action-name", "run-manager.default-run-command",
                         "css-classes", IDE_STRV_INIT ("checkimage"),
@@ -118,6 +127,10 @@ create_run_command_row (gpointer item,
                       "subtitle", subtitle ? subtitle->str : NULL,
                       "activatable-widget", check,
                       NULL);
+
+  if (label != NULL)
+    adw_action_row_add_suffix (row, label);
+
   adw_action_row_add_suffix (row, check);
 
   return GTK_WIDGET (row);
