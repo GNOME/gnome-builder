@@ -33,11 +33,12 @@
 
 struct _GbpBuilduiRunnablesDialog
 {
-  AdwWindow   parent_instance;
-  GtkListBox *list_box;
-  GtkSpinner *spinner;
-  GtkStack   *stack;
-  guint       busy : 1;
+  AdwWindow           parent_instance;
+  GtkListBox         *list_box;
+  AdwPreferencesPage *page;
+  GtkSpinner         *spinner;
+  GtkStack           *stack;
+  guint               busy : 1;
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiRunnablesDialog, gbp_buildui_runnables_dialog, ADW_TYPE_WINDOW)
@@ -272,6 +273,7 @@ gbp_buildui_runnables_dialog_class_init (GbpBuilduiRunnablesDialogClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-runnables-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, list_box);
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, page);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, spinner);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, stack);
 
@@ -286,4 +288,12 @@ gbp_buildui_runnables_dialog_init (GbpBuilduiRunnablesDialog *self)
 #ifdef DEVELOPMENT_BUILD
   gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
 #endif
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->page));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (GTK_IS_SCROLLED_WINDOW (child))
+        gtk_widget_add_css_class (child, "shadow-when-scroll");
+    }
 }
