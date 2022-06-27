@@ -26,6 +26,8 @@
 
 #include <libide-core.h>
 
+#include "ide-foundry-types.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_RUN_COMMAND (ide_run_command_get_type())
@@ -46,6 +48,10 @@ G_DECLARE_DERIVABLE_TYPE (IdeRunCommand, ide_run_command, IDE, RUN_COMMAND, GObj
 struct _IdeRunCommandClass
 {
   GObjectClass parent_class;
+
+  void (*prepare_to_run) (IdeRunCommand *self,
+                          IdeRunContext *run_context,
+                          IdeContext    *context);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -90,5 +96,9 @@ const char * const *ide_run_command_get_languages    (IdeRunCommand      *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_languages    (IdeRunCommand      *self,
                                                       const char * const *languages);
+IDE_AVAILABLE_IN_ALL
+void                ide_run_command_prepare_to_run   (IdeRunCommand      *self,
+                                                      IdeRunContext      *run_context,
+                                                      IdeContext         *context);
 
 G_END_DECLS
