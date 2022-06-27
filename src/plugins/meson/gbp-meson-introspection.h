@@ -28,7 +28,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpMesonIntrospection, gbp_meson_introspection, GBP, MESON_INTROSPECTION, IdePipelineStage)
 
-GbpMesonIntrospection *gbp_meson_introspection_new               (void);
-GListModel            *gbp_meson_introspection_list_run_commands (GbpMesonIntrospection *self);
+GbpMesonIntrospection *gbp_meson_introspection_new                      (IdePipeline            *pipeline);
+void                   gbp_meson_introspection_list_run_commands_async  (GbpMesonIntrospection  *self,
+                                                                         GCancellable           *cancelalble,
+                                                                         GAsyncReadyCallback     callback,
+                                                                         gpointer                user_data);
+GListModel            *gbp_meson_introspection_list_run_commands_finish (GbpMesonIntrospection  *self,
+                                                                         GAsyncResult           *result,
+                                                                         GError                **error);
 
 G_END_DECLS
