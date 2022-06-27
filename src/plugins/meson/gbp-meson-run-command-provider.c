@@ -32,6 +32,31 @@ struct _GbpMesonRunCommandProvider
 };
 
 static void
+gbp_meson_run_command_provider_list_run_commands_cb (GObject      *object,
+                                                     GAsyncResult *result,
+                                                     gpointer      user_data)
+{
+  GbpMesonIntrospection *introspection = (GbpMesonIntrospection *)object;
+  g_autoptr(GListModel) run_commands = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_MESON_INTROSPECTION (introspection));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!(run_commands = gbp_meson_introspection_list_run_commands_finish (introspection, result, &error)))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_pointer (task, g_steal_pointer (&run_commands), g_object_unref);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_meson_run_command_provider_list_commands_async (IdeRunCommandProvider *provider,
                                                     GCancellable          *cancellable,
                                                     GAsyncReadyCallback    callback,
@@ -70,11 +95,13 @@ gbp_meson_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
     }
 
   introspection = gbp_meson_pipeline_addin_get_introspection (GBP_MESON_PIPELINE_ADDIN (addin));
-  run_commands = gbp_meson_introspection_list_run_commands (introspection);
 
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&run_commands),
-                           g_object_unref);
+  g_assert (GBP_IS_MESON_INTROSPECTION (introspection));
+
+  gbp_meson_introspection_list_run_commands_async (introspection,
+                                                   cancellable,
+                                                   gbp_meson_run_command_provider_list_run_commands_cb,
+                                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }

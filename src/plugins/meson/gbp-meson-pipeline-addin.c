@@ -275,7 +275,7 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
   g_signal_connect (stage, "query", G_CALLBACK (on_install_stage_query), NULL);
 
   /* Setup our introspection stage */
-  self->introspection = gbp_meson_introspection_new ();
+  self->introspection = gbp_meson_introspection_new (pipeline);
   id = ide_pipeline_attach (pipeline,
                             IDE_PIPELINE_PHASE_CONFIGURE | IDE_PIPELINE_PHASE_AFTER,
                             0,

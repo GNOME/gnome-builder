@@ -36,6 +36,8 @@ struct _GbpMesonIntrospection
 {
   IdePipelineStage parent_instance;
 
+  IdePipeline *pipeline;
+
   char *etag;
 
   GListStore *run_commands;
@@ -45,6 +47,7 @@ struct _GbpMesonIntrospection
   char *version;
 
   guint loaded : 1;
+  guint has_built_once : 1;
 };
 
 G_DEFINE_FINAL_TYPE (GbpMesonIntrospection, gbp_meson_introspection, IDE_TYPE_PIPELINE_STAGE)
@@ -477,6 +480,8 @@ gbp_meson_introspection_build_async (IdePipelineStage    *stage,
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  self->has_built_once = TRUE;
+
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_meson_introspection_build_async);
   ide_task_set_task_data (task, get_current_etag (pipeline), g_free);
@@ -550,6 +555,8 @@ gbp_meson_introspection_dispose (GObject *object)
   g_clear_pointer (&self->version, g_free);
   g_clear_pointer (&self->etag, g_free);
 
+  g_clear_weak_pointer (&self->pipeline);
+
   G_OBJECT_CLASS (gbp_meson_introspection_parent_class)->dispose (object);
 }
 
@@ -576,15 +583,83 @@ gbp_meson_introspection_init (GbpMesonIntrospection *self)
 }
 
 GbpMesonIntrospection *
-gbp_meson_introspection_new (void)
+gbp_meson_introspection_new (IdePipeline *pipeline)
 {
-  return g_object_new (GBP_TYPE_MESON_INTROSPECTION, NULL);
+  GbpMesonIntrospection *self;
+
+  g_return_val_if_fail (IDE_IS_PIPELINE (pipeline), NULL);
+
+  self = g_object_new (GBP_TYPE_MESON_INTROSPECTION, NULL);
+  g_set_weak_pointer (&self->pipeline, pipeline);
+
+  return self;
+}
+
+static void
+gbp_meson_introspection_list_run_commands_cb (GObject      *object,
+                                              GAsyncResult *result,
+                                              gpointer      user_data)
+{
+  IdePipeline *pipeline = (IdePipeline *)object;
+  g_autoptr(IdeTask) task = user_data;
+  GbpMesonIntrospection *self;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  g_assert (GBP_IS_MESON_INTROSPECTION (self));
+
+  ide_task_return_pointer (task, g_object_ref (self->run_commands), g_object_unref);
+
+  IDE_EXIT;
+}
+
+void
+gbp_meson_introspection_list_run_commands_async (GbpMesonIntrospection *self,
+                                                 GCancellable          *cancellable,
+                                                 GAsyncReadyCallback    callback,
+                                                 gpointer               user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (GBP_IS_MESON_INTROSPECTION (self));
+  g_return_if_fail (IDE_IS_PIPELINE (self->pipeline));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_meson_introspection_list_run_commands_async);
+
+  if (!self->has_built_once)
+    ide_pipeline_build_async (self->pipeline,
+                              IDE_PIPELINE_PHASE_CONFIGURE,
+                              cancellable,
+                              gbp_meson_introspection_list_run_commands_cb,
+                              g_steal_pointer (&task));
+  else
+    ide_task_return_pointer (task, g_object_ref (self->run_commands), g_object_unref);
+
+  IDE_EXIT;
 }
 
 GListModel *
-gbp_meson_introspection_list_run_commands (GbpMesonIntrospection *self)
+gbp_meson_introspection_list_run_commands_finish (GbpMesonIntrospection  *self,
+                                                  GAsyncResult           *result,
+                                                  GError                **error)
 {
-  g_return_val_if_fail (GBP_IS_MESON_INTROSPECTION (self), NULL);
+  GListModel *ret;
 
-  return g_object_ref (G_LIST_MODEL (self->run_commands));
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_MESON_INTROSPECTION (self));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
