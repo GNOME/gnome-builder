@@ -34,9 +34,9 @@
 struct _GbpBuilduiRunnablesDialog
 {
   AdwWindow           parent_instance;
+  IdeContext         *context;
   GtkListBox         *list_box;
   AdwPreferencesPage *page;
-  GtkSpinner         *spinner;
   GtkStack           *stack;
   guint               busy : 1;
 };
@@ -45,7 +45,6 @@ G_DEFINE_FINAL_TYPE (GbpBuilduiRunnablesDialog, gbp_buildui_runnables_dialog, AD
 
 enum {
   PROP_0,
-  PROP_BUSY,
   PROP_CONTEXT,
   N_PROPS
 };
@@ -148,12 +147,12 @@ gbp_buildui_runnables_dialog_list_commands_cb (GObject      *object,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (GBP_IS_BUILDUI_RUNNABLES_DIALOG (self));
 
-  self->busy = FALSE;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
+  gtk_stack_set_visible_child_name (self->stack, "list");
 
   if (!(model = ide_run_manager_list_commands_finish (run_manager, result, &error)))
     {
@@ -166,36 +165,6 @@ gbp_buildui_runnables_dialog_list_commands_cb (GObject      *object,
     }
 
   gtk_list_box_bind_model (self->list_box, model, create_run_command_row, NULL, NULL);
-
-  IDE_EXIT;
-}
-
-static void
-gbp_buildui_runnables_dialog_set_context (GbpBuilduiRunnablesDialog *self,
-                                          IdeContext                *context)
-{
-  IdeRunManager *run_manager;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_BUILDUI_RUNNABLES_DIALOG (self));
-  g_assert (!context || IDE_IS_CONTEXT (context));
-
-  if (context == NULL)
-    IDE_EXIT;
-
-  self->busy = TRUE;
-
-  run_manager = ide_run_manager_from_context (context);
-  gtk_widget_insert_action_group (GTK_WIDGET (self),
-                                  "run-manager",
-                                  G_ACTION_GROUP (run_manager));
-  ide_run_manager_list_commands_async (run_manager,
-                                       NULL,
-                                       gbp_buildui_runnables_dialog_list_commands_cb,
-                                       g_object_ref (self));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 
   IDE_EXIT;
 }
@@ -222,6 +191,43 @@ new_run_command_action (GtkWidget  *widget,
 }
 
 static void
+gbp_buildui_runnables_dialog_realize (GtkWidget *widget)
+{
+  GbpBuilduiRunnablesDialog *self = (GbpBuilduiRunnablesDialog *)widget;
+  IdeRunManager *run_manager;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_BUILDUI_RUNNABLES_DIALOG (self));
+  g_assert (IDE_IS_CONTEXT (self->context));
+
+  GTK_WIDGET_CLASS (gbp_buildui_runnables_dialog_parent_class)->realize (widget);
+
+  gtk_stack_set_visible_child_name (self->stack, "loading");
+
+  run_manager = ide_run_manager_from_context (self->context);
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "run-manager",
+                                  G_ACTION_GROUP (run_manager));
+  ide_run_manager_list_commands_async (run_manager,
+                                       NULL,
+                                       gbp_buildui_runnables_dialog_list_commands_cb,
+                                       g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
+gbp_buildui_runnables_dialog_dispose (GObject *object)
+{
+  GbpBuilduiRunnablesDialog *self = (GbpBuilduiRunnablesDialog *)object;
+
+  g_clear_object (&self->context);
+
+  G_OBJECT_CLASS (gbp_buildui_runnables_dialog_parent_class)->dispose (object);
+}
+
+static void
 gbp_buildui_runnables_dialog_get_property (GObject    *object,
                                            guint       prop_id,
                                            GValue     *value,
@@ -231,8 +237,8 @@ gbp_buildui_runnables_dialog_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_BUSY:
-      g_value_set_boolean (value, self->busy);
+    case PROP_CONTEXT:
+      g_value_set_object (value, self->context);
       break;
 
     default:
@@ -251,7 +257,7 @@ gbp_buildui_runnables_dialog_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_CONTEXT:
-      gbp_buildui_runnables_dialog_set_context (self, g_value_get_object (value));
+      self->context = g_value_dup_object (value);
       break;
 
     default:
@@ -262,21 +268,19 @@ gbp_buildui_runnables_dialog_set_property (GObject      *object,
 static void
 gbp_buildui_runnables_dialog_class_init (GbpBuilduiRunnablesDialogClass *klass)
 {
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gbp_buildui_runnables_dialog_dispose;
   object_class->get_property = gbp_buildui_runnables_dialog_get_property;
   object_class->set_property = gbp_buildui_runnables_dialog_set_property;
 
-  properties [PROP_BUSY] =
-    g_param_spec_boolean ("busy", NULL, NULL,
-                          FALSE,
-                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  widget_class->realize = gbp_buildui_runnables_dialog_realize;
 
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context", NULL, NULL,
                          IDE_TYPE_CONTEXT,
-                         (G_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -287,7 +291,6 @@ gbp_buildui_runnables_dialog_class_init (GbpBuilduiRunnablesDialogClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-runnables-dialog.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, page);
-  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, spinner);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiRunnablesDialog, stack);
 
   g_type_ensure (IDE_TYPE_ENUM_OBJECT);

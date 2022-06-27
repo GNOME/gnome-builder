@@ -4,66 +4,81 @@
     <property name="default-width">700</property>
     <property name="default-height">550</property>
     <child type="content">
-      <object class="GtkStack" id="stack">
-        <property name="transition-type">slide-left-right</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkStackPage">
-            <property name="name">list</property>
-            <property name="child">
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
+          <object class="AdwHeaderBar">
+            <style>
+              <class name="flat"/>
+            </style>
+            <child type="title">
+              <object class="AdwWindowTitle">
+                <property name="title" translatable="yes">Select Run Command</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwPreferencesPage" id="page">
+            <child>
+              <object class="AdwPreferencesGroup">
+                <property name="title" translatable="yes">Available Run Commands</property>
+                <property name="description" translatable="yes">Some run commands may not be available until the project has been configured.</property>
                 <child>
-                  <object class="AdwHeaderBar">
-                    <style>
-                      <class name="flat"/>
-                    </style>
-                    <child type="title">
-                      <object class="AdwWindowTitle">
-                        <property name="title" translatable="yes">Select Run Command</property>
+                  <object class="AdwActionRow">
+                    <property name="title" translatable="yes">Project Default</property>
+                    <property name="subtitle" translatable="yes">This selection allows the build system to choose the best default candidate.</property>
+                    <property name="activatable-widget">default_runnable</property>
+                    <child type="suffix">
+                      <object class="GtkCheckButton" id="default_runnable">
+                        <property name="action-name">run-manager.default-run-command</property>
+                        <property name="action-target">''</property>
+                        <style>
+                          <class name="checkimage"/>
+                        </style>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwPreferencesPage" id="page">
+                  <object class="GtkButton">
+                    <property name="margin-top">12</property>
+                    <property name="margin-bottom">12</property>
+                    <property name="use-underline">true</property>
+                    <property name="label" translatable="yes">_Custom Command…</property>
+                    <property name="action-name">run-command.new</property>
+                    <property name="halign">end</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStack" id="stack">
+                    <property name="hhomogeneous">false</property>
+                    <property name="vhomogeneous">false</property>
                     <child>
-                      <object class="AdwPreferencesGroup">
-                        <property name="title" translatable="yes">Available Run Commands</property>
-                        <property name="description" translatable="yes">Some run commands may not be available until the project has been configured.</property>
-                        <property name="header-suffix">
-                          <object class="GtkSpinner" id="spinner">
-                            <property name="spinning" bind-source="GbpBuilduiRunnablesDialog" bind-property="busy" bind-flags="sync-create"/>
-                            <property name="halign">end</property>
-                            <property name="valign">start</property>
-                          </object>
-                        </property>
-                        <child>
-                          <object class="AdwActionRow">
-                            <property name="title" translatable="yes">Project Default</property>
-                            <property name="subtitle" translatable="yes">This selection allows the build system to choose the best default candidate.</property>
-                            <property name="activatable-widget">default_runnable</property>
-                            <child type="suffix">
-                              <object class="GtkCheckButton" id="default_runnable">
-                                <property name="action-name">run-manager.default-run-command</property>
-                                <property name="action-target">''</property>
-                                <style>
-                                  <class name="checkimage"/>
-                                </style>
+                      <object class="GtkStackPage">
+                        <property name="name">loading</property>
+                        <property name="child">
+                          <object class="GtkListBox">
+                            <property name="margin-top">12</property>
+                            <property name="selection-mode">none</property>
+                            <style>
+                              <class name="boxed-list"/>
+                            </style>
+                            <child>
+                              <object class="AdwActionRow">
+                                <property name="icon-name">content-loading-symbolic</property>
+                                <property name="title" translatable="yes">Loading Run Commands</property>
+                                <property name="subtitle" translatable="yes">Some building may be required to load all run commands</property>
                               </object>
                             </child>
                           </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="margin-top">12</property>
-                            <property name="margin-bottom">12</property>
-                            <property name="use-underline">true</property>
-                            <property name="label" translatable="yes">_Custom Command…</property>
-                            <property name="action-name">run-command.new</property>
-                            <property name="halign">end</property>
-                          </object>
-                        </child>
-                        <child>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">list</property>
+                        <property name="child">
                           <object class="GtkListBox" id="list_box">
                             <property name="margin-top">12</property>
                             <property name="selection-mode">none</property>
@@ -71,13 +86,13 @@
                               <class name="boxed-list"/>
                             </style>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
-            </property>
+            </child>
           </object>
         </child>
       </object>
