@@ -68,7 +68,7 @@
                               <object class="AdwActionRow">
                                 <property name="icon-name">content-loading-symbolic</property>
                                 <property name="title" translatable="yes">Loading Run Commands</property>
-                                <property name="subtitle" translatable="yes">Some building may be required to load all run commands</property>
+                                <property name="subtitle" translatable="yes">Your project may require building to load run commands</property>
                               </object>
                             </child>
                           </object>
