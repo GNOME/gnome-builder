@@ -54,6 +54,69 @@ G_DEFINE_FINAL_TYPE (GbpShellcmdRunCommand, gbp_shellcmd_run_command, IDE_TYPE_R
 static GParamSpec *properties [N_PROPS];
 
 static void
+gbp_shellcmd_run_command_prepare_to_run (IdeRunCommand *run_command,
+                                         IdeRunContext *run_context,
+                                         IdeContext    *context)
+{
+  GbpShellcmdRunCommand *self = (GbpShellcmdRunCommand *)run_command;
+  IdePipeline *pipeline = NULL;
+  IdeRuntime *runtime = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (self));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  if (ide_context_has_project (context))
+    {
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+
+      if ((pipeline = ide_build_manager_get_pipeline (build_manager)))
+        runtime = ide_pipeline_get_runtime (pipeline);
+    }
+
+  switch (self->locality)
+    {
+    case GBP_SHELLCMD_LOCALITY_PIPELINE:
+      if (pipeline == NULL)
+        ide_run_context_push_error (run_context,
+                                    g_error_new (G_IO_ERROR,
+                                                 G_IO_ERROR_NOT_INITIALIZED,
+                                                 "No pipeline available for run command"));
+      else
+        ide_pipeline_prepare_run_context (pipeline, run_context);
+      break;
+
+    case GBP_SHELLCMD_LOCALITY_HOST:
+      ide_run_context_push_host (run_context);
+      break;
+
+    case GBP_SHELLCMD_LOCALITY_SUBPROCESS:
+      break;
+
+    case GBP_SHELLCMD_LOCALITY_RUNNER: {
+      if (pipeline == NULL || runtime == NULL)
+        ide_run_context_push_error (run_context,
+                                    g_error_new (G_IO_ERROR,
+                                                 G_IO_ERROR_NOT_INITIALIZED,
+                                                 "No pipeline available for run command"));
+      else
+        ide_runtime_prepare_to_run (runtime, pipeline, run_context);
+      break;
+    }
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  IDE_RUN_COMMAND_CLASS (gbp_shellcmd_run_command_parent_class)->prepare_to_run (run_command, run_context, context);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_shellcmd_run_command_constructed (GObject *object)
 {
   GbpShellcmdRunCommand *self = (GbpShellcmdRunCommand *)object;
@@ -214,11 +277,14 @@ static void
 gbp_shellcmd_run_command_class_init (GbpShellcmdRunCommandClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeRunCommandClass *run_command_class = IDE_RUN_COMMAND_CLASS (klass);
 
   object_class->constructed = gbp_shellcmd_run_command_constructed;
   object_class->dispose = gbp_shellcmd_run_command_dispose;
   object_class->get_property = gbp_shellcmd_run_command_get_property;
   object_class->set_property = gbp_shellcmd_run_command_set_property;
+
+  run_command_class->prepare_to_run = gbp_shellcmd_run_command_prepare_to_run;
 
   properties [PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator", NULL, NULL, NULL,
