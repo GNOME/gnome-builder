@@ -22,8 +22,11 @@
 
 #include "config.h"
 
+#include "ide-build-manager.h"
 #include "ide-foundry-enums.h"
+#include "ide-pipeline.h"
 #include "ide-run-command.h"
+#include "ide-run-context.h"
 
 typedef struct
 {
@@ -53,6 +56,58 @@ enum {
 G_DEFINE_TYPE_WITH_PRIVATE (IdeRunCommand, ide_run_command, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_run_command_real_prepare_to_run (IdeRunCommand *self,
+                                     IdeRunContext *run_context,
+                                     IdeContext    *context)
+{
+  g_autoptr(GFile) workdir = NULL;
+  IdeBuildManager *build_manager = NULL;
+  g_auto(GStrv) environ = NULL;
+  IdePipeline *pipeline = NULL;
+  const char * const *argv;
+  const char * const *env;
+  const char *builddir;
+  const char *srcdir;
+  const char *cwd;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_RUN_COMMAND (self));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  workdir = ide_context_ref_workdir (context);
+  srcdir = g_file_peek_path (workdir);
+  builddir = g_file_peek_path (workdir);
+
+  if (ide_context_has_project (context))
+    {
+      build_manager = ide_build_manager_from_context (context);
+      pipeline = ide_build_manager_get_pipeline (build_manager);
+      builddir = ide_pipeline_get_builddir (pipeline);
+      srcdir = ide_pipeline_get_srcdir (pipeline);
+    }
+
+  environ = g_environ_setenv (environ, "BUILDDIR", builddir, TRUE);
+  environ = g_environ_setenv (environ, "SRCDIR", srcdir, TRUE);
+  environ = g_environ_setenv (environ, "USER", g_get_user_name (), TRUE);
+  environ = g_environ_setenv (environ, "HOME", g_get_home_dir (), TRUE);
+
+  ide_run_context_push_expansion (run_context, (const char * const *)environ);
+
+  if ((cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self))))
+    ide_run_context_set_cwd (run_context, cwd);
+
+  if ((argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self))))
+    ide_run_context_append_args (run_context, argv);
+
+  if ((env = ide_run_command_get_environ (IDE_RUN_COMMAND (self))))
+    ide_run_context_add_environ (run_context, env);
+
+  IDE_EXIT;
+}
 
 static void
 ide_run_command_finalize (GObject *object)
@@ -172,6 +227,8 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
   object_class->finalize = ide_run_command_finalize;
   object_class->get_property = ide_run_command_get_property;
   object_class->set_property = ide_run_command_set_property;
+
+  klass->prepare_to_run = ide_run_command_real_prepare_to_run;
 
   properties [PROP_ARGV] =
     g_param_spec_boxed ("argv", NULL, NULL,
@@ -457,4 +514,30 @@ ide_run_command_set_languages (IdeRunCommand      *self,
   g_strfreev (priv->languages);
   priv->languages = g_strdupv ((char **)languages);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGES]);
+}
+
+/**
+ * ide_run_command_prepare_to_run:
+ * @self: a #IdeRunCommand
+ * @run_context: an #IdeRunContext
+ * @context: an #IdeContext
+ *
+ * Prepares the run command to be run within @run_context.
+ *
+ * This requires that the run command add anything necessary to the
+ * @run_context so that the command can be run.
+ *
+ * Subclasses may override this to implement custom functionality such as
+ * locality-based execution (see shellcmd plugin).
+ */
+void
+ide_run_command_prepare_to_run (IdeRunCommand *self,
+                                IdeRunContext *run_context,
+                                IdeContext    *context)
+{
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+  g_return_if_fail (IDE_IS_CONTEXT (context));
+
+  IDE_RUN_COMMAND_GET_CLASS (self)->prepare_to_run (self, run_context, context);
 }
