@@ -299,6 +299,51 @@ ide_run_context_push_host (IdeRunContext *self)
 }
 
 static gboolean
+ide_run_context_error_handler (IdeRunContext       *self,
+                               const char * const  *argv,
+                               const char * const  *env,
+                               const char          *cwd,
+                               IdeUnixFDMap        *unix_fd_map,
+                               gpointer             user_data,
+                               GError             **error)
+{
+  const GError *local_error = user_data;
+
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+  g_assert (local_error != NULL);
+
+  if (error != NULL)
+    *error = g_error_copy (local_error);
+
+  return FALSE;
+}
+
+/**
+ * ide_run_context_push_error:
+ * @self: a #IdeRunContext
+ * @error: (transfer full) (in): a #GError
+ *
+ * Pushes a new layer that will always fail with @error.
+ *
+ * This is useful if you have an error when attempting to build
+ * a run command, but need it to deliver the error when attempting
+ * to create a subprocess launcher.
+ */
+void
+ide_run_context_push_error (IdeRunContext *self,
+                            GError        *error)
+{
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+  g_return_if_fail (error != NULL);
+
+  ide_run_context_push (self,
+                        ide_run_context_error_handler,
+                        error,
+                        (GDestroyNotify)g_error_free);
+}
+
+static gboolean
 next_variable (const char *str,
                guint      *cursor,
                guint      *begin)
