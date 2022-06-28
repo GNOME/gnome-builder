@@ -112,6 +112,8 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
       g_assert_not_reached ();
     }
 
+  ide_run_context_add_minimal_environment (run_context);
+
   IDE_RUN_COMMAND_CLASS (ide_terminal_run_command_parent_class)->prepare_to_run (run_command, run_context, context);
 
   IDE_EXIT;
