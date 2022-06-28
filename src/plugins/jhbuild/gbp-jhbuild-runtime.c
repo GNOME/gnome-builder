@@ -124,6 +124,7 @@ gbp_jhbuild_runtime_prepare_run_context (IdeRuntime    *runtime,
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
+  ide_run_context_push_host (run_context);
   ide_run_context_push (run_context,
                         gbp_jhbuild_runtime_run_handler,
                         g_object_ref (self),
