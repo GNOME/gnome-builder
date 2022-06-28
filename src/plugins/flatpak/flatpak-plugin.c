@@ -29,7 +29,6 @@
 
 #include "gbp-flatpak-aux.h"
 #include "gbp-flatpak-build-system-discovery.h"
-#include "gbp-flatpak-build-target-provider.h"
 #include "gbp-flatpak-client.h"
 #include "gbp-flatpak-config-provider.h"
 #include "gbp-flatpak-dependency-updater.h"
@@ -46,9 +45,6 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
                                               GBP_TYPE_FLATPAK_BUILD_SYSTEM_DISCOVERY);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUILD_TARGET_PROVIDER,
-                                              GBP_TYPE_FLATPAK_BUILD_TARGET_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUN_COMMAND_PROVIDER,
                                               GBP_TYPE_FLATPAK_RUN_COMMAND_PROVIDER);
