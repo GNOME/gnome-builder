@@ -132,7 +132,6 @@ subdir('todo')
 subdir('ts-language-server')
 subdir('trim-spaces')
 subdir('update-manager')
-subdir('vagrant')
 subdir('valac')
 subdir('valgrind')
 subdir('vcsui')
@@ -208,7 +207,6 @@ status += [
   'Todo ................................. : @0@'.format(get_option('plugin_todo')),
   'Update Manager ....................... : @0@'.format(get_option('plugin_update_manager')),
   'Vala Compiler ........................ : @0@'.format(get_option('plugin_valac')),
-  'Vagrant .............................. : @0@ **'.format(get_option('plugin_vagrant')),
   'Valgrind ............................. : @0@'.format(get_option('plugin_valgrind')),
   'Waf .................................. : @0@'.format(get_option('plugin_waf')),
   'Word Completion ...................... : @0@'.format(get_option('plugin_words')),
