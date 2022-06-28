@@ -263,7 +263,7 @@
     </child>
     <child>
       <object class="IdeEnumObject">
-        <property name="nick">runner</property>
+        <property name="nick">runtime</property>
         <property name="title" translatable="yes">As Target Application</property>
         <property name="description" translatable="yes">Runs the command as if it were the target application.</property>
       </object>
