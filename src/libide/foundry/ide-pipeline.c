@@ -1064,6 +1064,7 @@ register_build_commands_stage (IdePipeline *self,
   g_autofree gchar *rundir_path = NULL;
   GFile *rundir;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (IDE_IS_CONFIG (self->config));
@@ -2284,7 +2285,7 @@ ide_pipeline_build_targets_finish (IdePipeline   *self,
  */
 void
 ide_pipeline_build_async (IdePipeline         *self,
-                          IdePipelinePhase        phase,
+                          IdePipelinePhase     phase,
                           GCancellable        *cancellable,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
@@ -2876,8 +2877,8 @@ ide_pipeline_detach (IdePipeline *self,
  * projects autogen.sh file has been changed.
  */
 void
-ide_pipeline_invalidate_phase (IdePipeline *self,
-                                     IdePipelinePhase     phases)
+ide_pipeline_invalidate_phase (IdePipeline      *self,
+                               IdePipelinePhase  phases)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
 
@@ -3631,7 +3632,7 @@ ide_pipeline_reaper_cb (GObject      *object,
 
 static void
 ide_pipeline_tick_rebuild (IdePipeline *self,
-                                 IdeTask          *task)
+                           IdeTask     *task)
 {
   g_autoptr(IdeDirectoryReaper) reaper = NULL;
   GCancellable *cancellable;
@@ -3742,9 +3743,9 @@ ide_pipeline_rebuild_async (IdePipeline         *self,
 }
 
 gboolean
-ide_pipeline_rebuild_finish (IdePipeline  *self,
-                                   GAsyncResult      *result,
-                                   GError           **error)
+ide_pipeline_rebuild_finish (IdePipeline   *self,
+                             GAsyncResult  *result,
+                             GError       **error)
 {
   gboolean ret;
 
@@ -3790,7 +3791,7 @@ ide_pipeline_get_can_export (IdePipeline *self)
 
 void
 _ide_pipeline_set_message (IdePipeline *self,
-                                 const gchar      *message)
+                           const gchar *message)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
 
@@ -3923,7 +3924,7 @@ ide_pipeline_get_n_items (GListModel *model)
 
 static gpointer
 ide_pipeline_get_item (GListModel *model,
-                             guint       position)
+                       guint       position)
 {
   IdePipeline *self = (IdePipeline *)model;
   const PipelineEntry *entry;
@@ -3980,18 +3981,18 @@ ide_pipeline_get_requested_phase (IdePipeline *self)
 
 void
 _ide_pipeline_set_pty_size (IdePipeline *self,
-                                  guint             rows,
-                                  guint             columns)
+                            guint        rows,
+                            guint        columns)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
 
-  if (self->pty_slave != IDE_PTY_FD_INVALID)
+  if (self->pty_producer != IDE_PTY_FD_INVALID)
     ide_pty_intercept_set_size (&self->intercept, rows, columns);
 }
 
 void
 _ide_pipeline_set_runtime (IdePipeline *self,
-                                 IdeRuntime       *runtime)
+                           IdeRuntime  *runtime)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
@@ -4010,8 +4011,8 @@ _ide_pipeline_set_runtime (IdePipeline *self,
 }
 
 void
-_ide_pipeline_set_toolchain (IdePipeline *self,
-                                   IdeToolchain     *toolchain)
+_ide_pipeline_set_toolchain (IdePipeline  *self,
+                             IdeToolchain *toolchain)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!toolchain || IDE_IS_TOOLCHAIN (toolchain));
