@@ -27,6 +27,7 @@
 #include "ide-build-manager.h"
 #include "ide-diagnostic-tool.h"
 #include "ide-pipeline.h"
+#include "ide-run-context.h"
 #include "ide-runtime.h"
 #include "ide-runtime-manager.h"
 
@@ -170,7 +171,7 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
       ((program_path != NULL && ide_pipeline_contains_program_in_path (pipeline, program_path, NULL)) ||
       ide_pipeline_contains_program_in_path (pipeline, program_name, NULL)) &&
       (launcher = ide_pipeline_create_launcher (pipeline, NULL)))
-    goto setup_launcher;
+    IDE_GOTO (setup_launcher);
 
   if (host != NULL)
     {
@@ -182,15 +183,17 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
       if (program_path != NULL ||
           ide_runtime_contains_program_in_path (host, program_name, NULL))
         {
-          launcher = ide_runtime_create_launcher (host, NULL);
-          goto setup_launcher;
+          g_autoptr(IdeRunContext) run_context = ide_run_context_new ();
+          ide_run_context_push_host (run_context);
+          launcher = ide_run_context_end (run_context, NULL);
+          IDE_GOTO (setup_launcher);
         }
     }
   else if (program_path != NULL)
     {
       launcher = ide_subprocess_launcher_new (0);
       ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-      goto setup_launcher;
+      IDE_GOTO (setup_launcher);
     }
 
   if (bundled_program_path != NULL && ide_is_flatpak ())
@@ -200,7 +203,7 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
   if (program_path || g_find_program_in_path (program_name))
     {
       launcher = ide_subprocess_launcher_new (0);
-      goto setup_launcher;
+      IDE_GOTO (setup_launcher);
     }
 
   g_set_error (error,
