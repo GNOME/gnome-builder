@@ -65,34 +65,6 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static IdeSubprocessLauncher *
-ide_runtime_real_create_launcher (IdeRuntime  *self,
-                                  GError     **error)
-{
-  IdeSubprocessLauncher *ret;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUNTIME (self));
-
-  ret = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
-
-  if (ret != NULL)
-    {
-      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
-      ide_subprocess_launcher_set_clear_env (ret, FALSE);
-    }
-  else
-    {
-      g_set_error_literal (error,
-                           G_IO_ERROR,
-                           G_IO_ERROR_FAILED,
-                           "An unknown error ocurred");
-    }
-
-  IDE_RETURN (ret);
-}
-
 static gboolean
 ide_runtime_real_contains_program_in_path (IdeRuntime   *self,
                                            const char   *program,
@@ -303,7 +275,6 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
 
   i_object_class->repr = ide_runtime_repr;
 
-  klass->create_launcher = ide_runtime_real_create_launcher;
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
   klass->prepare_configuration = ide_runtime_real_prepare_configuration;
 
@@ -509,27 +480,6 @@ ide_runtime_new (const gchar *id,
                        "id", id,
                        "display-name", display_name,
                        NULL);
-}
-
-/**
- * ide_runtime_create_launcher:
- *
- * Creates a launcher for the runtime.
- *
- * This can be used to execute a command within a runtime.
- *
- * It is important that this function can be run from a thread without
- * side effects.
- *
- * Returns: (transfer full): An #IdeSubprocessLauncher or %NULL upon failure.
- */
-IdeSubprocessLauncher *
-ide_runtime_create_launcher (IdeRuntime  *self,
-                             GError     **error)
-{
-  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
-
-  return IDE_RUNTIME_GET_CLASS (self)->create_launcher (self, error);
 }
 
 void
