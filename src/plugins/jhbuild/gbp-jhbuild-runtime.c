@@ -154,6 +154,11 @@ gbp_jhbuild_runtime_contains_program_in_path (IdeRuntime   *runtime,
                         g_object_ref (self),
                         g_object_unref);
 
+  /* Will use /bin/sh --login -c 'which program' */
+  ide_run_context_push_shell (run_context, TRUE);
+  ide_run_context_append_argv (run_context, "which");
+  ide_run_context_append_argv (run_context, program);
+
   if (!(subprocess = ide_run_context_spawn (run_context, &error)))
     {
       g_warning ("Failed to spawn subprocess: %s", error->message);
