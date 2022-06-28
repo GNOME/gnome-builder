@@ -95,59 +95,20 @@ ide_runtime_real_create_launcher (IdeRuntime  *self,
 
 static gboolean
 ide_runtime_real_contains_program_in_path (IdeRuntime   *self,
-                                           const gchar  *program,
+                                           const char   *program,
                                            GCancellable *cancellable)
 {
+  g_autofree char *path = NULL;
+
   g_assert (IDE_IS_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (!ide_is_flatpak ())
-    {
-      g_autofree gchar *path = NULL;
-      path = g_find_program_in_path (program);
-      return path != NULL;
-    }
-  else
-    {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  path = g_find_program_in_path (program);
 
-      /*
-       * If we are in flatpak, we have to execute a program on the host to
-       * determine if there is a program available, as we cannot resolve
-       * file paths from inside the mount namespace.
-       */
+  IDE_TRACE_MSG ("Locating program %s => %s", program, path ? path : "missing");
 
-      if (NULL != (launcher = ide_runtime_create_launcher (self, NULL)))
-        {
-          g_autoptr(IdeSubprocess) subprocess = NULL;
-          g_autofree char *escaped = g_shell_quote (program);
-          g_autofree char *command = g_strdup_printf ("which %s", escaped);
-          const char *user_shell = ide_get_user_shell ();
-
-          ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-
-          /* Try to get a real PATH by using the preferred shell */
-          if (ide_shell_supports_dash_c (user_shell))
-            ide_subprocess_launcher_push_argv (launcher, user_shell);
-          else
-            ide_subprocess_launcher_push_argv (launcher, "sh");
-
-          /* Try a login shell as well to improve reliability */
-          if (ide_shell_supports_dash_login (user_shell))
-            ide_subprocess_launcher_push_argv (launcher, "--login");
-
-          ide_subprocess_launcher_push_argv (launcher, "-c");
-          ide_subprocess_launcher_push_argv (launcher, command);
-
-          if (NULL != (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL)))
-            return ide_subprocess_wait_check (subprocess, NULL, NULL);
-        }
-
-      return FALSE;
-    }
-
-  g_assert_not_reached ();
+  return path != NULL;
 }
 
 gboolean
