@@ -65,23 +65,7 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static inline gboolean
-strv_empty (gchar **strv)
-{
-  return strv == NULL || strv[0] == NULL;
-}
-
-static const gchar *
-get_builddir (GbpFlatpakRuntime *self)
-{
-  g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
-  g_autoptr(IdeBuildManager) build_manager = ide_build_manager_ref_from_context (context);
-  g_autoptr(IdePipeline) pipeline = ide_build_manager_ref_pipeline (build_manager);
-
-  return ide_pipeline_get_builddir (pipeline);
-}
-
-static gchar *
+static char *
 get_staging_directory (GbpFlatpakRuntime *self)
 {
   g_autoptr(IdeContext) context = ide_object_ref_context (IDE_OBJECT (self));
@@ -144,125 +128,6 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
   g_hash_table_insert (self->program_paths_cache,
                        (char *)g_intern_string (program),
                        GUINT_TO_POINTER (ret));
-
-  return ret;
-}
-
-static IdeSubprocessLauncher *
-gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
-                                     GError     **error)
-{
-  IdeSubprocessLauncher *ret;
-  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-  g_autoptr(IdeContext) context = NULL;
-  const gchar *runtime_id;
-
-  g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
-
-  context = ide_object_ref_context (IDE_OBJECT (self));
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-
-  runtime_id = ide_runtime_get_id (runtime);
-  g_return_val_if_fail (g_str_has_prefix (runtime_id, "flatpak:"), NULL);
-
-  ret = gbp_flatpak_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
-
-  if (ret != NULL && !ide_context_has_project (context))
-    {
-      ide_subprocess_launcher_set_cwd (ret, g_get_home_dir ());
-      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
-      gbp_flatpak_subprocess_launcher_use_run (GBP_FLATPAK_SUBPROCESS_LAUNCHER (ret),
-                                               runtime_id + strlen ("flatpak:"));
-    }
-  else if (ret != NULL)
-    {
-      g_autofree gchar *build_path = NULL;
-      g_autofree gchar *ccache_dir = NULL;
-      g_auto(GStrv) new_environ = NULL;
-      const gchar *builddir = NULL;
-      const gchar *project_path = NULL;
-      const gchar * const *build_args = NULL;
-      const gchar *config_dir = gbp_flatpak_get_config_dir ();
-      g_autoptr(IdeConfigManager) config_manager = NULL;
-      IdeConfig *configuration;
-      IdeVcs *vcs;
-
-      config_manager = ide_config_manager_ref_from_context (context);
-      configuration = ide_config_manager_ref_current (config_manager);
-
-      build_path = get_staging_directory (self);
-      builddir = get_builddir (self);
-
-      /* Find the project directory path */
-      vcs = ide_vcs_ref_from_context (context);
-      project_path = g_file_peek_path (ide_vcs_get_workdir (vcs));
-
-      /* Add 'flatpak build' and the specified arguments to the launcher */
-      ide_subprocess_launcher_push_argv (ret, "flatpak");
-      ide_subprocess_launcher_push_argv (ret, "build");
-
-      /* Get access to override installations */
-      ide_subprocess_launcher_setenv (ret, "FLATPAK_CONFIG_DIR", config_dir, TRUE);
-
-      if (GBP_IS_FLATPAK_MANIFEST (configuration))
-        build_args = gbp_flatpak_manifest_get_build_args (GBP_FLATPAK_MANIFEST (configuration));
-
-      if (build_args != NULL)
-        ide_subprocess_launcher_push_args (ret, build_args);
-      else
-        ide_subprocess_launcher_push_argv (ret, "--share=network");
-
-      /* We might need access to ccache configs inside the build environ.
-       * Usually, this is set by flatpak-builder, but since we are running
-       * the incremental build, we need to take care of that too.
-       *
-       * See https://bugzilla.gnome.org/show_bug.cgi?id=780153
-       */
-      ccache_dir = g_build_filename (g_get_user_cache_dir (),
-                                     ide_get_program_name (),
-                                     "flatpak-builder",
-                                     "ccache",
-                                     NULL);
-      ide_subprocess_launcher_setenv (ret, "CCACHE_DIR", ccache_dir, FALSE);
-
-      if (!ide_str_empty0 (project_path))
-        {
-          g_autofree gchar *filesystem_option_src = NULL;
-          g_autofree gchar *filesystem_option_build = NULL;
-          g_autofree gchar *filesystem_option_cache = NULL;
-
-          filesystem_option_src = g_strdup_printf ("--filesystem=%s", project_path);
-          filesystem_option_build = g_strdup_printf ("--filesystem=%s", builddir);
-          filesystem_option_cache = g_strdup_printf ("--filesystem=%s/gnome-builder", g_get_user_cache_dir ());
-          ide_subprocess_launcher_push_argv (ret, "--nofilesystem=host");
-          ide_subprocess_launcher_push_argv (ret, filesystem_option_cache);
-          ide_subprocess_launcher_push_argv (ret, filesystem_option_src);
-          ide_subprocess_launcher_push_argv (ret, filesystem_option_build);
-        }
-
-      new_environ = ide_config_get_environ (IDE_CONFIG (configuration));
-
-      if (!strv_empty (new_environ))
-        {
-          for (guint i = 0; new_environ[i]; i++)
-            {
-              if (g_utf8_strlen (new_environ[i], -1) > 1)
-                {
-                  g_autofree gchar *env_option = NULL;
-
-                  env_option = g_strdup_printf ("--env=%s", new_environ[i]);
-                  ide_subprocess_launcher_push_argv (ret, env_option);
-                }
-            }
-        }
-
-      /* We want the configure step to be separate so IdeAutotoolsBuildTask can pass options to it */
-      ide_subprocess_launcher_push_argv (ret, "--env=NOCONFIGURE=1");
-
-      ide_subprocess_launcher_push_argv (ret, build_path);
-
-      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
-    }
 
   return ret;
 }
@@ -931,7 +796,6 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   object_class->get_property = gbp_flatpak_runtime_get_property;
   object_class->set_property = gbp_flatpak_runtime_set_property;
 
-  runtime_class->create_launcher = gbp_flatpak_runtime_create_launcher;
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->prepare_to_build = gbp_flatpak_runtime_prepare_to_build;
