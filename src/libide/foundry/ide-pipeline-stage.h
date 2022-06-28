@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include <libide-io.h>
 
 #include "ide-build-log.h"
 #include "ide-foundry-types.h"
@@ -117,9 +118,6 @@ struct _IdePipelineStageClass
                               IdeDirectoryReaper   *reaper);
   gboolean (*chain)          (IdePipelineStage     *self,
                               IdePipelineStage     *next);
-
-  /*< private >*/
-  gpointer _reserved[16];
 };
 
 IDE_AVAILABLE_IN_ALL
