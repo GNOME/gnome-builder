@@ -17,8 +17,6 @@ plugins_sources += files([
   'flatpak-plugin.c',
   'gbp-flatpak-aux.c',
   'gbp-flatpak-build-system-discovery.c',
-  'gbp-flatpak-build-target-provider.c',
-  'gbp-flatpak-build-target.c',
   'gbp-flatpak-client.c',
   'gbp-flatpak-config-provider.c',
   'gbp-flatpak-dependency-updater.c',
