@@ -102,7 +102,6 @@ gbp_host_runtime_prepare_to_run (IdeRuntime    *runtime,
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
   ide_run_context_push_host (run_context);
-  ide_run_context_add_minimal_environment (run_context);
 
   config = ide_pipeline_get_config (pipeline);
   prefix = ide_config_get_prefix (config);
