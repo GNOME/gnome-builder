@@ -774,7 +774,8 @@ ide_run_manager_run_subprocess_wait_check_cb (GObject      *object,
   else
     ide_task_return_boolean (task, TRUE);
 
-  _ide_run_tool_emit_stopped (self->run_tool);
+  if (self->run_tool != NULL)
+    _ide_run_tool_emit_stopped (self->run_tool);
 
   g_signal_emit (self, signals[STOPPED], 0);
 
