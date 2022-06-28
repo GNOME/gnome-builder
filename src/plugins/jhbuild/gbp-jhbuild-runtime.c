@@ -139,23 +139,26 @@ gbp_jhbuild_runtime_contains_program_in_path (IdeRuntime   *runtime,
                                               GCancellable *cancellable)
 {
   GbpJhbuildRuntime *self = (GbpJhbuildRuntime *)runtime;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GError) error = NULL;
 
   g_assert (GBP_IS_JHBUILD_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (!(launcher = ide_runtime_create_launcher (runtime, NULL)))
-    return FALSE;
+  run_context = ide_run_context_new ();
+  ide_run_context_push_host (run_context);
+  ide_run_context_push (run_context,
+                        gbp_jhbuild_runtime_run_handler,
+                        g_object_ref (self),
+                        g_object_unref);
 
-  ide_subprocess_launcher_set_flags (launcher,
-                                     (G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
-                                      G_SUBPROCESS_FLAGS_STDERR_SILENCE));
-  ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT ("which", program));
-
-  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL)))
-    return FALSE;
+  if (!(subprocess = ide_run_context_spawn (run_context, &error)))
+    {
+      g_warning ("Failed to spawn subprocess: %s", error->message);
+      return FALSE;
+    }
 
   return ide_subprocess_wait_check (subprocess, cancellable, NULL);
 }
