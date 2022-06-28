@@ -2965,14 +2965,14 @@ ide_pipeline_create_launcher (IdePipeline  *self,
                               GError      **error)
 {
   g_autoptr(IdeSubprocessLauncher) ret = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
+  g_auto(GStrv) environ = NULL;
   IdeRuntime *runtime;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
-  runtime = ide_config_get_runtime (self->config);
-
-  if (runtime == NULL)
+  if (!(runtime = ide_config_get_runtime (self->config)))
     {
       g_set_error (error,
                    G_IO_ERROR,
@@ -2982,17 +2982,19 @@ ide_pipeline_create_launcher (IdePipeline  *self,
       return NULL;
     }
 
-  ret = ide_runtime_create_launcher (runtime, error);
+  environ = ide_environment_get_environ (ide_config_get_environment (self->config));
+
+  run_context = ide_run_context_new ();
+  ide_runtime_prepare_to_build (runtime, self, run_context);
+  ide_run_context_set_cwd (run_context, ide_pipeline_get_builddir (self));
+  ide_run_context_add_environ (run_context, (const char * const *)environ);
+  /* Always ignore V=1 from configurations */
+  ide_run_context_setenv (run_context, "V", "0");
+
+  ret = ide_run_context_end (run_context, error);
 
   if (ret != NULL)
     {
-      IdeEnvironment *env = ide_config_get_environment (self->config);
-
-      ide_subprocess_launcher_set_clear_env (ret, TRUE);
-      ide_subprocess_launcher_overlay_environment (ret, env);
-      /* Always ignore V=1 from configurations */
-      ide_subprocess_launcher_setenv (ret, "V", "0", TRUE);
-      ide_subprocess_launcher_set_cwd (ret, ide_pipeline_get_builddir (self));
       ide_subprocess_launcher_set_flags (ret,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE));
