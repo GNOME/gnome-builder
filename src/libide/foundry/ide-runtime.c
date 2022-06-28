@@ -798,6 +798,9 @@ ide_runtime_prepare_to_run (IdeRuntime    *self,
 
   IDE_RUNTIME_GET_CLASS (self)->prepare_to_run (self, pipeline, run_context);
 
+  /* Give the run_context access to some environment */
+  ide_run_context_add_minimal_environment (run_context);
+
   IDE_EXIT;
 }
 

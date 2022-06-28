@@ -818,11 +818,6 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   environ = g_environ_setenv (environ, "USER", g_get_user_name (), TRUE);
   ide_run_context_push_expansion (run_context, (const char * const *)environ);
 
-  /* First we need to setup our basic runtime envronment so that we can be
-   * reasonably certain the application can access the desktop session.
-   */
-  ide_run_context_add_minimal_environment (run_context);
-
   /* Setup working directory */
   {
     const char *cwd = ide_run_command_get_cwd (run_command);
