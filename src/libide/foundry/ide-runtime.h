@@ -62,8 +62,6 @@ struct _IdeRuntimeClass
   void                    (*prepare_to_build)         (IdeRuntime           *self,
                                                        IdePipeline          *pipeline,
                                                        IdeRunContext        *run_context);
-  IdeRunner              *(*create_runner)            (IdeRuntime           *self,
-                                                       IdeBuildTarget       *build_target);
   GFile                  *(*translate_file)           (IdeRuntime           *self,
                                                        GFile                *file);
   gchar                 **(*get_system_include_dirs)  (IdeRuntime           *self);
@@ -92,9 +90,6 @@ IDE_AVAILABLE_IN_ALL
 void                    ide_runtime_prepare_to_build         (IdeRuntime      *self,
                                                               IdePipeline     *pipeline,
                                                               IdeRunContext   *run_context);
-IDE_AVAILABLE_IN_ALL
-IdeRunner              *ide_runtime_create_runner            (IdeRuntime      *self,
-                                                              IdeBuildTarget  *build_target);
 IDE_AVAILABLE_IN_ALL
 void                    ide_runtime_prepare_configuration    (IdeRuntime      *self,
                                                               IdeConfig       *configuration);
