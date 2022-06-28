@@ -93,10 +93,10 @@ get_staging_directory (GbpFlatpakRuntime *self)
 
 static gboolean
 gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
-                                              const gchar  *program,
+                                              const char   *program,
                                               GCancellable *cancellable)
 {
-  static const gchar *known_path_dirs[] = { "/bin" };
+  static const char *known_path_dirs[] = { "/bin" };
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
   gboolean ret = FALSE;
   gpointer val = NULL;
@@ -110,7 +110,7 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
 
   for (guint i = 0; i < G_N_ELEMENTS (known_path_dirs); i++)
     {
-      g_autofree gchar *path = NULL;
+      g_autofree char *path = NULL;
 
       path = g_build_filename (self->deploy_dir,
                                "files",
@@ -130,22 +130,19 @@ gbp_flatpak_runtime_contains_program_in_path (IdeRuntime   *runtime,
       self->sdk != NULL &&
       !ide_str_equal0 (self->platform, self->sdk))
     {
-      IdeContext* context = ide_object_get_context (IDE_OBJECT (self));
-      if (context)
-        {
-          g_autoptr(IdeRuntimeManager) manager = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_RUNTIME_MANAGER);
-          g_autofree char *arch = ide_runtime_get_arch (runtime);
-          g_autofree char *sdk_id = g_strdup_printf ("flatpak:%s/%s/%s", self->sdk, arch, self->branch);
-          IdeRuntime *sdk = ide_runtime_manager_get_runtime (manager, sdk_id);
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeRuntimeManager *manager = ide_runtime_manager_from_context (context);
+      g_autofree char *arch = ide_runtime_get_arch (runtime);
+      g_autofree char *sdk_id = g_strdup_printf ("flatpak:%s/%s/%s", self->sdk, arch, self->branch);
+      IdeRuntime *sdk = ide_runtime_manager_get_runtime (manager, sdk_id);
 
-          if (sdk != NULL && sdk != runtime)
-            ret = ide_runtime_contains_program_in_path (sdk, program, cancellable);
-        }
+      if (sdk != NULL && sdk != runtime)
+        ret = ide_runtime_contains_program_in_path (sdk, program, cancellable);
     }
 
   /* Cache both positive and negative lookups */
   g_hash_table_insert (self->program_paths_cache,
-                       (gchar *)g_intern_string (program),
+                       (char *)g_intern_string (program),
                        GUINT_TO_POINTER (ret));
 
   return ret;
