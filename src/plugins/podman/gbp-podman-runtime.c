@@ -27,7 +27,6 @@
 
 #include "gbp-podman-runtime.h"
 #include "gbp-podman-runtime-private.h"
-#include "gbp-podman-subprocess-launcher.h"
 
 struct _GbpPodmanRuntime
 {
