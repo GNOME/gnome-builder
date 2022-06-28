@@ -27,7 +27,6 @@ plugins_sources += files([
   'gbp-flatpak-manifest.c',
   'gbp-flatpak-pipeline-addin.c',
   'gbp-flatpak-run-command-provider.c',
-  'gbp-flatpak-runner.c',
   'gbp-flatpak-runtime-provider.c',
   'gbp-flatpak-runtime.c',
   'gbp-flatpak-sdk-stage.c',

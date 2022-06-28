@@ -32,7 +32,6 @@
 
 #include "gbp-flatpak-aux.h"
 #include "gbp-flatpak-manifest.h"
-#include "gbp-flatpak-runner.h"
 #include "gbp-flatpak-runtime.h"
 #include "gbp-flatpak-subprocess-launcher.h"
 #include "gbp-flatpak-util.h"
@@ -269,50 +268,6 @@ gbp_flatpak_runtime_create_launcher (IdeRuntime  *runtime,
     }
 
   return ret;
-}
-
-static gchar *
-get_manifst_command (GbpFlatpakRuntime *self)
-{
-  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-  IdeConfigManager *config_manager = ide_config_manager_from_context (context);
-  IdeConfig *config = ide_config_manager_get_current (config_manager);
-
-  if (GBP_IS_FLATPAK_MANIFEST (config))
-    {
-      const gchar *command;
-
-      command = gbp_flatpak_manifest_get_command (GBP_FLATPAK_MANIFEST (config));
-      if (!ide_str_empty0 (command))
-        return g_strdup (command);
-    }
-
-  /* Use the project id as a last resort */
-  return ide_context_dup_project_id (context);
-}
-
-static IdeRunner *
-gbp_flatpak_runtime_create_runner (IdeRuntime     *runtime,
-                                   IdeBuildTarget *build_target)
-{
-  GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-  g_autofree gchar *build_path = NULL;
-  g_autofree gchar *binary_name = NULL;
-  IdeContext *context;
-  IdeRunner *runner;
-
-  g_assert (GBP_IS_FLATPAK_RUNTIME (self));
-  g_assert (!build_target || IDE_IS_BUILD_TARGET (build_target));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  build_path = get_staging_directory (self);
-
-  binary_name = get_manifst_command (self);
-
-  if ((runner = IDE_RUNNER (gbp_flatpak_runner_new (context, build_path, build_target, binary_name))))
-    ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runner));
-
-  return runner;
 }
 
 static gboolean
@@ -980,7 +935,6 @@ gbp_flatpak_runtime_class_init (GbpFlatpakRuntimeClass *klass)
   object_class->set_property = gbp_flatpak_runtime_set_property;
 
   runtime_class->create_launcher = gbp_flatpak_runtime_create_launcher;
-  runtime_class->create_runner = gbp_flatpak_runtime_create_runner;
   runtime_class->contains_program_in_path = gbp_flatpak_runtime_contains_program_in_path;
   runtime_class->prepare_configuration = gbp_flatpak_runtime_prepare_configuration;
   runtime_class->prepare_to_build = gbp_flatpak_runtime_prepare_to_build;
