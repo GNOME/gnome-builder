@@ -174,20 +174,20 @@ gbp_gradle_test_provider_run_cb (GObject      *object,
                                  GAsyncResult *result,
                                  gpointer      user_data)
 {
-  IdeRunner *runner = (IdeRunner *)object;
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeTest *test;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
   test = ide_task_get_task_data (task);
 
-  if (!ide_runner_run_finish (runner, result, &error))
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
     {
       ide_test_set_status (test, IDE_TEST_STATUS_FAILED);
       ide_task_return_error (task, g_steal_pointer (&error));
@@ -210,7 +210,9 @@ gbp_gradle_test_provider_run_async (IdeTestProvider     *provider,
                                     GAsyncReadyCallback  callback,
                                     gpointer             user_data)
 {
-  g_autoptr(IdeRunner) runner = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GError) error = NULL;
   g_autoptr(IdeTask) task = NULL;
   const char *suite_name;
   IdeRuntime *runtime;
@@ -229,31 +231,37 @@ gbp_gradle_test_provider_run_async (IdeTestProvider     *provider,
 
   suite_name = gbp_gradle_test_get_suite_name (GBP_GRADLE_TEST (test));
 
-  if (!(runtime = ide_pipeline_get_runtime (pipeline)) ||
-      !(runner = ide_runtime_create_runner (runtime, NULL)))
-    IDE_GOTO (failure);
+  if (!(runtime = ide_pipeline_get_runtime (pipeline)))
+    {
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_FAILED,
+                                 "Failed to run test: %s",
+                                 gbp_gradle_test_get_suite_name (GBP_GRADLE_TEST (test)));
+      IDE_EXIT;
+    }
+
+  run_context = ide_run_context_new ();
+  ide_runtime_prepare_to_run (runtime, pipeline, run_context);
 
   if (pty != NULL)
-    ide_runner_set_pty (runner, pty);
+    ide_run_context_set_pty (run_context, pty);
 
-  ide_runner_set_cwd (runner, ide_pipeline_get_srcdir (pipeline));
-  ide_runner_push_args (runner, IDE_STRV_INIT ("./gradlew", "test", "--tests", suite_name));
+  ide_run_context_set_cwd (run_context, ide_pipeline_get_srcdir (pipeline));
+  ide_run_context_append_args (run_context, IDE_STRV_INIT ("./gradlew", "test", "--tests", suite_name));
+
+  if (!(subprocess = ide_run_context_spawn (run_context, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
 
   ide_test_set_status (test, IDE_TEST_STATUS_RUNNING);
 
-  ide_runner_run_async (runner,
-                        cancellable,
-                        gbp_gradle_test_provider_run_cb,
-                        g_steal_pointer (&task));
-
-  IDE_EXIT;
-
-failure:
-  ide_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_FAILED,
-                             "Failed to run test: %s",
-                             gbp_gradle_test_get_suite_name (GBP_GRADLE_TEST (test)));
+  ide_subprocess_wait_check_async (subprocess,
+                                   cancellable,
+                                   gbp_gradle_test_provider_run_cb,
+                                   g_steal_pointer (&task));
 
   IDE_EXIT;
 }
