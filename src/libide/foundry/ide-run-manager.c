@@ -48,7 +48,6 @@
 #include "ide-run-manager-private.h"
 #include "ide-run-manager.h"
 #include "ide-run-tool-private.h"
-#include "ide-runner.h"
 #include "ide-runtime.h"
 
 struct _IdeRunManager

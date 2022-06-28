@@ -28,7 +28,6 @@
 #include "ide-local-device.h"
 #include "ide-pipeline.h"
 #include "ide-runtime.h"
-#include "ide-runner.h"
 
 struct _IdeLocalDeployStrategy
 {
