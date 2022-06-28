@@ -222,18 +222,17 @@ struct _IdePipeline
   guint   errfmt_seqnum;
 
   /*
-   * The VtePty is used to connect to a VteTerminal. It's basically
-   * just a wrapper around a PTY master. We then add a IdePtyIntercept
-   * to proxy PTY data while allowing us to tap into the content being
-   * transmitted. We can use that to run regexes against and perform
-   * additional error extraction. Finally, pty_slave is the PTY device
-   * we created that will get attached to stdin/stdout/stderr in our
-   * spawned subprocesses. It is a slave to the PTY master owned by
-   * the IdePtyIntercept.
+   * The VtePty is used to connect to a VteTerminal. It's basically just a
+   * wrapper around a PTY consumer. We then add a IdePtyIntercept to proxy
+   * PTY data while allowing us to tap into the content being transmitted.
+   * We can use that to run regexes against and perform additional error
+   * extraction. Finally, pty_producer is the PTY device we created that
+   * will get attached to stdin/stdout/stderr in our spawned subprocesses.
+   * It is a producer to the PTY consumer owned by the IdePtyIntercept.
    */
   VtePty          *pty;
   IdePtyIntercept  intercept;
-  IdePtyFd         pty_slave;
+  IdePtyFd         pty_producer;
 
   /*
    * If the terminal interpreting our Pty has received a terminal
@@ -773,11 +772,11 @@ ide_pipeline_log_observer (IdeBuildLogStream  stream,
 }
 
 static void
-ide_pipeline_intercept_pty_master_cb (const IdePtyIntercept     *intercept,
-                                      const IdePtyInterceptSide *side,
-                                      const guint8              *data,
-                                      gsize                      len,
-                                      gpointer                   user_data)
+ide_pipeline_intercept_pty_consumer_cb (const IdePtyIntercept     *intercept,
+                                        const IdePtyInterceptSide *side,
+                                        const guint8              *data,
+                                        gsize                      len,
+                                        gpointer                   user_data)
 {
   IdePipeline *self = user_data;
 
@@ -1505,7 +1504,7 @@ ide_pipeline_destroy (IdeObject *object)
   g_clear_pointer (&self->message, g_free);
 
   g_clear_object (&self->pty);
-  fd = pty_fd_steal (&self->pty_slave);
+  fd = pty_fd_steal (&self->pty_producer);
 
   if (IDE_IS_PTY_INTERCEPT (&self->intercept))
     ide_pty_intercept_clear (&self->intercept);
@@ -1521,7 +1520,7 @@ ide_pipeline_initable_init (GInitable     *initable,
                             GError       **error)
 {
   IdePipeline *self = (IdePipeline *)initable;
-  IdePtyFd master_fd;
+  IdePtyFd consumer_fd;
 
   IDE_ENTRY;
 
@@ -1551,9 +1550,9 @@ ide_pipeline_initable_init (GInitable     *initable,
 
   vte_pty_set_utf8 (self->pty, TRUE, NULL);
 
-  master_fd = vte_pty_get_fd (self->pty);
+  consumer_fd = vte_pty_get_fd (self->pty);
 
-  if (!ide_pty_intercept_init (&self->intercept, master_fd, NULL))
+  if (!ide_pty_intercept_init (&self->intercept, consumer_fd, NULL))
     {
       g_set_error_literal (error,
                            G_IO_ERROR,
@@ -1563,9 +1562,9 @@ ide_pipeline_initable_init (GInitable     *initable,
     }
 
   ide_pty_intercept_set_callback (&self->intercept,
-                              &self->intercept.master,
-                              ide_pipeline_intercept_pty_master_cb,
-                              self);
+                                  &self->intercept.consumer,
+                                  ide_pipeline_intercept_pty_consumer_cb,
+                                  self);
 
   g_signal_connect_object (self->config,
                            "notify::ready",
@@ -1852,7 +1851,7 @@ ide_pipeline_init (IdePipeline *self)
   self->cancellable = g_cancellable_new ();
 
   self->position = -1;
-  self->pty_slave = -1;
+  self->pty_producer = -1;
 
   self->best_strategy_priority = G_MAXINT;
   self->best_strategy = ide_local_deploy_strategy_new ();
@@ -3022,13 +3021,13 @@ ide_pipeline_attach_pty (IdePipeline           *self,
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
-  if (self->pty_slave == -1)
+  if (self->pty_producer == -1)
     {
-      IdePtyFd master_fd = ide_pty_intercept_get_fd (&self->intercept);
-      self->pty_slave = ide_pty_intercept_create_slave (master_fd, TRUE);
+      IdePtyFd consumer_fd = ide_pty_intercept_get_fd (&self->intercept);
+      self->pty_producer = ide_pty_intercept_create_producer (consumer_fd, TRUE);
     }
 
-  if (self->pty_slave == -1)
+  if (self->pty_producer == -1)
     {
       ide_object_warning (self, _("Pseudo terminal creation failed. Terminal features will be limited."));
       return;
@@ -3041,10 +3040,10 @@ ide_pipeline_attach_pty (IdePipeline           *self,
              G_SUBPROCESS_FLAGS_STDIN_PIPE);
   ide_subprocess_launcher_set_flags (launcher, flags);
 
-  /* Assign slave device */
-  ide_subprocess_launcher_take_stdin_fd (launcher, dup (self->pty_slave));
-  ide_subprocess_launcher_take_stdout_fd (launcher, dup (self->pty_slave));
-  ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->pty_slave));
+  /* Assign producer device */
+  ide_subprocess_launcher_take_stdin_fd (launcher, dup (self->pty_producer));
+  ide_subprocess_launcher_take_stdout_fd (launcher, dup (self->pty_producer));
+  ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->pty_producer));
 
   /* Ensure a terminal type is set */
   ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", FALSE);

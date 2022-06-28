@@ -31,16 +31,16 @@
 
 #include "ide-terminal-util.h"
 
-gint
+int
 ide_vte_pty_create_producer (VtePty *pty)
 {
-  gint master_fd;
+  int consumer_fd;
 
   g_return_val_if_fail (VTE_IS_PTY (pty), IDE_PTY_FD_INVALID);
 
-  master_fd = vte_pty_get_fd (pty);
-  if (master_fd == IDE_PTY_FD_INVALID)
+  consumer_fd = vte_pty_get_fd (pty);
+  if (consumer_fd == IDE_PTY_FD_INVALID)
     return IDE_PTY_FD_INVALID;
 
-  return ide_pty_intercept_create_slave (master_fd, TRUE);
+  return ide_pty_intercept_create_producer (consumer_fd, TRUE);
 }
