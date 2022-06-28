@@ -73,14 +73,15 @@ ide_autotools_makecache_stage_makecache_cb (GObject      *object,
 
 static void
 ide_autotools_makecache_stage_build_cb (GObject      *object,
-                                          GAsyncResult *result,
-                                          gpointer      user_data)
+                                        GAsyncResult *result,
+                                        gpointer      user_data)
 {
   IdeAutotoolsMakecacheStage *self = (IdeAutotoolsMakecacheStage *)object;
   IdePipelineStage *stage = (IdePipelineStage *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
+  IdePipeline *pipeline;
 
   IDE_ENTRY;
 
@@ -97,7 +98,10 @@ ide_autotools_makecache_stage_build_cb (GObject      *object,
     }
 
   cancellable = ide_task_get_cancellable (task);
+  pipeline = ide_task_get_task_data (task);
+
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_PIPELINE (pipeline));
 
   /*
    * Now that we have our makecache file created, we can mmap() it into our
@@ -105,6 +109,7 @@ ide_autotools_makecache_stage_build_cb (GObject      *object,
    */
 
   ide_makecache_new_for_cache_file_async (self->runtime,
+                                          pipeline,
                                           self->cache_file,
                                           cancellable,
                                           ide_autotools_makecache_stage_makecache_cb,
@@ -114,11 +119,11 @@ ide_autotools_makecache_stage_build_cb (GObject      *object,
 }
 
 static void
-ide_autotools_makecache_stage_build_async (IdePipelineStage       *stage,
-                                             IdePipeline    *pipeline,
-                                             GCancellable        *cancellable,
-                                             GAsyncReadyCallback  callback,
-                                             gpointer             user_data)
+ide_autotools_makecache_stage_build_async (IdePipelineStage    *stage,
+                                           IdePipeline         *pipeline,
+                                           GCancellable        *cancellable,
+                                           GAsyncReadyCallback  callback,
+                                           gpointer             user_data)
 {
   IdeAutotoolsMakecacheStage *self = (IdeAutotoolsMakecacheStage *)stage;
   g_autoptr(IdeTask) task = NULL;
@@ -131,6 +136,7 @@ ide_autotools_makecache_stage_build_async (IdePipelineStage       *stage,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_autotools_makecache_stage_build_async);
+  ide_task_set_task_data (task, g_object_ref (pipeline), g_object_unref);
 
   /*
    * First we need to build our launcher (performed by our parent class).
@@ -139,18 +145,18 @@ ide_autotools_makecache_stage_build_async (IdePipelineStage       *stage,
    */
 
   IDE_PIPELINE_STAGE_CLASS (ide_autotools_makecache_stage_parent_class)->build_async (stage,
-                                                                                        pipeline,
-                                                                                        cancellable,
-                                                                                        ide_autotools_makecache_stage_build_cb,
-                                                                                        g_steal_pointer (&task));
+                                                                                      pipeline,
+                                                                                      cancellable,
+                                                                                      ide_autotools_makecache_stage_build_cb,
+                                                                                      g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static gboolean
 ide_autotools_makecache_stage_build_finish (IdePipelineStage  *stage,
-                                              GAsyncResult   *result,
-                                              GError        **error)
+                                            GAsyncResult      *result,
+                                            GError           **error)
 {
   gboolean ret;
 
