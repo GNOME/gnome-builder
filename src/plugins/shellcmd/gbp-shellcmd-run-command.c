@@ -96,7 +96,7 @@ gbp_shellcmd_run_command_prepare_to_run (IdeRunCommand *run_command,
     case GBP_SHELLCMD_LOCALITY_SUBPROCESS:
       break;
 
-    case GBP_SHELLCMD_LOCALITY_RUNNER: {
+    case GBP_SHELLCMD_LOCALITY_RUNTIME: {
       if (pipeline == NULL || runtime == NULL)
         ide_run_context_push_error (run_context,
                                     g_error_new (G_IO_ERROR,

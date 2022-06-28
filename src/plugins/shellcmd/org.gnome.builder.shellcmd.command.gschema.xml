@@ -25,7 +25,7 @@
       <choices>
         <choice value="host"/>
         <choice value="pipeline"/>
-        <choice value="runner"/>
+        <choice value="runtime"/>
         <choice value="subprocess"/>
       </choices>
       <default>'pipeline'</default>
