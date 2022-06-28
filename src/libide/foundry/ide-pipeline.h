@@ -92,6 +92,9 @@ IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_pipeline_create_launcher          (IdePipeline            *self,
                                                               GError                **error);
 IDE_AVAILABLE_IN_ALL
+IdeRunContext         *ide_pipeline_create_run_context       (IdePipeline            *self,
+                                                              IdeRunCommand          *run_command);
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_prepare_run_context      (IdePipeline            *self,
                                                               IdeRunContext          *run_context);
 IDE_AVAILABLE_IN_ALL

@@ -50,6 +50,7 @@
 #include "ide-foundry-enums.h"
 #include "ide-local-deploy-strategy.h"
 #include "ide-local-device.h"
+#include "ide-run-command.h"
 #include "ide-run-context.h"
 #include "ide-run-manager-private.h"
 #include "ide-runtime.h"
@@ -4388,4 +4389,40 @@ ide_pipeline_prepare_run_context (IdePipeline   *self,
   ide_run_context_setenv (run_context, "BUILDDIR", ide_pipeline_get_builddir (self));
   ide_run_context_setenv (run_context, "SRCDIR", ide_pipeline_get_srcdir (self));
   ide_run_context_set_cwd (run_context, ide_pipeline_get_builddir (self));
+}
+
+/**
+ * ide_pipeline_create_run_context:
+ * @self: a #IdePipeline
+ * @run_command: an #IdeRunCommand
+ *
+ * Creates a new #IdeRunContext to run @run_command.
+ *
+ * This helper is generally meant to be used by pipeline stages to create
+ * a run context that will execute within the pipeline to run the command
+ * described in @run_command.
+ *
+ * The run context is first prepared using ide_pipeline_prepare_run_context()
+ * after which the run command's ide_run_command_prepare_to_run() is used.
+ *
+ * Returns: (transfer full): an #IdeRunContext
+ */
+IdeRunContext *
+ide_pipeline_create_run_context (IdePipeline   *self,
+                                 IdeRunCommand *run_command)
+{
+  g_autoptr(IdeRunContext) run_context = NULL;
+  IdeContext *context;
+
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (run_command), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (self, run_context);
+  ide_run_command_prepare_to_run (run_command, run_context, context);
+
+  return g_steal_pointer (&run_context);
 }
