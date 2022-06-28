@@ -32,8 +32,22 @@
 #include "ide-build-manager.h"
 #include "ide-foundry-global.h"
 #include "ide-pipeline.h"
+#include "ide-run-context.h"
 #include "ide-runtime-manager.h"
 #include "ide-runtime.h"
+
+static IdeSubprocessLauncher *
+create_host_launcher (void)
+{
+  g_autoptr(IdeRunContext) run_context = ide_run_context_new ();
+
+  /* To be like the build pipeline, we do not add the "minimal"
+   * environment as that would give display access which the
+   * build pipeline generally does not have.
+   */
+  ide_run_context_push_host (run_context);
+  return ide_run_context_end (run_context, NULL);
+}
 
 /**
  * ide_foundry_get_launcher_for_context:
@@ -113,14 +127,13 @@ ide_foundry_get_launcher_for_context (IdeContext  *context,
       if (program_path != NULL ||
           ide_runtime_contains_program_in_path (host, program_name, NULL))
         {
-          launcher = ide_runtime_create_launcher (host, NULL);
+          launcher = create_host_launcher ();
           IDE_GOTO (setup_launcher);
         }
     }
   else if (program_path != NULL)
     {
-      launcher = ide_subprocess_launcher_new (0);
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
+      launcher = create_host_launcher ();
       IDE_GOTO (setup_launcher);
     }
 
