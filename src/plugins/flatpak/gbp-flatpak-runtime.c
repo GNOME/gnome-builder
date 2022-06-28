@@ -43,11 +43,11 @@ struct _GbpFlatpakRuntime
   GHashTable *program_paths_cache;
 
   IdeTriplet *triplet;
-  gchar *branch;
-  gchar *deploy_dir;
-  gchar *platform;
-  gchar *sdk;
-  gchar *runtime_dir;
+  char *branch;
+  char *deploy_dir;
+  char *platform;
+  char *sdk;
+  char *runtime_dir;
   GFile *deploy_dir_files;
 };
 
@@ -239,7 +239,7 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   /* Make sure all of our finish arguments for the manifest are included */
   if (GBP_IS_FLATPAK_MANIFEST (config))
     {
-      const gchar * const *finish_args = gbp_flatpak_manifest_get_finish_args (GBP_FLATPAK_MANIFEST (config));
+      const char * const *finish_args = gbp_flatpak_manifest_get_finish_args (GBP_FLATPAK_MANIFEST (config));
 
       if (finish_args != NULL)
         {
@@ -434,7 +434,7 @@ gbp_flatpak_runtime_prepare_configuration (IdeRuntime *runtime,
 
 static void
 gbp_flatpak_runtime_set_deploy_dir (GbpFlatpakRuntime *self,
-                                    const gchar       *deploy_dir)
+                                    const char        *deploy_dir)
 {
   g_autoptr(GFile) file = NULL;
 
@@ -450,13 +450,13 @@ gbp_flatpak_runtime_set_deploy_dir (GbpFlatpakRuntime *self,
     }
 }
 
-static const gchar *
+static const char *
 gbp_flatpak_runtime_get_runtime_dir (GbpFlatpakRuntime *self)
 {
   if G_UNLIKELY (self->runtime_dir == NULL)
     {
-      g_autofree gchar *sdk_name = NULL;
-      const gchar *ids[2];
+      g_autofree char *sdk_name = NULL;
+      const char *ids[2];
 
       sdk_name = gbp_flatpak_runtime_get_sdk_name (self);
 
@@ -465,10 +465,10 @@ gbp_flatpak_runtime_get_runtime_dir (GbpFlatpakRuntime *self)
 
       for (guint i = 0; i < G_N_ELEMENTS (ids); i++)
         {
-          const gchar *id = ids[i];
-          g_autofree gchar *name = g_strdup_printf ("%s.Debug", id);
-          g_autofree gchar *deploy_path = NULL;
-          g_autofree gchar *path = NULL;
+          const char *id = ids[i];
+          g_autofree char *name = g_strdup_printf ("%s.Debug", id);
+          g_autofree char *deploy_path = NULL;
+          g_autofree char *path = NULL;
 
           /*
            * The easiest way to reliably stay within the same installation
@@ -495,11 +495,11 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
                                     GFile      *file)
 {
   GbpFlatpakRuntime *self = (GbpFlatpakRuntime *)runtime;
-  const gchar *runtime_dir;
-  g_autofree gchar *path = NULL;
-  g_autofree gchar *build_dir = NULL;
-  g_autofree gchar *app_files_path = NULL;
-  g_autofree gchar *debug_dir = NULL;
+  const char *runtime_dir;
+  g_autofree char *path = NULL;
+  g_autofree char *build_dir = NULL;
+  g_autofree char *app_files_path = NULL;
+  g_autofree char *debug_dir = NULL;
 
   g_assert (GBP_IS_FLATPAK_RUNTIME (self));
   g_assert (G_IS_FILE (file));
@@ -525,7 +525,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
     {
       if (g_str_has_prefix (path, "/run/build-runtime/"))
         {
-          g_autofree gchar *translated = NULL;
+          g_autofree char *translated = NULL;
 
           translated = g_build_filename (runtime_dir,
                                          "source",
@@ -542,7 +542,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
 
       if (g_str_has_prefix (path, "/usr/lib/debug/"))
         {
-          g_autofree gchar *translated = NULL;
+          g_autofree char *translated = NULL;
 
           translated = g_build_filename (debug_dir,
                                          path + strlen ("/usr/lib/debug/"),
@@ -565,7 +565,7 @@ gbp_flatpak_runtime_translate_file (IdeRuntime *runtime,
 
   if (g_str_has_prefix (path, "/app/"))
     {
-      g_autofree gchar *translated = NULL;
+      g_autofree char *translated = NULL;
 
       translated = g_build_filename (app_files_path,
                                      path + strlen ("/app/"),
@@ -598,7 +598,7 @@ gbp_flatpak_runtime_set_triplet (GbpFlatpakRuntime *self,
     }
 }
 
-const gchar *
+const char *
 gbp_flatpak_runtime_get_branch (GbpFlatpakRuntime *self)
 {
   g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
@@ -608,7 +608,7 @@ gbp_flatpak_runtime_get_branch (GbpFlatpakRuntime *self)
 
 static void
 gbp_flatpak_runtime_set_branch (GbpFlatpakRuntime *self,
-                                const gchar       *branch)
+                                const char        *branch)
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
@@ -620,7 +620,7 @@ gbp_flatpak_runtime_set_branch (GbpFlatpakRuntime *self,
     }
 }
 
-const gchar *
+const char *
 gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime *self)
 {
   g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
@@ -630,7 +630,7 @@ gbp_flatpak_runtime_get_platform (GbpFlatpakRuntime *self)
 
 static void
 gbp_flatpak_runtime_set_platform (GbpFlatpakRuntime *self,
-                                  const gchar       *platform)
+                                  const char        *platform)
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
@@ -639,7 +639,7 @@ gbp_flatpak_runtime_set_platform (GbpFlatpakRuntime *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PLATFORM]);
 }
 
-const gchar *
+const char *
 gbp_flatpak_runtime_get_sdk (GbpFlatpakRuntime *self)
 {
   g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
@@ -647,10 +647,10 @@ gbp_flatpak_runtime_get_sdk (GbpFlatpakRuntime *self)
   return self->sdk;
 }
 
-gchar *
+char *
 gbp_flatpak_runtime_get_sdk_name (GbpFlatpakRuntime *self)
 {
-  const gchar *slash;
+  const char *slash;
 
   g_return_val_if_fail (GBP_IS_FLATPAK_RUNTIME (self), NULL);
 
@@ -667,7 +667,7 @@ gbp_flatpak_runtime_get_sdk_name (GbpFlatpakRuntime *self)
 
 static void
 gbp_flatpak_runtime_set_sdk (GbpFlatpakRuntime *self,
-                             const gchar       *sdk)
+                             const char        *sdk)
 {
   g_return_if_fail (GBP_IS_FLATPAK_RUNTIME (self));
 
@@ -679,11 +679,11 @@ gbp_flatpak_runtime_set_sdk (GbpFlatpakRuntime *self,
     }
 }
 
-static gchar **
+static char **
 gbp_flatpak_runtime_get_system_include_dirs (IdeRuntime *runtime)
 {
-  static const gchar *include_dirs[] = { "/app/include", "/usr/include", NULL };
-  return g_strdupv ((gchar **)include_dirs);
+  static const char *include_dirs[] = { "/app/include", "/usr/include", NULL };
+  return g_strdupv ((char **)include_dirs);
 }
 
 static IdeTriplet *
@@ -859,11 +859,11 @@ gbp_flatpak_runtime_new (const char *name,
                          const char *metadata,
                          gboolean    is_extension)
 {
-  g_autofree gchar *id = NULL;
-  g_autofree gchar *short_id = NULL;
-  g_autofree gchar *display_name = NULL;
-  g_autofree gchar *triplet = NULL;
-  g_autofree gchar *runtime_name = NULL;
+  g_autofree char *id = NULL;
+  g_autofree char *short_id = NULL;
+  g_autofree char *display_name = NULL;
+  g_autofree char *triplet = NULL;
+  g_autofree char *runtime_name = NULL;
   g_autoptr(IdeTriplet) triplet_object = NULL;
   g_autoptr(GString) category = NULL;
 
