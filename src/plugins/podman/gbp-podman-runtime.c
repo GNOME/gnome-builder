@@ -71,25 +71,6 @@ maybe_start (GbpPodmanRuntime *self)
   g_mutex_unlock (&self->mutex);
 }
 
-static IdeSubprocessLauncher *
-gbp_podman_runtime_create_launcher (IdeRuntime  *runtime,
-                                    GError     **error)
-{
-  GbpPodmanRuntime *self = (GbpPodmanRuntime *)runtime;
-  IdeSubprocessLauncher *launcher;
-
-  g_assert (GBP_IS_PODMAN_RUNTIME (self));
-  g_assert (self->id != NULL);
-
-  maybe_start (self);
-
-  launcher = g_object_new (GBP_TYPE_PODMAN_SUBPROCESS_LAUNCHER,
-                           "id", self->id,
-                           NULL);
-
-  return launcher;
-}
-
 static gboolean
 gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
                                    const char * const  *argv,
@@ -167,8 +148,10 @@ gbp_podman_runtime_prepare_run_context (IdeRuntime    *runtime,
   IDE_ENTRY;
 
   g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
-  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  maybe_start (GBP_PODMAN_RUNTIME (runtime));
 
   /* Our commands will need to be run from the host */
   ide_run_context_push_host (run_context);
@@ -180,6 +163,33 @@ gbp_podman_runtime_prepare_run_context (IdeRuntime    *runtime,
                         g_object_unref);
 
   IDE_EXIT;
+}
+
+static gboolean
+gbp_podman_runtime_contains_program_in_path (IdeRuntime   *runtime,
+                                             const char   *program,
+                                             GCancellable *cancellable)
+{
+  g_autoptr(IdeRunContext) run_context = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
+  g_assert (program != NULL);
+
+  gbp_podman_runtime_prepare_run_context (runtime, NULL, run_context);
+  ide_run_context_push_shell (run_context, TRUE);
+  ide_run_context_append_argv (run_context, "which");
+  ide_run_context_append_argv (run_context, program);
+
+  if (!(subprocess = ide_run_context_spawn (run_context, NULL)))
+    IDE_RETURN (FALSE);
+
+  ret = ide_subprocess_wait_check (subprocess, cancellable, NULL);
+
+  IDE_RETURN (ret);
 }
 
 char *
@@ -552,7 +562,7 @@ gbp_podman_runtime_class_init (GbpPodmanRuntimeClass *klass)
 
   i_object_class->destroy = gbp_podman_runtime_destroy;
 
-  runtime_class->create_launcher = gbp_podman_runtime_create_launcher;
+  runtime_class->contains_program_in_path = gbp_podman_runtime_contains_program_in_path;
   runtime_class->translate_file = gbp_podman_runtime_translate_file;
   runtime_class->prepare_to_build = gbp_podman_runtime_prepare_run_context;
   runtime_class->prepare_to_run = gbp_podman_runtime_prepare_run_context;
