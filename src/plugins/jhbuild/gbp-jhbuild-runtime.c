@@ -42,27 +42,6 @@ G_DEFINE_FINAL_TYPE (GbpJhbuildRuntime, gbp_jhbuild_runtime, IDE_TYPE_RUNTIME)
 
 static GParamSpec *properties [N_PROPS];
 
-static IdeSubprocessLauncher *
-gbp_jhbuild_runtime_create_launcher (IdeRuntime  *runtime,
-                                     GError     **error)
-{
-  GbpJhbuildRuntime *self = (GbpJhbuildRuntime *)runtime;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-
-  g_assert (GBP_IS_JHBUILD_RUNTIME (self));
-
-  launcher = IDE_RUNTIME_CLASS (gbp_jhbuild_runtime_parent_class)->create_launcher (runtime, error);
-
-  if (launcher != NULL)
-    {
-      ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT (self->executable_path, "run"));
-      ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-      ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-    }
-
-  return g_steal_pointer (&launcher);
-}
-
 static gboolean
 gbp_jhbuild_runtime_run_handler (IdeRunContext       *run_context,
                                  const char * const  *argv,
@@ -251,7 +230,6 @@ gbp_jhbuild_runtime_class_init (GbpJhbuildRuntimeClass *klass)
   object_class->set_property = gbp_jhbuild_runtime_set_property;
 
   runtime_class->contains_program_in_path = gbp_jhbuild_runtime_contains_program_in_path;
-  runtime_class->create_launcher = gbp_jhbuild_runtime_create_launcher;
   runtime_class->prepare_configuration = gbp_jhbuild_runtime_prepare_configuration;
   runtime_class->prepare_to_build = gbp_jhbuild_runtime_prepare_run_context;
   runtime_class->prepare_to_run = gbp_jhbuild_runtime_prepare_run_context;
