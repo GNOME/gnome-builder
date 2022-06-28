@@ -197,6 +197,7 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_LSP_SERVICE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
 
@@ -226,11 +227,16 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
 
       if (ide_runtime_contains_program_in_path (host, priv->program, NULL))
         {
-          if ((launcher = ide_runtime_create_launcher (host, NULL)))
+          g_autoptr(IdeRunContext) run_context = NULL;
+
+          run_context = ide_run_context_new ();
+          ide_runtime_prepare_to_build (host, pipeline, run_context);
+          ide_run_context_append_argv (run_context, priv->program);
+          ide_run_context_set_cwd (run_context, srcdir);
+
+          if ((launcher = ide_run_context_end (run_context, NULL)))
             {
               ide_subprocess_launcher_set_flags (launcher, flags);
-              ide_subprocess_launcher_push_argv (launcher, priv->program);
-              ide_subprocess_launcher_set_cwd (launcher, srcdir);
               IDE_RETURN (g_steal_pointer (&launcher));
             }
         }
@@ -246,11 +252,16 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
 
               if (g_file_test (path, G_FILE_TEST_IS_EXECUTABLE))
                 {
-                  if ((launcher = ide_runtime_create_launcher (host, NULL)))
+                  g_autoptr(IdeRunContext) run_context = NULL;
+
+                  run_context = ide_run_context_new ();
+                  ide_runtime_prepare_to_build (host, pipeline, run_context);
+                  ide_run_context_append_argv (run_context, path);
+                  ide_run_context_set_cwd (run_context, srcdir);
+
+                  if ((launcher = ide_run_context_end (run_context, NULL)))
                     {
-                      ide_subprocess_launcher_push_argv (launcher, path);
                       ide_subprocess_launcher_set_flags (launcher, flags);
-                      ide_subprocess_launcher_set_cwd (launcher, srcdir);
                       IDE_RETURN (g_steal_pointer (&launcher));
                     }
                 }
