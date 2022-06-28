@@ -63,24 +63,6 @@ gbp_jhbuild_runtime_create_launcher (IdeRuntime  *runtime,
   return g_steal_pointer (&launcher);
 }
 
-static IdeRunner *
-gbp_jhbuild_runtime_create_runner (IdeRuntime     *runtime,
-                                   IdeBuildTarget *build_target)
-{
-  GbpJhbuildRuntime *self = (GbpJhbuildRuntime *)runtime;
-  g_autoptr(IdeRunner) runner = NULL;
-
-  g_assert (GBP_IS_JHBUILD_RUNTIME (self));
-  g_assert (IDE_IS_BUILD_TARGET (build_target));
-
-  runner = IDE_RUNTIME_CLASS (gbp_jhbuild_runtime_parent_class)->create_runner (runtime, build_target);
-
-  if (runner != NULL)
-    ide_runner_set_run_on_host (runner, TRUE);
-
-  return g_steal_pointer (&runner);
-}
-
 static gboolean
 gbp_jhbuild_runtime_run_handler (IdeRunContext       *run_context,
                                  const char * const  *argv,
@@ -261,7 +243,6 @@ gbp_jhbuild_runtime_class_init (GbpJhbuildRuntimeClass *klass)
 
   runtime_class->contains_program_in_path = gbp_jhbuild_runtime_contains_program_in_path;
   runtime_class->create_launcher = gbp_jhbuild_runtime_create_launcher;
-  runtime_class->create_runner = gbp_jhbuild_runtime_create_runner;
   runtime_class->prepare_configuration = gbp_jhbuild_runtime_prepare_configuration;
   runtime_class->prepare_to_build = gbp_jhbuild_runtime_prepare_run_context;
   runtime_class->prepare_to_run = gbp_jhbuild_runtime_prepare_run_context;
