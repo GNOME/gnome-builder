@@ -3,25 +3,21 @@
   <menu id="new-document-menu">
     <section id="new-terminal-section">
       <item>
-        <attribute name="id">new-terminal</attribute>
-        <attribute name="after">new-file</attribute>
-        <attribute name="before">new-documentation-page</attribute>
         <attribute name="label" translatable="yes">New _Terminal</attribute>
-        <attribute name="action">win.new-terminal</attribute>
+        <attribute name="action">terminal.terminal-on-host</attribute>
+        <attribute name="target" type="s">''</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;t</attribute>
       </item>
       <item>
-        <attribute name="id">new-build-terminal</attribute>
-        <attribute name="after">new-terminal</attribute>
         <attribute name="label" translatable="yes">New _Build Terminal</attribute>
-        <attribute name="action">win.new-terminal-in-config</attribute>
+        <attribute name="action">terminal.terminal-in-pipeline</attribute>
+        <attribute name="target" type="s">''</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;&lt;alt&gt;t</attribute>
       </item>
       <item>
-        <attribute name="id">new-run-terminal</attribute>
-        <attribute name="after">new-build-terminal</attribute>
         <attribute name="label" translatable="yes">New _Runtime Terminal</attribute>
-        <attribute name="action">win.new-terminal-in-runner</attribute>
+        <attribute name="action">terminal.terminal-in-runtime</attribute>
+        <attribute name="target" type="s">''</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;t</attribute>
       </item>
     </section>

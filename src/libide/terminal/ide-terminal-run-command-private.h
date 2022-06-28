@@ -1,4 +1,4 @@
-/* ide-terminal-private.h
+/* ide-terminal-run-command-private.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,10 +20,24 @@
 
 #pragma once
 
-#include <glib.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-void _ide_terminal_init (void);
+#define IDE_TYPE_TERMINAL_RUN_COMMAND (ide_terminal_run_command_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeTerminalRunCommand, ide_terminal_run_command, IDE, TERMINAL_RUN_COMMAND, IdeRunCommand)
+
+typedef enum
+{
+  IDE_TERMINAL_RUN_ON_HOST,
+  IDE_TERMINAL_RUN_AS_SUBPROCESS,
+  IDE_TERMINAL_RUN_IN_PIPELINE,
+  IDE_TERMINAL_RUN_IN_RUNTIME,
+
+  IDE_TERMINAL_RUN_LAST
+} IdeTerminalRunLocality;
+
+IdeRunCommand *ide_terminal_run_command_new (IdeTerminalRunLocality  locality);
 
 G_END_DECLS

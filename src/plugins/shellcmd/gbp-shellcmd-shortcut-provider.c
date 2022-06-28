@@ -43,7 +43,7 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
                             GVariant  *args,
                             gpointer   user_data)
 {
-  GbpShellcmdRunCommand *command = user_data;
+  GbpShellcmdRunCommand *run_command = user_data;
   g_autoptr(IdePanelPosition) position = NULL;
   g_autoptr(IdeTerminalLauncher) launcher = NULL;
   IdeWorkspace *workspace;
@@ -55,11 +55,11 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
 
   g_assert (GTK_IS_WIDGET (widget));
   g_assert (args == NULL);
-  g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (command));
+  g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (run_command));
 
   g_debug ("Shortcut triggered to run command “%s” which has accelerator %s",
-           ide_run_command_get_display_name (IDE_RUN_COMMAND (command)),
-           gbp_shellcmd_run_command_get_accelerator (command));
+           ide_run_command_get_display_name (IDE_RUN_COMMAND (run_command)),
+           gbp_shellcmd_run_command_get_accelerator (run_command));
 
   if (!(workspace = ide_widget_get_workspace (widget)) ||
       !(context = ide_workspace_get_context (workspace)))
@@ -69,10 +69,11 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
       !IDE_IS_EDITOR_WORKSPACE (workspace))
     IDE_RETURN (FALSE);
 
-  if (!(title = ide_run_command_get_display_name (IDE_RUN_COMMAND (command))))
+  if (!(title = ide_run_command_get_display_name (IDE_RUN_COMMAND (run_command))))
     title = _("Untitled command");
 
-  launcher = gbp_shellcmd_run_command_create_launcher (command, context);
+  launcher = ide_terminal_launcher_new (context, IDE_RUN_COMMAND (run_command));
+
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
                        "close-on-exit", FALSE,
                        "icon-name", "text-x-script-symbolic",

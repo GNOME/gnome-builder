@@ -43,6 +43,8 @@ void                 ide_terminal_page_set_launcher              (IdeTerminalPag
 IDE_AVAILABLE_IN_ALL
 IdeTerminalLauncher *ide_terminal_page_get_launcher              (IdeTerminalPage     *self);
 IDE_AVAILABLE_IN_ALL
+VtePty              *ide_terminal_page_get_pty                   (IdeTerminalPage     *self);
+IDE_AVAILABLE_IN_ALL
 void                 ide_terminal_page_set_pty                   (IdeTerminalPage     *self,
                                                                   VtePty              *pty);
 IDE_AVAILABLE_IN_ALL

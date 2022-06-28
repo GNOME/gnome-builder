@@ -28,234 +28,148 @@
 #include <libide-terminal.h>
 #include <libide-gui.h>
 
-#include "ide-terminal-private.h"
+#include "ide-terminal-run-command-private.h"
 
 #include "gbp-terminal-workspace-addin.h"
 
 struct _GbpTerminalWorkspaceAddin
 {
-  GObject             parent_instance;
-
-  IdeWorkspace       *workspace;
-
-  IdePane            *bottom_dock;
-  IdeTerminalPage    *bottom;
-
-  IdePane            *run_panel;
-  IdeTerminalPage    *run_terminal;
+  GObject       parent_instance;
+  IdeWorkspace *workspace;
 };
 
-static IdeRuntime *
-find_runtime (IdeWorkspace *workspace)
-{
-  IdeContext *context;
-  IdeConfigManager *config_manager;
-  IdeConfig *config;
+static void terminal_on_host_action       (GbpTerminalWorkspaceAddin *self,
+                                           GVariant                  *param);
+static void terminal_as_subprocess_action (GbpTerminalWorkspaceAddin *self,
+                                           GVariant                  *param);
+static void terminal_in_pipeline_action   (GbpTerminalWorkspaceAddin *self,
+                                           GVariant                  *param);
+static void terminal_in_runtime_action    (GbpTerminalWorkspaceAddin *self,
+                                           GVariant                  *param);
 
-  g_assert (IDE_IS_WORKSPACE (workspace));
-
-  context = ide_workspace_get_context (workspace);
-  config_manager = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (config_manager);
-
-  return ide_config_get_runtime (config);
-}
-
-static gchar *
-find_builddir (IdeWorkspace *workspace)
-{
-  IdeContext *context;
-  IdeBuildManager *build_manager;
-  IdePipeline *pipeline;
-  const gchar *builddir = NULL;
-
-  if ((context = ide_workspace_get_context (workspace)) &&
-      (build_manager = ide_build_manager_from_context (context)) &&
-      (pipeline = ide_build_manager_get_pipeline (build_manager)) &&
-      (builddir = ide_pipeline_get_builddir (pipeline)) &&
-      g_file_test (builddir, G_FILE_TEST_IS_DIR))
-    return g_strdup (builddir);
-
-  return NULL;
-}
+IDE_DEFINE_ACTION_GROUP (GbpTerminalWorkspaceAddin, gbp_terminal_workspace_addin, {
+  { "terminal-on-host", terminal_on_host_action, "s" },
+  { "terminal-as-subprocess", terminal_as_subprocess_action, "s" },
+  { "terminal-in-pipeline", terminal_in_pipeline_action, "s" },
+  { "terminal-in-runtime", terminal_in_runtime_action, "s" },
+})
 
 static void
-new_terminal_activate (GSimpleAction *action,
-                       GVariant      *param,
-                       gpointer       user_data)
+gbp_terminal_workspace_addin_add_page (GbpTerminalWorkspaceAddin *self,
+                                       IdeTerminalRunLocality     locality,
+                                       const char                *cwd)
 {
-  GbpTerminalWorkspaceAddin *self = user_data;
   g_autoptr(IdeTerminalLauncher) launcher = NULL;
   g_autoptr(IdePanelPosition) position = NULL;
-  g_autoptr(GFile) workdir = NULL;
-  g_autofree gchar *cwd = NULL;
-  IdePage *page;
-  IdeRuntime *runtime = NULL;
+  g_autoptr(IdeRunCommand) run_command = NULL;
   IdeContext *context;
-  const gchar *name;
-  GtkWidget *current_frame = NULL;
   IdePage *current_page;
-  const gchar *uri = NULL;
+  IdePage *page;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+  g_assert (locality >= IDE_TERMINAL_RUN_ON_HOST);
+  g_assert (locality < IDE_TERMINAL_RUN_LAST);
 
-  /* If we are creating a new terminal while we already have a terminal
-   * focused, then try to copy some details from that terminal.
-   */
-  if ((current_page = ide_workspace_get_most_recent_page (self->workspace)))
-    current_frame = gtk_widget_get_ancestor (GTK_WIDGET (current_page), IDE_TYPE_FRAME);
+  run_command = ide_terminal_run_command_new (locality);
+
+  if (!ide_str_empty0 (cwd))
+    ide_run_command_set_cwd (run_command, cwd);
 
   context = ide_workspace_get_context (self->workspace);
-  workdir = ide_context_ref_workdir (context);
-  name = g_action_get_name (G_ACTION (action));
+  launcher = ide_terminal_launcher_new (context, run_command);
 
-  /* Only allow plain terminals unless this is a project */
-  if (!ide_context_has_project (context) &&
-      !ide_str_equal0 (name, "debug-terminal"))
-    name = "new-terminal";
+  if ((current_page = ide_workspace_get_most_recent_page (self->workspace)))
+    position = ide_page_get_position (current_page);
 
-  if (ide_str_equal0 (name, "new-terminal-in-config"))
-    {
-      IdeConfigManager *config_manager = ide_config_manager_from_context (context);
-      IdeConfig *config = ide_config_manager_get_current (config_manager);
-
-      cwd = find_builddir (self->workspace);
-      launcher = ide_terminal_launcher_new_for_config (config);
-    }
-  else if (ide_str_equal0 (name, "new-terminal-in-runtime"))
-    {
-      runtime = find_runtime (self->workspace);
-      cwd = find_builddir (self->workspace);
-      launcher = ide_terminal_launcher_new_for_runtime (runtime);
-    }
-  else if (ide_str_equal0 (name, "debug-terminal"))
-    {
-      launcher = ide_terminal_launcher_new_for_debug ();
-    }
-  else if (ide_str_equal0 (name, "new-terminal-in-runner"))
-    {
-      runtime = find_runtime (self->workspace);
-      launcher = ide_terminal_launcher_new_for_runner (runtime);
-    }
-  else if (ide_str_equal0 (name, "new-terminal-in-dir"))
-    {
-      page = ide_workspace_get_most_recent_page (self->workspace);
-
-      if (IDE_IS_EDITOR_PAGE (page))
-        {
-          IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
-
-          if (buffer != NULL)
-            {
-              GFile *file = ide_buffer_get_file (buffer);
-              g_autoptr(GFile) parent = g_file_get_parent (file);
-
-              cwd = g_file_get_path (parent);
-            }
-        }
-    }
-  else
-    {
-      launcher = ide_terminal_launcher_new (context);
-      cwd = g_file_get_path (workdir);
-    }
-
-  if (IDE_IS_TERMINAL_PAGE (current_page))
-    {
-      if (_ide_terminal_launcher_are_similar (launcher,
-                                              ide_terminal_page_get_launcher (IDE_TERMINAL_PAGE (current_page))))
-        uri = ide_terminal_page_get_current_directory_uri (IDE_TERMINAL_PAGE (current_page));
-    }
-
-  if (uri != NULL)
-    {
-      g_autoptr(GFile) file = g_file_new_for_uri (uri);
-
-      if (g_file_is_native (file))
-        ide_terminal_launcher_set_cwd (launcher, g_file_peek_path (file));
-      else if (cwd != NULL)
-        ide_terminal_launcher_set_cwd (launcher, cwd);
-    }
-  else if (cwd != NULL)
-    {
-      ide_terminal_launcher_set_cwd (launcher, cwd);
-    }
-
-  page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                       "launcher", launcher,
-                       "respawn-on-exit", FALSE,
-                       "visible", TRUE,
-                       NULL);
-
-  if (current_frame != NULL)
-    position = ide_frame_get_position (IDE_FRAME (current_frame));
-  else
+  if (position == NULL)
     position = ide_panel_position_new ();
 
+  page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                       "respawn-on-exit", FALSE,
+                       "manage-spawn", TRUE,
+                       "launcher", launcher,
+                       "visible", TRUE,
+                       NULL);
   ide_workspace_add_page (self->workspace, page, position);
   panel_widget_raise (PANEL_WIDGET (page));
   gtk_widget_grab_focus (GTK_WIDGET (page));
+
+  IDE_EXIT;
 }
 
 static void
-on_run_manager_run (GbpTerminalWorkspaceAddin *self,
-                    IdeRunContext             *run_context,
-                    IdeRunManager             *run_manager)
+terminal_on_host_action (GbpTerminalWorkspaceAddin *self,
+                         GVariant                  *param)
+{
+  const char *cwd = g_variant_get_string (param, NULL);
+  g_autofree char *project_dir = NULL;
+
+  if (ide_str_empty0 (cwd))
+    {
+      IdeContext *context = ide_workspace_get_context (self->workspace);
+      g_autoptr(GFile) workdir = ide_context_ref_workdir (context);
+      cwd = project_dir = g_file_get_path (workdir);
+    }
+
+  gbp_terminal_workspace_addin_add_page (self, IDE_TERMINAL_RUN_ON_HOST, cwd);
+}
+
+static void
+terminal_as_subprocess_action (GbpTerminalWorkspaceAddin *self,
+                               GVariant                  *param)
+{
+  const char *cwd = g_variant_get_string (param, NULL);
+
+  if (ide_str_empty0 (cwd))
+    cwd = g_get_home_dir ();
+
+  gbp_terminal_workspace_addin_add_page (self, IDE_TERMINAL_RUN_AS_SUBPROCESS, cwd);
+}
+
+static void
+terminal_in_pipeline_action (GbpTerminalWorkspaceAddin *self,
+                             GVariant                  *param)
+{
+  gbp_terminal_workspace_addin_add_page (self,
+                                         IDE_TERMINAL_RUN_IN_PIPELINE,
+                                         g_variant_get_string (param, NULL));
+}
+
+static void
+terminal_in_runtime_action (GbpTerminalWorkspaceAddin *self,
+                            GVariant                  *param)
+{
+  const char *cwd = g_variant_get_string (param, NULL);
+
+  if (ide_str_empty0 (cwd))
+    cwd = g_get_home_dir ();
+
+  gbp_terminal_workspace_addin_add_page (self, IDE_TERMINAL_RUN_AS_SUBPROCESS, cwd);
+  gbp_terminal_workspace_addin_add_page (self, IDE_TERMINAL_RUN_IN_RUNTIME, cwd);
+}
+
+static void
+on_run_manager_run (IdeRunManager   *run_manager,
+                    IdeRunContext   *run_context,
+                    IdeTerminalPage *page)
 {
   g_autoptr(GDateTime) now = NULL;
   g_autofree char *formatted = NULL;
   g_autofree char *tmp = NULL;
-  VtePty *pty = NULL;
+  VtePty *pty;
 
   IDE_ENTRY;
 
-  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
+  g_assert (IDE_IS_TERMINAL_PAGE (page));
 
-  /*
-   * We need to create a new or re-use our existing terminal page
-   * for run output. Additionally, we need to override the stdin,
-   * stdout, and stderr file-descriptors to our pty master for the
-   * terminal instance.
-   */
-
-  if (!(pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL)))
-    {
-      g_warning ("Failed to allocate PTY for run output");
-      IDE_GOTO (failure);
-    }
-
-  if (self->run_terminal == NULL)
-    {
-      g_autoptr(IdePanelPosition) position = NULL;
-
-      self->run_terminal = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                                         "manage-spawn", FALSE,
-                                         "pty", pty,
-                                         NULL);
-      ide_pane_observe (g_object_new (IDE_TYPE_PANE,
-                                      "child", self->run_terminal,
-                                      "vexpand", TRUE,
-                                      "hexpand", TRUE,
-                                      "icon-name", "builder-run-start-symbolic",
-                                      "title", _("Application Output"),
-                                      NULL),
-                        &self->run_panel);
-
-      position = ide_panel_position_new ();
-      ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
-      ide_workspace_add_pane (self->workspace, self->run_panel, position);
-    }
-  else
-    {
-      ide_terminal_page_set_pty (self->run_terminal, pty);
-    }
-
-  if (self->run_panel != NULL)
-    panel_widget_raise (PANEL_WIDGET (self->run_panel));
+  pty = ide_terminal_page_get_pty (page);
 
   ide_run_context_push (run_context, NULL, NULL, NULL);
   ide_run_context_set_pty (run_context, pty);
@@ -267,43 +181,37 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
 
   /* translators: %s is replaced with the current local time of day */
   formatted = g_strdup_printf (_("Application started at %s\r\n"), tmp);
-  ide_terminal_page_feed (self->run_terminal, formatted);
+  ide_terminal_page_feed (page, formatted);
 
-failure:
-  g_clear_object (&pty);
+  panel_widget_raise (PANEL_WIDGET (page));
 
   IDE_EXIT;
 }
 
 static void
-on_run_manager_stopped (GbpTerminalWorkspaceAddin *self,
-                        IdeRunManager             *run_manager)
+on_run_manager_stopped (IdeRunManager   *run_manager,
+                        IdeTerminalPage *page)
 {
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
+  g_assert (IDE_IS_TERMINAL_PAGE (page));
 
-  ide_terminal_page_feed (self->run_terminal, _("Application exited\r\n"));
+  ide_terminal_page_feed (page, _("Application exited"));
+  ide_terminal_page_feed (page, "\r\n");
+
+  IDE_EXIT;
 }
-
-static const GActionEntry terminal_actions[] = {
-  { "new-terminal", new_terminal_activate },
-  { "new-terminal-in-config", new_terminal_activate },
-  { "new-terminal-in-runner", new_terminal_activate },
-  { "new-terminal-in-runtime", new_terminal_activate },
-  { "new-terminal-in-dir", new_terminal_activate },
-  { "debug-terminal", new_terminal_activate },
-};
 
 static void
 gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   GbpTerminalWorkspaceAddin *self = (GbpTerminalWorkspaceAddin *)addin;
-  IdeWorkbench *workbench;
   g_autoptr(IdePanelPosition) position = NULL;
-  IdeRunManager *run_manager;
-  IdeContext *context;
+  IdePage *page;
+  IdePane *pane;
 
   g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) ||
@@ -311,45 +219,54 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
 
-  g_action_map_add_action_entries (G_ACTION_MAP (workspace),
-                                   terminal_actions,
-                                   G_N_ELEMENTS (terminal_actions),
-                                   self);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                  "terminal",
+                                  G_ACTION_GROUP (self));
 
-
+  /* Always add the terminal panel to primary/editor workspaces */
   position = ide_panel_position_new ();
   ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
+  page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                       "respawn-on-exit", TRUE,
+                       "visible", TRUE,
+                       NULL);
+  pane = g_object_new (IDE_TYPE_PANE,
+                       "title", _("Terminal"),
+                       "icon-name", "builder-terminal-symbolic",
+                       "child", page,
+                       NULL);
+  ide_workspace_add_pane (workspace, pane, position);
 
-  self->bottom = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                               "respawn-on-exit", TRUE,
-                               "visible", TRUE,
-                               NULL);
-  ide_pane_observe (g_object_new (IDE_TYPE_PANE,
-                                  "title", _("Terminal"),
-                                  "icon-name", "builder-terminal-symbolic",
-                                  "child", self->bottom,
-                                  NULL),
-                    &self->bottom_dock);
-
-  ide_workspace_add_pane (workspace, IDE_PANE (self->bottom_dock), position);
-
-  workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
-
-  if (ide_workbench_has_project (workbench) && IDE_IS_PRIMARY_WORKSPACE (workspace))
+  /* Setup panel for application output */
+  if (IDE_IS_PRIMARY_WORKSPACE (workspace))
     {
-      /* Setup terminals when a project is run */
-      context = ide_widget_get_context (GTK_WIDGET (workspace));
-      run_manager = ide_run_manager_from_context (context);
+      IdeWorkbench *workbench = ide_workspace_get_workbench (workspace);
+      IdeContext *context = ide_workbench_get_context (workbench);
+      IdeRunManager *run_manager = ide_run_manager_from_context (context);
+      VtePty *pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
+
+      page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                           "respawn-on-exit", FALSE,
+                           "manage-spawn", FALSE,
+                           "pty", pty,
+                           NULL);
+      pane = g_object_new (IDE_TYPE_PANE,
+                           "title", _("Application Output"),
+                           "icon-name", "builder-run-start-symbolic",
+                           "child", page,
+                           NULL);
+      ide_workspace_add_pane (workspace, pane, position);
+
       g_signal_connect_object (run_manager,
                                "run",
                                G_CALLBACK (on_run_manager_run),
-                               self,
-                               G_CONNECT_SWAPPED);
+                               page,
+                               0);
       g_signal_connect_object (run_manager,
                                "stopped",
                                G_CALLBACK (on_run_manager_stopped),
-                               self,
-                               G_CONNECT_SWAPPED);
+                               page,
+                               0);
     }
 }
 
@@ -369,11 +286,9 @@ gbp_terminal_workspace_addin_unload (IdeWorkspaceAddin *addin,
 
   if (ide_workbench_has_project (workbench))
     {
-      IdeRunManager *run_manager;
-      IdeContext *context;
+      IdeContext *context = ide_widget_get_context (GTK_WIDGET (workspace));
+      IdeRunManager *run_manager = ide_run_manager_from_context (context);
 
-      context = ide_widget_get_context (GTK_WIDGET (workspace));
-      run_manager = ide_run_manager_from_context (context);
       g_signal_handlers_disconnect_by_func (run_manager,
                                             G_CALLBACK (on_run_manager_run),
                                             self);
@@ -382,16 +297,7 @@ gbp_terminal_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                             self);
     }
 
-  for (guint i = 0; i < G_N_ELEMENTS (terminal_actions); i++)
-    g_action_map_remove_action (G_ACTION_MAP (workspace), terminal_actions[i].name);
-
-  ide_clear_pane (&self->bottom_dock);
-  ide_clear_pane (&self->run_panel);
-
-  self->bottom = NULL;
-  self->bottom_dock = NULL;
-  self->run_terminal = NULL;
-  self->run_panel = NULL;
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "terminal", NULL);
 
   self->workspace = NULL;
 }
@@ -404,6 +310,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTerminalWorkspaceAddin, gbp_terminal_workspace_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_terminal_workspace_addin_init_action_group)
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void

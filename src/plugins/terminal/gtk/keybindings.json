@@ -1,7 +1,7 @@
 /* New Terminal Actions */
-{ "trigger" : "<Control><Shift>t", "action" : "win.new-terminal", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt><Shift>t", "action" : "win.new-terminal-in-config", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt>t", "action" : "win.new-terminal-in-runner", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>t", "action" : "terminal.terminal-on-host", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Alt><Shift>t", "action" : "terminal.terminal-in-pipeline", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Alt>t", "action" : "terminal.terminal-in-runtime", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
 
 /* IdeTerminal */
 { "trigger" : "<Control><Shift>c", "action" : "clipboard.copy", "when" : "inTerminal()", "phase" : "capture" },
