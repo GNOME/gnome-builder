@@ -299,6 +299,84 @@ ide_run_context_push_host (IdeRunContext *self)
 }
 
 static gboolean
+ide_run_context_shell_handler (IdeRunContext       *self,
+                               const char * const  *argv,
+                               const char * const  *env,
+                               const char          *cwd,
+                               IdeUnixFDMap        *unix_fd_map,
+                               gpointer             user_data,
+                               GError             **error)
+{
+  g_autoptr(GString) str = NULL;
+  gboolean login = !!GPOINTER_TO_INT (user_data);
+
+  g_assert (IDE_IS_RUN_CONTEXT (self));
+  g_assert (argv != NULL);
+  g_assert (env != NULL);
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  if (!ide_run_context_merge_unix_fd_map (self, unix_fd_map, error))
+    return FALSE;
+
+  if (cwd != NULL)
+    ide_run_context_set_cwd (self, cwd);
+
+  ide_run_context_append_argv (self, "/bin/sh");
+  if (login)
+    ide_run_context_append_argv (self, "--login");
+  ide_run_context_append_argv (self, "-c");
+
+  str = g_string_new (NULL);
+
+  if (env[0] != NULL)
+    {
+      g_string_append (str, "env");
+
+      for (guint i = 0; env[i]; i++)
+        {
+          g_autofree char *quoted = g_shell_quote (env[i]);
+
+          g_string_append_c (str, ' ');
+          g_string_append (str, quoted);
+        }
+
+      g_string_append_c (str, ' ');
+    }
+
+  for (guint i = 0; argv[i]; i++)
+    {
+      g_autofree char *quoted = g_shell_quote (argv[i]);
+
+      if (i > 0)
+        g_string_append_c (str, ' ');
+      g_string_append (str, quoted);
+    }
+
+  ide_run_context_append_argv (self, str->str);
+
+  return TRUE;
+}
+
+/**
+ * ide_run_context_push_shell:
+ * @self: a #IdeRunContext
+ * @login: if a login shell should be used
+ *
+ * Pushes a shell which can run the upper layer command with -c.
+ */
+void
+ide_run_context_push_shell (IdeRunContext *self,
+                            gboolean       login)
+{
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  ide_run_context_push (self,
+                        ide_run_context_shell_handler,
+                        GINT_TO_POINTER (!!login),
+                        NULL);
+}
+
+static gboolean
 ide_run_context_error_handler (IdeRunContext       *self,
                                const char * const  *argv,
                                const char * const  *env,

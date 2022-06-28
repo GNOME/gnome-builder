@@ -61,6 +61,9 @@ void                   ide_run_context_push_error              (IdeRunContext   
 IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_push_host               (IdeRunContext         *self);
 IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_push_shell              (IdeRunContext         *self,
+                                                                gboolean               login);
+IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_push_expansion          (IdeRunContext         *self,
                                                                 const char * const    *environ);
 IDE_AVAILABLE_IN_ALL
