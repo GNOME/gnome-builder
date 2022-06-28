@@ -33,7 +33,6 @@
 #include "gbp-flatpak-aux.h"
 #include "gbp-flatpak-manifest.h"
 #include "gbp-flatpak-runtime.h"
-#include "gbp-flatpak-subprocess-launcher.h"
 #include "gbp-flatpak-util.h"
 
 struct _GbpFlatpakRuntime

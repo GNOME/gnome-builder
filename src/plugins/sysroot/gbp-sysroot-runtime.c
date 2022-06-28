@@ -25,7 +25,6 @@
 
 #include "gbp-sysroot-runtime.h"
 #include "gbp-sysroot-manager.h"
-#include "gbp-sysroot-subprocess-launcher.h"
 
 // This is a list of common libdirs to use
 #define RUNTIME_PREFIX "sysroot:"

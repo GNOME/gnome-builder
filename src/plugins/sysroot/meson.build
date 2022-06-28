@@ -7,7 +7,6 @@ plugins_sources += files([
   # 'gbp-sysroot-preferences-row.c',
   'gbp-sysroot-runtime.c',
   'gbp-sysroot-runtime-provider.c',
-  'gbp-sysroot-subprocess-launcher.c',
   'gbp-sysroot-toolchain-provider.c',
 ])
 
