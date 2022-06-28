@@ -111,7 +111,6 @@ ide_runtime_manager_initable_init (GInitable     *initable,
                                    GError       **error)
 {
   IdeRuntimeManager *self = (IdeRuntimeManager *)initable;
-  g_autoptr(IdeRuntime) host = NULL;
 
   g_assert (IDE_IS_RUNTIME_MANAGER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -134,11 +133,6 @@ ide_runtime_manager_initable_init (GInitable     *initable,
   ide_extension_set_adapter_foreach (self->extensions,
                                      ide_runtime_manager_extension_added,
                                      self);
-
-  host = ide_runtime_new ("host", _("Host Operating System"));
-  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (host));
-
-  ide_runtime_manager_add (self, host);
 
   return TRUE;
 }
