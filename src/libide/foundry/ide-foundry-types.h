@@ -55,8 +55,6 @@ typedef struct _IdeRunContext IdeRunContext;
 typedef struct _IdeRunCommand IdeRunCommand;
 typedef struct _IdeRunCommandProvider IdeRunCommandProvider;
 typedef struct _IdeRunManager IdeRunManager;
-typedef struct _IdeRunner IdeRunner;
-typedef struct _IdeRunnerAddin IdeRunnerAddin;
 typedef struct _IdeRuntime IdeRuntime;
 typedef struct _IdeRuntimeManager IdeRuntimeManager;
 typedef struct _IdeRuntimeProvider IdeRuntimeProvider;

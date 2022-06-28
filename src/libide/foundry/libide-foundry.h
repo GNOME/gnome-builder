@@ -60,8 +60,6 @@ G_BEGIN_DECLS
 #include "ide-run-context.h"
 #include "ide-run-manager.h"
 #include "ide-run-tool.h"
-#include "ide-runner-addin.h"
-#include "ide-runner.h"
 #include "ide-runtime-manager.h"
 #include "ide-runtime-provider.h"
 #include "ide-runtime.h"

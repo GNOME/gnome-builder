@@ -39,7 +39,6 @@
 #include "ide-pipeline.h"
 #include "ide-run-context.h"
 #include "ide-runtime.h"
-#include "ide-runner.h"
 #include "ide-toolchain.h"
 #include "ide-triplet.h"
 
@@ -580,31 +579,6 @@ ide_runtime_prepare_configuration (IdeRuntime       *self,
   g_return_if_fail (IDE_IS_CONFIG (configuration));
 
   IDE_RUNTIME_GET_CLASS (self)->prepare_configuration (self, configuration);
-}
-
-/**
- * ide_runtime_create_runner:
- * @self: An #IdeRuntime
- * @build_target: (nullable): An #IdeBuildTarget or %NULL
- *
- * Creates a new runner that can be used to execute the build target within
- * the runtime. This should be used to implement such features as "run target"
- * or "run unit test" inside the target runtime.
- *
- * If @build_target is %NULL, the runtime should create a runner that allows
- * the caller to specify the binary using the #IdeRunner API.
- *
- * Returns: (transfer full) (nullable): An #IdeRunner if successful, otherwise
- *   %NULL and @error is set.
- */
-IdeRunner *
-ide_runtime_create_runner (IdeRuntime     *self,
-                           IdeBuildTarget *build_target)
-{
-  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
-  g_return_val_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target), NULL);
-
-  return IDE_RUNTIME_GET_CLASS (self)->create_runner (self, build_target);
 }
 
 GQuark
