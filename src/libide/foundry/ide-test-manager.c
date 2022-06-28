@@ -1097,7 +1097,7 @@ ide_test_manager_open_pty (IdeTestManager *self)
   if (self->child_pty == -1)
     {
       VtePty *pty = ide_test_manager_get_pty (self);
-      self->child_pty = ide_pty_intercept_create_slave (vte_pty_get_fd (pty), TRUE);
+      self->child_pty = ide_pty_intercept_create_producer (vte_pty_get_fd (pty), TRUE);
     }
 
   return dup (self->child_pty);
