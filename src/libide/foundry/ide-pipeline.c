@@ -60,7 +60,7 @@
 G_DEFINE_QUARK (ide_build_error, ide_build_error)
 
 /**
- * SECTION:idebuildpipeline
+ * SECTION:idepipeline
  * @title: IdePipeline
  * @short_description: Pluggable build pipeline
  * @include: ide.h
