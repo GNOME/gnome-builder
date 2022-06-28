@@ -52,8 +52,6 @@ struct _IdeRuntimeClass
   gboolean                (*contains_program_in_path) (IdeRuntime           *self,
                                                        const gchar          *program,
                                                        GCancellable         *cancellable);
-  IdeSubprocessLauncher  *(*create_launcher)          (IdeRuntime           *self,
-                                                       GError              **error);
   void                    (*prepare_configuration)    (IdeRuntime           *self,
                                                        IdeConfig            *config);
   void                    (*prepare_to_run)           (IdeRuntime           *self,
@@ -79,9 +77,6 @@ IDE_AVAILABLE_IN_ALL
 gboolean                ide_runtime_contains_program_in_path (IdeRuntime      *self,
                                                               const gchar     *program,
                                                               GCancellable    *cancellable);
-IDE_AVAILABLE_IN_ALL
-IdeSubprocessLauncher  *ide_runtime_create_launcher          (IdeRuntime      *self,
-                                                              GError         **error);
 IDE_AVAILABLE_IN_ALL
 void                    ide_runtime_prepare_to_run           (IdeRuntime      *self,
                                                               IdePipeline     *pipeline,
