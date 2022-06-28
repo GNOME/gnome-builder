@@ -55,12 +55,14 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
     {
     case IDE_TERMINAL_RUN_ON_HOST:
       ide_run_context_push_host (run_context);
+      ide_run_context_add_minimal_environment (run_context);
       ide_run_context_append_argv (run_context, user_shell);
       if (ide_shell_supports_dash_login (user_shell))
         ide_run_context_append_argv (run_context, "--login");
       break;
 
     case IDE_TERMINAL_RUN_AS_SUBPROCESS:
+      ide_run_context_add_minimal_environment (run_context);
       if (g_find_program_in_path (user_shell))
         {
           ide_run_context_append_argv (run_context, user_shell);
@@ -111,8 +113,6 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
     default:
       g_assert_not_reached ();
     }
-
-  ide_run_context_add_minimal_environment (run_context);
 
   IDE_RUN_COMMAND_CLASS (ide_terminal_run_command_parent_class)->prepare_to_run (run_command, run_context, context);
 
