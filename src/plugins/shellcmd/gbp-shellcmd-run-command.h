@@ -53,7 +53,5 @@ void                   gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunC
 GbpShellcmdLocality    gbp_shellcmd_run_command_get_locality    (GbpShellcmdRunCommand *self);
 void                   gbp_shellcmd_run_command_set_locality    (GbpShellcmdRunCommand *self,
                                                                  GbpShellcmdLocality    locality);
-IdeTerminalLauncher   *gbp_shellcmd_run_command_create_launcher (GbpShellcmdRunCommand *self,
-                                                                 IdeContext            *context);
 
 G_END_DECLS

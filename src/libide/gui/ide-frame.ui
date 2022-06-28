@@ -108,7 +108,8 @@
                 <child>
                   <object class="GtkButton">
                     <property name="label" translatable="yes">New Terminal</property>
-                    <property name="action-name">win.new-terminal</property>
+                    <property name="action-name">terminal.terminal-on-host</property>
+                    <property name="action-target">''</property>
                   </object>
                 </child>
               </object>

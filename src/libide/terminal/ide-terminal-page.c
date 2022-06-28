@@ -37,6 +37,7 @@
 #include "ide-terminal-page.h"
 #include "ide-terminal-page-private.h"
 #include "ide-terminal-page-actions.h"
+#include "ide-terminal-run-command-private.h"
 
 #define FLAPPING_DURATION_USEC (G_USEC_PER_SEC / 20)
 
@@ -346,8 +347,14 @@ ide_terminal_page_context_set (GtkWidget  *widget,
   g_assert (IDE_IS_TERMINAL_PAGE (self));
   g_assert (!context || IDE_IS_CONTEXT (context));
 
-  if (self->launcher == NULL && context != NULL)
-    self->launcher = ide_terminal_launcher_new (context);
+  if (context == NULL)
+    return;
+
+  if (self->launcher == NULL)
+    {
+      g_autoptr(IdeRunCommand) run_command = ide_terminal_run_command_new (IDE_TERMINAL_RUN_ON_HOST);
+      self->launcher = ide_terminal_launcher_new (context, run_command);
+    }
 }
 
 static GFile *
@@ -509,7 +516,7 @@ ide_terminal_page_class_init (IdeTerminalPageClass *klass)
                          "Launcher",
                          "The launcher to use for spawning",
                          IDE_TYPE_TERMINAL_LAUNCHER,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -541,6 +548,22 @@ ide_terminal_page_init (IdeTerminalPage *self)
   ide_terminal_page_actions_init (self);
 
   ide_widget_set_context_handler (self, ide_terminal_page_context_set);
+}
+
+/**
+ * ide_terminal_page_get_pty:
+ * @self: a #IdeTerminalPage
+ *
+ * Gets the #VtePty for the page.
+ *
+ * Returns: (transfer none): a #VtePty
+ */
+VtePty *
+ide_terminal_page_get_pty (IdeTerminalPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TERMINAL_PAGE (self), NULL);
+
+  return self->pty;
 }
 
 void
@@ -581,21 +604,8 @@ ide_terminal_page_set_launcher (IdeTerminalPage     *self,
 
   if (g_set_object (&self->launcher, launcher))
     {
-      gboolean can_split;
-
-      if (launcher != NULL)
-        {
-          const gchar *title = ide_terminal_launcher_get_title (launcher);
-          panel_widget_set_title (PANEL_WIDGET (self), title);
-          can_split = ide_terminal_launcher_can_respawn (launcher);
-        }
-      else
-        {
-          self->manage_spawn = FALSE;
-          can_split = FALSE;
-        }
-
-      ide_page_set_can_split (IDE_PAGE (self), can_split);
+      ide_page_set_can_split (IDE_PAGE (self), TRUE);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAUNCHER]);
     }
 }
 
