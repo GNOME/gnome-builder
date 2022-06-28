@@ -201,130 +201,22 @@ ide_runtime_real_prepare_configuration (IdeRuntime *self,
     }
 }
 
-static IdeRunner *
-ide_runtime_real_create_runner (IdeRuntime     *self,
-                                IdeBuildTarget *build_target)
+static GFile *
+ide_runtime_null_translate_file (IdeRuntime *self,
+                                 GFile      *file)
 {
-  IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
-  IdeEnvironment *env;
-  g_autoptr(GFile) installdir = NULL;
-  g_auto(GStrv) argv = NULL;
-  g_autofree gchar *cwd = NULL;
-  IdeConfigManager *config_manager;
-  const gchar *prefix;
-  IdeContext *context;
-  IdeRunner *runner;
-  IdeConfig *config;
-
-  g_assert (IDE_IS_RUNTIME (self));
-  g_assert (!build_target || IDE_IS_BUILD_TARGET (build_target));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  config_manager = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (config_manager);
-  prefix = ide_config_get_prefix (config);
-
-  runner = ide_runner_new (context);
-  g_assert (IDE_IS_RUNNER (runner));
-
-  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runner));
-
-  env = ide_runner_get_environment (runner);
-
-  if (ide_str_equal0 (priv->id, "host"))
-    ide_runner_set_run_on_host (runner, TRUE);
-
-  if (build_target != NULL)
-    {
-      ide_runner_set_build_target (runner, build_target);
-
-      installdir = ide_build_target_get_install_directory (build_target);
-      argv = ide_build_target_get_argv (build_target);
-      cwd = ide_build_target_get_cwd (build_target);
-    }
-
-  /* Possibly translate relative paths for the binary */
-  if (argv && argv[0] && !g_path_is_absolute (argv[0]))
-    {
-      const gchar *slash = strchr (argv[0], '/');
-
-      if (slash != NULL)
-        {
-          g_autofree gchar *copy = g_strdup (slash ? (slash + 1) : argv[0]);
-
-          g_free (argv[0]);
-
-          if (installdir != NULL)
-            {
-              g_autoptr(GFile) dest = g_file_get_child (installdir, copy);
-              argv[0] = g_file_get_path (dest);
-            }
-          else
-            argv[0] = g_steal_pointer (&copy);
-        }
-    }
-
-  if (installdir != NULL)
-    {
-      g_autoptr(GFile) parentdir = NULL;
-      g_autofree gchar *schemadir = NULL;
-      g_autofree gchar *parentpath = NULL;
-
-      /* GSettings requires an env var for non-standard dirs */
-      if ((parentdir = g_file_get_parent (installdir)))
-        {
-          parentpath = g_file_get_path (parentdir);
-          schemadir = g_build_filename (parentpath, "share", "glib-2.0", "schemas", NULL);
-          ide_environment_setenv (env, "GSETTINGS_SCHEMA_DIR", schemadir);
-        }
-    }
-
-  if (prefix != NULL)
-    {
-      static const gchar *tries[] = { "lib64", "lib", "lib32", };
-      const gchar *old_path = ide_environment_getenv (env, "LD_LIBRARY_PATH");
-
-      for (guint i = 0; i < G_N_ELEMENTS (tries); i++)
-        {
-          g_autofree gchar *ld_library_path = g_build_filename (prefix, tries[i], NULL);
-
-          if (g_file_test (ld_library_path, G_FILE_TEST_IS_DIR))
-            {
-              if (old_path != NULL)
-                {
-                  g_autofree gchar *freeme = g_steal_pointer (&ld_library_path);
-                  ld_library_path = g_strdup_printf ("%s:%s", freeme, old_path);
-                }
-
-              ide_environment_setenv (env, "LD_LIBRARY_PATH", ld_library_path);
-              break;
-            }
-        }
-    }
-
-  if (argv != NULL)
-    ide_runner_push_args (runner, (const gchar * const *)argv);
-
-  if (cwd != NULL)
-    ide_runner_set_cwd (runner, cwd);
-
-  return runner;
+  return NULL;
 }
 
 static GFile *
-ide_runtime_real_translate_file (IdeRuntime *self,
-                                 GFile      *file)
+ide_runtime_flatpak_translate_file (IdeRuntime *self,
+                                    GFile      *file)
 {
   g_autofree gchar *path = NULL;
 
   g_assert (IDE_IS_RUNTIME (self));
   g_assert (G_IS_FILE (file));
-
-  /* We only need to translate when running as flatpak */
-  if (!ide_is_flatpak ())
-    return NULL;
+  g_assert (ide_is_flatpak ());
 
   /* Only deal with native files */
   if (!g_file_is_native (file) || NULL == (path = g_file_get_path (file)))
@@ -452,10 +344,13 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
   i_object_class->repr = ide_runtime_repr;
 
   klass->create_launcher = ide_runtime_real_create_launcher;
-  klass->create_runner = ide_runtime_real_create_runner;
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
   klass->prepare_configuration = ide_runtime_real_prepare_configuration;
-  klass->translate_file = ide_runtime_real_translate_file;
+
+  if (ide_is_flatpak ())
+    klass->translate_file = ide_runtime_flatpak_translate_file;
+  else
+    klass->translate_file = ide_runtime_null_translate_file;
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
