@@ -1,6 +1,6 @@
-/* testui-plugin.c
+/* gbp-testui-workspace-addin.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,20 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "testui-plugin"
+#pragma once
 
-#include "config.h"
+#include <glib-object.h>
 
-#include <libpeas/peas.h>
+G_BEGIN_DECLS
 
-#include <libide-gui.h>
+#define GBP_TYPE_TESTUI_WORKSPACE_ADDIN (gbp_testui_workspace_addin_get_type())
 
-#include "gbp-testui-workspace-addin.h"
+G_DECLARE_FINAL_TYPE (GbpTestuiWorkspaceAddin, gbp_testui_workspace_addin, GBP, TESTUI_WORKSPACE_ADDIN, GObject)
 
-_IDE_EXTERN void
-_gbp_testui_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKSPACE_ADDIN,
-                                              GBP_TYPE_TESTUI_WORKSPACE_ADDIN);
-}
+G_END_DECLS

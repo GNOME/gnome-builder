@@ -1,6 +1,6 @@
-/* testui-plugin.c
+/* gbp-testui-panel.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,20 +18,16 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "testui-plugin"
-
-#include "config.h"
-
-#include <libpeas/peas.h>
+#pragma once
 
 #include <libide-gui.h>
 
-#include "gbp-testui-workspace-addin.h"
+G_BEGIN_DECLS
 
-_IDE_EXTERN void
-_gbp_testui_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKSPACE_ADDIN,
-                                              GBP_TYPE_TESTUI_WORKSPACE_ADDIN);
-}
+#define GBP_TYPE_TESTUI_PANEL (gbp_testui_panel_get_type())
+
+G_DECLARE_FINAL_TYPE (GbpTestuiPanel, gbp_testui_panel, GBP, TESTUI_PANEL, IdePane)
+
+GbpTestuiPanel *gbp_testui_panel_new (void);
+
+G_END_DECLS
