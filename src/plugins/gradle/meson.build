@@ -6,8 +6,6 @@ plugins_sources += files([
   'gbp-gradle-build-system.c',
   'gbp-gradle-pipeline-addin.c',
   'gbp-gradle-run-command-provider.c',
-  'gbp-gradle-test.c',
-  'gbp-gradle-test-provider.c',
 ])
 
 plugin_gradle_resources = gnome.compile_resources(
