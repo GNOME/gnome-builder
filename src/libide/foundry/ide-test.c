@@ -154,7 +154,7 @@ ide_test_class_init (IdeTestClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_STATUS] =
-    g_param_spec_enum ("run-command", NULL, NULL,
+    g_param_spec_enum ("status", NULL, NULL,
                        IDE_TYPE_TEST_STATUS,
                        IDE_TEST_STATUS_NONE,
                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
