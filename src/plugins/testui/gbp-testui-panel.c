@@ -26,10 +26,23 @@
 
 struct _GbpTestuiPanel
 {
-  IdePane parent_instance;
+  IdePane          parent_instance;
+
+  GtkListView    *list_view;
+  GtkNoSelection *selection;
+
+  GListModel      *model;
 };
 
 G_DEFINE_FINAL_TYPE (GbpTestuiPanel, gbp_testui_panel, IDE_TYPE_PANE)
+
+enum {
+  PROP_0,
+  PROP_MODEL,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
 
 static void
 gbp_testui_panel_activate_cb (GbpTestuiPanel *self,
@@ -54,11 +67,88 @@ gbp_testui_panel_activate_cb (GbpTestuiPanel *self,
 }
 
 static void
+gbp_testui_panel_set_model (GbpTestuiPanel *self,
+                            GListModel     *model)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TESTUI_PANEL (self));
+  g_assert (!model || G_IS_LIST_MODEL (model));
+
+  if (g_set_object (&self->model, model))
+    {
+      gtk_no_selection_set_model (self->selection, model);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
+    }
+}
+
+static void
+gbp_testui_panel_dispose (GObject *object)
+{
+  GbpTestuiPanel *self = (GbpTestuiPanel *)object;
+
+  g_clear_object (&self->model);
+
+  G_OBJECT_CLASS (gbp_testui_panel_parent_class)->dispose (object);
+}
+
+static void
+gbp_testui_panel_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GbpTestuiPanel *self = GBP_TESTUI_PANEL (object);
+
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      g_value_set_object (value, self->model);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gbp_testui_panel_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GbpTestuiPanel *self = GBP_TESTUI_PANEL (object);
+
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      gbp_testui_panel_set_model (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_testui_panel_class_init (GbpTestuiPanelClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = gbp_testui_panel_dispose;
+  object_class->get_property = gbp_testui_panel_get_property;
+  object_class->set_property = gbp_testui_panel_set_property;
+
+  properties [PROP_MODEL] =
+    g_param_spec_object ("model", NULL, NULL,
+                         G_TYPE_LIST_MODEL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/testui/gbp-testui-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpTestuiPanel, list_view);
+  gtk_widget_class_bind_template_child (widget_class, GbpTestuiPanel, selection);
   gtk_widget_class_bind_template_callback (widget_class, gbp_testui_panel_activate_cb);
 }
 

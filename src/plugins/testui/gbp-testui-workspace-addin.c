@@ -41,6 +41,8 @@ gbp_testui_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpTestuiWorkspaceAddin *self = (GbpTestuiWorkspaceAddin *)addin;
   g_autoptr(IdePanelPosition) position = NULL;
+  IdeTestManager *test_manager;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -50,7 +52,13 @@ gbp_testui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
 
+  context = ide_workspace_get_context (workspace);
+  test_manager = ide_test_manager_from_context (context);
   self->panel = gbp_testui_panel_new ();
+  g_object_bind_property (test_manager, "model",
+                          self->panel, "model",
+                          G_BINDING_SYNC_CREATE);
+
   position = ide_panel_position_new ();
   ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_END);
   ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
