@@ -29,13 +29,12 @@
 #include <libide-threading.h>
 
 #include "ide-build-manager.h"
-#include "ide-pipeline.h"
 #include "ide-foundry-compat.h"
+#include "ide-pipeline.h"
 #include "ide-run-command.h"
 #include "ide-run-manager.h"
+#include "ide-test.h"
 #include "ide-test-manager.h"
-#include "ide-test-private.h"
-#include "ide-test-provider.h"
 
 #define MAX_UNIT_TESTS 4
 
