@@ -6,8 +6,6 @@ plugins_sources += files([
   'gbp-maven-build-system.c',
   'gbp-maven-pipeline-addin.c',
   'gbp-maven-run-command-provider.c',
-  'gbp-maven-test.c',
-  'gbp-maven-test-provider.c',
 ])
 
 plugin_maven_resources = gnome.compile_resources(

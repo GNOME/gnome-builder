@@ -30,7 +30,6 @@
 #include "gbp-maven-build-system-discovery.h"
 #include "gbp-maven-pipeline-addin.h"
 #include "gbp-maven-run-command-provider.h"
-#include "gbp-maven-test-provider.h"
 
 _IDE_EXTERN void
 _gbp_maven_register_types (PeasObjectModule *module)
@@ -47,7 +46,4 @@ _gbp_maven_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUN_COMMAND_PROVIDER,
                                               GBP_TYPE_MAVEN_RUN_COMMAND_PROVIDER);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_TEST_PROVIDER,
-                                              GBP_TYPE_MAVEN_TEST_PROVIDER);
 }

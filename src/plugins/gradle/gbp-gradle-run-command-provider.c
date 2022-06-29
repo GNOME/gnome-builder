@@ -45,6 +45,7 @@ find_test_files_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GListStore *store;
+  const char *srcdir;
 
   IDE_ENTRY;
 
@@ -54,7 +55,10 @@ find_test_files_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   store = ide_task_get_task_data (task);
+  srcdir = g_object_get_data (G_OBJECT (task), "SRCDIR");
+
   g_assert (G_IS_LIST_STORE (store));
+  g_assert (srcdir != NULL);
 
   if (!(files = ide_g_file_find_finish (basedir, result, &error)))
     {
@@ -113,6 +117,7 @@ find_test_files_cb (GObject      *object,
           ide_run_command_set_display_name (run_command, name);
           ide_run_command_set_kind (run_command, IDE_RUN_COMMAND_KIND_TEST);
           ide_run_command_set_argv (run_command, IDE_STRV_INIT ("./gradlew", "test", "--tests", full_name));
+          ide_run_command_set_cwd (run_command, srcdir);
 
           g_list_store_append (store, run_command);
         }
@@ -164,6 +169,11 @@ gbp_gradle_run_command_provider_list_commands_async (IdeRunCommandProvider *prov
 
   project_dir = gbp_gradle_build_system_get_project_dir (GBP_GRADLE_BUILD_SYSTEM (build_system));
   testdir = g_file_new_build_filename (project_dir, "src", "test", "java", NULL);
+
+  g_object_set_data_full (G_OBJECT (task),
+                          "SRCDIR",
+                          g_strdup (project_dir),
+                          g_free);
 
   run_command = ide_run_command_new ();
   ide_run_command_set_id (run_command, "gradle:run");
