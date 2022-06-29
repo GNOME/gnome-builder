@@ -87,6 +87,14 @@ IDE_DEFINE_ACTION_GROUP (IdeTestManager, ide_test_manager, {
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTestManager, ide_test_manager, IDE_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_test_manager_init_action_group))
 
+enum {
+  PROP_0,
+  PROP_MODEL,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
+
 static void
 run_all_free (RunAll *state)
 {
@@ -150,7 +158,12 @@ static gpointer
 map_run_command_to_test (gpointer item,
                          gpointer user_data)
 {
-  return ide_test_new (IDE_RUN_COMMAND (item));
+  g_autoptr(IdeRunCommand) run_command = item;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_COMMAND (run_command));
+
+  return ide_test_new (run_command);
 }
 
 static void
@@ -165,11 +178,49 @@ ide_test_manager_dispose (GObject *object)
 }
 
 static void
+ide_test_manager_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  IdeTestManager *self = IDE_TEST_MANAGER (object);
+
+  switch (prop_id)
+    {
+    case PROP_MODEL:
+      g_value_set_object (value, self->tests);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_test_manager_class_init (IdeTestManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_test_manager_dispose;
+  object_class->get_property = ide_test_manager_get_property;
+
+  /**
+   * IdeTestManager:model:
+   *
+   * The "model" property contains a #GListModel of #IdeTest.
+   *
+   * Fetching this property will not cause the #GListModel to be
+   * populated. That is only done by calling ide_test_manager_list_tests().
+   *
+   * This may be a more convenient way to get access to the model when you
+   * do not want the tests to autopopulate just to be bound to UI elements.
+   */
+  properties [PROP_MODEL] =
+    g_param_spec_object ("model", NULL, NULL,
+                         G_TYPE_LIST_MODEL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -480,7 +531,12 @@ static gboolean
 filter_tests_func (gpointer item,
                    gpointer user_data)
 {
-  return ide_run_command_get_kind (IDE_RUN_COMMAND (item)) == IDE_RUN_COMMAND_KIND_TEST;
+  IdeRunCommand *run_command = item;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_COMMAND (run_command));
+
+  return ide_run_command_get_kind (run_command) == IDE_RUN_COMMAND_KIND_TEST;
 }
 
 static void
