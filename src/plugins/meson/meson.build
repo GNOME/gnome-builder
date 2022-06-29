@@ -9,8 +9,6 @@ plugins_sources += files([
   'gbp-meson-introspection.c',
   'gbp-meson-pipeline-addin.c',
   'gbp-meson-run-command-provider.c',
-  'gbp-meson-test-provider.c',
-  'gbp-meson-test.c',
   'gbp-meson-toolchain-provider.c',
   'gbp-meson-toolchain.c',
   'gbp-meson-utils.c',
