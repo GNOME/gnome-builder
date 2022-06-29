@@ -68,7 +68,6 @@ G_BEGIN_DECLS
 #include "ide-simple-build-target.h"
 #include "ide-simple-toolchain.h"
 #include "ide-test-manager.h"
-#include "ide-test-provider.h"
 #include "ide-test.h"
 #include "ide-toolchain-manager.h"
 #include "ide-toolchain-provider.h"
