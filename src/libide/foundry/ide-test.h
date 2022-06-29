@@ -24,7 +24,11 @@
 # error "Only <libide-foundry.h> can be included directly."
 #endif
 
+#include <vte/vte.h>
+
 #include <libide-core.h>
+
+#include "ide-foundry-types.h"
 
 G_BEGIN_DECLS
 
@@ -39,39 +43,30 @@ typedef enum
 } IdeTestStatus;
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (IdeTest, ide_test, IDE, TEST, GObject)
-
-struct _IdeTestClass
-{
-  GObjectClass parent;
-
-  /*< private >*/
-  gpointer _reserved[16];
-};
+G_DECLARE_FINAL_TYPE (IdeTest, ide_test, IDE, TEST, GObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeTest       *ide_test_new              (void);
+IdeTest       *ide_test_new             (IdeRunCommand        *run_command);
 IDE_AVAILABLE_IN_ALL
-const gchar   *ide_test_get_display_name (IdeTest       *self);
+const char    *ide_test_get_id          (IdeTest              *self);
 IDE_AVAILABLE_IN_ALL
-void           ide_test_set_display_name (IdeTest       *self,
-                                          const gchar   *display_name);
+IdeTestStatus  ide_test_get_status      (IdeTest              *self);
 IDE_AVAILABLE_IN_ALL
-const gchar   *ide_test_get_group        (IdeTest       *self);
+const char    *ide_test_get_title       (IdeTest              *self);
 IDE_AVAILABLE_IN_ALL
-void           ide_test_set_group        (IdeTest       *self,
-                                          const gchar   *group);
+const char    *ide_test_get_icon_name   (IdeTest              *self);
 IDE_AVAILABLE_IN_ALL
-const gchar   *ide_test_get_icon_name    (IdeTest       *self);
+IdeRunCommand *ide_test_get_run_command (IdeTest              *self);
 IDE_AVAILABLE_IN_ALL
-const gchar   *ide_test_get_id           (IdeTest       *self);
+void           ide_test_run_async       (IdeTest              *self,
+                                         IdePipeline          *pipeline,
+                                         VtePty               *pty,
+                                         GCancellable         *cancellable,
+                                         GAsyncReadyCallback   callback,
+                                         gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-void           ide_test_set_id           (IdeTest       *self,
-                                          const gchar   *id);
-IDE_AVAILABLE_IN_ALL
-IdeTestStatus  ide_test_get_status       (IdeTest       *self);
-IDE_AVAILABLE_IN_ALL
-void           ide_test_set_status       (IdeTest       *self,
-                                          IdeTestStatus  status);
+gboolean        ide_test_run_finish     (IdeTest              *self,
+                                         GAsyncResult         *result,
+                                         GError              **error);
 
 G_END_DECLS

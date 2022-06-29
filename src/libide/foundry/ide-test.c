@@ -1,6 +1,6 @@
 /* ide-test.c
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,57 +22,59 @@
 
 #include "config.h"
 
+#include <libide-io.h>
+#include <libide-threading.h>
+
+#include "ide-run-command.h"
+#include "ide-run-context.h"
 #include "ide-foundry-enums.h"
-
+#include "ide-pipeline.h"
 #include "ide-test.h"
-#include "ide-test-private.h"
-#include "ide-test-provider.h"
 
-typedef struct
+struct _IdeTest
 {
-  /* Unowned references */
-  IdeTestProvider *provider;
-
-  /* Owned references */
-  gchar *display_name;
-  gchar *group;
-  gchar *id;
-
-  IdeTestStatus status;
-} IdeTestPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE (IdeTest, ide_test, G_TYPE_OBJECT)
+  GObject        parent_instance;
+  IdeRunCommand *run_command;
+  IdeTestStatus  status;
+};
 
 enum {
   PROP_0,
-  PROP_DISPLAY_NAME,
-  PROP_GROUP,
+  PROP_ICON_NAME,
   PROP_ID,
+  PROP_RUN_COMMAND,
   PROP_STATUS,
+  PROP_TITLE,
   N_PROPS
 };
 
+G_DEFINE_FINAL_TYPE (IdeTest, ide_test, G_TYPE_OBJECT)
+
 static GParamSpec *properties [N_PROPS];
 
-IdeTest *
-ide_test_new (void)
+static void
+ide_test_set_status (IdeTest       *self,
+                     IdeTestStatus  status)
 {
-  return g_object_new (IDE_TYPE_TEST, NULL);
+  g_assert (IDE_IS_TEST (self));
+
+  if (status != self->status)
+    {
+      self->status = status;
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_STATUS]);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
+    }
 }
 
 static void
-ide_test_finalize (GObject *object)
+ide_test_dispose (GObject *object)
 {
   IdeTest *self = (IdeTest *)object;
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
 
-  priv->provider = NULL;
+  g_clear_object (&self->run_command);
 
-  g_clear_pointer (&priv->group, g_free);
-  g_clear_pointer (&priv->id, g_free);
-  g_clear_pointer (&priv->display_name, g_free);
-
-  G_OBJECT_CLASS (ide_test_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_test_parent_class)->dispose (object);
 }
 
 static void
@@ -85,20 +87,24 @@ ide_test_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ICON_NAME:
+      g_value_set_string (value, ide_test_get_icon_name (self));
+      break;
+
     case PROP_ID:
       g_value_set_string (value, ide_test_get_id (self));
       break;
 
-    case PROP_GROUP:
-      g_value_set_string (value, ide_test_get_group (self));
-      break;
-
-    case PROP_DISPLAY_NAME:
-      g_value_set_string (value, ide_test_get_display_name (self));
+    case PROP_RUN_COMMAND:
+      g_value_set_object (value, ide_test_get_run_command (self));
       break;
 
     case PROP_STATUS:
       g_value_set_enum (value, ide_test_get_status (self));
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, ide_test_get_title (self));
       break;
 
     default:
@@ -116,20 +122,8 @@ ide_test_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_GROUP:
-      ide_test_set_group (self, g_value_get_string (value));
-      break;
-
-    case PROP_ID:
-      ide_test_set_id (self, g_value_get_string (value));
-      break;
-
-    case PROP_DISPLAY_NAME:
-      ide_test_set_display_name (self, g_value_get_string (value));
-      break;
-
-    case PROP_STATUS:
-      ide_test_set_status (self, g_value_get_enum (value));
+    case PROP_RUN_COMMAND:
+      g_set_object (&self->run_command, g_value_get_object (value));
       break;
 
     default:
@@ -142,61 +136,32 @@ ide_test_class_init (IdeTestClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ide_test_finalize;
+  object_class->dispose = ide_test_dispose;
   object_class->get_property = ide_test_get_property;
   object_class->set_property = ide_test_set_property;
 
-  /**
-   * IdeTest:display_name:
-   *
-   * The "display-name" property contains the display name of the test as
-   * the user is expected to read in UI elements.
-   */
-  properties [PROP_DISPLAY_NAME] =
-    g_param_spec_string ("display-name",
-                         "Name",
-                         "The display_name of the unit test",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+  properties [PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  /**
-   * IdeTest:id:
-   *
-   * The "id" property contains the unique identifier of the test.
-   */
   properties [PROP_ID] =
-    g_param_spec_string ("id",
-                         "Id",
-                         "The unique identifier of the test",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+    g_param_spec_string ("id", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  /**
-   * IdeTest:group:
-   *
-   * The "group" property contains the name of the gruop the test belongs
-   * to, if any.
-   */
-  properties [PROP_GROUP] =
-    g_param_spec_string ("group",
-                         "Group",
-                         "The name of the group the test belongs to, if any",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+  properties [PROP_RUN_COMMAND] =
+    g_param_spec_object ("run-command", NULL, NULL,
+                         IDE_TYPE_RUN_COMMAND,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  /**
-   * IdeTest::status:
-   *
-   * The "status" property contains the status of the test, updated by
-   * providers when they have run the test.
-   */
   properties [PROP_STATUS] =
-    g_param_spec_enum ("status",
-                       "Status",
-                       "The status of the test",
+    g_param_spec_enum ("run-command", NULL, NULL,
                        IDE_TYPE_TEST_STATUS,
                        IDE_TEST_STATUS_NONE,
-                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                       (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TITLE] =
+    g_param_spec_string ("title", NULL, NULL, NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -206,190 +171,48 @@ ide_test_init (IdeTest *self)
 {
 }
 
-IdeTestProvider *
-_ide_test_get_provider (IdeTest *self)
+IdeTest *
+ide_test_new (IdeRunCommand *run_command)
 {
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (run_command), NULL);
 
-  g_return_val_if_fail (IDE_IS_TEST (self), NULL);
-
-  return priv->provider;
+  return g_object_new (IDE_TYPE_TEST,
+                       "run-command", run_command,
+                       NULL);
 }
 
-void
-_ide_test_set_provider (IdeTest         *self,
-                        IdeTestProvider *provider)
-{
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TEST (self));
-  g_return_if_fail (!provider || IDE_IS_TEST_PROVIDER (provider));
-
-  priv->provider = provider;
-}
-
-/**
- * ide_test_get_display_name:
- * @self: An #IdeTest
- *
- * Gets the "display-name" property of the test.
- *
- * Returns: (nullable): The display_name of the test or %NULL
- */
-const gchar *
-ide_test_get_display_name (IdeTest *self)
-{
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TEST (self), NULL);
-
-  return priv->display_name;
-}
-
-/**
- * ide_test_set_display_name:
- * @self: An #IdeTest
- * @display_name: (nullable): The display_name of the test, or %NULL to unset
- *
- * Sets the "display-name" property of the unit test.
- */
-void
-ide_test_set_display_name (IdeTest     *self,
-                           const gchar *display_name)
-{
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TEST (self));
-
-  if (g_strcmp0 (display_name, priv->display_name) != 0)
-    {
-      g_free (priv->display_name);
-      priv->display_name = g_strdup (display_name);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DISPLAY_NAME]);
-    }
-}
-
-/**
- * ide_test_get_group:
- * @self: a #IdeTest
- *
- * Gets the "group" property.
- *
- * The group name is used to group tests together.
- *
- * Returns: (nullable): The group name or %NULL.
- */
-const gchar *
-ide_test_get_group (IdeTest *self)
-{
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TEST (self), NULL);
-
-  return priv->group;
-}
-
-/**
- * ide_test_set_group:
- * @self: a #IdeTest
- * @group: (nullable): the name of the group or %NULL
- *
- * Sets the #IdeTest:group property.
- *
- * The group property is used to group related tests together.
- */
-void
-ide_test_set_group (IdeTest     *self,
-                    const gchar *group)
-{
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TEST (self));
-
-  if (g_strcmp0 (group, priv->group) != 0)
-    {
-      g_free (priv->group);
-      priv->group = g_strdup (group);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_GROUP]);
-    }
-}
-
-/**
- * ide_test_get_id:
- * @self: a #IdeTest
- *
- * Gets the #IdeTest:id property.
- *
- * Returns: (nullable): The id of the test, or %NULL if it has not been set.
- */
-const gchar *
+const char *
 ide_test_get_id (IdeTest *self)
 {
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_TEST (self), NULL);
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self->run_command), NULL);
 
-  return priv->id;
-}
-
-/**
- * ide_test_set_id:
- * @self: a #IdeTest
- * @id: (nullable): the id of the test or %NULL
- *
- * Sets the #IdeTest:id property.
- *
- * The id property is used to uniquely identify the test.
- */
-void
-ide_test_set_id (IdeTest     *self,
-                 const gchar *id)
-{
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TEST (self));
-
-  if (g_strcmp0 (id, priv->id) != 0)
-    {
-      g_free (priv->id);
-      priv->id = g_strdup (id);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
-    }
+  return ide_run_command_get_id (self->run_command);
 }
 
 IdeTestStatus
 ide_test_get_status (IdeTest *self)
 {
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_TEST (self), 0);
 
-  return priv->status;
+  return self->status;
 }
 
-void
-ide_test_set_status (IdeTest       *self,
-                     IdeTestStatus  status)
+const char *
+ide_test_get_title (IdeTest *self)
 {
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
+  g_return_val_if_fail (IDE_IS_TEST (self), NULL);
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self->run_command), NULL);
 
-  g_return_if_fail (IDE_IS_TEST (self));
-
-  if (priv->status != status)
-    {
-      priv->status = status;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_STATUS]);
-    }
+  return ide_run_command_get_display_name (self->run_command);
 }
 
-const gchar *
+const char *
 ide_test_get_icon_name (IdeTest *self)
 {
-  IdeTestPrivate *priv = ide_test_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_TEST (self), NULL);
 
-  switch (priv->status)
+  switch (self->status)
     {
     case IDE_TEST_STATUS_NONE:
       return "builder-unit-tests-symbolic";
@@ -406,4 +229,116 @@ ide_test_get_icon_name (IdeTest *self)
     default:
       g_return_val_if_reached (NULL);
     }
+}
+
+/**
+ * ide_test_get_run_command:
+ * @self: a #IdeTest
+ *
+ * Gets the run command for the test.
+ *
+ * Returns: (transfer none): an #IdeTest
+ */
+IdeRunCommand *
+ide_test_get_run_command (IdeTest *self)
+{
+  g_return_val_if_fail (IDE_IS_TEST (self), NULL);
+
+  return self->run_command;
+}
+
+static void
+ide_test_wait_check_cb (GObject      *object,
+                        GAsyncResult *result,
+                        gpointer      user_data)
+{
+  IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  IdeTest *self;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SUBPROCESS (subprocess));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
+    {
+      ide_test_set_status (self, IDE_TEST_STATUS_FAILED);
+      ide_task_return_error (task, g_steal_pointer (&error));
+    }
+  else
+    {
+      ide_test_set_status (self, IDE_TEST_STATUS_SUCCESS);
+      ide_task_return_boolean (task, TRUE);
+    }
+
+  IDE_EXIT;
+}
+
+void
+ide_test_run_async (IdeTest             *self,
+                    IdePipeline         *pipeline,
+                    VtePty              *pty,
+                    GCancellable        *cancellable,
+                    GAsyncReadyCallback  callback,
+                    gpointer             user_data)
+{
+  g_autoptr(IdeRunContext) run_context = NULL;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_TEST (self));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (!pty || VTE_IS_PTY (pty));
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self->run_command));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_test_run_async);
+
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
+
+  run_context = ide_pipeline_create_run_context (pipeline, self->run_command);
+
+  if (!(subprocess = ide_run_context_spawn (run_context, &error)))
+    {
+      ide_test_set_status (self, IDE_TEST_STATUS_FAILED);
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+  else
+    {
+      ide_test_set_status (self, IDE_TEST_STATUS_RUNNING);
+      ide_subprocess_wait_check_async (subprocess,
+                                       cancellable,
+                                       ide_test_wait_check_cb,
+                                       g_steal_pointer (&task));
+      IDE_EXIT;
+    }
+}
+
+gboolean
+ide_test_run_finish (IdeTest       *self,
+                     GAsyncResult  *result,
+                     GError       **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TEST (self));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }

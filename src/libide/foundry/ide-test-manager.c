@@ -1,6 +1,6 @@
 /* ide-test-manager.c
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,11 +31,20 @@
 #include "ide-build-manager.h"
 #include "ide-pipeline.h"
 #include "ide-foundry-compat.h"
+#include "ide-run-command.h"
+#include "ide-run-manager.h"
 #include "ide-test-manager.h"
 #include "ide-test-private.h"
 #include "ide-test-provider.h"
 
 #define MAX_UNIT_TESTS 4
+
+typedef enum
+{
+  LIST_STATE_INITIAL,
+  LIST_STATE_WAITING_FOR_RESULTS,
+  LIST_STATE_READY,
+} ListState;
 
 /**
  * SECTION:ide-test-manager
@@ -52,475 +61,126 @@
 
 struct _IdeTestManager
 {
-  IdeObject         parent_instance;
-
-  PeasExtensionSet *providers;
-  GPtrArray        *tests_by_provider;
-  GtkTreeStore     *tests_store;
-  GCancellable     *cancellable;
-  VtePty           *pty;
-  gint              child_pty;
-  gint              n_active;
+  IdeObject        parent_instance;
+  GtkMapListModel *tests;
+  VtePty          *pty;
+  ListState        list_state;
 };
 
 typedef struct
 {
-  IdeTestProvider *provider;
-  GPtrArray       *tests;
-} TestsByProvider;
+  IdePipeline *pipeline;
+  GPtrArray   *tests;
+  VtePty      *pty;
+  guint        n_active;
+} RunAll;
 
-typedef struct
-{
-  GQueue queue;
-  guint  n_active;
-} RunAllTaskData;
-
-enum {
-  PROP_0,
-  PROP_LOADING,
-  N_PROPS
-};
-
-static void initable_iface_init              (GInitableIface *iface);
-static void ide_test_manager_actions_run_all (IdeTestManager *self,
-                                              GVariant       *param);
-static void ide_test_manager_actions_reload  (IdeTestManager *self,
-                                              GVariant       *param);
-static void ide_test_manager_actions_cancel  (IdeTestManager *self,
-                                              GVariant       *param);
+static void ide_test_manager_actions_test     (IdeTestManager *self,
+                                               GVariant       *param);
+static void ide_test_manager_actions_test_all (IdeTestManager *self,
+                                               GVariant       *param);
 
 IDE_DEFINE_ACTION_GROUP (IdeTestManager, ide_test_manager, {
-  { "cancel", ide_test_manager_actions_cancel },
-  { "run-all", ide_test_manager_actions_run_all },
-  { "reload-tests", ide_test_manager_actions_reload },
+  { "test", ide_test_manager_actions_test, "s" },
+  { "test-all", ide_test_manager_actions_test_all },
 })
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTestManager, ide_test_manager, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init)
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP,
-                                                ide_test_manager_init_action_group))
-
-static GParamSpec *properties [N_PROPS];
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_test_manager_init_action_group))
 
 static void
-tests_by_provider_free (gpointer data)
+run_all_free (RunAll *state)
 {
-  TestsByProvider *info = data;
+  g_assert (state != NULL);
+  g_assert (state->n_active == 0);
 
-  g_clear_pointer (&info->tests, g_ptr_array_unref);
-  g_clear_object (&info->provider);
-  g_slice_free (TestsByProvider, info);
+  g_clear_pointer (&state->tests, g_ptr_array_unref);
+  g_clear_object (&state->pipeline);
+  g_clear_object (&state->pty);
+  g_slice_free (RunAll, state);
 }
 
 static void
-ide_test_manager_destroy (IdeObject *object)
+ide_test_manager_actions_test (IdeTestManager *self,
+                               GVariant       *param)
+{
+  g_autoptr(GListModel) tests = NULL;
+  const char *test_id;
+  guint n_items;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TEST_MANAGER (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  test_id = g_variant_get_string (param, NULL);
+  tests = ide_test_manager_list_tests (self);
+  n_items = g_list_model_get_n_items (tests);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeTest) test = g_list_model_get_item (tests, i);
+
+      if (ide_str_equal0 (test_id, ide_test_get_id (test)))
+        {
+          ide_test_manager_run_async (self, test, NULL, NULL, NULL);
+          IDE_EXIT;
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_test_manager_actions_test_all (IdeTestManager *self,
+                                   GVariant       *param)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TEST_MANAGER (self));
+  g_assert (param == NULL);
+
+  ide_test_manager_run_all_async (self, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static gpointer
+map_run_command_to_test (gpointer item,
+                         gpointer user_data)
+{
+  return ide_test_new (IDE_RUN_COMMAND (item));
+}
+
+static void
+ide_test_manager_dispose (GObject *object)
 {
   IdeTestManager *self = (IdeTestManager *)object;
 
-  if (self->child_pty != -1)
-    {
-      close (self->child_pty);
-      self->child_pty = -1;
-    }
-
-  if (self->tests_store != NULL)
-    {
-      gtk_tree_store_clear (self->tests_store);
-      g_clear_object (&self->tests_store);
-    }
-
-  g_cancellable_cancel (self->cancellable);
-  g_clear_object (&self->cancellable);
-
-  g_clear_object (&self->providers);
-  g_clear_pointer (&self->tests_by_provider, g_ptr_array_unref);
-
   g_clear_object (&self->pty);
+  g_clear_object (&self->tests);
 
-  IDE_OBJECT_CLASS (ide_test_manager_parent_class)->destroy (object);
-}
-
-static void
-ide_test_manager_get_property (GObject    *object,
-                               guint       prop_id,
-                               GValue     *value,
-                               GParamSpec *pspec)
-{
-  IdeTestManager *self = IDE_TEST_MANAGER (object);
-
-  switch (prop_id)
-    {
-    case PROP_LOADING:
-      g_value_set_boolean (value, ide_test_manager_get_loading (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
+  G_OBJECT_CLASS (ide_test_manager_parent_class)->dispose (object);
 }
 
 static void
 ide_test_manager_class_init (IdeTestManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->get_property = ide_test_manager_get_property;
-
-  i_object_class->destroy = ide_test_manager_destroy;
-
-  /**
-   * IdeTestManager:loading:
-   *
-   * The "loading" property denotes if a test provider is busy loading
-   * tests in the background.
-   */
-  properties [PROP_LOADING] =
-    g_param_spec_boolean ("loading",
-                          "Loading",
-                          "If a test provider is loading tests",
-                          FALSE,
-                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, N_PROPS, properties);
+  object_class->dispose = ide_test_manager_dispose;
 }
 
 static void
 ide_test_manager_init (IdeTestManager *self)
 {
-  self->child_pty = -1;
-  self->cancellable = g_cancellable_new ();
-  self->tests_by_provider = g_ptr_array_new_with_free_func (tests_by_provider_free);
-  self->tests_store = gtk_tree_store_new (2, G_TYPE_STRING, IDE_TYPE_TEST);
-
-  ide_test_manager_set_action_enabled (self, "cancel", FALSE);
-}
-
-static void
-ide_test_manager_locate_group (IdeTestManager *self,
-                               GtkTreeIter    *iter,
-                               const gchar    *group)
-{
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (iter != NULL);
-
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self->tests_store), iter))
-    {
-      do
-        {
-          g_autofree gchar *row_group = NULL;
-
-          gtk_tree_model_get (GTK_TREE_MODEL (self->tests_store), iter,
-                              IDE_TEST_COLUMN_GROUP, &row_group,
-                              -1);
-
-          if (ide_str_equal0 (row_group, group))
-            return;
-        }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->tests_store), iter));
-    }
-
-  /* TODO: Sort groups by name? */
-
-  gtk_tree_store_append (self->tests_store, iter, NULL);
-  gtk_tree_store_set (self->tests_store, iter,
-                      IDE_TEST_COLUMN_GROUP, group,
-                      -1);
-}
-
-static void
-ide_test_manager_test_notify_status (IdeTestManager *self,
-                                     GParamSpec     *pspec,
-                                     IdeTest        *test)
-{
-  const gchar *group;
-  GtkTreeIter parent;
-  GtkTreeIter iter;
-
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (IDE_IS_TEST (test));
-
-  group = ide_test_get_group (test);
-
-  ide_test_manager_locate_group (self, &parent, group);
-
-  if (gtk_tree_model_iter_children (GTK_TREE_MODEL (self->tests_store), &iter, &parent))
-    {
-      do
-        {
-          g_autoptr(IdeTest) row_test = NULL;
-
-          gtk_tree_model_get (GTK_TREE_MODEL (self->tests_store), &iter,
-                              IDE_TEST_COLUMN_TEST, &row_test,
-                              -1);
-
-          if (row_test == test)
-            {
-              GtkTreePath *path;
-
-              path = gtk_tree_model_get_path (GTK_TREE_MODEL (self->tests_store), &iter);
-              gtk_tree_model_row_changed (GTK_TREE_MODEL (self->tests_store), path, &iter);
-              gtk_tree_path_free (path);
-
-              break;
-            }
-        }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->tests_store), &iter));
-    }
-}
-
-static void
-ide_test_manager_add_test (IdeTestManager        *self,
-                           const TestsByProvider *info,
-                           guint                  position,
-                           IdeTest               *test)
-{
-  const gchar *group;
-  GtkTreeIter iter;
-  GtkTreeIter parent;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (info != NULL);
-  g_assert (IDE_IS_TEST (test));
-
-  g_ptr_array_insert (info->tests, position, g_object_ref (test));
-
-  group = ide_test_get_group (test);
-
-  ide_test_manager_locate_group (self, &parent, group);
-  gtk_tree_store_append (self->tests_store, &iter, &parent);
-  gtk_tree_store_set (self->tests_store, &iter,
-                      IDE_TEST_COLUMN_GROUP, NULL,
-                      IDE_TEST_COLUMN_TEST, test,
-                      -1);
-
-  g_signal_connect_object (test,
-                           "notify::status",
-                           G_CALLBACK (ide_test_manager_test_notify_status),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  IDE_EXIT;
-}
-
-static void
-ide_test_manager_remove_test (IdeTestManager        *self,
-                              const TestsByProvider *info,
-                              IdeTest               *test)
-{
-  const gchar *group;
-  GtkTreeIter iter;
-  GtkTreeIter parent;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (info != NULL);
-  g_assert (IDE_IS_TEST (test));
-
-  group = ide_test_get_group (test);
-
-  ide_test_manager_locate_group (self, &parent, group);
-
-  if (gtk_tree_model_iter_children (GTK_TREE_MODEL (self->tests_store), &iter, &parent))
-    {
-      do
-        {
-          g_autoptr(IdeTest) row = NULL;
-
-          gtk_tree_model_get (GTK_TREE_MODEL (self->tests_store), &iter,
-                              IDE_TEST_COLUMN_TEST, &row,
-                              -1);
-
-          if (row == test)
-            {
-              g_signal_handlers_disconnect_by_func (test,
-                                                    G_CALLBACK (ide_test_manager_test_notify_status),
-                                                    self);
-              gtk_tree_store_remove (self->tests_store, &iter);
-              break;
-            }
-        }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->tests_store), &iter));
-    }
-
-  g_ptr_array_remove (info->tests, test);
-
-  IDE_EXIT;
-}
-
-static void
-ide_test_manager_provider_items_changed (IdeTestManager  *self,
-                                         guint            position,
-                                         guint            removed,
-                                         guint            added,
-                                         IdeTestProvider *provider)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (IDE_IS_TEST_PROVIDER (provider));
-
-  for (guint i = 0; i < self->tests_by_provider->len; i++)
-    {
-      const TestsByProvider *info = g_ptr_array_index (self->tests_by_provider, i);
-
-      if (info->provider == provider)
-        {
-          /* Remove tests from cache that were deleted */
-          for (guint j = 0; j < removed; j++)
-            {
-              IdeTest *test = g_ptr_array_index (info->tests, position);
-
-              g_assert (IDE_IS_TEST (test));
-              ide_test_manager_remove_test (self, info, test);
-            }
-
-          /* Add tests to cache that were added */
-          for (guint j = 0; j < added; j++)
-            {
-              g_autoptr(IdeTest) test = NULL;
-
-              test = g_list_model_get_item (G_LIST_MODEL (provider), position + j);
-              g_assert (IDE_IS_TEST (test));
-              ide_test_manager_add_test (self, info, position + j, test);
-            }
-        }
-    }
-
-  IDE_EXIT;
-}
-
-static void
-ide_test_manager_provider_notify_loading (IdeTestManager  *self,
-                                          GParamSpec      *pspec,
-                                          IdeTestProvider *provider)
-{
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (IDE_IS_TEST_PROVIDER (provider));
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LOADING]);
-}
-
-static void
-ide_test_manager_provider_added (PeasExtensionSet *set,
-                                 PeasPluginInfo   *plugin_info,
-                                 PeasExtension    *exten,
-                                 gpointer          user_data)
-{
-  IdeTestManager *self = user_data;
-  IdeTestProvider *provider = (IdeTestProvider *)exten;
-  TestsByProvider *tests;
-  guint len;
-
-  IDE_ENTRY;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_TEST_PROVIDER (provider));
-  g_assert (G_IS_LIST_MODEL (provider));
-  g_assert (IDE_IS_TEST_MANAGER (self));
-
-  tests = g_slice_new0 (TestsByProvider);
-  tests->provider = g_object_ref (provider);
-  tests->tests = g_ptr_array_new_with_free_func (g_object_unref);
-  g_ptr_array_add (self->tests_by_provider, tests);
-
-  g_signal_connect_swapped (provider,
-                            "items-changed",
-                            G_CALLBACK (ide_test_manager_provider_items_changed),
-                            self);
-  g_signal_connect_swapped (provider,
-                            "notify::loading",
-                            G_CALLBACK (ide_test_manager_provider_notify_loading),
-                            self);
-
-  len = g_list_model_get_n_items (G_LIST_MODEL (provider));
-  ide_test_manager_provider_items_changed (self, 0, 0, len, provider);
-
-  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (provider));
-
-  IDE_EXIT;
-}
-
-static void
-ide_test_manager_provider_removed (PeasExtensionSet *set,
-                                   PeasPluginInfo   *plugin_info,
-                                   PeasExtension    *exten,
-                                   gpointer          user_data)
-{
-  IdeTestManager *self = user_data;
-  IdeTestProvider *provider = (IdeTestProvider *)exten;
-
-  IDE_ENTRY;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_TEST_PROVIDER (provider));
-  g_assert (IDE_IS_TEST_MANAGER (self));
-
-  for (guint i = 0; i < self->tests_by_provider->len; i++)
-    {
-      const TestsByProvider *info = g_ptr_array_index (self->tests_by_provider, i);
-
-      if (info->provider == provider)
-        {
-          g_ptr_array_remove_index (self->tests_by_provider, i);
-          break;
-        }
-    }
-
-  g_signal_handlers_disconnect_by_func (provider,
-                                        G_CALLBACK (ide_test_manager_provider_items_changed),
-                                        self);
-  g_signal_handlers_disconnect_by_func (provider,
-                                        G_CALLBACK (ide_test_manager_provider_notify_loading),
-                                        self);
-
-  ide_object_destroy (IDE_OBJECT (provider));
-
-  IDE_EXIT;
-}
-
-static gboolean
-ide_test_manager_initiable_init (GInitable     *initable,
-                                 GCancellable  *cancellable,
-                                 GError       **error)
-{
-  IdeTestManager *self = (IdeTestManager *)initable;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  self->providers = peas_extension_set_new (peas_engine_get_default (),
-                                            IDE_TYPE_TEST_PROVIDER,
-                                            NULL);
-
-  g_signal_connect (self->providers,
-                    "extension-added",
-                    G_CALLBACK (ide_test_manager_provider_added),
-                    self);
-
-  g_signal_connect (self->providers,
-                    "extension-removed",
-                    G_CALLBACK (ide_test_manager_provider_removed),
-                    self);
-
-  peas_extension_set_foreach (self->providers,
-                              ide_test_manager_provider_added,
-                              self);
-
-  IDE_RETURN (TRUE);
-}
-
-static void
-initable_iface_init (GInitableIface *iface)
-{
-  iface->init = ide_test_manager_initiable_init;
+  self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
+  self->tests = gtk_map_list_model_new (NULL,
+                                        map_run_command_to_test,
+                                        NULL,
+                                        NULL);
 }
 
 static void
@@ -528,43 +188,49 @@ ide_test_manager_run_all_cb (GObject      *object,
                              GAsyncResult *result,
                              gpointer      user_data)
 {
-  IdeTestManager *self = (IdeTestManager *)object;
-  g_autoptr(GTask) task = user_data;
+  IdeTest *test = (IdeTest *)object;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autoptr(IdeTest) test = NULL;
-  RunAllTaskData *task_data;
   GCancellable *cancellable;
+  RunAll *state;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_TEST_MANAGER (self));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TEST (test));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  cancellable = g_task_get_cancellable (task);
-  task_data = g_task_get_task_data (task);
-  g_assert (task_data != NULL);
-  g_assert (task_data->n_active > 0);
+  cancellable = ide_task_get_cancellable (task);
+  state = ide_task_get_task_data (task);
 
-  if (!ide_test_manager_run_finish (self, result, &error))
+  g_assert (state != NULL);
+  g_assert (state->n_active > 0);
+  g_assert (!state->pty || VTE_IS_PTY (state->pty));
+  g_assert (state->tests != NULL);
+
+  if (!ide_test_run_finish (test, result, &error))
     g_message ("%s", error->message);
 
-  test = g_queue_pop_head (&task_data->queue);
-
-  if (test != NULL)
+  if (state->tests->len > 0 &&
+      !g_cancellable_is_cancelled (cancellable))
     {
-      task_data->n_active++;
-      ide_test_manager_run_async (self,
-                                  test,
-                                  cancellable,
-                                  ide_test_manager_run_all_cb,
-                                  g_object_ref (task));
+      g_autoptr(IdeTest) next_test = g_ptr_array_steal_index (state->tests, state->tests->len-1);
+
+      state->n_active++;
+
+      ide_test_run_async (next_test,
+                          state->pipeline,
+                          state->pty,
+                          cancellable,
+                          ide_test_manager_run_all_cb,
+                          g_object_ref (task));
     }
 
-  task_data->n_active--;
+  state->n_active--;
 
-  if (task_data->n_active == 0)
-    g_task_return_boolean (task, TRUE);
+  if (state->n_active == 0)
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -590,54 +256,66 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
-  RunAllTaskData *task_data;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GListModel) tests = NULL;
+  g_autoptr(GPtrArray) ar = NULL;
+  IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
+  IdeContext *context;
+  RunAll *state;
+  guint n_items;
 
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_TEST_MANAGER (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, ide_test_manager_run_all_async);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_test_manager_run_all_async);
 
-  task_data = g_new0 (RunAllTaskData, 1);
-  g_task_set_task_data (task, task_data, g_free);
+  context = ide_object_get_context (IDE_OBJECT (self));
+  build_manager = ide_build_manager_from_context (context);
+  pipeline = ide_build_manager_get_pipeline (build_manager);
 
-  for (guint i = 0; i < self->tests_by_provider->len; i++)
+  if (pipeline == NULL)
     {
-      TestsByProvider *info = g_ptr_array_index (self->tests_by_provider, i);
-
-      for (guint j = 0; j < info->tests->len; j++)
-        {
-          IdeTest *test = g_ptr_array_index (info->tests, j);
-
-          g_queue_push_tail (&task_data->queue, g_object_ref (test));
-        }
-    }
-
-  task_data->n_active = MIN (MAX_UNIT_TESTS, task_data->queue.length);
-
-  if (task_data->n_active == 0)
-    {
-      g_task_return_boolean (task, TRUE);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_INITIALIZED,
+                                 "Cannot run test until pipeline is ready");
       IDE_EXIT;
     }
 
-  for (guint i = 0; i < MAX_UNIT_TESTS; i++)
+  tests = ide_test_manager_list_tests (self);
+  n_items = g_list_model_get_n_items (tests);
+
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
+  for (guint i = n_items; i > 0; i--)
+    g_ptr_array_add (ar, g_list_model_get_item (tests, i-1));
+
+  state = g_slice_new0 (RunAll);
+  state->tests = g_ptr_array_ref (ar);
+  state->pipeline = g_object_ref (pipeline);
+  state->pty = g_object_ref (self->pty);
+  state->n_active = 0;
+  ide_task_set_task_data (task, state, run_all_free);
+
+  for (guint i = 0; i < MAX_UNIT_TESTS && ar->len > 0; i++)
     {
-      g_autoptr(IdeTest) test = g_queue_pop_head (&task_data->queue);
+      g_autoptr(IdeTest) test = g_ptr_array_steal_index (state->tests, ar->len-1);
 
-      if (test == NULL)
-        break;
+      state->n_active++;
 
-      ide_test_manager_run_async (self,
-                                  test,
-                                  cancellable,
-                                  ide_test_manager_run_all_cb,
-                                  g_object_ref (task));
+      ide_test_run_async (test,
+                          state->pipeline,
+                          state->pty,
+                          cancellable,
+                          ide_test_manager_run_all_cb,
+                          g_object_ref (task));
     }
+
+  if (state->n_active == 0)
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -666,25 +344,11 @@ ide_test_manager_run_all_finish (IdeTestManager  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  ret = g_task_propagate_boolean (G_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
-}
-
-static void
-run_task_completed_cb (IdeTestManager *self,
-                       GParamSpec     *pspec,
-                       IdeTask        *task)
-{
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (G_IS_TASK (task));
-  g_assert (self->n_active > 0);
-
-  self->n_active--;
-
-  ide_test_manager_set_action_enabled (self, "cancel", self->n_active > 0);
 }
 
 static void
@@ -692,20 +356,21 @@ ide_test_manager_run_cb (GObject      *object,
                          GAsyncResult *result,
                          gpointer      user_data)
 {
-  IdeTestProvider *provider = (IdeTestProvider *)object;
-  g_autoptr(GTask) task = user_data;
+  IdeTest *test = (IdeTest *)object;
+  g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_TEST_PROVIDER (provider));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TEST (test));
   g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (G_IS_TASK (task));
+  g_assert (IDE_IS_TASK (task));
 
-  if (!ide_test_provider_run_finish (provider, result, &error))
-    g_task_return_error (task, g_steal_pointer (&error));
+  if (!ide_test_run_finish (test, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
   else
-    g_task_return_boolean (task, TRUE);
+    ide_task_return_boolean (task, TRUE);
 
   IDE_EXIT;
 }
@@ -730,10 +395,9 @@ ide_test_manager_run_async (IdeTestManager      *self,
                             GAsyncReadyCallback  callback,
                             gpointer             user_data)
 {
-  g_autoptr(GTask) task = NULL;
-  IdePipeline *pipeline;
-  IdeTestProvider *provider;
+  g_autoptr(IdeTask) task = NULL;
   IdeBuildManager *build_manager;
+  IdePipeline *pipeline;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -742,51 +406,25 @@ ide_test_manager_run_async (IdeTestManager      *self,
   g_return_if_fail (IDE_IS_TEST (test));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  task = g_task_new (self, cancellable, callback, user_data);
-  g_task_set_priority (task, G_PRIORITY_LOW);
-  g_task_set_source_tag (task, ide_test_manager_run_async);
-
-  self->n_active++;
-  g_signal_connect_object (task,
-                           "notify::completed",
-                           G_CALLBACK (run_task_completed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  ide_test_manager_set_action_enabled (self, "cancel", TRUE);
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_test_manager_run_async);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
   if (pipeline == NULL)
-    {
-      g_task_return_new_error (task,
+    ide_task_return_new_error (task,
                                G_IO_ERROR,
-                               G_IO_ERROR_FAILED,
+                               G_IO_ERROR_NOT_INITIALIZED,
                                "Pipeline is not ready, cannot run test");
-      IDE_EXIT;
-    }
-
-  provider = _ide_test_get_provider (test);
-
-  if (self->pty == NULL)
-    {
-      g_autoptr(GError) error = NULL;
-
-      if (!(self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, cancellable, &error)))
-        {
-          g_task_return_error (task, g_steal_pointer (&error));
-          IDE_EXIT;
-        }
-    }
-
-  ide_test_provider_run_async (provider,
-                               test,
-                               pipeline,
-                               self->pty,
-                               cancellable,
-                               ide_test_manager_run_cb,
-                               g_steal_pointer (&task));
+  else
+    ide_test_run_async (test,
+                        pipeline,
+                        self->pty,
+                        cancellable,
+                        ide_test_manager_run_cb,
+                        g_steal_pointer (&task));
 
   IDE_EXIT;
 }
@@ -816,250 +454,11 @@ ide_test_manager_run_finish (IdeTestManager  *self,
   IDE_ENTRY;
 
   g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), FALSE);
-  g_return_val_if_fail (G_IS_TASK (result), FALSE);
-
-  ret = g_task_propagate_boolean (G_TASK (result), error);
-
-  IDE_RETURN (ret);
-}
-
-static void
-ide_test_manager_actions_run_all (IdeTestManager *self,
-                                  GVariant       *param)
-{
-  g_assert (IDE_IS_TEST_MANAGER (self));
-
-  ide_test_manager_run_all_async (self, NULL, NULL, NULL);
-}
-
-static void
-ide_test_manager_actions_reload (IdeTestManager *self,
-                                 GVariant       *param)
-{
-  g_assert (IDE_IS_TEST_MANAGER (self));
-
-  gtk_tree_store_clear (self->tests_store);
-
-  for (guint i = 0; i < self->tests_by_provider->len; i++)
-    {
-      const TestsByProvider *info = g_ptr_array_index (self->tests_by_provider, i);
-
-      ide_test_provider_reload (info->provider);
-    }
-}
-
-GtkTreeModel *
-_ide_test_manager_get_model (IdeTestManager *self)
-{
-  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
-
-  return GTK_TREE_MODEL (self->tests_store);
-}
-
-static void
-ide_test_manager_get_loading_cb (PeasExtensionSet *set,
-                                 PeasPluginInfo   *plugin_info,
-                                 PeasExtension    *exten,
-                                 gpointer          user_data)
-{
-  IdeTestProvider *provider = (IdeTestProvider *)exten;
-  gboolean *loading = user_data;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_TEST_PROVIDER (provider));
-  g_assert (loading != NULL);
-
-  *loading |= ide_test_provider_get_loading (provider);
-}
-
-gboolean
-ide_test_manager_get_loading (IdeTestManager *self)
-{
-  gboolean loading = FALSE;
-
-  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), FALSE);
-
-  peas_extension_set_foreach (self->providers,
-                              ide_test_manager_get_loading_cb,
-                              &loading);
-
-  return loading;
-}
-
-/**
- * ide_test_manager_get_tests:
- * @self: a #IdeTestManager
- * @path: (nullable): the path to the test or %NULL for the root path
- *
- * Locates and returns any #IdeTest that is found as a direct child
- * of @path.
- *
- * Returns: (transfer full) (element-type IdeTest): an array of #IdeTest
- */
-GPtrArray *
-ide_test_manager_get_tests (IdeTestManager *self,
-                            const gchar    *path)
-{
-  GPtrArray *ret;
-  GtkTreeIter iter;
-
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
-
-  ret = g_ptr_array_new ();
-
-  if (path == NULL)
-    {
-      if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self->tests_store), &iter))
-        goto failure;
-    }
-  else
-    {
-      GtkTreeIter parent;
-
-      ide_test_manager_locate_group (self, &parent, path);
-
-      if (!gtk_tree_model_iter_children (GTK_TREE_MODEL (self->tests_store), &iter, &parent))
-        goto failure;
-    }
-
-  do
-    {
-      IdeTest *test = NULL;
-
-      gtk_tree_model_get (GTK_TREE_MODEL (self->tests_store), &iter,
-                          IDE_TEST_COLUMN_TEST, &test,
-                          -1);
-      if (test != NULL)
-        g_ptr_array_add (ret, g_steal_pointer (&test));
-    }
-  while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->tests_store), &iter));
-
-failure:
-  return g_steal_pointer (&ret);
-}
-
-/**
- * ide_test_manager_get_folders:
- * @self: a #IdeTestManager
- * @path: (nullable): the path to the test or %NULL for the root path
- *
- * Gets the sub-paths of @path that are not individual tests.
- *
- * Returns: (transfer full) (array zero-terminated=1): an array of strings
- *   describing available sub-paths to @path.
- */
-gchar **
-ide_test_manager_get_folders (IdeTestManager *self,
-                              const gchar    *path)
-{
-  static const gchar *empty[] = { NULL };
-  GPtrArray *ret;
-  GtkTreeIter iter;
-
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
-
-  ret = g_ptr_array_new ();
-
-  if (path == NULL)
-    {
-      if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self->tests_store), &iter))
-        return g_strdupv ((gchar **)empty);
-    }
-  else
-    {
-      GtkTreeIter parent;
-
-      ide_test_manager_locate_group (self, &parent, path);
-
-      if (!gtk_tree_model_iter_children (GTK_TREE_MODEL (self->tests_store), &iter, &parent))
-        return g_strdupv ((gchar **)empty);
-    }
-
-  do
-    {
-      gchar *group = NULL;
-
-      gtk_tree_model_get (GTK_TREE_MODEL (self->tests_store), &iter,
-                          IDE_TEST_COLUMN_GROUP, &group,
-                          -1);
-      if (group != NULL)
-        g_ptr_array_add (ret, g_steal_pointer (&group));
-    }
-  while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->tests_store), &iter));
-
-  g_ptr_array_add (ret, NULL);
-
-  return (gchar **)g_ptr_array_free (ret, FALSE);
-}
-
-static void
-ide_test_manager_ensure_loaded_cb (IdeTestManager *self,
-                                   GParamSpec     *pspec,
-                                   IdeTask        *task)
-{
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TEST_MANAGER (self));
-  g_assert (IDE_IS_TASK (task));
-
-  if (!ide_test_manager_get_loading (self))
-    {
-      g_signal_handlers_disconnect_by_func (self,
-                                            G_CALLBACK (ide_test_manager_ensure_loaded_cb),
-                                            task);
-      ide_task_return_boolean (task, TRUE);
-    }
-}
-
-/**
- * ide_test_manager_ensure_loaded_async:
- * @self: a #IdeTestManager
- *
- * Calls @callback after the test manager has loaded tests.
- *
- * If the test manager has already loaded tests, then @callback will
- * be called after returning to the main loop.
- */
-void
-ide_test_manager_ensure_loaded_async (IdeTestManager      *self,
-                                      GCancellable        *cancellable,
-                                      GAsyncReadyCallback  callback,
-                                      gpointer             user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-
-  g_return_if_fail (IDE_IS_TEST_MANAGER (self));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_test_manager_ensure_loaded_async);
-
-  if (ide_test_manager_get_loading (self))
-    {
-      g_signal_connect_data (self,
-                             "notify::loading",
-                             G_CALLBACK (ide_test_manager_ensure_loaded_cb),
-                             g_steal_pointer (&task),
-                             (GClosureNotify)g_object_unref,
-                             0);
-      return;
-    }
-
-  ide_task_return_boolean (task, TRUE);
-}
-
-gboolean
-ide_test_manager_ensure_loaded_finish (IdeTestManager  *self,
-                                       GAsyncResult    *result,
-                                       GError         **error)
-{
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
-  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), FALSE);
   g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
 
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }
 
 /**
@@ -1075,58 +474,86 @@ ide_test_manager_get_pty (IdeTestManager *self)
 {
   g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
 
-  if (self->pty == NULL)
-    self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
-
   return self->pty;
 }
 
-/**
- * ide_test_manager_open_pty:
- * @self: a #IdeTestManager
- *
- * Gets a FD that maps to the child side of the PTY device.
- *
- * Returns: a new FD or -1 on failure
- */
-gint
-ide_test_manager_open_pty (IdeTestManager *self)
+static gboolean
+filter_tests_func (gpointer item,
+                   gpointer user_data)
 {
-  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), -1);
-
-  if (self->child_pty == -1)
-    {
-      VtePty *pty = ide_test_manager_get_pty (self);
-      self->child_pty = ide_pty_intercept_create_producer (vte_pty_get_fd (pty), TRUE);
-    }
-
-  return dup (self->child_pty);
-}
-
-/**
- * ide_test_manager_get_cancellable:
- * @self: a #IdeTestManager
- *
- * Gets the cancellable for the test manager which will be cancelled
- * when the cancel action is called.
- *
- * Returns: (transfer none): a #GCancellable
- */
-GCancellable *
-ide_test_manager_get_cancellable (IdeTestManager *self)
-{
-  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
-
-  return self->cancellable;
+  return ide_run_command_get_kind (IDE_RUN_COMMAND (item)) == IDE_RUN_COMMAND_KIND_TEST;
 }
 
 static void
-ide_test_manager_actions_cancel (IdeTestManager *self,
-                                 GVariant       *param)
+ide_test_manager_list_commands_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
 {
+  IdeRunManager *run_manager = (IdeRunManager *)object;
+  g_autoptr(IdeTestManager) self = user_data;
+  g_autoptr(GListModel) commands = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TEST_MANAGER (self));
 
-  g_cancellable_cancel (self->cancellable);
-  g_clear_object (&self->cancellable);
-  self->cancellable = g_cancellable_new ();
+  commands = ide_run_manager_list_commands_finish (run_manager, result, &error);
+
+  if (error != NULL)
+    g_message ("Failed to list run commands: %s", error->message);
+
+  self->list_state = commands != NULL ? LIST_STATE_READY : LIST_STATE_INITIAL;
+
+  if (commands != NULL)
+    {
+      g_autoptr(GtkFilterListModel) filtered = NULL;
+      g_autoptr(GtkCustomFilter) filter = NULL;
+
+      filter = gtk_custom_filter_new (filter_tests_func, NULL, NULL);
+      filtered = gtk_filter_list_model_new (g_steal_pointer (&commands),
+                                            GTK_FILTER (g_steal_pointer (&filter)));
+      gtk_map_list_model_set_model (self->tests, G_LIST_MODEL (filtered));
+    }
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_test_manager_list_tests:
+ * @self: a #IdeTestManager
+ *
+ * Gets a #GListModel of #IdeTest.
+ *
+ * This will return a #GListModel immediately, but that list may not complete
+ * until some time in the future based on how quickly various
+ * #IdeRunCommandProvider return commands.
+ *
+ * Returns: (transfer none): an #GListModel of #IdeTest
+ */
+GListModel *
+ide_test_manager_list_tests (IdeTestManager *self)
+{
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
+
+  if (self->list_state == LIST_STATE_INITIAL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeRunManager *run_manager = ide_run_manager_from_context (context);
+
+      self->list_state = LIST_STATE_WAITING_FOR_RESULTS;
+
+      ide_run_manager_list_commands_async (run_manager,
+                                           NULL,
+                                           ide_test_manager_list_commands_cb,
+                                           g_object_ref (self));
+    }
+
+  IDE_RETURN (G_LIST_MODEL (self->tests));
 }
