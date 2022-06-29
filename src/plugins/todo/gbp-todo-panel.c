@@ -200,7 +200,7 @@ gbp_todo_panel_query_tooltip (GbpTodoPanel *self,
           gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
           gtk_tooltip_set_markup (tooltip, str->str);
 
-	  return TRUE;
+          return TRUE;
         }
     }
 
