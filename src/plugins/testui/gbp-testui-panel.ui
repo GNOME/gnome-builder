@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpTestuiPanel" parent="IdePane">
+    <property name="title" translatable="yes">Unit Tests</property>
+    <property name="icon-name">builder-unit-tests-symbolic</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkListView" id="list_view">
+            <signal name="activate" handler="gbp_testui_panel_activate_cb" swapped="true" object="GbpTestuiPanel"/>
+            <property name="orientation">vertical</property>
+            <property name="single-click-activate">true</property>
+            <property name="model">
+              <object class="GtkNoSelection" id="selection">
+              </object>
+            </property>
+            <property name="factory">
+              <object class="GtkBuilderListItemFactory">
+                <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkTreeExpander" id="expander">
+        <binding name="list-row">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <property name="child">
+          <object class="GtkBox">
+            <property name="spacing">6</property>
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+            <child>
+              <object class="GtkImage">
+                <binding name="icon-name">
+                  <lookup name="icon-name" type="IdeTest">
+                    <lookup name="item">expander</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <binding name="label">
+                  <lookup name="title" type="IdeTest">
+                    <lookup name="item">expander</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+          </object>
+        </property>
+      </object>
+    </property>
+  </template>
+</interface>
+]]>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
