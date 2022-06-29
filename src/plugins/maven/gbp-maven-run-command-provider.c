@@ -36,6 +36,107 @@ struct _GbpMavenRunCommandProvider
 };
 
 static void
+find_test_files_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  GFile *basedir = (GFile *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GPtrArray) files = NULL;
+  g_autoptr(GError) error = NULL;
+  GListStore *store;
+  const char *srcdir;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_FILE (basedir));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  store = ide_task_get_task_data (task);
+  srcdir = g_object_get_data (G_OBJECT (task), "SRCDIR");
+
+  g_assert (G_IS_LIST_STORE (store));
+  g_assert (srcdir != NULL);
+
+  if (!(files = ide_g_file_find_finish (basedir, result, &error)))
+    {
+      g_debug ("Failed to find test files: %s", error->message);
+      IDE_GOTO (failure);
+    }
+
+  for (guint i = 0; i < files->len; i++)
+    {
+      GFile *file = g_ptr_array_index (files, i);
+      g_autofree char *contents = NULL;
+      IdeLineReader reader;
+      char *line;
+      gsize line_len;
+      gsize len;
+
+      if (!g_file_load_contents (file, NULL, &contents, &len, NULL, NULL))
+        continue;
+
+      /* Obviously this isn't a great way to find tests, but it
+       * does allow for skipping any sort of introspection. Mostly
+       * just copying what the python plugin did.
+       */
+      ide_line_reader_init (&reader, contents, len);
+      while ((line = ide_line_reader_next (&reader, &line_len)))
+        {
+          g_autoptr(IdeRunCommand) run_command = NULL;
+          g_autofree char *class_name = NULL;
+          g_autofree char *d_test = NULL;
+          g_autofree char *full_name = NULL;
+          g_autofree char *id = NULL;
+          char *dot;
+          char *name;
+          char *paren;
+
+          line[line_len] = 0;
+
+          if (!(name = strstr (line, "public void")))
+            continue;
+
+          if (!(paren = strchr (name, '(')))
+            continue;
+
+          *paren = 0;
+          name += strlen ("public void");
+          g_strstrip (name);
+
+          class_name = g_file_get_basename (file);
+          if ((dot = strrchr (class_name, '.')))
+            *dot = 0;
+
+          full_name = g_strconcat (class_name, "#", name, NULL);
+          id = g_strconcat ("maven:%s", full_name, NULL);
+
+          /*
+           * http://maven.apache.org/surefire/maven-surefire-plugin/examples/single-test.html
+           * it has to be junit 4.x
+           */
+          d_test = g_strconcat ("-Dtest=", full_name, NULL);
+
+          run_command = ide_run_command_new ();
+          ide_run_command_set_id (run_command, id);
+          ide_run_command_set_display_name (run_command, name);
+          ide_run_command_set_kind (run_command, IDE_RUN_COMMAND_KIND_TEST);
+          ide_run_command_set_argv (run_command, IDE_STRV_INIT ("mvn", d_test, "test"));
+          ide_run_command_set_cwd (run_command, srcdir);
+
+          g_list_store_append (store, run_command);
+        }
+    }
+
+failure:
+  ide_task_return_pointer (task, g_object_ref (store), g_object_unref);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_maven_run_command_provider_list_commands_async (IdeRunCommandProvider *provider,
                                                     GCancellable          *cancellable,
                                                     GAsyncReadyCallback    callback,
@@ -49,6 +150,7 @@ gbp_maven_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
   g_autofree char *project_dir = NULL;
   IdeConfigManager *config_manager;
   IdeBuildSystem *build_system;
+  g_autoptr(GFile) testdir = NULL;
   g_auto(GStrv) run_argv = NULL;
   g_auto(GStrv) args = NULL;
   const char *run_opts;
@@ -61,8 +163,11 @@ gbp_maven_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
   g_assert (GBP_IS_MAVEN_RUN_COMMAND_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  store = g_list_store_new (IDE_TYPE_RUN_COMMAND);
+
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_maven_run_command_provider_list_commands_async);
+  ide_task_set_task_data (task, g_object_ref (store), g_object_unref);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_system = ide_build_system_from_context (context);
@@ -80,6 +185,12 @@ gbp_maven_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
     }
 
   project_dir = gbp_maven_build_system_get_project_dir (GBP_MAVEN_BUILD_SYSTEM (build_system));
+  testdir = g_file_new_build_filename (project_dir, "src", "test", "java", NULL);
+
+  g_object_set_data_full (G_OBJECT (task),
+                          "SRCDIR",
+                          g_strdup (project_dir),
+                          g_free);
 
   run_command = ide_run_command_new ();
   ide_run_command_set_id (run_command, "maven:run");
@@ -97,10 +208,12 @@ gbp_maven_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
     g_strv_builder_addv (builder, (const char **)run_argv);
   args = g_strv_builder_end (builder);
   ide_run_command_set_argv (run_command, (const char * const *)args);
-
-  store = g_list_store_new (IDE_TYPE_RUN_COMMAND);
   g_list_store_append (store, run_command);
-  ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
+
+  ide_g_file_find_with_depth_async (testdir, "*.java", 5,
+                                    NULL,
+                                    find_test_files_cb,
+                                    g_object_ref (provider));
 
   IDE_EXIT;
 }
