@@ -30,7 +30,6 @@
 #include "gbp-gradle-build-system-discovery.h"
 #include "gbp-gradle-pipeline-addin.h"
 #include "gbp-gradle-run-command-provider.h"
-#include "gbp-gradle-test-provider.h"
 
 _IDE_EXTERN void
 _gbp_gradle_register_types (PeasObjectModule *module)
@@ -47,7 +46,4 @@ _gbp_gradle_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUN_COMMAND_PROVIDER,
                                               GBP_TYPE_GRADLE_RUN_COMMAND_PROVIDER);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_TEST_PROVIDER,
-                                              GBP_TYPE_GRADLE_TEST_PROVIDER);
 }
