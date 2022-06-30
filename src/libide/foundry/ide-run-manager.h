@@ -24,8 +24,9 @@
 # error "Only <libide-foundry.h> can be included directly."
 #endif
 
+#include <libpeas/peas.h>
+
 #include <libide-core.h>
-#include <libide-plugins.h>
 
 #include "ide-foundry-types.h"
 

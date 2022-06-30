@@ -37,6 +37,7 @@ struct _IdeRunCommandProviderInterface
 {
   GTypeInterface parent_iface;
 
+  void        (*invalidated)          (IdeRunCommandProvider  *self);
   void        (*list_commands_async)  (IdeRunCommandProvider  *self,
                                        GCancellable           *cancellable,
                                        GAsyncReadyCallback     callback,
@@ -46,6 +47,8 @@ struct _IdeRunCommandProviderInterface
                                        GError                **error);
 };
 
+IDE_AVAILABLE_IN_ALL
+void        ide_run_command_provider_invalidate           (IdeRunCommandProvider  *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_run_command_provider_list_commands_async  (IdeRunCommandProvider  *self,
                                                            GCancellable           *cancellable,

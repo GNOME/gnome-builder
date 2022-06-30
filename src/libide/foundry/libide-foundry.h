@@ -58,6 +58,7 @@ G_BEGIN_DECLS
 #include "ide-pipeline.h"
 #include "ide-run-command.h"
 #include "ide-run-command-provider.h"
+#include "ide-run-commands.h"
 #include "ide-run-context.h"
 #include "ide-run-manager.h"
 #include "ide-run-tool.h"
