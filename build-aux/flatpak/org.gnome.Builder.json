@@ -4,7 +4,7 @@
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
-        "org.freedesktop.Sdk.Extension.llvm12",
+        "org.freedesktop.Sdk.Extension.llvm14",
         "org.freedesktop.Sdk.Extension.node14"
     ],
     "command" : "gnome-builder",
@@ -63,8 +63,8 @@
             "BASH_COMPLETIONSDIR" : "/app/share/bash-completion/completions",
             "MOUNT_FUSE_PATH" : "../tmp/"
         },
-        "prepend-path" : "/usr/lib/sdk/llvm12/bin",
-        "prepend-ld-library-path" : "/usr/lib/sdk/llvm12/lib"
+        "prepend-path" : "/usr/lib/sdk/llvm14/bin",
+        "prepend-ld-library-path" : "/usr/lib/sdk/llvm14/lib"
     },
     "cleanup" : [
         "/bin/rst*",
@@ -753,11 +753,11 @@
                 }
             ],
             "post-install" : [
-                "cp -a /usr/lib/sdk/llvm12/bin/* /app/bin/",
-                "cp -a /usr/lib/sdk/llvm12/lib/* /app/lib/",
-                "cp -a /usr/lib/sdk/llvm12/libexec/* /app/libexec/",
-                "cp -a /usr/lib/sdk/llvm12/include/* /app/include/",
-                "cp -a /usr/lib/sdk/llvm12/share/* /app/share/",
+                "cp -a /usr/lib/sdk/llvm14/bin/* /app/bin/",
+                "cp -a /usr/lib/sdk/llvm14/lib/* /app/lib/",
+                "cp -a /usr/lib/sdk/llvm14/libexec/* /app/libexec/",
+                "cp -a /usr/lib/sdk/llvm14/include/* /app/include/",
+                "cp -a /usr/lib/sdk/llvm14/share/* /app/share/",
                 "install -d /app/extensions"
             ]
         }

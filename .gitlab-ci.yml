@@ -15,7 +15,7 @@ flatpak:
     BUNDLE: "gnome-builder-git.flatpak"
   before_script:
     - flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    - flatpak --user install -y flathub org.freedesktop.Sdk.Extension.llvm12//21.08
+    - flatpak --user install -y flathub org.freedesktop.Sdk.Extension.llvm14//21.08
     - flatpak --user install -y flathub org.freedesktop.Sdk.Extension.node14//21.08
 
 nightly:
