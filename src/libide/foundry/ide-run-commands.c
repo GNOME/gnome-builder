@@ -114,9 +114,14 @@ ide_run_commands_list_commands_cb (GObject      *object,
   g_assert (IDE_IS_RUN_COMMANDS (self));
 
   if (!(model = ide_run_command_provider_list_commands_finish (provider, result, &error)))
-    g_debug ("Failed to list run commands from %s: %s",
-             G_OBJECT_TYPE_NAME (provider),
-             error->message);
+    {
+      /* Just keep the old one around until things succeed */
+      g_debug ("Failed to list run commands from %s: %s",
+               G_OBJECT_TYPE_NAME (provider), error->message);
+      IDE_EXIT;
+    }
+
+  g_assert (G_IS_LIST_MODEL (model));
 
   /* Try to replace the old item in one-shot if possible */
   if ((old_model = g_hash_table_lookup (self->provider_to_model, provider)) &&
@@ -141,6 +146,8 @@ ide_run_commands_reload_source_func (gpointer data)
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_RUN_COMMANDS (self));
+
+  self->reload_source = 0;
 
   cancellable = ide_object_ref_cancellable (IDE_OBJECT (self));
 
@@ -309,7 +316,7 @@ static void
 ide_run_commands_init (IdeRunCommands *self)
 {
   self->provider_to_model = g_hash_table_new_full (NULL, NULL, g_object_unref, g_object_unref);
-  self->models = g_list_store_new (G_TYPE_LIST_STORE);
+  self->models = g_list_store_new (G_TYPE_LIST_MODEL);
   self->flatten_model = gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (self->models)));
 
   g_signal_connect_object (self->flatten_model,
