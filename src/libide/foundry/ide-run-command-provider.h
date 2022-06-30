@@ -26,6 +26,8 @@
 
 #include <libide-core.h>
 
+#include "ide-pipeline-phase.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_RUN_COMMAND_PROVIDER (ide_run_command_provider_get_type())
@@ -49,6 +51,9 @@ struct _IdeRunCommandProviderInterface
 
 IDE_AVAILABLE_IN_ALL
 void        ide_run_command_provider_invalidate           (IdeRunCommandProvider  *self);
+IDE_AVAILABLE_IN_ALL
+void        ide_run_command_provider_invalidates_at_phase (IdeRunCommandProvider  *self,
+                                                           IdePipelinePhase        phase);
 IDE_AVAILABLE_IN_ALL
 void        ide_run_command_provider_list_commands_async  (IdeRunCommandProvider  *self,
                                                            GCancellable           *cancellable,
