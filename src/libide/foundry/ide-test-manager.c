@@ -32,18 +32,12 @@
 #include "ide-foundry-compat.h"
 #include "ide-pipeline.h"
 #include "ide-run-command.h"
+#include "ide-run-commands.h"
 #include "ide-run-manager.h"
 #include "ide-test.h"
 #include "ide-test-manager.h"
 
 #define MAX_UNIT_TESTS 4
-
-typedef enum
-{
-  LIST_STATE_INITIAL,
-  LIST_STATE_WAITING_FOR_RESULTS,
-  LIST_STATE_READY,
-} ListState;
 
 /**
  * SECTION:ide-test-manager
@@ -60,10 +54,10 @@ typedef enum
 
 struct _IdeTestManager
 {
-  IdeObject        parent_instance;
-  GtkMapListModel *tests;
-  VtePty          *pty;
-  ListState        list_state;
+  IdeObject           parent_instance;
+  GtkFilterListModel *filtered;
+  GtkMapListModel    *tests;
+  VtePty             *pty;
 };
 
 typedef struct
@@ -94,6 +88,18 @@ enum {
 };
 
 static GParamSpec *properties[N_PROPS];
+
+static gboolean
+filter_tests_func (gpointer item,
+                   gpointer user_data)
+{
+  IdeRunCommand *run_command = item;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_COMMAND (run_command));
+
+  return ide_run_command_get_kind (run_command) == IDE_RUN_COMMAND_KIND_TEST;
+}
 
 static void
 run_all_free (RunAll *state)
@@ -172,6 +178,7 @@ ide_test_manager_dispose (GObject *object)
   IdeTestManager *self = (IdeTestManager *)object;
 
   g_clear_object (&self->pty);
+  g_clear_object (&self->filtered);
   g_clear_object (&self->tests);
 
   G_OBJECT_CLASS (ide_test_manager_parent_class)->dispose (object);
@@ -188,7 +195,7 @@ ide_test_manager_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_MODEL:
-      g_value_set_object (value, self->tests);
+      g_value_set_object (value, ide_test_manager_list_tests (self));
       break;
 
     default:
@@ -226,11 +233,16 @@ ide_test_manager_class_init (IdeTestManagerClass *klass)
 static void
 ide_test_manager_init (IdeTestManager *self)
 {
+  g_autoptr(GtkFilterListModel) filtered = NULL;
+  g_autoptr(GtkCustomFilter) filter = NULL;
+
   self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
-  self->tests = gtk_map_list_model_new (NULL,
+
+  filter = gtk_custom_filter_new (filter_tests_func, NULL, NULL);
+  self->filtered = gtk_filter_list_model_new (NULL, GTK_FILTER (g_steal_pointer (&filter)));
+  self->tests = gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (self->filtered)),
                                         map_run_command_to_test,
-                                        NULL,
-                                        NULL);
+                                        NULL, NULL);
 }
 
 static void
@@ -527,56 +539,6 @@ ide_test_manager_get_pty (IdeTestManager *self)
   return self->pty;
 }
 
-static gboolean
-filter_tests_func (gpointer item,
-                   gpointer user_data)
-{
-  IdeRunCommand *run_command = item;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_RUN_COMMAND (run_command));
-
-  return ide_run_command_get_kind (run_command) == IDE_RUN_COMMAND_KIND_TEST;
-}
-
-static void
-ide_test_manager_list_commands_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
-{
-  IdeRunManager *run_manager = (IdeRunManager *)object;
-  g_autoptr(IdeTestManager) self = user_data;
-  g_autoptr(GListModel) commands = NULL;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_RUN_MANAGER (run_manager));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_TEST_MANAGER (self));
-
-  commands = ide_run_manager_list_commands_finish (run_manager, result, &error);
-
-  if (error != NULL)
-    g_message ("Failed to list run commands: %s", error->message);
-
-  self->list_state = commands != NULL ? LIST_STATE_READY : LIST_STATE_INITIAL;
-
-  if (commands != NULL)
-    {
-      g_autoptr(GtkFilterListModel) filtered = NULL;
-      g_autoptr(GtkCustomFilter) filter = NULL;
-
-      filter = gtk_custom_filter_new (filter_tests_func, NULL, NULL);
-      filtered = gtk_filter_list_model_new (g_steal_pointer (&commands),
-                                            GTK_FILTER (g_steal_pointer (&filter)));
-      gtk_map_list_model_set_model (self->tests, G_LIST_MODEL (filtered));
-    }
-
-  IDE_EXIT;
-}
-
 /**
  * ide_test_manager_list_tests:
  * @self: a #IdeTestManager
@@ -597,17 +559,12 @@ ide_test_manager_list_tests (IdeTestManager *self)
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_TEST_MANAGER (self), NULL);
 
-  if (self->list_state == LIST_STATE_INITIAL)
+  if (gtk_filter_list_model_get_model (self->filtered) == NULL)
     {
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-      IdeRunManager *run_manager = ide_run_manager_from_context (context);
+      IdeRunCommands *run_commands = ide_run_commands_from_context (context);
 
-      self->list_state = LIST_STATE_WAITING_FOR_RESULTS;
-
-      ide_run_manager_list_commands_async (run_manager,
-                                           NULL,
-                                           ide_test_manager_list_commands_cb,
-                                           g_object_ref (self));
+      gtk_filter_list_model_set_model (self->filtered, G_LIST_MODEL (run_commands));
     }
 
   IDE_RETURN (G_LIST_MODEL (self->tests));
