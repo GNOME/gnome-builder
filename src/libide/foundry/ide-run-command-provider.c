@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include "ide-build-manager.h"
+#include "ide-pipeline.h"
 #include "ide-run-command-provider.h"
 
 G_DEFINE_INTERFACE (IdeRunCommandProvider, ide_run_command_provider, IDE_TYPE_OBJECT)
@@ -93,4 +95,96 @@ ide_run_command_provider_invalidate (IdeRunCommandProvider *self)
   g_return_if_fail (IDE_IS_RUN_COMMAND_PROVIDER (self));
 
   g_signal_emit (self, signals[INVALIDATED], 0);
+}
+
+static inline gulong
+get_signal_handler (IdeRunCommandProvider *self)
+{
+  return GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (self), "INVALIDATES_AT_PHASE"));
+}
+
+static inline void
+set_signal_handler (IdeRunCommandProvider *self,
+                    gulong                 handler_id)
+{
+  g_object_set_data (G_OBJECT (self), "INVALIDATES_AT_PHASE", GSIZE_TO_POINTER (handler_id));
+}
+
+static void
+ide_run_command_provider_pipeline_notify_phase_cb (IdeRunCommandProvider *self,
+                                                   GParamSpec            *pspec,
+                                                   IdePipeline           *pipeline)
+{
+  IdePipelinePhase current_phase;
+  IdePipelinePhase invalidate_phase;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_COMMAND_PROVIDER (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  invalidate_phase = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (self), "PIPELINE_PHASE"));
+  current_phase = ide_pipeline_get_phase (pipeline);
+
+  /* Only invalidate when the phase exactly matches. We could check to see if
+   * the current phase is > than the last notified phase, but generally
+   * speaking, the users of this have a pipeline stage attached at exactly that
+   * phase to be notified of.
+   */
+  if (invalidate_phase != 0 && current_phase != 0 && invalidate_phase == current_phase)
+    ide_run_command_provider_invalidate (self);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_run_command_provider_invalidates_at_phase:
+ * @self: an #IdeRunCommandProvider
+ * @phase: an #IdePipelinePhase
+ *
+ * Invalidates the provider when @phase is reached.
+ *
+ * This is a helper for run command provider implementations to use which
+ * will automatically invalidate @self when pipeline @phase is reached.
+ *
+ * Calling this function will unset any previous call to the function. Setting
+ * @phase to 0 will not subscribe to any new phase.
+ */
+void
+ide_run_command_provider_invalidates_at_phase  (IdeRunCommandProvider  *self,
+                                                IdePipelinePhase        phase)
+{
+  GSignalGroup *signal_group;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_RUN_COMMAND_PROVIDER (self));
+
+  g_object_set_data (G_OBJECT (self), "PIPELINE_PHASE", GUINT_TO_POINTER (phase));
+
+  if (phase == 0)
+    IDE_EXIT;
+
+
+  if (!(signal_group = g_object_get_data (G_OBJECT (self), "PIPELINE_SIGNAL_GROUP")))
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+
+      signal_group = g_signal_group_new (IDE_TYPE_PIPELINE);
+      g_signal_group_connect_object (signal_group,
+                                     "notify::phase",
+                                     G_CALLBACK (ide_run_command_provider_pipeline_notify_phase_cb),
+                                     self,
+                                     G_CONNECT_SWAPPED);
+      g_object_set_data_full (G_OBJECT (self),
+                              "PIPELINE_SIGNAL_GROUP",
+                              signal_group,
+                              g_object_unref);
+      g_object_bind_property (build_manager, "pipeline", signal_group, "target", G_BINDING_SYNC_CREATE);
+    }
+
+  IDE_EXIT;
 }
