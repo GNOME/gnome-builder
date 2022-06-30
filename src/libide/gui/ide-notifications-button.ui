@@ -8,6 +8,9 @@
         <property name="reveal-child">false</property>
         <child>
           <object class="GtkMenuButton" id="menu_button">
+            <style>
+              <class name="flat"/>
+            </style>
             <property name="popover">
               <object class="GtkPopover" id="popover">
                 <style>
