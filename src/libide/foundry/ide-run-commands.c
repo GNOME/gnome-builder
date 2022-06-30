@@ -31,6 +31,8 @@
 #include "ide-run-command-provider.h"
 #include "ide-run-commands.h"
 
+#define RELOAD_TIMEOUT_MSEC 250
+
 struct _IdeRunCommands
 {
   IdeObject               parent_instance;
@@ -38,6 +40,8 @@ struct _IdeRunCommands
   GListStore             *models;
   GtkFlattenListModel    *flatten_model;
   GHashTable             *provider_to_model;
+  GQueue                  invalid;
+  guint                   reload_source;
 };
 
 static GType
@@ -91,6 +95,65 @@ ide_run_commands_items_changed_cb (IdeRunCommands *self,
 }
 
 static void
+ide_run_commands_list_commands_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeRunCommandProvider *provider = (IdeRunCommandProvider *)object;
+  g_autoptr(IdeRunCommands) self = user_data;
+  g_autoptr(GListModel) model = NULL;
+  g_autoptr(GError) error = NULL;
+  GListModel *old_model;
+  guint position;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_COMMAND_PROVIDER (provider));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_RUN_COMMANDS (self));
+
+  if (!(model = ide_run_command_provider_list_commands_finish (provider, result, &error)))
+    g_debug ("Failed to list run commands from %s: %s",
+             G_OBJECT_TYPE_NAME (provider),
+             error->message);
+
+  /* Try to replace the old item in one-shot if possible */
+  if ((old_model = g_hash_table_lookup (self->provider_to_model, provider)) &&
+      g_list_store_find (self->models, old_model, &position))
+    g_list_store_splice (self->models, position, 1, (gpointer *)&model, 1);
+  else
+    g_list_store_append (self->models, model);
+
+  g_hash_table_insert (self->provider_to_model, provider, model);
+
+  IDE_EXIT;
+}
+
+static gboolean
+ide_run_commands_reload_source_func (gpointer data)
+{
+  g_autoptr(GCancellable) cancellable = NULL;
+  IdeRunCommandProvider *provider;
+  IdeRunCommands *self = data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_COMMANDS (self));
+
+  cancellable = ide_object_ref_cancellable (IDE_OBJECT (self));
+
+  while ((provider = g_queue_pop_head (&self->invalid)))
+    ide_run_command_provider_list_commands_async (provider,
+                                                  cancellable,
+                                                  ide_run_commands_list_commands_cb,
+                                                  g_object_ref (self));
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
 ide_run_commands_provider_invalidated_cb (IdeRunCommands        *self,
                                           IdeRunCommandProvider *provider)
 {
@@ -100,7 +163,15 @@ ide_run_commands_provider_invalidated_cb (IdeRunCommands        *self,
   g_assert (IDE_IS_RUN_COMMANDS (self));
   g_assert (IDE_IS_RUN_COMMAND_PROVIDER (provider));
 
-  /* TODO: queue update for changes */
+  if (g_queue_find (&self->invalid, provider) == NULL)
+    {
+      g_queue_push_tail (&self->invalid, provider);
+
+      if (self->reload_source == 0)
+        self->reload_source = g_timeout_add (RELOAD_TIMEOUT_MSEC,
+                                             ide_run_commands_reload_source_func,
+                                             self);
+    }
 
   IDE_EXIT;
 }
@@ -157,6 +228,11 @@ ide_run_commands_provider_removed_cb (IdeExtensionSetAdapter *set,
                                    (gpointer *)&stolen_key,
                                    (gpointer *)&stolen_value))
     {
+      g_queue_remove (&self->invalid, provider);
+
+      if (self->invalid.length == 0)
+        g_clear_handle_id (&self->reload_source, g_source_remove);
+
       if (stolen_value != NULL)
         {
           guint position;
@@ -208,8 +284,11 @@ ide_run_commands_dispose (GObject *object)
 {
   IdeRunCommands *self = (IdeRunCommands *)object;
 
+  g_queue_clear (&self->invalid);
+  g_clear_handle_id (&self->reload_source, g_source_remove);
   ide_clear_and_destroy_object (&self->addins);
   g_clear_object (&self->models);
+  g_clear_object (&self->flatten_model);
   g_clear_pointer (&self->provider_to_model, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_run_commands_parent_class)->dispose (object);
