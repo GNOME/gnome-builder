@@ -22,6 +22,7 @@
 
 #include <libide-threading.h>
 
+#include "gbp-meson-build-system.h"
 #include "gbp-meson-introspection.h"
 #include "gbp-meson-pipeline-addin.h"
 #include "gbp-meson-run-command-provider.h"
@@ -68,6 +69,7 @@ gbp_meson_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
   g_autoptr(IdeTask) task = NULL;
   IdePipelineAddin *addin;
   IdeBuildManager *build_manager;
+  IdeBuildSystem *build_system;
   IdePipeline *pipeline;
   IdeContext *context;
 
@@ -81,23 +83,22 @@ gbp_meson_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
   ide_task_set_source_tag (task, gbp_meson_run_command_provider_list_commands_async);
 
   context = ide_object_get_context (IDE_OBJECT (self));
+  build_system = ide_build_system_from_context (context);
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
-  if (pipeline == NULL ||
+  if (!GBP_IS_MESON_BUILD_SYSTEM (build_system) ||
+      pipeline == NULL ||
       !(addin = ide_pipeline_addin_find_by_module_name (pipeline, "meson")))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
                                  G_IO_ERROR_NOT_SUPPORTED,
-                                 "Cannot list run commands without a pipeline");
+                                 "Cannot list run commands without a meson-based pipeline");
       IDE_EXIT;
     }
 
   introspection = gbp_meson_pipeline_addin_get_introspection (GBP_MESON_PIPELINE_ADDIN (addin));
-
-  g_assert (GBP_IS_MESON_INTROSPECTION (introspection));
-
   gbp_meson_introspection_list_run_commands_async (introspection,
                                                    cancellable,
                                                    gbp_meson_run_command_provider_list_run_commands_cb,
