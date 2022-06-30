@@ -26,9 +26,24 @@
 
 G_DEFINE_INTERFACE (IdeRunCommandProvider, ide_run_command_provider, IDE_TYPE_OBJECT)
 
+enum {
+  INVALIDATED,
+  N_SIGNALS
+};
+
+static guint signals[N_SIGNALS];
+
 static void
 ide_run_command_provider_default_init (IdeRunCommandProviderInterface *iface)
 {
+  signals[INVALIDATED] =
+    g_signal_new ("invalidated",
+                  G_TYPE_FROM_INTERFACE (iface),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeRunCommandProviderInterface, invalidated),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 }
 
 void
@@ -61,4 +76,21 @@ ide_run_command_provider_list_commands_finish (IdeRunCommandProvider  *self,
   g_return_val_if_fail (IDE_IS_RUN_COMMAND_PROVIDER (self), NULL);
 
   return IDE_RUN_COMMAND_PROVIDER_GET_IFACE (self)->list_commands_finish (self, result, error);
+}
+
+/**
+ * ide_run_command_provider_invalidate:
+ * @self: a #IdeRunCommandProvider
+ *
+ * Emits the #IdeRunCommandProvider::invalidated signal.
+ *
+ * This often results in #IdeRunCommands requesting a new set of results for
+ * the run command provider via ide_run_command_provider_list_commands_async().
+ */
+void
+ide_run_command_provider_invalidate (IdeRunCommandProvider *self)
+{
+  g_return_if_fail (IDE_IS_RUN_COMMAND_PROVIDER (self));
+
+  g_signal_emit (self, signals[INVALIDATED], 0);
 }
