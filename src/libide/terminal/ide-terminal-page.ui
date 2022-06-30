@@ -4,6 +4,7 @@
     <property name="can-maximize">true</property>
     <property name="hexpand">true</property>
     <property name="vexpand">true</property>
+    <property name="title" translatable="yes">Untitled Terminal</property>
     <child>
       <object class="GtkPaned" id="paned">
         <property name="orientation">vertical</property>
