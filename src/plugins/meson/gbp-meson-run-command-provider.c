@@ -134,8 +134,32 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpMesonRunCommandProvider, gbp_meson_run_command
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_RUN_COMMAND_PROVIDER, run_command_provider_iface))
 
 static void
+gbp_meson_run_command_provider_parent_set (IdeObject *object,
+                                           IdeObject *parent)
+{
+  GbpMesonRunCommandProvider *self = (GbpMesonRunCommandProvider *)object;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_MESON_RUN_COMMAND_PROVIDER (self));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (parent == NULL)
+    IDE_EXIT;
+
+  ide_run_command_provider_invalidates_at_phase (IDE_RUN_COMMAND_PROVIDER (self),
+                                                 IDE_PIPELINE_PHASE_CONFIGURE);
+
+  IDE_EXIT;
+}
+
+static void
 gbp_meson_run_command_provider_class_init (GbpMesonRunCommandProviderClass *klass)
 {
+  IdeObjectClass *ide_object_class = IDE_OBJECT_CLASS (klass);
+
+  ide_object_class->parent_set = gbp_meson_run_command_provider_parent_set;
 }
 
 static void
