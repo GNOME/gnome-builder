@@ -600,13 +600,12 @@ gbp_meson_introspection_list_run_commands_cb (GObject      *object,
                                               GAsyncResult *result,
                                               gpointer      user_data)
 {
-  IdePipeline *pipeline = (IdePipeline *)object;
   g_autoptr(IdeTask) task = user_data;
   GbpMesonIntrospection *self;
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_PIPELINE (object) || IDE_IS_PIPELINE_STAGE (object));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
@@ -636,13 +635,29 @@ gbp_meson_introspection_list_run_commands_async (GbpMesonIntrospection *self,
   ide_task_set_source_tag (task, gbp_meson_introspection_list_run_commands_async);
 
   if (!self->has_built_once)
-    ide_pipeline_build_async (self->pipeline,
-                              IDE_PIPELINE_PHASE_CONFIGURE,
-                              cancellable,
-                              gbp_meson_introspection_list_run_commands_cb,
-                              g_steal_pointer (&task));
-  else
-    ide_task_return_pointer (task, g_object_ref (self->run_commands), g_object_unref);
+    {
+      g_autofree char *build_dot_ninja = ide_pipeline_build_builddir_path (self->pipeline, "build.ninja", NULL);
+
+      /* If there is a build.ninja then assume we can skip running through
+       * the pipeline and just introspection immediately.
+       */
+      if (g_file_test (build_dot_ninja, G_FILE_TEST_EXISTS))
+        ide_pipeline_stage_build_async (IDE_PIPELINE_STAGE (self),
+                                        self->pipeline,
+                                        cancellable,
+                                        gbp_meson_introspection_list_run_commands_cb,
+                                        g_steal_pointer (&task));
+      else
+        ide_pipeline_build_async (self->pipeline,
+                                  IDE_PIPELINE_PHASE_CONFIGURE,
+                                  cancellable,
+                                  gbp_meson_introspection_list_run_commands_cb,
+                                  g_steal_pointer (&task));
+
+      IDE_EXIT;
+    }
+
+  ide_task_return_pointer (task, g_object_ref (self->run_commands), g_object_unref);
 
   IDE_EXIT;
 }
