@@ -44,7 +44,13 @@ enum {
   N_PROPS
 };
 
+enum {
+  TEST_ACTIVATED,
+  N_SIGNALS
+};
+
 static GParamSpec *properties[N_PROPS];
+static guint signals[N_SIGNALS];
 
 static void
 gbp_testui_panel_activate_cb (GbpTestuiPanel *self,
@@ -53,8 +59,6 @@ gbp_testui_panel_activate_cb (GbpTestuiPanel *self,
 {
   GtkSelectionModel *model;
   g_autoptr(IdeTest) test = NULL;
-  IdeTestManager *test_manager;
-  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -65,13 +69,7 @@ gbp_testui_panel_activate_cb (GbpTestuiPanel *self,
   model = gtk_list_view_get_model (list_view);
   test = g_list_model_get_item (G_LIST_MODEL (model), position);
 
-  g_assert (IDE_IS_TEST (test));
-
-  g_debug ("Activating test \"%s\"", ide_test_get_id (test));
-
-  context = ide_widget_get_context (GTK_WIDGET (self));
-  test_manager = ide_test_manager_from_context (context);
-  ide_test_manager_run_async (test_manager, test, NULL, NULL, NULL);
+  g_signal_emit (self, signals[TEST_ACTIVATED], 0, test);
 
   IDE_EXIT;
 }
@@ -155,6 +153,15 @@ gbp_testui_panel_class_init (GbpTestuiPanelClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals[TEST_ACTIVATED] =
+    g_signal_new ("test-activated",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 1, IDE_TYPE_TEST);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/testui/gbp-testui-panel.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpTestuiPanel, list_view);
