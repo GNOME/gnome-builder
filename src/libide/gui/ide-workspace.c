@@ -1049,13 +1049,13 @@ add_to_frame_with_depth (PanelFrame  *frame,
       if ((int)depth < GET_PRIORITY (child))
         {
           panel_frame_add_before (frame, widget, child);
-          panel_frame_set_visible_child (frame, widget);
-          return;
+          goto reset_page;
         }
     }
 
   panel_frame_add (frame, widget);
 
+reset_page:
   if (previous_page != NULL)
     panel_frame_set_visible_child (frame, previous_page);
 }
