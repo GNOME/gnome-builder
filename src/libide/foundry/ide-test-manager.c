@@ -238,6 +238,8 @@ ide_test_manager_init (IdeTestManager *self)
 
   self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
 
+  g_assert (VTE_IS_PTY (self->pty));
+
   filter = gtk_custom_filter_new (filter_tests_func, NULL, NULL);
   self->filtered = gtk_filter_list_model_new (NULL, GTK_FILTER (g_steal_pointer (&filter)));
   self->tests = gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (self->filtered)),

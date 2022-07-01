@@ -307,6 +307,7 @@ ide_test_run_async (IdeTest             *self,
     IDE_EXIT;
 
   run_context = ide_pipeline_create_run_context (pipeline, self->run_command);
+  ide_run_context_set_pty (run_context, pty);
 
   if (!(subprocess = ide_run_context_spawn (run_context, &error)))
     {
