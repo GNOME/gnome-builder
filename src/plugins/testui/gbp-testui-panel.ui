@@ -37,7 +37,7 @@
               <object class="GtkImage">
                 <binding name="icon-name">
                   <lookup name="icon-name" type="IdeTest">
-                    <lookup name="item">expander</lookup>
+                    <lookup name="item">GtkListItem</lookup>
                   </lookup>
                 </binding>
               </object>
@@ -45,9 +45,10 @@
             <child>
               <object class="GtkLabel">
                 <property name="halign">start</property>
+                <property name="ellipsize">end</property>
                 <binding name="label">
                   <lookup name="title" type="IdeTest">
-                    <lookup name="item">expander</lookup>
+                    <lookup name="item">GtkListItem</lookup>
                   </lookup>
                 </binding>
               </object>
