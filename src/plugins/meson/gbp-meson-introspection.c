@@ -62,7 +62,8 @@ get_string_member (JsonObject  *object,
   g_assert (object != NULL);
   g_assert (member != NULL);
   g_assert (location != NULL);
-  g_assert (*location == NULL);
+
+  g_clear_pointer (location, g_free);
 
   if (json_object_has_member (object, member) &&
       (node = json_object_get_member (object, member)) &&
@@ -86,7 +87,8 @@ get_strv_member (JsonObject   *object,
   g_assert (object != NULL);
   g_assert (member != NULL);
   g_assert (location != NULL);
-  g_assert (*location == NULL);
+
+  g_clear_pointer (location, g_strfreev);
 
   if (json_object_has_member (object, member) &&
       (node = json_object_get_member (object, member)) &&
