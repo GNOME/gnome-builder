@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-foundry.h>
+
 #include "gbp-testui-panel.h"
 
 struct _GbpTestuiPanel
@@ -51,6 +53,8 @@ gbp_testui_panel_activate_cb (GbpTestuiPanel *self,
 {
   GtkSelectionModel *model;
   g_autoptr(IdeTest) test = NULL;
+  IdeTestManager *test_manager;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -61,7 +65,13 @@ gbp_testui_panel_activate_cb (GbpTestuiPanel *self,
   model = gtk_list_view_get_model (list_view);
   test = g_list_model_get_item (G_LIST_MODEL (model), position);
 
-  g_debug ("Activating test \"%s\"", ide_test_get_title (test));
+  g_assert (IDE_IS_TEST (test));
+
+  g_debug ("Activating test \"%s\"", ide_test_get_id (test));
+
+  context = ide_widget_get_context (GTK_WIDGET (self));
+  test_manager = ide_test_manager_from_context (context);
+  ide_test_manager_run_async (test_manager, test, NULL, NULL, NULL);
 
   IDE_EXIT;
 }
