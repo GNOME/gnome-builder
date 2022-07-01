@@ -30,6 +30,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpTestuiOutputPanel, gbp_testui_output_panel, GBP, TESTUI_OUTPUT_PANEL, IdePane)
 
-GbpTestuiOutputPanel *gbp_testui_output_panel_new (VtePty *pty);
+GbpTestuiOutputPanel *gbp_testui_output_panel_new   (VtePty               *pty);
+void                  gbp_testui_output_panel_reset (GbpTestuiOutputPanel *self);
 
 G_END_DECLS
