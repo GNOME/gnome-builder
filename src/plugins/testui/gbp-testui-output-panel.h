@@ -1,4 +1,4 @@
-/* gbp-test-output-panel.h
+/* gbp-testui-output-panel.h
  *
  * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
@@ -26,10 +26,10 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_TEST_OUTPUT_PANEL (gbp_test_output_panel_get_type())
+#define GBP_TYPE_TESTUI_OUTPUT_PANEL (gbp_testui_output_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTestOutputPanel, gbp_test_output_panel, GBP, TEST_OUTPUT_PANEL, IdePane)
+G_DECLARE_FINAL_TYPE (GbpTestuiOutputPanel, gbp_testui_output_panel, GBP, TESTUI_OUTPUT_PANEL, IdePane)
 
-GtkWidget *gbp_test_output_panel_new (VtePty *pty);
+GbpTestuiOutputPanel *gbp_testui_output_panel_new (VtePty *pty);
 
 G_END_DECLS

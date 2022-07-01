@@ -25,15 +25,41 @@
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
+#include "gbp-testui-output-panel.h"
 #include "gbp-testui-panel.h"
 #include "gbp-testui-workspace-addin.h"
 
 struct _GbpTestuiWorkspaceAddin
 {
-  GObject         parent_instance;
-  IdeWorkspace   *workspace;
-  GbpTestuiPanel *panel;
+  GObject               parent_instance;
+  IdeWorkspace         *workspace;
+  GbpTestuiPanel       *panel;
+  GbpTestuiOutputPanel *output_panel;
 };
+
+static void
+on_test_activated_cb (GbpTestuiWorkspaceAddin *self,
+                      IdeTest                 *test,
+                      GbpTestuiPanel          *panel)
+{
+  IdeTestManager *test_manager;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TESTUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_TEST (test));
+  g_assert (GBP_IS_TESTUI_PANEL (panel));
+
+  context = ide_workspace_get_context (self->workspace);
+  test_manager = ide_test_manager_from_context (context);
+  ide_test_manager_run_async (test_manager, test, NULL, NULL, NULL);
+
+  panel_widget_raise (PANEL_WIDGET (self->output_panel));
+
+  IDE_EXIT;
+}
 
 static void
 gbp_testui_workspace_addin_load (IdeWorkspaceAddin *addin,
@@ -41,8 +67,10 @@ gbp_testui_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpTestuiWorkspaceAddin *self = (GbpTestuiWorkspaceAddin *)addin;
   g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(IdePanelPosition) output_position = NULL;
   IdeTestManager *test_manager;
   IdeContext *context;
+  VtePty *pty;
 
   IDE_ENTRY;
 
@@ -54,14 +82,25 @@ gbp_testui_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   context = ide_workspace_get_context (workspace);
   test_manager = ide_test_manager_from_context (context);
+  pty = ide_test_manager_get_pty (test_manager);
+
   self->panel = gbp_testui_panel_new ();
   g_object_bind_property (test_manager, "model",
                           self->panel, "model",
                           G_BINDING_SYNC_CREATE);
-
+  g_signal_connect_object (self->panel,
+                           "test-activated",
+                           G_CALLBACK (on_test_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   position = ide_panel_position_new ();
   ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_END);
   ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
+
+  self->output_panel = gbp_testui_output_panel_new (pty);
+  output_position = ide_panel_position_new ();
+  ide_panel_position_set_edge (output_position, PANEL_DOCK_POSITION_BOTTOM);
+  ide_workspace_add_pane (workspace, IDE_PANE (self->output_panel), output_position);
 
   IDE_EXIT;
 }
@@ -79,6 +118,7 @@ gbp_testui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace));
 
   g_clear_pointer ((IdePane **)&self->panel, ide_pane_destroy);
+  g_clear_pointer ((IdePane **)&self->output_panel, ide_pane_destroy);
 
   self->workspace = NULL;
 

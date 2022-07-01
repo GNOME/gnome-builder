@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpTestOutputPanel" parent="IdePane">
+  <template class="GbpTestuiOutputPanel" parent="IdePane">
     <property name="hexpand">true</property>
     <property name="vexpand">true</property>
     <child>

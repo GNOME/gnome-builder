@@ -1,4 +1,4 @@
-/* gbp-test-output-panel.c
+/* gbp-testui-output-panel.c
  *
  * Copyright 2019 Christian Hergert <chergert@redhat.com>
  *
@@ -18,40 +18,40 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "gbp-test-output-panel"
+#define G_LOG_DOMAIN "gbp-testui-output-panel"
 
 #include "config.h"
 
 #include <glib/gi18n.h>
 #include <libide-terminal.h>
 
-#include "gbp-test-output-panel.h"
+#include "gbp-testui-output-panel.h"
 
-struct _GbpTestOutputPanel
+struct _GbpTestuiOutputPanel
 {
   IdePane       parent_instance;
   IdeTerminal  *terminal;
 };
 
-G_DEFINE_FINAL_TYPE (GbpTestOutputPanel, gbp_test_output_panel, IDE_TYPE_PANE)
+G_DEFINE_FINAL_TYPE (GbpTestuiOutputPanel, gbp_testui_output_panel, IDE_TYPE_PANE)
 
 static void
-gbp_test_output_panel_class_init (GbpTestOutputPanelClass *klass)
+gbp_testui_output_panel_class_init (GbpTestuiOutputPanelClass *klass)
 {
   GtkWidgetClass *widget_class = (GtkWidgetClass*)klass;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/testui/gbp-test-output-panel.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpTestOutputPanel, terminal);
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/testui/gbp-testui-output-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpTestuiOutputPanel, terminal);
 }
 
 static void
-gbp_test_output_panel_save_in_file_cb (GbpTestOutputPanel   *self,
+gbp_testui_output_panel_save_in_file_cb (GbpTestuiOutputPanel   *self,
                                        int                   res,
                                        GtkFileChooserNative *native)
 {
   IDE_ENTRY;
 
-  g_assert (GBP_IS_TEST_OUTPUT_PANEL (self));
+  g_assert (GBP_IS_TESTUI_OUTPUT_PANEL (self));
   g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
 
   if (res == GTK_RESPONSE_ACCEPT)
@@ -97,14 +97,14 @@ gbp_testui_output_panel_save_in_file (GSimpleAction *action,
                                       GVariant      *param,
                                       gpointer       user_data)
 {
-  GbpTestOutputPanel *self = user_data;
+  GbpTestuiOutputPanel *self = user_data;
   g_autoptr(GtkFileChooserNative) native = NULL;
   GtkWidget *window;
 
   IDE_ENTRY;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_TEST_OUTPUT_PANEL (self));
+  g_assert (GBP_IS_TESTUI_OUTPUT_PANEL (self));
 
   window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
   native = gtk_file_chooser_native_new (_("Save File"),
@@ -115,7 +115,7 @@ gbp_testui_output_panel_save_in_file (GSimpleAction *action,
 
   g_signal_connect_object (native,
                            "response",
-                           G_CALLBACK (gbp_test_output_panel_save_in_file_cb),
+                           G_CALLBACK (gbp_testui_output_panel_save_in_file_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -130,16 +130,16 @@ gbp_testui_output_panel_clear_activate (GSimpleAction *action,
                                         GVariant      *param,
                                         gpointer       user_data)
 {
-  GbpTestOutputPanel *self = user_data;
+  GbpTestuiOutputPanel *self = user_data;
 
-  g_assert (GBP_IS_TEST_OUTPUT_PANEL (self));
+  g_assert (GBP_IS_TESTUI_OUTPUT_PANEL (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
 
   vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
 }
 
 static void
-gbp_test_output_panel_init (GbpTestOutputPanel *self)
+gbp_testui_output_panel_init (GbpTestuiOutputPanel *self)
 {
   static const GActionEntry entries[] = {
     { "clear", gbp_testui_output_panel_clear_activate },
@@ -154,18 +154,18 @@ gbp_test_output_panel_init (GbpTestOutputPanel *self)
 
   actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "test-output", G_ACTION_GROUP (actions));
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "testui-output", G_ACTION_GROUP (actions));
 }
 
-GtkWidget *
-gbp_test_output_panel_new (VtePty *pty)
+GbpTestuiOutputPanel *
+gbp_testui_output_panel_new (VtePty *pty)
 {
-  GbpTestOutputPanel *self;
+  GbpTestuiOutputPanel *self;
 
   g_return_val_if_fail (VTE_IS_PTY (pty), NULL);
 
-  self = g_object_new (GBP_TYPE_TEST_OUTPUT_PANEL, NULL);
+  self = g_object_new (GBP_TYPE_TESTUI_OUTPUT_PANEL, NULL);
   vte_terminal_set_pty (VTE_TERMINAL (self->terminal), pty);
 
-  return GTK_WIDGET (self);
+  return self;
 }
