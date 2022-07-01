@@ -130,7 +130,9 @@ ide_run_commands_list_commands_cb (GObject      *object,
   else
     g_list_store_append (self->models, model);
 
-  g_hash_table_insert (self->provider_to_model, provider, model);
+  g_hash_table_insert (self->provider_to_model,
+                       g_object_ref (provider),
+                       g_object_ref (model));
 
   IDE_EXIT;
 }
