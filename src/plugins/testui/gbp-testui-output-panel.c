@@ -169,3 +169,11 @@ gbp_testui_output_panel_new (VtePty *pty)
 
   return self;
 }
+
+void
+gbp_testui_output_panel_reset (GbpTestuiOutputPanel *self)
+{
+  g_return_if_fail (GBP_IS_TESTUI_OUTPUT_PANEL (self));
+
+  vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
+}
