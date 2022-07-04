@@ -130,7 +130,7 @@ msgstr "Un depurador integrat per a aplicacions natives"
 #: data/appdata/org.gnome.Builder.appdata.xml.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
 msgstr ""
-"Comptabilitat per a construir amb els entorns d'execució jhbuild i flatpak"
+"Support per a construir amb els entorns d'execució jhbuild i flatpak"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:39
 msgid "Support for viewing TODOs found within your code base"
