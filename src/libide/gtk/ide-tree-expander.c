@@ -140,6 +140,76 @@ ide_tree_expander_notify_expanded_cb (IdeTreeExpander *self,
 }
 
 static void
+ide_tree_expander_click_pressed_cb (IdeTreeExpander *self,
+                                    int              n_press,
+                                    double           x,
+                                    double           y,
+                                    GtkGestureClick *click)
+{
+  g_assert (IDE_IS_TREE_EXPANDER (self));
+  g_assert (GTK_IS_GESTURE_CLICK (click));
+
+  if (n_press != 1 ||
+      self->list_row == NULL ||
+      !gtk_tree_list_row_is_expandable (self->list_row))
+    return;
+
+  gtk_widget_activate_action (GTK_WIDGET (self), "listitem.toggle-expand", NULL);
+
+  gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE, FALSE);
+  gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+ide_tree_expander_click_released_cb (IdeTreeExpander *self,
+                                     int              n_press,
+                                     double           x,
+                                     double           y,
+                                     GtkGestureClick *click)
+{
+  g_assert (IDE_IS_TREE_EXPANDER (self));
+  g_assert (GTK_IS_GESTURE_CLICK (click));
+
+  if (n_press != 1 ||
+      self->list_row == NULL ||
+      !gtk_tree_list_row_is_expandable (self->list_row))
+    return;
+
+  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
+  gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+ide_tree_expander_click_cancel_cb (IdeTreeExpander  *self,
+                                   GdkEventSequence *sequence,
+                                   GtkGestureClick  *click)
+{
+  g_assert (IDE_IS_TREE_EXPANDER (self));
+  g_assert (GTK_IS_GESTURE_CLICK (click));
+
+  g_print ("Cancel\n");
+
+  gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
+  gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
+}
+
+static void
+ide_tree_expander_toggle_expand (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *parameter)
+{
+  IdeTreeExpander *self = (IdeTreeExpander *)widget;
+
+  g_assert (IDE_IS_TREE_EXPANDER (self));
+
+  if (self->list_row == NULL)
+    return;
+
+  gtk_tree_list_row_set_expanded (self->list_row,
+                                  !gtk_tree_list_row_get_expanded (self->list_row));
+}
+
+static void
 ide_tree_expander_dispose (GObject *object)
 {
   IdeTreeExpander *self = (IdeTreeExpander *)object;
@@ -288,11 +358,15 @@ ide_tree_expander_class_init (IdeTreeExpanderClass *klass)
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
   gtk_widget_class_set_css_name (widget_class, "treeexpander");
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
+
+  gtk_widget_class_install_action (widget_class, "listitem.toggle-expand", NULL, ide_tree_expander_toggle_expand);
 }
 
 static void
 ide_tree_expander_init (IdeTreeExpander *self)
 {
+  GtkEventController *controller;
+
   self->image = g_object_new (GTK_TYPE_IMAGE, NULL);
   gtk_widget_insert_after (self->image, GTK_WIDGET (self), NULL);
 
@@ -303,6 +377,24 @@ ide_tree_expander_init (IdeTreeExpander *self)
                               "margin-end", 3,
                               NULL);
   gtk_widget_insert_after (self->title, GTK_WIDGET (self), self->image);
+
+  controller = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+  g_signal_connect_object (controller,
+                           "pressed",
+                           G_CALLBACK (ide_tree_expander_click_pressed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (controller,
+                           "released",
+                           G_CALLBACK (ide_tree_expander_click_released_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (controller,
+                           "cancel",
+                           G_CALLBACK (ide_tree_expander_click_cancel_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
 /**
