@@ -1,4 +1,4 @@
-/* gbp-testui-panel.h
+/* gbp-testui-item.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,15 +20,19 @@
 
 #pragma once
 
-#include <libide-foundry.h>
-#include <libide-gui.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_TESTUI_PANEL (gbp_testui_panel_get_type())
+#define GBP_TYPE_TESTUI_ITEM (gbp_testui_item_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTestuiPanel, gbp_testui_panel, GBP, TESTUI_PANEL, IdePane)
+G_DECLARE_FINAL_TYPE (GbpTestuiItem, gbp_testui_item, GBP, TESTUI_ITEM, GObject)
 
-GbpTestuiPanel *gbp_testui_panel_new (IdeTestManager *test_manager);
+GbpTestuiItem *gbp_testui_item_new                (gpointer       instance);
+gpointer       gbp_testui_item_get_instance       (GbpTestuiItem *self);
+GListModel    *gbp_testui_item_create_child_model (gpointer       item,
+                                                   gpointer       user_data);
+gpointer       gbp_testui_item_map_func           (gpointer       item,
+                                                   gpointer       user_data);
 
 G_END_DECLS
