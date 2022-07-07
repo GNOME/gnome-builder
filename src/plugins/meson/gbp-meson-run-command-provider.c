@@ -89,7 +89,8 @@ gbp_meson_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
 
   if (!GBP_IS_MESON_BUILD_SYSTEM (build_system) ||
       pipeline == NULL ||
-      !(addin = ide_pipeline_addin_find_by_module_name (pipeline, "meson")))
+      !(addin = ide_pipeline_addin_find_by_module_name (pipeline, "meson")) ||
+      !(introspection = gbp_meson_pipeline_addin_get_introspection (GBP_MESON_PIPELINE_ADDIN (addin))))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -98,7 +99,8 @@ gbp_meson_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
       IDE_EXIT;
     }
 
-  introspection = gbp_meson_pipeline_addin_get_introspection (GBP_MESON_PIPELINE_ADDIN (addin));
+  g_assert (GBP_IS_MESON_INTROSPECTION (introspection));
+
   gbp_meson_introspection_list_run_commands_async (introspection,
                                                    cancellable,
                                                    gbp_meson_run_command_provider_list_run_commands_cb,
