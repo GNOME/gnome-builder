@@ -299,6 +299,8 @@ ide_tree_expander_init (IdeTreeExpander *self)
   self->title = g_object_new (GTK_TYPE_LABEL,
                               "halign", GTK_ALIGN_START,
                               "ellipsize", PANGO_ELLIPSIZE_END,
+                              "margin-start", 3,
+                              "margin-end", 3,
                               NULL);
   gtk_widget_insert_after (self->title, GTK_WIDGET (self), self->image);
 }
