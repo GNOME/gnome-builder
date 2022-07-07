@@ -194,8 +194,6 @@ gbp_testui_item_new (gpointer instance)
   g_assert (IDE_IS_TEST (instance) ||
             IDE_IS_TEST_MANAGER (instance));
 
-  g_print ("%s\n", G_OBJECT_TYPE_NAME (instance));
-
   return g_object_new (GBP_TYPE_TESTUI_ITEM,
                        "instance", instance,
                        NULL);
