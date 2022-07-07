@@ -504,4 +504,5 @@ ide_tree_expander_set_list_row (IdeTreeExpander *self,
   ide_tree_expander_update_icon (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LIST_ROW]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
 }
