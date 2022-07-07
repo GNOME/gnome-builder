@@ -34,7 +34,7 @@
         <choice value="pipeline"/>
         <choice value="runtime"/>
       </choices>
-      <default>'pipeline'</default>
+      <default>'runtime'</default>
       <summary>Unit Test Locality</summary>
       <description>What environment to use when running unit tests</description>
     </key>
