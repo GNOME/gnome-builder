@@ -35,6 +35,7 @@
 #include "ide-radio-box.h"
 #include "ide-search-entry.h"
 #include "ide-shortcut-accel-dialog.h"
+#include "ide-tree-expander.h"
 #include "ide-truncate-model.h"
 
 void
@@ -50,6 +51,7 @@ _ide_gtk_init (void)
   g_type_ensure (IDE_TYPE_RADIO_BOX);
   g_type_ensure (IDE_TYPE_SEARCH_ENTRY);
   g_type_ensure (IDE_TYPE_SHORTCUT_ACCEL_DIALOG);
+  g_type_ensure (IDE_TYPE_TREE_EXPANDER);
   g_type_ensure (IDE_TYPE_TRUNCATE_MODEL);
 
   g_resources_register (ide_gtk_get_resource ());

@@ -37,5 +37,6 @@
 # include "ide-radio-box.h"
 # include "ide-search-entry.h"
 # include "ide-shortcut-accel-dialog.h"
+# include "ide-tree-expander.h"
 # include "ide-truncate-model.h"
 #undef IDE_GTK_INSIDE
