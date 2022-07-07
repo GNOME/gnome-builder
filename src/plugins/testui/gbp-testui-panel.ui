@@ -31,20 +31,18 @@
           <lookup name="item">GtkListItem</lookup>
         </binding>
         <binding name="icon-name">
-          <lookup name="icon-name" type="IdeTest">
-            <lookup name="item">GtkListItem</lookup>
+          <lookup name="icon-name" type="GbpTestuiItem">
+            <lookup name="item">expander</lookup>
           </lookup>
         </binding>
         <binding name="expanded-icon-name">
-          <!-- TODO: add expanded-icon-name -->
-          <lookup name="icon-name" type="IdeTest">
-            <lookup name="item">GtkListItem</lookup>
+          <lookup name="expanded-icon-name" type="GbpTestuiItem">
+            <lookup name="item">expander</lookup>
           </lookup>
         </binding>
         <binding name="title">
-          <!-- TODO: add expanded-icon-name -->
-          <lookup name="title" type="IdeTest">
-            <lookup name="item">GtkListItem</lookup>
+          <lookup name="title" type="GbpTestuiItem">
+            <lookup name="item">expander</lookup>
           </lookup>
         </binding>
       </object>

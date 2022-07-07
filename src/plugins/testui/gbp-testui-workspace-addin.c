@@ -85,10 +85,7 @@ gbp_testui_workspace_addin_load (IdeWorkspaceAddin *addin,
   test_manager = ide_test_manager_from_context (context);
   pty = ide_test_manager_get_pty (test_manager);
 
-  self->panel = gbp_testui_panel_new ();
-  g_object_bind_property (test_manager, "model",
-                          self->panel, "model",
-                          G_BINDING_SYNC_CREATE);
+  self->panel = gbp_testui_panel_new (test_manager);
   g_signal_connect_object (self->panel,
                            "test-activated",
                            G_CALLBACK (on_test_activated_cb),
