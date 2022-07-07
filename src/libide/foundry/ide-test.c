@@ -29,6 +29,7 @@
 #include "ide-run-context.h"
 #include "ide-foundry-enums.h"
 #include "ide-pipeline.h"
+#include "ide-runtime.h"
 #include "ide-test.h"
 
 struct _IdeTest
@@ -290,8 +291,12 @@ ide_test_run_async (IdeTest             *self,
 {
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GSettings) settings = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
+  g_autofree char *locality = NULL;
+  IdeContext *context;
+  IdeRuntime *runtime;
 
   IDE_ENTRY;
 
@@ -306,8 +311,24 @@ ide_test_run_async (IdeTest             *self,
   if (ide_task_return_error_if_cancelled (task))
     IDE_EXIT;
 
-  run_context = ide_pipeline_create_run_context (pipeline, self->run_command);
-  ide_run_context_set_pty (run_context, pty);
+  context = ide_object_get_context (IDE_OBJECT (pipeline));
+  runtime = ide_pipeline_get_runtime (pipeline);
+  settings = ide_context_ref_project_settings (context);
+  locality = g_settings_get_string (settings, "unit-test-locality");
+
+  if (ide_str_equal0 (locality, "runtime"))
+    {
+      run_context = ide_run_context_new ();
+      ide_runtime_prepare_to_run (runtime, pipeline, run_context);
+      ide_run_command_prepare_to_run (self->run_command, run_context, context);
+    }
+  else /* "pipeline" */
+    {
+      run_context = ide_pipeline_create_run_context (pipeline, self->run_command);
+    }
+
+  if (pty != NULL)
+    ide_run_context_set_pty (run_context, pty);
 
   if (!(subprocess = ide_run_context_spawn (run_context, &error)))
     {

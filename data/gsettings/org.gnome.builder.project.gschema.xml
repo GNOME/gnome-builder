@@ -29,5 +29,15 @@
       <description>This allows sending something other than sigkill to stop the target application. That might be useful when you want to gracefully shutdown a server process.</description>
     </key>
 
+    <key name="unit-test-locality" type="s">
+      <choices>
+        <choice value="pipeline"/>
+        <choice value="runtime"/>
+      </choices>
+      <default>'pipeline'</default>
+      <summary>Unit Test Locality</summary>
+      <description>What environment to use when running unit tests</description>
+    </key>
+
   </schema>
 </schemalist>
