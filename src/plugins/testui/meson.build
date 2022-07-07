@@ -3,6 +3,7 @@ plugins_sources += files([
   'gbp-testui-item.c',
   'gbp-testui-output-panel.c',
   'gbp-testui-panel.c',
+  'gbp-testui-preferences-addin.c',
   'gbp-testui-workspace-addin.c',
 ])
 
