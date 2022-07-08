@@ -20,6 +20,6 @@ flatpak:
     - flatpak --user install -y flathub org.freedesktop.Sdk.Extension.node14//21.08
 
 nightly:
-    extends: '.publish_nightly'
-    dependencies:
-        - 'flatpak'
+  extends: '.publish_nightly'
+  needs:
+    - 'flatpak'
