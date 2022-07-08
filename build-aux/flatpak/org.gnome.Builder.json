@@ -5,7 +5,7 @@
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.llvm14",
-        "org.freedesktop.Sdk.Extension.node14"
+        "org.freedesktop.Sdk.Extension.node18"
     ],
     "command" : "gnome-builder",
     "tags" : [

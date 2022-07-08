@@ -3,15 +3,15 @@
     "buildsystem" : "simple",
     "build-options" : {
         "env" : {
-            "npm_config_nodedir" : "/usr/lib/sdk/node14"
+            "npm_config_nodedir" : "/usr/lib/sdk/node18"
         }
     },
     "build-commands" : [
         "mkdir -p /app/bin/ /app/lib/ /app/include/ /app/share/ ",
-        "cp -a /usr/lib/sdk/node14/bin/* /app/bin/",
-        "cp -a /usr/lib/sdk/node14/lib/* /app/lib/",
-        "cp -a /usr/lib/sdk/node14/include/* /app/include/",
-        "cp -a /usr/lib/sdk/node14/share/* /app/share/",
+        "cp -a /usr/lib/sdk/node18/bin/* /app/bin/",
+        "cp -a /usr/lib/sdk/node18/lib/* /app/lib/",
+        "cp -a /usr/lib/sdk/node18/include/* /app/include/",
+        "cp -a /usr/lib/sdk/node18/share/* /app/share/",
         "HOME=$PWD npm --offline -g config set offline true",
         "HOME=$PWD npm --offline -g config set prefix /app",
         "HOME=$PWD npm --offline -g config set cache $FLATPAK_BUILDER_BUILDDIR/flatpak-node/npm-cache",
