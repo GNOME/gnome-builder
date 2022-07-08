@@ -389,6 +389,8 @@
             "name" : "ostree",
             "config-opts" : [
                 "--disable-man",
+                "--with-curl",
+                "--without-soup",
                 "--without-libsystemd"
             ],
             "cleanup" : [
@@ -473,6 +475,7 @@
                 "--disable-seccomp",
                 "--disable-sandboxed-triggers",
                 "--disable-system-helper",
+                "--with-curl",
                 "--with-system-install-dir=/var/lib/flatpak",
                 "--sysconfdir=/var/run/host/etc"
             ],
