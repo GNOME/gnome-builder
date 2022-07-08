@@ -189,6 +189,7 @@ gbp_testui_item_init (GbpTestuiItem *self)
 GbpTestuiItem *
 gbp_testui_item_new (gpointer instance)
 {
+  g_return_val_if_fail (instance != NULL, NULL);
   g_return_val_if_fail (G_IS_OBJECT (instance), NULL);
 
   g_assert (IDE_IS_TEST (instance) ||
