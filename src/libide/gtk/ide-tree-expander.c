@@ -187,8 +187,6 @@ ide_tree_expander_click_cancel_cb (IdeTreeExpander  *self,
   g_assert (IDE_IS_TREE_EXPANDER (self));
   g_assert (GTK_IS_GESTURE_CLICK (click));
 
-  g_print ("Cancel\n");
-
   gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_ACTIVE);
   gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
 }
