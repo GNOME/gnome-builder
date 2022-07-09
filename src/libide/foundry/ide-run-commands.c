@@ -104,6 +104,7 @@ ide_run_commands_list_commands_cb (GObject      *object,
   g_autoptr(GListModel) model = NULL;
   g_autoptr(GError) error = NULL;
   GListModel *old_model;
+  gboolean found;
   guint position;
 
   IDE_ENTRY;
@@ -121,18 +122,30 @@ ide_run_commands_list_commands_cb (GObject      *object,
       IDE_EXIT;
     }
 
+  /* Do nothing if the model didn't change */
+  old_model = g_hash_table_lookup (self->provider_to_model, provider);
+  if (old_model == model)
+    IDE_EXIT;
+
+  g_assert (old_model != model);
+  g_assert (!old_model || G_IS_LIST_MODEL (old_model));
   g_assert (G_IS_LIST_MODEL (model));
 
-  /* Try to replace the old item in one-shot if possible */
-  if ((old_model = g_hash_table_lookup (self->provider_to_model, provider)) &&
-      g_list_store_find (self->models, old_model, &position))
-    g_list_store_splice (self->models, position, 1, (gpointer *)&model, 1);
+  /* First try to locate our model */
+  if (old_model != NULL)
+    found = g_list_store_find (self->models, old_model, &position);
   else
-    g_list_store_append (self->models, model);
+    found = FALSE;
 
+  /* Now ensure our hashtable is up to date for re-entrancy purposes */
   g_hash_table_insert (self->provider_to_model,
                        g_object_ref (provider),
                        g_object_ref (model));
+
+  if (found)
+    g_list_store_splice (self->models, position, 1, (gpointer *)&model, 1);
+  else
+    g_list_store_append (self->models, model);
 
   IDE_EXIT;
 }
@@ -390,16 +403,13 @@ GListModel *
 ide_run_commands_list_by_kind (IdeRunCommands    *self,
                                IdeRunCommandKind  kind)
 {
-  g_autoptr(GtkCustomFilter) filter = NULL;
-  g_autoptr(GtkFilterListModel) model = NULL;
+  GtkCustomFilter *filter = NULL;
+  GtkFilterListModel *model = NULL;
 
   g_return_val_if_fail (IDE_IS_RUN_COMMANDS (self), NULL);
 
-  filter = gtk_custom_filter_new (filter_run_command_by_kind,
-                                  GINT_TO_POINTER (kind),
-                                  NULL);
-  model = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (self)),
-                                     GTK_FILTER (g_steal_pointer (&filter)));
+  filter = gtk_custom_filter_new (filter_run_command_by_kind, GINT_TO_POINTER (kind), NULL);
+  model = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (self)), GTK_FILTER (filter));
 
-  return G_LIST_MODEL (g_steal_pointer (&model));
+  return G_LIST_MODEL (model);
 }
