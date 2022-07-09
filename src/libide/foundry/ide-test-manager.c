@@ -56,7 +56,7 @@ struct _IdeTestManager
 {
   IdeObject           parent_instance;
   GtkFilterListModel *filtered;
-  GtkMapListModel    *tests;
+  IdeCachedListModel *tests;
   VtePty             *pty;
 };
 
@@ -233,17 +233,18 @@ ide_test_manager_class_init (IdeTestManagerClass *klass)
 static void
 ide_test_manager_init (IdeTestManager *self)
 {
-  g_autoptr(GtkFilterListModel) filtered = NULL;
-  g_autoptr(GtkCustomFilter) filter = NULL;
+  GtkCustomFilter *filter;
+  GtkMapListModel *map;
 
   self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
   vte_pty_set_utf8 (self->pty, TRUE, NULL);
 
   filter = gtk_custom_filter_new (filter_tests_func, NULL, NULL);
-  self->filtered = gtk_filter_list_model_new (NULL, GTK_FILTER (g_steal_pointer (&filter)));
-  self->tests = gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (self->filtered)),
-                                        map_run_command_to_test,
-                                        NULL, NULL);
+  self->filtered = gtk_filter_list_model_new (NULL, GTK_FILTER (filter));
+  map = gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (self->filtered)),
+                                map_run_command_to_test,
+                                NULL, NULL);
+  self->tests = ide_cached_list_model_new (G_LIST_MODEL (map));
 }
 
 static void
