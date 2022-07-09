@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<interface>
+  <menu id="run-menu">
+    <section id="run-menu-tests-section">
+      <item>
+        <attribute name="id">run-unit-tests</attribute>
+        <attribute name="action">test-manager.test-all</attribute>
+        <attribute name="label" translatable="yes">Run all Unit Tests</attribute>
+        <attribute name="verb-icon-name">builder-unit-tests-symbolic</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;u</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

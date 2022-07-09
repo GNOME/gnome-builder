@@ -116,6 +116,7 @@
         <attribute name="verb-icon">builder-run-start-symbolic</attribute>
       </item>
     </section>
+    <section id="run-menu-tests-section"/>
     <section id="run-menu-settings-section">
       <attribute name="label" translatable="yes">Settings</attribute>
       <submenu id="run-menu-appearance">
