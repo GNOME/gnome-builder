@@ -251,9 +251,10 @@ gbp_testui_item_create_child_model (gpointer item,
   if (IDE_IS_TEST_MANAGER (self->instance))
     {
       GListModel *tests = ide_test_manager_list_tests (self->instance);
-      return G_LIST_MODEL (gtk_map_list_model_new (g_object_ref (tests),
-                                                   gbp_testui_item_map_func,
-                                                   NULL, NULL));
+      GtkMapListModel *map = gtk_map_list_model_new (g_object_ref (tests),
+                                                     gbp_testui_item_map_func,
+                                                     NULL, NULL);
+      return G_LIST_MODEL (ide_cached_list_model_new (G_LIST_MODEL (map)));
     }
 
   /* TODO: We could insert information about the test run here, like
