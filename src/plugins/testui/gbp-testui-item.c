@@ -90,6 +90,36 @@ gbp_testui_item_get_title (GbpTestuiItem *self)
 }
 
 static void
+gbp_testui_item_notify_icon_name_cb (GbpTestuiItem *self,
+                                     GParamSpec    *pspec,
+                                     IdeTest       *test)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TESTUI_ITEM (self));
+  g_assert (IDE_IS_TEST (test));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_NAME]);
+}
+
+static void
+gbp_testui_item_set_instance (GbpTestuiItem *self,
+                              gpointer       instance)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TESTUI_ITEM (self));
+  g_assert (G_IS_OBJECT (instance));
+
+  self->instance = g_object_ref (instance);
+
+  if (IDE_IS_TEST (instance))
+    g_signal_connect_object (instance,
+                             "notify::icon-name",
+                             G_CALLBACK (gbp_testui_item_notify_icon_name_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
+}
+
+static void
 gbp_testui_item_dispose (GObject *object)
 {
   GbpTestuiItem *self = (GbpTestuiItem *)object;
@@ -114,11 +144,11 @@ gbp_testui_item_get_property (GObject    *object,
       break;
 
     case PROP_ICON_NAME:
-      g_value_set_static_string (value, g_intern_string (gbp_testui_item_get_icon_name (self)));
+      g_value_set_string (value, gbp_testui_item_get_icon_name (self));
       break;
 
     case PROP_EXPANDED_ICON_NAME:
-      g_value_set_static_string (value, g_intern_string (gbp_testui_item_get_expanded_icon_name (self)));
+      g_value_set_string (value, gbp_testui_item_get_expanded_icon_name (self));
       break;
 
     case PROP_TITLE:
@@ -141,7 +171,7 @@ gbp_testui_item_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_INSTANCE:
-      self->instance = g_value_dup_object (value);
+      gbp_testui_item_set_instance (self, g_value_get_object (value));
       break;
 
     default:
