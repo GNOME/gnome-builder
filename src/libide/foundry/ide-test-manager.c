@@ -117,7 +117,7 @@ static void
 ide_test_manager_actions_test (IdeTestManager *self,
                                GVariant       *param)
 {
-  g_autoptr(GListModel) tests = NULL;
+  GListModel *tests;
   const char *test_id;
   guint n_items;
 
@@ -321,10 +321,10 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
                                 gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(GListModel) tests = NULL;
   g_autoptr(GPtrArray) ar = NULL;
   IdeBuildManager *build_manager;
   IdePipeline *pipeline;
+  GListModel *tests;
   IdeContext *context;
   RunAll *state;
   guint n_items;
