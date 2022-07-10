@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-02-21 19:11+0000\n"
-"PO-Revision-Date: 2022-02-23 09:35+0700\n"
+"POT-Creation-Date: 2022-05-18 13:09+0000\n"
+"PO-Revision-Date: 2022-07-10 16:35+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -849,7 +849,7 @@ msgid "Load or generate a palette using the preferences"
 msgstr "Muat atau buat palet memakai preferensi"
 
 #: src/gstyle/ui/gstyle-color-widget.ui:13
-#: src/libide/sourceview/ide-source-view.c:5030
+#: src/libide/sourceview/ide-source-view.c:5029
 #: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
 msgid "Rename"
 msgstr "Ubah nama"
@@ -871,7 +871,7 @@ msgstr "_Ubah Nama"
 msgid "unsaved file %u"
 msgstr "berkas %u belum disimpan"
 
-#: src/libide/code/ide-buffer.c:3635
+#: src/libide/code/ide-buffer.c:3720
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
@@ -914,7 +914,7 @@ msgstr "Tanpa Judul"
 msgid "_Cancel"
 msgstr "_Batal"
 
-#: src/libide/debugger/ide-debug-manager.c:1001
+#: src/libide/debugger/ide-debug-manager.c:1002
 #, c-format
 msgid "A suitable debugger was not found."
 msgstr "Pengawakutu yang cocok tidak ditemukan."
@@ -1443,7 +1443,7 @@ msgstr "Proses keluar tak disangka"
 msgid "Host Operating System"
 msgstr "Sistem Operasi Host"
 
-#: src/libide/foundry/ide-runtime.c:571
+#: src/libide/foundry/ide-runtime.c:575
 #: src/plugins/jhbuild/jhbuild_plugin.py:123
 msgid "Host System"
 msgstr "Sistem host"
@@ -2685,6 +2685,7 @@ msgctxt "shortcut window"
 msgid "Beautify selected code"
 msgstr "Percantik kode yang dipilih"
 
+#. Translators: LSP stands for Language Server Protocol
 #: src/libide/gui/ide-shortcuts-window.ui:447
 msgctxt "shortcut window"
 msgid "(LSP only) Format selected code or whole document"
@@ -2817,7 +2818,7 @@ msgid_plural "Installing %u packages"
 msgstr[0] "Memasang %u paket"
 
 #. translators: %s is replaced with the error message
-#: src/libide/lsp/ide-lsp-client.c:1473
+#: src/libide/lsp/ide-lsp-client.c:1481
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Gagal menginisialisasi server bahasa: %s"
@@ -2923,31 +2924,31 @@ msgstr "Per_kecil"
 msgid "_Reset"
 msgstr "_Reset"
 
-#: src/libide/sourceview/ide-source-view.c:4444
+#: src/libide/sourceview/ide-source-view.c:4443
 #, c-format
 msgid "Insert “%s”"
 msgstr "Sisip \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4446
+#: src/libide/sourceview/ide-source-view.c:4445
 #, c-format
 msgid "Replace “%s” with “%s”"
 msgstr "Gantikan “%s” dengan \"%s\""
 
-#: src/libide/sourceview/ide-source-view.c:4572
+#: src/libide/sourceview/ide-source-view.c:4571
 msgid "Apply Fix-It"
 msgstr "Terapkan Fix-It"
 
-#: src/libide/sourceview/ide-source-view.c:5029
+#: src/libide/sourceview/ide-source-view.c:5028
 msgid "Rename symbol"
 msgstr "Ubah nama simbol"
 
 #. translators: %s is the filename, then line number, column number. <> are pango markup
-#: src/libide/sourceview/ide-source-view.c:5408
+#: src/libide/sourceview/ide-source-view.c:5407
 #, c-format
 msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 msgstr "<b>%s</b> — <small>Baris %u, Kolom %u</small>"
 
-#: src/libide/sourceview/ide-source-view.c:5434
+#: src/libide/sourceview/ide-source-view.c:5433
 msgid "No references were found"
 msgstr "Tidak ada referensi yang ditemukan"
 
@@ -2986,24 +2987,24 @@ msgstr "Terminal Tanpa Judul"
 msgid "Save Terminal Content As"
 msgstr "Simpan Isi Terminal Sebagai"
 
-#: src/libide/terminal/ide-terminal-page.c:112
-#: src/libide/terminal/ide-terminal-page.c:158
-#: src/libide/terminal/ide-terminal-page.c:301
-msgid "Untitled terminal"
-msgstr "Terminal tanpa judul"
-
-#. translators: exited describes that the terminal shell process has exited
-#: src/libide/terminal/ide-terminal-page.c:114
-msgid "Exited"
-msgstr "Keluar"
-
-#: src/libide/terminal/ide-terminal-page.c:121
+#: src/libide/terminal/ide-terminal-page.c:125
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
 "Gagal meluncurkan subproses. Anda mungkin perlu membangun kembali proyek "
 "Anda."
 
-#: src/libide/terminal/ide-terminal-page.c:145
+#: src/libide/terminal/ide-terminal-page.c:130
+#: src/libide/terminal/ide-terminal-page.c:165
+#: src/libide/terminal/ide-terminal-page.c:336
+msgid "Untitled terminal"
+msgstr "Terminal tanpa judul"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:132
+msgid "Exited"
+msgstr "Keluar"
+
+#: src/libide/terminal/ide-terminal-page.c:152
 msgid "Subprocess launcher failed too quickly, will not respawn."
 msgstr "Peluncur subproses gagal terlalu cepat, tidak akan muncul kembali."
 
@@ -3252,7 +3253,7 @@ msgid "_Beautify"
 msgstr "_Beautify"
 
 #. translators: %s is replaced with the name of the configuration
-#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:663
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:705
 #, c-format
 msgid "%s (Copy)"
 msgstr "%s (Salinan)"
@@ -3639,6 +3640,11 @@ msgstr ""
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:80
 msgid "Declaration"
 msgstr "Deklarasi"
+
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#, c-format
+msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr "Kemungkinan salah ketik dalam \"%s\". Apakah maksud Anda \"%s\"?"
 
 #: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
 msgid "Colors"
@@ -4569,18 +4575,18 @@ msgstr "Emacs"
 msgid "Emulates the Emacs text editor"
 msgstr "Mengemulasi penyunting teks Emacs"
 
-#: src/plugins/eslint/eslint_plugin.py:204
+#: src/plugins/eslint/eslint_plugin.py:97
 msgid "ESlint"
 msgstr "ESlint"
 
-#: src/plugins/eslint/eslint_plugin.py:205
+#: src/plugins/eslint/eslint_plugin.py:98
 msgid "Enable the use of ESLint, which may execute code in your project"
 msgstr ""
 "Memungkinkan penggunaan ESLint, yang dapat mengeksekusi kode dalam proyek "
 "Anda"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/eslint/eslint_plugin.py:207
+#: src/plugins/eslint/eslint_plugin.py:100
 msgid "eslint javascript lint code execute execution"
 msgstr "eslint javascript kode lint mengeksekusi eksekusi"
 
@@ -5132,7 +5138,7 @@ msgstr "Komputer Anda kekurangan python3-sphinx"
 msgid "(Preview)"
 msgstr "(Pratinjau)"
 
-#: src/plugins/intelephense/intelephense.py:71
+#: src/plugins/intelephense/intelephense.py:72
 msgid "Indexing php code…"
 msgstr "Mengindeks kode php…"
 
@@ -5174,59 +5180,59 @@ msgstr "Bangun proyek"
 msgid "Install project"
 msgstr "Pasang proyek"
 
-#: src/plugins/make/make_plugin.py:343
+#: src/plugins/make/make_plugin.py:351
 msgid "Empty Makefile Project"
 msgstr "Proyek Makefile Kosong"
 
-#: src/plugins/make/make_plugin.py:345
+#: src/plugins/make/make_plugin.py:353
 msgid "Create a new empty project using a simple Makefile"
 msgstr "Buat proyek kosong baru dengan menggunakan Makefile sederhana"
 
-#: src/plugins/meson-templates/meson_templates.py:255
+#: src/plugins/meson-templates/meson_templates.py:259
 msgid "GTK Application (Legacy)"
 msgstr "Aplikasi GTK (Warisan)"
 
-#: src/plugins/meson-templates/meson_templates.py:257
+#: src/plugins/meson-templates/meson_templates.py:261
 msgid "Create a GTK application with GTK 3"
 msgstr "Buat suatu aplikasi GTK dengan GTK 3"
 
-#: src/plugins/meson-templates/meson_templates.py:332
+#: src/plugins/meson-templates/meson_templates.py:336
 msgid "GTK Application"
 msgstr "Aplikasi GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:334
+#: src/plugins/meson-templates/meson_templates.py:338
 msgid "Create a GTK application"
 msgstr "Buat suatu aplikasi GTK"
 
-#: src/plugins/meson-templates/meson_templates.py:414
+#: src/plugins/meson-templates/meson_templates.py:418
 msgid "GNOME Application"
 msgstr "Aplikasi GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:416
+#: src/plugins/meson-templates/meson_templates.py:420
 msgid "Create a GNOME application"
 msgstr "Buat suatu aplikasi GNOME"
 
-#: src/plugins/meson-templates/meson_templates.py:496
+#: src/plugins/meson-templates/meson_templates.py:500
 msgid "Shared Library"
 msgstr "Pustaka Bersama"
 
-#: src/plugins/meson-templates/meson_templates.py:498
+#: src/plugins/meson-templates/meson_templates.py:502
 msgid "Create a new project with a shared library"
 msgstr "Buat suatu proyek baru dengan pustaka bersama"
 
-#: src/plugins/meson-templates/meson_templates.py:515
+#: src/plugins/meson-templates/meson_templates.py:519
 msgid "Empty Project"
 msgstr "Proyek Kosong"
 
-#: src/plugins/meson-templates/meson_templates.py:517
+#: src/plugins/meson-templates/meson_templates.py:521
 msgid "Create a new empty project"
 msgstr "Buat proyek kosong baru"
 
-#: src/plugins/meson-templates/meson_templates.py:534
+#: src/plugins/meson-templates/meson_templates.py:538
 msgid "Command Line Tool"
 msgstr "Alat Baris Perintah"
 
-#: src/plugins/meson-templates/meson_templates.py:536
+#: src/plugins/meson-templates/meson_templates.py:540
 msgid "Create a new command line project"
 msgstr "Buat proyek baris perintah baru"
 
@@ -5496,12 +5502,12 @@ msgid "Bootstrapping project"
 msgstr "Mem-bootstrap proyek"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:499
+#: src/plugins/podman/gbp-podman-runtime.c:523
 msgid "Containers/Toolbox"
 msgstr "Kontainer/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:505
+#: src/plugins/podman/gbp-podman-runtime.c:529
 msgid "Containers/Podman"
 msgstr "Kontainer/Podman"
 
@@ -5939,18 +5945,18 @@ msgstr ""
 "berkas stylesheet. Hal ini dapat mengakibatkan eksekusi kode dalam proyek "
 "Anda."
 
-#: src/plugins/stylelint/stylelint_plugin.py:135
+#: src/plugins/stylelint/stylelint_plugin.py:77
 msgid "Stylelint"
 msgstr "Stylelint"
 
-#: src/plugins/stylelint/stylelint_plugin.py:136
+#: src/plugins/stylelint/stylelint_plugin.py:78
 msgid "Enable the use of Stylelint, which may execute code in your project"
 msgstr ""
 "Memungkinkan penggunaan Stylelint, yang dapat mengeksekusi kode dalam proyek "
 "Anda"
 
 #. translators: these are keywords used to search for preferences
-#: src/plugins/stylelint/stylelint_plugin.py:138
+#: src/plugins/stylelint/stylelint_plugin.py:80
 msgid "stylelint stylesheet lint code execute execution"
 msgstr "stylelint stylesheet kode lint mengeksekusi eksekusi"
 
@@ -6272,8 +6278,8 @@ msgstr "Pem_utakhiran"
 msgid "Vagrant"
 msgstr "Vagrant"
 
+#: src/plugins/valgrind/gbp-valgrind-workbench-addin.c:152
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:20
-#: src/plugins/valgrind/valgrind_plugin.py:54
 msgid "Run with Valgrind"
 msgstr "Jalankan dengan Valgrind"
 
