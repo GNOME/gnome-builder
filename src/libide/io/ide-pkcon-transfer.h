@@ -30,10 +30,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PKCON_TRANSFER (ide_pkcon_transfer_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePkconTransfer, ide_pkcon_transfer, IDE, PKCON_TRANSFER, IdeTransfer)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePkconTransfer *ide_pkcon_transfer_new (const gchar * const *packages);
 
 G_END_DECLS

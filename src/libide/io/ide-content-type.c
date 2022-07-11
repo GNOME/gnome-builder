@@ -131,8 +131,6 @@ ide_io_init_ctor (void)
  * In 3.40, this function was modified to add the @filename parameter.
  *
  * Returns: (transfer full) (nullable): A #GIcon or %NULL
- *
- * Since: 3.40
  */
 GIcon *
 ide_g_content_type_get_symbolic_icon (const gchar *content_type,
