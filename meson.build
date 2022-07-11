@@ -22,21 +22,31 @@ pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
 pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
 
 # Check dependencies
-glib_req_version = '2.69.1'
-gtk_req_version = '3.24'
+glib_req_version = '2.71'
+gtk_req_version = '4.7'
+gtksourceview_req_version = '5.5'
+libadwaita_req_version = '1.2.alpha'
 
 glib_req = '>= @0@'.format(glib_req_version)
 gtk_req = '>= @0@'.format(gtk_req_version)
+gtksourceview_req = '>= @0@'.format(gtksourceview_req_version)
+libadwaita_req = '>= @0@'.format(libadwaita_req_version)
+
 glib_major = glib_req_version.split('.')[0].to_int()
 glib_minor = glib_req_version.split('.')[1].to_int()
 gtk_major = gtk_req_version.split('.')[0].to_int()
 gtk_minor = gtk_req_version.split('.')[1].to_int()
+gtksourceview_major = gtksourceview_req_version.split('.')[0].to_int()
+gtksourceview_minor = gtksourceview_req_version.split('.')[1].to_int()
 
 if glib_minor % 2 == 1
   glib_minor = glib_minor + 1
 endif
 if gtk_minor % 2 == 1
   gtk_minor = gtk_minor + 1
+endif
+if gtksourceview_minor % 2 == 1
+  gtksourceview_minor = gtksourceview_minor + 1
 endif
 
 # These default values are obtained by running /bin/sh without setting PATH
@@ -65,7 +75,7 @@ config_h = configuration_data()
 
 # Message of doom
 if version_split[1][0] in ['a', 'b', 'r']
-  config_h.set10('DEVELOPMENT_BUILD', 1)
+  config_h.set10('DEVELOPMENT_BUILD', true)
   MINOR_VERSION = 0
   status += [
     'You are building a development version of GNOME Builder. There may be more',
@@ -92,6 +102,8 @@ status += [
   '',
   'Help Docs ............. : @0@'.format(get_option('help')),
   'API Docs .............. : @0@'.format(get_option('docs')),
+  '',
+  'WebKit ................ : @0@'.format(get_option('webkit').enabled()),
   '', ''
 ]
 
@@ -132,6 +144,8 @@ global_c_args = [
   '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_@0@_@1@'.format(glib_major, glib_minor),
   '-DGDK_VERSION_MIN_REQUIRED=GDK_VERSION_@0@_@1@'.format(gtk_major, gtk_minor),
   '-DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_@0@_@1@'.format(gtk_major, gtk_minor),
+  '-DGTK_SOURCE_VERSION_MIN_REQUIRED=GTK_SOURCE_VERSION_@0@_@1@'.format(gtksourceview_major, gtksourceview_minor),
+  '-DGTK_SOURCE_VERSION_MAX_ALLOWED=GTK_SOURCE_VERSION_@0@_@1@'.format(gtksourceview_major, gtksourceview_minor),
 ]
 test_c_args = [
   '-Wcast-align',
@@ -274,26 +288,25 @@ ld_supports_version_script = cc.links('''
 message('Linker supports --version-script: @0@'.format(ld_supports_version_script))
 
 # Commonly used deps
-libdazzle_dep = dependency('libdazzle-1.0', version: '>= 3.37.0')
 libglib_dep = dependency('glib-2.0', version: glib_req)
 libgio_dep = dependency('gio-2.0', version: glib_req)
 libgiounix_dep = dependency('gio-unix-2.0', version: glib_req)
-libgtk_dep = dependency('gtk+-3.0', version: gtk_req)
-libgtksource_dep = dependency('gtksourceview-4', version: '>= 4.0.0')
-libhandy_dep = dependency('libhandy-1', version: '>= 1.5.0')
+libgtk_dep = dependency('gtk4', version: gtk_req)
+libadwaita_dep = dependency('libadwaita-1', version: libadwaita_req)
+libpanel_dep = dependency('libpanel-1')
+libgtksource_dep = dependency('gtksourceview-5', version: gtksourceview_req)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
-libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.41.0')
+libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.42.0')
 libm_dep = cc.find_library('m', required: false)
-libpangoft2_dep = dependency('pangoft2', version: '>= 1.38.0')
-libpeas_dep = dependency('libpeas-1.0', version: '>= 1.22.0')
-libportal_dep = dependency('libportal-gtk3', required: false)
-libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.28.0')
-libvte_dep = dependency('vte-2.91', version: '>= 0.65.0')
+libpeas_dep = dependency('libpeas-1.0', version: '>= 1.32.0')
+libportal_dep = dependency('libportal-gtk4', required: false)
+libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.35.0')
+libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.69.0')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
 if get_option('webkit').enabled()
-  libwebkit_dep = dependency('webkit2gtk-4.1')
-  config_h.set10('HAVE_WEBKIT', 1)
+  libwebkit_dep = dependency('webkit2gtk-5.0')
+  config_h.set10('HAVE_WEBKIT', true)
 endif
 
 check_functions = [
@@ -316,7 +329,7 @@ endforeach
 # to the SYSPROF_TRACE_FD. We use sysprof-4 instead since we will
 # already have to link against that for the plugin.
 #
-libsysprof_capture = dependency('sysprof-4', version: '>= 3.37.1', required: false)
+libsysprof_capture = dependency('sysprof-capture-4', version: '>= 3.42.0', static: true, required: false)
 if libsysprof_capture.found()
   config_h.set10('ENABLE_TRACING_SYSCAP', true)
 endif
