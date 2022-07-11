@@ -1,1 +1,63 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"><g color="#000" font-weight="400" font-family="sans-serif" fill="#2e3436"><path d="M7 2.927c-4.042 0-5.893 3.611-5.893 3.611l1.786.904S4.14 4.927 7 4.927c2.055 0 3.097 1.394 3.484 2.074h-.91C8.243 7 8 8.253 8 9.034l6-.045.045-6c-1.044 0-2.033.525-2.033 1.668v.93l-.063.062C11.193 4.56 9.635 2.927 7 2.927z" style="line-height:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none" overflow="visible"/><path d="M2.5 8.99c-.814 0-1.5.685-1.5 1.5v3c0 .813.686 1.5 1.5 1.5h3c.814 0 1.5-.687 1.5-1.5v-3c0-.815-.686-1.5-1.5-1.5zm.5 2h2v2H3z" style="line-height:normal;font-variant-ligatures:normal;font-variant-position:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-alternates:normal;font-feature-settings:normal;text-indent:0;text-align:start;text-decoration-line:none;text-decoration-style:solid;text-decoration-color:#000;text-transform:none;text-orientation:mixed;shape-padding:0;isolation:auto;mix-blend-mode:normal;marker:none" clip-rule="evenodd" overflow="visible" fill-rule="evenodd" image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"/></g></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg height="16px" viewBox="0 0 16 16" width="16px" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <filter id="a" height="100%" width="100%" x="0%" y="0%">
+        <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+    </filter>
+    <mask id="b">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.3"/>
+        </g>
+    </mask>
+    <clipPath id="c">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="d">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="e">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="f">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="g">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="h">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="i">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <mask id="j">
+        <g filter="url(#a)">
+            <path d="m 0 0 h 16 v 16 h -16 z" fill-opacity="0.35"/>
+        </g>
+    </mask>
+    <clipPath id="k">
+        <path d="m 0 0 h 800 v 800 h -800 z"/>
+    </clipPath>
+    <g clip-path="url(#c)" mask="url(#b)" transform="matrix(1 0 0 1 -240 -380.011719)">
+        <path d="m 142.5 351 h 10.449219 c -1.183594 0.492188 -1.296875 2.457031 0 3 h -10.449219 z m 0 0" fill="#2e3436"/>
+    </g>
+    <path d="m 7 2.925781 c -4.042969 0 -5.894531 3.613281 -5.894531 3.613281 l 1.789062 0.902344 s 1.246094 -2.515625 4.105469 -2.515625 c 2.054688 0 3.097656 1.394531 3.484375 2.074219 h -0.910156 c -1.332031 0 -1.574219 1.253906 -1.574219 2.035156 l 6 -0.046875 l 0.042969 -6 c -1.042969 0 -2.03125 0.523438 -2.03125 1.667969 v 0.929688 l -0.0625 0.0625 c -0.757813 -1.089844 -2.316407 -2.722657 -4.949219 -2.722657 z m 0 0" fill="#2e3436"/>
+    <path d="m 2.5 8.988281 c -0.8125 0 -1.5 0.683594 -1.5 1.5 v 3 c 0 0.8125 0.6875 1.5 1.5 1.5 h 3 c 0.8125 0 1.5 -0.6875 1.5 -1.5 v -3 c 0 -0.816406 -0.6875 -1.5 -1.5 -1.5 z m 0.5 2 h 2 v 2 h -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    <g clip-path="url(#e)" mask="url(#d)" transform="matrix(1 0 0 1 -240 -380.011719)">
+        <path d="m 104 502 c 0 0.550781 -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 s 1 0.449219 1 1 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#g)" mask="url(#f)" transform="matrix(1 0 0 1 -240 -380.011719)">
+        <path d="m 106 501 v 2 h 8 v -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+    <g clip-path="url(#i)" mask="url(#h)" transform="matrix(1 0 0 1 -240 -380.011719)">
+        <path d="m 104 514 c 0 0.550781 -0.449219 1 -1 1 s -1 -0.449219 -1 -1 s 0.449219 -1 1 -1 s 1 0.449219 1 1 z m 0 0" fill="#2e3436"/>
+    </g>
+    <g clip-path="url(#k)" mask="url(#j)" transform="matrix(1 0 0 1 -240 -380.011719)">
+        <path d="m 106 513 v 2 h 8 v -2 z m 0 0" fill="#2e3436" fill-rule="evenodd"/>
+    </g>
+</svg>
