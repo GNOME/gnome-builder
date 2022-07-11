@@ -43,7 +43,9 @@ ide_language_format_header (GtkSourceLanguage *self,
   guint prefix_len;
 
   g_return_val_if_fail (GTK_SOURCE_IS_LANGUAGE (self), NULL);
-  g_return_val_if_fail (header != NULL, NULL);
+
+  if (ide_str_empty0 (header))
+    return g_strdup ("");
 
   first_prefix = gtk_source_language_get_metadata (self, "block-comment-start");
   last_prefix = gtk_source_language_get_metadata (self, "block-comment-end");
@@ -55,24 +57,29 @@ ide_language_format_header (GtkSourceLanguage *self,
 
   if (first_prefix == NULL || last_prefix == NULL)
     {
+      if (line_prefix == NULL)
+        line_prefix = "";
+
       first_prefix = line_prefix;
       last_prefix = line_prefix;
     }
 
-  prefix_len = strlen (first_prefix);
+  g_assert (first_prefix != NULL);
+  g_assert (last_prefix != NULL);
+  g_assert (line_prefix != NULL);
 
+  prefix_len = strlen (first_prefix);
   outstr = g_string_new (NULL);
 
-  ide_line_reader_init (&reader, (gchar *)header, -1);
-
-  while (NULL != (line = ide_line_reader_next (&reader, &len)))
+  ide_line_reader_init (&reader, (char *)header, -1);
+  while ((line = ide_line_reader_next (&reader, &len)))
     {
       if (first)
         {
           g_string_append (outstr, first_prefix);
           first = FALSE;
         }
-      else if (line_prefix == NULL)
+      else if (ide_str_empty0 (line_prefix))
         {
           for (guint i = 0; i < prefix_len; i++)
             g_string_append_c (outstr, ' ');
@@ -88,18 +95,12 @@ ide_language_format_header (GtkSourceLanguage *self,
           g_string_append_len (outstr, line, len);
         }
 
-      /* Lines ending in expansion need an extra \n */
-      if (outstr->len > 2 &&
-          outstr->str[outstr->len - 2] == '}' &&
-          outstr->str[outstr->len - 1] == '}')
-        g_string_append_c (outstr, '\n');
-
       g_string_append_c (outstr, '\n');
     }
 
   if (last_prefix && g_strcmp0 (first_prefix, last_prefix) != 0)
     {
-      if (line_prefix && *line_prefix == ' ')
+      if (line_prefix && line_prefix[0] == ' ')
         g_string_append_c (outstr, ' ');
       g_string_append (outstr, last_prefix);
       g_string_append_c (outstr, '\n');
