@@ -1,6 +1,6 @@
-/* ide-log.h
+/* ide-log-private.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,15 @@
 
 #pragma once
 
-#if !defined (IDE_CORE_INSIDE) && !defined (IDE_CORE_COMPILATION)
-# error "Only <libide-core.h> can be included directly."
-#endif
-
-#include <glib.h>
-
-#include "ide-version-macros.h"
+#include "ide-log.h"
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_ALL
-int ide_log_get_verbosity (void);
+void ide_log_init               (gboolean    stdout_,
+                                 const char *filename,
+                                 const char *messages_debug);
+void ide_log_increase_verbosity (void);
+void ide_log_set_verbosity      (int         level);
+void ide_log_shutdown           (void);
 
 G_END_DECLS

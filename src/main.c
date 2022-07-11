@@ -41,6 +41,7 @@
 #include "ide-application-private.h"
 #include "ide-build-ident.h"
 #include "ide-thread-private.h"
+#include "ide-log-private.h"
 #include "ide-terminal-private.h"
 #include "ide-private.h"
 
@@ -245,7 +246,7 @@ main (gint   argc,
    * format. If we deferred this to GApplication, we'd get them in
    * multiple formats.
    */
-  ide_log_init (TRUE, NULL);
+  ide_log_init (TRUE, NULL, messages_debug);
 
   /* Extract options like -vvvv */
   early_params_check (&argc, &argv, &standalone, &type, &plugin, &dbus_address);

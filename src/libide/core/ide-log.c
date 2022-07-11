@@ -38,7 +38,7 @@
 #include <unistd.h>
 
 #include "ide-debug.h"
-#include "ide-log.h"
+#include "ide-log-private.h"
 #include "ide-macros.h"
 #include "ide-private.h"
 
@@ -84,8 +84,6 @@
  * Ide.debug("This is a debug")
  * Ide.error("This is a fatal error")
  * ]|
- *
- * Since: 3.32
  */
 
 typedef const gchar *(*IdeLogLevelStrFunc) (GLogLevelFlags log_level);
@@ -106,8 +104,6 @@ G_LOCK_DEFINE (channels_lock);
  * On other platforms, the current thread pointer is retrieved.
  *
  * Returns: The task id.
- *
- * Since: 3.32
  */
 static inline gint
 ide_log_get_thread (void)
@@ -127,8 +123,6 @@ ide_log_get_thread (void)
  *
  * Returns: A string which shouldn't be modified or freed.
  * Side effects: None.
- *
- * Since: 3.32
  */
 static const gchar *
 ide_log_level_str (GLogLevelFlags log_level)
@@ -172,8 +166,6 @@ ide_log_level_str_with_color (GLogLevelFlags log_level)
  * @message: A string log message.
  *
  * Writes @message to @channel and flushes the channel.
- *
- * Since: 3.32
  */
 static void
 ide_log_write_to_channel (GIOChannel  *channel,
@@ -192,8 +184,6 @@ ide_log_write_to_channel (GIOChannel  *channel,
  *
  * Default log handler that will dispatch log messages to configured logging
  * destinations.
- *
- * Since: 3.32
  */
 static void
 ide_log_handler (const gchar    *log_domain,
@@ -274,16 +264,16 @@ ide_log_handler (const gchar    *log_domain,
  * ide_log_init:
  * @stdout_: Indicates logging should be written to stdout.
  * @filename: An optional file in which to store logs.
+ * @messages_debug: the value of G_MESSAGES_DEBUG environment variable
  *
  * Initializes the logging subsystem. This should be called from
  * the application entry point only. Secondary calls to this function
  * will do nothing.
- *
- * Since: 3.32
  */
 void
-ide_log_init (gboolean     stdout_,
-              const gchar *filename)
+ide_log_init (gboolean    stdout_,
+              const char *filename,
+              const char *messages_debug)
 {
   static gsize initialized = FALSE;
   GIOChannel *channel;
@@ -305,7 +295,7 @@ ide_log_init (gboolean     stdout_,
             log_level_str_func = ide_log_level_str_with_color;
         }
 
-      domains = g_strdup (g_getenv ("G_MESSAGES_DEBUG"));
+      domains = g_strdup (messages_debug);
       if (!ide_str_empty0 (domains) && strcmp (domains, "all") != 0)
         has_domains = TRUE;
 
@@ -319,8 +309,6 @@ ide_log_init (gboolean     stdout_,
  *
  * Cleans up after the logging subsystem and restores the original
  * log handler.
- *
- * Since: 3.32
  */
 void
 ide_log_shutdown (void)
@@ -352,8 +340,6 @@ ide_log_shutdown (void)
  * line.
  *
  * Calling this method more than four times is acceptable.
- *
- * Since: 3.32
  */
 void
 ide_log_increase_verbosity (void)
@@ -366,10 +352,8 @@ ide_log_increase_verbosity (void)
  *
  * Retrieves the log verbosity, which is the number of times -v was
  * provided on the command line.
- *
- * Since: 3.32
  */
-gint
+int
 ide_log_get_verbosity (void)
 {
   return log_verbosity;
@@ -380,8 +364,6 @@ ide_log_get_verbosity (void)
  *
  * Sets the explicit verbosity. Generally you want to use
  * ide_log_increase_verbosity() instead of this function.
- *
- * Since: 3.32
  */
 void
 ide_log_set_verbosity (gint level)
