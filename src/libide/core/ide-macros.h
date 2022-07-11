@@ -35,10 +35,9 @@
 G_BEGIN_DECLS
 
 #define ide_str_empty0(str)       (!(str) || !*(str))
-#define ide_str_equal(str1,str2)  (strcmp(str1,str2)==0)
-#define ide_str_equal0(str1,str2) (g_strcmp0(str1,str2)==0)
+#define ide_str_equal(str1,str2)  (strcmp((char*)str1,(char*)str2)==0)
+#define ide_str_equal0(str1,str2) (g_strcmp0((char*)str1,(char*)str2)==0)
 #define ide_strv_empty0(strv)     (((strv) == NULL) || ((strv)[0] == NULL))
-#define ide_set_string(ptr,str)   (ide_take_string((ptr), g_strdup(str)))
 
 #define ide_clear_param(pptr, pval) \
   G_STMT_START { if (pptr) { *(pptr) = pval; }; } G_STMT_END
@@ -89,24 +88,35 @@ _g_object_unref0 (gpointer instance)
 }
 
 static inline gboolean
-ide_take_string (gchar **ptr,
-                 gchar  *str)
+ide_set_string (char       **ptr,
+                const char  *str)
 {
-  if (*ptr != str)
-    {
-      g_free (*ptr);
-      *ptr = str;
-      return TRUE;
-    }
+  if (*ptr == str || g_strcmp0 (*ptr, str) == 0)
+    return FALSE;
 
-  return FALSE;
+  g_clear_pointer (ptr, g_free);
+  *ptr = g_strdup (str);
+  return TRUE;
 }
 
 static inline void
-ide_clear_string (gchar **ptr)
+ide_take_string (char **ptr,
+                 char  *str)
 {
-  g_free (*ptr);
-  *ptr = NULL;
+  if (*ptr == str || g_strcmp0 (*ptr, str) == 0)
+    {
+      g_free (str);
+      return;
+    }
+
+  g_clear_pointer (ptr, g_free);
+  *ptr = g_steal_pointer (&str);
+}
+
+static inline void
+ide_clear_string (char **ptr)
+{
+  g_clear_pointer (ptr, g_free);
 }
 
 static inline GList *
@@ -269,6 +279,35 @@ ide_object_array_unref (IdeObjectArray *ar)
 #define IDE_OBJECT_ARRAY_STEAL_FULL(ar) IDE_PTR_ARRAY_STEAL_FULL(ar)
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (IdeObjectArray, g_ptr_array_unref)
+
+#define IDE_STRV_INIT(...) ((const char * const[]) { __VA_ARGS__, NULL})
+
+static inline int
+ide_strv_qsort_compare_element (const char * const *a,
+                                const char * const *b,
+                                gpointer            sort_data)
+{
+  return strcmp (*a, *b);
+}
+
+static inline void
+ide_strv_sort (char   **strv,
+               gssize   len)
+{
+  if (len < 0)
+    len = g_strv_length (strv);
+  g_qsort_with_data (strv, len, sizeof (char*),
+                     (GCompareDataFunc)ide_strv_qsort_compare_element,
+                     NULL);
+}
+
+static inline int
+ide_steal_fd (int *fd)
+{
+  int ret = *fd;
+  *fd = -1;
+  return ret;
+}
 
 G_END_DECLS
 
