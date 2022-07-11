@@ -73,6 +73,7 @@ libide_core_public_headers = [
 ]
 
 libide_core_private_headers = [
+  'ide-settings-sandwich-private.h',
   'ide-transfer-manager-private.h',
 ]
 
@@ -99,9 +100,14 @@ libide_core_public_sources = [
   'ide-transfer-manager.c',
 ]
 
+libide_core_private_sources = [
+  'ide-settings-sandwich.c',
+]
+
 libide_core_sources = []
 libide_core_sources += libide_core_generated_headers
 libide_core_sources += libide_core_public_sources
+libide_core_sources += libide_core_private_sources
 
 #
 # Library Definitions
