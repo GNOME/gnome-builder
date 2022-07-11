@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_RANGE (ide_range_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeRange, ide_range, IDE, RANGE, GObject)
 
 struct _IdeRangeClass
@@ -43,16 +43,16 @@ struct _IdeRangeClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeRange    *ide_range_new_from_variant (GVariant    *variant);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeRange    *ide_range_new              (IdeLocation *begin,
                                          IdeLocation *end);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation *ide_range_get_begin        (IdeRange    *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation *ide_range_get_end          (IdeRange    *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GVariant    *ide_range_to_variant       (IdeRange    *self);
 
 G_END_DECLS

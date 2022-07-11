@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LOCATION (ide_location_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLocation, ide_location, IDE, LOCATION, GObject)
 
 struct _IdeLocationClass
@@ -43,33 +43,33 @@ struct _IdeLocationClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation *ide_location_new_from_variant (GVariant    *variant);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation *ide_location_new              (GFile       *file,
                                             gint         line,
                                             gint         line_offset);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation *ide_location_new_with_offset  (GFile       *file,
                                             gint         line,
                                             gint         line_offset,
                                             gint         offset);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation *ide_location_dup              (IdeLocation *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint         ide_location_get_line         (IdeLocation *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint         ide_location_get_line_offset  (IdeLocation *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint         ide_location_get_offset       (IdeLocation *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFile       *ide_location_get_file         (IdeLocation *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GVariant    *ide_location_to_variant       (IdeLocation *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_location_compare          (IdeLocation *a,
                                             IdeLocation *b);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint        ide_location_hash             (IdeLocation *self);
 IDE_AVAILABLE_IN_ALL
 gboolean     ide_location_equal            (IdeLocation *a,
