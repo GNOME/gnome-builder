@@ -40,7 +40,7 @@ typedef enum
   IDE_OBJECT_AFTER_SIBLING,
 } IdeObjectLocation;
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeObject, ide_object, IDE, OBJECT, GObject)
 
 struct _IdeObjectClass
@@ -56,94 +56,94 @@ struct _IdeObjectClass
                           IdeObject         *child);
   void     (*parent_set) (IdeObject         *self,
                           IdeObject         *parent);
-  gchar  *(*repr)        (IdeObject         *self);
+  char    *(*repr)       (IdeObject         *self);
 
   /*< private */
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gpointer      ide_object_new                    (GType               type,
                                                  IdeObject          *parent) G_GNUC_WARN_UNUSED_RESULT;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GCancellable *ide_object_ref_cancellable        (IdeObject          *self) G_GNUC_WARN_UNUSED_RESULT;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeObject    *ide_object_get_parent             (IdeObject          *self) G_GNUC_WARN_UNUSED_RESULT;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeObject    *ide_object_ref_parent             (IdeObject          *self) G_GNUC_WARN_UNUSED_RESULT;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeObject    *ide_object_ref_root               (IdeObject          *self) G_GNUC_WARN_UNUSED_RESULT;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean      ide_object_is_root                (IdeObject          *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_lock                   (IdeObject          *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_unlock                 (IdeObject          *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_add                    (IdeObject          *self,
                                                  IdeObject          *sibling,
                                                  IdeObject          *child,
                                                  IdeObjectLocation   location);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_append                 (IdeObject          *self,
                                                  IdeObject          *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_prepend                (IdeObject          *self,
                                                  IdeObject          *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_insert_before          (IdeObject          *self,
                                                  IdeObject          *sibling,
                                                  IdeObject          *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_insert_after           (IdeObject          *self,
                                                  IdeObject          *sibling,
                                                  IdeObject          *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_insert_sorted          (IdeObject          *self,
                                                  IdeObject          *child,
                                                  GCompareDataFunc    func,
                                                  gpointer            user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_remove                 (IdeObject          *self,
                                                  IdeObject          *child);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_foreach                (IdeObject          *self,
                                                  GFunc               callback,
                                                  gpointer            user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean      ide_object_set_error_if_destroyed (IdeObject          *self,
                                                  GError            **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_destroy                (IdeObject          *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_destroyed              (IdeObject         **self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint         ide_object_get_position           (IdeObject          *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint         ide_object_get_n_children         (IdeObject          *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeObject    *ide_object_get_nth_child          (IdeObject          *self,
                                                  guint               nth);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gpointer      ide_object_get_child_typed        (IdeObject          *self,
                                                  GType               type);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray    *ide_object_get_children_typed     (IdeObject          *self,
                                                  GType               type);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gpointer      ide_object_ensure_child_typed     (IdeObject          *self,
                                                  GType               type);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_notify_in_main         (gpointer            instance,
                                                  GParamSpec         *pspec);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_notify_by_pspec        (gpointer            instance,
                                                  GParamSpec         *pspec);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean      ide_object_in_destruction         (IdeObject          *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar        *ide_object_repr                   (IdeObject          *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_object_log                    (gpointer            instance,
                                                  GLogLevelFlags      level,
                                                  const gchar        *domain,
