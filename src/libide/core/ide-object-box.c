@@ -61,8 +61,6 @@ ide_object_box_set_object (IdeObjectBox *self,
  * Create a new #IdeObjectBox.
  *
  * Returns: (transfer full): a newly created #IdeObjectBox
- *
- * Since: 3.32
  */
 IdeObjectBox *
 ide_object_box_new (GObject *object)
@@ -177,8 +175,6 @@ ide_object_box_class_init (IdeObjectBoxClass *klass)
    *
    * The "object" property contains the object that is boxed and
    * placed onto the object graph using this box.
-   *
-   * Since: 3.32
    */
   properties [PROP_OBJECT] =
     g_param_spec_object ("object",
@@ -196,8 +192,6 @@ ide_object_box_class_init (IdeObjectBoxClass *klass)
    *
    * This is useful when you want to force disposal of an external object
    * when @self is removed from the object tree.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROPAGATE_DISPOSAL] =
     g_param_spec_boolean ("propagate-disposal",
@@ -222,8 +216,6 @@ ide_object_box_init (IdeObjectBox *self)
  * Gets the boxed object.
  *
  * Returns: (transfer full) (nullable) (type GObject): a #GObject or %NULL
- *
- * Since: 3.32
  */
 gpointer
 ide_object_box_ref_object (IdeObjectBox *self)
@@ -249,8 +241,6 @@ ide_object_box_ref_object (IdeObjectBox *self)
  * This function may only be called from the main thread.
  *
  * Returns: (transfer none): an #IdeObjectBox
- *
- * Since: 3.32
  */
 IdeObjectBox *
 ide_object_box_from_object (GObject *object)
@@ -269,8 +259,6 @@ ide_object_box_from_object (GObject *object)
  * Checks if @self contains @instance.
  *
  * Returns: %TRUE if #IdeObjectBox:object matches @instance
- *
- * Since: 3.32
  */
 gboolean
 ide_object_box_contains (IdeObjectBox *self,
