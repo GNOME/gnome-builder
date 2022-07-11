@@ -40,6 +40,7 @@ G_BEGIN_DECLS
 #include "ide-shell.h"
 
 # include "ide-directory-reaper.h"
+# include "ide-file-transfer.h"
 # include "ide-heap.h"
 # include "ide-recursive-file-monitor.h"
 # include "ide-task-cache.h"
