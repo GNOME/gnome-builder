@@ -28,41 +28,41 @@ G_BEGIN_DECLS
 
 /* Semi-public functions. */
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_forward_visible_word_end          (GtkTextIter       *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_forward_visible_word_ends         (GtkTextIter       *iter,
                                                              gint               count);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_backward_visible_word_start       (GtkTextIter       *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_backward_visible_word_starts      (GtkTextIter       *iter,
                                                              gint               count);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     _ide_source_iter_extend_selection_word             (const GtkTextIter *location,
                                                              GtkTextIter       *start,
                                                              GtkTextIter       *end);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     _ide_source_iter_forward_full_word_end             (GtkTextIter       *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     _ide_source_iter_backward_full_word_start          (GtkTextIter       *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_starts_full_word                  (const GtkTextIter *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_ends_full_word                    (const GtkTextIter *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     _ide_source_iter_forward_extra_natural_word_end    (GtkTextIter       *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     _ide_source_iter_backward_extra_natural_word_start (GtkTextIter       *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_starts_extra_natural_word         (const GtkTextIter *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_ends_extra_natural_word           (const GtkTextIter *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_starts_word                       (const GtkTextIter *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_ends_word                         (const GtkTextIter *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean _ide_source_iter_inside_word                       (const GtkTextIter *iter);
 
 G_END_DECLS
