@@ -20,9 +20,10 @@
 
 #include <math.h>
 
-#include <dazzle.h>
 #include <glib.h>
 #include <glib/gi18n.h>
+
+#include <libide-search.h>
 
 #include "gstyle-private.h"
 #include "gstyle-colorlexer.h"
@@ -544,7 +545,7 @@ parse_components (GstyleColorScanner *s)
 static gboolean
 convert_component (GstyleColorComponent  comp,
                    ComponentRange        range,
-                   gdouble              *number)
+                   float                *number)
 {
   gdouble n = comp.value;
 
@@ -568,7 +569,7 @@ convert_component (GstyleColorComponent  comp,
 
 static gboolean
 convert_hue_component (GstyleColorComponent  comp,
-                       gdouble              *hue)
+                       float                *hue)
 {
   gdouble num = comp.value;
 
@@ -642,9 +643,9 @@ _parse_hsla_string (const gchar      *string,
 {
   GstyleColorScanner s;
   g_autoptr (GArray) ar = NULL;
-  gdouble hue;
-  gdouble saturation;
-  gdouble lightness;
+  float hue;
+  float saturation;
+  float lightness;
   gboolean has_alpha = FALSE;
   gboolean ret;
 
@@ -687,25 +688,25 @@ _parse_hsla_string (const gchar      *string,
 }
 
 /* TODO: add a public func to init so we can control the initial starting time ? */
-static DzlFuzzyMutableIndex *
+static IdeFuzzyMutableIndex *
 _init_predefined_table (void)
 {
-  static DzlFuzzyMutableIndex *predefined_table;
+  static IdeFuzzyMutableIndex *predefined_table;
   NamedColor *item;
 
   if (predefined_table == NULL)
     {
-      predefined_table = dzl_fuzzy_mutable_index_new (TRUE);
+      predefined_table = ide_fuzzy_mutable_index_new (TRUE);
 
-      dzl_fuzzy_mutable_index_begin_bulk_insert (predefined_table);
+      ide_fuzzy_mutable_index_begin_bulk_insert (predefined_table);
       for (guint i = 0; i < G_N_ELEMENTS (predefined_colors_table); ++i)
         {
           item = &predefined_colors_table [i];
           item->index = i;
-          dzl_fuzzy_mutable_index_insert (predefined_table, item->name, (gpointer)item);
+          ide_fuzzy_mutable_index_insert (predefined_table, item->name, (gpointer)item);
         }
 
-      dzl_fuzzy_mutable_index_end_bulk_insert (predefined_table);
+      ide_fuzzy_mutable_index_end_bulk_insert (predefined_table);
     }
 
   return predefined_table;
@@ -719,13 +720,13 @@ _parse_predefined_color (const gchar  *color_string,
   g_autoptr (GArray) results = NULL;
   NamedColor *item = NULL;
   gint len;
-  DzlFuzzyMutableIndex *predefined_table = _init_predefined_table ();
+  IdeFuzzyMutableIndex *predefined_table = _init_predefined_table ();
 
-  results = dzl_fuzzy_mutable_index_match (predefined_table, color_string, 10);
+  results = ide_fuzzy_mutable_index_match (predefined_table, color_string, 10);
   len = results->len;
   for (gint i = 0; i < len; ++i)
     {
-      const DzlFuzzyMutableIndexMatch *match = &g_array_index (results, DzlFuzzyMutableIndexMatch, i);
+      const IdeFuzzyMutableIndexMatch *match = &g_array_index (results, IdeFuzzyMutableIndexMatch, i);
 
       if (g_strcmp0 (color_string, match->key) == 0)
         {
@@ -760,14 +761,14 @@ gstyle_color_fuzzy_parse_color_string (const gchar *color_string)
   GdkRGBA rgba;
   gint len;
 
-  DzlFuzzyMutableIndex *predefined_table = _init_predefined_table ();
+  IdeFuzzyMutableIndex *predefined_table = _init_predefined_table ();
 
   results = g_ptr_array_new_with_free_func (g_object_unref);
-  fuzzy_results = dzl_fuzzy_mutable_index_match (predefined_table, color_string, GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN);
+  fuzzy_results = ide_fuzzy_mutable_index_match (predefined_table, color_string, GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN);
   len = MIN (GSTYLE_COLOR_FUZZY_SEARCH_MAX_LEN, fuzzy_results->len);
   for (gint i = 0; i < len; ++i)
     {
-      const DzlFuzzyMutableIndexMatch *match = &g_array_index (fuzzy_results, DzlFuzzyMutableIndexMatch, i);
+      const IdeFuzzyMutableIndexMatch *match = &g_array_index (fuzzy_results, IdeFuzzyMutableIndexMatch, i);
 
       item = match->value;
       rgba.red = item->red / 255.0;

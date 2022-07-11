@@ -20,9 +20,7 @@
 
 #pragma once
 
-#include <glib-object.h>
-
-#include <dazzle.h>
+#include <libide-search.h>
 
 #include "gstyle-cielab.h"
 #include "gstyle-color.h"
@@ -75,7 +73,7 @@ struct _GstyleColorPanel
   GtkWidget                           *search_strings_popover;
   GtkWidget                           *search_strings_list;
 
-  DzlFuzzyMutableIndex                *fuzzy;
+  IdeFuzzyMutableIndex                *fuzzy;
 
   GtkToggleButton                     *components_toggle;
   GtkToggleButton                     *strings_toggle;

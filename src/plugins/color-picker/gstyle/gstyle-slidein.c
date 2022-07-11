@@ -314,7 +314,7 @@ compute_duration (GstyleSlidein *self)
 
   g_assert (GSTYLE_IS_SLIDEIN (self));
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   gtk_widget_get_preferred_size (child, &min_req_size, &nat_req_size);
 
   if (get_orientation (self) == GTK_ORIENTATION_HORIZONTAL)
@@ -416,7 +416,7 @@ animate (GstyleSlidein *self,
   g_assert (GSTYLE_IS_SLIDEIN (self));
   g_assert (0.0 <= target_offset && target_offset <= 1.0);
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child == NULL || self->overlay_child == NULL)
     return FALSE;
 
@@ -829,7 +829,7 @@ gstyle_slidein_get_preferred_width (GtkWidget *widget,
 
   *min_width = *nat_width = 1;
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child != NULL)
     gtk_widget_get_preferred_width (child, min_width, nat_width);
 
@@ -893,7 +893,7 @@ gstyle_slidein_get_preferred_height (GtkWidget *widget,
 
   *min_height = *nat_height = 1;
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child != NULL)
     gtk_widget_get_preferred_width (child, min_height, nat_height);
 
@@ -1034,7 +1034,7 @@ gstyle_slidein_draw (GtkWidget *widget,
    * and provide your own container draw implementation.
    */
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child == NULL)
     return GDK_EVENT_STOP;
 
@@ -1073,7 +1073,7 @@ gstyle_slidein_forall (GtkContainer *container,
 
   g_assert (GSTYLE_IS_SLIDEIN (self));
 
-  child = gtk_bin_get_child (GTK_BIN (self));
+  child = adw_bin_get_child (ADW_BIN (self));
   if (child)
     (* callback) (child, callback_data);
 

@@ -20,14 +20,13 @@
 
 #pragma once
 
-#include <glib-object.h>
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define GSTYLE_TYPE_REVEALER (gstyle_revealer_get_type())
 
-G_DECLARE_FINAL_TYPE (GstyleRevealer, gstyle_revealer, GSTYLE, REVEALER, GtkBin)
+G_DECLARE_FINAL_TYPE (GstyleRevealer, gstyle_revealer, GSTYLE, REVEALER, AdwBin)
 
 GstyleRevealer   *gstyle_revealer_new                  (void);
 void              gstyle_revealer_set_reveal_child     (GstyleRevealer *self,
