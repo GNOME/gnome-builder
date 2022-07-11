@@ -42,7 +42,7 @@ G_BEGIN_DECLS
   G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME"," \
   G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeProjectFile, ide_project_file, IDE, PROJECT_FILE, IdeObject)
 
 struct _IdeProjectFileClass
@@ -53,49 +53,49 @@ struct _IdeProjectFileClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeProjectFile *ide_project_file_new                       (GFile                *directory,
                                                             GFileInfo            *info);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFile          *ide_project_file_get_directory             (IdeProjectFile       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFileInfo      *ide_project_file_get_info                  (IdeProjectFile       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GFile          *ide_project_file_ref_file                  (IdeProjectFile       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar    *ide_project_file_get_display_name          (IdeProjectFile       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar    *ide_project_file_get_name                  (IdeProjectFile       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_project_file_is_directory              (IdeProjectFile       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_project_file_is_symlink                (IdeProjectFile       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint            ide_project_file_compare_directories_first (IdeProjectFile       *a,
                                                             IdeProjectFile       *b);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint            ide_project_file_compare                   (IdeProjectFile       *a,
                                                             IdeProjectFile       *b);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GIcon          *ide_project_file_get_symbolic_icon         (IdeProjectFile       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeProjectFile *ide_project_file_create_child              (IdeProjectFile       *self,
                                                             GFileInfo            *info);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_project_file_list_children_async       (IdeProjectFile       *self,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GPtrArray      *ide_project_file_list_children_finish      (IdeProjectFile       *self,
                                                             GAsyncResult         *result,
                                                             GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_project_file_trash_async               (IdeProjectFile       *self,
                                                             GCancellable         *cancellable,
                                                             GAsyncReadyCallback   callback,
                                                             gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_project_file_trash_finish              (IdeProjectFile       *self,
                                                             GAsyncResult         *result,
                                                             GError              **error);

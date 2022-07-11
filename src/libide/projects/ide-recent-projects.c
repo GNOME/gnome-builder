@@ -63,8 +63,6 @@ ide_recent_projects_new (void)
  * request to get the default #IdeRecentProjects instance.
  *
  * Returns: (transfer none): an #IdeRecentProjects
- *
- * Since: 3.32
  */
 IdeRecentProjects *
 ide_recent_projects_get_default (void)
@@ -333,8 +331,6 @@ ide_recent_projects_init (IdeRecentProjects *self)
  *   of #IdeProjectInfo.
  *
  * Removes the provided projects from the recent projects file.
- *
- * Since: 3.32
  */
 void
 ide_recent_projects_remove (IdeRecentProjects *self,
