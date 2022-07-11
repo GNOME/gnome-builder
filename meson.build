@@ -12,7 +12,7 @@ project('gnome-builder', 'c',
 version_split = meson.project_version().split('.')
 MAJOR_VERSION = version_split[0]
 
-libide_api_version = '@0@.0'.format(MAJOR_VERSION)
+libide_api_version = '@0@'.format(MAJOR_VERSION)
 
 pkgdocdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'gnome-builder')
 pkglibdir_abs = join_paths(get_option('prefix'), get_option('libdir'), 'gnome-builder')
