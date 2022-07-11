@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 #include "ide-pty-intercept.h"
 #include "ide-shell.h"
 
+# include "ide-task-cache.h"
 #undef IDE_IO_INSIDE
 
 G_END_DECLS

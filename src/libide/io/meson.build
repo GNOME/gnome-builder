@@ -18,6 +18,7 @@ libide_io_public_headers = [
   'ide-pty-intercept.h',
   'ide-recursive-file-monitor.h',
   'ide-shell.h',
+  'ide-task-cache.h',
   'libide-io.h',
 ]
 
@@ -44,6 +45,7 @@ libide_io_public_sources = [
   'ide-pkcon-transfer.c',
   'ide-pty-intercept.c',
   'ide-shell.c',
+  'ide-task-cache.c',
 ]
 
 libide_io_sources = libide_io_public_sources
