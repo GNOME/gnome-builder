@@ -1,3 +1,6 @@
+libwebkit_dep = dependency('webkit2gtk-5.0', required: false)
+
+if libwebkit_dep.found()
 
 #
 # Sources
@@ -43,3 +46,5 @@ libide_webkit_dep = declare_dependency(
   include_directories: include_directories('.'),
               sources: libide_webkit_generated_headers,
 )
+
+endif

@@ -80,7 +80,6 @@ libide_editor_sources += libide_editor_resources
 libide_editor_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
   libpeas_dep,
 
   libide_core_dep,

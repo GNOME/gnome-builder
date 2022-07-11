@@ -71,7 +71,6 @@ libide_terminal_generated_headers += [libide_terminal_resources[1]]
 libide_terminal_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
   libvte_dep,
 
   libide_core_dep,

@@ -7,7 +7,6 @@ plugins_generated_sources = []
 plugins_link_with = []
 
 plugins_deps = [
-  libdazzle_dep,
   libgtk_dep,
   libgtksource_dep,
   libjsonrpc_glib_dep,

@@ -17,7 +17,6 @@ libdspy_sources = [
 libdspy_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
 ]
 
 libdspy_sources += gnome.compile_resources('libdspy-resources', 'libdspy.gresource.xml',
