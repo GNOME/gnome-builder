@@ -277,6 +277,7 @@
             "name" : "vte",
             "buildsystem" : "meson",
             "config-opts" : [
+                "-Dgtk4=true",
                 "-Dvapi=false"
             ],
             "sources" : [
@@ -328,27 +329,6 @@
             ]
         },
         {
-            "name" : "gspell",
-            "config-opts" : [
-                "--disable-gtk-doc",
-                "--disable-gtk-doc-html"
-            ],
-            "cleanup" : [
-                "/bin",
-                "/include",
-                "/lib/pkgconfig",
-                "*.la",
-                "/share"
-            ],
-            "sources" : [
-                {
-                    "type" : "archive",
-                    "url" : "https://download.gnome.org/sources/gspell/1.8/gspell-1.8.1.tar.xz",
-                    "sha256" : "819a1d23c7603000e73f5e738bdd284342e0cd345fb0c7650999c31ec741bbe5"
-                }
-            ]
-        },
-        {
             "name" : "template-glib",
             "config-opts" : [
                 "--libdir=/app/lib",
@@ -381,30 +361,12 @@
             ]
         },
         {
-            "name" : "libdazzle",
-            "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "cleanup" : [
-                "/bin"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libdazzle.git"
-                }
-            ]
-        },
-        {
             "name" : "sysprof",
             "config-opts" : [
                 "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
-                "-Denable_gtk=true",
-                "-Dwith_sysprofd=host"
+                "-Dgtk=true",
+                "-Dsysprofd=host"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
@@ -419,8 +381,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git",
-                    "branch" : "sysprof-3-44"
+                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git"
                 }
             ]
         },
@@ -587,27 +548,6 @@
             ]
         },
         {
-            "name" : "glade",
-            "cleanup" : [
-                "/share/applications",
-                "/share/help",
-                "/share/metainfo",
-                "/bin/glade"
-            ],
-            "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/glade.git"
-                }
-            ]
-        },
-        {
             "name" : "deviced",
             "config-opts" : [
                 "--libdir=/app/lib",
@@ -643,40 +583,19 @@
             ]
         },
         {
-            "name" : "gvls",
-            "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized",
-                "-Dui=false",
-                "-Dui-tests=false",
-                "-Ddocs=false",
-                "-Dintrospection=false",
-                "-Dgedit-plugin=false"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/esodan/gvls.git",
-                    "tag" : "gvls-20.1"
-                }
-            ]
-        },
-        {
             "name" : "libportal",
             "config-opts" : [
                 "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
-                "-Dbackends=gtk3"
+                "-Dbackends=gtk4"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
             "sources" : [
                 {
                     "type" : "archive",
-                    "url" : "https://github.com/flatpak/libportal/releases/download/0.5/libportal-0.5.tar.xz",
-                    "sha256" : "d8c8cb18a34e5eeb26a39c94044c955995b01de0e139caac5e18c076cf821b3b"
+                    "url" : "https://github.com/flatpak/libportal/releases/download/0.6/libportal-0.6.tar.xz",
+                    "sha256" : "88a12c3ba71bc31acff7238c280de697d609cebc50830c3766776ec35abc6566"
                 }
             ]
         },
@@ -715,12 +634,35 @@
         "typescript-language-server.json",
         "intelephense-language-server.json",
         {
+            "name" : "libpanel",
+            "buildsystem" : "meson",
+            "builddir" : true,
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/chergert/libpanel.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
             "name" : "blueprint-compiler",
             "buildsystem" : "meson",
             "sources" : [
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/jwestman/blueprint-compiler.git",
+                    "branch" : "main"
+                }
+            ]
+        },
+        {
+            "name" : "d-spy",
+            "buildsystem" : "meson",
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://gitlab.gnome.org/GNOME/d-spy.git",
                     "branch" : "main"
                 }
             ]
