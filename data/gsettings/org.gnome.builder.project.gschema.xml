@@ -8,5 +8,36 @@
       <description>The configuration that has been selected and will be restored the next time the project loads.</description>
     </key>
 
+    <key name="install-before-run" type="b">
+      <default>true</default>
+      <summary>Install Project Before Running</summary>
+      <description>Run the pipelines install phase before running the project. Only use this if you know what you're doing with your project.</description>
+    </key>
+
+    <key name="stop-signal" type="s">
+      <choices>
+        <choice value="SIGKILL"/>
+        <choice value="SIGINT"/>
+        <choice value="SIGHUP"/>
+        <choice value="SIGUSR1"/>
+        <choice value="SIGUSR2"/>
+        <choice value="SIGABRT"/>
+        <choice value="SIGQUIT"/>
+      </choices>
+      <default>"SIGKILL"</default>
+      <summary>The signal to send the app to stop</summary>
+      <description>This allows sending something other than sigkill to stop the target application. That might be useful when you want to gracefully shutdown a server process.</description>
+    </key>
+
+    <key name="unit-test-locality" type="s">
+      <choices>
+        <choice value="pipeline"/>
+        <choice value="runtime"/>
+      </choices>
+      <default>'runtime'</default>
+      <summary>Unit Test Locality</summary>
+      <description>What environment to use when running unit tests</description>
+    </key>
+
   </schema>
 </schemalist>

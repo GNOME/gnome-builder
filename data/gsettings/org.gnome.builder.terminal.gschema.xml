@@ -7,7 +7,7 @@
       <default>true</default>
     </key>
     <key name="font-name" type="s">
-      <default>"Monospace 11"</default>
+      <default>"Monospace 10"</default>
     </key>
     <key name="limit-scrollback" type="b">
       <default>true</default>

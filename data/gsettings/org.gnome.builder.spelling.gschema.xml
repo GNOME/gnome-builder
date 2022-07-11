@@ -1,0 +1,9 @@
+<schemalist>
+  <schema id="org.gnome.builder.spelling" path="/org/gnome/builder/editor/" gettext-domain="gnome-builder">
+    <key name="check-spelling" type="b">
+      <default>true</default>
+      <summary>Check Spelling</summary>
+      <description>Automatically check spelling within documents</description>
+    </key>
+  </schema>
+</schemalist>

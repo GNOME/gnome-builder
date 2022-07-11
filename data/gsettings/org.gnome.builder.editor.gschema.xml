@@ -60,12 +60,12 @@
       <description>Whether or not Home moves to first non-space character.</description>
     </key>
     <key name="show-grid-lines" type="b">
-      <default>true</default>
+      <default>false</default>
       <summary>Show grid lines</summary>
       <description>If enabled, the editor will show grid lines in the document.</description>
     </key>
     <key name="font-name" type="s">
-      <default>"Monospace 11"</default>
+      <default>"Monospace 10"</default>
     </key>
     <key name="style-scheme-name" type="s">
       <default>"Adwaita"</default>
@@ -122,11 +122,11 @@
       <summary>Completion Row Count</summary>
       <description>The number of completion rows to display to the user.</description>
     </key>
-    <key name="line-spacing" type="i">
-      <default>0</default>
-      <range min="0" max="32"/>
-      <summary>Line Spacing</summary>
-      <description>The number of pixels to include above and below lines in the editor.</description>
+    <key name="line-height" type="d">
+      <default>1.2</default>
+      <range min="0.5" max="10"/>
+      <summary>Line Height</summary>
+      <description>The line height to use for the selected font.</description>
     </key>
     <key name="interactive-completion" type="b">
       <default>true</default>
@@ -138,6 +138,21 @@
       <range min="1" max="32"/>
       <summary>Minimum characters for matching selection.</summary>
       <description>Specify the minimum number of characters for selection matching.</description>
+    </key>
+    <key name="use-tabbar" type="b">
+      <default>true</default>
+      <summary>Use Tabs</summary>
+      <description>Use the tabbar within the page grid.</description>
+    </key>
+    <key name="enable-snippets" type="b">
+      <default>true</default>
+      <summary>Enable Snippets</summary>
+      <description>Allow expanding snippets from the editor by pressing tab after the snippet trigger.</description>
+    </key>
+    <key name="select-first-completion" type="b">
+      <default>true</default>
+      <summary>Select First Completion</summary>
+      <description>Automatically select the first auto-completion entry.</description>
     </key>
   </schema>
 </schemalist>

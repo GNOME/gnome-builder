@@ -5,11 +5,6 @@
       <summary>Window size</summary>
       <description>Window size (width and height).</description>
     </key>
-    <key name="window-position" type="(ii)">
-      <default>(-1,-1)</default>
-      <summary>Window position</summary>
-      <description>Window position (x and y).</description>
-    </key>
     <key name="window-maximized" type="b">
       <default>true</default>
       <summary>Window maximized</summary>
@@ -17,11 +12,11 @@
     </key>
     <key name="style-variant" type="s">
       <choices>
-        <choice value="follow"/>
+        <choice value="default"/>
         <choice value="light"/>
         <choice value="dark"/>
       </choices>
-      <default>'follow'</default>
+      <default>'default'</default>
       <summary>Style Variant</summary>
       <description>Use the light or dark variant of the GTK theme and/or GtkSourceView style scheme.</description>
     </key>
@@ -50,6 +45,21 @@
     </key>
     <key name="format-on-save" type="b">
       <default>false</default>
+    </key>
+    <key name="default-license" type="s">
+      <choices>
+        <choice value="AGPL-3.0-or-later"/>
+        <choice value="Apache-2.0"/>
+        <choice value="GPL-2.0-or-later"/>
+        <choice value="GPL-3.0-or-later"/>
+        <choice value="LGPL-2.1-or-later"/>
+        <choice value="LGPL-3.0-or-later"/>
+        <choice value="MIT"/>
+        <choice value="No License"/>
+      </choices>
+      <default>'GPL-3.0-or-later'</default>
+      <summary>Default License</summary>
+      <description>THe default license to use for new projects</description>
     </key>
   </schema>
 </schemalist>
