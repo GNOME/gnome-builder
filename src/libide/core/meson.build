@@ -53,6 +53,8 @@ libide_core_generated_headers += [libide_debug_h]
 #
 
 libide_core_public_headers = [
+  'ide-action-group.h',
+  'ide-binding-group.h',
   'ide-context.h',
   'ide-context-addin.h',
   'ide-global.h',
@@ -63,6 +65,7 @@ libide_core_public_headers = [
   'ide-object.h',
   'ide-object-box.h',
   'ide-settings.h',
+  'ide-signal-group.h',
   'ide-transfer.h',
   'ide-transfer-manager.h',
   'ide-version-macros.h',
@@ -80,6 +83,7 @@ install_headers(libide_core_public_headers, subdir: libide_core_header_subdir)
 #
 
 libide_core_public_sources = [
+  'ide-binding-group.c',
   'ide-context.c',
   'ide-context-addin.c',
   'ide-global.c',
@@ -90,6 +94,7 @@ libide_core_public_sources = [
   'ide-object-box.c',
   'ide-object-notify.c',
   'ide-settings.c',
+  'ide-signal-group.c',
   'ide-transfer.c',
   'ide-transfer-manager.c',
 ]
