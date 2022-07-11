@@ -8,6 +8,7 @@ libide_include_directories += include_directories('.')
 libide_io_public_headers = [
   'ide-cached-list-model.h',
   'ide-content-type.h',
+  'ide-directory-reaper.h',
   'ide-gfile.h',
   'ide-heap.h',
   'ide-line-reader.h',
@@ -37,6 +38,7 @@ install_headers(libide_io_public_headers, subdir: libide_io_header_subdir)
 libide_io_public_sources = [
   'ide-cached-list-model.c',
   'ide-content-type.c',
+  'ide-directory-reaper.c',
   'ide-gfile.c',
   'ide-heap.c',
   'ide-line-reader.c',

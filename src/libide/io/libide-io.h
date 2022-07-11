@@ -39,6 +39,7 @@ G_BEGIN_DECLS
 #include "ide-pty-intercept.h"
 #include "ide-shell.h"
 
+# include "ide-directory-reaper.h"
 # include "ide-heap.h"
 # include "ide-recursive-file-monitor.h"
 # include "ide-task-cache.h"
