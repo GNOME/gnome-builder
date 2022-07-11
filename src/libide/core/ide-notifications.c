@@ -168,8 +168,6 @@ ide_notifications_class_init (IdeNotificationsClass *klass)
    *
    * The "has-progress" property denotes if any of the notifications
    * have progress supported.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_PROGRESS] =
     g_param_spec_boolean ("has-progress",
@@ -184,8 +182,6 @@ ide_notifications_class_init (IdeNotificationsClass *klass)
    * The "progress" property is the combination of all of the notifications
    * currently monitored. It is updated when child notifications progress
    * changes.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROGRESS] =
     g_param_spec_double ("progress",
@@ -199,8 +195,6 @@ ide_notifications_class_init (IdeNotificationsClass *klass)
    *
    * The "progress-is-imprecise" property indicates that all progress-bearing
    * notifications are imprecise.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROGRESS_IS_IMPRECISE] =
     g_param_spec_boolean ("progress-is-imprecise",
@@ -305,8 +299,6 @@ ide_notifications_init (IdeNotifications *self)
  * #IdeObject will create it automatically.
  *
  * Returns: (transfer full): a newly created #IdeNotifications
- *
- * Since: 3.32
  */
 IdeNotifications *
 ide_notifications_new (void)
@@ -321,8 +313,6 @@ ide_notifications_new (void)
  *
  * Adds @notification as a child of @self, sorting it by priority
  * and urgency.
- *
- * Since: 3.32
  */
 void
 ide_notifications_add_notification (IdeNotifications *self,
@@ -394,8 +384,6 @@ collect_progress_cb (gpointer item,
  * #IdeNotifications object.
  *
  * Returns: A double between 0.0 and 1.0
- *
- * Since: 3.32
  */
 gdouble
 ide_notifications_get_progress (IdeNotifications *self)
@@ -426,8 +414,6 @@ ide_notifications_get_progress (IdeNotifications *self)
  * Gets if any of the notification support progress updates.
  *
  * Returns: %TRUE if any notification has progress
- *
- * Since: 3.32
  */
 gboolean
 ide_notifications_get_has_progress (IdeNotifications *self)
@@ -450,8 +436,6 @@ ide_notifications_get_has_progress (IdeNotifications *self)
  * Checks if all of the notifications with progress are imprecise.
  *
  * Returns: %TRUE if all progress-supporting notifications are imprecise.
- *
- * Since: 3.32
  */
 gboolean
 ide_notifications_get_progress_is_imprecise (IdeNotifications *self)
@@ -496,8 +480,6 @@ find_by_id (gpointer item,
  * #IdeNotification:id of @id.
  *
  * Returns: (transfer full) (nullable): an #IdeNotification or %NULL
- *
- * Since: 3.32
  */
 IdeNotification *
 ide_notifications_find_by_id (IdeNotifications *self,
