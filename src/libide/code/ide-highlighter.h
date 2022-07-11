@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_HIGHLIGHTER (ide_highlighter_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeHighlighter, ide_highlighter, IDE, HIGHLIGHTER, IdeObject)
 
 typedef enum
@@ -62,8 +62,6 @@ struct _IdeHighlighterInterface
    *
    * @location should be set to the position that the highlighter got to
    * before yielding back to the engine.
-   *
-   * Since: 3.32
    */
   void (*update)     (IdeHighlighter       *self,
                       IdeHighlightCallback  callback,
@@ -77,9 +75,9 @@ struct _IdeHighlighterInterface
   void (*load)       (IdeHighlighter       *self);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_highlighter_load   (IdeHighlighter       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_highlighter_update (IdeHighlighter       *self,
                              IdeHighlightCallback  callback,
                              const GtkTextIter    *range_begin,
