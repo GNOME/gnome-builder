@@ -45,6 +45,11 @@ static const struct {
   { "AUTHORS", "text-x-authors-symbolic" },
   { "MAINTAINERS", "text-x-authors-symbolic" },
   { "Dockerfile", "text-makefile-symbolic" },
+  { "package.json", "text-makefile-symbolic" },
+  { "pom.xml", "text-makefile-symbolic" },
+  { "build.gradle", "text-makefile-symbolic" },
+  { "Cargo.toml", "text-makefile-symbolic" },
+  { "wscript", "text-makefile-symbolic" },
 };
 
 static const struct {
