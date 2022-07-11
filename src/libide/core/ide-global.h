@@ -36,7 +36,11 @@ typedef enum
   IDE_PROCESS_KIND_FLATPAK = 1,
 } IdeProcessKind;
 
-#define ide_is_flatpak() (ide_get_process_kind() == IDE_PROCESS_KIND_FLATPAK)
+#ifdef __linux__
+# define ide_is_flatpak() (ide_get_process_kind() == IDE_PROCESS_KIND_FLATPAK)
+#else
+# define ide_is_flatpak() 0
+#endif
 
 IDE_AVAILABLE_IN_ALL
 const gchar    *ide_gettext              (const gchar *message);
