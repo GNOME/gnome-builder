@@ -24,6 +24,8 @@
 
 #define IDE_CORE_INSIDE
 
+#include "ide-action-group.h"
+#include "ide-binding-group.h"
 #include "ide-context.h"
 #include "ide-context-addin.h"
 #include "ide-debug.h"
@@ -35,6 +37,7 @@
 #include "ide-object.h"
 #include "ide-object-box.h"
 #include "ide-settings.h"
+#include "ide-signal-group.h"
 #include "ide-transfer.h"
 #include "ide-transfer-manager.h"
 #include "ide-version.h"
