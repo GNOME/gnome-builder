@@ -23,11 +23,14 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
 #include <libide-code.h>
+#include <libide-plugins.h>
 
 #include "ide-buffer-private.h"
 
 #include "ide-project.h"
+#include "ide-similar-file-locator.h"
 
 struct _IdeProject
 {

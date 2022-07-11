@@ -34,6 +34,7 @@
 #include "ide-project-tree-addin.h"
 #include "ide-projects-global.h"
 #include "ide-recent-projects.h"
+#include "ide-similar-file-locator.h"
 #include "ide-template-base.h"
 #include "ide-template-provider.h"
 
