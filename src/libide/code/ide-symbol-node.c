@@ -45,6 +45,7 @@ enum {
   PROP_KIND,
   PROP_NAME,
   PROP_USE_MARKUP,
+  PROP_ICON_NAME,
   N_PROPS
 };
 
@@ -74,6 +75,13 @@ ide_symbol_node_real_get_location_finish (IdeSymbolNode  *self,
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
+static const char *
+ide_symbol_node_get_icon_name (IdeSymbolNode *self)
+{
+  IdeSymbolKind kind = ide_symbol_node_get_kind (self);
+  return ide_symbol_kind_get_icon_name (kind);
+}
+
 static void
 ide_symbol_node_finalize (GObject *object)
 {
@@ -97,6 +105,10 @@ ide_symbol_node_get_property (GObject    *object,
     {
     case PROP_NAME:
       g_value_set_string (value, ide_symbol_node_get_name (self));
+      break;
+
+    case PROP_ICON_NAME:
+      g_value_set_static_string (value, ide_symbol_node_get_icon_name (self));
       break;
 
     case PROP_KIND:
@@ -134,6 +146,7 @@ ide_symbol_node_set_property (GObject      *object,
 
     case PROP_KIND:
       priv->kind = g_value_get_enum (value);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_NAME]);
       break;
 
     case PROP_FLAGS:
@@ -167,6 +180,13 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
                          "Name",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name",
+                         "Icon Name",
+                         "Icon Name",
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_KIND] =
     g_param_spec_enum ("kind",
