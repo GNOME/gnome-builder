@@ -99,7 +99,7 @@ typedef enum
 
 #define IDE_TYPE_SYMBOL (ide_symbol_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSymbol, ide_symbol, IDE, SYMBOL, GObject)
 
 struct _IdeSymbolClass
@@ -110,27 +110,27 @@ struct _IdeSymbolClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbol      *ide_symbol_new                 (const gchar    *name,
                                                 IdeSymbolKind   kind,
                                                 IdeSymbolFlags  flags,
                                                 IdeLocation    *location,
                                                 IdeLocation    *header_location);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind   ide_symbol_get_kind            (IdeSymbol      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolFlags  ide_symbol_get_flags           (IdeSymbol      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar    *ide_symbol_get_name            (IdeSymbol      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation    *ide_symbol_get_location        (IdeSymbol      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation    *ide_symbol_get_header_location (IdeSymbol      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbol      *ide_symbol_new_from_variant    (GVariant       *variant);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GVariant       *ide_symbol_to_variant          (IdeSymbol      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar    *ide_symbol_kind_get_icon_name  (IdeSymbolKind   kind);
 
 G_END_DECLS

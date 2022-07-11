@@ -224,8 +224,6 @@ ide_symbol_get_name (IdeSymbol *self)
  * Gets the location, if any.
  *
  * Returns: (transfer none) (nullable): an #IdeLocation or %NULL
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_symbol_get_location (IdeSymbol *self)
@@ -244,8 +242,6 @@ ide_symbol_get_location (IdeSymbol *self)
  * Gets the header location, if any.
  *
  * Returns: (transfer none) (nullable): an #IdeLocation or %NULL
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_symbol_get_header_location (IdeSymbol *self)
@@ -430,8 +426,6 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
  * This function will never return a floating reference.
  *
  * Returns: (transfer full): a #GVariant
- *
- * Since: 3.32
  */
 GVariant *
 ide_symbol_to_variant (IdeSymbol *self)
@@ -468,10 +462,8 @@ ide_symbol_new_from_variant (GVariant *variant)
   g_autoptr(GVariant) unboxed = NULL;
   g_autoptr(GVariant) vdecl = NULL;
   g_autoptr(GVariant) vdef = NULL;
-  g_autoptr(GVariant) vcanon = NULL;
   g_autoptr(IdeLocation) decl = NULL;
   g_autoptr(IdeLocation) def = NULL;
-  g_autoptr(IdeLocation) canon = NULL;
   const gchar *name;
   IdeSymbolKind kind;
   IdeSymbolFlags flags;
@@ -517,8 +509,6 @@ ide_symbol_new_from_variant (GVariant *variant)
  * @header_location: (nullable):
  *
  * Returns: (transfer full): an #IdeSymbol
- *
- * Since: 3.32
  */
 IdeSymbol *
 ide_symbol_new (const gchar    *name,

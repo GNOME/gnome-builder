@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SYMBOL_NODE (ide_symbol_node_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSymbolNode, ide_symbol_node, IDE, SYMBOL_NODE, GObject)
 
 struct _IdeSymbolNodeClass
@@ -52,20 +52,20 @@ struct _IdeSymbolNodeClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind   ide_symbol_node_get_kind            (IdeSymbolNode        *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolFlags  ide_symbol_node_get_flags           (IdeSymbolNode        *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar    *ide_symbol_node_get_name            (IdeSymbolNode        *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_symbol_node_get_use_markup      (IdeSymbolNode        *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_symbol_node_get_location_async  (IdeSymbolNode        *self,
                                                      GCancellable         *cancellable,
                                                      GAsyncReadyCallback   callback,
                                                      gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLocation    *ide_symbol_node_get_location_finish (IdeSymbolNode        *self,
                                                      GAsyncResult         *result,
                                                      GError              **error);
