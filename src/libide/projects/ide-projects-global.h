@@ -28,9 +28,7 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
-const gchar *ide_get_projects_dir  (void);
-IDE_AVAILABLE_IN_3_32
-gchar       *ide_create_project_id (const gchar *name);
+IDE_AVAILABLE_IN_ALL
+char *ide_create_project_id (const char *name);
 
 G_END_DECLS
