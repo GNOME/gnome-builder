@@ -1,6 +1,6 @@
-/* ide-shell.h
+/* ide-shell-private.h
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,11 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include "ide-shell.h"
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_ALL
-gboolean    ide_shell_supports_dash_c     (const char *shell);
-IDE_AVAILABLE_IN_ALL
-gboolean    ide_shell_supports_dash_login (const char *shell);
-IDE_AVAILABLE_IN_ALL
-const char *ide_get_user_shell            (void);
-IDE_AVAILABLE_IN_ALL
-const char *ide_get_user_default_path     (void);
+void _ide_guess_shell     (void);
+void _ide_guess_user_path (void);
 
 G_END_DECLS
