@@ -38,8 +38,6 @@
  * Python source code, you might use:
  *
  *   X-Code-Indexer-Languages=python,python3
- *
- * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeCodeIndexer, ide_code_indexer, IDE_TYPE_OBJECT)
@@ -125,8 +123,6 @@ ide_code_indexer_default_init (IdeCodeIndexerInterface *iface)
  * This function will take index source file and create an array of symbols in
  * @file. @callback is called upon completion and must call
  * ide_code_indexer_index_file_finish() to complete the operation.
- *
- * Since: 3.32
  */
 void
 ide_code_indexer_index_file_async (IdeCodeIndexer      *self,
@@ -163,8 +159,6 @@ ide_code_indexer_index_file_async (IdeCodeIndexer      *self,
  *
  * Returns: (transfer full): an #IdeCodeIndexEntries if successful; otherwise %NULL
  *   and @error is set.
- *
- * Since: 3.32
  */
 IdeCodeIndexEntries *
 ide_code_indexer_index_file_finish (IdeCodeIndexer  *self,
@@ -190,8 +184,6 @@ ide_code_indexer_index_file_finish (IdeCodeIndexer  *self,
  * This function will get key of reference located at #IdeSoureLocation.
  *
  * In 3.30 this function gained the @build_flags parameter.
- *
- * Since: 3.32
  */
 void
 ide_code_indexer_generate_key_async (IdeCodeIndexer      *self,
@@ -218,8 +210,6 @@ ide_code_indexer_generate_key_async (IdeCodeIndexer      *self,
  * Returns key for declaration of reference at a location.
  *
  * Returns: (transfer full) : A string which contains key.
- *
- * Since: 3.32
  */
 gchar *
 ide_code_indexer_generate_key_finish (IdeCodeIndexer  *self,

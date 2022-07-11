@@ -37,49 +37,49 @@ G_BEGIN_DECLS
 typedef struct _IdeCodeIndexEntry        IdeCodeIndexEntry;
 typedef struct _IdeCodeIndexEntryBuilder IdeCodeIndexEntryBuilder;
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GType                     ide_code_index_entry_get_type          (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GType                     ide_code_index_entry_builder_get_type  (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeCodeIndexEntryBuilder *ide_code_index_entry_builder_new       (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                      ide_code_index_entry_builder_set_range (IdeCodeIndexEntryBuilder *builder,
                                                                   guint                     begin_line,
                                                                   guint                     begin_line_offset,
                                                                   guint                     end_line,
                                                                   guint                     end_line_offset);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                      ide_code_index_entry_builder_set_key   (IdeCodeIndexEntryBuilder *builder,
                                                                   const gchar              *key);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                      ide_code_index_entry_builder_set_name  (IdeCodeIndexEntryBuilder *builder,
                                                                   const gchar              *name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                      ide_code_index_entry_builder_set_kind  (IdeCodeIndexEntryBuilder *builder,
                                                                   IdeSymbolKind             kind);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                      ide_code_index_entry_builder_set_flags (IdeCodeIndexEntryBuilder *builder,
                                                                   IdeSymbolFlags            flags);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeCodeIndexEntry        *ide_code_index_entry_builder_build     (IdeCodeIndexEntryBuilder *builder);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeCodeIndexEntryBuilder *ide_code_index_entry_builder_copy      (IdeCodeIndexEntryBuilder *builder);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                      ide_code_index_entry_builder_free      (IdeCodeIndexEntryBuilder *builder);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                      ide_code_index_entry_free              (IdeCodeIndexEntry        *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeCodeIndexEntry        *ide_code_index_entry_copy              (const IdeCodeIndexEntry  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar              *ide_code_index_entry_get_key           (const IdeCodeIndexEntry  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar              *ide_code_index_entry_get_name          (const IdeCodeIndexEntry  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolKind             ide_code_index_entry_get_kind          (const IdeCodeIndexEntry  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSymbolFlags            ide_code_index_entry_get_flags         (const IdeCodeIndexEntry  *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                      ide_code_index_entry_get_range         (const IdeCodeIndexEntry  *self,
                                                                   guint                    *begin_line,
                                                                   guint                    *begin_line_offset,
