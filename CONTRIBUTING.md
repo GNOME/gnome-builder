@@ -51,6 +51,7 @@ Permissively licensed contributions will also be accepted, but we prefer that or
 Our coding style matches that of Gtk+.
 We consider the Gtk+ project an upstream, and often push features into Gtk+.
 This might feel unfamiliar at first, but it works well for us.
+Builder's default C mode matches our style guide relatively close.
 
 We use the recent GNU GCC '11 mode, such as -std=gnu11.
 
@@ -83,7 +84,37 @@ Unless you intend to subclass the object, make the object final.
 G_DECLARE_FINAL_TYPE (ExampleObject, example_object, EXAMPLE, OBJECT, GObject)
 ```
 
-Builder's default C mode matches our style guide.
+### Includes
+
+The top of your source files should have defines and includes grouped well.
+Generally, they should be in the style of the following, but please omit the comments.
+
+```c
+/* G_LOG_DOMAIN always first */
+#define G_LOG_DOMAIN "file-name-without-suffix"
+
+/* include "config.h" always second */
+#include "config.h"
+
+/* Includes that are system related, sorted if possible */
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+/* GLib/GTK and other dependency includes, sorted if possible */
+#include <adwaita.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
+/* Includes from Builder's platform libraries */
+#include <libide-core.h>
+#include <libide-gui.h>
+
+/* Includes from the module directory within builder */
+#include "my-widget.h"
+#include "my-widget-settings.h"
+#include "my-widget-private.h"
+```
 
 ### Be explicit about ownership transfers
 
