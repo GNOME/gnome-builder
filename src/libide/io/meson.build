@@ -44,6 +44,7 @@ libide_io_public_sources = [
   'ide-persistent-map-builder.c',
   'ide-pkcon-transfer.c',
   'ide-pty-intercept.c',
+  'ide-recursive-file-monitor.c',
   'ide-shell.c',
   'ide-task-cache.c',
 ]
