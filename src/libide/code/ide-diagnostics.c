@@ -401,8 +401,6 @@ ide_diagnostics_build_caches (IdeDiagnostics *self)
  * This function calls @callback for every line with diagnostics between
  * @begin_line and @end_line. This is useful when drawing information about
  * diagnostics in an editor where a known number of lines are visible.
- *
- * Since: 3.32
  */
 void
 ide_diagnostics_foreach_line_in_range (IdeDiagnostics             *self,
@@ -450,8 +448,6 @@ ide_diagnostics_foreach_line_in_range (IdeDiagnostics             *self,
  * Locates an #IdeDiagnostic in @file at @line.
  *
  * Returns: (transfer none) (nullable): an #IdeDiagnostic or %NULL
- *
- * Since: 3.32
  */
 IdeDiagnostic *
 ide_diagnostics_get_diagnostic_at_line (IdeDiagnostics *self,
@@ -492,8 +488,6 @@ ide_diagnostics_get_diagnostic_at_line (IdeDiagnostics *self,
  * Locates all #IdeDiagnostic in @file at @line.
  *
  * Returns: (transfer full) (element-type IdeDiagnostic) (nullable): an #GPtrArray or %NULL
- *
- * Since: 3.38
  */
 GPtrArray *
 ide_diagnostics_get_diagnostics_at_line (IdeDiagnostics *self,
@@ -537,8 +531,6 @@ ide_diagnostics_get_diagnostics_at_line (IdeDiagnostics *self,
  *   of diagnostics to add.
  *
  * Returns: (transfer full): an #IdeDiagnostics
- *
- * Since: 3.32
  */
 IdeDiagnostics *
 ide_diagnostics_new_from_array (GPtrArray *array)

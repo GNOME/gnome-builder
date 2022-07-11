@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTICS (ide_diagnostics_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDiagnostics, ide_diagnostics, IDE, DIAGNOSTICS, IdeObject)
 
 /**
@@ -44,8 +44,6 @@ G_DECLARE_DERIVABLE_TYPE (IdeDiagnostics, ide_diagnostics, IDE, DIAGNOSTICS, Ide
  *
  * This function prototype is used to notify a caller of every line that has a
  * diagnostic, and the most severe #IdeDiagnosticSeverity for that line.
- *
- * Since: 3.32
  */
 typedef void (*IdeDiagnosticsLineCallback) (guint                 line,
                                             IdeDiagnosticSeverity severity,
@@ -59,39 +57,39 @@ struct _IdeDiagnosticsClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostics *ide_diagnostics_new                     (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostics *ide_diagnostics_new_from_array          (GPtrArray                  *array);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_add                     (IdeDiagnostics             *self,
                                                          IdeDiagnostic              *diagnostic);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_take                    (IdeDiagnostics             *self,
                                                          IdeDiagnostic              *diagnostic);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_merge                   (IdeDiagnostics             *self,
                                                          IdeDiagnostics             *other);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint           ide_diagnostics_get_n_errors            (IdeDiagnostics             *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_diagnostics_get_has_errors          (IdeDiagnostics             *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint           ide_diagnostics_get_n_warnings          (IdeDiagnostics             *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean        ide_diagnostics_get_has_warnings        (IdeDiagnostics             *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void            ide_diagnostics_foreach_line_in_range   (IdeDiagnostics             *self,
                                                          GFile                      *file,
                                                          guint                       begin_line,
                                                          guint                       end_line,
                                                          IdeDiagnosticsLineCallback  callback,
                                                          gpointer                    user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostic  *ide_diagnostics_get_diagnostic_at_line  (IdeDiagnostics             *self,
                                                          GFile                      *file,
                                                          guint                       line);
-IDE_AVAILABLE_IN_3_38
+IDE_AVAILABLE_IN_ALL
 GPtrArray      *ide_diagnostics_get_diagnostics_at_line (IdeDiagnostics             *self,
                                                          GFile                      *file,
                                                          guint                       line);
