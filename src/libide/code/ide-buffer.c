@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <libide-io.h>
 #include <libide-plugins.h>
@@ -51,14 +50,14 @@
 
 #define SETTLING_DELAY_MSEC  333
 
-#define TAG_ERROR            "diagnostician::error"
-#define TAG_WARNING          "diagnostician::warning"
-#define TAG_DEPRECATED       "diagnostician::deprecated"
-#define TAG_UNUSED           "diagnostician::unused"
-#define TAG_NOTE             "diagnostician::note"
-#define TAG_SNIPPET_TAB_STOP "snippet::tab-stop"
-#define TAG_DEFINITION       "action::hover-definition"
-#define TAG_CURRENT_BKPT     "debugger::current-breakpoint"
+#define TAG_ERROR            "-Builder:error"
+#define TAG_WARNING          "-Builder:warning"
+#define TAG_DEPRECATED       "-Builder:deprecated"
+#define TAG_UNUSED           "-Builder:unused"
+#define TAG_NOTE             "-Builder:note"
+#define TAG_SNIPPET_TAB_STOP "-Builder:tab-stop"
+#define TAG_DEFINITION       "-Builder:hover-definition"
+#define TAG_CURRENT_BKPT     "-Builder:current-breakpoint"
 
 #define DEPRECATED_COLOR     "#babdb6"
 #define UNUSED_COLOR         "#c17d11"
@@ -71,6 +70,8 @@
 struct _IdeBuffer
 {
   GtkSourceBuffer         parent_instance;
+
+  const GtkSourceEncoding *encoding;
 
   /* Owned references */
   IdeExtensionSetAdapter *addins;
@@ -89,12 +90,15 @@ struct _IdeBuffer
   GFile                  *readlink_file;
 
   IdeTask                *in_flight_symbol_at_location;
-  gint                    in_flight_symbol_at_location_pos;
+  int                     in_flight_symbol_at_location_pos;
 
-  /* Scalars */
   guint                   change_count;
   guint                   settling_source;
-  gint                    hold;
+  int                     hold;
+  guint                   release_in_idle;
+
+  GArray                 *commit_funcs;
+  guint                   next_commit_handler;
 
   /* Bit-fields */
   IdeBufferState          state : 3;
@@ -104,7 +108,19 @@ struct _IdeBuffer
   guint                   changed_on_volume : 1;
   guint                   read_only : 1;
   guint                   highlight_diagnostics : 1;
+  GtkSourceNewlineType    newline_type : 2;
 };
+
+typedef struct
+{
+  IdeBufferCommitFunc before_insert_text;
+  IdeBufferCommitFunc after_insert_text;
+  IdeBufferCommitFunc before_delete_range;
+  IdeBufferCommitFunc after_delete_range;
+  gpointer user_data;
+  GDestroyNotify user_data_destroy;
+  guint handler_id;
+} CommitHooks;
 
 typedef struct
 {
@@ -134,6 +150,7 @@ enum {
   PROP_BUFFER_MANAGER,
   PROP_CHANGE_MONITOR,
   PROP_CHANGED_ON_VOLUME,
+  PROP_CHARSET,
   PROP_ENABLE_ADDINS,
   PROP_DIAGNOSTICS,
   PROP_FAILED,
@@ -144,6 +161,7 @@ enum {
   PROP_HIGHLIGHT_DIAGNOSTICS,
   PROP_IS_TEMPORARY,
   PROP_LANGUAGE_ID,
+  PROP_NEWLINE_TYPE,
   PROP_READ_ONLY,
   PROP_STATE,
   PROP_STYLE_SCHEME_NAME,
@@ -197,7 +215,6 @@ static void     ide_buffer_notify_style_scheme     (IdeBuffer              *self
 static void     ide_buffer_reload_file_settings    (IdeBuffer              *self);
 static void     ide_buffer_set_file_settings       (IdeBuffer              *self,
                                                     IdeFileSettings        *file_settings);
-static void     ide_buffer_emit_cursor_moved       (IdeBuffer              *self);
 static void     ide_buffer_changed                 (GtkTextBuffer          *buffer);
 static void     ide_buffer_delete_range            (GtkTextBuffer          *buffer,
                                                     GtkTextIter            *start,
@@ -206,9 +223,6 @@ static void     ide_buffer_insert_text             (GtkTextBuffer          *buff
                                                     GtkTextIter            *location,
                                                     const gchar            *text,
                                                     gint                    len);
-static void     ide_buffer_mark_set                (GtkTextBuffer          *buffer,
-                                                    const GtkTextIter      *iter,
-                                                    GtkTextMark            *mark);
 static void     ide_buffer_delay_settling          (IdeBuffer              *self);
 static gboolean ide_buffer_settled_cb              (gpointer                user_data);
 static void     ide_buffer_apply_diagnostics       (IdeBuffer              *self);
@@ -277,6 +291,15 @@ lookup_symbol_data_free (LookUpSymbolData *data)
   g_slice_free (LookUpSymbolData, data);
 }
 
+static void
+clear_commit_func (gpointer data)
+{
+  CommitHooks *hooks = data;
+
+  if (hooks->user_data_destroy)
+    hooks->user_data_destroy (hooks->user_data);
+}
+
 IdeBuffer *
 _ide_buffer_new (IdeBufferManager *buffer_manager,
                  GFile            *file,
@@ -293,6 +316,7 @@ _ide_buffer_new (IdeBufferManager *buffer_manager,
                        "enable-addins", enable_addins,
                        "is-temporary", is_temporary,
                        "implicit-trailing-newline", FALSE,
+                       "style-scheme-name", "Adwaita",
                        NULL);
 }
 
@@ -467,6 +491,8 @@ ide_buffer_notify_language (IdeBuffer  *self,
 
   if (self->code_action_provider)
     ide_extension_adapter_set_value (self->code_action_provider, lang_id);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LANGUAGE_ID]);
 }
 
 static void
@@ -491,23 +517,29 @@ ide_buffer_dispose (GObject *object)
   g_assert (IDE_IS_MAIN_THREAD ());
 
   g_clear_handle_id (&self->settling_source, g_source_remove);
+  g_clear_handle_id (&self->release_in_idle, g_source_remove);
+
+  ide_clear_and_destroy_object (&self->addins);
+
+  ide_clear_and_destroy_object (&self->rename_provider);
+  ide_clear_and_destroy_object (&self->symbol_resolvers);
+  ide_clear_and_destroy_object (&self->formatter);
+  ide_clear_and_destroy_object (&self->code_action_provider);
+  ide_clear_and_destroy_object (&self->highlight_engine);
+  ide_clear_and_destroy_object (&self->change_monitor);
+  ide_clear_and_destroy_object (&self->file_settings);
+
+  g_clear_pointer (&self->commit_funcs, g_array_unref);
+
+  g_clear_object (&self->diagnostics);
+  g_clear_object (&self->buffer_manager);
 
   /* Remove ourselves from the object-tree if necessary */
   if ((box = ide_object_box_from_object (object)) &&
       !ide_object_in_destruction (IDE_OBJECT (box)))
     ide_object_destroy (IDE_OBJECT (box));
 
-  ide_clear_and_destroy_object (&self->addins);
-  ide_clear_and_destroy_object (&self->rename_provider);
-  ide_clear_and_destroy_object (&self->symbol_resolvers);
-  ide_clear_and_destroy_object (&self->formatter);
-  ide_clear_and_destroy_object (&self->code_action_provider);
-  ide_clear_and_destroy_object (&self->highlight_engine);
-  g_clear_object (&self->buffer_manager);
-  ide_clear_and_destroy_object (&self->change_monitor);
   g_clear_pointer (&self->content, g_bytes_unref);
-  g_clear_object (&self->diagnostics);
-  ide_clear_and_destroy_object (&self->file_settings);
 
   G_OBJECT_CLASS (ide_buffer_parent_class)->dispose (object);
 }
@@ -540,6 +572,10 @@ ide_buffer_get_property (GObject    *object,
 
     case PROP_CHANGED_ON_VOLUME:
       g_value_set_boolean (value, ide_buffer_get_changed_on_volume (self));
+      break;
+
+    case PROP_CHARSET:
+      g_value_set_string (value, ide_buffer_get_charset (self));
       break;
 
     case PROP_ENABLE_ADDINS:
@@ -576,6 +612,10 @@ ide_buffer_get_property (GObject    *object,
 
     case PROP_LANGUAGE_ID:
       g_value_set_string (value, ide_buffer_get_language_id (self));
+      break;
+
+    case PROP_NEWLINE_TYPE:
+      g_value_set_enum (value, ide_buffer_get_newline_type (self));
       break;
 
     case PROP_IS_TEMPORARY:
@@ -621,6 +661,10 @@ ide_buffer_set_property (GObject      *object,
       ide_buffer_set_change_monitor (self, g_value_get_object (value));
       break;
 
+    case PROP_CHARSET:
+      ide_buffer_set_charset (self, g_value_get_string (value));
+      break;
+
     case PROP_ENABLE_ADDINS:
       self->enable_addins = g_value_get_boolean (value);
       break;
@@ -639,6 +683,10 @@ ide_buffer_set_property (GObject      *object,
 
     case PROP_LANGUAGE_ID:
       ide_buffer_set_language_id (self, g_value_get_string (value));
+      break;
+
+    case PROP_NEWLINE_TYPE:
+      ide_buffer_set_newline_type (self, g_value_get_enum (value));
       break;
 
     case PROP_IS_TEMPORARY:
@@ -669,15 +717,12 @@ ide_buffer_class_init (IdeBufferClass *klass)
   buffer_class->changed = ide_buffer_changed;
   buffer_class->delete_range = ide_buffer_delete_range;
   buffer_class->insert_text = ide_buffer_insert_text;
-  buffer_class->mark_set = ide_buffer_mark_set;
 
   /**
    * IdeBuffer:buffer-manager:
    *
    * Sets the "buffer-manager" property, which is used by the buffer to
    * clean-up state when the buffer is no longer in use.
-   *
-   * Since: 3.32
    */
   properties [PROP_BUFFER_MANAGER] =
     g_param_spec_object ("buffer-manager",
@@ -692,8 +737,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "change-monitor" property is an #IdeBufferChangeMonitor that will be
    * used to track changes in the #IdeBuffer. This can be used to show line
    * changes in the editor gutter.
-   *
-   * Since: 3.32
    */
   properties [PROP_CHANGE_MONITOR] =
     g_param_spec_object ("change-monitor",
@@ -703,13 +746,25 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
+   * IdeBuffer:charset:
+   *
+   * Sets the encoding to use for the buffer based on the "charset"
+   * specified. This is useful to ensure that characters may not be
+   * lost from the original encoding.
+   */
+  properties [PROP_CHARSET] =
+    g_param_spec_string ("charset",
+                         "Character Set",
+                         "The encoding character set",
+                         "UTF-8",
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
    * IdeBuffer:changed-on-volume:
    *
    * The "changed-on-volume" property is set to %TRUE when it has been
    * discovered that the file represented by the #IdeBuffer has changed
    * externally to Builder.
-   *
-   * Since: 3.32
    */
   properties [PROP_CHANGED_ON_VOLUME] =
     g_param_spec_boolean ("changed-on-volume",
@@ -724,8 +779,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "enable-addins" property determines whether addins will be aware of
    * this buffer. When set to %FALSE no ide_buffer_addin_*() functions will be
    * called on this buffer.
-   *
-   * Since: 41.0
    */
   properties [PROP_ENABLE_ADDINS] =
     g_param_spec_boolean ("enable-addins",
@@ -739,8 +792,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "diagnostics" property contains an #IdeDiagnostics that represent
    * the diagnostics found in the buffer.
-   *
-   * Since: 3.32
    */
   properties [PROP_DIAGNOSTICS] =
     g_param_spec_object ("diagnostics",
@@ -754,8 +805,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "failed" property is %TRUE when the buffer has entered a failed
    * state such as when loading or saving the buffer to disk.
-   *
-   * Since: 3.32
    */
   properties [PROP_FAILED] =
     g_param_spec_boolean ("failed",
@@ -768,8 +817,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * IdeBuffer:file:
    *
    * The "file" property is the underlying file represented by the buffer.
-   *
-   * Since: 3.32
    */
   properties [PROP_FILE] =
     g_param_spec_object ("file",
@@ -786,8 +833,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * These are automatically discovered and kept up to date based on the
    * #IdeFileSettings extension points.
-   *
-   * Since: 3.32
    */
   properties [PROP_FILE_SETTINGS] =
     g_param_spec_object ("file-settings",
@@ -801,8 +846,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "has-diagnostics" property denotes that there are a non-zero number
    * of diangostics registered for the buffer.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_DIAGNOSTICS] =
     g_param_spec_boolean ("has-diagnostics",
@@ -816,8 +859,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "has-symbol-resolvers" property is %TRUE if there are any symbol
    * resolvers loaded.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_SYMBOL_RESOLVERS] =
     g_param_spec_boolean ("has-symbol-resolvers",
@@ -831,8 +872,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "highlight-diagnostics" property indicates that diagnostics which
    * are discovered should be styled.
-   *
-   * Since: 3.32
    */
   properties [PROP_HIGHLIGHT_DIAGNOSTICS] =
     g_param_spec_boolean ("highlight-diagnostics",
@@ -850,8 +889,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * to select the destination file.
    *
    * Upon saving the file, the property will change to %FALSE.
-   *
-   * Since: 3.32
    */
   properties [PROP_IS_TEMPORARY] =
     g_param_spec_boolean ("is-temporary",
@@ -865,8 +902,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "language-id" property is a convenience property to set the
    * #GtkSourceBuffer:langauge property using a string name.
-   *
-   * Since: 3.32
    */
   properties [PROP_LANGUAGE_ID] =
     g_param_spec_string ("language-id",
@@ -876,13 +911,33 @@ ide_buffer_class_init (IdeBufferClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   /**
+   * IdeBuffer:newline-type:
+   *
+   * Sets the style of newline to append to each line.
+   *
+   * This sets the style of newlines to use within the file. Generally,
+   * only LF should be used (\n) as it is common on Unix, Linux, and most
+   * editors at this point.
+   *
+   * Older Windows editors might prefer CR+LF (\r\n) which is similar to what
+   * is displayed in a raw terminal without a \n line discipline.
+   *
+   * Really old Mac Classic systems use just a \r.
+   */
+  properties [PROP_NEWLINE_TYPE] =
+    g_param_spec_enum ("newline-type",
+                       "Newline Type",
+                       "The style of newlines to append at the end of each line",
+                       GTK_SOURCE_TYPE_NEWLINE_TYPE,
+                       GTK_SOURCE_NEWLINE_TYPE_LF,
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
    * IdeBuffer:read-only:
    *
    * The "read-only" property is set to %TRUE when it has been
    * discovered that the file represented by the #IdeBuffer is read-only
    * on the underlying storage.
-   *
-   * Since: 3.32
    */
   properties [PROP_READ_ONLY] =
     g_param_spec_boolean ("read-only",
@@ -897,8 +952,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "state" property can be used to determine if the buffer is
    * currently performing any specific background work, such as loading
    * from or saving a buffer to storage.
-   *
-   * Since: 3.32
    */
   properties [PROP_STATE] =
     g_param_spec_enum ("state",
@@ -914,8 +967,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * The "style-scheme-name" is the name of the style scheme that is used.
    * It is a convenience property so that you do not need to use the
    * #GtkSourceStyleSchemeManager to lookup style schemes.
-   *
-   * Since: 3.32
    */
   properties [PROP_STYLE_SCHEME_NAME] =
     g_param_spec_string ("style-scheme-name",
@@ -929,8 +980,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * The "title" for the buffer which includes some variant of the path
    * to the underlying file.
-   *
-   * Since: 3.32
    */
   properties [PROP_TITLE] =
     g_param_spec_string ("title",
@@ -949,8 +998,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * being edited for a short period of time. This is useful to connect
    * to when you want to perform work as the user is editing, but you
    * don't want to get in the way of their editing.
-   *
-   * Since: 3.32
    */
   signals [CHANGE_SETTLED] =
     g_signal_new ("change-settled",
@@ -965,40 +1012,12 @@ ide_buffer_class_init (IdeBufferClass *klass)
                               g_cclosure_marshal_VOID__VOIDv);
 
   /**
-   * IdeBuffer::cursor-moved:
-   * @self: an #IdeBuffer
-   * @location: a #GtkTextIter
-   *
-   * This signal is emitted when the insertion location has moved. You might
-   * want to attach to this signal to update the location of the insert mark in
-   * the display.
-   *
-   * Since: 3.32
-   */
-  signals [CURSOR_MOVED] =
-    g_signal_new ("cursor-moved",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL,
-                  NULL,
-                  g_cclosure_marshal_VOID__BOXED,
-                  G_TYPE_NONE,
-                  1,
-                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
-  g_signal_set_va_marshaller (signals [CURSOR_MOVED],
-                              G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__BOXEDv);
-
-  /**
    * IdeBuffer::line-flags-changed:
    * @self: an #IdeBuffer
    *
    * The "line-flags-changed" signal is emitted when the buffer has detected
    * ancillary information has changed for lines in the buffer. Such information
    * might include diagnostics or version control information.
-   *
-   * Since: 3.32
    */
   signals [LINE_FLAGS_CHANGED] =
     g_signal_new_class_handler ("line-flags-changed",
@@ -1020,8 +1039,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    *
    * This is useful to watch if you want to perform a given action but do
    * not want to interfere with buffer loading.
-   *
-   * Since: 3.32
    */
   signals [LOADED] =
     g_signal_new_class_handler ("loaded",
@@ -1041,8 +1058,6 @@ ide_buffer_class_init (IdeBufferClass *klass)
    * Requests that attached views scroll to insert location.
    *
    * This is generally only used when loading a buffer.
-   *
-   * Since: 3.32
    */
   signals [REQUEST_SCROLL_TO_INSERT] =
     g_signal_new_class_handler ("request-scroll-to-insert",
@@ -1060,13 +1075,17 @@ ide_buffer_class_init (IdeBufferClass *klass)
 static void
 ide_buffer_init (IdeBuffer *self)
 {
+  g_assert (IDE_IS_MAIN_THREAD ());
+
   self->in_flight_symbol_at_location_pos = -1;
   self->source_file = gtk_source_file_new ();
   self->can_restore_cursor = TRUE;
   self->highlight_diagnostics = TRUE;
   self->enable_addins = TRUE;
+  self->newline_type = GTK_SOURCE_NEWLINE_TYPE_LF;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
+  self->commit_funcs = g_array_new (FALSE, FALSE, sizeof (CommitHooks));
+  g_array_set_clear_func (self->commit_funcs, clear_commit_func);
 
   g_signal_connect (self,
                     "notify::language",
@@ -1183,6 +1202,8 @@ void
 _ide_buffer_attach (IdeBuffer *self,
                     IdeObject *parent)
 {
+  const char *language_id;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_OBJECT_BOX (parent));
   g_return_if_fail (ide_object_box_contains (IDE_OBJECT_BOX (parent), self));
@@ -1192,6 +1213,10 @@ _ide_buffer_attach (IdeBuffer *self,
   g_return_if_fail (self->formatter == NULL);
   g_return_if_fail (self->rename_provider == NULL);
 
+  /* We use "--disabled--" just like sourceview does */
+  if (!(language_id = ide_buffer_get_language_id (self)))
+    language_id = "--disabled--";
+
   /* Setup the semantic highlight engine */
   self->highlight_engine = ide_highlight_engine_new (self);
 
@@ -1200,7 +1225,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                 peas_engine_get_default (),
                                                 IDE_TYPE_BUFFER_ADDIN,
                                                 "Buffer-Addin-Languages",
-                                                ide_buffer_get_language_id (self));
+                                                language_id);
   g_signal_connect (self->addins,
                     "extension-added",
                     G_CALLBACK (_ide_buffer_addin_load_cb),
@@ -1218,7 +1243,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                      peas_engine_get_default (),
                                                      IDE_TYPE_RENAME_PROVIDER,
                                                      "Rename-Provider-Languages",
-                                                     ide_buffer_get_language_id (self));
+                                                     language_id);
   g_signal_connect_object (self->rename_provider,
                            "notify::extension",
                            G_CALLBACK (ide_buffer_rename_provider_notify_extension),
@@ -1231,7 +1256,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                peas_engine_get_default (),
                                                IDE_TYPE_FORMATTER,
                                                "Formatter-Languages",
-                                               ide_buffer_get_language_id (self));
+                                               language_id);
   g_signal_connect_object (self->formatter,
                            "notify::extension",
                            G_CALLBACK (ide_buffer_formatter_notify_extension),
@@ -1244,7 +1269,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                           peas_engine_get_default (),
                                                           IDE_TYPE_CODE_ACTION_PROVIDER,
                                                           "Code-Action-Languages",
-                                                          ide_buffer_get_language_id (self));
+                                                          language_id);
 
   g_signal_connect_object (self->code_action_provider,
                            "notify::extension",
@@ -1258,7 +1283,7 @@ _ide_buffer_attach (IdeBuffer *self,
                                                           peas_engine_get_default (),
                                                           IDE_TYPE_SYMBOL_RESOLVER,
                                                           "Symbol-Resolver-Languages",
-                                                          ide_buffer_get_language_id (self));
+                                                          language_id);
   g_signal_connect_object (self->symbol_resolvers,
                            "extension-added",
                            G_CALLBACK (ide_buffer_symbol_resolver_added),
@@ -1281,8 +1306,6 @@ _ide_buffer_attach (IdeBuffer *self,
  * Gets the #IdeBuffer:file property.
  *
  * Returns: (transfer none): a #GFile
- *
- * Since: 3.32
  */
 GFile *
 ide_buffer_get_file (IdeBuffer *self)
@@ -1306,8 +1329,6 @@ ide_buffer_get_file (IdeBuffer *self)
  * Gets the URI for the underlying file and returns a copy of it.
  *
  * Returns: (transfer full): a new string
- *
- * Since: 3.32
  */
 gchar *
 ide_buffer_dup_uri (IdeBuffer *self)
@@ -1326,8 +1347,6 @@ ide_buffer_dup_uri (IdeBuffer *self)
  * when the user requests to save the buffer.
  *
  * Returns: %TRUE if the buffer is for a temporary file
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_is_temporary (IdeBuffer *self)
@@ -1347,8 +1366,6 @@ ide_buffer_get_is_temporary (IdeBuffer *self)
  * This will changed while files are loaded or saved to disk.
  *
  * Returns: an #IdeBufferState
- *
- * Since: 3.32
  */
 IdeBufferState
 ide_buffer_get_state (IdeBuffer *self)
@@ -1510,8 +1527,6 @@ _ide_buffer_load_file_async (IdeBuffer            *self,
  * that the completion of signals and addins may be notified.
  *
  * Returns: %TRUE if the file was successfully loaded
- *
- * Since: 3.32
  */
 gboolean
 _ide_buffer_load_file_finish (IdeBuffer     *self,
@@ -1645,12 +1660,21 @@ ide_buffer_save_file_settle_cb (GObject      *object,
     }
 
   saver = gtk_source_file_saver_new (GTK_SOURCE_BUFFER (self), state->source_file);
+
   /* At this point, we've notified the user of changes to the underlying file using
    * the infobar, so just save the file knowing that we are overwriting things.
    */
   gtk_source_file_saver_set_flags (saver,
                                    (GTK_SOURCE_FILE_SAVER_FLAGS_IGNORE_INVALID_CHARS |
                                     GTK_SOURCE_FILE_SAVER_FLAGS_IGNORE_MODIFICATION_TIME));
+
+  /* Propagate the requested encoding, if necessary */
+  if (self->encoding != NULL)
+    gtk_source_file_saver_set_encoding (saver, self->encoding);
+
+  /* Same for newlines */
+  gtk_source_file_saver_set_newline_type (saver, self->newline_type);
+
   gtk_source_file_saver_save_async (saver,
                                     G_PRIORITY_DEFAULT,
                                     ide_task_get_cancellable (task),
@@ -1667,6 +1691,7 @@ ide_buffer_save_file_settle_cb (GObject      *object,
  * @self: an #IdeBuffer
  * @file: (nullable): a #GFile or %NULL
  * @cancellable: (nullable): a #GCancellable
+ * @notif: (out) (optional) (transfer full): a location for an #IdeNotification or %NULL
  * @callback: a #GAsyncReadyCallback to execute upon completion
  * @user_data: closure data for @callback
  *
@@ -1679,8 +1704,6 @@ ide_buffer_save_file_settle_cb (GObject      *object,
  *
  * @callback is executed upon completion and should call
  * ide_buffer_save_file_finish() to get the result of the operation.
- *
- * Since: 3.32
  */
 void
 ide_buffer_save_file_async (IdeBuffer            *self,
@@ -1805,8 +1828,6 @@ set_out_param:
  * ide_buffer_save_file_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_save_file_finish (IdeBuffer     *self,
@@ -1827,8 +1848,6 @@ ide_buffer_save_file_finish (IdeBuffer     *self,
  * A helper to get the language identifier of the buffers current language.
  *
  * Returns: (nullable): a string containing the language id, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_buffer_get_language_id (IdeBuffer *self)
@@ -1897,8 +1916,6 @@ _ide_buffer_set_failure (IdeBuffer    *self,
  * buffer.
  *
  * Returns: (transfer none): a #GError, or %NULL
- *
- * Since: 3.32
  */
 const GError *
 ide_buffer_get_failure (IdeBuffer *self)
@@ -1917,8 +1934,6 @@ ide_buffer_get_failure (IdeBuffer *self)
  * in some aspect such as loading or saving.
  *
  * Returns: %TRUE if the buffer is in a failed state
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_failed (IdeBuffer *self)
@@ -1978,23 +1993,6 @@ ide_buffer_reload_file_settings (IdeBuffer *self)
     }
 }
 
-static void
-ide_buffer_emit_cursor_moved (IdeBuffer *self)
-{
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUFFER (self));
-
-  if (!ide_buffer_get_loading (self))
-    {
-      GtkTextMark *mark;
-      GtkTextIter iter;
-
-      mark = gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self));
-      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (self), &iter, mark);
-      g_signal_emit (self, signals [CURSOR_MOVED], 0, &iter);
-    }
-}
-
 /**
  * ide_buffer_get_loading:
  * @self: an #IdeBuffer
@@ -2003,8 +2001,6 @@ ide_buffer_emit_cursor_moved (IdeBuffer *self)
  * to calling ide_buffer_get_state() and checking for %IDE_BUFFER_STATE_LOADING.
  *
  * Returns: %TRUE if the buffer is loading; otherwise %FALSE.
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_loading (IdeBuffer *self)
@@ -2037,10 +2033,14 @@ ide_buffer_delete_range (GtkTextBuffer *buffer,
                          GtkTextIter   *begin,
                          GtkTextIter   *end)
 {
+  IdeBuffer *self = (IdeBuffer *)buffer;
+  guint position;
+  guint length;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER (self));
   g_assert (begin != NULL);
   g_assert (end != NULL);
 
@@ -2060,9 +2060,26 @@ ide_buffer_delete_range (GtkTextBuffer *buffer,
   }
 #endif
 
+  position = gtk_text_iter_get_offset (begin);
+  length = gtk_text_iter_get_offset (end) - position;
+
+  for (guint i = 0; i < self->commit_funcs->len; i++)
+    {
+      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
+
+      if (hooks->before_delete_range != NULL)
+        hooks->before_delete_range (self, position, length, hooks->user_data);
+    }
+
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->delete_range (buffer, begin, end);
 
-  ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
+  for (guint i = 0; i < self->commit_funcs->len; i++)
+    {
+      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
+
+      if (hooks->after_delete_range != NULL)
+        hooks->after_delete_range (self, position, length, hooks->user_data);
+    }
 
   IDE_EXIT;
 }
@@ -2073,12 +2090,15 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
                         const gchar   *text,
                         gint           len)
 {
+  IdeBuffer *self = (IdeBuffer *)buffer;
   gboolean recheck_language = FALSE;
+  guint position;
+  guint length;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_BUFFER (self));
   g_assert (location != NULL);
   g_assert (text != NULL);
 
@@ -2092,33 +2112,31 @@ ide_buffer_insert_text (GtkTextBuffer *buffer,
       ((text [0] == '\n') || ((len > 1) && (strchr (text, '\n') != NULL))))
     recheck_language = TRUE;
 
+  position = gtk_text_iter_get_offset (location);
+  length = g_utf8_strlen (text, len);
+
+  for (guint i = 0; i < self->commit_funcs->len; i++)
+    {
+      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
+
+      if (hooks->before_insert_text != NULL)
+        hooks->before_insert_text (self, position, length, hooks->user_data);
+    }
+
   GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->insert_text (buffer, location, text, len);
 
-  ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
+  for (guint i = 0; i < self->commit_funcs->len; i++)
+    {
+      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
+
+      if (hooks->after_insert_text != NULL)
+        hooks->after_insert_text (self, position, length, hooks->user_data);
+    }
 
   if G_UNLIKELY (recheck_language)
     ide_buffer_guess_language (IDE_BUFFER (buffer));
 
   IDE_EXIT;
-}
-
-static void
-ide_buffer_mark_set (GtkTextBuffer     *buffer,
-                     const GtkTextIter *iter,
-                     GtkTextMark       *mark)
-{
-  IdeBuffer *self = (IdeBuffer *)buffer;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_BUFFER (self));
-
-  GTK_TEXT_BUFFER_CLASS (ide_buffer_parent_class)->mark_set (buffer, iter, mark);
-
-  if (!ide_buffer_get_loading (self))
-    {
-      if (mark == gtk_text_buffer_get_insert (buffer))
-        ide_buffer_emit_cursor_moved (IDE_BUFFER (buffer));
-    }
 }
 
 /**
@@ -2129,8 +2147,6 @@ ide_buffer_mark_set (GtkTextBuffer     *buffer,
  * externally from this #IdeBuffer.
  *
  * Returns: %TRUE if @self is known to be modified on storage
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_changed_on_volume (IdeBuffer *self)
@@ -2150,8 +2166,6 @@ ide_buffer_get_changed_on_volume (IdeBuffer *self)
  *
  * Set this to %TRUE if the buffer has been discovered to have changed
  * outside of this buffer.
- *
- * Since: 3.32
  */
 void
 _ide_buffer_set_changed_on_volume (IdeBuffer *self,
@@ -2179,8 +2193,6 @@ _ide_buffer_set_changed_on_volume (IdeBuffer *self,
  * the user about saving the file.
  *
  * Returns: %TRUE if the underlying file is read-only
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_read_only (IdeBuffer *self)
@@ -2198,8 +2210,6 @@ ide_buffer_get_read_only (IdeBuffer *self)
  *
  * Sets the #IdeBuffer:read-only property, which should be set when the buffer
  * has been discovered to be read-only on disk.
- *
- * Since: 3.32
  */
 void
 _ide_buffer_set_read_only (IdeBuffer *self,
@@ -2225,8 +2235,6 @@ _ide_buffer_set_read_only (IdeBuffer *self,
  * property.
  *
  * Returns: (nullable): a string containing the style scheme or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_buffer_get_style_scheme_name (IdeBuffer *self)
@@ -2249,8 +2257,6 @@ ide_buffer_get_style_scheme_name (IdeBuffer *self)
  *
  * Sets the #IdeBuffer:style-scheme property by locating the style scheme
  * matching @style_scheme_name.
- *
- * Since: 3.32
  */
 void
 ide_buffer_set_style_scheme_name (IdeBuffer   *self,
@@ -2277,8 +2283,6 @@ ide_buffer_set_style_scheme_name (IdeBuffer   *self,
  * make this relative to the project workdir if possible.
  *
  * Returns: (transfer full): a string containing a title
- *
- * Since: 3.32
  */
 gchar *
 ide_buffer_dup_title (IdeBuffer *self)
@@ -2326,8 +2330,6 @@ ide_buffer_dup_title (IdeBuffer *self)
  * Checks if diagnostics should be highlighted.
  *
  * Returns: %TRUE if diagnostics should be highlighted
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
@@ -2345,8 +2347,6 @@ ide_buffer_get_highlight_diagnostics (IdeBuffer *self)
  * Sets the #IdeBuffer:highlight-diagnostics property.
  *
  * If set to %TRUE, diagnostics will be styled in the buffer.
- *
- * Since: 3.32
  */
 void
 ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
@@ -2374,8 +2374,6 @@ ide_buffer_set_highlight_diagnostics (IdeBuffer *self,
  * Gets an #IdeLocation for the position represented by @iter.
  *
  * Returns: (transfer full): an #IdeLocation
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_buffer_get_iter_location (IdeBuffer         *self,
@@ -2397,8 +2395,6 @@ ide_buffer_get_iter_location (IdeBuffer         *self,
  * Gets an #IdeRange to represent the current buffer selection.
  *
  * Returns: (transfer full): an #IdeRange
- *
- * Since: 3.32
  */
 IdeRange *
 ide_buffer_get_selection_range (IdeBuffer *self)
@@ -2426,8 +2422,6 @@ ide_buffer_get_selection_range (IdeBuffer *self)
  * Gets the monotonic change count for the buffer.
  *
  * Returns: the change count for the buffer
- *
- * Since: 3.32
  */
 guint
 ide_buffer_get_change_count (IdeBuffer *self)
@@ -2464,9 +2458,9 @@ ide_buffer_delay_settling (IdeBuffer *self)
   g_assert (IDE_IS_BUFFER (self));
 
   g_clear_handle_id (&self->settling_source, g_source_remove);
-  self->settling_source = gdk_threads_add_timeout (SETTLING_DELAY_MSEC,
-                                                   ide_buffer_settled_cb,
-                                                   self);
+  self->settling_source = g_timeout_add (SETTLING_DELAY_MSEC,
+                                         ide_buffer_settled_cb,
+                                         self);
 }
 
 /**
@@ -2477,8 +2471,6 @@ ide_buffer_delay_settling (IdeBuffer *self)
  * Sets the #IdeDiagnostics for the buffer. These will be used to highlight
  * the buffer for errors and warnings if #IdeBuffer:highlight-diagnostics
  * is %TRUE.
- *
- * Since: 3.32
  */
 void
 ide_buffer_set_diagnostics (IdeBuffer      *self,
@@ -2520,8 +2512,6 @@ ide_buffer_set_diagnostics (IdeBuffer      *self,
  * Gets the #IdeDiagnostics for the buffer if any have been registered.
  *
  * Returns: (transfer none) (nullable): an #IdeDiagnostics or %NULL
- *
- * Since: 3.32
  */
 IdeDiagnostics *
 ide_buffer_get_diagnostics (IdeBuffer *self)
@@ -2539,8 +2529,6 @@ ide_buffer_get_diagnostics (IdeBuffer *self)
  * Returns %TRUE if any diagnostics have been registered for the buffer.
  *
  * Returns: %TRUE if there are a non-zero number of diagnostics.
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_has_diagnostics (IdeBuffer *self)
@@ -2573,19 +2561,19 @@ ide_buffer_clear_diagnostics (IdeBuffer *self)
   table = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (self));
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_NOTE)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_WARNING)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_DEPRECATED)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_UNUSED)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 
   if (NULL != (tag = gtk_text_tag_table_lookup (table, TAG_ERROR)))
-    dzl_gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end, TRUE);
+    gtk_text_buffer_remove_tag (GTK_TEXT_BUFFER (self), tag, &begin, &end);
 }
 
 static void
@@ -2727,8 +2715,6 @@ ide_buffer_apply_diagnostics (IdeBuffer *self)
  * @location: a #IdeLocation
  *
  * Set @iter to the position designated by @location.
- *
- * Since: 3.32
  */
 void
 ide_buffer_get_iter_at_location (IdeBuffer   *self,
@@ -2770,8 +2756,6 @@ ide_buffer_get_iter_at_location (IdeBuffer   *self,
  * Gets the #IdeBuffer:change-monitor for the buffer.
  *
  * Returns: (transfer none) (nullable): an #IdeBufferChangeMonitor or %NULL
- *
- * Since: 3.32
  */
 IdeBufferChangeMonitor *
 ide_buffer_get_change_monitor (IdeBuffer *self)
@@ -2787,8 +2771,6 @@ ide_buffer_get_change_monitor (IdeBuffer *self)
  * @change_monitor: (nullable): an #IdeBufferChangeMonitor or %NULL
  *
  * Sets an #IdeBufferChangeMonitor to use for the buffer.
- *
- * Since: 3.32
  */
 void
 ide_buffer_set_change_monitor (IdeBuffer              *self,
@@ -2859,8 +2841,6 @@ ide_buffer_can_do_newline_hack (IdeBuffer *self,
  * if the content is out of sync.
  *
  * Returns: (transfer full): a #GBytes containing the buffer content.
- *
- * Since: 3.32
  */
 GBytes *
 ide_buffer_dup_content (IdeBuffer *self)
@@ -2889,8 +2869,7 @@ ide_buffer_dup_content (IdeBuffer *self)
        * files will restore to a buffer, for which \n is acceptable.
        */
       len = strlen (text);
-      if (gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (self)) &&
-          (len == 0 || text[len - 1] != '\n'))
+      if (gtk_source_buffer_get_implicit_trailing_newline (GTK_SOURCE_BUFFER (self)))
         {
           if (!ide_buffer_can_do_newline_hack (self, len))
             {
@@ -2975,8 +2954,6 @@ ide_buffer_format_selection_range_cb (GObject      *object,
  * @user_data: user data for @callback
  *
  * Formats the selection using an available #IdeFormatter for the buffer.
- *
- * Since: 3.32
  */
 void
 ide_buffer_format_selection_async (IdeBuffer           *self,
@@ -3050,8 +3027,6 @@ ide_buffer_format_selection_async (IdeBuffer           *self,
  * Completes an asynchronous request to ide_buffer_format_selection_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_format_selection_finish (IdeBuffer     *self,
@@ -3102,8 +3077,6 @@ ide_buffer_query_code_action_cb(GObject      *object,
  * @user_data: user data for @callback
  *
  * Queries for code actions in the current buffer.
- *
- * Since: 42.0
  */
 void
 ide_buffer_code_action_query_async(IdeBuffer           *self,
@@ -3157,8 +3130,6 @@ ide_buffer_code_action_query_async(IdeBuffer           *self,
  * Completes an asynchronous request to ide_buffer_query_code_action_async().
  *
  * Returns: (transfer full) (element-type IdeCodeAction): a #GPtrArray of #IdeCodeAction.
- *
- * Since: 42.0
  */
 GPtrArray*
 ide_buffer_code_action_query_finish(IdeBuffer     *self,
@@ -3184,8 +3155,6 @@ ide_buffer_code_action_query_finish(IdeBuffer     *self,
  * Gets the location of the insert mark as an #IdeLocation.
  *
  * Returns: (transfer full): An #IdeLocation
- *
- * Since: 3.32
  */
 IdeLocation *
 ide_buffer_get_insert_location (IdeBuffer *self)
@@ -3210,8 +3179,6 @@ ide_buffer_get_insert_location (IdeBuffer *self)
  * Gets the word found under the position denoted by @iter.
  *
  * Returns: (transfer full): A newly allocated string.
- *
- * Since: 3.32
  */
 gchar *
 ide_buffer_get_word_at_iter (IdeBuffer         *self,
@@ -3243,8 +3210,6 @@ ide_buffer_get_word_at_iter (IdeBuffer         *self,
  *
  * Returns: (nullable) (transfer none): An #IdeRenameProvider or %NULL if
  *   there is no #IdeRenameProvider that can statisfy the buffer.
- *
- * Since: 3.32
  */
 IdeRenameProvider *
 ide_buffer_get_rename_provider (IdeBuffer *self)
@@ -3268,8 +3233,6 @@ ide_buffer_get_rename_provider (IdeBuffer *self)
  * syntax are chnaged.
  *
  * Returns: (transfer none) (nullable): an #IdeFileSettings or %NULL
- *
- * Since: 3.32
  */
 IdeFileSettings *
 ide_buffer_get_file_settings (IdeBuffer *self)
@@ -3286,8 +3249,6 @@ ide_buffer_get_file_settings (IdeBuffer *self)
  * Locates the #IdeContext for the buffer and returns it.
  *
  * Returns: (transfer full): an #IdeContext
- *
- * Since: 3.32
  */
 IdeContext *
 ide_buffer_ref_context (IdeBuffer *self)
@@ -3550,8 +3511,6 @@ ide_buffer_init_tags (IdeBuffer *self)
  * Gets an #IdeFormatter for the buffer, if any.
  *
  * Returns: (transfer none) (nullable): an #IdeFormatter or %NULL
- *
- * Since: 3.32
  */
 IdeFormatter *
 ide_buffer_get_formatter (IdeBuffer *self)
@@ -3581,8 +3540,6 @@ _ide_buffer_sync_to_unsaved_files (IdeBuffer *self)
  * @self: an #IdeBuffer
  *
  * Force @self to rebuild the highlighted words.
- *
- * Since: 3.32
  */
 void
 ide_buffer_rehighlight (IdeBuffer *self)
@@ -3683,8 +3640,6 @@ ide_buffer_get_symbol_at_location_cb (GObject      *object,
  * @user_data: a #gpointer to hold user data
  *
  * Asynchronously get a possible symbol at @location.
- *
- * Since: 3.32
  */
 void
 ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
@@ -3765,8 +3720,6 @@ ide_buffer_get_symbol_at_location_async (IdeBuffer           *self,
  * Completes an asynchronous request to locate a symbol at a location.
  *
  * Returns: (transfer full): An #IdeSymbol or %NULL.
- *
- * Since: 3.32
  */
 IdeSymbol *
 ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
@@ -3792,8 +3745,6 @@ ide_buffer_get_symbol_at_location_finish (IdeBuffer     *self,
  *
  * Calling gtk_text_iter_order() with the results of this function would be
  * equivalent to calling gtk_text_buffer_get_selection_bounds().
- *
- * Since: 3.32
  */
 void
 ide_buffer_get_selection_bounds (IdeBuffer   *self,
@@ -3845,8 +3796,6 @@ ide_buffer_get_symbol_resolvers_cb (IdeExtensionSetAdapter *set,
  *
  * Returns: (transfer full) (element-type IdeSymbolResolver): a #GPtrArray
  *   of #IdeSymbolResolver.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_buffer_get_symbol_resolvers (IdeBuffer *self)
@@ -3875,8 +3824,6 @@ ide_buffer_get_symbol_resolvers (IdeBuffer *self)
  *
  * Returns: (transfer full) (nullable): a string containing the line's text
  *   or %NULL if the line does not exist.
- *
- * Since: 3.32
  */
 gchar *
 ide_buffer_get_line_text (IdeBuffer *self,
@@ -3986,8 +3933,6 @@ _ide_buffer_cancel_cursor_restore (IdeBuffer *self)
  * When the hold count reaches zero, the buffer will be destroyed.
  *
  * Returns: (transfer full): @self
- *
- * Since: 3.32
  */
 IdeBuffer *
 ide_buffer_hold (IdeBuffer *self)
@@ -3997,7 +3942,25 @@ ide_buffer_hold (IdeBuffer *self)
 
   self->hold++;
 
+  g_clear_handle_id (&self->release_in_idle, g_source_remove);
+
   return g_object_ref (self);
+}
+
+static gboolean
+ide_buffer_release_in_idle (gpointer data)
+{
+  IdeBuffer *self = data;
+  IdeObjectBox *box;
+
+  g_assert (IDE_IS_BUFFER (self));
+
+  self->release_in_idle = 0;
+
+  if ((box = ide_object_box_from_object (G_OBJECT (self))))
+    ide_object_destroy (IDE_OBJECT (box));
+
+  return G_SOURCE_REMOVE;
 }
 
 /**
@@ -4008,8 +3971,6 @@ ide_buffer_hold (IdeBuffer *self)
  *
  * The buffer will be destroyed and unloaded when the hold count
  * reaches zero.
- *
- * Since: 3.32
  */
 void
 ide_buffer_release (IdeBuffer *self)
@@ -4022,10 +3983,13 @@ ide_buffer_release (IdeBuffer *self)
 
   if (self->hold == 0)
     {
-      IdeObjectBox *box = ide_object_box_from_object (G_OBJECT (self));
-
-      if (box != NULL)
-        ide_object_destroy (IDE_OBJECT (box));
+      g_assert (self->release_in_idle == 0);
+      self->release_in_idle =
+        g_idle_add_full (G_PRIORITY_DEFAULT,
+                         ide_buffer_release_in_idle,
+                         self,
+                         g_object_unref);
+      return;
     }
 
   g_object_unref (self);
@@ -4056,8 +4020,6 @@ _ide_buffer_line_flags_changed (IdeBuffer *self)
  * Checks if any symbol resolvers are available.
  *
  * Returns: %TRUE if at least one symbol resolvers is available
- *
- * Since: 3.32
  */
 gboolean
 ide_buffer_has_symbol_resolvers (IdeBuffer *self)
@@ -4189,4 +4151,140 @@ _ide_buffer_is_file (IdeBuffer *self,
 
   return g_file_equal (nolink_file, ide_buffer_get_file (self)) ||
          g_file_equal (nolink_file, self->readlink_file);
+}
+
+/**
+ * ide_buffer_add_commit_funcs:
+ * @self: a #IdeBuffer
+ * @before_insert_text: (nullable) (scope async): function for before inserting text
+ * @after_insert_text: (nullable) (scope async): function for after inserting text
+ * @before_delete_range: (nullable) (scope async): function for before deleting a range
+ * @after_delete_range: (nullable) (scope async): function for after deleting a range
+ * @user_data: closure data
+ * @user_data_destroy: destroy notify for @user_data
+ *
+ * Adds function callbacks to handle important changes to text
+ * internally within the GtkTextBuffer. You can use these instead
+ * of signals like #GtkTextBuffer::insert-text or
+ * #GtkTextBuffer::delete-range when you want to be sure you're
+ * getting unprocessed changes right before they are commited to
+ * underlying GTK data structures.
+ *
+ * However, this has the requirement that you do not change this
+ * content in any way, only access the information that these events
+ * occurred.
+ *
+ * Returns: a handler-id which can be used with
+ *   ide_buffer_remove_commit_funcs().
+ */
+guint
+ide_buffer_add_commit_funcs (IdeBuffer           *self,
+                             IdeBufferCommitFunc  before_insert_text,
+                             IdeBufferCommitFunc  after_insert_text,
+                             IdeBufferCommitFunc  before_delete_range,
+                             IdeBufferCommitFunc  after_delete_range,
+                             gpointer             user_data,
+                             GDestroyNotify       user_data_destroy)
+{
+  CommitHooks hooks;
+
+  g_return_val_if_fail (IDE_IS_BUFFER (self), 0);
+
+  hooks.before_insert_text = before_insert_text;
+  hooks.after_insert_text = after_insert_text;
+  hooks.after_delete_range = after_delete_range;
+  hooks.before_delete_range = before_delete_range;
+  hooks.user_data = user_data;
+  hooks.user_data_destroy = user_data_destroy;
+  hooks.handler_id = ++self->next_commit_handler;
+
+  g_array_append_val (self->commit_funcs, hooks);
+
+  return hooks.handler_id;
+}
+
+void
+ide_buffer_remove_commit_funcs (IdeBuffer *self,
+                                guint      commit_funcs_handler)
+{
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (commit_funcs_handler > 0);
+
+  for (guint i = 0; i < self->commit_funcs->len; i++)
+    {
+      const CommitHooks *hooks = &g_array_index (self->commit_funcs, CommitHooks, i);
+
+      if (hooks->handler_id == commit_funcs_handler)
+        {
+          g_array_remove_index (self->commit_funcs, i);
+          return;
+        }
+    }
+
+  g_warning ("Failed to locate commit handler %u", commit_funcs_handler);
+}
+
+const char *
+ide_buffer_get_charset (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), NULL);
+
+  return self->encoding
+         ? gtk_source_encoding_get_charset (self->encoding)
+         : "UTF-8";
+}
+
+void
+ide_buffer_set_charset (IdeBuffer  *self,
+                        const char *charset)
+{
+  GSList *all;
+
+  g_return_if_fail (IDE_IS_BUFFER (self));
+
+  if (charset == NULL || charset[0] == 0)
+    charset = "UTF-8";
+
+  all = gtk_source_encoding_get_all ();
+
+  for (const GSList *iter = all; iter; iter = iter->next)
+    {
+      const GtkSourceEncoding *encoding = iter->data;
+
+      if (g_strcmp0 (charset, gtk_source_encoding_get_charset (encoding)) == 0)
+        {
+          if (self->encoding != encoding)
+            {
+              self->encoding = encoding;
+              g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CHARSET]);
+              break;
+            }
+        }
+    }
+
+  g_slist_free (all);
+}
+
+GtkSourceNewlineType
+ide_buffer_get_newline_type (IdeBuffer *self)
+{
+  g_return_val_if_fail (IDE_IS_BUFFER (self), GTK_SOURCE_NEWLINE_TYPE_LF);
+
+  return self->newline_type;
+}
+
+void
+ide_buffer_set_newline_type (IdeBuffer            *self,
+                             GtkSourceNewlineType  newline_type)
+{
+  g_return_if_fail (IDE_IS_BUFFER (self));
+  g_return_if_fail (newline_type == GTK_SOURCE_NEWLINE_TYPE_LF ||
+                    newline_type == GTK_SOURCE_NEWLINE_TYPE_CR ||
+                    newline_type == GTK_SOURCE_NEWLINE_TYPE_CR_LF);
+
+  if (newline_type == self->newline_type)
+    return;
+
+  self->newline_type = newline_type;
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_NEWLINE_TYPE]);
 }

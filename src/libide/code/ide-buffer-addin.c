@@ -43,8 +43,6 @@
  * may be used by views to show the misspelled words. This is preferrable
  * to adding a spellchecker in each view because it allows for multiple
  * views to share one spellcheker on the underlying buffer.
- *
- * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeBufferAddin, ide_buffer_addin, G_TYPE_OBJECT)
@@ -85,8 +83,6 @@ ide_buffer_addin_default_init (IdeBufferAddinInterface *iface)
  *
  * This calls the load virtual function of #IdeBufferAddin to request
  * that the addin load itself.
- *
- * Since: 3.32
  */
 void
 ide_buffer_addin_load (IdeBufferAddin *self,
@@ -110,8 +106,6 @@ ide_buffer_addin_load (IdeBufferAddin *self,
  *
  * The addin should cancel any in-flight operations and attempt to drop
  * references to the buffer or any other machinery as soon as possible.
- *
- * Since: 3.32
  */
 void
 ide_buffer_addin_unload (IdeBufferAddin *self,
@@ -135,8 +129,6 @@ ide_buffer_addin_unload (IdeBufferAddin *self,
  *
  * It is not guaranteed that this function will be called for addins that were
  * loaded after the buffer already loaded a file.
- *
- * Since: 3.32
  */
 void
 ide_buffer_addin_file_loaded (IdeBufferAddin *self,
@@ -160,8 +152,6 @@ ide_buffer_addin_file_loaded (IdeBufferAddin *self,
  *
  * This function gives a chance for plugins to modify the buffer right before
  * writing to disk.
- *
- * Since: 3.32
  */
 void
 ide_buffer_addin_save_file (IdeBufferAddin *self,
@@ -184,8 +174,6 @@ ide_buffer_addin_save_file (IdeBufferAddin *self,
  * @file: a #GFile
  *
  * This function is called for an addin after a file has been saved to disk.
- *
- * Since: 3.32
  */
 void
 ide_buffer_addin_file_saved (IdeBufferAddin *self,
@@ -209,8 +197,6 @@ ide_buffer_addin_file_saved (IdeBufferAddin *self,
  *
  * This vfunc is called when the source language in the buffer changes. This
  * will only be delivered to addins that support multiple languages.
- *
- * Since: 3.32
  */
 void
 ide_buffer_addin_language_set (IdeBufferAddin *self,
@@ -233,8 +219,6 @@ ide_buffer_addin_language_set (IdeBufferAddin *self,
  * changes provided by the user. It is a convenient way to know when you
  * should perform more background work without having to coalesce work
  * yourself.
- *
- * Since: 3.32
  */
 void
 ide_buffer_addin_change_settled (IdeBufferAddin *self,
@@ -254,8 +238,6 @@ ide_buffer_addin_change_settled (IdeBufferAddin *self,
  *
  * This function is called when the #GtkSourceStyleScheme of the #IdeBuffer
  * has changed.
- *
- * Since: 3.32
  */
 void
 ide_buffer_addin_style_scheme_changed (IdeBufferAddin *self,
@@ -277,8 +259,6 @@ ide_buffer_addin_style_scheme_changed (IdeBufferAddin *self,
  * that provides the addin.
  *
  * Returns: (transfer none) (nullable): An #IdeBufferAddin or %NULL
- *
- * Since: 3.32
  */
 IdeBufferAddin *
 ide_buffer_addin_find_by_module_name (IdeBuffer   *buffer,
