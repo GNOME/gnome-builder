@@ -1,3 +1,4 @@
+libide_io_header_dir = join_paths(libide_header_dir, 'io')
 libide_io_header_subdir = join_paths(libide_header_subdir, 'io')
 libide_include_directories += include_directories('.')
 
@@ -55,7 +56,27 @@ libide_io_public_sources = [
   'ide-task-cache.c',
 ]
 
+libide_io_generated_headers = []
 libide_io_sources = libide_io_public_sources
+
+#
+# Enum generation
+#
+
+libide_io_enum_headers = [
+  'ide-file-transfer.h',
+]
+
+libide_io_enums = gnome.mkenums_simple('ide-io-enums',
+     body_prefix: '#include "config.h"',
+   header_prefix: '#include <libide-core.h>',
+       decorator: '_IDE_EXTERN',
+         sources: libide_io_enum_headers,
+  install_header: true,
+     install_dir: libide_io_header_dir,
+)
+libide_io_generated_headers += [libide_io_enums[1]]
+libide_io_sources += [libide_io_enums[0]]
 
 #
 # Dependencies
@@ -71,9 +92,10 @@ libide_io_deps = [
 # Library Definitions
 #
 
-libide_io = static_library('ide-io-' + libide_api_version, libide_io_sources,
-   dependencies: libide_io_deps,
-         c_args: libide_args + release_args + ['-DIDE_IO_COMPILATION'],
+libide_io = static_library('ide-io-' + libide_api_version,
+  libide_io_sources + libide_io_generated_headers,
+  dependencies: libide_io_deps,
+        c_args: libide_args + release_args + ['-DIDE_IO_COMPILATION'],
 )
 
 libide_io_dep = declare_dependency(

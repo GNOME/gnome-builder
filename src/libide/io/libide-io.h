@@ -27,22 +27,21 @@ G_BEGIN_DECLS
 
 #define IDE_IO_INSIDE
 # include "ide-cached-list-model.h"
-
-#include "ide-content-type.h"
-#include "ide-gfile.h"
-#include "ide-line-reader.h"
-#include "ide-marked-content.h"
-#include "ide-path.h"
-#include "ide-persistent-map-builder.h"
-#include "ide-persistent-map.h"
-#include "ide-pkcon-transfer.h"
-#include "ide-pty-intercept.h"
-#include "ide-shell.h"
-
+# include "ide-content-type.h"
 # include "ide-directory-reaper.h"
 # include "ide-file-transfer.h"
+# include "ide-gfile.h"
 # include "ide-heap.h"
+# include "ide-line-reader.h"
+# include "ide-io-enums.h"
+# include "ide-marked-content.h"
+# include "ide-path.h"
+# include "ide-persistent-map-builder.h"
+# include "ide-persistent-map.h"
+# include "ide-pkcon-transfer.h"
+# include "ide-pty-intercept.h"
 # include "ide-recursive-file-monitor.h"
+# include "ide-shell.h"
 # include "ide-task-cache.h"
 #undef IDE_IO_INSIDE
 
