@@ -79,23 +79,21 @@ _ide_pty_intercept_set_raw (IdePtyFd fd)
 }
 
 /**
- * ide_pty_intercept_create_slave:
- * @master_fd: a pty master
+ * ide_pty_intercept_create_producer:
+ * @consumer_fd: a pty
  * @blocking: use %FALSE to set O_NONBLOCK
  *
- * This creates a new slave to the PTY master @master_fd.
+ * This creates a new producer to the PTY consumer @consumer_fd.
  *
  * This uses grantpt(), unlockpt(), and ptsname() to open a new
- * PTY slave.
+ * PTY producer.
  *
- * Returns: a FD for the slave PTY that should be closed with close().
+ * Returns: a FD for the producer PTY that should be closed with close().
  *   Upon error, %IDE_PTY_FD_INVALID (-1) is returned.
- *
- * Since: 3.32
  */
 IdePtyFd
-ide_pty_intercept_create_slave (IdePtyFd master_fd,
-                                gboolean blocking)
+ide_pty_intercept_create_producer (IdePtyFd consumer_fd,
+                                   gboolean blocking)
 {
   g_auto(IdePtyFd) ret = IDE_PTY_FD_INVALID;
   gint extra = blocking ? 0 : O_NONBLOCK;
@@ -105,25 +103,25 @@ ide_pty_intercept_create_slave (IdePtyFd master_fd,
   const char *name;
 #endif
 
-  g_assert (master_fd != -1);
+  g_assert (consumer_fd != -1);
 
-  if (grantpt (master_fd) != 0)
+  if (grantpt (consumer_fd) != 0)
     return IDE_PTY_FD_INVALID;
 
-  if (unlockpt (master_fd) != 0)
+  if (unlockpt (consumer_fd) != 0)
     return IDE_PTY_FD_INVALID;
 
 #ifdef HAVE_PTSNAME_R
-  if (ptsname_r (master_fd, name, sizeof name - 1) != 0)
+  if (ptsname_r (consumer_fd, name, sizeof name - 1) != 0)
     return IDE_PTY_FD_INVALID;
   name[sizeof name - 1] = '\0';
 #elif defined(__FreeBSD__)
-  if (fdevname_r (master_fd, name + 5, sizeof name - 6) == NULL)
+  if (fdevname_r (consumer_fd, name + 5, sizeof name - 6) == NULL)
     return IDE_PTY_FD_INVALID;
   memcpy (name, "/dev/", 5);
   name[sizeof name - 1] = '\0';
 #else
-  if (NULL == (name = ptsname (master_fd)))
+  if (NULL == (name = ptsname (consumer_fd)))
     return IDE_PTY_FD_INVALID;
 #endif
 
@@ -159,54 +157,52 @@ ide_pty_intercept_create_slave (IdePtyFd master_fd,
 }
 
 /**
- * ide_pty_intercept_create_master:
+ * ide_pty_intercept_create_consumer:
  *
- * Creates a new PTY master using posix_openpt(). Some fallbacks are
+ * Creates a new PTY consumer using posix_openpt(). Some fallbacks are
  * provided for non-Linux systems where O_CLOEXEC and O_NONBLOCK may
  * not be supported.
  *
  * Returns: a FD that should be closed with close() if successful.
  *   Upon error, %IDE_PTY_FD_INVALID (-1) is returned.
- *
- * Since: 3.32
  */
 IdePtyFd
-ide_pty_intercept_create_master (void)
+ide_pty_intercept_create_consumer (void)
 {
-  g_auto(IdePtyFd) master_fd = IDE_PTY_FD_INVALID;
+  g_auto(IdePtyFd) consumer_fd = IDE_PTY_FD_INVALID;
 
-  master_fd = posix_openpt (O_RDWR | O_NOCTTY | O_NONBLOCK | O_CLOEXEC);
+  consumer_fd = posix_openpt (O_RDWR | O_NOCTTY | O_NONBLOCK | O_CLOEXEC);
 
 #ifndef __linux__
   /* Fallback for operating systems that don't support
    * O_NONBLOCK and O_CLOEXEC when opening.
    */
-  if (master_fd == IDE_PTY_FD_INVALID && errno == EINVAL)
+  if (consumer_fd == IDE_PTY_FD_INVALID && errno == EINVAL)
     {
-      master_fd = posix_openpt (O_RDWR | O_NOCTTY | O_CLOEXEC);
+      consumer_fd = posix_openpt (O_RDWR | O_NOCTTY | O_CLOEXEC);
 
-      if (master_fd == IDE_PTY_FD_INVALID && errno == EINVAL)
+      if (consumer_fd == IDE_PTY_FD_INVALID && errno == EINVAL)
         {
           gint flags;
 
-          master_fd = posix_openpt (O_RDWR | O_NOCTTY);
-          if (master_fd == -1)
+          consumer_fd = posix_openpt (O_RDWR | O_NOCTTY);
+          if (consumer_fd == -1)
             return IDE_PTY_FD_INVALID;
 
-          flags = fcntl (master_fd, F_GETFD, 0);
+          flags = fcntl (consumer_fd, F_GETFD, 0);
           if (flags < 0)
             return IDE_PTY_FD_INVALID;
 
-          if (fcntl (master_fd, F_SETFD, flags | FD_CLOEXEC) < 0)
+          if (fcntl (consumer_fd, F_SETFD, flags | FD_CLOEXEC) < 0)
             return IDE_PTY_FD_INVALID;
         }
 
-      if (!g_unix_set_fd_nonblocking (master_fd, TRUE, NULL))
+      if (!g_unix_set_fd_nonblocking (consumer_fd, TRUE, NULL))
         return IDE_PTY_FD_INVALID;
     }
 #endif
 
-  return pty_fd_steal (&master_fd);
+  return pty_fd_steal (&consumer_fd);
 }
 
 static void
@@ -244,15 +240,15 @@ _ide_pty_intercept_out_cb (GIOChannel   *channel,
   g_assert (channel != NULL);
   g_assert (condition & (G_IO_ERR | G_IO_HUP | G_IO_OUT));
 
-  if (channel == self->master.channel)
+  if (channel == self->consumer.channel)
     {
-      us = &self->master;
-      them = &self->slave;
+      us = &self->consumer;
+      them = &self->producer;
     }
   else
     {
-      us = &self->slave;
-      them = &self->master;
+      us = &self->producer;
+      them = &self->consumer;
     }
 
   if ((condition & G_IO_OUT) == 0 ||
@@ -332,15 +328,15 @@ _ide_pty_intercept_in_cb (GIOChannel   *channel,
   g_assert (condition & (G_IO_ERR | G_IO_HUP | G_IO_IN));
   g_assert (IDE_IS_PTY_INTERCEPT (self));
 
-  if (channel == self->master.channel)
+  if (channel == self->consumer.channel)
     {
-      us = &self->master;
-      them = &self->slave;
+      us = &self->consumer;
+      them = &self->producer;
     }
   else
     {
-      us = &self->slave;
-      them = &self->master;
+      us = &self->producer;
+      them = &self->consumer;
     }
 
   g_assert (us->in_watch != 0);
@@ -418,8 +414,6 @@ close_and_cleanup:
  * Since we can't track SIGWINCH cleanly in here, we rely on the
  * external consuming program to notify us of SIGWINCH so that we
  * can copy the new size across.
- *
- * Since: 3.32
  */
 gboolean
 ide_pty_intercept_set_size (IdePtyIntercept *self,
@@ -429,9 +423,9 @@ ide_pty_intercept_set_size (IdePtyIntercept *self,
 
   g_return_val_if_fail (IDE_IS_PTY_INTERCEPT (self), FALSE);
 
-  if (self->master.channel != NULL)
+  if (self->consumer.channel != NULL)
     {
-      IdePtyFd fd = g_io_channel_unix_get_fd (self->master.channel);
+      IdePtyFd fd = g_io_channel_unix_get_fd (self->consumer.channel);
       struct winsize ws = {0};
 
       ws.ws_col = columns;
@@ -472,27 +466,25 @@ _g_io_add_watch_full_with_context (GMainContext   *main_context,
 /**
  * ide_pty_intercept_init:
  * @self: a location of memory to store a #IdePtyIntercept
- * @fd: the PTY master fd, possibly from a #VtePty
+ * @fd: the PTY consumer fd, possibly from a #VtePty
  * @main_context: (nullable): a #GMainContext or %NULL for thread-default
  *
- * Creates a enw #IdePtyIntercept using the PTY master fd @fd.
+ * Creates a enw #IdePtyIntercept using the PTY consumer fd @fd.
  *
- * A new PTY slave is created that will communicate with @fd.
- * Additionally, a new PTY master is created that can communicate
+ * A new PTY producer is created that will communicate with @fd.
+ * Additionally, a new PTY consumer is created that can communicate
  * with another side, and will pass that information to @fd after
  * extracting any necessary information.
  *
  * Returns: %TRUE if successful; otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_pty_intercept_init (IdePtyIntercept *self,
                         int              fd,
                         GMainContext    *main_context)
 {
-  g_auto(IdePtyFd) slave_fd = IDE_PTY_FD_INVALID;
-  g_auto(IdePtyFd) master_fd = IDE_PTY_FD_INVALID;
+  g_auto(IdePtyFd) producer_fd = IDE_PTY_FD_INVALID;
+  g_auto(IdePtyFd) consumer_fd = IDE_PTY_FD_INVALID;
   struct winsize ws;
 
   g_return_val_if_fail (self != NULL, FALSE);
@@ -501,57 +493,57 @@ ide_pty_intercept_init (IdePtyIntercept *self,
   memset (self, 0, sizeof *self);
   self->magic = IDE_PTY_INTERCEPT_MAGIC;
 
-  slave_fd = ide_pty_intercept_create_slave (fd, FALSE);
-  if (slave_fd == IDE_PTY_FD_INVALID)
+  producer_fd = ide_pty_intercept_create_producer (fd, FALSE);
+  if (producer_fd == IDE_PTY_FD_INVALID)
     return FALSE;
 
-  /* Do not perform additional processing on the slave_fd created
-   * from the master we were provided. Otherwise, it will be happening
+  /* Do not perform additional processing on the producer_fd created
+   * from the consumer we were provided. Otherwise, it will be happening
    * twice instead of just once.
    */
-  if (!_ide_pty_intercept_set_raw (slave_fd))
+  if (!_ide_pty_intercept_set_raw (producer_fd))
     return FALSE;
 
-  master_fd = ide_pty_intercept_create_master ();
-  if (master_fd == IDE_PTY_FD_INVALID)
+  consumer_fd = ide_pty_intercept_create_consumer ();
+  if (consumer_fd == IDE_PTY_FD_INVALID)
     return FALSE;
 
   /* Copy the win size across */
-  if (ioctl (slave_fd, TIOCGWINSZ, &ws) >= 0)
-    ioctl (master_fd, TIOCSWINSZ, &ws);
+  if (ioctl (producer_fd, TIOCGWINSZ, &ws) >= 0)
+    ioctl (consumer_fd, TIOCSWINSZ, &ws);
 
   if (main_context == NULL)
     main_context = g_main_context_get_thread_default ();
 
-  self->master.read_prio = MASTER_READ_PRIORITY;
-  self->master.write_prio = MASTER_WRITE_PRIORITY;
-  self->slave.read_prio = SLAVE_READ_PRIORITY;
-  self->slave.write_prio = SLAVE_WRITE_PRIORITY;
+  self->consumer.read_prio = MASTER_READ_PRIORITY;
+  self->consumer.write_prio = MASTER_WRITE_PRIORITY;
+  self->producer.read_prio = SLAVE_READ_PRIORITY;
+  self->producer.write_prio = SLAVE_WRITE_PRIORITY;
 
-  self->master.channel = g_io_channel_unix_new (pty_fd_steal (&master_fd));
-  self->slave.channel = g_io_channel_unix_new (pty_fd_steal (&slave_fd));
+  self->consumer.channel = g_io_channel_unix_new (pty_fd_steal (&consumer_fd));
+  self->producer.channel = g_io_channel_unix_new (pty_fd_steal (&producer_fd));
 
-  g_io_channel_set_close_on_unref (self->master.channel, TRUE);
-  g_io_channel_set_close_on_unref (self->slave.channel, TRUE);
+  g_io_channel_set_close_on_unref (self->consumer.channel, TRUE);
+  g_io_channel_set_close_on_unref (self->producer.channel, TRUE);
 
-  g_io_channel_set_encoding (self->master.channel, NULL, NULL);
-  g_io_channel_set_encoding (self->slave.channel, NULL, NULL);
+  g_io_channel_set_encoding (self->consumer.channel, NULL, NULL);
+  g_io_channel_set_encoding (self->producer.channel, NULL, NULL);
 
-  g_io_channel_set_buffer_size (self->master.channel, CHANNEL_BUFFER_SIZE);
-  g_io_channel_set_buffer_size (self->slave.channel, CHANNEL_BUFFER_SIZE);
+  g_io_channel_set_buffer_size (self->consumer.channel, CHANNEL_BUFFER_SIZE);
+  g_io_channel_set_buffer_size (self->producer.channel, CHANNEL_BUFFER_SIZE);
 
-  self->master.in_watch =
+  self->consumer.in_watch =
     _g_io_add_watch_full_with_context (main_context,
-                                       self->master.channel,
-                                       self->master.read_prio,
+                                       self->consumer.channel,
+                                       self->consumer.read_prio,
                                        G_IO_IN | G_IO_ERR | G_IO_HUP,
                                        _ide_pty_intercept_in_cb,
                                        self, NULL);
 
-  self->slave.in_watch =
+  self->producer.in_watch =
     _g_io_add_watch_full_with_context (main_context,
-                                       self->slave.channel,
-                                       self->slave.read_prio,
+                                       self->producer.channel,
+                                       self->producer.read_prio,
                                        G_IO_IN | G_IO_ERR | G_IO_HUP,
                                        _ide_pty_intercept_in_cb,
                                        self, NULL);
@@ -570,23 +562,21 @@ ide_pty_intercept_init (IdePtyIntercept *self,
  * releases any allocated memory.
  *
  * It is invalid to use @self after calling this function.
- *
- * Since: 3.32
  */
 void
 ide_pty_intercept_clear (IdePtyIntercept *self)
 {
   g_return_if_fail (IDE_IS_PTY_INTERCEPT (self));
 
-  clear_source (&self->slave.in_watch);
-  clear_source (&self->slave.out_watch);
-  g_clear_pointer (&self->slave.channel, g_io_channel_unref);
-  g_clear_pointer (&self->slave.out_bytes, g_bytes_unref);
+  clear_source (&self->producer.in_watch);
+  clear_source (&self->producer.out_watch);
+  g_clear_pointer (&self->producer.channel, g_io_channel_unref);
+  g_clear_pointer (&self->producer.out_bytes, g_bytes_unref);
 
-  clear_source (&self->master.in_watch);
-  clear_source (&self->master.out_watch);
-  g_clear_pointer (&self->master.channel, g_io_channel_unref);
-  g_clear_pointer (&self->master.out_bytes, g_bytes_unref);
+  clear_source (&self->consumer.in_watch);
+  clear_source (&self->consumer.out_watch);
+  g_clear_pointer (&self->consumer.channel, g_io_channel_unref);
+  g_clear_pointer (&self->consumer.out_bytes, g_bytes_unref);
 
   memset (self, 0, sizeof *self);
 }
@@ -595,20 +585,18 @@ ide_pty_intercept_clear (IdePtyIntercept *self)
  * ide_pty_intercept_get_fd:
  * @self: a #IdePtyIntercept
  *
- * Gets a master PTY fd created by the #IdePtyIntercept. This is suitable
- * to use to create a slave fd which can be passed to a child process.
+ * Gets a consumer PTY fd created by the #IdePtyIntercept. This is suitable
+ * to use to create a producer fd which can be passed to a child process.
  *
- * Returns: A FD of a PTY master if successful, otherwise -1.
- *
- * Since: 3.32
+ * Returns: A FD of a PTY consumer if successful, otherwise -1.
  */
 IdePtyFd
 ide_pty_intercept_get_fd (IdePtyIntercept *self)
 {
   g_return_val_if_fail (IDE_IS_PTY_INTERCEPT (self), IDE_PTY_FD_INVALID);
-  g_return_val_if_fail (self->master.channel != NULL, IDE_PTY_FD_INVALID);
+  g_return_val_if_fail (self->consumer.channel != NULL, IDE_PTY_FD_INVALID);
 
-  return g_io_channel_unix_get_fd (self->master.channel);
+  return g_io_channel_unix_get_fd (self->consumer.channel);
 }
 
 /**
@@ -622,8 +610,6 @@ ide_pty_intercept_get_fd (IdePtyIntercept *self)
  * from a particular side of the intercept.
  *
  * You may only set one per side.
- *
- * Since: 3.32
  */
 void
 ide_pty_intercept_set_callback (IdePtyIntercept         *self,
@@ -632,7 +618,7 @@ ide_pty_intercept_set_callback (IdePtyIntercept         *self,
                                 gpointer                 callback_data)
 {
   g_return_if_fail (IDE_IS_PTY_INTERCEPT (self));
-  g_return_if_fail (side == &self->master || side == &self->slave);
+  g_return_if_fail (side == &self->consumer || side == &self->producer);
 
   side->callback = callback;
   side->callback_data = callback_data;
