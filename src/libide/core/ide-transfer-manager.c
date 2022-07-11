@@ -65,8 +65,6 @@ static guint signals [N_SIGNALS];
  * Gets if there are active transfers.
  *
  * Returns: %TRUE if there are active transfers.
- *
- * Since: 3.32
  */
 gboolean
 ide_transfer_manager_get_has_active (IdeTransferManager *self)
@@ -130,8 +128,6 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
    * IdeTransferManager:has-active:
    *
    * If there are transfers active, this will be set.
-   *
-   * Since: 3.32
    */
   properties [PROP_HAS_ACTIVE] =
     g_param_spec_boolean ("has-active",
@@ -145,8 +141,6 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
    *
    * A double between and including 0.0 and 1.0 describing the progress of
    * all tasks.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROGRESS] =
     g_param_spec_double ("progress",
@@ -163,8 +157,6 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
    * IdeTransferManager::all-transfers-completed:
    *
    * This signal is emitted when all of the transfers have completed or failed.
-   *
-   * Since: 3.32
    */
   signals [ALL_TRANSFERS_COMPLETED] =
     g_signal_new ("all-transfers-completed",
@@ -178,8 +170,6 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
    * @transfer: An #IdeTransfer
    *
    * This signal is emitted when a transfer has completed successfully.
-   *
-   * Since: 3.32
    */
   signals [TRANSFER_COMPLETED] =
     g_signal_new ("transfer-completed",
@@ -197,8 +187,6 @@ ide_transfer_manager_class_init (IdeTransferManagerClass *klass)
    *
    * This signal is emitted when a transfer has failed to complete
    * successfully.
-   *
-   * Since: 3.32
    */
   signals [TRANSFER_FAILED] =
     g_signal_new ("transfer-failed",
@@ -289,8 +277,6 @@ ide_transfer_manager_cancel_all (IdeTransferManager *self)
  * ide_transfer_manager_clear:
  *
  * Removes all transfers from the manager that are completed.
- *
- * Since: 3.32
  */
 void
 ide_transfer_manager_clear (IdeTransferManager *self)
@@ -436,8 +422,6 @@ notify_properties:
  * manager and execute callback upon completion of the transfer. The success
  * or failure #GError will be propagated to the caller via
  * ide_transfer_manager_execute_finish().
- *
- * Since: 3.32
  */
 void
 ide_transfer_manager_execute_async (IdeTransferManager  *self,
@@ -495,8 +479,6 @@ ide_transfer_manager_execute_finish (IdeTransferManager  *self,
  * Gets the #IdeTransferManager singleton.
  *
  * Returns: (transfer none): an #IdeTransferManager
- *
- * Since: 3.32
  */
 IdeTransferManager *
 ide_transfer_manager_get_default (void)

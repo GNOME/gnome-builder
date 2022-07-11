@@ -517,8 +517,6 @@ ide_transfer_notification_notify_completed (IdeTransfer     *self,
  * If the transfer has completed, %NULL is returned.
  *
  * Returns: (transfer full) (nullable): an #IdeNotification or %NULL
- *
- * Since: 3.32
  */
 IdeNotification *
 ide_transfer_create_notification (IdeTransfer *self)
