@@ -1,6 +1,6 @@
-/* ide-io.h
+/* ide-cached-list-model.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,24 +21,20 @@
 #pragma once
 
 #include <libide-core.h>
-#include <libide-threading.h>
 
 G_BEGIN_DECLS
 
-#define IDE_IO_INSIDE
-# include "ide-cached-list-model.h"
+#define IDE_TYPE_CACHED_LIST_MODEL (ide_cached_list_model_get_type())
 
-#include "ide-content-type.h"
-#include "ide-gfile.h"
-#include "ide-line-reader.h"
-#include "ide-marked-content.h"
-#include "ide-path.h"
-#include "ide-persistent-map-builder.h"
-#include "ide-persistent-map.h"
-#include "ide-pkcon-transfer.h"
-#include "ide-pty-intercept.h"
-#include "ide-shell.h"
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeCachedListModel, ide_cached_list_model, IDE, CACHED_LIST_MODEL, GObject)
 
-#undef IDE_IO_INSIDE
+IDE_AVAILABLE_IN_ALL
+IdeCachedListModel *ide_cached_list_model_new       (GListModel         *model);
+IDE_AVAILABLE_IN_ALL
+GListModel         *ide_cached_list_model_get_model (IdeCachedListModel *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_cached_list_model_set_model (IdeCachedListModel *self,
+                                                     GListModel         *model);
 
 G_END_DECLS

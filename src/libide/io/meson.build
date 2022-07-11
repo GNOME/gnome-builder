@@ -6,6 +6,7 @@ libide_include_directories += include_directories('.')
 #
 
 libide_io_public_headers = [
+  'ide-cached-list-model.h',
   'ide-content-type.h',
   'ide-gfile.h',
   'ide-line-reader.h',
@@ -15,6 +16,7 @@ libide_io_public_headers = [
   'ide-persistent-map-builder.h',
   'ide-pkcon-transfer.h',
   'ide-pty-intercept.h',
+  'ide-recursive-file-monitor.h',
   'ide-shell.h',
   'libide-io.h',
 ]
@@ -31,6 +33,7 @@ install_headers(libide_io_public_headers, subdir: libide_io_header_subdir)
 #
 
 libide_io_public_sources = [
+  'ide-cached-list-model.c',
   'ide-content-type.c',
   'ide-gfile.c',
   'ide-line-reader.c',
