@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
 #include "ide-debugger.h"
 
@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_DEBUGGER_LOCALS_VIEW (ide_debugger_locals_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerLocalsView, ide_debugger_locals_view, IDE, DEBUGGER_LOCALS_VIEW, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeDebuggerLocalsView, ide_debugger_locals_view, IDE, DEBUGGER_LOCALS_VIEW, AdwBin)
 
 GtkWidget   *ide_debugger_locals_view_new          (void);
 IdeDebugger *ide_debugger_locals_view_get_debugger (IdeDebuggerLocalsView  *self);

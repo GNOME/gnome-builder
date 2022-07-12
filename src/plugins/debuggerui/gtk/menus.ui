@@ -1,26 +1,51 @@
 <?xml version="1.0"?>
 <interface>
   <menu id="run-menu">
-    <section id="run-menu-section">
+    <section id="run-menu-observation-section">
       <item>
         <attribute name="id">debugger-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">run-manager.run-with-handler</attribute>
-        <attribute name="target">debugger</attribute>
+        <attribute name="target" type="s">'debuggerui'</attribute>
         <attribute name="label" translatable="yes">Run with Debugger</attribute>
         <attribute name="verb-icon-name">builder-debugger-symbolic</attribute>
-        <attribute name="accel">F5</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;d</attribute>
       </item>
     </section>
   </menu>
-  <menu id="project-tree-run-with-submenu">
-    <section id="project-tree-menu-run-with-section">
-      <item>
-        <attribute name="id">project-tree-menu-debug</attribute>
-        <attribute name="label" translatable="yes">Run with _Debugger</attribute>
-        <attribute name="action">buildui.run-with-handler</attribute>
-        <attribute name="target" type="s">'debugger'</attribute>
-      </item>
+  <menu id="run-menu">
+    <section id="run-menu-tools-section">
+      <submenu id="run-menu-debugger-submenu">
+        <attribute name="before">run-menu-verbose-logging</attribute>
+        <attribute name="label" translatable="yes">Debugger</attribute>
+        <section id="run-menu-debugger-logging-breakpoints">
+          <attribute name="label" translatable="yes">Logging Breakpoints</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Automatically Break at Warnings</attribute>
+            <attribute name="action">debug-manager.stop-at-warnings</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Automatically Break at Criticals</attribute>
+            <attribute name="action">debug-manager.stop-at-criticals</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-foundry-section">
+      <submenu id="project-tree-run-with-submenu">
+        <section id="project-tree-menu-run-with-section">
+          <item>
+            <attribute name="id">project-tree-menu-debug</attribute>
+            <attribute name="label" translatable="yes">Run with _Debugger</attribute>
+            <attribute name="action">buildui.run-with-handler</attribute>
+            <attribute name="target" type="s">'debuggerui'</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
   </menu>
 </interface>

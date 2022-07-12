@@ -22,17 +22,17 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-core.h>
+#include <libide-gtk.h>
 
 #include "ide-debugger-registers-view.h"
 
 struct _IdeDebuggerRegistersView
 {
-  GtkBin          parent_instance;
+  AdwBin          parent_instance;
 
   /* Owned references */
-  DzlSignalGroup      *debugger_signals;
+  IdeSignalGroup      *debugger_signals;
 
   /* Template references */
   GtkTreeView         *tree_view;
@@ -51,18 +51,18 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeDebuggerRegistersView, ide_debugger_registers_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerRegistersView, ide_debugger_registers_view, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 
 static void
 ide_debugger_registers_view_bind (IdeDebuggerRegistersView *self,
                                   IdeDebugger              *debugger,
-                                  DzlSignalGroup           *signals)
+                                  IdeSignalGroup           *signals)
 {
   g_assert (IDE_IS_DEBUGGER_REGISTERS_VIEW (self));
   g_assert (IDE_IS_DEBUGGER (debugger));
-  g_assert (DZL_IS_SIGNAL_GROUP (signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (signals));
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view),
                             !ide_debugger_get_is_running (debugger));
@@ -70,10 +70,10 @@ ide_debugger_registers_view_bind (IdeDebuggerRegistersView *self,
 
 static void
 ide_debugger_registers_view_unbind (IdeDebuggerRegistersView *self,
-                                    DzlSignalGroup           *signals)
+                                    IdeSignalGroup           *signals)
 {
   g_assert (IDE_IS_DEBUGGER_REGISTERS_VIEW (self));
-  g_assert (DZL_IS_SIGNAL_GROUP (signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (signals));
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), FALSE);
 }
@@ -122,7 +122,7 @@ ide_debugger_registers_view_list_registers_cb (GObject      *object,
           IdeDebuggerRegister *reg = g_ptr_array_index (registers, i);
           GtkTreeIter iter;
 
-          dzl_gtk_list_store_insert_sorted (self->list_store, &iter, reg, 0,
+          ide_gtk_list_store_insert_sorted (self->list_store, &iter, reg, 0,
                                             (GCompareDataFunc)ide_debugger_register_compare,
                                             NULL);
           gtk_list_store_set (self->list_store, &iter, 0, reg, -1);
@@ -173,13 +173,13 @@ string_property_cell_data_func (GtkCellLayout   *cell_layout,
 }
 
 static void
-ide_debugger_registers_view_destroy (GtkWidget *widget)
+ide_debugger_registers_view_dispose (GObject *object)
 {
-  IdeDebuggerRegistersView *self = (IdeDebuggerRegistersView *)widget;
+  IdeDebuggerRegistersView *self = (IdeDebuggerRegistersView *)object;
 
   g_clear_object (&self->debugger_signals);
 
-  GTK_WIDGET_CLASS (ide_debugger_registers_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_debugger_registers_view_parent_class)->dispose (object);
 }
 
 static void
@@ -226,10 +226,9 @@ ide_debugger_registers_view_class_init (IdeDebuggerRegistersViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_debugger_registers_view_dispose;
   object_class->get_property = ide_debugger_registers_view_get_property;
   object_class->set_property = ide_debugger_registers_view_set_property;
-
-  widget_class->destroy = ide_debugger_registers_view_destroy;
 
   properties [PROP_DEBUGGER] =
     g_param_spec_object ("debugger",
@@ -256,7 +255,7 @@ ide_debugger_registers_view_class_init (IdeDebuggerRegistersViewClass *klass)
 static void
 ide_debugger_registers_view_init (IdeDebuggerRegistersView *self)
 {
-  self->debugger_signals = dzl_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
@@ -270,12 +269,12 @@ ide_debugger_registers_view_init (IdeDebuggerRegistersView *self)
                             G_CALLBACK (ide_debugger_registers_view_unbind),
                             self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_registers_view_running),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_registers_view_stopped),
                                     self);
@@ -306,8 +305,6 @@ ide_debugger_registers_view_new (void)
  *
  *
  * Returns: (transfer none) (nullable): An #IdeDebugger or %NULL
- *
- * Since: 3.32
  */
 IdeDebugger *
 ide_debugger_registers_view_get_debugger (IdeDebuggerRegistersView *self)
@@ -315,7 +312,7 @@ ide_debugger_registers_view_get_debugger (IdeDebuggerRegistersView *self)
   g_return_val_if_fail (IDE_IS_DEBUGGER_REGISTERS_VIEW (self), NULL);
 
   if (self->debugger_signals != NULL)
-    return dzl_signal_group_get_target (self->debugger_signals);
+    return ide_signal_group_get_target (self->debugger_signals);
 
   return NULL;
 }
@@ -329,7 +326,7 @@ ide_debugger_registers_view_set_debugger (IdeDebuggerRegistersView *self,
 
   if (self->debugger_signals != NULL)
     {
-      dzl_signal_group_set_target (self->debugger_signals, debugger);
+      ide_signal_group_set_target (self->debugger_signals, debugger);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
     }
 }

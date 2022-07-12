@@ -3,6 +3,8 @@
   <gresource prefix="/plugins/debuggerui">
     <file>debuggerui.plugin</file>
     <file>gtk/menus.ui</file>
+    <file>gtk/keybindings.json</file>
+    <file>style.css</file>
     <file preprocess="xml-stripblanks">ide-debugger-breakpoints-view.ui</file>
     <file preprocess="xml-stripblanks">ide-debugger-controls.ui</file>
     <file preprocess="xml-stripblanks">ide-debugger-disassembly-view.ui</file>
@@ -12,6 +14,8 @@
     <file preprocess="xml-stripblanks">ide-debugger-registers-view.ui</file>
     <file preprocess="xml-stripblanks">ide-debugger-threads-view.ui</file>
     <file preprocess="xml-stripblanks">ide-debugger-log-view.ui</file>
-    <file>themes/Adwaita-shared.css</file>
+  </gresource>
+  <gresource prefix="/org/gnome/builder/gtksourceview/language-specs">
+    <file>builder-disassembly.lang</file>
   </gresource>
 </gresources>

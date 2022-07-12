@@ -22,13 +22,13 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libide-gtk.h>
 
 #include "ide-debugger-libraries-view.h"
 
 struct _IdeDebuggerLibrariesView
 {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 
   /* Template widgets */
   GtkTreeView         *tree_view;
@@ -39,7 +39,7 @@ struct _IdeDebuggerLibrariesView
   GtkTreeViewColumn   *target_column;
 
   /* Onwed refnerences */
-  DzlSignalGroup *debugger_signals;
+  IdeSignalGroup *debugger_signals;
 };
 
 enum {
@@ -48,14 +48,14 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (IdeDebuggerLibrariesView, ide_debugger_libraries_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerLibrariesView, ide_debugger_libraries_view, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 
 static void
 ide_debugger_libraries_view_bind (IdeDebuggerLibrariesView *self,
                                   IdeDebugger              *debugger,
-                                  DzlSignalGroup           *signals)
+                                  IdeSignalGroup           *signals)
 {
   g_assert (IDE_IS_DEBUGGER_LIBRARIES_VIEW (self));
   g_assert (IDE_IS_DEBUGGER (debugger));
@@ -66,10 +66,10 @@ ide_debugger_libraries_view_bind (IdeDebuggerLibrariesView *self,
 
 static void
 ide_debugger_libraries_view_unbind (IdeDebuggerLibrariesView *self,
-                                    DzlSignalGroup           *signals)
+                                    IdeSignalGroup           *signals)
 {
   g_assert (IDE_IS_DEBUGGER_LIBRARIES_VIEW (self));
-  g_assert (DZL_IS_SIGNAL_GROUP (signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (signals));
 
   gtk_widget_set_sensitive (GTK_WIDGET (self->tree_view), FALSE);
 }
@@ -107,7 +107,7 @@ ide_debugger_libraries_view_library_loaded (IdeDebuggerLibrariesView *self,
   g_assert (IDE_IS_DEBUGGER_LIBRARY (library));
   g_assert (IDE_IS_DEBUGGER (debugger));
 
-  dzl_gtk_list_store_insert_sorted (self->list_store,
+  ide_gtk_list_store_insert_sorted (self->list_store,
                                     &iter, library, 0,
                                     (GCompareDataFunc)ide_debugger_library_compare,
                                     NULL);
@@ -207,13 +207,13 @@ string_property_cell_data_func (GtkCellLayout   *cell_layout,
 }
 
 static void
-ide_debugger_libraries_view_destroy (GtkWidget *widget)
+ide_debugger_libraries_view_dispose (GObject *object)
 {
-  IdeDebuggerLibrariesView *self = (IdeDebuggerLibrariesView *)widget;
+  IdeDebuggerLibrariesView *self = (IdeDebuggerLibrariesView *)object;
 
   g_clear_object (&self->debugger_signals);
 
-  GTK_WIDGET_CLASS (ide_debugger_libraries_view_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_debugger_libraries_view_parent_class)->dispose (object);
 }
 
 static void
@@ -260,10 +260,9 @@ ide_debugger_libraries_view_class_init (IdeDebuggerLibrariesViewClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->dispose = ide_debugger_libraries_view_dispose;
   object_class->get_property = ide_debugger_libraries_view_get_property;
   object_class->set_property = ide_debugger_libraries_view_set_property;
-
-  widget_class->destroy = ide_debugger_libraries_view_destroy;
 
   properties [PROP_DEBUGGER] =
     g_param_spec_object ("debugger",
@@ -288,9 +287,18 @@ ide_debugger_libraries_view_class_init (IdeDebuggerLibrariesViewClass *klass)
 static void
 ide_debugger_libraries_view_init (IdeDebuggerLibrariesView *self)
 {
+  g_autoptr(PangoAttrList) tt_attrs = NULL;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->debugger_signals = dzl_signal_group_new (IDE_TYPE_DEBUGGER);
+  tt_attrs = pango_attr_list_new ();
+  pango_attr_list_insert (tt_attrs, pango_attr_family_new ("Monospace"));
+  pango_attr_list_insert (tt_attrs, pango_attr_scale_new (0.83333));
+  g_object_set (self->range_cell,
+                "attributes", tt_attrs,
+                NULL);
+
+  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
   g_signal_connect_swapped (self->debugger_signals,
                             "bind",
@@ -302,22 +310,22 @@ ide_debugger_libraries_view_init (IdeDebuggerLibrariesView *self)
                             G_CALLBACK (ide_debugger_libraries_view_unbind),
                             self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_libraries_view_running),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_libraries_view_stopped),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "library-loaded",
                                     G_CALLBACK (ide_debugger_libraries_view_library_loaded),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "library-unloaded",
                                     G_CALLBACK (ide_debugger_libraries_view_library_unloaded),
                                     self);
@@ -344,8 +352,6 @@ ide_debugger_libraries_view_new (void)
  * Gets the debugger property.
  *
  * Returns: (transfer none): An #IdeDebugger or %NULL.
- *
- * Since: 3.32
  */
 IdeDebugger *
 ide_debugger_libraries_view_get_debugger (IdeDebuggerLibrariesView *self)
@@ -353,7 +359,7 @@ ide_debugger_libraries_view_get_debugger (IdeDebuggerLibrariesView *self)
   g_return_val_if_fail (IDE_IS_DEBUGGER_LIBRARIES_VIEW (self), NULL);
 
   if (self->debugger_signals != NULL)
-    return dzl_signal_group_get_target (self->debugger_signals);
+    return ide_signal_group_get_target (self->debugger_signals);
   return NULL;
 }
 
@@ -364,6 +370,6 @@ ide_debugger_libraries_view_set_debugger (IdeDebuggerLibrariesView *self,
   g_return_if_fail (IDE_IS_DEBUGGER_LIBRARIES_VIEW (self));
   g_return_if_fail (!debugger || IDE_IS_DEBUGGER (debugger));
 
-  dzl_signal_group_set_target (self->debugger_signals, debugger);
+  ide_signal_group_set_target (self->debugger_signals, debugger);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DEBUGGER]);
 }

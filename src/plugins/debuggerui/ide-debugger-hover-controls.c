@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-debugger.h>
 #include <libide-sourceview.h>
 
@@ -32,7 +31,7 @@
 
 struct _IdeDebuggerHoverControls
 {
-  GtkBin parent_instance;
+  AdwBin parent_instance;
 
   IdeDebugManager *debug_manager;
   GFile *file;
@@ -43,25 +42,26 @@ struct _IdeDebuggerHoverControls
   GtkToggleButton *countpoint;
 };
 
-G_DEFINE_FINAL_TYPE (IdeDebuggerHoverControls, ide_debugger_hover_controls, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerHoverControls, ide_debugger_hover_controls, ADW_TYPE_BIN)
 
 static void
-ide_debugger_hover_controls_destroy (GtkWidget *widget)
+ide_debugger_hover_controls_dispose (GObject *object)
 {
-  IdeDebuggerHoverControls *self = (IdeDebuggerHoverControls *)widget;
+  IdeDebuggerHoverControls *self = (IdeDebuggerHoverControls *)object;
 
   g_clear_object (&self->debug_manager);
   g_clear_object (&self->file);
 
-  GTK_WIDGET_CLASS (ide_debugger_hover_controls_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_debugger_hover_controls_parent_class)->dispose (object);
 }
 
 static void
 ide_debugger_hover_controls_class_init (IdeDebuggerHoverControlsClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = ide_debugger_hover_controls_destroy;
+  object_class->dispose = ide_debugger_hover_controls_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/debuggerui/ide-debugger-hover-controls.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeDebuggerHoverControls, nobreak);
@@ -82,7 +82,6 @@ on_toggle_cb (GtkToggleButton          *button,
   g_autoptr(IdeDebuggerBreakpoints) breakpoints = NULL;
   IdeDebuggerBreakMode break_type = IDE_DEBUGGER_BREAK_NONE;
   IdeDebuggerBreakpoint *breakpoint;
-  GtkWidget *view;
 
   g_assert (GTK_IS_TOGGLE_BUTTON (button));
   g_assert (IDE_IS_DEBUGGER_HOVER_CONTROLS (self));
@@ -144,9 +143,6 @@ on_toggle_cb (GtkToggleButton          *button,
       gtk_toggle_button_set_active (self->countpoint, FALSE);
       break;
     }
-
-  view = dzl_gtk_widget_get_relative (GTK_WIDGET (self), IDE_TYPE_SOURCE_VIEW);
-  gtk_widget_queue_draw (view);
 
   g_signal_handlers_unblock_by_func (self->nobreak, G_CALLBACK (on_toggle_cb), self);
   g_signal_handlers_unblock_by_func (self->breakpoint, G_CALLBACK (on_toggle_cb), self);

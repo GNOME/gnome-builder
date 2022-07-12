@@ -1,6 +1,6 @@
-/* ide-debugger-breakpoints-view.h
+/* gbp-debugger-tool.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,12 @@
 
 #pragma once
 
-#include <adwaita.h>
-
-#include "ide-debugger.h"
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_DEBUGGER_BREAKPOINTS_VIEW (ide_debugger_breakpoints_view_get_type())
+#define GBP_TYPE_DEBUGGER_TOOL (gbp_debugger_tool_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeDebuggerBreakpointsView, ide_debugger_breakpoints_view, IDE, DEBUGGER_BREAKPOINTS_VIEW, AdwBin)
-
-GtkWidget   *ide_debugger_breakpoints_view_new          (void);
-IdeDebugger *ide_debugger_breakpoints_view_get_debugger (IdeDebuggerBreakpointsView *self);
-void         ide_debugger_breakpoints_view_set_debugger (IdeDebuggerBreakpointsView *self,
-                                                         IdeDebugger                *debugger);
+G_DECLARE_FINAL_TYPE (GbpDebuggerTool, gbp_debugger_tool, GBP, DEBUGGER_TOOL, IdeRunTool)
 
 G_END_DECLS

@@ -22,21 +22,25 @@
 
 #include "config.h"
 
-#include <libide-debugger.h>
-#include <libide-editor.h>
-#include <libide-gui.h>
 #include <libpeas/peas.h>
 
-#include "ide-debugger-editor-addin.h"
+#include <libide-debugger.h>
+#include <libide-gui.h>
+
+#include "gbp-debugger-tool.h"
 #include "ide-debugger-hover-provider.h"
+#include "ide-debugger-workspace-addin.h"
 
 void
 _gbp_debuggerui_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_ADDIN,
-                                              IDE_TYPE_DEBUGGER_EDITOR_ADDIN);
+                                              IDE_TYPE_RUN_TOOL,
+                                              GBP_TYPE_DEBUGGER_TOOL);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_HOVER_PROVIDER,
+                                              GTK_SOURCE_TYPE_HOVER_PROVIDER,
                                               IDE_TYPE_DEBUGGER_HOVER_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              IDE_TYPE_DEBUGGER_WORKSPACE_ADDIN);
 }

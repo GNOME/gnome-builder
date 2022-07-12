@@ -22,19 +22,19 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <glib/gi18n.h>
+
 #include <libide-core.h>
 #include <libide-gui.h>
-#include <glib/gi18n.h>
 
 #include "ide-debugger-threads-view.h"
 
 struct _IdeDebuggerThreadsView
 {
-  GtkBin               parent_instance;
+  AdwBin               parent_instance;
 
   /* Owned references */
-  DzlSignalGroup      *debugger_signals;
+  IdeSignalGroup      *debugger_signals;
 
   /* Template References */
   GtkTreeView         *frames_tree_view;
@@ -70,7 +70,7 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_FINAL_TYPE (IdeDebuggerThreadsView, ide_debugger_threads_view, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeDebuggerThreadsView, ide_debugger_threads_view, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
@@ -175,7 +175,7 @@ ide_debugger_threads_view_thread_group_added (IdeDebuggerThreadsView *self,
   g_assert (IDE_IS_DEBUGGER_THREAD_GROUP (group));
   g_assert (IDE_IS_DEBUGGER (debugger));
 
-  dzl_gtk_list_store_insert_sorted (self->thread_groups_store,
+  ide_gtk_list_store_insert_sorted (self->thread_groups_store,
                                     &iter, group, 0,
                                     (GCompareDataFunc)ide_debugger_thread_group_compare,
                                     NULL);
@@ -225,7 +225,7 @@ ide_debugger_threads_view_thread_added (IdeDebuggerThreadsView *self,
   g_assert (IDE_IS_DEBUGGER_THREAD (thread));
   g_assert (IDE_IS_DEBUGGER (debugger));
 
-  dzl_gtk_list_store_insert_sorted (self->threads_store,
+  ide_gtk_list_store_insert_sorted (self->threads_store,
                                     &iter, thread, 0,
                                     (GCompareDataFunc)ide_debugger_thread_compare,
                                     NULL);
@@ -317,7 +317,7 @@ ide_debugger_threads_view_list_frames_cb (GObject      *object,
 static void
 ide_debugger_threads_view_bind (IdeDebuggerThreadsView *self,
                                 IdeDebugger            *debugger,
-                                DzlSignalGroup         *debugger_signals)
+                                IdeSignalGroup         *debugger_signals)
 {
   GListModel *thread_groups;
   GListModel *threads;
@@ -325,7 +325,7 @@ ide_debugger_threads_view_bind (IdeDebuggerThreadsView *self,
 
   g_assert (IDE_IS_DEBUGGER_THREADS_VIEW (self));
   g_assert (IDE_IS_DEBUGGER (debugger));
-  g_assert (DZL_IS_SIGNAL_GROUP (debugger_signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (debugger_signals));
 
   /* Add any thread groups already loaded by the debugger */
 
@@ -356,10 +356,10 @@ ide_debugger_threads_view_bind (IdeDebuggerThreadsView *self,
 
 static void
 ide_debugger_threads_view_unbind (IdeDebuggerThreadsView *self,
-                                  DzlSignalGroup         *debugger_signals)
+                                  IdeSignalGroup         *debugger_signals)
 {
   g_assert (IDE_IS_DEBUGGER_THREADS_VIEW (self));
-  g_assert (DZL_IS_SIGNAL_GROUP (debugger_signals));
+  g_assert (IDE_IS_SIGNAL_GROUP (debugger_signals));
 
   gtk_list_store_clear (self->thread_groups_store);
   gtk_list_store_clear (self->threads_store);
@@ -469,7 +469,7 @@ binary_property_cell_data_func (GtkCellLayout   *cell_layout,
   g_assert (GTK_IS_TREE_MODEL (model));
   g_assert (iter != NULL);
 
-  debugger = dzl_signal_group_get_target (self->debugger_signals);
+  debugger = ide_signal_group_get_target (self->debugger_signals);
   if (debugger == NULL)
     return;
 
@@ -559,7 +559,7 @@ ide_debugger_threads_view_threads_row_activated (IdeDebuggerThreadsView *self,
   g_assert (GTK_IS_TREE_VIEW (tree_view));
 
   model = gtk_tree_view_get_model (tree_view);
-  debugger = dzl_signal_group_get_target (self->debugger_signals);
+  debugger = ide_signal_group_get_target (self->debugger_signals);
 
   if (debugger == NULL)
     return;
@@ -721,34 +721,34 @@ ide_debugger_threads_view_init (IdeDebuggerThreadsView *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->debugger_signals = dzl_signal_group_new (IDE_TYPE_DEBUGGER);
+  self->debugger_signals = ide_signal_group_new (IDE_TYPE_DEBUGGER);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "running",
                                     G_CALLBACK (ide_debugger_threads_view_running),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "stopped",
                                     G_CALLBACK (ide_debugger_threads_view_stopped),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "thread-group-added",
                                     G_CALLBACK (ide_debugger_threads_view_thread_group_added),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "thread-group-removed",
                                     G_CALLBACK (ide_debugger_threads_view_thread_group_removed),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "thread-added",
                                     G_CALLBACK (ide_debugger_threads_view_thread_added),
                                     self);
 
-  dzl_signal_group_connect_swapped (self->debugger_signals,
+  ide_signal_group_connect_swapped (self->debugger_signals,
                                     "thread-removed",
                                     G_CALLBACK (ide_debugger_threads_view_thread_removed),
                                     self);
@@ -809,15 +809,13 @@ ide_debugger_threads_view_init (IdeDebuggerThreadsView *self)
  * Gets the debugger that is being observed.
  *
  * Returns: (transfer none) (nullable): An #IdeDebugger or %NULL
- *
- * Since: 3.32
  */
 IdeDebugger *
 ide_debugger_threads_view_get_debugger (IdeDebuggerThreadsView *self)
 {
   g_return_val_if_fail (IDE_IS_DEBUGGER_THREADS_VIEW (self), NULL);
 
-  return dzl_signal_group_get_target (self->debugger_signals);
+  return ide_signal_group_get_target (self->debugger_signals);
 }
 
 void
@@ -827,5 +825,5 @@ ide_debugger_threads_view_set_debugger (IdeDebuggerThreadsView *self,
   g_return_if_fail (IDE_IS_DEBUGGER_THREADS_VIEW (self));
   g_return_if_fail (!debugger || IDE_IS_DEBUGGER (debugger));
 
-  dzl_signal_group_set_target (self->debugger_signals, debugger);
+  ide_signal_group_set_target (self->debugger_signals, debugger);
 }
