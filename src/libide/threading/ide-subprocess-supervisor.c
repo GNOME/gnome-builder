@@ -190,8 +190,6 @@ ide_subprocess_supervisor_new (void)
  * ide_subprocess_supervisor_get_launcher:
  *
  * Returns: (nullable) (transfer none): An #IdeSubprocessLauncher or %NULL.
- *
- * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_subprocess_supervisor_get_launcher (IdeSubprocessSupervisor *self)
@@ -321,8 +319,6 @@ ide_subprocess_supervisor_stop (IdeSubprocessSupervisor *self)
  * called or if there was a failure to spawn the process.
  *
  * Returns: (nullable) (transfer none): An #IdeSubprocess or %NULL.
- *
- * Since: 3.32
  */
 IdeSubprocess *
 ide_subprocess_supervisor_get_subprocess (IdeSubprocessSupervisor *self)

@@ -41,32 +41,25 @@
 #include "ide-flatpak-subprocess-private.h"
 #include "ide-simple-subprocess-private.h"
 #include "ide-subprocess-launcher.h"
+#include "ide-unix-fd-map.h"
+
+/* This comes from libide-io but we need access to it */
+#include "../io/ide-shell.h"
 
 #define is_flatpak() (ide_get_process_kind() == IDE_PROCESS_KIND_FLATPAK)
 
 typedef struct
 {
-  GSubprocessFlags  flags;
-
   GPtrArray        *argv;
-  gchar            *cwd;
-  gchar           **environ;
-  GArray           *fd_mapping;
-  gchar            *stdout_file_path;
+  char             *cwd;
+  char            **environ;
+  char             *stdout_file_path;
+  IdeUnixFDMap     *unix_fd_map;
 
-  gint              stdin_fd;
-  gint              stdout_fd;
-  gint              stderr_fd;
-
+  GSubprocessFlags  flags : 14;
   guint             run_on_host : 1;
   guint             clear_env : 1;
 } IdeSubprocessLauncherPrivate;
-
-typedef struct
-{
-  gint source_fd;
-  gint dest_fd;
-} FdMapping;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSubprocessLauncher, ide_subprocess_launcher, G_TYPE_OBJECT)
 
@@ -119,7 +112,7 @@ ide_subprocess_launcher_kill_process_group (GCancellable *cancellable,
                                             GSubprocess  *subprocess)
 {
 #ifdef G_OS_UNIX
-  const gchar *ident;
+  const char *ident;
   pid_t pid;
 
   IDE_ENTRY;
@@ -201,10 +194,6 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
   g_autoptr(IdeSubprocess) process = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GArray) fds = NULL;
-  gint stdin_fd = -1;
-  gint stdout_fd = -1;
-  gint stderr_fd = -1;
 
   IDE_ENTRY;
 
@@ -212,55 +201,43 @@ ide_subprocess_launcher_spawn_host_worker (GTask        *task,
 
 #ifdef IDE_ENABLE_TRACE
   {
-    g_autofree gchar *str = NULL;
-    g_autofree gchar *env = NULL;
-    str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
+    g_autofree char *str = NULL;
+    g_autofree char *env = NULL;
+    str = g_strjoinv (" ", (char **)priv->argv->pdata);
     env = priv->environ ? g_strjoinv (" ", priv->environ) : g_strdup ("");
     IDE_TRACE_MSG ("Launching '%s' with environment %s %s parent environment",
                    str, env, priv->clear_env ? "clearing" : "inheriting");
   }
 #endif
 
-  fds = g_steal_pointer (&priv->fd_mapping);
+  if (priv->stdout_file_path != NULL &&
+      !ide_unix_fd_map_open_file (priv->unix_fd_map,
+                                  priv->stdout_file_path, O_WRONLY, STDOUT_FILENO,
+                                  &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
 
-  if (priv->stdin_fd != -1)
-    stdin_fd = dup (priv->stdin_fd);
-
-  if (priv->stdout_fd != -1)
-    stdout_fd = dup (priv->stdout_fd);
-  else if (priv->stdout_file_path != NULL)
-    stdout_fd = open (priv->stdout_file_path, O_WRONLY);
-
-  if (priv->stderr_fd != -1)
-    stderr_fd = dup (priv->stderr_fd);
-
-  process = _ide_flatpak_subprocess_new (priv->cwd,
-                                          (const gchar * const *)priv->argv->pdata,
-                                          (const gchar * const *)priv->environ,
-                                          priv->flags,
-                                          priv->clear_env,
-                                          stdin_fd,
-                                          stdout_fd,
-                                          stderr_fd,
-                                          fds ? (gpointer)fds->data : NULL,
-                                          fds ? fds->len : 0,
-                                          cancellable,
-                                          &error);
-
-  if (process == NULL)
+  if (!(process = _ide_flatpak_subprocess_new (priv->cwd,
+                                               (const char * const *)priv->argv->pdata,
+                                               (const char * const *)priv->environ,
+                                               priv->flags,
+                                               priv->clear_env,
+                                               priv->unix_fd_map,
+                                               cancellable,
+                                               &error)))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   if (cancellable != NULL)
-    {
-      g_signal_connect_object (cancellable,
-                               "cancelled",
-                               G_CALLBACK (ide_subprocess_launcher_kill_host_process),
-                               process,
-                               0);
-    }
+    g_signal_connect_object (cancellable,
+                             "cancelled",
+                             G_CALLBACK (ide_subprocess_launcher_kill_host_process),
+                             process,
+                             0);
 
   g_task_return_pointer (task, g_steal_pointer (&process), g_object_unref);
 
@@ -280,6 +257,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   g_autoptr(IdeSubprocess) wrapped = NULL;
   g_autoptr(GError) error = NULL;
   gpointer child_data = NULL;
+  guint length;
 
   IDE_ENTRY;
 
@@ -289,10 +267,10 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
     child_data = GUINT_TO_POINTER (TRUE);
 
   {
-    g_autofree gchar *str = NULL;
-    g_autofree gchar *env = NULL;
+    g_autofree char *str = NULL;
+    g_autofree char *env = NULL;
 
-    str = g_strjoinv (" ", (gchar **)priv->argv->pdata);
+    str = g_strjoinv (" ", (char **)priv->argv->pdata);
     env = priv->environ ? g_strjoinv (" ", priv->environ) : g_strdup ("");
 
     g_debug ("Launching '%s' from directory '%s' with environment %s %s parent environment",
@@ -306,33 +284,22 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   if (priv->stdout_file_path != NULL)
     g_subprocess_launcher_set_stdout_file_path (launcher, priv->stdout_file_path);
 
-  if (priv->stdin_fd != -1)
+  length = ide_unix_fd_map_get_length (priv->unix_fd_map);
+  for (guint i = 0; i < length; i++)
     {
-      g_subprocess_launcher_take_stdin_fd (launcher, priv->stdin_fd);
-      priv->stdin_fd = -1;
-    }
+      int source_fd;
+      int dest_fd;
 
-  if (priv->stdout_fd != -1)
-    {
-      g_subprocess_launcher_take_stdout_fd (launcher, priv->stdout_fd);
-      priv->stdout_fd = -1;
-    }
-
-  if (priv->stderr_fd != -1)
-    {
-      g_subprocess_launcher_take_stderr_fd (launcher, priv->stderr_fd);
-      priv->stderr_fd = -1;
-    }
-
-  if (priv->fd_mapping != NULL)
-    {
-      g_autoptr(GArray) ar = g_steal_pointer (&priv->fd_mapping);
-
-      for (guint i = 0; i < ar->len; i++)
+      if (-1 != (source_fd = ide_unix_fd_map_steal (priv->unix_fd_map, i, &dest_fd)))
         {
-          const FdMapping *map = &g_array_index (ar, FdMapping, i);
-
-          g_subprocess_launcher_take_fd (launcher, map->source_fd, map->dest_fd);
+          if (dest_fd == STDIN_FILENO)
+            g_subprocess_launcher_take_stdin_fd (launcher, source_fd);
+          else if (dest_fd == STDOUT_FILENO)
+            g_subprocess_launcher_take_stdout_fd (launcher, source_fd);
+          else if (dest_fd == STDERR_FILENO)
+            g_subprocess_launcher_take_stderr_fd (launcher, source_fd);
+          else
+            g_subprocess_launcher_take_fd (launcher, source_fd, dest_fd);
         }
     }
 
@@ -344,8 +311,8 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
    */
   if (priv->clear_env)
     {
-      gchar *envp[] = { NULL };
-      g_subprocess_launcher_set_environ (launcher, envp);
+      static const char *envp[] = { NULL };
+      g_subprocess_launcher_set_environ (launcher, (char **)envp);
     }
 
   /*
@@ -354,35 +321,30 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
    */
   if (priv->environ != NULL)
     {
-      for (guint i = 0; priv->environ[i] != NULL; i++)
+      for (guint i = 0; priv->environ[i]; i++)
         {
-          const gchar *pair = priv->environ[i];
-          const gchar *eq = strchr (pair, '=');
-          g_autofree gchar *key = g_strndup (pair, eq - pair);
-          const gchar *val = eq ? eq + 1 : NULL;
+          g_autofree char *key = NULL;
+          g_autofree char *value = NULL;
 
-          g_subprocess_launcher_setenv (launcher, key, val, TRUE);
+          if (ide_environ_parse (priv->environ[i], &key, &value))
+            g_subprocess_launcher_setenv (launcher, key, value, TRUE);
         }
     }
 
-  real = g_subprocess_launcher_spawnv (launcher,
-                                       (const gchar * const *)priv->argv->pdata,
-                                       &error);
-
-  if (real == NULL)
+  if (!(real = g_subprocess_launcher_spawnv (launcher,
+                                             (const char * const *)priv->argv->pdata,
+                                             &error)))
     {
       g_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
   if (cancellable != NULL)
-    {
-      g_signal_connect_object (cancellable,
-                               "cancelled",
-                               G_CALLBACK (ide_subprocess_launcher_kill_process_group),
-                               real,
-                               0);
-    }
+    g_signal_connect_object (cancellable,
+                             "cancelled",
+                             G_CALLBACK (ide_subprocess_launcher_kill_process_group),
+                             real,
+                             0);
 
   wrapped = ide_simple_subprocess_new (real);
 
@@ -415,7 +377,7 @@ ide_subprocess_launcher_real_spawn (IdeSubprocessLauncher  *self,
        * that it can get /app/bin too. Since it chains up to us, we wont
        * overwrite PATH in that case (which is what we want).
        */
-      ide_subprocess_launcher_setenv (self, "PATH", SAFE_PATH, FALSE);
+      ide_subprocess_launcher_setenv (self, "PATH", ide_get_user_default_path (), FALSE);
       ide_subprocess_launcher_setenv (self, "HOME", g_get_home_dir (), FALSE);
       ide_subprocess_launcher_setenv (self, "USER", g_get_user_name (), FALSE);
       ide_subprocess_launcher_setenv (self, "LANG", g_getenv ("LANG"), FALSE);
@@ -445,41 +407,11 @@ ide_subprocess_launcher_finalize (GObject *object)
   IdeSubprocessLauncher *self = (IdeSubprocessLauncher *)object;
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
-  if (priv->fd_mapping != NULL)
-    {
-      for (guint i = 0; i < priv->fd_mapping->len; i++)
-        {
-          FdMapping *map = &g_array_index (priv->fd_mapping, FdMapping, i);
-
-          if (map->source_fd != -1)
-            close (map->source_fd);
-        }
-
-      g_clear_pointer (&priv->fd_mapping, g_array_unref);
-    }
-
+  g_clear_object (&priv->unix_fd_map);
   g_clear_pointer (&priv->argv, g_ptr_array_unref);
   g_clear_pointer (&priv->cwd, g_free);
   g_clear_pointer (&priv->environ, g_strfreev);
   g_clear_pointer (&priv->stdout_file_path, g_free);
-
-  if (priv->stdin_fd != -1)
-    {
-      close (priv->stdin_fd);
-      priv->stdin_fd = -1;
-    }
-
-  if (priv->stdout_fd != -1)
-    {
-      close (priv->stdout_fd);
-      priv->stdout_fd = -1;
-    }
-
-  if (priv->stderr_fd != -1)
-    {
-      close (priv->stderr_fd);
-      priv->stderr_fd = -1;
-    }
 
   G_OBJECT_CLASS (ide_subprocess_launcher_parent_class)->finalize (object);
 }
@@ -570,14 +502,14 @@ ide_subprocess_launcher_class_init (IdeSubprocessLauncherClass *klass)
                           "Clear Environment",
                           "If the environment should be cleared before setting environment variables.",
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CWD] =
     g_param_spec_string ("cwd",
                          "Current Working Directory",
                          "Current Working Directory",
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_FLAGS] =
     g_param_spec_flags ("flags",
@@ -589,17 +521,17 @@ ide_subprocess_launcher_class_init (IdeSubprocessLauncherClass *klass)
 
   properties [PROP_ENVIRON] =
     g_param_spec_boxed ("environ",
-                        "Environ",
-                        "Environ",
+                        "Environment",
+                        "The environment variables for the subprocess",
                         G_TYPE_STRV,
-                        (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_RUN_ON_HOST] =
     g_param_spec_boolean ("run-on-host",
                           "Run on Host",
                           "Run on Host",
                           FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -611,20 +543,12 @@ ide_subprocess_launcher_init (IdeSubprocessLauncher *self)
 
   priv->clear_env = TRUE;
 
-  priv->stdin_fd = -1;
-  priv->stdout_fd = -1;
-  priv->stderr_fd = -1;
+  priv->unix_fd_map = ide_unix_fd_map_new ();
 
   priv->argv = g_ptr_array_new_with_free_func (g_free);
   g_ptr_array_add (priv->argv, NULL);
 
   priv->cwd = g_strdup (".");
-  /* Prevent inheritance of G_MESSAGES_DEBUG because it brings a lot of problems with IPC
-   * over stdout/stdin because all the debug messages would go to stdout, which means
-   * that the connection would be closed because of invalid data. If needed it can still
-   * be set back if needed, but at least it's a good default.
-   */
-  ide_subprocess_launcher_setenv (self, "G_MESSAGES_DEBUG", "", TRUE);
 }
 
 void
@@ -652,14 +576,14 @@ ide_subprocess_launcher_get_flags (IdeSubprocessLauncher *self)
   return priv->flags;
 }
 
-const gchar * const *
+const char * const *
 ide_subprocess_launcher_get_environ (IdeSubprocessLauncher *self)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
 
-  return (const gchar * const *)priv->environ;
+  return (const char * const *)priv->environ;
 }
 
 /**
@@ -669,27 +593,30 @@ ide_subprocess_launcher_get_environ (IdeSubprocessLauncher *self)
  * of environment variables to set
  *
  * Replace the environment variables by a new list of variables.
- *
- * Since: 3.32
  */
 void
 ide_subprocess_launcher_set_environ (IdeSubprocessLauncher *self,
-                                     const gchar * const   *environ_)
+                                     const char * const    *environ_)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (priv->environ != (gchar **)environ_)
+  if (priv->environ == (char **)environ_)
+    return;
+
+  if ((priv->environ == NULL || environ_ == NULL) ||
+      !g_strv_equal ((const char * const *)priv->environ, environ_))
     {
       g_strfreev (priv->environ);
-      priv->environ = g_strdupv ((gchar **)environ_);
+      priv->environ = g_strdupv ((char **)environ_);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENVIRON]);
     }
 }
 
-const gchar *
+const char *
 ide_subprocess_launcher_getenv (IdeSubprocessLauncher *self,
-                                const gchar           *key)
+                                const char           *key)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
@@ -701,8 +628,8 @@ ide_subprocess_launcher_getenv (IdeSubprocessLauncher *self,
 
 void
 ide_subprocess_launcher_setenv (IdeSubprocessLauncher *self,
-                                const gchar           *key,
-                                const gchar           *value,
+                                const char           *key,
+                                const char           *value,
                                 gboolean               replace)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
@@ -718,7 +645,7 @@ ide_subprocess_launcher_setenv (IdeSubprocessLauncher *self,
 
 void
 ide_subprocess_launcher_push_argv (IdeSubprocessLauncher *self,
-                                   const gchar           *argv)
+                                   const char           *argv)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
@@ -735,8 +662,6 @@ ide_subprocess_launcher_push_argv (IdeSubprocessLauncher *self,
  * Synchronously spawn a process using the internal state.
  *
  * Returns: (transfer full): an #IdeSubprocess or %NULL upon error.
- *
- * Since: 3.32
  */
 IdeSubprocess *
 ide_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
@@ -751,7 +676,7 @@ ide_subprocess_launcher_spawn (IdeSubprocessLauncher  *self,
 
 void
 ide_subprocess_launcher_set_cwd (IdeSubprocessLauncher *self,
-                                 const gchar           *cwd)
+                                 const char           *cwd)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
@@ -768,7 +693,7 @@ ide_subprocess_launcher_set_cwd (IdeSubprocessLauncher *self,
     }
 }
 
-const gchar *
+const char *
 ide_subprocess_launcher_get_cwd (IdeSubprocessLauncher *self)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
@@ -792,8 +717,8 @@ ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
       for (guint i = 0; i < n_items; i++)
         {
           g_autoptr(IdeEnvironmentVariable) var = NULL;
-          const gchar *key;
-          const gchar *value;
+          const char *key;
+          const char *value;
 
           var = g_list_model_get_item (G_LIST_MODEL (environment), i);
           key = ide_environment_variable_get_key (var);
@@ -814,12 +739,10 @@ ide_subprocess_launcher_overlay_environment (IdeSubprocessLauncher *self,
  * for each element of @args.
  *
  * If @args is %NULL, this function does nothing.
- *
- * Since: 3.32
  */
 void
 ide_subprocess_launcher_push_args (IdeSubprocessLauncher *self,
-                                   const gchar * const   *args)
+                                   const char * const   *args)
 {
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
@@ -830,11 +753,11 @@ ide_subprocess_launcher_push_args (IdeSubprocessLauncher *self,
     }
 }
 
-gchar *
+char *
 ide_subprocess_launcher_pop_argv (IdeSubprocessLauncher *self)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
-  gchar *ret = NULL;
+  char *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
 
@@ -861,8 +784,6 @@ ide_subprocess_launcher_pop_argv (IdeSubprocessLauncher *self)
  * zone and requires the application was built with --allow=devel.
  *
  * Returns: %TRUE if the process should be executed outside the containment zone.
- *
- * Since: 3.32
  */
 gboolean
 ide_subprocess_launcher_get_run_on_host (IdeSubprocessLauncher *self)
@@ -879,8 +800,6 @@ ide_subprocess_launcher_get_run_on_host (IdeSubprocessLauncher *self)
  *
  * Sets the #IdeSubprocessLauncher:run-on-host property. See
  * ide_subprocess_launcher_get_run_on_host() for more information.
- *
- * Since: 3.32
  */
 void
 ide_subprocess_launcher_set_run_on_host (IdeSubprocessLauncher *self,
@@ -926,50 +845,36 @@ ide_subprocess_launcher_set_clear_env (IdeSubprocessLauncher *self,
 
 void
 ide_subprocess_launcher_take_stdin_fd (IdeSubprocessLauncher *self,
-                                       gint                   stdin_fd)
+                                       int                    stdin_fd)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+  g_autoptr(GError) error = NULL;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (priv->stdin_fd != stdin_fd)
-    {
-      if (priv->stdin_fd != -1)
-        close (priv->stdin_fd);
-      priv->stdin_fd = stdin_fd;
-    }
+  ide_unix_fd_map_take (priv->unix_fd_map, stdin_fd, STDIN_FILENO);
 }
 
 void
 ide_subprocess_launcher_take_stdout_fd (IdeSubprocessLauncher *self,
-                                        gint                   stdout_fd)
+                                        int                    stdout_fd)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (priv->stdout_fd != stdout_fd)
-    {
-      if (priv->stdout_fd != -1)
-        close (priv->stdout_fd);
-      priv->stdout_fd = stdout_fd;
-    }
+  ide_unix_fd_map_take (priv->unix_fd_map, stdout_fd, STDOUT_FILENO);
 }
 
 void
 ide_subprocess_launcher_take_stderr_fd (IdeSubprocessLauncher *self,
-                                        gint                   stderr_fd)
+                                        int                    stderr_fd)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
-  if (priv->stderr_fd != stderr_fd)
-    {
-      if (priv->stderr_fd != -1)
-        close (priv->stderr_fd);
-      priv->stderr_fd = stderr_fd;
-    }
+  ide_unix_fd_map_take (priv->unix_fd_map, stderr_fd, STDERR_FILENO);
 }
 
 /**
@@ -983,7 +888,7 @@ ide_subprocess_launcher_take_stderr_fd (IdeSubprocessLauncher *self,
  */
 void
 ide_subprocess_launcher_set_argv (IdeSubprocessLauncher  *self,
-                                  const gchar * const    *args)
+                                  const char * const    *args)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
@@ -1000,20 +905,20 @@ ide_subprocess_launcher_set_argv (IdeSubprocessLauncher  *self,
   g_ptr_array_add (priv->argv, NULL);
 }
 
-const gchar * const *
+const char * const *
 ide_subprocess_launcher_get_argv (IdeSubprocessLauncher *self)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), NULL);
 
-  return (const gchar * const *)priv->argv->pdata;
+  return (const char * const *)priv->argv->pdata;
 }
 
 void
 ide_subprocess_launcher_insert_argv (IdeSubprocessLauncher *self,
                                      guint                  index,
-                                     const gchar           *arg)
+                                     const char           *arg)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
@@ -1028,10 +933,10 @@ ide_subprocess_launcher_insert_argv (IdeSubprocessLauncher *self,
 void
 ide_subprocess_launcher_replace_argv (IdeSubprocessLauncher *self,
                                       guint                  index,
-                                      const gchar           *arg)
+                                      const char           *arg)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
-  gchar *old_arg;
+  char *old_arg;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_return_if_fail (priv->argv->len > 0);
@@ -1046,28 +951,21 @@ ide_subprocess_launcher_replace_argv (IdeSubprocessLauncher *self,
 
 void
 ide_subprocess_launcher_take_fd (IdeSubprocessLauncher *self,
-                                 gint                   source_fd,
-                                 gint                   dest_fd)
+                                 int                    source_fd,
+                                 int                    dest_fd)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
-  FdMapping map = {
-    .source_fd = source_fd,
-    .dest_fd = dest_fd
-  };
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
   g_return_if_fail (source_fd > -1);
   g_return_if_fail (dest_fd > -1);
 
-  if (priv->fd_mapping == NULL)
-    priv->fd_mapping = g_array_new (FALSE, FALSE, sizeof (FdMapping));
-
-  g_array_append_val (priv->fd_mapping, map);
+  ide_unix_fd_map_take (priv->unix_fd_map, source_fd, dest_fd);
 }
 
 void
 ide_subprocess_launcher_set_stdout_file_path (IdeSubprocessLauncher *self,
-                                              const gchar           *stdout_file_path)
+                                              const char           *stdout_file_path)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
@@ -1082,9 +980,9 @@ ide_subprocess_launcher_set_stdout_file_path (IdeSubprocessLauncher *self,
 
 void
 ide_subprocess_launcher_prepend_path (IdeSubprocessLauncher *self,
-                                      const gchar           *path)
+                                      const char           *path)
 {
-  const gchar *old_path;
+  const char *old_path;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
@@ -1095,7 +993,7 @@ ide_subprocess_launcher_prepend_path (IdeSubprocessLauncher *self,
 
   if (old_path != NULL)
     {
-      g_autofree gchar *new_path = g_strdup_printf ("%s:%s", path, old_path);
+      g_autofree char *new_path = g_strdup_printf ("%s:%s", path, old_path);
       ide_subprocess_launcher_setenv (self, "PATH", new_path, TRUE);
     }
   else
@@ -1106,9 +1004,9 @@ ide_subprocess_launcher_prepend_path (IdeSubprocessLauncher *self,
 
 void
 ide_subprocess_launcher_append_path (IdeSubprocessLauncher *self,
-                                     const gchar           *path)
+                                     const char           *path)
 {
-  const gchar *old_path;
+  const char *old_path;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
@@ -1119,7 +1017,7 @@ ide_subprocess_launcher_append_path (IdeSubprocessLauncher *self,
 
   if (old_path != NULL)
     {
-      g_autofree gchar *new_path = g_strdup_printf ("%s:%s", old_path, path);
+      g_autofree char *new_path = g_strdup_printf ("%s:%s", old_path, path);
       ide_subprocess_launcher_setenv (self, "PATH", new_path, TRUE);
     }
   else
@@ -1134,34 +1032,11 @@ ide_subprocess_launcher_get_needs_tty (IdeSubprocessLauncher *self)
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), FALSE);
+  g_return_val_if_fail (IDE_IS_UNIX_FD_MAP (priv->unix_fd_map), FALSE);
 
-  if ((priv->stdin_fd != -1 && isatty (priv->stdin_fd)) ||
-      (priv->stdout_fd != -1 && isatty (priv->stdout_fd)) ||
-      (priv->stderr_fd != -1 && isatty (priv->stderr_fd)))
-    return TRUE;
-
-  if (priv->fd_mapping != NULL)
-    {
-      for (guint i = 0; i < priv->fd_mapping->len; i++)
-        {
-          const FdMapping *fdmap = &g_array_index (priv->fd_mapping, FdMapping, i);
-
-          switch (fdmap->dest_fd)
-            {
-            case STDIN_FILENO:
-            case STDOUT_FILENO:
-            case STDERR_FILENO:
-              if (isatty (fdmap->source_fd))
-                return TRUE;
-              break;
-
-            default:
-              break;
-            }
-        }
-    }
-
-  return FALSE;
+  return ide_unix_fd_map_stdin_isatty (priv->unix_fd_map) ||
+         ide_unix_fd_map_stdout_isatty (priv->unix_fd_map) ||
+         ide_unix_fd_map_stderr_isatty (priv->unix_fd_map);
 }
 
 /**
@@ -1174,32 +1049,19 @@ ide_subprocess_launcher_get_needs_tty (IdeSubprocessLauncher *self)
  * This will always return a value >= 2 (to indicate stdin/stdout/stderr).
  *
  * Returns: an integer for the max-fd
- *
- * Since: 3.34
  */
-gint
+int
 ide_subprocess_launcher_get_max_fd (IdeSubprocessLauncher *self)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
-  gint max_fd = 2;
 
-  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), 2);
+  g_return_val_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self), -1);
+  g_return_val_if_fail (IDE_IS_UNIX_FD_MAP (priv->unix_fd_map), -1);
 
-  if (priv->fd_mapping != NULL)
-    {
-      for (guint i = 0; i < priv->fd_mapping->len; i++)
-        {
-          const FdMapping *map = &g_array_index (priv->fd_mapping, FdMapping, i);
-
-          if (map->dest_fd > max_fd)
-            max_fd = map->dest_fd;
-        }
-    }
-
-  return max_fd;
+  return ide_unix_fd_map_get_max_dest_fd (priv->unix_fd_map);
 }
 
-const gchar *
+const char *
 ide_subprocess_launcher_get_arg (IdeSubprocessLauncher *self,
                                  guint                  pos)
 {
@@ -1218,7 +1080,7 @@ ide_subprocess_launcher_join_args_for_sh_c (IdeSubprocessLauncher *self,
                                             guint                  start_pos)
 {
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
-  const gchar * const *argv;
+  const char * const *argv;
   GString *str;
 
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
@@ -1229,7 +1091,7 @@ ide_subprocess_launcher_join_args_for_sh_c (IdeSubprocessLauncher *self,
 
   for (guint i = start_pos; argv[i] != NULL; i++)
     {
-      g_autofree gchar *quoted_string = g_shell_quote (argv[i]);
+      g_autofree char *quoted_string = g_shell_quote (argv[i]);
 
       if (i > 0)
         g_string_append_c (str, ' ');
@@ -1239,4 +1101,54 @@ ide_subprocess_launcher_join_args_for_sh_c (IdeSubprocessLauncher *self,
   g_ptr_array_remove_range (priv->argv, start_pos, priv->argv->len - start_pos);
   g_ptr_array_add (priv->argv, g_string_free (g_steal_pointer (&str), FALSE));
   g_ptr_array_add (priv->argv, NULL);
+}
+
+/**
+ * ide_subprocess_launcher_push_argv_format: (skip)
+ * @self: a #IdeSubprocessLauncher
+ * @format: a printf-style format string
+ *
+ * Convenience function which allows combining a g_strdup_printf() and
+ * call to ide_subprocess_launcher_push_argv() into one call.
+ *
+ * @format is used to build the argument string which is added using
+ * ide_subprocess_launcher_push_argv() and then freed.
+ */
+void
+ide_subprocess_launcher_push_argv_format (IdeSubprocessLauncher *self,
+                                          const char            *format,
+                                          ...)
+{
+  g_autofree char *arg = NULL;
+  va_list args;
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+  g_return_if_fail (format != NULL);
+
+  va_start (args, format);
+  arg = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  g_return_if_fail (arg != NULL);
+
+  ide_subprocess_launcher_push_argv (self, arg);
+}
+
+void
+ide_subprocess_launcher_push_argv_parsed (IdeSubprocessLauncher *self,
+                                          const char            *args_to_parse)
+{
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  if (!ide_str_empty0 (args_to_parse))
+    {
+      g_autoptr(GError) error = NULL;
+      g_auto(GStrv) argv = NULL;
+      int argc;
+
+      if (!g_shell_parse_argv (args_to_parse, &argc, &argv, &error))
+        g_warning ("Failed to parse args: %s", error->message);
+      else
+        ide_subprocess_launcher_push_args (self, (const char * const *)argv);
+    }
 }

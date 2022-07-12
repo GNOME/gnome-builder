@@ -58,29 +58,24 @@ struct _IdeFlatpakSubprocess
   gulong connection_closed_handler;
 
   GPid client_pid;
-  gint status;
+  int status;
 
   GSubprocessFlags flags;
 
   /* No reference */
   GThread *spawn_thread;
 
-  gchar **argv;
-  gchar **env;
-  gchar *cwd;
+  char **argv;
+  char **env;
+  char *cwd;
 
-  gchar *identifier;
-
-  gint stdin_fd;
-  gint stdout_fd;
-  gint stderr_fd;
+  char *identifier;
 
   GOutputStream *stdin_pipe;
   GInputStream *stdout_pipe;
   GInputStream *stderr_pipe;
 
-  IdeBreakoutFdMapping *fd_mapping;
-  guint fd_mapping_len;
+  IdeUnixFDMap *unix_fd_map;
 
   GMainContext *main_context;
 
@@ -139,29 +134,31 @@ struct _IdeFlatpakSubprocess
  */
 typedef struct
 {
-  const gchar *stdin_data;
-  gsize stdin_length;
-  gsize stdin_offset;
+  const char          *stdin_data;
+  gsize                stdin_length;
+  gsize                stdin_offset;
 
-  gboolean add_nul;
+  gboolean             add_nul;
 
-  GInputStream *stdin_buf;
+  GInputStream        *stdin_buf;
   GMemoryOutputStream *stdout_buf;
   GMemoryOutputStream *stderr_buf;
 
-  GCancellable *cancellable;
-  GSource      *cancellable_source;
+  GCancellable        *cancellable;
+  GSource             *cancellable_source;
 
-  guint         outstanding_ops;
-  gboolean      reported_error;
+  guint                outstanding_ops;
+  gboolean             reported_error;
 } CommunicateState;
 
 enum {
   PROP_0,
   PROP_ARGV,
+  PROP_CLEAR_ENV,
   PROP_CWD,
   PROP_ENV,
   PROP_FLAGS,
+  PROP_UNIX_FD_MAP,
   N_PROPS
 };
 
@@ -180,7 +177,7 @@ static CommunicateState *ide_flatpak_subprocess_communicate_internal (IdeFlatpak
 
 static GParamSpec *properties [N_PROPS];
 
-static const gchar *
+static const char *
 ide_flatpak_subprocess_get_identifier (IdeSubprocess *subprocess)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
@@ -485,7 +482,7 @@ ide_flatpak_subprocess_get_if_exited (IdeSubprocess *subprocess)
   return WIFEXITED (self->status);
 }
 
-static gint
+static int
 ide_flatpak_subprocess_get_exit_status (IdeSubprocess *subprocess)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
@@ -510,7 +507,7 @@ ide_flatpak_subprocess_get_if_signaled (IdeSubprocess *subprocess)
   return WIFSIGNALED (self->status);
 }
 
-static gint
+static int
 ide_flatpak_subprocess_get_term_sig (IdeSubprocess *subprocess)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
@@ -521,7 +518,7 @@ ide_flatpak_subprocess_get_term_sig (IdeSubprocess *subprocess)
   return WTERMSIG (self->status);
 }
 
-static gint
+static int
 ide_flatpak_subprocess_get_status (IdeSubprocess *subprocess)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
@@ -534,7 +531,7 @@ ide_flatpak_subprocess_get_status (IdeSubprocess *subprocess)
 
 static void
 ide_flatpak_subprocess_send_signal (IdeSubprocess *subprocess,
-                                     gint           signal_num)
+                                     int           signal_num)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)subprocess;
 
@@ -945,7 +942,7 @@ subprocess_iface_init (IdeSubprocessInterface *iface)
 
 static void
 maybe_create_input_stream (GInputStream **ret,
-                           gint          *fdptr,
+                           int          *fdptr,
                            gboolean       needs_stream)
 {
   g_assert (ret != NULL);
@@ -972,7 +969,7 @@ maybe_create_input_stream (GInputStream **ret,
 
 static void
 maybe_create_output_stream (GOutputStream **ret,
-                            gint           *fdptr,
+                            int           *fdptr,
                             gboolean        needs_stream)
 {
   g_assert (ret != NULL);
@@ -999,7 +996,7 @@ maybe_create_output_stream (GOutputStream **ret,
 
 static void
 ide_flatpak_subprocess_complete_command_locked (IdeFlatpakSubprocess *self,
-                                                 gint                   exit_status)
+                                                int                  exit_status)
 {
   GList *waiting;
 
@@ -1046,10 +1043,10 @@ ide_flatpak_subprocess_complete_command_locked (IdeFlatpakSubprocess *self,
 
 static void
 host_command_exited_cb (GDBusConnection *connection,
-                        const gchar     *sender_name,
-                        const gchar     *object_path,
-                        const gchar     *interface_name,
-                        const gchar     *signal_name,
+                        const char      *sender_name,
+                        const char      *object_path,
+                        const char      *interface_name,
+                        const char      *signal_name,
                         GVariant        *parameters,
                         gpointer         user_data)
 {
@@ -1094,7 +1091,7 @@ host_command_exited_cb (GDBusConnection *connection,
 
 static void
 ide_flatpak_subprocess_cancelled (IdeFlatpakSubprocess *self,
-                                   GCancellable          *cancellable)
+                                  GCancellable         *cancellable)
 {
   IDE_ENTRY;
 
@@ -1107,7 +1104,7 @@ ide_flatpak_subprocess_cancelled (IdeFlatpakSubprocess *self,
 }
 
 static inline void
-maybe_close (gint *fd)
+maybe_close (int *fd)
 {
   g_assert (fd != NULL);
   g_assert (*fd >= -1);
@@ -1120,9 +1117,9 @@ maybe_close (gint *fd)
 
 static void
 ide_flatpak_subprocess_connection_closed (IdeFlatpakSubprocess *self,
-                                           gboolean               remote_peer_vanished,
-                                           const GError          *error,
-                                           GDBusConnection       *connection)
+                                          gboolean              remote_peer_vanished,
+                                          const GError         *error,
+                                          GDBusConnection      *connection)
 {
   g_autoptr(GMutexLocker) locker = NULL;
 
@@ -1143,8 +1140,8 @@ ide_flatpak_subprocess_connection_closed (IdeFlatpakSubprocess *self,
 
 static gboolean
 ide_flatpak_subprocess_initable_init (GInitable     *initable,
-                                       GCancellable  *cancellable,
-                                       GError       **error)
+                                      GCancellable  *cancellable,
+                                      GError       **error)
 {
   IdeFlatpakSubprocess *self = (IdeFlatpakSubprocess *)initable;
   g_autoptr(GVariantBuilder) fd_builder = g_variant_builder_new (G_VARIANT_TYPE ("a{uh}"));
@@ -1153,18 +1150,20 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
   g_autoptr(GVariant) reply = NULL;
   g_autoptr(GVariant) params = NULL;
   guint32 client_pid = 0;
-  gint stdout_pair[2] = { -1, -1 };
-  gint stderr_pair[2] = { -1, -1 };
-  gint stdin_pair[2] = { -1, -1 };
-  gint stdin_handle = -1;
-  gint stdout_handle = -1;
-  gint stderr_handle = -1;
+  int stdout_pair[2] = { -1, -1 };
+  int stderr_pair[2] = { -1, -1 };
+  int stdin_pair[2] = { -1, -1 };
+  int stdin_handle = -1;
+  int stdout_handle = -1;
+  int stderr_handle = -1;
   gboolean ret = FALSE;
   guint flags = FLATPAK_HOST_COMMAND_FLAGS_WATCH_BUS;
+  guint length;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_FLATPAK_SUBPROCESS (self));
+  g_assert (IDE_IS_UNIX_FD_MAP (self->unix_fd_map));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (!(self->connection = g_bus_get_sync (G_BUS_TYPE_SESSION, cancellable, error)))
@@ -1173,18 +1172,14 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
   if (self->clear_env)
     flags |= FLATPAK_HOST_COMMAND_FLAGS_CLEAR_ENV;
 
-
-  /*
-   * Handle STDIN for the process.
+  /* Handle STDIN for the process.
    *
    * Make sure we handle inherit STDIN, a new pipe (so that the application can
    * get the stdin stream), or simply redirect to /dev/null.
    */
-  if (self->stdin_fd != -1)
+  if (-1 != (stdin_pair[0] = ide_unix_fd_map_steal_stdin (self->unix_fd_map)))
     {
       self->flags &= ~G_SUBPROCESS_FLAGS_STDIN_PIPE;
-      stdin_pair[0] = self->stdin_fd;
-      self->stdin_fd = -1;
     }
   else if (self->flags & G_SUBPROCESS_FLAGS_STDIN_INHERIT)
     {
@@ -1213,18 +1208,15 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
     maybe_close (&stdin_pair[0]);
 
 
-  /*
-   * Setup STDOUT for the process.
+  /* Setup STDOUT for the process.
    *
    * Make sure we redirect STDOUT to our stdout, unless a pipe was requested
    * for the application to read. However, if silence was requested, redirect
    * to /dev/null.
    */
-  if (self->stdout_fd != -1)
+  if (-1 != (stdout_pair[1] = ide_unix_fd_map_steal_stdout (self->unix_fd_map)))
     {
       self->flags &= ~G_SUBPROCESS_FLAGS_STDOUT_PIPE;
-      stdout_pair[1] = self->stdout_fd;
-      self->stdout_fd = -1;
     }
   else if (self->flags & G_SUBPROCESS_FLAGS_STDOUT_SILENCE)
     {
@@ -1253,18 +1245,15 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
     maybe_close (&stdout_pair[1]);
 
 
-  /*
-   * Handle STDERR for the process.
+  /* Handle STDERR for the process.
    *
    * If silence is requested, we simply redirect to /dev/null. If the
    * application requested to read from the subprocesses stderr, then we need
    * to create a pipe. Otherwose, merge stderr into our own stderr.
    */
-  if (self->stderr_fd != -1)
+  if (-1 != (stderr_pair[1] = ide_unix_fd_map_steal_stderr (self->unix_fd_map)))
     {
       self->flags &= ~G_SUBPROCESS_FLAGS_STDERR_PIPE;
-      stderr_pair[1] = self->stderr_fd;
-      self->stderr_fd = -1;
     }
   else if (self->flags & G_SUBPROCESS_FLAGS_STDERR_SILENCE)
     {
@@ -1293,39 +1282,32 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
     maybe_close (&stderr_pair[1]);
 
 
-  /*
-   * Build our FDs for the message.
-   */
+  /* Build our FDs for the message. */
   g_variant_builder_add (fd_builder, "{uh}", 0, stdin_handle);
   g_variant_builder_add (fd_builder, "{uh}", 1, stdout_handle);
   g_variant_builder_add (fd_builder, "{uh}", 2, stderr_handle);
 
 
-  /*
-   * Now add the rest of our FDs that we might need to map in for which
+  /* Now add the rest of our FDs that we might need to map in for which
    * the subprocess launcher tried to map.
    */
-  for (guint i = 0; i < self->fd_mapping_len; i++)
+  length = ide_unix_fd_map_get_length (self->unix_fd_map);
+  for (guint i = 0; i < length; i++)
     {
-      const IdeBreakoutFdMapping *map = &self->fd_mapping[i];
-      g_autoptr(GError) fd_error = NULL;
-      gint dest_handle;
+      int source_fd;
+      int dest_fd;
 
-      dest_handle = g_unix_fd_list_append (fd_list, map->source_fd, &fd_error);
+      if (-1 != (source_fd = ide_unix_fd_map_peek (self->unix_fd_map, i, &dest_fd)))
+        {
+          int dest_handle = g_unix_fd_list_append (fd_list, source_fd, NULL);
 
-      if (dest_handle != -1)
-        g_variant_builder_add (fd_builder, "{uh}", map->dest_fd, dest_handle);
-      else
-        g_warning ("%s", fd_error->message);
-
-      close (map->source_fd);
+          if (dest_handle != -1)
+            g_variant_builder_add (fd_builder, "{uh}", dest_fd, dest_handle);
+        }
     }
 
-  /*
-   * We don't want to allow these FDs to be used again.
-   */
-  self->fd_mapping_len = 0;
-  g_clear_pointer (&self->fd_mapping, g_free);
+  /* We don't want to allow these FDs to be used again. */
+  g_clear_object (&self->unix_fd_map);
 
 
   /*
@@ -1343,10 +1325,10 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
     {
       for (guint i = 0; self->env[i]; i++)
         {
-          const gchar *pair = self->env[i];
-          const gchar *eq = strchr (pair, '=');
-          const gchar *val = eq ? eq + 1 : "";
-          g_autofree gchar *key = eq ? g_strndup (pair, eq - pair) : g_strdup (pair);
+          const char *pair = self->env[i];
+          const char *eq = strchr (pair, '=');
+          const char *val = eq ? eq + 1 : "";
+          g_autofree char *key = eq ? g_strndup (pair, eq - pair) : g_strdup (pair);
 
           g_variant_builder_add (env_builder, "{ss}", key, val);
         }
@@ -1410,7 +1392,7 @@ ide_flatpak_subprocess_initable_init (GInitable     *initable,
 
 #ifdef IDE_ENABLE_TRACE
   {
-    g_autofree gchar *str = g_variant_print (params, TRUE);
+    g_autofree char *str = g_variant_print (params, TRUE);
     IDE_TRACE_MSG ("Calling HostCommand with %s", str);
   }
 #endif
@@ -1474,9 +1456,9 @@ initiable_iface_init (GInitableIface *iface)
   iface->init = ide_flatpak_subprocess_initable_init;
 }
 
-G_DEFINE_TYPE_EXTENDED (IdeFlatpakSubprocess, ide_flatpak_subprocess, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
-                        G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initiable_iface_init)
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_SUBPROCESS, subprocess_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeFlatpakSubprocess, ide_flatpak_subprocess, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initiable_iface_init)
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_SUBPROCESS, subprocess_iface_init))
 
 static void
 ide_flatpak_subprocess_dispose (GObject *object)
@@ -1522,22 +1504,10 @@ ide_flatpak_subprocess_finalize (GObject *object)
   g_clear_object (&self->stdout_pipe);
   g_clear_object (&self->stderr_pipe);
   g_clear_object (&self->connection);
+  g_clear_object (&self->unix_fd_map);
 
   g_mutex_clear (&self->waiter_mutex);
   g_cond_clear (&self->waiter_cond);
-
-  if (self->stdin_fd != -1)
-    close (self->stdin_fd);
-
-  if (self->stdout_fd != -1)
-    close (self->stdout_fd);
-
-  if (self->stderr_fd != -1)
-    close (self->stderr_fd);
-
-  for (guint i = 0; i < self->fd_mapping_len; i++)
-    close (self->fd_mapping[i].source_fd);
-  g_clear_pointer (&self->fd_mapping, g_free);
 
   G_OBJECT_CLASS (ide_flatpak_subprocess_parent_class)->finalize (object);
 
@@ -1546,14 +1516,18 @@ ide_flatpak_subprocess_finalize (GObject *object)
 
 static void
 ide_flatpak_subprocess_get_property (GObject    *object,
-                                      guint       prop_id,
-                                      GValue     *value,
-                                      GParamSpec *pspec)
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
   IdeFlatpakSubprocess *self = IDE_FLATPAK_SUBPROCESS (object);
 
   switch (prop_id)
     {
+    case PROP_CLEAR_ENV:
+      g_value_set_boolean (value, self->clear_env);
+      break;
+
     case PROP_CWD:
       g_value_set_string (value, self->cwd);
       break;
@@ -1570,6 +1544,10 @@ ide_flatpak_subprocess_get_property (GObject    *object,
       g_value_set_flags (value, self->flags);
       break;
 
+    case PROP_UNIX_FD_MAP:
+      g_value_set_object (value, self->unix_fd_map);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -1577,20 +1555,24 @@ ide_flatpak_subprocess_get_property (GObject    *object,
 
 static void
 ide_flatpak_subprocess_set_property (GObject      *object,
-                                      guint         prop_id,
-                                      const GValue *value,
-                                      GParamSpec   *pspec)
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
 {
   IdeFlatpakSubprocess *self = IDE_FLATPAK_SUBPROCESS (object);
 
   switch (prop_id)
     {
-    case PROP_CWD:
-      self->cwd = g_value_dup_string (value);
-      break;
-
     case PROP_ARGV:
       self->argv = g_value_dup_boxed (value);
+      break;
+
+    case PROP_CLEAR_ENV:
+      self->clear_env = g_value_get_boolean (value);
+      break;
+
+    case PROP_CWD:
+      self->cwd = g_value_dup_string (value);
       break;
 
     case PROP_ENV:
@@ -1599,6 +1581,12 @@ ide_flatpak_subprocess_set_property (GObject      *object,
 
     case PROP_FLAGS:
       self->flags = g_value_get_flags (value);
+      break;
+
+    case PROP_UNIX_FD_MAP:
+      self->unix_fd_map = g_value_dup_object (value);
+      if (self->unix_fd_map == NULL)
+        self->unix_fd_map = ide_unix_fd_map_new ();
       break;
 
     default:
@@ -1615,6 +1603,11 @@ ide_flatpak_subprocess_class_init (IdeFlatpakSubprocessClass *klass)
   object_class->finalize = ide_flatpak_subprocess_finalize;
   object_class->get_property = ide_flatpak_subprocess_get_property;
   object_class->set_property = ide_flatpak_subprocess_set_property;
+
+  properties [PROP_CLEAR_ENV] =
+    g_param_spec_boolean ("clear-env", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CWD] =
     g_param_spec_string ("cwd",
@@ -1645,6 +1638,11 @@ ide_flatpak_subprocess_class_init (IdeFlatpakSubprocessClass *klass)
                         G_SUBPROCESS_FLAGS_NONE,
                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_UNIX_FD_MAP] =
+    g_param_spec_object ("unix-fd-map", NULL, NULL,
+                         IDE_TYPE_UNIX_FD_MAP,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -1653,10 +1651,6 @@ ide_flatpak_subprocess_init (IdeFlatpakSubprocess *self)
 {
   IDE_ENTRY;
 
-  self->stdin_fd = -1;
-  self->stdout_fd = -1;
-  self->stderr_fd = -1;
-
   g_mutex_init (&self->waiter_mutex);
   g_cond_init (&self->waiter_cond);
 
@@ -1664,39 +1658,30 @@ ide_flatpak_subprocess_init (IdeFlatpakSubprocess *self)
 }
 
 IdeSubprocess *
-_ide_flatpak_subprocess_new (const gchar                 *cwd,
-                              const gchar * const         *argv,
-                              const gchar * const         *env,
-                              GSubprocessFlags             flags,
-                              gboolean                     clear_env,
-                              gint                         stdin_fd,
-                              gint                         stdout_fd,
-                              gint                         stderr_fd,
-                              const IdeBreakoutFdMapping  *fd_mapping,
-                              guint                        fd_mapping_len,
-                              GCancellable                *cancellable,
-                              GError                     **error)
+_ide_flatpak_subprocess_new (const char          *cwd,
+                             const char * const  *argv,
+                             const char * const  *env,
+                             GSubprocessFlags     flags,
+                             gboolean             clear_env,
+                             IdeUnixFDMap        *unix_fd_map,
+                             GCancellable        *cancellable,
+                             GError             **error)
 {
   g_autoptr(IdeFlatpakSubprocess) ret = NULL;
 
   g_return_val_if_fail (argv != NULL, NULL);
   g_return_val_if_fail (argv[0] != NULL, NULL);
+  g_return_val_if_fail (!unix_fd_map || IDE_IS_UNIX_FD_MAP (unix_fd_map), NULL);
+  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), NULL);
 
   ret = g_object_new (IDE_TYPE_FLATPAK_SUBPROCESS,
                       "cwd", cwd,
                       "argv", argv,
+                      "clear-env", clear_env,
                       "env", env,
                       "flags", flags,
+                      "unix-fd-map", unix_fd_map,
                       NULL);
-
-  ret->clear_env = clear_env;
-  ret->stdin_fd = stdin_fd;
-  ret->stdout_fd = stdout_fd;
-  ret->stderr_fd = stderr_fd;
-
-  ret->fd_mapping = g_new0 (IdeBreakoutFdMapping, fd_mapping_len);
-  ret->fd_mapping_len = fd_mapping_len;
-  memcpy (ret->fd_mapping, fd_mapping, sizeof(IdeBreakoutFdMapping) * fd_mapping_len);
 
   if (!g_initable_init (G_INITABLE (ret), cancellable, error))
     return NULL;
