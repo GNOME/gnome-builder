@@ -1,6 +1,7 @@
-/* gbp-buildui-log-pane.h
+/* gbp-buildui-preferences-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Georges Basile Stavracas Neto <georges.stavracas@gmail.com>
+ *           2018-2019 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +21,11 @@
 
 #pragma once
 
-#include <libide-foundry.h>
 #include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_BUILDUI_LOG_PANE (gbp_buildui_log_pane_get_type())
-
-G_DECLARE_FINAL_TYPE (GbpBuilduiLogPane, gbp_buildui_log_pane, GBP, BUILDUI_LOG_PANE, IdePane)
-
-void gbp_buildui_log_pane_set_pipeline (GbpBuilduiLogPane *self,
-                                        IdePipeline  *pipeline);
-
-void gbp_buildui_log_pane_clear (GbpBuilduiLogPane *self);
+#define GBP_TYPE_BUILDUI_PREFERENCES_ADDIN (gbp_buildui_preferences_addin_get_type())
+G_DECLARE_FINAL_TYPE (GbpBuilduiPreferencesAddin, gbp_buildui_preferences_addin, GBP, BUILDUI_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS

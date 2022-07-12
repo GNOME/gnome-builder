@@ -1,6 +1,6 @@
-/* gbp-buildui-log-pane.h
+/* gbp-buildui-status-indicator.h
  *
- * Copyright 2015-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,16 @@
 
 #pragma once
 
-#include <libide-foundry.h>
-#include <libide-gui.h>
+#include <gtk/gtk.h>
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_BUILDUI_LOG_PANE (gbp_buildui_log_pane_get_type())
+#define GBP_TYPE_BUILDUI_STATUS_INDICATOR (gbp_buildui_status_indicator_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuilduiLogPane, gbp_buildui_log_pane, GBP, BUILDUI_LOG_PANE, IdePane)
+G_DECLARE_FINAL_TYPE (GbpBuilduiStatusIndicator, gbp_buildui_status_indicator, GBP, BUILDUI_STATUS_INDICATOR, GtkWidget)
 
-void gbp_buildui_log_pane_set_pipeline (GbpBuilduiLogPane *self,
-                                        IdePipeline  *pipeline);
-
-void gbp_buildui_log_pane_clear (GbpBuilduiLogPane *self);
+GbpBuilduiStatusIndicator *gbp_buildui_status_indicator_new (IdeContext *context);
 
 G_END_DECLS

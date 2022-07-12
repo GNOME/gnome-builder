@@ -1,6 +1,6 @@
-/* gbp-buildui-config-surface.h
+/* gbp-buildui-status-popover.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,18 @@
 
 #pragma once
 
-#include <libide-foundry.h>
-#include <libide-gui.h>
+#include <gtk/gtk.h>
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_BUILDUI_CONFIG_SURFACE (gbp_buildui_config_surface_get_type())
+#define GBP_TYPE_BUILDUI_STATUS_POPOVER (gbp_buildui_status_popover_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuilduiConfigSurface, gbp_buildui_config_surface, GBP, BUILDUI_CONFIG_SURFACE, IdeSurface)
+G_DECLARE_FINAL_TYPE (GbpBuilduiStatusPopover, gbp_buildui_status_popover, GBP, BUILDUI_STATUS_POPOVER, GtkPopover)
 
-void gbp_buildui_config_surface_set_config (GbpBuilduiConfigSurface *self,
-                                            IdeConfig        *config);
+GbpBuilduiStatusPopover *gbp_buildui_status_popover_new      (IdeContext              *context);
+void                     gbp_buildui_status_popover_set_page (GbpBuilduiStatusPopover *self,
+                                                              const char              *page);
 
 G_END_DECLS

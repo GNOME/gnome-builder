@@ -152,7 +152,7 @@ gbp_buildui_log_pane_window_title_changed (GbpBuilduiLogPane *self,
     }
 }
 
-static void
+static gboolean
 gbp_buildui_log_pane_grab_focus (GtkWidget *widget)
 {
   GbpBuilduiLogPane *self = (GbpBuilduiLogPane *)widget;
@@ -160,7 +160,9 @@ gbp_buildui_log_pane_grab_focus (GtkWidget *widget)
   g_assert (GBP_IS_BUILDUI_LOG_PANE (self));
 
   if (self->terminal != NULL)
-    gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
+    return gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
+
+  return FALSE;
 }
 
 static void
@@ -262,6 +264,49 @@ gbp_buildui_log_pane_clear_activate (GSimpleAction *action,
 }
 
 static void
+gbp_builui_log_pane_save_response (GtkFileChooserNative *native,
+                                   int                   response,
+                                   GbpBuilduiLogPane    *self)
+{
+  g_autoptr(GFile) file = NULL;
+
+  IDE_ENTRY;
+
+  if (response != GTK_RESPONSE_ACCEPT)
+    IDE_RETURN ();
+
+  file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
+
+  if (file != NULL)
+    {
+      g_autoptr(GFileOutputStream) stream = NULL;
+      g_autoptr(GError) error = NULL;
+
+      stream = g_file_replace (file,
+                               NULL,
+                               FALSE,
+                               G_FILE_CREATE_REPLACE_DESTINATION,
+                               NULL,
+                               &error);
+
+      if (stream != NULL)
+        {
+          vte_terminal_write_contents_sync (VTE_TERMINAL (self->terminal),
+                                            G_OUTPUT_STREAM (stream),
+                                            VTE_WRITE_DEFAULT,
+                                            NULL,
+                                            &error);
+          g_output_stream_close (G_OUTPUT_STREAM (stream), NULL, NULL);
+        }
+
+      if (error != NULL)
+        g_warning ("Failed to write contents: %s", error->message);
+    }
+
+  IDE_EXIT;
+}
+
+static void
 gbp_buildui_log_pane_save_in_file (GSimpleAction *action,
                                    GVariant      *param,
                                    gpointer       user_data)
@@ -269,7 +314,6 @@ gbp_buildui_log_pane_save_in_file (GSimpleAction *action,
   GbpBuilduiLogPane *self = user_data;
   g_autoptr(GtkFileChooserNative) native = NULL;
   GtkWidget *window;
-  gint res;
 
   IDE_ENTRY;
 
@@ -283,64 +327,14 @@ gbp_buildui_log_pane_save_in_file (GSimpleAction *action,
                                         _("_Save"),
                                         _("_Cancel"));
 
-  res = gtk_native_dialog_run (GTK_NATIVE_DIALOG (native));
+  g_signal_connect (native,
+                    "response",
+                    G_CALLBACK (gbp_builui_log_pane_save_response),
+                    self);
 
-  if (res == GTK_RESPONSE_ACCEPT)
-    {
-      g_autoptr(GFile) file = NULL;
-
-      file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
-
-      if (file != NULL)
-        {
-          g_autoptr(GFileOutputStream) stream = NULL;
-          g_autoptr(GError) error = NULL;
-
-          stream = g_file_replace (file,
-                                   NULL,
-                                   FALSE,
-                                   G_FILE_CREATE_REPLACE_DESTINATION,
-                                   NULL,
-                                   &error);
-
-          if (stream != NULL)
-            {
-              vte_terminal_write_contents_sync (VTE_TERMINAL (self->terminal),
-                                                G_OUTPUT_STREAM (stream),
-                                                VTE_WRITE_DEFAULT,
-                                                NULL,
-                                                &error);
-              g_output_stream_close (G_OUTPUT_STREAM (stream), NULL, NULL);
-            }
-
-          if (error != NULL)
-            g_warning ("Failed to write contents: %s", error->message);
-        }
-    }
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
 
   IDE_EXIT;
-}
-
-static void
-terminal_size_allocate (GbpBuilduiLogPane *self,
-                        GtkAllocation     *allocation,
-                        IdeTerminal       *terminal)
-{
-  VtePty *pty;
-  gint rows = 0;
-  gint columns = 0;
-
-  g_assert (GBP_IS_BUILDUI_LOG_PANE (self));
-  g_assert (allocation != NULL);
-  g_assert (IDE_IS_TERMINAL (terminal));
-
-  pty = vte_terminal_get_pty (VTE_TERMINAL (self->terminal));
-
-  if (self->pipeline != NULL && pty != NULL)
-    {
-      if (vte_pty_get_size (pty, &rows, &columns, NULL))
-        _ide_pipeline_set_pty_size (self->pipeline, rows, columns);
-    }
 }
 
 static void
@@ -354,13 +348,7 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  dzl_dock_widget_set_icon_name (DZL_DOCK_WIDGET (self), "builder-build-info-symbolic");
-
-  g_signal_connect_object (self->terminal,
-                           "size-allocate",
-                           G_CALLBACK (terminal_size_allocate),
-                           self,
-                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-build-info-symbolic");
 
   g_signal_connect_object (self->terminal,
                            "window-title-changed",
@@ -368,7 +356,7 @@ gbp_buildui_log_pane_init (GbpBuilduiLogPane *self)
                            self,
                            G_CONNECT_SWAPPED);
 
-  dzl_dock_widget_set_title (DZL_DOCK_WIDGET (self), _("Build Output"));
+  panel_widget_set_title (PANEL_WIDGET (self), _("Build Output"));
 
   gbp_buildui_log_pane_reset_view (self);
 

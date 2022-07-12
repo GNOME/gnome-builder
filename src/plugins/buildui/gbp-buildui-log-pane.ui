@@ -4,22 +4,19 @@
     <child>
       <object class="GtkBox">
         <property name="orientation">horizontal</property>
-        <property name="visible">true</property>
         <child>
           <object class="GtkScrolledWindow">
-            <property name="visible">true</property>
             <child>
               <object class="IdeTerminal" id="terminal">
                 <property name="audible-bell">false</property>
-                <property name="expand">true</property>
-                <property name="visible">true</property>
+                <property name="hexpand">true</property>
+                <property name="vexpand">true</property>
               </object>
             </child>
           </object>
         </child>
         <child>
           <object class="GtkSeparator">
-            <property name="visible">true</property>
             <style>
               <class name="sidebar"/>
             </style>
@@ -27,25 +24,26 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="border-width">2</property>
+            <property name="margin-top">2</property>
+            <property name="margin-bottom">2</property>
+            <property name="margin-start">2</property>
+            <property name="margin-end">2</property>
             <property name="hexpand">false</property>
             <property name="orientation">vertical</property>
             <property name="spacing">2</property>
             <property name="vexpand">true</property>
-            <property name="visible">true</property>
             <child>
               <object class="GtkButton" id="clear_button">
                 <property name="action-name">build-log.clear</property>
-                <property name="expand">false</property>
+                <property name="hexpand">false</property>
+                <property name="vexpand">false</property>
                 <property name="tooltip-text" translatable="yes">Clear build log</property>
-                <property name="visible">true</property>
                 <style>
                   <class name="flat"/>
                 </style>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">edit-clear-all-symbolic</property>
-                    <property name="visible">true</property>
                   </object>
                 </child>
               </object>
@@ -53,16 +51,15 @@
             <child>
               <object class="GtkButton" id="stop_button">
                 <property name="action-name">build-manager.cancel</property>
-                <property name="expand">false</property>
+                <property name="hexpand">false</property>
+                <property name="vexpand">false</property>
                 <property name="tooltip-text" translatable="yes">Cancel build</property>
-                <property name="visible">true</property>
                 <style>
                   <class name="flat"/>
                 </style>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">builder-build-stop-symbolic</property>
-                    <property name="visible">true</property>
                   </object>
                 </child>
               </object>
@@ -70,16 +67,15 @@
             <child>
               <object class="GtkButton" id="save_button">
                 <property name="action-name">build-log.save</property>
-                <property name="expand">false</property>
+                <property name="hexpand">false</property>
+                <property name="vexpand">false</property>
                 <property name="tooltip-text" translatable="yes">Save build log</property>
-                <property name="visible">true</property>
                 <style>
                   <class name="flat"/>
                 </style>
                 <child>
                   <object class="GtkImage">
                     <property name="icon-name">document-save-symbolic</property>
-                    <property name="visible">true</property>
                   </object>
                 </child>
               </object>

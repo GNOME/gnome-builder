@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpBuilduiStatusIndicator" parent="GtkWidget">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">dialog-error-symbolic</property>
+                <property name="pixel-size">12</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="error_label">
+                <property name="label">0</property>
+                <attributes>
+                  <attribute name="font-features" value="tnum"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkImage">
+                <property name="icon-name">dialog-warning-symbolic</property>
+                <property name="pixel-size">12</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="warning_label">
+                <property name="label">0</property>
+                <attributes>
+                  <attribute name="font-features" value="tnum"/>
+                </attributes>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

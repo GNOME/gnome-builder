@@ -20,14 +20,14 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 #include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_BUILDUI_RUNTIME_ROW (gbp_buildui_runtime_row_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpBuilduiRuntimeRow, gbp_buildui_runtime_row, GBP, BUILDUI_RUNTIME_ROW, GtkListBoxRow)
+G_DECLARE_FINAL_TYPE (GbpBuilduiRuntimeRow, gbp_buildui_runtime_row, GBP, BUILDUI_RUNTIME_ROW, AdwActionRow)
 
 GtkWidget   *gbp_buildui_runtime_row_new    (IdeRuntime           *runtime,
                                              IdeConfig     *config);

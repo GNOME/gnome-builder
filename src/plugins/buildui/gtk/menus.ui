@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="ide-primary-workspace-surfaces-menu">
-    <section id="ide-primary-workspace-surfaces-menu-section">
-      <item>
-        <attribute name="accel">&lt;alt&gt;comma</attribute>
-        <attribute name="id">surface-menu-config</attribute>
-        <attribute name="label" translatable="yes">Build Preferences</attribute>
-        <attribute name="role">normal</attribute>
-        <attribute name="action">win.surface</attribute>
-        <attribute name="target">buildui</attribute>
-        <attribute name="verb-icon-name">builder-build-configure-symbolic</attribute>
-      </item>
-    </section>
-  </menu>
   <menu id="project-tree-menu">
-    <section id="project-tree-menu-buildui">
+    <section id="project-tree-menu-foundry-section">
       <item>
         <attribute name="id">project-tree-menu-build</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
@@ -39,6 +26,152 @@
         <section id="project-tree-menu-run-with-section">
         </section>
       </submenu>
+    </section>
+  </menu>
+  <menu id="build-menu">
+    <item>
+      <attribute name="label" translatable="yes">Configure Project…</attribute>
+      <attribute name="action">workbench.configure</attribute>
+      <attribute name="accel">&lt;alt&gt;comma</attribute>
+    </item>
+    <section id="build-menu-target">
+      <item>
+        <attribute name="label" translatable="yes">Select Build Target…</attribute>
+        <attribute name="action">win.select-build-target</attribute>
+      </item>
+    </section>
+    <section id="build-commands">
+      <item>
+        <attribute name="label" translatable="yes">_Build</attribute>
+        <attribute name="action">build-manager.build</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;&lt;shift&gt;b</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Rebuild</attribute>
+        <attribute name="action">build-manager.rebuild</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Clean</attribute>
+        <attribute name="action">build-manager.clean</attribute>
+      </item>
+    </section>
+    <section id="build-export">
+      <item>
+        <attribute name="label" translatable="yes">_Install</attribute>
+        <attribute name="action">build-manager.install</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Deploy to Device…</attribute>
+        <attribute name="action">device-manager.deploy</attribute>
+      </item>
+      <item>
+        <!-- TODO: Instead of having a generic Export via the build-manager,
+          this should move into the Flatpak plugin and have it use
+          flatpak-builder directly (reusing our cachepoints) so that
+          the output is the same as using flatpak-builder from Flathub, etc.
+        -->
+        <attribute name="label" translatable="yes">_Export</attribute>
+        <attribute name="action">build-manager.export</attribute>
+      </item>
+    </section>
+    <section id="build-cork">
+      <item>
+        <attribute name="label" translatable="yes">Stop Build</attribute>
+        <attribute name="action">build-manager.cancel</attribute>
+      </item>
+    </section>
+    <section id="build-output">
+      <item>
+        <attribute name="label" translatable="yes">Show Build _Log</attribute>
+        <attribute name="action">win.show-build-log</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;l</attribute>
+      </item>
+    </section>
+    <section id="build-deps">
+      <item>
+        <attribute name="label" translatable="yes">Update Dependencies…</attribute>
+        <attribute name="action">win.update-dependencies</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Manage SDKs…</attribute>
+        <attribute name="action">app.preferences-page</attribute>
+        <attribute name="target" type="s">'sdks'</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="run-menu">
+    <section id="run-command-section">
+      <item>
+        <attribute name="label" translatable="yes">Select Run Command…</attribute>
+        <attribute name="action">win.select-run-command</attribute>
+      </item>
+    </section>
+    <section id="run-menu-observation-section">
+      <item>
+        <attribute name="id">default-run-handler</attribute>
+        <attribute name="action">run-manager.run-with-handler</attribute>
+        <attribute name="target" type="s">'run'</attribute>
+        <attribute name="label" translatable="yes">Run</attribute>
+        <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;space</attribute>
+        <attribute name="verb-icon">builder-run-start-symbolic</attribute>
+      </item>
+    </section>
+    <section id="run-menu-tests-section"/>
+    <section id="run-menu-settings-section">
+      <attribute name="label" translatable="yes">Settings</attribute>
+      <submenu id="run-menu-appearance">
+        <attribute name="label" translatable="yes">Appearance</attribute>
+        <item>
+          <attribute name="label">Follow System Style</attribute>
+          <attribute name="role">radio</attribute>
+          <attribute name="action">run-manager.color-scheme</attribute>
+          <attribute name="target" type="s">'follow'</attribute>
+        </item>
+        <item>
+          <attribute name="label">Force Light</attribute>
+          <attribute name="role">radio</attribute>
+          <attribute name="action">run-manager.color-scheme</attribute>
+          <attribute name="target" type="s">'force-light'</attribute>
+        </item>
+        <item>
+          <attribute name="label">Force Dark</attribute>
+          <attribute name="role">radio</attribute>
+          <attribute name="action">run-manager.color-scheme</attribute>
+          <attribute name="target" type="s">'force-dark'</attribute>
+        </item>
+      </submenu>
+      <submenu id="run-menu-a11y">
+        <attribute name="label" translatable="yes">Accessibility</attribute>
+        <item>
+          <attribute name="label" translatable="yes">High Contrast</attribute>
+          <attribute name="role">check</attribute>
+          <attribute name="action">run-manager.high-contrast</attribute>
+        </item>
+        <section id="run-menu-a11y-text-direction">
+          <attribute name="label" translatable="yes">Text Direction</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Left-to-Right</attribute>
+            <attribute name="role">check</attribute>
+            <attribute name="action">run-manager.text-direction</attribute>
+            <attribute name="target" type="s">'ltr'</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Right-to-Left</attribute>
+            <attribute name="role">check</attribute>
+            <attribute name="action">run-manager.text-direction</attribute>
+            <attribute name="target" type="s">'rtl'</attribute>
+          </item>
+        </section>
+      </submenu>
+      <item>
+        <attribute name="id">run-menu-verbose-logging</attribute>
+        <attribute name="label" translatable="yes">Verbose Logging</attribute>
+        <attribute name="action">run-manager.messages-debug-all</attribute>
+        <attribute name="role">check</attribute>
+      </item>
+    </section>
+    <section id="run-menu-tools-section">
+      <attribute name="label" translatable="yes">Tools</attribute>
     </section>
   </menu>
 </interface>
