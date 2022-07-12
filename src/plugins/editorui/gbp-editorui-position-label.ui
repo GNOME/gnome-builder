@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpEditoruiPositionLabel" parent="GtkWidget">
+    <child>
+      <object class="GtkLabel" id="label">
+        <property name="width-chars">12</property>
+        <attributes>
+          <attribute name="font-features" value="tnum"/>
+        </attributes>
+      </object>
+    </child>
+  </template>
+</interface>

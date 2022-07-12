@@ -1,0 +1,14 @@
+window.preferences preferencesgroup flowbox.style-schemes flowboxchild {
+  outline-offset: 2px;
+  border-radius: 12px;
+  outline-width: 2px;
+  padding: 0;
+}
+window.preferences preferencesgroup flowbox.style-schemes flowboxchild GtkSourceStyleSchemePreview {
+  margin: 0;
+}
+window.preferences preferencesgroup flowbox.style-schemes flowboxchild GtkSourceStyleSchemePreview:not(.selected) {
+  box-shadow: 0 0 0 1px alpha(black, 0.03),
+              0 1px 3px 1px alpha(black, .07),
+              0 2px 6px 2px alpha(black, .03);
+}

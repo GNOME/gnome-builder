@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="editorui-indent-menu">
+    <section id="editorui-indent-section">
+      <attribute name="label" translatable="yes">Indentation</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Indent Using Spaces</attribute>
+        <attribute name="action">editorui.use-spaces</attribute>
+      </item>
+    </section>
+    <section id="editorui-tab-section">
+      <submenu id="editorui-tab-submenu">
+        <attribute name="label" translatable="yes">Spaces per Tab</attribute>
+        <item>
+          <attribute name="label" translatable="yes">2</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">2</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">3</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">3</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">4</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">4</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">5</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">5</attribute>
+        </item>
+        <item>
+          <attribute name="label" translatable="yes">8</attribute>
+          <attribute name="action">editorui.tab-width</attribute>
+          <attribute name="target" type="u">8</attribute>
+        </item>
+      </submenu>
+      <submenu id="editorui-indent-submenu">
+        <attribute name="label" translatable="yes">Indentation Size</attribute>
+        <section id="indent-inherit-size-section">
+          <item>
+            <attribute name="label" translatable="yes">Same as Tab Width</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">-1</attribute>
+          </item>
+        </section>
+        <section id="indent-common-sizes-section">
+          <item>
+            <attribute name="label" translatable="yes">2</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">2</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">3</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">3</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">4</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">4</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">5</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">5</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">8</attribute>
+            <attribute name="action">editorui.indent-width</attribute>
+            <attribute name="target" type="i">8</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+  <menu id="editorui-line-ends-menu">
+    <section id="editorui-line-ends-section">
+      <attribute name="label">Line Ending</attribute>
+      <!--item>
+        This item is inserted automatically when the application starts
+        so that we can alter what label is shown.
+        <attribute name="label">Linux (LF)</attribute>
+        <attribute name="action">editorui.newline-type</attribute>
+        <attribute name="target" type="s">'lf'</attribute>
+      </item-->
+      <item>
+        <attribute name="label">Windows (CR/LF)</attribute>
+        <attribute name="action">editorui.newline-type</attribute>
+        <attribute name="target" type="s">'cr-lf'</attribute>
+      </item>
+      <item>
+        <attribute name="label">Mac Classic (CR)</attribute>
+        <attribute name="action">editorui.newline-type</attribute>
+        <attribute name="target" type="s">'cr'</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-editor-page-menu">
+    <section id="ide-editor-page-document-section">
+      <attribute name="label" translatable="yes">Document</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Frame</attribute>
+        <attribute name="id">editor-document-open-in-new-workspace</attribute>
+        <attribute name="action">editorui.open-in-new-frame</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Workspace…</attribute>
+        <attribute name="id">editor-document-open-in-new-workspace</attribute>
+        <attribute name="action">editorui.open-in-new-workspace</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Print…</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-editor-workspace-menu">
+    <section id="ide-editor-workspace-menu-placeholder1">
+      <item>
+        <attribute name="label" translatable="yes">New Editor Workspace…</attribute>
+        <attribute name="id">ide-editor-workspace-new-workspace</attribute>
+        <attribute name="action">editorui.new-workspace</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-placeholder1">
+      <item>
+        <attribute name="label" translatable="yes">New Editor Workspace…</attribute>
+        <attribute name="id">ide-editor-workspace-new-workspace</attribute>
+        <attribute name="action">editorui.new-workspace</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="new-document-menu">
+    <section id="new-document-section">
+      <attribute name="id">new-document-section</attribute>
+      <item>
+        <attribute name="id">new-file</attribute>
+        <attribute name="label" translatable="yes">New _File</attribute>
+        <attribute name="action">editorui.new-file</attribute>
+        <attribute name="accel">&lt;primary&gt;n</attribute>
+      </item>
+    </section>
+    <section id="open-document-section">
+      <attribute name="id">open-document-section</attribute>
+      <item>
+        <attribute name="id">open-file</attribute>
+        <attribute name="label" translatable="yes">_Open File…</attribute>
+        <attribute name="action">workbench.open</attribute>
+        <attribute name="accel">&lt;primary&gt;o</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
