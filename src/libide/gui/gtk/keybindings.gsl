@@ -1,0 +1,94 @@
+require Ide
+
+require Adw       version "1"
+require GLib      version "2.0"
+require Gdk       version "4.0"
+require Gio       version "2.0"
+require Gsk       version "4.0"
+require Gtk       version "4.0"
+require GtkSource version "5"
+require Json      version "1.0"
+require Jsonrpc   version "1.0"
+require Panel     version "1"
+require Template  version "1.0"
+require Vte       version "3.91"
+
+def inEditor()
+  (focus != null) && typeof(focus).is_a(typeof(Ide.SourceView))
+end
+
+def inTerminal()
+  (focus != null) && typeof(focus).is_a(typeof(Ide.Terminal))
+end
+
+def inGrid()
+  (focus != null) && (focus.get_ancestor(typeof(Ide.Grid)) != null)
+end
+
+def inPage()
+  (focus != null) && (focus.get_ancestor(typeof(Ide.Page)) != null)
+end
+
+def hasProject()
+  workbench.has_project()
+end
+
+def canBuild()
+  hasProject() && Ide.BuildManager.from_context(workbench.context).get_can_build()
+end
+
+def canEdit()
+  (workspace != null) && (typeof(workspace) != typeof(Ide.GreeterWorkspace))
+end
+
+def canSearch()
+  (workspace != null) && (typeof(workspace) != typeof(Ide.GreeterWorkspace))
+end
+
+def inPopover()
+  (focus != null) && (focus.get_ancestor(typeof(Gtk.Popover)) != null)
+end
+
+def inPopoverSearch()
+  (focus != null) && (focus.get_ancestor(typeof(Ide.SearchPopover)) != null)
+end
+
+def inPageSearch()
+  ((page != null) && \
+   (focus != null) && \
+   focus.is_ancestor(page) && \
+   (focus.get_ancestor(typeof(Gtk.Revealer)) != null) && \
+   !page.is_ancestor(focus.get_ancestor(typeof(Gtk.Revealer))))
+end
+
+def isBuilding()
+  workbench.has_project() && Ide.BuildManager.from_context(workbench.context).get_busy()
+end
+
+def isRunning()
+  workbench.has_project() && Ide.RunManager.from_context(workbench.context).get_busy()
+end
+
+def isDebugging()
+  workbench.has_project() && Ide.DebugManager.from_context(workbench.context).get_active()
+end
+
+def inEditorWithLanguage(language_id)
+  inEditor() && (page.get_buffer().get_language_id() == language_id)
+end
+
+def hasSelection()
+  inEditor() && page.get_buffer().get_has_selection()
+end
+
+def inPageWithTypeName(name)
+  (page != null) && (typeof(page).name() == name) && (focus != null) && focus.is_ancestor(page)
+end
+
+def hasErrors()
+  workbench.has_project() && (Ide.BuildManager.from_context(workbench.context).get_error_count() > 0)
+end
+
+def hasWarnings()
+  workbench.has_project() && (Ide.BuildManager.from_context(workbench.context).get_warning_count() > 0)
+end

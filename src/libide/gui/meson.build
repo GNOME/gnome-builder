@@ -27,6 +27,7 @@ libide_gui_public_headers = [
   'ide-preferences-window.h',
   'ide-primary-workspace.h',
   'ide-session-addin.h',
+  'ide-shortcut-provider.h',
   'ide-workbench.h',
   'ide-workbench-addin.h',
   'ide-workspace.h',
@@ -49,6 +50,8 @@ libide_gui_private_headers = [
   'ide-preferences-builtin-private.h',
   'ide-recoloring-private.h',
   'ide-session-private.h',
+  'ide-shortcut-bundle-private.h',
+  'ide-shortcut-manager-private.h',
 ]
 
 libide_gui_private_sources = [
@@ -63,6 +66,8 @@ libide_gui_private_sources = [
   'ide-primary-workspace-actions.c',
   'ide-recoloring.c',
   'ide-session.c',
+  'ide-shortcut-bundle.c',
+  'ide-shortcut-manager.c',
   'ide-workspace-actions.c',
 ]
 
@@ -88,6 +93,7 @@ libide_gui_public_sources = [
   'ide-preferences-addin.c',
   'ide-preferences-window.c',
   'ide-session-addin.c',
+  'ide-shortcut-provider.c',
   'ide-workbench.c',
   'ide-workbench-addin.c',
   'ide-workspace.c',
