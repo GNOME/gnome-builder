@@ -28,7 +28,8 @@
 
 struct _GbpNewcomersSection
 {
-  GtkBin      parent_instance;
+  GtkWidget   parent_instance;
+  GtkBox     *box;
   GtkListBox *list_box;
 };
 
@@ -65,94 +66,52 @@ gbp_newcomers_section_get_priority (IdeGreeterSection *section)
   return 100;
 }
 
-static void
-gbp_newcomers_section_filter_child (GtkWidget *child,
-                                    gpointer   user_data)
-{
-  struct {
-    DzlPatternSpec *spec;
-    gboolean found;
-  } *filter = user_data;
-  gboolean match = TRUE;
-
-  g_assert (GBP_IS_NEWCOMERS_PROJECT (child));
-  g_assert (user_data != NULL);
-
-  if (filter->spec != NULL)
-    {
-      const gchar *name;
-
-      name = gbp_newcomers_project_get_name (GBP_NEWCOMERS_PROJECT (child));
-      match = dzl_pattern_spec_match (filter->spec, name);
-    }
-
-  gtk_widget_set_visible (child, match);
-
-  filter->found |= match;
-}
-
 static gboolean
 gbp_newcomers_section_filter (IdeGreeterSection *section,
-                              DzlPatternSpec    *spec)
+                              IdePatternSpec    *spec)
 {
   GbpNewcomersSection *self = (GbpNewcomersSection *)section;
-  struct {
-    DzlPatternSpec *spec;
-    gboolean found;
-  } filter = { spec, FALSE };
+  gboolean found = FALSE;
 
   g_assert (GBP_IS_NEWCOMERS_SECTION (self));
 
-  gtk_container_foreach (GTK_CONTAINER (self->list_box),
-                         gbp_newcomers_section_filter_child,
-                         &filter);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->list_box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (GBP_IS_NEWCOMERS_PROJECT (child))
+        {
+          const char *name = gbp_newcomers_project_get_name (GBP_NEWCOMERS_PROJECT (child));
+          gboolean match = spec == NULL || ide_pattern_spec_match (spec, name);
 
-  return filter.found;
-}
+          gtk_widget_set_visible (child, match);
 
-static void
-gbp_newcomers_section_activate_cb (GtkWidget *widget,
-                                   gpointer   user_data)
-{
-  GbpNewcomersProject *project = (GbpNewcomersProject *)widget;
-  struct {
-    GbpNewcomersSection *self;
-    gboolean handled;
-  } *activate = user_data;
+          found |= match;
+        }
+    }
 
-  g_assert (GBP_IS_NEWCOMERS_PROJECT (project));
-  g_assert (activate != NULL);
-  g_assert (GBP_IS_NEWCOMERS_SECTION (activate->self));
-
-  if (activate->handled || !gtk_widget_get_visible (widget))
-    return;
-
-  gbp_newcomers_section_row_activated (activate->self,
-                                         project,
-                                         activate->self->list_box);
-
-  activate->handled = TRUE;
+  return found;
 }
 
 static gboolean
 gbp_newcomers_section_activate_first (IdeGreeterSection *section)
 {
   GbpNewcomersSection *self = (GbpNewcomersSection *)section;
-  struct {
-    GbpNewcomersSection *self;
-    gboolean handled;
-  } activate;
 
   g_assert (GBP_IS_NEWCOMERS_SECTION (self));
 
-  activate.self = self;
-  activate.handled = FALSE;
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->list_box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (GTK_WIDGET (self->list_box)))
+    {
+      if (GBP_IS_NEWCOMERS_PROJECT (child))
+        {
+          gbp_newcomers_section_row_activated (self, GBP_NEWCOMERS_PROJECT (child), self->list_box);
+          return TRUE;
+        }
+    }
 
-  gtk_container_foreach (GTK_CONTAINER (self->list_box),
-                         gbp_newcomers_section_activate_cb,
-                         &activate);
-
-  return activate.handled;
+  return FALSE;
 }
 
 static void
@@ -171,9 +130,8 @@ greeter_section_iface_init (IdeGreeterSectionInterface *iface)
   iface->set_selection_mode = gbp_newcomers_section_set_selection_mode;
 }
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpNewcomersSection, gbp_newcomers_section, GTK_TYPE_BIN,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION,
-                                                greeter_section_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpNewcomersSection, gbp_newcomers_section, GTK_TYPE_WIDGET,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_GREETER_SECTION, greeter_section_iface_init))
 
 static gboolean
 clear_selection_from_timeout (gpointer data)
@@ -249,6 +207,16 @@ gbp_newcomers_section_row_activated (GbpNewcomersSection *self,
 }
 
 static void
+gbp_newcomers_section_dispose (GObject *object)
+{
+  GbpNewcomersSection *self = (GbpNewcomersSection *)object;
+
+  g_clear_pointer ((GtkWidget **)&self->box, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gbp_newcomers_section_parent_class)->dispose (object);
+}
+
+static void
 gbp_newcomers_section_get_property (GObject    *object,
                                     guint       prop_id,
                                     GValue     *value,
@@ -271,6 +239,7 @@ gbp_newcomers_section_class_init (GbpNewcomersSectionClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = gbp_newcomers_section_dispose;
   object_class->get_property = gbp_newcomers_section_get_property;
 
   g_object_class_install_property (object_class,
@@ -280,7 +249,9 @@ gbp_newcomers_section_class_init (GbpNewcomersSectionClass *klass)
                                                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   gtk_widget_class_set_css_name (widget_class, "newcomers");
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/newcomers/gbp-newcomers-section.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpNewcomersSection, box);
   gtk_widget_class_bind_template_child (widget_class, GbpNewcomersSection, list_box);
 
   g_type_ensure (GBP_TYPE_NEWCOMERS_PROJECT);
