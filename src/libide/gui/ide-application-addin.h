@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_APPLICATION_ADDIN (ide_application_addin_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeApplicationAddin, ide_application_addin, IDE, APPLICATION_ADDIN, GObject)
 
 /**
@@ -42,8 +42,6 @@ G_DECLARE_INTERFACE (IdeApplicationAddin, ide_application_addin, IDE, APPLICATIO
  *   g_application_add_main_option_entries().
  * @handle_command_line: Set this virtual method to handle parsing command
  *   line arguments.
- *
- * Since: 3.32
  */
 struct _IdeApplicationAddinInterface
 {
@@ -71,32 +69,32 @@ struct _IdeApplicationAddinInterface
                                IdeWorkbench            *workbench);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_open                (IdeApplicationAddin    *self,
                                                 IdeApplication         *application,
                                                 GFile                 **files,
                                                 gint                    n_files,
                                                 const gchar             *hint);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_activate            (IdeApplicationAddin     *self,
                                                 IdeApplication          *application);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_load                (IdeApplicationAddin     *self,
                                                 IdeApplication          *application);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_unload              (IdeApplicationAddin     *self,
                                                 IdeApplication          *application);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_add_option_entries  (IdeApplicationAddin     *self,
                                                 IdeApplication          *application);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_handle_command_line (IdeApplicationAddin     *self,
                                                 IdeApplication          *application,
                                                 GApplicationCommandLine *cmdline);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_workbench_added     (IdeApplicationAddin     *self,
                                                 IdeWorkbench            *workbench);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_application_addin_workbench_removed   (IdeApplicationAddin     *self,
                                                 IdeWorkbench            *workbench);
 

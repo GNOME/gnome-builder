@@ -38,8 +38,6 @@
  *
  * Use this interface when you can share code between multiple projects that
  * are open at the same time.
- *
- * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeApplicationAddin, ide_application_addin, G_TYPE_OBJECT)
@@ -70,8 +68,6 @@ ide_application_addin_default_init (IdeApplicationAddinInterface *iface)
  *
  * This function is activated when the GApplication::activate signal is
  * emitted.
- *
- * Since: 3.32
  */
 void
 ide_application_addin_activate (IdeApplicationAddin *self,
@@ -93,8 +89,6 @@ ide_application_addin_activate (IdeApplicationAddin *self,
  * @hint: a hint provided by the calling instance
  *
  * This function is activated when the #GApplication::open signal is emitted.
- *
- * Since: 3.32
  */
 void
 ide_application_addin_open (IdeApplicationAddin  *self,
@@ -120,8 +114,6 @@ ide_application_addin_open (IdeApplicationAddin  *self,
  *
  * Use this to setup code in your plugin that needs to be loaded once per
  * application process.
- *
- * Since: 3.32
  */
 void
 ide_application_addin_load (IdeApplicationAddin *self,
@@ -143,8 +135,6 @@ ide_application_addin_load (IdeApplicationAddin *self,
  *
  * Use this function to cleanup after anything setup in
  * ide_application_addin_load().
- *
- * Since: 3.32
  */
 void
 ide_application_addin_unload (IdeApplicationAddin *self,
@@ -172,8 +162,6 @@ ide_application_addin_unload (IdeApplicationAddin *self,
  * Make sure you set `X-At-Startup=true` in your `.plugin` file so that the
  * plugin is loaded early during startup or this virtual function will not
  * be called.
- *
- * Since: 3.32
  */
 void
 ide_application_addin_add_option_entries (IdeApplicationAddin *self,
@@ -197,8 +185,6 @@ ide_application_addin_add_option_entries (IdeApplicationAddin *self,
  * ide_application_addin_add_option_entries().
  *
  * See g_application_command_line_get_option_dict() for more information.
- *
- * Since: 3.32
  */
 void
 ide_application_addin_handle_command_line (IdeApplicationAddin     *self,

@@ -24,7 +24,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <handy.h>
+
 #include <ide-build-ident.h>
 #include <libide-projects.h>
 
@@ -33,7 +33,7 @@
 #include "ide-application-private.h"
 #include "ide-gui-global.h"
 #include "ide-preferences-window.h"
-#include "ide-shortcuts-window-private.h"
+#include "ide-primary-workspace.h"
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -41,6 +41,8 @@ ide_application_actions_preferences (GSimpleAction *action,
                                      gpointer       user_data)
 {
   IdeApplication *self = user_data;
+  const char *page = NULL;
+  IdeContext *context = NULL;
   GtkWindow *toplevel = NULL;
   GtkWindow *window;
   GList *windows;
@@ -49,6 +51,10 @@ ide_application_actions_preferences (GSimpleAction *action,
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_APPLICATION (self));
+
+  if (parameter != NULL &&
+      g_variant_is_of_type (parameter, G_VARIANT_TYPE_STRING))
+    page = g_variant_get_string (parameter, NULL);
 
   /* Locate a toplevel for a transient-for property, or a previous
    * preferences window to display.
@@ -64,23 +70,31 @@ ide_application_actions_preferences (GSimpleAction *action,
           return;
         }
 
-      if (toplevel == NULL && IDE_IS_WORKBENCH (win))
+      if (toplevel == NULL && IDE_IS_PRIMARY_WORKSPACE (win))
         toplevel = win;
     }
+
+  /* We want to make a context available if necessary */
+  if (IDE_IS_WORKSPACE (toplevel))
+    context = ide_workspace_get_context (IDE_WORKSPACE (toplevel));
 
   /* Create a new window for preferences, with enough space for
    * 2 columns of preferences. The window manager will automatically
    * maximize the window if necessary.
    */
   window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
+                         "context", context,
+                         "mode", IDE_PREFERENCES_MODE_APPLICATION,
                          "transient-for", toplevel,
-                         "default-width", 1300,
-                         "default-height", 800,
+                         "default-width", 1080,
+                         "default-height", 720,
                          "title", _("Builder — Preferences"),
-                         "window-position", GTK_WIN_POS_CENTER_ON_PARENT,
                          NULL);
   gtk_application_add_window (GTK_APPLICATION (self), window);
   ide_gtk_window_present (window);
+
+  if (page != NULL)
+    ide_preferences_window_set_page (IDE_PREFERENCES_WINDOW (window), page);
 
   IDE_EXIT;
 }
@@ -143,12 +157,11 @@ ide_application_actions_about (GSimpleAction *action,
                          "copyright", "© 2014–2022 Christian Hergert, et al.",
                          "documenters", ide_application_credits_documenters,
                          "license-type", GTK_LICENSE_GPL_3_0,
-                         "logo-icon-name", "org.gnome.Builder",
+                         "logo-icon-name", ide_get_application_id (),
                          "modal", TRUE,
                          "program-name", _("GNOME Builder"),
                          "transient-for", parent,
                          "translator-credits", _("translator-credits"),
-                         "use-header-bar", TRUE,
                          "version", version->str,
                          "website", "https://wiki.gnome.org/Apps/Builder",
                          "website-label", _("Learn more about GNOME Builder"),
@@ -157,7 +170,6 @@ ide_application_actions_about (GSimpleAction *action,
                                        _("Funded By"),
                                        ide_application_credits_funders);
 
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
   ide_gtk_window_present (GTK_WINDOW (dialog));
 }
 
@@ -254,68 +266,6 @@ ide_application_actions_help (GSimpleAction *action,
 }
 
 static void
-ide_application_actions_shortcuts (GSimpleAction *action,
-                                   GVariant      *variant,
-                                   gpointer       user_data)
-{
-  IdeApplication *self = user_data;
-  GtkWindow *window;
-  GtkWindow *parent = NULL;
-  GList *list;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  list = gtk_application_get_windows (GTK_APPLICATION (self));
-
-  for (; list; list = list->next)
-    {
-      window = list->data;
-
-      if (IDE_IS_SHORTCUTS_WINDOW (window))
-        {
-          ide_gtk_window_present (window);
-          return;
-        }
-
-      if (IDE_IS_WORKBENCH (window))
-        {
-          parent = window;
-          break;
-        }
-    }
-
-  window = g_object_new (IDE_TYPE_SHORTCUTS_WINDOW,
-                         "application", self,
-                         "window-position", GTK_WIN_POS_CENTER,
-                         "transient-for", parent,
-                         NULL);
-
-  ide_gtk_window_present (GTK_WINDOW (window));
-}
-
-static void
-ide_application_actions_nighthack (GSimpleAction *action,
-                                   GVariant      *variant,
-                                   gpointer       user_data)
-{
-  g_autoptr(GSettings) settings = NULL;
-
-  settings = g_settings_new ("org.gnome.builder");
-  g_settings_set_string (settings, "style-variant", "dark");
-}
-
-static void
-ide_application_actions_dayhack (GSimpleAction *action,
-                                 GVariant      *variant,
-                                 gpointer       user_data)
-{
-  g_autoptr(GSettings) settings = NULL;
-
-  settings = g_settings_new ("org.gnome.builder");
-  g_settings_set_string (settings, "style-variant", "light");
-}
-
-static void
 ide_application_actions_load_project (GSimpleAction *action,
                                       GVariant      *args,
                                       gpointer       user_data)
@@ -375,13 +325,13 @@ ide_application_actions_stats (GSimpleAction *action,
   scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
                            "visible", TRUE,
                            NULL);
-  gtk_container_add (GTK_CONTAINER (window), GTK_WIDGET (scroller));
+  gtk_window_set_child (window, GTK_WIDGET (scroller));
   text_view = g_object_new (GTK_TYPE_TEXT_VIEW,
                             "editable", FALSE,
                             "monospace", TRUE,
                             "visible", TRUE,
                             NULL);
-  gtk_container_add (GTK_CONTAINER (scroller), GTK_WIDGET (text_view));
+  gtk_scrolled_window_set_child(scroller, GTK_WIDGET (text_view));
   buffer = gtk_text_view_get_buffer (text_view);
 
   gtk_text_buffer_insert_at_cursor (buffer, "Count | Type\n", -1);
@@ -414,20 +364,21 @@ ide_application_actions_stats (GSimpleAction *action,
 }
 
 static const GActionEntry IdeApplicationActions[] = {
-  { "about:types",  ide_application_actions_stats },
-  { "about",        ide_application_actions_about },
-  { "dayhack",      ide_application_actions_dayhack },
-  { "nighthack",    ide_application_actions_nighthack },
+  { "about:types", ide_application_actions_stats },
+  { "about", ide_application_actions_about },
   { "load-project", ide_application_actions_load_project, "s"},
-  { "preferences",  ide_application_actions_preferences },
-  { "quit",         ide_application_actions_quit },
-  { "shortcuts",    ide_application_actions_shortcuts },
-  { "help",         ide_application_actions_help },
+  { "preferences", ide_application_actions_preferences },
+  { "preferences-page", ide_application_actions_preferences, "s" },
+  { "quit", ide_application_actions_quit },
+  { "help", ide_application_actions_help },
 };
 
 void
 _ide_application_init_actions (IdeApplication *self)
 {
+  g_autoptr(GAction) style_action = NULL;
+  g_autoptr(GAction) style_scheme_action = NULL;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
@@ -435,6 +386,12 @@ _ide_application_init_actions (IdeApplication *self)
                                    IdeApplicationActions,
                                    G_N_ELEMENTS (IdeApplicationActions),
                                    self);
+
+  style_action = g_settings_create_action (self->settings, "style-variant");
+  g_action_map_add_action (G_ACTION_MAP (self), style_action);
+
+  style_scheme_action = g_settings_create_action (self->editor_settings, "style-scheme-name");
+  g_action_map_add_action (G_ACTION_MAP (self), style_scheme_action);
 }
 
 static void
