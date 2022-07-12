@@ -1,15 +1,12 @@
 [Plugin]
-Authors=Matthew Leeds <mleeds@redhat.com>
+Authors=Matthew Leeds <mleeds@redhat.com>, Christian Hergert <chergert@redhat.com>
 Builtin=true
-Copyright=Copyright © 2017 Matthew Leeds
-Depends=editor;buildui;
-Description=Provides support for Makefile projects without autotools
-Hidden=true
-Loader=python3
-Module=make_plugin
+Copyright=Copyright © 2017 Matthew Leeds, Copyright © 2022 Christian Hergert
+Description=Provides basic integration for Makefile projects
+Embedded=_gbp_make_register_types
+Module=make
 Name=Make
-X-Has-Resources=true
-X-Project-File-Filter-Name=Makefile Project
+X-Category=buildsystems
+X-Project-File-Filter-Name=Makefile
 X-Project-File-Filter-Pattern=Makefile
 X-Project-File-Filter-Content-Type=text/x-makefile
-X-Builder-ABI=@PACKAGE_ABI@
