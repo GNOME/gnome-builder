@@ -12,6 +12,11 @@ project('gnome-builder', 'c',
 version_split = meson.project_version().split('.')
 MAJOR_VERSION = version_split[0]
 
+app_id = 'org.gnome.Builder'
+if version_split[1][0] in ['a', 'b', 'r']
+  app_id = 'org.gnome.Builder.Devel'
+endif
+
 libide_api_version = '@0@'.format(MAJOR_VERSION)
 
 pkgdocdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'gnome-builder')
@@ -72,6 +77,7 @@ status = [
 ]
 
 config_h = configuration_data()
+config_h.set_quoted('APP_ID', app_id)
 
 # Message of doom
 if version_split[1][0] in ['a', 'b', 'r']

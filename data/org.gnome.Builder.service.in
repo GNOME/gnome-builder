@@ -1,4 +1,4 @@
 [D-BUS Service]
-Name=org.gnome.Builder
+Name=@APP_ID@
 Exec=@bindir@/gnome-builder --gapplication-service
 

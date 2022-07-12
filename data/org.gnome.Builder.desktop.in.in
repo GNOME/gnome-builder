@@ -3,7 +3,7 @@ Name=Builder
 Comment=Build software for GNOME
 Exec=gnome-builder %U
 # Translators: Do NOT translate or transliterate this text (this is an icon file name)!
-Icon=org.gnome.Builder
+Icon=@APP_ID@
 DBusActivatable=true
 StartupNotify=true
 Terminal=false
