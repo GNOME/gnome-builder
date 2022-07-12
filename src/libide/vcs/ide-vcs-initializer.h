@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_INITIALIZER (ide_vcs_initializer_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeVcsInitializer, ide_vcs_initializer, IDE, VCS_INITIALIZER, IdeObject)
 
 struct _IdeVcsInitializerInterface
@@ -48,15 +48,15 @@ struct _IdeVcsInitializerInterface
                                  GError              **error);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar    *ide_vcs_initializer_get_title         (IdeVcsInitializer    *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void      ide_vcs_initializer_initialize_async  (IdeVcsInitializer    *self,
                                                  GFile                *file,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean  ide_vcs_initializer_initialize_finish (IdeVcsInitializer    *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);
