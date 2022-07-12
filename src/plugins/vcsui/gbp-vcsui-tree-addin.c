@@ -37,6 +37,8 @@ struct _GbpVcsuiTreeAddin
 {
   GObject        parent_instance;
 
+  GActionMap    *actions;
+
   IdeTree       *tree;
   IdeTreeModel  *model;
   IdeVcs        *vcs;
@@ -170,6 +172,7 @@ gbp_vcsui_tree_addin_load (IdeTreeAddin *addin,
   gtk_widget_insert_action_group (GTK_WIDGET (tree),
                                   "vcsui",
                                   G_ACTION_GROUP (group));
+  self->actions = g_object_ref (G_ACTION_MAP (group));
 
   if ((workbench = ide_widget_get_workbench (GTK_WIDGET (tree))) &&
       (vcs = ide_workbench_get_vcs (workbench)) &&
@@ -199,6 +202,7 @@ gbp_vcsui_tree_addin_unload (IdeTreeAddin *addin,
 
   gtk_widget_insert_action_group (GTK_WIDGET (tree), "vcsui", NULL);
 
+  g_clear_object (&self->actions);
   g_clear_object (&self->monitor);
   g_clear_object (&self->vcs);
   self->model = NULL;
@@ -211,6 +215,7 @@ gbp_vcsui_tree_addin_selection_changed (IdeTreeAddin *addin,
 {
   GbpVcsuiTreeAddin *self = (GbpVcsuiTreeAddin *)addin;
   gboolean is_branch = FALSE;
+  GAction *action;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_VCSUI_TREE_ADDIN (self));
@@ -219,12 +224,11 @@ gbp_vcsui_tree_addin_selection_changed (IdeTreeAddin *addin,
   if (node != NULL)
     is_branch = ide_tree_node_holds (node, IDE_TYPE_VCS_BRANCH);
 
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "vcsui", "switch-branch",
-                             "enabled", is_branch,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "vcsui", "push-branch",
-                             "enabled", is_branch,
-                             NULL);
+  action = g_action_map_lookup_action (self->actions, "switch-branch");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), is_branch);
+
+  action = g_action_map_lookup_action (self->actions, "push-branch");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), is_branch);
 }
 
 static void
@@ -289,7 +293,7 @@ gbp_vcsui_tree_addin_list_branches_cb (GObject      *object,
       for (guint i = 0; i < branches->len; i++)
         {
           IdeVcsBranch *branch = g_ptr_array_index (branches, i);
-          g_autofree gchar *name = ide_vcs_branch_get_name (branch);
+          g_autofree gchar *name = ide_vcs_branch_dup_name (branch);
           g_autoptr(IdeTreeNode) child = NULL;
 
           child = g_object_new (IDE_TYPE_TREE_NODE,
@@ -329,7 +333,7 @@ gbp_vcsui_tree_addin_list_tags_cb (GObject      *object,
       for (guint i = 0; i < tags->len; i++)
         {
           IdeVcsTag *tag = g_ptr_array_index (tags, i);
-          g_autofree gchar *name = ide_vcs_tag_get_name (tag);
+          g_autofree gchar *name = ide_vcs_tag_dup_name (tag);
           g_autoptr(IdeTreeNode) child = NULL;
 
           child = g_object_new (IDE_TYPE_TREE_NODE,
@@ -461,7 +465,7 @@ tree_addin_iface_init (IdeTreeAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVcsuiTreeAddin, gbp_vcsui_tree_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
 
 static void
 gbp_vcsui_tree_addin_class_init (GbpVcsuiTreeAddinClass *klass)
