@@ -535,7 +535,7 @@ guess_best_config (GPtrArray *ar)
       /* If appid.json is the same as the filename, that is the
        * best match (after unstable) we can have. Use it.
        */
-      if (dzl_str_equal0 (app_id_json, base))
+      if (ide_str_equal0 (app_id_json, base))
         return IDE_CONFIG (config);
     }
 

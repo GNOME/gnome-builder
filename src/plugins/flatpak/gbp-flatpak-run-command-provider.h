@@ -1,6 +1,6 @@
-/* gbp-flatpak-build-target.h
+/* gbp-flatpak-build-target-provider.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <libide-foundry.h>
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_FLATPAK_BUILD_TARGET (gbp_flatpak_build_target_get_type())
+#define GBP_TYPE_FLATPAK_RUN_COMMAND_PROVIDER (gbp_flatpak_run_command_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpFlatpakBuildTarget, gbp_flatpak_build_target, GBP, FLATPAK_BUILD_TARGET, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpFlatpakRunCommandProvider, gbp_flatpak_run_command_provider, GBP, FLATPAK_RUN_COMMAND_PROVIDER, IdeObject)
 
 G_END_DECLS

@@ -121,7 +121,7 @@ gbp_flatpak_download_stage_query (IdePipelineStage    *stage,
       ide_subprocess_launcher_push_argv (launcher, "--ccache");
       ide_subprocess_launcher_push_argv (launcher, "--force-clean");
 
-      if (!dzl_str_empty0 (self->state_dir))
+      if (!ide_str_empty0 (self->state_dir))
         {
           ide_subprocess_launcher_push_argv (launcher, "--state-dir");
           ide_subprocess_launcher_push_argv (launcher, self->state_dir);
@@ -193,8 +193,6 @@ gbp_flatpak_download_stage_class_init (GbpFlatpakDownloadStageClass *klass)
    *
    * The "state-dir" is the flatpak-builder state directory, to be used
    * as a parameter to "flatpak-builder --state-dir".
-   *
-   * Since: 3.28
    */
   properties [PROP_STATE_DIR] =
     g_param_spec_string ("state-dir",
