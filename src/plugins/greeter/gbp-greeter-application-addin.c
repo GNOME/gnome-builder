@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-greeter.h>
 #include <libide-gui.h>
 
@@ -35,9 +36,9 @@ struct _GbpGreeterApplicationAddin
 };
 
 static void
-present_greeter_with_surface (GSimpleAction *action,
-                              GVariant      *param,
-                              gpointer       user_data)
+present_greeter_with_page (GSimpleAction *action,
+                           GVariant      *param,
+                           gpointer       user_data)
 {
   GbpGreeterApplicationAddin *self = user_data;
   g_autoptr(IdeWorkbench) workbench = NULL;
@@ -56,7 +57,7 @@ present_greeter_with_surface (GSimpleAction *action,
   ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
 
   if (param != NULL && (name = g_variant_get_string (param, NULL)) && !ide_str_empty0 (name))
-    ide_workspace_set_visible_surface_name (IDE_WORKSPACE (workspace), name);
+    ide_greeter_workspace_set_page_name (workspace, name);
 
   ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
 }
@@ -72,7 +73,7 @@ new_window (GSimpleAction *action,
   g_assert (GBP_IS_GREETER_APPLICATION_ADDIN (self));
   g_assert (IDE_IS_APPLICATION (self->application));
 
-  present_greeter_with_surface (NULL, NULL, self);
+  present_greeter_with_page (NULL, NULL, self);
 }
 
 static void
@@ -86,7 +87,7 @@ clone_repo_cb (GSimpleAction *action,
   g_assert (GBP_IS_GREETER_APPLICATION_ADDIN (user_data));
 
   clone_param = g_variant_take_ref (g_variant_new_string ("clone"));
-  present_greeter_with_surface (NULL, clone_param, user_data);
+  present_greeter_with_page (NULL, clone_param, user_data);
 }
 
 static void
@@ -112,7 +113,7 @@ open_project (GSimpleAction *action,
 }
 
 static const GActionEntry actions[] = {
-  { "present-greeter-with-surface", present_greeter_with_surface, "s" },
+  { "present-greeter-with-page", present_greeter_with_page, "s" },
   { "open-project", open_project },
   { "clone-repo", clone_repo_cb },
   { "new-window", new_window },
@@ -132,14 +133,6 @@ gbp_greeter_application_addin_add_option_entries (IdeApplicationAddin *addin,
                                  G_OPTION_ARG_NONE,
                                  _("Display a new greeter window"),
                                  NULL);
-
-  g_application_add_main_option (G_APPLICATION (app),
-                                 "clone",
-                                 0,
-                                 G_OPTION_FLAG_IN_MAIN,
-                                 G_OPTION_ARG_STRING,
-                                 _("Begin cloning project from URI"),
-                                 "URI");
 }
 
 static void
@@ -150,8 +143,7 @@ gbp_greeter_application_addin_handle_command_line (IdeApplicationAddin     *addi
   GbpGreeterApplicationAddin *self = (GbpGreeterApplicationAddin *)addin;
   g_auto(GStrv) argv = NULL;
   GVariantDict *dict;
-  const gchar *clone_uri = NULL;
-  gint argc;
+  int argc;
 
   g_assert (GBP_IS_GREETER_APPLICATION_ADDIN (self));
   g_assert (IDE_IS_APPLICATION (application));
@@ -171,33 +163,8 @@ gbp_greeter_application_addin_handle_command_line (IdeApplicationAddin     *addi
   if ((!g_application_command_line_get_is_remote (cmdline) && argc == 1) ||
       g_variant_dict_contains (dict, "greeter"))
     {
-      present_greeter_with_surface (NULL, NULL, addin);
+      present_greeter_with_page (NULL, NULL, addin);
       return;
-    }
-
-  /*
-   * If the --clone=URI option was provided, switch the greeter to the
-   * clone surface and begin cloning.
-   */
-  if (dict != NULL && g_variant_dict_lookup (dict, "clone", "&s", &clone_uri))
-    {
-      IdeGreeterWorkspace *workspace;
-      IdeWorkbench *workbench;
-      IdeSurface *surface;
-
-      workbench = ide_workbench_new ();
-      ide_application_add_workbench (self->application, workbench);
-
-      workspace = ide_greeter_workspace_new (self->application);
-      ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
-
-      surface = ide_workspace_get_surface_by_name (IDE_WORKSPACE (workspace), "clone");
-      ide_workspace_set_visible_surface (IDE_WORKSPACE (workspace), surface);
-
-      if (IDE_IS_CLONE_SURFACE (surface))
-        ide_clone_surface_set_uri (IDE_CLONE_SURFACE (surface), clone_uri);
-
-      ide_workbench_focus_workspace (workbench, IDE_WORKSPACE (workspace));
     }
 }
 
@@ -244,7 +211,7 @@ gbp_greeter_application_addin_activate (IdeApplicationAddin *addin,
   g_assert (IDE_IS_APPLICATION (app));
 
   if (!(window = gtk_application_get_active_window (GTK_APPLICATION (app))))
-    present_greeter_with_surface (NULL, NULL, addin);
+    present_greeter_with_page (NULL, NULL, addin);
 }
 
 static void
@@ -258,7 +225,7 @@ application_addin_iface_init (IdeApplicationAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGreeterApplicationAddin, gbp_greeter_application_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_APPLICATION_ADDIN, application_addin_iface_init))
 
 static void
 gbp_greeter_application_addin_class_init (GbpGreeterApplicationAddinClass *klass)
