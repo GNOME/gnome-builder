@@ -1,11 +1,11 @@
 [Plugin]
 Builtin=true
-Name=Intelephense LSP plugin
-Description=Provides a Language Server Protocol implementation for PHP.
-Loader=python3
+Name=PHP Language Server
+Description=Provides integration with the intelephense language server for PHP
+Embedded=_gbp_intelephense_register_types
 Module=intelephense
 Author=Peter Maatman <blackwolf12333@gmail.com>
-X-Builder-ABI=@PACKAGE_ABI@
+X-Category=lsps
 X-Completion-Provider-Languages=php
 X-Symbol-Resolver-Languages=php
 X-Diagnostic-Provider-Languages=php
