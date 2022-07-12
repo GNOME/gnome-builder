@@ -50,6 +50,7 @@ G_BEGIN_DECLS
 #include "ide-foundry-global.h"
 #include "ide-local-device.h"
 #include "ide-pipeline-addin.h"
+#include "ide-pipeline-stage-command.h"
 #include "ide-pipeline-stage-launcher.h"
 #include "ide-pipeline-stage-mkdirs.h"
 #include "ide-pipeline-stage-transfer.h"
