@@ -22,70 +22,50 @@
 
 #include "config.h"
 
-#include <dazzle.h>
-
-#include "ide-gui-private.h"
+#include "ide-application.h"
 #include "ide-header-bar.h"
 
 typedef struct
 {
-  gchar              *menu_id;
+  char *menu_id;
 
-  GtkToggleButton    *fullscreen_button;
-  GtkImage           *fullscreen_image;
-  DzlShortcutTooltip *fullscreen_tooltip;
+  AdwHeaderBar *header_bar;
+  GtkMenuButton *menu_button;
+  GtkCenterBox *center_box;
+  GtkBox *left;
+  GtkBox *left_of_center;
+  GtkBox *right;
+  GtkBox *right_of_center;
 
-  DzlMenuButton      *menu_button;
-  DzlShortcutTooltip *menu_tooltip;
-  GtkBox             *primary;
-  GtkBox             *secondary;
-
-  guint               show_fullscreen_button : 1;
+  guint flat : 1;
 } IdeHeaderBarPrivate;
 
 enum {
   PROP_0,
+  PROP_FLAT,
   PROP_MENU_ID,
-  PROP_SHOW_FULLSCREEN_BUTTON,
   N_PROPS
 };
 
 static void buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (IdeHeaderBar, ide_header_bar, HDY_TYPE_HEADER_BAR,
+G_DEFINE_TYPE_WITH_CODE (IdeHeaderBar, ide_header_bar, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (IdeHeaderBar)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
-static GParamSpec        *properties [N_PROPS];
-static GtkBuildableIface *buildable_parent;
+static GtkBuildableIface *buildable_parent_iface;
+static GParamSpec *properties [N_PROPS];
 
 static void
-on_fullscreen_toggled_cb (GtkToggleButton *button,
-                          GParamSpec      *pspec,
-                          GtkImage        *image)
-{
-  const gchar *icon_name;
-
-  g_assert (GTK_IS_TOGGLE_BUTTON (button));
-  g_assert (GTK_IS_IMAGE (image));
-
-  if (gtk_toggle_button_get_active (button))
-    icon_name = "view-restore-symbolic";
-  else
-    icon_name = "view-fullscreen-symbolic";
-
-  g_object_set (image, "icon-name", icon_name, NULL);
-}
-
-static void
-ide_header_bar_finalize (GObject *object)
+ide_header_bar_dispose (GObject *object)
 {
   IdeHeaderBar *self = (IdeHeaderBar *)object;
   IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
 
   g_clear_pointer (&priv->menu_id, g_free);
+  g_clear_pointer ((GtkWidget **)&priv->header_bar, gtk_widget_unparent);
 
-  G_OBJECT_CLASS (ide_header_bar_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_header_bar_parent_class)->dispose (object);
 }
 
 static void
@@ -98,12 +78,12 @@ ide_header_bar_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_MENU_ID:
-      g_value_set_string (value, ide_header_bar_get_menu_id (self));
+    case PROP_FLAT:
+      g_value_set_boolean (value, ide_header_bar_get_flat (self));
       break;
 
-    case PROP_SHOW_FULLSCREEN_BUTTON:
-      g_value_set_boolean (value, ide_header_bar_get_show_fullscreen_button (self));
+    case PROP_MENU_ID:
+      g_value_set_string (value, ide_header_bar_get_menu_id (self));
       break;
 
     default:
@@ -121,12 +101,12 @@ ide_header_bar_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_MENU_ID:
-      ide_header_bar_set_menu_id (self, g_value_get_string (value));
+    case PROP_FLAT:
+      ide_header_bar_set_flat (self, g_value_get_boolean (value));
       break;
 
-    case PROP_SHOW_FULLSCREEN_BUTTON:
-      ide_header_bar_set_show_fullscreen_button (self, g_value_get_boolean (value));
+    case PROP_MENU_ID:
+      ide_header_bar_set_menu_id (self, g_value_get_string (value));
       break;
 
     default:
@@ -140,14 +120,12 @@ ide_header_bar_class_init (IdeHeaderBarClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = ide_header_bar_finalize;
+  object_class->dispose = ide_header_bar_dispose;
   object_class->get_property = ide_header_bar_get_property;
   object_class->set_property = ide_header_bar_set_property;
 
-  properties [PROP_SHOW_FULLSCREEN_BUTTON] =
-    g_param_spec_boolean ("show-fullscreen-button",
-                          "Show Fullscreen Button",
-                          "If the fullscreen button should be shown",
+  properties [PROP_FLAT] =
+    g_param_spec_boolean ("flat", NULL, NULL,
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
@@ -160,33 +138,21 @@ ide_header_bar_class_init (IdeHeaderBarClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-header-bar.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, fullscreen_button);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, fullscreen_image);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, fullscreen_tooltip);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, center_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, header_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, left);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, left_of_center);
   gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, menu_button);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, menu_tooltip);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, primary);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, secondary);
-
-  g_type_ensure (DZL_TYPE_PRIORITY_BOX);
-  g_type_ensure (DZL_TYPE_SHORTCUT_TOOLTIP);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, right);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeHeaderBar, right_of_center);
 }
 
 static void
 ide_header_bar_init (IdeHeaderBar *self)
 {
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
   gtk_widget_init_template (GTK_WIDGET (self));
-
-  g_signal_connect_object (priv->fullscreen_button,
-                           "notify::active",
-                           G_CALLBACK (on_fullscreen_toggled_cb),
-                           priv->fullscreen_image,
-                           0);
-
-  _ide_header_bar_init_shortcuts (self);
 }
 
 GtkWidget *
@@ -196,69 +162,12 @@ ide_header_bar_new (void)
 }
 
 /**
- * ide_header_bar_get_show_fullscreen_button:
- * @self: a #IdeHeaderBar
- *
- * Gets if the fullscreen button should be displayed in the header bar.
- *
- * Returns: %TRUE if it should be displayed
- *
- * Since: 3.32
- */
-gboolean
-ide_header_bar_get_show_fullscreen_button (IdeHeaderBar *self)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_HEADER_BAR (self), FALSE);
-
-  return priv->show_fullscreen_button;
-}
-
-/**
- * ide_header_bar_set_show_fullscreen_button:
- * @self: a #IdeHeaderBar
- * @show_fullscreen_button: if the fullscreen button should be displayed
- *
- * Changes the visibility of the fullscreen button.
- *
- * Since: 3.32
- */
-void
-ide_header_bar_set_show_fullscreen_button (IdeHeaderBar *self,
-                                           gboolean      show_fullscreen_button)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_HEADER_BAR (self));
-
-  show_fullscreen_button = !!show_fullscreen_button;
-
-  if (show_fullscreen_button != priv->show_fullscreen_button)
-    {
-      const gchar *session;
-
-      priv->show_fullscreen_button = show_fullscreen_button;
-
-      session = g_getenv ("DESKTOP_SESSION");
-      if (ide_str_equal0 (session, "pantheon"))
-        show_fullscreen_button = FALSE;
-
-      gtk_widget_set_visible (GTK_WIDGET (priv->fullscreen_button), show_fullscreen_button);
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_FULLSCREEN_BUTTON]);
-    }
-}
-
-/**
  * ide_header_bar_get_menu_id:
  * @self: a #IdeHeaderBar
  *
  * Gets the menu-id to show in the workspace window.
  *
  * Returns: (nullable): a string containing the menu-id, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_header_bar_get_menu_id (IdeHeaderBar *self)
@@ -270,6 +179,33 @@ ide_header_bar_get_menu_id (IdeHeaderBar *self)
   return priv->menu_id;
 }
 
+static gboolean
+menu_has_custom (GMenuModel *model,
+                 const char *name)
+{
+  guint n_items;
+
+  if (model == NULL || name == NULL)
+    return FALSE;
+
+  n_items = g_menu_model_get_n_items (model);
+  for (int i = 0; i < n_items; i++)
+    {
+      g_autofree char *custom = NULL;
+      g_autoptr(GMenuModel) section = NULL;
+
+      if (g_menu_model_get_item_attribute (model, i, "custom", "s", &custom) &&
+          g_strcmp0 (custom, name) == 0)
+        return TRUE;
+
+      if ((section = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION)) &&
+          menu_has_custom (section, name))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 /**
  * ide_header_bar_set_menu_id:
  * @self: a #IdeHeaderBar
@@ -277,12 +213,10 @@ ide_header_bar_get_menu_id (IdeHeaderBar *self)
  * Sets the menu-id to display in the window.
  *
  * Set to %NULL to hide the workspace menu.
- *
- * Since: 3.32
  */
 void
 ide_header_bar_set_menu_id (IdeHeaderBar *self,
-                            const gchar  *menu_id)
+                            const char   *menu_id)
 {
   IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
 
@@ -290,78 +224,28 @@ ide_header_bar_set_menu_id (IdeHeaderBar *self,
 
   if (!ide_str_equal0 (menu_id, priv->menu_id))
     {
+      GtkPopover *popover;
+      GMenu *menu = NULL;
+
       g_free (priv->menu_id);
       priv->menu_id = g_strdup (menu_id);
-      g_object_set (priv->menu_button, "menu-id", menu_id, NULL);
+
+      if (menu_id != NULL)
+        menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, menu_id);
+
+      g_object_set (priv->menu_button, "menu-model", menu, NULL);
       gtk_widget_set_visible (GTK_WIDGET (priv->menu_button), !ide_str_empty0 (menu_id));
+
+      popover = gtk_menu_button_get_popover (priv->menu_button);
+      if (menu_has_custom (G_MENU_MODEL (menu), "theme_selector"))
+        gtk_popover_menu_add_child (GTK_POPOVER_MENU (popover),
+                                    g_object_new (PANEL_TYPE_THEME_SELECTOR,
+                                                  "action-name", "app.style-variant",
+                                                  NULL),
+                                    "theme_selector");
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MENU_ID]);
     }
-}
-
-/**
- * ide_header_bar_add_primary:
- * @self: a #IdeHeaderBar
- *
- * Adds a widget to the primary button section of the workspace header.
- * This is the left, for LTR languages.
- *
- * Since: 3.32
- */
-void
-ide_header_bar_add_primary (IdeHeaderBar *self,
-                            GtkWidget    *widget)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_HEADER_BAR (self));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_container_add (GTK_CONTAINER (priv->primary), widget);
-}
-
-void
-ide_header_bar_add_center_left (IdeHeaderBar *self,
-                                GtkWidget    *child)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_HEADER_BAR (self));
-  g_return_if_fail (GTK_IS_WIDGET (child));
-
-  gtk_container_add_with_properties (GTK_CONTAINER (priv->primary), child,
-                                     "pack-type", GTK_PACK_END,
-                                     NULL);
-}
-
-/**
- * ide_header_bar_add_secondary:
- * @self: a #IdeHeaderBar
- *
- * Adds a widget to the secondary button section of the workspace header.
- * This is the right, for LTR languages.
- *
- * Since: 3.32
- */
-void
-ide_header_bar_add_secondary (IdeHeaderBar *self,
-                              GtkWidget    *widget)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_HEADER_BAR (self));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_container_add (GTK_CONTAINER (priv->secondary), widget);
-}
-
-void
-_ide_header_bar_show_menu (IdeHeaderBar *self)
-{
-  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_HEADER_BAR (self));
-
-  gtk_widget_activate (GTK_WIDGET (priv->menu_button));
 }
 
 static void
@@ -377,94 +261,192 @@ ide_header_bar_add_child (GtkBuildable  *buildable,
   g_assert (GTK_IS_BUILDER (builder));
   g_assert (G_IS_OBJECT (child));
 
-  if (ide_str_equal0 (type, "left-of-center"))
+  if (ADW_IS_HEADER_BAR (child) && priv->header_bar == NULL)
     {
-      if (GTK_IS_WIDGET (child))
-        {
-          gtk_container_add_with_properties (GTK_CONTAINER (priv->primary), GTK_WIDGET (child),
-                                             "pack-type", GTK_PACK_END,
-                                             NULL);
-          return;
-        }
-
-      goto warning;
+      buildable_parent_iface->add_child (buildable, builder, child, type);
+      return;
     }
 
-  if (ide_str_equal0 (type, "left") || ide_str_equal0 (type, "primary"))
+  if (GTK_IS_WIDGET (child))
     {
-      if (GTK_IS_WIDGET (child))
-        {
-          gtk_container_add_with_properties (GTK_CONTAINER (priv->primary), GTK_WIDGET (child),
-                                             "pack-type", GTK_PACK_START,
-                                             NULL);
-          return;
-        }
+      if (ide_str_equal0 (type, "title"))
+        gtk_center_box_set_center_widget (priv->center_box, GTK_WIDGET (child));
+      else if (ide_str_equal0 (type, "left"))
+        ide_header_bar_add (self, IDE_HEADER_BAR_POSITION_LEFT, 0, GTK_WIDGET (child));
+      else if (ide_str_equal0 (type, "right"))
+        ide_header_bar_add (self, IDE_HEADER_BAR_POSITION_RIGHT, 0, GTK_WIDGET (child));
+      else if (ide_str_equal0 (type, "left-of-center"))
+        ide_header_bar_add (self, IDE_HEADER_BAR_POSITION_LEFT_OF_CENTER, 0, GTK_WIDGET (child));
+      else if (ide_str_equal0 (type, "right-of-center"))
+        ide_header_bar_add (self, IDE_HEADER_BAR_POSITION_RIGHT_OF_CENTER, 0, GTK_WIDGET (child));
+      else
+        goto failure;
 
-      goto warning;
+      return;
     }
 
-  if (ide_str_equal0 (type, "right-of-center"))
-    {
-      if (GTK_IS_WIDGET (child))
-        {
-          gtk_container_add_with_properties (GTK_CONTAINER (priv->secondary), GTK_WIDGET (child),
-                                             "pack-type", GTK_PACK_START,
-                                             NULL);
-          return;
-        }
+failure:
+  g_warning ("No such child \"%s\" for child of type %s",
+             type ? type : "NULL", G_OBJECT_TYPE_NAME (child));
 
-      goto warning;
-    }
-
-  if (ide_str_equal0 (type, "right") || ide_str_equal0 (type, "secondary"))
-    {
-      if (GTK_IS_WIDGET (child))
-        {
-          gtk_container_add_with_properties (GTK_CONTAINER (priv->secondary), GTK_WIDGET (child),
-                                             "pack-type", GTK_PACK_END,
-                                             NULL);
-          return;
-        }
-
-      goto warning;
-    }
-
-  buildable_parent->add_child (buildable, builder, child, type);
-
-  return;
-
-warning:
-  g_warning ("'%s' child type must be a GtkWidget, not %s",
-             type, G_OBJECT_TYPE_NAME (child));
 }
 
 static GObject *
 ide_header_bar_get_internal_child (GtkBuildable *buildable,
                                    GtkBuilder   *builder,
-                                   const gchar  *child_name)
+                                   const char   *name)
 {
   IdeHeaderBar *self = (IdeHeaderBar *)buildable;
   IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
 
-  g_assert (IDE_IS_HEADER_BAR (self));
-  g_assert (GTK_IS_BUILDER (builder));
+  if (g_strcmp0 (name, "headerbar") == 0)
+    return G_OBJECT (priv->header_bar);
 
-  if (ide_str_equal0 (child_name, "primary"))
-    return G_OBJECT (priv->primary);
-
-  if (ide_str_equal0 (child_name, "secondary"))
-    return G_OBJECT (priv->secondary);
-
-  if (buildable_parent->get_internal_child)
-    return buildable_parent->get_internal_child (buildable, builder, child_name);
-
-  return NULL;
+  return buildable_parent_iface->get_internal_child (buildable, builder, name);
 }
 
 static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
-  buildable_parent = g_type_interface_peek_parent (iface);
+  buildable_parent_iface = g_type_interface_peek_parent (iface);
+
   iface->add_child = ide_header_bar_add_child;
   iface->get_internal_child = ide_header_bar_get_internal_child;
+}
+
+#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
+#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
+
+void
+ide_header_bar_add (IdeHeaderBar         *self,
+                    IdeHeaderBarPosition  position,
+                    int                   priority,
+                    GtkWidget            *widget)
+{
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
+  GtkBox *box;
+  gboolean append;
+
+  g_return_if_fail (IDE_IS_HEADER_BAR (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (position < IDE_HEADER_BAR_POSITION_LAST);
+
+  SET_PRIORITY (widget, priority);
+
+  switch (position)
+    {
+    case IDE_HEADER_BAR_POSITION_LEFT:
+      box = priv->left;
+      append = TRUE;
+      break;
+
+    case IDE_HEADER_BAR_POSITION_RIGHT:
+      box = priv->right;
+      append = FALSE;
+      break;
+
+    case IDE_HEADER_BAR_POSITION_LEFT_OF_CENTER:
+      box = priv->left_of_center;
+      append = FALSE;
+      break;
+
+    case IDE_HEADER_BAR_POSITION_RIGHT_OF_CENTER:
+      box = priv->right_of_center;
+      append = TRUE;
+      break;
+
+    case IDE_HEADER_BAR_POSITION_LAST:
+    default:
+      g_assert_not_reached ();
+    }
+
+  if (append)
+    {
+      GtkWidget *sibling = NULL;
+
+      for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (box));
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
+        {
+          if (priority < GET_PRIORITY (child))
+            break;
+          sibling = child;
+        }
+
+      gtk_box_insert_child_after (box, widget, sibling);
+    }
+  else
+    {
+      GtkWidget *sibling = NULL;
+
+      for (GtkWidget *child = gtk_widget_get_last_child (GTK_WIDGET (box));
+           child != NULL;
+           child = gtk_widget_get_prev_sibling (child))
+        {
+          if (priority < GET_PRIORITY (child))
+            break;
+          sibling = child;
+        }
+
+      gtk_box_insert_child_after (box, widget, sibling);
+    }
+}
+
+void
+ide_header_bar_remove (IdeHeaderBar *self,
+                       GtkWidget    *widget)
+{
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
+  GtkBox *box;
+
+  g_return_if_fail (IDE_IS_HEADER_BAR (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (gtk_widget_get_ancestor (widget, IDE_TYPE_HEADER_BAR) == GTK_WIDGET (self));
+
+  box = GTK_BOX (gtk_widget_get_ancestor (widget, GTK_TYPE_BOX));
+
+  if (box == priv->left ||
+      box == priv->right ||
+      box == priv->left_of_center ||
+      box == priv->right_of_center)
+    {
+      gtk_box_remove (box, widget);
+      return;
+    }
+
+  g_warning ("Failed to locate widget of type %s within headerbar",
+             G_OBJECT_TYPE_NAME (widget));
+}
+
+gboolean
+ide_header_bar_get_flat (IdeHeaderBar *self)
+{
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_HEADER_BAR (self), FALSE);
+
+  return priv->flat;
+}
+
+void
+ide_header_bar_set_flat (IdeHeaderBar *self,
+                         gboolean      flat)
+{
+  IdeHeaderBarPrivate *priv = ide_header_bar_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_HEADER_BAR (self));
+
+  flat = !!flat;
+
+  if (priv->flat != flat)
+    {
+      priv->flat = flat;
+
+      if (flat)
+        gtk_widget_add_css_class (GTK_WIDGET (priv->header_bar), "flat");
+      else
+        gtk_widget_remove_css_class (GTK_WIDGET (priv->header_bar), "flat");
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FLAT]);
+    }
 }
