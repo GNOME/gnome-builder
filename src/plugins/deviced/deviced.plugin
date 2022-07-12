@@ -2,8 +2,9 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2017 Christian Hergert
-Depends=editor;debuggerui;terminal;deviceui;flatpak;
+Depends=flatpak;
 Description=Integration with deviced devices
 Embedded=_gbp_deviced_register_types
 Module=deviced
 Name=Deviced
+X-Category=devices
