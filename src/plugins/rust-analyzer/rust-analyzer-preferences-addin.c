@@ -18,22 +18,79 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include "rust-analyzer-preferences-addin.h"
+#define G_LOG_DOMAIN "rust-analyzer-preferences-addin"
+
+#include "config.h"
+
 #include <glib/gi18n.h>
+
+#include <libide-gui.h>
+
+#include "rust-analyzer-preferences-addin.h"
 
 struct _RustAnalyzerPreferencesAddin
 {
   IdeObject parent_instance;
-  guint check_id;
-  guint clippy_id;
 };
 
-static void preferences_addin_iface_init (IdePreferencesAddinInterface *iface);
+static const IdePreferenceGroupEntry groups[] = {
+  { "insight", "rust-analyer", 2000, N_("Rust Analyzer") },
+};
+
+static const IdePreferenceItemEntry items[] = {
+  { "insight", "rust-analyzer", "cargo-command-check", 0, ide_preferences_window_check,
+    N_("Cargo Check"),
+    N_("Run “cargo check” as the default cargo command"),
+    "org.gnome.builder.rust-analyzer", NULL, "cargo-command", "'check'" },
+
+  { "insight", "rust-analyzer", "cargo-command-clippy", 0, ide_preferences_window_check,
+    N_("Cargo Clippy"),
+    N_("Run “cargo clippy” as the default cargo command"),
+    "org.gnome.builder.rust-analyzer", NULL, "cargo-command", "'clippy'" },
+};
+
+static void
+rust_analyzer_preferences_addin_load (IdePreferencesAddin  *addin,
+                                      IdePreferencesWindow *window,
+                                      IdeContext           *context)
+{
+  RustAnalyzerPreferencesAddin *self = (RustAnalyzerPreferencesAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (RUST_IS_ANALYZER_PREFERENCES_ADDIN (self));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (window));
+
+  ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+  ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
+
+  IDE_EXIT;
+}
+
+static void
+rust_analyzer_preferences_addin_unload (IdePreferencesAddin  *addin,
+                                        IdePreferencesWindow *window,
+                                        IdeContext           *context)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (RUST_IS_ANALYZER_PREFERENCES_ADDIN (addin));
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (window));
+
+  IDE_EXIT;
+}
+
+static void
+preferences_addin_iface_init (IdePreferencesAddinInterface *iface)
+{
+  iface->load = rust_analyzer_preferences_addin_load;
+  iface->unload = rust_analyzer_preferences_addin_unload;
+}
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerPreferencesAddin,
-                         rust_analyzer_preferences_addin,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, preferences_addin_iface_init))
+                               rust_analyzer_preferences_addin,
+                               IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, preferences_addin_iface_init))
 
 static void
 rust_analyzer_preferences_addin_class_init (RustAnalyzerPreferencesAddinClass *klass)
@@ -43,56 +100,4 @@ rust_analyzer_preferences_addin_class_init (RustAnalyzerPreferencesAddinClass *k
 static void
 rust_analyzer_preferences_addin_init (RustAnalyzerPreferencesAddin *self)
 {
-}
-
-static void
-rust_analyzer_preferences_addin_load (IdePreferencesAddin *addin,
-                                      DzlPreferences      *preferences)
-{
-  RustAnalyzerPreferencesAddin *self = (RustAnalyzerPreferencesAddin *)addin;
-
-  g_return_if_fail (RUST_IS_ANALYZER_PREFERENCES_ADDIN (self));
-  g_return_if_fail (DZL_IS_PREFERENCES (preferences));
-
-  dzl_preferences_add_list_group (preferences, "code-insight", "rust-analyzer", _("Rust Analyzer: Cargo command for diagnostics"), GTK_SELECTION_NONE, 0);
-  self->check_id = dzl_preferences_add_radio (preferences,
-                                              "code-insight",
-                                              "rust-analyzer",
-                                              "org.gnome.builder.rust-analyzer",
-                                              "cargo-command",
-                                              NULL,
-                                              "\"check\"",
-                                              "Cargo check",
-                                              _("the default cargo command"),
-                                              NULL, 1);
-  self->clippy_id = dzl_preferences_add_radio (preferences,
-                                               "code-insight",
-                                               "rust-analyzer",
-                                               "org.gnome.builder.rust-analyzer",
-                                               "cargo-command",
-                                               NULL,
-                                               "\"clippy\"",
-                                               "Cargo clippy",
-                                               _("clippy adds additional lints to catch common mistakes but is in general slower"),
-                                               NULL, 2);
-}
-
-static void
-rust_analyzer_preferences_addin_unload (IdePreferencesAddin *addin,
-                                        DzlPreferences      *preferences)
-{
-  RustAnalyzerPreferencesAddin *self = (RustAnalyzerPreferencesAddin *)addin;
-
-  g_return_if_fail (RUST_IS_ANALYZER_PREFERENCES_ADDIN (self));
-  g_return_if_fail (DZL_IS_PREFERENCES (preferences));
-
-  dzl_preferences_remove_id (preferences, self->check_id);
-  dzl_preferences_remove_id (preferences, self->clippy_id);
-}
-
-static void
-preferences_addin_iface_init (IdePreferencesAddinInterface *iface)
-{
-  iface->load = rust_analyzer_preferences_addin_load;
-  iface->unload = rust_analyzer_preferences_addin_unload;
 }
