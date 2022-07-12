@@ -50,6 +50,8 @@ struct _IdeDebugManager
   GPtrArray      *supported_languages;
 
   guint           active : 1;
+  guint           stop_at_criticals : 1;
+  guint           stop_at_warnings : 1;
 };
 
 typedef struct
@@ -74,10 +76,22 @@ enum {
   N_SIGNALS
 };
 
+static void ide_debug_manager_actions_stop_at_criticals (IdeDebugManager *self,
+                                                         GVariant        *param);
+static void ide_debug_manager_actions_stop_at_warnings  (IdeDebugManager *self,
+                                                         GVariant        *param);
+
+
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
-G_DEFINE_FINAL_TYPE (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT)
+IDE_DEFINE_ACTION_GROUP (IdeDebugManager, ide_debug_manager, {
+  { "stop-at-criticals", ide_debug_manager_actions_stop_at_criticals, NULL, "false" },
+  { "stop-at-warnings", ide_debug_manager_actions_stop_at_warnings, NULL, "false" },
+})
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_debug_manager_init_action_group))
 
 static gint
 compare_language_id (gconstpointer a,
@@ -1214,4 +1228,36 @@ ide_debug_manager_from_context (IdeContext *context)
   g_object_unref (ret);
 
   return ret;
+}
+
+static void
+ide_debug_manager_actions_stop_at_criticals (IdeDebugManager *self,
+                                             GVariant        *param)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+
+  self->stop_at_criticals = !self->stop_at_criticals;
+  ide_debug_manager_set_action_state (self,
+                                      "stop-at-criticals",
+                                      g_variant_new_boolean (self->stop_at_criticals));
+
+  IDE_EXIT;
+}
+
+static void
+ide_debug_manager_actions_stop_at_warnings (IdeDebugManager *self,
+                                            GVariant        *param)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEBUG_MANAGER (self));
+
+  self->stop_at_warnings = !self->stop_at_warnings;
+  ide_debug_manager_set_action_state (self,
+                                      "stop-at-warnings",
+                                      g_variant_new_boolean (self->stop_at_warnings));
+
+  IDE_EXIT;
 }
