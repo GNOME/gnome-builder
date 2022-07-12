@@ -1,16 +1,20 @@
 if get_option('plugin_blueprint')
 
-install_data('blueprint_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'blueprint-plugin.c',
+  'gbp-blueprint-code-action-provider.c',
+  'gbp-blueprint-completion-provider.c',
+  'gbp-blueprint-diagnostic-provider.c',
+  'gbp-blueprint-hover-provider.c',
+  'gbp-blueprint-service.c',
+])
 
-configure_file(
-          input: 'blueprint.plugin',
-         output: 'blueprint.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_blueprint_resources = gnome.compile_resources(
+  'blueprint-resources',
+  'blueprint.gresource.xml',
+  c_name: 'gbp_blueprint',
 )
 
-install_data('blueprint.lang',
-  install_dir: join_paths(get_option('datadir'), 'gtksourceview-4' / 'language-specs'))
+plugins_sources += plugin_blueprint_resources
 
 endif
