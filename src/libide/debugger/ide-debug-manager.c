@@ -36,7 +36,7 @@
 #include "ide-debugger.h"
 #include "ide-debugger-private.h"
 
-#define TAG_CURRENT_BKPT "debugger::current-breakpoint"
+#define TAG_CURRENT_BKPT "-Builder:current-breakpoint"
 
 struct _IdeDebugManager
 {
