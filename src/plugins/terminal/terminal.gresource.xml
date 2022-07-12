@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/plugins/terminal">
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file>gtk/keybindings.json</file>
     <file>terminal.plugin</file>
   </gresource>
 </gresources>
