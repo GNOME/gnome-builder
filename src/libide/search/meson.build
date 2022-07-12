@@ -7,6 +7,12 @@ libide_include_directories += include_directories('.')
 #
 
 libide_search_public_headers = [
+  'ide-fuzzy-index-builder.h',
+  'ide-fuzzy-index-cursor.h',
+  'ide-fuzzy-index.h',
+  'ide-fuzzy-index-match.h',
+  'ide-fuzzy-mutable-index.h',
+  'ide-pattern-spec.h',
   'ide-search-engine.h',
   'ide-search-provider.h',
   'ide-search-reducer.h',
@@ -21,13 +27,34 @@ install_headers(libide_search_public_headers, subdir: libide_search_header_subdi
 #
 
 libide_search_public_sources = [
+  'ide-fuzzy-index-builder.c',
+  'ide-fuzzy-index.c',
+  'ide-fuzzy-index-cursor.c',
+  'ide-fuzzy-index-match.c',
+  'ide-fuzzy-mutable-index.c',
+  'ide-pattern-spec.c',
   'ide-search-engine.c',
   'ide-search-provider.c',
   'ide-search-reducer.c',
   'ide-search-result.c',
 ]
 
-libide_search_sources = libide_search_public_sources
+libide_search_private_sources = [
+  'ide-search-init.c',
+]
+
+libide_search_sources = libide_search_public_sources + libide_search_private_sources
+
+#
+# Generated Resource Files
+#
+
+libide_search_resources = gnome.compile_resources(
+  'ide-search-resources',
+  'libide-search.gresource.xml',
+  c_name: 'ide_search',
+)
+libide_search_sources += libide_search_resources
 
 #
 # Dependencies
@@ -35,7 +62,6 @@ libide_search_sources = libide_search_public_sources
 
 libide_search_deps = [
   libgio_dep,
-  libdazzle_dep,
   libpeas_dep,
   libide_core_dep,
   libide_threading_dep,

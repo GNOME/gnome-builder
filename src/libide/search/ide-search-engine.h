@@ -31,27 +31,27 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SEARCH_ENGINE (ide_search_engine_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE, SEARCH_ENGINE, IdeObject)
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeSearchEngine *ide_search_engine_new             (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_search_engine_get_busy        (IdeSearchEngine      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_search_engine_search_async    (IdeSearchEngine      *self,
                                                     const gchar          *query,
                                                     guint                 max_results,
                                                     GCancellable         *cancellable,
                                                     GAsyncReadyCallback   callback,
                                                     gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GListModel      *ide_search_engine_search_finish   (IdeSearchEngine      *self,
                                                     GAsyncResult         *result,
                                                     GError              **error);
-IDE_AVAILABLE_IN_3_36
+IDE_AVAILABLE_IN_ALL
 void             ide_search_engine_add_provider    (IdeSearchEngine      *self,
                                                     IdeSearchProvider    *provider);
-IDE_AVAILABLE_IN_3_36
+IDE_AVAILABLE_IN_ALL
 void             ide_search_engine_remove_provider (IdeSearchEngine      *self,
                                                     IdeSearchProvider    *provider);
 

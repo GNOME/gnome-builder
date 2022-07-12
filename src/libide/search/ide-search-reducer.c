@@ -32,8 +32,6 @@
  *
  * This is a helper structure for search engines to reduce the number
  * of items they inflate when performing a search.
- *
- * Since: 3.32
  */
 
 #define DEFAULT_MAX_ITEMS 1000
@@ -46,8 +44,6 @@
  * Initializes a new #IdeSearchReducer to be used to reduce the number of
  * search results that are created. This is generally just used to help
  * keep search performance good.
- *
- * Since: 3.32
  */
 void
 ide_search_reducer_init (IdeSearchReducer  *reducer,
@@ -65,8 +61,6 @@ ide_search_reducer_init (IdeSearchReducer  *reducer,
  * @reducer: a #IdeSearchReducer
  *
  * Frees the results.
- *
- * Since: 3.32
  */
 void
 ide_search_reducer_destroy (IdeSearchReducer *reducer)
@@ -88,8 +82,6 @@ ide_search_reducer_destroy (IdeSearchReducer *reducer)
  * Returns: (nullable) (transfer container) (element-type IdeSearchResult):
  *   An array of #IdeSearchResult unless @free_results is %TRUE, then
  *   %NULL is returned.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_search_reducer_free (IdeSearchReducer *reducer,
@@ -135,8 +127,6 @@ ide_search_reducer_free (IdeSearchReducer *reducer,
  *
  * Like ide_search_reducer_push() but takes ownership of @result by
  * stealing the reference.
- *
- * Since: 3.32
  */
 void
 ide_search_reducer_take (IdeSearchReducer *reducer,
@@ -163,8 +153,6 @@ ide_search_reducer_take (IdeSearchReducer *reducer,
  * @result: an #IdeSearchResult
  *
  * Adds result to the set unless it scores too low.
- *
- * Since: 3.32
  */
 void
 ide_search_reducer_push (IdeSearchReducer *reducer,
@@ -186,8 +174,6 @@ ide_search_reducer_push (IdeSearchReducer *reducer,
  * where you want to avoid inflating an #IdeSearchResult unless necessary.
  *
  * Returns: %TRUE if there is space for a result with a score of @score.
- *
- * Since: 3.32
  */
 gboolean
 ide_search_reducer_accepts (IdeSearchReducer *reducer,

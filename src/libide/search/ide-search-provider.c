@@ -108,8 +108,6 @@ ide_search_provider_search_async (IdeSearchProvider   *self,
  *
  * Returns: (transfer full) (element-type IdeSearchResult): a #GPtrArray
  *    of #IdeSearchResult elements.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_search_provider_search_finish (IdeSearchProvider  *self,

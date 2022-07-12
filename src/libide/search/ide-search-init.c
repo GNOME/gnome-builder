@@ -1,6 +1,6 @@
-/* libide-search.h
+/* ide-search-init.c
  *
- * Copyright 2014-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,20 +18,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#define G_LOG_DOMAIN "ide-search-init"
 
-#include <libide-core.h>
-#include <libide-threading.h>
+#include "config.h"
 
-#define IDE_SEARCH_INSIDE
-# include "ide-fuzzy-index-builder.h"
-# include "ide-fuzzy-index-cursor.h"
-# include "ide-fuzzy-index.h"
-# include "ide-fuzzy-index-match.h"
-# include "ide-fuzzy-mutable-index.h"
-# include "ide-pattern-spec.h"
-# include "ide-search-engine.h"
-# include "ide-search-provider.h"
-# include "ide-search-reducer.h"
-# include "ide-search-result.h"
-#undef IDE_SEARCH_INSIDE
+#include "ide-search-private.h"
+#include "ide-search-resources.h"
+
+void
+_ide_search_init (void)
+{
+  g_resources_register (ide_search_get_resource ());
+}
