@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeWebkitPage" parent="IdePage">
+    <property name="icon-name">web-browser-symbolic</property>
+    <property name="title" translatable="yes">Blank page</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="WebKitWebView" id="web_view">
+            <property name="settings">web_settings</property>
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+            <signal name="notify::is-loading" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
+            <signal name="notify::uri" handler="ide_webkit_page_update_reload" swapped="true" object="IdeWebkitPage"/>
+            <signal name="decide-policy" handler="on_web_view_decide_policy_cb" swapped="true" object="IdeWebkitPage"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSeparator"/>
+        </child>
+        <child>
+          <object class="GtkCenterBox" id="toolbar">
+            <signal name="notify::visible" handler="on_toolbar_notify_visible_cb" swapped="true" object="IdeWebkitPage"/>
+            <property name="orientation">horizontal</property>
+            <style>
+              <class name="toolbar"/>
+            </style>
+            <child type="start">
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="spacing">3</property>
+                <property name="valign">center</property>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">go-previous-symbolic</property>
+                    <property name="action-name">web.go-back</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="icon-name">go-next-symbolic</property>
+                    <property name="action-name">web.go-forward</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStack" id="reload_stack">
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">reload</property>
+                        <property name="child">
+                          <object class="GtkButton">
+                            <property name="icon-name">view-refresh-symbolic</property>
+                            <property name="action-name">web.reload</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkStackPage">
+                        <property name="name">stop</property>
+                        <property name="child">
+                          <object class="GtkButton">
+                            <property name="icon-name">stop-sign-symbolic</property>
+                            <property name="action-name">web.stop</property>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="center">
+              <object class="IdeUrlBar" id="url_bar">
+                <property name="hexpand">true</property>
+                <property name="valign">center</property>
+                <property name="web_view">web_view</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="menu-model">primary_menu</property>
+                <property name="direction">up</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="WebKitSettings" id="web_settings"/>
+  <menu id="primary_menu">
+    <section>
+      <attribute name="label" translatable="yes">Settings</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Allow JavaScript</attribute>
+        <attribute name="action">web.enable-javascript</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
