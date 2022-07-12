@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.builder.shellcmd" gettext-domain="gnome-builder">
+    <key name="run-commands" type="as">
+      <default>[]</default>
+      <summary>Run Commands</summary>
+      <description>A list of run-command ids to load for the application or project.</description>
+    </key>
+  </schema>
+</schemalist>

@@ -1,6 +1,6 @@
-/* gbp-shellcmd-command-editor.h
+/* gbp-shellcmd-run-command-provider.h
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,12 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-
-#include "gbp-shellcmd-command.h"
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SHELLCMD_COMMAND_EDITOR (gbp_shellcmd_command_editor_get_type())
+#define GBP_TYPE_SHELLCMD_RUN_COMMAND_PROVIDER (gbp_shellcmd_run_command_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpShellcmdCommandEditor, gbp_shellcmd_command_editor, GBP, SHELLCMD_COMMAND_EDITOR, GtkBin)
-
-GtkWidget *gbp_shellcmd_command_editor_new         (void);
-void       gbp_shellcmd_command_editor_set_command (GbpShellcmdCommandEditor *self,
-                                                    GbpShellcmdCommand       *command);
+G_DECLARE_FINAL_TYPE (GbpShellcmdRunCommandProvider, gbp_shellcmd_run_command_provider, GBP, SHELLCMD_RUN_COMMAND_PROVIDER, IdeObject)
 
 G_END_DECLS

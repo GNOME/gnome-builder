@@ -1,10 +1,10 @@
 [Plugin]
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
-Copyright=Copyright © 2019 Christian Hergert
-Depends=editor;
-Description=Run shell commands from your project
+Copyright=Copyright © 2019-2022 Christian Hergert
+Description=Use custom commands to run your project
 Embedded=_gbp_shellcmd_register_types
 Hidden=true
 Module=shellcmd
 Name=Shell Commands
+X-Preferences-Kind=application;project;

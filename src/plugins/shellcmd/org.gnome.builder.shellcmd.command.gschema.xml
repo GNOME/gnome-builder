@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.builder.shellcmd.command" gettext-domain="gnome-builder">
+    <key name="display-name" type="s">
+      <default>''</default>
+      <summary>Display Name</summary>
+    </key>
+    <key name="accelerator" type="s">
+      <default>''</default>
+      <summary>Keyboard Accelerator</summary>
+    </key>
+    <key name="cwd" type="s">
+      <default>'$BUILDDIR/'</default>
+      <summary>Current Working Directory</summary>
+    </key>
+    <key name="argv" type="as">
+      <default>[]</default>
+      <summary>Command Arguments</summary>
+    </key>
+    <key name="env" type="as">
+      <default>[]</default>
+      <summary>Command Environment</summary>
+    </key>
+    <key name="locality" type="s">
+      <choices>
+        <choice value="host"/>
+        <choice value="pipeline"/>
+        <choice value="runtime"/>
+        <choice value="subprocess"/>
+      </choices>
+      <default>'pipeline'</default>
+      <summary>Command Locality</summary>
+    </key>
+  </schema>
+</schemalist>

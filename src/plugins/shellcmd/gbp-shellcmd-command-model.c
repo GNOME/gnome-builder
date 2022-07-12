@@ -1,6 +1,6 @@
 /* gbp-shellcmd-command-model.c
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,111 +22,228 @@
 
 #include "config.h"
 
-#include <glib/gstdio.h>
-#include <libide-core.h>
-#include <libide-sourceview.h>
-#include <libide-threading.h>
-
-#include "gbp-shellcmd-command.h"
 #include "gbp-shellcmd-command-model.h"
+#include "gbp-shellcmd-run-command.h"
+
+#define SHELLCMD_SETTINGS_BASE "/org/gnome/builder/shellcmd/"
 
 struct _GbpShellcmdCommandModel
 {
-  GObject    parent_instance;
-
-  GPtrArray *items;
-  GKeyFile  *keyfile;
-
-  guint      queue_save;
-
-  guint      keybindings_changed : 1;
+  GObject      parent_instance;
+  GSettings   *settings;
+  char        *key;
+  GHashTable  *id_to_command;
+  char       **ids;
+  guint        n_items;
 };
-
-static void list_model_iface_init (GListModelInterface *iface);
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpShellcmdCommandModel, gbp_shellcmd_command_model, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
-  KEYBINDINGS_CHANGED,
-  N_SIGNALS
+  PROP_0,
+  PROP_KEY,
+  PROP_SETTINGS,
+  PROP_N_ITEMS,
+  N_PROPS
 };
 
-static guint signals [N_SIGNALS];
+static GParamSpec *properties [N_PROPS];
 
-static gboolean
-gbp_shellcmd_command_model_queue_save_cb (gpointer data)
+static gpointer
+gbp_shellcmd_command_model_get_item (GListModel *model,
+                                     guint       position)
 {
-  GbpShellcmdCommandModel *self = data;
-  g_autoptr(GError) error = NULL;
+  GbpShellcmdCommandModel *self = (GbpShellcmdCommandModel *)model;
+  GbpShellcmdRunCommand *command;
+  const char *id;
 
   g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
 
-  self->queue_save = 0;
+  if (position >= self->n_items)
+    return NULL;
 
-  if (!gbp_shellcmd_command_model_save (self, NULL, &error))
-    g_warning ("Failed to save external-commands: %s", error->message);
+  id = self->ids[position];
+  command = g_hash_table_lookup (self->id_to_command, id);
 
-  /* Now ask everything to reload (as we might have new keybindings) */
-  if (self->keybindings_changed)
+  if (command == NULL)
     {
-      g_signal_emit (self, signals [KEYBINDINGS_CHANGED], 0);
-      self->keybindings_changed = FALSE;
+      g_autofree char *base_path = NULL;
+      g_autofree char *settings_path = NULL;
+
+      g_object_get (self->settings,
+                    "path", &base_path,
+                    NULL);
+      settings_path = g_strconcat (base_path, id, "/", NULL);
+      command = gbp_shellcmd_run_command_new (settings_path);
+      g_hash_table_insert (self->id_to_command, g_strdup (id), command);
     }
 
-  return G_SOURCE_REMOVE;
+  return g_object_ref (command);
+}
+
+static guint
+gbp_shellcmd_command_model_get_n_items (GListModel *model)
+{
+  return GBP_SHELLCMD_COMMAND_MODEL (model)->n_items;
+}
+
+static GType
+gbp_shellcmd_command_model_get_item_type (GListModel *model)
+{
+  return IDE_TYPE_RUN_COMMAND;
 }
 
 static void
-gbp_shellcmd_command_model_queue_save (GbpShellcmdCommandModel *self)
+list_model_iface_init (GListModelInterface *iface)
 {
+  iface->get_n_items = gbp_shellcmd_command_model_get_n_items;
+  iface->get_item = gbp_shellcmd_command_model_get_item;
+  iface->get_item_type = gbp_shellcmd_command_model_get_item_type;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpShellcmdCommandModel, gbp_shellcmd_command_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+
+static void
+gbp_shellcmd_command_model_replace (GbpShellcmdCommandModel  *self,
+                                    char                    **commands)
+{
+  g_auto(GStrv) old_ids = NULL;
+  guint old_len;
+
   g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+  g_assert (self->ids != NULL);
+  g_assert (commands != NULL);
 
-  g_object_ref (self);
+  if (g_strv_equal ((const char * const *)self->ids,
+                    (const char * const *)commands))
+    {
+      g_strfreev (commands);
+      return;
+    }
 
-  if (self->queue_save != 0)
-    g_source_remove (self->queue_save);
+  old_ids = g_steal_pointer (&self->ids);
+  old_len = self->n_items;
 
-  self->queue_save =
-    g_timeout_add_seconds_full (G_PRIORITY_HIGH,
-                                1,
-                                gbp_shellcmd_command_model_queue_save_cb,
-                                g_object_ref (self),
-                                g_object_unref);
+  self->ids = g_steal_pointer (&commands);
+  self->n_items = g_strv_length (self->ids);
 
-  g_object_unref (self);
+  g_assert (g_strv_length (old_ids) == old_len);
+  g_assert (g_strv_length (self->ids) == self->n_items);
+  g_assert (g_hash_table_size (self->id_to_command) <= old_len);
+
+  for (guint i = 0; old_ids[i]; i++)
+    {
+      if (!g_strv_contains ((const char * const *)self->ids, old_ids[i]))
+        g_hash_table_remove (self->id_to_command, old_ids[i]);
+    }
+
+  g_assert (g_hash_table_size (self->id_to_command) <= self->n_items);
+
+  g_list_model_items_changed (G_LIST_MODEL (self), 0, old_len, self->n_items);
+
+  if (old_len != self->n_items)
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_N_ITEMS]);
 }
 
 static void
-on_command_changed_cb (GbpShellcmdCommandModel *self,
-                       GbpShellcmdCommand      *command)
+gbp_shellcmd_command_model_settings_changed_cb (GbpShellcmdCommandModel *self,
+                                                const char              *key,
+                                                GSettings               *settings)
 {
-  g_assert (GBP_SHELLCMD_COMMAND_MODEL (self));
-  g_assert (GBP_SHELLCMD_COMMAND (command));
+  g_auto(GStrv) commands = NULL;
 
-  gbp_shellcmd_command_model_queue_save (self);
+  g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+  g_assert (ide_str_equal0 (key, self->key));
+  g_assert (G_IS_SETTINGS (settings));
+
+  commands = g_settings_get_strv (settings, self->key);
+
+  gbp_shellcmd_command_model_replace (self, g_steal_pointer (&commands));
 }
 
 static void
-on_command_shortcut_changed_cb (GbpShellcmdCommandModel *self,
-                                GParamSpec              *pspec,
-                                GbpShellcmdCommand      *command)
+gbp_shellcmd_command_model_constructed (GObject *object)
 {
-  g_assert (GBP_SHELLCMD_COMMAND_MODEL (self));
-  g_assert (GBP_SHELLCMD_COMMAND (command));
+  GbpShellcmdCommandModel *self = (GbpShellcmdCommandModel *)object;
+  g_autofree char *signal_name = NULL;
 
-  self->keybindings_changed = TRUE;
+  G_OBJECT_CLASS (gbp_shellcmd_command_model_parent_class)->constructed (object);
+
+  g_assert (self->key != NULL);
+  g_assert (G_IS_SETTINGS (self->settings));
+
+  self->ids = g_settings_get_strv (self->settings, self->key);
+  self->n_items = g_strv_length (self->ids);
+
+  signal_name = g_strconcat ("changed::", self->key, NULL);
+  g_signal_connect_object (self->settings,
+                           signal_name,
+                           G_CALLBACK (gbp_shellcmd_command_model_settings_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 }
 
 static void
-gbp_shellcmd_command_model_finalize (GObject *object)
+gbp_shellcmd_command_model_dispose (GObject *object)
 {
   GbpShellcmdCommandModel *self = (GbpShellcmdCommandModel *)object;
 
-  g_clear_pointer (&self->items, g_ptr_array_unref);
-  g_clear_pointer (&self->keyfile, g_key_file_free);
+  g_clear_pointer (&self->key, g_free);
+  g_clear_pointer (&self->id_to_command, g_hash_table_unref);
+  g_clear_pointer (&self->ids, g_strfreev);
 
-  G_OBJECT_CLASS (gbp_shellcmd_command_model_parent_class)->finalize (object);
+  g_clear_object (&self->settings);
+
+  G_OBJECT_CLASS (gbp_shellcmd_command_model_parent_class)->dispose (object);
+}
+
+static void
+gbp_shellcmd_command_model_get_property (GObject    *object,
+                                         guint       prop_id,
+                                         GValue     *value,
+                                         GParamSpec *pspec)
+{
+  GbpShellcmdCommandModel *self = GBP_SHELLCMD_COMMAND_MODEL (object);
+
+  switch (prop_id)
+    {
+    case PROP_KEY:
+      g_value_set_string (value, self->key);
+      break;
+
+    case PROP_SETTINGS:
+      g_value_set_object (value, self->settings);
+      break;
+
+    case PROP_N_ITEMS:
+      g_value_set_uint (value, self->n_items);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gbp_shellcmd_command_model_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec)
+{
+  GbpShellcmdCommandModel *self = GBP_SHELLCMD_COMMAND_MODEL (object);
+
+  switch (prop_id)
+    {
+    case PROP_KEY:
+      self->key = g_value_dup_string (value);
+      break;
+
+    case PROP_SETTINGS:
+      self->settings = g_value_dup_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -134,302 +251,120 @@ gbp_shellcmd_command_model_class_init (GbpShellcmdCommandModelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gbp_shellcmd_command_model_finalize;
+  object_class->constructed = gbp_shellcmd_command_model_constructed;
+  object_class->dispose = gbp_shellcmd_command_model_dispose;
+  object_class->get_property = gbp_shellcmd_command_model_get_property;
+  object_class->set_property = gbp_shellcmd_command_model_set_property;
 
-  signals [KEYBINDINGS_CHANGED] =
-    g_signal_new ("keybindings-changed",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL, NULL, G_TYPE_NONE, 0);
+  properties [PROP_KEY] =
+    g_param_spec_string ("key", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SETTINGS] =
+    g_param_spec_object ("settings", NULL, NULL,
+                         G_TYPE_SETTINGS,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_CONSTRUCT_ONLY |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_N_ITEMS] =
+    g_param_spec_uint ("n-items", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 gbp_shellcmd_command_model_init (GbpShellcmdCommandModel *self)
 {
-  self->items = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_object_unref_and_destroy);
-  self->keyfile = g_key_file_new ();
+  self->id_to_command = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
 }
 
 GbpShellcmdCommandModel *
-gbp_shellcmd_command_model_new (void)
+gbp_shellcmd_command_model_new (GSettings  *settings,
+                                const char *key)
 {
-  return g_object_new (GBP_TYPE_SHELLCMD_COMMAND_MODEL, NULL);
+  g_autoptr(GSettingsSchema) schema = NULL;
+
+  g_return_val_if_fail (G_SETTINGS (settings), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  g_object_get (settings,
+                "settings-schema", &schema,
+                NULL);
+
+  g_return_val_if_fail (schema != NULL, NULL);
+  g_return_val_if_fail (g_settings_schema_has_key (schema, key), NULL);
+
+  return g_object_new (GBP_TYPE_SHELLCMD_COMMAND_MODEL,
+                       "settings", settings,
+                       "key", key,
+                       NULL);
 }
 
-static GType
-gbp_shellcmd_command_model_get_item_type (GListModel *model)
+GbpShellcmdCommandModel *
+gbp_shellcmd_command_model_new_for_app (void)
 {
-  return GBP_TYPE_SHELLCMD_COMMAND;
+  g_autoptr(GSettings) settings = NULL;
+
+  settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", SHELLCMD_SETTINGS_BASE);
+  return gbp_shellcmd_command_model_new (settings, "run-commands");
 }
 
-static gpointer
-gbp_shellcmd_command_model_get_item (GListModel *model,
-                                     guint       position)
+GbpShellcmdCommandModel *
+gbp_shellcmd_command_model_new_for_project (IdeContext *context)
 {
-  GbpShellcmdCommandModel *self = GBP_SHELLCMD_COMMAND_MODEL (model);
+  g_autofree char *project_id = NULL;
+  g_autofree char *project_settings_path = NULL;
+  g_autoptr(GSettings) settings = NULL;
 
-  g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
-  g_assert (position < self->items->len);
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
-  return g_object_ref (g_ptr_array_index (self->items, position));
+  project_id = ide_context_dup_project_id (context);
+  project_settings_path = g_strconcat (SHELLCMD_SETTINGS_BASE"projects/", project_id, "/", NULL);
+  settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", project_settings_path);
+
+  return gbp_shellcmd_command_model_new (settings, "run-commands");
 }
 
-static guint
-gbp_shellcmd_command_model_get_n_items (GListModel *model)
+GbpShellcmdRunCommand *
+gbp_shellcmd_run_command_create (IdeContext *context)
 {
-  GbpShellcmdCommandModel *self = GBP_SHELLCMD_COMMAND_MODEL (model);
+  g_autofree char *uuid = NULL;
+  g_autofree char *project_id = NULL;
+  g_autofree char *settings_path = NULL;
+  g_autofree char *parent_path = NULL;
+  g_autoptr(GStrvBuilder) builder = NULL;
+  g_autoptr(GSettings) settings = NULL;
+  g_auto(GStrv) strv = NULL;
 
-  g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
 
-  return self->items->len;
-}
+  uuid = g_uuid_string_random ();
+  if (context != NULL)
+    project_id = ide_context_dup_project_id (context);
 
-static void
-list_model_iface_init (GListModelInterface *iface)
-{
-  iface->get_item = gbp_shellcmd_command_model_get_item;
-  iface->get_item_type = gbp_shellcmd_command_model_get_item_type;
-  iface->get_n_items = gbp_shellcmd_command_model_get_n_items;
-}
+  if (project_id == NULL)
+    parent_path = g_strdup (SHELLCMD_SETTINGS_BASE);
+  else
+    parent_path = g_strconcat (SHELLCMD_SETTINGS_BASE"projects/", project_id, "/", NULL);
 
-static gchar *
-get_filename (void)
-{
-  return g_build_filename (g_get_user_config_dir (),
-                           ide_get_program_name (),
-                           "external-commands",
-                           NULL);
-}
+  settings_path = g_strconcat (parent_path, uuid, "/", NULL);
+  settings = g_settings_new_with_path ("org.gnome.builder.shellcmd", parent_path);
+  strv = g_settings_get_strv (settings, "run-commands");
 
-static void
-set_items (GbpShellcmdCommandModel *self,
-           GPtrArray               *items)
-{
-  g_autoptr(GPtrArray) old_items = NULL;
+  builder = g_strv_builder_new ();
+  g_strv_builder_addv (builder, (const char **)strv);
+  g_strv_builder_add (builder, uuid);
 
-  g_assert (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
-  g_assert (items != NULL);
+  g_clear_pointer (&strv, g_strfreev);
+  strv = g_strv_builder_end (builder);
 
-  old_items = g_steal_pointer (&self->items);
-  self->items = g_ptr_array_ref (items);
+  g_settings_set_strv (settings, "run-commands", (const char * const *)strv);
 
-  for (guint i = 0; i < items->len; i++)
-    {
-      GbpShellcmdCommand *command = g_ptr_array_index (items, i);
-
-      g_signal_connect_object (command,
-                               "changed",
-                               G_CALLBACK (on_command_changed_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-
-      g_signal_connect_object (command,
-                               "notify::shortcut",
-                               G_CALLBACK (on_command_shortcut_changed_cb),
-                               self,
-                               G_CONNECT_SWAPPED);
-    }
-
-  if (old_items->len || self->items->len)
-    g_list_model_items_changed (G_LIST_MODEL (self), 0, old_items->len, self->items->len);
-}
-
-gboolean
-gbp_shellcmd_command_model_load (GbpShellcmdCommandModel  *self,
-                                 GCancellable             *cancellable,
-                                 GError                  **error)
-{
-  g_autofree gchar *path = NULL;
-  g_autoptr(GPtrArray) items = NULL;
-  g_autoptr(GKeyFile) keyfile = NULL;
-  g_autoptr(GError) err = NULL;
-  g_auto(GStrv) groups = NULL;
-  gsize len;
-
-  g_return_val_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self), FALSE);
-  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
-
-  path = get_filename ();
-  keyfile = g_key_file_new ();
-  items = g_ptr_array_new_with_free_func ((GDestroyNotify)ide_object_unref_and_destroy);
-
-  /* Parse keybindings keyfile from storage, but ignore if missing */
-  if (!g_key_file_load_from_file (keyfile, path, G_KEY_FILE_KEEP_COMMENTS, &err))
-    {
-      if (g_error_matches (err, G_IO_ERROR, G_IO_ERROR_NOT_FOUND) ||
-          g_error_matches (err, G_FILE_ERROR, G_FILE_ERROR_NOENT))
-        return TRUE;
-
-      g_propagate_error (error, g_steal_pointer (&err));
-      return FALSE;
-    }
-
-  groups = g_key_file_get_groups (keyfile, &len);
-
-  for (guint i = 0; i < len; i++)
-    {
-      g_autoptr(GbpShellcmdCommand) command = NULL;
-      g_autoptr(GError) cmderr = NULL;
-
-      if (!(command = gbp_shellcmd_command_from_key_file (keyfile, groups[i], &cmderr)))
-        {
-          g_warning ("Failed to parse command from group %s", groups[i]);
-          continue;
-        }
-
-      g_ptr_array_add (items, g_steal_pointer (&command));
-    }
-
-  g_clear_pointer (&self->keyfile, g_key_file_unref);
-  self->keyfile = g_steal_pointer (&keyfile);
-  set_items (self, items);
-
-  return TRUE;
-}
-
-gboolean
-gbp_shellcmd_command_model_save (GbpShellcmdCommandModel  *self,
-                                 GCancellable             *cancellable,
-                                 GError                  **error)
-{
-  g_autofree gchar *path = NULL;
-  g_auto(GStrv) groups = NULL;
-  gsize n_groups = 0;
-
-  g_return_val_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self), FALSE);
-  g_return_val_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable), FALSE);
-  g_return_val_if_fail (self->keyfile != NULL, FALSE);
-
-  path = get_filename ();
-
-  for (guint i = 0; i < self->items->len; i++)
-    {
-      GbpShellcmdCommand *command = g_ptr_array_index (self->items, i);
-      gbp_shellcmd_command_to_key_file (command, self->keyfile);
-    }
-
-  groups = g_key_file_get_groups (self->keyfile, &n_groups);
-
-  if (n_groups == 0)
-    {
-      g_unlink (path);
-      return TRUE;
-    }
-
-  return g_key_file_save_to_file (self->keyfile, path, error);
-}
-
-/**
- * gbp_shellcmd_command_model_get_command:
- *
- * Returns: (transfer none) (nullable): an #GbpShellcmdCommand or %NULL
- */
-GbpShellcmdCommand *
-gbp_shellcmd_command_model_get_command (GbpShellcmdCommandModel *self,
-                                        const gchar             *command_id)
-{
-  g_return_val_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self), NULL);
-
-  for (guint i = 0; i < self->items->len; i++)
-    {
-      GbpShellcmdCommand *command = g_ptr_array_index (self->items, i);
-      const gchar *id = gbp_shellcmd_command_get_id (command);
-
-      if (ide_str_equal0 (id, command_id))
-        return command;
-    }
-
-  return NULL;
-}
-
-void
-gbp_shellcmd_command_model_query (GbpShellcmdCommandModel *self,
-                                  GPtrArray               *items,
-                                  const gchar             *typed_text)
-{
-  g_autofree gchar *q = NULL;
-
-  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
-  g_return_if_fail (items != NULL);
-  g_return_if_fail (typed_text != NULL);
-
-  q = g_utf8_casefold (typed_text, -1);
-
-  for (guint i = 0; i < self->items->len; i++)
-    {
-      GbpShellcmdCommand *command = g_ptr_array_index (self->items, i);
-      g_autofree gchar *title = ide_command_get_title (IDE_COMMAND (command));
-      const gchar *cmdstr = gbp_shellcmd_command_get_command (command);
-      guint prio1 = G_MAXINT;
-      guint prio2 = G_MAXINT;
-
-      if (ide_completion_fuzzy_match (title, q, &prio1) ||
-          ide_completion_fuzzy_match (cmdstr, q, &prio2))
-        {
-          GbpShellcmdCommand *copy = gbp_shellcmd_command_copy (command);
-          gbp_shellcmd_command_set_priority (copy, MIN (prio1, prio2));
-          g_ptr_array_add (items, g_steal_pointer (&copy));
-        }
-    }
-}
-
-void
-gbp_shellcmd_command_model_add (GbpShellcmdCommandModel *self,
-                                GbpShellcmdCommand      *command)
-{
-  guint position;
-
-  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
-  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (command));
-
-  g_signal_connect_object (command,
-                           "changed",
-                           G_CALLBACK (on_command_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  self->keybindings_changed = TRUE;
-
-  position = self->items->len;
-  g_ptr_array_add (self->items, g_object_ref (command));
-  g_list_model_items_changed (G_LIST_MODEL (self), position, 0, 1);
-
-  gbp_shellcmd_command_model_queue_save (self);
-}
-
-void
-gbp_shellcmd_command_model_remove (GbpShellcmdCommandModel *self,
-                                   GbpShellcmdCommand      *command)
-{
-  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND_MODEL (self));
-  g_return_if_fail (GBP_IS_SHELLCMD_COMMAND (command));
-
-  for (guint i = 0; i < self->items->len; i++)
-    {
-      GbpShellcmdCommand *ele = g_ptr_array_index (self->items, i);
-
-      if (ele == command)
-        {
-          const gchar *id = gbp_shellcmd_command_get_id (ele);
-
-          self->keybindings_changed = TRUE;
-
-          if (id != NULL)
-            g_key_file_remove_group (self->keyfile, id, NULL);
-
-          g_signal_handlers_disconnect_by_func (command,
-                                                G_CALLBACK (on_command_changed_cb),
-                                                self);
-
-          g_signal_handlers_disconnect_by_func (command,
-                                                G_CALLBACK (on_command_shortcut_changed_cb),
-                                                self);
-
-          g_ptr_array_remove_index (self->items, i);
-          g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
-          gbp_shellcmd_command_model_queue_save (self);
-
-          break;
-        }
-    }
+  return gbp_shellcmd_run_command_new (settings_path);
 }

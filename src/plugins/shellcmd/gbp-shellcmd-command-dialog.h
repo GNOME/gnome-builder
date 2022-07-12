@@ -1,6 +1,6 @@
-/* gbp-shellcmd-command-row.h
+/* gbp-shellcmd-command-dialog.h
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,19 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
 
-#include "gbp-shellcmd-command.h"
+#include <libide-foundry.h>
+
+#include "gbp-shellcmd-run-command.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SHELLCMD_COMMAND_ROW (gbp_shellcmd_command_row_get_type())
+#define GBP_TYPE_SHELLCMD_COMMAND_DIALOG (gbp_shellcmd_command_dialog_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpShellcmdCommandRow, gbp_shellcmd_command_row, GBP, SHELLCMD_COMMAND_ROW, GtkListBoxRow)
+G_DECLARE_FINAL_TYPE (GbpShellcmdCommandDialog, gbp_shellcmd_command_dialog, GBP, SHELLCMD_COMMAND_DIALOG, AdwWindow)
 
-GtkWidget          *gbp_shellcmd_command_row_new         (GbpShellcmdCommand    *commad);
-GbpShellcmdCommand *gbp_shellcmd_command_row_get_command (GbpShellcmdCommandRow *self);
+GbpShellcmdCommandDialog *gbp_shellcmd_command_dialog_new (GbpShellcmdRunCommand *command,
+                                                           gboolean               delete_on_cancel);
 
 G_END_DECLS

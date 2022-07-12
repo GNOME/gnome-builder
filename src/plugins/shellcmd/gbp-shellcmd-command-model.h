@@ -1,6 +1,6 @@
 /* gbp-shellcmd-command-model.h
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,7 @@
 
 #pragma once
 
-#include <gio/gio.h>
-
-#include "gbp-shellcmd-command.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
@@ -30,21 +28,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpShellcmdCommandModel, gbp_shellcmd_command_model, GBP, SHELLCMD_COMMAND_MODEL, GObject)
 
-GbpShellcmdCommandModel *gbp_shellcmd_command_model_new         (void);
-GbpShellcmdCommand      *gbp_shellcmd_command_model_get_command (GbpShellcmdCommandModel  *self,
-                                                                 const gchar              *command_id);
-void                     gbp_shellcmd_command_model_add         (GbpShellcmdCommandModel  *self,
-                                                                 GbpShellcmdCommand       *command);
-void                     gbp_shellcmd_command_model_remove      (GbpShellcmdCommandModel  *self,
-                                                                 GbpShellcmdCommand       *command);
-void                     gbp_shellcmd_command_model_query       (GbpShellcmdCommandModel  *self,
-                                                                 GPtrArray                *items,
-                                                                 const gchar              *typed_text);
-gboolean                 gbp_shellcmd_command_model_load        (GbpShellcmdCommandModel  *self,
-                                                                 GCancellable             *cancellable,
-                                                                 GError                  **error);
-gboolean                 gbp_shellcmd_command_model_save        (GbpShellcmdCommandModel  *self,
-                                                                 GCancellable             *cancellable,
-                                                                 GError                  **error);
+GbpShellcmdCommandModel *gbp_shellcmd_command_model_new_for_app     (void);
+GbpShellcmdCommandModel *gbp_shellcmd_command_model_new_for_project (IdeContext *context);
+GbpShellcmdCommandModel *gbp_shellcmd_command_model_new             (GSettings  *settings,
+                                                                     const char *key);
 
 G_END_DECLS

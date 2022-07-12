@@ -2,24 +2,23 @@ if get_option('plugin_shellcmd')
 
 plugins_sources += files([
   'shellcmd-plugin.c',
-  'gbp-shellcmd-application-addin.c',
-  'gbp-shellcmd-command.c',
-  'gbp-shellcmd-command-editor.c',
+  'gbp-shellcmd-command-dialog.c',
   'gbp-shellcmd-command-model.c',
-  'gbp-shellcmd-command-provider.c',
-  'gbp-shellcmd-command-row.c',
-  'gbp-shellcmd-list.c',
   'gbp-shellcmd-preferences-addin.c',
+  'gbp-shellcmd-run-command.c',
+  'gbp-shellcmd-run-command-provider.c',
+  'gbp-shellcmd-shortcut-provider.c',
 ])
 
 plugin_shellcmd_enum_headers = [
-  'gbp-shellcmd-command.h',
+  'gbp-shellcmd-run-command.h',
 ]
 
 plugin_shellcmd_enums = gnome.mkenums_simple('gbp-shellcmd-enums',
      body_prefix: '#include "config.h"',
-   header_prefix: '#include <libide-gui.h>',
+   header_prefix: '#include <libide-core.h>',
          sources: plugin_shellcmd_enum_headers,
+  install_header: false,
 )
 
 plugin_shellcmd_resources = gnome.compile_resources(
@@ -28,8 +27,11 @@ plugin_shellcmd_resources = gnome.compile_resources(
   c_name: 'gbp_shellcmd',
 )
 
-plugins_sources += plugin_shellcmd_enums
 plugins_sources += plugin_shellcmd_resources
+plugins_sources += plugin_shellcmd_enums
 plugins_include_directories += [include_directories('.')]
+
+install_data(['org.gnome.builder.shellcmd.gschema.xml'], install_dir: schema_dir)
+install_data(['org.gnome.builder.shellcmd.command.gschema.xml'], install_dir: schema_dir)
 
 endif

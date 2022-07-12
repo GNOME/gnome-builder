@@ -1,6 +1,6 @@
-/* gbp-shellcmd-list.h
+/* gbp-shellcmd-shortcut-provider.h
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,12 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-
-#include "gbp-shellcmd-command-model.h"
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SHELLCMD_LIST (gbp_shellcmd_list_get_type())
+#define GBP_TYPE_SHELLCMD_SHORTCUT_PROVIDER (gbp_shellcmd_shortcut_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpShellcmdList, gbp_shellcmd_list, GBP, SHELLCMD_LIST, GtkFrame)
-
-GtkWidget *gbp_shellcmd_list_new (GbpShellcmdCommandModel *model);
+G_DECLARE_FINAL_TYPE (GbpShellcmdShortcutProvider, gbp_shellcmd_shortcut_provider, GBP, SHELLCMD_SHORTCUT_PROVIDER, IdeObject)
 
 G_END_DECLS
