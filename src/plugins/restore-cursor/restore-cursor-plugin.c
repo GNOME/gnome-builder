@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-code.h>
 
 #include "gbp-restore-cursor-buffer-addin.h"
