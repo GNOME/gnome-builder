@@ -46,8 +46,6 @@ ide_greeter_section_default_init (IdeGreeterSectionInterface *iface)
    *
    * Use ide_greeter_section_emit_project_activated() to activate
    * this signal.
-   *
-   * Since: 3.32
    */
   signals [PROJECT_ACTIVATED] =
     g_signal_new ("project-activated",
@@ -66,8 +64,6 @@ ide_greeter_section_default_init (IdeGreeterSectionInterface *iface)
  * sorted first in the list of sections.
  *
  * Returns: the priority for the section
- *
- * Since: 3.32
  */
 gint
 ide_greeter_section_get_priority (IdeGreeterSection *self)
@@ -83,17 +79,15 @@ ide_greeter_section_get_priority (IdeGreeterSection *self)
 /**
  * ide_greeter_section_filter:
  * @self: a #IdeGreeterSection
- * @spec: (nullable): a #DzlPatternSpec or %NULL
+ * @spec: (nullable): a #IdePatternSpec or %NULL
  *
  * Refilter the visibile items based on the current search.
  *
  * Returns: %TRUE if at least one element matched.
- *
- * Since: 3.32
  */
 gboolean
 ide_greeter_section_filter (IdeGreeterSection *self,
-                            DzlPatternSpec    *spec)
+                            IdePatternSpec    *spec)
 {
   g_return_val_if_fail (IDE_IS_GREETER_SECTION (self), FALSE);
 
@@ -126,8 +120,6 @@ ide_greeter_section_emit_project_activated (IdeGreeterSection *self,
  * If no item matched, then return %FALSE.
  *
  * Returns: %TRUE if an item was activated
- *
- * Since: 3.32
  */
 gboolean
 ide_greeter_section_activate_first (IdeGreeterSection *self)

@@ -8,7 +8,6 @@ libide_greeter_generated_headers = []
 #
 
 libide_greeter_public_headers = [
-  'ide-clone-surface.h',
   'ide-greeter-row.h',
   'ide-greeter-section.h',
   'ide-greeter-workspace.h',
@@ -18,7 +17,6 @@ libide_greeter_public_headers = [
 libide_greeter_private_headers = [
   'ide-greeter-buttons-section.h',
   'ide-greeter-private.h',
-  'ide-truncate-model.h',
 ]
 
 install_headers(libide_greeter_public_headers, subdir: libide_greeter_header_subdir)
@@ -28,7 +26,6 @@ install_headers(libide_greeter_public_headers, subdir: libide_greeter_header_sub
 #
 
 libide_greeter_public_sources = [
-  'ide-clone-surface.c',
   'ide-greeter-row.c',
   'ide-greeter-section.c',
   'ide-greeter-workspace.c',
@@ -36,9 +33,7 @@ libide_greeter_public_sources = [
 
 libide_greeter_private_sources = [
   'ide-greeter-workspace-actions.c',
-  'ide-greeter-workspace-shortcuts.c',
   'ide-greeter-buttons-section.c',
-  'ide-truncate-model.c',
 ]
 
 #
@@ -61,13 +56,13 @@ libide_greeter_private_sources += libide_greeter_resources
 libide_greeter_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
 
   libide_core_dep,
+  libide_gtk_dep,
   libide_gui_dep,
   libide_io_dep,
+  libide_search_dep,
   libide_threading_dep,
-  libide_vcs_dep,
 ]
 
 #

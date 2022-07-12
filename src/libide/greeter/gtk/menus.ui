@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="ide-greeter-workspace-menu">
+    <section id="ide-greeter-workspace-menu-theme">
+      <item>
+        <attribute name="custom">theme_selector</attribute>
+      </item>
+    </section>
+    <section id="ide-greeter-workspace-menu-projects">
+      <item>
+        <attribute name="id">ide-greeter-workspace-menu-clone</attribute>
+        <attribute name="label" translatable="yes">_Clone Repository…</attribute>
+        <attribute name="action">greeter.page</attribute>
+        <attribute name="target" type="s">'clone'</attribute>
+      </item>
+    </section>
+    <section id="ide-greeter-workspace-menu-close">
+      <item>
+        <attribute name="id">ide-greeter-workspace-menu-close</attribute>
+        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="action">win.close</attribute>
+      </item>
+    </section>
+    <section id="ide-greeter-workspace-menu-app">
+      <item>
+        <attribute name="id">ide-greeter-workspace-menu-preferences</attribute>
+        <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="action">app.preferences</attribute>
+        <attribute name="accel">&lt;primary&gt;comma</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-greeter-workspace-menu-shortcuts</attribute>
+        <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
+        <attribute name="accel">&lt;primary&gt;question</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-greeter-workspace-menu-help</attribute>
+        <attribute name="label" translatable="yes">Help</attribute>
+        <attribute name="action">app.help</attribute>
+        <attribute name="accel">F1</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-greeter-workspace-menu-about</attribute>
+        <attribute name="label" translatable="yes">About Builder</attribute>
+        <attribute name="action">app.about</attribute>
+      </item>
+    </section>
+    <section id="ide-greeter-workspace-menu-quit-section">
+      <item>
+        <attribute name="id">ide-greeter-workspace-menu-quit</attribute>
+        <attribute name="label" translatable="yes">Quit</attribute>
+        <attribute name="action">app.quit</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-projects-section">
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-open</attribute>
+        <attribute name="label" translatable="yes">Open a _Project…</attribute>
+        <attribute name="action">app.present-greeter-with-page</attribute>
+        <attribute name="target" type="s">''</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-clone</attribute>
+        <attribute name="label" translatable="yes">_Clone Repository…</attribute>
+        <attribute name="action">app.present-greeter-with-page</attribute>
+        <attribute name="target" type="s">'clone'</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-editor-workspace-menu">
+    <section id="ide-editor-workspace-menu-theme-section">
+    </section>
+    <section id="ide-editor-workspace-menu-projects-section">
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-open</attribute>
+        <attribute name="label" translatable="yes">Open a _Project…</attribute>
+        <attribute name="action">app.present-greeter-with-page</attribute>
+        <attribute name="target" type="s">''</attribute>
+      </item>
+      <item>
+        <attribute name="id">ide-editor-workspace-menu-clone</attribute>
+        <attribute name="label" translatable="yes">_Clone Repository…</attribute>
+        <attribute name="action">app.present-greeter-with-page</attribute>
+        <attribute name="target" type="s">'clone'</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

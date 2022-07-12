@@ -23,8 +23,10 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libide-projects.h>
 #include <stdlib.h>
+
+#include <libide-gtk.h>
+#include <libide-projects.h>
 
 #include "ide-project-info-private.h"
 
@@ -36,6 +38,8 @@ typedef struct
 
   /* Template Widgets */
   GtkCheckButton *check_button;
+  GtkRevealer    *revealer;
+  GtkImage       *next_image;
   GtkLabel       *title;
   GtkLabel       *subtitle;
   GtkImage       *image;
@@ -74,23 +78,14 @@ ide_greeter_row_new (void)
 }
 
 static void
-ide_greeter_row_get_preferred_width (GtkWidget *widget,
-                                     gint      *min_width,
-                                     gint      *nat_width)
-{
-  *min_width = 600;
-  *nat_width = 600;
-}
-
-static void
-ide_greeter_row_finalize (GObject *object)
+ide_greeter_row_dispose (GObject *object)
 {
   IdeGreeterRow *self = (IdeGreeterRow *)object;
   IdeGreeterRowPrivate *priv = ide_greeter_row_get_instance_private (self);
 
   g_clear_object (&priv->project_info);
 
-  G_OBJECT_CLASS (ide_greeter_row_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_greeter_row_parent_class)->dispose (object);
 }
 
 static void
@@ -110,7 +105,7 @@ ide_greeter_row_get_property (GObject    *object,
 
     case PROP_SELECTED:
       g_value_set_boolean (value,
-                           gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->check_button)));
+                           gtk_check_button_get_active (GTK_CHECK_BUTTON (priv->check_button)));
       break;
 
     default:
@@ -134,8 +129,8 @@ ide_greeter_row_set_property (GObject      *object,
       break;
 
     case PROP_SELECTED:
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->check_button),
-                                    g_value_get_boolean (value));
+      gtk_check_button_set_active (GTK_CHECK_BUTTON (priv->check_button),
+                                   g_value_get_boolean (value));
       break;
 
     default:
@@ -149,19 +144,15 @@ ide_greeter_row_class_init (IdeGreeterRowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = ide_greeter_row_finalize;
+  object_class->dispose = ide_greeter_row_dispose;
   object_class->get_property = ide_greeter_row_get_property;
   object_class->set_property = ide_greeter_row_set_property;
-
-  widget_class->get_preferred_width = ide_greeter_row_get_preferred_width;
 
   /**
    * IdeGreeterRow:project-info:
    *
    * The "project-info" property contains information about the project
    * to be displayed.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROJECT_INFO] =
     g_param_spec_object ("project-info",
@@ -179,9 +170,11 @@ ide_greeter_row_class_init (IdeGreeterRowClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/builder/ui/ide-greeter-row.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-greeter/ide-greeter-row.ui");
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, check_button);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, image);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, next_image);
+  gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, revealer);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, subtitle);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, tags);
   gtk_widget_class_bind_template_child_private (widget_class, IdeGreeterRow, title);
@@ -211,15 +204,16 @@ static void
 ide_greeter_row_clear (IdeGreeterRow *self)
 {
   IdeGreeterRowPrivate *priv = ide_greeter_row_get_instance_private (self);
+  GtkWidget *child;
 
   g_assert (IDE_IS_GREETER_ROW (self));
 
   g_object_set (priv->image, "icon-name", NULL, NULL);
   gtk_label_set_label (priv->title, NULL);
   gtk_label_set_label (priv->subtitle, NULL);
-  gtk_container_foreach (GTK_CONTAINER (priv->tags),
-                         (GtkCallback)gtk_widget_destroy,
-                         NULL);
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (priv->tags))))
+    gtk_box_remove (priv->tags, child);
 }
 
 /**
@@ -229,8 +223,6 @@ ide_greeter_row_clear (IdeGreeterRow *self)
  * Gets the #IdeGreeterRow:project-info property.
  *
  * Returns: (transfer none) (nullable): an #IdeProjectInfo or %NULL
- *
- * Since: 3.32
  */
 IdeProjectInfo *
 ide_greeter_row_get_project_info (IdeGreeterRow *self)
@@ -311,13 +303,14 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
           for (guint i = 0; i < parts->len; i++)
             {
               const gchar *key = g_ptr_array_index (parts, i);
-              DzlPillBox *tag;
+              GtkLabel *tag;
 
-              tag = g_object_new (DZL_TYPE_PILL_BOX,
-                                  "visible", TRUE,
+              tag = g_object_new (GTK_TYPE_LABEL,
                                   "label", key,
+                                  "css-name", "button",
+                                  "css-classes", IDE_STRV_INIT ("pill", "small"),
                                   NULL);
-              gtk_container_add (GTK_CONTAINER (priv->tags), GTK_WIDGET (tag));
+              gtk_box_append (priv->tags, GTK_WIDGET (tag));
             }
 
           if (icon != NULL)
@@ -339,8 +332,6 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
  * Gets a new string containing the search text for the greeter row.
  *
  * Returns: (transfer full) (nullable): a string or %NULL
- *
- * Since: 3.32
  */
 gchar *
 ide_greeter_row_get_search_text (IdeGreeterRow *self)
@@ -375,5 +366,11 @@ ide_greeter_row_set_selection_mode (IdeGreeterRow *self,
 
   g_return_if_fail (IDE_IS_GREETER_ROW (self));
 
-  gtk_widget_set_visible (GTK_WIDGET (priv->check_button), selection_mode);
+  gtk_revealer_set_reveal_child (priv->revealer, selection_mode);
+  ide_object_animate (priv->next_image,
+                      IDE_ANIMATION_EASE_OUT_CUBIC,
+                      300,
+                      NULL,
+                      "opacity", selection_mode ? 0.0 : 1.0,
+                      NULL);
 }
