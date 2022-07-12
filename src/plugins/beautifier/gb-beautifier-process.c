@@ -18,16 +18,20 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "gb-beautifier-process"
+
+#include "config.h"
+
 #include <glib.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
-#include <libide-editor.h>
-#include <libide-threading.h>
 #include <string.h>
 
-#include "gb-beautifier-private.h"
-#include "gb-beautifier-helper.h"
+#include <libide-editor.h>
+#include <libide-threading.h>
 
+#include "gb-beautifier-helper.h"
+#include "gb-beautifier-private.h"
 #include "gb-beautifier-process.h"
 
 typedef struct
@@ -150,8 +154,8 @@ gb_beautifier_process_create_generic (GbBeautifierEditorAddin  *self,
 
   src_path = g_file_get_path (state->src_file);
 
-  g_assert (!dzl_str_empty0 (src_path));
-  g_assert (!dzl_str_empty0 (state->lang_id));
+  g_assert (!ide_str_empty0 (src_path));
+  g_assert (!ide_str_empty0 (state->lang_id));
 
   command_args_expand (self, state->command_args_strs, state);
 
@@ -184,7 +188,7 @@ gb_beautifier_process_create_for_clang_format (GbBeautifierEditorAddin  *self,
   g_assert (GB_IS_BEAUTIFIER_EDITOR_ADDIN (self));
   g_assert (state != NULL);
 
-  g_assert (!dzl_str_empty0 (state->lang_id));
+  g_assert (!ide_str_empty0 (state->lang_id));
 
   tmp_workdir = g_build_filename (self->tmp_dir, "clang-XXXXXX.txt", NULL);
   if (g_mkdtemp (tmp_workdir) == NULL)
@@ -249,7 +253,7 @@ process_communicate_utf8_cb (GObject      *object,
   const gchar *stdout_str = NULL;
   const gchar *stderr_str = NULL;
   g_autoptr(GError) error = NULL;
-  IdeCompletion *completion;
+  GtkSourceCompletion *completion;
   GtkTextBuffer *buffer;
   GtkTextIter begin;
   GtkTextIter end;
@@ -271,7 +275,7 @@ process_communicate_utf8_cb (GObject      *object,
   state = (ProcessState *)ide_task_get_task_data (task);
   if (stderr_gb != NULL &&
       NULL != (stderr_str = g_bytes_get_data (stderr_gb, NULL)) &&
-      !dzl_str_empty0 (stderr_str) &&
+      !ide_str_empty0 (stderr_str) &&
       g_utf8_validate (stderr_str, -1, NULL))
     {
       if (ide_subprocess_get_if_exited (process) && ide_subprocess_get_exit_status (process) != 0)
@@ -286,16 +290,16 @@ process_communicate_utf8_cb (GObject      *object,
   if (stdout_gb != NULL)
     stdout_str = g_bytes_get_data (stdout_gb, NULL);
 
-  if (stdout_gb != NULL && dzl_str_empty0 (stdout_str))
+  if (stdout_gb != NULL && ide_str_empty0 (stdout_str))
     {
       ide_object_warning (state->self, _("Beautifier plugin: the command output is empty"));
     }
   else if (g_utf8_validate (stdout_str, -1, NULL))
     {
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (state->source_view));
-      completion = ide_source_view_get_completion (IDE_SOURCE_VIEW (state->source_view));
+      completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (state->source_view));
 
-      ide_completion_block_interactive (completion);
+      gtk_source_completion_block_interactive (completion);
       gtk_text_buffer_begin_user_action (buffer);
 
       gtk_text_buffer_get_iter_at_mark (buffer, &begin, state->begin_mark);
@@ -310,7 +314,7 @@ process_communicate_utf8_cb (GObject      *object,
       g_signal_emit_by_name (state->source_view, "selection-theatric", IDE_SOURCE_VIEW_THEATRIC_EXPAND);
 
       gtk_text_buffer_end_user_action (buffer);
-      ide_completion_unblock_interactive (completion);
+      gtk_source_completion_unblock_interactive (completion);
 
       ide_task_return_boolean (task, TRUE);
     }
