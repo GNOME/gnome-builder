@@ -20,18 +20,22 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include <libide-core.h>
+#include <libide-gtk.h>
+
 #include <libpeas/peas.h>
 
 #include "ide-application.h"
-#include "ide-keybindings.h"
-#include "ide-worker-manager.h"
 
 G_BEGIN_DECLS
 
 struct _IdeApplication
 {
-  DzlApplication parent_instance;
+  AdwApplication parent_instance;
+
+  /* Our helper to merge menus together */
+  IdeMenuManager *menu_manager;
+  GHashTable *menu_merge_ids;
 
   /* Array of all of our IdeWorkebench instances (loaded projects and
    * their application windows).
@@ -55,17 +59,25 @@ struct _IdeApplication
    * for various keys.
    */
   GSettings *settings;
-
-  /* Tracks changes to plugins and updates the available keybindings
-   * to ensure they are loaded correctly (including .css files).
-   */
-  IdeKeybindings *keybindings;
+  GSettings *editor_settings;
 
   /* We need to track the GResource files that were manually loaded for
    * plugins on disk (generally Python plugins that need resources). That
    * way we can remove them when the plugin is unloaded.
    */
   GHashTable *plugin_gresources;
+
+  /* CSS providers for each plugin that is loaded, indexed by the resource
+   * path for the plugin/internal library.
+   */
+  GHashTable *css_providers;
+
+  /* The CSS provider to recolor all of the widgetry based on style schemes */
+  GtkCssProvider *recoloring;
+
+  /* A D-Bus proxy to settings portal */
+  GDBusProxy *settings_portal;
+  char *system_font_name;
 
   /* We need to stash the unmodified argv for the application somewhere
    * so that we can pass it to a remote instance. Otherwise we lose
@@ -77,18 +89,6 @@ struct _IdeApplication
   /* The time the application was started */
   GDateTime *started_at;
 
-  /* Multi-process worker manager */
-  IdeWorkerManager *worker_manager;
-
-  /* Our type of process (optionally set to "worker" */
-  gchar *type;
-
-  /* The single plugin to load within a worker */
-  gchar *plugin;
-
-  /* The dbus-address for worker mode */
-  gchar *dbus_address;
-
   /* Sets the type of workspace to create when creating the next workspace
    * (such as when processing command line arguments).
    */
@@ -97,15 +97,15 @@ struct _IdeApplication
   /* If we've detected we lost network access */
   GNetworkMonitor *network_monitor;
   guint has_network : 1;
+
+  /* If all our typelibs were loaded successfully */
+  guint loaded_typelibs : 1;
 };
 
-IdeApplication *_ide_application_new                      (gboolean                 standalone,
-                                                           const gchar             *type,
-                                                           const gchar             *plugin,
-                                                           const gchar             *dbus_address);
+IdeApplication *_ide_application_new                      (gboolean                 standalone);
 void            _ide_application_init_color               (IdeApplication          *self);
 void            _ide_application_init_actions             (IdeApplication          *self);
-void            _ide_application_init_shortcuts           (IdeApplication          *self);
+void            _ide_application_init_settings            (IdeApplication          *self);
 void            _ide_application_load_addins              (IdeApplication          *self);
 void            _ide_application_unload_addins            (IdeApplication          *self);
 void            _ide_application_load_plugin              (IdeApplication          *self,
@@ -115,5 +115,9 @@ void            _ide_application_load_plugins_for_startup (IdeApplication       
 void            _ide_application_load_plugins             (IdeApplication          *self);
 void            _ide_application_command_line             (IdeApplication          *self,
                                                            GApplicationCommandLine *cmdline);
+void            _ide_application_add_resources            (IdeApplication          *self,
+                                                           const char              *path);
+void            _ide_application_remove_resources         (IdeApplication          *self,
+                                                           const char              *path);
 
 G_END_DECLS

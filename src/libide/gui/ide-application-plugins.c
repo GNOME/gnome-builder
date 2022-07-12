@@ -106,10 +106,6 @@ ide_application_can_load_plugin (IdeApplication *self,
   module_dir = peas_plugin_info_get_module_dir (plugin_info);
   module_name = peas_plugin_info_get_module_name (plugin_info);
 
-  /* Short-circuit for single-plugin mode */
-  if (self->plugin != NULL)
-    return ide_str_equal0 (module_name, self->plugin);
-
   if (g_hash_table_contains (circular, module_name))
     {
       g_warning ("Circular dependency found in module %s", module_name);
@@ -122,14 +118,6 @@ ide_application_can_load_plugin (IdeApplication *self,
   settings = _ide_application_plugin_get_settings (self, plugin_info);
   if (!g_settings_get_boolean (settings, "enabled"))
     return FALSE;
-
-#if 0
-  if (self->mode == IDE_APPLICATION_MODE_WORKER)
-    {
-      if (self->worker != plugin_info)
-        return FALSE;
-    }
-#endif
 
   /*
    * If the plugin is not bundled within the Builder executable, then we
@@ -216,7 +204,7 @@ ide_application_load_plugin_resources (IdeApplication *self,
       g_resources_register (resource);
 
       resource_path = g_strdup_printf ("resource:///plugins/%s", module_name);
-      dzl_application_add_resources (DZL_APPLICATION (self), resource_path);
+      _ide_application_add_resources (self, resource_path);
     }
 }
 
@@ -238,9 +226,9 @@ _ide_application_load_plugin (IdeApplication *self,
 }
 
 static void
-ide_application_plugins_load_plugin_cb (IdeApplication *self,
-                                        PeasPluginInfo *plugin_info,
-                                        PeasEngine     *engine)
+ide_application_plugins_load_plugin_after_cb (IdeApplication *self,
+                                              PeasPluginInfo *plugin_info,
+                                              PeasEngine     *engine)
 {
   const gchar *data_dir;
   const gchar *module_dir;
@@ -273,19 +261,29 @@ ide_application_plugins_load_plugin_cb (IdeApplication *self,
    */
   if (g_str_has_prefix (data_dir, "resource://") ||
       !peas_plugin_info_is_builtin (plugin_info))
-    dzl_application_add_resources (DZL_APPLICATION (self), data_dir);
+    _ide_application_add_resources (self, data_dir);
 }
 
 static void
-ide_application_plugins_unload_plugin_cb (IdeApplication *self,
-                                          PeasPluginInfo *plugin_info,
-                                          PeasEngine     *engine)
+ide_application_plugins_unload_plugin_after_cb (IdeApplication *self,
+                                                PeasPluginInfo *plugin_info,
+                                                PeasEngine     *engine)
 {
+  const gchar *module_dir;
+  const gchar *module_name;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
   g_assert (plugin_info != NULL);
   g_assert (PEAS_IS_ENGINE (engine));
 
+  module_dir = peas_plugin_info_get_module_dir (plugin_info);
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+
+  _ide_application_remove_resources (self, module_dir);
+
+  g_debug ("Unloaded plugin \"%s\" with module-dir \"%s\"",
+           module_name, module_dir);
 }
 
 /**
@@ -295,8 +293,6 @@ ide_application_plugins_unload_plugin_cb (IdeApplication *self,
  * early-stage initialization. Usually, that is any plugin that has a
  * command-line handler and uses "X-At-Startup=true" in their .plugin
  * manifest.
- *
- * Since: 3.32
  */
 void
 _ide_application_load_plugins_for_startup (IdeApplication *self)
@@ -308,15 +304,15 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
 
   g_signal_connect_object (engine,
                            "load-plugin",
-                           G_CALLBACK (ide_application_plugins_load_plugin_cb),
+                           G_CALLBACK (ide_application_plugins_load_plugin_after_cb),
                            self,
-                           G_CONNECT_SWAPPED);
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   g_signal_connect_object (engine,
                            "unload-plugin",
-                           G_CALLBACK (ide_application_plugins_unload_plugin_cb),
+                           G_CALLBACK (ide_application_plugins_unload_plugin_after_cb),
                            self,
-                           G_CONNECT_SWAPPED);
+                           G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
   /* Ensure that our embedded plugins are allowed early access to
    * start loading (before we ever look at anything on disk). This
@@ -355,14 +351,11 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
  *
  * This function loads any additional plugins that have not yet been
  * loaded during early startup.
- *
- * Since: 3.32
  */
 void
 _ide_application_load_plugins (IdeApplication *self)
 {
   g_autofree gchar *user_plugins_dir = NULL;
-  g_autoptr(GError) error = NULL;
   const GList *plugins;
   PeasEngine *engine;
 
@@ -406,28 +399,7 @@ _ide_application_load_plugins (IdeApplication *self)
                                        NULL);
   peas_engine_prepend_search_path (engine, user_plugins_dir, NULL);
 
-  /* Ensure that we have all our required GObject Introspection packages
-   * loaded so that plugins don't need to require_version() as that is
-   * tedious and annoying to keep up to date.
-   *
-   * If we can't load any of our dependent packages, then fail to load
-   * python3 plugins altogether to avoid loading anything improper into
-   * the process space.
-   */
-  g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
-  if (!g_irepository_require (NULL, "GtkSource", "4", 0, &error) ||
-      !g_irepository_require (NULL, "Gio", "2.0", 0, &error) ||
-      !g_irepository_require (NULL, "GLib", "2.0", 0, &error) ||
-      !g_irepository_require (NULL, "Gtk", "3.0", 0, &error) ||
-      !g_irepository_require (NULL, "Dazzle", "1.0", 0, &error) ||
-      !g_irepository_require (NULL, "Jsonrpc", "1.0", 0, &error) ||
-      !g_irepository_require (NULL, "Template", "1.0", 0, &error) ||
-#ifdef HAVE_WEBKIT
-      !g_irepository_require (NULL, "WebKit2", "4.0", 0, &error) ||
-#endif
-      !g_irepository_require (NULL, "Ide", PACKAGE_ABI_S, 0, &error))
-    g_critical ("Cannot enable Python 3 plugins: %s", error->message);
-  else
+  if (self->loaded_typelibs)
     peas_engine_enable_loader (engine, "python3");
 
   peas_engine_rescan_plugins (engine);
@@ -484,8 +456,6 @@ ide_application_addin_removed_cb (PeasExtensionSet *set,
  * @self: a #IdeApplication
  *
  * Loads the #IdeApplicationAddin's for this application.
- *
- * Since: 3.32
  */
 void
 _ide_application_load_addins (IdeApplication *self)
@@ -518,8 +488,6 @@ _ide_application_load_addins (IdeApplication *self)
  * @self: a #IdeApplication
  *
  * Unloads all of the previously loaded #IdeApplicationAddin.
- *
- * Since: 3.32
  */
 void
 _ide_application_unload_addins (IdeApplication *self)

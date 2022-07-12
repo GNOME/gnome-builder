@@ -27,9 +27,8 @@
 #endif
 
 #include <glib/gi18n.h>
-#include <handy.h>
+
 #include <libpeas/peas-autocleanups.h>
-#include <libide-themes.h>
 
 #include "ide-language-defaults.h"
 
@@ -38,11 +37,7 @@
 #include "ide-application-private.h"
 #include "ide-gui-global.h"
 #include "ide-primary-workspace.h"
-#include "ide-worker.h"
-
-G_DEFINE_FINAL_TYPE (IdeApplication, ide_application, DZL_TYPE_APPLICATION)
-
-#define IS_UI_PROCESS(app) ((app)->type == NULL)
+#include "ide-shortcut-manager-private.h"
 
 typedef struct
 {
@@ -51,6 +46,18 @@ typedef struct
   gint             n_files;
   const gchar     *hint;
 } OpenData;
+
+G_DEFINE_FINAL_TYPE (IdeApplication, ide_application, ADW_TYPE_APPLICATION)
+
+enum {
+  PROP_0,
+  PROP_STYLE_SCHEME,
+  PROP_SYSTEM_FONT,
+  PROP_SYSTEM_FONT_NAME,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
 
 static void
 ide_application_add_platform_data (GApplication    *app,
@@ -106,113 +113,122 @@ ide_application_local_command_line (GApplication   *app,
   return G_APPLICATION_CLASS (ide_application_parent_class)->local_command_line (app, arguments, exit_status);
 }
 
-static void
-ide_application_register_keybindings (IdeApplication *self)
+G_GNUC_NULL_TERMINATED
+static gboolean
+ide_application_load_all_typelibs (GError **error, ...)
 {
-  g_autoptr(GSettings) settings = NULL;
-  g_autofree gchar *name = NULL;
+  g_autoptr(GString) msg = g_string_new (NULL);
+  const char *typelib;
+  gboolean had_failure = FALSE;
+  va_list args;
 
-  g_assert (IDE_IS_APPLICATION (self));
-
-  settings = g_settings_new ("org.gnome.builder.editor");
-  name = g_settings_get_string (settings, "keybindings");
-  self->keybindings = ide_keybindings_new (name);
-  g_settings_bind (settings, "keybindings", self->keybindings, "mode", G_SETTINGS_BIND_GET);
-}
-
-static int
-keybinding_key_snooper (GtkWidget   *grab_widget,
-                        GdkEventKey *key,
-                        gpointer     func_data)
-{
-  IdeApplication *self = func_data;
-
-  g_assert (IDE_IS_APPLICATION (self));
-
-  /* We need to hijack <Ctrl>period because ibus is messing it up. However,
-   * we only get a release event since it gets hijacked from the compositor
-   * so we never see the event. Instead, we catch the release and then change
-   * the focus to what we want (clearlying the state created in the compositor
-   * ibus bits).
-   */
-  if (key->type == GDK_KEY_RELEASE &&
-      key->keyval == GDK_KEY_period &&
-      (key->state & GDK_CONTROL_MASK) != 0)
+  va_start (args, error);
+  while ((typelib = va_arg (args, const char *)))
     {
-      if (IDE_IS_WORKSPACE (grab_widget))
+      const char *version = va_arg (args, const char *);
+      g_autoptr(GError) local_error = NULL;
+
+      if (!g_irepository_require (NULL, typelib, version, 0, &local_error))
         {
-          DzlShortcutManager *shortcuts = dzl_shortcut_manager_get_default ();
-
-          g_clear_object (&key->window);
-          key->window = g_object_ref (gtk_widget_get_window (grab_widget));
-          key->type = GDK_KEY_PRESS;
-
-          dzl_shortcut_manager_handle_event (shortcuts, key, grab_widget);
-
-          return TRUE;
+          if (msg->len)
+            g_string_append (msg, "; ");
+          g_string_append (msg, local_error->message);
+          had_failure = TRUE;
         }
     }
+  va_end (args);
 
-  return FALSE;
+  if (had_failure)
+    {
+      g_set_error_literal (error,
+                           G_IREPOSITORY_ERROR,
+                           G_IREPOSITORY_ERROR_TYPELIB_NOT_FOUND,
+                           msg->str);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+ide_application_load_typelibs (IdeApplication *self)
+{
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION (self));
+
+  g_irepository_prepend_search_path (PACKAGE_LIBDIR"/gnome-builder/girepository-1.0");
+
+  /* Ensure that we have all our required GObject Introspection packages
+   * loaded so that plugins don't need to require_version() as that is
+   * tedious and annoying to keep up to date.
+   *
+   * If we can't load any of our dependent packages, then fail to load
+   * python3 plugins altogether to avoid loading anything improper into
+   * the process space.
+   */
+  if (!ide_application_load_all_typelibs (&error,
+                                          "Gio", "2.0",
+                                          "GLib", "2.0",
+                                          "Gtk", "4.0",
+                                          "GtkSource", "5",
+                                          "Jsonrpc", "1.0",
+                                          "Template", "1.0",
+                                          "Vte", "3.91",
+#ifdef HAVE_WEBKIT
+                                          "WebKit2", "5.0",
+#endif
+                                          "Ide", PACKAGE_ABI_S,
+                                          NULL))
+    g_critical ("Cannot enable Python 3 plugins: %s", error->message);
+  else
+    self->loaded_typelibs = TRUE;
+
+  IDE_EXIT;
 }
 
 static void
 ide_application_startup (GApplication *app)
 {
   IdeApplication *self = (IdeApplication *)app;
+  g_autofree gchar *style_path = NULL;
+  GtkSourceStyleSchemeManager *styles;
+  GtkSourceLanguageManager *langs;
+  GtkIconTheme *icon_theme;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
-  /*
-   * We require a desktop session that provides a properly working
-   * D-Bus environment. Bail if for some reason that is not the case.
-   */
-  if (g_getenv ("DBUS_SESSION_BUS_ADDRESS") == NULL)
-    g_warning ("%s",
-               _("GNOME Builder requires a session with D-Bus which was not found. Please set DBUS_SESSION_BUS_ADDRESS. Some features may not be available."));
-
   G_APPLICATION_CLASS (ide_application_parent_class)->startup (app);
 
-  if (IS_UI_PROCESS (self))
-    {
-      g_autofree gchar *style_path = NULL;
-      GtkSourceStyleSchemeManager *styles;
+  /* Setup access to private icons dir */
+  icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+  gtk_icon_theme_add_search_path (icon_theme, PACKAGE_ICONDIR);
 
-      /* Setup key snoopers */
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_key_snooper_install (keybinding_key_snooper, self);
-      G_GNUC_END_IGNORE_DEPRECATIONS
+  /* Add custom style locations for gtksourceview schemes */
+  styles = gtk_source_style_scheme_manager_get_default ();
+  style_path = g_build_filename (g_get_home_dir (), ".local", "share", "gtksourceview-5", "styles", NULL);
+  gtk_source_style_scheme_manager_append_search_path (styles, style_path);
+  gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gnome-builder/styles/");
 
-      /* Setup access to private icons dir */
-      gtk_icon_theme_prepend_search_path (gtk_icon_theme_get_default (), PACKAGE_ICONDIR);
+  /* Add custom locations for language specs */
+  langs = gtk_source_language_manager_get_default ();
+  gtk_source_language_manager_append_search_path (langs, "resource:///org/gnome/builder/gtksourceview/language-specs");
 
-      /* Add custom style locations for gtksourceview schemes */
-      styles = gtk_source_style_scheme_manager_get_default ();
-      style_path = g_build_filename (g_get_home_dir (), ".local", "share", "gtksourceview-4", "styles", NULL);
-      gtk_source_style_scheme_manager_append_search_path (styles, style_path);
-      gtk_source_style_scheme_manager_append_search_path (styles, PACKAGE_DATADIR"/gtksourceview-4/styles/");
+  /* Setup access to portal settings */
+  _ide_application_init_settings (self);
 
-      hdy_init ();
-
-      /* Load color settings (Night Light, Dark Mode, etc) */
-      _ide_application_init_color (self);
-    }
+  /* Load color settings (Night Light, Dark Mode, etc) */
+  _ide_application_init_color (self);
 
   /* And now we can load the rest of our plugins for startup. */
   _ide_application_load_plugins (self);
 
-  if (IS_UI_PROCESS (self))
-    {
-      /* Make sure our shorcuts are registered */
-      _ide_application_init_shortcuts (self);
-
-      /* Load keybindings from plugins and what not */
-      ide_application_register_keybindings (self);
-
-      /* Load language defaults into gsettings */
-      ide_language_defaults_init_async (NULL, NULL, NULL);
-    }
+  /* Load language defaults into gsettings */
+  ide_language_defaults_init_async (NULL, NULL, NULL);
 }
 
 static void
@@ -228,64 +244,8 @@ ide_application_shutdown (GApplication *app)
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_object (&self->addins);
   g_clear_object (&self->settings);
-  g_clear_object (&self->keybindings);
 
   G_APPLICATION_CLASS (ide_application_parent_class)->shutdown (app);
-}
-
-static void
-ide_application_activate_worker (IdeApplication *self)
-{
-  g_autoptr(GDBusConnection) connection = NULL;
-  g_autoptr(GError) error = NULL;
-  PeasPluginInfo *plugin_info;
-  PeasExtension *extension;
-  PeasEngine *engine;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_APPLICATION (self));
-  g_assert (ide_str_equal0 (self->type, "worker"));
-  g_assert (self->dbus_address != NULL);
-  g_assert (self->plugin != NULL);
-
-#ifdef __linux__
-  prctl (PR_SET_PDEATHSIG, SIGKILL);
-#endif
-
-  IDE_TRACE_MSG ("Connecting to %s", self->dbus_address);
-
-  connection = g_dbus_connection_new_for_address_sync (self->dbus_address,
-                                                       (G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT |
-                                                        G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING),
-                                                       NULL, NULL, &error);
-
-  if (error != NULL)
-    {
-      g_error ("D-Bus failure: %s", error->message);
-      IDE_EXIT;
-    }
-
-  engine = peas_engine_get_default ();
-
-  if (!(plugin_info = peas_engine_get_plugin_info (engine, self->plugin)))
-    {
-      g_error ("No such plugin \"%s\"", self->plugin);
-      IDE_EXIT;
-    }
-
-  if (!(extension = peas_engine_create_extension (engine, plugin_info, IDE_TYPE_WORKER, NULL)))
-    {
-      g_error ("Failed to create \"%s\" worker", self->plugin);
-      IDE_EXIT;
-    }
-
-  ide_worker_register_service (IDE_WORKER (extension), connection);
-  g_application_hold (G_APPLICATION (self));
-  g_dbus_connection_start_message_processing (connection);
-
-  IDE_EXIT;
 }
 
 static void
@@ -313,14 +273,8 @@ ide_application_activate (GApplication *app)
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_APPLICATION (self));
 
-  if (ide_str_equal0 (self->type, "worker"))
-    {
-      ide_application_activate_worker (self);
-      IDE_EXIT;
-    }
-
   if ((window = gtk_application_get_active_window (GTK_APPLICATION (self))))
-    ide_gtk_window_present (window);
+    gtk_window_present (GTK_WINDOW (window));
 
   if (self->addins != NULL)
     peas_extension_set_foreach (self->addins,
@@ -377,6 +331,148 @@ ide_application_open (GApplication  *app,
   IDE_EXIT;
 }
 
+static GtkCssProvider *
+get_css_provider (IdeApplication *self,
+                  const char     *key)
+{
+  GtkCssProvider *ret;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (key != NULL);
+
+  if (!(ret = g_hash_table_lookup (self->css_providers, key)))
+    {
+      ret = gtk_css_provider_new ();
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (ret),
+                                                  GTK_STYLE_PROVIDER_PRIORITY_USER-1);
+      g_hash_table_insert (self->css_providers, g_strdup (key), ret);
+    }
+
+  return ret;
+}
+
+void
+_ide_application_add_resources (IdeApplication *self,
+                                const char     *resource_path)
+{
+  g_autoptr(GError) error = NULL;
+  g_autofree gchar *menu_path = NULL;
+  g_autofree gchar *css_path = NULL;
+  guint merge_id;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (resource_path != NULL);
+
+  /* We use interned strings for hash table keys */
+  resource_path = g_intern_string (resource_path);
+
+  /*
+   * If the resource path has a gtk/menus.ui file, we want to auto-load and
+   * merge the menus.
+   */
+  menu_path = g_build_filename (resource_path, "gtk", "menus.ui", NULL);
+
+  if (g_str_has_prefix (menu_path, "resource://"))
+    merge_id = ide_menu_manager_add_resource (self->menu_manager, menu_path, &error);
+  else
+    merge_id = ide_menu_manager_add_filename (self->menu_manager, menu_path, &error);
+
+  if (merge_id != 0)
+    g_hash_table_insert (self->menu_merge_ids, (gchar *)resource_path, GUINT_TO_POINTER (merge_id));
+
+  if (error != NULL &&
+      !(g_error_matches (error, G_RESOURCE_ERROR, G_RESOURCE_ERROR_NOT_FOUND) ||
+        g_error_matches (error, G_FILE_ERROR, G_FILE_ERROR_NOENT)))
+    g_warning ("%s", error->message);
+  g_clear_error (&error);
+
+  if (g_str_has_prefix (resource_path, "resource://"))
+    {
+      g_autoptr(GBytes) bytes = NULL;
+
+      css_path = g_build_filename (resource_path + strlen ("resource://"), "style.css", NULL);
+      bytes = g_resources_lookup_data (css_path, 0, NULL);
+
+      if (bytes != NULL)
+        {
+          GtkCssProvider *provider = get_css_provider (self, resource_path);
+          gtk_css_provider_load_from_resource (provider, css_path);
+        }
+    }
+  else
+    {
+      css_path = g_build_filename (resource_path, "style.css", NULL);
+
+      if (g_file_test (css_path, G_FILE_TEST_IS_REGULAR))
+        {
+          GtkCssProvider *provider = get_css_provider (self, resource_path);
+          gtk_css_provider_load_from_path (provider, css_path);
+        }
+    }
+
+  ide_shortcut_manager_add_resources (resource_path);
+}
+
+void
+_ide_application_remove_resources (IdeApplication *self,
+                                   const char     *resource_path)
+{
+  g_return_if_fail (IDE_IS_APPLICATION (self));
+  g_return_if_fail (resource_path != NULL);
+
+  /* Unmerge menus, keybindings, etc */
+  g_warning ("TODO: implement resource unloading for plugins: %s", resource_path);
+}
+
+static void
+ide_application_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  IdeApplication *self = IDE_APPLICATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_STYLE_SCHEME:
+      g_value_set_string (value, ide_application_get_style_scheme (self));
+      break;
+
+    case PROP_SYSTEM_FONT_NAME:
+      g_value_set_string (value, ide_application_get_system_font_name (self));
+      break;
+
+    case PROP_SYSTEM_FONT: {
+      const char *system_font_name = ide_application_get_system_font_name (self);
+      g_value_take_boxed (value, pango_font_description_from_string (system_font_name));
+      break;
+    }
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_application_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  IdeApplication *self = IDE_APPLICATION (object);
+
+  switch (prop_id)
+    {
+    case PROP_STYLE_SCHEME:
+      ide_application_set_style_scheme (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
 static void
 ide_application_dispose (GObject *object)
 {
@@ -390,14 +486,16 @@ ide_application_dispose (GObject *object)
   g_clear_pointer (&self->workbenches, g_ptr_array_unref);
   g_clear_pointer (&self->plugin_settings, g_hash_table_unref);
   g_clear_pointer (&self->plugin_gresources, g_hash_table_unref);
+  g_clear_pointer (&self->css_providers, g_hash_table_unref);
   g_clear_pointer (&self->argv, g_strfreev);
-  g_clear_pointer (&self->plugin, g_free);
-  g_clear_pointer (&self->type, g_free);
-  g_clear_pointer (&self->dbus_address, g_free);
+  g_clear_pointer (&self->menu_merge_ids, g_hash_table_unref);
+  g_clear_pointer (&self->system_font_name, g_free);
+  g_clear_object (&self->recoloring);
   g_clear_object (&self->addins);
+  g_clear_object (&self->editor_settings);
   g_clear_object (&self->settings);
   g_clear_object (&self->network_monitor);
-  g_clear_object (&self->worker_manager);
+  g_clear_object (&self->menu_manager);
 
   G_OBJECT_CLASS (ide_application_parent_class)->dispose (object);
 }
@@ -409,6 +507,8 @@ ide_application_class_init (IdeApplicationClass *klass)
   GApplicationClass *app_class = G_APPLICATION_CLASS (klass);
 
   object_class->dispose = ide_application_dispose;
+  object_class->get_property = ide_application_get_property;
+  object_class->set_property = ide_application_set_property;
 
   app_class->activate = ide_application_activate;
   app_class->open = ide_application_open;
@@ -417,41 +517,71 @@ ide_application_class_init (IdeApplicationClass *klass)
   app_class->local_command_line = ide_application_local_command_line;
   app_class->startup = ide_application_startup;
   app_class->shutdown = ide_application_shutdown;
+
+  properties[PROP_STYLE_SCHEME] =
+    g_param_spec_string ("style-scheme",
+                         "Style Scheme",
+                         "The style scheme for the editor",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_SYSTEM_FONT] =
+    g_param_spec_boxed ("system-font",
+                        "System Font",
+                        "System Font",
+                        PANGO_TYPE_FONT_DESCRIPTION,
+                        (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_SYSTEM_FONT_NAME] =
+    g_param_spec_string ("system-font-name",
+                         "System Font Name",
+                         "System Font Name",
+                         "Monospace 11",
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 ide_application_init (IdeApplication *self)
 {
+  self->system_font_name = g_strdup ("Monospace 11");
+  self->menu_merge_ids = g_hash_table_new (g_str_hash, g_str_equal);
+  self->menu_manager = ide_menu_manager_new ();
   self->started_at = g_date_time_new_now_local ();
   self->workspace_type = IDE_TYPE_PRIMARY_WORKSPACE;
   self->workbenches = g_ptr_array_new_with_free_func (g_object_unref);
   self->settings = g_settings_new ("org.gnome.builder");
+  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
   self->plugin_gresources = g_hash_table_new_full (g_str_hash, g_str_equal, g_free,
                                                    (GDestroyNotify)g_resource_unref);
+  self->css_providers = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref );
+  self->recoloring = gtk_css_provider_new ();
 
   g_application_set_default (G_APPLICATION (self));
   gtk_window_set_default_icon_name (ide_get_application_id ());
-  ide_themes_init ();
+
+  /* Make sure we've loaded typelibs into process for early access */
+  ide_application_load_typelibs (self);
 
   /* Ensure our core data is loaded early. */
-  dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-sourceview/");
-  dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-gui/");
-  dzl_application_add_resources (DZL_APPLICATION (self), "resource:///org/gnome/libide-terminal/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-sourceview/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-gui/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-greeter/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-editor/");
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-terminal/");
 
   /* Make sure our GAction are available */
   _ide_application_init_actions (self);
 }
 
 IdeApplication *
-_ide_application_new (gboolean     standalone,
-                      const gchar *type,
-                      const gchar *plugin,
-                      const gchar *dbus_address)
+_ide_application_new (gboolean standalone)
 {
   GApplicationFlags flags = G_APPLICATION_HANDLES_COMMAND_LINE | G_APPLICATION_HANDLES_OPEN;
   IdeApplication *self;
 
-  if (standalone || ide_str_equal0 (type, "worker"))
+  if (standalone)
     flags |= G_APPLICATION_NON_UNIQUE;
 
   self = g_object_new (IDE_TYPE_APPLICATION,
@@ -459,10 +589,6 @@ _ide_application_new (gboolean     standalone,
                        "flags", flags,
                        "resource-base-path", "/org/gnome/builder",
                        NULL);
-
-  self->type = g_strdup (type);
-  self->plugin = g_strdup (plugin);
-  self->dbus_address = g_strdup (dbus_address);
 
   /* Load plugins indicating they support startup features */
   _ide_application_load_plugins_for_startup (self);
@@ -541,8 +667,6 @@ ide_application_remove_workbench (IdeApplication *self,
  * @user_data: user data for @callback
  *
  * Calls @callback for each of the registered workbenches.
- *
- * Since: 3.32
  */
 void
 ide_application_foreach_workbench (IdeApplication *self,
@@ -568,8 +692,6 @@ ide_application_foreach_workbench (IdeApplication *self,
  * next workspace upon handling files from command-line arguments. This is
  * reset after the files are opened and is generally only useful from
  * #IdeApplicationAddin's who need to alter the default workspace.
- *
- * Since: 3.32
  */
 void
 ide_application_set_workspace_type (IdeApplication *self,
@@ -601,8 +723,6 @@ ide_application_network_changed_cb (IdeApplication  *self,
  * the wild that make determining if we have network access difficult.
  *
  * Returns: %TRUE if we think there is network access.
- *
- * Since: 3.32
  */
 gboolean
 ide_application_has_network (IdeApplication *self)
@@ -646,8 +766,6 @@ ide_application_has_network (IdeApplication *self)
  * Gets the time the application was started.
  *
  * Returns: (transfer none): a #GDateTime
- *
- * Since: 3.32
  */
 GDateTime *
 ide_application_get_started_at (IdeApplication *self)
@@ -655,94 +773,6 @@ ide_application_get_started_at (IdeApplication *self)
   g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
 
   return self->started_at;
-}
-
-static void
-ide_application_get_worker_cb (GObject      *object,
-                               GAsyncResult *result,
-                               gpointer      user_data)
-{
-  IdeWorkerManager *worker_manager = (IdeWorkerManager *)object;
-  g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GError) error = NULL;
-  GDBusProxy *proxy;
-
-  g_assert (IDE_IS_WORKER_MANAGER (worker_manager));
-
-  if (!(proxy = ide_worker_manager_get_worker_finish (worker_manager, result, &error)))
-    ide_task_return_error (task, g_steal_pointer (&error));
-  else
-    ide_task_return_pointer (task, g_steal_pointer (&proxy), g_object_unref);
-}
-
-/**
- * ide_application_get_worker_async:
- * @self: an #IdeApplication
- * @plugin_name: The name of the plugin.
- * @cancellable: (allow-none): a #GCancellable or %NULL.
- * @callback: a #GAsyncReadyCallback or %NULL.
- * @user_data: user data for @callback.
- *
- * Asynchronously requests a #GDBusProxy to a service provided in a worker
- * process. The worker should be an #IdeWorker implemented by the plugin named
- * @plugin_name. The #IdeWorker is responsible for created both the service
- * registered on the bus and the proxy to it.
- *
- * The #IdeApplication is responsible for spawning a subprocess for the worker.
- *
- * @callback should call ide_application_get_worker_finish() with the result
- * provided to retrieve the result.
- *
- * Since: 3.32
- */
-void
-ide_application_get_worker_async (IdeApplication      *self,
-                                  const gchar         *plugin_name,
-                                  GCancellable        *cancellable,
-                                  GAsyncReadyCallback  callback,
-                                  gpointer             user_data)
-{
-  g_autoptr(IdeTask) task = NULL;
-
-  g_return_if_fail (IDE_IS_APPLICATION (self));
-  g_return_if_fail (plugin_name != NULL);
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (self->worker_manager == NULL)
-    self->worker_manager = ide_worker_manager_new ();
-
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, ide_application_get_worker_async);
-
-  ide_worker_manager_get_worker_async (self->worker_manager,
-                                       plugin_name,
-                                       cancellable,
-                                       ide_application_get_worker_cb,
-                                       g_steal_pointer (&task));
-}
-
-/**
- * ide_application_get_worker_finish:
- * @self: an #IdeApplication.
- * @result: a #GAsyncResult
- * @error: a location for a #GError, or %NULL.
- *
- * Completes an asynchronous request to get a proxy to a worker process.
- *
- * Returns: (transfer full): a #GDBusProxy or %NULL.
- *
- * Since: 3.32
- */
-GDBusProxy *
-ide_application_get_worker_finish (IdeApplication  *self,
-                                   GAsyncResult    *result,
-                                   GError         **error)
-{
-  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
-  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
-  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
-
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
 /**
@@ -755,8 +785,6 @@ ide_application_get_worker_finish (IdeApplication  *self,
  * If no workbench is the root of @file, then %NULL is returned.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkbench or %NULL
- *
- * Since: 3.32
  */
 IdeWorkbench *
 ide_application_find_workbench_for_file (IdeApplication *self,
@@ -833,8 +861,6 @@ ide_application_get_command_line_handled (IdeApplication          *self,
  *
  * Returns: (transfer none) (type IdeApplicationAddin) (nullable): an
  *   #IdeApplicationAddin or %NULL.
- *
- * Since: 3.34
  */
 gpointer
 ide_application_find_addin_by_module_name (IdeApplication *self,
@@ -859,4 +885,167 @@ ide_application_find_addin_by_module_name (IdeApplication *self,
     return NULL;
 
   return peas_extension_set_get_extension (self->addins, plugin_info);
+}
+
+/**
+ * ide_application_get_menu_by_id:
+ * @self: a #IdeApplication
+ * @menu_id: (nullable): the menu identifier
+ *
+ * Gets the merged menu by it's identifier.
+ *
+ * Returns: (transfer none) (nullable): a #GMenu or %NULL if @menu_id is %NULL
+ */
+GMenu *
+ide_application_get_menu_by_id (IdeApplication *self,
+                                const char     *menu_id)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  if (menu_id == NULL)
+    return NULL;
+
+  return ide_menu_manager_get_menu_by_id (self->menu_manager, menu_id);
+}
+
+const char *
+ide_application_get_system_font_name (IdeApplication *self)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  return self->system_font_name;
+}
+
+static GFile *
+get_user_style_file (GFile *file)
+{
+  static GFile *style_dir;
+  g_autofree char *basename = NULL;
+
+  g_return_val_if_fail (G_IS_FILE (file), NULL);
+
+  if G_UNLIKELY (style_dir == NULL)
+    {
+      if (ide_is_flatpak ())
+        style_dir = g_file_new_build_filename (g_get_home_dir (),
+                                               ".local",
+                                               "share",
+                                               "gtksourceview-5",
+                                               "styles",
+                                               NULL);
+      else
+        style_dir = g_file_new_build_filename (g_get_user_data_dir (),
+                                               "gtksourceview-5",
+                                               "styles",
+                                               NULL);
+    }
+
+  basename = g_file_get_basename (file);
+
+  return g_file_get_child (style_dir, basename);
+}
+
+static void
+ide_application_install_schemes_cb (GObject      *object,
+                                    GAsyncResult *result,
+                                    gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = user_data;
+  g_autoptr(GFile) dst = NULL;
+  GPtrArray *ar;
+  GFile *src;
+
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (G_IS_TASK (task));
+
+  ar = g_task_get_task_data (task);
+
+  g_assert (ar != NULL);
+  g_assert (ar->len > 0);
+  g_assert (G_IS_FILE (g_ptr_array_index (ar, ar->len-1)));
+
+  g_ptr_array_remove_index (ar, ar->len-1);
+
+  if (!g_file_copy_finish (file, result, &error))
+    g_warning ("Failed to copy file: %s", error->message);
+
+  if (ar->len == 0)
+    {
+      g_task_return_boolean (task, TRUE);
+      return;
+    }
+
+  src = g_ptr_array_index (ar, ar->len-1);
+  dst = get_user_style_file (src);
+
+  g_file_copy_async (src, dst,
+                     G_FILE_COPY_OVERWRITE | G_FILE_COPY_BACKUP,
+                     G_PRIORITY_LOW,
+                     g_task_get_cancellable (task),
+                     NULL, NULL,
+                     ide_application_install_schemes_cb,
+                     g_object_ref (task));
+}
+
+void
+ide_application_install_schemes_async (IdeApplication       *self,
+                                       GFile               **files,
+                                       guint                 n_files,
+                                       GCancellable         *cancellable,
+                                       GAsyncReadyCallback   callback,
+                                       gpointer              user_data)
+{
+  g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GTask) task = NULL;
+  g_autoptr(GFile) dst = NULL;
+  g_autoptr(GFile) dir = NULL;
+  GFile *src;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_APPLICATION (self));
+  g_return_if_fail (files != NULL);
+  g_return_if_fail (n_files > 0);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
+  for (guint i = 0; i < n_files; i++)
+    g_ptr_array_add (ar, g_object_ref (files[i]));
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_source_tag (task, ide_application_install_schemes_async);
+  g_task_set_task_data (task, g_ptr_array_ref (ar), (GDestroyNotify) g_ptr_array_unref);
+
+  src = g_ptr_array_index (ar, ar->len-1);
+  dst = get_user_style_file (src);
+  dir = g_file_get_parent (dst);
+
+  if (!g_file_query_exists (dir, NULL) &&
+      !g_file_make_directory_with_parents (dir, cancellable, &error))
+    {
+      g_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
+
+  g_file_copy_async (src, dst,
+                     G_FILE_COPY_OVERWRITE | G_FILE_COPY_BACKUP,
+                     G_PRIORITY_LOW,
+                     cancellable,
+                     NULL, NULL,
+                     ide_application_install_schemes_cb,
+                     g_steal_pointer (&task));
+}
+
+gboolean
+ide_application_install_schemes_finish (IdeApplication  *self,
+                                        GAsyncResult    *result,
+                                        GError         **error)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+  g_return_val_if_fail (G_IS_TASK (result), FALSE);
+
+  return g_task_propagate_boolean (G_TASK (result), error);
 }

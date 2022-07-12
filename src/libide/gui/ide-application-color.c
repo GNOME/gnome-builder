@@ -23,10 +23,10 @@
 #include "config.h"
 
 #include <gtksourceview/gtksource.h>
-#include <handy.h>
 
 #include "ide-application.h"
 #include "ide-application-private.h"
+#include "ide-recoloring-private.h"
 
 static void
 add_style_name (GPtrArray   *ar,
@@ -93,7 +93,7 @@ static void
 _ide_application_update_color (IdeApplication *self)
 {
   static gboolean ignore_reentrant = FALSE;
-  HdyStyleManager *manager;
+  AdwStyleManager *manager;
   g_autofree char *style_variant = NULL;
 
   g_assert (IDE_IS_APPLICATION (self));
@@ -109,14 +109,16 @@ _ide_application_update_color (IdeApplication *self)
   g_assert (G_IS_SETTINGS (self->settings));
 
   style_variant = g_settings_get_string (self->settings, "style-variant");
-  manager = hdy_style_manager_get_default ();
+  manager = adw_style_manager_get_default ();
 
-  if (!g_strcmp0 (style_variant, "follow"))
-    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_PREFER_LIGHT);
-  else if (!g_strcmp0 (style_variant, "dark"))
-    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_FORCE_DARK);
+  g_debug ("Style variant changed to %s", style_variant);
+
+  if (g_strcmp0 (style_variant, "follow") == 0)
+    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_PREFER_LIGHT);
+  else if (g_strcmp0 (style_variant, "dark") == 0)
+    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_DARK);
   else
-    hdy_style_manager_set_color_scheme (manager, HDY_COLOR_SCHEME_FORCE_LIGHT);
+    adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_LIGHT);
 
   ignore_reentrant = FALSE;
 }
@@ -124,12 +126,14 @@ _ide_application_update_color (IdeApplication *self)
 static void
 _ide_application_update_style_scheme (IdeApplication *self)
 {
-  HdyStyleManager *manager;
+  AdwStyleManager *manager;
   g_autoptr(GSettings) editor_settings = NULL;
   g_autofree gchar *old_name = NULL;
   g_autofree gchar *new_name = NULL;
 
-  manager = hdy_style_manager_get_default ();
+  g_assert (IDE_IS_APPLICATION (self));
+
+  manager = adw_style_manager_get_default ();
 
   /*
    * Now that we have our color up to date, we need to possibly update the
@@ -143,32 +147,87 @@ _ide_application_update_style_scheme (IdeApplication *self)
 
   editor_settings = g_settings_new ("org.gnome.builder.editor");
   old_name = g_settings_get_string (editor_settings, "style-scheme-name");
-  new_name = find_similar_style_scheme (old_name, hdy_style_manager_get_dark (manager));
+  new_name = find_similar_style_scheme (old_name, adw_style_manager_get_dark (manager));
 
   if (new_name != NULL)
     g_settings_set_string (editor_settings, "style-scheme-name", new_name);
 }
 
+static void
+ide_application_color_style_scheme_changed_cb (IdeApplication *self,
+                                               const char     *key,
+                                               GSettings      *editor_settings)
+{
+  GtkSourceStyleSchemeManager *manager;
+  GtkSourceStyleScheme *scheme;
+  g_autofree char *style_scheme_name = NULL;
+  g_autofree char *css = NULL;
+
+  g_assert (IDE_IS_APPLICATION (self));
+  g_assert (g_strcmp0 (key, "style-scheme-name") == 0);
+  g_assert (G_IS_SETTINGS (editor_settings));
+
+  style_scheme_name = g_settings_get_string (editor_settings, key);
+  g_debug ("Style scheme changed to %s", style_scheme_name);
+
+  manager = gtk_source_style_scheme_manager_get_default ();
+  scheme = gtk_source_style_scheme_manager_get_scheme (manager, style_scheme_name);
+
+  if (scheme == NULL)
+    return;
+
+  css = _ide_recoloring_generate_css (scheme);
+  gtk_css_provider_load_from_data (self->recoloring, css ? css : "", -1);
+}
+
 void
 _ide_application_init_color (IdeApplication *self)
 {
+  g_autofree char *style_scheme_name = NULL;
+
   g_return_if_fail (IDE_IS_APPLICATION (self));
   g_return_if_fail (G_IS_SETTINGS (self->settings));
 
   if (g_getenv ("GTK_THEME") == NULL)
     {
+      g_autofree char *style_variant = NULL;
+
+      /* We must read "style-variant" to get changed notifications */
+      style_variant = g_settings_get_string (self->settings, "style-variant");
+      g_debug ("Initialized with style-variant %s", style_variant);
+
       g_signal_connect_object (self->settings,
                                "changed::style-variant",
                                G_CALLBACK (_ide_application_update_color),
                                self,
                                G_CONNECT_SWAPPED);
-      g_signal_connect_object (hdy_style_manager_get_default (),
+      g_signal_connect_object (adw_style_manager_get_default (),
                                "notify::dark",
                                G_CALLBACK (_ide_application_update_style_scheme),
                                self,
                                G_CONNECT_SWAPPED);
     }
 
+  style_scheme_name = g_settings_get_string (self->editor_settings, "style-scheme-name");
+  g_debug ("Initialized with style scheme %s", style_scheme_name);
+  g_signal_connect_object (self->editor_settings,
+                           "changed::style-scheme-name",
+                           G_CALLBACK (ide_application_color_style_scheme_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (self->recoloring),
+                                              GTK_STYLE_PROVIDER_PRIORITY_THEME+1);
+
   _ide_application_update_color (self);
   _ide_application_update_style_scheme (self);
+  ide_application_color_style_scheme_changed_cb (self, "style-scheme-name", self->editor_settings);
+}
+
+gboolean
+ide_application_get_dark (IdeApplication *self)
+{
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), FALSE);
+
+  return adw_style_manager_get_dark (adw_style_manager_get_default ());
 }
