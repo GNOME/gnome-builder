@@ -191,7 +191,7 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
       ide_subprocess_launcher_push_argv (configure_launcher, toolchain_option);
     }
 
-  if (!dzl_str_empty0 (config_opts))
+  if (!ide_str_empty0 (config_opts))
     {
       g_auto(GStrv) argv = NULL;
       gint argc;

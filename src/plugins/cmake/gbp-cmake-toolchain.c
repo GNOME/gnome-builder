@@ -68,8 +68,6 @@ gbp_cmake_toolchain_new (IdeContext *context)
  * Gets the path to the CMake cross-compilation definitions
  *
  * Returns: (transfer none): the path to the CMake cross-compilation definitions file.
- *
- * Since: 3.30
  */
 const gchar *
 gbp_cmake_toolchain_get_file_path (GbpCMakeToolchain  *self)
