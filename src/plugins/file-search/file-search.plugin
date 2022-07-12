@@ -6,3 +6,4 @@ Description=Search for files in the global search bar
 Embedded=_gbp_file_search_register_types
 Module=file-search
 Name=File Search
+X-Category=search

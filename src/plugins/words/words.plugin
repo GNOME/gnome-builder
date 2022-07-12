@@ -6,3 +6,4 @@ Description=Provides completions based on words within the document
 Embedded=_gbp_words_register_types
 Module=words
 Name=Word Completion
+X-Category=editing

@@ -6,4 +6,5 @@ Description=Provides autocompletion for importing GObject Introspection enabled 
 Module=pygi
 Name=Python GObject Introspection Imports Auto-Completion
 Embedded=_gbp_pygi_register_types
+X-Category=language
 X-Completion-Provider-Languages=python,python3

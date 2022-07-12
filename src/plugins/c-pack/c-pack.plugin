@@ -6,6 +6,7 @@ Description=Provides language support for the C programming language.
 Embedded=_ide_c_pack_register_types
 Module=c-pack
 Name=C Language Enablement
+X-Category=language
 X-Completion-Provider-Languages=c,chdr,cpp,cpphdr
 X-Indenter-Languages-Priority=0
 X-Indenter-Languages=c,chdr

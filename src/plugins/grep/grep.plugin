@@ -7,5 +7,6 @@ Description=Search across project files
 Embedded=_gbp_grep_register_types
 Module=grep
 Name=Find in Files
+X-Category=search
 X-Tree-Kind=project-tree;
 X-Workspace-Kind=editor;primary;

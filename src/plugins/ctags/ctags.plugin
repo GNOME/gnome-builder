@@ -6,6 +6,7 @@ Description=Provides integration with Ctags for auto-completion and symbol resol
 Embedded=_ide_ctags_register_types
 Module=ctags
 Name=Ctags Auto-Completion
+X-Category=language
 X-Completion-Provider-Languages=c,cpp,chdr,cpphdr,python,python3,js,ruby
 X-Highlighter-Languages=c,cpp,chdr,cpphdr,python,python3,js,ruby
 X-Symbol-Resolver-Languages=c,cpp,chdr,cpphdr,python,python3,js,css,html,ruby

@@ -7,4 +7,5 @@ Description=Live preview of Markdown documents
 Embedded=_gbp_markdown_preview_register_types
 Module=markdown-preview
 Name=Markdown Preview
+X-Category=web
 X-Workspace-Kind=primary;editor;

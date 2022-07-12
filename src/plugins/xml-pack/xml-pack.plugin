@@ -2,10 +2,11 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015-2018 Christian Hergert
-Description=Provides language support features for XML
+Description=Completion, highlighting, symbol resolution, and diagnostics for XML documents
 Embedded=_ide_xml_register_types
 Module=xml-pack
-Name=XML Auto-Indenter, completion, highlighter, resolver, diagnostics
+Name=XML Language Enablement
+X-Category=language
 X-Completion-Provider-Languages-Priority=0
 X-Completion-Provider-Languages=xml,html
 X-Diagnostic-Provider-Languages-Priority=0

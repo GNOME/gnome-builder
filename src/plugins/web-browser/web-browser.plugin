@@ -6,5 +6,5 @@ Description=Integrates a WebKit-based web browser
 Embedded=_gbp_web_browser_register_types
 Module=web-browser
 Name=Web Browser
-X-Category=other
+X-Category=web
 X-Workspace-Kind=primary;editor;

@@ -7,4 +7,5 @@ Description=Find and present To-Do items from source code
 Embedded=_gbp_todo_register_types
 Module=todo
 Name=To-Do Tracker
+X-Category=search
 X-Workspace-Kind=primary;

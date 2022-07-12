@@ -6,4 +6,5 @@ Description=Provides auto-completion when authoring HTML documents
 Embedded=_ide_html_completion_register_types
 Module=html-completion
 Name=HTML Auto-Completion
+X-Category=language
 X-Completion-Provider-Languages=asp,dtl,html,php,css

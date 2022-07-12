@@ -7,5 +7,6 @@ Embedded=_ide_code_index_register_types
 Module=code-index
 Name=Code Index
 X-At-Startup=true
+X-Category=search
 X-Symbol-Resolver-Languages-Priority=200
 X-Symbol-Resolver-Languages=c,chdr,cpp,cpphdr

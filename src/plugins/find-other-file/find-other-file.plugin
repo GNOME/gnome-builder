@@ -6,4 +6,5 @@ Description=Allows the user to rotate through other files similarly named to the
 Embedded=_gbp_find_other_file_register_types
 Module=find-other-file
 Name=Find Similar Files
+X-Category=search
 X-Workspace-Kind=primary;editor;

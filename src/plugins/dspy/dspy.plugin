@@ -6,5 +6,6 @@ Description=Explore D-Bus session and system connections
 Embedded=_gbp_dspy_register_types
 Module=dspy
 Name=D-Bus Connection Explorer
-X-Workspace-Kind=primary;editor;
 X-At-Startup=true
+X-Category=desktop
+X-Workspace-Kind=primary;editor;
