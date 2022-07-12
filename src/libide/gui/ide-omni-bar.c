@@ -23,10 +23,9 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
-#include <dazzle.h>
 
+#include "ide-application.h"
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
 #include "ide-notification-list-box-row-private.h"
 #include "ide-notification-stack-private.h"
 #include "ide-omni-bar-addin.h"
@@ -34,25 +33,16 @@
 
 struct _IdeOmniBar
 {
-  GtkBin                parent_instance;
+  PanelOmniBar          parent_instance;
 
   PeasExtensionSet     *addins;
-  GtkGesture           *gesture;
-  GtkEventController   *motion;
 
-  GtkEventBox          *entry_event_box;
-  GtkStack             *top_stack;
+  GtkStack             *stack;
   GtkPopover           *popover;
-  DzlEntryBox          *entry_box;
   IdeNotificationStack *notification_stack;
   GtkListBox           *notifications_list_box;
-  DzlPriorityBox       *inner_box;
-  DzlPriorityBox       *outer_box;
-  GtkProgressBar       *progress;
   GtkWidget            *placeholder;
-  DzlPriorityBox       *sections_box;
-
-  guint                 in_button : 1;
+  GtkBox               *sections_box;
 };
 
 static void ide_omni_bar_move_next     (IdeOmniBar        *self,
@@ -61,107 +51,23 @@ static void ide_omni_bar_move_previous (IdeOmniBar        *self,
                                         GVariant          *param);
 static void buildable_iface_init       (GtkBuildableIface *iface);
 
-DZL_DEFINE_ACTION_GROUP (IdeOmniBar, ide_omni_bar, {
+IDE_DEFINE_ACTION_GROUP (IdeOmniBar, ide_omni_bar, {
   { "move-next", ide_omni_bar_move_next },
   { "move-previous", ide_omni_bar_move_previous },
 })
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeOmniBar, ide_omni_bar, GTK_TYPE_BIN,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_omni_bar_init_action_group)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeOmniBar, ide_omni_bar, PANEL_TYPE_OMNI_BAR,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_omni_bar_init_action_group)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
+
+enum {
+  PROP_0,
+  PROP_MENU_ID,
+  N_PROPS
+};
 
 static GtkBuildableIface *parent_buildable_iface;
-
-static void
-ide_omni_bar_popover_closed_cb (IdeOmniBar *self,
-                                GtkPopover *popover)
-{
-  GtkStyleContext *style_context;
-  GtkStateFlags state_flags;
-
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (GTK_IS_POPOVER (popover));
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  state_flags = gtk_style_context_get_state (style_context);
-
-  state_flags &= ~GTK_STATE_FLAG_ACTIVE;
-  state_flags &= ~GTK_STATE_FLAG_PRELIGHT;
-
-  gtk_style_context_set_state (style_context, state_flags);
-}
-
-static void
-multipress_pressed_cb (IdeOmniBar           *self,
-                       guint                 n_press,
-                       gdouble               x,
-                       gdouble               y,
-                       GtkGestureMultiPress *gesture)
-{
-  GtkStyleContext *style_context;
-  GtkStateFlags state_flags;
-
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
-
-  if (gtk_widget_get_focus_on_click (GTK_WIDGET (self)) &&
-      !gtk_widget_has_focus (GTK_WIDGET (self)))
-    gtk_widget_grab_focus (GTK_WIDGET (self));
-
-  self->in_button = TRUE;
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  state_flags = gtk_style_context_get_state (style_context);
-  gtk_style_context_set_state (style_context, state_flags | GTK_STATE_FLAG_ACTIVE);
-
-  gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-}
-
-static void
-multipress_released_cb (IdeOmniBar           *self,
-                        guint                 n_press,
-                        gdouble               x,
-                        gdouble               y,
-                        GtkGestureMultiPress *gesture)
-{
-  GtkStyleContext *style_context;
-  GtkStateFlags state_flags;
-  gboolean show;
-
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
-
-  show = self->in_button;
-  self->in_button = FALSE;
-
-  if (show)
-    {
-      gtk_popover_popup (self->popover);
-      return;
-    }
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  state_flags = gtk_style_context_get_state (style_context);
-  gtk_style_context_set_state (style_context, state_flags & ~GTK_STATE_FLAG_ACTIVE);
-}
-
-static void
-multipress_cancel_cb (IdeOmniBar           *self,
-                      GdkEventSequence     *sequence,
-                      GtkGestureMultiPress *gesture)
-{
-  GtkStyleContext *style_context;
-  GtkStateFlags state_flags;
-
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (GTK_IS_GESTURE_MULTI_PRESS (gesture));
-
-  self->in_button = FALSE;
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  state_flags = gtk_style_context_get_state (style_context);
-  gtk_style_context_set_state (style_context, state_flags & ~GTK_STATE_FLAG_ACTIVE);
-}
+static GParamSpec *properties [N_PROPS];
 
 static void
 ide_omni_bar_notification_stack_changed_cb (IdeOmniBar           *self,
@@ -178,23 +84,21 @@ ide_omni_bar_notification_stack_changed_cb (IdeOmniBar           *self,
   ide_omni_bar_set_action_enabled (self, "move-previous", enabled);
   ide_omni_bar_set_action_enabled (self, "move-next", enabled);
 
-  _ide_gtk_progress_bar_stop_pulsing (self->progress);
-  gtk_widget_hide (GTK_WIDGET (self->progress));
+  panel_omni_bar_stop_pulsing (PANEL_OMNI_BAR (self));
 
   if ((notif = ide_notification_stack_get_visible (stack)))
     {
       if (ide_notification_get_has_progress (notif))
         {
           if (ide_notification_get_progress_is_imprecise (notif))
-            _ide_gtk_progress_bar_start_pulsing (self->progress);
-          gtk_widget_show (GTK_WIDGET (self->progress));
+            panel_omni_bar_start_pulsing (PANEL_OMNI_BAR (self));
         }
     }
 
   if (ide_notification_stack_is_empty (stack))
-    gtk_stack_set_visible_child_name (self->top_stack, "placeholder");
+    gtk_stack_set_visible_child_name (self->stack, "placeholder");
   else
-    gtk_stack_set_visible_child_name (self->top_stack, "notifications");
+    gtk_stack_set_visible_child_name (self->stack, "notifications");
 }
 
 static void
@@ -250,10 +154,10 @@ create_notification_row (gpointer item,
 }
 
 static gboolean
-filter_for_popover (GObject  *object,
-                    gpointer  user_data)
+filter_for_popover (gpointer item,
+                    gpointer user_data)
 {
-  IdeNotification *notif = (IdeNotification *)object;
+  IdeNotification *notif = item;
 
   g_assert (IDE_IS_NOTIFICATION (notif));
   g_assert (user_data == NULL);
@@ -268,7 +172,8 @@ ide_omni_bar_context_set_cb (GtkWidget  *widget,
 {
   IdeOmniBar *self = (IdeOmniBar *)widget;
   g_autoptr(IdeObject) notifications = NULL;
-  g_autoptr(DzlListModelFilter) filter = NULL;
+  g_autoptr(GtkFilterListModel) model = NULL;
+  g_autoptr(GtkCustomFilter) filter = NULL;
 
   g_assert (IDE_IS_OMNI_BAR (self));
   g_assert (IDE_IS_CONTEXT (context));
@@ -277,8 +182,9 @@ ide_omni_bar_context_set_cb (GtkWidget  *widget,
   notifications = ide_object_get_child_typed (IDE_OBJECT (context), IDE_TYPE_NOTIFICATIONS);
   ide_notification_stack_bind_model (self->notification_stack, G_LIST_MODEL (notifications));
 
-  filter = dzl_list_model_filter_new (G_LIST_MODEL (notifications));
-  dzl_list_model_filter_set_filter_func (filter, filter_for_popover, NULL, NULL);
+  filter = gtk_custom_filter_new (filter_for_popover, NULL, NULL);
+  model = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (notifications)),
+                                     GTK_FILTER (g_steal_pointer (&filter)));
   gtk_list_box_bind_model (self->notifications_list_box,
                            G_LIST_MODEL (filter),
                            create_notification_row,
@@ -300,61 +206,6 @@ ide_omni_bar_context_set_cb (GtkWidget  *widget,
   peas_extension_set_foreach (self->addins,
                               ide_omni_bar_extension_added_cb,
                               self);
-}
-
-static void
-ide_omni_bar_motion_enter_cb (IdeOmniBar               *self,
-                              gdouble                   x,
-                              gdouble                   y,
-                              GtkEventControllerMotion *motion)
-{
-  GtkStyleContext *style_context;
-  GtkStateFlags state_flags;
-
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (GTK_IS_EVENT_CONTROLLER_MOTION (motion));
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  state_flags = gtk_style_context_get_state (style_context);
-
-  if ((state_flags & GTK_STATE_FLAG_PRELIGHT) == 0)
-    gtk_style_context_set_state (style_context, state_flags | GTK_STATE_FLAG_PRELIGHT);
-}
-
-static void
-ide_omni_bar_motion_leave_cb (IdeOmniBar               *self,
-                              GtkEventControllerMotion *motion)
-{
-  GtkStyleContext *style_context;
-  GtkStateFlags state_flags;
-
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (GTK_IS_EVENT_CONTROLLER_MOTION (motion));
-
-  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-  state_flags = gtk_style_context_get_state (style_context);
-
-  if (state_flags & GTK_STATE_FLAG_PRELIGHT)
-    gtk_style_context_set_state (style_context, state_flags & ~GTK_STATE_FLAG_PRELIGHT);
-}
-
-static void
-ide_omni_bar_motion_cb (IdeOmniBar               *self,
-                        gdouble                   x,
-                        gdouble                   y,
-                        GtkEventControllerMotion *motion)
-{
-  g_assert (IDE_IS_OMNI_BAR (self));
-  g_assert (GTK_IS_EVENT_CONTROLLER_MOTION (motion));
-
-  /*
-   * Because of how crossing-events work with Gtk 3, we don't get reliable
-   * crossing events for the motion controller. So every motion (which we do
-   * seem to get semi-reliably), just re-run the enter-notify path to ensure
-   * we get proper state set.
-   */
-
-  ide_omni_bar_motion_enter_cb (self, x, y, motion);
 }
 
 static gboolean
@@ -400,65 +251,95 @@ ide_omni_bar_notification_row_activated (IdeOmniBar                *self,
   notif = ide_notification_list_box_row_get_notification (row);
 
   if (ide_notification_get_default_action (notif, &default_action, &default_target))
+    gtk_widget_activate_action_variant (GTK_WIDGET (list_box), default_action, default_target);
+}
+
+static void
+ide_omni_bar_measure (GtkWidget      *widget,
+                      GtkOrientation  orientation,
+                      int             for_size,
+                      int            *minimum,
+                      int            *natural,
+                      int            *minimum_baseline,
+                      int            *natural_baseline)
+{
+  g_assert (IDE_IS_OMNI_BAR (widget));
+
+  GTK_WIDGET_CLASS (ide_omni_bar_parent_class)->measure (widget, orientation, for_size,
+                                                         minimum, natural,
+                                                         minimum_baseline, natural_baseline);
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gchar *name = strchr (default_action, '.');
-      gchar *group = default_action;
-
-      if (name != NULL)
-        {
-          *name = '\0';
-          name++;
-        }
-      else
-        {
-          group = NULL;
-          name = default_action;
-        }
-
-      dzl_gtk_widget_action (GTK_WIDGET (list_box), group, name, default_target);
+      if (*natural < 500)
+        *natural = 500;
     }
 }
 
 static void
-ide_omni_bar_destroy (GtkWidget *widget)
+ide_omni_bar_dispose (GObject *object)
 {
-  IdeOmniBar *self = (IdeOmniBar *)widget;
+  IdeOmniBar *self = (IdeOmniBar *)object;
 
   g_assert (IDE_IS_OMNI_BAR (self));
 
-  if (self->progress != NULL)
-    _ide_gtk_progress_bar_stop_pulsing (self->progress);
-
   g_clear_object (&self->addins);
-  g_clear_object (&self->gesture);
-  g_clear_object (&self->motion);
 
-  GTK_WIDGET_CLASS (ide_omni_bar_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_omni_bar_parent_class)->dispose (object);
+}
+
+static void
+ide_omni_bar_set_property (GObject      *object,
+                           guint         prop_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
+{
+  IdeOmniBar *self = IDE_OMNI_BAR (object);
+
+  switch (prop_id)
+    {
+    case PROP_MENU_ID:
+      {
+        const char *menu_id = g_value_get_string (value);
+        GMenu *menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, menu_id);
+        g_object_set (self, "menu-model", menu, NULL);
+        break;
+      }
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
 ide_omni_bar_class_init (IdeOmniBarClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->destroy = ide_omni_bar_destroy;
+  object_class->dispose = ide_omni_bar_dispose;
+  object_class->set_property = ide_omni_bar_set_property;
+
   widget_class->query_tooltip = ide_omni_bar_query_tooltip;
+  widget_class->measure = ide_omni_bar_measure;
+
+  properties [PROP_MENU_ID] =
+    g_param_spec_string ("menu-id",
+                         "Menu ID",
+                         "The identifier for the merged menu",
+                         NULL,
+                         (G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-omni-bar.ui");
-  gtk_widget_class_set_css_name (widget_class, "omnibar");
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, entry_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, entry_event_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, inner_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, notification_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, notifications_list_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, outer_box);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, popover);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, progress);
   gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, sections_box);
-  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, top_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeOmniBar, stack);
   gtk_widget_class_bind_template_callback (widget_class, ide_omni_bar_notification_row_activated);
 
-  g_type_ensure (DZL_TYPE_ENTRY_BOX);
   g_type_ensure (IDE_TYPE_NOTIFICATION_STACK);
 }
 
@@ -469,58 +350,9 @@ ide_omni_bar_init (IdeOmniBar *self)
 
   gtk_widget_set_has_tooltip (GTK_WIDGET (self), TRUE);
 
-  gtk_widget_add_events (GTK_WIDGET (self),
-                         (GDK_POINTER_MOTION_MASK |
-                          GDK_ENTER_NOTIFY_MASK |
-                          GDK_LEAVE_NOTIFY_MASK));
-
-  self->motion = gtk_event_controller_motion_new (GTK_WIDGET (self));
-  gtk_event_controller_set_propagation_phase (self->motion, GTK_PHASE_CAPTURE);
-
-  g_signal_connect_swapped (self->motion,
-                            "enter",
-                            G_CALLBACK (ide_omni_bar_motion_enter_cb),
-                            self);
-
-  g_signal_connect_swapped (self->motion,
-                            "motion",
-                            G_CALLBACK (ide_omni_bar_motion_cb),
-                            self);
-
-  g_signal_connect_swapped (self->motion,
-                            "leave",
-                            G_CALLBACK (ide_omni_bar_motion_leave_cb),
-                            self);
-
-  self->gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self->entry_event_box));
-  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (self->gesture), FALSE);
-  gtk_gesture_single_set_exclusive (GTK_GESTURE_SINGLE (self->gesture), TRUE);
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (self->gesture), GDK_BUTTON_PRIMARY);
-  g_signal_connect_object (self->gesture,
-                           "pressed",
-                           G_CALLBACK (multipress_pressed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->gesture,
-                           "released",
-                           G_CALLBACK (multipress_released_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  g_signal_connect_object (self->gesture,
-                           "cancel",
-                           G_CALLBACK (multipress_cancel_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
   g_signal_connect_object (self->notification_stack,
                            "changed",
                            G_CALLBACK (ide_omni_bar_notification_stack_changed_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  g_signal_connect_object (self->popover,
-                           "closed",
-                           G_CALLBACK (ide_omni_bar_popover_closed_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -566,38 +398,16 @@ ide_omni_bar_move_previous (IdeOmniBar *self,
  *
  * Adds a status-icon style widget to the end of the omnibar. Generally,
  * you'll want this to be either a GtkButton, GtkLabel, or something simple.
- *
- * Since: 3.32
  */
 void
 ide_omni_bar_add_status_icon (IdeOmniBar *self,
                               GtkWidget  *widget,
-                              gint        priority)
+                              int         priority)
 {
   g_return_if_fail (IDE_IS_OMNI_BAR (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->inner_box), widget,
-                                     "pack-type", GTK_PACK_END,
-                                     "priority", priority,
-                                     NULL);
-}
-
-void
-ide_omni_bar_add_button (IdeOmniBar  *self,
-                         GtkWidget   *widget,
-                         GtkPackType  pack_type,
-                         gint         priority)
-{
-  g_return_if_fail (IDE_IS_OMNI_BAR (self));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (pack_type == GTK_PACK_START ||
-                    pack_type == GTK_PACK_END);
-
-  gtk_container_add_with_properties (GTK_CONTAINER (self->outer_box), widget,
-                                     "pack-type", pack_type,
-                                     "priority", priority,
-                                     NULL);
+  panel_omni_bar_add_suffix (PANEL_OMNI_BAR (self), priority, widget);
 }
 
 void
@@ -611,28 +421,22 @@ ide_omni_bar_set_placeholder (IdeOmniBar *self,
     return;
 
   if (self->placeholder)
-    gtk_widget_destroy (self->placeholder);
+    gtk_stack_remove (self->stack, self->placeholder);
 
   self->placeholder = widget;
 
   if (self->placeholder)
     {
-      g_signal_connect (self->placeholder,
-                        "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        self->placeholder);
-      gtk_container_add_with_properties (GTK_CONTAINER (self->top_stack), self->placeholder,
-                                         "name", "placeholder",
-                                         NULL);
+      gtk_stack_add_named (self->stack, self->placeholder, "placeholder");
       if (self->notification_stack == NULL ||
           ide_notification_stack_is_empty (self->notification_stack))
-        gtk_stack_set_visible_child_name (self->top_stack, "placeholder");
+        gtk_stack_set_visible_child_name (self->stack, "placeholder");
     }
 }
 
 static void
 ide_omni_bar_add_child (GtkBuildable *buildable,
-                          GtkBuilder   *builder,
+                        GtkBuilder   *builder,
                         GObject      *child,
                         const gchar  *type)
 {
@@ -642,17 +446,7 @@ ide_omni_bar_add_child (GtkBuildable *buildable,
   g_assert (GTK_IS_BUILDER (builder));
   g_assert (G_IS_OBJECT (child));
 
-  if (ide_str_equal0 (type, "start") && GTK_IS_WIDGET (child))
-    ide_omni_bar_add_button (IDE_OMNI_BAR (self),
-                             GTK_WIDGET (child),
-                             GTK_PACK_START,
-                             0);
-  else if (ide_str_equal0 (type, "end") && GTK_IS_WIDGET (child))
-    ide_omni_bar_add_button (IDE_OMNI_BAR (self),
-                             GTK_WIDGET (child),
-                             GTK_PACK_END,
-                             0);
-  else if (ide_str_equal0 (type, "placeholder") && GTK_IS_WIDGET (child))
+  if (ide_str_equal0 (type, "placeholder") && GTK_IS_WIDGET (child))
     ide_omni_bar_set_placeholder (IDE_OMNI_BAR (self), GTK_WIDGET (child));
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
@@ -665,6 +459,9 @@ buildable_iface_init (GtkBuildableIface *iface)
   iface->add_child = ide_omni_bar_add_child;
 }
 
+#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
+#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
+
 /**
  * ide_omni_bar_add_popover_section:
  * @self: an #IdeOmniBar
@@ -672,18 +469,27 @@ buildable_iface_init (GtkBuildableIface *iface)
  * @priority: sort priority for the section
  *
  * Adds @widget to the omnibar popover, sorted by @priority
- *
- * Since: 3.32
  */
 void
 ide_omni_bar_add_popover_section (IdeOmniBar *self,
                                   GtkWidget  *widget,
-                                  gint        priority)
+                                  int         priority)
 {
+  GtkWidget *sibling = NULL;
+
   g_return_if_fail (IDE_IS_OMNI_BAR (self));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_container_add_with_properties (GTK_CONTAINER (self->sections_box), widget,
-                                     "priority", priority,
-                                     NULL);
+  SET_PRIORITY (widget, priority);
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections_box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (priority < GET_PRIORITY (child))
+        break;
+      sibling = child;
+    }
+
+  gtk_box_insert_child_after (self->sections_box, widget, sibling);
 }

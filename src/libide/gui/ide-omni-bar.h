@@ -24,33 +24,29 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
+#include <libpanel.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_OMNI_BAR (ide_omni_bar_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, GtkBin)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeOmniBar, ide_omni_bar, IDE, OMNI_BAR, PanelOmniBar)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_omni_bar_new                 (void);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_omni_bar_add_status_icon     (IdeOmniBar  *self,
                                              GtkWidget   *widget,
-                                             gint         priority);
-IDE_AVAILABLE_IN_3_32
-void       ide_omni_bar_add_button          (IdeOmniBar  *self,
-                                             GtkWidget   *widget,
-                                             GtkPackType  pack_type,
-                                             gint         priority);
-IDE_AVAILABLE_IN_3_32
+                                             int          priority);
+IDE_AVAILABLE_IN_ALL
 void       ide_omni_bar_set_placeholder     (IdeOmniBar  *self,
                                              GtkWidget   *placeholder);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void       ide_omni_bar_add_popover_section (IdeOmniBar  *self,
                                              GtkWidget   *widget,
-                                             gint         priority);
+                                             int          priority);
 
 G_END_DECLS

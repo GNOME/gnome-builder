@@ -34,8 +34,6 @@
  * information to the popover.
  *
  * See #IdeOmniBar for information about what you can alter.
- *
- * Since: 3.32
  */
 
 G_DEFINE_INTERFACE (IdeOmniBarAddin, ide_omni_bar_addin, G_TYPE_OBJECT)
@@ -52,8 +50,6 @@ ide_omni_bar_addin_default_init (IdeOmniBarAddinInterface *iface)
  *
  * Requests that the #IdeOmniBarAddin initialize, possibly modifying
  * @omni_bar as necessary.
- *
- * Since: 3.32
  */
 void
 ide_omni_bar_addin_load (IdeOmniBarAddin *self,
@@ -74,8 +70,6 @@ ide_omni_bar_addin_load (IdeOmniBarAddin *self,
  * Requests that the #IdeOmniBarAddin shutdown, possibly modifying
  * @omni_bar as necessary to return it to the original state before
  * the addin was loaded.
- *
- * Since: 3.32
  */
 void
 ide_omni_bar_addin_unload (IdeOmniBarAddin *self,

@@ -1,133 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeOmniBar" parent="GtkBin">
-    <child>
-      <object class="DzlPriorityBox" id="outer_box">
-        <property name="hexpand">true</property>
-        <property name="visible">true</property>
-        <style>
-          <class name="linked"/>
-        </style>
-        <child type="center">
-          <object class="DzlEntryBox" id="entry_box">
-            <property name="max-width-chars">40</property>
-            <property name="visible">true</property>
+  <requires lib="gtk" version="4.0"/>
+  <requires lib="Adw" version="1.0"/>
+  <requires lib="Panel" version="1.0"/>
+  <template class="IdeOmniBar" parent="PanelOmniBar">
+    <property name="popover">
+      <object class="GtkPopover" id="popover">
+        <property name="width-request">500</property>
+        <property name="position">bottom</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
             <child>
-              <object class="GtkOverlay" id="overlay">
-                <property name="visible">true</property>
-                <child type="overlay">
-                  <object class="GtkProgressBar" id="progress">
-                    <property name="valign">end</property>
-                    <property name="hexpand">true</property>
-                    <property name="fraction" bind-source="notification_stack" bind-property="progress"/>
-                    <property name="visible">true</property>
-                    <style>
-                      <class name="osd"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="DzlPriorityBox" id="inner_box">
-                    <property name="margin-top">1</property>
-                    <property name="spacing">3</property>
-                    <property name="visible">true</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="hexpand">false</property>
-                        <property name="vexpand">false</property>
-                        <property name="valign">center</property>
-                        <property name="orientation">vertical</property>
-                        <property name="visible">true</property>
-                        <style>
-                          <class name="pan"/>
-                        </style>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="action-name">omnibar.move-previous</property>
-                            <property name="visible">true</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">pan-up-symbolic</property>
-                                <property name="pixel-size">12</property>
-                                <property name="visible">true</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton">
-                            <property name="action-name">omnibar.move-next</property>
-                            <property name="visible">true</property>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="icon-name">pan-down-symbolic</property>
-                                <property name="pixel-size">12</property>
-                                <property name="visible">true</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkEventBox" id="entry_event_box">
-                        <property name="visible">true</property>
-                        <child>
-                          <object class="GtkStack" id="top_stack">
-                            <property name="margin-start">3</property>
-                            <property name="margin-end">3</property>
-                            <property name="hexpand">true</property>
-                            <property name="visible">true</property>
-                            <child>
-                              <object class="IdeNotificationStack" id="notification_stack">
-                                <property name="visible">true</property>
-                              </object>
-                              <packing>
-                                <property name="name">notifications</property>
-                              </packing>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">true</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
+              <object class="GtkBox" id="sections_box">
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBox" id="notifications_list_box">
+                <signal name="row-activated" swapped="true" object="IdeOmniBar" handler="ide_omni_bar_notification_row_activated"/>
+                <property name="selection-mode">none</property>
               </object>
             </child>
           </object>
         </child>
       </object>
-    </child>
-  </template>
-  <object class="GtkPopover" id="popover">
-    <property name="width-request">500</property>
-    <property name="relative-to">IdeOmniBar</property>
-    <property name="position">top</property>
-    <style>
-      <class name="omnibar"/>
-    </style>
-    <child>
+    </property>
+    <child type="prefix">
       <object class="GtkBox">
+        <property name="hexpand">false</property>
+        <property name="vexpand">false</property>
+        <property name="valign">center</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">12</property>
-        <property name="visible">true</property>
+        <style>
+          <class name="pan"/>
+        </style>
         <child>
-          <object class="DzlPriorityBox" id="sections_box">
-            <property name="orientation">vertical</property>
-            <property name="visible">true</property>
+          <object class="GtkImage">
+            <property name="icon-name">pan-up-symbolic</property>
+            <property name="pixel-size">12</property>
           </object>
         </child>
         <child>
-          <object class="GtkListBox" id="notifications_list_box">
-            <signal name="row-activated" swapped="true" object="IdeOmniBar" handler="ide_omni_bar_notification_row_activated"/>
-            <property name="selection-mode">none</property>
-            <property name="visible">true</property>
+          <object class="GtkImage">
+            <property name="icon-name">pan-down-symbolic</property>
+            <property name="pixel-size">12</property>
           </object>
         </child>
       </object>
     </child>
-  </object>
+    <child type="prefix">
+      <object class="GtkStack" id="stack">
+        <property name="margin-start">3</property>
+        <property name="margin-end">3</property>
+        <property name="hexpand">true</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="name">notifications</property>
+            <property name="child">
+              <object class="IdeNotificationStack" id="notification_stack">
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
 </interface>
