@@ -22,39 +22,21 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <gtk/gtk.h>
-#include <libide-gui.h>
-#include <ide-build-ident.h>
 #include <libpeas/peas.h>
 #include <string.h>
 
+#include <libide-gui.h>
+#include <ide-build-ident.h>
+
 #include "ide-support.h"
-
-static gchar *
-str_to_key (const gchar *str)
-{
-  return g_strdelimit (g_strdup (str), " ", '_');
-}
-
-static void
-counter_arena_foreach_cb (DzlCounter *counter,
-                          gpointer    user_data)
-{
-  GString *str = (GString *)user_data;
-  g_autofree gchar *category = str_to_key (counter->category);
-  g_autofree gchar *name = str_to_key (counter->name);
-
-  g_string_append_printf (str,
-                          "%s.%s = %"G_GINT64_FORMAT"\n",
-                          category, name, dzl_counter_get (counter));
-}
 
 gchar *
 ide_get_support_log (void)
 {
   PeasEngine *engine = peas_engine_get_default ();
   const GList *plugins;
+  GListModel *monitors;
   GChecksum *checksum;
   GDateTime *now;
   GDateTime *started_at;
@@ -126,14 +108,14 @@ ide_get_support_log (void)
   g_string_append (str, "[runtime.display]\n");
   g_string_append_printf (str, "name = \"%s\"\n", gdk_display_get_name (display));
 
-  n_monitors = gdk_display_get_n_monitors (display);
+  monitors = gdk_display_get_monitors (display);
+  n_monitors = g_list_model_get_n_items (monitors);
   g_string_append_printf (str, "n_monitors = %u\n", n_monitors);
   for (i = 0; i < n_monitors; i++)
     {
-      GdkMonitor *monitor;
+      g_autoptr(GdkMonitor) monitor = g_list_model_get_item (monitors, i);
       GdkRectangle geom;
 
-      monitor = gdk_display_get_monitor (display, i);
       gdk_monitor_get_geometry (monitor, &geom);
       g_string_append_printf (str, "geometry[%u] = [%u,%u]\n",
                               i, geom.width, geom.height);
@@ -180,15 +162,6 @@ ide_get_support_log (void)
       g_free (key);
     }
   g_strfreev (env);
-  g_string_append (str, "\n");
-
-  /*
-   * Log the counters.
-   */
-  g_string_append (str, "[runtime.counters]\n");
-  dzl_counter_arena_foreach (dzl_counter_arena_get_default (),
-                             counter_arena_foreach_cb, str);
-
   g_string_append (str, "\n\n");
 
   /*

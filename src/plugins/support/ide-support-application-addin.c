@@ -94,10 +94,10 @@ generate_support_activate (GSimpleAction              *action,
                                    GTK_BUTTONS_CLOSE,
                                    "%s", text);
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
-  ide_gtk_window_present (GTK_WINDOW (dialog));
+  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
+  gtk_window_present (GTK_WINDOW (dialog));
 
-  dzl_file_manager_show (file, NULL);
+  ide_file_manager_show (file, NULL);
 
 cleanup:
   g_free (text);
