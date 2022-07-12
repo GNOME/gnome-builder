@@ -22,61 +22,86 @@
 
 #include <libide-core.h>
 
+#include "ide-vcs-uri.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_CLONER (ide_vcs_cloner_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeVcsCloner, ide_vcs_cloner, IDE, VCS_CLONER, IdeObject)
 
 struct _IdeVcsClonerInterface
 {
   GTypeInterface parent_iface;
 
-  gchar    *(*get_title)    (IdeVcsCloner         *self);
-  gboolean  (*validate_uri) (IdeVcsCloner         *self,
-                             const gchar          *uri,
-                             gchar               **errmsg);
-  void      (*clone_async)  (IdeVcsCloner         *self,
-                             const gchar          *uri,
-                             const gchar          *destination,
-                             GVariant             *options,
-                             IdeNotification      *progress,
-                             GCancellable         *cancellable,
-                             GAsyncReadyCallback   callback,
-                             gpointer              user_data);
-  gboolean  (*clone_finish) (IdeVcsCloner         *self,
-                             GAsyncResult         *result,
-                             GError              **error);
-};
-
-IDE_AVAILABLE_IN_3_32
-gchar    *ide_vcs_cloner_get_title    (IdeVcsCloner         *self);
-IDE_AVAILABLE_IN_3_32
-void      ide_vcs_cloner_clone_async  (IdeVcsCloner         *self,
-                                       const gchar          *uri,
-                                       const gchar          *destination,
+  char       *(*get_title)            (IdeVcsCloner         *self);
+  gboolean    (*validate_uri)         (IdeVcsCloner         *self,
+                                       const char           *uri,
+                                       char                **errmsg);
+  void        (*clone_async)          (IdeVcsCloner         *self,
+                                       const char           *uri,
+                                       const char           *destination,
                                        GVariant             *options,
                                        IdeNotification      *progress,
                                        GCancellable         *cancellable,
                                        GAsyncReadyCallback   callback,
                                        gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
-gboolean  ide_vcs_cloner_clone_finish (IdeVcsCloner         *self,
+  gboolean    (*clone_finish)         (IdeVcsCloner         *self,
                                        GAsyncResult         *result,
                                        GError              **error);
-IDE_AVAILABLE_IN_3_32
-gboolean  ide_vcs_cloner_validate_uri (IdeVcsCloner         *self,
-                                       const gchar          *uri,
-                                       gchar               **errmsg);
-IDE_AVAILABLE_IN_3_34
-gboolean  ide_vcs_cloner_clone_simple (IdeContext           *context,
-                                       const gchar          *module_name,
-                                       const gchar          *url,
-                                       const gchar          *branch,
-                                       const gchar          *destination,
-                                       IdeNotification      *notif,
+  void        (*list_branches_async)  (IdeVcsCloner         *self,
+                                       IdeVcsUri            *uri,
                                        GCancellable         *cancellable,
+                                       GAsyncReadyCallback   callback,
+                                       gpointer              user_data);
+  GListModel *(*list_branches_finish) (IdeVcsCloner         *self,
+                                       GAsyncResult         *result,
                                        GError              **error);
+  char       *(*get_directory_name)   (IdeVcsCloner         *self,
+                                       IdeVcsUri            *uri);
+};
+
+IDE_AVAILABLE_IN_ALL
+char       *ide_vcs_cloner_get_title            (IdeVcsCloner         *self);
+IDE_AVAILABLE_IN_ALL
+void        ide_vcs_cloner_clone_async          (IdeVcsCloner         *self,
+                                                 const char           *uri,
+                                                 const char           *destination,
+                                                 GVariant             *options,
+                                                 IdeNotification      *progress,
+                                                 GCancellable         *cancellable,
+                                                 GAsyncReadyCallback   callback,
+                                                 gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+gboolean    ide_vcs_cloner_clone_finish         (IdeVcsCloner         *self,
+                                                 GAsyncResult         *result,
+                                                 GError              **error);
+IDE_AVAILABLE_IN_ALL
+void        ide_vcs_cloner_list_branches_async  (IdeVcsCloner         *self,
+                                                 IdeVcsUri            *uri,
+                                                 GCancellable         *cancellable,
+                                                 GAsyncReadyCallback   callback,
+                                                 gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+GListModel *ide_vcs_cloner_list_branches_finish (IdeVcsCloner         *self,
+                                                 GAsyncResult         *result,
+                                                 GError              **error);
+IDE_AVAILABLE_IN_ALL
+char       *ide_vcs_cloner_get_directory_name   (IdeVcsCloner         *self,
+                                                 IdeVcsUri            *uri);
+IDE_AVAILABLE_IN_ALL
+gboolean    ide_vcs_cloner_validate_uri         (IdeVcsCloner         *self,
+                                                 const char           *uri,
+                                                 char                **errmsg);
+IDE_AVAILABLE_IN_ALL
+gboolean    ide_vcs_cloner_clone_simple         (IdeContext           *context,
+                                                 const char           *module_name,
+                                                 const char           *url,
+                                                 const char           *branch,
+                                                 const char           *destination,
+                                                 IdeNotification      *notif,
+                                                 GCancellable         *cancellable,
+                                                 GError              **error);
 
 G_END_DECLS

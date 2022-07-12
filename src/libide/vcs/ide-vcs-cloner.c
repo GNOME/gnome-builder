@@ -46,8 +46,6 @@ ide_vcs_cloner_default_init (IdeVcsClonerInterface *iface)
  * describing how the URI is invalid.
  *
  * Returns: %TRUE if @uri is valid, otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_vcs_cloner_validate_uri (IdeVcsCloner  *self,
@@ -75,8 +73,6 @@ ide_vcs_cloner_validate_uri (IdeVcsCloner  *self,
  * @progress: (nullable): a location for an #IdeNotification, or %NULL
  * @callback: a #GAsyncReadyCallback to execute upon completion
  * @user_data: closure data for @callback
- *
- * Since: 3.32
  */
 void
 ide_vcs_cloner_clone_async (IdeVcsCloner         *self,
@@ -113,8 +109,6 @@ ide_vcs_cloner_clone_async (IdeVcsCloner         *self,
  * @error: a location for a #GError, or %NULL
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_vcs_cloner_clone_finish (IdeVcsCloner  *self,
@@ -136,8 +130,6 @@ ide_vcs_cloner_clone_finish (IdeVcsCloner  *self,
  * titles might be "Subversion" or "CVS".
  *
  * Returns: (transfer full): a string containing the title
- *
- * Since: 3.32
  */
 gchar *
 ide_vcs_cloner_get_title (IdeVcsCloner *self)
@@ -170,7 +162,6 @@ ide_vcs_cloner_clone_simple_clone_cb (GObject      *object,
                                       gpointer      user_data)
 {
   IdeVcsCloner *cloner = (IdeVcsCloner *)object;
-  g_autoptr(GError) error = NULL;
   CloneSimple *state = user_data;
 
   g_assert (IDE_IS_VCS_CLONER (cloner));
@@ -294,9 +285,9 @@ ide_vcs_cloner_clone_simple (IdeContext       *context,
 
   g_mutex_lock (&state.mutex);
 
-  gdk_threads_add_idle_full (G_PRIORITY_HIGH,
-                             (GSourceFunc) ide_vcs_cloner_clone_simple_idle_cb,
-                             &state, NULL);
+  g_idle_add_full (G_PRIORITY_HIGH,
+                   (GSourceFunc) ide_vcs_cloner_clone_simple_idle_cb,
+                   &state, NULL);
 
   g_cond_wait (&state.cond, &state.mutex);
   g_mutex_unlock (&state.mutex);
@@ -312,3 +303,72 @@ ide_vcs_cloner_clone_simple (IdeContext       *context,
   return TRUE;
 }
 
+void
+ide_vcs_cloner_list_branches_async (IdeVcsCloner        *self,
+                                    IdeVcsUri           *uri,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_VCS_CLONER (self));
+  g_return_if_fail (uri != NULL);
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  IDE_VCS_CLONER_GET_IFACE (self)->list_branches_async (self, uri, cancellable, callback, user_data);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_vcs_cloner_list_branches_finish:
+ *
+ * Returns: (transfer full): a #GListModel of #IdeVcsBranch
+ */
+GListModel *
+ide_vcs_cloner_list_branches_finish (IdeVcsCloner  *self,
+                                     GAsyncResult  *result,
+                                     GError       **error)
+{
+  GListModel *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_VCS_CLONER (self), NULL);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
+
+  ret = IDE_VCS_CLONER_GET_IFACE (self)->list_branches_finish (self, result, error);
+
+  g_return_val_if_fail (!ret || G_IS_LIST_MODEL (ret), NULL);
+
+  IDE_RETURN (ret);
+}
+
+/**
+ * ide_vcs_cloner_get_directory_name:
+ * @self: a #IdeVcsCloner
+ * @uri: an #IdeVcsUri
+ *
+ * Gets the directory name that will be used to clone from @uri.
+ *
+ * If the path has "foo.git", this function would be expected to
+ * return "foo".
+ *
+ * Returns: (transfer full): a string containing the directory name
+ */
+char *
+ide_vcs_cloner_get_directory_name (IdeVcsCloner *self,
+                                   IdeVcsUri    *uri)
+{
+  char *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_VCS_CLONER (self), NULL);
+  g_return_val_if_fail (uri != NULL, NULL);
+
+  ret = IDE_VCS_CLONER_GET_IFACE (self)->get_directory_name (self, uri);
+
+  IDE_RETURN (ret);
+}
