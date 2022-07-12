@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <gio/gio.h>
 #include <glib/gi18n.h>
 #include <string.h>
@@ -393,7 +392,7 @@ ide_buildconfig_config_provider_append_env (IdeEnvironment *env,
       key = ide_environment_variable_get_key (var);
       value = ide_environment_variable_get_value (var);
 
-      if (!dzl_str_empty0 (key))
+      if (!ide_str_empty0 (key))
         g_key_file_set_string (key_file, env_group, key, value ?: "");
     }
 }
