@@ -41,7 +41,6 @@
 #include "ide-frame-empty-state.h"
 #include "ide-frame-header.h"
 #include "ide-header-bar.h"
-#include "ide-fancy-tree-view.h"
 #include "ide-grid.h"
 #include "ide-grid-column.h"
 #include "ide-gui-global.h"
