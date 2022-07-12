@@ -20,8 +20,11 @@
 
 #define G_LOG_DOMAIN "gbp-notification-addin"
 
+#include "config.h"
+
 #include <glib/gi18n.h>
 #include <gio/gio.h>
+
 #include <libide-foundry.h>
 
 #include "ide-notification-addin.h"
@@ -55,7 +58,7 @@ should_supress_message (IdeNotificationAddin *self,
   g_assert (message != NULL);
 
   if (self->last_msg_body == NULL ||
-      !dzl_str_equal0 (self->last_msg_body, message) ||
+      !ide_str_equal0 (self->last_msg_body, message) ||
       self->last_time + GRACE_PERIOD_USEC < g_get_monotonic_time ())
     {
       g_free (self->last_msg_body);
@@ -110,7 +113,11 @@ ide_notification_addin_notify (IdeNotificationAddin *self,
       msg_body = g_strdup_printf (_("Project “%s” failed to build"), project_name);
     }
 
+#ifdef DEVELOPMENT_BUILD
+  icon = g_themed_icon_new ("org.gnome.Builder.Devel-symbolic");
+#else
   icon = g_themed_icon_new ("org.gnome.Builder-symbolic");
+#endif
 
   notification = g_notification_new (msg_title);
   g_notification_set_body (notification, msg_body);
