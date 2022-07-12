@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_SYMBOL_TREE (ide_lsp_symbol_tree_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLspSymbolTree, ide_lsp_symbol_tree, IDE, LSP_SYMBOL_TREE, GObject)
 
 G_END_DECLS

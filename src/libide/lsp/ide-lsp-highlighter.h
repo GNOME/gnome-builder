@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_HIGHLIGHTER (ide_lsp_highlighter_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspHighlighter, ide_lsp_highlighter, IDE, LSP_HIGHLIGHTER, IdeObject)
 
 struct _IdeLspHighlighterClass
@@ -43,12 +43,12 @@ struct _IdeLspHighlighterClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLspClient *ide_lsp_highlighter_get_client     (IdeLspHighlighter *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_lsp_highlighter_set_client     (IdeLspHighlighter *self,
                                                   IdeLspClient      *client);
-IDE_AVAILABLE_IN_3_36
+IDE_AVAILABLE_IN_ALL
 void          ide_lsp_highlighter_set_kind_style (IdeLspHighlighter *self,
                                                   IdeSymbolKind      kind,
                                                   const gchar       *style);

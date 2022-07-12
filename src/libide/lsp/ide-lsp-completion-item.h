@@ -30,25 +30,26 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_COMPLETION_ITEM (ide_lsp_completion_item_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLspCompletionItem, ide_lsp_completion_item, IDE, LSP_COMPLETION_ITEM, GObject)
 
-IDE_AVAILABLE_IN_3_32
-IdeLspCompletionItem *ide_lsp_completion_item_new                       (GVariant             *variant);
-IDE_AVAILABLE_IN_3_32
-const gchar          *ide_lsp_completion_item_get_icon_name             (IdeLspCompletionItem *self);
-IDE_AVAILABLE_IN_3_32
-const gchar          *ide_lsp_completion_item_get_return_type           (IdeLspCompletionItem *self);
-IDE_AVAILABLE_IN_3_32
-const gchar          *ide_lsp_completion_item_get_detail                (IdeLspCompletionItem *self);
-IDE_AVAILABLE_IN_3_32
-gchar                *ide_lsp_completion_item_get_markup                (IdeLspCompletionItem *self,
-                                                                         const gchar          *typed_text);
-IDE_AVAILABLE_IN_3_32
-IdeSnippet           *ide_lsp_completion_item_get_snippet               (IdeLspCompletionItem *self);
+IDE_AVAILABLE_IN_ALL
+IdeLspCompletionItem *ide_lsp_completion_item_new                       (GVariant                *variant);
+IDE_AVAILABLE_IN_ALL
+const gchar          *ide_lsp_completion_item_get_icon_name             (IdeLspCompletionItem    *self);
+IDE_AVAILABLE_IN_ALL
+const gchar          *ide_lsp_completion_item_get_return_type           (IdeLspCompletionItem    *self);
+IDE_AVAILABLE_IN_ALL
+const gchar          *ide_lsp_completion_item_get_detail                (IdeLspCompletionItem    *self);
+IDE_AVAILABLE_IN_ALL
+GtkSourceSnippet     *ide_lsp_completion_item_get_snippet               (IdeLspCompletionItem    *self);
 
-IDE_AVAILABLE_IN_41
-GPtrArray            *ide_lsp_completion_item_get_additional_text_edits (IdeLspCompletionItem *self,
-                                                                         GFile                *file);
+IDE_AVAILABLE_IN_ALL
+GPtrArray            *ide_lsp_completion_item_get_additional_text_edits (IdeLspCompletionItem    *self,
+                                                                         GFile                   *file);
+IDE_AVAILABLE_IN_ALL
+void                  ide_lsp_completion_item_display                   (IdeLspCompletionItem    *self,
+                                                                         GtkSourceCompletionCell *cell,
+                                                                         const char              *typed_text);
 
 G_END_DECLS

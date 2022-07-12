@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_RENAME_PROVIDER (ide_lsp_rename_provider_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspRenameProvider, ide_lsp_rename_provider, IDE, LSP_RENAME_PROVIDER, IdeObject)
 
 struct _IdeLspRenameProviderClass
@@ -43,9 +43,9 @@ struct _IdeLspRenameProviderClass
   gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeLspClient *ide_lsp_rename_provider_get_client (IdeLspRenameProvider *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void          ide_lsp_rename_provider_set_client (IdeLspRenameProvider *self,
                                                   IdeLspClient         *client);
 

@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_CODE_ACTION_PROVIDER (ide_lsp_code_action_provider_get_type())
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspCodeActionProvider, ide_lsp_code_action_provider, IDE, LSP_CODE_ACTION_PROVIDER, IdeObject)
 
 struct _IdeLspCodeActionProviderClass
@@ -40,12 +40,12 @@ struct _IdeLspCodeActionProviderClass
   IdeObjectClass parent_class;
 };
 
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 void            ide_lsp_code_action_provider_set_client      (IdeLspCodeActionProvider *self,
                                                               IdeLspClient             *client);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 IdeLspClient   *ide_lsp_code_action_provider_get_client      (IdeLspCodeActionProvider *self);
-IDE_AVAILABLE_IN_42
+IDE_AVAILABLE_IN_ALL
 IdeDiagnostics *ide_lsp_code_action_provider_get_diagnostics (IdeLspCodeActionProvider *self);
 
 

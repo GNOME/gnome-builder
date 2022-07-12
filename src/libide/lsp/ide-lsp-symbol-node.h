@@ -30,12 +30,12 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_SYMBOL_NODE (ide_lsp_symbol_node_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeLspSymbolNode, ide_lsp_symbol_node, IDE, LSP_SYMBOL_NODE, IdeSymbolNode)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_lsp_symbol_node_get_parent_name (IdeLspSymbolNode *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_lsp_symbol_node_is_parent_of    (IdeLspSymbolNode *self,
                                                   IdeLspSymbolNode *other);
 
