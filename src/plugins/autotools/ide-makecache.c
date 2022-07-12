@@ -24,7 +24,6 @@
 #include "config.h"
 
 #include <ctype.h>
-#include <dazzle.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <gio/gio.h>
@@ -33,6 +32,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <libide-io.h>
 #include <libide-foundry.h>
 #include <libide-vcs.h>
 
@@ -51,10 +51,11 @@ struct _IdeMakecache
 
   GFile        *parent;
   GMappedFile  *mapped;
-  DzlTaskCache *file_targets_cache;
-  DzlTaskCache *file_flags_cache;
+  IdeTaskCache *file_targets_cache;
+  IdeTaskCache *file_flags_cache;
   GPtrArray    *build_targets;
   IdeRuntime   *runtime;
+  IdePipeline  *pipeline;
   const gchar  *make_name;
 };
 
@@ -83,8 +84,6 @@ typedef struct
 } GetBuildTargets;
 
 G_DEFINE_FINAL_TYPE (IdeMakecache, ide_makecache, IDE_TYPE_OBJECT)
-
-DZL_DEFINE_COUNTER (instances, "IdeMakecache", "Instances", "The number of IdeMakecache")
 
 static void
 get_build_targets_free (GetBuildTargets *data)
@@ -641,7 +640,7 @@ ide_makecache_get_file_flags_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (DZL_IS_TASK_CACHE (source_object));
+  g_assert (IDE_IS_TASK_CACHE (source_object));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (G_IS_TASK (task));
   g_assert (lookup != NULL);
@@ -710,11 +709,8 @@ ide_makecache_get_file_flags_worker (GTask        *task,
       }
 #endif
 
-      launcher = ide_runtime_create_launcher (lookup->self->runtime, &error);
-
-      if (launcher == NULL)
+      if (!(launcher = ide_pipeline_create_launcher (lookup->self->pipeline, &error)))
         {
-          g_assert (error != NULL);
           g_task_return_error (task, g_steal_pointer (&error));
           IDE_EXIT;
         }
@@ -830,7 +826,7 @@ ide_makecache_get_file_targets_worker (GTask        *task,
 
   IDE_ENTRY;
 
-  g_assert (DZL_IS_TASK_CACHE (source_object));
+  g_assert (IDE_IS_TASK_CACHE (source_object));
   g_assert (G_IS_TASK (task));
   g_assert (lookup != NULL);
   g_assert (lookup->mapped != NULL);
@@ -902,7 +898,7 @@ ide_makecache_get_file_targets_worker (GTask        *task,
 }
 
 static void
-ide_makecache_get_file_targets_dispatch (DzlTaskCache  *cache,
+ide_makecache_get_file_targets_dispatch (IdeTaskCache  *cache,
                                          gconstpointer  key,
                                          GTask         *task,
                                          gpointer       user_data)
@@ -911,7 +907,7 @@ ide_makecache_get_file_targets_dispatch (DzlTaskCache  *cache,
   FileTargetsLookup *lookup;
   GFile *file = (GFile *)key;
 
-  g_assert (DZL_IS_TASK_CACHE (cache));
+  g_assert (IDE_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_MAKECACHE (self));
   g_assert (G_IS_FILE (file));
   g_assert (G_IS_TASK (task));
@@ -994,7 +990,7 @@ ide_makecache_get_file_flags__get_targets_cb (GObject      *object,
 }
 
 static void
-ide_makecache_get_file_flags_dispatch (DzlTaskCache  *cache,
+ide_makecache_get_file_flags_dispatch (IdeTaskCache  *cache,
                                        gconstpointer  key,
                                        GTask         *task,
                                        gpointer       user_data)
@@ -1045,14 +1041,13 @@ ide_makecache_finalize (GObject *object)
   g_clear_object (&self->file_targets_cache);
   g_clear_object (&self->file_flags_cache);
   g_clear_object (&self->runtime);
+  g_clear_object (&self->pipeline);
   g_clear_object (&self->parent);
 
   g_clear_pointer (&self->mapped, g_mapped_file_unref);
   g_clear_pointer (&self->build_targets, g_ptr_array_unref);
 
   G_OBJECT_CLASS (ide_makecache_parent_class)->finalize (object);
-
-  DZL_COUNTER_DEC (instances);
 }
 
 static void
@@ -1066,11 +1061,9 @@ ide_makecache_class_init (IdeMakecacheClass *klass)
 static void
 ide_makecache_init (IdeMakecache *self)
 {
-  DZL_COUNTER_INC (instances);
-
   self->make_name = "make";
 
-  self->file_targets_cache = dzl_task_cache_new ((GHashFunc)g_file_hash,
+  self->file_targets_cache = ide_task_cache_new ((GHashFunc)g_file_hash,
                                                  (GEqualFunc)g_file_equal,
                                                  g_object_ref,
                                                  g_object_unref,
@@ -1081,9 +1074,9 @@ ide_makecache_init (IdeMakecache *self)
                                                  self,
                                                  NULL);
 
-  dzl_task_cache_set_name (self->file_targets_cache, "makecache: file-targets-cache");
+  ide_task_cache_set_name (self->file_targets_cache, "makecache: file-targets-cache");
 
-  self->file_flags_cache = dzl_task_cache_new ((GHashFunc)g_file_hash,
+  self->file_flags_cache = ide_task_cache_new ((GHashFunc)g_file_hash,
                                                (GEqualFunc)g_file_equal,
                                                g_object_ref,
                                                g_object_unref,
@@ -1094,7 +1087,7 @@ ide_makecache_init (IdeMakecache *self)
                                                self,
                                                NULL);
 
-  dzl_task_cache_set_name (self->file_flags_cache, "makecache: file-flags-cache");
+  ide_task_cache_set_name (self->file_flags_cache, "makecache: file-flags-cache");
 }
 
 static void
@@ -1121,6 +1114,7 @@ ide_makecache_validate_worker (GTask        *task,
 
 void
 ide_makecache_new_for_cache_file_async (IdeRuntime          *runtime,
+                                        IdePipeline         *pipeline,
                                         GFile               *cache_file,
                                         GCancellable        *cancellable,
                                         GAsyncReadyCallback  callback,
@@ -1136,6 +1130,7 @@ ide_makecache_new_for_cache_file_async (IdeRuntime          *runtime,
   IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_RUNTIME (runtime));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
   g_return_if_fail (G_IS_FILE (cache_file));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -1186,6 +1181,7 @@ ide_makecache_new_for_cache_file_async (IdeRuntime          *runtime,
   self->parent = g_steal_pointer (&parent);
   self->mapped = g_steal_pointer (&mapped);
   self->runtime = g_object_ref (runtime);
+  self->pipeline = g_object_ref (pipeline);
 
   if (ide_runtime_contains_program_in_path (runtime, "gmake", NULL))
     self->make_name = "gmake";
@@ -1217,12 +1213,12 @@ ide_makecache_get_file_targets__task_cache_get_cb (GObject      *object,
                                                    GAsyncResult *result,
                                                    gpointer      user_data)
 {
-  DzlTaskCache *cache = (DzlTaskCache *)object;
+  IdeTaskCache *cache = (IdeTaskCache *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GPtrArray *ret;
 
-  if (!(ret = dzl_task_cache_get_finish (cache, result, &error)))
+  if (!(ret = ide_task_cache_get_finish (cache, result, &error)))
     {
       g_assert (error != NULL);
       g_task_return_error (task, g_steal_pointer (&error));
@@ -1248,7 +1244,7 @@ ide_makecache_get_file_targets_async (IdeMakecache        *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  dzl_task_cache_get_async (self->file_targets_cache,
+  ide_task_cache_get_async (self->file_targets_cache,
                             file,
                             FALSE,
                             cancellable,
@@ -1288,12 +1284,12 @@ ide_makecache_get_file_flags__task_cache_get_cb (GObject      *object,
                                                  GAsyncResult *result,
                                                  gpointer      user_data)
 {
-  DzlTaskCache *cache = (DzlTaskCache *)object;
+  IdeTaskCache *cache = (IdeTaskCache *)object;
   g_autoptr(GTask) task = user_data;
   g_autoptr(GError) error = NULL;
   gchar **ret;
 
-  if (!(ret = dzl_task_cache_get_finish (cache, result, &error)))
+  if (!(ret = ide_task_cache_get_finish (cache, result, &error)))
     {
       g_assert (error != NULL);
       g_task_return_error (task, g_steal_pointer (&error));
@@ -1319,7 +1315,7 @@ ide_makecache_get_file_flags_async (IdeMakecache        *self,
 
   task = g_task_new (self, cancellable, callback, user_data);
 
-  dzl_task_cache_get_async (self->file_flags_cache,
+  ide_task_cache_get_async (self->file_flags_cache,
                             file,
                             FALSE,
                             cancellable,
@@ -1452,7 +1448,7 @@ find_install_dir (const gchar *key,
   const gchar *path = NULL;
 
   if (g_str_has_prefix (key, "nodist_"))
-    key += DZL_LITERAL_LENGTH ("nodist_");
+    key += strlen ("nodist_");
 
   parts = g_strsplit (key, "_", 2);
   dirkey = parts[0];
@@ -1709,7 +1705,6 @@ ide_makecache_get_build_targets_async (IdeMakecache        *self,
 {
   g_autoptr(GTask) task = NULL;
   GetBuildTargets *data;
-  IdeRuntime *runtime;
   GPtrArray *ret;
   guint i;
 
@@ -1725,12 +1720,8 @@ ide_makecache_get_build_targets_async (IdeMakecache        *self,
   data->context = ide_object_ref_context (IDE_OBJECT (self));
   data->configmgr = ide_config_manager_from_context (data->context);
   data->config = ide_config_manager_get_current (data->configmgr);
-
-  if ((runtime = ide_config_get_runtime (data->config)))
-    {
-      data->runtime = g_object_ref (runtime);
-      data->launcher = ide_runtime_create_launcher (runtime, NULL);
-    }
+  data->runtime = g_object_ref (self->runtime);
+  data->launcher = ide_pipeline_create_launcher (self->pipeline, NULL);
 
   g_task_set_task_data (task, data, (GDestroyNotify)get_build_targets_free);
 

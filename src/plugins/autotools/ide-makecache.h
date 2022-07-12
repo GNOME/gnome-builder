@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (IdeMakecache, ide_makecache, IDE, MAKECACHE, IdeObject)
 
 void                 ide_makecache_new_for_cache_file_async  (IdeRuntime           *runtime,
+                                                              IdePipeline          *pipeline,
                                                               GFile                *cache_file,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
