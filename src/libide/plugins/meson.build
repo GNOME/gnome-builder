@@ -37,8 +37,6 @@ libide_plugins_private_sources = [
 libide_plugins_deps = [
   libgio_dep,
   libpeas_dep,
-  libdazzle_dep,
-
   libide_core_dep,
 ]
 

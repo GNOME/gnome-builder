@@ -25,13 +25,14 @@
 #endif
 
 #include <libpeas/peas.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EXTENSION_SET_ADAPTER (ide_extension_set_adapter_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeExtensionSetAdapter, ide_extension_set_adapter, IDE, EXTENSION_SET_ADAPTER, IdeObject)
 
 typedef void (*IdeExtensionSetAdapterForeachFunc) (IdeExtensionSetAdapter *set,
@@ -39,37 +40,37 @@ typedef void (*IdeExtensionSetAdapterForeachFunc) (IdeExtensionSetAdapter *set,
                                                    PeasExtension          *extension,
                                                    gpointer                user_data);
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeExtensionSetAdapter *ide_extension_set_adapter_new                 (IdeObject                         *parent,
                                                                        PeasEngine                        *engine,
                                                                        GType                              interface_type,
                                                                        const gchar                       *key,
                                                                        const gchar                       *value);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 PeasEngine             *ide_extension_set_adapter_get_engine          (IdeExtensionSetAdapter            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GType                   ide_extension_set_adapter_get_interface_type  (IdeExtensionSetAdapter            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_extension_set_adapter_get_key             (IdeExtensionSetAdapter            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                    ide_extension_set_adapter_set_key             (IdeExtensionSetAdapter            *self,
                                                                        const gchar                       *key);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar            *ide_extension_set_adapter_get_value           (IdeExtensionSetAdapter            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                    ide_extension_set_adapter_set_value           (IdeExtensionSetAdapter            *self,
                                                                        const gchar                       *value);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 guint                   ide_extension_set_adapter_get_n_extensions    (IdeExtensionSetAdapter            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                    ide_extension_set_adapter_foreach             (IdeExtensionSetAdapter            *self,
                                                                        IdeExtensionSetAdapterForeachFunc  foreach_func,
                                                                        gpointer                           user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                    ide_extension_set_adapter_foreach_by_priority (IdeExtensionSetAdapter            *self,
                                                                        IdeExtensionSetAdapterForeachFunc  foreach_func,
                                                                        gpointer                           user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 PeasExtension          *ide_extension_set_adapter_get_extension       (IdeExtensionSetAdapter            *self,
                                                                        PeasPluginInfo                    *plugin_info);
 
