@@ -1,11 +1,11 @@
 [Plugin]
 Name=Vala Language Server
-Description=Vala code intelligence provided by VLS.
+Description=Vala code intelligence provided by vala-language-server
 Authors=Princeton Ferro, Ben Iofel
 Copyright=Copyright © 2020
-
-Loader=python3
-Module=vala_langserv
+Module=vls
+Embedded=_gbp_vls_register_types
+X-Category=lsps
 X-Code-Action-Languages=vala
 X-Completion-Provider-Languages=vala
 X-Diagnostic-Provider-Languages=vala
@@ -18,4 +18,3 @@ X-Hover-Provider-Languages=vala
 X-Rename-Provider-Languages=vala
 X-Symbol-Resolver-Languages-Priority=100
 X-Symbol-Resolver-Languages=vala
-X-Builder-ABI=@PACKAGE_ABI@
