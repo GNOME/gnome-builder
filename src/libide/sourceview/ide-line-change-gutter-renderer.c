@@ -36,14 +36,12 @@ struct _IdeLineChangeGutterRenderer
 {
   GtkSourceGutterRenderer parent_instance;
 
-  GtkTextView            *text_view;
-  gulong                  text_view_notify_buffer;
-
-  GtkTextBuffer          *buffer;
+  GtkSourceBuffer        *buffer;
   gulong                  buffer_notify_style_scheme;
+  gulong                  buffer_notify_change_monitor;
 
-  GArray                 *lines;
-  guint                   begin_line;
+  IdeBufferChangeMonitor *change_monitor;
+  gulong                  change_monitor_changed;
 
   struct {
     GdkRGBA add;
@@ -78,6 +76,10 @@ enum {
   FOREGROUND,
   BACKGROUND,
 };
+
+static GQuark added_quark;
+static GQuark changed_quark;
+static GQuark deleted_quark;
 
 G_DEFINE_FINAL_TYPE (IdeLineChangeGutterRenderer, ide_line_change_gutter_renderer, GTK_SOURCE_TYPE_GUTTER_RENDERER)
 
@@ -131,24 +133,18 @@ disconnect_buffer (IdeLineChangeGutterRenderer *self)
 {
   disconnect_style_scheme (self);
 
-  if (self->buffer && self->buffer_notify_style_scheme)
+  if (self->buffer)
     {
-      g_signal_handler_disconnect (self->buffer, self->buffer_notify_style_scheme);
-      self->buffer_notify_style_scheme = 0;
+      g_clear_signal_handler (&self->buffer_notify_style_scheme, self->buffer);
+      g_clear_signal_handler (&self->buffer_notify_change_monitor, self->buffer);
+
       g_clear_weak_pointer (&self->buffer);
     }
-}
 
-static void
-disconnect_view (IdeLineChangeGutterRenderer *self)
-{
-  disconnect_buffer (self);
-
-  if (self->text_view && self->text_view_notify_buffer)
+  if (self->change_monitor)
     {
-      g_signal_handler_disconnect (self->text_view, self->text_view_notify_buffer);
-      self->text_view_notify_buffer = 0;
-      g_clear_weak_pointer (&self->text_view);
+      g_clear_signal_handler (&self->change_monitor_changed, self->change_monitor);
+      g_clear_object (&self->change_monitor);
     }
 }
 
@@ -157,23 +153,23 @@ connect_style_scheme (IdeLineChangeGutterRenderer *self)
 {
   GtkSourceStyleScheme *scheme;
   GtkTextBuffer *buffer;
-  GtkTextView *view;
+  GtkSourceView *view;
 
   if (!(view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self))) ||
-      !(buffer = gtk_text_view_get_buffer (view)) ||
+      !(buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view))) ||
       !GTK_SOURCE_IS_BUFFER (buffer))
     return;
 
   scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer));
 
-  if (!get_style_rgba (scheme, "gutter::added-line", FOREGROUND, &self->changes.add))
-    gdk_rgba_parse (&self->changes.add, "#8ae234");
+  if (!get_style_rgba (scheme, "-Builder:added-line", FOREGROUND, &self->changes.add))
+    gdk_rgba_parse (&self->changes.add, IDE_LINE_CHANGES_FALLBACK_ADDED);
 
-  if (!get_style_rgba (scheme, "gutter::changed-line", FOREGROUND, &self->changes.change))
-    gdk_rgba_parse (&self->changes.change, "#fcaf3e");
+  if (!get_style_rgba (scheme, "-Builder:changed-line", FOREGROUND, &self->changes.change))
+    gdk_rgba_parse (&self->changes.change, IDE_LINE_CHANGES_FALLBACK_CHANGED);
 
-  if (!get_style_rgba (scheme, "gutter::removed-line", FOREGROUND, &self->changes.remove))
-    gdk_rgba_parse (&self->changes.remove, "#ef2929");
+  if (!get_style_rgba (scheme, "-Builder:removed-line", FOREGROUND, &self->changes.remove))
+    gdk_rgba_parse (&self->changes.remove, IDE_LINE_CHANGES_FALLBACK_REMOVED);
 }
 
 static void
@@ -186,55 +182,67 @@ notify_style_scheme_cb (GtkTextBuffer               *buffer,
 }
 
 static void
+notify_change_monitor_cb (IdeBuffer                   *buffer,
+                          GParamSpec                  *pspec,
+                          IdeLineChangeGutterRenderer *self)
+{
+  IdeBufferChangeMonitor *change_monitor;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
+
+  change_monitor = ide_buffer_get_change_monitor (buffer);
+
+  if (change_monitor == self->change_monitor)
+    return;
+
+  if (self->change_monitor)
+    g_clear_signal_handler (&self->change_monitor_changed, self->change_monitor);
+
+  g_set_object (&self->change_monitor, change_monitor);
+
+  if (self->change_monitor)
+    self->change_monitor_changed =
+      g_signal_connect_object (self->change_monitor,
+                               "changed",
+                               G_CALLBACK (gtk_widget_queue_draw),
+                               self,
+                               G_CONNECT_SWAPPED);
+}
+
+static void
 connect_buffer (IdeLineChangeGutterRenderer *self)
 {
-  GtkTextBuffer *buffer;
+  GtkSourceBuffer *buffer;
 
-  buffer = gtk_text_view_get_buffer (self->text_view);
+  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
 
-  if (buffer)
-    {
-      g_set_weak_pointer (&self->buffer, buffer);
-      self->buffer_notify_style_scheme = g_signal_connect (buffer,
-                                                           "notify::style-scheme",
-                                                           G_CALLBACK (notify_style_scheme_cb),
-                                                           self);
-      connect_style_scheme (self);
-    }
+  buffer = gtk_source_gutter_renderer_get_buffer (GTK_SOURCE_GUTTER_RENDERER (self));
+  if (!IDE_IS_BUFFER (buffer))
+    return;
+
+  g_set_weak_pointer (&self->buffer, buffer);
+  self->buffer_notify_style_scheme =
+    g_signal_connect (buffer,
+                      "notify::style-scheme",
+                      G_CALLBACK (notify_style_scheme_cb),
+                      self);
+  self->buffer_notify_change_monitor =
+    g_signal_connect (buffer,
+                      "notify::change-monitor",
+                      G_CALLBACK (notify_change_monitor_cb),
+                      self);
+
+  connect_style_scheme (self);
+  notify_change_monitor_cb (IDE_BUFFER (buffer), NULL, self);
 }
 
 static void
-notify_buffer_cb (GtkTextView                 *text_view,
-                  GParamSpec                  *pspec,
-                  IdeLineChangeGutterRenderer *self)
+ide_line_change_gutter_renderer_change_buffer (GtkSourceGutterRenderer *renderer,
+                                               GtkSourceBuffer         *old_buffer)
 {
-  disconnect_buffer (self);
-  connect_buffer (self);
-}
-
-static void
-connect_view (IdeLineChangeGutterRenderer *self)
-{
-  GtkTextView *view;
-
-  view = gtk_source_gutter_renderer_get_view (GTK_SOURCE_GUTTER_RENDERER (self));
-
-  if (view)
-    {
-      g_set_weak_pointer (&self->text_view, view);
-      self->text_view_notify_buffer = g_signal_connect (self->text_view,
-                                                        "notify::buffer",
-                                                        G_CALLBACK (notify_buffer_cb),
-                                                        self);
-      connect_buffer (self);
-    }
-}
-
-static void
-ide_line_change_gutter_renderer_notify_view (IdeLineChangeGutterRenderer *self)
-{
-  disconnect_view (self);
-  connect_view (self);
+  disconnect_buffer (IDE_LINE_CHANGE_GUTTER_RENDERER (renderer));
+  connect_buffer (IDE_LINE_CHANGE_GUTTER_RENDERER (renderer));
 }
 
 static void
@@ -242,171 +250,95 @@ populate_changes_cb (guint               line,
                      IdeBufferLineChange change,
                      gpointer            user_data)
 {
-  LineInfo *info;
-  struct {
-    GArray *lines;
-    guint   begin_line;
-    guint   end_line;
-  } *state = user_data;
-  guint pos;
+  GtkSourceGutterLines *lines = user_data;
 
-  g_assert (line >= state->begin_line);
-  g_assert (line <= state->end_line);
+  if (line < gtk_source_gutter_lines_get_first (lines) ||
+      line > gtk_source_gutter_lines_get_last (lines))
+    return;
 
-  pos = line - state->begin_line;
+  if (change & IDE_BUFFER_LINE_CHANGE_ADDED)
+    gtk_source_gutter_lines_add_qclass (lines, line, added_quark);
 
-  info = &g_array_index (state->lines, LineInfo, pos);
-  info->is_add = !!(change & IDE_BUFFER_LINE_CHANGE_ADDED);
-  info->is_change = !!(change & IDE_BUFFER_LINE_CHANGE_CHANGED);
-  info->is_delete = !!(change & IDE_BUFFER_LINE_CHANGE_DELETED);
+  if (change & IDE_BUFFER_LINE_CHANGE_CHANGED)
+    gtk_source_gutter_lines_add_qclass (lines, line, changed_quark);
 
-  if (pos > 0)
-    {
-      LineInfo *last = &g_array_index (state->lines, LineInfo, pos - 1);
-
-      info->is_prev_delete = last->is_delete;
-      last->is_next_delete = info->is_delete;
-    }
+  if (change & IDE_BUFFER_LINE_CHANGE_DELETED)
+    gtk_source_gutter_lines_add_qclass (lines, line, deleted_quark);
 }
 
 static void
 ide_line_change_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
-                                       cairo_t                 *cr,
-                                       GdkRectangle            *bg_area,
-                                       GdkRectangle            *cell_area,
-                                       GtkTextIter             *begin,
-                                       GtkTextIter             *end)
+                                       GtkSourceGutterLines    *lines)
 {
   IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
-  IdeBufferChangeMonitor *monitor;
-  GtkTextBuffer *buffer;
-  GtkTextView *view;
-  struct {
-    GArray *lines;
-    guint   begin_line;
-    guint   end_line;
-  } state;
+  guint first;
+  guint last;
 
   g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
-  g_assert (cr != NULL);
-  g_assert (bg_area != NULL);
-  g_assert (cell_area != NULL);
-  g_assert (begin != NULL);
-  g_assert (end != NULL);
+  g_assert (lines != NULL);
 
-  if (!(view = gtk_source_gutter_renderer_get_view (renderer)) ||
-      !(buffer = gtk_text_view_get_buffer (view)) ||
-      !IDE_IS_BUFFER (buffer) ||
-      !(monitor = ide_buffer_get_change_monitor (IDE_BUFFER (buffer))))
+  if (self->change_monitor == NULL)
     return;
 
-  self->begin_line = state.begin_line = gtk_text_iter_get_line (begin);
-  state.end_line = gtk_text_iter_get_line (end);
-  state.lines = g_array_new (FALSE, TRUE, sizeof (LineInfo));
-  g_array_set_size (state.lines, state.end_line - state.begin_line + 1);
+  first = gtk_source_gutter_lines_get_first (lines);
+  last = gtk_source_gutter_lines_get_last (lines);
 
-  ide_buffer_change_monitor_foreach_change (monitor,
-                                            state.begin_line,
-                                            state.end_line,
+  ide_buffer_change_monitor_foreach_change (self->change_monitor,
+                                            first,
+                                            last,
                                             populate_changes_cb,
-                                            &state);
-
-  g_clear_pointer (&self->lines, g_array_unref);
-  self->lines = g_steal_pointer (&state.lines);
+                                            lines);
 }
 
 static void
-draw_line_change (IdeLineChangeGutterRenderer  *self,
-                  cairo_t                      *cr,
-                  GdkRectangle                 *area,
-                  LineInfo                     *info,
-                  GtkSourceGutterRendererState  state)
-{
-  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
-  g_assert (cr != NULL);
-  g_assert (area != NULL);
-
-  /*
-   * Draw a simple line with the appropriate color from the style scheme
-   * based on the type of change we have.
-   */
-
-  if (info->is_add || info->is_change)
-    {
-      gdk_cairo_rectangle (cr, area);
-
-      if (info->is_add)
-        gdk_cairo_set_source_rgba (cr, &self->changes.add);
-      else
-        gdk_cairo_set_source_rgba (cr, &self->changes.change);
-
-      cairo_fill (cr);
-    }
-
-  if (info->is_next_delete && !info->is_delete)
-    {
-      cairo_rectangle (cr,
-                       area->x,
-                       area->y + area->width / 2.0,
-                       area->width,
-                       area->height / 2.0);
-      gdk_cairo_set_source_rgba (cr, &self->changes.remove);
-      cairo_fill (cr);
-    }
-
-  if (info->is_delete && !info->is_prev_delete)
-    {
-      cairo_rectangle (cr,
-                       area->x,
-                       area->y,
-                       area->width,
-                       area->height / 2.0);
-      gdk_cairo_set_source_rgba (cr, &self->changes.remove);
-      cairo_fill (cr);
-    }
-}
-
-static void
-ide_line_change_gutter_renderer_draw (GtkSourceGutterRenderer      *renderer,
-                                      cairo_t                      *cr,
-                                      GdkRectangle                 *bg_area,
-                                      GdkRectangle                 *cell_area,
-                                      GtkTextIter                  *begin,
-                                      GtkTextIter                  *end,
-                                      GtkSourceGutterRendererState  state)
+ide_line_change_gutter_renderer_snapshot_line (GtkSourceGutterRenderer *renderer,
+                                               GtkSnapshot             *snapshot,
+                                               GtkSourceGutterLines    *lines,
+                                               guint                    line)
 {
   IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
-  guint line;
+  gboolean is_add;
+  gboolean is_change;
+  gboolean is_delete;
+  int line_y;
+  int line_height;
+  int width;
 
-  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
-  g_assert (cr != NULL);
-  g_assert (bg_area != NULL);
-  g_assert (cell_area != NULL);
-  g_assert (begin != NULL);
-  g_assert (end != NULL);
-
-  if (self->lines == NULL)
+  if (!gtk_source_gutter_lines_has_any_class (lines, line))
     return;
 
-  line = gtk_text_iter_get_line (begin);
+  is_add = gtk_source_gutter_lines_has_qclass (lines, line, added_quark);
+  is_change = gtk_source_gutter_lines_has_qclass (lines, line, changed_quark);
+  is_delete = gtk_source_gutter_lines_has_qclass (lines, line, deleted_quark);
 
-  if ((line - self->begin_line) < self->lines->len)
-    {
-      LineInfo *info = &g_array_index (self->lines, LineInfo, line - self->begin_line);
+  if (!is_add && !is_change && !is_delete)
+    return;
 
-      if (IS_LINE_CHANGE (info))
-        draw_line_change (self, cr, cell_area, info, state);
-    }
+  gtk_source_gutter_lines_get_line_yrange (lines, line, GTK_SOURCE_GUTTER_RENDERER_ALIGNMENT_MODE_CELL, &line_y, &line_height);
+  width = gtk_widget_get_width (GTK_WIDGET (renderer));
+
+  if (is_add || is_change)
+    gtk_snapshot_append_color (snapshot,
+                               is_add ? &self->changes.add : &self->changes.change,
+                               &GRAPHENE_RECT_INIT (0, line_y, width, line_height));
+
+  if (!is_delete &&
+      line < gtk_source_gutter_lines_get_last (lines) &&
+      gtk_source_gutter_lines_has_qclass (lines, line+1, deleted_quark))
+    gtk_snapshot_append_color (snapshot,
+                               &self->changes.remove,
+                               &GRAPHENE_RECT_INIT (0, line_y+line_height/2., width, line_height/2.));
+
+  if (is_delete && line > 0 && gtk_source_gutter_lines_has_qclass (lines, line-1, deleted_quark))
+    gtk_snapshot_append_color (snapshot,
+                               &self->changes.remove,
+                               &GRAPHENE_RECT_INIT (0, line_y, width, line_height/2.));
 }
 
 static void
 ide_line_change_gutter_renderer_dispose (GObject *object)
 {
-  IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)object;
-
-  disconnect_view (IDE_LINE_CHANGE_GUTTER_RENDERER (object));
-
-  g_clear_pointer (&self->lines, g_array_unref);
+  disconnect_buffer (IDE_LINE_CHANGE_GUTTER_RENDERER (object));
 
   G_OBJECT_CLASS (ide_line_change_gutter_renderer_parent_class)->dispose (object);
 }
@@ -420,14 +352,16 @@ ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *kl
   object_class->dispose = ide_line_change_gutter_renderer_dispose;
 
   renderer_class->begin = ide_line_change_gutter_renderer_begin;
-  renderer_class->draw = ide_line_change_gutter_renderer_draw;
+  renderer_class->snapshot_line = ide_line_change_gutter_renderer_snapshot_line;
+  renderer_class->change_buffer = ide_line_change_gutter_renderer_change_buffer;
+  renderer_class->query_data = NULL; /* opt out */
+
+  added_quark = g_quark_from_static_string ("added");
+  changed_quark = g_quark_from_static_string ("changed");
+  deleted_quark = g_quark_from_static_string ("deleted");
 }
 
 static void
 ide_line_change_gutter_renderer_init (IdeLineChangeGutterRenderer *self)
 {
-  g_signal_connect (self,
-                    "notify::view",
-                    G_CALLBACK (ide_line_change_gutter_renderer_notify_view),
-                    NULL);
 }

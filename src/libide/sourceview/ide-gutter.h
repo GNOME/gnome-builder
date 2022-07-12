@@ -20,15 +20,20 @@
 
 #pragma once
 
+#if !defined (IDE_SOURCEVIEW_INSIDE) && !defined (IDE_SOURCEVIEW_COMPILATION)
+# error "Only <libide-sourceview.h> can be included directly."
+#endif
+
 #include <gtksourceview/gtksource.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_GUTTER (ide_gutter_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_INTERFACE (IdeGutter, ide_gutter, IDE, GUTTER, GObject)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_INTERFACE (IdeGutter, ide_gutter, IDE, GUTTER, GtkSourceGutterRenderer)
 
 struct _IdeGutterInterface
 {
@@ -37,27 +42,27 @@ struct _IdeGutterInterface
   void (*style_changed) (IdeGutter *self);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_gutter_get_show_line_changes          (IdeGutter *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_gutter_get_show_line_numbers          (IdeGutter *self);
-IDE_AVAILABLE_IN_3_36
+IDE_AVAILABLE_IN_ALL
 gboolean ide_gutter_get_show_relative_line_numbers (IdeGutter *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean ide_gutter_get_show_line_diagnostics      (IdeGutter *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_gutter_set_show_line_changes          (IdeGutter *self,
                                                     gboolean   show_line_changes);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_gutter_set_show_line_numbers          (IdeGutter *self,
                                                     gboolean   show_line_numbers);
-IDE_AVAILABLE_IN_3_36
+IDE_AVAILABLE_IN_ALL
 void     ide_gutter_set_show_relative_line_numbers (IdeGutter *self,
                                                     gboolean   show_relative_line_numbers);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_gutter_set_show_line_diagnostics      (IdeGutter *self,
                                                     gboolean   show_line_diagnostics);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void     ide_gutter_style_changed                  (IdeGutter *self);
 
 G_END_DECLS

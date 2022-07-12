@@ -24,7 +24,7 @@
 
 #include "ide-gutter.h"
 
-G_DEFINE_INTERFACE (IdeGutter, ide_gutter, G_TYPE_OBJECT)
+G_DEFINE_INTERFACE (IdeGutter, ide_gutter, GTK_SOURCE_TYPE_GUTTER_RENDERER)
 
 enum {
   STYLE_CHANGED,

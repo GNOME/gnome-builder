@@ -22,6 +22,10 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "ide-text-util"
+
+#include "config.h"
+
 #include "ide-text-util.h"
 
 void
@@ -122,4 +126,135 @@ ide_text_util_delete_line (GtkTextView *text_view,
 	{
 		gtk_widget_error_bell (GTK_WIDGET (text_view));
 	}
+}
+
+static gboolean
+find_prefix_match (const GtkTextIter *limit,
+                   const GtkTextIter *end,
+                   GtkTextIter       *found_start,
+                   GtkTextIter       *found_end,
+                   const char        *prefix,
+                   gsize              len,
+                   gsize              n_chars)
+{
+  g_autofree gchar *copy = g_utf8_substring (prefix, 0, n_chars);
+
+  if (gtk_text_iter_backward_search (end, copy, GTK_TEXT_SEARCH_TEXT_ONLY, found_start, found_end, limit))
+    return gtk_text_iter_equal (found_end, end);
+
+  return FALSE;
+}
+
+void
+ide_text_util_remove_common_prefix (GtkTextIter *begin,
+                                    const gchar *prefix)
+{
+  GtkTextIter rm_begin;
+  GtkTextIter rm_end;
+  GtkTextIter line_start;
+  GtkTextIter found_start, found_end;
+  gboolean found = FALSE;
+  gsize len;
+  gsize count = 1;
+
+  g_return_if_fail (begin != NULL);
+
+  if (prefix == NULL || prefix[0] == 0)
+    return;
+
+  len = g_utf8_strlen (prefix, -1);
+  line_start = *begin;
+  gtk_text_iter_set_line_offset (&line_start, 0);
+
+  while (count <= len &&
+         find_prefix_match (&line_start, begin, &found_start, &found_end, prefix, len, count))
+    {
+      rm_begin = found_start;
+      rm_end = found_end;
+      count++;
+      found = TRUE;
+    }
+
+  if (found)
+    {
+      gtk_text_buffer_delete (gtk_text_iter_get_buffer (begin), &rm_begin, &rm_end);
+      *begin = rm_begin;
+    }
+}
+
+/*
+ * ide_text_util_int_to_string:
+ * @value: the integer to convert to a string
+ * @outstr: (out): a location for a pointer to the result string
+ *
+ * The following implementation uses an internal cache to speed up the
+ * conversion of integers to strings by comparing the value to the
+ * previous value that was calculated.
+ *
+ * If we detect a simple increment, we can alter the previous string directly
+ * and then carry the number to each of the previous chars sequentually. If we
+ * still have a carry bit at the end of the loop, we need to move the whole
+ * string over 1 place to take account for the new "1" at the start.
+ *
+ * This function is not thread-safe, as the resulting string is stored in
+ * static data.
+ *
+ * Returns: the number of characters in the resulting string
+ */
+int
+ide_text_util_int_to_string (guint        value,
+                             const char **outstr)
+{
+  static struct {
+    guint value;
+    int len;
+    char str[12];
+  } fi;
+
+  *outstr = fi.str;
+
+  if G_LIKELY (value == fi.value + 1)
+    {
+      guint carry = 1;
+
+      for (int i = fi.len - 1; i >= 0; i--)
+        {
+          fi.str[i] += carry;
+          carry = fi.str[i] == ':';
+
+          if (carry)
+            fi.str[i] = '0';
+          else
+            break;
+        }
+
+      if G_UNLIKELY (carry)
+        {
+          for (int i = fi.len; i > 0; i--)
+            fi.str[i] = fi.str[i-1];
+
+          fi.len++;
+          fi.str[0] = '1';
+          fi.str[fi.len] = 0;
+        }
+
+      fi.value++;
+
+      return fi.len;
+    }
+  else if (value == fi.value)
+    {
+      return fi.len;
+    }
+
+#ifdef G_OS_WIN32
+  fi.len = g_snprintf (fi.str, sizeof fi.str - 1, "%u", value);
+#else
+  /* Use snprintf() directly when possible to reduce overhead */
+  fi.len = snprintf (fi.str, sizeof fi.str - 1, "%u", value);
+#endif
+  fi.str[fi.len] = 0;
+  fi.value = value;
+
+  return fi.len;
 }

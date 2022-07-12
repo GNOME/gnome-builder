@@ -1,6 +1,6 @@
-/* ide-completion-types.h
+/* ide-source-style-scheme.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,29 +24,17 @@
 # error "Only <libide-sourceview.h> can be included directly."
 #endif
 
+#include <gtksourceview/gtksource.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
-typedef struct _IdeCompletion           IdeCompletion;
-typedef struct _IdeCompletionContext    IdeCompletionContext;
-typedef struct _IdeCompletionDisplay    IdeCompletionDisplay;
-typedef struct _IdeCompletionProposal   IdeCompletionProposal;
-typedef struct _IdeCompletionProvider   IdeCompletionProvider;
+IDE_AVAILABLE_IN_ALL
+gboolean              ide_source_style_scheme_is_dark     (GtkSourceStyleScheme *scheme);
+IDE_AVAILABLE_IN_ALL
+GtkSourceStyleScheme *ide_source_style_scheme_get_variant (GtkSourceStyleScheme *scheme,
+                                                           const char           *variant);
 
-typedef enum
-{
-  IDE_COMPLETION_INTERACTIVE,
-  IDE_COMPLETION_USER_REQUESTED,
-  IDE_COMPLETION_TRIGGERED,
-} IdeCompletionActivation;
-
-typedef enum
-{
-  IDE_COMPLETION_COLUMN_ICON,
-  IDE_COMPLETION_COLUMN_LEFT_OF,
-  IDE_COMPLETION_COLUMN_TYPED_TEXT,
-  IDE_COMPLETION_COLUMN_RIGHT_OF,
-} IdeCompletionColumn;
 
 G_END_DECLS
