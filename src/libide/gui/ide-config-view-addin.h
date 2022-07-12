@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIG_VIEW_ADDIN (ide_config_view_addin_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeConfigViewAddin, ide_config_view_addin, IDE, CONFIG_VIEW_ADDIN, GObject)
 
 struct _IdeConfigViewAddinInterface
@@ -40,7 +40,7 @@ struct _IdeConfigViewAddinInterface
                 IdeConfig          *configuration);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_config_view_addin_load (IdeConfigViewAddin *self,
                                  DzlPreferences     *preferences,
                                  IdeConfig          *configuration);

@@ -20,7 +20,12 @@
 
 #pragma once
 
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
 #include <gtk/gtk.h>
+
 #include <libide-core.h>
 #include <libide-io.h>
 
@@ -28,10 +33,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_MARKED_VIEW (ide_marked_view_get_type())
 
-IDE_AVAILABLE_IN_3_32
 G_DECLARE_FINAL_TYPE (IdeMarkedView, ide_marked_view, IDE, MARKED_VIEW, GtkBin)
+IDE_AVAILABLE_IN_ALL
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_marked_view_new (IdeMarkedContent *content);
 
 G_END_DECLS

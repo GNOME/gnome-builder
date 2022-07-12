@@ -24,9 +24,6 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
-#include <libide-core.h>
-
 #include "ide-frame.h"
 #include "ide-page.h"
 
@@ -34,7 +31,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FRAME_ADDIN (ide_frame_addin_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeFrameAddin, ide_frame_addin, IDE, FRAME_ADDIN, GObject)
 
 struct _IdeFrameAddinInterface
@@ -49,16 +46,16 @@ struct _IdeFrameAddinInterface
                     IdePage       *page);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_frame_addin_load                (IdeFrameAddin *self,
                                                     IdeFrame      *frame);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_frame_addin_unload              (IdeFrameAddin *self,
                                                     IdeFrame      *frame);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_frame_addin_set_page            (IdeFrameAddin *self,
                                                     IdePage       *page);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeFrameAddin *ide_frame_addin_find_by_module_name (IdeFrame      *frame,
                                                     const gchar   *module_name);
 
