@@ -1,6 +1,6 @@
-/* gbp-spell-editor-addin.h
+/* gbp-spell-preferences-addin.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <libide-editor.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SPELL_EDITOR_ADDIN (gbp_spell_editor_addin_get_type())
+#define GBP_TYPE_SPELL_PREFERENCES_ADDIN (gbp_spell_preferences_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSpellEditorAddin, gbp_spell_editor_addin, GBP, SPELL_EDITOR_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpSpellPreferencesAddin, gbp_spell_preferences_addin, GBP, SPELL_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS

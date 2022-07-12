@@ -1,6 +1,6 @@
 /* gbp-spell-buffer-addin.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,8 +20,7 @@
 
 #pragma once
 
-#include <libide-editor.h>
-#include <gspell/gspell.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
@@ -29,9 +28,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSpellBufferAddin, gbp_spell_buffer_addin, GBP, SPELL_BUFFER_ADDIN, GObject)
 
-GspellChecker *gbp_spell_buffer_addin_get_checker        (GbpSpellBufferAddin *self);
-void           gbp_spell_buffer_addin_begin_checking     (GbpSpellBufferAddin *self);
-void           gbp_spell_buffer_addin_end_checking       (GbpSpellBufferAddin *self);
-GtkTextTag    *gbp_spell_buffer_addin_get_misspelled_tag (GbpSpellBufferAddin *self);
+void       gbp_spell_buffer_addin_add_word           (GbpSpellBufferAddin *self,
+                                                      const char          *word);
+void       gbp_spell_buffer_addin_ignore_word        (GbpSpellBufferAddin *self,
+                                                      const char          *word);
+gboolean   gbp_spell_buffer_addin_check_spelling     (GbpSpellBufferAddin *self,
+                                                      const char          *word);
+char     **gbp_spell_buffer_addin_list_corrections   (GbpSpellBufferAddin *self,
+                                                      const char          *word);
+GAction   *gbp_spell_buffer_addin_get_enabled_action (GbpSpellBufferAddin *self);
 
 G_END_DECLS

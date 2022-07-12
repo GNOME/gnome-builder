@@ -1,6 +1,6 @@
-/* gbp-spell-editor-page-addin.h
+/* editor-enchant-spell-provider.h
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,14 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include "editor-spell-provider.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SPELL_EDITOR_PAGE_ADDIN (gbp_spell_editor_page_addin_get_type())
+#define EDITOR_TYPE_ENCHANT_SPELL_PROVIDER (editor_enchant_spell_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSpellEditorPageAddin, gbp_spell_editor_page_addin, GBP, SPELL_EDITOR_PAGE_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (EditorEnchantSpellProvider, editor_enchant_spell_provider, EDITOR, ENCHANT_SPELL_PROVIDER, EditorSpellProvider)
+
+EditorSpellProvider *editor_enchant_spell_provider_new (void);
 
 G_END_DECLS

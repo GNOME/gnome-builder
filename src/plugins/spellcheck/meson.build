@@ -1,15 +1,20 @@
 if get_option('plugin_spellcheck')
 
 plugins_sources += files([
+  'cjhtextregion.c',
+  'editor-empty-spell-provider.c',
+  'editor-enchant-spell-language.c',
+  'editor-enchant-spell-provider.c',
+  'editor-spell-checker.c',
+  'editor-spell-cursor.c',
+  'editor-spell-language.c',
+  'editor-spell-language-info.c',
+  'editor-spell-menu.c',
+  'editor-spell-provider.c',
+  'editor-text-buffer-spell-adapter.c',
   'gbp-spell-buffer-addin.c',
-  'gbp-spell-dict.c',
-  'gbp-spell-editor-addin.c',
   'gbp-spell-editor-page-addin.c',
-  'gbp-spell-language-popover.c',
-  'gbp-spell-navigator.c',
-  'gbp-spell-utils.c',
-  'gbp-spell-widget-actions.c',
-  'gbp-spell-widget.c',
+  'gbp-spell-preferences-addin.c',
   'spellcheck-plugin.c',
 ])
 
@@ -20,8 +25,8 @@ plugin_spellcheck_resources = gnome.compile_resources(
 )
 
 plugins_deps += [
-  dependency('gspell-1', version: '>= 1.2.0'),
   dependency('enchant-2'),
+  dependency('icu-uc'),
 ]
 
 plugins_sources += plugin_spellcheck_resources

@@ -1,6 +1,6 @@
-/* gbp-spell-editor-page-addin.h
+/* editor-spell-menu.h
  *
- * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ * Copyright 2021 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,15 @@
 
 #pragma once
 
-#include <glib-object.h>
+#include "editor-types.h"
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SPELL_EDITOR_PAGE_ADDIN (gbp_spell_editor_page_addin_get_type())
-
-G_DECLARE_FINAL_TYPE (GbpSpellEditorPageAddin, gbp_spell_editor_page_addin, GBP, SPELL_EDITOR_PAGE_ADDIN, GObject)
+GMenuModel *editor_spell_menu_new             (void);
+void        editor_spell_menu_set_language    (GMenuModel          *menu,
+                                               EditorSpellLanguage *language);
+void        editor_spell_menu_set_corrections (GMenuModel          *menu,
+                                               const char          *word,
+                                               const char * const  *words);
 
 G_END_DECLS
