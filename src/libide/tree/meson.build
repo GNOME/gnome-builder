@@ -6,6 +6,7 @@ libide_include_directories += include_directories('.')
 #
 
 libide_tree_public_headers = [
+  'ide-popover-positioner.h',
   'ide-tree.h',
   'ide-tree-addin.h',
   'ide-tree-model.h',
@@ -20,6 +21,7 @@ install_headers(libide_tree_public_headers, subdir: libide_tree_header_subdir)
 #
 
 libide_tree_public_sources = [
+  'ide-popover-positioner.c',
   'ide-tree.c',
   'ide-tree-addin.c',
   'ide-tree-model.c',

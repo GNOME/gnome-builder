@@ -67,7 +67,7 @@ static void
 ide_tree_addin_real_node_dropped_async (IdeTreeAddin        *self,
                                         IdeTreeNode         *drag_node,
                                         IdeTreeNode         *drop_node,
-                                        GtkSelectionData    *selection,
+                                        const GValue        *value,
                                         GdkDragAction        actions,
                                         GCancellable        *cancellable,
                                         GAsyncReadyCallback  callback,
@@ -122,8 +122,6 @@ ide_tree_addin_default_init (IdeTreeAddinInterface *iface)
  *
  * This function will call the synchronous form of
  * IdeTreeAddin.build_children() if no asynchronous form is available.
- *
- * Since: 3.32
  */
 void
 ide_tree_addin_build_children_async (IdeTreeAddin        *self,
@@ -149,8 +147,6 @@ ide_tree_addin_build_children_async (IdeTreeAddin        *self,
  * Completes an asynchronous request to ide_tree_addin_build_children_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_addin_build_children_finish (IdeTreeAddin  *self,
@@ -176,8 +172,6 @@ ide_tree_addin_build_children_finish (IdeTreeAddin  *self,
  *
  * You may want to use ide_tree_node_holds() to determine if the node
  * contains an item that you are interested in.
- *
- * Since: 3.32
  */
 void
 ide_tree_addin_build_node (IdeTreeAddin *self,
@@ -206,8 +200,6 @@ ide_tree_addin_build_node (IdeTreeAddin *self,
  * respond to the action.
  *
  * Returns: %TRUE if the activation was handled, otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_addin_node_activated (IdeTreeAddin *self,
@@ -298,17 +290,17 @@ ide_tree_addin_node_draggable (IdeTreeAddin *self,
 }
 
 gboolean
-ide_tree_addin_node_droppable (IdeTreeAddin     *self,
-                               IdeTreeNode      *drag_node,
-                               IdeTreeNode      *drop_node,
-                               GtkSelectionData *selection)
+ide_tree_addin_node_droppable (IdeTreeAddin *self,
+                               IdeTreeNode  *drag_node,
+                               IdeTreeNode  *drop_node,
+                               const GValue *value)
 {
   g_return_val_if_fail (IDE_IS_TREE_ADDIN (self), FALSE);
   g_return_val_if_fail (!drag_node || IDE_IS_TREE_NODE (drag_node), FALSE);
   g_return_val_if_fail (!drop_node || IDE_IS_TREE_NODE (drop_node), FALSE);
 
   if (IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable)
-    return IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable (self, drag_node, drop_node, selection);
+    return IDE_TREE_ADDIN_GET_IFACE (self)->node_droppable (self, drag_node, drop_node, value);
 
   return FALSE;
 }
@@ -317,7 +309,7 @@ void
 ide_tree_addin_node_dropped_async (IdeTreeAddin        *self,
                                    IdeTreeNode         *drag_node,
                                    IdeTreeNode         *drop_node,
-                                   GtkSelectionData    *selection,
+                                   const GValue        *value,
                                    GdkDragAction        actions,
                                    GCancellable        *cancellable,
                                    GAsyncReadyCallback  callback,
@@ -327,13 +319,13 @@ ide_tree_addin_node_dropped_async (IdeTreeAddin        *self,
   g_return_if_fail (IDE_IS_TREE_ADDIN (self));
   g_return_if_fail (!drag_node || IDE_IS_TREE_NODE (drag_node));
   g_return_if_fail (!drop_node || IDE_IS_TREE_NODE (drop_node));
-  g_return_if_fail (selection != NULL);
+  g_return_if_fail (value != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_TREE_ADDIN_GET_IFACE (self)->node_dropped_async (self,
                                                        drag_node,
                                                        drop_node,
-                                                       selection,
+                                                       value,
                                                        actions,
                                                        cancellable,
                                                        callback,

@@ -27,10 +27,18 @@
 #include <libide-threading.h>
 
 #include "ide-cell-renderer-status.h"
+#include "ide-popover-positioner.h"
 #include "ide-tree.h"
 #include "ide-tree-model.h"
 #include "ide-tree-node.h"
 #include "ide-tree-private.h"
+
+/* FIXME-GTK4:
+ *
+ * We still need DnD work here but that has changed so much
+ * that it would help to have a plugin using this to ensure
+ * we're porting it correctly.
+ */
 
 typedef struct
 {
@@ -136,7 +144,7 @@ state_cell_func (GtkCellLayout   *layout,
   if ((node = ide_tree_model_get_node (IDE_TREE_MODEL (model), iter)))
     flags = ide_tree_node_get_flags (node);
 
-  ide_cell_renderer_status_set_flags (IDE_CELL_RENDERER_STATUS (cell), flags);
+  ide_cell_renderer_status_set_flags (cell, flags);
 }
 
 static void
@@ -392,105 +400,87 @@ ide_tree_row_collapsed (GtkTreeView *tree_view,
 static void
 ide_tree_popup (IdeTree        *self,
                 IdeTreeNode    *node,
-                GdkEventButton *event,
-                gint            target_x,
-                gint            target_y)
+                double          target_x,
+                double          target_y)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  const GdkRectangle area = { target_x, target_y, 0, 0 };
+  GdkRectangle area;
+  GtkTextDirection dir;
+  GtkWidget *positioner;
 
   g_assert (IDE_IS_TREE (self));
   g_assert (IDE_IS_TREE_NODE (node));
-  g_assert (priv->popover != NULL);
 
-  gtk_popover_set_pointing_to (priv->popover, &area);
+  if (priv->context_menu == NULL)
+    return;
 
-  ide_tree_show_popover_at_node (self, node, priv->popover);
+  if (!(positioner = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_POPOVER_POSITIONER)))
+    return;
+
+  priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (priv->context_menu)));
+  g_object_ref_sink (priv->popover);
+
+  dir = gtk_widget_get_direction (GTK_WIDGET (self));
+  gtk_popover_set_position (priv->popover, dir == GTK_TEXT_DIR_LTR ? GTK_POS_RIGHT : GTK_POS_LEFT);
+
+  _ide_tree_node_get_area (node, self, &area);
+
+  ide_popover_positioner_present (IDE_POPOVER_POSITIONER (positioner),
+                                  priv->popover,
+                                  GTK_WIDGET (self),
+                                  &area);
 }
 
-static gboolean
-ide_tree_button_press_event (GtkWidget      *widget,
-                             GdkEventButton *event)
+static void
+ide_tree_click_pressed_cb (IdeTree         *self,
+                           int              n_presses,
+                           double           x,
+                           double           y,
+                           GtkGestureClick *gesture)
 {
-  IdeTree *self = (IdeTree *)widget;
+  g_autoptr(GtkTreePath) path = NULL;
   IdeTreeModel *model;
+  int cell_y;
 
   g_assert (IDE_IS_TREE (self));
-  g_assert (event != NULL);
+  g_assert (GTK_IS_GESTURE_CLICK (gesture));
 
-  if ((model = ide_tree_get_model (self)) &&
-      (event->type == GDK_BUTTON_PRESS) &&
-      (event->button == GDK_BUTTON_SECONDARY))
+  if (!(model = ide_tree_get_model (self)))
+    return;
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+    gtk_widget_grab_focus (GTK_WIDGET (self));
+
+  gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (self),
+                                 x,
+                                 y,
+                                 &path,
+                                 NULL,
+                                 NULL,
+                                 &cell_y);
+
+  if (path == NULL)
     {
-      g_autoptr(GtkTreePath) path = NULL;
-      gint cell_y;
+      ide_tree_unselect (self);
+    }
+  else
+    {
+      GtkAllocation alloc;
+      GtkTreeIter iter;
 
-      if (!gtk_widget_has_focus (GTK_WIDGET (self)))
-        gtk_widget_grab_focus (GTK_WIDGET (self));
+      gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
 
-      gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (self),
-                                     event->x,
-                                     event->y,
-                                     &path,
-                                     NULL,
-                                     NULL,
-                                     &cell_y);
-
-      if (path == NULL)
+      if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
         {
-          ide_tree_unselect (self);
+          IdeTreeNode *node;
+
+          node = ide_tree_model_get_node (IDE_TREE_MODEL (model), &iter);
+          ide_tree_select (self, node);
+          ide_tree_popup (self, node, alloc.x + alloc.width, y - cell_y);
         }
-      else
-        {
-          GtkAllocation alloc;
-          GtkTreeIter iter;
-
-          gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
-
-          if (gtk_tree_model_get_iter (GTK_TREE_MODEL (model), &iter, path))
-            {
-              IdeTreeNode *node;
-
-              node = ide_tree_model_get_node (IDE_TREE_MODEL (model), &iter);
-              ide_tree_select (self, node);
-              ide_tree_popup (self, node, event, alloc.x + alloc.width, event->y - cell_y);
-            }
-        }
-
-      return GDK_EVENT_STOP;
     }
 
-  return GTK_WIDGET_CLASS (ide_tree_parent_class)->button_press_event (widget, event);
-}
-
-static gboolean
-ide_tree_drag_motion (GtkWidget      *widget,
-                      GdkDragContext *context,
-                      gint            x,
-                      gint            y,
-                      guint           time_)
-{
-  IdeTree *self = (IdeTree *)widget;
-  IdeTreePrivate *priv = ide_tree_get_instance_private (self);
-  gboolean ret;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TREE (self));
-  g_assert (context != NULL);
-
-  ret = GTK_WIDGET_CLASS (ide_tree_parent_class)->drag_motion (widget, context, x, y, time_);
-
-  /*
-   * Cache the current drop position so we can use it
-   * later to determine how to drop on a given node.
-   */
-  g_clear_pointer (&priv->drop_path, gtk_tree_path_free);
-  gtk_tree_view_get_drag_dest_row (GTK_TREE_VIEW (self), &priv->drop_path, &priv->drop_pos);
-
-  /* Save the drag action for builders dispatch */
-  priv->drop_action = gdk_drag_context_get_selected_action (context);
-
-  return ret;
+  gtk_gesture_set_state (GTK_GESTURE (gesture),  GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static gboolean
@@ -520,8 +510,8 @@ ide_tree_query_tooltip (GtkWidget  *widget,
           if (node != NULL)
             {
               gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
-              gtk_tooltip_set_text (tooltip,
-                                    ide_tree_node_get_display_name (node));
+              gtk_tooltip_set_markup (tooltip,
+                                      ide_tree_node_get_display_name (node));
               return TRUE;
             }
         }
@@ -530,29 +520,10 @@ ide_tree_query_tooltip (GtkWidget  *widget,
   return FALSE;
 }
 
-static gboolean
-ide_tree_popup_menu_cb (IdeTree *tree,
-                        gpointer user_data)
-{
-  IdeTreePrivate *priv = ide_tree_get_instance_private (tree);
-  IdeTreeNode *selected_node = NULL;
-
-  g_assert (priv != NULL);
-
-  selected_node = ide_tree_get_selected_node (tree);
-
-  if (selected_node)
-    {
-      ide_tree_show_popover_at_node (tree, selected_node, priv->popover);
-      return TRUE;
-    }
-  return FALSE;
-}
-
 static void
-ide_tree_destroy (GtkWidget *widget)
+ide_tree_dispose (GObject *object)
 {
-  IdeTree *self = (IdeTree *)widget;
+  IdeTree *self = (IdeTree *)object;
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
   IdeTreeModel *model;
 
@@ -561,8 +532,7 @@ ide_tree_destroy (GtkWidget *widget)
   if ((model = ide_tree_get_model (self)))
     _ide_tree_model_release_addins (model);
 
-  if (priv->popover != NULL)
-    gtk_widget_destroy (GTK_WIDGET (priv->popover));
+  g_clear_object (&priv->popover);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (self), NULL);
 
@@ -575,18 +545,18 @@ ide_tree_destroy (GtkWidget *widget)
   g_clear_pointer (&priv->header_attributes, pango_attr_list_unref);
   g_clear_pointer (&priv->drop_path, gtk_tree_path_free);
 
-  GTK_WIDGET_CLASS (ide_tree_parent_class)->destroy (widget);
+  G_OBJECT_CLASS (ide_tree_parent_class)->dispose (object);
 }
 
 static void
 ide_tree_class_init (IdeTreeClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkTreeViewClass *tree_view_class = GTK_TREE_VIEW_CLASS (klass);
 
-  widget_class->destroy = ide_tree_destroy;
-  widget_class->button_press_event = ide_tree_button_press_event;
-  widget_class->drag_motion = ide_tree_drag_motion;
+  object_class->dispose = ide_tree_dispose;
+
   widget_class->query_tooltip = ide_tree_query_tooltip;
 
   tree_view_class->row_activated = ide_tree_row_activated;
@@ -598,8 +568,19 @@ static void
 ide_tree_init (IdeTree *self)
 {
   IdeTreePrivate *priv = ide_tree_get_instance_private (self);
+  GtkGesture *gesture;
   GtkCellRenderer *cell;
   GtkTreeViewColumn *column;
+
+  /* Show popover on right-click */
+  gesture = gtk_gesture_click_new ();
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 3);
+  g_signal_connect_object (gesture,
+                           "pressed",
+                           G_CALLBACK (ide_tree_click_pressed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (gesture));
 
   priv->cancellable = g_cancellable_new ();
 
@@ -610,11 +591,6 @@ ide_tree_init (IdeTree *self)
                            G_CALLBACK (ide_tree_selection_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect_object (self,
-                           "popup-menu",
-                           G_CALLBACK (ide_tree_popup_menu_cb),
-                           NULL,
-                           0);
 
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (self), FALSE);
   gtk_tree_view_set_activate_on_single_click (GTK_TREE_VIEW (self), TRUE);
@@ -629,11 +605,12 @@ ide_tree_init (IdeTree *self)
 
   cell = g_object_new (GTK_TYPE_CELL_RENDERER_TEXT,
                        "ellipsize", PANGO_ELLIPSIZE_END,
+                       "ypad", 6,
                        NULL);
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, TRUE);
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, text_cell_func, self, NULL);
 
-  cell = g_object_new (IDE_TYPE_CELL_RENDERER_STATUS, NULL);
+  cell = ide_cell_renderer_status_new ();
   gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (column), cell, state_cell_func, self, NULL);
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (column), cell, FALSE);
 
@@ -664,21 +641,7 @@ ide_tree_set_context_menu (IdeTree *self,
   g_return_if_fail (!menu || G_IS_MENU (menu));
 
   if (g_set_object (&priv->context_menu, menu))
-    {
-      GtkTextDirection dir;
-
-      if (priv->popover != NULL)
-        gtk_widget_destroy (GTK_WIDGET (priv->popover));
-
-      priv->popover = GTK_POPOVER (gtk_popover_new_from_model (GTK_WIDGET (self),
-                                                               G_MENU_MODEL (priv->context_menu)));
-      dir = gtk_widget_get_direction (GTK_WIDGET (self));
-      gtk_popover_set_position (priv->popover, dir == GTK_TEXT_DIR_LTR ? GTK_POS_RIGHT : GTK_POS_LEFT);
-      g_signal_connect (priv->popover,
-                        "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &priv->popover);
-    }
+    g_clear_object (&priv->popover);
 }
 
 void
@@ -689,6 +652,12 @@ ide_tree_show_popover_at_node (IdeTree     *self,
   g_return_if_fail (IDE_IS_TREE (self));
   g_return_if_fail (IDE_IS_TREE_NODE (node));
   g_return_if_fail (GTK_IS_POPOVER (popover));
+  g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (popover)) == NULL);
+
+#if 0
+  /* Once this is in GTK, uncomment */
+  gtk_widget_set_action_parent (GTK_WIDGET (popover), GTK_WIDGET (self));
+#endif
 
   _ide_tree_node_show_popover (node, self, popover);
 }
@@ -700,8 +669,6 @@ ide_tree_show_popover_at_node (IdeTree     *self,
  * Gets the currently selected node, or %NULL
  *
  * Returns: (transfer none) (nullable): an #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_get_selected_node (IdeTree *self)

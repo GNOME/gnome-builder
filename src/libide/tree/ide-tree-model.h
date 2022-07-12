@@ -30,41 +30,41 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TREE_MODEL (ide_tree_model_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTreeModel, ide_tree_model, IDE, TREE_MODEL, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTree     *ide_tree_model_get_tree          (IdeTreeModel         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTreeNode *ide_tree_model_get_root          (IdeTreeModel         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_tree_model_set_root          (IdeTreeModel         *self,
                                                IdeTreeNode          *root);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_tree_model_get_kind          (IdeTreeModel         *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_tree_model_set_kind          (IdeTreeModel         *self,
                                                const gchar          *kind);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTreeNode *ide_tree_model_get_node          (IdeTreeModel         *self,
                                                GtkTreeIter          *iter);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkTreePath *ide_tree_model_get_path_for_node (IdeTreeModel         *self,
                                                IdeTreeNode          *node);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_tree_model_get_iter_for_node (IdeTreeModel         *self,
                                                GtkTreeIter          *iter,
                                                IdeTreeNode          *node);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_tree_model_invalidate        (IdeTreeModel         *self,
                                                IdeTreeNode          *node);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_tree_model_expand_async      (IdeTreeModel         *self,
                                                IdeTreeNode          *node,
                                                GCancellable         *cancellable,
                                                GAsyncReadyCallback   callback,
                                                gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_tree_model_expand_finish     (IdeTreeModel         *self,
                                                GAsyncResult         *result,
                                                GError              **error);

@@ -46,7 +46,7 @@ typedef struct
 {
   IdeTreeNode      *drag_node;
   IdeTreeNode      *drop_node;
-  GtkSelectionData *selection;
+  GValue            value;
   GdkDragAction     actions;
   gint              n_active;
 } DragDataReceived;
@@ -56,9 +56,9 @@ static void tree_drag_dest_iface_init   (GtkTreeDragDestIface   *iface);
 static void tree_drag_source_iface_init (GtkTreeDragSourceIface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTreeModel, ide_tree_model, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, tree_model_iface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST, tree_drag_dest_iface_init)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE, tree_drag_source_iface_init))
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, tree_model_iface_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_DEST, tree_drag_dest_iface_init)
+                               G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_DRAG_SOURCE, tree_drag_source_iface_init))
 
 enum {
   PROP_0,
@@ -80,7 +80,7 @@ drag_data_received_free (DragDataReceived *data)
 
   g_clear_object (&data->drag_node);
   g_clear_object (&data->drop_node);
-  g_clear_pointer (&data->selection, gtk_selection_data_free);
+  g_value_unset (&data->value);
   g_slice_free (DragDataReceived, data);
 }
 
@@ -227,14 +227,15 @@ ide_tree_model_dispose (GObject *object)
 {
   IdeTreeModel *self = (IdeTreeModel *)object;
 
-  /* Clear the model back-pointer for root so that it cannot emit anu
+  ide_clear_and_destroy_object (&self->addins);
+
+  /* Clear the model back-pointer for root so that it cannot emit any
    * further signals on our tree model.
    */
   if (self->root != NULL)
     _ide_tree_node_set_model (self->root, NULL);
 
   g_clear_object (&self->tree);
-  ide_clear_and_destroy_object (&self->addins);
   g_clear_object (&self->root);
   g_clear_pointer (&self->kind, g_free);
 
@@ -320,8 +321,6 @@ ide_tree_model_class_init (IdeTreeModelClass *klass)
    * The "root" property contains the root #IdeTreeNode that is used to build
    * the tree. It should contain an object for the #IdeTreeNode:item property
    * so that #IdeTreeAddin's may use it to build the node and any children.
-   *
-   * Since: 3.32
    */
   properties [PROP_ROOT] =
     g_param_spec_object ("root",
@@ -339,8 +338,6 @@ ide_tree_model_class_init (IdeTreeModelClass *klass)
    *
    * For example, to extend the project-tree, plugins should set
    * "X-Tree-Kind=project-tree" in their .plugin manifest.
-   *
-   * Since: 3.32
    */
   properties [PROP_KIND] =
     g_param_spec_string ("kind",
@@ -689,8 +686,6 @@ tree_model_iface_init (GtkTreeModelIface *iface)
  * Gets the #GtkTreePath pointing at @node.
  *
  * Returns: (transfer full) (nullable): a new #GtkTreePath
- *
- * Since: 3.32
  */
 GtkTreePath *
 ide_tree_model_get_path_for_node (IdeTreeModel *self,
@@ -716,8 +711,6 @@ ide_tree_model_get_path_for_node (IdeTreeModel *self,
  * Gets a #GtkTreeIter that points at @node.
  *
  * Returns: %TRUE if @iter was set; otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_tree_model_get_iter_for_node (IdeTreeModel *self,
@@ -744,8 +737,6 @@ ide_tree_model_get_iter_for_node (IdeTreeModel *self,
  * is used to build the immediate children which are displayed in the tree.
  *
  * Returns: (transfer none) (not nullable): an #IdeTreeNode
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_model_get_root (IdeTreeModel *self)
@@ -824,8 +815,6 @@ ide_tree_model_set_root (IdeTreeModel *self,
  * for more information.
  *
  * Returns: (nullable): a string containing the kind, or %NULL
- *
- * Since: 3.32
  */
 const gchar *
 ide_tree_model_get_kind (IdeTreeModel *self)
@@ -845,8 +834,6 @@ ide_tree_model_get_kind (IdeTreeModel *self)
  *
  * This should be set before adding the #IdeTreeModel to an #IdeObject to
  * ensure the tree builds the proper contents.
- *
- * Since: 3.32
  */
 void
 ide_tree_model_set_kind (IdeTreeModel *self,
@@ -930,8 +917,6 @@ _ide_tree_model_row_activated (IdeTreeModel *self,
  * Gets the #IdeTreeNode found at @iter.
  *
  * Returns: (transfer none) (nullable): an #IdeTreeNode or %NULL
- *
- * Since: 3.32
  */
 IdeTreeNode *
 ide_tree_model_get_node (IdeTreeModel *self,
@@ -1120,8 +1105,6 @@ ide_tree_model_invalidate_traverse_cb (IdeTreeNode *node,
  * are rebuilt using the configured tree addins.
  *
  * If @node is %NULL, the root of the tree is invalidated.
- *
- * Since: 3.32
  */
 void
 ide_tree_model_invalidate (IdeTreeModel *self,
@@ -1271,8 +1254,6 @@ _ide_tree_model_row_collapsed (IdeTreeModel *self,
  * @self: a #IdeTreeModel
  *
  * Returns: (transfer none): an #IdeTree
- *
- * Since: 3.32
  */
 IdeTree *
 ide_tree_model_get_tree (IdeTreeModel *self)
@@ -1378,19 +1359,17 @@ ide_tree_model_row_draggable (GtkTreeDragSource *source,
   return state.draggable;
 }
 
-static gboolean
+static GdkContentProvider *
 ide_tree_model_drag_data_get (GtkTreeDragSource *source,
-                              GtkTreePath       *path,
-                              GtkSelectionData  *selection)
+                              GtkTreePath       *path)
 {
   IdeTreeModel *self = (IdeTreeModel *)source;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE_MODEL (self));
   g_assert (path != NULL);
-  g_assert (selection != NULL);
 
-  return gtk_tree_set_row_drag_data (selection, GTK_TREE_MODEL (self), path);
+  return gtk_tree_create_row_drag_content (GTK_TREE_MODEL (self), path);
 }
 
 static gboolean
@@ -1471,7 +1450,7 @@ ide_tree_model_drag_data_received_cb (IdeExtensionSetAdapter *set,
   ide_tree_addin_node_dropped_async (addin,
                                      state->drag_node,
                                      state->drop_node,
-                                     state->selection,
+                                     &state->value,
                                      state->actions,
                                      NULL,
                                      ide_tree_model_drag_data_received_addin_cb,
@@ -1479,9 +1458,9 @@ ide_tree_model_drag_data_received_cb (IdeExtensionSetAdapter *set,
 }
 
 static gboolean
-ide_tree_model_drag_data_received (GtkTreeDragDest  *dest,
-                                   GtkTreePath      *path,
-                                   GtkSelectionData *selection)
+ide_tree_model_drag_data_received (GtkTreeDragDest *dest,
+                                   GtkTreePath     *path,
+                                   const GValue    *value)
 {
   IdeTreeModel *self = (IdeTreeModel *)dest;
   g_autoptr(GtkTreePath) source_path = NULL;
@@ -1495,9 +1474,9 @@ ide_tree_model_drag_data_received (GtkTreeDragDest  *dest,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE_MODEL (self));
   g_assert (path != NULL);
-  g_assert (selection != NULL);
+  g_assert (value != NULL);
 
-  if (gtk_tree_get_row_drag_data (selection, &source_model, &source_path))
+  if (gtk_tree_get_row_drag_data (value, &source_model, &source_path))
     {
       if (IDE_IS_TREE_MODEL (source_model))
         {
@@ -1511,9 +1490,8 @@ ide_tree_model_drag_data_received (GtkTreeDragDest  *dest,
   state = g_slice_new0 (DragDataReceived);
   g_set_object (&state->drag_node, drag_node);
   g_set_object (&state->drop_node, drop_node);
-  state->selection = gtk_selection_data_copy (selection);
+  g_value_copy (value, &state->value);
   state->actions = _ide_tree_get_drop_actions (self->tree);
-
 
   task = ide_task_new (self, NULL, NULL, NULL);
   ide_task_set_source_tag (task, ide_tree_model_drag_data_received);
@@ -1538,7 +1516,7 @@ ide_tree_model_row_drop_possible_cb (IdeExtensionSetAdapter *set,
   struct {
     IdeTreeNode      *drag_node;
     IdeTreeNode      *drop_node;
-    GtkSelectionData *selection;
+    const GValue     *value;
     gboolean          drop_possible;
   } *state = user_data;
 
@@ -1547,18 +1525,18 @@ ide_tree_model_row_drop_possible_cb (IdeExtensionSetAdapter *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_TREE_ADDIN (exten));
   g_assert (state != NULL);
-  g_assert (state->selection != NULL);
+  g_assert (state->value != NULL);
 
   state->drop_possible |= ide_tree_addin_node_droppable (IDE_TREE_ADDIN (exten),
                                                          state->drag_node,
                                                          state->drop_node,
-                                                         state->selection);
+                                                         state->value);
 }
 
 static gboolean
-ide_tree_model_row_drop_possible (GtkTreeDragDest  *dest,
-                                  GtkTreePath      *path,
-                                  GtkSelectionData *selection)
+ide_tree_model_row_drop_possible (GtkTreeDragDest *dest,
+                                  GtkTreePath     *path,
+                                  const GValue    *value)
 {
   IdeTreeModel *self = (IdeTreeModel *)dest;
   g_autoptr(GtkTreePath) source_path = NULL;
@@ -1569,16 +1547,16 @@ ide_tree_model_row_drop_possible (GtkTreeDragDest  *dest,
   struct {
     IdeTreeNode      *drag_node;
     IdeTreeNode      *drop_node;
-    GtkSelectionData *selection;
+    const GValue     *value;
     gboolean          drop_possible;
   } state;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TREE_MODEL (self));
   g_assert (path != NULL);
-  g_assert (selection != NULL);
+  g_assert (value != NULL);
 
-  if (gtk_tree_get_row_drag_data (selection, &source_model, &source_path))
+  if (gtk_tree_get_row_drag_data (value, &source_model, &source_path))
     {
       if (IDE_IS_TREE_MODEL (source_model))
         {
@@ -1603,7 +1581,7 @@ ide_tree_model_row_drop_possible (GtkTreeDragDest  *dest,
 
   state.drag_node = drag_node;
   state.drop_node = drop_node;
-  state.selection = selection;
+  state.value = value;
   state.drop_possible = FALSE;
 
   ide_extension_set_adapter_foreach (self->addins,
