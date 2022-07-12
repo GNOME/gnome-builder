@@ -138,8 +138,6 @@ ide_lsp_diagnostic_init (IdeLspDiagnostic *self)
  * returns it.
  *
  * Returns: (transfer full) (nullable): a #GVariant with it's reference count incremented
- *
- * Since: 42.0
  */
 GVariant *
 ide_lsp_diagnostic_dup_raw (IdeLspDiagnostic *self)
