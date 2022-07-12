@@ -29,16 +29,16 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpWordProposals, gbp_word_proposals, GBP, WORD_PROPOSALS, GObject)
 
 GbpWordProposals *gbp_word_proposals_new             (void);
-void              gbp_word_proposals_populate_async  (GbpWordProposals      *self,
-                                                      IdeCompletionContext  *context,
-                                                      GCancellable          *cancellable,
-                                                      GAsyncReadyCallback    callback,
-                                                      gpointer               user_data);
-gboolean          gbp_word_proposals_populate_finish (GbpWordProposals      *self,
-                                                      GAsyncResult          *result,
-                                                      GError               **error);
-void              gbp_word_proposals_refilter        (GbpWordProposals      *self,
-                                                      const gchar           *word);
-void              gbp_word_proposals_clear           (GbpWordProposals      *self);
+void              gbp_word_proposals_populate_async  (GbpWordProposals            *self,
+                                                      GtkSourceCompletionContext  *context,
+                                                      GCancellable                *cancellable,
+                                                      GAsyncReadyCallback          callback,
+                                                      gpointer                     user_data);
+gboolean          gbp_word_proposals_populate_finish (GbpWordProposals            *self,
+                                                      GAsyncResult                *result,
+                                                      GError                     **error);
+void              gbp_word_proposals_refilter        (GbpWordProposals            *self,
+                                                      const gchar                 *word);
+void              gbp_word_proposals_clear           (GbpWordProposals            *self);
 
 G_END_DECLS

@@ -33,7 +33,7 @@ struct _GbpWordProposal
 };
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWordProposal, gbp_word_proposal, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void
 gbp_word_proposal_finalize (GObject *object)

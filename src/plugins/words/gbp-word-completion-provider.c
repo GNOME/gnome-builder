@@ -30,14 +30,14 @@
 
 struct _GbpWordCompletionProvider
 {
-  GObject parent_instance;
+  GObject           parent_instance;
   GbpWordProposals *proposals;
 };
 
-static void completion_provider_iface_init (IdeCompletionProviderInterface *iface);
+static void completion_provider_iface_init (GtkSourceCompletionProviderInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWordCompletionProvider, gbp_word_completion_provider, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, completion_provider_iface_init))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_iface_init))
 
 static void
 gbp_word_completion_provider_finalize (GObject *object)
@@ -62,24 +62,22 @@ gbp_word_completion_provider_init (GbpWordCompletionProvider *self)
 {
 }
 
-static gboolean
-gbp_word_completion_provider_refilter (IdeCompletionProvider *provider,
-                                       IdeCompletionContext  *context,
-                                       GListModel            *model)
+static void
+gbp_word_completion_provider_refilter (GtkSourceCompletionProvider *provider,
+                                       GtkSourceCompletionContext  *context,
+                                       GListModel                  *model)
 {
   g_autofree gchar *casefold = NULL;
   g_autofree gchar *word = NULL;
 
   g_assert (GBP_IS_WORD_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (GBP_IS_WORD_PROPOSALS (model));
 
-  if ((word = ide_completion_context_get_word (context)))
+  if ((word = gtk_source_completion_context_get_word (context)))
     casefold = g_utf8_casefold (word, -1);
 
   gbp_word_proposals_refilter (GBP_WORD_PROPOSALS (model), casefold);
-
-  return TRUE;
 }
 
 static void
@@ -102,18 +100,18 @@ gbp_word_completion_provider_populate_cb (GObject      *object,
 }
 
 static void
-gbp_word_completion_provider_populate_async (IdeCompletionProvider *provider,
-                                             IdeCompletionContext  *context,
-                                             GCancellable          *cancellable,
-                                             GAsyncReadyCallback    callback,
-                                             gpointer               user_data)
+gbp_word_completion_provider_populate_async (GtkSourceCompletionProvider *provider,
+                                             GtkSourceCompletionContext  *context,
+                                             GCancellable                *cancellable,
+                                             GAsyncReadyCallback          callback,
+                                             gpointer                     user_data)
 {
   GbpWordCompletionProvider *self = (GbpWordCompletionProvider *)provider;
-  IdeCompletionActivation activation;
+  GtkSourceCompletionActivation activation;
   g_autoptr(IdeTask) task = NULL;
 
   g_assert (GBP_IS_WORD_COMPLETION_PROVIDER (self));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -126,17 +124,17 @@ gbp_word_completion_provider_populate_async (IdeCompletionProvider *provider,
    * Avoid extra processing unless the user requested completion, since
    * scanning the buffer is rather expensive.
    */
-  activation = ide_completion_context_get_activation (context);
-  if (activation != IDE_COMPLETION_USER_REQUESTED)
+  activation = gtk_source_completion_context_get_activation (context);
+  if (activation != GTK_SOURCE_COMPLETION_ACTIVATION_USER_REQUESTED)
     {
       gbp_word_proposals_clear (self->proposals);
       ide_task_return_boolean (task, TRUE);
       return;
     }
 
-  ide_completion_context_set_proposals_for_provider (context,
-                                                     provider,
-                                                     G_LIST_MODEL (self->proposals));
+  gtk_source_completion_context_set_proposals_for_provider (context,
+                                                            provider,
+                                                            G_LIST_MODEL (self->proposals));
 
   gbp_word_proposals_populate_async (self->proposals,
                                      context,
@@ -146,7 +144,7 @@ gbp_word_completion_provider_populate_async (IdeCompletionProvider *provider,
 }
 
 static GListModel *
-gbp_word_completion_provider_populate_finish (IdeCompletionProvider  *provider,
+gbp_word_completion_provider_populate_finish (GtkSourceCompletionProvider  *provider,
                                               GAsyncResult           *result,
                                               GError                **error)
 {
@@ -157,68 +155,82 @@ gbp_word_completion_provider_populate_finish (IdeCompletionProvider  *provider,
 }
 
 static void
-gbp_word_completion_provider_display_proposal (IdeCompletionProvider   *provider,
-                                               IdeCompletionListBoxRow *row,
-                                               IdeCompletionContext    *context,
-                                               const gchar             *typed_text,
-                                               IdeCompletionProposal   *proposal)
+gbp_word_completion_provider_display (GtkSourceCompletionProvider *provider,
+                                      GtkSourceCompletionContext  *context,
+                                      GtkSourceCompletionProposal *proposal,
+                                      GtkSourceCompletionCell     *cell)
 {
-  g_autofree gchar *markup = NULL;
-  const gchar *word;
+  GtkSourceCompletionColumn column;
 
   g_assert (GBP_IS_WORD_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
-  g_assert (IDE_IS_COMPLETION_PROPOSAL (proposal));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_PROPOSAL (proposal));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CELL (cell));
 
-  word = gbp_word_proposal_get_word (GBP_WORD_PROPOSAL (proposal));
-  markup = ide_completion_fuzzy_highlight (word, typed_text);
+  column = gtk_source_completion_cell_get_column (cell);
 
-  ide_completion_list_box_row_set_icon_name (row, "completion-word-symbolic");
-  ide_completion_list_box_row_set_left (row, NULL);
-  ide_completion_list_box_row_set_center_markup (row, markup);
-  ide_completion_list_box_row_set_right (row, NULL);
+  switch (column)
+    {
+    case GTK_SOURCE_COMPLETION_COLUMN_ICON:
+      gtk_source_completion_cell_set_icon_name (cell, "completion-word-symbolic");
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_TYPED_TEXT:
+      {
+        const char *word = gbp_word_proposal_get_word (GBP_WORD_PROPOSAL (proposal));
+        g_autofree char *typed_text = gtk_source_completion_context_get_word (context);
+        g_autoptr(PangoAttrList) attrs = gtk_source_completion_fuzzy_highlight (word, typed_text);
+        gtk_source_completion_cell_set_text_with_attributes (cell, word, attrs);
+        break;
+      }
+
+    case GTK_SOURCE_COMPLETION_COLUMN_BEFORE:
+    case GTK_SOURCE_COMPLETION_COLUMN_AFTER:
+    case GTK_SOURCE_COMPLETION_COLUMN_COMMENT:
+    case GTK_SOURCE_COMPLETION_COLUMN_DETAILS:
+    default:
+      gtk_source_completion_cell_set_text (cell, NULL);
+      break;
+    }
 }
 
 static void
-gbp_word_completion_provider_activate_proposal (IdeCompletionProvider *provider,
-                                                IdeCompletionContext  *context,
-                                                IdeCompletionProposal *proposal,
-                                                const GdkEventKey     *key)
+gbp_word_completion_provider_activate (GtkSourceCompletionProvider *provider,
+                                       GtkSourceCompletionContext  *context,
+                                       GtkSourceCompletionProposal *proposal)
 {
-  GtkTextIter begin, end;
-  GtkTextBuffer *buffer;
+  GtkSourceBuffer *buffer;
   const gchar *word;
+  GtkTextIter begin, end;
 
   g_assert (GBP_IS_WORD_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (GBP_IS_WORD_PROPOSAL (proposal));
-  g_assert (key != NULL);
 
-  buffer = ide_completion_context_get_buffer (context);
+  buffer = gtk_source_completion_context_get_buffer (context);
   word = gbp_word_proposal_get_word (GBP_WORD_PROPOSAL (proposal));
 
-  gtk_text_buffer_begin_user_action (buffer);
-  if (ide_completion_context_get_bounds (context, &begin, &end))
-    gtk_text_buffer_delete (buffer, &begin, &end);
-  gtk_text_buffer_insert (buffer, &begin, word, -1);
-  gtk_text_buffer_end_user_action (buffer);
+  gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (buffer));
+  if (gtk_source_completion_context_get_bounds (context, &begin, &end))
+    gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
+  gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &begin, word, -1);
+  gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
 }
 
 static gint
-gbp_word_completion_provider_get_priority (IdeCompletionProvider *provider,
-                                           IdeCompletionContext  *context)
+gbp_word_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
+                                           GtkSourceCompletionContext  *context)
 {
   return 1000;
 }
 
 static void
-completion_provider_iface_init (IdeCompletionProviderInterface *iface)
+completion_provider_iface_init (GtkSourceCompletionProviderInterface *iface)
 {
   iface->populate_async = gbp_word_completion_provider_populate_async;
   iface->populate_finish = gbp_word_completion_provider_populate_finish;
-  iface->display_proposal = gbp_word_completion_provider_display_proposal;
-  iface->activate_proposal = gbp_word_completion_provider_activate_proposal;
+  iface->display = gbp_word_completion_provider_display;
+  iface->activate = gbp_word_completion_provider_activate;
   iface->refilter = gbp_word_completion_provider_refilter;
   iface->get_priority = gbp_word_completion_provider_get_priority;
 }
