@@ -27,6 +27,7 @@
 #include "ide-device-manager.h"
 #include "ide-config-manager.h"
 #include "ide-foundry-compat.h"
+#include "ide-run-commands.h"
 #include "ide-run-manager.h"
 #include "ide-runtime-manager.h"
 #include "ide-test-manager.h"
@@ -215,4 +216,20 @@ ide_test_manager_from_context (IdeContext *context)
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
   return ensure_child_typed_borrowed (context, IDE_TYPE_TEST_MANAGER);
+}
+
+/**
+ * ide_run_commands_from_context:
+ * @context: an #IdeContext
+ *
+ * Gets the default #IdeRunCommands instance for @context.
+ *
+ * Returns: (transfer none): an #IdeRunCommands
+ */
+IdeRunCommands *
+ide_run_commands_from_context (IdeContext *context)
+{
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  return ensure_child_typed_borrowed (context, IDE_TYPE_RUN_COMMANDS);
 }
