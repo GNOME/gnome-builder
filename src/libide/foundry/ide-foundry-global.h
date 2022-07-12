@@ -29,13 +29,13 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_43
+IDE_AVAILABLE_IN_ALL
 int                    ide_foundry_bytes_to_memfd           (GBytes      *bytes,
                                                              const char  *name);
-IDE_AVAILABLE_IN_43
+IDE_AVAILABLE_IN_ALL
 int                    ide_foundry_file_to_memfd            (GFile       *file,
                                                              const char  *name);
-IDE_AVAILABLE_IN_43
+IDE_AVAILABLE_IN_ALL
 IdeSubprocessLauncher *ide_foundry_get_launcher_for_context (IdeContext  *context,
                                                              const char  *program_name,
                                                              const char  *bundled_program_path,
