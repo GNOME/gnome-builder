@@ -232,8 +232,6 @@ ide_debugger_library_set_target_name (IdeDebuggerLibrary *self,
  *
  * Returns: (transfer none) (element-type Ide.DebuggerAddressRange): a #GPtrArray
  *   containing the list of address ranges.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_debugger_library_get_ranges (IdeDebuggerLibrary *self)
@@ -252,8 +250,6 @@ ide_debugger_library_get_ranges (IdeDebuggerLibrary *self)
  *
  * Adds @range to the list of ranges for which the library is mapped in
  * the inferior's address space.
- *
- * Since: 3.32
  */
 void
 ide_debugger_library_add_range (IdeDebuggerLibrary            *self,

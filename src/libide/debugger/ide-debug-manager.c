@@ -124,8 +124,6 @@ ide_debug_manager_notify_buffer (IdeDebugManager        *self,
  * return %NULL in this case.
  *
  * Returns: %TRUE if the language is supported; otherwise %FALSE.
- *
- * Since: 3.32
  */
 gboolean
 ide_debug_manager_supports_language (IdeDebugManager *self,
@@ -600,8 +598,6 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
    *
    * This can be used to determine if the controls should be made visible
    * in the workbench.
-   *
-   * Since: 3.32
    */
   properties [PROP_ACTIVE] =
     g_param_spec_boolean ("active",
@@ -626,8 +622,6 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
    *
    * The "breakpoint-added" signal is emitted when a new breakpoint has
    * been registered by the debugger.
-   *
-   * Since: 3.32
    */
   signals [BREAKPOINT_ADDED] =
     g_signal_new_class_handler ("breakpoint-added",
@@ -644,8 +638,6 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
    *
    * The "breakpoint-removed" signal is emitted when a new breakpoint has been
    * removed by the debugger.
-   *
-   * Since: 3.32
    */
   signals [BREAKPOINT_REMOVED] =
     g_signal_new_class_handler ("breakpoint-removed",
@@ -667,8 +659,6 @@ ide_debug_manager_class_init (IdeDebugManagerClass *klass)
    * on the #IdeDebugger itself.
    *
    * See also: #IdeDebugManager:debugger
-   *
-   * Since: 3.32
    */
   signals [BREAKPOINT_REACHED] =
     g_signal_new_class_handler ("breakpoint-reached",
@@ -1068,8 +1058,6 @@ ide_debug_manager_get_active (IdeDebugManager *self)
  * Gets the debugger instance, if it is loaded.
  *
  * Returns: (transfer none) (nullable): An #IdeDebugger or %NULL
- *
- * Since: 3.32
  */
 IdeDebugger *
 ide_debug_manager_get_debugger (IdeDebugManager *self)
@@ -1093,8 +1081,6 @@ ide_debug_manager_get_debugger (IdeDebugManager *self)
  * propagate to the debugger when the debugger has been successfully spawned.
  *
  * Returns: (transfer full): An #IdeDebuggerBreakpoints
- *
- * Since: 3.32
  */
 IdeDebuggerBreakpoints *
 ide_debug_manager_get_breakpoints_for_file (IdeDebugManager *self,
@@ -1127,8 +1113,6 @@ ide_debug_manager_get_breakpoints_for_file (IdeDebugManager *self,
  * is done by notifying the debugger to add the breakpoint. If there is
  * not an active debugger, then it is done by caching the breakpoint
  * until the debugger is next started.
- *
- * Since: 3.32
  */
 void
 _ide_debug_manager_add_breakpoint (IdeDebugManager       *self,
@@ -1175,8 +1159,6 @@ _ide_debug_manager_add_breakpoint (IdeDebugManager       *self,
  * This removes an exiting breakpoint. If the debugger has been started, it
  * is done by notifying the debugger to remove the breakpoint. If there is
  * not an active debugger, then it is done by removing the cached breakpoint.
- *
- * Since: 3.32
  */
 void
 _ide_debug_manager_remove_breakpoint (IdeDebugManager       *self,
@@ -1219,8 +1201,6 @@ _ide_debug_manager_remove_breakpoint (IdeDebugManager       *self,
  * Gets the #IdeDebugManager for a context.
  *
  * Returns: (transfer none): an #IdeDebugManager
- *
- * Since: 3.32
  */
 IdeDebugManager *
 ide_debug_manager_from_context (IdeContext *context)
