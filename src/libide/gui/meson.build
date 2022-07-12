@@ -163,23 +163,27 @@ libide_gui_sources += libide_gui_resources
 #
 
 libide_gui_deps = [
+  cc.find_library('m', required: false),
+
   libgio_dep,
   libgtk_dep,
   libgtksource_dep,
-  libdazzle_dep,
-  libhandy_dep,
+  libadwaita_dep,
+  libpanel_dep,
   libpeas_dep,
+  libjson_glib_dep,
 
   dependency('libcmark', version: '>= 0.29.0'),
 
   libide_core_dep,
   libide_io_dep,
   libide_foundry_dep,
+  libide_gtk_dep,
   libide_debugger_dep,
   libide_plugins_dep,
   libide_projects_dep,
   libide_search_dep,
-  libide_themes_dep,
+  libide_sourceview_dep,
 ]
 
 if get_option('webkit').enabled()
