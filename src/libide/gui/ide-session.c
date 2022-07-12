@@ -23,14 +23,13 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-plugins.h>
-#include <libide-gui.h>
 #include <libide-threading.h>
 
+#include "ide-frame.h"
 #include "ide-session-addin.h"
 #include "ide-session-private.h"
-
-#include "ide-gui-private.h"
 
 struct _IdeSession
 {
@@ -338,19 +337,18 @@ restore_pages_to_grid (GArray  *r_items,
   for (guint i = 0; i < r_items->len; i++)
     {
       RestoreItem *item = &g_array_index (r_items, RestoreItem, i);
-      IdeGridColumn *column;
-      IdeFrame *stack;
+      PanelGridColumn *column;
+      PanelFrame *frame;
 
       /* Ignore pages that couldn't be restored. */
       if (item->restored_page == NULL)
         continue;
 
       /* This relies on the fact that the items are sorted. */
-      column = ide_grid_get_nth_column (grid, item->column);
-      stack = _ide_grid_get_nth_stack_for_column (grid, column, item->row);
+      column = panel_grid_get_column (PANEL_GRID (grid), item->column);
+      frame = panel_grid_column_get_row (column, item->row);
 
-      gtk_container_add (GTK_CONTAINER (stack),
-                         GTK_WIDGET (item->restored_page));
+      panel_frame_add (frame, PANEL_WIDGET (item->restored_page));
     }
   IDE_EXIT;
 }
@@ -668,8 +666,6 @@ on_session_cache_loaded_cb (GObject      *object,
  * the point it was last saved (typically upon shutdown). This includes
  * open documents and editor splits to the degree possible. Adding support
  * for a new page type requires implementing an #IdeSessionAddin.
- *
- * Since: 41
  */
 void
 ide_session_restore_async (IdeSession          *self,
@@ -777,55 +773,6 @@ on_state_saved_to_cache_file_cb (GObject      *object,
   IDE_EXIT;
 }
 
-static void
-get_page_position (IdePage *page,
-                   guint   *out_column,
-                   guint   *out_row,
-                   guint   *out_depth)
-{
-  GtkWidget *frame_pages_stack;
-  GtkWidget *frame;
-  GtkWidget *grid_column;
-  GtkWidget *grid;
-
-  g_assert (IDE_IS_PAGE (page));
-  g_assert (out_column != NULL);
-  g_assert (out_row != NULL);
-  g_assert (out_depth != NULL);
-
-  frame_pages_stack = gtk_widget_get_ancestor (GTK_WIDGET (page), GTK_TYPE_STACK);
-  frame = gtk_widget_get_ancestor (GTK_WIDGET (frame_pages_stack), IDE_TYPE_FRAME);
-  grid_column = gtk_widget_get_ancestor (GTK_WIDGET (frame), IDE_TYPE_GRID_COLUMN);
-  grid = gtk_widget_get_ancestor (GTK_WIDGET (grid_column), IDE_TYPE_GRID);
-
-  /* When this page is the currently visible one for this frame, we want to keep it on top when
-   * restoring so that there's no need to switch back to the pages we were working on. We need to
-   * do this because the stack's "position" child property only refers to the order in which the
-   * pages were initially opened, not the most-recently-used order.
-   */
-  if (ide_frame_get_visible_child (IDE_FRAME (frame)) == page)
-    {
-      *out_depth = g_list_model_get_n_items (G_LIST_MODEL (frame));
-    }
-  else
-    {
-      gtk_container_child_get (GTK_CONTAINER (frame_pages_stack), GTK_WIDGET (page),
-                               "position", out_depth,
-                               NULL);
-      *out_depth = MAX (*out_depth, 0);
-    }
-
-  gtk_container_child_get (GTK_CONTAINER (grid_column), GTK_WIDGET (frame),
-                           "index", out_row,
-                           NULL);
-  *out_row = MAX (*out_row, 0);
-
-  gtk_container_child_get (GTK_CONTAINER (grid), GTK_WIDGET (grid_column),
-                           "index", out_column,
-                           NULL);
-  *out_column = MAX (*out_column, 0);
-}
-
 typedef struct {
   IdeTask *task;
   IdePage *page;
@@ -920,7 +867,7 @@ on_session_addin_page_saved_cb (GObject      *object,
 
       g_assert (!g_variant_is_floating (page_state));
 
-      get_page_position (page, &frame_column, &frame_row, &frame_depth);
+      ide_grid_get_page_position (s->grid, page, &frame_column, &frame_row, &frame_depth);
 
       g_variant_dict_init (&state_dict, NULL);
       g_variant_dict_insert (&state_dict, "column", "u", frame_column);
@@ -943,10 +890,9 @@ on_session_addin_page_saved_cb (GObject      *object,
 }
 
 static void
-foreach_page_in_grid_save_cb (GtkWidget *widget,
-                              gpointer   user_data)
+foreach_page_in_grid_save_cb (IdePage  *page,
+                              gpointer  user_data)
 {
-  IdePage *page = IDE_PAGE (widget);
   IdeTask *task = user_data;
   IdeSessionAddin *addin;
   SavePage *save_page = NULL;
@@ -989,8 +935,6 @@ foreach_page_in_grid_save_cb (GtkWidget *widget,
  * This function will save the position and content of the pages in the @grid,
  * which can then be restored with ide_session_restore_async(), asking the
  * content of the pages to the appropriate #IdeSessionAddin.
- *
- * Since: 41
  */
 void
 ide_session_save_async (IdeSession          *self,
