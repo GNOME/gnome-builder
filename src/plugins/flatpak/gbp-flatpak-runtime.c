@@ -229,10 +229,7 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   if (env != NULL)
     {
       for (guint i = 0; env[i]; i++)
-        {
-          g_autofree char *arg = g_strconcat ("--env=", env[i], NULL);
-          ide_run_context_append_argv (run_context, arg);
-        }
+        ide_run_context_append_formatted (run_context, "--env=%s", env[i]);
     }
 
   /* Make sure all of our finish arguments for the manifest are included */
@@ -305,6 +302,10 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
   GbpFlatpakRuntime *self;
   g_autofree char *staging_dir = NULL;
   g_autofree char *ccache_dir = NULL;
+  g_autofree char *new_path = NULL;
+  const char *path;
+  const char *prepend_path;
+  const char *append_path;
   const char *srcdir;
   const char *builddir;
   IdeContext *context;
@@ -378,15 +379,30 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
       ide_run_context_append_argv (run_context, "--share=network");
     }
 
+  /* Prepare an alternate PATH */
+  path = g_environ_getenv ((char **)env, "PATH");
+  prepend_path = ide_config_get_prepend_path (config);
+  append_path = ide_config_get_append_path (config);
+  if (path || prepend_path || append_path)
+    new_path = g_strdup_printf ("%s%s%s%s%s",
+                                prepend_path ? prepend_path : "",
+                                prepend_path ? ":" : "",
+                                path ? path : "/app/bin:/usr/bin",
+                                path ? ":" : "",
+                                append_path ? append_path : "");
+
   /* Convert environment from upper level into --env=FOO=BAR */
   if (env != NULL)
     {
       for (guint i = 0; env[i]; i++)
         {
-          g_autofree char *arg = g_strconcat ("--env=", env[i], NULL);
-          ide_run_context_append_argv (run_context, arg);
+          if (new_path == NULL || !ide_str_equal0 (env[i], "PATH"))
+            ide_run_context_append_formatted (run_context, "--env=%s", env[i]);
         }
     }
+
+  if (new_path != NULL)
+    ide_run_context_append_formatted (run_context, "--env=PATH=%s", new_path);
 
   /* And last, before our child command, is the staging directory */
   ide_run_context_append_argv (run_context, staging_dir);
