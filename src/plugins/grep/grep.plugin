@@ -2,9 +2,10 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2018 Christian Hergert
-Depends=editor;project-tree;
+Depends=project-tree;
 Description=Search across project files
 Embedded=_gbp_grep_register_types
 Module=grep
 Name=Find in Files
 X-Tree-Kind=project-tree;
+X-Workspace-Kind=editor;primary;

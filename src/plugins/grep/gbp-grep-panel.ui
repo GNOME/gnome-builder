@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="GbpGrepPanel" parent="DzlDockWidget">
+  <template class="GbpGrepPanel" parent="IdePane">
     <property name="icon-name">edit-find-symbolic</property>
     <property name="title" translatable="yes">Find in Files</property>
     <child>
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
+        <property name="hexpand">true</property>
         <property name="visible">true</property>
         <child>
           <object class="GtkStack" id="stack">
@@ -125,14 +126,11 @@
                   <object class="GtkEntry" id="find_entry">
                     <property name="visible">true</property>
                     <property name="hexpand">true</property>
-                    <accessibility>
-                      <relation target="find_button" type="labelled-by"/>
-                    </accessibility>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">0</property>
+                    </layout>
                   </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="find_button">
@@ -140,24 +138,21 @@
                     <property name="sensitive">false</property>
                     <property name="label" translatable="yes">_Find in Project</property>
                     <property name="use-underline">True</property>
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">0</property>
+                    </layout>
                   </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">0</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkEntry" id="replace_entry">
                     <property name="visible">true</property>
                     <property name="hexpand">true</property>
-                    <accessibility>
-                      <relation target="replace_button" type="labelled-by"/>
-                    </accessibility>
+                    <layout>
+                      <property name="column">0</property>
+                      <property name="row">1</property>
+                    </layout>
                   </object>
-                  <packing>
-                    <property name="left-attach">0</property>
-                    <property name="top-attach">1</property>
-                  </packing>
                 </child>
                 <child>
                   <object class="GtkButton" id="replace_button">
@@ -168,11 +163,11 @@
                     <style>
                       <class name="destructive-action"/>
                     </style>
+                    <layout>
+                      <property name="column">1</property>
+                      <property name="row">1</property>
+                    </layout>
                   </object>
-                  <packing>
-                    <property name="left-attach">1</property>
-                    <property name="top-attach">1</property>
-                  </packing>
                 </child>
               </object>
             </child>
