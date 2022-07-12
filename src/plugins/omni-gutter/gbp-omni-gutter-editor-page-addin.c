@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "gbp-omni-gutter-editor-page-addin"
 
+#include "config.h"
+
 #include <libide-editor.h>
 
 #include "gbp-omni-gutter-editor-page-addin.h"
@@ -34,28 +36,28 @@ static void
 gbp_omni_gutter_editor_page_addin_load (IdeEditorPageAddin *addin,
                                         IdeEditorPage      *page)
 {
-  GbpOmniGutterRenderer *gutter;
-  IdeSourceView *view;
+  IDE_ENTRY;
 
-  g_assert (IDE_IS_EDITOR_PAGE_ADDIN (addin));
+  g_assert (GBP_IS_OMNI_GUTTER_EDITOR_PAGE_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_PAGE (page));
 
-  view = ide_editor_page_get_view (page);
-  gutter = gbp_omni_gutter_renderer_new ();
-  ide_source_view_set_gutter (view, IDE_GUTTER (gutter));
+  ide_editor_page_set_gutter (page, IDE_GUTTER (gbp_omni_gutter_renderer_new ()));
+
+  IDE_EXIT;
 }
 
 static void
 gbp_omni_gutter_editor_page_addin_unload (IdeEditorPageAddin *addin,
                                           IdeEditorPage      *page)
 {
-  IdeSourceView *view;
+  IDE_ENTRY;
 
-  g_assert (IDE_IS_EDITOR_PAGE_ADDIN (addin));
+  g_assert (GBP_IS_OMNI_GUTTER_EDITOR_PAGE_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_PAGE (page));
 
-  view = ide_editor_page_get_view (page);
-  ide_source_view_set_gutter (view, NULL);
+  ide_editor_page_set_gutter (page, NULL);
+
+  IDE_EXIT;
 }
 
 static void
@@ -66,7 +68,7 @@ editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpOmniGutterEditorPageAddin, gbp_omni_gutter_editor_page_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
 
 static void
 gbp_omni_gutter_editor_page_addin_class_init (GbpOmniGutterEditorPageAddinClass *klass)
