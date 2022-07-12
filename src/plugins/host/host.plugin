@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Description=Access to host system as a runtime
+Embedded=_gbp_host_register_types
+Hidden=true
+Module=host
+Name=Host
