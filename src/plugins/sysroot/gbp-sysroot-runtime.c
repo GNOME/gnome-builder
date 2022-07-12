@@ -25,7 +25,6 @@
 
 #include "gbp-sysroot-runtime.h"
 #include "gbp-sysroot-manager.h"
-#include "gbp-sysroot-subprocess-launcher.h"
 
 // This is a list of common libdirs to use
 #define RUNTIME_PREFIX "sysroot:"
@@ -73,72 +72,40 @@ gbp_sysroot_runtime_get_sysroot_id (GbpSysrootRuntime *self)
   return runtime_id + strlen (RUNTIME_PREFIX);
 }
 
-static IdeSubprocessLauncher *
-gbp_sysroot_runtime_create_launcher (IdeRuntime  *runtime,
-                                     GError     **error)
+static void
+gbp_sysroot_runtime_prepare_run_context (IdeRuntime    *runtime,
+                                         IdePipeline   *pipeline,
+                                         IdeRunContext *run_context)
 {
-  IdeSubprocessLauncher *ret;
   GbpSysrootRuntime *self = GBP_SYSROOT_RUNTIME(runtime);
+  GbpSysrootManager *sysroot_manager = NULL;
+  g_autofree char *sysroot_flag = NULL;
+  g_autofree char *sysroot_path = NULL;
+  g_autofree char *pkgconfig_dirs = NULL;
+  const char *sysroot_id = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_SYSROOT_RUNTIME (self));
+  g_assert (!pipeline || IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
-  ret = gbp_sysroot_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                             G_SUBPROCESS_FLAGS_STDERR_PIPE);
+  ide_run_context_push_host (run_context);
 
-  if (ret != NULL)
-    {
-      GbpSysrootManager *sysroot_manager = NULL;
-      g_autofree gchar *sysroot_flag = NULL;
-      g_autofree gchar *sysroot_libdirs = NULL;
-      g_autofree gchar *sysroot_path = NULL;
-      g_autofree gchar *pkgconfig_dirs = NULL;
-      g_autofree gchar *cflags = NULL;
-      g_autofree gchar *ldflags = NULL;
-      const gchar *previous_env = NULL;
-      const gchar *sysroot_id = NULL;
+  sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
+  sysroot_manager = gbp_sysroot_manager_get_default ();
+  sysroot_path = gbp_sysroot_manager_get_target_path (sysroot_manager, sysroot_id);
+  sysroot_flag = g_strconcat ("--sysroot=", sysroot_path, NULL);
+  pkgconfig_dirs = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, sysroot_id);
 
-      sysroot_id = gbp_sysroot_runtime_get_sysroot_id (self);
-      sysroot_manager = gbp_sysroot_manager_get_default ();
-      sysroot_path = gbp_sysroot_manager_get_target_path (sysroot_manager, sysroot_id);
-      sysroot_flag = g_strconcat ("--sysroot=", sysroot_path, NULL);
+  ide_run_context_setenv (run_context, "CFLAGS", sysroot_flag);
+  ide_run_context_setenv (run_context, "LDFLAGS", sysroot_flag);
+  ide_run_context_setenv (run_context, "PKG_CONFIG_DIR", "");
+  ide_run_context_setenv (run_context, "PKG_CONFIG_LIBDIR", pkgconfig_dirs);
+  ide_run_context_setenv (run_context, "PKG_CONFIG_SYSROOT_DIR", sysroot_path);
+  ide_run_context_setenv (run_context, "QEMU_LD_PREFIX", sysroot_path);
 
-      previous_env = ide_subprocess_launcher_getenv (ret, "CFLAGS");
-      cflags = g_strjoin (" ", sysroot_flag, previous_env, NULL);
-
-      previous_env = ide_subprocess_launcher_getenv (ret, "LDFLAGS");
-      ldflags = g_strjoin (" ", sysroot_flag, previous_env, NULL);
-
-      pkgconfig_dirs = gbp_sysroot_manager_get_target_pkg_config_path (sysroot_manager, sysroot_id);
-
-      if (!dzl_str_empty0 (pkgconfig_dirs))
-        {
-          g_autofree gchar *libdir_tmp = NULL;
-
-          libdir_tmp = g_strjoin (":", pkgconfig_dirs, sysroot_libdirs, NULL);
-          sysroot_libdirs = g_steal_pointer (&libdir_tmp);
-        }
-
-      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
-      ide_subprocess_launcher_set_clear_env (ret, FALSE);
-
-      ide_subprocess_launcher_setenv (ret, "CFLAGS", cflags, TRUE);
-      ide_subprocess_launcher_setenv (ret, "LDFLAGS", ldflags, TRUE);
-      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_DIR", "", TRUE);
-      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_SYSROOT_DIR", sysroot_path, TRUE);
-      ide_subprocess_launcher_setenv (ret, "PKG_CONFIG_LIBDIR", sysroot_libdirs, TRUE);
-      ide_subprocess_launcher_setenv (ret, "QEMU_LD_PREFIX", sysroot_path, TRUE);
-    }
-  else
-    {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_FAILED,
-                   "An unknown error ocurred");
-    }
-
-  IDE_RETURN (ret);
+  IDE_EXIT;
 }
 
 static gchar **
@@ -242,7 +209,8 @@ gbp_sysroot_runtime_class_init (GbpSysrootRuntimeClass *klass)
 
   object_class->constructed = gbp_sysroot_runtime_constructed;
 
-  runtime_class->create_launcher = gbp_sysroot_runtime_create_launcher;
+  runtime_class->prepare_to_build = gbp_sysroot_runtime_prepare_run_context;
+  runtime_class->prepare_to_run = gbp_sysroot_runtime_prepare_run_context;
   runtime_class->get_system_include_dirs = gbp_sysroot_runtime_get_system_include_dirs;
   runtime_class->get_triplet = gbp_sysroot_runtime_get_triplet;
   runtime_class->supports_toolchain = gbp_sysroot_runtime_supports_toolchain;

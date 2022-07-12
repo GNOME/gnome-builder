@@ -3,11 +3,10 @@ if get_option('plugin_sysroot')
 plugins_sources += files([
   'sysroot-plugin.c',
   'gbp-sysroot-manager.c',
-  'gbp-sysroot-preferences-addin.c',
-  'gbp-sysroot-preferences-row.c',
+  # 'gbp-sysroot-preferences-addin.c',
+  # 'gbp-sysroot-preferences-row.c',
   'gbp-sysroot-runtime.c',
   'gbp-sysroot-runtime-provider.c',
-  'gbp-sysroot-subprocess-launcher.c',
   'gbp-sysroot-toolchain-provider.c',
 ])
 
