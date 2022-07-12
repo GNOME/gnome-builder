@@ -8,20 +8,14 @@
   </gresource>
   <gresource prefix="/org/gnome/libide-gui/ui">
     <file preprocess="xml-stripblanks">ide-environment-editor-row.ui</file>
-    <file preprocess="xml-stripblanks">ide-frame-header.ui</file>
     <file preprocess="xml-stripblanks">ide-frame.ui</file>
-    <file preprocess="xml-stripblanks">ide-frame-empty-state.ui</file>
     <file preprocess="xml-stripblanks">ide-header-bar.ui</file>
     <file preprocess="xml-stripblanks">ide-notification-list-box-row.ui</file>
     <file preprocess="xml-stripblanks">ide-notification-view.ui</file>
     <file preprocess="xml-stripblanks">ide-notifications-button.ui</file>
     <file preprocess="xml-stripblanks">ide-omni-bar.ui</file>
-    <file preprocess="xml-stripblanks">ide-panel.ui</file>
-    <file preprocess="xml-stripblanks">ide-preferences-language-row.ui</file>
     <file preprocess="xml-stripblanks">ide-preferences-window.ui</file>
     <file preprocess="xml-stripblanks">ide-primary-workspace.ui</file>
     <file preprocess="xml-stripblanks">ide-run-button.ui</file>
-    <file preprocess="xml-stripblanks">ide-shortcuts-window.ui</file>
-    <file preprocess="xml-stripblanks">ide-workspace.ui</file>
   </gresource>
 </gresources>

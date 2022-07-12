@@ -20,49 +20,41 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
+
 #include <libide-core.h>
+#include <libide-gtk.h>
 #include <libide-io.h>
 #include <libide-projects.h>
 #include <libide-threading.h>
 
 #define IDE_GUI_INSIDE
-
-#include "ide-application.h"
-#include "ide-application-addin.h"
-#include "ide-cell-renderer-fancy.h"
-#include "ide-config-view-addin.h"
-#include "ide-environment-editor.h"
-#include "ide-frame.h"
-#include "ide-frame-addin.h"
-#include "ide-frame-empty-state.h"
-#include "ide-frame-header.h"
-#include "ide-header-bar.h"
-#include "ide-grid.h"
-#include "ide-grid-column.h"
-#include "ide-gui-global.h"
-#include "ide-header-bar.h"
-#include "ide-marked-view.h"
-#include "ide-notifications-button.h"
-#include "ide-omni-bar-addin.h"
-#include "ide-omni-bar.h"
-#include "ide-page.h"
-#include "ide-pane.h"
-#include "ide-panel.h"
-#include "ide-preferences-addin.h"
-#include "ide-preferences-surface.h"
-#include "ide-preferences-window.h"
-#include "ide-primary-workspace.h"
-#include "ide-search-button.h"
-#include "ide-session-addin.h"
-#include "ide-surface.h"
-#include "ide-surfaces-button.h"
-#include "ide-tagged-entry.h"
-#include "ide-transfer-button.h"
-#include "ide-transient-sidebar.h"
-#include "ide-workbench.h"
-#include "ide-workbench-addin.h"
-#include "ide-workspace.h"
-#include "ide-workspace-addin.h"
-
+# include "ide-application.h"
+# include "ide-application-addin.h"
+# include "ide-config-view-addin.h"
+# include "ide-environment-editor.h"
+# include "ide-frame.h"
+# include "ide-frame-addin.h"
+# include "ide-header-bar.h"
+# include "ide-grid.h"
+# include "ide-gui-enums.h"
+# include "ide-gui-global.h"
+# include "ide-header-bar.h"
+# include "ide-marked-view.h"
+# include "ide-notifications-button.h"
+# include "ide-omni-bar-addin.h"
+# include "ide-omni-bar.h"
+# include "ide-page.h"
+# include "ide-pane.h"
+# include "ide-panel-position.h"
+# include "ide-preferences-addin.h"
+# include "ide-primary-workspace.h"
+# include "ide-run-button.h"
+# include "ide-search-popover.h"
+# include "ide-session-addin.h"
+# include "ide-shortcut-provider.h"
+# include "ide-workbench.h"
+# include "ide-workbench-addin.h"
+# include "ide-workspace.h"
+# include "ide-workspace-addin.h"
 #undef IDE_GUI_INSIDE

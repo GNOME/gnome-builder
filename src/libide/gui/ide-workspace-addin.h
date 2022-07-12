@@ -37,9 +37,6 @@ struct _IdeWorkspaceAddinInterface
                            IdeWorkspace      *workspace);
   void     (*unload)      (IdeWorkspaceAddin *self,
                            IdeWorkspace      *workspace);
-  void     (*surface_set) (IdeWorkspaceAddin *self,
-                           IdeSurface        *surface);
-  gboolean (*can_close)   (IdeWorkspaceAddin *self);
 };
 
 IDE_AVAILABLE_IN_3_32
@@ -48,11 +45,7 @@ void               ide_workspace_addin_load                (IdeWorkspaceAddin *s
 IDE_AVAILABLE_IN_3_32
 void               ide_workspace_addin_unload              (IdeWorkspaceAddin *self,
                                                             IdeWorkspace      *workspace);
-IDE_AVAILABLE_IN_3_32
-void               ide_workspace_addin_surface_set         (IdeWorkspaceAddin *self,
                                                             IdeSurface        *surface);
-IDE_AVAILABLE_IN_3_34
-gboolean           ide_workspace_addin_can_close           (IdeWorkspaceAddin *self);
 IDE_AVAILABLE_IN_3_40
 IdeWorkspaceAddin *ide_workspace_addin_find_by_module_name (IdeWorkspace      *workspace,
                                                             const gchar       *module_name);
