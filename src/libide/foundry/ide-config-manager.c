@@ -22,14 +22,14 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
-#include <libide-threading.h>
 #include <libpeas/peas.h>
 
+#include <libide-threading.h>
+
+#include "ide-config.h"
 #include "ide-config-manager.h"
 #include "ide-config-private.h"
-#include "ide-config.h"
 #include "ide-config-provider.h"
 
 #define WRITEBACK_DELAY_SEC 3
@@ -43,6 +43,9 @@ struct _IdeConfigManager
   IdeConfig        *current;
   PeasExtensionSet *providers;
   GSettings        *project_settings;
+
+  GMenu            *menu;
+  GMenu            *config_menu;
 
   guint             queued_save_source;
 
@@ -65,7 +68,7 @@ static void ide_config_manager_actions_delete    (IdeConfigManager    *self,
 static void ide_config_manager_actions_duplicate (IdeConfigManager    *self,
                                                   GVariant            *param);
 
-DZL_DEFINE_ACTION_GROUP (IdeConfigManager, ide_config_manager, {
+IDE_DEFINE_ACTION_GROUP (IdeConfigManager, ide_config_manager, {
   { "current", ide_config_manager_actions_current, "s" },
   { "delete", ide_config_manager_actions_delete, "s" },
   { "duplicate", ide_config_manager_actions_duplicate, "s" },
@@ -354,10 +357,63 @@ ide_config_manager_dispose (GObject *object)
 }
 
 static void
+config_notify_cb (IdeConfig  *config,
+                  GParamSpec *pspec,
+                  GMenuItem  *item)
+{
+  g_assert (IDE_IS_CONFIG (config));
+  g_assert (G_IS_MENU_ITEM (item));
+
+  if (pspec == NULL || ide_str_equal0 (pspec->name, "display-name"))
+    {
+      const char *name = ide_config_get_display_name (config);
+      g_menu_item_set_label (item, name);
+    }
+
+  if (pspec == NULL || ide_str_equal0 (pspec->name, "id"))
+    {
+      const char *id = ide_config_get_id (config);
+      g_menu_item_set_action_and_target (item,
+                                         "config-manager.current",
+                                         "s", id);
+    }
+}
+
+static void
+items_changed_cb (IdeConfigManager *self,
+                  guint             position,
+                  guint             removed,
+                  guint             added)
+{
+  g_assert (IDE_IS_CONFIG_MANAGER (self));
+
+  for (guint i = 0; i < removed; i++)
+    g_menu_remove (self->config_menu, position + i);
+
+  for (guint i = 0; i < added; i++)
+    {
+      g_autoptr(IdeConfig) config = g_list_model_get_item (G_LIST_MODEL (self), position + i);
+      g_autoptr(GMenuItem) item = g_menu_item_new (NULL, NULL);
+
+      g_menu_item_set_attribute (item, "role", "s", "check");
+
+      g_signal_connect_object (config,
+                               "notify",
+                               G_CALLBACK (config_notify_cb),
+                               item,
+                               0);
+      config_notify_cb (config, NULL, item);
+      g_menu_insert_item (self->config_menu, position + i, item);
+    }
+}
+
+static void
 ide_config_manager_finalize (GObject *object)
 {
   IdeConfigManager *self = (IdeConfigManager *)object;
 
+  g_clear_object (&self->menu);
+  g_clear_object (&self->config_menu);
   g_clear_object (&self->current);
   g_clear_object (&self->cancellable);
   g_clear_pointer (&self->configs, g_array_unref);
@@ -466,6 +522,17 @@ ide_config_manager_init (IdeConfigManager *self)
   self->cancellable = g_cancellable_new ();
   self->configs = g_array_new (FALSE, FALSE, sizeof (ConfigInfo));
   g_array_set_clear_func (self->configs, config_info_clear);
+
+  self->menu = g_menu_new ();
+  self->config_menu = g_menu_new ();
+  g_menu_append_submenu (self->menu,
+                         _("Active Configuration"),
+                         G_MENU_MODEL (self->config_menu));
+
+  g_signal_connect (self,
+                    "items-changed",
+                    G_CALLBACK (items_changed_cb),
+                    NULL);
 }
 
 static GType
@@ -912,6 +979,8 @@ ide_config_manager_set_current (IdeConfigManager *self,
 
   if (self->current != current)
     {
+      const char *id = "";
+
       if (self->current != NULL)
         {
           g_signal_handlers_disconnect_by_func (self->current,
@@ -943,7 +1012,11 @@ ide_config_manager_set_current (IdeConfigManager *self,
               g_autofree gchar *new_id = g_strdup (ide_config_get_id (current));
               g_settings_set_string (self->project_settings, "config-id", new_id);
             }
+
+          id = ide_config_get_id (self->current);
         }
+
+      ide_config_manager_set_action_state (self, "current", g_variant_new_string (id));
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT]);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CURRENT_DISPLAY_NAME]);
@@ -1128,4 +1201,20 @@ ide_config_manager_ref_from_context (IdeContext *context)
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
   return ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CONFIG_MANAGER);
+}
+
+/**
+ * ide_config_manager_get_menu:
+ * @self: a #IdeConfigManager
+ *
+ * Gets the menu for the config manager.
+ *
+ * Returns: (transfer none): a #GMenuModel
+ */
+GMenuModel *
+ide_config_manager_get_menu (IdeConfigManager *self)
+{
+  g_return_val_if_fail (IDE_IS_CONFIG_MANAGER (self), NULL);
+
+  return G_MENU_MODEL (self->menu);
 }

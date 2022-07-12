@@ -66,5 +66,7 @@ gboolean          ide_config_manager_save_finish      (IdeConfigManager     *sel
                                                        GError              **error);
 IDE_AVAILABLE_IN_ALL
 gboolean          ide_config_manager_get_ready        (IdeConfigManager     *self);
+IDE_AVAILABLE_IN_ALL
+GMenuModel       *ide_config_manager_get_menu         (IdeConfigManager     *self);
 
 G_END_DECLS
