@@ -1,9 +1,0 @@
-[Plugin]
-Authors=Christian Hergert <christian@hergert.me>
-Builtin=true
-Copyright=Copyright © 2017 Christian Hergert
-Depends=editor;
-Description=Tracks edits in buffer to provide navigation history
-Embedded=_gbp_history_register_types
-Module=history
-Name=Editor History
