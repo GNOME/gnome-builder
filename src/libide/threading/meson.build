@@ -14,6 +14,7 @@ libide_threading_public_headers = [
   'ide-subprocess-supervisor.h',
   'ide-task.h',
   'ide-thread-pool.h',
+  'ide-unix-fd-map.h',
   'libide-threading.h',
 ]
 
@@ -45,6 +46,7 @@ libide_threading_public_sources = [
   'ide-subprocess.c',
   'ide-task.c',
   'ide-thread-pool.c',
+  'ide-unix-fd-map.c',
 ]
 
 libide_threading_sources = libide_threading_public_sources + libide_threading_private_sources

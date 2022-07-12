@@ -32,5 +32,6 @@
 #include "ide-subprocess.h"
 #include "ide-task.h"
 #include "ide-thread-pool.h"
+#include "ide-unix-fd-map.h"
 
 #undef IDE_THREADING_INSIDE
