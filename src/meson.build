@@ -8,7 +8,8 @@ gnome_builder_private_sources = []
 gnome_builder_private_headers = []
 gnome_builder_generated_sources = []
 gnome_builder_generated_headers = []
-gnome_builder_gir_extra_args = ['--pkg-export=gnome-builder-1.0']
+gnome_builder_gir_extra_args = []
+
 # To allow all resources to be initialized with static constructors
 # inside the final executable, we delay compiling them until the
 # final binary (otherwise they are silenty dropped when linking).
@@ -16,8 +17,40 @@ gnome_builder_gir_extra_args = ['--pkg-export=gnome-builder-1.0']
 exe_link_args = []
 exe_c_args = []
 
+# Setup variables for some libide tests early
+test_gi_typelib_path = ['@0@/src'.format(meson.project_build_root())]
+test_typelib_deps = [
+  libadwaita_dep,
+  libgio_dep,
+  libgtk_dep,
+  libgtksource_dep,
+  libjson_glib_dep,
+  libjsonrpc_glib_dep,
+  libpanel_dep,
+  libpeas_dep,
+  libtemplate_glib_dep,
+  libvte_dep,
+]
+foreach test_typelib_dep: test_typelib_deps
+  test_gi_typelib_path += [join_paths(test_typelib_dep.get_variable('libdir'), 'girepository-1.0')]
+endforeach
+test_env = [
+  'GI_TYPELIB_PATH=@0@'.format(':'.join(test_gi_typelib_path)),
+  'G_TEST_SRCDIR=@0@/tests'.format(meson.current_source_dir()),
+  'G_TEST_BUILDDIR=@0@/tests'.format(meson.current_build_dir()),
+  'G_DEBUG=gc-friendly',
+  'GSETTINGS_BACKEND=memory',
+  'GSETTINGS_SCHEMA_DIR=@0@/data/gsettings'.format(meson.project_build_root()),
+  'PYTHONDONTWRITEBYTECODE=yes',
+  'MALLOC_CHECK_=2',
+  'NO_AT_BRIDGE=1',
+]
+test_cflags = [
+  '-DTEST_DATA_DIR="@0@/tests/data/"'.format(meson.current_source_dir()),
+  '-I' + join_paths(meson.project_source_root(), 'src'),
+]
+
 subdir('libide')
-subdir('tests')
 subdir('plugins')
 
 gnome_builder_deps = [
@@ -116,3 +149,6 @@ libide_gir = gnome.generate_gir(gnome_builder,
   install_dir_typelib: pkgtypelibdir,
            extra_args: gnome_builder_gir_extra_args,
 )
+
+# tests last so they can reference libide_gir as test(depends:)
+subdir('tests')
