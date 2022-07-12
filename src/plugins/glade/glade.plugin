@@ -1,9 +1,0 @@
-[Plugin]
-Authors=Christian Hergert <christian@hergert.me>
-Builtin=true
-Copyright=Copyright © 2018 Christian Hergert
-Depends=editor;
-Description=Integration with Glade UI designer for Gtk
-Embedded=_gbp_glade_register_types
-Module=glade
-Name=Glade
