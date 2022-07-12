@@ -1,6 +1,6 @@
-/* gbp-symbol-menu-button.h
+/* gbp-symbol-list-model.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,16 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SYMBOL_MENU_BUTTON (gbp_symbol_menu_button_get_type())
+#define GBP_TYPE_SYMBOL_LIST_MODEL (gbp_symbol_list_model_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSymbolMenuButton, gbp_symbol_menu_button, GBP, SYMBOL_MENU_BUTTON, GtkMenuButton)
+G_DECLARE_FINAL_TYPE (GbpSymbolListModel, gbp_symbol_list_model, GBP, SYMBOL_LIST_MODEL, GObject)
 
-void           gbp_symbol_menu_button_set_symbol      (GbpSymbolMenuButton *self,
-                                                       IdeSymbol           *symbol);
-IdeSymbolTree *gbp_symbol_menu_button_get_symbol_tree (GbpSymbolMenuButton *self);
-void           gbp_symbol_menu_button_set_symbol_tree (GbpSymbolMenuButton *self,
-                                                       IdeSymbolTree       *symbol_tree);
+GbpSymbolListModel *gbp_symbol_list_model_new      (IdeSymbolTree      *tree,
+                                                    IdeSymbolNode      *parent);
+IdeSymbolTree      *gbp_symbol_list_model_get_tree (GbpSymbolListModel *self);
 
 G_END_DECLS

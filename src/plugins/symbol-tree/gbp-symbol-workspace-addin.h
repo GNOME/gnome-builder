@@ -1,6 +1,6 @@
-/* gbp-symbol-tree-builder.h
+/* gbp-symbol-workspace-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,12 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SYMBOL_TREE_BUILDER (gbp_symbol_tree_builder_get_type())
+#define GBP_TYPE_SYMBOL_WORKSPACE_ADDIN (gbp_symbol_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSymbolTreeBuilder, gbp_symbol_tree_builder, GBP, SYMBOL_TREE_BUILDER, DzlTreeBuilder)
-
-void gbp_symbol_tree_builder_set_filter (GbpSymbolTreeBuilder *self,
-                                         const gchar          *filter);
+G_DECLARE_FINAL_TYPE (GbpSymbolWorkspaceAddin, gbp_symbol_workspace_addin, GBP, SYMBOL_WORKSPACE_ADDIN, GObject)
 
 G_END_DECLS

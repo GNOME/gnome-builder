@@ -1,8 +1,9 @@
 plugins_sources += files([
   'gbp-symbol-hover-provider.c',
-  'gbp-symbol-frame-addin.c',
-  'gbp-symbol-menu-button.c',
-  'gbp-symbol-tree-builder.c',
+  'gbp-symbol-list-model.c',
+  'gbp-symbol-popover.c',
+  'gbp-symbol-util.c',
+  'gbp-symbol-workspace-addin.c',
   'symbol-tree-plugin.c',
 ])
 

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpSymbolPopover" parent="GtkPopover">
+    <property name="width-request">400</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkFrame">
+            <child>
+              <object class="GtkScrolledWindow" id="scroller">
+                <property name="propagate-natural-height">true</property>
+                <property name="propagate-natural-width">true</property>
+                <property name="min-content-height">100</property>
+                <property name="max-content-height">600</property>
+                <property name="min-content-width">400</property>
+                <property name="max-content-width">400</property>
+                <child>
+                  <object class="GtkListView" id="list_view">
+                    <signal name="activate" handler="gbp_symbol_popover_activate_cb" swapped="true" object="GbpSymbolPopover"/>
+                    <property name="orientation">vertical</property>
+                    <property name="single-click-activate">True</property>
+                    <property name="factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="resource">/plugins/symbol-tree/gbp-symbol-popover-row.ui</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkSearchEntry" id="search_entry">
+            <property name="placeholder-text" translatable="yes">Filter Symbols…</property>
+            <signal name="activate" handler="gbp_symbol_popover_search_activate_cb" swapped="true" object="GbpSymbolPopover"/>
+            <signal name="search-changed" handler="gbp_symbol_popover_search_changed_cb" swapped="true" object="GbpSymbolPopover"/>
+            <child>
+              <object class="GtkEventControllerKey">
+                <property name="propagation-phase">capture</property>
+                <signal name="key-pressed" handler="on_search_key_pressed_cb" swapped="true" object="GbpSymbolPopover"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,6 +1,6 @@
-/* gbp-symbol-frame-addin.h
+/* gbp-symbol-popover.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,19 @@
 
 #pragma once
 
-#include <libide-gui.h>
+#include <gtk/gtk.h>
+
+#include <libide-code.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_SYMBOL_FRAME_ADDIN (gbp_symbol_frame_addin_get_type())
+#define GBP_TYPE_SYMBOL_POPOVER (gbp_symbol_popover_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpSymbolFrameAddin, gbp_symbol_frame_addin, GBP, SYMBOL_FRAME_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpSymbolPopover, gbp_symbol_popover, GBP, SYMBOL_POPOVER, GtkPopover)
+
+GtkWidget     *gbp_symbol_popover_new             (void);
+IdeSymbolTree *gbp_symbol_popover_get_symbol_tree (GbpSymbolPopover *self);
+void           gbp_symbol_popover_set_symbol_tree (GbpSymbolPopover *self,
+                                                   IdeSymbolTree    *symbol_tree);
 
 G_END_DECLS

@@ -22,10 +22,11 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-code.h>
 #include <libide-gui.h>
 #include <libide-editor.h>
-#include <glib/gi18n.h>
 
 #include "gbp-symbol-hover-provider.h"
 
@@ -41,8 +42,8 @@ on_activate_link (GtkLabel    *label,
                   const gchar *uristr,
                   IdeLocation *location)
 {
+  g_autoptr(IdePanelPosition) position = NULL;
   IdeWorkspace *workspace;
-  IdeSurface *surface;
 
   g_assert (uristr != NULL);
   g_assert (GTK_IS_LABEL (label));
@@ -51,10 +52,8 @@ on_activate_link (GtkLabel    *label,
   if (!(workspace = ide_widget_get_workspace (GTK_WIDGET (label))))
     return FALSE;
 
-  if (!(surface = ide_workspace_get_surface_by_name (workspace, "editor")))
-    return FALSE;
-
-  ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (surface), location);
+  position = ide_panel_position_new ();
+  ide_editor_focus_location (workspace, position, location);
 
   return TRUE;
 }
@@ -69,9 +68,9 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
   g_autoptr(IdeSymbol) symbol = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree gchar *tt = NULL;
-  IdeHoverContext *context;
+  GtkSourceHoverDisplay *display;
   const gchar *name;
-  GtkWidget *box;
+  GtkBox *box;
   struct {
     const gchar *kind;
     IdeLocation *loc;
@@ -90,16 +89,19 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
       return;
     }
 
-  context = ide_task_get_task_data (task);
-  g_assert (context != NULL);
-  g_assert (IDE_IS_HOVER_CONTEXT (context));
+  display = ide_task_get_task_data (task);
+  g_assert (display != NULL);
+  g_assert (GTK_SOURCE_IS_HOVER_DISPLAY (display));
 
   loc[0].loc = ide_symbol_get_location (symbol);
   loc[1].loc = ide_symbol_get_header_location (symbol);
 
   if (!loc[0].loc && !loc[1].loc)
     {
-      ide_task_return_boolean (task, TRUE);
+      ide_task_return_new_error (task,
+                                 G_IO_ERROR,
+                                 G_IO_ERROR_NOT_SUPPORTED,
+                                 "Not supported");
       return;
     }
 
@@ -113,16 +115,17 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
     name = _("Unnamed Symbol");
 
   tt = g_strdup_printf ("<tt><span size='smaller'>%s</span></tt>", name);
-  gtk_container_add (GTK_CONTAINER (box),
-                     g_object_new (GTK_TYPE_LABEL,
-                                   "ellipsize", PANGO_ELLIPSIZE_END,
-                                   "visible", TRUE,
-                                   "xalign", 0.0f,
-                                   "margin-bottom", 3,
-                                   "selectable", TRUE,
-                                   "use-markup", TRUE,
-                                   "label", tt,
-                                   NULL));
+
+  gtk_box_append (box,
+                  g_object_new (GTK_TYPE_LABEL,
+                                "ellipsize", PANGO_ELLIPSIZE_END,
+                                "visible", TRUE,
+                                "xalign", 0.0f,
+                                "margin-bottom", 3,
+                                "selectable", TRUE,
+                                "use-markup", TRUE,
+                                "label", tt,
+                                NULL));
 
 
   for (guint i = 0; i < G_N_ELEMENTS (loc); i++)
@@ -147,47 +150,52 @@ gbp_symbol_hover_provider_get_symbol_cb (GObject      *object,
                                  g_object_ref (loc[i].loc),
                                  (GClosureNotify)g_object_unref,
                                  0);
-          gtk_container_add (GTK_CONTAINER (box), label);
+          gtk_box_append (box, label);
         }
+
     }
 
-  ide_hover_context_add_widget (context, SYMBOL_TREE_HOVER_PRIORITY, _("Symbol"), box);
+  gtk_source_hover_display_append (display, GTK_WIDGET (box));
+
   ide_task_return_boolean (task, TRUE);
 }
 
 static void
-gbp_symbol_hover_provider_hover_async (IdeHoverProvider    *provider,
-                                       IdeHoverContext     *context,
-                                       const GtkTextIter   *iter,
-                                       GCancellable        *cancellable,
-                                       GAsyncReadyCallback  callback,
-                                       gpointer             user_data)
+gbp_symbol_hover_provider_populate_async (GtkSourceHoverProvider *provider,
+                                          GtkSourceHoverContext  *context,
+                                          GtkSourceHoverDisplay  *display,
+                                          GCancellable           *cancellable,
+                                          GAsyncReadyCallback     callback,
+                                          gpointer                user_data)
 {
   GbpSymbolHoverProvider *self = (GbpSymbolHoverProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
+  GtkTextIter iter;
   IdeBuffer *buffer;
 
   g_assert (GBP_IS_SYMBOL_HOVER_PROVIDER (self));
-  g_assert (IDE_IS_HOVER_CONTEXT (context));
-  g_assert (iter != NULL);
+  g_assert (GTK_SOURCE_IS_HOVER_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_HOVER_DISPLAY (display));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_symbol_hover_provider_hover_async);
-  ide_task_set_task_data (task, g_object_ref (context), g_object_unref);
+  ide_task_set_source_tag (task, gbp_symbol_hover_provider_populate_async);
+  ide_task_set_task_data (task, g_object_ref (display), g_object_unref);
 
-  buffer = IDE_BUFFER (gtk_text_iter_get_buffer (iter));
+  gtk_source_hover_context_get_iter (context, &iter);
+  buffer = IDE_BUFFER (gtk_source_hover_context_get_buffer (context));
+
   ide_buffer_get_symbol_at_location_async (buffer,
-                                           iter,
+                                           &iter,
                                            cancellable,
                                            gbp_symbol_hover_provider_get_symbol_cb,
                                            g_steal_pointer (&task));
 }
 
 static gboolean
-gbp_symbol_hover_provider_hover_finish (IdeHoverProvider  *provider,
-                                        GAsyncResult      *result,
-                                        GError           **error)
+gbp_symbol_hover_provider_populate_finish (GtkSourceHoverProvider  *provider,
+                                           GAsyncResult            *result,
+                                           GError                 **error)
 {
   g_assert (GBP_IS_SYMBOL_HOVER_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
@@ -196,14 +204,14 @@ gbp_symbol_hover_provider_hover_finish (IdeHoverProvider  *provider,
 }
 
 static void
-hover_provider_iface_init (IdeHoverProviderInterface *iface)
+hover_provider_iface_init (GtkSourceHoverProviderInterface *iface)
 {
-  iface->hover_async = gbp_symbol_hover_provider_hover_async;
-  iface->hover_finish = gbp_symbol_hover_provider_hover_finish;
+  iface->populate_async = gbp_symbol_hover_provider_populate_async;
+  iface->populate_finish = gbp_symbol_hover_provider_populate_finish;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSymbolHoverProvider, gbp_symbol_hover_provider, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_HOVER_PROVIDER, hover_provider_iface_init))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_HOVER_PROVIDER, hover_provider_iface_init))
 
 static void
 gbp_symbol_hover_provider_class_init (GbpSymbolHoverProviderClass *klass)
