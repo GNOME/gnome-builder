@@ -478,6 +478,10 @@ ide_config_set_property (GObject      *object,
       ide_config_set_prefix (self, g_value_get_string (value));
       break;
 
+    case PROP_PREFIX_SET:
+      ide_config_set_prefix_set (self, g_value_get_boolean (value));
+      break;
+
     case PROP_PARALLELISM:
       ide_config_set_parallelism (self, g_value_get_int (value));
       break;
