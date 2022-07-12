@@ -48,6 +48,8 @@
 # include "ide-pane.h"
 # include "ide-panel-position.h"
 # include "ide-preferences-addin.h"
+# include "ide-preferences-choice-row.h"
+# include "ide-preferences-window.h"
 # include "ide-primary-workspace.h"
 # include "ide-run-button.h"
 # include "ide-search-popover.h"

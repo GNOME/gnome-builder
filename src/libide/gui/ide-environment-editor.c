@@ -29,14 +29,16 @@
 
 struct _IdeEnvironmentEditor
 {
-  GtkListBox      parent_instance;
-  IdeEnvironment *environment;
-  GtkWidget      *dummy_row;
+  GtkWidget               parent_instance;
+
+  GtkListBox             *list_box;
+  IdeEnvironment         *environment;
+  GtkWidget              *dummy_row;
 
   IdeEnvironmentVariable *dummy;
 };
 
-G_DEFINE_FINAL_TYPE (IdeEnvironmentEditor, ide_environment_editor, GTK_TYPE_LIST_BOX)
+G_DEFINE_FINAL_TYPE (IdeEnvironmentEditor, ide_environment_editor, GTK_TYPE_WIDGET)
 
 enum {
   PROP_0,
@@ -113,7 +115,7 @@ ide_environment_editor_disconnect (IdeEnvironmentEditor *self)
   g_assert (IDE_IS_ENVIRONMENT_EDITOR (self));
   g_assert (IDE_IS_ENVIRONMENT (self->environment));
 
-  gtk_list_box_bind_model (GTK_LIST_BOX (self), NULL, NULL, NULL, NULL);
+  gtk_list_box_bind_model (self->list_box, NULL, NULL, NULL, NULL);
 
   g_clear_object (&self->dummy);
 }
@@ -124,12 +126,12 @@ ide_environment_editor_connect (IdeEnvironmentEditor *self)
   g_assert (IDE_IS_ENVIRONMENT_EDITOR (self));
   g_assert (IDE_IS_ENVIRONMENT (self->environment));
 
-  gtk_list_box_bind_model (GTK_LIST_BOX (self),
+  gtk_list_box_bind_model (self->list_box,
                            G_LIST_MODEL (self->environment),
                            ide_environment_editor_create_row, self, NULL);
 
   self->dummy_row = ide_environment_editor_create_dummy_row (self);
-  gtk_container_add (GTK_CONTAINER (self), self->dummy_row);
+  gtk_list_box_append (self->list_box, self->dummy_row);
 }
 
 static void
@@ -167,17 +169,24 @@ find_row (IdeEnvironmentEditor   *self,
   g_assert (IDE_IS_ENVIRONMENT_EDITOR (self));
   g_assert (IDE_IS_ENVIRONMENT_VARIABLE (variable));
 
-  gtk_container_foreach (GTK_CONTAINER (self), find_row_cb, &lookup);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->list_box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      find_row_cb (child, &lookup);
+      if (lookup.row)
+        return lookup.row;
+    }
 
   return lookup.row;
 }
 
 static void
-ide_environment_editor_row_activated (GtkListBox    *list_box,
-                                      GtkListBoxRow *row)
+ide_environment_editor_row_activated (IdeEnvironmentEditor *self,
+                                      GtkListBoxRow        *row,
+                                      GtkListBox           *list_box)
 {
-  IdeEnvironmentEditor *self = (IdeEnvironmentEditor *)list_box;
-
+  g_assert (IDE_IS_ENVIRONMENT_EDITOR (self));
   g_assert (GTK_IS_LIST_BOX (list_box));
   g_assert (GTK_IS_LIST_BOX_ROW (row));
 
@@ -195,13 +204,14 @@ ide_environment_editor_row_activated (GtkListBox    *list_box,
 }
 
 static void
-ide_environment_editor_destroy (GtkWidget *widget)
+ide_environment_editor_dispose (GObject *object)
 {
-  IdeEnvironmentEditor *self = (IdeEnvironmentEditor *)widget;
+  IdeEnvironmentEditor *self = (IdeEnvironmentEditor *)object;
 
-  GTK_WIDGET_CLASS (ide_environment_editor_parent_class)->destroy (widget);
-
+  g_clear_pointer ((GtkWidget **)&self->list_box, gtk_widget_unparent);
   g_clear_object (&self->environment);
+
+  G_OBJECT_CLASS (ide_environment_editor_parent_class)->dispose (object);
 }
 
 static void
@@ -247,14 +257,10 @@ ide_environment_editor_class_init (IdeEnvironmentEditorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkListBoxClass *list_box_class = GTK_LIST_BOX_CLASS (klass);
 
+  object_class->dispose = ide_environment_editor_dispose;
   object_class->get_property = ide_environment_editor_get_property;
   object_class->set_property = ide_environment_editor_set_property;
-
-  widget_class->destroy = ide_environment_editor_destroy;
-
-  list_box_class->row_activated = ide_environment_editor_row_activated;
 
   properties [PROP_ENVIRONMENT] =
     g_param_spec_object ("environment",
@@ -264,12 +270,22 @@ ide_environment_editor_class_init (IdeEnvironmentEditorClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
 
 static void
 ide_environment_editor_init (IdeEnvironmentEditor *self)
 {
-  gtk_list_box_set_selection_mode (GTK_LIST_BOX (self), GTK_SELECTION_NONE);
+  self->list_box = g_object_new (GTK_TYPE_LIST_BOX,
+                                 "selection-mode", GTK_SELECTION_NONE,
+                                 NULL);
+  g_signal_connect_object (self->list_box,
+                           "row-activated",
+                           G_CALLBACK (ide_environment_editor_row_activated),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_set_parent (GTK_WIDGET (self->list_box), GTK_WIDGET (self));
 }
 
 GtkWidget *

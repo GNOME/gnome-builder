@@ -129,6 +129,25 @@ libide_gui_resources = gnome.compile_resources(
 libide_gui_generated_headers += [libide_gui_resources[1]]
 libide_gui_sources += libide_gui_resources
 
+#
+# Enum generation
+#
+
+libide_gui_enum_headers = [
+  'ide-preferences-window.h',
+]
+
+libide_gui_enums = gnome.mkenums_simple('ide-gui-enums',
+     body_prefix: '#include "config.h"',
+   header_prefix: '#include <libide-core.h>',
+       decorator: '_IDE_EXTERN',
+         sources: libide_gui_enum_headers,
+  install_header: true,
+     install_dir: libide_gui_header_dir,
+)
+libide_gui_generated_headers += [libide_gui_enums[1]]
+libide_gui_sources += libide_gui_enums
+
 
 #
 # Dependencies
@@ -184,3 +203,5 @@ gnome_builder_private_sources += files(libide_gui_private_sources)
 gnome_builder_private_headers += files(libide_gui_private_headers)
 gnome_builder_include_subdirs += libide_gui_header_subdir
 gnome_builder_gir_extra_args += ['--c-include=libide-gui.h', '-DIDE_GUI_COMPILATION']
+
+subdir('tests')

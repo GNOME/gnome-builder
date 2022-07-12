@@ -20,9 +20,14 @@
 
 #pragma once
 
-#include <dazzle.h>
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
 #include <libide-core.h>
 #include <libide-foundry.h>
+
+#include "ide-preferences-window.h"
 
 G_BEGIN_DECLS
 
@@ -35,14 +40,14 @@ struct _IdeConfigViewAddinInterface
 {
   GTypeInterface parent_iface;
 
-  void (*load) (IdeConfigViewAddin *self,
-                DzlPreferences     *preferences,
-                IdeConfig          *configuration);
+  void (*load) (IdeConfigViewAddin   *self,
+                IdePreferencesWindow *preferences,
+                IdeConfig            *config);
 };
 
 IDE_AVAILABLE_IN_ALL
-void ide_config_view_addin_load (IdeConfigViewAddin *self,
-                                 DzlPreferences     *preferences,
-                                 IdeConfig          *configuration);
+void ide_config_view_addin_load (IdeConfigViewAddin   *self,
+                                 IdePreferencesWindow *preferences,
+                                 IdeConfig            *config);
 
 G_END_DECLS

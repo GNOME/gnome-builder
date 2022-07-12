@@ -22,16 +22,18 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+
+#include <adwaita.h>
 #include <gtksourceview/gtksource.h>
-#include <handy.h>
 #include <libpeas/peas.h>
 
 #include "ide-preferences-builtin-private.h"
-#include "ide-preferences-language-row-private.h"
+#include "ide-style-variant-preview-private.h"
 
-static gint
+static gboolean is_plugin_category (const char *name);
+
+static int
 sort_plugin_info (gconstpointer a,
                   gconstpointer b)
 {
@@ -47,20 +49,17 @@ sort_plugin_info (gconstpointer a,
 }
 
 static void
-ide_preferences_builtin_register_plugins (DzlPreferences *preferences)
+ide_preferences_builtin_add_plugins (IdePreferencesWindow *window)
 {
   PeasEngine *engine;
   const GList *list;
   GList *copy;
   guint i = 0;
 
-  g_assert (DZL_IS_PREFERENCES (preferences));
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
 
   engine = peas_engine_get_default ();
   list = peas_engine_get_plugin_list (engine);
-
-  dzl_preferences_add_page (preferences, "plugins", _("Extensions"), 700);
-  dzl_preferences_add_list_group (preferences, "plugins", "plugins", _("Extensions"), GTK_SELECTION_NONE, 100);
 
   copy = g_list_sort (g_list_copy ((GList *)list), sort_plugin_info);
 
@@ -69,24 +68,43 @@ ide_preferences_builtin_register_plugins (DzlPreferences *preferences)
       PeasPluginInfo *plugin_info = iter->data;
       g_autofree gchar *path = NULL;
       g_autofree gchar *keywords = NULL;
+      IdePreferenceItemEntry item = {0};
+      const gchar *category;
       const gchar *desc;
       const gchar *name;
+      const gchar *module_name;
 
       if (peas_plugin_info_is_hidden (plugin_info))
         continue;
 
+      category = peas_plugin_info_get_external_data (plugin_info, "Category");
+      if (!is_plugin_category (category))
+        category = "other";
+
+      module_name = peas_plugin_info_get_module_name (plugin_info);
       name = peas_plugin_info_get_name (plugin_info);
       desc = peas_plugin_info_get_description (plugin_info);
       keywords = g_strdup_printf ("%s %s", name, desc);
-      path = g_strdup_printf ("/org/gnome/builder/plugins/%s/",
-                              peas_plugin_info_get_module_name (plugin_info));
+      path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", module_name);
 
-      dzl_preferences_add_switch (preferences, "plugins", "plugins", "org.gnome.builder.plugin", "enabled", path, NULL, name, desc, keywords, i);
+      item.page = "plugins";
+      item.group = category;
+      item.name = module_name;
+      item.priority = i++;
+      item.callback = ide_preferences_window_toggle;
+      item.title = name;
+      item.subtitle = desc;
+      item.schema_id = "org.gnome.builder.plugin";
+      item.path = path;
+      item.key = "enabled";
+
+      ide_preferences_window_add_items (window, &item, 1, window, NULL);
     }
 
   g_list_free (copy);
 }
 
+#if 0
 static void
 ide_preferences_builtin_register_appearance (DzlPreferences *preferences)
 {
@@ -128,7 +146,7 @@ ide_preferences_builtin_register_appearance (DzlPreferences *preferences)
       dzl_preferences_add_radio (preferences, "appearance", "schemes", "org.gnome.builder.editor", "style-scheme-name", NULL, variant_str, title, NULL, title, i);
     }
 
-  if (!hdy_style_manager_get_system_supports_color_schemes (hdy_style_manager_get_default ()))
+  if (!adw_style_manager_get_system_supports_color_schemes (adw_style_manager_get_default ()))
     {
       bin = dzl_preferences_get_widget (preferences, follow_style);
       gtk_widget_set_sensitive (bin, FALSE);
@@ -563,27 +581,266 @@ ide_preferences_builtin_register_vcs (DzlPreferences *preferences)
   g_clear_object (&extensions);
 }
 #endif
+#endif
 
 static void
-ide_preferences_builtin_register_sdks (DzlPreferences *preferences)
+handle_style_variant (const char                   *page_name,
+                      const IdePreferenceItemEntry *entry,
+                      AdwPreferencesGroup          *group,
+                      gpointer                      user_data)
 {
-  /* only the page goes here, plugins will fill in the details */
-  dzl_preferences_add_page (preferences, "sdk", _("SDKs"), 550);
+  static const struct {
+    const char *key;
+    AdwColorScheme color_scheme;
+    const char *title;
+  } variants[] = {
+    { "default", ADW_COLOR_SCHEME_DEFAULT, N_("Follow System") },
+    { "light", ADW_COLOR_SCHEME_FORCE_LIGHT, N_("Light") },
+    { "dark", ADW_COLOR_SCHEME_FORCE_DARK, N_("Dark") },
+  };
+  GtkBox *box;
+  GtkBox *options;
+
+  g_assert (ADW_IS_PREFERENCES_GROUP (group));
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "css-name", "list",
+                      NULL);
+  gtk_widget_add_css_class (GTK_WIDGET (box), "boxed-list");
+  gtk_widget_add_css_class (GTK_WIDGET (box), "style-variant");
+
+  options = g_object_new (GTK_TYPE_BOX,
+                          "halign", GTK_ALIGN_CENTER,
+                          NULL);
+
+  for (guint i = 0; i < G_N_ELEMENTS (variants); i++)
+    {
+      IdeStyleVariantPreview *preview;
+      GtkButton *button;
+      GtkLabel *label;
+      GtkBox *vbox;
+
+      vbox = g_object_new (GTK_TYPE_BOX,
+                           "orientation", GTK_ORIENTATION_VERTICAL,
+                           "spacing", 8,
+                           "margin-top", 18,
+                           "margin-bottom", 18,
+                           "margin-start", 9,
+                           "margin-end", 9,
+                           NULL);
+      preview = g_object_new (IDE_TYPE_STYLE_VARIANT_PREVIEW,
+                              "color-scheme", variants[i].color_scheme,
+                              NULL);
+      button = g_object_new (GTK_TYPE_TOGGLE_BUTTON,
+                             "action-name", "app.style-variant",
+                             "child", preview,
+                             NULL);
+      gtk_actionable_set_action_target (GTK_ACTIONABLE (button), "s", variants[i].key);
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "xalign", 0.5f,
+                            "label", g_dgettext (NULL, variants[i].title),
+                            NULL);
+      gtk_box_append (vbox, GTK_WIDGET (button));
+      gtk_box_append (vbox, GTK_WIDGET (label));
+      gtk_box_append (options, GTK_WIDGET (vbox));
+    }
+
+  gtk_box_append (box, GTK_WIDGET (options));
+  adw_preferences_group_add (group, GTK_WIDGET (box));
+}
+
+static const IdePreferencePageEntry pages[] = {
+  { NULL, "visual",   "appearance", "preferences-desktop-appearance-symbolic",           0, N_("Appearance") },
+  { NULL, "visual",   "editing",    "document-edit-symbolic",                           10, N_("Editing") },
+  { NULL, "visual",   "keyboard",   "preferences-desktop-keyboard-shortcuts-symbolic",  20, N_("Shortcuts") },
+  { NULL, "code",     "languages",  "text-x-javascript-symbolic",                      100, N_("Languages") },
+  { NULL, "code",     "insight",    "folder-saved-search-symbolic",                    120, N_("Insight") },
+  { NULL, "projects", "projects",   "folder-symbolic",                                 200, N_("Projects") },
+  { NULL, "tools",    "build",      "builder-build-symbolic",                          300, N_("Build") },
+  { NULL, "tools",    "debug",      "builder-debugger-symbolic",                       310, N_("Debugger") },
+  { NULL, "tools",    "commands",   "text-x-script-symbolic",                          320, N_("Commands") },
+  { NULL, "network",  "sdks",       "package-x-generic-symbolic",                      500, N_("SDKs") },
+  { NULL, "network",  "network",    "folder-download-symbolic",                        600, N_("Network") },
+  { NULL, "plugins",  "plugins",    "builder-plugin-symbolic",                         700, N_("Plugins") },
+};
+
+static const IdePreferencePageEntry project_pages[] = {
+  { NULL, "config", "overview",       "info-symbolic",                          0, N_("Overview") },
+  { NULL, "config", "build",          "builder-build-symbolic",               100, N_("Configurations") },
+  { NULL, "code",   "languages",      "text-x-javascript-symbolic",           200, N_("Languages") },
+  { NULL, "tools",  "application",    "builder-run-start-symbolic",           310, N_("Application") },
+  { NULL, "tools",  "commands",       "text-x-script-symbolic",               320, N_("Commands") },
+};
+
+static const IdePreferenceGroupEntry groups[] = {
+  { "appearance", "style",                  0, N_("Appearance") },
+  { "appearance", "interface",           1000, N_("Interface") },
+
+  { "editing",    "completion",             0, N_("Completion") },
+  { "editing",    "formatting",           100, N_("Formatting") },
+  { "editing",    "snippets",             200, N_("Snippets") },
+
+  { "insight",    "general",                0, NULL },
+  { "insight",    "completion",            10, N_("Completion") },
+  { "insight",    "completion-providers",  20, NULL },
+  { "insight",    "diagnostics-providers", 40, N_("Diagnostics") },
+
+  { "plugins",    "vcs",                    0, N_("Version Control") },
+  { "plugins",    "sdks",                  10, N_("SDKs") },
+  { "plugins",    "lsps",                  20, N_("Language Servers") },
+  { "plugins",    "devices",               30, N_("Devices & Simulators") },
+  { "plugins",    "diagnostics",           40, N_("Diagnostics") },
+  { "plugins",    "buildsystems",          50, N_("Build Systems") },
+  { "plugins",    "compilers",             60, N_("Compilers") },
+  { "plugins",    "debuggers",             70, N_("Debuggers") },
+  { "plugins",    "templates",             80, N_("Templates") },
+  { "plugins",    "editing",               90, N_("Editing & Formatting") },
+  { "plugins",    "keybindings",          100, N_("Keyboard Shortcuts") },
+  { "plugins",    "other",                500, N_("Additional") },
+
+  { "keyboard",   "keybindings",            0, N_("Keyboard Shortcuts") },
+
+  { "projects",   "session",                0, N_("Behavior") },
+  { "projects",   "templates",             10, N_("Templates") },
+
+  { "debug",      "breakpoints",            0, N_("Breakpoints") },
+
+  { "build",      "general",                0, N_("General") },
+
+  { "network",    "downloads",              0, N_("Downloads") },
+};
+
+static const IdePreferenceGroupEntry project_groups[] = {
+  { "application", "install",  0, N_("Starting & Stopping") },
+  { "application", "stop",    10 },
+};
+
+static const IdePreferenceItemEntry items[] = {
+  { "appearance", "style", "style-variant", 0, handle_style_variant },
+
+  { "appearance", "interface", "use-tabbar", 0, ide_preferences_window_toggle,
+    N_("Navigate with Tab Bar"),
+    N_("Switch documents using a tabbed interface"),
+    "org.gnome.builder.editor", NULL, "use-tabbar" },
+
+  { "projects", "session", "restore", 0, ide_preferences_window_toggle,
+    N_("Restore Previous Session"),
+    N_("Open previously opened files when loading a project"),
+    "org.gnome.builder", NULL, "restore-previous-files" },
+
+  { "projects", "templates", "default-license", 0, ide_preferences_window_combo,
+    N_("License"),
+    N_("The default license when creating new projects"),
+    "org.gnome.builder", NULL, "default-license" },
+
+  { "debug", "breakpoints", "break-on-main", 0, ide_preferences_window_toggle,
+    N_("Stop After Launching Program"),
+    N_("Automatically insert a breakpoint at the start of the application"),
+    "org.gnome.builder.build", NULL, "debugger-breakpoint-on-main" },
+
+  { "build", "general", "clear-build-logs", 10, ide_preferences_window_toggle,
+    N_("Clear Build Logs"),
+    N_("Upon rebuilding the project the build log will be cleared"),
+    "org.gnome.builder.build", NULL, "clear-build-log-pane" },
+
+  { "build", "general", "clear-build-cache", 20, ide_preferences_window_toggle,
+    N_("Clear Expired Artifacts"),
+    N_("Artifacts which have expired will be deleted when Builder is started"),
+    "org.gnome.builder", NULL, "clear-cache-at-startup" },
+
+  { "network", "downloads", "metered", 0, ide_preferences_window_toggle,
+    N_("Allow Downloads over Metered Connections"),
+    N_("Allow the use of metered network connections when automatically downloading dependencies"),
+    "org.gnome.builder.build", NULL, "allow-network-when-metered" },
+
+  { "keyboard", "keybindings", "default", 0, ide_preferences_window_check,
+    N_("Builder"),
+    N_("Keyboard shortcuts similar to GNOME Text Editor"),
+    "org.gnome.builder.editor", NULL, "keybindings", "'default'" },
+
+  /* TODO: This belongs in plugins/terminal after it is ported */
+  { "appearance", "font", "terminal-font", 10, ide_preferences_window_font,
+    N_("Terminal Font"),
+    N_("The font used within terminals"),
+    "org.gnome.builder.terminal", NULL, "font-name" },
+};
+
+static const IdePreferenceItemEntry project_items[] = {
+  { "application", "install", "install-before-run", 0, ide_preferences_window_toggle,
+    N_("Install Before Running"),
+    N_("Installs the application before running. This is necessary for most projects unless run commands are used."),
+    "org.gnome.builder.project", NULL, "install-before-run" },
+
+  { "application", "stop", "stop-signal", 0, ide_preferences_window_combo,
+    N_("Stop Signal"),
+    N_("Send the signal to the target application when requesting the application stop."),
+    "org.gnome.builder.project", NULL, "stop-signal" },
+};
+
+static gboolean
+is_plugin_category (const char *name)
+{
+  static GHashTable *categories;
+
+  if (name == NULL)
+    return FALSE;
+
+  if (categories == NULL)
+    {
+      categories = g_hash_table_new (g_str_hash, g_str_equal);
+      for (guint i = 0; i < G_N_ELEMENTS (groups); i++)
+        {
+          if (strcmp (groups[i].page, "plugins") == 0)
+            g_hash_table_add (categories, (char *)groups[i].name);
+        }
+    }
+
+  return g_hash_table_contains (categories, name);
 }
 
 void
-_ide_preferences_builtin_register (DzlPreferences *preferences)
+_ide_preferences_builtin_register (IdePreferencesWindow *window)
 {
-  ide_preferences_builtin_register_appearance (preferences);
-  ide_preferences_builtin_register_editor (preferences);
-  ide_preferences_builtin_register_languages (preferences);
-  ide_preferences_builtin_register_code_insight (preferences);
-  ide_preferences_builtin_register_completion (preferences);
-  ide_preferences_builtin_register_snippets (preferences);
-  ide_preferences_builtin_register_keyboard (preferences);
-  ide_preferences_builtin_register_plugins (preferences);
-  ide_preferences_builtin_register_build (preferences);
-  ide_preferences_builtin_register_projects (preferences);
-  //ide_preferences_builtin_register_vcs (preferences);
-  ide_preferences_builtin_register_sdks (preferences);
+  IdePreferencesMode mode;
+  IdeContext *context;
+
+  g_return_if_fail (IDE_IS_PREFERENCES_WINDOW (window));
+
+  mode = ide_preferences_window_get_mode (window);
+  context = ide_preferences_window_get_context (window);
+
+  if (mode == IDE_PREFERENCES_MODE_APPLICATION)
+    {
+      ide_preferences_window_add_pages (window, pages, G_N_ELEMENTS (pages), NULL);
+      ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+      ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
+
+      ide_preferences_builtin_add_plugins (window);
+    }
+  else if (mode == IDE_PREFERENCES_MODE_PROJECT)
+    {
+      g_autoptr(GArray) copy = g_array_new (FALSE, FALSE, sizeof (IdePreferenceItemEntry));
+      g_autofree char *project_id = ide_context_dup_project_id (context);
+      g_autofree char *project_settings_path = g_strdup_printf ("/org/gnome/builder/projects/%s/", project_id);
+
+      ide_preferences_window_add_pages (window, project_pages, G_N_ELEMENTS (project_pages), NULL);
+      ide_preferences_window_add_groups (window, project_groups, G_N_ELEMENTS (project_groups), NULL);
+
+      for (guint i = 0; i < G_N_ELEMENTS (project_items); i++)
+        {
+          IdePreferenceItemEntry *item;
+
+          g_array_append_val (copy, project_items[i]);
+          item = &g_array_index (copy, IdePreferenceItemEntry, i);
+
+          if (ide_str_equal0 (item->schema_id, "org.gnome.builder.project"))
+            item->path = project_settings_path;
+        }
+
+      ide_preferences_window_add_items (window,
+                                        &g_array_index (copy, IdePreferenceItemEntry, 0),
+                                        copy->len,
+                                        window,
+                                        NULL);
+    }
 }

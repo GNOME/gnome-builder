@@ -20,32 +20,40 @@
 
 #pragma once
 
-#include <dazzle.h>
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
 
 #include <libide-core.h>
+
+#include "ide-preferences-window.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PREFERENCES_ADDIN (ide_preferences_addin_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdePreferencesAddin, ide_preferences_addin, IDE, PREFERENCES_ADDIN, GObject)
 
 struct _IdePreferencesAddinInterface
 {
   GTypeInterface parent_interface;
 
-  void (*load)   (IdePreferencesAddin *self,
-                  DzlPreferences      *preferences);
-  void (*unload) (IdePreferencesAddin *self,
-                  DzlPreferences      *preferences);
+  void (*load)   (IdePreferencesAddin  *self,
+                  IdePreferencesWindow *preferences,
+                  IdeContext           *context);
+  void (*unload) (IdePreferencesAddin  *self,
+                  IdePreferencesWindow *preferences,
+                  IdeContext           *context);
 };
 
-IDE_AVAILABLE_IN_3_32
-void ide_preferences_addin_load   (IdePreferencesAddin *self,
-                                   DzlPreferences      *preferences);
-IDE_AVAILABLE_IN_3_32
-void ide_preferences_addin_unload (IdePreferencesAddin *self,
-                                   DzlPreferences      *preferences);
+IDE_AVAILABLE_IN_ALL
+void ide_preferences_addin_load   (IdePreferencesAddin  *self,
+                                   IdePreferencesWindow *preferences,
+                                   IdeContext           *context);
+IDE_AVAILABLE_IN_ALL
+void ide_preferences_addin_unload (IdePreferencesAddin  *self,
+                                   IdePreferencesWindow *preferences,
+                                   IdeContext           *context);
 
 G_END_DECLS
