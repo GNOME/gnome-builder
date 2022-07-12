@@ -24,8 +24,9 @@
 # error "Only <libide-foundry.h> can be included directly."
 #endif
 
-#include <libide-core.h>
 #include <vte/vte.h>
+
+#include <libide-core.h>
 
 #include "ide-foundry-types.h"
 
@@ -33,51 +34,32 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TEST_MANAGER (ide_test_manager_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTestManager, ide_test_manager, IDE, TEST_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeTestManager  *ide_test_manager_from_context         (IdeContext           *context);
-IDE_AVAILABLE_IN_3_32
-gboolean         ide_test_manager_get_loading          (IdeTestManager       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 VtePty          *ide_test_manager_get_pty              (IdeTestManager       *self);
-IDE_AVAILABLE_IN_3_34
-gint             ide_test_manager_open_pty             (IdeTestManager       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
+GListModel      *ide_test_manager_list_tests           (IdeTestManager       *self);
+IDE_AVAILABLE_IN_ALL
 void             ide_test_manager_run_async            (IdeTestManager       *self,
                                                         IdeTest              *test,
                                                         GCancellable         *cancellable,
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_test_manager_run_finish           (IdeTestManager       *self,
                                                         GAsyncResult         *result,
                                                         GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_test_manager_run_all_async        (IdeTestManager       *self,
                                                         GCancellable         *cancellable,
                                                         GAsyncReadyCallback   callback,
                                                         gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_test_manager_run_all_finish       (IdeTestManager       *self,
-                                                        GAsyncResult         *result,
-                                                        GError              **error);
-IDE_AVAILABLE_IN_3_32
-GPtrArray       *ide_test_manager_get_tests            (IdeTestManager       *self,
-                                                        const gchar          *path);
-IDE_AVAILABLE_IN_3_32
-gchar          **ide_test_manager_get_folders          (IdeTestManager       *self,
-                                                        const gchar          *path);
-IDE_AVAILABLE_IN_3_34
-GCancellable    *ide_test_manager_get_cancellable      (IdeTestManager       *self);
-IDE_AVAILABLE_IN_3_32
-void             ide_test_manager_ensure_loaded_async  (IdeTestManager       *self,
-                                                        GCancellable         *cancellable,
-                                                        GAsyncReadyCallback   callback,
-                                                        gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
-gboolean         ide_test_manager_ensure_loaded_finish (IdeTestManager       *self,
                                                         GAsyncResult         *result,
                                                         GError              **error);
 

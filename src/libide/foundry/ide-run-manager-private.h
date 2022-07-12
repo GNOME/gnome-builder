@@ -24,19 +24,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct
-{
-  gchar          *id;
-  gchar          *title;
-  gchar          *icon_name;
-  gchar          *accel;
-  gint            priority;
-  IdeRunHandler   handler;
-  gpointer        handler_data;
-  GDestroyNotify  handler_data_destroy;
-} IdeRunHandlerInfo;
-
-const GList *_ide_run_manager_get_handlers (IdeRunManager *self);
-void         _ide_run_manager_drop_caches  (IdeRunManager *self);
+void _ide_run_manager_drop_caches (IdeRunManager *self);
 
 G_END_DECLS

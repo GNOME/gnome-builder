@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <string.h>
 
@@ -33,11 +32,13 @@
 # include "../terminal/ide-terminal-util.h"
 #undef IDE_TERMINAL_INSIDE
 
+#include "ide-build-manager.h"
 #include "ide-build-target.h"
 #include "ide-config.h"
 #include "ide-config-manager.h"
+#include "ide-pipeline.h"
+#include "ide-run-context.h"
 #include "ide-runtime.h"
-#include "ide-runner.h"
 #include "ide-toolchain.h"
 #include "ide-triplet.h"
 
@@ -64,89 +65,22 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static IdeSubprocessLauncher *
-ide_runtime_real_create_launcher (IdeRuntime  *self,
-                                  GError     **error)
-{
-  IdeSubprocessLauncher *ret;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUNTIME (self));
-
-  ret = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_PIPE);
-
-  if (ret != NULL)
-    {
-      ide_subprocess_launcher_set_run_on_host (ret, TRUE);
-      ide_subprocess_launcher_set_clear_env (ret, FALSE);
-    }
-  else
-    {
-      g_set_error (error,
-                   G_IO_ERROR,
-                   G_IO_ERROR_FAILED,
-                   "An unknown error ocurred");
-    }
-
-  IDE_RETURN (ret);
-}
-
 static gboolean
 ide_runtime_real_contains_program_in_path (IdeRuntime   *self,
-                                           const gchar  *program,
+                                           const char   *program,
                                            GCancellable *cancellable)
 {
+  g_autofree char *path = NULL;
+
   g_assert (IDE_IS_RUNTIME (self));
   g_assert (program != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  if (!ide_is_flatpak ())
-    {
-      g_autofree gchar *path = NULL;
-      path = g_find_program_in_path (program);
-      return path != NULL;
-    }
-  else
-    {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  path = g_find_program_in_path (program);
 
-      /*
-       * If we are in flatpak, we have to execute a program on the host to
-       * determine if there is a program available, as we cannot resolve
-       * file paths from inside the mount namespace.
-       */
+  IDE_TRACE_MSG ("Locating program %s => %s", program, path ? path : "missing");
 
-      if (NULL != (launcher = ide_runtime_create_launcher (self, NULL)))
-        {
-          g_autoptr(IdeSubprocess) subprocess = NULL;
-          g_autofree char *escaped = g_shell_quote (program);
-          g_autofree char *command = g_strdup_printf ("which %s", escaped);
-          const char *user_shell = ide_get_user_shell ();
-
-          ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
-
-          /* Try to get a real PATH by using the preferred shell */
-          if (ide_shell_supports_dash_c (user_shell))
-            ide_subprocess_launcher_push_argv (launcher, user_shell);
-          else
-            ide_subprocess_launcher_push_argv (launcher, "sh");
-
-          /* Try a login shell as well to improve reliability */
-          if (ide_shell_supports_dash_login (user_shell))
-            ide_subprocess_launcher_push_argv (launcher, "--login");
-
-          ide_subprocess_launcher_push_argv (launcher, "-c");
-          ide_subprocess_launcher_push_argv (launcher, command);
-
-          if (NULL != (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL)))
-            return ide_subprocess_wait_check (subprocess, NULL, NULL);
-        }
-
-      return FALSE;
-    }
-
-  g_assert_not_reached ();
+  return path != NULL;
 }
 
 gboolean
@@ -199,130 +133,22 @@ ide_runtime_real_prepare_configuration (IdeRuntime *self,
     }
 }
 
-static IdeRunner *
-ide_runtime_real_create_runner (IdeRuntime     *self,
-                                IdeBuildTarget *build_target)
+static GFile *
+ide_runtime_null_translate_file (IdeRuntime *self,
+                                 GFile      *file)
 {
-  IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
-  IdeEnvironment *env;
-  g_autoptr(GFile) installdir = NULL;
-  g_auto(GStrv) argv = NULL;
-  g_autofree gchar *cwd = NULL;
-  IdeConfigManager *config_manager;
-  const gchar *prefix;
-  IdeContext *context;
-  IdeRunner *runner;
-  IdeConfig *config;
-
-  g_assert (IDE_IS_RUNTIME (self));
-  g_assert (!build_target || IDE_IS_BUILD_TARGET (build_target));
-
-  context = ide_object_get_context (IDE_OBJECT (self));
-  g_assert (IDE_IS_CONTEXT (context));
-
-  config_manager = ide_config_manager_from_context (context);
-  config = ide_config_manager_get_current (config_manager);
-  prefix = ide_config_get_prefix (config);
-
-  runner = ide_runner_new (context);
-  g_assert (IDE_IS_RUNNER (runner));
-
-  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runner));
-
-  env = ide_runner_get_environment (runner);
-
-  if (ide_str_equal0 (priv->id, "host"))
-    ide_runner_set_run_on_host (runner, TRUE);
-
-  if (build_target != NULL)
-    {
-      ide_runner_set_build_target (runner, build_target);
-
-      installdir = ide_build_target_get_install_directory (build_target);
-      argv = ide_build_target_get_argv (build_target);
-      cwd = ide_build_target_get_cwd (build_target);
-    }
-
-  /* Possibly translate relative paths for the binary */
-  if (argv && argv[0] && !g_path_is_absolute (argv[0]))
-    {
-      const gchar *slash = strchr (argv[0], '/');
-
-      if (slash != NULL)
-        {
-          g_autofree gchar *copy = g_strdup (slash ? (slash + 1) : argv[0]);
-
-          g_free (argv[0]);
-
-          if (installdir != NULL)
-            {
-              g_autoptr(GFile) dest = g_file_get_child (installdir, copy);
-              argv[0] = g_file_get_path (dest);
-            }
-          else
-            argv[0] = g_steal_pointer (&copy);
-        }
-    }
-
-  if (installdir != NULL)
-    {
-      g_autoptr(GFile) parentdir = NULL;
-      g_autofree gchar *schemadir = NULL;
-      g_autofree gchar *parentpath = NULL;
-
-      /* GSettings requires an env var for non-standard dirs */
-      if ((parentdir = g_file_get_parent (installdir)))
-        {
-          parentpath = g_file_get_path (parentdir);
-          schemadir = g_build_filename (parentpath, "share", "glib-2.0", "schemas", NULL);
-          ide_environment_setenv (env, "GSETTINGS_SCHEMA_DIR", schemadir);
-        }
-    }
-
-  if (prefix != NULL)
-    {
-      static const gchar *tries[] = { "lib64", "lib", "lib32", };
-      const gchar *old_path = ide_environment_getenv (env, "LD_LIBRARY_PATH");
-
-      for (guint i = 0; i < G_N_ELEMENTS (tries); i++)
-        {
-          g_autofree gchar *ld_library_path = g_build_filename (prefix, tries[i], NULL);
-
-          if (g_file_test (ld_library_path, G_FILE_TEST_IS_DIR))
-            {
-              if (old_path != NULL)
-                {
-                  g_autofree gchar *freeme = g_steal_pointer (&ld_library_path);
-                  ld_library_path = g_strdup_printf ("%s:%s", freeme, old_path);
-                }
-
-              ide_environment_setenv (env, "LD_LIBRARY_PATH", ld_library_path);
-              break;
-            }
-        }
-    }
-
-  if (argv != NULL)
-    ide_runner_push_args (runner, (const gchar * const *)argv);
-
-  if (cwd != NULL)
-    ide_runner_set_cwd (runner, cwd);
-
-  return runner;
+  return NULL;
 }
 
 static GFile *
-ide_runtime_real_translate_file (IdeRuntime *self,
-                                 GFile      *file)
+ide_runtime_flatpak_translate_file (IdeRuntime *self,
+                                    GFile      *file)
 {
   g_autofree gchar *path = NULL;
 
   g_assert (IDE_IS_RUNTIME (self));
   g_assert (G_IS_FILE (file));
-
-  /* We only need to translate when running as flatpak */
-  if (!ide_is_flatpak ())
-    return NULL;
+  g_assert (ide_is_flatpak ());
 
   /* Only deal with native files */
   if (!g_file_is_native (file) || NULL == (path = g_file_get_path (file)))
@@ -449,11 +275,13 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
 
   i_object_class->repr = ide_runtime_repr;
 
-  klass->create_launcher = ide_runtime_real_create_launcher;
-  klass->create_runner = ide_runtime_real_create_runner;
   klass->contains_program_in_path = ide_runtime_real_contains_program_in_path;
   klass->prepare_configuration = ide_runtime_real_prepare_configuration;
-  klass->translate_file = ide_runtime_real_translate_file;
+
+  if (ide_is_flatpak ())
+    klass->translate_file = ide_runtime_flatpak_translate_file;
+  else
+    klass->translate_file = ide_runtime_null_translate_file;
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
@@ -654,29 +482,6 @@ ide_runtime_new (const gchar *id,
                        NULL);
 }
 
-/**
- * ide_runtime_create_launcher:
- *
- * Creates a launcher for the runtime.
- *
- * This can be used to execute a command within a runtime.
- *
- * It is important that this function can be run from a thread without
- * side effects.
- *
- * Returns: (transfer full): An #IdeSubprocessLauncher or %NULL upon failure.
- *
- * Since: 3.32
- */
-IdeSubprocessLauncher *
-ide_runtime_create_launcher (IdeRuntime  *self,
-                             GError     **error)
-{
-  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
-
-  return IDE_RUNTIME_GET_CLASS (self)->create_launcher (self, error);
-}
-
 void
 ide_runtime_prepare_configuration (IdeRuntime       *self,
                                    IdeConfig *configuration)
@@ -685,33 +490,6 @@ ide_runtime_prepare_configuration (IdeRuntime       *self,
   g_return_if_fail (IDE_IS_CONFIG (configuration));
 
   IDE_RUNTIME_GET_CLASS (self)->prepare_configuration (self, configuration);
-}
-
-/**
- * ide_runtime_create_runner:
- * @self: An #IdeRuntime
- * @build_target: (nullable): An #IdeBuildTarget or %NULL
- *
- * Creates a new runner that can be used to execute the build target within
- * the runtime. This should be used to implement such features as "run target"
- * or "run unit test" inside the target runtime.
- *
- * If @build_target is %NULL, the runtime should create a runner that allows
- * the caller to specify the binary using the #IdeRunner API.
- *
- * Returns: (transfer full) (nullable): An #IdeRunner if successful, otherwise
- *   %NULL and @error is set.
- *
- * Since: 3.32
- */
-IdeRunner *
-ide_runtime_create_runner (IdeRuntime     *self,
-                           IdeBuildTarget *build_target)
-{
-  g_return_val_if_fail (IDE_IS_RUNTIME (self), NULL);
-  g_return_val_if_fail (!build_target || IDE_IS_BUILD_TARGET (build_target), NULL);
-
-  return IDE_RUNTIME_GET_CLASS (self)->create_runner (self, build_target);
 }
 
 GQuark
@@ -734,8 +512,6 @@ ide_runtime_error_quark (void)
  * be accessed from the host system.
  *
  * Returns: (transfer full) (not nullable): a #GFile.
- *
- * Since: 3.32
  */
 GFile *
 ide_runtime_translate_file (IdeRuntime *self,
@@ -764,8 +540,6 @@ ide_runtime_translate_file (IdeRuntime *self,
  *
  * Returns: (transfer full) (array zero-terminated=1): A newly allocated
  *   string containing the include dirs.
- *
- * Since: 3.32
  */
 gchar **
 ide_runtime_get_system_include_dirs (IdeRuntime *self)
@@ -791,8 +565,6 @@ ide_runtime_get_system_include_dirs (IdeRuntime *self)
  *
  * Returns: (transfer full) (not nullable): the architecture triplet the runtime
  * will build for.
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_runtime_get_triplet (IdeRuntime *self)
@@ -824,8 +596,6 @@ ide_runtime_get_triplet (IdeRuntime *self)
  *
  * Returns: (transfer full) (not nullable): the name of the architecture
  * the runtime will build for.
- *
- * Since: 3.32
  */
 gchar *
 ide_runtime_get_arch (IdeRuntime *self)
@@ -849,8 +619,6 @@ ide_runtime_get_arch (IdeRuntime *self)
  * Informs wether a toolchain is supported by this.
  *
  * Returns: %TRUE if the toolchain is supported
- *
- * Since: 3.32
  */
 gboolean
 ide_runtime_supports_toolchain (IdeRuntime   *self,
@@ -869,4 +637,101 @@ ide_runtime_supports_toolchain (IdeRuntime   *self,
     return IDE_RUNTIME_GET_CLASS (self)->supports_toolchain (self, toolchain);
 
   return TRUE;
+}
+
+/**
+ * ide_runtime_prepare_to_run:
+ * @self: a #IdeRuntime
+ * @pipeline: (nullable): an #IdePipeline or %NULL for the current
+ * @run_context: an #IdeRunContext
+ *
+ * Prepares a run context to run an application.
+ *
+ * The virtual function implementation should add to the run context anything
+ * necessary to be able to run within the runtime.
+ *
+ * That might include pushing a new layer so that the command will run within
+ * a subcommand such as "flatpak", "jhbuild", or "podman".
+ *
+ * This is meant to be able to run applications, so additional work is expected
+ * of runtimes to ensure access to things like graphical displays.
+ */
+void
+ide_runtime_prepare_to_run (IdeRuntime    *self,
+                            IdePipeline   *pipeline,
+                            IdeRunContext *run_context)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_RUNTIME (self));
+  g_return_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (IDE_RUNTIME_GET_CLASS (self)->prepare_to_run == NULL)
+    IDE_EXIT;
+
+  if (pipeline == NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+
+      pipeline = ide_build_manager_get_pipeline (build_manager);
+    }
+
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (ide_pipeline_get_runtime (pipeline) == self);
+
+  IDE_RUNTIME_GET_CLASS (self)->prepare_to_run (self, pipeline, run_context);
+
+  /* Give the run_context access to some environment */
+  ide_run_context_add_minimal_environment (run_context);
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_runtime_prepare_to_build:
+ * @self: a #IdeRuntime
+ * @pipeline: (nullable): an #IdePipeline or %NULL for the current
+ * @run_context: an #IdeRunContext
+ *
+ * Prepares a run context for running a build command.
+ *
+ * The virtual function implementation should add to the run context anything
+ * necessary to be able to run within the runtime.
+ *
+ * That might include pushing a new layer so that the command will run within
+ * a subcommand such as "flatpak", "jhbuild", or "podman".
+ *
+ * This is meant to be able to run a build command, so it may not require
+ * access to some features like network or graphical displays.
+ */
+void
+ide_runtime_prepare_to_build (IdeRuntime    *self,
+                              IdePipeline   *pipeline,
+                              IdeRunContext *run_context)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_RUNTIME (self));
+  g_return_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (IDE_RUNTIME_GET_CLASS (self)->prepare_to_build == NULL)
+    IDE_EXIT;
+
+  if (pipeline == NULL)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+
+      pipeline = ide_build_manager_get_pipeline (build_manager);
+    }
+
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (ide_pipeline_get_runtime (pipeline) == self);
+
+  IDE_RUNTIME_GET_CLASS (self)->prepare_to_build (self, pipeline, run_context);
+
+  IDE_EXIT;
 }
