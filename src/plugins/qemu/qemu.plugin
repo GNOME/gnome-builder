@@ -2,8 +2,8 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2018 Christian Hergert
-Depends=deviceui;
 Description=Integration with Qemu cross-architecture emulation
 Embedded=_gbp_qemu_register_types
 Module=qemu
 Name=Qemu
+X-Category=devices
