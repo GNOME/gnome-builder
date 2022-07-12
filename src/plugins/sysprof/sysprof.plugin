@@ -2,10 +2,10 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2016-2018 Christian Hergert
-Depends=buildui;
-Description=Integration with the Sysprof system profiler
+Depends=buildui;project-tree;
+Description=Integrates a whole-system profiler using Sysprof
 Embedded=_gbp_sysprof_register_types
-Hidden=true
 Module=sysprof
 Name=Sysprof
+X-Category=debuggers
 X-Workspace-Kind=primary;

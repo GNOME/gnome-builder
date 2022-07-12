@@ -6,33 +6,97 @@
         <attribute name="id">open-sysprof-capture</attribute>
         <attribute name="after">open-file</attribute>
         <attribute name="label" translatable="yes" context="menu label">Open _Sysprof Capture…</attribute>
-        <attribute name="action">profiler.open-profile</attribute>
-      </item>
-    </section>
-  </menu>
-  <menu id="ide-primary-workspace-surfaces-menu">
-    <section id="ide-primary-workspace-surfaces-menu-section">
-      <item>
-        <attribute name="accel">&lt;alt&gt;2</attribute>
-        <attribute name="before">surface-menu-config</attribute>
-        <attribute name="id">surface-menu-profiler</attribute>
-        <attribute name="label" translatable="yes">Profiler</attribute>
-        <attribute name="role">normal</attribute>
-        <attribute name="action">profiler.show</attribute>
-        <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
+        <attribute name="action">sysprof.open-capture</attribute>
       </item>
     </section>
   </menu>
   <menu id="run-menu">
-    <section id="run-menu-section">
+    <section id="run-menu-observation-section">
       <item>
-        <attribute name="id">profiler-run-handler</attribute>
+        <attribute name="id">sysprof-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
-        <attribute name="action">profiler.run</attribute>
+        <attribute name="action">sysprof.run</attribute>
         <attribute name="label" translatable="yes">Run with Profiler</attribute>
         <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
-        <attribute name="accel">&lt;Control&gt;F8</attribute>
+        <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;&lt;Alt&gt;p</attribute>
       </item>
+    </section>
+  </menu>
+  <menu id="run-menu">
+    <section id="run-menu-tools-section">
+      <submenu id="run-menu-sysprof-submenu">
+        <attribute name="before">run-menu-verbose-logging</attribute>
+        <attribute name="label" translatable="yes">Profiler</attribute>
+        <section id="run-menu-sysprof-threads-section">
+          <attribute name="label" translatable="yes">Thread Sampling</attribute>
+          <item>
+            <attribute name="label" translatable="yes">CPU Performance</attribute>
+            <attribute name="action">sysprof.perf-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Memory Allocations</attribute>
+            <attribute name="action">sysprof.memprof-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-sysprof-graphics-section">
+          <attribute name="label" translatable="yes">Graphics</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Display Timings</attribute>
+            <attribute name="action">sysprof.compositor-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-sysprof-counters-section">
+          <attribute name="label" translatable="yes">Counters</attribute>
+          <item>
+            <attribute name="label" translatable="yes">CPU Usage</attribute>
+            <attribute name="action">sysprof.cpu-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Memory Usage</attribute>
+            <attribute name="action">sysprof.memory-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Storage I/O</attribute>
+            <attribute name="action">sysprof.diskstat-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Network I/O</attribute>
+            <attribute name="action">sysprof.netstat-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-sysprof-energy-section">
+          <attribute name="label" translatable="yes">Energy</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Consumption</attribute>
+            <attribute name="action">sysprof.energy-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Battery Charge</attribute>
+            <attribute name="action">sysprof.battery-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-sysprof-misc-section">
+          <item>
+            <attribute name="label" translatable="yes">Allow Application Integration</attribute>
+            <attribute name="action">sysprof.allow-tracefd</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Allow CPU Throttling</attribute>
+            <attribute name="action">sysprof.allow-throttle</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
   </menu>
   <menu id="project-tree-run-with-submenu">
@@ -41,7 +105,29 @@
         <attribute name="id">project-tree-menu-profiler</attribute>
         <attribute name="label" translatable="yes">Run with _Profiler</attribute>
         <attribute name="action">buildui.run-with-handler</attribute>
-        <attribute name="target" type="s">'profiler'</attribute>
+        <attribute name="target" type="s">'sysprof'</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="gbp-sysprof-page-menu">
+    <section id="gbp-sysprof-page-file-section">
+      <item>
+        <attribute name="label" translatable="yes">Save</attribute>
+        <attribute name="action">sysprof.save-as</attribute>
+        <attribute name="accel">&lt;control&gt;s</attribute>
+      </item>
+    </section>
+    <section id="gbp-sysprof-page-record-section">
+      <item>
+        <attribute name="label" translatable="yes">Record Again…</attribute>
+        <attribute name="action">sysprof.record-again</attribute>
+      </item>
+    </section>
+    <section id="gbp-sysprof-page-close-section">
+      <item>
+        <attribute name="label" translatable="yes">Close</attribute>
+        <attribute name="action">frame.close-page-or-frame</attribute>
+        <attribute name="accel">&lt;control&gt;w</attribute>
       </item>
     </section>
   </menu>

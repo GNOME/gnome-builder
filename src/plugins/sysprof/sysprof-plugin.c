@@ -1,6 +1,6 @@
 /* sysprof-plugin.c
  *
- * Copyright 2016-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2016-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,9 +23,12 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
-#include <libide-gui.h>
 #include <sysprof.h>
 
+#include <libide-gui.h>
+
+#include "gbp-sysprof-tool.h"
+#include "gbp-sysprof-workbench-addin.h"
 #include "gbp-sysprof-workspace-addin.h"
 
 _IDE_EXTERN void
@@ -33,6 +36,12 @@ _gbp_sysprof_register_types (PeasObjectModule *module)
 {
   sysprof_clock_init ();
 
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUN_TOOL,
+                                              GBP_TYPE_SYSPROF_TOOL);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKBENCH_ADDIN,
+                                              GBP_TYPE_SYSPROF_WORKBENCH_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
                                               GBP_TYPE_SYSPROF_WORKSPACE_ADDIN);
