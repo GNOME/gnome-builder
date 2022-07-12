@@ -24,19 +24,25 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <gtk/gtk.h>
+#include <libpanel.h>
+
 #include <libide-core.h>
+
+#include "ide-panel-position.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PAGE (ide_page_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdePage, ide_page, IDE, PAGE, GtkBox)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (IdePage, ide_page, IDE, PAGE, PanelWidget)
+
+typedef void (*IdePageCallback) (IdePage  *page,
+                                 gpointer  user_data);
 
 struct _IdePageClass
 {
-  GtkBoxClass parent_class;
+  PanelWidgetClass parent_class;
 
   void           (*agree_to_close_async)  (IdePage              *self,
                                            GCancellable         *cancellable,
@@ -49,74 +55,60 @@ struct _IdePageClass
   GFile         *(*get_file_or_directory) (IdePage              *self);
 
   /*< private >*/
-  gpointer _reserved[16];
+  gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
-GtkWidget     *ide_page_new                   (void);
-IDE_AVAILABLE_IN_3_32
-gboolean       ide_page_get_can_split         (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_can_split         (IdePage              *self,
-                                               gboolean              can_split);
-IDE_AVAILABLE_IN_3_32
-IdePage       *ide_page_create_split          (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-const gchar   *ide_page_get_icon_name         (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_icon_name         (IdePage              *self,
-                                               const gchar          *icon_name);
-IDE_AVAILABLE_IN_3_32
-GIcon         *ide_page_get_icon              (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_icon              (IdePage              *self,
-                                               GIcon                *icon);
-IDE_AVAILABLE_IN_3_32
-gboolean       ide_page_get_failed            (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_failed            (IdePage              *self,
-                                               gboolean              failed);
-IDE_AVAILABLE_IN_3_32
-const gchar   *ide_page_get_menu_id           (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_menu_id           (IdePage              *self,
-                                               const gchar          *menu_id);
-IDE_AVAILABLE_IN_3_32
-gboolean       ide_page_get_modified          (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_modified          (IdePage              *self,
-                                               gboolean              modified);
-IDE_AVAILABLE_IN_3_32
-const gchar   *ide_page_get_title             (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_title             (IdePage              *self,
-                                               const gchar          *title);
-IDE_AVAILABLE_IN_3_32
-const GdkRGBA *ide_page_get_primary_color_bg  (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_primary_color_bg  (IdePage              *self,
-                                               const GdkRGBA        *primary_color_bg);
-IDE_AVAILABLE_IN_3_32
-const GdkRGBA *ide_page_get_primary_color_fg  (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_set_primary_color_fg  (IdePage              *self,
-                                               const GdkRGBA        *primary_color_fg);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_agree_to_close_async  (IdePage              *self,
-                                               GCancellable         *cancellable,
-                                               GAsyncReadyCallback   callback,
-                                               gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
-gboolean       ide_page_agree_to_close_finish (IdePage              *self,
-                                               GAsyncResult         *result,
-                                               GError              **error);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_mark_used             (IdePage              *self);
-IDE_AVAILABLE_IN_3_32
-void           ide_page_report_error          (IdePage              *self,
-                                               const gchar          *format,
-                                               ...) G_GNUC_PRINTF (2, 3);
-IDE_AVAILABLE_IN_3_40
-GFile         *ide_page_get_file_or_directory (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+gboolean          ide_page_get_can_split         (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_set_can_split         (IdePage              *self,
+                                                  gboolean              can_split);
+IDE_AVAILABLE_IN_ALL
+IdePage          *ide_page_create_split          (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+gboolean          ide_page_get_failed            (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_set_failed            (IdePage              *self,
+                                                  gboolean              failed);
+IDE_AVAILABLE_IN_ALL
+const gchar      *ide_page_get_menu_id           (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_set_menu_id           (IdePage              *self,
+                                                  const gchar          *menu_id);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_agree_to_close_async  (IdePage              *self,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+gboolean          ide_page_agree_to_close_finish (IdePage              *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_mark_used             (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_report_error          (IdePage              *self,
+                                                  const gchar          *format,
+                                                  ...) G_GNUC_PRINTF (2, 3);
+IDE_AVAILABLE_IN_ALL
+GFile            *ide_page_get_file_or_directory (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_set_progress          (IdePage              *self,
+                                                  IdeNotification      *notification);
+IDE_AVAILABLE_IN_ALL
+IdePanelPosition *ide_page_get_position          (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_observe               (IdePage              *self,
+                                                  IdePage             **location);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_unobserve             (IdePage              *self,
+                                                  IdePage             **location);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_destroy               (IdePage              *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_clear_page                 (IdePage             **location);
+IDE_AVAILABLE_IN_ALL
+void              ide_page_add_content_widget    (IdePage              *self,
+                                                  GtkWidget            *widget);
 
 G_END_DECLS

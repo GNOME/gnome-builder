@@ -1,0 +1,98 @@
+/* Preferences */
+window.preferences list.boxed-list.style-variant button {
+  padding: 0;
+  margin: 0;
+  border: 3px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+}
+window.preferences list.boxed-list.style-variant button:checked {
+  border-color: @theme_selected_bg_color;
+}
+.checkimage radio,
+.checkimage check {
+  background: none;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  color: @window_fg_color;
+  -gtk-icon-source: none;
+  -gtk-icon-size: 18px;
+}
+.checkimage radio:checked,
+.checkimage check:checked {
+  -gtk-icon-source: -gtk-icontheme('object-select-symbolic');
+}
+stylevariantpreview widget.wallpaper {
+  border-radius: 6px;
+  box-shadow: 0 0 9px 1px rgba(0,0,0,.2);
+}
+stylevariantpreview widget.window {
+  box-shadow: 0 0 9px 2px rgba(0,0,0,.25);
+  border-radius: 7px;
+  border: 1px solid alpha(white, .075);
+}
+stylevariantpreview widget.window.dark {
+  background: #242424;
+}
+stylevariantpreview widget.window.light {
+  background: #fafafa;
+}
+stylevariantpreview widget.header {
+  border-radius: 7px 7px 0 0;
+  border-bottom: 1px solid alpha(white, 0.075);
+}
+stylevariantpreview widget.header.dark {
+  background: #484848;
+}
+stylevariantpreview widget.header.light {
+  background: #cccccc;
+}
+
+window popover.global-search contents {
+  padding: 0;
+  margin: 0;
+}
+window popover.global-search .navigation-sidebar {
+  border-right: 1px solid @borders;
+}
+
+notificationstack button {
+  margin: 0;
+  padding: 0;
+  background: none;
+}
+
+scrolledwindow.shadow-when-scroll undershoot.top {
+  box-shadow: inset 0px 5px 14px -14px rgba(0,0,0,.9);
+}
+
+button.pill.small {
+  font-size: .83333em;
+  border-radius: 99px;
+  margin: 0;
+  padding: 1px 12px;
+}
+
+/* Styling for search bars */
+.searchbar {
+  background-color: @popover_bg_color;
+  background-clip: padding-box;
+  color: @popover_fg_color;
+  padding: 6px;
+  border-style: solid;
+  border-color: alpha(black, .14);
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-radius: 0 0 12px 12px;
+  margin: 0 10px 20px 10px;
+  box-shadow: 0 1px 5px 1px alpha(black, .09),
+              0 2px 14px 3px alpha(black, .05);
+}
+.searchbar button.flat.circular {
+  min-width: 24px;
+  min-height: 24px;
+  margin: 0px;
+  padding: 3px;
+}

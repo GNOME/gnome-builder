@@ -22,14 +22,20 @@
 
 #include "config.h"
 
+#include <libide-search.h>
 #include <libide-plugins.h>
 
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
-#include "ide-workspace.h"
+#include "ide-page-private.h"
+#include "ide-search-popover-private.h"
+#include "ide-shortcut-bundle-private.h"
 #include "ide-workspace-addin.h"
+#include "ide-workspace-private.h"
+#include "ide-workbench-private.h"
 
 #define MUX_ACTIONS_KEY "IDE_WORKSPACE_MUX_ACTIONS"
+#define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
+#define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
 
 typedef struct
 {
@@ -55,58 +61,92 @@ typedef struct
    */
   IdeExtensionSetAdapter *addins;
 
-  /* We use an overlay as our top-most child so that plugins can potentially
-   * render any widget a layer above the UI.
-   */
-  GtkOverlay *overlay;
+  /* A statusbar, if any, that was added to the workspace */
+  PanelStatusbar *statusbar;
 
-  /* All workspaces are comprised of a series of "surfaces". However there may
-   * only ever be a single surface in a workspace (such as the editor workspace
-   * which is dedicated for editing).
-   */
-  GtkStack *surfaces;
+  /* The global search for the workspace, if any */
+  IdeSearchPopover *search_popover;
 
-  /* The event box ensures that we can have events that will be used by the
-   * fullscreen overlay so that it gets delivery of crossing events.
-   */
-  GtkEventBox *event_box;
-  GtkBox *vbox;
+  /* GListModel of GtkShortcut w/ capture/bubble filters */
+  GtkFilterListModel *shortcut_model_bubble;
+  GtkFilterListModel *shortcut_model_capture;
 
   /* A MRU that is updated as pages are focused. It allows us to move through
    * the pages in the order they've been most-recently focused.
    */
   GQueue page_mru;
 
-  guint in_key_press : 1;
+  /* Queued source to save window size/etc */
+  guint queued_window_save;
+
+  /* Vertical box for children */
+  GtkBox *box;
+
+  /* Weak pointer to the current page. */
+  gpointer current_page_ptr;
 } IdeWorkspacePrivate;
 
 typedef struct
 {
-  GtkCallback callback;
-  gpointer    user_data;
+  IdePageCallback callback;
+  gpointer        user_data;
 } ForeachPage;
-
-enum {
-  SURFACE_SET,
-  N_SIGNALS
-};
 
 enum {
   PROP_0,
   PROP_CONTEXT,
-  PROP_VISIBLE_SURFACE,
   N_PROPS
 };
 
 static void buildable_iface_init (GtkBuildableIface *iface);
 
-G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, HDY_TYPE_APPLICATION_WINDOW,
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICATION_WINDOW,
                                   G_ADD_PRIVATE (IdeWorkspace)
                                   G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
-static GtkBuildableIface *parent_builder;
 static GParamSpec *properties [N_PROPS];
-static guint signals [N_SIGNALS];
+static GSettings *settings;
+
+static void
+ide_workspace_attach_shortcuts (IdeWorkspace *self,
+                                GtkWidget    *widget)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GtkEventController *controller;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (GTK_IS_WIDGET (widget));
+  g_assert (G_IS_LIST_MODEL (priv->shortcut_model_bubble));
+  g_assert (G_IS_LIST_MODEL (priv->shortcut_model_capture));
+
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (priv->shortcut_model_capture));
+  gtk_event_controller_set_name (controller, "ide-shortcuts-capture");
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
+  gtk_widget_add_controller (widget, g_steal_pointer (&controller));
+
+  controller = gtk_shortcut_controller_new_for_model (G_LIST_MODEL (priv->shortcut_model_bubble));
+  gtk_event_controller_set_name (controller, "ide-shortcuts-bubble");
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
+  gtk_widget_add_controller (widget, g_steal_pointer (&controller));
+}
+
+static IdePage *
+ide_workspace_get_focus_page (IdeWorkspace *self)
+{
+  GtkWidget *focus;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  if ((focus = gtk_root_get_focus (GTK_ROOT (self))))
+    {
+      if (!IDE_IS_PAGE (focus))
+        focus = gtk_widget_get_ancestor (focus, IDE_TYPE_PAGE);
+    }
+
+  return IDE_PAGE (focus);
+}
 
 static void
 ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
@@ -116,6 +156,7 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
 {
   IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
   IdeWorkspace *self = user_data;
+  IdePage *page;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
@@ -126,6 +167,9 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
            peas_plugin_info_get_module_name (plugin_info));
 
   ide_workspace_addin_load (addin, self);
+
+  if ((page = ide_workspace_get_focus_page (self)))
+    ide_workspace_addin_page_changed (addin, page);
 }
 
 static void
@@ -145,8 +189,25 @@ ide_workspace_addin_removed_cb (IdeExtensionSetAdapter *set,
   g_debug ("Unloading workspace addin from module %s",
            peas_plugin_info_get_module_name (plugin_info));
 
-  ide_workspace_addin_surface_set (addin, NULL);
+  ide_workspace_addin_page_changed (addin, NULL);
   ide_workspace_addin_unload (addin, self);
+}
+
+static void
+ide_workspace_addin_page_changed_cb (IdeExtensionSetAdapter *set,
+                                     PeasPluginInfo         *plugin_info,
+                                     PeasExtension          *exten,
+                                     gpointer                user_data)
+{
+  IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
+  IdePage *page = user_data;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
+  g_assert (!page || IDE_IS_PAGE (page));
+
+  ide_workspace_addin_page_changed (addin, page);
 }
 
 static void
@@ -181,194 +242,89 @@ ide_workspace_real_context_set (IdeWorkspace *self,
 }
 
 static void
-ide_workspace_addin_surface_set_cb (IdeExtensionSetAdapter *set,
-                                    PeasPluginInfo         *plugin_info,
-                                    PeasExtension          *exten,
-                                    gpointer                user_data)
+ide_workspace_close_request_cb (GObject      *object,
+                                GAsyncResult *result,
+                                gpointer      user_data)
 {
-  IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
-  IdeSurface *surface = user_data;
-
-  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
-  g_assert (!surface || IDE_IS_SURFACE (surface));
-
-  ide_workspace_addin_surface_set (addin, surface);
-}
-
-static void
-ide_workspace_real_surface_set (IdeWorkspace *self,
-                                IdeSurface   *surface)
-{
+  IdeWorkspace *self = (IdeWorkspace *)object;
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_WORKSPACE (self));
-  g_assert (!surface || IDE_IS_SURFACE (surface));
-
-  if (priv->addins != NULL)
-    ide_extension_set_adapter_foreach (priv->addins,
-                                       ide_workspace_addin_surface_set_cb,
-                                       surface);
-}
-
-/**
- * ide_workspace_foreach_surface:
- * @self: a #IdeWorkspace
- * @callback: (scope call): a #GtkCallback to execute for every surface
- * @user_data: user data for @callback
- *
- * Calls callback for every #IdeSurface based #GtkWidget that is registered
- * in the workspace.
- *
- * Since: 3.32
- */
-void
-ide_workspace_foreach_surface (IdeWorkspace *self,
-                               GtkCallback   callback,
-                               gpointer      user_data)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_WORKSPACE (self));
-  g_assert (callback != NULL);
+  g_assert (G_IS_ASYNC_RESULT (result));
 
-  gtk_container_foreach (GTK_CONTAINER (priv->surfaces), callback, user_data);
-}
+  if (IDE_WORKSPACE_GET_CLASS (self)->agree_to_close_finish (self, result, &error))
+    {
+      IdeWorkbench *workbench = IDE_WORKBENCH (gtk_window_get_group (GTK_WINDOW (self)));
 
-static void
-ide_workspace_agree_to_shutdown_cb (GtkWidget *widget,
-                                    gpointer   user_data)
-{
-  gboolean *blocked = user_data;
+      if (ide_workbench_has_project (workbench) &&
+          _ide_workbench_is_last_workspace (workbench, self))
+        {
+          gtk_widget_hide (GTK_WIDGET (self));
+          ide_workbench_unload_async (workbench, NULL, NULL, NULL);
+          return;
+        }
 
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_SURFACE (widget));
-  g_assert (blocked != NULL);
-
-  *blocked |= !ide_surface_agree_to_shutdown (IDE_SURFACE (widget));
-}
-
-static void
-ide_workspace_addin_can_close_cb (IdeExtensionSetAdapter *adapter,
-                                  PeasPluginInfo         *plugin_info,
-                                  PeasExtension          *exten,
-                                  gpointer                user_data)
-{
-  IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
-  gboolean *blocked = user_data;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
-  g_assert (blocked != NULL);
-
-  *blocked |= !ide_workspace_addin_can_close (addin);
+      g_cancellable_cancel (priv->cancellable);
+      ide_workbench_remove_workspace (workbench, self);
+      gtk_window_destroy (GTK_WINDOW (self));
+    }
 }
 
 static gboolean
-ide_workspace_agree_to_shutdown (IdeWorkspace *self)
+ide_workspace_close_request (GtkWindow *window)
 {
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  gboolean blocked = FALSE;
+  IdeWorkspace *self = (IdeWorkspace *)window;
 
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_WORKSPACE (self));
 
-  ide_workspace_foreach_surface (self, ide_workspace_agree_to_shutdown_cb, &blocked);
+  IDE_WORKSPACE_GET_CLASS (self)->agree_to_close_async (self,
+                                                        NULL,
+                                                        ide_workspace_close_request_cb,
+                                                        NULL);
 
-  if (!blocked)
-    ide_extension_set_adapter_foreach (priv->addins,
-                                       ide_workspace_addin_can_close_cb,
-                                       &blocked);
-
-  return !blocked;
-}
-
-static gboolean
-ide_workspace_delete_event (GtkWidget   *widget,
-                            GdkEventAny *any)
-{
-  IdeWorkspace *self = (IdeWorkspace *)widget;
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  IdeWorkbench *workbench;
-
-  g_assert (IDE_IS_WORKSPACE (self));
-  g_assert (any != NULL);
-
-  /* TODO:
-   *
-   * If there are any active transfers, we want to ask the user if they
-   * are sure they want to exit and risk losing them. We can allow them
-   * to be completed in the background.
-   *
-   * Note that we only want to do this on the final workspace window.
-   */
-
-  if (!ide_workspace_agree_to_shutdown (self))
-    return GDK_EVENT_STOP;
-
-  g_cancellable_cancel (priv->cancellable);
-
-  workbench = ide_widget_get_workbench (widget);
-
-  if (ide_workbench_has_project (workbench) &&
-      _ide_workbench_is_last_workspace (workbench, self))
-    {
-      gtk_widget_hide (GTK_WIDGET (self));
-      ide_workbench_unload_async (workbench, NULL, NULL, NULL);
-      return GDK_EVENT_STOP;
-    }
-
-  return GDK_EVENT_PROPAGATE;
+  return TRUE;
 }
 
 static void
-ide_workspace_notify_surface_cb (IdeWorkspace *self,
-                                 GParamSpec   *pspec,
-                                 GtkStack     *surfaces)
+ide_workspace_notify_focus_widget (IdeWorkspace *self,
+                                   GParamSpec   *pspec,
+                                   gpointer      user_data)
 {
-  GtkWidget *visible_child;
-  IdeHeaderBar *header_bar;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  IdePage *focus;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_WORKSPACE (self));
-  g_assert (GTK_IS_STACK (surfaces));
+  g_assert (pspec != NULL);
+  g_assert (user_data == NULL);
 
-  visible_child = gtk_stack_get_visible_child (surfaces);
-  if (!IDE_IS_SURFACE (visible_child))
-    visible_child = NULL;
+  focus = ide_workspace_get_focus_page (self);
 
-  if (visible_child != NULL)
-    gtk_widget_grab_focus (visible_child);
-
-  if ((header_bar = ide_workspace_get_header_bar (self)))
+  if (priv->current_page_ptr != (gpointer)focus)
     {
-      if (visible_child != NULL)
-        dzl_gtk_widget_mux_action_groups (GTK_WIDGET (header_bar), visible_child, MUX_ACTIONS_KEY);
-      else
-        dzl_gtk_widget_mux_action_groups (GTK_WIDGET (header_bar), NULL, MUX_ACTIONS_KEY);
+      /* Focus changed, but old page is still valid */
+      if (focus == NULL)
+        IDE_EXIT;
+
+      /* Focus changed, and we have a new widget */
+      g_set_weak_pointer (&priv->current_page_ptr, focus);
+
+      /* And move this page to the front of the MRU */
+      _ide_workspace_move_front_page_mru (self, _ide_page_get_mru_link (focus));
+
+      if (priv->addins != NULL)
+        {
+          g_object_ref (focus);
+          ide_extension_set_adapter_foreach (priv->addins,
+                                             ide_workspace_addin_page_changed_cb,
+                                             focus);
+          g_object_unref (focus);
+        }
     }
 
-  g_signal_emit (self, signals [SURFACE_SET], 0, visible_child);
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VISIBLE_SURFACE]);
-}
-
-static void
-ide_workspace_destroy (GtkWidget *widget)
-{
-  IdeWorkspace *self = (IdeWorkspace *)widget;
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  GtkWindowGroup *group;
-
-  g_assert (IDE_IS_WORKSPACE (self));
-
-  ide_clear_and_destroy_object (&priv->addins);
-
-  group = gtk_window_get_group (GTK_WINDOW (self));
-  if (IDE_IS_WORKBENCH (group))
-    ide_workbench_remove_workspace (IDE_WORKBENCH (group), self);
-
-  GTK_WIDGET_CLASS (ide_workspace_parent_class)->destroy (widget);
+  IDE_EXIT;
 }
 
 /**
@@ -377,8 +333,6 @@ ide_workspace_destroy (GtkWidget *widget)
  *
  * Sets the shorthand name for the kind of workspace. This is used to limit
  * what #IdeWorkspaceAddin may load within the workspace.
- *
- * Since: 3.32
  */
 void
 ide_workspace_class_set_kind (IdeWorkspaceClass *klass,
@@ -389,97 +343,187 @@ ide_workspace_class_set_kind (IdeWorkspaceClass *klass,
   klass->kind = g_intern_string (kind);
 }
 
-
 static void
-ide_workspace_foreach_page_cb (GtkWidget *widget,
-                               gpointer   user_data)
+ide_workspace_real_foreach_page (IdeWorkspace    *self,
+                                 IdePageCallback  callback,
+                                 gpointer         user_data)
 {
-  ForeachPage *state = user_data;
-
-  if (IDE_IS_SURFACE (widget))
-    ide_surface_foreach_page (IDE_SURFACE (widget), state->callback, state->user_data);
-}
-
-static void
-ide_workspace_real_foreach_page (IdeWorkspace *self,
-                                 GtkCallback   callback,
-                                 gpointer      user_data)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  ForeachPage state = { callback, user_data };
-
   g_assert (IDE_IS_WORKSPACE (self));
   g_assert (callback != NULL);
-
-  gtk_container_foreach (GTK_CONTAINER (priv->surfaces),
-                         ide_workspace_foreach_page_cb,
-                         &state);
-}
-
-#if 0
-static void
-ide_workspace_set_surface_fullscreen_cb (GtkWidget *widget,
-                                         gpointer   user_data)
-{
-  g_assert (GTK_IS_WIDGET (widget));
-
-  if (IDE_IS_SURFACE (widget))
-    _ide_surface_set_fullscreen (IDE_SURFACE (widget), !!user_data);
 }
 
 static void
-ide_workspace_real_set_fullscreen (DzlApplicationWindow *window,
-                                   gboolean              fullscreen)
+ide_workspace_agree_to_close_async (IdeWorkspace        *self,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
 {
-  IdeWorkspace *self = (IdeWorkspace *)window;
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  GtkWidget *titlebar;
-
-  g_assert (IDE_IS_WORKSPACE (self));
-
-  DZL_APPLICATION_WINDOW_CLASS (ide_workspace_parent_class)->set_fullscreen (window, fullscreen);
-
-  titlebar = dzl_application_window_get_titlebar (window);
-  gtk_header_bar_set_show_close_button (GTK_HEADER_BAR (titlebar), !fullscreen);
-
-  gtk_container_foreach (GTK_CONTAINER (priv->surfaces),
-                         ide_workspace_set_surface_fullscreen_cb,
-                         GUINT_TO_POINTER (fullscreen));
-}
-#endif
-
-static void
-ide_workspace_grab_focus (GtkWidget *widget)
-{
-  IdeWorkspace *self = (IdeWorkspace *)widget;
-  IdeSurface *surface;
-
-  g_assert (IDE_IS_WORKSPACE (self));
-
-  if ((surface = ide_workspace_get_visible_surface (self)))
-    gtk_widget_grab_focus (GTK_WIDGET (surface));
+  g_autoptr(GTask) task = g_task_new (self, cancellable, callback, user_data);
+  g_task_return_boolean (task, TRUE);
 }
 
 static gboolean
-ide_workspace_key_press_event (GtkWidget   *widget,
-                               GdkEventKey *event)
+ide_workspace_agree_to_close_finish (IdeWorkspace *self,
+                                     GAsyncResult *result,
+                                     GError **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static gboolean
+ide_workspace_save_settings (gpointer data)
+{
+  IdeWorkspace *self = data;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GdkRectangle geom = {0};
+  gboolean maximized;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  priv->queued_window_save = 0;
+
+  if (!gtk_widget_get_realized (GTK_WIDGET (self)) ||
+      !gtk_widget_get_visible (GTK_WIDGET (self)) ||
+      !IDE_WORKSPACE_GET_CLASS (self)->save_size (self, &geom.width, &geom.height))
+    return G_SOURCE_REMOVE;
+
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder");
+
+  maximized = gtk_window_is_maximized (GTK_WINDOW (self));
+
+  g_settings_set (settings, "window-size", "(ii)", geom.width, geom.height);
+  g_settings_set_boolean (settings, "window-maximized", maximized);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_workspace_size_allocate (GtkWidget *widget,
+                             int        width,
+                             int        height,
+                             int        baseline)
 {
   IdeWorkspace *self = (IdeWorkspace *)widget;
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  gboolean ret;
 
   g_assert (IDE_IS_WORKSPACE (self));
-  g_assert (event != NULL);
 
-  /* Be re-entrant safe from the shortcut manager */
-  if (priv->in_key_press)
-    return GTK_WIDGET_CLASS (ide_workspace_parent_class)->key_press_event (widget, event);
+  GTK_WIDGET_CLASS (ide_workspace_parent_class)->size_allocate (widget, width, height, baseline);
 
-  priv->in_key_press = TRUE;
-  ret = dzl_shortcut_manager_handle_event (NULL, event, widget);
-  priv->in_key_press = FALSE;
+  if (priv->search_popover != NULL)
+    ide_search_popover_present (priv->search_popover, width, height);
 
-  return ret;
+  if (priv->queued_window_save == 0 &&
+      IDE_WORKSPACE_GET_CLASS (self)->save_size != NULL)
+    priv->queued_window_save = g_timeout_add_seconds (1, ide_workspace_save_settings, self);
+}
+
+static void
+ide_workspace_restore_size (IdeWorkspace *workspace,
+                            int           width,
+                            int           height)
+{
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  gtk_window_set_default_size (GTK_WINDOW (workspace), width, height);
+}
+
+static gboolean
+ide_workspace_save_size (IdeWorkspace *workspace,
+                         int          *width,
+                         int          *height)
+{
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  gtk_window_get_default_size (GTK_WINDOW (workspace), width, height);
+
+  return TRUE;
+}
+
+static void
+ide_workspace_realize (GtkWidget *widget)
+{
+  IdeWorkspace *self = (IdeWorkspace *)widget;
+  GdkRectangle geom = {0};
+  gboolean maximized = FALSE;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder");
+
+  g_settings_get (settings, "window-size", "(ii)", &geom.width, &geom.height);
+  g_settings_get (settings, "window-maximized", "b", &maximized);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->restore_size)
+    IDE_WORKSPACE_GET_CLASS (self)->restore_size (self, geom.width, geom.height);
+
+  GTK_WIDGET_CLASS (ide_workspace_parent_class)->realize (widget);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->restore_size)
+    {
+      if (maximized)
+        gtk_window_maximize (GTK_WINDOW (self));
+    }
+}
+
+static IdeFrame *
+ide_workspace_real_get_most_recent_frame (IdeWorkspace *self)
+{
+  IdePage *page;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  if (!(page = ide_workspace_get_most_recent_page (self)))
+    return NULL;
+
+  return IDE_FRAME (gtk_widget_get_ancestor (GTK_WIDGET (page), IDE_TYPE_FRAME));
+}
+
+static gboolean
+ide_workspace_real_can_search (IdeWorkspace *self)
+{
+  return FALSE;
+}
+
+static IdeHeaderBar *
+ide_workspace_real_get_header_bar (IdeWorkspace *workspace)
+{
+  return NULL;
+}
+
+static void
+ide_workspace_dispose (GObject *object)
+{
+  IdeWorkspace *self = (IdeWorkspace *)object;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GtkWindowGroup *group;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  g_clear_pointer ((GtkWidget **)&priv->search_popover, gtk_widget_unparent);
+
+  g_clear_weak_pointer (&priv->current_page_ptr);
+
+  /* Unload addins immediately */
+  ide_clear_and_destroy_object (&priv->addins);
+
+  /* Remove the workspace from the workbench MRU/etc */
+  group = gtk_window_get_group (GTK_WINDOW (self));
+  if (IDE_IS_WORKBENCH (group))
+    ide_workbench_remove_workspace (IDE_WORKBENCH (group), self);
+
+  /* Chain up to ensure the GtkWindow cleans up any widgets or other
+   * state attached to the workspace. We keep the context alive during
+   * this process.
+   */
+  G_OBJECT_CLASS (ide_workspace_parent_class)->dispose (object);
+
+  /* A reference is held during this so it is safe to run code after
+   * chaining up to dispose. Force release teh context now.
+   */
+  g_clear_object (&priv->context);
 }
 
 static void
@@ -490,6 +534,7 @@ ide_workspace_finalize (GObject *object)
 
   g_clear_object (&priv->context);
   g_clear_object (&priv->cancellable);
+  g_clear_handle_id (&priv->queued_window_save, g_source_remove);
 
   G_OBJECT_CLASS (ide_workspace_parent_class)->finalize (object);
 }
@@ -508,29 +553,6 @@ ide_workspace_get_property (GObject    *object,
       g_value_set_object (value, ide_workspace_get_context (self));
       break;
 
-    case PROP_VISIBLE_SURFACE:
-      g_value_set_object (value, ide_workspace_get_visible_surface (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_workspace_set_property (GObject      *object,
-                            guint         prop_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
-{
-  IdeWorkspace *self = IDE_WORKSPACE (object);
-
-  switch (prop_id)
-    {
-    case PROP_VISIBLE_SURFACE:
-      ide_workspace_set_visible_surface (self, g_value_get_object (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -541,30 +563,32 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  //DzlApplicationWindowClass *window_class = DZL_APPLICATION_WINDOW_CLASS (klass);
+  GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
+  object_class->dispose = ide_workspace_dispose;
   object_class->finalize = ide_workspace_finalize;
   object_class->get_property = ide_workspace_get_property;
-  object_class->set_property = ide_workspace_set_property;
 
-  widget_class->destroy = ide_workspace_destroy;
-  widget_class->delete_event = ide_workspace_delete_event;
-  widget_class->grab_focus = ide_workspace_grab_focus;
-  widget_class->key_press_event = ide_workspace_key_press_event;
+  widget_class->realize = ide_workspace_realize;
+  widget_class->size_allocate = ide_workspace_size_allocate;
 
-  //window_class->set_fullscreen = ide_workspace_real_set_fullscreen;
+  window_class->close_request = ide_workspace_close_request;
 
-  klass->foreach_page = ide_workspace_real_foreach_page;
+  klass->agree_to_close_async = ide_workspace_agree_to_close_async;
+  klass->agree_to_close_finish = ide_workspace_agree_to_close_finish;
+  klass->can_search = ide_workspace_real_can_search;
   klass->context_set = ide_workspace_real_context_set;
-  klass->surface_set = ide_workspace_real_surface_set;
+  klass->foreach_page = ide_workspace_real_foreach_page;
+  klass->get_most_recent_frame = ide_workspace_real_get_most_recent_frame;
+  klass->restore_size = ide_workspace_restore_size;
+  klass->save_size = ide_workspace_save_size;
+  klass->get_header_bar = ide_workspace_real_get_header_bar;
 
   /**
    * IdeWorkspace:context:
    *
    * The "context" property is the #IdeContext for the workspace. This is set
    * when the workspace joins a workbench.
-   *
-   * Since: 3.32
    */
   properties [PROP_CONTEXT] =
     g_param_spec_object ("context",
@@ -573,51 +597,9 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  /**
-   * IdeWorkspace:visible-surface:
-   *
-   * The "visible-surface" property contains the currently foremost surface
-   * in the workspaces stack of surfaces. Usually, this is the editor surface,
-   * but may be other surfaces such as build preferences, profiler, etc.
-   *
-   * Since: 3.32
-   */
-  properties [PROP_VISIBLE_SURFACE] =
-    g_param_spec_object ("visible-surface",
-                         "Visible Surface",
-                         "The currently visible surface",
-                         IDE_TYPE_SURFACE,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  /**
-   * IdeWorkspace::surface-set:
-   * @self: an #IdeWorkspace
-   * @surface: (nullable): an #IdeSurface
-   *
-   * The "surface-set" signal is emitted when the current surface changes
-   * within the workspace.
-   *
-   * Since: 3.32
-   */
-  signals [SURFACE_SET] =
-    g_signal_new ("surface-set",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeWorkspaceClass, surface_set),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__OBJECT,
-                  G_TYPE_NONE, 1, IDE_TYPE_SURFACE);
-  g_signal_set_va_marshaller (signals [SURFACE_SET],
-                              G_TYPE_FROM_CLASS (klass),
-                              g_cclosure_marshal_VOID__OBJECTv);
-
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-workspace.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkspace, event_box);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkspace, overlay);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkspace, surfaces);
-  gtk_widget_class_bind_template_child_private (widget_class, IdeWorkspace, vbox);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_comma, GDK_CONTROL_MASK, "app.preferences", NULL);
 }
 
 static void
@@ -626,26 +608,35 @@ ide_workspace_init (IdeWorkspace *self)
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
   g_autofree gchar *app_id = NULL;
 
+#ifdef DEVELOPMENT_BUILD
+  gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
+#endif
+
   priv->mru_link.data = self;
-
-  gtk_widget_init_template (GTK_WIDGET (self));
-
-  g_signal_connect_object (priv->surfaces,
-                           "notify::visible-child",
-                           G_CALLBACK (ide_workspace_notify_surface_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
 
   /* Add org-gnome-Builder style CSS identifier */
   app_id = g_strdelimit (g_strdup (ide_get_application_id ()), ".", '-');
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), app_id);
-  dzl_gtk_widget_add_style_class (GTK_WIDGET (self), "workspace");
+  gtk_widget_add_css_class (GTK_WIDGET (self), app_id);
+  gtk_widget_add_css_class (GTK_WIDGET (self), "workspace");
 
-  /* Add events for motion controller of fullscreen titlebar */
-  gtk_widget_add_events (GTK_WIDGET (priv->event_box),
-                         (GDK_POINTER_MOTION_MASK |
-                          GDK_ENTER_NOTIFY_MASK |
-                          GDK_LEAVE_NOTIFY_MASK));
+  /* Setup container for children widgetry */
+  priv->box = g_object_new (GTK_TYPE_BOX,
+                            "orientation", GTK_ORIENTATION_VERTICAL,
+                            NULL);
+  adw_application_window_set_content (ADW_APPLICATION_WINDOW (self),
+                                      GTK_WIDGET (priv->box));
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->has_statusbar)
+    {
+      priv->statusbar = PANEL_STATUSBAR (panel_statusbar_new ());
+      gtk_box_append (priv->box, GTK_WIDGET (priv->statusbar));
+    }
+
+  /* Track focus change to propagate to addins */
+  g_signal_connect (self,
+                    "notify::focus-widget",
+                    G_CALLBACK (ide_workspace_notify_focus_widget),
+                    NULL);
 
   /* Initialize GActions for workspace */
   _ide_workspace_init_actions (self);
@@ -668,8 +659,6 @@ _ide_workspace_get_mru_link (IdeWorkspace *self)
  * workspace joins an #IdeWorkbench.
  *
  * Returns: (transfer none) (nullable): an #IdeContext or %NULL
- *
- * Since: 3.32
  */
 IdeContext *
 ide_workspace_get_context (IdeWorkspace *self)
@@ -707,8 +696,6 @@ _ide_workspace_set_context (IdeWorkspace *self,
  * to be cancelled if a window is closed.
  *
  * Returns: (transfer none): a #GCancellable
- *
- * Since: 3.32
  */
 GCancellable *
 ide_workspace_get_cancellable (IdeWorkspace *self)
@@ -731,13 +718,11 @@ ide_workspace_get_cancellable (IdeWorkspace *self)
  * @user_data: closure data for @callback
  *
  * Calls @callback for each #IdePage found within the workspace.
- *
- * Since: 3.32
  */
 void
-ide_workspace_foreach_page (IdeWorkspace *self,
-                            GtkCallback   callback,
-                            gpointer      user_data)
+ide_workspace_foreach_page (IdeWorkspace    *self,
+                            IdePageCallback  callback,
+                            gpointer         user_data)
 {
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (callback != NULL);
@@ -754,228 +739,13 @@ ide_workspace_foreach_page (IdeWorkspace *self,
  * Also works around Gtk giving back a GtkStack for the header bar.
  *
  * Returns: (nullable) (transfer none): an #IdeHeaderBar or %NULL
- *
- * Since: 3.32
  */
 IdeHeaderBar *
 ide_workspace_get_header_bar (IdeWorkspace *self)
 {
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  IdeHeaderBar *ret = NULL;
-  GList *children;
-
   g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
 
-  children = gtk_container_get_children (GTK_CONTAINER (priv->vbox));
-
-  for (const GList *iter = children; iter; iter = iter->next)
-    {
-      GtkWidget *widget = iter->data;
-
-      if (GTK_IS_STACK (widget))
-        widget = gtk_stack_get_visible_child (GTK_STACK (widget));
-
-      if (IDE_IS_HEADER_BAR (widget))
-        {
-          ret = IDE_HEADER_BAR (widget);
-          break;
-        }
-    }
-
-  g_list_free (children);
-
-  return ret;
-}
-
-/**
- * ide_workspace_add_surface:
- * @self: a #IdeWorkspace
- *
- * Adds a new #IdeSurface to the workspace.
- *
- * Since: 3.32
- */
-void
-ide_workspace_add_surface (IdeWorkspace *self,
-                           IdeSurface   *surface)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  g_autofree gchar *title = NULL;
-
-  g_return_if_fail (IDE_IS_WORKSPACE (self));
-  g_return_if_fail (IDE_IS_SURFACE (surface));
-
-  if (DZL_IS_DOCK_ITEM (surface))
-    title = dzl_dock_item_get_title (DZL_DOCK_ITEM (surface));
-
-  gtk_container_add_with_properties (GTK_CONTAINER (priv->surfaces), GTK_WIDGET (surface),
-                                     "name", gtk_widget_get_name (GTK_WIDGET (surface)),
-                                     "title", title,
-                                     NULL);
-}
-
-/**
- * ide_workspace_set_visible_surface_name:
- * @self: a #IdeWorkspace
- * @visible_surface_name: the name of the #IdeSurface
- *
- * Sets the visible surface based on the name of the surface.  The name of the
- * surface comes from gtk_widget_get_name(), which should be set when creating
- * the surface using gtk_widget_set_name().
- *
- * Since: 3.32
- */
-void
-ide_workspace_set_visible_surface_name (IdeWorkspace *self,
-                                        const gchar  *visible_surface_name)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_WORKSPACE (self));
-  g_return_if_fail (visible_surface_name != NULL);
-
-  gtk_stack_set_visible_child_name (priv->surfaces, visible_surface_name);
-}
-
-/**
- * ide_workspace_get_visible_surface:
- * @self: a #IdeWorkspace
- *
- * Gets the currently visible #IdeSurface, or %NULL
- *
- * Returns: (transfer none) (nullable): an #IdeSurface or %NULL
- *
- * Since: 3.32
- */
-IdeSurface *
-ide_workspace_get_visible_surface (IdeWorkspace *self)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  GtkWidget *child;
-
-  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
-
-  child = gtk_stack_get_visible_child (priv->surfaces);
-  if (!IDE_IS_SURFACE (child))
-    child = NULL;
-
-  return IDE_SURFACE (child);
-}
-
-/**
- * ide_workspace_set_visible_surface:
- * @self: a #IdeWorkspace
- * @surface: an #IdeSurface
- *
- * Sets the #IdeWorkspace:visible-surface property which is the currently
- * visible #IdeSurface in the workspace.
- *
- * Since: 3.32
- */
-void
-ide_workspace_set_visible_surface (IdeWorkspace *self,
-                                   IdeSurface   *surface)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_WORKSPACE (self));
-  g_return_if_fail (IDE_IS_SURFACE (surface));
-
-  gtk_stack_set_visible_child (priv->surfaces, GTK_WIDGET (surface));
-}
-
-/**
- * ide_workspace_get_surface_by_name:
- * @self: a #IdeWorkspace
- * @name: the name of the surface
- *
- * Locates an #IdeSurface that has been added to the workspace by the name
- * that was registered for the widget using gtk_widget_set_name().
- *
- * Returns: (transfer none) (nullable): an #IdeSurface or %NULL
- *
- * Since: 3.32
- */
-IdeSurface *
-ide_workspace_get_surface_by_name (IdeWorkspace *self,
-                                   const gchar  *name)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-  GtkWidget *child;
-
-  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
-  g_return_val_if_fail (name != NULL, NULL);
-
-  child = gtk_stack_get_child_by_name (priv->surfaces, name);
-
-  return IDE_IS_SURFACE (child) ? IDE_SURFACE (child) : NULL;
-}
-
-static GObject *
-ide_workspace_get_internal_child (GtkBuildable *buildable,
-                                  GtkBuilder   *builder,
-                                  const gchar  *child_name)
-{
-  IdeWorkspace *self = (IdeWorkspace *)buildable;
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-
-  g_assert (GTK_IS_BUILDABLE (buildable));
-  g_assert (GTK_IS_BUILDER (builder));
-  g_assert (child_name != NULL);
-
-  if (ide_str_equal0 (child_name, "surfaces"))
-    return G_OBJECT (priv->surfaces);
-
-  return NULL;
-}
-
-static void
-ide_workspace_add_child (GtkBuildable *buildable,
-                         GtkBuilder   *builder,
-                         GObject      *object,
-                         const char   *type)
-{
-  IdeWorkspace *self = (IdeWorkspace *)buildable;
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-
-  g_assert (IDE_IS_WORKSPACE (self));
-  g_assert (GTK_IS_BUILDER (builder));
-
-  if (g_strcmp0 (type, "titlebar") == 0 && GTK_IS_WIDGET (object))
-    gtk_box_pack_start (priv->vbox, GTK_WIDGET (object), FALSE, FALSE, 0);
-  else
-    parent_builder->add_child (buildable, builder, object, type);
-}
-
-static void
-buildable_iface_init (GtkBuildableIface *iface)
-{
-  parent_builder = g_type_interface_peek_parent (iface);
-
-  iface->get_internal_child = ide_workspace_get_internal_child;
-  iface->add_child = ide_workspace_add_child;
-}
-
-/**
- * ide_workspace_get_overlay:
- * @self: a #IdeWorkspace
- *
- * Gets a #GtkOverlay that contains all of the primary contents of the window
- * (everything except the headerbar). This can be used by plugins to draw
- * above the workspace contents.
- *
- * Returns: (transfer none): a #GtkOverlay
- *
- * Since: 3.32
- */
-GtkOverlay *
-ide_workspace_get_overlay (IdeWorkspace *self)
-{
-  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
-
-  return priv->overlay;
+  return IDE_WORKSPACE_GET_CLASS (self)->get_header_bar (self);
 }
 
 /**
@@ -985,8 +755,6 @@ ide_workspace_get_overlay (IdeWorkspace *self)
  * Gets the most recently focused #IdePage.
  *
  * Returns: (transfer none) (nullable): an #IdePage or %NULL
- *
- * Since: 3.32
  */
 IdePage *
 ide_workspace_get_most_recent_page (IdeWorkspace *self)
@@ -999,6 +767,22 @@ ide_workspace_get_most_recent_page (IdeWorkspace *self)
     return IDE_PAGE (priv->page_mru.head->data);
 
   return NULL;
+}
+
+/**
+ * ide_workspace_get_most_recent_frame:
+ * @self: a #IdeWorkspace
+ *
+ * Gets the most recently selected frame.
+ *
+ * Returns: (transfer none) (nullable): an #IdeFrame or %NULL
+ */
+IdeFrame *
+ide_workspace_get_most_recent_frame (IdeWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+
+  return IDE_WORKSPACE_GET_CLASS (self)->get_most_recent_frame (self);
 }
 
 void
@@ -1024,15 +808,30 @@ _ide_workspace_remove_page_mru (IdeWorkspace *self,
                                 GList        *mru_link)
 {
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  IdePage *mru_page;
+
+  IDE_ENTRY;
 
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (mru_link != NULL);
   g_return_if_fail (IDE_IS_PAGE (mru_link->data));
 
+  mru_page = mru_link->data;
+
   g_debug ("Removing %s from page MRU",
-           G_OBJECT_TYPE_NAME (mru_link->data));
+           G_OBJECT_TYPE_NAME (mru_page));
 
   g_queue_unlink (&priv->page_mru, mru_link);
+
+  if ((gpointer)mru_page == priv->current_page_ptr)
+    {
+      g_clear_weak_pointer (&priv->current_page_ptr);
+      ide_extension_set_adapter_foreach (priv->addins,
+                                         ide_workspace_addin_page_changed_cb,
+                                         NULL);
+    }
+
+  IDE_EXIT;
 }
 
 void
@@ -1063,8 +862,6 @@ _ide_workspace_move_front_page_mru (IdeWorkspace *self,
  * Finds the addin (if any) matching the plugin's @module_name.
  *
  * Returns: (transfer none) (nullable): an #IdeWorkspaceAddin or %NULL
- *
- * Since: 3.40
  */
 IdeWorkspaceAddin *
 ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
@@ -1088,4 +885,517 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
     ret = ide_extension_set_adapter_get_extension (priv->addins, plugin_info);
 
   return IDE_WORKSPACE_ADDIN (ret);
+}
+
+/**
+ * ide_workspace_add_page:
+ * @self: a #IdeWorkspace
+ * @page: an #IdePage
+ * @position: the position for the page
+ *
+ * Adds @page to @workspace.
+ *
+ * In future versions, @position may be updated to reflect the
+ * position in which @page was added.
+ */
+void
+ide_workspace_add_page (IdeWorkspace     *self,
+                        IdePage          *page,
+                        IdePanelPosition *position)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_PAGE (page));
+  g_return_if_fail (position != NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->add_page)
+    IDE_WORKSPACE_GET_CLASS (self)->add_page (self, page, position);
+  else
+    g_critical ("%s does not support adding pages",
+                G_OBJECT_TYPE_NAME (self));
+}
+
+/**
+ * ide_workspace_add_pane:
+ * @self: a #IdeWorkspace
+ * @pane: an #IdePane
+ * @position: the position for the pane
+ *
+ * Adds @pane to @workspace.
+ *
+ * In future versions, @position may be updated to reflect the
+ * position in which @pane was added.
+ */
+void
+ide_workspace_add_pane (IdeWorkspace     *self,
+                        IdePane          *pane,
+                        IdePanelPosition *position)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_PANE (pane));
+  g_return_if_fail (position != NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->add_pane)
+    IDE_WORKSPACE_GET_CLASS (self)->add_pane (self, pane, position);
+  else
+    g_critical ("%s does not support adding panels",
+                G_OBJECT_TYPE_NAME (self));
+}
+
+static void
+ide_workspace_add_child (GtkBuildable *buildable,
+                         GtkBuilder   *builder,
+                         GObject      *object,
+                         const char   *type)
+{
+  IdeWorkspace *self = (IdeWorkspace *)buildable;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (G_IS_OBJECT (object));
+
+  if (GTK_IS_WIDGET (object))
+    {
+      if (g_strcmp0 (type, "titlebar") == 0)
+        {
+          gtk_box_prepend (priv->box, GTK_WIDGET (object));
+        }
+      else
+        {
+          gtk_box_append (priv->box, GTK_WIDGET (object));
+
+          if (priv->statusbar != NULL)
+            gtk_box_reorder_child_after (priv->box, GTK_WIDGET (priv->statusbar), GTK_WIDGET (object));
+        }
+    }
+}
+
+static GObject *
+ide_workspace_get_internal_child (GtkBuildable *buildable,
+                                  GtkBuilder   *builder,
+                                  const char   *id)
+{
+  IdeWorkspace *self = (IdeWorkspace *)buildable;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (id != NULL);
+
+  if (g_strcmp0 (id, "statusbar") == 0)
+    {
+      if (priv->statusbar == NULL)
+        {
+          priv->statusbar = PANEL_STATUSBAR (panel_statusbar_new ());
+          gtk_box_append (priv->box, GTK_WIDGET (priv->statusbar));
+        }
+
+      return G_OBJECT (priv->statusbar);
+    }
+
+  return NULL;
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  iface->add_child = ide_workspace_add_child;
+  iface->get_internal_child = ide_workspace_get_internal_child;
+}
+
+/**
+ * ide_workspace_get_statusbar:
+ * @self: a #IdeWorkspace
+ *
+ * Gets the statusbar if any.
+ *
+ * Returns: (transfer none) (nullable): a #PanelStatusbar or %NULL
+ */
+PanelStatusbar *
+ide_workspace_get_statusbar (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+
+  return priv->statusbar;
+}
+
+static void
+add_to_frame_with_depth (PanelFrame  *frame,
+                         PanelWidget *widget,
+                         guint        depth,
+                         gboolean     depth_set)
+{
+  PanelWidget *previous_page;
+  guint n_pages;
+
+  g_assert (PANEL_IS_FRAME (frame));
+  g_assert (PANEL_IS_WIDGET (widget));
+
+  previous_page = panel_frame_get_visible_child (frame);
+
+  if (!depth_set || depth > G_MAXINT)
+    depth = G_MAXINT;
+
+  SET_PRIORITY (widget, depth);
+
+  n_pages = panel_frame_get_n_pages (frame);
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      PanelWidget *child = panel_frame_get_page (frame, i);
+
+      if ((int)depth < GET_PRIORITY (child))
+        {
+          panel_frame_add_before (frame, widget, child);
+          goto reset_page;
+        }
+    }
+
+  panel_frame_add (frame, widget);
+
+reset_page:
+  if (previous_page != NULL)
+    panel_frame_set_visible_child (frame, previous_page);
+}
+
+static gboolean
+find_open_frame (IdeGrid *grid,
+                 guint   *column,
+                 guint   *row)
+{
+  guint n_columns;
+
+  g_assert (IDE_IS_GRID (grid));
+  g_assert (column != NULL);
+  g_assert (row != NULL);
+
+  n_columns = panel_grid_get_n_columns (PANEL_GRID (grid));
+
+  for (guint c = 0; c < n_columns; c++)
+    {
+      PanelGridColumn *grid_column = panel_grid_get_column (PANEL_GRID (grid), c);
+      guint n_rows = panel_grid_column_get_n_rows (grid_column);
+
+      for (guint r = 0; r < n_rows; r++)
+        {
+          PanelFrame *frame = panel_grid_column_get_row (grid_column, r);
+
+          if (panel_frame_get_empty (frame))
+            {
+              *column = c;
+              *row = r;
+              return TRUE;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
+static void
+find_most_recent_frame (IdeWorkspace *workspace,
+                        IdeGrid      *grid,
+                        guint        *column,
+                        guint        *row)
+{
+  GtkWidget *grid_column;
+  IdeFrame *frame;
+  guint n_columns;
+
+  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (IDE_IS_GRID (grid));
+  g_assert (column != NULL);
+  g_assert (row != NULL);
+
+  *column = 0;
+  *row = 0;
+
+  if (!(frame = ide_workspace_get_most_recent_frame (workspace)) ||
+      !(grid_column = gtk_widget_get_ancestor (GTK_WIDGET (frame), PANEL_TYPE_GRID_COLUMN)))
+    return;
+
+  n_columns = panel_grid_get_n_columns (PANEL_GRID (grid));
+
+  for (guint c = 0; c < n_columns; c++)
+    {
+      if (grid_column == (GtkWidget *)panel_grid_get_column (PANEL_GRID (grid), c))
+        {
+          guint n_rows = panel_grid_column_get_n_rows (PANEL_GRID_COLUMN (grid_column));
+
+          for (guint r = 0; r < n_rows; r++)
+            {
+              if ((PanelFrame *)frame == panel_grid_column_get_row (PANEL_GRID_COLUMN (grid_column), r))
+                {
+                  *column = c;
+                  *row = r;
+                  return;
+                }
+            }
+        }
+    }
+}
+
+static gboolean
+dummy_cb (gpointer data)
+{
+  return G_SOURCE_REMOVE;
+}
+
+void
+_ide_workspace_add_widget (IdeWorkspace     *self,
+                           PanelWidget      *widget,
+                           IdePanelPosition *position,
+                           PanelPaned       *dock_start,
+                           PanelPaned       *dock_end,
+                           PanelPaned       *dock_bottom,
+                           IdeGrid          *grid)
+{
+  PanelFrame *frame;
+  gboolean depth_set;
+  guint depth;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (PANEL_IS_WIDGET (widget));
+  g_return_if_fail (position != NULL);
+  g_return_if_fail (!dock_start || PANEL_IS_PANED (dock_start));
+  g_return_if_fail (!dock_end || PANEL_IS_PANED (dock_end));
+  g_return_if_fail (!dock_bottom || PANEL_IS_PANED (dock_bottom));
+  g_return_if_fail (IDE_IS_GRID (grid));
+
+  if (!(frame = _ide_workspace_find_frame (self, position, dock_start, dock_end, dock_bottom, grid)))
+    {
+      /* Extreme failure case, try to be nice and wait until
+       * end of the main loop to destroy
+       */
+      g_idle_add_full (G_PRIORITY_LOW,
+                       dummy_cb,
+                       g_object_ref_sink (widget),
+                       g_object_unref);
+      IDE_EXIT;
+    }
+
+  depth_set = ide_panel_position_get_depth (position, &depth);
+  add_to_frame_with_depth (frame, widget, depth, depth_set);
+
+  IDE_EXIT;
+}
+
+PanelFrame *
+_ide_workspace_find_frame (IdeWorkspace     *self,
+                           IdePanelPosition *position,
+                           PanelPaned       *dock_start,
+                           PanelPaned       *dock_end,
+                           PanelPaned       *dock_bottom,
+                           IdeGrid          *grid)
+{
+  PanelDockPosition edge;
+  PanelPaned *paned = NULL;
+  PanelFrame *ret;
+  GtkWidget *parent;
+  guint column = 0;
+  guint row = 0;
+  guint nth = 0;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+  g_return_val_if_fail (position != NULL, NULL);
+  g_return_val_if_fail (!dock_start || PANEL_IS_PANED (dock_start), NULL);
+  g_return_val_if_fail (!dock_end || PANEL_IS_PANED (dock_end), NULL);
+  g_return_val_if_fail (!dock_bottom || PANEL_IS_PANED (dock_bottom), NULL);
+
+  if (!ide_panel_position_get_edge (position, &edge))
+    edge = PANEL_DOCK_POSITION_CENTER;
+
+  if (edge == PANEL_DOCK_POSITION_CENTER)
+    {
+      gboolean has_column = ide_panel_position_get_column (position, &column);
+      gboolean has_row = ide_panel_position_get_row (position, &row);
+
+      /* If we are adding a page, and no row or column is set, then the next
+       * best thing to do is to try to find an open frame. If we can't do that
+       * then we'll try to find the most recent frame.
+       */
+      if (!has_column && !has_row)
+        {
+          if (!find_open_frame (grid, &column, &row))
+            find_most_recent_frame (self, grid, &column, &row);
+        }
+
+      ret = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (grid), column), row);
+
+      IDE_RETURN (ret);
+    }
+
+  switch (edge)
+    {
+    case PANEL_DOCK_POSITION_START:
+      paned = dock_start;
+      ide_panel_position_get_row (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_END:
+      paned = dock_end;
+      ide_panel_position_get_row (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_BOTTOM:
+      paned = dock_bottom;
+      ide_panel_position_get_column (position, &nth);
+      break;
+
+    case PANEL_DOCK_POSITION_TOP:
+      g_warning ("Top panel is not supported");
+      return NULL;
+
+    case PANEL_DOCK_POSITION_CENTER:
+    default:
+      return NULL;
+    }
+
+  while (!(parent = panel_paned_get_nth_child (paned, nth)))
+    {
+      parent = panel_frame_new ();
+
+      if (edge == PANEL_DOCK_POSITION_START ||
+          edge == PANEL_DOCK_POSITION_END)
+        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_VERTICAL);
+      else
+        gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_HORIZONTAL);
+
+      panel_paned_append (paned, parent);
+    }
+
+  IDE_RETURN (PANEL_FRAME (parent));
+}
+
+/**
+ * ide_workspace_get_frame_at_position:
+ * @self: an #IdeWorkspace
+ * @position: an #IdePanelPosition
+ *
+ * Attempts to locate the #PanelFrame at a given position.
+ *
+ * Returns: (transfer none) (nullable): a #PaneFrame or %NULL
+ */
+PanelFrame *
+ide_workspace_get_frame_at_position (IdeWorkspace     *self,
+                                     IdePanelPosition *position)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+  g_return_val_if_fail (position != NULL, NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->get_frame_at_position)
+    return IDE_WORKSPACE_GET_CLASS (self)->get_frame_at_position (self, position);
+
+  return NULL;
+}
+
+gboolean
+_ide_workspace_can_search (IdeWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), FALSE);
+
+  return IDE_WORKSPACE_GET_CLASS (self)->can_search (self);
+}
+
+void
+_ide_workspace_begin_global_search (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+
+  if (priv->search_popover == NULL)
+    {
+      IdeWorkbench *workbench = ide_workspace_get_workbench (self);
+      IdeSearchEngine *search_engine = ide_workbench_get_search_engine (workbench);
+
+      priv->search_popover = IDE_SEARCH_POPOVER (ide_search_popover_new (search_engine));
+      gtk_widget_set_parent (GTK_WIDGET (priv->search_popover), GTK_WIDGET (self));
+
+      /* Popovers don't appear (as of GTK 4.7) to capture/bubble from the GtkRoot
+       * when running controllers. So we need to manually attach them for the popovers
+       * that are important enough to care about.
+       */
+      ide_workspace_attach_shortcuts (self, GTK_WIDGET (priv->search_popover));
+    }
+
+  if (!gtk_widget_get_visible (GTK_WIDGET (priv->search_popover)))
+    gtk_popover_popup (GTK_POPOVER (priv->search_popover));
+}
+
+void
+ide_workspace_add_overlay (IdeWorkspace *self,
+                           GtkWidget    *overlay)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (GTK_IS_WIDGET (overlay));
+  g_return_if_fail (gtk_widget_get_parent (overlay) == NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->add_overlay == NULL)
+    g_critical ("Attempt to add overlay of type %s to workspace of type %s which does not support overlays",
+                G_OBJECT_TYPE_NAME (overlay), G_OBJECT_TYPE_NAME (self));
+  else
+    IDE_WORKSPACE_GET_CLASS (self)->add_overlay (self, overlay);
+}
+
+void
+ide_workspace_remove_overlay (IdeWorkspace *self,
+                              GtkWidget    *overlay)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (GTK_IS_WIDGET (overlay));
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->remove_overlay == NULL)
+    g_critical ("Attempt to remove overlay of type %s to workspace of type %s which does not support overlays",
+                G_OBJECT_TYPE_NAME (overlay), G_OBJECT_TYPE_NAME (self));
+  else
+    IDE_WORKSPACE_GET_CLASS (self)->remove_overlay (self, overlay);
+}
+
+static gboolean
+shortcut_phase_filter (gpointer item,
+                       gpointer user_data)
+{
+  return ide_shortcut_is_phase (item, user_data);
+}
+
+void
+_ide_workspace_set_shortcut_model (IdeWorkspace *self,
+                                   GListModel   *model)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  static GtkCustomFilter *bubble_filter;
+  static GtkCustomFilter *capture_filter;
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (G_IS_LIST_MODEL (model));
+
+  if (bubble_filter == NULL)
+    bubble_filter = gtk_custom_filter_new (shortcut_phase_filter, GINT_TO_POINTER (GTK_PHASE_BUBBLE), NULL);
+
+  if (capture_filter == NULL)
+    capture_filter = gtk_custom_filter_new (shortcut_phase_filter, GINT_TO_POINTER (GTK_PHASE_CAPTURE), NULL);
+
+  priv->shortcut_model_capture = gtk_filter_list_model_new (g_object_ref (model),
+                                                            g_object_ref (GTK_FILTER (capture_filter)));
+  priv->shortcut_model_bubble = gtk_filter_list_model_new (g_object_ref (model),
+                                                           g_object_ref (GTK_FILTER (bubble_filter)));
+
+  ide_workspace_attach_shortcuts (self, GTK_WIDGET (self));
+}
+
+void
+ide_workspace_add_grid_column (IdeWorkspace *self,
+                               guint         position)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_WORKSPACE_GET_CLASS (self)->add_grid_column);
+
+  IDE_WORKSPACE_GET_CLASS (self)->add_grid_column (self, position);
 }

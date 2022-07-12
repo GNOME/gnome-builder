@@ -22,14 +22,15 @@
 
 #include "config.h"
 
+#include "ide-frame.h"
+#include "ide-grid.h"
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
 #include "ide-header-bar.h"
+#include "ide-notifications-button.h"
 #include "ide-omni-bar.h"
-#include "ide-primary-workspace.h"
+#include "ide-primary-workspace-private.h"
 #include "ide-run-button.h"
-#include "ide-surface.h"
-#include "ide-window-settings-private.h"
+#include "ide-workspace-private.h"
 
 /**
  * SECTION:ide-primary-workspace
@@ -42,10 +43,6 @@
  *
  * See ide_workbench_open_async() for how to select another workspace type
  * when opening a project.
- *
- * Returns: (transfer full): an #IdePrimaryWorkspace
- *
- * Since: 3.32
  */
 
 struct _IdePrimaryWorkspace
@@ -54,10 +51,17 @@ struct _IdePrimaryWorkspace
 
   /* Template widgets */
   IdeHeaderBar       *header_bar;
-  DzlMenuButton      *surface_menu_button;
   IdeRunButton       *run_button;
   GtkLabel           *project_title;
-  DzlShortcutTooltip *search_tooltip;
+  GtkMenuButton      *add_button;
+  PanelDock          *dock;
+  PanelPaned         *edge_start;
+  PanelPaned         *edge_end;
+  PanelPaned         *edge_bottom;
+  IdeGrid            *grid;
+  GtkOverlay         *overlay;
+  IdeOmniBar         *omni_bar;
+  IdeJoinedMenu      *build_menu;
 };
 
 G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
@@ -67,8 +71,10 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
                                    IdeContext   *context)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+  IdeConfigManager *config_manager;
   IdeProjectInfo *project_info;
   IdeWorkbench *workbench;
+  GMenuModel *config_menu;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
@@ -80,58 +86,216 @@ ide_primary_workspace_context_set (IdeWorkspace *workspace,
   project_info = ide_workbench_get_project_info (workbench);
 
   if (project_info)
-    g_object_bind_property (project_info, "name", self->project_title, "label",
+    g_object_bind_property (project_info, "name",
+                            self->project_title, "label",
                             G_BINDING_SYNC_CREATE);
+
+  config_manager = ide_config_manager_from_context (context);
+  config_menu = ide_config_manager_get_menu (config_manager);
+  ide_joined_menu_prepend_menu (self->build_menu, G_MENU_MODEL (config_menu));
 }
 
 static void
-ide_primary_workspace_surface_set (IdeWorkspace *workspace,
-                                   IdeSurface   *surface)
+ide_primary_workspace_add_page (IdeWorkspace     *workspace,
+                                IdePage          *page,
+                                IdePanelPosition *position)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
 
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
-  g_assert (!surface || IDE_IS_SURFACE (surface));
 
-  if (DZL_IS_DOCK_ITEM (surface))
-    {
-      g_autofree gchar *icon_name = NULL;
+  _ide_workspace_add_widget (workspace,
+                             PANEL_WIDGET (page),
+                             position,
+                             self->edge_start,
+                             self->edge_end,
+                             self->edge_bottom,
+                             self->grid);
+}
 
-      icon_name = dzl_dock_item_get_icon_name (DZL_DOCK_ITEM (surface));
-      g_object_set (self->surface_menu_button,
-                    "icon-name", icon_name,
-                    NULL);
-    }
+static void
+ide_primary_workspace_add_pane (IdeWorkspace     *workspace,
+                                IdePane          *pane,
+                                IdePanelPosition *position)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
 
-  IDE_WORKSPACE_CLASS (ide_primary_workspace_parent_class)->surface_set (workspace, surface);
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+
+  _ide_workspace_add_widget (workspace,
+                             PANEL_WIDGET (pane),
+                             position,
+                             self->edge_start,
+                             self->edge_end,
+                             self->edge_bottom,
+                             self->grid);
+}
+
+static void
+ide_primary_workspace_add_grid_column (IdeWorkspace *workspace,
+                                       guint         position)
+{
+  panel_grid_insert_column (PANEL_GRID (IDE_PRIMARY_WORKSPACE (workspace)->grid), position);
+}
+
+static void
+ide_primary_workspace_add_overlay (IdeWorkspace *workspace,
+                                   GtkWidget    *overlay)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+
+  gtk_overlay_add_overlay (self->overlay, overlay);
+}
+
+static void
+ide_primary_workspace_remove_overlay (IdeWorkspace *workspace,
+                                      GtkWidget    *overlay)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+
+  gtk_overlay_remove_overlay (self->overlay, overlay);
+}
+
+static IdeFrame *
+ide_primary_workspace_get_most_recent_frame (IdeWorkspace *workspace)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+
+  return IDE_FRAME (panel_grid_get_most_recent_frame (PANEL_GRID (self->grid)));
+}
+
+static PanelFrame *
+ide_primary_workspace_get_frame_at_position (IdeWorkspace     *workspace,
+                                             IdePanelPosition *position)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+  g_assert (position != NULL);
+
+  return _ide_workspace_find_frame (workspace,
+                                    position,
+                                    self->edge_start,
+                                    self->edge_end,
+                                    self->edge_bottom,
+                                    self->grid);
+}
+
+static gboolean
+ide_primary_workspace_can_search (IdeWorkspace *workspace)
+{
+  return TRUE;
+}
+
+static IdeHeaderBar *
+ide_primary_workspace_get_header_bar (IdeWorkspace *workspace)
+{
+  return IDE_PRIMARY_WORKSPACE (workspace)->header_bar;
+}
+
+static void
+ide_primary_workspace_foreach_page (IdeWorkspace    *workspace,
+                                    IdePageCallback  callback,
+                                    gpointer         user_data)
+{
+  ide_grid_foreach_page (IDE_PRIMARY_WORKSPACE (workspace)->grid, callback, user_data);
+}
+
+static void
+ide_primary_workspace_dispose (GObject *object)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)object;
+
+  /* Ensure that the grid is removed first so that it will cleanup
+   * addins/pages/etc before we ever get to removing the workspace
+   * addins as part of the parent class.
+   */
+  panel_dock_remove (self->dock, GTK_WIDGET (self->grid));
+  self->grid = NULL;
+
+  G_OBJECT_CLASS (ide_primary_workspace_parent_class)->dispose (object);
 }
 
 static void
 ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   IdeWorkspaceClass *workspace_class = IDE_WORKSPACE_CLASS (klass);
 
+  object_class->dispose = ide_primary_workspace_dispose;
+
+  workspace_class->add_grid_column = ide_primary_workspace_add_grid_column;
+  workspace_class->add_overlay = ide_primary_workspace_add_overlay;
+  workspace_class->add_page = ide_primary_workspace_add_page;
+  workspace_class->add_pane = ide_primary_workspace_add_pane;
+  workspace_class->can_search = ide_primary_workspace_can_search;
+  workspace_class->context_set = ide_primary_workspace_context_set;
+  workspace_class->foreach_page = ide_primary_workspace_foreach_page;
+  workspace_class->get_frame_at_position = ide_primary_workspace_get_frame_at_position;
+  workspace_class->get_header_bar = ide_primary_workspace_get_header_bar;
+  workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
+  workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
+
   ide_workspace_class_set_kind (workspace_class, "primary");
 
-  workspace_class->surface_set = ide_primary_workspace_surface_set;
-  workspace_class->context_set = ide_primary_workspace_context_set;
-
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-primary-workspace.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, add_button);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, build_menu);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, dock);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_bottom);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_end);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_start);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, grid);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, omni_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, search_tooltip);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, surface_menu_button);
 
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, GDK_CONTROL_MASK, "workbench.global-search", NULL);
+
+  g_type_ensure (IDE_TYPE_GRID);
+  g_type_ensure (IDE_TYPE_NOTIFICATIONS_BUTTON);
+  g_type_ensure (IDE_TYPE_OMNI_BAR);
   g_type_ensure (IDE_TYPE_RUN_BUTTON);
 }
 
 static void
 ide_primary_workspace_init (IdePrimaryWorkspace *self)
 {
+  GMenu *build_menu;
+  GMenu *menu;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "new-document-menu");
+  gtk_menu_button_set_menu_model (self->add_button, G_MENU_MODEL (menu));
+
+  build_menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "build-menu");
+  ide_joined_menu_append_menu (self->build_menu, G_MENU_MODEL (build_menu));
+
   _ide_primary_workspace_init_actions (self);
-  _ide_window_settings_register (GTK_WINDOW (self));
+}
+
+/**
+ * ide_primary_workspace_get_omni_bar:
+ * @self: an #IdePrimaryWorkspace
+ *
+ * Retrieves the #IdeOmniBar of @self.
+ *
+ * Returns: (transfer none): an #IdeOmniBar
+ */
+IdeOmniBar *
+ide_primary_workspace_get_omni_bar (IdePrimaryWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_PRIMARY_WORKSPACE (self), NULL);
+
+  return self->omni_bar;
 }

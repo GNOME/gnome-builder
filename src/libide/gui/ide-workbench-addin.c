@@ -26,23 +26,6 @@
 
 G_DEFINE_INTERFACE (IdeWorkbenchAddin, ide_workbench_addin, G_TYPE_OBJECT)
 
-static void ide_workbench_addin_real_open_at_async (IdeWorkbenchAddin   *self,
-                                                    GFile               *file,
-                                                    const gchar         *hint,
-                                                    gint                 at_line,
-                                                    gint                 at_line_offset,
-                                                    IdeBufferOpenFlags   flags,
-                                                    GCancellable        *cancellable,
-                                                    GAsyncReadyCallback  callback,
-                                                    gpointer             user_data);
-static void ide_workbench_addin_real_open_async    (IdeWorkbenchAddin   *self,
-                                                    GFile               *file,
-                                                    const gchar         *hint,
-                                                    IdeBufferOpenFlags   flags,
-                                                    GCancellable        *cancellable,
-                                                    GAsyncReadyCallback  callback,
-                                                    gpointer             user_data);
-
 static void
 ide_workbench_addin_real_load_project_async (IdeWorkbenchAddin   *self,
                                              IdeProjectInfo      *project_info,
@@ -91,62 +74,28 @@ static void
 ide_workbench_addin_real_open_async (IdeWorkbenchAddin   *self,
                                      GFile               *file,
                                      const gchar         *hint,
+                                     int                  at_line,
+                                     int                  at_line_offset,
                                      IdeBufferOpenFlags   flags,
+                                     IdePanelPosition    *position,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
 {
-  IdeWorkbenchAddinInterface *iface;
-
   g_assert (IDE_IS_WORKBENCH_ADDIN (self));
   g_assert (G_IS_FILE (file));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  iface = IDE_WORKBENCH_ADDIN_GET_IFACE (self);
-
-  if (iface->open_at_async == (gpointer)ide_workbench_addin_real_open_at_async)
-    {
-      ide_task_report_new_error (self, callback, user_data,
-                                 ide_workbench_addin_real_open_async,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_NOT_SUPPORTED,
-                                 "Opening files is not supported");
-      return;
-    }
-
-  iface->open_at_async (self, file, hint, -1, -1, flags, cancellable, callback, user_data);
-}
-
-static void
-ide_workbench_addin_real_open_at_async (IdeWorkbenchAddin   *self,
-                                        GFile               *file,
-                                        const gchar         *hint,
-                                        gint                 at_line,
-                                        gint                 at_line_offset,
-                                        IdeBufferOpenFlags   flags,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
-{
-  IdeWorkbenchAddinInterface *iface;
-
-  g_assert (IDE_IS_WORKBENCH_ADDIN (self));
-  g_assert (G_IS_FILE (file));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  iface = IDE_WORKBENCH_ADDIN_GET_IFACE (self);
-
-  if (iface->open_async == (gpointer)ide_workbench_addin_real_open_async)
-    {
-      ide_task_report_new_error (self, callback, user_data,
-                                 ide_workbench_addin_real_open_at_async,
-                                 G_IO_ERROR,
-                                 G_IO_ERROR_NOT_SUPPORTED,
-                                 "Opening files is not supported");
-      return;
-    }
-
-  iface->open_async (self, file, hint, flags, cancellable, callback, user_data);
+  IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_async (self,
+                                                    file,
+                                                    hint,
+                                                    at_line,
+                                                    at_line_offset,
+                                                    flags,
+                                                    position,
+                                                    cancellable,
+                                                    callback,
+                                                    user_data);
 }
 
 static gboolean
@@ -165,7 +114,6 @@ ide_workbench_addin_default_init (IdeWorkbenchAddinInterface *iface)
   iface->unload_project_async = ide_workbench_addin_real_unload_project_async;
   iface->unload_project_finish = ide_workbench_addin_real_unload_project_finish;
   iface->open_async = ide_workbench_addin_real_open_async;
-  iface->open_at_async = ide_workbench_addin_real_open_at_async;
   iface->open_finish = ide_workbench_addin_real_open_finish;
 }
 
@@ -297,7 +245,10 @@ void
 ide_workbench_addin_open_async (IdeWorkbenchAddin   *self,
                                 GFile               *file,
                                 const gchar         *content_type,
+                                int                  at_line,
+                                int                  at_line_offset,
                                 IdeBufferOpenFlags   flags,
+                                IdePanelPosition    *position,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
@@ -309,36 +260,13 @@ ide_workbench_addin_open_async (IdeWorkbenchAddin   *self,
   IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_async (self,
                                                     file,
                                                     content_type,
+                                                    at_line,
+                                                    at_line_offset,
                                                     flags,
+                                                    position,
                                                     cancellable,
                                                     callback,
                                                     user_data);
-}
-
-void
-ide_workbench_addin_open_at_async (IdeWorkbenchAddin   *self,
-                                   GFile               *file,
-                                   const gchar         *content_type,
-                                   gint                 at_line,
-                                   gint                 at_line_offset,
-                                   IdeBufferOpenFlags   flags,
-                                   GCancellable        *cancellable,
-                                   GAsyncReadyCallback  callback,
-                                   gpointer             user_data)
-{
-  g_return_if_fail (IDE_IS_WORKBENCH_ADDIN (self));
-  g_return_if_fail (G_IS_FILE (file));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  IDE_WORKBENCH_ADDIN_GET_IFACE (self)->open_at_async (self,
-                                                       file,
-                                                       content_type,
-                                                       at_line,
-                                                       at_line_offset,
-                                                       flags,
-                                                       cancellable,
-                                                       callback,
-                                                       user_data);
 }
 
 gboolean
@@ -363,8 +291,6 @@ ide_workbench_addin_open_finish (IdeWorkbenchAddin  *self,
  *
  * This is helpful for plugins that want to react to VCS changes such as
  * changing branches, or tracking commits.
- *
- * Since: 3.32
  */
 void
 ide_workbench_addin_vcs_changed (IdeWorkbenchAddin *self,
@@ -387,8 +313,6 @@ ide_workbench_addin_vcs_changed (IdeWorkbenchAddin *self,
  * It is useful for situations where you do not need to influence the
  * project loading, but do need to perform operations after it has
  * completed.
- *
- * Since: 3.32
  */
 void
 ide_workbench_addin_project_loaded (IdeWorkbenchAddin *self,

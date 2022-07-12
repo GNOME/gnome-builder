@@ -1,55 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="IdeFrame" parent="GtkBox">
-    <property name="orientation">vertical</property>
-    <child>
-      <object class="IdeFrameHeader" id="header">
-        <property name="show-close-button">true</property>
-        <property name="title" translatable="yes">No Open Pages</property>
-        <property name="visible">true</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkEventBox" id="event_box">
-        <property name="visible">true</property>
-        <child>
-          <object class="GtkStack" id="top_stack">
-            <property name="expand">true</property>
-            <property name="homogeneous">false</property>
-            <property name="interpolate-size">false</property>
-            <property name="visible">true</property>
+  <template class="IdeFrame" parent="PanelFrame">
+    <property name="placeholder">
+      <object class="AdwStatusPage" id="status">
+        <property name="title" translatable="yes">Open a File or Terminal</property>
+        <property name="description" translatable="yes">Use the page switcher above or use one of the following:</property>
+        <property name="child">
+          <object class="GtkGrid">
+            <property name="halign">center</property>
+            <property name="column-spacing">48</property>
+            <property name="row-spacing">6</property>
             <child>
-              <object class="GtkBox" id="empty_placeholder">
-                <property name="expand">true</property>
-                <property name="visible">true</property>
+              <object class="GtkLabel">
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Search</property>
+                <layout>
+                  <property name="row">0</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Ctrl+Enter</property>
+                <layout>
+                  <property name="row">0</property>
+                  <property name="column">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Project Sidebar</property>
+                <layout>
+                  <property name="row">1</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">F9</property>
+                <layout>
+                  <property name="row">1</property>
+                  <property name="column">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">Open File</property>
+                <layout>
+                  <property name="row">2</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Ctrl+O</property>
+                <layout>
+                  <property name="row">2</property>
+                  <property name="column">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">New Terminal</property>
+                <layout>
+                  <property name="row">3</property>
+                  <property name="column">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="xalign">1</property>
+                <property name="label" translatable="yes">Ctrl+Shift+T</property>
+                <layout>
+                  <property name="row">3</property>
+                  <property name="column">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="spacing">6</property>
+                <property name="homogeneous">true</property>
+                <layout>
+                  <property name="row">4</property>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                </layout>
                 <child>
-                  <object class="IdeFrameEmptyState">
-                    <property name="expand">true</property>
-                    <property name="visible">true</property>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">Open File…</property>
+                    <property name="action-name">workbench.open</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="label" translatable="yes">New Terminal</property>
+                    <property name="action-name">terminal.terminal-on-host</property>
+                    <property name="action-target">''</property>
                   </object>
                 </child>
               </object>
             </child>
-            <child>
-              <object class="DzlEmptyState" id="failed_state">
-                <property name="icon-name">computer-fail-symbolic</property>
-                <property name="pixel-size">160</property>
-                <property name="title" translatable="yes">Uh oh, something went wrong</property>
-                <property name="subtitle" translatable="yes">There was a failure while trying to perform the operation.</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="IdeFrameWrapper" id="stack">
-                <property name="expand">true</property>
-                <property name="homogeneous">false</property>
-                <property name="interpolate-size">false</property>
-                <property name="visible">true</property>
-              </object>
-            </child>
+          </object>
+        </property>
+        <child>
+          <object class="GtkGestureClick">
+            <property name="propagation-phase">bubble</property>
+            <signal name="pressed" handler="status_page_pressed_cb" swapped="true" object="IdeFrame"/>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

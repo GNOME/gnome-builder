@@ -1,6 +1,6 @@
 /* ide-pane.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,25 +24,37 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <dazzle.h>
+#include <libpanel.h>
+
 #include <libide-core.h>
+
+#include "ide-panel-position.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_PANE (ide_pane_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdePane, ide_pane, IDE, PANE, DzlDockWidget)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (IdePane, ide_pane, IDE, PANE, PanelWidget)
 
 struct _IdePaneClass
 {
-  DzlDockWidgetClass parent_class;
-
-  /*< private >*/
-  gpointer _reserved[16];
+  PanelWidgetClass parent_class;
 };
 
-IDE_AVAILABLE_IN_3_32
-GtkWidget *ide_pane_new (void);
+IDE_AVAILABLE_IN_ALL
+GtkWidget *ide_pane_new       (void);
+IDE_AVAILABLE_IN_ALL
+void       ide_pane_destroy   (IdePane *self);
+IDE_AVAILABLE_IN_ALL
+void       ide_pane_observe   (IdePane  *self,
+                               IdePane **location);
+IDE_AVAILABLE_IN_ALL
+void       ide_pane_unobserve (IdePane  *self,
+                               IdePane **location);
+IDE_AVAILABLE_IN_ALL
+void       ide_clear_pane     (IdePane **location);
+IDE_AVAILABLE_IN_ALL
+IdePanelPosition *ide_pane_get_position (IdePane *self);
 
 G_END_DECLS

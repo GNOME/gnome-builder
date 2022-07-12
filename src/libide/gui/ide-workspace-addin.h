@@ -20,33 +20,44 @@
 
 #pragma once
 
+#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
+# error "Only <libide-gui.h> can be included directly."
+#endif
+
+#include <libide-core.h>
+
+#include "ide-page.h"
 #include "ide-workspace.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKSPACE_ADDIN (ide_workspace_addin_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeWorkspaceAddin, ide_workspace_addin, IDE, WORKSPACE_ADDIN, GObject)
 
 struct _IdeWorkspaceAddinInterface
 {
   GTypeInterface parent_iface;
 
-  void     (*load)        (IdeWorkspaceAddin *self,
-                           IdeWorkspace      *workspace);
-  void     (*unload)      (IdeWorkspaceAddin *self,
-                           IdeWorkspace      *workspace);
+  void     (*load)          (IdeWorkspaceAddin *self,
+                             IdeWorkspace      *workspace);
+  void     (*unload)        (IdeWorkspaceAddin *self,
+                             IdeWorkspace      *workspace);
+  void     (*page_changed)  (IdeWorkspaceAddin *self,
+                             IdePage           *page);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void               ide_workspace_addin_load                (IdeWorkspaceAddin *self,
                                                             IdeWorkspace      *workspace);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void               ide_workspace_addin_unload              (IdeWorkspaceAddin *self,
                                                             IdeWorkspace      *workspace);
-                                                            IdeSurface        *surface);
-IDE_AVAILABLE_IN_3_40
+IDE_AVAILABLE_IN_ALL
+void               ide_workspace_addin_page_changed        (IdeWorkspaceAddin *self,
+                                                            IdePage           *page);
+IDE_AVAILABLE_IN_ALL
 IdeWorkspaceAddin *ide_workspace_addin_find_by_module_name (IdeWorkspace      *workspace,
                                                             const gchar       *module_name);
 

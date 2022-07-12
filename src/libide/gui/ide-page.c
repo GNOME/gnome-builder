@@ -22,44 +22,36 @@
 
 #include "config.h"
 
-#include <libide-threading.h>
 #include <string.h>
 
+#include <libide-gtk.h>
+#include <libide-threading.h>
+
+#include "ide-application.h"
 #include "ide-gui-global.h"
-#include "ide-gui-private.h"
-#include "ide-page.h"
-#include "ide-workspace.h"
+#include "ide-page-private.h"
+#include "ide-workspace-private.h"
 
 typedef struct
 {
-  GList        mru_link;
+  GList           mru_link;
 
-  const gchar *menu_id;
-  const gchar *icon_name;
-  gchar       *title;
-  GIcon       *icon;
+  const char     *menu_id;
 
-  GdkRGBA      primary_color_bg;
-  GdkRGBA      primary_color_fg;
+  GtkBox         *content_box;
+  GtkOverlay     *overlay;
+  GtkProgressBar *progress_bar;
 
-  guint        failed : 1;
-  guint        modified : 1;
-  guint        can_split : 1;
-  guint        primary_color_bg_set : 1;
-  guint        primary_color_fg_set : 1;
+  guint           failed : 1;
+  guint           modified : 1;
+  guint           can_split : 1;
 } IdePagePrivate;
 
 enum {
   PROP_0,
   PROP_CAN_SPLIT,
   PROP_FAILED,
-  PROP_ICON,
-  PROP_ICON_NAME,
   PROP_MENU_ID,
-  PROP_MODIFIED,
-  PROP_PRIMARY_COLOR_BG,
-  PROP_PRIMARY_COLOR_FG,
-  PROP_TITLE,
   N_PROPS
 };
 
@@ -68,10 +60,23 @@ enum {
   N_SIGNALS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdePage, ide_page, GTK_TYPE_BOX)
+static void buildable_iface_init (GtkBuildableIface *iface);
 
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdePage, ide_page, PANEL_TYPE_WIDGET,
+                                  G_ADD_PRIVATE (IdePage)
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
+
+static GtkBuildableIface *parent_buildable;
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+GList *
+_ide_page_get_mru_link (IdePage *self)
+{
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+  g_assert (IDE_IS_PAGE (self));
+  return &priv->mru_link;
+}
 
 static void
 ide_page_real_agree_to_close_async (IdePage             *self,
@@ -102,51 +107,37 @@ ide_page_real_agree_to_close_finish (IdePage       *self,
 }
 
 static void
-find_focus_child (GtkWidget *widget,
-                  gboolean  *handled)
-{
-  if (!*handled)
-    *handled = gtk_widget_child_focus (widget, GTK_DIR_TAB_FORWARD);
-}
-
-static void
-ide_page_grab_focus (GtkWidget *widget)
-{
-  gboolean handled = FALSE;
-
-  g_assert (IDE_IS_PAGE (widget));
-
-  /*
-   * This default grab_focus override just looks for the first child (generally
-   * something like a scrolled window) and tries to move forward on focusing
-   * the child widget. In most cases, this should work without intervention
-   * from the child subclass.
-   */
-
-  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) find_focus_child, &handled);
-}
-
-static void
-ide_page_hierarchy_changed (GtkWidget *widget,
-                            GtkWidget *previous_toplevel)
+ide_page_root (GtkWidget *widget)
 {
   IdePage *self = (IdePage *)widget;
   IdePagePrivate *priv = ide_page_get_instance_private (self);
   GtkWidget *toplevel;
 
   g_assert (IDE_IS_PAGE (self));
-  g_assert (!previous_toplevel || GTK_IS_WIDGET (previous_toplevel));
 
-  if (IDE_IS_WORKSPACE (previous_toplevel))
-    _ide_workspace_remove_page_mru (IDE_WORKSPACE (previous_toplevel), &priv->mru_link);
+  GTK_WIDGET_CLASS (ide_page_parent_class)->root (widget);
 
-  if (GTK_WIDGET_CLASS (ide_page_parent_class)->hierarchy_changed)
-    GTK_WIDGET_CLASS (ide_page_parent_class)->hierarchy_changed (widget, previous_toplevel);
-
-  toplevel = gtk_widget_get_toplevel (widget);
+  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
 
   if (IDE_IS_WORKSPACE (toplevel))
     _ide_workspace_add_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
+}
+
+static void
+ide_page_unroot (GtkWidget *widget)
+{
+  IdePage *self = (IdePage *)widget;
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+  GtkWidget *toplevel;
+
+  g_assert (IDE_IS_PAGE (self));
+
+  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
+
+  if (IDE_IS_WORKSPACE (toplevel))
+    _ide_workspace_remove_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
+
+  GTK_WIDGET_CLASS (ide_page_parent_class)->unroot (widget);
 }
 
 /**
@@ -157,8 +148,6 @@ ide_page_hierarchy_changed (GtkWidget *widget,
  * workspaces MRU (most-recently-used) queue.
  *
  * Pages should call this when their contents have been focused.
- *
- * Since: 3.32
  */
 void
 ide_page_mark_used (IdePage *self)
@@ -175,12 +164,6 @@ ide_page_mark_used (IdePage *self)
 static void
 ide_page_finalize (GObject *object)
 {
-  IdePage *self = (IdePage *)object;
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_clear_pointer (&priv->title, g_free);
-  g_clear_object (&priv->icon);
-
   G_OBJECT_CLASS (ide_page_parent_class)->finalize (object);
 }
 
@@ -202,32 +185,8 @@ ide_page_get_property (GObject    *object,
       g_value_set_boolean (value, ide_page_get_failed (self));
       break;
 
-    case PROP_ICON_NAME:
-      g_value_set_static_string (value, ide_page_get_icon_name (self));
-      break;
-
-    case PROP_ICON:
-      g_value_set_object (value, ide_page_get_icon (self));
-      break;
-
     case PROP_MENU_ID:
       g_value_set_static_string (value, ide_page_get_menu_id (self));
-      break;
-
-    case PROP_MODIFIED:
-      g_value_set_boolean (value, ide_page_get_modified (self));
-      break;
-
-    case PROP_PRIMARY_COLOR_BG:
-      g_value_set_boxed (value, ide_page_get_primary_color_bg (self));
-      break;
-
-    case PROP_PRIMARY_COLOR_FG:
-      g_value_set_boxed (value, ide_page_get_primary_color_fg (self));
-      break;
-
-    case PROP_TITLE:
-      g_value_set_string (value, ide_page_get_title (self));
       break;
 
     default:
@@ -253,32 +212,8 @@ ide_page_set_property (GObject      *object,
       ide_page_set_failed (self, g_value_get_boolean (value));
       break;
 
-    case PROP_ICON_NAME:
-      ide_page_set_icon_name (self, g_value_get_string (value));
-      break;
-
-    case PROP_ICON:
-      ide_page_set_icon (self, g_value_get_object (value));
-      break;
-
     case PROP_MENU_ID:
       ide_page_set_menu_id (self, g_value_get_string (value));
-      break;
-
-    case PROP_MODIFIED:
-      ide_page_set_modified (self, g_value_get_boolean (value));
-      break;
-
-    case PROP_PRIMARY_COLOR_BG:
-      ide_page_set_primary_color_bg (self, g_value_get_boxed (value));
-      break;
-
-    case PROP_PRIMARY_COLOR_FG:
-      ide_page_set_primary_color_fg (self, g_value_get_boxed (value));
-      break;
-
-    case PROP_TITLE:
-      ide_page_set_title (self, g_value_get_string (value));
       break;
 
     default:
@@ -296,8 +231,8 @@ ide_page_class_init (IdePageClass *klass)
   object_class->get_property = ide_page_get_property;
   object_class->set_property = ide_page_set_property;
 
-  widget_class->grab_focus = ide_page_grab_focus;
-  widget_class->hierarchy_changed = ide_page_hierarchy_changed;
+  widget_class->root = ide_page_root;
+  widget_class->unroot = ide_page_unroot;
 
   klass->agree_to_close_async = ide_page_real_agree_to_close_async;
   klass->agree_to_close_finish = ide_page_real_agree_to_close_finish;
@@ -316,74 +251,10 @@ ide_page_class_init (IdePageClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  properties [PROP_ICON] =
-    g_param_spec_object ("icon",
-                         "Icon",
-                         "A GIcon for the view",
-                         G_TYPE_ICON,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_ICON_NAME] =
-    g_param_spec_string ("icon-name",
-                         "Icon Name",
-                         "The icon-name describing the view content",
-                         "text-x-generic-symbolic",
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   properties [PROP_MENU_ID] =
     g_param_spec_string ("menu-id",
                          "Menu ID",
                          "The identifier of the GMenu to use in the document popover",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_MODIFIED] =
-    g_param_spec_boolean ("modified",
-                          "Modified",
-                          "If the view has been modified from the saved content",
-                          FALSE,
-                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  /**
-   * IdePage:primary-color-bg:
-   *
-   * The "primary-color-bg" property should describe the primary color
-   * of the content of the view (if any).
-   *
-   * This can be used by the layout stack to alter the color of the
-   * header to match that of the content.
-   *
-   * Since: 3.32
-   */
-  properties [PROP_PRIMARY_COLOR_BG] =
-    g_param_spec_boxed ("primary-color-bg",
-                        "Primary Color Background",
-                        "The primary foreground color of the content",
-                        GDK_TYPE_RGBA,
-                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  /**
-   * IdePage:primary-color-fg:
-   *
-   * The "primary-color-fg" property should describe the foreground
-   * to use for content above primary-color-bg.
-   *
-   * This can be used by the layout stack to alter the color of the
-   * foreground to match that of the content.
-   *
-   * Since: 3.32
-   */
-  properties [PROP_PRIMARY_COLOR_FG] =
-    g_param_spec_boxed ("primary-color-fg",
-                        "Primary Color Foreground",
-                        "The primary foreground color of the content",
-                        GDK_TYPE_RGBA,
-                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_TITLE] =
-    g_param_spec_string ("title",
-                         "Title",
-                         "The title of the document or view",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
@@ -401,8 +272,6 @@ ide_page_class_init (IdePageClass *klass)
    * set to %TRUE. The default is %FALSE.
    *
    * Returns: (transfer full): A newly created #IdePage
-   *
-   * Since: 3.32
    */
   signals [CREATE_SPLIT] =
     g_signal_new (g_intern_static_string ("create-split"),
@@ -411,58 +280,28 @@ ide_page_class_init (IdePageClass *klass)
                   G_STRUCT_OFFSET (IdePageClass, create_split),
                   g_signal_accumulator_first_wins, NULL,
                   NULL, IDE_TYPE_PAGE, 0);
+
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BOX_LAYOUT);
+  gtk_widget_class_set_css_name (widget_class, "page");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-page.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, IdePage, content_box);
+  gtk_widget_class_bind_template_child_private (widget_class, IdePage, overlay);
+  gtk_widget_class_bind_template_child_private (widget_class, IdePage, progress_bar);
 }
 
 static void
 ide_page_init (IdePage *self)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
-  g_autoptr(GSimpleActionGroup) group = g_simple_action_group_new ();
 
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
+  gtk_widget_init_template (GTK_WIDGET (self));
+
+  panel_widget_set_kind (PANEL_WIDGET (self), PANEL_WIDGET_KIND_DOCUMENT);
 
   priv->mru_link.data = self;
-  priv->icon_name = g_intern_string ("text-x-generic-symbolic");
-
-  /* Add an action group out of convenience to plugins that want to
-   * stash a simple action somewhere.
-   */
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "view", G_ACTION_GROUP (group));
 }
 
-GtkWidget *
-ide_page_new (void)
-{
-  return g_object_new (IDE_TYPE_PAGE, NULL);
-}
-
-const gchar *
-ide_page_get_title (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  return priv->title;
-}
-
-void
-ide_page_set_title (IdePage     *self,
-                    const gchar *title)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  if (g_strcmp0 (title, priv->title) != 0)
-    {
-      g_free (priv->title);
-      priv->title = g_strdup (title);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
-    }
-}
-
-const gchar *
+const char *
 ide_page_get_menu_id (IdePage *self)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
@@ -473,8 +312,8 @@ ide_page_get_menu_id (IdePage *self)
 }
 
 void
-ide_page_set_menu_id (IdePage     *self,
-                      const gchar *menu_id)
+ide_page_set_menu_id (IdePage    *self,
+                      const char *menu_id)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
 
@@ -484,7 +323,13 @@ ide_page_set_menu_id (IdePage     *self,
 
   if (menu_id != priv->menu_id)
     {
+      GMenu *menu;
+
       priv->menu_id = menu_id;
+
+      menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, menu_id);
+      panel_widget_set_menu_model (PANEL_WIDGET (self), G_MENU_MODEL (menu));
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MENU_ID]);
     }
 }
@@ -540,99 +385,6 @@ ide_page_set_failed (IdePage  *self,
 }
 
 gboolean
-ide_page_get_modified (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), FALSE);
-
-  return priv->modified;
-}
-
-void
-ide_page_set_modified (IdePage  *self,
-                       gboolean  modified)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  modified = !!modified;
-
-  if (priv->modified != modified)
-    {
-      priv->modified = modified;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODIFIED]);
-    }
-}
-
-/**
- * ide_page_get_icon:
- * @self: a #IdePage
- *
- * Gets the #GIcon to represent the view.
- *
- * Returns: (transfer none) (nullable): A #GIcon or %NULL
- *
- * Since: 3.32
- */
-GIcon *
-ide_page_get_icon (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  if (priv->icon == NULL)
-    {
-      if (priv->icon_name != NULL)
-        priv->icon = g_icon_new_for_string (priv->icon_name, NULL);
-    }
-
-  return priv->icon;
-}
-
-void
-ide_page_set_icon (IdePage *self,
-                   GIcon   *icon)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  if (g_set_object (&priv->icon, icon))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON]);
-}
-
-const gchar *
-ide_page_get_icon_name (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  return priv->icon_name;
-}
-
-void
-ide_page_set_icon_name (IdePage     *self,
-                        const gchar *icon_name)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  icon_name = g_intern_string (icon_name);
-
-  if (icon_name != priv->icon_name)
-    {
-      priv->icon_name = icon_name;
-      g_clear_object (&priv->icon);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
-    }
-}
-
-gboolean
 ide_page_get_can_split (IdePage *self)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
@@ -669,8 +421,6 @@ ide_page_set_can_split (IdePage  *self,
  * The view should be added to an #IdeLayoutStack where appropriate.
  *
  * Returns: (nullable) (transfer full): A newly created #IdePage or %NULL.
- *
- * Since: 3.32
  */
 IdePage *
 ide_page_create_split (IdePage *self)
@@ -690,130 +440,6 @@ ide_page_create_split (IdePage *self)
 }
 
 /**
- * ide_page_get_primary_color_bg:
- * @self: a #IdePage
- *
- * Gets the #IdePage:primary-color-bg property if it has been set.
- *
- * The primary-color-bg can be used to alter the color of the layout
- * stack header to match the document contents.
- *
- * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
- *
- * Since: 3.32
- */
-const GdkRGBA *
-ide_page_get_primary_color_bg (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  return priv->primary_color_bg_set ?  &priv->primary_color_bg : NULL;
-}
-
-/**
- * ide_page_set_primary_color_bg:
- * @self: a #IdePage
- * @primary_color_bg: (nullable): a #GdkRGBA or %NULL
- *
- * Sets the #IdePage:primary-color-bg property.
- * If @primary_color_bg is %NULL, the property is unset.
- *
- * Since: 3.32
- */
-void
-ide_page_set_primary_color_bg (IdePage       *self,
-                               const GdkRGBA *primary_color_bg)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-  gboolean old_set;
-  GdkRGBA old;
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  old_set = priv->primary_color_bg_set;
-  old = priv->primary_color_bg;
-
-  if (primary_color_bg != NULL)
-    {
-      priv->primary_color_bg = *primary_color_bg;
-      priv->primary_color_bg_set = TRUE;
-    }
-  else
-    {
-      memset (&priv->primary_color_bg, 0, sizeof priv->primary_color_bg);
-      priv->primary_color_bg_set = FALSE;
-    }
-
-  if (old_set != priv->primary_color_bg_set ||
-      !gdk_rgba_equal (&old, &priv->primary_color_bg))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR_BG]);
-}
-
-/**
- * ide_page_get_primary_color_fg:
- * @self: a #IdePage
- *
- * Gets the #IdePage:primary-color-fg property if it has been set.
- *
- * The primary-color-fg can be used to alter the foreground color of the layout
- * stack header to match the document contents.
- *
- * Returns: (transfer none) (nullable): a #GdkRGBA or %NULL.
- *
- * Since: 3.32
- */
-const GdkRGBA *
-ide_page_get_primary_color_fg (IdePage *self)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  return priv->primary_color_fg_set ?  &priv->primary_color_fg : NULL;
-}
-
-/**
- * ide_page_set_primary_color_fg:
- * @self: a #IdePage
- * @primary_color_fg: (nullable): a #GdkRGBA or %NULL
- *
- * Sets the #IdePage:primary-color-fg property.
- * If @primary_color_fg is %NULL, the property is unset.
- *
- * Since: 3.32
- */
-void
-ide_page_set_primary_color_fg (IdePage       *self,
-                               const GdkRGBA *primary_color_fg)
-{
-  IdePagePrivate *priv = ide_page_get_instance_private (self);
-  gboolean old_set;
-  GdkRGBA old;
-
-  g_return_if_fail (IDE_IS_PAGE (self));
-
-  old_set = priv->primary_color_fg_set;
-  old = priv->primary_color_fg;
-
-  if (primary_color_fg != NULL)
-    {
-      priv->primary_color_fg = *primary_color_fg;
-      priv->primary_color_fg_set = TRUE;
-    }
-  else
-    {
-      memset (&priv->primary_color_fg, 0, sizeof priv->primary_color_fg);
-      priv->primary_color_fg_set = FALSE;
-    }
-
-  if (old_set != priv->primary_color_fg_set ||
-      !gdk_rgba_equal (&old, &priv->primary_color_fg))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PRIMARY_COLOR_FG]);
-}
-
-/**
  * ide_page_report_error:
  * @self: a #IdePage
  * @format: a printf-style format string
@@ -822,17 +448,14 @@ ide_page_set_primary_color_fg (IdePage       *self,
  *
  * @format should be a printf-style format string followed by the
  * arguments for the format.
- *
- * Since: 3.32
  */
 void
-ide_page_report_error (IdePage     *self,
-                       const gchar *format,
+ide_page_report_error (IdePage    *self,
+                       const char *format,
                        ...)
 {
-  g_autofree gchar *message = NULL;
+  g_autofree char *message = NULL;
   GtkInfoBar *infobar;
-  GtkWidget *content_area;
   GtkLabel *label;
   va_list args;
 
@@ -849,11 +472,11 @@ ide_page_report_error (IdePage     *self,
                           NULL);
   g_signal_connect (infobar,
                     "response",
-                    G_CALLBACK (gtk_widget_destroy),
+                    G_CALLBACK (gtk_widget_unparent),
                     NULL);
   g_signal_connect (infobar,
                     "close",
-                    G_CALLBACK (gtk_widget_destroy),
+                    G_CALLBACK (gtk_widget_unparent),
                     NULL);
 
   label = g_object_new (GTK_TYPE_LABEL,
@@ -863,12 +486,8 @@ ide_page_report_error (IdePage     *self,
                         "xalign", 0.0f,
                         NULL);
 
-  content_area = gtk_info_bar_get_content_area (infobar);
-  gtk_container_add (GTK_CONTAINER (content_area), GTK_WIDGET (label));
-
-  gtk_container_add_with_properties (GTK_CONTAINER (self), GTK_WIDGET (infobar),
-                                     "position", 0,
-                                     NULL);
+  gtk_info_bar_add_child (infobar, GTK_WIDGET (label));
+  gtk_widget_insert_after (GTK_WIDGET (infobar), GTK_WIDGET (self), NULL);
 }
 
 /**
@@ -880,8 +499,6 @@ ide_page_report_error (IdePage     *self,
  * or designer might use the backing file.
  *
  * Returns: (transfer full) (nullable): a #GFile or %NULL
- *
- * Since: 3.40
  */
 GFile *
 ide_page_get_file_or_directory (IdePage *self)
@@ -892,4 +509,169 @@ ide_page_get_file_or_directory (IdePage *self)
     return IDE_PAGE_GET_CLASS (self)->get_file_or_directory (self);
 
   return NULL;
+}
+
+void
+ide_page_add_content_widget (IdePage   *self,
+                             GtkWidget *widget)
+{
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PAGE (self));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_box_append (priv->content_box, widget);
+}
+
+static void
+ide_page_add_child (GtkBuildable *buildable,
+                    GtkBuilder   *builder,
+                    GObject      *object,
+                    const char   *name)
+{
+  IdePage *self = (IdePage *)buildable;
+
+  g_assert (IDE_IS_PAGE (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (G_IS_OBJECT (object));
+
+  if (GTK_IS_WIDGET (object))
+    {
+      if (g_strcmp0 (name, "content") == 0)
+        {
+          ide_page_add_content_widget (self, GTK_WIDGET (object));
+          return;
+        }
+    }
+
+  parent_buildable->add_child (buildable, builder, object, name);
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  parent_buildable = g_type_interface_peek_parent (iface);
+  iface->add_child = ide_page_add_child;
+}
+
+/**
+ * ide_page_set_progress:
+ * @self: a #IdePage
+ * @notification: (nullable): an #IdeNotification or %NULL
+ *
+ * Set interactive progress for the page.
+ *
+ * When the operation is completed, the caller shoudl call this method
+ * again and reutrn a value of %NULL for @notification.
+ */
+void
+ide_page_set_progress (IdePage         *self,
+                       IdeNotification *notification)
+{
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_PAGE (self));
+  g_return_if_fail (!notification || IDE_IS_NOTIFICATION (notification));
+
+  if (notification == NULL)
+    {
+      ide_gtk_widget_hide_with_fade (GTK_WIDGET (priv->progress_bar));
+      return;
+    }
+
+  gtk_progress_bar_set_fraction (priv->progress_bar, .0);
+  gtk_widget_show (GTK_WIDGET (priv->progress_bar));
+  g_object_bind_property (notification, "progress",
+                          priv->progress_bar, "fraction",
+                          G_BINDING_SYNC_CREATE);
+}
+
+/**
+ * ide_page_get_position:
+ * @self: a #IdePage
+ *
+ * Gets the position of a page within the workspace.
+ *
+ * Returns: (transfer full) (nullable): an #IdePanelPosition or %NULL
+ *   if the page is not rooted.
+ */
+IdePanelPosition *
+ide_page_get_position (IdePage *self)
+{
+  IdePanelPosition *position;
+  GtkWidget *frame;
+  guint n_pages;
+
+  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
+
+  if (!(frame = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_FRAME)))
+    return NULL;
+
+  if (!(position = ide_frame_get_position (IDE_FRAME (frame))))
+    return NULL;
+
+  n_pages = panel_frame_get_n_pages (PANEL_FRAME (frame));
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      if (panel_frame_get_page (PANEL_FRAME (frame), i) == PANEL_WIDGET (self))
+        {
+          ide_panel_position_set_depth (position, i);
+          return position;
+        }
+    }
+
+  g_critical ("Failed to find page within frame");
+
+  return position;
+}
+
+void
+ide_page_destroy (IdePage *self)
+{
+  GtkWidget *frame;
+
+  g_return_if_fail (IDE_IS_PAGE (self));
+
+  if ((frame = gtk_widget_get_ancestor (GTK_WIDGET (self), PANEL_TYPE_FRAME)))
+    panel_frame_remove (PANEL_FRAME (frame), PANEL_WIDGET (self));
+}
+
+void
+ide_page_observe (IdePage  *self,
+                  IdePage **location)
+{
+  g_return_if_fail (IDE_IS_PAGE (self));
+  g_return_if_fail (location != NULL);
+
+  *location = self;
+  g_signal_connect_swapped (self,
+                            "destroy",
+                            G_CALLBACK (g_nullify_pointer),
+                            location);
+}
+
+void
+ide_page_unobserve (IdePage  *self,
+                    IdePage **location)
+{
+  g_return_if_fail (IDE_IS_PAGE (self));
+  g_return_if_fail (location != NULL);
+
+  g_signal_handlers_disconnect_by_func (self,
+                                        G_CALLBACK (g_nullify_pointer),
+                                        location);
+  *location = NULL;
+}
+
+void
+ide_clear_page (IdePage **location)
+{
+  IdePage *self = *location;
+
+  if (self == NULL)
+    return;
+
+  ide_page_unobserve (self, location);
+  ide_page_destroy (self);
 }

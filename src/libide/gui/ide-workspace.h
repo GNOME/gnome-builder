@@ -24,74 +24,112 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include <dazzle.h>
-#include <handy.h>
+#include <adwaita.h>
+
 #include <libide-core.h>
 #include <libide-projects.h>
 
+#include "ide-frame.h"
 #include "ide-header-bar.h"
 #include "ide-page.h"
-#include "ide-surface.h"
+#include "ide-pane.h"
+#include "ide-panel-position.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_WORKSPACE (ide_workspace_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_DERIVABLE_TYPE (IdeWorkspace, ide_workspace, IDE, WORKSPACE, HdyApplicationWindow)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (IdeWorkspace, ide_workspace, IDE, WORKSPACE, AdwApplicationWindow)
+
+typedef void (*IdeWorkspaceCallback) (IdeWorkspace *workspace,
+                                      gpointer      user_data);
 
 struct _IdeWorkspaceClass
 {
-  HdyApplicationWindowClass parent_class;
+  AdwApplicationWindowClass parent_class;
 
   const gchar *kind;
 
-  void (*context_set)  (IdeWorkspace *self,
-                        IdeContext   *context);
-  void (*foreach_page) (IdeWorkspace *self,
-                        GtkCallback   callback,
-                        gpointer      user_data);
-  void (*surface_set)  (IdeWorkspace *self,
-                        IdeSurface   *surface);
+  guint has_statusbar : 1;
+  guint _unused_flags : 31;
 
-  /*< private >*/
-  gpointer _reserved[32];
+  void          (*context_set)           (IdeWorkspace         *self,
+                                          IdeContext           *context);
+  void          (*foreach_page)          (IdeWorkspace         *self,
+                                          IdePageCallback       callback,
+                                          gpointer              user_data);
+  IdeHeaderBar *(*get_header_bar)        (IdeWorkspace         *self);
+  IdePage      *(*get_most_recent_page)  (IdeWorkspace         *self);
+  IdeFrame     *(*get_most_recent_frame) (IdeWorkspace         *self);
+  void          (*agree_to_close_async)  (IdeWorkspace         *self,
+                                          GCancellable         *cancellable,
+                                          GAsyncReadyCallback   callback,
+                                          gpointer              user_data);
+  gboolean      (*agree_to_close_finish) (IdeWorkspace         *self,
+                                          GAsyncResult         *result,
+                                          GError              **error);
+  void          (*add_pane)              (IdeWorkspace         *self,
+                                          IdePane              *pane,
+                                          IdePanelPosition     *position);
+  void          (*add_page)              (IdeWorkspace         *self,
+                                          IdePage              *page,
+                                          IdePanelPosition     *position);
+  void          (*add_grid_column)       (IdeWorkspace         *self,
+                                          guint                 column);
+  void          (*add_overlay)           (IdeWorkspace         *self,
+                                          GtkWidget            *overlay);
+  void          (*remove_overlay)        (IdeWorkspace         *self,
+                                          GtkWidget            *overlay);
+  PanelFrame   *(*get_frame_at_position) (IdeWorkspace         *self,
+                                          IdePanelPosition     *position);
+  void          (*restore_size)          (IdeWorkspace         *self,
+                                          int                   width,
+                                          int                   height);
+  gboolean      (*save_size)             (IdeWorkspace         *self,
+                                          int                  *width,
+                                          int                  *height);
+  gboolean      (*can_search)            (IdeWorkspace         *self);
 };
 
-IDE_AVAILABLE_IN_3_32
-void          ide_workspace_class_set_kind           (IdeWorkspaceClass *klass,
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_class_set_kind           (IdeWorkspaceClass *klass,
                                                       const gchar       *kind);
-IDE_AVAILABLE_IN_3_32
-IdeHeaderBar *ide_workspace_get_header_bar           (IdeWorkspace      *self);
-IDE_AVAILABLE_IN_3_32
-IdeContext   *ide_workspace_get_context              (IdeWorkspace      *self);
-IDE_AVAILABLE_IN_3_32
-GCancellable *ide_workspace_get_cancellable          (IdeWorkspace      *self);
-IDE_AVAILABLE_IN_3_32
-void          ide_workspace_foreach_page             (IdeWorkspace      *self,
-                                                      GtkCallback        callback,
-                                                      gpointer           user_data);
-IDE_AVAILABLE_IN_3_32
-void          ide_workspace_foreach_surface          (IdeWorkspace      *self,
-                                                      GtkCallback        callback,
-                                                      gpointer           user_data);
-IDE_AVAILABLE_IN_3_32
-void          ide_workspace_add_surface              (IdeWorkspace      *self,
-                                                      IdeSurface        *surface);
-IDE_AVAILABLE_IN_3_32
-IdeSurface   *ide_workspace_get_surface_by_name      (IdeWorkspace      *self,
-                                                      const gchar       *name);
-IDE_AVAILABLE_IN_3_32
-void          ide_workspace_set_visible_surface_name (IdeWorkspace      *self,
-                                                      const gchar       *visible_surface_name);
-IDE_AVAILABLE_IN_3_32
-IdeSurface   *ide_workspace_get_visible_surface      (IdeWorkspace      *self);
-IDE_AVAILABLE_IN_3_32
-void          ide_workspace_set_visible_surface      (IdeWorkspace      *self,
-                                                      IdeSurface        *surface);
-IDE_AVAILABLE_IN_3_32
-GtkOverlay   *ide_workspace_get_overlay              (IdeWorkspace      *self);
-IDE_AVAILABLE_IN_3_32
-IdePage      *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+IdeHeaderBar   *ide_workspace_get_header_bar           (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+IdeContext     *ide_workspace_get_context              (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+GCancellable   *ide_workspace_get_cancellable          (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_foreach_page             (IdeWorkspace      *self,
+                                                        IdePageCallback    callback,
+                                                        gpointer           user_data);
+IDE_AVAILABLE_IN_ALL
+IdePage        *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+IdeFrame       *ide_workspace_get_most_recent_frame    (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+PanelFrame     *ide_workspace_get_frame_at_position    (IdeWorkspace      *self,
+                                                        IdePanelPosition  *position);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_add_pane                 (IdeWorkspace      *self,
+                                                        IdePane           *pane,
+                                                        IdePanelPosition  *position);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_add_page                 (IdeWorkspace      *self,
+                                                        IdePage           *page,
+                                                        IdePanelPosition  *position);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_add_grid_column          (IdeWorkspace      *self,
+                                                        guint              position);
+IDE_AVAILABLE_IN_ALL
+PanelStatusbar *ide_workspace_get_statusbar            (IdeWorkspace      *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_add_overlay              (IdeWorkspace      *self,
+                                                        GtkWidget         *widget);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_remove_overlay           (IdeWorkspace      *self,
+                                                        GtkWidget         *widget);
 
 G_END_DECLS

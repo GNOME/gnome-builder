@@ -1,6 +1,6 @@
-/* ide-primary-workspace.h
+/* ide-page-private.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,22 +20,10 @@
 
 #pragma once
 
-#if !defined (IDE_GUI_INSIDE) && !defined (IDE_GUI_COMPILATION)
-# error "Only <libide-gui.h> can be included directly."
-#endif
-
-#include "ide-application.h"
-#include "ide-omni-bar.h"
-#include "ide-workspace.h"
+#include "ide-page.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PRIMARY_WORKSPACE (ide_primary_workspace_get_type())
-
-IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE, PRIMARY_WORKSPACE, IdeWorkspace)
-
-IDE_AVAILABLE_IN_ALL
-IdeOmniBar *ide_primary_workspace_get_omni_bar (IdePrimaryWorkspace *self);
+GList *_ide_page_get_mru_link (IdePage *self);
 
 G_END_DECLS

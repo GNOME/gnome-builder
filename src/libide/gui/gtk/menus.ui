@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="ide-primary-workspace-surfaces-menu">
-    <section id="ide-primary-workspace-surfaces-menu-section">
-      <attribute name="label" translatable="yes">Switch Surface</attribute>
-    </section>
-    <section id="ide-primary-workspace-surfaces-menu-utils-section"/>
-  </menu>
   <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-theme-section">
+      <item>
+        <attribute name="custom">theme_selector</attribute>
+      </item>
+    </section>
     <section id="ide-primary-workspace-menu-projects-section"/>
     <section id="ide-primary-workspace-menu-placeholder1"/>
-    <section id="ide-primary-workspace-menu-placeholder2"/>
     <section id="ide-primary-workspace-menu-close-section">
       <item>
         <attribute name="id">ide-primary-workspace-menu-close-project</attribute>
@@ -17,6 +15,7 @@
         <attribute name="action">workbench.close</attribute>
       </item>
     </section>
+    <section id="ide-primary-workspace-menu-placeholder2"/>
     <section id="ide-primary-workspace-menu-placeholder3"/>
     <section id="ide-primary-workspace-menu-app-section">
       <item>
@@ -28,7 +27,7 @@
       <item>
         <attribute name="id">ide-primary-workspace-menu-shortcuts</attribute>
         <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
-        <attribute name="action">app.shortcuts</attribute>
+        <attribute name="action">win.show-help-overlay</attribute>
         <attribute name="accel">&lt;primary&gt;question</attribute>
       </item>
       <item>
@@ -51,37 +50,11 @@
       </item>
     </section>
   </menu>
-  <menu id="ide-primary-workspace-new-menu">
-    <section id="new-document-section">
-    </section>
-    <section id="open-document-section">
-    </section>
-  </menu>
-  <menu id="run-menu">
-    <section id="run-menu-section">
-      <attribute name="label" translatable="yes">Run Options</attribute>
-      <item>
-        <attribute name="id">default-run-handler</attribute>
-        <attribute name="action">run-manager.run-with-handler</attribute>
-        <attribute name="target">run</attribute>
-        <attribute name="label" translatable="yes">Run</attribute>
-        <attribute name="verb-icon-name">builder-run-start-symbolic</attribute>
-        <attribute name="accel">&lt;Control&gt;F5</attribute>
-      </item>
-    </section>
-  </menu>
-  <menu id="project-tree-menu">
-    <section id="project-tree-menu-placeholder0"/>
-    <section id="project-tree-menu-new-section"/>
-    <section id="project-tree-menu-placeholder1"/>
-    <section id="project-tree-menu-open-section"/>
-    <section id="project-tree-menu-buildui"/>
-    <section id="project-tree-menu-vcs"/>
-    <section id="project-tree-menu-placeholder2"/>
-    <section id="project-tree-menu-destructive-section"/>
-    <section id="project-tree-menu-placeholder3"/>
-    <section id="project-tree-menu-display-options-parent-section"/>
-    <section id="project-tree-menu-placeholder4"/>
+  <menu id="new-document-menu">
+    <section id="new-document-section"/>
+    <section id="open-document-section"/>
+    <section id="new-browser-section"/>
+    <section id="new-terminal-section"/>
   </menu>
 </interface>
 
