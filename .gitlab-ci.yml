@@ -14,8 +14,9 @@ flatpak:
     APP_ID: "org.gnome.Builder.Devel"
     BUNDLE: "gnome-builder-git.flatpak"
   before_script:
-    - flatpak --user install -y org.freedesktop.Sdk.Extension.llvm14//22.08beta
-    - flatpak --user install -y org.freedesktop.Sdk.Extension.node18//22.08beta
+    - flatpak --user install -y org.freedesktop.Sdk.Extension.llvm15//22.08beta
+    - flatpak --user install -y --from https://dl.flathub.org/build-repo/97448/org.freedesktop.Sdk.Extension.node18.flatpakref
+    # - flatpak --user install -y org.freedesktop.Sdk.Extension.node18//22.08
 
 nightly:
   extends: '.publish_nightly'
