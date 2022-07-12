@@ -41,13 +41,11 @@ format_decls_cb (GSimpleAction *action,
   g_autofree gchar *input = NULL;
   g_autofree gchar *output = NULL;
   IdeBuffer *buffer;
-  IdeSourceView *sourceview;
   GtkTextIter begin, end;
 
   g_assert (IDE_IS_EDITOR_PAGE (view));
 
   buffer = ide_editor_page_get_buffer (view);
-  sourceview = ide_editor_page_get_view (view);
 
   /* We require a selection */
   if (!gtk_text_buffer_get_selection_bounds (GTK_TEXT_BUFFER (buffer), &begin, &end))
@@ -62,7 +60,6 @@ format_decls_cb (GSimpleAction *action,
       gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
       gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &begin, output, -1);
       gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
-      g_signal_emit_by_name (sourceview, "reset");
     }
 }
 

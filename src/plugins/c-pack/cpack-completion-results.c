@@ -176,7 +176,7 @@ cpack_completion_results_refilter (CpackCompletionResults *self,
           const gchar *ele = g_ptr_array_index (self->unfiltered, i);
           guint priority;
 
-          if (ide_completion_fuzzy_match (ele, casefold, &priority))
+          if (gtk_source_completion_fuzzy_match (ele, casefold, &priority))
             {
               Item item = { .word = ele, .priority = priority };
 
