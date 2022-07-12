@@ -45,20 +45,19 @@ typedef enum
  * @user_data: (closure) (transfer full): The closure for the callback.
  *
  *
- * Since: 3.32
  */
 typedef void (*IdeThreadFunc) (gpointer user_data);
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_thread_pool_push               (IdeThreadPoolKind  kind,
                                          IdeThreadFunc      func,
                                          gpointer           func_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_thread_pool_push_with_priority (IdeThreadPoolKind  kind,
                                          gint               priority,
                                          IdeThreadFunc      func,
                                          gpointer           func_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void ide_thread_pool_push_task          (IdeThreadPoolKind  kind,
                                          GTask             *task,
                                          GTaskThreadFunc    func);

@@ -100,8 +100,6 @@ task_state_attach (TaskState *state)
  * This is just like g_task_return_boolean() except that it enforces
  * that the current stack return to the main context before dispatching
  * the callback.
- *
- * Since: 3.32
  */
 void
 ide_g_task_return_boolean_from_main (GTask    *task,
@@ -160,8 +158,6 @@ ide_g_task_return_pointer_from_main (GTask          *task,
  *
  * Like g_task_return_error() but ensures we return to the main loop before
  * dispatching the result.
- *
- * Since: 3.32
  */
 void
 ide_g_task_return_error_from_main (GTask  *task,
