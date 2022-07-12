@@ -1,6 +1,6 @@
-/* ide-snippet-completion-provider.h
+/* gbp-snippet-completion-provider.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include <gtksourceview/gtksource.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SNIPPET_COMPLETION_PROVIDER (ide_snippet_completion_provider_get_type())
+#define GBP_TYPE_SNIPPET_COMPLETION_PROVIDER (gbp_snippet_completion_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSnippetCompletionProvider, ide_snippet_completion_provider, IDE, SNIPPET_COMPLETION_PROVIDER, IdeObject)
+G_DECLARE_FINAL_TYPE (GbpSnippetCompletionProvider, gbp_snippet_completion_provider, GBP, SNIPPET_COMPLETION_PROVIDER, GtkSourceCompletionSnippets)
 
 G_END_DECLS

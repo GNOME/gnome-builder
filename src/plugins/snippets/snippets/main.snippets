@@ -1,25 +1,27 @@
-snippet main
-- scope c, cpp
-	#include <glib.h>
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+  <snippet _name="main" trigger="main" _description="">
+    <tooltip position="1" text="Name of the program. Not localized."/>
+    <tooltip position="2" text="Human-readable name for the application. Should be localized."/>
+    <text languages="c;cpp;"><![CDATA[#include <glib.h>
+    
+gint
+main (gint   argc,
+      gchar *argv[])
+{
+	g_set_prgname ("${1:my-program}");
+	g_set_application_name ("${2:$1|capitalize}");
 
-	gint
-	main (gint   argc,
-	      gchar *argv[])
-	{
-		g_set_prgname ("${1:my-program}");
-		g_set_application_name ("${2:$1|capitalize}");
+	$0
 
-		$0
+	return 0;
+}
+]]></text>
+    <text languages="python;python3;"><![CDATA[def main():
+	$0
 
-		return 0;
-	}
-- scope python, python3
-	def main():
-		$0
-	
-	if __name__ == "__main__":
-		main()
-- scope rust
-	fn main() {
-	    $0
-	}
+if __name__ == "__main__":
+	main()
+]]></text>
+  </snippet>
+</snippets>

@@ -1,312 +1,402 @@
-snippet allow
-- desc #![allow(…)]
-	#${1:!}[allow(${2:lint})]
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+  <snippet _name="allow" trigger="allow" _description="#![allow(…)]">
+    <text languages="rust"><![CDATA[#${1:!}[allow(${2:lint})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="deny" trigger="deny" _description="#![deny(…)]">
+    <text languages="rust"><![CDATA[#${1:!}[deny(${2:lint})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="forbid" trigger="forbid" _description="#![forbid(…)]">
+    <text languages="rust"><![CDATA[#${1:!}[forbid(${2:lint})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="warn" trigger="warn" _description="#![warn(…)]">
+    <text languages="rust"><![CDATA[#${1:!}[warn(${2:lint})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="doc" trigger="doc" _description="#![doc(…)]">
+    <text languages="rust"><![CDATA[#${1:!}[doc(${2:hidden})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="deprecated" trigger="deprecated" _description="#[deprecated(…)]">
+    <text languages="rust"><![CDATA[#[deprecated(since = "${1:version}", note = "${2:reason}")]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="must_use" trigger="must_use" _description="#[must_use]">
+    <text languages="rust"><![CDATA[#[must_use]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="should_panic" trigger="should_panic" _description="#[should_panic(…)]">
+    <text languages="rust"><![CDATA[#[should_panic(expected = "${1:reason}")]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="cfg" trigger="cfg" _description="#![cfg(…)]">
+    <text languages="rust"><![CDATA[#${1:!}[cfg(${2:expression})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="cfg_attr" trigger="cfg_attr" _description="#![cfg_attr(…)]">
+    <text languages="rust"><![CDATA[#${1:!}[cfg_attr(${2:expression}, ${3:attribute})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="derive" trigger="derive" _description="#[derive(…)]">
+    <text languages="rust"><![CDATA[#[derive(${1:Debug})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="repr" trigger="repr" _description="#[repr(…)]">
+    <text languages="rust"><![CDATA[#[repr(${1:C})]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="export_name" trigger="export_name" _description="#[export_name]">
+    <text languages="rust"><![CDATA[#[export_name = "${1:symbol}"]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="link" trigger="link" _description="#[link(…)]">
+    <text languages="rust"><![CDATA[#[link(name = "${1:library}")]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="macro_export" trigger="macro_export" _description="#[macro_export]">
+    <text languages="rust"><![CDATA[#[macro_export]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="no_mangle" trigger="no_mangle" _description="#[no_mangle]">
+    <text languages="rust"><![CDATA[#[no_mangle]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="no_std" trigger="no_std" _description="#![no_std]">
+    <text languages="rust"><![CDATA[#![no_std]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="no_main" trigger="no_main" _description="#![no_main]">
+    <text languages="rust"><![CDATA[#![no_main]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="non_exhaustive" trigger="non_exhaustive" _description="#[non_exhaustive]">
+    <text languages="rust"><![CDATA[#[non_exhaustive]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="inline" trigger="inline" _description="#[inline]">
+    <text languages="rust"><![CDATA[#[inline]
+$0
+]]></text>
+  </snippet>
+  <snippet _name="struct" trigger="struct" _description="">
+    <text languages="rust"><![CDATA[struct ${1:StructName} {
 	$0
-snippet deny
-- desc #![deny(…)]
-	#${1:!}[deny(${2:lint})]
+}
+]]></text>
+  </snippet>
+  <snippet _name="tuple" trigger="tuple" _description="Create tuple struct">
+    <text languages="rust"><![CDATA[struct ${1:TupleName}(${2:i32});$0
+]]></text>
+  </snippet>
+  <snippet _name="unit" trigger="unit" _description="Create unit-like struct">
+    <text languages="rust"><![CDATA[struct ${1:StructName};$0
+]]></text>
+  </snippet>
+  <snippet _name="union" trigger="union" _description="">
+    <text languages="rust"><![CDATA[#[repr(C)]
+union ${1:UnionName} {
 	$0
-snippet forbid
-- desc #![forbid(…)]
-	#${1:!}[forbid(${2:lint})]
+}
+]]></text>
+  </snippet>
+  <snippet _name="enum" trigger="enum" _description="">
+    <text languages="rust"><![CDATA[enum ${1:EnumName} {
 	$0
-snippet warn
-- desc #![warn(…)]
-	#${1:!}[warn(${2:lint})]
+}
+]]></text>
+  </snippet>
+  <snippet _name="trait" trigger="trait" _description="">
+    <text languages="rust"><![CDATA[trait ${1:TraitName} {
 	$0
-snippet doc
-- desc #![doc(…)]
-	#${1:!}[doc(${2:hidden})]
+}
+]]></text>
+  </snippet>
+  <snippet _name="impl" trigger="impl" _description="">
+    <text languages="rust"><![CDATA[impl ${1:Type} {
 	$0
-snippet deprecated
-- desc #[deprecated(…)]
-	#[deprecated(since = "${1:version}", note = "${2:reason}")]
+}
+]]></text>
+  </snippet>
+  <snippet _name="implfor" trigger="implfor" _description="impl … for">
+    <text languages="rust"><![CDATA[impl ${1:Trait} for ${2:Type} {
 	$0
-snippet must_use
-- desc #[must_use]
-	#[must_use]
-	$0
-snippet should_panic
-- desc #[should_panic(…)]
-	#[should_panic(expected = "${1:reason}")]
-	$0
-snippet cfg
-- desc #![cfg(…)]
-	#${1:!}[cfg(${2:expression})]
-	$0
-snippet cfg_attr
-- desc #![cfg_attr(…)]
-	#${1:!}[cfg_attr(${2:expression}, ${3:attribute})]
-	$0
-snippet derive
-- desc #[derive(…)]
-	#[derive(${1:Debug})]
-	$0
-snippet repr
-- desc #[repr(…)]
-	#[repr(${1:C})]
-	$0
-snippet export_name
-- desc #[export_name]
-	#[export_name = "${1:symbol}"]
-	$0
-snippet link
-- desc #[link(…)]
-	#[link(name = "${1:library}")]
-	$0
-snippet macro_export
-- desc #[macro_export]
-	#[macro_export]
-	$0
-snippet no_mangle
-- desc #[no_mangle]
-	#[no_mangle]
-	$0
-snippet no_std
-- desc #![no_std]
-	#![no_std]
-	$0
-snippet no_main
-- desc #![no_main]
-	#![no_main]
-	$0
-snippet non_exhaustive
-- desc #[non_exhaustive]
-	#[non_exhaustive]
-	$0
-snippet inline
-- desc #[inline]
-	#[inline]
-	$0
-snippet struct
-	struct ${1:StructName} {
+}
+]]></text>
+  </snippet>
+  <snippet _name="default" trigger="default" _description="Implement Default trait">
+    <text languages="rust"><![CDATA[impl Default for ${1:Type} {
+	fn default() -> Self {
 		$0
 	}
-snippet tuple
-- desc Create tuple struct
-	struct ${1:TupleName}(${2:i32});$0
-snippet unit
-- desc Create unit-like struct
-	struct ${1:StructName};$0
-snippet union
-	#[repr(C)]
-	union ${1:UnionName} {
+}
+]]></text>
+  </snippet>
+  <snippet _name="drop" trigger="drop" _description="Implement Drop trait">
+    <text languages="rust"><![CDATA[impl Drop for ${1:Type} {
+	fn drop(&mut self) {
 		$0
 	}
-snippet enum
-	enum ${1:EnumName} {
+}
+]]></text>
+  </snippet>
+  <snippet _name="macro" trigger="macro" _description="Define declarative macro">
+    <text languages="rust"><![CDATA[macro_rules! ${1:macro_name} {
+	(${2}) => {
 		$0
-	}
-snippet trait
-	trait ${1:TraitName} {
-		$0
-	}
-snippet impl
-	impl ${1:Type} {
-		$0
-	}
-snippet implfor
-- desc impl … for
-	impl ${1:Trait} for ${2:Type} {
-		$0
-	}
-snippet default
-- desc Implement Default trait
-	impl Default for ${1:Type} {
-		fn default() -> Self {
-			$0
-		}
-	}
-snippet drop
-- desc Implement Drop trait
-	impl Drop for ${1:Type} {
-		fn drop(&mut self) {
-			$0
-		}
-	}
-snippet macro
-- desc Define declarative macro
-	macro_rules! ${1:macro_name} {
-		(${2}) => {
-			$0
-		};
-	}
-snippet proc_macro
-- desc Implement procedural macro
-	#[proc_macro]
-	pub fn ${1:macro_name}(item: TokenStream) -> TokenStream {
-		unimplemented!()$0
-	}
-snippet proc_macro_attribute
-- desc Implement attribute macro
-	#[proc_macro_attribute]
-	pub fn ${1:attribute_name}(attr: TokenStream, item: TokenStream) -> TokenStream {
-		unimplemented!()$0
-	}
-	$0
-snippet proc_macro_derive
-- desc Implement derive macro
-	#[proc_macro_derive(${1:Name})]
-	pub fn derive_${$1|functify}(item: TokenStream) -> TokenStream {
-		unimplemented!()$0
-	}
-snippet spawn
-- desc thread::spawn(…)
-	thread::spawn(move || {
-		$0
-	});
-snippet fn
-	fn ${1:function_name}(${2:&mut self}) {
-		unimplemented!()$0
-	}
-snippet fnr
-- desc Create function with return
-	fn ${1:function_name}(${2:&mut self}) -> ${3:&mut Self} {
-		unimplemented!()$0
-	}
-snippet fns
-- desc Create function signature
-	fn ${1:function_name}(${2:&mut self});$0
-snippet fnrs
-- desc Create function signature with return
-	fn ${1:function_name}(${2:&mut self}) -> ${3:&mut Self};$0
-snippet match
-	match ${1:expression} {
-		_ => unimplemented!(),$0
-	}
-snippet option
-- desc Pattern matching for Option
-	match ${1:expression} {
-		None => ${2},
-		Some(${3:val}) => ${4},
-	}$0
-snippet result
-- desc Pattern matching for Result
-	match ${1:expression} {
-		Ok(${2:val}) => ${3},
-		Err(${4:err}) => ${5},
-	}$0
-snippet if
-	if ${1:condition} {
-		$0
-	}
-snippet else
-	else {
-		$0
-	}
-snippet elseif
-- desc else if
-	else if ${1:condition} {
-		$0
-	}
-snippet iflet
-- desc if let
-	if let ${1:Some(val)} = ${2:expression} {
-		$0
-	}
-snippet while
-	while ${1:condition} {
-		$0
-	}
-snippet whilelet
-- desc while let
-	while let ${1:Some(val)} = ${2:expression} {
-		$0
-	}
-snippet for
-	for ${1:item} in ${2:collection} {
-		$0
-	}
-snippet loop
-	loop {
-		$0
-	}
-snippet unsafe
-	unsafe {
-		$0
-	}
-snippet extern
-	extern {
-		$0
-	}
-snippet const
-	const ${1:CONST_NAME}: ${2:type} = ${3:expression};$0
-snippet static
-	static ${1:STATIC_NAME}: ${2:type} = ${3:expression};$0
-snippet let
-	let ${1:variable} = ${2:expression};$0
-snippet type
-	type ${1:Alias} = ${2:Type};$0
-snippet thread_local
-- desc thread_local! {…}
-	thread_local! {
-		$0
-	}
-snippet vec
-- desc vec![…]
-	vec![${1:expression}; ${2:size}]$0
-snippet format_args
-- desc format_args!(…)
-	format_args!("${1:{}}", ${2:expression})$0
-snippet format
-- desc format!(…)
-	format!("${1:{}}", ${2:expression})$0
-snippet write
-- desc write!(…)
-	write!(${1:buffer}, "${2:{}}", ${3:expression})$0
-snippet writeln
-- desc writeln!(…)
-	writeln!(${1:buffer}, "${2:{}}", ${3:expression})$0
-snippet print
-- desc print!(…)
-	print!("${1:{}}", ${2:expression})$0
-snippet println
-- desc println!(…)
-	println!("${1:{}}", ${2:expression})$0
-snippet eprint
-- desc eprint!(…)
-	eprint!("${1:{}}", ${2:expression})$0
-snippet eprintln
-- desc eprintln!(…)
-	eprintln!("${1:{}}", ${2:expression})$0
-snippet dbg
-- desc dbg!(…)
-	dbg!(${1:expression})$0
-snippet panic
-- desc panic!(…)
-	panic!("${1:{}}", ${2:expression})$0
-snippet unreachable
-- desc unreachable!(…)
-	unreachable!("${1:reason}")$0
-snippet unimplemented
-- desc unimplemented!()
+	};
+}
+]]></text>
+  </snippet>
+  <snippet _name="proc_macro" trigger="proc_macro" _description="Implement procedural macro">
+    <text languages="rust"><![CDATA[#[proc_macro]
+pub fn ${1:macro_name}(item: TokenStream) -> TokenStream {
 	unimplemented!()$0
-snippet todo
-- desc todo!()
-	todo!()$0
-snippet assert
-- desc assert!(…)
-	assert!(${1:expression})$0
-snippet assert_eq
-- desc assert_eq!(…)
-	assert_eq!(${1:expression1}, ${2:expression2})$0
-snippet assert_ne
-- desc assert_ne!(…)
-	assert_ne!(${1:expression1}, ${2:expression2})$0
-snippet testsmod
-- desc Create tests module
-	#[cfg(test)]
-	mod tests {
-		use super::*;
+}
+]]></text>
+  </snippet>
+  <snippet _name="proc_macro_attribute" trigger="proc_macro_attribute" _description="Implement attribute macro">
+    <text languages="rust"><![CDATA[#[proc_macro_attribute]
+pub fn ${1:attribute_name}(attr: TokenStream, item: TokenStream) -> TokenStream {
+	unimplemented!()$0
+}
+$0
+]]></text>
+  </snippet>
+  <snippet _name="proc_macro_derive" trigger="proc_macro_derive" _description="Implement derive macro">
+    <text languages="rust"><![CDATA[#[proc_macro_derive(${1:Name})]
+pub fn derive_${$1|functify}(item: TokenStream) -> TokenStream {
+	unimplemented!()$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="spawn" trigger="spawn" _description="thread::spawn(…)">
+    <text languages="rust"><![CDATA[thread::spawn(move || {
+	$0
+});
+]]></text>
+  </snippet>
+  <snippet _name="fn" trigger="fn" _description="">
+    <text languages="rust"><![CDATA[fn ${1:function_name}(${2:&mut self}) {
+	unimplemented!()$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="fnr" trigger="fnr" _description="Create function with return">
+    <text languages="rust"><![CDATA[fn ${1:function_name}(${2:&mut self}) -> ${3:&mut Self} {
+	unimplemented!()$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="fns" trigger="fns" _description="Create function signature">
+    <text languages="rust"><![CDATA[fn ${1:function_name}(${2:&mut self});$0
+]]></text>
+  </snippet>
+  <snippet _name="fnrs" trigger="fnrs" _description="Create function signature with return">
+    <text languages="rust"><![CDATA[fn ${1:function_name}(${2:&mut self}) -> ${3:&mut Self};$0
+]]></text>
+  </snippet>
+  <snippet _name="match" trigger="match" _description="">
+    <text languages="rust"><![CDATA[match ${1:expression} {
+	_ => unimplemented!(),$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="option" trigger="option" _description="Pattern matching for Option">
+    <text languages="rust"><![CDATA[match ${1:expression} {
+	None => ${2},
+	Some(${3:val}) => ${4},
+}$0
+]]></text>
+  </snippet>
+  <snippet _name="result" trigger="result" _description="Pattern matching for Result">
+    <text languages="rust"><![CDATA[match ${1:expression} {
+	Ok(${2:val}) => ${3},
+	Err(${4:err}) => ${5},
+}$0
+]]></text>
+  </snippet>
+  <snippet _name="if" trigger="if" _description="">
+    <text languages="rust"><![CDATA[if ${1:condition} {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="else" trigger="else" _description="">
+    <text languages="rust"><![CDATA[else {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="elseif" trigger="elseif" _description="else if">
+    <text languages="rust"><![CDATA[else if ${1:condition} {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="iflet" trigger="iflet" _description="if let">
+    <text languages="rust"><![CDATA[if let ${1:Some(val)} = ${2:expression} {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="while" trigger="while" _description="">
+    <text languages="rust"><![CDATA[while ${1:condition} {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="whilelet" trigger="whilelet" _description="while let">
+    <text languages="rust"><![CDATA[while let ${1:Some(val)} = ${2:expression} {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="for" trigger="for" _description="">
+    <text languages="rust"><![CDATA[for ${1:item} in ${2:collection} {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="loop" trigger="loop" _description="">
+    <text languages="rust"><![CDATA[loop {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="unsafe" trigger="unsafe" _description="">
+    <text languages="rust"><![CDATA[unsafe {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="extern" trigger="extern" _description="">
+    <text languages="rust"><![CDATA[extern {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="const" trigger="const" _description="">
+    <text languages="rust"><![CDATA[const ${1:CONST_NAME}: ${2:type} = ${3:expression};$0
+]]></text>
+  </snippet>
+  <snippet _name="static" trigger="static" _description="">
+    <text languages="rust"><![CDATA[static ${1:STATIC_NAME}: ${2:type} = ${3:expression};$0
+]]></text>
+  </snippet>
+  <snippet _name="let" trigger="let" _description="">
+    <text languages="rust"><![CDATA[let ${1:variable} = ${2:expression};$0
+]]></text>
+  </snippet>
+  <snippet _name="type" trigger="type" _description="">
+    <text languages="rust"><![CDATA[type ${1:Alias} = ${2:Type};$0
+]]></text>
+  </snippet>
+  <snippet _name="thread_local" trigger="thread_local" _description="thread_local! {…}">
+    <text languages="rust"><![CDATA[thread_local! {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="vec" trigger="vec" _description="vec![…]">
+    <text languages="rust"><![CDATA[vec![${1:expression}; ${2:size}]$0
+]]></text>
+  </snippet>
+  <snippet _name="format_args" trigger="format_args" _description="format_args!(…)">
+    <text languages="rust"><![CDATA[format_args!("${1:{}}", ${2:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="format" trigger="format" _description="format!(…)">
+    <text languages="rust"><![CDATA[format!("${1:{}}", ${2:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="write" trigger="write" _description="write!(…)">
+    <text languages="rust"><![CDATA[write!(${1:buffer}, "${2:{}}", ${3:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="writeln" trigger="writeln" _description="writeln!(…)">
+    <text languages="rust"><![CDATA[writeln!(${1:buffer}, "${2:{}}", ${3:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="print" trigger="print" _description="print!(…)">
+    <text languages="rust"><![CDATA[print!("${1:{}}", ${2:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="println" trigger="println" _description="println!(…)">
+    <text languages="rust"><![CDATA[println!("${1:{}}", ${2:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="eprint" trigger="eprint" _description="eprint!(…)">
+    <text languages="rust"><![CDATA[eprint!("${1:{}}", ${2:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="eprintln" trigger="eprintln" _description="eprintln!(…)">
+    <text languages="rust"><![CDATA[eprintln!("${1:{}}", ${2:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="dbg" trigger="dbg" _description="dbg!(…)">
+    <text languages="rust"><![CDATA[dbg!(${1:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="panic" trigger="panic" _description="panic!(…)">
+    <text languages="rust"><![CDATA[panic!("${1:{}}", ${2:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="unreachable" trigger="unreachable" _description="unreachable!(…)">
+    <text languages="rust"><![CDATA[unreachable!("${1:reason}")$0
+]]></text>
+  </snippet>
+  <snippet _name="unimplemented" trigger="unimplemented" _description="unimplemented!()">
+    <text languages="rust"><![CDATA[unimplemented!()$0
+]]></text>
+  </snippet>
+  <snippet _name="todo" trigger="todo" _description="todo!()">
+    <text languages="rust"><![CDATA[todo!()$0
+]]></text>
+  </snippet>
+  <snippet _name="assert" trigger="assert" _description="assert!(…)">
+    <text languages="rust"><![CDATA[assert!(${1:expression})$0
+]]></text>
+  </snippet>
+  <snippet _name="assert_eq" trigger="assert_eq" _description="assert_eq!(…)">
+    <text languages="rust"><![CDATA[assert_eq!(${1:expression1}, ${2:expression2})$0
+]]></text>
+  </snippet>
+  <snippet _name="assert_ne" trigger="assert_ne" _description="assert_ne!(…)">
+    <text languages="rust"><![CDATA[assert_ne!(${1:expression1}, ${2:expression2})$0
+]]></text>
+  </snippet>
+  <snippet _name="testsmod" trigger="testsmod" _description="Create tests module">
+    <text languages="rust"><![CDATA[#[cfg(test)]
+mod tests {
+	use super::*;
 
-		#[test]
-		fn ${1:function_name}() {
-			unimplemented!()$0
-		}
-	}
-snippet test
-- desc Create test
 	#[test]
 	fn ${1:function_name}() {
 		unimplemented!()$0
 	}
+}
+]]></text>
+  </snippet>
+</snippets>

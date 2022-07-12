@@ -1,845 +1,833 @@
-snippet gobject_derivable_private
-- scope c
-- desc Create GObject
-	#include "${1:$filename|stripsuffix}.h"
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+  <snippet _name="gobject_derivable_private" trigger="gobject_derivable_private" _description="Create GObject">
+    <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
 
-	typedef struct
-	{
-		$0
-	} ${2:$1|camelize}Private;
-
-	G_DEFINE_FINAL_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
-
-	enum {
-		PROP_0,
-		N_PROPS
-	};
-
-	static GParamSpec *properties [N_PROPS];
-
-	/**
-	 * $3_new:
-	 *
-	 * Create a new #$2.
-	 *
-	 * Returns: (transfer full): a newly created #$2
-	 */
-	$2 *
-	$3_new (void)
-	{
-		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
-	}
-
-	static void
-	$3_finalize (GObject *object)
-	{
-		$2 *self = ($2 *)object;
-		$2Private *priv = $3_get_instance_private (self);
-
-		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
-	}
-
-	static void
-	$3_get_property (GObject    *object,
-	${$3|space}               guint       prop_id,
-	${$3|space}               GValue     *value,
-	${$3|space}               GParamSpec *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_set_property (GObject      *object,
-	${$3|space}               guint         prop_id,
-	${$3|space}               const GValue *value,
-	${$3|space}               GParamSpec   *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_class_init ($2Class *klass)
-	{
-		GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-		object_class->finalize = $3_finalize;
-		object_class->get_property = $3_get_property;
-		object_class->set_property = $3_set_property;
-	}
-
-	static void
-	$3_init ($2 *self)
-	{
-	}
-
-snippet gobject_derivable
-- scope c
-- desc Create GObject
-	#include "${1:$filename|stripsuffix}.h"
-
-	G_DEFINE_TYPE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
-
-	enum {
-		PROP_0,
-		N_PROPS
-	};
-
-	static GParamSpec *properties [N_PROPS];
-
-	/**
-	 * $3_new:
-	 *
-	 * Create a new #$2.
-	 *
-	 * Returns: (transfer full): a newly created #$2
-	 */
-	$2 *
-	$3_new (void)
-	{
-		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
-	}
-
-	static void
-	$3_finalize (GObject *object)
-	{
-		$2 *self = ($2 *)object;
-
-		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
-	}
-
-	static void
-	$3_get_property (GObject    *object,
-	${$3|space}               guint       prop_id,
-	${$3|space}               GValue     *value,
-	${$3|space}               GParamSpec *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_set_property (GObject      *object,
-	${$3|space}               guint         prop_id,
-	${$3|space}               const GValue *value,
-	${$3|space}               GParamSpec   *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_class_init ($2Class *klass)
-	{
-		GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-		object_class->finalize = $3_finalize;
-		object_class->get_property = $3_get_property;
-		object_class->set_property = $3_set_property;
-	}
-
-	static void
-	$3_init ($2 *self)
-	{
-	}
-- scope chdr
-- desc Create GObject header
-	#pragma once
-
-	#include ${3:<glib-object.h>}
-
-	G_BEGIN_DECLS
-
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${$1|functify}_get_type())
-
-	G_DECLARE_DERIVABLE_TYPE (${1:$filename|stripsuffix|camelize}, ${$1|functify}, ${$1|functify|namespace|upper}, ${$1|class|functify|upper}, ${2:GObject})
-
-	struct _$1Class
-	{
-		$2Class parent_class;
-	};
-
-	$1 *${$1|functify}_new (void);
+typedef struct
+{
 	$0
-	G_END_DECLS
-snippet gobject
-- scope js
-- desc Create GObject
-	var $1 = GObject.registerClass(
-	class ${1:ClassName} extends ${2:GObject.Object} {
-		constructor(${3}) {
-			super();
-			$0
+} ${2:$1|camelize}Private;
+
+G_DEFINE_FINAL_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+
+enum {
+	PROP_0,
+	N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+
+/**
+ * $3_new:
+ *
+ * Create a new #$2.
+ *
+ * Returns: (transfer full): a newly created #$2
+ */
+
+$2 *
+$3_new (void)
+{
+	return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
+}
+
+static void
+$3_finalize (GObject *object)
+{
+	$2 *self = ($2 *)object;
+	$2Private *priv = $3_get_instance_private (self);
+	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
+}
+
+static void
+$3_get_property (GObject    *object,
+${$3|space}               guint       prop_id,
+${$3|space}               GValue     *value,
+${$3|space}               GParamSpec *pspec)
+{
+	$2 *self = ${$3|upper} (object);
+
+	switch (prop_id)
+	  {
+	  default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	  }
+}
+
+static void
+$3_set_property (GObject      *object,
+${$3|space}               guint         prop_id,
+${$3|space}               const GValue *value,
+${$3|space}               GParamSpec   *pspec)
+{
+	$2 *self = ${$3|upper} (object);
+
+	switch (prop_id)
+	  {
+	  default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	  }
+}
+
+static void
+$3_class_init ($2Class *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = $3_finalize;
+	object_class->get_property = $3_get_property;
+	object_class->set_property = $3_set_property;
+}
+
+static void
+$3_init ($2 *self)
+{
+}
+]]></text>
+  </snippet>
+  <snippet _name="gobject_derivable" trigger="gobject_derivable" _description="Create GObject">
+    <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
+
+G_DEFINE_TYPE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+
+enum {
+	PROP_0,
+	N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+/**
+ * $3_new:
+ *
+ * Create a new #$2.
+ *
+ * Returns: (transfer full): a newly created #$2
+ */
+$2 *
+$3_new (void)
+{
+	return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
+}
+
+static void
+$3_finalize (GObject *object)
+{
+	$2 *self = ($2 *)object;
+	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
+}
+
+static void
+$3_get_property (GObject    *object,
+${$3|space}               guint       prop_id,
+${$3|space}               GValue     *value,
+${$3|space}               GParamSpec *pspec)
+{
+	$2 *self = ${$3|upper} (object);
+
+	switch (prop_id)
+	  {
+	  default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	  }
+}
+
+static void
+$3_set_property (GObject      *object,
+${$3|space}               guint         prop_id,
+${$3|space}               const GValue *value,
+${$3|space}               GParamSpec   *pspec)
+{
+	$2 *self = ${$3|upper} (object);
+
+	switch (prop_id)
+	  {
+	  default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	  }
+}
+
+static void
+$3_class_init ($2Class *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = $3_finalize;
+	object_class->get_property = $3_get_property;
+	object_class->set_property = $3_set_property;
+}
+
+static void
+$3_init ($2 *self)
+{
+  $0
+}
+]]></text>
+    <text languages="chdr;"><![CDATA[#pragma once
+
+#include ${3:<glib-object.h>}
+
+G_BEGIN_DECLS
+
+#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${$1|functify}_get_type())
+
+G_DECLARE_DERIVABLE_TYPE (${1:$filename|stripsuffix|camelize}, ${$1|functify}, ${$1|functify|namespace|upper}, ${$1|class|functify|upper}, ${2:GObject})
+
+struct _$1Class
+{
+	$2Class parent_class;
+};
+
+$1 *${$1|functify}_new (void);
+$0
+
+G_END_DECLS
+]]></text>
+  </snippet>
+  <snippet _name="gobject" trigger="gobject" _description="Create GObject">
+    <text languages="js;"><![CDATA[var $1 = GObject.registerClass(
+class ${1:ClassName} extends ${2:GObject.Object} {
+
+	constructor(${3}) {
+		super();
+		$0
+	}
+
+});
+]]></text>
+    <text languages="python;"><![CDATA[class ${1:ClassName}(${2:GObject.Object}):
+
+	def __init__(self${3:,}):
+		$2.__init__(self)
+$0
+]]></text>
+    <text languages="python3;"><![CDATA[class ${1:ClassName}(${2:GObject.Object}):
+
+	def __init__(self${3:,}):
+		super().__init__()
+$0
+]]></text>
+  </snippet>
+  <snippet _name="gobject_final" trigger="gobject_final" _description="Create GObject for a non-derivable class">
+    <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
+
+struct _${2:$1|camelize}
+{
+	${4:GObject} parent_instance;
+};
+
+G_DEFINE_FINAL_TYPE ($2, ${3:$1|functify}, ${$4|namespace|functify|upper}_TYPE_${$4|class|functify|upper})
+
+enum {
+	PROP_0,
+	N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+
+$2 *
+$3_new (void)
+{
+	return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
+}
+
+static void
+$3_finalize (GObject *object)
+{
+	$2 *self = ($2 *)object;
+
+	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
+}
+
+static void
+$3_get_property (GObject    *object,
+${$3|space}               guint       prop_id,
+${$3|space}               GValue     *value,
+${$3|space}               GParamSpec *pspec)
+{
+	$2 *self = ${$3|upper} (object);
+
+	switch (prop_id)
+	  {
+	  default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	  }
+}
+
+static void
+$3_set_property (GObject      *object,
+${$3|space}               guint         prop_id,
+${$3|space}               const GValue *value,
+${$3|space}               GParamSpec   *pspec)
+{
+	$2 *self = ${$3|upper} (object);
+
+	switch (prop_id)
+	  {
+	  default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	  }
+}
+
+static void
+$3_class_init ($2Class *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = $3_finalize;
+	object_class->get_property = $3_get_property;
+	object_class->set_property = $3_set_property;
+}
+
+static void
+$3_init ($2 *self)
+{
+  $0
+}
+]]></text>
+    <text languages="chdr;"><![CDATA[#pragma once
+
+#include ${3:<glib-object.h>}
+
+G_BEGIN_DECLS
+
+#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${$1|functify}_get_type())
+
+G_DECLARE_FINAL_TYPE (${1:$filename|stripsuffix|camelize}, ${$1|functify}, ${$1|functify|namespace|upper}, ${$1|class|functify|upper}, ${2:GObject})
+
+$1 *${$1|functify}_new (void);
+$0
+
+G_END_DECLS
+]]></text>
+  </snippet>
+  <snippet _name="gobject_final_private" trigger="gobject_final_private" _description="Create GObject for a non-derivable class with private datastructure">
+    <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
+
+struct _${2:$1|camelize}
+{
+	${4:GObject} parent_instance;
+};
+
+typedef struct
+{
+	$0
+} ${2:$1|camelize}Private;
+
+G_DEFINE_FINAL_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${$4|namespace|functify|upper}_TYPE_${$4|class|functify|upper})
+
+enum {
+	PROP_0,
+	N_PROPS
+};
+
+static GParamSpec *properties [N_PROPS];
+
+$2 *
+$3_new (void)
+{
+	return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
+}
+
+static void
+$3_finalize (GObject *object)
+{
+	$2 *self = ($2 *)object;
+	$2Private *priv = $3_get_instance_private (self);
+
+	G_OBJECT_CLASS ($3_parent_class)->finalize (object);
+}
+
+static void
+$3_get_property (GObject    *object,
+${$3|space}               guint       prop_id,
+${$3|space}               GValue     *value,
+${$3|space}               GParamSpec *pspec)
+{
+	$2 *self = ${$3|upper} (object);
+
+	switch (prop_id)
+	  {
+	  default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	  }
+}
+
+static void
+$3_set_property (GObject      *object,
+${$3|space}               guint         prop_id,
+${$3|space}               const GValue *value,
+${$3|space}               GParamSpec   *pspec)
+{
+	$2 *self = ${$3|upper} (object);
+
+	switch (prop_id)
+	  {
+	  default:
+	    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+	  }
+}
+
+static void
+$3_class_init ($2Class *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = $3_finalize;
+	object_class->get_property = $3_get_property;
+	object_class->set_property = $3_set_property;
+}
+
+static void
+$3_init ($2 *self)
+{
+}
+]]></text>
+  </snippet>
+  <snippet _name="gobject_boxed_ref" trigger="gobject_boxed_ref" _description="Create reference counted boxed type">
+    <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
+
+G_DEFINE_BOXED_TYPE (${2:$1|camelize}, ${3:$1|functify}, $3_ref, $3_unref)
+
+/**
+ * $3_new:
+ *
+ * Creates a new #$2.
+ *
+ * Returns: (transfer full): A newly created #$2
+ */
+$2 *
+$3_new (void)
+{
+	$2 *self;
+
+	self = g_slice_new0 ($2);
+	self->ref_count = 1;
+
+	return self;
+}
+
+/**
+ * $3_copy:
+ * @self: a #$2
+ *
+ * Makes a deep copy of a #$2.
+ *
+ * Returns: (transfer full): A newly created #$2 with the same
+ *   contents as @self
+ */
+$2 *
+$3_copy ($2 *self)
+{
+	$2 *copy;
+
+	g_return_val_if_fail (self, NULL);
+	g_return_val_if_fail (self->ref_count, NULL);
+
+	copy = $3_new ();
+
+	return copy;
+}
+
+static void
+$3_free ($2 *self)
+{
+	g_assert (self);
+
+	g_assert_cmpint (self->ref_count, ==, 0);
+
+	g_slice_free ($2, self);
+}
+
+/**
+ * $3_ref:
+ * @self: A #$2
+ *
+ * Increments the reference count of @self by one.
+ *
+ * Returns: (transfer full): @self
+ */
+$2 *
+$3_ref ($2 *self)
+{
+	g_return_val_if_fail (self, NULL);
+	g_return_val_if_fail (self->ref_count, NULL);
+
+	g_atomic_int_inc (&self->ref_count);
+
+	return self;
+}
+
+/**
+ * $3_unref:
+ * @self: A #$2
+ *
+ * Decrements the reference count of @self by one, freeing the structure when
+ * the reference count reaches zero.
+ */
+void
+$3_unref ($2 *self)
+{
+	g_return_if_fail (self);
+	g_return_if_fail (self->ref_count);
+
+	if (g_atomic_int_dec_and_test (&self->ref_count))
+		$3_free (self);
+}$0
+]]></text>
+    <text languages="chdr;"><![CDATA[#pragma once
+
+#include ${3:<glib-object.h>}
+
+G_BEGIN_DECLS
+
+#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type ())
+
+typedef struct _$1 ${1:$filename|stripsuffix|camelize};
+
+struct _$1
+{
+	/*< private >*/
+	guint ref_count;
+};
+
+GType${$1|space} $4_get_type (void) G_GNUC_CONST;
+$1     *$4_new      (void);
+$1     *$4_copy     ($1 *self);
+$1     *$4_ref      ($1 *self);
+void${$1|space}  $4_unref    ($1 *self);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_unref)
+$0
+G_END_DECLS
+]]></text>
+  </snippet>
+  <snippet _name="gobject_boxed_copy" trigger="gobject_boxed_copy" _description="Create a copy/free boxed type">
+    <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
+
+G_DEFINE_BOXED_TYPE (${2:$1|camelize}, ${3:$1|functify}, $3_copy, $3_free)
+
+struct _$2
+{
+	$0;
+};
+
+/**
+ * $3_new:
+ *
+ * Creates a new #$2.
+ *
+ * Returns: (transfer full): A newly created #$2
+ */
+$2 *
+$3_new (void)
+{
+	$2 *self;
+
+	self = g_slice_new0 ($2);
+
+	return self;
+}
+
+/**
+ * $3_copy:
+ * @self: a #$2
+ *
+ * Makes a deep copy of a #$2.
+ *
+ * Returns: (transfer full): A newly created #$2 with the same
+ *   contents as @self
+ */
+$2 *
+$3_copy ($2 *self)
+{
+	$2 *copy;
+
+	g_return_val_if_fail (self, NULL);
+
+	copy = $3_new ();
+
+	return copy;
+}
+
+/**
+ * $3_free:
+ * @self: a #$2
+ *
+ * Frees a #$2 allocated using $3_new()
+ * or $3_copy().
+ */
+void
+$3_free ($2 *self)
+{
+	g_return_if_fail (self);
+
+	g_slice_free ($2, self);
+}
+]]></text>
+    <text languages="chdr;"><![CDATA[#pragma once
+
+#include ${3:<glib-object.h>}
+
+G_BEGIN_DECLS
+
+#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type ())
+
+typedef struct _$1 ${1:$filename|stripsuffix|camelize};
+
+GType${$1|space} $4_get_type (void) G_GNUC_CONST;
+$1     *$4_new      (void);
+$1     *$4_copy     ($1 *self);
+void${$1|space}  $4_free     ($1 *self);
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_free)
+$0
+
+G_END_DECLS
+]]></text>
+  </snippet>
+  <snippet _name="gobj_guard" trigger="gobj_guard" _description="Create header for a copy/free boxed type">
+    <text languages="chdr;"><![CDATA[#pragma once
+
+#include <glib.h>
+
+G_BEGIN_DECLS
+
+$0
+
+G_END_DECLS
+]]></text>
+  </snippet>
+  <snippet _name="gobj_interface" trigger="gobj_interface" _description="Create GObject Interface">
+    <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
+
+G_DEFINE_INTERFACE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
+
+static void
+$3_default_init ($2Interface *iface)
+{
+  $0
+}
+]]></text>
+    <text languages="chdr;"><![CDATA[#pragma once
+
+#include ${3:<glib-object.h>}
+
+G_BEGIN_DECLS
+
+#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${$1|functify}_get_type ())
+
+G_DECLARE_INTERFACE ($1, ${$1|functify}, ${$1|functify|namespace|upper}, ${$1|class|functify|upper}, ${2:GObject})
+
+struct _${1:$filename|stripsuffix|functify|camelize}Interface
+{
+	GTypeInterface parent;
+	$0
+};
+
+G_END_DECLS
+]]></text>
+  </snippet>
+  <snippet _name="gobj_ref" trigger="gobj_ref" _description="GObject ref">
+    <text languages="c;"><![CDATA[g_object_ref (${1});$0
+]]></text>
+  </snippet>
+  <snippet _name="gobj_unref" trigger="gobj_unref" _description="GObject unref">
+    <text languages="c;"><![CDATA[g_object_unref (${1});$0
+]]></text>
+  </snippet>
+  <snippet _name="gobj_clear" trigger="gobj_clear" _description="GObject clear">
+    <text languages="c;"><![CDATA[g_clear_object (&${1});$0
+]]></text>
+  </snippet>
+  <snippet _name="gproperty" trigger="gproperty" _description="Add GObject property">
+    <text languages="c;"><![CDATA[properties [PROP_${1:NAME}] =
+	g_param_spec_${2:object} ("${3:$1|lower}",
+	             ${$2|space}  "${4:$3|camelize}",
+	             ${$2|space}  "${5:$3|camelize}",
+	             ${$2|space}  ${6}
+	             ${$2|space}  (G_PARAM_${7:READWRITE} |
+	             ${$2|space}   G_PARAM_STATIC_STRINGS));
+g_object_class_install_property (object_class, PROP_$1,
+                                 properties [PROP_$1]);
+$0]]></text>
+    <text languages="js;"><![CDATA[${1:foo}: GObject.ParamSpec.${2:int}('$1',
+	'${3:$1|capitalize}', '${4:Property description}',
+	$0),
+]]></text>
+    <text languages="python;python3;"><![CDATA[${1:foo} = GObject.Property(type=${2:int}, default=${3:0})$0
+]]></text>
+  </snippet>
+  <snippet _name="gsignal" trigger="gsignal" _description="Add GObject signal">
+    <text languages="c;"><![CDATA[signals [${$1|functify|upper}] =
+	g_signal_new ("${1:name}",
+	              G_TYPE_FROM_CLASS (klass),
+	              ${2:G_SIGNAL_RUN_LAST},
+	              ${3:0},
+	              ${4:NULL},
+	              ${5:NULL},
+	              ${6:g_cclosure_marshal_generic},
+	              ${7:G_TYPE_NONE},
+	              ${8:0});$0
+]]></text>
+    <text languages="js;"><![CDATA[${1:signal}: {$0},
+]]></text>
+    <text languages="python;python3;"><![CDATA["${1:signal}": (GObject.SignalFlags.${2:RUN_FIRST}, ${3:None}, (${4:int,}))$0
+]]></text>
+  </snippet>
+  <snippet _name="async" trigger="async" _description="Create the async function for an async/finish pair">
+    <text languages="c;"><![CDATA[/**
+ * ${$2|functify}_$1_async:
+ * @self: an #$2
+ * @cancellable: (nullable): a #GCancellable
+ * @callback: a #GAsyncReadyCallback to execute upon completion
+ * @user_data: closure data for @callback
+ *
+ */
+void
+${$2|functify}_${1:do_something}_async (${2:$filename|stripsuffix|camelize} *self,
+${$2|space} ${$1|space}         GCancellable *cancellable,
+${$2|space} ${$1|space}         GAsyncReadyCallback callback,
+${$2|space} ${$1|space}         gpointer user_data)
+{
+	g_autoptr(GTask) task = NULL;
+
+	g_return_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self));
+	g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+	task = g_task_new (self, cancellable, callback, user_data);
+	g_task_set_source_tag (task, ${$2|functify}_$1_async);
+	$0
+}
+]]></text>
+    <text languages="chdr;"><![CDATA[void ${$2|functify}_${1:do_something}_async (${2:$filename|stripsuffix|camelize} *self,
+     ${$2|space} ${$1|space}         GCancellable *cancellable,
+     ${$2|space} ${$1|space}         GAsyncReadyCallback callback,
+     ${$2|space} ${$1|space}         gpointer user_data);$0
+]]></text>
+  </snippet>
+  <snippet _name="vtasync" trigger="vtasync" _description="Create a vtable async function for an async/finish pair">
+    <text languages="chdr;"><![CDATA[void     (*${1:do_someting}_async)  (${2:$filename|stripsuffix|camelize} *self,
+           ${$1|space}          GCancellable         *cancellable,
+           ${$1|space}          GAsyncReadyCallback   callback,
+           ${$1|space}          gpointer              user_data);$0
+]]></text>
+  </snippet>
+  <snippet _name="finish" trigger="finish" _description="Create the finish function for an async/finish pair">
+    <text languages="c;"><![CDATA[/**
+ * ${$2|functify}_$1_finish:
+ * @self: an #$2
+ * @result: a #GAsyncResult provided to callback
+ * @error: a location for a #GError, or %NULL
+ *
+ * Returns:
+ */
+gboolean
+${$2|functify}_${1:do_something}_finish (${2:$filename|stripsuffix|camelize} *self,
+${$2|space} ${$1|space}          GAsyncResult *result,
+${$2|space} ${$1|space}          GError **error)
+{
+	g_return_val_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self), ${3:FALSE});
+	g_return_val_if_fail (g_task_is_valid (result, self), $3);
+
+	return g_task_propagate_${4:boolean} (G_TASK (result), error);
+}$0
+]]></text>
+    <text languages="chdr;"><![CDATA[gboolean ${$2|functify}_${1:do_something}_finish (${2:$filename|stripsuffix|camelize} *self,
+         ${$2|space} ${$1|space}          GAsyncResult *result,
+         ${$2|space} ${$1|space}          GError **error);
+]]></text>
+  </snippet>
+  <snippet _name="vtfinish" trigger="vtfinish" _description="Create a vtable finish function for an async/finish pair">
+    <text languages="chdr;"><![CDATA[gboolean (*${1:do_someting}_finish) (${2:$filename|stripsuffix|camelize} *self,
+           ${$1|space}          GAsyncResult         *result,
+           ${$1|space}          GError              **error);$0
+]]></text>
+  </snippet>
+  <snippet _name="readycallback" trigger="readycallback" _description="Create a GAsyncReadyCallback function">
+    <text languages="c;"><![CDATA[static void
+${$filename|stripsuffix|functify}_${1:do_something_cb} (GObject      *object,
+${$filename|stripsuffix|functify|space} ${$1|space}  GAsyncResult *result,
+${$filename|stripsuffix|functify|space} ${$1|space}  gpointer      user_data)
+{
+	g_autoptr(GTask) task = user_data;
+	g_autoptr(GError) error = NULL;
+
+	g_assert (G_IS_OBJECT (object));
+	g_assert (G_IS_ASYNC_RESULT (result));
+	g_assert (G_IS_TASK (task));
+
+	g_task_return_boolean (task, TRUE);
+}$0
+]]></text>
+  </snippet>
+  <snippet _name="Private" trigger="Private" _description="Define a local for the GObject&apos;s private data.">
+    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify|camelize}Private *priv = ${$filename|stripsuffix|functify}_get_instance_private (self);$0
+]]></text>
+  </snippet>
+  <snippet _name="doc" trigger="doc" _description="">
+    <text languages="c;chdr;"><![CDATA[/**
+ * ${$filename|stripsuffix|functify}_${1:func}:
+ *
+ * ${3}
+ *
+ * Returns: ${2}
+ */$0
+]]></text>
+  </snippet>
+  <snippet _name="fail" trigger="fail" _description="Snippet for g_return_if_fail()">
+    <text languages="c;chdr;"><![CDATA[g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)});$0
+]]></text>
+  </snippet>
+  <snippet _name="vfail" trigger="vfail" _description="Snippet for g_return_val_if_fail()">
+    <text languages="c;chdr;"><![CDATA[g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)}, ${2:NULL});$0
+]]></text>
+  </snippet>
+  <snippet _name="gobj_get_property" trigger="gobj_get_property" _description="Create a get_property handler">
+    <text languages="c;"><![CDATA[static void
+${1:$filename|stripsuffix|functify}_get_property (GObject    *object,
+${$1|space}               guint       prop_id,
+${$1|space}               GValue     *value,
+${$1|space}               GParamSpec *pspec)
+{
+	${2:$filename|stripsuffix|camelize} *self = ${3:$2|functify|upper} (object);
+
+	switch (prop_id)
+		{$0
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		}
-	});
-- scope python
-- desc Create GObject
-	class ${1:ClassName}(${2:GObject.Object}):
-
-		def __init__(self${3:,}):
-			$2.__init__(self)
-
-	$0
-- scope python3
-- desc Create GObject
-	class ${1:ClassName}(${2:GObject.Object}):
-
-		def __init__(self${3:,}):
-			super().__init__()
-
-	$0
-snippet gobject_final
-- scope c
-- desc Create GObject for a non-derivable class
-	#include "${1:$filename|stripsuffix}.h"
-	
-	struct _${2:$1|camelize}
-	{
-		${4:GObject} parent_instance;
-	};
-
-	G_DEFINE_FINAL_TYPE ($2, ${3:$1|functify}, ${$4|namespace|functify|upper}_TYPE_${$4|class|functify|upper})
-
-	enum {
-		PROP_0,
-		N_PROPS
-	};
-
-	static GParamSpec *properties [N_PROPS];
-
-	$2 *
-	$3_new (void)
-	{
-		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
-	}
-
-	static void
-	$3_finalize (GObject *object)
-	{
-		$2 *self = ($2 *)object;
-
-		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
-	}
-
-	static void
-	$3_get_property (GObject    *object,
-	${$3|space}               guint       prop_id,
-	${$3|space}               GValue     *value,
-	${$3|space}               GParamSpec *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_set_property (GObject      *object,
-	${$3|space}               guint         prop_id,
-	${$3|space}               const GValue *value,
-	${$3|space}               GParamSpec   *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_class_init ($2Class *klass)
-	{
-		GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-		object_class->finalize = $3_finalize;
-		object_class->get_property = $3_get_property;
-		object_class->set_property = $3_set_property;
-	}
-
-	static void
-	$3_init ($2 *self)
-	{
-	}
-- scope chdr
-- desc Create GObject header for a non-derivable class
-	#pragma once
-
-	#include ${3:<glib-object.h>}
-
-	G_BEGIN_DECLS
-
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${$1|functify}_get_type())
-
-	G_DECLARE_FINAL_TYPE (${1:$filename|stripsuffix|camelize}, ${$1|functify}, ${$1|functify|namespace|upper}, ${$1|class|functify|upper}, ${2:GObject})
-
-	$1 *${$1|functify}_new (void);
-	$0
-	G_END_DECLS
-snippet gobject_final_private
-- scope c
-- desc Create GObject for a non-derivable class with private datastructure
-	#include "${1:$filename|stripsuffix}.h"
-
-	struct _${2:$1|camelize}
-	{
-		${4:GObject} parent_instance;
-	};
-
-	typedef struct
-	{
-		$0
-	} ${2:$1|camelize}Private;
-
-
-	G_DEFINE_FINAL_TYPE_WITH_PRIVATE ($2, ${3:$1|functify}, ${$4|namespace|functify|upper}_TYPE_${$4|class|functify|upper})
-
-	enum {
-		PROP_0,
-		N_PROPS
-	};
-
-	static GParamSpec *properties [N_PROPS];
-
-	$2 *
-	$3_new (void)
-	{
-		return g_object_new (${$1|namespace|functify|upper}_TYPE_${$1|class|functify|upper}, NULL);
-	}
-
-	static void
-	$3_finalize (GObject *object)
-	{
-		$2 *self = ($2 *)object;
-		$2Private *priv = $3_get_instance_private (self);
-
-		G_OBJECT_CLASS ($3_parent_class)->finalize (object);
-	}
-
-	static void
-	$3_get_property (GObject    *object,
-	${$3|space}               guint       prop_id,
-	${$3|space}               GValue     *value,
-	${$3|space}               GParamSpec *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_set_property (GObject      *object,
-	${$3|space}               guint         prop_id,
-	${$3|space}               const GValue *value,
-	${$3|space}               GParamSpec   *pspec)
-	{
-		$2 *self = ${$3|upper} (object);
-
-		switch (prop_id)
-		  {
-		  default:
-		    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-		  }
-	}
-
-	static void
-	$3_class_init ($2Class *klass)
-	{
-		GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-		object_class->finalize = $3_finalize;
-		object_class->get_property = $3_get_property;
-		object_class->set_property = $3_set_property;
-	}
-
-	static void
-	$3_init ($2 *self)
-	{
-	}
-snippet gobject_boxed_ref
-- scope c
-- desc Create reference counted boxed type
-	#include "${1:$filename|stripsuffix}.h"
-
-	G_DEFINE_BOXED_TYPE (${2:$1|camelize}, ${3:$1|functify}, $3_ref, $3_unref)
-
-	/**
-	 * $3_new:
-	 *
-	 * Creates a new #$2.
-	 *
-	 * Returns: (transfer full): A newly created #$2
-	 */
-	$2 *
-	$3_new (void)
-	{
-		$2 *self;
-
-		self = g_slice_new0 ($2);
-		self->ref_count = 1;
-
-		return self;
-	}
-
-	/**
-	 * $3_copy:
-	 * @self: a #$2
-	 *
-	 * Makes a deep copy of a #$2.
-	 *
-	 * Returns: (transfer full): A newly created #$2 with the same
-	 *   contents as @self
-	 */
-	$2 *
-	$3_copy ($2 *self)
-	{
-		$2 *copy;
-
-		g_return_val_if_fail (self, NULL);
-		g_return_val_if_fail (self->ref_count, NULL);
-
-		copy = $3_new ();
-
-		return copy;
-	}
-
-	static void
-	$3_free ($2 *self)
-	{
-		g_assert (self);
-		g_assert_cmpint (self->ref_count, ==, 0);
-
-		g_slice_free ($2, self);
-	}
-
-	/**
-	 * $3_ref:
-	 * @self: A #$2
-	 *
-	 * Increments the reference count of @self by one.
-	 *
-	 * Returns: (transfer full): @self
-	 */
-	$2 *
-	$3_ref ($2 *self)
-	{
-		g_return_val_if_fail (self, NULL);
-		g_return_val_if_fail (self->ref_count, NULL);
-
-		g_atomic_int_inc (&self->ref_count);
-
-		return self;
-	}
-
-	/**
-	 * $3_unref:
-	 * @self: A #$2
-	 *
-	 * Decrements the reference count of @self by one, freeing the structure when
-	 * the reference count reaches zero.
-	 */
-	void
-	$3_unref ($2 *self)
-	{
-		g_return_if_fail (self);
-		g_return_if_fail (self->ref_count);
-
-		if (g_atomic_int_dec_and_test (&self->ref_count))
-			$3_free (self);
-	}
-- scope chdr
-- desc Create header for reference counted boxed type
-	#pragma once
-
-	#include ${3:<glib-object.h>}
-
-	G_BEGIN_DECLS
-
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type ())
-
-	typedef struct _$1 ${1:$filename|stripsuffix|camelize};
-
-	struct _$1
-	{
-		/*< private >*/
-		guint ref_count;
-	};
-
-	GType${$1|space} $4_get_type (void) G_GNUC_CONST;
-	$1     *$4_new      (void);
-	$1     *$4_copy     ($1 *self);
-	$1     *$4_ref      ($1 *self);
-	void${$1|space}  $4_unref    ($1 *self);
-	$0
-	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_unref)
-	$0
-	G_END_DECLS
-snippet gobject_boxed_copy
-- scope c
-- desc Create a copy/free boxed type
-	#include "${1:$filename|stripsuffix}.h"
-
-	G_DEFINE_BOXED_TYPE (${2:$1|camelize}, ${3:$1|functify}, $3_copy, $3_free)
-
-	struct _$2
-	{
-		$0;
-	};
-
-	/**
-	 * $3_new:
-	 *
-	 * Creates a new #$2.
-	 *
-	 * Returns: (transfer full): A newly created #$2
-	 */
-	$2 *
-	$3_new (void)
-	{
-		$2 *self;
-
-		self = g_slice_new0 ($2);
-
-		return self;
-	}
-
-	/**
-	 * $3_copy:
-	 * @self: a #$2
-	 *
-	 * Makes a deep copy of a #$2.
-	 *
-	 * Returns: (transfer full): A newly created #$2 with the same
-	 *   contents as @self
-	 */
-	$2 *
-	$3_copy ($2 *self)
-	{
-		$2 *copy;
-
-		g_return_val_if_fail (self, NULL);
-
-		copy = $3_new ();
-
-		return copy;
-	}
-
-	/**
-	 * $3_free:
-	 * @self: a #$2
-	 *
-	 * Frees a #$2 allocated using $3_new()
-	 * or $3_copy().
-	 */
-	void
-	$3_free ($2 *self)
-	{
-		g_return_if_fail (self);
-
-		g_slice_free ($2, self);
-	}
-- scope chdr
-- desc Create header for a copy/free boxed type
-	#pragma once
-
-	#include ${3:<glib-object.h>}
-
-	G_BEGIN_DECLS
-
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${4:$1|functify}_get_type ())
-
-	typedef struct _$1 ${1:$filename|stripsuffix|camelize};
-
-	GType${$1|space} $4_get_type (void) G_GNUC_CONST;
-	$1     *$4_new      (void);
-	$1     *$4_copy     ($1 *self);
-	void${$1|space}  $4_free     ($1 *self);
-	$0
-	G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_free)
-	$0
-	G_END_DECLS
-snippet gobj_guard
-- scope chdr
-	#pragma once
-
-	#include <glib.h>
-
-	G_BEGIN_DECLS
+}
+]]></text>
+  </snippet>
+  <snippet _name="gobj_set_property" trigger="gobj_set_property" _description="Create a set_property handler">
+    <text languages="c;"><![CDATA[static void
+${1:$filename|stripsuffix|functify}_set_property (GObject      *object,
+${$1|space}               guint         prop_id,
+${$1|space}               const GValue *value,
+${$1|space}               GParamSpec   *pspec)
+{
+	${2:$filename|stripsuffix|camelize} *self = ${3:$2|functify|upper} (object);
+
+	switch (prop_id)
+		{$0
+		default:
+			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+		}
+}
+]]></text>
+  </snippet>
+  <snippet _name="testmain" trigger="testmain" _description="">
+    <text languages="c;cpp;"><![CDATA[#include <glib.h>
+gint
+main (gint   argc,
+      gchar *argv[])
+{
+	g_test_init (&argc, &argv, NULL);
 
 	$0
 
-	G_END_DECLS
-snippet gobj_interface
-- scope c
-- desc Create GObject Interface
-	#include "${1:$filename|stripsuffix}.h"
-
-	G_DEFINE_INTERFACE (${2:$1|camelize}, ${3:$1|functify}, ${4:G_TYPE_OBJECT})
-
-	static void
-	$3_default_init ($2Interface *iface)
-	{
-	}
-- scope chdr
-- desc Create GObject Interface header
-	#pragma once
-
-	#include ${3:<glib-object.h>}
-
-	G_BEGIN_DECLS
-
-	#define ${$1|functify|namespace|upper}_TYPE_${$1|class|functify|upper} (${$1|functify}_get_type ())
-
-	G_DECLARE_INTERFACE ($1, ${$1|functify}, ${$1|functify|namespace|upper}, ${$1|class|functify|upper}, ${2:GObject})
-
-	struct _${1:$filename|stripsuffix|functify|camelize}Interface
-	{
-		GTypeInterface parent;
-
-		$0
-	};
-
-	G_END_DECLS
-snippet gobj_ref
-- scope c
-- desc GObject ref
-	g_object_ref (${1});$0
-snippet gobj_unref
-- scope c
-- desc GObject unref
-	g_object_unref (${1});$0
-snippet gobj_clear
-- scope c
-- desc GObject clear
-	g_clear_object (&${1});$0
-snippet gproperty
-- scope c
-- desc Add GObject property
-	properties [PROP_${1:NAME}] =
-		g_param_spec_${2:object} ("${3:$1|lower}",
-		             ${$2|space}  "${4:$3|camelize}",
-		             ${$2|space}  "${5:$3|camelize}",
-		             ${$2|space}  ${6}
-		             ${$2|space}  (G_PARAM_${7:READWRITE} |
-		             ${$2|space}   G_PARAM_STATIC_STRINGS));
-	g_object_class_install_property (object_class, PROP_$1,
-	                                 properties [PROP_$1]);
-- scope js
-- desc Add GObject property
-	${1:foo}: GObject.ParamSpec.${2:int}('$1',
-		'${3:$1|capitalize}', '${4:Property description}',
-		$0),
-- scope python, python3
-- desc Add GObject property
-	${1:foo} = GObject.Property(type=${2:int}, default=${3:0})$0
-snippet gsignal
-- scope c
-- desc Add GObject signal
-	signals [${$1|functify|upper}] =
-		g_signal_new ("${1:name}",
-		              G_TYPE_FROM_CLASS (klass),
-		              ${2:G_SIGNAL_RUN_LAST},
-		              ${3:0},
-		              ${4:NULL},
-		              ${5:NULL},
-		              ${6:g_cclosure_marshal_generic},
-		              ${7:G_TYPE_NONE},
-		              ${8:0});
-- scope js
-- desc Add GObject signal
-	${1:signal}: {$0},
-- scope python, python3
-- desc Add GObject signal
-	"${1:signal}": (GObject.SignalFlags.${2:RUN_FIRST}, ${3:None}, (${4:int,}))$0
-snippet async
-- scope c
-- desc Create the async function for an async/finish pair
-	/**
-	 * ${$2|functify}_$1_async:
-	 * @self: an #$2
-	 * @cancellable: (nullable): a #GCancellable
-	 * @callback: a #GAsyncReadyCallback to execute upon completion
-	 * @user_data: closure data for @callback
-	 *
-	 */
-	void
-	${$2|functify}_${1:do_something}_async (${2:$filename|stripsuffix|camelize} *self,
-	${$2|space} ${$1|space}         GCancellable *cancellable,
-	${$2|space} ${$1|space}         GAsyncReadyCallback callback,
-	${$2|space} ${$1|space}         gpointer user_data)
-	{
-		g_autoptr(GTask) task = NULL;
-
-		g_return_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self));
-		g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-		task = g_task_new (self, cancellable, callback, user_data);
-		g_task_set_source_tag (task, ${$2|functify}_$1_async);
-
-		$0
-	}
-- scope chdr
-- desc Create the header declaration for an async function
-	void ${$2|functify}_${1:do_something}_async (${2:$filename|stripsuffix|camelize} *self,
-	     ${$2|space} ${$1|space}         GCancellable *cancellable,
-	     ${$2|space} ${$1|space}         GAsyncReadyCallback callback,
-	     ${$2|space} ${$1|space}         gpointer user_data);
-snippet vtasync
-- scope chdr
-- desc Create a vtable async function for an async/finish pair
-	void     (*${1:do_someting}_async)  (${2:$filename|stripsuffix|camelize} *self,
-	           ${$1|space}          GCancellable         *cancellable,
-	           ${$1|space}          GAsyncReadyCallback   callback,
-	           ${$1|space}          gpointer              user_data);
-snippet finish
-- scope c
-- desc Create the finish function for an async/finish pair
-	/**
-	 * ${$2|functify}_$1_finish:
-	 * @self: an #$2
-	 * @result: a #GAsyncResult provided to callback
-	 * @error: a location for a #GError, or %NULL
-	 *
-	 * Returns:
-	 */
-	gboolean
-	${$2|functify}_${1:do_something}_finish (${2:$filename|stripsuffix|camelize} *self,
-	${$2|space} ${$1|space}          GAsyncResult *result,
-	${$2|space} ${$1|space}          GError **error)
-	{
-		g_return_val_if_fail (${$filename|stripsuffix|functify|namespace|upper}_IS_${$filename|stripsuffix|class|functify|upper} (self), ${3:FALSE});
-		g_return_val_if_fail (g_task_is_valid (result, self), $3);
-
-		return g_task_propagate_${4:boolean} (G_TASK (result), error);
-	}
-- scope chdr
-- desc Create the header declaration for a finish function
-	gboolean ${$2|functify}_${1:do_something}_finish (${2:$filename|stripsuffix|camelize} *self,
-	         ${$2|space} ${$1|space}          GAsyncResult *result,
-	         ${$2|space} ${$1|space}          GError **error);
-snippet vtfinish
-- scope chdr
-- desc Create a vtable finish function for an async/finish pair
-	gboolean (*${1:do_someting}_finish) (${2:$filename|stripsuffix|camelize} *self,
-	           ${$1|space}          GAsyncResult         *result,
-	           ${$1|space}          GError              **error);
-snippet readycallback
-- scope c
-- desc Create a GAsyncReadyCallback function
-	static void
-	${$filename|stripsuffix|functify}_${1:do_something_cb} (GObject      *object,
-	${$filename|stripsuffix|functify|space} ${$1|space}  GAsyncResult *result,
-	${$filename|stripsuffix|functify|space} ${$1|space}  gpointer      user_data)
-	{
-		g_autoptr(GTask) task = user_data;
-		g_autoptr(GError) error = NULL;
-
-		g_assert (G_IS_OBJECT (object));
-		g_assert (G_IS_ASYNC_RESULT (result));
-		g_assert (G_IS_TASK (task));
-
-		g_task_return_boolean (task, TRUE);
-	}
-snippet Private
-- desc Define a local for the GObject's private data.
-- scope c, chdr
-	${$filename|stripsuffix|functify|camelize}Private *priv = ${$filename|stripsuffix|functify}_get_instance_private (self);$0
-snippet doc
-- scope c, chdr
-	/**
-	 * ${$filename|stripsuffix|functify}_${1:func}:
-	 *
-	 * ${3}
-	 *
-	 * Returns: ${2}
-	 *
-	 * Since: ${4:$project_version}
-	 */$0
-snippet fail
-- desc Snippet for g_return_if_fail()
-- scope c, chdr
-	g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)});$0
-snippet vfail
-- desc Snippet for g_return_val_if_fail()
-- scope c, chdr
-	g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)}, ${2:NULL});$0
-snippet gobj_get_property
-- desc Create a get_property handler
-- scope c
-	static void
-	${1:$filename|stripsuffix|functify}_get_property (GObject    *object,
-	${$1|space}               guint       prop_id,
-	${$1|space}               GValue     *value,
-	${$1|space}               GParamSpec *pspec)
-	{
-		${2:$filename|stripsuffix|camelize} *self = ${3:$2|functify|upper} (object);
-
-		switch (prop_id)
-			{$0
-			default:
-				G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-			}
-	}
-snippet gobj_set_property
-- desc Create a set_property handler
-- scope c
-	static void
-	${1:$filename|stripsuffix|functify}_set_property (GObject      *object,
-	${$1|space}               guint         prop_id,
-	${$1|space}               const GValue *value,
-	${$1|space}               GParamSpec   *pspec)
-	{
-		${2:$filename|stripsuffix|camelize} *self = ${3:$2|functify|upper} (object);
-
-		switch (prop_id)
-			{$0
-			default:
-				G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-			}
-	}
-snippet testmain
-- scope c, cpp
-	#include <glib.h>
-
-	gint
-	main (gint   argc,
-	      gchar *argv[])
-	{
-		g_test_init (&argc, &argv, NULL);
-
-		$0
-
-		return g_test_run ();
-	}
-snippet testadd
-- scope c, cpp
-	g_test_add_func($1, $2);$0
+	return g_test_run ();
+}
+]]></text>
+  </snippet>
+</snippets>

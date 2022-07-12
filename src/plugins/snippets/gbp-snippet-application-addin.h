@@ -1,6 +1,6 @@
-/* ide-snippet-model.h
+/* gbp-snippet-application-addin.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Günther Wagner <info@gunibert.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,23 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- * SPDX-License-Identifier: GPL-3.0-or-later
+ * SPDX-License-Gbpntifier: GPL-3.0-or-later
  */
 
 #pragma once
 
-#include <libide-sourceview.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SNIPPET_MODEL (ide_snippet_model_get_type())
+#define GBP_TYPE_SNIPPET_APPLICATION_ADDIN (gbp_snippet_application_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeSnippetModel, ide_snippet_model, IDE, SNIPPET_MODEL, GObject)
-
-IdeSnippetModel *ide_snippet_model_new          (IdeSnippetStorage *storage);
-void             ide_snippet_model_set_language (IdeSnippetModel   *self,
-                                                 const gchar       *language_id);
-void             ide_snippet_model_set_prefix   (IdeSnippetModel   *self,
-                                                 const gchar       *prefix);
+G_DECLARE_FINAL_TYPE (GbpSnippetApplicationAddin, gbp_snippet_application_addin, GBP, SNIPPET_APPLICATION_ADDIN, GObject)
 
 G_END_DECLS

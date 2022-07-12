@@ -1,62 +1,80 @@
-snippet coding
-- scope python, python3
-- desc Set document encoding
-	# -*- coding: ${1:utf-8} -*-
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+  <snippet _name="coding" trigger="coding" _description="Set document encoding">
+    <text languages="python;python3;"><![CDATA[# -*- coding: ${1:utf-8} -*-
+$0
+]]></text>
+  </snippet>
+  <snippet _name="import" trigger="import" _description="import package">
+    <text languages="python;python3;"><![CDATA[import $0
+]]></text>
+  </snippet>
+  <snippet _name="from" trigger="from" _description="import parts from module">
+    <text languages="python;python3;"><![CDATA[from ${1:__future__} import $0
+]]></text>
+  </snippet>
+  <snippet _name="def" trigger="def" _description="function">
+    <tooltip position="1" text="Function name"/>
+    <tooltip position="2" text="Parameters"/>
+    <text languages="python;python3;"><![CDATA[def ${1:function}(${2}):
 	$0
-snippet import
-- scope python, python3
-	import $0
-snippet from
-- scope python, python3
-	from ${1:__future__} import $0
-snippet def
-- scope python, python3
-	def ${1:function}(${2}):
-		$0
-snippet class
-- scope python, python3
-	class ${1:ClassName}(${2:object}):
-	
-		def __init__(self${3:,}):
-			${4:pass}
-	
+]]></text>
+  </snippet>
+  <snippet _name="class" trigger="class" _description="define class">
+    <tooltip position="1" text="Class name"/>
+    <tooltip position="2" text="Base class"/>
+    <tooltip position="3" text="constructor parameters"/>
+    <text languages="python;python3;"><![CDATA[class ${1:ClassName}(${2:object}):
+
+	def __init__(self${3:,}):
+		${4:pass}
+
+$0
+]]></text>
+  </snippet>
+  <snippet _name="if" trigger="if" _description="">
+    <text languages="python;python3;"><![CDATA[if ${1:condition}:
 	$0
-snippet if
-- scope python, python3
-	if ${1:condition}:
-		$0
-snippet else
-- scope python, python3
-	else:
-		$0
-snippet elif
-- scope python, python3
-	elif ${1:condition}:
-		$0
-snippet while
-- scope python, python3
-	while ${1:condition}:
-		$0
-snippet for
-- scope python, python3
-	for ${1:item} in ${2:collection}:
-		$0
-snippet try
-- scope python, python3
-	try:
-		$0
-snippet except
-- scope python, python3
-	except ${1:Exception}:
-		$0
-snippet finally
-- scope python, python3
-	finally:
-		$0
-snippet with
-- scope python, python3
-	with ${1:expression} as ${2:variable}:
-		$0
-snippet lambda
-- scope python, python3
-	lambda ${1:name}: $0
+]]></text>
+  </snippet>
+  <snippet _name="else" trigger="else" _description="">
+    <text languages="python;python3;"><![CDATA[else:
+	$0
+]]></text>
+  </snippet>
+  <snippet _name="elif" trigger="elif" _description="">
+    <text languages="python;python3;"><![CDATA[elif ${1:condition}:
+	$0
+]]></text>
+  </snippet>
+  <snippet _name="while" trigger="while" _description="">
+    <text languages="python;python3;"><![CDATA[while ${1:condition}:
+	$0
+]]></text>
+  </snippet>
+  <snippet _name="for" trigger="for" _description="">
+    <text languages="python;python3;"><![CDATA[for ${1:item} in ${2:collection}:
+	$0
+]]></text>
+  </snippet>
+  <snippet _name="try" trigger="try" _description="">
+    <text languages="python;python3;"><![CDATA[try:
+	$0
+]]></text>
+  </snippet>
+  <snippet _name="except" trigger="except" _description="">
+    <text languages="python;python3;"><![CDATA[except ${1:Exception}:
+	$0
+]]></text>
+  </snippet>
+  <snippet _name="finally" trigger="finally" _description="">
+    <text languages="python;python3;"><![CDATA[finally:
+	$0
+]]></text>
+  </snippet>
+  <snippet _name="with" trigger="with" _description="">
+    <text languages="python;python3;"><![CDATA[with ${1:expression} as ${2:variable}:
+	$0
+]]></text>
+  </snippet>
+</snippets>

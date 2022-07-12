@@ -1,115 +1,167 @@
-snippet import
-	import '${1:./module.js}';
-	$0
-snippet from
-- desc import … from
-	import ${1:{ Module }} from '${2:./module.js}';
-	$0
-snippet imports
-	const ${1:Module} = imports.${2:path}.${$1|decapitalize};
-	$0
-snippet gi
-- desc imports.gi
-	const ${1:{ GObject, Gtk }} = imports.gi;
-	$0
-snippet lang
-- desc imports.lang
-	const ${1:Lang} = imports.${$1|decapitalize};
-	$0
-snippet require
-	const ${1:Module} = require('${2:./}${3:$1|lower}');
-	$0
-snippet class
-	class ${1:ClassName} {
-		constructor(${2}) {
-			$0
-		}
-	}
-snippet method
-- desc Create class method
-	${1:name}(${2}) {
+<?xml version="1.0" encoding="utf-8"?>
+<snippets>
+  <snippet _name="import" trigger="import" _description="">
+    <text languages="js"><![CDATA[import '${1:./module.js}';
+$0
+]]></text>
+  </snippet>
+  <snippet _name="from" trigger="from" _description="import … from">
+    <text languages="js"><![CDATA[import ${1:{ Module }} from '${2:./module.js}';
+$0
+]]></text>
+  </snippet>
+  <snippet _name="imports" trigger="imports" _description="">
+    <text languages="js"><![CDATA[const ${1:Module} = imports.${2:path}.${$1|decapitalize};
+$0
+]]></text>
+  </snippet>
+  <snippet _name="gi" trigger="gi" _description="imports.gi">
+    <text languages="js"><![CDATA[const ${1:{ GObject, Gtk }} = imports.gi;
+$0
+]]></text>
+  </snippet>
+  <snippet _name="lang" trigger="lang" _description="imports.lang">
+    <text languages="js"><![CDATA[const ${1:Lang} = imports.${$1|decapitalize};
+$0
+]]></text>
+  </snippet>
+  <snippet _name="require" trigger="require" _description="">
+    <text languages="js"><![CDATA[const ${1:Module} = require('${2:./}${3:$1|lower}');
+$0
+]]></text>
+  </snippet>
+  <snippet _name="class" trigger="class" _description="">
+    <text languages="js"><![CDATA[class ${1:ClassName} {
+	constructor(${2}) {
 		$0
 	}
-snippet function
-	function ${1:name}(${2}) {
-		$0
-	}
-snippet arrow
-- desc Create arrow function
-	${1:()} => {
-		$0
-	}
-snippet if
-	if (${1:condition}) {
-		$0
-	}
-snippet else
-	else {
-		$0
-	}
-snippet elseif
-- desc else if
-	else if (${1:condition}) {
-		$0
-	}
-snippet switch
-	switch (${1:expression}) {
-		case ${2:value}:
-			$0
-			break;
-	}
-snippet case
-	case ${1:value}:
+}
+]]></text>
+  </snippet>
+  <snippet _name="method" trigger="method" _description="Create class method">
+    <text languages="js"><![CDATA[${1:name}(${2}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="function" trigger="function" _description="">
+    <text languages="js"><![CDATA[function ${1:name}(${2}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="arrow" trigger="arrow" _description="Create arrow function">
+    <text languages="js"><![CDATA[${1:()} => {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="if" trigger="if" _description="">
+    <text languages="js"><![CDATA[if (${1:condition}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="else" trigger="else" _description="">
+    <text languages="js"><![CDATA[else {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="elseif" trigger="elseif" _description="else if">
+    <text languages="js"><![CDATA[else if (${1:condition}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="switch" trigger="switch" _description="">
+    <text languages="js"><![CDATA[switch (${1:expression}) {
+	case ${2:value}:
 		$0
 		break;
-snippet default
-- desc default … break
-	default:
-		$0
-		break;
-snippet while
-	while (${1:condition}) {
-		$0
-	}
-snippet for
-	for (${1:let i = 0}; ${2:i < }; ${3:i++}) {
-		$0
-	}
-snippet forin
-- desc for … in
-	for (${1:let item} in ${2:enumerable}) {
-		$0
-	}
-snippet forof
-- desc for … of
-	for (${1:let item} of ${2:iterable}) {
-		$0
-	}
-snippet try
-	try {
-		$0
-	}
-snippet catch
-	catch (${1:err}) {
-		$0
-	}
-snippet finally
-	finally {
-		$0
-	}
-snippet const
-	const ${1:variable} = ${2:expression};$0
-snippet let
-	let ${1:variable} = ${2:expression};$0
-snippet var
-	var ${1:variable} = ${2:expression};$0
-snippet log
-	console.log('${1:message}');$0
-snippet debug
-	console.debug('${1:message}');$0
-snippet error
-	console.error('${1:message}');$0
-snippet info
-	console.info('${1:message}');$0
-snippet warn
-	console.warn('${1:message}');$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="case" trigger="case" _description="">
+    <text languages="js"><![CDATA[case ${1:value}:
+	$0
+	break;
+]]></text>
+  </snippet>
+  <snippet _name="default" trigger="default" _description="default … break">
+    <text languages="js"><![CDATA[default:
+	$0
+	break;
+]]></text>
+  </snippet>
+  <snippet _name="while" trigger="while" _description="">
+    <text languages="js"><![CDATA[while (${1:condition}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="for" trigger="for" _description="">
+    <text languages="js"><![CDATA[for (${1:let i = 0}; ${2:i < }; ${3:i++}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="forin" trigger="forin" _description="for … in">
+    <text languages="js"><![CDATA[for (${1:let item} in ${2:enumerable}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="forof" trigger="forof" _description="for … of">
+    <text languages="js"><![CDATA[for (${1:let item} of ${2:iterable}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="try" trigger="try" _description="">
+    <text languages="js"><![CDATA[try {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="catch" trigger="catch" _description="">
+    <text languages="js"><![CDATA[catch (${1:err}) {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="finally" trigger="finally" _description="">
+    <text languages="js"><![CDATA[finally {
+	$0
+}
+]]></text>
+  </snippet>
+  <snippet _name="const" trigger="const" _description="">
+    <text languages="js"><![CDATA[const ${1:variable} = ${2:expression};$0
+]]></text>
+  </snippet>
+  <snippet _name="let" trigger="let" _description="">
+    <text languages="js"><![CDATA[let ${1:variable} = ${2:expression};$0
+]]></text>
+  </snippet>
+  <snippet _name="var" trigger="var" _description="">
+    <text languages="js"><![CDATA[var ${1:variable} = ${2:expression};$0
+]]></text>
+  </snippet>
+  <snippet _name="log" trigger="log" _description="">
+    <text languages="js"><![CDATA[console.log('${1:message}');$0
+]]></text>
+  </snippet>
+  <snippet _name="debug" trigger="debug" _description="">
+    <text languages="js"><![CDATA[console.debug('${1:message}');$0
+]]></text>
+  </snippet>
+  <snippet _name="error" trigger="error" _description="">
+    <text languages="js"><![CDATA[console.error('${1:message}');$0
+]]></text>
+  </snippet>
+  <snippet _name="info" trigger="info" _description="">
+    <text languages="js"><![CDATA[console.info('${1:message}');$0
+]]></text>
+  </snippet>
+</snippets>
