@@ -7,11 +7,11 @@ flatpak:
     GIT_SUBMODULE_STRATEGY: normal
 
     # Replace with your manifest path
-    MANIFEST_PATH: "build-aux/flatpak/org.gnome.Builder.json"
+    MANIFEST_PATH: "build-aux/flatpak/org.gnome.Builder.Devel.json"
     RUNTIME_REPO: "https://nightly.gnome.org/gnome-nightly.flatpakrepo"
     # Replace with your application name, as written in the manifest
     FLATPAK_MODULE: "gnome-builder"
-    APP_ID: "org.gnome.Builder"
+    APP_ID: "org.gnome.Builder.Devel"
     BUNDLE: "gnome-builder-git.flatpak"
   before_script:
     - flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo

@@ -1,5 +1,5 @@
 {
-    "app-id" : "org.gnome.Builder",
+    "app-id" : "org.gnome.Builder.Devel",
     "runtime" : "org.gnome.Sdk",
     "runtime-version" : "master",
     "sdk" : "org.gnome.Sdk",
@@ -11,7 +11,7 @@
     "tags" : [
         "nightly"
     ],
-    "desktop-file-name-prefix" : "(Nightly) ",
+    "desktop-file-name-suffix" : "(Nightly) ",
     "add-extensions" : {
         "org.gnome.Builder.Plugin" : {
             "version" : "master",
@@ -682,9 +682,7 @@
                 "-Dplugin_deviced=true"
             ],
             "cleanup" : [
-                "/share/gnome-builder/gir-1.0",
-                "/share/gnome-builder/vapi",
-                "/share/gtksourceview-3.0"
+                "/share/gnome-builder/gir-1.0"
             ],
             "sources" : [
                 {
