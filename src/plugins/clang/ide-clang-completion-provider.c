@@ -20,6 +20,8 @@
 
 #define G_LOG_DOMAIN "ide-clang-completion-provider"
 
+#include <libide-sourceview.h>
+
 #include "ide-clang-client.h"
 #include "ide-clang-completion-item.h"
 #include "ide-clang-completion-provider.h"
@@ -28,18 +30,27 @@
 struct _IdeClangCompletionProvider
 {
   IdeObject          parent_instance;
+
   IdeClangClient    *client;
   IdeClangProposals *proposals;
+
+  char              *word;
+  char              *refilter_word;
+
+  guint              activation_keyval;
+  GdkModifierType    activation_state;
+
+  guint              loaded : 1;
 };
 
 static gboolean
-is_field_access (IdeCompletionContext *context)
+is_field_access (GtkSourceCompletionContext *context)
 {
   GtkTextIter begin, end;
 
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
 
-  ide_completion_context_get_bounds (context, &begin, &end);
+  gtk_source_completion_context_get_bounds (context, &begin, &end);
 
   if (gtk_text_iter_backward_char (&begin))
     {
@@ -60,8 +71,8 @@ is_field_access (IdeCompletionContext *context)
 }
 
 static gint
-ide_clang_completion_provider_get_priority (IdeCompletionProvider *provider,
-                                            IdeCompletionContext  *context)
+ide_clang_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
+                                            GtkSourceCompletionContext  *context)
 {
   /* Place results before snippets */
   if (is_field_access (context))
@@ -71,7 +82,7 @@ ide_clang_completion_provider_get_priority (IdeCompletionProvider *provider,
 }
 
 static gboolean
-ide_clang_completion_provider_is_trigger (IdeCompletionProvider *provider,
+ide_clang_completion_provider_is_trigger (GtkSourceCompletionProvider *provider,
                                           const GtkTextIter     *iter,
                                           gunichar               ch)
 {
@@ -104,50 +115,74 @@ ide_clang_completion_provider_is_trigger (IdeCompletionProvider *provider,
 }
 
 static gboolean
-ide_clang_completion_provider_key_activates (IdeCompletionProvider *provider,
-                                             IdeCompletionProposal *proposal,
-                                             const GdkEventKey     *key)
+ide_clang_completion_provider_key_activates (GtkSourceCompletionProvider *provider,
+                                             GtkSourceCompletionContext  *context,
+                                             GtkSourceCompletionProposal *proposal,
+                                             guint                        keyval,
+                                             GdkModifierType              state)
 {
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   IdeClangCompletionItem *item = IDE_CLANG_COMPLETION_ITEM (proposal);
+
+  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
+  g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
+
+  if ((state & (GDK_SHIFT_MASK|GDK_CONTROL_MASK)) == 0)
+    {
+      if (keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter)
+        goto store_and_activate;
+    }
 
   /* Try to dereference field/variable */
   if (item->kind == IDE_SYMBOL_KIND_FIELD || item->kind == IDE_SYMBOL_KIND_VARIABLE)
-    return key->keyval == GDK_KEY_period;
+    {
+      if (keyval == GDK_KEY_period || keyval == GDK_KEY_minus)
+        goto store_and_activate;
+    }
+
+  /* We add suffix ; if pressed */
+  if (keyval == GDK_KEY_semicolon)
+    goto store_and_activate;
 
 #if 0
-  /* We add suffix ; if pressed */
-  if (key->keyval == GDK_KEY_semicolon)
-    return TRUE;
-
   /* Open parens for function */
   if (item->kind == IDE_SYMBOL_FUNCTION)
-    return key->keyval == GDK_KEY_parenleft;
+    return keyval == GDK_KEY_parenleft;
 #endif
+
+  self->activation_keyval = 0;
+  self->activation_state = 0;
 
   return FALSE;
 
+store_and_activate:
+  self->activation_keyval = keyval;
+  self->activation_state = state;
+
+  return TRUE;
 }
 
 static void
-ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider,
-                                                 IdeCompletionContext  *context,
-                                                 IdeCompletionProposal *proposal,
-                                                 const GdkEventKey     *key)
+ide_clang_completion_provider_activate (GtkSourceCompletionProvider *provider,
+                                        GtkSourceCompletionContext  *context,
+                                        GtkSourceCompletionProposal *proposal)
 {
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   IdeClangCompletionItem *item = (IdeClangCompletionItem *)proposal;
   g_autofree gchar *word = NULL;
-  g_autoptr(IdeSnippet) snippet = NULL;
+  g_autoptr(GtkSourceSnippet) snippet = NULL;
   IdeFileSettings *file_settings;
-  GtkTextBuffer *buffer;
-  GtkTextView *view;
+  GtkSourceBuffer *buffer;
+  GtkSourceView *view;
   GtkTextIter begin, end;
+  guint n_chunks;
 
-  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
 
-  buffer = ide_completion_context_get_buffer (context);
-  view = ide_completion_context_get_view (context);
+  buffer = gtk_source_completion_context_get_buffer (context);
+  view = gtk_source_completion_context_get_view (context);
 
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (IDE_IS_SOURCE_VIEW (view));
@@ -158,38 +193,40 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
    * If the typed text matches the typed text of the item, and the user
    * it enter, then just skip the result and instead insert a newline.
    */
-  if (key->keyval == GDK_KEY_Return || key->keyval == GDK_KEY_KP_Enter)
+  if (self->activation_keyval == GDK_KEY_Return ||
+      self->activation_keyval == GDK_KEY_KP_Enter)
     {
-      if ((word = ide_completion_context_get_word (context)))
+      if ((word = gtk_source_completion_context_get_word (context)))
         {
           if (ide_str_equal0 (word, item->typed_text))
             {
-              ide_completion_context_get_bounds (context, &begin, &end);
-              gtk_text_buffer_insert (buffer, &end, "\n", -1);
+              gtk_source_completion_context_get_bounds (context, &begin, &end);
+              gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &end, "\n", -1);
 
               return;
             }
         }
     }
 
-  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_begin_user_action (GTK_TEXT_BUFFER (buffer));
 
-  if (ide_completion_context_get_bounds (context, &begin, &end))
-    gtk_text_buffer_delete (buffer, &begin, &end);
+  if (gtk_source_completion_context_get_bounds (context, &begin, &end))
+    gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
 
   snippet = ide_clang_completion_item_get_snippet (item, file_settings);
+  n_chunks = gtk_source_snippet_get_n_chunks (snippet);
 
   /* Check the last snippet chunk and see if it matches our current
    * position so we can omit it.
    */
-  if (ide_snippet_get_n_chunks (snippet) > 0)
+  if (n_chunks > 0)
     {
-      IdeSnippetChunk *chunk;
+      GtkSourceSnippetChunk *chunk;
       const gchar *text;
       GtkTextIter limit;
 
-      chunk = ide_snippet_get_nth_chunk (snippet, ide_snippet_get_n_chunks (snippet) - 1);
-      text = ide_snippet_chunk_get_text (chunk);
+      chunk = gtk_source_snippet_get_nth_chunk (snippet, n_chunks-1);
+      text = gtk_source_snippet_chunk_get_text (chunk);
       limit = end;
 
       if (text != NULL)
@@ -203,7 +240,7 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
                 gtk_text_iter_forward_to_line_end (&limit);
             }
 
-          ide_completion_remove_common_suffix (ide_completion_context_get_completion (context), &end, text);
+          ide_text_util_remove_common_prefix (&end, text);
           begin = end;
         }
     }
@@ -214,72 +251,73 @@ ide_clang_completion_provider_activate_proposal (IdeCompletionProvider *provider
    */
   if (item->kind == IDE_SYMBOL_KIND_FIELD || item->kind == IDE_SYMBOL_KIND_VARIABLE)
     {
-      if (key->keyval == GDK_KEY_period || key->keyval == GDK_KEY_minus)
+      if (self->activation_keyval == GDK_KEY_period ||
+          self->activation_keyval == GDK_KEY_minus)
         {
-          g_autoptr(IdeSnippetChunk) chunk = ide_snippet_chunk_new ();
+          g_autoptr(GtkSourceSnippetChunk) chunk = gtk_source_snippet_chunk_new ();
           if (strchr (item->return_type, '*'))
-            ide_snippet_chunk_set_spec (chunk, "->");
+            gtk_source_snippet_chunk_set_spec (chunk, "->");
           else
-            ide_snippet_chunk_set_spec (chunk, ".");
-          ide_snippet_add_chunk (snippet, chunk);
+            gtk_source_snippet_chunk_set_spec (chunk, ".");
+          gtk_source_snippet_add_chunk (snippet, chunk);
         }
     }
 
-  if (key->keyval == GDK_KEY_semicolon)
+  if (self->activation_keyval == GDK_KEY_semicolon)
     {
-      g_autoptr(IdeSnippetChunk) chunk = ide_snippet_chunk_new ();
-      ide_snippet_chunk_set_spec (chunk, ";");
-      ide_snippet_add_chunk (snippet, chunk);
+      g_autoptr(GtkSourceSnippetChunk) chunk = gtk_source_snippet_chunk_new ();
+      gtk_source_snippet_chunk_set_spec (chunk, ";");
+      gtk_source_snippet_add_chunk (snippet, chunk);
     }
 
-  ide_source_view_push_snippet (IDE_SOURCE_VIEW (view), snippet, &begin);
+  gtk_source_view_push_snippet (view, snippet, &begin);
 
-  gtk_text_buffer_end_user_action (buffer);
+  gtk_text_buffer_end_user_action (GTK_TEXT_BUFFER (buffer));
 }
 
-static gboolean
-ide_clang_completion_provider_refilter (IdeCompletionProvider *provider,
-                                        IdeCompletionContext  *context,
+static void
+ide_clang_completion_provider_refilter (GtkSourceCompletionProvider *provider,
+                                        GtkSourceCompletionContext  *context,
                                         GListModel            *proposals)
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (G_IS_LIST_MODEL (proposals));
 
   if (self->proposals != NULL)
     {
-      g_autofree gchar *word = NULL;
       GtkTextIter begin, end;
 
-      ide_completion_context_get_bounds (context, &begin, &end);
-      word = gtk_text_iter_get_slice (&begin, &end);
-      ide_clang_proposals_refilter (self->proposals, word);
+      g_clear_pointer (&self->refilter_word, g_free);
 
-      return TRUE;
+      gtk_source_completion_context_get_bounds (context, &begin, &end);
+      self->refilter_word = gtk_text_iter_get_slice (&begin, &end);
+      ide_clang_proposals_refilter (self->proposals, self->refilter_word);
     }
-
-  return FALSE;
 }
 
 static gchar *
-ide_clang_completion_provider_get_title (IdeCompletionProvider *provider)
+ide_clang_completion_provider_get_title (GtkSourceCompletionProvider *provider)
 {
   return g_strdup ("Clang");
 }
 
 static void
-ide_clang_completion_provider_load (IdeCompletionProvider *provider,
-                                    IdeContext            *context)
+ide_clang_completion_provider_load (IdeClangCompletionProvider *self)
 {
-  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   g_autoptr(IdeClangClient) client = NULL;
+  g_autoptr(IdeContext) context = NULL;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
-  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (self->loaded == FALSE);
 
+  self->loaded = TRUE;
+
+  context = ide_object_ref_context (IDE_OBJECT (self));
   client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
+
   g_set_object (&self->client, client);
 }
 
@@ -303,25 +341,30 @@ ide_clang_completion_provider_populate_cb (GObject      *object,
 }
 
 static void
-ide_clang_completion_provider_populate_async (IdeCompletionProvider  *provider,
-                                              IdeCompletionContext   *context,
+ide_clang_completion_provider_populate_async (GtkSourceCompletionProvider  *provider,
+                                              GtkSourceCompletionContext   *context,
                                               GCancellable           *cancellable,
                                               GAsyncReadyCallback     callback,
                                               gpointer                user_data)
 {
   IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
-  g_autofree gchar *word = NULL;
   GtkTextIter begin, end;
 
   g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
+  if (!self->loaded)
+    ide_clang_completion_provider_load (self);
+
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_clang_completion_provider_populate_async);
 
-  if (ide_completion_context_get_bounds (context, &begin, &end))
-    word = gtk_text_iter_get_slice (&begin, &end);
+  g_clear_pointer (&self->refilter_word, g_free);
+  g_clear_pointer (&self->word, g_free);
+
+  if (gtk_source_completion_context_get_bounds (context, &begin, &end))
+    self->word = gtk_text_iter_get_slice (&begin, &end);
 
   if (self->proposals == NULL)
     self->proposals = ide_clang_proposals_new (self->client);
@@ -331,20 +374,20 @@ ide_clang_completion_provider_populate_async (IdeCompletionProvider  *provider,
    * latency a bit.
    */
   if (!is_field_access (context))
-    ide_completion_context_set_proposals_for_provider (context,
-                                                       provider,
-                                                       G_LIST_MODEL (self->proposals));
+    gtk_source_completion_context_set_proposals_for_provider (context,
+                                                              provider,
+                                                              G_LIST_MODEL (self->proposals));
 
   ide_clang_proposals_populate_async (self->proposals,
                                       &begin,
-                                      word,
+                                      self->word,
                                       cancellable,
                                       ide_clang_completion_provider_populate_cb,
                                       g_steal_pointer (&task));
 }
 
 static GListModel *
-ide_clang_completion_provider_populate_finish (IdeCompletionProvider  *provider,
+ide_clang_completion_provider_populate_finish (GtkSourceCompletionProvider  *provider,
                                                GAsyncResult           *result,
                                                GError                **error)
 {
@@ -355,67 +398,44 @@ ide_clang_completion_provider_populate_finish (IdeCompletionProvider  *provider,
 }
 
 static void
-ide_clang_completion_provider_display_proposal (IdeCompletionProvider   *provider,
-                                                IdeCompletionListBoxRow *row,
-                                                IdeCompletionContext    *context,
-                                                const gchar             *typed_text,
-                                                IdeCompletionProposal   *proposal)
+ide_clang_completion_provider_display (GtkSourceCompletionProvider   *provider,
+                                       GtkSourceCompletionContext    *context,
+                                       GtkSourceCompletionProposal   *proposal,
+                                       GtkSourceCompletionCell       *cell)
 {
+  IdeClangCompletionProvider *self = (IdeClangCompletionProvider *)provider;
   IdeClangCompletionItem *item = IDE_CLANG_COMPLETION_ITEM (proposal);
-  g_autofree gchar *escaped = NULL;
-  g_autofree gchar *markup = NULL;
-  g_autofree gchar *highlight = NULL;
-  g_autofree gchar *params_escaped = NULL;
+  const char *typed_text;
 
-  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (provider));
-  g_assert (IDE_IS_COMPLETION_LIST_BOX_ROW (row));
-  g_assert (IDE_IS_COMPLETION_CONTEXT (context));
+  g_assert (IDE_IS_CLANG_COMPLETION_PROVIDER (self));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (item));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CELL (cell));
 
-  escaped = g_markup_escape_text (item->typed_text, -1);
-  if (item->params != NULL)
-    params_escaped = g_markup_escape_text (item->params, -1);
-  highlight = ide_completion_fuzzy_highlight (escaped, typed_text);
-  ide_completion_list_box_row_set_icon_name (row, item->icon_name);
-  ide_completion_list_box_row_set_left (row, item->return_type);
-  markup = g_strdup_printf ("%s%s<span fgalpha='32767'>%s</span>",
-                            highlight,
-                            item->params ? " " : "",
-                            params_escaped ?: "");
-  ide_completion_list_box_row_set_center_markup (row, markup);
-}
+  if (self->refilter_word)
+    typed_text = self->refilter_word;
+  else
+    typed_text = self->word;
 
-static gchar *
-ide_clang_completion_provider_get_comment (IdeCompletionProvider *provider,
-                                           IdeCompletionProposal *proposal)
-{
-  IdeClangCompletionItem *item = IDE_CLANG_COMPLETION_ITEM (proposal);
-  g_autoptr(GVariant) result = ide_clang_completion_item_get_result (item);
-  gchar *str = NULL;
-
-  g_variant_lookup (result, "comment", "s", &str);
-
-  return str;
+  ide_clang_completion_item_display (item, cell, typed_text);
 }
 
 static void
-provider_iface_init (IdeCompletionProviderInterface *iface)
+provider_iface_init (GtkSourceCompletionProviderInterface *iface)
 {
-  iface->load = ide_clang_completion_provider_load;
   iface->get_priority = ide_clang_completion_provider_get_priority;
   iface->is_trigger = ide_clang_completion_provider_is_trigger;
   iface->key_activates = ide_clang_completion_provider_key_activates;
-  iface->activate_proposal = ide_clang_completion_provider_activate_proposal;
+  iface->activate = ide_clang_completion_provider_activate;
   iface->refilter = ide_clang_completion_provider_refilter;
   iface->get_title = ide_clang_completion_provider_get_title;
   iface->populate_async = ide_clang_completion_provider_populate_async;
   iface->populate_finish = ide_clang_completion_provider_populate_finish;
-  iface->display_proposal = ide_clang_completion_provider_display_proposal;
-  iface->get_comment = ide_clang_completion_provider_get_comment;
+  iface->display = ide_clang_completion_provider_display;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangCompletionProvider, ide_clang_completion_provider, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, provider_iface_init))
 
 static void
 ide_clang_completion_provider_dispose (GObject *object)
@@ -427,6 +447,9 @@ ide_clang_completion_provider_dispose (GObject *object)
 
   g_clear_object (&self->client);
   g_clear_object (&self->proposals);
+
+  g_clear_pointer (&self->word, g_free);
+  g_clear_pointer (&self->refilter_word, g_free);
 
   G_OBJECT_CLASS (ide_clang_completion_provider_parent_class)->dispose (object);
 }

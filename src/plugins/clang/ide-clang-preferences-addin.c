@@ -18,7 +18,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "ide-clang-preferences-addin"
+
+#include "config.h"
+
 #include <glib/gi18n.h>
+
 #include <libide-code.h>
 #include <libide-gui.h>
 
@@ -33,11 +38,78 @@ struct _IdeClangPreferencesAddin
   guint   params_id;
 };
 
-static void preferences_addin_iface_init (IdePreferencesAddinInterface *iface);
+static const IdePreferenceGroupEntry groups[] = {
+  { "insight", "clang", 1000, N_("Clang") },
+};
 
-G_DEFINE_TYPE_EXTENDED (IdeClangPreferencesAddin, ide_clang_preferences_addin, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN,
-                                               preferences_addin_iface_init))
+static const IdePreferenceItemEntry items[] = {
+  { "insight", "diagnostics-providers", "clang", 0, ide_preferences_window_toggle,
+    N_("Use Clang for Diagnostics"),
+    N_("Clang will be queried for diagnostics within C, C++, and Objective-C sources"),
+    "org.gnome.builder.extension-type",
+    "/org/gnome/builder/extension-types/clang/IdeDiagnosticProvider/",
+    "enabled" },
+
+  { "insight", "completion-providers", "clang", 0, ide_preferences_window_toggle,
+    N_("Use Clang for Completions"),
+    N_("Clang will be queried for completions within C, C++, and Objective-C sources"),
+    "org.gnome.builder.extension-type",
+    "/org/gnome/builder/extension-types/clang/GtkSourceCompletionProvider/",
+    "enabled" },
+
+  { "insight", "clang", "parens", 0, ide_preferences_window_toggle,
+    N_("Complete Parenthesis"),
+    N_("Include parenthesis when completing clang proposals"),
+    "org.gnome.builder.clang", NULL, "complete-parens" },
+
+  { "insight", "clang", "params", 0, ide_preferences_window_toggle,
+    N_("Complete Parameters"),
+    N_("Include parameters and types when completing clang proposals"),
+    "org.gnome.builder.clang", NULL, "complete-params" },
+};
+
+static void
+ide_clang_preferences_addin_load (IdePreferencesAddin  *addin,
+                                  IdePreferencesWindow *window,
+                                  IdeContext           *context)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+  ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
+
+  IDE_EXIT;
+}
+
+static void
+ide_clang_preferences_addin_unload (IdePreferencesAddin  *addin,
+                                    IdePreferencesWindow *window,
+                                    IdeContext           *context)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
+  g_assert (!context || IDE_IS_CONTEXT (context));
+
+  /* TODO: Remove gsettings switches */
+
+  IDE_EXIT;
+}
+
+static void
+preferences_addin_iface_init (IdePreferencesAddinInterface *iface)
+{
+  iface->load = ide_clang_preferences_addin_load;
+  iface->unload = ide_clang_preferences_addin_unload;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangPreferencesAddin, ide_clang_preferences_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, preferences_addin_iface_init))
 
 static void
 ide_clang_preferences_addin_class_init (IdeClangPreferencesAddinClass *klass)
@@ -47,87 +119,4 @@ ide_clang_preferences_addin_class_init (IdeClangPreferencesAddinClass *klass)
 static void
 ide_clang_preferences_addin_init (IdeClangPreferencesAddin *self)
 {
-}
-
-static void
-ide_clang_preferences_addin_load (IdePreferencesAddin *addin,
-                                  DzlPreferences      *preferences)
-{
-  IdeClangPreferencesAddin *self = (IdeClangPreferencesAddin *)addin;
-
-  g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
-  g_assert (DZL_IS_PREFERENCES (preferences));
-
-  self->diagnose_id = dzl_preferences_add_switch (preferences,
-                                                  "code-insight",
-                                                  "diagnostics",
-                                                  "org.gnome.builder.extension-type",
-                                                  "enabled",
-                                                  "/org/gnome/builder/extension-types/clang-plugin/IdeDiagnosticProvider/",
-                                                  NULL,
-                                                  _("Clang"),
-                                                  _("Show errors and warnings provided by Clang"),
-                                                  /* translators: keywords used when searching for preferences */
-                                                  _("clang diagnostics warnings errors"),
-                                                  50);
-
-  self->completion_id = dzl_preferences_add_switch (preferences,
-                                                    "completion",
-                                                    "providers",
-                                                    "org.gnome.builder.extension-type",
-                                                    "enabled",
-                                                    "/org/gnome/builder/extension-types/clang-plugin/IdeCompletionProvider/",
-                                                    NULL,
-                                                    _("Suggest completions using Clang"),
-                                                    _("Use Clang to suggest completions for C and C++ languages"),
-                                                    NULL,
-                                                    20);
-
-  dzl_preferences_add_list_group (preferences, "completion", "clang", _("Clang Options"), GTK_SELECTION_NONE, 300);
-
-  self->parens_id = dzl_preferences_add_switch (preferences,
-                                                "completion",
-                                                "clang",
-                                                "org.gnome.builder.clang",
-                                                "complete-parens",
-                                                NULL,
-                                                NULL,
-                                                _("Complete Parenthesis"),
-                                                _("Include parenthesis when completing clang proposals"),
-                                                NULL,
-                                                0);
-
-  self->params_id = dzl_preferences_add_switch (preferences,
-                                                "completion",
-                                                "clang",
-                                                "org.gnome.builder.clang",
-                                                "complete-params",
-                                                NULL,
-                                                NULL,
-                                                _("Complete Parameters"),
-                                                _("Include parameters and types when completing clang proposals"),
-                                                NULL,
-                                                10);
-}
-
-static void
-ide_clang_preferences_addin_unload (IdePreferencesAddin *addin,
-                                    DzlPreferences      *preferences)
-{
-  IdeClangPreferencesAddin *self = (IdeClangPreferencesAddin *)addin;
-
-  g_assert (IDE_IS_CLANG_PREFERENCES_ADDIN (addin));
-  g_assert (DZL_IS_PREFERENCES (preferences));
-
-  dzl_preferences_remove_id (preferences, self->completion_id);
-  dzl_preferences_remove_id (preferences, self->diagnose_id);
-  dzl_preferences_remove_id (preferences, self->parens_id);
-  dzl_preferences_remove_id (preferences, self->params_id);
-}
-
-static void
-preferences_addin_iface_init (IdePreferencesAddinInterface *iface)
-{
-  iface->load = ide_clang_preferences_addin_load;
-  iface->unload = ide_clang_preferences_addin_unload;
 }

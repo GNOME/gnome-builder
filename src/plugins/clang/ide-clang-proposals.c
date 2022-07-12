@@ -22,10 +22,11 @@
 
 #include "config.h"
 
+#include <clang-c/Index.h>
+
 #include <libide-code.h>
 #include <libide-foundry.h>
 #include <libide-sourceview.h>
-#include <clang-c/Index.h>
 
 #include "ide-buffer-private.h"
 
@@ -344,7 +345,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
                 keyword = NULL;
             }
 
-          if (keyword == NULL || !ide_completion_fuzzy_match (keyword, folded, &priority))
+          if (keyword == NULL || !gtk_source_completion_fuzzy_match (keyword, folded, &priority))
             g_array_remove_index_fast (self->match_indexes, i - 1);
           else
             item->priority = priority;
@@ -393,7 +394,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
               Item item = { index, 0, 0, typed_text };
               guint priority;
 
-              if (ide_completion_fuzzy_match (typed_text, folded, &priority))
+              if (gtk_source_completion_fuzzy_match (typed_text, folded, &priority))
                 {
                   enum CXCursorKind kind = 0;
 

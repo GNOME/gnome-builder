@@ -42,8 +42,8 @@ struct _IdeClangHighlighter
 static void highlighter_iface_init             (IdeHighlighterInterface *iface);
 static void ide_clang_highlighter_queue_udpate (IdeClangHighlighter     *self);
 
-G_DEFINE_TYPE_EXTENDED (IdeClangHighlighter, ide_clang_highlighter, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangHighlighter, ide_clang_highlighter, IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_HIGHLIGHTER, highlighter_iface_init))
 
 static inline gboolean
 accepts_char (gunichar ch)
@@ -128,11 +128,19 @@ get_index_flags_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  flags = ide_build_system_get_build_flags_finish (build_system, result, &error);
-  context = ide_object_get_context (IDE_OBJECT (build_system));
-  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
   file = ide_task_get_task_data (task);
   cancellable = ide_task_get_cancellable (task);
+
+  g_assert (G_IS_FILE (file));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  flags = ide_build_system_get_build_flags_finish (build_system, result, &error);
+
+  if (ide_task_return_error_if_cancelled (task))
+    return;
+
+  context = ide_object_get_context (IDE_OBJECT (build_system));
+  client = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CLANG_CLIENT);
 
   ide_clang_client_get_highlight_index_async (client,
                                               file,
@@ -283,6 +291,7 @@ ide_clang_highlighter_destroy (IdeObject *object)
 {
   IdeClangHighlighter *self = (IdeClangHighlighter *)object;
 
+  g_clear_handle_id (&self->queued_source, g_source_remove);
   g_clear_pointer (&self->index, ide_highlight_index_unref);
   g_clear_weak_pointer (&self->engine);
 
@@ -323,7 +332,8 @@ ide_clang_highlighter_do_update (IdeClangHighlighter *self)
 
   self->queued_source = 0;
 
-  if (self->engine == NULL ||
+  if (!ide_object_check_ready (IDE_OBJECT (self), NULL) ||
+      self->engine == NULL ||
       !(buffer = ide_highlight_engine_get_buffer (self->engine)) ||
       !(file = ide_buffer_get_file (buffer)) ||
       !(context = ide_object_get_context (IDE_OBJECT (self))) ||
@@ -350,7 +360,8 @@ ide_clang_highlighter_queue_udpate (IdeClangHighlighter *self)
 {
   g_assert (IDE_IS_CLANG_HIGHLIGHTER (self));
 
-  if (self->queued_source != 0)
+  if (self->queued_source != 0 ||
+      ide_object_in_destruction (IDE_OBJECT (self)))
     return;
 
   self->queued_source =
