@@ -65,7 +65,7 @@ gbp_file_search_result_activate (IdeSearchResult *result,
 
   file = g_file_get_child (workdir, GBP_FILE_SEARCH_RESULT (result)->path);
 
-  ide_workbench_open_async (workbench, file, NULL, 0,NULL, NULL, NULL);
+  ide_workbench_open_async (workbench, file, NULL, 0, NULL, NULL, NULL, NULL);
 }
 
 static void
