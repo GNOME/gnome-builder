@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "gbp-todo-workspace-addin"
 
-#include <libide-editor.h>
 #include <glib/gi18n.h>
 
 #include "gbp-todo-workspace-addin.h"
@@ -110,9 +109,8 @@ gbp_todo_workspace_addin_load (IdeWorkspaceAddin *addin,
                                IdeWorkspace      *workspace)
 {
   GbpTodoWorkspaceAddin *self = (GbpTodoWorkspaceAddin *)addin;
-  IdeEditorSidebar *sidebar;
+  g_autoptr(IdePanelPosition) position = NULL;
   IdeBufferManager *bufmgr;
-  IdeSurface *editor;
   IdeContext *context;
   IdeVcs *vcs;
   GFile *workdir;
@@ -126,8 +124,6 @@ gbp_todo_workspace_addin_load (IdeWorkspaceAddin *addin,
   vcs = ide_vcs_from_context (context);
   workdir = ide_vcs_get_workdir (vcs);
   bufmgr = ide_buffer_manager_from_context (context);
-  editor = ide_workspace_get_surface_by_name (workspace, "editor");
-  sidebar = ide_editor_surface_get_sidebar (IDE_EDITOR_SURFACE (editor));
 
   self->workdir = g_object_ref (workdir);
 
@@ -140,25 +136,22 @@ gbp_todo_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->model = gbp_todo_model_new (vcs);
 
   self->panel = g_object_new (GBP_TYPE_TODO_PANEL,
+                              "title", _("TODO/FIXMEs"),
+                              "icon-name", "builder-todo-symbolic",
                               "model", self->model,
-                              "visible", TRUE,
                               NULL);
   g_signal_connect_object (self->panel,
                            "presented",
                            G_CALLBACK (gbp_todo_workspace_addin_presented_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  g_signal_connect (self->panel,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->panel);
-  ide_editor_sidebar_add_section (sidebar,
-                                  "todo",
-                                  _("TODO/FIXMEs"),
-                                  "builder-todo-symbolic",
-                                  NULL, NULL,
-                                  GTK_WIDGET (self->panel),
-                                  200);
+
+  position = ide_panel_position_new ();
+  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_START);
+  ide_panel_position_set_row (position, 0);
+  ide_panel_position_set_depth (position, 2);
+
+  ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
 }
 
 static void
@@ -182,10 +175,7 @@ gbp_todo_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                         G_CALLBACK (gbp_todo_workspace_addin_buffer_saved),
                                         self);
 
-  if (self->panel != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->panel));
-
-  g_assert (self->panel == NULL);
+  panel_widget_close (PANEL_WIDGET (self->panel));
 
   g_clear_object (&self->model);
   g_clear_object (&self->workdir);
