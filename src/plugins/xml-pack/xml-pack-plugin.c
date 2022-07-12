@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-code.h>
 #include <libide-sourceview.h>
 
@@ -33,18 +34,22 @@
 _IDE_EXTERN void
 _ide_xml_register_types (PeasObjectModule *module)
 {
+#if 0
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                               IDE_TYPE_XML_COMPLETION_PROVIDER);
+#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
                                               IDE_TYPE_XML_DIAGNOSTIC_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_HIGHLIGHTER,
                                               IDE_TYPE_XML_HIGHLIGHTER);
+#if 0
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_INDENTER,
+                                              GTK_SOURCE_TYPE_INDENTER,
                                               IDE_TYPE_XML_INDENTER);
+#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SYMBOL_RESOLVER,
                                               IDE_TYPE_XML_SYMBOL_RESOLVER);

@@ -18,7 +18,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#include <dazzle.h>
 #include <string.h>
 
 #include "ide-xml-tree-builder-utils-private.h"
@@ -31,14 +30,14 @@ list_get_attribute (const guchar **attributes,
 {
   const guchar **l = attributes;
 
-  g_return_val_if_fail (!dzl_str_empty0 (name), NULL);
+  g_return_val_if_fail (!ide_str_empty0 (name), NULL);
 
   if (attributes == NULL)
     return NULL;
 
   while (l [0] != NULL)
     {
-      if (dzl_str_equal0 (name, l [0]))
+      if (ide_str_equal0 (name, l [0]))
         return (const gchar *)l [1];
 
       l += 2;
