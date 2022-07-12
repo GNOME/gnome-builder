@@ -24,6 +24,7 @@
 
 #include <glib/gi18n.h>
 #include <libpeas/peas.h>
+
 #include <libide-code.h>
 #include <libide-plugins.h>
 
@@ -34,7 +35,8 @@
 
 struct _IdeProject
 {
-  IdeObject parent_instance;
+  IdeObject               parent_instance;
+  IdeExtensionSetAdapter *similar_file_locators;
 };
 
 typedef struct
@@ -55,8 +57,22 @@ G_DEFINE_FINAL_TYPE (IdeProject, ide_project, IDE_TYPE_OBJECT)
 static guint signals [N_SIGNALS];
 
 static void
+ide_project_dispose (GObject *object)
+{
+  IdeProject *self = (IdeProject *)object;
+
+  ide_clear_and_destroy_object (&self->similar_file_locators);
+
+  G_OBJECT_CLASS (ide_project_parent_class)->dispose (object);
+}
+
+static void
 ide_project_class_init (IdeProjectClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ide_project_dispose;
+
   signals [FILE_RENAMED] =
     g_signal_new ("file-renamed",
                   G_TYPE_FROM_CLASS (klass),
@@ -84,8 +100,6 @@ ide_project_init (IdeProject *self)
  * Gets the project for an #IdeContext.
  *
  * Returns: (transfer none): an #IdeProject
- *
- * Since: 3.32
  */
 IdeProject *
 ide_project_from_context (IdeContext *context)
@@ -484,6 +498,161 @@ ide_project_trash_file_finish (IdeProject    *self,
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   ret = ide_task_propagate_boolean (task, error);
+
+  IDE_RETURN (ret);
+}
+
+typedef struct
+{
+  GFile *file;
+  GListStore *models;
+  guint n_active;
+} ListSimilar;
+
+static void
+list_similar_free (ListSimilar *state)
+{
+  g_assert (state->n_active == 0);
+
+  g_clear_object (&state->file);
+  g_clear_object (&state->models);
+  g_slice_free (ListSimilar, state);
+}
+
+static void
+ide_project_list_similar_cb (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      user_data)
+{
+  IdeSimilarFileLocator *locator = (IdeSimilarFileLocator *)object;
+  g_autoptr(GListModel) model = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  ListSimilar *state;
+  IdeProject *self;
+
+  g_assert (IDE_IS_SIMILAR_FILE_LOCATOR (locator));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_PROJECT (self));
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->file));
+  g_assert (G_IS_LIST_STORE (state->models));
+
+  if ((model = ide_similar_file_locator_list_finish (locator, result, &error)))
+    g_list_store_append (state->models, model);
+  else if (!ide_error_ignore (error))
+    ide_object_warning (IDE_OBJECT (self), "%s", error->message);
+
+  state->n_active--;
+
+  if (state->n_active == 0)
+    ide_task_return_object (task,
+                            gtk_flatten_list_model_new (g_object_ref (G_LIST_MODEL (state->models))));
+}
+
+static void
+ide_project_list_similar_foreach_cb (IdeExtensionSetAdapter *set,
+                                     PeasPluginInfo         *plugin_info,
+                                     PeasExtension          *exten,
+                                     gpointer                user_data)
+{
+  IdeSimilarFileLocator *locator = (IdeSimilarFileLocator *)exten;
+  IdeTask *task = user_data;
+  ListSimilar *state;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SIMILAR_FILE_LOCATOR (locator));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->file));
+  g_assert (G_IS_LIST_STORE (state->models));
+
+  state->n_active++;
+
+  ide_similar_file_locator_list_async (locator,
+                                       state->file,
+                                       ide_task_get_cancellable (task),
+                                       ide_project_list_similar_cb,
+                                       g_object_ref (task));
+}
+
+void
+ide_project_list_similar_async (IdeProject          *self,
+                                GFile               *file,
+                                GCancellable        *cancellable,
+                                GAsyncReadyCallback  callback,
+                                gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  ListSimilar *state;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_PROJECT (self));
+  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_project_list_similar_async);
+
+  if (self->similar_file_locators == NULL)
+    self->similar_file_locators = ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                                                 peas_engine_get_default (),
+                                                                 IDE_TYPE_SIMILAR_FILE_LOCATOR,
+                                                                 NULL, NULL);
+
+  state = g_slice_new0 (ListSimilar);
+  state->file = g_object_ref (file);
+  state->models = g_list_store_new (G_TYPE_LIST_MODEL);
+  ide_task_set_task_data (task, state, list_similar_free);
+
+  ide_extension_set_adapter_foreach (self->similar_file_locators,
+                                     ide_project_list_similar_foreach_cb,
+                                     task);
+
+  if (state->n_active == 0)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "Not supported");
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_project_list_similar_finish:
+ * @self: a #IdeProject
+ * @result: a #GAsyncResult
+ * @error: location for a #GError
+ *
+ * Completes asynchronous request to locate similar files.
+ *
+ * Returns: (transfer full): a #GListModel of #GFile or %NULL
+ */
+GListModel *
+ide_project_list_similar_finish (IdeProject    *self,
+                                 GAsyncResult  *result,
+                                 GError       **error)
+{
+  GListModel *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
+  g_return_val_if_fail (IDE_IS_PROJECT (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  ret = ide_task_propagate_object (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
 }

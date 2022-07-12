@@ -52,5 +52,15 @@ IDE_AVAILABLE_IN_ALL
 gboolean    ide_project_trash_file_finish    (IdeProject           *self,
                                               GAsyncResult         *result,
                                               GError              **error);
+IDE_AVAILABLE_IN_ALL
+void         ide_project_list_similar_async  (IdeProject           *self,
+                                              GFile                *file,
+                                              GCancellable         *cancellable,
+                                              GAsyncReadyCallback   callback,
+                                              gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+GListModel  *ide_project_list_similar_finish (IdeProject           *self,
+                                              GAsyncResult         *result,
+                                              GError              **error);
 
 G_END_DECLS
