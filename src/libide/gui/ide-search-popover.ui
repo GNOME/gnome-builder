@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeSearchPopover" parent="GtkPopover">
+    <property name="has-arrow">false</property>
+    <property name="width-request">700</property>
+    <property name="height-request">400</property>
+    <property name="default-widget">entry</property>
+    <style>
+      <class name="global-search"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <child>
+          <object class="GtkBox" id="nav_box">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="AdwHeaderBar">
+                <property name="show-start-title-buttons">false</property>
+                <property name="show-end-title-buttons">false</property>
+                <child type="title">
+                  <object class="GtkLabel">
+                  </object>
+                </child>
+                <child type="end">
+                  <object class="GtkMenuButton">
+                    <property name="icon-name">open-menu-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">true</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="propagate-natural-width">true</property>
+                <child>
+                  <object class="GtkListBox">
+                    <property name="width-request">200</property>
+                    <style>
+                      <class name="navigation-sidebar"/>
+                    </style>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <child>
+                          <object class="GtkBox">
+                            <property name="orientation">horizontal</property>
+                            <property name="spacing">12</property>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">edit-find-symbolic</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="xalign">0</property>
+                                <property name="hexpand">true</property>
+                                <property name="label" translatable="yes">_Top Results</property>
+                                <property name="use-underline">true</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="main_box">
+            <property name="orientation">vertical</property>
+            <property name="hexpand">true</property>
+            <child>
+              <object class="AdwHeaderBar">
+                <property name="show-start-title-buttons">false</property>
+                <property name="show-end-title-buttons">false</property>
+                <child type="title">
+                  <object class="GtkSearchEntry" id="entry">
+                    <property name="width-chars">40</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="vexpand">true</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="propagate-natural-height">true</property>
+                <property name="min-content-height">400</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
