@@ -1,6 +1,6 @@
-/* gbp-vim-command-provider.h
+/* gbp-vim-workspace-addin.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,14 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_VIM_COMMAND_PROVIDER (gbp_vim_command_provider_get_type())
+#define GBP_TYPE_VIM_WORKSPACE_ADDIN (gbp_vim_workspace_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpVimCommandProvider, gbp_vim_command_provider, GBP, VIM_COMMAND_PROVIDER, GObject)
+G_DECLARE_FINAL_TYPE (GbpVimWorkspaceAddin, gbp_vim_workspace_addin, GBP, VIM_WORKSPACE_ADDIN, GObject)
+
+gboolean gbp_vim_workspace_addin_get_active      (GbpVimWorkspaceAddin *self);
+void     gbp_vim_workspace_addin_set_command     (GbpVimWorkspaceAddin *self,
+                                                  const char           *command);
+void     gbp_vim_workspace_addin_set_command_bar (GbpVimWorkspaceAddin *self,
+                                                  const char           *command_bar);
 
 G_END_DECLS

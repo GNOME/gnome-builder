@@ -1,6 +1,6 @@
-/* gbp-vim-command.h
+/* gbp-vim-editor-page-addin.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,17 +20,12 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_VIM_COMMAND (gbp_vim_command_get_type())
+#define GBP_TYPE_VIM_EDITOR_PAGE_ADDIN (gbp_vim_editor_page_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpVimCommand, gbp_vim_command, GBP, VIM_COMMAND, IdeObject)
-
-GbpVimCommand *gbp_vim_command_new (GtkWidget   *active_widget,
-                                    const gchar *typed_text,
-                                    const gchar *command,
-                                    const gchar *description);
+G_DECLARE_FINAL_TYPE (GbpVimEditorPageAddin, gbp_vim_editor_page_addin, GBP, VIM_EDITOR_PAGE_ADDIN, GObject)
 
 G_END_DECLS
