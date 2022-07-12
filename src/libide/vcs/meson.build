@@ -11,6 +11,7 @@ libide_vcs_public_headers = [
   'ide-vcs-branch.h',
   'ide-vcs-config.h',
   'ide-vcs-cloner.h',
+  'ide-vcs-clone-request.h',
   'ide-vcs-file-info.h',
   'ide-vcs-initializer.h',
   'ide-vcs-monitor.h',
@@ -36,6 +37,7 @@ libide_vcs_public_sources = [
   'ide-vcs-branch.c',
   'ide-vcs-config.c',
   'ide-vcs-cloner.c',
+  'ide-vcs-clone-request.c',
   'ide-vcs-file-info.c',
   'ide-vcs-initializer.c',
   'ide-vcs-monitor.c',
@@ -69,6 +71,7 @@ libide_vcs_deps = [
 
   libide_core_dep,
   libide_io_dep,
+  libide_plugins_dep,
   libide_threading_dep,
 ]
 

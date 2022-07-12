@@ -26,20 +26,17 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_VCS_BRANCH (ide_vcs_branch_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeVcsBranch, ide_vcs_branch, IDE, VCS_BRANCH, GObject)
 
 struct _IdeVcsBranchInterface
 {
   GTypeInterface parent;
-
-  gchar *(*get_name) (IdeVcsBranch *self);
-  gchar *(*get_id)   (IdeVcsBranch *self);
 };
 
-IDE_AVAILABLE_IN_3_32
-gchar *ide_vcs_branch_get_name (IdeVcsBranch *self);
-IDE_AVAILABLE_IN_3_34
-gchar *ide_vcs_branch_get_id   (IdeVcsBranch *self);
+IDE_AVAILABLE_IN_ALL
+char *ide_vcs_branch_dup_name (IdeVcsBranch *self);
+IDE_AVAILABLE_IN_ALL
+char *ide_vcs_branch_dup_id   (IdeVcsBranch *self);
 
 G_END_DECLS
