@@ -2,8 +2,9 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2017-2022 Christian Hergert
-Description=Provides integration with valgrind
+Depends=buildui;
+Description=Provides integration with valgrind to detect leaks
 Embedded=_gbp_valgrind_register_types
 Module=valgrind
-Name=Valgrind
+Name=Leak Detector
 X-Category=debuggers

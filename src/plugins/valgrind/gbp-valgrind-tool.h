@@ -1,4 +1,4 @@
-/* valgrind-plugin.c
+/* gbp-valgrind-tool.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -18,24 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "valgrind-plugin"
+#pragma once
 
-#include "config.h"
+#include <libide-foundry.h>
 
-#include <libpeas/peas.h>
+G_BEGIN_DECLS
 
-#include <libide-gui.h>
+#define GBP_TYPE_VALGRIND_TOOL (gbp_valgrind_tool_get_type())
 
-#include "gbp-valgrind-tool.h"
-#include "gbp-valgrind-workbench-addin.h"
+G_DECLARE_FINAL_TYPE (GbpValgrindTool, gbp_valgrind_tool, GBP, VALGRIND_TOOL, IdeRunTool)
 
-_IDE_EXTERN void
-_gbp_valgrind_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_RUN_TOOL,
-                                              GBP_TYPE_VALGRIND_TOOL);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_VALGRIND_WORKBENCH_ADDIN);
-}
+G_END_DECLS

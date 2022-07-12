@@ -1,26 +1,89 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="run-menu">
-    <section id="run-menu-section">
+    <section id="run-menu-observation-section">
       <item>
         <attribute name="id">valgrind-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">run-manager.run-with-handler</attribute>
-        <attribute name="target">valgrind</attribute>
-        <attribute name="label" translatable="yes">Run with Valgrind</attribute>
+        <attribute name="target" type="s">'valgrind'</attribute>
+        <attribute name="label" translatable="yes">Run with Leak Detector</attribute>
         <attribute name="verb-icon-name">system-run-symbolic</attribute>
-        <attribute name="accel">&lt;Control&gt;F10</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;v</attribute>
       </item>
     </section>
   </menu>
-  <menu id="project-tree-run-with-submenu">
-    <section id="project-tree-menu-run-with-section">
-      <item>
-        <attribute name="id">project-tree-menu-valgrind</attribute>
-        <attribute name="label" translatable="yes">Run with Valgrind</attribute>
-        <attribute name="action">buildui.run-with-handler</attribute>
-        <attribute name="target" type="s">'valgrind'</attribute>
-      </item>
+  <menu id="run-menu">
+    <section id="run-menu-tools-section">
+      <submenu id="run-menu-valgrind-submenu">
+        <attribute name="before">run-menu-verbose-logging</attribute>
+        <attribute name="label" translatable="yes">Leak Detector</attribute>
+        <section id="run-menu-valgrind-origins-section">
+          <item>
+            <attribute name="label" translatable="yes">Track Origin of Leaks</attribute>
+            <attribute name="action">valgrind.track-origins</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+        <section id="run-menu-valgrind-leak-check">
+          <attribute name="label" translatable="yes">Report Leaks</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Summary</attribute>
+            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="target" type="s">'summary'</attribute>
+            <attribute name="role">radio</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Full</attribute>
+            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="target" type="s">'full'</attribute>
+            <attribute name="role">radio</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Disabled</attribute>
+            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="target" type="s">'no'</attribute>
+            <attribute name="role">radio</attribute>
+          </item>
+        </section>
+        <section id="run-menu-valgrind-leak-kinds">
+          <attribute name="label" translatable="yes">Leak Kinds</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Definite</attribute>
+            <attribute name="action">valgrind.leak-kind-definite</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Indirect</attribute>
+            <attribute name="action">valgrind.leak-kind-indirect</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Possible</attribute>
+            <attribute name="action">valgrind.leak-kind-possible</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">Reachable</attribute>
+            <attribute name="action">valgrind.leak-kind-reachable</attribute>
+            <attribute name="role">check</attribute>
+          </item>
+        </section>
+      </submenu>
+    </section>
+  </menu>
+  <menu id="project-tree-menu">
+    <section id="project-tree-menu-foundry-section">
+      <submenu id="project-tree-run-with-submenu">
+        <section id="project-tree-menu-run-with-section">
+          <item>
+            <attribute name="id">project-tree-menu-valgrind</attribute>
+            <attribute name="label" translatable="yes">Run with Leak Detector</attribute>
+            <attribute name="action">buildui.run-with-handler</attribute>
+            <attribute name="target" type="s">'valgrind'</attribute>
+          </item>
+        </section>
+      </submenu>
     </section>
   </menu>
 </interface>
