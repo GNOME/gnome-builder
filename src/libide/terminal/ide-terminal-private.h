@@ -1,6 +1,6 @@
 /* ide-terminal-private.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,6 @@
 
 G_BEGIN_DECLS
 
-void _ide_guess_shell (void);
+void _ide_terminal_init (void);
 
 G_END_DECLS

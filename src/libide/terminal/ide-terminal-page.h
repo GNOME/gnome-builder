@@ -34,19 +34,25 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL_PAGE (ide_terminal_page_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTerminalPage, ide_terminal_page, IDE, TERMINAL_PAGE, IdePage)
 
-IDE_AVAILABLE_IN_3_34
-void         ide_terminal_page_set_launcher              (IdeTerminalPage     *self,
-                                                          IdeTerminalLauncher *launcher);
-IDE_AVAILABLE_IN_3_32
-void         ide_terminal_page_set_pty                   (IdeTerminalPage     *self,
-                                                          VtePty              *pty);
-IDE_AVAILABLE_IN_3_32
-void         ide_terminal_page_feed                      (IdeTerminalPage     *self,
-                                                          const gchar         *message);
-IDE_AVAILABLE_IN_3_34
-const gchar *ide_terminal_page_get_current_directory_uri (IdeTerminalPage     *self);
+IDE_AVAILABLE_IN_ALL
+void                 ide_terminal_page_set_launcher              (IdeTerminalPage     *self,
+                                                                  IdeTerminalLauncher *launcher);
+IDE_AVAILABLE_IN_ALL
+IdeTerminalLauncher *ide_terminal_page_get_launcher              (IdeTerminalPage     *self);
+IDE_AVAILABLE_IN_ALL
+VtePty              *ide_terminal_page_get_pty                   (IdeTerminalPage     *self);
+IDE_AVAILABLE_IN_ALL
+void                 ide_terminal_page_set_pty                   (IdeTerminalPage     *self,
+                                                                  VtePty              *pty);
+IDE_AVAILABLE_IN_ALL
+void                 ide_terminal_page_feed                      (IdeTerminalPage     *self,
+                                                                  const gchar         *message);
+IDE_AVAILABLE_IN_ALL
+const gchar         *ide_terminal_page_get_current_directory_uri (IdeTerminalPage     *self);
+IDE_AVAILABLE_IN_ALL
+gboolean             ide_terminal_page_has_exited                (IdeTerminalPage     *self);
 
 G_END_DECLS

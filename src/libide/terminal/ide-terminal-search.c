@@ -24,16 +24,19 @@
 #include "config.h"
 
 #include <fcntl.h>
-#include <glib/gi18n.h>
 #include <pcre2.h>
 #include <stdlib.h>
-#include <vte/vte.h>
 #include <unistd.h>
+
+#include <glib/gi18n.h>
+#include <vte/vte.h>
+
+#include <libide-gtk.h>
 
 #include "ide-terminal-search.h"
 #include "ide-terminal-search-private.h"
 
-G_DEFINE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, GTK_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeTerminalSearch, ide_terminal_search, ADW_TYPE_BIN)
 
 enum {
   PROP_0,
@@ -101,7 +104,7 @@ update_regex (IdeTerminalSearch *self)
 
   g_assert (IDE_IS_TERMINAL_SEARCH (self));
 
-  search_text = gtk_entry_get_text (GTK_ENTRY (self->search_entry));
+  search_text = gtk_editable_get_text (GTK_EDITABLE (self->search_entry));
   caseless = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->match_case_checkbutton));
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->regex_checkbutton)))
@@ -150,7 +153,7 @@ update_regex (IdeTerminalSearch *self)
 }
 
 static void
-search_text_changed_cb (IdeTaggedEntry  *search_entry,
+search_text_changed_cb (IdeSearchEntry    *search_entry,
                         IdeTerminalSearch *self)
 {
   update_regex (self);
@@ -232,18 +235,36 @@ search_revealer_cb (GtkRevealer       *search_revealer,
 
   if (gtk_revealer_get_child_revealed (search_revealer))
     {
+#if 0
       if (vte_terminal_get_has_selection (self->terminal))
         {
           vte_terminal_copy_primary (self->terminal);
-          self->selected_text = gtk_clipboard_wait_for_text (self->clipboard);
-          gtk_entry_set_text (GTK_ENTRY (self->search_entry), self->selected_text);
+
+          g_clear_pointer (&self->selected_text, g_free);
+
+          /* TODO: Wait for async text read */
+
+          gtk_editable_set_text (GTK_EDITABLE (self->search_entry), self->selected_text);
         }
+#endif
+
       gtk_widget_grab_focus (GTK_WIDGET (self->search_entry));
     }
   else
     {
       gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
     }
+}
+
+static void
+search_hide_action (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  IdeTerminalSearch *self = IDE_TERMINAL_SEARCH (widget);
+
+  gtk_revealer_set_reveal_child (self->search_revealer, FALSE);
+  gtk_widget_grab_focus (GTK_WIDGET (self->terminal));
 }
 
 static void
@@ -312,6 +333,8 @@ ide_terminal_search_class_init (IdeTerminalSearchClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeTerminalSearch, search_options);
 
+  gtk_widget_class_install_action (widget_class, "search.hide", NULL, search_hide_action);
+
   signals[SEARCH] =
     g_signal_new ("search",
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -341,14 +364,12 @@ ide_terminal_search_init (IdeTerminalSearch *self)
   self->regex_caseless = FALSE;
   self->regex_pattern = 0;
 
-  self->clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect (self->search_prev_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
   g_signal_connect (self->search_next_button, "clicked", G_CALLBACK (search_button_clicked_cb), self);
   g_signal_connect (self->close_button, "clicked", G_CALLBACK (close_clicked_cb), self);
-  g_signal_connect (self->search_entry, "search-changed", G_CALLBACK (search_text_changed_cb), self);
+  g_signal_connect (self->search_entry, "changed", G_CALLBACK (search_text_changed_cb), self);
   g_signal_connect (self->match_case_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
   g_signal_connect (self->entire_word_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
   g_signal_connect (self->regex_checkbutton, "toggled", G_CALLBACK (search_parameters_changed_cb), self);
@@ -360,8 +381,6 @@ ide_terminal_search_init (IdeTerminalSearch *self)
 /**
  * ide_terminal_search_set_terminal:
  * @self: a #IdeTerminalSearch
- *
- * Since: 3.32
  */
 void
 ide_terminal_search_set_terminal (IdeTerminalSearch *self,
@@ -378,8 +397,6 @@ ide_terminal_search_set_terminal (IdeTerminalSearch *self,
  * @self: a #IdeTerminalSearch
  *
  * Returns: (transfer none) (nullable): a #VteRegex or %NULL.
- *
- * Since: 3.32
  */
 VteRegex *
 ide_terminal_search_get_regex (IdeTerminalSearch *self)
@@ -394,7 +411,6 @@ ide_terminal_search_get_regex (IdeTerminalSearch *self)
  * @self: a #IdeTerminalSearch
  *
  *
- * Since: 3.32
  */
 gboolean
 ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
@@ -411,8 +427,6 @@ ide_terminal_search_get_wrap_around (IdeTerminalSearch *self)
  * Gets the revealer widget used for the terminal search.
  *
  * Returns: (transfer none): a #GtkRevealer
- *
- * Since: 3.32
  */
 GtkRevealer *
 ide_terminal_search_get_revealer (IdeTerminalSearch *self)

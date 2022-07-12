@@ -29,9 +29,7 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
-int          ide_vte_pty_create_slave (VtePty *pty);
-IDE_AVAILABLE_IN_3_32
-const gchar *ide_get_user_shell       (void);
+IDE_AVAILABLE_IN_ALL
+int ide_vte_pty_create_producer (VtePty *pty);
 
 G_END_DECLS

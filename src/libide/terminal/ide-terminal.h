@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TERMINAL (ide_terminal_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeTerminal, ide_terminal, IDE, TERMINAL, VteTerminal)
 
 struct _IdeTerminalClass
@@ -42,15 +42,15 @@ struct _IdeTerminalClass
                                    GtkWidget   *widget);
   void     (*select_all)          (IdeTerminal *self,
                                    gboolean     all);
-  void     (*search_reveal)       (IdeTerminal *self);
   gboolean (*open_link)           (IdeTerminal *self);
   gboolean (*copy_link_address)   (IdeTerminal *self);
-
-  /*< private >*/
-  gpointer padding[16];
 };
 
-IDE_AVAILABLE_IN_3_32
-GtkWidget *ide_terminal_new (void);
+IDE_AVAILABLE_IN_ALL
+GtkWidget *ide_terminal_new        (void);
+IDE_AVAILABLE_IN_ALL
+void       ide_terminal_get_colors (IdeTerminal *self,
+                                    GdkRGBA     *bg,
+                                    GdkRGBA     *fg);
 
 G_END_DECLS

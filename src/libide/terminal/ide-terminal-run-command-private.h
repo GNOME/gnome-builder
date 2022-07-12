@@ -1,6 +1,6 @@
-/* ide-terminal-workspace.h
+/* ide-terminal-run-command-private.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,21 +20,24 @@
 
 #pragma once
 
-#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
-# error "Only <libide-terminal.h> can be included directly."
-#endif
-
-#include <libide-core.h>
-#include <libide-gui.h>
+#include <libide-foundry.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_TERMINAL_WORKSPACE (ide_terminal_workspace_get_type())
+#define IDE_TYPE_TERMINAL_RUN_COMMAND (ide_terminal_run_command_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeTerminalWorkspace, ide_terminal_workspace, IDE, TERMINAL_WORKSPACE, IdeWorkspace)
+G_DECLARE_FINAL_TYPE (IdeTerminalRunCommand, ide_terminal_run_command, IDE, TERMINAL_RUN_COMMAND, IdeRunCommand)
 
-IDE_AVAILABLE_IN_3_34
-IdeTerminalWorkspace *ide_terminal_workspace_new (IdeApplication *application);
+typedef enum
+{
+  IDE_TERMINAL_RUN_ON_HOST,
+  IDE_TERMINAL_RUN_AS_SUBPROCESS,
+  IDE_TERMINAL_RUN_IN_PIPELINE,
+  IDE_TERMINAL_RUN_IN_RUNTIME,
+
+  IDE_TERMINAL_RUN_LAST
+} IdeTerminalRunLocality;
+
+IdeRunCommand *ide_terminal_run_command_new (IdeTerminalRunLocality  locality);
 
 G_END_DECLS

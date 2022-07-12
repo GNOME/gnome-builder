@@ -31,14 +31,14 @@ struct _IdeTerminalPage
   IdePage              parent_instance;
 
   IdeTerminalLauncher *launcher;
-  GFile               *save_as_file_top;
+  GFile               *save_as_file;
   gchar               *selection_buffer;
   VtePty              *pty;
 
   /* Template widgets */
-  GtkOverlay          *terminal_overlay_top;
-  GtkRevealer         *search_revealer_top;
-  IdeTerminal         *terminal_top;
+  GtkOverlay          *terminal_overlay;
+  GtkRevealer         *search_revealer;
+  IdeTerminal         *terminal;
   IdeTerminalSearch   *tsearch;
 
   gint64               last_respawn;
@@ -47,7 +47,6 @@ struct _IdeTerminalPage
   guint                manage_spawn : 1;
   guint                respawn_on_exit : 1;
   guint                close_on_exit : 1;
-  guint                needs_attention : 1;
   guint                exited : 1;
   guint                destroyed : 1;
 };

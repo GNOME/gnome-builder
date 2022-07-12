@@ -1,6 +1,6 @@
-/* ide-terminal-surface.h
+/* ide-terminal-init.c
  *
- * Copyright 2018 Christian Hergert <unknown@domain.org>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,22 +18,19 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#define G_LOG_DOMAIN "ide-terminal-init"
 
-#if !defined (IDE_TERMINAL_INSIDE) && !defined (IDE_TERMINAL_COMPILATION)
-# error "Only <libide-terminal.h> can be included directly."
-#endif
+#include "ide-terminal.h"
+#include "ide-terminal-launcher.h"
+#include "ide-terminal-page.h"
+#include "ide-terminal-private.h"
+#include "ide-terminal-search.h"
 
-#include <libide-gui.h>
-
-G_BEGIN_DECLS
-
-#define IDE_TYPE_TERMINAL_SURFACE (ide_terminal_surface_get_type())
-
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeTerminalSurface, ide_terminal_surface, IDE, TERMINAL_SURFACE, IdeSurface)
-
-IDE_AVAILABLE_IN_3_32
-IdeTerminalSurface *ide_terminal_surface_new (void);
-
-G_END_DECLS
+void
+_ide_terminal_init (void)
+{
+  g_type_ensure (IDE_TYPE_TERMINAL);
+  g_type_ensure (IDE_TYPE_TERMINAL_LAUNCHER);
+  g_type_ensure (IDE_TYPE_TERMINAL_PAGE);
+  g_type_ensure (IDE_TYPE_TERMINAL_SEARCH);
+}

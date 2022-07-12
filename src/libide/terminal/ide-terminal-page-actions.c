@@ -165,8 +165,8 @@ save_as_cb (GObject      *object,
     }
   else
     {
-      g_clear_object (&view->save_as_file_top);
-      view->save_as_file_top = file;
+      g_clear_object (&view->save_as_file);
+      view->save_as_file = file;
     }
 }
 
@@ -175,8 +175,8 @@ get_last_focused_terminal_file (IdeTerminalPage *view)
 {
   GFile *file = NULL;
 
-  if (G_IS_FILE (view->save_as_file_top))
-    file = view->save_as_file_top;
+  if (G_IS_FILE (view->save_as_file))
+    file = view->save_as_file;
 
   return file;
 }
@@ -184,13 +184,14 @@ get_last_focused_terminal_file (IdeTerminalPage *view)
 static VteTerminal *
 get_last_focused_terminal (IdeTerminalPage *view)
 {
-  return VTE_TERMINAL (view->terminal_top);
+  return VTE_TERMINAL (view->terminal);
 }
 
 static gchar *
 gb_terminal_get_selected_text (IdeTerminalPage  *view,
-                               VteTerminal    **terminal_p)
+                               VteTerminal     **terminal_p)
 {
+#if 0
   VteTerminal *terminal;
   gchar *buf = NULL;
 
@@ -205,6 +206,9 @@ gb_terminal_get_selected_text (IdeTerminalPage  *view,
     }
 
   return buf;
+#else
+  return g_strdup ("");
+#endif
 }
 
 static void
@@ -235,7 +239,7 @@ save_as_response (GtkWidget *widget,
       break;
     }
 
-  gtk_widget_destroy (widget);
+  gtk_window_destroy (GTK_WINDOW (chooser));
 }
 
 static void
@@ -256,7 +260,7 @@ ide_terminal_page_actions_save_as (GSimpleAction *action,
    */
   view->selection_buffer = gb_terminal_get_selected_text (view, NULL);
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
+  toplevel = GTK_WIDGET (gtk_widget_get_native (GTK_WIDGET (view)));
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
                          "action", GTK_FILE_CHOOSER_ACTION_SAVE,
                          "do-overwrite-confirmation", TRUE,
@@ -280,7 +284,7 @@ ide_terminal_page_actions_save_as (GSimpleAction *action,
 
   suggested = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_style_context_add_class (gtk_widget_get_style_context (suggested),
-                               GTK_STYLE_CLASS_SUGGESTED_ACTION);
+                               "suggested-action");
 
   g_signal_connect (dialog, "response", G_CALLBACK (save_as_response), g_object_ref (view));
 

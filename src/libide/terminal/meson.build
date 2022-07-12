@@ -15,9 +15,7 @@ libide_terminal_public_headers = [
   'ide-terminal-popover.h',
   'ide-terminal-launcher.h',
   'ide-terminal-search.h',
-  'ide-terminal-surface.h',
   'ide-terminal-util.h',
-  'ide-terminal-workspace.h',
   'ide-terminal.h',
   'libide-terminal.h',
 ]
@@ -32,8 +30,9 @@ libide_terminal_private_headers = [
   'ide-terminal-page-actions.h',
   'ide-terminal-page-private.h',
   'ide-terminal-popover-row.h',
-  'ide-terminal-private.h',
+  'ide-terminal-run-command-private.h',
   'ide-terminal-search-private.h',
+  'ide-terminal-private.h',
 ]
 
 libide_terminal_public_sources = [
@@ -41,15 +40,15 @@ libide_terminal_public_sources = [
   'ide-terminal-popover.c',
   'ide-terminal-launcher.c',
   'ide-terminal-search.c',
-  'ide-terminal-surface.c',
   'ide-terminal-util.c',
-  'ide-terminal-workspace.c',
   'ide-terminal.c',
 ]
 
 libide_terminal_private_sources = [
+  'ide-terminal-init.c',
   'ide-terminal-page-actions.c',
   'ide-terminal-popover-row.c',
+  'ide-terminal-run-command.c',
 ]
 
 #
@@ -71,7 +70,6 @@ libide_terminal_generated_headers += [libide_terminal_resources[1]]
 libide_terminal_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
   libvte_dep,
 
   libide_core_dep,

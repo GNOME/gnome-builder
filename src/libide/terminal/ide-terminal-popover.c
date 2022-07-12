@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
@@ -33,7 +32,7 @@ struct _IdeTerminalPopover
 {
   GtkPopover          parent_instance;
 
-  DzlListModelFilter *filter;
+  GtkFilterListModel *filter;
   gchar              *selected;
 
   /* Template widgets */
@@ -42,21 +41,6 @@ struct _IdeTerminalPopover
 };
 
 G_DEFINE_FINAL_TYPE (IdeTerminalPopover, ide_terminal_popover, GTK_TYPE_POPOVER)
-
-static void
-ide_terminal_popover_update_selected_cb (GtkWidget *widget,
-                                         gpointer   user_data)
-{
-  IdeTerminalPopoverRow *row = (IdeTerminalPopoverRow *)widget;
-  IdeRuntime *runtime = user_data;
-  gboolean selected;
-
-  g_assert (IDE_IS_TERMINAL_POPOVER_ROW (row));
-  g_assert (IDE_IS_RUNTIME (runtime));
-
-  selected = runtime == ide_terminal_popover_row_get_runtime (row);
-  ide_terminal_popover_row_set_selected (row, selected);
-}
 
 static void
 ide_terminal_popover_row_activated_cb (IdeTerminalPopover    *self,
@@ -74,9 +58,10 @@ ide_terminal_popover_row_activated_cb (IdeTerminalPopover    *self,
   g_free (self->selected);
   self->selected = g_strdup (ide_runtime_get_id (runtime));
 
-  gtk_container_foreach (GTK_CONTAINER (self->list_box),
-                         ide_terminal_popover_update_selected_cb,
-                         runtime);
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->list_box));
+       child;
+       child = gtk_widget_get_next_sibling (child))
+    ide_terminal_popover_row_set_selected (row, runtime == ide_terminal_popover_row_get_runtime (row));
 }
 
 static GtkWidget *
@@ -96,23 +81,23 @@ ide_terminal_popover_create_row_cb (gpointer item,
 }
 
 static gboolean
-ide_terminal_popover_filter_func (GObject  *item,
-                                  gpointer  user_data)
+ide_terminal_popover_filter_func (gpointer item,
+                                  gpointer user_data)
 {
-  DzlPatternSpec *spec = user_data;
-  IdeRuntime *runtime = IDE_RUNTIME (item);
+  IdePatternSpec *spec = user_data;
+  IdeRuntime *runtime = item;
   const gchar *str;
 
   str = ide_runtime_get_id (runtime);
-  if (dzl_pattern_spec_match (spec, str))
+  if (ide_pattern_spec_match (spec, str))
     return TRUE;
 
   str = ide_runtime_get_category (runtime);
-  if (dzl_pattern_spec_match (spec, str))
+  if (ide_pattern_spec_match (spec, str))
     return TRUE;
 
   str = ide_runtime_get_display_name (runtime);
-  if (dzl_pattern_spec_match (spec, str))
+  if (ide_pattern_spec_match (spec, str))
     return TRUE;
 
   return FALSE;
@@ -122,6 +107,7 @@ static void
 ide_terminal_popover_search_changed_cb (IdeTerminalPopover *self,
                                         GtkSearchEntry     *entry)
 {
+  GtkCustomFilter *filter;
   const gchar *text;
 
   g_assert (IDE_IS_TERMINAL_POPOVER (self));
@@ -130,14 +116,14 @@ ide_terminal_popover_search_changed_cb (IdeTerminalPopover *self,
   if (self->filter == NULL)
     return;
 
-  text = gtk_entry_get_text (GTK_ENTRY (entry));
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
   if (ide_str_empty0 (text))
     text = NULL;
 
-  dzl_list_model_filter_set_filter_func (self->filter,
-                                         ide_terminal_popover_filter_func,
-                                         dzl_pattern_spec_new (text),
-                                         (GDestroyNotify) dzl_pattern_spec_unref);
+  filter = gtk_custom_filter_new (ide_terminal_popover_filter_func,
+                                  ide_pattern_spec_new (text),
+                                  (GDestroyNotify) ide_pattern_spec_unref);
+  gtk_filter_list_model_set_filter (self->filter, GTK_FILTER (filter));
 }
 
 static void
@@ -171,7 +157,7 @@ ide_terminal_popover_context_set_cb (GtkWidget  *widget,
     }
 
   g_clear_object (&self->filter);
-  self->filter = dzl_list_model_filter_new (G_LIST_MODEL (runtime_manager));
+  self->filter = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (runtime_manager)), NULL);
 
   gtk_list_box_bind_model (self->list_box,
                            G_LIST_MODEL (self->filter),
@@ -222,8 +208,6 @@ ide_terminal_popover_new (void)
  * @self: a #IdeTerminalPopover
  *
  * Returns: (transfer none): an #IdeRuntime or %NULL
- *
- * Since: 3.32
  */
 IdeRuntime *
 ide_terminal_popover_get_runtime (IdeTerminalPopover *self)
