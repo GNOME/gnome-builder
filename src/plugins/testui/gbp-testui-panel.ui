@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpTestuiPanel" parent="IdePane">
+    <property name="title" translatable="yes">Unit Tests</property>
+    <property name="icon-name">builder-unit-tests-symbolic</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkListView" id="list_view">
+            <signal name="activate" handler="gbp_testui_panel_activate_cb" swapped="true" object="GbpTestuiPanel"/>
+            <property name="orientation">vertical</property>
+            <property name="single-click-activate">true</property>
+            <property name="model">
+              <object class="GtkNoSelection" id="selection">
+              </object>
+            </property>
+            <property name="factory">
+              <object class="GtkBuilderListItemFactory">
+                <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="IdeTreeExpander" id="expander">
+        <property name="margin-top">4</property>
+        <property name="margin-bottom">4</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <binding name="list-row">
+          <lookup name="item">GtkListItem</lookup>
+        </binding>
+        <binding name="icon-name">
+          <lookup name="icon-name" type="GbpTestuiItem">
+            <lookup name="item">expander</lookup>
+          </lookup>
+        </binding>
+        <binding name="expanded-icon-name">
+          <lookup name="expanded-icon-name" type="GbpTestuiItem">
+            <lookup name="item">expander</lookup>
+          </lookup>
+        </binding>
+        <binding name="title">
+          <lookup name="title" type="GbpTestuiItem">
+            <lookup name="item">expander</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+]]>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

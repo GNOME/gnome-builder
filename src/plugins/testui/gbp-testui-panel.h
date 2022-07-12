@@ -1,6 +1,6 @@
-/* gbp-test-output-panel.h
+/* gbp-testui-panel.h
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,16 +20,15 @@
 
 #pragma once
 
+#include <libide-foundry.h>
 #include <libide-gui.h>
-#include <dazzle.h>
-#include <vte/vte.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_TEST_OUTPUT_PANEL (gbp_test_output_panel_get_type())
+#define GBP_TYPE_TESTUI_PANEL (gbp_testui_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTestOutputPanel, gbp_test_output_panel, GBP, TEST_OUTPUT_PANEL, IdePane)
+G_DECLARE_FINAL_TYPE (GbpTestuiPanel, gbp_testui_panel, GBP, TESTUI_PANEL, IdePane)
 
-GtkWidget *gbp_test_output_panel_new (VtePty *pty);
+GbpTestuiPanel *gbp_testui_panel_new (IdeTestManager *test_manager);
 
 G_END_DECLS

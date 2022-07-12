@@ -1,11 +1,11 @@
 [Plugin]
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
-Copyright=Copyright © 2017-2018 Christian Hergert
-Depends=editor;
-Description=Unit testing for Builder
+Copyright=Copyright © 2017-2022 Christian Hergert
+Depends=buildui;
+Description=Unit Testing
 Embedded=_gbp_testui_register_types
 Hidden=true
 Module=testui
 Name=Unit Testing
-X-Tree-Kind=project-tree;
+X-Workspace-Kind=primary;

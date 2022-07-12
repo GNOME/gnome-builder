@@ -1,6 +1,6 @@
-/* gbp-test-path.h
+/* gbp-testui-item.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +20,19 @@
 
 #pragma once
 
-#include <libide-foundry.h>
+#include <glib-object.h>
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_TEST_PATH (gbp_test_path_get_type())
+#define GBP_TYPE_TESTUI_ITEM (gbp_testui_item_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTestPath, gbp_test_path, GBP, TEST_PATH, GObject)
+G_DECLARE_FINAL_TYPE (GbpTestuiItem, gbp_testui_item, GBP, TESTUI_ITEM, GObject)
 
-GbpTestPath *gbp_test_path_new         (IdeTestManager *test_manager,
-                                        const gchar    *path);
-const gchar *gbp_test_path_get_name    (GbpTestPath    *self);
-GPtrArray   *gbp_test_path_get_folders (GbpTestPath    *self);
-GPtrArray   *gbp_test_path_get_tests   (GbpTestPath    *self);
+GbpTestuiItem *gbp_testui_item_new                (gpointer       instance);
+gpointer       gbp_testui_item_get_instance       (GbpTestuiItem *self);
+GListModel    *gbp_testui_item_create_child_model (gpointer       item,
+                                                   gpointer       user_data);
+gpointer       gbp_testui_item_map_func           (gpointer       item,
+                                                   gpointer       user_data);
 
 G_END_DECLS

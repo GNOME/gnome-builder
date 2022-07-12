@@ -1,6 +1,6 @@
-/* gbp-test-tree-addin.h
+/* gbp-testui-preferences-addin.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_TEST_TREE_ADDIN (gbp_test_tree_addin_get_type())
+#define GBP_TYPE_TESTUI_PREFERENCES_ADDIN (gbp_testui_preferences_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTestTreeAddin, gbp_test_tree_addin, GBP, TEST_TREE_ADDIN, GObject)
+G_DECLARE_FINAL_TYPE (GbpTestuiPreferencesAddin, gbp_testui_preferences_addin, GBP, TESTUI_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS

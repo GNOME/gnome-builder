@@ -1,8 +1,10 @@
 plugins_sources += files([
   'testui-plugin.c',
-  'gbp-test-path.c',
-  'gbp-test-output-panel.c',
-  'gbp-test-tree-addin.c',
+  'gbp-testui-item.c',
+  'gbp-testui-output-panel.c',
+  'gbp-testui-panel.c',
+  'gbp-testui-preferences-addin.c',
+  'gbp-testui-workspace-addin.c',
 ])
 
 plugin_testui_resources = gnome.compile_resources(

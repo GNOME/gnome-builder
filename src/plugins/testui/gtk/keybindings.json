@@ -1,0 +1,1 @@
+{ "trigger" : "<Control><Alt><Shift>u", "action" : "test-manager.test-all", "when" : "hasProject()", "phase" : "capture" },
