@@ -22,77 +22,57 @@
 
 #include <glib/gi18n.h>
 
+#include <libide-gui.h>
+
 #include "gbp-quick-highlight-preferences.h"
 
 struct _GbpQuickHighlightPreferences
 {
   GObject parent_instance;
-  guint   enable_switch;
-  guint   min_char_spin_button;
+};
+
+static const IdePreferenceGroupEntry groups[] = {
+  { "editing", "quick-highlight", 300, N_("Highlighting") },
+};
+
+static const IdePreferenceItemEntry items[] = {
+  { "editing", "quick-highlight", "enabled", 0, ide_preferences_window_toggle,
+    N_("Highlight Words Matching Selection"),
+    N_("Highlight all occurrences of words matching the current selection"),
+    "org.gnome.builder.extension-type",
+    "/org/gnome/builder/extension-types/quick-highlight/IdeEditorPageAddin/",
+    "enabled" },
+
+  { "editing", "quick-highlight", "min-length", 0, ide_preferences_window_spin,
+    N_("Minimum Length for Highlight"),
+    N_("Highlight words matching at least this number of characters"),
+    "org.gnome.builder.editor",
+    NULL,
+    "min-char-selected" },
 };
 
 static void
-gbp_quick_highlight_preferences_load (IdePreferencesAddin *addin,
-                                      DzlPreferences      *preferences)
+gbp_quick_highlight_preferences_load (IdePreferencesAddin  *addin,
+                                      IdePreferencesWindow *window,
+                                      IdeContext           *context)
 {
   GbpQuickHighlightPreferences *self = (GbpQuickHighlightPreferences *)addin;
 
   g_assert (IDE_IS_PREFERENCES_ADDIN (self));
-  g_assert (DZL_IS_PREFERENCES (preferences));
+  g_assert (IDE_IS_PREFERENCES_WINDOW (window));
 
-  self->enable_switch =
-    dzl_preferences_add_switch (preferences,
-                                "editor",
-                                "highlight",
-                                "org.gnome.builder.extension-type",
-                                "enabled",
-                                "/org/gnome/builder/extension-types/quick-highlight/IdeEditorPageAddin/",
-                                NULL,
-                                _("Words matching selection"),
-                                _("Highlight all occurrences of words matching the current selection"),
-                                /* Translators: the following are keywords used for searching to locate this preference */
-                                _("quick highlight words matching current selection"),
-                                10);
-
-  self->min_char_spin_button =
-    dzl_preferences_add_spin_button (preferences,
-                                     "editor",
-                                     "highlight",
-                                     "org.gnome.builder.editor",
-                                     "min-char-selected",
-                                     "/org/gnome/builder/editor/",
-                                     _("Minimum length for highlight"),
-                                     _("Highlight words matching at least this number of characters"),
-                                     /* Translators: the following are keywords used for searching to locate this preference */
-                                     _("quick highlight words matching current selection minimum length"),
-                                     10);
-}
-
-static void
-gbp_quick_highlight_preferences_unload (IdePreferencesAddin *addin,
-                                        DzlPreferences      *preferences)
-{
-  GbpQuickHighlightPreferences *self = (GbpQuickHighlightPreferences *)addin;
-
-  g_assert (IDE_IS_PREFERENCES_ADDIN (self));
-  g_assert (DZL_IS_PREFERENCES (preferences));
-
-  dzl_preferences_remove_id (preferences, self->enable_switch);
-  self->enable_switch = 0;
-
-  dzl_preferences_remove_id (preferences, self->min_char_spin_button);
-  self->min_char_spin_button = 0;
+  ide_preferences_window_add_groups (window, groups, G_N_ELEMENTS (groups), NULL);
+  ide_preferences_window_add_items (window, items, G_N_ELEMENTS (items), window, NULL);
 }
 
 static void
 preferences_addin_iface_init (IdePreferencesAddinInterface *iface)
 {
   iface->load = gbp_quick_highlight_preferences_load;
-  iface->unload = gbp_quick_highlight_preferences_unload;
 }
 
-G_DEFINE_TYPE_EXTENDED (GbpQuickHighlightPreferences, gbp_quick_highlight_preferences, G_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
-                        G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, preferences_addin_iface_init))
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpQuickHighlightPreferences, gbp_quick_highlight_preferences, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_PREFERENCES_ADDIN, preferences_addin_iface_init))
 
 static void
 gbp_quick_highlight_preferences_class_init (GbpQuickHighlightPreferencesClass *klass)
