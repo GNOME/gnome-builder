@@ -152,6 +152,10 @@
                     "path" : "fuse-disable-sys-mount-under-flatpak.patch"
                 },
                 {
+                    "type" : "patch",
+                    "path" : "fuse-2.9.2-closefrom.patch"
+                },
+                {
                     "type" : "file",
                     "path" : "fusermount-wrapper.sh"
                 }
