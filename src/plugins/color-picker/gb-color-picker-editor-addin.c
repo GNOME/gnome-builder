@@ -174,7 +174,7 @@ gb_color_picker_editor_addin_set_panel (GbColorPickerEditorAddin *self)
                               NULL);
   g_signal_connect (self->panel,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->panel);
   g_signal_connect_object (self->panel,
                            "notify::rgba",
@@ -294,7 +294,7 @@ gb_color_picker_editor_addin_load (IdeEditorAddin       *addin,
                              NULL);
   g_signal_connect (self->dock,
                     "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
+                    G_CALLBACK (ide_gtk_widget_destroyed),
                     &self->dock);
 
   sidebar = ide_editor_surface_get_transient_sidebar (self->editor);
@@ -392,8 +392,6 @@ gb_color_picker_editor_addin_init (GbColorPickerEditorAddin *self)
  * If no editor view is focused, %NULL is returned.
  *
  * Returns: (transfer full): a #GstylePalette or %NULL.
- *
- * Since: 3.26
  */
 GstylePalette *
 gb_color_picker_editor_addin_create_palette (GbColorPickerEditorAddin *self)

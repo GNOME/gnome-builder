@@ -19,13 +19,13 @@
  */
 #pragma once
 
-#include <dazzle.h>
+#include <adwaita.h>
 
 G_BEGIN_DECLS
 
 #define GB_TYPE_COLOR_PICKER_PREFS_PALETTE_ROW (gb_color_picker_prefs_palette_row_get_type())
 
-G_DECLARE_FINAL_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, GB, COLOR_PICKER_PREFS_PALETTE_ROW, DzlPreferencesBin)
+G_DECLARE_FINAL_TYPE (GbColorPickerPrefsPaletteRow, gb_color_picker_prefs_palette_row, GB, COLOR_PICKER_PREFS_PALETTE_ROW, AdwPreferencesRow)
 
 gboolean                      gb_color_picker_prefs_palette_row_get_needs_attention (GbColorPickerPrefsPaletteRow    *self);
 void                          gb_color_picker_prefs_palette_row_set_needs_attention (GbColorPickerPrefsPaletteRow    *self,
