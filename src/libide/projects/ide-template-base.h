@@ -24,14 +24,15 @@
 # error "Only <libide-projects.h> can be included directly."
 #endif
 
-#include <libide-core.h>
 #include <tmpl-glib.h>
+
+#include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_TEMPLATE_BASE (ide_template_base_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeTemplateBase, ide_template_base, IDE, TEMPLATE_BASE, GObject)
 
 struct _IdeTemplateBaseClass
@@ -39,33 +40,33 @@ struct _IdeTemplateBaseClass
   GObjectClass parent_class;
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 TmplTemplateLocator *ide_template_base_get_locator       (IdeTemplateBase      *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_template_base_set_locator       (IdeTemplateBase      *self,
                                                           TmplTemplateLocator  *locator);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_template_base_add_resource      (IdeTemplateBase      *self,
                                                           const gchar          *resource_path,
                                                           GFile                *destination,
                                                           TmplScope            *scope,
                                                           gint                  mode);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_template_base_add_path          (IdeTemplateBase      *self,
                                                           const gchar          *path,
                                                           GFile                *destination,
                                                           TmplScope            *scope,
                                                           gint                  mode);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_template_base_expand_all_async  (IdeTemplateBase      *self,
                                                           GCancellable         *cancellable,
                                                           GAsyncReadyCallback   callback,
                                                           gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean             ide_template_base_expand_all_finish (IdeTemplateBase      *self,
                                                           GAsyncResult         *result,
                                                           GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                 ide_template_base_reset             (IdeTemplateBase      *self);
 
 G_END_DECLS

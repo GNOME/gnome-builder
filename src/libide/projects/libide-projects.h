@@ -36,6 +36,8 @@
 #include "ide-recent-projects.h"
 #include "ide-similar-file-locator.h"
 #include "ide-template-base.h"
+#include "ide-template-input.h"
+#include "ide-template-locator.h"
 #include "ide-template-provider.h"
 
 #undef IDE_PROJECTS_INSIDE

@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "ide-template-base.h"
+#include "ide-template-locator.h"
 
 #define TIMEOUT_INTERVAL_MSEC 17
 #define TIMEOUT_DURATION_MSEC  2
@@ -134,8 +135,6 @@ ide_template_base_mkdirs_finish (IdeTemplateBase  *self,
  * Fetches the #TmplTemplateLocator used for resolving templates.
  *
  * Returns: (transfer none) (nullable): a #TmplTemplateLocator or %NULL.
- *
- * Since: 3.32
  */
 TmplTemplateLocator *
 ide_template_base_get_locator (IdeTemplateBase *self)
@@ -246,8 +245,6 @@ ide_template_base_class_init (IdeTemplateBaseClass *klass)
    * that should be used to resolve template includes. If %NULL, templates
    * will not be allowed to include other templates.
    * directive.
-   *
-   * Since: 3.32
    */
   properties [PROP_LOCATOR] =
     g_param_spec_object ("locator",
@@ -263,6 +260,8 @@ static void
 ide_template_base_init (IdeTemplateBase *self)
 {
   IdeTemplateBasePrivate *priv = ide_template_base_get_instance_private (self);
+
+  priv->locator = TMPL_TEMPLATE_LOCATOR (ide_template_locator_new ());
 
   priv->files = g_array_new (FALSE, TRUE, sizeof (FileExpansion));
   g_array_set_clear_func (priv->files, clear_file_expansion);
@@ -294,6 +293,9 @@ ide_template_base_parse_worker (IdeTask      *task,
 
       if (!tmpl_template_parse_file (template, fexp->file, cancellable, &error))
         {
+          g_debug ("Failed to parse template: %s: %s",
+                   g_file_peek_path (fexp->file),
+                   error->message);
           ide_task_return_error (task, g_steal_pointer (&error));
           return;
         }

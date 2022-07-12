@@ -17,6 +17,8 @@ libide_projects_public_headers = [
   'ide-recent-projects.h',
   'ide-similar-file-locator.h',
   'ide-template-base.h',
+  'ide-template-input.h',
+  'ide-template-locator.h',
   'ide-template-provider.h',
   'libide-projects.h',
 ]
@@ -46,10 +48,18 @@ libide_projects_public_sources = [
   'ide-recent-projects.c',
   'ide-similar-file-locator.c',
   'ide-template-base.c',
+  'ide-template-input.c',
+  'ide-template-locator.c',
   'ide-template-provider.c',
 ]
 
-libide_projects_sources = libide_projects_public_sources + libide_projects_private_sources
+libide_projects_resources = gnome.compile_resources(
+  'ide-projects-resources',
+  'libide-projects.gresource.xml',
+  c_name: 'ide_projects',
+)
+
+libide_projects_sources = libide_projects_public_sources + libide_projects_private_sources + libide_projects_resources
 
 #
 # Dependencies
@@ -65,6 +75,7 @@ libide_projects_deps = [
   libide_core_dep,
   libide_io_dep,
   libide_threading_dep,
+  libide_tree_dep,
   libide_vcs_dep,
 ]
 
