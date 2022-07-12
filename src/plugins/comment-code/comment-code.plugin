@@ -2,7 +2,6 @@
 Authors=Sebastien Lafargue <slafargue@gnome.org>
 Builtin=true
 Copyright=Copyright © 2016 Sebastien Lafargue
-Depends=editor;
 Description=Comment code lines with Builder editor.
 Embedded=_gbp_comment_code_register_types
 Hidden=true
