@@ -22,14 +22,16 @@
 
 #include "config.h"
 
-#include "ide-pipeline.h"
 #include "ide-deploy-strategy.h"
+#include "ide-pipeline.h"
+#include "ide-run-context.h"
+#include "ide-runtime.h"
 
 G_DEFINE_ABSTRACT_TYPE (IdeDeployStrategy, ide_deploy_strategy, IDE_TYPE_OBJECT)
 
 static void
 ide_deploy_strategy_real_load_async (IdeDeployStrategy   *self,
-                                     IdePipeline    *pipeline,
+                                     IdePipeline         *pipeline,
                                      GCancellable        *cancellable,
                                      GAsyncReadyCallback  callback,
                                      gpointer             user_data)
@@ -45,18 +47,21 @@ ide_deploy_strategy_real_load_async (IdeDeployStrategy   *self,
 static gboolean
 ide_deploy_strategy_real_load_finish (IdeDeployStrategy  *self,
                                       GAsyncResult       *result,
+                                      int                *priority,
                                       GError            **error)
 {
   g_assert (IDE_IS_DEPLOY_STRATEGY (self));
   g_assert (G_IS_TASK (result));
   g_assert (g_task_is_valid (G_TASK (result), self));
 
+  *priority = G_MAXINT;
+
   return g_task_propagate_boolean (G_TASK (result), error);
 }
 
 static void
 ide_deploy_strategy_real_deploy_async (IdeDeployStrategy     *self,
-                                       IdePipeline      *pipeline,
+                                       IdePipeline           *pipeline,
                                        GFileProgressCallback  progress,
                                        gpointer               progress_data,
                                        GDestroyNotify         progress_data_destroy,
@@ -85,36 +90,27 @@ ide_deploy_strategy_real_deploy_finish (IdeDeployStrategy  *self,
 }
 
 static void
-ide_deploy_strategy_real_create_runner_async (IdeDeployStrategy   *self,
-                                              IdePipeline         *pipeline,
-                                              GCancellable        *cancellable,
-                                              GAsyncReadyCallback  callback,
-                                              gpointer             user_data)
+ide_deploy_strategy_real_prepare_run_context (IdeDeployStrategy *self,
+                                              IdePipeline       *pipeline,
+                                              IdeRunContext     *run_context)
 {
-  g_autoptr(IdeTask) task = NULL;
+  IdeRuntime *runtime;
 
-  g_return_if_fail (IDE_IS_DEPLOY_STRATEGY (self));
-  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
-  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+  IDE_ENTRY;
 
-  task = ide_task_new (self, cancellable, callback, user_data);
-  ide_task_return_new_error (task,
-                             G_IO_ERROR,
-                             G_IO_ERROR_NOT_SUPPORTED,
-                             "Not supported");
-
-}
-
-static IdeRunner *
-ide_deploy_strategy_real_create_runner_finish (IdeDeployStrategy  *self,
-                                               GAsyncResult       *result,
-                                               GError            **error)
-{
   g_assert (IDE_IS_DEPLOY_STRATEGY (self));
-  g_assert (IDE_IS_TASK (result));
-  g_assert (ide_task_is_valid (G_TASK (result), self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
-  return g_task_propagate_pointer (G_TASK (result), error);
+  /* In the default implementation, for running locally, we just defer to
+   * the pipeline's runtime for how to create a run context.
+   */
+  if ((runtime = ide_pipeline_get_runtime (pipeline)))
+    ide_runtime_prepare_to_run (runtime, pipeline, run_context);
+  else
+    g_return_if_reached ();
+
+  IDE_EXIT;
 }
 
 static void
@@ -124,8 +120,7 @@ ide_deploy_strategy_class_init (IdeDeployStrategyClass *klass)
   klass->load_finish = ide_deploy_strategy_real_load_finish;
   klass->deploy_async = ide_deploy_strategy_real_deploy_async;
   klass->deploy_finish = ide_deploy_strategy_real_deploy_finish;
-  klass->create_runner_async = ide_deploy_strategy_real_create_runner_async;
-  klass->create_runner_finish = ide_deploy_strategy_real_create_runner_finish;
+  klass->prepare_run_context = ide_deploy_strategy_real_prepare_run_context;
 }
 
 static void
@@ -151,12 +146,10 @@ ide_deploy_strategy_init (IdeDeployStrategy *self)
  * get the install data out of the pipeline. Given so many moving parts
  * in build systems, how to determine that is an implementation detail of
  * the specific #IdeDeployStrategy.
- *
- * Since: 3.32
  */
 void
 ide_deploy_strategy_load_async (IdeDeployStrategy   *self,
-                                IdePipeline    *pipeline,
+                                IdePipeline         *pipeline,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
                                 gpointer             user_data)
@@ -182,12 +175,11 @@ ide_deploy_strategy_load_async (IdeDeployStrategy   *self,
  *
  * Returns: %TRUE if successful and the pipeline was supported; otherwise
  *   %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
                                  GAsyncResult       *result,
+                                 int                *priority,
                                  GError            **error)
 {
   gboolean ret;
@@ -196,8 +188,9 @@ ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
 
   g_assert (IDE_IS_DEPLOY_STRATEGY (self));
   g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (priority != NULL);
 
-  ret = IDE_DEPLOY_STRATEGY_GET_CLASS (self)->load_finish (self, result, error);
+  ret = IDE_DEPLOY_STRATEGY_GET_CLASS (self)->load_finish (self, result, priority, error);
 
   IDE_RETURN (ret);
 }
@@ -219,12 +212,10 @@ ide_deploy_strategy_load_finish (IdeDeployStrategy  *self,
  *
  * If supported, the strategy will call @progress with periodic updates as
  * the application is deployed.
- *
- * Since: 3.32
  */
 void
 ide_deploy_strategy_deploy_async (IdeDeployStrategy     *self,
-                                  IdePipeline      *pipeline,
+                                  IdePipeline           *pipeline,
                                   GFileProgressCallback  progress,
                                   gpointer               progress_data,
                                   GDestroyNotify         progress_data_destroy,
@@ -260,8 +251,6 @@ ide_deploy_strategy_deploy_async (IdeDeployStrategy     *self,
  * build pipeline's device.
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set
- *
- * Since: 3.32
  */
 gboolean
 ide_deploy_strategy_deploy_finish (IdeDeployStrategy  *self,
@@ -272,8 +261,8 @@ ide_deploy_strategy_deploy_finish (IdeDeployStrategy  *self,
 
   IDE_ENTRY;
 
-  g_assert (IDE_IS_DEPLOY_STRATEGY (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
+  g_return_val_if_fail (IDE_IS_DEPLOY_STRATEGY (self), FALSE);
+  g_return_val_if_fail (G_IS_ASYNC_RESULT (result), FALSE);
 
   ret = IDE_DEPLOY_STRATEGY_GET_CLASS (self)->deploy_finish (self, result, error);
 
@@ -281,66 +270,28 @@ ide_deploy_strategy_deploy_finish (IdeDeployStrategy  *self,
 }
 
 /**
- * ide_deploy_strategy_create_runner_async:
+ * ide_deploy_strategy_prepare_run_context:
  * @self: a #IdeDeployStrategy
  * @pipeline: an #IdePipeline
- * @cancellable: (nullable): a #GCancellable or %NULL
- * @callback: (closure user_data): a callback to execute upon completion
- * @user_data: closure data for @callback
+ * @run_context: an #IdeRunContext
  *
- * Gets an #IdeRunner that runs apps deployed to the device, if a
- * runner other than the default is needed.
+ * Prepare an #IdeRunContext to run on a device.
  *
- * Since: 41
+ * This virtual function should be implemented by device strategies to prepare
+ * a run context for running on a device or deployment situation.
+ *
+ * Typically this is either nothing (in the case of running locally) or pushing
+ * a layer into the run context which is a command to deliver the command to
+ * another device/container/simulator/etc.
  */
 void
-ide_deploy_strategy_create_runner_async (IdeDeployStrategy   *self,
-                                         IdePipeline         *pipeline,
-                                         GCancellable        *cancellable,
-                                         GAsyncReadyCallback  callback,
-                                         gpointer             user_data)
+ide_deploy_strategy_prepare_run_context (IdeDeployStrategy *self,
+                                         IdePipeline       *pipeline,
+                                         IdeRunContext     *run_context)
 {
-  IDE_ENTRY;
+  g_return_if_fail (IDE_IS_DEPLOY_STRATEGY (self));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
 
-  g_assert (IDE_IS_DEPLOY_STRATEGY (self));
-  g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  IDE_DEPLOY_STRATEGY_GET_CLASS (self)->create_runner_async (self,
-                                                             pipeline,
-                                                             cancellable,
-                                                             callback,
-                                                             user_data);
-
-  IDE_EXIT;
-}
-
-/**
- * ide_deploy_strategy_create_runner_finish:
- * @self: an #IdeDeployStrategy
- * @result: a #GAsyncResult provided to callback
- * @error: a location for a #GError, or %NULL
- *
- * Completes an asynchronous request to get an #IdeRunner for the current
- * device.
- *
- * Returns: (transfer full): An #IdeRunner or %NULL
- *
- * Since: 41
- */
-IdeRunner *
-ide_deploy_strategy_create_runner_finish (IdeDeployStrategy  *self,
-                                          GAsyncResult       *result,
-                                          GError            **error)
-{
-  IdeRunner *ret;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_DEPLOY_STRATEGY (self));
-  g_assert (G_IS_ASYNC_RESULT (result));
-
-  ret = IDE_DEPLOY_STRATEGY_GET_CLASS (self)->create_runner_finish (self, result, error);
-
-  IDE_RETURN (ret);
+  IDE_DEPLOY_STRATEGY_GET_CLASS (self)->prepare_run_context (self, pipeline, run_context);
 }

@@ -22,14 +22,19 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+#include <libpeas/peas.h>
+
+#include <libide-core.h>
 #include <libide-code.h>
+#include <libide-plugins.h>
 #include <libide-threading.h>
 #include <libide-vcs.h>
 
 #include "ide-build-manager.h"
 #include "ide-build-private.h"
+#include "ide-build-target.h"
+#include "ide-build-target-provider.h"
 #include "ide-config-manager.h"
 #include "ide-config.h"
 #include "ide-device-info.h"
@@ -37,12 +42,12 @@
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
 #include "ide-pipeline.h"
-#include "ide-run-manager.h"
 #include "ide-runtime-manager.h"
 #include "ide-runtime-private.h"
 #include "ide-runtime.h"
 #include "ide-toolchain-manager.h"
 #include "ide-toolchain-private.h"
+#include "ide-triplet.h"
 
 /**
  * SECTION:ide-build-manager
@@ -70,9 +75,20 @@ struct _IdeBuildManager
 
   IdePipeline      *pipeline;
   GDateTime        *last_build_time;
-  DzlSignalGroup   *pipeline_signals;
+  IdeSignalGroup   *pipeline_signals;
 
-  gchar            *branch_name;
+  IdeExtensionSetAdapter
+                   *build_target_providers;
+
+  char             *branch_name;
+
+  /* The name of the default build target to build if no targets
+   * are specified. Setting to NULL (or empty string) implies that
+   * no target should be specified and therefore the build system
+   * should attempt a "full build" such as you would get by running
+   * `make` or `ninja`.
+   */
+  char             *default_build_target;
 
   GTimer           *running_time;
 
@@ -90,29 +106,40 @@ struct _IdeBuildManager
   guint             has_configured : 1;
 };
 
-static void initable_iface_init              (GInitableIface  *iface);
-static void ide_build_manager_set_can_build  (IdeBuildManager *self,
-                                              gboolean         can_build);
-static void ide_build_manager_action_build   (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_rebuild (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_cancel  (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_clean   (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_export  (IdeBuildManager *self,
-                                              GVariant        *param);
-static void ide_build_manager_action_install (IdeBuildManager *self,
-                                              GVariant        *param);
+typedef struct
+{
+  IdePipeline      *pipeline;
+  GPtrArray        *targets;
+  char             *default_target;
+  IdePipelinePhase  phase;
+} BuildState;
 
-DZL_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
+static void initable_iface_init                           (GInitableIface  *iface);
+static void ide_build_manager_set_can_build               (IdeBuildManager *self,
+                                                           gboolean         can_build);
+static void ide_build_manager_action_build                (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_rebuild              (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_cancel               (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_clean                (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_export               (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_install              (IdeBuildManager *self,
+                                                           GVariant        *param);
+static void ide_build_manager_action_default_build_target (IdeBuildManager *self,
+                                                           GVariant        *param);
+
+IDE_DEFINE_ACTION_GROUP (IdeBuildManager, ide_build_manager, {
   { "build", ide_build_manager_action_build },
   { "cancel", ide_build_manager_action_cancel },
   { "clean", ide_build_manager_action_clean },
   { "export", ide_build_manager_action_export },
   { "install", ide_build_manager_action_install },
   { "rebuild", ide_build_manager_action_rebuild },
+  { "default-build-target", ide_build_manager_action_default_build_target, "s", "''" },
 })
 
 G_DEFINE_TYPE_EXTENDED (IdeBuildManager, ide_build_manager, IDE_TYPE_OBJECT, G_TYPE_FLAG_FINAL,
@@ -143,6 +170,39 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+build_state_free (BuildState *state)
+{
+  g_clear_pointer (&state->default_target, g_free);
+  g_clear_pointer (&state->targets, g_ptr_array_unref);
+  g_clear_object (&state->pipeline);
+  g_slice_free (BuildState, state);
+}
+
+static void
+ide_build_manager_action_default_build_target (IdeBuildManager *self,
+                                               GVariant        *param)
+{
+  const char *str;
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (param != NULL);
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  str = g_variant_get_string (param, NULL);
+  if (ide_str_empty0 (str))
+    str = NULL;
+
+  if (g_strcmp0 (str, self->default_build_target) != 0)
+    {
+      g_free (self->default_build_target);
+      self->default_build_target = g_strdup (str);
+      ide_build_manager_set_action_state (self,
+                                          "default-build-target",
+                                          g_variant_new_string (str ? str : ""));
+    }
+}
 
 static void
 ide_build_manager_rediagnose (IdeBuildManager *self)
@@ -192,14 +252,7 @@ ide_build_manager_start_timer (IdeBuildManager *self)
   else
     self->running_time = g_timer_new ();
 
-  /*
-   * We use the DzlFrameSource for our timer callback because we only want to
-   * update at a rate somewhat close to a typical monitor refresh rate.
-   * Additionally, we want to handle drift (which that source does) so that we
-   * don't constantly fall behind.
-   */
   self->timer_source = g_timeout_add_seconds (1, timer_callback, self);
-
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
 
   IDE_EXIT;
@@ -212,7 +265,7 @@ ide_build_manager_stop_timer (IdeBuildManager *self)
 
   g_assert (IDE_IS_BUILD_MANAGER (self));
 
-  dzl_clear_source (&self->timer_source);
+  g_clear_handle_id (&self->timer_source, g_source_remove);
 
   if (self->running_time != NULL)
     {
@@ -582,7 +635,6 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
   g_autoptr(IdeTask) task = NULL;
   IdeConfigManager *config_manager;
   IdeDeviceManager *device_manager;
-  IdeRunManager *run_manager;
   IdeConfig *config;
   IdeContext *context;
   IdeDevice *device;
@@ -604,15 +656,9 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
       g_assert (self->pipeline != NULL);
 
       self->building = FALSE;
-      dzl_clear_source (&self->timer_source);
+      g_clear_handle_id (&self->timer_source, g_source_remove);
       g_signal_emit (self, signals [BUILD_FAILED], 0, self->pipeline);
     }
-
-  /*
-   * Clear any cached build targets from the run manager.
-   */
-  run_manager = ide_run_manager_from_context (context);
-  ide_run_manager_set_build_target (run_manager, NULL);
 
   /*
    * Cancel and clear our previous pipeline and associated components
@@ -654,7 +700,7 @@ ide_build_manager_invalidate_pipeline (IdeBuildManager *self)
                                  "device", device,
                                  NULL);
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (self->pipeline));
-  dzl_signal_group_set_target (self->pipeline_signals, self->pipeline);
+  ide_signal_group_set_target (self->pipeline_signals, self->pipeline);
 
   /*
    * Create a task to manage our async pipeline initialization state.
@@ -819,14 +865,15 @@ ide_build_manager_finalize (GObject *object)
 {
   IdeBuildManager *self = (IdeBuildManager *)object;
 
+  ide_clear_and_destroy_object (&self->build_target_providers);
   ide_clear_and_destroy_object (&self->pipeline);
   g_clear_object (&self->pipeline_signals);
   g_clear_object (&self->cancellable);
   g_clear_pointer (&self->last_build_time, g_date_time_unref);
   g_clear_pointer (&self->running_time, g_timer_destroy);
   g_clear_pointer (&self->branch_name, g_free);
-
-  dzl_clear_source (&self->timer_source);
+  g_clear_pointer (&self->default_build_target, g_free);
+  g_clear_handle_id (&self->timer_source, g_source_remove);
 
   G_OBJECT_CLASS (ide_build_manager_parent_class)->finalize (object);
 }
@@ -1166,33 +1213,33 @@ ide_build_manager_init (IdeBuildManager *self)
   self->cancellable = g_cancellable_new ();
   self->needs_rediagnose = TRUE;
 
-  self->pipeline_signals = dzl_signal_group_new (IDE_TYPE_PIPELINE);
+  self->pipeline_signals = ide_signal_group_new (IDE_TYPE_PIPELINE);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "diagnostic",
                                    G_CALLBACK (ide_build_manager_handle_diagnostic),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "notify::busy",
                                    G_CALLBACK (ide_build_manager_notify_busy),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "notify::message",
                                    G_CALLBACK (ide_build_manager_notify_message),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "started",
                                    G_CALLBACK (ide_build_manager_pipeline_started),
                                    self,
                                    G_CONNECT_SWAPPED);
 
-  dzl_signal_group_connect_object (self->pipeline_signals,
+  ide_signal_group_connect_object (self->pipeline_signals,
                                    "finished",
                                    G_CALLBACK (ide_build_manager_pipeline_finished),
                                    self,
@@ -1381,6 +1428,102 @@ failure:
 }
 
 static void
+ide_build_manager_build_list_targets_cb (GObject      *object,
+                                         GAsyncResult *result,
+                                         gpointer      user_data)
+{
+  IdeBuildManager *self = (IdeBuildManager *)object;
+  g_autoptr(GListModel) targets = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  BuildState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (state->targets == NULL);
+  g_assert (state->default_target != NULL);
+  g_assert (IDE_IS_PIPELINE (state->pipeline));
+
+  if ((targets = ide_build_manager_list_targets_finish (self, result, &error)))
+    {
+      guint n_items = g_list_model_get_n_items (targets);
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(IdeBuildTarget) target = g_list_model_get_item (targets, i);
+          const char *name = ide_build_target_get_name (target);
+
+          if (g_strcmp0 (name, state->default_target) == 0)
+            {
+              state->targets = g_ptr_array_new_with_free_func (g_object_unref);
+              g_ptr_array_add (state->targets, g_steal_pointer (&target));
+              break;
+            }
+        }
+    }
+
+  if (error != NULL && !ide_error_ignore (error))
+    g_warning ("Failed to list build targets: %s", error->message);
+
+  ide_pipeline_build_targets_async (state->pipeline,
+                                    state->phase,
+                                    state->targets,
+                                    ide_task_get_cancellable (task),
+                                    ide_build_manager_build_targets_cb,
+                                    g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
+ide_build_manager_build_after_save (IdeTask *task)
+{
+  IdeBuildManager *self;
+  BuildState *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
+
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+  g_assert (state != NULL);
+  g_assert (IDE_IS_PIPELINE (state->pipeline));
+
+  /* If a default build target was preferred instead of the build system
+   * default then we need to go fetch that from the build target providers.
+   * However, we can only do this if we are just building. Anything requiring
+   * us to install means that we have to do regular builds as that will happen
+   * anyway as part of the install process.
+   */
+  if (state->targets == NULL &&
+      state->default_target != NULL &&
+      state->phase < IDE_PIPELINE_PHASE_INSTALL)
+    ide_build_manager_list_targets_async (self,
+                                          ide_task_get_cancellable (task),
+                                          ide_build_manager_build_list_targets_cb,
+                                          g_object_ref (task));
+  else
+    ide_pipeline_build_targets_async (state->pipeline,
+                                      state->phase,
+                                      state->targets,
+                                      ide_task_get_cancellable (task),
+                                      ide_build_manager_build_targets_cb,
+                                      g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+static void
 ide_build_manager_save_all_cb (GObject      *object,
                                GAsyncResult *result,
                                gpointer      user_data)
@@ -1389,9 +1532,6 @@ ide_build_manager_save_all_cb (GObject      *object,
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   IdeBuildManager *self;
-  GCancellable *cancellable;
-  GPtrArray *targets;
-  IdePipelinePhase phase;
 
   IDE_ENTRY;
 
@@ -1399,30 +1539,15 @@ ide_build_manager_save_all_cb (GObject      *object,
   g_assert (IDE_IS_TASK (task));
 
   self = ide_task_get_source_object (task);
-  cancellable = ide_task_get_cancellable (task);
-  targets = ide_task_get_task_data (task);
-
-  g_assert (IDE_IS_BUILD_MANAGER (self));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  if (!ide_buffer_manager_save_all_finish (buffer_manager, result, &error))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
-
-  phase = ide_pipeline_get_requested_phase (self->pipeline);
-
-  ide_pipeline_build_targets_async (self->pipeline,
-                                    phase,
-                                    targets,
-                                    cancellable,
-                                    ide_build_manager_build_targets_cb,
-                                    g_steal_pointer (&task));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_HAS_DIAGNOSTICS]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_LAST_BUILD_TIME]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RUNNING_TIME]);
+
+  if (!ide_buffer_manager_save_all_finish (buffer_manager, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_build_manager_build_after_save (task);
 
   IDE_EXIT;
 }
@@ -1451,8 +1576,7 @@ ide_build_manager_build_async (IdeBuildManager     *self,
                                gpointer             user_data)
 {
   g_autoptr(IdeTask) task = NULL;
-  IdeBufferManager *buffer_manager;
-  IdeContext *context;
+  BuildState *state;
 
   IDE_ENTRY;
 
@@ -1460,15 +1584,12 @@ ide_build_manager_build_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_build_manager_build_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_return_on_cancel (task, TRUE);
-
-  if (targets != NULL)
-    ide_task_set_task_data (task, _g_ptr_array_copy_objects (targets), g_ptr_array_unref);
 
   if (self->pipeline == NULL ||
       self->can_build == FALSE ||
@@ -1486,6 +1607,17 @@ ide_build_manager_build_async (IdeBuildManager     *self,
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
+
+  /* Setup our state for the build process. We try to cache everything
+   * we need up front so that we don't need to deal with races between
+   * asynchronous operations.
+   */
+  state = g_slice_new0 (BuildState);
+  state->phase = phase;
+  state->default_target = g_strdup (self->default_build_target);
+  state->targets = targets ? _g_ptr_array_copy_objects (targets) : NULL;
+  state->pipeline = g_object_ref (self->pipeline);
+  ide_task_set_task_data (task, state, build_state_free);
 
   /*
    * Only update our "build time" if we are advancing to IDE_PIPELINE_PHASE_BUILD,
@@ -1510,8 +1642,9 @@ ide_build_manager_build_async (IdeBuildManager     *self,
    */
   if ((phase & IDE_PIPELINE_PHASE_MASK) >= IDE_PIPELINE_PHASE_BUILD)
     {
-      context = ide_object_get_context (IDE_OBJECT (self));
-      buffer_manager = ide_buffer_manager_from_context (context);
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      IdeBufferManager *buffer_manager = ide_buffer_manager_from_context (context);
+
       ide_buffer_manager_save_all_async (buffer_manager,
                                          NULL,
                                          ide_build_manager_save_all_cb,
@@ -1519,12 +1652,7 @@ ide_build_manager_build_async (IdeBuildManager     *self,
       IDE_EXIT;
     }
 
-  ide_pipeline_build_targets_async (self->pipeline,
-                                    phase,
-                                    targets,
-                                    cancellable,
-                                    ide_build_manager_build_targets_cb,
-                                    g_steal_pointer (&task));
+  ide_build_manager_build_after_save (task);
 
   IDE_EXIT;
 }
@@ -1606,7 +1734,7 @@ ide_build_manager_clean_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_build_manager_clean_async);
@@ -1715,7 +1843,7 @@ ide_build_manager_rebuild_async (IdeBuildManager     *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (!g_cancellable_is_cancelled (self->cancellable));
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_build_manager_rebuild_async);
@@ -1843,4 +1971,186 @@ _ide_build_manager_start (IdeBuildManager *self)
   self->started = TRUE;
 
   ide_build_manager_invalidate (self);
+}
+
+static void
+ensure_build_target_providers (IdeBuildManager *self)
+{
+  g_assert (IDE_IS_BUILD_MANAGER (self));
+
+  if (self->build_target_providers != NULL)
+    return;
+
+  self->build_target_providers =
+    ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                   peas_engine_get_default (),
+                                   IDE_TYPE_BUILD_TARGET_PROVIDER,
+                                   NULL, NULL);
+}
+
+typedef struct
+{
+  GListStore *store;
+  guint n_active;
+} ListTargets;
+
+static void
+list_targets_free (ListTargets *state)
+{
+  g_clear_object (&state->store);
+  g_slice_free (ListTargets, state);
+}
+
+static void
+ide_build_manager_list_targets_cb (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
+{
+  IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)object;
+  g_autoptr(GPtrArray) targets = NULL;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+  ListTargets *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (G_IS_LIST_STORE (state->store));
+
+  targets = ide_build_target_provider_get_targets_finish (provider, result, &error);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (targets, g_object_unref);
+
+  if (targets != NULL)
+    {
+      for (guint i = 0; i < targets->len; i++)
+        {
+          IdeBuildTarget *target = g_ptr_array_index (targets, i);
+
+          g_list_store_append (state->store, target);
+        }
+    }
+
+  state->n_active--;
+
+  if (state->n_active == 0)
+    {
+      if (g_list_model_get_n_items (G_LIST_MODEL (state->store)) > 0)
+        ide_task_return_object (task, g_steal_pointer (&state->store));
+      else
+        ide_task_return_new_error (task,
+                                   G_IO_ERROR,
+                                   G_IO_ERROR_NOT_SUPPORTED,
+                                   "No build targets could be located, perhaps project needs to be configured");
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_build_manager_list_targets_foreach_cb (IdeExtensionSetAdapter *set,
+                                           PeasPluginInfo         *plugin_info,
+                                           PeasExtension          *exten,
+                                           gpointer                user_data)
+{
+  IdeBuildTargetProvider *provider = (IdeBuildTargetProvider *)exten;
+  IdeTask *task = user_data;
+  ListTargets *state;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (IDE_IS_BUILD_TARGET_PROVIDER (provider));
+  g_assert (IDE_IS_TASK (task));
+
+  state = ide_task_get_task_data (task);
+
+  g_assert (state != NULL);
+  g_assert (G_IS_LIST_STORE (state->store));
+
+  state->n_active++;
+
+  ide_build_target_provider_get_targets_async (provider,
+                                               ide_task_get_cancellable (task),
+                                               ide_build_manager_list_targets_cb,
+                                               g_object_ref (task));
+
+  IDE_EXIT;
+}
+
+void
+ide_build_manager_list_targets_async (IdeBuildManager     *self,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  ListTargets *state;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_BUILD_MANAGER (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  state = g_slice_new0 (ListTargets);
+  state->store = g_list_store_new (IDE_TYPE_BUILD_TARGET);
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, ide_build_manager_list_targets_async);
+  ide_task_set_task_data (task, state, list_targets_free);
+
+  ensure_build_target_providers (self);
+
+  ide_extension_set_adapter_foreach (self->build_target_providers,
+                                     ide_build_manager_list_targets_foreach_cb,
+                                     task);
+
+  if (state->n_active == 0)
+    ide_task_return_new_error (task,
+                               G_IO_ERROR,
+                               G_IO_ERROR_NOT_SUPPORTED,
+                               "No build target providers found");
+
+  IDE_EXIT;
+}
+
+/**
+ * ide_build_manager_list_targets_finish:
+ * @self: a #IdeBuildManager
+ * @error: a location for a #GError
+ *
+ * Lists available build targets.
+ *
+ * Completes a request to list available build targets that was started with
+ * ide_build_manager_list_targets_async(). If no build targetproviders were
+ * discovered or no build targets were found, this will return %NULL and @error
+ * will be set to %G_IO_ERROR_NOT_SUPPORTED.
+ *
+ * Otherwise, a non-empty #GListModel of #IdeBuildTarget will be returned.
+ *
+ * Returns: (transfer full): a #GListModel of #IdeBuildTarget if successful;
+ *   otherwise %NULL and @error is set.
+ */
+GListModel *
+ide_build_manager_list_targets_finish (IdeBuildManager  *self,
+                                       GAsyncResult     *result,
+                                       GError          **error)
+{
+  GListModel *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_BUILD_MANAGER (self), NULL);
+  g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  ret = ide_task_propagate_object (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }

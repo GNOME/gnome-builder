@@ -23,8 +23,6 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <dazzle.h>
-#include <libide-plugins.h>
 #include <libpeas/peas.h>
 #include <string.h>
 #include <vte/vte.h>
@@ -37,7 +35,8 @@
 #include <libide-threading.h>
 
 #include "ide-build-log-private.h"
-#include "ide-build-log.h"
+#include "ide-config.h"
+#include "ide-deploy-strategy.h"
 #include "ide-pipeline-addin.h"
 #include "ide-pipeline.h"
 #include "ide-build-private.h"
@@ -49,17 +48,20 @@
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
 #include "ide-foundry-enums.h"
+#include "ide-local-deploy-strategy.h"
+#include "ide-local-device.h"
+#include "ide-run-command.h"
+#include "ide-run-context.h"
 #include "ide-run-manager-private.h"
 #include "ide-runtime.h"
 #include "ide-toolchain-manager.h"
 #include "ide-toolchain.h"
 #include "ide-triplet.h"
 
-DZL_DEFINE_COUNTER (Instances, "Pipeline", "N Pipelines", "Number of Pipeline instances")
 G_DEFINE_QUARK (ide_build_error, ide_build_error)
 
 /**
- * SECTION:idebuildpipeline
+ * SECTION:idepipeline
  * @title: IdePipeline
  * @short_description: Pluggable build pipeline
  * @include: ide.h
@@ -96,22 +98,20 @@ G_DEFINE_QUARK (ide_build_error, ide_build_error)
  * ide_pipeline_stage_set_transient(). This may be useful to perform operations
  * such as an "export tarball" stage which should only run once as determined
  * by the user requesting a "make dist" style operation.
- *
- * Since: 3.32
  */
 
 typedef struct
 {
-  guint          id;
+  guint             id;
   IdePipelinePhase  phase;
-  gint           priority;
+  int               priority;
   IdePipelineStage *stage;
 } PipelineEntry;
 
 typedef struct
 {
   IdePipeline *self;
-  GPtrArray        *addins;
+  GPtrArray   *addins;
 } IdleLoadState;
 
 typedef struct
@@ -137,6 +137,15 @@ struct _IdePipeline
    * add error formats, or just monitor logs.
    */
   IdeExtensionSetAdapter *addins;
+
+  /*
+   * Deployment stategies help discover how to make a deployment to
+   * a device which might require sending data to another system such
+   * as a phone or tablet.
+   */
+  IdeExtensionSetAdapter *deploy_strategies;
+  IdeDeployStrategy *best_strategy;
+  int best_strategy_priority;
 
   /*
    * This is the configuration for the build. It is a snapshot of
@@ -214,18 +223,17 @@ struct _IdePipeline
   guint   errfmt_seqnum;
 
   /*
-   * The VtePty is used to connect to a VteTerminal. It's basically
-   * just a wrapper around a PTY master. We then add a IdePtyIntercept
-   * to proxy PTY data while allowing us to tap into the content being
-   * transmitted. We can use that to run regexes against and perform
-   * additional error extraction. Finally, pty_slave is the PTY device
-   * we created that will get attached to stdin/stdout/stderr in our
-   * spawned subprocesses. It is a slave to the PTY master owned by
-   * the IdePtyIntercept.
+   * The VtePty is used to connect to a VteTerminal. It's basically just a
+   * wrapper around a PTY consumer. We then add a IdePtyIntercept to proxy
+   * PTY data while allowing us to tap into the content being transmitted.
+   * We can use that to run regexes against and perform additional error
+   * extraction. Finally, pty_producer is the PTY device we created that
+   * will get attached to stdin/stdout/stderr in our spawned subprocesses.
+   * It is a producer to the PTY consumer owned by the IdePtyIntercept.
    */
   VtePty          *pty;
   IdePtyIntercept  intercept;
-  IdePtyFd         pty_slave;
+  IdePtyFd         pty_producer;
 
   /*
    * If the terminal interpreting our Pty has received a terminal
@@ -765,11 +773,11 @@ ide_pipeline_log_observer (IdeBuildLogStream  stream,
 }
 
 static void
-ide_pipeline_intercept_pty_master_cb (const IdePtyIntercept     *intercept,
-                                      const IdePtyInterceptSide *side,
-                                      const guint8              *data,
-                                      gsize                      len,
-                                      gpointer                   user_data)
+ide_pipeline_intercept_pty_consumer_cb (const IdePtyIntercept     *intercept,
+                                        const IdePtyInterceptSide *side,
+                                        const guint8              *data,
+                                        gsize                      len,
+                                        gpointer                   user_data)
 {
   IdePipeline *self = user_data;
 
@@ -843,8 +851,6 @@ ide_pipeline_check_ready (IdePipeline *self,
  *
  * Gets the current phase that is executing. This is only useful during
  * execution of the pipeline.
- *
- * Since: 3.32
  */
 IdePipelinePhase
 ide_pipeline_get_phase (IdePipeline *self)
@@ -867,8 +873,6 @@ ide_pipeline_get_phase (IdePipeline *self)
  * Gets the #IdeConfig to use for the pipeline.
  *
  * Returns: (transfer none): An #IdeConfig
- *
- * Since: 3.32
  */
 IdeConfig *
 ide_pipeline_get_config (IdePipeline *self)
@@ -1061,6 +1065,7 @@ register_build_commands_stage (IdePipeline *self,
   g_autofree gchar *rundir_path = NULL;
   GFile *rundir;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_PIPELINE (self));
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (IDE_IS_CONFIG (self->config));
@@ -1165,6 +1170,60 @@ collect_pipeline_addins (IdeExtensionSetAdapter *set,
   g_ptr_array_add (addins, g_object_ref (exten));
 }
 
+static void
+ide_pipeline_deploy_strategy_load_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  IdeDeployStrategy *strategy = (IdeDeployStrategy *)object;
+  g_autoptr(IdePipeline) self = user_data;
+  g_autoptr(GError) error = NULL;
+  int priority = 0;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_PIPELINE (self));
+
+  if (ide_deploy_strategy_load_finish (strategy, result, &priority, &error))
+    {
+      if (self->best_strategy == NULL || priority < self->best_strategy_priority)
+        {
+          g_set_object (&self->best_strategy, strategy);
+          self->best_strategy_priority = priority;
+          IDE_EXIT;
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
+ide_pipeline_deploy_strategy_added_cb (IdeExtensionSetAdapter *set,
+                                       PeasPluginInfo         *plugin_info,
+                                       PeasExtension          *exten,
+                                       gpointer                user_data)
+{
+  IdePipeline *self = user_data;
+  IdeDeployStrategy *strategy = (IdeDeployStrategy *)exten;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_DEPLOY_STRATEGY (strategy));
+  g_assert (IDE_IS_PIPELINE (self));
+
+  ide_deploy_strategy_load_async (strategy,
+                                  self,
+                                  self->cancellable,
+                                  ide_pipeline_deploy_strategy_load_cb,
+                                  g_object_ref (self));
+
+  IDE_EXIT;
+}
+
 static gboolean
 ide_pipeline_load_cb (IdleLoadState *state)
 {
@@ -1200,6 +1259,15 @@ ide_pipeline_load_cb (IdleLoadState *state)
         return G_SOURCE_CONTINUE;
     }
 
+  /* Now setup deployment strategies */
+  g_signal_connect (state->self->deploy_strategies,
+                    "extension-added",
+                    G_CALLBACK (ide_pipeline_deploy_strategy_added_cb),
+                    state->self);
+  ide_extension_set_adapter_foreach (state->self->deploy_strategies,
+                                     ide_pipeline_deploy_strategy_added_cb,
+                                     state->self);
+
   state->self->loaded = TRUE;
   state->self->idle_addins_load_source = 0;
 
@@ -1218,13 +1286,10 @@ ide_pipeline_load_cb (IdleLoadState *state)
  * enable/disable the pipeline as the IdeConfig:ready property changes.
  * This could happen when the device or runtime is added/removed while the
  * application is running.
- *
- * Since: 3.32
  */
 static void
 ide_pipeline_load (IdePipeline *self)
 {
-  g_autoptr(GPtrArray) addins = NULL;
   IdleLoadState *state;
   IdeContext *context;
 
@@ -1240,42 +1305,39 @@ ide_pipeline_load (IdePipeline *self)
   register_build_commands_stage (self, context);
   register_post_install_commands_stage (self, context);
 
+  /* Setup pipeline addins */
   self->addins = ide_extension_set_adapter_new (IDE_OBJECT (self),
                                                 peas_engine_get_default (),
                                                 IDE_TYPE_PIPELINE_ADDIN,
                                                 NULL, NULL);
-
   g_signal_connect (self->addins,
                     "extension-added",
                     G_CALLBACK (ide_pipeline_extension_prepare),
                     self);
-
   ide_extension_set_adapter_foreach (self->addins,
                                      ide_pipeline_extension_prepare,
                                      self);
-
   g_signal_connect_after (self->addins,
                           "extension-added",
                           G_CALLBACK (ide_pipeline_extension_added),
                           self);
-
   g_signal_connect (self->addins,
                     "extension-removed",
                     G_CALLBACK (ide_pipeline_extension_removed),
                     self);
 
-  /* Collect our addins so we can incrementally load them in an
-   * idle callback to reduce chances of stalling the main loop.
-   */
-  addins = g_ptr_array_new_with_free_func (g_object_unref);
-  ide_extension_set_adapter_foreach (self->addins,
-                                     collect_pipeline_addins,
-                                     addins);
+  /* Create deployment strategies */
+  self->deploy_strategies = ide_extension_set_adapter_new (IDE_OBJECT (self),
+                                                           peas_engine_get_default (),
+                                                           IDE_TYPE_DEPLOY_STRATEGY,
+                                                           NULL, NULL);
 
   state = g_slice_new0 (IdleLoadState);
   state->self = g_object_ref (self);
-  state->addins = g_steal_pointer (&addins);
-
+  state->addins = g_ptr_array_new_with_free_func (g_object_unref);
+  ide_extension_set_adapter_foreach (self->addins,
+                                     collect_pipeline_addins,
+                                     state->addins);
   self->idle_addins_load_source =
     g_idle_add_full (G_PRIORITY_LOW,
                      (GSourceFunc) ide_pipeline_load_cb,
@@ -1350,8 +1412,6 @@ ide_pipeline_begin_load (IdePipeline *self)
  * This function is safe to run even if load has not been called. We will not
  * clean things up if the pipeline is currently executing (we can wait until
  * its finished or dispose/finalize to cleanup up further.
- *
- * Since: 3.32
  */
 static void
 ide_pipeline_unload (IdePipeline *self)
@@ -1360,7 +1420,10 @@ ide_pipeline_unload (IdePipeline *self)
 
   g_assert (IDE_IS_PIPELINE (self));
 
+  g_clear_object (&self->best_strategy);
+
   ide_clear_and_destroy_object (&self->addins);
+  ide_clear_and_destroy_object (&self->deploy_strategies);
 
   IDE_EXIT;
 }
@@ -1423,8 +1486,6 @@ ide_pipeline_finalize (GObject *object)
 
   G_OBJECT_CLASS (ide_pipeline_parent_class)->finalize (object);
 
-  DZL_COUNTER_DEC (Instances);
-
   IDE_EXIT;
 }
 
@@ -1445,7 +1506,7 @@ ide_pipeline_destroy (IdeObject *object)
   g_clear_pointer (&self->message, g_free);
 
   g_clear_object (&self->pty);
-  fd = pty_fd_steal (&self->pty_slave);
+  fd = pty_fd_steal (&self->pty_producer);
 
   if (IDE_IS_PTY_INTERCEPT (&self->intercept))
     ide_pty_intercept_clear (&self->intercept);
@@ -1461,7 +1522,7 @@ ide_pipeline_initable_init (GInitable     *initable,
                             GError       **error)
 {
   IdePipeline *self = (IdePipeline *)initable;
-  IdePtyFd master_fd;
+  IdePtyFd consumer_fd;
 
   IDE_ENTRY;
 
@@ -1491,9 +1552,9 @@ ide_pipeline_initable_init (GInitable     *initable,
 
   vte_pty_set_utf8 (self->pty, TRUE, NULL);
 
-  master_fd = vte_pty_get_fd (self->pty);
+  consumer_fd = vte_pty_get_fd (self->pty);
 
-  if (!ide_pty_intercept_init (&self->intercept, master_fd, NULL))
+  if (!ide_pty_intercept_init (&self->intercept, consumer_fd, NULL))
     {
       g_set_error_literal (error,
                            G_IO_ERROR,
@@ -1503,9 +1564,9 @@ ide_pipeline_initable_init (GInitable     *initable,
     }
 
   ide_pty_intercept_set_callback (&self->intercept,
-                              &self->intercept.master,
-                              ide_pipeline_intercept_pty_master_cb,
-                              self);
+                                  &self->intercept.consumer,
+                                  ide_pipeline_intercept_pty_consumer_cb,
+                                  self);
 
   g_signal_connect_object (self->config,
                            "notify::ready",
@@ -1630,8 +1691,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * IdePipeline:busy:
    *
    * Gets the "busy" property. If %TRUE, the pipeline is busy executing.
-   *
-   * Since: 3.32
    */
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
@@ -1644,8 +1703,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * IdePipeline:configuration:
    *
    * The configuration to use for the build pipeline.
-   *
-   * Since: 3.32
    */
   properties [PROP_CONFIG] =
     g_param_spec_object ("config",
@@ -1658,8 +1715,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * IdePipeline:device:
    *
    * The "device" property is the device we are compiling for.
-   *
-   * Since: 3.32
    */
   properties [PROP_DEVICE] =
     g_param_spec_object ("device",
@@ -1673,8 +1728,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * The "message" property is descriptive text about what the the
    * pipeline is doing or it's readiness status.
-   *
-   * Since: 3.32
    */
   properties [PROP_MESSAGE] =
     g_param_spec_string ("message",
@@ -1687,8 +1740,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * IdePipeline:phase:
    *
    * The current build phase during execution of the pipeline.
-   *
-   * Since: 3.32
    */
   properties [PROP_PHASE] =
     g_param_spec_flags ("phase",
@@ -1703,8 +1754,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * The "pty" property is the #VtePty that is used by build stages that
    * build subprocesses with a pseudo terminal.
-   *
-   * Since: 3.32
    */
   properties [PROP_PTY] =
     g_param_spec_object ("pty",
@@ -1722,8 +1771,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * This signal is emitted when a plugin has detected a diagnostic while
    * building the pipeline.
-   *
-   * Since: 3.32
    */
   signals [DIAGNOSTIC] =
     g_signal_new_class_handler ("diagnostic",
@@ -1739,8 +1786,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * This signal is emitted when the pipeline has started executing in
    * response to ide_pipeline_build_async() being called.
-   *
-   * Since: 3.32
    */
   signals [STARTED] =
     g_signal_new_class_handler ("started",
@@ -1758,8 +1803,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * This signal is emitted when the build process has finished executing.
    * If the build failed to complete all requested stages, then @failed will
    * be set to %TRUE, otherwise %FALSE.
-   *
-   * Since: 3.32
    */
   signals [FINISHED] =
     g_signal_new_class_handler ("finished",
@@ -1774,8 +1817,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    *
    * The "loaded" signal is emitted after the pipeline has finished
    * loading addins.
-   *
-   * Since: 3.32
    */
   signals [LOADED] =
     g_signal_new_class_handler ("loaded",
@@ -1793,8 +1834,6 @@ ide_pipeline_class_init (IdePipelineClass *klass)
    * #IdeSubprocessLauncher is created by the pipeline. This may be useful
    * to plugins that wan to modify the launcher in a consistent way for all
    * pipeline consumers.
-   *
-   * Since: 3.34
    */
   signals [LAUNCHER_CREATED] =
     g_signal_new_class_handler ("launcher-created",
@@ -1811,12 +1850,13 @@ ide_pipeline_class_init (IdePipelineClass *klass)
 static void
 ide_pipeline_init (IdePipeline *self)
 {
-  DZL_COUNTER_INC (Instances);
-
   self->cancellable = g_cancellable_new ();
 
   self->position = -1;
-  self->pty_slave = -1;
+  self->pty_producer = -1;
+
+  self->best_strategy_priority = G_MAXINT;
+  self->best_strategy = ide_local_deploy_strategy_new ();
 
   self->pipeline = g_array_new (FALSE, FALSE, sizeof (PipelineEntry));
   g_array_set_clear_func (self->pipeline, clear_pipeline_entry);
@@ -1831,8 +1871,8 @@ ide_pipeline_init (IdePipeline *self)
 
 static void
 ide_pipeline_stage_build_cb (GObject      *object,
-                                     GAsyncResult *result,
-                                     gpointer      user_data)
+                             GAsyncResult *result,
+                             gpointer      user_data)
 {
   IdePipelineStage *stage = (IdePipelineStage *)object;
   IdePipeline *self;
@@ -2121,8 +2161,6 @@ ide_pipeline_task_notify_completed (IdePipeline *self,
  * Upon completion, @callback will be buildd and should call
  * ide_pipeline_build_finish() to get the status of the
  * operation.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_build_targets_async (IdePipeline         *self,
@@ -2140,7 +2178,7 @@ ide_pipeline_build_targets_async (IdePipeline         *self,
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_pipeline_build_targets_async);
@@ -2204,8 +2242,6 @@ short_circuit:
  * Returns: %TRUE if the build stages were buildd successfully
  *   up to the requested build phase provided to
  *   ide_pipeline_build_targets_async().
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_build_targets_finish (IdePipeline   *self,
@@ -2247,12 +2283,10 @@ ide_pipeline_build_targets_finish (IdePipeline   *self,
  * Upon completion, @callback will be buildd and should call
  * ide_pipeline_build_finish() to get the status of the
  * operation.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_build_async (IdePipeline         *self,
-                          IdePipelinePhase        phase,
+                          IdePipelinePhase     phase,
                           GCancellable        *cancellable,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
@@ -2272,8 +2306,6 @@ ide_pipeline_build_async (IdePipeline         *self,
  * Returns: %TRUE if the build stages were buildd successfully
  *   up to the requested build phase provided to
  *   ide_pipeline_build_async().
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_build_finish (IdePipeline   *self,
@@ -2466,10 +2498,7 @@ ide_pipeline_queue_flush (IdePipeline *self)
 
   g_assert (IDE_IS_PIPELINE (self));
 
-  gdk_threads_add_idle_full (G_PRIORITY_LOW,
-                             ide_pipeline_do_flush,
-                             g_object_ref (self),
-                             g_object_unref);
+  g_idle_add_full (G_PRIORITY_LOW, ide_pipeline_do_flush, g_object_ref (self), g_object_unref);
 
   IDE_EXIT;
 }
@@ -2487,8 +2516,6 @@ ide_pipeline_queue_flush (IdePipeline *self)
  * stages that are part of the same phase.
  *
  * Returns: A stage_id that may be passed to ide_pipeline_detach().
- *
- * Since: 3.32
  */
 guint
 ide_pipeline_attach (IdePipeline      *self,
@@ -2585,8 +2612,6 @@ cleanup:
  * function.
  *
  * Returns: A stage_id that may be passed to ide_pipeline_remove().
- *
- * Since: 3.32
  */
 guint
 ide_pipeline_attach_launcher (IdePipeline           *self,
@@ -2618,8 +2643,6 @@ ide_pipeline_attach_launcher (IdePipeline           *self,
  * including all stages that were previously invalidated.
  *
  * Returns: %TRUE if a stage is known to require execution.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_request_phase (IdePipeline      *self,
@@ -2699,8 +2722,6 @@ cleanup:
  * the location that build systems will use for out-of-tree builds.
  *
  * Returns: the path of the build directory
- *
- * Since: 3.32
  */
 const gchar *
 ide_pipeline_get_builddir (IdePipeline *self)
@@ -2718,8 +2739,6 @@ ide_pipeline_get_builddir (IdePipeline *self)
  * IdeVcs:working-directory property as a string.
  *
  * Returns: the path of the source directory
- *
- * Since: 3.32
  */
 const gchar *
 ide_pipeline_get_srcdir (IdePipeline *self)
@@ -2759,8 +2778,6 @@ ide_pipeline_build_path_va_list (const gchar *prefix,
  * working directory of the source tree.
  *
  * Returns: (transfer full): A newly allocated string.
- *
- * Since: 3.32
  */
 gchar *
 ide_pipeline_build_srcdir_path (IdePipeline *self,
@@ -2791,8 +2808,6 @@ ide_pipeline_build_srcdir_path (IdePipeline *self,
  * result of ide_pipeline_get_builddir() as the first parameter.
  *
  * Returns: (transfer full): A newly allocated string.
- *
- * Since: 3.32
  */
 gchar *
 ide_pipeline_build_builddir_path (IdePipeline *self,
@@ -2824,8 +2839,6 @@ ide_pipeline_build_builddir_path (IdePipeline *self,
  *
  * Plugins should use this function to remove their stages when the plugin
  * is unloading.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_detach (IdePipeline *self,
@@ -2863,12 +2876,10 @@ ide_pipeline_detach (IdePipeline *self,
  * upon discovering its state is no longer valid. Such an example might be
  * invalidating the %IDE_PIPELINE_PHASE_AUTOGEN phase when the an autotools
  * projects autogen.sh file has been changed.
- *
- * Since: 3.32
  */
 void
-ide_pipeline_invalidate_phase (IdePipeline *self,
-                                     IdePipelinePhase     phases)
+ide_pipeline_invalidate_phase (IdePipeline      *self,
+                               IdePipelinePhase  phases)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
 
@@ -2891,8 +2902,6 @@ ide_pipeline_invalidate_phase (IdePipeline *self,
  *
  * Returns: (transfer none) (nullable): An #IdePipelineStage or %NULL if the
  *   stage could not be found.
- *
- * Since: 3.32
  */
 IdePipelineStage *
 ide_pipeline_get_stage_by_id (IdePipeline *self,
@@ -2918,8 +2927,6 @@ ide_pipeline_get_stage_by_id (IdePipeline *self,
  * A convenience function to get the runtime for a build pipeline.
  *
  * Returns: (transfer none) (nullable): An #IdeRuntime or %NULL
- *
- * Since: 3.32
  */
 IdeRuntime *
 ide_pipeline_get_runtime (IdePipeline *self)
@@ -2936,8 +2943,6 @@ ide_pipeline_get_runtime (IdePipeline *self)
  * A convenience function to get the toolchain for a build pipeline.
  *
  * Returns: (transfer none): An #IdeToolchain
- *
- * Since: 3.32
  */
 IdeToolchain *
 ide_pipeline_get_toolchain (IdePipeline *self)
@@ -2955,22 +2960,20 @@ ide_pipeline_get_toolchain (IdePipeline *self)
  * using the configuration and runtime associated with the pipeline.
  *
  * Returns: (transfer full): An #IdeSubprocessLauncher.
- *
- * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_pipeline_create_launcher (IdePipeline  *self,
                               GError      **error)
 {
   g_autoptr(IdeSubprocessLauncher) ret = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
+  g_auto(GStrv) environ = NULL;
   IdeRuntime *runtime;
 
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
 
-  runtime = ide_config_get_runtime (self->config);
-
-  if (runtime == NULL)
+  if (!(runtime = ide_config_get_runtime (self->config)))
     {
       g_set_error (error,
                    G_IO_ERROR,
@@ -2980,17 +2983,19 @@ ide_pipeline_create_launcher (IdePipeline  *self,
       return NULL;
     }
 
-  ret = ide_runtime_create_launcher (runtime, error);
+  environ = ide_environment_get_environ (ide_config_get_environment (self->config));
+
+  run_context = ide_run_context_new ();
+  ide_runtime_prepare_to_build (runtime, self, run_context);
+  ide_run_context_set_cwd (run_context, ide_pipeline_get_builddir (self));
+  ide_run_context_add_environ (run_context, (const char * const *)environ);
+  /* Always ignore V=1 from configurations */
+  ide_run_context_setenv (run_context, "V", "0");
+
+  ret = ide_run_context_end (run_context, error);
 
   if (ret != NULL)
     {
-      IdeEnvironment *env = ide_config_get_environment (self->config);
-
-      ide_subprocess_launcher_set_clear_env (ret, TRUE);
-      ide_subprocess_launcher_overlay_environment (ret, env);
-      /* Always ignore V=1 from configurations */
-      ide_subprocess_launcher_setenv (ret, "V", "0", TRUE);
-      ide_subprocess_launcher_set_cwd (ret, ide_pipeline_get_builddir (self));
       ide_subprocess_launcher_set_flags (ret,
                                          (G_SUBPROCESS_FLAGS_STDERR_PIPE |
                                           G_SUBPROCESS_FLAGS_STDOUT_PIPE));
@@ -3010,25 +3015,23 @@ ide_pipeline_create_launcher (IdePipeline  *self,
  * Attaches a PTY to stdin/stdout/stderr of the #IdeSubprocessLauncher.
  * This is useful if the application can take advantage of a PTY for
  * features like colors and other escape sequences.
- *
- * Since: 3.32
  */
 void
-ide_pipeline_attach_pty (IdePipeline      *self,
-                               IdeSubprocessLauncher *launcher)
+ide_pipeline_attach_pty (IdePipeline           *self,
+                         IdeSubprocessLauncher *launcher)
 {
   GSubprocessFlags flags;
 
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
-  if (self->pty_slave == -1)
+  if (self->pty_producer == -1)
     {
-      IdePtyFd master_fd = ide_pty_intercept_get_fd (&self->intercept);
-      self->pty_slave = ide_pty_intercept_create_slave (master_fd, TRUE);
+      IdePtyFd consumer_fd = ide_pty_intercept_get_fd (&self->intercept);
+      self->pty_producer = ide_pty_intercept_create_producer (consumer_fd, TRUE);
     }
 
-  if (self->pty_slave == -1)
+  if (self->pty_producer == -1)
     {
       ide_object_warning (self, _("Pseudo terminal creation failed. Terminal features will be limited."));
       return;
@@ -3041,10 +3044,10 @@ ide_pipeline_attach_pty (IdePipeline      *self,
              G_SUBPROCESS_FLAGS_STDIN_PIPE);
   ide_subprocess_launcher_set_flags (launcher, flags);
 
-  /* Assign slave device */
-  ide_subprocess_launcher_take_stdin_fd (launcher, dup (self->pty_slave));
-  ide_subprocess_launcher_take_stdout_fd (launcher, dup (self->pty_slave));
-  ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->pty_slave));
+  /* Assign producer device */
+  ide_subprocess_launcher_take_stdin_fd (launcher, dup (self->pty_producer));
+  ide_subprocess_launcher_take_stdout_fd (launcher, dup (self->pty_producer));
+  ide_subprocess_launcher_take_stderr_fd (launcher, dup (self->pty_producer));
 
   /* Ensure a terminal type is set */
   ide_subprocess_launcher_setenv (launcher, "TERM", "xterm-256color", FALSE);
@@ -3060,8 +3063,6 @@ ide_pipeline_attach_pty (IdePipeline      *self,
  * guaranteed to happen at object creation time.
  *
  * Returns: (transfer none) (nullable): a #VtePty or %NULL
- *
- * Since: 3.32
  */
 VtePty *
 ide_pipeline_get_pty (IdePipeline *self)
@@ -3141,8 +3142,6 @@ ide_pipeline_emit_diagnostic (IdePipeline   *self,
  *
  * Returns: an error format id that may be passed to
  *   ide_pipeline_remove_error_format().
- *
- * Since: 3.32
  */
 guint
 ide_pipeline_add_error_format (IdePipeline        *self,
@@ -3178,8 +3177,6 @@ ide_pipeline_add_error_format (IdePipeline        *self,
  * ide_pipeline_add_error_format().
  *
  * Returns: %TRUE if the error format was removed.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_remove_error_format (IdePipeline *self,
@@ -3220,8 +3217,6 @@ ide_pipeline_get_busy (IdePipeline *self)
  *
  * Returns: (nullable) (transfer full): A string representing the
  *   current stage of the build, or %NULL.
- *
- * Since: 3.32
  */
 gchar *
 ide_pipeline_get_message (IdePipeline *self)
@@ -3325,8 +3320,6 @@ ide_pipeline_get_message (IdePipeline *self)
  *
  * This function will call @stage_callback for every #IdePipelineStage registered
  * in the pipeline.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_foreach_stage (IdePipeline *self,
@@ -3469,7 +3462,7 @@ ide_pipeline_clean_async (IdePipeline         *self,
   if (!ide_pipeline_check_ready (self, task))
     return;
 
-  dzl_cancellable_chain (cancellable, self->cancellable);
+  ide_cancellable_chain (cancellable, self->cancellable);
 
   td = task_data_new (task, TASK_CLEAN);
   td->phase = phase;
@@ -3600,7 +3593,7 @@ ide_pipeline_reaper_cb (GObject      *object,
                         GAsyncResult *result,
                         gpointer      user_data)
 {
-  DzlDirectoryReaper *reaper = (DzlDirectoryReaper *)object;
+  IdeDirectoryReaper *reaper = (IdeDirectoryReaper *)object;
   IdePipeline *self;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
@@ -3608,7 +3601,7 @@ ide_pipeline_reaper_cb (GObject      *object,
 
   IDE_ENTRY;
 
-  g_assert (DZL_IS_DIRECTORY_REAPER (reaper));
+  g_assert (IDE_IS_DIRECTORY_REAPER (reaper));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
@@ -3622,7 +3615,7 @@ ide_pipeline_reaper_cb (GObject      *object,
   g_assert (IDE_IS_PIPELINE (self));
 
   /* Make sure our reaper completed or else we bail */
-  if (!dzl_directory_reaper_execute_finish (reaper, result, &error))
+  if (!ide_directory_reaper_execute_finish (reaper, result, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -3642,9 +3635,9 @@ ide_pipeline_reaper_cb (GObject      *object,
 
 static void
 ide_pipeline_tick_rebuild (IdePipeline *self,
-                                 IdeTask          *task)
+                           IdeTask     *task)
 {
-  g_autoptr(DzlDirectoryReaper) reaper = NULL;
+  g_autoptr(IdeDirectoryReaper) reaper = NULL;
   GCancellable *cancellable;
 
   IDE_ENTRY;
@@ -3662,7 +3655,7 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
   }
 #endif
 
-  reaper = dzl_directory_reaper_new ();
+  reaper = ide_directory_reaper_new ();
 
   /*
    * Check if we can remove the builddir. We don't want to do this if it is the
@@ -3672,7 +3665,7 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
     {
       g_autoptr(GFile) builddir = g_file_new_for_path (self->builddir);
 
-      dzl_directory_reaper_add_directory (reaper, builddir, 0);
+      ide_directory_reaper_add_directory (reaper, builddir, 0);
     }
 
   /*
@@ -3691,7 +3684,7 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Now build the reaper to clean up the build files. */
-  dzl_directory_reaper_execute_async (reaper,
+  ide_directory_reaper_execute_async (reaper,
                                       cancellable,
                                       ide_pipeline_reaper_cb,
                                       g_object_ref (task));
@@ -3711,8 +3704,6 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
  *
  * Asynchronously starts the build pipeline after cleaning any
  * existing build artifacts.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_rebuild_async (IdePipeline         *self,
@@ -3733,7 +3724,7 @@ ide_pipeline_rebuild_async (IdePipeline         *self,
 
   drop_caches (self);
 
-  cancellable = dzl_cancellable_chain (cancellable, self->cancellable);
+  cancellable = ide_cancellable_chain (cancellable, self->cancellable);
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_priority (task, G_PRIORITY_LOW);
@@ -3755,9 +3746,9 @@ ide_pipeline_rebuild_async (IdePipeline         *self,
 }
 
 gboolean
-ide_pipeline_rebuild_finish (IdePipeline  *self,
-                                   GAsyncResult      *result,
-                                   GError           **error)
+ide_pipeline_rebuild_finish (IdePipeline   *self,
+                             GAsyncResult  *result,
+                             GError       **error)
 {
   gboolean ret;
 
@@ -3781,8 +3772,6 @@ ide_pipeline_rebuild_finish (IdePipeline  *self,
  * sensitivity of a button.
  *
  * Returns: %TRUE if there are export pipeline stages.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_get_can_export (IdePipeline *self)
@@ -3805,7 +3794,7 @@ ide_pipeline_get_can_export (IdePipeline *self)
 
 void
 _ide_pipeline_set_message (IdePipeline *self,
-                                 const gchar      *message)
+                           const gchar *message)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
 
@@ -3851,8 +3840,6 @@ _ide_pipeline_cancel (IdePipeline *self)
  * the configure stage has been reached.
  *
  * Returns: %TRUE if %IDE_PIPELINE_PHASE_CONFIGURE has been reached.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_has_configured (IdePipeline *self)
@@ -3940,7 +3927,7 @@ ide_pipeline_get_n_items (GListModel *model)
 
 static gpointer
 ide_pipeline_get_item (GListModel *model,
-                             guint       position)
+                       guint       position)
 {
   IdePipeline *self = (IdePipeline *)model;
   const PipelineEntry *entry;
@@ -3970,8 +3957,6 @@ list_model_iface_init (GListModelInterface *iface)
  * get an idea of where the build pipeline will attempt to advance.
  *
  * Returns: an #IdePipelinePhase
- *
- * Since: 3.32
  */
 IdePipelinePhase
 ide_pipeline_get_requested_phase (IdePipeline *self)
@@ -3999,18 +3984,18 @@ ide_pipeline_get_requested_phase (IdePipeline *self)
 
 void
 _ide_pipeline_set_pty_size (IdePipeline *self,
-                                  guint             rows,
-                                  guint             columns)
+                            guint        rows,
+                            guint        columns)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
 
-  if (self->pty_slave != IDE_PTY_FD_INVALID)
+  if (self->pty_producer != IDE_PTY_FD_INVALID)
     ide_pty_intercept_set_size (&self->intercept, rows, columns);
 }
 
 void
 _ide_pipeline_set_runtime (IdePipeline *self,
-                                 IdeRuntime       *runtime)
+                           IdeRuntime  *runtime)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!runtime || IDE_IS_RUNTIME (runtime));
@@ -4029,8 +4014,8 @@ _ide_pipeline_set_runtime (IdePipeline *self,
 }
 
 void
-_ide_pipeline_set_toolchain (IdePipeline *self,
-                                   IdeToolchain     *toolchain)
+_ide_pipeline_set_toolchain (IdePipeline  *self,
+                             IdeToolchain *toolchain)
 {
   g_return_if_fail (IDE_IS_PIPELINE (self));
   g_return_if_fail (!toolchain || IDE_IS_TOOLCHAIN (toolchain));
@@ -4048,8 +4033,6 @@ _ide_pipeline_set_toolchain (IdePipeline *self,
  * Thread-safe variant of ide_pipeline_get_toolchain().
  *
  * Returns: (transfer full) (nullable): an #IdeToolchain or %NULL
- *
- * Since: 3.32
  */
 IdeToolchain *
 ide_pipeline_ref_toolchain (IdePipeline *self)
@@ -4130,8 +4113,6 @@ _ide_pipeline_check_toolchain (IdePipeline   *self,
  * Gets the device that the pipeline is building for.
  *
  * Returns: (transfer none): an #IdeDevice.
- *
- * Since: 3.32
  */
 IdeDevice *
 ide_pipeline_get_device (IdePipeline *self)
@@ -4148,8 +4129,6 @@ ide_pipeline_get_device (IdePipeline *self)
  * Gets the device info for the current device.
  *
  * Returns: (nullable) (transfer none): an #IdeDeviceInfo or %NULL
- *
- * Since: 3.32
  */
 IdeDeviceInfo *
 ide_pipeline_get_device_info (IdePipeline *self)
@@ -4167,8 +4146,6 @@ ide_pipeline_get_device_info (IdePipeline *self)
  * due to various initialization routines that need to complete.
  *
  * Returns: %TRUE if the pipeline has loaded, otherwise %FALSE
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_is_ready (IdePipeline *self)
@@ -4188,8 +4165,6 @@ ide_pipeline_is_ready (IdePipeline *self)
  * set for the build pipeline.
  *
  * Returns: (transfer none): an #IdeTriplet
- *
- * Since: 3.32
  */
 IdeTriplet *
 ide_pipeline_get_host_triplet (IdePipeline *self)
@@ -4208,8 +4183,6 @@ ide_pipeline_get_host_triplet (IdePipeline *self)
  * work by avoiding some cross-compiling work.
  *
  * Returns: %FALSE if we're possibly cross-compiling, otherwise %TRUE
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_is_native (IdePipeline *self)
@@ -4278,8 +4251,6 @@ contains_in_runtime_with_alt_path (IdeRuntime *runtime,
  * @name that may be executed.
  *
  * Returns: %TRUE if @name was found; otherwise %FALSE
- *
- * Since: 3.34
  */
 gboolean
 ide_pipeline_contains_program_in_path (IdePipeline  *self,
@@ -4334,6 +4305,25 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
 }
 
 /**
+ * ide_pipeline_get_deploy_strategy:
+ * @self: a #IdePipeline
+ *
+ * Gets the best discovered deployment strategry.
+ *
+ * Returns: (transfer none) (nullable): the best deployment strategy
+ *   if any are supported for the current configuration.
+ */
+IdeDeployStrategy *
+ide_pipeline_get_deploy_strategy (IdePipeline *self)
+{
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
+  g_return_val_if_fail (!self->best_strategy ||
+                        IDE_IS_DEPLOY_STRATEGY (self->best_strategy), NULL);
+
+  return self->best_strategy;
+}
+
+/**
  * ide_pipeline_addin_find_by_module_name:
  * @pipeline: an #IdePipeline
  * @module_name: the name of the addin module
@@ -4341,8 +4331,6 @@ ide_pipeline_contains_program_in_path (IdePipeline  *self,
  * Finds the addin (if any) matching the plugin's @module_name.
  *
  * Returns: (transfer none) (nullable): an #IdePipelineAddin or %NULL
- *
- * Since: 3.40
  */
 IdePipelineAddin *
 ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,
@@ -4365,4 +4353,76 @@ ide_pipeline_addin_find_by_module_name (IdePipeline *pipeline,
     ret = ide_extension_set_adapter_get_extension (pipeline->addins, plugin_info);
 
   return IDE_PIPELINE_ADDIN (ret);
+}
+
+/**
+ * ide_pipeline_prepare_run_context:
+ * @self: a #IdePipeline
+ * @run_context: an #IdeRunContext
+ *
+ * Prepares #IdeRunContext to build within the pipeline.
+ *
+ * You should use this to prepare a new #IdeRunContext to run within the
+ * build pipeline environment before adding arguments and other settings
+ * to the context.
+ *
+ * The runtime will be consulted to modify any commands necessary.
+ */
+void
+ide_pipeline_prepare_run_context (IdePipeline   *self,
+                                  IdeRunContext *run_context)
+{
+  IdeRuntime *runtime;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_PIPELINE (self));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (!(runtime = ide_pipeline_get_runtime (self)))
+    {
+      g_critical ("Attempt to prepare a run context before pipeline has a runtime!");
+      return;
+    }
+
+  ide_runtime_prepare_to_build (runtime, self, run_context);
+
+  ide_run_context_setenv (run_context, "BUILDDIR", ide_pipeline_get_builddir (self));
+  ide_run_context_setenv (run_context, "SRCDIR", ide_pipeline_get_srcdir (self));
+  ide_run_context_set_cwd (run_context, ide_pipeline_get_builddir (self));
+}
+
+/**
+ * ide_pipeline_create_run_context:
+ * @self: a #IdePipeline
+ * @run_command: an #IdeRunCommand
+ *
+ * Creates a new #IdeRunContext to run @run_command.
+ *
+ * This helper is generally meant to be used by pipeline stages to create
+ * a run context that will execute within the pipeline to run the command
+ * described in @run_command.
+ *
+ * The run context is first prepared using ide_pipeline_prepare_run_context()
+ * after which the run command's ide_run_command_prepare_to_run() is used.
+ *
+ * Returns: (transfer full): an #IdeRunContext
+ */
+IdeRunContext *
+ide_pipeline_create_run_context (IdePipeline   *self,
+                                 IdeRunCommand *run_command)
+{
+  g_autoptr(IdeRunContext) run_context = NULL;
+  IdeContext *context;
+
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), NULL);
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (run_command), NULL);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
+
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (self, run_context);
+  ide_run_command_prepare_to_run (run_command, run_context, context);
+
+  return g_steal_pointer (&run_context);
 }

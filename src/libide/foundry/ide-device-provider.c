@@ -128,8 +128,6 @@ ide_device_provider_class_init (IdeDeviceProviderClass *klass)
    *
    * Subclasses of #IdeDeviceManager must chain-up if they override the
    * #IdeDeviceProviderClass.device_added vfunc.
-   *
-   * Since: 3.32
    */
   signals [DEVICE_ADDED] =
     g_signal_new ("device-added",
@@ -153,8 +151,6 @@ ide_device_provider_class_init (IdeDeviceProviderClass *klass)
    *
    * Subclasses of #IdeDeviceManager must chain-up if they override the
    * #IdeDeviceProviderClass.device_removed vfunc.
-   *
-   * Since: 3.32
    */
   signals [DEVICE_REMOVED] =
     g_signal_new ("device-removed",
@@ -181,8 +177,6 @@ ide_device_provider_init (IdeDeviceProvider *self)
  *
  * This should only be called by subclasses of #IdeDeviceProvider when
  * a new device has been discovered.
- *
- * Since: 3.32
  */
 void
 ide_device_provider_emit_device_added (IdeDeviceProvider *provider,
@@ -201,8 +195,6 @@ ide_device_provider_emit_device_added (IdeDeviceProvider *provider,
  *
  * This should only be called by subclasses of #IdeDeviceProvider when
  * a previously added device has been removed.
- *
- * Since: 3.32
  */
 void
 ide_device_provider_emit_device_removed (IdeDeviceProvider *provider,
@@ -231,8 +223,6 @@ ide_device_provider_emit_device_removed (IdeDeviceProvider *provider,
  * That should be done for known devices before returning from the asynchronous
  * operation so that the device manager does not need to wait for additional
  * devices to enter the "settled" state.
- *
- * Since: 3.32
  */
 void
 ide_device_provider_load_async (IdeDeviceProvider   *self,
@@ -256,8 +246,6 @@ ide_device_provider_load_async (IdeDeviceProvider   *self,
  * ide_device_provider_load_async().
  *
  * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
- *
- * Since: 3.32
  */
 gboolean
 ide_device_provider_load_finish (IdeDeviceProvider  *self,
@@ -279,8 +267,6 @@ ide_device_provider_load_finish (IdeDeviceProvider  *self,
  *
  * Returns: (transfer full) (element-type Ide.Device) (not nullable):
  *   a #GPtrArray of #IdeDevice.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_device_provider_get_devices (IdeDeviceProvider *self)

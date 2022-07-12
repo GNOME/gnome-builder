@@ -197,6 +197,6 @@ IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_unpause          (IdePipelineStage     *self);
 IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_emit_reap        (IdePipelineStage     *self,
-                                                  DzlDirectoryReaper   *reaper);
+                                                  IdeDirectoryReaper   *reaper);
 
 G_END_DECLS
