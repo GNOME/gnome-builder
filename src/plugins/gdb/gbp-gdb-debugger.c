@@ -20,7 +20,6 @@
 
 #define G_LOG_DOMAIN "gbp-gdb-debugger"
 
-#include <dazzle.h>
 #include <libide-io.h>
 #include <libide-terminal.h>
 #include <string.h>
@@ -38,15 +37,9 @@ struct _GbpGdbDebugger
   GCancellable             *read_cancellable;
   GHashTable               *register_names;
   GFile                    *builddir;
+  IdeRuntime               *current_runtime;
 
-  DzlSignalGroup           *runner_signals;
   GSettings                *settings;
-
-  /* This is the number for the fd in the inferior process.
-   * It is not opened/owned by this instance (as it is in a
-   * different process space). No need to close.
-   */
-  gint                      mapped_fd;
 
   struct gdbwire_mi_parser *parser;
 
@@ -117,18 +110,11 @@ gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
                                  const gchar    *path)
 {
   g_autoptr(GFile) file = NULL;
-  IdeRuntime *runtime = NULL;
-  IdeRunner *runner;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
 
   if (path == NULL)
     return NULL;
-
-  /* Discover the current runtime for path translation */
-  runner = dzl_signal_group_get_target (self->runner_signals);
-  if (runner != NULL)
-    runtime = ide_runner_get_runtime (runner);
 
   /* Generate a path, trying to resolve relative paths to
    * make things easier on the runtime path translation.
@@ -139,10 +125,10 @@ gbp_gdb_debugger_translate_path (GbpGdbDebugger *self,
     file = g_file_resolve_relative_path (self->builddir, path);
 
   /* If we still have access to the runtime, translate */
-  if (runtime != NULL)
+  if (self->current_runtime != NULL)
     {
       GFile *freeme = file;
-      file = ide_runtime_translate_file (runtime, file);
+      file = ide_runtime_translate_file (self->current_runtime, file);
       g_clear_object (&freeme);
     }
 
@@ -665,6 +651,14 @@ gbp_gdb_debugger_handle_stopped (GbpGdbDebugger                 *self,
 
   ide_debugger_emit_thread_selected (IDE_DEBUGGER (self), thread);
   ide_debugger_emit_stopped (IDE_DEBUGGER (self), stop_reason, breakpoint);
+
+  /* Currently, we expect to have gdb exit with the program. We might change that
+   * at some point, but it's currently the expectation.
+   */
+  if (stop_reason == IDE_DEBUGGER_STOP_EXITED_SIGNALED ||
+      stop_reason == IDE_DEBUGGER_STOP_EXITED_NORMALLY ||
+      stop_reason == IDE_DEBUGGER_STOP_EXITED)
+    gbp_gdb_debugger_exec_async (self, "-gdb-exit", NULL, NULL, NULL);
 }
 
 static void
@@ -2322,112 +2316,146 @@ gbp_gdb_debugger_disassemble_finish (IdeDebugger   *debugger,
 }
 
 static gboolean
-gbp_gdb_debugger_supports_runner (IdeDebugger *debugger,
-                                  IdeRunner   *runner,
-                                  gint        *priority)
+gbp_gdb_debugger_supports_run_command (IdeDebugger   *debugger,
+                                       IdePipeline   *pipeline,
+                                       IdeRunCommand *run_command,
+                                       int           *priority)
 {
-  IdeRuntime *runtime;
-
   g_assert (GBP_IS_GDB_DEBUGGER (debugger));
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_COMMAND (run_command));
   g_assert (priority != NULL);
 
-  runtime = ide_runner_get_runtime (runner);
+  *priority = G_MAXINT;
 
-  if (ide_runtime_contains_program_in_path (runtime, "gdb", NULL))
-    {
-      *priority = G_MAXINT;
-      return TRUE;
-    }
-
-  g_debug ("Failed to locate gdb in runtime");
-
-  return FALSE;
+  return TRUE;
 }
 
-static void
-gbp_gdb_debugger_prepare (IdeDebugger *debugger,
-                          IdeRunner   *runner)
+static gboolean
+gbp_gdb_debugger_run_context_handler_cb (IdeRunContext       *run_context,
+                                         const char * const  *argv,
+                                         const char * const  *env,
+                                         const char          *cwd,
+                                         IdeUnixFDMap        *unix_fd_map,
+                                         gpointer             user_data,
+                                         GError             **error)
 {
-  static const gchar *prepend_argv[] = { "gdb", "--interpreter=mi2", "--args" };
-  const char *shell;
-  GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
-  IdeEnvironment *env;
-  VtePty *pty;
+  static const char * const allowed_shells[] = { "/bin/sh", "sh", "/bin/bash", "bash", NULL };
+  GbpGdbDebugger *self = user_data;
+  g_autoptr(GIOStream) io_stream = NULL;
+  int pty_source_fd;
+  int pty_dest_fd;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
-  g_assert (IDE_IS_RUNNER (runner));
-
-  env = ide_runner_get_environment (runner);
-
-  /* Prepend arguments in reverse to preserve ordering */
-  for (guint i = G_N_ELEMENTS (prepend_argv); i > 0; i--)
-    ide_runner_prepend_argv (runner, prepend_argv [i-1]);
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (argv != NULL);
+  g_assert (env != NULL);
+  g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
 
   /* Override $SHELL unless it's sh or bash as that tends to break things
    * like '$SHELL -c "exec $APP"' in gdb.
    */
-  shell = ide_get_user_shell ();
-  if (!ide_str_equal0 (shell, "/bin/sh") && !ide_str_equal0 (shell, "sh") &&
-      !ide_str_equal0 (shell, "/bin/bash") && !ide_str_equal0 (shell, "bash"))
-    ide_environment_setenv (env, "SHELL", "sh");
+  if (!g_strv_contains (allowed_shells, ide_get_user_shell ()))
+    ide_run_context_setenv (run_context, "SHELL", "sh");
 
-  /* Connect to all our important signals */
-  dzl_signal_group_set_target (self->runner_signals, runner);
+  /* Specify GDB with mi2 wire protocol */
+  ide_run_context_append_argv (run_context, "gdb");
+  ide_run_context_append_argv (run_context, "--interpreter=mi2");
 
-  /*
-   * If there is a PTY device to display the contents of the inferior, then
-   * we will create a new FD for that from the PTY and save it to map into
-   * the inferior.
+  /* Steal the PTY for the inferior so we can assign it as another
+   * file-descriptor and map it to the inferior from GDB.
    */
-  if ((pty = ide_runner_get_pty (runner)))
-    {
-      int master_fd = vte_pty_get_fd (pty);
-      int tty_fd = ide_pty_intercept_create_slave (master_fd, TRUE);
+  pty_source_fd = ide_unix_fd_map_steal_stdout (unix_fd_map);
+  g_warn_if_fail (pty_source_fd != -1);
 
-      if (tty_fd != -1)
-        {
-          self->mapped_fd = ide_runner_take_fd (runner, tty_fd, -1);
-          ide_runner_set_disable_pty (runner, TRUE);
-        }
+  /* Save the PTY fd around to attach after spawning */
+  pty_dest_fd = ide_unix_fd_map_get_max_dest_fd (unix_fd_map) + 1;
+  ide_unix_fd_map_take (unix_fd_map, ide_steal_fd (&pty_source_fd), pty_dest_fd);
+
+  /* Setup a stream to communicate with GDB over which is just a
+   * regular pipe[2] for stdin/stdout.
+   */
+  if (!(io_stream = ide_unix_fd_map_create_stream (unix_fd_map,
+                                                   STDIN_FILENO, STDOUT_FILENO,
+                                                   error)))
+    IDE_RETURN (FALSE);
+
+  /* Now merge the FD map down a layer */
+  if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
+    IDE_RETURN (FALSE);
+
+  /* Now that we have a PTY, we need to make sure our first command is
+   * to set the PTY of the inferior to the FD of the PTY we attached.
+   */
+  ide_run_context_append_argv (run_context, "-ex");
+  ide_run_context_append_formatted (run_context,
+                                    "set inferior-tty /proc/self/fd/%d",
+                                    pty_dest_fd);
+
+  /* Set the CWD for the inferior but leave gdb untouched */
+  if (cwd != NULL)
+    {
+      ide_run_context_append_argv (run_context, "-ex");
+      ide_run_context_append_formatted (run_context, "set cwd %s", cwd);
     }
 
-  /* We need access to stdin/stdout for communicating with gdb */
-  ide_runner_set_flags (runner, G_SUBPROCESS_FLAGS_STDIN_PIPE | G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
+  /* We don't want GDB to get the environment from this layer, so we specify
+   * a wrapper script to set the environment for the inferior only. That
+   * means that "show environment FOO" will not show anything, but the
+   * inferior will see "FOO".
+   */
+  if (env[0] != NULL)
+    {
+      g_autoptr(GString) str = g_string_new ("set exec-wrapper env");
 
-  IDE_EXIT;
+      for (guint i = 0; env[i]; i++)
+        {
+          g_autofree char *quoted = g_shell_quote (env[i]);
+
+          g_string_append_c (str, ' ');
+          g_string_append (str, quoted);
+        }
+
+      ide_run_context_append_argv (run_context, "-ex");
+      ide_run_context_append_argv (run_context, str->str);
+    }
+
+  /* Now we can setup our command from the upper layer. Everything after
+   * this must be part of the inferior's arguments.
+   */
+  ide_run_context_append_argv (run_context, "--args");
+  ide_run_context_append_args (run_context, argv);
+
+  /* Start communicating with gdb */
+  gbp_gdb_debugger_connect (self, io_stream, NULL);
+  ide_debugger_move_async (IDE_DEBUGGER (self),
+                           IDE_DEBUGGER_MOVEMENT_START,
+                           NULL, NULL, NULL);
+
+  IDE_RETURN (TRUE);
 }
 
 static void
-gbp_gdb_debugger_on_runner_spawned (GbpGdbDebugger *self,
-                                    const gchar    *identifier,
-                                    IdeRunner      *runner)
+gbp_gdb_debugger_prepare_for_run (IdeDebugger   *debugger,
+                                  IdePipeline   *pipeline,
+                                  IdeRunContext *run_context)
 {
-  g_autoptr(GIOStream) io_stream = NULL;
-  g_autofree gchar *tty_command = NULL;
+  GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
-  g_assert (identifier != NULL);
-  g_assert (IDE_IS_RUNNER (runner));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
 
-  /* Create an IOStream to track pipe communication with gdb */
-  io_stream = g_simple_io_stream_new (ide_runner_get_stdout (runner),
-                                      ide_runner_get_stdin (runner));
-
-  /* Start communicating with gdb */
-  gbp_gdb_debugger_connect (self, io_stream, NULL);
-
-  /* Ask gdb to use our mapped in FD for the TTY when spawning the child */
-  tty_command = g_strdup_printf ("-gdb-set inferior-tty /proc/self/fd/%d", self->mapped_fd);
-  gbp_gdb_debugger_exec_async (self, tty_command, NULL, NULL, NULL);
-
-  ide_debugger_move_async (IDE_DEBUGGER (self),
-                           IDE_DEBUGGER_MOVEMENT_START,
-                           NULL, NULL, NULL);
+  g_set_object (&self->current_runtime,
+                ide_pipeline_get_runtime (pipeline));
+  ide_run_context_push (run_context,
+                        gbp_gdb_debugger_run_context_handler_cb,
+                        g_object_ref (self),
+                        g_object_unref);
 
   IDE_EXIT;
 }
@@ -2506,6 +2534,8 @@ gbp_gdb_debugger_dispose (GObject *object)
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
 
+  g_clear_object (&self->current_runtime);
+
   list = self->cmdqueue.head;
 
   self->cmdqueue.head = NULL;
@@ -2568,8 +2598,8 @@ gbp_gdb_debugger_class_init (GbpGdbDebuggerClass *klass)
 
   ide_object_class->parent_set = gbp_gdb_debugger_parent_set;
 
-  debugger_class->supports_runner = gbp_gdb_debugger_supports_runner;
-  debugger_class->prepare = gbp_gdb_debugger_prepare;
+  debugger_class->supports_run_command = gbp_gdb_debugger_supports_run_command;
+  debugger_class->prepare_for_run = gbp_gdb_debugger_prepare_for_run;
   debugger_class->disassemble_async = gbp_gdb_debugger_disassemble_async;
   debugger_class->disassemble_finish = gbp_gdb_debugger_disassemble_finish;
   debugger_class->insert_breakpoint_async = gbp_gdb_debugger_insert_breakpoint_async;
@@ -2609,17 +2639,8 @@ gbp_gdb_debugger_init (GbpGdbDebugger *self)
   self->parser = gdbwire_mi_parser_create (callbacks);
   self->read_cancellable = g_cancellable_new ();
   self->read_buffer = g_malloc (READ_BUFFER_LEN);
-  self->mapped_fd = -1;
 
   g_queue_init (&self->cmdqueue);
-
-  self->runner_signals = dzl_signal_group_new (IDE_TYPE_RUNNER);
-
-  dzl_signal_group_connect_object (self->runner_signals,
-                                   "spawned",
-                                   G_CALLBACK (gbp_gdb_debugger_on_runner_spawned),
-                                   self,
-                                   G_CONNECT_SWAPPED);
 }
 
 GbpGdbDebugger *
@@ -2801,8 +2822,6 @@ gbp_gdb_debugger_write_cb (GObject      *object,
  * This asynchronous function will complete when we have received a response
  * from the debugger with the result, or the connection has closed. Whichever
  * is first.
- *
- * Since: 3.32
  */
 void
 gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
@@ -2903,8 +2922,6 @@ gbp_gdb_debugger_exec_async (GbpGdbDebugger      *self,
  *
  * Returns: a gdbwire_mi_output which should be freed with
  *   gdbwire_mi_output_free() when no longer in use.
- *
- * Since: 3.32
  */
 struct gdbwire_mi_output *
 gbp_gdb_debugger_exec_finish (GbpGdbDebugger  *self,
