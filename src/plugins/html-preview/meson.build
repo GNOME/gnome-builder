@@ -1,21 +1,20 @@
 if get_option('plugin_html_preview')
 
-html_preview_resources = gnome.compile_resources(
-  'html_preview',
+if not get_option('webkit').enabled()
+  error('-Dwebkit=enabled is required for html-preview plugin')
+endif
+
+plugins_sources += files([
+  'html-preview-plugin.c',
+  'gbp-html-preview-workspace-addin.c',
+])
+
+plugin_html_preview_resources = gnome.compile_resources(
+  'html-preview-resources',
   'html-preview.gresource.xml',
-  gresource_bundle: true,
-           install: true,
-       install_dir: plugindir,
+  c_name: 'gbp_html_preview'
 )
 
-install_data('html_preview.py', install_dir: plugindir)
-
-configure_file(
-          input: 'html-preview.plugin',
-         output: 'html-preview.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
-)
+plugins_sources += plugin_html_preview_resources
 
 endif

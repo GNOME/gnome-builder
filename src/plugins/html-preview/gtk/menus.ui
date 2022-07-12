@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="ide-editor-page-document-menu">
-    <section id="editor-document-section">
+  <menu id="ide-editor-page-menu">
+    <section id="ide-editor-page-preview-section">
       <item>
-        <attribute name="after">editor-document-open-in-new-frame</attribute>
-        <attribute name="label" translatable="yes">Open Preview</attribute>
-        <attribute name="action">editor-page.preview-as-html</attribute>
+        <attribute name="id">html-preview-item</attribute>
+        <attribute name="label" translatable="yes">Open Preview…</attribute>
+        <attribute name="action">html-preview.html-preview</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
       </item>
     </section>
   </menu>
