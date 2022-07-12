@@ -63,8 +63,8 @@ gbp_ls_workbench_addin_can_open (IdeWorkbenchAddin *addin,
 }
 
 static void
-locate_view (GtkWidget *view,
-             gpointer   user_data)
+locate_view (IdePage  *view,
+             gpointer  user_data)
 {
   LocateView *locate = user_data;
   GFile *file;
@@ -87,7 +87,10 @@ static void
 gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
                                    GFile                 *file,
                                    const gchar           *content_type,
+                                   int                    at_line,
+                                   int                    at_line_offset,
                                    IdeBufferOpenFlags     flags,
+                                   IdePanelPosition      *position,
                                    GCancellable          *cancellable,
                                    GAsyncReadyCallback    callback,
                                    gpointer               user_data)
@@ -96,11 +99,8 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GFile) parent = NULL;
   IdeWorkspace *workspace;
-  IdeSurface *surface;
-  GtkWidget *current_frame;
   GbpLsPage *view;
-  IdePage *current_page;
-  LocateView locate = { 0 };
+  LocateView locate = {0};
 
   g_assert (GBP_IS_LS_WORKBENCH_ADDIN (self));
   g_assert (!self->workbench || IDE_IS_WORKBENCH (self->workbench));
@@ -119,10 +119,6 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
       return;
     }
 
-  workspace = ide_workbench_get_current_workspace (self->workbench);
-  if (!(surface = ide_workspace_get_surface_by_name (workspace, "editor")))
-    surface = ide_workspace_get_surface_by_name (workspace, "terminal");
-
   /* If this isn't a directory, get the parent */
   if (!ide_str_equal0 (content_type, "inode/directory"))
     file = parent = g_file_get_parent (file);
@@ -132,27 +128,21 @@ gbp_ls_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
   ide_workbench_foreach_page (self->workbench, locate_view, &locate);
   if (locate.view != NULL)
     {
-      ide_widget_reveal_and_grab (GTK_WIDGET (locate.view));
+      panel_widget_raise (PANEL_WIDGET (locate.view));
       ide_task_return_boolean (task, TRUE);
       return;
     }
 
-  current_page = ide_workspace_get_most_recent_page (workspace);
-  current_frame = gtk_widget_get_ancestor (GTK_WIDGET (current_page), IDE_TYPE_FRAME);
-
-  /* When opening from the project tree, it acts like a persistent folder browser, which doesn't
-   * disappear when opening one of the files.
+  /* When opening from the project tree, it acts like a persistent folder
+   * browser, which doesn't disappear when opening one of the files.
    */
+  workspace = ide_workbench_get_current_workspace (self->workbench);
   view = g_object_new (GBP_TYPE_LS_PAGE,
                        "close-on-activate", FALSE,
-                       "visible", TRUE,
                        NULL);
-  if (current_frame != NULL)
-    gtk_container_add (GTK_CONTAINER (current_frame), GTK_WIDGET (view));
-  else
-    gtk_container_add (GTK_CONTAINER (surface), GTK_WIDGET (view));
-  ide_widget_reveal_and_grab (GTK_WIDGET (view));
+  ide_workspace_add_page (workspace, IDE_PAGE (view), position);
   gbp_ls_page_set_directory (view, file);
+  panel_widget_raise (PANEL_WIDGET (view));
 
   ide_task_return_boolean (task, TRUE);
 }
@@ -193,7 +183,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpLsWorkbenchAddin, gbp_ls_workbench_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
 gbp_ls_workbench_addin_class_init (GbpLsWorkbenchAddinClass *klass)

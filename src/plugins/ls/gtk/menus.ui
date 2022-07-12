@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="project-tree-menu">
-    <section id="project-tree-menu-open-section">
-      <item>
-        <attribute name="id">project-tree-menu-open-editor</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">_Browse Folder</attribute>
-        <attribute name="action">project-tree.open-with-hint</attribute>
-        <attribute name="target" type="s">'ls'</attribute>
-      </item>
-    </section>
+  <menu id="project-tree-menu-open-containing-folder-menu">
+    <item>
+      <attribute name="id">project-tree-menu-open-editor</attribute>
+      <attribute name="hidden-when">action-disabled</attribute>
+      <attribute name="label" translatable="yes">With _Folder Listing</attribute>
+      <attribute name="action">project-tree.open-with-hint</attribute>
+      <attribute name="target" type="s">'ls'</attribute>
+    </item>
   </menu>
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-files-section">
-      <item>
-        <attribute name="id">source-view-open-directory</attribute>
-        <attribute name="label" translatable="yes">S_witch to Folder</attribute>
-        <attribute name="action">ls.open-directory</attribute>
-      </item>
-      <item>
-        <attribute name="id">source-view-open-in-files</attribute>
-        <attribute name="label" translatable="yes">_Open Containing Folder</attribute>
-        <attribute name="action">ls.open-in-files</attribute>
-      </item>
+      <submenu id="ide-source-view-popup-menu-open-containing-folder-section">
+        <attribute name="label" translatable="yes">Open Containing Folder</attribute>
+        <item>
+          <attribute name="id">source-view-open-directory</attribute>
+          <attribute name="label" translatable="yes">With _Folder Listing</attribute>
+          <attribute name="action">ls.open-directory</attribute>
+        </item>
+        <item>
+          <attribute name="id">source-view-open-in-files</attribute>
+          <attribute name="label" translatable="yes">With File _Browser…</attribute>
+          <attribute name="action">ls.open-in-files</attribute>
+        </item>
+      </submenu>
     </section>
   </menu>
 </interface>
