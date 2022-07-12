@@ -22,63 +22,31 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
-#include <libide-foundry.h>
 
+#include <libide-foundry.h>
+#include <libide-gtk.h>
+
+#include "ide-device-private.h"
+
+#include "ide-application.h"
 #include "ide-gui-global.h"
 #include "ide-run-button.h"
-
 #include "ide-run-manager-private.h"
 
 struct _IdeRunButton
 {
-  GtkBox                parent_instance;
-
-  GtkButton            *button;
-  GtkImage             *button_image;
-  DzlMenuButton        *menu_button;
-  GtkShortcutsShortcut *run_shortcut;
-  GtkLabel             *run_tooltip_message;
-  DzlShortcutTooltip   *tooltip;
-
-  char *run_handler_icon_name;
+  GtkWidget       parent_instance;
+  AdwSplitButton *split_button;
+  IdeJoinedMenu  *joined_menu;
 };
 
-G_DEFINE_FINAL_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_BOX)
+G_DEFINE_FINAL_TYPE (IdeRunButton, ide_run_button, GTK_TYPE_WIDGET)
 
 static void
-ide_run_button_handler_set (IdeRunButton  *self,
-                            GParamSpec    *pspec,
-                            IdeRunManager *run_manager)
-{
-  const GList *list;
-  const GList *iter;
-  const gchar *handler;
-
-  g_assert (IDE_IS_RUN_BUTTON (self));
-  g_assert (IDE_IS_RUN_MANAGER (run_manager));
-
-  handler = ide_run_manager_get_handler (run_manager);
-  list = _ide_run_manager_get_handlers (run_manager);
-
-  for (iter = list; iter; iter = iter->next)
-    {
-      const IdeRunHandlerInfo *info = iter->data;
-
-      if (g_strcmp0 (info->id, handler) == 0)
-        {
-          self->run_handler_icon_name = g_strdup (info->icon_name);
-          g_object_set (self->button_image, "icon-name", info->icon_name, NULL);
-          break;
-        }
-    }
-}
-
-static void
-on_run_busy_state_changed_cb (IdeRunButton  *self,
-                              GParamSpec    *pspec,
-                              IdeRunManager *run_manager)
+on_icon_state_changed_cb (IdeRunButton  *self,
+                          GParamSpec    *pspec,
+                          IdeRunManager *run_manager)
 {
   const char *icon_name;
   const char *action_name;
@@ -88,7 +56,7 @@ on_run_busy_state_changed_cb (IdeRunButton  *self,
 
   if (!ide_run_manager_get_busy (run_manager))
     {
-      icon_name = self->run_handler_icon_name;
+      icon_name = ide_run_manager_get_icon_name (run_manager);
       action_name = "run-manager.run";
     }
   else
@@ -97,34 +65,48 @@ on_run_busy_state_changed_cb (IdeRunButton  *self,
       action_name = "run-manager.stop";
     }
 
-  g_object_set (self->button_image, "icon-name", icon_name, NULL);
-  gtk_actionable_set_action_name (GTK_ACTIONABLE (self->button), action_name);
+  g_object_set (self->split_button,
+                "action-name", action_name,
+                "icon-name", icon_name,
+                NULL);
 }
 
 static void
 ide_run_button_load (IdeRunButton *self,
                      IdeContext   *context)
 {
+  IdeDeviceManager *device_manager;
   IdeRunManager *run_manager;
+  GMenu *menu;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_RUN_BUTTON (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  run_manager = ide_run_manager_from_context (context);
+  if (!ide_context_has_project (context))
+    IDE_EXIT;
 
+  /* Setup button action/icon */
+  run_manager = ide_run_manager_from_context (context);
   g_signal_connect_object (run_manager,
                            "notify::busy",
-                           G_CALLBACK (on_run_busy_state_changed_cb),
+                           G_CALLBACK (on_icon_state_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
-
   g_signal_connect_object (run_manager,
-                           "notify::handler",
-                           G_CALLBACK (ide_run_button_handler_set),
+                           "notify::icon-name",
+                           G_CALLBACK (on_icon_state_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
+  on_icon_state_changed_cb (self, NULL, run_manager);
 
-  ide_run_button_handler_set (self, NULL, run_manager);
+  /* Add devices section */
+  device_manager = ide_device_manager_from_context (context);
+  menu = _ide_device_manager_get_menu (device_manager);
+  ide_joined_menu_prepend_menu (self->joined_menu, G_MENU_MODEL (menu));
+
+  IDE_EXIT;
 }
 
 static void
@@ -149,9 +131,6 @@ ide_run_button_query_tooltip (IdeRunButton *self,
                               GtkButton    *button)
 {
   IdeRunManager *run_manager;
-  const GList *list;
-  const GList *iter;
-  const gchar *handler;
   IdeContext *context;
 
   g_assert (IDE_IS_RUN_BUTTON (self));
@@ -160,69 +139,55 @@ ide_run_button_query_tooltip (IdeRunButton *self,
 
   context = ide_widget_get_context (GTK_WIDGET (self));
   run_manager = ide_run_manager_from_context (context);
-  handler = ide_run_manager_get_handler (run_manager);
-  list = _ide_run_manager_get_handlers (run_manager);
 
   if (ide_run_manager_get_busy (run_manager))
-    {
-      gtk_tooltip_set_text (tooltip, _("Stop running"));
-      return TRUE;
-    }
+    gtk_tooltip_set_text (tooltip, _("Stop running"));
+  else
+    gtk_tooltip_set_text (tooltip, _("Run project"));
 
-  for (iter = list; iter; iter = iter->next)
-    {
-      const IdeRunHandlerInfo *info = iter->data;
+  return TRUE;
+}
 
-      if (g_strcmp0 (info->id, handler) == 0)
-        {
-          gboolean enabled;
-          /* Figure out if the run action is enabled. If it
-           * is not, then we should inform the user that
-           * the project cannot be run yet because the
-           * build pipeline is not yet configured. */
-          g_action_group_query_action (G_ACTION_GROUP (run_manager),
-                                       "run",
-                                       &enabled,
-                                       NULL,
-                                       NULL,
-                                       NULL,
-                                       NULL);
+static void
+ide_run_button_dispose (GObject *object)
+{
+  IdeRunButton *self = (IdeRunButton *)object;
 
-          if (!enabled)
-            {
-              gtk_tooltip_set_custom (tooltip, GTK_WIDGET (self->run_tooltip_message));
-              return TRUE;
-            }
+  g_clear_pointer ((GtkWidget **)&self->split_button, gtk_widget_unparent);
+  g_clear_object (&self->joined_menu);
 
-          /* The shortcut tooltip will set this up after us */
-          dzl_shortcut_tooltip_set_accel (self->tooltip, info->accel);
-          dzl_shortcut_tooltip_set_title (self->tooltip, info->title);
-        }
-    }
-
-  return FALSE;
+  G_OBJECT_CLASS (ide_run_button_parent_class)->dispose (object);
 }
 
 static void
 ide_run_button_class_init (IdeRunButtonClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = ide_run_button_dispose;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-run-button.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, button);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, button_image);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, menu_button);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_shortcut);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, run_tooltip_message);
-  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, tooltip);
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
+  gtk_widget_class_bind_template_child (widget_class, IdeRunButton, split_button);
 }
 
 static void
 ide_run_button_init (IdeRunButton *self)
 {
+  GMenu *menu;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  g_signal_connect_object (self->button,
+  self->joined_menu = ide_joined_menu_new ();
+
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "run-menu");
+  ide_joined_menu_append_menu (self->joined_menu, G_MENU_MODEL (menu));
+
+  adw_split_button_set_menu_model (self->split_button,
+                                   G_MENU_MODEL (self->joined_menu));
+
+  g_signal_connect_object (self->split_button,
                            "query-tooltip",
                            G_CALLBACK (ide_run_button_query_tooltip),
                            self,
