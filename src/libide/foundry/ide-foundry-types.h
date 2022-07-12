@@ -52,6 +52,8 @@ typedef struct _IdePipelineStageLauncher IdePipelineStageLauncher;
 typedef struct _IdePipelineStageMkdirs IdePipelineStageMkdirs;
 typedef struct _IdePipelineStageTransfer IdePipelineStageTransfer;
 typedef struct _IdeRunContext IdeRunContext;
+typedef struct _IdeRunCommand IdeRunCommand;
+typedef struct _IdeRunCommandProvider IdeRunCommandProvider;
 typedef struct _IdeRunManager IdeRunManager;
 typedef struct _IdeRuntime IdeRuntime;
 typedef struct _IdeRuntimeManager IdeRuntimeManager;
