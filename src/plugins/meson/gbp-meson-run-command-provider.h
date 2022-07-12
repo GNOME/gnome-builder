@@ -1,6 +1,6 @@
-/* gbp-meson-test-provider.h
+/* gbp-meson-run-command-provider.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_MESON_TEST_PROVIDER (gbp_meson_test_provider_get_type())
+#define GBP_TYPE_MESON_RUN_COMMAND_PROVIDER (gbp_meson_run_command_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpMesonTestProvider, gbp_meson_test_provider, GBP, MESON_TEST_PROVIDER, IdeTestProvider)
+G_DECLARE_FINAL_TYPE (GbpMesonRunCommandProvider, gbp_meson_run_command_provider, GBP, MESON_RUN_COMMAND_PROVIDER, IdeObject)
 
 G_END_DECLS

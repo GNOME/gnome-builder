@@ -6,17 +6,18 @@ plugins_sources += files([
   'gbp-meson-build-system.c',
   'gbp-meson-build-target-provider.c',
   'gbp-meson-build-target.c',
-  'gbp-meson-config-view-addin.c',
+  'gbp-meson-introspection.c',
   'gbp-meson-pipeline-addin.c',
-  'gbp-meson-test-provider.c',
-  'gbp-meson-test.c',
-  'gbp-meson-tool-row.c',
-  'gbp-meson-toolchain-edition-preferences-addin.c',
-  'gbp-meson-toolchain-edition-preferences-row.c',
+  'gbp-meson-run-command-provider.c',
   'gbp-meson-toolchain-provider.c',
   'gbp-meson-toolchain.c',
   'gbp-meson-utils.c',
   'meson-plugin.c',
+
+  # 'gbp-meson-config-view-addin.c',
+  # 'gbp-meson-toolchain-edition-preferences-addin.c',
+  # 'gbp-meson-toolchain-edition-preferences-row.c',
+  # 'gbp-meson-tool-row.c',
 ])
 
 plugin_meson_resources = gnome.compile_resources(
@@ -27,14 +28,14 @@ plugin_meson_resources = gnome.compile_resources(
 
 plugins_sources += plugin_meson_resources
 
-test_sources = files([
+test_meson_sources = files([
   'test-meson-build-system.c',
   'gbp-meson-build-system.c',
   'gbp-meson-toolchain.c',
   'gbp-meson-utils.c',
 ])
 
-test_meson = executable('test-meson', test_sources,
+test_meson = executable('test-meson', test_meson_sources,
         c_args: test_cflags,
   dependencies: [ libide_foundry_dep, libide_terminal_dep ],
 )

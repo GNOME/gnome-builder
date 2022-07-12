@@ -55,7 +55,7 @@ create_launcher (IdeContext  *context,
       return NULL;
     }
 
-  if ((ret = ide_runtime_create_launcher (runtime, error)))
+  if ((ret = ide_pipeline_create_launcher (pipeline, error)))
     {
       ide_subprocess_launcher_set_flags (ret, G_SUBPROCESS_FLAGS_STDOUT_PIPE | G_SUBPROCESS_FLAGS_STDERR_SILENCE);
       ide_subprocess_launcher_set_cwd (ret, ide_pipeline_get_builddir (pipeline));
@@ -314,18 +314,16 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
       return;
     }
 
-  launcher = create_launcher (context, &error);
-
-  if (launcher == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
   cancellable = ide_task_get_cancellable (task);
+
+  if (!(launcher = ide_pipeline_create_launcher (pipeline, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      return;
+    }
 
   ide_subprocess_launcher_push_argv (launcher, "meson");
   ide_subprocess_launcher_push_argv (launcher, "introspect");

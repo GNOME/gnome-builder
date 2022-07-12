@@ -18,7 +18,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#define G_LOG_DOMAIN "meson-plugin"
+
+#include "config.h"
+
 #include <libpeas/peas.h>
+
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
@@ -27,9 +32,12 @@
 #include "gbp-meson-build-target-provider.h"
 #include "gbp-meson-config-view-addin.h"
 #include "gbp-meson-pipeline-addin.h"
-#include "gbp-meson-test-provider.h"
+#include "gbp-meson-run-command-provider.h"
 #include "gbp-meson-toolchain-provider.h"
+
+#if 0
 #include "gbp-meson-toolchain-edition-preferences-addin.h"
+#endif
 
 _IDE_EXTERN void
 _gbp_meson_register_types (PeasObjectModule *module)
@@ -37,11 +45,6 @@ _gbp_meson_register_types (PeasObjectModule *module)
   /* For in-tree builds of meson projects */
   ide_g_file_add_ignored_pattern ("_build");
 
-#if 0
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_CONFIG_VIEW_ADDIN,
-                                              GBP_TYPE_MESON_CONFIG_VIEW_ADDIN);
-#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PIPELINE_ADDIN,
                                               GBP_TYPE_MESON_PIPELINE_ADDIN);
@@ -55,12 +58,18 @@ _gbp_meson_register_types (PeasObjectModule *module)
                                               IDE_TYPE_BUILD_TARGET_PROVIDER,
                                               GBP_TYPE_MESON_BUILD_TARGET_PROVIDER);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_TEST_PROVIDER,
-                                              GBP_TYPE_MESON_TEST_PROVIDER);
+                                              IDE_TYPE_RUN_COMMAND_PROVIDER,
+                                              GBP_TYPE_MESON_RUN_COMMAND_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TOOLCHAIN_PROVIDER,
                                               GBP_TYPE_MESON_TOOLCHAIN_PROVIDER);
+
+#if 0
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               GBP_TYPE_MESON_TOOLCHAIN_EDITION_PREFERENCES_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_CONFIG_VIEW_ADDIN,
+                                              GBP_TYPE_MESON_CONFIG_VIEW_ADDIN);
+#endif
 }
