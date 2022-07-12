@@ -47,6 +47,7 @@ libide_gui_private_headers = [
   'ide-notification-stack-private.h',
   'ide-notification-view-private.h',
   'ide-preferences-builtin-private.h',
+  'ide-recoloring-private.h',
   'ide-session-private.h',
 ]
 
@@ -60,6 +61,7 @@ libide_gui_private_sources = [
   'ide-notification-view.c',
   'ide-preferences-builtin.c',
   'ide-primary-workspace-actions.c',
+  'ide-recoloring.c',
   'ide-session.c',
   'ide-workspace-actions.c',
 ]
