@@ -1845,7 +1845,8 @@ ide_debugger_disassemble_finish (IdeDebugger   *self,
 /**
  * ide_debugger_supports_runner:
  * @self: an #IdeDebugger
- * @runner: an #IdeRunner
+ * @pipeline: an #IdePipeline
+ * #run_command: an #IdeRunCommand
  * @priority: (out): A location for a priority
  *
  * Checks if the debugger supports a given runner. The debugger may need
@@ -1854,39 +1855,44 @@ ide_debugger_disassemble_finish (IdeDebugger   *self,
  * Returns: %TRUE if the #IdeDebugger supports the runner.
  */
 gboolean
-ide_debugger_supports_runner (IdeDebugger *self,
-                              IdeRunner   *runner,
-                              gint        *priority)
+ide_debugger_supports_run_command (IdeDebugger   *self,
+                                   IdePipeline   *pipeline,
+                                   IdeRunCommand *run_command,
+                                   int           *priority)
 {
-  gint dummy = 0;
+  int dummy = 0;
 
   g_return_val_if_fail (IDE_IS_DEBUGGER (self), FALSE);
-  g_return_val_if_fail (IDE_IS_RUNNER (runner), FALSE);
+  g_return_val_if_fail (IDE_IS_PIPELINE (pipeline), FALSE);
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (run_command), FALSE);
 
   if (priority == NULL)
     priority = &dummy;
   else
     *priority = 0;
 
-  return IDE_DEBUGGER_GET_CLASS (self)->supports_runner (self, runner, priority);
+  return IDE_DEBUGGER_GET_CLASS (self)->supports_run_command (self, pipeline, run_command, priority);
 }
 
 /**
- * ide_debugger_prepare:
+ * ide_debugger_prepare_for_run:
  * @self: an #IdeDebugger
- * @runner: an #IdeRunner
+ * @pipeline: an #IdePipeline
+ * @run_context: an #IdeRunContext
  *
  * Prepares the runner to launch a debugger and target process.
  */
 void
-ide_debugger_prepare (IdeDebugger *self,
-                      IdeRunner   *runner)
+ide_debugger_prepare_for_run (IdeDebugger   *self,
+                              IdePipeline   *pipeline,
+                              IdeRunContext *run_context)
 {
   g_return_if_fail (IDE_IS_DEBUGGER (self));
-  g_return_if_fail (IDE_IS_RUNNER (runner));
+  g_return_if_fail (IDE_IS_PIPELINE (pipeline));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+  g_return_if_fail (IDE_DEBUGGER_GET_CLASS (self)->prepare_for_run != NULL);
 
-  if (IDE_DEBUGGER_GET_CLASS (self)->prepare)
-    IDE_DEBUGGER_GET_CLASS (self)->prepare (self, runner);
+  IDE_DEBUGGER_GET_CLASS (self)->prepare_for_run (self, pipeline, run_context);
 }
 
 /**
