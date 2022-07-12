@@ -40,6 +40,7 @@ struct _IdeVcsInterface
 {
   GTypeInterface            parent_interface;
 
+  char                   *(*get_display_name)          (IdeVcs               *self);
   GFile                  *(*get_workdir)               (IdeVcs               *self);
   gboolean                (*is_ignored)                (IdeVcs               *self,
                                                         GFile                *file,
@@ -162,5 +163,7 @@ IDE_AVAILABLE_IN_ALL
 gboolean      ide_vcs_push_branch_finish   (IdeVcs               *self,
                                             GAsyncResult         *result,
                                             GError              **error);
+IDE_AVAILABLE_IN_ALL
+char         *ide_vcs_get_display_name     (IdeVcs               *self);
 
 G_END_DECLS

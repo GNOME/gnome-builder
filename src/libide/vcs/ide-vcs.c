@@ -646,3 +646,23 @@ ide_vcs_push_branch_finish (IdeVcs        *self,
 
   return IDE_VCS_GET_IFACE (self)->push_branch_finish (self, result, error);
 }
+
+/**
+ * ide_vcs_get_display_name:
+ * @self: a #IdeVcs
+ *
+ * Gets the display name for the VCS.
+ *
+ * Returns: (transfer full): a string describing the VCS
+ */
+char *
+ide_vcs_get_display_name (IdeVcs *self)
+{
+  g_return_val_if_fail (IDE_IS_VCS (self), NULL);
+
+  if (IDE_VCS_GET_IFACE (self)->get_display_name == NULL)
+    /* translators: None means "no version control system" */
+    return g_strdup (_("None"));
+
+  return IDE_VCS_GET_IFACE (self)->get_display_name (self);
+}
