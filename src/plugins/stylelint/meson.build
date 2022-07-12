@@ -1,16 +1,16 @@
 if get_option('plugin_stylelint')
 
-install_data('stylelint_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'stylelint-plugin.c',
+  'gbp-stylelint-diagnostic-provider.c',
+])
 
-install_data('org.gnome.builder.plugins.stylelint.gschema.xml',
-  install_dir: schema_dir)
-
-configure_file(
-          input: 'stylelint.plugin',
-         output: 'stylelint.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_stylelint_resources = gnome.compile_resources(
+  'stylelint-resources',
+  'stylelint.gresource.xml',
+  c_name: 'gbp_stylelint',
 )
+
+plugins_sources += plugin_stylelint_resources
 
 endif
