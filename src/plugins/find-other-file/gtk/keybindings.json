@@ -1,0 +1,1 @@
+{ "trigger" : "<Control><Shift>o", "action" : "win.find-other-file", "when" : "canEdit()", "phase" : "capture" },

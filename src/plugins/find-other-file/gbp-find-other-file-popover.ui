@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpFindOtherFilePopover" parent="GtkPopover">
+    <style>
+      <class name="menu"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkScrolledWindow" id="scroller">
+            <property name="propagate-natural-height">true</property>
+            <property name="propagate-natural-width">true</property>
+            <property name="min-content-height">100</property>
+            <property name="max-content-height">600</property>
+            <property name="min-content-width">300</property>
+            <property name="max-content-width">300</property>
+            <child>
+              <object class="GtkListView" id="list_view">
+                <signal name="activate" handler="gbp_find_other_file_popover_activate_cb" swapped="true" object="GbpFindOtherFilePopover"/>
+                <property name="orientation">vertical</property>
+                <property name="single-click-activate">True</property>
+                <property name="factory">
+                  <object class="GtkBuilderListItemFactory">
+                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="spacing">6</property>
+        <child>
+          <object class="GtkImage">
+            <property name="pixel-size">16</property>
+            <binding name="gicon">
+              <lookup name="gicon" type="GbpFoundFile">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="halign">start</property>
+            <property name="hexpand">true</property>
+            <property name="ellipsize">start</property>
+            <binding name="label">
+              <lookup name="display-name" type="GbpFoundFile">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage">
+            <property name="icon-name">go-next-symbolic</property>
+            <binding name="visible">
+              <lookup name="is-directory" type="GbpFoundFile">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+]]>
+                    </property>
+                  </object>
+                </property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

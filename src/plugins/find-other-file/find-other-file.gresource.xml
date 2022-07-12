@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/plugins/find-other-file">
+    <file>find-other-file.plugin</file>
+    <file>gtk/keybindings.json</file>
+    <file preprocess="xml-stripblanks">gbp-find-other-file-popover.ui</file>
+  </gresource>
+</gresources>
