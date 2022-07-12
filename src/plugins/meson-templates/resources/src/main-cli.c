@@ -1,6 +1,6 @@
 {{include "license.c"}}
 
-#include "{{prefix}}-config.h"
+#include "config.h"
 
 #include <glib.h>
 {{if enable_i18n}}

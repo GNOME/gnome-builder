@@ -1,3 +1,0 @@
-#!/bin/sh
-
-mono "@libexecdir@/{{exec_name}}.exe"
