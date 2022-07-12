@@ -110,7 +110,7 @@ ide_html_proposals_refilter (IdeHtmlProposals    *self,
         {
           guint priority;
 
-          if (ide_completion_fuzzy_match (html_elements[i], casefold, &priority))
+          if (gtk_source_completion_fuzzy_match (html_elements[i], casefold, &priority))
             {
               Item item = { html_elements[i], kind, priority };
               g_array_append_val (self->items, item);
@@ -125,7 +125,7 @@ ide_html_proposals_refilter (IdeHtmlProposals    *self,
         {
           guint priority;
 
-          if (ide_completion_fuzzy_match (html_attributes_shared[i], casefold, &priority))
+          if (gtk_source_completion_fuzzy_match (html_attributes_shared[i], casefold, &priority))
             {
               Item item = { html_attributes_shared[i], kind, priority };
               g_array_append_val (self->items, item);
@@ -139,7 +139,7 @@ ide_html_proposals_refilter (IdeHtmlProposals    *self,
           if (strcmp (html_attributes[i].element, element) != 0)
             continue;
 
-          if (ide_completion_fuzzy_match (html_attributes[i].attr, casefold, &priority))
+          if (gtk_source_completion_fuzzy_match (html_attributes[i].attr, casefold, &priority))
             {
               Item item = { html_attributes[i].attr, kind, priority };
               g_array_append_val (self->items, item);
@@ -152,7 +152,7 @@ ide_html_proposals_refilter (IdeHtmlProposals    *self,
         {
           guint priority;
 
-          if (ide_completion_fuzzy_match (css_properties[i], casefold, &priority))
+          if (gtk_source_completion_fuzzy_match (css_properties[i], casefold, &priority))
             {
               Item item = { css_properties[i], kind, priority };
               g_array_append_val (self->items, item);

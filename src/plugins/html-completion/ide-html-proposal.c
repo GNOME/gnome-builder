@@ -32,7 +32,7 @@ struct _IdeHtmlProposal
 };
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeHtmlProposal, ide_html_proposal, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void
 ide_html_proposal_class_init (IdeHtmlProposalClass *klass)
@@ -59,18 +59,18 @@ ide_html_proposal_new (const gchar         *word,
   return self;
 }
 
-IdeSnippet *
+GtkSourceSnippet *
 ide_html_proposal_get_snippet (IdeHtmlProposal *self)
 {
-  g_autoptr(IdeSnippet) snippet = NULL;
-  g_autoptr(IdeSnippetChunk) chunk = NULL;
+  g_autoptr(GtkSourceSnippet) snippet = NULL;
+  g_autoptr(GtkSourceSnippetChunk) chunk = NULL;
 
   g_return_val_if_fail (IDE_IS_HTML_PROPOSAL (self), NULL);
 
-  snippet = ide_snippet_new (NULL, NULL);
-  chunk = ide_snippet_chunk_new ();
-  ide_snippet_chunk_set_spec (chunk, self->word);
-  ide_snippet_add_chunk (snippet, chunk);
+  snippet = gtk_source_snippet_new (NULL, NULL);
+  chunk = gtk_source_snippet_chunk_new ();
+  gtk_source_snippet_chunk_set_spec (chunk, self->word);
+  gtk_source_snippet_add_chunk (snippet, chunk);
 
   return g_steal_pointer (&snippet);
 }

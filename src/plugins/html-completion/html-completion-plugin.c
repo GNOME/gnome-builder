@@ -20,8 +20,8 @@
 
 #include "config.h"
 
-#include <libide-sourceview.h>
 #include <libpeas/peas.h>
+#include <gtksourceview/gtksource.h>
 
 #include "ide-html-completion-provider.h"
 
@@ -29,6 +29,6 @@ _IDE_EXTERN void
 _ide_html_completion_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_COMPLETION_PROVIDER,
+                                              GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
                                               IDE_TYPE_HTML_COMPLETION_PROVIDER);
 }
