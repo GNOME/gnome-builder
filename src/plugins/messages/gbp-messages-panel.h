@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <dazzle.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_MESSAGES_PANEL (gbp_messages_panel_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpMessagesPanel, gbp_messages_panel, GBP, MESSAGES_PANEL, DzlDockWidget)
+G_DECLARE_FINAL_TYPE (GbpMessagesPanel, gbp_messages_panel, GBP, MESSAGES_PANEL, IdePane)
 
 G_END_DECLS

@@ -21,14 +21,15 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
-#include <libide-editor.h>
 
-#include "gbp-messages-editor-addin.h"
+#include <libide-gui.h>
+
+#include "gbp-messages-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_messages_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_ADDIN,
-                                              GBP_TYPE_MESSAGES_EDITOR_ADDIN);
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_MESSAGES_WORKSPACE_ADDIN);
 }

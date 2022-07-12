@@ -7,7 +7,6 @@ plugins_generated_sources = []
 plugins_link_with = []
 
 plugins_deps = [
-  libdazzle_dep,
   libgtk_dep,
   libgtksource_dep,
   libjsonrpc_glib_dep,
@@ -26,7 +25,6 @@ plugins_deps = [
   libide_search_dep,
   libide_sourceview_dep,
   libide_terminal_dep,
-  libide_themes_dep,
   libide_threading_dep,
   libide_tree_dep,
   libide_vcs_dep,
@@ -38,7 +36,7 @@ endif
 
 subdir('auto-save')
 subdir('autotools')
-subdir('beautifier')
+subdir('bash-language-server')
 subdir('blueprint')
 subdir('buildconfig')
 subdir('buildstream')
@@ -53,22 +51,17 @@ subdir('cmake')
 subdir('codespell')
 subdir('code-index')
 subdir('codeui')
-subdir('color-picker')
-subdir('command-bar')
 subdir('comment-code')
 subdir('copyright')
 subdir('c-pack')
 subdir('create-project')
 subdir('ctags')
 subdir('debuggerui')
-subdir('devhelp')
-subdir('deviceui')
 subdir('deviced')
 subdir('doap')
 subdir('dspy')
-subdir('editor')
+subdir('editorui')
 subdir('editorconfig')
-subdir('emacs')
 subdir('eslint')
 subdir('flatpak')
 subdir('file-search')
@@ -78,23 +71,21 @@ subdir('gdb')
 subdir('gdiagnose')
 subdir('gettext')
 subdir('git')
-subdir('glade')
-subdir('gnome-code-assistance')
-subdir('go-langserv')
-subdir('gjs-symbols')
+subdir('gopls')
 subdir('gradle')
 subdir('greeter')
 subdir('grep')
-subdir('gvls')
-subdir('history')
+subdir('host')
 subdir('html-completion')
 subdir('html-preview')
 subdir('intelephense')
+subdir('jdtls')
 subdir('jedi-language-server')
 subdir('jhbuild')
-subdir('line-spacing')
 subdir('ls')
 subdir('make')
+subdir('make-templates')
+subdir('markdown-preview')
 subdir('maven')
 subdir('meson')
 subdir('meson-templates')
@@ -109,22 +100,20 @@ subdir('open-with-external')
 subdir('phpize')
 subdir('podman')
 subdir('project-tree')
-subdir('python-gi-imports-completion')
-subdir('python-pack')
+subdir('pygi')
 subdir('qemu')
 subdir('quick-highlight')
 subdir('recent')
 subdir('restore-cursor')
 subdir('retab')
-subdir('rls')
 subdir('rstcheck')
 subdir('rubocop')
 subdir('rust-analyzer')
 subdir('shellcmd')
 subdir('snippets')
 subdir('spellcheck')
+subdir('sphinx-preview')
 subdir('stylelint')
-subdir('sublime')
 subdir('support')
 subdir('symbol-tree')
 subdir('sysprof')
@@ -135,13 +124,13 @@ subdir('todo')
 subdir('ts-language-server')
 subdir('trim-spaces')
 subdir('update-manager')
-subdir('vagrant')
-subdir('vala-pack')
+subdir('valac')
 subdir('valgrind')
 subdir('vcsui')
 subdir('vim')
 subdir('vls')
 subdir('waf')
+subdir('web-browser')
 subdir('words')
 subdir('xml-pack')
 
@@ -157,6 +146,7 @@ status += [
   '',
   'Autotools ............................ : @0@'.format(get_option('plugin_autotools')),
   'Beautifier ........................... : @0@'.format(get_option('plugin_beautifier')),
+  'BuildStream .......................... : @0@'.format(get_option('plugin_buildstream')),
   'C Pack ............................... : @0@'.format(get_option('plugin_c_pack')),
   'Cargo ................................ : @0@'.format(get_option('plugin_cargo')),
   'Clang Format ......................... : @0@'.format(get_option('plugin_clang_format')),
@@ -166,7 +156,6 @@ status += [
   'Color Pickr .......................... : @0@'.format(get_option('plugin_color_picker')),
   'CTags ................................ : @0@'.format(get_option('plugin_ctags')),
   'Copyright ............................ : @0@'.format(get_option('plugin_copyright')),
-  'Devhelp .............................. : @0@'.format(get_option('plugin_devhelp')),
   'Deviced .............................. : @0@'.format(get_option('plugin_deviced')),
   'D-Bus Spy ............................ : @0@'.format(get_option('plugin_dspy')),
   'Editorconfig ......................... : @0@'.format(get_option('plugin_editorconfig')),
@@ -176,17 +165,17 @@ status += [
   'GDB .................................. : @0@'.format(get_option('plugin_gdb')),
   'Gettext .............................. : @0@'.format(get_option('plugin_gettext')),
   'Git .................................. : @0@'.format(get_option('plugin_git')),
-  'GJS Symbols .......................... : @0@'.format(get_option('plugin_gjs_symbols')),
-  'Glade ................................ : @0@'.format(get_option('plugin_glade')),
-  'GNOME Code Assistance ................ : @0@'.format(get_option('plugin_gnome_code_assistance')),
   'Gradle ............................... : @0@'.format(get_option('plugin_gradle')),
   'Grep ................................. : @0@'.format(get_option('plugin_grep')),
   'HTML Completion ...................... : @0@'.format(get_option('plugin_html_completion')),
   'HTML Preview ......................... : @0@'.format(get_option('plugin_html_preview')),
   'JHBuild .............................. : @0@'.format(get_option('plugin_jhbuild')),
   'Make ................................. : @0@'.format(get_option('plugin_make')),
+  'Make Templates ....................... : @0@'.format(get_option('plugin_make_templates')),
+  'Markdown Preview ..................... : @0@'.format(get_option('plugin_markdown_preview')),
   'Maven ................................ : @0@'.format(get_option('plugin_maven')),
   'Meson ................................ : @0@'.format(get_option('plugin_meson')),
+  'Meson Templates ...................... : @0@'.format(get_option('plugin_meson_templates')),
   'Modelines ............................ : @0@'.format(get_option('plugin_modelines')),
   'Mono ................................. : @0@'.format(get_option('plugin_mono')),
   'Newcomers ............................ : @0@'.format(get_option('plugin_newcomers')),
@@ -194,10 +183,12 @@ status += [
   'Npm .................................. : @0@'.format(get_option('plugin_npm')),
   'PHPize ............................... : @0@'.format(get_option('plugin_phpize')),
   'Podman ............................... : @0@'.format(get_option('plugin_podman')),
-  'Python Pack .......................... : @0@'.format(get_option('plugin_python_pack')),
+  'PyGObject Imports .................... : @0@'.format(get_option('plugin_pygi')),
   'Qemu ................................. : @0@'.format(get_option('plugin_qemu')),
   'Quick Highlight ...................... : @0@'.format(get_option('plugin_quick_highlight')),
   'Retab ................................ : @0@'.format(get_option('plugin_retab')),
+  'rstcheck ............................. : @0@'.format(get_option('plugin_rstcheck')),
+  'Sphinx Preview (reStructuredText) .... : @0@'.format(get_option('plugin_sphinx_preview')),
   'Rubocop .............................. : @0@'.format(get_option('plugin_rubocop')),
   'Spellcheck ........................... : @0@'.format(get_option('plugin_spellcheck')),
   'Stylelint ............................ : @0@'.format(get_option('plugin_stylelint')),
@@ -205,8 +196,7 @@ status += [
   'Sysroot .............................. : @0@'.format(get_option('plugin_sysroot')),
   'Todo ................................. : @0@'.format(get_option('plugin_todo')),
   'Update Manager ....................... : @0@'.format(get_option('plugin_update_manager')),
-  'Vala Pack ............................ : @0@'.format(get_option('plugin_vala')),
-  'Vagrant .............................. : @0@'.format(get_option('plugin_vagrant')),
+  'Vala Compiler ........................ : @0@'.format(get_option('plugin_valac')),
   'Valgrind ............................. : @0@'.format(get_option('plugin_valgrind')),
   'Waf .................................. : @0@'.format(get_option('plugin_waf')),
   'Word Completion ...................... : @0@'.format(get_option('plugin_words')),
@@ -214,17 +204,18 @@ status += [
   '',
   'Language Servers:',
   '',
+  'bash-language-server .......... (Bash) : @0@'.format(get_option('plugin_bash_language_server')),
   'blueprint ................ (Blueprint) : @0@'.format(get_option('plugin_blueprint')),
+  'clangd ............... (C, C++, Obj-C) : @0@ **'.format(get_option('plugin_clangd')),
   'gnome-builder-clang .. (C, C++, Obj-C) : @0@'.format(get_option('plugin_clang')),
-  'clangd ............... (C, C++, Obj-C) : @0@ (Not Suggested)'.format(get_option('plugin_clangd')),
-  'gpls ............................ (Go) : @0@'.format(get_option('plugin_go_langserv')),
-  'intelephense ....................(PHP) : @0@'.format(get_option('plugin_intelephense')),
+  'gopls ........................... (Go) : @0@'.format(get_option('plugin_gopls')),
+  'intelephense ................... (PHP) : @0@'.format(get_option('plugin_intelephense')),
+  'jdtls ......................... (Java) : @0@'.format(get_option('plugin_jdtls')),
   'jedi-language-server ........ (Python) : @0@'.format(get_option('plugin_jedi_language_server')),
-  'rls ........................... (Rust) : @0@ (Not Suggested)'.format(get_option('plugin_rls')),
-  'rstcheck ...........(reStructuredText) : @0@'.format(get_option('plugin_rstcheck')),
   'rust-analyzer ................. (Rust) : @0@'.format(get_option('plugin_rust_analyzer')),
   'ts-language-server ... (JS/TypeScript) : @0@'.format(get_option('plugin_ts_language_server')),
-  'gvls .......................... (Vala) : @0@'.format(get_option('plugin_gvls')),
   'vala-language-server .......... (Vala) : @0@'.format(get_option('plugin_vls')),
+  '',
+  ' ** Denotes plugins not recommended for distribution',
   '',
 ]

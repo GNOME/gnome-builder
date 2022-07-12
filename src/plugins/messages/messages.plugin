@@ -2,9 +2,9 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2018 Christian Hergert
-Depends=editor;
 Description=Show internal warning logs
 Embedded=_gbp_messages_register_types
 Hidden=true
 Module=messages
 Name=Internal Logging
+X-Workspace-Kind=primary;editor;
