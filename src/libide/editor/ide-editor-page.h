@@ -1,6 +1,6 @@
 /* ide-editor-page.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2017-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,59 +24,52 @@
 # error "Only <libide-editor.h> can be included directly."
 #endif
 
-#include <libide-code.h>
 #include <libide-core.h>
+#include <libide-code.h>
 #include <libide-gui.h>
 #include <libide-sourceview.h>
-
-#include "ide-editor-search.h"
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_PAGE (ide_editor_page_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeEditorPage, ide_editor_page, IDE, EDITOR_PAGE, IdePage)
 
-IDE_AVAILABLE_IN_3_32
-GFile             *ide_editor_page_get_file                    (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-IdeBuffer         *ide_editor_page_get_buffer                  (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-IdeSourceView     *ide_editor_page_get_view                    (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-IdeEditorSearch   *ide_editor_page_get_search                  (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-const gchar       *ide_editor_page_get_language_id             (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_scroll_to_line              (IdeEditorPage     *self,
-                                                                guint              line);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_scroll_to_line_offset       (IdeEditorPage     *self,
-                                                                guint              line,
-                                                                guint              line_offset);
-IDE_AVAILABLE_IN_3_32
-gboolean           ide_editor_page_get_auto_hide_map           (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_set_auto_hide_map           (IdeEditorPage     *self,
-                                                                gboolean           auto_hide_map);
-IDE_AVAILABLE_IN_3_32
-gboolean           ide_editor_page_get_show_map                (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_set_show_map                (IdeEditorPage     *self,
-                                                                gboolean           show_map);
-IDE_AVAILABLE_IN_3_32
-GtkSourceLanguage *ide_editor_page_get_language                (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_set_language                (IdeEditorPage     *self,
-                                                                GtkSourceLanguage *language);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_move_next_error             (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_move_previous_error         (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_move_next_search_result     (IdeEditorPage     *self);
-IDE_AVAILABLE_IN_3_32
-void               ide_editor_page_move_previous_search_result (IdeEditorPage     *self);
+IDE_AVAILABLE_IN_ALL
+GtkWidget     *ide_editor_page_new                       (IdeBuffer            *buffer);
+IDE_AVAILABLE_IN_ALL
+IdeBuffer     *ide_editor_page_get_buffer                (IdeEditorPage        *self);
+IDE_AVAILABLE_IN_ALL
+IdeSourceView *ide_editor_page_get_view                  (IdeEditorPage        *self);
+IDE_AVAILABLE_IN_ALL
+GFile         *ide_editor_page_get_file                  (IdeEditorPage        *self);
+IDE_AVAILABLE_IN_ALL
+IdeGutter     *ide_editor_page_get_gutter                (IdeEditorPage        *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_editor_page_set_gutter                (IdeEditorPage        *self,
+                                                          IdeGutter            *gutter);
+IDE_AVAILABLE_IN_ALL
+void           ide_editor_page_discard_changes_async     (IdeEditorPage        *self,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_editor_page_discard_changes_finish    (IdeEditorPage        *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
+IDE_AVAILABLE_IN_ALL
+void           ide_editor_page_save_async                (IdeEditorPage        *self,
+                                                          GCancellable         *cancellable,
+                                                          GAsyncReadyCallback   callback,
+                                                          gpointer              user_data);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_editor_page_save_finish               (IdeEditorPage        *self,
+                                                          GAsyncResult         *result,
+                                                          GError              **error);
+IDE_AVAILABLE_IN_ALL
+void           ide_editor_page_scroll_to_visual_position (IdeEditorPage        *self,
+                                                          guint                 line,
+                                                          guint                 column);
 
 G_END_DECLS

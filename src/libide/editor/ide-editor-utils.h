@@ -1,6 +1,6 @@
-/* ide-editor-utilities.h
+/* ide-editor-utils.h
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2020 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,16 +24,18 @@
 # error "Only <libide-editor.h> can be included directly."
 #endif
 
+#include <gtksourceview/gtksource.h>
+
 #include <libide-core.h>
-#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_UTILITIES (ide_editor_utilities_get_type())
-
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeEditorUtilities, ide_editor_utilities, IDE, EDITOR_UTILITIES, IdePanel)
-
-/* Use GtkContainer api to add your DzlDockWidget */
+void                     ide_editor_file_chooser_add_encodings     (GtkFileChooser       *chooser);
+void                     ide_editor_file_chooser_add_line_endings  (GtkFileChooser       *chooser,
+                                                                    GtkSourceNewlineType  selected);
+const GtkSourceEncoding *ide_editor_file_chooser_get_encoding      (GtkFileChooser       *chooser);
+GtkSourceNewlineType     ide_editor_file_chooser_get_line_ending   (GtkFileChooser       *chooser);
+GMenuModel              *ide_editor_encoding_menu_new              (const char           *action_name);
+GMenuModel              *ide_editor_syntax_menu_new                (const char           *action_name);
 
 G_END_DECLS

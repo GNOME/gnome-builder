@@ -1,0 +1,12 @@
+textview.GtkSourceMap {
+  font-family: BuilderBlocks;
+  font-size: 1.75pt;
+  line-height: 5px;
+  color: alpha(currentColor, 0.75);
+}
+textview.GtkSourceMap:dir(ltr) {
+  border-left: 1px solid @borders;
+}
+textview.GtkSourceMap:dir(rtl) {
+  border-right: 1px solid @borders;
+}

@@ -1,6 +1,6 @@
 /* ide-editor-page-addin.h
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2022 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,7 +24,6 @@
 # error "Only <libide-editor.h> can be included directly."
 #endif
 
-
 #include <libide-core.h>
 #include <libide-gui.h>
 
@@ -34,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_PAGE_ADDIN (ide_editor_page_addin_get_type ())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeEditorPageAddin, ide_editor_page_addin, IDE, EDITOR_PAGE_ADDIN, GObject)
 
 struct _IdeEditorPageAddinInterface
@@ -51,19 +50,19 @@ struct _IdeEditorPageAddinInterface
                               IdeFrame           *frame);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_editor_page_addin_load                (IdeEditorPageAddin *self,
                                                                IdeEditorPage      *page);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_editor_page_addin_unload              (IdeEditorPageAddin *self,
                                                                IdeEditorPage      *page);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_editor_page_addin_frame_set           (IdeEditorPageAddin *self,
                                                                IdeFrame           *frame);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void                ide_editor_page_addin_language_changed    (IdeEditorPageAddin *self,
                                                                const gchar        *language_id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeEditorPageAddin *ide_editor_page_addin_find_by_module_name (IdeEditorPage      *page,
                                                                const gchar        *module_name);
 

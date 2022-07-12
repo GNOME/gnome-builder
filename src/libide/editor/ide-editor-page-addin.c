@@ -1,6 +1,6 @@
 /* ide-editor-page-addin.c
  *
- * Copyright 2015-2019 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2022 Christian Hergert <christian@hergert.me>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,8 +22,10 @@
 
 #include "config.h"
 
-#include "ide-editor-private.h"
+#include <libide-plugins.h>
+
 #include "ide-editor-page-addin.h"
+#include "ide-editor-page-private.h"
 
 G_DEFINE_INTERFACE (IdeEditorPageAddin, ide_editor_page_addin, G_TYPE_OBJECT)
 
@@ -88,8 +90,6 @@ ide_editor_page_addin_frame_set (IdeEditorPageAddin *self,
  * #IdeEditorPageAddinInterface, then %NULL is returned.
  *
  * Returns: (transfer none) (nullable): An #IdeEditorPageAddin or %NULL
- *
- * Since: 3.32
  */
 IdeEditorPageAddin *
 ide_editor_page_addin_find_by_module_name (IdeEditorPage *page,

@@ -1,6 +1,6 @@
-/* ide-editor-print-operation.h
+/* ide-editor-init.c
  *
- * Copyright 2015 Paolo Borelli <pborelli@gnome.org>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,16 +18,17 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#pragma once
+#define G_LOG_DOMAIN "ide-editor-init"
+
+#include "config.h"
 
 #include "ide-editor-page.h"
+#include "ide-editor-private.h"
+#include "ide-editor-workspace.h"
 
-G_BEGIN_DECLS
-
-#define IDE_TYPE_EDITOR_PRINT_OPERATION (ide_editor_print_operation_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeEditorPrintOperation, ide_editor_print_operation, IDE, EDITOR_PRINT_OPERATION, GtkPrintOperation)
-
-IdeEditorPrintOperation *ide_editor_print_operation_new (IdeSourceView *view);
-
-G_END_DECLS
+void
+_ide_editor_init (void)
+{
+  g_type_ensure (IDE_TYPE_EDITOR_PAGE);
+  g_type_ensure (IDE_TYPE_EDITOR_WORKSPACE);
+}

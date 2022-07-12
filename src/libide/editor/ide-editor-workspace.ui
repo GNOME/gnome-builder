@@ -2,67 +2,80 @@
 <interface>
   <template class="IdeEditorWorkspace" parent="IdeWorkspace">
     <child type="titlebar">
-      <object class="IdeHeaderBar">
-        <property name="show-close-button">true</property>
-        <property name="show-fullscreen-button">false</property>
+      <object class="IdeHeaderBar" id="header_bar">
         <property name="menu-id">ide-editor-workspace-menu</property>
-        <property name="visible">true</property>
-        <child type="primary">
-          <object class="IdeSurfacesButton" id="surface_menu_button">
-            <property name="focus-on-click">false</property>
-            <property name="menu-id">ide-editor-workspace-surfaces-menu</property>
-            <property name="show-accels">true</property>
-            <property name="show-arrow">true</property>
-            <property name="show-icons">true</property>
-            <!-- disable transitions since they'll cause jitter with the
-                 whole surface changing below it. -->
-            <property name="transitions-enabled">false</property>
-            <property name="has-tooltip">true</property>
-            <property name="tooltip-text" translatable="yes">Switch surface</property>
+        <child type="left">
+          <object class="GtkMenuButton" id="add_button">
+            <property name="icon-name">list-add-symbolic</property>
+            <property name="always-show-arrow">true</property>
           </object>
         </child>
-        <child type="secondary">
-          <object class="DzlPriorityBox">
-            <property name="visible">true</property>
+        <child type="left">
+          <object class="PanelDockSwitcher">
+            <property name="dock">dock</property>
+            <property name="position">start</property>
+          </object>
+        </child>
+        <child type="title">
+          <object class="AdwWindowTitle" id="project_title">
+            <property name="title" translatable="yes">Builder</property>
+          </object>
+        </child>
+        <child type="right">
+          <object class="IdeNotificationsButton" id="notifications_button"/>
+        </child>
+        <child type="right">
+          <object class="GtkButton" id="search_button">
+            <property name="icon-name">edit-find-symbolic</property>
+          </object>
+        </child>
+        <child type="right">
+          <object class="PanelDockSwitcher">
+            <property name="dock">dock</property>
+            <property name="position">end</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="PanelDock" id="dock">
+        <property name="start-width">300</property>
+        <property name="reveal-start">true</property>
+        <property name="vexpand">true</property>
+        <child type="center">
+          <object class="IdeGrid" id="grid">
+          </object>
+        </child>
+        <child type="start">
+          <object class="PanelPaned" id="edge_start">
+            <property name="orientation">vertical</property>
+          </object>
+        </child>
+        <child type="end">
+          <object class="PanelPaned" id="edge_end">
+            <property name="orientation">vertical</property>
             <child>
-              <object class="IdeSearchButton" id="search_button">
-                <property name="visible">true</property>
-                <child internal-child="entry">
-                  <object class="DzlSuggestionEntry">
-                    <property name="max-width-chars">20</property>
-                  </object>
-                </child>
+              <object class="PanelFrame">
               </object>
-              <packing>
-                <property name="pack-type">end</property>
-                <property name="priority">-200</property>
-              </packing>
             </child>
-            <child>
-              <object class="GtkRevealer">
-                <property name="reveal-child">false</property>
-                <property name="transition-type">slide-left</property>
-                <property name="visible">true</property>
-                <child>
-                  <object class="IdeNotificationsButton" id="notifications_button">
-                    <property name="show-theatric">false</property>
-                    <property name="visible">true</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="pack-type">end</property>
-                <property name="priority">-300</property>
-              </packing>
-            </child>
+          </object>
+        </child>
+        <child type="bottom">
+          <object class="PanelPaned" id="edge_bottom">
+            <property name="orientation">horizontal</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="statusbar">
+      <object class="PanelStatusbar">
+        <child type="suffix">
+          <object class="PanelDockSwitcher">
+            <property name="dock">dock</property>
+            <property name="position">bottom</property>
           </object>
         </child>
       </object>
     </child>
   </template>
-  <object class="DzlShortcutTooltip" id="search_tooltip">
-    <property name="title" translatable="yes">Search your project</property>
-    <property name="command-id">org.gnome.builder.workspace.global-search</property>
-    <property name="widget">search_button</property>
-  </object>
 </interface>

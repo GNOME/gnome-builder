@@ -1,6 +1,6 @@
 /* ide-editor-page-settings.c
  *
- * Copyright 2017-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,220 +22,261 @@
 
 #include "config.h"
 
-#include "ide-editor-private.h"
+#include "ide-editor-page-private.h"
 
-#include <gtksourceview/gtksource.h>
-
-static gboolean
-get_smart_home_end (GValue   *value,
-                    GVariant *variant,
-                    gpointer  user_data)
-{
-  if (g_variant_get_boolean (variant))
-    g_value_set_enum (value, GTK_SOURCE_SMART_HOME_END_BEFORE);
-  else
-    g_value_set_enum (value, GTK_SOURCE_SMART_HOME_END_DISABLED);
-  return TRUE;
-}
+static GSettings *editor_settings;
 
 static gboolean
-get_wrap_mode (GValue   *value,
-               GVariant *variant,
-               gpointer  user_data)
+indent_style_to_insert_spaces (GBinding     *binding,
+                               const GValue *from,
+                               GValue       *to,
+                               gpointer      user_data)
 {
-  const gchar *wrap_mode = g_variant_get_string (variant, NULL);
+  g_assert (G_IS_BINDING (binding));
+  g_assert (G_VALUE_HOLDS_ENUM (from));
+  g_assert (G_VALUE_HOLDS_BOOLEAN (to));
+  g_assert (user_data == NULL);
 
-  if (!g_strcmp0 (wrap_mode, "always"))
-    g_value_set_enum (value, GTK_WRAP_WORD_CHAR);
-  else if (!g_strcmp0 (wrap_mode, "whitespace"))
-    g_value_set_enum (value, GTK_WRAP_WORD);
+  if (g_value_get_enum (from) == IDE_INDENT_STYLE_TABS)
+    g_value_set_boolean (to, FALSE);
   else
-    g_value_set_enum (value, GTK_WRAP_NONE);
+    g_value_set_boolean (to, TRUE);
+
   return TRUE;
-}
-
-static void
-on_keybindings_changed (IdeEditorPage *self,
-                        const gchar   *key,
-                        GSettings     *settings)
-{
-  IdeSourceView *source_view;
-
-  g_assert (IDE_IS_EDITOR_PAGE (self));
-  g_assert (g_strcmp0 (key, "keybindings") == 0);
-  g_assert (G_IS_SETTINGS (settings));
-
-  source_view = ide_editor_page_get_view (self);
-
-  g_signal_emit_by_name (source_view,
-                         "set-mode",
-                         NULL,
-                         IDE_SOURCE_VIEW_MODE_TYPE_PERMANENT);
-}
-
-static void
-on_draw_spaces_changed (IdeEditorPage *self,
-                        const gchar   *key,
-                        GSettings     *settings)
-{
-  GtkSourceView *source_view;
-  GtkSourceSpaceDrawer *drawer;
-  guint flags;
-  GtkSourceSpaceLocationFlags location_flags = GTK_SOURCE_SPACE_LOCATION_NONE;
-  GtkSourceSpaceTypeFlags type_flags = GTK_SOURCE_SPACE_TYPE_NONE;
-
-  g_assert (IDE_IS_EDITOR_PAGE (self));
-  g_assert (g_strcmp0 (key, "draw-spaces") == 0);
-  g_assert (G_IS_SETTINGS (settings));
-
-  source_view = GTK_SOURCE_VIEW (ide_editor_page_get_view (self));
-  drawer = gtk_source_view_get_space_drawer (source_view);
-  flags = g_settings_get_flags (settings, "draw-spaces");
-
-  if (flags == 0)
-    {
-      gtk_source_space_drawer_set_enable_matrix (drawer, FALSE);
-      return;
-    }
-
-  /* Reset the matrix before setting it */
-  gtk_source_space_drawer_set_types_for_locations (drawer, GTK_SOURCE_SPACE_LOCATION_ALL, GTK_SOURCE_SPACE_TYPE_NONE);
-
-  if (flags & 1)
-    type_flags |= GTK_SOURCE_SPACE_TYPE_SPACE;
-
-  if (flags & 2)
-    type_flags |= GTK_SOURCE_SPACE_TYPE_TAB;
-
-  if (flags & 4)
-    {
-      gtk_source_space_drawer_set_types_for_locations (drawer, GTK_SOURCE_SPACE_LOCATION_ALL, GTK_SOURCE_SPACE_TYPE_NEWLINE);
-      type_flags |= GTK_SOURCE_SPACE_TYPE_NEWLINE;
-    }
-
-  if (flags & 8)
-    type_flags |= GTK_SOURCE_SPACE_TYPE_NBSP;
-
-  if (flags & 16)
-    location_flags |= GTK_SOURCE_SPACE_LOCATION_LEADING;
-
-  if (flags & 32)
-    location_flags |= GTK_SOURCE_SPACE_LOCATION_INSIDE_TEXT;
-
-  if (flags & 64)
-    location_flags |= GTK_SOURCE_SPACE_LOCATION_TRAILING;
-
-  if (type_flags > 0 && location_flags == 0)
-    location_flags |= GTK_SOURCE_SPACE_LOCATION_ALL;
-
-  gtk_source_space_drawer_set_enable_matrix (drawer, TRUE);
-  gtk_source_space_drawer_set_types_for_locations (drawer, location_flags, type_flags);
 }
 
 void
-_ide_editor_page_init_settings (IdeEditorPage *self)
+_ide_editor_page_settings_reload (IdeEditorPage *self)
 {
-  IdeSourceView *source_view;
-  IdeBuffer *buffer;
+  IdeFileSettings *file_settings;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (IDE_IS_BUFFER (self->buffer));
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self->view));
+  g_return_if_fail (IDE_IS_BINDING_GROUP (self->buffer_file_settings));
+
+  file_settings = ide_buffer_get_file_settings (self->buffer);
+
+  ide_binding_group_set_source (self->buffer_file_settings, file_settings);
+  ide_binding_group_set_source (self->view_file_settings, file_settings);
+
+  IDE_EXIT;
+}
+
+static gboolean
+show_map_to_vscrollbar_policy (GValue   *value,
+                               GVariant *variant,
+                               gpointer  user_data)
+{
+  if (g_variant_get_boolean (variant))
+    g_value_set_enum (value, GTK_POLICY_EXTERNAL);
+  else
+    g_value_set_enum (value, GTK_POLICY_AUTOMATIC);
+
+  return TRUE;
+}
+
+static gboolean
+grid_lines_to_background_pattern (GValue   *value,
+                                  GVariant *variant,
+                                  gpointer  user_data)
+{
+  if (g_variant_get_boolean (variant))
+    g_value_set_enum (value, GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID);
+  else
+    g_value_set_enum (value, GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+
+  return TRUE;
+}
+
+static gboolean
+font_name_to_font_desc (GValue   *value,
+                        GVariant *variant,
+                        gpointer  user_data)
+{
+  const char *str;
+
+  if ((str = g_variant_get_string (variant, NULL)))
+    g_value_take_boxed (value, pango_font_description_from_string (str));
+  else
+    g_value_set_boxed (value, NULL);
+
+  return TRUE;
+}
+
+static void
+notify_interactive_completion_cb (IdeEditorPage *self,
+                                  const char    *key,
+                                  GSettings     *settings)
+{
+  GtkSourceCompletion *completion;
 
   g_assert (IDE_IS_EDITOR_PAGE (self));
-  g_assert (self->editor_settings == NULL);
-  g_assert (self->insight_settings == NULL);
+  g_assert (G_IS_SETTINGS (settings));
 
-  source_view = ide_editor_page_get_view (self);
-  buffer = ide_editor_page_get_buffer (self);
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->view));
 
-  self->editor_settings = g_settings_new ("org.gnome.builder.editor");
+  if (g_settings_get_boolean (settings, "interactive-completion"))
+    {
+      if (self->completion_blocked)
+        {
+          self->completion_blocked = FALSE;
+          gtk_source_completion_unblock_interactive (completion);
+        }
+    }
+  else
+    {
+      if (!self->completion_blocked)
+        {
+          self->completion_blocked = TRUE;
+          gtk_source_completion_block_interactive (completion);
+        }
+    }
+}
 
-  g_settings_bind (self->editor_settings, "highlight-current-line",
-                   source_view, "highlight-current-line",
+void
+_ide_editor_page_settings_init (IdeEditorPage *self)
+{
+  GtkSourceCompletion *completion;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self->view));
+  g_return_if_fail (IDE_IS_BUFFER (self->buffer));
+  g_return_if_fail (self->buffer_file_settings == NULL);
+  g_return_if_fail (self->view_file_settings == NULL);
+
+  if (editor_settings == NULL)
+    editor_settings = g_settings_new ("org.gnome.builder.editor");
+
+  g_object_bind_property (IDE_APPLICATION_DEFAULT, "style-scheme",
+                          self->buffer, "style-scheme-name",
+                          G_BINDING_SYNC_CREATE);
+
+  self->buffer_file_settings = ide_binding_group_new ();
+  ide_binding_group_bind (self->buffer_file_settings,
+                          "insert-trailing-newline", self->buffer, "implicit-trailing-newline",
+                          G_BINDING_SYNC_CREATE);
+
+  self->view_file_settings = ide_binding_group_new ();
+  ide_binding_group_bind (self->view_file_settings,
+                          "auto-indent", self->view, "auto-indent",
+                          G_BINDING_SYNC_CREATE);
+  ide_binding_group_bind_full (self->view_file_settings,
+                               "indent-style", self->view, "insert-spaces-instead-of-tabs",
+                               G_BINDING_SYNC_CREATE,
+                               indent_style_to_insert_spaces, NULL, NULL, NULL);
+  ide_binding_group_bind (self->view_file_settings,
+                          "indent-width", self->view, "indent-width",
+                          G_BINDING_SYNC_CREATE);
+  ide_binding_group_bind (self->view_file_settings,
+                          "right-margin-position", self->view, "right-margin-position",
+                          G_BINDING_SYNC_CREATE);
+  ide_binding_group_bind (self->view_file_settings,
+                          "show-right-margin", self->view, "show-right-margin",
+                          G_BINDING_SYNC_CREATE);
+  ide_binding_group_bind (self->view_file_settings,
+                          "tab-width", self->view, "tab-width",
+                          G_BINDING_SYNC_CREATE);
+
+  g_settings_bind (editor_settings, "show-map",
+                   self->map_revealer, "reveal-child",
                    G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "highlight-matching-brackets",
-                   buffer, "highlight-matching-brackets",
+  g_settings_bind (editor_settings, "highlight-current-line",
+                   self->view, "highlight-current-line",
                    G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "show-line-changes",
-                   source_view, "show-line-changes",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "show-line-diagnostics",
-                   source_view, "show-line-diagnostics",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "show-line-numbers",
-                   source_view, "show-line-numbers",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "show-relative-line-numbers",
-                   source_view, "show-relative-line-numbers",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "smart-backspace",
-                   source_view, "smart-backspace",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind_with_mapping (self->editor_settings, "smart-home-end",
-                                source_view, "smart-home-end",
+  g_settings_bind_with_mapping (editor_settings, "show-map",
+                                self->scroller, "vscrollbar-policy",
                                 G_SETTINGS_BIND_GET,
-                                get_smart_home_end, NULL, NULL, NULL);
-
-  g_settings_bind (self->editor_settings, "style-scheme-name",
-                   buffer, "style-scheme-name",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "font-name",
-                   source_view, "font-name",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "overscroll",
-                   source_view, "overscroll",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "scroll-offset",
-                   source_view, "scroll-offset",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind (self->editor_settings, "show-grid-lines",
-                   source_view, "show-grid-lines",
-                   G_SETTINGS_BIND_GET);
-
-  g_settings_bind_with_mapping (self->editor_settings, "wrap-text",
-                                source_view, "wrap-mode",
+                                show_map_to_vscrollbar_policy,
+                                NULL, NULL, NULL);
+  g_settings_bind_with_mapping (editor_settings, "show-grid-lines",
+                                self->view, "background-pattern",
                                 G_SETTINGS_BIND_GET,
-                                get_wrap_mode, NULL, NULL, NULL);
-
-  g_settings_bind (self->editor_settings, "completion-n-rows",
-                   source_view, "completion-n-rows",
+                                grid_lines_to_background_pattern,
+                                NULL, NULL, NULL);
+  g_settings_bind (editor_settings, "enable-snippets",
+                   self->view, "enable-snippets",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "line-height",
+                   self->view, "line-height",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (self->editor_settings, "interactive-completion",
-                   source_view, "interactive-completion",
+  g_settings_bind_with_mapping (editor_settings, "font-name",
+                                self->view, "font-desc",
+                                G_SETTINGS_BIND_GET,
+                                font_name_to_font_desc,
+                                NULL, NULL, NULL);
+
+  completion = gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->view));
+  g_settings_bind (editor_settings, "select-first-completion",
+                   completion, "select-on-show",
                    G_SETTINGS_BIND_GET);
 
-  g_settings_bind (self->editor_settings, "show-map",
-                   self, "show-map",
-                   G_SETTINGS_BIND_GET);
+#if 0
+  ide_binding_group_bind (self->view_file_settings,
+                          "insert-matching-brace", self->view, "insert-matching-brace",
+                          G_BINDING_SYNC_CREATE);
+  ide_binding_group_bind (self->view_file_settings,
+                          "overwrite-braces", self->view, "overwrite-braces",
+                          G_BINDING_SYNC_CREATE);
+#endif
 
-  g_settings_bind (self->editor_settings, "auto-hide-map",
-                   self, "auto-hide-map",
-                   G_SETTINGS_BIND_GET);
-
-  g_signal_connect_object (self->editor_settings,
-                           "changed::keybindings",
-                           G_CALLBACK (on_keybindings_changed),
+  g_signal_connect_object (editor_settings,
+                           "changed::interactive-completion",
+                           G_CALLBACK (notify_interactive_completion_cb),
                            self,
                            G_CONNECT_SWAPPED);
+  notify_interactive_completion_cb (self, NULL, editor_settings);
 
-  on_keybindings_changed (self, "keybindings", self->editor_settings);
+  _ide_editor_page_settings_reload (self);
 
-  g_signal_connect_object (self->editor_settings,
-                           "changed::draw-spaces",
-                           G_CALLBACK (on_draw_spaces_changed),
-                           self,
-                           G_CONNECT_SWAPPED);
+  IDE_EXIT;
+}
 
-  on_draw_spaces_changed (self, "draw-spaces", self->editor_settings);
+void
+_ide_editor_page_settings_connect_gutter (IdeEditorPage *self,
+                                          IdeGutter     *gutter)
+{
+  IDE_ENTRY;
 
-  self->insight_settings = g_settings_new ("org.gnome.builder.code-insight");
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (IDE_IS_GUTTER (gutter));
+
+  g_settings_bind (editor_settings, "show-line-numbers",
+                   gutter, "show-line-numbers",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "show-line-changes",
+                   gutter, "show-line-changes",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "show-relative-line-numbers",
+                   gutter, "show-relative-line-numbers",
+                   G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "show-line-diagnostics",
+                   gutter, "show-line-diagnostics",
+                   G_SETTINGS_BIND_GET);
+
+  IDE_EXIT;
+}
+
+void
+_ide_editor_page_settings_disconnect_gutter (IdeEditorPage *self,
+                                             IdeGutter     *gutter)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+  g_return_if_fail (IDE_IS_GUTTER (gutter));
+
+  g_settings_unbind (gutter, "show-line-changes");
+  g_settings_unbind (gutter, "show-line-numbers");
+  g_settings_unbind (gutter, "show-relative-line-numbers");
+  g_settings_unbind (gutter, "show-line-diagnostics");
+
+  IDE_EXIT;
 }

@@ -1,6 +1,6 @@
-/* ide-editor-settings-dialog.h
+/* ide-editor.h
  *
- * Copyright 2018 Christian Hergert <unknown@domain.org>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,19 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
-#include <libide-editor.h>
+#include <libide-core.h>
+#include <libide-code.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_EDITOR_SETTINGS_DIALOG (ide_editor_settings_dialog_get_type())
-
-G_DECLARE_FINAL_TYPE (IdeEditorSettingsDialog, ide_editor_settings_dialog, IDE, EDITOR_SETTINGS_DIALOG, GtkDialog)
-
-IdeEditorSettingsDialog *ide_editor_settings_dialog_new (IdeEditorPage *page);
+IDE_AVAILABLE_IN_ALL
+void ide_editor_focus_location (IdeWorkspace     *workspace,
+                                IdePanelPosition *position,
+                                IdeLocation      *location);
+IDE_AVAILABLE_IN_ALL
+void ide_editor_focus_buffer   (IdeWorkspace     *workspace,
+                                IdePanelPosition *position,
+                                IdeBuffer        *buffer);
 
 G_END_DECLS

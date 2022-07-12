@@ -24,16 +24,16 @@
 # error "Only <libide-editor.h> can be included directly."
 #endif
 
-#include <libide-core.h>
+#include <libide-gui.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_EDITOR_WORKSPACE (ide_editor_workspace_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeEditorWorkspace, ide_editor_workspace, IDE, EDITOR_WORKSPACE, IdeWorkspace)
 
-IDE_AVAILABLE_IN_3_32
-IdeEditorWorkspace *ide_editor_workspace_new (IdeApplication *app);
+IDE_AVAILABLE_IN_ALL
+IdeEditorWorkspace *ide_editor_workspace_new (IdeApplication *application);
 
 G_END_DECLS

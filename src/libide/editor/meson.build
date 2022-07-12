@@ -11,21 +11,16 @@ libide_editor_generated_headers = []
 #
 
 libide_editor_public_headers = [
-  'ide-editor-addin.h',
+  'ide-editor.h',
   'ide-editor-page.h',
   'ide-editor-page-addin.h',
-  'ide-editor-search.h',
-  'ide-editor-sidebar.h',
-  'ide-editor-surface.h',
-  'ide-editor-utilities.h',
+  'ide-editor-utils.h',
   'ide-editor-workspace.h',
   'libide-editor.h',
 ]
 
 libide_editor_private_headers = [
-  'ide-editor-print-operation.h',
-  'ide-editor-search-bar.h',
-  'ide-editor-settings-dialog.h',
+  'ide-editor-page-private.h',
 ]
 
 install_headers(libide_editor_public_headers, subdir: libide_editor_header_subdir)
@@ -35,27 +30,18 @@ install_headers(libide_editor_public_headers, subdir: libide_editor_header_subdi
 #
 
 libide_editor_public_sources = [
-  'ide-editor-addin.c',
+  'ide-editor.c',
   'ide-editor-page.c',
   'ide-editor-page-addin.c',
-  'ide-editor-search.c',
-  'ide-editor-sidebar.c',
-  'ide-editor-surface.c',
-  'ide-editor-utilities.c',
+  'ide-editor-utils.c',
   'ide-editor-workspace.c',
 ]
 
 
 libide_editor_private_sources = [
+  'ide-editor-init.c',
   'ide-editor-page-actions.c',
   'ide-editor-page-settings.c',
-  'ide-editor-page-shortcuts.c',
-  'ide-editor-print-operation.c',
-  'ide-editor-search-bar.c',
-  'ide-editor-search-bar-shortcuts.c',
-  'ide-editor-settings-dialog.c',
-  'ide-editor-surface-actions.c',
-  'ide-editor-surface-shortcuts.c',
 ]
 
 libide_editor_sources += libide_editor_public_sources
@@ -80,11 +66,11 @@ libide_editor_sources += libide_editor_resources
 libide_editor_deps = [
   libgio_dep,
   libgtk_dep,
-  libdazzle_dep,
   libpeas_dep,
 
   libide_core_dep,
   libide_io_dep,
+  libide_plugins_dep,
   libide_projects_dep,
   libide_search_dep,
   libide_sourceview_dep,
@@ -93,7 +79,6 @@ libide_editor_deps = [
 ]
 
 libide_editor_internal_deps = [
-  libpangoft2_dep,
 ]
 
 #
