@@ -160,7 +160,7 @@ gbp_git_vcs_switch_branch_async (IdeVcs              *vcs,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_vcs_switch_branch_async);
 
-  branch_id = ide_vcs_branch_get_id (branch);
+  branch_id = ide_vcs_branch_dup_id (branch);
 
   ipc_git_repository_call_switch_branch (self->repository,
                                          branch_id,
@@ -233,8 +233,8 @@ gbp_git_vcs_push_branch_async (IdeVcs              *vcs,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_git_vcs_push_branch_async);
 
-  branch_id = ide_vcs_branch_get_id (branch);
-  name = ide_vcs_branch_get_name (branch);
+  branch_id = ide_vcs_branch_dup_id (branch);
+  name = ide_vcs_branch_dup_name (branch);
 
   ref_specs = g_ptr_array_new_with_free_func (g_free);
   g_ptr_array_add (ref_specs, g_strdup_printf ("%s:%s", branch_id, branch_id));
@@ -530,9 +530,16 @@ gbp_git_vcs_list_status_finish (IdeVcs        *vcs,
   return ide_task_propagate_object (IDE_TASK (result), error);
 }
 
+static char *
+gbp_git_vcs_get_display_name (IdeVcs *vcs)
+{
+  return g_strdup (_("Git"));
+}
+
 static void
 vcs_iface_init (IdeVcsInterface *iface)
 {
+  iface->get_display_name = gbp_git_vcs_get_display_name;
   iface->get_workdir = gbp_git_vcs_get_workdir;
   iface->is_ignored = gbp_git_vcs_is_ignored;
   iface->get_config = gbp_git_vcs_get_config;

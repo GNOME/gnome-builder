@@ -298,7 +298,7 @@ git_change_monitor_iface_init (IpcGitChangeMonitorIface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IpcGitChangeMonitorImpl, ipc_git_change_monitor_impl, IPC_TYPE_GIT_CHANGE_MONITOR_SKELETON,
-                         G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_CHANGE_MONITOR, git_change_monitor_iface_init))
+                               G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_CHANGE_MONITOR, git_change_monitor_iface_init))
 
 static void
 ipc_git_change_monitor_impl_finalize (GObject *object)

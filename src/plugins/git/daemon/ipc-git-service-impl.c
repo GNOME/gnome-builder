@@ -27,6 +27,7 @@
 #include "ipc-git-remote-callbacks.h"
 #include "ipc-git-repository-impl.h"
 #include "ipc-git-service-impl.h"
+#include "ipc-git-types.h"
 #include "ipc-git-util.h"
 
 struct _IpcGitServiceImpl
@@ -321,6 +322,163 @@ ipc_git_service_impl_handle_load_config (IpcGitService         *service,
 }
 
 static void
+rm_rf (const char *dir)
+{
+  g_spawn_sync (NULL,
+                (char **)(const char * const[]) { "rm", "-rf", dir, NULL },
+                NULL,
+                G_SPAWN_SEARCH_PATH,
+                NULL, NULL,
+                NULL, NULL, NULL, NULL);
+}
+
+typedef GgitRemoteHead **RemoteHeadList;
+
+static void
+remote_head_list_free (RemoteHeadList list)
+{
+  for (guint i = 0; list[i]; i++)
+    ggit_remote_head_unref (list[i]);
+  g_free (list);
+}
+
+G_DEFINE_AUTO_CLEANUP_FREE_FUNC (RemoteHeadList, remote_head_list_free, NULL)
+
+typedef struct
+{
+  GgitRemoteCallbacks *callbacks;
+  char                *uri;
+  IpcGitRefKind        kind;
+} ListRemoteRefsByKind;
+
+static void
+list_remote_refs_by_kind_free (gpointer data)
+{
+  ListRemoteRefsByKind *state = data;
+
+  g_clear_pointer (&state->uri, g_free);
+  g_clear_object (&state->callbacks);
+  g_slice_free (ListRemoteRefsByKind, state);
+}
+
+static void
+list_remote_refs_by_kind_worker (GTask        *task,
+                                 gpointer      source_object,
+                                 gpointer      task_data,
+                                 GCancellable *cancellable)
+{
+  ListRemoteRefsByKind *state = task_data;
+  g_autoptr(GgitRepository) repo = NULL;
+  g_autoptr(GgitRemote) remote = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) repodir = NULL;
+  g_autofree char *tmpdir = NULL;
+  g_auto(RemoteHeadList) refs = NULL;
+  GPtrArray *ar;
+
+  g_assert (G_IS_TASK (task));
+  g_assert (IPC_IS_GIT_SERVICE_IMPL (source_object));
+  g_assert (task_data != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  /* Only branches are currently supported, tags are ignored */
+
+  if (!(tmpdir = g_dir_make_tmp (".libgit2-glib-remote-ls-XXXXXX", &error)))
+    goto handle_gerror;
+
+  repodir = g_file_new_for_path (tmpdir);
+
+  if (!(repo = ggit_repository_init_repository (repodir, TRUE, &error)))
+    goto handle_gerror;
+
+  if (!(remote = ggit_remote_new_anonymous (repo, state->uri, &error)))
+    goto handle_gerror;
+
+  ggit_remote_connect (remote,
+                       GGIT_DIRECTION_FETCH,
+                       state->callbacks,
+                       NULL, NULL, &error);
+  if (error != NULL)
+    goto handle_gerror;
+
+  if (!(refs = ggit_remote_list (remote, &error)))
+    goto handle_gerror;
+
+  ar = g_ptr_array_new ();
+  for (guint i = 0; refs[i]; i++)
+    g_ptr_array_add (ar, g_strdup (ggit_remote_head_get_name (refs[i])));
+  g_ptr_array_add (ar, NULL);
+
+  g_task_return_pointer (task,
+                         g_ptr_array_free (ar, FALSE),
+                         (GDestroyNotify) g_strfreev);
+
+  goto cleanup_tmpdir;
+
+handle_gerror:
+  g_task_return_error (task, g_steal_pointer (&error));
+
+cleanup_tmpdir:
+  if (tmpdir != NULL)
+    rm_rf (tmpdir);
+}
+
+static void
+list_remote_refs_cb (GObject      *object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  IpcGitServiceImpl *self = (IpcGitServiceImpl *)object;
+  g_autoptr(GDBusMethodInvocation) invocation = user_data;
+  g_autoptr(GError) error = NULL;
+  g_auto(GStrv) refs = NULL;
+
+  g_assert (IPC_IS_GIT_SERVICE_IMPL (self));
+  g_assert (G_IS_TASK (result));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+
+  if (!(refs = g_task_propagate_pointer (G_TASK (result), &error)))
+    complete_wrapped_error (g_steal_pointer (&invocation), error);
+  else
+    ipc_git_service_complete_list_remote_refs_by_kind (IPC_GIT_SERVICE (self),
+                                                       g_steal_pointer (&invocation),
+                                                       (const char * const *)refs);
+}
+
+static gboolean
+ipc_git_service_impl_list_remote_refs_by_kind (IpcGitService         *service,
+                                               GDBusMethodInvocation *invocation,
+                                               const char            *uri,
+                                               guint                  kind)
+{
+  IpcGitServiceImpl *self = (IpcGitServiceImpl *)service;
+  g_autoptr(GTask) task = NULL;
+  ListRemoteRefsByKind *state;
+
+  g_assert (IPC_IS_GIT_SERVICE_IMPL (self));
+  g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
+
+  if (kind != IPC_GIT_REF_BRANCH)
+    {
+      g_dbus_method_invocation_return_dbus_error (invocation,
+                                                  "org.freedesktop.DBus.Error.InvalidArgs",
+                                                  "kind must be a branch, tags are unsupported");
+      return TRUE;
+    }
+
+  state = g_slice_new0 (ListRemoteRefsByKind);
+  state->callbacks = ipc_git_remote_callbacks_new (NULL);
+  state->uri = g_strdup (uri);
+  state->kind = kind;
+
+  task = g_task_new (service, NULL, list_remote_refs_cb, g_steal_pointer (&invocation));
+  g_task_set_task_data (task, state, list_remote_refs_by_kind_free);
+  g_task_run_in_thread (task, list_remote_refs_by_kind_worker);
+
+  return TRUE;
+}
+
+static void
 git_service_iface_init (IpcGitServiceIface *iface)
 {
   iface->handle_discover = ipc_git_service_impl_handle_discover;
@@ -328,10 +486,11 @@ git_service_iface_init (IpcGitServiceIface *iface)
   iface->handle_create = ipc_git_service_impl_handle_create;
   iface->handle_clone = ipc_git_service_impl_handle_clone;
   iface->handle_load_config = ipc_git_service_impl_handle_load_config;
+  iface->handle_list_remote_refs_by_kind = ipc_git_service_impl_list_remote_refs_by_kind;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IpcGitServiceImpl, ipc_git_service_impl, IPC_TYPE_GIT_SERVICE_SKELETON,
-                         G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_SERVICE, git_service_iface_init))
+                               G_IMPLEMENT_INTERFACE (IPC_TYPE_GIT_SERVICE, git_service_iface_init))
 
 static void
 ipc_git_service_impl_finalize (GObject *object)

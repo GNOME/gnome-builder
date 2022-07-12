@@ -1,6 +1,6 @@
-/* gbp-git-branch.h
+/* gbp-git-preferences-addin.h
  *
- * Copyright 2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,10 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define GBP_TYPE_GIT_BRANCH (gbp_git_branch_get_type())
+#define GBP_TYPE_GIT_PREFERENCES_ADDIN (gbp_git_preferences_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGitBranch, gbp_git_branch, GBP, GIT_BRANCH, GObject)
-
-GbpGitBranch *gbp_git_branch_new (const char *id);
+G_DECLARE_FINAL_TYPE (GbpGitPreferencesAddin, gbp_git_preferences_addin, GBP, GIT_PREFERENCES_ADDIN, GObject)
 
 G_END_DECLS

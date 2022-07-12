@@ -27,7 +27,7 @@
       This signal is emitted when the repository is updated.
       Clients may want to refresh their cached information.
     -->
-    <signal name="Changed"/>>
+    <signal name="Changed"/>
     <!--
       Closed:
 

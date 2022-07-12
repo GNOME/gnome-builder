@@ -64,9 +64,10 @@ static void
 ipc_git_repository_impl_monitor_changed_cb (IpcGitRepositoryImpl *self,
                                             IpcGitIndexMonitor   *monitor)
 {
+  g_autoptr(GgitRef) head_ref = NULL;
+  const char *shortname = NULL;
   GHashTableIter iter;
   gpointer key;
-  g_autoptr(GgitRef) head_ref = NULL;
 
   g_assert (IPC_IS_GIT_REPOSITORY_IMPL (self));
   g_assert (IPC_IS_GIT_INDEX_MONITOR (monitor));
@@ -79,9 +80,16 @@ ipc_git_repository_impl_monitor_changed_cb (IpcGitRepositoryImpl *self,
       ipc_git_change_monitor_impl_reset (change_monitor);
     }
 
-  head_ref = ggit_repository_get_head (self->repository, NULL);
-  g_assert (GGIT_IS_REF (head_ref));
-  ipc_git_repository_set_branch ((IpcGitRepository *)self, ggit_ref_get_shorthand (head_ref));
+  if ((head_ref = ggit_repository_get_head (self->repository, NULL)))
+    {
+      g_assert (GGIT_IS_REF (head_ref));
+      shortname = ggit_ref_get_shorthand (head_ref);
+    }
+
+  if (shortname == NULL)
+    shortname = "main";
+
+  ipc_git_repository_set_branch ((IpcGitRepository *)self, shortname);
   ipc_git_repository_emit_changed (IPC_GIT_REPOSITORY (self));
 }
 
@@ -124,6 +132,7 @@ translate_status (GgitStatusFlags flags)
     case GGIT_STATUS_INDEX_TYPECHANGE:
     case GGIT_STATUS_WORKING_TREE_MODIFIED:
     case GGIT_STATUS_WORKING_TREE_TYPECHANGE:
+    case GGIT_STATUS_CONFLICTED:
       return FILE_STATUS_CHANGED;
 
     case GGIT_STATUS_IGNORED:
@@ -132,6 +141,8 @@ translate_status (GgitStatusFlags flags)
     case GGIT_STATUS_CURRENT:
       return FILE_STATUS_UNCHANGED;
 
+    case GGIT_STATUS_WORKING_TREE_RENAMED:
+    case GGIT_STATUS_WORKING_TREE_UNREADABLE:
     default:
       return FILE_STATUS_UNTRACKED;
     }
@@ -223,7 +234,7 @@ ipc_git_repository_impl_handle_switch_branch (IpcGitRepository      *repository,
     return complete_wrapped_error (invocation, error);
 
   if (!(shortname = ggit_ref_get_shorthand (ref)))
-    shortname = "master";
+    shortname = "main";
 
   workdir = ggit_repository_get_workdir (self->repository);
 
@@ -1172,7 +1183,7 @@ ipc_git_repository_impl_open (GFile   *location,
         branch = g_strdup (ggit_ref_get_shorthand (ref));
 
       if (branch == NULL)
-        branch = g_strdup ("master");
+        branch = g_strdup ("main");
     }
 
   workdir = ggit_repository_get_workdir (repository);
