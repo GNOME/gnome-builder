@@ -20,14 +20,15 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <adwaita.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_NOTIFICATION_VIEW (ide_notification_view_get_type())
 
-G_DECLARE_FINAL_TYPE (IdeNotificationView, ide_notification_view, IDE, NOTIFICATION_VIEW, GtkBin)
+G_DECLARE_FINAL_TYPE (IdeNotificationView, ide_notification_view, IDE, NOTIFICATION_VIEW, AdwBin)
 
 GtkWidget       *ide_notification_view_new              (void);
 IdeNotification *ide_notification_view_get_notification (IdeNotificationView *self);

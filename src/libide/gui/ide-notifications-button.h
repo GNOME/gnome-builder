@@ -1,6 +1,6 @@
 /* ide-notifications-button.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,16 +25,16 @@
 #endif
 
 #include <libide-core.h>
-#include <dazzle.h>
+#include <libide-gtk.h>
 
 G_BEGIN_DECLS
 
 #define IDE_TYPE_NOTIFICATIONS_BUTTON (ide_notifications_button_get_type())
 
-IDE_AVAILABLE_IN_3_32
-G_DECLARE_FINAL_TYPE (IdeNotificationsButton, ide_notifications_button, IDE, NOTIFICATIONS_BUTTON, DzlProgressMenuButton)
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeNotificationsButton, ide_notifications_button, IDE, NOTIFICATIONS_BUTTON, GtkWidget)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GtkWidget *ide_notifications_button_new (void);
 
 G_END_DECLS
