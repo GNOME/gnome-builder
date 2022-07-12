@@ -576,7 +576,7 @@
             "config-opts" : [
                 "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
-                "-Dman-pages=disabled",
+                "-Dman_pages=disabled",
                 "-Dtests=false",
                 "-Dplugins=false"
             ],
