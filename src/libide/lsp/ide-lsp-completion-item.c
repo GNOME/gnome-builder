@@ -22,7 +22,8 @@
 
 #include "config.h"
 
-#include <libide-sourceview.h>
+#include <gtksourceview/gtksource.h>
+
 #include <jsonrpc-glib.h>
 
 #include "ide-lsp-completion-item.h"
@@ -38,7 +39,7 @@ struct _IdeLspCompletionItem
 };
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeLspCompletionItem, ide_lsp_completion_item, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_COMPLETION_PROPOSAL, NULL))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void
 ide_lsp_completion_item_finalize (GObject *object)
@@ -87,15 +88,6 @@ ide_lsp_completion_item_new (GVariant *variant)
   return self;
 }
 
-gchar *
-ide_lsp_completion_item_get_markup (IdeLspCompletionItem *self,
-                                    const gchar          *typed_text)
-{
-  g_return_val_if_fail (IDE_IS_LSP_COMPLETION_ITEM (self), NULL);
-
-  return ide_completion_fuzzy_highlight (self->label, typed_text);
-}
-
 const gchar *
 ide_lsp_completion_item_get_return_type (IdeLspCompletionItem *self)
 {
@@ -122,6 +114,68 @@ ide_lsp_completion_item_get_detail (IdeLspCompletionItem *self)
   return self->detail;
 }
 
+void
+ide_lsp_completion_item_display (IdeLspCompletionItem    *self,
+                                 GtkSourceCompletionCell *cell,
+                                 const char              *typed_text)
+{
+  GtkSourceCompletionColumn column;
+
+  g_return_if_fail (IDE_IS_LSP_COMPLETION_ITEM (self));
+  g_return_if_fail (GTK_SOURCE_IS_COMPLETION_CELL (cell));
+
+  column = gtk_source_completion_cell_get_column (cell);
+
+  switch (column)
+    {
+    case GTK_SOURCE_COMPLETION_COLUMN_ICON:
+      gtk_source_completion_cell_set_icon_name (cell, ide_lsp_completion_item_get_icon_name (self));
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_TYPED_TEXT:
+      {
+        PangoAttrList *attrs;
+
+        attrs = gtk_source_completion_fuzzy_highlight (self->label, typed_text);
+        gtk_source_completion_cell_set_text_with_attributes (cell, self->label, attrs);
+        pango_attr_list_unref (attrs);
+
+        break;
+      }
+
+    case GTK_SOURCE_COMPLETION_COLUMN_COMMENT:
+      if (self->detail != NULL && self->detail[0] != 0)
+        {
+          const char *endptr = strchr (self->detail, '\n');
+
+          if (endptr == NULL)
+            {
+              gtk_source_completion_cell_set_text (cell, self->detail);
+            }
+          else
+            {
+              g_autofree char *detail = g_strndup (self->detail, endptr - self->detail);
+              gtk_source_completion_cell_set_text (cell, detail);
+            }
+        }
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_DETAILS:
+      /* TODO: If there is markdown, we *could* use a markedview here
+       * and set_child() with the WebKit view.
+       */
+      gtk_source_completion_cell_set_text (cell, self->detail);
+      break;
+
+    default:
+    case GTK_SOURCE_COMPLETION_COLUMN_AFTER:
+    case GTK_SOURCE_COMPLETION_COLUMN_BEFORE:
+      /* TODO: Can we get this info from LSP? */
+      gtk_source_completion_cell_set_text (cell, NULL);
+      break;
+    }
+}
+
 /**
  * ide_lsp_completion_item_get_snippet:
  * @self: a #IdeLspCompletionItem
@@ -129,15 +183,13 @@ ide_lsp_completion_item_get_detail (IdeLspCompletionItem *self)
  * Creates a new snippet for the completion item to be inserted into
  * the document.
  *
- * Returns: (transfer full): an #IdeSnippet
- *
- * Since: 3.30
+ * Returns: (transfer full): an #GtkSourceSnippet
  */
-IdeSnippet *
+GtkSourceSnippet *
 ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
 {
-  g_autoptr(IdeSnippet) snippet = NULL;
-  g_autoptr(IdeSnippetChunk) plainchunk = NULL;
+  g_autoptr(GtkSourceSnippet) snippet = NULL;
+  g_autoptr(GtkSourceSnippetChunk) plainchunk = NULL;
   const gchar *snippet_text = NULL;
   const gchar *snippet_new_text = NULL;
   const gchar *text;
@@ -156,7 +208,7 @@ ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
         {
           g_autoptr(GError) error = NULL;
 
-          if ((snippet = ide_snippet_parser_parse_one (snippet_new_text, -1, &error)))
+          if ((snippet = gtk_source_snippet_new_parsed (snippet_new_text, &error)))
             return g_steal_pointer (&snippet);
 
           g_warning ("Failed to parse snippet: %s: %s",
@@ -166,7 +218,7 @@ ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
         {
           g_autoptr(GError) error = NULL;
 
-          if ((snippet = ide_snippet_parser_parse_one (snippet_text, -1, &error)))
+          if ((snippet = gtk_source_snippet_new_parsed (snippet_text, &error)))
             return g_steal_pointer (&snippet);
 
           g_warning ("Failed to parse snippet: %s: %s",
@@ -174,11 +226,11 @@ ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
         }
     }
 
-  snippet = ide_snippet_new (NULL, NULL);
-  plainchunk = ide_snippet_chunk_new ();
-  ide_snippet_chunk_set_text (plainchunk, text);
-  ide_snippet_chunk_set_text_set (plainchunk, TRUE);
-  ide_snippet_add_chunk (snippet, plainchunk);
+  snippet = gtk_source_snippet_new (NULL, NULL);
+  plainchunk = gtk_source_snippet_chunk_new ();
+  gtk_source_snippet_chunk_set_text (plainchunk, text);
+  gtk_source_snippet_chunk_set_text_set (plainchunk, TRUE);
+  gtk_source_snippet_add_chunk (snippet, plainchunk);
 
   return g_steal_pointer (&snippet);
 }
@@ -192,8 +244,6 @@ ide_lsp_completion_item_get_snippet (IdeLspCompletionItem *self)
  * Obtain an array of all additional text edits to be applied to the project.
  *
  * Returns: (transfer full) (element-type IdeTextEdit) (nullable): a #GPtrArray of #IdeTextEdit
- *
- * Since: 41.0
  */
 GPtrArray *
 ide_lsp_completion_item_get_additional_text_edits (IdeLspCompletionItem *self,
