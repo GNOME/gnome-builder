@@ -1,33 +1,3 @@
-template_libdir = dependency('template-glib-1.0').get_variable('libdir')
-dazzle_libdir = dependency('libdazzle-1.0').get_variable('libdir')
-gsv_libdir = dependency('gtksourceview-4').get_variable('libdir')
-
-typelib_dirs = [
-  '@0@/src/libide'.format(meson.project_build_root()),
-  '@0@/src/gstyle'.format(meson.project_build_root()),
-  join_paths(template_libdir, 'girepository-1.0'),
-  join_paths(dazzle_libdir, 'girepository-1.0'),
-  join_paths(gsv_libdir, 'girepository-1.0'),
-]
-
-test_env = [
-  'GI_TYPELIB_PATH="@0@:$(GI_TYPELIB_PATH)"'.format(':'.join(typelib_dirs)),
-  'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-  'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-  'G_DEBUG=gc-friendly',
-  'GSETTINGS_BACKEND=memory',
-  'GSETTINGS_SCHEMA_DIR=@0@/data/gsettings'.format(meson.project_build_root()),
-  'PYTHONDONTWRITEBYTECODE=yes',
-  'MALLOC_CHECK_=2',
-  'NO_AT_BRIDGE=1',
-]
-
-test_cflags = [
-  '-DTEST_DATA_DIR="@0@/data/"'.format(meson.current_source_dir()),
-  '-I' + join_paths(meson.project_source_root(), 'src'),
-]
-
-
 test_libide_core = executable('test-libide-core', 'test-libide-core.c',
         c_args: test_cflags,
   dependencies: [ libide_core_dep ],
@@ -40,13 +10,6 @@ test_libide_io = executable('test-libide-io', 'test-libide-io.c',
   dependencies: [ libide_io_dep ],
 )
 test('test-libide-io', test_libide_io, env: test_env)
-
-
-test_snippet_parser = executable('test-snippet-parser', 'test-snippet-parser.c',
-        c_args: test_cflags,
-  dependencies: [ libide_sourceview_dep ],
-)
-test('test-snippet-parser', test_snippet_parser, env: test_env)
 
 
 test_line_reader = executable('test-line-reader', 'test-line-reader.c',
@@ -79,7 +42,7 @@ test('test-task', test_task, env: test_env)
 
 test_subprocess_launcher = executable('test-subprocess-launcher', 'test-subprocess-launcher.c',
         c_args: test_cflags,
-  dependencies: [ libide_threading_dep ],
+  dependencies: [ libide_threading_dep, libide_io_dep ],
 )
 test('test-subprocess-launcher', test_subprocess_launcher, env: test_env)
 
@@ -104,9 +67,14 @@ test_compile_commands = executable('test-compile-commands', 'test-compile-comman
 )
 test('test-compile-commands', test_compile_commands, env: test_env)
 
-
-test_completion_fuzzy = executable('test-completion-fuzzy', 'test-completion-fuzzy.c',
+test_shortcuts = executable('test-shortcuts', 'test-shortcuts.c',
         c_args: test_cflags,
-  dependencies: [ libide_sourceview_dep ],
+  dependencies: [ libgtk_dep, libide_gui_dep ],
 )
-test('test-completion-fuzzy', test_completion_fuzzy, env: test_env)
+test('test-shortcuts', test_shortcuts, env: test_env, depends: [libide_gir])
+
+test_run_context = executable('test-run-context', 'test-run-context.c',
+        c_args: test_cflags,
+  dependencies: [ libide_foundry_dep ],
+)
+test('test-run-context', test_run_context, env: test_env)

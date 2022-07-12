@@ -1,0 +1,14 @@
+[
+  {
+    "action" : "test.open",
+    "when" : "!typeof(focus).is_a(typeof(Gtk.Window))",
+    "trigger" : "<ctrl>o",
+    "phase" : "bubble"
+  },
+  {
+    "action" : "test.open",
+    "when" : "focus != null",
+    "trigger" : "<ctrl>p",
+    "phase" : "capture"
+  }
+]
