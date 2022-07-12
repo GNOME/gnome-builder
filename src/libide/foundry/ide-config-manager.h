@@ -32,39 +32,39 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_CONFIG_MANAGER (ide_config_manager_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeConfigManager, ide_config_manager, IDE, CONFIG_MANAGER, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeConfigManager *ide_config_manager_from_context     (IdeContext           *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeConfigManager *ide_config_manager_ref_from_context (IdeContext           *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeConfig        *ide_config_manager_get_current      (IdeConfigManager     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeConfig        *ide_config_manager_ref_current      (IdeConfigManager     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_config_manager_set_current      (IdeConfigManager     *self,
                                                        IdeConfig            *configuration);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeConfig        *ide_config_manager_get_config       (IdeConfigManager     *self,
                                                        const gchar          *id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_config_manager_duplicate        (IdeConfigManager     *self,
                                                        IdeConfig            *config);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_config_manager_delete           (IdeConfigManager     *self,
                                                        IdeConfig            *config);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void              ide_config_manager_save_async       (IdeConfigManager     *self,
                                                        GCancellable         *cancellable,
                                                        GAsyncReadyCallback   callback,
                                                        gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_config_manager_save_finish      (IdeConfigManager     *self,
                                                        GAsyncResult         *result,
                                                        GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_config_manager_get_ready        (IdeConfigManager     *self);
 
 G_END_DECLS

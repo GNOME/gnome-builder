@@ -277,8 +277,6 @@ ide_config_manager_save_finish (IdeConfigManager  *self,
  *
  * Returns: (transfer none) (nullable): An #IdeConfig or %NULL if
  *   the configuration could not be found.
- *
- * Since: 3.32
  */
 IdeConfig *
 ide_config_manager_get_config (IdeConfigManager *self,
@@ -452,8 +450,6 @@ ide_config_manager_class_init (IdeConfigManagerClass *klass)
    *
    * This signal is emitted any time a new configuration is selected or the
    * currently selected configurations state changes.
-   *
-   * Since: 3.32
    */
   signals [INVALIDATE] =
     g_signal_new ("invalidate",
@@ -969,8 +965,6 @@ ide_config_manager_set_current (IdeConfigManager *self,
  * settings.
  *
  * Returns: (transfer full): An #IdeConfig
- *
- * Since: 3.32
  */
 IdeConfig *
 ide_config_manager_ref_current (IdeConfigManager *self)
@@ -1011,8 +1005,6 @@ ide_config_manager_ref_current (IdeConfigManager *self)
  * settings.
  *
  * Returns: (transfer none): An #IdeConfig
- *
- * Since: 3.32
  */
 IdeConfig *
 ide_config_manager_get_current (IdeConfigManager *self)
@@ -1108,8 +1100,6 @@ ide_config_manager_delete (IdeConfigManager *self,
  *
  * Returns: %TRUE if the current configuration is ready for usage;
  *   otherwise %FALSE.
- *
- * Since: 3.32
  */
 gboolean
 ide_config_manager_get_ready (IdeConfigManager *self)
@@ -1131,8 +1121,6 @@ ide_config_manager_get_ready (IdeConfigManager *self)
  * Thread-safe version of ide_config_manager_from_context().
  *
  * Returns: (transfer full): an #IdeConfigManager
- *
- * Since: 3.32
  */
 IdeConfigManager *
 ide_config_manager_ref_from_context (IdeContext *context)

@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_BUILD_SYSTEM (ide_build_system_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_INTERFACE (IdeBuildSystem, ide_build_system, IDE, BUILD_SYSTEM, IdeObject)
 
 struct _IdeBuildSystemInterface
@@ -68,55 +68,55 @@ struct _IdeBuildSystemInterface
                                                     const char           *language);
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeBuildSystem  *ide_build_system_from_context                     (IdeContext           *context);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar           *ide_build_system_get_id                           (IdeBuildSystem       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar           *ide_build_system_get_display_name                 (IdeBuildSystem       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint             ide_build_system_get_priority                     (IdeBuildSystem       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar           *ide_build_system_get_builddir                     (IdeBuildSystem       *self,
                                                                     IdePipeline     *pipeline);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar           *ide_build_system_get_project_version              (IdeBuildSystem       *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_build_system_get_build_flags_async            (IdeBuildSystem       *self,
                                                                     GFile                *file,
                                                                     GCancellable         *cancellable,
                                                                     GAsyncReadyCallback   callback,
                                                                     gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gchar          **ide_build_system_get_build_flags_finish           (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_build_system_get_build_flags_for_files_async  (IdeBuildSystem       *self,
                                                                     GPtrArray            *files,
                                                                     GCancellable         *cancellable,
                                                                     GAsyncReadyCallback   callback,
                                                                     gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GHashTable      *ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void             ide_build_system_get_build_flags_for_dir_async    (IdeBuildSystem       *self,
                                                                     GFile                *directory,
                                                                     GCancellable         *cancellable,
                                                                     GAsyncReadyCallback   callback,
                                                                     gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GHashTable      *ide_build_system_get_build_flags_for_dir_finish   (IdeBuildSystem       *self,
                                                                     GAsyncResult         *result,
                                                                     GError              **error);
 void             _ide_build_system_set_project_file                (IdeBuildSystem       *self,
                                                                     GFile                *project_file) G_GNUC_INTERNAL;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_build_system_supports_toolchain               (IdeBuildSystem       *self,
                                                                     IdeToolchain         *toolchain);
-IDE_AVAILABLE_IN_41
+IDE_AVAILABLE_IN_ALL
 gboolean         ide_build_system_supports_language                (IdeBuildSystem       *self,
                                                                     const char           *language);
 

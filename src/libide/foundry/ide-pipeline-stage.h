@@ -24,8 +24,8 @@
 # error "Only <libide-foundry.h> can be included directly."
 #endif
 
-#include <dazzle.h>
 #include <libide-core.h>
+#include <libide-io.h>
 
 #include "ide-build-log.h"
 #include "ide-foundry-types.h"
@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PIPELINE_STAGE (ide_pipeline_stage_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdePipelineStage, ide_pipeline_stage, IDE, PIPELINE_STAGE, IdeObject)
 
 struct _IdePipelineStageClass
@@ -49,8 +49,6 @@ struct _IdePipelineStageClass
    * vfuncs.
    *
    * Only use thread-safe API from this function.
-   *
-   * Since: 3.32
    */
   gboolean (*build)          (IdePipelineStage     *self,
                               IdePipeline          *pipeline,
@@ -62,8 +60,6 @@ struct _IdePipelineStageClass
    *
    * Asynchronous version of the #IdePipelineStage API. This is the preferred
    * way to subclass #IdePipelineStage.
-   *
-   * Since: 3.32
    */
   void     (*build_async)    (IdePipelineStage     *self,
                               IdePipeline          *pipeline,
@@ -78,8 +74,6 @@ struct _IdePipelineStageClass
    *
    * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
    *   Upon failure, the pipeline will be stopped.
-   *
-   * Since: 3.32
    */
   gboolean (*build_finish)   (IdePipelineStage     *self,
                               GAsyncResult         *result,
@@ -94,8 +88,6 @@ struct _IdePipelineStageClass
    * @user_data: user data for @callback
    *
    * This function will perform the clean operation.
-   *
-   * Since: 3.32
    */
   void     (*clean_async)    (IdePipelineStage     *self,
                               IdePipeline          *pipeline,
@@ -112,8 +104,6 @@ struct _IdePipelineStageClass
    * Completes an async operation to ide_pipeline_stage_clean_async().
    *
    * Returns: %TRUE if successful; otherwise %FALSE and @error is set.
-   *
-   * Since: 3.32
    */
   gboolean (*clean_finish)   (IdePipelineStage     *self,
                               GAsyncResult         *result,
@@ -125,90 +115,87 @@ struct _IdePipelineStageClass
                               GPtrArray            *targets,
                               GCancellable         *cancellable);
   void     (*reap)           (IdePipelineStage     *self,
-                              DzlDirectoryReaper   *reaper);
+                              IdeDirectoryReaper   *reaper);
   gboolean (*chain)          (IdePipelineStage     *self,
                               IdePipelineStage     *next);
-
-  /*< private >*/
-  gpointer _reserved[16];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_pipeline_stage_get_active       (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_set_active       (IdePipelineStage     *self,
                                                   gboolean              active);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_pipeline_stage_get_name         (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_set_name         (IdePipelineStage     *self,
                                                   const gchar          *name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_log              (IdePipelineStage     *self,
                                                   IdeBuildLogStream     stream,
                                                   const gchar          *message,
                                                   gssize                message_len);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_log_subprocess   (IdePipelineStage     *self,
                                                   IdeSubprocess        *subprocess);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_set_log_observer (IdePipelineStage     *self,
                                                   IdeBuildLogObserver   observer,
                                                   gpointer              observer_data,
                                                   GDestroyNotify        observer_data_destroy);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_set_stdout_path  (IdePipelineStage     *self,
                                                   const gchar          *path);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_pipeline_stage_get_stdout_path  (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_pipeline_stage_get_completed    (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_set_completed    (IdePipelineStage     *self,
                                                   gboolean              completed);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_pipeline_stage_get_disabled     (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_set_disabled     (IdePipelineStage     *self,
                                                   gboolean              disabled);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_pipeline_stage_get_check_stdout (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_set_check_stdout (IdePipelineStage     *self,
                                                   gboolean              check_stdout);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_pipeline_stage_get_transient    (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_set_transient    (IdePipelineStage     *self,
                                                   gboolean              transient);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_build_async      (IdePipelineStage     *self,
                                                   IdePipeline          *pipeline,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_pipeline_stage_build_finish     (IdePipelineStage     *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_clean_async      (IdePipelineStage     *self,
                                                   IdePipeline          *pipeline,
                                                   GCancellable         *cancellable,
                                                   GAsyncReadyCallback   callback,
                                                   gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_pipeline_stage_clean_finish     (IdePipelineStage     *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gboolean     ide_pipeline_stage_chain            (IdePipelineStage     *self,
                                                   IdePipelineStage     *next);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_pause            (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_unpause          (IdePipelineStage     *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_pipeline_stage_emit_reap        (IdePipelineStage     *self,
                                                   DzlDirectoryReaper   *reaper);
 

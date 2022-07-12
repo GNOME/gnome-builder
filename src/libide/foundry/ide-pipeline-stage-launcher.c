@@ -491,8 +491,6 @@ ide_pipeline_stage_launcher_init (IdePipelineStageLauncher *self)
  * ide_pipeline_stage_launcher_get_launcher:
  *
  * Returns: (transfer none): An #IdeSubprocessLauncher
- *
- * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_pipeline_stage_launcher_get_launcher (IdePipelineStageLauncher *self)
@@ -526,8 +524,6 @@ ide_pipeline_stage_launcher_set_launcher (IdePipelineStageLauncher *self,
  * #IdePipeline.
  *
  * Returns: (transfer full): An #IdePipelineStageLauncher
- *
- * Since: 3.32
  */
 IdePipelineStage *
 ide_pipeline_stage_launcher_new (IdeContext            *context,
@@ -545,8 +541,6 @@ ide_pipeline_stage_launcher_new (IdeContext            *context,
  *
  * If set to %TRUE, a non-zero exit status from the subprocess will not cause
  * the build stage to fail.
- *
- * Since: 3.32
  */
 gboolean
 ide_pipeline_stage_launcher_get_ignore_exit_status (IdePipelineStageLauncher *self)
@@ -565,8 +559,6 @@ ide_pipeline_stage_launcher_get_ignore_exit_status (IdePipelineStageLauncher *se
  *
  * If set to %TRUE, a non-zero exit status from the subprocess will not cause
  * the build stage to fail.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_stage_launcher_set_ignore_exit_status (IdePipelineStageLauncher *self,
@@ -597,7 +589,7 @@ ide_pipeline_stage_launcher_set_clean_launcher (IdePipelineStageLauncher *self,
   IdePipelineStageLauncherPrivate *priv = ide_pipeline_stage_launcher_get_instance_private (self);
 
   g_return_if_fail (IDE_IS_PIPELINE_STAGE_LAUNCHER (self));
-  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (clean_launcher));
+  g_return_if_fail (!clean_launcher || IDE_IS_SUBPROCESS_LAUNCHER (clean_launcher));
 
   if (g_set_object (&priv->clean_launcher, clean_launcher))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAN_LAUNCHER]);
@@ -607,8 +599,6 @@ ide_pipeline_stage_launcher_set_clean_launcher (IdePipelineStageLauncher *self,
  * ide_pipeline_stage_launcher_get_clean_launcher:
  *
  * Returns: (nullable) (transfer none): An #IdeSubprocessLauncher or %NULL.
- *
- * Since: 3.32
  */
 IdeSubprocessLauncher *
 ide_pipeline_stage_launcher_get_clean_launcher (IdePipelineStageLauncher *self)
@@ -636,8 +626,6 @@ ide_pipeline_stage_launcher_get_use_pty (IdePipelineStageLauncher *self)
  * @use_pty: If a Pty should be used
  *
  * If @use_pty is set to %TRUE, a Pty will be attached to the process.
- *
- * Since: 3.32
  */
 void
 ide_pipeline_stage_launcher_set_use_pty (IdePipelineStageLauncher *self,

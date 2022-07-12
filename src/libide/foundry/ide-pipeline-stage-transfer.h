@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include <libide-io.h>
 
 #include "ide-pipeline-stage.h"
 
@@ -32,10 +33,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_PIPELINE_STAGE_TRANSFER (ide_pipeline_stage_transfer_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePipelineStageTransfer, ide_pipeline_stage_transfer, IDE, PIPELINE_STAGE_TRANSFER, IdePipelineStage)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdePipelineStageTransfer *ide_pipeline_stage_transfer_new (IdeContext  *context,
                                                            IdeTransfer *transfer);
 

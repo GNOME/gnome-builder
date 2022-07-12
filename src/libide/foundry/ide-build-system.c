@@ -37,6 +37,7 @@
 #include "ide-config.h"
 #include "ide-device.h"
 #include "ide-foundry-compat.h"
+#include "ide-runtime.h"
 #include "ide-toolchain.h"
 
 G_DEFINE_INTERFACE (IdeBuildSystem, ide_build_system, IDE_TYPE_OBJECT)
@@ -430,8 +431,6 @@ ide_build_system_get_build_flags_async (IdeBuildSystem      *self,
  * ide_build_system_get_build_flags_finish:
  *
  * Returns: (transfer full):
- *
- * Since: 3.32
  */
 gchar **
 ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
@@ -476,8 +475,6 @@ ide_build_system_get_build_flags_finish (IdeBuildSystem  *self,
  *
  * This function will get build flags for all files and returns
  * map of file and its build flags as #GHashTable.
- *
- * Since: 3.32
  */
 void
 ide_build_system_get_build_flags_for_files_async (IdeBuildSystem       *self,
@@ -504,8 +501,6 @@ ide_build_system_get_build_flags_for_files_async (IdeBuildSystem       *self,
  * @error: a location for a #GError or %NULL
  *
  * Returns: (element-type Ide.File GStrv) (transfer full): a #GHashTable or #GFile to #GStrv
- *
- * Since: 3.32
  */
 GHashTable *
 ide_build_system_get_build_flags_for_files_finish (IdeBuildSystem  *self,
@@ -727,8 +722,6 @@ ide_build_system_get_build_flags_for_dir_async (IdeBuildSystem      *self,
  * @error: a location for a #GError or %NULL
  *
  * Returns: (element-type Ide.File GStrv) (transfer full): a #GHashTable of #GFile to #GStrv
- *
- * Since: 3.32
  */
 GHashTable *
 ide_build_system_get_build_flags_for_dir_finish (IdeBuildSystem  *self,
@@ -749,8 +742,6 @@ ide_build_system_get_build_flags_for_dir_finish (IdeBuildSystem  *self,
  * Checks whether the build system supports the given toolchain.
  *
  * Returns: %TRUE if the toolchain is supported by the build system, %FALSE otherwise
- *
- * Since: 3.32
  */
 gboolean
 ide_build_system_supports_toolchain (IdeBuildSystem *self,
@@ -779,8 +770,6 @@ ide_build_system_supports_toolchain (IdeBuildSystem *self,
  * in the build system's configuration files.
  *
  * Returns: (transfer full) (nullable): a string containing the project version
- *
- * Since: 3.32
  */
 gchar *
 ide_build_system_get_project_version (IdeBuildSystem *self)
@@ -802,8 +791,6 @@ ide_build_system_get_project_version (IdeBuildSystem *self)
  * Returns %TRUE if @self in it's current configuration is known to support @language.
  *
  * Returns: %TRUE if @language is supported, otherwise %FALSE.
- *
- * Since: 41.0
  */
 gboolean
 ide_build_system_supports_language (IdeBuildSystem *self,

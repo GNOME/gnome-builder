@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_SIMPLE_BUILD_SYSTEM_DISCOVERY (ide_simple_build_system_discovery_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeSimpleBuildSystemDiscovery, ide_simple_build_system_discovery, IDE, SIMPLE_BUILD_SYSTEM_DISCOVERY, IdeObject)
 
 struct _IdeSimpleBuildSystemDiscoveryClass
@@ -43,19 +43,19 @@ struct _IdeSimpleBuildSystemDiscoveryClass
   gpointer _reserved[8];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_simple_build_system_discovery_get_glob     (IdeSimpleBuildSystemDiscovery *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_simple_build_system_discovery_set_glob     (IdeSimpleBuildSystemDiscovery *self,
                                                              const gchar                   *glob);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar *ide_simple_build_system_discovery_get_hint     (IdeSimpleBuildSystemDiscovery *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_simple_build_system_discovery_set_hint     (IdeSimpleBuildSystemDiscovery *self,
                                                              const gchar                   *hint);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 gint         ide_simple_build_system_discovery_get_priority (IdeSimpleBuildSystemDiscovery *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void         ide_simple_build_system_discovery_set_priority (IdeSimpleBuildSystemDiscovery *self,
                                                              gint                           priority);
 

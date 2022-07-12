@@ -38,7 +38,7 @@ typedef enum
 #define IDE_TYPE_DEVICE  (ide_device_get_type())
 #define IDE_DEVICE_ERROR (ide_device_error_quark())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeDevice, ide_device, IDE, DEVICE, IdeObject)
 
 struct _IdeDeviceClass
@@ -59,32 +59,32 @@ struct _IdeDeviceClass
   gpointer _reserved[32];
 };
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 GQuark         ide_device_error_quark           (void) G_GNUC_CONST;
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_device_get_display_name      (IdeDevice            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_device_set_display_name      (IdeDevice            *self,
                                                  const gchar          *display_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_device_get_icon_name         (IdeDevice            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_device_set_icon_name         (IdeDevice            *self,
                                                  const gchar          *icon_name);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 const gchar   *ide_device_get_id                (IdeDevice            *self);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_device_set_id                (IdeDevice            *self,
                                                  const gchar          *id);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_device_prepare_configuration (IdeDevice            *self,
                                                  IdeConfig            *configuration);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 void           ide_device_get_info_async        (IdeDevice            *self,
                                                  GCancellable         *cancellable,
                                                  GAsyncReadyCallback   callback,
                                                  gpointer              user_data);
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeDeviceInfo *ide_device_get_info_finish       (IdeDevice            *self,
                                                  GAsyncResult         *result,
                                                  GError              **error);

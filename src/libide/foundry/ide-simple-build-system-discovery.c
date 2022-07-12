@@ -146,8 +146,6 @@ ide_simple_build_system_discovery_class_init (IdeSimpleBuildSystemDiscoveryClass
    * The "glob" property is a glob to match for files within the project
    * directory. This can be used to quickly match the project file, such as
    * "configure.*".
-   *
-   * Since: 3.32
    */
   properties [PROP_GLOB] =
     g_param_spec_string ("glob",
@@ -161,8 +159,6 @@ ide_simple_build_system_discovery_class_init (IdeSimpleBuildSystemDiscoveryClass
    *
    * The "hint" property is used from ide_build_system_discovery_discover()
    * if the build file was discovered.
-   *
-   * Since: 3.32
    */
   properties [PROP_HINT] =
     g_param_spec_string ("hint",
@@ -175,8 +171,6 @@ ide_simple_build_system_discovery_class_init (IdeSimpleBuildSystemDiscoveryClass
    * IdeSimpleBuildSystemDiscovery:priority:
    *
    * The "priority" property is the priority of any match.
-   *
-   * Since: 3.32
    */
   properties [PROP_PRIORITY] =
     g_param_spec_int ("priority",

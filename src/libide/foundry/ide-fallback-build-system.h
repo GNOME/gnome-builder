@@ -26,10 +26,10 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_FALLBACK_BUILD_SYSTEM (ide_fallback_build_system_get_type())
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeFallbackBuildSystem, ide_fallback_build_system, IDE, FALLBACK_BUILD_SYSTEM, IdeObject)
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeBuildSystem *ide_fallback_build_system_new (void);
 
 G_END_DECLS

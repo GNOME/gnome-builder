@@ -30,7 +30,7 @@
 
 G_BEGIN_DECLS
 
-IDE_AVAILABLE_IN_3_32
+IDE_AVAILABLE_IN_ALL
 IdeToolchainManager *ide_toolchain_manager_from_context (IdeContext *context);
 
 G_END_DECLS

@@ -109,8 +109,6 @@ ide_fallback_build_system_class_init (IdeFallbackBuildSystemClass *klass)
    *
    * The "project-file" property is the primary file representing the
    * projects build system.
-   *
-   * Since: 3.32
    */
   properties [PROP_PROJECT_FILE] =
     g_param_spec_object ("project-file",
@@ -159,8 +157,6 @@ build_system_init (IdeBuildSystemInterface *iface)
  * Creates a new #IdeFallbackBuildSystem.
  *
  * Returns: (transfer full): an #IdeBuildSystem
- *
- * Since: 3.32
  */
 IdeBuildSystem *
 ide_fallback_build_system_new (void)
