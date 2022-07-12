@@ -37,10 +37,9 @@ struct _GbClangFormatBufferAddin
 static GSettings *settings;
 
 static void
-scroll_page_to_insert (GtkWidget *widget,
-                       gpointer   data)
+scroll_page_to_insert (IdePage  *page,
+                       gpointer  data)
 {
-  IdePage *page = (IdePage *)widget;
   IdeBuffer *buffer = data;
 
   g_assert (IDE_IS_PAGE (page));
