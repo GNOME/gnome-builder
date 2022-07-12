@@ -48,18 +48,16 @@ ide_code_index_search_result_activate (IdeSearchResult *result,
                                        GtkWidget       *last_focus)
 {
   IdeCodeIndexSearchResult *self = (IdeCodeIndexSearchResult *)result;
+  g_autoptr(IdePanelPosition) position = NULL;
   IdeWorkspace *workspace;
-  IdeSurface *editor;
 
   g_assert (IDE_IS_CODE_INDEX_SEARCH_RESULT (self));
   g_assert (GTK_IS_WIDGET (last_focus));
 
-  if (!last_focus)
-    return;
+  workspace = ide_widget_get_workspace (last_focus);
+  position = ide_panel_position_new ();
 
-  if ((workspace = ide_widget_get_workspace (last_focus)) &&
-      (editor = ide_workspace_get_surface_by_name (workspace, "editor")))
-    ide_editor_surface_focus_location (IDE_EDITOR_SURFACE (editor), self->location);
+  ide_editor_focus_location (workspace, position, self->location);
 }
 
 static void

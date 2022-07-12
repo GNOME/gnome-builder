@@ -22,11 +22,12 @@
 
 #include "config.h"
 
-#include <dazzle.h>
+#include <libpeas/peas.h>
+
 #include <libide-code.h>
 #include <libide-io.h>
 #include <libide-foundry.h>
-#include <libpeas/peas.h>
+#include <libide-search.h>
 
 #include "gbp-code-index-builder.h"
 #include "gbp-code-index-plan.h"
@@ -38,7 +39,7 @@ struct _GbpCodeIndexBuilder
   GFile                   *index_dir;
   GPtrArray               *items;
   IdePersistentMapBuilder *map;
-  DzlFuzzyIndexBuilder    *fuzzy;
+  IdeFuzzyIndexBuilder    *fuzzy;
   guint                    next_file_id;
   guint                    has_run : 1;
 };
@@ -82,7 +83,7 @@ gbp_code_index_builder_init (GbpCodeIndexBuilder *self)
 {
   self->items = g_ptr_array_new_with_free_func ((GDestroyNotify)gbp_code_index_plan_item_free);
   self->map = ide_persistent_map_builder_new ();
-  self->fuzzy = dzl_fuzzy_index_builder_new ();
+  self->fuzzy = ide_fuzzy_index_builder_new ();
 }
 
 static void
@@ -110,8 +111,8 @@ gbp_code_index_builder_submit (GbpCodeIndexBuilder *self,
    */
   g_snprintf (num, sizeof (num), "%u", file_id);
   filename = g_file_get_path (file);
-  dzl_fuzzy_index_builder_set_metadata_uint32 (self->fuzzy, filename, file_id);
-  dzl_fuzzy_index_builder_set_metadata_string (self->fuzzy, num, filename);
+  ide_fuzzy_index_builder_set_metadata_uint32 (self->fuzzy, filename, file_id);
+  ide_fuzzy_index_builder_set_metadata_string (self->fuzzy, num, filename);
 
   if (entries == NULL)
     return;
@@ -152,7 +153,7 @@ gbp_code_index_builder_submit (GbpCodeIndexBuilder *self,
                                            !!(flags & IDE_SYMBOL_FLAGS_IS_DEFINITION));
 
       if (name != NULL)
-        dzl_fuzzy_index_builder_insert (self->fuzzy,
+        ide_fuzzy_index_builder_insert (self->fuzzy,
                                         name,
                                         g_variant_new ("(uuuuu)",
                                                        file_id,
@@ -434,16 +435,16 @@ gbp_code_index_builder_persist_write_fuzzy_cb (GObject      *object,
                                                GAsyncResult *result,
                                                gpointer      user_data)
 {
-  DzlFuzzyIndexBuilder *fuzzy = (DzlFuzzyIndexBuilder *)object;
+  IdeFuzzyIndexBuilder *fuzzy = (IdeFuzzyIndexBuilder *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (DZL_IS_FUZZY_INDEX_BUILDER (fuzzy));
+  g_assert (IDE_IS_FUZZY_INDEX_BUILDER (fuzzy));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!dzl_fuzzy_index_builder_write_finish (fuzzy, result, &error))
+  if (!ide_fuzzy_index_builder_write_finish (fuzzy, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -474,11 +475,11 @@ gbp_code_index_builder_persist_write_map_cb (GObject      *object,
   self = ide_task_get_source_object (task);
   file = g_file_get_child (self->index_dir, "SymbolNames");
 
-  dzl_fuzzy_index_builder_set_metadata_uint32 (self->fuzzy, "n_files", self->next_file_id);
+  ide_fuzzy_index_builder_set_metadata_uint32 (self->fuzzy, "n_files", self->next_file_id);
 
   IDE_TRACE_MSG ("Writing %s", g_file_peek_path (file));
 
-  dzl_fuzzy_index_builder_write_async (self->fuzzy,
+  ide_fuzzy_index_builder_write_async (self->fuzzy,
                                        file,
                                        G_PRIORITY_DEFAULT,
                                        ide_task_get_cancellable (task),

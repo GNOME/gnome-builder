@@ -28,7 +28,7 @@
 
 /*
  * This class will store index of all directories and will have a map of
- * directory and Indexes (DzlFuzzyIndex & IdePersistentMap)
+ * directory and Indexes (IdeFuzzyIndex & IdePersistentMap)
  */
 
 struct _IdeCodeIndexIndex
@@ -44,7 +44,7 @@ typedef struct
 {
   GFile            *directory;
   GFile            *source_directory;
-  DzlFuzzyIndex    *symbol_names;
+  IdeFuzzyIndex    *symbol_names;
   IdePersistentMap *symbol_keys;
   guint64           mtime;
 } DirectoryIndex;
@@ -52,7 +52,7 @@ typedef struct
 typedef struct
 {
   gchar   *query;
-  DzlHeap *fuzzy_matches;
+  IdeHeap *fuzzy_matches;
   guint    curr_index;
   gsize    max_results;
 } PopulateTaskData;
@@ -63,9 +63,9 @@ typedef struct
  */
 typedef struct
 {
-  DzlFuzzyIndex      *index;
+  IdeFuzzyIndex      *index;
   GListModel         *list;
-  DzlFuzzyIndexMatch *match;
+  IdeFuzzyIndexMatch *match;
   guint               match_num;
 } FuzzyMatch;
 
@@ -73,7 +73,6 @@ G_DEFINE_FINAL_TYPE (IdeCodeIndexIndex, ide_code_index_index, IDE_TYPE_OBJECT)
 
 static void directory_index_free (DirectoryIndex *data);
 
-DZL_DEFINE_COUNTER (code_indexes, "Code Indexes", "Instances", "Number of loaded code indexes")
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (DirectoryIndex, directory_index_free)
 
 static guint64
@@ -106,8 +105,6 @@ directory_index_free (DirectoryIndex *data)
   g_clear_object (&data->directory);
   g_clear_object (&data->source_directory);
   g_slice_free (DirectoryIndex, data);
-
-  DZL_COUNTER_DEC (code_indexes);
 }
 
 static void
@@ -117,11 +114,11 @@ populate_task_data_free (PopulateTaskData *data)
 
   for (guint i = 0; i < data->fuzzy_matches->len; i++)
     {
-      g_clear_object (&(dzl_heap_index(data->fuzzy_matches, FuzzyMatch, i).list));
-      g_clear_object (&(dzl_heap_index(data->fuzzy_matches, FuzzyMatch, i).match));
+      g_clear_object (&(ide_heap_index(data->fuzzy_matches, FuzzyMatch, i).list));
+      g_clear_object (&(ide_heap_index(data->fuzzy_matches, FuzzyMatch, i).match));
     }
 
-  g_clear_pointer (&data->fuzzy_matches, dzl_heap_unref);
+  g_clear_pointer (&data->fuzzy_matches, ide_heap_unref);
 
   g_slice_free (PopulateTaskData, data);
 }
@@ -132,8 +129,8 @@ fuzzy_match_compare (const FuzzyMatch *a,
 {
   float diff;
 
-  diff = dzl_fuzzy_index_match_get_score (a->match) -
-          dzl_fuzzy_index_match_get_score (b->match);
+  diff = ide_fuzzy_index_match_get_score (a->match) -
+          ide_fuzzy_index_match_get_score (b->match);
 
   if (diff < 0)
     return -1;
@@ -152,7 +149,7 @@ directory_index_new (GFile         *directory,
 {
   g_autoptr(GFile) keys_file = NULL;
   g_autoptr(GFile) names_file = NULL;
-  g_autoptr(DzlFuzzyIndex) symbol_names = NULL;
+  g_autoptr(IdeFuzzyIndex) symbol_names = NULL;
   g_autoptr(IdePersistentMap) symbol_keys = NULL;
   g_autoptr(DirectoryIndex) dir_index = NULL;
 
@@ -165,10 +162,10 @@ directory_index_new (GFile         *directory,
   if (!ide_persistent_map_load_file (symbol_keys, keys_file, cancellable, error))
     return NULL;
 
-  symbol_names = dzl_fuzzy_index_new ();
+  symbol_names = ide_fuzzy_index_new ();
   names_file = g_file_get_child (directory, "SymbolNames");
 
-  if (!dzl_fuzzy_index_load_file (symbol_names, names_file, cancellable, error))
+  if (!ide_fuzzy_index_load_file (symbol_names, names_file, cancellable, error))
     return NULL;
 
   dir_index = g_slice_new0 (DirectoryIndex);
@@ -177,8 +174,6 @@ directory_index_new (GFile         *directory,
   dir_index->directory = g_file_dup (directory);
   dir_index->source_directory = g_file_dup (source_directory);
   dir_index->mtime = newest_mtime (keys_file, names_file, cancellable);
-
-  DZL_COUNTER_INC (code_indexes);
 
   return g_steal_pointer (&dir_index);
 }
@@ -310,7 +305,7 @@ ide_code_index_index_create_search_result (IdeContext       *context,
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (fuzzy_match != NULL);
 
-  value = dzl_fuzzy_index_match_get_document (fuzzy_match->match);
+  value = ide_fuzzy_index_match_get_document (fuzzy_match->match);
 
   g_variant_get (value, "(uuuuu)", &file_id, &line, &line_offset, &flags, &kind);
 
@@ -318,17 +313,17 @@ ide_code_index_index_create_search_result (IdeContext       *context,
   if (kind == IDE_SYMBOL_KIND_VARIABLE)
     return NULL;
 
-  key = dzl_fuzzy_index_match_get_key (fuzzy_match->match);
+  key = ide_fuzzy_index_match_get_key (fuzzy_match->match);
 
   g_snprintf (num, sizeof num, "%u", file_id);
 
-  path = dzl_fuzzy_index_get_metadata_string (fuzzy_match->index, num);
+  path = ide_fuzzy_index_get_metadata_string (fuzzy_match->index, num);
 
   file = g_file_new_for_path (path);
   location = ide_location_new (file, line - 1, line_offset - 1);
 
   icon_name = ide_symbol_kind_get_icon_name (kind);
-  score = dzl_fuzzy_index_match_get_score (fuzzy_match->match);
+  score = ide_fuzzy_index_match_get_score (fuzzy_match->match);
 
   subtitle = g_string_new (NULL);
 
@@ -351,7 +346,7 @@ ide_code_index_index_query_cb (GObject      *object,
                                GAsyncResult *result,
                                gpointer      user_data)
 {
-  DzlFuzzyIndex *index = (DzlFuzzyIndex *)object;
+  IdeFuzzyIndex *index = (IdeFuzzyIndex *)object;
   g_autoptr(IdeTask) task = (IdeTask *)user_data;
   g_autoptr(GListModel) list = NULL;
   g_autoptr(GMutexLocker) locker = NULL;
@@ -360,7 +355,7 @@ ide_code_index_index_query_cb (GObject      *object,
   PopulateTaskData *data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (DZL_IS_FUZZY_INDEX (index));
+  g_assert (IDE_IS_FUZZY_INDEX (index));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
@@ -372,7 +367,7 @@ ide_code_index_index_query_cb (GObject      *object,
   data = ide_task_get_task_data (task);
   g_assert (data != NULL);
 
-  list = dzl_fuzzy_index_query_finish (index, result, &error);
+  list = ide_fuzzy_index_query_finish (index, result, &error);
   g_assert (!list || G_IS_LIST_MODEL (list));
 
   if (list != NULL)
@@ -386,7 +381,7 @@ ide_code_index_index_query_cb (GObject      *object,
           fuzzy_match.list = g_steal_pointer (&list);
           fuzzy_match.match_num = 0;
 
-          dzl_heap_insert_val (data->fuzzy_matches, fuzzy_match);
+          ide_heap_insert_val (data->fuzzy_matches, fuzzy_match);
         }
     }
   else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
@@ -404,7 +399,7 @@ ide_code_index_index_query_cb (GObject      *object,
       dir_index = g_ptr_array_index (self->indexes, data->curr_index);
       cancellable = ide_task_get_cancellable (task);
 
-      dzl_fuzzy_index_query_async (dir_index->symbol_names,
+      ide_fuzzy_index_query_async (dir_index->symbol_names,
                                    data->query,
                                    data->max_results,
                                    cancellable,
@@ -425,7 +420,7 @@ ide_code_index_index_query_cb (GObject      *object,
           IdeCodeIndexSearchResult *item;
           FuzzyMatch fuzzy_match;
 
-          dzl_heap_extract (data->fuzzy_matches, &fuzzy_match);
+          ide_heap_extract (data->fuzzy_matches, &fuzzy_match);
 
           item = ide_code_index_index_create_search_result (context, &fuzzy_match);
           if (item != NULL)
@@ -440,7 +435,7 @@ ide_code_index_index_query_cb (GObject      *object,
           if (fuzzy_match.match_num < g_list_model_get_n_items (fuzzy_match.list))
             {
               fuzzy_match.match = g_list_model_get_item (fuzzy_match.list, fuzzy_match.match_num);
-              dzl_heap_insert_val (data->fuzzy_matches, fuzzy_match);
+              ide_heap_insert_val (data->fuzzy_matches, fuzzy_match);
             }
           else
             {
@@ -479,7 +474,7 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
   data = g_slice_new0 (PopulateTaskData);
   data->max_results = max_results;
   data->curr_index = 0;
-  data->fuzzy_matches = dzl_heap_new (sizeof (FuzzyMatch),
+  data->fuzzy_matches = ide_heap_new (sizeof (FuzzyMatch),
                                       (GCompareFunc)fuzzy_match_compare);
 
   /* Replace "<symbol type prefix><space>" with <symbol code>INFORMATION SEPARATOR ONE  */
@@ -522,7 +517,7 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
     {
       DirectoryIndex *dir_index = g_ptr_array_index (self->indexes, data->curr_index);
 
-      dzl_fuzzy_index_query_async (dir_index->symbol_names,
+      ide_fuzzy_index_query_async (dir_index->symbol_names,
                                    data->query,
                                    data->max_results,
                                    cancellable,
@@ -560,7 +555,7 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
   g_autofree gchar *name = NULL;
   IdeSymbolKind kind = IDE_SYMBOL_KIND_NONE;
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
-  DzlFuzzyIndex *symbol_names = NULL;
+  IdeFuzzyIndex *symbol_names = NULL;
   const DirectoryIndex *dir_index = NULL;
   const gchar *filename;
   guint32 file_id = 0;
@@ -601,7 +596,7 @@ ide_code_index_index_lookup_symbol (IdeCodeIndexIndex *self,
 
   g_snprintf (num, sizeof(num), "%u", file_id);
 
-  filename = dzl_fuzzy_index_get_metadata_string (symbol_names, num);
+  filename = ide_fuzzy_index_get_metadata_string (symbol_names, num);
   file = g_file_new_for_path (filename);
 
   if (flags & IDE_SYMBOL_FLAGS_IS_DEFINITION)
