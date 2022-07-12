@@ -22,8 +22,8 @@
 
 #include "config.h"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
+
 #include <libide-gui.h>
 #include <libide-projects.h>
 #include <libide-tree.h>
@@ -260,7 +260,7 @@ gbp_project_tree_addin_node_activated (IdeTreeAddin *addin,
       file = ide_project_file_ref_file (project_file);
       workbench = ide_widget_get_workbench (GTK_WIDGET (tree));
 
-      ide_workbench_open_async (workbench, file, NULL, 0, NULL, NULL, NULL);
+      ide_workbench_open_async (workbench, file, NULL, 0, NULL, NULL, NULL, NULL);
 
       return TRUE;
     }
@@ -553,14 +553,11 @@ gbp_project_tree_addin_load (IdeTreeAddin *addin,
                              IdeTree      *tree,
                              IdeTreeModel *model)
 {
-  static const GtkTargetEntry drag_targets[] = {
-    { (gchar *)"GTK_TREE_MODEL_ROW", GTK_TARGET_SAME_WIDGET, 0 },
-    { (gchar *)"text/uri-list", 0, 0 },
-  };
-
   GbpProjectTreeAddin *self = (GbpProjectTreeAddin *)addin;
   IdeVcsMonitor *monitor;
   IdeWorkbench *workbench;
+  g_autoptr(GdkContentFormats) formats = NULL;
+  GdkContentFormatsBuilder *builder;
 
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (self));
   g_assert (IDE_IS_TREE_MODEL (model));
@@ -583,12 +580,17 @@ gbp_project_tree_addin_load (IdeTreeAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
 
+  builder = gdk_content_formats_builder_new ();
+  gdk_content_formats_builder_add_gtype (builder, GDK_TYPE_FILE_LIST);
+  gdk_content_formats_builder_add_gtype (builder, GTK_TYPE_TREE_ROW_DATA);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
+
   gtk_tree_view_enable_model_drag_source (GTK_TREE_VIEW (tree),
                                           GDK_BUTTON1_MASK,
-                                          drag_targets, G_N_ELEMENTS (drag_targets),
+                                          formats,
                                           GDK_ACTION_COPY | GDK_ACTION_MOVE);
   gtk_tree_view_enable_model_drag_dest (GTK_TREE_VIEW (tree),
-                                        drag_targets, G_N_ELEMENTS (drag_targets),
+                                        formats,
                                         GDK_ACTION_COPY | GDK_ACTION_MOVE);
 }
 
@@ -617,10 +619,9 @@ static gboolean
 gbp_project_tree_addin_node_droppable (IdeTreeAddin     *addin,
                                        IdeTreeNode      *drag_node,
                                        IdeTreeNode      *drop_node,
-                                       GtkSelectionData *selection)
+                                       const GValue     *value)
 {
   IdeProjectFile *drop_file = NULL;
-  g_auto(GStrv) uris = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PROJECT_TREE_ADDIN (addin));
@@ -638,9 +639,13 @@ gbp_project_tree_addin_node_droppable (IdeTreeAddin     *addin,
     return FALSE;
 
   /* We need a uri list or file node */
-  uris = gtk_selection_data_get_uris (selection);
-  if ((uris == NULL || uris[0] == NULL) && drag_node == NULL)
-    return FALSE;
+  if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    {
+      const GList *files = g_value_get_boxed (value);
+
+      if ((files == NULL || !G_IS_FILE (files->data)) && drag_node == NULL)
+        return FALSE;
+    }
 
   /* If we have a drag node, make sure it's a file */
   if (drag_node != NULL &&
@@ -651,23 +656,23 @@ gbp_project_tree_addin_node_droppable (IdeTreeAddin     *addin,
 }
 
 static void
-gbp_project_tree_addin_notify_progress_cb (DzlFileTransfer *transfer,
+gbp_project_tree_addin_notify_progress_cb (IdeFileTransfer *transfer,
                                            GParamSpec      *pspec,
                                            IdeNotification *notif)
 {
   g_autofree gchar *body = NULL;
-  DzlFileTransferStat stbuf;
+  IdeFileTransferStat stbuf;
   gchar count[16];
   gchar total[16];
   gdouble progress;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (DZL_IS_FILE_TRANSFER (transfer));
+  g_assert (IDE_IS_FILE_TRANSFER (transfer));
   g_assert (IDE_IS_NOTIFICATION (notif));
 
-  dzl_file_transfer_stat (transfer, &stbuf);
+  ide_file_transfer_stat (transfer, &stbuf);
 
-  progress = dzl_file_transfer_get_progress (transfer);
+  progress = ide_file_transfer_get_progress (transfer);
   ide_notification_set_progress (notif, progress);
 
   g_snprintf (count, sizeof count, "%"G_GINT64_FORMAT, stbuf.n_files);
@@ -687,17 +692,17 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
 {
-  DzlFileTransfer *transfer = (DzlFileTransfer *)object;
+  IdeFileTransfer *transfer = (IdeFileTransfer *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GbpProjectTreeAddin *self;
   IdeNotification *notif;
-  DzlFileTransferStat stbuf;
+  IdeFileTransferStat stbuf;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (DZL_IS_FILE_TRANSFER (transfer));
+  g_assert (IDE_IS_FILE_TRANSFER (transfer));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
@@ -711,7 +716,7 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
   gbp_project_tree_addin_notify_progress_cb (transfer, NULL, notif);
   ide_notification_set_progress (notif, 1.0);
 
-  if (!dzl_file_transfer_execute_finish (transfer, result, &error))
+  if (!ide_file_transfer_execute_finish (transfer, result, &error))
     {
       ide_notification_set_title (notif, _("Failed to copy files"));
       ide_notification_set_body (notif, error->message);
@@ -725,7 +730,7 @@ gbp_project_tree_addin_transfer_cb (GObject      *object,
 
       ide_notification_set_title (notif, _("Files copied"));
 
-      dzl_file_transfer_stat (transfer, &stbuf);
+      ide_file_transfer_stat (transfer, &stbuf);
       g_snprintf (count, sizeof count, "%"G_GINT64_FORMAT, stbuf.n_files_total);
       format = g_strdup_printf (ngettext ("Copied %s file", "Copied %s files", stbuf.n_files_total), count);
       ide_notification_set_body (notif, format);
@@ -807,7 +812,7 @@ static void
 gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
                                            IdeTreeNode         *drag_node,
                                            IdeTreeNode         *drop_node,
-                                           GtkSelectionData    *selection,
+                                           const GValue        *value,
                                            GdkDragAction        actions,
                                            GCancellable        *cancellable,
                                            GAsyncReadyCallback  callback,
@@ -815,16 +820,16 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
 {
   GbpProjectTreeAddin *self = (GbpProjectTreeAddin *)addin;
   g_autoptr(IdeTask) task = NULL;
-  g_autoptr(DzlFileTransfer) transfer = NULL;
+  g_autoptr(IdeFileTransfer) transfer = NULL;
   g_autoptr(GFile) src_file = NULL;
   g_autoptr(GFile) dst_dir = NULL;
   g_autoptr(IdeNotification) notif = NULL;
   g_autoptr(GPtrArray) srcs = NULL;
-  g_auto(GStrv) uris = NULL;
   IdeProjectFile *drag_file;
   IdeProjectFile *drop_file;
   IdeBufferManager *buffer_manager;
   IdeContext *context;
+  const GList *files = NULL;
 
   IDE_ENTRY;
 
@@ -836,19 +841,20 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_project_tree_addin_node_dropped_async);
 
-  if (!gbp_project_tree_addin_node_droppable (addin, drag_node, drop_node, selection))
+  if (!gbp_project_tree_addin_node_droppable (addin, drag_node, drop_node, value))
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
     }
 
   srcs = g_ptr_array_new_with_free_func (g_object_unref);
-  uris = gtk_selection_data_get_uris (selection);
+  if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    files = g_value_get_boxed (value);
 
-  if (uris != NULL)
+  if (files != NULL)
     {
-      for (guint i = 0; uris[i]; i++)
-        g_ptr_array_add (srcs, g_file_new_for_uri (uris[i]));
+      for (const GList *iter = files; iter; iter = iter->next)
+        g_ptr_array_add (srcs, g_object_ref (iter->data));
     }
 
   drop_file = ide_tree_node_get_item (drop_node);
@@ -866,8 +872,8 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   dst_dir = ide_project_file_ref_file (drop_file);
   g_assert (G_IS_FILE (dst_dir));
 
-  transfer = dzl_file_transfer_new ();
-  dzl_file_transfer_set_flags (transfer, DZL_FILE_TRANSFER_FLAGS_NONE);
+  transfer = ide_file_transfer_new ();
+  ide_file_transfer_set_flags (transfer, IDE_FILE_TRANSFER_FLAGS_NONE);
   g_signal_connect_object (transfer,
                            "notify::progress",
                            G_CALLBACK (gbp_project_tree_addin_notify_progress_cb),
@@ -899,7 +905,7 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
           IDE_EXIT;
         }
 
-      dzl_file_transfer_add (transfer, source, dst_file);
+      ide_file_transfer_add (transfer, source, dst_file);
 
       /* If there are any buffers that are open with this file as an
        * ancester, then we need to rename there file to point at the
@@ -925,7 +931,7 @@ gbp_project_tree_addin_node_dropped_async (IdeTreeAddin        *addin,
   ide_notification_attach (notif, IDE_OBJECT (self->model));
   ide_task_set_task_data (task, g_object_ref (notif), g_object_unref);
 
-  dzl_file_transfer_execute_async (transfer,
+  ide_file_transfer_execute_async (transfer,
                                    G_PRIORITY_DEFAULT,
                                    cancellable,
                                    gbp_project_tree_addin_transfer_cb,

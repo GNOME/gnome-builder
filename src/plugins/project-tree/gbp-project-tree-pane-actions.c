@@ -22,9 +22,12 @@
 
 #include "config.h"
 
-#include <libide-editor.h>
-#include <libide-projects.h>
 #include <vte/vte.h>
+
+#include <libide-editor.h>
+
+#include <libide-gtk.h>
+#include <libide-projects.h>
 
 #include "gbp-project-tree-private.h"
 #include "gbp-rename-file-popover.h"
@@ -73,7 +76,14 @@ new_action_completed_cb (GObject      *object,
         return;
 
       if (state->file != NULL)
-        ide_workbench_open_async (workbench, state->file, "editor", 0, NULL, NULL, NULL);
+        ide_workbench_open_async (workbench,
+                                  state->file,
+                                  "editorui",
+                                  0,
+                                  NULL,
+                                  NULL,
+                                  NULL,
+                                  NULL);
     }
 }
 
@@ -164,7 +174,7 @@ gbp_project_tree_pane_actions_new_cb (GObject      *object,
   else
     g_assert_not_reached ();
 
-  gtk_widget_destroy (GTK_WIDGET (popover));
+  gtk_popover_popdown (GTK_POPOVER (popover));
 }
 
 static void
@@ -233,10 +243,28 @@ gbp_project_tree_pane_actions_new (GbpProjectTreePane *self,
 }
 
 static void
-close_matching_pages (GtkWidget *widget,
-                      gpointer   user_data)
+rename_save_cb (GObject      *object,
+                GAsyncResult *result,
+                gpointer      user_data)
 {
-  IdePage *page = (IdePage *)widget;
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdePage) page = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_PAGE (page));
+
+  if (!ide_buffer_save_file_finish (buffer, result, &error))
+    g_warning ("Failed to save file before rename: %s", error->message);
+
+  panel_widget_close (PANEL_WIDGET (page));
+}
+
+static void
+close_matching_pages (IdePage  *page,
+                      gpointer  user_data)
+{
   GFile *file = user_data;
   GFile *this_file;
 
@@ -246,45 +274,58 @@ close_matching_pages (GtkWidget *widget,
   if (!IDE_IS_EDITOR_PAGE (page))
     return;
 
-  this_file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page));
-  if (this_file == NULL)
+  if (!(this_file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page))))
     return;
 
   if (g_file_equal (this_file, file))
     {
       IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
-      ide_buffer_save_file_async (buffer, NULL, NULL, NULL, NULL, NULL);
-      gtk_widget_destroy (widget);
+      ide_buffer_save_file_async (buffer, NULL, NULL,
+                                  NULL,
+                                  rename_save_cb,
+                                  g_object_ref (page));
     }
 }
 
-#define DEFINE_ACTION_HANDLER(short_name, BODY)                       \
-static void                                                           \
-gbp_project_tree_pane_actions_##short_name (GSimpleAction *action,    \
-                                            GVariant      *param,     \
-                                            gpointer       user_data) \
-{                                                                     \
-  GbpProjectTreePane *self = user_data;                               \
-                                                                      \
-  g_assert (G_IS_SIMPLE_ACTION (action));                             \
-  g_assert (GBP_IS_PROJECT_TREE_PANE (self));                         \
-                                                                      \
-  BODY                                                                \
+static void
+gbp_project_tree_pane_actions_new_file (GSimpleAction *action,
+                                        GVariant      *param,
+                                        gpointer       user_data)
+{
+  GbpProjectTreePane *self = user_data;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
+
+  gbp_project_tree_pane_actions_new (self, G_FILE_TYPE_REGULAR);
 }
 
-DEFINE_ACTION_HANDLER (new_file, {
-  gbp_project_tree_pane_actions_new (self, G_FILE_TYPE_REGULAR);
-});
+static void
+gbp_project_tree_pane_actions_new_folder (GSimpleAction *action,
+                                          GVariant      *param,
+                                          gpointer       user_data)
+{
+  GbpProjectTreePane *self = user_data;
 
-DEFINE_ACTION_HANDLER (new_folder, {
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
+
   gbp_project_tree_pane_actions_new (self, G_FILE_TYPE_DIRECTORY);
-});
+}
 
-DEFINE_ACTION_HANDLER (open, {
+static void
+gbp_project_tree_pane_actions_open (GSimpleAction *action,
+                                    GVariant      *param,
+                                    gpointer       user_data)
+{
+  GbpProjectTreePane *self = user_data;
   IdeProjectFile *project_file;
   g_autoptr(GFile) file = NULL;
   IdeWorkbench *workbench;
   IdeTreeNode *selected;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
   if (!(selected = ide_tree_get_selected_node (self->tree)) ||
       !ide_tree_node_holds (selected, IDE_TYPE_PROJECT_FILE) ||
@@ -298,8 +339,11 @@ DEFINE_ACTION_HANDLER (open, {
                             file,
                             NULL,
                             IDE_BUFFER_OPEN_FLAGS_NONE,
-                            NULL, NULL, NULL);
-});
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL);
+}
 
 static void
 gbp_project_tree_pane_actions_rename_cb (GObject      *object,
@@ -334,7 +378,7 @@ gbp_project_tree_pane_actions_rename_display_cb (GObject      *object,
   g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
   if (!(dst = gbp_rename_file_popover_display_finish (popover, result, &error)))
-    goto destroy;
+    goto done;
 
   src = gbp_rename_file_popover_get_file (popover);
   context = ide_widget_get_context (GTK_WIDGET (self));
@@ -347,17 +391,25 @@ gbp_project_tree_pane_actions_rename_display_cb (GObject      *object,
                                  gbp_project_tree_pane_actions_rename_cb,
                                  g_object_ref (self));
 
-destroy:
-  gtk_widget_destroy (GTK_WIDGET (popover));
+done:
+  gtk_popover_popdown (GTK_POPOVER (popover));
 }
 
-DEFINE_ACTION_HANDLER (rename, {
+static void
+gbp_project_tree_pane_actions_rename (GSimpleAction *action,
+                                      GVariant      *param,
+                                      gpointer       user_data)
+{
+  GbpProjectTreePane *self = user_data;
   IdeProjectFile *project_file;
   g_autoptr(GFile) file = NULL;
   GbpRenameFilePopover *popover;
   IdeWorkbench *workbench;
   IdeTreeNode *selected;
   gboolean is_dir;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
   if (!(selected = ide_tree_get_selected_node (self->tree)) ||
       !ide_tree_node_holds (selected, IDE_TYPE_PROJECT_FILE) ||
@@ -381,7 +433,7 @@ DEFINE_ACTION_HANDLER (rename, {
                                          NULL,
                                          gbp_project_tree_pane_actions_rename_display_cb,
                                          g_object_ref (self));
-});
+}
 
 static void
 gbp_project_tree_pane_actions_trash_cb (GObject      *object,
@@ -405,11 +457,19 @@ gbp_project_tree_pane_actions_trash_cb (GObject      *object,
     ide_tree_node_remove (parent, node);
 }
 
-DEFINE_ACTION_HANDLER (trash, {
+static void
+gbp_project_tree_pane_actions_trash (GSimpleAction *action,
+                                     GVariant      *param,
+                                     gpointer       user_data)
+{
+  GbpProjectTreePane *self = user_data;
   IdeProjectFile *project_file;
   g_autoptr(GFile) file = NULL;
   IdeWorkbench *workbench;
   IdeTreeNode *selected;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
   if (!(selected = ide_tree_get_selected_node (self->tree)) ||
       !ide_tree_node_holds (selected, IDE_TYPE_PROJECT_FILE) ||
@@ -424,12 +484,20 @@ DEFINE_ACTION_HANDLER (trash, {
                                 NULL,
                                 gbp_project_tree_pane_actions_trash_cb,
                                 g_object_ref (selected));
-});
+}
 
-DEFINE_ACTION_HANDLER (open_containing_folder, {
+static void
+gbp_project_tree_pane_actions_open_containing_folder (GSimpleAction *action,
+                                                      GVariant      *param,
+                                                      gpointer       user_data)
+{
+  GbpProjectTreePane *self = user_data;
   IdeProjectFile *project_file;
   g_autoptr(GFile) file = NULL;
   IdeTreeNode *selected;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
   if (!(selected = ide_tree_get_selected_node (self->tree)) ||
       !ide_tree_node_holds (selected, IDE_TYPE_PROJECT_FILE) ||
@@ -437,15 +505,23 @@ DEFINE_ACTION_HANDLER (open_containing_folder, {
     return;
 
   file = ide_project_file_ref_file (project_file);
-  dzl_file_manager_show (file, NULL);
-});
+  ide_file_manager_show (file, NULL);
+}
 
-DEFINE_ACTION_HANDLER (open_with_hint, {
+static void
+gbp_project_tree_pane_actions_open_with_hint (GSimpleAction *action,
+                                              GVariant      *param,
+                                              gpointer       user_data)
+{
+  GbpProjectTreePane *self = user_data;
   IdeProjectFile *project_file;
   g_autoptr(GFile) file = NULL;
   IdeWorkbench *workbench;
   IdeTreeNode *selected;
   const gchar *hint;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
 
   if (!(selected = ide_tree_get_selected_node (self->tree)) ||
       !ide_tree_node_holds (selected, IDE_TYPE_PROJECT_FILE) ||
@@ -460,8 +536,11 @@ DEFINE_ACTION_HANDLER (open_with_hint, {
                             file,
                             hint,
                             IDE_BUFFER_OPEN_FLAGS_NONE,
-                            NULL, NULL, NULL);
-});
+                            NULL,
+                            NULL,
+                            NULL,
+                            NULL);
+}
 
 /* Based on gdesktopappinfo.c in GIO */
 static gchar *
@@ -575,11 +654,29 @@ _gbp_project_tree_pane_init_actions (GbpProjectTreePane *self)
                                    self);
   g_action_map_add_action (G_ACTION_MAP (actions), ignored_action);
   g_action_map_add_action (G_ACTION_MAP (actions), sort_action);
-  gtk_widget_insert_action_group (GTK_WIDGET (self->tree),
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
                                   "project-tree",
                                   G_ACTION_GROUP (actions));
 
+  self->actions = g_object_ref (G_ACTION_GROUP (actions));
+
   _gbp_project_tree_pane_update_actions (self);
+}
+
+G_GNUC_NULL_TERMINATED static void
+action_map_set (GActionMap *map,
+                const char *name,
+                const char *first_property,
+                ...)
+{
+  GAction *action;
+  va_list args;
+
+  action = g_action_map_lookup_action (map, name);
+
+  va_start (args, first_property);
+  g_object_set_valist (G_OBJECT (action), first_property, args);
+  va_end (args);
 }
 
 void
@@ -606,28 +703,28 @@ _gbp_project_tree_pane_update_actions (GbpProjectTreePane *self)
         }
     }
 
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "new-file",
-                             "enabled", is_file,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "new-folder",
-                             "enabled", is_file,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "trash",
-                             "enabled", is_file,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "rename",
-                             "enabled", is_file,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open",
-                             "enabled", is_file && !is_dir,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-with-hint",
-                             "enabled", is_file,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-containing-folder",
-                             "enabled", is_file,
-                             NULL);
-  dzl_gtk_widget_action_set (GTK_WIDGET (self->tree), "project-tree", "open-in-terminal",
-                             "enabled", is_file,
-                             NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "new-file",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "new-folder",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "trash",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "rename",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "open",
+                  "enabled", is_file && !is_dir,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "open-with-hint",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "open-containing-folder",
+                  "enabled", is_file,
+                  NULL);
+  action_map_set (G_ACTION_MAP (self->actions), "open-in-terminal",
+                  "enabled", is_file,
+                  NULL);
 }

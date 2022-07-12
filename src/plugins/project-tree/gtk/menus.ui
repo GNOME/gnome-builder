@@ -33,18 +33,25 @@
           </item>
         </section>
       </submenu>
-      <item>
-        <attribute name="id">project-tree-menu-open-folder</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
+      <submenu id="project-tree-menu-open-containing-folder-menu">
         <attribute name="label" translatable="yes">Open _Containing Folder</attribute>
-        <attribute name="action">project-tree.open-containing-folder</attribute>
-      </item>
-      <item>
-        <attribute name="id">project-tree-menu-open-terminal</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
-        <attribute name="label" translatable="yes">Open in _Terminal</attribute>
-        <attribute name="action">project-tree.open-in-terminal</attribute>
-      </item>
+        <item>
+          <attribute name="id">project-tree-menu-open-folder</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+          <attribute name="label" translatable="yes">With File _Browser…</attribute>
+          <attribute name="action">project-tree.open-containing-folder</attribute>
+        </item>
+        <item>
+          <attribute name="id">project-tree-menu-open-terminal</attribute>
+          <attribute name="hidden-when">action-disabled</attribute>
+          <attribute name="label" translatable="yes">With _Terminal…</attribute>
+          <attribute name="action">project-tree.open-in-terminal</attribute>
+        </item>
+      </submenu>
+    </section>
+    <section id="project-tree-menu-find-section">
+    </section>
+    <section id="project-tree-menu-foundry-section">
     </section>
     <section id="project-tree-menu-destructive-section">
       <item>
@@ -78,10 +85,9 @@
       </submenu>
     </section>
   </menu>
-  <menu id="ide-editor-page-document-menu">
-    <section id="ide-frame-menu-reveal">
-      <attribute name="after">editor-document-preferences-section</attribute>
-      <attribute name="before">editor-document-save-section</attribute>
+  <menu id="ide-editor-page-menu">
+    <section id="ide-editor-page-reveal-section">
+      <attribute name="before">ide-editor-page-save-section</attribute>
       <item>
         <attribute name="id">project-tree-reveal</attribute>
         <attribute name="label" translatable="yes">Reveal in Project Tree</attribute>
@@ -93,7 +99,7 @@
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-files-section">
       <item>
-        <attribute name="label" translatable="yes">Reveal File in Project _Tree</attribute>
+        <attribute name="label" translatable="yes">Reveal in Project _Tree</attribute>
         <attribute name="action">project-tree.reveal</attribute>
       </item>
     </section>

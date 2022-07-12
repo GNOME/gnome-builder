@@ -23,7 +23,6 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libide-editor.h>
 #include <libide-gui.h>
 
 #include "gbp-project-tree-workspace-addin.h"
@@ -40,33 +39,25 @@ gbp_project_tree_workspace_addin_load (IdeWorkspaceAddin *addin,
                                        IdeWorkspace      *workspace)
 {
   GbpProjectTreeWorkspaceAddin *self = (GbpProjectTreeWorkspaceAddin *)addin;
-  IdeEditorSidebar *sidebar;
-  IdeSurface *surface;
+  g_autoptr(IdePanelPosition) position = NULL;
 
   g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) ||
-            IDE_IS_EDITOR_WORKSPACE (workspace));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
-  surface = ide_workspace_get_surface_by_name (workspace, "editor");
-  g_assert (IDE_IS_EDITOR_SURFACE (surface));
+  ide_pane_observe (g_object_new (GBP_TYPE_PROJECT_TREE_PANE,
+                                  "title", _("Project Tree"),
+                                  "icon-name", "view-list-symbolic",
+                                  NULL),
+                    (IdePane **)&self->pane);
 
-  sidebar = ide_editor_surface_get_sidebar (IDE_EDITOR_SURFACE (surface));
-  g_assert (IDE_IS_EDITOR_SIDEBAR (sidebar));
+  position = ide_panel_position_new ();
+  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_START);
+  ide_panel_position_set_row (position, 0);
+  ide_panel_position_set_depth (position, 0);
 
-  self->pane = g_object_new (GBP_TYPE_PROJECT_TREE_PANE,
-                             "visible", TRUE,
-                             NULL);
-  g_signal_connect (self->pane,
-                    "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &self->pane);
-  ide_editor_sidebar_add_section (sidebar,
-                                  "project-tree",
-                                  _("Project Tree"),
-                                  "view-list-symbolic",
-                                  NULL, NULL,
-                                  GTK_WIDGET (self->pane),
-                                  0);
+  ide_workspace_add_pane (workspace, IDE_PANE (self->pane), position);
+
+  panel_widget_raise (PANEL_WIDGET (self->pane));
 }
 
 static void
@@ -76,11 +67,9 @@ gbp_project_tree_workspace_addin_unload (IdeWorkspaceAddin *addin,
   GbpProjectTreeWorkspaceAddin *self = (GbpProjectTreeWorkspaceAddin *)addin;
 
   g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) ||
-            IDE_IS_EDITOR_WORKSPACE (workspace));
+  g_assert (IDE_IS_WORKSPACE (workspace));
 
-  if (self->pane != NULL)
-    gtk_widget_destroy (GTK_WIDGET (self->pane));
+  ide_clear_pane ((IdePane **)&self->pane);
 }
 
 static void
@@ -91,7 +80,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpProjectTreeWorkspaceAddin, gbp_project_tree_workspace_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
 gbp_project_tree_workspace_addin_class_init (GbpProjectTreeWorkspaceAddinClass *klass)

@@ -66,8 +66,8 @@ gbp_new_file_popover_button_clicked (GbpNewFilePopover *self,
   if (self->directory == NULL)
     return;
 
-  path = gtk_entry_get_text (self->entry);
-  if (dzl_str_empty0 (path))
+  path = gtk_editable_get_text (GTK_EDITABLE (self->entry));
+  if (ide_str_empty0 (path))
     return;
 
   stripped = g_strstrip (g_strdup (path));
@@ -178,9 +178,9 @@ gbp_new_file_popover_entry_changed (GbpNewFilePopover *self,
 
   /* make sure to strip so that warnings (eg. "file already exists") are
    * consistents with the final behavior (creating the file). */
-  stripped = g_strstrip(g_strdup (gtk_entry_get_text (entry)));
+  stripped = g_strstrip(g_strdup (gtk_editable_get_text (GTK_EDITABLE (entry))));
 
-  gtk_widget_set_sensitive (GTK_WIDGET (self->button), !dzl_str_empty0 (stripped));
+  gtk_widget_set_sensitive (GTK_WIDGET (self->button), !ide_str_empty0 (stripped));
 
   gbp_new_file_popover_check_exists (self, self->directory, stripped);
 }
@@ -243,8 +243,6 @@ gbp_new_file_popover_get_property (GObject    *object,
  * @pspec: (in): a #ParamSpec.
  *
  * Set a given #GObject property.
- *
- * Since: 3.32
  */
 static void
 gbp_new_file_popover_set_property (GObject      *object,
@@ -372,7 +370,7 @@ gbp_new_file_popover_set_directory (GbpNewFilePopover *self,
     {
       const gchar *path;
 
-      path = gtk_entry_get_text (self->entry);
+      path = gtk_editable_get_text (GTK_EDITABLE (self->entry));
       gbp_new_file_popover_check_exists (self, directory, path);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIRECTORY]);
     }
@@ -382,8 +380,6 @@ gbp_new_file_popover_set_directory (GbpNewFilePopover *self,
  * gbp_new_file_popover_get_directory:
  *
  * Returns: (transfer none) (nullable): a #GFile or %NULL.
- *
- * Since: 3.32
  */
 GFile *
 gbp_new_file_popover_get_directory (GbpNewFilePopover *self)

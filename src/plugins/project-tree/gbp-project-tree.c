@@ -127,56 +127,55 @@ cleanup:
 }
 
 static void
-gbp_project_tree_hierarchy_changed (GtkWidget *widget,
-                                    GtkWidget *old_toplevel)
+gbp_project_tree_context_set (GtkWidget  *widget,
+                              IdeContext *context)
 {
   GbpProjectTree *self = (GbpProjectTree *)widget;
-  GtkWidget *toplevel;
+  g_autoptr(IdeTreeNode) root = NULL;
+  g_autoptr(IdeTreeModel) model = NULL;
+  g_autoptr(IdeTask) task = NULL;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_PROJECT_TREE (self));
+  g_assert (!context || IDE_IS_CONTEXT (context));
 
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (self));
+  if (context == NULL)
+    return;
 
-  if (IDE_IS_WORKSPACE (toplevel))
-    {
-      IdeContext *context = ide_widget_get_context (GTK_WIDGET (toplevel));
-      g_autoptr(IdeTreeNode) root = ide_tree_node_new ();
-      g_autoptr(IdeTreeModel) model = NULL;
-      g_autoptr(IdeTask) task = NULL;
+  root = ide_tree_node_new ();
 
-      model = g_object_new (IDE_TYPE_TREE_MODEL,
-                            "kind", "project-tree",
-                            "tree", self,
-                            NULL);
-      gtk_tree_view_set_model (GTK_TREE_VIEW (self), GTK_TREE_MODEL (model));
+  model = g_object_new (IDE_TYPE_TREE_MODEL,
+                        "kind", "project-tree",
+                        "tree", self,
+                        NULL);
+  gtk_tree_view_set_model (GTK_TREE_VIEW (self), GTK_TREE_MODEL (model));
 
-      ide_tree_node_set_item (root, context);
-      ide_object_append (IDE_OBJECT (context), IDE_OBJECT (model));
-      ide_tree_model_set_root (model, root);
+  ide_tree_node_set_item (root, context);
+  ide_object_append (IDE_OBJECT (context), IDE_OBJECT (model));
+  ide_tree_model_set_root (model, root);
 
-      task = ide_task_new (self, NULL, NULL, NULL);
-      ide_task_set_source_tag (task, gbp_project_tree_hierarchy_changed);
+  task = ide_task_new (self, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, gbp_project_tree_context_set);
 
-      ide_tree_model_expand_async (model,
-                                   root,
-                                   NULL,
-                                   gbp_project_tree_expand_cb,
-                                   g_steal_pointer (&task));
-    }
+  ide_tree_model_expand_async (model,
+                               root,
+                               NULL,
+                               gbp_project_tree_expand_cb,
+                               g_steal_pointer (&task));
 }
 
 static void
 gbp_project_tree_class_init (GbpProjectTreeClass *klass)
 {
-  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-
-  widget_class->hierarchy_changed = gbp_project_tree_hierarchy_changed;
 }
 
 static void
 gbp_project_tree_init (GbpProjectTree *self)
 {
+  ide_widget_set_context_handler (GTK_WIDGET (self),
+                                  gbp_project_tree_context_set);
+
+  gtk_tree_view_set_show_expanders (GTK_TREE_VIEW (self), FALSE);
 }
 
 static IdeTreeNode *
@@ -327,11 +326,9 @@ reveal_next (Reveal *r)
                                 NULL,
                                 FALSE);
       /* We still need to grab the focus on the tree view widget as suggested
-       * by the documentation. ide_widget_reveal_and_grab() also makes the left
-       * dock show up automatically which is very nice because it avoids having
-       * to press F9 when it could have been revealed automatically.
+       * by the documentation.
        */
-      ide_widget_reveal_and_grab (GTK_WIDGET (r->tree));
+      gtk_widget_grab_focus (GTK_WIDGET (r->tree));
     }
 
 failure:

@@ -48,7 +48,7 @@ gbp_project_tree_pane_init (GbpProjectTreePane *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   app = IDE_APPLICATION_DEFAULT;
-  menu = dzl_application_get_menu_by_id (DZL_APPLICATION (app), "project-tree-menu");
+  menu = ide_application_get_menu_by_id (IDE_APPLICATION (app), "project-tree-menu");
   ide_tree_set_context_menu (self->tree, menu);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->tree));
