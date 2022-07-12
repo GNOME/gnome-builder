@@ -1,11 +1,11 @@
 [Plugin]
 Builtin=true
-Copyright=Copyright © 2021 Georg Vienna
-Description=Provides LSP integration for Typescript/Javascript
-Loader=python3
-Module=ts_language_server_plugin
-Name=Typescript Language Server Plugin
-X-Builder-ABI=@PACKAGE_ABI@
+Copyright=Copyright © 2021 Georg Vienna, Copyright © 2022 Christian Hergert
+Description=Provides language server integration for Typescript and Javascript
+Embedded=_gbp_tslsp_register_types
+Module=ts-language-server
+Name=Typescript Language Server
+X-Category=lsps
 X-Code-Action-Languages=js,jsx,typescript,typescript-jsx
 X-Completion-Provider-Languages=js,jsx,typescript,typescript-jsx
 X-Diagnostic-Provider-Languages=js,jsx,typescript,typescript-jsx
