@@ -1,11 +1,11 @@
 [Plugin]
 Authors=Giovanni Campagna <gcampagn@cs.stanford.edu>
 Builtin=true
-Copyright=Copyright © 2016-2018 Christian Hergert, 2017 Giovanni Campagna
+Copyright=Copyright © 2016-2022 Christian Hergert, Copyright © 2017 Giovanni Campagna
 Description=Provides integration with the NPM package system
-Loader=python3
-Module=npm_plugin
-Name=NPM/nodejs
-X-Builder-ABI=@PACKAGE_ABI@
-X-Project-File-Filter-Name=NPM package (package.json)
+Embedded=_gbp_npm_register_types
+Module=npm
+Name=NPM
+X-Category=buildsystems
+X-Project-File-Filter-Name=NPM Package (package.json)
 X-Project-File-Filter-Pattern=package.json

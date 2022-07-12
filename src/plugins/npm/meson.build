@@ -1,13 +1,19 @@
 if get_option('plugin_npm')
 
-install_data('npm_plugin.py', install_dir: plugindir)
+plugins_sources += files([
+  'npm-plugin.c',
+  'gbp-npm-build-system-discovery.c',
+  'gbp-npm-build-system.c',
+  'gbp-npm-pipeline-addin.c',
+  'gbp-npm-run-command-provider.c',
+])
 
-configure_file(
-          input: 'npm.plugin',
-         output: 'npm.plugin',
-  configuration: config_h,
-        install: true,
-    install_dir: plugindir,
+plugin_npm_resources = gnome.compile_resources(
+  'npm-resources',
+  'npm.gresource.xml',
+  c_name: 'gbp_npm',
 )
+
+plugins_sources += plugin_npm_resources
 
 endif
