@@ -81,7 +81,6 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCtagsSymbolTree, ide_ctags_symbol_tree, G_TYPE
  * This function takes ownership of @ar.
  *
  *
- * Since: 3.32
  */
 IdeCtagsSymbolTree *
 ide_ctags_symbol_tree_new (GPtrArray *ar)

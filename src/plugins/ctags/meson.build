@@ -7,7 +7,6 @@ plugins_sources += files([
   'ide-ctags-completion-provider.c',
   'ide-ctags-highlighter.c',
   'ide-ctags-index.c',
-  'ide-ctags-preferences-addin.c',
   'ide-ctags-results.c',
   'ide-ctags-service.c',
   'ide-ctags-symbol-node.c',

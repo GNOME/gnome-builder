@@ -20,9 +20,9 @@
 
 #define G_LOG_DOMAIN "ide-ctags-service"
 
-#include <dazzle.h>
 #include <glib/gi18n.h>
 #include <gtksourceview/gtksource.h>
+
 #include <libide-code.h>
 #include <libide-vcs.h>
 
@@ -39,7 +39,7 @@ struct _IdeCtagsService
 {
   IdeObject         parent_instance;
 
-  DzlTaskCache     *indexes;
+  IdeTaskCache     *indexes;
   GCancellable     *cancellable;
   GPtrArray        *highlighters;
   GPtrArray        *completions;
@@ -246,7 +246,7 @@ resolve_path_root (IdeCtagsService *self,
 }
 
 static void
-ide_ctags_service_build_index_cb (DzlTaskCache  *cache,
+ide_ctags_service_build_index_cb (IdeTaskCache  *cache,
                                   gconstpointer  key,
                                   GTask         *task,
                                   gpointer       user_data)
@@ -287,17 +287,17 @@ ide_ctags_service_tags_loaded_cb (GObject      *object,
                                   GAsyncResult *result,
                                   gpointer      user_data)
 {
-  DzlTaskCache *cache = (DzlTaskCache *)object;
+  IdeTaskCache *cache = (IdeTaskCache *)object;
   g_autoptr(IdeCtagsService) self = user_data;
   g_autoptr(IdeCtagsIndex) index = NULL;
   GError *error = NULL;
 
   IDE_ENTRY;
 
-  g_assert (DZL_IS_TASK_CACHE (cache));
+  g_assert (IDE_IS_TASK_CACHE (cache));
   g_assert (IDE_IS_CTAGS_SERVICE (self));
 
-  if (!(index = dzl_task_cache_get_finish (cache, result, &error)))
+  if (!(index = ide_task_cache_get_finish (cache, result, &error)))
     {
       /* don't log if it was an empty file */
       if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NONE))
@@ -350,13 +350,13 @@ do_load (gpointer data)
     GFile *file;
   } *pair = data;
 
-  if ((prev = dzl_task_cache_peek (pair->self->indexes, pair->file)))
+  if ((prev = ide_task_cache_peek (pair->self->indexes, pair->file)))
     {
       if (!file_is_newer (prev, pair->file))
         goto cleanup;
     }
 
-  dzl_task_cache_get_async (pair->self->indexes,
+  ide_task_cache_get_async (pair->self->indexes,
                             pair->file,
                             TRUE,
                             pair->self->cancellable,
@@ -834,7 +834,7 @@ ide_ctags_service_init (IdeCtagsService *self)
                                                       (GEqualFunc)g_file_equal,
                                                       g_object_unref, NULL);
 
-  self->indexes = dzl_task_cache_new ((GHashFunc)g_file_hash,
+  self->indexes = ide_task_cache_new ((GHashFunc)g_file_hash,
                                       (GEqualFunc)g_file_equal,
                                       g_object_ref,
                                       g_object_unref,
@@ -845,7 +845,7 @@ ide_ctags_service_init (IdeCtagsService *self)
                                       self,
                                       NULL);
 
-  dzl_task_cache_set_name (self->indexes, "ctags index cache");
+  ide_task_cache_set_name (self->indexes, "ctags index cache");
 }
 
 /**
@@ -856,15 +856,13 @@ ide_ctags_service_init (IdeCtagsService *self)
  * Note: this does not sort the indexes by importance.
  *
  * Returns: (transfer container) (element-type Ide.CtagsIndex): An array of indexes.
- *
- * Since: 3.32
  */
 GPtrArray *
 ide_ctags_service_get_indexes (IdeCtagsService *self)
 {
   g_return_val_if_fail (IDE_IS_CTAGS_SERVICE (self), NULL);
 
-  return dzl_task_cache_get_values (self->indexes);
+  return ide_task_cache_get_values (self->indexes);
 }
 
 void
@@ -877,7 +875,7 @@ ide_ctags_service_register_highlighter (IdeCtagsService     *self,
   g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
   g_return_if_fail (IDE_IS_CTAGS_HIGHLIGHTER (highlighter));
 
-  values = dzl_task_cache_get_values (self->indexes);
+  values = ide_task_cache_get_values (self->indexes);
 
   for (i = 0; i < values->len; i++)
     {
@@ -908,7 +906,7 @@ ide_ctags_service_register_completion (IdeCtagsService            *self,
   g_return_if_fail (IDE_IS_CTAGS_SERVICE (self));
   g_return_if_fail (IDE_IS_CTAGS_COMPLETION_PROVIDER (completion));
 
-  values = dzl_task_cache_get_values (self->indexes);
+  values = ide_task_cache_get_values (self->indexes);
 
   for (i = 0; i < values->len; i++)
     {
