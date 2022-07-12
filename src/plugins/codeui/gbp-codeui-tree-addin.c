@@ -76,7 +76,7 @@ tree_addin_iface_init (IdeTreeAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCodeuiTreeAddin, gbp_codeui_tree_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_TREE_ADDIN, tree_addin_iface_init))
 
 static void
 gbp_codeui_tree_addin_class_init (GbpCodeuiTreeAddinClass *klass)
