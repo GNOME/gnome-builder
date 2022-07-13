@@ -79,5 +79,10 @@ const char      *ide_search_result_get_title     (IdeSearchResult *self);
 IDE_AVAILABLE_IN_ALL
 void             ide_search_result_set_title     (IdeSearchResult *self,
                                                   const char      *title);
+IDE_AVAILABLE_IN_ALL
+const char      *ide_search_result_get_subtitle  (IdeSearchResult *self);
+IDE_AVAILABLE_IN_ALL
+void             ide_search_result_set_subtitle  (IdeSearchResult *self,
+                                                  const char      *subtitle);
 
 G_END_DECLS

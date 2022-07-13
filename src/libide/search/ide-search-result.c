@@ -27,6 +27,7 @@
 typedef struct
 {
   char         *title;
+  char         *subtitle;
   GdkPaintable *paintable;
   GIcon        *gicon;
   float         score;
@@ -39,6 +40,7 @@ enum {
   PROP_GICON,
   PROP_PRIORITY,
   PROP_SCORE,
+  PROP_SUBTITLE,
   PROP_TITLE,
   N_PROPS
 };
@@ -53,8 +55,10 @@ ide_search_result_finalize (GObject *object)
   IdeSearchResult *self = (IdeSearchResult *)object;
   IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
 
+  g_clear_object (&priv->gicon);
   g_clear_object (&priv->paintable);
   g_clear_pointer (&priv->title, g_free);
+  g_clear_pointer (&priv->subtitle, g_free);
 
   G_OBJECT_CLASS (ide_search_result_parent_class)->finalize (object);
 }
@@ -83,6 +87,10 @@ ide_search_result_get_property (GObject    *object,
 
     case PROP_SCORE:
       g_value_set_float (value, ide_search_result_get_score (self));
+      break;
+
+    case PROP_SUBTITLE:
+      g_value_set_string (value, ide_search_result_get_subtitle (self));
       break;
 
     case PROP_TITLE:
@@ -118,6 +126,10 @@ ide_search_result_set_property (GObject      *object,
 
     case PROP_SCORE:
       ide_search_result_set_score (self, g_value_get_float (value));
+      break;
+
+    case PROP_SUBTITLE:
+      ide_search_result_set_subtitle (self, g_value_get_string (value));
       break;
 
     case PROP_TITLE:
@@ -174,6 +186,13 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
     g_param_spec_string ("title",
                          "Title",
                          "The title of the search result",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SUBTITLE] =
+    g_param_spec_string ("subtitle",
+                         "Subtitle",
+                         "The subtitle of the search result",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
@@ -311,6 +330,32 @@ ide_search_result_set_paintable (IdeSearchResult *self,
 
   if (g_set_object (&priv->paintable, paintable))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PAINTABLE]);
+}
+
+const char *
+ide_search_result_get_subtitle (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
+
+  return priv->subtitle;
+}
+
+void
+ide_search_result_set_subtitle (IdeSearchResult *self,
+                             const char      *subtitle)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+
+  if (g_strcmp0 (priv->subtitle, subtitle) != 0)
+    {
+      g_free (priv->subtitle);
+      priv->subtitle = g_strdup (subtitle);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
+    }
 }
 
 const char *
