@@ -307,32 +307,6 @@
             ]
         },
         {
-            "name" : "devhelp",
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized",
-                "-Dflatpak_build=true"
-            ],
-            "cleanup" : [
-                "/bin/*",
-                "/lib/gedit/plugins",
-                "/share/appdata/*",
-                "/share/applications/*",
-                "/share/dbus-1/services",
-                "/share/GConf",
-                "/share/metainfo"
-            ],
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/devhelp.git",
-                    "branch" : "main"
-                }
-            ]
-        },
-        {
             "name" : "template-glib",
             "config-opts" : [
                 "--libdir=/app/lib",
