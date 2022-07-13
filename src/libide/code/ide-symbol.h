@@ -131,6 +131,8 @@ IdeSymbol      *ide_symbol_new_from_variant    (GVariant       *variant);
 IDE_AVAILABLE_IN_ALL
 GVariant       *ide_symbol_to_variant          (IdeSymbol      *self);
 IDE_AVAILABLE_IN_ALL
-const gchar    *ide_symbol_kind_get_icon_name  (IdeSymbolKind   kind);
+const char     *ide_symbol_kind_get_icon_name  (IdeSymbolKind   kind);
+IDE_AVAILABLE_IN_ALL
+GIcon          *ide_symbol_kind_get_gicon      (IdeSymbolKind   kind);
 
 G_END_DECLS

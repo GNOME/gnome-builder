@@ -417,6 +417,39 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
 }
 
 /**
+ * ide_symbol_kind_get_gicon:
+ * @kind: a #IdeSymbolKind
+ *
+ * Gets a #GIcon to represent the symbol kind.
+ *
+ * Returns: (transfer none) (nullable): a #GIcon or %NULL
+ */
+GIcon *
+ide_symbol_kind_get_gicon (IdeSymbolKind kind)
+{
+  const char *icon_name;
+  GIcon *ret = NULL;
+
+  if ((icon_name = ide_symbol_kind_get_icon_name (kind)))
+    {
+      static GHashTable *cached;
+
+      if (cached == NULL)
+        cached = g_hash_table_new (NULL, NULL);
+
+      ret = g_hash_table_lookup (cached, icon_name);
+
+      if (ret == NULL)
+        {
+          ret = g_themed_icon_new (icon_name);
+          g_hash_table_insert (cached, (char *)icon_name, ret);
+        }
+    }
+
+  return ret;
+}
+
+/**
  * ide_symbol_to_variant:
  * @self: a #IdeSymbol
  *
