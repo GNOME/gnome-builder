@@ -255,20 +255,10 @@ gbp_create_project_widget_expand_cb (GObject      *object,
         {
           GtkWidget *dialog;
 
-          dialog = gtk_message_dialog_new (GTK_WINDOW (greeter),
-                                           (GTK_DIALOG_MODAL |
-                                            GTK_DIALOG_DESTROY_WITH_PARENT |
-                                            GTK_DIALOG_USE_HEADER_BAR),
-                                           GTK_MESSAGE_ERROR,
-                                           GTK_BUTTONS_CLOSE,
-                                           "%s",
-                                           _("Failed to Create Project"));
-          gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-                                                    "%s", error->message);
-          g_signal_connect (dialog,
-                            "response",
-                            G_CALLBACK (gtk_window_destroy),
-                            NULL);
+          dialog = adw_message_dialog_new (GTK_WINDOW (greeter),
+                                           _("Failed to Create Project"),
+                                           error->message);
+          adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (dialog), "close", _("_Close"));
           gtk_window_present (GTK_WINDOW (dialog));
         }
     }

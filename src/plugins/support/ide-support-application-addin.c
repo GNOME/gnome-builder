@@ -88,13 +88,8 @@ generate_support_activate (GSimpleAction              *action,
 
   g_message ("%s", text);
 
-  dialog = gtk_message_dialog_new (windows ? windows->data : NULL,
-                                   GTK_DIALOG_DESTROY_WITH_PARENT,
-                                   GTK_MESSAGE_INFO,
-                                   GTK_BUTTONS_CLOSE,
-                                   "%s", text);
-  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
-  g_signal_connect (dialog, "response", G_CALLBACK (gtk_window_destroy), NULL);
+  dialog = adw_message_dialog_new (windows ? windows->data : NULL, NULL, text);
+  adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (dialog), "close", _("_Close"));
   gtk_window_present (GTK_WINDOW (dialog));
 
   ide_file_manager_show (file, NULL);
