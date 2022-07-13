@@ -13,8 +13,16 @@ install_subdir('hicolor/scalable', install_dir: pkgicondir)
 
 app_icon = '@0@.svg'.format(app_id)
 
-install_data([
-  'hicolor/scalable/apps/@0@.svg'.format(app_id),
-  'hicolor/scalable/apps/@0@-symbolic.svg'.format(app_id)
-], install_dir: join_paths(icondir, 'scalable/apps'))
+app_icons = [
+  'hicolor/scalable/apps/org.gnome.Builder.svg',
+  'hicolor/scalable/apps/org.gnome.Builder-symbolic.svg',
+]
 
+if get_option('development')
+  app_icons += [
+    'hicolor/scalable/apps/@0@.svg'.format(app_id),
+    'hicolor/scalable/apps/@0@-symbolic.svg'.format(app_id),
+  ]
+endif
+
+install_data(app_icons, install_dir: join_paths(icondir, 'scalable/apps'))
