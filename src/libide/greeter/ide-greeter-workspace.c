@@ -313,16 +313,12 @@ ide_greeter_workspace_constructed (GObject *object)
 }
 
 static void
-tear_workbench_down (GtkDialog    *dialog,
-                     int           response,
-                     IdeWorkbench *workbench)
+tear_workbench_down (IdeWorkbench *workbench)
 {
   IDE_ENTRY;
 
-  g_assert (GTK_IS_DIALOG (dialog));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
   ide_workbench_unload_async (workbench, NULL, NULL, NULL);
 
   IDE_EXIT;
@@ -347,22 +343,16 @@ ide_greeter_workspace_open_project_cb (GObject      *object,
     {
       GtkWidget *dialog;
 
-      dialog = gtk_message_dialog_new (GTK_WINDOW (self),
-                                       GTK_DIALOG_USE_HEADER_BAR,
-                                       GTK_MESSAGE_ERROR,
-                                       GTK_BUTTONS_CLOSE,
-                                       _("Failed to load the project"));
-
-      g_object_set (dialog,
-                    "modal", TRUE,
-                    "secondary-text", error->message,
-                    NULL);
+      dialog = adw_message_dialog_new (GTK_WINDOW (self),
+                                       _("Failed to load the project"),
+                                       error->message);
+      adw_message_dialog_add_response (ADW_MESSAGE_DIALOG (dialog), "close", _("_Close"));
 
       g_signal_connect_object (dialog,
                                "response",
                                G_CALLBACK (tear_workbench_down),
                                workbench,
-                               0);
+                               G_CONNECT_SWAPPED);
 
       gtk_window_present (GTK_WINDOW (dialog));
 
@@ -519,28 +509,20 @@ ide_greeter_workspace_delete_selected_rows (GSimpleAction *action,
 }
 
 static void
-purge_selected_rows_response (IdeGreeterWorkspace *self,
-                              gint                 response,
-                              GtkDialog           *dialog)
+purge_selected_rows_response (IdeGreeterWorkspace *self)
 {
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
-  g_assert (GTK_IS_DIALOG (dialog));
 
-  if (response == GTK_RESPONSE_OK)
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
     {
-      for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->sections));
-           child != NULL;
-           child = gtk_widget_get_next_sibling (child))
-        {
-          if (IDE_IS_GREETER_SECTION (child))
-            ide_greeter_section_purge_selected (IDE_GREETER_SECTION (child));
-        }
-
-      ide_greeter_workspace_apply_filter_all (self);
-      ide_greeter_workspace_set_selection_mode (self, FALSE);
+      if (IDE_IS_GREETER_SECTION (child))
+        ide_greeter_section_purge_selected (IDE_GREETER_SECTION (child));
     }
 
-  gtk_window_destroy (GTK_WINDOW (dialog));
+  ide_greeter_workspace_apply_filter_all (self);
+  ide_greeter_workspace_set_selection_mode (self, FALSE);
 }
 
 static void
@@ -549,29 +531,26 @@ ide_greeter_workspace_purge_selected_rows (GSimpleAction *action,
                                            gpointer       user_data)
 {
   IdeGreeterWorkspace *self = user_data;
-  GtkWidget *parent;
-  GtkWidget *button;
-  GtkDialog *dialog;
+  GtkWindow *parent;
+  GtkWidget *dialog;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (param == NULL);
   g_assert (IDE_IS_GREETER_WORKSPACE (self));
 
-  parent = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
-  dialog = g_object_new (GTK_TYPE_MESSAGE_DIALOG,
-                         "modal", TRUE,
-                         "transient-for", parent,
-                         "text", _("Delete Project Sources?"),
-                         "secondary-text", _("Deleting the project source code from your computer cannot be undone."),
-                         NULL);
-  gtk_dialog_add_buttons (dialog,
-                          _("Cancel"), GTK_RESPONSE_CANCEL,
-                          _("Delete Project Sources"), GTK_RESPONSE_OK,
-                          NULL);
-  button = gtk_dialog_get_widget_for_response (dialog, GTK_RESPONSE_OK);
-  gtk_widget_add_css_class (button, "destructive-action");
+  parent = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self)));
+  dialog = adw_message_dialog_new (GTK_WINDOW (parent),
+                                   _("Delete Project Sources?"),
+                                   _("Deleting the project source code from your computer cannot be undone."));
+  adw_message_dialog_add_responses (ADW_MESSAGE_DIALOG (dialog),
+                                    "cancel", _("_Cancel"),
+                                    "delete", _("_Delete Project Sources"),
+                                    NULL);
+  adw_message_dialog_set_response_appearance (ADW_MESSAGE_DIALOG (dialog),
+                                              "delete",
+                                              ADW_RESPONSE_DESTRUCTIVE);
   g_signal_connect_object (dialog,
-                           "response",
+                           "response::delete",
                            G_CALLBACK (purge_selected_rows_response),
                            self,
                            G_CONNECT_SWAPPED);
