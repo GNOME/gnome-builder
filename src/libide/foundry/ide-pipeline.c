@@ -3082,7 +3082,6 @@ ide_pipeline_add_log_observer (IdePipeline         *self,
   g_return_val_if_fail (observer != NULL, 0);
 
   return ide_build_log_add_observer (self->log, observer, observer_data, observer_data_destroy);
-
 }
 
 gboolean
@@ -3633,6 +3632,29 @@ ide_pipeline_reaper_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static inline void
+ide_pipeline_log (IdePipeline *self,
+                  const char  *message)
+{
+  g_assert (IDE_IS_PIPELINE (self));
+
+  if (self->log == NULL)
+    return;
+
+  ide_build_log_observer (IDE_BUILD_LOG_STDOUT, message, strlen (message), self->log);
+}
+
+static void
+ide_pipeline_remove_file_cb (IdePipeline        *self,
+                             GFile              *file,
+                             IdeDirectoryReaper *reaper)
+{
+  g_autofree char *message = NULL;
+  /* translators: %s is replaced with the name of the file being removed */
+  message = g_strdup_printf (_("Removing %s"), g_file_peek_path (file));
+  ide_pipeline_log (self, message);
+}
+
 static void
 ide_pipeline_tick_rebuild (IdePipeline *self,
                            IdeTask     *task)
@@ -3656,6 +3678,11 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
 #endif
 
   reaper = ide_directory_reaper_new ();
+  g_signal_connect_object (reaper,
+                           "remove-file",
+                           G_CALLBACK (ide_pipeline_remove_file_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   /*
    * Check if we can remove the builddir. We don't want to do this if it is the
@@ -3682,6 +3709,8 @@ ide_pipeline_tick_rebuild (IdePipeline *self,
 
   cancellable = ide_task_get_cancellable (task);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  ide_pipeline_log (self, _("Removing build directories…"));
 
   /* Now build the reaper to clean up the build files. */
   ide_directory_reaper_execute_async (reaper,
