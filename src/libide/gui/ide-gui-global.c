@@ -218,7 +218,12 @@ ide_widget_get_workbench (GtkWidget *widget)
     return ide_widget_get_workbench (GTK_WIDGET (transient_for));
 
   if (GTK_IS_WINDOW (root))
-    return IDE_WORKBENCH (gtk_window_get_group (GTK_WINDOW (root)));
+    {
+      GtkWindowGroup *group = gtk_window_get_group (GTK_WINDOW (root));
+
+      if (IDE_IS_WORKBENCH (group))
+        return IDE_WORKBENCH (group);
+    }
 
   return NULL;
 }
