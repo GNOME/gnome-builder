@@ -50,7 +50,6 @@
         "--filesystem=~/.local/share/flatpak",
         "--filesystem=xdg-data/meson",
         "--filesystem=/var/lib/flatpak",
-        "--metadata=X-DConf=migrate-path=/org/gnome/builder/",
         "--env=G_SLICE=always-malloc"
     ],
     "x-run-args" : [
