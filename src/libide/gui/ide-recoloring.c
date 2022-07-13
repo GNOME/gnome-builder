@@ -31,15 +31,18 @@
   "@define-color headerbar_fg_color @window_fg_color;\n" \
   "@define-color headerbar_border_color @window_fg_color;\n" \
   "@define-color popover_fg_color @window_fg_color;\n" \
+  "@define-color dialog_fg_color @window_fg_color;\n" \
   "@define-color dark_fill_bg_color @headerbar_bg_color;\n" \
   "@define-color view_bg_color @card_bg_color;\n" \
   "@define-color view_fg_color @window_fg_color;\n"
 #define LIGHT_CSS_SUFFIX \
   "@define-color popover_bg_color mix(@window_bg_color, white, .1);\n" \
+  "@define-color dialog_bg_color @window_bg_color;\n" \
   "@define-color card_bg_color alpha(white, .6);\n"
 #define DARK_CSS_SUFFIX \
-  "@define-color popover_bg_color mix(@window_bg_color, white, .025);\n" \
-  "@define-color card_bg_color mix(@window_bg_color, white, .1);\n" \
+  "@define-color popover_bg_color mix(@window_bg_color, white, 0.07);\n" \
+  "@define-color dialog_bg_color mix(@window_bg_color, white, 0.07);\n" \
+  "@define-color card_bg_color alpha(white, .08);\n" \
   "@define-color view_bg_color darker(@window_bg_color);\n"
 
 enum {
