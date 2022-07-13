@@ -258,6 +258,42 @@ ide_search_popover_entry_activate_cb (IdeSearchPopover *self,
 }
 
 static void
+ide_search_popover_move_action (GtkWidget  *widget,
+                                const char *action_name,
+                                GVariant   *param)
+{
+  IdeSearchPopover *self = (IdeSearchPopover *)widget;
+  guint selected;
+  int dir;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_INT32));
+
+  selected = gtk_single_selection_get_selected (self->selection);
+  dir = g_variant_get_int32 (param);
+
+  if (dir < 0)
+    {
+      if (selected < ABS (dir))
+        selected = 0;
+      else
+        selected -= ABS (dir);
+    }
+  else
+    {
+      selected += dir;
+    }
+
+  if (selected < g_list_model_get_n_items (G_LIST_MODEL (self->selection)))
+    gtk_single_selection_set_selected (self->selection, selected);
+
+  IDE_EXIT;
+}
+
+static void
 ide_search_popover_next_match_cb (IdeSearchPopover *self,
                                   GtkSearchEntry   *entry)
 {
@@ -395,6 +431,7 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_previous_match_cb);
 
   gtk_widget_class_install_action (widget_class, "search.hide", NULL, ide_search_popover_hide_action);
+  gtk_widget_class_install_action (widget_class, "search.move", "i", ide_search_popover_move_action);
 }
 
 static void
