@@ -201,19 +201,24 @@ ide_widget_get_context (GtkWidget *widget)
 IdeWorkbench *
 ide_widget_get_workbench (GtkWidget *widget)
 {
-  GtkWidget *toplevel;
+  GtkWindow *transient_for;
+  GtkRoot *root;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
+  if (GTK_IS_ROOT (widget))
+    root = GTK_ROOT (widget);
+  else
+    root = gtk_widget_get_root (widget);
 
-  if (GTK_IS_WINDOW (toplevel))
-    {
-      GtkWindowGroup *group = gtk_window_get_group (GTK_WINDOW (toplevel));
+  if (root != NULL &&
+      !IDE_IS_WORKSPACE (root) &&
+      GTK_IS_WINDOW (root) &&
+      (transient_for = gtk_window_get_transient_for (GTK_WINDOW (root))))
+    return ide_widget_get_workbench (GTK_WIDGET (transient_for));
 
-      if (IDE_IS_WORKBENCH (group))
-        return IDE_WORKBENCH (group);
-    }
+  if (GTK_IS_WINDOW (root))
+    return IDE_WORKBENCH (gtk_window_get_group (GTK_WINDOW (root)));
 
   return NULL;
 }
