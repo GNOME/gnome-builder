@@ -24,15 +24,25 @@
 
 #include "ide-search-popover-private.h"
 #include "ide-search-resources.h"
+#include "ide-gui-global.h"
+
+#define SEARCH_DELAY_MSEC 30
+#define MAX_RESULTS 1000 /* 0 for unlimited */
 
 struct _IdeSearchPopover
 {
   GtkPopover       parent_instance;
 
+  GCancellable    *cancellable;
   IdeSearchEngine *search_engine;
 
-  GtkBox          *nav_box;
   GtkSearchEntry  *entry;
+  GtkNoSelection  *selection;
+  GtkListView     *list_view;
+
+  guint            queued_search;
+
+  guint            activate_after_search : 1;
 };
 
 enum {
@@ -46,8 +56,45 @@ G_DEFINE_FINAL_TYPE (IdeSearchPopover, ide_search_popover, GTK_TYPE_POPOVER)
 static GParamSpec *properties [N_PROPS];
 
 static void
+ide_search_popover_cancel (IdeSearchPopover *self)
+{
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+
+  g_cancellable_cancel (self->cancellable);
+  g_clear_object (&self->cancellable);
+  self->cancellable = g_cancellable_new ();
+}
+
+static void
+ide_search_popover_activate (IdeSearchPopover *self,
+                             IdeSearchResult  *result)
+{
+  IdeWorkspace *workspace;
+  GtkWidget *last_focus = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (IDE_IS_SEARCH_RESULT (result));
+
+  /* We want GtkWindow:focus-widget because we don't care that the
+   * popover has a GtkText focused for text entry. We want what was
+   * last focused in the parent workspace window.
+   */
+  if ((workspace = ide_widget_get_workspace (GTK_WIDGET (self))))
+    last_focus = gtk_window_get_focus (GTK_WINDOW (workspace));
+
+  gtk_popover_popdown (GTK_POPOVER (self));
+
+  ide_search_result_activate (result, last_focus);
+
+  IDE_EXIT;
+}
+
+static void
 ide_search_popover_hide_action (GtkWidget  *widget,
-                                const char *action_Name,
+                                const char *action_name,
                                 GVariant   *param)
 {
   gtk_popover_popdown (GTK_POPOVER (widget));
@@ -60,10 +107,151 @@ ide_search_popover_set_search_engine (IdeSearchPopover *self,
   g_assert (IDE_IS_SEARCH_POPOVER (self));
   g_assert (IDE_IS_SEARCH_ENGINE (search_engine));
 
-  if (g_set_object (&self->search_engine, search_engine))
+  g_set_object (&self->search_engine, search_engine);
+}
+
+static void
+ide_search_popover_search_cb (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      user_data)
+{
+  IdeSearchEngine *search_engine = (IdeSearchEngine *)object;
+  g_autoptr(IdeSearchPopover) self = user_data;
+  g_autoptr(GListModel) results = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_ENGINE (search_engine));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+
+  results = ide_search_engine_search_finish (search_engine, result, &error);
+
+  if (error != NULL)
+    g_debug ("Search failed: %s", error->message);
+
+  gtk_no_selection_set_model (self->selection, results);
+
+  if (self->activate_after_search)
     {
-      /* TODO: Setup addins */
+      self->activate_after_search = FALSE;
+
+      if (results != NULL && g_list_model_get_n_items (results) > 0)
+        {
+          g_autoptr(IdeSearchResult) first = g_list_model_get_item (results, 0);
+          g_assert (IDE_IS_SEARCH_RESULT (first));
+          ide_search_popover_activate (self, first);
+        }
     }
+
+  IDE_EXIT;
+}
+
+static gboolean
+ide_search_popover_search_source_func (gpointer data)
+{
+  IdeSearchPopover *self = data;
+  const char *query;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+
+  self->queued_search = 0;
+
+  if (self->search_engine == NULL)
+    IDE_GOTO (failure);
+
+  ide_search_popover_cancel (self);
+
+  query = gtk_editable_get_text (GTK_EDITABLE (self->entry));
+
+  if (ide_str_empty0 (query))
+    IDE_GOTO (failure);
+  else
+    ide_search_engine_search_async (self->search_engine,
+                                    query,
+                                    MAX_RESULTS,
+                                    self->cancellable,
+                                    ide_search_popover_search_cb,
+                                    g_object_ref (self));
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+
+failure:
+  self->activate_after_search = FALSE;
+  gtk_no_selection_set_model (self->selection, NULL);
+
+  IDE_RETURN (G_SOURCE_REMOVE);
+}
+
+static void
+ide_search_popover_queue_search (IdeSearchPopover *self)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+
+  if (self->queued_search == 0)
+    self->queued_search = g_timeout_add (SEARCH_DELAY_MSEC,
+                                         ide_search_popover_search_source_func,
+                                         self);
+}
+
+static void
+ide_search_popover_search_changed_cb (IdeSearchPopover *self,
+                                      GtkEditable      *editable)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (GTK_IS_EDITABLE (editable));
+
+  ide_search_popover_queue_search (self);
+
+  IDE_EXIT;
+}
+
+static void
+ide_search_popover_activate_cb (IdeSearchPopover *self,
+                                guint             position,
+                                GtkListView      *list_view)
+{
+  g_autoptr(IdeSearchResult) result = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (GTK_IS_LIST_VIEW (list_view));
+
+  result = g_list_model_get_item (G_LIST_MODEL (self->selection), position);
+
+  g_assert (result != NULL);
+  g_assert (IDE_IS_SEARCH_RESULT (result));
+
+  ide_search_popover_activate (self, result);
+
+  IDE_EXIT;
+}
+
+static void
+ide_search_popover_entry_activate_cb (IdeSearchPopover *self,
+                                      GtkEditable      *editable)
+{
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (GTK_IS_EDITABLE (editable));
+
+  /* Delay activation until the result comes back. Just send off
+   * another search out of simplifity here. When it comes back we
+   * activate. That way we always get the same result no matter if
+   * a search was in-progress while activate happened.
+   */
+  self->activate_after_search = TRUE;
+
+  ide_search_popover_queue_search (self);
 }
 
 static void
@@ -93,6 +281,9 @@ ide_search_popover_dispose (GObject *object)
 {
   IdeSearchPopover *self = (IdeSearchPopover *)object;
 
+  g_clear_handle_id (&self->queued_search, g_source_remove);
+
+  g_clear_object (&self->cancellable);
   g_clear_object (&self->search_engine);
 
   G_OBJECT_CLASS (ide_search_popover_parent_class)->dispose (object);
@@ -162,7 +353,11 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-search-popover.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, entry);
-  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, nav_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, list_view);
+  gtk_widget_class_bind_template_child (widget_class, IdeSearchPopover, selection);
+  gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_entry_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_search_changed_cb);
 
   gtk_widget_class_install_action (widget_class, "search.hide", NULL, ide_search_popover_hide_action);
 }
@@ -188,18 +383,9 @@ ide_search_popover_present (IdeSearchPopover *self,
                             int               parent_width,
                             int               parent_height)
 {
-  GdkRectangle point;
-  int min_width;
-  int nat_width;
-
   g_return_if_fail (IDE_IS_SEARCH_POPOVER (self));
 
-  gtk_widget_measure (GTK_WIDGET (self->nav_box),
-                      GTK_ORIENTATION_HORIZONTAL,
-                      -1,
-                      &min_width, &nat_width, NULL, NULL);
-
-  point = (GdkRectangle) { (parent_width - min_width) / 2, 100, 1, 1 };
-  gtk_popover_set_pointing_to (GTK_POPOVER (self), &point);
+  gtk_popover_set_pointing_to (GTK_POPOVER (self),
+                               &(GdkRectangle) { parent_width / 2, 100, 1, 1 });
   gtk_popover_present (GTK_POPOVER (self));
 }
