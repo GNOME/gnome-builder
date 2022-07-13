@@ -31,18 +31,18 @@
 
 struct _IdeSearchPopover
 {
-  GtkPopover       parent_instance;
+  GtkPopover          parent_instance;
 
-  GCancellable    *cancellable;
-  IdeSearchEngine *search_engine;
+  GCancellable       *cancellable;
+  IdeSearchEngine    *search_engine;
 
-  GtkSearchEntry  *entry;
-  GtkNoSelection  *selection;
-  GtkListView     *list_view;
+  GtkSearchEntry     *entry;
+  GtkSingleSelection *selection;
+  GtkListView        *list_view;
 
-  guint            queued_search;
+  guint               queued_search;
 
-  guint            activate_after_search : 1;
+  guint               activate_after_search : 1;
 };
 
 enum {
@@ -132,7 +132,7 @@ ide_search_popover_search_cb (GObject      *object,
   if (error != NULL)
     g_debug ("Search failed: %s", error->message);
 
-  gtk_no_selection_set_model (self->selection, results);
+  gtk_single_selection_set_model (self->selection, results);
 
   if (self->activate_after_search)
     {
@@ -140,9 +140,12 @@ ide_search_popover_search_cb (GObject      *object,
 
       if (results != NULL && g_list_model_get_n_items (results) > 0)
         {
-          g_autoptr(IdeSearchResult) first = g_list_model_get_item (results, 0);
-          g_assert (IDE_IS_SEARCH_RESULT (first));
-          ide_search_popover_activate (self, first);
+          IdeSearchResult *selected = gtk_single_selection_get_selected_item (self->selection);
+
+          g_assert (!selected || IDE_IS_SEARCH_RESULT (selected));
+
+          if (selected != NULL)
+            ide_search_popover_activate (self, selected);
         }
     }
 
@@ -183,7 +186,7 @@ ide_search_popover_search_source_func (gpointer data)
 
 failure:
   self->activate_after_search = FALSE;
-  gtk_no_selection_set_model (self->selection, NULL);
+  gtk_single_selection_set_model (self->selection, NULL);
 
   IDE_RETURN (G_SOURCE_REMOVE);
 }
@@ -252,6 +255,36 @@ ide_search_popover_entry_activate_cb (IdeSearchPopover *self,
   self->activate_after_search = TRUE;
 
   ide_search_popover_queue_search (self);
+}
+
+static void
+ide_search_popover_next_match_cb (IdeSearchPopover *self,
+                                  GtkSearchEntry   *entry)
+{
+  guint selected;
+
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+
+  selected = gtk_single_selection_get_selected (self->selection);
+
+  if (selected + 1 < g_list_model_get_n_items (G_LIST_MODEL (self->selection)))
+    gtk_single_selection_set_selected (self->selection, selected + 1);
+}
+
+static void
+ide_search_popover_previous_match_cb (IdeSearchPopover *self,
+                                      GtkSearchEntry   *entry)
+{
+  guint selected;
+
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+  g_assert (GTK_IS_SEARCH_ENTRY (entry));
+
+  selected = gtk_single_selection_get_selected (self->selection);
+
+  if (selected > 0)
+    gtk_single_selection_set_selected (self->selection, selected - 1);
 }
 
 static void
@@ -358,6 +391,8 @@ ide_search_popover_class_init (IdeSearchPopoverClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_search_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_next_match_cb);
+  gtk_widget_class_bind_template_callback (widget_class, ide_search_popover_previous_match_cb);
 
   gtk_widget_class_install_action (widget_class, "search.hide", NULL, ide_search_popover_hide_action);
 }

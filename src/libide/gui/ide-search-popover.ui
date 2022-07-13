@@ -21,6 +21,8 @@
                 <property name="width-chars">40</property>
                 <signal name="activate" handler="ide_search_popover_entry_activate_cb" swapped="true" object="IdeSearchPopover"/>
                 <signal name="changed" handler="ide_search_popover_search_changed_cb" swapped="true" object="IdeSearchPopover"/>
+                <signal name="next-match" handler="ide_search_popover_next_match_cb" swapped="true" object="IdeSearchPopover"/>
+                <signal name="previous-match" handler="ide_search_popover_previous_match_cb" swapped="true" object="IdeSearchPopover"/>
               </object>
             </child>
           </object>
@@ -36,7 +38,8 @@
                 <property name="single-click-activate">True</property>
                 <property name="orientation">vertical</property>
                 <property name="model">
-                  <object class="GtkNoSelection" id="selection">
+                  <object class="GtkSingleSelection" id="selection">
+                    <property name="autoselect">true</property>
                   </object>
                 </property>
                 <property name="factory">
