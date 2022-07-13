@@ -427,7 +427,7 @@ gbp_recent_section_purge_selected_full (IdeGreeterSection *section,
                              "default-height", 500,
                              "use-header-bar", TRUE,
                              NULL);
-#if DEVELOPMENT_BUILD
+#ifdef DEVELOPMENT_BUILD
       gtk_widget_add_css_class (GTK_WIDGET (dialog), "devel");
 #endif
       gtk_dialog_add_button (dialog, _("_Close"), GTK_RESPONSE_CLOSE);

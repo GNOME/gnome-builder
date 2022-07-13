@@ -9,14 +9,21 @@ project('gnome-builder', 'c',
                    ],
 )
 
+config_h = configuration_data()
+config_h.set_quoted('PACKAGE_NAME', 'gnome-builder')
+config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
+
+# Development builds get an alternate application-id
+if get_option('development')
+  app_id = 'org.gnome.Builder.Devel'
+  config_h.set10('DEVELOPMENT_BUILD', true)
+else
+  app_id = 'org.gnome.Builder'
+endif
+config_h.set_quoted('APP_ID', app_id)
+
 version_split = meson.project_version().split('.')
 MAJOR_VERSION = version_split[0]
-
-app_id = 'org.gnome.Builder'
-if version_split[1][0] in ['a', 'b', 'r']
-  app_id = 'org.gnome.Builder.Devel'
-endif
-
 libide_api_version = '@0@'.format(MAJOR_VERSION)
 
 pkgdocdir_abs = join_paths(get_option('prefix'), get_option('datadir'), 'doc', 'gnome-builder')
@@ -76,12 +83,9 @@ status = [
   '', '',
 ]
 
-config_h = configuration_data()
-config_h.set_quoted('APP_ID', app_id)
 
-# Message of doom
+# Message of Doom
 if version_split[1][0] in ['a', 'b', 'r']
-  config_h.set10('DEVELOPMENT_BUILD', true)
   MINOR_VERSION = 0
   status += [
     'You are building a development version of GNOME Builder. There may be more',
@@ -102,7 +106,7 @@ status += [
   'Libdir ................ : @0@'.format(join_paths(get_option('prefix'), get_option('libdir'))),
   'Safe PATH ............. : @0@'.format(safe_path),
   '',
-  'Tracing ............... : @0@'.format(get_option('tracing')),
+  'Development Build ..... : @0@'.format(get_option('development')),
   'Profiling ............. : @0@'.format(get_option('profiling')),
   'tcmalloc_minimal ...... : @0@'.format(get_option('tcmalloc')),
   '',
@@ -113,10 +117,8 @@ status += [
   '', ''
 ]
 
-config_h.set_quoted('PACKAGE_NAME', 'gnome-builder')
 config_h.set_quoted('PACKAGE_ABI_S', libide_api_version)
 config_h.set('PACKAGE_ABI', libide_api_version)
-config_h.set_quoted('PACKAGE_VERSION', meson.project_version())
 config_h.set_quoted('PACKAGE_STRING', 'gnome-builder-' + meson.project_version())
 config_h.set_quoted('PACKAGE_DATADIR', join_paths(get_option('prefix'), get_option('datadir')))
 config_h.set_quoted('PACKAGE_ICONDIR', join_paths(get_option('prefix'), get_option('datadir'), 'gnome-builder/icons'))
@@ -125,10 +127,8 @@ config_h.set_quoted('PACKAGE_LIBDIR', join_paths(get_option('prefix'), get_optio
 config_h.set_quoted('PACKAGE_LOCALE_DIR', join_paths(get_option('prefix'), get_option('datadir'), 'locale'))
 config_h.set_quoted('PACKAGE_LIBEXECDIR', join_paths(get_option('prefix'), get_option('libexecdir')))
 config_h.set_quoted('SAFE_PATH', safe_path)
-
 config_h.set('GETTEXT_PACKAGE', 'PACKAGE_NAME')
 config_h.set('LOCALEDIR', 'PACKAGE_LOCALE_DIR')
-
 config_h.set10('ENABLE_NLS', true) # Always enabled
 
 # We should probably avoid using these

@@ -601,7 +601,7 @@ gbp_shellcmd_command_dialog_init (GbpShellcmdCommandDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-#if DEVELOPMENT_BUILD
+#ifdef DEVELOPMENT_BUILD
   gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
 #endif
 

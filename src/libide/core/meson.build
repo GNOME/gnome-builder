@@ -35,7 +35,7 @@ libide_core_generated_headers += [libide_build_ident_h]
 #
 
 libide_core_conf = configuration_data()
-libide_core_conf.set10('ENABLE_TRACING', get_option('tracing'))
+libide_core_conf.set10('ENABLE_TRACING', get_option('development'))
 libide_core_conf.set('BUGREPORT_URL', 'https://gitlab.gnome.org/GNOME/gnome-builder/issues')
 
 libide_debug_h = configure_file(

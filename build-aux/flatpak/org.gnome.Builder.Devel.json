@@ -656,6 +656,7 @@
                 "--libdir=lib",
                 "--buildtype=debugoptimized",
                 "-Dctags_path=/app/bin/ctags",
+                "-Ddevelopment=true",
                 "-Dtcmalloc=true",
                 "-Dtracing=true",
                 "-Dhelp=true",
