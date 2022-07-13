@@ -1103,6 +1103,7 @@ ide_run_context_end (IdeRunContext  *self,
   ide_subprocess_launcher_set_argv (launcher, ide_run_context_get_argv (self));
   ide_subprocess_launcher_set_environ (launcher, ide_run_context_get_environ (self));
   ide_subprocess_launcher_set_cwd (launcher, ide_run_context_get_cwd (self));
+  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
 
   length = ide_unix_fd_map_get_length (self->root.unix_fd_map);
 
