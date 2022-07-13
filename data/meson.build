@@ -5,10 +5,12 @@ subdir('icons')
 subdir('styles')
 
 # Desktop launcher and description file.
+desktop_file_config = configuration_data()
+desktop_file_config.set('app_id', app_id)
 desktop_file_in = configure_file(
           input: 'org.gnome.Builder.desktop.in.in',
          output: 'org.gnome.Builder.desktop.in',
-  configuration: config_h,
+  configuration: desktop_file_config,
 )
 desktop_file = i18n.merge_file(
         input: desktop_file_in,
@@ -26,7 +28,7 @@ endif
 
 # D-Bus service file.
 dbusconf = configuration_data()
-dbusconf.set('APP_ID', app_id)
+dbusconf.set('app_id', app_id)
 dbusconf.set('bindir', join_paths(get_option('prefix'), get_option('bindir')))
 configure_file(
           input: 'org.gnome.Builder.service.in',

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2014 Igor Gnatenko <ignatenko@src.gnome.org> -->
 <component type="desktop-application">
-  <id>org.gnome.Builder.desktop</id>
+  <id>@app_id@.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0+ and GPL-2.0+ and LGPL-3.0+ and LGPL-2.0+ and MIT</project_license>
   <name>Builder</name>
@@ -71,7 +71,7 @@
       <image width="2664" height="1638">https://gitlab.gnome.org/GNOME/gnome-builder/raw/4aa3486375c618dc97f5477d42bf3674c44f7189/data/appdata/07-minimap.png</image>
     </screenshot>
   </screenshots>
-  <launchable type="desktop-id">org.gnome.Builder.desktop</launchable>
+  <launchable type="desktop-id">@app_id@.desktop</launchable>
   <url type="homepage">https://wiki.gnome.org/Apps/Builder</url>
   <url type="bugtracker">https://gitlab.gnome.org/GNOME/gnome-builder/issues</url>
   <url type="donation">https://www.gnome.org/donate/</url>
@@ -90,7 +90,7 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
-    <release version="42.0" date="2022-03-18"/>
+    <release version="43.alpha0" date="2022-07-13"/>
   </releases>
 
   <content_rating type="oars-1.1">
