@@ -205,7 +205,7 @@ gbp_find_other_file_workspace_addin_load (IdeWorkspaceAddin *addin,
                                     "direction", GTK_ARROW_UP,
                                     "child", box,
                                     "visible", FALSE,
-                                    "tooltip-text", _("Similar Files"),
+                                    "tooltip-text", _("Similar Files (Ctrl+Shift+O)"),
                                     NULL);
 
   statusbar = ide_workspace_get_statusbar (workspace);
