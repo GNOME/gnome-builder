@@ -163,7 +163,6 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   g_autofree char *project_build_dir_arg = NULL;
   g_autofree char *project_build_dir = NULL;
   g_autofree char *staging_dir = NULL;
-  const char *wayland_display;
   const char *app_id;
   IdeContext *context;
   IdeConfig *config;
@@ -211,11 +210,17 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
                                     "--bind-mount=/run/user/%u/doc=/run/user/%u/doc/by-app/%s",
                                     getuid (), getuid (), app_id);
 
-  /* Make sure wayland socket is available. */
-  if ((wayland_display = g_getenv ("WAYLAND_DISPLAY")))
-    ide_run_context_append_formatted (run_context,
-                                      "--bind-mount=/run/user/%u/%s=/run/user/%u/%s",
-                                      getuid (), wayland_display, getuid (), wayland_display);
+#if 0
+  {
+    const char *wayland_display;
+
+    /* Make sure wayland socket is available. */
+    if ((wayland_display = g_getenv ("WAYLAND_DISPLAY")))
+      ide_run_context_append_formatted (run_context,
+                                        "--bind-mount=/run/user/%u/%s=/run/user/%u/%s",
+                                        getuid (), wayland_display, getuid (), wayland_display);
+  }
+#endif
 
   /* Make sure we have access to fonts and such */
   gbp_flatpak_aux_append_to_run_context (run_context);
