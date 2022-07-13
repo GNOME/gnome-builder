@@ -351,6 +351,7 @@ gbp_symbol_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    "label", _("Select Symbol…"),
                                    "xalign", 0.0f,
                                    "ellipsize", PANGO_ELLIPSIZE_END,
+                                   "tooltip-text", _("Select Symbol (Ctrl+Shift+K)"),
                                    NULL);
   gtk_box_append (box, GTK_WIDGET (self->menu_label));
   self->popover = GBP_SYMBOL_POPOVER (gbp_symbol_popover_new ());
