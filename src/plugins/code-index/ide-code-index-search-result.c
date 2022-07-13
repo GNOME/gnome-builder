@@ -136,18 +136,18 @@ ide_code_index_search_result_init (IdeCodeIndexSearchResult *self)
 }
 
 IdeCodeIndexSearchResult *
-ide_code_index_search_result_new (const gchar *title,
-                                  const gchar *subtitle,
-                                  const gchar *icon_name,
+ide_code_index_search_result_new (const char  *title,
+                                  const char  *subtitle,
+                                  GIcon       *gicon,
                                   IdeLocation *location,
-                                  gfloat       score)
+                                  float        score)
 {
   g_autofree gchar *etitle = g_markup_escape_text (title, -1);
 
   return g_object_new (IDE_TYPE_CODE_INDEX_SEARCH_RESULT,
                        "title", etitle,
                        "subtitle", subtitle,
-                       "icon-name", icon_name,
+                       "gicon", gicon,
                        "location", location,
                        "score", score,
                        NULL);

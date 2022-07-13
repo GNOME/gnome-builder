@@ -29,10 +29,10 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeCodeIndexSearchResult, ide_code_index_search_result, IDE, CODE_INDEX_SEARCH_RESULT, IdeSearchResult)
 
-IdeCodeIndexSearchResult *ide_code_index_search_result_new (const gchar *title,
-                                                            const gchar *subtitle,
-                                                            const gchar *icon_name,
+IdeCodeIndexSearchResult *ide_code_index_search_result_new (const char  *title,
+                                                            const char  *subtitle,
+                                                            GIcon       *icon,
                                                             IdeLocation *location,
-                                                            gfloat       score);
+                                                            float        score);
 
 G_END_DECLS

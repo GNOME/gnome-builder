@@ -286,21 +286,21 @@ static IdeCodeIndexSearchResult *
 ide_code_index_index_create_search_result (IdeContext       *context,
                                            const FuzzyMatch *fuzzy_match)
 {
-  g_autoptr(GFile) file = NULL;
   g_autoptr(IdeLocation) location = NULL;
   g_autoptr(GString) subtitle = NULL;
-  const gchar *key;
-  const gchar *icon_name;
-  const gchar *shortname;
-  const gchar *path;
+  g_autoptr(GFile) file = NULL;
+  const char *key;
+  const char *shortname;
+  const char *path;
   GVariant *value;
-  gfloat score;
+  GIcon *gicon;
+  float score;
   guint file_id;
   guint line;
   guint line_offset;
   guint kind;
   guint flags;
-  gchar num [20];
+  char num [20];
 
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (fuzzy_match != NULL);
@@ -322,7 +322,7 @@ ide_code_index_index_create_search_result (IdeContext       *context,
   file = g_file_new_for_path (path);
   location = ide_location_new (file, line - 1, line_offset - 1);
 
-  icon_name = ide_symbol_kind_get_icon_name (kind);
+  gicon = ide_symbol_kind_get_gicon (kind);
   score = ide_fuzzy_index_match_get_score (fuzzy_match->match);
 
   subtitle = g_string_new (NULL);
@@ -338,7 +338,7 @@ ide_code_index_index_create_search_result (IdeContext       *context,
       g_string_append_printf (subtitle, " (%s)", _("Declaration"));
     }
 
-  return ide_code_index_search_result_new (key + 2, subtitle->str, icon_name, location, score);
+  return ide_code_index_search_result_new (key + 2, subtitle->str, gicon, location, score);
 }
 
 static void
