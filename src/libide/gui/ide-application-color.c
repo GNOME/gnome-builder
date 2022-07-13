@@ -113,7 +113,7 @@ _ide_application_update_color (IdeApplication *self)
 
   g_debug ("Style variant changed to %s", style_variant);
 
-  if (g_strcmp0 (style_variant, "follow") == 0)
+  if (g_strcmp0 (style_variant, "default") == 0)
     adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_PREFER_LIGHT);
   else if (g_strcmp0 (style_variant, "dark") == 0)
     adw_style_manager_set_color_scheme (manager, ADW_COLOR_SCHEME_FORCE_DARK);
