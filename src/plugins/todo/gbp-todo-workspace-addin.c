@@ -176,6 +176,7 @@ gbp_todo_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                         self);
 
   panel_widget_close (PANEL_WIDGET (self->panel));
+  self->panel = NULL;
 
   g_clear_object (&self->model);
   g_clear_object (&self->workdir);
