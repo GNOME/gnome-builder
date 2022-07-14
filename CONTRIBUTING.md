@@ -48,12 +48,12 @@ Permissively licensed contributions will also be accepted, but we prefer that or
 
 ## Coding Style
 
-Our coding style matches that of Gtk+.
-We consider the Gtk+ project an upstream, and often push features into Gtk+.
+Our coding style matches that of GTK.
+We consider the GTK project an upstream, and often push features into GTK.
 This might feel unfamiliar at first, but it works well for us.
 Builder's default C mode matches our style guide relatively close.
 
-We use the recent GNU GCC '11 mode, such as -std=gnu11.
+We use the recent GNU GCC '18 mode, such as -std=gnu18.
 
 ```c
 static GtkWidget *
@@ -118,8 +118,9 @@ Generally, they should be in the style of the following, but please omit the com
 
 ### Be explicit about ownership transfers
 
-Since `GLib 2.44`, we've had helpful macros and functions to be explit about ownership transfers.
-Please use them as it drastically saves time when tracking down memory leaks.
+Since `GLib 2.44`, we've had helpful macros and functions to be explicit about
+ownership transfers. Please use them as it drastically saves time when tracking
+down memory leaks.
 
 These include:
 
@@ -131,18 +132,18 @@ We prefer that you zero fields in structures when freeing the contents.
 
 ## Documentation
 
-Most functions should be obvious what they do from the object type, name, and parameters.
-Add additional documentation when it makes sense.
+Most functions should be obvious what they do from the object type, name, and
+parameters. Add additional documentation when it makes sense.
 
-If you find you come across something particularly tricky, or are being clever, please add a comment denoting such.
+If you find you come across something particularly tricky, or are being clever,
+please add a comment denoting such.
 
 ## Making a Release
 
- - Update subprojects like libdazzle/etc for recent releases
  - Update NEWS for release notes
  - Update meson.build for the new version number
  - Update doc/conf.py to reflect the updated version number
- - Update any necessary tags in org.gnome.Builder.json for Flatpak
+ - Update any necessary tags in org.gnome.Builder.Devel.json for Flatpak
  - Make sure documentation builds, tests pass
  - Make sure flatpak bundle builds
  - Commit release changes, add a signed tag (git tag -s -u $keyid)
@@ -150,5 +151,5 @@ If you find you come across something particularly tricky, or are being clever, 
  - From the build directory, run `ninja dist` to generate the tarball
  - Push changes to master (or branch), push tag
  - scp the tarball to master.gnome.org
- - Run ftpadmin install `gnome-builder-*.tar.xz`.
+ - Run `ftpadmin install gnome-builder-*.tar.xz`.
 
