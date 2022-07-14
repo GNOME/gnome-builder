@@ -77,7 +77,7 @@ ide_greeter_buttons_section_init (IdeGreeterButtonsSection *self)
                                           g_object_new (GTK_TYPE_BUTTON,
                                                         "label", _("Select a _Folder…"),
                                                         "visible", TRUE,
-                                                        "action-name", "win.open",
+                                                        "action-name", "greeter.open",
                                                         "use-underline", TRUE,
                                                         NULL));
 }

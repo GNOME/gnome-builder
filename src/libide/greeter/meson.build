@@ -16,7 +16,6 @@ libide_greeter_public_headers = [
 
 libide_greeter_private_headers = [
   'ide-greeter-buttons-section.h',
-  'ide-greeter-private.h',
 ]
 
 install_headers(libide_greeter_public_headers, subdir: libide_greeter_header_subdir)
@@ -32,7 +31,6 @@ libide_greeter_public_sources = [
 ]
 
 libide_greeter_private_sources = [
-  'ide-greeter-workspace-actions.c',
   'ide-greeter-buttons-section.c',
 ]
 

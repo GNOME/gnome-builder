@@ -26,7 +26,6 @@
 #include <libpeas/peas.h>
 
 #include "ide-greeter-buttons-section.h"
-#include "ide-greeter-private.h"
 #include "ide-greeter-resources.h"
 #include "ide-greeter-row.h"
 #include "ide-greeter-workspace.h"
@@ -597,6 +596,228 @@ ide_greeter_workspace_page_action (GtkWidget  *widget,
 }
 
 static void
+ide_greeter_workspace_dialog_response (IdeGreeterWorkspace  *self,
+                                       gint                  response_id,
+                                       GtkFileChooserDialog *dialog)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
+
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      g_autoptr(IdeProjectInfo) project_info = NULL;
+      g_autoptr(GFile) project_file = NULL;
+      GtkFileFilter *filter;
+
+      project_file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+
+      project_info = ide_project_info_new ();
+      ide_project_info_set_file (project_info, project_file);
+
+      if ((filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog))))
+        {
+          const gchar *module_name = g_object_get_data (G_OBJECT (filter), "MODULE_NAME");
+
+          if (module_name != NULL)
+            ide_project_info_set_build_system_hint (project_info, module_name);
+
+          /* If this is a directory selection, then make sure we set the
+           * directory on the project-info too. That way we don't rely on
+           * it being set elsewhere (which could be a translated symlink path).
+           */
+          if (g_object_get_data (G_OBJECT (filter), "IS_DIRECTORY"))
+            ide_project_info_set_directory (project_info, project_file);
+        }
+
+      ide_greeter_workspace_open_project (self, project_info);
+    }
+
+  gtk_window_destroy (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
+}
+
+static void
+ide_greeter_workspace_dialog_notify_filter (IdeGreeterWorkspace  *self,
+                                            GParamSpec           *pspec,
+                                            GtkFileChooserDialog *dialog)
+{
+  GtkFileFilter *filter;
+  GtkFileChooserAction action;
+  const gchar *title;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+  g_assert (pspec != NULL);
+  g_assert (GTK_IS_FILE_CHOOSER_DIALOG (dialog));
+
+  filter = gtk_file_chooser_get_filter (GTK_FILE_CHOOSER (dialog));
+
+  if (filter && g_object_get_data (G_OBJECT (filter), "IS_DIRECTORY"))
+    {
+      action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+      title = _("Select Project Folder");
+    }
+  else
+    {
+      action = GTK_FILE_CHOOSER_ACTION_OPEN;
+      title = _("Select Project File");
+    }
+
+  gtk_file_chooser_set_action (GTK_FILE_CHOOSER (dialog), action);
+  gtk_window_set_title (GTK_WINDOW (dialog), title);
+
+  IDE_EXIT;
+}
+
+static void
+ide_greeter_workspace_open_action (GtkWidget  *widget,
+                                   const char *action_name,
+                                   GVariant   *param)
+{
+  IdeGreeterWorkspace *self = (IdeGreeterWorkspace *)widget;
+  g_autoptr(GFile) projects_dir = NULL;
+  GtkFileChooserDialog *dialog;
+  GtkFileFilter *all_filter;
+  const GList *list;
+  gint64 last_priority = G_MAXINT64;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_GREETER_WORKSPACE (self));
+  g_assert (param == NULL);
+
+  list = peas_engine_get_plugin_list (peas_engine_get_default ());
+
+  dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+                         "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+                         "transient-for", self,
+                         "modal", TRUE,
+                         "title", _("Select Project Folder"),
+                         "visible", TRUE,
+                         NULL);
+  gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+                          _("_Cancel"), GTK_RESPONSE_CANCEL,
+                          _("_Open"), GTK_RESPONSE_OK,
+                          NULL);
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
+
+  g_signal_connect_object (dialog,
+                           "notify::filter",
+                           G_CALLBACK (ide_greeter_workspace_dialog_notify_filter),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  all_filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (all_filter, _("All Project Types"));
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), all_filter);
+
+  /* For testing with no plugins */
+  if (list == NULL)
+    gtk_file_filter_add_pattern (all_filter, "*");
+
+  for (; list != NULL; list = list->next)
+    {
+      PeasPluginInfo *plugin_info = list->data;
+      const gchar *module_name = peas_plugin_info_get_module_name (plugin_info);
+      GtkFileFilter *filter;
+      const gchar *pattern;
+      const gchar *content_type;
+      const gchar *name;
+      const gchar *priority;
+      gchar **patterns;
+      gchar **content_types;
+      gint i;
+
+      if (!peas_plugin_info_is_loaded (plugin_info))
+        continue;
+
+      name = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Name");
+      if (name == NULL)
+        continue;
+
+      pattern = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Pattern");
+      content_type = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Content-Type");
+      priority = peas_plugin_info_get_external_data (plugin_info, "X-Project-File-Filter-Priority");
+
+      if (pattern == NULL && content_type == NULL)
+        continue;
+
+      patterns = g_strsplit (pattern ?: "", ",", 0);
+      content_types = g_strsplit (content_type ?: "", ",", 0);
+
+      filter = gtk_file_filter_new ();
+
+      gtk_file_filter_set_name (filter, name);
+
+      if (!ide_str_equal0 (module_name, "greeter"))
+        g_object_set_data_full (G_OBJECT (filter), "MODULE_NAME", g_strdup (module_name), g_free);
+
+      for (i = 0; patterns [i] != NULL; i++)
+        {
+          if (*patterns [i])
+            {
+              gtk_file_filter_add_pattern (filter, patterns [i]);
+              gtk_file_filter_add_pattern (all_filter, patterns [i]);
+            }
+        }
+
+      for (i = 0; content_types [i] != NULL; i++)
+        {
+          if (*content_types [i])
+            {
+              gtk_file_filter_add_mime_type (filter, content_types [i]);
+              gtk_file_filter_add_mime_type (all_filter, content_types [i]);
+
+              /* Helper so we can change the file chooser action to OPEN_DIRECTORY,
+               * otherwise the user won't be able to choose a directory, it will
+               * instead dive into the directory.
+               */
+              if (g_strcmp0 (content_types [i], "inode/directory") == 0)
+                g_object_set_data (G_OBJECT (filter), "IS_DIRECTORY", GINT_TO_POINTER (1));
+            }
+        }
+
+      gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
+
+      /* Look at the priority to set the default file filter. */
+      if (priority != NULL)
+        {
+          gint64 pval = g_ascii_strtoll (priority, NULL, 10);
+
+          if (pval < last_priority)
+            {
+              gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+              last_priority = pval;
+            }
+        }
+
+      g_strfreev (patterns);
+      g_strfreev (content_types);
+    }
+
+  g_signal_connect_object (dialog,
+                           "response",
+                           G_CALLBACK (ide_greeter_workspace_dialog_response),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* If unset, set the default filter */
+  if (last_priority == G_MAXINT64)
+    gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), all_filter);
+
+  projects_dir = g_file_new_for_path (ide_get_projects_dir ());
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (dialog), projects_dir, NULL);
+
+  gtk_window_present (GTK_WINDOW (dialog));
+
+  IDE_EXIT;
+}
+
+static void
 ide_greeter_workspace_dispose (GObject *object)
 {
   IdeGreeterWorkspace *self = (IdeGreeterWorkspace *)object;
@@ -706,6 +927,7 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeGreeterWorkspace, title);
   gtk_widget_class_bind_template_callback (widget_class, stack_notify_visible_child_cb);
 
+  gtk_widget_class_install_action (widget_class, "greeter.open", NULL, ide_greeter_workspace_open_action);
   gtk_widget_class_install_action (widget_class, "greeter.page", "s", ide_greeter_workspace_page_action);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Left, GDK_ALT_MASK, "win.page", "s", "overview");
@@ -762,8 +984,6 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
                            G_CONNECT_SWAPPED);
 
   stack_notify_visible_child_cb (self, NULL, self->pages);
-
-  _ide_greeter_workspace_init_actions (self);
 }
 
 IdeGreeterWorkspace *
