@@ -194,6 +194,23 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
   IDE_EXIT;
 }
 
+static gboolean
+message_from_idle_cb (gpointer data)
+{
+  GbpTerminalWorkspaceAddin *self = data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
+
+  if (self->app_page != NULL)
+    {
+      ide_terminal_page_feed (self->app_page, _("Application exited"));
+      ide_terminal_page_feed (self->app_page, "\r\n");
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 on_run_manager_stopped (GbpTerminalWorkspaceAddin *self,
                         IdeRunManager             *run_manager)
@@ -204,8 +221,14 @@ on_run_manager_stopped (GbpTerminalWorkspaceAddin *self,
   g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
-  ide_terminal_page_feed (self->app_page, _("Application exited"));
-  ide_terminal_page_feed (self->app_page, "\r\n");
+  /* Wait to feed the widget until the main loop so that we
+   * are more likely to finish flushing out contents from the
+   * child PTY before we write our contents.
+   */
+  g_idle_add_full (G_PRIORITY_LOW + 1000,
+                   message_from_idle_cb,
+                   g_object_ref (self),
+                   g_object_unref);
 
   IDE_EXIT;
 }
