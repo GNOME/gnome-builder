@@ -81,6 +81,7 @@ ide_run_context_add_minimal_environment (IdeRunContext *self)
     "DESKTOP_SESSION",
     "DISPLAY",
     "LANG",
+    "HOME",
     "SHELL",
     "SSH_AUTH_SOCK",
     "USER",
