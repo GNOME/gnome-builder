@@ -12,6 +12,8 @@
           <object class="GtkOverlay" id="terminal_overlay">
             <child>
               <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">external</property>
                 <child>
                   <object class="IdeTerminal" id="terminal">
                     <property name="audible-bell">false</property>
