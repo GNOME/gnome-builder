@@ -41,6 +41,8 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
 {
   IdeTerminalRunCommand *self = (IdeTerminalRunCommand *)run_command;
   const char *user_shell;
+  g_autoptr(GFile) workdir = NULL;
+  g_autofree char *workdir_path = NULL;
 
   IDE_ENTRY;
 
@@ -50,10 +52,13 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
   g_assert (IDE_IS_CONTEXT (context));
 
   user_shell = ide_get_user_shell ();
+  workdir = ide_context_ref_workdir (context);
+  workdir_path = g_file_get_path (workdir);
 
   switch (self->locality)
     {
     case IDE_TERMINAL_RUN_ON_HOST:
+      ide_run_context_set_cwd (run_context, workdir_path);
       ide_run_context_push_host (run_context);
       ide_run_context_add_minimal_environment (run_context);
       ide_run_context_append_argv (run_context, user_shell);
