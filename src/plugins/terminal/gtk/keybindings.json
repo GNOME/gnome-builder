@@ -4,6 +4,8 @@
 { "trigger" : "<Control><Alt>t", "action" : "terminal.terminal-in-runtime", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
 
 /* IdeTerminal */
+{ "trigger" : "<Control><Shift>c", "action" : "clipboard.copy", "when" : "inTerminal()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>v", "action" : "clipboard.paste", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>f", "action" : "terminal.search-reveal", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>braceleft", "action" : "page.move-left", "when" : "inTerminal()", "phase" : "capture" },
 { "trigger" : "<Control><Shift>braceright", "action" : "page.move-right", "when" : "inTerminal()", "phase" : "capture" },
