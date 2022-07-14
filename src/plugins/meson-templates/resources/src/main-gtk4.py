@@ -10,7 +10,7 @@ gi.require_version('Adw', '1')
 
 from gi.repository import Gtk, Gio{{if is_adwaita}}, Adw{{end}}
 
-from .window import {{PreFix}}Window, AboutDialog
+from .window import {{PreFix}}Window
 
 
 class {{Prefix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
@@ -36,7 +36,23 @@ class {{Prefix}}Application({{if is_adwaita}}Adw{{else}}Gtk{{end}}.Application):
 
     def on_about_action(self, widget, _):
         """Callback for the app.about action."""
-        about = AboutDialog(self.props.active_window)
+{{if is_adwaita}}
+        about = Adw.AboutWindow(transient_for=self.props.active_window,
+                                application_name='{{name}}',
+                                application_icon='{{appid}}',
+                                developer_name='{{author}}',
+                                version='{{project_version}}',
+                                developers=['{{author}}'],
+                                copyright='© {{year}} {{author}}')
+{{else}}
+        about = Gtk.AboutDialog(transient_for=self.props.active_window,
+                                modal=True,
+                                program_name='{{name}}',
+                                logo_icon_name='{{appid}}',
+                                version='{{project_version}}',
+                                authors=['{{author}}'],
+                                copyright='© {{year}} {{author}}')
+{{end}}
         about.present()
 
     def on_preferences_action(self, widget, _):

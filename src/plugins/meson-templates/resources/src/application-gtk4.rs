@@ -87,14 +87,28 @@ impl {{PreFix}}Application {
 
     fn show_about(&self) {
         let window = self.active_window().unwrap();
-        let dialog = gtk::AboutDialog::builder()
+{{if is_adwaita}}
+        let about = adw::AboutWindow::builder()
+            .transient_for(&window)
+            .application_name("{{name}}")
+            .application_icon("{{appid}}")
+            .developer_name("{{author}}")
+            .version(VERSION)
+            .developers(vec!["{{author}}".into()])
+            .copyright("© {{year}} {{author}}"),
+            .build();
+{{else}}
+        let about = gtk::AboutDialog::builder()
             .transient_for(&window)
             .modal(true)
             .program_name("{{name}}")
+            .logo_icon_name("{{appid}}")
             .version(VERSION)
             .authors(vec!["{{author}}".into()])
+            .copyright("© {{year}} {{author}}"),
             .build();
+{{end}}
 
-        dialog.present();
+        about.present();
     }
 }
