@@ -8,19 +8,15 @@
         <property name="orientation">vertical</property>
         <property name="vexpand">true</property>
         <property name="hexpand">true</property>
-        <property name="visible">true</property>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="visible">true</property>
             <child>
               <object class="GtkScrolledWindow" id="scrolled_window">
                 <property name="vexpand">true</property>
-                <property name="visible">true</property>
                 <child>
                   <object class="GtkTreeView" id="tree_view">
                     <property name="activate-on-single-click">true</property>
                     <property name="headers-visible">true</property>
-                    <property name="visible">true</property>
                   </object>
                 </child>
               </object>
@@ -29,7 +25,6 @@
               <object class="GtkSpinner" id="spinner">
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="visible">True</property>
               </object>
             </child>
           </object>
@@ -42,17 +37,14 @@
             <property name="margin-bottom">6</property>
             <property name="spacing">6</property>
             <property name="orientation">vertical</property>
-            <property name="visible">true</property>
             <child>
               <object class="GtkBox">
-                <property name="visible">True</property>
                 <property name="spacing">6</property>
                 <property name="orientation">horizontal</property>
                 <child>
                   <object class="GtkLabel">
                     <property name="label" translatable="yes">Find and Replace</property>
                     <property name="halign">start</property>
-                    <property name="visible">true</property>
                     <style>
                       <class name="dim-label"/>
                     </style>
@@ -64,13 +56,11 @@
                 </child>
                 <child>
                   <object class="GtkBox">
-                    <property name="visible">True</property>
                     <property name="halign">end</property>
                     <property name="hexpand">True</property>
                     <property name="spacing">6</property>
                     <child>
                       <object class="GtkCheckButton" id="recursive_button">
-                        <property name="visible">true</property>
                         <property name="active">true</property>
                         <property name="label" translatable="yes">R_ecursive</property>
                         <property name="use-underline">true</property>
@@ -78,7 +68,6 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="case_button">
-                        <property name="visible">true</property>
                         <property name="active">true</property>
                         <property name="label" translatable="yes">Match _Case</property>
                         <property name="use-underline">true</property>
@@ -86,14 +75,12 @@
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="whole_words_button">
-                        <property name="visible">true</property>
                         <property name="label" translatable="yes">Match _Words</property>
                         <property name="use-underline">true</property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkCheckButton" id="regex_button">
-                        <property name="visible">true</property>
                         <property name="label" translatable="yes">Regular E_xpressions</property>
                         <property name="use-underline">true</property>
                       </object>
@@ -106,7 +93,6 @@
                         <property name="tooltip-text" translatable="yes">Close the panel (Escape key)</property>
                         <child>
                           <object class="GtkImage">
-                            <property name="visible">True</property>
                             <property name="icon-name">window-close-symbolic</property>
                           </object>
                         </child>
@@ -121,12 +107,10 @@
             </child>
             <child>
               <object class="GtkGrid">
-                <property name="visible">True</property>
                 <property name="column-spacing">6</property>
                 <property name="row-spacing">6</property>
                 <child>
                   <object class="GtkEntry" id="find_entry">
-                    <property name="visible">true</property>
                     <property name="hexpand">true</property>
                     <layout>
                       <property name="column">0</property>
@@ -136,7 +120,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="find_button">
-                    <property name="visible">true</property>
                     <property name="sensitive">false</property>
                     <property name="label" translatable="yes">_Find in Project</property>
                     <property name="use-underline">True</property>
@@ -148,7 +131,6 @@
                 </child>
                 <child>
                   <object class="GtkEntry" id="replace_entry">
-                    <property name="visible">true</property>
                     <property name="hexpand">true</property>
                     <layout>
                       <property name="column">0</property>
@@ -158,7 +140,6 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="replace_button">
-                    <property name="visible">true</property>
                     <property name="sensitive">false</property>
                     <property name="label" translatable="yes">_Replace in Project</property>
                     <property name="use-underline">True</property>
