@@ -1038,15 +1038,15 @@ ide_pipeline_extension_removed (IdeExtensionSetAdapter *set,
 }
 
 static void
-build_command_query_cb (IdePipelineStage *stage,
-                        IdePipeline      *pipeline,
-                        GPtrArray        *targets,
-                        GCancellable     *cancellable,
-                        gpointer          user_data)
+ide_pipeline_always_incomplete (IdePipelineStage *stage,
+                                IdePipeline      *pipeline,
+                                GPtrArray        *targets,
+                                GCancellable     *cancellable,
+                                gpointer          user_data)
 {
   IDE_ENTRY;
 
-  g_assert (IDE_IS_PIPELINE_STAGE_LAUNCHER (stage));
+  g_assert (IDE_IS_PIPELINE_STAGE (stage));
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
   g_assert (user_data == NULL);
@@ -1102,7 +1102,7 @@ register_build_commands_stage (IdePipeline *self,
                             NULL);
       g_signal_connect (stage,
                         "query",
-                        G_CALLBACK (build_command_query_cb),
+                        G_CALLBACK (ide_pipeline_always_incomplete),
                         NULL);
       ide_pipeline_attach (self,
                            IDE_PIPELINE_PHASE_BUILD | IDE_PIPELINE_PHASE_AFTER,
@@ -1150,7 +1150,7 @@ register_post_install_commands_stage (IdePipeline *self,
                             NULL);
       g_signal_connect (stage,
                         "query",
-                        G_CALLBACK (build_command_query_cb),
+                        G_CALLBACK (ide_pipeline_always_incomplete),
                         NULL);
       ide_pipeline_attach (self,
                            IDE_PIPELINE_PHASE_INSTALL | IDE_PIPELINE_PHASE_AFTER,
