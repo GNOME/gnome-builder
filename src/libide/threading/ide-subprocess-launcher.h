@@ -151,5 +151,8 @@ gint                   ide_subprocess_launcher_get_max_fd           (IdeSubproce
 IDE_AVAILABLE_IN_ALL
 void                   ide_subprocess_launcher_join_args_for_sh_c   (IdeSubprocessLauncher  *self,
                                                                      guint                   start_pos);
+IDE_AVAILABLE_IN_ALL
+void                   ide_subprocess_launcher_set_setup_tty        (IdeSubprocessLauncher  *self,
+                                                                     gboolean                setup_tty);
 
 G_END_DECLS

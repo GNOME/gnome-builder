@@ -59,6 +59,7 @@ typedef struct
   GSubprocessFlags  flags : 14;
   guint             run_on_host : 1;
   guint             clear_env : 1;
+  guint             setup_tty : 1;
 } IdeSubprocessLauncherPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSubprocessLauncher, ide_subprocess_launcher, G_TYPE_OBJECT)
@@ -75,9 +76,14 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
+#define CHILD_PDEATHSIG (1<<0)
+#define CHILD_SETUP_TTY (1<<1)
+
 static void
 child_setup_func (gpointer data)
 {
+  guint flags = GPOINTER_TO_UINT (data);
+
 #ifdef G_OS_UNIX
   /*
    * TODO: Check on FreeBSD to see if the process group id is the same as
@@ -95,9 +101,15 @@ child_setup_func (gpointer data)
    * PR_SET_PDEATHSIG and know that when this thread exits that the
    * child will get a kill sig.
    */
-  if (data != NULL)
+  if (flags & CHILD_PDEATHSIG)
     prctl (PR_SET_PDEATHSIG, SIGKILL);
 #endif
+
+  if (flags & CHILD_SETUP_TTY)
+    {
+      if (isatty (STDIN_FILENO))
+        ioctl (STDIN_FILENO, TIOCSCTTY, 0);
+    }
 }
 
 static void
@@ -249,7 +261,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   g_autoptr(GSubprocess) real = NULL;
   g_autoptr(IdeSubprocess) wrapped = NULL;
   g_autoptr(GError) error = NULL;
-  gpointer child_data = NULL;
+  guint flags = 0;
   guint length;
 
   IDE_ENTRY;
@@ -257,7 +269,10 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
 
   if (IDE_IS_MAIN_THREAD ())
-    child_data = GUINT_TO_POINTER (TRUE);
+    flags |= CHILD_PDEATHSIG;
+
+  if (priv->setup_tty)
+    flags |= CHILD_SETUP_TTY;
 
   {
     g_autofree char *str = NULL;
@@ -271,7 +286,7 @@ ide_subprocess_launcher_spawn_worker (GTask        *task,
   }
 
   launcher = g_subprocess_launcher_new (priv->flags);
-  g_subprocess_launcher_set_child_setup (launcher, child_setup_func, child_data, NULL);
+  g_subprocess_launcher_set_child_setup (launcher, child_setup_func, GUINT_TO_POINTER (flags), NULL);
   g_subprocess_launcher_set_cwd (launcher, priv->cwd);
 
   if (priv->stdout_file_path != NULL)
@@ -535,6 +550,7 @@ ide_subprocess_launcher_init (IdeSubprocessLauncher *self)
   IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
 
   priv->clear_env = TRUE;
+  priv->setup_tty = TRUE;
 
   priv->unix_fd_map = ide_unix_fd_map_new ();
 
@@ -1144,4 +1160,22 @@ ide_subprocess_launcher_push_argv_parsed (IdeSubprocessLauncher *self,
       else
         ide_subprocess_launcher_push_args (self, (const char * const *)argv);
     }
+}
+
+/**
+ * ide_subprocess_launcher_set_setup_tty:
+ * @self: a #IdeSubprocessLauncher
+ * @setup_tty: if TTY should be prepared in subprocess
+ *
+ * Requests the controlling TTY be set on the subprocess.
+ */
+void
+ide_subprocess_launcher_set_setup_tty (IdeSubprocessLauncher *self,
+                                       gboolean               setup_tty)
+{
+  IdeSubprocessLauncherPrivate *priv = ide_subprocess_launcher_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SUBPROCESS_LAUNCHER (self));
+
+  priv->setup_tty = !!setup_tty;
 }
