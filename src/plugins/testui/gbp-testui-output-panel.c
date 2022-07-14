@@ -36,18 +36,9 @@ struct _GbpTestuiOutputPanel
 G_DEFINE_FINAL_TYPE (GbpTestuiOutputPanel, gbp_testui_output_panel, IDE_TYPE_PANE)
 
 static void
-gbp_testui_output_panel_class_init (GbpTestuiOutputPanelClass *klass)
-{
-  GtkWidgetClass *widget_class = (GtkWidgetClass*)klass;
-
-  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/testui/gbp-testui-output-panel.ui");
-  gtk_widget_class_bind_template_child (widget_class, GbpTestuiOutputPanel, terminal);
-}
-
-static void
-gbp_testui_output_panel_save_in_file_cb (GbpTestuiOutputPanel   *self,
-                                       int                   res,
-                                       GtkFileChooserNative *native)
+gbp_testui_output_panel_save_in_file_cb (GbpTestuiOutputPanel *self,
+                                         int                   res,
+                                         GtkFileChooserNative *native)
 {
   IDE_ENTRY;
 
@@ -93,17 +84,16 @@ gbp_testui_output_panel_save_in_file_cb (GbpTestuiOutputPanel   *self,
 }
 
 static void
-gbp_testui_output_panel_save_in_file (GSimpleAction *action,
-                                      GVariant      *param,
-                                      gpointer       user_data)
+gbp_testui_output_panel_save_in_file (GtkWidget  *widget,
+                                      const char *action_name,
+                                      GVariant   *param)
 {
-  GbpTestuiOutputPanel *self = user_data;
+  GbpTestuiOutputPanel *self = (GbpTestuiOutputPanel *)widget;
   g_autoptr(GtkFileChooserNative) native = NULL;
   GtkWidget *window;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_TESTUI_OUTPUT_PANEL (self));
 
   window = gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_WINDOW);
@@ -126,35 +116,36 @@ gbp_testui_output_panel_save_in_file (GSimpleAction *action,
 }
 
 static void
-gbp_testui_output_panel_clear_activate (GSimpleAction *action,
-                                        GVariant      *param,
-                                        gpointer       user_data)
+gbp_testui_output_panel_clear_activate (GtkWidget  *widget,
+                                        const char *action_name,
+                                        GVariant   *param)
 {
-  GbpTestuiOutputPanel *self = user_data;
+  GbpTestuiOutputPanel *self = (GbpTestuiOutputPanel *)widget;
 
   g_assert (GBP_IS_TESTUI_OUTPUT_PANEL (self));
-  g_assert (G_IS_SIMPLE_ACTION (action));
 
   vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
 }
 
 static void
+gbp_testui_output_panel_class_init (GbpTestuiOutputPanelClass *klass)
+{
+  GtkWidgetClass *widget_class = (GtkWidgetClass*)klass;
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/testui/gbp-testui-output-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpTestuiOutputPanel, terminal);
+
+  gtk_widget_class_install_action (widget_class, "test-output.clear", NULL, gbp_testui_output_panel_clear_activate);
+  gtk_widget_class_install_action (widget_class, "test-output.save", NULL, gbp_testui_output_panel_save_in_file);
+}
+
+static void
 gbp_testui_output_panel_init (GbpTestuiOutputPanel *self)
 {
-  static const GActionEntry entries[] = {
-    { "clear", gbp_testui_output_panel_clear_activate },
-    { "save", gbp_testui_output_panel_save_in_file },
-  };
-  g_autoptr(GSimpleActionGroup) actions = NULL;
-
   gtk_widget_init_template (GTK_WIDGET(self));
 
   panel_widget_set_title (PANEL_WIDGET (self), _("Unit Test Output"));
   panel_widget_set_icon_name (PANEL_WIDGET (self), "builder-unit-tests-symbolic");
-
-  actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (actions), entries, G_N_ELEMENTS (entries), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "testui-output", G_ACTION_GROUP (actions));
 }
 
 GbpTestuiOutputPanel *
