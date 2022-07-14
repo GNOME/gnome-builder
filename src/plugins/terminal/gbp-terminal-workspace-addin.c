@@ -34,8 +34,12 @@
 
 struct _GbpTerminalWorkspaceAddin
 {
-  GObject       parent_instance;
-  IdeWorkspace *workspace;
+  GObject          parent_instance;
+
+  IdeWorkspace    *workspace;
+
+  IdePane         *app_pane;
+  IdeTerminalPage *app_page;
 };
 
 static void terminal_on_host_action       (GbpTerminalWorkspaceAddin *self,
@@ -153,9 +157,9 @@ terminal_in_runtime_action (GbpTerminalWorkspaceAddin *self,
 }
 
 static void
-on_run_manager_run (IdeRunManager   *run_manager,
-                    IdeRunContext   *run_context,
-                    IdeTerminalPage *page)
+on_run_manager_run (GbpTerminalWorkspaceAddin *self,
+                    IdeRunContext             *run_context,
+                    IdeRunManager             *run_manager)
 {
   g_autoptr(GDateTime) now = NULL;
   g_autofree char *formatted = NULL;
@@ -165,11 +169,11 @@ on_run_manager_run (IdeRunManager   *run_manager,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
-  g_assert (IDE_IS_TERMINAL_PAGE (page));
 
-  pty = ide_terminal_page_get_pty (page);
+  pty = ide_terminal_page_get_pty (self->app_page);
 
   ide_run_context_push (run_context, NULL, NULL, NULL);
   ide_run_context_set_pty (run_context, pty);
@@ -181,25 +185,25 @@ on_run_manager_run (IdeRunManager   *run_manager,
 
   /* translators: %s is replaced with the current local time of day */
   formatted = g_strdup_printf (_("Application started at %s\r\n"), tmp);
-  ide_terminal_page_feed (page, formatted);
+  ide_terminal_page_feed (self->app_page, formatted);
 
-  panel_widget_raise (PANEL_WIDGET (page));
+  panel_widget_raise (PANEL_WIDGET (self->app_pane));
 
   IDE_EXIT;
 }
 
 static void
-on_run_manager_stopped (IdeRunManager   *run_manager,
-                        IdeTerminalPage *page)
+on_run_manager_stopped (GbpTerminalWorkspaceAddin *self,
+                        IdeRunManager             *run_manager)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
-  g_assert (IDE_IS_TERMINAL_PAGE (page));
 
-  ide_terminal_page_feed (page, _("Application exited"));
-  ide_terminal_page_feed (page, "\r\n");
+  ide_terminal_page_feed (self->app_page, _("Application exited"));
+  ide_terminal_page_feed (self->app_page, "\r\n");
 
   IDE_EXIT;
 }
@@ -245,28 +249,28 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
       IdeRunManager *run_manager = ide_run_manager_from_context (context);
       VtePty *pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
 
-      page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
-                           "respawn-on-exit", FALSE,
-                           "manage-spawn", FALSE,
-                           "pty", pty,
-                           NULL);
-      pane = g_object_new (IDE_TYPE_PANE,
-                           "title", _("Application Output"),
-                           "icon-name", "builder-run-start-symbolic",
-                           "child", page,
-                           NULL);
-      ide_workspace_add_pane (workspace, pane, position);
+      self->app_page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                                     "respawn-on-exit", FALSE,
+                                     "manage-spawn", FALSE,
+                                     "pty", pty,
+                                     NULL);
+      self->app_pane = g_object_new (IDE_TYPE_PANE,
+                                     "title", _("Application Output"),
+                                     "icon-name", "builder-run-start-symbolic",
+                                     "child", self->app_page,
+                                     NULL);
+      ide_workspace_add_pane (workspace, self->app_pane, position);
 
       g_signal_connect_object (run_manager,
                                "run",
                                G_CALLBACK (on_run_manager_run),
-                               page,
-                               0);
+                               self,
+                               G_CONNECT_SWAPPED);
       g_signal_connect_object (run_manager,
                                "stopped",
                                G_CALLBACK (on_run_manager_stopped),
-                               page,
-                               0);
+                               self,
+                               G_CONNECT_SWAPPED);
     }
 }
 
@@ -296,6 +300,9 @@ gbp_terminal_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                             G_CALLBACK (on_run_manager_stopped),
                                             self);
     }
+
+  self->app_page = NULL;
+  g_clear_pointer ((PanelWidget **)&self->app_pane, panel_widget_close);
 
   gtk_widget_insert_action_group (GTK_WIDGET (workspace), "terminal", NULL);
 
