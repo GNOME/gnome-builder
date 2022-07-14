@@ -164,7 +164,7 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
   g_autoptr(GDateTime) now = NULL;
   g_autofree char *formatted = NULL;
   g_autofree char *tmp = NULL;
-  VtePty *pty;
+  g_autoptr(VtePty) pty = NULL;
 
   IDE_ENTRY;
 
@@ -173,7 +173,9 @@ on_run_manager_run (GbpTerminalWorkspaceAddin *self,
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
 
-  pty = ide_terminal_page_get_pty (self->app_page);
+  pty = ide_pty_new_sync (NULL);
+
+  ide_terminal_page_set_pty (self->app_page, pty);
 
   ide_run_context_push (run_context, NULL, NULL, NULL);
   ide_run_context_set_pty (run_context, pty);
