@@ -385,12 +385,6 @@ ide_source_view_menu_popup_action (GtkWidget  *widget,
                                    GVariant   *param)
 {
   IdeSourceView *self = (IdeSourceView *)widget;
-  GtkTextView *text_view = (GtkTextView *)widget;
-  GtkTextBuffer *buffer;
-  GtkTextIter iter;
-  GdkRectangle iter_location;
-  GdkRectangle visible_rect;
-  gboolean is_visible;
 
   IDE_ENTRY;
 
@@ -411,33 +405,8 @@ ide_source_view_menu_popup_action (GtkWidget  *widget,
       gtk_widget_set_valign (GTK_WIDGET (self->popup_menu), GTK_ALIGN_START);
     }
 
-  buffer = gtk_text_view_get_buffer (text_view);
-  gtk_text_buffer_get_iter_at_mark (buffer, &iter,
-                                    gtk_text_buffer_get_insert (buffer));
-  gtk_text_view_get_iter_location (text_view, &iter, &iter_location);
-  gtk_text_view_get_visible_rect (text_view, &visible_rect);
-
-  is_visible = (iter_location.x + iter_location.width > visible_rect.x &&
-                iter_location.x < visible_rect.x + visible_rect.width &&
-                iter_location.y + iter_location.height > visible_rect.y &&
-                iter_location.y < visible_rect.y + visible_rect.height);
-
-  if (is_visible)
-    {
-      gtk_text_view_buffer_to_window_coords (text_view,
-                                             GTK_TEXT_WINDOW_WIDGET,
-                                             iter_location.x,
-                                             iter_location.y,
-                                             &iter_location.x,
-                                             &iter_location.y);
-
-      gtk_popover_set_pointing_to (self->popup_menu, &iter_location);
-    }
-  else
-    {
-      gtk_popover_set_pointing_to (self->popup_menu,
-                                   &(GdkRectangle) { self->click_x, self->click_y, 1, 1 });
-    }
+  gtk_popover_set_pointing_to (self->popup_menu,
+                               &(GdkRectangle) { self->click_x, self->click_y, 1, 1 });
 
   gtk_popover_popup (self->popup_menu);
 
