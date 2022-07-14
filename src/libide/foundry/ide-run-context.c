@@ -50,6 +50,7 @@ struct _IdeRunContext
   GQueue             layers;
   IdeRunContextLayer root;
   guint              ended : 1;
+  guint              setup_tty : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeRunContext, ide_run_context, G_TYPE_OBJECT)
@@ -199,6 +200,8 @@ ide_run_context_init (IdeRunContext *self)
   ide_run_context_layer_init (&self->root);
 
   g_queue_push_head_link (&self->layers, &self->root.qlink);
+
+  self->setup_tty = TRUE;
 }
 
 void
@@ -292,10 +295,13 @@ ide_run_context_push_host (IdeRunContext *self)
   g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
 
   if (ide_is_flatpak ())
-    ide_run_context_push (self,
-                          ide_run_context_host_handler,
-                          NULL,
-                          NULL);
+    {
+      self->setup_tty = FALSE;
+      ide_run_context_push (self,
+                            ide_run_context_host_handler,
+                            NULL,
+                            NULL);
+    }
 }
 
 static gboolean
@@ -1126,6 +1132,8 @@ ide_run_context_end (IdeRunContext  *self,
             ide_subprocess_launcher_take_fd (launcher, source_fd, dest_fd);
         }
     }
+
+  ide_subprocess_launcher_set_setup_tty (launcher, self->setup_tty);
 
   return g_steal_pointer (&launcher);
 }
