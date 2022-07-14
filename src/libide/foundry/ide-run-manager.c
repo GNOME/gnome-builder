@@ -856,6 +856,29 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   apply_text_direction (run_context, get_action_state_string (self, "text-direction"));
   apply_messages_debug (run_context, self->messages_debug_all);
 
+#if 0
+/* TODO: Probably want to inherit these when running, but we should have
+ * a toggle to turn inherit locale on/off.
+ */
+static const char * const copy[] = {
+  "LANG",
+  "LANGUAGE",
+  "LC_ALL",
+  "LC_ADDRESS",
+  "LC_COLLATE",
+  "LC_CTYPE",
+  "LC_IDENTIFICATION",
+  "LC_MEASUREMENT",
+  "LC_MESSAGES",
+  "LC_MONETARY",
+  "LC_NAME",
+  "LC_NUMERIC",
+  "LC_PAPER",
+  "LC_TELEPHONE",
+  "LC_TIME",
+};
+#endif
+
   /* Allow plugins to track anything in the mix. For example the
    * terminal plugin will attach a PTY here for stdin/stdout/stderr.
    */
