@@ -22,17 +22,16 @@
 
 #include "config.h"
 
-#include <fcntl.h>
 #include <glib/gi18n.h>
+
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <vte/vte.h>
+
 #include <libide-foundry.h>
 #include <libide-gui.h>
 #include <libide-terminal.h>
-#include <stdlib.h>
-#include <vte/vte.h>
-#include <unistd.h>
-
-#define PCRE2_CODE_UNIT_WIDTH 0
-#include <pcre2.h>
 
 #include "ide-terminal-page.h"
 #include "ide-terminal-page-private.h"
@@ -149,7 +148,7 @@ ide_terminal_page_spawn_cb (GObject      *object,
 
   g_clear_object (&self->pty);
   vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
-  self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
+  self->pty = ide_pty_new_sync (NULL);
   vte_terminal_set_pty (VTE_TERMINAL (self->terminal), self->pty);
 
   /* Spawn our terminal and wait for it to exit */
@@ -181,7 +180,7 @@ ide_terminal_page_do_spawn_in_idle (IdeTerminalPage *self)
     {
       g_autoptr(GError) error = NULL;
 
-      if (!(self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, &error)))
+      if (!(self->pty = ide_pty_new_sync (&error)))
         {
           g_critical ("Failed to create PTY for terminal: %s", error->message);
           IDE_RETURN (G_SOURCE_REMOVE);

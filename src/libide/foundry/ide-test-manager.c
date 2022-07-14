@@ -31,6 +31,7 @@
 #include "ide-build-manager.h"
 #include "ide-foundry-compat.h"
 #include "ide-pipeline.h"
+#include "ide-pty.h"
 #include "ide-run-command.h"
 #include "ide-run-commands.h"
 #include "ide-run-manager.h"
@@ -236,8 +237,7 @@ ide_test_manager_init (IdeTestManager *self)
   GtkCustomFilter *filter;
   GtkMapListModel *map;
 
-  self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
-  vte_pty_set_utf8 (self->pty, TRUE, NULL);
+  self->pty = ide_pty_new_sync (NULL);
 
   filter = gtk_custom_filter_new (filter_tests_func, NULL, NULL);
   self->filtered = gtk_filter_list_model_new (NULL, GTK_FILTER (filter));

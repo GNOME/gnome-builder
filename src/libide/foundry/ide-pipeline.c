@@ -51,6 +51,7 @@
 #include "ide-foundry-enums.h"
 #include "ide-local-deploy-strategy.h"
 #include "ide-local-device.h"
+#include "ide-pty.h"
 #include "ide-run-command.h"
 #include "ide-run-context.h"
 #include "ide-run-manager-private.h"
@@ -1543,11 +1544,8 @@ ide_pipeline_initable_init (GInitable     *initable,
    * Create a PTY for subprocess launchers. PTY initialization does not
    * support cancellation, so do not pass @cancellable along to it.
    */
-  self->pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, error);
-  if (self->pty == NULL)
+  if (!(self->pty = ide_pty_new_sync (error)))
     IDE_RETURN (FALSE);
-
-  vte_pty_set_utf8 (self->pty, TRUE, NULL);
 
   consumer_fd = vte_pty_get_fd (self->pty);
 

@@ -247,7 +247,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
       IdeWorkbench *workbench = ide_workspace_get_workbench (workspace);
       IdeContext *context = ide_workbench_get_context (workbench);
       IdeRunManager *run_manager = ide_run_manager_from_context (context);
-      VtePty *pty = vte_pty_new_sync (VTE_PTY_DEFAULT, NULL, NULL);
+      VtePty *pty = ide_pty_new_sync (NULL);
 
       self->app_page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
                                      "respawn-on-exit", FALSE,
