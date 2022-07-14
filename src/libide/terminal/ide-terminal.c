@@ -524,7 +524,26 @@ copy_clipboard_action (GtkWidget  *widget,
                        const char *action_name,
                        GVariant   *param)
 {
-  g_signal_emit_by_name (widget, "copy-clipboard");
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
+  g_autofree char *text = vte_terminal_get_text_selected (VTE_TERMINAL (widget));
+  gdk_clipboard_set_text (clipboard, text);
+}
+
+static void
+ide_terminal_read_text_cb (GObject      *object,
+                           GAsyncResult *result,
+                           gpointer      user_data)
+{
+  GdkClipboard *clipboard = (GdkClipboard *)object;
+  g_autoptr(IdeTerminal) self = user_data;
+  g_autofree char *text = NULL;
+
+  g_assert (GDK_IS_CLIPBOARD (clipboard));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TERMINAL (self));
+
+  if ((text = gdk_clipboard_read_text_finish (clipboard, result, NULL)))
+    vte_terminal_paste_text (VTE_TERMINAL (self), text);
 }
 
 static void
@@ -532,7 +551,12 @@ paste_clipboard_action (GtkWidget  *widget,
                         const char *action_name,
                         GVariant   *param)
 {
-  g_signal_emit_by_name (widget, "paste-clipboard");
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
+
+  gdk_clipboard_read_text_async (clipboard,
+                                 NULL,
+                                 ide_terminal_read_text_cb,
+                                 g_object_ref (widget));
 }
 
 static void
@@ -611,9 +635,12 @@ ide_terminal_class_init (IdeTerminalClass *klass)
                   1,
                   G_TYPE_BOOLEAN);
 
-  gtk_widget_class_install_action (widget_class, "terminal.copy-clipboard", NULL, copy_clipboard_action);
-  gtk_widget_class_install_action (widget_class, "terminal.paste-clipboard", NULL, paste_clipboard_action);
+  gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL, copy_clipboard_action);
+  gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL, paste_clipboard_action);
   gtk_widget_class_install_action (widget_class, "terminal.search-reveal", NULL, ide_terminal_search_reveal);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "clipboard.copy", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_v, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "clipboard.paste", NULL);
 }
 
 static void
