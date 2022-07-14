@@ -34,6 +34,7 @@
 #include "ide-gui-global.h"
 #include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
+#include "ide-support-private.h"
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -123,7 +124,8 @@ ide_application_actions_about (GSimpleAction *action,
                                gpointer       user_data)
 {
   IdeApplication *self = user_data;
-  g_autoptr(GString) version = NULL;
+  g_autofree char *support_info = NULL;
+  g_autofree char *support_filename = NULL;
   GtkDialog *dialog;
   GtkWindow *parent = NULL;
   GList *iter;
@@ -142,33 +144,29 @@ ide_application_actions_about (GSimpleAction *action,
         }
     }
 
-  version = g_string_new (PACKAGE_VERSION);
+  support_info = ide_get_support_log ();
+  support_filename = g_strdup_printf ("gnome-builder-%u.log", (int)getpid ());
 
-  if (!g_str_equal (IDE_BUILD_TYPE, "release"))
-    g_string_append (version, " (" IDE_BUILD_IDENTIFIER ")");
-
-  if (g_strcmp0 (IDE_BUILD_CHANNEL, "other") != 0)
-    g_string_append (version, "\n" IDE_BUILD_CHANNEL);
-
-  dialog = g_object_new (GTK_TYPE_ABOUT_DIALOG,
-                         "artists", ide_application_credits_artists,
-                         "authors", ide_application_credits_authors,
-                         "comments", _("An IDE for GNOME"),
-                         "copyright", "© 2014–2022 Christian Hergert, et al.",
-                         "documenters", ide_application_credits_documenters,
-                         "license-type", GTK_LICENSE_GPL_3_0,
-                         "logo-icon-name", ide_get_application_id (),
-                         "modal", TRUE,
-                         "program-name", _("GNOME Builder"),
+  dialog = g_object_new (ADW_TYPE_ABOUT_WINDOW,
                          "transient-for", parent,
-                         "translator-credits", _("translator-credits"),
-                         "version", version->str,
+                         "application-icon", ide_get_application_id (),
+                         "application-name", _("Builder"),
+                         "developer-name", _("Christian Hergert, et al."),
+                         "version", PACKAGE_VERSION,
                          "website", "https://wiki.gnome.org/Apps/Builder",
-                         "website-label", _("Learn more about GNOME Builder"),
+                         "issue-url", "https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/new",
+                         "developers", ide_application_credits_developers,
+                         "designers", ide_application_credits_designers,
+                         "documenters", ide_application_credits_documenters,
+                         "translator-credits", _("translator-credits"),
+                         "copyright", "© 2014–2022 Christian Hergert, et al.",
+                         "license-type", GTK_LICENSE_GPL_3_0,
+                         "debug-info", support_info,
+                         "debug-info-filename", support_filename,
                          NULL);
-  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
-                                       _("Funded By"),
-                                       ide_application_credits_funders);
+  adw_about_window_add_acknowledgement_section (ADW_ABOUT_WINDOW (dialog),
+                                                _("Funded By"),
+                                                ide_application_credits_funders);
 
   ide_gtk_window_present (GTK_WINDOW (dialog));
 }

@@ -29,7 +29,7 @@
 #include <libide-gui.h>
 #include <ide-build-ident.h>
 
-#include "ide-support.h"
+#include "ide-support-private.h"
 
 gchar *
 ide_get_support_log (void)

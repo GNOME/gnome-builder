@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-static const gchar *ide_application_credits_artists[] = {
+static const gchar *ide_application_credits_designers[] = {
   "Allan Day",
   "Hylke Bons",
   "Jakub Steiner",
@@ -32,7 +32,7 @@ static const gchar *ide_application_credits_artists[] = {
   NULL
 };
 
-static const gchar *ide_application_credits_authors[] = {
+static const gchar *ide_application_credits_developers[] = {
   "Akshaya Kakkilaya",
   "Alberto Fanjul",
   "Alex285",
