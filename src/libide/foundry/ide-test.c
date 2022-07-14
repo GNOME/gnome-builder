@@ -22,15 +22,17 @@
 
 #include "config.h"
 
+#include <unistd.h>
+
 #include <libide-io.h>
 #include <libide-threading.h>
 
-#include "ide-run-command.h"
-#include "ide-run-context.h"
 #include "ide-foundry-enums.h"
 #include "ide-pipeline.h"
+#include "ide-run-command.h"
+#include "ide-run-context.h"
 #include "ide-runtime.h"
-#include "ide-test.h"
+#include "ide-test-private.h"
 
 struct _IdeTest
 {
@@ -284,7 +286,7 @@ ide_test_wait_check_cb (GObject      *object,
 void
 ide_test_run_async (IdeTest             *self,
                     IdePipeline         *pipeline,
-                    VtePty              *pty,
+                    int                  pty_fd,
                     GCancellable        *cancellable,
                     GAsyncReadyCallback  callback,
                     gpointer             user_data)
@@ -302,7 +304,6 @@ ide_test_run_async (IdeTest             *self,
 
   g_return_if_fail (IDE_IS_TEST (self));
   g_return_if_fail (IDE_IS_PIPELINE (pipeline));
-  g_return_if_fail (!pty || VTE_IS_PTY (pty));
   g_return_if_fail (IDE_IS_RUN_COMMAND (self->run_command));
 
   task = ide_task_new (self, cancellable, callback, user_data);
@@ -327,8 +328,14 @@ ide_test_run_async (IdeTest             *self,
       run_context = ide_pipeline_create_run_context (pipeline, self->run_command);
     }
 
-  if (pty != NULL)
-    ide_run_context_set_pty (run_context, pty);
+  if (pty_fd > -1)
+    {
+      ide_run_context_take_fd (run_context, dup (pty_fd), STDIN_FILENO);
+      ide_run_context_take_fd (run_context, dup (pty_fd), STDOUT_FILENO);
+      ide_run_context_take_fd (run_context, dup (pty_fd), STDERR_FILENO);
+
+      ide_run_context_setenv (run_context, "TERM", "xterm-256color");
+    }
 
   if (!(subprocess = ide_run_context_spawn (run_context, &error)))
     {

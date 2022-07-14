@@ -57,16 +57,5 @@ IDE_AVAILABLE_IN_ALL
 const char    *ide_test_get_icon_name   (IdeTest              *self);
 IDE_AVAILABLE_IN_ALL
 IdeRunCommand *ide_test_get_run_command (IdeTest              *self);
-IDE_AVAILABLE_IN_ALL
-void           ide_test_run_async       (IdeTest              *self,
-                                         IdePipeline          *pipeline,
-                                         VtePty               *pty,
-                                         GCancellable         *cancellable,
-                                         GAsyncReadyCallback   callback,
-                                         gpointer              user_data);
-IDE_AVAILABLE_IN_ALL
-gboolean        ide_test_run_finish     (IdeTest              *self,
-                                         GAsyncResult         *result,
-                                         GError              **error);
 
 G_END_DECLS

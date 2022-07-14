@@ -32,11 +32,12 @@
 #include "ide-foundry-compat.h"
 #include "ide-pipeline.h"
 #include "ide-pty.h"
+#include "ide-run-context.h"
 #include "ide-run-command.h"
 #include "ide-run-commands.h"
 #include "ide-run-manager.h"
-#include "ide-test.h"
 #include "ide-test-manager.h"
+#include "ide-test-private.h"
 
 #define MAX_UNIT_TESTS 4
 
@@ -59,6 +60,8 @@ struct _IdeTestManager
   GtkFilterListModel *filtered;
   IdeCachedListModel *tests;
   VtePty             *pty;
+  IdePtyIntercept     intercept;
+  int                 pty_producer;
 };
 
 typedef struct
@@ -111,6 +114,7 @@ run_all_free (RunAll *state)
   g_clear_pointer (&state->tests, g_ptr_array_unref);
   g_clear_object (&state->pipeline);
   g_clear_object (&state->pty);
+
   g_slice_free (RunAll, state);
 }
 
@@ -177,10 +181,16 @@ static void
 ide_test_manager_dispose (GObject *object)
 {
   IdeTestManager *self = (IdeTestManager *)object;
+  g_auto(IdePtyFd) fd = IDE_PTY_FD_INVALID;
 
-  g_clear_object (&self->pty);
   g_clear_object (&self->filtered);
   g_clear_object (&self->tests);
+
+  g_clear_object (&self->pty);
+  fd = pty_fd_steal (&self->pty_producer);
+
+  if (IDE_IS_PTY_INTERCEPT (&self->intercept))
+    ide_pty_intercept_clear (&self->intercept);
 
   G_OBJECT_CLASS (ide_test_manager_parent_class)->dispose (object);
 }
@@ -236,8 +246,16 @@ ide_test_manager_init (IdeTestManager *self)
 {
   GtkCustomFilter *filter;
   GtkMapListModel *map;
+  int consumer_fd;
 
   self->pty = ide_pty_new_sync (NULL);
+  self->pty_producer = -1;
+
+  /* Now create intercept, which we'll use to apply PTY
+   * to all the spawned processes instead of our VtePty.
+   */
+  consumer_fd = vte_pty_get_fd (self->pty);
+  ide_pty_intercept_init (&self->intercept, consumer_fd, NULL);
 
   filter = gtk_custom_filter_new (filter_tests_func, NULL, NULL);
   self->filtered = gtk_filter_list_model_new (NULL, GTK_FILTER (filter));
@@ -252,7 +270,7 @@ ide_test_manager_run_all_cb (GObject      *object,
                              GAsyncResult *result,
                              gpointer      user_data)
 {
-  IdeTest *test = (IdeTest *)object;
+  IdeTestManager *self = (IdeTestManager *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
   GCancellable *cancellable;
@@ -261,7 +279,7 @@ ide_test_manager_run_all_cb (GObject      *object,
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_TEST (test));
+  g_assert (IDE_IS_TEST_MANAGER (self));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
@@ -270,10 +288,9 @@ ide_test_manager_run_all_cb (GObject      *object,
 
   g_assert (state != NULL);
   g_assert (state->n_active > 0);
-  g_assert (!state->pty || VTE_IS_PTY (state->pty));
   g_assert (state->tests != NULL);
 
-  if (!ide_test_run_finish (test, result, &error))
+  if (!ide_test_manager_run_finish (self, result, &error))
     g_message ("%s", error->message);
 
   if (state->tests->len > 0 &&
@@ -283,12 +300,11 @@ ide_test_manager_run_all_cb (GObject      *object,
 
       state->n_active++;
 
-      ide_test_run_async (next_test,
-                          state->pipeline,
-                          state->pty,
-                          cancellable,
-                          ide_test_manager_run_all_cb,
-                          g_object_ref (task));
+      ide_test_manager_run_async (self,
+                                  next_test,
+                                  cancellable,
+                                  ide_test_manager_run_all_cb,
+                                  g_object_ref (task));
     }
 
   state->n_active--;
@@ -360,7 +376,6 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
   state = g_slice_new0 (RunAll);
   state->tests = g_ptr_array_ref (ar);
   state->pipeline = g_object_ref (pipeline);
-  state->pty = g_object_ref (self->pty);
   state->n_active = 0;
   ide_task_set_task_data (task, state, run_all_free);
 
@@ -370,12 +385,11 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
 
       state->n_active++;
 
-      ide_test_run_async (test,
-                          state->pipeline,
-                          state->pty,
-                          cancellable,
-                          ide_test_manager_run_all_cb,
-                          g_object_ref (task));
+      ide_test_manager_run_async (self,
+                                  test,
+                                  cancellable,
+                                  ide_test_manager_run_all_cb,
+                                  g_object_ref (task));
     }
 
   if (state->n_active == 0)
@@ -477,6 +491,12 @@ ide_test_manager_run_async (IdeTestManager      *self,
   build_manager = ide_build_manager_from_context (context);
   pipeline = ide_build_manager_get_pipeline (build_manager);
 
+  if (self->pty_producer == -1)
+    {
+      IdePtyFd consumer_fd = ide_pty_intercept_get_fd (&self->intercept);
+      self->pty_producer = ide_pty_intercept_create_producer (consumer_fd, TRUE);
+    }
+
   if (pipeline == NULL)
     ide_task_return_new_error (task,
                                G_IO_ERROR,
@@ -485,7 +505,7 @@ ide_test_manager_run_async (IdeTestManager      *self,
   else
     ide_test_run_async (test,
                         pipeline,
-                        self->pty,
+                        self->pty_producer,
                         cancellable,
                         ide_test_manager_run_cb,
                         g_steal_pointer (&task));
