@@ -1129,6 +1129,7 @@ register_post_install_commands_stage (IdePipeline *self,
     {
       g_autoptr(IdeSubprocessLauncher) launcher = NULL;
       g_autoptr(IdePipelineStage) stage = NULL;
+      g_autofree char *title = NULL;
 
       if (!(launcher = ide_pipeline_create_launcher (self, &error)))
         {
@@ -1140,8 +1141,12 @@ register_post_install_commands_stage (IdePipeline *self,
       ide_subprocess_launcher_push_argv (launcher, "-c");
       ide_subprocess_launcher_push_argv (launcher, post_install_commands[i]);
 
+      /* translators: %s is replaced with the post-install shell command */
+      title = g_strdup_printf (_("Post-install (%s)"), post_install_commands[i]);
+
       stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
                             "launcher", launcher,
+                            "name", title,
                             NULL);
       g_signal_connect (stage,
                         "query",
