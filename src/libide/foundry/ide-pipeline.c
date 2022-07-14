@@ -40,6 +40,7 @@
 #include "ide-pipeline-addin.h"
 #include "ide-pipeline.h"
 #include "ide-build-private.h"
+#include "ide-pipeline-stage-command.h"
 #include "ide-pipeline-stage-launcher.h"
 #include "ide-pipeline-stage-private.h"
 #include "ide-pipeline-stage.h"
@@ -1078,27 +1079,24 @@ register_build_commands_stage (IdePipeline *self,
 
   for (guint i = 0; build_commands[i]; i++)
     {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeRunCommand) run_command = NULL;
       g_autoptr(IdePipelineStage) stage = NULL;
+      g_autofree char *title = NULL;
 
-      if (!(launcher = ide_pipeline_create_launcher (self, &error)))
-        {
-          g_warning ("%s", error->message);
-          return;
-        }
-
-      /* Request deprecation warnings from the GLib stack by default */
-      ide_subprocess_launcher_setenv (launcher, "G_ENABLE_DIAGNOSTIC", "1", FALSE);
-
-      ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
-      ide_subprocess_launcher_push_argv (launcher, "-c");
-      ide_subprocess_launcher_push_argv (launcher, build_commands[i]);
+      run_command = ide_run_command_new ();
+      ide_run_command_set_argv (run_command, IDE_STRV_INIT ("/bin/sh", "-c", build_commands[i]));
 
       if (rundir_path != NULL)
-        ide_subprocess_launcher_set_cwd (launcher, rundir_path);
+        ide_run_command_set_cwd (run_command, rundir_path);
+      else
+        ide_run_command_set_cwd (run_command, ide_pipeline_get_builddir (self));
 
-      stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
-                            "launcher", launcher,
+      /* translators: %s is replaced with the build shell command */
+      title = g_strdup_printf (_("Build (%s)"), build_commands[i]);
+
+      stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                            "build-command", run_command,
+                            "name", title,
                             NULL);
       g_signal_connect (stage,
                         "query",
@@ -1127,25 +1125,19 @@ register_post_install_commands_stage (IdePipeline *self,
 
   for (guint i = 0; post_install_commands[i]; i++)
     {
-      g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+      g_autoptr(IdeRunCommand) run_command = NULL;
       g_autoptr(IdePipelineStage) stage = NULL;
       g_autofree char *title = NULL;
 
-      if (!(launcher = ide_pipeline_create_launcher (self, &error)))
-        {
-          ide_object_warning (self, "%s", error->message);
-          return;
-        }
-
-      ide_subprocess_launcher_push_argv (launcher, "/bin/sh");
-      ide_subprocess_launcher_push_argv (launcher, "-c");
-      ide_subprocess_launcher_push_argv (launcher, post_install_commands[i]);
+      run_command = ide_run_command_new ();
+      ide_run_command_set_argv (run_command, IDE_STRV_INIT ("/bin/sh", "-c", post_install_commands[i]));
+      ide_run_command_set_cwd (run_command, ide_pipeline_get_builddir (self));
 
       /* translators: %s is replaced with the post-install shell command */
       title = g_strdup_printf (_("Post-install (%s)"), post_install_commands[i]);
 
-      stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_LAUNCHER,
-                            "launcher", launcher,
+      stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                            "build-command", run_command,
                             "name", title,
                             NULL);
       g_signal_connect (stage,
