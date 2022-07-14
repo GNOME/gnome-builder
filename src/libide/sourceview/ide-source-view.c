@@ -408,6 +408,7 @@ ide_source_view_menu_popup_action (GtkWidget  *widget,
       gtk_popover_set_position (self->popup_menu, GTK_POS_RIGHT);
       gtk_popover_set_has_arrow (self->popup_menu, FALSE);
       gtk_widget_set_halign (GTK_WIDGET (self->popup_menu), GTK_ALIGN_START);
+      gtk_widget_set_valign (GTK_WIDGET (self->popup_menu), GTK_ALIGN_START);
     }
 
   buffer = gtk_text_view_get_buffer (text_view);
