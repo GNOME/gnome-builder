@@ -52,7 +52,6 @@ on_test_activated_cb (GbpTestuiWorkspaceAddin *self,
   g_assert (IDE_IS_TEST (test));
   g_assert (GBP_IS_TESTUI_PANEL (panel));
 
-  gbp_testui_output_panel_reset (self->output_panel);
   panel_widget_raise (PANEL_WIDGET (self->output_panel));
 
   context = ide_workspace_get_context (self->workspace);
