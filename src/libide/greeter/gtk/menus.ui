@@ -46,13 +46,6 @@
         <attribute name="action">app.about</attribute>
       </item>
     </section>
-    <section id="ide-greeter-workspace-menu-quit-section">
-      <item>
-        <attribute name="id">ide-greeter-workspace-menu-quit</attribute>
-        <attribute name="label" translatable="yes">Quit</attribute>
-        <attribute name="action">app.quit</attribute>
-      </item>
-    </section>
   </menu>
   <menu id="ide-primary-workspace-menu">
     <section id="ide-primary-workspace-menu-projects-section">
