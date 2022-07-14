@@ -26,11 +26,28 @@ namespace {{PreFix}} {
         }
 
         private void on_about_action () {
+{{if is_adwaita}}
+            string[] developers = { "{{author}}" };
+            var about = new Adw.AboutWindow () {
+                transient_for = this.active_window,
+                application_name = "{{name}}",
+                application_icon = "{{appid}}",
+                developer_name = "{{author}}",
+                version = "{{project_version}}",
+                developers = developers,
+                copyright = "© {{year}} {{author}}",
+            };
+
+            about.present ();
+{{else}}
             string[] authors = { "{{author}}" };
             Gtk.show_about_dialog (this.active_window,
                                    "program-name", "{{name}}",
+                                   "logo-icon-name", "{{appid}}",
                                    "authors", authors,
-                                   "version", "{{project_version}}");
+                                   "version", "{{project_version}}",
+                                   "copyright", "© {{year}} {{author}}");
+{{end}}
         }
 
         private void on_preferences_action () {

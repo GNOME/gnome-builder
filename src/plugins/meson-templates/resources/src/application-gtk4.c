@@ -57,7 +57,11 @@ static void
 {{spaces}}                           GVariant      *parameter,
 {{spaces}}                           gpointer       user_data)
 {
+{{if is_adwaita}}
+  static const char *developers[] = {"{{author}}", NULL};
+{{else}}
   static const char *authors[] = {"{{author}}", NULL};
+{{end}}
   {{PreFix}}Application *self = user_data;
   GtkWindow *window = NULL;
 
@@ -65,11 +69,24 @@ static void
 
   window = gtk_application_get_active_window (GTK_APPLICATION (self));
 
+{{if is_adwaita}}
+  adw_show_about_window (window,
+                         "application-name", "{{name}}",
+                         "application-icon", "{{appid}}",
+                         "developer-name", "{{author}}",
+                         "version", "{{project_version}}",
+                         "developers", developers,
+                         "copyright", "© {{year}} {{author}}",
+                         NULL);
+{{else}}
   gtk_show_about_dialog (window,
                          "program-name", "{{name}}",
+                         "logo-icon-name", "{{appid}}",
                          "authors", authors,
                          "version", "{{project_version}}",
+                         "copyright", "© {{year}} {{author}}",
                          NULL);
+{{end}}
 }
 
 static void
@@ -100,3 +117,4 @@ static void
                                          "app.quit",
                                          (const char *[]) { "<primary>q", NULL });
 }
+

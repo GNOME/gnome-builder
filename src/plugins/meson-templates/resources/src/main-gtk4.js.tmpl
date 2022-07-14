@@ -26,17 +26,35 @@ export const {{PreFix}}Application = GObject.registerClass(
 
             const show_about_action = new Gio.SimpleAction({name: 'about'});
             show_about_action.connect('activate', action => {
+{{if is_adwaita}}
                 let aboutParams = {
+                    transient_for: this.active_window,
+                    application_name: '{{name}}',
+                    application_icon: '{{appid}}',
+                    developer_name: '{{author}}',
+                    version: '{{project_version}}',
+                    developers: [
+                        '{{author}}'
+                    ],
+                    copyright: '© {{year}} {{author}}'
+                };
+                const aboutWindow = new Adw.AboutWindow(aboutParams);
+                aboutWindow.present();
+{{else}}
+                let aboutParams = {
+                    transient_for: this.active_window,
+                    modal: true,
+                    program_name: '{{name}}',
+                    logo_icon_name: '{{appid}}',
+                    version: '{{project_version}}',
                     authors: [
                         '{{author}}'
                     ],
-                    version: '{{project_version}}',
-                    program_name: '{{name}}',
-                    transient_for: this.active_window,
-                    modal: true,
+                    copyright: '© {{year}} {{author}}'
                 };
                 const aboutDialog = new Gtk.AboutDialog(aboutParams);
                 aboutDialog.present();
+{{end}}
             });
             this.add_action(show_about_action);
         }
