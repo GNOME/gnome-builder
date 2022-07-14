@@ -87,6 +87,7 @@ child_setup_func (gpointer data)
 
   setsid ();
   setpgid (0, 0);
+#endif
 
 #ifdef __linux__
   /*
@@ -96,14 +97,6 @@ child_setup_func (gpointer data)
    */
   if (data != NULL)
     prctl (PR_SET_PDEATHSIG, SIGKILL);
-#endif
-
-  if (isatty (STDIN_FILENO))
-    {
-      if (ioctl (STDIN_FILENO, TIOCSCTTY, 0) != 0)
-        g_warning ("Failed to setup TIOCSCTTY on stdin: %s",
-                   g_strerror (errno));
-    }
 #endif
 }
 
