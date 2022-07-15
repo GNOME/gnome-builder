@@ -24,10 +24,12 @@
 
 #include <libide-gui.h>
 #include <libide-search.h>
+#include <libide-sourceview.h>
 #include <libide-threading.h>
 
 #include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-search-provider.h"
+#include "gbp-shellcmd-search-result.h"
 #include "gbp-shellcmd-run-command.h"
 
 struct _GbpShellcmdSearchProvider
@@ -35,6 +37,33 @@ struct _GbpShellcmdSearchProvider
   IdeObject   parent_instance;
   GListModel *commands;
 };
+
+static GIcon *result_icon;
+
+static gboolean
+filter_func (gpointer item,
+             gpointer user_data)
+{
+  GbpShellcmdRunCommand *run_command = item;
+  const char *query = user_data;
+  const char *keywords;
+  guint prio = 0;
+
+  g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (run_command));
+  g_assert (query != NULL);
+
+  if (!(keywords = gbp_shellcmd_run_command_get_keywords (run_command)))
+    return FALSE;
+
+  return gtk_source_completion_fuzzy_match (keywords, query, &prio);
+}
+
+static gpointer
+map_func (gpointer item,
+          gpointer user_data)
+{
+  return gbp_shellcmd_search_result_new (item, result_icon);
+}
 
 static void
 gbp_shellcmd_search_provider_search_async (IdeSearchProvider   *provider,
@@ -45,18 +74,27 @@ gbp_shellcmd_search_provider_search_async (IdeSearchProvider   *provider,
                                            gpointer             user_data)
 {
   GbpShellcmdSearchProvider *self = (GbpShellcmdSearchProvider *)provider;
+  g_autoptr(GtkFilterListModel) list = NULL;
+  g_autoptr(GtkMapListModel) map = NULL;
+  g_autoptr(GtkCustomFilter) filter = NULL;
   g_autoptr(IdeTask) task = NULL;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SHELLCMD_SEARCH_PROVIDER (self));
+  g_assert (query != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, gbp_shellcmd_search_provider_search_async);
 
-  ide_task_return_unsupported_error (task);
+  filter = gtk_custom_filter_new (filter_func, g_strdup (query), g_free);
+  list = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (self->commands)),
+                                    g_object_ref (GTK_FILTER (filter)));
+  map = gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (list)), map_func, NULL, NULL);
+
+  ide_task_return_pointer (task, g_steal_pointer (&map), g_object_unref);
 
   IDE_EXIT;
 }
@@ -142,6 +180,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpShellcmdSearchProvider, gbp_shellcmd_search_pr
 static void
 gbp_shellcmd_search_provider_class_init (GbpShellcmdSearchProviderClass *klass)
 {
+  result_icon = g_themed_icon_new ("builder-terminal-symbolic");
 }
 
 static void

@@ -8,6 +8,7 @@ plugins_sources += files([
   'gbp-shellcmd-run-command.c',
   'gbp-shellcmd-run-command-provider.c',
   'gbp-shellcmd-search-provider.c',
+  'gbp-shellcmd-search-result.c',
   'gbp-shellcmd-shortcut-provider.c',
 ])
 
