@@ -47,7 +47,7 @@ struct _GbpFlatpakRuntimeProvider
 static void runtime_provider_iface_init (IdeRuntimeProviderInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakRuntimeProvider, gbp_flatpak_runtime_provider, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_RUNTIME_PROVIDER, runtime_provider_iface_init))
 
 static void
 gbp_flatpak_runtime_provider_dispose (GObject *object)
@@ -115,7 +115,8 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
 
   context = ide_object_ref_context (IDE_OBJECT (self));
   manager = ide_runtime_manager_from_context (context);
-  runtime = gbp_flatpak_runtime_new (name,
+  runtime = gbp_flatpak_runtime_new (IDE_OBJECT (self),
+                                     name,
                                      arch,
                                      branch,
                                      sdk_name,
@@ -128,7 +129,6 @@ on_runtime_added_cb (GbpFlatpakRuntimeProvider *self,
            name, arch, branch, sdk_name, sdk_branch, deploy_dir);
 
   g_ptr_array_add (self->runtimes, g_object_ref (runtime));
-  ide_object_append (IDE_OBJECT (self), IDE_OBJECT (runtime));
   ide_runtime_manager_add (manager, IDE_RUNTIME (runtime));
 
   IDE_EXIT;

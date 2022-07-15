@@ -33,7 +33,7 @@
 
 struct _GbpFlatpakManifest
 {
-  IdeConfig  parent_instance;
+  IdeConfig         parent_instance;
 
   GFile            *file;
   GFileMonitor     *file_monitor;
@@ -66,7 +66,7 @@ struct _GbpFlatpakManifest
 static void initable_iface_init (GInitableIface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakManifest, gbp_flatpak_manifest, IDE_TYPE_CONFIG,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_INITABLE, initable_iface_init))
 
 enum {
   PROP_0,
@@ -609,7 +609,8 @@ find_extension (GbpFlatpakManifest *self,
                                  &deploy_dir,
                                  &metadata,
                                  &is_extension))
-        ret = gbp_flatpak_runtime_new (name,
+        ret = gbp_flatpak_runtime_new (IDE_OBJECT (self),
+                                       name,
                                        arch,
                                        branch,
                                        sdk_name,

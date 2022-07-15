@@ -28,7 +28,8 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpFlatpakRuntime, gbp_flatpak_runtime, GBP, FLATPAK_RUNTIME, IdeRuntime)
 
-GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (const char        *name,
+GbpFlatpakRuntime   *gbp_flatpak_runtime_new          (IdeObject         *parent,
+                                                       const char        *name,
                                                        const char        *arch,
                                                        const char        *branch,
                                                        const char        *sdk_name,
