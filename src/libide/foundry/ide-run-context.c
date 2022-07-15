@@ -844,7 +844,7 @@ ide_run_context_take_fd (IdeRunContext *self,
   IdeRunContextLayer *layer;
 
   g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
-  g_return_if_fail (source_fd > -1);
+  g_return_if_fail (source_fd >= -1);
   g_return_if_fail (dest_fd > -1);
 
   layer = ide_run_context_current_layer (self);
@@ -1063,6 +1063,7 @@ ide_run_context_end (IdeRunContext  *self,
                      GError        **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  GSubprocessFlags flags = 0;
   guint length;
 
   g_return_val_if_fail (IDE_IS_RUN_CONTEXT (self), NULL);
@@ -1120,6 +1121,12 @@ ide_run_context_end (IdeRunContext  *self,
 
       source_fd = ide_unix_fd_map_steal (self->root.unix_fd_map, i, &dest_fd);
 
+      if (dest_fd == STDOUT_FILENO && source_fd == -1)
+        flags |= G_SUBPROCESS_FLAGS_STDOUT_SILENCE;
+
+      if (dest_fd == STDERR_FILENO && source_fd == -1)
+        flags |= G_SUBPROCESS_FLAGS_STDERR_SILENCE;
+
       if (source_fd != -1 && dest_fd != -1)
         {
           if (dest_fd == STDIN_FILENO)
@@ -1133,6 +1140,7 @@ ide_run_context_end (IdeRunContext  *self,
         }
     }
 
+  ide_subprocess_launcher_set_flags (launcher, flags);
   ide_subprocess_launcher_set_setup_tty (launcher, self->setup_tty);
 
   return g_steal_pointer (&launcher);
