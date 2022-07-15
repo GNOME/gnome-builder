@@ -138,6 +138,9 @@ gbp_jhbuild_runtime_contains_program_in_path (IdeRuntime   *runtime,
   ide_run_context_append_argv (run_context, "which");
   ide_run_context_append_argv (run_context, program);
 
+  ide_run_context_take_fd (run_context, -1, STDOUT_FILENO);
+  ide_run_context_take_fd (run_context, -1, STDERR_FILENO);
+
   if (!(subprocess = ide_run_context_spawn (run_context, &error)))
     {
       g_warning ("Failed to spawn subprocess: %s", error->message);
