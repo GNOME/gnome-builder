@@ -213,7 +213,7 @@ gbp_maven_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
   ide_g_file_find_with_depth_async (testdir, "*.java", 5,
                                     NULL,
                                     find_test_files_cb,
-                                    g_object_ref (provider));
+                                    g_steal_pointer (&task));
 
   IDE_EXIT;
 }
