@@ -23,6 +23,7 @@
 #include <libide-plugins.h>
 
 #include "ide-editor-page.h"
+#include "ide-editor-search-bar-private.h"
 
 G_BEGIN_DECLS
 
@@ -44,6 +45,8 @@ struct _IdeEditorPage
   GtkScrolledWindow       *scroller;
   GtkSourceMap            *map;
   GtkRevealer             *map_revealer;
+  IdeEditorSearchBar      *search_bar;
+  GtkRevealer             *search_revealer;
 
   guint                    completion_blocked : 1;
 };

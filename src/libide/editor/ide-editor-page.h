@@ -68,6 +68,8 @@ gboolean       ide_editor_page_save_finish               (IdeEditorPage        *
                                                           GAsyncResult         *result,
                                                           GError              **error);
 IDE_AVAILABLE_IN_ALL
+void           ide_editor_page_scroll_to_insert          (IdeEditorPage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_editor_page_scroll_to_visual_position (IdeEditorPage        *self,
                                                           guint                 line,
                                                           guint                 column);

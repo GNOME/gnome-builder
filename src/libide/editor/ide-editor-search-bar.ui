@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="IdeEditorSearchBar" parent="GtkWidget">
+    <child>
+      <object class="GtkGrid" id="grid">
+        <property name="column-spacing">6</property>
+        <property name="row-spacing">6</property>
+        <child>
+          <object class="IdeSearchEntry" id="search_entry">
+            <property name="hexpand">true</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+            </layout>
+            <child>
+              <object class="GtkEventControllerKey">
+                <property name="propagation-phase">capture</property>
+                <signal name="key-pressed" handler="on_search_key_pressed_cb"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry" id="replace_entry">
+            <property name="primary-icon-name">edit-find-replace-symbolic</property>
+            <property name="max-width-chars">20</property>
+            <property name="hexpand">true</property>
+            <property name="visible">false</property>
+            <property name="placeholder-text" translatable="yes">Replace</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="homogeneous">true</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">3</property>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">search.move-previous</property>
+                <property name="action-target">false</property>
+                <property name="tooltip-text" translatable="yes">Move to previous match (Ctrl+Shift+G)</property>
+                <property name="icon-name">go-up-symbolic</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="action-name">search.move-next</property>
+                <property name="action-target">false</property>
+                <property name="tooltip-text" translatable="yes">Move to next match (Ctrl+G)</property>
+                <property name="icon-name">go-down-symbolic</property>
+                <style>
+                  <class name="flat"/>
+                </style>
+              </object>
+            </child>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="replace_mode_button">
+            <property name="tooltip-text" translatable="yes">Search &amp; Replace (Ctrl+H)</property>
+            <property name="icon-name">edit-find-replace-symbolic</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">2</property>
+            </layout>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="direction">up</property>
+            <property name="icon-name">view-more-symbolic</property>
+            <property name="menu-model">options_menu</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">3</property>
+            </layout>
+            <style>
+              <class name="flat"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="close_button">
+            <property name="margin-end">3</property>
+            <property name="action-name">search.hide</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="tooltip-text" translatable="yes">Close search</property>
+            <property name="icon-name">window-close-symbolic</property>
+            <style>
+              <class name="flat"/>
+              <class name="small-button"/>
+              <class name="circular"/>
+            </style>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">4</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="replace_button">
+            <property name="action-name">search.replace-one</property>
+            <property name="use-underline">true</property>
+            <property name="label" translatable="yes">_Replace</property>
+            <property name="visible">false</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkButton" id="replace_all_button">
+            <property name="action-name">search.replace-all</property>
+            <property name="use-underline">true</property>
+            <property name="label" translatable="yes">Replace _All</property>
+            <property name="visible">false</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">2</property>
+              <property name="column-span">3</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <menu id="options_menu">
+    <item>
+      <attribute name="label" translatable="yes">Use Re_gular Expressions</attribute>
+      <attribute name="action">search.use-regex</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Case Sensitive</attribute>
+      <attribute name="action">search.case-sensitive</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Match Whole Words</attribute>
+      <attribute name="action">search.whole-words</attribute>
+    </item>
+  </menu>
+</interface>

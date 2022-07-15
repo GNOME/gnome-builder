@@ -42,10 +42,8 @@ libide_editor_private_sources = [
   'ide-editor-init.c',
   'ide-editor-page-actions.c',
   'ide-editor-page-settings.c',
+  'ide-editor-search-bar.c',
 ]
-
-libide_editor_sources += libide_editor_public_sources
-libide_editor_sources += libide_editor_private_sources
 
 #
 # Generated Resource Files
@@ -58,6 +56,17 @@ libide_editor_resources = gnome.compile_resources(
 )
 libide_editor_generated_headers += [libide_editor_resources[1]]
 libide_editor_sources += libide_editor_resources
+
+#
+# Enums Generation
+#
+libide_editor_private_enums_headers = [
+  'ide-editor-search-bar-private.h',
+]
+libide_editor_private_enums = gnome.mkenums_simple('ide-editor-enums-private',
+     body_prefix: '#include "config.h"',
+         sources: libide_editor_private_enums_headers,
+)
 
 #
 # Dependencies
@@ -78,16 +87,17 @@ libide_editor_deps = [
   libide_gui_dep,
 ]
 
-libide_editor_internal_deps = [
-]
-
 #
 # Library Definitions
 #
 
-libide_editor = static_library('ide-editor-' + libide_api_version, libide_editor_sources,
-   dependencies: libide_editor_deps + libide_editor_internal_deps,
-         c_args: libide_args + release_args + ['-DIDE_EDITOR_COMPILATION'],
+libide_editor_sources += libide_editor_public_sources
+libide_editor_sources += libide_editor_private_sources
+
+libide_editor = static_library('ide-editor-' + libide_api_version,
+  libide_editor_sources + libide_editor_private_enums,
+  dependencies: libide_editor_deps,
+        c_args: libide_args + release_args + ['-DIDE_EDITOR_COMPILATION'],
 )
 
 libide_editor_dep = declare_dependency(

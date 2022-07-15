@@ -322,6 +322,56 @@ ide_editor_page_get_file_or_directory (IdePage *page)
 }
 
 static void
+set_search_visible (IdeEditorPage          *self,
+                    gboolean                search_visible,
+                    IdeEditorSearchBarMode  mode)
+{
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+
+  if (search_visible)
+    {
+      _ide_editor_search_bar_set_mode (self->search_bar, mode);
+      _ide_editor_search_bar_attach (self->search_bar, self->buffer);
+    }
+  else
+    {
+      _ide_editor_search_bar_detach (self->search_bar);
+    }
+
+  gtk_revealer_set_reveal_child (self->search_revealer, search_visible);
+
+  if (search_visible)
+    _ide_editor_search_bar_grab_focus (self->search_bar);
+}
+
+static void
+search_hide_action (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  IdeEditorPage *self = IDE_EDITOR_PAGE (widget);
+
+  set_search_visible (self, FALSE, 0);
+  gtk_widget_grab_focus (GTK_WIDGET (self->view));
+}
+
+static void
+search_begin_find_action (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *param)
+{
+  set_search_visible (IDE_EDITOR_PAGE (widget), TRUE, IDE_EDITOR_SEARCH_BAR_MODE_SEARCH);
+}
+
+static void
+search_begin_replace_action (GtkWidget  *widget,
+                             const char *action_name,
+                             GVariant   *param)
+{
+  set_search_visible (IDE_EDITOR_PAGE (widget), TRUE, IDE_EDITOR_SEARCH_BAR_MODE_REPLACE);
+}
+
+static void
 ide_editor_page_dispose (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
@@ -452,13 +502,23 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ide-editor-page.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, map);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, map_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, search_bar);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, scroller);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, view);
   gtk_widget_class_bind_template_callback (widget_class, ide_editor_page_focus_enter_cb);
 
+  gtk_widget_class_install_action (widget_class, "search.hide", NULL, search_hide_action);
+  gtk_widget_class_install_action (widget_class, "search.begin-find", NULL, search_begin_find_action);
+  gtk_widget_class_install_action (widget_class, "search.begin-replace", NULL, search_begin_replace_action);
+
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_s, GDK_CONTROL_MASK, "page.save", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_f, GDK_CONTROL_MASK, "search.begin-find", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_h, GDK_CONTROL_MASK, "search.begin-replace", NULL);
 
   _ide_editor_page_class_actions_init (klass);
+
+  g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
 }
 
 static void
@@ -858,4 +918,12 @@ ide_editor_page_scroll_to_visual_position (IdeEditorPage *self,
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self->buffer), &iter, &iter);
   gtk_text_view_scroll_mark_onscreen (GTK_TEXT_VIEW (self->view),
                                       gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (self->buffer)));
+}
+
+void
+ide_editor_page_scroll_to_insert (IdeEditorPage *self)
+{
+  g_return_if_fail (IDE_IS_EDITOR_PAGE (self));
+
+  ide_source_view_scroll_to_insert (self->view);
 }
