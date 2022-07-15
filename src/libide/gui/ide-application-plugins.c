@@ -319,7 +319,9 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
    * ensures that only embedded plugins can be used at startup,
    * saving us some precious disk I/O.
    */
-  peas_engine_prepend_search_path (engine, "resource:///plugins", "resource:///plugins");
+  peas_engine_prepend_search_path (engine,
+                                   "resource:///plugins",
+                                   "resource:///plugins");
 
   /* If we are within the Flatpak, then load any extensions we've
    * found merged into the extensions directory.
