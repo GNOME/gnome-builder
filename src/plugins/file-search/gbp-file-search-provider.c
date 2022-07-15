@@ -54,8 +54,11 @@ gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
                                        gpointer             user_data)
 {
   GbpFileSearchProvider *self = (GbpFileSearchProvider *)provider;
-  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GListStore) store = NULL;
   g_autoptr(GPtrArray) results = NULL;
+  g_autoptr(IdeTask) task = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
@@ -66,20 +69,28 @@ gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
   ide_task_set_source_tag (task, gbp_file_search_provider_search_async);
   ide_task_set_priority (task, G_PRIORITY_LOW);
 
-  if (self->index != NULL)
-    results = gbp_file_search_index_populate (self->index, search_terms, max_results);
-  else
-    results = g_ptr_array_new_with_free_func (g_object_unref);
+  if (self->index == NULL ||
+      !(results = gbp_file_search_index_populate (self->index, search_terms, max_results)))
+    {
+      ide_task_return_unsupported_error (task);
+      IDE_EXIT;
+    }
 
-  ide_task_return_pointer (task, g_steal_pointer (&results), g_ptr_array_unref);
+  store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
+  g_list_store_splice (store, 0, 0, results->pdata, results->len);
+  ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
+
+  IDE_EXIT;
 }
 
-static GPtrArray *
+static GListModel *
 gbp_file_search_provider_search_finish (IdeSearchProvider  *provider,
                                         GAsyncResult       *result,
                                         GError            **error)
 {
-  GPtrArray *ret;
+  GListModel *ret;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (provider));
@@ -87,7 +98,7 @@ gbp_file_search_provider_search_finish (IdeSearchProvider  *provider,
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
-  return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+  IDE_RETURN (ret);
 }
 
 static void

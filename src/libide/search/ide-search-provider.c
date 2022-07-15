@@ -48,7 +48,7 @@ ide_search_provider_real_search_async (IdeSearchProvider   *self,
                              "search not implemented");
 }
 
-static GPtrArray *
+static GListModel *
 ide_search_provider_real_search_finish (IdeSearchProvider  *self,
                                         GAsyncResult       *result,
                                         GError            **error)
@@ -94,11 +94,16 @@ ide_search_provider_search_async (IdeSearchProvider   *self,
                                   GAsyncReadyCallback  callback,
                                   gpointer             user_data)
 {
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (self));
   g_return_if_fail (query != NULL);
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   IDE_SEARCH_PROVIDER_GET_IFACE (self)->search_async (self, query, max_results, cancellable, callback, user_data);
+
+  IDE_EXIT;
 }
 
 /**
@@ -109,16 +114,24 @@ ide_search_provider_search_async (IdeSearchProvider   *self,
  *
  * Completes a request to a search provider.
  *
- * Returns: (transfer full) (element-type IdeSearchResult): a #GPtrArray
- *    of #IdeSearchResult elements.
+ * Returns: (transfer full): a #GListModel of #IdeSearchResult
  */
-GPtrArray *
+GListModel *
 ide_search_provider_search_finish (IdeSearchProvider  *self,
                                    GAsyncResult       *result,
                                    GError            **error)
 {
+  GListModel *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (self), NULL);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  return IDE_SEARCH_PROVIDER_GET_IFACE (self)->search_finish (self, result, error);
+  ret = IDE_SEARCH_PROVIDER_GET_IFACE (self)->search_finish (self, result, error);
+
+  g_return_val_if_fail (!ret || G_IS_LIST_MODEL (ret), NULL);
+
+  IDE_RETURN (ret);
 }

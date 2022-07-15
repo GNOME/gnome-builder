@@ -35,20 +35,27 @@ populate_cb (GObject      *object,
   IdeCodeIndexIndex *index = (IdeCodeIndexIndex *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GPtrArray) results = NULL;
+  g_autoptr(GListStore) store = NULL;
   g_autoptr(GError) error = NULL;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_CODE_INDEX_INDEX (index));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  results = ide_code_index_index_populate_finish (index, result, &error);
+  if (!(results = ide_code_index_index_populate_finish (index, result, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
 
-  if (results != NULL)
-    ide_task_return_pointer (task,
-                             g_steal_pointer (&results),
-                             g_ptr_array_unref);
-  else
-    ide_task_return_error (task, g_steal_pointer (&error));
+  store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
+  g_list_store_splice (store, 0, 0, results->pdata, results->len);
+  ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -106,12 +113,12 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
   IDE_EXIT;
 }
 
-static GPtrArray *
+static GListModel *
 ide_code_index_search_provider_search_finish (IdeSearchProvider *provider,
                                               GAsyncResult      *result,
                                               GError           **error)
 {
-  GPtrArray *ar;
+  GListModel *ret;
 
   IDE_ENTRY;
 
@@ -119,9 +126,11 @@ ide_code_index_search_provider_search_finish (IdeSearchProvider *provider,
   g_return_val_if_fail (IDE_IS_CODE_INDEX_SEARCH_PROVIDER (provider), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  ar = ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
-  IDE_RETURN (IDE_PTR_ARRAY_STEAL_FULL (&ar));
+  g_return_val_if_fail (!ret || G_IS_LIST_MODEL (ret), NULL);
+
+  IDE_RETURN (ret);
 }
 
 static void

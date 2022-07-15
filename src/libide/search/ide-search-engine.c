@@ -232,7 +232,7 @@ ide_search_engine_search_cb (GObject      *object,
   IdeSearchProvider *provider = (IdeSearchProvider *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GPtrArray) ar = NULL;
+  g_autoptr(GListModel) ret = NULL;
   Request *r;
 
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
@@ -245,35 +245,24 @@ ide_search_engine_search_cb (GObject      *object,
   g_assert (r->outstanding > 0);
   g_assert (G_IS_LIST_STORE (r->store));
 
-  ar = ide_search_provider_search_finish (provider, result, &error);
-  IDE_PTR_ARRAY_SET_FREE_FUNC (ar, g_object_unref);
-
-  if (error != NULL)
+  if (!(ret = ide_search_provider_search_finish (provider, result, &error)))
     {
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
-          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED))
+      if (!ide_error_ignore (error))
         g_warning ("%s", error->message);
       goto cleanup;
     }
 
-  for (guint i = 0; i < ar->len; i++)
-    {
-      IdeSearchResult *item = g_ptr_array_index (ar, i);
-
-      g_assert (IDE_IS_SEARCH_RESULT (item));
-
-      g_list_store_insert_sorted (r->store,
-                                  item,
-                                  (GCompareDataFunc)ide_search_result_compare,
-                                  NULL);
-
-    }
+  g_list_store_append (r->store, ret);
 
 cleanup:
   r->outstanding--;
 
   if (r->outstanding == 0)
-    ide_task_return_pointer (task, g_steal_pointer (&r->store), g_object_unref);
+    ide_task_return_pointer (task,
+                             g_object_new (GTK_TYPE_FLATTEN_LIST_MODEL,
+                                           "model", r->store,
+                                           NULL),
+                             g_object_unref);
 }
 
 static void
@@ -356,7 +345,7 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   r->query = g_strdup (query);
   r->max_results = max_results;
   r->task = task;
-  r->store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
+  r->store = g_list_store_new (G_TYPE_LIST_MODEL);
   r->outstanding = 0;
   ide_task_set_task_data (task, r, request_destroy);
 
@@ -370,9 +359,7 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   self->active_count += r->outstanding;
 
   if (r->outstanding == 0)
-    ide_task_return_pointer (task,
-                             g_object_ref (r->store),
-                             g_object_unref);
+    ide_task_return_unsupported_error (task);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUSY]);
 }

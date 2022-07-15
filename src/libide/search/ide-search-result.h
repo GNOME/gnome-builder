@@ -41,9 +41,6 @@ struct _IdeSearchResultClass
 
   void (*activate) (IdeSearchResult *self,
                     GtkWidget       *last_focus);
-
-  /*< private >*/
-  gpointer _reserved[8];
 };
 
 IDE_AVAILABLE_IN_ALL

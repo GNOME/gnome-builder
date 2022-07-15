@@ -156,40 +156,46 @@ ide_lsp_search_provider_init (IdeLspSearchProvider *self)
 
 static void
 ide_lsp_search_provider_search_cb (GObject      *object,
-                                   GAsyncResult *res,
+                                   GAsyncResult *result,
                                    gpointer      user_data)
 {
   IdeLspClient *client = (IdeLspClient *)object;
   g_autoptr(IdeTask) task = user_data;
-  g_autoptr(GVariant) result = NULL;
   g_autoptr(GVariantIter) iter = NULL;
+  g_autoptr(GListStore) store = NULL;
+  g_autoptr(GVariant) res = NULL;
   g_autoptr(GError) error = NULL;
   GVariant *symbol_information;
-  GPtrArray *ar;
 
   IDE_ENTRY;
 
-  ar = g_ptr_array_new_with_free_func (g_object_unref);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_LSP_CLIENT (client));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
 
-  if (!ide_lsp_client_call_finish (client, res, &result, &error))
+  if (!ide_lsp_client_call_finish (client, result, &res, &error))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
 
-  iter = g_variant_iter_new (result);
+  store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
+  iter = g_variant_iter_new (res);
 
   while (g_variant_iter_loop (iter, "v", &symbol_information))
     {
-      g_autoptr(GFile) gfile = NULL;
+      g_autoptr(IdeLspSearchResult) item = NULL;
       g_autoptr(IdeLocation) location = NULL;
-      g_autofree gchar *base = NULL;
-      const gchar *title;
-      const gchar *uri;
-      gint64 kind;
-      gint64 line, character;
+      g_autoptr(GFile) gfile = NULL;
+      g_autofree char *base = NULL;
       IdeSymbolKind symbol_kind;
-      const gchar *icon_name;
+      const char *icon_name;
+      const char *title;
+      const char *uri;
+      gint64 kind;
+      gint64 line;
+      gint64 character;
 
       JSONRPC_MESSAGE_PARSE (symbol_information,
                              "name", JSONRPC_MESSAGE_GET_STRING (&title),
@@ -211,19 +217,18 @@ ide_lsp_search_provider_search_cb (GObject      *object,
       location = ide_location_new (gfile, line, character);
       base = g_file_get_basename (gfile);
 
-      g_ptr_array_add (ar, ide_lsp_search_result_new (title, base, location, icon_name));
+      item = ide_lsp_search_result_new (title, base, location, icon_name);
+      g_list_store_append (store, item);
     }
 
-  ide_task_return_pointer (task,
-                           g_steal_pointer (&ar),
-                           g_ptr_array_unref);
+  ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
 
   IDE_EXIT;
 }
 
 static void
 ide_lsp_search_provider_search_async (IdeSearchProvider   *provider,
-                                      const gchar         *query,
+                                      const char          *query,
                                       guint                max_results,
                                       GCancellable        *cancellable,
                                       GAsyncReadyCallback  callback,
@@ -265,20 +270,24 @@ ide_lsp_search_provider_search_async (IdeSearchProvider   *provider,
   IDE_EXIT;
 }
 
-static GPtrArray *
+static GListModel *
 ide_lsp_search_provider_search_finish (IdeSearchProvider  *provider,
                                        GAsyncResult       *result,
                                        GError            **error)
 {
-  g_autoptr(GPtrArray) ret = NULL;
+  GListModel *ret;
 
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
 
-  if ((ret = ide_task_propagate_pointer (IDE_TASK (result), error)))
-    return IDE_PTR_ARRAY_STEAL_FULL (&ret);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
-  return NULL;
+  g_assert (!ret || G_IS_LIST_MODEL (ret));
+
+  IDE_RETURN (ret);
 }
 
 static void

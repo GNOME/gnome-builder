@@ -61,12 +61,12 @@ gbp_shellcmd_search_provider_search_async (IdeSearchProvider   *provider,
   IDE_EXIT;
 }
 
-static GPtrArray *
+static GListModel *
 gbp_shellcmd_search_provider_search_finish (IdeSearchProvider  *provider,
                                             GAsyncResult       *result,
                                             GError            **error)
 {
-  GPtrArray *ret;
+  GListModel *ret;
 
   IDE_ENTRY;
 

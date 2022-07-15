@@ -37,33 +37,33 @@ struct _IdeSearchProviderInterface
 {
   GTypeInterface parent_interface;
 
-  void       (*load)          (IdeSearchProvider    *self);
-  void       (*unload)        (IdeSearchProvider    *self);
-  void       (*search_async)  (IdeSearchProvider    *self,
-                               const gchar          *query,
-                               guint                 max_results,
-                               GCancellable         *cancellable,
-                               GAsyncReadyCallback   callback,
-                               gpointer              user_data);
-  GPtrArray *(*search_finish) (IdeSearchProvider    *self,
-                               GAsyncResult         *result,
-                               GError              **error);
+  void        (*load)          (IdeSearchProvider    *self);
+  void        (*unload)        (IdeSearchProvider    *self);
+  void        (*search_async)  (IdeSearchProvider    *self,
+                                const gchar          *query,
+                                guint                 max_results,
+                                GCancellable         *cancellable,
+                                GAsyncReadyCallback   callback,
+                                gpointer              user_data);
+  GListModel *(*search_finish) (IdeSearchProvider    *self,
+                                GAsyncResult         *result,
+                                GError              **error);
 };
 
 IDE_AVAILABLE_IN_ALL
-void       ide_search_provider_load          (IdeSearchProvider *self);
+void       ide_search_provider_load           (IdeSearchProvider *self);
 IDE_AVAILABLE_IN_ALL
-void       ide_search_provider_unload        (IdeSearchProvider *self);
+void       ide_search_provider_unload         (IdeSearchProvider *self);
 IDE_AVAILABLE_IN_ALL
-void       ide_search_provider_search_async  (IdeSearchProvider    *self,
-                                              const gchar          *query,
-                                              guint                 max_results,
-                                              GCancellable         *cancellable,
-                                              GAsyncReadyCallback   callback,
-                                              gpointer              user_data);
+void       ide_search_provider_search_async   (IdeSearchProvider    *self,
+                                               const gchar          *query,
+                                               guint                 max_results,
+                                               GCancellable         *cancellable,
+                                               GAsyncReadyCallback   callback,
+                                               gpointer              user_data);
 IDE_AVAILABLE_IN_ALL
-GPtrArray *ide_search_provider_search_finish (IdeSearchProvider    *self,
-                                              GAsyncResult         *result,
-                                              GError              **error);
+GListModel *ide_search_provider_search_finish (IdeSearchProvider    *self,
+                                               GAsyncResult         *result,
+                                               GError              **error);
 
 G_END_DECLS
