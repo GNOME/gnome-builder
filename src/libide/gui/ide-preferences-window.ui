@@ -5,10 +5,10 @@
   <template class="IdePreferencesWindow" parent="AdwApplicationWindow">
     <child>
       <object class="GtkBox">
-        <property name="orientation">vertical</property>
+        <property name="orientation">horizontal</property>
         <child>
           <object class="GtkBox">
-            <property name="orientation">horizontal</property>
+            <property name="orientation">vertical</property>
             <child>
               <object class="AdwHeaderBar" id="left">
                 <property name="title-widget">
@@ -39,10 +39,25 @@
               </object>
             </child>
             <child>
-              <object class="GtkSeparator">
-                <property name="orientation">vertical</property>
+              <object class="GtkStack" id="pages_stack">
+                <property name="transition-type">slide-left-right</property>
+                <property name="transition-duration">300</property>
+                <property name="vexpand">true</property>
+                <property name="hexpand">false</property>
+                <property name="width-request">300</property>
               </object>
             </child>
+          </object>
+        </child>
+
+        <child>
+          <object class="GtkSeparator" />
+        </child>
+
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+
             <child>
               <object class="AdwHeaderBar" id="right">
                 <property name="hexpand">true</property>
@@ -51,30 +66,6 @@
                   <object class="AdwWindowTitle" id="page_title">
                   </object>
                 </property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="vexpand">true</property>
-            <child>
-              <object class="GtkBox">
-                <property name="orientation">vertical</property>
-                <property name="width-request">300</property>
-                <property name="hexpand">false</property>
-                <child>
-                  <object class="GtkStack" id="pages_stack">
-                    <property name="transition-type">slide-left-right</property>
-                    <property name="transition-duration">300</property>
-                    <property name="vexpand">true</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkSeparator">
-                <property name="orientation">vertical</property>
               </object>
             </child>
             <child>
