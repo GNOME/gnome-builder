@@ -31,6 +31,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GbpShellcmdSearchResult, gbp_shellcmd_search_result, GBP, SHELLCMD_SEARCH_RESULT, IdeSearchResult)
 
 GbpShellcmdSearchResult *gbp_shellcmd_search_result_new (GbpShellcmdRunCommand *run_command,
-                                                         GIcon                 *gicon);
+                                                         GIcon                 *gicon,
+                                                         guint                  prio);
 
 G_END_DECLS

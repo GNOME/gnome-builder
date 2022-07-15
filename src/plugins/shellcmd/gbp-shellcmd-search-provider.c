@@ -62,7 +62,14 @@ static gpointer
 map_func (gpointer item,
           gpointer user_data)
 {
-  return gbp_shellcmd_search_result_new (item, result_icon);
+  GbpShellcmdRunCommand *run_command = item;
+  const char *keywords = gbp_shellcmd_run_command_get_keywords (run_command);
+  const char *query = user_data;
+  guint prio = 0;
+
+  gtk_source_completion_fuzzy_match (keywords, query, &prio);
+
+  return gbp_shellcmd_search_result_new (item, result_icon, prio);
 }
 
 static void
@@ -92,7 +99,10 @@ gbp_shellcmd_search_provider_search_async (IdeSearchProvider   *provider,
   filter = gtk_custom_filter_new (filter_func, g_strdup (query), g_free);
   list = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (self->commands)),
                                     g_object_ref (GTK_FILTER (filter)));
-  map = gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (list)), map_func, NULL, NULL);
+  map = gtk_map_list_model_new (g_object_ref (G_LIST_MODEL (list)),
+                                map_func,
+                                g_strdup (query),
+                                g_free);
 
   ide_task_return_pointer (task, g_steal_pointer (&map), g_object_unref);
 

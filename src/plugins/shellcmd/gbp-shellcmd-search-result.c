@@ -115,12 +115,15 @@ gbp_shellcmd_search_result_init (GbpShellcmdSearchResult *self)
 /**
  * gbp_shellcmd_search_result_new:
  * @run_command: (transfer full): a #GbpShellcmdRunCommand
+ * @gicon: the icon to use
+ * @prio: the score of the match
  *
  * Returns: (transfer full): a new GbpShellcmdSearchResult
  */
 GbpShellcmdSearchResult *
 gbp_shellcmd_search_result_new (GbpShellcmdRunCommand *run_command,
-                                GIcon                 *gicon)
+                                GIcon                 *gicon,
+                                guint                  prio)
 {
   GbpShellcmdSearchResult *self;
   g_autofree char *subtitle = NULL;
@@ -133,6 +136,7 @@ gbp_shellcmd_search_result_new (GbpShellcmdRunCommand *run_command,
                        "title", ide_run_command_get_display_name (IDE_RUN_COMMAND (run_command)),
                        "subtitle", subtitle,
                        "gicon", gicon,
+                       "score", (float)(prio > 0 ? 1. / prio : 0.),
                        NULL);
 
   self->run_command = g_steal_pointer (&run_command);
