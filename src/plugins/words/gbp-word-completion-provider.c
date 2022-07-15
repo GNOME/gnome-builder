@@ -221,7 +221,7 @@ static gint
 gbp_word_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
                                            GtkSourceCompletionContext  *context)
 {
-  return 1000;
+  return -10000;
 }
 
 static void

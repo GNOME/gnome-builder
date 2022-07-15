@@ -45,21 +45,7 @@ gbp_vls_completion_provider_load (IdeLspCompletionProvider *provider)
   IDE_EXIT;
 }
 
-static int
-gbp_vls_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
-                                          GtkSourceCompletionContext  *context)
-{
-  return -1000;
-}
-
-static void
-completion_provider_iface_init (GtkSourceCompletionProviderInterface *iface)
-{
-  iface->get_priority = gbp_vls_completion_provider_get_priority;
-}
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVlsCompletionProvider, gbp_vls_completion_provider, IDE_TYPE_LSP_COMPLETION_PROVIDER,
-                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROVIDER, completion_provider_iface_init))
+G_DEFINE_FINAL_TYPE (GbpVlsCompletionProvider, gbp_vls_completion_provider, IDE_TYPE_LSP_COMPLETION_PROVIDER)
 
 static void
 gbp_vls_completion_provider_class_init (GbpVlsCompletionProviderClass *klass)

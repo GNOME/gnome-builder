@@ -76,9 +76,9 @@ ide_clang_completion_provider_get_priority (GtkSourceCompletionProvider *provide
 {
   /* Place results before snippets */
   if (is_field_access (context))
-    return -200;
+    return 2400;
 
-  return 100;
+  return 2500;
 }
 
 static gboolean

@@ -459,7 +459,7 @@ static gint
 ide_html_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
                                            GtkSourceCompletionContext  *context)
 {
-  return 200;
+  return -200;
 }
 
 static gboolean
