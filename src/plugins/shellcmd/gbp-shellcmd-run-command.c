@@ -35,6 +35,7 @@ struct _GbpShellcmdRunCommand
   GSettings           *settings;
   char                *id;
   char                *accelerator;
+  char                *keywords;
 
   GbpShellcmdLocality  locality;
 };
@@ -52,6 +53,14 @@ enum {
 G_DEFINE_FINAL_TYPE (GbpShellcmdRunCommand, gbp_shellcmd_run_command, IDE_TYPE_RUN_COMMAND)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+clear_keywords_cb (GbpShellcmdRunCommand *self)
+{
+  g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (self));
+
+  g_clear_pointer (&self->keywords, g_free);
+}
 
 static void
 gbp_shellcmd_run_command_prepare_to_run (IdeRunCommand *run_command,
@@ -152,29 +161,17 @@ subtitle_changed_cb (GbpShellcmdRunCommand *self)
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SUBTITLE]);
 }
 
-static char *
-get_subtitle (GbpShellcmdRunCommand *self)
+char *
+gbp_shellcmd_run_command_dup_subtitle (GbpShellcmdRunCommand *self)
 {
-  g_autofree char *joined = NULL;
   const char * const *argv;
-  const char *cwd;
 
   g_assert (GBP_IS_SHELLCMD_RUN_COMMAND (self));
 
-  argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self));
-  cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (self));
+  if ((argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self))))
+    return g_strjoinv (" ", (char **)argv);
 
-  if (argv != NULL)
-    joined = g_strjoinv (" ", (char **)argv);
-
-  if (joined && cwd)
-    /* something like a bash prompt */
-    return g_strdup_printf ("<tt>%s&gt; %s</tt>", cwd, joined);
-
-  if (cwd)
-    return g_strdup_printf ("%s&gt; ", cwd);
-
-  return g_steal_pointer (&joined);
+  return NULL;
 }
 
 static void
@@ -206,6 +203,8 @@ gbp_shellcmd_run_command_dispose (GObject *object)
   g_clear_pointer (&self->accelerator, g_free);
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->settings_path, g_free);
+  g_clear_pointer (&self->keywords, g_free);
+
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (gbp_shellcmd_run_command_parent_class)->dispose (object);
@@ -238,7 +237,7 @@ gbp_shellcmd_run_command_get_property (GObject    *object,
       break;
 
     case PROP_SUBTITLE:
-      g_value_take_string (value, get_subtitle (self));
+      g_value_take_string (value, gbp_shellcmd_run_command_dup_subtitle (self));
       break;
 
     default:
@@ -322,6 +321,7 @@ gbp_shellcmd_run_command_init (GbpShellcmdRunCommand *self)
   g_signal_connect (self, "notify::accelerator", G_CALLBACK (accelerator_label_changed_cb), NULL);
   g_signal_connect (self, "notify::cwd", G_CALLBACK (subtitle_changed_cb), NULL);
   g_signal_connect (self, "notify::argv", G_CALLBACK (subtitle_changed_cb), NULL);
+  g_signal_connect (self, "notify", G_CALLBACK (clear_keywords_cb), NULL);
 }
 
 GbpShellcmdRunCommand *
@@ -413,4 +413,33 @@ gbp_shellcmd_run_command_set_locality (GbpShellcmdRunCommand *self,
       self->locality = locality;
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LOCALITY]);
     }
+}
+
+const char *
+gbp_shellcmd_run_command_get_keywords (GbpShellcmdRunCommand *self)
+{
+  g_return_val_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self), NULL);
+
+  if (self->keywords == NULL)
+    {
+      GString *str = g_string_new (NULL);
+      const char * const *argv;
+      const char *name;
+
+      if ((name = ide_run_command_get_display_name (IDE_RUN_COMMAND (self))))
+        g_string_append (str, name);
+
+      if ((argv = ide_run_command_get_argv (IDE_RUN_COMMAND (self))))
+        {
+          for (guint i = 0; argv[i]; i++)
+            {
+              g_string_append_c (str, ' ');
+              g_string_append (str, argv[i]);
+            }
+        }
+
+      self->keywords = g_string_free (str, FALSE);
+    }
+
+  return self->keywords;
 }

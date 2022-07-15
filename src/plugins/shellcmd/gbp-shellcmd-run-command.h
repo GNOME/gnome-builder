@@ -53,5 +53,7 @@ void                   gbp_shellcmd_run_command_set_accelerator (GbpShellcmdRunC
 GbpShellcmdLocality    gbp_shellcmd_run_command_get_locality    (GbpShellcmdRunCommand *self);
 void                   gbp_shellcmd_run_command_set_locality    (GbpShellcmdRunCommand *self,
                                                                  GbpShellcmdLocality    locality);
+const char            *gbp_shellcmd_run_command_get_keywords    (GbpShellcmdRunCommand *self);
+char                  *gbp_shellcmd_run_command_dup_subtitle    (GbpShellcmdRunCommand *self);
 
 G_END_DECLS
