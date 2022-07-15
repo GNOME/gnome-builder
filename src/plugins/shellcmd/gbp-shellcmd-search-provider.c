@@ -26,11 +26,14 @@
 #include <libide-search.h>
 #include <libide-threading.h>
 
+#include "gbp-shellcmd-command-model.h"
 #include "gbp-shellcmd-search-provider.h"
+#include "gbp-shellcmd-run-command.h"
 
 struct _GbpShellcmdSearchProvider
 {
-  IdeObject parent_instance;
+  IdeObject   parent_instance;
+  GListModel *commands;
 };
 
 static void
@@ -44,6 +47,8 @@ gbp_shellcmd_search_provider_search_async (IdeSearchProvider   *provider,
   GbpShellcmdSearchProvider *self = (GbpShellcmdSearchProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
 
+  IDE_ENTRY;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SHELLCMD_SEARCH_PROVIDER (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -52,6 +57,8 @@ gbp_shellcmd_search_provider_search_async (IdeSearchProvider   *provider,
   ide_task_set_source_tag (task, gbp_shellcmd_search_provider_search_async);
 
   ide_task_return_unsupported_error (task);
+
+  IDE_EXIT;
 }
 
 static GPtrArray *
@@ -59,12 +66,72 @@ gbp_shellcmd_search_provider_search_finish (IdeSearchProvider  *provider,
                                             GAsyncResult       *result,
                                             GError            **error)
 {
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  GPtrArray *ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SHELLCMD_SEARCH_PROVIDER (provider));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
+gbp_shellcmd_search_provider_load (IdeSearchProvider *provider)
+{
+  GbpShellcmdSearchProvider *self = (GbpShellcmdSearchProvider *)provider;
+  g_autoptr(GbpShellcmdCommandModel) app_commands = NULL;
+  g_autoptr(GListStore) store = NULL;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHELLCMD_SEARCH_PROVIDER (self));
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  store = g_list_store_new (G_TYPE_LIST_MODEL);
+
+  app_commands = gbp_shellcmd_command_model_new_for_app ();
+  g_list_store_append (store, app_commands);
+
+  if (ide_context_has_project (context))
+    {
+      g_autoptr(GbpShellcmdCommandModel) project_commands = NULL;
+
+      project_commands = gbp_shellcmd_command_model_new_for_project (context);
+      g_list_store_append (store, project_commands);
+    }
+
+  self->commands = g_object_new (GTK_TYPE_FLATTEN_LIST_MODEL,
+                                 "model", store,
+                                 NULL);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_shellcmd_search_provider_unload (IdeSearchProvider *provider)
+{
+  GbpShellcmdSearchProvider *self = (GbpShellcmdSearchProvider *)provider;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SHELLCMD_SEARCH_PROVIDER (self));
+
+  g_clear_object (&self->commands);
+
+  IDE_EXIT;
 }
 
 static void
 search_provider_iface_init (IdeSearchProviderInterface *iface)
 {
+  iface->load = gbp_shellcmd_search_provider_load;
+  iface->unload = gbp_shellcmd_search_provider_unload;
   iface->search_async = gbp_shellcmd_search_provider_search_async;
   iface->search_finish = gbp_shellcmd_search_provider_search_finish;
 }

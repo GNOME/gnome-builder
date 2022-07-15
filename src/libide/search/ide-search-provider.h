@@ -37,8 +37,8 @@ struct _IdeSearchProviderInterface
 {
   GTypeInterface parent_interface;
 
-  void       (*load)          (IdeSearchProvider    *self,
-                               IdeContext           *context);
+  void       (*load)          (IdeSearchProvider    *self);
+  void       (*unload)        (IdeSearchProvider    *self);
   void       (*search_async)  (IdeSearchProvider    *self,
                                const gchar          *query,
                                guint                 max_results,
@@ -51,8 +51,9 @@ struct _IdeSearchProviderInterface
 };
 
 IDE_AVAILABLE_IN_ALL
-void       ide_search_provider_load          (IdeSearchProvider *self,
-                                              IdeContext        *context);
+void       ide_search_provider_load          (IdeSearchProvider *self);
+IDE_AVAILABLE_IN_ALL
+void       ide_search_provider_unload        (IdeSearchProvider *self);
 IDE_AVAILABLE_IN_ALL
 void       ide_search_provider_search_async  (IdeSearchProvider    *self,
                                               const gchar          *query,

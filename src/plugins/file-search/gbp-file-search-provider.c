@@ -41,22 +41,23 @@ struct _GbpFileSearchProvider
 static void search_provider_iface_init (IdeSearchProviderInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFileSearchProvider,
-                         gbp_file_search_provider,
-                         IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))
+                               gbp_file_search_provider,
+                               IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))
 
 static void
 gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
-                                      const gchar         *search_terms,
-                                      guint                max_results,
-                                      GCancellable        *cancellable,
-                                      GAsyncReadyCallback  callback,
-                                      gpointer             user_data)
+                                       const char          *search_terms,
+                                       guint                max_results,
+                                       GCancellable        *cancellable,
+                                       GAsyncReadyCallback  callback,
+                                       gpointer             user_data)
 {
   GbpFileSearchProvider *self = (GbpFileSearchProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) results = NULL;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (self));
   g_assert (search_terms != NULL);
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -75,11 +76,12 @@ gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
 
 static GPtrArray *
 gbp_file_search_provider_search_finish (IdeSearchProvider  *provider,
-                                       GAsyncResult       *result,
-                                       GError            **error)
+                                        GAsyncResult       *result,
+                                        GError            **error)
 {
   GPtrArray *ret;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_FILE_SEARCH_PROVIDER (provider));
   g_assert (IDE_IS_TASK (result));
 
@@ -90,8 +92,8 @@ gbp_file_search_provider_search_finish (IdeSearchProvider  *provider,
 
 static void
 on_buffer_loaded (GbpFileSearchProvider *self,
-                  IdeBuffer            *buffer,
-                  IdeBufferManager     *bufmgr)
+                  IdeBuffer             *buffer,
+                  IdeBufferManager      *bufmgr)
 {
   g_autofree gchar *relative_path = NULL;
   g_autoptr(IdeContext) context = NULL;
@@ -120,9 +122,9 @@ on_buffer_loaded (GbpFileSearchProvider *self,
 
 static void
 on_file_renamed (GbpFileSearchProvider *self,
-                 GFile                *src_file,
-                 GFile                *dst_file,
-                 IdeProject           *project)
+                 GFile                 *src_file,
+                 GFile                 *dst_file,
+                 IdeProject            *project)
 {
   g_autofree gchar *old_path = NULL;
   g_autofree gchar *new_path = NULL;
@@ -147,8 +149,8 @@ on_file_renamed (GbpFileSearchProvider *self,
 
 static void
 on_file_trashed (GbpFileSearchProvider *self,
-                 GFile                *file,
-                 IdeProject           *project)
+                 GFile                 *file,
+                 IdeProject            *project)
 {
   g_autofree gchar *path = NULL;
   g_autoptr(GFile) workdir = NULL;
@@ -170,8 +172,8 @@ on_file_trashed (GbpFileSearchProvider *self,
 
 static void
 gbp_file_search_provider_build_cb (GObject      *object,
-                                  GAsyncResult *result,
-                                  gpointer      user_data)
+                                   GAsyncResult *result,
+                                   gpointer      user_data)
 {
   GbpFileSearchIndex *index = (GbpFileSearchIndex *)object;
   g_autoptr(GbpFileSearchProvider) self = user_data;

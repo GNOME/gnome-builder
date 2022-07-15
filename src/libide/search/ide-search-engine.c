@@ -89,17 +89,13 @@ on_extension_added_cb (IdeExtensionSetAdapter *set,
                        PeasExtension          *exten,
                        gpointer                user_data)
 {
-  IdeSearchEngine *self = (IdeSearchEngine *)user_data;
   IdeSearchProvider *provider = (IdeSearchProvider *)exten;
-  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
-  g_assert (context != NULL);
-  g_assert (IDE_IS_CONTEXT (context));
 
-  ide_search_provider_load (provider, context);
+  ide_search_provider_load (provider);
 }
 
 static void
@@ -108,7 +104,13 @@ on_extension_removed_cb (IdeExtensionSetAdapter *set,
                          PeasExtension          *exten,
                          gpointer                user_data)
 {
-// FIXME ??
+  IdeSearchProvider *provider = (IdeSearchProvider *)exten;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+
+  ide_search_provider_unload (provider);
 }
 
 static void
@@ -121,12 +123,9 @@ ide_search_engine_parent_set (IdeObject *object,
   g_assert (!parent || IDE_IS_OBJECT (parent));
 
   if (parent == NULL)
-    {
-      g_clear_object (&self->extensions);
-      return;
-    }
+    return;
 
-  self->extensions = ide_extension_set_adapter_new (parent,
+  self->extensions = ide_extension_set_adapter_new (object,
                                                     peas_engine_get_default (),
                                                     IDE_TYPE_SEARCH_PROVIDER,
                                                     NULL, NULL);
@@ -147,14 +146,14 @@ ide_search_engine_parent_set (IdeObject *object,
 }
 
 static void
-ide_search_engine_destroy (IdeObject *object)
+ide_search_engine_dispose (GObject *object)
 {
   IdeSearchEngine *self = (IdeSearchEngine *)object;
 
   g_clear_object (&self->extensions);
   g_clear_pointer (&self->custom_provider, g_ptr_array_unref);
 
-  IDE_OBJECT_CLASS (ide_search_engine_parent_class)->destroy (object);
+  G_OBJECT_CLASS (ide_search_engine_parent_class)->dispose (object);
 }
 
 static void
@@ -179,13 +178,13 @@ ide_search_engine_get_property (GObject    *object,
 static void
 ide_search_engine_class_init (IdeSearchEngineClass *klass)
 {
-  GObjectClass *g_object_class = G_OBJECT_CLASS (klass);
-  IdeObjectClass *object_class = IDE_OBJECT_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  g_object_class->get_property = ide_search_engine_get_property;
+  object_class->dispose = ide_search_engine_dispose;
+  object_class->get_property = ide_search_engine_get_property;
 
-  object_class->destroy = ide_search_engine_destroy;
-  object_class->parent_set = ide_search_engine_parent_set;
+  i_object_class->parent_set = ide_search_engine_parent_set;
 
   properties [PROP_BUSY] =
     g_param_spec_boolean ("busy",
@@ -194,7 +193,7 @@ ide_search_engine_class_init (IdeSearchEngineClass *klass)
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (g_object_class, N_PROPS, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void

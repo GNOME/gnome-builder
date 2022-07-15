@@ -1662,6 +1662,9 @@ ide_workbench_unload_async (IdeWorkbench        *self,
                            G_CONNECT_SWAPPED);
   g_application_hold (app);
 
+  /* Release the search engine early to help it cleanup */
+  ide_clear_and_destroy_object (&self->search_engine);
+
   /*
    * Remove our workbench from the application, so that no new
    * open-file requests can keep us alive while we're shutting

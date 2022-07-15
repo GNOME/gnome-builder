@@ -34,16 +34,18 @@ struct _GbpVlsSearchProvider
 };
 
 static void
-gbp_vls_search_provider_load (IdeSearchProvider *provider,
-                              IdeContext        *context)
+gbp_vls_search_provider_load (IdeSearchProvider *provider)
 {
   g_autoptr(IdeLspServiceClass) klass = NULL;
   IdeBuildSystem *build_system;
+  IdeContext *context;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_VLS_SEARCH_PROVIDER (provider));
-  g_assert (IDE_IS_CONTEXT (context));
+
+  context = ide_object_get_context (IDE_OBJECT (provider));
 
   if (!ide_context_has_project (context))
     IDE_EXIT;

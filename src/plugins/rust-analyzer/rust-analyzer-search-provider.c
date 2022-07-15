@@ -33,9 +33,9 @@ struct _RustAnalyzerSearchProvider
 static void provider_iface_init (IdeSearchProviderInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (RustAnalyzerSearchProvider,
-                         rust_analyzer_search_provider,
-                         IDE_TYPE_LSP_SEARCH_PROVIDER,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, provider_iface_init))
+                               rust_analyzer_search_provider,
+                               IDE_TYPE_LSP_SEARCH_PROVIDER,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, provider_iface_init))
 
 static void
 rust_analyzer_search_provider_class_init (RustAnalyzerSearchProviderClass *klass)
@@ -48,17 +48,17 @@ rust_analyzer_search_provider_init (RustAnalyzerSearchProvider *self)
 }
 
 static void
-rust_analyzer_search_provider_load (IdeSearchProvider *self,
-                                    IdeContext        *context)
+rust_analyzer_search_provider_load (IdeSearchProvider *self)
 {
   RustAnalyzerService *service;
+  IdeContext *context;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (RUST_IS_ANALYZER_SEARCH_PROVIDER (self));
-  g_assert (context != NULL);
-  g_assert (IDE_IS_CONTEXT (context));
 
+  context = ide_object_get_context (IDE_OBJECT (self));
   service = rust_analyzer_service_from_context (context);
   g_object_bind_property (service, "client", self, "client", G_BINDING_SYNC_CREATE);
 

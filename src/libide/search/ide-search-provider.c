@@ -29,12 +29,6 @@
 G_DEFINE_INTERFACE (IdeSearchProvider, ide_search_provider, IDE_TYPE_OBJECT)
 
 static void
-ide_search_provider_real_load (IdeSearchProvider *self,
-                               IdeContext        *context)
-{
-}
-
-static void
 ide_search_provider_real_search_async (IdeSearchProvider   *self,
                                        const gchar         *query,
                                        guint                max_results,
@@ -68,19 +62,28 @@ ide_search_provider_real_search_finish (IdeSearchProvider  *self,
 static void
 ide_search_provider_default_init (IdeSearchProviderInterface *iface)
 {
-  iface->load = ide_search_provider_real_load;
   iface->search_async = ide_search_provider_real_search_async;
   iface->search_finish = ide_search_provider_real_search_finish;
 }
 
 void
-ide_search_provider_load (IdeSearchProvider   *self,
-                          IdeContext          *context)
+ide_search_provider_load (IdeSearchProvider *self)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_SEARCH_PROVIDER (self));
-  g_return_if_fail (IDE_IS_CONTEXT (context));
 
-  IDE_SEARCH_PROVIDER_GET_IFACE (self)->load (self, context);
+  if (IDE_SEARCH_PROVIDER_GET_IFACE (self)->load)
+    IDE_SEARCH_PROVIDER_GET_IFACE (self)->load (self);
+}
+
+void
+ide_search_provider_unload (IdeSearchProvider *self)
+{
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_SEARCH_PROVIDER (self));
+
+  if (IDE_SEARCH_PROVIDER_GET_IFACE (self)->unload)
+    IDE_SEARCH_PROVIDER_GET_IFACE (self)->unload (self);
 }
 
 void
