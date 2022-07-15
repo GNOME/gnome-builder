@@ -24,9 +24,11 @@
 
 #include <libide-foundry.h>
 #include <libide-gui.h>
+#include <libide-search.h>
 
 #include "gbp-shellcmd-preferences-addin.h"
 #include "gbp-shellcmd-run-command-provider.h"
+#include "gbp-shellcmd-search-provider.h"
 #include "gbp-shellcmd-shortcut-provider.h"
 
 _IDE_EXTERN void
@@ -38,6 +40,9 @@ _gbp_shellcmd_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUN_COMMAND_PROVIDER,
                                               GBP_TYPE_SHELLCMD_RUN_COMMAND_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_SEARCH_PROVIDER,
+                                              GBP_TYPE_SHELLCMD_SEARCH_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SHORTCUT_PROVIDER,
                                               GBP_TYPE_SHELLCMD_SHORTCUT_PROVIDER);
