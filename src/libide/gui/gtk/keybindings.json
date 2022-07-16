@@ -28,3 +28,7 @@
 { "trigger" : "<Control>comma", "action" : "app.preferences", "phase" : "capture" },
 { "trigger" : "<Alt>comma", "action" : "workbench.configure", "phase" : "capture" },
 { "trigger" : "<Control>w", "action" : "frame.close-page-or-frame", "when" : "inPage()", "phase" : "bubble" },
+
+/* Toggle Panels */
+{ "trigger" : "<Control>F9", "action" : "panel.toggle-bottom", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "F9", "action" : "panel.toggle-start", "when" : "canEdit()", "phase" : "capture" },
