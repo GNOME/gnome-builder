@@ -54,12 +54,14 @@
         <attribute name="label" translatable="yes">Open a _Project…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">''</attribute>
+        <attribute name="description" translatable="yes">Open a new or existing project</attribute>
       </item>
       <item>
         <attribute name="id">ide-primary-workspace-menu-clone</attribute>
         <attribute name="label" translatable="yes">_Clone Repository…</attribute>
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'clone'</attribute>
+        <attribute name="description" translatable="yes">Create a new project by cloning a repository</attribute>
       </item>
     </section>
   </menu>

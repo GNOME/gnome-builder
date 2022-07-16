@@ -17,8 +17,9 @@
         <attribute name="after">default-run-handler</attribute>
         <attribute name="action">sysprof.run</attribute>
         <attribute name="label" translatable="yes">Run with Profiler</attribute>
-        <attribute name="verb-icon-name">builder-profiler-symbolic</attribute>
+        <attribute name="verb-icon">builder-profiler-symbolic</attribute>
         <attribute name="accel">&lt;Control&gt;&lt;Shift&gt;&lt;Alt&gt;p</attribute>
+        <attribute name="description" translatable="yes">Run the project with profiler</attribute>
       </item>
     </section>
   </menu>

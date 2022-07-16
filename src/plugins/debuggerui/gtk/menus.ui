@@ -8,8 +8,9 @@
         <attribute name="action">run-manager.run-with-handler</attribute>
         <attribute name="target" type="s">'debuggerui'</attribute>
         <attribute name="label" translatable="yes">Run with Debugger</attribute>
-        <attribute name="verb-icon-name">builder-debugger-symbolic</attribute>
+        <attribute name="verb-icon">builder-debugger-symbolic</attribute>
         <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;d</attribute>
+        <attribute name="description" translatable="yes">Run the project with debugger</attribute>
       </item>
     </section>
   </menu>

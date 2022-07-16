@@ -8,8 +8,9 @@
         <attribute name="action">run-manager.run-with-handler</attribute>
         <attribute name="target" type="s">'valgrind'</attribute>
         <attribute name="label" translatable="yes">Run with Leak Detector</attribute>
-        <attribute name="verb-icon-name">system-run-symbolic</attribute>
+        <attribute name="verb-icon">system-run-symbolic</attribute>
         <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;v</attribute>
+        <attribute name="description" translatable="yes">Run the project with valgrind</attribute>
       </item>
     </section>
   </menu>

@@ -13,6 +13,7 @@
         <attribute name="id">ide-primary-workspace-menu-close-project</attribute>
         <attribute name="label" translatable="yes">Close Project</attribute>
         <attribute name="action">workbench.close</attribute>
+        <attribute name="verb-icon">window-close-symbolic</attribute>
       </item>
     </section>
     <section id="ide-primary-workspace-menu-placeholder2"/>
@@ -21,12 +22,14 @@
       <item>
         <attribute name="id">ide-primary-workspace-menu-preferences</attribute>
         <attribute name="label" translatable="yes">Preferences</attribute>
+        <attribute name="description" translatable="yes">Change application preferences</attribute>
         <attribute name="action">app.preferences</attribute>
         <attribute name="accel">&lt;primary&gt;comma</attribute>
       </item>
       <item>
         <attribute name="id">ide-primary-workspace-menu-shortcuts</attribute>
         <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
+        <attribute name="description" translatable="yes">Find keyboard shortcuts</attribute>
         <attribute name="action">win.show-help-overlay</attribute>
         <attribute name="accel">&lt;primary&gt;question</attribute>
       </item>

@@ -19,6 +19,7 @@
         <attribute name="action">app.present-greeter-with-page</attribute>
         <attribute name="target" type="s">'create-project'</attribute>
         <attribute name="after">ide-primary-workspace-menu-open</attribute>
+        <attribute name="description" translatable="yes">Create a new project from template</attribute>
       </item>
     </section>
   </menu>
