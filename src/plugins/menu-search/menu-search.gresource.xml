@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/menu-search">
     <file>menu-search.plugin</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
   </gresource>
 </gresources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="extra-search-menu">
+    <!-- This menu is just used to add extra search items -->
+
+    <item>
+      <!-- translators: you may need to swap left/right in your language, as this refers to "start" (not "end") -->
+      <attribute name="label" translatable="yes">Toggle Left Panel</attribute>
+      <attribute name="description" translatable="yes">Toggle the left panel in our out of view</attribute>
+      <attribute name="verb-icon" translatable="yes">panel-left-symbolic</attribute>
+      <attribute name="action">panel.toggle-start</attribute>
+    </item>
+
+    <item>
+      <!-- translators: you may need to swap left/right in your language, as this refers to "end" (not "start") -->
+      <attribute name="label" translatable="yes">Toggle Right Panel</attribute>
+      <attribute name="description" translatable="yes">Toggle the right panel in our out of view</attribute>
+      <attribute name="verb-icon" translatable="yes">panel-right-symbolic</attribute>
+      <attribute name="action">panel.toggle-end</attribute>
+    </item>
+
+    <item>
+      <attribute name="label" translatable="yes">Toggle Bottom Panel</attribute>
+      <attribute name="description" translatable="yes">Toggle the bottom panel in our out of view</attribute>
+      <attribute name="verb-icon">panel-bottom-symbolic</attribute>
+      <attribute name="action">panel.toggle-bottom</attribute>
+    </item>
+  </menu>
+</interface>
