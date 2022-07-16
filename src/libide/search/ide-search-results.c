@@ -148,12 +148,20 @@ ide_search_results_refilter (IdeSearchResults *self,
 {
   g_autofree char *old_query = NULL;
 
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_SEARCH_RESULTS (self), FALSE);
   g_return_val_if_fail (query != NULL, FALSE);
 
   /* Make sure we have the prefix of the original search */
   if (memcmp (self->query, query, self->query_len) != 0)
-    return FALSE;
+    IDE_RETURN (FALSE);
+
+  /* If they are exactly the same, ignore the request but
+   * pretend we refiltered.
+   */
+  if (g_strcmp0 (self->refilter, query) == 0)
+    IDE_RETURN (TRUE);
 
   /* Swap the filtering query */
   old_query = g_steal_pointer (&self->refilter);
@@ -169,5 +177,5 @@ ide_search_results_refilter (IdeSearchResults *self,
   if (gtk_filter_list_model_get_filter (self->filter_model) == NULL)
     gtk_filter_list_model_set_filter (self->filter_model, GTK_FILTER (self->filter));
 
-  return TRUE;
+  IDE_RETURN (TRUE);
 }
