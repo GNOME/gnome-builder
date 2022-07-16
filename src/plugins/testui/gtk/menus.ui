@@ -6,8 +6,9 @@
         <attribute name="id">run-unit-tests</attribute>
         <attribute name="action">test-manager.test-all</attribute>
         <attribute name="label" translatable="yes">Run all Unit Tests</attribute>
-        <attribute name="verb-icon-name">builder-unit-tests-symbolic</attribute>
+        <attribute name="verb-icon">builder-unit-tests-symbolic</attribute>
         <attribute name="accel">&lt;control&gt;&lt;shift&gt;&lt;alt&gt;u</attribute>
+        <attribute name="description" translatable="yes">Request that all unit tests are run</attribute>
       </item>
     </section>
   </menu>
