@@ -39,6 +39,7 @@ gbp_vls_service_configure_client (IdeLspService *service,
   g_assert (IDE_IS_LSP_CLIENT (client));
 
   ide_lsp_client_add_language (client, "vala");
+  ide_lsp_client_add_language (client, "genie");
 }
 
 static void
