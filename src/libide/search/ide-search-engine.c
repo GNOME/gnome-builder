@@ -30,6 +30,7 @@
 #include "ide-search-engine.h"
 #include "ide-search-provider.h"
 #include "ide-search-result.h"
+#include "ide-search-results-private.h"
 
 #define DEFAULT_MAX_RESULTS 50
 
@@ -43,11 +44,11 @@ struct _IdeSearchEngine
 
 typedef struct
 {
-  IdeTask       *task;
-  gchar         *query;
-  GListStore    *store;
-  guint          outstanding;
-  guint          max_results;
+  IdeTask    *task;
+  char       *query;
+  GListStore *store;
+  guint       outstanding;
+  guint       max_results;
 } Request;
 
 enum {
@@ -258,11 +259,14 @@ cleanup:
   r->outstanding--;
 
   if (r->outstanding == 0)
-    ide_task_return_pointer (task,
-                             g_object_new (GTK_TYPE_FLATTEN_LIST_MODEL,
-                                           "model", r->store,
-                                           NULL),
-                             g_object_unref);
+    {
+      g_autoptr(GtkFlattenListModel) flatten = NULL;
+
+      flatten = gtk_flatten_list_model_new (G_LIST_MODEL (g_steal_pointer (&r->store)));
+      ide_task_return_pointer (task,
+                               _ide_search_results_new (G_LIST_MODEL (flatten), r->query),
+                               g_object_unref);
+    }
 }
 
 static void
@@ -322,7 +326,7 @@ ide_search_engine_search_foreach_custom_provider (gpointer data,
 
 void
 ide_search_engine_search_async (IdeSearchEngine     *self,
-                                const gchar         *query,
+                                const char          *query,
                                 guint                max_results,
                                 GCancellable        *cancellable,
                                 GAsyncReadyCallback  callback,
@@ -372,19 +376,29 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
  *
  * Completes an asynchronous request to ide_search_engine_search_async().
  *
- * The result is a #GListModel of #IdeSearchResult when successful.
+ * The result is a #GListModel of #IdeSearchResult when successful. The type
+ * is #IdeSearchResults which allows you to do additional filtering on the
+ * result set instead of querying providers again.
  *
  * Returns: (transfer full): a #GListModel of #IdeSearchResult items.
  */
-GListModel *
+IdeSearchResults *
 ide_search_engine_search_finish (IdeSearchEngine  *self,
                                  GAsyncResult     *result,
                                  GError          **error)
 {
+  IdeSearchResults *ret;
+
+  IDE_ENTRY;
+
   g_return_val_if_fail (IDE_IS_SEARCH_ENGINE (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
 
-  return ide_task_propagate_pointer (IDE_TASK (result), error);
+  ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  g_return_val_if_fail (!ret || IDE_IS_SEARCH_RESULTS (ret), NULL);
+
+  IDE_RETURN (ret);
 }
 
 /**

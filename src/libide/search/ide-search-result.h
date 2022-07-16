@@ -39,8 +39,10 @@ struct _IdeSearchResultClass
 {
   GObjectClass parent_class;
 
-  void (*activate) (IdeSearchResult *self,
-                    GtkWidget       *last_focus);
+  gboolean (*matches)  (IdeSearchResult *self,
+                        const char      *query);
+  void     (*activate) (IdeSearchResult *self,
+                        GtkWidget       *last_focus);
 };
 
 IDE_AVAILABLE_IN_ALL

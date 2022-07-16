@@ -117,7 +117,7 @@ ide_search_popover_search_cb (GObject      *object,
 {
   IdeSearchEngine *search_engine = (IdeSearchEngine *)object;
   g_autoptr(IdeSearchPopover) self = user_data;
-  g_autoptr(GListModel) results = NULL;
+  g_autoptr(IdeSearchResults) results = NULL;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -132,13 +132,13 @@ ide_search_popover_search_cb (GObject      *object,
   if (error != NULL)
     g_debug ("Search failed: %s", error->message);
 
-  gtk_single_selection_set_model (self->selection, results);
+  gtk_single_selection_set_model (self->selection, G_LIST_MODEL (results));
 
   if (self->activate_after_search)
     {
       self->activate_after_search = FALSE;
 
-      if (results != NULL && g_list_model_get_n_items (results) > 0)
+      if (results != NULL && g_list_model_get_n_items (G_LIST_MODEL (results)) > 0)
         {
           IdeSearchResult *selected = gtk_single_selection_get_selected_item (self->selection);
 

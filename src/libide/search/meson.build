@@ -17,6 +17,7 @@ libide_search_public_headers = [
   'ide-search-provider.h',
   'ide-search-reducer.h',
   'ide-search-result.h',
+  'ide-search-results.h',
   'libide-search.h',
 ]
 
@@ -37,6 +38,7 @@ libide_search_public_sources = [
   'ide-search-provider.c',
   'ide-search-reducer.c',
   'ide-search-result.c',
+  'ide-search-results.c',
 ]
 
 libide_search_private_sources = [

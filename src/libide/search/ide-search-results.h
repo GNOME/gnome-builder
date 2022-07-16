@@ -1,6 +1,6 @@
-/* libide-search.h
+/* ide-search-results.h
  *
- * Copyright 2014-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,19 +20,21 @@
 
 #pragma once
 
-#include <libide-core.h>
-#include <libide-threading.h>
+#if !defined (IDE_SEARCH_INSIDE) && !defined (IDE_SEARCH_COMPILATION)
+# error "Only <libide-search.h> can be included directly."
+#endif
 
-#define IDE_SEARCH_INSIDE
-# include "ide-fuzzy-index-builder.h"
-# include "ide-fuzzy-index-cursor.h"
-# include "ide-fuzzy-index.h"
-# include "ide-fuzzy-index-match.h"
-# include "ide-fuzzy-mutable-index.h"
-# include "ide-pattern-spec.h"
-# include "ide-search-engine.h"
-# include "ide-search-provider.h"
-# include "ide-search-reducer.h"
-# include "ide-search-result.h"
-# include "ide-search-results.h"
-#undef IDE_SEARCH_INSIDE
+#include <libide-core.h>
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_SEARCH_RESULTS (ide_search_results_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeSearchResults, ide_search_results, IDE, SEARCH_RESULTS, GObject)
+
+IDE_AVAILABLE_IN_ALL
+gboolean ide_search_results_refilter (IdeSearchResults *self,
+                                      const char       *query);
+
+G_END_DECLS
