@@ -118,17 +118,14 @@ ide_search_popover_after_search (IdeSearchPopover *self)
 
   if (self->activate_after_search)
     {
+      IdeSearchResult *selected = gtk_single_selection_get_selected_item (self->selection);
+
+      g_assert (!selected || IDE_IS_SEARCH_RESULT (selected));
+
       self->activate_after_search = FALSE;
 
-      if (g_list_model_get_n_items (G_LIST_MODEL (self->selection)) > 0)
-        {
-          IdeSearchResult *selected = gtk_single_selection_get_selected_item (self->selection);
-
-          g_assert (!selected || IDE_IS_SEARCH_RESULT (selected));
-
-          if (selected != NULL)
-            ide_search_popover_activate (self, selected);
-        }
+      if (selected != NULL)
+        ide_search_popover_activate (self, selected);
     }
 }
 
