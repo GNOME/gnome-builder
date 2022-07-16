@@ -54,12 +54,20 @@ gbp_gradle_build_system_get_priority (IdeBuildSystem *build_system)
   return 2000;
 }
 
+static gchar *
+gbp_gradle_build_system_get_builddir (IdeBuildSystem *build_system,
+                                      IdePipeline    *pipeline)
+{
+  return g_strdup (ide_pipeline_get_srcdir (pipeline));
+}
+
 static void
 build_system_iface_init (IdeBuildSystemInterface *iface)
 {
   iface->get_id = gbp_gradle_build_system_get_id;
   iface->get_display_name = gbp_gradle_build_system_get_display_name;
   iface->get_priority = gbp_gradle_build_system_get_priority;
+  iface->get_builddir = gbp_gradle_build_system_get_builddir;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpGradleBuildSystem, gbp_gradle_build_system, IDE_TYPE_OBJECT,
