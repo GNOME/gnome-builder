@@ -1,9 +1,11 @@
 # List of source files that should *not* be translated.
 # Please keep this file sorted alphabetically.
+data/appdata/org.gnome.Builder.appdata.xml.in
 data/org.gnome.Builder.desktop.in
-src/gstyle/tests/data/gstyle-color-editor.ui
-src/gstyle/tests/data/palette.xml
+src/plugins/color-picker/gstyle/tests/data/gstyle-color-editor.ui
+src/plugins/color-picker/gstyle/tests/data/palette.xml
 src/plugins/gdb/gdbwire.c
+src/plugins/meson-templates/resources/data/hello.gschema.xml
 src/plugins/meson-templates/resources/src/help-overlay.ui
 src/plugins/meson-templates/resources/src/main-cli.c
 src/plugins/meson-templates/resources/src/window-gtk4.ui
