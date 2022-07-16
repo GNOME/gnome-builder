@@ -152,7 +152,6 @@ terminal_in_runtime_action (GbpTerminalWorkspaceAddin *self,
   if (ide_str_empty0 (cwd))
     cwd = g_get_home_dir ();
 
-  gbp_terminal_workspace_addin_add_page (self, IDE_TERMINAL_RUN_AS_SUBPROCESS, cwd);
   gbp_terminal_workspace_addin_add_page (self, IDE_TERMINAL_RUN_IN_RUNTIME, cwd);
 }
 
