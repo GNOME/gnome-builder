@@ -34,24 +34,26 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeMenuManager, ide_menu_manager, IDE, MENU_MANAGER, GObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeMenuManager *ide_menu_manager_new            (void);
+IdeMenuManager     *ide_menu_manager_new            (void);
 IDE_AVAILABLE_IN_ALL
-guint           ide_menu_manager_add_filename   (IdeMenuManager  *self,
-                                                 const gchar     *filename,
-                                                 GError         **error);
+guint               ide_menu_manager_add_filename   (IdeMenuManager  *self,
+                                                     const char      *filename,
+                                                     GError         **error);
 IDE_AVAILABLE_IN_ALL
-guint           ide_menu_manager_add_resource   (IdeMenuManager  *self,
-                                                 const gchar     *resource,
-                                                 GError         **error);
+guint               ide_menu_manager_add_resource   (IdeMenuManager  *self,
+                                                     const char      *resource,
+                                                     GError         **error);
 IDE_AVAILABLE_IN_ALL
-guint           ide_menu_manager_merge          (IdeMenuManager  *self,
-                                                 const gchar     *menu_id,
-                                                 GMenuModel      *model);
+guint               ide_menu_manager_merge          (IdeMenuManager  *self,
+                                                     const char      *menu_id,
+                                                     GMenuModel      *model);
 IDE_AVAILABLE_IN_ALL
-void            ide_menu_manager_remove         (IdeMenuManager  *self,
-                                                 guint            merge_id);
+void                ide_menu_manager_remove         (IdeMenuManager  *self,
+                                                     guint            merge_id);
 IDE_AVAILABLE_IN_ALL
-GMenu          *ide_menu_manager_get_menu_by_id (IdeMenuManager  *self,
-                                                 const gchar     *menu_id);
+GMenu              *ide_menu_manager_get_menu_by_id (IdeMenuManager  *self,
+                                                     const char      *menu_id);
+IDE_AVAILABLE_IN_ALL
+const char * const *ide_menu_manager_get_menu_ids   (IdeMenuManager  *self);
 
 G_END_DECLS

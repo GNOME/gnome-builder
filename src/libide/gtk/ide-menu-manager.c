@@ -27,10 +27,10 @@
 
 struct _IdeMenuManager
 {
-  GObject     parent_instance;
-
-  guint       last_merge_id;
-  GHashTable *models;
+  GObject      parent_instance;
+  guint        last_merge_id;
+  GHashTable  *models;
+  char       **cached_keys;
 };
 
 G_DEFINE_TYPE (IdeMenuManager, ide_menu_manager, G_TYPE_OBJECT)
@@ -488,7 +488,10 @@ ide_menu_manager_merge_builder (IdeMenuManager *self,
         }
 
       if (!(menu = g_hash_table_lookup (self->models, id)))
-        g_hash_table_insert (self->models, g_strdup (id), g_menu_new ());
+        {
+          g_hash_table_insert (self->models, g_strdup (id), g_menu_new ());
+          g_clear_pointer (&self->cached_keys, g_strfreev);
+        }
     }
 
   /*
@@ -569,6 +572,7 @@ ide_menu_manager_merge (IdeMenuManager *self,
     {
       GMenu *new_model = g_menu_new ();
       g_hash_table_insert (self->models, g_strdup (menu_id), new_model);
+      g_clear_pointer (&self->cached_keys, g_strfreev);
       menu = new_model;
     }
 
@@ -622,6 +626,8 @@ ide_menu_manager_remove (IdeMenuManager *self,
             }
         }
     }
+
+  g_clear_pointer (&self->cached_keys, g_strfreev);
 }
 
 /**
@@ -644,6 +650,7 @@ ide_menu_manager_get_menu_by_id (IdeMenuManager *self,
     {
       menu = g_menu_new ();
       g_hash_table_insert (self->models, g_strdup (menu_id), menu);
+      g_clear_pointer (&self->cached_keys, g_strfreev);
     }
 
   return menu;
@@ -676,4 +683,18 @@ ide_menu_manager_add_resource (IdeMenuManager  *self,
   g_object_unref (builder);
 
   return merge_id;
+}
+
+const char * const *
+ide_menu_manager_get_menu_ids (IdeMenuManager *self)
+{
+  g_return_val_if_fail (IDE_IS_MENU_MANAGER (self), NULL);
+
+  if (self->cached_keys == NULL)
+    {
+      g_autofree gpointer *keys = g_hash_table_get_keys_as_array (self->models, NULL);
+      self->cached_keys = g_strdupv ((char **)keys);
+    }
+
+  return (const char * const *)self->cached_keys;
 }
