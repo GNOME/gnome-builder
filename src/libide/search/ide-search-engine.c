@@ -44,9 +44,15 @@ struct _IdeSearchEngine
 
 typedef struct
 {
+  IdeSearchProvider *provider;
+  GListModel        *results;
+} SortInfo;
+
+typedef struct
+{
   IdeTask    *task;
   char       *query;
-  GListStore *store;
+  GArray     *sorted;
   guint       outstanding;
   guint       max_results;
 } Request;
@@ -61,15 +67,25 @@ G_DEFINE_FINAL_TYPE (IdeSearchEngine, ide_search_engine, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 
+static void
+sort_info_clear (gpointer item)
+{
+  SortInfo *info = item;
+
+  g_clear_object (&info->provider);
+  g_clear_object (&info->results);
+}
+
 static Request *
 request_new (void)
 {
   Request *r;
 
   r = g_slice_new0 (Request);
-  r->store = NULL;
   r->outstanding = 0;
   r->query = NULL;
+  r->sorted = g_array_new (FALSE, FALSE, sizeof (SortInfo));
+  g_array_set_clear_func (r->sorted, sort_info_clear);
 
   return r;
 }
@@ -78,8 +94,8 @@ static void
 request_destroy (Request *r)
 {
   g_assert (r->outstanding == 0);
-  g_clear_object (&r->store);
   g_clear_pointer (&r->query, g_free);
+  g_clear_pointer (&r->sorted, g_array_unref);
   r->task = NULL;
   g_slice_free (Request, r);
 }
@@ -244,25 +260,40 @@ ide_search_engine_search_cb (GObject      *object,
   g_assert (r != NULL);
   g_assert (r->task == task);
   g_assert (r->outstanding > 0);
-  g_assert (G_IS_LIST_STORE (r->store));
 
-  if (!(ret = ide_search_provider_search_finish (provider, result, &error)))
+  for (guint i = 0; i < r->sorted->len; i++)
     {
-      if (!ide_error_ignore (error))
-        g_warning ("%s", error->message);
-      goto cleanup;
+      SortInfo *info = &g_array_index (r->sorted, SortInfo, i);
+
+      if (info->provider != provider)
+        continue;
+
+      g_assert (info->results == NULL);
+
+      if (!(info->results = ide_search_provider_search_finish (provider, result, &error)))
+        {
+          if (!ide_error_ignore (error))
+            g_warning ("%s", error->message);
+        }
+
+      break;
     }
 
-  g_list_store_append (r->store, ret);
-
-cleanup:
   r->outstanding--;
 
   if (r->outstanding == 0)
     {
-      g_autoptr(GtkFlattenListModel) flatten = NULL;
+      g_autoptr(GListStore) store = g_list_store_new (G_TYPE_LIST_MODEL);
+      g_autoptr(GtkFlattenListModel) flatten = gtk_flatten_list_model_new (G_LIST_MODEL (g_object_ref (store)));
 
-      flatten = gtk_flatten_list_model_new (G_LIST_MODEL (g_steal_pointer (&r->store)));
+      for (guint i = 0; i < r->sorted->len; i++)
+        {
+          SortInfo *info = &g_array_index (r->sorted, SortInfo, i);
+
+          if (info->results != NULL)
+            g_list_store_append (store, info->results);
+        }
+
       ide_task_return_pointer (task,
                                _ide_search_results_new (G_LIST_MODEL (flatten), r->query),
                                g_object_unref);
@@ -271,23 +302,26 @@ cleanup:
 
 static void
 _provider_search_async (IdeSearchProvider *provider,
-                        Request           *request)
+                        Request           *r)
 {
-  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
-  g_assert (request != NULL);
-  g_assert (IDE_IS_TASK (request->task));
-  g_assert (G_IS_LIST_STORE (request->store));
+  SortInfo sort_info;
 
-  request->outstanding++;
+  g_assert (IDE_IS_SEARCH_PROVIDER (provider));
+  g_assert (r != NULL);
+  g_assert (IDE_IS_TASK (r->task));
+
+  r->outstanding++;
+
+  sort_info.provider = g_object_ref (provider);
+  sort_info.results = NULL;
+  g_array_append_val (r->sorted, sort_info);
 
   ide_search_provider_search_async (provider,
-                                    request->query,
-                                    request->max_results,
-                                    ide_task_get_cancellable (request->task),
+                                    r->query,
+                                    r->max_results,
+                                    ide_task_get_cancellable (r->task),
                                     ide_search_engine_search_cb,
-                                    g_object_ref (request->task));
-
-
+                                    g_object_ref (r->task));
 }
 
 static void
@@ -304,7 +338,6 @@ ide_search_engine_search_foreach (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
   g_assert (r != NULL);
   g_assert (IDE_IS_TASK (r->task));
-  g_assert (G_IS_LIST_STORE (r->store));
 
   _provider_search_async (provider, r);
 }
@@ -319,7 +352,6 @@ ide_search_engine_search_foreach_custom_provider (gpointer data,
   g_assert (IDE_IS_SEARCH_PROVIDER (provider));
   g_assert (r != NULL);
   g_assert (IDE_IS_TASK (r->task));
-  g_assert (G_IS_LIST_STORE (r->store));
 
   _provider_search_async (provider, r);
 }
@@ -349,16 +381,15 @@ ide_search_engine_search_async (IdeSearchEngine     *self,
   r->query = g_strdup (query);
   r->max_results = max_results;
   r->task = task;
-  r->store = g_list_store_new (G_TYPE_LIST_MODEL);
   r->outstanding = 0;
   ide_task_set_task_data (task, r, request_destroy);
 
-  ide_extension_set_adapter_foreach (self->extensions,
-                                     ide_search_engine_search_foreach,
-                                     r);
   g_ptr_array_foreach (self->custom_provider,
                        ide_search_engine_search_foreach_custom_provider,
                        r);
+  ide_extension_set_adapter_foreach_by_priority (self->extensions,
+                                                 ide_search_engine_search_foreach,
+                                                 r);
 
   self->active_count += r->outstanding;
 
