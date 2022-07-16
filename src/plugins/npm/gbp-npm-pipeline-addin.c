@@ -40,8 +40,9 @@ static void
 gbp_npm_pipeline_addin_load (IdePipelineAddin *addin,
                              IdePipeline      *pipeline)
 {
-  g_autoptr(IdeSubprocessLauncher) fetch_launcher = NULL;
+  g_autoptr(IdeRunCommand) fetch_command = NULL;
   g_autoptr(IdePipelineStage) fetch_stage = NULL;
+  g_autoptr(GPtrArray) args = NULL;
   g_autofree char *project_dir = NULL;
   IdeBuildSystem *build_system;
   const char *npm;
@@ -61,25 +62,34 @@ gbp_npm_pipeline_addin_load (IdePipelineAddin *addin,
   if (!GBP_IS_NPM_BUILD_SYSTEM (build_system))
     IDE_EXIT;
 
+  project_dir = gbp_npm_build_system_get_project_dir (GBP_NPM_BUILD_SYSTEM (build_system));
+
   npm = ide_config_getenv (config, "NPM");
   if (ide_str_empty0 (npm))
     npm = "npm";
 
-  project_dir = gbp_npm_build_system_get_project_dir (GBP_NPM_BUILD_SYSTEM (build_system));
-
-  /* Fetch dependencies so that we no longer need network access */
-  fetch_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (fetch_launcher, project_dir);
-  ide_subprocess_launcher_push_argv (fetch_launcher, npm);
+  args = g_ptr_array_new ();
+  g_ptr_array_add (args, (char *)npm);
   if (!ide_pipeline_is_native (pipeline))
     {
       IdeTriplet *triplet = ide_pipeline_get_host_triplet (pipeline);
       const char *arch = ide_triplet_get_arch (triplet);
-      ide_subprocess_launcher_push_args (fetch_launcher, IDE_STRV_INIT ("--arch", arch));
+
+      g_ptr_array_add (args, (char *)"--arch");
+      g_ptr_array_add (args, (char *)arch);
     }
-  ide_subprocess_launcher_push_argv (fetch_launcher, "install");
-  fetch_stage = ide_pipeline_stage_launcher_new (context, fetch_launcher);
-  ide_pipeline_stage_set_name (fetch_stage, _("Downloading npm dependencies"));
+  g_ptr_array_add (args, (char *)"install");
+  g_ptr_array_add (args, NULL);
+
+  fetch_command = ide_run_command_new ();
+  ide_run_command_set_cwd (fetch_command, project_dir);
+  ide_run_command_set_argv (fetch_command, (const char * const *)(gpointer)args->pdata);
+
+  /* Fetch dependencies so that we no longer need network access */
+  fetch_stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                              "build-command", fetch_command,
+                              "name", _("Downloading npm dependencies"),
+                              NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, 0, fetch_stage);
   ide_pipeline_addin_track (addin, id);
 
