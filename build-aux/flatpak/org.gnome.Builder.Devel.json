@@ -545,24 +545,6 @@
             ]
         },
         {
-            "name" : "vala-language-server",
-            "config-opts" : [
-                "--libdir=/app/lib",
-                "--buildtype=debugoptimized",
-                "-Dman_pages=disabled",
-                "-Dtests=false",
-                "-Dplugins=false"
-            ],
-            "buildsystem" : "meson",
-            "builddir" : true,
-            "sources" : [
-                {
-                    "type" : "git",
-                    "url" : "https://github.com/Prince781/vala-language-server.git"
-                }
-            ]
-        },
-        {
             "name" : "libportal",
             "config-opts" : [
                 "--libdir=/app/lib",
