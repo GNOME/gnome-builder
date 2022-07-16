@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <gtksourceview/gtksource.h>
+
 #include "ide-search-result.h"
 
 typedef struct
@@ -48,6 +50,22 @@ enum {
 G_DEFINE_TYPE_WITH_PRIVATE (IdeSearchResult, ide_search_result, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+
+static gboolean
+ide_search_result_real_matches (IdeSearchResult *self,
+                                const char      *query)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+  guint prio;
+
+  if (priv->title != NULL && gtk_source_completion_fuzzy_match (priv->title, query, &prio))
+    return TRUE;
+
+  if (priv->subtitle != NULL && gtk_source_completion_fuzzy_match (priv->subtitle, query, &prio))
+    return TRUE;
+
+  return FALSE;
+}
 
 static void
 ide_search_result_finalize (GObject *object)
@@ -149,6 +167,8 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
   object_class->finalize = ide_search_result_finalize;
   object_class->get_property = ide_search_result_get_property;
   object_class->set_property = ide_search_result_set_property;
+
+  klass->matches = ide_search_result_real_matches;
 
   properties [PROP_PAINTABLE] =
     g_param_spec_object ("paintable",

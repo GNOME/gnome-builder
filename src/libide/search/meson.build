@@ -64,7 +64,9 @@ libide_search_sources += libide_search_resources
 
 libide_search_deps = [
   libgio_dep,
+  libgtksource_dep,
   libpeas_dep,
+
   libide_core_dep,
   libide_threading_dep,
   libide_plugins_dep
