@@ -7,6 +7,10 @@
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.rust-stable"
     ],
+{{else if language == "vala"}}
+    "sdk-extensions" : [
+        "org.freedesktop.Sdk.Extension.vala"
+    ],
 {{end}}
     "command" : "{{exec_name}}",
     "finish-args" : [
@@ -28,6 +32,11 @@
             "RUST_BACKTRACE" : "1",
             "RUST_LOG" : "{{name}}=debug"
         }
+    },
+{{else if language == "vala"}}
+    "build-options" : {
+        "append-path" : "/usr/lib/sdk/vala/bin",
+        "prepend-ld-library-path" : "/usr/lib/sdk/vala/lib"
     },
 {{end}}
     "cleanup" : [
