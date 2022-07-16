@@ -111,6 +111,28 @@ ide_search_popover_set_search_engine (IdeSearchPopover *self,
 }
 
 static void
+ide_search_popover_after_search (IdeSearchPopover *self)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SEARCH_POPOVER (self));
+
+  if (self->activate_after_search)
+    {
+      self->activate_after_search = FALSE;
+
+      if (g_list_model_get_n_items (G_LIST_MODEL (self->selection)) > 0)
+        {
+          IdeSearchResult *selected = gtk_single_selection_get_selected_item (self->selection);
+
+          g_assert (!selected || IDE_IS_SEARCH_RESULT (selected));
+
+          if (selected != NULL)
+            ide_search_popover_activate (self, selected);
+        }
+    }
+}
+
+static void
 ide_search_popover_search_cb (GObject      *object,
                               GAsyncResult *result,
                               gpointer      user_data)
@@ -134,20 +156,7 @@ ide_search_popover_search_cb (GObject      *object,
 
   gtk_single_selection_set_model (self->selection, G_LIST_MODEL (results));
 
-  if (self->activate_after_search)
-    {
-      self->activate_after_search = FALSE;
-
-      if (results != NULL && g_list_model_get_n_items (G_LIST_MODEL (results)) > 0)
-        {
-          IdeSearchResult *selected = gtk_single_selection_get_selected_item (self->selection);
-
-          g_assert (!selected || IDE_IS_SEARCH_RESULT (selected));
-
-          if (selected != NULL)
-            ide_search_popover_activate (self, selected);
-        }
-    }
+  ide_search_popover_after_search (self);
 
   IDE_EXIT;
 }
@@ -156,6 +165,7 @@ static gboolean
 ide_search_popover_search_source_func (gpointer data)
 {
   IdeSearchPopover *self = data;
+  GListModel *model;
   const char *query;
 
   IDE_ENTRY;
@@ -174,13 +184,22 @@ ide_search_popover_search_source_func (gpointer data)
 
   if (ide_str_empty0 (query))
     IDE_GOTO (failure);
-  else
-    ide_search_engine_search_async (self->search_engine,
-                                    query,
-                                    MAX_RESULTS,
-                                    self->cancellable,
-                                    ide_search_popover_search_cb,
-                                    g_object_ref (self));
+
+  /* Fast path to just filter our previous result set */
+  if ((model = gtk_single_selection_get_model (self->selection)) &&
+      IDE_IS_SEARCH_RESULTS (model) &&
+      ide_search_results_refilter (IDE_SEARCH_RESULTS (model), query))
+    {
+      ide_search_popover_after_search (self);
+      IDE_RETURN (G_SOURCE_REMOVE);
+    }
+
+  ide_search_engine_search_async (self->search_engine,
+                                  query,
+                                  MAX_RESULTS,
+                                  self->cancellable,
+                                  ide_search_popover_search_cb,
+                                  g_object_ref (self));
 
   IDE_RETURN (G_SOURCE_REMOVE);
 
