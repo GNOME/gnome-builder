@@ -162,6 +162,68 @@ add_entry_row (AdwPreferencesGroup *group,
   adw_preferences_group_add (group, row);
 }
 
+static gboolean
+runtime_filter_func (gpointer item,
+                     gpointer user_data)
+{
+  IdeRuntime *runtime = item;
+  IdeConfig *config = user_data;
+
+  return ide_config_supports_runtime (config, runtime);
+}
+
+static void
+add_runtiem_row (AdwPreferencesGroup *group,
+                 IdeRuntimeManager   *runtime_manager,
+                 IdeConfig           *config)
+{
+  g_autoptr(GtkFilterListModel) model = NULL;
+  g_autoptr(GtkCustomFilter) filter = NULL;
+  g_autoptr(GtkExpression) expression = NULL;
+  const char *runtime_id;
+  GtkWidget *row;
+  guint n_items;
+
+  g_assert (ADW_IS_PREFERENCES_GROUP (group));
+  g_assert (IDE_IS_RUNTIME_MANAGER (runtime_manager));
+  g_assert (IDE_IS_CONFIG (config));
+
+  filter = gtk_custom_filter_new (runtime_filter_func,
+                                  g_object_ref (config),
+                                  g_object_unref);
+  model = gtk_filter_list_model_new (g_object_ref (G_LIST_MODEL (runtime_manager)),
+                                     g_object_ref (GTK_FILTER (filter)));
+  expression = gtk_property_expression_new (IDE_TYPE_RUNTIME, NULL, "display-name");
+  runtime_id = ide_config_get_runtime_id (config);
+
+  row = g_object_new (ADW_TYPE_COMBO_ROW,
+                      "title", _("Runtime"),
+                      "subtitle", _("The runtime is the environment used to run your application."),
+                      "expression", expression,
+                      NULL);
+
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeRuntime) runtime = g_list_model_get_item (G_LIST_MODEL (model), i);
+      const char *id = ide_runtime_get_id (runtime);
+
+      if (g_strcmp0 (runtime_id, id) == 0)
+        {
+          adw_combo_row_set_selected (ADW_COMBO_ROW (row), i);
+          break;
+        }
+    }
+
+  /* TODO: need to get the title in sync initially */
+
+  g_object_bind_property (row, "selected-item", config, "runtime", 0);
+
+  adw_combo_row_set_model (ADW_COMBO_ROW (row), G_LIST_MODEL (model));
+  adw_preferences_group_add (group, row);
+}
+
 static void
 create_general_widgetry (const char                   *page_name,
                          const IdePreferenceItemEntry *entry,
@@ -172,6 +234,7 @@ create_general_widgetry (const char                   *page_name,
   IdeConfig *config = user_data;
   IdeConfigManager *config_manager;
   IdeBuildSystem *build_system;
+  IdeRuntimeManager *runtime_manager;
   IdeContext *context;
   GtkWidget *box;
   static const struct {
@@ -207,12 +270,16 @@ create_general_widgetry (const char                   *page_name,
   add_description_row (group, _("Name"), ide_config_get_display_name (config));
   add_description_row (group, _("Source Directory"), g_file_peek_path (workdir));
   add_description_row (group, _("Build System"), ide_build_system_get_display_name (build_system));
+
   /* Translators: "Install" is a noun here */
   add_entry_row (group, _("Install Prefix"), config, "prefix");
   /* Translators: "Configure" is a noun here */
   add_entry_row (group, _("Configure Options"), config, "config-opts");
   /* Translators: "Run" is a noun here, this string is analogous to "Execution Options" */
   add_entry_row (group, _("Run Options"), config, "run-opts");
+
+  runtime_manager = ide_runtime_manager_from_context (context);
+  add_runtiem_row (group, runtime_manager, config);
 
   config_manager = ide_config_manager_from_context (context);
   gtk_widget_insert_action_group (GTK_WIDGET (group),
