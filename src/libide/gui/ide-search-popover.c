@@ -214,9 +214,16 @@ ide_search_popover_queue_search (IdeSearchPopover *self)
   g_assert (IDE_IS_SEARCH_POPOVER (self));
 
   if (self->queued_search == 0)
-    self->queued_search = g_timeout_add (SEARCH_DELAY_MSEC,
-                                         ide_search_popover_search_source_func,
-                                         self);
+    {
+      guint delay = SEARCH_DELAY_MSEC;
+
+      if (self->activate_after_search)
+        delay = 0;
+
+      self->queued_search = g_timeout_add (delay,
+                                           ide_search_popover_search_source_func,
+                                           self);
+    }
 }
 
 static void
