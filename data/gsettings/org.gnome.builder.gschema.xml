@@ -59,7 +59,7 @@
       </choices>
       <default>'GPL-3.0-or-later'</default>
       <summary>Default License</summary>
-      <description>THe default license to use for new projects</description>
+      <description>The default license to use for new projects</description>
     </key>
   </schema>
 </schemalist>
