@@ -49,7 +49,7 @@
                     <signal name="activated" handler="on_shortcut_activated_cb" swapped="true" object="GbpShellcmdCommandDialog"/>
                     <property name="activatable">true</property>
                     <property name="title" translatable="yes">Keyboard Shortcut</property>
-                    <property name="subtitle" translatable="yes">An optional shourtcut to run the command</property>
+                    <property name="subtitle" translatable="yes">An optional shortcut to run the command</property>
                     <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
                     <child type="suffix">
                       <object class="GtkLabel" id="shortcut_label">

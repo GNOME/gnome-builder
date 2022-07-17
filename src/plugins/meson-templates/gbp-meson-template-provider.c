@@ -208,7 +208,7 @@ static const GbpMesonTemplateInfo templates[] = {
   {
     -700,
     "empty",
-    N_("Command Line Toool"),
+    N_("Command Line Tool"),
     N_("An Meson-based project for a command-line program"),
     IDE_STRV_INIT ("C", "C++", "Python", "Rust", "Vala"),
     cli_expansions, G_N_ELEMENTS (cli_expansions),
