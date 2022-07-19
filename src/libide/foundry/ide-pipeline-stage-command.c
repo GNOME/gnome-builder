@@ -108,6 +108,8 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
       IDE_EXIT;
     }
 
+  ide_subprocess_send_signal_upon_cancel (subprocess, cancellable, SIGKILL);
+
   ide_subprocess_wait_check_async (subprocess,
                                    cancellable,
                                    ide_pipeline_stage_command_wait_check_cb,
@@ -170,6 +172,8 @@ ide_pipeline_stage_command_clean_async (IdePipelineStage    *stage,
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
+
+  ide_subprocess_send_signal_upon_cancel (subprocess, cancellable, SIGKILL);
 
   ide_subprocess_wait_check_async (subprocess,
                                    cancellable,
