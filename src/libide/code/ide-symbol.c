@@ -422,6 +422,8 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
  *
  * Gets a #GIcon to represent the symbol kind.
  *
+ * You may only call this from the main (GTK) thread.
+ *
  * Returns: (transfer none) (nullable): a #GIcon or %NULL
  */
 GIcon *
@@ -429,6 +431,8 @@ ide_symbol_kind_get_gicon (IdeSymbolKind kind)
 {
   const char *icon_name;
   GIcon *ret = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
 
   if ((icon_name = ide_symbol_kind_get_icon_name (kind)))
     {
