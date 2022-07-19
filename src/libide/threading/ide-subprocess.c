@@ -424,3 +424,95 @@ ide_subprocess_check_exit_status (IdeSubprocess  *self,
 
   return g_spawn_check_wait_status (exit_status, error);
 }
+
+typedef struct
+{
+  GWeakRef subprocess_wr;
+  GWeakRef cancellable_wr;
+  gpointer handler_id;
+  int signum;
+} CancelSignalData;
+
+static void
+signal_upon_cancel_activate (GCancellable *cancellable,
+                             gpointer      user_data)
+{
+  CancelSignalData *data = user_data;
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+
+  g_assert (G_IS_CANCELLABLE (cancellable));
+  g_assert (data != NULL);
+
+  if ((subprocess = g_weak_ref_get (&data->subprocess_wr)))
+    ide_subprocess_send_signal (subprocess, data->signum);
+}
+
+static void
+cancel_signal_data_finalize (CancelSignalData *data)
+{
+  g_weak_ref_clear (&data->cancellable_wr);
+  g_weak_ref_clear (&data->subprocess_wr);
+}
+
+static void
+cancel_signal_data_invalidate_by_subprocess (CancelSignalData *data)
+{
+  g_autoptr(GCancellable) cancellable = NULL;
+  gulong handler_id;
+
+  g_assert (data != NULL);
+
+  g_weak_ref_set (&data->subprocess_wr, NULL);
+
+  handler_id = GPOINTER_TO_SIZE (g_atomic_pointer_exchange (&data->handler_id, NULL));
+  if (handler_id != 0 && (cancellable = g_weak_ref_get (&data->cancellable_wr)))
+    g_cancellable_disconnect (cancellable, handler_id);
+
+  g_atomic_rc_box_release_full (data, (GDestroyNotify)cancel_signal_data_finalize);
+}
+
+static void
+cancel_signal_data_invalidate_by_cancellable (CancelSignalData *data)
+{
+  g_autoptr(IdeSubprocess) subprocess = NULL;
+
+  g_assert (data != NULL);
+
+  g_weak_ref_set (&data->cancellable_wr, NULL);
+
+  if ((subprocess = g_weak_ref_get (&data->subprocess_wr)))
+    g_object_set_data (G_OBJECT (subprocess), "SIGNAL_UPON_CANCEL", NULL);
+
+  g_atomic_rc_box_release_full (data, (GDestroyNotify)cancel_signal_data_finalize);
+}
+
+void
+ide_subprocess_send_signal_upon_cancel (IdeSubprocess *self,
+                                        GCancellable  *cancellable,
+                                        int            signal_num)
+{
+  CancelSignalData *data;
+
+  g_return_if_fail (IDE_IS_SUBPROCESS (self));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  if (cancellable == NULL)
+    return;
+
+  data = g_atomic_rc_box_new0 (CancelSignalData);
+  g_weak_ref_init (&data->subprocess_wr, self);
+  g_weak_ref_init (&data->cancellable_wr, cancellable);
+  data->signum = signal_num;
+
+  g_object_set_data_full (G_OBJECT (self),
+                          "SIGNAL_UPON_CANCEL",
+                          g_atomic_rc_box_acquire (data),
+                          (GDestroyNotify)cancel_signal_data_invalidate_by_subprocess);
+
+  data->handler_id = GSIZE_TO_POINTER (g_cancellable_connect (cancellable,
+                                                              G_CALLBACK (signal_upon_cancel_activate),
+                                                              g_atomic_rc_box_acquire (data),
+                                                              (GDestroyNotify)cancel_signal_data_invalidate_by_cancellable));
+
+  g_atomic_rc_box_release_full (data, (GDestroyNotify)cancel_signal_data_finalize);
+}

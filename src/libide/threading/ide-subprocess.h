@@ -146,9 +146,13 @@ IDE_AVAILABLE_IN_ALL
 gint           ide_subprocess_get_status              (IdeSubprocess        *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_subprocess_send_signal             (IdeSubprocess        *self,
-                                                       gint                  signal_num);
+                                                       int                   signal_num);
 IDE_AVAILABLE_IN_ALL
 void           ide_subprocess_force_exit              (IdeSubprocess        *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_subprocess_send_signal_upon_cancel (IdeSubprocess        *self,
+                                                       GCancellable         *cancellable,
+                                                       int                   signal_num);
 IDE_AVAILABLE_IN_ALL
 gboolean       ide_subprocess_communicate             (IdeSubprocess        *self,
                                                        GBytes               *stdin_buf,
