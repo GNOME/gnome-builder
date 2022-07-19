@@ -411,6 +411,7 @@ gbp_symbol_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self));
   g_assert (!page || IDE_IS_PAGE (page));
 
+  gbp_symbol_popover_set_symbol_tree (self->popover, NULL);
   gbp_symbol_workspace_addin_set_symbol (self, NULL);
   gtk_widget_hide (GTK_WIDGET (self->menu_button));
 
