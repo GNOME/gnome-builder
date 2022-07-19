@@ -91,7 +91,14 @@ enum {
   N_PROPS
 };
 
+enum {
+  BEGIN_TEST_ALL,
+  END_TEST_ALL,
+  N_SIGNALS
+};
+
 static GParamSpec *properties[N_PROPS];
+static guint signals [N_SIGNALS];
 
 static gboolean
 filter_tests_func (gpointer item,
@@ -238,6 +245,24 @@ ide_test_manager_class_init (IdeTestManagerClass *klass)
                          G_TYPE_LIST_MODEL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  signals [BEGIN_TEST_ALL] =
+    g_signal_new ("begin-test-all",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  signals [END_TEST_ALL] =
+    g_signal_new ("end-test-all",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -315,6 +340,12 @@ ide_test_manager_run_all_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static void
+ide_test_manager_emit_end_test_all (IdeTestManager *self)
+{
+  g_signal_emit (self, signals [END_TEST_ALL], 0);
+}
+
 /**
  * ide_test_manager_run_all_async:
  * @self: An #IdeTestManager
@@ -352,6 +383,12 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_test_manager_run_all_async);
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_test_manager_emit_end_test_all),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
@@ -394,6 +431,8 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
 
   if (state->n_active == 0)
     ide_task_return_boolean (task, TRUE);
+
+  g_signal_emit (self, signals[BEGIN_TEST_ALL], 0);
 
   IDE_EXIT;
 }
