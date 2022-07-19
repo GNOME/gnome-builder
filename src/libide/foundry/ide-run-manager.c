@@ -1536,6 +1536,14 @@ ide_run_manager_discover_run_command_cb (GObject      *object,
           IDE_EXIT;
         }
 
+      /* Don't allow using this as a default/fallback unless the command
+       * is explicitely marked as capable of that. Otherwise, we risk things
+       * like a "destroy my hard drive" commands in shellcmd being run as
+       * the default run command.
+       */
+      if (!ide_run_command_get_can_default (run_command))
+        continue;
+
       if (best == NULL || priority < best_priority)
         {
           g_set_object (&best, run_command);
