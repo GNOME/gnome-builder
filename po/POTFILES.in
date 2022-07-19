@@ -267,6 +267,7 @@ src/plugins/symbol-tree/gbp-symbol-hover-provider.c
 src/plugins/symbol-tree/gbp-symbol-popover.ui
 src/plugins/symbol-tree/gbp-symbol-search-result.c
 src/plugins/symbol-tree/gbp-symbol-workspace-addin.c
+src/plugins/symbol-tree/gtk/menus.ui
 src/plugins/sysprof/gbp-sysprof-surface.c
 src/plugins/sysprof/gbp-sysprof-workspace-addin.c
 src/plugins/sysprof/gtk/menus.ui
