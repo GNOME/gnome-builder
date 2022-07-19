@@ -473,3 +473,14 @@ gbp_symbol_workspace_addin_init (GbpSymbolWorkspaceAddin *self)
                                    G_CONNECT_SWAPPED);
 
 }
+
+GListModel *
+gbp_symbol_workspace_addin_get_model (GbpSymbolWorkspaceAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self), NULL);
+
+  if (self->popover == NULL)
+    return NULL;
+
+  return gbp_symbol_popover_get_model (self->popover);
+}

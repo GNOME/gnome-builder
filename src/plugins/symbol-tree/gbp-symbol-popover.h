@@ -34,5 +34,6 @@ GtkWidget     *gbp_symbol_popover_new             (void);
 IdeSymbolTree *gbp_symbol_popover_get_symbol_tree (GbpSymbolPopover *self);
 void           gbp_symbol_popover_set_symbol_tree (GbpSymbolPopover *self,
                                                    IdeSymbolTree    *symbol_tree);
+GListModel    *gbp_symbol_popover_get_model       (GbpSymbolPopover *self);
 
 G_END_DECLS

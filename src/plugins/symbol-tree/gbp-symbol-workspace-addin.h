@@ -28,4 +28,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpSymbolWorkspaceAddin, gbp_symbol_workspace_addin, GBP, SYMBOL_WORKSPACE_ADDIN, GObject)
 
+GListModel *gbp_symbol_workspace_addin_get_model (GbpSymbolWorkspaceAddin *self);
+
 G_END_DECLS

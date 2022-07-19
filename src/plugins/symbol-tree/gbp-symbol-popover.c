@@ -431,3 +431,18 @@ gbp_symbol_popover_set_symbol_tree (GbpSymbolPopover *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SYMBOL_TREE]);
     }
 }
+
+GListModel *
+gbp_symbol_popover_get_model (GbpSymbolPopover *self)
+{
+  GtkSelectionModel *selection;
+
+  g_return_val_if_fail (GBP_IS_SYMBOL_POPOVER (self), NULL);
+
+  if (self->list_view == NULL ||
+      !(selection = gtk_list_view_get_model (self->list_view)) ||
+      !GTK_IS_SINGLE_SELECTION (selection))
+    return NULL;
+
+  return gtk_single_selection_get_model (GTK_SINGLE_SELECTION (selection));
+}
