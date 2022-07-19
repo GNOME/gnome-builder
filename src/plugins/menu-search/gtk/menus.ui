@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="extra-search-menu">
+  <menu id="menu-search">
     <!-- This menu is just used to add extra search items -->
 
     <item>
