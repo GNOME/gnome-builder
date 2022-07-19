@@ -32,5 +32,7 @@ G_DECLARE_FINAL_TYPE (GbpTestuiOutputPanel, gbp_testui_output_panel, GBP, TESTUI
 
 GbpTestuiOutputPanel *gbp_testui_output_panel_new   (VtePty               *pty);
 void                  gbp_testui_output_panel_reset (GbpTestuiOutputPanel *self);
+void                  gbp_testui_output_panel_write (GbpTestuiOutputPanel *self,
+                                                     const char           *message);
 
 G_END_DECLS

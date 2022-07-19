@@ -168,3 +168,14 @@ gbp_testui_output_panel_reset (GbpTestuiOutputPanel *self)
 
   vte_terminal_reset (VTE_TERMINAL (self->terminal), TRUE, TRUE);
 }
+
+void
+gbp_testui_output_panel_write (GbpTestuiOutputPanel *self,
+                               const char           *message)
+{
+  g_return_if_fail (GBP_IS_TESTUI_OUTPUT_PANEL (self));
+  g_return_if_fail (message != NULL);
+
+  vte_terminal_feed (VTE_TERMINAL (self->terminal), message, -1);
+  vte_terminal_feed (VTE_TERMINAL (self->terminal), "\r\n", -1);
+}

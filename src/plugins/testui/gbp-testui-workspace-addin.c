@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-foundry.h>
 #include <libide-gui.h>
 
@@ -35,6 +37,7 @@ struct _GbpTestuiWorkspaceAddin
   IdeWorkspace         *workspace;
   GbpTestuiPanel       *panel;
   GbpTestuiOutputPanel *output_panel;
+  GTimer               *timer;
 };
 
 static void
@@ -54,9 +57,73 @@ on_test_activated_cb (GbpTestuiWorkspaceAddin *self,
 
   panel_widget_raise (PANEL_WIDGET (self->output_panel));
 
+  gbp_testui_output_panel_write (self->output_panel,
+                                 ide_test_get_title (test));
+
   context = ide_workspace_get_context (self->workspace);
   test_manager = ide_test_manager_from_context (context);
   ide_test_manager_run_async (test_manager, test, NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static void
+begin_test_all_cb (GbpTestuiWorkspaceAddin *self,
+                   IdeTestManager          *test_manager)
+{
+  g_autoptr(GDateTime) now = NULL;
+  g_autofree char *nowstr = NULL;
+  g_autofree char *message = NULL;
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TESTUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_TEST_MANAGER (test_manager));
+
+  now = g_date_time_new_now_local ();
+  nowstr = g_date_time_format (now, "%X");
+  /* Translators: %s is replaced with the time in the current locale */
+  message = g_strdup_printf (_("Running all unit tests at %s"), nowstr);
+
+  gbp_testui_output_panel_write (self->output_panel, message);
+
+  panel_widget_raise (PANEL_WIDGET (self->panel));
+  panel_widget_raise (PANEL_WIDGET (self->output_panel));
+
+  g_clear_pointer (&self->timer, g_timer_destroy);
+  self->timer = g_timer_new ();
+
+  IDE_EXIT;
+}
+
+static void
+end_test_all_cb (GbpTestuiWorkspaceAddin *self,
+                 IdeTestManager          *test_manager)
+{
+  g_autofree char *message = NULL;
+  double elapsed = .0;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TESTUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_TEST_MANAGER (test_manager));
+
+  if (self->timer != NULL)
+    {
+      elapsed = g_timer_elapsed (self->timer, NULL);
+      g_clear_pointer (&self->timer, g_timer_destroy);
+    }
+
+  if (elapsed != .0)
+    message = g_strdup_printf (_("Unit tests completed in %lf seconds"), elapsed);
+  else
+    message = g_strdup (_("Unit tests completed"));
+
+  gbp_testui_output_panel_write (self->output_panel, message);
+
+  panel_widget_raise (PANEL_WIDGET (self->panel));
+  panel_widget_raise (PANEL_WIDGET (self->output_panel));
 
   IDE_EXIT;
 }
@@ -83,6 +150,17 @@ gbp_testui_workspace_addin_load (IdeWorkspaceAddin *addin,
   context = ide_workspace_get_context (workspace);
   test_manager = ide_test_manager_from_context (context);
   pty = ide_test_manager_get_pty (test_manager);
+
+  g_signal_connect_object (test_manager,
+                           "begin-test-all",
+                           G_CALLBACK (begin_test_all_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (test_manager,
+                           "end-test-all",
+                           G_CALLBACK (end_test_all_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   self->panel = gbp_testui_panel_new (test_manager);
   g_signal_connect_object (self->panel,
@@ -118,6 +196,7 @@ gbp_testui_workspace_addin_unload (IdeWorkspaceAddin *addin,
 
   g_clear_pointer ((IdePane **)&self->panel, ide_pane_destroy);
   g_clear_pointer ((IdePane **)&self->output_panel, ide_pane_destroy);
+  g_clear_pointer (&self->timer, g_timer_destroy);
 
   self->workspace = NULL;
 
