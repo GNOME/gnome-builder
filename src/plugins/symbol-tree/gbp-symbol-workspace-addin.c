@@ -484,3 +484,11 @@ gbp_symbol_workspace_addin_get_model (GbpSymbolWorkspaceAddin *self)
 
   return gbp_symbol_popover_get_model (self->popover);
 }
+
+IdeBuffer *
+gbp_symbol_workspace_addin_get_buffer (GbpSymbolWorkspaceAddin *self)
+{
+  g_return_val_if_fail (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self), NULL);
+
+  return ide_signal_group_get_target (self->buffer_signals);
+}
