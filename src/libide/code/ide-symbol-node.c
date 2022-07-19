@@ -75,11 +75,26 @@ ide_symbol_node_real_get_location_finish (IdeSymbolNode  *self,
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
 
-static const char *
+const char *
 ide_symbol_node_get_icon_name (IdeSymbolNode *self)
 {
   IdeSymbolKind kind = ide_symbol_node_get_kind (self);
   return ide_symbol_kind_get_icon_name (kind);
+}
+
+/**
+ * ide_symbol_node_get_gicon:
+ * @self: a #IdeSymbolNode
+ *
+ * Gets a #GIcon for the symbol node.
+ *
+ * Returns: (transfer none) (nullable): a #GIcon or %NULL
+ */
+GIcon *
+ide_symbol_node_get_gicon (IdeSymbolNode *self)
+{
+  IdeSymbolKind kind = ide_symbol_node_get_kind (self);
+  return ide_symbol_kind_get_gicon (kind);
 }
 
 static void

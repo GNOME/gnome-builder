@@ -57,7 +57,11 @@ IdeSymbolKind   ide_symbol_node_get_kind            (IdeSymbolNode        *self)
 IDE_AVAILABLE_IN_ALL
 IdeSymbolFlags  ide_symbol_node_get_flags           (IdeSymbolNode        *self);
 IDE_AVAILABLE_IN_ALL
-const gchar    *ide_symbol_node_get_name            (IdeSymbolNode        *self);
+const char     *ide_symbol_node_get_name            (IdeSymbolNode        *self);
+IDE_AVAILABLE_IN_ALL
+const char     *ide_symbol_node_get_icon_name       (IdeSymbolNode        *self);
+IDE_AVAILABLE_IN_ALL
+GIcon          *ide_symbol_node_get_gicon           (IdeSymbolNode        *self);
 IDE_AVAILABLE_IN_ALL
 gboolean        ide_symbol_node_get_use_markup      (IdeSymbolNode        *self);
 IDE_AVAILABLE_IN_ALL
