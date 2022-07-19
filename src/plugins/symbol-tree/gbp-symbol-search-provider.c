@@ -1,0 +1,153 @@
+/* gbp-symbol-search-provider.c
+ *
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+#define G_LOG_DOMAIN "gbp-symbol-search-provider"
+
+#include "config.h"
+
+#include <libide-gui.h>
+#include <libide-search.h>
+#include <libide-threading.h>
+
+#include "gbp-symbol-search-provider.h"
+#include "gbp-symbol-search-result.h"
+#include "gbp-symbol-workspace-addin.h"
+
+struct _GbpSymbolSearchProvider
+{
+  IdeObject parent_instance;
+};
+
+static gpointer
+gbp_symbol_search_provider_map_func (gpointer item,
+                                     gpointer user_data)
+{
+  g_autoptr(GtkTreeListRow) row = item;
+  g_autoptr(IdeSymbolNode) node = NULL;
+  GFile *file = user_data;
+
+  g_assert (GTK_IS_TREE_LIST_ROW (item));
+  g_assert (!file || G_IS_FILE (file));
+
+  node = gtk_tree_list_row_get_item (row);
+  g_assert (IDE_IS_SYMBOL_NODE (node));
+
+  return gbp_symbol_search_result_new (node, file);
+}
+
+static void
+gbp_symbol_search_provider_foreach_workspace_cb (IdeWorkspace *workspace,
+                                                 gpointer      user_data)
+{
+  g_autoptr(GtkMapListModel) map = NULL;
+  IdeWorkspaceAddin *addin;
+  GListStore *store = user_data;
+  GListModel *model;
+  IdeBuffer *buffer;
+  GFile *file = NULL;
+
+  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (G_IS_LIST_STORE (user_data));
+
+  if (!(addin = ide_workspace_addin_find_by_module_name (workspace, "symbol-tree")) ||
+      !(model = gbp_symbol_workspace_addin_get_model (GBP_SYMBOL_WORKSPACE_ADDIN (addin))))
+    return;
+
+  if ((buffer = gbp_symbol_workspace_addin_get_buffer (GBP_SYMBOL_WORKSPACE_ADDIN (addin))))
+    file = g_object_ref (ide_buffer_get_file (buffer));
+
+  map = gtk_map_list_model_new (g_object_ref (model),
+                                gbp_symbol_search_provider_map_func,
+                                file,
+                                file ? g_object_unref : NULL);
+
+  g_list_store_append (store, map);
+}
+
+static void
+gbp_symbol_search_provider_search_async (IdeSearchProvider   *provider,
+                                         const char          *query,
+                                         guint                max_results,
+                                         GCancellable        *cancellable,
+                                         GAsyncReadyCallback  callback,
+                                         gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GListStore) store = NULL;
+  IdeWorkbench *workbench;
+  IdeContext *context;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYMBOL_SEARCH_PROVIDER (provider));
+  g_assert (query != NULL);
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (provider, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_symbol_search_provider_search_async);
+
+  context = ide_object_get_context (IDE_OBJECT (provider));
+  workbench = ide_workbench_from_context (context);
+  store = g_list_store_new (G_TYPE_LIST_MODEL);
+
+  ide_workbench_foreach_workspace (workbench,
+                                   gbp_symbol_search_provider_foreach_workspace_cb,
+                                   store);
+
+  if (g_list_model_get_n_items (G_LIST_MODEL (store)) == 0)
+    ide_task_return_unsupported_error (task);
+  else
+    ide_task_return_pointer (task,
+                             g_object_new (GTK_TYPE_FLATTEN_LIST_MODEL,
+                                           "model", store,
+                                           NULL),
+                             g_object_unref);
+}
+
+static GListModel *
+gbp_symbol_search_provider_search_finish (IdeSearchProvider  *provider,
+                                          GAsyncResult       *result,
+                                          GError            **error)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYMBOL_SEARCH_PROVIDER (provider));
+  g_assert (IDE_IS_TASK (result));
+
+  return ide_task_propagate_pointer (IDE_TASK (result), error);
+}
+
+static void
+search_provider_iface_init (IdeSearchProviderInterface *iface)
+{
+  iface->search_async = gbp_symbol_search_provider_search_async;
+  iface->search_finish = gbp_symbol_search_provider_search_finish;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSymbolSearchProvider, gbp_symbol_search_provider, IDE_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_SEARCH_PROVIDER, search_provider_iface_init))
+
+static void
+gbp_symbol_search_provider_class_init (GbpSymbolSearchProviderClass *klass)
+{
+}
+
+static void
+gbp_symbol_search_provider_init (GbpSymbolSearchProvider *self)
+{
+}

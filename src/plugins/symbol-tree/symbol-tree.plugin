@@ -8,3 +8,4 @@ Module=symbol-tree
 Name=Symbol Tree
 X-Category=editing
 X-Workspace-Kind=primary;editor;
+X-Search-Provider-Priority=-100
