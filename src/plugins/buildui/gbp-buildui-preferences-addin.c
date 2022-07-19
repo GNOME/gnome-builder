@@ -200,6 +200,7 @@ add_runtiem_row (AdwPreferencesGroup *group,
                       "title", _("Runtime"),
                       "subtitle", _("The runtime is the environment used to run your application."),
                       "expression", expression,
+                      "model", model,
                       NULL);
 
   n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
@@ -216,11 +217,8 @@ add_runtiem_row (AdwPreferencesGroup *group,
         }
     }
 
-  /* TODO: need to get the title in sync initially */
-
   g_object_bind_property (row, "selected-item", config, "runtime", 0);
 
-  adw_combo_row_set_model (ADW_COMBO_ROW (row), G_LIST_MODEL (model));
   adw_preferences_group_add (group, row);
 }
 
