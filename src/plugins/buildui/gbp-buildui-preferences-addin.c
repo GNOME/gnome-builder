@@ -225,17 +225,40 @@ add_runtiem_row (AdwPreferencesGroup *group,
 }
 
 static void
+create_overview_widgetry (const char                   *page_name,
+                          const IdePreferenceItemEntry *entry,
+                          AdwPreferencesGroup          *group,
+                          gpointer                      user_data)
+{
+  g_autoptr(GFile) workdir = NULL;
+  IdeBuildSystem *build_system;
+  IdeContext *context;
+  IdeConfig *config = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (ADW_IS_PREFERENCES_GROUP (group));
+  g_assert (IDE_IS_CONFIG (config));
+  g_assert (page_name != NULL && g_str_equal (page_name, ide_config_get_id (config)));
+
+  context = ide_object_get_context (IDE_OBJECT (config));
+  workdir = ide_context_ref_workdir (context);
+  build_system = ide_build_system_from_context (context);
+
+  add_description_row (group, _("Name"), ide_config_get_display_name (config));
+  add_description_row (group, _("Source Directory"), g_file_peek_path (workdir));
+  add_description_row (group, _("Build System"), ide_build_system_get_display_name (build_system));
+}
+
+static void
 create_general_widgetry (const char                   *page_name,
                          const IdePreferenceItemEntry *entry,
                          AdwPreferencesGroup          *group,
                          gpointer                      user_data)
 {
-  g_autoptr(GFile) workdir = NULL;
-  IdeConfig *config = user_data;
-  IdeConfigManager *config_manager;
-  IdeBuildSystem *build_system;
   IdeRuntimeManager *runtime_manager;
+  IdeConfigManager *config_manager;
   IdeContext *context;
+  IdeConfig *config = user_data;
   GtkWidget *box;
   static const struct {
     const gchar *label;
@@ -264,12 +287,6 @@ create_general_widgetry (const char                   *page_name,
   g_assert (page_name != NULL && g_str_equal (page_name, ide_config_get_id (config)));
 
   context = ide_object_get_context (IDE_OBJECT (config));
-  build_system = ide_build_system_from_context (context);
-  workdir = ide_context_ref_workdir (context);
-
-  add_description_row (group, _("Name"), ide_config_get_display_name (config));
-  add_description_row (group, _("Source Directory"), g_file_peek_path (workdir));
-  add_description_row (group, _("Build System"), ide_build_system_get_display_name (build_system));
 
   /* Translators: "Install" is a noun here */
   add_entry_row (group, _("Install Prefix"), config, "prefix");
@@ -503,12 +520,14 @@ gbp_buildui_preferences_addin_load (IdePreferencesAddin  *addin,
       const char *page = ide_config_get_id (config);
 
       const IdePreferenceGroupEntry groups[] = {
-        { page, "general",     0, N_("General") },
+        { page, "overview",    0 },
+        { page, "general",    10, N_("General") },
         { page, "toolchain", 100, N_("Build Toolchain") },
         { page, "runtime",   200, N_("Application Runtime") },
       };
 
       const IdePreferenceItemEntry items[] = {
+        { page, "overview",  "overview",    0, create_overview_widgetry },
         { page, "general",   "general",     0, create_general_widgetry },
         { page, "toolchain", "toolchain", 100, create_toolchain_widgetry },
         { page, "runtime",   "runtime",   200, create_runtime_widgetry },
