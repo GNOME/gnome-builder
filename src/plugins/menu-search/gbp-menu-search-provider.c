@@ -58,15 +58,14 @@ populate_from_menu_model (GListStore *store,
       g_autofree char *icon_name = NULL;
       g_autofree char *description = NULL;
       g_autofree char *action = NULL;
-      guint prio = 0;
 
       if (!g_menu_model_get_item_attribute (menu, i, "label", "s", &label) ||
           !g_menu_model_get_item_attribute (menu, i, "action", "s", &action) ||
           !g_menu_model_get_item_attribute (menu, i, "description", "s", &description))
         continue;
 
-      if (!gtk_source_completion_fuzzy_match (label, query, &prio) &&
-          !gtk_source_completion_fuzzy_match (description, query, &prio))
+      if (strcasestr (label, query) == NULL &&
+          strcasestr (description, query) == NULL)
         continue;
 
       result = g_object_new (GBP_TYPE_MENU_SEARCH_RESULT,

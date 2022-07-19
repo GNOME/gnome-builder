@@ -54,6 +54,17 @@ gbp_menu_search_result_activate (IdeSearchResult *result,
   IDE_EXIT;
 }
 
+static gboolean
+gbp_menu_search_result_matches (IdeSearchResult *result,
+                                const char      *query)
+{
+  const char *title = ide_search_result_get_title (result);
+  const char *subtitle = ide_search_result_get_subtitle (result);
+
+  return (title && strcasestr (title, query) != NULL) ||
+         (subtitle && strcasestr (subtitle, query) != NULL);
+}
+
 static void
 gbp_menu_search_result_dispose (GObject *object)
 {
@@ -74,6 +85,7 @@ gbp_menu_search_result_class_init (GbpMenuSearchResultClass *klass)
   object_class->dispose = gbp_menu_search_result_dispose;
 
   search_result_class->activate = gbp_menu_search_result_activate;
+  search_result_class->matches = gbp_menu_search_result_matches;
 }
 
 static void
