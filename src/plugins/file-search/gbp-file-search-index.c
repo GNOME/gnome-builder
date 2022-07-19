@@ -381,14 +381,9 @@ gbp_file_search_index_populate (GbpFileSearchIndex *self,
       if (ide_search_reducer_accepts (&reducer, match->score))
         {
           g_autoptr(GbpFileSearchResult) result = NULL;
-          g_autofree gchar *escaped = NULL;
-          g_autofree gchar *markup = NULL;
-          const gchar *filename = match->key;
-          g_autofree gchar *content_type = NULL;
+          g_autofree char *content_type = NULL;
           g_autoptr(GIcon) themed_icon = NULL;
-
-          escaped = g_markup_escape_text (match->key, -1);
-          markup = ide_fuzzy_highlight (escaped, delimited->str, FALSE);
+          const char *filename = match->key;
 
           /*
            * Try to get a more appropriate icon, but by filename only.
@@ -400,7 +395,7 @@ gbp_file_search_index_populate (GbpFileSearchIndex *self,
           result = g_object_new (GBP_TYPE_FILE_SEARCH_RESULT,
                                  "context", context,
                                  "score", match->score,
-                                 "title", markup,
+                                 "title", filename,
                                  "path", filename,
                                  NULL);
 
