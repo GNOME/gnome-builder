@@ -29,6 +29,7 @@
 #include "ide-buildconfig-build-target-provider.h"
 #include "ide-buildconfig-config-provider.h"
 #include "ide-buildconfig-pipeline-addin.h"
+#include "gbp-buildconfig-run-command-provider.h"
 
 _IDE_EXTERN void
 _gbp_buildconfig_register_types (PeasObjectModule *module)
@@ -42,4 +43,7 @@ _gbp_buildconfig_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PIPELINE_ADDIN,
                                               IDE_TYPE_BUILDCONFIG_PIPELINE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUN_COMMAND_PROVIDER,
+                                              GBP_TYPE_BUILDCONFIG_RUN_COMMAND_PROVIDER);
 }

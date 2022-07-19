@@ -5,6 +5,7 @@ plugins_sources += files([
   'ide-buildconfig-config.c',
   'ide-buildconfig-config-provider.c',
   'ide-buildconfig-pipeline-addin.c',
+  'gbp-buildconfig-run-command-provider.c',
 ])
 
 plugin_buildconfig_resources = gnome.compile_resources(
