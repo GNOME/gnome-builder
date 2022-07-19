@@ -79,6 +79,7 @@ gbp_menu_search_result_class_init (GbpMenuSearchResultClass *klass)
 static void
 gbp_menu_search_result_init (GbpMenuSearchResult *self)
 {
+  ide_search_result_set_use_underline (IDE_SEARCH_RESULT (self), TRUE);
 }
 
 void
