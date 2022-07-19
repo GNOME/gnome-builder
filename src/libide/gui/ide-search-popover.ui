@@ -69,8 +69,16 @@
       <object class="GtkLabel">
         <property name="halign">start</property>
         <property name="ellipsize">end</property>
-        <property name="use-markup">true</property>
-        <property name="use-underline">true</property>
+        <binding name="use-markup">
+          <lookup name="use-markup" type="IdeSearchResult">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
+        <binding name="use-underline">
+          <lookup name="use-underline" type="IdeSearchResult">
+            <lookup name="item">GtkListItem</lookup>
+          </lookup>
+        </binding>
         <binding name="label">
           <lookup name="title" type="IdeSearchResult">
             <lookup name="item">GtkListItem</lookup>

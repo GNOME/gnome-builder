@@ -34,6 +34,8 @@ typedef struct
   GIcon        *gicon;
   float         score;
   guint         priority;
+  guint         use_underline : 1;
+  guint         use_markup : 1;
 } IdeSearchResultPrivate;
 
 enum {
@@ -44,6 +46,8 @@ enum {
   PROP_SCORE,
   PROP_SUBTITLE,
   PROP_TITLE,
+  PROP_USE_MARKUP,
+  PROP_USE_UNDERLINE,
   N_PROPS
 };
 
@@ -115,6 +119,14 @@ ide_search_result_get_property (GObject    *object,
       g_value_set_string (value, ide_search_result_get_title (self));
       break;
 
+    case PROP_USE_MARKUP:
+      g_value_set_boolean (value, ide_search_result_get_use_markup (self));
+      break;
+
+    case PROP_USE_UNDERLINE:
+      g_value_set_boolean (value, ide_search_result_get_use_underline (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -152,6 +164,14 @@ ide_search_result_set_property (GObject      *object,
 
     case PROP_TITLE:
       ide_search_result_set_title (self, g_value_get_string (value));
+      break;
+
+    case PROP_USE_MARKUP:
+      ide_search_result_set_use_markup (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_USE_UNDERLINE:
+      ide_search_result_set_use_underline (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -215,6 +235,16 @@ ide_search_result_class_init (IdeSearchResultClass *klass)
                          "The subtitle of the search result",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_USE_MARKUP] =
+    g_param_spec_boolean ("use-markup", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_USE_UNDERLINE] =
+    g_param_spec_boolean ("use-underline", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -433,4 +463,58 @@ ide_search_result_get_gicon (IdeSearchResult *self)
   g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), NULL);
 
   return priv->gicon;
+}
+
+gboolean
+ide_search_result_get_use_underline (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), FALSE);
+
+  return priv->use_underline;
+}
+
+void
+ide_search_result_set_use_underline (IdeSearchResult *self,
+                                     gboolean         use_underline)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+
+  use_underline = !!use_underline;
+
+  if (priv->use_underline != use_underline)
+    {
+      priv->use_underline = use_underline;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_USE_UNDERLINE]);
+    }
+}
+
+gboolean
+ide_search_result_get_use_markup (IdeSearchResult *self)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_SEARCH_RESULT (self), FALSE);
+
+  return priv->use_markup;
+}
+
+void
+ide_search_result_set_use_markup (IdeSearchResult *self,
+                                     gboolean         use_markup)
+{
+  IdeSearchResultPrivate *priv = ide_search_result_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_SEARCH_RESULT (self));
+
+  use_markup = !!use_markup;
+
+  if (priv->use_markup != use_markup)
+    {
+      priv->use_markup = use_markup;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_USE_MARKUP]);
+    }
 }

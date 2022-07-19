@@ -145,7 +145,7 @@ ide_search_engine_parent_set (IdeObject *object,
   self->extensions = ide_extension_set_adapter_new (object,
                                                     peas_engine_get_default (),
                                                     IDE_TYPE_SEARCH_PROVIDER,
-                                                    NULL, NULL);
+                                                    "Search-Provider", NULL);
 
   g_signal_connect (self->extensions,
                     "extension-added",
