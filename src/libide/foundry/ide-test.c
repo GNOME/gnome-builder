@@ -345,6 +345,7 @@ ide_test_run_async (IdeTest             *self,
     }
   else
     {
+      ide_subprocess_send_signal_upon_cancel (subprocess, cancellable, SIGKILL);
       ide_test_set_status (self, IDE_TEST_STATUS_RUNNING);
       ide_subprocess_wait_check_async (subprocess,
                                        cancellable,
