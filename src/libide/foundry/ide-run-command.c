@@ -37,12 +37,14 @@ typedef struct
   char **argv;
   char **languages;
   int priority;
-  IdeRunCommandKind kind;
+  IdeRunCommandKind kind : 8;
+  guint can_default : 1;
 } IdeRunCommandPrivate;
 
 enum {
   PROP_0,
   PROP_ARGV,
+  PROP_CAN_DEFAULT,
   PROP_CWD,
   PROP_DISPLAY_NAME,
   PROP_ENVIRON,
@@ -135,6 +137,10 @@ ide_run_command_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CAN_DEFAULT:
+      g_value_set_boolean (value, ide_run_command_get_can_default (self));
+      break;
+
     case PROP_CWD:
       g_value_set_string (value, ide_run_command_get_cwd (self));
       break;
@@ -182,6 +188,10 @@ ide_run_command_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CAN_DEFAULT:
+      ide_run_command_set_can_default (self, g_value_get_boolean (value));
+      break;
+
     case PROP_CWD:
       ide_run_command_set_cwd (self, g_value_get_string (value));
       break;
@@ -234,6 +244,21 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
     g_param_spec_boxed ("argv", NULL, NULL,
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * IdeRunCommand:can-default:
+   *
+   * If the command is suitable as the default run command for the project.
+   *
+   * Set this to %TRUE if the command is/should be used as the default command
+   * to run the project. This is useful when you are writing plumbing for build
+   * systems or similar so that an item may be a candidate for the default
+   * command when the user selects "Run".
+   */
+  properties [PROP_CAN_DEFAULT] =
+    g_param_spec_boolean ("can-default", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_CWD] =
     g_param_spec_string ("cwd", NULL, NULL,
@@ -540,4 +565,31 @@ ide_run_command_prepare_to_run (IdeRunCommand *self,
   g_return_if_fail (IDE_IS_CONTEXT (context));
 
   IDE_RUN_COMMAND_GET_CLASS (self)->prepare_to_run (self, run_context, context);
+}
+
+gboolean
+ide_run_command_get_can_default (IdeRunCommand *self)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), FALSE);
+
+  return priv->can_default;
+}
+
+void
+ide_run_command_set_can_default (IdeRunCommand *self,
+                                 gboolean can_default)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+
+  can_default = !!can_default;
+
+  if (can_default != priv->can_default)
+    {
+      priv->can_default = can_default;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_DEFAULT]);
+    }
 }

@@ -97,6 +97,11 @@ IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_languages    (IdeRunCommand      *self,
                                                       const char * const *languages);
 IDE_AVAILABLE_IN_ALL
+gboolean            ide_run_command_get_can_default  (IdeRunCommand      *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_run_command_set_can_default  (IdeRunCommand      *self,
+                                                      gboolean            can_default);
+IDE_AVAILABLE_IN_ALL
 void                ide_run_command_prepare_to_run   (IdeRunCommand      *self,
                                                       IdeRunContext      *run_context,
                                                       IdeContext         *context);
