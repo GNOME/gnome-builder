@@ -60,8 +60,10 @@ struct _IdeTestManager
   GtkFilterListModel *filtered;
   IdeCachedListModel *tests;
   VtePty             *pty;
+  GCancellable       *cancellable;
   IdePtyIntercept     intercept;
   int                 pty_producer;
+  guint               n_active;
 };
 
 typedef struct
@@ -72,6 +74,8 @@ typedef struct
   guint        n_active;
 } RunAll;
 
+static void ide_test_manager_actions_cancel   (IdeTestManager *self,
+                                               GVariant       *param);
 static void ide_test_manager_actions_test     (IdeTestManager *self,
                                                GVariant       *param);
 static void ide_test_manager_actions_test_all (IdeTestManager *self,
@@ -80,6 +84,7 @@ static void ide_test_manager_actions_test_all (IdeTestManager *self,
 IDE_DEFINE_ACTION_GROUP (IdeTestManager, ide_test_manager, {
   { "test", ide_test_manager_actions_test, "s" },
   { "test-all", ide_test_manager_actions_test_all },
+  { "cancel", ide_test_manager_actions_cancel },
 })
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeTestManager, ide_test_manager, IDE_TYPE_OBJECT,
@@ -125,10 +130,33 @@ run_all_free (RunAll *state)
   g_slice_free (RunAll, state);
 }
 
+static GCancellable *
+get_cancellable (IdeTestManager *self)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TEST_MANAGER (self));
+
+  if (g_cancellable_is_cancelled (self->cancellable))
+    g_clear_object (&self->cancellable);
+
+  if (self->cancellable == NULL)
+    self->cancellable = g_cancellable_new ();
+
+  return self->cancellable;
+}
+
+static void
+ide_test_manager_actions_cancel (IdeTestManager *self,
+                                 GVariant       *param)
+{
+  g_cancellable_cancel (self->cancellable);
+}
+
 static void
 ide_test_manager_actions_test (IdeTestManager *self,
                                GVariant       *param)
 {
+  GCancellable *cancellable;
   GListModel *tests;
   const char *test_id;
   guint n_items;
@@ -138,6 +166,8 @@ ide_test_manager_actions_test (IdeTestManager *self,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_TEST_MANAGER (self));
   g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
+
+  cancellable = get_cancellable (self);
 
   test_id = g_variant_get_string (param, NULL);
   tests = ide_test_manager_list_tests (self);
@@ -149,7 +179,7 @@ ide_test_manager_actions_test (IdeTestManager *self,
 
       if (ide_str_equal0 (test_id, ide_test_get_id (test)))
         {
-          ide_test_manager_run_async (self, test, NULL, NULL, NULL);
+          ide_test_manager_run_async (self, test, cancellable, NULL, NULL);
           IDE_EXIT;
         }
     }
@@ -167,7 +197,7 @@ ide_test_manager_actions_test_all (IdeTestManager *self,
   g_assert (IDE_IS_TEST_MANAGER (self));
   g_assert (param == NULL);
 
-  ide_test_manager_run_all_async (self, NULL, NULL, NULL);
+  ide_test_manager_run_all_async (self, get_cancellable (self), NULL, NULL);
 
   IDE_EXIT;
 }
@@ -190,6 +220,7 @@ ide_test_manager_dispose (GObject *object)
   IdeTestManager *self = (IdeTestManager *)object;
   g_auto(IdePtyFd) fd = IDE_PTY_FD_INVALID;
 
+  g_clear_object (&self->cancellable);
   g_clear_object (&self->filtered);
   g_clear_object (&self->tests);
 
@@ -384,11 +415,8 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_test_manager_run_all_async);
 
-  g_signal_connect_object (task,
-                           "notify::completed",
-                           G_CALLBACK (ide_test_manager_emit_end_test_all),
-                           self,
-                           G_CONNECT_SWAPPED);
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
@@ -402,6 +430,12 @@ ide_test_manager_run_all_async (IdeTestManager      *self,
                                  "Cannot run test until pipeline is ready");
       IDE_EXIT;
     }
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_test_manager_emit_end_test_all),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   tests = ide_test_manager_list_tests (self);
   n_items = g_list_model_get_n_items (tests);
@@ -492,6 +526,21 @@ ide_test_manager_run_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static void
+ide_test_manager_test_notify_completed_cb (IdeTestManager *self,
+                                           GParamSpec     *pspec,
+                                           IdeTask        *task)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TEST_MANAGER (self));
+  g_assert (IDE_IS_TASK (task));
+
+  self->n_active--;
+
+  if (self->n_active == 0)
+    ide_test_manager_set_action_enabled (self, "cancel", FALSE);
+}
+
 /**
  * ide_test_manager_run_async:
  * @self: An #IdeTestManager
@@ -525,6 +574,20 @@ ide_test_manager_run_async (IdeTestManager      *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_test_manager_run_async);
+
+  self->n_active++;
+
+  if (self->n_active == 1)
+    ide_test_manager_set_action_enabled (self, "cancel", TRUE);
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_test_manager_test_notify_completed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  if (ide_task_return_error_if_cancelled (task))
+    IDE_EXIT;
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
