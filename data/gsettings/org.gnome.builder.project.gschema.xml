@@ -14,6 +14,12 @@
       <description>Run the pipelines install phase before running the project. Only use this if you know what you're doing with your project.</description>
     </key>
 
+    <key name="default-run-command" type="s">
+      <default>''</default>
+      <summary>Default Run Command</summary>
+      <description>The id of the default run command</description>
+    </key>
+
     <key name="stop-signal" type="s">
       <choices>
         <choice value="SIGKILL"/>

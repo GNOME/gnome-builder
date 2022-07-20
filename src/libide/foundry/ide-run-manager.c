@@ -248,14 +248,7 @@ ide_run_manager_actions_default_run_command (IdeRunManager *self,
   if (ide_str_empty0 (str))
     str = NULL;
 
-  if (g_strcmp0 (str, self->default_run_command) != 0)
-    {
-      g_free (self->default_run_command);
-      self->default_run_command = g_strdup (str);
-      ide_run_manager_set_action_state (self,
-                                        "default-run-command",
-                                        g_variant_new_string (str ? str : ""));
-    }
+  _ide_run_manager_set_default_id (self, str);
 }
 
 static void
@@ -366,6 +359,7 @@ initable_init (GInitable     *initable,
                GError       **error)
 {
   IdeRunManager *self = (IdeRunManager *)initable;
+  g_autoptr(GSettings) settings = NULL;
   IdeBuildManager *build_manager;
   IdeContext *context;
 
@@ -376,6 +370,13 @@ initable_init (GInitable     *initable,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
+  settings = ide_context_ref_project_settings (context);
+
+  g_clear_pointer (&self->default_run_command, g_free);
+  self->default_run_command = g_settings_get_string (settings, "default-run-command");
+  ide_run_manager_set_action_state (self,
+                                    "default-run-command",
+                                    g_variant_new_string (self->default_run_command));
 
   g_signal_connect_object (build_manager,
                            "notify::can-build",
@@ -1304,6 +1305,7 @@ ide_run_manager_init (IdeRunManager *self)
 
   self->cancellable = g_cancellable_new ();
   self->run_tool = ide_no_tool_new ();
+  self->default_run_command = g_strdup ("");
 
   /* Setup initial text direction state */
   text_dir = gtk_widget_get_default_direction ();
@@ -1615,4 +1617,42 @@ ide_run_manager_discover_run_command_finish (IdeRunManager  *self,
   g_return_val_if_fail (!run_command || IDE_IS_RUN_COMMAND (run_command), NULL);
 
   IDE_RETURN (run_command);
+}
+
+const char *
+_ide_run_manager_get_default_id (IdeRunManager *self)
+{
+  g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
+
+  return self->default_run_command;
+}
+
+void
+_ide_run_manager_set_default_id (IdeRunManager *self,
+                                 const char    *run_command_id)
+{
+  g_return_if_fail (IDE_IS_RUN_MANAGER (self));
+
+  if (run_command_id == NULL)
+    run_command_id = "";
+
+  if (g_strcmp0 (run_command_id, self->default_run_command) != 0)
+    {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      g_autoptr(GSettings) settings = ide_context_ref_project_settings (context);
+
+      g_debug ("Setting default run command to \"%s\"",
+               run_command_id);
+
+      g_free (self->default_run_command);
+      self->default_run_command = g_strdup (run_command_id);
+
+      g_settings_set_string (settings,
+                             "default-run-command",
+                             run_command_id);
+
+      ide_run_manager_set_action_state (self,
+                                        "default-run-command",
+                                        g_variant_new_string (run_command_id));
+    }
 }
