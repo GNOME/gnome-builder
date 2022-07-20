@@ -95,7 +95,7 @@ impl {{PreFix}}Application {
             .developer_name("{{author}}")
             .version(VERSION)
             .developers(vec!["{{author}}".into()])
-            .copyright("© {{year}} {{author}}"),
+            .copyright("© {{year}} {{author}}")
             .build();
 {{else}}
         let about = gtk::AboutDialog::builder()
@@ -105,7 +105,7 @@ impl {{PreFix}}Application {
             .logo_icon_name("{{appid}}")
             .version(VERSION)
             .authors(vec!["{{author}}".into()])
-            .copyright("© {{year}} {{author}}"),
+            .copyright("© {{year}} {{author}}")
             .build();
 {{end}}
 
