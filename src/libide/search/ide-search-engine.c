@@ -32,7 +32,7 @@
 #include "ide-search-result.h"
 #include "ide-search-results-private.h"
 
-#define DEFAULT_MAX_RESULTS 50
+#define DEFAULT_MAX_RESULTS 100
 
 struct _IdeSearchEngine
 {
