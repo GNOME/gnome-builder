@@ -26,7 +26,9 @@
 #include "ide-search-resources.h"
 #include "ide-gui-global.h"
 
-#define SEARCH_DELAY_MSEC 30
+#define LONG_SEARCH_DELAY_MSEC  300
+#define SHORT_SEARCH_DELAY_MSEC 50
+
 #define MAX_RESULTS 1000 /* 0 for unlimited */
 
 struct _IdeSearchPopover
@@ -210,20 +212,26 @@ failure:
 static void
 ide_search_popover_queue_search (IdeSearchPopover *self)
 {
+  const char *text;
+  guint delay;
+
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_SEARCH_POPOVER (self));
 
-  if (self->queued_search == 0)
-    {
-      guint delay = SEARCH_DELAY_MSEC;
+  g_clear_handle_id (&self->queued_search, g_source_remove);
 
-      if (self->activate_after_search)
-        delay = 0;
+  text = gtk_editable_get_text (GTK_EDITABLE (self->entry));
 
-      self->queued_search = g_timeout_add (delay,
-                                           ide_search_popover_search_source_func,
-                                           self);
-    }
+  if (self->activate_after_search)
+    delay = 0;
+  else if (strlen (text) < 3)
+    delay = LONG_SEARCH_DELAY_MSEC;
+  else
+    delay = SHORT_SEARCH_DELAY_MSEC;
+
+  self->queued_search = g_timeout_add (delay,
+                                       ide_search_popover_search_source_func,
+                                       self);
 }
 
 static void
