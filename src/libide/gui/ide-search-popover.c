@@ -29,8 +29,6 @@
 #define LONG_SEARCH_DELAY_MSEC  300
 #define SHORT_SEARCH_DELAY_MSEC 50
 
-#define MAX_RESULTS 1000 /* 0 for unlimited */
-
 struct _IdeSearchPopover
 {
   GtkPopover          parent_instance;
@@ -195,7 +193,7 @@ ide_search_popover_search_source_func (gpointer data)
 
   ide_search_engine_search_async (self->search_engine,
                                   query,
-                                  MAX_RESULTS,
+                                  0,
                                   self->cancellable,
                                   ide_search_popover_search_cb,
                                   g_object_ref (self));
