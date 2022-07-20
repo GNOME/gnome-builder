@@ -414,9 +414,9 @@ ide_unix_fd_map_steal_from (IdeUnixFDMap  *self,
                   return FALSE;
                 }
             }
-
-          ide_unix_fd_map_take (self, ide_steal_fd (&item->source_fd), item->dest_fd);
         }
+
+      ide_unix_fd_map_take (self, ide_steal_fd (&item->source_fd), item->dest_fd);
     }
 
   return TRUE;
