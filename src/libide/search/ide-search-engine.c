@@ -299,6 +299,7 @@ ide_search_engine_search_cb (GObject      *object,
     {
       g_autoptr(GListStore) store = g_list_store_new (G_TYPE_LIST_MODEL);
       g_autoptr(GtkFlattenListModel) flatten = gtk_flatten_list_model_new (G_LIST_MODEL (g_object_ref (store)));
+      gboolean truncated = FALSE;
 
       for (guint i = 0; i < r->sorted->len; i++)
         {
@@ -306,10 +307,12 @@ ide_search_engine_search_cb (GObject      *object,
 
           if (info->results != NULL)
             g_list_store_append (store, info->results);
+
+          truncated |= info->truncated;
         }
 
       ide_task_return_pointer (task,
-                               _ide_search_results_new (G_LIST_MODEL (flatten), r->query),
+                               _ide_search_results_new (G_LIST_MODEL (flatten), r->query, truncated),
                                g_object_unref);
     }
 }

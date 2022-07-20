@@ -25,6 +25,7 @@
 G_BEGIN_DECLS
 
 IdeSearchResults *_ide_search_results_new (GListModel *model,
-                                           const char *query);
+                                           const char *query,
+                                           gboolean    truncated);
 
 G_END_DECLS

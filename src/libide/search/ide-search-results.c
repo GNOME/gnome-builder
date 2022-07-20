@@ -41,6 +41,9 @@ struct _IdeSearchResults
   /* The original query and it's length */
   char                *query;
   gsize                query_len;
+
+  /* If the original search set was truncated */
+  guint                truncated : 1;
 };
 
 static GType
@@ -117,7 +120,8 @@ ide_search_results_filter (gpointer item,
 
 IdeSearchResults *
 _ide_search_results_new (GListModel *model,
-                         const char *query)
+                         const char *query,
+                         gboolean    truncated)
 {
   IdeSearchResults *self;
 
@@ -125,6 +129,7 @@ _ide_search_results_new (GListModel *model,
   g_return_val_if_fail (query != NULL, NULL);
 
   self = g_object_new (IDE_TYPE_SEARCH_RESULTS, NULL);
+  self->truncated = !!truncated;
   self->query = g_strdup (query);
   self->query_len = strlen (query);
   self->refilter = g_strdup (query);
@@ -152,6 +157,12 @@ ide_search_results_refilter (IdeSearchResults *self,
 
   g_return_val_if_fail (IDE_IS_SEARCH_RESULTS (self), FALSE);
   g_return_val_if_fail (query != NULL, FALSE);
+
+  /* Can't refilter truncated sets, we want a new result set
+   * instead so that we get possibly missing results.
+   */
+  if (self->truncated)
+    IDE_RETURN (FALSE);
 
   /* Make sure we have the prefix of the original search */
   if (memcmp (self->query, query, self->query_len) != 0)
