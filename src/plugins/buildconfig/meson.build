@@ -1,7 +1,5 @@
 plugins_sources += files([
   'buildconfig-plugin.c',
-  'ide-buildconfig-build-target.c',
-  'ide-buildconfig-build-target-provider.c',
   'ide-buildconfig-config.c',
   'ide-buildconfig-config-provider.c',
   'ide-buildconfig-pipeline-addin.c',
