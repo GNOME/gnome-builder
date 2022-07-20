@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-18 15:53+0000\n"
-"PO-Revision-Date: 2022-07-18 19:05+0300\n"
+"POT-Creation-Date: 2022-07-20 02:38+0000\n"
+"PO-Revision-Date: 2022-07-20 08:54+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -572,7 +572,6 @@ msgid "Default License"
 msgstr "Типова ліцензія"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:62
-#| msgid "THe default license to use for new projects"
 msgid "The default license to use for new projects"
 msgstr "Типові умови ліцензування для нових проєктів"
 
@@ -1985,7 +1984,7 @@ msgstr ""
 #: src/libide/gui/ide-preferences-builtin.c:427
 #: src/libide/gui/ide-preferences-builtin.c:712
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:506
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:522
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
@@ -3124,22 +3123,22 @@ msgid "All Runtimes"
 msgstr "Усі середовища виконання"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:247
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:268
 msgid "Make _Active"
 msgstr "Зробити _активними"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:248
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:269
 msgid "Select this configuration as the active configuration."
 msgstr "Вибрати ці налаштування як активні налаштування."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:251
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:272
 msgid "_Duplicate"
 msgstr "_Дублювати"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:252
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:273
 msgid ""
 "Duplicating the configuration allows making changes without modifying this "
 "configuration."
@@ -3148,12 +3147,12 @@ msgstr ""
 "поточного файла налаштувань."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:255
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:276
 msgid "_Remove"
 msgstr "В_илучити"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:256
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:277
 msgid "Removes the configuration and cannot be undone."
 msgstr "Вилучає налаштування, не може бути скасоване."
 
@@ -3172,7 +3171,7 @@ msgstr "Середовище виконання"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:270
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:245
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
 #: src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
@@ -3184,43 +3183,43 @@ msgstr "Назва"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:107
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:271
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:246
 msgid "Source Directory"
 msgstr "Каталог коду"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:106
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:272
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:247
 msgid "Build System"
 msgstr "Система збирання"
 
 #. Translators: "Install" is a noun here
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:467
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:275
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:290
 msgid "Install Prefix"
 msgstr "Префікс встановлення"
 
 #. Translators: "Configure" is a noun here
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:277
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:292
 msgid "Configure Options"
 msgstr "Параметри конфігурації"
 
 #. Translators: "Run" is a noun here, this string is analogous to "Execution Options"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:485
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:279
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:294
 msgid "Run Options"
 msgstr "Параметри запуску"
 
 #. Setup runtime selection
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:490
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:508
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:524
 msgid "Application Runtime"
 msgstr "Середовище виконання програми"
 
 #. Setup toolchain selection
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:494
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:507
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:523
 msgid "Build Toolchain"
 msgstr "Набір інструментів збирання"
 
@@ -4734,20 +4733,6 @@ msgstr "Створюємо комплект flatpak"
 msgid "Flatpak Application"
 msgstr "Програма Flatpak"
 
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:923
-#, c-format
-msgid "%s <b>%s</b>"
-msgstr "%s <b>%s</b>"
-
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:925
-#, c-format
-msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
-msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
-
-#: src/plugins/flatpak/gbp-flatpak-runtime.c:927
-msgid "Flatpak"
-msgstr "Flatpak"
-
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
 msgid "Installing Necessary SDKs"
 msgstr "Встановлення потрібних наборів інструментів для розробки"
@@ -5261,7 +5246,6 @@ msgid "A Meson-based project for a shared library"
 msgstr "Заснований на Meson проєкт бібліотеки спільного використання"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:211
-#| msgid "Command Line Toool"
 msgid "Command Line Tool"
 msgstr "Засіб командного рядка"
 
@@ -5654,7 +5638,6 @@ msgid "Keyboard Shortcut"
 msgstr "Клавіатурне скорочення"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:52
-#| msgid "An optional shourtcut to run the command"
 msgid "An optional shortcut to run the command"
 msgstr "Необов'язкове скорочення для запуску команди"
 
@@ -5821,14 +5804,26 @@ msgstr "Символ без назви"
 msgid "Filter Symbols…"
 msgstr "Фільтрувати символи…"
 
+#. translators: "In Page" refers to the title of the page which contains the search result
+#: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
+#| msgid "Open Pages"
+msgid "In Page"
+msgstr "На сторінці"
+
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:78
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:351
+#: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Select Symbol…"
 msgstr "Вибрати символ…"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:354
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Вибрати символ (Ctrl+Shift+K)"
+
+#: src/plugins/symbol-tree/gtk/menus.ui:6
+#| msgid "Create a split page below the current page"
+msgid "Navigate to a symbol within the current page"
+msgstr "Перейти до пункту на поточній сторінці"
 
 #: src/plugins/sysprof/gbp-sysprof-surface.c:56
 #: src/plugins/sysprof/gtk/menus.ui:30
@@ -6321,6 +6316,17 @@ msgstr "Не вдалося створити ієрархію XML."
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
 
+#, c-format
+#~ msgid "%s <b>%s</b>"
+#~ msgstr "%s <b>%s</b>"
+
+#, c-format
+#~ msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+#~ msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
+
+#~ msgid "Flatpak"
+#~ msgstr "Flatpak"
+
 #~ msgid "The number of pixels to include above and below lines in the editor."
 #~ msgstr ""
 #~ "Кількість пікселів, які слід включати над і під рядками у редакторі."
@@ -6441,9 +6447,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Overwrite trailing braces and quotations"
 #~ msgstr "Перезаписувати кінцеві фігурні дужки і лапки"
-
-#~ msgid "Open Pages"
-#~ msgstr "Відкриті сторінки"
 
 #~ msgid "Create a new document"
 #~ msgstr "Створити новий документ"
@@ -7417,9 +7420,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Sort the selected lines"
 #~ msgstr "Упорядкувати позначені рядки"
-
-#~ msgid "Create a split page below the current page"
-#~ msgstr "Створити сторінку-роздільник під поточною сторінкою"
 
 #~ msgid "Toggle syntax highlighting"
 #~ msgstr "Перемкнути підсвічування синтаксису"
