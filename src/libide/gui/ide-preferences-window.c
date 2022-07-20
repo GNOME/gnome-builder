@@ -286,6 +286,15 @@ search_changed_cb (IdePreferencesWindow *self,
 }
 
 static void
+set_page_action (GtkWidget  *widget,
+                 const char *action_name,
+                 GVariant   *param)
+{
+  ide_preferences_window_set_page (IDE_PREFERENCES_WINDOW (widget),
+                                   g_variant_get_string (param, NULL));
+}
+
+static void
 ide_preferences_window_extension_added (IdeExtensionSetAdapter *set,
                                         PeasPluginInfo         *plugin_info,
                                         PeasExtension          *exten,
@@ -492,6 +501,8 @@ ide_preferences_window_class_init (IdePreferencesWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, go_back_cb);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_w, GDK_CONTROL_MASK, "window.close", NULL);
+
+  gtk_widget_class_install_action (widget_class, "win.page", "s", set_page_action);
 }
 
 static void

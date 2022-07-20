@@ -134,10 +134,13 @@ list_run_commands_cb (GObject      *object,
                       GAsyncResult *result,
                       gpointer      user_data)
 {
+  static GListStore *empty_model;
   IdeRunManager *run_manager = (IdeRunManager *)object;
+  g_autoptr(GtkFlattenListModel) flatten = NULL;
   g_autoptr(GtkDropDown) drop_down = user_data;
   g_autoptr(GListModel) model = NULL;
   g_autoptr(GError) error = NULL;
+  GListStore *wrapper;
   int command_index = -1;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -166,10 +169,26 @@ list_run_commands_cb (GObject      *object,
         }
     }
 
-  gtk_drop_down_set_model (drop_down, model);
+  if (!empty_model)
+    {
+      g_autoptr(IdeRunCommand) empty = g_object_new (IDE_TYPE_RUN_COMMAND,
+                                                     "id", "",
+                                                     "display-name", _("Automatically Discover"),
+                                                     NULL);
+      empty_model = g_list_store_new (IDE_TYPE_RUN_COMMAND);
+      g_list_store_append (empty_model, empty);
+    }
+
+  wrapper = g_list_store_new (G_TYPE_LIST_MODEL);
+  g_list_store_append (wrapper, empty_model);
+  if (model != NULL)
+    g_list_store_append (wrapper, model);
+  flatten = gtk_flatten_list_model_new (G_LIST_MODEL (wrapper));
+
+  gtk_drop_down_set_model (drop_down, G_LIST_MODEL (flatten));
 
   if (command_index > -1)
-    gtk_drop_down_set_selected (drop_down, command_index);
+    gtk_drop_down_set_selected (drop_down, command_index+1);
 
   g_signal_connect_object (drop_down,
                            "notify::selected-item",
