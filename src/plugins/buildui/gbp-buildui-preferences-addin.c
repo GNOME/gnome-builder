@@ -25,7 +25,10 @@
 
 #include <glib/gi18n.h>
 
+#include <libide-foundry.h>
 #include <libide-sourceview.h>
+
+#include "ide-run-manager-private.h"
 
 #include "gbp-buildui-preferences-addin.h"
 #include "gbp-buildui-runtime-categories.h"
@@ -106,6 +109,122 @@ static const IdePreferenceItemEntry overview_items[] = {
   { "overview", "project", "kind", 0, overview_func, N_("Build System") },
   { "overview", "project", "srcdir", 0, overview_func, N_("Source Directory") },
   { "overview", "project", "vcsuri", 0, overview_func, N_("Version Control") },
+};
+
+static void
+notify_run_command_cb (GtkDropDown   *drop_down,
+                       GParamSpec    *pspec,
+                       IdeRunManager *run_manager)
+{
+  IdeRunCommand *run_command = NULL;
+  const char *id = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GTK_IS_DROP_DOWN (drop_down));
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+
+  if ((run_command = gtk_drop_down_get_selected_item (drop_down)))
+    id = ide_run_command_get_id (run_command);
+
+  _ide_run_manager_set_default_id (run_manager, id);
+}
+
+static void
+list_run_commands_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  IdeRunManager *run_manager = (IdeRunManager *)object;
+  g_autoptr(GtkDropDown) drop_down = user_data;
+  g_autoptr(GListModel) model = NULL;
+  g_autoptr(GError) error = NULL;
+  int command_index = -1;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+  g_assert (GTK_IS_DROP_DOWN (drop_down));
+
+  if (!(model = ide_run_manager_list_commands_finish (run_manager, result, &error)))
+    {
+      g_warning ("%s", error->message);
+    }
+  else
+    {
+      const char *id = _ide_run_manager_get_default_id (run_manager);
+      guint n_items = g_list_model_get_n_items (model);
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(IdeRunCommand) command = g_list_model_get_item (model, i);
+          const char *command_id = ide_run_command_get_id (command);
+
+          if (g_strcmp0 (command_id, id) == 0)
+            {
+              command_index = i;
+              break;
+            }
+        }
+    }
+
+  gtk_drop_down_set_model (drop_down, model);
+
+  if (command_index > -1)
+    gtk_drop_down_set_selected (drop_down, command_index);
+
+  g_signal_connect_object (drop_down,
+                           "notify::selected-item",
+                           G_CALLBACK (notify_run_command_cb),
+                           run_manager,
+                           0);
+}
+
+static void
+run_command_func (const char                   *page_name,
+                  const IdePreferenceItemEntry *entry,
+                  AdwPreferencesGroup          *group,
+                  gpointer                      user_data)
+{
+  g_autoptr(GtkListItemFactory) list_factory = NULL;
+  g_autoptr(GtkExpression) expression = NULL;
+  IdeContext *context = user_data;
+  IdeRunManager *run_manager;
+  AdwActionRow *row;
+  GtkDropDown *drop_down;
+
+  g_assert (IDE_IS_CONTEXT (context));
+  g_assert (ADW_IS_PREFERENCES_GROUP (group));
+
+  run_manager = ide_run_manager_from_context (context);
+
+  list_factory = g_object_new (GTK_TYPE_BUILDER_LIST_ITEM_FACTORY,
+                               "resource", "/plugins/buildui/gbp-buildui-run-command-row.ui",
+                               NULL);
+  expression = gtk_property_expression_new (IDE_TYPE_RUN_COMMAND, NULL, "display-name");
+  drop_down = g_object_new (GTK_TYPE_DROP_DOWN,
+                            "enable-search", TRUE,
+                            "expression", expression,
+                            "list-factory", list_factory,
+                            "css-classes", IDE_STRV_INIT ("flat"),
+                            "valign", GTK_ALIGN_CENTER,
+                            NULL);
+
+  ide_run_manager_list_commands_async (run_manager,
+                                       NULL,
+                                       list_run_commands_cb,
+                                       g_object_ref (drop_down));
+
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title", _("Run Command"),
+                      "subtitle", _("The run command is used to run your project"),
+                      "activatable-widget", drop_down,
+                      NULL);
+  adw_action_row_add_suffix (row, GTK_WIDGET (drop_down));
+
+  adw_preferences_group_add (group, GTK_WIDGET (row));
+}
+
+static const IdePreferenceItemEntry app_items[] = {
+  { "application", "running", "run-command", 0, run_command_func },
 };
 
 static gboolean
@@ -489,6 +608,12 @@ gbp_buildui_preferences_addin_load (IdePreferencesAddin  *addin,
   ide_preferences_window_add_items (window,
                                     overview_items,
                                     G_N_ELEMENTS (overview_items),
+                                    g_object_ref (context),
+                                    g_object_unref);
+
+  ide_preferences_window_add_items (window,
+                                    app_items,
+                                    G_N_ELEMENTS (app_items),
                                     g_object_ref (context),
                                     g_object_unref);
 

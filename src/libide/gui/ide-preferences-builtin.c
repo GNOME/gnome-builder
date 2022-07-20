@@ -715,8 +715,9 @@ static const IdePreferenceGroupEntry groups[] = {
 };
 
 static const IdePreferenceGroupEntry project_groups[] = {
-  { "application", "install",  0, N_("Starting & Stopping") },
-  { "application", "stop",    10 },
+  { "application", "running",  0, N_("Running") },
+  { "application", "install", 10, N_("Starting & Stopping") },
+  { "application", "stop",    20 },
 };
 
 static const IdePreferenceItemEntry items[] = {

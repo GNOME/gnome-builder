@@ -6,7 +6,6 @@ plugins_sources += files([
   'gbp-buildui-omni-bar-section.c',
   'gbp-buildui-pane.c',
   'gbp-buildui-preferences-addin.c',
-  'gbp-buildui-runnables-dialog.c',
   'gbp-buildui-runtime-categories.c',
   'gbp-buildui-runtime-row.c',
   'gbp-buildui-stage-row.c',

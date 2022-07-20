@@ -6,7 +6,7 @@
     <file preprocess="xml-stripblanks">gbp-buildui-log-pane.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-omni-bar-section.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-pane.ui</file>
-    <file preprocess="xml-stripblanks">gbp-buildui-runnables-dialog.ui</file>
+    <file preprocess="xml-stripblanks">gbp-buildui-run-command-row.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-stage-row.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-status-indicator.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-status-popover.ui</file>

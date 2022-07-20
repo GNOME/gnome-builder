@@ -121,7 +121,8 @@
     <section id="run-command-section">
       <item>
         <attribute name="label" translatable="yes">Select Run Command…</attribute>
-        <attribute name="action">win.select-run-command</attribute>
+        <attribute name="action">workbench.configure-page</attribute>
+        <attribute name="target" type="s">'application'</attribute>
       </item>
     </section>
     <section id="run-menu-observation-section">
