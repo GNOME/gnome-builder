@@ -726,10 +726,10 @@ ide_workbench_workspace_is_active_cb (IdeWorkbench *self,
 }
 
 static void
-insert_action_groups_foreach_cb (IdeWorkspace *workspace,
-                                 gpointer      user_data)
+add_remove_foundry_action_groups (IdeWorkbench *self,
+                                  IdeWorkspace *workspace,
+                                  gboolean      add)
 {
-  IdeWorkbench *self = user_data;
   struct {
     const gchar *name;
     GType        child_type;
@@ -742,19 +742,33 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
     { "test-manager", IDE_TYPE_TEST_MANAGER },
   };
 
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   for (guint i = 0; i < G_N_ELEMENTS (groups); i++)
     {
-      IdeObject *child;
+      IdeObject *child = NULL;
 
-      if ((child = ide_context_peek_child_typed (self->context, groups[i].child_type)))
-        gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                        groups[i].name,
-                                        G_ACTION_GROUP (child));
+      if (add)
+        child = ide_context_peek_child_typed (self->context, groups[i].child_type);
+
+      gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                      groups[i].name,
+                                      G_ACTION_GROUP (child));
     }
+}
+
+static void
+insert_action_groups_foreach_cb (IdeWorkspace *workspace,
+                                 gpointer      user_data)
+{
+  IdeWorkbench *self = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKBENCH (self));
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  add_remove_foundry_action_groups (self, workspace, TRUE);
 }
 
 /**
@@ -886,7 +900,8 @@ ide_workbench_remove_workspace (IdeWorkbench *self,
         }
     }
 
-  /* Clear our action group (which drops an additional back-reference) */
+  /* Clear our action groups (which drops an additional back-reference) */
+  add_remove_foundry_action_groups (self, workspace, FALSE);
   gtk_widget_insert_action_group (GTK_WIDGET (workspace), "workbench", NULL);
 
   /* Only cleanup the group if it hasn't already been removed */
