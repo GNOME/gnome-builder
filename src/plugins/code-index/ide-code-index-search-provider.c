@@ -37,6 +37,7 @@ populate_cb (GObject      *object,
   g_autoptr(GPtrArray) results = NULL;
   g_autoptr(GListStore) store = NULL;
   g_autoptr(GError) error = NULL;
+  gboolean truncated = FALSE;
 
   IDE_ENTRY;
 
@@ -45,11 +46,14 @@ populate_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!(results = ide_code_index_index_populate_finish (index, result, &error)))
+  if (!(results = ide_code_index_index_populate_finish (index, result, &truncated, &error)))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
     }
+
+  if (truncated)
+    g_object_set_data (G_OBJECT (task), "TRUNCATED", GINT_TO_POINTER (truncated));
 
   store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
   g_list_store_splice (store, 0, 0, results->pdata, results->len);
@@ -114,9 +118,10 @@ ide_code_index_search_provider_search_async (IdeSearchProvider   *provider,
 }
 
 static GListModel *
-ide_code_index_search_provider_search_finish (IdeSearchProvider *provider,
-                                              GAsyncResult      *result,
-                                              GError           **error)
+ide_code_index_search_provider_search_finish (IdeSearchProvider  *provider,
+                                              GAsyncResult       *result,
+                                              gboolean           *truncated,
+                                              GError            **error)
 {
   GListModel *ret;
 
@@ -125,6 +130,8 @@ ide_code_index_search_provider_search_finish (IdeSearchProvider *provider,
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_SEARCH_PROVIDER (provider), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  *truncated = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (result), "TRUNCATED"));
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 

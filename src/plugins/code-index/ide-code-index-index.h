@@ -44,6 +44,7 @@ void               ide_code_index_index_populate_async  (IdeCodeIndexIndex    *s
                                                          gpointer              user_data);
 GPtrArray         *ide_code_index_index_populate_finish (IdeCodeIndexIndex    *self,
                                                          GAsyncResult         *result,
+                                                         gboolean             *truncated,
                                                          GError              **error);
 
 G_END_DECLS

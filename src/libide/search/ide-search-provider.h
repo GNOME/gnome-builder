@@ -47,6 +47,7 @@ struct _IdeSearchProviderInterface
                                 gpointer              user_data);
   GListModel *(*search_finish) (IdeSearchProvider    *self,
                                 GAsyncResult         *result,
+                                gboolean             *truncated,
                                 GError              **error);
 };
 
@@ -64,6 +65,7 @@ void       ide_search_provider_search_async   (IdeSearchProvider    *self,
 IDE_AVAILABLE_IN_ALL
 GListModel *ide_search_provider_search_finish (IdeSearchProvider    *self,
                                                GAsyncResult         *result,
+                                               gboolean             *truncated,
                                                GError              **error);
 
 G_END_DECLS

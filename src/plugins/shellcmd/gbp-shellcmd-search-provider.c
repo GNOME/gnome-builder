@@ -112,6 +112,7 @@ gbp_shellcmd_search_provider_search_async (IdeSearchProvider   *provider,
 static GListModel *
 gbp_shellcmd_search_provider_search_finish (IdeSearchProvider  *provider,
                                             GAsyncResult       *result,
+                                            gboolean           *truncated,
                                             GError            **error)
 {
   GListModel *ret;

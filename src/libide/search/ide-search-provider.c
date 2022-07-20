@@ -51,10 +51,14 @@ ide_search_provider_real_search_async (IdeSearchProvider   *self,
 static GListModel *
 ide_search_provider_real_search_finish (IdeSearchProvider  *self,
                                         GAsyncResult       *result,
+                                        gboolean           *truncated,
                                         GError            **error)
 {
   g_assert (IDE_IS_SEARCH_PROVIDER (self));
   g_assert (IDE_IS_TASK (result));
+  g_assert (truncated != NULL);
+
+  *truncated = FALSE;
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }
@@ -110,18 +114,24 @@ ide_search_provider_search_async (IdeSearchProvider   *self,
  * ide_search_provider_search_finish:
  * @self: a #IdeSearchProvider
  * @result: a #GAsyncResult
+ * @truncated: (nullable) (out): if the result was truncated
  * @error: a location for a #GError, or %NULL
  *
  * Completes a request to a search provider.
+ *
+ * If the result was truncated because of too many search results, then
+ * @truncated is set to %TRUE.
  *
  * Returns: (transfer full): a #GListModel of #IdeSearchResult
  */
 GListModel *
 ide_search_provider_search_finish (IdeSearchProvider  *self,
                                    GAsyncResult       *result,
+                                   gboolean           *truncated,
                                    GError            **error)
 {
   GListModel *ret;
+  gboolean empty_trunicated;
 
   IDE_ENTRY;
 
@@ -129,9 +139,15 @@ ide_search_provider_search_finish (IdeSearchProvider  *self,
   g_return_val_if_fail (IDE_IS_SEARCH_PROVIDER (self), NULL);
   g_return_val_if_fail (G_IS_ASYNC_RESULT (result), NULL);
 
-  ret = IDE_SEARCH_PROVIDER_GET_IFACE (self)->search_finish (self, result, error);
+  if (truncated == NULL)
+    truncated = &empty_trunicated;
+
+  *truncated = FALSE;
+
+  ret = IDE_SEARCH_PROVIDER_GET_IFACE (self)->search_finish (self, result, truncated, error);
 
   g_return_val_if_fail (!ret || G_IS_LIST_MODEL (ret), NULL);
+  g_return_val_if_fail (*truncated == TRUE || *truncated == FALSE, NULL);
 
   IDE_RETURN (ret);
 }

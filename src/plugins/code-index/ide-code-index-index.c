@@ -443,6 +443,9 @@ ide_code_index_index_query_cb (GObject      *object,
             }
         }
 
+      if (data->max_results == 0 && data->fuzzy_matches->len > 0)
+        g_object_set_data (G_OBJECT (task), "TRUNCATED", GINT_TO_POINTER (TRUE));
+
       ide_task_return_pointer (task,
                                g_steal_pointer (&results),
                                g_ptr_array_unref);
@@ -535,11 +538,15 @@ ide_code_index_index_populate_async (IdeCodeIndexIndex   *self,
 GPtrArray *
 ide_code_index_index_populate_finish (IdeCodeIndexIndex *self,
                                       GAsyncResult      *result,
+                                      gboolean          *truncated,
                                       GError           **error)
 {
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
   g_return_val_if_fail (IDE_IS_CODE_INDEX_INDEX (self), NULL);
   g_return_val_if_fail (IDE_IS_TASK (result), NULL);
+
+  if (truncated)
+    *truncated = !!g_object_get_data (G_OBJECT (result), "TRUNCATED");
 
   return ide_task_propagate_pointer (IDE_TASK (result), error);
 }

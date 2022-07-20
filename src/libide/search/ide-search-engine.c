@@ -46,6 +46,7 @@ typedef struct
 {
   IdeSearchProvider *provider;
   GListModel        *results;
+  guint              truncated : 1;
 } SortInfo;
 
 typedef struct
@@ -264,17 +265,30 @@ ide_search_engine_search_cb (GObject      *object,
   for (guint i = 0; i < r->sorted->len; i++)
     {
       SortInfo *info = &g_array_index (r->sorted, SortInfo, i);
+      gboolean truncated = FALSE;
 
       if (info->provider != provider)
         continue;
 
       g_assert (info->results == NULL);
 
-      if (!(info->results = ide_search_provider_search_finish (provider, result, &error)))
+      if (!(info->results = ide_search_provider_search_finish (provider, result, &truncated, &error)))
         {
+          IDE_TRACE_MSG ("%s: %s", G_OBJECT_TYPE_NAME (provider), error->message);
+
           if (!ide_error_ignore (error))
             g_warning ("%s", error->message);
         }
+
+      info->truncated = info->results != NULL && truncated;
+
+#ifdef IDE_ENABLE_TRACE
+      if (info->results != NULL)
+        IDE_TRACE_MSG ("%s: %d results%s",
+                       G_OBJECT_TYPE_NAME (provider),
+                       g_list_model_get_n_items (info->results),
+                       info->truncated ? " [truncated]" : "");
+#endif
 
       break;
     }

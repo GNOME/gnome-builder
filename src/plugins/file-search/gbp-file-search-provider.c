@@ -76,6 +76,9 @@ gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
       IDE_EXIT;
     }
 
+  if (results->len >= max_results)
+    g_object_set_data (G_OBJECT (task), "TRUNCATED", GINT_TO_POINTER (TRUE));
+
   store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
   g_list_store_splice (store, 0, 0, results->pdata, results->len);
   ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
@@ -86,6 +89,7 @@ gbp_file_search_provider_search_async (IdeSearchProvider   *provider,
 static GListModel *
 gbp_file_search_provider_search_finish (IdeSearchProvider  *provider,
                                         GAsyncResult       *result,
+                                        gboolean           *truncated,
                                         GError            **error)
 {
   GListModel *ret;
@@ -97,6 +101,8 @@ gbp_file_search_provider_search_finish (IdeSearchProvider  *provider,
   g_assert (IDE_IS_TASK (result));
 
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
+
+  *truncated = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (result), "TRUNCATED"));
 
   IDE_RETURN (ret);
 }

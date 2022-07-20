@@ -123,6 +123,7 @@ gbp_symbol_search_provider_search_async (IdeSearchProvider   *provider,
 static GListModel *
 gbp_symbol_search_provider_search_finish (IdeSearchProvider  *provider,
                                           GAsyncResult       *result,
+                                          gboolean           *truncated,
                                           GError            **error)
 {
   g_assert (IDE_IS_MAIN_THREAD ());

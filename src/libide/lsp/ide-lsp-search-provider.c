@@ -273,6 +273,7 @@ ide_lsp_search_provider_search_async (IdeSearchProvider   *provider,
 static GListModel *
 ide_lsp_search_provider_search_finish (IdeSearchProvider  *provider,
                                        GAsyncResult       *result,
+                                       gboolean           *truncated,
                                        GError            **error)
 {
   GListModel *ret;
