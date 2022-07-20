@@ -24,8 +24,8 @@
                 </property>
                 <child>
                   <object class="AdwActionRow">
-                    <property name="title" translatable="yes">Build System Default</property>
-                    <property name="subtitle" translatable="yes">This selection allows the build system to choose the best default candidate</property>
+                    <property name="title" translatable="yes">Automatically Discover</property>
+                    <property name="subtitle" translatable="yes">This selection allows Builder to choose the best candidate.</property>
                     <property name="activatable-widget">default_target</property>
                     <child type="suffix">
                       <object class="GtkCheckButton" id="default_target">
