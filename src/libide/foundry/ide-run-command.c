@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-build-manager.h"
 #include "ide-foundry-enums.h"
 #include "ide-pipeline.h"
@@ -44,6 +46,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_ARGV,
+  PROP_SHELL_COMMAND,
   PROP_CAN_DEFAULT,
   PROP_CWD,
   PROP_DISPLAY_NAME,
@@ -52,12 +55,58 @@ enum {
   PROP_KIND,
   PROP_LANGUAGES,
   PROP_PRIORITY,
+
+  /* Just for making listview's easier */
+  PROP_CATEGORY,
+  PROP_HAS_CATEGORY,
+
   N_PROPS
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeRunCommand, ide_run_command, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+
+static char *
+ide_run_command_get_shell_command (IdeRunCommand *self)
+{
+  const char * const *argv = ide_run_command_get_argv (self);
+  GString *str = g_string_new (NULL);
+
+  if (argv != NULL)
+    {
+      for (guint i = 0; argv[i]; i++)
+        {
+          const char *arg = argv[i];
+          g_autofree char *quote = NULL;
+          g_autofree char *arg_escaped = NULL;
+
+          if (i > 0)
+            g_string_append_c (str, ' ');
+
+          /* NOTE: Params can be file-system encoding, but everywhere we run
+           * that is UTF-8. May need to adjust should that change.
+           */
+          for (const char *c = arg; *c; c = g_utf8_next_char (c))
+            {
+              if (*c == ' ' || *c == '"' || *c == '\'')
+                {
+                  quote = g_shell_quote (arg);
+                  break;
+                }
+            }
+
+          if (quote != NULL)
+            arg_escaped = g_markup_escape_text (quote, -1);
+          else
+            arg_escaped = g_markup_escape_text (arg, -1);
+
+          g_string_append (str, arg_escaped);
+        }
+    }
+
+  return g_string_free (str, FALSE);
+}
 
 static void
 ide_run_command_real_prepare_to_run (IdeRunCommand *self,
@@ -153,6 +202,28 @@ ide_run_command_get_property (GObject    *object,
       g_value_set_boxed (value, ide_run_command_get_argv (self));
       break;
 
+    case PROP_HAS_CATEGORY:
+      switch ((int)ide_run_command_get_kind (self))
+        {
+        case IDE_RUN_COMMAND_KIND_TEST:
+          g_value_set_boolean (value, TRUE);
+          break;
+        default:
+          break;
+        }
+      break;
+
+    case PROP_CATEGORY:
+      switch ((int)ide_run_command_get_kind (self))
+        {
+        case IDE_RUN_COMMAND_KIND_TEST:
+          g_value_set_static_string (value, _("Unit Test"));
+
+        default:
+          break;
+        }
+      break;
+
     case PROP_ENVIRON:
       g_value_set_boxed (value, ide_run_command_get_environ (self));
       break;
@@ -171,6 +242,10 @@ ide_run_command_get_property (GObject    *object,
 
     case PROP_PRIORITY:
       g_value_set_int (value, ide_run_command_get_priority (self));
+      break;
+
+    case PROP_SHELL_COMMAND:
+      g_value_take_string (value, ide_run_command_get_shell_command (self));
       break;
 
     default:
@@ -260,6 +335,16 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_HAS_CATEGORY] =
+    g_param_spec_boolean ("has-category", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_CATEGORY] =
+    g_param_spec_string ("category", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_CWD] =
     g_param_spec_string ("cwd", NULL, NULL,
                          NULL,
@@ -305,6 +390,11 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
     g_param_spec_int ("priority", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SHELL_COMMAND] =
+    g_param_spec_string ("shell-command", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -422,6 +512,7 @@ ide_run_command_set_argv (IdeRunCommand      *self,
   g_strfreev (priv->argv);
   priv->argv = g_strdupv ((char **)argv);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARGV]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHELL_COMMAND]);
 }
 
 const char * const *
