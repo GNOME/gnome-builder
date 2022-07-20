@@ -247,7 +247,7 @@ _ide_recoloring_generate_css (GtkSourceStyleScheme *style_scheme)
   if (get_metadata_color (style_scheme, "headerbar_bg_color", &color))
     define_color (str, "headerbar_bg_color", &color);
   else if (has_bg && has_fg)
-    define_color_mixed (str, "headerbar_bg_color", &text_bg, &text_fg, .05);
+    define_color_mixed (str, "headerbar_bg_color", &text_bg, &text_fg, .085);
   else if (is_dark)
     define_color_mixed (str, "headerbar_bg_color", &text_bg, alt, .025);
   else
