@@ -39,6 +39,7 @@ src/libide/foundry/ide-fallback-build-system.c
 src/libide/foundry/ide-local-device.c
 src/libide/foundry/ide-pipeline.c
 src/libide/foundry/ide-pipeline-stage-transfer.c
+src/libide/foundry/ide-run-command.c
 src/libide/foundry/ide-run-manager.c
 src/libide/foundry/ide-runtime.c
 src/libide/foundry/ide-toolchain-manager.c
@@ -107,12 +108,9 @@ src/plugins/buildui/gbp-buildui-omni-bar-section.ui
 src/plugins/buildui/gbp-buildui-pane.c
 src/plugins/buildui/gbp-buildui-pane.ui
 src/plugins/buildui/gbp-buildui-preferences-addin.c
-src/plugins/buildui/gbp-buildui-runnables-dialog.c
-src/plugins/buildui/gbp-buildui-runnables-dialog.ui
 src/plugins/buildui/gbp-buildui-status-popover.c
 src/plugins/buildui/gbp-buildui-targets-dialog.c
 src/plugins/buildui/gbp-buildui-targets-dialog.ui
-src/plugins/buildui/gbp-buildui-tree-addin.c
 src/plugins/buildui/gtk/menus.ui
 src/plugins/cargo/gbp-cargo-pipeline-addin.c
 src/plugins/cargo/gbp-cargo-run-command-provider.c
@@ -282,6 +280,7 @@ src/plugins/testui/gbp-testui-output-panel.c
 src/plugins/testui/gbp-testui-output-panel.ui
 src/plugins/testui/gbp-testui-panel.ui
 src/plugins/testui/gbp-testui-preferences-addin.c
+src/plugins/testui/gbp-testui-workspace-addin.c
 src/plugins/testui/gtk/menus.ui
 src/plugins/todo/gbp-todo-panel.c
 src/plugins/todo/gbp-todo-workspace-addin.c
@@ -292,7 +291,6 @@ src/plugins/vcsui/gbp-vcsui-application-addin.c
 src/plugins/vcsui/gbp-vcsui-clone-page.c
 src/plugins/vcsui/gbp-vcsui-clone-page.ui
 src/plugins/vcsui/gbp-vcsui-switcher-popover.ui
-src/plugins/vcsui/gbp-vcsui-tree-addin.c
 src/plugins/vcsui/gbp-vcsui-workspace-addin.c
 src/plugins/vcsui/gtk/menus.ui
 src/plugins/vim/gbp-vim-preferences-addin.c
