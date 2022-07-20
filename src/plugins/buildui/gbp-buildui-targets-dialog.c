@@ -179,6 +179,17 @@ gbp_buildui_targets_dialog_set_context (GbpBuilduiTargetsDialog *self,
   IDE_EXIT;
 }
 
+static gboolean
+close_request_cb (GtkWindow *window)
+{
+  g_assert (GBP_IS_BUILDUI_TARGETS_DIALOG (window));
+
+  gtk_widget_insert_action_group (GTK_WIDGET (window), "build-manager", NULL);
+  gtk_window_destroy (window);
+
+  return TRUE;
+}
+
 static void
 gbp_buildui_targets_dialog_get_property (GObject    *object,
                                          guint       prop_id,
@@ -251,6 +262,8 @@ gbp_buildui_targets_dialog_init (GbpBuilduiTargetsDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  g_signal_connect (self, "close-request", G_CALLBACK (close_request_cb), NULL);
+
 #ifdef DEVELOPMENT_BUILD
   gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
 #endif
@@ -262,5 +275,4 @@ gbp_buildui_targets_dialog_init (GbpBuilduiTargetsDialog *self)
       if (GTK_IS_SCROLLED_WINDOW (child))
         gtk_widget_add_css_class (child, "shadow-when-scroll");
     }
-
 }
