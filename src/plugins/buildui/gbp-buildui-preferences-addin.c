@@ -197,6 +197,14 @@ list_run_commands_cb (GObject      *object,
                            0);
 }
 
+static gboolean
+go_to_commands (GtkLinkButton *button,
+                gpointer       user_data)
+{
+  gtk_widget_activate_action (GTK_WIDGET (button), "win.page", "s", "commands");
+  return TRUE;
+}
+
 static void
 run_command_func (const char                   *page_name,
                   const IdePreferenceItemEntry *entry,
@@ -209,6 +217,7 @@ run_command_func (const char                   *page_name,
   IdeRunManager *run_manager;
   AdwActionRow *row;
   GtkDropDown *drop_down;
+  GtkButton *add_button;
 
   g_assert (IDE_IS_CONTEXT (context));
   g_assert (ADW_IS_PREFERENCES_GROUP (group));
@@ -238,8 +247,19 @@ run_command_func (const char                   *page_name,
                       "activatable-widget", drop_down,
                       NULL);
   adw_action_row_add_suffix (row, GTK_WIDGET (drop_down));
-
   adw_preferences_group_add (group, GTK_WIDGET (row));
+
+  add_button = g_object_new (GTK_TYPE_LINK_BUTTON,
+                             "label", _("_Create Custom Command"),
+                             "halign", GTK_ALIGN_END,
+                             "margin-top", 12,
+                             "use-underline", TRUE,
+                             NULL);
+  g_signal_connect (add_button,
+                    "activate-link",
+                    G_CALLBACK (go_to_commands),
+                    NULL);
+  adw_preferences_group_add (group, GTK_WIDGET (add_button));
 }
 
 static const IdePreferenceItemEntry app_items[] = {
