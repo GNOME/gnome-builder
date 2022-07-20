@@ -882,9 +882,7 @@ gbp_flatpak_runtime_new (IdeObject  *parent,
 {
   g_autofree char *id = NULL;
   g_autofree char *short_id = NULL;
-  g_autofree char *display_name = NULL;
   g_autofree char *triplet = NULL;
-  g_autofree char *runtime_name = NULL;
   g_autoptr(IdeTriplet) triplet_object = NULL;
   g_autoptr(GString) category = NULL;
 
@@ -919,13 +917,6 @@ gbp_flatpak_runtime_new (IdeObject  *parent,
   else
     g_string_append_printf (category, "%s (%s)", name, arch);
 
-  if (g_str_equal (arch, ide_get_system_arch ()))
-    display_name = g_strdup_printf (_("%s <b>%s</b>"), name, branch);
-  else
-    display_name = g_strdup_printf (_("%s <b>%s</b> <span fgalpha='36044'>%s</span>"), name, branch, arch);
-
-  runtime_name = g_strdup_printf ("%s %s", _("Flatpak"), triplet);
-
   return g_object_new (GBP_TYPE_FLATPAK_RUNTIME,
                        "parent", parent,
                        "id", id,
@@ -933,9 +924,9 @@ gbp_flatpak_runtime_new (IdeObject  *parent,
                        "triplet", triplet_object,
                        "branch", branch,
                        "category", category->str,
-                       "name", runtime_name,
+                       "name", triplet,
                        "deploy-dir", deploy_dir,
-                       "display-name", display_name,
+                       "display-name", triplet,
                        "platform", name,
                        "sdk", sdk_name,
                        NULL);
