@@ -12,7 +12,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwPreferencesPage">
+          <object class="AdwPreferencesPage" id="page">
             <child>
               <object class="AdwPreferencesGroup">
                 <property name="title" translatable="yes">Available Build Targets</property>

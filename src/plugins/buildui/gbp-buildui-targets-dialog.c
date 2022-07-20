@@ -32,10 +32,11 @@
 
 struct _GbpBuilduiTargetsDialog
 {
-  AdwWindow   parent_instance;
-  GtkListBox *list_box;
-  GtkSpinner *spinner;
-  guint       busy : 1;
+  AdwWindow           parent_instance;
+  AdwPreferencesPage *page;
+  GtkListBox         *list_box;
+  GtkSpinner         *spinner;
+  guint               busy : 1;
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiTargetsDialog, gbp_buildui_targets_dialog, ADW_TYPE_WINDOW)
@@ -240,6 +241,7 @@ gbp_buildui_targets_dialog_class_init (GbpBuilduiTargetsDialogClass *klass)
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "window.close", NULL);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/buildui/gbp-buildui-targets-dialog.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, page);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, list_box);
   gtk_widget_class_bind_template_child (widget_class, GbpBuilduiTargetsDialog, spinner);
 }
@@ -248,4 +250,17 @@ static void
 gbp_buildui_targets_dialog_init (GbpBuilduiTargetsDialog *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+#ifdef DEVELOPMENT_BUILD
+  gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
+#endif
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->page));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (GTK_IS_SCROLLED_WINDOW (child))
+        gtk_widget_add_css_class (child, "shadow-when-scroll");
+    }
+
 }
