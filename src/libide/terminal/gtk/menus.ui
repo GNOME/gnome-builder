@@ -36,27 +36,24 @@
       <item>
         <attribute name="id">copy</attribute>
         <attribute name="label" translatable="yes">_Copy</attribute>
-        <attribute name="action">terminal.copy-clipboard</attribute>
+        <attribute name="action">clipboard.copy</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Paste</attribute>
-        <attribute name="action">terminal.paste-clipboard</attribute>
+        <attribute name="action">clipboard.paste</attribute>
       </item>
     </section>
     <section id="ide-terminal-page-popup-menu-selection-section">
-      <submenu id="ide-terminal-page-popup-menu-selection-submenu">
-        <attribute name="label" translatable="yes">Selection</attribute>
-        <item>
-          <attribute name="label" translatable="yes">Select _All</attribute>
-          <attribute name="action">terminal.select-all</attribute>
-          <attribute name="target" type="(b)">(true,)</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Select _None</attribute>
-          <attribute name="action">terminal.select-all</attribute>
-          <attribute name="target" type="(b)">(false,)</attribute>
-        </item>
-      </submenu>
+      <item>
+        <attribute name="label" translatable="yes">Select _All</attribute>
+        <attribute name="action">terminal.select-all</attribute>
+        <attribute name="target" type="b">true</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Select _None</attribute>
+        <attribute name="action">terminal.select-all</attribute>
+        <attribute name="target" type="b">false</attribute>
+      </item>
     </section>
   </menu>
 </interface>

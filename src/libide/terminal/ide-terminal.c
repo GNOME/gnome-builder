@@ -55,22 +55,11 @@ typedef struct
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeTerminal, ide_terminal, VTE_TYPE_TERMINAL)
 
-enum {
-  COPY_LINK_ADDRESS,
-  OPEN_LINK,
-  POPULATE_POPUP,
-  SELECT_ALL,
-  SEARCH_REVEAL,
-  COLORS_CHANGED,
-  N_SIGNALS
-};
-
 /* From vteapp.c */
 #define DINGUS1 "(((gopher|news|telnet|nntp|file|http|ftp|https)://)|(www|ftp)[-A-Za-z0-9]*\\.)[-A-Za-z0-9\\.]+(:[0-9]*)?"
 #define DINGUS2 DINGUS1 "/[-A-Za-z0-9_\\$\\.\\+\\!\\*\\(\\),;:@&=\\?/~\\#\\%]*[^]'\\.}>\\) ,\\\"]"
 #define FILENAME_PLUS_LOCATION "(?<filename>[[:alnum:]\\+\\-\\.\\/_]+):(?<line>\\d+):(?<column>\\d+)"
 
-static guint signals[N_SIGNALS];
 static const gchar *url_regexes[] = { DINGUS1, DINGUS2, FILENAME_PLUS_LOCATION };
 static GRegex *filename_regex;
 static const GdkRGBA solarized_palette[] = {
@@ -138,80 +127,97 @@ ide_terminal_css_changed (GtkWidget         *widget,
 
   priv->fg = fg;
   priv->bg = bg;
-
-  g_signal_emit (self, signals [COLORS_CHANGED], 0);
 }
 
-#if 0
 static void
-popup_menu_detach (GtkWidget *attach_widget,
-                   GtkMenu   *menu)
+ide_terminal_update_clipboard_actions (IdeTerminal *self)
 {
-  IdeTerminal *self = IDE_TERMINAL (attach_widget);
-  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+  GdkClipboard *clipboard;
+  gboolean can_paste;
+  gboolean has_selection;
 
   g_assert (IDE_IS_TERMINAL (self));
-  g_assert (GTK_IS_MENU (menu));
-  g_assert (priv->popup_menu == NULL || GTK_IS_WIDGET (priv->popup_menu));
 
-  g_clear_pointer (&priv->url, g_free);
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self));
+  can_paste = gdk_content_formats_contain_gtype (gdk_clipboard_get_formats (clipboard), G_TYPE_STRING);
+  has_selection = vte_terminal_get_has_selection (VTE_TERMINAL (self));
 
-  if (priv->popup_menu == GTK_WIDGET (menu))
-    g_clear_pointer (&priv->popup_menu, gtk_widget_destroy);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.copy", has_selection);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.paste", can_paste);
+}
+
+static char *
+ide_terminal_get_pattern_at_coords (IdeTerminal *self,
+                                    double       x,
+                                    double       y)
+{
+  g_autofree gchar *pattern = NULL;
+  glong cell_width;
+  glong cell_height;
+  glong column, row;
+  int tag = 0;
+
+  g_assert (IDE_IS_TERMINAL (self));
+
+  cell_width = vte_terminal_get_char_width (VTE_TERMINAL (self));
+  cell_height = vte_terminal_get_char_height (VTE_TERMINAL (self));
+
+  /* crappy way to do this, but i dont see another option right
+   * now given we have to go through deprecated APIs in Vte
+   * until it gets things together for GTK 4.
+   */
+  column = x / cell_width;
+  row = y / cell_height;
+
+  /* no other option in VTE for GTK 4 right now */
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  pattern = vte_terminal_match_check (VTE_TERMINAL (self), column, row, &tag);
+  G_GNUC_END_IGNORE_DEPRECATIONS
+
+  return g_steal_pointer (&pattern);
 }
 
 static void
-popup_targets_received (GtkClipboard     *clipboard,
-                        GtkSelectionData *data,
-                        gpointer          user_data)
+ide_terminal_update_url_actions (IdeTerminal *self,
+                                 double       x,
+                                 double       y)
 {
-  PopupInfo *popup_info = user_data;
-  g_autoptr(IdeTerminal) self = NULL;
-  g_autoptr(GdkEvent) event = NULL;
-  IdeTerminalPrivate *priv;
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+  g_autofree char *pattern = NULL;
 
-  g_assert (popup_info != NULL);
-  g_assert (IDE_IS_TERMINAL (popup_info->terminal));
+  g_assert (IDE_IS_TERMINAL (self));
 
-  self = g_steal_pointer (&popup_info->terminal);
-  priv = ide_terminal_get_instance_private (self);
-  event = g_steal_pointer (&popup_info->event);
+  pattern = ide_terminal_get_pattern_at_coords (self, x, y);
 
-  if (gtk_widget_get_realized (GTK_WIDGET (self)))
-    {
-      DzlWidgetActionGroup *group;
-      GMenu *menu;
-      gboolean clipboard_contains_text;
-      gboolean have_selection;
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.copy-link-address", pattern != NULL);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.open-link", pattern != NULL);
 
-      clipboard_contains_text = gtk_selection_data_targets_include_text (data);
-      have_selection = vte_terminal_get_has_selection (VTE_TERMINAL (self));
-
-      g_clear_pointer (&priv->popup_menu, gtk_widget_destroy);
-
-      priv->url = vte_terminal_match_check_event (VTE_TERMINAL (self), event, NULL);
-
-      menu = dzl_application_get_menu_by_id (DZL_APPLICATION_DEFAULT, "ide-terminal-page-popup-menu");
-      priv->popup_menu = gtk_menu_new_from_model (G_MENU_MODEL (menu));
-
-      group = DZL_WIDGET_ACTION_GROUP (gtk_widget_get_action_group (GTK_WIDGET (self), "terminal"));
-
-      dzl_widget_action_group_set_action_enabled (group, "copy-link-address", priv->url != NULL);
-      dzl_widget_action_group_set_action_enabled (group, "open-link", priv->url != NULL);
-      dzl_widget_action_group_set_action_enabled (group, "copy-clipboard", have_selection);
-      dzl_widget_action_group_set_action_enabled (group, "paste-clipboard", clipboard_contains_text);
-
-      dzl_gtk_widget_add_style_class (priv->popup_menu, GTK_STYLE_CLASS_CONTEXT_MENU);
-      gtk_menu_attach_to_widget (GTK_MENU (priv->popup_menu), GTK_WIDGET (self), popup_menu_detach);
-
-      g_signal_emit (self, signals[POPULATE_POPUP], 0, priv->popup_menu);
-
-      gtk_menu_popup_at_pointer (GTK_MENU (priv->popup_menu), event);
-    }
-
-  g_slice_free (PopupInfo, popup_info);
+  ide_set_string (&priv->url, pattern);
 }
-#endif
+
+static gboolean
+clear_url_actions_cb (gpointer data)
+{
+  IdeTerminal *self = data;
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.copy-link-address", FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.open-link", FALSE);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+ide_terminal_popover_closed_cb (IdeTerminal *self,
+                                GtkPopover  *popover)
+{
+  g_assert (IDE_IS_TERMINAL (self));
+  g_assert (GTK_IS_POPOVER (popover));
+
+  g_idle_add_full (G_PRIORITY_LOW,
+                   clear_url_actions_cb,
+                   g_object_ref (self),
+                   g_object_unref);
+}
 
 static void
 ide_terminal_popup (IdeTerminal *self,
@@ -222,6 +228,9 @@ ide_terminal_popup (IdeTerminal *self,
 
   g_assert (IDE_IS_TERMINAL (self));
 
+  ide_terminal_update_clipboard_actions (self);
+  ide_terminal_update_url_actions (self, x, y);
+
   if (priv->popover == NULL)
     {
       GMenu *menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-terminal-page-popup-menu");
@@ -229,6 +238,12 @@ ide_terminal_popup (IdeTerminal *self,
       priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (menu)));
       gtk_popover_set_has_arrow (priv->popover, FALSE);
       gtk_widget_set_parent (GTK_WIDGET (priv->popover), GTK_WIDGET (self));
+
+      g_signal_connect_object (priv->popover,
+                               "closed",
+                               G_CALLBACK (ide_terminal_popover_closed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
     }
 
   gtk_popover_set_pointing_to (priv->popover,
@@ -252,39 +267,14 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (GTK_IS_GESTURE_CLICK (click));
 
+  ide_terminal_update_url_actions (self, x, y);
+
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (click));
 
   if (button == 1)
     {
-      g_autofree gchar *pattern = NULL;
-      glong cell_width = vte_terminal_get_char_width (VTE_TERMINAL (self));
-      glong cell_height = vte_terminal_get_char_height (VTE_TERMINAL (self));
-      glong column, row;
-      int tag = 0;
-
-      /* crappy way to do this, but i dont see another option right
-       * now given we have to go through deprecated APIs in Vte
-       * until it gets things together for GTK 4.
-       */
-      column = x / cell_width;
-      row = y / cell_height;
-
-      /* no other option in VTE for GTK 4 right now */
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      pattern = vte_terminal_match_check (VTE_TERMINAL (self), column, row, &tag);
-      G_GNUC_END_IGNORE_DEPRECATIONS
-
-      if (pattern != NULL)
-        {
-          gboolean ret = GDK_EVENT_PROPAGATE;
-
-          ide_set_string (&priv->url, pattern);
-
-          g_signal_emit (self, signals[OPEN_LINK], 0, &ret);
-
-          if (ret)
-            gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
-        }
+      if (priv->url != NULL)
+        gtk_widget_activate_action (GTK_WIDGET (self), "terminal.open-link", NULL);
     }
   else if (button == 3)
     {
@@ -300,31 +290,20 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
 }
 
 static void
-ide_terminal_real_select_all (IdeTerminal *self,
-                              gboolean     all)
+copy_link_address_action (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *param)
 {
-  g_assert (IDE_IS_TERMINAL (self));
-
-  if (all)
-    vte_terminal_select_all (VTE_TERMINAL (self));
-  else
-    vte_terminal_unselect_all (VTE_TERMINAL (self));
-}
-
-static gboolean
-ide_terminal_copy_link_address (IdeTerminal *self)
-{
+  IdeTerminal *self = (IdeTerminal *)widget;
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
 
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (priv->url != NULL);
 
-  if (ide_str_empty0 (priv->url))
-    return FALSE;
+  g_print ("COPY: %s\n", priv->url);
 
-  gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self)), priv->url);
-
-  return TRUE;
+  if (!ide_str_empty0 (priv->url))
+    gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self)), priv->url);
 }
 
 static void
@@ -352,22 +331,24 @@ ide_terminal_open_link_resolve_cb (GObject      *object,
   g_slice_free (Position, pos);
 }
 
-static gboolean
-ide_terminal_open_link (IdeTerminal *self)
+static void
+open_link_action (GtkWidget  *widget,
+                  const char *action_name,
+                  GVariant   *param)
 {
+  IdeTerminal *self = (IdeTerminal *)widget;
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
   g_autoptr(GMatchInfo) match = NULL;
-  g_autofree gchar *filename = NULL;
-  g_autofree gchar *line = NULL;
-  g_autofree gchar *column = NULL;
+  g_autofree char *filename = NULL;
+  g_autofree char *line = NULL;
+  g_autofree char *column = NULL;
   GtkApplication *app;
   GtkWindow *focused_window;
 
   g_assert (IDE_IS_TERMINAL (self));
-  g_assert (priv->url != NULL);
 
   if (ide_str_empty0 (priv->url))
-    return FALSE;
+    return;
 
   if (g_regex_match (filename_regex, priv->url, 0, &match) &&
       (filename = g_match_info_fetch (match, 1)) &&
@@ -388,17 +369,15 @@ ide_terminal_open_link (IdeTerminal *self)
                                         ide_terminal_open_link_resolve_cb,
                                         g_slice_dup (Position, &pos));
 
-      return TRUE;
+      return;
     }
 
   if ((app = GTK_APPLICATION (g_application_get_default ())) &&
       (focused_window = gtk_application_get_active_window (app)))
-    return ide_gtk_show_uri_on_window (focused_window,
-                                       priv->url,
-                                       g_get_monotonic_time (),
-                                       NULL);
-
-  return FALSE;
+    ide_gtk_show_uri_on_window (focused_window,
+                                priv->url,
+                                g_get_monotonic_time (),
+                                NULL);
 }
 
 static GtkWidget *
@@ -512,6 +491,20 @@ update_scrollback_cb (IdeTerminal *self,
 }
 
 static void
+select_all_action (GtkWidget  *widget,
+                   const char *action_name,
+                   GVariant   *param)
+{
+  g_assert (IDE_IS_TERMINAL (widget));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_BOOLEAN));
+
+  if (g_variant_get_boolean (param))
+    vte_terminal_select_all (VTE_TERMINAL (widget));
+  else
+    vte_terminal_unselect_all (VTE_TERMINAL (widget));
+}
+
+static void
 copy_clipboard_action (GtkWidget  *widget,
                        const char *action_name,
                        GVariant   *param)
@@ -552,6 +545,12 @@ paste_clipboard_action (GtkWidget  *widget,
 }
 
 static void
+ide_terminal_selection_changed (VteTerminal *terminal)
+{
+  ide_terminal_update_clipboard_actions (IDE_TERMINAL (terminal));
+}
+
+static void
 ide_terminal_dispose (GObject *object)
 {
   IdeTerminal *self = (IdeTerminal *)object;
@@ -570,68 +569,24 @@ ide_terminal_class_init (IdeTerminalClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  VteTerminalClass *terminal_class = VTE_TERMINAL_CLASS (klass);
 
   object_class->dispose = ide_terminal_dispose;
 
   widget_class->css_changed = ide_terminal_css_changed;
   widget_class->size_allocate = ide_terminal_size_allocate;
 
-  klass->copy_link_address = ide_terminal_copy_link_address;
-  klass->open_link = ide_terminal_open_link;
-  klass->select_all = ide_terminal_real_select_all;
+  terminal_class->selection_changed = ide_terminal_selection_changed;
 
   filename_regex = g_regex_new (FILENAME_PLUS_LOCATION, 0, 0, NULL);
   g_assert (filename_regex != NULL);
 
-  signals [COLORS_CHANGED] =
-    g_signal_new ("colors-changed",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE, 0);
-
-  signals [COPY_LINK_ADDRESS] =
-    g_signal_new ("copy-link-address",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeTerminalClass, copy_link_address),
-                  NULL, NULL, NULL,
-                  G_TYPE_BOOLEAN,
-                  0);
-
-  signals [OPEN_LINK] =
-    g_signal_new ("open-link",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeTerminalClass, open_link),
-                  g_signal_accumulator_true_handled, NULL,
-                  NULL,
-                  G_TYPE_BOOLEAN, 0);
-
-  signals [POPULATE_POPUP] =
-    g_signal_new ("populate-popup",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeTerminalClass, populate_popup),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  1,
-                  GTK_TYPE_WIDGET);
-
-  signals [SELECT_ALL] =
-    g_signal_new ("select-all",
-                  G_TYPE_FROM_CLASS (klass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (IdeTerminalClass, select_all),
-                  NULL, NULL, NULL,
-                  G_TYPE_NONE,
-                  1,
-                  G_TYPE_BOOLEAN);
-
   gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL, copy_clipboard_action);
   gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL, paste_clipboard_action);
+  gtk_widget_class_install_action (widget_class, "terminal.copy-link-address", NULL, copy_link_address_action);
+  gtk_widget_class_install_action (widget_class, "terminal.open-link", NULL, open_link_action);
   gtk_widget_class_install_action (widget_class, "terminal.search-reveal", NULL, ide_terminal_search_reveal);
+  gtk_widget_class_install_action (widget_class, "terminal.select-all", "b", select_all_action);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "clipboard.copy", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_v, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "clipboard.paste", NULL);

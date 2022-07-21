@@ -37,13 +37,6 @@ G_DECLARE_DERIVABLE_TYPE (IdeTerminal, ide_terminal, IDE, TERMINAL, VteTerminal)
 struct _IdeTerminalClass
 {
   VteTerminalClass parent_class;
-
-  void     (*populate_popup)      (IdeTerminal *self,
-                                   GtkWidget   *widget);
-  void     (*select_all)          (IdeTerminal *self,
-                                   gboolean     all);
-  gboolean (*open_link)           (IdeTerminal *self);
-  gboolean (*copy_link_address)   (IdeTerminal *self);
 };
 
 IDE_AVAILABLE_IN_ALL
