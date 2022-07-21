@@ -33,11 +33,14 @@
       <attribute name="label" translatable="yes">Configure Project…</attribute>
       <attribute name="action">workbench.configure</attribute>
       <attribute name="accel">&lt;alt&gt;comma</attribute>
+      <attribute name="description" translatable="yes">Configure settings related to the project</attribute>
+      <attribute name="verb-icon">preferences-system-symbolic</attribute>
     </item>
     <section id="build-menu-target">
       <item>
         <attribute name="label" translatable="yes">Select Build Target…</attribute>
         <attribute name="action">win.select-build-target</attribute>
+        <attribute name="description" translatable="yes">Change default build target</attribute>
       </item>
     </section>
     <section id="build-commands">
