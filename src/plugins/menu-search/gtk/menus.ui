@@ -25,5 +25,18 @@
       <attribute name="verb-icon">panel-bottom-symbolic</attribute>
       <attribute name="action">panel.toggle-bottom</attribute>
     </item>
+
+    <item>
+      <attribute name="label" translatable="yes">Switch to Dark Mode</attribute>
+      <attribute name="description" translatable="yes">Change style-scheme to dark variant</attribute>
+      <attribute name="action">app.dark</attribute>
+    </item>
+
+    <item>
+      <attribute name="label" translatable="yes">Switch to Light Mode</attribute>
+      <attribute name="description" translatable="yes">Change style-scheme to light variant</attribute>
+      <attribute name="action">app.light</attribute>
+    </item>
+
   </menu>
 </interface>

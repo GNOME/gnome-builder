@@ -361,6 +361,24 @@ ide_application_actions_stats (GSimpleAction *action,
   ide_gtk_window_present (window);
 }
 
+static void
+ide_application_actions_dark (GSimpleAction *action,
+                              GVariant      *param,
+                              gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+  g_settings_set_string (self->settings, "style-variant", "dark");
+}
+
+static void
+ide_application_actions_light (GSimpleAction *action,
+                               GVariant      *param,
+                               gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+  g_settings_set_string (self->settings, "style-variant", "light");
+}
+
 static const GActionEntry IdeApplicationActions[] = {
   { "about:types", ide_application_actions_stats },
   { "about", ide_application_actions_about },
@@ -369,6 +387,8 @@ static const GActionEntry IdeApplicationActions[] = {
   { "preferences-page", ide_application_actions_preferences, "s" },
   { "quit", ide_application_actions_quit },
   { "help", ide_application_actions_help },
+  { "dark", ide_application_actions_dark },
+  { "light", ide_application_actions_light },
 };
 
 void
