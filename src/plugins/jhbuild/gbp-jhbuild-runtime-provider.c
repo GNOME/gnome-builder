@@ -158,7 +158,7 @@ gbp_jhbuild_runtime_provider_provides (IdeRuntimeProvider *provider,
   g_assert (GBP_IS_JHBUILD_RUNTIME_PROVIDER (provider));
   g_assert (runtime_id != NULL);
 
-  return ide_str_equal0 (runtime_id, "jhbuild") == 0;
+  return ide_str_equal0 (runtime_id, "jhbuild");
 }
 
 static void
