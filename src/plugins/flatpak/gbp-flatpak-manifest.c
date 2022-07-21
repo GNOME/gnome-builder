@@ -169,6 +169,7 @@ discover_strv_field (JsonObject    *object,
 
       g_ptr_array_add (ar, NULL);
 
+      g_clear_pointer (location, g_strfreev);
       *location = (gchar **)g_ptr_array_free (g_steal_pointer (&ar), FALSE);
 
       return TRUE;
@@ -208,6 +209,26 @@ discover_strv_as_quoted (JsonObject   *object,
     }
 
   return FALSE;
+}
+
+static void
+discover_build_options (GbpFlatpakManifest *self,
+                        JsonObject         *root)
+{
+  JsonObject *build_options;
+
+  g_assert (GBP_IS_FLATPAK_MANIFEST (self));
+  g_assert (root != NULL);
+
+  /* TODO: this all needs a revamp, as these can be changed per arch */
+
+  if (!json_object_has_member (root, "build-options"))
+    return;
+
+  if (!(build_options = json_object_get_object_member (root, "build-options")))
+    return;
+
+  discover_strv_field (build_options, "build-args", &self->build_args);
 }
 
 static void
@@ -423,7 +444,6 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
   discover_string_field (root_obj, "base-version", &self->base_version);
   discover_string_field (root_obj, "sdk", &self->sdk);
   discover_string_field (root_obj, "command", &self->command);
-  discover_strv_field (root_obj, "build-args", &self->build_args);
   discover_strv_field (root_obj, "finish-args", &self->finish_args);
   discover_strv_field (root_obj, "sdk-extensions", &self->sdk_extensions);
   discover_strv_field (root_obj, "x-run-args", &self->x_run_args);
@@ -479,6 +499,7 @@ gbp_flatpak_manifest_initable_init (GInitable     *initable,
                                    (const gchar * const *)make_install_args);
 
   discover_environ (self, root_obj);
+  discover_build_options (self, root_obj);
 
   self->root = json_node_ref (root);
   self->primary = json_object_ref (primary);
