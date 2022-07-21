@@ -22,8 +22,14 @@
 
 #include <errno.h>
 #include <stdlib.h>
-#include <sysprof.h>
 #include <unistd.h>
+
+#include <glib-unix.h>
+#include <gio/gunixinputstream.h>
+#include <gio/gunixoutputstream.h>
+
+#include <ipc-sysprof.h>
+#include <sysprof.h>
 
 #define BUFFER_SIZE (4096L*16L) /* 64KB */
 
@@ -33,6 +39,10 @@ static gboolean forward_fd_func (const char  *option_name,
                                  GError     **error);
 
 static GMainLoop *main_loop;
+static GSubprocess *subprocess;
+static char *subprocess_ident;
+static gboolean subprocess_finished;
+static IpcSysprof *service;
 static int exit_code = EXIT_SUCCESS;
 static int read_fd = -1;
 static int write_fd = -1;
@@ -77,6 +87,24 @@ static const GOptionEntry options[] = {
   { "tracefd", 0, 0, G_OPTION_ARG_NONE, &aid_tracefd, "Provide TRACEFD to subprocess" },
   { NULL }
 };
+
+G_GNUC_PRINTF (1, 2)
+static void
+message (const char *format,
+         ...)
+{
+  g_autofree char *formatted = NULL;
+  va_list args;
+
+  if (service == NULL)
+    return;
+
+  va_start (args, format);
+  formatted = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  ipc_sysprof_emit_log (service, formatted);
+}
 
 #define GBP_TYPE_SPAWN_SOURCE (gbp_spawn_source_get_type())
 G_DECLARE_FINAL_TYPE (GbpSpawnSource, gbp_spawn_source, GBP, SPAWN_SOURCE, GObject)
@@ -140,6 +168,59 @@ gbp_spawn_source_class_init (GbpSpawnSourceClass *klass)
 
 static void
 gbp_spawn_source_init (GbpSpawnSource *self)
+{
+}
+
+#define IPC_TYPE_SYSPROF_IMPL (ipc_sysprof_impl_get_type())
+G_DECLARE_FINAL_TYPE (IpcSysprofImpl, ipc_sysprof_impl, IPC, SYPSROF_IMPL, IpcSysprofSkeleton)
+
+struct _IpcSysprofImpl
+{
+  IpcSysprofSkeleton parent_instance;
+};
+
+static gboolean
+handle_force_exit (IpcSysprof            *sysprof,
+                   GDBusMethodInvocation *invocation)
+{
+  if (subprocess && !subprocess_finished)
+    g_subprocess_force_exit (subprocess);
+
+  ipc_sysprof_complete_force_exit (sysprof, invocation);
+
+  return TRUE;
+}
+
+static gboolean
+handle_send_signal (IpcSysprof            *sysprof,
+                    GDBusMethodInvocation *invocation,
+                    int                    signum)
+{
+  if (subprocess && !subprocess_finished)
+    g_subprocess_send_signal (subprocess, signum);
+
+  ipc_sysprof_complete_send_signal (sysprof, invocation);
+
+  return TRUE;
+}
+
+static void
+service_iface_init (IpcSysprofIface *iface)
+{
+  iface->handle_force_exit = handle_force_exit;
+  iface->handle_send_signal = handle_send_signal;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (IpcSysprofImpl, ipc_sysprof_impl, IPC_TYPE_SYSPROF_SKELETON,
+                               G_IMPLEMENT_INTERFACE (IPC_TYPE_SYSPROF, service_iface_init))
+
+static void
+ipc_sysprof_impl_class_init (IpcSysprofImplClass *klass)
+{
+}
+
+static void
+ipc_sysprof_impl_init (IpcSysprofImpl *self)
 {
 }
 
@@ -219,6 +300,9 @@ static void
 profiler_failed_cb (SysprofProfiler *profiler,
                     const GError    *error)
 {
+  g_assert (SYSPROF_IS_LOCAL_PROFILER (profiler));
+  g_assert (error != NULL);
+
   g_printerr ("Profiling failed: %s", error->message);
   exit_code = EXIT_FAILURE;
   g_main_loop_quit (main_loop);
@@ -227,7 +311,35 @@ profiler_failed_cb (SysprofProfiler *profiler,
 static void
 profiler_stopped_cb (SysprofProfiler *profiler)
 {
+  g_assert (SYSPROF_IS_LOCAL_PROFILER (profiler));
+
   g_main_loop_quit (main_loop);
+}
+
+static void
+subprocess_spawned_cb (SysprofLocalProfiler *profiler,
+                       GSubprocess          *new_subprocess)
+{
+  g_assert (SYSPROF_IS_LOCAL_PROFILER (profiler));
+  g_assert (G_IS_SUBPROCESS (new_subprocess));
+
+  g_set_object (&subprocess, new_subprocess);
+
+  subprocess_ident = g_strdup (g_subprocess_get_identifier (subprocess));
+
+  message ("Created process %s", subprocess_ident);
+}
+
+static void
+subprocess_finished_cb (SysprofLocalProfiler *profiler,
+                        GSubprocess          *new_subprocess)
+{
+  g_assert (SYSPROF_IS_LOCAL_PROFILER (profiler));
+  g_assert (G_IS_SUBPROCESS (new_subprocess));
+
+  subprocess_finished = TRUE;
+
+  message ("Process %s exited", subprocess_ident);
 }
 
 static void
@@ -279,15 +391,37 @@ warn_error (GError **error)
     }
 }
 
+static GDBusConnection *
+create_connection (GIOStream  *stream,
+                   GError    **error)
+{
+  GDBusConnection *ret;
+
+  g_assert (G_IS_IO_STREAM (stream));
+  g_assert (main_loop != NULL);
+  g_assert (error != NULL);
+
+  if ((ret = g_dbus_connection_new_sync (stream, NULL,
+                                          G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING,
+                                          NULL, NULL, error)))
+    {
+      g_dbus_connection_set_exit_on_close (ret, FALSE);
+      g_signal_connect_swapped (ret, "closed", G_CALLBACK (g_main_loop_quit), main_loop);
+    }
+
+  return ret;
+}
+
 int
 main (int   argc,
       char *argv[])
 {
   g_autoptr(SysprofCaptureWriter) writer = NULL;
   g_autoptr(SysprofProfiler) profiler = NULL;
-  g_autoptr(GOptionContext) context = NULL;
+  g_autoptr(GDBusConnection) connection = NULL;
   g_autoptr(GDBusConnection) session_bus = NULL;
   g_autoptr(GDBusConnection) system_bus = NULL;
+  g_autoptr(GOptionContext) context = NULL;
   g_autoptr(GError) error = NULL;
   g_auto(GStrv) our_argv = NULL;
   g_auto(GStrv) sub_argv = NULL;
@@ -297,26 +431,36 @@ main (int   argc,
 
   sysprof_clock_init ();
 
-  split_argv (argc, argv, &our_argc, &our_argv, &sub_argc, &sub_argv);
+  g_set_prgname ("gnome-builder-sysprof");
+  g_set_application_name ("gnome-builder-sysprof");
 
+  /* Ignore SIGPIPE as we're using pipes to IPC */
+  signal (SIGPIPE, SIG_IGN);
+
+  /* Split argv into pre/post -- command split */
+  split_argv (argc, argv, &our_argc, &our_argv, &sub_argc, &sub_argv);
   g_assert (our_argc >= 0);
   g_assert (sub_argc >= 0);
 
+  /* Parse command line options pre -- */
   context = g_option_context_new ("-- COMMAND");
   g_option_context_add_main_entries (context, options, NULL);
-
   if (!g_option_context_parse (context, &our_argc, &our_argv, &error))
     {
       g_printerr ("%s\n", error->message);
       return EXIT_FAILURE;
     }
 
+  /* Make sure we have a filename to capture to */
   if (capture_filename == NULL)
     {
       g_printerr ("You must provide --capture=PATH\n");
       return EXIT_FAILURE;
     }
 
+  /* Setup main loop, we'll need it going forward for things
+   * like async D-Bus, waiting for child processes, etc.
+   */
   main_loop = g_main_loop_new (NULL, FALSE);
 
   /* First spin up our bus connections */
@@ -324,6 +468,55 @@ main (int   argc,
     warn_error (&error);
   if (!(system_bus = g_bus_get_sync (G_BUS_TYPE_SYSTEM, NULL, NULL)))
     warn_error (&error);
+
+  /* Now setup our private p2p D-Bus connection to the controller */
+  if (read_fd != -1 || write_fd != -1)
+    {
+      g_autoptr(GIOStream) stream = NULL;
+      g_autoptr(GInputStream) in_stream = NULL;
+      g_autoptr(GOutputStream) out_stream = NULL;
+
+      /* Both must be set, not just one side */
+      if (read_fd == -1 || write_fd == -1)
+        {
+          g_printerr ("You must specify both --read-fd and --write-fd\n");
+          return EXIT_FAILURE;
+        }
+
+      /* We need these FDs non-blocking for async IO */
+      if (!g_unix_set_fd_nonblocking (read_fd, TRUE, &error) ||
+          !g_unix_set_fd_nonblocking (write_fd, TRUE, &error))
+        {
+          g_printerr ("Failed to set FDs in nonblocking mode: %s\n",
+                      error->message);
+          return EXIT_FAILURE;
+        }
+
+      /* Create stream using FDs provided to us */
+      in_stream = g_unix_input_stream_new (read_fd, FALSE);
+      out_stream = g_unix_output_stream_new (write_fd, FALSE);
+      stream = g_simple_io_stream_new (in_stream, out_stream);
+
+      /* Create connection using our private stream from the controller */
+      if (!(connection = create_connection (stream, &error)))
+        {
+          g_printerr ("Failed to setup P2P D-Bus connection: %s\n",
+                      error->message);
+          return EXIT_FAILURE;
+        }
+
+      /* Now export our service at "/" (but don't start processing messages
+       * until we start the profiler, further on.
+       */
+      service = g_object_new (IPC_TYPE_SYSPROF_IMPL, NULL);
+      if (!g_dbus_interface_skeleton_export (G_DBUS_INTERFACE_SKELETON (service),
+                                             connection, "/", &error))
+        {
+          g_printerr ("Failed to export service over D-Bus connection: %s",
+                      error->message);
+          return EXIT_FAILURE;
+        }
+    }
 
   /* Now start setting up our profiler */
   profiler = sysprof_local_profiler_new ();
@@ -335,6 +528,10 @@ main (int   argc,
    */
   sysprof_profiler_set_whole_system (profiler, TRUE);
 
+  /* If -- was ommitted or there are no commands, just profile the entire
+   * system without spawning anything. Really only useful when testing the
+   * agent without Builder.
+   */
   if (sub_argc >= 0)
     {
       sysprof_profiler_set_spawn (profiler, TRUE);
@@ -387,7 +584,9 @@ main (int   argc,
               "disable-governor", TRUE,
               NULL);
 
-  /* Bail when we've failed or finished */
+  /* Bail when we've failed or finished and track the subprocess
+   * so that we can deliver signals to it.
+   */
   g_signal_connect (profiler,
                     "failed",
                     G_CALLBACK (profiler_failed_cb),
@@ -396,12 +595,29 @@ main (int   argc,
                     "stopped",
                     G_CALLBACK (profiler_stopped_cb),
                     NULL);
+  g_signal_connect (profiler,
+                    "subprocess-spawned",
+                    G_CALLBACK (subprocess_spawned_cb),
+                    NULL);
+  g_signal_connect (profiler,
+                    "subprocess-finished",
+                    G_CALLBACK (subprocess_finished_cb),
+                    NULL);
 
   /* Start the profiler */
   sysprof_profiler_start (profiler);
 
+  /* Now tell the connection to start processing messages that are
+   * delivered from the controller, or signals destined back.
+   */
+  if (connection != NULL)
+    g_dbus_connection_start_message_processing (connection);
+
   /* Wait for profiler to finish */
   g_main_loop_run (main_loop);
+
+  /* Notify that some more work needs to proceed */
+  message ("Extracting callgraph symbols");
 
   /* Let anything in-flight finish */
   main_context = g_main_loop_get_context (main_loop);
@@ -410,6 +626,29 @@ main (int   argc,
 
   /* Now make sure our bits are on disk */
   sysprof_capture_writer_flush (writer);
+
+  /* Try to exit the same way as the subprocess did to propagate that
+   * back into Builder who is watching *this* process.
+   */
+  if (subprocess_finished)
+    {
+      g_assert (G_IS_SUBPROCESS (subprocess));
+      g_assert (g_subprocess_get_if_exited (subprocess) ||
+                g_subprocess_get_if_signaled (subprocess));
+
+      if (g_subprocess_get_if_signaled (subprocess))
+        {
+          int signum = g_subprocess_get_term_sig (subprocess);
+          /* Try to exit in the same manner, or SIGKILL if that doesn't
+           * work, or just EXIT_FAILURE as last resort.
+           */
+          raise (signum);
+          raise (SIGKILL);
+          return EXIT_FAILURE;
+        }
+
+      exit_code = g_subprocess_get_exit_status (subprocess);
+    }
 
   return exit_code;
 }
