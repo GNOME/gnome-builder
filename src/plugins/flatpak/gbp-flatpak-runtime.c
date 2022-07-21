@@ -395,7 +395,8 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
     }
 
   /* Prepare an alternate PATH */
-  path = g_environ_getenv ((char **)env, "PATH");
+  if (!(path = g_environ_getenv ((char **)env, "PATH")))
+    path = "/app/bin:/usr/bin";
   prepend_path = ide_config_get_prepend_path (config);
   append_path = ide_config_get_append_path (config);
   new_path = join_paths (prepend_path, path, append_path);
