@@ -888,7 +888,9 @@ get_short_license (IdeTemplateInput *self)
             break;
 
           data = g_bytes_get_data (bytes, &len);
-          return (char *)g_memdup2 (data, len);
+
+          /* All gresources contain a trailing \0 byte */
+          return (char *)g_memdup2 (data, len + 1);
         }
     }
 
