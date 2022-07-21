@@ -24,6 +24,7 @@
         <attribute name="label" translatable="yes">Preferences</attribute>
         <attribute name="description" translatable="yes">Change application preferences</attribute>
         <attribute name="action">app.preferences</attribute>
+        <attribute name="verb-icon">preferences-system-symbolic</attribute>
         <attribute name="accel">&lt;primary&gt;comma</attribute>
       </item>
       <item>
@@ -32,6 +33,7 @@
         <attribute name="description" translatable="yes">Find keyboard shortcuts</attribute>
         <attribute name="action">win.show-help-overlay</attribute>
         <attribute name="accel">&lt;primary&gt;question</attribute>
+        <attribute name="verb-icon">preferences-desktop-keyboard-shortcuts-symbolic</attribute>
       </item>
       <item>
         <attribute name="id">ide-primary-workspace-menu-help</attribute>
@@ -43,6 +45,7 @@
         <attribute name="id">ide-primary-workspace-menu-about</attribute>
         <attribute name="label" translatable="yes">About Builder</attribute>
         <attribute name="action">app.about</attribute>
+        <attribute name="description" translatable="yes">Show information about Builder</attribute>
       </item>
     </section>
     <section id="ide-primary-workspace-menu-quit-section">
