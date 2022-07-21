@@ -56,6 +56,11 @@ void                   ide_run_context_push                    (IdeRunContext   
                                                                 gpointer               handler_data,
                                                                 GDestroyNotify         handler_data_destroy);
 IDE_AVAILABLE_IN_ALL
+void                   ide_run_context_push_at_base            (IdeRunContext         *self,
+                                                                IdeRunContextHandler   handler,
+                                                                gpointer               handler_data,
+                                                                GDestroyNotify         handler_data_destroy);
+IDE_AVAILABLE_IN_ALL
 void                   ide_run_context_push_error              (IdeRunContext         *self,
                                                                 GError                *error);
 IDE_AVAILABLE_IN_ALL

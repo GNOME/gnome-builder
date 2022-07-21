@@ -225,6 +225,27 @@ ide_run_context_push (IdeRunContext        *self,
   g_queue_push_head_link (&self->layers, &layer->qlink);
 }
 
+void
+ide_run_context_push_at_base (IdeRunContext        *self,
+                              IdeRunContextHandler  handler,
+                              gpointer              handler_data,
+                              GDestroyNotify        handler_data_destroy)
+{
+  IdeRunContextLayer *layer;
+
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (self));
+
+  layer = g_slice_new0 (IdeRunContextLayer);
+
+  ide_run_context_layer_init (layer);
+
+  layer->handler = handler;
+  layer->handler_data = handler_data;
+  layer->handler_data_destroy = handler_data_destroy;
+
+  g_queue_insert_before_link (&self->layers, &self->root.qlink, &layer->qlink);
+}
+
 static gboolean
 ide_run_context_host_handler (IdeRunContext       *self,
                               const char * const  *argv,
