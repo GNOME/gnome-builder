@@ -1,6 +1,6 @@
-/* ide-threading.h
+/* ide-search-path.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,15 +22,13 @@
 
 #include <libide-core.h>
 
-#define IDE_THREADING_INSIDE
-# include "ide-cancellable.h"
-# include "ide-environment.h"
-# include "ide-environment-variable.h"
-# include "ide-search-path.h"
-# include "ide-subprocess-launcher.h"
-# include "ide-subprocess-supervisor.h"
-# include "ide-subprocess.h"
-# include "ide-task.h"
-# include "ide-thread-pool.h"
-# include "ide-unix-fd-map.h"
-#undef IDE_THREADING_INSIDE
+G_BEGIN_DECLS
+
+IDE_AVAILABLE_IN_ALL
+char *ide_search_path_prepend (const char *path,
+                               const char *prepend);
+IDE_AVAILABLE_IN_ALL
+char *ide_search_path_append  (const char *path,
+                               const char *append);
+
+G_END_DECLS
