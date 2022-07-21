@@ -1,23 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-
   <gresource prefix="/plugins/newcomers">
     <file>newcomers.plugin</file>
     <file>gbp-newcomers-section.ui</file>
   </gresource>
-
-  <!-- Icons used by the greeter for newcomer projects -->
-  <gresource prefix="/org/gnome/builder/icons">
-    <file compressed="true" alias="symbolic/apps/org.gnome.Boxes-symbolic.svg">icons/symbolic/org.gnome.Boxes-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.Maps-symbolic.svg">icons/symbolic/org.gnome.Maps-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.Music-symbolic.svg">icons/symbolic/org.gnome.Music-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.Photos-symbolic.svg">icons/symbolic/org.gnome.Photos-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.Calendar-symbolic.svg">icons/symbolic/org.gnome.Calendar-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.gitg-symbolic.svg">icons/symbolic/org.gnome.gitg-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.Nautilus-symbolic.svg">icons/symbolic/org.gnome.Nautilus-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.Polari-symbolic.svg">icons/symbolic/org.gnome.Polari-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.SoundRecorder-symbolic.svg">icons/symbolic/org.gnome.SoundRecorder-symbolic.svg</file>
-    <file compressed="true" alias="symbolic/apps/org.gnome.clocks-symbolic.svg">icons/symbolic/org.gnome.clocks-symbolic.svg</file>
-  </gresource>
-
 </gresources>
