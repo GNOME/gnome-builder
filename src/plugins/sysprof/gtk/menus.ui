@@ -40,6 +40,11 @@
             <attribute name="action">sysprof.memprof-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
+          <item>
+            <attribute name="label" translatable="yes">Sample JavaScript Stacks</attribute>
+            <attribute name="action">sysprof.gjs-aid</attribute>
+            <attribute name="role">check</attribute>
+          </item>
         </section>
         <section id="run-menu-sysprof-graphics-section">
           <attribute name="label" translatable="yes">Graphics</attribute>

@@ -10,6 +10,7 @@
     <key type="b" name="energy-aid"><default>false</default></key>
     <key type="b" name="battery-aid"><default>false</default></key>
     <key type="b" name="compositor-aid"><default>false</default></key>
+    <key type="b" name="gjs-aid"><default>false</default></key>
     <key type="b" name="allow-throttle"><default>true</default></key>
     <key type="b" name="allow-tracefd"><default>true</default></key>
   </schema>
