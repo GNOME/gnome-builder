@@ -33,16 +33,17 @@ ide_language_format_header (GtkSourceLanguage *self,
                             const gchar       *header)
 {
   IdeLineReader reader;
-  const gchar *first_prefix;
-  const gchar *last_prefix;
-  const gchar *line_prefix;
-  const gchar *line;
+  const char *first_prefix;
+  const char *last_prefix;
+  const char *line_prefix;
+  const char *line;
   gboolean first = TRUE;
   GString *outstr;
   gsize len;
   guint prefix_len;
 
   g_return_val_if_fail (GTK_SOURCE_IS_LANGUAGE (self), NULL);
+  g_return_val_if_fail (header == NULL || g_utf8_validate (header, -1, NULL), NULL);
 
   if (ide_str_empty0 (header))
     return g_strdup ("");

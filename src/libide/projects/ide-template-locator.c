@@ -53,6 +53,7 @@ ide_template_locator_locate (TmplTemplateLocator  *locator,
 
   g_assert (IDE_IS_TEMPLATE_LOCATOR (self));
   g_assert (path != NULL);
+  g_assert (priv->license_text == NULL || g_utf8_validate (priv->license_text, -1, NULL));
 
   if (g_str_has_prefix (path, "license."))
     {
@@ -63,6 +64,8 @@ ide_template_locator_locate (TmplTemplateLocator  *locator,
         {
           g_autofree char *header = ide_language_format_header (language, priv->license_text);
           gsize len = strlen (header);
+
+          g_assert (g_utf8_validate (header, -1, NULL));
 
           return g_memory_input_stream_new_from_data (g_steal_pointer (&header), len, g_free);
         }
