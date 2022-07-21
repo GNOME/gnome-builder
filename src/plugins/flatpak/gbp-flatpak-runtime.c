@@ -28,6 +28,7 @@
 
 #include <json-glib/json-glib.h>
 
+#include <libide-threading.h>
 #include <libide-vcs.h>
 
 #include "gbp-flatpak-aux.h"
@@ -294,6 +295,15 @@ gbp_flatpak_runtime_prepare_to_run (IdeRuntime    *runtime,
   IDE_EXIT;
 }
 
+static char *
+join_paths (const char *prepend,
+            const char *path,
+            const char *append)
+{
+  g_autofree char *tmp = ide_search_path_prepend (path, prepend);
+  return ide_search_path_append (tmp, append);
+}
+
 static gboolean
 gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
                                              const char * const  *argv,
@@ -388,13 +398,7 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
   path = g_environ_getenv ((char **)env, "PATH");
   prepend_path = ide_config_get_prepend_path (config);
   append_path = ide_config_get_append_path (config);
-  if (path || prepend_path || append_path)
-    new_path = g_strdup_printf ("%s%s%s%s%s",
-                                prepend_path ? prepend_path : "",
-                                prepend_path ? ":" : "",
-                                path ? path : "/app/bin:/usr/bin",
-                                path ? ":" : "",
-                                append_path ? append_path : "");
+  new_path = join_paths (prepend_path, path, append_path);
 
   /* Convert environment from upper level into --env=FOO=BAR */
   if (env != NULL)
