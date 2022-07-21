@@ -16,6 +16,10 @@ if 'DESTDIR' not in os.environ:
     subprocess.call(['gtk-update-icon-cache', '-qtf',
                      os.path.join(datadir, 'icons', 'hicolor')])
 
+    print('Updating package icon cache...')
+    subprocess.call(['gtk-update-icon-cache', '-qtf',
+                     os.path.join(datadir, 'gnome-builder', 'icons', 'hicolor')])
+
     print('Updating desktop database...')
     subprocess.call(['update-desktop-database', '-q',
                      os.path.join(datadir, 'applications')])
