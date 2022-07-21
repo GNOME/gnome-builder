@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-20 02:38+0000\n"
-"PO-Revision-Date: 2022-07-20 08:54+0300\n"
+"POT-Creation-Date: 2022-07-20 19:32+0000\n"
+"PO-Revision-Date: 2022-07-21 09:31+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: src/libide/editor/ide-editor-workspace.ui:21
 #: src/libide/gui/ide-application-actions.c:153
 #: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:761 src/main.c:237
+#: src/libide/gui/ide-preferences-builtin.c:762 src/main.c:237
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Будівник"
@@ -607,11 +607,21 @@ msgstr ""
 "Виконати фазу встановлення конвеєрів до запуску проєкту. Робіть це, лише "
 "якщо добре усвідомлюєте наслідки."
 
-#: data/gsettings/org.gnome.builder.project.gschema.xml:28
+#: data/gsettings/org.gnome.builder.project.gschema.xml:19
+#| msgid "Select Run Command"
+msgid "Default Run Command"
+msgstr "Типова команда запуску"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:20
+#| msgid "Redo the next command"
+msgid "The id of the default run command"
+msgstr "Ідентифікатор типової команди запуску"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:34
 msgid "The signal to send the app to stop"
 msgstr "Сигнал, який слід надіслати програмі для зупинення"
 
-#: data/gsettings/org.gnome.builder.project.gschema.xml:29
+#: data/gsettings/org.gnome.builder.project.gschema.xml:35
 msgid ""
 "This allows sending something other than sigkill to stop the target "
 "application. That might be useful when you want to gracefully shutdown a "
@@ -620,11 +630,11 @@ msgstr ""
 "Уможливлює надсилання відмінних від sigkill сигналів для зупинення програми-"
 "цілі. Може бути корисним, якщо ви хочете штатно завершити процес сервера."
 
-#: data/gsettings/org.gnome.builder.project.gschema.xml:38
+#: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
 msgstr "Локальність перевірки модулів"
 
-#: data/gsettings/org.gnome.builder.project.gschema.xml:39
+#: data/gsettings/org.gnome.builder.project.gschema.xml:45
 msgid "What environment to use when running unit tests"
 msgstr "Яке середовище слід використати для виконання перевірки модулів"
 
@@ -813,8 +823,8 @@ msgid "Open a file in the workspace"
 msgstr "Відкрити файл у новому робочому просторі"
 
 #: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
-#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:719
-#: src/libide/gui/ide-preferences-window.c:883
+#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
+#: src/libide/gui/ide-preferences-window.c:894
 msgid "Preferences"
 msgstr "Параметри"
 
@@ -1101,17 +1111,22 @@ msgstr ""
 "Неможливо зібрати передавання даних, перебуваючи в умовах вимірюваного "
 "з'єднання"
 
-#: src/libide/foundry/ide-run-manager.c:534
+#: src/libide/foundry/ide-run-command.c:220
+#| msgid "Unit Tests"
+msgid "Unit Test"
+msgstr "Перевірка модулів"
+
+#: src/libide/foundry/ide-run-manager.c:535
 msgid "Cannot run target, another target is running"
 msgstr "Неможливо запустити ціль — вже запущено іншу ціль"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:960
+#: src/libide/foundry/ide-run-manager.c:961
 #, c-format
 msgid "Running %s…"
 msgstr "Виконуємо %s…"
 
-#: src/libide/foundry/ide-run-manager.c:1027
+#: src/libide/foundry/ide-run-manager.c:1028
 msgid "Deploying to device…"
 msgstr "Розгортаємо на пристрої…"
 
@@ -1880,7 +1895,7 @@ msgstr "Не вдалося завантажити HTML. Не передбаче
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:653
 #: src/libide/gui/ide-preferences-builtin.c:676
-#: src/plugins/buildui/gtk/menus.ui:142
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Appearance"
 msgstr "Вигляд"
 
@@ -1984,7 +1999,7 @@ msgstr ""
 #: src/libide/gui/ide-preferences-builtin.c:427
 #: src/libide/gui/ide-preferences-builtin.c:712
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:522
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
@@ -2397,7 +2412,7 @@ msgid "Allow downloads over metered connections"
 msgstr "Дозволити отримання даних при вимірюваних з'єднаннях"
 
 #: src/libide/gui/ide-preferences-builtin.c:440
-#: src/libide/gui/ide-preferences-builtin.c:757
+#: src/libide/gui/ide-preferences-builtin.c:758
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -2446,16 +2461,15 @@ msgid "Restore previously opened files"
 msgstr "Відновлювати раніше відкриті файли"
 
 #: src/libide/gui/ide-preferences-builtin.c:454
-#: src/libide/gui/ide-preferences-builtin.c:732
+#: src/libide/gui/ide-preferences-builtin.c:733
 msgid "Open previously opened files when loading a project"
 msgstr "Відкривати раніше відкриті файли під час завантаження проєкту"
 
 #: src/libide/gui/ide-preferences-builtin.c:576
 #: src/libide/gui/ide-preferences-builtin.c:688
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:108
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:111
 #: src/plugins/create-project/gbp-create-project-widget.ui:115
 #: src/plugins/git/gbp-git-preferences-addin.c:184
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:383
 msgid "Version Control"
 msgstr "Контроль версії"
 
@@ -2571,77 +2585,82 @@ msgid "Downloads"
 msgstr "Отримання"
 
 #: src/libide/gui/ide-preferences-builtin.c:718
+#| msgid "Running %s…"
+msgid "Running"
+msgstr "Виконання"
+
+#: src/libide/gui/ide-preferences-builtin.c:719
 msgid "Starting & Stopping"
 msgstr "Запуск та зупинення"
 
-#: src/libide/gui/ide-preferences-builtin.c:726
+#: src/libide/gui/ide-preferences-builtin.c:727
 msgid "Navigate with Tab Bar"
 msgstr "Навігація за допомогою панелі вкладок"
 
-#: src/libide/gui/ide-preferences-builtin.c:727
+#: src/libide/gui/ide-preferences-builtin.c:728
 msgid "Switch documents using a tabbed interface"
 msgstr "Перемикання документів за допомогою інтерфейсу із вкладками"
 
-#: src/libide/gui/ide-preferences-builtin.c:731
+#: src/libide/gui/ide-preferences-builtin.c:732
 msgid "Restore Previous Session"
 msgstr "Відновлювати попередній сеанс"
 
-#: src/libide/gui/ide-preferences-builtin.c:736
+#: src/libide/gui/ide-preferences-builtin.c:737
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
 msgid "License"
 msgstr "Ліцензування"
 
-#: src/libide/gui/ide-preferences-builtin.c:737
+#: src/libide/gui/ide-preferences-builtin.c:738
 msgid "The default license when creating new projects"
 msgstr "Типові умови ліцензування при створенні проєктів"
 
-#: src/libide/gui/ide-preferences-builtin.c:741
+#: src/libide/gui/ide-preferences-builtin.c:742
 msgid "Stop After Launching Program"
 msgstr "Зупинятися після запуску програми"
 
-#: src/libide/gui/ide-preferences-builtin.c:742
+#: src/libide/gui/ide-preferences-builtin.c:743
 msgid "Automatically insert a breakpoint at the start of the application"
 msgstr "Автоматично вставляти точку зупинення на початку програми"
 
-#: src/libide/gui/ide-preferences-builtin.c:746
+#: src/libide/gui/ide-preferences-builtin.c:747
 msgid "Clear Build Logs"
 msgstr "Спорожняти журнал збирання"
 
-#: src/libide/gui/ide-preferences-builtin.c:747
+#: src/libide/gui/ide-preferences-builtin.c:748
 msgid "Upon rebuilding the project the build log will be cleared"
 msgstr "Перед повторним збиранням проєкту журнал збирання буде спорожнено"
 
-#: src/libide/gui/ide-preferences-builtin.c:751
+#: src/libide/gui/ide-preferences-builtin.c:752
 msgid "Clear Expired Artifacts"
 msgstr "Вилучити застарілі дані"
 
-#: src/libide/gui/ide-preferences-builtin.c:752
+#: src/libide/gui/ide-preferences-builtin.c:753
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Застарілі дані буде вилучено під час запуску «Будівника»"
 
-#: src/libide/gui/ide-preferences-builtin.c:756
+#: src/libide/gui/ide-preferences-builtin.c:757
 msgid "Allow Downloads over Metered Connections"
 msgstr "Дозволити отримання даних при вимірюваних з'єднаннях"
 
-#: src/libide/gui/ide-preferences-builtin.c:762
+#: src/libide/gui/ide-preferences-builtin.c:763
 msgid "Keyboard shortcuts similar to GNOME Text Editor"
 msgstr ""
 "Клавіатурні скорочення, подібні до скорочень «Текстового редактора GNOME»"
 
-#: src/libide/gui/ide-preferences-builtin.c:767
+#: src/libide/gui/ide-preferences-builtin.c:768
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
 msgstr "Шрифт термінала"
 
-#: src/libide/gui/ide-preferences-builtin.c:768
+#: src/libide/gui/ide-preferences-builtin.c:769
 msgid "The font used within terminals"
 msgstr "Шрифт, який буде використано у терміналах"
 
-#: src/libide/gui/ide-preferences-builtin.c:774
+#: src/libide/gui/ide-preferences-builtin.c:775
 msgid "Install Before Running"
 msgstr "Встановити до запуску"
 
-#: src/libide/gui/ide-preferences-builtin.c:775
+#: src/libide/gui/ide-preferences-builtin.c:776
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless run commands are used."
@@ -2649,11 +2668,11 @@ msgstr ""
 "Встановлювати програми до запуску. Це необхідно для більшості проєктів, якщо "
 "не використано команд запуску."
 
-#: src/libide/gui/ide-preferences-builtin.c:779
+#: src/libide/gui/ide-preferences-builtin.c:780
 msgid "Stop Signal"
 msgstr "Сигнал зупинення"
 
-#: src/libide/gui/ide-preferences-builtin.c:780
+#: src/libide/gui/ide-preferences-builtin.c:781
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
@@ -2661,7 +2680,7 @@ msgstr ""
 "Надсилати сигнал цільовій програмі при отриманні запиту щодо зупинення "
 "програми."
 
-#: src/libide/gui/ide-preferences-window.c:1505
+#: src/libide/gui/ide-preferences-window.c:1516
 msgid "Select Font"
 msgstr "Вибір шрифту"
 
@@ -2896,7 +2915,7 @@ msgstr "Немає"
 msgid "Blank page"
 msgstr "Порожня сторінка"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:140
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:141
 msgid "Settings"
 msgstr "Параметри"
 
@@ -3123,22 +3142,22 @@ msgid "All Runtimes"
 msgstr "Усі середовища виконання"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:268
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:426
 msgid "Make _Active"
 msgstr "Зробити _активними"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:269
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:427
 msgid "Select this configuration as the active configuration."
 msgstr "Вибрати ці налаштування як активні налаштування."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:272
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:430
 msgid "_Duplicate"
 msgstr "_Дублювати"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:273
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:431
 msgid ""
 "Duplicating the configuration allows making changes without modifying this "
 "configuration."
@@ -3147,12 +3166,12 @@ msgstr ""
 "поточного файла налаштувань."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:276
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:434
 msgid "_Remove"
 msgstr "В_илучити"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:277
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:435
 msgid "Removes the configuration and cannot be undone."
 msgstr "Вилучає налаштування, не може бути скасоване."
 
@@ -3171,7 +3190,7 @@ msgstr "Середовище виконання"
 
 #. Add description info
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:245
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:403
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
 #: src/plugins/ls/gbp-ls-page.ui:17
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
@@ -3182,44 +3201,44 @@ msgid "Name"
 msgstr "Назва"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:107
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:246
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:110
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:404
 msgid "Source Directory"
 msgstr "Каталог коду"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:106
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:247
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:109
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:405
 msgid "Build System"
 msgstr "Система збирання"
 
 #. Translators: "Install" is a noun here
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:467
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:290
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:448
 msgid "Install Prefix"
 msgstr "Префікс встановлення"
 
 #. Translators: "Configure" is a noun here
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:292
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:450
 msgid "Configure Options"
 msgstr "Параметри конфігурації"
 
 #. Translators: "Run" is a noun here, this string is analogous to "Execution Options"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:485
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:294
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:452
 msgid "Run Options"
 msgstr "Параметри запуску"
 
 #. Setup runtime selection
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:490
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:524
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:688
 msgid "Application Runtime"
 msgstr "Середовище виконання програми"
 
 #. Setup toolchain selection
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:494
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:523
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:687
 msgid "Build Toolchain"
 msgstr "Набір інструментів збирання"
 
@@ -3258,8 +3277,8 @@ msgid "Build Profile"
 msgstr "Профіль збирання"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:102
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:200
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:105
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:358
 msgid "Runtime"
 msgstr "Виконання"
 
@@ -3315,66 +3334,40 @@ msgstr "Використаний час:"
 msgid "—"
 msgstr "—"
 
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:94
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:97
 msgid "No Version Control"
 msgstr "Немає керування версіями"
 
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:101
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:104
 msgid "Project"
 msgstr "Проєкт"
 
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:201
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:176
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
+#| msgid "Automatically Detected"
+msgid "Automatically Discover"
+msgstr "Автоматичне виявлення"
+
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:245
+#| msgid "Run Commands"
+msgid "Run Command"
+msgstr "Виконати команду"
+
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:246
+#| msgid "Commands can be used to build, run, or modify your projects"
+msgid "The run command is used to run your project"
+msgstr "Команду запуску буде використано для запуску вашого проєкту"
+
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:253
+#| msgid "Create Command"
+msgid "_Create Custom Command"
+msgstr "С_творити нетипову команду"
+
+#: src/plugins/buildui/gbp-buildui-preferences-addin.c:359
 msgid "The runtime is the environment used to run your application."
 msgstr ""
 "Середовище виконання є середовищем, яке використовують для запуску вашої "
 "програми."
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.c:113
-msgid "Test"
-msgstr "Тест"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.c:162
-#, c-format
-msgid "Failed to list run commands: %s"
-msgstr "Не вдалося побудувати список команд запуску: %s"
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.ui:16
-msgid "Select Run Command"
-msgstr "Виберіть команду запуску"
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.ui:25
-msgid "Available Run Commands"
-msgstr "Доступні команди запуску"
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.ui:26
-msgid ""
-"Some run commands may not be available until the project has been configured."
-msgstr ""
-"Деякі команди запуску можуть бути недоступними до того, як буде налаштовано "
-"проєкт."
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.ui:29
-msgid "Project Default"
-msgstr "Типове для проєкту"
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.ui:30
-msgid ""
-"This selection allows the build system to choose the best default candidate."
-msgstr ""
-"Цей варіант надає змогу системі збирання вибрати найкращий типовий варіант."
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.ui:48
-msgid "_Custom Command…"
-msgstr "_Нетипова команда…"
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.ui:70
-msgid "Loading Run Commands"
-msgstr "Завантаження команд збирання"
-
-#: src/plugins/buildui/gbp-buildui-runnables-dialog.ui:71
-msgid "Your project may require building to load run commands"
-msgstr "Ваш проєкт може потребувати збирання для завантаження команд запуску"
 
 #. translators: %u is replaced with the number of warnings
 #: src/plugins/buildui/gbp-buildui-status-popover.c:63
@@ -3388,20 +3381,20 @@ msgstr "Попередження (%u)"
 msgid "Errors (%u)"
 msgstr "Помилки (%u)"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:86
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
 msgid "Shared"
 msgstr "Спільна"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:90
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
 msgid "Static"
 msgstr "Статична"
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:94
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
 msgid "Executable"
 msgstr "Виконуваний файл"
 
 #. translators: %s is replaced with the error message
-#: src/plugins/buildui/gbp-buildui-targets-dialog.c:141
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
 #, c-format
 msgid "Failed to list build targets: %s"
 msgstr "Не вдалося побудувати список цілей збирання: %s"
@@ -3420,19 +3413,14 @@ msgid ""
 msgstr ""
 "Деякі цілі можуть бути недоступними до того, як буде налаштовано проєкт."
 
-#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
-msgid "Build System Default"
-msgstr "Типове для системи збирання"
-
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
-msgid ""
-"This selection allows the build system to choose the best default candidate"
+#| msgid ""
+#| "This selection allows the build system to choose the best default "
+#| "candidate."
+msgid "This selection allows Builder to choose the best candidate."
 msgstr ""
-"Цей варіант надає змогу системі збирання вибрати найкращий типовий варіант"
-
-#: src/plugins/buildui/gbp-buildui-tree-addin.c:169
-msgid "Build Targets"
-msgstr "Цілі збирання"
+"Вибір цього варіанта дозволить «Будівнику» автоматично скористатися"
+" найкращим з кандидатів."
 
 #: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:45
 msgid "_Build"
@@ -3539,39 +3527,39 @@ msgstr "Керування SDK…"
 msgid "Select Run Command…"
 msgstr "Вибрати команду запуску…"
 
-#: src/plugins/buildui/gtk/menus.ui:132
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Run"
 msgstr "Запустити"
 
-#: src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:136
 msgid "Run the project"
 msgstr "Запустити проєкт"
 
-#: src/plugins/buildui/gtk/menus.ui:163
+#: src/plugins/buildui/gtk/menus.ui:164
 msgid "Accessibility"
 msgstr "Доступність"
 
-#: src/plugins/buildui/gtk/menus.ui:165
+#: src/plugins/buildui/gtk/menus.ui:166
 msgid "High Contrast"
 msgstr "Висока контрастність"
 
-#: src/plugins/buildui/gtk/menus.ui:170
+#: src/plugins/buildui/gtk/menus.ui:171
 msgid "Text Direction"
 msgstr "Напрям тексту"
 
-#: src/plugins/buildui/gtk/menus.ui:172
+#: src/plugins/buildui/gtk/menus.ui:173
 msgid "Left-to-Right"
 msgstr "Зліва праворуч"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:179
 msgid "Right-to-Left"
 msgstr "Справа ліворуч"
 
-#: src/plugins/buildui/gtk/menus.ui:187
+#: src/plugins/buildui/gtk/menus.ui:188
 msgid "Verbose Logging"
 msgstr "Докладний журнал"
 
-#: src/plugins/buildui/gtk/menus.ui:193
+#: src/plugins/buildui/gtk/menus.ui:194
 msgid "Tools"
 msgstr "Інструменти"
 
@@ -5806,7 +5794,6 @@ msgstr "Фільтрувати символи…"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
-#| msgid "Open Pages"
 msgid "In Page"
 msgstr "На сторінці"
 
@@ -5821,7 +5808,6 @@ msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Вибрати символ (Ctrl+Shift+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:6
-#| msgid "Create a split page below the current page"
 msgid "Navigate to a symbol within the current page"
 msgstr "Перейти до пункту на поточній сторінці"
 
@@ -6139,6 +6125,23 @@ msgstr ""
 "Запустити перевірки модулів із доступом до дисплея та інших можливостей "
 "середовища виконання."
 
+#. Translators: %s is replaced with the time in the current locale
+#: src/plugins/testui/gbp-testui-workspace-addin.c:86
+#, c-format
+#| msgid "Run all Unit Tests"
+msgid "Running all unit tests at %s"
+msgstr "Виконуємо усі перевірки модулів о %s"
+
+#: src/plugins/testui/gbp-testui-workspace-addin.c:119
+#, c-format
+msgid "Unit tests completed in %lf seconds"
+msgstr "Тестування модулів виконано за %lf секунд"
+
+#: src/plugins/testui/gbp-testui-workspace-addin.c:121
+#| msgid "Time completed:"
+msgid "Unit tests completed"
+msgstr "Перевірку модулів завершено"
+
 #: src/plugins/testui/gtk/menus.ui:8
 msgid "Run all Unit Tests"
 msgstr "Запустити усі перевірки модулів"
@@ -6248,7 +6251,6 @@ msgid "Choose an alternate branch"
 msgstr "Виберіть альтернативну гілку"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:56
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:423
 msgid "Branches"
 msgstr "Гілки"
 
@@ -6283,10 +6285,6 @@ msgstr "_Гілки"
 msgid "_Tags"
 msgstr "_Мітки"
 
-#: src/plugins/vcsui/gbp-vcsui-tree-addin.c:433
-msgid "Tags"
-msgstr "Мітки"
-
 #: src/plugins/vcsui/gtk/menus.ui:7
 msgid "_Switch to branch"
 msgstr "Пере_мкнутись на гілку"
@@ -6315,6 +6313,51 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Test"
+#~ msgstr "Тест"
+
+#, c-format
+#~ msgid "Failed to list run commands: %s"
+#~ msgstr "Не вдалося побудувати список команд запуску: %s"
+
+#~ msgid "Available Run Commands"
+#~ msgstr "Доступні команди запуску"
+
+#~ msgid ""
+#~ "Some run commands may not be available until the project has been "
+#~ "configured."
+#~ msgstr ""
+#~ "Деякі команди запуску можуть бути недоступними до того, як буде "
+#~ "налаштовано проєкт."
+
+#~ msgid "Project Default"
+#~ msgstr "Типове для проєкту"
+
+#~ msgid "_Custom Command…"
+#~ msgstr "_Нетипова команда…"
+
+#~ msgid "Loading Run Commands"
+#~ msgstr "Завантаження команд збирання"
+
+#~ msgid "Your project may require building to load run commands"
+#~ msgstr ""
+#~ "Ваш проєкт може потребувати збирання для завантаження команд запуску"
+
+#~ msgid "Build System Default"
+#~ msgstr "Типове для системи збирання"
+
+#~ msgid ""
+#~ "This selection allows the build system to choose the best default "
+#~ "candidate"
+#~ msgstr ""
+#~ "Цей варіант надає змогу системі збирання вибрати найкращий типовий варіант"
+
+#~ msgid "Build Targets"
+#~ msgstr "Цілі збирання"
+
+#~ msgid "Tags"
+#~ msgstr "Мітки"
 
 #, c-format
 #~ msgid "%s <b>%s</b>"
@@ -7007,9 +7050,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Undo the last command"
 #~ msgstr "Скасувати останню команду"
-
-#~ msgid "Redo the next command"
-#~ msgstr "Повторити наступну команду"
 
 #~ msgid "Switch to selection mode"
 #~ msgstr "Перемкнутись на режим вибору"
