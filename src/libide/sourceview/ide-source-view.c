@@ -574,6 +574,45 @@ ide_source_view_zoom_one_action (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_zoom (IdeSourceView *self,
+                      int            amount)
+{
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if (amount == 0)
+    self->font_scale = 0;
+  else
+    self->font_scale += amount;
+
+  ide_source_view_update_css (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FONT_SCALE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ZOOM_LEVEL]);
+}
+
+static gboolean
+on_scroll_scrolled_cb (GtkEventControllerScroll *scroll,
+                       double                    dx,
+                       double                    dy,
+                       IdeSourceView            *self)
+{
+  GdkModifierType mods;
+
+  g_assert (GTK_IS_EVENT_CONTROLLER_SCROLL (scroll));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  mods = gtk_event_controller_get_current_event_state (GTK_EVENT_CONTROLLER (scroll));
+
+  if ((mods & GDK_CONTROL_MASK) != 0)
+    {
+      ide_source_view_zoom (self, dy < 0 ? 1 : -1);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
 ide_source_view_push_snippet (GtkSourceView    *source_view,
                               GtkSourceSnippet *snippet,
                               GtkTextIter      *location)
@@ -796,6 +835,7 @@ ide_source_view_init (IdeSourceView *self)
   GtkStyleContext *style_context;
   GtkEventController *click;
   GtkEventController *focus;
+  GtkEventController *scroll;
 
   g_signal_connect (self,
                     "notify::buffer",
@@ -831,6 +871,15 @@ ide_source_view_init (IdeSourceView *self)
                             G_CALLBACK (ide_source_view_focus_leave_cb),
                             self);
   gtk_widget_add_controller (GTK_WIDGET (self), focus);
+
+  /* Setup ctrl+scroll zoom */
+  scroll = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  gtk_event_controller_set_propagation_phase (scroll, GTK_PHASE_CAPTURE);
+  g_signal_connect (scroll,
+                    "scroll",
+                    G_CALLBACK (on_scroll_scrolled_cb),
+                    self);
+  gtk_widget_add_controller (GTK_WIDGET (self), scroll);
 
   /* This is sort of a layer vioaltion, but it's helpful for us to
    * get the system font name and manage it invisibly.
