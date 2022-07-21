@@ -11,8 +11,8 @@ export const {{PreFix}}Window = GObject.registerClass({
     Template: 'resource://{{appid_path}}/{{ui_file}}',
     InternalChildren: ['label'],
 }, class {{PreFix}}Window extends {{if is_adwaita}}Adw{{else}}Gtk{{end}}.ApplicationWindow {
-    _init(application) {
-        super._init({ application });
+    constructor(application) {
+        super({ application });
     }
 });
 
