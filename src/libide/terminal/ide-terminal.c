@@ -34,11 +34,11 @@
 
 typedef struct
 {
-  GtkWidget *popup_menu;
-  GSettings *settings;
-  gchar     *url;
-  GdkRGBA    bg;
-  GdkRGBA    fg;
+  GtkPopover *popover;
+  GSettings  *settings;
+  char       *url;
+  GdkRGBA     bg;
+  GdkRGBA     fg;
 } IdeTerminalPrivate;
 
 typedef struct
@@ -211,40 +211,31 @@ popup_targets_received (GtkClipboard     *clipboard,
 
   g_slice_free (PopupInfo, popup_info);
 }
+#endif
 
 static void
-ide_terminal_do_popup (IdeTerminal    *self,
-                       const GdkEvent *event)
+ide_terminal_popup (IdeTerminal *self,
+                    double       x,
+                    double       y)
 {
-  PopupInfo *popup_info;
-  GtkClipboard *clipboard;
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
 
   g_assert (IDE_IS_TERMINAL (self));
 
-  popup_info = g_slice_new0 (PopupInfo);
-  popup_info->event = event ? gdk_event_copy (event) : gtk_get_current_event ();
-  popup_info->terminal = g_object_ref (self);
+  if (priv->popover == NULL)
+    {
+      GMenu *menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "ide-terminal-page-popup-menu");
 
-  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (self), GDK_SELECTION_CLIPBOARD);
+      priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (menu)));
+      gtk_popover_set_has_arrow (priv->popover, FALSE);
+      gtk_widget_set_parent (GTK_WIDGET (priv->popover), GTK_WIDGET (self));
+    }
 
-  gtk_clipboard_request_contents (clipboard,
-                                  gdk_atom_intern_static_string ("TARGETS"),
-                                  popup_targets_received,
-                                  popup_info);
+  gtk_popover_set_pointing_to (priv->popover,
+                               &(GdkRectangle) { x, y, 1, 1 });
+
+  gtk_popover_popup (priv->popover);
 }
-
-static gboolean
-ide_terminal_popup_menu (GtkWidget *widget)
-{
-  IdeTerminal *self = (IdeTerminal *)widget;
-
-  g_assert (IDE_IS_TERMINAL (self));
-
-  ide_terminal_do_popup (self, NULL);
-
-  return TRUE;
-}
-#endif
 
 static void
 ide_terminal_click_pressed_cb (IdeTerminal     *self,
@@ -295,15 +286,15 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
             gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
         }
     }
-#if 0
   else if (button == 3)
     {
       if (!gtk_widget_has_focus (GTK_WIDGET (self)))
         gtk_widget_grab_focus (GTK_WIDGET (self));
 
-      ide_terminal_do_popup (self, (GdkEvent *)button);
+      ide_terminal_popup (self, x, y);
+
+      gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
     }
-#endif
 
   IDE_EXIT;
 }
@@ -478,13 +469,11 @@ ide_terminal_size_allocate (GtkWidget *widget,
                             int        baseline)
 {
   IdeTerminal *self = (IdeTerminal *)widget;
+  IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
   int char_width, char_height;
   int columns, rows;
 
   GTK_WIDGET_CLASS (ide_terminal_parent_class)->size_allocate (widget, width, height, baseline);
-
-  if (width == 0 || height == 0)
-    return;
 
   char_width = vte_terminal_get_char_width (VTE_TERMINAL (self));
   char_height = vte_terminal_get_char_height (VTE_TERMINAL (self));
@@ -497,6 +486,9 @@ ide_terminal_size_allocate (GtkWidget *widget,
     return;
 
   vte_terminal_set_size (VTE_TERMINAL (self), columns, rows);
+
+  if (priv->popover)
+    gtk_popover_present (priv->popover);
 }
 
 static void
@@ -564,6 +556,8 @@ ide_terminal_dispose (GObject *object)
 {
   IdeTerminal *self = (IdeTerminal *)object;
   IdeTerminalPrivate *priv = ide_terminal_get_instance_private (self);
+
+  g_clear_pointer ((GtkWidget **)&priv->popover, gtk_widget_unparent);
 
   g_clear_object (&priv->settings);
   g_clear_pointer (&priv->url, g_free);
@@ -650,6 +644,8 @@ ide_terminal_init (IdeTerminal *self)
   GtkEventController *gesture;
 
   gesture = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 0);
+  gtk_event_controller_set_propagation_phase (gesture, GTK_PHASE_CAPTURE);
   g_signal_connect_object (gesture,
                            "pressed",
                            G_CALLBACK (ide_terminal_click_pressed_cb),
