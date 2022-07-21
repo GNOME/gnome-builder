@@ -39,13 +39,13 @@ struct _GbpMenuSearchProvider
 static GIcon *default_gicon;
 
 static void
-populate_from_menu_model (GListStore *store,
+populate_from_menu_model (GPtrArray  *ar,
                           GMenuModel *menu,
                           const char *query)
 {
   guint n_items;
 
-  g_assert (G_IS_LIST_STORE (store));
+  g_assert (ar != NULL);
   g_assert (G_IS_MENU_MODEL (menu));
 
   n_items = g_menu_model_get_n_items (menu);
@@ -58,6 +58,8 @@ populate_from_menu_model (GListStore *store,
       g_autofree char *icon_name = NULL;
       g_autofree char *description = NULL;
       g_autofree char *action = NULL;
+      guint label_prio = 0;
+      guint desc_prio = 0;
 
       if (!g_menu_model_get_item_attribute (menu, i, "label", "s", &label) ||
           !g_menu_model_get_item_attribute (menu, i, "action", "s", &action) ||
@@ -68,9 +70,13 @@ populate_from_menu_model (GListStore *store,
           strcasestr (description, query) == NULL)
         continue;
 
+      gtk_source_completion_fuzzy_match (label, query, &label_prio);
+      gtk_source_completion_fuzzy_match (description, query, &desc_prio);
+
       result = g_object_new (GBP_TYPE_MENU_SEARCH_RESULT,
                              "title", label,
                              "subtitle", description,
+                             "priority", MAX (label_prio, desc_prio),
                              NULL);
 
       if (g_menu_model_get_item_attribute (menu, i, "verb-icon", "s", &icon_name))
@@ -86,8 +92,18 @@ populate_from_menu_model (GListStore *store,
       target = g_menu_model_get_item_attribute_value (menu, i, "target", NULL);
       gbp_menu_search_result_set_action (GBP_MENU_SEARCH_RESULT (result), action, target);
 
-      g_list_store_append (store, result);
+      g_ptr_array_add (ar, g_steal_pointer (&result));
     }
+}
+
+static int
+sort_results (gconstpointer a,
+              gconstpointer b)
+{
+  const IdeSearchResult * const *ra = a;
+  const IdeSearchResult * const *rb = b;
+
+  return ide_search_result_compare (*ra, *rb);
 }
 
 static void
@@ -100,6 +116,7 @@ gbp_menu_search_provider_search_async (IdeSearchProvider   *provider,
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GListStore) store = NULL;
+  g_autoptr(GPtrArray) ar = NULL;
   const char * const *menu_ids;
   IdeApplication *app;
 
@@ -116,13 +133,17 @@ gbp_menu_search_provider_search_async (IdeSearchProvider   *provider,
   app = IDE_APPLICATION_DEFAULT;
   menu_ids = ide_menu_manager_get_menu_ids (app->menu_manager);
   store = g_list_store_new (IDE_TYPE_SEARCH_RESULT);
+  ar = g_ptr_array_new_with_free_func (g_object_unref);
 
   for (guint i = 0; menu_ids[i]; i++)
     {
       GMenu *menu = ide_menu_manager_get_menu_by_id (app->menu_manager, menu_ids[i]);
 
-      populate_from_menu_model (store, G_MENU_MODEL (menu), query);
+      populate_from_menu_model (ar, G_MENU_MODEL (menu), query);
     }
+
+  g_ptr_array_sort (ar, sort_results);
+  g_list_store_splice (store, 0, 0, ar->pdata, ar->len);
 
   ide_task_return_pointer (task, g_steal_pointer (&store), g_object_unref);
 
