@@ -1213,9 +1213,7 @@ _ide_buffer_attach (IdeBuffer *self,
   g_return_if_fail (self->formatter == NULL);
   g_return_if_fail (self->rename_provider == NULL);
 
-  /* We use "--disabled--" just like sourceview does */
-  if (!(language_id = ide_buffer_get_language_id (self)))
-    language_id = "--disabled--";
+  language_id = ide_buffer_get_language_id (self);
 
   /* Setup the semantic highlight engine */
   self->highlight_engine = ide_highlight_engine_new (self);
@@ -1860,7 +1858,7 @@ ide_buffer_get_language_id (IdeBuffer *self)
   if ((lang = gtk_source_buffer_get_language (GTK_SOURCE_BUFFER (self))))
     return gtk_source_language_get_id (lang);
 
-  return NULL;
+  return "plain";
 }
 
 void

@@ -24,7 +24,7 @@
 
 #include "ide-source-view-private.h"
 
-#define DISABLED_LANGUAGE_ID "--disabled--"
+#define DISABLED_LANGUAGE_ID "plain"
 
 static void
 ide_source_view_completion_provider_added_cb (IdeExtensionSetAdapter *adapter,
