@@ -40,7 +40,6 @@
         "--talk-name=org.gtk.vfs.*",
         "--system-talk-name=org.freedesktop.PolicyKit1",
         "--system-talk-name=org.gnome.Sysprof3",
-        "--talk-name=org.gnome.CodeAssist.v1.*",
         "--system-talk-name=org.freedesktop.Avahi",
         "--talk-name=org.freedesktop.FileManager1",
         "--talk-name=org.freedesktop.PackageKit",
