@@ -49,10 +49,7 @@ struct _GbpSysprofTool
   GDBusConnection *connection;
 
   /* IPC service on @connection */
-  IpcSysprof *sysprof;
-
-  /* If we found sysprof-agent in the runtime */
-  guint has_agent : 1;
+  IpcAgent *sysprof;
 };
 
 G_DEFINE_FINAL_TYPE (GbpSysprofTool, gbp_sysprof_tool, IDE_TYPE_RUN_TOOL)
@@ -103,10 +100,7 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
     settings = g_settings_new ("org.gnome.builder.sysprof");
 
   /* Run sysprof-agent/gnome-builder-sysprof */
-  if (self->has_agent)
-    ide_run_context_append_argv (run_context, "sysprof-agent");
-  else
-    ide_run_context_append_argv (run_context, PACKAGE_LIBEXECDIR"/gnome-builder-sysprof");
+  ide_run_context_append_argv (run_context, "sysprof-agent");
 
   /* Pass along FDs after stderr to next process */
   n_fds = ide_unix_fd_map_get_length (unix_fd_map);
@@ -205,14 +199,13 @@ gbp_sysprof_tool_prepare_to_run (IdeRunTool    *run_tool,
    * a chance to make things like LD_PRELOAD work. Otherwise, fallback to
    * using our own wrapper in our context which is more restrictive.
    */
-  self->has_agent = ide_pipeline_contains_program_in_path (pipeline, "sysprof-agent", NULL);
-
-  if (self->has_agent)
+  if (ide_pipeline_contains_program_in_path (pipeline, "sysprof-agent", NULL))
     ide_run_context_push (run_context,
                           gbp_sysprof_tool_handler,
                           g_object_ref (run_tool),
                           g_object_unref);
   else
+    /* Use our bundled version */
     ide_run_context_push_at_base (run_context,
                                   gbp_sysprof_tool_handler,
                                   g_object_ref (run_tool),
@@ -232,7 +225,7 @@ gbp_sysprof_tool_force_exit (IdeRunTool *run_tool)
   g_assert (GBP_IS_SYSPROF_TOOL (self));
 
   if (self->sysprof)
-    ipc_sysprof_call_force_exit (self->sysprof, 0, -1, NULL, NULL, NULL);
+    ipc_agent_call_force_exit (self->sysprof, 0, -1, NULL, NULL, NULL);
   else if (self->subprocess)
     ide_subprocess_force_exit (self->subprocess);
   else
@@ -253,7 +246,7 @@ gbp_sysprof_tool_send_signal (IdeRunTool *run_tool,
   g_assert (GBP_IS_SYSPROF_TOOL (self));
 
   if (self->sysprof)
-    ipc_sysprof_call_send_signal (self->sysprof, signum, 0, -1, NULL, NULL, NULL);
+    ipc_agent_call_send_signal (self->sysprof, signum, 0, -1, NULL, NULL, NULL);
   else if (self->subprocess)
     ide_subprocess_send_signal (self->subprocess, signum);
   else
@@ -268,7 +261,7 @@ gbp_sysprof_tool_started (IdeRunTool    *run_tool,
 {
   GbpSysprofTool *self = (GbpSysprofTool *)run_tool;
   g_autoptr(GDBusConnection) connection = NULL;
-  g_autoptr(IpcSysprof) sysprof = NULL;
+  g_autoptr(IpcAgent) sysprof = NULL;
   g_autoptr(GError) error = NULL;
 
   IDE_ENTRY;
@@ -296,7 +289,7 @@ gbp_sysprof_tool_started (IdeRunTool    *run_tool,
       IDE_EXIT;
     }
 
-  sysprof = ipc_sysprof_proxy_new_sync (connection,
+  sysprof = ipc_agent_proxy_new_sync (connection,
                                         G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
                                         NULL, "/", NULL, &error);
 

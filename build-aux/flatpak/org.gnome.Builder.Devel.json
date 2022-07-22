@@ -343,12 +343,12 @@
                 "--libdir=/app/lib",
                 "--buildtype=debugoptimized",
                 "-Dgtk=true",
-                "-Dsysprofd=host"
+                "-Dsysprofd=host",
+                "-Dagent=true"
             ],
             "buildsystem" : "meson",
             "builddir" : true,
             "cleanup" : [
-                "/bin/*",
                 "/libexec/sysprof",
                 "/share/appdata",
                 "/share/applications",

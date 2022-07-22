@@ -20,7 +20,7 @@
 
     SPDX-License-Identifier: GPL-3.0-or-later
   -->
-  <interface name="org.gnome.Builder.Sysprof">
+  <interface name="org.gnome.Sysprof.Agent">
     <method name="ForceExit"/>
     <method name="SendSignal">
       <arg name="signum" direction="in" type="i">

@@ -12,8 +12,8 @@ plugins_deps += [
 ]
 
 ipc_sysprof_src = gnome.gdbus_codegen('ipc-sysprof',
-           sources: 'org.gnome.Builder.Sysprof.xml',
-  interface_prefix: 'org.gnome.Builder.',
+           sources: 'org.gnome.Sysprof.Agent.xml',
+  interface_prefix: 'org.gnome.Sysprof.',
          namespace: 'Ipc',
         extra_args: ['--glib-min-required=@0@'.format(glib_req_version)],
 )
@@ -36,13 +36,5 @@ plugin_sysprof_resources = gnome.compile_resources(
 plugins_sources += plugin_sysprof_resources
 
 install_data(['org.gnome.builder.sysprof.gschema.xml'], install_dir: schema_dir)
-
-gnome_builder_sysprof_sources = ['gnome-builder-sysprof.c', ipc_sysprof_src]
-gnome_builder_sysprof_deps = [libsysprof_dep]
-gnome_builder_sysprof = executable('gnome-builder-sysprof', gnome_builder_sysprof_sources,
-           install: true,
-       install_dir: get_option('libexecdir'),
-      dependencies: gnome_builder_sysprof_deps,
-)
 
 endif
