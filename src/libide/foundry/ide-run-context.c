@@ -1043,6 +1043,16 @@ ide_run_context_default_handler (IdeRunContext       *self,
   return TRUE;
 }
 
+static int
+sort_strptr (gconstpointer a,
+             gconstpointer b)
+{
+  const char * const *astr = a;
+  const char * const *bstr = b;
+
+  return g_strcmp0 (*astr, *bstr);
+}
+
 static gboolean
 ide_run_context_callback_layer (IdeRunContext       *self,
                                 IdeRunContextLayer  *layer,
@@ -1058,6 +1068,11 @@ ide_run_context_callback_layer (IdeRunContext       *self,
 
   handler = layer->handler ? layer->handler : ide_run_context_default_handler;
   handler_data = layer->handler ? layer->handler_data : NULL;
+
+  /* Sort environment variables first so that we have an easier time
+   * finding them by eye in tooling which translates them.
+   */
+  g_array_sort (layer->env, sort_strptr);
 
   ret = handler (self,
                  (const char * const *)(gpointer)layer->argv->data,
