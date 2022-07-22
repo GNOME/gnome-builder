@@ -52,8 +52,7 @@
         "--env=G_SLICE=always-malloc"
     ],
     "x-run-args" : [
-        "--standalone",
-        "-vvvv"
+        "--standalone"
     ],
     "build-options" : {
         "env" : {
