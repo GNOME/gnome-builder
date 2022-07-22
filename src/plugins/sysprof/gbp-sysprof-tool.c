@@ -22,9 +22,12 @@
 
 #include "config.h"
 
+#include <glib/gstdio.h>
 #include <unistd.h>
 
 #include <libide-gui.h>
+
+#include "ipc-sysprof.h"
 
 #include "gbp-sysprof-page.h"
 #include "gbp-sysprof-tool.h"
@@ -32,7 +35,21 @@
 struct _GbpSysprofTool
 {
   IdeRunTool parent_instance;
+
+  /* Temporary file subprocess captures into */
   char *capture_file;
+
+  /* Handle to our subprocess */
+  IdeSubprocess *subprocess;
+
+  /* IOStream used to communicate w/ subprocess */
+  GIOStream *io_stream;
+
+  /* Encoded protocol on top of @io_stream */
+  GDBusConnection *connection;
+
+  /* IPC service on @connection */
+  IpcSysprof *sysprof;
 };
 
 G_DEFINE_FINAL_TYPE (GbpSysprofTool, gbp_sysprof_tool, IDE_TYPE_RUN_TOOL)
@@ -65,9 +82,13 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
                           gpointer             user_data,
                           GError             **error)
 {
+  static GSettings *settings;
   GbpSysprofTool *self = user_data;
-  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(GIOStream) io_stream = NULL;
   const char *capture_file;
+  guint n_fds;
+  int read_fd;
+  int write_fd;
 
   g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (argv != NULL);
@@ -75,13 +96,38 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
   g_assert (GBP_IS_SYSPROF_TOOL (self));
 
-  capture_file = gbp_sysprof_tool_get_capture_file (self);
-  settings = g_settings_new ("org.gnome.builder.sysprof");
+  if (settings == NULL)
+    settings = g_settings_new ("org.gnome.builder.sysprof");
 
+  /* Run gnome-builder-sysprof from $prefix/libexec/ */
   ide_run_context_append_argv (run_context, PACKAGE_LIBEXECDIR"/gnome-builder-sysprof");
-  ide_run_context_append_formatted (run_context, "--capture=%s", capture_file);
 
-  /* TODO: Setup --read-fd/--write-fd/--forward-fd/--pty */
+  /* Pass along FDs after stderr to next process */
+  n_fds = ide_unix_fd_map_get_length (unix_fd_map);
+  for (guint i = 3; i < n_fds; i++)
+    {
+      int source_fd;
+      int dest_fd;
+
+      source_fd = ide_unix_fd_map_peek (unix_fd_map, i, &dest_fd);
+
+      if (source_fd != -1)
+        ide_run_context_append_formatted (run_context, "--forward-fd=%d", dest_fd);
+    }
+
+  /* Setup a read/write FD to use to control subprocess via D-Bus */
+  read_fd = ide_unix_fd_map_get_max_dest_fd (unix_fd_map) + 1;
+  write_fd = read_fd + 1;
+  if (!(io_stream = ide_unix_fd_map_create_stream (unix_fd_map, read_fd, write_fd, error)))
+    return FALSE;
+
+  /* Use a GIOStream to communicate via p2p D-Bus to subprocess */
+  ide_run_context_append_formatted (run_context, "--read-fd=%d", read_fd);
+  ide_run_context_append_formatted (run_context, "--write-fd=%d", write_fd);
+
+  /* Setup temporary file to write to */
+  capture_file = gbp_sysprof_tool_get_capture_file (self);
+  ide_run_context_append_formatted (run_context, "--capture=%s", capture_file);
 
   if (g_settings_get_boolean (settings, "cpu-aid"))
     ide_run_context_append_argv (run_context, "--cpu");
@@ -125,6 +171,8 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
   ide_run_context_append_argv (run_context, "--");
   ide_run_context_append_args (run_context, argv);
 
+  g_set_object (&self->io_stream, io_stream);
+
   return TRUE;
 }
 
@@ -151,15 +199,42 @@ gbp_sysprof_tool_prepare_to_run (IdeRunTool    *run_tool,
 }
 
 static void
-gbp_sysprof_tool_send_signal (IdeRunTool *run_tool,
-                              int         signum)
+gbp_sysprof_tool_force_exit (IdeRunTool *run_tool)
 {
+  GbpSysprofTool *self = (GbpSysprofTool *)run_tool;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_SYSPROF_TOOL (run_tool));
+  g_assert (GBP_IS_SYSPROF_TOOL (self));
 
-  /* TODO: Proxy to worker */
+  if (self->sysprof)
+    ipc_sysprof_call_force_exit (self->sysprof, 0, -1, NULL, NULL, NULL);
+  else if (self->subprocess)
+    ide_subprocess_force_exit (self->subprocess);
+  else
+    g_warning ("Cannot force exit, no subprocess");
+
+  IDE_EXIT;
+}
+
+static void
+gbp_sysprof_tool_send_signal (IdeRunTool *run_tool,
+                              int         signum)
+{
+  GbpSysprofTool *self = (GbpSysprofTool *)run_tool;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_TOOL (self));
+
+  if (self->sysprof)
+    ipc_sysprof_call_send_signal (self->sysprof, signum, 0, -1, NULL, NULL, NULL);
+  else if (self->subprocess)
+    ide_subprocess_send_signal (self->subprocess, signum);
+  else
+    g_warning ("Cannot send signal %d, no subprocess", signum);
 
   IDE_EXIT;
 }
@@ -168,13 +243,60 @@ static void
 gbp_sysprof_tool_started (IdeRunTool    *run_tool,
                           IdeSubprocess *subprocess)
 {
+  GbpSysprofTool *self = (GbpSysprofTool *)run_tool;
+  g_autoptr(GDBusConnection) connection = NULL;
+  g_autoptr(IpcSysprof) sysprof = NULL;
+  g_autoptr(GError) error = NULL;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_SYSPROF_TOOL (run_tool));
+  g_assert (GBP_IS_SYSPROF_TOOL (self));
   g_assert (IDE_IS_SUBPROCESS (subprocess));
 
-  /* TODO: Setup connection using GIOStream to subprocess */
+  g_set_object (&self->subprocess, subprocess);
+
+  if (self->io_stream == NULL)
+    {
+      g_warning ("No stream to communicate with subprocess, control unavailable");
+      IDE_EXIT;
+    }
+
+  connection = g_dbus_connection_new_sync (self->io_stream, NULL,
+                                           G_DBUS_CONNECTION_FLAGS_DELAY_MESSAGE_PROCESSING,
+                                           NULL, NULL, &error);
+
+  if (connection == NULL)
+    {
+      g_warning ("Failed to create GDBusConncetion, cantrol unavailable: %s",
+                 error->message);
+      IDE_EXIT;
+    }
+
+  sysprof = ipc_sysprof_proxy_new_sync (connection,
+                                        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+                                        NULL, "/", NULL, &error);
+
+  if (sysprof == NULL)
+    {
+      g_warning ("Failed to create GDBusProxy, cantrol unavailable: %s",
+                 error->message);
+      IDE_EXIT;
+    }
+
+  g_debug ("Control proxy to subprocess created");
+  g_set_object (&self->sysprof, sysprof);
+  g_set_object (&self->connection, connection);
+
+  /* We can have long running operations, so set no timeout */
+  g_dbus_proxy_set_default_timeout (G_DBUS_PROXY (sysprof), G_MAXINT);
+
+  /* Now start processing messages */
+  g_dbus_connection_set_exit_on_close (connection, FALSE);
+
+  /* Now we can start processing things */
+  g_debug ("Starting to process peer messages");
+  g_dbus_connection_start_message_processing (connection);
 
   IDE_EXIT;
 }
@@ -199,18 +321,48 @@ gbp_sysprof_tool_stopped (IdeRunTool *run_tool)
       g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
 
       ide_workspace_add_page (workspace, IDE_PAGE (page), position);
+
+      /* Now that the page has the file open, we can unlink our temporary
+       * file and it can continue using it's open FD.
+       */
+      g_unlink (self->capture_file);
+      g_clear_pointer (&self->capture_file, g_free);
     }
+
+  g_clear_object (&self->subprocess);
+  g_clear_object (&self->sysprof);
+  g_clear_object (&self->connection);
+  g_clear_object (&self->io_stream);
 
   IDE_EXIT;
 }
 
 static void
+gbp_sysprof_tool_dispose (GObject *object)
+{
+  GbpSysprofTool *self = (GbpSysprofTool *)object;
+
+  g_clear_object (&self->sysprof);
+  g_clear_object (&self->connection);
+  g_clear_object (&self->io_stream);
+  g_clear_object (&self->subprocess);
+
+  g_clear_pointer (&self->capture_file, g_free);
+
+  G_OBJECT_CLASS (gbp_sysprof_tool_parent_class)->dispose (object);
+}
+
+static void
 gbp_sysprof_tool_class_init (GbpSysprofToolClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeRunToolClass *run_tool_class = IDE_RUN_TOOL_CLASS (klass);
+
+  object_class->dispose = gbp_sysprof_tool_dispose;
 
   run_tool_class->prepare_to_run = gbp_sysprof_tool_prepare_to_run;
   run_tool_class->send_signal = gbp_sysprof_tool_send_signal;
+  run_tool_class->force_exit = gbp_sysprof_tool_force_exit;
   run_tool_class->started = gbp_sysprof_tool_started;
   run_tool_class->stopped = gbp_sysprof_tool_stopped;
 }
