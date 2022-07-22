@@ -89,8 +89,8 @@
         "*.a"
     ],
     "modules" : [
-        "python-deps.json",
-        "python3-jedi-language-server.json",
+        "build-aux/flatpak/python-deps.json",
+        "build-aux/flatpak/python3-jedi-language-server.json",
         {
             "name" : "gperftools",
             "cleanup" : [
@@ -134,7 +134,7 @@
                 "/bin/ulockmgr_server"
             ],
             "post-install" : [
-                "install -m a+rx fusermount-wrapper.sh /app/bin/fusermount"
+                "install -m a+rx build-aux/flatpak/fusermount-wrapper.sh /app/bin/fusermount"
             ],
             "sources" : [
                 {
@@ -144,19 +144,19 @@
                 },
                 {
                     "type" : "patch",
-                    "path" : "fuse-2.9.2-namespace-conflict-fix.patch"
+                    "path" : "build-aux/flatpak/fuse-2.9.2-namespace-conflict-fix.patch"
                 },
                 {
                     "type" : "patch",
-                    "path" : "fuse-disable-sys-mount-under-flatpak.patch"
+                    "path" : "build-aux/flatpak/fuse-disable-sys-mount-under-flatpak.patch"
                 },
                 {
                     "type" : "patch",
-                    "path" : "fuse-2.9.2-closefrom.patch"
+                    "path" : "build-aux/flatpak/fuse-2.9.2-closefrom.patch"
                 },
                 {
                     "type" : "file",
-                    "path" : "fusermount-wrapper.sh"
+                    "path" : "build-aux/flatpak/fusermount-wrapper.sh"
                 }
             ]
         },
@@ -204,11 +204,11 @@
                 },
                 {
                     "type" : "patch",
-                    "path" : "polkit-build-Add-option-to-build-without-polkitd.patch"
+                    "path" : "build-aux/flatpak/polkit-build-Add-option-to-build-without-polkitd.patch"
                 },
                 {
                     "type" : "file",
-                    "path" : "polkit-autogen",
+                    "path" : "build-aux/flatpak/polkit-autogen",
                     "dest-filename" : "autogen.sh"
                 }
             ]
@@ -593,8 +593,8 @@
                 }
             ]
         },
-        "typescript-language-server.json",
-        "intelephense-language-server.json",
+        "build-aux/flatpak/typescript-language-server.json",
+        "build-aux/flatpak/intelephense-language-server.json",
         {
             "name" : "libpanel",
             "buildsystem" : "meson",
