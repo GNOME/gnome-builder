@@ -173,6 +173,9 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
 
   g_set_object (&self->io_stream, io_stream);
 
+  if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
+    return FALSE;
+
   return TRUE;
 }
 
