@@ -277,6 +277,18 @@
             ]
         },
         {
+            "name" : "libeditorconfig",
+            "buildsystem" : "cmake",
+            "config-opts" : [ "-DINSTALL_HTML_DOC=OFF" ],
+            "sources" : [
+                {
+                    "type" : "git",
+                    "url" : "https://github.com/editorconfig/editorconfig-core-c.git",
+                    "tag" : "v0.12.5"
+                }
+            ]
+        },
+        {
             "name" : "vte",
             "buildsystem" : "meson",
             "config-opts" : [

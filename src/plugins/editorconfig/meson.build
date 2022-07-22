@@ -1,6 +1,6 @@
 if get_option('plugin_editorconfig')
 
-subdir('libeditorconfig')
+libeditorconfig_dep = dependency('editorconfig')
 
 plugins_sources += files([
   'editorconfig-glib.c',

@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <editorconfig.h>
+#include <editorconfig/editorconfig.h>
 
 #include "editorconfig-glib.h"
 
