@@ -134,7 +134,7 @@
                 "/bin/ulockmgr_server"
             ],
             "post-install" : [
-                "install -m a+rx ${FLATPAK_BUILDER_BUILDDIR}/build-aux/flatpak/fusermount-wrapper.sh /app/bin/fusermount"
+                "install -m a+rx fusermount-wrapper.sh /app/bin/fusermount"
             ],
             "sources" : [
                 {
