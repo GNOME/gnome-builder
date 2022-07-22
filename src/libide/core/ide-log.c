@@ -282,11 +282,13 @@ ide_log_init (gboolean    stdout_,
     {
       log_level_str_func = ide_log_level_str;
       channels = g_ptr_array_new ();
+
       if (filename)
         {
           channel = g_io_channel_new_file (filename, "a", NULL);
           g_ptr_array_add (channels, channel);
         }
+
       if (stdout_)
         {
           channel = g_io_channel_unix_new (STDOUT_FILENO);
@@ -294,6 +296,10 @@ ide_log_init (gboolean    stdout_,
           if ((filename == NULL) && isatty (STDOUT_FILENO))
             log_level_str_func = ide_log_level_str_with_color;
         }
+
+      /* Assume tracing if G_MESSAGES_DEBUG=all */
+      if (g_strcmp0 (messages_debug, "all") == 0)
+        log_verbosity = 4;
 
       domains = g_strdup (messages_debug);
       if (!ide_str_empty0 (domains) && strcmp (domains, "all") != 0)
