@@ -66,6 +66,7 @@ on_push_snippet_cb (GbpVcsuiEditorPageAddin *self,
 
       if (!ide_str_empty0 (g_value_get_string (&value)))
         {
+          gtk_source_snippet_context_set_variable (context, "NAME", g_value_get_string (&value));
           gtk_source_snippet_context_set_variable (context, "author", g_value_get_string (&value));
           gtk_source_snippet_context_set_variable (context, "fullname", g_value_get_string (&value));
           gtk_source_snippet_context_set_variable (context, "username", g_value_get_string (&value));
@@ -76,7 +77,10 @@ on_push_snippet_cb (GbpVcsuiEditorPageAddin *self,
       ide_vcs_config_get_config (vcs_config, IDE_VCS_CONFIG_EMAIL, &value);
 
       if (!ide_str_empty0 (g_value_get_string (&value)))
-        gtk_source_snippet_context_set_variable (context, "email", g_value_get_string (&value));
+        {
+          gtk_source_snippet_context_set_variable (context, "email", g_value_get_string (&value));
+          gtk_source_snippet_context_set_variable (context, "EMAIL", g_value_get_string (&value));
+        }
 
       g_value_unset (&value);
     }
