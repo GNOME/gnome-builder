@@ -466,6 +466,11 @@ ide_unix_fd_map_create_stream (IdeUnixFDMap  *self,
       IDE_GOTO (failure);
     }
 
+  g_assert (stdin_pair[0] != -1);
+  g_assert (stdin_pair[1] != -1);
+  g_assert (stdout_pair[0] != -1);
+  g_assert (stdout_pair[1] != -1);
+
   ide_unix_fd_map_take (self, ide_steal_fd (&stdin_pair[0]), dest_read_fd);
   ide_unix_fd_map_take (self, ide_steal_fd (&stdout_pair[1]), dest_write_fd);
 
@@ -477,6 +482,11 @@ ide_unix_fd_map_create_stream (IdeUnixFDMap  *self,
   input = g_unix_input_stream_new (ide_steal_fd (&stdout_pair[0]), TRUE);
 
   ret = g_simple_io_stream_new (input, output);
+
+  g_assert (stdin_pair[0] == -1);
+  g_assert (stdin_pair[1] == -1);
+  g_assert (stdout_pair[0] == -1);
+  g_assert (stdout_pair[1] == -1);
 
 failure:
 
