@@ -162,6 +162,31 @@ store_and_activate:
   return TRUE;
 }
 
+static gboolean
+ends_with_string (GtkSourceSnippet *snippet,
+                  const char       *string)
+{
+  const char *spec = "";
+  guint n_chunks;
+  int pos;
+
+  g_assert (GTK_SOURCE_IS_SNIPPET (snippet));
+
+  if (!(n_chunks = gtk_source_snippet_get_n_chunks (snippet)))
+    return FALSE;
+
+  pos = n_chunks - 1;
+
+  while (ide_str_empty0 (spec) && pos >= 0)
+    {
+      GtkSourceSnippetChunk *chunk = gtk_source_snippet_get_nth_chunk (snippet, pos);
+      spec = gtk_source_snippet_chunk_get_text (chunk);
+      pos--;
+    }
+
+  return g_str_has_suffix (spec, string);
+}
+
 static void
 ide_clang_completion_provider_activate (GtkSourceCompletionProvider *provider,
                                         GtkSourceCompletionContext  *context,
@@ -263,7 +288,8 @@ ide_clang_completion_provider_activate (GtkSourceCompletionProvider *provider,
         }
     }
 
-  if (self->activation_keyval == GDK_KEY_semicolon)
+  if (self->activation_keyval == GDK_KEY_semicolon &&
+      !ends_with_string (snippet, ";"))
     {
       g_autoptr(GtkSourceSnippetChunk) chunk = gtk_source_snippet_chunk_new ();
       gtk_source_snippet_chunk_set_spec (chunk, ";");
