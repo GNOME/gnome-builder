@@ -636,6 +636,7 @@ ide_source_view_push_snippet (GtkSourceView    *source_view,
           IdeContext *ide_context;
 
           gtk_source_snippet_context_set_constant (context, "filename", basename);
+          gtk_source_snippet_context_set_constant (context, "TM_FILENAME", basename);
           gtk_source_snippet_context_set_constant (context, "dirname", g_file_peek_path (parent));
           gtk_source_snippet_context_set_constant (context, "path", g_file_peek_path (file));
 
