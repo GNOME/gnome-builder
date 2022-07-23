@@ -141,7 +141,7 @@ test_run_context_default_handler (void)
   g_assert_true (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
   g_assert_true (g_strv_equal (ide_subprocess_launcher_get_argv (launcher),
-                               IDE_STRV_INIT ("wrapper", "--", "env", "USER=user", "UID=1000", "ls", "-lsah")));
+                               IDE_STRV_INIT ("wrapper", "--", "env", "UID=1000", "USER=user", "ls", "-lsah")));
   g_assert_true (g_strv_equal (ide_subprocess_launcher_get_environ (launcher),
                                IDE_STRV_INIT ("USER=nobody")));
 
