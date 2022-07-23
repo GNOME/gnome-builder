@@ -729,7 +729,11 @@ ide_runtime_prepare_to_build (IdeRuntime    *self,
     }
 
   g_return_if_fail (IDE_IS_PIPELINE (pipeline));
-  g_return_if_fail (ide_pipeline_get_runtime (pipeline) == self);
+
+  if (self != ide_pipeline_get_runtime (pipeline))
+    g_debug ("Preparing run context for build using non-native runtime. \"%s\" instead of \"%s\".",
+             ide_runtime_get_id (self),
+             ide_runtime_get_id (ide_pipeline_get_runtime (pipeline)));
 
   IDE_RUNTIME_GET_CLASS (self)->prepare_to_build (self, pipeline, run_context);
 
