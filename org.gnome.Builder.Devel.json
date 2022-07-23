@@ -652,6 +652,7 @@
                 "-Dtracing=true",
                 "-Dhelp=true",
                 "-Dchannel=flatpak-nightly",
+                "-Dnetwork_tests=false",
                 "-Dplugin_deviced=true"
             ],
             "cleanup" : [
