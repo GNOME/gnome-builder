@@ -760,8 +760,7 @@ ${$filename|stripsuffix|functify|space} ${$1|space}  gpointer      user_data)
 ]]></text>
   </snippet>
   <snippet _name="Private" trigger="Private" _description="Define a local for the GObject&apos;s private data.">
-    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify|camelize}Private *priv = ${$filename|stripsuffix|functify}_get_instance_private (self);$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify|camelize}Private *priv = ${$filename|stripsuffix|functify}_get_instance_private (self);$0]]></text>
   </snippet>
   <snippet _name="doc" trigger="doc" _description="">
     <text languages="c;chdr;"><![CDATA[/**
@@ -774,12 +773,10 @@ ${$filename|stripsuffix|functify|space} ${$1|space}  gpointer      user_data)
 ]]></text>
   </snippet>
   <snippet _name="fail" trigger="fail" _description="Snippet for g_return_if_fail()">
-    <text languages="c;chdr;"><![CDATA[g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)});$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)});$0]]></text>
   </snippet>
   <snippet _name="vfail" trigger="vfail" _description="Snippet for g_return_val_if_fail()">
-    <text languages="c;chdr;"><![CDATA[g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)}, ${2:NULL});$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[g_return_val_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)}, ${2:NULL});$0]]></text>
   </snippet>
   <snippet _name="gobj_get_property" trigger="gobj_get_property" _description="Create a get_property handler">
     <text languages="c;"><![CDATA[static void
