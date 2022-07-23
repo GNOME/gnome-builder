@@ -134,6 +134,59 @@ ide_source_view_hover_provider_removed_cb (IdeExtensionSetAdapter *adapter,
   IDE_EXIT;
 }
 
+static void
+ide_source_view_indenter_added_cb (IdeExtensionSetAdapter *adapter,
+                                   PeasPluginInfo         *plugin_info,
+                                   PeasExtension          *exten,
+                                   gpointer                user_data)
+{
+  GtkSourceIndenter *indenter = (GtkSourceIndenter *)exten;
+  IdeSourceView *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (GTK_SOURCE_IS_INDENTER (indenter));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  g_debug ("Adding indenter %s from module %s",
+           G_OBJECT_TYPE_NAME (indenter),
+           peas_plugin_info_get_module_name (plugin_info));
+
+  // TODO: how to handle multiple indenters?
+  gtk_source_view_set_indenter (GTK_SOURCE_VIEW (self), indenter);
+
+  IDE_EXIT;
+}
+
+static void
+ide_source_view_indenter_removed_cb (IdeExtensionSetAdapter *adapter,
+                                     PeasPluginInfo         *plugin_info,
+                                     PeasExtension          *exten,
+                                     gpointer                user_data)
+{
+  GtkSourceIndenter *indenter = (GtkSourceIndenter *)exten;
+  IdeSourceView *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (GTK_SOURCE_IS_INDENTER (indenter));
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  g_debug ("Removing indenter %s from module %s",
+           G_OBJECT_TYPE_NAME (indenter),
+           peas_plugin_info_get_module_name (plugin_info));
+
+  // TODO: how to handle multiple indenters?
+  if (indenter == gtk_source_view_get_indenter (GTK_SOURCE_VIEW (self)))
+    gtk_source_view_set_indenter (GTK_SOURCE_VIEW (self), NULL);
+
+  IDE_EXIT;
+}
+
 void
 _ide_source_view_addins_init (IdeSourceView     *self,
                               GtkSourceLanguage *language)
@@ -195,6 +248,25 @@ _ide_source_view_addins_init (IdeSourceView     *self,
                                      ide_source_view_hover_provider_added_cb,
                                      self);
 
+  /* Create our hover providers and attach them */
+  self->indenters =
+    ide_extension_set_adapter_new (IDE_OBJECT (parent),
+                                   peas_engine_get_default (),
+                                   GTK_SOURCE_TYPE_INDENTER,
+                                   "Indenter-Languages",
+                                   language_id);
+  g_signal_connect (self->indenters,
+                    "extension-added",
+                    G_CALLBACK (ide_source_view_indenter_added_cb),
+                    self);
+  g_signal_connect (self->indenters,
+                    "extension-removed",
+                    G_CALLBACK (ide_source_view_indenter_removed_cb),
+                    self);
+  ide_extension_set_adapter_foreach (self->indenters,
+                                     ide_source_view_indenter_added_cb,
+                                     self);
+
   IDE_EXIT;
 }
 
@@ -207,6 +279,7 @@ _ide_source_view_addins_shutdown (IdeSourceView *self)
 
   ide_clear_and_destroy_object (&self->completion_providers);
   ide_clear_and_destroy_object (&self->hover_providers);
+  ide_clear_and_destroy_object (&self->indenters);
 
   IDE_EXIT;
 }
@@ -223,6 +296,7 @@ _ide_source_view_addins_set_language (IdeSourceView     *self,
   g_return_if_fail (!language || GTK_SOURCE_IS_LANGUAGE (language));
   g_return_if_fail (self->completion_providers != NULL);
   g_return_if_fail (self->hover_providers != NULL);
+  g_return_if_fail (self->indenters != NULL);
 
   if (language != NULL)
     language_id = gtk_source_language_get_id (language);
@@ -231,6 +305,7 @@ _ide_source_view_addins_set_language (IdeSourceView     *self,
 
   ide_extension_set_adapter_set_value (self->completion_providers, language_id);
   ide_extension_set_adapter_set_value (self->hover_providers, language_id);
+  ide_extension_set_adapter_set_value (self->indenters, language_id);
 
   IDE_EXIT;
 }

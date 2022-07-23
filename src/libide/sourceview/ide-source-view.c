@@ -671,6 +671,7 @@ ide_source_view_dispose (GObject *object)
 
   g_assert (self->completion_providers == NULL);
   g_assert (self->hover_providers == NULL);
+  g_assert (self->indenters == NULL);
 
   G_OBJECT_CLASS (ide_source_view_parent_class)->dispose (object);
 
