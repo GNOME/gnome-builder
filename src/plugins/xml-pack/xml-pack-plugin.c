@@ -43,11 +43,9 @@ _ide_xml_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_HIGHLIGHTER,
                                               IDE_TYPE_XML_HIGHLIGHTER);
-#if 0
   peas_object_module_register_extension_type (module,
                                               GTK_SOURCE_TYPE_INDENTER,
                                               IDE_TYPE_XML_INDENTER);
-#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SYMBOL_RESOLVER,
                                               IDE_TYPE_XML_SYMBOL_RESOLVER);

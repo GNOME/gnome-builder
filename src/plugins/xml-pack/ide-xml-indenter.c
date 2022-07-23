@@ -28,9 +28,17 @@
 
 #include "ide-xml-indenter.h"
 
+typedef enum
+{
+  IDE_XML_INDENT_ACTION_INDENT_FORWARD,
+  IDE_XML_INDENT_ACTION_INDENT_BACKWARD,
+  IDE_XML_INDENT_ACTION_ADD_CLOSING_TAG,
+} IdeXmlIndentAction;
+
 struct _IdeXmlIndenter
 {
   IdeObject parent_class;
+  IdeXmlIndentAction indent_action;
   guint tab_width;
   guint indent_width;
   guint use_tabs : 1;
@@ -194,23 +202,22 @@ cleanup:
   return ret;
 }
 
-static gchar *
-ide_xml_indenter_indent (IdeXmlIndenter *xml,
-                         GtkTextIter    *begin,
-                         GtkTextIter    *end,
-                         gint           *cursor_offset)
+static void
+ide_xml_indenter_indent_forward (IdeXmlIndenter *xml,
+                                 GtkTextIter    *iter)
 {
+  g_autoptr(GString) str = NULL;
+  GtkTextBuffer *buffer;
   GtkTextIter match_begin;
-  GString *str;
+  gint backward_chars = 0;
   guint offset;
 
-  g_return_val_if_fail (IDE_IS_XML_INDENTER (xml), NULL);
-  g_return_val_if_fail (begin, NULL);
-  g_return_val_if_fail (end, NULL);
+  g_return_if_fail (IDE_IS_XML_INDENTER (xml));
+  g_return_if_fail (iter);
 
   str = g_string_new (NULL);
 
-  if (text_iter_backward_to_element_start (begin, &match_begin))
+  if (text_iter_backward_to_element_start (iter, &match_begin))
     {
       offset = gtk_text_iter_get_line_offset (&match_begin);
       build_indent (xml, offset + xml->indent_width, &match_begin, str);
@@ -219,10 +226,10 @@ ide_xml_indenter_indent (IdeXmlIndenter *xml,
        * If immediately after our cursor is a closing tag, we will move it to
        * a line after our indent line.
        */
-      if ('<' == gtk_text_iter_get_char (end) &&
-          '/' == text_iter_peek_next_char (end))
+      if ('<' == gtk_text_iter_get_char (iter) &&
+          '/' == text_iter_peek_next_char (iter))
         {
-          GString *str2;
+          g_autoptr(GString) str2 = NULL;
 
           str2 = g_string_new (NULL);
           build_indent (xml, offset, &match_begin, str2);
@@ -230,36 +237,34 @@ ide_xml_indenter_indent (IdeXmlIndenter *xml,
           g_string_append (str, "\n");
           g_string_append (str, str2->str);
 
-          *cursor_offset = -str2->len - 1;
-
-          g_string_free (str2, TRUE);
+          backward_chars = str2->len + 1;
         }
-
-      IDE_GOTO (cleanup);
     }
 
-  /* do nothing */
+  buffer = gtk_text_iter_get_buffer (iter);
+  gtk_text_buffer_insert (buffer, iter, str->str, str->len);
 
-cleanup:
-  return g_string_free (str, (str->len == 0));
+  if (backward_chars != 0)
+    {
+      gtk_text_iter_backward_chars (iter, backward_chars);
+      gtk_text_buffer_place_cursor (buffer, iter);
+    }
 }
 
-static gchar *
-ide_xml_indenter_maybe_unindent (IdeXmlIndenter *xml,
-                                 GtkTextIter    *begin,
-                                 GtkTextIter    *end)
+static void
+ide_xml_indenter_indent_backward (IdeXmlIndenter *xml,
+                                  GtkTextIter    *iter)
 {
   GtkTextIter tmp;
   gunichar ch;
 
-  g_return_val_if_fail (IDE_IS_XML_INDENTER (xml), NULL);
-  g_return_val_if_fail (begin, NULL);
-  g_return_val_if_fail (end, NULL);
+  g_return_if_fail (IDE_IS_XML_INDENTER (xml));
+  g_return_if_fail (iter);
 
-  tmp = *begin;
+  tmp = *iter;
 
   if (!gtk_text_iter_backward_char (&tmp))
-    return NULL;
+    return;
 
   if (('/' == gtk_text_iter_get_char (&tmp)) &&
       gtk_text_iter_backward_char (&tmp) &&
@@ -269,9 +274,12 @@ ide_xml_indenter_maybe_unindent (IdeXmlIndenter *xml,
     {
       if (ch == '\t')
         {
+          GtkTextBuffer *buffer = gtk_text_iter_get_buffer (iter);
+
           gtk_text_iter_backward_char (&tmp);
-          *begin = tmp;
-          return g_strdup ("</");
+          *iter = tmp;
+
+          gtk_text_buffer_insert (buffer, iter, "</", 2);
         }
       else
         {
@@ -282,19 +290,13 @@ ide_xml_indenter_maybe_unindent (IdeXmlIndenter *xml,
               if (!gtk_text_iter_backward_char (&tmp) ||
                   !(ch = gtk_text_iter_get_char (&tmp)) ||
                   (ch != ' '))
-                return NULL;
+                return;
               count--;
               if (count == 0)
-                IDE_GOTO (success);
+                *iter = tmp;
             }
         }
     }
-
-  return NULL;
-
-success:
-  *begin = tmp;
-  return g_strdup ("</");
 }
 
 static gboolean
@@ -304,29 +306,26 @@ find_end (gunichar ch,
   return (ch == '>' || g_unichar_isspace (ch));
 }
 
-static gchar *
-ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
-                                    GtkTextIter    *begin,
-                                    GtkTextIter    *end,
-                                    gint           *cursor_offset)
+static void
+ide_xml_indenter_add_closing_tag (IdeXmlIndenter *xml,
+                                  GtkTextIter    *iter)
 {
   GtkTextIter match_begin;
   GtkTextIter match_end;
   GtkTextIter copy;
 
-  g_return_val_if_fail (IDE_IS_XML_INDENTER (xml), NULL);
-  g_return_val_if_fail (begin, NULL);
-  g_return_val_if_fail (end, NULL);
+  g_return_if_fail (IDE_IS_XML_INDENTER (xml));
+  g_return_if_fail (iter);
 
-  copy = *begin;
+  copy = *iter;
 
   gtk_text_iter_backward_char (&copy);
   gtk_text_iter_backward_char (&copy);
 
   if (gtk_text_iter_get_char (&copy) == '/')
-    return NULL;
+    return;
 
-  copy = *begin;
+  copy = *iter;
 
   if (gtk_text_iter_backward_search (&copy, "<", GTK_TEXT_SEARCH_TEXT_ONLY, &match_begin, &match_end, NULL))
     {
@@ -337,49 +336,64 @@ ide_xml_indenter_maybe_add_closing (IdeXmlIndenter *xml,
       text = gtk_text_iter_get_slice (&match_begin, &copy);
 
       if (strchr (text, '>'))
-        return NULL;
+        return;
 
       gtk_text_iter_forward_char (&match_begin);
       if (gtk_text_iter_get_char (&match_begin) == '/')
-        return NULL;
+        return;
 
       match_end = match_begin;
 
-      if (gtk_text_iter_forward_find_char (&match_end, find_end, NULL, begin))
+      if (gtk_text_iter_forward_find_char (&match_end, find_end, NULL, iter))
         {
-          gchar *slice;
-          gchar *ret = NULL;
+          g_autofree gchar *slice = NULL;
 
           slice = gtk_text_iter_get_slice (&match_begin, &match_end);
 
           if (slice && *slice && *slice != '!')
             {
-              if (gtk_text_iter_get_char (end) == '>')
-                ret = g_strdup_printf ("</%s", slice);
-              else
-                ret = g_strdup_printf ("</%s>", slice);
-              *cursor_offset = -strlen (ret);
+              g_autoptr(GString) tag = NULL;
+              GtkTextBuffer *buffer;
+
+              tag = g_string_new ("</");
+              g_string_append (tag, slice);
+
+              if (gtk_text_iter_get_char (iter) != '>')
+                g_string_append_c (tag, '>');
+
+              buffer = gtk_text_iter_get_buffer (iter);
+              gtk_text_buffer_insert (buffer, iter, tag->str, tag->len);
+              gtk_text_iter_backward_chars (iter, tag->len);
+              gtk_text_buffer_place_cursor (buffer, iter);
             }
-
-          g_free (slice);
-
-          return ret;
         }
     }
-
-  return NULL;
 }
 
 static gboolean
 ide_xml_indenter_is_trigger (GtkSourceIndenter *indenter,
-                             GdkEventKey       *event)
+                             GtkSourceView     *view,
+                             const GtkTextIter *location,
+                             GdkModifierType    state,
+                             guint              keyval)
 {
-  switch (event->keyval)
+  IdeXmlIndenter *xml = (IdeXmlIndenter *)indenter;
+
+  g_return_val_if_fail (IDE_IS_XML_INDENTER (xml), FALSE);
+
+  switch (keyval)
     {
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
+      xml->indent_action = IDE_XML_INDENT_ACTION_INDENT_FORWARD;
+      return TRUE;
+
     case GDK_KEY_slash:
+      xml->indent_action = IDE_XML_INDENT_ACTION_INDENT_BACKWARD;
+      return TRUE;
+
     case GDK_KEY_greater:
+      xml->indent_action = IDE_XML_INDENT_ACTION_ADD_CLOSING_TAG;
       return TRUE;
 
     default:
@@ -389,29 +403,21 @@ ide_xml_indenter_is_trigger (GtkSourceIndenter *indenter,
   return FALSE;
 }
 
-static gchar *
-ide_xml_indenter_format (GtkSourceIndenter *indenter,
-                         GtkTextView       *view,
-                         GtkTextIter       *begin,
-                         GtkTextIter       *end,
-                         gint              *cursor_offset,
-                         GdkEventKey       *trigger)
+static void
+ide_xml_indenter_indent (GtkSourceIndenter *indenter,
+                         GtkSourceView     *view,
+                         GtkTextIter       *iter)
 {
   IdeXmlIndenter *xml = (IdeXmlIndenter *)indenter;
   guint tab_width = 2;
   gint indent_width = -1;
 
-  g_return_val_if_fail (IDE_IS_XML_INDENTER (xml), NULL);
+  g_return_if_fail (IDE_IS_XML_INDENTER (xml));
 
-  *cursor_offset = 0;
-
-  if (GTK_SOURCE_IS_VIEW (view))
-    {
-      tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (view));
-      indent_width = gtk_source_view_get_indent_width (GTK_SOURCE_VIEW (view));
-      if (indent_width != -1)
-        tab_width = indent_width;
-    }
+  tab_width = gtk_source_view_get_tab_width (GTK_SOURCE_VIEW (view));
+  indent_width = gtk_source_view_get_indent_width (GTK_SOURCE_VIEW (view));
+  if (indent_width != -1)
+    tab_width = indent_width;
 
   xml->tab_width = tab_width;
   xml->use_tabs = !gtk_source_view_get_insert_spaces_instead_of_tabs (GTK_SOURCE_VIEW (view));
@@ -422,34 +428,34 @@ ide_xml_indenter_format (GtkSourceIndenter *indenter,
     xml->indent_width = indent_width;
 
   /* do nothing if we are in a cdata section */
-  if (text_iter_in_cdata (begin))
-    return NULL;
+  if (text_iter_in_cdata (iter))
+    return;
 
-  switch (trigger->keyval)
+  switch (xml->indent_action)
     {
-    case GDK_KEY_Return:
-    case GDK_KEY_KP_Enter:
-      if ((trigger->state & GDK_SHIFT_MASK) == 0)
-        return ide_xml_indenter_indent (xml, begin, end, cursor_offset);
-      return NULL;
+    case IDE_XML_INDENT_ACTION_INDENT_FORWARD:
+      ide_xml_indenter_indent_forward (xml, iter);
+      break;
 
-    case GDK_KEY_slash:
-      return ide_xml_indenter_maybe_unindent (xml, begin, end);
+    case IDE_XML_INDENT_ACTION_INDENT_BACKWARD:
+      // FIXME: can't confirm it works since this is never triggered
+      ide_xml_indenter_indent_backward (xml, iter);
+      break;
 
-    case GDK_KEY_greater:
-      return ide_xml_indenter_maybe_add_closing (xml, begin, end, cursor_offset);
+    case IDE_XML_INDENT_ACTION_ADD_CLOSING_TAG:
+      // FIXME: can't confirm it works since this is never triggered
+      ide_xml_indenter_add_closing_tag (xml, iter);
+      break;
 
     default:
-      g_return_val_if_reached (NULL);
+      g_return_if_reached ();
     }
-
-  return NULL;
 }
 
 static void
 indenter_iface_init (GtkSourceIndenterInterface *iface)
 {
-  iface->format = ide_xml_indenter_format;
+  iface->indent = ide_xml_indenter_indent;
   iface->is_trigger = ide_xml_indenter_is_trigger;
 }
 

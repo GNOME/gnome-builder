@@ -8,7 +8,7 @@ plugins_sources += files([
   'ide-xml-diagnostic-provider.c',
   'ide-xml-hash-table.c',
   'ide-xml-highlighter.c',
-  # 'ide-xml-indenter.c',
+  'ide-xml-indenter.c',
   'ide-xml-parser.c',
   'ide-xml-parser-generic.c',
   'ide-xml-parser-ui.c',
