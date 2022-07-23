@@ -510,7 +510,7 @@ copy_clipboard_action (GtkWidget  *widget,
                        GVariant   *param)
 {
   GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
-  g_autofree char *text = vte_terminal_get_text_selected (VTE_TERMINAL (widget));
+  g_autofree char *text = vte_terminal_get_text_selected (VTE_TERMINAL (widget), VTE_FORMAT_TEXT);
   gdk_clipboard_set_text (clipboard, text);
 }
 
