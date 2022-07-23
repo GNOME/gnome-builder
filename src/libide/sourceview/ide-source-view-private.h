@@ -61,7 +61,7 @@ struct _IdeSourceView
    */
   IdeExtensionSetAdapter *completion_providers;
   IdeExtensionSetAdapter *hover_providers;
-  IdeExtensionSetAdapter *indenters;
+  IdeExtensionAdapter *indenter;
 
   /* Mouse click position */
   double click_x;
