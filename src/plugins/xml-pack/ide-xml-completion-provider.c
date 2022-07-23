@@ -1032,7 +1032,7 @@ ide_xml_completion_provider_populate_async (GtkSourceCompletionProvider *provide
 {
   IdeXmlCompletionProvider *self = (IdeXmlCompletionProvider *)provider;
   g_autoptr(IdeTask) task = NULL;
-  GtkTextBuffer *buffer;
+  GtkSourceBuffer *buffer;
   IdeXmlService *service;
   PopulateState *state;
   IdeContext *ide_context;
@@ -1079,7 +1079,7 @@ ide_xml_completion_provider_populate_finish (GtkSourceCompletionProvider  *provi
   return ide_task_propagate_object (IDE_TASK (result), error);
 }
 
-static gboolean
+static void
 ide_xml_completion_provider_refilter (GtkSourceCompletionProvider *provider,
                                       GtkSourceCompletionContext  *context,
                                       GListModel            *model)
@@ -1109,8 +1109,6 @@ ide_xml_completion_provider_refilter (GtkSourceCompletionProvider *provider,
       if (!gtk_source_completion_fuzzy_match (label, casefold, &priority))
         g_list_store_remove (G_LIST_STORE (model), i - 1);
     }
-
-  return TRUE;
 }
 
 static void
@@ -1120,19 +1118,30 @@ ide_xml_completion_provider_display (GtkSourceCompletionProvider *provider,
                                      GtkSourceCompletionCell     *cell)
 {
   IdeXmlProposal *item = (IdeXmlProposal *)proposal;
-  const gchar *label;
 
   g_assert (IDE_IS_XML_COMPLETION_PROVIDER (provider));
-  g_assert (GTK_SOURCE_IS_COMPLETION_LIST_BOX_ROW (row));
+  g_assert (GTK_SOURCE_IS_COMPLETION_CELL (cell));
   g_assert (GTK_SOURCE_IS_COMPLETION_CONTEXT (context));
   g_assert (GTK_SOURCE_IS_COMPLETION_PROPOSAL (proposal));
 
-  label = ide_xml_proposal_get_label (item);
+  switch (gtk_source_completion_cell_get_column (cell))
+    {
+    case GTK_SOURCE_COMPLETION_COLUMN_ICON:
+      gtk_source_completion_cell_set_icon_name (cell, "text-xml-symbolic");
+      break;
 
-  gtk_source_completion_list_box_row_set_icon_name (row, NULL);
-  gtk_source_completion_list_box_row_set_left (row, NULL);
-  gtk_source_completion_list_box_row_set_right (row, NULL);
-  gtk_source_completion_list_box_row_set_center_markup (row, label);
+    case GTK_SOURCE_COMPLETION_COLUMN_TYPED_TEXT:
+      gtk_source_completion_cell_set_markup (cell, ide_xml_proposal_get_label (item));
+      break;
+
+    case GTK_SOURCE_COMPLETION_COLUMN_COMMENT:
+    case GTK_SOURCE_COMPLETION_COLUMN_DETAILS:
+    case GTK_SOURCE_COMPLETION_COLUMN_BEFORE:
+    case GTK_SOURCE_COMPLETION_COLUMN_AFTER:
+    default:
+      gtk_source_completion_cell_set_text (cell, NULL);
+      break;
+    }
 }
 
 static void
@@ -1141,6 +1150,7 @@ ide_xml_completion_provider_activate (GtkSourceCompletionProvider *provider,
                                       GtkSourceCompletionProposal *proposal)
 {
   IdeXmlProposal *item = (IdeXmlProposal *)proposal;
+  GtkSourceBuffer *source_buffer;
   GtkTextBuffer *buffer;
   GtkTextIter begin, end;
   const gchar *text;
@@ -1151,9 +1161,10 @@ ide_xml_completion_provider_activate (GtkSourceCompletionProvider *provider,
 
   text = ide_xml_proposal_get_text (item);
 
-  buffer = gtk_source_completion_context_get_buffer (context);
+  source_buffer = gtk_source_completion_context_get_buffer (context);
   gtk_source_completion_context_get_bounds (context, &begin, &end);
 
+  buffer = GTK_TEXT_BUFFER (source_buffer);
   gtk_text_buffer_begin_user_action (buffer);
   gtk_text_buffer_delete (buffer, &begin, &end);
   gtk_text_buffer_insert (buffer, &begin, text, -1);

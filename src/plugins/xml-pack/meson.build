@@ -4,7 +4,7 @@ plugins_sources += files([
   'ide-xml-analysis.c',
   'ide-xml-completion-attributes.c',
   'ide-xml-completion-values.c',
-  # 'ide-xml-completion-provider.c',
+  'ide-xml-completion-provider.c',
   'ide-xml-diagnostic-provider.c',
   'ide-xml-hash-table.c',
   'ide-xml-highlighter.c',
