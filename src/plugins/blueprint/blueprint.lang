@@ -223,12 +223,15 @@
 
     <context id="keywords" style-ref="keyword">
       <keyword>accessibility</keyword>
+      <keyword>after</keyword>
       <keyword>bidirectional</keyword>
       <keyword>bind</keyword>
+      <keyword>inverted</keyword>
       <keyword>item</keyword>
       <keyword>items</keyword>
       <keyword>layout</keyword>
       <keyword>menu</keyword>
+      <keyword>no-sync-create</keyword>
       <keyword>patterns</keyword>
       <keyword>section</keyword>
       <keyword>strings</keyword>
