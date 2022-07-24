@@ -121,14 +121,14 @@ copy_children (GPtrArray *children)
 }
 
 static void
-state_stack_item_free (gpointer *data)
+state_stack_item_clear (gpointer data)
 {
-  StateStackItem *item;
+  StateStackItem *item = data;
 
-  g_assert (data != NULL);
+  g_assert (item != NULL);
 
-  item = (StateStackItem *)data;
-  g_ptr_array_unref (item->children);
+  g_clear_pointer (&item->children, g_ptr_array_unref);
+  item->candidate_node = NULL;
 }
 
 static GArray *
@@ -137,7 +137,7 @@ state_stack_new (void)
   GArray *stack;
 
   stack = g_array_new (FALSE, TRUE, sizeof (StateStackItem));
-  g_array_set_clear_func (stack, (GDestroyNotify)state_stack_item_free);
+  g_array_set_clear_func (stack, state_stack_item_clear);
 
   return stack;
 }
