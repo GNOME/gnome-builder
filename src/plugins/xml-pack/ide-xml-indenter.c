@@ -443,7 +443,6 @@ ide_xml_indenter_indent (GtkSourceIndenter *indenter,
       break;
 
     case IDE_XML_INDENT_ACTION_ADD_CLOSING_TAG:
-      // FIXME: can't confirm it works since this is never triggered
       ide_xml_indenter_add_closing_tag (xml, iter);
       break;
 
