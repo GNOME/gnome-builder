@@ -272,6 +272,8 @@ ide_xml_indenter_indent_backward (IdeXmlIndenter *xml,
       (ch = text_iter_peek_prev_char (&tmp)) &&
       ((ch == ' ') || (ch == '\t')))
     {
+      GtkTextIter close_tag_begin = tmp;
+
       if (ch == '\t')
         {
           GtkTextBuffer *buffer = gtk_text_iter_get_buffer (iter);
@@ -292,8 +294,16 @@ ide_xml_indenter_indent_backward (IdeXmlIndenter *xml,
                   (ch != ' '))
                 return;
               count--;
+
               if (count == 0)
-                *iter = tmp;
+                {
+                  GtkTextBuffer *buffer = gtk_text_iter_get_buffer (iter);
+                  GtkTextMark *mark = gtk_text_buffer_create_mark (buffer, NULL, iter, FALSE);
+
+                  gtk_text_buffer_delete (buffer, &tmp, &close_tag_begin);
+                  gtk_text_buffer_get_iter_at_mark (buffer, iter, mark);
+                  gtk_text_buffer_delete_mark (buffer, mark);
+                }
             }
         }
     }
@@ -438,7 +448,6 @@ ide_xml_indenter_indent (GtkSourceIndenter *indenter,
       break;
 
     case IDE_XML_INDENT_ACTION_INDENT_BACKWARD:
-      // FIXME: can't confirm it works since this is never triggered
       ide_xml_indenter_indent_backward (xml, iter);
       break;
 
