@@ -125,6 +125,7 @@ subdir('ts-language-server')
 subdir('trim-spaces')
 subdir('update-manager')
 subdir('valac')
+subdir('vala-indenter')
 subdir('valgrind')
 subdir('vcsui')
 subdir('vim')
@@ -197,6 +198,7 @@ status += [
   'Todo ................................. : @0@'.format(get_option('plugin_todo')),
   'Update Manager ....................... : @0@'.format(get_option('plugin_update_manager')),
   'Vala Compiler ........................ : @0@'.format(get_option('plugin_valac')),
+  'Vala Indenter ........................ : @0@'.format(get_option('plugin_vala_indenter')),
   'Valgrind ............................. : @0@'.format(get_option('plugin_valgrind')),
   'Waf .................................. : @0@'.format(get_option('plugin_waf')),
   'Word Completion ...................... : @0@'.format(get_option('plugin_words')),

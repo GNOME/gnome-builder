@@ -1,0 +1,11 @@
+[Plugin]
+Authors=JCWasmx86 <JCWasmx86@t-online.de>
+Builtin=true
+Copyright=Copyright © 2022 JCWasmx86
+Description=Indenter for Vala
+Embedded=_ide_vala_indenter_register_types
+Module=vala-indenter
+Name=Vala Indenter
+X-Category=language
+X-Indenter-Languages-Priority=1500
+X-Indenter-Languages=vala
