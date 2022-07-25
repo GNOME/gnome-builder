@@ -22,10 +22,8 @@
 
 #define IDE_GTK_INSIDE
 # include "ide-animation.h"
-# include "ide-cell-renderer-fancy.h"
 # include "ide-entry-popover.h"
 # include "ide-enum-object.h"
-# include "ide-fancy-tree-view.h"
 # include "ide-file-chooser-entry.h"
 # include "ide-file-manager.h"
 # include "ide-font-description.h"
