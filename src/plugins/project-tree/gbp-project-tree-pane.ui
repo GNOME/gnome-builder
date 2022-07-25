@@ -10,6 +10,7 @@
             <property name="visible">true</property>
             <style>
               <class name="project-tree"/>
+              <class name="navigation-sidebar"/>
             </style>
           </object>
         </child>
