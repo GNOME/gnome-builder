@@ -34,6 +34,9 @@
                     <property name="max-content-height">600</property>
                     <property name="min-content-width">300</property>
                     <property name="max-content-width">300</property>
+                    <style>
+                      <class name="shadow-when-scroll"/>
+                    </style>
                     <child>
                       <object class="GtkListView" id="branches_view">
                         <!--signal name="activate" handler="activate_branch_cb" swapped="true" object="GbpVcsuiSwitcherPopover"/-->
@@ -92,6 +95,9 @@
                     <property name="max-content-height">600</property>
                     <property name="min-content-width">300</property>
                     <property name="max-content-width">300</property>
+                    <style>
+                      <class name="shadow-when-scroll"/>
+                    </style>
                     <child>
                       <object class="GtkListView" id="tags_view">
                         <!--signal name="activate" handler="activate_tag_cb" swapped="true" object="GbpVcsuiSwitcherPopover"/-->
