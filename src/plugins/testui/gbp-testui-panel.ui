@@ -53,6 +53,9 @@
                 </property>
               </object>
             </property>
+            <style>
+              <class name="navigation-sidebar"/>
+            </style>
           </object>
         </child>
       </object>

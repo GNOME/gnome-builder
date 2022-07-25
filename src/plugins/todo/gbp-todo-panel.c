@@ -322,6 +322,8 @@ gbp_todo_panel_init (GbpTodoPanel *self)
 
   ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->tree_view),
                                      gbp_todo_panel_cell_data_func, NULL, NULL);
+
+  gtk_widget_add_css_class (GTK_WIDGET (self->tree_view), "navigation-sidebar");
 }
 
 /**
