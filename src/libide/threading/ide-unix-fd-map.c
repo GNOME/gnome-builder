@@ -422,6 +422,26 @@ ide_unix_fd_map_steal_from (IdeUnixFDMap  *self,
   return TRUE;
 }
 
+#ifdef __APPLE__
+static int
+pipe2 (int      fd_pair[2],
+       unsigned flags)
+{
+  int r = pipe (fd_pair);
+
+  if (r == -1)
+    return -1;
+
+  if (flags & O_CLOEXEC)
+    {
+      fcntl (fd_pair[0], F_SETFD, FD_CLOEXEC);
+      fcntl (fd_pair[1], F_SETFD, FD_CLOEXEC);
+    }
+
+  return r;
+}
+#endif
+
 /**
  * ide_unix_fd_map_create_stream:
  * @self: a #IdeUnixFdMap
