@@ -4,34 +4,29 @@
     <text languages="c;chdr;"><![CDATA[GtkWidget *$0]]></text>
   </snippet>
   <snippet _name="function_prefix" trigger="function_prefix" _description="">
-    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify}_
-]]></text>
+    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify}_]]></text>
   </snippet>
   <snippet _name="fn" trigger="fn" _description="Create function">
     <text languages="c;chdr;"><![CDATA[${1:static void}
 ${2:function_name} (${3:void})
 {
 	$0
-}
-]]></text>
+}]]></text>
   </snippet>
   <snippet _name="fns" trigger="fns" _description="Create function signature">
-    <text languages="c;chdr;"><![CDATA[${1:void} ${2:function_name} (${3:void});$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[${1:void} ${2:function_name} (${3:void});$0]]></text>
   </snippet>
   <snippet _name="if" trigger="if" _description="">
     <text languages="c;chdr;"><![CDATA[if (${1:condition})
 	{
 		$0
-	}
-]]></text>
+	}]]></text>
   </snippet>
   <snippet _name="elseif" trigger="elseif" _description="else if">
     <text languages="c;chdr;"><![CDATA[else if (${1:condition})
 	{
 		$0
-	}
-]]></text>
+	}]]></text>
   </snippet>
   <snippet _name="switch" trigger="switch" _description="">
     <text languages="c;chdr;"><![CDATA[switch (${1:expression})
@@ -39,69 +34,55 @@ ${2:function_name} (${3:void})
 	case ${2:value}:
 		$0
 		break;
-	}
-]]></text>
+	}]]></text>
   </snippet>
   <snippet _name="case" trigger="case" _description="">
     <text languages="c;chdr;"><![CDATA[case ${1:value}:
 	$0
-	break;
-]]></text>
+	break;]]></text>
   </snippet>
   <snippet _name="default" trigger="default" _description="">
     <text languages="c;chdr;"><![CDATA[default:
 	$0
-	break;
-]]></text>
+	break;]]></text>
   </snippet>
   <snippet _name="while" trigger="while" _description="">
     <text languages="c;chdr;"><![CDATA[while (${1:condition})
 	{
 		$0
-	}
-]]></text>
+	}]]></text>
   </snippet>
   <snippet _name="for" trigger="for" _description="">
     <text languages="c;chdr;"><![CDATA[for (${1:i = 0}; ${2:i < }; ${3:i++})
 	{
 		$0
-	}
-]]></text>
+	}]]></text>
   </snippet>
   <snippet _name="var" trigger="var" _description="Create variable">
-    <text languages="c;chdr;"><![CDATA[${1:type} ${2:variable} = ${3:expression};$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[${1:type} ${2:variable} = ${3:expression};$0]]></text>
   </snippet>
   <snippet _name="printf" trigger="printf" _description="printf(…)">
-    <text languages="c;chdr;"><![CDATA[printf("${1:%s\\n}", ${2:expression});$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[printf("${1:%s\\n}", ${2:expression});$0]]></text>
   </snippet>
   <snippet _name="eprintf" trigger="eprintf" _description="eprintf(…)">
-    <text languages="c;chdr;"><![CDATA[eprintf("${1:%s\\n}", ${2:expression});$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[eprintf("${1:%s\\n}", ${2:expression});$0]]></text>
   </snippet>
   <snippet _name="scanf" trigger="scanf" _description="scanf(…)">
-    <text languages="c;chdr;"><![CDATA[scanf("${1:%d}", ${2:&variable});$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[scanf("${1:%d}", ${2:&variable});$0]]></text>
   </snippet>
   <snippet _name="include" trigger="include" _description="Include a file relative to the file or configured include paths">
-    <text languages="c;chdr;"><![CDATA[#include "${1}"$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[#include "${1}"$0]]></text>
   </snippet>
   <snippet _name="Include" trigger="Include" _description="Include a file from the global include path">
-    <text languages="c;chdr;"><![CDATA[#include <${1}>$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[#include <${1}>$0]]></text>
   </snippet>
   <snippet _name="Classname" trigger="Classname" _description="">
-    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify|camelize} $0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify|camelize} $0]]></text>
   </snippet>
   <snippet _name="_Classname" trigger="_Classname" _description="Like Classname, but with _ prefix">
-    <text languages="c;chdr;"><![CDATA[_${$filename|stripsuffix|functify|camelize}
-]]></text>
+    <text languages="c;chdr;"><![CDATA[_${$filename|stripsuffix|functify|camelize}]]></text>
   </snippet>
   <snippet _name="CLASS_NAME" trigger="CLASS_NAME" _description="">
-    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify|upper} (${1})$0
-]]></text>
+    <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify|upper} (${1})$0]]></text>
   </snippet>
 </snippets>

@@ -82,8 +82,7 @@ $3_class_init ($2Class *klass)
 static void
 $3_init ($2 *self)
 {
-}
-]]></text>
+}]]></text>
   </snippet>
   <snippet _name="gobject_derivable" trigger="gobject_derivable" _description="Create GObject">
     <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
@@ -160,8 +159,7 @@ static void
 $3_init ($2 *self)
 {
   $0
-}
-]]></text>
+}]]></text>
     <text languages="chdr;"><![CDATA[#pragma once
 
 #include ${3:<glib-object.h>}
@@ -180,8 +178,7 @@ struct _$1Class
 $1 *${$1|functify}_new (void);
 $0
 
-G_END_DECLS
-]]></text>
+G_END_DECLS]]></text>
   </snippet>
   <snippet _name="gobject" trigger="gobject" _description="Create GObject">
     <text languages="js;"><![CDATA[var $1 = GObject.registerClass(
@@ -192,20 +189,17 @@ class ${1:ClassName} extends ${2:GObject.Object} {
 		$0
 	}
 
-});
-]]></text>
+});]]></text>
     <text languages="python;"><![CDATA[class ${1:ClassName}(${2:GObject.Object}):
 
 	def __init__(self${3:,}):
 		$2.__init__(self)
-$0
-]]></text>
+$0]]></text>
     <text languages="python3;"><![CDATA[class ${1:ClassName}(${2:GObject.Object}):
 
 	def __init__(self${3:,}):
 		super().__init__()
-$0
-]]></text>
+$0]]></text>
   </snippet>
   <snippet _name="gobject_final" trigger="gobject_final" _description="Create GObject for a non-derivable class">
     <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
@@ -282,8 +276,7 @@ static void
 $3_init ($2 *self)
 {
   $0
-}
-]]></text>
+}]]></text>
     <text languages="chdr;"><![CDATA[#pragma once
 
 #include ${3:<glib-object.h>}
@@ -296,8 +289,7 @@ G_DECLARE_FINAL_TYPE (${1:$filename|stripsuffix|camelize}, ${$1|functify}, ${$1|
 
 $1 *${$1|functify}_new (void);
 $0
-G_END_DECLS
-]]></text>
+G_END_DECLS]]></text>
   </snippet>
   <snippet _name="gobject_final_private" trigger="gobject_final_private" _description="Create GObject for a non-derivable class with private datastructure">
     <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
@@ -379,8 +371,7 @@ $3_class_init ($2Class *klass)
 static void
 $3_init ($2 *self)
 {
-}
-]]></text>
+}]]></text>
   </snippet>
   <snippet _name="gobject_boxed_ref" trigger="gobject_boxed_ref" _description="Create reference counted boxed type">
     <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
@@ -471,8 +462,7 @@ $3_unref ($2 *self)
 
 	if (g_atomic_int_dec_and_test (&self->ref_count))
 		$3_free (self);
-}$0
-]]></text>
+}$0]]></text>
     <text languages="chdr;"><![CDATA[#pragma once
 
 #include ${3:<glib-object.h>}
@@ -497,8 +487,7 @@ void${$1|space}  $4_unref    ($1 *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_unref)
 $0
-G_END_DECLS
-]]></text>
+G_END_DECLS]]></text>
   </snippet>
   <snippet _name="gobject_boxed_copy" trigger="gobject_boxed_copy" _description="Create a copy/free boxed type">
     <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
@@ -561,8 +550,7 @@ $3_free ($2 *self)
 	g_return_if_fail (self);
 
 	g_slice_free ($2, self);
-}
-]]></text>
+}]]></text>
     <text languages="chdr;"><![CDATA[#pragma once
 
 #include ${3:<glib-object.h>}
@@ -581,8 +569,7 @@ void${$1|space}  $4_free     ($1 *self);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC ($1, $4_free)
 $0
 
-G_END_DECLS
-]]></text>
+G_END_DECLS]]></text>
   </snippet>
   <snippet _name="gobj_guard" trigger="gobj_guard" _description="Create header for a copy/free boxed type">
     <text languages="chdr;"><![CDATA[#pragma once
@@ -593,8 +580,7 @@ G_BEGIN_DECLS
 
 $0
 
-G_END_DECLS
-]]></text>
+G_END_DECLS]]></text>
   </snippet>
   <snippet _name="gobj_interface" trigger="gobj_interface" _description="Create GObject Interface">
     <text languages="c;"><![CDATA[#include "${1:$filename|stripsuffix}.h"
@@ -605,8 +591,7 @@ static void
 $3_default_init ($2Interface *iface)
 {
   $0
-}
-]]></text>
+}]]></text>
     <text languages="chdr;"><![CDATA[#pragma once
 
 #include ${3:<glib-object.h>}
@@ -623,20 +608,16 @@ struct _${1:$filename|stripsuffix|functify|camelize}Interface
 	$0
 };
 
-G_END_DECLS
-]]></text>
+G_END_DECLS]]></text>
   </snippet>
   <snippet _name="gobj_ref" trigger="gobj_ref" _description="GObject ref">
-    <text languages="c;"><![CDATA[g_object_ref (${1});$0
-]]></text>
+    <text languages="c;"><![CDATA[g_object_ref (${1});$0]]></text>
   </snippet>
   <snippet _name="gobj_unref" trigger="gobj_unref" _description="GObject unref">
-    <text languages="c;"><![CDATA[g_object_unref (${1});$0
-]]></text>
+    <text languages="c;"><![CDATA[g_object_unref (${1});$0]]></text>
   </snippet>
   <snippet _name="gobj_clear" trigger="gobj_clear" _description="GObject clear">
-    <text languages="c;"><![CDATA[g_clear_object (&${1});$0
-]]></text>
+    <text languages="c;"><![CDATA[g_clear_object (&${1});$0]]></text>
   </snippet>
   <snippet _name="gproperty" trigger="gproperty" _description="Add GObject property">
     <text languages="c;"><![CDATA[properties [PROP_${1:NAME}] =
@@ -646,15 +627,11 @@ G_END_DECLS
 	             ${$2|space}  ${6}
 	             ${$2|space}  (G_PARAM_${7:READWRITE} |
 	             ${$2|space}   G_PARAM_STATIC_STRINGS));
-g_object_class_install_property (object_class, PROP_$1,
-                                 properties [PROP_$1]);
-$0]]></text>
+g_object_class_install_property (object_class, PROP_$1, properties [PROP_$1]);$0]]></text>
     <text languages="js;"><![CDATA[${1:foo}: GObject.ParamSpec.${2:int}('$1',
 	'${3:$1|capitalize}', '${4:Property description}',
-	$0),
-]]></text>
-    <text languages="python;python3;"><![CDATA[${1:foo} = GObject.Property(type=${2:int}, default=${3:0})$0
-]]></text>
+	$0),]]></text>
+    <text languages="python;python3;"><![CDATA[${1:foo} = GObject.Property(type=${2:int}, default=${3:0})$0]]></text>
   </snippet>
   <snippet _name="gsignal" trigger="gsignal" _description="Add GObject signal">
     <text languages="c;"><![CDATA[signals [${$1|functify|upper}] =
@@ -666,12 +643,9 @@ $0]]></text>
 	              ${5:NULL},
 	              ${6:g_cclosure_marshal_generic},
 	              ${7:G_TYPE_NONE},
-	              ${8:0});$0
-]]></text>
-    <text languages="js;"><![CDATA[${1:signal}: {$0},
-]]></text>
-    <text languages="python;python3;"><![CDATA["${1:signal}": (GObject.SignalFlags.${2:RUN_FIRST}, ${3:None}, (${4:int,}))$0
-]]></text>
+	              ${8:0});$0]]></text>
+    <text languages="js;"><![CDATA[${1:signal}: {$0},]]></text>
+    <text languages="python;python3;"><![CDATA["${1:signal}": (GObject.SignalFlags.${2:RUN_FIRST}, ${3:None}, (${4:int,}))$0]]></text>
   </snippet>
   <snippet _name="async" trigger="async" _description="Create the async function for an async/finish pair">
     <text languages="c;"><![CDATA[/**
@@ -696,20 +670,17 @@ ${$2|space} ${$1|space}         gpointer user_data)
 	task = g_task_new (self, cancellable, callback, user_data);
 	g_task_set_source_tag (task, ${$2|functify}_$1_async);
 	$0
-}
-]]></text>
+}]]></text>
     <text languages="chdr;"><![CDATA[void ${$2|functify}_${1:do_something}_async (${2:$filename|stripsuffix|camelize} *self,
      ${$2|space} ${$1|space}         GCancellable *cancellable,
      ${$2|space} ${$1|space}         GAsyncReadyCallback callback,
-     ${$2|space} ${$1|space}         gpointer user_data);$0
-]]></text>
+     ${$2|space} ${$1|space}         gpointer user_data);$0]]></text>
   </snippet>
   <snippet _name="vtasync" trigger="vtasync" _description="Create a vtable async function for an async/finish pair">
     <text languages="chdr;"><![CDATA[void     (*${1:do_someting}_async)  (${2:$filename|stripsuffix|camelize} *self,
            ${$1|space}          GCancellable         *cancellable,
            ${$1|space}          GAsyncReadyCallback   callback,
-           ${$1|space}          gpointer              user_data);$0
-]]></text>
+           ${$1|space}          gpointer              user_data);$0]]></text>
   </snippet>
   <snippet _name="finish" trigger="finish" _description="Create the finish function for an async/finish pair">
     <text languages="c;"><![CDATA[/**
@@ -729,18 +700,15 @@ ${$2|space} ${$1|space}          GError **error)
 	g_return_val_if_fail (g_task_is_valid (result, self), $3);
 
 	return g_task_propagate_${4:boolean} (G_TASK (result), error);
-}$0
-]]></text>
+}$0]]></text>
     <text languages="chdr;"><![CDATA[gboolean ${$2|functify}_${1:do_something}_finish (${2:$filename|stripsuffix|camelize} *self,
          ${$2|space} ${$1|space}          GAsyncResult *result,
-         ${$2|space} ${$1|space}          GError **error);
-]]></text>
+         ${$2|space} ${$1|space}          GError **error);]]></text>
   </snippet>
   <snippet _name="vtfinish" trigger="vtfinish" _description="Create a vtable finish function for an async/finish pair">
     <text languages="chdr;"><![CDATA[gboolean (*${1:do_someting}_finish) (${2:$filename|stripsuffix|camelize} *self,
            ${$1|space}          GAsyncResult         *result,
-           ${$1|space}          GError              **error);$0
-]]></text>
+           ${$1|space}          GError              **error);$0]]></text>
   </snippet>
   <snippet _name="readycallback" trigger="readycallback" _description="Create a GAsyncReadyCallback function">
     <text languages="c;"><![CDATA[static void
@@ -756,8 +724,7 @@ ${$filename|stripsuffix|functify|space} ${$1|space}  gpointer      user_data)
 	g_assert (G_IS_TASK (task));
 
 	g_task_return_boolean (task, TRUE);
-}$0
-]]></text>
+}$0]]></text>
   </snippet>
   <snippet _name="Private" trigger="Private" _description="Define a local for the GObject&apos;s private data.">
     <text languages="c;chdr;"><![CDATA[${$filename|stripsuffix|functify|camelize}Private *priv = ${$filename|stripsuffix|functify}_get_instance_private (self);$0]]></text>
@@ -769,8 +736,7 @@ ${$filename|stripsuffix|functify|space} ${$1|space}  gpointer      user_data)
  * ${3}
  *
  * Returns: ${2}
- */$0
-]]></text>
+ */$0]]></text>
   </snippet>
   <snippet _name="fail" trigger="fail" _description="Snippet for g_return_if_fail()">
     <text languages="c;chdr;"><![CDATA[g_return_if_fail (${1:`$filename|stripsuffix|functify|namespace|upper`_IS_`$filename|stripsuffix|class|functify|upper` (self)});$0]]></text>
@@ -792,8 +758,7 @@ ${$1|space}               GParamSpec *pspec)
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		}
-}
-]]></text>
+}]]></text>
   </snippet>
   <snippet _name="gobj_set_property" trigger="gobj_set_property" _description="Create a set_property handler">
     <text languages="c;"><![CDATA[static void
@@ -809,21 +774,19 @@ ${$1|space}               GParamSpec   *pspec)
 		default:
 			G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
 		}
-}
-]]></text>
+}]]></text>
   </snippet>
   <snippet _name="testmain" trigger="testmain" _description="">
     <text languages="c;cpp;"><![CDATA[#include <glib.h>
-gint
-main (gint   argc,
-      gchar *argv[])
+int
+main (int   argc,
+      char *argv[])
 {
 	g_test_init (&argc, &argv, NULL);
 
 	$0
 
 	return g_test_run ();
-}
-]]></text>
+}]]></text>
   </snippet>
 </snippets>
