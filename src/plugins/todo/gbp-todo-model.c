@@ -20,6 +20,7 @@
 
 #define G_LOG_DOMAIN "gbp-todo-model"
 
+#include <gtk/gtk.h>
 #include <string.h>
 
 #include <libide-code.h>
@@ -40,9 +41,11 @@
  * even when deleted, is more than fine.
  */
 
-struct _GbpTodoModel {
-  GtkListStore  parent_instance;
-  IdeVcs       *vcs;
+struct _GbpTodoModel
+{
+  GObject    parent_instance;
+  GSequence *items;
+  IdeVcs    *vcs;
 };
 
 typedef struct
@@ -55,10 +58,46 @@ typedef struct
 typedef struct
 {
   GbpTodoModel *self;
-  GPtrArray    *items;
+  GSequence    *items;
+  GFile        *file;
+  guint         single_file : 1;
 } ResultInfo;
 
-G_DEFINE_FINAL_TYPE (GbpTodoModel, gbp_todo_model, GTK_TYPE_LIST_STORE)
+static GType
+gbp_todo_model_get_item_type (GListModel *model)
+{
+  return GBP_TYPE_TODO_ITEM;
+}
+
+static guint
+gbp_todo_model_get_n_items (GListModel *model)
+{
+  return g_sequence_get_length (GBP_TODO_MODEL (model)->items);
+}
+
+static gpointer
+gbp_todo_model_get_item (GListModel *model,
+                         guint       position)
+{
+  GbpTodoModel *self = GBP_TODO_MODEL (model);
+  GSequenceIter *iter = g_sequence_get_iter_at_pos (self->items, position);
+
+  if (g_sequence_iter_is_end (iter))
+    return NULL;
+
+  return g_object_ref (g_sequence_get (iter));
+}
+
+static void
+list_model_iface_init (GListModelInterface *iface)
+{
+  iface->get_item_type = gbp_todo_model_get_item_type;
+  iface->get_n_items = gbp_todo_model_get_n_items;
+  iface->get_item = gbp_todo_model_get_item;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTodoModel, gbp_todo_model, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 enum {
   PROP_0,
@@ -70,7 +109,7 @@ static GParamSpec *properties [N_PROPS];
 static GRegex *line1;
 static GRegex *line2;
 
-static const gchar *exclude_dirs[] = {
+static const char *exclude_dirs[] = {
   ".bzr",
   ".flatpak-builder",
   ".git",
@@ -82,7 +121,7 @@ static const gchar *exclude_dirs[] = {
  * we know we'll discard, rather than wait until we query the IdeVcs
  * for that information.
  */
-static const gchar *exclude_files[] = {
+static const char *exclude_files[] = {
   "*~",
   "*.swp",
   "*.m4",
@@ -93,7 +132,7 @@ static const gchar *exclude_files[] = {
   "Makecache",
 };
 
-static const gchar *keywords[] = {
+static const char *keywords[] = {
   "FIXME",
   "XXX",
   "TODO",
@@ -114,97 +153,9 @@ result_info_free (gpointer data)
   ResultInfo *info = data;
 
   g_clear_object (&info->self);
-  g_clear_pointer (&info->items, g_ptr_array_unref);
+  g_clear_object (&info->file);
+  g_clear_pointer (&info->items, g_sequence_free);
   g_slice_free (ResultInfo, info);
-}
-
-static void
-gbp_todo_model_clear (GbpTodoModel *self,
-                      const gchar  *path)
-{
-  GtkTreeIter iter;
-  gboolean matched = FALSE;
-
-  g_assert (GBP_IS_TODO_MODEL (self));
-  g_assert (path != NULL);
-
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self), &iter))
-    {
-      do
-        {
-          g_autoptr(GbpTodoItem) item = NULL;
-          const gchar *item_path;
-
-        again:
-
-          gtk_tree_model_get (GTK_TREE_MODEL (self), &iter, 0, &item, -1);
-          item_path = gbp_todo_item_get_path (item);
-
-          if (g_strcmp0 (path, item_path) == 0)
-            {
-              if (!gtk_list_store_remove (GTK_LIST_STORE (self), &iter))
-                break;
-              matched = TRUE;
-              g_clear_object (&item);
-              goto again;
-            }
-          else if (matched)
-            {
-              /* We skipped past our last match, so we might as well
-               * short-circuit and avoid looking at more rows.
-               */
-              break;
-            }
-        }
-      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self), &iter));
-    }
-}
-
-static void
-gbp_todo_model_merge (GbpTodoModel *self,
-                      GbpTodoItem  *item)
-{
-  GtkTreeIter iter;
-
-  g_assert (GBP_IS_TODO_MODEL (self));
-  g_assert (GBP_IS_TODO_ITEM (item));
-
-  gtk_list_store_prepend (GTK_LIST_STORE (self), &iter);
-  gtk_list_store_set (GTK_LIST_STORE (self), &iter, 0, item, -1);
-}
-
-static gboolean
-gbp_todo_model_merge_results (gpointer user_data)
-{
-  ResultInfo *info = user_data;
-  const gchar *last_path = NULL;
-  gboolean needs_clear = FALSE;
-
-  g_assert (info != NULL);
-  g_assert (GBP_IS_TODO_MODEL (info->self));
-  g_assert (info->items != NULL);
-
-  /* Try to avoid clearing on the initial build of the model */
-  if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (info->self), NULL) > 0)
-    needs_clear = TRUE;
-
-  /* Walk backwards to preserve ordering, as merging will always prepend
-   * the item to the store.
-   */
-  for (guint i = info->items->len; i > 0; i--)
-    {
-      GbpTodoItem *item = g_ptr_array_index (info->items, i - 1);
-      const gchar *path = gbp_todo_item_get_path (item);
-
-      if (needs_clear && (g_strcmp0 (path, last_path) != 0))
-        gbp_todo_model_clear (info->self, path);
-
-      gbp_todo_model_merge (info->self, item);
-
-      last_path = path;
-    }
-
-  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -250,7 +201,7 @@ gbp_todo_model_dispose (GObject *object)
 {
   GbpTodoModel *self = (GbpTodoModel *)object;
 
-  g_clear_object (&self->vcs);
+  g_clear_pointer (&self->items, g_sequence_free);
 
   G_OBJECT_CLASS (gbp_todo_model_parent_class)->dispose (object);
 }
@@ -286,11 +237,7 @@ gbp_todo_model_class_init (GbpTodoModelClass *klass)
 static void
 gbp_todo_model_init (GbpTodoModel *self)
 {
-  GType column_types[] = { GBP_TYPE_TODO_ITEM };
-
-  gtk_list_store_set_column_types (GTK_LIST_STORE (self),
-                                   G_N_ELEMENTS (column_types),
-                                   column_types);
+  self->items = g_sequence_new (g_object_unref);
 }
 
 /**
@@ -309,6 +256,98 @@ gbp_todo_model_new (IdeVcs *vcs)
                        NULL);
 }
 
+static int
+gbp_todo_model_compare_func (const GbpTodoItem *a,
+                             const GbpTodoItem *b)
+{
+  return g_strcmp0 (a->path, b->path);
+}
+
+static gboolean
+result_info_merge (gpointer user_data)
+{
+  ResultInfo *r = user_data;
+  guint added;
+
+  g_assert (r != NULL);
+  g_assert (GBP_IS_TODO_MODEL (r->self));
+  g_assert (G_IS_FILE (r->file));
+  g_assert (r->items != NULL);
+
+  added = g_sequence_get_length (r->items);
+
+  if (!r->single_file)
+    {
+      g_autoptr(GSequence) old_seq = g_steal_pointer (&r->self->items);
+      guint old_len = g_sequence_get_length (old_seq);
+
+      /* If we are not in single-file mode, then we just indexed the entire
+       * project directory tree. Just swap out our items lists and notify
+       * the list model interface of changes.
+       */
+      r->self->items = g_steal_pointer (&r->items);
+
+      if (old_len || added)
+        g_list_model_items_changed (G_LIST_MODEL (r->self), 0, old_len, added);
+
+      return G_SOURCE_REMOVE;
+    }
+  else
+    {
+      GbpTodoItem *first = g_sequence_get (g_sequence_get_begin_iter (r->items));
+      GSequenceIter *iter;
+      GSequenceIter *prev;
+      GSequenceIter *next;
+      guint position;
+      guint removed = 0;
+
+      /* We parsed a single file for TODOs, so we need to remove all of the old
+       * items first. We search for a GSequenceIter then walk backwards to the
+       * first matching position (since multiple iters returning TRUE from the
+       * compare func do not guarantee we're given the first). After the last
+       * iter is removed, we can start inserting our sorted result set.
+       */
+
+      iter = g_sequence_search (r->self->items,
+                                first,
+                                (GCompareDataFunc)gbp_todo_model_compare_func,
+                                NULL);
+
+      g_assert (iter != NULL);
+
+      /* Walk backwards to first match. Necessary because GSequence does not
+       * guarantee our binary search will find the first matching iter when
+       * multiple iters may compare equally.
+       */
+      while ((prev = g_sequence_iter_prev (iter)) &&
+             (prev != iter) &&
+             gbp_todo_model_compare_func (g_sequence_get (prev), first) == 0)
+        iter = prev;
+
+      position = g_sequence_iter_get_position (iter);
+
+      while ((next = g_sequence_iter_next (iter)) &&
+             (next != iter) &&
+             gbp_todo_model_compare_func (g_sequence_get (iter), first) == 0)
+        {
+          g_sequence_remove (iter);
+          iter = next;
+          removed++;
+        }
+
+      if (added > 0)
+        g_sequence_move_range (iter,
+                               g_sequence_get_begin_iter (r->items),
+                               g_sequence_iter_prev (g_sequence_get_end_iter (r->items)));
+
+      g_list_model_items_changed (G_LIST_MODEL (r->self), position, removed, added);
+
+      return G_SOURCE_REMOVE;
+    }
+
+  g_assert_not_reached ();
+}
+
 static void
 gbp_todo_model_mine_worker (IdeTask      *task,
                             gpointer      source_object,
@@ -318,17 +357,19 @@ gbp_todo_model_mine_worker (IdeTask      *task,
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(GPtrArray) items = NULL;
+  g_autoptr(GSequence) items = NULL;
   g_autoptr(GbpTodoItem) item = NULL;
+  g_autoptr(GListStore) store = NULL;
   g_autoptr(GBytes) bytes = NULL;
   g_autoptr(GTimer) timer = g_timer_new ();
-  g_autofree gchar *workpath = NULL;
+  g_autofree char *workpath = NULL;
   GbpTodoModel *self = source_object;
   Mine *m = task_data;
   IdeLineReader reader;
   ResultInfo *info;
-  gchar *stdoutstr = NULL;
-  gchar *line;
+  gboolean single_file = FALSE;
+  char *stdoutstr = NULL;
+  char *line;
   gsize pathlen = 0;
   gsize stdoutstr_len;
   gsize len;
@@ -341,7 +382,8 @@ gbp_todo_model_mine_worker (IdeTask      *task,
 
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDOUT_PIPE);
 
-  if (!(workpath = g_file_get_path (m->workdir)))
+  if (!g_file_is_native (m->workdir) ||
+      !(workpath = g_file_get_path (m->workdir)))
     {
       ide_task_return_new_error (task,
                                  G_IO_ERROR,
@@ -382,8 +424,8 @@ gbp_todo_model_mine_worker (IdeTask      *task,
     {
       for (guint i = 0; i < G_N_ELEMENTS (exclude_files); i++)
         {
-          const gchar *exclude_file = exclude_files[i];
-          g_autofree gchar *arg = NULL;
+          const char *exclude_file = exclude_files[i];
+          g_autofree char *arg = NULL;
 
           arg = g_strdup_printf ("--exclude=%s", exclude_file);
           ide_subprocess_launcher_push_argv (launcher, arg);
@@ -391,8 +433,8 @@ gbp_todo_model_mine_worker (IdeTask      *task,
 
       for (guint i = 0; i < G_N_ELEMENTS (exclude_dirs); i++)
         {
-          const gchar *exclude_dir = exclude_dirs[i];
-          g_autofree gchar *arg = NULL;
+          const char *exclude_dir = exclude_dirs[i];
+          g_autofree char *arg = NULL;
 
           arg = g_strdup_printf ("--exclude-dir=%s", exclude_dir);
           ide_subprocess_launcher_push_argv (launcher, arg);
@@ -401,8 +443,8 @@ gbp_todo_model_mine_worker (IdeTask      *task,
 
   for (guint i = 0; i < G_N_ELEMENTS (keywords); i++)
     {
-      const gchar *keyword = keywords[i];
-      g_autofree gchar *arg = NULL;
+      const char *keyword = keywords[i];
+      g_autofree char *arg = NULL;
 
       arg = g_strdup_printf ("%s(:| )", keyword);
       ide_subprocess_launcher_push_argv (launcher, "-e");
@@ -425,14 +467,12 @@ gbp_todo_model_mine_worker (IdeTask      *task,
 
   if (g_file_query_file_type (m->file, 0, NULL) != G_FILE_TYPE_DIRECTORY)
     {
-      g_autofree gchar *path = NULL;
-
-      path = g_file_get_path (m->workdir);
-      ide_subprocess_launcher_push_argv (launcher, path);
+      ide_subprocess_launcher_push_argv (launcher, g_file_peek_path (m->file));
+      single_file = TRUE;
     }
 
   /* Spawn our grep process */
-  if (NULL == (subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       return;
@@ -455,7 +495,7 @@ gbp_todo_model_mine_worker (IdeTask      *task,
   stdoutstr_len = strlen (stdoutstr);
   bytes = g_bytes_new_take (stdoutstr, stdoutstr_len);
 
-  items = g_ptr_array_new_with_free_func (g_object_unref);
+  items = g_sequence_new (g_object_unref);
 
   /*
    * Process the STDOUT string iteratively, while trying to be tidy
@@ -463,7 +503,7 @@ gbp_todo_model_mine_worker (IdeTask      *task,
    * a \0, we can use it as a C string.
    */
   ide_line_reader_init (&reader, stdoutstr, stdoutstr_len);
-  while (NULL != (line = ide_line_reader_next (&reader, &len)))
+  while ((line = ide_line_reader_next (&reader, &len)))
     {
       g_autoptr(GMatchInfo) match_info1 = NULL;
       g_autoptr(GMatchInfo) match_info2 = NULL;
@@ -480,11 +520,11 @@ gbp_todo_model_mine_worker (IdeTask      *task,
             {
               if (m->use_git_grep)
                 {
-                  g_ptr_array_add (items, g_steal_pointer (&item));
+                  g_sequence_append (items, g_steal_pointer (&item));
                 }
               else
                 {
-                  const gchar *pathstr = gbp_todo_item_get_path (item);
+                  const char *pathstr = gbp_todo_item_get_path (item);
 
                   /*
                    * self->vcs is only set at construction, so safe to
@@ -492,7 +532,7 @@ gbp_todo_model_mine_worker (IdeTask      *task,
                    * is expected to be thread-safe as well.
                    */
                   if (!ide_vcs_path_is_ignored (self->vcs, pathstr, NULL))
-                    g_ptr_array_add (items, g_steal_pointer (&item));
+                    g_sequence_append (items, g_steal_pointer (&item));
                   else
                     g_clear_object (&item);
                 }
@@ -523,7 +563,7 @@ gbp_todo_model_mine_worker (IdeTask      *task,
               /* Get the path */
               if (g_match_info_fetch_pos (match_info1, 1, &begin, &end))
                 {
-                  const gchar *pathstr;
+                  const char *pathstr;
 
                   line[end] = '\0';
                   pathstr = &line[begin];
@@ -581,11 +621,11 @@ gbp_todo_model_mine_worker (IdeTask      *task,
     {
       if (m->use_git_grep)
         {
-          g_ptr_array_add (items, g_steal_pointer (&item));
+          g_sequence_append (items, g_steal_pointer (&item));
         }
       else
         {
-          const gchar *pathstr = gbp_todo_item_get_path (item);
+          const char *pathstr = gbp_todo_item_get_path (item);
 
           /*
            * self->vcs is only set at construction, so safe to
@@ -593,29 +633,36 @@ gbp_todo_model_mine_worker (IdeTask      *task,
            * is expected to be thread-safe as well.
            */
           if (!ide_vcs_path_is_ignored (self->vcs, pathstr, NULL))
-            g_ptr_array_add (items, g_steal_pointer (&item));
+            g_sequence_append (items, g_steal_pointer (&item));
           else
             g_clear_object (&item);
         }
     }
 
-  g_debug ("Located %u TODO items in %0.4lf seconds",
-           items->len, g_timer_elapsed (timer, NULL));
+  g_debug ("Located %d TODO items in %0.4lf seconds",
+           g_sequence_get_length (items),
+           g_timer_elapsed (timer, NULL));
 
   info = g_slice_new0 (ResultInfo);
   info->self = g_object_ref (source_object);
   info->items = g_steal_pointer (&items);
+  info->file = g_object_ref (m->file);
+  info->single_file = single_file;
+
+  /* Sort our result set to help reduce how much sorting
+   * needs to be done on the main thread later.
+   */
+  g_sequence_sort (info->items, (GCompareDataFunc)gbp_todo_model_compare_func, NULL);
 
   g_idle_add_full (G_PRIORITY_LOW + 100,
-                   gbp_todo_model_merge_results,
-                   info, result_info_free);
+                   result_info_merge, info, result_info_free);
 
   ide_task_return_boolean (task, TRUE);
 }
 
 static gboolean
-is_typed (IdeVcs      *vcs,
-          const gchar *name)
+is_typed (IdeVcs     *vcs,
+          const char *name)
 {
   return g_strcmp0 (G_OBJECT_TYPE_NAME (vcs), name) == 0;
 }

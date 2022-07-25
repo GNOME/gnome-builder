@@ -20,14 +20,13 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
 #include <libide-vcs.h>
 
 G_BEGIN_DECLS
 
 #define GBP_TYPE_TODO_MODEL (gbp_todo_model_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpTodoModel, gbp_todo_model, GBP, TODO_MODEL, GtkListStore)
+G_DECLARE_FINAL_TYPE (GbpTodoModel, gbp_todo_model, GBP, TODO_MODEL, GObject)
 
 GbpTodoModel *gbp_todo_model_new         (IdeVcs               *vcs);
 void          gbp_todo_model_mine_async  (GbpTodoModel         *self,

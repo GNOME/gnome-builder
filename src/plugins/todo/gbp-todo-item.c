@@ -22,18 +22,49 @@
 
 #include "gbp-todo-item.h"
 
-#define MAX_TODO_LINES 5
+G_DEFINE_FINAL_TYPE (GbpTodoItem, gbp_todo_item, G_TYPE_OBJECT)
 
-struct _GbpTodoItem
-{
-  GObject      parent_instance;
-  GBytes      *bytes;
-  const gchar *path;
-  guint        lineno;
-  const gchar *lines[MAX_TODO_LINES];
+enum {
+  PROP_0,
+  PROP_SUBTITLE,
+  PROP_TITLE,
+  N_PROPS
 };
 
-G_DEFINE_FINAL_TYPE (GbpTodoItem, gbp_todo_item, G_TYPE_OBJECT)
+static GParamSpec *properties[N_PROPS];
+
+static char *
+gbp_todo_item_dup_title (GbpTodoItem *self)
+{
+  const char *path;
+  guint lineno;
+
+  g_assert (GBP_IS_TODO_ITEM (self));
+
+  path = gbp_todo_item_get_path (self);
+  lineno = gbp_todo_item_get_lineno (self);
+
+  return g_strdup_printf ("%s:%u", path, lineno);
+}
+
+static const char *
+gbp_todo_item_get_subtitle (GbpTodoItem *self)
+{
+  const char *message;
+
+  g_assert (GBP_IS_TODO_ITEM (self));
+
+  message = gbp_todo_item_get_line (self, 0);
+  /*
+   * We don't trim the whitespace from lines so that we can keep
+   * them in tact when showing tooltips. So we need to truncate
+   * here for display in the pane.
+   */
+  while (g_ascii_isspace (*message))
+    message++;
+
+  return message;
+}
 
 static void
 gbp_todo_item_finalize (GObject *object)
@@ -46,11 +77,47 @@ gbp_todo_item_finalize (GObject *object)
 }
 
 static void
+gbp_todo_item_get_property (GObject    *object,
+                            guint       prop_id,
+                            GValue     *value,
+                            GParamSpec *pspec)
+{
+  GbpTodoItem *self = GBP_TODO_ITEM (object);
+
+  switch (prop_id)
+    {
+    case PROP_SUBTITLE:
+      g_value_set_string (value, gbp_todo_item_get_subtitle (self));
+      break;
+
+    case PROP_TITLE:
+      g_value_take_string (value, gbp_todo_item_dup_title (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 gbp_todo_item_class_init (GbpTodoItemClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gbp_todo_item_finalize;
+  object_class->get_property = gbp_todo_item_get_property;
+
+  properties [PROP_SUBTITLE] =
+    g_param_spec_string ("subtitle", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_TITLE] =
+    g_param_spec_string ("title", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -134,7 +201,7 @@ gbp_todo_item_set_lineno (GbpTodoItem *self,
   self->lineno = lineno;
 }
 
-const gchar *
+const char *
 gbp_todo_item_get_path (GbpTodoItem *self)
 {
   g_return_val_if_fail (GBP_IS_TODO_ITEM (self), NULL);
@@ -144,7 +211,7 @@ gbp_todo_item_get_path (GbpTodoItem *self)
 
 void
 gbp_todo_item_set_path (GbpTodoItem *self,
-                        const gchar *path)
+                        const char  *path)
 {
   g_return_if_fail (GBP_IS_TODO_ITEM (self));
 

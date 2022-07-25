@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/todo">
     <file>todo.plugin</file>
+    <file preprocess="xml-stripblanks">gbp-todo-panel.ui</file>
   </gresource>
 </gresources>

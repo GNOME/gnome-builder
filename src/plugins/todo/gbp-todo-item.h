@@ -28,6 +28,15 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GbpTodoItem, gbp_todo_item, GBP, TODO_ITEM, GObject)
 
+struct _GbpTodoItem
+{
+  GObject     parent_instance;
+  GBytes     *bytes;
+  const char *path;
+  guint       lineno;
+  const char *lines[5];
+};
+
 GbpTodoItem *gbp_todo_item_new        (GBytes       *bytes);
 const gchar *gbp_todo_item_get_path   (GbpTodoItem  *self);
 void         gbp_todo_item_set_path   (GbpTodoItem  *self,

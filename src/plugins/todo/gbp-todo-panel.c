@@ -30,12 +30,12 @@
 
 struct _GbpTodoPanel
 {
-  IdePane        parent_instance;
+  IdePane         parent_instance;
 
-  GbpTodoModel  *model;
+  GbpTodoModel   *model;
 
-  GtkTreeView   *tree_view;
-  GtkStack      *stack;
+  GtkNoSelection *selection;
+  GtkStack       *stack;
 };
 
 G_DEFINE_FINAL_TYPE (GbpTodoPanel, gbp_todo_panel, IDE_TYPE_PANE)
@@ -49,68 +49,24 @@ enum {
 static GParamSpec *properties [N_PROPS];
 
 static void
-gbp_todo_panel_cell_data_func (GtkCellLayout   *cell_layout,
-                               GtkCellRenderer *cell,
-                               GtkTreeModel    *tree_model,
-                               GtkTreeIter     *iter,
-                               gpointer         data)
-{
-  g_autoptr(GbpTodoItem) item = NULL;
-  const gchar *message;
-
-  gtk_tree_model_get (tree_model, iter, 0, &item, -1);
-
-  message = gbp_todo_item_get_line (item, 0);
-
-  if (message != NULL)
-    {
-      g_autofree gchar *title = NULL;
-      const gchar *path;
-      guint lineno;
-
-      /*
-       * We don't trim the whitespace from lines so that we can keep
-       * them in tact when showing tooltips. So we need to truncate
-       * here for display in the pane.
-       */
-      while (g_ascii_isspace (*message))
-        message++;
-
-      path = gbp_todo_item_get_path (item);
-      lineno = gbp_todo_item_get_lineno (item);
-      title = g_strdup_printf ("%s:%u", path, lineno);
-      ide_cell_renderer_fancy_take_title (IDE_CELL_RENDERER_FANCY (cell),
-                                          g_steal_pointer (&title));
-      ide_cell_renderer_fancy_set_body (IDE_CELL_RENDERER_FANCY (cell), message);
-    }
-  else
-    {
-      ide_cell_renderer_fancy_set_body (IDE_CELL_RENDERER_FANCY (cell), NULL);
-      ide_cell_renderer_fancy_set_title (IDE_CELL_RENDERER_FANCY (cell), NULL);
-    }
-}
-
-static void
-gbp_todo_panel_row_activated (GbpTodoPanel      *self,
-                              GtkTreePath       *tree_path,
-                              GtkTreeViewColumn *column,
-                              GtkTreeView       *tree_view)
+gbp_todo_panel_activate_cb (GbpTodoPanel *self,
+                            guint         position,
+                            GtkListView  *list_view)
 {
   g_autoptr(GbpTodoItem) item = NULL;
   g_autoptr(GFile) file = NULL;
   IdeWorkbench *workbench;
-  GtkTreeModel *model;
-  const gchar *path;
-  GtkTreeIter iter;
+  GListModel *model;
+  const char *path;
   guint lineno;
 
   g_assert (GBP_IS_TODO_PANEL (self));
-  g_assert (tree_path != NULL);
-  g_assert (GTK_IS_TREE_VIEW (tree_view));
+  g_assert (GTK_IS_LIST_VIEW (list_view));
 
-  model = gtk_tree_view_get_model (tree_view);
-  gtk_tree_model_get_iter (model, &iter, tree_path);
-  gtk_tree_model_get (model, &iter, 0, &item, -1);
+  model = G_LIST_MODEL (gtk_list_view_get_model (list_view));
+  g_assert (G_IS_LIST_MODEL (model));
+
+  item = g_list_model_get_item (model, position);
   g_assert (GBP_IS_TODO_ITEM (item));
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
@@ -145,66 +101,11 @@ gbp_todo_panel_row_activated (GbpTodoPanel      *self,
 
   ide_workbench_open_at_async (workbench,
                                file,
-                               "editor",
+                               "editorui",
                                lineno,
                                -1,
                                IDE_BUFFER_OPEN_FLAGS_NONE,
                                NULL, NULL, NULL, NULL);
-}
-
-static gboolean
-gbp_todo_panel_query_tooltip (GbpTodoPanel *self,
-                              gint          x,
-                              gint          y,
-                              gboolean      keyboard_mode,
-                              GtkTooltip   *tooltip,
-                              GtkTreeView  *tree_view)
-{
-  g_autoptr(GtkTreePath) path = NULL;
-  GtkTreeModel *model;
-
-  g_assert (GBP_IS_TODO_PANEL (self));
-  g_assert (GTK_IS_TOOLTIP (tooltip));
-  g_assert (GTK_IS_TREE_VIEW (tree_view));
-
-  if (NULL == (model = gtk_tree_view_get_model (tree_view)))
-    return FALSE;
-
-  if (gtk_tree_view_get_path_at_pos (tree_view, x, y, &path, NULL, NULL, NULL))
-    {
-      GtkTreeIter iter;
-
-      if (gtk_tree_model_get_iter (model, &iter, path))
-        {
-          g_autoptr(GbpTodoItem) item = NULL;
-          g_autoptr(GString) str = g_string_new ("<tt>");
-
-          gtk_tree_model_get (model, &iter, 0, &item, -1);
-          g_assert (GBP_IS_TODO_ITEM (item));
-
-          /* only 5 lines stashed */
-          for (guint i = 0; i < 5; i++)
-            {
-              const gchar *line = gbp_todo_item_get_line (item, i);
-              g_autofree gchar *escaped = NULL;
-
-              if (!line)
-                break;
-
-              escaped = g_markup_escape_text (line, -1);
-              g_string_append (str, escaped);
-              g_string_append_c (str, '\n');
-            }
-
-          g_string_append (str, "</tt>");
-          gtk_tree_view_set_tooltip_row (tree_view, tooltip, path);
-          gtk_tooltip_set_markup (tooltip, str->str);
-
-          return TRUE;
-        }
-    }
-
-  return FALSE;
 }
 
 static void
@@ -213,9 +114,6 @@ gbp_todo_panel_dispose (GObject *object)
   GbpTodoPanel *self = (GbpTodoPanel *)object;
 
   g_assert (GBP_IS_TODO_PANEL (self));
-
-  if (self->tree_view != NULL)
-    gtk_tree_view_set_model (self->tree_view, NULL);
 
   g_clear_object (&self->model);
 
@@ -264,6 +162,7 @@ static void
 gbp_todo_panel_class_init (GbpTodoPanelClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   object_class->dispose = gbp_todo_panel_dispose;
   object_class->get_property = gbp_todo_panel_get_property;
@@ -277,53 +176,17 @@ gbp_todo_panel_class_init (GbpTodoPanelClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  gtk_widget_class_set_template_from_resource (widget_class, "/plugins/todo/gbp-todo-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, GbpTodoPanel, selection);
+  gtk_widget_class_bind_template_child (widget_class, GbpTodoPanel, stack);
+  gtk_widget_class_bind_template_callback (widget_class, gbp_todo_panel_activate_cb);
 }
 
 static void
 gbp_todo_panel_init (GbpTodoPanel *self)
 {
-  GtkWidget *scroller;
-  GtkWidget *empty;
-  GtkTreeSelection *selection;
-
-  self->stack = g_object_new (GTK_TYPE_STACK,
-                              "transition-duration", 333,
-                              "transition-type", GTK_STACK_TRANSITION_TYPE_CROSSFADE,
-                              NULL);
-  panel_widget_set_child (PANEL_WIDGET (self), GTK_WIDGET (self->stack));
-
-  empty = g_object_new (ADW_TYPE_STATUS_PAGE,
-                        "title", _("Loading TODOs…"),
-                        "description", _("Please wait while we scan your project"),
-                        "icon-name", "builder-todo-symbolic",
-                        NULL);
-  gtk_stack_add_named (self->stack, empty, "empty");
-
-  scroller = g_object_new (GTK_TYPE_SCROLLED_WINDOW,
-                           "vexpand", TRUE,
-                           NULL);
-  gtk_stack_add_named (self->stack, scroller, "todos");
-
-  self->tree_view = g_object_new (IDE_TYPE_FANCY_TREE_VIEW,
-                                  "has-tooltip", TRUE,
-                                  NULL);
-  g_signal_connect_swapped (self->tree_view,
-                            "row-activated",
-                            G_CALLBACK (gbp_todo_panel_row_activated),
-                            self);
-  g_signal_connect_swapped (self->tree_view,
-                            "query-tooltip",
-                            G_CALLBACK (gbp_todo_panel_query_tooltip),
-                            self);
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scroller), GTK_WIDGET (self->tree_view));
-
-  selection = gtk_tree_view_get_selection (self->tree_view);
-  gtk_tree_selection_set_mode (selection, GTK_SELECTION_NONE);
-
-  ide_fancy_tree_view_set_data_func (IDE_FANCY_TREE_VIEW (self->tree_view),
-                                     gbp_todo_panel_cell_data_func, NULL, NULL);
-
-  gtk_widget_add_css_class (GTK_WIDGET (self->tree_view), "navigation-sidebar");
+  gtk_widget_init_template (GTK_WIDGET (self));
 }
 
 /**
@@ -351,11 +214,7 @@ gbp_todo_panel_set_model (GbpTodoPanel *self,
 
   if (g_set_object (&self->model, model))
     {
-      if (self->model != NULL)
-        gtk_tree_view_set_model (self->tree_view, GTK_TREE_MODEL (self->model));
-      else
-        gtk_tree_view_set_model (self->tree_view, NULL);
-
+      gtk_no_selection_set_model (self->selection, G_LIST_MODEL (model));
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODEL]);
     }
 }
