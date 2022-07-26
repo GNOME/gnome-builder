@@ -248,7 +248,6 @@ ide_gsettings_action_group_activate_action (GActionGroup *group,
 static const GVariantType *
 ide_gsettings_action_group_get_action_parameter_type (GActionGroup *group,
                                                       const char   *action_name)
-
 {
   IdeGSettingsActionGroup *self = (IdeGSettingsActionGroup *)group;
   g_autoptr(GSettingsSchemaKey) key = g_settings_schema_get_key (self->schema, action_name);
