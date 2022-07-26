@@ -763,7 +763,9 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
                                  gpointer      user_data)
 {
   g_autoptr(IdeSettingsActionGroup) project_settings_group = NULL;
+  g_autoptr(IdeSettingsActionGroup) build_settings_group = NULL;
   g_autoptr(GSettings) project_settings = NULL;
+  g_autoptr(GSettings) build_settings = NULL;
   IdeWorkbench *self = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
@@ -781,6 +783,14 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
   gtk_widget_insert_action_group (GTK_WIDGET (workspace),
                                   "project-settings",
                                   G_ACTION_GROUP (project_settings_group));
+
+  build_settings = g_settings_new ("org.gnome.builder.build");
+  build_settings_group = g_object_new (IDE_TYPE_SETTINGS_ACTION_GROUP,
+                                       "settings", build_settings,
+                                       NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                  "build-settings",
+                                  G_ACTION_GROUP (build_settings_group));
 }
 
 /**
