@@ -27,7 +27,6 @@
 #include "ide-action-group.h"
 #include "ide-binding-group.h"
 #include "ide-context.h"
-#include "ide-context-addin.h"
 #include "ide-debug.h"
 #include "ide-global.h"
 #include "ide-gsettings-action-group.h"

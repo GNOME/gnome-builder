@@ -23,11 +23,11 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libpeas/peas.h>
 
 #include "ide-context.h"
 #include "ide-context-private.h"
-#include "ide-context-addin.h"
 #include "ide-macros.h"
 #include "ide-notifications.h"
 
@@ -42,12 +42,11 @@
 
 struct _IdeContext
 {
-  IdeObject         parent_instance;
-  PeasExtensionSet *addins;
-  gchar            *project_id;
-  gchar            *title;
-  GFile            *workdir;
-  guint             project_loaded : 1;
+  IdeObject       parent_instance;
+  char           *project_id;
+  char           *title;
+  GFile          *workdir;
+  guint           project_loaded : 1;
 };
 
 enum {
@@ -67,71 +66,6 @@ G_DEFINE_FINAL_TYPE (IdeContext, ide_context, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
-
-static void
-ide_context_addin_load_project_cb (GObject      *object,
-                                   GAsyncResult *result,
-                                   gpointer      user_data)
-{
-  IdeContextAddin *addin = (IdeContextAddin *)object;
-  g_autoptr(IdeContext) self = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_CONTEXT_ADDIN (addin));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_CONTEXT (self));
-
-  if (ide_context_addin_load_project_finish (addin, result, &error))
-    ide_context_addin_project_loaded (addin, self);
-  else
-    g_warning ("%s context addin failed to load project: %s",
-               G_OBJECT_TYPE_NAME (addin), error->message);
-}
-
-static void
-ide_context_addin_added_cb (PeasExtensionSet *set,
-                            PeasPluginInfo   *plugin_info,
-                            PeasExtension    *exten,
-                            gpointer          user_data)
-{
-  IdeContextAddin *addin = (IdeContextAddin *)exten;
-  IdeContext *self = user_data;
-  g_autoptr(GCancellable) cancellable = NULL;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_CONTEXT_ADDIN (addin));
-
-  /* Ignore any request during shutdown */
-  cancellable = ide_object_ref_cancellable (IDE_OBJECT (self));
-  if (g_cancellable_is_cancelled (cancellable))
-    return;
-
-  ide_context_addin_load (addin, self);
-
-  if (self->project_loaded)
-    ide_context_addin_load_project_async (addin,
-                                          self,
-                                          cancellable,
-                                          ide_context_addin_load_project_cb,
-                                          g_object_ref (self));
-}
-
-static void
-ide_context_addin_removed_cb (PeasExtensionSet *set,
-                              PeasPluginInfo   *plugin_info,
-                              PeasExtension    *exten,
-                              gpointer          user_data)
-{
-  IdeContextAddin *addin = (IdeContextAddin *)exten;
-  IdeContext *self = user_data;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (IDE_IS_CONTEXT_ADDIN (addin));
-
-  ide_context_addin_unload (addin, self);
-}
 
 static void
 ide_context_real_log (IdeContext     *self,
@@ -154,41 +88,12 @@ ide_context_repr (IdeObject *object)
 }
 
 static void
-ide_context_constructed (GObject *object)
-{
-  IdeContext *self = (IdeContext *)object;
-
-  g_assert (IDE_IS_OBJECT (object));
-
-  self->addins = peas_extension_set_new (peas_engine_get_default (),
-                                         IDE_TYPE_CONTEXT_ADDIN,
-                                         NULL);
-
-  g_signal_connect (self->addins,
-                    "extension-added",
-                    G_CALLBACK (ide_context_addin_added_cb),
-                    self);
-
-  g_signal_connect (self->addins,
-                    "extension-removed",
-                    G_CALLBACK (ide_context_addin_removed_cb),
-                    self);
-
-  peas_extension_set_foreach (self->addins,
-                              ide_context_addin_added_cb,
-                              self);
-
-  G_OBJECT_CLASS (ide_context_parent_class)->constructed (object);
-}
-
-static void
 ide_context_destroy (IdeObject *object)
 {
   IdeContext *self = (IdeContext *)object;
 
   g_assert (IDE_IS_OBJECT (object));
 
-  g_clear_object (&self->addins);
 
   IDE_OBJECT_CLASS (ide_context_parent_class)->destroy (object);
 }
@@ -265,7 +170,6 @@ ide_context_class_init (IdeContextClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
-  object_class->constructed = ide_context_constructed;
   object_class->finalize = ide_context_finalize;
   object_class->get_property = ide_context_get_property;
   object_class->set_property = ide_context_set_property;
@@ -824,36 +728,4 @@ _ide_context_set_has_project (IdeContext *self)
   ide_object_lock (IDE_OBJECT (self));
   self->project_loaded = TRUE;
   ide_object_unlock (IDE_OBJECT (self));
-}
-
-/**
- * ide_context_addin_find_by_module_name:
- * @context: an #IdeContext
- * @module_name: the name of the addin module
- *
- * Finds the addin (if any) matching the plugin's @module_name.
- *
- * Returns: (transfer none) (nullable): an #IdeContextAddin or %NULL
- */
-IdeContextAddin *
-ide_context_addin_find_by_module_name (IdeContext  *context,
-                                       const gchar *module_name)
-{
-  PeasPluginInfo *plugin_info;
-  PeasExtension *ret = NULL;
-  PeasEngine *engine;
-
-  g_return_val_if_fail (IDE_IS_MAIN_THREAD (), NULL);
-  g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
-  g_return_val_if_fail (module_name != NULL, NULL);
-
-  if (context->addins == NULL)
-    return NULL;
-
-  engine = peas_engine_get_default ();
-
-  if ((plugin_info = peas_engine_get_plugin_info (engine, module_name)))
-    ret = peas_extension_set_get_extension (context->addins, plugin_info);
-
-  return IDE_CONTEXT_ADDIN (ret);
 }
