@@ -26,7 +26,7 @@
 #include <stdlib.h>
 
 #include "ide-settings.h"
-#include "ide-settings-sandwich-private.h"
+#include "ide-layered-settings-private.h"
 
 /**
  * SECTION:ide-settings
@@ -45,12 +45,12 @@
 
 struct _IdeSettings
 {
-  GObject              parent_instance;
-  IdeSettingsSandwich *settings_sandwich;
-  char                *relative_path;
-  char                *schema_id;
-  char                *project_id;
-  guint                ignore_project_settings : 1;
+  GObject             parent_instance;
+  IdeLayeredSettings *layered_settings;
+  char               *relative_path;
+  char               *schema_id;
+  char               *project_id;
+  guint               ignore_project_settings : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeSettings, ide_settings, G_TYPE_OBJECT)
@@ -161,7 +161,7 @@ ide_settings_constructed (GObject *object)
   g_assert ((self->relative_path [0] == 0) || g_str_has_suffix (self->relative_path, "/"));
 
   full_path = g_strdup_printf ("/org/gnome/builder/%s", self->relative_path);
-  self->settings_sandwich = ide_settings_sandwich_new (self->schema_id, full_path);
+  self->layered_settings = ide_layered_settings_new (self->schema_id, full_path);
 
   /* Add our project relative settings */
   if (self->ignore_project_settings == FALSE)
@@ -172,12 +172,12 @@ ide_settings_constructed (GObject *object)
       path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s",
                               self->project_id, self->relative_path);
       project_settings = g_settings_new_with_path (self->schema_id, path);
-      ide_settings_sandwich_append (self->settings_sandwich, project_settings);
+      ide_layered_settings_append (self->layered_settings, project_settings);
     }
 
   /* Add our application global (user defaults) settings */
   app_settings = g_settings_new_with_path (self->schema_id, full_path);
-  ide_settings_sandwich_append (self->settings_sandwich, app_settings);
+  ide_layered_settings_append (self->layered_settings, app_settings);
 
   IDE_EXIT;
 }
@@ -187,7 +187,7 @@ ide_settings_finalize (GObject *object)
 {
   IdeSettings *self = (IdeSettings *)object;
 
-  g_clear_object (&self->settings_sandwich);
+  g_clear_object (&self->layered_settings);
   g_clear_pointer (&self->relative_path, g_free);
   g_clear_pointer (&self->schema_id, g_free);
   g_clear_pointer (&self->project_id, g_free);
@@ -368,7 +368,7 @@ ide_settings_get_default_value (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return ide_settings_sandwich_get_default_value (self->settings_sandwich, key);
+  return ide_layered_settings_get_default_value (self->layered_settings, key);
 }
 
 GVariant *
@@ -378,7 +378,7 @@ ide_settings_get_user_value (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return ide_settings_sandwich_get_user_value (self->settings_sandwich, key);
+  return ide_layered_settings_get_user_value (self->layered_settings, key);
 }
 
 GVariant *
@@ -388,7 +388,7 @@ ide_settings_get_value (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return ide_settings_sandwich_get_value (self->settings_sandwich, key);
+  return ide_layered_settings_get_value (self->layered_settings, key);
 }
 
 void
@@ -399,7 +399,7 @@ ide_settings_set_value (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  return ide_settings_sandwich_set_value (self->settings_sandwich, key, value);
+  return ide_layered_settings_set_value (self->layered_settings, key, value);
 }
 
 gboolean
@@ -409,7 +409,7 @@ ide_settings_get_boolean (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), FALSE);
   g_return_val_if_fail (key != NULL, FALSE);
 
-  return ide_settings_sandwich_get_boolean (self->settings_sandwich, key);
+  return ide_layered_settings_get_boolean (self->layered_settings, key);
 }
 
 double
@@ -419,7 +419,7 @@ ide_settings_get_double (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0.0);
   g_return_val_if_fail (key != NULL, 0.0);
 
-  return ide_settings_sandwich_get_double (self->settings_sandwich, key);
+  return ide_layered_settings_get_double (self->layered_settings, key);
 }
 
 int
@@ -429,7 +429,7 @@ ide_settings_get_int (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0);
   g_return_val_if_fail (key != NULL, 0);
 
-  return ide_settings_sandwich_get_int (self->settings_sandwich, key);
+  return ide_layered_settings_get_int (self->layered_settings, key);
 }
 
 char *
@@ -439,7 +439,7 @@ ide_settings_get_string (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  return ide_settings_sandwich_get_string (self->settings_sandwich, key);
+  return ide_layered_settings_get_string (self->layered_settings, key);
 }
 
 guint
@@ -449,7 +449,7 @@ ide_settings_get_uint (IdeSettings *self,
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0);
   g_return_val_if_fail (key != NULL, 0);
 
-  return ide_settings_sandwich_get_uint (self->settings_sandwich, key);
+  return ide_layered_settings_get_uint (self->layered_settings, key);
 }
 
 void
@@ -460,7 +460,7 @@ ide_settings_set_boolean (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  ide_settings_sandwich_set_boolean (self->settings_sandwich, key, val);
+  ide_layered_settings_set_boolean (self->layered_settings, key, val);
 }
 
 void
@@ -471,7 +471,7 @@ ide_settings_set_double (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  ide_settings_sandwich_set_double (self->settings_sandwich, key, val);
+  ide_layered_settings_set_double (self->layered_settings, key, val);
 }
 
 void
@@ -482,7 +482,7 @@ ide_settings_set_int (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  ide_settings_sandwich_set_int (self->settings_sandwich, key, val);
+  ide_layered_settings_set_int (self->layered_settings, key, val);
 }
 
 void
@@ -493,7 +493,7 @@ ide_settings_set_string (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  ide_settings_sandwich_set_string (self->settings_sandwich, key, val);
+  ide_layered_settings_set_string (self->layered_settings, key, val);
 }
 
 void
@@ -504,7 +504,7 @@ ide_settings_set_uint (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
 
-  ide_settings_sandwich_set_uint (self->settings_sandwich, key, val);
+  ide_layered_settings_set_uint (self->layered_settings, key, val);
 }
 
 void
@@ -519,7 +519,7 @@ ide_settings_bind (IdeSettings        *self,
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
 
-  ide_settings_sandwich_bind (self->settings_sandwich, key, object, property, flags);
+  ide_layered_settings_bind (self->layered_settings, key, object, property, flags);
 }
 
 /**
@@ -555,7 +555,7 @@ ide_settings_bind_with_mapping (IdeSettings             *self,
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
 
-  ide_settings_sandwich_bind_with_mapping (self->settings_sandwich, key, object, property, flags,
+  ide_layered_settings_bind_with_mapping (self->layered_settings, key, object, property, flags,
                                            get_mapping, set_mapping, user_data, destroy);
 }
 
@@ -566,5 +566,5 @@ ide_settings_unbind (IdeSettings *self,
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (property != NULL);
 
-  ide_settings_sandwich_unbind (self->settings_sandwich, property);
+  ide_layered_settings_unbind (self->layered_settings, property);
 }

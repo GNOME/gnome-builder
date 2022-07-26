@@ -74,7 +74,7 @@ libide_core_public_headers = [
 ]
 
 libide_core_private_headers = [
-  'ide-settings-sandwich-private.h',
+  'ide-layered-settings-private.h',
   'ide-transfer-manager-private.h',
 ]
 
@@ -103,7 +103,7 @@ libide_core_public_sources = [
 ]
 
 libide_core_private_sources = [
-  'ide-settings-sandwich.c',
+  'ide-layered-settings.c',
 ]
 
 libide_core_sources = []
