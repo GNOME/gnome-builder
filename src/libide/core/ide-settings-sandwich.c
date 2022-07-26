@@ -1,28 +1,32 @@
 /* ide-settings-sandwich.c
  *
- * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
+ * Copyright 2015-2022 Christian Hergert <chergert@redhat.com>
  *
- * This file is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 3 of the
- * License, or (at your option) any later version.
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * This file is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+
 #define G_LOG_DOMAIN "ide-settings-sandwich"
-#define G_SETTINGS_ENABLE_BACKEND
 
 #include "config.h"
 
-#include <gio/gsettingsbackend.h>
 #include <glib/gi18n.h>
+
+#define G_SETTINGS_ENABLE_BACKEND
+#include <gio/gsettingsbackend.h>
 
 #include "ide-settings-sandwich-private.h"
 
@@ -32,8 +36,8 @@ struct _IdeSettingsSandwich
   GPtrArray        *settings;
   GSettingsBackend *memory_backend;
   GSettings        *memory_settings;
-  gchar            *schema_id;
-  gchar            *path;
+  char             *schema_id;
+  char             *path;
 };
 
 G_DEFINE_TYPE (IdeSettingsSandwich, ide_settings_sandwich, G_TYPE_OBJECT)
@@ -53,28 +57,23 @@ ide_settings_sandwich_get_primary_settings (IdeSettingsSandwich *self)
   g_assert (IDE_IS_SETTINGS_SANDWICH (self));
 
   if (self->settings->len == 0)
-    {
-      g_error ("No settings have been loaded. Aborting.");
-      g_assert_not_reached ();
-      return NULL;
-    }
+    g_error ("No settings have been loaded. Aborting.");
 
   return g_ptr_array_index (self->settings, 0);
 }
 
 static void
 ide_settings_sandwich_cache_key (IdeSettingsSandwich *self,
-                                 const gchar         *key)
+                                 const char          *key)
 {
-  GSettings *settings;
   g_autoptr(GVariant) value = NULL;
-  gsize i;
+  GSettings *settings;
 
   g_assert (IDE_IS_SETTINGS_SANDWICH (self));
   g_assert (key != NULL);
   g_assert (self->settings->len > 0);
 
-  for (i = 0; i < self->settings->len; i++)
+  for (guint i = 0; i < self->settings->len; i++)
     {
       settings = g_ptr_array_index (self->settings, i);
       value = g_settings_get_user_value (settings, key);
@@ -95,9 +94,8 @@ static void
 ide_settings_sandwich_update_cache (IdeSettingsSandwich *self)
 {
   GSettingsSchemaSource *source;
-  GSettingsSchema *schema;
-  gchar **keys;
-  gsize i;
+  g_autoptr(GSettingsSchema) schema = NULL;
+  g_auto(GStrv) keys = NULL;
 
   g_assert (IDE_IS_SETTINGS_SANDWICH (self));
 
@@ -105,24 +103,19 @@ ide_settings_sandwich_update_cache (IdeSettingsSandwich *self)
   schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
 
   if (schema == NULL)
+    g_error ("Failed to locate schema: %s", self->schema_id);
+
+  if ((keys = g_settings_schema_list_keys (schema)))
     {
-      g_error ("Failed to locate schema: %s", self->schema_id);
-      return;
+      for (guint i = 0; keys[i]; i++)
+        ide_settings_sandwich_cache_key (self, keys [i]);
     }
-
-  keys = g_settings_schema_list_keys (schema);
-
-  for (i = 0; keys [i]; i++)
-    ide_settings_sandwich_cache_key (self, keys [i]);
-
-  g_settings_schema_unref (schema);
-  g_strfreev (keys);
 }
 
 static void
-ide_settings_sandwich__settings_changed (IdeSettingsSandwich *self,
-                                         const gchar         *key,
-                                         GSettings           *settings)
+ide_settings_sandwich_settings_changed_cb (IdeSettingsSandwich *self,
+                                           const char          *key,
+                                           GSettings           *settings)
 {
   g_assert (IDE_IS_SETTINGS_SANDWICH (self));
   g_assert (key != NULL);
@@ -241,8 +234,8 @@ ide_settings_sandwich_init (IdeSettingsSandwich *self)
 }
 
 IdeSettingsSandwich *
-ide_settings_sandwich_new (const gchar *schema_id,
-                           const gchar *path)
+ide_settings_sandwich_new (const char *schema_id,
+                           const char *path)
 {
   g_return_val_if_fail (schema_id != NULL, NULL);
   g_return_val_if_fail (path != NULL, NULL);
@@ -255,38 +248,29 @@ ide_settings_sandwich_new (const gchar *schema_id,
 
 GVariant *
 ide_settings_sandwich_get_default_value (IdeSettingsSandwich *self,
-                                         const gchar         *key)
+                                         const char          *key)
 {
-  GSettings *settings;
-  GVariant *ret;
-
   g_return_val_if_fail (IDE_IS_SETTINGS_SANDWICH (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  settings = ide_settings_sandwich_get_primary_settings (self);
-  ret = g_settings_get_default_value (settings, key);
-
-  return ret;
+  return g_settings_get_default_value (ide_settings_sandwich_get_primary_settings (self), key);
 }
 
 GVariant *
 ide_settings_sandwich_get_user_value (IdeSettingsSandwich *self,
-                                      const gchar         *key)
+                                      const char          *key)
 {
-  gsize i;
-
   g_return_val_if_fail (IDE_IS_SETTINGS_SANDWICH (self), NULL);
+  g_return_val_if_fail (self->settings != NULL, NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-  for (i = 0; i < self->settings->len; i++)
+  for (guint i = 0; i < self->settings->len; i++)
     {
-      GSettings *settings;
-      GVariant *value;
+      GSettings *settings = g_ptr_array_index (self->settings, i);
+      g_autoptr(GVariant) value = g_settings_get_user_value (settings, key);
 
-      settings = g_ptr_array_index (self->settings, i);
-      value = g_settings_get_user_value (settings, key);
       if (value != NULL)
-        return value;
+        return g_steal_pointer (&value);
     }
 
   return NULL;
@@ -294,48 +278,38 @@ ide_settings_sandwich_get_user_value (IdeSettingsSandwich *self,
 
 GVariant *
 ide_settings_sandwich_get_value (IdeSettingsSandwich *self,
-                                 const gchar         *key)
+                                 const char          *key)
 {
-  GSettings *settings;
-  GVariant *ret;
-  gsize i;
-
   g_return_val_if_fail (IDE_IS_SETTINGS_SANDWICH (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
 
-
-  for (i = 0; i < self->settings->len; i++)
+  for (guint i = 0; i < self->settings->len; i++)
     {
-      settings = g_ptr_array_index (self->settings, i);
-      ret = g_settings_get_user_value (settings, key);
-      if (ret != NULL)
-        return ret;
+      GSettings *settings = g_ptr_array_index (self->settings, i);
+      g_autoptr(GVariant) value = g_settings_get_user_value (settings, key);
+
+      if (value != NULL)
+        return g_steal_pointer (&value);
     }
 
-  settings = ide_settings_sandwich_get_primary_settings (self);
-  ret = g_settings_get_value (settings, key);
-
-  return ret;
+  return g_settings_get_value (ide_settings_sandwich_get_primary_settings (self), key);
 }
 
 void
 ide_settings_sandwich_set_value (IdeSettingsSandwich *self,
-                                 const gchar         *key,
+                                 const char          *key,
                                  GVariant            *value)
 {
-  GSettings *settings;
-
   g_return_if_fail (IDE_IS_SETTINGS_SANDWICH (self));
   g_return_if_fail (key != NULL);
 
-  settings = ide_settings_sandwich_get_primary_settings (self);
-  g_settings_set_value (settings, key, value);
+  g_settings_set_value (ide_settings_sandwich_get_primary_settings (self), key, value);
 }
 
 #define DEFINE_GETTER(name, ret_type, func, ...)                        \
 ret_type                                                                \
 ide_settings_sandwich_get_##name (IdeSettingsSandwich *self,            \
-                                  const gchar         *key)             \
+                                  const char         *key)              \
 {                                                                       \
   GVariant *value;                                                      \
   ret_type ret;                                                         \
@@ -351,15 +325,15 @@ ide_settings_sandwich_get_##name (IdeSettingsSandwich *self,            \
 }
 
 DEFINE_GETTER (boolean, gboolean, get_boolean)
-DEFINE_GETTER (double,  gdouble,  get_double)
-DEFINE_GETTER (int,     gint,     get_int32)
-DEFINE_GETTER (string,  gchar *,  dup_string, NULL)
+DEFINE_GETTER (double,  double,   get_double)
+DEFINE_GETTER (int,     int,      get_int32)
+DEFINE_GETTER (string,  char *,   dup_string, NULL)
 DEFINE_GETTER (uint,    guint,    get_uint32)
 
 #define DEFINE_SETTER(name, param_type, func)                           \
 void                                                                    \
 ide_settings_sandwich_set_##name (IdeSettingsSandwich *self,            \
-                                  const gchar         *key,             \
+                                  const char         *key,              \
                                   param_type           val)             \
 {                                                                       \
   GVariant *value;                                                      \
@@ -372,9 +346,9 @@ ide_settings_sandwich_set_##name (IdeSettingsSandwich *self,            \
 }
 
 DEFINE_SETTER (boolean, gboolean,      new_boolean)
-DEFINE_SETTER (double,  gdouble,       new_double)
-DEFINE_SETTER (int,     gint,          new_int32)
-DEFINE_SETTER (string,  const gchar *, new_string)
+DEFINE_SETTER (double,  double,        new_double)
+DEFINE_SETTER (int,     int,           new_int32)
+DEFINE_SETTER (string,  const char *,  new_string)
 DEFINE_SETTER (uint,    guint,         new_uint32)
 
 void
@@ -386,21 +360,9 @@ ide_settings_sandwich_append (IdeSettingsSandwich *self,
 
   g_ptr_array_add (self->settings, g_object_ref (settings));
 
-#if 0
-  {
-    g_autofree gchar *schema_id = NULL;
-    g_autofree gchar *path = NULL;
-
-    g_object_get (settings,
-                  "schema-id", &schema_id,
-                  "path", &path,
-                  NULL);
-  }
-#endif
-
   g_signal_connect_object (settings,
                            "changed",
-                           G_CALLBACK (ide_settings_sandwich__settings_changed),
+                           G_CALLBACK (ide_settings_sandwich_settings_changed_cb),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -409,9 +371,9 @@ ide_settings_sandwich_append (IdeSettingsSandwich *self,
 
 void
 ide_settings_sandwich_bind (IdeSettingsSandwich *self,
-                            const gchar         *key,
+                            const char         *key,
                             gpointer             object,
-                            const gchar         *property,
+                            const char         *property,
                             GSettingsBindFlags   flags)
 {
   g_return_if_fail (IDE_IS_SETTINGS_SANDWICH (self));
@@ -436,56 +398,49 @@ ide_settings_sandwich_bind (IdeSettingsSandwich *self,
  * @destroy: destroy notify for @user_data.
  *
  * Creates a new binding similar to g_settings_bind_with_mapping() but applying
- * from the resolved value via the settings sandwich.
+ * from the resolved value via the layered settings.
  */
 void
 ide_settings_sandwich_bind_with_mapping (IdeSettingsSandwich     *self,
-                                         const gchar             *key,
+                                         const char              *key,
                                          gpointer                 object,
-                                         const gchar             *property,
+                                         const char              *property,
                                          GSettingsBindFlags       flags,
                                          GSettingsBindGetMapping  get_mapping,
                                          GSettingsBindSetMapping  set_mapping,
                                          gpointer                 user_data,
                                          GDestroyNotify           destroy)
 {
-  GSettings *settings;
-
   g_return_if_fail (IDE_IS_SETTINGS_SANDWICH (self));
   g_return_if_fail (key != NULL);
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
 
   /*
-   * Our memory backend/settings are compiling the values from all of the layers of our
-   * sandwich. Therefore, we only want to map reads from the memory backend. We want to direct
-   * all writes to the topmost layer of the sandwich (found at index 0).
+   * Our memory backend/settings are compiling the values from all of the
+   * layers of our sandwich. Therefore, we only want to map reads from the
+   * memory backend. We want to direct all writes to the topmost layer of the
+   * sandwich (found at index 0).
    */
   if ((flags & G_SETTINGS_BIND_GET) != 0)
     g_settings_bind_with_mapping (self->memory_settings, key, object, property,
                                   (flags & ~G_SETTINGS_BIND_SET),
                                   get_mapping, set_mapping, user_data, destroy);
 
-  /*
-   * We bind writability directly to our toplevel layer of the sandwich.
-   */
-  settings = ide_settings_sandwich_get_primary_settings (self);
+  /* We bind writability directly to our toplevel layer */
   if ((flags & G_SETTINGS_BIND_SET) != 0)
-    g_settings_bind_with_mapping (settings, key, object, property, (flags & ~G_SETTINGS_BIND_GET),
+    g_settings_bind_with_mapping (ide_settings_sandwich_get_primary_settings (self),
+                                  key, object, property, (flags & ~G_SETTINGS_BIND_GET),
                                   get_mapping, set_mapping, user_data, destroy);
 }
 
 void
 ide_settings_sandwich_unbind (IdeSettingsSandwich *self,
-                              const gchar         *property)
+                              const char          *property)
 {
-  GSettings *settings;
-
   g_return_if_fail (IDE_IS_SETTINGS_SANDWICH (self));
   g_return_if_fail (property != NULL);
 
-  settings = ide_settings_sandwich_get_primary_settings (self);
-
-  g_settings_unbind (settings, property);
+  g_settings_unbind (ide_settings_sandwich_get_primary_settings (self), property);
   g_settings_unbind (self->memory_backend, property);
 }
