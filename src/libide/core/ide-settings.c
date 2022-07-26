@@ -124,6 +124,23 @@ ide_settings_set_schema_id (IdeSettings *self,
 }
 
 static void
+ide_settings_layered_settings_changed_cb (IdeSettings        *self,
+                                          const char         *key,
+                                          IdeLayeredSettings *layered_settings)
+{
+  g_autoptr(GVariant) value = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (key != NULL);
+  g_assert (IDE_IS_LAYERED_SETTINGS (layered_settings));
+
+  g_signal_emit (self, signals [CHANGED], g_quark_from_string (key), key);
+
+  value = ide_layered_settings_get_value (self->layered_settings, key);
+  g_action_group_action_state_changed (G_ACTION_GROUP (self), key, value);
+}
+
+static void
 ide_settings_constructed (GObject *object)
 {
   IdeSettings *self = (IdeSettings *)object;
@@ -165,6 +182,12 @@ ide_settings_constructed (GObject *object)
 
   full_path = g_strdup_printf ("/org/gnome/builder/%s", self->relative_path);
   self->layered_settings = ide_layered_settings_new (self->schema_id, full_path);
+
+  g_signal_connect_object (self->layered_settings,
+                           "changed",
+                           G_CALLBACK (ide_settings_layered_settings_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
 
   /* Add our project relative settings */
   if (self->ignore_project_settings == FALSE)
@@ -305,10 +328,11 @@ ide_settings_class_init (IdeSettingsClass *klass)
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
                   0,
-                  NULL, NULL, NULL,
+                  NULL, NULL,
+                  NULL,
                   G_TYPE_NONE,
                   1,
-                  G_TYPE_STRING);
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
