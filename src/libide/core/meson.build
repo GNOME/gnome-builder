@@ -73,6 +73,7 @@ libide_core_public_headers = [
 ]
 
 libide_core_private_headers = [
+  'ide-action-muxer.h',
   'ide-layered-settings-private.h',
   'ide-transfer-manager-private.h',
 ]
@@ -101,6 +102,7 @@ libide_core_public_sources = [
 ]
 
 libide_core_private_sources = [
+  'ide-action-muxer.c',
   'ide-layered-settings.c',
 ]
 
