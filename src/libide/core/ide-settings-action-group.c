@@ -202,7 +202,12 @@ ide_settings_action_group_change_action_state (GActionGroup *group,
 
   if (g_variant_is_of_type (value, g_settings_schema_key_get_value_type (key)) &&
       g_settings_schema_key_range_check (key, value))
-    g_settings_set_value (self->settings, action_name, value);
+    {
+      g_autoptr(GVariant) hold = g_variant_ref_sink (value);
+
+      g_settings_set_value (self->settings, action_name, hold);
+      g_action_group_action_state_changed (group, action_name, hold);
+    }
 }
 
 static const GVariantType *
