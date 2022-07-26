@@ -45,10 +45,16 @@ enum {
   PROP_0,
   PROP_PATH,
   PROP_SCHEMA_ID,
-  LAST_PROP
+  N_PROPS
 };
 
-static GParamSpec *properties [LAST_PROP];
+enum {
+  CHANGED,
+  N_SIGNALS
+};
+
+static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static GSettings *
 ide_layered_settings_get_primary_settings (IdeLayeredSettings *self)
@@ -87,6 +93,8 @@ ide_layered_settings_cache_key (IdeLayeredSettings *self,
   settings = g_ptr_array_index (self->settings, 0);
   value = g_settings_get_value (settings, key);
   g_settings_set_value (self->memory_settings, key, value);
+
+  g_signal_emit (self, signals[CHANGED], g_quark_from_string (key));
 }
 
 static void
@@ -222,7 +230,16 @@ ide_layered_settings_class_init (IdeLayeredSettingsClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  signals [CHANGED] =
+    g_signal_new ("changed",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_DETAILED,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 }
 
 static void
