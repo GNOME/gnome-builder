@@ -1,6 +1,7 @@
-/* ide-core.h
+/*
+ * ide-settings-action-group.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,26 +23,16 @@
 
 #include <gio/gio.h>
 
-#define IDE_CORE_INSIDE
-
-#include "ide-action-group.h"
-#include "ide-binding-group.h"
-#include "ide-context.h"
-#include "ide-context-addin.h"
-#include "ide-debug.h"
-#include "ide-global.h"
-#include "ide-log.h"
-#include "ide-macros.h"
-#include "ide-notification.h"
-#include "ide-notifications.h"
-#include "ide-object.h"
-#include "ide-object-box.h"
-#include "ide-settings.h"
-#include "ide-settings-action-group.h"
-#include "ide-signal-group.h"
-#include "ide-transfer.h"
-#include "ide-transfer-manager.h"
-#include "ide-version.h"
 #include "ide-version-macros.h"
 
-#undef IDE_CORE_INSIDE
+G_BEGIN_DECLS
+
+#define IDE_TYPE_SETTINGS_ACTION_GROUP (ide_settings_action_group_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeSettingsActionGroup, ide_settings_action_group, IDE, SETTINGS_ACTION_GROUP, GObject)
+
+IDE_AVAILABLE_IN_ALL
+GActionGroup *ide_settings_action_group_new (GSettings *settings);
+
+G_END_DECLS
