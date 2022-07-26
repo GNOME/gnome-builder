@@ -282,6 +282,7 @@ src/plugins/testui/gbp-testui-preferences-addin.c
 src/plugins/testui/gbp-testui-workspace-addin.c
 src/plugins/testui/gtk/menus.ui
 src/plugins/todo/gbp-todo-panel.c
+src/plugins/todo/gbp-todo-panel.ui
 src/plugins/todo/gbp-todo-workspace-addin.c
 src/plugins/update-manager/gbp-update-manager-app-addin.c
 src/plugins/valgrind/gtk/menus.ui
