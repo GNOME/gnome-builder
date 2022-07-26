@@ -5,9 +5,11 @@
     <property name="title" translatable="yes">Messages</property>
     <child>
       <object class="GtkScrolledWindow">
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">external</property>
         <property name="hexpand">true</property>
         <child>
-          <object class="VteTerminal" id="terminal">
+          <object class="IdeTerminal" id="terminal">
             <property name="hexpand">true</property>
             <property name="scroll-on-output">false</property>
           </object>
