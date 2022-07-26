@@ -46,11 +46,10 @@
 struct _IdeSettings
 {
   GObject              parent_instance;
-
   IdeSettingsSandwich *settings_sandwich;
-  gchar               *relative_path;
-  gchar               *schema_id;
-  gchar               *project_id;
+  char                *relative_path;
+  char                *schema_id;
+  char                *project_id;
   guint                ignore_project_settings : 1;
 };
 
@@ -90,7 +89,7 @@ ide_settings_set_ignore_project_settings (IdeSettings *self,
 
 static void
 ide_settings_set_relative_path (IdeSettings *self,
-                                const gchar *relative_path)
+                                const char  *relative_path)
 {
   g_assert (IDE_IS_SETTINGS (self));
   g_assert (relative_path != NULL);
@@ -108,7 +107,7 @@ ide_settings_set_relative_path (IdeSettings *self,
 
 static void
 ide_settings_set_schema_id (IdeSettings *self,
-                            const gchar *schema_id)
+                            const char  *schema_id)
 {
   g_assert (IDE_IS_SETTINGS (self));
   g_assert (schema_id != NULL);
@@ -125,50 +124,36 @@ static void
 ide_settings_constructed (GObject *object)
 {
   IdeSettings *self = (IdeSettings *)object;
-  g_autofree gchar *full_path = NULL;
-  GSettings *settings;
-  gchar *path;
+  g_autoptr(GSettings) app_settings = NULL;
+  g_autofree char *full_path = NULL;
 
   IDE_ENTRY;
 
   G_OBJECT_CLASS (ide_settings_parent_class)->constructed (object);
 
   if (self->schema_id == NULL)
-    {
-      g_error ("You must provide IdeSettings:schema-id");
-      abort ();
-    }
+    g_error ("You must provide IdeSettings:schema-id");
 
   if (self->relative_path == NULL)
     {
       g_autoptr(GSettingsSchema) schema = NULL;
       GSettingsSchemaSource *source;
-      const gchar *schema_path;
+      const char *schema_path;
 
       source = g_settings_schema_source_get_default ();
-      schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
 
-      if (schema == NULL)
-        {
-          g_error ("Could not locate schema %s", self->schema_id);
-          abort ();
-        }
+      if (!(schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE)))
+        g_error ("Could not locate schema %s", self->schema_id);
 
       schema_path = g_settings_schema_get_path (schema);
 
       if ((schema_path != NULL) && !g_str_has_prefix (schema_path, "/org/gnome/builder/"))
-        {
-          g_error ("Schema path MUST be under /org/gnome/builder/");
-          abort ();
-        }
-      else if (schema_path == NULL)
-        {
-          self->relative_path = g_strdup ("");
-        }
+        g_error ("Schema path MUST be under /org/gnome/builder/");
+
+      if (schema_path == NULL)
+        self->relative_path = g_strdup ("");
       else
-        {
-          self->relative_path = g_strdup (schema_path + strlen ("/org/gnome/builder/"));
-        }
+        self->relative_path = g_strdup (schema_path + strlen ("/org/gnome/builder/"));
     }
 
   g_assert (self->relative_path != NULL);
@@ -181,18 +166,18 @@ ide_settings_constructed (GObject *object)
   /* Add our project relative settings */
   if (self->ignore_project_settings == FALSE)
     {
+      g_autoptr(GSettings) project_settings = NULL;
+      g_autofree char *path = NULL;
+
       path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s",
                               self->project_id, self->relative_path);
-      settings = g_settings_new_with_path (self->schema_id, path);
-      ide_settings_sandwich_append (self->settings_sandwich, settings);
-      g_clear_object (&settings);
-      g_free (path);
+      project_settings = g_settings_new_with_path (self->schema_id, path);
+      ide_settings_sandwich_append (self->settings_sandwich, project_settings);
     }
 
   /* Add our application global (user defaults) settings */
-  settings = g_settings_new_with_path (self->schema_id, full_path);
-  ide_settings_sandwich_append (self->settings_sandwich, settings);
-  g_clear_object (&settings);
+  app_settings = g_settings_new_with_path (self->schema_id, full_path);
+  ide_settings_sandwich_append (self->settings_sandwich, app_settings);
 
   IDE_EXIT;
 }
@@ -329,10 +314,10 @@ ide_settings_init (IdeSettings *self)
 }
 
 IdeSettings *
-ide_settings_new (const gchar *project_id,
-                  const gchar *schema_id,
-                  const gchar *relative_path,
-                  gboolean     ignore_project_settings)
+ide_settings_new (const char *project_id,
+                  const char *schema_id,
+                  const char *relative_path,
+                  gboolean    ignore_project_settings)
 {
   IdeSettings *ret;
 
@@ -352,7 +337,7 @@ ide_settings_new (const gchar *project_id,
   IDE_RETURN (ret);
 }
 
-const gchar *
+const char *
 ide_settings_get_schema_id (IdeSettings *self)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
@@ -360,7 +345,7 @@ ide_settings_get_schema_id (IdeSettings *self)
   return self->schema_id;
 }
 
-const gchar *
+const char *
 ide_settings_get_relative_path (IdeSettings *self)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
@@ -378,7 +363,7 @@ ide_settings_get_ignore_project_settings (IdeSettings *self)
 
 GVariant *
 ide_settings_get_default_value (IdeSettings *self,
-                                const gchar *key)
+                                const char  *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
@@ -388,7 +373,7 @@ ide_settings_get_default_value (IdeSettings *self,
 
 GVariant *
 ide_settings_get_user_value (IdeSettings *self,
-                             const gchar *key)
+                             const char  *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
@@ -398,7 +383,7 @@ ide_settings_get_user_value (IdeSettings *self,
 
 GVariant *
 ide_settings_get_value (IdeSettings *self,
-                        const gchar *key)
+                        const char  *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
@@ -408,7 +393,7 @@ ide_settings_get_value (IdeSettings *self,
 
 void
 ide_settings_set_value (IdeSettings *self,
-                        const gchar *key,
+                        const char  *key,
                         GVariant    *value)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
@@ -419,7 +404,7 @@ ide_settings_set_value (IdeSettings *self,
 
 gboolean
 ide_settings_get_boolean (IdeSettings *self,
-                          const gchar *key)
+                          const char  *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), FALSE);
   g_return_val_if_fail (key != NULL, FALSE);
@@ -427,9 +412,9 @@ ide_settings_get_boolean (IdeSettings *self,
   return ide_settings_sandwich_get_boolean (self->settings_sandwich, key);
 }
 
-gdouble
+double
 ide_settings_get_double (IdeSettings *self,
-                         const gchar *key)
+                         const char  *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0.0);
   g_return_val_if_fail (key != NULL, 0.0);
@@ -437,9 +422,9 @@ ide_settings_get_double (IdeSettings *self,
   return ide_settings_sandwich_get_double (self->settings_sandwich, key);
 }
 
-gint
+int
 ide_settings_get_int (IdeSettings *self,
-                      const gchar *key)
+                      const char  *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0);
   g_return_val_if_fail (key != NULL, 0);
@@ -447,9 +432,9 @@ ide_settings_get_int (IdeSettings *self,
   return ide_settings_sandwich_get_int (self->settings_sandwich, key);
 }
 
-gchar *
+char *
 ide_settings_get_string (IdeSettings *self,
-                         const gchar *key)
+                         const char  *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
@@ -459,7 +444,7 @@ ide_settings_get_string (IdeSettings *self,
 
 guint
 ide_settings_get_uint (IdeSettings *self,
-                       const gchar *key)
+                       const char  *key)
 {
   g_return_val_if_fail (IDE_IS_SETTINGS (self), 0);
   g_return_val_if_fail (key != NULL, 0);
@@ -469,7 +454,7 @@ ide_settings_get_uint (IdeSettings *self,
 
 void
 ide_settings_set_boolean (IdeSettings *self,
-                          const gchar *key,
+                          const char  *key,
                           gboolean     val)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
@@ -480,8 +465,8 @@ ide_settings_set_boolean (IdeSettings *self,
 
 void
 ide_settings_set_double (IdeSettings *self,
-                         const gchar *key,
-                         gdouble      val)
+                         const char  *key,
+                         double       val)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
@@ -491,8 +476,8 @@ ide_settings_set_double (IdeSettings *self,
 
 void
 ide_settings_set_int (IdeSettings *self,
-                      const gchar *key,
-                      gint         val)
+                      const char  *key,
+                      int          val)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
@@ -502,8 +487,8 @@ ide_settings_set_int (IdeSettings *self,
 
 void
 ide_settings_set_string (IdeSettings *self,
-                         const gchar *key,
-                         const gchar *val)
+                         const char  *key,
+                         const char  *val)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (key != NULL);
@@ -513,7 +498,7 @@ ide_settings_set_string (IdeSettings *self,
 
 void
 ide_settings_set_uint (IdeSettings *self,
-                       const gchar *key,
+                       const char  *key,
                        guint        val)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
@@ -524,9 +509,9 @@ ide_settings_set_uint (IdeSettings *self,
 
 void
 ide_settings_bind (IdeSettings        *self,
-                   const gchar        *key,
+                   const char         *key,
                    gpointer            object,
-                   const gchar        *property,
+                   const char         *property,
                    GSettingsBindFlags  flags)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
@@ -556,9 +541,9 @@ ide_settings_bind (IdeSettings        *self,
  */
 void
 ide_settings_bind_with_mapping (IdeSettings             *self,
-                                const gchar             *key,
+                                const char              *key,
                                 gpointer                 object,
-                                const gchar             *property,
+                                const char              *property,
                                 GSettingsBindFlags       flags,
                                 GSettingsBindGetMapping  get_mapping,
                                 GSettingsBindSetMapping  set_mapping,
@@ -576,7 +561,7 @@ ide_settings_bind_with_mapping (IdeSettings             *self,
 
 void
 ide_settings_unbind (IdeSettings *self,
-                     const gchar *property)
+                     const char  *property)
 {
   g_return_if_fail (IDE_IS_SETTINGS (self));
   g_return_if_fail (property != NULL);

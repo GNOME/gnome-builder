@@ -30,75 +30,75 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSettings, ide_settings, IDE, SETTINGS, GObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeSettings *ide_settings_new                         (const gchar             *project_id,
-                                                       const gchar             *schema_id,
-                                                       const gchar             *relative_path,
+IdeSettings *ide_settings_new                         (const char              *project_id,
+                                                       const char              *schema_id,
+                                                       const char              *relative_path,
                                                        gboolean                 ignore_project_settings);
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_settings_get_relative_path           (IdeSettings             *self);
+const char  *ide_settings_get_relative_path           (IdeSettings             *self);
 IDE_AVAILABLE_IN_ALL
-const gchar *ide_settings_get_schema_id               (IdeSettings             *self);
+const char  *ide_settings_get_schema_id               (IdeSettings             *self);
 IDE_AVAILABLE_IN_ALL
 gboolean     ide_settings_get_ignore_project_settings (IdeSettings             *self);
 IDE_AVAILABLE_IN_ALL
 GVariant    *ide_settings_get_default_value           (IdeSettings             *self,
-                                                       const gchar             *key);
+                                                       const char              *key);
 IDE_AVAILABLE_IN_ALL
 GVariant    *ide_settings_get_user_value              (IdeSettings             *self,
-                                                       const gchar             *key);
+                                                       const char              *key);
 IDE_AVAILABLE_IN_ALL
 GVariant    *ide_settings_get_value                   (IdeSettings             *self,
-                                                       const gchar             *key);
+                                                       const char              *key);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_set_value                   (IdeSettings             *self,
-                                                       const gchar             *key,
+                                                       const char              *key,
                                                        GVariant                *value);
 IDE_AVAILABLE_IN_ALL
 gboolean     ide_settings_get_boolean                 (IdeSettings             *self,
-                                                       const gchar             *key);
+                                                       const char              *key);
 IDE_AVAILABLE_IN_ALL
-gdouble      ide_settings_get_double                  (IdeSettings             *self,
-                                                       const gchar             *key);
+double       ide_settings_get_double                  (IdeSettings             *self,
+                                                       const char              *key);
 IDE_AVAILABLE_IN_ALL
-gint         ide_settings_get_int                     (IdeSettings             *self,
-                                                       const gchar             *key);
+int          ide_settings_get_int                     (IdeSettings             *self,
+                                                       const char              *key);
 IDE_AVAILABLE_IN_ALL
-gchar       *ide_settings_get_string                  (IdeSettings             *self,
-                                                       const gchar             *key);
+char        *ide_settings_get_string                  (IdeSettings             *self,
+                                                       const char              *key);
 IDE_AVAILABLE_IN_ALL
 guint        ide_settings_get_uint                    (IdeSettings             *self,
-                                                       const gchar             *key);
+                                                       const char              *key);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_set_boolean                 (IdeSettings             *self,
-                                                       const gchar             *key,
+                                                       const char              *key,
                                                        gboolean                 val);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_set_double                  (IdeSettings             *self,
-                                                       const gchar             *key,
-                                                       gdouble                  val);
+                                                       const char              *key,
+                                                       double                   val);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_set_int                     (IdeSettings             *self,
-                                                       const gchar             *key,
-                                                       gint                     val);
+                                                       const char              *key,
+                                                       int                      val);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_set_string                  (IdeSettings             *self,
-                                                       const gchar             *key,
-                                                       const gchar             *val);
+                                                       const char              *key,
+                                                       const char              *val);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_set_uint                    (IdeSettings             *self,
-                                                       const gchar             *key,
+                                                       const char              *key,
                                                        guint                    val);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_bind                        (IdeSettings             *self,
-                                                       const gchar             *key,
+                                                       const char              *key,
                                                        gpointer                 object,
-                                                       const gchar             *property,
+                                                       const char              *property,
                                                        GSettingsBindFlags       flags);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_bind_with_mapping           (IdeSettings             *self,
-                                                       const gchar             *key,
+                                                       const char              *key,
                                                        gpointer                 object,
-                                                       const gchar             *property,
+                                                       const char              *property,
                                                        GSettingsBindFlags       flags,
                                                        GSettingsBindGetMapping  get_mapping,
                                                        GSettingsBindSetMapping  set_mapping,
@@ -106,6 +106,6 @@ void         ide_settings_bind_with_mapping           (IdeSettings             *
                                                        GDestroyNotify           destroy);
 IDE_AVAILABLE_IN_ALL
 void         ide_settings_unbind                      (IdeSettings             *self,
-                                                       const gchar             *property);
+                                                       const char              *property);
 
 G_END_DECLS
