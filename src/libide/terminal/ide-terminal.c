@@ -237,7 +237,7 @@ ide_terminal_popup (IdeTerminal *self,
 
       priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (menu)));
       gtk_popover_set_has_arrow (priv->popover, FALSE);
-      gtk_widget_set_parent (GTK_WIDGET (priv->popover), GTK_WIDGET (self));
+      gtk_widget_set_halign (GTK_WIDGET (priv->popover), GTK_ALIGN_END);
 
       g_signal_connect_object (priv->popover,
                                "closed",
