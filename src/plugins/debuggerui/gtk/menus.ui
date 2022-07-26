@@ -19,8 +19,13 @@
       <submenu id="run-menu-debugger-submenu">
         <attribute name="before">run-menu-verbose-logging</attribute>
         <attribute name="label" translatable="yes">Debugger</attribute>
-        <section id="run-menu-debugger-logging-breakpoints">
-          <attribute name="label" translatable="yes">Logging Breakpoints</attribute>
+        <section id="run-menu-debugger-breakpoints">
+          <attribute name="label" translatable="yes">Breakpoints</attribute>
+          <item>
+            <attribute name="label" translatable="yes">Automatically Break at Program Start</attribute>
+            <attribute name="action">build-settings.debugger-breakpoint-on-main</attribute>
+            <attribute name="role">check</attribute>
+          </item>
           <item>
             <attribute name="label" translatable="yes">Automatically Break at Warnings</attribute>
             <attribute name="action">debug-manager.stop-at-warnings</attribute>
