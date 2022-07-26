@@ -459,3 +459,53 @@ ide_layered_settings_unbind (IdeLayeredSettings *self,
   g_settings_unbind (ide_layered_settings_get_primary_settings (self), property);
   g_settings_unbind (self->memory_backend, property);
 }
+
+/**
+ * ide_layered_settings_get_key:
+ * @self: a #IdeLayeredSettings
+ * @key: the name of the setting
+ *
+ * Gets the #GSettingsSchemaKey denoted by @key.
+ *
+ * It is a programming error to call this with a key that does not exist.
+ *
+ * Returns: (transfer full): a #GSettingsSchemaKey
+ */
+GSettingsSchemaKey *
+ide_layered_settings_get_key (IdeLayeredSettings *self,
+                              const char         *key)
+{
+  g_autoptr(GSettingsSchema) schema = NULL;
+
+  g_return_val_if_fail (IDE_IS_LAYERED_SETTINGS (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  g_object_get (self->memory_settings,
+                "settings-schema", &schema,
+                NULL);
+
+  return g_settings_schema_get_key (schema, key);
+}
+
+/**
+ * ide_layered_settings_list_keys:
+ * @self: a #IdeLayeredSettings
+ *
+ * Lists the available keys.
+ *
+ * Returns: (transfer full) (array zero-terminated=1) (element-type utf8):
+ *   an array of keys that can be retrieved from the #IdeLayeredSettings.
+ */
+char **
+ide_layered_settings_list_keys (IdeLayeredSettings *self)
+{
+  g_autoptr(GSettingsSchema) schema = NULL;
+
+  g_return_val_if_fail (IDE_IS_LAYERED_SETTINGS (self), NULL);
+
+  g_object_get (self->memory_settings,
+                "settings-schema", &schema,
+                NULL);
+
+  return g_settings_schema_list_keys (schema);
+}
