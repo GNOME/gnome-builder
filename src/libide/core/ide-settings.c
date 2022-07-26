@@ -53,7 +53,10 @@ struct _IdeSettings
   guint               ignore_project_settings : 1;
 };
 
-G_DEFINE_FINAL_TYPE (IdeSettings, ide_settings, G_TYPE_OBJECT)
+static void action_group_iface_init (GActionGroupInterface *iface);
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSettings, ide_settings, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
 
 enum {
   PROP_0,
@@ -567,4 +570,128 @@ ide_settings_unbind (IdeSettings *self,
   g_return_if_fail (property != NULL);
 
   ide_layered_settings_unbind (self->layered_settings, property);
+}
+
+static gboolean
+ide_settings_has_action (GActionGroup *group,
+                         const char   *action_name)
+{
+  IdeSettings *self = (IdeSettings *)group;
+  g_auto(GStrv) keys = ide_layered_settings_list_keys (self->layered_settings);
+
+  return g_strv_contains ((const char * const *)keys, action_name);
+}
+
+static char **
+ide_settings_list_actions (GActionGroup *group)
+{
+  IdeSettings *self = (IdeSettings *)group;
+  return ide_layered_settings_list_keys (self->layered_settings);
+}
+
+static gboolean
+ide_settings_get_action_enabled (GActionGroup *group,
+                                 const char   *action_name)
+{
+  return TRUE;
+}
+
+static GVariant *
+ide_settings_get_action_state (GActionGroup *group,
+                               const char   *action_name)
+{
+  IdeSettings *self = (IdeSettings *)group;
+  return ide_layered_settings_get_value (self->layered_settings, action_name);
+}
+
+static GVariant *
+ide_settings_get_action_state_hint (GActionGroup *group,
+                                    const char   *action_name)
+{
+  IdeSettings *self = (IdeSettings *)group;
+  g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
+  return g_settings_schema_key_get_range (key);
+}
+
+static void
+ide_settings_change_action_state (GActionGroup *group,
+                                  const char   *action_name,
+                                  GVariant     *value)
+{
+  IdeSettings *self = (IdeSettings *)group;
+  g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
+
+  if (g_variant_is_of_type (value, g_settings_schema_key_get_value_type (key)) &&
+      g_settings_schema_key_range_check (key, value))
+    {
+      g_autoptr(GVariant) hold = g_variant_ref_sink (value);
+
+      ide_layered_settings_set_value (self->layered_settings, action_name, hold);
+      g_action_group_action_state_changed (group, action_name, hold);
+    }
+}
+
+static const GVariantType *
+ide_settings_get_action_state_type (GActionGroup *group,
+                                    const char   *action_name)
+{
+  IdeSettings *self = (IdeSettings *)group;
+  g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
+  g_autoptr(GVariant) default_value = g_settings_schema_key_get_default_value (key);
+
+  return g_variant_get_type (default_value);
+}
+
+static void
+ide_settings_activate_action (GActionGroup *group,
+                              const char   *action_name,
+                              GVariant     *parameter)
+{
+  IdeSettings *self = (IdeSettings *)group;
+  g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
+  g_autoptr(GVariant) default_value = g_settings_schema_key_get_default_value (key);
+
+  if (g_variant_is_of_type (default_value, G_VARIANT_TYPE_BOOLEAN))
+    {
+      GVariant *old;
+
+      if (parameter != NULL)
+        return;
+
+      old = ide_settings_get_action_state (group, action_name);
+      parameter = g_variant_new_boolean (!g_variant_get_boolean (old));
+      g_variant_unref (old);
+    }
+
+  g_action_group_change_action_state (group, action_name, parameter);
+}
+
+static const GVariantType *
+ide_settings_get_action_parameter_type (GActionGroup *group,
+                                        const char   *action_name)
+
+{
+  IdeSettings *self = (IdeSettings *)group;
+  g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
+  g_autoptr(GVariant) default_value = g_settings_schema_key_get_default_value (key);
+  const GVariantType *type = g_variant_get_type (default_value);
+
+  if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
+    type = NULL;
+
+  return type;
+}
+
+static void
+action_group_iface_init (GActionGroupInterface *iface)
+{
+  iface->has_action = ide_settings_has_action;
+  iface->list_actions = ide_settings_list_actions;
+  iface->get_action_parameter_type = ide_settings_get_action_parameter_type;
+  iface->get_action_enabled = ide_settings_get_action_enabled;
+  iface->get_action_state = ide_settings_get_action_state;
+  iface->get_action_state_hint = ide_settings_get_action_state_hint;
+  iface->get_action_state_type = ide_settings_get_action_state_type;
+  iface->change_action_state = ide_settings_change_action_state;
+  iface->activate_action = ide_settings_activate_action;
 }
