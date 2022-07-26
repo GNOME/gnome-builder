@@ -94,7 +94,7 @@ ide_layered_settings_cache_key (IdeLayeredSettings *self,
   value = g_settings_get_value (settings, key);
   g_settings_set_value (self->memory_settings, key, value);
 
-  g_signal_emit (self, signals[CHANGED], g_quark_from_string (key));
+  g_signal_emit (self, signals[CHANGED], g_quark_from_string (key), key);
 }
 
 static void
@@ -239,7 +239,9 @@ ide_layered_settings_class_init (IdeLayeredSettingsClass *klass)
                   0,
                   NULL, NULL,
                   NULL,
-                  G_TYPE_NONE, 0);
+                  G_TYPE_NONE,
+                  1,
+                  G_TYPE_STRING | G_SIGNAL_TYPE_STATIC_SCOPE);
 }
 
 static void
@@ -292,6 +294,14 @@ ide_layered_settings_get_user_value (IdeLayeredSettings *self,
   return NULL;
 }
 
+/**
+ * ide_layered_settings_get_value:
+ * @self: a #IdeLayeredSettings
+ *
+ * Gets the value of @key from the first layer that is modified.
+ *
+ * Returns: (transfer full): a #GVariant
+ */
 GVariant *
 ide_layered_settings_get_value (IdeLayeredSettings *self,
                                 const char         *key)
