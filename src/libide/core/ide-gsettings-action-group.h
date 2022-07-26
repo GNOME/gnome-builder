@@ -1,5 +1,5 @@
 /*
- * ide-settings-action-group.h
+ * ide-gsettings-action-group.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -27,12 +27,12 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_SETTINGS_ACTION_GROUP (ide_settings_action_group_get_type())
+#define IDE_TYPE_GSETTINGS_ACTION_GROUP (ide_gsettings_action_group_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeSettingsActionGroup, ide_settings_action_group, IDE, SETTINGS_ACTION_GROUP, GObject)
+G_DECLARE_FINAL_TYPE (IdeGSettingsActionGroup, ide_gsettings_action_group, IDE, GSETTINGS_ACTION_GROUP, GObject)
 
 IDE_AVAILABLE_IN_ALL
-GActionGroup *ide_settings_action_group_new (GSettings *settings);
+GActionGroup *ide_gsettings_action_group_new (GSettings *settings);
 
 G_END_DECLS

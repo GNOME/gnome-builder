@@ -762,8 +762,8 @@ static void
 insert_action_groups_foreach_cb (IdeWorkspace *workspace,
                                  gpointer      user_data)
 {
-  g_autoptr(IdeSettingsActionGroup) project_settings_group = NULL;
-  g_autoptr(IdeSettingsActionGroup) build_settings_group = NULL;
+  g_autoptr(IdeGSettingsActionGroup) project_settings_group = NULL;
+  g_autoptr(IdeGSettingsActionGroup) build_settings_group = NULL;
   g_autoptr(GSettings) project_settings = NULL;
   g_autoptr(GSettings) build_settings = NULL;
   IdeWorkbench *self = user_data;
@@ -777,7 +777,7 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
   add_remove_foundry_action_groups (self, workspace, TRUE);
 
   project_settings = ide_context_ref_project_settings (self->context);
-  project_settings_group = g_object_new (IDE_TYPE_SETTINGS_ACTION_GROUP,
+  project_settings_group = g_object_new (IDE_TYPE_GSETTINGS_ACTION_GROUP,
                                          "settings", project_settings,
                                          NULL);
   gtk_widget_insert_action_group (GTK_WIDGET (workspace),
@@ -785,7 +785,7 @@ insert_action_groups_foreach_cb (IdeWorkspace *workspace,
                                   G_ACTION_GROUP (project_settings_group));
 
   build_settings = g_settings_new ("org.gnome.builder.build");
-  build_settings_group = g_object_new (IDE_TYPE_SETTINGS_ACTION_GROUP,
+  build_settings_group = g_object_new (IDE_TYPE_GSETTINGS_ACTION_GROUP,
                                        "settings", build_settings,
                                        NULL);
   gtk_widget_insert_action_group (GTK_WIDGET (workspace),
