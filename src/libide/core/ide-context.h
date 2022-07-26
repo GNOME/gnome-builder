@@ -24,6 +24,7 @@
 # error "Only <libide-core.h> can be included directly."
 #endif
 
+#include "ide-action-muxer.h"
 #include "ide-object.h"
 
 G_BEGIN_DECLS
@@ -34,56 +35,58 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeContext, ide_context, IDE, CONTEXT, IdeObject)
 
 IDE_AVAILABLE_IN_ALL
-IdeContext *ide_context_new                  (void);
+IdeContext     *ide_context_new                  (void);
 IDE_AVAILABLE_IN_ALL
-gboolean    ide_context_has_project          (IdeContext     *self);
+gboolean        ide_context_has_project          (IdeContext     *self);
 IDE_AVAILABLE_IN_ALL
-gpointer    ide_context_peek_child_typed     (IdeContext     *self,
-                                              GType           type);
+gpointer        ide_context_peek_child_typed     (IdeContext     *self,
+                                                  GType           type);
 IDE_AVAILABLE_IN_ALL
-gchar      *ide_context_dup_project_id       (IdeContext     *self);
+gchar          *ide_context_dup_project_id       (IdeContext     *self);
 IDE_AVAILABLE_IN_ALL
-void        ide_context_set_project_id       (IdeContext     *self,
-                                              const gchar    *project_id);
+void            ide_context_set_project_id       (IdeContext     *self,
+                                                  const gchar    *project_id);
 IDE_AVAILABLE_IN_ALL
-gchar      *ide_context_dup_title            (IdeContext     *self);
+gchar          *ide_context_dup_title            (IdeContext     *self);
 IDE_AVAILABLE_IN_ALL
-void        ide_context_set_title            (IdeContext     *self,
-                                              const gchar    *title);
+void            ide_context_set_title            (IdeContext     *self,
+                                                  const gchar    *title);
 IDE_AVAILABLE_IN_ALL
-GFile      *ide_context_ref_workdir          (IdeContext     *self);
+GFile          *ide_context_ref_workdir          (IdeContext     *self);
 IDE_AVAILABLE_IN_ALL
-void        ide_context_set_workdir          (IdeContext     *self,
-                                              GFile          *workdir);
+void            ide_context_set_workdir          (IdeContext     *self,
+                                                  GFile          *workdir);
 IDE_AVAILABLE_IN_ALL
-GFile      *ide_context_build_file           (IdeContext     *self,
-                                              const gchar    *path);
+GFile          *ide_context_build_file           (IdeContext     *self,
+                                                  const gchar    *path);
 IDE_AVAILABLE_IN_ALL
-gchar      *ide_context_build_filename       (IdeContext     *self,
-                                              const gchar    *first_part,
-                                              ...) G_GNUC_NULL_TERMINATED;
+gchar          *ide_context_build_filename       (IdeContext     *self,
+                                                  const gchar    *first_part,
+                                                  ...) G_GNUC_NULL_TERMINATED;
 IDE_AVAILABLE_IN_ALL
-GFile      *ide_context_cache_file           (IdeContext     *self,
-                                              const gchar    *first_part,
-                                              ...) G_GNUC_NULL_TERMINATED;
+GFile          *ide_context_cache_file           (IdeContext     *self,
+                                                  const gchar    *first_part,
+                                                  ...) G_GNUC_NULL_TERMINATED;
 IDE_AVAILABLE_IN_ALL
-gchar      *ide_context_cache_filename       (IdeContext     *self,
-                                              const gchar    *first_part,
-                                              ...) G_GNUC_NULL_TERMINATED;
+gchar          *ide_context_cache_filename       (IdeContext     *self,
+                                                  const gchar    *first_part,
+                                                  ...) G_GNUC_NULL_TERMINATED;
 IDE_AVAILABLE_IN_ALL
-GSettings  *ide_context_ref_project_settings (IdeContext     *self);
+GSettings      *ide_context_ref_project_settings (IdeContext     *self);
 IDE_AVAILABLE_IN_ALL
-IdeContext *ide_object_ref_context           (IdeObject      *self);
+IdeContext     *ide_object_ref_context           (IdeObject      *self);
 IDE_AVAILABLE_IN_ALL
-IdeContext *ide_object_get_context           (IdeObject      *object);
+IdeContext     *ide_object_get_context           (IdeObject      *object);
 IDE_AVAILABLE_IN_ALL
-void        ide_object_set_context           (IdeObject      *object,
-                                              IdeContext     *context);
+void            ide_object_set_context           (IdeObject      *object,
+                                                  IdeContext     *context);
 IDE_AVAILABLE_IN_ALL
-void        ide_context_log                  (IdeContext     *self,
-                                              GLogLevelFlags  level,
-                                              const gchar    *domain,
-                                              const gchar    *message);
+void            ide_context_log                  (IdeContext     *self,
+                                                  GLogLevelFlags  level,
+                                                  const gchar    *domain,
+                                                  const gchar    *message);
+IDE_AVAILABLE_IN_ALL
+IdeActionMuxer *ide_context_ref_action_muxer     (IdeContext     *self);
 
 #ifdef __cplusplus
 #define ide_context_warning(instance, format, ...) \

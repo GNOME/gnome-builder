@@ -53,6 +53,7 @@ libide_core_generated_headers += [libide_debug_h]
 #
 
 libide_core_public_headers = [
+  'ide-action-muxer.h',
   'ide-action-group.h',
   'ide-binding-group.h',
   'ide-context.h',
@@ -73,7 +74,6 @@ libide_core_public_headers = [
 ]
 
 libide_core_private_headers = [
-  'ide-action-muxer.h',
   'ide-layered-settings-private.h',
   'ide-transfer-manager-private.h',
 ]
@@ -85,6 +85,7 @@ install_headers(libide_core_public_headers, subdir: libide_core_header_subdir)
 #
 
 libide_core_public_sources = [
+  'ide-action-muxer.c',
   'ide-binding-group.c',
   'ide-context.c',
   'ide-global.c',
@@ -102,7 +103,6 @@ libide_core_public_sources = [
 ]
 
 libide_core_private_sources = [
-  'ide-action-muxer.c',
   'ide-layered-settings.c',
 ]
 

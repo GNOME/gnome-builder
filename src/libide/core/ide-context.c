@@ -46,6 +46,7 @@ struct _IdeContext
   char           *project_id;
   char           *title;
   GFile          *workdir;
+  IdeActionMuxer *action_muxer;
   guint           project_loaded : 1;
 };
 
@@ -94,6 +95,13 @@ ide_context_destroy (IdeObject *object)
 
   g_assert (IDE_IS_OBJECT (object));
 
+  if (self->action_muxer)
+    {
+      g_auto(GStrv) groups = ide_action_muxer_list_groups (self->action_muxer);
+
+      for (guint i = 0; groups[i]; i++)
+        ide_action_muxer_remove_action_group (self->action_muxer, groups[i]);
+    }
 
   IDE_OBJECT_CLASS (ide_context_parent_class)->destroy (object);
 }
@@ -103,6 +111,7 @@ ide_context_finalize (GObject *object)
 {
   IdeContext *self = (IdeContext *)object;
 
+  g_clear_object (&self->action_muxer);
   g_clear_object (&self->workdir);
   g_clear_pointer (&self->project_id, g_free);
   g_clear_pointer (&self->title, g_free);
@@ -258,6 +267,7 @@ ide_context_init (IdeContext *self)
   self->workdir = g_file_new_for_path (g_get_home_dir ());
   self->project_id = g_strdup ("empty");
   self->title = g_strdup (_("Untitled"));
+  self->action_muxer = ide_action_muxer_new ();
 
   notifs = ide_notifications_new ();
   ide_object_append (IDE_OBJECT (self), IDE_OBJECT (notifs));
@@ -728,4 +738,26 @@ _ide_context_set_has_project (IdeContext *self)
   ide_object_lock (IDE_OBJECT (self));
   self->project_loaded = TRUE;
   ide_object_unlock (IDE_OBJECT (self));
+}
+
+/**
+ * ide_context_ref_action_muxer:
+ * @self: a #IdeContext
+ *
+ * Gets the action muxer for the context.
+ *
+ * Returns: (transfer full): an #IdeActionMuxer
+ */
+IdeActionMuxer *
+ide_context_ref_action_muxer (IdeContext *self)
+{
+  IdeActionMuxer *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+
+  ide_object_lock (IDE_OBJECT (self));
+  g_set_object (&ret, self->action_muxer);
+  ide_object_unlock (IDE_OBJECT (self));
+
+  return g_steal_pointer (&ret);
 }
