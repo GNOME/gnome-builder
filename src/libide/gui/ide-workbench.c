@@ -762,13 +762,25 @@ static void
 insert_action_groups_foreach_cb (IdeWorkspace *workspace,
                                  gpointer      user_data)
 {
+  g_autoptr(IdeSettingsActionGroup) project_settings_group = NULL;
+  g_autoptr(GSettings) project_settings = NULL;
   IdeWorkbench *self = user_data;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (IDE_IS_CONTEXT (self->context));
+  g_assert (ide_context_has_project (self->context));
 
   add_remove_foundry_action_groups (self, workspace, TRUE);
+
+  project_settings = ide_context_ref_project_settings (self->context);
+  project_settings_group = g_object_new (IDE_TYPE_SETTINGS_ACTION_GROUP,
+                                         "settings", project_settings,
+                                         NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                  "project-settings",
+                                  G_ACTION_GROUP (project_settings_group));
 }
 
 /**
