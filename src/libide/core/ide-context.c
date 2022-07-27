@@ -28,6 +28,7 @@
 
 #include "ide-context.h"
 #include "ide-context-private.h"
+#include "ide-debug.h"
 #include "ide-gsettings-action-group.h"
 #include "ide-macros.h"
 #include "ide-notifications.h"
@@ -69,6 +70,19 @@ G_DEFINE_FINAL_TYPE (IdeContext, ide_context, IDE_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+static const char *app_schema_ids[] = {
+  "org.gnome.builder",
+  "org.gnome.builder.code-insight",
+  "org.gnome.builder.editor",
+  "org.gnome.builder.project-tree",
+  "org.gnome.builder.spelling",
+  "org.gnome.builder.terminal",
+};
+static const char *project_schema_ids[] = {
+  "org.gnome.builder.debug",
+  "org.gnome.builder.project",
+  "org.gnome.builder.workbench",
+};
 
 static void
 ide_context_real_log (IdeContext     *self,
@@ -88,6 +102,28 @@ ide_context_repr (IdeObject *object)
                           G_OBJECT_TYPE_NAME (self),
                           g_file_peek_path (self->workdir),
                           self->project_loaded);
+}
+
+static void
+ide_context_constructed (GObject *object)
+{
+  IdeContext *self = (IdeContext *)object;
+
+  IDE_ENTRY;
+
+  G_OBJECT_CLASS (ide_context_parent_class)->constructed (object);
+
+  for (guint i = 0; i < G_N_ELEMENTS (app_schema_ids); i++)
+    {
+      g_autoptr(IdeSettings) settings = ide_settings_new (NULL, app_schema_ids[i]);
+      g_autofree char *prefix = g_strconcat ("settings.app:", app_schema_ids[i], NULL);
+
+      ide_action_muxer_insert_action_group (self->action_muxer,
+                                            prefix,
+                                            G_ACTION_GROUP (settings));
+    }
+
+  IDE_EXIT;
 }
 
 static void
@@ -181,6 +217,7 @@ ide_context_class_init (IdeContextClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
+  object_class->constructed = ide_context_constructed;
   object_class->finalize = ide_context_finalize;
   object_class->get_property = ide_context_get_property;
   object_class->set_property = ide_context_set_property;
@@ -402,7 +439,10 @@ ide_context_set_project_id (IdeContext *self,
   ide_object_unlock (IDE_OBJECT (self));
 
   if (register_settings)
-    ide_context_register_settings (self, "org.gnome.builder.project");
+    {
+      for (guint i = 0; i < G_N_ELEMENTS (project_schema_ids); i++)
+        ide_context_register_settings (self, project_schema_ids[i]);
+    }
 }
 
 /**
@@ -827,8 +867,8 @@ ide_context_register_settings (IdeContext *self,
   if ((muxer = ide_context_ref_action_muxer (self)) &&
       (project_id = ide_context_dup_project_id (self)))
     {
-      g_autoptr(IdeSettings) project_settings = ide_settings_new (project_id, schema_id, NULL, FALSE);
-      g_autoptr(IdeSettings) app_settings = ide_settings_new (project_id, schema_id, NULL, TRUE);
+      g_autoptr(IdeSettings) project_settings = ide_settings_new (project_id, schema_id);
+      g_autoptr(IdeSettings) app_settings = ide_settings_new (NULL, schema_id);
       g_autofree char *project_group = g_strconcat ("settings.project:", schema_id, NULL);
       g_autofree char *app_group = g_strconcat ("settings.app:", schema_id, NULL);
 

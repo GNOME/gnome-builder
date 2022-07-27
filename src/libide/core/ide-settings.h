@@ -37,15 +37,13 @@ G_DECLARE_FINAL_TYPE (IdeSettings, ide_settings, IDE, SETTINGS, GObject)
 
 IDE_AVAILABLE_IN_ALL
 IdeSettings *ide_settings_new                         (const char              *project_id,
-                                                       const char              *schema_id,
-                                                       const char              *relative_path,
-                                                       gboolean                 ignore_project_settings);
+                                                       const char              *schema_id);
 IDE_AVAILABLE_IN_ALL
-const char  *ide_settings_get_relative_path           (IdeSettings             *self);
+IdeSettings *ide_settings_new_with_path               (const char              *project_id,
+                                                       const char              *schema_id,
+                                                       const char              *path);
 IDE_AVAILABLE_IN_ALL
 const char  *ide_settings_get_schema_id               (IdeSettings             *self);
-IDE_AVAILABLE_IN_ALL
-gboolean     ide_settings_get_ignore_project_settings (IdeSettings             *self);
 IDE_AVAILABLE_IN_ALL
 GVariant    *ide_settings_get_default_value           (IdeSettings             *self,
                                                        const char              *key);

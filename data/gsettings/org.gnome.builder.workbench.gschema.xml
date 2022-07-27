@@ -1,5 +1,5 @@
 <schemalist>
-  <schema id="org.gnome.builder.workbench" path="/org/gnome/builder/workbench/" gettext-domain="gnome-builder">
+  <schema id="org.gnome.builder.workbench" gettext-domain="gnome-builder">
     <key name="left-visible" type="b">
       <default>true</default>
       <summary>Show Left Panel</summary>
@@ -11,7 +11,6 @@
       <summary>Left Panel Position</summary>
       <description>The width in pixel units of the left panel.</description>
     </key>
-
     <key name="right-visible" type="b">
       <default>false</default>
       <summary>Show Right Panel</summary>
@@ -23,7 +22,6 @@
       <summary>Right Panel Position</summary>
       <description>The width in pixel units of the right panel.</description>
     </key>
-
     <key name="bottom-visible" type="b">
       <default>false</default>
       <summary>Show Bottom Panel</summary>

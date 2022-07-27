@@ -50,10 +50,9 @@ struct _IdeSettings
 {
   GObject             parent_instance;
   IdeLayeredSettings *layered_settings;
-  char               *relative_path;
   char               *schema_id;
   char               *project_id;
-  guint               ignore_project_settings : 1;
+  char               *path;
 };
 
 static void action_group_iface_init (GActionGroupInterface *iface);
@@ -63,10 +62,9 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSettings, ide_settings, G_TYPE_OBJECT,
 
 enum {
   PROP_0,
-  PROP_RELATIVE_PATH,
-  PROP_SCHEMA_ID,
-  PROP_IGNORE_PROJECT_SETTINGS,
+  PROP_PATH,
   PROP_PROJECT_ID,
+  PROP_SCHEMA_ID,
   N_PROPS
 };
 
@@ -79,51 +77,14 @@ static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
 static void
-ide_settings_set_ignore_project_settings (IdeSettings *self,
-                                          gboolean     ignore_project_settings)
-{
-  g_return_if_fail (IDE_IS_SETTINGS (self));
-
-  ignore_project_settings = !!ignore_project_settings;
-
-  if (ignore_project_settings != self->ignore_project_settings)
-    {
-      self->ignore_project_settings = ignore_project_settings;
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_IGNORE_PROJECT_SETTINGS]);
-    }
-}
-
-static void
-ide_settings_set_relative_path (IdeSettings *self,
-                                const char  *relative_path)
-{
-  g_assert (IDE_IS_SETTINGS (self));
-  g_assert (ide_str_empty0 (relative_path) || g_str_has_suffix (relative_path, "/"));
-
-  if (relative_path && *relative_path == '/')
-    relative_path++;
-
-  if (!ide_str_equal0 (relative_path, self->relative_path))
-    {
-      g_free (self->relative_path);
-      self->relative_path = g_strdup (relative_path);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_RELATIVE_PATH]);
-    }
-}
-
-static void
 ide_settings_set_schema_id (IdeSettings *self,
                             const char  *schema_id)
 {
   g_assert (IDE_IS_SETTINGS (self));
   g_assert (schema_id != NULL);
 
-  if (!ide_str_equal0 (schema_id, self->schema_id))
-    {
-      g_free (self->schema_id);
-      self->schema_id = g_strdup (schema_id);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SCHEMA_ID]);
-    }
+  if (ide_set_string (&self->schema_id, schema_id))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SCHEMA_ID]);
 }
 
 static void
@@ -147,44 +108,76 @@ static void
 ide_settings_constructed (GObject *object)
 {
   IdeSettings *self = (IdeSettings *)object;
+  g_autoptr(GSettingsSchema) schema = NULL;
   g_autoptr(GSettings) app_settings = NULL;
-  g_autofree char *full_path = NULL;
+  GSettingsSchemaSource *source;
+  g_autofree char *app_path = NULL;
+  g_autofree char *project_path = NULL;
+  const char *schema_path;
 
   IDE_ENTRY;
 
   G_OBJECT_CLASS (ide_settings_parent_class)->constructed (object);
 
   if (self->schema_id == NULL)
-    g_error ("You must provide IdeSettings:schema-id");
+    g_error ("You must set %s:schema-id during construction", G_OBJECT_TYPE_NAME (self));
 
-  if (self->relative_path == NULL)
+  if (!ide_str_equal0 (self->schema_id, "org.gnome.builder") &&
+      !g_str_has_prefix (self->schema_id, "org.gnome.builder."))
+    g_error ("You mus use a schema prefixed with org.gnome.builder.");
+
+  if (self->path != NULL)
     {
-      g_autoptr(GSettingsSchema) schema = NULL;
-      GSettingsSchemaSource *source;
-      const char *schema_path;
-
-      source = g_settings_schema_source_get_default ();
-
-      if (!(schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE)))
-        g_error ("Could not locate schema %s", self->schema_id);
-
-      schema_path = g_settings_schema_get_path (schema);
-
-      if ((schema_path != NULL) && !g_str_has_prefix (schema_path, "/org/gnome/builder/"))
-        g_error ("Schema path MUST be under /org/gnome/builder/");
-
-      if (schema_path == NULL)
-        self->relative_path = g_strdup ("");
-      else
-        self->relative_path = g_strdup (schema_path + strlen ("/org/gnome/builder/"));
+      if (!g_str_has_prefix (self->path, "/org/gnome/builder/"))
+        g_error ("You must use a path that begins with /org/gnome/builder/");
+      else if (!g_str_has_suffix (self->path, "/"))
+        g_error ("Settings paths must end in /");
     }
 
-  g_assert (self->relative_path != NULL);
-  g_assert (self->relative_path [0] != '/');
-  g_assert ((self->relative_path [0] == 0) || g_str_has_suffix (self->relative_path, "/"));
+  source = g_settings_schema_source_get_default ();
+  if (!(schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE)))
+    g_error ("Could not locate schema %s", self->schema_id);
 
-  full_path = g_strdup_printf ("/org/gnome/builder/%s", self->relative_path);
-  self->layered_settings = ide_layered_settings_new (self->schema_id, full_path);
+  if ((schema_path = g_settings_schema_get_path (schema)))
+    app_path = g_strdup (schema_path);
+  else if (self->path != NULL)
+    app_path = g_strdup (self->path);
+
+  if (schema_path == NULL)
+    {
+      if (!g_str_has_prefix (self->schema_id, "org.gnome.builder."))
+        g_error ("Project schemes must have a prefix of org.gnome.builder.");
+    }
+
+  if (app_path == NULL)
+    {
+      g_autofree char *suffix = g_strdelimit (g_strdup (self->schema_id), ".", '/');
+      app_path = g_strconcat ("/", suffix, "/", NULL);
+    }
+
+  if (schema_path == NULL && self->project_id != NULL)
+    {
+      if (self->path != NULL)
+        {
+          project_path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s",
+                                          self->project_id,
+                                          self->path + strlen ("/org/gnome/builder/"));
+        }
+      else
+        {
+          g_autofree char *suffix = g_strdup (self->schema_id + strlen ("org.gnome.builder."));
+          GString *str = g_string_new ("/org/gnome/builder/projects/");
+
+          g_string_append (str, self->project_id);
+          g_string_append_c (str, '/');
+          g_string_append (str, g_strdelimit (suffix, ".", '/'));
+          g_string_append_c (str, '/');
+
+          project_path = g_string_free (str, FALSE);
+        }
+    }
+
+  self->layered_settings = ide_layered_settings_new (self->schema_id, app_path);
 
   g_signal_connect_object (self->layered_settings,
                            "changed",
@@ -192,20 +185,15 @@ ide_settings_constructed (GObject *object)
                            self,
                            G_CONNECT_SWAPPED);
 
-  /* Add our project relative settings */
-  if (self->ignore_project_settings == FALSE)
+  /* Add project layer if we need one */
+  if (project_path != NULL)
     {
-      g_autoptr(GSettings) project_settings = NULL;
-      g_autofree char *path = NULL;
-
-      path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s",
-                              self->project_id, self->relative_path);
-      project_settings = g_settings_new_with_path (self->schema_id, path);
+      g_autoptr(GSettings) project_settings = g_settings_new_with_path (self->schema_id, project_path);
       ide_layered_settings_append (self->layered_settings, project_settings);
     }
 
   /* Add our application global (user defaults) settings */
-  app_settings = g_settings_new_with_path (self->schema_id, full_path);
+  app_settings = g_settings_new_with_path (self->schema_id, app_path);
   ide_layered_settings_append (self->layered_settings, app_settings);
 
   IDE_EXIT;
@@ -217,9 +205,10 @@ ide_settings_finalize (GObject *object)
   IdeSettings *self = (IdeSettings *)object;
 
   g_clear_object (&self->layered_settings);
-  g_clear_pointer (&self->relative_path, g_free);
+
   g_clear_pointer (&self->schema_id, g_free);
   g_clear_pointer (&self->project_id, g_free);
+  g_clear_pointer (&self->path, g_free);
 
   G_OBJECT_CLASS (ide_settings_parent_class)->finalize (object);
 }
@@ -234,20 +223,16 @@ ide_settings_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_PATH:
+      g_value_set_string (value, self->path);
+      break;
+
     case PROP_PROJECT_ID:
       g_value_set_string (value, self->project_id);
       break;
 
     case PROP_SCHEMA_ID:
       g_value_set_string (value, ide_settings_get_schema_id (self));
-      break;
-
-    case PROP_RELATIVE_PATH:
-      g_value_set_string (value, ide_settings_get_relative_path (self));
-      break;
-
-    case PROP_IGNORE_PROJECT_SETTINGS:
-      g_value_set_boolean (value, ide_settings_get_ignore_project_settings (self));
       break;
 
     default:
@@ -265,20 +250,16 @@ ide_settings_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_PATH:
+      self->path = g_value_dup_string (value);
+      break;
+
     case PROP_PROJECT_ID:
       self->project_id = g_value_dup_string (value);
       break;
 
     case PROP_SCHEMA_ID:
       ide_settings_set_schema_id (self, g_value_get_string (value));
-      break;
-
-    case PROP_RELATIVE_PATH:
-      ide_settings_set_relative_path (self, g_value_get_string (value));
-      break;
-
-    case PROP_IGNORE_PROJECT_SETTINGS:
-      ide_settings_set_ignore_project_settings (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -296,24 +277,17 @@ ide_settings_class_init (IdeSettingsClass *klass)
   object_class->get_property = ide_settings_get_property;
   object_class->set_property = ide_settings_set_property;
 
+  properties [PROP_PATH] =
+    g_param_spec_string ("path",
+                         "Path",
+                         "The path to use for for app settings",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_PROJECT_ID] =
     g_param_spec_string ("project-id",
                          "Project Id",
                          "The identifier for the project",
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_IGNORE_PROJECT_SETTINGS] =
-    g_param_spec_boolean ("ignore-project-settings",
-                         "Ignore Project Settings",
-                         "If project settings should be ignored.",
-                         FALSE,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_RELATIVE_PATH] =
-    g_param_spec_string ("relative-path",
-                         "Relative Path",
-                         "Relative Path",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
@@ -345,22 +319,37 @@ ide_settings_init (IdeSettings *self)
 
 IdeSettings *
 ide_settings_new (const char *project_id,
-                  const char *schema_id,
-                  const char *relative_path,
-                  gboolean    ignore_project_settings)
+                  const char *schema_id)
 {
   IdeSettings *ret;
 
   IDE_ENTRY;
 
-  g_return_val_if_fail (project_id != NULL, NULL);
   g_return_val_if_fail (schema_id != NULL, NULL);
 
   ret = g_object_new (IDE_TYPE_SETTINGS,
                       "project-id", project_id,
-                      "ignore-project-settings", ignore_project_settings,
-                      "relative-path", relative_path,
                       "schema-id", schema_id,
+                      NULL);
+
+  IDE_RETURN (ret);
+}
+
+IdeSettings *
+ide_settings_new_with_path (const char *project_id,
+                            const char *schema_id,
+                            const char *path)
+{
+  IdeSettings *ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (schema_id != NULL, NULL);
+
+  ret = g_object_new (IDE_TYPE_SETTINGS,
+                      "project-id", project_id,
+                      "schema-id", schema_id,
+                      "path", path,
                       NULL);
 
   IDE_RETURN (ret);
@@ -372,22 +361,6 @@ ide_settings_get_schema_id (IdeSettings *self)
   g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
 
   return self->schema_id;
-}
-
-const char *
-ide_settings_get_relative_path (IdeSettings *self)
-{
-  g_return_val_if_fail (IDE_IS_SETTINGS (self), NULL);
-
-  return self->relative_path;
-}
-
-gboolean
-ide_settings_get_ignore_project_settings (IdeSettings *self)
-{
-  g_return_val_if_fail (IDE_IS_SETTINGS (self), FALSE);
-
-  return self->ignore_project_settings;
 }
 
 GVariant *
@@ -585,7 +558,7 @@ ide_settings_bind_with_mapping (IdeSettings             *self,
   g_return_if_fail (property != NULL);
 
   ide_layered_settings_bind_with_mapping (self->layered_settings, key, object, property, flags,
-                                           get_mapping, set_mapping, user_data, destroy);
+                                          get_mapping, set_mapping, user_data, destroy);
 }
 
 void
