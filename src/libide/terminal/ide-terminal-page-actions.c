@@ -333,7 +333,9 @@ ide_terminal_page_actions_init (IdeTerminalPage *self)
   g_autoptr(GSimpleActionGroup) group = NULL;
 
   group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group), IdeTerminalPageActions,
-                                   G_N_ELEMENTS (IdeTerminalPageActions), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (self), "terminal-view", G_ACTION_GROUP (group));
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   IdeTerminalPageActions,
+                                   G_N_ELEMENTS (IdeTerminalPageActions),
+                                   self);
+  panel_widget_insert_action_group (PANEL_WIDGET (self), "terminal", G_ACTION_GROUP (group));
 }
