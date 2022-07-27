@@ -31,6 +31,7 @@
 #include "ide-gsettings-action-group.h"
 #include "ide-macros.h"
 #include "ide-notifications.h"
+#include "ide-settings.h"
 
 /**
  * SECTION:ide-context
@@ -382,6 +383,8 @@ void
 ide_context_set_project_id (IdeContext *self,
                             const char *project_id)
 {
+  gboolean register_settings = FALSE;
+
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
@@ -391,25 +394,15 @@ ide_context_set_project_id (IdeContext *self,
   ide_object_lock (IDE_OBJECT (self));
   if (!ide_str_equal0 (self->project_id, project_id))
     {
-      g_autoptr(IdeGSettingsActionGroup) project_settings_action_group = NULL;
-      g_autoptr(GSettings) project_settings = NULL;
-      g_autofree char *path = NULL;
-
       g_free (self->project_id);
       self->project_id = g_strdup (project_id);
-
-      path = g_strdup_printf ("/org/gnome/builder/projects/%s/", project_id);
-      project_settings = g_settings_new_with_path ("org.gnome.builder.project", path);
-      project_settings_action_group = g_object_new (IDE_TYPE_GSETTINGS_ACTION_GROUP,
-                                                    "settings", project_settings,
-                                                    NULL);
-      ide_action_muxer_insert_action_group (self->action_muxer,
-                                            "settings:org.gnome.builder.project",
-                                            G_ACTION_GROUP (project_settings_action_group));
-
       ide_object_notify_by_pspec (IDE_OBJECT (self), properties [PROP_PROJECT_ID]);
+      register_settings = TRUE;
     }
   ide_object_unlock (IDE_OBJECT (self));
+
+  if (register_settings)
+    ide_context_register_settings (self, "org.gnome.builder.project");
 }
 
 /**
@@ -776,4 +769,36 @@ ide_context_ref_action_muxer (IdeContext *self)
   ide_object_unlock (IDE_OBJECT (self));
 
   return g_steal_pointer (&ret);
+}
+
+/**
+ * ide_context_register_settings:
+ * @self: a #IdeContext
+ *
+ * Registers settings that can be overriden by a project.
+ *
+ * Use this if you have a GSettings schema that can have both
+ * application and per-project overrides.
+ */
+void
+ide_context_register_settings (IdeContext *self,
+                               const char *schema_id)
+{
+  g_autoptr(IdeActionMuxer) muxer = NULL;
+  g_autofree char *project_id = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (schema_id != NULL);
+
+  if ((muxer = ide_context_ref_action_muxer (self)) &&
+      (project_id = ide_context_dup_project_id (self)))
+    {
+      g_autoptr(IdeSettings) project_settings = ide_settings_new (project_id, schema_id, NULL, FALSE);
+      g_autoptr(IdeSettings) app_settings = ide_settings_new (project_id, schema_id, NULL, TRUE);
+      g_autofree char *project_group = g_strconcat ("project.settings:", schema_id, NULL);
+      g_autofree char *app_group = g_strconcat ("app.settings:", schema_id, NULL);
+
+      ide_action_muxer_insert_action_group (muxer, app_group, G_ACTION_GROUP (app_settings));
+      ide_action_muxer_insert_action_group (muxer, project_group, G_ACTION_GROUP (project_settings));
+    }
 }
