@@ -804,6 +804,7 @@ void
 ide_workbench_add_workspace (IdeWorkbench *self,
                              IdeWorkspace *workspace)
 {
+  g_autoptr(IdeActionMuxer) muxer = NULL;
   g_autoptr(GPtrArray) addins = NULL;
   IdeShortcutManager *shortcuts;
   GList *mru_link;
@@ -833,6 +834,12 @@ ide_workbench_add_workspace (IdeWorkbench *self,
    * this IdeContext will be updated later.
    */
   _ide_workspace_set_context (workspace, self->context);
+
+  /* Connect context actions to the workspace */
+  muxer = ide_context_ref_action_muxer (self->context);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
+                                  "context",
+                                  G_ACTION_GROUP (muxer));
 
   /* This causes the workspace to get an additional reference to the group
    * (which already happens from GtkWindow:group), but IdeWorkspace will
