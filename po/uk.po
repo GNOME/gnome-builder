@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-26 11:10+0000\n"
-"PO-Revision-Date: 2022-07-26 23:03+0300\n"
+"POT-Creation-Date: 2022-07-27 12:23+0000\n"
+"PO-Revision-Date: 2022-07-27 18:21+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -207,15 +207,6 @@ msgstr ""
 "отримання SDK та залежностей, якщо відомо, що ведеться облік і тарифікація "
 "обміну даними мережею."
 
-#: data/gsettings/org.gnome.builder.build.gschema.xml:21
-msgid "Debugger Breakpoint on Main"
-msgstr "Діагностична точка зупинки у головній функції"
-
-#: data/gsettings/org.gnome.builder.build.gschema.xml:22
-msgid "Debugger should automatically insert breakpoint on main function."
-msgstr ""
-"Засіб діагностики має автоматично вставляти точку зупинки у основній функції."
-
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
 msgstr "Автодоповнення на основі Ctags"
@@ -243,6 +234,43 @@ msgstr "Шлях до виконуваного файла ctags"
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "The path to the ctags executable on the system."
 msgstr "Шлях до виконуваного файла ctags у системі."
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:5
+#| msgid "Debugger Breakpoint on Main"
+msgid "Debugger Breakpoint at Main"
+msgstr "Діагностична точка зупинки у головній функції"
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:6
+#| msgid "Debugger should automatically insert breakpoint on main function."
+msgid "Debugger should automatically insert breakpoint at main() function."
+msgstr ""
+"Засіб діагностики має автоматично вставляти точку зупинки у основній функції."
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:10
+#| msgid "Debugger Breakpoint on Main"
+msgid "Debugger Breakpoint at g_critical()"
+msgstr "Діагностична точка зупинки у g_critical()"
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:11
+#| msgid "Debugger should automatically insert breakpoint on main function."
+msgid ""
+"Debugger should automatically insert breakpoint at g_critical() function."
+msgstr ""
+"Засіб діагностики має автоматично вставляти точку зупинки у функції"
+" g_critical()."
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:15
+#| msgid "Debugger Breakpoint on Main"
+msgid "Debugger Breakpoint at g_warning()"
+msgstr "Діагностична точка зупинки у g_warning()"
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:16
+#| msgid "Debugger should automatically insert breakpoint on main function."
+msgid ""
+"Debugger should automatically insert breakpoint at g_warning() function."
+msgstr ""
+"Засіб діагностики має автоматично вставляти точку зупинки у функції"
+" g_warning()."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -676,54 +704,6 @@ msgstr "Перевірка правопису"
 msgid "Automatically check spelling within documents"
 msgstr "Автоматично перевіряти правопис у документах"
 
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:5
-msgid "Show Left Panel"
-msgstr "Показати ліву панель"
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:6
-msgid "If enabled, the left panel will be displayed."
-msgstr "Якщо увімкнено, буде показано ліву панель."
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:11
-msgid "Left Panel Position"
-msgstr "Розташування лівої панелі"
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:12
-msgid "The width in pixel units of the left panel."
-msgstr "Ширина лівої панелі у пікселях."
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:17
-msgid "Show Right Panel"
-msgstr "Показати праву панель"
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:18
-msgid "If enabled, the right panel will be displayed."
-msgstr "Якщо увімкнено, буде показано праву панель."
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:23
-msgid "Right Panel Position"
-msgstr "Розташування правої панелі"
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:24
-msgid "The width in pixel units of the right panel."
-msgstr "Ширина правої панелі у пікселях."
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:29
-msgid "Show Bottom Panel"
-msgstr "Показати нижню панель"
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:30
-msgid "If enabled, the bottom panel will be displayed."
-msgstr "Якщо увімкнено, буде показано нижню панель."
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:35
-msgid "Bottom Panel Position"
-msgstr "Розташування нижньої панелі"
-
-#: data/gsettings/org.gnome.builder.workbench.gschema.xml:36
-msgid "The height in pixel units of the bottom panel."
-msgstr "Висота нижньої панелі у пікселях"
-
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
 msgstr "Збирання програмного забезпечення для GNOME"
@@ -742,7 +722,7 @@ msgid "Start New Project"
 msgstr "Створити проєкт"
 
 #: data/org.gnome.Builder.desktop.in.in:28
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:280
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:279
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:92
 msgid "Clone Repository"
 msgstr "Клонувати сховище"
@@ -790,7 +770,7 @@ msgstr "Не вдалося запустити типові мови."
 msgid "Failed to save draft: %s"
 msgstr "Не вдалося зберегти чернетку: %s"
 
-#: src/libide/core/ide-context.c:356 src/libide/core/ide-context.c:774
+#: src/libide/core/ide-context.c:379 src/libide/core/ide-context.c:842
 msgid "Untitled"
 msgstr "Без назви"
 
@@ -798,7 +778,7 @@ msgstr "Без назви"
 #: src/libide/greeter/ide-greeter-workspace.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1466
+#: src/libide/gui/ide-workbench.c:1472
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
@@ -807,12 +787,12 @@ msgstr "Без назви"
 msgid "_Cancel"
 msgstr "_Скасувати"
 
-#: src/libide/debugger/ide-debug-manager.c:967
+#: src/libide/debugger/ide-debug-manager.c:977
 msgid "A suitable debugger could not be found."
 msgstr "Не знайдено придатного засобу діагностики."
 
 #: src/libide/editor/gtk/menus.ui:16 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1462
+#: src/libide/gui/ide-workbench.c:1468
 msgid "Open File…"
 msgstr "Відкрити файл…"
 
@@ -1170,8 +1150,8 @@ msgid "Directory"
 msgstr "Каталог"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:322 src/libide/gui/ide-workbench.c:883
-#: src/libide/gui/ide-workbench.c:2737
+#: src/libide/gui/ide-workbench.c:322 src/libide/gui/ide-workbench.c:889
+#: src/libide/gui/ide-workbench.c:2743
 #, c-format
 msgid "Builder — %s"
 msgstr "Будівник — %s"
@@ -1210,7 +1190,7 @@ msgid "Select Project File"
 msgstr "Виберіть файл проєкту"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1465
+#: src/libide/gui/ide-workbench.c:1471
 msgid "_Open"
 msgstr "_Відкрити"
 
@@ -1897,10 +1877,13 @@ msgstr "Не вдалося завантажити HTML. Не передбаче
 #: src/libide/gui/ide-preferences-builtin.c:653
 #: src/libide/gui/ide-preferences-builtin.c:676
 #: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/preferences.ui:25
+#: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
 msgstr "Вигляд"
 
 #: src/libide/gui/ide-preferences-builtin.c:119
+#: src/plugins/buildui/gtk/preferences.ui:36
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:40
 msgid "Style"
 msgstr "Стиль"
@@ -1934,6 +1917,7 @@ msgid "Grid Pattern"
 msgstr "Шаблон сітки"
 
 #: src/libide/gui/ide-preferences-builtin.c:125
+#: src/plugins/buildui/gtk/preferences.ui:81
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:66
 msgid "Display a grid pattern underneath source code"
 msgstr "Показати шаблон сітки за кодом "
@@ -2183,8 +2167,7 @@ msgstr "Увімкнути або вимкнути можливість авто
 
 #: src/libide/gui/ide-preferences-builtin.c:213
 msgid "The number of seconds after modification before auto saving"
-msgstr ""
-"Кількість секунд після внесення змін до автоматичного збереження даних"
+msgstr "Кількість секунд після внесення змін до автоматичного збереження даних"
 
 #: src/libide/gui/ide-preferences-builtin.c:219
 msgid "Code Insight"
@@ -2526,6 +2509,7 @@ msgid "Application"
 msgstr "Програма"
 
 #: src/libide/gui/ide-preferences-builtin.c:677
+#: src/plugins/buildui/gtk/preferences.ui:40
 msgid "Interface"
 msgstr "Інтерфейс"
 
@@ -2599,6 +2583,7 @@ msgid "Navigate with Tab Bar"
 msgstr "Навігація за допомогою панелі вкладок"
 
 #: src/libide/gui/ide-preferences-builtin.c:728
+#: src/plugins/buildui/gtk/preferences.ui:96
 msgid "Switch documents using a tabbed interface"
 msgstr "Перемикання документів за допомогою інтерфейсу із вкладками"
 
@@ -2649,6 +2634,7 @@ msgstr ""
 "Клавіатурні скорочення, подібні до скорочень «Текстового редактора GNOME»"
 
 #: src/libide/gui/ide-preferences-builtin.c:768
+#: src/plugins/buildui/gtk/preferences.ui:72
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
 msgstr "Шрифт термінала"
@@ -2956,8 +2942,7 @@ msgstr "Кешування команд збирання"
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:157
 #, c-format
-msgid ""
-"Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
 "Додаток форматування: сталася помилка під час копіювання файла налаштувань "
 "gresource для «%s»: %s"
@@ -2999,8 +2984,7 @@ msgstr ""
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:291
 #, c-format
-msgid ""
-"Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
 msgstr ""
 "Додаток форматування: шляху налаштувань «%s» не існує, запис «%s» вимкнено"
 
@@ -3561,6 +3545,51 @@ msgstr "Докладний журнал"
 msgid "Tools"
 msgstr "Інструменти"
 
+#: src/plugins/buildui/gtk/preferences.ui:66
+#: src/plugins/editorui/gbp-editorui-preferences-addin.c:60
+msgid "Editor Font"
+msgstr "Шрифт редактора"
+
+#: src/plugins/buildui/gtk/preferences.ui:67
+#| msgid "The font used within the source code editor"
+msgid "The font used in the source code editor"
+msgstr "Шрифт, який використано у редакторі коду"
+
+#: src/plugins/buildui/gtk/preferences.ui:73
+#| msgid "The font used within terminals"
+msgid "The font used in the terminal"
+msgstr "Шрифт, який буде використано у терміналі"
+
+#: src/plugins/buildui/gtk/preferences.ui:80
+#: src/plugins/editorui/gbp-editorui-preferences-addin.c:65
+msgid "Show Grid Pattern"
+msgstr "Показувати шаблон таблиці"
+
+#: src/plugins/buildui/gtk/preferences.ui:86
+#: src/plugins/editorui/gbp-editorui-preferences-addin.c:70
+msgid "Show Overview Map"
+msgstr "Показувати оглядову мапу"
+
+#: src/plugins/buildui/gtk/preferences.ui:87
+#| msgid "Use an overview map instead of a scrollbar"
+msgid "Display an overview map instead of a scrollbar"
+msgstr "Показати карту перегляду замість смужки гортання"
+
+#: src/plugins/buildui/gtk/preferences.ui:95
+#| msgid "Navigate with Tab Bar"
+msgid "Navigate with Tabs"
+msgstr "Навігація за допомогою вкладок"
+
+#: src/plugins/buildui/gtk/preferences.ui:102
+#| msgid "Navigate with Tab Bar"
+msgid "Navigate with Popover"
+msgstr "Навігація за допомогою накладки"
+
+#: src/plugins/buildui/gtk/preferences.ui:103
+#| msgid "Switch documents using a tabbed interface"
+msgid "Switch documents using a popover"
+msgstr "Перемикання документів за допомогою накладки"
+
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 msgid "Fetch dependencies"
 msgstr "Отримати залежності"
@@ -4002,8 +4031,7 @@ msgid "Visibility:"
 msgstr "Видимість:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid ""
-"Select the color spaces for which you want to see sliders in the panel."
+msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr ""
 "Виберіть простори кольорів, для яких ви хочете бачити повзунки на панелі."
 
@@ -4279,7 +4307,6 @@ msgid "Run the project with debugger"
 msgstr "Запустити проєкт із засобом діагностики"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
-#| msgid "Automatically Break at Criticals"
 msgid "Automatically Break at Program Start"
 msgstr "Автоматично переривати при запуску програми"
 
@@ -4466,21 +4493,9 @@ msgstr "Використовувати мінімальний інтерфейс
 msgid "Movements"
 msgstr "Рухи"
 
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:60
-msgid "Editor Font"
-msgstr "Шрифт редактора"
-
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:61
 msgid "The font used within the source code editor"
 msgstr "Шрифт, який використано у редакторі коду"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:65
-msgid "Show Grid Pattern"
-msgstr "Показувати шаблон таблиці"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:70
-msgid "Show Overview Map"
-msgstr "Показувати оглядову мапу"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:71
 msgid "Use an overview map instead of a scrollbar"
@@ -4550,8 +4565,7 @@ msgstr "Вставляти завершальні символи для блок
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr ""
-"Показувати поле у редакторі для позначення максимальної бажаної ширини"
+msgstr "Показувати поле у редакторі для позначення максимальної бажаної ширини"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:155
 msgid "Prefer spaces over tabs"
@@ -6326,6 +6340,42 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Show Left Panel"
+#~ msgstr "Показати ліву панель"
+
+#~ msgid "If enabled, the left panel will be displayed."
+#~ msgstr "Якщо увімкнено, буде показано ліву панель."
+
+#~ msgid "Left Panel Position"
+#~ msgstr "Розташування лівої панелі"
+
+#~ msgid "The width in pixel units of the left panel."
+#~ msgstr "Ширина лівої панелі у пікселях."
+
+#~ msgid "Show Right Panel"
+#~ msgstr "Показати праву панель"
+
+#~ msgid "If enabled, the right panel will be displayed."
+#~ msgstr "Якщо увімкнено, буде показано праву панель."
+
+#~ msgid "Right Panel Position"
+#~ msgstr "Розташування правої панелі"
+
+#~ msgid "The width in pixel units of the right panel."
+#~ msgstr "Ширина правої панелі у пікселях."
+
+#~ msgid "Show Bottom Panel"
+#~ msgstr "Показати нижню панель"
+
+#~ msgid "If enabled, the bottom panel will be displayed."
+#~ msgstr "Якщо увімкнено, буде показано нижню панель."
+
+#~ msgid "Bottom Panel Position"
+#~ msgstr "Розташування нижньої панелі"
+
+#~ msgid "The height in pixel units of the bottom panel."
+#~ msgstr "Висота нижньої панелі у пікселях"
 
 #~ msgid "Logging Breakpoints"
 #~ msgstr "Журналювання точок зупинки"
