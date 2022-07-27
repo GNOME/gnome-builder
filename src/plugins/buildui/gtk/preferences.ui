@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="app-preferences">
+    <item>
+      <link name="section" id="app-visual"/>
+    </item>
+    <item>
+      <link name="section" id="app-code"/>
+    </item>
+    <item>
+      <link name="section" id="app-projects"/>
+    </item>
+    <item>
+      <link name="section" id="app-tools"/>
+    </item>
+    <item>
+      <link name="section" id="app-network"/>
+    </item>
+    <item>
+      <link name="section" id="app-plugins"/>
+    </item>
+  </menu>
+  <menu id="app-visual">
+    <item>
+      <attribute name="label" translatable="yes">Appearance</attribute>
+      <attribute name="icon">preferences-desktop-appearance-symbolic</attribute>
+      <link name="page" id="app-visual-appearance"/>
+    </item>
+  </menu>
+  <menu id="app-visual-appearance">
+    <item>
+      <attribute name="label" translatable="yes">Appearance</attribute>
+      <link name="group" id="app-visual-appearance-mode"/>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Style</attribute>
+      <link name="group" id="app-visual-appearance-style"/>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">Interface</attribute>
+      <link name="group" id="app-visual-appearance-interface"/>
+    </item>
+    <item>
+      <link name="group" id="app-visual-appearance-font"/>
+    </item>
+    <item>
+      <link name="group" id="app-visual-appearance-editor"/>
+    </item>
+  </menu>
+  <menu id="app-visual-appearance-mode">
+    <item>
+      <attribute name="custom">color_scheme</attribute>
+    </item>
+  </menu>
+  <menu id="app-visual-appearance-style">
+    <item>
+      <attribute name="custom">style_scheme_preview</attribute>
+    </item>
+    <item>
+      <attribute name="custom">style_scheme_selector</attribute>
+    </item>
+  </menu>
+  <menu id="app-visual-appearance-font">
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.editor.font-name</attribute>
+      <attribute name="label" translatable="yes">Editor Font</attribute>
+      <attribute name="description" translatable="yes">The font used in the source code editor</attribute>
+      <attribute name="role">font</attribute>
+    </item>
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.terminal.font-name</attribute>
+      <attribute name="label" translatable="yes">Terminal Font</attribute>
+      <attribute name="description" translatable="yes">The font used in the terminal</attribute>
+      <attribute name="role">font</attribute>
+    </item>
+  </menu>
+  <menu id="app-visual-appearance-editor">
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.editor.show-grid-lines</attribute>
+      <attribute name="label" translatable="yes">Show Grid Pattern</attribute>
+      <attribute name="description" translatable="yes">Display a grid pattern underneath source code</attribute>
+      <attribute name="role">check</attribute>
+    </item>
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.editor.show-map</attribute>
+      <attribute name="label" translatable="yes">Show Overview Map</attribute>
+      <attribute name="description" translatable="yes">Display an overview map instead of a scrollbar</attribute>
+      <attribute name="role">check</attribute>
+    </item>
+  </menu>
+  <menu id="app-visual-appearance-interface">
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.editor.use-tabbar</attribute>
+      <attribute name="target" type="b">true</attribute>
+      <attribute name="label" translatable="yes">Navigate with Tabs</attribute>
+      <attribute name="description" translatable="yes">Switch documents using a tabbed interface</attribute>
+      <attribute name="role">check</attribute>
+    </item>
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.editor.use-tabbar</attribute>
+      <attribute name="target" type="b">false</attribute>
+      <attribute name="label" translatable="yes">Navigate with Popover</attribute>
+      <attribute name="description" translatable="yes">Switch documents using a popover</attribute>
+      <attribute name="role">check</attribute>
+    </item>
+  </menu>
+</interface>
