@@ -28,6 +28,7 @@
 
 #include "ide-context.h"
 #include "ide-context-private.h"
+#include "ide-gsettings-action-group.h"
 #include "ide-macros.h"
 #include "ide-notifications.h"
 
@@ -378,9 +379,10 @@ ide_context_dup_project_id (IdeContext *self)
  * Generally, this should only be done once after loading a project.
  */
 void
-ide_context_set_project_id (IdeContext  *self,
-                            const gchar *project_id)
+ide_context_set_project_id (IdeContext *self,
+                            const char *project_id)
 {
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_CONTEXT (self));
 
   if (ide_str_empty0 (project_id))
@@ -389,8 +391,22 @@ ide_context_set_project_id (IdeContext  *self,
   ide_object_lock (IDE_OBJECT (self));
   if (!ide_str_equal0 (self->project_id, project_id))
     {
+      g_autoptr(IdeGSettingsActionGroup) project_settings_action_group = NULL;
+      g_autoptr(GSettings) project_settings = NULL;
+      g_autofree char *path = NULL;
+
       g_free (self->project_id);
       self->project_id = g_strdup (project_id);
+
+      path = g_strdup_printf ("/org/gnome/builder/projects/%s/", project_id);
+      project_settings = g_settings_new_with_path ("org.gnome.builder.project", path);
+      project_settings_action_group = g_object_new (IDE_TYPE_GSETTINGS_ACTION_GROUP,
+                                                    "settings", project_settings,
+                                                    NULL);
+      ide_action_muxer_insert_action_group (self->action_muxer,
+                                            "settings:org.gnome.builder.project",
+                                            G_ACTION_GROUP (project_settings_action_group));
+
       ide_object_notify_by_pspec (IDE_OBJECT (self), properties [PROP_PROJECT_ID]);
     }
   ide_object_unlock (IDE_OBJECT (self));
