@@ -659,6 +659,40 @@ ide_context_ref_project_settings (IdeContext *self)
 }
 
 /**
+ * ide_context_ref_settings:
+ * @self: a #IdeContext
+ *
+ * Gets an #IdeSettings for @schema_id.
+ *
+ * The #IdeSettings will read settings from project overrides before
+ * falling back to application settings.
+ *
+ * Changes to settings will always apply to the project overrides.
+ *
+ * Returns: (transfer full) (nullable): an #IdeSettings
+ */
+IdeSettings *
+ide_context_ref_settings (IdeContext *self,
+                          const char *schema_id)
+{
+  g_autoptr(IdeActionMuxer) muxer = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONTEXT (self), NULL);
+  g_return_val_if_fail (schema_id != NULL, NULL);
+
+  if ((muxer = ide_context_ref_action_muxer (self)))
+    {
+      g_autofree char *prefix = g_strconcat ("project.settings:", schema_id, NULL);
+      GActionGroup *group = ide_action_muxer_get_action_group (muxer, prefix);
+
+      if (IDE_IS_SETTINGS (group))
+        return g_object_ref (IDE_SETTINGS (group));
+    }
+
+  return NULL;
+}
+
+/**
  * ide_context_dup_title:
  * @self: a #IdeContext
  *

@@ -26,6 +26,7 @@
 
 #include "ide-action-muxer.h"
 #include "ide-object.h"
+#include "ide-settings.h"
 
 G_BEGIN_DECLS
 
@@ -89,6 +90,9 @@ IDE_AVAILABLE_IN_ALL
 IdeActionMuxer *ide_context_ref_action_muxer     (IdeContext     *self);
 IDE_AVAILABLE_IN_ALL
 void            ide_context_register_settings    (IdeContext     *self,
+                                                  const char     *schema_id);
+IDE_AVAILABLE_IN_ALL
+IdeSettings    *ide_context_ref_settings         (IdeContext     *self,
                                                   const char     *schema_id);
 
 #ifdef __cplusplus
