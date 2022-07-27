@@ -682,7 +682,7 @@ ide_context_ref_settings (IdeContext *self,
 
   if ((muxer = ide_context_ref_action_muxer (self)))
     {
-      g_autofree char *prefix = g_strconcat ("project.settings:", schema_id, NULL);
+      g_autofree char *prefix = g_strconcat ("settings.project:", schema_id, NULL);
       GActionGroup *group = ide_action_muxer_get_action_group (muxer, prefix);
 
       if (IDE_IS_SETTINGS (group))
@@ -829,8 +829,8 @@ ide_context_register_settings (IdeContext *self,
     {
       g_autoptr(IdeSettings) project_settings = ide_settings_new (project_id, schema_id, NULL, FALSE);
       g_autoptr(IdeSettings) app_settings = ide_settings_new (project_id, schema_id, NULL, TRUE);
-      g_autofree char *project_group = g_strconcat ("project.settings:", schema_id, NULL);
-      g_autofree char *app_group = g_strconcat ("app.settings:", schema_id, NULL);
+      g_autofree char *project_group = g_strconcat ("settings.project:", schema_id, NULL);
+      g_autofree char *app_group = g_strconcat ("settings.app:", schema_id, NULL);
 
       ide_action_muxer_insert_action_group (muxer, app_group, G_ACTION_GROUP (app_settings));
       ide_action_muxer_insert_action_group (muxer, project_group, G_ACTION_GROUP (project_settings));
