@@ -95,6 +95,46 @@ ide_foundry_init_async_cb (GObject      *init_object,
   ide_task_return_boolean (task, TRUE);
 }
 
+static void
+ide_foundry_init_notify_completed_cb (IdeTask    *task,
+                                      GParamSpec *pspec,
+                                      IdeContext *context)
+{
+  g_autoptr(IdeActionMuxer) muxer = NULL;
+  struct {
+    GType gtype;
+    const char *action_group_name;
+  } action_groups[] = {
+    { IDE_TYPE_DEVICE_MANAGER, "device-manager" },
+    { IDE_TYPE_RUNTIME_MANAGER, "runtime-manager" },
+    { IDE_TYPE_TOOLCHAIN_MANAGER, "toolchain-mainager" },
+    { IDE_TYPE_CONFIG_MANAGER, "config-manager" },
+    { IDE_TYPE_BUILD_MANAGER, "build-manager" },
+    { IDE_TYPE_RUN_MANAGER, "run-manager" },
+    { IDE_TYPE_TEST_MANAGER, "test-manager" },
+  };
+
+  g_assert (IDE_IS_TASK (task));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  if (ide_task_had_error (task))
+    return;
+
+  muxer = ide_context_ref_action_muxer (context);
+
+  for (guint i = 0; i < G_N_ELEMENTS (action_groups); i++)
+    {
+      IdeObject *object = ide_context_peek_child_typed (context, action_groups[i].gtype);
+
+      if (!object || !g_type_is_a (action_groups[i].gtype, G_TYPE_ACTION_GROUP))
+        continue;
+
+      ide_action_muxer_insert_action_group (muxer,
+                                            action_groups[i].action_group_name,
+                                            G_ACTION_GROUP (object));
+    }
+}
+
 void
 _ide_foundry_init_async (IdeContext          *context,
                          GCancellable        *cancellable,
@@ -121,6 +161,12 @@ _ide_foundry_init_async (IdeContext          *context,
   task = ide_task_new (context, cancellable, callback, user_data);
   ide_task_set_source_tag (task, _ide_foundry_init_async);
   ide_task_set_task_data (task, state, foundry_init_free);
+
+  g_signal_connect_object (task,
+                           "notify::completed",
+                           G_CALLBACK (ide_foundry_init_notify_completed_cb),
+                           context,
+                           0);
 
   for (guint i = 0; i < G_N_ELEMENTS (foundry_types); i++)
     {
