@@ -612,7 +612,7 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/chergert/libpanel.git",
+                    "url" : "https://gitlab.gnome.org/GNOME/libpanel.git",
                     "branch" : "main"
                 }
             ]
