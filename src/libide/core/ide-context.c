@@ -104,9 +104,61 @@ ide_context_repr (IdeObject *object)
 }
 
 static void
+ide_context_engine_load_plugin_cb (IdeContext           *self,
+                                   const PeasPluginInfo *plugin_info,
+                                   PeasEngine           *engine)
+{
+  g_autofree char *schemas = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  if ((schemas = g_strdup (peas_plugin_info_get_external_data (plugin_info, "Settings-Schemas"))))
+    {
+      g_auto(GStrv) split = g_strsplit (g_strdelimit (schemas, " ,\t:", ';'), ";", 0);
+
+      for (guint i = 0; split[i]; i++)
+        {
+          g_strstrip (split[i]);
+
+          if (!ide_str_empty0 (split[i]))
+            ide_context_register_settings (self, split[i]);
+        }
+    }
+}
+
+static void
+ide_context_engine_unload_plugin_cb (IdeContext           *self,
+                                     const PeasPluginInfo *plugin_info,
+                                     PeasEngine           *engine)
+{
+  g_autofree char *schemas = NULL;
+
+  g_assert (IDE_IS_CONTEXT (self));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_ENGINE (engine));
+
+  if ((schemas = g_strdup (peas_plugin_info_get_external_data (plugin_info, "Settings-Schemas"))))
+    {
+      g_auto(GStrv) split = g_strsplit (g_strdelimit (schemas, " ,\t:", ';'), ";", 0);
+
+      for (guint i = 0; split[i]; i++)
+        {
+          g_strstrip (split[i]);
+
+          if (!ide_str_empty0 (split[i]))
+            ide_context_unregister_settings (self, split[i]);
+        }
+    }
+}
+
+static void
 ide_context_constructed (GObject *object)
 {
   IdeContext *self = (IdeContext *)object;
+  g_auto(GStrv) loaded_plugins = NULL;
+  PeasEngine *engine;
 
   IDE_ENTRY;
 
@@ -120,6 +172,26 @@ ide_context_constructed (GObject *object)
       ide_action_muxer_insert_action_group (self->action_muxer,
                                             prefix,
                                             G_ACTION_GROUP (settings));
+    }
+
+  engine = peas_engine_get_default ();
+  g_signal_connect_object (engine,
+                           "load-plugin",
+                           G_CALLBACK (ide_context_engine_load_plugin_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_connect_object (engine,
+                           "unload-plugin",
+                           G_CALLBACK (ide_context_engine_unload_plugin_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  loaded_plugins = peas_engine_get_loaded_plugins (engine);
+
+  for (guint i = 0; loaded_plugins[i]; i++)
+    {
+      const PeasPluginInfo *info = peas_engine_get_plugin_info (engine, loaded_plugins[i]);
+      ide_context_engine_load_plugin_cb (self, info, engine);
     }
 
   IDE_EXIT;
