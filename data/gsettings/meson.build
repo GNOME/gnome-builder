@@ -38,7 +38,6 @@ schemas = [
   'org.gnome.builder.project-tree.gschema.xml',
   'org.gnome.builder.spelling.gschema.xml',
   'org.gnome.builder.terminal.gschema.xml',
-  'org.gnome.builder.workbench.gschema.xml',
 ]
 
 # HACK: We need access to all schemas when running tests, so we

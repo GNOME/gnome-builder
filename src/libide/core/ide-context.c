@@ -81,7 +81,6 @@ static const char *app_schema_ids[] = {
 static const char *project_schema_ids[] = {
   "org.gnome.builder.debug",
   "org.gnome.builder.project",
-  "org.gnome.builder.workbench",
 };
 
 static void
