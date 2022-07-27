@@ -16,10 +16,5 @@
       <summary>Allow network when metered</summary>
       <description>Enable automated transfers upon building such as SDK downloads and dependencies when connection is metered.</description>
     </key>
-    <key name="debugger-breakpoint-on-main" type="b">
-      <default>false</default>
-      <summary>Debugger Breakpoint on Main</summary>
-      <description>Debugger should automatically insert breakpoint on main function.</description>
-    </key>
   </schema>
 </schemalist>

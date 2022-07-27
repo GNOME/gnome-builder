@@ -28,6 +28,7 @@ schema_files += [configure_file(
 
 schemas = [
   'org.gnome.builder.build.gschema.xml',
+  'org.gnome.builder.debug.gschema.xml',
   'org.gnome.builder.editor.gschema.xml',
   'org.gnome.builder.editor.language.gschema.xml',
   'org.gnome.builder.extension-type.gschema.xml',

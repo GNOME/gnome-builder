@@ -49,8 +49,6 @@ struct _IdeDebugManager
   GPtrArray      *supported_languages;
 
   guint           active : 1;
-  guint           stop_at_criticals : 1;
-  guint           stop_at_warnings : 1;
 };
 
 typedef struct
@@ -76,22 +74,10 @@ enum {
   N_SIGNALS
 };
 
-static void ide_debug_manager_actions_stop_at_criticals (IdeDebugManager *self,
-                                                         GVariant        *param);
-static void ide_debug_manager_actions_stop_at_warnings  (IdeDebugManager *self,
-                                                         GVariant        *param);
-
-
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
-IDE_DEFINE_ACTION_GROUP (IdeDebugManager, ide_debug_manager, {
-  { "stop-at-criticals", ide_debug_manager_actions_stop_at_criticals, NULL, "false" },
-  { "stop-at-warnings", ide_debug_manager_actions_stop_at_warnings, NULL, "false" },
-})
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_debug_manager_init_action_group))
+G_DEFINE_FINAL_TYPE (IdeDebugManager, ide_debug_manager, IDE_TYPE_OBJECT)
 
 static gint
 compare_language_id (gconstpointer a,
@@ -558,6 +544,22 @@ ide_debug_manager_dispose (GObject *object)
 }
 
 static void
+ide_debug_manager_parent_set (IdeObject *object,
+                              IdeObject *parent)
+{
+  g_autoptr(IdeContext) context = NULL;
+
+  g_assert (IDE_IS_OBJECT (object));
+  g_assert (!parent || IDE_IS_OBJECT (parent));
+
+  if (!parent)
+    return;
+
+  context = ide_object_ref_context (object);
+  ide_context_register_settings (context, "org.gnome.builder.debug");
+}
+
+static void
 ide_debug_manager_finalize (GObject *object)
 {
   IdeDebugManager *self = (IdeDebugManager *)object;
@@ -596,10 +598,13 @@ static void
 ide_debug_manager_class_init (IdeDebugManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_debug_manager_dispose;
   object_class->finalize = ide_debug_manager_finalize;
   object_class->get_property = ide_debug_manager_get_property;
+
+  i_object_class->parent_set = ide_debug_manager_parent_set;
 
   /**
    * IdeDebugManager:active:
@@ -951,6 +956,8 @@ _ide_debug_manager_prepare (IdeDebugManager  *self,
                             GError          **error)
 {
   g_autoptr(IdeDebugger) debugger = NULL;
+  g_autoptr(IdeSettings) settings = NULL;
+  IdeContext *context;
 
   IDE_ENTRY;
 
@@ -958,6 +965,9 @@ _ide_debug_manager_prepare (IdeDebugManager  *self,
   g_return_val_if_fail (IDE_IS_RUN_COMMAND (run_command), FALSE);
   g_return_val_if_fail (IDE_IS_RUN_CONTEXT (run_context), FALSE);
   g_return_val_if_fail (self->debugger == NULL, FALSE);
+
+  context = ide_object_get_context (IDE_OBJECT (self));
+  settings = ide_context_ref_settings (context, "org.gnome.builder.debug");
 
   if (!(debugger = ide_debug_manager_find_debugger (self, pipeline, run_command)))
     {
@@ -970,9 +980,9 @@ _ide_debug_manager_prepare (IdeDebugManager  *self,
 
   ide_debugger_prepare_for_run (debugger, pipeline, run_context);
 
-  if (self->stop_at_criticals)
+  if (ide_settings_get_boolean (settings, "insert-breakpoint-at-criticals"))
     ide_run_context_setenv (run_context, "G_DEBUG", "fatal-criticals");
-  else if (self->stop_at_warnings)
+  else if (ide_settings_get_boolean (settings, "insert-breakpoint-at-warnings"))
     ide_run_context_setenv (run_context, "G_DEBUG", "fatal-warnings");
 
   if (g_set_object (&self->debugger, debugger))
@@ -1156,36 +1166,4 @@ ide_debug_manager_from_context (IdeContext *context)
   g_object_unref (ret);
 
   return ret;
-}
-
-static void
-ide_debug_manager_actions_stop_at_criticals (IdeDebugManager *self,
-                                             GVariant        *param)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_DEBUG_MANAGER (self));
-
-  self->stop_at_criticals = !self->stop_at_criticals;
-  ide_debug_manager_set_action_state (self,
-                                      "stop-at-criticals",
-                                      g_variant_new_boolean (self->stop_at_criticals));
-
-  IDE_EXIT;
-}
-
-static void
-ide_debug_manager_actions_stop_at_warnings (IdeDebugManager *self,
-                                            GVariant        *param)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_DEBUG_MANAGER (self));
-
-  self->stop_at_warnings = !self->stop_at_warnings;
-  ide_debug_manager_set_action_state (self,
-                                      "stop-at-warnings",
-                                      g_variant_new_boolean (self->stop_at_warnings));
-
-  IDE_EXIT;
 }

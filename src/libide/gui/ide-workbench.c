@@ -736,7 +736,6 @@ add_remove_foundry_action_groups (IdeWorkbench *self,
   } groups[] = {
     { "config-manager", IDE_TYPE_CONFIG_MANAGER },
     { "build-manager", IDE_TYPE_BUILD_MANAGER },
-    { "debug-manager", IDE_TYPE_DEBUG_MANAGER },
     { "device-manager", IDE_TYPE_DEVICE_MANAGER },
     { "run-manager", IDE_TYPE_RUN_MANAGER },
     { "test-manager", IDE_TYPE_TEST_MANAGER },

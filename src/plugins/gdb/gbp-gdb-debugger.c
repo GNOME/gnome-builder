@@ -39,8 +39,6 @@ struct _GbpGdbDebugger
   GFile                    *builddir;
   IdeRuntime               *current_runtime;
 
-  GSettings                *settings;
-
   struct gdbwire_mi_parser *parser;
 
   GQueue                    writequeue;
@@ -1453,7 +1451,7 @@ gbp_gdb_debugger_move_async (IdeDebugger         *debugger,
 {
   GbpGdbDebugger *self = (GbpGdbDebugger *)debugger;
   g_autoptr(IdeTask) task = NULL;
-  const gchar *command = NULL;
+  const char *command = NULL;
 
   g_assert (GBP_IS_GDB_DEBUGGER (self));
   g_assert (IDE_IS_DEBUGGER_MOVEMENT (movement));
@@ -1463,14 +1461,20 @@ gbp_gdb_debugger_move_async (IdeDebugger         *debugger,
   ide_task_set_priority (task, G_PRIORITY_LOW);
   ide_task_set_source_tag (task, gbp_gdb_debugger_move_async);
 
+
   switch (movement)
     {
-    case IDE_DEBUGGER_MOVEMENT_START:
-      if (g_settings_get_boolean (self->settings, "debugger-breakpoint-on-main"))
+    case IDE_DEBUGGER_MOVEMENT_START: {
+      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+      g_autoptr(IdeSettings) settings = ide_context_ref_settings (context, "org.gnome.builder.debug");
+
+      if (ide_settings_get_boolean (settings, "insert-breakpoint-at-main"))
         command = "-exec-run --all --start";
       else
         command = "-exec-run --all";
+
       break;
+    }
 
     case IDE_DEBUGGER_MOVEMENT_CONTINUE:
       command = "-exec-continue";
@@ -2575,7 +2579,6 @@ gbp_gdb_debugger_finalize (GObject *object)
   /* Ensure no tasks were queued after dispose call */
   g_assert (self->cmdqueue.length == 0);
 
-  g_clear_object (&self->settings);
   g_clear_object (&self->io_stream);
   g_clear_object (&self->read_cancellable);
   g_clear_pointer (&self->parser, gdbwire_mi_parser_destroy);
@@ -2635,7 +2638,6 @@ gbp_gdb_debugger_init (GbpGdbDebugger *self)
     self, gbp_gdb_debugger_output_callback
   };
 
-  self->settings = g_settings_new ("org.gnome.builder.build");
   self->parser = gdbwire_mi_parser_create (callbacks);
   self->read_cancellable = g_cancellable_new ();
   self->read_buffer = g_malloc (READ_BUFFER_LEN);

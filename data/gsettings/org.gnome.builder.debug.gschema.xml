@@ -1,0 +1,19 @@
+<schemalist>
+  <schema id="org.gnome.builder.debug" path="/org/gnome/builder/debug/" gettext-domain="gnome-builder">
+    <key name="insert-breakpoint-at-main" type="b">
+      <default>false</default>
+      <summary>Debugger Breakpoint at Main</summary>
+      <description>Debugger should automatically insert breakpoint at main() function.</description>
+    </key>
+    <key name="insert-breakpoint-at-criticals" type="b">
+      <default>false</default>
+      <summary>Debugger Breakpoint at g_critical()</summary>
+      <description>Debugger should automatically insert breakpoint at g_critical() function.</description>
+    </key>
+    <key name="insert-breakpoint-at-warnings" type="b">
+      <default>false</default>
+      <summary>Debugger Breakpoint at g_warning()</summary>
+      <description>Debugger should automatically insert breakpoint at g_warning() function.</description>
+    </key>
+  </schema>
+</schemalist>
