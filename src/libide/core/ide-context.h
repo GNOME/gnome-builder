@@ -92,6 +92,9 @@ IDE_AVAILABLE_IN_ALL
 void            ide_context_register_settings    (IdeContext     *self,
                                                   const char     *schema_id);
 IDE_AVAILABLE_IN_ALL
+void            ide_context_unregister_settings  (IdeContext     *self,
+                                                  const char     *schema_id);
+IDE_AVAILABLE_IN_ALL
 IdeSettings    *ide_context_ref_settings         (IdeContext     *self,
                                                   const char     *schema_id);
 

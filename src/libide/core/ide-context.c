@@ -875,3 +875,22 @@ ide_context_register_settings (IdeContext *self,
       ide_action_muxer_insert_action_group (muxer, project_group, G_ACTION_GROUP (project_settings));
     }
 }
+
+void
+ide_context_unregister_settings (IdeContext *self,
+                                 const char *schema_id)
+{
+  g_autoptr(IdeActionMuxer) muxer = NULL;
+
+  g_return_if_fail (IDE_IS_CONTEXT (self));
+  g_return_if_fail (schema_id != NULL);
+
+  if ((muxer = ide_context_ref_action_muxer (self)))
+    {
+      g_autofree char *project_group = g_strconcat ("settings.project:", schema_id, NULL);
+      g_autofree char *app_group = g_strconcat ("settings.app:", schema_id, NULL);
+
+      ide_action_muxer_insert_action_group (muxer, project_group, NULL);
+      ide_action_muxer_insert_action_group (muxer, app_group, NULL);
+    }
+}
