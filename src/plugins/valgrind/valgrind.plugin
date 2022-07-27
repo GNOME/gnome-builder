@@ -8,3 +8,4 @@ Embedded=_gbp_valgrind_register_types
 Module=valgrind
 Name=Leak Detector
 X-Category=debuggers
+X-Settings-Schemas=org.gnome.builder.valgrind;

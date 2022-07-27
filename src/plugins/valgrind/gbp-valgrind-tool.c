@@ -44,10 +44,11 @@ gbp_valgrind_tool_handler_cb (IdeRunContext       *run_context,
                               GError             **error)
 {
   GbpValgrindTool *self = user_data;
-  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(IdeSettings) settings = NULL;
   g_autoptr(GString) leak_kinds = NULL;
   g_autofree char *name = NULL;
   g_autofree char *leak_check = NULL;
+  IdeContext *context;
   gboolean track_origins;
   int source_fd;
   int dest_fd;
@@ -61,7 +62,8 @@ gbp_valgrind_tool_handler_cb (IdeRunContext       *run_context,
   g_assert (env != NULL);
   g_assert (GBP_IS_VALGRIND_TOOL (self));
 
-  settings = g_settings_new ("org.gnome.builder.valgrind");
+  context = ide_object_get_context (IDE_OBJECT (self));
+  settings = ide_context_ref_settings (context, "org.gnome.builder.valgrind");
 
   if (cwd != NULL)
     ide_run_context_set_cwd (run_context, cwd);
@@ -81,17 +83,17 @@ gbp_valgrind_tool_handler_cb (IdeRunContext       *run_context,
   ide_set_string (&self->log_name, name);
   g_debug ("Using %s for valgrind log", name);
 
-  track_origins = g_settings_get_boolean (settings, "track-origins");
-  leak_check = g_settings_get_string (settings, "leak-check");
+  track_origins = ide_settings_get_boolean (settings, "track-origins");
+  leak_check = ide_settings_get_string (settings, "leak-check");
 
   leak_kinds = g_string_new (NULL);
-  if (g_settings_get_boolean (settings, "leak-kind-definite"))
+  if (ide_settings_get_boolean (settings, "leak-kind-definite"))
     g_string_append (leak_kinds, "definite,");
-  if (g_settings_get_boolean (settings, "leak-kind-possible"))
+  if (ide_settings_get_boolean (settings, "leak-kind-possible"))
     g_string_append (leak_kinds, "possible,");
-  if (g_settings_get_boolean (settings, "leak-kind-indirect"))
+  if (ide_settings_get_boolean (settings, "leak-kind-indirect"))
     g_string_append (leak_kinds, "indirect,");
-  if (g_settings_get_boolean (settings, "leak-kind-reachable"))
+  if (ide_settings_get_boolean (settings, "leak-kind-reachable"))
     g_string_append (leak_kinds, "reachable,");
 
   ide_run_context_append_argv (run_context, "valgrind");

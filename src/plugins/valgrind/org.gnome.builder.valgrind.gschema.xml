@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schemalist>
-  <schema id="org.gnome.builder.valgrind" path="/org/gnome/builder/valgrind/" gettext-domain="gnome-builder">
+  <schema id="org.gnome.builder.valgrind" gettext-domain="gnome-builder">
     <key name="leak-kind-definite" type="b">
       <default>true</default>
     </key>
