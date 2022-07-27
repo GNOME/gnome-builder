@@ -3,6 +3,7 @@
 data/appdata/org.gnome.Builder.appdata.xml.in.in
 data/gsettings/org.gnome.builder.build.gschema.xml
 data/gsettings/org.gnome.builder.code-insight.gschema.xml.in
+data/gsettings/org.gnome.builder.debug.gschema.xml
 data/gsettings/org.gnome.builder.editor.gschema.xml
 data/gsettings/org.gnome.builder.editor.language.gschema.xml
 data/gsettings/org.gnome.builder.extension-type.gschema.xml
@@ -12,7 +13,6 @@ data/gsettings/org.gnome.builder.project.gschema.xml
 data/gsettings/org.gnome.builder.project-tree.gschema.xml
 data/gsettings/org.gnome.builder.spelling.gschema.xml
 data/gsettings/org.gnome.builder.terminal.gschema.xml
-data/gsettings/org.gnome.builder.workbench.gschema.xml
 data/org.gnome.Builder.desktop.in.in
 data/styles/builder-dark.xml
 data/styles/builder.xml
@@ -112,6 +112,7 @@ src/plugins/buildui/gbp-buildui-status-popover.c
 src/plugins/buildui/gbp-buildui-targets-dialog.c
 src/plugins/buildui/gbp-buildui-targets-dialog.ui
 src/plugins/buildui/gtk/menus.ui
+src/plugins/buildui/gtk/preferences.ui
 src/plugins/cargo/gbp-cargo-pipeline-addin.c
 src/plugins/cargo/gbp-cargo-run-command-provider.c
 src/plugins/clang/ide-clang-preferences-addin.c
