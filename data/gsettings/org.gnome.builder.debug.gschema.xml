@@ -1,5 +1,5 @@
 <schemalist>
-  <schema id="org.gnome.builder.debug" path="/org/gnome/builder/debug/" gettext-domain="gnome-builder">
+  <schema id="org.gnome.builder.debug" gettext-domain="gnome-builder">
     <key name="insert-breakpoint-at-main" type="b">
       <default>false</default>
       <summary>Debugger Breakpoint at Main</summary>
