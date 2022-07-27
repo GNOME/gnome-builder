@@ -5,7 +5,7 @@
       <item>
         <attribute name="id">debugger-run-handler</attribute>
         <attribute name="after">default-run-handler</attribute>
-        <attribute name="action">run-manager.run-with-handler</attribute>
+        <attribute name="action">context.run-manager.run-with-handler</attribute>
         <attribute name="target" type="s">'debuggerui'</attribute>
         <attribute name="label" translatable="yes">Run with Debugger</attribute>
         <attribute name="verb-icon">builder-debugger-symbolic</attribute>
@@ -23,17 +23,17 @@
           <attribute name="label" translatable="yes">Breakpoints</attribute>
           <item>
             <attribute name="label" translatable="yes">Automatically Break at Program Start</attribute>
-            <attribute name="action">build-settings.debugger-breakpoint-on-main</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.debug.insert-breakpoint-at-main</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Automatically Break at Warnings</attribute>
-            <attribute name="action">debug-manager.stop-at-warnings</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.debug.insert-breakpoint-at-warnings</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Automatically Break at Criticals</attribute>
-            <attribute name="action">debug-manager.stop-at-criticals</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.debug.insert-breakpoint-at-criticals</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
