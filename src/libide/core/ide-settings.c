@@ -23,8 +23,11 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <stdlib.h>
 
+#include "ide-debug.h"
+#include "ide-macros.h"
 #include "ide-settings.h"
 #include "ide-layered-settings-private.h"
 
@@ -95,9 +98,9 @@ ide_settings_set_relative_path (IdeSettings *self,
                                 const char  *relative_path)
 {
   g_assert (IDE_IS_SETTINGS (self));
-  g_assert (relative_path != NULL);
+  g_assert (ide_str_empty0 (relative_path) || g_str_has_suffix (relative_path, "/"));
 
-  if (*relative_path == '/')
+  if (relative_path && *relative_path == '/')
     relative_path++;
 
   if (!ide_str_equal0 (relative_path, self->relative_path))
@@ -350,9 +353,8 @@ ide_settings_new (const char *project_id,
 
   IDE_ENTRY;
 
-  g_assert (project_id != NULL);
-  g_assert (schema_id != NULL);
-  g_assert (relative_path != NULL);
+  g_return_val_if_fail (project_id != NULL, NULL);
+  g_return_val_if_fail (schema_id != NULL, NULL);
 
   ret = g_object_new (IDE_TYPE_SETTINGS,
                       "project-id", project_id,
