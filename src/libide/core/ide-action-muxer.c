@@ -350,6 +350,40 @@ ide_action_muxer_remove_action_group (IdeActionMuxer *self,
   ide_action_muxer_insert_action_group (self, prefix, NULL);
 }
 
+/**
+ * ide_action_muxer_get_action_group:
+ * @self: a #IdeActionMuxer
+ * @prefix: the name of the inserted action group
+ *
+ * Locates the #GActionGroup inserted as @prefix.
+ *
+ * If no group was found matching @group, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): a #GActionGroup matching @prefix if
+ *   found, otherwise %NULL.
+ */
+GActionGroup *
+ide_action_muxer_get_action_group (IdeActionMuxer *self,
+                                   const char     *prefix)
+{
+  g_autofree char *prefix_dot = NULL;
+
+  g_return_val_if_fail (IDE_IS_ACTION_MUXER (self), NULL);
+  g_return_val_if_fail (prefix!= NULL, NULL);
+
+  prefix_dot = g_strconcat (prefix, ".", NULL);
+
+  for (guint i = 0; i < self->action_groups->len; i++)
+    {
+      const PrefixedActionGroup *pag = g_ptr_array_index (self->action_groups, i);
+
+      if (g_strcmp0 (pag->prefix, prefix_dot) == 0)
+        return pag->action_group;
+    }
+
+  return NULL;
+}
+
 static gboolean
 ide_action_muxer_has_action (GActionGroup *group,
                              const char   *action_name)

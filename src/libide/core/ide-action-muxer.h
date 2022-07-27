@@ -42,5 +42,8 @@ void             ide_action_muxer_remove_action_group (IdeActionMuxer *self,
                                                        const char     *prefix);
 IDE_AVAILABLE_IN_ALL
 char           **ide_action_muxer_list_groups         (IdeActionMuxer *self);
+IDE_AVAILABLE_IN_ALL
+GActionGroup    *ide_action_muxer_get_action_group    (IdeActionMuxer *self,
+                                                       const char     *prefix);
 
 G_END_DECLS
