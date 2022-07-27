@@ -124,7 +124,8 @@ ide_settings_constructed (GObject *object)
 
   if (!ide_str_equal0 (self->schema_id, "org.gnome.builder") &&
       !g_str_has_prefix (self->schema_id, "org.gnome.builder."))
-    g_error ("You mus use a schema prefixed with org.gnome.builder.");
+    g_error ("You must use a schema prefixed with org.gnome.builder. (%s)",
+             self->schema_id);
 
   if (self->path != NULL)
     {
