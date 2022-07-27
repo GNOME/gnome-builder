@@ -26,21 +26,23 @@
         <attribute name="action">terminal.open-link</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
       </item>
-      <item>
-        <attribute name="label" translatable="yes">_Copy Link Address</attribute>
-        <attribute name="action">terminal.copy-link-address</attribute>
-        <attribute name="hidden-when">action-disabled</attribute>
-      </item>
     </section>
     <section id="ide-terminal-page-popup-menu-clipboard-section">
       <item>
         <attribute name="id">copy</attribute>
         <attribute name="label" translatable="yes">_Copy</attribute>
         <attribute name="action">clipboard.copy</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;c</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Copy Link</attribute>
+        <attribute name="action">clipboard.copy-link</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Paste</attribute>
         <attribute name="action">clipboard.paste</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;v</attribute>
       </item>
     </section>
     <section id="ide-terminal-page-popup-menu-selection-section">
@@ -48,6 +50,7 @@
         <attribute name="label" translatable="yes">Select _All</attribute>
         <attribute name="action">terminal.select-all</attribute>
         <attribute name="target" type="b">true</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;a</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Select _None</attribute>

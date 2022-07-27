@@ -189,7 +189,7 @@ ide_terminal_update_url_actions (IdeTerminal *self,
 
   pattern = ide_terminal_get_pattern_at_coords (self, x, y);
 
-  gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.copy-link-address", pattern != NULL);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.copy-link", pattern != NULL);
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.open-link", pattern != NULL);
 
   ide_set_string (&priv->url, pattern);
@@ -200,7 +200,7 @@ clear_url_actions_cb (gpointer data)
 {
   IdeTerminal *self = data;
 
-  gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.copy-link-address", FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "clipboard.copy-link", FALSE);
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "terminal.open-link", FALSE);
 
   return G_SOURCE_REMOVE;
@@ -238,6 +238,7 @@ ide_terminal_popup (IdeTerminal *self,
       priv->popover = GTK_POPOVER (gtk_popover_menu_new_from_model (G_MENU_MODEL (menu)));
       gtk_popover_set_has_arrow (priv->popover, FALSE);
       gtk_widget_set_halign (GTK_WIDGET (priv->popover), GTK_ALIGN_END);
+      gtk_widget_set_parent (GTK_WIDGET (priv->popover), GTK_WIDGET (self));
 
       g_signal_connect_object (priv->popover,
                                "closed",
@@ -582,10 +583,10 @@ ide_terminal_class_init (IdeTerminalClass *klass)
   g_assert (filename_regex != NULL);
 
   gtk_widget_class_install_action (widget_class, "clipboard.copy", NULL, copy_clipboard_action);
+  gtk_widget_class_install_action (widget_class, "clipboard.copy-link", NULL, copy_link_address_action);
   gtk_widget_class_install_action (widget_class, "clipboard.paste", NULL, paste_clipboard_action);
-  gtk_widget_class_install_action (widget_class, "terminal.copy-link-address", NULL, copy_link_address_action);
   gtk_widget_class_install_action (widget_class, "terminal.open-link", NULL, open_link_action);
-  gtk_widget_class_install_action (widget_class, "terminal.search-reveal", NULL, ide_terminal_search_reveal);
+  gtk_widget_class_install_action (widget_class, "terminal.search", NULL, ide_terminal_search_reveal);
   gtk_widget_class_install_action (widget_class, "terminal.select-all", "b", select_all_action);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, GDK_CONTROL_MASK|GDK_SHIFT_MASK, "clipboard.copy", NULL);
