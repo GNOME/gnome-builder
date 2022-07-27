@@ -82,9 +82,10 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
                           gpointer             user_data,
                           GError             **error)
 {
-  static GSettings *settings;
   GbpSysprofTool *self = user_data;
+  g_autoptr(IdeSettings) settings = NULL;
   g_autoptr(GIOStream) io_stream = NULL;
+  IdeContext *context;
   const char *capture_file;
   guint n_fds;
   int read_fd;
@@ -96,8 +97,8 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
   g_assert (GBP_IS_SYSPROF_TOOL (self));
 
-  if (settings == NULL)
-    settings = g_settings_new ("org.gnome.builder.sysprof");
+  context = ide_object_get_context (IDE_OBJECT (self));
+  settings = ide_context_ref_settings (context, "org.gnome.builder.sysprof");
 
   /* Run sysprof-agent/gnome-builder-sysprof */
   ide_run_context_append_argv (run_context, "sysprof-agent");
@@ -129,40 +130,40 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
   capture_file = gbp_sysprof_tool_get_capture_file (self);
   ide_run_context_append_formatted (run_context, "--capture=%s", capture_file);
 
-  if (g_settings_get_boolean (settings, "cpu-aid"))
+  if (ide_settings_get_boolean (settings, "cpu-aid"))
     ide_run_context_append_argv (run_context, "--cpu");
 
-  if (g_settings_get_boolean (settings, "perf-aid"))
+  if (ide_settings_get_boolean (settings, "perf-aid"))
     ide_run_context_append_argv (run_context, "--perf");
 
-  if (g_settings_get_boolean (settings, "memory-aid"))
+  if (ide_settings_get_boolean (settings, "memory-aid"))
     ide_run_context_append_argv (run_context, "--memory");
 
-  if (g_settings_get_boolean (settings, "memprof-aid"))
+  if (ide_settings_get_boolean (settings, "memprof-aid"))
     ide_run_context_append_argv (run_context, "--memprof");
 
-  if (g_settings_get_boolean (settings, "diskstat-aid"))
+  if (ide_settings_get_boolean (settings, "diskstat-aid"))
     ide_run_context_append_argv (run_context, "--disk");
 
-  if (g_settings_get_boolean (settings, "netstat-aid"))
+  if (ide_settings_get_boolean (settings, "netdev-aid"))
     ide_run_context_append_argv (run_context, "--net");
 
-  if (g_settings_get_boolean (settings, "energy-aid"))
+  if (ide_settings_get_boolean (settings, "energy-aid"))
     ide_run_context_append_argv (run_context, "--energy");
 
-  if (g_settings_get_boolean (settings, "battery-aid"))
+  if (ide_settings_get_boolean (settings, "battery-aid"))
     ide_run_context_append_argv (run_context, "--battery");
 
-  if (g_settings_get_boolean (settings, "compositor-aid"))
+  if (ide_settings_get_boolean (settings, "compositor-aid"))
     ide_run_context_append_argv (run_context, "--compositor");
 
-  if (g_settings_get_boolean (settings, "gjs-aid"))
+  if (ide_settings_get_boolean (settings, "gjs-aid"))
     ide_run_context_append_argv (run_context, "--gjs");
 
-  if (!g_settings_get_boolean (settings, "allow-throttle"))
+  if (!ide_settings_get_boolean (settings, "allow-throttle"))
     ide_run_context_append_argv (run_context, "--no-throttle");
 
-  if (g_settings_get_boolean (settings, "allow-tracefd"))
+  if (ide_settings_get_boolean (settings, "allow-tracefd"))
     ide_run_context_append_argv (run_context, "--tracefd");
 
   for (guint i = 0; env[i]; i++)

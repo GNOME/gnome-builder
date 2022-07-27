@@ -9,3 +9,4 @@ Module=sysprof
 Name=Sysprof
 X-Category=debuggers
 X-Workspace-Kind=primary;
+X-Settings-Schemas=org.gnome.builder.sysprof;

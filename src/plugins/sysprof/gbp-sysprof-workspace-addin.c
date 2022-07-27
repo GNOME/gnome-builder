@@ -196,9 +196,6 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
   GbpSysprofWorkspaceAddin *self = (GbpSysprofWorkspaceAddin *)addin;
-  g_autoptr(GSettingsSchema) schema = NULL;
-  g_autoptr(GSettings) settings = NULL;
-  g_auto(GStrv) keys = NULL;
   IdeRunManager *run_manager;
   IdeContext *context;
 
@@ -220,16 +217,6 @@ gbp_sysprof_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    entries,
                                    G_N_ELEMENTS (entries),
                                    self);
-
-  settings = g_settings_new ("org.gnome.builder.sysprof");
-  g_object_get (settings, "settings-schema", &schema, NULL);
-  keys = g_settings_schema_list_keys (schema);
-
-  for (guint i = 0; keys[i]; i++)
-    {
-      g_autoptr(GAction) action = g_settings_create_action (settings, keys[i]);
-      g_action_map_add_action (G_ACTION_MAP (self->actions), action);
-    }
 
   g_object_bind_property (self->run_manager,
                           "busy",

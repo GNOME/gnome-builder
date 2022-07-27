@@ -32,17 +32,17 @@
           <attribute name="label" translatable="yes">Thread Sampling</attribute>
           <item>
             <attribute name="label" translatable="yes">CPU Performance</attribute>
-            <attribute name="action">sysprof.perf-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.perf-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Memory Allocations</attribute>
-            <attribute name="action">sysprof.memprof-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.memprof-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Sample JavaScript Stacks</attribute>
-            <attribute name="action">sysprof.gjs-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.gjs-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
@@ -50,7 +50,7 @@
           <attribute name="label" translatable="yes">Graphics</attribute>
           <item>
             <attribute name="label" translatable="yes">Display Timings</attribute>
-            <attribute name="action">sysprof.compositor-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.compositor-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
@@ -58,22 +58,22 @@
           <attribute name="label" translatable="yes">Counters</attribute>
           <item>
             <attribute name="label" translatable="yes">CPU Usage</attribute>
-            <attribute name="action">sysprof.cpu-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.cpu-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Memory Usage</attribute>
-            <attribute name="action">sysprof.memory-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.memory-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Storage I/O</attribute>
-            <attribute name="action">sysprof.diskstat-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.diskstat-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Network I/O</attribute>
-            <attribute name="action">sysprof.netstat-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.netdev-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
@@ -81,24 +81,24 @@
           <attribute name="label" translatable="yes">Energy</attribute>
           <item>
             <attribute name="label" translatable="yes">Consumption</attribute>
-            <attribute name="action">sysprof.energy-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.energy-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Battery Charge</attribute>
-            <attribute name="action">sysprof.battery-aid</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.battery-aid</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
         <section id="run-menu-sysprof-misc-section">
           <item>
             <attribute name="label" translatable="yes">Allow Application Integration</attribute>
-            <attribute name="action">sysprof.allow-tracefd</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.allow-tracefd</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Allow CPU Throttling</attribute>
-            <attribute name="action">sysprof.allow-throttle</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.sysprof.allow-throttle</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
