@@ -22,7 +22,7 @@
         <section id="run-menu-valgrind-origins-section">
           <item>
             <attribute name="label" translatable="yes">Track Origin of Leaks</attribute>
-            <attribute name="action">valgrind.track-origins</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.valgrind.track-origins</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
@@ -30,19 +30,19 @@
           <attribute name="label" translatable="yes">Report Leaks</attribute>
           <item>
             <attribute name="label" translatable="yes">Summary</attribute>
-            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.valgrind.leak-check</attribute>
             <attribute name="target" type="s">'summary'</attribute>
             <attribute name="role">radio</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Full</attribute>
-            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.valgrind.leak-check</attribute>
             <attribute name="target" type="s">'full'</attribute>
             <attribute name="role">radio</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Disabled</attribute>
-            <attribute name="action">valgrind.leak-check</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.valgrind.leak-check</attribute>
             <attribute name="target" type="s">'no'</attribute>
             <attribute name="role">radio</attribute>
           </item>
@@ -51,22 +51,22 @@
           <attribute name="label" translatable="yes">Leak Kinds</attribute>
           <item>
             <attribute name="label" translatable="yes">Definite</attribute>
-            <attribute name="action">valgrind.leak-kind-definite</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.valgrind.leak-kind-definite</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Indirect</attribute>
-            <attribute name="action">valgrind.leak-kind-indirect</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.valgrind.leak-kind-indirect</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Possible</attribute>
-            <attribute name="action">valgrind.leak-kind-possible</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.valgrind.leak-kind-possible</attribute>
             <attribute name="role">check</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">Reachable</attribute>
-            <attribute name="action">valgrind.leak-kind-reachable</attribute>
+            <attribute name="action">context.settings.project:org.gnome.builder.valgrind.leak-kind-reachable</attribute>
             <attribute name="role">check</attribute>
           </item>
         </section>
