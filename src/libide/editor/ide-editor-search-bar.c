@@ -68,12 +68,14 @@ update_properties (IdeEditorSearchBar *self)
   if (can_replace != self->can_replace)
     {
       self->can_replace = can_replace;
+      gtk_widget_action_set_enabled (GTK_WIDGET (self), "search.replace-one", self->can_replace);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_REPLACE]);
     }
 
   if (can_replace_all != self->can_replace_all)
     {
       self->can_replace_all = can_replace_all;
+      gtk_widget_action_set_enabled (GTK_WIDGET (self), "search.replace-all", self->can_replace_all);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_REPLACE_ALL]);
     }
 
@@ -185,6 +187,23 @@ _ide_editor_search_bar_move_previous (IdeEditorSearchBar *self,
                                             /* XXX: fixme */
                                             ide_editor_search_bar_move_next_forward_cb,
                                             g_object_ref (self));
+}
+
+static void
+search_replace_all (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  _ide_editor_search_bar_replace_all (IDE_EDITOR_SEARCH_BAR (widget));
+}
+
+static void
+search_replace_one (GtkWidget  *widget,
+                    const char *action_name,
+                    GVariant   *param)
+{
+  _ide_editor_search_bar_replace (IDE_EDITOR_SEARCH_BAR (widget));
+  _ide_editor_search_bar_move_next (IDE_EDITOR_SEARCH_BAR (widget), FALSE);
 }
 
 static void
@@ -532,6 +551,8 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
   gtk_widget_class_install_property_action (widget_class, "search.use-regex", "use-regex");
   gtk_widget_class_install_action (widget_class, "search.move-next", "b", move_next_action);
   gtk_widget_class_install_action (widget_class, "search.move-previous", "b", move_previous_action);
+  gtk_widget_class_install_action (widget_class, "search.replace-one", NULL, search_replace_one);
+  gtk_widget_class_install_action (widget_class, "search.replace-all", NULL, search_replace_all);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "search.hide", NULL);
 
@@ -573,6 +594,11 @@ ide_editor_search_bar_init (IdeEditorSearchBar *self)
                                self, "mode",
                                G_BINDING_SYNC_CREATE | G_BINDING_BIDIRECTIONAL,
                                boolean_to_mode, mode_to_boolean, NULL, NULL);
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "search.replace-one", FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "search.replace-all", FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "search.move-next", FALSE);
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "search.move-previous", FALSE);
 }
 
 void
