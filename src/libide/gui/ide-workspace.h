@@ -95,43 +95,56 @@ struct _IdeWorkspaceClass
 };
 
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_class_set_kind           (IdeWorkspaceClass *klass,
-                                                      const gchar       *kind);
+void            ide_workspace_class_install_action          (IdeWorkspaceClass     *klass,
+                                                             const char            *action_name,
+                                                             const char            *parameter_type,
+                                                             IdeActionActivateFunc  activate);
 IDE_AVAILABLE_IN_ALL
-IdeHeaderBar   *ide_workspace_get_header_bar           (IdeWorkspace      *self);
+void            ide_workspace_class_install_property_action (IdeWorkspaceClass     *klass,
+                                                             const char            *action_name,
+                                                             const char            *property_name);
 IDE_AVAILABLE_IN_ALL
-IdeContext     *ide_workspace_get_context              (IdeWorkspace      *self);
+void            ide_workspace_class_set_kind                (IdeWorkspaceClass     *klass,
+                                                             const gchar           *kind);
 IDE_AVAILABLE_IN_ALL
-GCancellable   *ide_workspace_get_cancellable          (IdeWorkspace      *self);
+void            ide_workspace_action_set_enabled            (IdeWorkspace          *self,
+                                                             const char            *action_name,
+                                                             gboolean               enabled);
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_foreach_page             (IdeWorkspace      *self,
-                                                        IdePageCallback    callback,
-                                                        gpointer           user_data);
+IdeHeaderBar   *ide_workspace_get_header_bar                (IdeWorkspace          *self);
 IDE_AVAILABLE_IN_ALL
-IdePage        *ide_workspace_get_most_recent_page     (IdeWorkspace      *self);
+IdeContext     *ide_workspace_get_context                   (IdeWorkspace          *self);
 IDE_AVAILABLE_IN_ALL
-IdeFrame       *ide_workspace_get_most_recent_frame    (IdeWorkspace      *self);
+GCancellable   *ide_workspace_get_cancellable               (IdeWorkspace          *self);
 IDE_AVAILABLE_IN_ALL
-PanelFrame     *ide_workspace_get_frame_at_position    (IdeWorkspace      *self,
-                                                        IdePanelPosition  *position);
+void            ide_workspace_foreach_page                  (IdeWorkspace          *self,
+                                                             IdePageCallback        callback,
+                                                             gpointer               user_data);
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_add_pane                 (IdeWorkspace      *self,
-                                                        IdePane           *pane,
-                                                        IdePanelPosition  *position);
+IdePage        *ide_workspace_get_most_recent_page          (IdeWorkspace          *self);
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_add_page                 (IdeWorkspace      *self,
-                                                        IdePage           *page,
-                                                        IdePanelPosition  *position);
+IdeFrame       *ide_workspace_get_most_recent_frame         (IdeWorkspace          *self);
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_add_grid_column          (IdeWorkspace      *self,
-                                                        guint              position);
+PanelFrame     *ide_workspace_get_frame_at_position         (IdeWorkspace          *self,
+                                                             IdePanelPosition      *position);
 IDE_AVAILABLE_IN_ALL
-PanelStatusbar *ide_workspace_get_statusbar            (IdeWorkspace      *self);
+void            ide_workspace_add_pane                      (IdeWorkspace          *self,
+                                                             IdePane               *pane,
+                                                             IdePanelPosition      *position);
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_add_overlay              (IdeWorkspace      *self,
-                                                        GtkWidget         *widget);
+void            ide_workspace_add_page                      (IdeWorkspace          *self,
+                                                             IdePage               *page,
+                                                             IdePanelPosition      *position);
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_remove_overlay           (IdeWorkspace      *self,
-                                                        GtkWidget         *widget);
+void            ide_workspace_add_grid_column               (IdeWorkspace          *self,
+                                                             guint                  position);
+IDE_AVAILABLE_IN_ALL
+PanelStatusbar *ide_workspace_get_statusbar                 (IdeWorkspace          *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_add_overlay                   (IdeWorkspace          *self,
+                                                             GtkWidget             *widget);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_remove_overlay                (IdeWorkspace          *self,
+                                                             GtkWidget             *widget);
 
 G_END_DECLS

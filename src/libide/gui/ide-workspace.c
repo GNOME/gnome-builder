@@ -1428,3 +1428,32 @@ ide_workspace_add_grid_column (IdeWorkspace *self,
 
   IDE_WORKSPACE_GET_CLASS (self)->add_grid_column (self, position);
 }
+
+void
+ide_workspace_class_install_action (IdeWorkspaceClass     *klass,
+                                    const char            *action_name,
+                                    const char            *parameter_type,
+                                    IdeActionActivateFunc  activate)
+{
+  klass->action_mixin.object_class = G_OBJECT_CLASS (klass);
+
+  ide_action_mixin_install_action (&klass->action_mixin, action_name, parameter_type, activate);
+}
+
+void
+ide_workspace_class_install_property_action (IdeWorkspaceClass *klass,
+                                             const char        *action_name,
+                                             const char        *property_name)
+{
+  klass->action_mixin.object_class = G_OBJECT_CLASS (klass);
+
+  ide_action_mixin_install_property_action (&klass->action_mixin, action_name, property_name);
+}
+
+void
+ide_workspace_action_set_enabled (IdeWorkspace *self,
+                                  const char   *action_name,
+                                  gboolean      enabled)
+{
+  ide_action_mixin_set_enabled (self, action_name, enabled);
+}
