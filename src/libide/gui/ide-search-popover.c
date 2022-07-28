@@ -26,7 +26,7 @@
 #include "ide-search-resources.h"
 #include "ide-gui-global.h"
 
-#define LONG_SEARCH_DELAY_MSEC  300
+#define LONG_SEARCH_DELAY_MSEC  100
 #define SHORT_SEARCH_DELAY_MSEC 50
 
 struct _IdeSearchPopover
