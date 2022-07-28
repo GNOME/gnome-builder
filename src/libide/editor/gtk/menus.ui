@@ -64,12 +64,12 @@
     <section id="ide-editor-page-save-section">
       <item>
         <attribute name="label" translatable="yes">Save</attribute>
-        <attribute name="action">page.editor.save</attribute>
+        <attribute name="action">page.save</attribute>
         <attribute name="accel">&lt;ctrl&gt;s</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Save _As</attribute>
-        <attribute name="action">page.editor.save-as</attribute>
+        <attribute name="action">page.save-as</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;s</attribute>
       </item>
     </section>

@@ -51,7 +51,6 @@ struct _IdeEditorPage
   guint                    completion_blocked : 1;
 };
 
-void _ide_editor_page_class_actions_init         (IdeEditorPageClass *klass);
 void _ide_editor_page_settings_init              (IdeEditorPage      *self);
 void _ide_editor_page_settings_reload            (IdeEditorPage      *self);
 void _ide_editor_page_settings_connect_gutter    (IdeEditorPage      *self,

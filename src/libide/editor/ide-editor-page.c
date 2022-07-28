@@ -29,6 +29,7 @@
 
 #include "ide-editor-page-addin.h"
 #include "ide-editor-page-private.h"
+#include "ide-editor-save-delegate.h"
 
 enum {
   PROP_0,
@@ -372,6 +373,18 @@ search_begin_replace_action (GtkWidget  *widget,
 }
 
 static void
+ide_editor_page_constructed (GObject *object)
+{
+  IdeEditorPage *self = (IdeEditorPage *)object;
+  g_autoptr(PanelSaveDelegate) save_delegate = NULL;
+
+  G_OBJECT_CLASS (ide_editor_page_parent_class)->constructed (object);
+
+  save_delegate = ide_editor_save_delegate_new (self);
+  panel_widget_set_save_delegate (PANEL_WIDGET (self), save_delegate);
+}
+
+static void
 ide_editor_page_dispose (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
@@ -450,6 +463,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   IdePageClass *page_class = IDE_PAGE_CLASS (klass);
   PanelWidgetClass *panel_widget_class = PANEL_WIDGET_CLASS (widget_class);
 
+  object_class->constructed = ide_editor_page_constructed;
   object_class->dispose = ide_editor_page_dispose;
   object_class->get_property = ide_editor_page_get_property;
   object_class->set_property = ide_editor_page_set_property;
@@ -512,8 +526,6 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "search.hide", NULL, search_hide_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-find", NULL, search_begin_find_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-replace", NULL, search_begin_replace_action);
-
-  _ide_editor_page_class_actions_init (klass);
 
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
 }
