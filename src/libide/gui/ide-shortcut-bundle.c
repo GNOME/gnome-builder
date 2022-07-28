@@ -377,7 +377,7 @@ populate_from_object (IdeShortcutBundle  *self,
 
       g_clear_pointer (&args, g_variant_unref);
       args = g_variant_builder_end (&builder);
-      action = "workbench.command";
+      action = "context.workbench.command";
     }
 
   if (!ide_str_empty0 (when_str))

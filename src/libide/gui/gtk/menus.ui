@@ -12,7 +12,7 @@
       <item>
         <attribute name="id">ide-primary-workspace-menu-close-project</attribute>
         <attribute name="label" translatable="yes">Close Project</attribute>
-        <attribute name="action">workbench.close</attribute>
+        <attribute name="action">context.workbench.close</attribute>
         <attribute name="verb-icon">window-close-symbolic</attribute>
       </item>
     </section>

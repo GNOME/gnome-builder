@@ -102,7 +102,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="label" translatable="yes">Open File…</property>
-                    <property name="action-name">workbench.open</property>
+                    <property name="action-name">context.workbench.open</property>
                   </object>
                 </child>
                 <child>

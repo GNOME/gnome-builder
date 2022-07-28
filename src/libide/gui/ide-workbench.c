@@ -113,42 +113,38 @@ enum {
   N_PROPS
 };
 
-static void ide_workbench_action_close         (IdeWorkbench *self,
+static void ide_workbench_action_close         (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
-static void ide_workbench_action_open          (IdeWorkbench *self,
+static void ide_workbench_action_open          (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
-static void ide_workbench_action_open_uri      (IdeWorkbench *self,
+static void ide_workbench_action_open_uri      (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
-static void ide_workbench_action_dump_tasks    (IdeWorkbench *self,
+static void ide_workbench_action_dump_tasks    (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
-static void ide_workbench_action_object_tree   (IdeWorkbench *self,
+static void ide_workbench_action_object_tree   (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
-static void ide_workbench_action_inspector     (IdeWorkbench *self,
+static void ide_workbench_action_inspector     (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
-static void ide_workbench_action_reload_all    (IdeWorkbench *self,
+static void ide_workbench_action_reload_all    (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
-static void ide_workbench_action_global_search (IdeWorkbench *self,
+static void ide_workbench_action_global_search (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
-static void ide_workbench_action_configure     (IdeWorkbench *self,
+static void ide_workbench_action_configure     (gpointer      instance,
+                                                const char   *action_name,
                                                 GVariant     *param);
 
-IDE_DEFINE_ACTION_GROUP (IdeWorkbench, ide_workbench, {
-  { "close", ide_workbench_action_close },
-  { "open", ide_workbench_action_open },
-  { "open-uri", ide_workbench_action_open_uri, "s" },
-  { "reload-files", ide_workbench_action_reload_all },
-  { "global-search", ide_workbench_action_global_search },
-  { "configure", ide_workbench_action_configure },
-  { "configure-page", ide_workbench_action_configure, "s" },
-  { "-inspector", ide_workbench_action_inspector },
-  { "-object-tree", ide_workbench_action_object_tree },
-  { "-dump-tasks", ide_workbench_action_dump_tasks },
-})
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (IdeWorkbench, ide_workbench, GTK_TYPE_WINDOW_GROUP,
-                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, ide_workbench_init_action_group))
+G_DEFINE_FINAL_TYPE (IdeWorkbench, ide_workbench, GTK_TYPE_WINDOW_GROUP)
 
 static GParamSpec *properties [N_PROPS];
+static IdeActionMixin action_mixin;
 
 static void
 load_project_free (LoadProject *lp)
@@ -344,6 +340,8 @@ static void
 ide_workbench_constructed (GObject *object)
 {
   IdeWorkbench *self = (IdeWorkbench *)object;
+  g_autoptr(IdeActionMuxer) muxer = NULL;
+  IdeActionMuxer *our_muxer;
 
   g_assert (IDE_IS_WORKBENCH (self));
 
@@ -364,6 +362,14 @@ ide_workbench_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_workbench_parent_class)->constructed (object);
 
+  ide_action_mixin_constructed (&action_mixin, object);
+  ide_action_mixin_set_enabled (self, "configure", FALSE);
+
+  /* Add workbench actions to the muxer */
+  muxer = ide_context_ref_action_muxer (self->context);
+  our_muxer = ide_action_mixin_get_action_muxer (self);
+  ide_action_muxer_insert_action_group (muxer, "workbench", G_ACTION_GROUP (our_muxer));
+
   self->vcs_monitor = g_object_new (IDE_TYPE_VCS_MONITOR,
                                     "parent", self->context,
                                     NULL);
@@ -371,20 +377,18 @@ ide_workbench_constructed (GObject *object)
   self->addins = peas_extension_set_new (peas_engine_get_default (),
                                          IDE_TYPE_WORKBENCH_ADDIN,
                                          NULL);
-
   g_signal_connect (self->addins,
                     "extension-added",
                     G_CALLBACK (ide_workbench_addin_added_cb),
                     self);
-
   g_signal_connect (self->addins,
                     "extension-removed",
                     G_CALLBACK (ide_workbench_addin_removed_cb),
                     self);
-
   peas_extension_set_foreach (self->addins,
                               ide_workbench_addin_added_cb,
                               self);
+
 }
 
 static void
@@ -494,12 +498,24 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
+
+  ide_action_mixin_init (&action_mixin, object_class);
+
+  ide_action_mixin_install_action (&action_mixin, "close", NULL, ide_workbench_action_close);
+  ide_action_mixin_install_action (&action_mixin, "open", NULL, ide_workbench_action_open);
+  ide_action_mixin_install_action (&action_mixin, "open-uri", "s", ide_workbench_action_open_uri);
+  ide_action_mixin_install_action (&action_mixin, "reload-files", NULL, ide_workbench_action_reload_all);
+  ide_action_mixin_install_action (&action_mixin, "global-search", NULL, ide_workbench_action_global_search);
+  ide_action_mixin_install_action (&action_mixin, "configure", NULL, ide_workbench_action_configure);
+  ide_action_mixin_install_action (&action_mixin, "configure-page", "s", ide_workbench_action_configure);
+  ide_action_mixin_install_action (&action_mixin, "-inspector", NULL, ide_workbench_action_inspector);
+  ide_action_mixin_install_action (&action_mixin, "-object-tree", NULL, ide_workbench_action_object_tree);
+  ide_action_mixin_install_action (&action_mixin, "-dump-tasks", NULL, ide_workbench_action_dump_tasks);
 }
 
 static void
 ide_workbench_init (IdeWorkbench *self)
 {
-  ide_workbench_set_action_enabled (self, "configure", FALSE);
 }
 
 static void
@@ -840,14 +856,6 @@ ide_workbench_add_workspace (IdeWorkbench *self,
                                   "context",
                                   G_ACTION_GROUP (muxer));
 
-  /* This causes the workspace to get an additional reference to the group
-   * (which already happens from GtkWindow:group), but IdeWorkspace will
-   * remove itself in IdeWorkspace.destroy.
-   */
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "workbench",
-                                  G_ACTION_GROUP (self));
-
   /* Give the workspace access to all the action groups of the context that
    * might be useful for them to access (debug-manager, run-manager, etc).
    */
@@ -1057,7 +1065,7 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
   _ide_build_manager_start (build_manager);
 
   /* Enable actions that are available to projects */
-  ide_workbench_set_action_enabled (self, "configure", TRUE);
+  ide_action_mixin_set_enabled (self, "configure", FALSE);
 
   ide_task_return_boolean (task, TRUE);
 }
@@ -1350,26 +1358,33 @@ print_object_tree (IdeObject *object,
 }
 
 static void
-ide_workbench_action_object_tree (IdeWorkbench *self,
-                                  GVariant     *param)
+ide_workbench_action_object_tree (gpointer    instance,
+                                  const char *action_name,
+                                  GVariant   *param)
 {
+  IdeWorkbench *self = instance;
+
   g_assert (IDE_IS_WORKBENCH (self));
 
   print_object_tree (IDE_OBJECT (self->context), NULL);
 }
 
 static void
-ide_workbench_action_dump_tasks (IdeWorkbench *self,
-                                 GVariant     *param)
+ide_workbench_action_dump_tasks (gpointer    instance,
+                                 const char *action_name,
+                                 GVariant   *param)
 {
+  IdeWorkbench *self = instance;
+
   g_assert (IDE_IS_WORKBENCH (self));
 
   _ide_dump_tasks ();
 }
 
 static void
-ide_workbench_action_inspector (IdeWorkbench *self,
-                                GVariant     *param)
+ide_workbench_action_inspector (gpointer    instance,
+                                const char *action_name,
+                                GVariant   *param)
 {
   gtk_window_set_interactive_debugging (TRUE);
 }
@@ -1399,9 +1414,12 @@ ide_workbench_action_close_cb (GObject      *object,
 }
 
 static void
-ide_workbench_action_close (IdeWorkbench *self,
-                            GVariant     *param)
+ide_workbench_action_close (gpointer    instance,
+                            const char *action_name,
+                            GVariant   *param)
 {
+  IdeWorkbench *self = instance;
+
   g_assert (IDE_IS_WORKBENCH (self));
   g_assert (param == NULL);
 
@@ -1413,9 +1431,11 @@ ide_workbench_action_close (IdeWorkbench *self,
 }
 
 static void
-ide_workbench_action_reload_all (IdeWorkbench *self,
-                                 GVariant     *param)
+ide_workbench_action_reload_all (gpointer    instance,
+                                 const char *action_name,
+                                 GVariant   *param)
 {
+  IdeWorkbench *self = instance;
   IdeBufferManager *bufmgr;
   IdeContext *context;
 
@@ -1454,9 +1474,11 @@ ide_workbench_action_open_response_cb (IdeWorkbench         *self,
 }
 
 static void
-ide_workbench_action_open (IdeWorkbench *self,
-                           GVariant     *param)
+ide_workbench_action_open (gpointer    instance,
+                           const char *action_name,
+                           GVariant   *param)
 {
+  IdeWorkbench *self = instance;
   GtkFileChooserNative *chooser;
   IdeWorkspace *workspace;
 
@@ -1483,9 +1505,11 @@ ide_workbench_action_open (IdeWorkbench *self,
 }
 
 static void
-ide_workbench_action_open_uri (IdeWorkbench *self,
-                               GVariant     *param)
+ide_workbench_action_open_uri (gpointer    instance,
+                               const char *action_name,
+                               GVariant   *param)
 {
+  IdeWorkbench *self = instance;
   g_autoptr(GFile) file = NULL;
 
   IDE_ENTRY;
@@ -1500,9 +1524,12 @@ ide_workbench_action_open_uri (IdeWorkbench *self,
 }
 
 static void
-ide_workbench_action_global_search (IdeWorkbench *self,
-                                    GVariant     *param)
+ide_workbench_action_global_search (gpointer    instance,
+                                    const char *action_name,
+                                    GVariant   *param)
 {
+  IdeWorkbench *self = instance;
+
   IDE_ENTRY;
 
   g_assert (IDE_IS_WORKBENCH (self));
@@ -2704,9 +2731,11 @@ ide_workbench_resolve_file_finish (IdeWorkbench  *self,
 }
 
 static void
-ide_workbench_action_configure (IdeWorkbench *self,
-                                GVariant     *param)
+ide_workbench_action_configure (gpointer    instance,
+                                const char *action_name,
+                                GVariant   *param)
 {
+  IdeWorkbench *self = instance;
   const char *page = NULL;
   GtkWindow *window;
   GList *windows;

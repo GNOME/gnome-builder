@@ -14,7 +14,7 @@
       <item>
         <attribute name="id">ide-editor-workspace-menu-open</attribute>
         <attribute name="label" translatable="yes">Open File…</attribute>
-        <attribute name="action">workbench.open</attribute>
+        <attribute name="action">context.workbench.open</attribute>
         <attribute name="accel">&lt;primary&gt;o</attribute>
         <attribute name="verb-icon">document-open-symbolic</attribute>
         <attribute name="description" translatable="yes">Open a file in the workspace</attribute>

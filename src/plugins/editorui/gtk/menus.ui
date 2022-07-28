@@ -149,7 +149,7 @@
       <item>
         <attribute name="id">open-file</attribute>
         <attribute name="label" translatable="yes">_Open File…</attribute>
-        <attribute name="action">workbench.open</attribute>
+        <attribute name="action">context.workbench.open</attribute>
         <attribute name="accel">&lt;primary&gt;o</attribute>
       </item>
     </section>

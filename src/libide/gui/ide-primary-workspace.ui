@@ -51,7 +51,7 @@
         </child>
         <child type="right">
           <object class="GtkButton" id="search_button">
-            <property name="action-name">workbench.global-search</property>
+            <property name="action-name">context.workbench.global-search</property>
             <property name="icon-name">edit-find-symbolic</property>
             <property name="margin-start">6</property>
             <property name="tooltip-text" translatable="yes">Search (Ctrl+Enter)</property>

@@ -296,8 +296,6 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Return, GDK_CONTROL_MASK, "workbench.global-search", NULL);
-
   gtk_widget_class_install_action (widget_class, "panel.toggle-start", NULL, toggle_panel_action);
   gtk_widget_class_install_action (widget_class, "panel.toggle-end", NULL, toggle_panel_action);
   gtk_widget_class_install_action (widget_class, "panel.toggle-bottom", NULL, toggle_panel_action);

@@ -31,7 +31,7 @@
   <menu id="build-menu">
     <item>
       <attribute name="label" translatable="yes">Configure Project…</attribute>
-      <attribute name="action">workbench.configure</attribute>
+      <attribute name="action">context.workbench.configure</attribute>
       <attribute name="accel">&lt;alt&gt;comma</attribute>
       <attribute name="description" translatable="yes">Configure settings related to the project</attribute>
       <attribute name="verb-icon">preferences-system-symbolic</attribute>
@@ -124,7 +124,7 @@
     <section id="run-command-section">
       <item>
         <attribute name="label" translatable="yes">Select Run Command…</attribute>
-        <attribute name="action">workbench.configure-page</attribute>
+        <attribute name="action">context.workbench.configure-page</attribute>
         <attribute name="target" type="s">'application'</attribute>
       </item>
     </section>
