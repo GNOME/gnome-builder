@@ -39,7 +39,6 @@
                 <property name="orientation">vertical</property>
                 <property name="model">
                   <object class="GtkSingleSelection" id="selection">
-                    <property name="autoselect">true</property>
                   </object>
                 </property>
                 <property name="factory">
