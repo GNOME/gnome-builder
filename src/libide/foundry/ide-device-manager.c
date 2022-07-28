@@ -166,7 +166,7 @@ ide_device_manager_provider_device_added_cb (IdeDeviceManager  *self,
   g_menu_item_set_attribute (menu_item, "id", "s", device_id);
   g_menu_item_set_attribute (menu_item, "verb-icon-name", "s", icon_name ?: "computer-symbolic");
   g_menu_item_set_action_and_target_value (menu_item,
-                                           "device-manager.device",
+                                           "context.device-manager.device",
                                            g_variant_new_string (device_id));
   g_menu_append_item (self->menu_section, menu_item);
 
