@@ -33,7 +33,7 @@
                 <child type="end">
                   <object class="GtkMenuButton" id="primary_button">
                     <property name="icon-name">open-menu-symbolic</property>
-                    <property name="menu-model">primary_menu</property>
+                    <property name="visible">false</property>
                   </object>
                 </child>
               </object>
@@ -81,18 +81,4 @@
       </object>
     </child>
   </template>
-  <menu id="primary_menu">
-    <section>
-      <item>
-        <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
-        <attribute name="action">win.show-help-overlay</attribute>
-        <attribute name="accel">&lt;ctrl&gt;question</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Help</attribute>
-        <attribute name="action">app.help</attribute>
-        <attribute name="accel">F1</attribute>
-      </item>
-    </section>
-  </menu>
 </interface>

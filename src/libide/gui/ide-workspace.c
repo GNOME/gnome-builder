@@ -506,6 +506,17 @@ ide_workspace_action_close (gpointer    instance,
 }
 
 static void
+ide_workspace_action_help_overlay (gpointer    instance,
+                                   const char *action_name,
+                                   GVariant   *param)
+{
+  IdeWorkspace *self = instance;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+}
+
+static void
 ide_workspace_constructed (GObject *object)
 {
   IdeWorkspace *self = (IdeWorkspace *)object;
@@ -632,6 +643,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
 
   ide_action_mixin_init (&klass->action_mixin, object_class);
   ide_action_mixin_install_action (&klass->action_mixin, "close", NULL, ide_workspace_action_close);
+  ide_action_mixin_install_action (&klass->action_mixin, "show-help-overlay", NULL, ide_workspace_action_help_overlay);
 }
 
 static void

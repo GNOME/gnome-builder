@@ -31,7 +31,7 @@
         <attribute name="id">ide-primary-workspace-menu-shortcuts</attribute>
         <attribute name="label" translatable="yes">Keyboard Shortcuts</attribute>
         <attribute name="description" translatable="yes">Find keyboard shortcuts</attribute>
-        <attribute name="action">win.show-help-overlay</attribute>
+        <attribute name="action">workspace.show-help-overlay</attribute>
         <attribute name="accel">&lt;primary&gt;question</attribute>
         <attribute name="verb-icon">preferences-desktop-keyboard-shortcuts-symbolic</attribute>
       </item>
