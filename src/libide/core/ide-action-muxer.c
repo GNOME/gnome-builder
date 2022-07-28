@@ -50,6 +50,8 @@ static void action_group_iface_init (GActionGroupInterface *iface);
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeActionMuxer, ide_action_muxer, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, action_group_iface_init))
 
+static GQuark mixin_quark;
+
 static void
 prefixed_action_group_finalize (gpointer data)
 {
@@ -865,4 +867,200 @@ ide_action_muxer_connect_actions (IdeActionMuxer  *self,
       else
         ide_action_muxer_add_action (self, instance, iter);
     }
+}
+
+void
+ide_action_mixin_init (IdeActionMixin *mixin,
+                       GObjectClass   *object_class)
+{
+  g_return_if_fail (mixin != NULL);
+  g_return_if_fail (G_IS_OBJECT_CLASS (object_class));
+
+  if (!mixin_quark)
+    mixin_quark = g_quark_from_static_string ("ide-action-mixin");
+
+  mixin->object_class = object_class;
+}
+
+/**
+ * ide_action_mixin_install_action: (skip)
+ * @mixin: an `IdeActionMixin`
+ * @action_name: a prefixed action name, such as "clipboard.paste"
+ * @parameter_type: (nullable): the parameter type
+ * @activate: (scope notified): callback to use when the action is activated
+ *
+ * This should be called at class initialization time to specify
+ * actions to be added for all instances of this class.
+ *
+ * Actions installed by this function are stateless. The only state
+ * they have is whether they are enabled or not.
+ */
+void
+ide_action_mixin_install_action (IdeActionMixin        *mixin,
+                                 const char            *action_name,
+                                 const char            *parameter_type,
+                                 IdeActionActivateFunc  activate)
+{
+  IdeAction *action;
+
+  g_return_if_fail (mixin != NULL);
+  g_return_if_fail (G_IS_OBJECT_CLASS (mixin->object_class));
+
+  action = g_new0 (IdeAction, 1);
+  action->owner = G_OBJECT_CLASS_TYPE (mixin->object_class);
+  action->name = g_intern_string (action_name);
+  if (parameter_type != NULL)
+    action->parameter_type = g_variant_type_new (parameter_type);
+  action->activate = (IdeActionActivateFunc)activate;
+  action->position = ++mixin->n_actions;
+  action->next = mixin->actions;
+  mixin->actions = action;
+}
+
+static const GVariantType *
+determine_type (GParamSpec *pspec)
+{
+  if (G_TYPE_IS_ENUM (pspec->value_type))
+    return G_VARIANT_TYPE_STRING;
+
+  switch (pspec->value_type)
+    {
+    case G_TYPE_BOOLEAN:
+      return G_VARIANT_TYPE_BOOLEAN;
+
+    case G_TYPE_INT:
+      return G_VARIANT_TYPE_INT32;
+
+    case G_TYPE_UINT:
+      return G_VARIANT_TYPE_UINT32;
+
+    case G_TYPE_DOUBLE:
+    case G_TYPE_FLOAT:
+      return G_VARIANT_TYPE_DOUBLE;
+
+    case G_TYPE_STRING:
+      return G_VARIANT_TYPE_STRING;
+
+    default:
+      g_critical ("Unable to use ide_action_mixin_install_property_action with property '%s:%s' of type '%s'",
+                  g_type_name (pspec->owner_type), pspec->name, g_type_name (pspec->value_type));
+      return NULL;
+    }
+}
+
+/**
+ * ide_action_mixin_install_property_action: (skip)
+ * @mixin: an `IdeActionMixin`
+ * @action_name: name of the action
+ * @property_name: name of the property in instances of @mixin
+ *   or any parent class.
+ *
+ * Installs an action called @action_name on @mmixin and
+ * binds its state to the value of the @property_name property.
+ *
+ * This function will perform a few santity checks on the property selected
+ * via @property_name. Namely, the property must exist, must be readable,
+ * writable and must not be construct-only. There are also restrictions
+ * on the type of the given property, it must be boolean, int, unsigned int,
+ * double or string. If any of these conditions are not met, a critical
+ * warning will be printed and no action will be added.
+ *
+ * The state type of the action matches the property type.
+ *
+ * If the property is boolean, the action will have no parameter and
+ * toggle the property value. Otherwise, the action will have a parameter
+ * of the same type as the property.
+ */
+void
+ide_action_mixin_install_property_action (IdeActionMixin *mixin,
+                                          const char     *action_name,
+                                          const char     *property_name)
+{
+  const GVariantType *state_type;
+  IdeAction *action;
+  GParamSpec *pspec;
+
+  g_return_if_fail (mixin != NULL);
+  g_return_if_fail (action_name != NULL);
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (G_IS_OBJECT_CLASS (mixin->object_class));
+
+  if (!(pspec = g_object_class_find_property (mixin->object_class, property_name)))
+    {
+      g_critical ("Attempted to use non-existent property '%s:%s' for ide_action_mixin_install_property_action",
+                  G_OBJECT_CLASS_NAME (mixin->object_class), property_name);
+      return;
+    }
+
+  if (~pspec->flags & G_PARAM_READABLE || ~pspec->flags & G_PARAM_WRITABLE || pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+    {
+      g_critical ("Property '%s:%s' used with ide_action_mixin_install_property_action must be readable, writable, and not construct-only",
+                  G_OBJECT_CLASS_NAME (mixin->object_class), property_name);
+      return;
+    }
+
+  state_type = determine_type (pspec);
+
+  if (!state_type)
+    return;
+
+  action = g_new0 (IdeAction, 1);
+  action->owner = G_TYPE_FROM_CLASS (mixin->object_class);
+  action->name = g_intern_string (action_name);
+  action->pspec = pspec;
+  action->state_type = state_type;
+  if (action->pspec->value_type != G_TYPE_BOOLEAN)
+    action->parameter_type = action->state_type;
+  action->position = ++mixin->n_actions;
+  action->next = mixin->actions;
+
+  mixin->actions = action;
+}
+
+/**
+ * ide_action_muxer_get_action_muxer: (skip)
+ * @self: a #IdeActionMuxer
+ *
+ * Returns: (transfer none) (nullable): an #IdeActionMuxer or %NULL
+ */
+IdeActionMuxer *
+ide_action_mixin_get_action_muxer (gpointer instance)
+{
+  return g_object_get_qdata (instance, mixin_quark);
+}
+
+void
+ide_action_mixin_set_enabled (gpointer    instance,
+                              const char *action_name,
+                              gboolean    enabled)
+{
+  IdeActionMuxer *muxer;
+
+  g_return_if_fail (G_IS_OBJECT (instance));
+  g_return_if_fail (action_name != NULL);
+
+  muxer = ide_action_mixin_get_action_muxer (instance);
+
+  for (const IdeAction *iter = muxer->actions; iter; iter = iter->next)
+    {
+      if (g_strcmp0 (iter->name, action_name) == 0)
+        {
+          ide_action_muxer_set_enabled (muxer, iter, enabled);
+          break;
+        }
+    }
+}
+
+void
+ide_action_mixin_constructed (const IdeActionMixin *mixin,
+                              gpointer              instance)
+{
+  IdeActionMuxer *muxer;
+
+  g_return_if_fail (mixin != NULL);
+  g_return_if_fail (G_IS_OBJECT (instance));
+
+  muxer = ide_action_muxer_new ();
+  g_object_set_qdata_full (instance, mixin_quark, muxer, g_object_unref);
+  ide_action_muxer_connect_actions (muxer, instance, mixin->actions);
 }
