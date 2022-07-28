@@ -1018,8 +1018,8 @@ ide_action_mixin_install_property_action (IdeActionMixin *mixin,
 }
 
 /**
- * ide_action_muxer_get_action_muxer: (skip)
- * @self: a #IdeActionMuxer
+ * ide_action_mixin_get_action_muxer: (skip)
+ * @instance: a #IdeActionMuxer
  *
  * Returns: (transfer none) (nullable): an #IdeActionMuxer or %NULL
  */
