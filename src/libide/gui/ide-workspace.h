@@ -95,12 +95,12 @@ struct _IdeWorkspaceClass
 };
 
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_class_install_action          (IdeWorkspaceClass     *klass,
+void            ide_workspace_class_install_action          (IdeWorkspaceClass     *workspace_class,
                                                              const char            *action_name,
                                                              const char            *parameter_type,
                                                              IdeActionActivateFunc  activate);
 IDE_AVAILABLE_IN_ALL
-void            ide_workspace_class_install_property_action (IdeWorkspaceClass     *klass,
+void            ide_workspace_class_install_property_action (IdeWorkspaceClass     *workspace_class,
                                                              const char            *action_name,
                                                              const char            *property_name);
 IDE_AVAILABLE_IN_ALL

@@ -1429,25 +1429,61 @@ ide_workspace_add_grid_column (IdeWorkspace *self,
   IDE_WORKSPACE_GET_CLASS (self)->add_grid_column (self, position);
 }
 
+/**
+ * ide_workspace_class_install_action:
+ * @workspace_class: an `IdeWorkspaceClass`
+ * @action_name: a prefixed action name, such as "clipboard.paste"
+ * @parameter_type: (nullable): the parameter type
+ * @activate: (scope notified): callback to use when the action is activated
+ *
+ * This should be called at class initialization time to specify
+ * actions to be added for all instances of this class.
+ *
+ * Actions installed by this function are stateless. The only state
+ * they have is whether they are enabled or not.
+ */
 void
-ide_workspace_class_install_action (IdeWorkspaceClass     *klass,
+ide_workspace_class_install_action (IdeWorkspaceClass     *workspace_class,
                                     const char            *action_name,
                                     const char            *parameter_type,
                                     IdeActionActivateFunc  activate)
 {
-  klass->action_mixin.object_class = G_OBJECT_CLASS (klass);
+  workspace_class->action_mixin.object_class = G_OBJECT_CLASS (workspace_class);
 
-  ide_action_mixin_install_action (&klass->action_mixin, action_name, parameter_type, activate);
+  ide_action_mixin_install_action (&workspace_class->action_mixin, action_name, parameter_type, activate);
 }
 
+/**
+ * ide_workspace_class_install_property_action:
+ * @workspace_class: an `IdeWorkspaceClass`
+ * @action_name: name of the action
+ * @property_name: name of the property in instances of @widget_class
+ *   or any parent class.
+ *
+ * Installs an action called @action_name on @widget_class and
+ * binds its state to the value of the @property_name property.
+ *
+ * This function will perform a few santity checks on the property selected
+ * via @property_name. Namely, the property must exist, must be readable,
+ * writable and must not be construct-only. There are also restrictions
+ * on the type of the given property, it must be boolean, int, unsigned int,
+ * double or string. If any of these conditions are not met, a critical
+ * warning will be printed and no action will be added.
+ *
+ * The state type of the action matches the property type.
+ *
+ * If the property is boolean, the action will have no parameter and
+ * toggle the property value. Otherwise, the action will have a parameter
+ * of the same type as the property.
+ */
 void
-ide_workspace_class_install_property_action (IdeWorkspaceClass *klass,
+ide_workspace_class_install_property_action (IdeWorkspaceClass *workspace_class,
                                              const char        *action_name,
                                              const char        *property_name)
 {
-  klass->action_mixin.object_class = G_OBJECT_CLASS (klass);
+  workspace_class->action_mixin.object_class = G_OBJECT_CLASS (workspace_class);
 
-  ide_action_mixin_install_property_action (&klass->action_mixin, action_name, property_name);
+  ide_action_mixin_install_property_action (&workspace_class->action_mixin, action_name, property_name);
 }
 
 void
