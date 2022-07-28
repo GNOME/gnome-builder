@@ -74,16 +74,6 @@
       <range min="0" max="999"/>
       <default>0</default>
     </key>
-    <key name="show-map" type="b">
-      <default>false</default>
-      <summary>Show overview map</summary>
-      <description>If enabled, Builder will display an overview map of the source file next to the editor.</description>
-    </key>
-    <key name="auto-hide-map" type="b">
-      <default>false</default>
-      <summary>Automatically Hide Overview Map</summary>
-      <description>If enabled, Builder will automatically hide the overview map when mouse focus leaves the editor, or a timeout occurs.</description>
-    </key>
     <key name="map-policy" type="s">
       <choices>
         <choice value="never"/>
