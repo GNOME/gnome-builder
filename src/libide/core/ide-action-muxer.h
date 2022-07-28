@@ -20,11 +20,31 @@
 
 #pragma once
 
+#if !defined (IDE_CORE_INSIDE) && !defined (IDE_CORE_COMPILATION)
+# error "Only <libide-core.h> can be included directly."
+#endif
+
 #include <gio/gio.h>
 
 #include "ide-version-macros.h"
 
 G_BEGIN_DECLS
+
+typedef void (*IdeActionActivateFunc) (gpointer    instance,
+                                       const char *action_name,
+                                       GVariant   *param);
+
+typedef struct _IdeAction
+{
+  const struct _IdeAction *next;
+  const char                *name;
+  GType                      owner;
+  const GVariantType        *parameter_type;
+  const GVariantType        *state_type;
+  GParamSpec                *pspec;
+  IdeActionActivateFunc    activate;
+  guint                      position;
+} IdeAction;
 
 #define IDE_TYPE_ACTION_MUXER (ide_action_muxer_get_type())
 
@@ -34,16 +54,26 @@ G_DECLARE_FINAL_TYPE (IdeActionMuxer, ide_action_muxer, IDE, ACTION_MUXER, GObje
 IDE_AVAILABLE_IN_ALL
 IdeActionMuxer  *ide_action_muxer_new                 (void);
 IDE_AVAILABLE_IN_ALL
-void             ide_action_muxer_insert_action_group (IdeActionMuxer *self,
-                                                       const char     *prefix,
-                                                       GActionGroup   *action_group);
+void             ide_action_muxer_remove_all          (IdeActionMuxer  *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_action_muxer_remove_action_group (IdeActionMuxer *self,
-                                                       const char     *prefix);
+void             ide_action_muxer_insert_action_group (IdeActionMuxer  *self,
+                                                       const char      *prefix,
+                                                       GActionGroup    *action_group);
 IDE_AVAILABLE_IN_ALL
-char           **ide_action_muxer_list_groups         (IdeActionMuxer *self);
+void             ide_action_muxer_remove_action_group (IdeActionMuxer  *self,
+                                                       const char      *prefix);
 IDE_AVAILABLE_IN_ALL
-GActionGroup    *ide_action_muxer_get_action_group    (IdeActionMuxer *self,
-                                                       const char     *prefix);
+char           **ide_action_muxer_list_groups         (IdeActionMuxer  *self);
+IDE_AVAILABLE_IN_ALL
+GActionGroup    *ide_action_muxer_get_action_group    (IdeActionMuxer  *self,
+                                                       const char      *prefix);
+IDE_AVAILABLE_IN_ALL
+void             ide_action_muxer_set_enabled         (IdeActionMuxer  *self,
+                                                       const IdeAction *action,
+                                                       gboolean         enabled);
+IDE_AVAILABLE_IN_ALL
+void             ide_action_muxer_connect_actions     (IdeActionMuxer  *self,
+                                                       gpointer         instance,
+                                                       const IdeAction *actions);
 
 G_END_DECLS
