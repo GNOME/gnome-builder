@@ -29,6 +29,7 @@
 
 #include "ide-editor-page-addin.h"
 #include "ide-editor-page-private.h"
+#include "ide-editor-print-operation.h"
 #include "ide-editor-save-delegate.h"
 
 enum {
@@ -373,6 +374,83 @@ search_begin_replace_action (GtkWidget  *widget,
 }
 
 static void
+handle_print_result (IdeEditorPage           *self,
+                     GtkPrintOperation       *operation,
+                     GtkPrintOperationResult  result)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (GTK_IS_PRINT_OPERATION (operation));
+
+  if (result == GTK_PRINT_OPERATION_RESULT_ERROR)
+    {
+      g_autoptr(GError) error = NULL;
+
+      gtk_print_operation_get_error (operation, &error);
+
+      g_warning ("%s", error->message);
+      ide_page_report_error (IDE_PAGE (self),
+                             /* translators: %s is the error message */
+                             _("Print failed: %s"), error->message);
+    }
+
+  IDE_EXIT;
+}
+
+static void
+print_done (GtkPrintOperation       *operation,
+            GtkPrintOperationResult  result,
+            gpointer                 user_data)
+{
+  IdeEditorPage *self = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (GTK_IS_PRINT_OPERATION (operation));
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  handle_print_result (self, operation, result);
+
+  g_object_unref (operation);
+  g_object_unref (self);
+
+  IDE_EXIT;
+}
+
+static void
+print_action (GtkWidget  *widget,
+              const char *action_name,
+              GVariant   *param)
+{
+  IdeEditorPage *self = (IdeEditorPage *)widget;
+  g_autoptr(IdeEditorPrintOperation) operation = NULL;
+  GtkPrintOperationResult result;
+  IdeSourceView *view;
+  GtkRoot *root;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  root = gtk_widget_get_root (GTK_WIDGET (self));
+  view = ide_editor_page_get_view (self);
+  operation = ide_editor_print_operation_new (view);
+
+  /* keep a ref until "done" is emitted */
+  g_object_ref (operation);
+  g_signal_connect_after (g_object_ref (operation),
+                          "done",
+                          G_CALLBACK (print_done),
+                          g_object_ref (self));
+
+  result = gtk_print_operation_run (GTK_PRINT_OPERATION (operation),
+                                    GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG,
+                                    GTK_WINDOW (root),
+                                    NULL);
+
+  handle_print_result (self, GTK_PRINT_OPERATION (operation), result);
+}
+
+static void
 ide_editor_page_constructed (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
@@ -526,6 +604,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "search.hide", NULL, search_hide_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-find", NULL, search_begin_find_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-replace", NULL, search_begin_replace_action);
+  panel_widget_class_install_action (panel_widget_class, "print", NULL, print_action);
 
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
 }

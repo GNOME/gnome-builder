@@ -20,8 +20,9 @@ libide_editor_public_headers = [
 ]
 
 libide_editor_private_headers = [
-  'ide-editor-save-delegate.h',
   'ide-editor-page-private.h',
+  'ide-editor-print-operation.h',
+  'ide-editor-save-delegate.h',
 ]
 
 install_headers(libide_editor_public_headers, subdir: libide_editor_header_subdir)
@@ -42,6 +43,7 @@ libide_editor_public_sources = [
 libide_editor_private_sources = [
   'ide-editor-init.c',
   'ide-editor-page-settings.c',
+  'ide-editor-print-operation.c',
   'ide-editor-save-delegate.c',
   'ide-editor-search-bar.c',
 ]
