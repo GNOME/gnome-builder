@@ -106,3 +106,24 @@ ide_workspace_addin_page_changed (IdeWorkspaceAddin *self,
   if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->page_changed)
     IDE_WORKSPACE_ADDIN_GET_IFACE (self)->page_changed (self, page);
 }
+
+/**
+ * ide_workspace_addin_ref_action_group:
+ * @self: a #IdeWorkspaceAddin
+ *
+ * Gets the action group for the workspace addin. This is automatically
+ * registered with an action prefix like "workspace.module-name" where
+ * "module-name" is the value of "Module=" in the plugin's manifest.
+ *
+ * Returns: (transfer full) (nullable): a #GActionGroup or %NULL
+ */
+GActionGroup *
+ide_workspace_addin_ref_action_group (IdeWorkspaceAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE_ADDIN (self), NULL);
+
+  if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->ref_action_group)
+    return IDE_WORKSPACE_ADDIN_GET_IFACE (self)->ref_action_group (self);
+
+  return NULL;
+}

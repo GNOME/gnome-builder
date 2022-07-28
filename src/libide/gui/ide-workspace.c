@@ -37,6 +37,8 @@
 #define GET_PRIORITY(w)   GPOINTER_TO_INT(g_object_get_data(G_OBJECT(w),"PRIORITY"))
 #define SET_PRIORITY(w,i) g_object_set_data(G_OBJECT(w),"PRIORITY",GINT_TO_POINTER(i))
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GActionGroup, g_object_unref)
+
 typedef struct
 {
   /* Used as a link in IdeWorkbench's GQueue to track the most-recently-used
@@ -155,6 +157,7 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
                               gpointer                user_data)
 {
   IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
+  g_autoptr(GActionGroup) action_group = NULL;
   IdeWorkspace *self = user_data;
   IdePage *page;
 
@@ -167,6 +170,14 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
            peas_plugin_info_get_module_name (plugin_info));
 
   ide_workspace_addin_load (addin, self);
+
+  if ((action_group = ide_workspace_addin_ref_action_group (addin)))
+    {
+      IdeActionMuxer *muxer = ide_action_mixin_get_action_muxer (self);
+      ide_action_muxer_insert_action_group (muxer,
+                                            peas_plugin_info_get_module_name (plugin_info),
+                                            G_ACTION_GROUP (muxer));
+    }
 
   if ((page = ide_workspace_get_focus_page (self)))
     ide_workspace_addin_page_changed (addin, page);
@@ -524,7 +535,6 @@ ide_workspace_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_workspace_parent_class)->constructed (object);
 
-  /* TODO: Connect addins to muxer */
   ide_action_mixin_constructed (&IDE_WORKSPACE_GET_CLASS (self)->action_mixin, object);
   muxer = ide_action_mixin_get_action_muxer (self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", G_ACTION_GROUP (muxer));
