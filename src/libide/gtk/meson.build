@@ -18,6 +18,7 @@ libide_gtk_public_headers = [
   'ide-menu-manager.h',
   'ide-progress-icon.h',
   'ide-radio-box.h',
+  'ide-scrubber-revealer.h',
   'ide-search-entry.h',
   'ide-shortcut-accel-dialog.h',
   'ide-tree-expander.h',
@@ -27,6 +28,7 @@ libide_gtk_public_headers = [
 
 libide_gtk_enum_headers = [
   'ide-animation.h',
+  'ide-scrubber-revealer.h',
 ]
 
 install_headers(libide_gtk_public_headers, subdir: libide_gtk_header_subdir)
@@ -47,6 +49,7 @@ libide_gtk_public_sources = [
   'ide-menu-manager.c',
   'ide-progress-icon.c',
   'ide-radio-box.c',
+  'ide-scrubber-revealer.c',
   'ide-search-entry.c',
   'ide-shortcut-accel-dialog.c',
   'ide-tree-expander.c',

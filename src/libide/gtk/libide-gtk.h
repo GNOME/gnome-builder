@@ -33,6 +33,7 @@
 # include "ide-menu-manager.h"
 # include "ide-progress-icon.h"
 # include "ide-radio-box.h"
+# include "ide-scrubber-revealer.h"
 # include "ide-search-entry.h"
 # include "ide-shortcut-accel-dialog.h"
 # include "ide-tree-expander.h"
