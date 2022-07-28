@@ -525,10 +525,6 @@ ide_workspace_constructed (GObject *object)
   G_OBJECT_CLASS (ide_workspace_parent_class)->constructed (object);
 
   /* TODO: Connect addins to muxer */
-  /* TODO: Make sure we can get subclasses working (needs a fix
-   * for when/what/who should call ide_action_muxer_init() as you
-   * currently need to call that again in subclass.
-   */
   ide_action_mixin_constructed (&IDE_WORKSPACE_GET_CLASS (self)->action_mixin, object);
   muxer = ide_action_mixin_get_action_muxer (self);
   gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", G_ACTION_GROUP (muxer));
