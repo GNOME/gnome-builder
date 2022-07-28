@@ -82,10 +82,27 @@
       <attribute name="role">check</attribute>
     </item>
     <item>
-      <attribute name="action">context.settings.app:org.gnome.builder.editor.show-map</attribute>
-      <attribute name="label" translatable="yes">Show Overview Map</attribute>
-      <attribute name="description" translatable="yes">Display an overview map instead of a scrollbar</attribute>
-      <attribute name="role">check</attribute>
+      <link name="combo" id="app-visual-appearance-map-policy"/>
+    </item>
+  </menu>
+  <menu id="app-visual-appearance-map-policy">
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.editor.map-policy</attribute>
+      <attribute name="target" type="s">'never'</attribute>
+      <attribute name="label" translatable="yes">Never</attribute>
+      <attribute name="description" translatable="yes">Overview map is never displayed</attribute>
+    </item>
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.editor.map-policy</attribute>
+      <attribute name="target" type="s">'always'</attribute>
+      <attribute name="label" translatable="yes">Always</attribute>
+      <attribute name="description" translatable="yes">Overview map is always displayed</attribute>
+    </item>
+    <item>
+      <attribute name="action">context.settings.app:org.gnome.builder.editor.map-policy</attribute>
+      <attribute name="target" type="s">'auto'</attribute>
+      <attribute name="label" translatable="yes">Auto</attribute>
+      <attribute name="description" translatable="yes">Overview map is automatically displayed based on user input</attribute>
     </item>
   </menu>
   <menu id="app-visual-appearance-interface">
