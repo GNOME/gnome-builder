@@ -40,14 +40,15 @@ struct _IdeEditorPageAddinInterface
 {
   GTypeInterface parent;
 
-  void (*load)               (IdeEditorPageAddin *self,
-                              IdeEditorPage      *page);
-  void (*unload)             (IdeEditorPageAddin *self,
-                              IdeEditorPage      *page);
-  void (*language_changed)   (IdeEditorPageAddin *self,
-                              const gchar        *language_id);
-  void (*frame_set)          (IdeEditorPageAddin *self,
-                              IdeFrame           *frame);
+  void          (*load)             (IdeEditorPageAddin *self,
+                                     IdeEditorPage      *page);
+  void          (*unload)           (IdeEditorPageAddin *self,
+                                     IdeEditorPage      *page);
+  void          (*language_changed) (IdeEditorPageAddin *self,
+                                     const gchar        *language_id);
+  void          (*frame_set)        (IdeEditorPageAddin *self,
+                                     IdeFrame           *frame);
+  GActionGroup *(*ref_action_group) (IdeEditorPageAddin *self);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -62,6 +63,8 @@ void                ide_editor_page_addin_frame_set           (IdeEditorPageAddi
 IDE_AVAILABLE_IN_ALL
 void                ide_editor_page_addin_language_changed    (IdeEditorPageAddin *self,
                                                                const gchar        *language_id);
+IDE_AVAILABLE_IN_ALL
+GActionGroup       *ide_editor_page_addin_ref_action_group    (IdeEditorPageAddin *self);
 IDE_AVAILABLE_IN_ALL
 IdeEditorPageAddin *ide_editor_page_addin_find_by_module_name (IdeEditorPage      *page,
                                                                const gchar        *module_name);

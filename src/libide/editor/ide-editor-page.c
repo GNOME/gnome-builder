@@ -32,6 +32,8 @@
 #include "ide-editor-print-operation.h"
 #include "ide-editor-save-delegate.h"
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GActionGroup, g_object_unref)
+
 enum {
   PROP_0,
   PROP_BUFFER,
@@ -220,6 +222,7 @@ ide_editor_page_addin_added (IdeExtensionSetAdapter *set,
 {
   IdeEditorPage *self = user_data;
   IdeEditorPageAddin *addin = (IdeEditorPageAddin *)exten;
+  g_autoptr(GActionGroup) action_group = NULL;
 
   g_assert (IDE_IS_EXTENSION_SET_ADAPTER (set));
   g_assert (plugin_info != NULL);
@@ -227,6 +230,11 @@ ide_editor_page_addin_added (IdeExtensionSetAdapter *set,
   g_assert (IDE_IS_EDITOR_PAGE (self));
 
   ide_editor_page_addin_load (addin, self);
+
+  if ((action_group = ide_editor_page_addin_ref_action_group (addin)))
+    panel_widget_insert_action_group (PANEL_WIDGET (self),
+                                      peas_plugin_info_get_module_name (plugin_info),
+                                      action_group);
 }
 
 static void
@@ -242,6 +250,10 @@ ide_editor_page_addin_removed (IdeExtensionSetAdapter *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_EDITOR_PAGE_ADDIN (addin));
   g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  panel_widget_insert_action_group (PANEL_WIDGET (self),
+                                    peas_plugin_info_get_module_name (plugin_info),
+                                    NULL);
 
   ide_editor_page_addin_unload (addin, self);
 }

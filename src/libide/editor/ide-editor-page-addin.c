@@ -78,6 +78,23 @@ ide_editor_page_addin_frame_set (IdeEditorPageAddin *self,
 }
 
 /**
+ * ide_editor_page_addin_ref_action_group:
+ * @self: a #IdeEditorPageAddin
+ *
+ * Returns: (transfer full) (nullable): a #GActionGroup or %NULL
+ */
+GActionGroup *
+ide_editor_page_addin_ref_action_group (IdeEditorPageAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_EDITOR_PAGE_ADDIN (self), NULL);
+
+  if (IDE_EDITOR_PAGE_ADDIN_GET_IFACE (self)->ref_action_group)
+    return IDE_EDITOR_PAGE_ADDIN_GET_IFACE (self)->ref_action_group (self);
+
+  return NULL;
+}
+
+/**
  * ide_editor_page_addin_find_by_module_name:
  * @page: an #IdeEditorPage
  * @module_name: the module name which provides the addin
