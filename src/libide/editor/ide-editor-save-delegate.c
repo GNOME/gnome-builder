@@ -29,6 +29,7 @@
 struct _IdeEditorSaveDelegate
 {
   PanelSaveDelegate  parent_instance;
+  IdeEditorPage     *page;
   IdeBuffer         *buffer;
 };
 
@@ -50,6 +51,7 @@ ide_editor_save_delegate_save_cb (GObject      *object,
   IdeBuffer *buffer = (IdeBuffer *)object;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
+  IdeEditorSaveDelegate *self;
 
   IDE_ENTRY;
 
@@ -57,6 +59,11 @@ ide_editor_save_delegate_save_cb (GObject      *object,
   g_assert (IDE_IS_BUFFER (buffer));
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+
+  if (self->page != NULL)
+    ide_page_set_progress (IDE_PAGE (self->page), NULL);
 
   if (!ide_buffer_save_file_finish (buffer, result, &error))
     ide_task_return_error (task, g_steal_pointer (&error));
@@ -93,6 +100,9 @@ ide_editor_save_delegate_save_async (PanelSaveDelegate   *delegate,
 
   g_object_bind_property (notif, "progress", self, "progress", G_BINDING_SYNC_CREATE);
 
+  if (self->page != NULL)
+    ide_page_set_progress (IDE_PAGE (self->page), notif);
+
   IDE_EXIT;
 }
 
@@ -118,6 +128,7 @@ ide_editor_save_delegate_dispose (GObject *object)
 {
   IdeEditorSaveDelegate *self = (IdeEditorSaveDelegate *)object;
 
+  g_clear_weak_pointer (&self->page);
   g_clear_object (&self->buffer);
 
   G_OBJECT_CLASS (ide_editor_save_delegate_parent_class)->dispose (object);
@@ -200,6 +211,8 @@ ide_editor_save_delegate_new (IdeEditorPage *page)
   ret = g_object_new (IDE_TYPE_EDITOR_SAVE_DELEGATE,
                       "buffer", buffer,
                       NULL);
+
+  g_set_weak_pointer (&ret->page, page);
 
   g_object_bind_property (page, "title", ret, "title", G_BINDING_SYNC_CREATE);
   g_object_bind_property (page, "icon", ret, "icon", G_BINDING_SYNC_CREATE);
