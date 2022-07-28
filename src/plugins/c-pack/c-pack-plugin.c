@@ -25,20 +25,16 @@
 #include <libide-editor.h>
 #include <libide-sourceview.h>
 
-#if 0
 #include "ide-c-indenter.h"
-#endif
 #include "cpack-completion-provider.h"
 #include "cpack-editor-page-addin.h"
 
 _IDE_EXTERN void
 _ide_c_pack_register_types (PeasObjectModule *module)
 {
-#if 0
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_INDENTER,
+                                              GTK_SOURCE_TYPE_INDENTER,
                                               IDE_TYPE_C_INDENTER);
-#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_PAGE_ADDIN,
                                               CPACK_TYPE_EDITOR_PAGE_ADDIN);

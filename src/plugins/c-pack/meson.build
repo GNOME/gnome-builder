@@ -7,11 +7,9 @@ plugins_sources += files([
   'cpack-completion-provider.c',
   'cpack-completion-results.c',
   'cpack-editor-page-addin.c',
+  'ide-c-indenter.c',
   'hdr-format.c',
 ])
-
-# needs to be ported to GtkSourceView 5 and moved there
-# 'ide-c-indenter.c',
 
 plugin_c_pack_resources = gnome.compile_resources(
   'c-pack-resources',
