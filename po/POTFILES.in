@@ -27,7 +27,6 @@ src/libide/core/ide-transfer.c
 src/libide/debugger/ide-debug-manager.c
 src/libide/editor/gtk/menus.ui
 src/libide/editor/ide-editor.c
-src/libide/editor/ide-editor-page-actions.c
 src/libide/editor/ide-editor-page.c
 src/libide/editor/ide-editor-search-bar.ui
 src/libide/editor/ide-editor-utils.c
