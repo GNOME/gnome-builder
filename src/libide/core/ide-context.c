@@ -79,6 +79,7 @@ static const char *app_schema_ids[] = {
   "org.gnome.builder.terminal",
 };
 static const char *project_schema_ids[] = {
+  "org.gnome.builder.build",
   "org.gnome.builder.debug",
   "org.gnome.builder.project",
 };

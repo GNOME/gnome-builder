@@ -57,12 +57,12 @@ on_icon_state_changed_cb (IdeRunButton  *self,
   if (!ide_run_manager_get_busy (run_manager))
     {
       icon_name = ide_run_manager_get_icon_name (run_manager);
-      action_name = "run-manager.run";
+      action_name = "context.run-manager.run";
     }
   else
     {
       icon_name = "builder-run-stop-symbolic";
-      action_name = "run-manager.stop";
+      action_name = "context.run-manager.stop";
     }
 
   g_object_set (self->split_button,

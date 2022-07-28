@@ -45,7 +45,7 @@
             </child>
             <child>
               <object class="GtkButton" id="stop_button">
-                <property name="action-name">test-manager.cancel</property>
+                <property name="action-name">context.test-manager.cancel</property>
                 <property name="tooltip-text" translatable="yes">Cancel tests</property>
                 <property name="icon-name">builder-build-stop-symbolic</property>
                 <style>

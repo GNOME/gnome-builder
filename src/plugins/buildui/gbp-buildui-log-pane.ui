@@ -50,7 +50,7 @@
             </child>
             <child>
               <object class="GtkButton" id="stop_button">
-                <property name="action-name">build-manager.cancel</property>
+                <property name="action-name">context.build-manager.cancel</property>
                 <property name="hexpand">false</property>
                 <property name="vexpand">false</property>
                 <property name="tooltip-text" translatable="yes">Cancel build</property>

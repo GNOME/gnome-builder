@@ -68,7 +68,7 @@ create_target_row (gpointer item,
   namev = g_variant_take_ref (g_variant_new_string (name ? name : ""));
 
   check = g_object_new (GTK_TYPE_CHECK_BUTTON,
-                        "action-name", "build-manager.default-build-target",
+                        "action-name", "context.build-manager.default-build-target",
                         "css-classes", IDE_STRV_INIT ("checkimage"),
                         "action-target", namev,
                         "valign", GTK_ALIGN_CENTER,

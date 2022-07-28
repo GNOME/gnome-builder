@@ -147,7 +147,7 @@ gbp_buildui_workspace_addin_notify_busy (GbpBuilduiWorkspaceAddin *self,
 
   g_object_set (omni_bar,
                 "icon-name", busy ? "builder-build-stop-symbolic" : "builder-build-symbolic",
-                "action-name", busy ? "build-manager.cancel" : "build-manager.build",
+                "action-name", busy ? "context.build-manager.cancel" : "context.build-manager.build",
                 NULL);
 }
 

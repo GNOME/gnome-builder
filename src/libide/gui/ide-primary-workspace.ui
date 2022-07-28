@@ -23,7 +23,7 @@
             <child>
               <object class="IdeOmniBar" id="omni_bar">
                 <property name="icon-name">builder-build-symbolic</property>
-                <property name="action-name">build-manager.build</property>
+                <property name="action-name">context.build-manager.build</property>
                 <property name="menu-model">build_menu</property>
                 <child type="placeholder">
                   <object class="GtkLabel" id="project_title">

@@ -4,7 +4,7 @@
   <template class="IdeRunButton" parent="GtkWidget">
     <child>
       <object class="AdwSplitButton" id="split_button">
-        <property name="action-name">run-manager.run</property>
+        <property name="action-name">context.run-manager.run</property>
         <property name="icon-name">builder-run-start-symbolic</property>
       </object>
     </child>

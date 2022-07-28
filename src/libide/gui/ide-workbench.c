@@ -375,10 +375,11 @@ ide_workbench_constructed (GObject *object)
   ide_action_mixin_constructed (&action_mixin, object);
   ide_action_mixin_set_enabled (self, "configure", FALSE);
 
-  /* Add workbench actions to the muxer */
+  /* Add various action groups to context muxer */
   muxer = ide_context_ref_action_muxer (self->context);
   our_muxer = ide_action_mixin_get_action_muxer (self);
   ide_action_muxer_insert_action_group (muxer, "workbench", G_ACTION_GROUP (our_muxer));
+  ide_action_muxer_insert_action_group (muxer, "transfer-manager", _ide_transfer_manager_get_actions (NULL));
 
   self->vcs_monitor = g_object_new (IDE_TYPE_VCS_MONITOR,
                                     "parent", self->context,
@@ -751,73 +752,6 @@ ide_workbench_workspace_is_active_cb (IdeWorkbench *self,
     }
 }
 
-static void
-add_remove_foundry_action_groups (IdeWorkbench *self,
-                                  IdeWorkspace *workspace,
-                                  gboolean      add)
-{
-  struct {
-    const gchar *name;
-    GType        child_type;
-  } groups[] = {
-    { "config-manager", IDE_TYPE_CONFIG_MANAGER },
-    { "build-manager", IDE_TYPE_BUILD_MANAGER },
-    { "device-manager", IDE_TYPE_DEVICE_MANAGER },
-    { "run-manager", IDE_TYPE_RUN_MANAGER },
-    { "test-manager", IDE_TYPE_TEST_MANAGER },
-  };
-
-  g_assert (IDE_IS_WORKBENCH (self));
-  g_assert (IDE_IS_WORKSPACE (workspace));
-
-  for (guint i = 0; i < G_N_ELEMENTS (groups); i++)
-    {
-      IdeObject *child = NULL;
-
-      if (add)
-        child = ide_context_peek_child_typed (self->context, groups[i].child_type);
-
-      gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                      groups[i].name,
-                                      G_ACTION_GROUP (child));
-    }
-}
-
-static void
-insert_action_groups_foreach_cb (IdeWorkspace *workspace,
-                                 gpointer      user_data)
-{
-  g_autoptr(IdeGSettingsActionGroup) project_settings_group = NULL;
-  g_autoptr(IdeGSettingsActionGroup) build_settings_group = NULL;
-  g_autoptr(GSettings) project_settings = NULL;
-  g_autoptr(GSettings) build_settings = NULL;
-  IdeWorkbench *self = user_data;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (IDE_IS_WORKBENCH (self));
-  g_assert (IDE_IS_WORKSPACE (workspace));
-  g_assert (IDE_IS_CONTEXT (self->context));
-  g_assert (ide_context_has_project (self->context));
-
-  add_remove_foundry_action_groups (self, workspace, TRUE);
-
-  project_settings = ide_context_ref_project_settings (self->context);
-  project_settings_group = g_object_new (IDE_TYPE_GSETTINGS_ACTION_GROUP,
-                                         "settings", project_settings,
-                                         NULL);
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "project-settings",
-                                  G_ACTION_GROUP (project_settings_group));
-
-  build_settings = g_settings_new ("org.gnome.builder.build");
-  build_settings_group = g_object_new (IDE_TYPE_GSETTINGS_ACTION_GROUP,
-                                       "settings", build_settings,
-                                       NULL);
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "build-settings",
-                                  G_ACTION_GROUP (build_settings_group));
-}
-
 /**
  * ide_workbench_add_workspace:
  * @self: an #IdeWorkbench
@@ -866,12 +800,6 @@ ide_workbench_add_workspace (IdeWorkbench *self,
                                   "context",
                                   G_ACTION_GROUP (muxer));
 
-  /* Give the workspace access to all the action groups of the context that
-   * might be useful for them to access (debug-manager, run-manager, etc).
-   */
-  if (self->project_info != NULL)
-    insert_action_groups_foreach_cb (workspace, self);
-
   /* Setup capture shortcut controller for workspace */
   shortcuts = ide_shortcut_manager_from_context (self->context);
   _ide_workspace_set_shortcut_model (workspace, G_LIST_MODEL (shortcuts));
@@ -882,11 +810,6 @@ ide_workbench_add_workspace (IdeWorkbench *self,
                            G_CALLBACK (ide_workbench_workspace_is_active_cb),
                            self,
                            G_CONNECT_SWAPPED);
-
-  /* Give access to transfer-manager */
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "transfer-manager",
-                                  _ide_transfer_manager_get_actions (NULL));
 
   /* Notify all the addins about the new workspace. */
   if ((addins = ide_workbench_collect_addins (self)))
@@ -947,8 +870,7 @@ ide_workbench_remove_workspace (IdeWorkbench *self,
     }
 
   /* Clear our action groups (which drops an additional back-reference) */
-  add_remove_foundry_action_groups (self, workspace, FALSE);
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "workbench", NULL);
+  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "context", NULL);
 
   /* Only cleanup the group if it hasn't already been removed */
   if (gtk_window_has_group (GTK_WINDOW (workspace)))
@@ -1057,11 +979,6 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
       ide_workbench_add_workspace (self, IDE_WORKSPACE (workspace));
       gtk_window_present_with_time (GTK_WINDOW (workspace), lp->present_time);
     }
-
-  /* Give workspaces access to the various GActionGroups */
-  ide_workbench_foreach_workspace (self,
-                                   (IdeWorkspaceCallback)insert_action_groups_foreach_cb,
-                                   self);
 
   /* Notify addins that projects have loaded */
   peas_extension_set_foreach (self->addins,

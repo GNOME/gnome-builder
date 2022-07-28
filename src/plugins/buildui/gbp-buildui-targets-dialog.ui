@@ -29,7 +29,7 @@
                     <property name="activatable-widget">default_target</property>
                     <child type="suffix">
                       <object class="GtkCheckButton" id="default_target">
-                        <property name="action-name">build-manager.default-build-target</property>
+                        <property name="action-name">context.build-manager.default-build-target</property>
                         <property name="action-target">''</property>
                         <style>
                           <class name="checkimage"/>
