@@ -324,3 +324,26 @@ ide_workbench_addin_project_loaded (IdeWorkbenchAddin *self,
   if (IDE_WORKBENCH_ADDIN_GET_IFACE (self)->project_loaded)
     IDE_WORKBENCH_ADDIN_GET_IFACE (self)->project_loaded (self, project_info);
 }
+
+/**
+ * ide_workbench_addin_ref_action_group:
+ * @self: a #IdeWorkbenchAddin
+ *
+ * Gets the action group for the addin.
+ *
+ * If provided, the action group will be registered for the addin at
+ * "context.workbench.module-name" where "module-name" is replaced with the
+ * module-name of the plugin.
+ *
+ * Returns: (transfer full) (nullable): a #GActionGroup or %NULL
+ */
+GActionGroup *
+ide_workbench_addin_ref_action_group (IdeWorkbenchAddin *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKBENCH_ADDIN (self), NULL);
+
+  if (IDE_WORKBENCH_ADDIN_GET_IFACE (self)->ref_action_group)
+    return IDE_WORKBENCH_ADDIN_GET_IFACE (self)->ref_action_group (self);
+
+  return NULL;
+}

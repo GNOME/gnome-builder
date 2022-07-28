@@ -253,6 +253,7 @@ ide_workbench_addin_added_cb (PeasExtensionSet *set,
 {
   IdeWorkbench *self = user_data;
   IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
+  GActionGroup *action_group;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
@@ -260,6 +261,15 @@ ide_workbench_addin_added_cb (PeasExtensionSet *set,
   g_assert (IDE_IS_WORKBENCH (self));
 
   ide_workbench_addin_load (addin, self);
+
+  if ((action_group = ide_workbench_addin_ref_action_group (addin)))
+    {
+      IdeActionMuxer *muxer = ide_action_mixin_get_action_muxer (self);
+      ide_action_muxer_insert_action_group (muxer,
+                                            peas_plugin_info_get_module_name (plugin_info),
+                                            action_group);
+      g_clear_object (&action_group);
+    }
 
   /* Notify of the VCS system up-front */
   if (self->vcs != NULL)

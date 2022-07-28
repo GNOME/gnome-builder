@@ -39,51 +39,52 @@ struct _IdeWorkbenchAddinInterface
 {
   GTypeInterface parent;
 
-  void     (*load)                  (IdeWorkbenchAddin     *self,
-                                     IdeWorkbench          *workbench);
-  void     (*unload)                (IdeWorkbenchAddin     *self,
-                                     IdeWorkbench          *workbench);
-  void     (*load_project_async)    (IdeWorkbenchAddin     *self,
-                                     IdeProjectInfo        *project_info,
-                                     GCancellable          *cancellable,
-                                     GAsyncReadyCallback    callback,
-                                     gpointer               user_data);
-  gboolean (*load_project_finish)   (IdeWorkbenchAddin     *self,
-                                     GAsyncResult          *result,
-                                     GError               **error);
-  void     (*unload_project_async)  (IdeWorkbenchAddin     *self,
-                                     IdeProjectInfo        *project_info,
-                                     GCancellable          *cancellable,
-                                     GAsyncReadyCallback    callback,
-                                     gpointer               user_data);
-  gboolean (*unload_project_finish) (IdeWorkbenchAddin     *self,
-                                     GAsyncResult          *result,
-                                     GError               **error);
-  void     (*project_loaded)        (IdeWorkbenchAddin     *self,
-                                     IdeProjectInfo        *project_info);
-  void     (*workspace_added)       (IdeWorkbenchAddin     *self,
-                                     IdeWorkspace          *workspace);
-  void     (*workspace_removed)     (IdeWorkbenchAddin     *self,
-                                     IdeWorkspace          *workspace);
-  gboolean (*can_open)              (IdeWorkbenchAddin     *self,
-                                     GFile                 *file,
-                                     const gchar           *content_type,
-                                     gint                  *priority);
-  void     (*open_async)            (IdeWorkbenchAddin     *self,
-                                     GFile                 *file,
-                                     const gchar           *content_type,
-                                     int                    at_line,
-                                     int                    at_line_offset,
-                                     IdeBufferOpenFlags     flags,
-                                     IdePanelPosition      *position,
-                                     GCancellable          *cancellable,
-                                     GAsyncReadyCallback    callback,
-                                     gpointer               user_data);
-  gboolean (*open_finish)           (IdeWorkbenchAddin     *self,
-                                     GAsyncResult          *result,
-                                     GError               **error);
-  void     (*vcs_changed)           (IdeWorkbenchAddin     *self,
-                                     IdeVcs                *vcs);
+  void          (*load)                  (IdeWorkbenchAddin     *self,
+                                          IdeWorkbench          *workbench);
+  void          (*unload)                (IdeWorkbenchAddin     *self,
+                                          IdeWorkbench          *workbench);
+  void          (*load_project_async)    (IdeWorkbenchAddin     *self,
+                                          IdeProjectInfo        *project_info,
+                                          GCancellable          *cancellable,
+                                          GAsyncReadyCallback    callback,
+                                          gpointer               user_data);
+  gboolean      (*load_project_finish)   (IdeWorkbenchAddin     *self,
+                                          GAsyncResult          *result,
+                                          GError               **error);
+  void          (*unload_project_async)  (IdeWorkbenchAddin     *self,
+                                          IdeProjectInfo        *project_info,
+                                          GCancellable          *cancellable,
+                                          GAsyncReadyCallback    callback,
+                                          gpointer               user_data);
+  gboolean      (*unload_project_finish) (IdeWorkbenchAddin     *self,
+                                          GAsyncResult          *result,
+                                          GError               **error);
+  void          (*project_loaded)        (IdeWorkbenchAddin     *self,
+                                          IdeProjectInfo        *project_info);
+  void          (*workspace_added)       (IdeWorkbenchAddin     *self,
+                                          IdeWorkspace          *workspace);
+  void          (*workspace_removed)     (IdeWorkbenchAddin     *self,
+                                          IdeWorkspace          *workspace);
+  gboolean      (*can_open)              (IdeWorkbenchAddin     *self,
+                                          GFile                 *file,
+                                          const gchar           *content_type,
+                                          gint                  *priority);
+  void          (*open_async)            (IdeWorkbenchAddin     *self,
+                                          GFile                 *file,
+                                          const gchar           *content_type,
+                                          int                    at_line,
+                                          int                    at_line_offset,
+                                          IdeBufferOpenFlags     flags,
+                                          IdePanelPosition      *position,
+                                          GCancellable          *cancellable,
+                                          GAsyncReadyCallback    callback,
+                                          gpointer               user_data);
+  gboolean      (*open_finish)           (IdeWorkbenchAddin     *self,
+                                          GAsyncResult          *result,
+                                          GError               **error);
+  void          (*vcs_changed)           (IdeWorkbenchAddin     *self,
+                                          IdeVcs                *vcs);
+  GActionGroup *(*ref_action_group)      (IdeWorkbenchAddin     *self);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -144,6 +145,8 @@ gboolean           ide_workbench_addin_open_finish           (IdeWorkbenchAddin 
 IDE_AVAILABLE_IN_ALL
 void               ide_workbench_addin_vcs_changed           (IdeWorkbenchAddin    *self,
                                                               IdeVcs               *vcs);
+IDE_AVAILABLE_IN_ALL
+GActionGroup      *ide_workbench_addin_ref_action_group      (IdeWorkbenchAddin    *self);
 IDE_AVAILABLE_IN_ALL
 IdeWorkbenchAddin *ide_workbench_addin_find_by_module_name   (IdeWorkbench         *workbench,
                                                               const gchar          *module_name);
