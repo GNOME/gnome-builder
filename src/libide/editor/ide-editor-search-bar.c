@@ -322,7 +322,7 @@ on_search_key_pressed_cb (GtkEventControllerKey *key,
                           guint                  keyval,
                           guint                  keycode,
                           GdkModifierType        state,
-                          IdeEditorSearchBar       *self)
+                          IdeEditorSearchBar    *self)
 {
   g_assert (GTK_IS_EVENT_CONTROLLER_KEY (key));
   g_assert (IDE_IS_EDITOR_SEARCH_BAR (self));
@@ -554,7 +554,7 @@ ide_editor_search_bar_class_init (IdeEditorSearchBarClass *klass)
   gtk_widget_class_install_action (widget_class, "search.replace-one", NULL, search_replace_one);
   gtk_widget_class_install_action (widget_class, "search.replace-all", NULL, search_replace_all);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "search.hide", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "page.search.hide", NULL);
 
   g_type_ensure (IDE_TYPE_SEARCH_ENTRY);
 }
