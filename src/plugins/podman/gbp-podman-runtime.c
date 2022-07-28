@@ -178,6 +178,8 @@ gbp_podman_runtime_contains_program_in_path (IdeRuntime   *runtime,
   g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
   g_assert (program != NULL);
 
+  run_context = ide_run_context_new ();
+
   gbp_podman_runtime_prepare_run_context (runtime, NULL, run_context);
   ide_run_context_push_shell (run_context, TRUE);
   ide_run_context_append_argv (run_context, "which");
