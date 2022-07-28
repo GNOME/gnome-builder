@@ -73,5 +73,17 @@
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;s</attribute>
       </item>
     </section>
+    <section id="ide-editor-page-search-section">
+      <item>
+        <attribute name="label" translatable="yes">Find…</attribute>
+        <attribute name="action">page.search.begin-find</attribute>
+        <attribute name="accel">&lt;ctrl&gt;f</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find/Replace…</attribute>
+        <attribute name="action">page.search.begin-replace</attribute>
+        <attribute name="accel">&lt;ctrl&gt;h</attribute>
+      </item>
+    </section>
   </menu>
 </interface>
