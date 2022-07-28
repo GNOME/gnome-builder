@@ -44,6 +44,8 @@
 #include "ide-workbench-private.h"
 #include "ide-workspace-private.h"
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GActionGroup, g_object_unref)
+
 /**
  * SECTION:ide-workbench
  * @title: IdeWorkbench
@@ -253,7 +255,7 @@ ide_workbench_addin_added_cb (PeasExtensionSet *set,
 {
   IdeWorkbench *self = user_data;
   IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
-  GActionGroup *action_group;
+  g_autoptr(GActionGroup) action_group = NULL;
 
   g_assert (PEAS_IS_EXTENSION_SET (set));
   g_assert (plugin_info != NULL);
@@ -268,7 +270,6 @@ ide_workbench_addin_added_cb (PeasExtensionSet *set,
       ide_action_muxer_insert_action_group (muxer,
                                             peas_plugin_info_get_module_name (plugin_info),
                                             action_group);
-      g_clear_object (&action_group);
     }
 
   /* Notify of the VCS system up-front */
@@ -301,6 +302,10 @@ ide_workbench_addin_removed_cb (PeasExtensionSet *set,
   g_assert (plugin_info != NULL);
   g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
   g_assert (IDE_IS_WORKBENCH (self));
+
+  ide_action_muxer_insert_action_group (ide_action_mixin_get_action_muxer (self),
+                                        peas_plugin_info_get_module_name (plugin_info),
+                                        NULL);
 
   /* Notify of workspace removals so addins don't need to manually
    * track them for cleanup.

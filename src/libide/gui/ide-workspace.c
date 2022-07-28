@@ -200,6 +200,10 @@ ide_workspace_addin_removed_cb (IdeExtensionSetAdapter *set,
   g_debug ("Unloading workspace addin from module %s",
            peas_plugin_info_get_module_name (plugin_info));
 
+  ide_action_muxer_insert_action_group (ide_action_mixin_get_action_muxer (self),
+                                        peas_plugin_info_get_module_name (plugin_info),
+                                        NULL);
+
   ide_workspace_addin_page_changed (addin, NULL);
   ide_workspace_addin_unload (addin, self);
 }
