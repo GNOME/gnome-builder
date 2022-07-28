@@ -49,6 +49,8 @@ struct _IdeWorkspaceClass
 {
   AdwApplicationWindowClass parent_class;
 
+  IdeActionMixin action_mixin;
+
   const gchar *kind;
 
   guint has_statusbar : 1;

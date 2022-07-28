@@ -494,6 +494,36 @@ ide_workspace_real_get_header_bar (IdeWorkspace *workspace)
 }
 
 static void
+ide_workspace_action_close (gpointer    instance,
+                            const char *action_name,
+                            GVariant   *param)
+{
+  IdeWorkspace *self = instance;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+
+  gtk_window_close (GTK_WINDOW (self));
+}
+
+static void
+ide_workspace_constructed (GObject *object)
+{
+  IdeWorkspace *self = (IdeWorkspace *)object;
+  IdeActionMuxer *muxer;
+
+  G_OBJECT_CLASS (ide_workspace_parent_class)->constructed (object);
+
+  /* TODO: Connect addins to muxer */
+  /* TODO: Make sure we can get subclasses working (needs a fix
+   * for when/what/who should call ide_action_muxer_init() as you
+   * currently need to call that again in subclass.
+   */
+  ide_action_mixin_constructed (&IDE_WORKSPACE_GET_CLASS (self)->action_mixin, object);
+  muxer = ide_action_mixin_get_action_muxer (self);
+  gtk_widget_insert_action_group (GTK_WIDGET (self), "workspace", G_ACTION_GROUP (muxer));
+}
+
+static void
 ide_workspace_dispose (GObject *object)
 {
   IdeWorkspace *self = (IdeWorkspace *)object;
@@ -565,6 +595,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkWindowClass *window_class = GTK_WINDOW_CLASS (klass);
 
+  object_class->constructed = ide_workspace_constructed;
   object_class->dispose = ide_workspace_dispose;
   object_class->finalize = ide_workspace_finalize;
   object_class->get_property = ide_workspace_get_property;
@@ -599,7 +630,8 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_comma, GDK_CONTROL_MASK, "app.preferences", NULL);
+  ide_action_mixin_init (&klass->action_mixin, object_class);
+  ide_action_mixin_install_action (&klass->action_mixin, "close", NULL, ide_workspace_action_close);
 }
 
 static void
@@ -637,9 +669,6 @@ ide_workspace_init (IdeWorkspace *self)
                     "notify::focus-widget",
                     G_CALLBACK (ide_workspace_notify_focus_widget),
                     NULL);
-
-  /* Initialize GActions for workspace */
-  _ide_workspace_init_actions (self);
 }
 
 GList *

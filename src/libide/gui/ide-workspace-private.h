@@ -26,7 +26,6 @@
 
 G_BEGIN_DECLS
 
-void        _ide_workspace_init_actions        (IdeWorkspace        *self);
 GList      *_ide_workspace_get_mru_link        (IdeWorkspace        *self);
 void        _ide_workspace_add_page_mru        (IdeWorkspace        *self,
                                                 GList               *mru_link);

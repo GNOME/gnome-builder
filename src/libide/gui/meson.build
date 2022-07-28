@@ -82,7 +82,6 @@ libide_gui_private_sources = [
   'ide-shortcut-manager.c',
   'ide-support.c',
   'ide-style-variant-preview.c',
-  'ide-workspace-actions.c',
 ]
 
 libide_gui_public_sources = [

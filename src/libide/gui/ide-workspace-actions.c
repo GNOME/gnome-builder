@@ -25,18 +25,6 @@
 #include "ide-gui-global.h"
 #include "ide-workspace-private.h"
 
-static void
-ide_workspace_actions_close (GSimpleAction *action,
-                             GVariant      *param,
-                             gpointer       user_data)
-{
-  IdeWorkspace *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (IDE_IS_WORKSPACE (self));
-
-  gtk_window_close (GTK_WINDOW (self));
-}
 
 static const GActionEntry actions[] = {
   { "close", ide_workspace_actions_close },

@@ -15,7 +15,7 @@
       <item>
         <attribute name="id">ide-terminal-workspace-menu-close</attribute>
         <attribute name="label" translatable="yes">Close</attribute>
-        <attribute name="action">win.close</attribute>
+        <attribute name="action">workspace.close</attribute>
       </item>
     </section>
   </menu>
