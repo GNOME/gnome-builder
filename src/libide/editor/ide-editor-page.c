@@ -513,10 +513,6 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "search.begin-find", NULL, search_begin_find_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-replace", NULL, search_begin_replace_action);
 
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_s, GDK_CONTROL_MASK, "page.save", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_f, GDK_CONTROL_MASK, "search.begin-find", NULL);
-  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_h, GDK_CONTROL_MASK, "search.begin-replace", NULL);
-
   _ide_editor_page_class_actions_init (klass);
 
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);

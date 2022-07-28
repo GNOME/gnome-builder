@@ -1,2 +1,6 @@
 { "trigger" : "<Control>i", "action" : "editorui.show-go-to-line", "when" : "canEdit()", "phase" : "capture" },
 { "trigger" : "<Shift><Alt>f", "action": "editorui.format", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control>f", "action" : "page.search.begin-find", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control>h", "action" : "page.search.begin-replace", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control>s", "action" : "page.save", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>s", "action" : "page.save-as", "when" : "canEdit()", "phase" : "capture" },
