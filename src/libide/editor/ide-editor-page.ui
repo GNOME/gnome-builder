@@ -3,10 +3,10 @@
   <template class="IdeEditorPage" parent="IdePage">
     <property name="can-maximize">true</property>
     <child type="content">
-      <object class="GtkBox">
-        <property name="orientation">horizontal</property>
+      <object class="IdeScrubberRevealer" id="scrubber_revealer">
+        <property name="hexpand">true</property>
         <property name="vexpand">true</property>
-        <child>
+        <property name="content">
           <object class="GtkScrolledWindow" id="scroller">
             <child>
               <object class="IdeSourceView" id="view">
@@ -23,20 +23,13 @@
               </object>
             </child>
           </object>
-        </child>
-        <child>
-          <object class="GtkRevealer" id="map_revealer">
-            <property name="transition-type">slide-left</property>
-            <property name="transition-duration">300</property>
-            <property name="reveal-child">true</property>
-            <child>
-              <object class="GtkSourceMap" id="map">
-                <property name="left-margin">6</property>
-                <property name="view">view</property>
-              </object>
-            </child>
+        </property>
+        <property name="scrubber">
+          <object class="GtkSourceMap" id="map">
+            <property name="left-margin">6</property>
+            <property name="view">view</property>
           </object>
-        </child>
+        </property>
       </object>
     </child>
     <child type="content">

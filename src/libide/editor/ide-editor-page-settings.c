@@ -67,11 +67,13 @@ _ide_editor_page_settings_reload (IdeEditorPage *self)
 }
 
 static gboolean
-show_map_to_vscrollbar_policy (GValue   *value,
-                               GVariant *variant,
-                               gpointer  user_data)
+map_policy_to_vscrollbar_policy (GValue   *value,
+                                 GVariant *variant,
+                                 gpointer  user_data)
 {
-  if (g_variant_get_boolean (variant))
+  const char *policy = g_variant_get_string (variant, NULL);
+
+  if (g_strcmp0 (policy, "always") == 0)
     g_value_set_enum (value, GTK_POLICY_EXTERNAL);
   else
     g_value_set_enum (value, GTK_POLICY_AUTOMATIC);
@@ -184,16 +186,16 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                           "tab-width", self->view, "tab-width",
                           G_BINDING_SYNC_CREATE);
 
-  g_settings_bind (editor_settings, "show-map",
-                   self->map_revealer, "reveal-child",
+  g_settings_bind (editor_settings, "map-policy",
+                   self->scrubber_revealer, "policy",
                    G_SETTINGS_BIND_GET);
   g_settings_bind (editor_settings, "highlight-current-line",
                    self->view, "highlight-current-line",
                    G_SETTINGS_BIND_GET);
-  g_settings_bind_with_mapping (editor_settings, "show-map",
+  g_settings_bind_with_mapping (editor_settings, "map-policy",
                                 self->scroller, "vscrollbar-policy",
                                 G_SETTINGS_BIND_GET,
-                                show_map_to_vscrollbar_policy,
+                                map_policy_to_vscrollbar_policy,
                                 NULL, NULL, NULL);
   g_settings_bind_with_mapping (editor_settings, "show-grid-lines",
                                 self->view, "background-pattern",

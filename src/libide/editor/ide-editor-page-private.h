@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include <libide-gtk.h>
 #include <libide-plugins.h>
 
 #include "ide-editor-page.h"
@@ -44,7 +45,7 @@ struct _IdeEditorPage
   IdeSourceView           *view;
   GtkScrolledWindow       *scroller;
   GtkSourceMap            *map;
-  GtkRevealer             *map_revealer;
+  IdeScrubberRevealer     *scrubber_revealer;
   IdeEditorSearchBar      *search_bar;
   GtkRevealer             *search_revealer;
 

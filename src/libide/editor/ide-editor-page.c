@@ -594,7 +594,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-editor/ide-editor-page.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, map);
-  gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, map_revealer);
+  gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, scrubber_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, search_revealer);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, scroller);

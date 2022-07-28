@@ -84,6 +84,16 @@
       <summary>Automatically Hide Overview Map</summary>
       <description>If enabled, Builder will automatically hide the overview map when mouse focus leaves the editor, or a timeout occurs.</description>
     </key>
+    <key name="map-policy" type="s">
+      <choices>
+        <choice value="never"/>
+        <choice value="auto"/>
+        <choice value="always"/>
+      </choices>
+      <default>'never'</default>
+      <summary>Overview Map Policy</summary>
+      <description>When the overview map should be displayed.</description>
+    </key>
     <key name="draw-spaces" flags="org.gnome.builder.editor.DrawSpaces">
       <default>[]</default>
       <summary>Draw Spaces</summary>
