@@ -1076,6 +1076,7 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
 
   /* Enable actions that are available to projects */
   ide_action_mixin_set_enabled (self, "configure", TRUE);
+  ide_action_mixin_set_enabled (self, "configure-page", TRUE);
 
   ide_task_return_boolean (task, TRUE);
 }
