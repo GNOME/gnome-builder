@@ -66,10 +66,10 @@ static const IdePreferenceItemEntry items[] = {
     N_("Display a grid pattern underneath source code"),
     "org.gnome.builder.editor", NULL, "show-grid-lines" },
 
-  { "appearance", "effects", "show-map", 10, ide_preferences_window_toggle,
+  { "appearance", "effects", "map-policy", 10, ide_preferences_window_combo,
     N_("Show Overview Map"),
     N_("Use an overview map instead of a scrollbar"),
-    "org.gnome.builder.editor", NULL, "show-map" },
+    "org.gnome.builder.editor", NULL, "map-policy" },
 
   { "appearance", "lines", "show-line-numbers", 0, ide_preferences_window_toggle,
     N_("Show Line Numbers"),
