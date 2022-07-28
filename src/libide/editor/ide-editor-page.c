@@ -448,6 +448,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   IdePageClass *page_class = IDE_PAGE_CLASS (klass);
+  PanelWidgetClass *panel_widget_class = PANEL_WIDGET_CLASS (widget_class);
 
   object_class->dispose = ide_editor_page_dispose;
   object_class->get_property = ide_editor_page_get_property;
@@ -508,9 +509,9 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorPage, view);
   gtk_widget_class_bind_template_callback (widget_class, ide_editor_page_focus_enter_cb);
 
-  gtk_widget_class_install_action (widget_class, "search.hide", NULL, search_hide_action);
-  gtk_widget_class_install_action (widget_class, "search.begin-find", NULL, search_begin_find_action);
-  gtk_widget_class_install_action (widget_class, "search.begin-replace", NULL, search_begin_replace_action);
+  panel_widget_class_install_action (panel_widget_class, "search.hide", NULL, search_hide_action);
+  panel_widget_class_install_action (panel_widget_class, "search.begin-find", NULL, search_begin_find_action);
+  panel_widget_class_install_action (panel_widget_class, "search.begin-replace", NULL, search_begin_replace_action);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_s, GDK_CONTROL_MASK, "page.save", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_f, GDK_CONTROL_MASK, "search.begin-find", NULL);
