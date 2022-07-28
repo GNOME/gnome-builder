@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-27 12:23+0000\n"
-"PO-Revision-Date: 2022-07-27 18:21+0300\n"
+"POT-Creation-Date: 2022-07-28 04:12+0000\n"
+"PO-Revision-Date: 2022-07-28 12:37+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -236,41 +236,35 @@ msgid "The path to the ctags executable on the system."
 msgstr "Шлях до виконуваного файла ctags у системі."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:5
-#| msgid "Debugger Breakpoint on Main"
 msgid "Debugger Breakpoint at Main"
 msgstr "Діагностична точка зупинки у головній функції"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:6
-#| msgid "Debugger should automatically insert breakpoint on main function."
 msgid "Debugger should automatically insert breakpoint at main() function."
 msgstr ""
 "Засіб діагностики має автоматично вставляти точку зупинки у основній функції."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-#| msgid "Debugger Breakpoint on Main"
 msgid "Debugger Breakpoint at g_critical()"
 msgstr "Діагностична точка зупинки у g_critical()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
-#| msgid "Debugger should automatically insert breakpoint on main function."
 msgid ""
 "Debugger should automatically insert breakpoint at g_critical() function."
 msgstr ""
-"Засіб діагностики має автоматично вставляти точку зупинки у функції"
-" g_critical()."
+"Засіб діагностики має автоматично вставляти точку зупинки у функції "
+"g_critical()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-#| msgid "Debugger Breakpoint on Main"
 msgid "Debugger Breakpoint at g_warning()"
 msgstr "Діагностична точка зупинки у g_warning()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
-#| msgid "Debugger should automatically insert breakpoint on main function."
 msgid ""
 "Debugger should automatically insert breakpoint at g_warning() function."
 msgstr ""
-"Засіб діагностики має автоматично вставляти точку зупинки у функції"
-" g_warning()."
+"Засіб діагностики має автоматично вставляти точку зупинки у функції "
+"g_warning()."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -831,7 +825,7 @@ msgstr "Ви_йти"
 msgid "Document"
 msgstr "Документ"
 
-#: src/libide/editor/gtk/menus.ui:69 src/libide/editor/ide-editor-page.c:712
+#: src/libide/editor/gtk/menus.ui:66 src/libide/editor/ide-editor-page.c:709
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -840,9 +834,9 @@ msgstr "Документ"
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/libide/editor/gtk/menus.ui:72
-msgid "Save As"
-msgstr "Зберегти як"
+#: src/libide/editor/gtk/menus.ui:71
+msgid "Save _As"
+msgstr "Зберегти _як"
 
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
@@ -856,13 +850,13 @@ msgstr "Не вдалося відкрити файл: %s"
 msgid "Failed to save file: %s"
 msgstr "Не вдалося зберегти файл: %s"
 
-#: src/libide/editor/ide-editor-page.c:709
+#: src/libide/editor/ide-editor-page.c:706
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Зберегти файл"
 
-#: src/libide/editor/ide-editor-page.c:712
+#: src/libide/editor/ide-editor-page.c:709
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
@@ -2167,7 +2161,8 @@ msgstr "Увімкнути або вимкнути можливість авто
 
 #: src/libide/gui/ide-preferences-builtin.c:213
 msgid "The number of seconds after modification before auto saving"
-msgstr "Кількість секунд після внесення змін до автоматичного збереження даних"
+msgstr ""
+"Кількість секунд після внесення змін до автоматичного збереження даних"
 
 #: src/libide/gui/ide-preferences-builtin.c:219
 msgid "Code Insight"
@@ -2727,11 +2722,11 @@ msgstr "Неможливо розібрати XML з потоку"
 msgid "C_ut"
 msgstr "Ви_різати"
 
-#: src/libide/sourceview/gtk/menus.ui:13 src/libide/terminal/gtk/menus.ui:38
+#: src/libide/sourceview/gtk/menus.ui:13 src/libide/terminal/gtk/menus.ui:33
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/libide/sourceview/gtk/menus.ui:18 src/libide/terminal/gtk/menus.ui:42
+#: src/libide/sourceview/gtk/menus.ui:18 src/libide/terminal/gtk/menus.ui:43
 msgid "_Paste"
 msgstr "В_ставити"
 
@@ -2739,7 +2734,7 @@ msgstr "В_ставити"
 msgid "_Selection"
 msgstr "Ви_бір"
 
-#: src/libide/sourceview/gtk/menus.ui:24 src/libide/terminal/gtk/menus.ui:48
+#: src/libide/sourceview/gtk/menus.ui:24 src/libide/terminal/gtk/menus.ui:50
 msgid "Select _All"
 msgstr "Вибрати _все"
 
@@ -2810,11 +2805,12 @@ msgstr "Рд %u, Поз %u"
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: src/libide/terminal/gtk/menus.ui:30
-msgid "_Copy Link Address"
-msgstr "_Копіювати адресу посилання"
+#: src/libide/terminal/gtk/menus.ui:38
+#| msgid "_Copy Link Address"
+msgid "_Copy Link"
+msgstr "_Копіювати посилання"
 
-#: src/libide/terminal/gtk/menus.ui:53
+#: src/libide/terminal/gtk/menus.ui:56
 msgid "Select _None"
 msgstr "За_брати вибір"
 
@@ -2942,7 +2938,8 @@ msgstr "Кешування команд збирання"
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:157
 #, c-format
-msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgid ""
+"Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
 "Додаток форматування: сталася помилка під час копіювання файла налаштувань "
 "gresource для «%s»: %s"
@@ -2984,7 +2981,8 @@ msgstr ""
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:291
 #, c-format
-msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgid ""
+"Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
 msgstr ""
 "Додаток форматування: шляху налаштувань «%s» не існує, запис «%s» вимкнено"
 
@@ -3551,12 +3549,10 @@ msgid "Editor Font"
 msgstr "Шрифт редактора"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
-#| msgid "The font used within the source code editor"
 msgid "The font used in the source code editor"
 msgstr "Шрифт, який використано у редакторі коду"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
-#| msgid "The font used within terminals"
 msgid "The font used in the terminal"
 msgstr "Шрифт, який буде використано у терміналі"
 
@@ -3571,22 +3567,18 @@ msgid "Show Overview Map"
 msgstr "Показувати оглядову мапу"
 
 #: src/plugins/buildui/gtk/preferences.ui:87
-#| msgid "Use an overview map instead of a scrollbar"
 msgid "Display an overview map instead of a scrollbar"
 msgstr "Показати карту перегляду замість смужки гортання"
 
 #: src/plugins/buildui/gtk/preferences.ui:95
-#| msgid "Navigate with Tab Bar"
 msgid "Navigate with Tabs"
 msgstr "Навігація за допомогою вкладок"
 
 #: src/plugins/buildui/gtk/preferences.ui:102
-#| msgid "Navigate with Tab Bar"
 msgid "Navigate with Popover"
 msgstr "Навігація за допомогою накладки"
 
 #: src/plugins/buildui/gtk/preferences.ui:103
-#| msgid "Switch documents using a tabbed interface"
 msgid "Switch documents using a popover"
 msgstr "Перемикання документів за допомогою накладки"
 
@@ -4031,7 +4023,8 @@ msgid "Visibility:"
 msgstr "Видимість:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid "Select the color spaces for which you want to see sliders in the panel."
+msgid ""
+"Select the color spaces for which you want to see sliders in the panel."
 msgstr ""
 "Виберіть простори кольорів, для яких ви хочете бачити повзунки на панелі."
 
@@ -4565,7 +4558,8 @@ msgstr "Вставляти завершальні символи для блок
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr "Показувати поле у редакторі для позначення максимальної бажаної ширини"
+msgstr ""
+"Показувати поле у редакторі для позначення максимальної бажаної ширини"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:155
 msgid "Prefer spaces over tabs"
@@ -6341,6 +6335,9 @@ msgstr "Не вдалося створити ієрархію XML."
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
 
+#~ msgid "Save As"
+#~ msgstr "Зберегти як"
+
 #~ msgid "Show Left Panel"
 #~ msgstr "Показати ліву панель"
 
@@ -7058,9 +7055,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Close Frame"
 #~ msgstr "Закрити блок"
-
-#~ msgid "Save _As"
-#~ msgstr "Зберегти _як"
 
 #~ msgid "Emacs"
 #~ msgstr "Emacs"
