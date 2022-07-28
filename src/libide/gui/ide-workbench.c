@@ -1075,7 +1075,7 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
   _ide_build_manager_start (build_manager);
 
   /* Enable actions that are available to projects */
-  ide_action_mixin_set_enabled (self, "configure", FALSE);
+  ide_action_mixin_set_enabled (self, "configure", TRUE);
 
   ide_task_return_boolean (task, TRUE);
 }
