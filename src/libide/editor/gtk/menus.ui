@@ -61,29 +61,8 @@
     </section>
     <section id="ide-editor-page-preview-section"/>
     <section id="ide-editor-page-reveal-section"/>
-    <section id="ide-editor-page-save-section">
-      <item>
-        <attribute name="label" translatable="yes">Save</attribute>
-        <attribute name="action">page.save</attribute>
-        <attribute name="accel">&lt;ctrl&gt;s</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Save _As</attribute>
-        <attribute name="action">page.save-as</attribute>
-        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;s</attribute>
-      </item>
-    </section>
-    <section id="ide-editor-page-search-section">
-      <item>
-        <attribute name="label" translatable="yes">Find…</attribute>
-        <attribute name="action">page.search.begin-find</attribute>
-        <attribute name="accel">&lt;ctrl&gt;f</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Find/Replace…</attribute>
-        <attribute name="action">page.search.begin-replace</attribute>
-        <attribute name="accel">&lt;ctrl&gt;h</attribute>
-      </item>
-    </section>
+    <section id="ide-editor-page-search-section"/>
+    <section id="ide-editor-page-save-section"/>
+    <section id="ide-editor-page-print-section"/>
   </menu>
 </interface>

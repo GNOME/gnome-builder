@@ -98,24 +98,6 @@
       </item>
     </section>
   </menu>
-  <menu id="ide-editor-page-menu">
-    <section id="ide-editor-page-document-section">
-      <attribute name="label" translatable="yes">Document</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Open in New Frame</attribute>
-        <attribute name="id">editor-document-open-in-new-workspace</attribute>
-        <attribute name="action">editorui.open-in-new-frame</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Open in New Workspace…</attribute>
-        <attribute name="id">editor-document-open-in-new-workspace</attribute>
-        <attribute name="action">editorui.open-in-new-workspace</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Print…</attribute>
-      </item>
-    </section>
-  </menu>
   <menu id="ide-editor-workspace-menu">
     <section id="ide-editor-workspace-menu-placeholder1">
       <item>
@@ -151,6 +133,51 @@
         <attribute name="label" translatable="yes">_Open File…</attribute>
         <attribute name="action">context.workbench.open</attribute>
         <attribute name="accel">&lt;primary&gt;o</attribute>
+      </item>
+    </section>
+  </menu>
+  <menu id="ide-editor-page-menu">
+    <section id="ide-editor-page-document-section">
+      <item>
+        <attribute name="label" translatable="yes">Open in New Frame</attribute>
+        <attribute name="id">editor-document-open-in-new-workspace</attribute>
+        <attribute name="action">editorui.open-in-new-frame</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Open in New Workspace…</attribute>
+        <attribute name="id">editor-document-open-in-new-workspace</attribute>
+        <attribute name="action">editorui.open-in-new-workspace</attribute>
+      </item>
+    </section>
+    <section id="ide-editor-page-save-section">
+      <item>
+        <attribute name="label" translatable="yes">Save</attribute>
+        <attribute name="action">page.save</attribute>
+        <attribute name="accel">&lt;ctrl&gt;s</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Save _As</attribute>
+        <attribute name="action">page.save-as</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;s</attribute>
+      </item>
+    </section>
+    <section id="ide-editor-page-search-section">
+      <item>
+        <attribute name="label" translatable="yes">Find…</attribute>
+        <attribute name="action">page.search.begin-find</attribute>
+        <attribute name="accel">&lt;ctrl&gt;f</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Find/Replace…</attribute>
+        <attribute name="action">page.search.begin-replace</attribute>
+        <attribute name="accel">&lt;ctrl&gt;h</attribute>
+      </item>
+    </section>
+    <section id="ide-editor-page-print-section">
+      <item>
+        <attribute name="label" translatable="yes">Print…</attribute>
+        <attribute name="action">page.print</attribute>
+        <attribute name="accel">&lt;control&gt;p</attribute>
       </item>
     </section>
   </menu>
