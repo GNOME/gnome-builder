@@ -120,10 +120,15 @@ ide_workspace_addin_page_changed (IdeWorkspaceAddin *self,
 GActionGroup *
 ide_workspace_addin_ref_action_group (IdeWorkspaceAddin *self)
 {
+  GActionGroup *action_group = NULL;
+
   g_return_val_if_fail (IDE_IS_WORKSPACE_ADDIN (self), NULL);
 
   if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->ref_action_group)
-    return IDE_WORKSPACE_ADDIN_GET_IFACE (self)->ref_action_group (self);
+    action_group = IDE_WORKSPACE_ADDIN_GET_IFACE (self)->ref_action_group (self);
 
-  return NULL;
+  if (action_group == NULL && G_IS_ACTION_GROUP (self))
+    action_group = g_object_ref (G_ACTION_GROUP (self));
+
+  return action_group;
 }
