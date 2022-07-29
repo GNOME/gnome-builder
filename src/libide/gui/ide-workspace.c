@@ -176,7 +176,7 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
       IdeActionMuxer *muxer = ide_action_mixin_get_action_muxer (self);
       ide_action_muxer_insert_action_group (muxer,
                                             peas_plugin_info_get_module_name (plugin_info),
-                                            G_ACTION_GROUP (muxer));
+                                            action_group);
     }
 
   if ((page = ide_workspace_get_focus_page (self)))

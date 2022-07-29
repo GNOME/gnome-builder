@@ -202,6 +202,7 @@ ide_action_muxer_action_group_action_added_cb (GActionGroup        *action_group
   g_assert (pag != NULL);
   g_assert (pag->backptr != NULL);
   g_assert (IDE_IS_ACTION_MUXER (pag->backptr));
+  g_assert ((gpointer)pag->backptr != (gpointer)action_group);
 
   full_name = g_strconcat (pag->prefix, action_name, NULL);
   g_action_group_action_added (G_ACTION_GROUP (pag->backptr), full_name);
@@ -219,6 +220,7 @@ ide_action_muxer_action_group_action_removed_cb (GActionGroup        *action_gro
   g_assert (pag != NULL);
   g_assert (pag->backptr != NULL);
   g_assert (IDE_IS_ACTION_MUXER (pag->backptr));
+  g_assert ((gpointer)pag->backptr != (gpointer)action_group);
 
   full_name = g_strconcat (pag->prefix, action_name, NULL);
   g_action_group_action_removed (G_ACTION_GROUP (pag->backptr), full_name);
@@ -271,6 +273,7 @@ ide_action_muxer_insert_action_group (IdeActionMuxer *self,
   g_return_if_fail (self->n_recurse == 0);
   g_return_if_fail (prefix != NULL);
   g_return_if_fail (!action_group || G_IS_ACTION_GROUP (action_group));
+  g_return_if_fail ((gpointer)action_group != (gpointer)self);
 
   /* Protect against recursion via signal emission. We don't want anything to
    * mess with our GArray while we are actively processing actions. To do so is
