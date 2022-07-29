@@ -1,1 +1,1 @@
-{ "trigger" : "<Control><Shift>f", "action" : "cpack.format-decls", "when" : "inEditorWithLanguage(\"chdr\") && hasSelection()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>f", "action" : "page.c-pack.format", "when" : "hasSelection() && (inEditorWithLanguage(\"chdr\") || inEditorWithLanguage(\"c\"))", "phase" : "capture" },

@@ -29,7 +29,8 @@
 
 struct _CpackEditorPageAddin
 {
-  GObject parent_instance;
+  GObject             parent_instance;
+  GSimpleActionGroup *actions;
 };
 
 static void
@@ -64,31 +65,41 @@ format_decls_cb (GSimpleAction *action,
 }
 
 static GActionEntry entries[] = {
-  { "format-decls", format_decls_cb },
+  { "format", format_decls_cb },
 };
 
 static void
 cpack_editor_page_addin_load (IdeEditorPageAddin *addin,
-                              IdeEditorPage      *view)
+                              IdeEditorPage      *page)
 {
-  g_autoptr(GActionMap) group = NULL;
+  CpackEditorPageAddin *self = (CpackEditorPageAddin *)addin;
 
   g_assert (CPACK_IS_EDITOR_PAGE_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_PAGE (view));
+  g_assert (IDE_IS_EDITOR_PAGE (page));
 
-  group = G_ACTION_MAP (g_simple_action_group_new ());
-  g_action_map_add_action_entries (group, entries, G_N_ELEMENTS (entries), view);
-  gtk_widget_insert_action_group (GTK_WIDGET (view), "cpack", G_ACTION_GROUP (group));
+  self->actions = g_simple_action_group_new ();
+  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
+                                   entries,
+                                   G_N_ELEMENTS (entries),
+                                   page);
 }
 
 static void
 cpack_editor_page_addin_unload (IdeEditorPageAddin *addin,
-                                IdeEditorPage      *view)
+                                IdeEditorPage      *page)
 {
-  g_assert (CPACK_IS_EDITOR_PAGE_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_PAGE (view));
+  CpackEditorPageAddin *self = (CpackEditorPageAddin *)addin;
 
-  gtk_widget_insert_action_group (GTK_WIDGET (view), "cpack", NULL);
+  g_assert (CPACK_IS_EDITOR_PAGE_ADDIN (addin));
+  g_assert (IDE_IS_EDITOR_PAGE (page));
+
+  g_clear_object (&self->actions);
+}
+
+static GActionGroup *
+cpack_editor_page_addin_ref_action_group (IdeEditorPageAddin *addin)
+{
+  return g_object_ref (G_ACTION_GROUP (CPACK_EDITOR_PAGE_ADDIN (addin)->actions));
 }
 
 static void
@@ -96,10 +107,11 @@ iface_init (IdeEditorPageAddinInterface *iface)
 {
   iface->load = cpack_editor_page_addin_load;
   iface->unload = cpack_editor_page_addin_unload;
+  iface->ref_action_group = cpack_editor_page_addin_ref_action_group;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (CpackEditorPageAddin, cpack_editor_page_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, iface_init))
 
 static void
 cpack_editor_page_addin_class_init (CpackEditorPageAddinClass *klass)
