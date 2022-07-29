@@ -372,7 +372,7 @@ update_menus (IdeApplication *app)
 }
 
 static GActionEntry actions[] = {
-  { "new-editor-workspace", new_editor_workspace_action },
+  { "workbench.new", new_editor_workspace_action },
 };
 
 static void
