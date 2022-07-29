@@ -115,6 +115,9 @@ enum {
   N_PROPS
 };
 
+static void ide_workbench_action_add_workspace (gpointer      instance,
+                                                const char   *action_name,
+                                                GVariant     *param);
 static void ide_workbench_action_close         (gpointer      instance,
                                                 const char   *action_name,
                                                 GVariant     *param);
@@ -517,6 +520,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
 
   ide_action_mixin_init (&action_mixin, object_class);
 
+  ide_action_mixin_install_action (&action_mixin, "workspace.new", NULL, ide_workbench_action_add_workspace);
   ide_action_mixin_install_action (&action_mixin, "close", NULL, ide_workbench_action_close);
   ide_action_mixin_install_action (&action_mixin, "open", NULL, ide_workbench_action_open);
   ide_action_mixin_install_action (&action_mixin, "open-uri", "s", ide_workbench_action_open_uri);
@@ -1361,6 +1365,24 @@ ide_workbench_action_close (gpointer    instance,
                                 NULL,
                                 ide_workbench_action_close_cb,
                                 NULL);
+}
+
+static void
+ide_workbench_action_add_workspace (gpointer    instance,
+                                    const char *action_name,
+                                    GVariant   *param)
+{
+  IdeWorkbench *self = instance;
+  IdeWorkspace *workspace;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  workspace = _ide_workbench_create_secondary (self);
+  gtk_window_present (GTK_WINDOW (workspace));
+
+  IDE_EXIT;
 }
 
 static void
@@ -2717,4 +2739,27 @@ ide_workbench_action_configure (gpointer    instance,
 
   if (page != NULL)
     ide_preferences_window_set_page (IDE_PREFERENCES_WINDOW (window), page);
+}
+
+IdeWorkspace *
+_ide_workbench_create_secondary (IdeWorkbench *self)
+{
+  IdeWorkspace *workspace;
+  GType secondary_type;
+
+  g_return_val_if_fail (IDE_IS_WORKBENCH (self), NULL);
+
+  /* TODO: allow secondary workspace type to be set so we don't
+   *       have this layering violation.
+   */
+
+  secondary_type = g_type_from_name ("IdeEditorWorkspace");
+  g_return_val_if_fail (secondary_type != G_TYPE_INVALID, NULL);
+
+  workspace = g_object_new (secondary_type,
+                            "application", IDE_APPLICATION_DEFAULT,
+                            NULL);
+  ide_workbench_add_workspace (self, IDE_WORKSPACE (workspace));
+
+  return workspace;
 }

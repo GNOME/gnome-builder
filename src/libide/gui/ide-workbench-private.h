@@ -25,7 +25,8 @@
 
 G_BEGIN_DECLS
 
-gboolean _ide_workbench_is_last_workspace (IdeWorkbench *self,
-                                           IdeWorkspace *workspace);
+gboolean      _ide_workbench_is_last_workspace (IdeWorkbench *self,
+                                                IdeWorkspace *workspace);
+IdeWorkspace *_ide_workbench_create_secondary  (IdeWorkbench *self);
 
 G_END_DECLS
