@@ -37,6 +37,7 @@
 #include "ide-notifications.h"
 #include "ide-object.h"
 #include "ide-object-box.h"
+#include "ide-property-action-group.h"
 #include "ide-settings.h"
 #include "ide-signal-group.h"
 #include "ide-transfer.h"
