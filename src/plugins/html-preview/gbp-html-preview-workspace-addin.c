@@ -43,7 +43,7 @@ static void live_preview_action (GbpHtmlPreviewWorkspaceAddin *self,
                                  GVariant                     *params);
 
 IDE_DEFINE_ACTION_GROUP (GbpHtmlPreviewWorkspaceAddin, gbp_html_preview_workspace_addin, {
-  { "html-preview", live_preview_action },
+  { "preview", live_preview_action },
 })
 
 static void
@@ -59,7 +59,7 @@ gbp_html_preview_workspace_addin_set_language (GbpHtmlPreviewWorkspaceAddin *sel
   enabled = language_id != NULL &&
             g_hash_table_contains (known_languages, language_id);
 
-  gbp_html_preview_workspace_addin_set_action_enabled (self, "html-preview", enabled);
+  gbp_html_preview_workspace_addin_set_action_enabled (self, "preview", enabled);
 }
 
 static void
@@ -133,10 +133,6 @@ gbp_html_preview_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "html-preview",
-                                  G_ACTION_GROUP (self));
-
   self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
   g_signal_connect_object (self->buffer_signals,
                            "bind",
@@ -168,8 +164,6 @@ gbp_html_preview_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_HTML_PREVIEW_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
-
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "html-preview", NULL);
 
   g_clear_object (&self->buffer_signals);
 
@@ -207,7 +201,7 @@ gbp_html_preview_workspace_addin_class_init (GbpHtmlPreviewWorkspaceAddinClass *
 static void
 gbp_html_preview_workspace_addin_init (GbpHtmlPreviewWorkspaceAddin *self)
 {
-  gbp_html_preview_workspace_addin_set_action_enabled (self, "html-preview", FALSE);
+  gbp_html_preview_workspace_addin_set_action_enabled (self, "preview", FALSE);
 }
 
 static void

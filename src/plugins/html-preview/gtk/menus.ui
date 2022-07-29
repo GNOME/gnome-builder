@@ -5,7 +5,7 @@
       <item>
         <attribute name="id">html-preview-item</attribute>
         <attribute name="label" translatable="yes">Open Preview…</attribute>
-        <attribute name="action">html-preview.html-preview</attribute>
+        <attribute name="action">workspace.html-preview.preview</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
       </item>
     </section>
