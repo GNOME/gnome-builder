@@ -2,11 +2,9 @@
 <gresources>
   <gresource prefix="/plugins/grep">
     <file>grep.plugin</file>
+    <file>style.css</file>
     <file preprocess="xml-stripblanks">gbp-grep-panel.ui</file>
     <file preprocess="xml-stripblanks">gbp-grep-popover.ui</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
-    <file>themes/Adwaita-shared.css</file>
-    <file>themes/Adwaita-dark.css</file>
-    <file>themes/Adwaita.css</file>
   </gresource>
 </gresources>
