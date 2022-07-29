@@ -39,7 +39,7 @@
     <section id="build-menu-target">
       <item>
         <attribute name="label" translatable="yes">Select Build Target…</attribute>
-        <attribute name="action">win.select-build-target</attribute>
+        <attribute name="action">workspace.buildui.build-target.select</attribute>
         <attribute name="description" translatable="yes">Change default build target</attribute>
       </item>
     </section>
@@ -100,7 +100,7 @@
     <section id="build-output">
       <item>
         <attribute name="label" translatable="yes">Show Build _Log</attribute>
-        <attribute name="action">win.show-build-log</attribute>
+        <attribute name="action">workspace.buildui.log.show</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;l</attribute>
         <attribute name="description" translatable="yes">Display panel containing the build log</attribute>
         <attribute name="verb-icon">builder-terminal-symbolic</attribute>

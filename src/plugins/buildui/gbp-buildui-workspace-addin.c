@@ -168,14 +168,10 @@ gbp_buildui_workspace_addin_bind_build_manager (GbpBuilduiWorkspaceAddin *self,
 }
 
 static void
-on_view_output_cb (GSimpleAction *action,
-                   GVariant      *param,
-                   gpointer       user_data)
+on_view_output_cb (GbpBuilduiWorkspaceAddin *self,
+                   GVariant                 *param)
 {
-  GbpBuilduiWorkspaceAddin *self = user_data;
-
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
 
   panel_widget_raise (PANEL_WIDGET (self->log_pane));
@@ -183,15 +179,13 @@ on_view_output_cb (GSimpleAction *action,
 }
 
 static void
-select_build_target_action (GSimpleAction *action,
-                            GVariant      *param,
-                            gpointer       user_data)
+select_build_target_action (GbpBuilduiWorkspaceAddin *self,
+                            GVariant                 *param)
 {
-  GbpBuilduiWorkspaceAddin *self = user_data;
   GbpBuilduiTargetsDialog *dialog;
   IdeContext *context;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
 
   context = ide_workspace_get_context (self->workspace);
   dialog = g_object_new (GBP_TYPE_BUILDUI_TARGETS_DIALOG,
@@ -204,18 +198,15 @@ select_build_target_action (GSimpleAction *action,
 }
 
 static void
-show_status_popover (GSimpleAction *action,
-                     GVariant      *param,
-                     gpointer       user_data)
+show_status_popover (GbpBuilduiWorkspaceAddin *self,
+                     GVariant                 *param)
 {
-  GbpBuilduiWorkspaceAddin *self = user_data;
   GtkPopover *popover;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
   g_assert (GBP_IS_BUILDUI_WORKSPACE_ADDIN (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
 
   popover = gtk_menu_button_get_popover (self->status_button);
   gbp_buildui_status_popover_set_page (GBP_BUILDUI_STATUS_POPOVER (popover),
@@ -225,11 +216,11 @@ show_status_popover (GSimpleAction *action,
   IDE_EXIT;
 }
 
-static const GActionEntry actions[] = {
-  { "show-build-log", on_view_output_cb },
-  { "select-build-target", select_build_target_action },
-  { "show-build-status-popover", show_status_popover, "s" },
-};
+IDE_DEFINE_ACTION_GROUP (GbpBuilduiWorkspaceAddin, gbp_buildui_workspace_addin, {
+  { "build-target.select", select_build_target_action },
+  { "log.show", on_view_output_cb },
+  { "status.show", show_status_popover, "s" },
+})
 
 static void
 gbp_buildui_workspace_addin_build_started (GbpBuilduiWorkspaceAddin *self,
@@ -278,11 +269,6 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace));
 
   self->workspace = workspace;
-
-  g_action_map_add_action_entries (G_ACTION_MAP (workspace),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
 
   omnibar = ide_primary_workspace_get_omni_bar (IDE_PRIMARY_WORKSPACE (workspace));
   workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
@@ -420,9 +406,6 @@ gbp_buildui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   panel_statusbar_remove (statusbar, GTK_WIDGET (self->status_button));
   self->status_button = NULL;
 
-  for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
-    g_action_map_remove_action (G_ACTION_MAP (workspace), actions[i].name);
-
   if (self->omni_bar_section)
     gtk_widget_unparent (GTK_WIDGET (self->omni_bar_section));
 
@@ -443,7 +426,8 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpBuilduiWorkspaceAddin, gbp_buildui_workspace_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_buildui_workspace_addin_init_action_group)
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
 gbp_buildui_workspace_addin_class_init (GbpBuilduiWorkspaceAddinClass *klass)

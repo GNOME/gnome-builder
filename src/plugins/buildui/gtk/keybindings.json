@@ -1,11 +1,11 @@
 /* Build Actions */
-{ "trigger" : "<Control><Shift>l", "action" : "win.show-build-log", "when" : "hasProject()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt><Shift>b", "action" : "build-manager.build", "when" : "hasProject()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>l", "action" : "workspace.buildui.log.show", "when" : "hasProject()", "phase" : "capture" },
+{ "trigger" : "<Control><Alt><Shift>b", "action" : "context.build-manager.build", "when" : "hasProject()", "phase" : "capture" },
 
 /* Run Actions */
-{ "trigger" : "<Control><Shift>space", "action" : "run-manager.run", "when" : "hasProject()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>space", "action" : "context.run-manager.run", "when" : "hasProject()", "phase" : "capture" },
 
 /* Errors and Warnings Popover */
-{ "trigger" : "<Control><Shift>e", "action" : "win.show-build-status-popover", "args" : "'errors'", "when" : "hasErrors() || hasWarnings()", "phase" : "capture" },
-{ "trigger" : "<Control><Shift>w", "action" : "win.show-build-status-popover", "args" : "'warnings'", "when" : "hasErrors() || hasWarnings()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>e", "action" : "workspace.buildui.status.show", "args" : "'errors'", "when" : "hasErrors() || hasWarnings()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>w", "action" : "workspace.buildui.status.show", "args" : "'warnings'", "when" : "hasErrors() || hasWarnings()", "phase" : "capture" },
 
