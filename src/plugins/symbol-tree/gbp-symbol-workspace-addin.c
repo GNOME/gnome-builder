@@ -53,6 +53,23 @@ struct _GbpSymbolWorkspaceAddin
 };
 
 static void
+focus_action (GbpSymbolWorkspaceAddin *self,
+              GVariant                *param)
+{
+  g_assert (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self));
+
+  if (gtk_widget_get_visible (GTK_WIDGET (self->menu_button)))
+    {
+      gtk_menu_button_popup (self->menu_button);
+      gtk_widget_grab_focus (GTK_WIDGET (self->popover));
+    }
+}
+
+IDE_DEFINE_ACTION_GROUP (GbpSymbolWorkspaceAddin, gbp_symbol_workspace_addin, {
+  { "focus", focus_action },
+});
+
+static void
 gbp_symbol_workspace_addin_set_symbol (GbpSymbolWorkspaceAddin *self,
                                        IdeSymbol               *symbol)
 {
@@ -299,27 +316,6 @@ gbp_symbol_workspace_addin_buffer_changed_cb (GbpSymbolWorkspaceAddin *self,
 }
 
 static void
-focus_symbol_tree (GSimpleAction *action,
-                   GVariant      *param,
-                   gpointer       user_data)
-{
-  GbpSymbolWorkspaceAddin *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_SYMBOL_WORKSPACE_ADDIN (self));
-
-  if (gtk_widget_get_visible (GTK_WIDGET (self->menu_button)))
-    {
-      gtk_menu_button_popup (self->menu_button);
-      gtk_widget_grab_focus (GTK_WIDGET (self->popover));
-    }
-}
-
-static const GActionEntry actions[] = {
-  { "focus-symbol-tree", focus_symbol_tree },
-};
-
-static void
 gbp_symbol_workspace_addin_load (IdeWorkspaceAddin *addin,
                                  IdeWorkspace      *workspace)
 {
@@ -333,11 +329,6 @@ gbp_symbol_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
   self->statusbar = ide_workspace_get_statusbar (workspace);
-
-  g_action_map_add_action_entries (G_ACTION_MAP (workspace),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
 
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_HORIZONTAL,
@@ -379,9 +370,6 @@ gbp_symbol_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_WORKSPACE (workspace));
   g_assert (PANEL_IS_STATUSBAR (self->statusbar));
   g_assert (workspace == self->workspace);
-
-  for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
-    g_action_map_remove_action (G_ACTION_MAP (workspace), actions[i].name);
 
   ide_signal_group_set_target (self->buffer_signals, NULL);
 
@@ -432,6 +420,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSymbolWorkspaceAddin, gbp_symbol_workspace_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_symbol_workspace_addin_init_action_group)
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
