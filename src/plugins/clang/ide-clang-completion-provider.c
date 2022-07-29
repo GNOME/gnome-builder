@@ -140,9 +140,11 @@ ide_clang_completion_provider_key_activates (GtkSourceCompletionProvider *provid
         goto store_and_activate;
     }
 
+#if 0
   /* We add suffix ; if pressed */
   if (keyval == GDK_KEY_semicolon)
     goto store_and_activate;
+#endif
 
 #if 0
   /* Open parens for function */
