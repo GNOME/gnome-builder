@@ -3,8 +3,9 @@
   <gresource prefix="/plugins/grep">
     <file>grep.plugin</file>
     <file>style.css</file>
+    <file>gtk/keybindings.json</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
     <file preprocess="xml-stripblanks">gbp-grep-panel.ui</file>
     <file preprocess="xml-stripblanks">gbp-grep-popover.ui</file>
-    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
   </gresource>
 </gresources>
