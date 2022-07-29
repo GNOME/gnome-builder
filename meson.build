@@ -355,6 +355,12 @@ subdir('src')
 subdir('po')
 subdir('doc')
 
+gnome.post_install(
+  glib_compile_schemas: true,
+  gtk_update_icon_cache: true,
+  update_desktop_database: true,
+)
+
 meson.add_install_script('build-aux/meson/post_install.py')
 
 message('\n  '.join(status))
