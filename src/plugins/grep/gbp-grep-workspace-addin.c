@@ -34,25 +34,22 @@
 
 struct _GbpGrepWorkspaceAddin
 {
-  GObject    parent_instance;
-  GtkWidget *panel;
+  GObject  parent_instance;
+  IdePane *panel;
 };
 
 static void
-gbp_grep_workspace_page_addin_show_project_panel_action (GSimpleAction *action,
-                                                         GVariant      *variant,
-                                                         gpointer       user_data)
+panel_show_action (GbpGrepWorkspaceAddin *self,
+                   GVariant              *variant)
 {
-  GbpGrepWorkspaceAddin *self = GBP_GREP_WORKSPACE_ADDIN (user_data);
-
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));
 
   panel_widget_raise (PANEL_WIDGET (self->panel));
 }
 
-static const GActionEntry actions[] = {
-  { "show-project-panel", gbp_grep_workspace_page_addin_show_project_panel_action },
-};
+IDE_DEFINE_ACTION_GROUP (GbpGrepWorkspaceAddin, gbp_grep_workspace_addin, {
+  { "panel.show", panel_show_action },
+});
 
 static void
 gbp_grep_workspace_addin_load (IdeWorkspaceAddin *addin,
@@ -65,20 +62,11 @@ gbp_grep_workspace_addin_load (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  self->panel = gbp_grep_panel_new ();
+  self->panel = g_object_new (GBP_TYPE_GREP_PANEL, NULL);
 
   position = ide_panel_position_new ();
   ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
-  ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
-
-  group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "grep",
-                                  G_ACTION_GROUP (group));
+  ide_workspace_add_pane (workspace, self->panel, position);
 }
 
 static void
@@ -90,9 +78,7 @@ gbp_grep_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "grep", NULL);
-
-  g_clear_pointer ((IdePane **)&self->panel, ide_pane_destroy);
+  g_clear_pointer (&self->panel, ide_pane_destroy);
 }
 
 static void
@@ -103,6 +89,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpGrepWorkspaceAddin, gbp_grep_workspace_addin, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_grep_workspace_addin_init_action_group)
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
