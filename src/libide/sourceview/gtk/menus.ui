@@ -18,6 +18,44 @@
         <attribute name="label" translatable="yes">_Paste</attribute>
         <attribute name="action">clipboard.paste</attribute>
       </item>
+    </section>
+    <section id="ide-source-view-popup-menu-undo-section">
+      <attribute name="display-hint">inline-buttons</attribute>
+      <attribute name="label" translatable="yes">Undo</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Undo</attribute>
+        <attribute name="action">text.undo</attribute>
+        <attribute name="verb-icon">edit-undo-symbolic</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Redo</attribute>
+        <attribute name="action">text.redo</attribute>
+        <attribute name="verb-icon">edit-redo-symbolic</attribute>
+      </item>
+    </section>
+    <section id="ide-source-view-popup-menu-zoom-section">
+      <attribute name="label" translatable="yes">Zoom</attribute>
+      <attribute name="display-hint">inline-buttons</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Zoom Out</attribute>
+        <attribute name="verb-icon">zoom-out-symbolic</attribute>
+        <attribute name="action">zoom.out</attribute>
+        <attribute name="accel">&lt;control&gt;minus</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Reset Zoom</attribute>
+        <attribute name="verb-icon">zoom-original-symbolic</attribute>
+        <attribute name="action">zoom.one</attribute>
+        <attribute name="accel">&lt;control&gt;0</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Zoom In</attribute>
+        <attribute name="verb-icon">zoom-in-symbolic</attribute>
+        <attribute name="action">zoom.in</attribute>
+        <attribute name="accel">&lt;control&gt;plus</attribute>
+      </item>
+    </section>
+    <section id="ide-source-view-popup-menu-selection-section">
       <submenu id="ide-source-view-popup-menu-selection-submenu">
         <attribute name="label" translatable="yes">_Selection</attribute>
         <item>
@@ -63,43 +101,8 @@
             <attribute name="accel">&lt;shift&gt;&lt;control&gt;j</attribute>
           </item>
         </section>
+        <section id="ide-source-view-popup-menu-format-section"/>
       </submenu>
-    </section>
-    <section id="ide-source-view-popup-menu-undo-section">
-      <attribute name="display-hint">inline-buttons</attribute>
-      <attribute name="label" translatable="yes">Undo</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Undo</attribute>
-        <attribute name="action">text.undo</attribute>
-        <attribute name="verb-icon">edit-undo-symbolic</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Redo</attribute>
-        <attribute name="action">text.redo</attribute>
-        <attribute name="verb-icon">edit-redo-symbolic</attribute>
-      </item>
-    </section>
-    <section id="ide-source-view-popup-menu-zoom-section">
-      <attribute name="label" translatable="yes">Zoom</attribute>
-      <attribute name="display-hint">inline-buttons</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Zoom Out</attribute>
-        <attribute name="verb-icon">zoom-out-symbolic</attribute>
-        <attribute name="action">zoom.out</attribute>
-        <attribute name="accel">&lt;control&gt;minus</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Reset Zoom</attribute>
-        <attribute name="verb-icon">zoom-original-symbolic</attribute>
-        <attribute name="action">zoom.one</attribute>
-        <attribute name="accel">&lt;control&gt;0</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">Zoom In</attribute>
-        <attribute name="verb-icon">zoom-in-symbolic</attribute>
-        <attribute name="action">zoom.in</attribute>
-        <attribute name="accel">&lt;control&gt;plus</attribute>
-      </item>
     </section>
     <section id="ide-source-view-popup-menu-jump-section">
       <item>
