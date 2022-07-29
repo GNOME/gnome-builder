@@ -1,4 +1,4 @@
-{ "trigger" : "<Control><Shift>b", "action" : "web-browser.new-page", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "<Control><Shift>r", "action" : "web-browser.reload", "args" : "true", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
-{ "trigger" : "<Control>r", "action" : "web-browser.reload", "args" : "false", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
-{ "trigger" : "<Control>l", "action" : "web-browser.focus-address", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>b", "action" : "workspace.web-browser.page.new", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>r", "action" : "workspace.web-browser.page.reload", "args" : "true", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
+{ "trigger" : "<Control>r", "action" : "workspace.web-browser.page.reload", "args" : "false", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },
+{ "trigger" : "<Control>l", "action" : "workspace.web-browser.page.location.focus", "when" : "(page != null) && typeof(page).is_a(typeof(Ide.WebkitPage))", "phase" : "capture" },

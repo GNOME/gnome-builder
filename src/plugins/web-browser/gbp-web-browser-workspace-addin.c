@@ -33,7 +33,6 @@ struct _GbpWebBrowserWorkspaceAddin
   IdeWorkspace *workspace;
 };
 
-static void workspace_addin_iface_init       (IdeWorkspaceAddinInterface  *iface);
 static void web_browser_new_page_action      (GbpWebBrowserWorkspaceAddin *self,
                                               GVariant                    *param);
 static void web_browser_focus_address_action (GbpWebBrowserWorkspaceAddin *self,
@@ -42,10 +41,31 @@ static void web_browser_reload_action        (GbpWebBrowserWorkspaceAddin *self,
                                               GVariant                    *param);
 
 IDE_DEFINE_ACTION_GROUP (GbpWebBrowserWorkspaceAddin, gbp_web_browser_workspace_addin, {
-  { "new-page", web_browser_new_page_action },
-  { "focus-address", web_browser_focus_address_action },
-  { "reload", web_browser_reload_action, "b" },
+  { "page.new", web_browser_new_page_action },
+  { "page.location.focus", web_browser_focus_address_action },
+  { "page.reload", web_browser_reload_action, "b" },
 })
+
+static void
+gbp_web_browser_workspace_addin_load (IdeWorkspaceAddin *addin,
+                                      IdeWorkspace      *workspace)
+{
+  GBP_WEB_BROWSER_WORKSPACE_ADDIN (addin)->workspace = workspace;
+}
+
+static void
+gbp_web_browser_workspace_addin_unload (IdeWorkspaceAddin *addin,
+                                        IdeWorkspace      *workspace)
+{
+  GBP_WEB_BROWSER_WORKSPACE_ADDIN (addin)->workspace = NULL;
+}
+
+static void
+workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
+{
+  iface->load = gbp_web_browser_workspace_addin_load;
+  iface->unload = gbp_web_browser_workspace_addin_unload;
+}
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWebBrowserWorkspaceAddin, gbp_web_browser_workspace_addin, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_web_browser_workspace_addin_init_action_group)
@@ -59,50 +79,6 @@ gbp_web_browser_workspace_addin_class_init (GbpWebBrowserWorkspaceAddinClass *kl
 static void
 gbp_web_browser_workspace_addin_init (GbpWebBrowserWorkspaceAddin *self)
 {
-}
-
-static void
-gbp_web_browser_workspace_addin_load (IdeWorkspaceAddin *addin,
-                                      IdeWorkspace      *workspace)
-{
-  GbpWebBrowserWorkspaceAddin *self = (GbpWebBrowserWorkspaceAddin *)addin;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_WEB_BROWSER_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_WORKSPACE (workspace));
-
-  self->workspace = workspace;
-
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "web-browser", G_ACTION_GROUP (self));
-
-  IDE_EXIT;
-}
-
-static void
-gbp_web_browser_workspace_addin_unload (IdeWorkspaceAddin *addin,
-                                        IdeWorkspace      *workspace)
-{
-  GbpWebBrowserWorkspaceAddin *self = (GbpWebBrowserWorkspaceAddin *)addin;
-
-  IDE_ENTRY;
-
-  g_assert (GBP_IS_WEB_BROWSER_WORKSPACE_ADDIN (self));
-  g_assert (IDE_IS_WORKSPACE (workspace));
-
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "web-browser", NULL);
-
-  self->workspace = NULL;
-
-  IDE_EXIT;
-}
-
-
-static void
-workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
-{
-  iface->load = gbp_web_browser_workspace_addin_load;
-  iface->unload = gbp_web_browser_workspace_addin_unload;
 }
 
 static void
