@@ -63,6 +63,7 @@
     <section id="ide-editor-page-reveal-section"/>
     <section id="ide-editor-page-search-section"/>
     <section id="ide-editor-page-save-section"/>
+    <section id="ide-editor-page-format-section"/>
     <section id="ide-editor-page-print-section"/>
   </menu>
 </interface>

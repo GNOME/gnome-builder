@@ -173,10 +173,16 @@
         <attribute name="accel">&lt;ctrl&gt;h</attribute>
       </item>
     </section>
+    <section id="ide-editor-page-format-section">
+      <item>
+        <attribute name="label" translatable="yes">Format Selection</attribute>
+        <attribute name="action">page.editor.format</attribute>
+      </item>
+    </section>
     <section id="ide-editor-page-print-section">
       <item>
         <attribute name="label" translatable="yes">Print…</attribute>
-        <attribute name="action">page.print</attribute>
+        <attribute name="action">page.editor.print</attribute>
         <attribute name="accel">&lt;control&gt;p</attribute>
       </item>
     </section>

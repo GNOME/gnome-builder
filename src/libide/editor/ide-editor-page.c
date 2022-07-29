@@ -463,6 +463,67 @@ print_action (GtkWidget  *widget,
 }
 
 static void
+format_selection_cb (GObject      *object,
+                     GAsyncResult *result,
+                     gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdeEditorPage) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  if (!ide_buffer_format_selection_finish (buffer, result, &error))
+    ide_page_report_error (IDE_PAGE (self),
+                           /* translators: %s contains the error message */
+                           _("Failed to format selection: %s"),
+                           error->message);
+
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (self->view), TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+format_action (GtkWidget  *widget,
+               const char *action_name,
+               GVariant   *param)
+{
+  IdeEditorPage *self = (IdeEditorPage *)widget;
+  g_autoptr(IdeFormatterOptions) options = NULL;
+  gboolean insert_spaces_instead_of_tabs;
+  guint tab_width;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  g_object_get (self->view,
+                "tab-width", &tab_width,
+                "insert-spaces-instead-of-tabs", &insert_spaces_instead_of_tabs,
+                NULL);
+
+  options = ide_formatter_options_new ();
+  ide_formatter_options_set_tab_width (options, tab_width);
+  ide_formatter_options_set_insert_spaces (options, insert_spaces_instead_of_tabs);
+
+  /* Disable editing while we format */
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (self->view), FALSE);
+
+  ide_buffer_format_selection_async (self->buffer,
+                                     options,
+                                     NULL,
+                                     format_selection_cb,
+                                     g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_page_constructed (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
@@ -616,7 +677,8 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "search.hide", NULL, search_hide_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-find", NULL, search_begin_find_action);
   panel_widget_class_install_action (panel_widget_class, "search.begin-replace", NULL, search_begin_replace_action);
-  panel_widget_class_install_action (panel_widget_class, "print", NULL, print_action);
+  panel_widget_class_install_action (panel_widget_class, "editor.print", NULL, print_action);
+  panel_widget_class_install_action (panel_widget_class, "editor.format", NULL, format_action);
 
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
 }
