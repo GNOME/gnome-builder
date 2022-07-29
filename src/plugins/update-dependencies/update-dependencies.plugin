@@ -1,0 +1,10 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright 2022 Christian Hergert
+Dependencies=buildui;
+Description=Update Project Dependencies
+Embedded=_gbp_update_dependencies_register_types
+Hidden=true
+Module=update-dependencies
+Name=Update Dependencies

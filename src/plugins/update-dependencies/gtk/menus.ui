@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="build-deps">
+    <item>
+      <attribute name="before">manage-sdks</attribute>
+      <attribute name="label" translatable="yes">Update Dependencies…</attribute>
+      <attribute name="action">context.workbench.update-dependencies.update</attribute>
+      <attribute name="description" translatable="yes">Download updates to project dependencies</attribute>
+      <attribute name="verb-icon">software-update-available-symbolic</attribute>
+    </item>
+  </menu>
+</interface>
