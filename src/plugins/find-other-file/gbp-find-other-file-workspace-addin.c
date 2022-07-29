@@ -44,12 +44,9 @@ struct _GbpFindOtherFileWorkspaceAddin
 };
 
 static void
-find_other_file_action (GSimpleAction *action,
-                        GVariant      *param,
-                        gpointer       user_data)
+find_other_file_action (GbpFindOtherFileWorkspaceAddin *self,
+                        GVariant                       *param)
 {
-  GbpFindOtherFileWorkspaceAddin *self = user_data;
-
   g_assert (GBP_IS_FIND_OTHER_FILE_WORKSPACE_ADDIN (self));
 
   if (self->menu_button != NULL &&
@@ -57,9 +54,9 @@ find_other_file_action (GSimpleAction *action,
     gtk_menu_button_popup (self->menu_button);
 }
 
-static GActionEntry actions[] = {
-  { "find-other-file", find_other_file_action },
-};
+IDE_DEFINE_ACTION_GROUP (GbpFindOtherFileWorkspaceAddin, gbp_find_other_file_workspace_addin, {
+  { "focus", find_other_file_action },
+})
 
 static void
 gbp_find_other_file_workspace_addin_clear (GbpFindOtherFileWorkspaceAddin *self)
@@ -211,11 +208,6 @@ gbp_find_other_file_workspace_addin_load (IdeWorkspaceAddin *addin,
   statusbar = ide_workspace_get_statusbar (workspace);
   panel_statusbar_add_suffix (statusbar, 10000, GTK_WIDGET (self->menu_button));
 
-  g_action_map_add_action_entries (G_ACTION_MAP (workspace),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
-
   IDE_EXIT;
 }
 
@@ -232,9 +224,6 @@ gbp_find_other_file_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   g_clear_object (&self->browser);
-
-  for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
-    g_action_map_remove_action (G_ACTION_MAP (workspace), actions[i].name);
 
   statusbar = ide_workspace_get_statusbar (workspace);
   panel_statusbar_remove (statusbar, GTK_WIDGET (self->menu_button));
@@ -257,6 +246,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFindOtherFileWorkspaceAddin, gbp_find_other_file_workspace_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_find_other_file_workspace_addin_init_action_group)
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void

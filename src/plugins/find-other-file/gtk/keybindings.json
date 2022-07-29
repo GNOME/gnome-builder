@@ -1,1 +1,1 @@
-{ "trigger" : "<Control><Shift>o", "action" : "win.find-other-file", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>o", "action" : "workspace.find-other-file.focus", "when" : "canEdit()", "phase" : "capture" },
