@@ -24,6 +24,8 @@
 
 #include <glib/gi18n.h>
 
+#include <sysprof-ui.h>
+
 #include <libide-gui.h>
 #include <libide-threading.h>
 
@@ -33,7 +35,12 @@
 struct _GbpSysprofWorkbenchAddin
 {
   GObject       parent_instance;
+
   IdeWorkbench *workbench;
+
+  guint         project_loaded : 1;
+  guint         run_manager_busy : 1;
+  guint         sanity_check : 1;
 };
 
 typedef struct
@@ -41,6 +48,16 @@ typedef struct
   GFile          *file;
   GbpSysprofPage *page;
 } FindPageWithFile;
+
+static void gbp_sysprof_workbench_addin_open_capture (GbpSysprofWorkbenchAddin *self,
+                                                      GVariant                 *param);
+static void gbp_sysprof_workbench_addin_run          (GbpSysprofWorkbenchAddin *self,
+                                                      GVariant                 *param);
+
+IDE_DEFINE_ACTION_GROUP (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, {
+  { "open-capture", gbp_sysprof_workbench_addin_open_capture },
+  { "run", gbp_sysprof_workbench_addin_run },
+})
 
 static void
 find_page_with_file (IdePage *page,
@@ -161,6 +178,88 @@ gbp_sysprof_workbench_addin_load (IdeWorkbenchAddin *addin,
 }
 
 static void
+update_action_enabled (GbpSysprofWorkbenchAddin *self)
+{
+  gboolean enabled;
+
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+
+  enabled = !self->run_manager_busy && self->project_loaded && self->sanity_check;
+  gbp_sysprof_workbench_addin_set_action_enabled (self, "run", enabled);
+}
+
+static void
+gbp_sysprof_workbench_addin_notify_busy_cb (GbpSysprofWorkbenchAddin *self,
+                                            GParamSpec               *pspec,
+                                            IdeRunManager            *run_manager)
+{
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_RUN_MANAGER (run_manager));
+
+  self->run_manager_busy = ide_run_manager_get_busy (run_manager);
+
+  update_action_enabled (self);
+}
+
+static void
+gbp_sysprof_workbench_addin_check_supported_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  g_autoptr(GbpSysprofWorkbenchAddin) self = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+
+  if (!sysprof_check_supported_finish (result, &error))
+    {
+      g_warning ("Sysprof-3 is not supported, will not enable profiler: %s",
+                 error->message);
+      IDE_EXIT;
+    }
+
+  self->sanity_check = TRUE;
+
+  update_action_enabled (self);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_sysprof_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
+                                            IdeProjectInfo    *project_info)
+{
+  GbpSysprofWorkbenchAddin *self = (GbpSysprofWorkbenchAddin *)addin;
+  IdeRunManager *run_manager;
+  IdeContext *context;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKBENCH (self->workbench));
+
+  self->project_loaded = TRUE;
+
+  context = ide_workbench_get_context (self->workbench);
+  run_manager = ide_run_manager_from_context (context);
+
+  g_signal_connect_object (run_manager,
+                           "notify::busy",
+                           G_CALLBACK (gbp_sysprof_workbench_addin_notify_busy_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gbp_sysprof_workbench_addin_notify_busy_cb (self, NULL, run_manager);
+
+  sysprof_check_supported_async (NULL,
+                                 gbp_sysprof_workbench_addin_check_supported_cb,
+                                 g_object_ref (self));
+}
+
+static void
 gbp_sysprof_workbench_addin_unload (IdeWorkbenchAddin *addin,
                                     IdeWorkbench      *workbench)
 {
@@ -178,9 +277,25 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_sysprof_workbench_addin_load;
   iface->unload = gbp_sysprof_workbench_addin_unload;
+  iface->project_loaded = gbp_sysprof_workbench_addin_project_loaded;
   iface->can_open = gbp_sysprof_workbench_addin_can_open;
   iface->open_async = gbp_sysprof_workbench_addin_open_async;
   iface->open_finish = gbp_sysprof_workbench_addin_open_finish;
+}
+
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_sysprof_workbench_addin_init_action_group)
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
+
+static void
+gbp_sysprof_workbench_addin_class_init (GbpSysprofWorkbenchAddinClass *klass)
+{
+}
+
+static void
+gbp_sysprof_workbench_addin_init (GbpSysprofWorkbenchAddin *self)
+{
+  gbp_sysprof_workbench_addin_set_action_enabled (self, "run", FALSE);
 }
 
 static void
@@ -253,20 +368,26 @@ gbp_sysprof_workbench_addin_open_capture (GbpSysprofWorkbenchAddin *self,
   gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
 }
 
-IDE_DEFINE_ACTION_GROUP (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, {
-  { "open-capture", gbp_sysprof_workbench_addin_open_capture },
-})
-
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_sysprof_workbench_addin_init_action_group)
-                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
-
 static void
-gbp_sysprof_workbench_addin_class_init (GbpSysprofWorkbenchAddinClass *klass)
+gbp_sysprof_workbench_addin_run (GbpSysprofWorkbenchAddin *self,
+                                 GVariant                 *param)
 {
-}
+  PeasPluginInfo *plugin_info;
+  IdeRunManager *run_manager;
+  IdeContext *context;
 
-static void
-gbp_sysprof_workbench_addin_init (GbpSysprofWorkbenchAddin *self)
-{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKBENCH (self->workbench));
+
+  plugin_info = peas_engine_get_plugin_info (peas_engine_get_default (), "sysprof");
+  context = ide_workbench_get_context (self->workbench);
+  run_manager = ide_run_manager_from_context (context);
+
+  ide_run_manager_set_run_tool_from_plugin_info (run_manager, plugin_info);
+  ide_run_manager_run_async (run_manager, NULL, NULL, NULL);
+
+  IDE_EXIT;
 }

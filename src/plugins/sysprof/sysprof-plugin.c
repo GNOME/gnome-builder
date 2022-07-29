@@ -29,7 +29,6 @@
 
 #include "gbp-sysprof-tool.h"
 #include "gbp-sysprof-workbench-addin.h"
-#include "gbp-sysprof-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_sysprof_register_types (PeasObjectModule *module)
@@ -42,7 +41,4 @@ _gbp_sysprof_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_SYSPROF_WORKBENCH_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKSPACE_ADDIN,
-                                              GBP_TYPE_SYSPROF_WORKSPACE_ADDIN);
 }
