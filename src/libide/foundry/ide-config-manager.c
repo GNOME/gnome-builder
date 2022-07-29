@@ -374,7 +374,7 @@ config_notify_cb (IdeConfig  *config,
     {
       const char *id = ide_config_get_id (config);
       g_menu_item_set_action_and_target (item,
-                                         "config-manager.current",
+                                         "context.config-manager.current",
                                          "s", id);
     }
 }
