@@ -35,12 +35,19 @@ struct _IdePropertyActionGroup
   GArray       *mappings;
 };
 
+typedef enum
+{
+  FLAG_NONE          = 0,
+  FLAG_NULL_AS_EMPTY = 1 << 0,
+} Flags;
+
 typedef struct
 {
   const char         *action_name;
   const GVariantType *parameter_type;
   const GVariantType *state_type;
   GParamSpec         *pspec;
+  Flags               flags;
 } Mapping;
 
 enum {
@@ -58,7 +65,8 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdePropertyActionGroup, ide_property_action_group
 static GVariant *
 get_property_state (gpointer            instance,
                     GParamSpec         *pspec,
-                    const GVariantType *state_type)
+                    const GVariantType *state_type,
+                    Flags               flags)
 {
   GValue value = G_VALUE_INIT;
   GVariant *ret;
@@ -69,7 +77,14 @@ get_property_state (gpointer            instance,
 
   g_value_init (&value, pspec->value_type);
   g_object_get_property (instance, pspec->name, &value);
+
+  if ((flags & FLAG_NULL_AS_EMPTY) &&
+      G_VALUE_HOLDS_STRING (&value) &&
+      g_value_get_string (&value) == NULL)
+    g_value_set_static_string (&value, "");
+
   ret = g_settings_set_mapping (&value, state_type, NULL);
+
   g_value_unset (&value);
 
   return g_variant_ref_sink (ret);
@@ -108,36 +123,10 @@ static void
 ide_property_action_group_set_item_type (IdePropertyActionGroup *self,
                                          GType                   item_type)
 {
-  g_autofree GParamSpec **pspecs = NULL;
-  guint n_pspecs;
-
   g_assert (IDE_IS_PROPERTY_ACTION_GROUP (self));
   g_assert (g_type_is_a (item_type, G_TYPE_OBJECT));
 
   self->object_class = g_type_class_ref (item_type);
-
-  pspecs = g_object_class_list_properties (self->object_class, &n_pspecs);
-
-  for (guint i = 0; i < n_pspecs; i++)
-    {
-      GParamSpec *pspec = pspecs[i];
-      const GVariantType *state_type;
-      Mapping mapping = {0};
-
-      if (~pspec->flags & G_PARAM_READABLE || ~pspec->flags & G_PARAM_WRITABLE || pspec->flags & G_PARAM_CONSTRUCT_ONLY)
-        continue;
-
-      if (!(state_type = determine_type (pspec)))
-        continue;
-
-      mapping.action_name = g_intern_string (pspec->name);
-      mapping.pspec = pspec;
-      mapping.state_type = state_type;
-      if (pspec->value_type != G_TYPE_BOOLEAN)
-        mapping.parameter_type = state_type;
-
-      g_array_append_val (self->mappings, mapping);
-    }
 }
 
 static void
@@ -272,23 +261,35 @@ ide_property_action_group_set_item (IdePropertyActionGroup *self,
                                     gpointer                item)
 {
   g_autoptr(GObject) old_item = NULL;
+  gboolean enabled;
+  gboolean toggle_enable;
 
   g_return_if_fail (IDE_IS_PROPERTY_ACTION_GROUP (self));
-  g_return_if_fail (!item || G_IS_OBJECT (item));
+  g_return_if_fail (G_IS_OBJECT_CLASS (self->object_class));
+  g_return_if_fail (!item || G_TYPE_CHECK_INSTANCE_TYPE (item, G_OBJECT_CLASS_TYPE (self->object_class)));
 
   old_item = g_weak_ref_get (&self->item_wr);
 
   if (old_item == item)
     return;
 
+  enabled = item != NULL;
+  toggle_enable = !old_item != !item;
+
   g_weak_ref_set (&self->item_wr, item);
 
   for (guint i = 0; i < self->mappings->len; i++)
     {
       const Mapping *mapping = &g_array_index (self->mappings, Mapping, i);
-      g_autoptr(GVariant) value = get_property_state (item, mapping->pspec, mapping->state_type);
 
-      g_action_group_action_state_changed (G_ACTION_GROUP (self), mapping->action_name, value);
+      if (item != NULL)
+        {
+          g_autoptr(GVariant) value = get_property_state (item, mapping->pspec, mapping->state_type, mapping->flags);
+          g_action_group_action_state_changed (G_ACTION_GROUP (self), mapping->action_name, value);
+        }
+
+      if (toggle_enable)
+        g_action_group_action_enabled_changed (G_ACTION_GROUP (self), mapping->action_name, enabled);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
@@ -344,14 +345,15 @@ ide_property_action_group_get_action_state (GActionGroup *group,
   IdePropertyActionGroup *self = IDE_PROPERTY_ACTION_GROUP (group);
   g_autoptr(GObject) item = g_weak_ref_get (&self->item_wr);
 
-  g_return_val_if_fail (item != NULL, NULL);
-
-  for (guint i = 0; i < self->mappings->len; i++)
+  if (item != NULL)
     {
-      const Mapping *mapping = &g_array_index (self->mappings, Mapping, i);
+      for (guint i = 0; i < self->mappings->len; i++)
+        {
+          const Mapping *mapping = &g_array_index (self->mappings, Mapping, i);
 
-      if (g_strcmp0 (mapping->action_name, action_name) == 0)
-        return get_property_state (item, mapping->pspec, mapping->state_type);
+          if (g_strcmp0 (mapping->action_name, action_name) == 0)
+            return get_property_state (item, mapping->pspec, mapping->state_type, mapping->flags);
+        }
     }
 
   return NULL;
@@ -409,15 +411,29 @@ ide_property_action_group_change_action_state (GActionGroup *group,
                                                GVariant     *value)
 {
   IdePropertyActionGroup *self = IDE_PROPERTY_ACTION_GROUP (group);
-  g_autoptr(GObject) item = g_weak_ref_get (&self->item_wr);
+  g_autoptr(GObject) item = NULL;
+  g_autoptr(GVariant) hold = NULL;
 
-  g_return_if_fail (item != NULL);
+  g_assert (IDE_IS_PROPERTY_ACTION_GROUP (self));
+  g_assert (action_name != NULL);
+
+  if (!(item = g_weak_ref_get (&self->item_wr)))
+    {
+      g_warning ("Attempt to change state of action %s but it is disabled",
+                 action_name);
+      return;
+    }
+
+  if (value != NULL)
+    hold = g_variant_ref_sink (value);
 
   for (guint i = 0; i < self->mappings->len; i++)
     {
       const Mapping *mapping = &g_array_index (self->mappings, Mapping, i);
 
-      if (mapping->pspec != NULL)
+      g_assert (mapping->pspec != NULL);
+
+      if (g_strcmp0 (action_name, mapping->action_name) == 0)
         {
           GValue gvalue = G_VALUE_INIT;
 
@@ -425,10 +441,16 @@ ide_property_action_group_change_action_state (GActionGroup *group,
           g_settings_get_mapping (&gvalue, value, NULL);
           g_object_set_property (item, mapping->pspec->name, &gvalue);
           g_value_unset (&gvalue);
+
+          g_action_group_action_state_changed (G_ACTION_GROUP (self),
+                                               mapping->action_name,
+                                               value);
+
+          return;
         }
     }
 
-  g_return_if_reached ();
+  g_warning ("Failed to locate action %s", action_name);
 }
 
 static const GVariantType *
@@ -512,4 +534,110 @@ action_group_iface_init (GActionGroupInterface *iface)
   iface->get_action_state_hint = ide_property_action_group_get_action_state_hint;
   iface->change_action_state = ide_property_action_group_change_action_state;
   iface->activate_action = ide_property_action_group_activate_action;
+}
+
+void
+ide_property_action_group_add_all (IdePropertyActionGroup *self)
+{
+  g_autofree GParamSpec **pspecs = NULL;
+  guint n_pspecs;
+
+  g_return_if_fail (IDE_IS_PROPERTY_ACTION_GROUP (self));
+  g_return_if_fail (G_IS_OBJECT_CLASS (self->object_class));
+
+  pspecs = g_object_class_list_properties (self->object_class, &n_pspecs);
+
+  for (guint i = 0; i < n_pspecs; i++)
+    {
+      GParamSpec *pspec = pspecs[i];
+      const GVariantType *state_type;
+      Mapping mapping = {0};
+
+      if (~pspec->flags & G_PARAM_READABLE || ~pspec->flags & G_PARAM_WRITABLE || pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+        continue;
+
+      if (!(state_type = determine_type (pspec)))
+        continue;
+
+      mapping.action_name = g_intern_string (pspec->name);
+      mapping.pspec = pspec;
+      mapping.state_type = state_type;
+      if (pspec->value_type != G_TYPE_BOOLEAN)
+        mapping.parameter_type = state_type;
+
+      g_array_append_val (self->mappings, mapping);
+    }
+}
+
+static void
+ide_property_action_group_add_internal (IdePropertyActionGroup *self,
+                                        const char             *action_name,
+                                        const char             *property_name,
+                                        Flags                   flags)
+{
+  const GVariantType *state_type;
+  GParamSpec *pspec;
+  Mapping mapping = {0};
+
+  g_return_if_fail (IDE_IS_PROPERTY_ACTION_GROUP (self));
+  g_return_if_fail (G_IS_OBJECT_CLASS (self->object_class));
+  g_return_if_fail (action_name != NULL);
+  g_return_if_fail (property_name != NULL);
+
+  action_name = g_intern_string (action_name);
+  property_name = g_intern_string (property_name);
+
+  if (!(pspec = g_object_class_find_property (self->object_class, property_name)))
+    {
+      g_warning ("Failed to locate property %s on type %s",
+                 property_name,
+                 G_OBJECT_CLASS_NAME (self->object_class));
+      return;
+    }
+
+  if (~pspec->flags & G_PARAM_READABLE || ~pspec->flags & G_PARAM_WRITABLE || pspec->flags & G_PARAM_CONSTRUCT_ONLY)
+    {
+      g_warning ("Property must be read/write and not construct-only: %s:%s",
+                 G_OBJECT_CLASS_NAME (self->object_class),
+                 property_name);
+      return;
+    }
+
+  if (!(state_type = determine_type (pspec)))
+    {
+      g_warning ("Cannot determine type for %s:%s",
+                 G_OBJECT_CLASS_NAME (self->object_class),
+                 property_name);
+      return;
+    }
+
+  mapping.action_name = action_name;
+  mapping.pspec = pspec;
+  mapping.state_type = state_type;
+  mapping.flags = flags;
+
+  if (pspec->value_type != G_TYPE_BOOLEAN)
+    mapping.parameter_type = state_type;
+
+  g_array_append_val (self->mappings, mapping);
+}
+
+void
+ide_property_action_group_add (IdePropertyActionGroup *self,
+                               const char             *action_name,
+                               const char             *property_name)
+{
+  ide_property_action_group_add_internal (self, action_name, property_name, FLAG_NONE);
+}
+
+void
+ide_property_action_group_add_string (IdePropertyActionGroup *self,
+                                      const char             *action_name,
+                                      const char             *property_name,
+                                      gboolean                treat_null_as_empty)
+{
+  ide_property_action_group_add_internal (self,
+                                          action_name,
+                                          property_name,
+                                          treat_null_as_empty ? FLAG_NULL_AS_EMPTY : 0);
 }

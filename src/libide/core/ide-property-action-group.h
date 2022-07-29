@@ -42,5 +42,15 @@ gpointer                ide_property_action_group_dup_item      (IdePropertyActi
 IDE_AVAILABLE_IN_ALL
 void                    ide_property_action_group_set_item      (IdePropertyActionGroup *self,
                                                                  gpointer                item);
+IDE_AVAILABLE_IN_ALL
+void                    ide_property_action_group_add_all       (IdePropertyActionGroup *self);
+IDE_AVAILABLE_IN_ALL
+void                    ide_property_action_group_add           (IdePropertyActionGroup *self,
+                                                                 const char             *action_name,
+                                                                 const char             *property_name);
+void                    ide_property_action_group_add_string    (IdePropertyActionGroup *self,
+                                                                 const char             *action_name,
+                                                                 const char             *property_name,
+                                                                 gboolean                treat_null_as_empty);
 
 G_END_DECLS
