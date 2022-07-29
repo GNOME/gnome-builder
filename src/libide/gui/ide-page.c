@@ -485,6 +485,7 @@ ide_page_report_error (IdePage    *self,
                        const char *format,
                        ...)
 {
+  IdePagePrivate *priv = ide_page_get_instance_private (self);
   g_autofree char *message = NULL;
   GtkInfoBar *infobar;
   GtkLabel *label;
@@ -518,7 +519,8 @@ ide_page_report_error (IdePage    *self,
                         NULL);
 
   gtk_info_bar_add_child (infobar, GTK_WIDGET (label));
-  gtk_widget_insert_after (GTK_WIDGET (infobar), GTK_WIDGET (self), NULL);
+
+  gtk_box_prepend (priv->content_box, GTK_WIDGET (infobar));
 }
 
 /**
