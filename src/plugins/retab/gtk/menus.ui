@@ -1,12 +1,9 @@
 <?xml version="1.0"?>
 <interface>
-  <menu id="ide-source-view-popup-menu-selection-submenu">
-    <section id="ide-source-view-popup-menu-selection-retab-section">
-      <attribute name="after">ide-source-view-popup-menu-line-section</attribute>
-      <item>
-        <attribute name="label" translatable="yes">_Reformat tabs</attribute>
-        <attribute name="action">retab.retab</attribute>
-      </item>
-    </section>
+  <menu id="ide-source-view-popup-menu-format-section">
+    <item>
+      <attribute name="label" translatable="yes">_Reformat tabs</attribute>
+      <attribute name="action">retab.retab</attribute>
+    </item>
   </menu>
 </interface>
