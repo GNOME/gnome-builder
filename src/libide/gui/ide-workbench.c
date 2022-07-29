@@ -267,7 +267,11 @@ ide_workbench_addin_added_cb (PeasExtensionSet *set,
 
   ide_workbench_addin_load (addin, self);
 
-  if ((action_group = ide_workbench_addin_ref_action_group (addin)))
+  if (!(action_group = ide_workbench_addin_ref_action_group (addin)) &&
+      G_IS_ACTION_GROUP (addin))
+    action_group = g_object_ref (G_ACTION_GROUP (addin));
+
+  if (action_group != NULL)
     {
       IdeActionMuxer *muxer = ide_action_mixin_get_action_muxer (self);
       ide_action_muxer_insert_action_group (muxer,
