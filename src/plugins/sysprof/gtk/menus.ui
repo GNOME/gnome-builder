@@ -6,7 +6,7 @@
         <attribute name="id">open-sysprof-capture</attribute>
         <attribute name="after">open-file</attribute>
         <attribute name="label" translatable="yes" context="menu label">Open _Sysprof Capture…</attribute>
-        <attribute name="action">sysprof.open-capture</attribute>
+        <attribute name="action">context.workbench.sysprof.open-capture</attribute>
       </item>
     </section>
   </menu>

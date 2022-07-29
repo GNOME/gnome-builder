@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-gui.h>
 #include <libide-threading.h>
 
@@ -181,7 +183,82 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
   iface->open_finish = gbp_sysprof_workbench_addin_open_finish;
 }
 
+static void
+on_native_dialog_response_cb (GbpSysprofWorkbenchAddin *self,
+                              int                       response_id,
+                              GtkFileChooserNative     *native)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (GTK_IS_FILE_CHOOSER_NATIVE (native));
+
+  if (response_id == GTK_RESPONSE_ACCEPT)
+    {
+      g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
+      g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
+
+      if (G_IS_FILE (file))
+        gbp_sysprof_workbench_addin_open_async (IDE_WORKBENCH_ADDIN (self),
+                                                file, NULL, 0, 0, 0,
+                                                position, NULL, NULL, NULL);
+    }
+
+  gtk_native_dialog_hide (GTK_NATIVE_DIALOG (native));
+  gtk_native_dialog_destroy (GTK_NATIVE_DIALOG (native));
+}
+
+static void
+gbp_sysprof_workbench_addin_open_capture (GbpSysprofWorkbenchAddin *self,
+                                          GVariant                 *param)
+{
+  g_autoptr(GFile) workdir = NULL;
+  GtkFileChooserNative *native;
+  GtkFileFilter *filter;
+  IdeWorkspace *workspace;
+  IdeContext *context;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SYSPROF_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_WORKBENCH (self->workbench));
+
+  context = ide_workbench_get_context (self->workbench);
+  workdir = ide_context_ref_workdir (context);
+  workspace = ide_workbench_get_current_workspace (self->workbench);
+
+  native = gtk_file_chooser_native_new (_("Open Sysprof Capture…"),
+                                        GTK_WINDOW (workspace),
+                                        GTK_FILE_CHOOSER_ACTION_OPEN,
+                                        _("Open"),
+                                        _("Cancel"));
+  gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (native), workdir, NULL);
+
+  /* Add our filter for sysprof capture files.  */
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, _("Sysprof Capture (*.syscap)"));
+  gtk_file_filter_add_pattern (filter, "*.syscap");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
+
+  /* And all files now */
+  filter = gtk_file_filter_new ();
+  gtk_file_filter_set_name (filter, _("All Files"));
+  gtk_file_filter_add_pattern (filter, "*");
+  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
+
+  g_signal_connect_object (native,
+                           "response",
+                           G_CALLBACK (on_native_dialog_response_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (native));
+}
+
+IDE_DEFINE_ACTION_GROUP (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, {
+  { "open-capture", gbp_sysprof_workbench_addin_open_capture },
+})
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSysprofWorkbenchAddin, gbp_sysprof_workbench_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_sysprof_workbench_addin_init_action_group)
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
