@@ -45,7 +45,7 @@ static void live_preview_action (GbpSphinxPreviewWorkspaceAddin *self,
                                  GVariant                       *params);
 
 IDE_DEFINE_ACTION_GROUP (GbpSphinxPreviewWorkspaceAddin, gbp_sphinx_preview_workspace_addin, {
-  { "sphinx-preview", live_preview_action },
+  { "preview", live_preview_action },
 })
 
 static void
@@ -59,7 +59,7 @@ gbp_sphinx_preview_workspace_addin_set_language (GbpSphinxPreviewWorkspaceAddin 
   IDE_TRACE_MSG ("Switching language-id to %s", language_id ? language_id : "NULL");
 
   enabled = ide_str_equal0 (language_id, "rst");
-  gbp_sphinx_preview_workspace_addin_set_action_enabled (self, "sphinx-preview", enabled);
+  gbp_sphinx_preview_workspace_addin_set_action_enabled (self, "preview", enabled);
 }
 
 static void
@@ -163,10 +163,6 @@ gbp_sphinx_preview_workspace_addin_load (IdeWorkspaceAddin *addin,
                                  self,
                                  G_CONNECT_SWAPPED);
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "sphinx-preview",
-                                  G_ACTION_GROUP (self));
-
   IDE_EXIT;
 }
 
@@ -181,8 +177,6 @@ gbp_sphinx_preview_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SPHINX_PREVIEW_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
-
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "sphinx-preview", NULL);
 
   g_clear_pointer (&self->compilers, g_hash_table_unref);
   g_clear_object (&self->buffer_signals);
@@ -213,7 +207,7 @@ gbp_sphinx_preview_workspace_addin_class_init (GbpSphinxPreviewWorkspaceAddinCla
 static void
 gbp_sphinx_preview_workspace_addin_init (GbpSphinxPreviewWorkspaceAddin *self)
 {
-  gbp_sphinx_preview_workspace_addin_set_action_enabled (self, "sphinx-preview", FALSE);
+  gbp_sphinx_preview_workspace_addin_set_action_enabled (self, "preview", FALSE);
 }
 
 static IdePage *

@@ -5,7 +5,7 @@
       <item>
         <attribute name="id">sphinx-preview-item</attribute>
         <attribute name="label" translatable="yes">Open Preview…</attribute>
-        <attribute name="action">sphinx-preview.sphinx-preview</attribute>
+        <attribute name="action">workspace.sphinx-preview.preview</attribute>
         <attribute name="hidden-when">action-disabled</attribute>
       </item>
     </section>
