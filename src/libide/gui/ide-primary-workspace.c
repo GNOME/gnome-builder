@@ -28,7 +28,7 @@
 #include "ide-header-bar.h"
 #include "ide-notifications-button.h"
 #include "ide-omni-bar.h"
-#include "ide-primary-workspace-private.h"
+#include "ide-primary-workspace.h"
 #include "ide-run-button.h"
 #include "ide-workspace-private.h"
 
@@ -319,8 +319,6 @@ ide_primary_workspace_init (IdePrimaryWorkspace *self)
 
   build_menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "build-menu");
   ide_joined_menu_append_menu (self->build_menu, G_MENU_MODEL (build_menu));
-
-  _ide_primary_workspace_init_actions (self);
 }
 
 /**

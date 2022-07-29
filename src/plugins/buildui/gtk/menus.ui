@@ -108,12 +108,7 @@
     </section>
     <section id="build-deps">
       <item>
-        <attribute name="label" translatable="yes">Update Dependencies…</attribute>
-        <attribute name="action">win.update-dependencies</attribute>
-        <attribute name="description" translatable="yes">Download updates to project dependencies</attribute>
-        <attribute name="verb-icon">software-update-available-symbolic</attribute>
-      </item>
-      <item>
+        <attribute name="id" translatable="yes">manage-sdks</attribute>
         <attribute name="label" translatable="yes">Manage SDKs…</attribute>
         <attribute name="action">app.preferences-page</attribute>
         <attribute name="target" type="s">'sdks'</attribute>
