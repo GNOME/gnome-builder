@@ -709,8 +709,16 @@ gbp_editorui_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "encoding");
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "newline-type");
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "indent-width");
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "tab-width");
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "use-spaces");
+  g_action_map_remove_action (G_ACTION_MAP (self->actions), "language");
+
   gtk_widget_insert_action_group (GTK_WIDGET (workspace), "editorui", NULL);
 
+  g_clear_object (&self->actions);
   g_clear_object (&self->buffer_bindings);
   g_clear_object (&self->buffer_signals);
   g_clear_object (&self->view_signals);
