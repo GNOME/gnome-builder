@@ -55,7 +55,6 @@ src/libide/gtk/ide-search-entry.c
 src/libide/gtk/ide-search-entry.ui
 src/libide/gtk/ide-shortcut-accel-dialog.c
 src/libide/gtk/ide-shortcut-accel-dialog.ui
-src/libide/gui/gtk/help-overlay.ui
 src/libide/gui/gtk/menus.ui
 src/libide/gui/ide-application-actions.c
 src/libide/gui/ide-application-command-line.c
