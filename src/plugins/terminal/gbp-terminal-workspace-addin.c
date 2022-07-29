@@ -52,10 +52,10 @@ static void terminal_in_runtime_action    (GbpTerminalWorkspaceAddin *self,
                                            GVariant                  *param);
 
 IDE_DEFINE_ACTION_GROUP (GbpTerminalWorkspaceAddin, gbp_terminal_workspace_addin, {
-  { "terminal-on-host", terminal_on_host_action, "s" },
-  { "terminal-as-subprocess", terminal_as_subprocess_action, "s" },
-  { "terminal-in-pipeline", terminal_in_pipeline_action, "s" },
-  { "terminal-in-runtime", terminal_in_runtime_action, "s" },
+  { "new-in-host", terminal_on_host_action, "s" },
+  { "new-in-subprocess", terminal_as_subprocess_action, "s" },
+  { "new-in-pipeline", terminal_in_pipeline_action, "s" },
+  { "new-in-runtime", terminal_in_runtime_action, "s" },
 })
 
 static void
@@ -238,6 +238,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpTerminalWorkspaceAddin *self = (GbpTerminalWorkspaceAddin *)addin;
   g_autoptr(IdePanelPosition) position = NULL;
+  IdeContext *context;
   IdePage *page;
   IdePane *pane;
 
@@ -247,9 +248,16 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "terminal",
-                                  G_ACTION_GROUP (self));
+  context = ide_workspace_get_context (workspace);
+
+  /* Only allow activating runtime/pipeline terminals if we have a project
+   * (and therefore a build pipeline we can use).
+   */
+  if (ide_context_has_project (context))
+    {
+      gbp_terminal_workspace_addin_set_action_enabled (self, "terminal-in-pipeline", TRUE);
+      gbp_terminal_workspace_addin_set_action_enabled (self, "terminal-in-runtime", TRUE);
+    }
 
   /* Always add the terminal panel to primary/editor workspaces */
   position = ide_panel_position_new ();
@@ -268,8 +276,6 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
   /* Setup panel for application output */
   if (IDE_IS_PRIMARY_WORKSPACE (workspace))
     {
-      IdeWorkbench *workbench = ide_workspace_get_workbench (workspace);
-      IdeContext *context = ide_workbench_get_context (workbench);
       IdeRunManager *run_manager = ide_run_manager_from_context (context);
       VtePty *pty = ide_pty_new_sync (NULL);
 
@@ -328,8 +334,6 @@ gbp_terminal_workspace_addin_unload (IdeWorkspaceAddin *addin,
   self->app_page = NULL;
   g_clear_pointer ((PanelWidget **)&self->app_pane, panel_widget_close);
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "terminal", NULL);
-
   self->workspace = NULL;
 }
 
@@ -352,4 +356,6 @@ gbp_terminal_workspace_addin_class_init (GbpTerminalWorkspaceAddinClass *klass)
 static void
 gbp_terminal_workspace_addin_init (GbpTerminalWorkspaceAddin *self)
 {
+  gbp_terminal_workspace_addin_set_action_enabled (self, "terminal-in-pipeline", FALSE);
+  gbp_terminal_workspace_addin_set_action_enabled (self, "terminal-in-runtime", FALSE);
 }

@@ -4,7 +4,7 @@
     <section id="new-terminal-section">
       <item>
         <attribute name="label" translatable="yes">New _Terminal</attribute>
-        <attribute name="action">terminal.terminal-on-host</attribute>
+        <attribute name="action">workspace.terminal.new-in-host</attribute>
         <attribute name="target" type="s">''</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;t</attribute>
         <attribute name="verb-icon">builder-terminal-symbolic</attribute>
@@ -12,7 +12,7 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">New _Build Terminal</attribute>
-        <attribute name="action">terminal.terminal-in-pipeline</attribute>
+        <attribute name="action">workspace.terminal.new-in-pipeline</attribute>
         <attribute name="target" type="s">''</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;&lt;alt&gt;t</attribute>
         <attribute name="verb-icon">builder-terminal-symbolic</attribute>
@@ -20,7 +20,7 @@
       </item>
       <item>
         <attribute name="label" translatable="yes">New _Runtime Terminal</attribute>
-        <attribute name="action">terminal.terminal-in-runtime</attribute>
+        <attribute name="action">workspace.terminal.new-in-runtime</attribute>
         <attribute name="target" type="s">''</attribute>
         <attribute name="accel">&lt;ctrl&gt;&lt;alt&gt;t</attribute>
         <attribute name="verb-icon">builder-terminal-symbolic</attribute>

@@ -1,7 +1,8 @@
 /* New Terminal Actions */
-{ "trigger" : "<Control><Shift>t", "action" : "terminal.terminal-on-host", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt><Shift>t", "action" : "terminal.terminal-in-pipeline", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
-{ "trigger" : "<Control><Alt>t", "action" : "terminal.terminal-in-runtime", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>t", "action" : "workspace.terminal.new-in-host", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Alt><Shift>t", "action" : "workspace.terminal.new-in-pipeline", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Alt>t", "action" : "workspace.terminal.new-in-runtime", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control>Scroll_Lock", "action" : "workspace.terminal.new-in-subprocess", "args" : "''", "when" : "canEdit()", "phase" : "capture" },
 
 /* IdeTerminal */
 { "trigger" : "<Control><Shift>c", "action" : "clipboard.copy", "when" : "inTerminal()", "phase" : "capture" },
