@@ -98,37 +98,11 @@ gbp_code_index_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
 }
 
 static void
-gbp_code_index_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
-                                                IdeWorkspace      *workspace)
-{
-  GbpCodeIndexWorkbenchAddin *self = (GbpCodeIndexWorkbenchAddin *)addin;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKSPACE (workspace));
-
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "code-index", G_ACTION_GROUP (self));
-}
-
-static void
-gbp_code_index_workbench_addin_workspace_removed (IdeWorkbenchAddin *addin,
-                                                  IdeWorkspace      *workspace)
-{
-  g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_CODE_INDEX_WORKBENCH_ADDIN (addin));
-  g_assert (IDE_IS_WORKSPACE (workspace));
-
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "code-index", NULL);
-}
-
-static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_code_index_workbench_addin_load;
   iface->unload = gbp_code_index_workbench_addin_unload;
   iface->project_loaded = gbp_code_index_workbench_addin_project_loaded;
-  iface->workspace_added = gbp_code_index_workbench_addin_workspace_added;
-  iface->workspace_removed = gbp_code_index_workbench_addin_workspace_removed;
 }
 
 static void

@@ -210,7 +210,7 @@ gbp_code_index_service_init (GbpCodeIndexService *self)
   ide_notification_set_body (self->notif, _("Search, diagnostics, and autocompletion may be limited until complete."));
   ide_notification_set_has_progress (self->notif, TRUE);
   ide_notification_set_progress (self->notif, 0);
-  ide_notification_add_button (self->notif, NULL, icon, "code-index.paused");
+  ide_notification_add_button (self->notif, NULL, icon, "context.workbench.code-index.paused");
 
   self->index = ide_code_index_index_new (IDE_OBJECT (self));
 }
