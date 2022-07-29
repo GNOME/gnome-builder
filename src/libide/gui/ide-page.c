@@ -30,6 +30,7 @@
 #include "ide-application.h"
 #include "ide-gui-global.h"
 #include "ide-page-private.h"
+#include "ide-workbench-private.h"
 #include "ide-workspace-private.h"
 
 typedef struct
@@ -162,6 +163,33 @@ ide_page_mark_used (IdePage *self)
 }
 
 static void
+open_in_new_workspace_action (GtkWidget  *widget,
+                              const char *action_name,
+                              GVariant   *param)
+{
+  IdePage *self = (IdePage *)widget;
+  g_autoptr(IdePanelPosition) position = NULL;
+  IdeWorkspace *workspace;
+  IdeWorkbench *workbench;
+  IdePage *split;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_PAGE (self));
+
+  if (!(split = ide_page_create_split (self)))
+    IDE_EXIT;
+
+  workbench = ide_widget_get_workbench (GTK_WIDGET (self));
+  workspace = _ide_workbench_create_secondary (workbench);
+  ide_workspace_add_page (IDE_WORKSPACE (workspace), IDE_PAGE (split), position);
+
+  gtk_window_present (GTK_WINDOW (workspace));
+
+  IDE_EXIT;
+}
+
+static void
 ide_page_finalize (GObject *object)
 {
   G_OBJECT_CLASS (ide_page_parent_class)->finalize (object);
@@ -226,6 +254,7 @@ ide_page_class_init (IdePageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  PanelWidgetClass *panel_widget_class = PANEL_WIDGET_CLASS (klass);
 
   object_class->finalize = ide_page_finalize;
   object_class->get_property = ide_page_get_property;
@@ -287,6 +316,8 @@ ide_page_class_init (IdePageClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdePage, content_box);
   gtk_widget_class_bind_template_child_private (widget_class, IdePage, overlay);
   gtk_widget_class_bind_template_child_private (widget_class, IdePage, progress_bar);
+
+  panel_widget_class_install_action (panel_widget_class, "open-in-new-workspace", NULL, open_in_new_workspace_action);
 }
 
 static void
