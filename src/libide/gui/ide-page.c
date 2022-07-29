@@ -117,7 +117,7 @@ ide_page_root (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (ide_page_parent_class)->root (widget);
 
-  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (IDE_IS_WORKSPACE (toplevel))
     _ide_workspace_add_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
@@ -132,7 +132,7 @@ ide_page_unroot (GtkWidget *widget)
 
   g_assert (IDE_IS_PAGE (self));
 
-  toplevel = GTK_WIDGET (gtk_widget_get_native (widget));
+  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
 
   if (IDE_IS_WORKSPACE (toplevel))
     _ide_workspace_remove_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
@@ -294,11 +294,11 @@ ide_page_init (IdePage *self)
 {
   IdePagePrivate *priv = ide_page_get_instance_private (self);
 
+  priv->mru_link.data = self;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   panel_widget_set_kind (PANEL_WIDGET (self), PANEL_WIDGET_KIND_DOCUMENT);
-
-  priv->mru_link.data = self;
 }
 
 const char *
