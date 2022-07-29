@@ -61,11 +61,19 @@ gbp_snippet_completion_provider_populate (GtkSourceCompletionProvider  *provider
   return parent_iface->populate (provider, context, error);
 }
 
+static int
+gbp_snippet_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
+                                              GtkSourceCompletionContext  *context)
+{
+  return 4000;
+}
+
 static void
 competion_provider_iface_init (GtkSourceCompletionProviderInterface *iface)
 {
   parent_iface = g_type_interface_peek_parent (iface);
   iface->populate = gbp_snippet_completion_provider_populate;
+  iface->get_priority = gbp_snippet_completion_provider_get_priority;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSnippetCompletionProvider, gbp_snippet_completion_provider, GTK_SOURCE_TYPE_COMPLETION_SNIPPETS,
