@@ -39,7 +39,8 @@ struct _GbpEditoruiWorkspaceAddin
   IdeWorkspace             *workspace;
   PanelStatusbar           *statusbar;
 
-  GSimpleActionGroup       *actions;
+  IdePropertyActionGroup   *buffer_actions;
+  IdePropertyActionGroup   *view_actions;
 
   IdeBindingGroup          *buffer_bindings;
   IdeSignalGroup           *buffer_signals;
@@ -68,6 +69,8 @@ struct _GbpEditoruiWorkspaceAddin
 
   IdeEditorPage            *page;
 };
+
+static IdeActionMixin action_mixin;
 
 #define clear_from_statusbar(s,w) clear_from_statusbar(s, (GtkWidget **)w)
 
@@ -218,80 +221,6 @@ cursor_moved_cb (GbpEditoruiWorkspaceAddin *self)
 }
 
 static void
-open_in_new_frame (GSimpleAction *action,
-                   GVariant      *param,
-                   gpointer       user_data)
-{
-  GbpEditoruiWorkspaceAddin *self = user_data;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
-
-  IDE_EXIT;
-}
-
-static void
-open_in_new_workspace (GSimpleAction *action,
-                       GVariant      *param,
-                       gpointer       user_data)
-{
-  GbpEditoruiWorkspaceAddin *self = user_data;
-  g_autoptr(IdePanelPosition) position = NULL;
-  IdeEditorWorkspace *workspace;
-  IdeWorkbench *workbench;
-  IdePage *page;
-  IdePage *split;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
-
-  if (!(page = ide_workspace_get_most_recent_page (self->workspace)))
-    IDE_EXIT;
-
-  if (!(split = ide_page_create_split (page)))
-    IDE_EXIT;
-
-  workbench = ide_workspace_get_workbench (self->workspace);
-
-  workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
-  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
-
-  position = ide_panel_position_new ();
-  ide_workspace_add_page (IDE_WORKSPACE (workspace), IDE_PAGE (split), position);
-
-  gtk_window_present (GTK_WINDOW (workspace));
-
-  IDE_EXIT;
-}
-
-static void
-new_workspace (GSimpleAction *action,
-               GVariant      *param,
-               gpointer       user_data)
-{
-  GbpEditoruiWorkspaceAddin *self = user_data;
-  IdeEditorWorkspace *workspace;
-  IdeWorkbench *workbench;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
-
-  workbench = ide_workspace_get_workbench (self->workspace);
-  workspace = ide_editor_workspace_new (IDE_APPLICATION_DEFAULT);
-  ide_workbench_add_workspace (workbench, IDE_WORKSPACE (workspace));
-
-  gtk_window_present (GTK_WINDOW (workspace));
-
-  IDE_EXIT;
-}
-
-static void
 new_file_cb (GObject      *object,
              GAsyncResult *result,
              gpointer      user_data)
@@ -325,17 +254,16 @@ new_file_cb (GObject      *object,
 }
 
 static void
-new_file (GSimpleAction *action,
-          GVariant      *param,
-          gpointer       user_data)
+new_file (gpointer    instance,
+          const char *action_name,
+          GVariant   *param)
 {
-  GbpEditoruiWorkspaceAddin *self = user_data;
+  GbpEditoruiWorkspaceAddin *self = instance;
   IdeBufferManager *bufmgr;
   IdeContext *context;
 
   IDE_ENTRY;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (self->workspace));
 
@@ -446,95 +374,17 @@ show_go_to_line_cb (GbpEditoruiWorkspaceAddin *self,
 }
 
 static void
-show_go_to_line (GSimpleAction *action,
-                 GVariant      *param,
-                 gpointer       user_data)
+show_go_to_line (gpointer    instance,
+                 const char *action_name,
+                 GVariant   *param)
 {
-  GbpEditoruiWorkspaceAddin *self = user_data;
+  GbpEditoruiWorkspaceAddin *self = instance;
 
-  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
 
-  if (self->page == NULL)
-    return;
-
-  gtk_menu_button_popup (self->position);
+  if (self->page != NULL)
+    gtk_menu_button_popup (self->position);
 }
-
-static void
-format_selection_cb (GObject      *object,
-                     GAsyncResult *result,
-                     gpointer      user_data)
-{
-  IdeBuffer *buffer = (IdeBuffer *)object;
-  g_autoptr(IdeSourceView) view = user_data;
-  g_autoptr(GError) error = NULL;
-
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_SOURCE_VIEW (view));
-
-  if (!ide_buffer_format_selection_finish (buffer, result, &error))
-    {
-      IdeObjectBox *box = ide_object_box_from_object (G_OBJECT (buffer));
-
-      if (!ide_error_ignore (error))
-        /* translators: %s is replaced with the error message */
-        ide_object_warning (box, _("Format Selection Failed: %s"), error->message);
-    }
-
-  gtk_text_view_set_editable (GTK_TEXT_VIEW (view), TRUE);
-
-  IDE_EXIT;
-}
-
-static void
-format_action (GSimpleAction *action,
-               GVariant      *param,
-               gpointer       user_data)
-{
-  IdeSourceView *view = NULL;
-  GbpEditoruiWorkspaceAddin *self = user_data;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-
-  if ((view = ide_signal_group_get_target (self->view_signals)))
-    {
-      g_autoptr(IdeFormatterOptions) options = NULL;
-      IdeBuffer *buffer;
-      gboolean insert_spaces_instead_of_tabs;
-      guint tab_width;
-
-      g_object_get (view,
-                    "tab-width", &tab_width,
-                    "insert-spaces-instead-of-tabs", &insert_spaces_instead_of_tabs,
-                    NULL);
-
-      options = ide_formatter_options_new ();
-      ide_formatter_options_set_tab_width (options, tab_width);
-      ide_formatter_options_set_insert_spaces (options, insert_spaces_instead_of_tabs);
-
-      /* Disable editing while we format */
-      gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
-
-      buffer = ide_signal_group_get_target (self->buffer_signals);
-      ide_buffer_format_selection_async (buffer,
-                                         options,
-                                         NULL,
-                                         format_selection_cb,
-                                         g_object_ref (view));
-    }
-}
-
-static const GActionEntry actions[] = {
-  { "open-in-new-frame", open_in_new_frame },
-  { "open-in-new-workspace", open_in_new_workspace },
-  { "new-file", new_file },
-  { "new-workspace", new_workspace },
-  { "show-go-to-line", show_go_to_line },
-  { "format", format_action },
-};
 
 static void
 gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
@@ -543,6 +393,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
   g_autoptr(GMenuModel) encoding_menu = NULL;
   g_autoptr(GMenuModel) syntax_menu = NULL;
+  IdeActionMuxer *muxer;
   GtkPopover *popover;
   GMenu *menu;
 
@@ -554,18 +405,26 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->workspace = workspace;
   self->statusbar = ide_workspace_get_statusbar (workspace);
 
+  self->buffer_actions = ide_property_action_group_new (IDE_TYPE_BUFFER);
+  ide_property_action_group_add_string (self->buffer_actions, "encoding", "charset", TRUE);
+  ide_property_action_group_add (self->buffer_actions, "newline-type", "newline-type");
+
+  self->view_actions = ide_property_action_group_new (IDE_TYPE_SOURCE_VIEW);
+  ide_property_action_group_add (self->view_actions, "indent-width", "indent-width");
+  ide_property_action_group_add (self->view_actions, "tab-width", "tab-width");
+  ide_property_action_group_add (self->view_actions, "use-spaces", "insert-spaces-instead-of-tabs");
+
+  muxer = ide_action_mixin_get_action_muxer (self);
+  ide_action_muxer_insert_action_group (muxer,
+                                        "buffer",
+                                        G_ACTION_GROUP (self->buffer_actions));
+  ide_action_muxer_insert_action_group (muxer,
+                                        "view",
+                                        G_ACTION_GROUP (self->view_actions));
+
   self->encoding_label = g_object_new (GTK_TYPE_LABEL, NULL);
   self->line_ends_label = g_object_new (GTK_TYPE_LABEL, NULL);
   self->syntax_label = g_object_new (GTK_TYPE_LABEL, NULL);
-
-  self->actions = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (self->actions),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "editorui",
-                                  G_ACTION_GROUP (self->actions));
 
   self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
   ide_signal_group_connect_object (self->buffer_signals,
@@ -703,22 +562,22 @@ gbp_editorui_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                      IdeWorkspace      *workspace)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
+  IdeActionMuxer *muxer;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "encoding");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "newline-type");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "indent-width");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "tab-width");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "use-spaces");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "language");
+  muxer = ide_action_mixin_get_action_muxer (addin);
+  ide_action_muxer_remove_all (muxer);
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "editorui", NULL);
+  ide_property_action_group_set_item (self->buffer_actions, NULL);
+  ide_property_action_group_set_item (self->view_actions, NULL);
 
-  g_clear_object (&self->actions);
+  g_clear_object (&self->buffer_actions);
+  g_clear_object (&self->view_actions);
+
   g_clear_object (&self->buffer_bindings);
   g_clear_object (&self->buffer_signals);
   g_clear_object (&self->view_signals);
@@ -752,47 +611,19 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
 
   g_clear_handle_id (&self->queued_cursor_moved, g_source_remove);
 
-  /* Remove now invalid actions */
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "encoding");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "newline-type");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "indent-width");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "tab-width");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "use-spaces");
-  g_action_map_remove_action (G_ACTION_MAP (self->actions), "language");
-
   if (!IDE_IS_EDITOR_PAGE (page))
     page = NULL;
 
   self->page = IDE_EDITOR_PAGE (page);
 
-  if (page != NULL)
+  if (self->page != NULL)
     {
-      g_autoptr(GPropertyAction) encoding_action = NULL;
-      g_autoptr(GPropertyAction) newline_action = NULL;
-      g_autoptr(GPropertyAction) indent_width = NULL;
-      g_autoptr(GPropertyAction) tab_width = NULL;
-      g_autoptr(GPropertyAction) tabs_v_spaces = NULL;
-      g_autoptr(GPropertyAction) language = NULL;
-
-      view = ide_editor_page_get_view (IDE_EDITOR_PAGE (page));
-      buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
-
-      encoding_action = g_property_action_new ("encoding", buffer, "charset");
-      newline_action = g_property_action_new ("newline-type", buffer, "newline-type");
-      indent_width = g_property_action_new ("indent-width", view, "indent-width");
-      tab_width = g_property_action_new ("tab-width", view, "tab-width");
-      tabs_v_spaces = g_property_action_new ("use-spaces", view, "insert-spaces-instead-of-tabs");
-
-      /* TODO: This needs a transform to handle NULL */
-      language = g_property_action_new ("language", buffer, "language-id");
-
-      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (encoding_action));
-      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (newline_action));
-      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (tab_width));
-      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (indent_width));
-      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (tabs_v_spaces));
-      g_action_map_add_action (G_ACTION_MAP (self->actions), G_ACTION (language));
+      buffer = ide_editor_page_get_buffer (self->page);
+      view = ide_editor_page_get_view (self->page);
     }
+
+  ide_property_action_group_set_item (self->buffer_actions, buffer);
+  ide_property_action_group_set_item (self->view_actions, view);
 
   ide_binding_group_set_source (self->buffer_bindings, buffer);
   ide_signal_group_set_target (self->buffer_signals, buffer);
@@ -812,20 +643,41 @@ gbp_editorui_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
   gtk_widget_set_visible (GTK_WIDGET (self->syntax), page != NULL);
 }
 
+static GActionGroup *
+gbp_editorui_workspace_addin_ref_action_group (IdeWorkspaceAddin *addin)
+{
+  return g_object_ref (G_ACTION_GROUP (ide_action_mixin_get_action_muxer (addin)));
+}
+
 static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_editorui_workspace_addin_load;
   iface->unload = gbp_editorui_workspace_addin_unload;
   iface->page_changed = gbp_editorui_workspace_addin_page_changed;
+  iface->ref_action_group = gbp_editorui_workspace_addin_ref_action_group;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpEditoruiWorkspaceAddin, gbp_editorui_workspace_addin, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKSPACE_ADDIN, workspace_addin_iface_init))
 
 static void
+gbp_editorui_workspace_addin_constructed (GObject *object)
+{
+  G_OBJECT_CLASS (gbp_editorui_workspace_addin_parent_class)->constructed (object);
+  ide_action_mixin_constructed (&action_mixin, object);
+}
+
+static void
 gbp_editorui_workspace_addin_class_init (GbpEditoruiWorkspaceAddinClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->constructed = gbp_editorui_workspace_addin_constructed;
+
+  ide_action_mixin_init (&action_mixin, object_class);
+  ide_action_mixin_install_action (&action_mixin, "page.go-to-line", NULL, show_go_to_line);
+  ide_action_mixin_install_action (&action_mixin, "page.new", NULL, new_file);
 }
 
 static void
