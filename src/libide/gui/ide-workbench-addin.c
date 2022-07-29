@@ -335,15 +335,24 @@ ide_workbench_addin_project_loaded (IdeWorkbenchAddin *self,
  * "context.workbench.module-name" where "module-name" is replaced with the
  * module-name of the plugin.
  *
+ * If @self is a #GActionGroup and @self did not implement the
+ * `IdeWorkbenchAddinInterface.ref_action_group` vfunc, then @self is
+ * returned with it's reference count incremented.
+ *
  * Returns: (transfer full) (nullable): a #GActionGroup or %NULL
  */
 GActionGroup *
 ide_workbench_addin_ref_action_group (IdeWorkbenchAddin *self)
 {
+  GActionGroup *action_group = NULL;
+
   g_return_val_if_fail (IDE_IS_WORKBENCH_ADDIN (self), NULL);
 
   if (IDE_WORKBENCH_ADDIN_GET_IFACE (self)->ref_action_group)
-    return IDE_WORKBENCH_ADDIN_GET_IFACE (self)->ref_action_group (self);
+    action_group = IDE_WORKBENCH_ADDIN_GET_IFACE (self)->ref_action_group (self);
 
-  return NULL;
+  if (action_group == NULL && G_IS_ACTION_GROUP (self))
+    action_group = g_object_ref (G_ACTION_GROUP (self));
+
+  return action_group;
 }
