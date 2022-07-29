@@ -132,7 +132,7 @@ show_notification (IdeCtagsService *self)
   ide_notification_set_body (notif, _("Search, autocompletion, and symbol information may be limited until Ctags indexing is complete."));
   ide_notification_set_has_progress (notif, TRUE);
   ide_notification_set_progress_is_imprecise (notif, TRUE);
-  ide_notification_add_button (notif, NULL, icon, "win.pause-ctags");
+  ide_notification_add_button (notif, NULL, icon, "context.workbench.ctags.paused");
   ide_notification_attach (notif, IDE_OBJECT (context));
 
   self->notif = g_steal_pointer (&notif);

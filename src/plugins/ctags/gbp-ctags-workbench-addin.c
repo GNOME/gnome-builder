@@ -34,23 +34,57 @@ struct _GbpCtagsWorkbenchAddin
 };
 
 static void
-gbp_ctags_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
-                                              IdeProjectInfo      *project_info,
-                                              GCancellable        *cancellable,
-                                              GAsyncReadyCallback  callback,
-                                              gpointer             user_data)
+set_paused_state (GbpCtagsWorkbenchAddin *self,
+                  GVariant               *param)
+{
+  IdeCtagsService *service;
+  IdeContext *context;
+
+  g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (self));
+  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_BOOLEAN));
+
+  if ((context = ide_workbench_get_context (self->workbench)) &&
+      (service = ide_context_peek_child_typed (context, IDE_TYPE_CTAGS_SERVICE)))
+    {
+      if (g_variant_get_boolean (param))
+        ide_ctags_service_pause (service);
+      else
+        ide_ctags_service_unpause (service);
+    }
+}
+
+IDE_DEFINE_ACTION_GROUP (GbpCtagsWorkbenchAddin, gbp_ctags_workbench_addin, {
+  { "paused", NULL, NULL, "false", set_paused_state },
+})
+
+static void
+on_notify_paused_cb (GbpCtagsWorkbenchAddin *self,
+                     GParamSpec             *pspec,
+                     IdeCtagsService        *service)
+{
+  gboolean paused;
+
+  g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_CTAGS_SERVICE (service));
+
+  g_object_get (service,
+                "paused", &paused,
+                NULL);
+  gbp_ctags_workbench_addin_set_action_state (self,
+                                              "paused",
+                                              g_variant_new_boolean (paused));
+}
+
+static void
+gbp_ctags_workbench_addin_project_loaded (IdeWorkbenchAddin *addin,
+                                          IdeProjectInfo    *project_info)
 {
   GbpCtagsWorkbenchAddin *self = (GbpCtagsWorkbenchAddin *)addin;
-  g_autoptr(IdeTask) task = NULL;
   g_autoptr(IdeCtagsService) service = NULL;
   IdeContext *context;
 
   g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_PROJECT_INFO (project_info));
-  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
-
-  task = ide_task_new (addin, cancellable, callback, user_data);
-  ide_task_set_source_tag (task, gbp_ctags_workbench_addin_load_project_async);
 
   /* We don't load the ctags service until a project is loaded so that
    * we have a stable workdir to use.
@@ -58,18 +92,12 @@ gbp_ctags_workbench_addin_load_project_async (IdeWorkbenchAddin   *addin,
   context = ide_workbench_get_context (self->workbench);
   service = ide_object_ensure_child_typed (IDE_OBJECT (context), IDE_TYPE_CTAGS_SERVICE);
 
-  ide_task_return_boolean (task, TRUE);
-}
-
-static gboolean
-gbp_ctags_workbench_addin_load_project_finish (IdeWorkbenchAddin  *addin,
-                                               GAsyncResult       *result,
-                                               GError            **error)
-{
-  g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (addin));
-  g_assert (IDE_IS_TASK (result));
-
-  return ide_task_propagate_boolean (IDE_TASK (result), error);
+  g_signal_connect_object (G_OBJECT (service),
+                           "notify::paused",
+                           G_CALLBACK (on_notify_paused_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  on_notify_paused_cb (self, NULL, service);
 }
 
 static void
@@ -97,76 +125,15 @@ gbp_ctags_workbench_addin_unload (IdeWorkbenchAddin *addin,
 }
 
 static void
-pause_ctags_cb (GSimpleAction *action,
-                GVariant      *param,
-                gpointer       user_data)
-{
-  GbpCtagsWorkbenchAddin *self = user_data;
-  IdeContext *context;
-  IdeCtagsService *service;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (self));
-  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_BOOLEAN));
-
-  if ((context = ide_workbench_get_context (self->workbench)) &&
-      (service = ide_context_peek_child_typed (context, IDE_TYPE_CTAGS_SERVICE)))
-    {
-      gboolean val;
-
-      if (g_variant_get_boolean (param))
-        ide_ctags_service_pause (service);
-      else
-        ide_ctags_service_unpause (service);
-
-      /* Re-fetch the value incase we were out-of-sync */
-      g_object_get (service, "paused", &val, NULL);
-      g_simple_action_set_state (action, g_variant_new_boolean (val));
-    }
-}
-
-static const GActionEntry actions[] = {
-  { "pause-ctags", NULL, NULL, "false", pause_ctags_cb },
-};
-
-static void
-gbp_ctags_workbench_addin_workspace_added (IdeWorkbenchAddin *addin,
-                                           IdeWorkspace      *workspace)
-{
-  GbpCtagsWorkbenchAddin *self = (GbpCtagsWorkbenchAddin *)addin;
-
-  g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (self));
-  g_assert (IDE_IS_WORKSPACE (workspace));
-
-  g_action_map_add_action_entries (G_ACTION_MAP (workspace),
-                                   actions,
-                                   G_N_ELEMENTS (actions),
-                                   self);
-}
-
-static void
-gbp_ctags_workbench_addin_workspace_removed (IdeWorkbenchAddin *addin,
-                                             IdeWorkspace      *workspace)
-{
-  g_assert (GBP_IS_CTAGS_WORKBENCH_ADDIN (addin));
-  g_assert (IDE_IS_WORKSPACE (workspace));
-
-  for (guint i = 0; i < G_N_ELEMENTS (actions); i++)
-    g_action_map_remove_action (G_ACTION_MAP (workspace), actions[i].name);
-}
-
-static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_ctags_workbench_addin_load;
   iface->unload = gbp_ctags_workbench_addin_unload;
-  iface->load_project_async = gbp_ctags_workbench_addin_load_project_async;
-  iface->load_project_finish = gbp_ctags_workbench_addin_load_project_finish;
-  iface->workspace_added = gbp_ctags_workbench_addin_workspace_added;
-  iface->workspace_removed = gbp_ctags_workbench_addin_workspace_removed;
+  iface->project_loaded = gbp_ctags_workbench_addin_project_loaded;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpCtagsWorkbenchAddin, gbp_ctags_workbench_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_ctags_workbench_addin_init_action_group)
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
