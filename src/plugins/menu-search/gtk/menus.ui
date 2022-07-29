@@ -8,7 +8,7 @@
       <attribute name="label" translatable="yes">Toggle Left Panel</attribute>
       <attribute name="description" translatable="yes">Toggle the left panel in our out of view</attribute>
       <attribute name="verb-icon" translatable="yes">panel-left-symbolic</attribute>
-      <attribute name="action">panel.toggle-start</attribute>
+      <attribute name="action">workspace.panel.toggle-start</attribute>
     </item>
 
     <item>
@@ -16,14 +16,14 @@
       <attribute name="label" translatable="yes">Toggle Right Panel</attribute>
       <attribute name="description" translatable="yes">Toggle the right panel in our out of view</attribute>
       <attribute name="verb-icon" translatable="yes">panel-right-symbolic</attribute>
-      <attribute name="action">panel.toggle-end</attribute>
+      <attribute name="action">workspace.panel.toggle-end</attribute>
     </item>
 
     <item>
       <attribute name="label" translatable="yes">Toggle Bottom Panel</attribute>
       <attribute name="description" translatable="yes">Toggle the bottom panel in our out of view</attribute>
       <attribute name="verb-icon">panel-bottom-symbolic</attribute>
-      <attribute name="action">panel.toggle-bottom</attribute>
+      <attribute name="action">workspace.panel.toggle-bottom</attribute>
     </item>
 
     <item>

@@ -194,11 +194,11 @@ ide_editor_workspace_foreach_page (IdeWorkspace    *workspace,
 }
 
 static void
-toggle_panel_action (GtkWidget  *widget,
+toggle_panel_action (gpointer    instance,
                      const char *action_name,
                      GVariant   *param)
 {
-  IdeEditorWorkspace *self = (IdeEditorWorkspace *)widget;
+  IdeEditorWorkspace *self = instance;
   g_autofree char *can_property = NULL;
   const char *property = NULL;
   gboolean reveal;
@@ -276,9 +276,9 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeEditorWorkspace, project_title);
 
-  gtk_widget_class_install_action (widget_class, "panel.toggle-start", NULL, toggle_panel_action);
-  gtk_widget_class_install_action (widget_class, "panel.toggle-end", NULL, toggle_panel_action);
-  gtk_widget_class_install_action (widget_class, "panel.toggle-bottom", NULL, toggle_panel_action);
+  ide_workspace_class_install_action (workspace_class, "panel.toggle-start", NULL, toggle_panel_action);
+  ide_workspace_class_install_action (workspace_class, "panel.toggle-end", NULL, toggle_panel_action);
+  ide_workspace_class_install_action (workspace_class, "panel.toggle-bottom", NULL, toggle_panel_action);
 
   g_type_ensure (IDE_TYPE_GRID);
   g_type_ensure (IDE_TYPE_NOTIFICATIONS_BUTTON);
