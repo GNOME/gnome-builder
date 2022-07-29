@@ -42,7 +42,7 @@ static void live_preview_action (GbpMarkdownPreviewWorkspaceAddin *self,
                                  GVariant                     *params);
 
 IDE_DEFINE_ACTION_GROUP (GbpMarkdownPreviewWorkspaceAddin, gbp_markdown_preview_workspace_addin, {
-  { "markdown-preview", live_preview_action },
+  { "preview", live_preview_action },
 })
 
 static void
@@ -53,7 +53,7 @@ gbp_markdown_preview_workspace_addin_set_language (GbpMarkdownPreviewWorkspaceAd
 
   IDE_TRACE_MSG ("Switching language-id to %s", language_id ? language_id : "NULL");
   gbp_markdown_preview_workspace_addin_set_action_enabled (self,
-                                                           "markdown-preview",
+                                                           "preview",
                                                            ide_str_equal0 ("markdown", language_id));
 }
 
@@ -128,10 +128,6 @@ gbp_markdown_preview_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   self->workspace = workspace;
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace),
-                                  "markdown-preview",
-                                  G_ACTION_GROUP (self));
-
   self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
   g_signal_connect_object (self->buffer_signals,
                            "bind",
@@ -164,8 +160,6 @@ gbp_markdown_preview_workspace_addin_unload (IdeWorkspaceAddin *addin,
   g_assert (GBP_IS_MARKDOWN_PREVIEW_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  gtk_widget_insert_action_group (GTK_WIDGET (workspace), "markdown-preview", NULL);
-
   g_clear_object (&self->buffer_signals);
 
   self->editor_page = NULL;
@@ -194,7 +188,7 @@ gbp_markdown_preview_workspace_addin_class_init (GbpMarkdownPreviewWorkspaceAddi
 static void
 gbp_markdown_preview_workspace_addin_init (GbpMarkdownPreviewWorkspaceAddin *self)
 {
-  gbp_markdown_preview_workspace_addin_set_action_enabled (self, "markdown-preview", FALSE);
+  gbp_markdown_preview_workspace_addin_set_action_enabled (self, "preview", FALSE);
 }
 
 static void
