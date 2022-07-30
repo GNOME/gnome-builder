@@ -115,3 +115,21 @@ static void
 ide_tweaks_page_init (IdeTweaksPage *self)
 {
 }
+
+const char *
+ide_tweaks_page_get_title (IdeTweaksPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (self), NULL);
+
+  return self->title;
+}
+
+void
+ide_tweaks_page_set_title (IdeTweaksPage *self,
+                           const char    *title)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PAGE (self));
+
+  if (ide_set_string (&self->title, title))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
+}
