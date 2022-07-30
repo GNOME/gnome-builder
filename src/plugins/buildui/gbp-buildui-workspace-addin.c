@@ -148,6 +148,7 @@ gbp_buildui_workspace_addin_notify_busy (GbpBuilduiWorkspaceAddin *self,
   g_object_set (omni_bar,
                 "icon-name", busy ? "builder-build-stop-symbolic" : "builder-build-symbolic",
                 "action-name", busy ? "context.build-manager.cancel" : "context.build-manager.build",
+                "action-tooltip", busy ? _("Stop Building Project") : _("Build Project (Ctrl+Shift+Alt+B)"),
                 NULL);
 }
 
