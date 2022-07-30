@@ -114,7 +114,7 @@ ide_tweaks_item_class_init (IdeTweaksItemClass *klass)
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_SORT_KEY] =
-    g_param_spec_string ("sort_key", NULL, NULL,
+    g_param_spec_string ("sort-key", NULL, NULL,
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
