@@ -10,5 +10,6 @@ gtk = { version = "0.4.7", package = "gtk4" }
 {{if is_adwaita}}
 [dependencies.adw]
 package = "libadwaita"
-version  = "0.1.1"
+version = "0.2.0-alpha.2"
+features = ["v1_2"]
 {{end}}
