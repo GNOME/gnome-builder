@@ -50,6 +50,7 @@ on_icon_state_changed_cb (IdeRunButton  *self,
 {
   const char *icon_name;
   const char *action_name;
+  const char *tooltip_text;
 
   g_assert (IDE_IS_RUN_BUTTON (self));
   g_assert (IDE_IS_RUN_MANAGER (run_manager));
@@ -58,17 +59,21 @@ on_icon_state_changed_cb (IdeRunButton  *self,
     {
       icon_name = ide_run_manager_get_icon_name (run_manager);
       action_name = "context.run-manager.run";
+      tooltip_text = _("Run Project (Shift+Ctrl+Space)");
     }
   else
     {
       icon_name = "builder-run-stop-symbolic";
       action_name = "context.run-manager.stop";
+      tooltip_text = _("Stop Running Project");
     }
 
   g_object_set (self->split_button,
                 "action-name", action_name,
                 "icon-name", icon_name,
                 NULL);
+
+  gtk_widget_set_tooltip_text (GTK_WIDGET (self), tooltip_text);
 }
 
 static void
