@@ -28,6 +28,7 @@
 struct _IdeTweaksPage
 {
   IdeTweaksItem parent_instance;
+  char *section;
   char *title;
 };
 
@@ -35,6 +36,7 @@ G_DEFINE_FINAL_TYPE (IdeTweaksPage, ide_tweaks_page, IDE_TYPE_TWEAKS_ITEM)
 
 enum {
   PROP_0,
+  PROP_SECTION,
   PROP_TITLE,
   N_PROPS
 };
@@ -52,6 +54,7 @@ ide_tweaks_page_finalize (GObject *object)
 {
   IdeTweaksPage *self = (IdeTweaksPage *)object;
 
+  g_clear_pointer (&self->section, g_free);
   g_clear_pointer (&self->title, g_free);
 
   G_OBJECT_CLASS (ide_tweaks_page_parent_class)->finalize (object);
@@ -67,6 +70,10 @@ ide_tweaks_page_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_SECTION:
+      g_value_set_string (value, ide_tweaks_page_get_section (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, ide_tweaks_page_get_title (self));
       break;
@@ -86,6 +93,10 @@ ide_tweaks_page_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_SECTION:
+      ide_tweaks_page_set_section (self, g_value_get_string (value));
+      break;
+
     case PROP_TITLE:
       ide_tweaks_page_set_title (self, g_value_get_string (value));
       break;
@@ -104,6 +115,10 @@ ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
   object_class->get_property = ide_tweaks_page_get_property;
   object_class->set_property = ide_tweaks_page_set_property;
 
+  properties [PROP_SECTION] =
+    g_param_spec_string ("section", NULL, NULL, NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL, NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
@@ -114,6 +129,24 @@ ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
 static void
 ide_tweaks_page_init (IdeTweaksPage *self)
 {
+}
+
+const char *
+ide_tweaks_page_get_section (IdeTweaksPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (self), NULL);
+
+  return self->section;
+}
+
+void
+ide_tweaks_page_set_section (IdeTweaksPage *self,
+                             const char    *section)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PAGE (self));
+
+  if (ide_set_string (&self->section, section))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SECTION]);
 }
 
 const char *
