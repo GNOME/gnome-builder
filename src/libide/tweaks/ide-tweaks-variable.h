@@ -1,4 +1,4 @@
-/* ide-tweaks-init.c
+/* ide-tweaks-variable.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -18,18 +18,23 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-tweaks-init"
+#pragma once
 
-#include "config.h"
+#include "ide-tweaks-item.h"
 
-#include "libide-tweaks.h"
+G_BEGIN_DECLS
 
-#include "ide-tweaks-init.h"
+#define IDE_TYPE_TWEAKS_VARIABLE (ide_tweaks_variable_get_type())
 
-void
-_ide_tweaks_init (void)
-{
-  g_type_ensure (IDE_TYPE_TWEAKS_ITEM);
-  g_type_ensure (IDE_TYPE_TWEAKS_PAGE);
-  g_type_ensure (IDE_TYPE_TWEAKS_VARIABLE);
-}
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeTweaksVariable, ide_tweaks_variable, IDE, TWEAKS_VARIABLE, IdeTweaksItem)
+
+IDE_AVAILABLE_IN_ALL
+IdeTweaksVariable *ide_tweaks_variable_new       (const char        *key,
+                                                  const char        *value);
+IDE_AVAILABLE_IN_ALL
+const char        *ide_tweaks_variable_get_key   (IdeTweaksVariable *self);
+IDE_AVAILABLE_IN_ALL
+const char        *ide_tweaks_variable_get_value (IdeTweaksVariable *self);
+
+G_END_DECLS

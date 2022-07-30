@@ -23,4 +23,5 @@
 #define IDE_TWEAKS_INSIDE
 # include "ide-tweaks-item.h"
 # include "ide-tweaks-page.h"
+# include "ide-tweaks-variable.h"
 #undef IDE_TWEAKS_INSIDE
