@@ -27,11 +27,13 @@
 typedef struct
 {
   char **keywords;
+  char *sort_key;
 } IdeTweaksItemPrivate;
 
 enum {
   PROP_0,
   PROP_KEYWORDS,
+  PROP_SORT_KEY,
   N_PROPS
 };
 
@@ -46,6 +48,7 @@ ide_tweaks_item_finalize (GObject *object)
   IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
 
   g_clear_pointer (&priv->keywords, g_strfreev);
+  g_clear_pointer (&priv->sort_key, g_free);
 
   G_OBJECT_CLASS (ide_tweaks_item_parent_class)->finalize (object);
 }
@@ -62,6 +65,10 @@ ide_tweaks_item_get_property (GObject    *object,
     {
     case PROP_KEYWORDS:
       g_value_set_boxed (value, ide_tweaks_item_get_keywords (self));
+      break;
+
+    case PROP_SORT_KEY:
+      g_value_set_string (value, ide_tweaks_item_get_sort_key (self));
       break;
 
     default:
@@ -83,6 +90,10 @@ ide_tweaks_item_set_property (GObject      *object,
       ide_tweaks_item_set_keywords (self, g_value_get_boxed (value));
       break;
 
+    case PROP_SORT_KEY:
+      ide_tweaks_item_set_sort_key (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -101,6 +112,11 @@ ide_tweaks_item_class_init (IdeTweaksItemClass *klass)
     g_param_spec_boxed ("keywords", NULL, NULL,
                         G_TYPE_STRV,
                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_SORT_KEY] =
+    g_param_spec_string ("sort_key", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -134,4 +150,26 @@ ide_tweaks_item_set_keywords (IdeTweaksItem      *self,
   g_strfreev (priv->keywords);
   priv->keywords = g_strdupv ((char **)keywords);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEYWORDS]);
+}
+
+const char *
+ide_tweaks_item_get_sort_key (IdeTweaksItem *self)
+{
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), NULL);
+
+  return priv->sort_key;
+}
+
+void
+ide_tweaks_item_set_sort_key (IdeTweaksItem *self,
+                              const char    *sort_key)
+{
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_TWEAKS_ITEM (self));
+
+  if (ide_set_string (&priv->sort_key, sort_key))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SORT_KEY]);
 }

@@ -43,5 +43,10 @@ const char * const *ide_tweaks_item_get_keywords (IdeTweaksItem      *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_item_set_keywords (IdeTweaksItem      *self,
                                                   const char * const *keywords);
+IDE_AVAILABLE_IN_ALL
+const char         *ide_tweaks_item_get_sort_key (IdeTweaksItem      *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_tweaks_item_set_sort_key (IdeTweaksItem      *self,
+                                                  const char         *sort_key);
 
 G_END_DECLS
