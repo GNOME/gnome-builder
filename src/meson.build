@@ -73,6 +73,7 @@ gnome_builder_deps = [
   libide_sourceview_dep,
   libide_terminal_dep,
   libide_threading_dep,
+  libide_tweaks_dep,
   libide_vcs_dep,
   libide_tree_dep,
 ]

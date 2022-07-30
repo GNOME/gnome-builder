@@ -22,20 +22,24 @@
 
 #include "config.h"
 
-#include <girepository.h>
+#include <locale.h>
+#include <sched.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 #include <glib/gi18n.h>
+
+#include <girepository.h>
 #include <gtksourceview/gtksource.h>
+
+#ifdef ENABLE_TRACING_SYSCAP
+# include <sysprof-capture.h>
+#endif
+
 #include <libide-core.h>
 #include <libide-code.h>
 #include <libide-gui.h>
 #include <libide-threading.h>
-#include <locale.h>
-#ifdef ENABLE_TRACING_SYSCAP
-# include <sysprof-capture.h>
-#endif
-#include <sched.h>
-#include <stdlib.h>
-#include <unistd.h>
 
 #include "ide-application-private.h"
 #include "ide-build-ident.h"
@@ -46,6 +50,7 @@
 #include "ide-shell-private.h"
 #include "ide-terminal-private.h"
 #include "ide-thread-private.h"
+#include "ide-tweaks-init.h"
 #include "ide-private.h"
 
 #include "bug-buddy.h"
@@ -297,6 +302,7 @@ main (gint   argc,
   _ide_guess_user_path ();
 
   /* Ensure availability of some symbols possibly dropped in link */
+  _ide_tweaks_init ();
   _ide_gtk_init ();
   _ide_search_init ();
   _ide_editor_init ();
