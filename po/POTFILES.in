@@ -65,7 +65,6 @@ src/libide/gui/ide-marked-view.c
 src/libide/gui/ide-preferences-builtin.c
 src/libide/gui/ide-preferences-window.c
 src/libide/gui/ide-preferences-window.ui
-src/libide/gui/ide-primary-workspace-actions.c
 src/libide/gui/ide-primary-workspace.ui
 src/libide/gui/ide-run-button.c
 src/libide/gui/ide-workbench.c
@@ -265,7 +264,7 @@ src/plugins/symbol-tree/gbp-symbol-popover.ui
 src/plugins/symbol-tree/gbp-symbol-search-result.c
 src/plugins/symbol-tree/gbp-symbol-workspace-addin.c
 src/plugins/symbol-tree/gtk/menus.ui
-src/plugins/sysprof/gbp-sysprof-workspace-addin.c
+src/plugins/sysprof/gbp-sysprof-workbench-addin.c
 src/plugins/sysprof/gtk/menus.ui
 src/plugins/sysroot/gbp-sysroot-preferences-addin.c
 src/plugins/sysroot/gbp-sysroot-preferences-row.ui
@@ -283,6 +282,8 @@ src/plugins/testui/gtk/menus.ui
 src/plugins/todo/gbp-todo-panel.c
 src/plugins/todo/gbp-todo-panel.ui
 src/plugins/todo/gbp-todo-workspace-addin.c
+src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c
+src/plugins/update-dependencies/gtk/menus.ui
 src/plugins/update-manager/gbp-update-manager-app-addin.c
 src/plugins/valgrind/gtk/menus.ui
 src/plugins/valgrind/org.gnome.builder.valgrind.gschema.xml
