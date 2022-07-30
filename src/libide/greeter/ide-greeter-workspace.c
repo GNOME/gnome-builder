@@ -797,6 +797,14 @@ ide_greeter_workspace_open_action (GtkWidget  *widget,
 }
 
 static void
+ide_greeter_workspace_reset_action (GtkWidget  *widget,
+                                    const char *action_name,
+                                    GVariant   *param)
+{
+  ide_greeter_workspace_set_selection_mode (IDE_GREETER_WORKSPACE (widget), FALSE);
+}
+
+static void
 ide_greeter_workspace_dispose (GObject *object)
 {
   IdeGreeterWorkspace *self = (IdeGreeterWorkspace *)object;
@@ -908,9 +916,11 @@ ide_greeter_workspace_class_init (IdeGreeterWorkspaceClass *klass)
 
   gtk_widget_class_install_action (widget_class, "greeter.open", NULL, ide_greeter_workspace_open_action);
   gtk_widget_class_install_action (widget_class, "greeter.page", "s", ide_greeter_workspace_page_action);
+  gtk_widget_class_install_action (widget_class, "greeter.reset", NULL, ide_greeter_workspace_reset_action);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Left, GDK_ALT_MASK, "win.page", "s", "overview");
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_w, GDK_CONTROL_MASK, "window.close", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Escape, 0, "greeter.reset", NULL);
 
   g_type_ensure (IDE_TYPE_GREETER_BUTTONS_SECTION);
   g_type_ensure (IDE_TYPE_GREETER_ROW);
@@ -934,6 +944,8 @@ ide_greeter_workspace_init (IdeGreeterWorkspace *self)
   selection_action = g_property_action_new ("selection-mode", G_OBJECT (self), "selection-mode");
   g_action_map_add_action (G_ACTION_MAP (self), G_ACTION (selection_action));
   g_action_map_add_action_entries (G_ACTION_MAP (self), actions, G_N_ELEMENTS (actions), self);
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.reset", FALSE);
 
   gesture = gtk_gesture_click_new ();
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (gesture), 8);
@@ -1122,6 +1134,8 @@ ide_greeter_workspace_set_selection_mode (IdeGreeterWorkspace *self,
           if (IDE_IS_GREETER_SECTION (child))
             ide_greeter_section_set_selection_mode (IDE_GREETER_SECTION (child), selection_mode);
         }
+
+      gtk_widget_action_set_enabled (GTK_WIDGET (self), "greeter.reset", selection_mode);
 
       gtk_widget_set_visible (GTK_WIDGET (self->action_bar), selection_mode);
       gtk_widget_set_visible (GTK_WIDGET (self->projects_action_bar), !selection_mode);
