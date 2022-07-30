@@ -39,19 +39,39 @@ struct _IdeTweaksItemClass
 };
 
 IDE_AVAILABLE_IN_ALL
-const char         *ide_tweaks_item_get_id       (IdeTweaksItem      *self);
+const char         *ide_tweaks_item_get_id               (IdeTweaksItem      *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_set_id       (IdeTweaksItem      *self,
-                                                  const char         *id);
+void                ide_tweaks_item_set_id               (IdeTweaksItem      *self,
+                                                          const char         *id);
 IDE_AVAILABLE_IN_ALL
-const char * const *ide_tweaks_item_get_keywords (IdeTweaksItem      *self);
+const char * const *ide_tweaks_item_get_keywords         (IdeTweaksItem      *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_set_keywords (IdeTweaksItem      *self,
-                                                  const char * const *keywords);
+void                ide_tweaks_item_set_keywords         (IdeTweaksItem      *self,
+                                                          const char * const *keywords);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_tweaks_item_get_sort_key (IdeTweaksItem      *self);
+const char         *ide_tweaks_item_get_sort_key         (IdeTweaksItem      *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_set_sort_key (IdeTweaksItem      *self,
-                                                  const char         *sort_key);
+void                ide_tweaks_item_set_sort_key         (IdeTweaksItem      *self,
+                                                          const char         *sort_key);
+IDE_AVAILABLE_IN_ALL
+IdeTweaksItem      *ide_tweaks_item_get_parent           (IdeTweaksItem      *self);
+IDE_AVAILABLE_IN_ALL
+IdeTweaksItem      *ide_tweaks_item_get_last_child       (IdeTweaksItem      *self);
+IDE_AVAILABLE_IN_ALL
+IdeTweaksItem      *ide_tweaks_item_get_first_child      (IdeTweaksItem      *self);
+IDE_AVAILABLE_IN_ALL
+IdeTweaksItem      *ide_tweaks_item_get_previous_sibling (IdeTweaksItem      *self);
+IDE_AVAILABLE_IN_ALL
+IdeTweaksItem      *ide_tweaks_item_get_next_sibling     (IdeTweaksItem      *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_tweaks_item_insert_after         (IdeTweaksItem      *self,
+                                                          IdeTweaksItem      *parent,
+                                                          IdeTweaksItem      *previous_sibling);
+IDE_AVAILABLE_IN_ALL
+void                ide_tweaks_item_insert_before        (IdeTweaksItem      *self,
+                                                          IdeTweaksItem      *parent,
+                                                          IdeTweaksItem      *next_sibling);
+IDE_AVAILABLE_IN_ALL
+void                ide_tweaks_item_unparent             (IdeTweaksItem      *self);
 
 G_END_DECLS
