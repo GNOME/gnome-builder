@@ -128,7 +128,7 @@ ide_tweaks_item_set_keywords (IdeTweaksItem      *self,
 
   g_return_if_fail (IDE_IS_TWEAKS_ITEM (self));
 
-  if (keywords == priv->keywords)
+  if (keywords == (const char * const *)priv->keywords)
     return;
 
   g_strfreev (priv->keywords);
