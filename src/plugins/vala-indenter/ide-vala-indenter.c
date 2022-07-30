@@ -181,9 +181,7 @@ complete_block (GtkSourceView *view,
 		const char    *new_indent,
 		GtkTextIter    old)
 {
-	GtkTextIter saved_iter = {0};
 	g_autofree char *full = NULL;
-	int text_offset = 0;
 
 	if (gtk_source_view_get_insert_spaces_instead_of_tabs (view))
 	{
@@ -195,13 +193,6 @@ complete_block (GtkSourceView *view,
 		full = g_strconcat (new_indent, "\t", NULL);
 
 	gtk_text_buffer_insert (buffer, location, full, -1);
-	saved_iter = *location;
-	text_offset = gtk_text_iter_get_offset (location);
-	gtk_text_buffer_insert (buffer, &saved_iter, "\n", -1);
-	gtk_text_buffer_insert (buffer, &saved_iter, new_indent, -1);
-	gtk_text_buffer_insert (buffer, &saved_iter, "}", -1);
-	*location = old;
-	gtk_text_iter_set_offset (location, text_offset);
 }
 
 static void
@@ -401,7 +392,6 @@ vala_indent (GtkSourceIndenter *self,
 		g_autofree char *indent1 = NULL;
 		g_autofree char *extension = NULL;
 		g_autofree char *full = NULL;
-		int text_offset = 0;
 		GtkTextIter old = {0};
 
 		if (line_no >= 2 && !strchr (previous_line_stripped, '(') && strchr (previous_line_stripped, ')'))
@@ -453,12 +443,6 @@ vala_indent (GtkSourceIndenter *self,
 
 		full = g_strconcat (reference_indent, indent1, NULL);
 		gtk_text_buffer_insert (buffer, location, full, -1);
-		old = *location;
-		text_offset = gtk_text_iter_get_offset (location);
-		extension = g_strconcat ("\n", reference_indent, "}", NULL);
-		gtk_text_buffer_insert (buffer, &old, extension, -1);
-		*location = old;
-		gtk_text_iter_set_offset (location, text_offset);
 		return;
 	}
 	else if (line_is_a_oneline_block (previous_line_stripped))
@@ -522,8 +506,11 @@ end_block:
 			tmp_indent = extract_indent (content);
 			if (strlen (tmp_indent) < strlen (last_normal_indent))
 			{
+				g_autofree char *additional_indent = NULL;
+				additional_indent = view_indent (view);
 				gtk_text_iter_set_offset (location, saved_offset);
 				gtk_text_buffer_insert (buffer, location, tmp_indent, -1);
+				gtk_text_buffer_insert (buffer, location, additional_indent, -1);
 				return;
 			}
 			tmp_lineno--;
