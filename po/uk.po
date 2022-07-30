@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-29 19:16+0000\n"
-"PO-Revision-Date: 2022-07-30 14:09+0300\n"
+"POT-Creation-Date: 2022-07-30 15:01+0000\n"
+"PO-Revision-Date: 2022-07-30 22:25+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: src/libide/editor/ide-editor-workspace.ui:21
 #: src/libide/gui/ide-application-actions.c:153
 #: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:758 src/main.c:237
+#: src/libide/gui/ide-preferences-builtin.c:758 src/main.c:242
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Будівник"
@@ -755,7 +755,7 @@ msgstr "Без назви"
 #: src/libide/greeter/ide-greeter-workspace.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1449
+#: src/libide/gui/ide-workbench.c:1453
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
@@ -769,7 +769,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Не знайдено придатного засобу діагностики."
 
 #: src/libide/editor/gtk/menus.ui:16 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1445
+#: src/libide/gui/ide-workbench.c:1449
 msgid "Open File…"
 msgstr "Відкрити файл…"
 
@@ -822,7 +822,6 @@ msgstr "Не вдалося надрукувати: %s"
 #. translators: %s contains the error message
 #: src/libide/editor/ide-editor-page.c:483
 #, c-format
-#| msgid "Failed to load directory: %s"
 msgid "Failed to format selection: %s"
 msgstr "Не вдалося форматувати позначене: %s"
 
@@ -849,7 +848,7 @@ msgstr "Зберегти"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:114
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
 msgstr "Скасувати"
@@ -1129,8 +1128,8 @@ msgid "Directory"
 msgstr "Каталог"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:336 src/libide/gui/ide-workbench.c:839
-#: src/libide/gui/ide-workbench.c:2727
+#: src/libide/gui/ide-workbench.c:340 src/libide/gui/ide-workbench.c:843
+#: src/libide/gui/ide-workbench.c:2731
 #, c-format
 msgid "Builder — %s"
 msgstr "Будівник — %s"
@@ -1169,7 +1168,7 @@ msgid "Select Project File"
 msgstr "Виберіть файл проєкту"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1448
+#: src/libide/gui/ide-workbench.c:1452
 msgid "_Open"
 msgstr "_Відкрити"
 
@@ -1220,7 +1219,7 @@ msgstr "Не вдалося отримати значення va_list: %s"
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:113
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr "Відкрити"
 
@@ -1409,7 +1408,7 @@ msgstr "Не вдалося завантажити HTML. Не передбаче
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:649
 #: src/libide/gui/ide-preferences-builtin.c:672
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/plugins/buildui/gtk/menus.ui:141
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -2191,14 +2190,6 @@ msgstr ""
 msgid "Select Font"
 msgstr "Вибір шрифту"
 
-#: src/libide/gui/ide-primary-workspace-actions.c:132
-msgid "Updating Dependencies…"
-msgstr "Оновлення залежностей…"
-
-#: src/libide/gui/ide-primary-workspace-actions.c:133
-msgid "Builder is updating your projects configured dependencies."
-msgstr "«Будівник» оновлює налаштовані залежності ваших проєктів."
-
 #: src/libide/gui/ide-primary-workspace.ui:57
 msgid "Search (Ctrl+Enter)"
 msgstr "Шукати (Ctrl+Enter)"
@@ -2255,67 +2246,67 @@ msgstr "_Копіювати"
 msgid "_Paste"
 msgstr "В_ставити"
 
-#: src/libide/sourceview/gtk/menus.ui:22
-msgid "_Selection"
-msgstr "Ви_бір"
-
-#: src/libide/sourceview/gtk/menus.ui:24 src/libide/terminal/gtk/menus.ui:50
-msgid "Select _All"
-msgstr "Вибрати _все"
-
-#: src/libide/sourceview/gtk/menus.ui:30
-msgid "All _Upper Case"
-msgstr "Все _великими буквами"
-
-#: src/libide/sourceview/gtk/menus.ui:36
-msgid "All _Lower Case"
-msgstr "Все _малими буквами"
-
-#: src/libide/sourceview/gtk/menus.ui:42
-msgid "In_vert Case"
-msgstr "_Інвертувати регістр"
-
-#: src/libide/sourceview/gtk/menus.ui:48
-msgid "_Title Case"
-msgstr "Зробити _першу букву велику"
-
-#: src/libide/sourceview/gtk/menus.ui:55
-msgid "_Join Lines"
-msgstr "_Об'єднати рядки"
-
-#: src/libide/sourceview/gtk/menus.ui:60
-msgid "S_ort Lines"
-msgstr "В_порядкувати рядки"
-
-#: src/libide/sourceview/gtk/menus.ui:70 src/libide/sourceview/gtk/menus.ui:72
+#: src/libide/sourceview/gtk/menus.ui:24 src/libide/sourceview/gtk/menus.ui:26
 msgid "Undo"
 msgstr "Скасувати"
 
-#: src/libide/sourceview/gtk/menus.ui:77
+#: src/libide/sourceview/gtk/menus.ui:31
 msgid "Redo"
 msgstr "Повторити"
 
-#: src/libide/sourceview/gtk/menus.ui:83
+#: src/libide/sourceview/gtk/menus.ui:37
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: src/libide/sourceview/gtk/menus.ui:86
+#: src/libide/sourceview/gtk/menus.ui:40
 msgid "Zoom Out"
 msgstr "Зменшити"
 
-#: src/libide/sourceview/gtk/menus.ui:92
+#: src/libide/sourceview/gtk/menus.ui:46
 msgid "Reset Zoom"
 msgstr "Відновити масштаб"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:52
 msgid "Zoom In"
 msgstr "Збільшити"
 
-#: src/libide/sourceview/gtk/menus.ui:107
+#: src/libide/sourceview/gtk/menus.ui:60
+msgid "_Selection"
+msgstr "Ви_бір"
+
+#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:50
+msgid "Select _All"
+msgstr "Вибрати _все"
+
+#: src/libide/sourceview/gtk/menus.ui:68
+msgid "All _Upper Case"
+msgstr "Все _великими буквами"
+
+#: src/libide/sourceview/gtk/menus.ui:74
+msgid "All _Lower Case"
+msgstr "Все _малими буквами"
+
+#: src/libide/sourceview/gtk/menus.ui:80
+msgid "In_vert Case"
+msgstr "_Інвертувати регістр"
+
+#: src/libide/sourceview/gtk/menus.ui:86
+msgid "_Title Case"
+msgstr "Зробити _першу букву велику"
+
+#: src/libide/sourceview/gtk/menus.ui:93
+msgid "_Join Lines"
+msgstr "_Об'єднати рядки"
+
+#: src/libide/sourceview/gtk/menus.ui:98
+msgid "S_ort Lines"
+msgstr "В_порядкувати рядки"
+
+#: src/libide/sourceview/gtk/menus.ui:110
 msgid "_Go to Definition"
 msgstr "_Перейти до означення"
 
-#: src/libide/sourceview/gtk/menus.ui:113
+#: src/libide/sourceview/gtk/menus.ui:116
 msgid "_Find references"
 msgstr "З_найти посилання"
 
@@ -2418,7 +2409,7 @@ msgstr "Немає"
 msgid "Blank page"
 msgstr "Порожня сторінка"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:144
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:139
 msgid "Settings"
 msgstr "Параметри"
 
@@ -2426,7 +2417,7 @@ msgstr "Параметри"
 msgid "Allow JavaScript"
 msgstr "Дозволити JavaScript"
 
-#: src/main.c:149
+#: src/main.c:154
 msgid "Run a new instance of Builder"
 msgstr "Запустити новий екземпляр «Будівника»"
 
@@ -3016,54 +3007,50 @@ msgid "Display panel containing the build log"
 msgstr "Показати панель із вмістом журналу збирання"
 
 #: src/plugins/buildui/gtk/menus.ui:111
-msgid "Update Dependencies…"
-msgstr "Оновити залежності…"
+msgid "manage-sdks"
+msgstr "manage-sdks"
 
-#: src/plugins/buildui/gtk/menus.ui:113
-msgid "Download updates to project dependencies"
-msgstr "Отримати оновлення залежностей проєкту"
-
-#: src/plugins/buildui/gtk/menus.ui:117
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Manage SDKs…"
 msgstr "Керування SDK…"
 
-#: src/plugins/buildui/gtk/menus.ui:126
+#: src/plugins/buildui/gtk/menus.ui:121
 msgid "Select Run Command…"
 msgstr "Вибрати команду запуску…"
 
-#: src/plugins/buildui/gtk/menus.ui:136
+#: src/plugins/buildui/gtk/menus.ui:131
 msgid "Run"
 msgstr "Запустити"
 
-#: src/plugins/buildui/gtk/menus.ui:139
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Run the project"
 msgstr "Запустити проєкт"
 
-#: src/plugins/buildui/gtk/menus.ui:167
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Accessibility"
 msgstr "Доступність"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:164
 msgid "High Contrast"
 msgstr "Висока контрастність"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:169
 msgid "Text Direction"
 msgstr "Напрям тексту"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:171
 msgid "Left-to-Right"
 msgstr "Зліва праворуч"
 
-#: src/plugins/buildui/gtk/menus.ui:182
+#: src/plugins/buildui/gtk/menus.ui:177
 msgid "Right-to-Left"
 msgstr "Справа ліворуч"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:186
 msgid "Verbose Logging"
 msgstr "Докладний журнал"
 
-#: src/plugins/buildui/gtk/menus.ui:197
+#: src/plugins/buildui/gtk/menus.ui:192
 msgid "Tools"
 msgstr "Інструменти"
 
@@ -4191,15 +4178,14 @@ msgid "Find/Replace…"
 msgstr "Знайти і замінити…"
 
 #: src/plugins/editorui/gtk/menus.ui:178
-#| msgid "Format Selection Failed: %s"
-msgid "Format Selection"
-msgstr "Форматувати позначене"
-
-#: src/plugins/editorui/gtk/menus.ui:184
 msgid "Print…"
 msgstr "Надрукувати…"
 
-#: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:208
+#: src/plugins/editorui/gtk/menus.ui:186
+msgid "Format Selection"
+msgstr "Форматувати позначене"
+
+#: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr "Подібні файли (Ctrl+Shift+O)"
 
@@ -4474,9 +4460,10 @@ msgstr "З_найти у %s"
 msgid "_Replace in %s"
 msgstr "За_мінити у %s"
 
-#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
-msgid "Find in Files"
-msgstr "Пошук у файлах"
+#: src/plugins/grep/gbp-grep-panel.ui:5
+#| msgid "Similar Files (Ctrl+Shift+O)"
+msgid "Find in Files (Ctrl+Alt+Shift+F)"
+msgstr "Знайти у Файлах (Ctrl+Alt+Shift+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:46
 msgid "Find and Replace"
@@ -4509,6 +4496,10 @@ msgstr "З_найти у проєкті"
 #: src/plugins/grep/gbp-grep-panel.ui:144
 msgid "_Replace in Project"
 msgstr "З_амінити у проєкті"
+
+#: src/plugins/grep/gbp-grep-popover.ui:12
+msgid "Find in Files"
+msgstr "Пошук у файлах"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
 msgid "Search for…"
@@ -5138,7 +5129,7 @@ msgstr "Вилучаємо файли…"
 msgid "Recent Projects"
 msgstr "Недавні проєкти"
 
-#: src/plugins/retab/gtk/menus.ui:7
+#: src/plugins/retab/gtk/menus.ui:5
 msgid "_Reformat tabs"
 msgstr "Пере_форматування табуляцій"
 
@@ -5367,13 +5358,13 @@ msgstr "Фільтрувати символи…"
 msgid "In Page"
 msgstr "На сторінці"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:78
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:351
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Select Symbol…"
 msgstr "Вибрати символ…"
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:354
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Вибрати символ (Ctrl+Shift+K)"
 
@@ -5381,15 +5372,15 @@ msgstr "Вибрати символ (Ctrl+Shift+K)"
 msgid "Navigate to a symbol within the current page"
 msgstr "Перейти до пункту на поточній сторінці"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:110
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
 msgstr "Відкрити захоплені дані Sysprof…"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:119
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:352
 msgid "Sysprof Capture (*.syscap)"
 msgstr "захоплені дані Sysprof (*.syscap)"
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:125
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:358
 msgid "All Files"
 msgstr "усі файли"
 
@@ -5514,7 +5505,7 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:262
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:270
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Термінал"
@@ -5629,7 +5620,7 @@ msgstr "Програму запущено о %s\r\n"
 msgid "Application exited"
 msgstr "Програма завершила роботу"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:282
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:288
 msgid "Application Output"
 msgstr "Виведені програмою дані"
 
@@ -5729,6 +5720,22 @@ msgstr "TODO/FIXME"
 #: src/plugins/todo/gbp-todo-panel.ui:14
 msgid "Loading TODOs…"
 msgstr "Завантажуємо TODO…"
+
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+msgid "Updating Dependencies…"
+msgstr "Оновлення залежностей…"
+
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
+msgid "Builder is updating your projects configured dependencies."
+msgstr "«Будівник» оновлює налаштовані залежності ваших проєктів."
+
+#: src/plugins/update-dependencies/gtk/menus.ui:6
+msgid "Update Dependencies…"
+msgstr "Оновити залежності…"
+
+#: src/plugins/update-dependencies/gtk/menus.ui:8
+msgid "Download updates to project dependencies"
+msgstr "Отримати оновлення залежностей проєкту"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
