@@ -32,14 +32,12 @@ typedef struct
   IdeTweaksItem *parent;
   GList link;
   GQueue children;
-  char *id;
   char **keywords;
   char *sort_key;
 } IdeTweaksItemPrivate;
 
 enum {
   PROP_0,
-  PROP_ID,
   PROP_KEYWORDS,
   PROP_SORT_KEY,
   N_PROPS
@@ -74,7 +72,6 @@ ide_tweaks_item_dispose (GObject *object)
 
   g_clear_pointer (&priv->keywords, g_strfreev);
   g_clear_pointer (&priv->sort_key, g_free);
-  g_clear_pointer (&priv->id, g_free);
 
   G_OBJECT_CLASS (ide_tweaks_item_parent_class)->dispose (object);
 }
@@ -95,10 +92,6 @@ ide_tweaks_item_get_property (GObject    *object,
 
     case PROP_SORT_KEY:
       g_value_set_string (value, ide_tweaks_item_get_sort_key (self));
-      break;
-
-    case PROP_ID:
-      g_value_set_string (value, ide_tweaks_item_get_id (self));
       break;
 
     default:
@@ -124,10 +117,6 @@ ide_tweaks_item_set_property (GObject      *object,
       ide_tweaks_item_set_sort_key (self, g_value_get_string (value));
       break;
 
-    case PROP_ID:
-      ide_tweaks_item_set_id (self, g_value_get_string (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -141,10 +130,6 @@ ide_tweaks_item_class_init (IdeTweaksItemClass *klass)
   object_class->dispose = ide_tweaks_item_dispose;
   object_class->get_property = ide_tweaks_item_get_property;
   object_class->set_property = ide_tweaks_item_set_property;
-
-  properties [PROP_ID] =
-    g_param_spec_string ("id", NULL, NULL, NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_KEYWORDS] =
     g_param_spec_boxed ("keywords", NULL, NULL,
@@ -175,28 +160,6 @@ ide_tweaks_item_accepts (IdeTweaksItem *self,
     return IDE_TWEAKS_ITEM_GET_CLASS (self)->accepts (self, child);
 
   return FALSE;
-}
-
-const char *
-ide_tweaks_item_get_id (IdeTweaksItem *self)
-{
-  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), NULL);
-
-  return priv->id;
-}
-
-void
-ide_tweaks_item_set_id (IdeTweaksItem *self,
-                        const char    *id)
-{
-  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TWEAKS_ITEM (self));
-
-  if (ide_set_string (&priv->id, id))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
 }
 
 const char * const *
