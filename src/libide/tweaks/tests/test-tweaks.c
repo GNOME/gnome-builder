@@ -37,12 +37,15 @@ main (int   argc,
   g_autoptr(GError) error = NULL;
   g_autofree char *expected = NULL;
   g_autofree char *expected_contents = NULL;
+  gboolean display = FALSE;
   gsize len = 0;
   const GOptionEntry entries[] = {
     { "expected", 'e', 0, G_OPTION_ARG_FILENAME, &expected, "File containing expected output" },
+    { "display", 'd', 0, G_OPTION_ARG_NONE, &display, "Display a window containin the tweaks" },
     { NULL }
   };
 
+  gtk_init ();
   gtk_source_init ();
   _ide_tweaks_init ();
 
@@ -88,28 +91,44 @@ main (int   argc,
   _ide_tweaks_item_printf (IDE_TWEAKS_ITEM (tweaks), string, 0);
 
   if (!expected)
+    g_print ("%s", string->str);
+
+  if (expected)
     {
-      g_print ("%s", string->str);
-      return EXIT_SUCCESS;
+      if (!g_file_get_contents (expected, &expected_contents, &len, &error))
+        g_error ("Failed to load expected contents: %s: %s", expected, error->message);
+
+      if (!ide_str_equal0 (expected_contents, string->str))
+        {
+          g_printerr ("Contents did not match.\n"
+                      "\n"
+                      "Expected:\n"
+                      "=========\n"
+                      "%s\n"
+                      "\n"
+                      "Got:\n"
+                      "====\n"
+                      "%s\n",
+                      expected_contents,
+                      string->str);
+          return EXIT_FAILURE;
+        }
     }
 
-  if (!g_file_get_contents (expected, &expected_contents, &len, &error))
-    g_error ("Failed to load expected contents: %s: %s", expected, error->message);
+  if (display)
+    {
+      GtkWidget *window = ide_tweaks_window_new ();
+      g_autoptr(GMainLoop) main_loop = g_main_loop_new (NULL, FALSE);
 
-  if (ide_str_equal0 (expected_contents, string->str))
-    return EXIT_SUCCESS;
+      ide_tweaks_window_set_tweaks (IDE_TWEAKS_WINDOW (window), tweaks);
 
-  g_printerr ("Contents did not match.\n"
-              "\n"
-              "Expected:\n"
-              "=========\n"
-              "%s\n"
-              "\n"
-              "Got:\n"
-              "====\n"
-              "%s\n",
-              expected_contents,
-              string->str);
+      g_signal_connect_swapped (window,
+                                "close-request",
+                                G_CALLBACK (g_main_loop_quit),
+                                main_loop);
+      gtk_window_present (GTK_WINDOW (window));
+      g_main_loop_run (main_loop);
+    }
 
-  return EXIT_FAILURE;
+  return EXIT_SUCCESS;
 }
