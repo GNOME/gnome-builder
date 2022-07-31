@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-29 19:28+0000\n"
-"PO-Revision-Date: 2022-07-30 16:31+0200\n"
+"POT-Creation-Date: 2022-07-31 05:41+0000\n"
+"PO-Revision-Date: 2022-07-31 11:02+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: src/libide/editor/ide-editor-workspace.ui:21
 #: src/libide/gui/ide-application-actions.c:153
 #: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:758 src/main.c:237
+#: src/libide/gui/ide-preferences-builtin.c:757 src/main.c:242
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Builder"
@@ -164,7 +164,7 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
-#: src/libide/gui/ide-preferences-builtin.c:432
+#: src/libide/gui/ide-preferences-builtin.c:431
 msgid "Clear build logs"
 msgstr ""
 
@@ -339,101 +339,92 @@ msgstr ""
 msgid "The various types of space to draw in the editor."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
-#: src/libide/gui/ide-preferences-builtin.c:181
-msgid "Overscroll"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
-msgid "The number of lines to scroll beyond the end of the buffer."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
 msgid "Wrap Text"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
 msgid "The way to wrap a long line of text for a better visibility."
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
+#: src/libide/gui/ide-preferences-builtin.c:207
+msgid "Autosave Enabled"
+msgstr ""
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+msgid "Enable or disable autosave feature."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 #: src/libide/gui/ide-preferences-builtin.c:208
-msgid "Autosave Enabled"
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
-msgid "Enable or disable autosave feature."
-msgstr ""
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
-#: src/libide/gui/ide-preferences-builtin.c:209
 msgid "Autosave Frequency"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
 msgid "Completion Row Count"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
 msgid "The number of completion rows to display to the user."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
 msgid "Line Height"
-msgstr ""
+msgstr "ხაზის სიმაღლე"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 msgid "The line height to use for the selected font."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:133
-#: src/libide/gui/ide-preferences-builtin.c:230
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:127
+#: src/libide/gui/ide-preferences-builtin.c:229
 msgid "Interactive Completion"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:133
 msgid "Minimum characters for matching selection."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:138
 msgid "Use Tabs"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid "Use the tabbar within the page grid."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:149
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 msgid "Enable Snippets"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:150
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:154
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:148
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
 msgid "Select First Completion"
 msgstr ""
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:155
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:149
 msgid "Automatically select the first auto-completion entry."
 msgstr ""
 
@@ -487,7 +478,7 @@ msgid "\"Projects\""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:28
-#: src/libide/gui/ide-preferences-builtin.c:449
+#: src/libide/gui/ide-preferences-builtin.c:448
 msgid "Projects directory"
 msgstr ""
 
@@ -721,8 +712,8 @@ msgid "Preferences"
 msgstr "მორგება"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
-#: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:694
-#: src/libide/gui/ide-preferences-builtin.c:701
+#: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
+#: src/libide/gui/ide-preferences-builtin.c:700
 msgid "Keyboard Shortcuts"
 msgstr "კლავიატურის მალსახმობები"
 
@@ -785,7 +776,7 @@ msgstr "შენახვა"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:114
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
 msgstr "გაუქმენა"
@@ -1150,7 +1141,7 @@ msgstr ""
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
 #: src/plugins/color-picker/gb-color-picker-prefs.c:209
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:113
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr ""
 
@@ -1211,7 +1202,7 @@ msgid "%u of %u"
 msgstr "%u %u-დან"
 
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/gui/ide-preferences-builtin.c:695
+#: src/libide/gui/ide-preferences-builtin.c:694
 msgid "Search"
 msgstr ""
 
@@ -1332,9 +1323,9 @@ msgid "Cannot load HTML. Missing WebKit support."
 msgstr "HTML-ის ჩატვირთვის შეცდომა. WebKit-ის მხარდაჭერა ვერ ვიპოვე."
 
 #: src/libide/gui/ide-preferences-builtin.c:117
-#: src/libide/gui/ide-preferences-builtin.c:649
-#: src/libide/gui/ide-preferences-builtin.c:672
-#: src/plugins/buildui/gtk/menus.ui:146
+#: src/libide/gui/ide-preferences-builtin.c:648
+#: src/libide/gui/ide-preferences-builtin.c:671
+#: src/plugins/buildui/gtk/menus.ui:141
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1355,12 +1346,12 @@ msgid "follow"
 msgstr "მიყოლა"
 
 #: src/libide/gui/ide-preferences-builtin.c:121
-#: src/libide/gui/ide-preferences-builtin.c:594
+#: src/libide/gui/ide-preferences-builtin.c:593
 msgid "Light"
 msgstr "ღია"
 
 #: src/libide/gui/ide-preferences-builtin.c:122
-#: src/libide/gui/ide-preferences-builtin.c:595
+#: src/libide/gui/ide-preferences-builtin.c:594
 msgid "Dark"
 msgstr "ბნელი"
 
@@ -1435,10 +1426,10 @@ msgstr ""
 
 #. Add our pages
 #: src/libide/gui/ide-preferences-builtin.c:174
-#: src/libide/gui/ide-preferences-builtin.c:228
-#: src/libide/gui/ide-preferences-builtin.c:351
-#: src/libide/gui/ide-preferences-builtin.c:423
-#: src/libide/gui/ide-preferences-builtin.c:708
+#: src/libide/gui/ide-preferences-builtin.c:227
+#: src/libide/gui/ide-preferences-builtin.c:350
+#: src/libide/gui/ide-preferences-builtin.c:422
+#: src/libide/gui/ide-preferences-builtin.c:707
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
@@ -1482,617 +1473,613 @@ msgstr ""
 msgid "Minimum number of lines to keep above and below the cursor"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:181
-msgid "Allow the editor to scroll past the end of the buffer"
-msgstr ""
-
-#: src/libide/gui/ide-preferences-builtin.c:183
+#: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Text Wrapping"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:184
+#: src/libide/gui/ide-preferences-builtin.c:183
 #: src/plugins/buildui/gtk/preferences.ui:92
 msgid "Never"
 msgstr "არასდროს"
 
-#: src/libide/gui/ide-preferences-builtin.c:185
+#: src/libide/gui/ide-preferences-builtin.c:184
 msgid "In Between Words"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:186
+#: src/libide/gui/ide-preferences-builtin.c:185
 #: src/plugins/buildui/gtk/preferences.ui:98
 msgid "Always"
 msgstr "ყოველთვის"
 
-#: src/libide/gui/ide-preferences-builtin.c:188
+#: src/libide/gui/ide-preferences-builtin.c:187
 msgid "Line Information"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:189
+#: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Line numbers"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:189
+#: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Show line number at beginning of each line"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:190
+#: src/libide/gui/ide-preferences-builtin.c:189
 msgid "Relative line numbers"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:190
+#: src/libide/gui/ide-preferences-builtin.c:189
 msgid "Show line numbers relative to the cursor line"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:191
+#: src/libide/gui/ide-preferences-builtin.c:190
 msgid "Line changes"
 msgstr "სტრიქონის ცვლილებები"
 
-#: src/libide/gui/ide-preferences-builtin.c:191
+#: src/libide/gui/ide-preferences-builtin.c:190
 msgid "Show if a line was added or modified next to line number"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:192
+#: src/libide/gui/ide-preferences-builtin.c:191
 msgid "Line diagnostics"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:192
+#: src/libide/gui/ide-preferences-builtin.c:191
 msgid "Show an icon next to line numbers indicating type of diagnostic"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:194
+#: src/libide/gui/ide-preferences-builtin.c:193
 msgid "Highlight"
 msgstr "გამოკვეთა"
 
-#: src/libide/gui/ide-preferences-builtin.c:195
+#: src/libide/gui/ide-preferences-builtin.c:194
 msgid "Current line"
 msgstr "მიმდინარე ხაზი"
 
-#: src/libide/gui/ide-preferences-builtin.c:195
+#: src/libide/gui/ide-preferences-builtin.c:194
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:86
 msgid "Make current line stand out with highlights"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:196
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "Matching brackets"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:196
+#: src/libide/gui/ide-preferences-builtin.c:195
 msgid "Highlight matching brackets based on cursor position"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:198
+#: src/libide/gui/ide-preferences-builtin.c:197
 msgid "Visible Whitespace Characters"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:199
+#: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
 msgid "Spaces"
 msgstr "სივრცეები"
 
-#: src/libide/gui/ide-preferences-builtin.c:200
+#: src/libide/gui/ide-preferences-builtin.c:199
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
 msgid "Tabs"
 msgstr "დაფები"
 
-#: src/libide/gui/ide-preferences-builtin.c:201
+#: src/libide/gui/ide-preferences-builtin.c:200
 msgid "New line and carriage return"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:202
+#: src/libide/gui/ide-preferences-builtin.c:201
 msgid "Non-breaking spaces"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:203
+#: src/libide/gui/ide-preferences-builtin.c:202
 msgid "Spaces inside of text"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:204
+#: src/libide/gui/ide-preferences-builtin.c:203
 msgid "Trailing Only"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:205
+#: src/libide/gui/ide-preferences-builtin.c:204
 msgid "Leading Only"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: src/libide/gui/ide-preferences-builtin.c:206
 msgid "Autosave"
 msgstr "ავტომატური შენახვა"
 
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Enable or disable autosave feature"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:209
+#: src/libide/gui/ide-preferences-builtin.c:208
 msgid "The number of seconds after modification before auto saving"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:215
+#: src/libide/gui/ide-preferences-builtin.c:214
 msgid "Code Insight"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:217
+#: src/libide/gui/ide-preferences-builtin.c:216
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:35
 msgid "Highlighting"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:218
+#: src/libide/gui/ide-preferences-builtin.c:217
 msgid "Semantic Highlighting"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:218
+#: src/libide/gui/ide-preferences-builtin.c:217
 msgid ""
 "Use code insight to highlight additional information discovered in source "
 "file"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:220
-#: src/libide/gui/ide-preferences-builtin.c:682
-#: src/libide/gui/ide-preferences-builtin.c:688
+#: src/libide/gui/ide-preferences-builtin.c:219
+#: src/libide/gui/ide-preferences-builtin.c:681
+#: src/libide/gui/ide-preferences-builtin.c:687
 msgid "Diagnostics"
 msgstr "დიაგნოსტიკა"
 
-#: src/libide/gui/ide-preferences-builtin.c:226
-#: src/libide/gui/ide-preferences-builtin.c:675
-#: src/libide/gui/ide-preferences-builtin.c:680
+#: src/libide/gui/ide-preferences-builtin.c:225
+#: src/libide/gui/ide-preferences-builtin.c:674
+#: src/libide/gui/ide-preferences-builtin.c:679
 msgid "Completion"
 msgstr "დასრულება"
 
-#: src/libide/gui/ide-preferences-builtin.c:229
+#: src/libide/gui/ide-preferences-builtin.c:228
 msgid "Completions Display Size"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:229
+#: src/libide/gui/ide-preferences-builtin.c:228
 msgid "Number of completions to display"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:230
+#: src/libide/gui/ide-preferences-builtin.c:229
 msgid "Display code suggestions interactively as you type"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:232
+#: src/libide/gui/ide-preferences-builtin.c:231
 msgid "Completion Providers"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:238
-#: src/libide/gui/ide-preferences-builtin.c:677
+#: src/libide/gui/ide-preferences-builtin.c:237
+#: src/libide/gui/ide-preferences-builtin.c:676
 msgid "Snippets"
 msgstr "ფრაგმენტები"
 
-#: src/libide/gui/ide-preferences-builtin.c:281
+#: src/libide/gui/ide-preferences-builtin.c:280
 msgid "Programming Languages"
 msgstr ""
 
 #. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:292
+#: src/libide/gui/ide-preferences-builtin.c:291
 msgid "Search languages…"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:352
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Trim trailing whitespace"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:352
+#: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:353
+#: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
 msgid "Overwrite Braces"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:353
+#: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:128
 msgid "Overwrite closing braces"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:354
+#: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
 msgid "Insert Matching Brace"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:354
+#: src/libide/gui/ide-preferences-builtin.c:353
 msgid "Insert matching character for { [ ( or \""
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:355
+#: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
 msgid "Insert Trailing Newline"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:355
+#: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
 msgid "Ensure files end with a newline"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:357
+#: src/libide/gui/ide-preferences-builtin.c:356
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:53
 msgid "Margins"
 msgstr "გვერდის ველები"
 
-#: src/libide/gui/ide-preferences-builtin.c:358
+#: src/libide/gui/ide-preferences-builtin.c:357
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:142
 msgid "Show right margin"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:359
+#: src/libide/gui/ide-preferences-builtin.c:358
 msgid "Right margin position"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:359
+#: src/libide/gui/ide-preferences-builtin.c:358
 msgid "Position in spaces for the right margin"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:361
+#: src/libide/gui/ide-preferences-builtin.c:360
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:55
 #: src/plugins/editorui/gtk/menus.ui:5
 msgid "Indentation"
 msgstr "სწორება"
 
-#: src/libide/gui/ide-preferences-builtin.c:362
+#: src/libide/gui/ide-preferences-builtin.c:361
 msgid "Tab width"
 msgstr "ტაბულაციის სიგანე"
 
-#: src/libide/gui/ide-preferences-builtin.c:362
+#: src/libide/gui/ide-preferences-builtin.c:361
 msgid "Width of a tab character in spaces"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:363
+#: src/libide/gui/ide-preferences-builtin.c:362
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:154
 msgid "Insert spaces instead of tabs"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:363
+#: src/libide/gui/ide-preferences-builtin.c:362
 msgid "Prefer spaces over use of tabs"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:364
+#: src/libide/gui/ide-preferences-builtin.c:363
 msgid "Automatically indent"
 msgstr "ავტომატური სწორება"
 
-#: src/libide/gui/ide-preferences-builtin.c:364
+#: src/libide/gui/ide-preferences-builtin.c:363
 msgid "Indent source code as you type"
 msgstr "აკრეფის დროს კოდის სწორება"
 
-#: src/libide/gui/ide-preferences-builtin.c:366
+#: src/libide/gui/ide-preferences-builtin.c:365
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:54
 msgid "Spacing"
 msgstr "დაშორება"
 
-#: src/libide/gui/ide-preferences-builtin.c:367
+#: src/libide/gui/ide-preferences-builtin.c:366
 msgid "Space before opening parentheses"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:368
+#: src/libide/gui/ide-preferences-builtin.c:367
 msgid "Space before opening brackets"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:369
+#: src/libide/gui/ide-preferences-builtin.c:368
 msgid "Space before opening braces"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:370
+#: src/libide/gui/ide-preferences-builtin.c:369
 msgid "Space before opening angles"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:371
+#: src/libide/gui/ide-preferences-builtin.c:370
 msgid "Prefer a space before colons"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:372
+#: src/libide/gui/ide-preferences-builtin.c:371
 msgid "Prefer a space before commas"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:373
+#: src/libide/gui/ide-preferences-builtin.c:372
 msgid "Prefer a space before semicolons"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:383
-#: src/libide/gui/ide-preferences-builtin.c:401
+#: src/libide/gui/ide-preferences-builtin.c:382
+#: src/libide/gui/ide-preferences-builtin.c:400
 msgid "Default"
 msgstr "სტანდარტული"
 
-#: src/libide/gui/ide-preferences-builtin.c:388
-#: src/libide/gui/ide-preferences-builtin.c:406
+#: src/libide/gui/ide-preferences-builtin.c:387
+#: src/libide/gui/ide-preferences-builtin.c:405
 msgid "Number of CPU"
 msgstr "CPU-ების რაოდენობა"
 
-#: src/libide/gui/ide-preferences-builtin.c:421
-#: src/libide/gui/ide-preferences-builtin.c:655
+#: src/libide/gui/ide-preferences-builtin.c:420
+#: src/libide/gui/ide-preferences-builtin.c:654
 msgid "Build"
 msgstr "აგება"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "Build Workers"
 msgstr "აგების დამხმარე პროცესები"
 
-#: src/libide/gui/ide-preferences-builtin.c:424
+#: src/libide/gui/ide-preferences-builtin.c:423
 msgid "Number of parallel build workers"
 msgstr "აგების დამხმარე პროცესების რიცხვი"
 
-#: src/libide/gui/ide-preferences-builtin.c:432
+#: src/libide/gui/ide-preferences-builtin.c:431
 msgid "Clear build log pane on rebuild"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:433
+#: src/libide/gui/ide-preferences-builtin.c:432
 msgid "Clear build cache at startup"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:433
+#: src/libide/gui/ide-preferences-builtin.c:432
 msgid "Expired caches will be purged when Builder is started"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:435
-#: src/libide/gui/ide-preferences-builtin.c:659
+#: src/libide/gui/ide-preferences-builtin.c:434
+#: src/libide/gui/ide-preferences-builtin.c:658
 msgid "Network"
 msgstr "ქსელი"
 
-#: src/libide/gui/ide-preferences-builtin.c:436
+#: src/libide/gui/ide-preferences-builtin.c:435
 msgid "Allow downloads over metered connections"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:436
-#: src/libide/gui/ide-preferences-builtin.c:754
+#: src/libide/gui/ide-preferences-builtin.c:435
+#: src/libide/gui/ide-preferences-builtin.c:753
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:438
-#: src/libide/gui/ide-preferences-builtin.c:656
+#: src/libide/gui/ide-preferences-builtin.c:437
+#: src/libide/gui/ide-preferences-builtin.c:655
 #: src/plugins/debuggerui/gtk/menus.ui:21
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
 msgid "Debugger"
 msgstr "გამმართველი"
 
-#: src/libide/gui/ide-preferences-builtin.c:439
-#: src/libide/gui/ide-preferences-builtin.c:706
+#: src/libide/gui/ide-preferences-builtin.c:438
+#: src/libide/gui/ide-preferences-builtin.c:705
 #: src/plugins/debuggerui/gtk/menus.ui:23
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
 msgid "Breakpoints"
 msgstr "შეჩერების წერტილები"
 
-#: src/libide/gui/ide-preferences-builtin.c:440
+#: src/libide/gui/ide-preferences-builtin.c:439
 msgid "Insert Breakpoint at Start of Application"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:440
+#: src/libide/gui/ide-preferences-builtin.c:439
 msgid ""
 "Automatically stop execution at the start of the applications main function"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:446
-#: src/libide/gui/ide-preferences-builtin.c:654
+#: src/libide/gui/ide-preferences-builtin.c:445
+#: src/libide/gui/ide-preferences-builtin.c:653
 #: src/libide/projects/ide-projects-global.c:103
 msgid "Projects"
 msgstr "პროექტები"
 
-#: src/libide/gui/ide-preferences-builtin.c:448
+#: src/libide/gui/ide-preferences-builtin.c:447
 msgid "Workspace"
 msgstr "სამუშაო სივრცე"
 
-#: src/libide/gui/ide-preferences-builtin.c:449
+#: src/libide/gui/ide-preferences-builtin.c:448
 msgid "A place for all your projects"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:450
+#: src/libide/gui/ide-preferences-builtin.c:449
 msgid "Restore previously opened files"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:450
-#: src/libide/gui/ide-preferences-builtin.c:729
+#: src/libide/gui/ide-preferences-builtin.c:449
+#: src/libide/gui/ide-preferences-builtin.c:728
 msgid "Open previously opened files when loading a project"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:572
-#: src/libide/gui/ide-preferences-builtin.c:684
+#: src/libide/gui/ide-preferences-builtin.c:571
+#: src/libide/gui/ide-preferences-builtin.c:683
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:111
 #: src/plugins/create-project/gbp-create-project-widget.ui:115
 #: src/plugins/git/gbp-git-preferences-addin.c:184
 msgid "Version Control"
 msgstr "ვერსიის კონტროლი"
 
-#: src/libide/gui/ide-preferences-builtin.c:593
+#: src/libide/gui/ide-preferences-builtin.c:592
 msgid "Follow System"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:650
+#: src/libide/gui/ide-preferences-builtin.c:649
 msgid "Editing"
 msgstr "ჩასწორება"
 
-#: src/libide/gui/ide-preferences-builtin.c:651
+#: src/libide/gui/ide-preferences-builtin.c:650
 msgid "Shortcuts"
 msgstr "მალსახმობები"
 
-#: src/libide/gui/ide-preferences-builtin.c:652
-#: src/libide/gui/ide-preferences-builtin.c:666
+#: src/libide/gui/ide-preferences-builtin.c:651
+#: src/libide/gui/ide-preferences-builtin.c:665
 #: src/plugins/spellcheck/editor-spell-menu.c:259
 msgid "Languages"
 msgstr "ენები"
 
-#: src/libide/gui/ide-preferences-builtin.c:653
+#: src/libide/gui/ide-preferences-builtin.c:652
 msgid "Insight"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:657
-#: src/libide/gui/ide-preferences-builtin.c:668
+#: src/libide/gui/ide-preferences-builtin.c:656
+#: src/libide/gui/ide-preferences-builtin.c:667
 msgid "Commands"
 msgstr "ბრძანებები"
 
-#: src/libide/gui/ide-preferences-builtin.c:658
-#: src/libide/gui/ide-preferences-builtin.c:685
+#: src/libide/gui/ide-preferences-builtin.c:657
+#: src/libide/gui/ide-preferences-builtin.c:684
 msgid "SDKs"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:660
+#: src/libide/gui/ide-preferences-builtin.c:659
 msgid "Plugins"
 msgstr "დამატებები"
 
 #. Add groups to pages
-#: src/libide/gui/ide-preferences-builtin.c:664
+#: src/libide/gui/ide-preferences-builtin.c:663
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
 msgid "Overview"
 msgstr "მიმოხილვა"
 
-#: src/libide/gui/ide-preferences-builtin.c:665
+#: src/libide/gui/ide-preferences-builtin.c:664
 msgid "Configurations"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:667
+#: src/libide/gui/ide-preferences-builtin.c:666
 msgid "Application"
 msgstr "აპლიკაცია"
 
-#: src/libide/gui/ide-preferences-builtin.c:673
+#: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
 msgid "Interface"
 msgstr "ინტერფეისი"
 
-#: src/libide/gui/ide-preferences-builtin.c:676
+#: src/libide/gui/ide-preferences-builtin.c:675
 msgid "Formatting"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:686
+#: src/libide/gui/ide-preferences-builtin.c:685
 msgid "Language Servers"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:687
+#: src/libide/gui/ide-preferences-builtin.c:686
 msgid "Devices & Simulators"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:689
+#: src/libide/gui/ide-preferences-builtin.c:688
 msgid "Build Systems"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:690
+#: src/libide/gui/ide-preferences-builtin.c:689
 msgid "Compilers"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:691
+#: src/libide/gui/ide-preferences-builtin.c:690
 msgid "Debuggers"
 msgstr "გამმართველები"
 
-#: src/libide/gui/ide-preferences-builtin.c:692
-#: src/libide/gui/ide-preferences-builtin.c:704
+#: src/libide/gui/ide-preferences-builtin.c:691
+#: src/libide/gui/ide-preferences-builtin.c:703
 msgid "Templates"
 msgstr "შაბლონები"
 
-#: src/libide/gui/ide-preferences-builtin.c:693
+#: src/libide/gui/ide-preferences-builtin.c:692
 msgid "Editing & Formatting"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:696
+#: src/libide/gui/ide-preferences-builtin.c:695
 msgid "Web"
 msgstr "ვები"
 
-#: src/libide/gui/ide-preferences-builtin.c:697
+#: src/libide/gui/ide-preferences-builtin.c:696
 msgid "Language Enablement"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:698
+#: src/libide/gui/ide-preferences-builtin.c:697
 msgid "Desktop Integration"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:699
+#: src/libide/gui/ide-preferences-builtin.c:698
 msgid "Additional"
 msgstr "დამატებით"
 
-#: src/libide/gui/ide-preferences-builtin.c:703
+#: src/libide/gui/ide-preferences-builtin.c:702
 msgid "Behavior"
 msgstr "ქცევა"
 
-#: src/libide/gui/ide-preferences-builtin.c:710
+#: src/libide/gui/ide-preferences-builtin.c:709
 msgid "Downloads"
 msgstr "გადმოწერები"
 
-#: src/libide/gui/ide-preferences-builtin.c:714
+#: src/libide/gui/ide-preferences-builtin.c:713
 msgid "Running"
 msgstr "გაშვებულია"
 
-#: src/libide/gui/ide-preferences-builtin.c:715
+#: src/libide/gui/ide-preferences-builtin.c:714
 msgid "Starting & Stopping"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:723
+#: src/libide/gui/ide-preferences-builtin.c:722
 msgid "Navigate with Tab Bar"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:724
+#: src/libide/gui/ide-preferences-builtin.c:723
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:728
+#: src/libide/gui/ide-preferences-builtin.c:727
 msgid "Restore Previous Session"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:733
+#: src/libide/gui/ide-preferences-builtin.c:732
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
 msgid "License"
 msgstr "ლიცენზია"
 
-#: src/libide/gui/ide-preferences-builtin.c:734
+#: src/libide/gui/ide-preferences-builtin.c:733
 msgid "The default license when creating new projects"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:738
+#: src/libide/gui/ide-preferences-builtin.c:737
 msgid "Stop After Launching Program"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:739
+#: src/libide/gui/ide-preferences-builtin.c:738
 msgid "Automatically insert a breakpoint at the start of the application"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:743
+#: src/libide/gui/ide-preferences-builtin.c:742
 msgid "Clear Build Logs"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:744
+#: src/libide/gui/ide-preferences-builtin.c:743
 msgid "Upon rebuilding the project the build log will be cleared"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:748
+#: src/libide/gui/ide-preferences-builtin.c:747
 msgid "Clear Expired Artifacts"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:749
+#: src/libide/gui/ide-preferences-builtin.c:748
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:753
+#: src/libide/gui/ide-preferences-builtin.c:752
 msgid "Allow Downloads over Metered Connections"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:759
+#: src/libide/gui/ide-preferences-builtin.c:758
 msgid "Keyboard shortcuts similar to GNOME Text Editor"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:764
+#: src/libide/gui/ide-preferences-builtin.c:763
 #: src/plugins/buildui/gtk/preferences.ui:72
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
 msgstr "ტერმინალის ფონტი"
 
-#: src/libide/gui/ide-preferences-builtin.c:765
+#: src/libide/gui/ide-preferences-builtin.c:764
 msgid "The font used within terminals"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:771
+#: src/libide/gui/ide-preferences-builtin.c:770
 msgid "Install Before Running"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:772
+#: src/libide/gui/ide-preferences-builtin.c:771
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless run commands are used."
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:776
+#: src/libide/gui/ide-preferences-builtin.c:775
 msgid "Stop Signal"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:777
+#: src/libide/gui/ide-preferences-builtin.c:776
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
@@ -2102,23 +2089,23 @@ msgstr ""
 msgid "Select Font"
 msgstr "ფონტის არჩევა"
 
-#: src/libide/gui/ide-primary-workspace-actions.c:132
-msgid "Updating Dependencies…"
-msgstr ""
-
-#: src/libide/gui/ide-primary-workspace-actions.c:133
-msgid "Builder is updating your projects configured dependencies."
-msgstr ""
-
 #: src/libide/gui/ide-primary-workspace.ui:57
 msgid "Search (Ctrl+Enter)"
 msgstr ""
 
-#: src/libide/gui/ide-run-button.c:144
+#: src/libide/gui/ide-run-button.c:62
+msgid "Run Project (Shift+Ctrl+Space)"
+msgstr ""
+
+#: src/libide/gui/ide-run-button.c:68
+msgid "Stop Running Project"
+msgstr "გაშვებული ტესტების გაჩერება"
+
+#: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
 msgstr ""
 
-#: src/libide/gui/ide-run-button.c:146
+#: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
 msgstr ""
 
@@ -2163,72 +2150,72 @@ msgstr "_ასლი"
 msgid "_Paste"
 msgstr "_ჩასმა"
 
-#: src/libide/sourceview/gtk/menus.ui:22
-msgid "_Selection"
-msgstr "მონიშნული"
-
-#: src/libide/sourceview/gtk/menus.ui:24 src/libide/terminal/gtk/menus.ui:50
-msgid "Select _All"
-msgstr "მონიშნე _ყველა"
-
-#: src/libide/sourceview/gtk/menus.ui:30
-msgid "All _Upper Case"
-msgstr "დიდ ასოებში გადაყვანა"
-
-#: src/libide/sourceview/gtk/menus.ui:36
-msgid "All _Lower Case"
-msgstr "პატარა ასოებში გადაყვანა"
-
-#: src/libide/sourceview/gtk/menus.ui:42
-msgid "In_vert Case"
-msgstr "სიმბოლოების ზომის ინვერსია"
-
-#: src/libide/sourceview/gtk/menus.ui:48
-msgid "_Title Case"
-msgstr "სათაურის ზომა"
-
-#: src/libide/sourceview/gtk/menus.ui:55
-msgid "_Join Lines"
-msgstr "ხაზების შეერთება"
-
-#: src/libide/sourceview/gtk/menus.ui:60
-msgid "S_ort Lines"
-msgstr "ხაზების დალაგება"
-
-#: src/libide/sourceview/gtk/menus.ui:70 src/libide/sourceview/gtk/menus.ui:72
+#: src/libide/sourceview/gtk/menus.ui:24 src/libide/sourceview/gtk/menus.ui:26
 msgid "Undo"
 msgstr "ბრძანების გაუქმება"
 
-#: src/libide/sourceview/gtk/menus.ui:77
+#: src/libide/sourceview/gtk/menus.ui:31
 msgid "Redo"
 msgstr "ბრძანების აღდგენა"
 
-#: src/libide/sourceview/gtk/menus.ui:83
+#: src/libide/sourceview/gtk/menus.ui:37
 msgid "Zoom"
 msgstr ""
 
-#: src/libide/sourceview/gtk/menus.ui:86
+#: src/libide/sourceview/gtk/menus.ui:40
 msgid "Zoom Out"
 msgstr "დაპატარავება"
 
-#: src/libide/sourceview/gtk/menus.ui:92
+#: src/libide/sourceview/gtk/menus.ui:46
 msgid "Reset Zoom"
 msgstr "გადიდების საწყისი პარამეტრები"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:52
 msgid "Zoom In"
 msgstr "გა_დიდება"
 
-#: src/libide/sourceview/gtk/menus.ui:107
+#: src/libide/sourceview/gtk/menus.ui:60
+msgid "_Selection"
+msgstr "მონიშნული"
+
+#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:50
+msgid "Select _All"
+msgstr "მონიშნე _ყველა"
+
+#: src/libide/sourceview/gtk/menus.ui:68
+msgid "All _Upper Case"
+msgstr "დიდ ასოებში გადაყვანა"
+
+#: src/libide/sourceview/gtk/menus.ui:74
+msgid "All _Lower Case"
+msgstr "პატარა ასოებში გადაყვანა"
+
+#: src/libide/sourceview/gtk/menus.ui:80
+msgid "In_vert Case"
+msgstr "სიმბოლოების ზომის ინვერსია"
+
+#: src/libide/sourceview/gtk/menus.ui:86
+msgid "_Title Case"
+msgstr "სათაურის ზომა"
+
+#: src/libide/sourceview/gtk/menus.ui:93
+msgid "_Join Lines"
+msgstr "ხაზების შეერთება"
+
+#: src/libide/sourceview/gtk/menus.ui:98
+msgid "S_ort Lines"
+msgstr "ხაზების დალაგება"
+
+#: src/libide/sourceview/gtk/menus.ui:110
 msgid "_Go to Definition"
 msgstr "_აღწერაზე გადასვლა"
 
-#: src/libide/sourceview/gtk/menus.ui:113
+#: src/libide/sourceview/gtk/menus.ui:116
 msgid "_Find references"
 msgstr "_ბმის პოვნა"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:952
+#: src/libide/sourceview/ide-source-view.c:977
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -2320,7 +2307,7 @@ msgstr ""
 msgid "Blank page"
 msgstr "სუფთა გვერდი"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:144
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:139
 msgid "Settings"
 msgstr "მორგება"
 
@@ -2328,7 +2315,7 @@ msgstr "მორგება"
 msgid "Allow JavaScript"
 msgstr ""
 
-#: src/main.c:149
+#: src/main.c:154
 msgid "Run a new instance of Builder"
 msgstr "Builder-ის ახალი ასლის გაშვება"
 
@@ -2888,54 +2875,50 @@ msgid "Display panel containing the build log"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:111
-msgid "Update Dependencies…"
+msgid "manage-sdks"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:113
-msgid "Download updates to project dependencies"
-msgstr ""
-
-#: src/plugins/buildui/gtk/menus.ui:117
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Manage SDKs…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:126
+#: src/plugins/buildui/gtk/menus.ui:121
 msgid "Select Run Command…"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:136
+#: src/plugins/buildui/gtk/menus.ui:131
 msgid "Run"
 msgstr "გაშვება"
 
-#: src/plugins/buildui/gtk/menus.ui:139
+#: src/plugins/buildui/gtk/menus.ui:134
 msgid "Run the project"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:167
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Accessibility"
 msgstr "_დამხმარე საშუალებები"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:164
 msgid "High Contrast"
 msgstr "მაღალი კონტრასტი"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:169
 msgid "Text Direction"
 msgstr "ტექსტის მიმართულება"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:171
 msgid "Left-to-Right"
 msgstr "მარცხნიდან-მარჯვნივ"
 
-#: src/plugins/buildui/gtk/menus.ui:182
+#: src/plugins/buildui/gtk/menus.ui:177
 msgid "Right-to-Left"
 msgstr "მარჯვნიდან-მარცხნივ"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:186
 msgid "Verbose Logging"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:197
+#: src/plugins/buildui/gtk/menus.ui:192
 msgid "Tools"
 msgstr "ხელსაწყოები"
 
@@ -4036,14 +4019,14 @@ msgid "Find/Replace…"
 msgstr "ძებნა და ჩანაცვლება…"
 
 #: src/plugins/editorui/gtk/menus.ui:178
-msgid "Format Selection"
-msgstr "ფორმატის არჩევანი"
-
-#: src/plugins/editorui/gtk/menus.ui:184
 msgid "Print…"
 msgstr "ბეჭდვა…"
 
-#: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:208
+#: src/plugins/editorui/gtk/menus.ui:186
+msgid "Format Selection"
+msgstr "ფორმატის არჩევანი"
+
+#: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
 msgstr ""
 
@@ -4307,9 +4290,9 @@ msgstr "%s-ში მოძებნა"
 msgid "_Replace in %s"
 msgstr "%s-ში ჩანაცვლება"
 
-#: src/plugins/grep/gbp-grep-panel.ui:5 src/plugins/grep/gbp-grep-popover.ui:12
-msgid "Find in Files"
-msgstr "ფაილებში ძებნა"
+#: src/plugins/grep/gbp-grep-panel.ui:5
+msgid "Find in Files (Ctrl+Alt+Shift+F)"
+msgstr ""
 
 #: src/plugins/grep/gbp-grep-panel.ui:46
 msgid "Find and Replace"
@@ -4342,6 +4325,10 @@ msgstr "პროექტში მოძებნა"
 #: src/plugins/grep/gbp-grep-panel.ui:144
 msgid "_Replace in Project"
 msgstr "პროექტში ჩანაცვლება"
+
+#: src/plugins/grep/gbp-grep-popover.ui:12
+msgid "Find in Files"
+msgstr "ფაილებში ძებნა"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
 msgid "Search for…"
@@ -4965,7 +4952,7 @@ msgstr "ფაილების წაშლა…"
 msgid "Recent Projects"
 msgstr "ახლახანს გახსნილი პროექტები"
 
-#: src/plugins/retab/gtk/menus.ui:7
+#: src/plugins/retab/gtk/menus.ui:5
 msgid "_Reformat tabs"
 msgstr "ჩანართების გადაფორმატება"
 
@@ -5184,13 +5171,13 @@ msgstr ""
 msgid "In Page"
 msgstr ""
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:78
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:351
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Select Symbol…"
 msgstr ""
 
-#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:354
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr ""
 
@@ -5198,15 +5185,15 @@ msgstr ""
 msgid "Navigate to a symbol within the current page"
 msgstr ""
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:110
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
 msgstr ""
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:119
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:352
 msgid "Sysprof Capture (*.syscap)"
 msgstr ""
 
-#: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:125
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:358
 msgid "All Files"
 msgstr "ყველა ფაილი"
 
@@ -5329,7 +5316,7 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:262
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:270
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "ტერმინალი"
@@ -5436,7 +5423,7 @@ msgstr "აპლიკაციის გაშვების დრო: %s\n"
 msgid "Application exited"
 msgstr ""
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:282
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:288
 msgid "Application Output"
 msgstr "აპლიკაციის გამონატანი"
 
@@ -5533,6 +5520,22 @@ msgstr ""
 
 #: src/plugins/todo/gbp-todo-panel.ui:14
 msgid "Loading TODOs…"
+msgstr ""
+
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+msgid "Updating Dependencies…"
+msgstr ""
+
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
+msgid "Builder is updating your projects configured dependencies."
+msgstr ""
+
+#: src/plugins/update-dependencies/gtk/menus.ui:6
+msgid "Update Dependencies…"
+msgstr ""
+
+#: src/plugins/update-dependencies/gtk/menus.ui:8
+msgid "Download updates to project dependencies"
 msgstr ""
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
