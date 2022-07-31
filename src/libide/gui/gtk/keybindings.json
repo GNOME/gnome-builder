@@ -6,10 +6,6 @@
 { "trigger" : "<Control>n", "action" : "search.move", "args" : "1", "when" : "inPopoverSearch()", "phase" : "capture" },
 { "trigger" : "<Control>p", "action" : "search.move", "args" : "-1", "when" : "inPopoverSearch()", "phase" : "capture" },
 
-
-/* New Files */
-{ "trigger" : "<Control>n", "action" : "editorui.new-file", "when" : "canEdit()", "phase" : "bubble" },
-
 /* Open Files */
 { "trigger" : "<Control>o", "action" : "context.workbench.open", "when" : "canEdit()", "phase" : "bubble" },
 
