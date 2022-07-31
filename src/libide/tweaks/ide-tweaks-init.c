@@ -29,7 +29,11 @@
 void
 _ide_tweaks_init (void)
 {
+  g_type_ensure (IDE_TYPE_TWEAKS);
+  g_type_ensure (IDE_TYPE_TWEAKS_CUSTOM);
+  g_type_ensure (IDE_TYPE_TWEAKS_GROUP);
   g_type_ensure (IDE_TYPE_TWEAKS_ITEM);
   g_type_ensure (IDE_TYPE_TWEAKS_PAGE);
+  g_type_ensure (IDE_TYPE_TWEAKS_SUBPAGE);
   g_type_ensure (IDE_TYPE_TWEAKS_VARIABLE);
 }

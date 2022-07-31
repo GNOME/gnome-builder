@@ -1,4 +1,4 @@
-/* libide-tweaks.h
+/* ide-tweaks-subpage.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,21 @@
 
 #pragma once
 
-#define IDE_TWEAKS_INSIDE
-# include "ide-tweaks.h"
-# include "ide-tweaks-custom.h"
-# include "ide-tweaks-group.h"
-# include "ide-tweaks-item.h"
-# include "ide-tweaks-page.h"
-# include "ide-tweaks-subpage.h"
-# include "ide-tweaks-variable.h"
-#undef IDE_TWEAKS_INSIDE
+#include "ide-tweaks-item.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TWEAKS_SUBPAGE (ide_tweaks_subpage_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeTweaksSubpage, ide_tweaks_subpage, IDE, TWEAKS_SUBPAGE, IdeTweaksItem)
+
+IDE_AVAILABLE_IN_ALL
+IdeTweaksSubpage *ide_tweaks_subpage_new       (void);
+IDE_AVAILABLE_IN_ALL
+const char       *ide_tweaks_subpage_get_title (IdeTweaksSubpage *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_tweaks_subpage_set_title (IdeTweaksSubpage *self,
+                                                const char       *title);
+
+G_END_DECLS

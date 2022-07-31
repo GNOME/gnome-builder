@@ -23,7 +23,9 @@
 
 #include "config.h"
 
+#include "ide-tweaks-group.h"
 #include "ide-tweaks-page.h"
+#include "ide-tweaks-subpage.h"
 
 struct _IdeTweaksPage
 {
@@ -47,6 +49,13 @@ IdeTweaksPage *
 ide_tweaks_page_new (void)
 {
   return g_object_new (IDE_TYPE_TWEAKS_PAGE, NULL);
+}
+
+static gboolean
+ide_tweaks_page_accepts (IdeTweaksItem *item,
+                         IdeTweaksItem *child)
+{
+  return IDE_IS_TWEAKS_SUBPAGE (child) || IDE_IS_TWEAKS_GROUP (child);
 }
 
 static void
@@ -110,10 +119,13 @@ static void
 ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeTweaksItemClass *item_class = IDE_TWEAKS_ITEM_CLASS (klass);
 
   object_class->finalize = ide_tweaks_page_finalize;
   object_class->get_property = ide_tweaks_page_get_property;
   object_class->set_property = ide_tweaks_page_set_property;
+
+  item_class->accepts = ide_tweaks_page_accepts;
 
   properties [PROP_SECTION] =
     g_param_spec_string ("section", NULL, NULL, NULL,

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child>
+      <object class="IdeTweaksPage" id="appearance">
+        <property name="section">visual</property>
+        <property name="title" translatable="yes">Appearance</property>
+        <child>
+          <object class="IdeTweaksGroup" id="appearance_group">
+            <property name="title" translatable="yes">Appearance</property>
+            <child>
+              <object class="IdeTweaksCustom" id="appearance_selector">
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="IdeTweaksGroup" id="style">
+            <property name="title" translatable="yes">Style</property>
+            <child>
+              <object class="IdeTweaksCustom" id="style_preview">
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksCustom" id="style_scheme_selector">
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksPage" id="languages">
+        <property name="section">programming</property>
+        <property name="title" translatable="yes">Languages</property>
+        <property name="subpage-generator">
+          <object class="IdeTweaksSubpageGenerator">
+          </object>
+        </property>
+      </object>
+    </child>
+  </template>
+</interface>

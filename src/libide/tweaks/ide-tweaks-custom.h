@@ -1,4 +1,4 @@
-/* libide-tweaks.h
+/* ide-tweaks-custom.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,16 @@
 
 #pragma once
 
-#define IDE_TWEAKS_INSIDE
-# include "ide-tweaks.h"
-# include "ide-tweaks-custom.h"
-# include "ide-tweaks-group.h"
-# include "ide-tweaks-item.h"
-# include "ide-tweaks-page.h"
-# include "ide-tweaks-subpage.h"
-# include "ide-tweaks-variable.h"
-#undef IDE_TWEAKS_INSIDE
+#include "ide-tweaks-item.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TWEAKS_CUSTOM (ide_tweaks_custom_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeTweaksCustom, ide_tweaks_custom, IDE, TWEAKS_CUSTOM, IdeTweaksItem)
+
+IDE_AVAILABLE_IN_ALL
+IdeTweaksCustom *ide_tweaks_custom_new (void);
+
+G_END_DECLS
