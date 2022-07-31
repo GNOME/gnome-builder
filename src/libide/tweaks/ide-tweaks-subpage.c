@@ -28,6 +28,7 @@
 struct _IdeTweaksSubpage
 {
   IdeTweaksItem parent_instance;
+  char *icon_name;
   char *title;
 };
 
@@ -35,6 +36,7 @@ G_DEFINE_FINAL_TYPE (IdeTweaksSubpage, ide_tweaks_subpage, IDE_TYPE_TWEAKS_ITEM)
 
 enum {
   PROP_0,
+  PROP_ICON_NAME,
   PROP_TITLE,
   N_PROPS
 };
@@ -59,6 +61,7 @@ ide_tweaks_subpage_dispose (GObject *object)
 {
   IdeTweaksSubpage *self = (IdeTweaksSubpage *)object;
 
+  g_clear_pointer (&self->icon_name, g_free);
   g_clear_pointer (&self->title, g_free);
 
   G_OBJECT_CLASS (ide_tweaks_subpage_parent_class)->dispose (object);
@@ -74,6 +77,10 @@ ide_tweaks_subpage_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ICON_NAME:
+      g_value_set_string (value, ide_tweaks_subpage_get_icon_name (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, ide_tweaks_subpage_get_title (self));
       break;
@@ -93,6 +100,10 @@ ide_tweaks_subpage_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ICON_NAME:
+      ide_tweaks_subpage_set_icon_name (self, g_value_get_object (value));
+      break;
+
     case PROP_TITLE:
       ide_tweaks_subpage_set_title (self, g_value_get_string (value));
       break;
@@ -113,6 +124,11 @@ ide_tweaks_subpage_class_init (IdeTweaksSubpageClass *klass)
   object_class->set_property = ide_tweaks_subpage_set_property;
 
   item_class->accepts = ide_tweaks_subpage_accepts;
+
+  properties[PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL, NULL,
@@ -142,4 +158,22 @@ ide_tweaks_subpage_set_title (IdeTweaksSubpage *self,
 
   if (ide_set_string (&self->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
+}
+
+const char *
+ide_tweaks_subpage_get_icon_name (IdeTweaksSubpage *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_SUBPAGE (self), NULL);
+
+  return self->icon_name;
+}
+
+void
+ide_tweaks_subpage_set_icon_name (IdeTweaksSubpage *self,
+                                  const char       *icon_name)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_SUBPAGE (self));
+
+  if (ide_set_string (&self->icon_name, icon_name))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
 }

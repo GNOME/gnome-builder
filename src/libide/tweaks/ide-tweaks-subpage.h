@@ -30,11 +30,16 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksSubpage, ide_tweaks_subpage, IDE, TWEAKS_SUBPAGE, IdeTweaksItem)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksSubpage *ide_tweaks_subpage_new       (void);
+IdeTweaksSubpage *ide_tweaks_subpage_new           (void);
 IDE_AVAILABLE_IN_ALL
-const char       *ide_tweaks_subpage_get_title (IdeTweaksSubpage *self);
+const char       *ide_tweaks_subpage_get_icon_name (IdeTweaksSubpage *self);
 IDE_AVAILABLE_IN_ALL
-void              ide_tweaks_subpage_set_title (IdeTweaksSubpage *self,
-                                                const char       *title);
+void              ide_tweaks_subpage_set_icon_name (IdeTweaksSubpage *self,
+                                                    const char       *icon_name);
+IDE_AVAILABLE_IN_ALL
+const char       *ide_tweaks_subpage_get_title     (IdeTweaksSubpage *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_tweaks_subpage_set_title     (IdeTweaksSubpage *self,
+                                                    const char       *title);
 
 G_END_DECLS
