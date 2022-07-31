@@ -523,19 +523,41 @@ _ide_tweaks_item_printf (IdeTweaksItem *self,
     {
       GParamSpec *pspec = pspecs[i];
 
-      if (pspec->flags & G_PARAM_READABLE &&
-          g_value_type_transformable (pspec->value_type, G_TYPE_STRING))
+      if (pspec->flags & G_PARAM_READABLE)
         {
-          g_auto(GValue) value = G_VALUE_INIT;
-          g_autofree char *copy = NULL;
+          if (g_value_type_transformable (pspec->value_type, G_TYPE_STRING))
+            {
+              g_auto(GValue) value = G_VALUE_INIT;
+              g_autofree char *copy = NULL;
 
-          g_value_init (&value, G_TYPE_STRING);
-          g_object_get_property (G_OBJECT (self), pspec->name, &value);
+              g_value_init (&value, G_TYPE_STRING);
+              g_object_get_property (G_OBJECT (self), pspec->name, &value);
 
-          if (g_value_get_string (&value))
-            copy = g_strescape (g_value_get_string (&value), NULL);
+              if (g_value_get_string (&value))
+                copy = g_strescape (g_value_get_string (&value), NULL);
 
-          g_string_append_printf (string, " %s=\"%s\"", pspec->name, copy ? copy : "");
+              g_string_append_printf (string, " %s=\"%s\"", pspec->name, copy ? copy : "");
+            }
+          else if (g_type_is_a (pspec->value_type, G_TYPE_OBJECT))
+            {
+              g_auto(GValue) value = G_VALUE_INIT;
+              g_autofree char *generic = NULL;
+              const char *type_name = "";
+              GObject *obj;
+
+              g_value_init (&value, G_TYPE_OBJECT);
+              g_object_get_property (G_OBJECT (self), pspec->name, &value);
+
+              if ((obj = g_value_get_object (&value)))
+                type_name = G_OBJECT_TYPE_NAME (obj);
+
+              if (G_IS_LIST_MODEL (obj))
+                type_name = generic = g_strdup_printf ("%s<%s>",
+                                                       G_OBJECT_TYPE_NAME (obj),
+                                                       g_type_name (g_list_model_get_item_type (G_LIST_MODEL (obj))));
+
+              g_string_append_printf (string, " %s=\"%s\"", pspec->name, type_name);
+            }
         }
     }
 
