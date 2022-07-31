@@ -36,6 +36,9 @@ G_DECLARE_DERIVABLE_TYPE (IdeTweaksItem, ide_tweaks_item, IDE, TWEAKS_ITEM, GObj
 struct _IdeTweaksItemClass
 {
   GObjectClass parent_class;
+
+  gboolean (*accepts) (IdeTweaksItem *self,
+                       IdeTweaksItem *child);
 };
 
 IDE_AVAILABLE_IN_ALL

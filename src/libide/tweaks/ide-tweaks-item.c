@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
+
 #include "ide-tweaks-item.h"
 
 typedef struct
@@ -42,7 +44,11 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_ABSTRACT_TYPE (IdeTweaksItem, ide_tweaks_item, G_TYPE_OBJECT)
+static void buildable_iface_init (GtkBuildableIface *iface);
+
+G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeTweaksItem, ide_tweaks_item, G_TYPE_OBJECT,
+                                  G_ADD_PRIVATE (IdeTweaksItem)
+                                  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE, buildable_iface_init))
 
 static GParamSpec *properties [N_PROPS];
 
@@ -155,6 +161,19 @@ ide_tweaks_item_class_init (IdeTweaksItemClass *klass)
 static void
 ide_tweaks_item_init (IdeTweaksItem *self)
 {
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+
+  priv->link.data = self;
+}
+
+static gboolean
+ide_tweaks_item_accepts (IdeTweaksItem *self,
+                         IdeTweaksItem *child)
+{
+  if (IDE_TWEAKS_ITEM_GET_CLASS (self)->accepts)
+    return IDE_TWEAKS_ITEM_GET_CLASS (self)->accepts (self, child);
+
+  return FALSE;
 }
 
 const char *
@@ -332,6 +351,8 @@ ide_tweaks_item_insert_after (IdeTweaksItem *self,
   g_return_if_fail (parent_priv->link.data == parent);
   g_return_if_fail (priv->parent == NULL);
 
+  g_object_ref (self);
+
   priv->parent = parent;
 
   if (previous_sibling != NULL)
@@ -366,6 +387,8 @@ ide_tweaks_item_insert_before (IdeTweaksItem *self,
   g_return_if_fail (priv->link.data == self);
   g_return_if_fail (parent_priv->link.data == parent);
   g_return_if_fail (priv->parent == NULL);
+
+  g_object_ref (self);
 
   priv->parent = parent;
 
@@ -413,4 +436,38 @@ ide_tweaks_item_unparent (IdeTweaksItem *self)
   priv->parent = NULL;
 
   g_object_unref (self);
+}
+
+static void
+ide_tweaks_item_add_child (GtkBuildable *buildable,
+                           GtkBuilder   *builder,
+                           GObject      *child,
+                           const char   *type)
+{
+  IdeTweaksItem *self = (IdeTweaksItem *)buildable;
+
+  g_assert (IDE_IS_TWEAKS_ITEM (self));
+  g_assert (G_IS_OBJECT (child));
+
+  if (!IDE_IS_TWEAKS_ITEM (child))
+    {
+      g_warning ("Attempt to add %s as child of %s, which is not an IdeTweaksItem",
+                 G_OBJECT_TYPE_NAME (child), G_OBJECT_TYPE_NAME (self));
+      return;
+    }
+
+  if (!ide_tweaks_item_accepts (self, IDE_TWEAKS_ITEM (child)))
+    {
+      g_warning ("Attempt to add %s as child of %s, but that is not allowed",
+                 G_OBJECT_TYPE_NAME (child), G_OBJECT_TYPE_NAME (self));
+      return;
+    }
+
+  ide_tweaks_item_insert_after (IDE_TWEAKS_ITEM (child), self, NULL);
+}
+
+static void
+buildable_iface_init (GtkBuildableIface *iface)
+{
+  iface->add_child = ide_tweaks_item_add_child;
 }
