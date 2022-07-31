@@ -32,12 +32,14 @@ typedef struct
   IdeTweaksItem *parent;
   GList link;
   GQueue children;
+  char *id;
   char **keywords;
   char *sort_key;
 } IdeTweaksItemPrivate;
 
 enum {
   PROP_0,
+  PROP_ID,
   PROP_KEYWORDS,
   PROP_SORT_KEY,
   N_PROPS
@@ -72,6 +74,7 @@ ide_tweaks_item_dispose (GObject *object)
 
   g_clear_pointer (&priv->keywords, g_strfreev);
   g_clear_pointer (&priv->sort_key, g_free);
+  g_clear_pointer (&priv->id, g_free);
 
   G_OBJECT_CLASS (ide_tweaks_item_parent_class)->dispose (object);
 }
@@ -86,6 +89,10 @@ ide_tweaks_item_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ID:
+      g_value_set_string (value, gtk_buildable_get_buildable_id (GTK_BUILDABLE (self)));
+      break;
+
     case PROP_KEYWORDS:
       g_value_set_boxed (value, ide_tweaks_item_get_keywords (self));
       break;
@@ -130,6 +137,11 @@ ide_tweaks_item_class_init (IdeTweaksItemClass *klass)
   object_class->dispose = ide_tweaks_item_dispose;
   object_class->get_property = ide_tweaks_item_get_property;
   object_class->set_property = ide_tweaks_item_set_property;
+
+  properties[PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_KEYWORDS] =
     g_param_spec_boxed ("keywords", NULL, NULL,
@@ -454,11 +466,38 @@ ide_tweaks_item_get_internal_child (GtkBuildable *buildable,
   return NULL;
 }
 
+static const char *
+ide_tweaks_item_get_buildable_id (GtkBuildable *buildable)
+{
+  IdeTweaksItem *self = (IdeTweaksItem *)buildable;
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+
+  g_assert (IDE_IS_TWEAKS_ITEM (self));
+
+  return priv->id;
+}
+
+static void
+ide_tweaks_item_set_buildable_id (GtkBuildable *buildable,
+                                  const char   *buildable_id)
+{
+  IdeTweaksItem *self = (IdeTweaksItem *)buildable;
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+
+  g_assert (IDE_IS_TWEAKS_ITEM (self));
+  g_assert (buildable_id != NULL);
+
+  if (priv->id == NULL)
+    priv->id = g_strdup (buildable_id);
+}
+
 static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->add_child = ide_tweaks_item_add_child;
   iface->get_internal_child = ide_tweaks_item_get_internal_child;
+  iface->get_id = ide_tweaks_item_get_buildable_id;
+  iface->set_id = ide_tweaks_item_set_buildable_id;
 }
 
 void
