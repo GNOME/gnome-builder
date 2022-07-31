@@ -467,10 +467,37 @@ ide_tweaks_item_add_child (GtkBuildable *buildable,
   ide_tweaks_item_insert_after (IDE_TWEAKS_ITEM (child), self, NULL);
 }
 
+static GObject *
+ide_tweaks_item_get_internal_child (GtkBuildable *buildable,
+                                    GtkBuilder   *builder,
+                                    const char   *child_name)
+{
+  IdeTweaksItem *self = (IdeTweaksItem *)buildable;
+
+  g_assert (IDE_IS_TWEAKS_ITEM (self));
+  g_assert (GTK_IS_BUILDER (builder));
+  g_assert (child_name != NULL);
+
+  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (self);
+       child != NULL;
+       child = ide_tweaks_item_get_next_sibling (child))
+    {
+      const char *buildable_id = gtk_buildable_get_buildable_id (GTK_BUILDABLE (child));
+
+      if (ide_str_equal0 (buildable_id, child_name))
+        return G_OBJECT (child);
+    }
+
+  return NULL;
+}
+
 static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->add_child = ide_tweaks_item_add_child;
+  iface->get_internal_child = ide_tweaks_item_get_internal_child;
+}
+
 void
 _ide_tweaks_item_printf (IdeTweaksItem *self,
                          GString       *string,
