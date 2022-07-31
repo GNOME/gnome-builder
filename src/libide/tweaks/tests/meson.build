@@ -1,5 +1,5 @@
 test_tweaks = executable('test-tweaks', 'test-tweaks.c',
-  dependencies: [libide_tweaks_dep],
+  dependencies: [libide_tweaks_dep, libgtksource_dep],
 )
 
 test_tweaks_runs = [

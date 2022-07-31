@@ -20,6 +20,8 @@
 
 #include <unistd.h>
 
+#include <gtksourceview/gtksource.h>
+
 #include <libide-tweaks.h>
 
 #include "ide-tweaks-init.h"
@@ -41,6 +43,7 @@ main (int   argc,
     { NULL }
   };
 
+  gtk_source_init ();
   _ide_tweaks_init ();
 
   context = g_option_context_new ("- test tweaks ui merging");
@@ -54,6 +57,24 @@ main (int   argc,
 
   tweaks = ide_tweaks_new ();
   string = g_string_new (NULL);
+
+  /* Test with languages exposed */
+  {
+    GtkSourceLanguageManager *lm = gtk_source_language_manager_get_default ();
+    const char * const *ids = gtk_source_language_manager_get_language_ids (lm);
+    const char * const *allowed = IDE_STRV_INIT ("c", "chdr", "css", "xml");
+    g_autoptr(GListStore) languages = NULL;
+
+    languages = g_list_store_new (GTK_SOURCE_TYPE_LANGUAGE);
+
+    for (guint i = 0; ids[i]; i++)
+      {
+        if (g_strv_contains (allowed, ids[i]))
+          g_list_store_append (languages, gtk_source_language_manager_get_language (lm, ids[i]));
+      }
+
+    ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (languages));
+  }
 
   for (guint i = 1; i < argc; i++)
     {
