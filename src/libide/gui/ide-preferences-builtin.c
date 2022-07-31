@@ -178,7 +178,6 @@ ide_preferences_builtin_register_editor (DzlPreferences *preferences)
   dzl_preferences_add_list_group (preferences, "editor", "position", _("Cursor"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_switch (preferences, "editor", "position", "org.gnome.builder.editor", "restore-insert-mark", NULL, NULL, _("Restore cursor position"), _("Restore cursor position when a file is reopened"), NULL, 0);
   dzl_preferences_add_spin_button (preferences, "editor", "position", "org.gnome.builder.editor", "scroll-offset", NULL, _("Scroll Offset"), _("Minimum number of lines to keep above and below the cursor"), NULL, 10);
-  dzl_preferences_add_spin_button (preferences, "editor", "position", "org.gnome.builder.editor", "overscroll", NULL, _("Overscroll"), _("Allow the editor to scroll past the end of the buffer"), NULL, 20);
 
   dzl_preferences_add_list_group (preferences, "editor", "text-wrapping", _("Text Wrapping"), GTK_SELECTION_NONE, 0);
   dzl_preferences_add_radio (preferences, "editor", "text-wrapping", "org.gnome.builder.editor", "wrap-text", NULL, "\"never\"", _("Never"), NULL, NULL, 0);

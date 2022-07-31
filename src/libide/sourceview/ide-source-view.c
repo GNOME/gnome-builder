@@ -442,6 +442,26 @@ ide_source_view_focus_leave_cb (IdeSourceView           *self,
   IDE_EXIT;
 }
 
+static gboolean
+ide_source_view_update_overscroll (gpointer user_data)
+{
+  IdeSourceView *self = user_data;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  self->overscroll_source = 0;
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (self)))
+    {
+      GdkRectangle visible_rect;
+
+      gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self), &visible_rect);
+      gtk_text_view_set_bottom_margin (GTK_TEXT_VIEW (self), visible_rect.height * .75);
+    }
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 ide_source_view_size_allocate (GtkWidget *widget,
                                int        width,
@@ -457,6 +477,9 @@ ide_source_view_size_allocate (GtkWidget *widget,
 
   if (self->popup_menu != NULL)
     gtk_popover_present (self->popup_menu);
+
+  if (self->overscroll_source == 0)
+    self->overscroll_source = g_idle_add (ide_source_view_update_overscroll, self);
 }
 
 static void
@@ -661,6 +684,8 @@ ide_source_view_dispose (GObject *object)
   IdeSourceView *self = (IdeSourceView *)object;
 
   IDE_ENTRY;
+
+  g_clear_handle_id (&self->overscroll_source, g_source_remove);
 
   ide_source_view_disconnect_buffer (self);
 

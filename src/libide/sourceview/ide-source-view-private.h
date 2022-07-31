@@ -63,6 +63,9 @@ struct _IdeSourceView
   IdeExtensionSetAdapter *hover_providers;
   IdeExtensionAdapter *indenter;
 
+  /* GSource used to update bottom margin */
+  guint overscroll_source;
+
   /* Mouse click position */
   double click_x;
   double click_y;
