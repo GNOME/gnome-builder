@@ -60,3 +60,7 @@ gnome_builder_public_sources += files(libide_tweaks_public_sources)
 gnome_builder_public_headers += files(libide_tweaks_public_headers)
 gnome_builder_include_subdirs += libide_tweaks_header_subdir
 gnome_builder_gir_extra_args += ['--c-include=libide-tweaks.h', '-DIDE_TWEAKS_COMPILATION']
+
+test_tweaks = executable('test-tweaks', 'test-tweaks.c',
+  dependencies: [libide_tweaks_dep],
+)
