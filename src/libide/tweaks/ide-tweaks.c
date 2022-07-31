@@ -139,3 +139,15 @@ ide_tweaks_load_from_file (IdeTweaks     *self,
                                            contents, length,
                                            error);
 }
+
+void
+ide_tweaks_expose_object (IdeTweaks  *self,
+                          const char *name,
+                          GObject    *object)
+{
+  g_return_if_fail (IDE_IS_TWEAKS (self));
+  g_return_if_fail (name != NULL);
+  g_return_if_fail (G_IS_OBJECT (object));
+
+  gtk_builder_expose_object (self->builder, name, object);
+}

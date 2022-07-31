@@ -32,6 +32,10 @@ G_DECLARE_FINAL_TYPE (IdeTweaks, ide_tweaks, IDE, TWEAKS, IdeTweaksItem)
 IDE_AVAILABLE_IN_ALL
 IdeTweaks *ide_tweaks_new            (void);
 IDE_AVAILABLE_IN_ALL
+void       ide_tweaks_expose_object  (IdeTweaks     *self,
+                                      const char    *name,
+                                      GObject       *object);
+IDE_AVAILABLE_IN_ALL
 gboolean   ide_tweaks_load_from_file (IdeTweaks     *self,
                                       GFile         *file,
                                       GCancellable  *cancellable,
