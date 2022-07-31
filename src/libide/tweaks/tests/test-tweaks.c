@@ -29,10 +29,28 @@ int
 main (int   argc,
       char *argv[])
 {
+  g_autoptr(GOptionContext) context = NULL;
   g_autoptr(IdeTweaks) tweaks = NULL;
   g_autoptr(GString) string = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autofree char *expected = NULL;
+  g_autofree char *expected_contents = NULL;
+  gsize len = 0;
+  const GOptionEntry entries[] = {
+    { "expected", 'e', 0, G_OPTION_ARG_FILENAME, &expected, "File containing expected output" },
+    { NULL }
+  };
 
   _ide_tweaks_init ();
+
+  context = g_option_context_new ("- test tweaks ui merging");
+  g_option_context_add_main_entries (context, entries, NULL);
+
+  if (!g_option_context_parse (context, &argc, &argv, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      return EXIT_FAILURE;
+    }
 
   tweaks = ide_tweaks_new ();
   string = g_string_new (NULL);
@@ -41,18 +59,36 @@ main (int   argc,
     {
       const char *path = argv[i];
       g_autoptr(GFile) file = g_file_new_for_commandline_arg (path);
-      g_autoptr(GError) error = NULL;
 
       if (!ide_tweaks_load_from_file (tweaks, file, NULL, &error))
-        {
-          g_printerr ("Failed to parse %s: %s\n", path, error->message);
-          return EXIT_FAILURE;
-        }
+        g_error ("Failed to parse %s: %s", path, error->message);
     }
 
   _ide_tweaks_item_printf (IDE_TWEAKS_ITEM (tweaks), string, 0);
 
-  g_print ("%s", string->str);
+  if (!expected)
+    {
+      g_print ("%s", string->str);
+      return EXIT_SUCCESS;
+    }
 
-  return EXIT_SUCCESS;
+  if (!g_file_get_contents (expected, &expected_contents, &len, &error))
+    g_error ("Failed to load expected contents: %s: %s", expected, error->message);
+
+  if (ide_str_equal0 (expected_contents, string->str))
+    return EXIT_SUCCESS;
+
+  g_printerr ("Contents did not match.\n"
+              "\n"
+              "Expected:\n"
+              "=========\n"
+              "%s\n"
+              "\n"
+              "Got:\n"
+              "====\n"
+              "%s\n",
+              expected_contents,
+              string->str);
+
+  return EXIT_FAILURE;
 }

@@ -1,0 +1,17 @@
+<interface>
+  <template class="IdeTweaks">
+    <child>
+      <object class="IdeTweaksSection" id="visual_section">
+        <child>
+          <object class="IdeTweaksPage" id="appearance_page">
+            <child>
+              <object class="IdeTweaksGroup" id="appearance_group">
+                <property name="title" translatable="yes">Original</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

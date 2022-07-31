@@ -1,0 +1,32 @@
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="visual_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="appearance_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="appearance_group">
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Appearance</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="foundry_section">
+        <child>
+          <object class="IdeTweaksPage" id="build_page">
+            <property name="title" translatable="yes">Build</property>
+          </object>
+        </child>
+        <child>
+          <object class="IdeTweaksPage" id="debugger_page">
+            <property name="title" translatable="yes">Debugger</property>
+            <property name="icon-name">builder-debugger-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

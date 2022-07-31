@@ -1,0 +1,13 @@
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="visual_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="appearance_page">
+          <object class="IdeTweaksPage">
+            <property name="title" translatable="yes">Appearance</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

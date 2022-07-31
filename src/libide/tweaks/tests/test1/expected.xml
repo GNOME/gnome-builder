@@ -1,0 +1,11 @@
+<IdeTweaks id="IdeTweaks" id="IdeTweaks" sort-key="">
+  <IdeTweaksSection id="visual_section" id="visual_section" sort-key="">
+    <IdeTweaksPage id="appearance_page" id="appearance_page" sort-key="" icon-name="" title="Appearance">
+      <IdeTweaksGroup id="appearance_group" id="appearance_group" sort-key="" title="Appearance"/>
+    </IdeTweaksPage>
+  </IdeTweaksSection>
+  <IdeTweaksSection id="foundry_section" id="foundry_section" sort-key="">
+    <IdeTweaksPage id="build_page" id="build_page" sort-key="" icon-name="" title="Build"/>
+    <IdeTweaksPage id="debugger_page" id="debugger_page" sort-key="" icon-name="builder-debugger-symbolic" title="Debugger"/>
+  </IdeTweaksSection>
+</IdeTweaks>
