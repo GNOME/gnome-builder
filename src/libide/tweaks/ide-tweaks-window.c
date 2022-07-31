@@ -114,6 +114,12 @@ ide_tweaks_window_init (IdeTweaksWindow *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
+GtkWidget *
+ide_tweaks_window_new (void)
+{
+  return g_object_new (IDE_TYPE_TWEAKS_WINDOW, NULL);
+}
+
 /**
  * ide_tweaks_window_get_tweaks:
  * @self: a #IdeTweaksWindow
