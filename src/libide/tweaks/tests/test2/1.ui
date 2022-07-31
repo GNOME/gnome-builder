@@ -1,0 +1,25 @@
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="programming_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="languages_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="language_subpage_factory">
+              <object class="IdeTweaksSubpageFactory">
+                <child internal-child="language_subpage">
+                  <object class="IdeTweaksSubpage">
+                    <child internal-child="language_general_group">
+                      <object class="IdeTweaksGroup">
+                        <property name="sort-key">test-key</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

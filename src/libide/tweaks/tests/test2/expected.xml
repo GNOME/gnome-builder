@@ -1,0 +1,11 @@
+<IdeTweaks id="IdeTweaks" id="IdeTweaks" sort-key="">
+  <IdeTweaksSection id="programming_section" id="programming_section" sort-key="">
+    <IdeTweaksPage id="languages_page" id="languages_page" sort-key="" icon-name="" title="">
+      <IdeTweaksSubpageFactory id="language_subpage_factory" id="language_subpage_factory" sort-key="" model="GListStore<GtkSourceLanguage>">
+        <IdeTweaksSubpage id="language_subpage" id="language_subpage" sort-key="" title="">
+          <IdeTweaksGroup id="language_general_group" id="language_general_group" sort-key="test-key" title="General"/>
+        </IdeTweaksSubpage>
+      </IdeTweaksSubpageFactory>
+    </IdeTweaksPage>
+  </IdeTweaksSection>
+</IdeTweaks>
