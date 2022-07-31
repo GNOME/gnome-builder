@@ -46,6 +46,7 @@ main (int   argc,
   };
 
   gtk_init ();
+  adw_init ();
   gtk_source_init ();
   _ide_tweaks_init ();
 
