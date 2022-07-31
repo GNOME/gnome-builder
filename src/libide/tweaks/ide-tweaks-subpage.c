@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-tweaks-group.h"
 #include "ide-tweaks-subpage.h"
 
 struct _IdeTweaksSubpage
@@ -44,6 +45,13 @@ IdeTweaksSubpage *
 ide_tweaks_subpage_new (void)
 {
   return g_object_new (IDE_TYPE_TWEAKS_SUBPAGE, NULL);
+}
+
+static gboolean
+ide_tweaks_subpage_accepts (IdeTweaksItem *item,
+                            IdeTweaksItem *child)
+{
+  return IDE_IS_TWEAKS_GROUP (child);
 }
 
 static void
@@ -98,10 +106,13 @@ static void
 ide_tweaks_subpage_class_init (IdeTweaksSubpageClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeTweaksItemClass *item_class = IDE_TWEAKS_ITEM_CLASS (klass);
 
   object_class->dispose = ide_tweaks_subpage_dispose;
   object_class->get_property = ide_tweaks_subpage_get_property;
   object_class->set_property = ide_tweaks_subpage_set_property;
+
+  item_class->accepts = ide_tweaks_subpage_accepts;
 
   properties [PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL, NULL,
