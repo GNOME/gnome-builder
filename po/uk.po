@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-31 00:35+0000\n"
-"PO-Revision-Date: 2022-07-31 08:40+0300\n"
+"POT-Creation-Date: 2022-07-31 12:42+0000\n"
+"PO-Revision-Date: 2022-07-31 21:23+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2186,7 +2186,6 @@ msgid "Run Project (Shift+Ctrl+Space)"
 msgstr "Запустити проєкт (Shift+Ctrl+Пробіл)"
 
 #: src/libide/gui/ide-run-button.c:68
-#| msgid "Stop building project"
 msgid "Stop Running Project"
 msgstr "Зупинити виконання проєкту"
 
@@ -2904,6 +2903,16 @@ msgid "This selection allows Builder to choose the best candidate."
 msgstr ""
 "Вибір цього варіанта дозволить «Будівнику» автоматично скористатися "
 "найкращим з кандидатів."
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#| msgid "Stop building project"
+msgid "Stop Building Project"
+msgstr "Зупинити збирання проєкту"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#| msgid "Run Project (Shift+Ctrl+Space)"
+msgid "Build Project (Shift+Ctrl+Alt+B)"
+msgstr "Зібрати проєкт (Shift+Ctrl+Alt+B)"
 
 #: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:48
 msgid "_Build"
