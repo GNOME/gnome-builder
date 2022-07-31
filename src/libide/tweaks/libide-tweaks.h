@@ -30,4 +30,5 @@
 # include "ide-tweaks-subpage.h"
 # include "ide-tweaks-subpage-factory.h"
 # include "ide-tweaks-variable.h"
+# include "ide-tweaks-window.h"
 #undef IDE_TWEAKS_INSIDE

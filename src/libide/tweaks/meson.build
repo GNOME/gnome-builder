@@ -17,6 +17,7 @@ libide_tweaks_public_headers = [
   'ide-tweaks-subpage.h',
   'ide-tweaks-subpage-factory.h',
   'ide-tweaks-variable.h',
+  'ide-tweaks-window.h',
 ]
 
 install_headers(libide_tweaks_public_headers, subdir: libide_tweaks_header_subdir)
@@ -35,11 +36,22 @@ libide_tweaks_public_sources = [
   'ide-tweaks-subpage.c',
   'ide-tweaks-subpage-factory.c',
   'ide-tweaks-variable.c',
+  'ide-tweaks-window.c',
 ]
 
 libide_tweaks_private_sources = [
   'ide-tweaks-init.c',
 ]
+
+#
+# Generated Resource Files
+#
+
+libide_tweaks_resources = gnome.compile_resources(
+  'ide-tweaks-resources',
+  'libide-tweaks.gresource.xml',
+  c_name: 'ide_tweaks',
+)
 
 #
 # Dependencies
@@ -48,6 +60,7 @@ libide_tweaks_private_sources = [
 libide_tweaks_deps = [
   libgio_dep,
   libgtk_dep,
+  libadwaita_dep,
 
   libide_core_dep,
 ]
@@ -57,7 +70,7 @@ libide_tweaks_deps = [
 #
 
 libide_tweaks = static_library('ide-tweaks-' + libide_api_version,
-   libide_tweaks_public_sources + libide_tweaks_private_sources,
+   libide_tweaks_public_sources + libide_tweaks_private_sources + libide_tweaks_resources,
    dependencies: libide_tweaks_deps,
          c_args: libide_args + release_args + ['-DIDE_TWEAKS_COMPILATION'],
 )

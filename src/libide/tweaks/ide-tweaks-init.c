@@ -25,10 +25,13 @@
 #include "libide-tweaks.h"
 
 #include "ide-tweaks-init.h"
+#include "ide-tweaks-resources.h"
 
 void
 _ide_tweaks_init (void)
 {
+  g_resources_register (ide_tweaks_get_resource ());
+
   g_type_ensure (IDE_TYPE_TWEAKS);
   g_type_ensure (IDE_TYPE_TWEAKS_CUSTOM);
   g_type_ensure (IDE_TYPE_TWEAKS_GROUP);
@@ -38,4 +41,5 @@ _ide_tweaks_init (void)
   g_type_ensure (IDE_TYPE_TWEAKS_SUBPAGE);
   g_type_ensure (IDE_TYPE_TWEAKS_SUBPAGE_FACTORY);
   g_type_ensure (IDE_TYPE_TWEAKS_VARIABLE);
+  g_type_ensure (IDE_TYPE_TWEAKS_WINDOW);
 }
