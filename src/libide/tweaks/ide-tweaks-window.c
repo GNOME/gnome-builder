@@ -151,5 +151,33 @@ ide_tweaks_window_set_tweaks (IdeTweaksWindow *self,
   g_return_if_fail (!tweaks || IDE_IS_TWEAKS (tweaks));
 
   if (g_set_object (&self->tweaks, tweaks))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TWEAKS]);
+    {
+      ide_tweaks_window_navigate_to (self, IDE_TWEAKS_ITEM (tweaks));
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TWEAKS]);
+    }
+}
+
+/**
+ * ide_tweaks_window_navigate_to:
+ * @self: a #IdeTweaksWindow
+ * @item: (nullable): an #IdeTweaksItem or %NULL
+ *
+ * Navigates to @item.
+ *
+ * If @item is %NULL and #IdeTweaksWindow:tweaks is set, then navigates
+ * to the topmost item.
+ */
+void
+ide_tweaks_window_navigate_to (IdeTweaksWindow *self,
+                               IdeTweaksItem   *item)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_WINDOW (self));
+  g_return_if_fail (!item || IDE_IS_TWEAKS_ITEM (item));
+
+  if (item == NULL)
+    item = IDE_TWEAKS_ITEM (self->tweaks);
+
+  if (item == NULL)
+    return;
+
 }
