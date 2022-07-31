@@ -31,16 +31,16 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksPage, ide_tweaks_page, IDE, TWEAKS_PAGE, IdeTweaksItem)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksPage *ide_tweaks_page_new         (void);
+IdeTweaksPage *ide_tweaks_page_new           (void);
 IDE_AVAILABLE_IN_ALL
-const char    *ide_tweaks_page_get_section (IdeTweaksPage *self);
+const char    *ide_tweaks_page_get_icon_name (IdeTweaksPage *self);
 IDE_AVAILABLE_IN_ALL
-void           ide_tweaks_page_set_section (IdeTweaksPage *self,
-                                            const char    *section);
+void           ide_tweaks_page_set_icon_name (IdeTweaksPage *self,
+                                              const char    *icon_name);
 IDE_AVAILABLE_IN_ALL
-const char    *ide_tweaks_page_get_title   (IdeTweaksPage *self);
+const char    *ide_tweaks_page_get_title     (IdeTweaksPage *self);
 IDE_AVAILABLE_IN_ALL
-void           ide_tweaks_page_set_title   (IdeTweaksPage *self,
-                                            const char    *title);
+void           ide_tweaks_page_set_title     (IdeTweaksPage *self,
+                                              const char    *title);
 
 G_END_DECLS

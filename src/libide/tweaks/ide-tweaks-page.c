@@ -31,7 +31,7 @@
 struct _IdeTweaksPage
 {
   IdeTweaksItem parent_instance;
-  char *section;
+  char *icon_name;
   char *title;
 };
 
@@ -39,7 +39,7 @@ G_DEFINE_FINAL_TYPE (IdeTweaksPage, ide_tweaks_page, IDE_TYPE_TWEAKS_ITEM)
 
 enum {
   PROP_0,
-  PROP_SECTION,
+  PROP_ICON_NAME,
   PROP_TITLE,
   N_PROPS
 };
@@ -66,7 +66,7 @@ ide_tweaks_page_finalize (GObject *object)
 {
   IdeTweaksPage *self = (IdeTweaksPage *)object;
 
-  g_clear_pointer (&self->section, g_free);
+  g_clear_pointer (&self->icon_name, g_free);
   g_clear_pointer (&self->title, g_free);
 
   G_OBJECT_CLASS (ide_tweaks_page_parent_class)->finalize (object);
@@ -82,8 +82,8 @@ ide_tweaks_page_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_SECTION:
-      g_value_set_string (value, ide_tweaks_page_get_section (self));
+    case PROP_ICON_NAME:
+      g_value_set_string (value, ide_tweaks_page_get_icon_name (self));
       break;
 
     case PROP_TITLE:
@@ -105,8 +105,8 @@ ide_tweaks_page_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SECTION:
-      ide_tweaks_page_set_section (self, g_value_get_string (value));
+    case PROP_ICON_NAME:
+      ide_tweaks_page_set_icon_name (self, g_value_get_string (value));
       break;
 
     case PROP_TITLE:
@@ -130,8 +130,8 @@ ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
 
   item_class->accepts = ide_tweaks_page_accepts;
 
-  properties [PROP_SECTION] =
-    g_param_spec_string ("section", NULL, NULL, NULL,
+  properties [PROP_ICON_NAME] =
+    g_param_spec_string ("icon-name", NULL, NULL, NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TITLE] =
@@ -147,21 +147,21 @@ ide_tweaks_page_init (IdeTweaksPage *self)
 }
 
 const char *
-ide_tweaks_page_get_section (IdeTweaksPage *self)
+ide_tweaks_page_get_icon_name (IdeTweaksPage *self)
 {
   g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (self), NULL);
 
-  return self->section;
+  return self->icon_name;
 }
 
 void
-ide_tweaks_page_set_section (IdeTweaksPage *self,
-                             const char    *section)
+ide_tweaks_page_set_icon_name (IdeTweaksPage *self,
+                               const char    *icon_name)
 {
   g_return_if_fail (IDE_IS_TWEAKS_PAGE (self));
 
-  if (ide_set_string (&self->section, section))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SECTION]);
+  if (ide_set_string (&self->icon_name, icon_name))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
 }
 
 const char *
