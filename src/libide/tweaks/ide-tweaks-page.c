@@ -26,6 +26,7 @@
 #include "ide-tweaks-group.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-subpage.h"
+#include "ide-tweaks-subpage-generator.h"
 
 struct _IdeTweaksPage
 {
@@ -55,7 +56,9 @@ static gboolean
 ide_tweaks_page_accepts (IdeTweaksItem *item,
                          IdeTweaksItem *child)
 {
-  return IDE_IS_TWEAKS_SUBPAGE (child) || IDE_IS_TWEAKS_GROUP (child);
+  return IDE_IS_TWEAKS_SUBPAGE (child) ||
+         IDE_IS_TWEAKS_SUBPAGE_GENERATOR (child) ||
+         IDE_IS_TWEAKS_GROUP (child);
 }
 
 static void

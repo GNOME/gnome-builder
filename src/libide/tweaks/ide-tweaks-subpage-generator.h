@@ -1,4 +1,4 @@
-/* libide-tweaks.h
+/* ide-tweaks-subpage-generator.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,13 +20,25 @@
 
 #pragma once
 
-#define IDE_TWEAKS_INSIDE
-# include "ide-tweaks.h"
-# include "ide-tweaks-custom.h"
-# include "ide-tweaks-group.h"
-# include "ide-tweaks-item.h"
-# include "ide-tweaks-page.h"
-# include "ide-tweaks-subpage.h"
-# include "ide-tweaks-subpage-generator.h"
-# include "ide-tweaks-variable.h"
-#undef IDE_TWEAKS_INSIDE
+#include "ide-tweaks-item.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TWEAKS_SUBPAGE_GENERATOR (ide_tweaks_subpage_generator_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_DERIVABLE_TYPE (IdeTweaksSubpageGenerator, ide_tweaks_subpage_generator, IDE, TWEAKS_SUBPAGE_GENERATOR, IdeTweaksItem)
+
+struct _IdeTweaksSubpageGeneratorClass
+{
+  IdeTweaksItemClass parent_class;
+
+  void (*populate) (IdeTweaksSubpageGenerator *self);
+};
+
+IDE_AVAILABLE_IN_ALL
+IdeTweaksSubpageGenerator *ide_tweaks_subpage_generator_new      (void);
+IDE_AVAILABLE_IN_ALL
+void                       ide_tweaks_subpage_generator_populate (IdeTweaksSubpageGenerator *self);
+
+G_END_DECLS

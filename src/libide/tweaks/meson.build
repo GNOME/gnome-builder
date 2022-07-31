@@ -14,6 +14,7 @@ libide_tweaks_public_headers = [
   'ide-tweaks-item.h',
   'ide-tweaks-page.h',
   'ide-tweaks-subpage.h',
+  'ide-tweaks-subpage-generator.h',
   'ide-tweaks-variable.h',
 ]
 
@@ -30,6 +31,7 @@ libide_tweaks_public_sources = [
   'ide-tweaks-group.c',
   'ide-tweaks-page.c',
   'ide-tweaks-subpage.c',
+  'ide-tweaks-subpage-generator.c',
   'ide-tweaks-variable.c',
 ]
 

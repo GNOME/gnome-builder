@@ -33,10 +33,10 @@
       <object class="IdeTweaksPage" id="languages">
         <property name="section">programming</property>
         <property name="title" translatable="yes">Languages</property>
-        <property name="subpage-generator">
-          <object class="IdeTweaksSubpageGenerator">
+        <child>
+          <object class="IdeTweaksSubpageGenerator" id="source_languages">
           </object>
-        </property>
+        </child>
       </object>
     </child>
   </template>
