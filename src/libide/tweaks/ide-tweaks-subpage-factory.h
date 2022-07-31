@@ -1,4 +1,4 @@
-/* ide-tweaks-subpage-generator.h
+/* ide-tweaks-subpage-factory.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -24,21 +24,17 @@
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_TWEAKS_SUBPAGE_GENERATOR (ide_tweaks_subpage_generator_get_type())
+#define IDE_TYPE_TWEAKS_SUBPAGE_FACTORY (ide_tweaks_subpage_factory_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_DERIVABLE_TYPE (IdeTweaksSubpageGenerator, ide_tweaks_subpage_generator, IDE, TWEAKS_SUBPAGE_GENERATOR, IdeTweaksItem)
-
-struct _IdeTweaksSubpageGeneratorClass
-{
-  IdeTweaksItemClass parent_class;
-
-  void (*populate) (IdeTweaksSubpageGenerator *self);
-};
+G_DECLARE_FINAL_TYPE (IdeTweaksSubpageFactory, ide_tweaks_subpage_factory, IDE, TWEAKS_SUBPAGE_FACTORY, IdeTweaksItem)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksSubpageGenerator *ide_tweaks_subpage_generator_new      (void);
+IdeTweaksSubpageFactory *ide_tweaks_subpage_factory_new       (void);
 IDE_AVAILABLE_IN_ALL
-void                       ide_tweaks_subpage_generator_populate (IdeTweaksSubpageGenerator *self);
+GListModel              *ide_tweaks_subpage_factory_get_model (IdeTweaksSubpageFactory *self);
+IDE_AVAILABLE_IN_ALL
+void                     ide_tweaks_subpage_factory_set_model (IdeTweaksSubpageFactory *self,
+                                                               GListModel              *model);
 
 G_END_DECLS

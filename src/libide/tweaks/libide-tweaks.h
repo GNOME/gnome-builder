@@ -28,6 +28,6 @@
 # include "ide-tweaks-page.h"
 # include "ide-tweaks-section.h"
 # include "ide-tweaks-subpage.h"
-# include "ide-tweaks-subpage-generator.h"
+# include "ide-tweaks-subpage-factory.h"
 # include "ide-tweaks-variable.h"
 #undef IDE_TWEAKS_INSIDE
