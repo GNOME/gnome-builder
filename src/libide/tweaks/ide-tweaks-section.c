@@ -1,5 +1,5 @@
-/* ide-tweaks-init.c
- *
+/* ide-tweaks-section.c
+
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -18,24 +18,39 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "ide-tweaks-init"
+#define G_LOG_DOMAIN "ide-tweaks-section"
 
 #include "config.h"
 
-#include "libide-tweaks.h"
+#include "ide-tweaks-page.h"
+#include "ide-tweaks-section.h"
 
-#include "ide-tweaks-init.h"
-
-void
-_ide_tweaks_init (void)
+struct _IdeTweaksSection
 {
-  g_type_ensure (IDE_TYPE_TWEAKS);
-  g_type_ensure (IDE_TYPE_TWEAKS_CUSTOM);
-  g_type_ensure (IDE_TYPE_TWEAKS_GROUP);
-  g_type_ensure (IDE_TYPE_TWEAKS_ITEM);
-  g_type_ensure (IDE_TYPE_TWEAKS_PAGE);
-  g_type_ensure (IDE_TYPE_TWEAKS_SECTION);
-  g_type_ensure (IDE_TYPE_TWEAKS_SUBPAGE);
-  g_type_ensure (IDE_TYPE_TWEAKS_SUBPAGE_GENERATOR);
-  g_type_ensure (IDE_TYPE_TWEAKS_VARIABLE);
+  IdeTweaksItem parent_instance;
+};
+
+G_DEFINE_FINAL_TYPE (IdeTweaksSection, ide_tweaks_section, IDE_TYPE_TWEAKS_ITEM)
+
+static gboolean
+ide_tweaks_section_accepts (IdeTweaksItem *item,
+                            IdeTweaksItem *child)
+{
+  g_assert (IDE_IS_TWEAKS_ITEM (item));
+  g_assert (IDE_IS_TWEAKS_ITEM (child));
+
+  return IDE_IS_TWEAKS_PAGE (child);
+}
+
+static void
+ide_tweaks_section_class_init (IdeTweaksSectionClass *klass)
+{
+  IdeTweaksItemClass *item_class = IDE_TWEAKS_ITEM_CLASS (klass);
+
+  item_class->accepts = ide_tweaks_section_accepts;
+}
+
+static void
+ide_tweaks_section_init (IdeTweaksSection *self)
+{
 }

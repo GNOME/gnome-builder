@@ -1,4 +1,4 @@
-/* libide-tweaks.h
+/* ide-tweaks-section.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,14 +20,20 @@
 
 #pragma once
 
-#define IDE_TWEAKS_INSIDE
-# include "ide-tweaks.h"
-# include "ide-tweaks-custom.h"
-# include "ide-tweaks-group.h"
-# include "ide-tweaks-item.h"
-# include "ide-tweaks-page.h"
-# include "ide-tweaks-section.h"
-# include "ide-tweaks-subpage.h"
-# include "ide-tweaks-subpage-generator.h"
-# include "ide-tweaks-variable.h"
-#undef IDE_TWEAKS_INSIDE
+#if !defined (IDE_TWEAKS_INSIDE) && !defined (IDE_TWEAKS_COMPILATION)
+# error "Only <libide-tweaks.h> can be included directly."
+#endif
+
+#include "ide-tweaks-item.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TWEAKS_SECTION (ide_tweaks_section_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeTweaksSection, ide_tweaks_section, IDE, TWEAKS_SECTION, IdeTweaksItem)
+
+IDE_AVAILABLE_IN_ALL
+IdeTweaksSection *ide_tweaks_section_new (void);
+
+G_END_DECLS

@@ -25,7 +25,7 @@
 #include <gtk/gtk.h>
 
 #include "ide-tweaks.h"
-#include "ide-tweaks-page.h"
+#include "ide-tweaks-section.h"
 
 struct _IdeTweaks
 {
@@ -48,7 +48,7 @@ ide_tweaks_accepts (IdeTweaksItem *item,
   g_assert (IDE_IS_TWEAKS_ITEM (item));
   g_assert (IDE_IS_TWEAKS_ITEM (child));
 
-  return IDE_IS_TWEAKS_PAGE (child);
+  return IDE_IS_TWEAKS_SECTION (child);
 }
 
 static void
