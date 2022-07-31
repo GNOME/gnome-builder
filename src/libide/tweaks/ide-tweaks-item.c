@@ -500,6 +500,16 @@ buildable_iface_init (GtkBuildableIface *iface)
   iface->set_id = ide_tweaks_item_set_buildable_id;
 }
 
+static int
+compare_pspec (gconstpointer a,
+               gconstpointer b)
+{
+  const GParamSpec * const *pspec_a = a;
+  const GParamSpec * const *pspec_b = b;
+
+  return g_strcmp0 ((*pspec_a)->name, (*pspec_b)->name);
+}
+
 void
 _ide_tweaks_item_printf (IdeTweaksItem *self,
                          GString       *string,
@@ -519,9 +529,14 @@ _ide_tweaks_item_printf (IdeTweaksItem *self,
 
   pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (self), &n_pspecs);
 
+  qsort (pspecs, n_pspecs, sizeof (pspecs[0]), compare_pspec);
+
   for (guint i = 0; i < n_pspecs; i++)
     {
       GParamSpec *pspec = pspecs[i];
+
+      if (ide_str_equal0 (pspec->name, "id"))
+        continue;
 
       if (pspec->flags & G_PARAM_READABLE)
         {
