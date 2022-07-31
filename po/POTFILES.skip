@@ -2,6 +2,7 @@
 # Please keep this file sorted alphabetically.
 data/appdata/org.gnome.Builder.appdata.xml.in
 data/org.gnome.Builder.desktop.in
+src/libide/tweaks/tests
 src/plugins/color-picker/gstyle/tests/data/gstyle-color-editor.ui
 src/plugins/color-picker/gstyle/tests/data/palette.xml
 src/plugins/gdb/gdbwire.c

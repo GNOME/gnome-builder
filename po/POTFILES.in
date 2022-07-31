@@ -108,6 +108,7 @@ src/plugins/buildui/gbp-buildui-preferences-addin.c
 src/plugins/buildui/gbp-buildui-status-popover.c
 src/plugins/buildui/gbp-buildui-targets-dialog.c
 src/plugins/buildui/gbp-buildui-targets-dialog.ui
+src/plugins/buildui/gbp-buildui-workspace-addin.c
 src/plugins/buildui/gtk/menus.ui
 src/plugins/buildui/gtk/preferences.ui
 src/plugins/cargo/gbp-cargo-pipeline-addin.c
