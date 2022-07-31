@@ -29,7 +29,8 @@
 
 struct _IdeTweaks
 {
-  IdeTweaksItem parent_instance;
+  IdeTweaksItem  parent_instance;
+  GtkBuilder    *builder;
 };
 
 G_DEFINE_FINAL_TYPE (IdeTweaks, ide_tweaks, IDE_TYPE_TWEAKS_ITEM)
@@ -55,6 +56,8 @@ static void
 ide_tweaks_dispose (GObject *object)
 {
   IdeTweaks *self = (IdeTweaks *)object;
+
+  g_clear_object (&self->builder);
 
   G_OBJECT_CLASS (ide_tweaks_parent_class)->dispose (object);
 }
@@ -105,6 +108,8 @@ ide_tweaks_class_init (IdeTweaksClass *klass)
 static void
 ide_tweaks_init (IdeTweaks *self)
 {
+  self->builder = gtk_builder_new ();
+  gtk_builder_set_current_object (self->builder, G_OBJECT (self));
 }
 
 IdeTweaks *
@@ -119,7 +124,6 @@ ide_tweaks_load_from_file (IdeTweaks     *self,
                            GCancellable  *cancellable,
                            GError       **error)
 {
-  g_autoptr(GtkBuilder) builder = NULL;
   g_autofree char *contents = NULL;
   gsize length;
 
@@ -130,7 +134,8 @@ ide_tweaks_load_from_file (IdeTweaks     *self,
   if (!g_file_load_contents (file, cancellable, &contents, &length, NULL, error))
     return FALSE;
 
-  builder = gtk_builder_new ();
-
-  return gtk_builder_extend_with_template (builder, G_OBJECT (self), IDE_TYPE_TWEAKS, contents, length, error);
+  return gtk_builder_extend_with_template (self->builder,
+                                           G_OBJECT (self), G_OBJECT_TYPE (self),
+                                           contents, length,
+                                           error);
 }
