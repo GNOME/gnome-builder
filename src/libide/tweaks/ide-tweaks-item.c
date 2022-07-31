@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 
 #include "ide-tweaks-item.h"
+#include "ide-tweaks-item-private.h"
 
 typedef struct
 {
@@ -470,4 +471,59 @@ static void
 buildable_iface_init (GtkBuildableIface *iface)
 {
   iface->add_child = ide_tweaks_item_add_child;
+void
+_ide_tweaks_item_printf (IdeTweaksItem *self,
+                         GString       *string,
+                         guint          level)
+{
+  g_autofree GParamSpec **pspecs = NULL;
+  guint n_pspecs;
+
+  g_return_if_fail (IDE_IS_TWEAKS_ITEM (self));
+  g_return_if_fail (string != NULL);
+
+  for (guint i = 0; i < level; i++)
+    g_string_append (string, "  ");
+  g_string_append_printf (string, "<%s id=\"%s\"",
+                          G_OBJECT_TYPE_NAME (self),
+                          gtk_buildable_get_buildable_id (GTK_BUILDABLE (self)));
+
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (self), &n_pspecs);
+
+  for (guint i = 0; i < n_pspecs; i++)
+    {
+      GParamSpec *pspec = pspecs[i];
+
+      if (pspec->flags & G_PARAM_READABLE &&
+          g_value_type_transformable (pspec->value_type, G_TYPE_STRING))
+        {
+          g_auto(GValue) value = G_VALUE_INIT;
+          g_autofree char *copy = NULL;
+
+          g_value_init (&value, G_TYPE_STRING);
+          g_object_get_property (G_OBJECT (self), pspec->name, &value);
+
+          if (g_value_get_string (&value))
+            copy = g_strescape (g_value_get_string (&value), NULL);
+
+          g_string_append_printf (string, " %s=\"%s\"", pspec->name, copy ? copy : "");
+        }
+    }
+
+  if (ide_tweaks_item_get_first_child (self) == NULL)
+    {
+      g_string_append (string, "/>\n");
+      return;
+    }
+
+  g_string_append (string, ">\n");
+
+  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (self);
+       child != NULL;
+       child = ide_tweaks_item_get_next_sibling (child))
+    _ide_tweaks_item_printf (child, string, level+1);
+
+  for (guint i = 0; i < level; i++)
+    g_string_append (string, "  ");
+  g_string_append_printf (string, "</%s>\n", G_OBJECT_TYPE_NAME (self));
 }
