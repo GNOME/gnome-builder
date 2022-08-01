@@ -31,7 +31,7 @@ make %{?_smp_mflags}
 ${12}
 
 %changelog
-* $shortweekday $shortmonth $day $year ${13:$fullname} <${14:$email}> - $2-$3
+* $shortweekday $shortmonth $day $CURRENT_YEAR ${13:$fullname} <${14:$email}> - $2-$3
 - Initial package$0
 ]]></text>
   </snippet>
@@ -85,7 +85,7 @@ ${13}
 ${17}
 
 %changelog
-* $shortweekday $shortmonth $day $year ${18:$fullname} <${19:$email}> - $2-$3
+* $shortweekday $shortmonth $day $CURRENT_YEAR ${18:$fullname} <${19:$email}> - $2-$3
 - Initial package$0
 ]]></text>
   </snippet>
@@ -123,7 +123,7 @@ CFLAGS=%{optflags} %{__python} setup.py build
 ${15}
 
 %changelog
-* $shortweekday $shortmonth $day $year ${16:$fullname} <${17:$email}> - $2-$3
+* $shortweekday $shortmonth $day $CURRENT_YEAR ${16:$fullname} <${17:$email}> - $2-$3
 - Initial package$0
 ]]></text>
   </snippet>
