@@ -1,2 +1,3 @@
-install_subdir('hicolor/64x64', install_dir: pkgicondir)
-install_subdir('hicolor/symbolic', install_dir: pkgicondir)
+foreach size: ['32x32', '64x64']
+  install_subdir('hicolor/@0@'.format(size), install_dir: pkgicondir)
+endforeach
