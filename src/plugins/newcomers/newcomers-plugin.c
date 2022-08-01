@@ -22,7 +22,9 @@
 
 #include "config.h"
 
+#include <gtk/gtk.h>
 #include <libpeas/peas.h>
+
 #include <libide-greeter.h>
 
 #include "gbp-newcomers-section.h"
@@ -30,6 +32,10 @@
 _IDE_EXTERN void
 _gbp_newcomers_register_types (PeasObjectModule *module)
 {
+  GdkDisplay *display = gdk_display_get_default ();
+  GtkIconTheme *icon_theme = gtk_icon_theme_get_for_display (display);
+
+  gtk_icon_theme_add_resource_path (icon_theme, "/plugins/newcomers/icons");
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_GREETER_SECTION,
                                               GBP_TYPE_NEWCOMERS_SECTION);

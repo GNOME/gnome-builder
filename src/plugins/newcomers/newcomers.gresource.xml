@@ -3,5 +3,31 @@
   <gresource prefix="/plugins/newcomers">
     <file>newcomers.plugin</file>
     <file>gbp-newcomers-section.ui</file>
+
+    <!-- symbolic app icons for 1x -->
+    <file>icons/64x64/actions/org.gnome.Boxes-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.Builder-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.Calendar-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.Maps-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.Music-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.Nautilus-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.Photos-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.Polari-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.SoundRecorder-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.clocks-symbolic.png</file>
+    <file>icons/64x64/actions/org.gnome.gitg-symbolic.png</file>
+
+    <!-- symbolic app icons for 2x -->
+    <file>icons/32x32/actions/org.gnome.Boxes-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.Builder-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.Calendar-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.Maps-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.Music-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.Nautilus-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.Photos-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.Polari-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.SoundRecorder-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.clocks-symbolic.png</file>
+    <file>icons/32x32/actions/org.gnome.gitg-symbolic.png</file>
   </gresource>
 </gresources>

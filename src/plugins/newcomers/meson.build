@@ -14,6 +14,4 @@ plugin_newcomers_resources = gnome.compile_resources(
 
 plugins_sources += plugin_newcomers_resources
 
-subdir('icons')
-
 endif
