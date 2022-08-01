@@ -315,7 +315,6 @@ ide_greeter_row_set_project_info (IdeGreeterRow  *self,
 
           if (icon != NULL)
             g_object_set (priv->image,
-                          "pixel-size", 32,
                           "gicon", icon,
                           "visible", icon != NULL,
                           NULL);

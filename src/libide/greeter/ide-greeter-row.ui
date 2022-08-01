@@ -28,6 +28,9 @@
           <object class="GtkImage" id="image">
             <property name="visible">false</property>
             <property name="margin-end">12</property>
+            <property name="width-request">32</property>
+            <property name="height-request">32</property>
+            <property name="pixel-size">32</property>
           </object>
         </child>
         <child>
