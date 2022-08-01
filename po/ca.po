@@ -1491,7 +1491,7 @@ msgstr "El directori «%s» ja existeix. Trieu un altre directori."
 #: src/libide/greeter/ide-clone-surface.c:259
 #, c-format
 msgid "Your project will be created at %s"
-msgstr "El vostre projecte es crearà a %s"
+msgstr "El projecte es crearà a %s"
 
 #: src/libide/greeter/ide-clone-surface.ui:48
 msgid "Repository URL"
@@ -4031,7 +4031,7 @@ msgstr ""
 #: src/plugins/create-project/gbp-create-project-surface.c:226
 #: src/plugins/create-project/gbp-create-project-surface.ui:146
 msgid "Your project will be created within a new child directory."
-msgstr "El vostre projecte es crearà dins d'un directori fill nou."
+msgstr "El projecte es crearà dins d'un subdirectori nou."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:232
 msgid "Directory already exists with that name"
@@ -4042,7 +4042,7 @@ msgstr "Ja existeix un directori amb aqueix nom"
 #: src/plugins/create-project/gbp-create-project-surface.c:250
 #, c-format
 msgid "Your project will be created within %s."
-msgstr "El vostre projecte es crearà dins de %s."
+msgstr "El projecte es crearà dins de %s."
 
 #: src/plugins/create-project/gbp-create-project-surface.c:301
 msgid "Application ID is not valid."
@@ -4762,7 +4762,7 @@ msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
 msgid "Installing Necessary SDKs"
-msgstr "S'està instal·lant els SDK necessaris"
+msgstr "S'estan instal·lant els SDK necessaris"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
 msgid ""
