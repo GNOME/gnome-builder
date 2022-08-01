@@ -114,6 +114,13 @@
                 <style>
                   <class name="background"/>
                 </style>
+                <child>
+                  <object class="GtkStackPage">
+                    <property name="child">
+                      <object class="IdeTweaksPanel"/>
+                    </property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
