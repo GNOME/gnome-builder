@@ -56,6 +56,7 @@ ide_tweaks_factory_dispose (GObject *object)
   IdeTweaksFactory *self = (IdeTweaksFactory *)object;
 
   g_clear_object (&self->model);
+  g_clear_object (&self->item);
 
   G_OBJECT_CLASS (ide_tweaks_factory_parent_class)->dispose (object);
 }
@@ -72,6 +73,10 @@ ide_tweaks_factory_get_property (GObject    *object,
     {
     case PROP_MODEL:
       g_value_set_object (value, ide_tweaks_factory_get_model (self));
+      break;
+
+    case PROP_ITEM:
+      g_value_set_object (value, self->item);
       break;
 
     default:
@@ -209,6 +214,9 @@ _ide_tweaks_factory_inflate (IdeTweaksFactory *self)
       /* Now deep copy child to snapshot state */
       g_ptr_array_add (ar, _ide_tweaks_item_deep_copy (child));
     }
+
+  if (g_set_object (&self->item, NULL))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
 
   return ar;
 }
