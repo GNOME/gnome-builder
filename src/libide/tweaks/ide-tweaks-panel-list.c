@@ -22,7 +22,10 @@
 
 #include "config.h"
 
+#include "ide-tweaks-model-private.h"
+#include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-list-private.h"
+#include "ide-tweaks-subpage.h"
 
 struct _IdeTweaksPanelList
 {
@@ -138,6 +141,13 @@ ide_tweaks_panel_list_get_item (IdeTweaksPanelList *self)
   return self->item;
 }
 
+static GtkWidget *
+ide_tweaks_panel_list_create_row_cb (gpointer item,
+                                     gpointer user_data)
+{
+  return g_object_new (GTK_TYPE_LABEL, "label", "TODO: ", NULL);
+}
+
 void
 ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
                                 IdeTweaksItem      *item)
@@ -147,6 +157,19 @@ ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
 
   if (g_set_object (&self->item, item))
     {
+      g_autoptr(IdeTweaksModel) model = NULL;
+
+      if (item != NULL)
+        {
+          const GType allowed_types[] = { IDE_TYPE_TWEAKS_PAGE, IDE_TYPE_TWEAKS_SUBPAGE };
+
+          model = ide_tweaks_model_new (item, allowed_types, G_N_ELEMENTS (allowed_types));
+          gtk_list_box_bind_model (self->list_box,
+                                   G_LIST_MODEL (model),
+                                   ide_tweaks_panel_list_create_row_cb,
+                                   NULL, NULL);
+        }
+
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
     }
 }
