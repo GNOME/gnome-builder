@@ -5,7 +5,7 @@
         <child>
           <object class="IdeTweaksPage" id="languages_page">
             <child>
-              <object class="IdeTweaksSubpageFactory" id="language_subpage_factory">
+              <object class="IdeTweaksFactory" id="language_subpage_factory">
                 <property name="model">GtkSourceLanguages</property>
                 <child>
                   <object class="IdeTweaksSubpage" id="language_subpage">

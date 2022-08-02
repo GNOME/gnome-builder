@@ -1,4 +1,4 @@
-/* libide-tweaks.h
+/* ide-tweaks-factory.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,15 +20,21 @@
 
 #pragma once
 
-#define IDE_TWEAKS_INSIDE
-# include "ide-tweaks.h"
-# include "ide-tweaks-custom.h"
-# include "ide-tweaks-factory.h"
-# include "ide-tweaks-group.h"
-# include "ide-tweaks-item.h"
-# include "ide-tweaks-page.h"
-# include "ide-tweaks-section.h"
-# include "ide-tweaks-subpage.h"
-# include "ide-tweaks-variable.h"
-# include "ide-tweaks-window.h"
-#undef IDE_TWEAKS_INSIDE
+#include "ide-tweaks-item.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TWEAKS_FACTORY (ide_tweaks_factory_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeTweaksFactory, ide_tweaks_factory, IDE, TWEAKS_FACTORY, IdeTweaksItem)
+
+IDE_AVAILABLE_IN_ALL
+IdeTweaksFactory *ide_tweaks_factory_new       (void);
+IDE_AVAILABLE_IN_ALL
+GListModel       *ide_tweaks_factory_get_model (IdeTweaksFactory *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_tweaks_factory_set_model (IdeTweaksFactory *self,
+                                                GListModel       *model);
+
+G_END_DECLS

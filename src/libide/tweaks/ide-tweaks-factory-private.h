@@ -1,4 +1,5 @@
-/* ide-tweaks-subpage-factory.h
+/*
+ * ide-tweaks-factory-private.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,21 +21,13 @@
 
 #pragma once
 
-#include "ide-tweaks-item.h"
+#include "ide-tweaks-factory.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_TWEAKS_SUBPAGE_FACTORY (ide_tweaks_subpage_factory_get_type())
-
-IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeTweaksSubpageFactory, ide_tweaks_subpage_factory, IDE, TWEAKS_SUBPAGE_FACTORY, IdeTweaksItem)
-
-IDE_AVAILABLE_IN_ALL
-IdeTweaksSubpageFactory *ide_tweaks_subpage_factory_new       (void);
-IDE_AVAILABLE_IN_ALL
-GListModel              *ide_tweaks_subpage_factory_get_model (IdeTweaksSubpageFactory *self);
-IDE_AVAILABLE_IN_ALL
-void                     ide_tweaks_subpage_factory_set_model (IdeTweaksSubpageFactory *self,
-                                                               GListModel              *model);
+GPtrArray *_ide_tweaks_factory_inflate   (IdeTweaksFactory *factory);
+gboolean   _ide_tweaks_factory_is_one_of (IdeTweaksFactory *factory,
+                                          const GType      *allowed_types,
+                                          guint             n_allowed_types);
 
 G_END_DECLS

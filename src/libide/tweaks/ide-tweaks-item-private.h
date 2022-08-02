@@ -24,8 +24,9 @@
 
 G_BEGIN_DECLS
 
-void _ide_tweaks_item_printf (IdeTweaksItem *self,
-                              GString       *string,
-                              guint          level);
+IdeTweaksItem *_ide_tweaks_item_deep_copy (IdeTweaksItem *self);
+void           _ide_tweaks_item_printf    (IdeTweaksItem *self,
+                                           GString       *string,
+                                           guint          level);
 
 G_END_DECLS

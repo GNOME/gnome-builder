@@ -603,3 +603,11 @@ _ide_tweaks_item_printf (IdeTweaksItem *self,
     g_string_append (string, "  ");
   g_string_append_printf (string, "</%s>\n", G_OBJECT_TYPE_NAME (self));
 }
+
+IdeTweaksItem *
+_ide_tweaks_item_deep_copy (IdeTweaksItem *self)
+{
+  /* TODO: actually implement deep copy */
+
+  return g_object_new (G_OBJECT_TYPE (self), NULL);
+}

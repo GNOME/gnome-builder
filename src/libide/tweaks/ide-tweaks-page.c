@@ -23,10 +23,10 @@
 
 #include "config.h"
 
+#include "ide-tweaks-factory.h"
 #include "ide-tweaks-group.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-subpage.h"
-#include "ide-tweaks-subpage-factory.h"
 
 struct _IdeTweaksPage
 {
@@ -57,7 +57,7 @@ ide_tweaks_page_accepts (IdeTweaksItem *item,
                          IdeTweaksItem *child)
 {
   return IDE_IS_TWEAKS_SUBPAGE (child) ||
-         IDE_IS_TWEAKS_SUBPAGE_FACTORY (child) ||
+         IDE_IS_TWEAKS_FACTORY (child) ||
          IDE_IS_TWEAKS_GROUP (child);
 }
 
