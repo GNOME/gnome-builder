@@ -26,12 +26,16 @@
 
 struct _IdeTweaksPanelList
 {
-  AdwBin    parent_instance;
-  GtkStack *stack;
+  AdwBin         parent_instance;
+
+  IdeTweaksItem *item;
+
+  GtkListBox    *list_box;
 };
 
 enum {
   PROP_0,
+  PROP_ITEM,
   N_PROPS
 };
 
@@ -43,6 +47,8 @@ static void
 ide_tweaks_panel_list_dispose (GObject *object)
 {
   IdeTweaksPanelList *self = (IdeTweaksPanelList *)object;
+
+  g_clear_object (&self->item);
 
   G_OBJECT_CLASS (ide_tweaks_panel_list_parent_class)->dispose (object);
 }
@@ -57,6 +63,10 @@ ide_tweaks_panel_list_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ITEM:
+      g_value_set_object (value, ide_tweaks_panel_list_get_item (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -72,6 +82,10 @@ ide_tweaks_panel_list_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ITEM:
+      ide_tweaks_panel_list_set_item (self, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -87,8 +101,13 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
   object_class->get_property = ide_tweaks_panel_list_get_property;
   object_class->set_property = ide_tweaks_panel_list_set_property;
 
+  properties [PROP_ITEM] =
+    g_param_spec_object ("item", NULL, NULL,
+                         IDE_TYPE_TWEAKS_ITEM,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel-list.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, list_box);
 }
 
 static void
@@ -103,6 +122,22 @@ ide_tweaks_panel_list_new (void)
   return g_object_new (IDE_TYPE_TWEAKS_PANEL_LIST, NULL);
 }
 
+/**
+ * ide_tweaks_panel_list_get_item:
+ *
+ * Gets the parent item of the panel list. Children of this
+ * item are what are displayed in the panel list.
+ *
+ * Returns: (transfer none) (nullable): an #IdeTweaksItem or %NULL
+ */
+IdeTweaksItem *
+ide_tweaks_panel_list_get_item (IdeTweaksPanelList *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self), NULL);
+
+  return self->item;
+}
+
 void
 ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
                                 IdeTweaksItem      *item)
@@ -110,4 +145,8 @@ ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
   g_return_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self));
   g_return_if_fail (IDE_IS_TWEAKS_ITEM (item));
 
+  if (g_set_object (&self->item, item))
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
+    }
 }

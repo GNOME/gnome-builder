@@ -74,18 +74,12 @@
               </object>
             </child>
             <child>
-              <object class="GtkScrolledWindow">
+              <object class="GtkStack" id="panel_list_stack">
+                <property name="hhomogeneous">true</property>
+                <property name="transition-type">slide-left-right</property>
                 <property name="vexpand">true</property>
+                <property name="vhomogeneous">false</property>
                 <property name="width-request">200</property>
-                <property name="hscrollbar-policy">never</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="scroll-to-focus">true</property>
-                    <child>
-                      <object class="IdeTweaksPanelList" id="list"/>
-                    </child>
-                  </object>
-                </child>
               </object>
             </child>
           </object>
@@ -109,7 +103,7 @@
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
             <child>
-              <object class="GtkStack" id="stack">
+              <object class="GtkStack" id="panel_stack">
                 <property name="hexpand">true</property>
                 <property name="vexpand">true</property>
                 <property name="transition-type">crossfade</property>

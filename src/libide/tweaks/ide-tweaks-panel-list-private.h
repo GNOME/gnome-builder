@@ -30,8 +30,9 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, IDE, TWEAKS_PANEL_LIST, AdwBin)
 
-GtkWidget *ide_tweaks_panel_list_new      (void);
-void       ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
-                                           IdeTweaksItem      *item);
+GtkWidget     *ide_tweaks_panel_list_new      (void);
+IdeTweaksItem *ide_tweaks_panel_list_get_item (IdeTweaksPanelList *self);
+void           ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
+                                               IdeTweaksItem      *item);
 
 G_END_DECLS

@@ -29,8 +29,11 @@
 struct _IdeTweaksWindow
 {
   AdwWindow           parent_instance;
+
   IdeTweaks          *tweaks;
-  IdeTweaksPanelList *list;
+
+  GtkStack           *panel_stack;
+  GtkStack           *panel_list_stack;
 };
 
 enum {
@@ -44,11 +47,46 @@ G_DEFINE_FINAL_TYPE (IdeTweaksWindow, ide_tweaks_window, ADW_TYPE_WINDOW)
 static GParamSpec *properties [N_PROPS];
 
 static void
+ide_tweaks_window_clear (IdeTweaksWindow *self)
+{
+  GtkWidget *child;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (IDE_IS_TWEAKS (self->tweaks));
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack))))
+    gtk_stack_remove (self->panel_list_stack, child);
+
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_stack))))
+    gtk_stack_remove (self->panel_stack, child);
+}
+
+static void
+ide_tweaks_window_rebuild (IdeTweaksWindow *self)
+{
+  GtkWidget *list;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (IDE_IS_TWEAKS (self->tweaks));
+
+  list = ide_tweaks_panel_list_new ();
+  ide_tweaks_panel_list_set_item (IDE_TWEAKS_PANEL_LIST (list),
+                                  IDE_TWEAKS_ITEM (self->tweaks));
+  gtk_stack_add_named (self->panel_list_stack,
+                       list,
+                       ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));
+}
+
+static void
 ide_tweaks_window_dispose (GObject *object)
 {
   IdeTweaksWindow *self = (IdeTweaksWindow *)object;
 
-  g_clear_object (&self->tweaks);
+  if (self->tweaks)
+    {
+      ide_tweaks_window_clear (self);
+      g_clear_object (&self->tweaks);
+    }
 
   G_OBJECT_CLASS (ide_tweaks_window_parent_class)->dispose (object);
 }
@@ -109,7 +147,8 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-window.ui");
-  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, list);
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_stack);
 
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL);
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL_LIST);
@@ -157,11 +196,22 @@ ide_tweaks_window_set_tweaks (IdeTweaksWindow *self,
   g_return_if_fail (IDE_IS_TWEAKS_WINDOW (self));
   g_return_if_fail (!tweaks || IDE_IS_TWEAKS (tweaks));
 
-  if (g_set_object (&self->tweaks, tweaks))
+  if (self->tweaks == tweaks)
+    return;
+
+  if (self->tweaks != NULL)
     {
-      ide_tweaks_window_navigate_to (self, IDE_TWEAKS_ITEM (tweaks));
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TWEAKS]);
+      ide_tweaks_window_clear (self);
+      g_clear_object (&self->tweaks);
     }
+
+  if (tweaks != NULL)
+    {
+      g_set_object (&self->tweaks, tweaks);
+      ide_tweaks_window_rebuild (self);
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TWEAKS]);
 }
 
 /**
@@ -187,5 +237,4 @@ ide_tweaks_window_navigate_to (IdeTweaksWindow *self,
   if (item == NULL)
     return;
 
-  ide_tweaks_panel_list_set_item (self->list, item);
 }
