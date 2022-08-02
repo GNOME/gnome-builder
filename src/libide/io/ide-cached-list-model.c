@@ -30,6 +30,8 @@ struct _IdeCachedListModel
   GSequence  *items;
   GListModel *model;
   gulong      items_changed_handler;
+
+  guint       in_dispose : 1;
 };
 
 enum {
@@ -108,6 +110,8 @@ static void
 ide_cached_list_model_dispose (GObject *object)
 {
   IdeCachedListModel *self = (IdeCachedListModel *)object;
+
+  self->in_dispose = TRUE;
 
   ide_cached_list_model_set_model (self, NULL);
 
@@ -270,8 +274,11 @@ ide_cached_list_model_set_model (IdeCachedListModel *self,
 
   g_set_object (&self->model, model);
 
-  if (removed || added)
-    g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
+  if (!self->in_dispose)
+    {
+      if (removed || added)
+        g_list_model_items_changed (G_LIST_MODEL (self), 0, removed, added);
+    }
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODEL]);
 }
