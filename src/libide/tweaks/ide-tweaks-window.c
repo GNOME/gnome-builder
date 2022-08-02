@@ -28,8 +28,9 @@
 
 struct _IdeTweaksWindow
 {
-  AdwWindow  parent_instance;
-  IdeTweaks *tweaks;
+  AdwWindow           parent_instance;
+  IdeTweaks          *tweaks;
+  IdeTweaksPanelList *list;
 };
 
 enum {
@@ -108,6 +109,7 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-window.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, list);
 
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL);
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL_LIST);
@@ -185,4 +187,5 @@ ide_tweaks_window_navigate_to (IdeTweaksWindow *self,
   if (item == NULL)
     return;
 
+  ide_tweaks_panel_list_set_item (self->list, item);
 }

@@ -26,7 +26,8 @@
 
 struct _IdeTweaksPanelList
 {
-  AdwBin parent_instance;
+  AdwBin    parent_instance;
+  GtkStack *stack;
 };
 
 enum {
@@ -87,6 +88,7 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
   object_class->set_property = ide_tweaks_panel_list_set_property;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel-list.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, stack);
 }
 
 static void
@@ -99,4 +101,13 @@ GtkWidget *
 ide_tweaks_panel_list_new (void)
 {
   return g_object_new (IDE_TYPE_TWEAKS_PANEL_LIST, NULL);
+}
+
+void
+ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
+                                IdeTweaksItem      *item)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self));
+  g_return_if_fail (IDE_IS_TWEAKS_ITEM (item));
+
 }
