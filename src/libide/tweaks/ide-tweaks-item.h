@@ -42,6 +42,8 @@ struct _IdeTweaksItemClass
 };
 
 IDE_AVAILABLE_IN_ALL
+const char *        ide_tweaks_item_get_id               (IdeTweaksItem      *self);
+IDE_AVAILABLE_IN_ALL
 const char * const *ide_tweaks_item_get_keywords         (IdeTweaksItem      *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_item_set_keywords         (IdeTweaksItem      *self,

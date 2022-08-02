@@ -174,6 +174,16 @@ ide_tweaks_item_accepts (IdeTweaksItem *self,
   return FALSE;
 }
 
+const char *
+ide_tweaks_item_get_id (IdeTweaksItem *self)
+{
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), NULL);
+
+  return priv->id;
+}
+
 const char * const *
 ide_tweaks_item_get_keywords (IdeTweaksItem *self)
 {
