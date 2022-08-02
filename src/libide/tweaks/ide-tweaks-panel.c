@@ -22,7 +22,9 @@
 
 #include "config.h"
 
+#include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-private.h"
+#include "ide-tweaks-subpage.h"
 
 typedef struct
 {
@@ -44,6 +46,51 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
 static GParamSpec *properties [N_PROPS];
 
 static void
+ide_tweaks_panel_set_title (IdeTweaksPanel *self,
+                            const char     *title)
+{
+  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
+
+  g_assert (IDE_IS_TWEAKS_PANEL (self));
+
+  if (ide_set_string (&priv->title, title))
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TITLE]);
+}
+
+static void
+ide_tweaks_panel_page_notify_title_cb (IdeTweaksPanel *self,
+                                       GParamSpec     *pspec,
+                                       IdeTweaksPage  *page)
+{
+  ide_tweaks_panel_set_title (self, ide_tweaks_page_get_title (page));
+}
+
+static void
+ide_tweaks_panel_load_page (IdeTweaksPanel *self,
+                            IdeTweaksPage  *page)
+{
+  g_assert (IDE_IS_TWEAKS_PANEL (self));
+  g_assert (IDE_IS_TWEAKS_PAGE (page));
+
+  g_signal_connect_object (page,
+                           "notify::title",
+                           G_CALLBACK (ide_tweaks_panel_page_notify_title_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  ide_tweaks_panel_page_notify_title_cb (self, NULL, page);
+}
+
+static void
+ide_tweaks_panel_load_subpage (IdeTweaksPanel   *self,
+                               IdeTweaksSubpage *subpage)
+{
+  g_assert (IDE_IS_TWEAKS_PANEL (self));
+  g_assert (IDE_IS_TWEAKS_SUBPAGE (subpage));
+
+}
+
+static void
 ide_tweaks_panel_set_item (IdeTweaksPanel *self,
                            IdeTweaksItem  *item)
 {
@@ -52,7 +99,13 @@ ide_tweaks_panel_set_item (IdeTweaksPanel *self,
   g_return_if_fail (IDE_IS_TWEAKS_PANEL (self));
   g_return_if_fail (!item || IDE_IS_TWEAKS_ITEM (item));
 
-  g_set_object (&priv->item, item);
+  if (g_set_object (&priv->item, item))
+    {
+      if (IDE_IS_TWEAKS_PAGE (item))
+        ide_tweaks_panel_load_page (self, IDE_TWEAKS_PAGE (item));
+      else if (IDE_IS_TWEAKS_SUBPAGE (item))
+        ide_tweaks_panel_load_subpage (self, IDE_TWEAKS_SUBPAGE (item));
+    }
 }
 
 static void
