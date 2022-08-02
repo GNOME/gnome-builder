@@ -2,6 +2,7 @@
 <gresources>
   <gresource prefix="/org/gnome/libide-tweaks">
     <file preprocess="xml-stripblanks">ide-tweaks-panel.ui</file>
+    <file preprocess="xml-stripblanks">ide-tweaks-panel-list.ui</file>
     <file preprocess="xml-stripblanks">ide-tweaks-window.ui</file>
   </gresource>
 </gresources>

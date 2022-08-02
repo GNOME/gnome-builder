@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaksPanelList" parent="AdwBin">
+    <child>
+      <object class="GtkStack" id="stack">
+        <property name="vhomogeneous">False</property>
+        <property name="hhomogeneous">True</property>
+        <property name="transition-type">slide-left-right</property>
+        <child>
+          <object class="GtkStackPage">
+            <property name="child">
+              <object class="GtkListBox" id="main_list">
+                <style>
+                  <class name="navigation-sidebar"/>
+                </style>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

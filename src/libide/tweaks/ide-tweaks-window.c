@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "ide-tweaks-panel-private.h"
+#include "ide-tweaks-panel-list-private.h"
 #include "ide-tweaks-window.h"
 
 struct _IdeTweaksWindow
@@ -109,6 +110,7 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-window.ui");
 
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL);
+  g_type_ensure (IDE_TYPE_TWEAKS_PANEL_LIST);
 }
 
 static void

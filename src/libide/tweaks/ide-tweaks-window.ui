@@ -81,6 +81,9 @@
                 <child>
                   <object class="GtkViewport">
                     <property name="scroll-to-focus">true</property>
+                    <child>
+                      <object class="IdeTweaksPanelList" id="list"/>
+                    </child>
                   </object>
                 </child>
               </object>

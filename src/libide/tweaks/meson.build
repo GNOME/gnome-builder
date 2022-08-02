@@ -42,6 +42,7 @@ libide_tweaks_public_sources = [
 libide_tweaks_private_sources = [
   'ide-tweaks-init.c',
   'ide-tweaks-panel.c',
+  'ide-tweaks-panel-list.c',
 ]
 
 #
