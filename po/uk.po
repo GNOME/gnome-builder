@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-31 12:42+0000\n"
-"PO-Revision-Date: 2022-07-31 21:23+0300\n"
+"POT-Creation-Date: 2022-08-01 14:47+0000\n"
+"PO-Revision-Date: 2022-08-02 14:42+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -771,17 +771,19 @@ msgstr "Відкрити файл у новому робочому просто�
 #: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
 #: src/libide/gui/ide-preferences-window.c:894
+#: src/libide/tweaks/ide-tweaks-window.ui:24
 msgid "Preferences"
 msgstr "Параметри"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
 #: src/libide/gui/ide-preferences-builtin.c:700
+#: src/libide/tweaks/ide-tweaks-window.ui:134
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
 #: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40
+#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:138
 msgid "Help"
 msgstr "Довідка"
 
@@ -2390,6 +2392,22 @@ msgstr "(Порожньо)"
 msgid "Loading…"
 msgstr "Завантаження…"
 
+#: src/libide/tweaks/ide-tweaks-window.ui:32
+#| msgid "Preferences"
+msgid "All Preferences"
+msgstr "Усі налаштування"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:43
+#| msgid "Preferences"
+msgid "Search Preferences"
+msgstr "Параметри пошуку"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:56
+#| msgctxt "shortcut window"
+#| msgid "Toggle primary menu"
+msgid "Primary Menu"
+msgstr "Основне меню"
+
 #: src/libide/vcs/ide-directory-vcs.c:57
 msgid "unversioned"
 msgstr "поза керуванням версіями"
@@ -2905,12 +2923,10 @@ msgstr ""
 "найкращим з кандидатів."
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
-#| msgid "Stop building project"
 msgid "Stop Building Project"
 msgstr "Зупинити збирання проєкту"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
-#| msgid "Run Project (Shift+Ctrl+Space)"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Зібрати проєкт (Shift+Ctrl+Alt+B)"
 
@@ -3010,10 +3026,6 @@ msgstr "Показати _журнал збирання"
 #: src/plugins/buildui/gtk/menus.ui:105
 msgid "Display panel containing the build log"
 msgstr "Показати панель із вмістом журналу збирання"
-
-#: src/plugins/buildui/gtk/menus.ui:111
-msgid "manage-sdks"
-msgstr "manage-sdks"
 
 #: src/plugins/buildui/gtk/menus.ui:112
 msgid "Manage SDKs…"
@@ -5893,6 +5905,9 @@ msgstr "Не вдалося створити ієрархію XML."
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
 
+#~ msgid "manage-sdks"
+#~ msgstr "manage-sdks"
+
 #~ msgid "Overscroll"
 #~ msgstr "Надпрокручування"
 
@@ -5913,10 +5928,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgctxt "shortcut window"
 #~ msgid "Show help"
 #~ msgstr "Показати довідку"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle primary menu"
-#~ msgstr "Увімкнути або вимкнути основне меню"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Global Search"
