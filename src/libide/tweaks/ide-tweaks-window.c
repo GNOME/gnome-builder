@@ -75,6 +75,7 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
   gtk_stack_add_named (self->panel_list_stack,
                        list,
                        ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));
+  ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (list));
 }
 
 static void

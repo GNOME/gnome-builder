@@ -226,3 +226,20 @@ ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
     }
 }
+
+void
+ide_tweaks_panel_list_select_first (IdeTweaksPanelList *self)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self));
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->list_box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      if (GTK_IS_LIST_BOX_ROW (child))
+        {
+          gtk_widget_activate (GTK_WIDGET (child));
+          break;
+        }
+    }
+}
