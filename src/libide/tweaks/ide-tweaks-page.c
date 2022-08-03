@@ -23,7 +23,7 @@
 
 #include "config.h"
 
-#include "ide-tweaks-factory.h"
+#include "ide-tweaks-factory-private.h"
 #include "ide-tweaks-group.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-section.h"
@@ -40,6 +40,7 @@ G_DEFINE_FINAL_TYPE (IdeTweaksPage, ide_tweaks_page, IDE_TYPE_TWEAKS_ITEM)
 
 enum {
   PROP_0,
+  PROP_HAS_SUBPAGE,
   PROP_ICON_NAME,
   PROP_SECTION,
   PROP_TITLE,
@@ -84,6 +85,10 @@ ide_tweaks_page_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_HAS_SUBPAGE:
+      g_value_set_boolean (value, ide_tweaks_page_get_has_subpage (self));
+      break;
+
     case PROP_ICON_NAME:
       g_value_set_string (value, ide_tweaks_page_get_icon_name (self));
       break;
@@ -135,6 +140,11 @@ ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
   object_class->set_property = ide_tweaks_page_set_property;
 
   item_class->accepts = ide_tweaks_page_accepts;
+
+  properties [PROP_HAS_SUBPAGE] =
+    g_param_spec_boolean ("has-subpage", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ICON_NAME] =
     g_param_spec_string ("icon-name", NULL, NULL, NULL,
@@ -215,4 +225,37 @@ ide_tweaks_page_get_section (IdeTweaksPage *self)
     }
 
   return NULL;
+}
+
+/**
+ * ide_tweaks_page_get_has_subpage:
+ * @self: a #IdeTweaksPage
+ *
+ * Checks if @page has a subpage or a factory that can generate subpages.
+ *
+ * Returns: %TRUE if @self might have a subpage
+ */
+gboolean
+ide_tweaks_page_get_has_subpage (IdeTweaksPage *self)
+{
+  static GType subpage_type;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (self), FALSE);
+
+  if G_UNLIKELY (subpage_type == G_TYPE_INVALID)
+    subpage_type = IDE_TYPE_TWEAKS_SUBPAGE;
+
+  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (self));
+       child != NULL;
+       child = ide_tweaks_item_get_next_sibling (child))
+    {
+      if (G_TYPE_CHECK_INSTANCE_TYPE (child, subpage_type))
+        return TRUE;
+
+      if (IDE_IS_TWEAKS_FACTORY (child) &&
+          _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (child), &subpage_type, 1))
+        return TRUE;
+    }
+
+  return FALSE;
 }
