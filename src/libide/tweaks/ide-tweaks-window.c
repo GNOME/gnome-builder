@@ -26,6 +26,8 @@
 #include "ide-tweaks-panel-list-private.h"
 #include "ide-tweaks-window.h"
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkStackPage, g_object_unref)
+
 struct _IdeTweaksWindow
 {
   AdwWindow  parent_instance;
@@ -128,6 +130,43 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
 }
 
 static void
+panel_stack_notify_transition_running_cb (IdeTweaksWindow *self,
+                                          GParamSpec      *pspec,
+                                          GtkStack        *stack)
+{
+  GtkSelectionModel *model;
+  IdeTweaksPage *current_page;
+  guint n_items;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (GTK_IS_STACK (stack));
+
+  if (gtk_stack_get_transition_running (stack))
+    return;
+
+  if (!(current_page = ide_tweaks_window_get_current_page (self)))
+    return;
+
+  model = gtk_stack_get_pages (stack);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
+
+  for (guint i = n_items; i > 0; i--)
+    {
+      g_autoptr(GtkStackPage) page = g_list_model_get_item (G_LIST_MODEL (model), i - 1);
+      IdeTweaksPanel *panel;
+      IdeTweaksPage *item;
+
+      panel = IDE_TWEAKS_PANEL (gtk_stack_page_get_child (page));
+      item = ide_tweaks_panel_get_page (panel);
+
+      if (item != NULL &&
+          item != current_page &&
+          !ide_tweaks_item_is_ancestor (IDE_TWEAKS_ITEM (current_page), IDE_TWEAKS_ITEM (item)))
+        gtk_stack_remove (stack, GTK_WIDGET (panel));
+    }
+}
+
+static void
 ide_tweaks_window_dispose (GObject *object)
 {
   IdeTweaksWindow *self = (IdeTweaksWindow *)object;
@@ -199,6 +238,7 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-window.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_stack);
+  gtk_widget_class_bind_template_callback (widget_class, panel_stack_notify_transition_running_cb);
 
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL);
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL_LIST);
