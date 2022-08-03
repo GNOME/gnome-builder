@@ -218,10 +218,6 @@ ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
       if (item != NULL)
         {
           model = ide_tweaks_model_new (item, panel_list_visitor, NULL, NULL);
-
-          g_print ("Setting model: %p %d items\n",
-                   model, g_list_model_get_n_items (G_LIST_MODEL (model)));
-
           gtk_list_box_bind_model (self->list_box,
                                    G_LIST_MODEL (model),
                                    ide_tweaks_panel_list_create_row_cb,
