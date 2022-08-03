@@ -36,10 +36,13 @@ struct _IdeTweaksWindow
 
   GtkStack  *panel_stack;
   GtkStack  *panel_list_stack;
+
+  guint      can_navigate_back : 1;
 };
 
 enum {
   PROP_0,
+  PROP_CAN_NAVIGATE_BACK,
   PROP_TWEAKS,
   N_PROPS
 };
@@ -66,7 +69,7 @@ static void
 ide_tweaks_window_update_actions (IdeTweaksWindow *self)
 {
   GtkWidget *visible_child;
-  gboolean navigate_back_enabled = FALSE;
+  gboolean can_navigate_back = FALSE;
 
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
 
@@ -75,10 +78,15 @@ ide_tweaks_window_update_actions (IdeTweaksWindow *self)
       IdeTweaksPanelList *list = IDE_TWEAKS_PANEL_LIST (visible_child);
       IdeTweaksItem *item = ide_tweaks_panel_list_get_item (list);
 
-      navigate_back_enabled = !IDE_IS_TWEAKS (item);
+      can_navigate_back = !IDE_IS_TWEAKS (item);
     }
 
-  gtk_widget_action_set_enabled (GTK_WIDGET (self), "navigation.back", navigate_back_enabled);
+  if (can_navigate_back != self->can_navigate_back)
+    {
+      self->can_navigate_back = can_navigate_back;
+      gtk_widget_action_set_enabled (GTK_WIDGET (self), "navigation.back", can_navigate_back);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CAN_NAVIGATE_BACK]);
+    }
 }
 
 static void
@@ -236,6 +244,10 @@ ide_tweaks_window_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CAN_NAVIGATE_BACK:
+      g_value_set_boolean (value, ide_tweaks_window_get_can_navigate_back (self));
+      break;
+
     case PROP_TWEAKS:
       g_value_set_object (value, ide_tweaks_window_get_tweaks (self));
       break;
@@ -273,6 +285,12 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   object_class->dispose = ide_tweaks_window_dispose;
   object_class->get_property = ide_tweaks_window_get_property;
   object_class->set_property = ide_tweaks_window_set_property;
+
+  properties[PROP_CAN_NAVIGATE_BACK] =
+    g_param_spec_boolean ("can-navigate-back", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
 
   properties [PROP_TWEAKS] =
     g_param_spec_object ("tweaks", NULL, NULL,
@@ -431,4 +449,12 @@ ide_tweaks_window_navigate_back (IdeTweaksWindow *self)
     }
 
   g_warning ("Failed to lcoate parent panel list");
+}
+
+gboolean
+ide_tweaks_window_get_can_navigate_back (IdeTweaksWindow *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_WINDOW (self), FALSE);
+
+  return self->can_navigate_back;
 }

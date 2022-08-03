@@ -26,6 +26,7 @@
                 </property>
                 <child>
                   <object class="GtkButton" id="sidebar_previous_button">
+                    <property name="visible" bind-source="IdeTweaksWindow" bind-property="can-navigate-back" bind-flags="sync-create"/>
                     <property name="action-name">navigation.back</property>
                     <property name="icon-name">go-previous-symbolic</property>
                     <accessibility>
@@ -39,6 +40,7 @@
                 <child>
                   <object class="GtkToggleButton" id="sidebar_search_button">
                     <property name="icon-name">edit-find-symbolic</property>
+                    <property name="visible" bind-source="IdeTweaksWindow" bind-property="can-navigate-back" bind-flags="sync-create|invert-boolean"/>
                     <accessibility>
                       <property name="label" translatable="yes">Search Preferences</property>
                     </accessibility>
