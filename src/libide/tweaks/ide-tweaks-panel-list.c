@@ -31,16 +31,18 @@
 
 struct _IdeTweaksPanelList
 {
-  AdwBin         parent_instance;
+  AdwBin          parent_instance;
 
-  IdeTweaksItem *item;
+  IdeTweaksItem  *item;
 
-  GtkListBox    *list_box;
+  GtkListBox     *list_box;
+  GtkSearchEntry *search_entry;
 };
 
 enum {
   PROP_0,
   PROP_ITEM,
+  PROP_SEARCH_MODE,
   N_PROPS
 };
 
@@ -180,6 +182,10 @@ ide_tweaks_panel_list_get_property (GObject    *object,
       g_value_set_object (value, ide_tweaks_panel_list_get_item (self));
       break;
 
+    case PROP_SEARCH_MODE:
+      g_value_set_boolean (value, ide_tweaks_panel_list_get_search_mode (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -197,6 +203,10 @@ ide_tweaks_panel_list_set_property (GObject      *object,
     {
     case PROP_ITEM:
       ide_tweaks_panel_list_set_item (self, g_value_get_object (value));
+      break;
+
+    case PROP_SEARCH_MODE:
+      ide_tweaks_panel_list_set_search_mode (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -219,10 +229,16 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
                          IDE_TYPE_TWEAKS_ITEM,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_SEARCH_MODE] =
+    g_param_spec_boolean ("search-mode", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel-list.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, list_box);
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, search_entry);
   gtk_widget_class_bind_template_callback (widget_class, ide_tweaks_panel_list_row_activated_cb);
 
   signals [PAGE_ACTIVATED] =
@@ -285,5 +301,28 @@ ide_tweaks_panel_list_select_first (IdeTweaksPanelList *self)
           gtk_widget_activate (GTK_WIDGET (child));
           break;
         }
+    }
+}
+
+gboolean
+ide_tweaks_panel_list_get_search_mode (IdeTweaksPanelList *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self), FALSE);
+
+  return gtk_widget_get_visible (GTK_WIDGET (self->search_entry));
+}
+
+void
+ide_tweaks_panel_list_set_search_mode (IdeTweaksPanelList *self,
+                                       gboolean            search_mode)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self));
+
+  search_mode = !!search_mode;
+
+  if (ide_tweaks_panel_list_get_search_mode (self) != search_mode)
+    {
+      gtk_widget_set_visible (GTK_WIDGET (self->search_entry), search_mode);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_MODE]);
     }
 }

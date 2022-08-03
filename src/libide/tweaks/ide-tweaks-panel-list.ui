@@ -2,14 +2,29 @@
 <interface>
   <template class="IdeTweaksPanelList" parent="AdwBin">
     <child>
-      <object class="GtkScrolledWindow">
-        <property name="hscrollbar-policy">never</property>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <child>
-          <object class="GtkListBox" id="list_box">
-            <signal name="row-activated" handler="ide_tweaks_panel_list_row_activated_cb" swapped="true" object="IdeTweaksPanelList"/>
-            <style>
-              <class name="navigation-sidebar"/>
-            </style>
+          <object class="GtkSearchEntry" id="search_entry">
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">6</property>
+            <property name="visible">false</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="hscrollbar-policy">never</property>
+            <property name="vexpand">true</property>
+            <child>
+              <object class="GtkListBox" id="list_box">
+                <signal name="row-activated" handler="ide_tweaks_panel_list_row_activated_cb" swapped="true" object="IdeTweaksPanelList"/>
+                <style>
+                  <class name="navigation-sidebar"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
       </object>
