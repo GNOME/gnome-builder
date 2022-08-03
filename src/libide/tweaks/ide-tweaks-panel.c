@@ -126,6 +126,16 @@ ide_tweaks_panel_init (IdeTweaksPanel *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
+GtkWidget *
+ide_tweaks_panel_new (IdeTweaksPage *page)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (page), NULL);
+
+  return g_object_new (IDE_TYPE_TWEAKS_PANEL,
+                       "page", page,
+                       NULL);
+}
+
 IdeTweaksPage *
 ide_tweaks_panel_get_page (IdeTweaksPanel *self)
 {
