@@ -28,10 +28,16 @@
 
 struct _IdeTweaksModel
 {
-  GObject        parent_instance;
-  IdeTweaksItem *item;
-  GPtrArray     *items;
+  GObject               parent_instance;
+  IdeTweaksItem        *item;
+  GPtrArray            *items;
+  IdeTweaksItemVisitor  visitor;
+  gpointer              visitor_data;
+  GDestroyNotify        visitor_data_destroy;
 };
+
+static gboolean ide_tweaks_model_populate (IdeTweaksModel *self,
+                                           IdeTweaksItem  *item);
 
 static GType
 list_model_get_item_type (GListModel *model)
@@ -76,81 +82,92 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static inline gboolean
-descendant_is_allowed (IdeTweaksItem *item,
-                       const GType   *allowed_types,
-                       guint          n_allowed_types)
+static gboolean
+ide_tweaks_model_visit (IdeTweaksModel *self,
+                        IdeTweaksItem  *item)
 {
-  GType item_type = G_OBJECT_TYPE (item);
+  IdeTweaksItemVisitResult res;
 
-  for (guint i = 0; i < n_allowed_types; i++)
+  g_assert (IDE_IS_TWEAKS_MODEL (self));
+  g_assert (IDE_IS_TWEAKS_ITEM (item));
+
+  res = self->visitor (item, self->visitor_data);
+
+  switch (res)
     {
-      if (g_type_is_a (item_type, allowed_types[i]))
-        return TRUE;
+    case IDE_TWEAKS_ITEM_VISIT_STOP:
+      return TRUE;
+
+    case IDE_TWEAKS_ITEM_VISIT_SKIP:
+      return FALSE;
+
+    case IDE_TWEAKS_ITEM_VISIT_ACCEPT:
+      g_ptr_array_add (self->items, g_object_ref (item));
+      return FALSE;
+
+    case IDE_TWEAKS_ITEM_VISIT_RECURSE:
+      return ide_tweaks_model_populate (self, item);
+
+    default:
+      break;
+    }
+
+  g_assert_not_reached ();
+}
+
+static gboolean
+ide_tweaks_model_populate (IdeTweaksModel *self,
+                           IdeTweaksItem  *item)
+{
+  g_assert (IDE_IS_TWEAKS_MODEL (self));
+  g_assert (self->items != NULL);
+  g_assert (self->visitor != NULL);
+
+  if (IDE_IS_TWEAKS_FACTORY (item))
+    {
+      g_autoptr(GPtrArray) factory_items = _ide_tweaks_factory_inflate (IDE_TWEAKS_FACTORY (item));
+
+      for (guint i = 0; i < factory_items->len; i++)
+        {
+          IdeTweaksItem *factory_item = g_ptr_array_index (factory_items, i);
+
+          if (ide_tweaks_model_visit (self, factory_item))
+            return TRUE;
+        }
+    }
+  else
+    {
+      for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (item);
+           child != NULL;
+           child = ide_tweaks_item_get_next_sibling (child))
+        {
+          if (ide_tweaks_model_visit (self, child))
+            return TRUE;
+        }
     }
 
   return FALSE;
 }
 
-static void
-ide_tweaks_model_populate (IdeTweaksModel *self,
-                           const GType    *allowed_types,
-                           guint           n_allowed_types)
-{
-  g_assert (IDE_IS_TWEAKS_MODEL (self));
-  g_assert (IDE_IS_TWEAKS_ITEM (self->item));
-  g_assert (self->items != NULL);
-  g_assert (self->items->len == 0);
-  g_assert (allowed_types != NULL);
-  g_assert (n_allowed_types > 0);
-
-  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (self->item);
-       child != NULL;
-       child = ide_tweaks_item_get_next_sibling (child))
-    {
-      if (descendant_is_allowed (child, allowed_types, n_allowed_types))
-        {
-          g_ptr_array_add (self->items, g_object_ref (child));
-          continue;
-        }
-
-      /* Now check if this is a factory, we might need to create
-       * items based on the factory.
-       */
-      if (IDE_IS_TWEAKS_FACTORY (child) &&
-          _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (child),
-                                         allowed_types,
-                                         n_allowed_types))
-        {
-          g_autoptr(GPtrArray) factory_items = _ide_tweaks_factory_inflate (IDE_TWEAKS_FACTORY (child));
-
-          for (guint i = 0; i < factory_items->len; i++)
-            {
-              IdeTweaksItem *factory_item = g_ptr_array_index (factory_items, i);
-
-              if (descendant_is_allowed (factory_item, allowed_types, n_allowed_types))
-                g_ptr_array_add (self->items, g_object_ref (factory_item));
-            }
-        }
-    }
-}
-
 IdeTweaksModel *
-ide_tweaks_model_new (IdeTweaksItem *item,
-                      const GType   *allowed_types,
-                      guint          n_allowed_types)
+ide_tweaks_model_new (IdeTweaksItem        *item,
+                      IdeTweaksItemVisitor  visitor,
+                      gpointer              visitor_data,
+                      GDestroyNotify        visitor_data_destroy)
 {
   IdeTweaksModel *self;
 
   g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (item), NULL);
-  g_return_val_if_fail (allowed_types != NULL, NULL);
-  g_return_val_if_fail (n_allowed_types > 0, NULL);
+  g_return_val_if_fail (visitor != NULL, NULL);
 
   self = g_object_new (IDE_TYPE_TWEAKS_MODEL, NULL);
   self->items = g_ptr_array_new_with_free_func (g_object_unref);
+  self->visitor = visitor;
+  self->visitor_data = visitor_data;
+  self->visitor_data_destroy = visitor_data_destroy;
 
   if (g_set_object (&self->item, item))
-    ide_tweaks_model_populate (self, allowed_types, n_allowed_types);
+    ide_tweaks_model_populate (self, item);
 
   return self;
 }
@@ -161,6 +178,13 @@ ide_tweaks_model_dispose (GObject *object)
   IdeTweaksModel *self = (IdeTweaksModel *)object;
 
   g_clear_object (&self->item);
+
+  if (self->visitor_data_destroy)
+    {
+      GDestroyNotify notify = g_steal_pointer (&self->visitor_data_destroy);
+      self->visitor = NULL;
+      g_clear_pointer (&self->visitor_data, notify);
+    }
 
   G_OBJECT_CLASS (ide_tweaks_model_parent_class)->dispose (object);
 }

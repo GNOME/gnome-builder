@@ -22,9 +22,11 @@
 
 #include "config.h"
 
+#include "ide-tweaks-factory-private.h"
 #include "ide-tweaks-model-private.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-list-private.h"
+#include "ide-tweaks-section.h"
 #include "ide-tweaks-subpage.h"
 
 struct _IdeTweaksPanelList
@@ -148,6 +150,28 @@ ide_tweaks_panel_list_create_row_cb (gpointer item,
   return g_object_new (GTK_TYPE_LABEL, "label", "TODO: ", NULL);
 }
 
+static IdeTweaksItemVisitResult
+panel_list_visitor (IdeTweaksItem *item,
+                    gpointer       user_data)
+{
+  static GType page_type;
+
+  if (!page_type)
+    page_type = IDE_TYPE_TWEAKS_PAGE;
+
+  if (IDE_IS_TWEAKS_SECTION (item))
+    return IDE_TWEAKS_ITEM_VISIT_RECURSE;
+
+  if (IDE_IS_TWEAKS_PAGE (item))
+    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
+
+  if (IDE_IS_TWEAKS_FACTORY (item) &&
+      _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (item), &page_type, 1))
+    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
+
+  return IDE_TWEAKS_ITEM_VISIT_SKIP;
+}
+
 void
 ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
                                 IdeTweaksItem      *item)
@@ -161,9 +185,11 @@ ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
 
       if (item != NULL)
         {
-          const GType allowed_types[] = { IDE_TYPE_TWEAKS_PAGE, IDE_TYPE_TWEAKS_SUBPAGE };
+          model = ide_tweaks_model_new (item, panel_list_visitor, NULL, NULL);
 
-          model = ide_tweaks_model_new (item, allowed_types, G_N_ELEMENTS (allowed_types));
+          g_print ("Setting model: %p %d items\n",
+                   model, g_list_model_get_n_items (G_LIST_MODEL (model)));
+
           gtk_list_box_bind_model (self->list_box,
                                    G_LIST_MODEL (model),
                                    ide_tweaks_panel_list_create_row_cb,

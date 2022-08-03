@@ -27,11 +27,23 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TWEAKS_MODEL (ide_tweaks_model_get_type())
 
+typedef enum
+{
+  IDE_TWEAKS_ITEM_VISIT_STOP = 0,
+  IDE_TWEAKS_ITEM_VISIT_SKIP,
+  IDE_TWEAKS_ITEM_VISIT_ACCEPT,
+  IDE_TWEAKS_ITEM_VISIT_RECURSE,
+} IdeTweaksItemVisitResult;
+
+typedef IdeTweaksItemVisitResult (*IdeTweaksItemVisitor) (IdeTweaksItem *item,
+                                                          gpointer       user_data);
+
 G_DECLARE_FINAL_TYPE (IdeTweaksModel, ide_tweaks_model, IDE, TWEAKS_MODEL, GObject)
 
-IdeTweaksModel *ide_tweaks_model_new      (IdeTweaksItem  *item,
-                                           const GType    *allowed_types,
-                                           guint           n_allowed_types);
+IdeTweaksModel *ide_tweaks_model_new      (IdeTweaksItem        *item,
+                                           IdeTweaksItemVisitor  visitor,
+                                           gpointer              visitor_data,
+                                           GDestroyNotify        visitor_data_destroy);
 IdeTweaksItem  *ide_tweaks_model_get_item (IdeTweaksModel *self);
 
 G_END_DECLS
