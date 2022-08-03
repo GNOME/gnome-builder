@@ -45,7 +45,9 @@ enum {
   N_PROPS
 };
 
-static void buildable_iface_init (GtkBuildableIface *iface);
+static void buildable_iface_init             (GtkBuildableIface *iface);
+static void ide_tweaks_item_set_buildable_id (GtkBuildable *buildable,
+                                              const char   *id);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeTweaksItem, ide_tweaks_item, G_TYPE_OBJECT,
                                   G_ADD_PRIVATE (IdeTweaksItem)
@@ -61,7 +63,7 @@ clear_value (gpointer data)
 }
 
 static IdeTweaksItem *
-ide_tweaks_item_real_copy (IdeTweaksItem *item)
+ide_tweaks_item_real_copy (IdeTweaksItem *self)
 {
   g_autoptr(GPtrArray) names = NULL;
   g_autoptr(GArray) values = NULL;
@@ -70,14 +72,14 @@ ide_tweaks_item_real_copy (IdeTweaksItem *item)
   GType item_type;
   guint n_pspecs;
 
-  g_assert (IDE_IS_TWEAKS_ITEM (item));
+  g_assert (IDE_IS_TWEAKS_ITEM (self));
 
-  item_type = G_OBJECT_TYPE (item);
+  item_type = G_OBJECT_TYPE (self);
   names = g_ptr_array_new ();
   values = g_array_new (FALSE, FALSE, sizeof (GValue));
   g_array_set_clear_func (values, clear_value);
 
-  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (item), &n_pspecs);
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (self), &n_pspecs);
 
   for (guint i = 0; i < n_pspecs; i++)
     {
@@ -88,7 +90,7 @@ ide_tweaks_item_real_copy (IdeTweaksItem *item)
         continue;
 
       g_value_init (&value, pspec->value_type);
-      g_object_get_property (G_OBJECT (item), pspec->name, &value);
+      g_object_get_property (G_OBJECT (self), pspec->name, &value);
 
       g_ptr_array_add (names, (gpointer)pspec->name);
       g_array_append_val (values, value);
@@ -99,7 +101,10 @@ ide_tweaks_item_real_copy (IdeTweaksItem *item)
                                        (const char **)names->pdata,
                                        (const GValue *)values->data);
 
-  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (item);
+  ide_tweaks_item_set_buildable_id (GTK_BUILDABLE (copy),
+                                    ide_tweaks_item_get_id (self));
+
+  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (self);
        child != NULL;
        child = ide_tweaks_item_get_next_sibling (child))
     {
