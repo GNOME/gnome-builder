@@ -44,9 +44,15 @@ enum {
   N_PROPS
 };
 
+enum {
+  PAGE_ACTIVATED,
+  N_SIGNALS
+};
+
 G_DEFINE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
+static guint signals [N_SIGNALS];
 
 static void
 ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
@@ -71,6 +77,25 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
     header = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 
   gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), header);
+}
+
+static void
+ide_tweaks_panel_list_row_activated_cb (IdeTweaksPanelList    *self,
+                                        IdeTweaksPanelListRow *row,
+                                        GtkListBox            *list_box)
+{
+  IdeTweaksItem *page;
+
+  g_assert (IDE_IS_TWEAKS_PANEL_LIST (self));
+  g_assert (IDE_IS_TWEAKS_PANEL_LIST_ROW (row));
+  g_assert (GTK_IS_LIST_BOX (list_box));
+
+  page = ide_tweaks_panel_list_row_get_item (row);
+
+  g_assert (page != NULL);
+  g_assert (IDE_IS_TWEAKS_PAGE (page));
+
+  g_signal_emit (self, signals [PAGE_ACTIVATED], 0, page);
 }
 
 static void
@@ -138,6 +163,16 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel-list.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, list_box);
+  gtk_widget_class_bind_template_callback (widget_class, ide_tweaks_panel_list_row_activated_cb);
+
+  signals [PAGE_ACTIVATED] =
+    g_signal_new ("page-activated",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 1, IDE_TYPE_TWEAKS_PAGE);
 }
 
 static void

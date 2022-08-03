@@ -6,6 +6,7 @@
         <property name="hscrollbar-policy">never</property>
         <child>
           <object class="GtkListBox" id="list_box">
+            <signal name="row-activated" handler="ide_tweaks_panel_list_row_activated_cb" swapped="true" object="IdeTweaksPanelList"/>
             <style>
               <class name="navigation-sidebar"/>
             </style>
