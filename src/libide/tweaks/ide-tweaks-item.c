@@ -29,13 +29,14 @@
 
 typedef struct
 {
-  IdeTweaksItem *parent;
-  GList link;
-  GQueue children;
-  char *id;
-  char **keywords;
-  char *sort_key;
-  guint id_sequence;
+  IdeTweaksItem  *parent;
+  IdeTweaksItem  *parent_before_copy_wr;
+  GList           link;
+  GQueue          children;
+  char           *id;
+  char          **keywords;
+  char           *sort_key;
+  guint           id_sequence;
 } IdeTweaksItemPrivate;
 
 enum {
@@ -67,6 +68,7 @@ static IdeTweaksItem *
 ide_tweaks_item_real_copy (IdeTweaksItem *self)
 {
   IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+  IdeTweaksItemPrivate *copy_priv;
   g_autoptr(GPtrArray) names = NULL;
   g_autoptr(GArray) values = NULL;
   g_autofree GParamSpec **pspecs = NULL;
@@ -104,6 +106,18 @@ ide_tweaks_item_real_copy (IdeTweaksItem *self)
                                        (const char **)names->pdata,
                                        (const GValue *)(gpointer)values->data);
 
+  /* Sanity check that we could create the instance */
+  if (copy == NULL)
+    g_return_val_if_reached (NULL);
+
+  copy_priv = ide_tweaks_item_get_instance_private (IDE_TWEAKS_ITEM (copy));
+
+  /* Ensure we have access to the parent without taking a full
+   * reference and without causing the original tree to be mutated.
+   */
+  g_set_weak_pointer (&copy_priv->parent_before_copy_wr,
+                      ide_tweaks_item_get_parent (self));
+
   /* Generate dynamic id for this item based on our id */
   if (priv->id != NULL)
     id = g_strdup_printf ("%s__copy__%u", priv->id, ++priv->id_sequence);
@@ -117,8 +131,11 @@ ide_tweaks_item_real_copy (IdeTweaksItem *self)
        child = ide_tweaks_item_get_next_sibling (child))
     {
       g_autoptr(IdeTweaksItem) new_child = ide_tweaks_item_copy (child);
+
       ide_tweaks_item_insert_after (new_child, IDE_TWEAKS_ITEM (copy), NULL);
     }
+
+  g_assert (ide_tweaks_item_get_parent (self) == ide_tweaks_item_get_parent (IDE_TWEAKS_ITEM (copy)));
 
   return IDE_TWEAKS_ITEM (copy);
 }
@@ -128,6 +145,8 @@ ide_tweaks_item_dispose (GObject *object)
 {
   IdeTweaksItem *self = (IdeTweaksItem *)object;
   IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+
+  g_clear_weak_pointer (&priv->parent_before_copy_wr);
 
   while (priv->children.head != NULL)
     {
@@ -471,7 +490,11 @@ ide_tweaks_item_get_parent (IdeTweaksItem *self)
 
   g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), NULL);
 
-  return priv->parent;
+  /* Allow ourselves to graft back onto the original graph so long
+   * as the pointers still exist. That way we don't require any sort
+   * of CoW semantics where you have to copy from root->changed element.
+   */
+  return priv->parent ? priv->parent : priv->parent_before_copy_wr;
 }
 
 void
