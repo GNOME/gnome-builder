@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-02-21 19:11+0000\n"
-"PO-Revision-Date: 2022-02-13 10:34+0100\n"
-"Last-Translator: maite guix <maite.guix@me.com>\n"
+"PO-Revision-Date: 2022-08-03 15:51+0100\n"
+"Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
@@ -342,27 +342,27 @@ msgstr ""
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:79
 #: src/libide/gui/ide-preferences-builtin.c:181
 msgid "Show overview map"
-msgstr "Mostra resum del mapa"
+msgstr "Mostra el mapa general"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:80
 msgid ""
 "If enabled, Builder will display an overview map of the source file next to "
 "the editor."
 msgstr ""
-"Si està habilitat, el Constructor mostrarà el resum del mapa del fitxer del "
-"codi font al costat de l'editor."
+"Si està habilitat, el Constructor mostrarà el mapa general del "
+"fitxer de codi font al costat de l'editor."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:84
 msgid "Automatically Hide Overview Map"
-msgstr "De forma automàtica amaga el resum del mapa"
+msgstr "Amaga automàticament el mapa general"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid ""
 "If enabled, Builder will automatically hide the overview map when mouse "
 "focus leaves the editor, or a timeout occurs."
 msgstr ""
-"Si està habilitat, el Constructor amagarà de forma automàtica el resum del "
-"mapa quan el focus del ratolí deixi l'editor, o un compte enrere succeeixi."
+"Si està habilitat, el Constructor amagarà de forma automàtica el mapa general "
+"quan el focus del ratolí deixi l'editor, o un compte enrere succeeixi."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:89
 msgid "Draw Spaces"
@@ -514,7 +514,7 @@ msgstr "\"Projectes\""
 #: data/gsettings/org.gnome.builder.gschema.xml:33
 #: src/libide/gui/ide-preferences-builtin.c:435
 msgid "Projects directory"
-msgstr "El directori dels projectes"
+msgstr "Directori dels projectes"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:34
 msgid "Directory for all Builder projects."
@@ -1934,11 +1934,11 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Reformat code on save"
-msgstr "Torna a donar format el codi en desar"
+msgstr "Torna a donar format al codi en desar"
 
 #: src/libide/gui/ide-preferences-builtin.c:158
 msgid "Reformat current file on save"
-msgstr "Torna a donar format el fitxer actual en desar"
+msgstr "Torna a donar format al fitxer actual en desar"
 
 #: src/libide/gui/ide-preferences-builtin.c:160
 msgid "Cursor"
@@ -2051,7 +2051,7 @@ msgstr "Una vista ampliada per a millorar el codi font de navegació"
 
 #: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Automatically hide overview map"
-msgstr "Amaga automàticament el mapa de resum"
+msgstr "Amaga automàticament el mapa general"
 
 #: src/libide/gui/ide-preferences-builtin.c:182
 msgid "Automatically hide map when editor loses focus"
@@ -2059,7 +2059,7 @@ msgstr "Amaga automàticament el mapa quan l'editor perdi el focus"
 
 #: src/libide/gui/ide-preferences-builtin.c:184
 msgid "Visible Whitespace Characters"
-msgstr "Caràcters espai en blanc visible"
+msgstr "Caràcters d'espai en blanc visibles"
 
 #: src/libide/gui/ide-preferences-builtin.c:187
 msgid "New line and carriage return"
@@ -2083,11 +2083,11 @@ msgstr "Sols al principi"
 
 #: src/libide/gui/ide-preferences-builtin.c:193
 msgid "Autosave"
-msgstr "Desa automàticament"
+msgstr "Desat automàtic"
 
 #: src/libide/gui/ide-preferences-builtin.c:194
 msgid "Enable or disable autosave feature"
-msgstr "Habilita o deshabilita la característica de desat automàticament"
+msgstr "Habilita o deshabilita la característica de desat automàtic"
 
 #: src/libide/gui/ide-preferences-builtin.c:195
 msgid "The number of seconds after modification before auto saving"
@@ -2279,7 +2279,7 @@ msgstr "Construeix processos de treball"
 
 #: src/libide/gui/ide-preferences-builtin.c:410
 msgid "Number of parallel build workers"
-msgstr "Nombre de processos de treballs construïts en paral·lel"
+msgstr "Nombre de processos de construcció en paral·lel"
 
 #: src/libide/gui/ide-preferences-builtin.c:418
 msgid "Clear build log pane on rebuild"
@@ -4001,8 +4001,7 @@ msgid ""
 "When saving a file Builder will automatically update copyright information "
 "for you"
 msgstr ""
-"En desar un Constructor de fitxers actualitzarà automàticament la informació"
-" dels drets d'autor"
+"En desar, s'actualitzarà automàticament la informació dels drets d'autor"
 
 #. translators: these are keywords used to search for preferences
 #: src/plugins/copyright/copyright_plugin.py:117
