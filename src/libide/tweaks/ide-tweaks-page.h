@@ -38,6 +38,8 @@ IDE_AVAILABLE_IN_ALL
 void           ide_tweaks_page_set_icon_name (IdeTweaksPage *self,
                                               const char    *icon_name);
 IDE_AVAILABLE_IN_ALL
+IdeTweaksItem *ide_tweaks_page_get_section   (IdeTweaksPage *self);
+IDE_AVAILABLE_IN_ALL
 const char    *ide_tweaks_page_get_title     (IdeTweaksPage *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_tweaks_page_set_title     (IdeTweaksPage *self,

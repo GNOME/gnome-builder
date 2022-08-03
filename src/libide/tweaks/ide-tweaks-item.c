@@ -573,13 +573,12 @@ _ide_tweaks_item_printf (IdeTweaksItem *self,
               g_value_init (&value, G_TYPE_OBJECT);
               g_object_get_property (G_OBJECT (self), pspec->name, &value);
 
-              if ((obj = g_value_get_object (&value)))
-                type_name = G_OBJECT_TYPE_NAME (obj);
+              if (!(obj = g_value_get_object (&value)) || !G_IS_LIST_MODEL (obj))
+                continue;
 
-              if (G_IS_LIST_MODEL (obj))
-                type_name = generic = g_strdup_printf ("%s<%s>",
-                                                       G_OBJECT_TYPE_NAME (obj),
-                                                       g_type_name (g_list_model_get_item_type (G_LIST_MODEL (obj))));
+              type_name = generic = g_strdup_printf ("%s<%s>",
+                                                     G_OBJECT_TYPE_NAME (obj),
+                                                     g_type_name (g_list_model_get_item_type (G_LIST_MODEL (obj))));
 
               g_string_append_printf (string, " %s=\"%s\"", pspec->name, type_name);
             }
