@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTweaksWindow" parent="AdwWindow">
+    <property name="title" translatable="yes">Preferences</property>
     <property name="default-width">1080</property>
     <property name="default-height">720</property>
     <child>
@@ -20,9 +21,7 @@
                 <property name="show-start-title-buttons">true</property>
                 <property name="show-end-title-buttons" bind-source="leaflet" bind-property="folded" bind-flags="sync-create"/>
                 <property name="title-widget">
-                  <object class="AdwWindowTitle" id="sidebar_title">
-                    <property name="title" translatable="yes">Preferences</property>
-                  </object>
+                  <object class="AdwWindowTitle" id="sidebar_title"/>
                 </property>
                 <child>
                   <object class="GtkButton" id="sidebar_previous_button">

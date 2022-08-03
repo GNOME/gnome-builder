@@ -36,6 +36,7 @@ struct _IdeTweaksWindow
 
   GtkStack       *panel_stack;
   GtkStack       *panel_list_stack;
+  AdwWindowTitle *sidebar_title;
   GtkSearchBar   *sidebar_search_bar;
   GtkSearchEntry *sidebar_search_entry;
 
@@ -109,6 +110,8 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
                                      IdeTweaksPage      *page,
                                      IdeTweaksPanelList *list)
 {
+  IdeTweaksPage *ancestor;
+  const char *title;
   const char *name;
   GtkWidget *panel;
   gboolean has_subpages;
@@ -122,6 +125,13 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
 
   name = ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page));
   has_subpages = ide_tweaks_page_get_has_subpage (page);
+
+  if ((ancestor = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (page), IDE_TYPE_TWEAKS_PAGE)))
+    title = ide_tweaks_page_get_title (ancestor);
+  else
+    title = gtk_window_get_title (GTK_WINDOW (self));
+
+  adw_window_title_set_title (self->sidebar_title, title);
 
   /* Re-use a panel if it is already in the stack. This can happen if
    * we haven't yet reached a notify::transition-running that caused the
@@ -361,6 +371,7 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-window.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_stack);
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_title);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_search_entry);
   gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_transition_running_cb);
