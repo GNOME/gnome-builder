@@ -54,6 +54,9 @@ IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_item_set_sort_key         (IdeTweaksItem      *self,
                                                           const char         *sort_key);
 IDE_AVAILABLE_IN_ALL
+gboolean            ide_tweaks_item_is_ancestor          (IdeTweaksItem      *self,
+                                                          IdeTweaksItem      *ancestor);
+IDE_AVAILABLE_IN_ALL
 IdeTweaksItem      *ide_tweaks_item_get_parent           (IdeTweaksItem      *self);
 IDE_AVAILABLE_IN_ALL
 IdeTweaksItem      *ide_tweaks_item_get_last_child       (IdeTweaksItem      *self);

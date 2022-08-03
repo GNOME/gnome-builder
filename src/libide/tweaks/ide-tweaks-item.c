@@ -614,3 +614,21 @@ _ide_tweaks_item_deep_copy (IdeTweaksItem *self)
 
   return g_object_new (G_OBJECT_TYPE (self), NULL);
 }
+
+gboolean
+ide_tweaks_item_is_ancestor (IdeTweaksItem *self,
+                             IdeTweaksItem *ancestor)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (ancestor), FALSE);
+
+  for (IdeTweaksItem *item = ide_tweaks_item_get_parent (self);
+       item != NULL;
+       item = ide_tweaks_item_get_parent (item))
+    {
+      if (item == ancestor)
+        return TRUE;
+    }
+
+  return FALSE;
+}
