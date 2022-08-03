@@ -23,7 +23,11 @@
                 </child>
                 <property name="title-widget">
                   <object class="AdwWindowTitle">
-                    <property name="title" bind-source="IdeTweaksPanel" bind-property="title" bind-flags="default|sync-create"/>
+                    <binding name="title">
+                      <lookup name="title" type="IdeTweaksPage">
+                        <lookup name="page">IdeTweaksPanel</lookup>
+                      </lookup>
+                    </binding>
                   </object>
                 </property>
               </object>

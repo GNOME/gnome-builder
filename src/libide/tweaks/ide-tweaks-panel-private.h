@@ -22,7 +22,7 @@
 
 #include <adwaita.h>
 
-#include "ide-tweaks-item.h"
+#include "ide-tweaks-page.h"
 
 G_BEGIN_DECLS
 
@@ -35,8 +35,7 @@ struct _IdeTweaksPanelClass
   AdwBinClass parent_class;
 };
 
-IdeTweaksItem *ide_tweaks_panel_get_item   (IdeTweaksPanel *self);
+IdeTweaksPage *ide_tweaks_panel_get_page   (IdeTweaksPanel *self);
 gboolean       ide_tweaks_panel_get_folded (IdeTweaksPanel *self);
-const char    *ide_tweaks_panel_get_title  (IdeTweaksPanel *self);
 
 G_END_DECLS

@@ -27,16 +27,14 @@
 
 typedef struct
 {
-  IdeTweaksItem *item;
-  char *title;
+  IdeTweaksPage *page;
   guint folded : 1;
 } IdeTweaksPanelPrivate;
 
 enum {
   PROP_0,
   PROP_FOLDED,
-  PROP_ITEM,
-  PROP_TITLE,
+  PROP_PAGE,
   N_PROPS
 };
 
@@ -45,64 +43,12 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_tweaks_panel_set_title (IdeTweaksPanel *self,
-                            const char     *title)
-{
-  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
-
-  g_assert (IDE_IS_TWEAKS_PANEL (self));
-
-  if (ide_set_string (&priv->title, title))
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TITLE]);
-}
-
-static void
-ide_tweaks_panel_page_notify_title_cb (IdeTweaksPanel *self,
-                                       GParamSpec     *pspec,
-                                       IdeTweaksPage  *page)
-{
-  ide_tweaks_panel_set_title (self, ide_tweaks_page_get_title (page));
-}
-
-static void
-ide_tweaks_panel_load_page (IdeTweaksPanel *self,
-                            IdeTweaksPage  *page)
-{
-  g_assert (IDE_IS_TWEAKS_PANEL (self));
-  g_assert (IDE_IS_TWEAKS_PAGE (page));
-
-  g_signal_connect_object (page,
-                           "notify::title",
-                           G_CALLBACK (ide_tweaks_panel_page_notify_title_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-
-  ide_tweaks_panel_page_notify_title_cb (self, NULL, page);
-}
-
-static void
-ide_tweaks_panel_set_item (IdeTweaksPanel *self,
-                           IdeTweaksItem  *item)
-{
-  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
-
-  g_return_if_fail (IDE_IS_TWEAKS_PANEL (self));
-  g_return_if_fail (!item || IDE_IS_TWEAKS_ITEM (item));
-
-  if (g_set_object (&priv->item, item))
-    {
-      if (IDE_IS_TWEAKS_PAGE (item))
-        ide_tweaks_panel_load_page (self, IDE_TWEAKS_PAGE (item));
-    }
-}
-
-static void
 ide_tweaks_panel_dispose (GObject *object)
 {
   IdeTweaksPanel *self = (IdeTweaksPanel *)object;
   IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
 
-  g_clear_object (&priv->item);
+  g_clear_object (&priv->page);
 
   G_OBJECT_CLASS (ide_tweaks_panel_parent_class)->dispose (object);
 }
@@ -121,12 +67,8 @@ ide_tweaks_panel_get_property (GObject    *object,
       g_value_set_boolean (value, ide_tweaks_panel_get_folded (self));
       break;
 
-    case PROP_ITEM:
-      g_value_set_object (value, ide_tweaks_panel_get_item (self));
-      break;
-
-    case PROP_TITLE:
-      g_value_set_string (value, ide_tweaks_panel_get_title (self));
+    case PROP_PAGE:
+      g_value_set_object (value, ide_tweaks_panel_get_page (self));
       break;
 
     default:
@@ -141,11 +83,12 @@ ide_tweaks_panel_set_property (GObject      *object,
                                GParamSpec   *pspec)
 {
   IdeTweaksPanel *self = IDE_TWEAKS_PANEL (object);
+  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
 
   switch (prop_id)
     {
-    case PROP_ITEM:
-      ide_tweaks_panel_set_item (self, g_value_get_object (value));
+    case PROP_PAGE:
+      priv->page = g_value_dup_object (value);
       break;
 
     default:
@@ -168,15 +111,10 @@ ide_tweaks_panel_class_init (IdeTweaksPanelClass *klass)
                          FALSE,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_ITEM] =
-    g_param_spec_object ("item", NULL, NULL,
-                         IDE_TYPE_TWEAKS_ITEM,
+  properties[PROP_PAGE] =
+    g_param_spec_object ("page", NULL, NULL,
+                         IDE_TYPE_TWEAKS_PAGE,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties[PROP_TITLE] =
-    g_param_spec_string ("title", NULL, NULL,
-                         NULL,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
@@ -189,24 +127,14 @@ ide_tweaks_panel_init (IdeTweaksPanel *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 }
 
-IdeTweaksItem *
-ide_tweaks_panel_get_item (IdeTweaksPanel *self)
+IdeTweaksPage *
+ide_tweaks_panel_get_page (IdeTweaksPanel *self)
 {
   IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
 
   g_return_val_if_fail (IDE_IS_TWEAKS_PANEL (self), NULL);
 
-  return priv->item;
-}
-
-const char *
-ide_tweaks_panel_get_title (IdeTweaksPanel *self)
-{
-  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
-
-  g_return_val_if_fail (IDE_IS_TWEAKS_PANEL (self), NULL);
-
-  return priv->title;
+  return priv->page;
 }
 
 gboolean
