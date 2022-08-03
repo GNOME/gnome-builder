@@ -63,6 +63,25 @@ ide_tweaks_window_get_current_page (IdeTweaksWindow *self)
 }
 
 static void
+ide_tweaks_window_update_actions (IdeTweaksWindow *self)
+{
+  GtkWidget *visible_child;
+  gboolean navigate_back_enabled = FALSE;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+
+  if ((visible_child = gtk_stack_get_visible_child (self->panel_list_stack)))
+    {
+      IdeTweaksPanelList *list = IDE_TWEAKS_PANEL_LIST (visible_child);
+      IdeTweaksItem *item = ide_tweaks_panel_list_get_item (list);
+
+      navigate_back_enabled = !IDE_IS_TWEAKS (item);
+    }
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "navigation.back", navigate_back_enabled);
+}
+
+static void
 ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
                                      IdeTweaksPage      *page,
                                      IdeTweaksPanelList *list)
@@ -106,6 +125,8 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
                            sublist,
                            ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page)));
       gtk_stack_set_visible_child (self->panel_list_stack, sublist);
+
+      ide_tweaks_window_update_actions (self);
     }
 }
 
@@ -142,6 +163,8 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
                        list,
                        ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));
   ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (list));
+
+  ide_tweaks_window_update_actions (self);
 }
 
 static void
@@ -179,6 +202,14 @@ panel_stack_notify_transition_running_cb (IdeTweaksWindow *self,
           !ide_tweaks_item_is_ancestor (IDE_TWEAKS_ITEM (current_page), IDE_TWEAKS_ITEM (item)))
         gtk_stack_remove (stack, GTK_WIDGET (panel));
     }
+}
+
+static void
+ide_tweaks_window_navigate_back_action (GtkWidget  *widget,
+                                        const char *action_name,
+                                        GVariant   *param)
+{
+  ide_tweaks_window_navigate_back (IDE_TWEAKS_WINDOW (widget));
 }
 
 static void
@@ -255,6 +286,8 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_stack);
   gtk_widget_class_bind_template_callback (widget_class, panel_stack_notify_transition_running_cb);
 
+  gtk_widget_class_install_action (widget_class, "navigation.back", NULL, ide_tweaks_window_navigate_back_action);
+
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL);
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL_LIST);
 }
@@ -263,6 +296,8 @@ static void
 ide_tweaks_window_init (IdeTweaksWindow *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_widget_action_set_enabled (GTK_WIDGET (self), "navigation.back", FALSE);
 }
 
 GtkWidget *
@@ -342,4 +377,58 @@ ide_tweaks_window_navigate_to (IdeTweaksWindow *self,
   if (item == NULL)
     return;
 
+}
+
+static IdeTweaksPanelList *
+ide_tweaks_window_find_list_for_item (IdeTweaksWindow *self,
+                                      IdeTweaksItem   *item)
+{
+  GListModel *model;
+  guint n_items;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (IDE_IS_TWEAKS_ITEM (item));
+
+  model = G_LIST_MODEL (gtk_stack_get_pages (GTK_STACK (self->panel_list_stack)));
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(GtkStackPage) page = g_list_model_get_item (model, i);
+      IdeTweaksPanelList *list = IDE_TWEAKS_PANEL_LIST (gtk_stack_page_get_child (page));
+      IdeTweaksItem *list_item = ide_tweaks_panel_list_get_item (list);
+
+      if (item == list_item)
+        return list;
+    }
+
+  return NULL;
+}
+
+void
+ide_tweaks_window_navigate_back (IdeTweaksWindow *self)
+{
+  IdeTweaksPanelList *list;
+  IdeTweaksItem *item;
+  GtkWidget *visible_child;
+
+  g_return_if_fail (IDE_IS_TWEAKS_WINDOW (self));
+
+  if (!(visible_child = gtk_stack_get_visible_child (self->panel_list_stack)))
+    g_return_if_reached ();
+
+  list = IDE_TWEAKS_PANEL_LIST (visible_child);
+  item = ide_tweaks_panel_list_get_item (list);
+
+  while ((item = ide_tweaks_item_get_parent (item)))
+    {
+      if ((list = ide_tweaks_window_find_list_for_item (self, item)))
+        {
+          gtk_stack_set_visible_child (self->panel_list_stack, GTK_WIDGET (list));
+          ide_tweaks_window_update_actions (self);
+          return;
+        }
+    }
+
+  g_warning ("Failed to lcoate parent panel list");
 }

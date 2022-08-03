@@ -36,14 +36,16 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksWindow, ide_tweaks_window, IDE, TWEAKS_WINDOW, AdwWindow)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_tweaks_window_new         (void);
+GtkWidget *ide_tweaks_window_new           (void);
 IDE_AVAILABLE_IN_ALL
-IdeTweaks *ide_tweaks_window_get_tweaks  (IdeTweaksWindow *self);
+IdeTweaks *ide_tweaks_window_get_tweaks    (IdeTweaksWindow *self);
 IDE_AVAILABLE_IN_ALL
-void       ide_tweaks_window_set_tweaks  (IdeTweaksWindow *self,
-                                          IdeTweaks       *tweaks);
+void       ide_tweaks_window_set_tweaks    (IdeTweaksWindow *self,
+                                            IdeTweaks       *tweaks);
 IDE_AVAILABLE_IN_ALL
-void       ide_tweaks_window_navigate_to (IdeTweaksWindow *self,
-                                          IdeTweaksItem   *item);
+void       ide_tweaks_window_navigate_to   (IdeTweaksWindow *self,
+                                            IdeTweaksItem   *item);
+IDE_AVAILABLE_IN_ALL
+void       ide_tweaks_window_navigate_back (IdeTweaksWindow *self);
 
 G_END_DECLS
