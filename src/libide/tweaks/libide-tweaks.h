@@ -28,7 +28,6 @@
 # include "ide-tweaks-item.h"
 # include "ide-tweaks-page.h"
 # include "ide-tweaks-section.h"
-# include "ide-tweaks-subpage.h"
 # include "ide-tweaks-variable.h"
 # include "ide-tweaks-window.h"
 #undef IDE_TWEAKS_INSIDE

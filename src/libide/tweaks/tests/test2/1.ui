@@ -9,7 +9,7 @@
             <child internal-child="language_subpage_factory">
               <object class="IdeTweaksFactory">
                 <child internal-child="language_subpage">
-                  <object class="IdeTweaksSubpage">
+                  <object class="IdeTweaksPage">
                     <binding name="title">
                       <lookup name="title" type="IdeTweaksPage">
                         <lookup name="item">language_subpage_factory</lookup>

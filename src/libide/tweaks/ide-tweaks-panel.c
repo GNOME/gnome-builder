@@ -24,7 +24,6 @@
 
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-private.h"
-#include "ide-tweaks-subpage.h"
 
 typedef struct
 {
@@ -82,15 +81,6 @@ ide_tweaks_panel_load_page (IdeTweaksPanel *self,
 }
 
 static void
-ide_tweaks_panel_load_subpage (IdeTweaksPanel   *self,
-                               IdeTweaksSubpage *subpage)
-{
-  g_assert (IDE_IS_TWEAKS_PANEL (self));
-  g_assert (IDE_IS_TWEAKS_SUBPAGE (subpage));
-
-}
-
-static void
 ide_tweaks_panel_set_item (IdeTweaksPanel *self,
                            IdeTweaksItem  *item)
 {
@@ -103,8 +93,6 @@ ide_tweaks_panel_set_item (IdeTweaksPanel *self,
     {
       if (IDE_IS_TWEAKS_PAGE (item))
         ide_tweaks_panel_load_page (self, IDE_TWEAKS_PAGE (item));
-      else if (IDE_IS_TWEAKS_SUBPAGE (item))
-        ide_tweaks_panel_load_subpage (self, IDE_TWEAKS_SUBPAGE (item));
     }
 }
 

@@ -27,7 +27,6 @@
 #include "ide-tweaks-group.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-section.h"
-#include "ide-tweaks-subpage.h"
 
 struct _IdeTweaksPage
 {
@@ -59,7 +58,7 @@ static gboolean
 ide_tweaks_page_accepts (IdeTweaksItem *item,
                          IdeTweaksItem *child)
 {
-  return IDE_IS_TWEAKS_SUBPAGE (child) ||
+  return IDE_IS_TWEAKS_PAGE (child) ||
          IDE_IS_TWEAKS_FACTORY (child) ||
          IDE_IS_TWEAKS_GROUP (child);
 }
@@ -220,6 +219,9 @@ ide_tweaks_page_get_section (IdeTweaksPage *self)
 
   while ((item = ide_tweaks_item_get_parent (item)))
     {
+      if (IDE_IS_TWEAKS_PAGE (item))
+        break;
+
       if (IDE_IS_TWEAKS_SECTION (item))
         return item;
     }
@@ -238,22 +240,22 @@ ide_tweaks_page_get_section (IdeTweaksPage *self)
 gboolean
 ide_tweaks_page_get_has_subpage (IdeTweaksPage *self)
 {
-  static GType subpage_type;
+  static GType page_type;
 
   g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (self), FALSE);
 
-  if G_UNLIKELY (subpage_type == G_TYPE_INVALID)
-    subpage_type = IDE_TYPE_TWEAKS_SUBPAGE;
+  if G_UNLIKELY (page_type == G_TYPE_INVALID)
+    page_type = IDE_TYPE_TWEAKS_PAGE;
 
   for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (self));
        child != NULL;
        child = ide_tweaks_item_get_next_sibling (child))
     {
-      if (G_TYPE_CHECK_INSTANCE_TYPE (child, subpage_type))
+      if (G_TYPE_CHECK_INSTANCE_TYPE (child, page_type))
         return TRUE;
 
       if (IDE_IS_TWEAKS_FACTORY (child) &&
-          _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (child), &subpage_type, 1))
+          _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (child), &page_type, 1))
         return TRUE;
     }
 

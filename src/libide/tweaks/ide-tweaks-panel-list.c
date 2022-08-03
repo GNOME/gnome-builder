@@ -28,7 +28,6 @@
 #include "ide-tweaks-panel-list-private.h"
 #include "ide-tweaks-panel-list-row-private.h"
 #include "ide-tweaks-section.h"
-#include "ide-tweaks-subpage.h"
 
 struct _IdeTweaksPanelList
 {

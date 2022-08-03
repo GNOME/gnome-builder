@@ -39,7 +39,6 @@ _ide_tweaks_init (void)
   g_type_ensure (IDE_TYPE_TWEAKS_ITEM);
   g_type_ensure (IDE_TYPE_TWEAKS_PAGE);
   g_type_ensure (IDE_TYPE_TWEAKS_SECTION);
-  g_type_ensure (IDE_TYPE_TWEAKS_SUBPAGE);
   g_type_ensure (IDE_TYPE_TWEAKS_VARIABLE);
   g_type_ensure (IDE_TYPE_TWEAKS_WINDOW);
 }
