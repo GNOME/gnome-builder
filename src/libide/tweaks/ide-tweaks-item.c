@@ -35,6 +35,7 @@ typedef struct
   char *id;
   char **keywords;
   char *sort_key;
+  guint id_sequence;
 } IdeTweaksItemPrivate;
 
 enum {
@@ -65,9 +66,11 @@ clear_value (gpointer data)
 static IdeTweaksItem *
 ide_tweaks_item_real_copy (IdeTweaksItem *self)
 {
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
   g_autoptr(GPtrArray) names = NULL;
   g_autoptr(GArray) values = NULL;
   g_autofree GParamSpec **pspecs = NULL;
+  g_autofree char *id = NULL;
   GObject *copy;
   GType item_type;
   guint n_pspecs;
@@ -99,10 +102,15 @@ ide_tweaks_item_real_copy (IdeTweaksItem *self)
   copy = g_object_new_with_properties (item_type,
                                        names->len,
                                        (const char **)names->pdata,
-                                       (const GValue *)values->data);
+                                       (const GValue *)(gpointer)values->data);
 
-  ide_tweaks_item_set_buildable_id (GTK_BUILDABLE (copy),
-                                    ide_tweaks_item_get_id (self));
+  /* Generate dynamic id for this item based on our id */
+  if (priv->id != NULL)
+    id = g_strdup_printf ("%s__copy__%u", priv->id, ++priv->id_sequence);
+  else
+    id = g_strdup_printf ("%p_copy_%u", self, ++priv->id_sequence);
+
+  ide_tweaks_item_set_buildable_id (GTK_BUILDABLE (copy), id);
 
   for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (self);
        child != NULL;
