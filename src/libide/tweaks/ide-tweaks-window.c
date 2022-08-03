@@ -110,8 +110,6 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
                                      IdeTweaksPage      *page,
                                      IdeTweaksPanelList *list)
 {
-  IdeTweaksPage *ancestor;
-  const char *title;
   const char *name;
   GtkWidget *panel;
   gboolean has_subpages;
@@ -125,13 +123,6 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
 
   name = ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page));
   has_subpages = ide_tweaks_page_get_has_subpage (page);
-
-  if ((ancestor = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (page), IDE_TYPE_TWEAKS_PAGE)))
-    title = ide_tweaks_page_get_title (ancestor);
-  else
-    title = gtk_window_get_title (GTK_WINDOW (self));
-
-  adw_window_title_set_title (self->sidebar_title, title);
 
   /* Re-use a panel if it is already in the stack. This can happen if
    * we haven't yet reached a notify::transition-running that caused the
@@ -282,6 +273,29 @@ panel_list_stack_notify_transition_running_cb (IdeTweaksWindow *self,
 }
 
 static void
+panel_list_stack_notify_visible_child_cb (IdeTweaksWindow *self,
+                                          GParamSpec      *pspec,
+                                          GtkStack        *stack)
+{
+  IdeTweaksPanelList *list;
+  IdeTweaksItem *item;
+  const char *title;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (GTK_IS_STACK (stack));
+
+  if (!(list = IDE_TWEAKS_PANEL_LIST (gtk_stack_get_visible_child (stack))))
+    return;
+
+  if ((item = ide_tweaks_panel_list_get_item (list)) && IDE_IS_TWEAKS_PAGE (item))
+    title = ide_tweaks_page_get_title (IDE_TWEAKS_PAGE (item));
+  else
+    title = gtk_window_get_title (GTK_WINDOW (self));
+
+  adw_window_title_set_title (self->sidebar_title, title);
+}
+
+static void
 ide_tweaks_window_navigate_back_action (GtkWidget  *widget,
                                         const char *action_name,
                                         GVariant   *param)
@@ -375,6 +389,7 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_search_bar);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, sidebar_search_entry);
   gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_transition_running_cb);
+  gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_visible_child_cb);
   gtk_widget_class_bind_template_callback (widget_class, panel_stack_notify_transition_running_cb);
 
   gtk_widget_class_install_action (widget_class, "navigation.back", NULL, ide_tweaks_window_navigate_back_action);
@@ -521,7 +536,7 @@ ide_tweaks_window_navigate_back (IdeTweaksWindow *self)
         }
     }
 
-  g_warning ("Failed to lcoate parent panel list");
+  g_warning ("Failed to locate parent panel list");
 }
 
 gboolean
