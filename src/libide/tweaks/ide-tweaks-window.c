@@ -90,6 +90,23 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
     }
 
   gtk_stack_set_visible_child (self->panel_stack, panel);
+
+  /* If the page has subpages, then should show that list too */
+  if (ide_tweaks_page_get_has_subpage (page))
+    {
+      GtkWidget *sublist;
+
+      sublist = ide_tweaks_panel_list_new (IDE_TWEAKS_ITEM (page));
+      g_signal_connect_object (sublist,
+                               "page-activated",
+                               G_CALLBACK (ide_tweaks_window_page_activated_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+      gtk_stack_add_named (self->panel_list_stack,
+                           sublist,
+                           ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page)));
+      gtk_stack_set_visible_child (self->panel_list_stack, sublist);
+    }
 }
 
 static void
