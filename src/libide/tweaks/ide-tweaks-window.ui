@@ -82,6 +82,7 @@
                 <property name="vexpand">true</property>
                 <property name="vhomogeneous">false</property>
                 <property name="width-request">200</property>
+                <signal name="notify::transition-running" handler="panel_list_stack_notify_transition_running_cb" swapped="true" object="IdeTweaksWindow"/>
               </object>
             </child>
           </object>

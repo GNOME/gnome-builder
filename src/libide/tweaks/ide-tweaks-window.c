@@ -65,6 +65,19 @@ ide_tweaks_window_get_current_page (IdeTweaksWindow *self)
   return NULL;
 }
 
+static IdeTweaksItem *
+ide_tweaks_window_get_current_list_item (IdeTweaksWindow *self)
+{
+  GtkWidget *visible_child;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+
+  if ((visible_child = gtk_stack_get_visible_child (self->panel_list_stack)))
+    return ide_tweaks_panel_list_get_item (IDE_TWEAKS_PANEL_LIST (visible_child));
+
+  return NULL;
+}
+
 static void
 ide_tweaks_window_update_actions (IdeTweaksWindow *self)
 {
@@ -213,6 +226,40 @@ panel_stack_notify_transition_running_cb (IdeTweaksWindow *self,
 }
 
 static void
+panel_list_stack_notify_transition_running_cb (IdeTweaksWindow *self,
+                                               GParamSpec      *pspec,
+                                               GtkStack        *stack)
+{
+  IdeTweaksItem *current_list_item;
+  GListModel *model;
+  guint n_items;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (GTK_IS_STACK (stack));
+
+  if (gtk_stack_get_transition_running (stack))
+    return;
+
+  if (!(current_list_item = ide_tweaks_window_get_current_list_item (self)))
+    return;
+
+  model = G_LIST_MODEL (gtk_stack_get_pages (stack));
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = n_items; i > 0; i--)
+    {
+      g_autoptr(GtkStackPage) page = g_list_model_get_item (G_LIST_MODEL (model), i - 1);
+      IdeTweaksPanelList *list = IDE_TWEAKS_PANEL_LIST (gtk_stack_page_get_child (page));
+      IdeTweaksItem *item = ide_tweaks_panel_list_get_item (list);
+
+      if (item != NULL &&
+          item != current_list_item &&
+          !ide_tweaks_item_is_ancestor (current_list_item, item))
+        gtk_stack_remove (stack, GTK_WIDGET (list));
+    }
+}
+
+static void
 ide_tweaks_window_navigate_back_action (GtkWidget  *widget,
                                         const char *action_name,
                                         GVariant   *param)
@@ -302,6 +349,7 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-window.ui");
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_stack);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksWindow, panel_list_stack);
+  gtk_widget_class_bind_template_callback (widget_class, panel_list_stack_notify_transition_running_cb);
   gtk_widget_class_bind_template_callback (widget_class, panel_stack_notify_transition_running_cb);
 
   gtk_widget_class_install_action (widget_class, "navigation.back", NULL, ide_tweaks_window_navigate_back_action);
