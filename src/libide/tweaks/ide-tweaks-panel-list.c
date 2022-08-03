@@ -60,6 +60,9 @@ panel_list_visitor (IdeTweaksItem *item,
 {
   static GType page_type;
 
+  if (item == user_data)
+    return IDE_TWEAKS_ITEM_VISIT_RECURSE;
+
   if (!page_type)
     page_type = IDE_TYPE_TWEAKS_PAGE;
 
@@ -98,7 +101,7 @@ ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
 
       if (item != NULL)
         {
-          model = ide_tweaks_model_new (item, panel_list_visitor, NULL, NULL);
+          model = ide_tweaks_model_new (item, panel_list_visitor, item, NULL);
           gtk_list_box_bind_model (self->list_box,
                                    G_LIST_MODEL (model),
                                    ide_tweaks_panel_list_create_row_cb,
