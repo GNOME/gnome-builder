@@ -712,3 +712,30 @@ ide_tweaks_item_is_ancestor (IdeTweaksItem *self,
 
   return FALSE;
 }
+
+/**
+ * ide_tweaks_item_get_ancestor:
+ * @self: an #IdeTweaksItem
+ * @ancestor_type: the #GType of #IdeTweaksItem or subclass
+ *
+ * Finds the first ancestor of @self matching the #GType @ancestor_type.
+ *
+ * Returns: (transfer none) (nullable): an #IdeTweaksItem or %NULL
+ */
+gpointer
+ide_tweaks_item_get_ancestor (IdeTweaksItem *self,
+                              GType          ancestor_type)
+{
+  IdeTweaksItem *parent = self;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), NULL);
+  g_return_val_if_fail (g_type_is_a (ancestor_type, IDE_TYPE_TWEAKS_ITEM), NULL);
+
+  while ((parent = ide_tweaks_item_get_parent (parent)))
+    {
+      if (G_TYPE_CHECK_INSTANCE_TYPE (parent, ancestor_type))
+        return parent;
+    }
+
+  return NULL;
+}

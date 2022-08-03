@@ -78,6 +78,9 @@ void                ide_tweaks_item_insert_before        (IdeTweaksItem      *se
                                                           IdeTweaksItem      *parent,
                                                           IdeTweaksItem      *next_sibling);
 IDE_AVAILABLE_IN_ALL
+gpointer            ide_tweaks_item_get_ancestor         (IdeTweaksItem      *self,
+                                                          GType               ancestor_type);
+IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_item_unparent             (IdeTweaksItem      *self);
 
 G_END_DECLS
