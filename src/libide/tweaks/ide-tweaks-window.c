@@ -109,6 +109,7 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
 {
   const char *name;
   GtkWidget *panel;
+  gboolean has_subpages;
 
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (IDE_IS_TWEAKS_PAGE (page));
@@ -118,21 +119,28 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
     return;
 
   name = ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page));
+  has_subpages = ide_tweaks_page_get_has_subpage (page);
 
   /* Re-use a panel if it is already in the stack. This can happen if
    * we haven't yet reached a notify::transition-running that caused the
    * old page to be discarded.
+   *
+   * However, if there are subpages, we will instead jump right to the
+   * subpage instead of this item as a page.
    */
-  if (!(panel = gtk_stack_get_child_by_name (self->panel_stack, name)))
+  if (!has_subpages)
     {
-      panel = ide_tweaks_panel_new (page);
-      gtk_stack_add_named (self->panel_stack, panel, name);
+      if (!(panel = gtk_stack_get_child_by_name (self->panel_stack, name)))
+        {
+          panel = ide_tweaks_panel_new (page);
+          gtk_stack_add_named (self->panel_stack, panel, name);
+        }
+
+      gtk_stack_set_visible_child (self->panel_stack, panel);
     }
 
-  gtk_stack_set_visible_child (self->panel_stack, panel);
-
   /* If the page has subpages, then should show that list too */
-  if (ide_tweaks_page_get_has_subpage (page))
+  if (has_subpages)
     {
       GtkWidget *sublist;
 
@@ -146,6 +154,7 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
                            sublist,
                            ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page)));
       gtk_stack_set_visible_child (self->panel_list_stack, sublist);
+      ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (sublist));
 
       ide_tweaks_window_update_actions (self);
     }
