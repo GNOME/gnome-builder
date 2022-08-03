@@ -26,6 +26,7 @@
 #include "ide-tweaks-model-private.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-list-private.h"
+#include "ide-tweaks-panel-list-row-private.h"
 #include "ide-tweaks-section.h"
 #include "ide-tweaks-subpage.h"
 
@@ -47,6 +48,31 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
+                                   IdeTweaksPanelListRow *before,
+                                   gpointer               user_data)
+{
+  GtkWidget *header = NULL;
+  IdeTweaksItem *before_item = NULL;
+  IdeTweaksItem *row_item;
+
+  g_assert (!before || IDE_IS_TWEAKS_PANEL_LIST_ROW (before));
+  g_assert (IDE_IS_TWEAKS_PANEL_LIST_ROW (row));
+
+  if (before != NULL)
+    before_item = ide_tweaks_panel_list_row_get_item (before);
+  row_item = ide_tweaks_panel_list_row_get_item (row);
+
+  if (IDE_IS_TWEAKS_PAGE (before_item) &&
+      IDE_IS_TWEAKS_PAGE (row_item) &&
+      ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (before_item)) !=
+      ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (row_item)))
+    header = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+
+  gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), header);
+}
 
 static void
 ide_tweaks_panel_list_dispose (GObject *object)
@@ -119,6 +145,10 @@ static void
 ide_tweaks_panel_list_init (IdeTweaksPanelList *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  gtk_list_box_set_header_func (self->list_box,
+                                (GtkListBoxUpdateHeaderFunc)ide_tweaks_panel_list_header_func,
+                                NULL, NULL);
 }
 
 GtkWidget *
@@ -147,7 +177,9 @@ static GtkWidget *
 ide_tweaks_panel_list_create_row_cb (gpointer item,
                                      gpointer user_data)
 {
-  return g_object_new (GTK_TYPE_LABEL, "label", "TODO: ", NULL);
+  return g_object_new (IDE_TYPE_TWEAKS_PANEL_LIST_ROW,
+                       "item", item,
+                       NULL);
 }
 
 static IdeTweaksItemVisitResult

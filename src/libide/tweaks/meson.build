@@ -44,6 +44,7 @@ libide_tweaks_private_sources = [
   'ide-tweaks-model.c',
   'ide-tweaks-panel.c',
   'ide-tweaks-panel-list.c',
+  'ide-tweaks-panel-list-row.c',
 ]
 
 #
