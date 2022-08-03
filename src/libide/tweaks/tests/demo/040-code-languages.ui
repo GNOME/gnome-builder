@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="code_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="languages_page">
+            <property name="icon-name">text-x-javascript-symbolic</property>
+            <property name="title" translatable="yes">Programming Languages</property>
+            <child>
+              <object class="IdeTweaksFactory" id="language_page_factory">
+                <property name="model">GtkSourceLanguages</property>
+                <child>
+                  <object class="IdeTweaksSubpage" id="language_page">
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

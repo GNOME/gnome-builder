@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="plugins_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="plugins_page">
+            <property name="icon-name">builder-plugin-symbolic</property>
+            <property name="title" translatable="yes">Plugins</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child>
+      <object class="IdeTweaksSection" id="visual_section">
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="code_section">
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="projects_section">
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="foundry_section">
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="external_section">
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="plugins_section">
+      </object>
+    </child>
+  </template>
+</interface>

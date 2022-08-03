@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="visual_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="editor_page">
+            <property name="icon-name">document-edit-symbolic</property>
+            <property name="title" translatable="yes">Text Editor</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
