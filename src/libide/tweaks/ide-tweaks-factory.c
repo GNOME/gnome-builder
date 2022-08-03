@@ -63,9 +63,9 @@ ide_tweaks_factory_dispose (GObject *object)
 
 static void
 ide_tweaks_factory_get_property (GObject    *object,
-                                         guint       prop_id,
-                                         GValue     *value,
-                                         GParamSpec *pspec)
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
 {
   IdeTweaksFactory *self = IDE_TWEAKS_FACTORY (object);
 
@@ -86,9 +86,9 @@ ide_tweaks_factory_get_property (GObject    *object,
 
 static void
 ide_tweaks_factory_set_property (GObject      *object,
-                                         guint         prop_id,
-                                         const GValue *value,
-                                         GParamSpec   *pspec)
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
 {
   IdeTweaksFactory *self = IDE_TWEAKS_FACTORY (object);
 
