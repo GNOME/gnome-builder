@@ -115,14 +115,12 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (IDE_IS_TWEAKS (self->tweaks));
 
-  list = ide_tweaks_panel_list_new ();
+  list = ide_tweaks_panel_list_new (IDE_TWEAKS_ITEM (self->tweaks));
   g_signal_connect_object (list,
                            "page-activated",
                            G_CALLBACK (ide_tweaks_window_page_activated_cb),
                            self,
                            G_CONNECT_SWAPPED);
-  ide_tweaks_panel_list_set_item (IDE_TWEAKS_PANEL_LIST (list),
-                                  IDE_TWEAKS_ITEM (self->tweaks));
   gtk_stack_add_named (self->panel_list_stack,
                        list,
                        ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));

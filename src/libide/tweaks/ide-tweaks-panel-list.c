@@ -54,6 +54,61 @@ G_DEFINE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, ADW_TYPE_BIN)
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
+static IdeTweaksItemVisitResult
+panel_list_visitor (IdeTweaksItem *item,
+                    gpointer       user_data)
+{
+  static GType page_type;
+
+  if (!page_type)
+    page_type = IDE_TYPE_TWEAKS_PAGE;
+
+  if (IDE_IS_TWEAKS_SECTION (item))
+    return IDE_TWEAKS_ITEM_VISIT_RECURSE;
+
+  if (IDE_IS_TWEAKS_PAGE (item))
+    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
+
+  if (IDE_IS_TWEAKS_FACTORY (item) &&
+      _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (item), &page_type, 1))
+    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
+
+  return IDE_TWEAKS_ITEM_VISIT_SKIP;
+}
+
+static GtkWidget *
+ide_tweaks_panel_list_create_row_cb (gpointer item,
+                                     gpointer user_data)
+{
+  return g_object_new (IDE_TYPE_TWEAKS_PANEL_LIST_ROW,
+                       "item", item,
+                       NULL);
+}
+
+static void
+ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
+                                IdeTweaksItem      *item)
+{
+  g_assert (IDE_IS_TWEAKS_PANEL_LIST (self));
+  g_assert (IDE_IS_TWEAKS_ITEM (item));
+
+  if (g_set_object (&self->item, item))
+    {
+      g_autoptr(IdeTweaksModel) model = NULL;
+
+      if (item != NULL)
+        {
+          model = ide_tweaks_model_new (item, panel_list_visitor, NULL, NULL);
+          gtk_list_box_bind_model (self->list_box,
+                                   G_LIST_MODEL (model),
+                                   ide_tweaks_panel_list_create_row_cb,
+                                   NULL, NULL);
+        }
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
+    }
+}
+
 static void
 ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
                                    IdeTweaksPanelListRow *before,
@@ -188,9 +243,13 @@ ide_tweaks_panel_list_init (IdeTweaksPanelList *self)
 }
 
 GtkWidget *
-ide_tweaks_panel_list_new (void)
+ide_tweaks_panel_list_new (IdeTweaksItem *item)
 {
-  return g_object_new (IDE_TYPE_TWEAKS_PANEL_LIST, NULL);
+  g_return_val_if_fail (!item || IDE_IS_TWEAKS_ITEM (item), NULL);
+
+  return g_object_new (IDE_TYPE_TWEAKS_PANEL_LIST,
+                       "item", item,
+                       NULL);
 }
 
 /**
@@ -207,61 +266,6 @@ ide_tweaks_panel_list_get_item (IdeTweaksPanelList *self)
   g_return_val_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self), NULL);
 
   return self->item;
-}
-
-static GtkWidget *
-ide_tweaks_panel_list_create_row_cb (gpointer item,
-                                     gpointer user_data)
-{
-  return g_object_new (IDE_TYPE_TWEAKS_PANEL_LIST_ROW,
-                       "item", item,
-                       NULL);
-}
-
-static IdeTweaksItemVisitResult
-panel_list_visitor (IdeTweaksItem *item,
-                    gpointer       user_data)
-{
-  static GType page_type;
-
-  if (!page_type)
-    page_type = IDE_TYPE_TWEAKS_PAGE;
-
-  if (IDE_IS_TWEAKS_SECTION (item))
-    return IDE_TWEAKS_ITEM_VISIT_RECURSE;
-
-  if (IDE_IS_TWEAKS_PAGE (item))
-    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
-
-  if (IDE_IS_TWEAKS_FACTORY (item) &&
-      _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (item), &page_type, 1))
-    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
-
-  return IDE_TWEAKS_ITEM_VISIT_SKIP;
-}
-
-void
-ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
-                                IdeTweaksItem      *item)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self));
-  g_return_if_fail (IDE_IS_TWEAKS_ITEM (item));
-
-  if (g_set_object (&self->item, item))
-    {
-      g_autoptr(IdeTweaksModel) model = NULL;
-
-      if (item != NULL)
-        {
-          model = ide_tweaks_model_new (item, panel_list_visitor, NULL, NULL);
-          gtk_list_box_bind_model (self->list_box,
-                                   G_LIST_MODEL (model),
-                                   ide_tweaks_panel_list_create_row_cb,
-                                   NULL, NULL);
-        }
-
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
-    }
 }
 
 void
