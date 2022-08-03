@@ -37,12 +37,15 @@ struct _IdeTweaksItemClass
 {
   GObjectClass parent_class;
 
-  gboolean (*accepts) (IdeTweaksItem *self,
-                       IdeTweaksItem *child);
+  gboolean       (*accepts) (IdeTweaksItem *self,
+                             IdeTweaksItem *child);
+  IdeTweaksItem *(*copy)    (IdeTweaksItem *self);
 };
 
 IDE_AVAILABLE_IN_ALL
 const char *        ide_tweaks_item_get_id               (IdeTweaksItem      *self);
+IDE_AVAILABLE_IN_ALL
+IdeTweaksItem      *ide_tweaks_item_copy                 (IdeTweaksItem      *self);
 IDE_AVAILABLE_IN_ALL
 const char * const *ide_tweaks_item_get_keywords         (IdeTweaksItem      *self);
 IDE_AVAILABLE_IN_ALL

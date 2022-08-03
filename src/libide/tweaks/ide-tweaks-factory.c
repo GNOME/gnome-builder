@@ -212,7 +212,7 @@ _ide_tweaks_factory_inflate (IdeTweaksFactory *self)
         g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
 
       /* Now deep copy child to snapshot state */
-      g_ptr_array_add (ar, _ide_tweaks_item_deep_copy (child));
+      g_ptr_array_add (ar, ide_tweaks_item_copy (child));
     }
 
   if (g_set_object (&self->item, NULL))

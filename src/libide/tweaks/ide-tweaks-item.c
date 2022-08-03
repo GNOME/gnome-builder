@@ -54,6 +54,63 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeTweaksItem, ide_tweaks_item, G_TYPE_OBJECT,
 static GParamSpec *properties [N_PROPS];
 
 static void
+clear_value (gpointer data)
+{
+  GValue *v = data;
+  g_value_unset (v);
+}
+
+static IdeTweaksItem *
+ide_tweaks_item_real_copy (IdeTweaksItem *item)
+{
+  g_autoptr(GPtrArray) names = NULL;
+  g_autoptr(GArray) values = NULL;
+  g_autofree GParamSpec **pspecs = NULL;
+  GObject *copy;
+  GType item_type;
+  guint n_pspecs;
+
+  g_assert (IDE_IS_TWEAKS_ITEM (item));
+
+  item_type = G_OBJECT_TYPE (item);
+  names = g_ptr_array_new ();
+  values = g_array_new (FALSE, FALSE, sizeof (GValue));
+  g_array_set_clear_func (values, clear_value);
+
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (item), &n_pspecs);
+
+  for (guint i = 0; i < n_pspecs; i++)
+    {
+      GParamSpec *pspec = pspecs[i];
+      GValue value = G_VALUE_INIT;
+
+      if ((pspec->flags & G_PARAM_READWRITE) != G_PARAM_READWRITE)
+        continue;
+
+      g_value_init (&value, pspec->value_type);
+      g_object_get_property (G_OBJECT (item), pspec->name, &value);
+
+      g_ptr_array_add (names, (gpointer)pspec->name);
+      g_array_append_val (values, value);
+    }
+
+  copy = g_object_new_with_properties (item_type,
+                                       names->len,
+                                       (const char **)names->pdata,
+                                       (const GValue *)values->data);
+
+  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (item);
+       child != NULL;
+       child = ide_tweaks_item_get_next_sibling (child))
+    {
+      g_autoptr(IdeTweaksItem) new_child = ide_tweaks_item_copy (child);
+      ide_tweaks_item_insert_after (new_child, IDE_TWEAKS_ITEM (copy), NULL);
+    }
+
+  return IDE_TWEAKS_ITEM (copy);
+}
+
+static void
 ide_tweaks_item_dispose (GObject *object)
 {
   IdeTweaksItem *self = (IdeTweaksItem *)object;
@@ -137,6 +194,8 @@ ide_tweaks_item_class_init (IdeTweaksItemClass *klass)
   object_class->dispose = ide_tweaks_item_dispose;
   object_class->get_property = ide_tweaks_item_get_property;
   object_class->set_property = ide_tweaks_item_set_property;
+
+  klass->copy = ide_tweaks_item_real_copy;
 
   properties[PROP_ID] =
     g_param_spec_string ("id", NULL, NULL,
@@ -607,12 +666,20 @@ _ide_tweaks_item_printf (IdeTweaksItem *self,
   g_string_append_printf (string, "</%s>\n", G_OBJECT_TYPE_NAME (self));
 }
 
+/**
+ * ide_tweaks_item_copy:
+ * @self: a #IdeTweaksItem
+ *
+ * Does a deep copy starting from @self.
+ *
+ * Returns: (transfer full): an #IdeTweaksItem
+ */
 IdeTweaksItem *
-_ide_tweaks_item_deep_copy (IdeTweaksItem *self)
+ide_tweaks_item_copy (IdeTweaksItem *self)
 {
-  /* TODO: actually implement deep copy */
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), NULL);
 
-  return g_object_new (G_OBJECT_TYPE (self), NULL);
+  return IDE_TWEAKS_ITEM_GET_CLASS (self)->copy (self);
 }
 
 gboolean
