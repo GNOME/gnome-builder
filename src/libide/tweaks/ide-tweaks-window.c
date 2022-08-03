@@ -28,12 +28,12 @@
 
 struct _IdeTweaksWindow
 {
-  AdwWindow           parent_instance;
+  AdwWindow  parent_instance;
 
-  IdeTweaks          *tweaks;
+  IdeTweaks *tweaks;
 
-  GtkStack           *panel_stack;
-  GtkStack           *panel_list_stack;
+  GtkStack  *panel_stack;
+  GtkStack  *panel_list_stack;
 };
 
 enum {
@@ -45,6 +45,50 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeTweaksWindow, ide_tweaks_window, ADW_TYPE_WINDOW)
 
 static GParamSpec *properties [N_PROPS];
+
+static IdeTweaksPage *
+ide_tweaks_window_get_current_page (IdeTweaksWindow *self)
+{
+  GtkWidget *visible_child;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+
+  if ((visible_child = gtk_stack_get_visible_child (self->panel_stack)) &&
+      IDE_IS_TWEAKS_PANEL (visible_child))
+    return ide_tweaks_panel_get_page (IDE_TWEAKS_PANEL (visible_child));
+
+  return NULL;
+}
+
+static void
+ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
+                                     IdeTweaksPage      *page,
+                                     IdeTweaksPanelList *list)
+{
+  const char *name;
+  GtkWidget *panel;
+
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (IDE_IS_TWEAKS_PAGE (page));
+  g_assert (IDE_IS_TWEAKS_PANEL_LIST (list));
+
+  if (page == ide_tweaks_window_get_current_page (self))
+    return;
+
+  name = ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page));
+
+  /* Re-use a panel if it is already in the stack. This can happen if
+   * we haven't yet reached a notify::transition-running that caused the
+   * old page to be discarded.
+   */
+  if (!(panel = gtk_stack_get_child_by_name (self->panel_stack, name)))
+    {
+      panel = ide_tweaks_panel_new (page);
+      gtk_stack_add_named (self->panel_stack, panel, name);
+    }
+
+  gtk_stack_set_visible_child (self->panel_stack, panel);
+}
 
 static void
 ide_tweaks_window_clear (IdeTweaksWindow *self)
@@ -70,6 +114,11 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
   g_assert (IDE_IS_TWEAKS (self->tweaks));
 
   list = ide_tweaks_panel_list_new ();
+  g_signal_connect_object (list,
+                           "page-activated",
+                           G_CALLBACK (ide_tweaks_window_page_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
   ide_tweaks_panel_list_set_item (IDE_TWEAKS_PANEL_LIST (list),
                                   IDE_TWEAKS_ITEM (self->tweaks));
   gtk_stack_add_named (self->panel_list_stack,
