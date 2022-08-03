@@ -31,6 +31,17 @@
             </binding>
           </object>
         </child>
+        <child>
+          <object class="GtkImage" id="next">
+            <property name="valign">baseline</property>
+            <property name="icon-name">go-next-symbolic</property>
+            <binding name="visible">
+              <lookup name="has-subpage" type="IdeTweaksPage">
+                <lookup name="item">IdeTweaksPanelListRow</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
       </object>
     </child>
   </template>
