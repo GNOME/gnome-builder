@@ -12,6 +12,11 @@
                 <property name="model">GtkSourceLanguages</property>
                 <child>
                   <object class="IdeTweaksPage" id="language_page">
+                    <binding name="title">
+                      <lookup name="name" type="GtkSourceLanguage">
+                        <lookup name="item">language_page_factory</lookup>
+                      </lookup>
+                    </binding>
                   </object>
                 </child>
               </object>
