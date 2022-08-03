@@ -25,11 +25,12 @@
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-private.h"
 
-typedef struct
+struct _IdeTweaksPanel
 {
+  AdwBin         parent_instance;
   IdeTweaksPage *page;
-  guint folded : 1;
-} IdeTweaksPanelPrivate;
+  guint          folded : 1;
+};
 
 enum {
   PROP_0,
@@ -38,7 +39,7 @@ enum {
   N_PROPS
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
+G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 
@@ -46,9 +47,8 @@ static void
 ide_tweaks_panel_dispose (GObject *object)
 {
   IdeTweaksPanel *self = (IdeTweaksPanel *)object;
-  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
 
-  g_clear_object (&priv->page);
+  g_clear_object (&self->page);
 
   G_OBJECT_CLASS (ide_tweaks_panel_parent_class)->dispose (object);
 }
@@ -83,12 +83,11 @@ ide_tweaks_panel_set_property (GObject      *object,
                                GParamSpec   *pspec)
 {
   IdeTweaksPanel *self = IDE_TWEAKS_PANEL (object);
-  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_PAGE:
-      priv->page = g_value_dup_object (value);
+      self->page = g_value_dup_object (value);
       break;
 
     default:
@@ -130,19 +129,15 @@ ide_tweaks_panel_init (IdeTweaksPanel *self)
 IdeTweaksPage *
 ide_tweaks_panel_get_page (IdeTweaksPanel *self)
 {
-  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_TWEAKS_PANEL (self), NULL);
 
-  return priv->page;
+  return self->page;
 }
 
 gboolean
 ide_tweaks_panel_get_folded (IdeTweaksPanel *self)
 {
-  IdeTweaksPanelPrivate *priv = ide_tweaks_panel_get_instance_private (self);
-
   g_return_val_if_fail (IDE_IS_TWEAKS_PANEL (self), FALSE);
 
-  return priv->folded;
+  return self->folded;
 }

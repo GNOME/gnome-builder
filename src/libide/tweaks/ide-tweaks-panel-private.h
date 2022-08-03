@@ -28,12 +28,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TWEAKS_PANEL (ide_tweaks_panel_get_type())
 
-G_DECLARE_DERIVABLE_TYPE (IdeTweaksPanel, ide_tweaks_panel, IDE, TWEAKS_PANEL, AdwBin)
-
-struct _IdeTweaksPanelClass
-{
-  AdwBinClass parent_class;
-};
+G_DECLARE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, IDE, TWEAKS_PANEL, AdwBin)
 
 IdeTweaksPage *ide_tweaks_panel_get_page   (IdeTweaksPanel *self);
 gboolean       ide_tweaks_panel_get_folded (IdeTweaksPanel *self);
