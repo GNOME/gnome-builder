@@ -18,6 +18,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+#include "config.h"
+
 #include <unistd.h>
 
 #include <gtksourceview/gtksource.h>
@@ -58,6 +60,9 @@ main (int   argc,
       g_printerr ("%s\n", error->message);
       return EXIT_FAILURE;
     }
+
+  gtk_icon_theme_add_search_path (gtk_icon_theme_get_for_display (gdk_display_get_default ()),
+                                  PACKAGE_ICONDIR);
 
   tweaks = ide_tweaks_new ();
   string = g_string_new (NULL);
