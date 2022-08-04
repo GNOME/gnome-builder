@@ -73,13 +73,22 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
       GtkWidget *child = _ide_tweaks_widget_inflate (IDE_TWEAKS_WIDGET (item));
 
       if (child == NULL)
-        g_critical ("Failed to create widget from #%s",
-                    ide_tweaks_item_get_id (item));
-      else if (self->current_group)
-        g_critical ("Attempt to add #%s without a group!",
-                    ide_tweaks_item_get_id (item));
+        {
+          g_critical ("Failed to create widget from #%s",
+                      ide_tweaks_item_get_id (item));
+        }
+      else if (self->current_group == NULL)
+        {
+          g_critical ("Attempt to add #%s without a group, this is discouraged",
+                      ide_tweaks_item_get_id (item));
+          self->current_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP, NULL);
+          adw_preferences_page_add (self->prefs_page, self->current_group);
+          adw_preferences_group_add (self->current_group, child);
+        }
       else
-        adw_preferences_group_add (self->current_group, child);
+        {
+          adw_preferences_group_add (self->current_group, child);
+        }
     }
 
   return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
