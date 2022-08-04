@@ -137,9 +137,6 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
   g_assert (IDE_IS_TWEAKS_PAGE (page));
   g_assert (IDE_IS_TWEAKS_PANEL_LIST (list));
 
-  if (page == ide_tweaks_window_get_current_page (self))
-    return;
-
   name = ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page));
   has_subpages = ide_tweaks_page_get_has_subpage (page);
 
@@ -160,6 +157,7 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
         }
 
       gtk_stack_set_visible_child (self->panel_stack, panel);
+
       adw_leaflet_navigate (self->leaflet, ADW_NAVIGATION_DIRECTION_FORWARD);
     }
   else
@@ -180,7 +178,10 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
       gtk_stack_set_visible_child (self->panel_list_stack, sublist);
       ide_tweaks_panel_list_set_search_mode (IDE_TWEAKS_PANEL_LIST (sublist), TRUE);
 
-      if (!self->folded)
+      if (self->folded)
+        ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (sublist),
+                                                  GTK_SELECTION_NONE);
+      else
         ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (sublist));
     }
 
@@ -222,7 +223,9 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
                        list,
                        ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));
 
-  if (!self->folded)
+  if (self->folded)
+    ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (list), GTK_SELECTION_NONE);
+  else
     ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (list));
 
   ide_tweaks_window_update_actions (self);
@@ -343,16 +346,19 @@ ide_tweaks_window_set_folded (IdeTweaksWindow *self,
   if (self->folded != folded)
     {
       GtkSelectionMode selection_mode;
-      GtkWidget *child;
 
       self->folded = folded;
 
       selection_mode = folded ? GTK_SELECTION_NONE : GTK_SELECTION_SINGLE;
 
-      if ((child = gtk_stack_get_visible_child (self->panel_stack)))
+      for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_stack));
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
         ide_tweaks_panel_set_folded (IDE_TWEAKS_PANEL (child), folded);
 
-      if ((child = gtk_stack_get_visible_child (self->panel_list_stack)))
+      for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack));
+           child != NULL;
+           child = gtk_widget_get_next_sibling (child))
         ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (child), selection_mode);
 
       ide_tweaks_window_update_actions (self);

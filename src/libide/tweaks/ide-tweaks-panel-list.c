@@ -34,6 +34,7 @@ struct _IdeTweaksPanelList
   AdwBin          parent_instance;
 
   IdeTweaksItem  *item;
+  IdeTweaksItem  *selected;
 
   GtkListBox     *list_box;
   GtkSearchEntry *search_entry;
@@ -156,6 +157,8 @@ ide_tweaks_panel_list_row_activated_cb (IdeTweaksPanelList    *self,
   g_assert (page != NULL);
   g_assert (IDE_IS_TWEAKS_PAGE (page));
 
+  g_set_object (&self->selected, page);
+
   g_signal_emit (self, signals [PAGE_ACTIVATED], 0, page);
 }
 
@@ -165,6 +168,7 @@ ide_tweaks_panel_list_dispose (GObject *object)
   IdeTweaksPanelList *self = (IdeTweaksPanelList *)object;
 
   g_clear_object (&self->item);
+  g_clear_object (&self->selected);
 
   G_OBJECT_CLASS (ide_tweaks_panel_list_parent_class)->dispose (object);
 }
@@ -334,6 +338,43 @@ ide_tweaks_panel_list_set_search_mode (IdeTweaksPanelList *self,
     }
 }
 
+static void
+ide_tweaks_panel_list_select (IdeTweaksPanelList *self,
+                              IdeTweaksItem      *item)
+{
+  g_assert (IDE_IS_TWEAKS_PANEL_LIST (self));
+  g_assert (!item || IDE_IS_TWEAKS_ITEM (item));
+
+  if (item == NULL)
+    return;
+
+  g_signal_handlers_block_by_func (self->list_box,
+                                   G_CALLBACK (ide_tweaks_panel_list_row_activated_cb),
+                                   self);
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->list_box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      IdeTweaksItem *row_item;
+
+      if (!IDE_IS_TWEAKS_PANEL_LIST_ROW (child))
+        continue;
+
+      row_item = ide_tweaks_panel_list_row_get_item (IDE_TWEAKS_PANEL_LIST_ROW (child));
+
+      if (row_item == item)
+        {
+          gtk_list_box_select_row (self->list_box, GTK_LIST_BOX_ROW (child));
+          break;
+        }
+    }
+
+  g_signal_handlers_unblock_by_func (self->list_box,
+                                     G_CALLBACK (ide_tweaks_panel_list_row_activated_cb),
+                                     self);
+}
+
 GtkSelectionMode
 ide_tweaks_panel_list_get_selection_mode (IdeTweaksPanelList *self)
 {
@@ -351,6 +392,12 @@ ide_tweaks_panel_list_set_selection_mode (IdeTweaksPanelList *self,
   if (selection_mode != ide_tweaks_panel_list_get_selection_mode (self))
     {
       gtk_list_box_set_selection_mode (self->list_box, selection_mode);
+
+      if (selection_mode == GTK_SELECTION_NONE)
+        gtk_list_box_unselect_all (self->list_box);
+      else
+        ide_tweaks_panel_list_select (self, self->selected);
+
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTION_MODE]);
     }
 }
