@@ -32,9 +32,13 @@ G_DECLARE_FINAL_TYPE (IdeTweaksFactory, ide_tweaks_factory, IDE, TWEAKS_FACTORY,
 IDE_AVAILABLE_IN_ALL
 IdeTweaksFactory *ide_tweaks_factory_new       (void);
 IDE_AVAILABLE_IN_ALL
-GListModel       *ide_tweaks_factory_get_model (IdeTweaksFactory *self);
+GListModel       *ide_tweaks_factory_get_model (IdeTweaksFactory     *self);
 IDE_AVAILABLE_IN_ALL
-void              ide_tweaks_factory_set_model (IdeTweaksFactory *self,
-                                                GListModel       *model);
+void              ide_tweaks_factory_set_model (IdeTweaksFactory     *self,
+                                                GListModel           *model);
+IDE_AVAILABLE_IN_ALL
+gboolean          ide_tweaks_factory_visit     (IdeTweaksFactory     *self,
+                                                IdeTweaksItemVisitor  visitor,
+                                                gpointer              visitor_data);
 
 G_END_DECLS

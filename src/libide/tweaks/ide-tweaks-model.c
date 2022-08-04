@@ -84,39 +84,30 @@ ide_tweaks_model_populate_cb (IdeTweaksItem *item,
                               gpointer       user_data)
 {
   IdeTweaksModel *self = user_data;
+  IdeTweaksItemVisitResult res;
 
   if (IDE_IS_TWEAKS_FACTORY (item))
     {
-      g_autoptr(GPtrArray) factory_items = _ide_tweaks_factory_inflate (IDE_TWEAKS_FACTORY (item));
-
-      for (guint i = 0; i < factory_items->len; i++)
-        {
-          IdeTweaksItem *factory_item = g_ptr_array_index (factory_items, i);
-
-          if (ide_tweaks_model_populate_cb (factory_item, self) == IDE_TWEAKS_ITEM_VISIT_STOP)
-            return IDE_TWEAKS_ITEM_VISIT_STOP;
-        }
-
+      if (ide_tweaks_factory_visit (IDE_TWEAKS_FACTORY (item),
+                                    ide_tweaks_model_populate_cb,
+                                    self))
+        return IDE_TWEAKS_ITEM_VISIT_STOP;
       return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
     }
 
-  switch (self->visitor (item, self->visitor_data))
+  res = self->visitor (item, self->visitor_data);
+
+  switch (res)
     {
     case IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE:
       g_ptr_array_add (self->items, g_object_ref (item));
       return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
 
     case IDE_TWEAKS_ITEM_VISIT_RECURSE:
-      if (ide_tweaks_item_visit_children (item, ide_tweaks_model_populate_cb, self))
-        return IDE_TWEAKS_ITEM_VISIT_STOP;
-      return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
-
     case IDE_TWEAKS_ITEM_VISIT_STOP:
-      return IDE_TWEAKS_ITEM_VISIT_STOP;
-
     case IDE_TWEAKS_ITEM_VISIT_CONTINUE:
     default:
-      return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
+      return res;
     }
 
   g_assert_not_reached ();

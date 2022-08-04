@@ -23,16 +23,17 @@
 #include "config.h"
 
 #include "ide-tweaks-group.h"
-#include "ide-tweaks-model-private.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-private.h"
+#include "ide-tweaks-widget-private.h"
 
 struct _IdeTweaksPanel
 {
-  AdwBin              parent_instance;
-  AdwPreferencesPage *prefs_page;
-  IdeTweaksPage      *page;
-  guint               folded : 1;
+  AdwBin               parent_instance;
+  AdwPreferencesPage  *prefs_page;
+  AdwPreferencesGroup *current_group;
+  IdeTweaksPage       *page;
+  guint                folded : 1;
 };
 
 enum {
@@ -46,35 +47,40 @@ G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 
-static void
-ide_tweaks_panel_add_group (IdeTweaksPanel *self,
-                            IdeTweaksGroup *group)
-{
-  AdwPreferencesGroup *prefs_group;
-
-  g_assert (IDE_IS_TWEAKS_PANEL (self));
-  g_assert (IDE_IS_TWEAKS_GROUP (group));
-
-  prefs_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP,
-                              "title", ide_tweaks_group_get_title (group),
-                              NULL);
-  adw_preferences_page_add (self->prefs_page, prefs_group);
-}
-
 static IdeTweaksItemVisitResult
-group_visitor_func (IdeTweaksItem *item,
-                    gpointer       user_data)
+ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
+                             gpointer       user_data)
 {
   IdeTweaksPanel *self = user_data;
 
   g_assert (IDE_IS_TWEAKS_ITEM (item));
   g_assert (IDE_IS_TWEAKS_PANEL (self));
 
-  if (item == IDE_TWEAKS_ITEM (self->page))
-    return IDE_TWEAKS_ITEM_VISIT_RECURSE;
+  if (FALSE) {}
+  else if (IDE_IS_TWEAKS_GROUP (item))
+    {
+      IdeTweaksGroup *group = IDE_TWEAKS_GROUP (item);
 
-  if (IDE_IS_TWEAKS_GROUP (item))
-    return IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE;
+      self->current_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP,
+                            "title", ide_tweaks_group_get_title (group),
+                            NULL);
+      adw_preferences_page_add (self->prefs_page, self->current_group);
+
+      return IDE_TWEAKS_ITEM_VISIT_RECURSE;
+    }
+  else if (IDE_IS_TWEAKS_WIDGET (item))
+    {
+      GtkWidget *child = _ide_tweaks_widget_inflate (IDE_TWEAKS_WIDGET (item));
+
+      if (child == NULL)
+        g_critical ("Failed to create widget from #%s",
+                    ide_tweaks_item_get_id (item));
+      else if (self->current_group)
+        g_critical ("Attempt to add #%s without a group!",
+                    ide_tweaks_item_get_id (item));
+      else
+        adw_preferences_group_add (self->current_group, child);
+    }
 
   return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
 }
@@ -82,20 +88,12 @@ group_visitor_func (IdeTweaksItem *item,
 static void
 ide_tweaks_panel_rebuild (IdeTweaksPanel *self)
 {
-  g_autoptr(IdeTweaksModel) model = NULL;
-  guint n_items;
-
+  g_assert (IDE_IS_TWEAKS_PANEL (self));
   g_assert (IDE_IS_TWEAKS_PAGE (self->page));
 
-  model = ide_tweaks_model_new (IDE_TWEAKS_ITEM (self->page), group_visitor_func, self, NULL);
-  n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
-
-  for (guint i = 0; i < n_items; i++)
-    {
-      g_autoptr(IdeTweaksGroup) group = g_list_model_get_item (G_LIST_MODEL (model), i);
-
-      ide_tweaks_panel_add_group (self, group);
-    }
+  ide_tweaks_item_visit_children (IDE_TWEAKS_ITEM (self->page),
+                                  ide_tweaks_panel_visitor_cb,
+                                  self);
 }
 
 static void

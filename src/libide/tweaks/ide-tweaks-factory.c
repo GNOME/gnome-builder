@@ -220,3 +220,70 @@ _ide_tweaks_factory_inflate (IdeTweaksFactory *self)
 
   return ar;
 }
+
+gboolean
+ide_tweaks_factory_visit (IdeTweaksFactory     *self,
+                          IdeTweaksItemVisitor  visitor,
+                          gpointer              visitor_data)
+{
+  g_autoptr(GListModel) model = NULL;
+  IdeTweaksItem *child;
+  gboolean ret = FALSE;
+  guint n_items;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_FACTORY (self), FALSE);
+  g_return_val_if_fail (visitor != NULL, FALSE);
+
+  if (!g_set_object (&model, self->model))
+    return FALSE;
+
+  if (!(child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (self))))
+    return FALSE;
+
+  n_items = g_list_model_get_n_items (model);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(GObject) item = g_list_model_get_item (model, i);
+      g_autoptr(IdeTweaksItem) copy = NULL;
+      IdeTweaksItemVisitResult res;
+
+      /* This is sort of where the "magic" happens. We set
+       * #IdeTweaksFactory:item so all of the <binding/> and similar
+       * expressions in the template update. We will snapshot a copy
+       * of that state (without bindings applied) and use it to build
+       * new "clone" objects.
+       *
+       * Those clones will have a surrogate parent applied (a weak
+       * pointer back to the original parent) which is used when
+       * walking back up the tree from the non-original leaves.
+       */
+
+      if (g_set_object (&self->item, item))
+        g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
+
+      copy = ide_tweaks_item_copy (child);
+
+      res = visitor (copy, visitor_data);
+
+      if (res == IDE_TWEAKS_ITEM_VISIT_STOP)
+        {
+          ret = TRUE;
+          break;
+        }
+
+      if (res == IDE_TWEAKS_ITEM_VISIT_RECURSE)
+        {
+          if (ide_tweaks_item_visit_children (copy, visitor, visitor_data))
+            {
+              ret = TRUE;
+              break;
+            }
+        }
+    }
+
+  if (g_set_object (&self->item, NULL))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
+
+  return ret;
+}
