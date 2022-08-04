@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include "ide-tweaks-group.h"
+#include "ide-tweaks-model-private.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-private.h"
 
@@ -42,6 +44,56 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
+
+static IdeTweaksItemVisitResult
+group_visitor_func (IdeTweaksItem *item,
+                    gpointer       user_data)
+{
+  IdeTweaksPanel *self = user_data;
+
+  g_assert (IDE_IS_TWEAKS_ITEM (item));
+  g_assert (IDE_IS_TWEAKS_PANEL (self));
+
+  if (item == IDE_TWEAKS_ITEM (self->page))
+    return IDE_TWEAKS_ITEM_VISIT_RECURSE;
+
+  if (IDE_IS_TWEAKS_GROUP (item))
+    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
+
+  return IDE_TWEAKS_ITEM_VISIT_SKIP;
+}
+
+static void
+ide_tweaks_panel_rebuild (IdeTweaksPanel *self)
+{
+  g_autoptr(IdeTweaksModel) model = NULL;
+  guint n_items;
+
+  g_assert (IDE_IS_TWEAKS_PAGE (self->page));
+
+  model = ide_tweaks_model_new (IDE_TWEAKS_ITEM (self->page), group_visitor_func, self, NULL);
+  n_items = g_list_model_get_n_items (G_LIST_MODEL (model));
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeTweaksGroup) group = g_list_model_get_item (G_LIST_MODEL (model), i);
+
+      g_print ("Add group: %s\n", ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (group)));
+    }
+}
+
+static void
+ide_tweaks_panel_constructed (GObject *object)
+{
+  IdeTweaksPanel *self = (IdeTweaksPanel *)object;
+
+  g_assert (IDE_IS_TWEAKS_PANEL (self));
+
+  G_OBJECT_CLASS (ide_tweaks_panel_parent_class)->constructed (object);
+
+  if (self->page != NULL)
+    ide_tweaks_panel_rebuild (self);
+}
 
 static void
 ide_tweaks_panel_dispose (GObject *object)
@@ -101,6 +153,7 @@ ide_tweaks_panel_class_init (IdeTweaksPanelClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->constructed = ide_tweaks_panel_constructed;
   object_class->dispose = ide_tweaks_panel_dispose;
   object_class->get_property = ide_tweaks_panel_get_property;
   object_class->set_property = ide_tweaks_panel_set_property;
