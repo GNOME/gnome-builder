@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="code_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="languages_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="language_page_factory">
+              <object class="IdeTweaksFactory">
+                <child internal-child="language_page">
+                  <object class="IdeTweaksPage">
+                    <child>
+                      <object class="IdeTweaksGroup" id="language_page_general_group">
+                        <property name="title" translatable="yes">General</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="language_page_margins_group">
+                        <property name="title" translatable="yes">Margins</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="language_page_indentation_group">
+                        <property name="title" translatable="yes">Indentation</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
