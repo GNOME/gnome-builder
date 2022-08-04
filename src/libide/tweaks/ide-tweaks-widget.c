@@ -24,83 +24,11 @@
 
 #include "ide-tweaks-widget-private.h"
 
-struct _IdeTweaksWidget
-{
-  IdeTweaksItem parent_instance;
-  GType widget_type;
-};
-
-G_DEFINE_FINAL_TYPE (IdeTweaksWidget, ide_tweaks_widget, IDE_TYPE_TWEAKS_ITEM)
-
-enum {
-  PROP_0,
-  PROP_WIDGET_TYPE,
-  N_PROPS
-};
-
-static GParamSpec *properties [N_PROPS];
-
-static void
-ide_tweaks_widget_dispose (GObject *object)
-{
-  IdeTweaksWidget *self = (IdeTweaksWidget *)object;
-
-  G_OBJECT_CLASS (ide_tweaks_widget_parent_class)->dispose (object);
-}
-
-static void
-ide_tweaks_widget_get_property (GObject    *object,
-                                guint       prop_id,
-                                GValue     *value,
-                                GParamSpec *pspec)
-{
-  IdeTweaksWidget *self = IDE_TWEAKS_WIDGET (object);
-
-  switch (prop_id)
-    {
-    case PROP_WIDGET_TYPE:
-      g_value_set_gtype (value, ide_tweaks_widget_get_widget_type (self));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_tweaks_widget_set_property (GObject      *object,
-                                guint         prop_id,
-                                const GValue *value,
-                                GParamSpec   *pspec)
-{
-  IdeTweaksWidget *self = IDE_TWEAKS_WIDGET (object);
-
-  switch (prop_id)
-    {
-    case PROP_WIDGET_TYPE:
-      ide_tweaks_widget_set_widget_type (self, g_value_get_gtype (value));
-      break;
-
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
+G_DEFINE_ABSTRACT_TYPE (IdeTweaksWidget, ide_tweaks_widget, IDE_TYPE_TWEAKS_ITEM)
 
 static void
 ide_tweaks_widget_class_init (IdeTweaksWidgetClass *klass)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->dispose = ide_tweaks_widget_dispose;
-  object_class->get_property = ide_tweaks_widget_get_property;
-  object_class->set_property = ide_tweaks_widget_set_property;
-
-  properties [PROP_WIDGET_TYPE] =
-    g_param_spec_gtype ("widget-type", NULL, NULL,
-                        GTK_TYPE_WIDGET,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
@@ -108,39 +36,10 @@ ide_tweaks_widget_init (IdeTweaksWidget *self)
 {
 }
 
-IdeTweaksWidget *
-ide_tweaks_widget_new (void)
-{
-  return g_object_new (IDE_TYPE_TWEAKS_WIDGET, NULL);
-}
-
-GType
-ide_tweaks_widget_get_widget_type (IdeTweaksWidget *self)
-{
-  g_return_val_if_fail (IDE_IS_TWEAKS_WIDGET (self), G_TYPE_INVALID);
-
-  return self->widget_type;
-}
-
-void
-ide_tweaks_widget_set_widget_type (IdeTweaksWidget *self,
-                                   GType            widget_type)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_WIDGET (self));
-  g_return_if_fail (!widget_type || g_type_is_a (widget_type, GTK_TYPE_WIDGET));
-
-  if (self->widget_type != widget_type)
-    {
-      self->widget_type = widget_type;
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDGET_TYPE]);
-    }
-}
-
 GtkWidget *
-_ide_tweaks_widget_inflate (IdeTweaksWidget *self)
+_ide_tweaks_widget_create (IdeTweaksWidget *self)
 {
   g_return_val_if_fail (IDE_IS_TWEAKS_WIDGET (self), NULL);
-  g_return_val_if_fail (self->widget_type != G_TYPE_INVALID, NULL);
 
-  return g_object_new (self->widget_type, NULL);
+  return IDE_TWEAKS_WIDGET_GET_CLASS (self)->create (self);
 }

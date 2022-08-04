@@ -29,14 +29,13 @@ G_BEGIN_DECLS
 #define IDE_TYPE_TWEAKS_WIDGET (ide_tweaks_widget_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdeTweaksWidget, ide_tweaks_widget, IDE, TWEAKS_WIDGET, IdeTweaksItem)
+G_DECLARE_DERIVABLE_TYPE (IdeTweaksWidget, ide_tweaks_widget, IDE, TWEAKS_WIDGET, IdeTweaksItem)
 
-IDE_AVAILABLE_IN_ALL
-IdeTweaksWidget *ide_tweaks_widget_new             (void);
-IDE_AVAILABLE_IN_ALL
-GType            ide_tweaks_widget_get_widget_type (IdeTweaksWidget *self);
-IDE_AVAILABLE_IN_ALL
-void             ide_tweaks_widget_set_widget_type (IdeTweaksWidget *self,
-                                                    GType            widget_type);
+struct _IdeTweaksWidgetClass
+{
+  IdeTweaksItemClass parent_class;
+
+  GtkWidget *(*create) (IdeTweaksWidget *self);
+};
 
 G_END_DECLS
