@@ -14,7 +14,7 @@
         <property name="mode-transition-duration">250</property>
         <property name="transition-type">over</property>
         <child>
-          <object class="GtkBox" id="sidebar_box">
+          <object class="GtkBox" id="panel_list_box">
             <property name="orientation">vertical</property>
             <property name="hexpand">false</property>
             <child>
@@ -102,7 +102,7 @@
           </object>
         </child>
         <child>
-          <object class="GtkBox" id="page_box">
+          <object class="GtkBox" id="panel_box">
             <property name="orientation">vertical</property>
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
