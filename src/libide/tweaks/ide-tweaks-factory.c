@@ -221,6 +221,17 @@ _ide_tweaks_factory_inflate (IdeTweaksFactory *self)
   return ar;
 }
 
+/**
+ * ide_tweaks_factory_visit:
+ * @self: a #IdeTweaksFactory
+ * @visitor: (scope call): visitor callback
+ * @visitor_data: closure data for @visitor
+ *
+ * Like ide_tweaks_item_visit_children() but works on each factory-created
+ * child of @self.
+ *
+ * Returns: %TRUE if @visitor prematurely stopped.
+ */
 gboolean
 ide_tweaks_factory_visit (IdeTweaksFactory     *self,
                           IdeTweaksItemVisitor  visitor,
