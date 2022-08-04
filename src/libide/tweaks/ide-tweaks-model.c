@@ -36,9 +36,6 @@ struct _IdeTweaksModel
   GDestroyNotify        visitor_data_destroy;
 };
 
-static gboolean ide_tweaks_model_populate (IdeTweaksModel *self,
-                                           IdeTweaksItem  *item);
-
 static GType
 list_model_get_item_type (GListModel *model)
 {
@@ -82,46 +79,11 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 
-static gboolean
-ide_tweaks_model_visit (IdeTweaksModel *self,
-                        IdeTweaksItem  *item)
+static IdeTweaksItemVisitResult
+ide_tweaks_model_populate_cb (IdeTweaksItem *item,
+                              gpointer       user_data)
 {
-  IdeTweaksItemVisitResult res;
-
-  g_assert (IDE_IS_TWEAKS_MODEL (self));
-  g_assert (IDE_IS_TWEAKS_ITEM (item));
-
-  res = self->visitor (item, self->visitor_data);
-
-  switch (res)
-    {
-    case IDE_TWEAKS_ITEM_VISIT_STOP:
-      return TRUE;
-
-    case IDE_TWEAKS_ITEM_VISIT_SKIP:
-      return FALSE;
-
-    case IDE_TWEAKS_ITEM_VISIT_ACCEPT:
-      g_ptr_array_add (self->items, g_object_ref (item));
-      return FALSE;
-
-    case IDE_TWEAKS_ITEM_VISIT_RECURSE:
-      return ide_tweaks_model_populate (self, item);
-
-    default:
-      break;
-    }
-
-  g_assert_not_reached ();
-}
-
-static gboolean
-ide_tweaks_model_populate (IdeTweaksModel *self,
-                           IdeTweaksItem  *item)
-{
-  g_assert (IDE_IS_TWEAKS_MODEL (self));
-  g_assert (self->items != NULL);
-  g_assert (self->visitor != NULL);
+  IdeTweaksModel *self = user_data;
 
   if (IDE_IS_TWEAKS_FACTORY (item))
     {
@@ -131,22 +93,44 @@ ide_tweaks_model_populate (IdeTweaksModel *self,
         {
           IdeTweaksItem *factory_item = g_ptr_array_index (factory_items, i);
 
-          if (ide_tweaks_model_visit (self, factory_item))
-            return TRUE;
+          if (ide_tweaks_model_populate_cb (factory_item, self) == IDE_TWEAKS_ITEM_VISIT_STOP)
+            return IDE_TWEAKS_ITEM_VISIT_STOP;
         }
-    }
-  else
-    {
-      for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (item);
-           child != NULL;
-           child = ide_tweaks_item_get_next_sibling (child))
-        {
-          if (ide_tweaks_model_visit (self, child))
-            return TRUE;
-        }
+
+      return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
     }
 
-  return FALSE;
+  switch (self->visitor (item, self->visitor_data))
+    {
+    case IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE:
+      g_ptr_array_add (self->items, g_object_ref (item));
+      return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
+
+    case IDE_TWEAKS_ITEM_VISIT_RECURSE:
+      if (ide_tweaks_item_visit_children (item, ide_tweaks_model_populate_cb, self))
+        return IDE_TWEAKS_ITEM_VISIT_STOP;
+      return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
+
+    case IDE_TWEAKS_ITEM_VISIT_STOP:
+      return IDE_TWEAKS_ITEM_VISIT_STOP;
+
+    case IDE_TWEAKS_ITEM_VISIT_CONTINUE:
+    default:
+      return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
+    }
+
+  g_assert_not_reached ();
+}
+
+static void
+ide_tweaks_model_populate (IdeTweaksModel *self,
+                           IdeTweaksItem  *item)
+{
+  g_assert (IDE_IS_TWEAKS_MODEL (self));
+  g_assert (self->items != NULL);
+  g_assert (self->visitor != NULL);
+
+  ide_tweaks_item_visit_children (item, ide_tweaks_model_populate_cb, self);
 }
 
 IdeTweaksModel *

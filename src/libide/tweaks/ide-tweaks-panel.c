@@ -74,9 +74,9 @@ group_visitor_func (IdeTweaksItem *item,
     return IDE_TWEAKS_ITEM_VISIT_RECURSE;
 
   if (IDE_IS_TWEAKS_GROUP (item))
-    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
+    return IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE;
 
-  return IDE_TWEAKS_ITEM_VISIT_SKIP;
+  return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
 }
 
 static void

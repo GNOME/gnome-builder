@@ -74,13 +74,13 @@ panel_list_visitor (IdeTweaksItem *item,
     return IDE_TWEAKS_ITEM_VISIT_RECURSE;
 
   if (IDE_IS_TWEAKS_PAGE (item))
-    return IDE_TWEAKS_ITEM_VISIT_ACCEPT;
+    return IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE;
 
   if (IDE_IS_TWEAKS_FACTORY (item) &&
       _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (item), &page_type, 1))
     return IDE_TWEAKS_ITEM_VISIT_RECURSE;
 
-  return IDE_TWEAKS_ITEM_VISIT_SKIP;
+  return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
 }
 
 static GtkWidget *

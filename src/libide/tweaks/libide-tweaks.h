@@ -22,12 +22,12 @@
 
 #define IDE_TWEAKS_INSIDE
 # include "ide-tweaks.h"
-# include "ide-tweaks-custom.h"
 # include "ide-tweaks-factory.h"
 # include "ide-tweaks-group.h"
 # include "ide-tweaks-item.h"
 # include "ide-tweaks-page.h"
 # include "ide-tweaks-section.h"
 # include "ide-tweaks-variable.h"
+# include "ide-tweaks-widget.h"
 # include "ide-tweaks-window.h"
 #undef IDE_TWEAKS_INSIDE

@@ -762,3 +762,43 @@ ide_tweaks_item_get_ancestor (IdeTweaksItem *self,
 
   return NULL;
 }
+
+/**
+ * ide_tweaks_item_visit_children:
+ * @self: an #IdeTweaksItem
+ * @visitor: (scope call): an #IdeTweaksItemVistor to callback
+ * @visitor_data: closure data for @visitor
+ *
+ * Calls @visitor for every matching item.
+ *
+ * Based on the result of @visitor, items may be recursed into.
+ *
+ * It is an error to modify @self or any descendant from @visitor.
+ *
+ * Returns: %TRUE if %IDE_TWEAKS_ITEM_VISIT_STOP was returned; otherwise
+ *   %FALSE is returned.
+ */
+gboolean
+ide_tweaks_item_visit_children (IdeTweaksItem        *self,
+                                IdeTweaksItemVisitor  visitor,
+                                gpointer              visitor_data)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), FALSE);
+  g_return_val_if_fail (visitor != NULL, FALSE);
+
+  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (self);
+       child != NULL;
+       child = ide_tweaks_item_get_next_sibling (child))
+    {
+      IdeTweaksItemVisitResult res = visitor (child, visitor_data);
+
+      if (res == IDE_TWEAKS_ITEM_VISIT_STOP)
+        return TRUE;
+
+      if (res == IDE_TWEAKS_ITEM_VISIT_RECURSE &&
+          ide_tweaks_item_visit_children (child, visitor, visitor_data))
+        return TRUE;
+    }
+
+  return FALSE;
+}

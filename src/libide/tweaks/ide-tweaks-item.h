@@ -28,10 +28,30 @@
 
 G_BEGIN_DECLS
 
+typedef enum
+{
+  IDE_TWEAKS_ITEM_VISIT_STOP = 0,
+  IDE_TWEAKS_ITEM_VISIT_CONTINUE,
+  IDE_TWEAKS_ITEM_VISIT_RECURSE,
+  IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE,
+} IdeTweaksItemVisitResult;
+
 #define IDE_TYPE_TWEAKS_ITEM (ide_tweaks_item_get_type())
 
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeTweaksItem, ide_tweaks_item, IDE, TWEAKS_ITEM, GObject)
+
+/**
+ * IdeTweaksItemVisitor:
+ * @item: an #IdeTweaksItem being visited
+ * @user_data: user data provided
+ *
+ * Called for every matching item while visiting the item graph.
+ *
+ * Returns: an #IdeTweaksItemVisitResult
+ */
+typedef IdeTweaksItemVisitResult (*IdeTweaksItemVisitor) (IdeTweaksItem *item,
+                                                          gpointer       user_data);
 
 struct _IdeTweaksItemClass
 {
@@ -43,44 +63,48 @@ struct _IdeTweaksItemClass
 };
 
 IDE_AVAILABLE_IN_ALL
-const char *        ide_tweaks_item_get_id               (IdeTweaksItem      *self);
+const char         *ide_tweaks_item_get_id               (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-IdeTweaksItem      *ide_tweaks_item_copy                 (IdeTweaksItem      *self);
+IdeTweaksItem      *ide_tweaks_item_copy                 (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-const char * const *ide_tweaks_item_get_keywords         (IdeTweaksItem      *self);
+const char * const *ide_tweaks_item_get_keywords         (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_set_keywords         (IdeTweaksItem      *self,
-                                                          const char * const *keywords);
+void                ide_tweaks_item_set_keywords         (IdeTweaksItem        *self,
+                                                          const char * const   *keywords);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_tweaks_item_get_sort_key         (IdeTweaksItem      *self);
+const char         *ide_tweaks_item_get_sort_key         (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_set_sort_key         (IdeTweaksItem      *self,
-                                                          const char         *sort_key);
+void                ide_tweaks_item_set_sort_key         (IdeTweaksItem        *self,
+                                                          const char           *sort_key);
 IDE_AVAILABLE_IN_ALL
-gboolean            ide_tweaks_item_is_ancestor          (IdeTweaksItem      *self,
-                                                          IdeTweaksItem      *ancestor);
+gboolean            ide_tweaks_item_is_ancestor          (IdeTweaksItem        *self,
+                                                          IdeTweaksItem        *ancestor);
 IDE_AVAILABLE_IN_ALL
-IdeTweaksItem      *ide_tweaks_item_get_parent           (IdeTweaksItem      *self);
+IdeTweaksItem      *ide_tweaks_item_get_parent           (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-IdeTweaksItem      *ide_tweaks_item_get_last_child       (IdeTweaksItem      *self);
+IdeTweaksItem      *ide_tweaks_item_get_last_child       (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-IdeTweaksItem      *ide_tweaks_item_get_first_child      (IdeTweaksItem      *self);
+IdeTweaksItem      *ide_tweaks_item_get_first_child      (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-IdeTweaksItem      *ide_tweaks_item_get_previous_sibling (IdeTweaksItem      *self);
+IdeTweaksItem      *ide_tweaks_item_get_previous_sibling (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-IdeTweaksItem      *ide_tweaks_item_get_next_sibling     (IdeTweaksItem      *self);
+IdeTweaksItem      *ide_tweaks_item_get_next_sibling     (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_insert_after         (IdeTweaksItem      *self,
-                                                          IdeTweaksItem      *parent,
-                                                          IdeTweaksItem      *previous_sibling);
+void                ide_tweaks_item_insert_after         (IdeTweaksItem        *self,
+                                                          IdeTweaksItem        *parent,
+                                                          IdeTweaksItem        *previous_sibling);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_insert_before        (IdeTweaksItem      *self,
-                                                          IdeTweaksItem      *parent,
-                                                          IdeTweaksItem      *next_sibling);
+void                ide_tweaks_item_insert_before        (IdeTweaksItem        *self,
+                                                          IdeTweaksItem        *parent,
+                                                          IdeTweaksItem        *next_sibling);
 IDE_AVAILABLE_IN_ALL
-gpointer            ide_tweaks_item_get_ancestor         (IdeTweaksItem      *self,
-                                                          GType               ancestor_type);
+gpointer            ide_tweaks_item_get_ancestor         (IdeTweaksItem        *self,
+                                                          GType                 ancestor_type);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_unparent             (IdeTweaksItem      *self);
+void                ide_tweaks_item_unparent             (IdeTweaksItem        *self);
+IDE_AVAILABLE_IN_ALL
+gboolean            ide_tweaks_item_visit_children       (IdeTweaksItem        *self,
+                                                          IdeTweaksItemVisitor  visitor,
+                                                          gpointer              visitor_data);
 
 G_END_DECLS
