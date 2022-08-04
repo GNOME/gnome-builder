@@ -35,7 +35,7 @@
           </object>
         </child>
         <child>
-          <object class="AdwBin" id="content">
+          <object class="AdwPreferencesPage" id="prefs_page">
             <property name="hexpand">true</property>
             <property name="vexpand">true</property>
           </object>

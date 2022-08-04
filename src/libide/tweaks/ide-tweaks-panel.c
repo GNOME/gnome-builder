@@ -29,9 +29,10 @@
 
 struct _IdeTweaksPanel
 {
-  AdwBin         parent_instance;
-  IdeTweaksPage *page;
-  guint          folded : 1;
+  AdwBin              parent_instance;
+  AdwPreferencesPage *prefs_page;
+  IdeTweaksPage      *page;
+  guint               folded : 1;
 };
 
 enum {
@@ -44,6 +45,21 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
+
+static void
+ide_tweaks_panel_add_group (IdeTweaksPanel *self,
+                            IdeTweaksGroup *group)
+{
+  AdwPreferencesGroup *prefs_group;
+
+  g_assert (IDE_IS_TWEAKS_PANEL (self));
+  g_assert (IDE_IS_TWEAKS_GROUP (group));
+
+  prefs_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP,
+                              "title", ide_tweaks_group_get_title (group),
+                              NULL);
+  adw_preferences_page_add (self->prefs_page, prefs_group);
+}
 
 static IdeTweaksItemVisitResult
 group_visitor_func (IdeTweaksItem *item,
@@ -78,7 +94,7 @@ ide_tweaks_panel_rebuild (IdeTweaksPanel *self)
     {
       g_autoptr(IdeTweaksGroup) group = g_list_model_get_item (G_LIST_MODEL (model), i);
 
-      g_print ("Add group: %s\n", ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (group)));
+      ide_tweaks_panel_add_group (self, group);
     }
 }
 
@@ -171,6 +187,7 @@ ide_tweaks_panel_class_init (IdeTweaksPanelClass *klass)
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel.ui");
+  gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanel, prefs_page);
 }
 
 static void
