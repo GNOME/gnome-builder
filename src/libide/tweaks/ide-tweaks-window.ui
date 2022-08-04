@@ -4,6 +4,7 @@
     <property name="title" translatable="yes">Preferences</property>
     <property name="default-width">1080</property>
     <property name="default-height">720</property>
+    <property name="folded" bind-source="leaflet" bind-property="folded" bind-flags="sync-create"/>
     <child>
       <object class="AdwLeaflet" id="leaflet">
         <property name="can-navigate-back">true</property>

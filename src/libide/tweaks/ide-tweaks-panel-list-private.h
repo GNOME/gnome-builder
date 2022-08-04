@@ -30,11 +30,14 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, IDE, TWEAKS_PANEL_LIST, AdwBin)
 
-GtkWidget     *ide_tweaks_panel_list_new             (IdeTweaksItem      *item);
-IdeTweaksItem *ide_tweaks_panel_list_get_item        (IdeTweaksPanelList *self);
-void           ide_tweaks_panel_list_select_first    (IdeTweaksPanelList *self);
-gboolean       ide_tweaks_panel_list_get_search_mode (IdeTweaksPanelList *self);
-void           ide_tweaks_panel_list_set_search_mode (IdeTweaksPanelList *self,
-                                                      gboolean            search_mode);
+GtkWidget        *ide_tweaks_panel_list_new                (IdeTweaksItem      *item);
+IdeTweaksItem    *ide_tweaks_panel_list_get_item           (IdeTweaksPanelList *self);
+void              ide_tweaks_panel_list_select_first       (IdeTweaksPanelList *self);
+gboolean          ide_tweaks_panel_list_get_search_mode    (IdeTweaksPanelList *self);
+void              ide_tweaks_panel_list_set_search_mode    (IdeTweaksPanelList *self,
+                                                            gboolean            search_mode);
+GtkSelectionMode  ide_tweaks_panel_list_get_selection_mode (IdeTweaksPanelList *self);
+void              ide_tweaks_panel_list_set_selection_mode (IdeTweaksPanelList *self,
+                                                            GtkSelectionMode    selection_mode);
 
 G_END_DECLS

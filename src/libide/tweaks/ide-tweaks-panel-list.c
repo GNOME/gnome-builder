@@ -43,6 +43,7 @@ enum {
   PROP_0,
   PROP_ITEM,
   PROP_SEARCH_MODE,
+  PROP_SELECTION_MODE,
   N_PROPS
 };
 
@@ -234,6 +235,12 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  properties[PROP_SELECTION_MODE] =
+    g_param_spec_enum ("selection-mode", NULL, NULL,
+                       GTK_TYPE_SELECTION_MODE,
+                       GTK_SELECTION_SINGLE,
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-tweaks/ide-tweaks-panel-list.ui");
@@ -324,5 +331,26 @@ ide_tweaks_panel_list_set_search_mode (IdeTweaksPanelList *self,
     {
       gtk_widget_set_visible (GTK_WIDGET (self->search_entry), search_mode);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SEARCH_MODE]);
+    }
+}
+
+GtkSelectionMode
+ide_tweaks_panel_list_get_selection_mode (IdeTweaksPanelList *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self), 0);
+
+  return gtk_list_box_get_selection_mode (self->list_box);
+}
+
+void
+ide_tweaks_panel_list_set_selection_mode (IdeTweaksPanelList *self,
+                                          GtkSelectionMode    selection_mode)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self));
+
+  if (selection_mode != ide_tweaks_panel_list_get_selection_mode (self))
+    {
+      gtk_list_box_set_selection_mode (self->list_box, selection_mode);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTION_MODE]);
     }
 }

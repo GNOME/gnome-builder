@@ -33,5 +33,7 @@ G_DECLARE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, IDE, TWEAKS_PANEL, AdwBi
 GtkWidget     *ide_tweaks_panel_new        (IdeTweaksPage  *page);
 IdeTweaksPage *ide_tweaks_panel_get_page   (IdeTweaksPanel *self);
 gboolean       ide_tweaks_panel_get_folded (IdeTweaksPanel *self);
+void           ide_tweaks_panel_set_folded (IdeTweaksPanel *self,
+                                            gboolean        folded);
 
 G_END_DECLS

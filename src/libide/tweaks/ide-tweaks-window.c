@@ -41,11 +41,13 @@ struct _IdeTweaksWindow
   GtkSearchEntry *sidebar_search_entry;
 
   guint           can_navigate_back : 1;
+  guint           folded : 1;
 };
 
 enum {
   PROP_0,
   PROP_CAN_NAVIGATE_BACK,
+  PROP_FOLDED,
   PROP_TWEAKS,
   N_PROPS
 };
@@ -304,6 +306,33 @@ ide_tweaks_window_navigate_back_action (GtkWidget  *widget,
 }
 
 static void
+ide_tweaks_window_set_folded (IdeTweaksWindow *self,
+                              gboolean         folded)
+{
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+
+  folded = !!folded;
+
+  if (self->folded != folded)
+    {
+      GtkSelectionMode selection_mode;
+      GtkWidget *child;
+
+      self->folded = folded;
+
+      selection_mode = folded ? GTK_SELECTION_NONE : GTK_SELECTION_SINGLE;
+
+      if ((child = gtk_stack_get_visible_child (self->panel_stack)))
+        ide_tweaks_panel_set_folded (IDE_TWEAKS_PANEL (child), folded);
+
+      if ((child = gtk_stack_get_visible_child (self->panel_list_stack)))
+        ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (child), selection_mode);
+
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOLDED]);
+    }
+}
+
+static void
 ide_tweaks_window_dispose (GObject *object)
 {
   IdeTweaksWindow *self = (IdeTweaksWindow *)object;
@@ -331,6 +360,10 @@ ide_tweaks_window_get_property (GObject    *object,
       g_value_set_boolean (value, ide_tweaks_window_get_can_navigate_back (self));
       break;
 
+    case PROP_FOLDED:
+      g_value_set_boolean (value, self->folded);
+      break;
+
     case PROP_TWEAKS:
       g_value_set_object (value, ide_tweaks_window_get_tweaks (self));
       break;
@@ -350,6 +383,10 @@ ide_tweaks_window_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_FOLDED:
+      ide_tweaks_window_set_folded (self, g_value_get_boolean (value));
+      break;
+
     case PROP_TWEAKS:
       ide_tweaks_window_set_tweaks (self, g_value_get_object (value));
       break;
@@ -374,6 +411,10 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties[PROP_FOLDED] =
+    g_param_spec_boolean ("folded", NULL, NULL,
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TWEAKS] =
     g_param_spec_object ("tweaks", NULL, NULL,

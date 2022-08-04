@@ -12,10 +12,10 @@
             <child>
               <object class="AdwHeaderBar" id="titlebar">
                 <property name="show-end-title-buttons">true</property>
-                <property name="show-start-title-buttons" bind-source="IdeTweaksPanel" bind-property="folded" bind-flags="default|sync-create"/>
+                <property name="show-start-title-buttons" bind-source="IdeTweaksPanel" bind-property="folded" bind-flags="sync-create"/>
                 <child type="start">
                   <object class="GtkButton">
-                    <property name="visible" bind-source="IdeTweaksPanel" bind-property="folded" bind-flags="default|sync-create"/>
+                    <property name="visible" bind-source="IdeTweaksPanel" bind-property="folded" bind-flags="sync-create"/>
                     <property name="icon-name">go-previous-symbolic</property>
                     <property name="action-name">window.navigate</property>
                     <property name="action-target">0</property>
