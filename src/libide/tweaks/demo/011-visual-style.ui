@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="visual_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="appearance_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="appearance_page_style_group">
+              <object class="IdeTweaksGroup">
+                <child>
+                  <object class="IdeTweaksWidget">
+                    <property name="widget-type">GtkLabel</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
