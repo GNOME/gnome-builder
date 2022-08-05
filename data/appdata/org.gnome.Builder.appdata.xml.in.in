@@ -90,7 +90,7 @@
   <translation type="gettext">gnome-builder</translation>
 
   <releases>
-    <release version="43.alpha0" date="2022-07-13"/>
+    <release version="43.alpha1" date="2022-08-05"/>
   </releases>
 
   <content_rating type="oars-1.1">

@@ -1,3 +1,14 @@
+# Builder 43.alpha1
+
+This release is not intended for end-users.
+
+We're still under heavy development porting to GTK 4 and landing the new
+subsystems for GNOME 43. This release is therefore not yet Beta quality
+and so instead of a beta, we're releasing 43.alpha1.
+
+It has too many fixes to enumerate since 43.alpha0, so you'll have to
+look through the commit log for the details.
+
 # Builder 43.alpha0
 
 This release is not intended for end-users.
