@@ -35,13 +35,6 @@ struct _IdeTweaks
 
 G_DEFINE_FINAL_TYPE (IdeTweaks, ide_tweaks, IDE_TYPE_TWEAKS_ITEM)
 
-enum {
-  PROP_0,
-  N_PROPS
-};
-
-static GParamSpec *properties [N_PROPS];
-
 static gboolean
 ide_tweaks_accepts (IdeTweaksItem *item,
                     IdeTweaksItem *child)
@@ -63,44 +56,12 @@ ide_tweaks_dispose (GObject *object)
 }
 
 static void
-ide_tweaks_get_property (GObject    *object,
-                         guint       prop_id,
-                         GValue     *value,
-                         GParamSpec *pspec)
-{
-  IdeTweaks *self = IDE_TWEAKS (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-ide_tweaks_set_property (GObject      *object,
-                         guint         prop_id,
-                         const GValue *value,
-                         GParamSpec   *pspec)
-{
-  IdeTweaks *self = IDE_TWEAKS (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 ide_tweaks_class_init (IdeTweaksClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeTweaksItemClass *item_class = IDE_TWEAKS_ITEM_CLASS (klass);
 
   object_class->dispose = ide_tweaks_dispose;
-  object_class->get_property = ide_tweaks_get_property;
-  object_class->set_property = ide_tweaks_set_property;
 
   item_class->accepts = ide_tweaks_accepts;
 }
