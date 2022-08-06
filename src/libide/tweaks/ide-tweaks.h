@@ -34,15 +34,20 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaks, ide_tweaks, IDE, TWEAKS, IdeTweaksItem)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaks *ide_tweaks_new            (void);
+IdeTweaks *ide_tweaks_new             (void);
 IDE_AVAILABLE_IN_ALL
-void       ide_tweaks_expose_object  (IdeTweaks     *self,
-                                      const char    *name,
-                                      GObject       *object);
+const char *ide_tweaks_get_project_id (IdeTweaks     *self);
 IDE_AVAILABLE_IN_ALL
-gboolean   ide_tweaks_load_from_file (IdeTweaks     *self,
-                                      GFile         *file,
-                                      GCancellable  *cancellable,
-                                      GError       **error);
+void        ide_tweaks_set_project_id (IdeTweaks     *self,
+                                       const char    *project_id);
+IDE_AVAILABLE_IN_ALL
+void       ide_tweaks_expose_object   (IdeTweaks     *self,
+                                       const char    *name,
+                                       GObject       *object);
+IDE_AVAILABLE_IN_ALL
+gboolean   ide_tweaks_load_from_file  (IdeTweaks     *self,
+                                       GFile         *file,
+                                       GCancellable  *cancellable,
+                                       GError       **error);
 
 G_END_DECLS
