@@ -22,9 +22,11 @@
 
 #include "config.h"
 
+#include "ide-tweaks.h"
 #include "ide-tweaks-group.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-private.h"
+#include "ide-tweaks-settings.h"
 #include "ide-tweaks-widget-private.h"
 
 struct _IdeTweaksPanel
@@ -33,6 +35,7 @@ struct _IdeTweaksPanel
   AdwPreferencesPage  *prefs_page;
   AdwPreferencesGroup *current_group;
   IdeTweaksPage       *page;
+  IdeActionMuxer      *muxer;
   guint                folded : 1;
 };
 
@@ -67,6 +70,21 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
       adw_preferences_page_add (self->prefs_page, self->current_group);
 
       return IDE_TWEAKS_ITEM_VISIT_RECURSE;
+    }
+  else if (IDE_IS_TWEAKS_SETTINGS (item))
+    {
+      IdeTweaksSettings *settings = IDE_TWEAKS_SETTINGS (item);
+      const char *schema_id = ide_tweaks_settings_get_schema_id (settings);
+      IdeTweaks *tweaks = ide_tweaks_item_get_ancestor (item, IDE_TYPE_TWEAKS);
+      const char *project_id = ide_tweaks_get_project_id (tweaks);
+
+      if (ide_action_muxer_get_action_group (self->muxer, schema_id) == NULL)
+        {
+          GActionGroup *group = ide_tweaks_settings_create_action_group (settings, project_id);
+
+          if (group != NULL)
+            ide_action_muxer_insert_action_group (self->muxer, schema_id, G_ACTION_GROUP (group));
+        }
     }
   else if (IDE_IS_TWEAKS_WIDGET (item))
     {
@@ -124,6 +142,7 @@ ide_tweaks_panel_dispose (GObject *object)
   IdeTweaksPanel *self = (IdeTweaksPanel *)object;
 
   g_clear_object (&self->page);
+  g_clear_object (&self->muxer);
 
   G_OBJECT_CLASS (ide_tweaks_panel_parent_class)->dispose (object);
 }
@@ -205,6 +224,11 @@ static void
 ide_tweaks_panel_init (IdeTweaksPanel *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->muxer = ide_action_muxer_new ();
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "settings",
+                                  G_ACTION_GROUP (self->muxer));
 }
 
 GtkWidget *
