@@ -76,6 +76,18 @@ enum {
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
 
+static const GVariantType *
+_g_variant_type_intern (const GVariantType *type)
+{
+  g_autofree char *str = NULL;
+
+  if (type == NULL)
+    return NULL;
+
+  str = g_variant_type_dup_string (type);
+  return G_VARIANT_TYPE (g_intern_string (str));
+}
+
 static void
 ide_settings_set_schema_id (IdeSettings *self,
                             const char  *schema_id)
@@ -576,7 +588,7 @@ static gboolean
 ide_settings_has_action (GActionGroup *group,
                          const char   *action_name)
 {
-  IdeSettings *self = (IdeSettings *)group;
+  IdeSettings *self = IDE_SETTINGS (group);
   g_auto(GStrv) keys = ide_layered_settings_list_keys (self->layered_settings);
 
   return g_strv_contains ((const char * const *)keys, action_name);
@@ -585,7 +597,7 @@ ide_settings_has_action (GActionGroup *group,
 static char **
 ide_settings_list_actions (GActionGroup *group)
 {
-  IdeSettings *self = (IdeSettings *)group;
+  IdeSettings *self = IDE_SETTINGS (group);
   return ide_layered_settings_list_keys (self->layered_settings);
 }
 
@@ -600,7 +612,8 @@ static GVariant *
 ide_settings_get_action_state (GActionGroup *group,
                                const char   *action_name)
 {
-  IdeSettings *self = (IdeSettings *)group;
+  IdeSettings *self = IDE_SETTINGS (group);
+
   return ide_layered_settings_get_value (self->layered_settings, action_name);
 }
 
@@ -608,7 +621,7 @@ static GVariant *
 ide_settings_get_action_state_hint (GActionGroup *group,
                                     const char   *action_name)
 {
-  IdeSettings *self = (IdeSettings *)group;
+  IdeSettings *self = IDE_SETTINGS (group);
   g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
   return g_settings_schema_key_get_range (key);
 }
@@ -618,7 +631,7 @@ ide_settings_change_action_state (GActionGroup *group,
                                   const char   *action_name,
                                   GVariant     *value)
 {
-  IdeSettings *self = (IdeSettings *)group;
+  IdeSettings *self = IDE_SETTINGS (group);
   g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
 
   if (g_variant_is_of_type (value, g_settings_schema_key_get_value_type (key)) &&
@@ -635,11 +648,11 @@ static const GVariantType *
 ide_settings_get_action_state_type (GActionGroup *group,
                                     const char   *action_name)
 {
-  IdeSettings *self = (IdeSettings *)group;
+  IdeSettings *self = IDE_SETTINGS (group);
   g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
-  g_autoptr(GVariant) default_value = g_settings_schema_key_get_default_value (key);
+  const GVariantType *type = g_settings_schema_key_get_value_type (key);
 
-  return g_variant_get_type (default_value);
+  return _g_variant_type_intern (type);
 }
 
 static void
@@ -647,7 +660,7 @@ ide_settings_activate_action (GActionGroup *group,
                               const char   *action_name,
                               GVariant     *parameter)
 {
-  IdeSettings *self = (IdeSettings *)group;
+  IdeSettings *self = IDE_SETTINGS (group);
   g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
   g_autoptr(GVariant) default_value = g_settings_schema_key_get_default_value (key);
 
@@ -669,17 +682,16 @@ ide_settings_activate_action (GActionGroup *group,
 static const GVariantType *
 ide_settings_get_action_parameter_type (GActionGroup *group,
                                         const char   *action_name)
-
 {
-  IdeSettings *self = (IdeSettings *)group;
+  IdeSettings *self = IDE_SETTINGS (group);
   g_autoptr(GSettingsSchemaKey) key = ide_layered_settings_get_key (self->layered_settings, action_name);
   g_autoptr(GVariant) default_value = g_settings_schema_key_get_default_value (key);
-  const GVariantType *type = g_variant_get_type (default_value);
+  const GVariantType *type = g_settings_schema_key_get_value_type (key);
 
   if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
-    type = NULL;
+    return NULL;
 
-  return type;
+  return _g_variant_type_intern (type);
 }
 
 static void
