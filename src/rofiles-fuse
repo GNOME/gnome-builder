@@ -1,4 +1,0 @@
-#!/bin/sh
-
-flatpak-spawn --host --watch-bus rofiles-fuse "$@"
-
