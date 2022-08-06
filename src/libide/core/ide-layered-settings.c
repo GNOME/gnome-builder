@@ -486,6 +486,7 @@ ide_layered_settings_get_key (IdeLayeredSettings *self,
                               const char         *key)
 {
   g_autoptr(GSettingsSchema) schema = NULL;
+  GSettingsSchemaKey *ret;
 
   g_return_val_if_fail (IDE_IS_LAYERED_SETTINGS (self), NULL);
   g_return_val_if_fail (key != NULL, NULL);
@@ -493,8 +494,12 @@ ide_layered_settings_get_key (IdeLayeredSettings *self,
   g_object_get (self->memory_settings,
                 "settings-schema", &schema,
                 NULL);
+  g_assert (schema != NULL);
 
-  return g_settings_schema_get_key (schema, key);
+  ret = g_settings_schema_get_key (schema, key);
+  g_assert (ret != NULL);
+
+  return ret;
 }
 
 /**
