@@ -27,6 +27,7 @@
 #include "ide-tweaks-group.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-section.h"
+#include "ide-tweaks-settings.h"
 
 struct _IdeTweaksPage
 {
@@ -60,7 +61,8 @@ ide_tweaks_page_accepts (IdeTweaksItem *item,
 {
   return IDE_IS_TWEAKS_PAGE (child) ||
          IDE_IS_TWEAKS_FACTORY (child) ||
-         IDE_IS_TWEAKS_GROUP (child);
+         IDE_IS_TWEAKS_GROUP (child) ||
+         IDE_IS_TWEAKS_SETTINGS (child);
 }
 
 static void
