@@ -45,6 +45,7 @@ panel_show_action (GbpGrepWorkspaceAddin *self,
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));
 
   panel_widget_raise (PANEL_WIDGET (self->panel));
+  gtk_widget_grab_focus (GTK_WIDGET (self->panel));
 }
 
 IDE_DEFINE_ACTION_GROUP (GbpGrepWorkspaceAddin, gbp_grep_workspace_addin, {
