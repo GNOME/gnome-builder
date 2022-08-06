@@ -16,28 +16,28 @@
                           <object class="IdeTweaksSwitch" id="language_page_general_group_trim_switch">
                             <property name="title" translatable="yes">Trim Trailing Whitespace</property>
                             <property name="subtitle" translatable="yes">Upon saving, trailing whitespace will be removed from modified lines</property>
-                            <property name="action-name" translatable="yes">settings:org.gnome.builder.editor.language.trim-trailing-whitespace</property>
+                            <property name="action-name" translatable="yes">settings.org.gnome.builder.editor.language.trim-trailing-whitespace</property>
                           </object>
                         </child>
                         <child>
                           <object class="IdeTweaksSwitch" id="language_page_general_group_overwrite_braces_switch">
                             <property name="title" translatable="yes">Overwrite Braces</property>
                             <property name="subtitle" translatable="yes">Overwrite closing braces, brackets, and parenthesis</property>
-                            <property name="action-name" translatable="yes">settings:org.gnome.builder.editor.language.overwrite-braces</property>
+                            <property name="action-name" translatable="yes">settings.org.gnome.builder.editor.language.overwrite-braces</property>
                           </object>
                         </child>
                         <child>
                           <object class="IdeTweaksSwitch" id="language_page_general_group_insert_matching_switch">
                             <property name="title" translatable="yes">Insert Matching Braces</property>
                             <property name="subtitle" translatable="yes">Automatically close braces, brackets, and parenthesis</property>
-                            <property name="action-name" translatable="yes">settings:org.gnome.builder.editor.language.insert-matching-brace</property>
+                            <property name="action-name" translatable="yes">settings.org.gnome.builder.editor.language.insert-matching-brace</property>
                           </object>
                         </child>
                         <child>
                           <object class="IdeTweaksSwitch" id="language_page_general_group_insert_trailing_newline_switch">
                             <property name="title" translatable="yes">Insert Trailing Line</property>
                             <property name="subtitle" translatable="yes">Ensure files end with a new line</property>
-                            <property name="action-name" translatable="yes">settings:org.gnome.builder.editor.language.insert-trailing-newline</property>
+                            <property name="action-name" translatable="yes">settings.org.gnome.builder.editor.language.insert-trailing-newline</property>
                           </object>
                         </child>
                       </object>
