@@ -45,6 +45,13 @@
                     <child>
                       <object class="IdeTweaksGroup" id="language_page_margins_group">
                         <property name="title" translatable="yes">Margins</property>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="language_page_margins_group_right_margin">
+                            <property name="title" translatable="yes">Show Right Margin</property>
+                            <property name="subtitle" translatable="yes">Display a margin in the editor to indicate maximum desired width</property>
+                            <property name="action-name" translatable="yes">settings.org.gnome.builder.editor.language.show-right-margin</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
