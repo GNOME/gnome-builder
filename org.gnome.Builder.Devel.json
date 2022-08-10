@@ -277,7 +277,7 @@
         {
             "name" : "libeditorconfig",
             "buildsystem" : "cmake",
-            "config-opts" : [ "-DINSTALL_HTML_DOC=OFF" ],
+            "config-opts" : [ "-DBUILD_DOCUMENTATION=OFF", "-DINSTALL_HTML_DOC=OFF" ],
             "sources" : [
                 {
                     "type" : "git",
