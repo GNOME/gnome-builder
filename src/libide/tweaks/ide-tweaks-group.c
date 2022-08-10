@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "ide-tweaks-group.h"
+#include "ide-tweaks-settings.h"
 #include "ide-tweaks-widget.h"
 
 struct _IdeTweaksGroup
@@ -48,7 +49,8 @@ ide_tweaks_group_accepts (IdeTweaksItem *item,
   g_assert (IDE_IS_TWEAKS_GROUP (item));
   g_assert (IDE_IS_TWEAKS_ITEM (child));
 
-  return IDE_IS_TWEAKS_WIDGET (child);
+  return IDE_IS_TWEAKS_WIDGET (child) ||
+         IDE_IS_TWEAKS_SETTINGS (child);
 }
 
 static void
