@@ -29,9 +29,10 @@
 
 struct _IdeTweaks
 {
-  IdeTweaksItem  parent_instance;
-  GtkBuilder    *builder;
-  char          *project_id;
+  IdeTweaksItem    parent_instance;
+  GtkBuilder      *builder;
+  GtkBuilderScope *scope;
+  char            *project_id;
 };
 
 G_DEFINE_FINAL_TYPE (IdeTweaks, ide_tweaks, IDE_TYPE_TWEAKS_ITEM)
@@ -78,6 +79,7 @@ ide_tweaks_dispose (GObject *object)
   IdeTweaks *self = (IdeTweaks *)object;
 
   g_clear_object (&self->builder);
+  g_clear_object (&self->scope);
   g_clear_pointer (&self->project_id, g_free);
 
   G_OBJECT_CLASS (ide_tweaks_parent_class)->dispose (object);
@@ -144,13 +146,14 @@ ide_tweaks_class_init (IdeTweaksClass *klass)
 static void
 ide_tweaks_init (IdeTweaks *self)
 {
-  g_autoptr(GtkBuilderCScope) scope = (GtkBuilderCScope *)gtk_builder_cscope_new ();
-
+  self->scope = g_object_new (GTK_TYPE_BUILDER_CSCOPE, NULL);
   self->builder = gtk_builder_new ();
   gtk_builder_set_current_object (self->builder, G_OBJECT (self));
+  gtk_builder_set_scope (self->builder, self->scope);
 
-  gtk_builder_cscope_add_callback_symbol (scope, "format", (gpointer)ide_tweaks_format);
-  gtk_builder_set_scope (self->builder, GTK_BUILDER_SCOPE (scope));
+  gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (self->scope),
+                                          "format",
+                                          G_CALLBACK (ide_tweaks_format));
 }
 
 IdeTweaks *
@@ -191,6 +194,28 @@ ide_tweaks_expose_object (IdeTweaks  *self,
   g_return_if_fail (G_IS_OBJECT (object));
 
   gtk_builder_expose_object (self->builder, name, object);
+}
+
+/**
+ * ide_tweaks_add_callback:
+ * @self: a #IdeTweaks
+ * @name: the name of the callback
+ * @callback: (scope forever): the callback represented by @name
+ *
+ * Adds @callback to the scope used when expanding future templates
+ * from @self.
+ */
+void
+ide_tweaks_add_callback (IdeTweaks  *self,
+                         const char *name,
+                         GCallback   callback)
+{
+  g_return_if_fail (IDE_IS_TWEAKS (self));
+  g_return_if_fail (GTK_IS_BUILDER_CSCOPE (self->scope));
+  g_return_if_fail (name != NULL);
+  g_return_if_fail (callback != NULL);
+
+  gtk_builder_cscope_add_callback_symbol (GTK_BUILDER_CSCOPE (self->scope), name, callback);
 }
 
 const char *
