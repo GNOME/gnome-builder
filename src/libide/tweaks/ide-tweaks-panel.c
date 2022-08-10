@@ -32,11 +32,16 @@
 struct _IdeTweaksPanel
 {
   AdwBin               parent_instance;
+
   AdwPreferencesPage  *prefs_page;
   AdwPreferencesGroup *current_group;
+  GtkListBox          *current_list;
+
   IdeTweaksPage       *page;
   IdeActionMuxer      *muxer;
+
   guint                folded : 1;
+  guint                current_list_has_non_rows : 1;
 };
 
 enum {
@@ -49,6 +54,22 @@ enum {
 G_DEFINE_FINAL_TYPE (IdeTweaksPanel, ide_tweaks_panel, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
+
+static gboolean
+listbox_keynav_failed_cb (GtkListBox       *list_box,
+                          GtkDirectionType  direction)
+{
+  GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (list_box)));
+
+  if (toplevel == NULL)
+    return FALSE;
+
+  if (direction != GTK_DIR_UP && direction != GTK_DIR_DOWN)
+    return FALSE;
+
+  return gtk_widget_child_focus (toplevel, direction == GTK_DIR_UP ?
+                                 GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD);
+}
 
 static IdeTweaksItemVisitResult
 ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
@@ -64,6 +85,8 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
     {
       IdeTweaksGroup *group = IDE_TWEAKS_GROUP (item);
 
+      self->current_list = NULL;
+      self->current_list_has_non_rows = FALSE;
       self->current_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP,
                             "title", ide_tweaks_group_get_title (group),
                             NULL);
@@ -99,13 +122,44 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
         {
           g_critical ("Attempt to add #%s without a group, this is discouraged",
                       ide_tweaks_item_get_id (item));
+          self->current_list = NULL;
+          self->current_list_has_non_rows = FALSE;
           self->current_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP, NULL);
           adw_preferences_page_add (self->prefs_page, self->current_group);
           adw_preferences_group_add (self->current_group, child);
         }
       else
         {
-          adw_preferences_group_add (self->current_group, child);
+          if (GTK_IS_LIST_BOX_ROW (child))
+            {
+              if (self->current_list == NULL && !self->current_list_has_non_rows)
+                {
+                  adw_preferences_group_add (self->current_group, child);
+                }
+              else if (self->current_list == NULL)
+                {
+                  self->current_list = g_object_new (GTK_TYPE_LIST_BOX,
+                                                     "css-classes", IDE_STRV_INIT ("boxed-list"),
+                                                     "selection-mode", GTK_SELECTION_NONE,
+                                                     NULL);
+                  g_signal_connect (self->current_list,
+                                    "keynav-failed",
+                                    G_CALLBACK (listbox_keynav_failed_cb),
+                                    NULL);
+                  adw_preferences_group_add (self->current_group, GTK_WIDGET (self->current_list));
+                  gtk_list_box_append (self->current_list, child);
+                }
+              else
+                {
+                  gtk_list_box_append (self->current_list, child);
+                }
+            }
+          else
+            {
+              self->current_list = NULL;
+              self->current_list_has_non_rows = TRUE;
+              adw_preferences_group_add (self->current_group, child);
+            }
         }
     }
 
