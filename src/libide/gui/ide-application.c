@@ -397,6 +397,7 @@ _ide_application_add_resources (IdeApplication *self,
       if (bytes != NULL)
         {
           GtkCssProvider *provider = get_css_provider (self, resource_path);
+          g_debug ("Loading CSS from resource path %s\n", css_path);
           gtk_css_provider_load_from_resource (provider, css_path);
         }
     }
@@ -407,6 +408,7 @@ _ide_application_add_resources (IdeApplication *self,
       if (g_file_test (css_path, G_FILE_TEST_IS_REGULAR))
         {
           GtkCssProvider *provider = get_css_provider (self, resource_path);
+          g_debug ("Loading CSS from file path %s\n", css_path);
           gtk_css_provider_load_from_path (provider, css_path);
         }
     }
