@@ -22,6 +22,7 @@
 
 #define IDE_TWEAKS_INSIDE
 # include "ide-tweaks.h"
+# include "ide-tweaks-addin.h"
 # include "ide-tweaks-external.h"
 # include "ide-tweaks-factory.h"
 # include "ide-tweaks-group.h"

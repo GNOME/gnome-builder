@@ -9,6 +9,7 @@ libide_include_directories += include_directories('.')
 libide_tweaks_public_headers = [
   'libide-tweaks.h',
   'ide-tweaks.h',
+  'ide-tweaks-addin.h',
   'ide-tweaks-external.h',
   'ide-tweaks-factory.h',
   'ide-tweaks-group.h',
@@ -31,6 +32,7 @@ install_headers(libide_tweaks_public_headers, subdir: libide_tweaks_header_subdi
 
 libide_tweaks_public_sources = [
   'ide-tweaks.c',
+  'ide-tweaks-addin.c',
   'ide-tweaks-external.c',
   'ide-tweaks-factory.c',
   'ide-tweaks-group.c',
