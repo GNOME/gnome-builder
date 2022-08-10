@@ -26,6 +26,7 @@
 # include "ide-tweaks-group.h"
 # include "ide-tweaks-item.h"
 # include "ide-tweaks-page.h"
+# include "ide-tweaks-radio.h"
 # include "ide-tweaks-section.h"
 # include "ide-tweaks-settings.h"
 # include "ide-tweaks-switch.h"

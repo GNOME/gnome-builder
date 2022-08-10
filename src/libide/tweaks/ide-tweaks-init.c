@@ -37,6 +37,7 @@ _ide_tweaks_init (void)
   g_type_ensure (IDE_TYPE_TWEAKS_GROUP);
   g_type_ensure (IDE_TYPE_TWEAKS_ITEM);
   g_type_ensure (IDE_TYPE_TWEAKS_PAGE);
+  g_type_ensure (IDE_TYPE_TWEAKS_RADIO);
   g_type_ensure (IDE_TYPE_TWEAKS_SECTION);
   g_type_ensure (IDE_TYPE_TWEAKS_SETTINGS);
   g_type_ensure (IDE_TYPE_TWEAKS_SWITCH);
