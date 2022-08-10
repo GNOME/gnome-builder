@@ -1,0 +1,14 @@
+.IdeTweaksWindow .checkimage radio,
+.IdeTweaksWindow .checkimage check {
+  background: none;
+  outline: none;
+  box-shadow: none;
+  border: none;
+  color: @window_fg_color;
+  -gtk-icon-source: none;
+  -gtk-icon-size: 18px;
+}
+.IdeTweaksWindow .checkimage radio:checked,
+.IdeTweaksWindow .checkimage check:checked {
+  -gtk-icon-source: -gtk-icontheme('object-select-symbolic');
+}

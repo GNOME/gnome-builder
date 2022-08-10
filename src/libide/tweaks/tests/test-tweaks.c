@@ -39,6 +39,7 @@ main (int   argc,
   g_autoptr(GError) error = NULL;
   g_autofree char *expected = NULL;
   g_autofree char *expected_contents = NULL;
+  g_autoptr(GtkCssProvider) css = NULL;
   gboolean display = FALSE;
   gsize len = 0;
   const GOptionEntry entries[] = {
@@ -63,6 +64,12 @@ main (int   argc,
 
   gtk_icon_theme_add_search_path (gtk_icon_theme_get_for_display (gdk_display_get_default ()),
                                   PACKAGE_ICONDIR);
+
+  css = gtk_css_provider_new ();
+  gtk_css_provider_load_from_resource (css, "/org/gnome/libide-tweaks/style.css");
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                              GTK_STYLE_PROVIDER (css),
+                                              GTK_STYLE_PROVIDER_PRIORITY_THEME+1);
 
   tweaks = ide_tweaks_new ();
   string = g_string_new (NULL);

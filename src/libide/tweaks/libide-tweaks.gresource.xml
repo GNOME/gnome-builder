@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
   <gresource prefix="/org/gnome/libide-tweaks">
+    <file>style.css</file>
     <file preprocess="xml-stripblanks">ide-tweaks-panel.ui</file>
     <file preprocess="xml-stripblanks">ide-tweaks-panel-list.ui</file>
     <file preprocess="xml-stripblanks">ide-tweaks-panel-list-row.ui</file>
