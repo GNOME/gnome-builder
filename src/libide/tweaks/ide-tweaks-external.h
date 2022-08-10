@@ -1,4 +1,4 @@
-/* libide-tweaks.h
+/* ide-tweaks-external.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,18 +20,21 @@
 
 #pragma once
 
-#define IDE_TWEAKS_INSIDE
-# include "ide-tweaks.h"
-# include "ide-tweaks-external.h"
-# include "ide-tweaks-factory.h"
-# include "ide-tweaks-group.h"
-# include "ide-tweaks-item.h"
-# include "ide-tweaks-page.h"
-# include "ide-tweaks-radio.h"
-# include "ide-tweaks-section.h"
-# include "ide-tweaks-settings.h"
-# include "ide-tweaks-switch.h"
-# include "ide-tweaks-variable.h"
-# include "ide-tweaks-widget.h"
-# include "ide-tweaks-window.h"
-#undef IDE_TWEAKS_INSIDE
+#include "ide-tweaks-widget.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TWEAKS_EXTERNAL (ide_tweaks_external_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeTweaksExternal, ide_tweaks_external, IDE, TWEAKS_EXTERNAL, IdeTweaksWidget)
+
+IDE_AVAILABLE_IN_ALL
+IdeTweaksExternal *ide_tweaks_external_new             (void);
+IDE_AVAILABLE_IN_ALL
+GType              ide_tweaks_external_get_widget_type (IdeTweaksExternal *self);
+IDE_AVAILABLE_IN_ALL
+void               ide_tweaks_external_set_widget_type (IdeTweaksExternal *self,
+                                                        GType              widget_type);
+
+G_END_DECLS

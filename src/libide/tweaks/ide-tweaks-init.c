@@ -33,6 +33,7 @@ _ide_tweaks_init (void)
   g_resources_register (ide_tweaks_get_resource ());
 
   g_type_ensure (IDE_TYPE_TWEAKS);
+  g_type_ensure (IDE_TYPE_TWEAKS_EXTERNAL);
   g_type_ensure (IDE_TYPE_TWEAKS_FACTORY);
   g_type_ensure (IDE_TYPE_TWEAKS_GROUP);
   g_type_ensure (IDE_TYPE_TWEAKS_ITEM);
