@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-01 14:47+0000\n"
-"PO-Revision-Date: 2022-08-02 14:42+0300\n"
+"POT-Creation-Date: 2022-08-11 15:29+0000\n"
+"PO-Revision-Date: 2022-08-11 22:04+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -22,7 +22,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:153
+#: src/libide/gui/ide-application-actions.c:224
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:757 src/main.c:242
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
@@ -34,7 +34,7 @@ msgid "An IDE for GNOME"
 msgstr "Середовище розробляння для GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:154
+#: src/libide/gui/ide-application-actions.c:225
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert та інші"
 
@@ -771,19 +771,19 @@ msgstr "Відкрити файл у новому робочому просто�
 #: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
 #: src/libide/gui/ide-preferences-window.c:894
-#: src/libide/tweaks/ide-tweaks-window.ui:24
+#: src/libide/tweaks/ide-tweaks-window.ui:4
 msgid "Preferences"
 msgstr "Параметри"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700
-#: src/libide/tweaks/ide-tweaks-window.ui:134
+#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:33
+#: src/libide/tweaks/ide-tweaks-window.ui:139
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
 #: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:138
+#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Довідка"
 
@@ -1310,15 +1310,15 @@ msgstr "Пошук клавіатурних скорочень"
 msgid "Show information about Builder"
 msgstr "Показати відомості щодо «Будівника»"
 
-#: src/libide/gui/ide-application-actions.c:92
+#: src/libide/gui/ide-application-actions.c:163
 msgid "Builder — Preferences"
 msgstr "Будівник – Налаштування"
 
-#: src/libide/gui/ide-application-actions.c:161
+#: src/libide/gui/ide-application-actions.c:232
 msgid "translator-credits"
 msgstr "Daniel Korostil <ted.korostiled@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:168
+#: src/libide/gui/ide-application-actions.c:239
 msgid "Funded By"
 msgstr "Фінансували"
 
@@ -1400,7 +1400,7 @@ msgstr "Не вдалося завантажити HTML. Не передбаче
 
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671
+#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:9
 #: src/plugins/buildui/gtk/menus.ui:141
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1730,7 +1730,7 @@ msgstr "Засоби автодоповнення"
 msgid "Snippets"
 msgstr "Фрагменти"
 
-#: src/libide/gui/ide-preferences-builtin.c:280
+#: src/libide/gui/ide-preferences-builtin.c:280 src/libide/gui/tweaks.ui:43
 msgid "Programming Languages"
 msgstr "Мови програмування"
 
@@ -1998,7 +1998,7 @@ msgstr "Команди"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/gui/ide-preferences-builtin.c:659
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:92
 msgid "Plugins"
 msgstr "Додатки"
 
@@ -2203,6 +2203,11 @@ msgstr "Запустити проєкт"
 msgid "Custom Font"
 msgstr "Нетиповий шрифт"
 
+#: src/libide/gui/tweaks.ui:27
+#| msgid "Editor"
+msgid "Text Editor"
+msgstr "Текстовий редактор"
+
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
 msgid "Installing %u package"
@@ -2392,19 +2397,15 @@ msgstr "(Порожньо)"
 msgid "Loading…"
 msgstr "Завантаження…"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:32
-#| msgid "Preferences"
+#: src/libide/tweaks/ide-tweaks-window.ui:36
 msgid "All Preferences"
 msgstr "Усі налаштування"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:43
-#| msgid "Preferences"
+#: src/libide/tweaks/ide-tweaks-window.ui:48
 msgid "Search Preferences"
 msgstr "Параметри пошуку"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:56
-#| msgctxt "shortcut window"
-#| msgid "Toggle primary menu"
+#: src/libide/tweaks/ide-tweaks-window.ui:61
 msgid "Primary Menu"
 msgstr "Основне меню"
 
