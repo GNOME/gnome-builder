@@ -1,5 +1,5 @@
 # Needed for ggit-push-options
-libgit2_glib_dep = dependency('libgit2-glib-1.0', version: '>= 0.28.0.1')
+libgit2_glib_dep = dependency('libgit2-glib-1.0', version: '>= 1.1.0')
 
 # Make sure libgit2/libgit2-glib were compiled with proper flags
 libgit_thread_safe_check = '''
