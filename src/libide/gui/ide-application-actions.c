@@ -26,7 +26,9 @@
 #include <glib/gi18n.h>
 
 #include <ide-build-ident.h>
+
 #include <libide-projects.h>
+#include <libide-tweaks.h>
 
 #include "ide-application.h"
 #include "ide-application-credits.h"
@@ -35,6 +37,75 @@
 #include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
 #include "ide-support-private.h"
+
+static void
+ide_application_actions_tweaks (GSimpleAction *action,
+                                GVariant      *parameter,
+                                gpointer       user_data)
+{
+  IdeApplication *self = user_data;
+  g_autoptr(GListStore) languages = NULL;
+  g_autoptr(IdeTweaks) tweaks = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) tweaks_file = NULL;
+  IdeTweaksWindow *window;
+  GtkWindow *toplevel = NULL;
+  const GList *windows;
+
+  IDE_ENTRY;
+
+  g_assert (G_IS_SIMPLE_ACTION (action));
+  g_assert (IDE_IS_APPLICATION (self));
+
+  /* Locate a toplevel for a transient-for property, or a previous
+   * tweaks window to display.
+   */
+  windows = gtk_application_get_windows (GTK_APPLICATION (self));
+  for (; windows; windows = windows->next)
+    {
+      if (IDE_IS_TWEAKS_WINDOW (windows->data))
+        {
+          gtk_window_present (windows->data);
+          return;
+        }
+
+      if (toplevel == NULL && IDE_IS_PRIMARY_WORKSPACE (windows->data))
+        toplevel = windows->data;
+    }
+
+  tweaks = ide_tweaks_new ();
+
+  /* Setup access to sourceview languages */
+  {
+    GtkSourceLanguageManager *lm = gtk_source_language_manager_get_default ();
+    const char * const *ids = gtk_source_language_manager_get_language_ids (lm);
+    const char * const *allowed = IDE_STRV_INIT ("c", "chdr", "css", "xml");
+
+    languages = g_list_store_new (GTK_SOURCE_TYPE_LANGUAGE);
+
+    for (guint i = 0; ids[i]; i++)
+      {
+        if (g_strv_contains (allowed, ids[i]))
+          g_list_store_append (languages, gtk_source_language_manager_get_language (lm, ids[i]));
+      }
+
+    ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (languages));
+  }
+
+  /* Load our base tweaks scaffolding */
+  tweaks_file = g_file_new_for_uri ("resource:///org/gnome/libide-gui/tweaks.ui");
+  ide_tweaks_load_from_file (tweaks, tweaks_file, NULL, &error);
+  g_assert_no_error (error);
+
+  /* Now display window */
+  window = g_object_new (IDE_TYPE_TWEAKS_WINDOW,
+                         "tweaks", tweaks,
+                         NULL);
+  gtk_application_add_window (GTK_APPLICATION (self), GTK_WINDOW (window));
+  gtk_window_present (GTK_WINDOW (window));
+
+  IDE_EXIT;
+}
 
 static void
 ide_application_actions_preferences (GSimpleAction *action,
@@ -385,6 +456,7 @@ static const GActionEntry IdeApplicationActions[] = {
   { "load-project", ide_application_actions_load_project, "s"},
   { "preferences", ide_application_actions_preferences },
   { "preferences-page", ide_application_actions_preferences, "s" },
+  { "tweaks", ide_application_actions_tweaks },
   { "quit", ide_application_actions_quit },
   { "help", ide_application_actions_help },
   { "dark", ide_application_actions_dark },

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child>
+      <object class="IdeTweaksSection" id="visual_section">
+        <child>
+          <object class="IdeTweaksPage" id="appearance_page">
+            <property name="icon-name">preferences-desktop-appearance-symbolic</property>
+            <property name="title" translatable="yes">Appearance</property>
+            <child>
+              <object class="IdeTweaksSettings">
+                <property name="schema-id">org.gnome.builder</property>
+                <property name="application-only">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksSettings">
+                <property name="schema-id">org.gnome.builder.editor</property>
+                <property name="application-only">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="IdeTweaksPage" id="editor_page">
+            <property name="icon-name">document-edit-symbolic</property>
+            <property name="title" translatable="yes">Text Editor</property>
+          </object>
+        </child>
+        <child>
+          <object class="IdeTweaksPage" id="shortcuts_page">
+            <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+            <property name="title" translatable="yes">Keyboard Shortcuts</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="code_section">
+        <child>
+          <object class="IdeTweaksPage" id="languages_page">
+            <property name="icon-name">text-x-javascript-symbolic</property>
+            <property name="title" translatable="yes">Programming Languages</property>
+            <child>
+              <object class="IdeTweaksFactory" id="language_page_factory">
+                <property name="model">GtkSourceLanguages</property>
+                <child>
+                  <object class="IdeTweaksPage" id="language_page">
+                    <binding name="title">
+                      <lookup name="name" type="GtkSourceLanguage">
+                        <lookup name="item">language_page_factory</lookup>
+                      </lookup>
+                    </binding>
+                    <child>
+                      <object class="IdeTweaksSettings" id="language_page_settings">
+                        <property name="schema-id">org.gnome.builder.editor.language</property>
+                        <binding name="schema-path">
+                          <closure type="gchararray" function="format">
+                            <constant type="gchararray">/org/gnome/builder/editor/languages/%s/</constant>
+                            <lookup name="id" type="GtkSourceLanguage">
+                              <lookup name="item">language_page_factory</lookup>
+                            </lookup>
+                          </closure>
+                        </binding>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="projects_section">
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="foundry_section">
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="external_section">
+      </object>
+    </child>
+    <child>
+      <object class="IdeTweaksSection" id="plugins_section">
+        <child>
+          <object class="IdeTweaksPage" id="plugins_page">
+            <property name="icon-name">builder-plugin-symbolic</property>
+            <property name="title" translatable="yes">Plugins</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
