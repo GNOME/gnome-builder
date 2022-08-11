@@ -22,6 +22,9 @@
 
 #include "config.h"
 
+#include <libpeas/peas.h>
+
+#include "ide-tweaks-addin.h"
 #include "ide-tweaks-panel-private.h"
 #include "ide-tweaks-panel-list-private.h"
 #include "ide-tweaks-window.h"
@@ -30,21 +33,22 @@ G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkStackPage, g_object_unref)
 
 struct _IdeTweaksWindow
 {
-  AdwWindow       parent_instance;
+  AdwWindow         parent_instance;
 
-  IdeTweaks      *tweaks;
+  IdeTweaks        *tweaks;
+  PeasExtensionSet *addins;
 
-  AdwLeaflet     *leaflet;
-  GtkBox         *panel_box;
-  GtkStack       *panel_stack;
-  GtkStack       *panel_list_stack;
-  GtkBox         *panel_list_box;
-  AdwWindowTitle *sidebar_title;
-  GtkSearchBar   *sidebar_search_bar;
-  GtkSearchEntry *sidebar_search_entry;
+  AdwLeaflet       *leaflet;
+  GtkBox           *panel_box;
+  GtkStack         *panel_stack;
+  GtkStack         *panel_list_stack;
+  GtkBox           *panel_list_box;
+  AdwWindowTitle   *sidebar_title;
+  GtkSearchBar     *sidebar_search_bar;
+  GtkSearchEntry   *sidebar_search_entry;
 
-  guint           can_navigate_back : 1;
-  guint           folded : 1;
+  guint             can_navigate_back : 1;
+  guint             folded : 1;
 };
 
 enum {
@@ -196,6 +200,8 @@ ide_tweaks_window_clear (IdeTweaksWindow *self)
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (IDE_IS_TWEAKS (self->tweaks));
 
+  g_clear_object (&self->addins);
+
   while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack))))
     gtk_stack_remove (self->panel_list_stack, child);
 
@@ -206,13 +212,65 @@ ide_tweaks_window_clear (IdeTweaksWindow *self)
 }
 
 static void
+ide_tweaks_window_addin_added_cb (PeasExtensionSet *set,
+                                  PeasPluginInfo   *plugin_info,
+                                  PeasExtension    *exten,
+                                  gpointer          user_data)
+{
+  IdeTweaksWindow *self = user_data;
+  IdeTweaksAddin *addin = (IdeTweaksAddin *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TWEAKS_ADDIN (addin));
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (IDE_IS_TWEAKS (self->tweaks));
+
+  ide_tweaks_addin_load (addin, self->tweaks);
+}
+
+static void
+ide_tweaks_window_addin_removed_cb (PeasExtensionSet *set,
+                                    PeasPluginInfo   *plugin_info,
+                                    PeasExtension    *exten,
+                                    gpointer          user_data)
+{
+  IdeTweaksWindow *self = user_data;
+  IdeTweaksAddin *addin = (IdeTweaksAddin *)exten;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_TWEAKS_ADDIN (addin));
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+  g_assert (IDE_IS_TWEAKS (self->tweaks));
+
+  ide_tweaks_addin_unload (addin, self->tweaks);
+}
+
+static void
 ide_tweaks_window_rebuild (IdeTweaksWindow *self)
 {
   GtkWidget *list;
 
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (IDE_IS_TWEAKS (self->tweaks));
+  g_assert (self->addins == NULL);
 
+  /* Allow addins to extend the tweaks instance */
+  self->addins = peas_extension_set_new (peas_engine_get_default (),
+                                         IDE_TYPE_TWEAKS_ADDIN,
+                                         NULL);
+  g_signal_connect (self->addins,
+                    "extension-added",
+                    G_CALLBACK (ide_tweaks_window_addin_added_cb),
+                    self);
+  g_signal_connect (self->addins,
+                    "extension-removed",
+                    G_CALLBACK (ide_tweaks_window_addin_removed_cb),
+                    self);
+  peas_extension_set_foreach (self->addins, ide_tweaks_window_addin_added_cb, self);
+
+  /* Now create our list for toplevel pages */
   list = ide_tweaks_panel_list_new (IDE_TWEAKS_ITEM (self->tweaks));
   g_signal_connect_object (list,
                            "page-activated",
@@ -223,11 +281,13 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
                        list,
                        ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));
 
+  /* Setup initial selection state */
   if (self->folded)
     ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (list), GTK_SELECTION_NONE);
   else
     ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (list));
 
+  /* Ensure action state visibility */
   ide_tweaks_window_update_actions (self);
 }
 
