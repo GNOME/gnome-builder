@@ -69,6 +69,7 @@ src/libide/gui/ide-primary-workspace.ui
 src/libide/gui/ide-run-button.c
 src/libide/gui/ide-workbench.c
 src/libide/gui/tests/test-preferences.c
+src/libide/gui/tweaks.ui
 src/libide/io/ide-pkcon-transfer.c
 src/libide/lsp/ide-lsp-client.c
 src/libide/projects/ide-project.c
