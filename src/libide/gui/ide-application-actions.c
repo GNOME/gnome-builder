@@ -79,14 +79,15 @@ ide_application_actions_tweaks (GSimpleAction *action,
   {
     GtkSourceLanguageManager *lm = gtk_source_language_manager_get_default ();
     const char * const *ids = gtk_source_language_manager_get_language_ids (lm);
-    const char * const *allowed = IDE_STRV_INIT ("c", "chdr", "css", "xml");
 
     languages = g_list_store_new (GTK_SOURCE_TYPE_LANGUAGE);
 
     for (guint i = 0; ids[i]; i++)
       {
-        if (g_strv_contains (allowed, ids[i]))
-          g_list_store_append (languages, gtk_source_language_manager_get_language (lm, ids[i]));
+        GtkSourceLanguage *l = gtk_source_language_manager_get_language (lm, ids[i]);
+
+        if (!gtk_source_language_get_hidden (l))
+          g_list_store_append (languages, l);
       }
 
     ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (languages));
