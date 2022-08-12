@@ -6,6 +6,12 @@
         <child internal-child="appearance_page">
           <object class="IdeTweaksPage">
             <child>
+              <object class="IdeTweaksSettings" id="settings_org_gnome_builder">
+                <property name="schema-id">org.gnome.builder</property>
+                <property name="application-only">true</property>
+              </object>
+            </child>
+            <child>
               <object class="IdeTweaksGroup" id="appearance_page_style_group">
                 <property name="title" translatable="yes">Style</property>
                 <child>
