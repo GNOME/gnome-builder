@@ -84,6 +84,7 @@ src/libide/terminal/ide-terminal-page.ui
 src/libide/terminal/ide-terminal-popover.ui
 src/libide/terminal/ide-terminal-search.ui
 src/libide/tree/ide-tree-node.c
+src/libide/tweaks/ide-tweaks-font.c
 src/libide/tweaks/ide-tweaks-window.ui
 src/libide/vcs/ide-directory-vcs.c
 src/libide/vcs/ide-vcs.c
