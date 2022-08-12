@@ -58,6 +58,10 @@ ide_tweaks_addin_real_load (IdeTweaksAddin *self,
   g_assert (IDE_IS_TWEAKS_ADDIN (self));
   g_assert (IDE_IS_TWEAKS (tweaks));
 
+  ide_tweaks_expose_object (tweaks,
+                            G_OBJECT_TYPE_NAME (self),
+                            G_OBJECT (self));
+
   if (priv->callbacks != NULL)
     {
       for (guint i = 0; i < priv->callbacks->len; i++)
