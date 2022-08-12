@@ -80,6 +80,8 @@ IDE_AVAILABLE_IN_ALL
 gboolean            ide_tweaks_item_is_ancestor          (IdeTweaksItem        *self,
                                                           IdeTweaksItem        *ancestor);
 IDE_AVAILABLE_IN_ALL
+IdeTweaksItem      *ide_tweaks_item_get_root             (IdeTweaksItem        *self);
+IDE_AVAILABLE_IN_ALL
 IdeTweaksItem      *ide_tweaks_item_get_parent           (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
 IdeTweaksItem      *ide_tweaks_item_get_last_child       (IdeTweaksItem        *self);

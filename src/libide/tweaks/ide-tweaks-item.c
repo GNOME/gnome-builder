@@ -802,3 +802,24 @@ ide_tweaks_item_visit_children (IdeTweaksItem        *self,
 
   return FALSE;
 }
+
+/**
+ * ide_tweaks_item_get_root:
+ * @self: a #IdeTweaksItem
+ *
+ * Gets the root #IdeTweaksItem.
+ *
+ * Returns: (transfer none): the top-most #IdeTweaksItem
+ */
+IdeTweaksItem *
+ide_tweaks_item_get_root (IdeTweaksItem *self)
+{
+  IdeTweaksItem *parent = self;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), NULL);
+
+  while (ide_tweaks_item_get_parent (parent))
+    parent = ide_tweaks_item_get_parent (parent);
+
+  return parent;
+}
