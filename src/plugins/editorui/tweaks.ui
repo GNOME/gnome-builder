@@ -26,6 +26,19 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup" id="appearance_page_font_group">
+                <property name="title" translatable="yes">Fonts &amp; Styling</property>
+                <child>
+                  <object class="IdeTweaksFont" id="editor_font">
+                    <property name="title" translatable="yes">Editor Font</property>
+                    <property name="subtitle" translatable="yes">The font used within the source code editor</property>
+                    <property name="settings">settings_org_gnome_builder_editor</property>
+                    <property name="key">font-name</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
