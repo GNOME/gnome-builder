@@ -23,6 +23,9 @@
 #include "config.h"
 
 #include <libide-gui.h>
+#include <libide-sourceview.h>
+
+#include "ide-source-view-private.h"
 
 #include "gbp-editorui-preview.h"
 
@@ -30,6 +33,7 @@ struct _GbpEditoruiPreview
 {
   GtkSourceView parent_instance;
   GSettings *editor_settings;
+  GtkCssProvider *css_provider;
 };
 
 G_DEFINE_TYPE (GbpEditoruiPreview, gbp_editorui_preview, GTK_SOURCE_TYPE_VIEW)
@@ -84,27 +88,67 @@ notify_style_scheme_cb (GbpEditoruiPreview *self,
   IDE_EXIT;
 }
 
-static gboolean
-show_grid_lines_to_bg (GValue   *value,
-                       GVariant *variant,
-                       gpointer  user_data)
+static void
+gbp_editorui_preview_settings_changed_cb (GbpEditoruiPreview *self,
+                                          const char         *key,
+                                          GSettings          *settings)
 {
-  if (g_variant_get_boolean (variant))
-    g_value_set_enum (value, GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID);
-  else
-    g_value_set_enum (value, GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
-  return TRUE;
+  GtkSourceBuffer *buffer;
+  gboolean update_css = FALSE;
+
+  g_assert (GBP_IS_EDITORUI_PREVIEW (self));
+  g_assert (G_IS_SETTINGS (settings));
+
+  buffer = GTK_SOURCE_BUFFER (gtk_text_view_get_buffer (GTK_TEXT_VIEW (self)));
+
+  if (!key || ide_str_equal0 (key, "show-grid-lines"))
+    gtk_source_view_set_background_pattern (GTK_SOURCE_VIEW (self),
+                                            g_settings_get_boolean (settings, "show-grid-lines") ?
+                                              GTK_SOURCE_BACKGROUND_PATTERN_TYPE_GRID :
+                                              GTK_SOURCE_BACKGROUND_PATTERN_TYPE_NONE);
+
+  if (!key || ide_str_equal0 (key, "highlight-current-line"))
+    gtk_source_view_set_highlight_current_line (GTK_SOURCE_VIEW (self),
+                                                g_settings_get_boolean (settings, "highlight-current-line"));
+
+  if (!key || ide_str_equal0 (key, "highlight-matching-brackets"))
+    gtk_source_buffer_set_highlight_matching_brackets (buffer,
+                                                       g_settings_get_boolean (settings, "highlight-matching-brackets"));
+
+  if (!key || ide_str_equal0 (key, "show-line-numbers"))
+    gtk_source_view_set_show_line_numbers (GTK_SOURCE_VIEW (self),
+                                           g_settings_get_boolean (settings, "show-line-numbers"));
+
+  if (!key || ide_str_equal0 (key, "line-height"))
+    update_css = TRUE;
+
+  if (!key || ide_str_equal0 (key, "font-name"))
+    update_css = TRUE;
+
+  if (update_css)
+    {
+      g_autofree char *css = NULL;
+      g_autofree char *font_name = NULL;
+      PangoFontDescription *font_desc;
+      double line_height;
+
+      line_height = g_settings_get_double (settings, "line-height");
+      font_name = g_settings_get_string (settings, "font-name");
+      font_desc = pango_font_description_from_string (font_name);
+
+      if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), font_desc, 1, line_height)))
+        gtk_css_provider_load_from_data (self->css_provider, css, -1);
+
+      g_clear_pointer (&font_desc, pango_font_description_free);
+    }
 }
 
 static void
 gbp_editorui_preview_constructed (GObject *object)
 {
   GbpEditoruiPreview *self = (GbpEditoruiPreview *)object;
-  GtkTextBuffer *buffer;
 
   G_OBJECT_CLASS (gbp_editorui_preview_parent_class)->constructed (object);
-
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
 
   g_signal_connect_object (IDE_APPLICATION_DEFAULT,
                            "notify::style-scheme",
@@ -114,19 +158,7 @@ gbp_editorui_preview_constructed (GObject *object)
 
   notify_style_scheme_cb (self, NULL, IDE_APPLICATION_DEFAULT);
 
-  g_settings_bind_with_mapping (self->editor_settings,
-                                "show-grid-lines", self, "background-pattern",
-                                G_SETTINGS_BIND_GET,
-                                show_grid_lines_to_bg, NULL, NULL, NULL);
-  g_settings_bind (self->editor_settings,
-                   "highlight-current-line", self, "highlight-current-line",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (self->editor_settings,
-                   "highlight-matching-brackets", buffer, "highlight-matching-brackets",
-                   G_SETTINGS_BIND_GET);
-  g_settings_bind (self->editor_settings,
-                   "show-line-numbers", self, "show-line-numbers",
-                   G_SETTINGS_BIND_GET);
+  gbp_editorui_preview_settings_changed_cb (self, NULL, self->editor_settings);
 
   gbp_editorui_preview_load_text (self);
 }
@@ -136,6 +168,7 @@ gbp_editorui_preview_dispose (GObject *object)
 {
   GbpEditoruiPreview *self = (GbpEditoruiPreview *)object;
 
+  g_clear_object (&self->css_provider);
   g_clear_object (&self->editor_settings);
 
   G_OBJECT_CLASS (gbp_editorui_preview_parent_class)->dispose (object);
@@ -153,7 +186,21 @@ gbp_editorui_preview_class_init (GbpEditoruiPreviewClass *klass)
 static void
 gbp_editorui_preview_init (GbpEditoruiPreview *self)
 {
+  static const char *keys[] = {
+    "font-name",
+    "highlight-current-line",
+    "highlight-matching-brackets",
+    "line-height",
+    "show-grid-lines",
+    "show-line-numbers",
+  };
+
   self->editor_settings = g_settings_new ("org.gnome.builder.editor");
+
+  self->css_provider = gtk_css_provider_new ();
+  gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (self)),
+                                  GTK_STYLE_PROVIDER (self->css_provider),
+                                  G_MAXINT);
 
   gtk_text_view_set_monospace (GTK_TEXT_VIEW (self), TRUE);
   gtk_source_view_set_show_line_numbers (GTK_SOURCE_VIEW (self), TRUE);
@@ -164,6 +211,16 @@ gbp_editorui_preview_init (GbpEditoruiPreview *self)
                 "bottom-margin", 6,
                 "right-margin", 6,
                 NULL);
+
+  g_signal_connect_object (self->editor_settings,
+                           "changed",
+                           G_CALLBACK (gbp_editorui_preview_settings_changed_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Fetch the key to ensure that changed::key is emitted */
+  for (guint i = 0; i < G_N_ELEMENTS (keys); i++)
+    g_variant_unref (g_settings_get_value (self->editor_settings, keys[i]));
 }
 
 GtkWidget *
