@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-07-31 05:41+0000\n"
-"PO-Revision-Date: 2022-07-31 11:02+0200\n"
+"POT-Creation-Date: 2022-08-12 02:25+0000\n"
+"PO-Revision-Date: 2022-08-12 05:45+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -21,7 +21,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:153
+#: src/libide/gui/ide-application-actions.c:225
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:757 src/main.c:242
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
@@ -33,7 +33,7 @@ msgid "An IDE for GNOME"
 msgstr "პროგრამისტის სამუშაო გარემო GNOME-სთვის"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:154
+#: src/libide/gui/ide-application-actions.c:226
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert და სხვ."
 
@@ -708,17 +708,19 @@ msgstr ""
 #: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
 #: src/libide/gui/ide-preferences-window.c:894
+#: src/libide/tweaks/ide-tweaks-window.ui:4
 msgid "Preferences"
 msgstr "მორგება"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700
+#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:33
+#: src/libide/tweaks/ide-tweaks-window.ui:139
 msgid "Keyboard Shortcuts"
 msgstr "კლავიატურის მალსახმობები"
 
 #: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40
+#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "დახმარება"
 
@@ -1204,7 +1206,7 @@ msgstr "%u %u-დან"
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
 #: src/libide/gui/ide-preferences-builtin.c:694
 msgid "Search"
-msgstr ""
+msgstr "ძებნა"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:394
@@ -1236,15 +1238,15 @@ msgstr ""
 msgid "Show information about Builder"
 msgstr ""
 
-#: src/libide/gui/ide-application-actions.c:92
+#: src/libide/gui/ide-application-actions.c:164
 msgid "Builder — Preferences"
 msgstr "Builder — მორგება"
 
-#: src/libide/gui/ide-application-actions.c:161
+#: src/libide/gui/ide-application-actions.c:233
 msgid "translator-credits"
 msgstr "თარგმანი-შესრულებულია"
 
-#: src/libide/gui/ide-application-actions.c:168
+#: src/libide/gui/ide-application-actions.c:240
 msgid "Funded By"
 msgstr "დაფინანსებულია"
 
@@ -1292,7 +1294,7 @@ msgstr ""
 
 #: src/libide/gui/ide-frame.ui:26
 msgid "Ctrl+Enter"
-msgstr ""
+msgstr "Ctrl+Enter"
 
 #: src/libide/gui/ide-frame.ui:36
 msgid "Project Sidebar"
@@ -1324,7 +1326,7 @@ msgstr "HTML-ის ჩატვირთვის შეცდომა. WebKit
 
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671
+#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:9
 #: src/plugins/buildui/gtk/menus.ui:141
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1493,7 +1495,7 @@ msgstr "ყოველთვის"
 
 #: src/libide/gui/ide-preferences-builtin.c:187
 msgid "Line Information"
-msgstr ""
+msgstr "ხაზის ინფორმაცია"
 
 #: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Line numbers"
@@ -1648,7 +1650,7 @@ msgstr ""
 msgid "Snippets"
 msgstr "ფრაგმენტები"
 
-#: src/libide/gui/ide-preferences-builtin.c:280
+#: src/libide/gui/ide-preferences-builtin.c:280 src/libide/gui/tweaks.ui:43
 msgid "Programming Languages"
 msgstr ""
 
@@ -1913,7 +1915,7 @@ msgstr "ბრძანებები"
 msgid "SDKs"
 msgstr ""
 
-#: src/libide/gui/ide-preferences-builtin.c:659
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:92
 msgid "Plugins"
 msgstr "დამატებები"
 
@@ -2099,7 +2101,7 @@ msgstr ""
 
 #: src/libide/gui/ide-run-button.c:68
 msgid "Stop Running Project"
-msgstr "გაშვებული ტესტების გაჩერება"
+msgstr "გაშვებული პროექტის შეჩერება"
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
@@ -2112,6 +2114,10 @@ msgstr ""
 #: src/libide/gui/tests/test-preferences.c:218
 msgid "Custom Font"
 msgstr "ხელით მითითებული ფონტი"
+
+#: src/libide/gui/tweaks.ui:27
+msgid "Text Editor"
+msgstr "ტექსტური რედაქტორი"
 
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
@@ -2292,6 +2298,18 @@ msgstr "(ცარიელი)"
 #: src/libide/tree/ide-tree-node.c:1468
 msgid "Loading…"
 msgstr "იტვირთება…"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:36
+msgid "All Preferences"
+msgstr "ყველა პარამეტრი"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:48
+msgid "Search Preferences"
+msgstr "ძებნის პარამეტრები"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:61
+msgid "Primary Menu"
+msgstr "ძირითადი მენიუს"
 
 #: src/libide/vcs/ide-directory-vcs.c:57
 msgid "unversioned"
@@ -2612,7 +2630,7 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-log-pane.c:327
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
-msgstr ""
+msgstr "შ_ეინახე"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:359
 msgid "Build Output"
@@ -2777,6 +2795,14 @@ msgstr ""
 msgid "This selection allows Builder to choose the best candidate."
 msgstr ""
 
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+msgid "Stop Building Project"
+msgstr "პროექტის აგების შეჩერება"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+msgid "Build Project (Shift+Ctrl+Alt+B)"
+msgstr ""
+
 #: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:48
 msgid "_Build"
 msgstr "აგება"
@@ -2872,10 +2898,6 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:105
 msgid "Display panel containing the build log"
-msgstr ""
-
-#: src/plugins/buildui/gtk/menus.ui:111
-msgid "manage-sdks"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:112
@@ -3297,7 +3319,7 @@ msgstr "H"
 
 #: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:216
 msgid "S"
-msgstr ""
+msgstr "S"
 
 #: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:226
 msgid "V"
@@ -3309,7 +3331,7 @@ msgstr "L*"
 
 #: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:332
 msgid "a*"
-msgstr ""
+msgstr "a*"
 
 #: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:342
 msgid "b*"
@@ -5598,7 +5620,7 @@ msgstr ""
 
 #: src/plugins/valgrind/gtk/menus.ui:58
 msgid "Indirect"
-msgstr ""
+msgstr "არაპირდაპირი"
 
 #: src/plugins/valgrind/gtk/menus.ui:63
 msgid "Possible"
@@ -5698,10 +5720,6 @@ msgstr ""
 #~ msgctxt "shortcut window"
 #~ msgid "Show help"
 #~ msgstr "დახმარების ჩვენება"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Toggle primary menu"
-#~ msgstr "ძირითადი მენიუს ჩართ/გამორთ"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Global Search"
