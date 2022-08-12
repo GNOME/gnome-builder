@@ -24,11 +24,36 @@
 
 #include "ide-tweaks-widget-private.h"
 
-G_DEFINE_ABSTRACT_TYPE (IdeTweaksWidget, ide_tweaks_widget, IDE_TYPE_TWEAKS_ITEM)
+G_DEFINE_TYPE (IdeTweaksWidget, ide_tweaks_widget, IDE_TYPE_TWEAKS_ITEM)
+
+enum {
+  CREATE,
+  N_SIGNALS
+};
+
+static guint signals[N_SIGNALS];
 
 static void
 ide_tweaks_widget_class_init (IdeTweaksWidgetClass *klass)
 {
+  /**
+   * IdeTweaksWidget::create:
+   *
+   * Creates a new #GtkWidget that can be inserted into the #IdeTweaksWindow
+   * representing the item.
+   *
+   * Only the first signal handler is used.
+   *
+   * Returns: (transfer full) (nullable): a #GtkWidget or %NULL
+   */
+  signals [CREATE] =
+    g_signal_new ("create",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeTweaksWidgetClass, create),
+                  g_signal_accumulator_first_wins, NULL,
+                  NULL,
+                  GTK_TYPE_WIDGET, 0);
 }
 
 static void
@@ -39,7 +64,13 @@ ide_tweaks_widget_init (IdeTweaksWidget *self)
 GtkWidget *
 _ide_tweaks_widget_create (IdeTweaksWidget *self)
 {
+  GtkWidget *ret = NULL;
+
   g_return_val_if_fail (IDE_IS_TWEAKS_WIDGET (self), NULL);
 
-  return IDE_TWEAKS_WIDGET_GET_CLASS (self)->create (self);
+  g_signal_emit (self, signals [CREATE], 0, &ret);
+
+  g_return_val_if_fail (!ret || GTK_IS_WIDGET (ret), NULL);
+
+  return ret;
 }

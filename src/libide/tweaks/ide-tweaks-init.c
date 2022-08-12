@@ -34,7 +34,6 @@ _ide_tweaks_init (void)
 
   g_type_ensure (IDE_TYPE_TWEAKS);
   g_type_ensure (IDE_TYPE_TWEAKS_ADDIN);
-  g_type_ensure (IDE_TYPE_TWEAKS_EXTERNAL);
   g_type_ensure (IDE_TYPE_TWEAKS_FACTORY);
   g_type_ensure (IDE_TYPE_TWEAKS_GROUP);
   g_type_ensure (IDE_TYPE_TWEAKS_ITEM);
