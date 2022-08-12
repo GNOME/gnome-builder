@@ -30,9 +30,11 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TWEAKS_ADDIN (ide_tweaks_addin_get_type())
 
-#define ide_tweaks_addin_define_callback(instance, callback)      \
-  G_STMT_START {                                                  \
-    ide_tweaks_addin_add_callback(instance, #callback, callback); \
+#define ide_tweaks_addin_bind_callback(instance, callback) \
+  G_STMT_START {                                           \
+    ide_tweaks_addin_add_callback(instance,                \
+                                  #callback,               \
+                                  G_CALLBACK (callback));  \
   } G_STMT_END
 
 IDE_AVAILABLE_IN_ALL
