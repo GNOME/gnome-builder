@@ -84,11 +84,16 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
   else if (IDE_IS_TWEAKS_GROUP (item))
     {
       IdeTweaksGroup *group = IDE_TWEAKS_GROUP (item);
+      g_autofree char *title_escaped = NULL;
+      const char *title;
+
+      if ((title = ide_tweaks_group_get_title (group)))
+        title_escaped = g_markup_escape_text (title, -1);
 
       self->current_list = NULL;
       self->current_list_has_non_rows = FALSE;
       self->current_group = g_object_new (ADW_TYPE_PREFERENCES_GROUP,
-                            "title", ide_tweaks_group_get_title (group),
+                            "title", title_escaped,
                             NULL);
       adw_preferences_page_add (self->prefs_page, self->current_group);
 
