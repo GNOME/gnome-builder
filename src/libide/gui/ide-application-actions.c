@@ -44,7 +44,6 @@ ide_application_actions_tweaks (GSimpleAction *action,
                                 gpointer       user_data)
 {
   IdeApplication *self = user_data;
-  g_autoptr(GListStore) languages = NULL;
   g_autoptr(IdeTweaks) tweaks = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) tweaks_file = NULL;
