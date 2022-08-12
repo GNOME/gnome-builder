@@ -43,7 +43,6 @@
     <file compressed="true">resources/src/Cargo.lock</file>
     <file compressed="true">resources/src/Cargo-gtk4.toml</file>
     <file compressed="true">resources/src/Cargo-cli.toml</file>
-    <file compressed="true">resources/build-aux/cargo.sh</file>
     <file compressed="true">resources/meson.build</file>
     <file compressed="true">resources/src/meson-cli.build</file>
     <file compressed="true">resources/src/meson-py-cli.build</file>

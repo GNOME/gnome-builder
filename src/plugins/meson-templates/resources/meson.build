@@ -93,12 +93,6 @@ foreach arg: test_c_args
 endforeach
 add_project_arguments(project_c_args, language: 'c')
 {{end}}
-{{if language == "rust"}}
-cargo_sources = files(
-  'Cargo.toml',
-  'Cargo.lock',
-)
-{{end}}
 
 {{if enable_gnome}}
 subdir('data')

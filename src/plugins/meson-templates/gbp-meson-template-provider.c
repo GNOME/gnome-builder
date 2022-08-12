@@ -93,7 +93,6 @@ static GbpMesonTemplateExpansion gtk4_expansions[] = {
   { "src/window-gtk4.ui", "src/window.ui", IDE_STRV_INIT ("Python") },
 
   /* Rust */
-  { "build-aux/cargo.sh", "build-aux/cargo.sh", IDE_STRV_INIT ("Rust") },
   { "src/Cargo-gtk4.toml", "Cargo.toml", IDE_STRV_INIT ("Rust") },
   { "src/Cargo.lock", "Cargo.lock", IDE_STRV_INIT ("Rust") },
   { "src/application-gtk4.rs", "src/application.rs", IDE_STRV_INIT ("Rust") },
@@ -149,7 +148,6 @@ static GbpMesonTemplateExpansion cli_expansions[] = {
   { "src/Cargo.lock", "Cargo.lock", IDE_STRV_INIT ("Rust") },
   { "src/Cargo-cli.toml", "Cargo.toml", IDE_STRV_INIT ("Rust") },
   { "src/main-cli.rs", "src/main.rs", IDE_STRV_INIT ("Rust") },
-  { "build-aux/cargo.sh", "build-aux/cargo.sh", IDE_STRV_INIT ("Rust") },
 
   /* Vala */
   { "src/meson-cli.build", "src/meson.build", IDE_STRV_INIT ("Vala") },
