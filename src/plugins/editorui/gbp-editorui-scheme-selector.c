@@ -42,8 +42,6 @@ enum {
 
 G_DEFINE_FINAL_TYPE (GbpEditoruiSchemeSelector, gbp_editorui_scheme_selector, GTK_TYPE_WIDGET)
 
-static GParamSpec *properties [N_PROPS];
-
 typedef struct
 {
   const char           *id;
@@ -224,36 +222,6 @@ gbp_editorui_scheme_selector_dispose (GObject *object)
 }
 
 static void
-gbp_editorui_scheme_selector_get_property (GObject    *object,
-                                           guint       prop_id,
-                                           GValue     *value,
-                                           GParamSpec *pspec)
-{
-  GbpEditoruiSchemeSelector *self = GBP_EDITORUI_SCHEME_SELECTOR (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
-gbp_editorui_scheme_selector_set_property (GObject      *object,
-                                           guint         prop_id,
-                                           const GValue *value,
-                                           GParamSpec   *pspec)
-{
-  GbpEditoruiSchemeSelector *self = GBP_EDITORUI_SCHEME_SELECTOR (object);
-
-  switch (prop_id)
-    {
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-    }
-}
-
-static void
 gbp_editorui_scheme_selector_class_init (GbpEditoruiSchemeSelectorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -261,8 +229,6 @@ gbp_editorui_scheme_selector_class_init (GbpEditoruiSchemeSelectorClass *klass)
 
   object_class->constructed = gbp_editorui_scheme_selector_constructed;
   object_class->dispose = gbp_editorui_scheme_selector_dispose;
-  object_class->get_property = gbp_editorui_scheme_selector_get_property;
-  object_class->set_property = gbp_editorui_scheme_selector_set_property;
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/editorui/gbp-editorui-scheme-selector.ui");
