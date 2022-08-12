@@ -24,6 +24,7 @@
 # include "ide-tweaks.h"
 # include "ide-tweaks-addin.h"
 # include "ide-tweaks-factory.h"
+# include "ide-tweaks-font.h"
 # include "ide-tweaks-group.h"
 # include "ide-tweaks-item.h"
 # include "ide-tweaks-page.h"
