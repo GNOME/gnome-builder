@@ -221,6 +221,9 @@ ide_tweaks_settings_set_application_only (IdeTweaksSettings *self,
  *
  * Creates an action group containing the settings.
  *
+ * Some effort is taken to return an existing instance of the
+ * action group so that they are not needlessly created.
+ *
  * Returns: (transfer full) (nullable): a #GActionGroup if successful;
  *   otherwise %NULL if not enough information is available.
  */
@@ -228,12 +231,28 @@ GActionGroup *
 ide_tweaks_settings_create_action_group (IdeTweaksSettings *self,
                                          const char        *project_id)
 {
+  IdeTweaksItem *root;
+  GActionGroup *cached;
   IdeSettings *settings;
+  g_autofree char *hash_key = NULL;
 
   g_return_val_if_fail (IDE_IS_TWEAKS_SETTINGS (self), NULL);
 
   if (self->schema_id == NULL)
     return NULL;
+
+  hash_key = g_strdup_printf ("IdeSettings<%s|%s|%s>",
+                              self->schema_id,
+                              self->schema_path ? self->schema_path : (project_id ? project_id : "__app__"),
+                              self->application_only ? "app" : "project");
+
+  root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self));
+
+  if ((cached = g_object_get_data (G_OBJECT (root), hash_key)))
+    {
+      g_assert (G_IS_ACTION_GROUP (cached));
+      return g_object_ref (cached);
+    }
 
   if (self->schema_path == NULL)
     settings = ide_settings_new (project_id, self->schema_id);
@@ -241,6 +260,11 @@ ide_tweaks_settings_create_action_group (IdeTweaksSettings *self,
     settings = ide_settings_new_with_path (NULL, self->schema_id, self->schema_path);
   else
     settings = ide_settings_new_with_path (project_id, self->schema_id, self->schema_path);
+
+  g_object_set_data_full (G_OBJECT (root),
+                          hash_key,
+                          g_object_ref (settings),
+                          g_object_unref);
 
   return G_ACTION_GROUP (settings);
 }
