@@ -22,7 +22,10 @@
 
 #include "config.h"
 
+#include <libide-gui.h>
+
 #include "gbp-editorui-preview.h"
+#include "gbp-editorui-scheme-selector.h"
 #include "gbp-editorui-tweaks-addin.h"
 
 struct _GbpEditoruiTweaksAddin
@@ -33,26 +36,34 @@ struct _GbpEditoruiTweaksAddin
 G_DEFINE_FINAL_TYPE (GbpEditoruiTweaksAddin, gbp_editorui_tweaks_addin, IDE_TYPE_TWEAKS_ADDIN)
 
 static GtkWidget *
-editorui_create_style_scheme_selector (GbpEditoruiTweaksAddin *self,
-                                       IdeTweaksWidget        *widget)
+editorui_create_style_scheme_preview (GbpEditoruiTweaksAddin *self,
+                                      IdeTweaksWidget        *widget)
 {
-  GbpEditoruiPreview *preview;
-  GtkBox *box;
-
   g_assert (GBP_IS_EDITORUI_TWEAKS_ADDIN (self));
   g_assert (IDE_IS_TWEAKS_WIDGET (widget));
 
-  box = g_object_new (GTK_TYPE_BOX,
-                      "orientation", GTK_ORIENTATION_VERTICAL,
-                      "spacing", 12,
-                      "margin-bottom", 12,
-                      NULL);
-  preview = g_object_new (GBP_TYPE_EDITORUI_PREVIEW,
-                          "css-classes", IDE_STRV_INIT ("card"),
-                          NULL);
-  gtk_box_append (box, GTK_WIDGET (preview));
+  return g_object_new (GBP_TYPE_EDITORUI_PREVIEW,
+                       "bottom-margin", 8,
+                       "css-classes", IDE_STRV_INIT ("card"),
+                       "cursor-visible", FALSE,
+                       "left-margin", 12,
+                       "monospace", TRUE,
+                       "right-margin", 12,
+                       "right-margin-position", 30,
+                       "top-margin", 8,
+                       NULL);
+}
 
-  return GTK_WIDGET (box);
+static GtkWidget *
+editorui_create_style_scheme_selector (GbpEditoruiTweaksAddin *self,
+                                       IdeTweaksWidget        *widget)
+{
+  g_assert (GBP_IS_EDITORUI_TWEAKS_ADDIN (self));
+  g_assert (IDE_IS_TWEAKS_WIDGET (widget));
+
+  return g_object_new (GBP_TYPE_EDITORUI_SCHEME_SELECTOR,
+                       "margin-top", 18,
+                       NULL);
 }
 
 static void
@@ -65,6 +76,8 @@ gbp_editorui_tweaks_addin_init (GbpEditoruiTweaksAddin *self)
 {
   ide_tweaks_addin_set_resource_path (IDE_TWEAKS_ADDIN (self),
                                       "/plugins/editorui/tweaks.ui");
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),
+                                  editorui_create_style_scheme_preview);
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),
                                   editorui_create_style_scheme_selector);
 }

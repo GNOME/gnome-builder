@@ -9,6 +9,11 @@
               <object class="IdeTweaksGroup" id="appearance_page_color_group">
                 <property name="title" translatable="yes">Color</property>
                 <child>
+                  <object class="IdeTweaksWidget" id="style_scheme_preview">
+                    <signal name="create" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
+                  </object>
+                </child>
+                <child>
                   <object class="IdeTweaksWidget" id="style_scheme_selector">
                     <signal name="create" handler="editorui_create_style_scheme_selector" object="GbpEditoruiTweaksAddin" swapped="true"/>
                   </object>

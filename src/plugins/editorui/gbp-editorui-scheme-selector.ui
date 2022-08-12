@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpEditoruiSchemeSelector" parent="GtkWidget">
+    <child>
+      <object class="GtkFlowBox" id="flow_box">
+        <signal name="child-activated" handler="style_scheme_activated_cb" swapped="true" object="GbpEditoruiSchemeSelector"/>
+        <property name="hexpand">true</property>
+        <property name="column-spacing">8</property>
+        <property name="row-spacing">8</property>
+        <property name="max-children-per-line">4</property>
+        <property name="max-children-per-line">4</property>
+        <property name="selection-mode">none</property>
+      </object>
+    </child>
+  </template>
+  <object class="GSettings" id="settings">
+    <property name="schema-id">org.gnome.builder.editor</property>
+    <signal name="changed::style-scheme-name" handler="update_style_scheme_selection" object="flow_box" swapped="true"/>
+  </object>
+</interface>
