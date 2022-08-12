@@ -236,6 +236,7 @@ src/plugins/notification/ide-notification-addin.c
 src/plugins/npm/gbp-npm-pipeline-addin.c
 src/plugins/open-with-external/gtk/menus.ui
 src/plugins/phpize/gbp-phpize-pipeline-addin.c
+src/plugins/platformui/gbp-platformui-tweaks-addin.c
 src/plugins/podman/gbp-podman-runtime.c
 src/plugins/project-tree/gbp-new-file-popover.c
 src/plugins/project-tree/gbp-new-file-popover.ui

@@ -1,0 +1,10 @@
+.IdeTweaksWindow list.boxed-list.style-variant button {
+  padding: 0;
+  margin: 0;
+  border: 3px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+}
+.IdeTweaksWindow list.boxed-list.style-variant button:checked {
+  border-color: @theme_selected_bg_color;
+}
