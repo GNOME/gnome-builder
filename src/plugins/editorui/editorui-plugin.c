@@ -28,6 +28,7 @@
 
 #include "gbp-editorui-application-addin.h"
 #include "gbp-editorui-preferences-addin.h"
+#include "gbp-editorui-tweaks-addin.h"
 #include "gbp-editorui-workbench-addin.h"
 #include "gbp-editorui-workspace-addin.h"
 #include "gbp-editorui-resources.h"
@@ -43,6 +44,9 @@ _gbp_editorui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               GBP_TYPE_EDITORUI_PREFERENCES_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_EDITORUI_TWEAKS_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_EDITORUI_WORKBENCH_ADDIN);
