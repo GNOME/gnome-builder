@@ -20,6 +20,10 @@
 
 #pragma once
 
+#if !defined (IDE_TWEAKS_INSIDE) && !defined (IDE_TWEAKS_COMPILATION)
+# error "Only <libide-tweaks.h> can be included directly."
+#endif
+
 #include <gtk/gtk.h>
 
 #include "ide-tweaks-item.h"
