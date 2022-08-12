@@ -395,6 +395,32 @@ ide_layered_settings_append (IdeLayeredSettings *self,
   ide_layered_settings_update_cache (self);
 }
 
+static gboolean
+get_inverted_boolean (GValue   *value,
+                      GVariant *variant,
+                      gpointer  user_data)
+{
+  if (g_variant_is_of_type (variant, G_VARIANT_TYPE_BOOLEAN))
+    {
+      g_value_set_boolean (value, !g_variant_get_boolean (variant));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static GVariant *
+set_inverted_boolean (const GValue       *value,
+                      const GVariantType *type,
+                      gpointer            user_data)
+{
+  if (G_VALUE_HOLDS (value, G_TYPE_BOOLEAN) &&
+      g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
+    return g_variant_new_boolean (!g_value_get_boolean (value));
+
+  return NULL;
+}
+
 void
 ide_layered_settings_bind (IdeLayeredSettings *self,
                            const char         *key,
@@ -402,13 +428,23 @@ ide_layered_settings_bind (IdeLayeredSettings *self,
                            const char         *property,
                            GSettingsBindFlags  flags)
 {
+  GSettingsBindGetMapping get_mapping = NULL;
+  GSettingsBindSetMapping set_mapping = NULL;
+
   g_return_if_fail (IDE_IS_LAYERED_SETTINGS (self));
   g_return_if_fail (key != NULL);
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
 
+  if (flags & G_SETTINGS_BIND_INVERT_BOOLEAN)
+    {
+      flags &= ~G_SETTINGS_BIND_INVERT_BOOLEAN;
+      get_mapping = get_inverted_boolean;
+      set_mapping = set_inverted_boolean;
+    }
+
   ide_layered_settings_bind_with_mapping (self, key, object, property, flags,
-                                           NULL, NULL, NULL, NULL);
+                                          get_mapping, set_mapping, NULL, NULL);
 }
 
 /**
