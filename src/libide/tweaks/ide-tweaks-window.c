@@ -27,6 +27,7 @@
 #include "ide-tweaks-addin.h"
 #include "ide-tweaks-panel-private.h"
 #include "ide-tweaks-panel-list-private.h"
+#include "ide-tweaks-settings.h"
 #include "ide-tweaks-window.h"
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GtkStackPage, g_object_unref)
@@ -37,6 +38,7 @@ struct _IdeTweaksWindow
 
   IdeTweaks        *tweaks;
   PeasExtensionSet *addins;
+  IdeActionMuxer   *muxer;
 
   AdwLeaflet       *leaflet;
   GtkBox           *panel_box;
@@ -432,6 +434,13 @@ ide_tweaks_window_dispose (GObject *object)
 {
   IdeTweaksWindow *self = (IdeTweaksWindow *)object;
 
+  if (self->muxer != NULL)
+    {
+      gtk_widget_insert_action_group (GTK_WIDGET (self), "settings", NULL);
+      ide_action_muxer_remove_all (self->muxer);
+      g_clear_object (&self->muxer);
+    }
+
   if (self->tweaks)
     {
       ide_tweaks_window_clear (self);
@@ -543,6 +552,11 @@ ide_tweaks_window_init (IdeTweaksWindow *self)
   gtk_widget_init_template (GTK_WIDGET (self));
 
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "navigation.back", FALSE);
+
+  self->muxer = ide_action_muxer_new ();
+  gtk_widget_insert_action_group (GTK_WIDGET (self),
+                                  "settings",
+                                  G_ACTION_GROUP (self->muxer));
 }
 
 GtkWidget *
@@ -587,12 +601,35 @@ ide_tweaks_window_set_tweaks (IdeTweaksWindow *self,
   if (self->tweaks != NULL)
     {
       ide_tweaks_window_clear (self);
+      ide_action_muxer_remove_all (self->muxer);
       g_clear_object (&self->tweaks);
     }
 
   if (tweaks != NULL)
     {
+      const char *project_id = ide_tweaks_get_project_id (tweaks);
+
       g_set_object (&self->tweaks, tweaks);
+
+      for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (tweaks));
+           child != NULL;
+           child = ide_tweaks_item_get_next_sibling (child))
+        {
+          if (IDE_IS_TWEAKS_SETTINGS (child))
+            {
+              IdeTweaksSettings *settings = IDE_TWEAKS_SETTINGS (child);
+              const char *schema_id = ide_tweaks_settings_get_schema_id (settings);
+              GActionGroup *group;
+
+              if (schema_id == NULL)
+                continue;
+
+              group = ide_tweaks_settings_create_action_group (settings, project_id);
+              ide_action_muxer_insert_action_group (self->muxer, schema_id, group);
+              g_clear_object (&group);
+            }
+        }
+
       ide_tweaks_window_rebuild (self);
     }
 
