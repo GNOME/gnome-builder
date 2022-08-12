@@ -25,39 +25,6 @@
     </child>
     <child>
       <object class="IdeTweaksSection" id="code_section">
-        <child>
-          <object class="IdeTweaksPage" id="languages_page">
-            <property name="icon-name">text-x-javascript-symbolic</property>
-            <property name="title" translatable="yes">Programming Languages</property>
-            <child>
-              <object class="IdeTweaksFactory" id="language_page_factory">
-                <property name="model">GtkSourceLanguages</property>
-                <child>
-                  <object class="IdeTweaksPage" id="language_page">
-                    <binding name="title">
-                      <lookup name="name" type="GtkSourceLanguage">
-                        <lookup name="item">language_page_factory</lookup>
-                      </lookup>
-                    </binding>
-                    <child>
-                      <object class="IdeTweaksSettings" id="language_page_settings">
-                        <property name="schema-id">org.gnome.builder.editor.language</property>
-                        <binding name="schema-path">
-                          <closure type="gchararray" function="format">
-                            <constant type="gchararray">/org/gnome/builder/editor/languages/%s/</constant>
-                            <lookup name="id" type="GtkSourceLanguage">
-                              <lookup name="item">language_page_factory</lookup>
-                            </lookup>
-                          </closure>
-                        </binding>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
       </object>
     </child>
     <child>

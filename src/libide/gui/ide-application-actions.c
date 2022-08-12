@@ -75,24 +75,6 @@ ide_application_actions_tweaks (GSimpleAction *action,
 
   tweaks = ide_tweaks_new ();
 
-  /* Setup access to sourceview languages */
-  {
-    GtkSourceLanguageManager *lm = gtk_source_language_manager_get_default ();
-    const char * const *ids = gtk_source_language_manager_get_language_ids (lm);
-
-    languages = g_list_store_new (GTK_SOURCE_TYPE_LANGUAGE);
-
-    for (guint i = 0; ids[i]; i++)
-      {
-        GtkSourceLanguage *l = gtk_source_language_manager_get_language (lm, ids[i]);
-
-        if (!gtk_source_language_get_hidden (l))
-          g_list_store_append (languages, l);
-      }
-
-    ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (languages));
-  }
-
   /* Load our base tweaks scaffolding */
   tweaks_file = g_file_new_for_uri ("resource:///org/gnome/libide-gui/tweaks.ui");
   ide_tweaks_load_from_file (tweaks, tweaks_file, NULL, &error);

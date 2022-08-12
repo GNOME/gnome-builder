@@ -67,17 +67,48 @@ editorui_create_style_scheme_selector (GbpEditoruiTweaksAddin *self,
 }
 
 static void
-gbp_editorui_tweaks_addin_class_init (GbpEditoruiTweaksAddinClass *klass)
+gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
+                                IdeTweaks      *tweaks)
 {
-}
+  GbpEditoruiTweaksAddin *self = (GbpEditoruiTweaksAddin *)addin;
+  g_autoptr(GListStore) store = NULL;
+  GtkSourceLanguageManager *lm;
+  const char * const *ids;
 
-static void
-gbp_editorui_tweaks_addin_init (GbpEditoruiTweaksAddin *self)
-{
+  g_assert (GBP_IS_EDITORUI_TWEAKS_ADDIN (self));
+
+  lm = gtk_source_language_manager_get_default ();
+  ids = gtk_source_language_manager_get_language_ids (lm);
+  store = g_list_store_new (GTK_SOURCE_TYPE_LANGUAGE);
+
+  for (guint i = 0; ids[i]; i++)
+    {
+      GtkSourceLanguage *l = gtk_source_language_manager_get_language (lm, ids[i]);
+
+      if (!gtk_source_language_get_hidden (l))
+        g_list_store_append (store, l);
+    }
+
   ide_tweaks_addin_set_resource_path (IDE_TWEAKS_ADDIN (self),
                                       "/plugins/editorui/tweaks.ui");
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),
                                   editorui_create_style_scheme_preview);
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),
                                   editorui_create_style_scheme_selector);
+  ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (store));
+
+  IDE_TWEAKS_ADDIN_CLASS (gbp_editorui_tweaks_addin_parent_class)->load (addin, tweaks);
+}
+
+static void
+gbp_editorui_tweaks_addin_class_init (GbpEditoruiTweaksAddinClass *klass)
+{
+  IdeTweaksAddinClass *addin_class = IDE_TWEAKS_ADDIN_CLASS (klass);
+
+  addin_class->load = gbp_editorui_tweaks_addin_load;
+}
+
+static void
+gbp_editorui_tweaks_addin_init (GbpEditoruiTweaksAddin *self)
+{
 }
