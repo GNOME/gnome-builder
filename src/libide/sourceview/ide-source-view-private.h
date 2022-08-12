@@ -75,10 +75,14 @@ struct _IdeSourceView
 };
 
 
-void _ide_source_view_addins_init         (IdeSourceView     *self,
-                                           GtkSourceLanguage *language);
-void _ide_source_view_addins_shutdown     (IdeSourceView     *self);
-void _ide_source_view_addins_set_language (IdeSourceView     *self,
-                                           GtkSourceLanguage *language);
+void  _ide_source_view_addins_init         (IdeSourceView              *self,
+                                            GtkSourceLanguage          *language);
+void  _ide_source_view_addins_shutdown     (IdeSourceView              *self);
+void  _ide_source_view_addins_set_language (IdeSourceView              *self,
+                                            GtkSourceLanguage          *language);
+char *_ide_source_view_generate_css        (GtkSourceView              *view,
+                                            const PangoFontDescription *font_desc,
+                                            int                         font_scale,
+                                            double                      line_height);
 
 G_END_DECLS

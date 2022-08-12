@@ -49,26 +49,28 @@ enum {
 static GParamSpec *properties[N_PROPS];
 static guint signals[N_SIGNALS];
 
-static void
-ide_source_view_update_css (IdeSourceView *self)
+char *
+_ide_source_view_generate_css (GtkSourceView              *view,
+                               const PangoFontDescription *font_desc,
+                               int                         font_scale,
+                               double                      line_height)
 {
-  const PangoFontDescription *font_desc;
+  g_autofree char *font_css = NULL;
   PangoFontDescription *scaled = NULL;
   PangoFontDescription *system_font = NULL;
   GtkSourceStyleScheme *scheme;
   GtkSourceStyle *style;
   GtkTextBuffer *buffer;
-  g_autoptr(GString) str = NULL;
-  g_autofree char *font_css = NULL;
+  GString *str;
   int size = 11; /* 11pt */
   char line_height_str[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_return_val_if_fail (GTK_SOURCE_IS_VIEW (view), NULL);
 
   str = g_string_new (NULL);
 
   /* Get information for search bubbles */
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
   if ((scheme = gtk_source_buffer_get_style_scheme (GTK_SOURCE_BUFFER (buffer))) &&
       (style = gtk_source_style_scheme_get_style (scheme, "search-match")))
     {
@@ -93,7 +95,7 @@ ide_source_view_update_css (IdeSourceView *self)
   g_string_append (str, "textview {\n");
 
   /* Get font information to adjust line height and font changes */
-  if ((font_desc = self->font_desc) == NULL)
+  if (font_desc == NULL)
     {
       g_object_get (g_application_get_default (),
                     "system-font", &system_font,
@@ -105,10 +107,10 @@ ide_source_view_update_css (IdeSourceView *self)
       pango_font_description_get_set_fields (font_desc) & PANGO_FONT_MASK_SIZE)
     size = pango_font_description_get_size (font_desc) / PANGO_SCALE;
 
-  if (size + self->font_scale < 1)
-    self->font_scale = -size + 1;
+  if (size + font_scale < 1)
+    font_scale = -size + 1;
 
-  size = MAX (1, size + self->font_scale);
+  size = MAX (1, size + font_scale);
 
   if (size != 0)
     {
@@ -126,16 +128,27 @@ ide_source_view_update_css (IdeSourceView *self)
       g_string_append (str, font_css);
     }
 
-  g_ascii_dtostr (line_height_str, sizeof line_height_str, self->line_height);
+  g_ascii_dtostr (line_height_str, sizeof line_height_str, line_height);
   line_height_str[6] = 0;
   g_string_append_printf (str, "\nline-height: %s;\n", line_height_str);
 
   g_string_append (str, "}\n");
 
-  gtk_css_provider_load_from_data (self->css_provider, str->str, -1);
-
   g_clear_pointer (&scaled, pango_font_description_free);
   g_clear_pointer (&system_font, pango_font_description_free);
+
+  return g_string_free (str, FALSE);
+}
+
+static void
+ide_source_view_update_css (IdeSourceView *self)
+{
+  g_autofree char *css = NULL;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), self->font_desc, self->font_scale, self->line_height)))
+    gtk_css_provider_load_from_data (self->css_provider, css, -1);
 }
 
 static void
