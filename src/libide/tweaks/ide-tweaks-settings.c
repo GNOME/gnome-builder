@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-tweaks.h"
 #include "ide-tweaks-settings.h"
 
 struct _IdeTweaksSettings
@@ -267,4 +268,27 @@ ide_tweaks_settings_create_action_group (IdeTweaksSettings *self,
                           g_object_unref);
 
   return G_ACTION_GROUP (settings);
+}
+
+void
+ide_tweaks_settings_bind (IdeTweaksSettings  *self,
+                          const char         *key,
+                          gpointer            instance,
+                          const char         *property,
+                          GSettingsBindFlags  bind_flags)
+{
+  g_autoptr(IdeSettings) settings = NULL;
+  const char *project_id = NULL;
+  IdeTweaksItem *root;
+
+  g_return_if_fail (IDE_IS_TWEAKS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+  g_return_if_fail (G_IS_OBJECT (instance));
+  g_return_if_fail (property != NULL);
+
+  if ((root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self))) && IDE_IS_TWEAKS (root))
+    project_id = ide_tweaks_get_project_id (IDE_TWEAKS (root));
+
+  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self, project_id));
+  ide_settings_bind (settings, key, instance, property, bind_flags);
 }
