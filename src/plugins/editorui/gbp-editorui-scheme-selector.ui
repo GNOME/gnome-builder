@@ -5,11 +5,14 @@
       <object class="GtkFlowBox" id="flow_box">
         <signal name="child-activated" handler="style_scheme_activated_cb" swapped="true" object="GbpEditoruiSchemeSelector"/>
         <property name="hexpand">true</property>
-        <property name="column-spacing">8</property>
-        <property name="row-spacing">8</property>
+        <property name="column-spacing">12</property>
+        <property name="row-spacing">12</property>
         <property name="max-children-per-line">4</property>
         <property name="max-children-per-line">4</property>
         <property name="selection-mode">none</property>
+        <style>
+          <class name="style-schemes"/>
+        </style>
       </object>
     </child>
   </template>
