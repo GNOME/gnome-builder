@@ -19,6 +19,11 @@
                 <property name="application-only">true</property>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup" id="appearance_page_style_group">
+                <property name="title" translatable="yes">Style</property>
+              </object>
+            </child>
           </object>
         </child>
         <child>
