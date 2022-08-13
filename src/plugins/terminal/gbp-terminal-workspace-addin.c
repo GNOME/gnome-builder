@@ -36,6 +36,10 @@ struct _GbpTerminalWorkspaceAddin
 {
   GObject          parent_instance;
 
+  IdeRunManager   *run_manager;
+  gulong           run_manager_run_handler;
+  gulong           run_manager_stopped_handler;
+
   IdeWorkspace    *workspace;
 
   IdePane         *app_pane;
@@ -291,16 +295,19 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
                                      NULL);
       ide_workspace_add_pane (workspace, self->app_pane, position);
 
-      g_signal_connect_object (run_manager,
-                               "run",
-                               G_CALLBACK (on_run_manager_run),
-                               self,
-                               G_CONNECT_SWAPPED);
-      g_signal_connect_object (run_manager,
-                               "stopped",
-                               G_CALLBACK (on_run_manager_stopped),
-                               self,
-                               G_CONNECT_SWAPPED);
+      g_set_object (&self->run_manager, run_manager);
+      self->run_manager_run_handler =
+        g_signal_connect_object (self->run_manager,
+                                 "run",
+                                 G_CALLBACK (on_run_manager_run),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+      self->run_manager_stopped_handler =
+        g_signal_connect_object (self->run_manager,
+                                 "stopped",
+                                 G_CALLBACK (on_run_manager_stopped),
+                                 self,
+                                 G_CONNECT_SWAPPED);
     }
 }
 
@@ -309,26 +316,17 @@ gbp_terminal_workspace_addin_unload (IdeWorkspaceAddin *addin,
                                      IdeWorkspace      *workspace)
 {
   GbpTerminalWorkspaceAddin *self = (GbpTerminalWorkspaceAddin *)addin;
-  IdeWorkbench *workbench;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_PRIMARY_WORKSPACE (workspace) ||
             IDE_IS_EDITOR_WORKSPACE (workspace));
 
-  workbench = ide_widget_get_workbench (GTK_WIDGET (workspace));
-
-  if (ide_workbench_has_project (workbench))
+  if (self->run_manager)
     {
-      IdeContext *context = ide_widget_get_context (GTK_WIDGET (workspace));
-      IdeRunManager *run_manager = ide_run_manager_from_context (context);
-
-      g_signal_handlers_disconnect_by_func (run_manager,
-                                            G_CALLBACK (on_run_manager_run),
-                                            self);
-      g_signal_handlers_disconnect_by_func (run_manager,
-                                            G_CALLBACK (on_run_manager_stopped),
-                                            self);
+      g_clear_signal_handler (&self->run_manager_run_handler, self->run_manager);
+      g_clear_signal_handler (&self->run_manager_stopped_handler, self->run_manager);
+      g_clear_object (&self->run_manager);
     }
 
   self->app_page = NULL;
