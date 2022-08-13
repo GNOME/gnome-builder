@@ -1033,6 +1033,8 @@ ide_source_view_set_font_desc (IdeSourceView           *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FONT_DESC]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_FONT_SCALE]);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ZOOM_LEVEL]);
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 double
