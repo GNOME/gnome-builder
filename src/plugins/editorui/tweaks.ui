@@ -37,6 +37,14 @@
                     <property name="key">font-name</property>
                   </object>
                 </child>
+                <child>
+                  <object class="IdeTweaksSpin" id="editor_line_height">
+                    <property name="title" translatable="yes">Line Height</property>
+                    <property name="subtitle" translatable="yes">Adjust line height of the configured font</property>
+                    <property name="settings">settings_org_gnome_builder_editor</property>
+                    <property name="key">line-height</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
