@@ -9,11 +9,11 @@
     </child>
     <child internal-child="visual_section">
       <object class="IdeTweaksSection">
-        <child internal-child="appearance_page">
+        <child internal-child="editor_page">
           <object class="IdeTweaksPage">
             <child>
-              <object class="IdeTweaksGroup" id="appearance_page_color_group">
-                <property name="title" translatable="yes">Color</property>
+              <object class="IdeTweaksGroup" id="editor_page_color_group">
+                <property name="title" translatable="yes">Color Scheme</property>
                 <child>
                   <object class="IdeTweaksWidget" id="style_scheme_preview">
                     <signal name="create" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
@@ -31,7 +31,7 @@
                 <property name="title" translatable="yes">Fonts &amp; Styling</property>
                 <child>
                   <object class="IdeTweaksFont" id="editor_font">
-                    <property name="title" translatable="yes">Editor Font</property>
+                    <property name="title" translatable="yes">Font</property>
                     <property name="subtitle" translatable="yes">The font used within the source code editor</property>
                     <property name="settings">settings_org_gnome_builder_editor</property>
                     <property name="key">font-name</property>
@@ -40,7 +40,7 @@
                 <child>
                   <object class="IdeTweaksSpin" id="editor_line_height">
                     <property name="title" translatable="yes">Line Height</property>
-                    <property name="subtitle" translatable="yes">Adjust line height of the configured font</property>
+                    <property name="subtitle" translatable="yes">Adjust spacing between lines</property>
                     <property name="settings">settings_org_gnome_builder_editor</property>
                     <property name="key">line-height</property>
                   </object>
