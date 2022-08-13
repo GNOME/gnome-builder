@@ -85,6 +85,36 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup" id="editor_page_map_group">
+                <child>
+                  <object class="IdeTweaksCombo" id="editor_map">
+                    <property name="title" translatable="yes">Source Code Overview</property>
+                    <property name="subtitle" translatable="yes">Display an overview of source code next to the editor</property>
+                    <property name="settings">settings_org_gnome_builder_editor</property>
+                    <property name="key">map-policy</property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Prefer Scrollbars</property>
+                        <property name="action-target">'never'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Always On</property>
+                        <property name="action-target">'always'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Automatic</property>
+                        <property name="action-target">'auto'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
