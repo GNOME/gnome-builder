@@ -683,7 +683,7 @@ msgstr "Programari de construcció per a GNOME"
 #. localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
-msgstr "Build;Develop;Construcció ;Desenvolupament;programari;CASE;"
+msgstr "Construcció;Desenvolupament;Programació;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
 msgid "Open a Project"
@@ -4220,7 +4220,7 @@ msgstr "Cerca/reemplaça…"
 
 #: src/plugins/editorui/gtk/menus.ui:178
 msgid "Print…"
-msgstr "Imprimeix..."
+msgstr "Imprimeix…"
 
 #: src/plugins/editorui/gtk/menus.ui:186
 msgid "Format Selection"
@@ -4507,7 +4507,7 @@ msgstr "_Reemplaça a %s"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5
 msgid "Find in Files (Ctrl+Alt+Shift+F)"
-msgstr "Cerca als fitxers (Ctrl+Maj+O)"
+msgstr "Cerca als fitxers (Ctrl+Alt+Maj+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:46
 msgid "Find and Replace"
@@ -5831,7 +5831,7 @@ msgstr "Seguiment de l'origen de les fuites"
 
 #: src/plugins/valgrind/gtk/menus.ui:30
 msgid "Report Leaks"
-msgstr "_Informe fuites"
+msgstr "_Informe de fuites"
 
 #: src/plugins/valgrind/gtk/menus.ui:32
 msgid "Summary"
@@ -5947,14 +5947,3 @@ msgstr "Ha fallat crear l'arbre XML."
 msgid "File must be saved locally to parse."
 msgstr "El fitxer ha d'estar desat localment per a analitzar-lo."
 
-#~ msgid "Overscroll"
-#~ msgstr "Desplaçar-s'hi per sobre"
-
-#~ msgid "The number of lines to scroll beyond the end of the buffer."
-#~ msgstr ""
-#~ "El nombre de línies a desplaçar-se cap avall més enllà del memòria "
-#~ "intermèdia."
-
-#~ msgid "Allow the editor to scroll past the end of the buffer"
-#~ msgstr ""
-#~ "Permet que l'editor es desplaci més enllà del final de la memòria intermèdia"
