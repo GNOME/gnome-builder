@@ -1,4 +1,4 @@
-/* libide-tweaks.h
+/* ide-tweaks-combo-row.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,22 +20,12 @@
 
 #pragma once
 
-#define IDE_TWEAKS_INSIDE
-# include "ide-tweaks.h"
-# include "ide-tweaks-addin.h"
-# include "ide-tweaks-choice.h"
-# include "ide-tweaks-combo.h"
-# include "ide-tweaks-factory.h"
-# include "ide-tweaks-font.h"
-# include "ide-tweaks-group.h"
-# include "ide-tweaks-item.h"
-# include "ide-tweaks-page.h"
-# include "ide-tweaks-radio.h"
-# include "ide-tweaks-section.h"
-# include "ide-tweaks-settings.h"
-# include "ide-tweaks-spin.h"
-# include "ide-tweaks-switch.h"
-# include "ide-tweaks-variable.h"
-# include "ide-tweaks-widget.h"
-# include "ide-tweaks-window.h"
-#undef IDE_TWEAKS_INSIDE
+#include <adwaita.h>
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TWEAKS_COMBO_ROW (ide_tweaks_combo_row_get_type())
+
+G_DECLARE_FINAL_TYPE (IdeTweaksComboRow, ide_tweaks_combo_row, IDE, TWEAKS_COMBO_ROW, AdwComboRow)
+
+G_END_DECLS

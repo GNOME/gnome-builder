@@ -10,6 +10,8 @@ libide_tweaks_public_headers = [
   'libide-tweaks.h',
   'ide-tweaks.h',
   'ide-tweaks-addin.h',
+  'ide-tweaks-choice.h',
+  'ide-tweaks-combo.h',
   'ide-tweaks-factory.h',
   'ide-tweaks-font.h',
   'ide-tweaks-group.h',
@@ -34,6 +36,8 @@ install_headers(libide_tweaks_public_headers, subdir: libide_tweaks_header_subdi
 libide_tweaks_public_sources = [
   'ide-tweaks.c',
   'ide-tweaks-addin.c',
+  'ide-tweaks-choice.c',
+  'ide-tweaks-combo.c',
   'ide-tweaks-factory.c',
   'ide-tweaks-font.c',
   'ide-tweaks-group.c',
@@ -50,6 +54,7 @@ libide_tweaks_public_sources = [
 ]
 
 libide_tweaks_private_sources = [
+  'ide-tweaks-combo-row.c',
   'ide-tweaks-init.c',
   'ide-tweaks-model.c',
   'ide-tweaks-panel.c',

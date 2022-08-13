@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaksComboRow" parent="AdwComboRow">
+    <property name="expression">
+      <lookup name="title" type="IdeTweaksChoice"/>
+    </property>
+    <property name="list-factory">
+      <object class="GtkBuilderListItemFactory">
+        <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GtkListItem">
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="hexpand">true</property>
+            <binding name="label">
+              <lookup name="title" type="IdeTweaksChoice">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="hexpand">true</property>
+            <property name="visible">false</property>
+            <style>
+              <class name="caption"/>
+              <class name="dim-label"/>
+            </style>
+            <binding name="label">
+              <lookup name="subtitle" type="IdeTweaksChoice">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
+          </object>
+        </child>
+      </object>
+    </property>
+  </template>
+</interface>
+]]>
+        </property>
+      </object>
+    </property>
+  </template>
+</interface>
