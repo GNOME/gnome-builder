@@ -22,13 +22,15 @@
 
 #include "config.h"
 
-#include <adwaita.h>
 #include <glib/gi18n.h>
+
+#include <adwaita.h>
 #include <libpeas/peas.h>
 
 #include <libide-core.h>
 #include <libide-threading.h>
 
+#include "ide-application-private.h"
 #include "ide-frame.h"
 #include "ide-frame-addin.h"
 
@@ -50,6 +52,7 @@ struct _IdeFrame
   PanelFrame        parent_instance;
   PeasExtensionSet *addins;
   guint             use_tabbar : 1;
+  guint             constructed : 1;
 };
 
 G_DEFINE_TYPE (IdeFrame, ide_frame, PANEL_TYPE_FRAME)
@@ -60,7 +63,6 @@ enum {
   N_PROPS
 };
 
-static GSettings *editor_settings;
 static GParamSpec *properties[N_PROPS];
 
 static void
@@ -177,6 +179,15 @@ status_page_pressed_cb (IdeFrame        *self,
   gtk_root_set_focus (root, NULL);
 }
 
+static gboolean
+interface_style_to_tabbar (GValue *value,
+                           GVariant *variant,
+                           gpointer user_data)
+{
+  g_value_set_boolean (value, ide_str_equal0 (g_variant_get_string (variant, NULL), "tab-bar"));
+  return TRUE;
+}
+
 static void
 ide_frame_constructed (GObject *object)
 {
@@ -187,16 +198,20 @@ ide_frame_constructed (GObject *object)
 
   G_OBJECT_CLASS (ide_frame_parent_class)->constructed (object);
 
-  self->use_tabbar = g_settings_get_boolean (editor_settings, "use-tabbar");
+  g_settings_bind_with_mapping (IDE_APPLICATION_DEFAULT->settings, "interface-style",
+                                self, "use-tabbar",
+                                G_SETTINGS_BIND_GET,
+                                interface_style_to_tabbar, NULL, NULL, NULL);
+
+  self->constructed = TRUE;
+
+  g_print ("Use tab bar: %d\n", self->use_tabbar);
+
   if (self->use_tabbar)
     header = PANEL_FRAME_HEADER (panel_frame_tab_bar_new ());
   else
     header = PANEL_FRAME_HEADER (panel_frame_header_bar_new ());
   panel_frame_set_header (PANEL_FRAME (self), header);
-  g_settings_bind (editor_settings, "use-tabbar",
-                   self, "use-tabbar",
-                   G_SETTINGS_BIND_GET);
-
   ide_frame_reload_addins (self);
 }
 
@@ -277,9 +292,6 @@ ide_frame_class_init (IdeFrameClass *klass)
 static void
 ide_frame_init (IdeFrame *self)
 {
-  if (editor_settings == NULL)
-    editor_settings = g_settings_new ("org.gnome.builder.editor");
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect (self,
@@ -402,14 +414,17 @@ ide_frame_set_use_tabbar (IdeFrame *self,
 
       self->use_tabbar = use_tabbar;
 
-      if (self->use_tabbar)
-        header = PANEL_FRAME_HEADER (panel_frame_tab_bar_new ());
-      else
-        header = PANEL_FRAME_HEADER (panel_frame_header_bar_new ());
+      if (self->constructed)
+        {
+          if (self->use_tabbar)
+            header = PANEL_FRAME_HEADER (panel_frame_tab_bar_new ());
+          else
+            header = PANEL_FRAME_HEADER (panel_frame_header_bar_new ());
 
-      panel_frame_set_header (PANEL_FRAME (self), header);
+          panel_frame_set_header (PANEL_FRAME (self), header);
 
-      ide_frame_reload_addins (self);
+          ide_frame_reload_addins (self);
+        }
 
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_TABBAR]);
     }

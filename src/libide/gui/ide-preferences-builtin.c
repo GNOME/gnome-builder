@@ -718,10 +718,13 @@ static const IdePreferenceGroupEntry project_groups[] = {
 static const IdePreferenceItemEntry items[] = {
   { "appearance", "style", "style-variant", 0, handle_style_variant },
 
+#if 0
+  /* Removed, will be done with IdeTweaks */
   { "appearance", "interface", "use-tabbar", 0, ide_preferences_window_toggle,
     N_("Navigate with Tab Bar"),
     N_("Switch documents using a tabbed interface"),
     "org.gnome.builder.editor", NULL, "use-tabbar" },
+#endif
 
   { "projects", "session", "restore", 0, ide_preferences_window_toggle,
     N_("Restore Previous Session"),

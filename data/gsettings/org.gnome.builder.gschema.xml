@@ -46,6 +46,14 @@
     <key name="format-on-save" type="b">
       <default>false</default>
     </key>
+    <key name="interface-style" type="s">
+      <default>'tab-bar'</default>
+      <choices>
+        <choice value="tab-bar"/>
+        <choice value="drop-down"/>
+      </choices>
+      <summary>The interface style to change pages</summary>
+    </key>
     <key name="default-license" type="s">
       <choices>
         <choice value="AGPL-3.0-or-later"/>
