@@ -9,13 +9,13 @@
     </child>
     <child internal-child="visual_section">
       <object class="IdeTweaksSection">
-        <child internal-child="editor_page">
+        <child internal-child="appearance_page">
           <object class="IdeTweaksPage">
             <child>
-              <object class="IdeTweaksGroup" id="editor_page_color_group">
-                <property name="title" translatable="yes">Color Scheme</property>
+              <object class="IdeTweaksGroup" id="appearance_page_color_group">
+                <property name="title" translatable="yes">Color</property>
                 <child>
-                  <object class="IdeTweaksWidget" id="style_scheme_preview">
+                  <object class="IdeTweaksWidget" id="appearance_page_preview_widget">
                     <signal name="create" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
                   </object>
                 </child>
@@ -26,8 +26,22 @@
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+        <child internal-child="editor_page">
+          <object class="IdeTweaksPage">
             <child>
-              <object class="IdeTweaksGroup" id="appearance_page_font_group">
+              <object class="IdeTweaksGroup" id="editor_page_preview">
+                <property name="title" translatable="yes">Preview</property>
+                <child>
+                  <object class="IdeTweaksWidget" id="editor_page_preview_widget">
+                    <signal name="create" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup" id="editor_page_font_group">
                 <property name="title" translatable="yes">Fonts &amp; Styling</property>
                 <child>
                   <object class="IdeTweaksFont" id="editor_font">
