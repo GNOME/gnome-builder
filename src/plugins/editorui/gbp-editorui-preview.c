@@ -141,6 +141,8 @@ gbp_editorui_preview_settings_changed_cb (GbpEditoruiPreview *self,
 
       g_clear_pointer (&font_desc, pango_font_description_free);
     }
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 static void
