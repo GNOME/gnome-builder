@@ -91,11 +91,15 @@ static inline gboolean
 ide_set_string (char       **ptr,
                 const char  *str)
 {
+  char *copy;
+
   if (*ptr == str || g_strcmp0 (*ptr, str) == 0)
     return FALSE;
 
+  copy = g_strdup (str);
   g_clear_pointer (ptr, g_free);
-  *ptr = g_strdup (str);
+  *ptr = copy;
+
   return TRUE;
 }
 
