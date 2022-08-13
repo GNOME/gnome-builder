@@ -152,6 +152,23 @@ ide_source_view_update_css (IdeSourceView *self)
 }
 
 static void
+ide_source_view_set_line_height (IdeSourceView *self,
+                                 double         line_height)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (line_height >= .5);
+  g_return_if_fail (line_height <= 10.);
+
+  if (self->line_height != line_height)
+    {
+      self->line_height = line_height;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LINE_HEIGHT]);
+      ide_source_view_update_css (self);
+      gtk_widget_queue_resize (GTK_WIDGET (self));
+    }
+}
+
+static void
 tweak_gutter_spacing (GtkSourceView *view)
 {
   GtkSourceGutter *gutter;
@@ -776,12 +793,7 @@ ide_source_view_set_property (GObject      *object,
       break;
 
     case PROP_LINE_HEIGHT:
-      if (self->line_height != g_value_get_double (value))
-        {
-          self->line_height = g_value_get_double (value);
-          ide_source_view_update_css (self);
-          g_object_notify_by_pspec (G_OBJECT (self), pspec);
-        }
+      ide_source_view_set_line_height (self, g_value_get_double (value));
       break;
 
     default:
