@@ -31,6 +31,7 @@
 # include "ide-tweaks-radio.h"
 # include "ide-tweaks-section.h"
 # include "ide-tweaks-settings.h"
+# include "ide-tweaks-spin.h"
 # include "ide-tweaks-switch.h"
 # include "ide-tweaks-variable.h"
 # include "ide-tweaks-widget.h"
