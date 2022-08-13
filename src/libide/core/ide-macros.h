@@ -107,14 +107,10 @@ static inline void
 ide_take_string (char **ptr,
                  char  *str)
 {
-  if (*ptr == str || g_strcmp0 (*ptr, str) == 0)
-    {
-      g_free (str);
-      return;
-    }
-
-  g_clear_pointer (ptr, g_free);
-  *ptr = g_steal_pointer (&str);
+  if (*ptr == NULL && str == NULL)
+    return;
+  g_free (*ptr);
+  *ptr = str;
 }
 
 static inline void
