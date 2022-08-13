@@ -21,6 +21,29 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup" id="appearance_page_interface_group">
+                <child>
+                  <object class="IdeTweaksCombo">
+                    <property name="settings">settings_org_gnome_builder</property>
+                    <property name="key">interface-style</property>
+                    <property name="title" translatable="yes">Document Navigation</property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Tab Bar</property>
+                        <property name="action-target">'tab-bar'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Drop Down</property>
+                        <property name="action-target">'drop-down'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
