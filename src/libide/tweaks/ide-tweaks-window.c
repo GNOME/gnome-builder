@@ -252,11 +252,14 @@ ide_tweaks_window_addin_removed_cb (PeasExtensionSet *set,
 static void
 ide_tweaks_window_rebuild (IdeTweaksWindow *self)
 {
+  const char *project_id;
   GtkWidget *list;
 
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (IDE_IS_TWEAKS (self->tweaks));
   g_assert (self->addins == NULL);
+
+  project_id = ide_tweaks_get_project_id (self->tweaks);
 
   /* Allow addins to extend the tweaks instance */
   self->addins = peas_extension_set_new (peas_engine_get_default (),
@@ -288,6 +291,26 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
     ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (list), GTK_SELECTION_NONE);
   else
     ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (list));
+
+  /* Make sure we have access to settings under IdeTweaks */
+  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (self->tweaks));
+       child != NULL;
+       child = ide_tweaks_item_get_next_sibling (child))
+    {
+      if (IDE_IS_TWEAKS_SETTINGS (child))
+        {
+          IdeTweaksSettings *settings = IDE_TWEAKS_SETTINGS (child);
+          const char *schema_id = ide_tweaks_settings_get_schema_id (settings);
+          GActionGroup *group;
+
+          if (schema_id == NULL)
+            continue;
+
+          group = ide_tweaks_settings_create_action_group (settings, project_id);
+          ide_action_muxer_insert_action_group (self->muxer, schema_id, group);
+          g_clear_object (&group);
+        }
+    }
 
   /* Ensure action state visibility */
   ide_tweaks_window_update_actions (self);
@@ -607,29 +630,7 @@ ide_tweaks_window_set_tweaks (IdeTweaksWindow *self,
 
   if (tweaks != NULL)
     {
-      const char *project_id = ide_tweaks_get_project_id (tweaks);
-
       g_set_object (&self->tweaks, tweaks);
-
-      for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (tweaks));
-           child != NULL;
-           child = ide_tweaks_item_get_next_sibling (child))
-        {
-          if (IDE_IS_TWEAKS_SETTINGS (child))
-            {
-              IdeTweaksSettings *settings = IDE_TWEAKS_SETTINGS (child);
-              const char *schema_id = ide_tweaks_settings_get_schema_id (settings);
-              GActionGroup *group;
-
-              if (schema_id == NULL)
-                continue;
-
-              group = ide_tweaks_settings_create_action_group (settings, project_id);
-              ide_action_muxer_insert_action_group (self->muxer, schema_id, group);
-              g_clear_object (&group);
-            }
-        }
-
       ide_tweaks_window_rebuild (self);
     }
 
