@@ -27,6 +27,8 @@
 #define G_SETTINGS_ENABLE_BACKEND
 #include <gio/gsettingsbackend.h>
 
+#include "gsettings-mapping.h"
+
 #include "ide-layered-settings-private.h"
 
 struct _IdeLayeredSettings
@@ -499,6 +501,30 @@ ide_layered_settings_bind_with_mapping (IdeLayeredSettings      *self,
     g_settings_bind_with_mapping (ide_layered_settings_get_primary_settings (self),
                                   key, object, property, (flags & ~G_SETTINGS_BIND_GET),
                                   get_mapping, set_mapping, user_data, destroy);
+
+  /* Get initial value in case our memory settings doesn't have it */
+  if ((flags & G_SETTINGS_BIND_GET) != 0)
+    {
+      GObjectClass *object_class = G_OBJECT_GET_CLASS (object);
+      GParamSpec *pspec = g_object_class_find_property (object_class, property);
+
+      if (pspec != NULL)
+        {
+          g_autoptr(GVariant) value = ide_layered_settings_get_value (self, key);
+          g_auto(GValue) gvalue = G_VALUE_INIT;
+          gboolean ret;
+
+          g_value_init (&gvalue, pspec->value_type);
+
+          if (get_mapping)
+            ret = get_mapping (&gvalue, value, user_data);
+          else
+            ret = g_settings_get_mapping (&gvalue, value, NULL);
+
+          if (ret)
+            g_object_set_property (object, pspec->name, &gvalue);
+        }
+    }
 }
 
 void
