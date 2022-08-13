@@ -61,6 +61,30 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup" id="editor_page_style_group">
+                <child>
+                  <object class="IdeTweaksCombo" id="editor_grid_lines">
+                    <property name="title" translatable="yes">Background Pattern</property>
+                    <property name="subtitle" translatable="yes">Show a background pattern underneath source code</property>
+                    <property name="settings">settings_org_gnome_builder_editor</property>
+                    <property name="key">show-grid-lines</property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">No Pattern</property>
+                        <property name="action-target">false</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Grid Lines</property>
+                        <property name="action-target">true</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
