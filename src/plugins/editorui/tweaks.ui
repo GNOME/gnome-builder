@@ -62,6 +62,24 @@
               </object>
             </child>
             <child>
+              <object class="IdeTweaksGroup" id="editor_page_lines_group">
+                <child>
+                  <object class="IdeTweaksSwitch" id="editor_show_lines">
+                    <property name="title" translatable="yes">Show Line Numbers</property>
+                    <property name="subtitle" translatable="yes">Display line numbers next to each line of code</property>
+                    <property name="action-name">settings.org.gnome.builder.editor.show-line-numbers</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksSwitch" id="editor_highlight_line">
+                    <property name="title" translatable="yes">Highlight Current Line</property>
+                    <property name="subtitle" translatable="yes">Make the current line stand out with highlights</property>
+                    <property name="action-name">settings.org.gnome.builder.editor.highlight-current-line</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="IdeTweaksGroup" id="editor_page_style_group">
                 <child>
                   <object class="IdeTweaksCombo" id="editor_grid_lines">
