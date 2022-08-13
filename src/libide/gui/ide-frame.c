@@ -205,8 +205,6 @@ ide_frame_constructed (GObject *object)
 
   self->constructed = TRUE;
 
-  g_print ("Use tab bar: %d\n", self->use_tabbar);
-
   if (self->use_tabbar)
     header = PANEL_FRAME_HEADER (panel_frame_tab_bar_new ());
   else
