@@ -473,10 +473,16 @@ ide_layered_settings_bind_with_mapping (IdeLayeredSettings      *self,
                                         gpointer                 user_data,
                                         GDestroyNotify           destroy)
 {
+  static const GSettingsBindFlags default_flags = G_SETTINGS_BIND_GET|G_SETTINGS_BIND_SET;
+
   g_return_if_fail (IDE_IS_LAYERED_SETTINGS (self));
   g_return_if_fail (key != NULL);
   g_return_if_fail (G_IS_OBJECT (object));
   g_return_if_fail (property != NULL);
+
+  /* Make sure we have GET|SET flags if DEFAULT was specified */
+  if ((flags & default_flags) == 0)
+    flags |= default_flags;
 
   /*
    * Our memory backend/settings are compiling the values from all of the
