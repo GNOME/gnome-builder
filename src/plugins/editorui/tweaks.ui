@@ -31,106 +31,120 @@
         <child internal-child="editor_page">
           <object class="IdeTweaksPage">
             <child>
-              <object class="IdeTweaksGroup" id="editor_page_preview">
-                <property name="title" translatable="yes">Preview</property>
-                <child>
-                  <object class="IdeTweaksWidget" id="editor_page_preview_widget">
-                    <signal name="create" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="IdeTweaksGroup" id="editor_page_font_group">
+              <object class="IdeTweaksPage" id="editor_fonts_and_styling_page">
                 <property name="title" translatable="yes">Fonts &amp; Styling</property>
                 <child>
-                  <object class="IdeTweaksFont" id="editor_font">
-                    <property name="title" translatable="yes">Font</property>
-                    <property name="subtitle" translatable="yes">The font used within the source code editor</property>
-                    <property name="settings">settings_org_gnome_builder_editor</property>
-                    <property name="key">font-name</property>
+                  <object class="IdeTweaksGroup" id="editor_page_preview">
+                    <property name="title" translatable="yes">Preview</property>
+                    <child>
+                      <object class="IdeTweaksWidget" id="editor_page_preview_widget">
+                        <signal name="create" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
-                  <object class="IdeTweaksSpin" id="editor_line_height">
-                    <property name="title" translatable="yes">Line Height</property>
-                    <property name="subtitle" translatable="yes">Adjust spacing between lines</property>
-                    <property name="settings">settings_org_gnome_builder_editor</property>
-                    <property name="key">line-height</property>
+                  <object class="IdeTweaksGroup" id="editor_page_font_group">
+                    <child>
+                      <object class="IdeTweaksFont" id="editor_font">
+                        <property name="title" translatable="yes">Font</property>
+                        <property name="subtitle" translatable="yes">The font used within the source code editor</property>
+                        <property name="settings">settings_org_gnome_builder_editor</property>
+                        <property name="key">font-name</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksSpin" id="editor_line_height">
+                        <property name="title" translatable="yes">Line Height</property>
+                        <property name="subtitle" translatable="yes">Adjust spacing between lines</property>
+                        <property name="settings">settings_org_gnome_builder_editor</property>
+                        <property name="key">line-height</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup" id="editor_page_lines_group">
+                    <child>
+                      <object class="IdeTweaksSwitch" id="editor_show_lines">
+                        <property name="title" translatable="yes">Show Line Numbers</property>
+                        <property name="subtitle" translatable="yes">Display line numbers next to each line of code</property>
+                        <property name="action-name">settings.org.gnome.builder.editor.show-line-numbers</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksSwitch" id="editor_highlight_line">
+                        <property name="title" translatable="yes">Highlight Current Line</property>
+                        <property name="subtitle" translatable="yes">Make the current line stand out with highlights</property>
+                        <property name="action-name">settings.org.gnome.builder.editor.highlight-current-line</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup" id="editor_page_style_group">
+                    <child>
+                      <object class="IdeTweaksCombo" id="editor_grid_lines">
+                        <property name="title" translatable="yes">Background Pattern</property>
+                        <property name="subtitle" translatable="yes">Show a background pattern underneath source code</property>
+                        <property name="settings">settings_org_gnome_builder_editor</property>
+                        <property name="key">show-grid-lines</property>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">No Pattern</property>
+                            <property name="action-target">false</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Grid Lines</property>
+                            <property name="action-target">true</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup" id="editor_page_map_group">
+                    <child>
+                      <object class="IdeTweaksCombo" id="editor_map">
+                        <property name="title" translatable="yes">Source Code Overview</property>
+                        <property name="subtitle" translatable="yes">Display an overview of source code next to the editor</property>
+                        <property name="settings">settings_org_gnome_builder_editor</property>
+                        <property name="key">map-policy</property>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Prefer Scrollbars</property>
+                            <property name="action-target">'never'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Always On</property>
+                            <property name="action-target">'always'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Automatic</property>
+                            <property name="action-target">'auto'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
             </child>
             <child>
-              <object class="IdeTweaksGroup" id="editor_page_lines_group">
-                <child>
-                  <object class="IdeTweaksSwitch" id="editor_show_lines">
-                    <property name="title" translatable="yes">Show Line Numbers</property>
-                    <property name="subtitle" translatable="yes">Display line numbers next to each line of code</property>
-                    <property name="action-name">settings.org.gnome.builder.editor.show-line-numbers</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="IdeTweaksSwitch" id="editor_highlight_line">
-                    <property name="title" translatable="yes">Highlight Current Line</property>
-                    <property name="subtitle" translatable="yes">Make the current line stand out with highlights</property>
-                    <property name="action-name">settings.org.gnome.builder.editor.highlight-current-line</property>
-                  </object>
-                </child>
+              <object class="IdeTweaksPage" id="editor_completion_page">
+                <property name="title" translatable="yes">Auto-Completion</property>
               </object>
             </child>
             <child>
-              <object class="IdeTweaksGroup" id="editor_page_style_group">
-                <child>
-                  <object class="IdeTweaksCombo" id="editor_grid_lines">
-                    <property name="title" translatable="yes">Background Pattern</property>
-                    <property name="subtitle" translatable="yes">Show a background pattern underneath source code</property>
-                    <property name="settings">settings_org_gnome_builder_editor</property>
-                    <property name="key">show-grid-lines</property>
-                    <child>
-                      <object class="IdeTweaksChoice">
-                        <property name="title" translatable="yes">No Pattern</property>
-                        <property name="action-target">false</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksChoice">
-                        <property name="title" translatable="yes">Grid Lines</property>
-                        <property name="action-target">true</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="IdeTweaksGroup" id="editor_page_map_group">
-                <child>
-                  <object class="IdeTweaksCombo" id="editor_map">
-                    <property name="title" translatable="yes">Source Code Overview</property>
-                    <property name="subtitle" translatable="yes">Display an overview of source code next to the editor</property>
-                    <property name="settings">settings_org_gnome_builder_editor</property>
-                    <property name="key">map-policy</property>
-                    <child>
-                      <object class="IdeTweaksChoice">
-                        <property name="title" translatable="yes">Prefer Scrollbars</property>
-                        <property name="action-target">'never'</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksChoice">
-                        <property name="title" translatable="yes">Always On</property>
-                        <property name="action-target">'always'</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksChoice">
-                        <property name="title" translatable="yes">Automatic</property>
-                        <property name="action-target">'auto'</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+              <object class="IdeTweaksPage" id="editor_snippets_page">
+                <property name="title" translatable="yes">Snippets</property>
               </object>
             </child>
           </object>
