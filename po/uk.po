@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-13 18:54+0000\n"
-"PO-Revision-Date: 2022-08-14 08:53+0300\n"
+"POT-Creation-Date: 2022-08-14 19:35+0000\n"
+"PO-Revision-Date: 2022-08-14 23:09+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -333,6 +333,7 @@ msgstr "Якщо увімкнено, редактор показуватиме �
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:115
+#: src/plugins/editorui/tweaks.ui:159
 msgid "Smart Backspace"
 msgstr "Розумне вилучення"
 
@@ -1474,6 +1475,7 @@ msgid "Color Scheme"
 msgstr "Схема кольорів"
 
 #: src/libide/gui/ide-preferences-builtin.c:159
+#: src/plugins/editorui/tweaks.ui:156
 msgid "Keyboard"
 msgstr "Клавіатура"
 
@@ -1496,6 +1498,7 @@ msgstr "Клавіша «Home» переміщає до першого симв�
 
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:116
+#: src/plugins/editorui/tweaks.ui:160
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
@@ -1511,6 +1514,8 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
+#: src/plugins/editorui/tweaks.ui:180 src/plugins/editorui/tweaks.ui:204
+#: src/plugins/editorui/tweaks.ui:251
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
 msgstr "Загальне"
@@ -1727,12 +1732,12 @@ msgstr "Засоби автодоповнення"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
-#: src/plugins/editorui/tweaks.ui:147
+#: src/plugins/editorui/tweaks.ui:201
 msgid "Snippets"
 msgstr "Фрагменти"
 
 #: src/libide/gui/ide-preferences-builtin.c:280
-#: src/plugins/editorui/tweaks.ui:159
+#: src/plugins/editorui/tweaks.ui:225
 msgid "Programming Languages"
 msgstr "Мови програмування"
 
@@ -1752,6 +1757,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
+#: src/plugins/editorui/tweaks.ui:261
 msgid "Overwrite Braces"
 msgstr "Перезаписувати дужки"
 
@@ -1762,6 +1768,7 @@ msgstr "Перезаписувати завершальні дужки"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
+#: src/plugins/editorui/tweaks.ui:268
 msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
@@ -2075,6 +2082,7 @@ msgid "Additional"
 msgstr "Додатково"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
+#: src/plugins/editorui/tweaks.ui:153
 msgid "Behavior"
 msgstr "Поведінка"
 
@@ -4054,15 +4062,17 @@ msgid "Adjust line-height of the configured font"
 msgstr "Коригувати висоту рядка налаштованого шрифту"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
-#: src/plugins/editorui/tweaks.ui:77
+#: src/plugins/editorui/tweaks.ui:81
 msgid "Highlight Current Line"
 msgstr "Підсвічувати поточний рядок"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:90
+#: src/plugins/editorui/tweaks.ui:88
 msgid "Highlight Matching Brackets"
 msgstr "Підсвічувати відповідні дужки"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:91
+#: src/plugins/editorui/tweaks.ui:89
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4083,10 +4093,12 @@ msgid "Automatically select the first completion when displayed"
 msgstr "Автоматично вибирати перше доповнення при показу"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
+#: src/plugins/editorui/tweaks.ui:207
 msgid "Expand Snippets"
 msgstr "Розгортати фрагменти"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
+#: src/plugins/editorui/tweaks.ui:208
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Використовувати клавішу «Tab» для розгортання налаштованих фрагментів у "
@@ -4097,6 +4109,7 @@ msgid "Trim Trailing Whitespace"
 msgstr "Обрізати кінцевий пробіл"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
+#: src/plugins/editorui/tweaks.ui:255
 msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
 msgstr "При зберіганні програма обрізатиме кінцеві пробіли зі змінених рядків"
 
@@ -4211,7 +4224,6 @@ msgid "Format Selection"
 msgstr "Форматувати позначене"
 
 #: src/plugins/editorui/tweaks.ui:16
-#| msgid "Colors"
 msgid "Color"
 msgstr "Колір"
 
@@ -4220,7 +4232,6 @@ msgid "Fonts & Styling"
 msgstr "Шрифти та стилі"
 
 #: src/plugins/editorui/tweaks.ui:38
-#| msgid "(Preview)"
 msgid "Preview"
 msgstr "Перегляд"
 
@@ -4229,65 +4240,106 @@ msgid "Adjust spacing between lines"
 msgstr "Коригувати інтервал між рядками"
 
 #: src/plugins/editorui/tweaks.ui:71
-#| msgid "Display line numbers next to each line of source code"
 msgid "Display line numbers next to each line of code"
 msgstr "Показувати номери рядків поряд із кожним рядком коду"
 
-#: src/plugins/editorui/tweaks.ui:78
-#| msgid "Make current line stand out with highlights"
+#: src/plugins/editorui/tweaks.ui:82
 msgid "Make the current line stand out with highlights"
 msgstr "Підсвічувати поточний рядок"
 
-#: src/plugins/editorui/tweaks.ui:88
-#| msgid "Grid Pattern"
+#: src/plugins/editorui/tweaks.ui:99
 msgid "Background Pattern"
 msgstr "Фоновий візерунок"
 
-#: src/plugins/editorui/tweaks.ui:89
-#| msgid "Display a grid pattern underneath source code"
+#: src/plugins/editorui/tweaks.ui:100
 msgid "Show a background pattern underneath source code"
 msgstr "Показувати фоновий візерунок під початковим кодом"
 
-#: src/plugins/editorui/tweaks.ui:94
-#| msgid "Grid Pattern"
+#: src/plugins/editorui/tweaks.ui:105
 msgid "No Pattern"
 msgstr "Без візерунка"
 
-#: src/plugins/editorui/tweaks.ui:100
-#| msgid "_Join Lines"
+#: src/plugins/editorui/tweaks.ui:111
 msgid "Grid Lines"
 msgstr "Лінії сітки"
 
-#: src/plugins/editorui/tweaks.ui:112
-#| msgid "Code Overview"
+#: src/plugins/editorui/tweaks.ui:123
 msgid "Source Code Overview"
 msgstr "Огляд початкового коду"
 
-#: src/plugins/editorui/tweaks.ui:113
-#| msgid ""
-#| "If enabled, Builder will display an overview map of the source file next "
-#| "to the editor."
+#: src/plugins/editorui/tweaks.ui:124
 msgid "Display an overview of source code next to the editor"
 msgstr "Показувати оглядову схему початкового коду поруч із вікном редактора."
 
-#: src/plugins/editorui/tweaks.ui:118
+#: src/plugins/editorui/tweaks.ui:129
 msgid "Prefer Scrollbars"
 msgstr "Пріоритет смужок гортання"
 
-#: src/plugins/editorui/tweaks.ui:124
-#| msgid "Always"
+#: src/plugins/editorui/tweaks.ui:135
 msgid "Always On"
 msgstr "Завжди ввімкнено"
 
-#: src/plugins/editorui/tweaks.ui:130
-#| msgid "Static"
+#: src/plugins/editorui/tweaks.ui:141
 msgid "Automatic"
 msgstr "Автоматично"
 
-#: src/plugins/editorui/tweaks.ui:142
+#: src/plugins/editorui/tweaks.ui:166
+#| msgid "Smart Home and End"
+msgid "Smart Home/End"
+msgstr "Кмітливі клавіші «Home» та «End»"
+
+#: src/plugins/editorui/tweaks.ui:167
+#| msgid "Home moves to first non-whitespace character"
+msgid "Moves to first non-whitespace character before line edges"
+msgstr ""
+"Перехід до першого символу, який не є пропуском, у напрямку до країв рядка"
+
+#: src/plugins/editorui/tweaks.ui:177
 #| msgid "Completion"
-msgid "Auto-Completion"
-msgstr "Автозавершення"
+msgid "Code Completion"
+msgstr "Доповнення коду"
+
+#: src/plugins/editorui/tweaks.ui:183
+#| msgid "Suggest Completions While Typing"
+msgid "Suggest Code Completions"
+msgstr "Пропонувати доповнення коду"
+
+#: src/plugins/editorui/tweaks.ui:184
+#| msgid "Automatically suggest completions while typing within the file"
+msgid "Automatically suggest code completions while typing"
+msgstr "Автоматично пропонувати варіанти доповнення коду під час введення"
+
+#: src/plugins/editorui/tweaks.ui:190
+#| msgid "Select First Completion"
+msgid "Select First Proposal"
+msgstr "Вибирати першу пропозицію"
+
+#: src/plugins/editorui/tweaks.ui:191
+#| msgid "Automatically select the first completion when displayed"
+msgid "Automatically select the first completion proposal when displayed"
+msgstr "Автоматично вибирати першу пропозицію доповнення при показу"
+
+#: src/plugins/editorui/tweaks.ui:254
+#| msgid "Trim Trailing Whitespace"
+msgid "Trim Trailing Space"
+msgstr "Обрізати кінцевий пробіл"
+
+#: src/plugins/editorui/tweaks.ui:262
+#| msgid ""
+#| "Use cursor position to highlight matching brackets, braces, parenthesis, "
+#| "and more"
+msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
+msgstr "Перезаписувати завершальні квадратні, фігурні та круглі дужки і лапки"
+
+#: src/plugins/editorui/tweaks.ui:269
+#| msgid ""
+#| "Use cursor position to highlight matching brackets, braces, parenthesis, "
+#| "and more"
+msgid ""
+"Insert matching character for braces, brackets, parenthesis, and quotes"
+msgstr ""
+"Вставляти відповідні символи для квадратних, фігурних та круглих дужок, а"
+" також лапок"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -5046,7 +5098,6 @@ msgid "_External Program…"
 msgstr "_Зовнішньої програми…"
 
 #: src/plugins/platformui/tweaks.ui:30
-#| msgid "Documentation"
 msgid "Document Navigation"
 msgstr "Навігація документом"
 
@@ -6004,6 +6055,10 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~| msgid "Completion"
+#~ msgid "Auto-Completion"
+#~ msgstr "Автозавершення"
 
 #~ msgid "Use Tabs"
 #~ msgstr "Використовувати вкладки"
