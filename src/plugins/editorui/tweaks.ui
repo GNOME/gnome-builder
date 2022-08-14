@@ -72,11 +72,22 @@
                         <property name="action-name">settings.org.gnome.builder.editor.show-line-numbers</property>
                       </object>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup" id="editor_page_highlight_group">
                     <child>
                       <object class="IdeTweaksSwitch" id="editor_highlight_line">
                         <property name="title" translatable="yes">Highlight Current Line</property>
                         <property name="subtitle" translatable="yes">Make the current line stand out with highlights</property>
                         <property name="action-name">settings.org.gnome.builder.editor.highlight-current-line</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksSwitch" id="editor_highlight_brackets">
+                        <property name="title" translatable="yes">Highlight Matching Brackets</property>
+                        <property name="subtitle" translatable="yes">Use cursor position to highlight matching brackets, braces, parenthesis, and more</property>
+                        <property name="action-name">settings.org.gnome.builder.editor.highlight-matching-brackets</property>
                       </object>
                     </child>
                   </object>
