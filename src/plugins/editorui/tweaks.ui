@@ -149,6 +149,30 @@
               </object>
             </child>
             <child>
+              <object class="IdeTweaksPage" id="editor_behavior_page">
+                <property name="title" translatable="yes">Behavior</property>
+                <child>
+                  <object class="IdeTweaksGroup" id="editor_behavior_keyboard_group">
+                    <property name="title" translatable="yes">Keyboard</property>
+                    <child>
+                      <object class="IdeTweaksSwitch" id="smart_backspace">
+                        <property name="title" translatable="yes">Smart Backspace</property>
+                        <property name="subtitle" translatable="yes">Backspace will remove extra space to keep you aligned with your indentation</property>
+                        <property name="action-name">settings.org.gnome.builder.editor.smart-backspace</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksSwitch" id="smart_home_end">
+                        <property name="title" translatable="yes">Smart Home/End</property>
+                        <property name="subtitle" translatable="yes">Moves to first non-whitespace character before line edges</property>
+                        <property name="action-name">settings.org.gnome.builder.editor.smart-home-end</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="IdeTweaksPage" id="editor_completion_page">
                 <property name="title" translatable="yes">Code Completion</property>
                 <child>
