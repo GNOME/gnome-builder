@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-11 15:29+0000\n"
-"PO-Revision-Date: 2022-08-11 22:04+0300\n"
+"POT-Creation-Date: 2022-08-13 18:54+0000\n"
+"PO-Revision-Date: 2022-08-14 08:53+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -22,9 +22,9 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:224
+#: src/libide/gui/ide-application-actions.c:206
 #: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:757 src/main.c:242
+#: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Будівник"
@@ -34,7 +34,7 @@ msgid "An IDE for GNOME"
 msgstr "Середовище розробляння для GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:225
+#: src/libide/gui/ide-application-actions.c:207
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert та інші"
 
@@ -417,6 +417,7 @@ msgstr "Кількість рядків доповнення, які слід п
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
+#: src/plugins/editorui/tweaks.ui:58
 msgid "Line Height"
 msgstr "Висота рядка"
 
@@ -449,18 +450,10 @@ msgstr ""
 "позначеного."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:138
-msgid "Use Tabs"
-msgstr "Використовувати вкладки"
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
-msgid "Use the tabbar within the page grid."
-msgstr "Чи слід використовувати панель вкладок у таблиці сторінок"
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 msgid "Enable Snippets"
 msgstr "Увімкнути фрагменти"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -468,12 +461,12 @@ msgstr ""
 "Дозволити розгортання фрагментів з редактора натисканням Tab після "
 "перемикача фрагмента."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:148
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
 msgid "Select First Completion"
 msgstr "Вибирати перше доповнення"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:149
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
 msgid "Automatically select the first auto-completion entry."
 msgstr "Автоматично вибирати перший запис автоматичного доповнення."
 
@@ -563,11 +556,15 @@ msgstr ""
 "Якщо увімкнено, «Будівник» очищуватиме кеші збирання під час запуску "
 "програми."
 
-#: data/gsettings/org.gnome.builder.gschema.xml:61
+#: data/gsettings/org.gnome.builder.gschema.xml:55
+msgid "The interface style to change pages"
+msgstr "Стиль інтерфейсу для зміни сторінок"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:69
 msgid "Default License"
 msgstr "Типова ліцензія"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:62
+#: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid "The default license to use for new projects"
 msgstr "Типові умови ліцензування для нових проєктів"
 
@@ -777,7 +774,7 @@ msgstr "Параметри"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:33
+#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:21
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
@@ -1310,15 +1307,15 @@ msgstr "Пошук клавіатурних скорочень"
 msgid "Show information about Builder"
 msgstr "Показати відомості щодо «Будівника»"
 
-#: src/libide/gui/ide-application-actions.c:163
+#: src/libide/gui/ide-application-actions.c:145
 msgid "Builder — Preferences"
 msgstr "Будівник – Налаштування"
 
-#: src/libide/gui/ide-application-actions.c:232
+#: src/libide/gui/ide-application-actions.c:214
 msgid "translator-credits"
 msgstr "Daniel Korostil <ted.korostiled@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:239
+#: src/libide/gui/ide-application-actions.c:221
 msgid "Funded By"
 msgstr "Фінансували"
 
@@ -1423,11 +1420,13 @@ msgstr "дотримуватися"
 
 #: src/libide/gui/ide-preferences-builtin.c:121
 #: src/libide/gui/ide-preferences-builtin.c:593
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
 msgstr "Світлий"
 
 #: src/libide/gui/ide-preferences-builtin.c:122
 #: src/libide/gui/ide-preferences-builtin.c:594
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
 msgid "Dark"
 msgstr "Темна"
 
@@ -1448,6 +1447,7 @@ msgid "Display a grid pattern underneath source code"
 msgstr "Показати шаблон сітки за кодом "
 
 #: src/libide/gui/ide-preferences-builtin.c:127
+#: src/plugins/editorui/tweaks.ui:50
 msgid "Font"
 msgstr "Шрифт"
 
@@ -1727,10 +1727,12 @@ msgstr "Засоби автодоповнення"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
+#: src/plugins/editorui/tweaks.ui:147
 msgid "Snippets"
 msgstr "Фрагменти"
 
-#: src/libide/gui/ide-preferences-builtin.c:280 src/libide/gui/tweaks.ui:43
+#: src/libide/gui/ide-preferences-builtin.c:280
+#: src/plugins/editorui/tweaks.ui:159
 msgid "Programming Languages"
 msgstr "Мови програмування"
 
@@ -1904,7 +1906,7 @@ msgid "Allow downloads over metered connections"
 msgstr "Дозволити отримання даних при вимірюваних з'єднаннях"
 
 #: src/libide/gui/ide-preferences-builtin.c:435
-#: src/libide/gui/ide-preferences-builtin.c:753
+#: src/libide/gui/ide-preferences-builtin.c:756
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -1954,7 +1956,7 @@ msgid "Restore previously opened files"
 msgstr "Відновлювати раніше відкриті файли"
 
 #: src/libide/gui/ide-preferences-builtin.c:449
-#: src/libide/gui/ide-preferences-builtin.c:728
+#: src/libide/gui/ide-preferences-builtin.c:731
 msgid "Open previously opened files when loading a project"
 msgstr "Відкривати раніше відкриті файли під час завантаження проєкту"
 
@@ -1967,6 +1969,7 @@ msgid "Version Control"
 msgstr "Контроль версії"
 
 #: src/libide/gui/ide-preferences-builtin.c:592
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
 msgstr "Використовувати системний"
 
@@ -1998,7 +2001,7 @@ msgstr "Команди"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:92
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:47
 msgid "Plugins"
 msgstr "Додатки"
 
@@ -2018,6 +2021,7 @@ msgstr "Програма"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Інтерфейс"
 
@@ -2086,76 +2090,76 @@ msgstr "Виконання"
 msgid "Starting & Stopping"
 msgstr "Запуск та зупинення"
 
-#: src/libide/gui/ide-preferences-builtin.c:722
+#: src/libide/gui/ide-preferences-builtin.c:724
 msgid "Navigate with Tab Bar"
 msgstr "Навігація за допомогою панелі вкладок"
 
-#: src/libide/gui/ide-preferences-builtin.c:723
+#: src/libide/gui/ide-preferences-builtin.c:725
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
 msgstr "Перемикання документів за допомогою інтерфейсу із вкладками"
 
-#: src/libide/gui/ide-preferences-builtin.c:727
+#: src/libide/gui/ide-preferences-builtin.c:730
 msgid "Restore Previous Session"
 msgstr "Відновлювати попередній сеанс"
 
-#: src/libide/gui/ide-preferences-builtin.c:732
+#: src/libide/gui/ide-preferences-builtin.c:735
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
 msgid "License"
 msgstr "Ліцензування"
 
-#: src/libide/gui/ide-preferences-builtin.c:733
+#: src/libide/gui/ide-preferences-builtin.c:736
 msgid "The default license when creating new projects"
 msgstr "Типові умови ліцензування при створенні проєктів"
 
-#: src/libide/gui/ide-preferences-builtin.c:737
+#: src/libide/gui/ide-preferences-builtin.c:740
 msgid "Stop After Launching Program"
 msgstr "Зупинятися після запуску програми"
 
-#: src/libide/gui/ide-preferences-builtin.c:738
+#: src/libide/gui/ide-preferences-builtin.c:741
 msgid "Automatically insert a breakpoint at the start of the application"
 msgstr "Автоматично вставляти точку зупинення на початку програми"
 
-#: src/libide/gui/ide-preferences-builtin.c:742
+#: src/libide/gui/ide-preferences-builtin.c:745
 msgid "Clear Build Logs"
 msgstr "Спорожняти журнал збирання"
 
-#: src/libide/gui/ide-preferences-builtin.c:743
+#: src/libide/gui/ide-preferences-builtin.c:746
 msgid "Upon rebuilding the project the build log will be cleared"
 msgstr "Перед повторним збиранням проєкту журнал збирання буде спорожнено"
 
-#: src/libide/gui/ide-preferences-builtin.c:747
+#: src/libide/gui/ide-preferences-builtin.c:750
 msgid "Clear Expired Artifacts"
 msgstr "Вилучити застарілі дані"
 
-#: src/libide/gui/ide-preferences-builtin.c:748
+#: src/libide/gui/ide-preferences-builtin.c:751
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Застарілі дані буде вилучено під час запуску «Будівника»"
 
-#: src/libide/gui/ide-preferences-builtin.c:752
+#: src/libide/gui/ide-preferences-builtin.c:755
 msgid "Allow Downloads over Metered Connections"
 msgstr "Дозволити отримання даних при вимірюваних з'єднаннях"
 
-#: src/libide/gui/ide-preferences-builtin.c:758
+#: src/libide/gui/ide-preferences-builtin.c:761
 msgid "Keyboard shortcuts similar to GNOME Text Editor"
 msgstr ""
 "Клавіатурні скорочення, подібні до скорочень «Текстового редактора GNOME»"
 
-#: src/libide/gui/ide-preferences-builtin.c:763
+#: src/libide/gui/ide-preferences-builtin.c:766
 #: src/plugins/buildui/gtk/preferences.ui:72
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
 msgstr "Шрифт термінала"
 
-#: src/libide/gui/ide-preferences-builtin.c:764
+#: src/libide/gui/ide-preferences-builtin.c:767
 msgid "The font used within terminals"
 msgstr "Шрифт, який буде використано у терміналах"
 
-#: src/libide/gui/ide-preferences-builtin.c:770
+#: src/libide/gui/ide-preferences-builtin.c:773
 msgid "Install Before Running"
 msgstr "Встановити до запуску"
 
-#: src/libide/gui/ide-preferences-builtin.c:771
+#: src/libide/gui/ide-preferences-builtin.c:774
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless run commands are used."
@@ -2163,11 +2167,11 @@ msgstr ""
 "Встановлювати програми до запуску. Це необхідно для більшості проєктів, якщо "
 "не використано команд запуску."
 
-#: src/libide/gui/ide-preferences-builtin.c:775
+#: src/libide/gui/ide-preferences-builtin.c:778
 msgid "Stop Signal"
 msgstr "Сигнал зупинення"
 
-#: src/libide/gui/ide-preferences-builtin.c:776
+#: src/libide/gui/ide-preferences-builtin.c:779
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
@@ -2176,6 +2180,7 @@ msgstr ""
 "програми."
 
 #: src/libide/gui/ide-preferences-window.c:1516
+#: src/libide/tweaks/ide-tweaks-font.c:101
 msgid "Select Font"
 msgstr "Вибір шрифту"
 
@@ -2203,8 +2208,7 @@ msgstr "Запустити проєкт"
 msgid "Custom Font"
 msgstr "Нетиповий шрифт"
 
-#: src/libide/gui/tweaks.ui:27
-#| msgid "Editor"
+#: src/libide/gui/tweaks.ui:15
 msgid "Text Editor"
 msgstr "Текстовий редактор"
 
@@ -2313,7 +2317,7 @@ msgid "_Find references"
 msgstr "З_найти посилання"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:977
+#: src/libide/sourceview/ide-source-view.c:1002
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -4024,6 +4028,7 @@ msgid "Movements"
 msgstr "Рухи"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:61
+#: src/plugins/editorui/tweaks.ui:51
 msgid "The font used within the source code editor"
 msgstr "Шрифт, який використано у редакторі коду"
 
@@ -4036,6 +4041,7 @@ msgid "Use an overview map instead of a scrollbar"
 msgstr "Використовувати карту перегляду замість смужки гортання"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
+#: src/plugins/editorui/tweaks.ui:70
 msgid "Show Line Numbers"
 msgstr "Показувати номери рядків"
 
@@ -4048,6 +4054,7 @@ msgid "Adjust line-height of the configured font"
 msgstr "Коригувати висоту рядка налаштованого шрифту"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
+#: src/plugins/editorui/tweaks.ui:77
 msgid "Highlight Current Line"
 msgstr "Підсвічувати поточний рядок"
 
@@ -4202,6 +4209,85 @@ msgstr "Надрукувати…"
 #: src/plugins/editorui/gtk/menus.ui:186
 msgid "Format Selection"
 msgstr "Форматувати позначене"
+
+#: src/plugins/editorui/tweaks.ui:16
+#| msgid "Colors"
+msgid "Color"
+msgstr "Колір"
+
+#: src/plugins/editorui/tweaks.ui:35
+msgid "Fonts & Styling"
+msgstr "Шрифти та стилі"
+
+#: src/plugins/editorui/tweaks.ui:38
+#| msgid "(Preview)"
+msgid "Preview"
+msgstr "Перегляд"
+
+#: src/plugins/editorui/tweaks.ui:59
+msgid "Adjust spacing between lines"
+msgstr "Коригувати інтервал між рядками"
+
+#: src/plugins/editorui/tweaks.ui:71
+#| msgid "Display line numbers next to each line of source code"
+msgid "Display line numbers next to each line of code"
+msgstr "Показувати номери рядків поряд із кожним рядком коду"
+
+#: src/plugins/editorui/tweaks.ui:78
+#| msgid "Make current line stand out with highlights"
+msgid "Make the current line stand out with highlights"
+msgstr "Підсвічувати поточний рядок"
+
+#: src/plugins/editorui/tweaks.ui:88
+#| msgid "Grid Pattern"
+msgid "Background Pattern"
+msgstr "Фоновий візерунок"
+
+#: src/plugins/editorui/tweaks.ui:89
+#| msgid "Display a grid pattern underneath source code"
+msgid "Show a background pattern underneath source code"
+msgstr "Показувати фоновий візерунок під початковим кодом"
+
+#: src/plugins/editorui/tweaks.ui:94
+#| msgid "Grid Pattern"
+msgid "No Pattern"
+msgstr "Без візерунка"
+
+#: src/plugins/editorui/tweaks.ui:100
+#| msgid "_Join Lines"
+msgid "Grid Lines"
+msgstr "Лінії сітки"
+
+#: src/plugins/editorui/tweaks.ui:112
+#| msgid "Code Overview"
+msgid "Source Code Overview"
+msgstr "Огляд початкового коду"
+
+#: src/plugins/editorui/tweaks.ui:113
+#| msgid ""
+#| "If enabled, Builder will display an overview map of the source file next "
+#| "to the editor."
+msgid "Display an overview of source code next to the editor"
+msgstr "Показувати оглядову схему початкового коду поруч із вікном редактора."
+
+#: src/plugins/editorui/tweaks.ui:118
+msgid "Prefer Scrollbars"
+msgstr "Пріоритет смужок гортання"
+
+#: src/plugins/editorui/tweaks.ui:124
+#| msgid "Always"
+msgid "Always On"
+msgstr "Завжди ввімкнено"
+
+#: src/plugins/editorui/tweaks.ui:130
+#| msgid "Static"
+msgid "Automatic"
+msgstr "Автоматично"
+
+#: src/plugins/editorui/tweaks.ui:142
+#| msgid "Completion"
+msgid "Auto-Completion"
+msgstr "Автозавершення"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4959,6 +5045,19 @@ msgstr "Отримуємо залежності npm"
 msgid "_External Program…"
 msgstr "_Зовнішньої програми…"
 
+#: src/plugins/platformui/tweaks.ui:30
+#| msgid "Documentation"
+msgid "Document Navigation"
+msgstr "Навігація документом"
+
+#: src/plugins/platformui/tweaks.ui:33
+msgid "Tab Bar"
+msgstr "Панель вкладок"
+
+#: src/plugins/platformui/tweaks.ui:39
+msgid "Drop Down"
+msgstr "Спадний список"
+
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
 msgid "Containers/Toolbox"
@@ -5522,7 +5621,7 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:270
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Термінал"
@@ -5628,16 +5727,16 @@ msgid "scrollback lines"
 msgstr "рядки буфера гортання"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:188
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Програму запущено о %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:206
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
 msgid "Application exited"
 msgstr "Програма завершила роботу"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:288
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
 msgid "Application Output"
 msgstr "Виведені програмою дані"
 
@@ -5905,6 +6004,12 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Use Tabs"
+#~ msgstr "Використовувати вкладки"
+
+#~ msgid "Use the tabbar within the page grid."
+#~ msgstr "Чи слід використовувати панель вкладок у таблиці сторінок"
 
 #~ msgid "manage-sdks"
 #~ msgstr "manage-sdks"
@@ -6269,13 +6374,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Show overview map"
 #~ msgstr "Показувати мапу коду"
 
-#~ msgid ""
-#~ "If enabled, Builder will display an overview map of the source file next "
-#~ "to the editor."
-#~ msgstr ""
-#~ "Якщо увімкнено, «Будівник» показуватиме оглядову мапу файла з початковим "
-#~ "кодом поряд із вікном редактора."
-
 #~ msgid "Automatically Hide Overview Map"
 #~ msgstr "Автоматично ховати оглядову мапу"
 
@@ -6290,9 +6388,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #, c-format
 #~ msgid "Failed to save file: %s"
 #~ msgstr "Не вдалося зберегти файл: %s"
-
-#~ msgid "Code Overview"
-#~ msgstr "Огляд коду"
 
 #~ msgid "A zoomed out view to enhance navigating source code"
 #~ msgstr "Віддалений огляд для покращення пересування по коду"
@@ -6866,9 +6961,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "_Select Documentation…"
 #~ msgstr "Ви_брати документацію…"
 
-#~ msgid "Documentation"
-#~ msgstr "Документація"
-
 #~ msgid "Reveal search bar with Ctrl+F"
 #~ msgstr "Відкрийте панель пошуку за допомогою Ctrl+F"
 
@@ -7176,9 +7268,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Your computer is missing python3-sphinx"
 #~ msgstr "На комп'ютері не встановлено python3-sphinx"
-
-#~ msgid "(Preview)"
-#~ msgstr "(Перегляд)"
 
 #, c-format
 #~ msgid "%s — Directory"
