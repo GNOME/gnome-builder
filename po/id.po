@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-06 14:43+0000\n"
-"PO-Revision-Date: 2022-08-09 10:52+0700\n"
+"POT-Creation-Date: 2022-08-14 05:57+0000\n"
+"PO-Revision-Date: 2022-08-14 13:27+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -23,9 +23,9 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:153
+#: src/libide/gui/ide-application-actions.c:206
 #: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:757 src/main.c:242
+#: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Builder"
@@ -35,7 +35,7 @@ msgid "An IDE for GNOME"
 msgstr "IDE untuk GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:154
+#: src/libide/gui/ide-application-actions.c:207
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, et al."
 
@@ -406,6 +406,7 @@ msgstr "Banyaknya baris pelengkapan untuk ditampilkan kepada pengguna."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
+#: src/plugins/editorui/tweaks.ui:58
 msgid "Line Height"
 msgstr "Tinggi Garis"
 
@@ -435,18 +436,10 @@ msgid "Specify the minimum number of characters for selection matching."
 msgstr "Tentukan jumlah minimum karakter untuk pencocokan pilihan."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:138
-msgid "Use Tabs"
-msgstr "Gunakan Tab"
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
-msgid "Use the tabbar within the page grid."
-msgstr "Gunakan bilah tab di dalam kisi halaman."
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 msgid "Enable Snippets"
 msgstr "Aktifkan Cuplikan"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -454,12 +447,12 @@ msgstr ""
 "Izinkan perluasan cuplikan dari penyunting dengan menekan tab setelah "
 "cuplikan dipicu."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:148
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
 msgid "Select First Completion"
 msgstr "Pilih Penyelesaian Pertama"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:149
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
 msgid "Automatically select the first auto-completion entry."
 msgstr "Secara otomatis memilih entri penyelesaian otomatis pertama."
 
@@ -548,11 +541,15 @@ msgid "If enabled, Builder will clear build caches upon startup."
 msgstr ""
 "Jika diaktifkan, Builder akan menghapus tembolok bangun saat awal mula."
 
-#: data/gsettings/org.gnome.builder.gschema.xml:61
+#: data/gsettings/org.gnome.builder.gschema.xml:55
+msgid "The interface style to change pages"
+msgstr "Gaya antarmuka untuk mengubah halaman"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:69
 msgid "Default License"
 msgstr "Lisensi Bawaan"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:62
+#: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid "The default license to use for new projects"
 msgstr "Lisensi bawaan yang digunakan untuk proyek baru"
 
@@ -762,13 +759,13 @@ msgstr "Preferensi"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700
-#: src/libide/tweaks/ide-tweaks-window.ui:136
+#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:21
+#: src/libide/tweaks/ide-tweaks-window.ui:139
 msgid "Keyboard Shortcuts"
 msgstr "Pintasan Papan Tik"
 
 #: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:140
+#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Bantuan"
 
@@ -1287,18 +1284,18 @@ msgstr "Temukan pintasan papan tik"
 msgid "Show information about Builder"
 msgstr "Tampilkan informasi tentang Builder"
 
-#: src/libide/gui/ide-application-actions.c:92
+#: src/libide/gui/ide-application-actions.c:145
 msgid "Builder — Preferences"
 msgstr "Builder — Preferensi"
 
-#: src/libide/gui/ide-application-actions.c:161
+#: src/libide/gui/ide-application-actions.c:214
 msgid "translator-credits"
 msgstr ""
 "Andika Triwidada <andika@gmail.com>, 2012, 2014, 2016, 2018.\n"
 "Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2022.\n"
 "Sucipto <sucipto@pm.me>, 2020."
 
-#: src/libide/gui/ide-application-actions.c:168
+#: src/libide/gui/ide-application-actions.c:221
 msgid "Funded By"
 msgstr "Didanai Oleh"
 
@@ -1379,7 +1376,7 @@ msgstr "Tidak dapat memuat HTML. Kehilangan dukungan WebKit."
 
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671
+#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:9
 #: src/plugins/buildui/gtk/menus.ui:141
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1402,11 +1399,13 @@ msgstr "ikuti"
 
 #: src/libide/gui/ide-preferences-builtin.c:121
 #: src/libide/gui/ide-preferences-builtin.c:593
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
 msgstr "Terang"
 
 #: src/libide/gui/ide-preferences-builtin.c:122
 #: src/libide/gui/ide-preferences-builtin.c:594
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
 msgid "Dark"
 msgstr "Gelap"
 
@@ -1427,6 +1426,7 @@ msgid "Display a grid pattern underneath source code"
 msgstr "Tampilkan suatu pola kisi di bawah kode sumber"
 
 #: src/libide/gui/ide-preferences-builtin.c:127
+#: src/plugins/editorui/tweaks.ui:50
 msgid "Font"
 msgstr "Fonta"
 
@@ -1490,6 +1490,7 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
+#: src/plugins/editorui/tweaks.ui:156 src/plugins/editorui/tweaks.ui:180
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
 msgstr "Umum"
@@ -1706,10 +1707,12 @@ msgstr "Penyedia Pelengkapan"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
+#: src/plugins/editorui/tweaks.ui:177
 msgid "Snippets"
 msgstr "Potongan"
 
 #: src/libide/gui/ide-preferences-builtin.c:280
+#: src/plugins/editorui/tweaks.ui:201
 msgid "Programming Languages"
 msgstr "Bahasa Pemrograman"
 
@@ -1883,7 +1886,7 @@ msgid "Allow downloads over metered connections"
 msgstr "Izinkan mengunduh melalui koneksi berkuota"
 
 #: src/libide/gui/ide-preferences-builtin.c:435
-#: src/libide/gui/ide-preferences-builtin.c:753
+#: src/libide/gui/ide-preferences-builtin.c:756
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -1933,7 +1936,7 @@ msgid "Restore previously opened files"
 msgstr "Pulihkan berkas yang sebelumnya terbuka"
 
 #: src/libide/gui/ide-preferences-builtin.c:449
-#: src/libide/gui/ide-preferences-builtin.c:728
+#: src/libide/gui/ide-preferences-builtin.c:731
 msgid "Open previously opened files when loading a project"
 msgstr "Pulihkan berkas yang sebelumnya terbuka ketika memuat sebuah proyek"
 
@@ -1946,6 +1949,7 @@ msgid "Version Control"
 msgstr "Kendali Versi"
 
 #: src/libide/gui/ide-preferences-builtin.c:592
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
 msgstr "Ikuti Sistem"
 
@@ -1977,7 +1981,7 @@ msgstr "Perintah"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/gui/ide-preferences-builtin.c:659
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:47
 msgid "Plugins"
 msgstr "Pengaya"
 
@@ -1997,6 +2001,7 @@ msgstr "Aplikasi"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Antarmuka"
 
@@ -2065,75 +2070,75 @@ msgstr "Berjalan"
 msgid "Starting & Stopping"
 msgstr "Memulai & Menghentikan"
 
-#: src/libide/gui/ide-preferences-builtin.c:722
+#: src/libide/gui/ide-preferences-builtin.c:724
 msgid "Navigate with Tab Bar"
 msgstr "Navigasikan dengan Bilah Tab"
 
-#: src/libide/gui/ide-preferences-builtin.c:723
+#: src/libide/gui/ide-preferences-builtin.c:725
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
 msgstr "Beralih dokumen menggunakan antarmuka tab"
 
-#: src/libide/gui/ide-preferences-builtin.c:727
+#: src/libide/gui/ide-preferences-builtin.c:730
 msgid "Restore Previous Session"
 msgstr "Kembalikan Sesi Sebelumnya"
 
-#: src/libide/gui/ide-preferences-builtin.c:732
+#: src/libide/gui/ide-preferences-builtin.c:735
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
 msgid "License"
 msgstr "Lisensi"
 
-#: src/libide/gui/ide-preferences-builtin.c:733
+#: src/libide/gui/ide-preferences-builtin.c:736
 msgid "The default license when creating new projects"
 msgstr "Lisensi bawaan saat membuat proyek baru"
 
-#: src/libide/gui/ide-preferences-builtin.c:737
+#: src/libide/gui/ide-preferences-builtin.c:740
 msgid "Stop After Launching Program"
 msgstr "Berhenti Setelah Meluncurkan Program"
 
-#: src/libide/gui/ide-preferences-builtin.c:738
+#: src/libide/gui/ide-preferences-builtin.c:741
 msgid "Automatically insert a breakpoint at the start of the application"
 msgstr "Secara otomatis menyisipkan breakpoint di awal aplikasi"
 
-#: src/libide/gui/ide-preferences-builtin.c:742
+#: src/libide/gui/ide-preferences-builtin.c:745
 msgid "Clear Build Logs"
 msgstr "Bersihkan Log Bangun"
 
-#: src/libide/gui/ide-preferences-builtin.c:743
+#: src/libide/gui/ide-preferences-builtin.c:746
 msgid "Upon rebuilding the project the build log will be cleared"
 msgstr "Setelah membangun kembali proyek, log bangun akan dihapus"
 
-#: src/libide/gui/ide-preferences-builtin.c:747
+#: src/libide/gui/ide-preferences-builtin.c:750
 msgid "Clear Expired Artifacts"
 msgstr "Hapus Artefak Kedaluwarsa"
 
-#: src/libide/gui/ide-preferences-builtin.c:748
+#: src/libide/gui/ide-preferences-builtin.c:751
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Artefak yang telah kedaluwarsa akan dihapus saat Builder dimulai"
 
-#: src/libide/gui/ide-preferences-builtin.c:752
+#: src/libide/gui/ide-preferences-builtin.c:755
 msgid "Allow Downloads over Metered Connections"
 msgstr "Izinkan Mengunduh melalui Koneksi Berkuota"
 
-#: src/libide/gui/ide-preferences-builtin.c:758
+#: src/libide/gui/ide-preferences-builtin.c:761
 msgid "Keyboard shortcuts similar to GNOME Text Editor"
 msgstr "Pintasan papan tik mirip dengan Penyunting Teks GNOME"
 
-#: src/libide/gui/ide-preferences-builtin.c:763
+#: src/libide/gui/ide-preferences-builtin.c:766
 #: src/plugins/buildui/gtk/preferences.ui:72
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
 msgstr "Fonta Terminal"
 
-#: src/libide/gui/ide-preferences-builtin.c:764
+#: src/libide/gui/ide-preferences-builtin.c:767
 msgid "The font used within terminals"
 msgstr "Fonta yang digunakan dalam terminal"
 
-#: src/libide/gui/ide-preferences-builtin.c:770
+#: src/libide/gui/ide-preferences-builtin.c:773
 msgid "Install Before Running"
 msgstr "Pasang Sebelum Berjalan"
 
-#: src/libide/gui/ide-preferences-builtin.c:771
+#: src/libide/gui/ide-preferences-builtin.c:774
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless run commands are used."
@@ -2141,17 +2146,18 @@ msgstr ""
 "Pasang aplikasi sebelum berjalan. Ini diperlukan untuk sebagian besar proyek "
 "kecuali perintah run digunakan."
 
-#: src/libide/gui/ide-preferences-builtin.c:775
+#: src/libide/gui/ide-preferences-builtin.c:778
 msgid "Stop Signal"
 msgstr "Sinyal Berhenti"
 
-#: src/libide/gui/ide-preferences-builtin.c:776
+#: src/libide/gui/ide-preferences-builtin.c:779
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
 msgstr "Kirim sinyal ke aplikasi target saat meminta penghentian aplikasi."
 
 #: src/libide/gui/ide-preferences-window.c:1516
+#: src/libide/tweaks/ide-tweaks-font.c:101
 msgid "Select Font"
 msgstr "Pilih Fonta"
 
@@ -2178,6 +2184,10 @@ msgstr "Jalankan proyek"
 #: src/libide/gui/tests/test-preferences.c:218
 msgid "Custom Font"
 msgstr "Fonta Ubahan"
+
+#: src/libide/gui/tweaks.ui:15
+msgid "Text Editor"
+msgstr "Penyunting Teks"
 
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
@@ -2281,7 +2291,7 @@ msgid "_Find references"
 msgstr "Temukan re_ferensi"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:977
+#: src/libide/sourceview/ide-source-view.c:1002
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -2363,15 +2373,15 @@ msgstr "(Kosong)"
 msgid "Loading…"
 msgstr "Memuat…"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:33
+#: src/libide/tweaks/ide-tweaks-window.ui:36
 msgid "All Preferences"
 msgstr "Semua Preferensi"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:45
+#: src/libide/tweaks/ide-tweaks-window.ui:48
 msgid "Search Preferences"
 msgstr "Preferensi Pencarian"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:58
+#: src/libide/tweaks/ide-tweaks-window.ui:61
 msgid "Primary Menu"
 msgstr "Menu Utama"
 
@@ -3981,6 +3991,7 @@ msgid "Movements"
 msgstr "Pergerakan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:61
+#: src/plugins/editorui/tweaks.ui:51
 msgid "The font used within the source code editor"
 msgstr "Fonta yang digunakan dalam penyunting kode sumber"
 
@@ -3993,6 +4004,7 @@ msgid "Use an overview map instead of a scrollbar"
 msgstr "Gunakan peta gambaran umum alih-alih bilah gulir"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
+#: src/plugins/editorui/tweaks.ui:70
 msgid "Show Line Numbers"
 msgstr "Tampilkan Nomor Baris"
 
@@ -4005,14 +4017,17 @@ msgid "Adjust line-height of the configured font"
 msgstr "Sesuaikan tinggi garis dari fonta yang dikonfigurasi"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
+#: src/plugins/editorui/tweaks.ui:81
 msgid "Highlight Current Line"
 msgstr "Tandai Baris Kini"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:90
+#: src/plugins/editorui/tweaks.ui:88
 msgid "Highlight Matching Brackets"
 msgstr "Sorot Tanda Kurung yang Berpasangan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:91
+#: src/plugins/editorui/tweaks.ui:89
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4033,10 +4048,12 @@ msgid "Automatically select the first completion when displayed"
 msgstr "Secara otomatis memilih penyelesaian pertama saat ditampilkan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
+#: src/plugins/editorui/tweaks.ui:183
 msgid "Expand Snippets"
 msgstr "Perluas Cuplikan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
+#: src/plugins/editorui/tweaks.ui:184
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Gunakan \"Tab\" untuk memperluas cuplikan yang dikonfigurasi di penyunting"
@@ -4160,6 +4177,86 @@ msgstr "Cetak…"
 #: src/plugins/editorui/gtk/menus.ui:186
 msgid "Format Selection"
 msgstr "Pemilihan Format"
+
+#: src/plugins/editorui/tweaks.ui:16
+msgid "Color"
+msgstr "Warna"
+
+#: src/plugins/editorui/tweaks.ui:35
+msgid "Fonts & Styling"
+msgstr "Fonta & Gaya"
+
+#: src/plugins/editorui/tweaks.ui:38
+msgid "Preview"
+msgstr "Pratinjau"
+
+#: src/plugins/editorui/tweaks.ui:59
+msgid "Adjust spacing between lines"
+msgstr "Sesuaikan penspasian antar baris"
+
+#: src/plugins/editorui/tweaks.ui:71
+msgid "Display line numbers next to each line of code"
+msgstr "Tampilkan nomor baris di samping setiap baris kode"
+
+#: src/plugins/editorui/tweaks.ui:82
+msgid "Make the current line stand out with highlights"
+msgstr "Buat garis saat ini menonjol dengan sorotan"
+
+#: src/plugins/editorui/tweaks.ui:99
+msgid "Background Pattern"
+msgstr "Pola Latar Belakang"
+
+#: src/plugins/editorui/tweaks.ui:100
+msgid "Show a background pattern underneath source code"
+msgstr "Tampilkan pola latar belakang di bawah kode sumber"
+
+#: src/plugins/editorui/tweaks.ui:105
+msgid "No Pattern"
+msgstr "Tidak Ada Pola"
+
+#: src/plugins/editorui/tweaks.ui:111
+msgid "Grid Lines"
+msgstr "Garis Kisi"
+
+#: src/plugins/editorui/tweaks.ui:123
+msgid "Source Code Overview"
+msgstr "Gambaran Umum Kode Sumber"
+
+#: src/plugins/editorui/tweaks.ui:124
+msgid "Display an overview of source code next to the editor"
+msgstr "Menampilkan gambaran umum kode sumber di samping penyunting"
+
+#: src/plugins/editorui/tweaks.ui:129
+msgid "Prefer Scrollbars"
+msgstr "Lebih suka Bilah gulir"
+
+#: src/plugins/editorui/tweaks.ui:135
+msgid "Always On"
+msgstr "Selalu Aktif"
+
+#: src/plugins/editorui/tweaks.ui:141
+msgid "Automatic"
+msgstr "Otomatis"
+
+#: src/plugins/editorui/tweaks.ui:153
+msgid "Code Completion"
+msgstr "Penyelesaian Kode"
+
+#: src/plugins/editorui/tweaks.ui:159
+msgid "Suggest Code Completions"
+msgstr "Sarankan Penyelesaian Kode"
+
+#: src/plugins/editorui/tweaks.ui:160
+msgid "Automatically suggest code completions while typing"
+msgstr "Secara otomatis menyarankan penyelesaian kode saat mengetik"
+
+#: src/plugins/editorui/tweaks.ui:166
+msgid "Select First Proposal"
+msgstr "Pilih Proposal Pertama"
+
+#: src/plugins/editorui/tweaks.ui:167
+msgid "Automatically select the first completion proposal when displayed"
+msgstr "Secara otomatis memilih proposal penyelesaian pertama saat ditampilkan"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4913,6 +5010,18 @@ msgstr "Mengunduh dependensi npm"
 msgid "_External Program…"
 msgstr "Program _Eksternal…"
 
+#: src/plugins/platformui/tweaks.ui:30
+msgid "Document Navigation"
+msgstr "Navigasi Dokumen"
+
+#: src/plugins/platformui/tweaks.ui:33
+msgid "Tab Bar"
+msgstr "Bilah Tab"
+
+#: src/plugins/platformui/tweaks.ui:39
+msgid "Drop Down"
+msgstr "Drop Down"
+
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
 msgid "Containers/Toolbox"
@@ -5465,7 +5574,7 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:270
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
@@ -5568,16 +5677,16 @@ msgid "scrollback lines"
 msgstr "baris gulir balik"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:188
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Aplikasi dimulai pada %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:206
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
 msgid "Application exited"
 msgstr "Aplikasi keluar"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:288
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
 msgid "Application Output"
 msgstr "Keluaran Aplikasi"
 
@@ -5847,12 +5956,11 @@ msgstr "Gagal membuat pohon XML."
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
-#~ msgid ""
-#~ "If enabled, Builder will display an overview map of the source file next "
-#~ "to the editor."
-#~ msgstr ""
-#~ "Bila difungsikan, Builder akan menampilkan peta ikhtisar berkas sumber di "
-#~ "sebelah penyunting."
+#~ msgid "Use Tabs"
+#~ msgstr "Gunakan Tab"
+
+#~ msgid "Use the tabbar within the page grid."
+#~ msgstr "Gunakan bilah tab di dalam kisi halaman."
 
 #~ msgid "Automatically Hide Overview Map"
 #~ msgstr "Otomatis Sembunyikan Peta Ikhtisar"
@@ -6173,9 +6281,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Allow the editor to scroll past the end of the buffer"
 #~ msgstr "Mengijinkan penyunting menggulir melewati akhir buffer"
-
-#~ msgid "Code Overview"
-#~ msgstr "Ringkasan Kode"
 
 #~ msgid "A zoomed out view to enhance navigating source code"
 #~ msgstr "Suatu tilikan diperkecil untuk meningkatkan navigasi kode sumber"
@@ -6684,9 +6789,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgid "_Select Documentation…"
 #~ msgstr "_Pilih Dokumentasi…"
 
-#~ msgid "Documentation"
-#~ msgstr "Dokumentasi"
-
 #~ msgid "Reveal search bar with Ctrl+F"
 #~ msgstr "Ungkap bilah pencarian dengan Ctrl+F"
 
@@ -7000,9 +7102,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Your computer is missing python3-sphinx"
 #~ msgstr "Komputer Anda kekurangan python3-sphinx"
-
-#~ msgid "(Preview)"
-#~ msgstr "(Pratinjau)"
 
 #~ msgid "%s — Directory"
 #~ msgstr "%s — Direktori"
@@ -7743,9 +7842,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgid "Tabs and Indentation"
 #~ msgstr "Tab dan Indentasi"
 
-#~ msgid "Auto indent new lines"
-#~ msgstr "Baris baru indentasi otomatis"
-
 #~ msgid ""
 #~ "Why not <a href=\"action://app.new-project\">create a new project</a>?"
 #~ msgstr ""
@@ -8068,9 +8164,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Failed to load file: %s: %s"
 #~ msgstr "Gagal memuat berkas: %s: %s"
-
-#~ msgid "Suggest Python completions"
-#~ msgstr "Sarankan pelengkapan Python"
 
 #~ msgid "CPU"
 #~ msgstr "CPU"
