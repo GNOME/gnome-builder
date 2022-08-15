@@ -51,19 +51,19 @@ struct _IdeTweaksAddinClass
 };
 
 IDE_AVAILABLE_IN_ALL
-const char *ide_tweaks_addin_get_resource_path (IdeTweaksAddin *self);
+const char * const *ide_tweaks_addin_get_resource_paths (IdeTweaksAddin     *self);
 IDE_AVAILABLE_IN_ALL
-void        ide_tweaks_addin_set_resource_path (IdeTweaksAddin *self,
-                                                const char     *resource_path);
+void                ide_tweaks_addin_set_resource_paths (IdeTweaksAddin     *self,
+                                                         const char * const *resource_path);
 IDE_AVAILABLE_IN_ALL
-void        ide_tweaks_addin_add_callback      (IdeTweaksAddin *self,
-                                                const char     *name,
-                                                GCallback       callback);
+void                ide_tweaks_addin_add_callback       (IdeTweaksAddin     *self,
+                                                         const char         *name,
+                                                         GCallback           callback);
 IDE_AVAILABLE_IN_ALL
-void        ide_tweaks_addin_load              (IdeTweaksAddin *self,
-                                                IdeTweaks      *tweaks);
+void                ide_tweaks_addin_load               (IdeTweaksAddin     *self,
+                                                         IdeTweaks          *tweaks);
 IDE_AVAILABLE_IN_ALL
-void        ide_tweaks_addin_unload            (IdeTweaksAddin *self,
-                                                IdeTweaks      *tweaks);
+void                ide_tweaks_addin_unload             (IdeTweaksAddin     *self,
+                                                         IdeTweaks          *tweaks);
 
 G_END_DECLS

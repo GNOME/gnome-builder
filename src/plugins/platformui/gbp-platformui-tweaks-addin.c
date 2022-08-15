@@ -112,8 +112,8 @@ gbp_platformui_tweaks_addin_class_init (GbpPlatformuiTweaksAddinClass *klass)
 static void
 gbp_platformui_tweaks_addin_init (GbpPlatformuiTweaksAddin *self)
 {
-  ide_tweaks_addin_set_resource_path (IDE_TWEAKS_ADDIN (self),
-                                      "/plugins/platformui/tweaks.ui");
+  ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
+                                       IDE_STRV_INIT ("/plugins/platformui/tweaks.ui"));
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),
                                   platformui_create_style_selector);
 }

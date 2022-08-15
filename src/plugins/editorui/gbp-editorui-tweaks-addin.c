@@ -89,8 +89,9 @@ gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
         g_list_store_append (store, l);
     }
 
-  ide_tweaks_addin_set_resource_path (IDE_TWEAKS_ADDIN (self),
-                                      "/plugins/editorui/tweaks.ui");
+  ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
+                                       IDE_STRV_INIT ("/plugins/editorui/tweaks.ui",
+                                                      "/plugins/editorui/tweaks-language.ui"));
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),
                                   editorui_create_style_scheme_preview);
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),

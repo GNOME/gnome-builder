@@ -26,8 +26,8 @@
 
 typedef struct
 {
-  char   *resource_path;
-  GArray *callbacks;
+  char   **resource_paths;
+  GArray  *callbacks;
 } IdeTweaksAddinPrivate;
 
 typedef struct
@@ -38,7 +38,7 @@ typedef struct
 
 enum {
   PROP_0,
-  PROP_RESOURCE_PATH,
+  PROP_RESOURCE_PATHS,
   N_PROPS
 };
 
@@ -51,9 +51,6 @@ ide_tweaks_addin_real_load (IdeTweaksAddin *self,
                             IdeTweaks      *tweaks)
 {
   IdeTweaksAddinPrivate *priv = ide_tweaks_addin_get_instance_private (self);
-  g_autoptr(GFile) file = NULL;
-  g_autoptr(GError) error = NULL;
-  g_autofree char *uri = NULL;
 
   g_assert (IDE_IS_TWEAKS_ADDIN (self));
   g_assert (IDE_IS_TWEAKS (tweaks));
@@ -71,14 +68,18 @@ ide_tweaks_addin_real_load (IdeTweaksAddin *self,
         }
     }
 
-  if (priv->resource_path == NULL)
+  if (priv->resource_paths == NULL)
     return;
 
-  uri = g_strdup_printf ("resource://%s", priv->resource_path);
-  file = g_file_new_for_uri (uri);
+  for (guint i = 0; priv->resource_paths[i]; i++)
+    {
+      g_autofree char *uri = g_strdup_printf ("resource://%s", priv->resource_paths[i]);
+      g_autoptr(GFile) file = g_file_new_for_uri (uri);
+      g_autoptr(GError) error = NULL;
 
-  if (!ide_tweaks_load_from_file (tweaks, file, NULL, &error))
-    g_warning ("%s", error->message);
+      if (!ide_tweaks_load_from_file (tweaks, file, NULL, &error))
+        g_warning ("%s", error->message);
+    }
 }
 
 static void
@@ -87,7 +88,7 @@ ide_tweaks_addin_dispose (GObject *object)
   IdeTweaksAddin *self = (IdeTweaksAddin *)object;
   IdeTweaksAddinPrivate *priv = ide_tweaks_addin_get_instance_private (self);
 
-  g_clear_pointer (&priv->resource_path, g_free);
+  g_clear_pointer (&priv->resource_paths, g_strfreev);
   g_clear_pointer (&priv->callbacks, g_array_unref);
 
   G_OBJECT_CLASS (ide_tweaks_addin_parent_class)->dispose (object);
@@ -103,8 +104,8 @@ ide_tweaks_addin_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_RESOURCE_PATH:
-      g_value_set_string (value, ide_tweaks_addin_get_resource_path (self));
+    case PROP_RESOURCE_PATHS:
+      g_value_set_boxed (value, ide_tweaks_addin_get_resource_paths (self));
       break;
 
     default:
@@ -122,8 +123,8 @@ ide_tweaks_addin_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_RESOURCE_PATH:
-      ide_tweaks_addin_set_resource_path (self, g_value_get_string (value));
+    case PROP_RESOURCE_PATHS:
+      ide_tweaks_addin_set_resource_paths (self, g_value_get_boxed (value));
       break;
 
     default:
@@ -142,9 +143,10 @@ ide_tweaks_addin_class_init (IdeTweaksAddinClass *klass)
 
   klass->load = ide_tweaks_addin_real_load;
 
-  properties [PROP_RESOURCE_PATH] =
-    g_param_spec_string ("resource-path", NULL, NULL, NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+  properties [PROP_RESOURCE_PATHS] =
+    g_param_spec_boxed ("resource-paths", NULL, NULL,
+                        G_TYPE_STRV,
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -154,26 +156,37 @@ ide_tweaks_addin_init (IdeTweaksAddin *self)
 {
 }
 
-const char *
-ide_tweaks_addin_get_resource_path (IdeTweaksAddin *self)
+const char * const *
+ide_tweaks_addin_get_resource_paths (IdeTweaksAddin *self)
 {
   IdeTweaksAddinPrivate *priv = ide_tweaks_addin_get_instance_private (self);
+  static const char *empty[] = { NULL };
 
   g_return_val_if_fail (IDE_IS_TWEAKS_ADDIN (self), NULL);
 
-  return priv->resource_path;
+  if (priv->resource_paths == NULL)
+    return empty;
+
+  return (const char * const *)priv->resource_paths;
 }
 
 void
-ide_tweaks_addin_set_resource_path (IdeTweaksAddin *self,
-                                    const char     *resource_path)
+ide_tweaks_addin_set_resource_paths (IdeTweaksAddin     *self,
+                                     const char * const *resource_paths)
 {
   IdeTweaksAddinPrivate *priv = ide_tweaks_addin_get_instance_private (self);
+  char **copy;
 
   g_return_if_fail (IDE_IS_TWEAKS_ADDIN (self));
 
-  if (ide_set_string (&priv->resource_path, resource_path))
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RESOURCE_PATH]);
+  if ((const char * const *)priv->resource_paths == resource_paths)
+    return;
+
+  copy = g_strdupv ((char **)resource_paths);
+  g_strfreev (priv->resource_paths);
+  priv->resource_paths = copy;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RESOURCE_PATHS]);
 }
 
 void
