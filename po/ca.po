@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-12 03:46+0000\n"
-"PO-Revision-Date: 2022-08-11 20:35+0200\n"
+"POT-Creation-Date: 2022-08-14 19:35+0000\n"
+"PO-Revision-Date: 2022-08-15 20:35+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -28,19 +28,19 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:225
+#: src/libide/gui/ide-application-actions.c:206
 #: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:757 src/main.c:242
+#: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Constructor"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
 msgid "An IDE for GNOME"
-msgstr "Un EID per al GNOME"
+msgstr "Un IDE per al GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:226
+#: src/libide/gui/ide-application-actions.c:207
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, et al."
 
@@ -333,6 +333,7 @@ msgstr "Si està habilitat, l'editor mostrarà els números de línia relatius."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:115
+#: src/plugins/editorui/tweaks.ui:159
 msgid "Smart Backspace"
 msgstr "Retrocés intel·ligent"
 
@@ -419,6 +420,7 @@ msgstr "El nombre de línies de compleció a mostrar a l'usuari."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
+#: src/plugins/editorui/tweaks.ui:58
 msgid "Line Height"
 msgstr "Alçada de línia"
 
@@ -451,18 +453,10 @@ msgstr ""
 "selecció."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:138
-msgid "Use Tabs"
-msgstr "Utilitza pestanyes"
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
-msgid "Use the tabbar within the page grid."
-msgstr "Utilitza la barra de pestanyes dins la graella de pàgina."
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 msgid "Enable Snippets"
 msgstr "Habilita els fragments"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -470,12 +464,12 @@ msgstr ""
 "Permet ampliar fragments de l'editor prement la pestanya després de "
 "l'activador de fragments."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:148
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
 msgid "Select First Completion"
 msgstr "Selecciona la primera compleció"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:149
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
 msgid "Automatically select the first auto-completion entry."
 msgstr "Selecciona automàticament la primera entrada de compleció automàtica."
 
@@ -565,11 +559,15 @@ msgstr ""
 "Si està habilitat, el Constructor netejarà les memòries cau de construcció "
 "en iniciar."
 
-#: data/gsettings/org.gnome.builder.gschema.xml:61
+#: data/gsettings/org.gnome.builder.gschema.xml:55
+msgid "The interface style to change pages"
+msgstr "L'estil de la interfície per a canviar pàgines"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:69
 msgid "Default License"
 msgstr "Llicència per defecte"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:62
+#: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid "The default license to use for new projects"
 msgstr "La llicència per defecte a utilitzar per a nous projectes"
 
@@ -782,7 +780,7 @@ msgstr "Preferències"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:33
+#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:21
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 msgid "Keyboard Shortcuts"
 msgstr "Dreceres del teclat"
@@ -1316,11 +1314,11 @@ msgstr "Cerca dreceres de teclat"
 msgid "Show information about Builder"
 msgstr "Mostra la informació sobre el Constructor"
 
-#: src/libide/gui/ide-application-actions.c:164
+#: src/libide/gui/ide-application-actions.c:145
 msgid "Builder — Preferences"
 msgstr "Preferències del Constructor"
 
-#: src/libide/gui/ide-application-actions.c:233
+#: src/libide/gui/ide-application-actions.c:214
 msgid "translator-credits"
 msgstr ""
 "Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2018\n"
@@ -1328,7 +1326,7 @@ msgstr ""
 "Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail.com>, 2020\n"
 "Maite Guix i Ribé <maite.guix@gmail.com>, 2022"
 
-#: src/libide/gui/ide-application-actions.c:240
+#: src/libide/gui/ide-application-actions.c:221
 msgid "Funded By"
 msgstr "Finançat per"
 
@@ -1433,11 +1431,13 @@ msgstr "segueix"
 
 #: src/libide/gui/ide-preferences-builtin.c:121
 #: src/libide/gui/ide-preferences-builtin.c:593
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
 msgstr "Clar"
 
 #: src/libide/gui/ide-preferences-builtin.c:122
 #: src/libide/gui/ide-preferences-builtin.c:594
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
 msgid "Dark"
 msgstr "Fosc"
 
@@ -1458,6 +1458,7 @@ msgid "Display a grid pattern underneath source code"
 msgstr "Mostra un patró de graella sota el codi font"
 
 #: src/libide/gui/ide-preferences-builtin.c:127
+#: src/plugins/editorui/tweaks.ui:50
 msgid "Font"
 msgstr "Tipus de lletra"
 
@@ -1484,6 +1485,7 @@ msgid "Color Scheme"
 msgstr "Esquema de color"
 
 #: src/libide/gui/ide-preferences-builtin.c:159
+#: src/plugins/editorui/tweaks.ui:156
 msgid "Keyboard"
 msgstr "Teclat"
 
@@ -1506,6 +1508,7 @@ msgstr "L'inici es mou al primer caràcter no en blanc"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:116
+#: src/plugins/editorui/tweaks.ui:160
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
@@ -1521,6 +1524,8 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
+#: src/plugins/editorui/tweaks.ui:180 src/plugins/editorui/tweaks.ui:204
+#: src/plugins/editorui/tweaks.ui:251
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
 msgstr "General"
@@ -1741,10 +1746,12 @@ msgstr "Proveïdors de compleció"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
+#: src/plugins/editorui/tweaks.ui:201
 msgid "Snippets"
 msgstr "Fragments"
 
-#: src/libide/gui/ide-preferences-builtin.c:280 src/libide/gui/tweaks.ui:43
+#: src/libide/gui/ide-preferences-builtin.c:280
+#: src/plugins/editorui/tweaks.ui:225
 msgid "Programming Languages"
 msgstr "Llenguatges de programació"
 
@@ -1766,6 +1773,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
+#: src/plugins/editorui/tweaks.ui:261
 msgid "Overwrite Braces"
 msgstr "Sobreescriu els claudàtors"
 
@@ -1776,6 +1784,7 @@ msgstr "Sobreescriu els claudàtors tancats"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
+#: src/plugins/editorui/tweaks.ui:268
 msgid "Insert Matching Brace"
 msgstr "Insereix claudàtors concordants"
 
@@ -1920,7 +1929,7 @@ msgid "Allow downloads over metered connections"
 msgstr "Permet baixades en connexions limitades"
 
 #: src/libide/gui/ide-preferences-builtin.c:435
-#: src/libide/gui/ide-preferences-builtin.c:753
+#: src/libide/gui/ide-preferences-builtin.c:756
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -1972,7 +1981,7 @@ msgid "Restore previously opened files"
 msgstr "Restaura els fitxers oberts prèviament"
 
 #: src/libide/gui/ide-preferences-builtin.c:449
-#: src/libide/gui/ide-preferences-builtin.c:728
+#: src/libide/gui/ide-preferences-builtin.c:731
 msgid "Open previously opened files when loading a project"
 msgstr "Obre els fitxers oberts prèviament quan es carregui un projecte"
 
@@ -1985,6 +1994,7 @@ msgid "Version Control"
 msgstr "Control de versions"
 
 #: src/libide/gui/ide-preferences-builtin.c:592
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
 msgstr "Segueix el sistema"
 
@@ -2016,7 +2026,7 @@ msgstr "Ordres"
 msgid "SDKs"
 msgstr "SDKs"
 
-#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:92
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:47
 msgid "Plugins"
 msgstr "Complements"
 
@@ -2036,6 +2046,7 @@ msgstr "Aplicació"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Interfície"
 
@@ -2089,6 +2100,7 @@ msgid "Additional"
 msgstr "Addicional"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
+#: src/plugins/editorui/tweaks.ui:153
 msgid "Behavior"
 msgstr "Comportament"
 
@@ -2104,77 +2116,77 @@ msgstr "S'està executant"
 msgid "Starting & Stopping"
 msgstr "Inici i parada"
 
-#: src/libide/gui/ide-preferences-builtin.c:722
+#: src/libide/gui/ide-preferences-builtin.c:724
 msgid "Navigate with Tab Bar"
 msgstr "Navegar amb la barra de pestanyes"
 
-#: src/libide/gui/ide-preferences-builtin.c:723
+#: src/libide/gui/ide-preferences-builtin.c:725
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
 msgstr "Canviar documents mitjançant una interfície amb pestanyes"
 
-#: src/libide/gui/ide-preferences-builtin.c:727
+#: src/libide/gui/ide-preferences-builtin.c:730
 msgid "Restore Previous Session"
 msgstr "Restaura la sessió anterior"
 
-#: src/libide/gui/ide-preferences-builtin.c:732
+#: src/libide/gui/ide-preferences-builtin.c:735
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
 msgid "License"
 msgstr "Llicència"
 
-#: src/libide/gui/ide-preferences-builtin.c:733
+#: src/libide/gui/ide-preferences-builtin.c:736
 msgid "The default license when creating new projects"
 msgstr "La llicència per defecte en crear projectes"
 
-#: src/libide/gui/ide-preferences-builtin.c:737
+#: src/libide/gui/ide-preferences-builtin.c:740
 msgid "Stop After Launching Program"
 msgstr "Atura't després d'iniciar el programa"
 
-#: src/libide/gui/ide-preferences-builtin.c:738
+#: src/libide/gui/ide-preferences-builtin.c:741
 msgid "Automatically insert a breakpoint at the start of the application"
 msgstr ""
 "Insereix automàticament un punt d'interrupció a l'inici de l'aplicació"
 
-#: src/libide/gui/ide-preferences-builtin.c:742
+#: src/libide/gui/ide-preferences-builtin.c:745
 msgid "Clear Build Logs"
 msgstr "Neteja el registre de construcció"
 
-#: src/libide/gui/ide-preferences-builtin.c:743
+#: src/libide/gui/ide-preferences-builtin.c:746
 msgid "Upon rebuilding the project the build log will be cleared"
 msgstr ""
 "En construir de nou el projecte, s'esborrarà el registre de construcció"
 
-#: src/libide/gui/ide-preferences-builtin.c:747
+#: src/libide/gui/ide-preferences-builtin.c:750
 msgid "Clear Expired Artifacts"
 msgstr "Neteja els artefactes caducats"
 
-#: src/libide/gui/ide-preferences-builtin.c:748
+#: src/libide/gui/ide-preferences-builtin.c:751
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Els artefactes caducats se suprimiran quan s'iniciï el Constructor"
 
-#: src/libide/gui/ide-preferences-builtin.c:752
+#: src/libide/gui/ide-preferences-builtin.c:755
 msgid "Allow Downloads over Metered Connections"
 msgstr "Permet baixades en connexions limitades"
 
-#: src/libide/gui/ide-preferences-builtin.c:758
+#: src/libide/gui/ide-preferences-builtin.c:761
 msgid "Keyboard shortcuts similar to GNOME Text Editor"
 msgstr "Dreceres de teclat similars a l'editor de text del GNOME"
 
-#: src/libide/gui/ide-preferences-builtin.c:763
+#: src/libide/gui/ide-preferences-builtin.c:766
 #: src/plugins/buildui/gtk/preferences.ui:72
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
 msgstr "Tipus de lletra del Terminal"
 
-#: src/libide/gui/ide-preferences-builtin.c:764
+#: src/libide/gui/ide-preferences-builtin.c:767
 msgid "The font used within terminals"
 msgstr "El tipus de lletra utilitzat als terminals"
 
-#: src/libide/gui/ide-preferences-builtin.c:770
+#: src/libide/gui/ide-preferences-builtin.c:773
 msgid "Install Before Running"
 msgstr "Instal·leu abans d'executar"
 
-#: src/libide/gui/ide-preferences-builtin.c:771
+#: src/libide/gui/ide-preferences-builtin.c:774
 msgid ""
 "Installs the application before running. This is necessary for most projects"
 " unless run commands are used."
@@ -2182,11 +2194,11 @@ msgstr ""
 "Instal·la l'aplicació abans d'executar-la. Això és necessari per a la "
 "majoria de projectes tret que utilitzin ordres d'execució."
 
-#: src/libide/gui/ide-preferences-builtin.c:775
+#: src/libide/gui/ide-preferences-builtin.c:778
 msgid "Stop Signal"
 msgstr "Senyal de stop"
 
-#: src/libide/gui/ide-preferences-builtin.c:776
+#: src/libide/gui/ide-preferences-builtin.c:779
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
@@ -2195,6 +2207,7 @@ msgstr ""
 "l'aplicació."
 
 #: src/libide/gui/ide-preferences-window.c:1516
+#: src/libide/tweaks/ide-tweaks-font.c:101
 msgid "Select Font"
 msgstr "Selecciona el tipus de lletra"
 
@@ -2222,7 +2235,7 @@ msgstr "Executa el projecte"
 msgid "Custom Font"
 msgstr "Tipus de lletra personalitzat"
 
-#: src/libide/gui/tweaks.ui:27
+#: src/libide/gui/tweaks.ui:15
 msgid "Text Editor"
 msgstr "Editor de text"
 
@@ -2330,7 +2343,7 @@ msgstr "_Cerca les referències"
 
 #. translators: the first %u is replaced with the line number and the second
 #. with the column.
-#: src/libide/sourceview/ide-source-view.c:977
+#: src/libide/sourceview/ide-source-view.c:1002
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -4048,6 +4061,7 @@ msgid "Movements"
 msgstr "Moviments"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:61
+#: src/plugins/editorui/tweaks.ui:51
 msgid "The font used within the source code editor"
 msgstr "El tipus de lletra utilitzat dins de l'editor de codi font"
 
@@ -4060,6 +4074,7 @@ msgid "Use an overview map instead of a scrollbar"
 msgstr "Utilitza un mapa general en lloc d'una barra de desplaçament"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
+#: src/plugins/editorui/tweaks.ui:70
 msgid "Show Line Numbers"
 msgstr "Mostra els números de línia"
 
@@ -4072,14 +4087,17 @@ msgid "Adjust line-height of the configured font"
 msgstr "Ajusta l'alçada de línia al tipus de lletra configurat"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
+#: src/plugins/editorui/tweaks.ui:81
 msgid "Highlight Current Line"
 msgstr "Ressalta la línia actual"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:90
+#: src/plugins/editorui/tweaks.ui:88
 msgid "Highlight Matching Brackets"
 msgstr "Ressalta els parèntesis concordants"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:91
+#: src/plugins/editorui/tweaks.ui:89
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and"
 " more"
@@ -4100,10 +4118,12 @@ msgid "Automatically select the first completion when displayed"
 msgstr "Selecciona automàticament la primera compleció quan es mostri"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
+#: src/plugins/editorui/tweaks.ui:207
 msgid "Expand Snippets"
 msgstr "Ampliar fragments"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
+#: src/plugins/editorui/tweaks.ui:208
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Utilitza «tabulador» per a ampliar els fragments configurats a l'editor"
@@ -4113,6 +4133,7 @@ msgid "Trim Trailing Whitespace"
 msgstr "Retalla l'espai en blanc final"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
+#: src/plugins/editorui/tweaks.ui:255
 msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
 msgstr ""
 "En desar, es retallaran els espais en blanc finals de les línies modificades"
@@ -4225,6 +4246,110 @@ msgstr "Imprimeix…"
 #: src/plugins/editorui/gtk/menus.ui:186
 msgid "Format Selection"
 msgstr "Formata la selecció"
+
+#: src/plugins/editorui/tweaks.ui:16
+msgid "Color"
+msgstr "Colors"
+
+#: src/plugins/editorui/tweaks.ui:35
+msgid "Fonts & Styling"
+msgstr "Tipus de lletra i estil"
+
+#: src/plugins/editorui/tweaks.ui:38
+msgid "Preview"
+msgstr "Vista prèvia"
+
+#: src/plugins/editorui/tweaks.ui:59
+msgid "Adjust spacing between lines"
+msgstr "Ajusta l'espaiat entre línies"
+
+#: src/plugins/editorui/tweaks.ui:71
+msgid "Display line numbers next to each line of code"
+msgstr "Mostra els números de línia al costat de cada línia de codi"
+
+#: src/plugins/editorui/tweaks.ui:82
+msgid "Make the current line stand out with highlights"
+msgstr "Fes destacar la línia actual amb ressalts"
+
+#: src/plugins/editorui/tweaks.ui:99
+msgid "Background Pattern"
+msgstr "Patró de fons"
+
+#: src/plugins/editorui/tweaks.ui:100
+msgid "Show a background pattern underneath source code"
+msgstr "Mostra un patró de fons sota el codi font"
+
+#: src/plugins/editorui/tweaks.ui:105
+msgid "No Pattern"
+msgstr "Sense patró"
+
+#: src/plugins/editorui/tweaks.ui:111
+msgid "Grid Lines"
+msgstr "Línies de quadrícula"
+
+#: src/plugins/editorui/tweaks.ui:123
+msgid "Source Code Overview"
+msgstr "Vista general del codi font"
+
+#: src/plugins/editorui/tweaks.ui:124
+msgid "Display an overview of source code next to the editor"
+msgstr "Mostra un resum del codi font al costat de l'editor"
+
+#: src/plugins/editorui/tweaks.ui:129
+msgid "Prefer Scrollbars"
+msgstr "Prefereix barres de desplaçament"
+
+#: src/plugins/editorui/tweaks.ui:135
+msgid "Always On"
+msgstr "Sempre activat"
+
+#: src/plugins/editorui/tweaks.ui:141
+msgid "Automatic"
+msgstr "Automàtic"
+
+#: src/plugins/editorui/tweaks.ui:166
+msgid "Smart Home/End"
+msgstr "Inici i final intel·ligents"
+
+#: src/plugins/editorui/tweaks.ui:167
+msgid "Moves to first non-whitespace character before line edges"
+msgstr "Mou al primer caràcter no en blanc abans de les vores de la línia"
+
+#: src/plugins/editorui/tweaks.ui:177
+msgid "Code Completion"
+msgstr "Compleció de codi"
+
+#: src/plugins/editorui/tweaks.ui:183
+msgid "Suggest Code Completions"
+msgstr "Suggereix complecions de codi"
+
+#: src/plugins/editorui/tweaks.ui:184
+msgid "Automatically suggest code completions while typing"
+msgstr "Suggereix complecions automàticament mentre s'escriu"
+
+#: src/plugins/editorui/tweaks.ui:190
+msgid "Select First Proposal"
+msgstr "Selecciona la primera proposta"
+
+#: src/plugins/editorui/tweaks.ui:191
+msgid "Automatically select the first completion proposal when displayed"
+msgstr ""
+"Selecciona automàticament la primera proposta de compleció quan es mostri"
+
+#: src/plugins/editorui/tweaks.ui:254
+msgid "Trim Trailing Space"
+msgstr "Retalla l'espai final"
+
+#: src/plugins/editorui/tweaks.ui:262
+msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
+msgstr "Sobreescriu les claus de tancament, parèntesis i cometes"
+
+#: src/plugins/editorui/tweaks.ui:269
+msgid ""
+"Insert matching character for braces, brackets, parenthesis, and quotes"
+msgstr ""
+"Insereix un caràcter coincident per als claudàtors, parèntesis i"
+" cometes"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4989,6 +5114,18 @@ msgstr "S'estan descarregant les dependències npm"
 msgid "_External Program…"
 msgstr "_Programa extern…"
 
+#: src/plugins/platformui/tweaks.ui:30
+msgid "Document Navigation"
+msgstr "Navegació de documents"
+
+#: src/plugins/platformui/tweaks.ui:33
+msgid "Tab Bar"
+msgstr "Barra de pestanyes"
+
+#: src/plugins/platformui/tweaks.ui:39
+msgid "Drop Down"
+msgstr "Deixa anar"
+
 #. translators: this is a path to browse to the runtime, likely only
 #. "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
@@ -5557,7 +5694,7 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:270
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
@@ -5664,16 +5801,16 @@ msgid "scrollback lines"
 msgstr "línies d'historial"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:188
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "L'aplicació ha començat a les %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:206
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
 msgid "Application exited"
 msgstr "L'aplicació s'ha tancat"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:288
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
 msgid "Application Output"
 msgstr "Sortida de l'aplicació"
 
@@ -5946,4 +6083,3 @@ msgstr "Ha fallat crear l'arbre XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "El fitxer ha d'estar desat localment per a analitzar-lo."
-
