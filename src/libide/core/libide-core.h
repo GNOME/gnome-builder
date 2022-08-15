@@ -39,6 +39,7 @@
 #include "ide-object-box.h"
 #include "ide-property-action-group.h"
 #include "ide-settings.h"
+#include "ide-settings-flag-action.h"
 #include "ide-signal-group.h"
 #include "ide-transfer.h"
 #include "ide-transfer-manager.h"
