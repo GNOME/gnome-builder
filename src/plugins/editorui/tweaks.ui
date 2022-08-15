@@ -170,14 +170,9 @@
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="IdeTweaksPage" id="editor_completion_page">
-                <property name="title" translatable="yes">Code Completion</property>
                 <child>
                   <object class="IdeTweaksGroup" id="editor_completion_general_group">
-                    <property name="title" translatable="yes">General</property>
+                    <property name="title" translatable="yes">Code Completion</property>
                     <child>
                       <object class="IdeTweaksSwitch" id="suggest_code_completions">
                         <property name="title" translatable="yes">Suggest Code Completions</property>
@@ -187,21 +182,16 @@
                     </child>
                     <child>
                       <object class="IdeTweaksSwitch" id="select_first_completion">
-                        <property name="title" translatable="yes">Select First Proposal</property>
+                        <property name="title" translatable="yes">Select First Completion Proposal</property>
                         <property name="subtitle" translatable="yes">Automatically select the first completion proposal when displayed</property>
                         <property name="action-name">settings.org.gnome.builder.editor.select-first-completion</property>
                       </object>
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="IdeTweaksPage" id="editor_snippets_page">
-                <property name="title" translatable="yes">Snippets</property>
                 <child>
                   <object class="IdeTweaksGroup" id="editor_snippets_general_group">
-                    <property name="title" translatable="yes">General</property>
+                    <property name="title" translatable="yes">Snippets</property>
                     <child>
                       <object class="IdeTweaksSwitch" id="enable_snippets">
                         <property name="title" translatable="yes">Expand Snippets</property>
