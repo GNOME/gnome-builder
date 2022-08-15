@@ -172,6 +172,7 @@ src/plugins/editorconfig/gbp-editorconfig-file-settings.c
 src/plugins/editorui/gbp-editorui-application-addin.c
 src/plugins/editorui/gbp-editorui-position-label.c
 src/plugins/editorui/gbp-editorui-preferences-addin.c
+src/plugins/editorui/gbp-editorui-tweaks-addin.c
 src/plugins/editorui/gbp-editorui-workspace-addin.c
 src/plugins/editorui/gtk/menus.ui
 src/plugins/editorui/tweaks.ui

@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-gui.h>
 
 #include "gbp-editorui-preview.h"
@@ -66,6 +68,18 @@ editorui_create_style_scheme_selector (GbpEditoruiTweaksAddin *self,
                        NULL);
 }
 
+static GtkWidget *
+create_language_caption (IdeTweaks       *tweaks,
+                         IdeTweaksWidget *widget)
+{
+  return g_object_new (GTK_TYPE_LABEL,
+                       "css-classes", IDE_STRV_INIT ("caption", "dim-label"),
+                       "label", _("Settings provided .editorconfig and modelines specified within files take precedence over those below."),
+                       "xalign", .0f,
+                       "wrap", TRUE,
+                       NULL);
+}
+
 static void
 gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
                                 IdeTweaks      *tweaks)
@@ -92,10 +106,9 @@ gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
   ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
                                        IDE_STRV_INIT ("/plugins/editorui/tweaks.ui",
                                                       "/plugins/editorui/tweaks-language.ui"));
-  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),
-                                  editorui_create_style_scheme_preview);
-  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self),
-                                  editorui_create_style_scheme_selector);
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), editorui_create_style_scheme_preview);
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), editorui_create_style_scheme_selector);
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_language_caption);
   ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (store));
 
   IDE_TWEAKS_ADDIN_CLASS (gbp_editorui_tweaks_addin_parent_class)->load (addin, tweaks);
