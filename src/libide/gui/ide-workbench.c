@@ -23,11 +23,13 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libpeas/peas.h>
 
 #include <libide-debugger.h>
 #include <libide-gtk.h>
 #include <libide-threading.h>
+#include <libide-tweaks.h>
 
 #include "ide-build-private.h"
 #include "ide-context-private.h"
@@ -143,6 +145,9 @@ static void ide_workbench_action_global_search (gpointer      instance,
                                                 const char   *action_name,
                                                 GVariant     *param);
 static void ide_workbench_action_configure     (gpointer      instance,
+                                                const char   *action_name,
+                                                GVariant     *param);
+static void ide_workbench_action_tweaks        (gpointer      instance,
                                                 const char   *action_name,
                                                 GVariant     *param);
 
@@ -532,6 +537,7 @@ ide_workbench_class_init (IdeWorkbenchClass *klass)
   ide_action_mixin_install_action (&action_mixin, "global-search", NULL, ide_workbench_action_global_search);
   ide_action_mixin_install_action (&action_mixin, "configure", NULL, ide_workbench_action_configure);
   ide_action_mixin_install_action (&action_mixin, "configure-page", "s", ide_workbench_action_configure);
+  ide_action_mixin_install_action (&action_mixin, "tweaks", NULL, ide_workbench_action_tweaks);
   ide_action_mixin_install_action (&action_mixin, "-inspector", NULL, ide_workbench_action_inspector);
   ide_action_mixin_install_action (&action_mixin, "-object-tree", NULL, ide_workbench_action_object_tree);
   ide_action_mixin_install_action (&action_mixin, "-dump-tasks", NULL, ide_workbench_action_dump_tasks);
@@ -2687,6 +2693,47 @@ ide_workbench_resolve_file_finish (IdeWorkbench  *self,
   ret = ide_task_propagate_pointer (IDE_TASK (result), error);
 
   IDE_RETURN (g_steal_pointer (&ret));
+}
+
+static void
+ide_workbench_action_tweaks (gpointer    instance,
+                             const char *action_name,
+                             GVariant   *param)
+{
+  IdeWorkbench *self = instance;
+  g_autoptr(IdeTweaks) tweaks = NULL;
+  g_autoptr(GError) error = NULL;
+  g_autoptr(GFile) tweaks_file = NULL;
+  IdeTweaksWindow *window;
+  const char *project_id;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  tweaks = ide_tweaks_new ();
+
+  /* We are in project mode, so expose the project-id */
+  project_id = ide_context_dup_project_id (self->context);
+  ide_tweaks_set_project_id (tweaks, project_id);
+
+  /* Ensure access to the context and workbench objects */
+  ide_tweaks_expose_object (tweaks, "context", G_OBJECT (self->context));
+  ide_tweaks_expose_object (tweaks, "workbench", G_OBJECT (self));
+
+  /* Load our base tweaks scaffolding */
+  tweaks_file = g_file_new_for_uri ("resource:///org/gnome/libide-gui/tweaks.ui");
+  ide_tweaks_load_from_file (tweaks, tweaks_file, NULL, &error);
+  g_assert_no_error (error);
+
+  /* Now display window */
+  window = g_object_new (IDE_TYPE_TWEAKS_WINDOW,
+                         "tweaks", tweaks,
+                         NULL);
+  gtk_window_group_add_window (GTK_WINDOW_GROUP (self), GTK_WINDOW (window));
+  gtk_window_present (GTK_WINDOW (window));
+
+  IDE_EXIT;
 }
 
 static void
