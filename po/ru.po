@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-02 11:44+0000\n"
-"PO-Revision-Date: 2022-08-02 16:12+0300\n"
+"POT-Creation-Date: 2022-08-14 06:28+0000\n"
+"PO-Revision-Date: 2022-08-14 18:38+0300\n"
 "Last-Translator: David Lapshin <ddaudix@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -23,9 +23,9 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:153
+#: src/libide/gui/ide-application-actions.c:206
 #: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:757 src/main.c:242
+#: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Builder"
@@ -35,7 +35,7 @@ msgid "An IDE for GNOME"
 msgstr "IDE для GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:154
+#: src/libide/gui/ide-application-actions.c:207
 msgid "Christian Hergert, et al."
 msgstr "Кристиан Хергерт и др."
 
@@ -413,6 +413,7 @@ msgstr "Количество строк автодополнения, котор
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:122
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
+#: src/plugins/editorui/tweaks.ui:58
 msgid "Line Height"
 msgstr "Высота линии"
 
@@ -442,18 +443,10 @@ msgid "Specify the minimum number of characters for selection matching."
 msgstr "Укажите минимальное количество символов для подбора соответствия."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:138
-msgid "Use Tabs"
-msgstr "Использовать вкладки"
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
-msgid "Use the tabbar within the page grid."
-msgstr "Использовать панель вкладок в пределах сетки страницы."
-
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 msgid "Enable Snippets"
 msgstr "Включить фрагменты"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -461,12 +454,12 @@ msgstr ""
 "Разрешить расширять фрагменты из редактора, нажав tab после триггера "
 "фрагмента."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:148
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
 msgid "Select First Completion"
 msgstr "Выбрать первое автодополнение"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:149
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
 msgid "Automatically select the first auto-completion entry."
 msgstr "Автоматически выберите первую запись автодополнения."
 
@@ -555,11 +548,15 @@ msgid "If enabled, Builder will clear build caches upon startup."
 msgstr ""
 "Если этот параметр включён, Builder будет очищать кэши сборки при запуске."
 
-#: data/gsettings/org.gnome.builder.gschema.xml:61
+#: data/gsettings/org.gnome.builder.gschema.xml:55
+msgid "The interface style to change pages"
+msgstr "Стиль интерфейса для смены страниц"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:69
 msgid "Default License"
 msgstr "Лицензия по умолчанию"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:62
+#: data/gsettings/org.gnome.builder.gschema.xml:70
 msgid "The default license to use for new projects"
 msgstr "Лицензия по умолчанию для использования в новых проектах"
 
@@ -764,19 +761,19 @@ msgstr "Открыть в рабочем пространстве"
 #: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
 #: src/libide/gui/ide-preferences-window.c:894
-#: src/libide/tweaks/ide-tweaks-window.ui:24
+#: src/libide/tweaks/ide-tweaks-window.ui:4
 msgid "Preferences"
 msgstr "Параметры"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700
-#: src/libide/tweaks/ide-tweaks-window.ui:144
+#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:21
+#: src/libide/tweaks/ide-tweaks-window.ui:139
 msgid "Keyboard Shortcuts"
 msgstr "Комбинации клавиш"
 
 #: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:148
+#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Справка"
 
@@ -1300,11 +1297,11 @@ msgstr "Найти Комбинации клавиш"
 msgid "Show information about Builder"
 msgstr "Показать информацию об Builder"
 
-#: src/libide/gui/ide-application-actions.c:92
+#: src/libide/gui/ide-application-actions.c:145
 msgid "Builder — Preferences"
 msgstr "Builder — Параметры"
 
-#: src/libide/gui/ide-application-actions.c:161
+#: src/libide/gui/ide-application-actions.c:214
 msgid "translator-credits"
 msgstr ""
 "Stas Solovey <whats_up@tut.by>, 2017\n"
@@ -1312,7 +1309,7 @@ msgstr ""
 "Ser-82-png <sw@atrus.ru>, 2022\n"
 "David Lapshin <ddaudix@gmail.com>, 2022"
 
-#: src/libide/gui/ide-application-actions.c:168
+#: src/libide/gui/ide-application-actions.c:221
 msgid "Funded By"
 msgstr "Финансируется"
 
@@ -1392,7 +1389,7 @@ msgstr "Не удается загрузить HTML. Отсутствует по
 
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671
+#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:9
 #: src/plugins/buildui/gtk/menus.ui:141
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1415,11 +1412,13 @@ msgstr "следовать"
 
 #: src/libide/gui/ide-preferences-builtin.c:121
 #: src/libide/gui/ide-preferences-builtin.c:593
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
 msgstr "Светлый"
 
 #: src/libide/gui/ide-preferences-builtin.c:122
 #: src/libide/gui/ide-preferences-builtin.c:594
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
 msgid "Dark"
 msgstr "Тёмный"
 
@@ -1440,6 +1439,7 @@ msgid "Display a grid pattern underneath source code"
 msgstr "Отображать схему сетки под исходным кодом"
 
 #: src/libide/gui/ide-preferences-builtin.c:127
+#: src/plugins/editorui/tweaks.ui:50
 msgid "Font"
 msgstr "Шрифт"
 
@@ -1503,6 +1503,7 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
+#: src/plugins/editorui/tweaks.ui:156 src/plugins/editorui/tweaks.ui:180
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
 msgstr "Основные"
@@ -1718,10 +1719,12 @@ msgstr "Автодополнение"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
+#: src/plugins/editorui/tweaks.ui:177
 msgid "Snippets"
 msgstr "Фрагменты текста"
 
 #: src/libide/gui/ide-preferences-builtin.c:280
+#: src/plugins/editorui/tweaks.ui:201
 msgid "Programming Languages"
 msgstr "Языки программирования"
 
@@ -1896,7 +1899,7 @@ msgid "Allow downloads over metered connections"
 msgstr "Разрешить загрузки по лимитным соединениям"
 
 #: src/libide/gui/ide-preferences-builtin.c:435
-#: src/libide/gui/ide-preferences-builtin.c:753
+#: src/libide/gui/ide-preferences-builtin.c:756
 msgid ""
 "Allow the use of metered network connections when automatically downloading "
 "dependencies"
@@ -1948,7 +1951,7 @@ msgid "Restore previously opened files"
 msgstr "Восстановить ранее открытые файлы"
 
 #: src/libide/gui/ide-preferences-builtin.c:449
-#: src/libide/gui/ide-preferences-builtin.c:728
+#: src/libide/gui/ide-preferences-builtin.c:731
 msgid "Open previously opened files when loading a project"
 msgstr "Открывать ранее открытые файлы при загрузке проекта"
 
@@ -1961,6 +1964,7 @@ msgid "Version Control"
 msgstr "Контроль версий"
 
 #: src/libide/gui/ide-preferences-builtin.c:592
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
 msgstr "Следовать системе"
 
@@ -1992,7 +1996,7 @@ msgstr "Команды"
 msgid "SDKs"
 msgstr "SDKs"
 
-#: src/libide/gui/ide-preferences-builtin.c:659
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:47
 msgid "Plugins"
 msgstr "Плагини"
 
@@ -2012,6 +2016,7 @@ msgstr "Приложение"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Интерфейс"
 
@@ -2080,75 +2085,75 @@ msgstr "Выполнение"
 msgid "Starting & Stopping"
 msgstr "Запуск и Остановка"
 
-#: src/libide/gui/ide-preferences-builtin.c:722
+#: src/libide/gui/ide-preferences-builtin.c:724
 msgid "Navigate with Tab Bar"
 msgstr "Навигация при помощи панели вкладок"
 
-#: src/libide/gui/ide-preferences-builtin.c:723
+#: src/libide/gui/ide-preferences-builtin.c:725
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
 msgstr "Переключать документы используя вкладки"
 
-#: src/libide/gui/ide-preferences-builtin.c:727
+#: src/libide/gui/ide-preferences-builtin.c:730
 msgid "Restore Previous Session"
 msgstr "Восстановить предыдущею сессию"
 
-#: src/libide/gui/ide-preferences-builtin.c:732
+#: src/libide/gui/ide-preferences-builtin.c:735
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
 msgid "License"
 msgstr "Лицензия"
 
-#: src/libide/gui/ide-preferences-builtin.c:733
+#: src/libide/gui/ide-preferences-builtin.c:736
 msgid "The default license when creating new projects"
 msgstr "Лицензия по умолчанию при создании проектов"
 
-#: src/libide/gui/ide-preferences-builtin.c:737
+#: src/libide/gui/ide-preferences-builtin.c:740
 msgid "Stop After Launching Program"
 msgstr "Остановить после запуска программы"
 
-#: src/libide/gui/ide-preferences-builtin.c:738
+#: src/libide/gui/ide-preferences-builtin.c:741
 msgid "Automatically insert a breakpoint at the start of the application"
 msgstr "Автоматически вставлять точку остановки при запуске приложения"
 
-#: src/libide/gui/ide-preferences-builtin.c:742
+#: src/libide/gui/ide-preferences-builtin.c:745
 msgid "Clear Build Logs"
 msgstr "Очистить журналы сборки"
 
-#: src/libide/gui/ide-preferences-builtin.c:743
+#: src/libide/gui/ide-preferences-builtin.c:746
 msgid "Upon rebuilding the project the build log will be cleared"
 msgstr "Во время пере-сборки проекта журнал сборки будет очищен"
 
-#: src/libide/gui/ide-preferences-builtin.c:747
+#: src/libide/gui/ide-preferences-builtin.c:750
 msgid "Clear Expired Artifacts"
 msgstr "Очищать просроченные артефакты"
 
-#: src/libide/gui/ide-preferences-builtin.c:748
+#: src/libide/gui/ide-preferences-builtin.c:751
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Просроченные артефакты будут очищены при запуске Builder"
 
-#: src/libide/gui/ide-preferences-builtin.c:752
+#: src/libide/gui/ide-preferences-builtin.c:755
 msgid "Allow Downloads over Metered Connections"
 msgstr "Разрешить загрузки по лимитным соединениям"
 
-#: src/libide/gui/ide-preferences-builtin.c:758
+#: src/libide/gui/ide-preferences-builtin.c:761
 msgid "Keyboard shortcuts similar to GNOME Text Editor"
 msgstr "Комбинации клавиш похожие на комбинации из Текстового редактора GNOME"
 
-#: src/libide/gui/ide-preferences-builtin.c:763
+#: src/libide/gui/ide-preferences-builtin.c:766
 #: src/plugins/buildui/gtk/preferences.ui:72
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
 msgid "Terminal Font"
 msgstr "Шрифт терминала"
 
-#: src/libide/gui/ide-preferences-builtin.c:764
+#: src/libide/gui/ide-preferences-builtin.c:767
 msgid "The font used within terminals"
 msgstr "Шрифт, используемый в пределах терминалов"
 
-#: src/libide/gui/ide-preferences-builtin.c:770
+#: src/libide/gui/ide-preferences-builtin.c:773
 msgid "Install Before Running"
 msgstr "Установить перед запуском"
 
-#: src/libide/gui/ide-preferences-builtin.c:771
+#: src/libide/gui/ide-preferences-builtin.c:774
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless run commands are used."
@@ -2156,11 +2161,11 @@ msgstr ""
 "Установить приложение перед запуском. Это необходимо для большинства "
 "проектов не считая использования команд."
 
-#: src/libide/gui/ide-preferences-builtin.c:775
+#: src/libide/gui/ide-preferences-builtin.c:778
 msgid "Stop Signal"
 msgstr "Остановить сигнал"
 
-#: src/libide/gui/ide-preferences-builtin.c:776
+#: src/libide/gui/ide-preferences-builtin.c:779
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
@@ -2168,6 +2173,7 @@ msgstr ""
 "Отправлять сигнал в целевое приложение при запросе остановки приложения."
 
 #: src/libide/gui/ide-preferences-window.c:1516
+#: src/libide/tweaks/ide-tweaks-font.c:101
 msgid "Select Font"
 msgstr "Выбрать шрифт"
 
@@ -2194,6 +2200,10 @@ msgstr "Запустить проект"
 #: src/libide/gui/tests/test-preferences.c:218
 msgid "Custom Font"
 msgstr "Пользовательский шрифт"
+
+#: src/libide/gui/tweaks.ui:15
+msgid "Text Editor"
+msgstr "Текстовый редактор"
 
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
@@ -2299,7 +2309,7 @@ msgid "_Find references"
 msgstr "Найти упоминания"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:977
+#: src/libide/sourceview/ide-source-view.c:1002
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -2382,15 +2392,15 @@ msgstr "(Пусто)"
 msgid "Loading…"
 msgstr "Загрузка…"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:32
+#: src/libide/tweaks/ide-tweaks-window.ui:36
 msgid "All Preferences"
 msgstr "Все параметры"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:43
+#: src/libide/tweaks/ide-tweaks-window.ui:48
 msgid "Search Preferences"
 msgstr "Параметры поиска"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:56
+#: src/libide/tweaks/ide-tweaks-window.ui:61
 msgid "Primary Menu"
 msgstr "Основное меню"
 
@@ -4002,6 +4012,7 @@ msgid "Movements"
 msgstr "Перемещения"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:61
+#: src/plugins/editorui/tweaks.ui:51
 msgid "The font used within the source code editor"
 msgstr "Шрифт, используемый в пределах редактора исходного кода"
 
@@ -4014,6 +4025,7 @@ msgid "Use an overview map instead of a scrollbar"
 msgstr "Использовать обзорную карту вместо полосы прокрутки"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
+#: src/plugins/editorui/tweaks.ui:70
 msgid "Show Line Numbers"
 msgstr "Показывать номера строк"
 
@@ -4026,14 +4038,17 @@ msgid "Adjust line-height of the configured font"
 msgstr "Настроить высоту строки выбранного шрифта"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
+#: src/plugins/editorui/tweaks.ui:81
 msgid "Highlight Current Line"
 msgstr "Подсвечивать текущую строку"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:90
+#: src/plugins/editorui/tweaks.ui:88
 msgid "Highlight Matching Brackets"
 msgstr "Подсвечивать парные скобки"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:91
+#: src/plugins/editorui/tweaks.ui:89
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4054,10 +4069,12 @@ msgid "Automatically select the first completion when displayed"
 msgstr "Автоматически выбирать первое предложение при отображении"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
+#: src/plugins/editorui/tweaks.ui:183
 msgid "Expand Snippets"
 msgstr "Расширить фрагменты"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
+#: src/plugins/editorui/tweaks.ui:184
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "Использовать \"Tab\" для расширения фрагментов в редакторе"
 
@@ -4179,6 +4196,86 @@ msgstr "Печать…"
 #: src/plugins/editorui/gtk/menus.ui:186
 msgid "Format Selection"
 msgstr "Форматировать выбор"
+
+#: src/plugins/editorui/tweaks.ui:16
+msgid "Color"
+msgstr "Цвет"
+
+#: src/plugins/editorui/tweaks.ui:35
+msgid "Fonts & Styling"
+msgstr "Шрифты и стиль"
+
+#: src/plugins/editorui/tweaks.ui:38
+msgid "Preview"
+msgstr "Предпросмотр"
+
+#: src/plugins/editorui/tweaks.ui:59
+msgid "Adjust spacing between lines"
+msgstr "Настроить расстояние между линиями"
+
+#: src/plugins/editorui/tweaks.ui:71
+msgid "Display line numbers next to each line of code"
+msgstr "Отображать номера строк рядом с каждой строкой кода"
+
+#: src/plugins/editorui/tweaks.ui:82
+msgid "Make the current line stand out with highlights"
+msgstr "Выделять текущую строку"
+
+#: src/plugins/editorui/tweaks.ui:99
+msgid "Background Pattern"
+msgstr "Фоновый рисунок"
+
+#: src/plugins/editorui/tweaks.ui:100
+msgid "Show a background pattern underneath source code"
+msgstr "Отображать фон под исходным кодом"
+
+#: src/plugins/editorui/tweaks.ui:105
+msgid "No Pattern"
+msgstr "Без рисунка"
+
+#: src/plugins/editorui/tweaks.ui:111
+msgid "Grid Lines"
+msgstr "Сетка"
+
+#: src/plugins/editorui/tweaks.ui:123
+msgid "Source Code Overview"
+msgstr "Обзор исходного кода"
+
+#: src/plugins/editorui/tweaks.ui:124
+msgid "Display an overview of source code next to the editor"
+msgstr "Отображать обзор исходного кода рядом с редактором"
+
+#: src/plugins/editorui/tweaks.ui:129
+msgid "Prefer Scrollbars"
+msgstr "Предпочитать полосы прокрутки"
+
+#: src/plugins/editorui/tweaks.ui:135
+msgid "Always On"
+msgstr "Всегда включен"
+
+#: src/plugins/editorui/tweaks.ui:141
+msgid "Automatic"
+msgstr "Автоматически"
+
+#: src/plugins/editorui/tweaks.ui:153
+msgid "Code Completion"
+msgstr "Автодополнение кода"
+
+#: src/plugins/editorui/tweaks.ui:159
+msgid "Suggest Code Completions"
+msgstr "Предлагать автодополнения кода"
+
+#: src/plugins/editorui/tweaks.ui:160
+msgid "Automatically suggest code completions while typing"
+msgstr "Автоматически предлагать дополнения кода во время написания"
+
+#: src/plugins/editorui/tweaks.ui:166
+msgid "Select First Proposal"
+msgstr "Выбирать первое предложение"
+
+#: src/plugins/editorui/tweaks.ui:167
+msgid "Automatically select the first completion proposal when displayed"
+msgstr "Автоматически выбирать первое дополнение при отображении"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4932,6 +5029,18 @@ msgstr "Загрузка зависимостей npm"
 msgid "_External Program…"
 msgstr "_Внешняя программа…"
 
+#: src/plugins/platformui/tweaks.ui:30
+msgid "Document Navigation"
+msgstr "Навигация документа"
+
+#: src/plugins/platformui/tweaks.ui:33
+msgid "Tab Bar"
+msgstr "Панель вкладок"
+
+#: src/plugins/platformui/tweaks.ui:39
+msgid "Drop Down"
+msgstr "Выпадающее меню"
+
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
 msgid "Containers/Toolbox"
@@ -5491,7 +5600,7 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (SDK из корневого каталога)"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:270
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Терминал"
@@ -5595,16 +5704,16 @@ msgid "scrollback lines"
 msgstr "строки обратной прокрутки"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:188
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Приложение запущено в %s\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:206
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
 msgid "Application exited"
 msgstr "Приложение завершилось"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:288
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
 msgid "Application Output"
 msgstr "Вывод приложения"
 
@@ -5874,3 +5983,9 @@ msgstr "Не удалось создать дерево XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл должен быть сохранен локально для разбора."
+
+#~ msgid "Use Tabs"
+#~ msgstr "Использовать вкладки"
+
+#~ msgid "Use the tabbar within the page grid."
+#~ msgstr "Использовать панель вкладок в пределах сетки страницы."
