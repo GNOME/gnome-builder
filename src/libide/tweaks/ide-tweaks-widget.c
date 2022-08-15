@@ -24,7 +24,12 @@
 
 #include "ide-tweaks-widget-private.h"
 
-G_DEFINE_TYPE (IdeTweaksWidget, ide_tweaks_widget, IDE_TYPE_TWEAKS_ITEM)
+typedef struct
+{
+  IdeTweaksWidget *cloned;
+} IdeTweaksWidgetPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE (IdeTweaksWidget, ide_tweaks_widget, IDE_TYPE_TWEAKS_ITEM)
 
 enum {
   CREATE,
@@ -33,9 +38,43 @@ enum {
 
 static guint signals[N_SIGNALS];
 
+static IdeTweaksItem *
+ide_tweaks_widget_copy (IdeTweaksItem *item)
+{
+  IdeTweaksWidget *self = (IdeTweaksWidget *)item;
+  IdeTweaksWidgetPrivate *copy_priv;
+  IdeTweaksItem *copy;
+
+  g_assert (IDE_IS_TWEAKS_WIDGET (self));
+
+  copy = IDE_TWEAKS_ITEM_CLASS (ide_tweaks_widget_parent_class)->copy (item);
+  copy_priv = ide_tweaks_widget_get_instance_private (IDE_TWEAKS_WIDGET (copy));
+  g_set_weak_pointer (&copy_priv->cloned, self);
+
+  return copy;
+}
+
+static void
+ide_tweaks_widget_dispose (GObject *object)
+{
+  IdeTweaksWidget *self = (IdeTweaksWidget *)object;
+  IdeTweaksWidgetPrivate *priv = ide_tweaks_widget_get_instance_private (self);
+
+  g_clear_weak_pointer (&priv->cloned);
+
+  G_OBJECT_CLASS (ide_tweaks_widget_parent_class)->dispose (object);
+}
+
 static void
 ide_tweaks_widget_class_init (IdeTweaksWidgetClass *klass)
 {
+  IdeTweaksItemClass *item_class = IDE_TWEAKS_ITEM_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  item_class->copy = ide_tweaks_widget_copy;
+
+  object_class->dispose = ide_tweaks_widget_dispose;
+
   /**
    * IdeTweaksWidget::create:
    *
@@ -64,9 +103,13 @@ ide_tweaks_widget_init (IdeTweaksWidget *self)
 GtkWidget *
 _ide_tweaks_widget_create (IdeTweaksWidget *self)
 {
+  IdeTweaksWidgetPrivate *priv = ide_tweaks_widget_get_instance_private (self);
   GtkWidget *ret = NULL;
 
   g_return_val_if_fail (IDE_IS_TWEAKS_WIDGET (self), NULL);
+
+  if (priv->cloned != NULL)
+    return _ide_tweaks_widget_create (priv->cloned);
 
   g_signal_emit (self, signals [CREATE], 0, &ret);
 
