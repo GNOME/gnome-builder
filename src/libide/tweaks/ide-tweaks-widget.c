@@ -33,6 +33,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeTweaksWidget, ide_tweaks_widget, IDE_TYPE_TWEAKS_
 
 enum {
   CREATE,
+  CREATE_FOR_ITEM,
   N_SIGNALS
 };
 
@@ -52,6 +53,15 @@ ide_tweaks_widget_copy (IdeTweaksItem *item)
   g_set_weak_pointer (&copy_priv->cloned, self);
 
   return copy;
+}
+
+static GtkWidget *
+ide_tweaks_widget_real_create_for_item (IdeTweaksWidget *self,
+                                        IdeTweaksItem   *item)
+{
+  GtkWidget *ret = NULL;
+  g_signal_emit (self, signals [CREATE], 0, &ret);
+  return ret;
 }
 
 static void
@@ -75,6 +85,8 @@ ide_tweaks_widget_class_init (IdeTweaksWidgetClass *klass)
 
   object_class->dispose = ide_tweaks_widget_dispose;
 
+  klass->create_for_item = ide_tweaks_widget_real_create_for_item;
+
   /**
    * IdeTweaksWidget::create:
    *
@@ -93,11 +105,52 @@ ide_tweaks_widget_class_init (IdeTweaksWidgetClass *klass)
                   g_signal_accumulator_first_wins, NULL,
                   NULL,
                   GTK_TYPE_WIDGET, 0);
+
+  /**
+   * IdeTweaksWidget::create-for-item:
+   * @self: an #IdeTweaksWidget
+   * @item: the original #IdeTweaksItem which might be a clone
+   *
+   * Creates a new #GtkWidget that can be inserted into the #IdeTweaksWindow
+   * representing the item.
+   *
+   * @item is the original item (which might be a clone) to create the
+   * widget for.
+   *
+   * Only the first signal handler is used.
+   *
+   * Returns: (transfer full) (nullable): a #GtkWidget or %NULL
+   */
+  signals [CREATE_FOR_ITEM] =
+    g_signal_new ("create-for-item",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (IdeTweaksWidgetClass, create_for_item),
+                  g_signal_accumulator_first_wins, NULL,
+                  NULL,
+                  GTK_TYPE_WIDGET,
+                  1,
+                  IDE_TYPE_TWEAKS_ITEM);
 }
 
 static void
 ide_tweaks_widget_init (IdeTweaksWidget *self)
 {
+}
+
+static GtkWidget *
+_ide_tweaks_widget_create_for_item (IdeTweaksWidget *self,
+                                    IdeTweaksItem   *item)
+{
+  GtkWidget *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_WIDGET (self), NULL);
+
+  g_signal_emit (self, signals [CREATE_FOR_ITEM], 0, item, &ret);
+
+  g_return_val_if_fail (!ret || GTK_IS_WIDGET (ret), NULL);
+
+  return ret;
 }
 
 GtkWidget *
@@ -109,7 +162,7 @@ _ide_tweaks_widget_create (IdeTweaksWidget *self)
   g_return_val_if_fail (IDE_IS_TWEAKS_WIDGET (self), NULL);
 
   if (priv->cloned != NULL)
-    return _ide_tweaks_widget_create (priv->cloned);
+    return _ide_tweaks_widget_create_for_item (priv->cloned, IDE_TWEAKS_ITEM (self));
 
   g_signal_emit (self, signals [CREATE], 0, &ret);
 

@@ -39,7 +39,9 @@ struct _IdeTweaksWidgetClass
 {
   IdeTweaksItemClass parent_class;
 
-  GtkWidget *(*create) (IdeTweaksWidget *self);
+  GtkWidget *(*create)          (IdeTweaksWidget *self);
+  GtkWidget *(*create_for_item) (IdeTweaksWidget *self,
+                                 IdeTweaksItem   *item);
 };
 
 G_END_DECLS
