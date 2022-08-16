@@ -205,6 +205,28 @@
             </child>
           </object>
         </child>
+        <child internal-child="shortcuts_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="shorcut_theme_group">
+              <object class="IdeTweaksGroup">
+                <child>
+                  <object class="IdeTweaksCombo" id="shortcut_theme_combo">
+                    <property name="title" translatable="yes">Keyboard Theme</property>
+                    <property name="subtitle" translatable="yes">Shortcut themes provide a keyboard experience similar to other IDEs and editors</property>
+                    <property name="settings">settings_org_gnome_builder_editor</property>
+                    <property name="key">keybindings</property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Builder</property>
+                        <property name="action-target">'default'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
       </object>
     </child>
   </template>
