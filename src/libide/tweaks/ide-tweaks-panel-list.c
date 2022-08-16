@@ -116,6 +116,31 @@ ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
     }
 }
 
+static gboolean
+section_equal (IdeTweaksItem *section_a,
+               IdeTweaksItem *section_b)
+{
+  const char *title_a;
+  const char *title_b;
+
+  if (section_a == section_b)
+    return TRUE;
+
+  if (section_a == NULL || section_b == NULL)
+    return FALSE;
+
+  title_a = ide_tweaks_section_get_title (IDE_TWEAKS_SECTION (section_a));
+  title_b = ide_tweaks_section_get_title (IDE_TWEAKS_SECTION (section_b));
+
+  if (title_a == NULL && title_b != NULL)
+    return FALSE;
+
+  if (title_a != NULL && title_b == NULL)
+    return FALSE;
+
+  return g_strcmp0 (title_a, title_b) == 0;
+}
+
 static void
 ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
                                    IdeTweaksPanelListRow *before,
@@ -134,8 +159,8 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
 
   if (IDE_IS_TWEAKS_PAGE (before_item) &&
       IDE_IS_TWEAKS_PAGE (row_item) &&
-      ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (before_item)) !=
-      ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (row_item)))
+      !section_equal (ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (before_item)),
+                      ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (row_item))))
     header = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 
   gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), header);

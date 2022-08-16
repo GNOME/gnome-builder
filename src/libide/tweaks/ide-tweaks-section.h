@@ -34,6 +34,11 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksSection, ide_tweaks_section, IDE, TWEAKS_SECTION, IdeTweaksItem)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksSection *ide_tweaks_section_new (void);
+IdeTweaksSection *ide_tweaks_section_new       (void);
+IDE_AVAILABLE_IN_ALL
+const char       *ide_tweaks_section_get_title (IdeTweaksSection *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_tweaks_section_set_title (IdeTweaksSection *self,
+                                                const char       *title);
 
 G_END_DECLS

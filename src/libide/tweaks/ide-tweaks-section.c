@@ -28,9 +28,18 @@
 struct _IdeTweaksSection
 {
   IdeTweaksItem parent_instance;
+  char *title;
 };
 
 G_DEFINE_FINAL_TYPE (IdeTweaksSection, ide_tweaks_section, IDE_TYPE_TWEAKS_ITEM)
+
+enum {
+  PROP_0,
+  PROP_TITLE,
+  N_PROPS
+};
+
+static GParamSpec *properties[N_PROPS];
 
 static gboolean
 ide_tweaks_section_accepts (IdeTweaksItem *item,
@@ -43,14 +52,92 @@ ide_tweaks_section_accepts (IdeTweaksItem *item,
 }
 
 static void
+ide_tweaks_section_dispose (GObject *object)
+{
+  IdeTweaksSection *self = (IdeTweaksSection *)object;
+
+  g_clear_pointer (&self->title, g_free);
+
+  G_OBJECT_CLASS (ide_tweaks_section_parent_class)->dispose (object);
+}
+
+static void
+ide_tweaks_section_get_property (GObject    *object,
+                                 guint       prop_id,
+                                 GValue     *value,
+                                 GParamSpec *pspec)
+{
+  IdeTweaksSection *self = IDE_TWEAKS_SECTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_TITLE:
+      g_value_set_string (value, ide_tweaks_section_get_title (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_tweaks_section_set_property (GObject      *object,
+                                 guint         prop_id,
+                                 const GValue *value,
+                                 GParamSpec   *pspec)
+{
+  IdeTweaksSection *self = IDE_TWEAKS_SECTION (object);
+
+  switch (prop_id)
+    {
+    case PROP_TITLE:
+      ide_tweaks_section_set_title (self, g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
 ide_tweaks_section_class_init (IdeTweaksSectionClass *klass)
 {
   IdeTweaksItemClass *item_class = IDE_TWEAKS_ITEM_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   item_class->accepts = ide_tweaks_section_accepts;
+
+  object_class->dispose = ide_tweaks_section_dispose;
+  object_class->get_property = ide_tweaks_section_get_property;
+  object_class->set_property = ide_tweaks_section_set_property;
+
+  properties[PROP_TITLE] =
+    g_param_spec_string ("title", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
 static void
 ide_tweaks_section_init (IdeTweaksSection *self)
 {
+}
+
+const char *
+ide_tweaks_section_get_title (IdeTweaksSection *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_SECTION (self), NULL);
+
+  return self->title;
+}
+
+void
+ide_tweaks_section_set_title (IdeTweaksSection *self,
+                              const char       *title)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_SECTION (self));
+
+  if (ide_set_string (&self->title, title))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
 }

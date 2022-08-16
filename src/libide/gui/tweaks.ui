@@ -3,6 +3,7 @@
   <template class="IdeTweaks">
     <child>
       <object class="IdeTweaksSection" id="visual_section">
+        <property name="title" translatable="yes">Visual</property>
         <child>
           <object class="IdeTweaksPage" id="appearance_page">
             <property name="icon-name">preferences-desktop-appearance-symbolic</property>
@@ -29,22 +30,27 @@
     </child>
     <child>
       <object class="IdeTweaksSection" id="code_section">
+        <property name="title" translatable="yes">Code</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="projects_section">
+        <property name="title" translatable="yes">Projects</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="foundry_section">
+        <property name="title" translatable="yes">Foundry</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="external_section">
+        <property name="title" translatable="yes">External</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="plugins_section">
+        <property name="title" translatable="yes">Plugins</property>
         <child>
           <object class="IdeTweaksPage" id="plugins_page">
             <property name="icon-name">builder-plugin-symbolic</property>
