@@ -149,7 +149,7 @@
                         <property name="title" translatable="yes">Spaces</property>
                         <child>
                           <object class="IdeTweaksWidget">
-                            <signal name="create" handler="create_spaces_style" swapped="true" object="language_page_settings"/>
+                            <signal name="create-for-item" handler="create_spaces_style" swapped="true" object="IdeTweaks"/>
                           </object>
                         </child>
                       </object>

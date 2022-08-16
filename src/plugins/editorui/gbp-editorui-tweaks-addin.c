@@ -81,8 +81,9 @@ create_language_caption (IdeTweaks       *tweaks,
 }
 
 static GtkWidget *
-create_spaces_style (IdeTweaksSettings *settings,
-                     IdeTweaksWidget   *widget)
+create_spaces_style (IdeTweaks       *tweaks,
+                     IdeTweaksWidget *widget,
+                     IdeTweaksWidget *self)
 {
   static const struct {
     const char *nick;
@@ -96,6 +97,8 @@ create_spaces_style (IdeTweaksSettings *settings,
     { "before-comma", N_("Prefer a space before commas") },
     { "before-semicolon", N_("Prefer a space before semicolons") },
   };
+  IdeTweaksItem *page;
+  IdeTweaksSettings *found_settings = NULL;
   g_autoptr(GSimpleActionGroup) group = NULL;
   GtkListBox *list_box;
 
@@ -107,12 +110,30 @@ create_spaces_style (IdeTweaksSettings *settings,
   gtk_widget_insert_action_group (GTK_WIDGET (list_box),
                                   "spaces-style",
                                   G_ACTION_GROUP (group));
+  page = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (widget), IDE_TYPE_TWEAKS_PAGE);
+
+  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (page);
+       child != NULL;
+       child = ide_tweaks_item_get_next_sibling (child))
+    {
+      if (IDE_IS_TWEAKS_SETTINGS (child))
+        {
+          IdeTweaksSettings *settings = IDE_TWEAKS_SETTINGS (child);
+
+          if (ide_str_equal0 ("org.gnome.builder.editor.language",
+                              ide_tweaks_settings_get_schema_id (settings)))
+            {
+              found_settings = settings;
+              break;
+            }
+        }
+    }
 
   for (guint i = 0; i < G_N_ELEMENTS (flags); i++)
     {
       g_autoptr(IdeSettingsFlagAction) action = NULL;
-      const char *schema_id = ide_tweaks_settings_get_schema_id (settings);
-      const char *schema_path = ide_tweaks_settings_get_schema_path (settings);
+      const char *schema_id = ide_tweaks_settings_get_schema_id (found_settings);
+      const char *schema_path = ide_tweaks_settings_get_schema_path (found_settings);
       g_autofree char *action_name = g_strdup_printf ("spaces-style.%s", flags[i].nick);
       GtkCheckButton *button = NULL;
       AdwActionRow *row;
