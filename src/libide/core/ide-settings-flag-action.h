@@ -30,8 +30,9 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSettingsFlagAction, ide_settings_flag_action, IDE, SETTINGS_FLAG_ACTION, GObject)
 
 IDE_AVAILABLE_IN_ALL
-GAction *ide_settings_flag_action_new (const char *schema_id,
-                                       const char *schema_key,
-                                       const char *flag_nick);
+IdeSettingsFlagAction *ide_settings_flag_action_new (const char *schema_id,
+                                                     const char *schema_key,
+                                                     const char *path,
+                                                     const char *flag_nick);
 
 G_END_DECLS
