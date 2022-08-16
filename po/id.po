@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-14 05:57+0000\n"
-"PO-Revision-Date: 2022-08-14 13:27+0700\n"
+"POT-Creation-Date: 2022-08-16 00:31+0000\n"
+"PO-Revision-Date: 2022-08-16 15:39+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -323,6 +323,7 @@ msgstr "Bila difungsikan, penyunting akan menampilkan nomor baris relatif."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:115
+#: src/plugins/editorui/tweaks.ui:159
 msgid "Smart Backspace"
 msgstr "Backspace Cerdas"
 
@@ -728,7 +729,7 @@ msgstr "Tanpa Judul"
 #: src/libide/greeter/ide-greeter-workspace.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1453
+#: src/libide/gui/ide-workbench.c:1459
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
@@ -742,7 +743,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Pengawakutu yang cocok tidak ditemukan."
 
 #: src/libide/editor/gtk/menus.ui:16 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1449
+#: src/libide/gui/ide-workbench.c:1455
 msgid "Open File…"
 msgstr "Buka Berkas…"
 
@@ -1099,8 +1100,8 @@ msgid "Directory"
 msgstr "Direktori"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:340 src/libide/gui/ide-workbench.c:843
-#: src/libide/gui/ide-workbench.c:2731
+#: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
+#: src/libide/gui/ide-workbench.c:2778
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder— %s"
@@ -1138,7 +1139,7 @@ msgid "Select Project File"
 msgstr "Pilih Berkas Proyek"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1452
+#: src/libide/gui/ide-workbench.c:1458
 msgid "_Open"
 msgstr "B_uka"
 
@@ -1453,6 +1454,7 @@ msgid "Color Scheme"
 msgstr "Skema Warna"
 
 #: src/libide/gui/ide-preferences-builtin.c:159
+#: src/plugins/editorui/tweaks.ui:156
 msgid "Keyboard"
 msgstr "Papan Ketik"
 
@@ -1475,6 +1477,7 @@ msgstr "Home bergerak ke karakter bukan spasi pertama"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:116
+#: src/plugins/editorui/tweaks.ui:160
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
@@ -1490,7 +1493,6 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
-#: src/plugins/editorui/tweaks.ui:156 src/plugins/editorui/tweaks.ui:180
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
 msgstr "Umum"
@@ -1610,7 +1612,7 @@ msgstr "Sorot tanda kurung pasangan berbasis pada posisi kursor"
 
 #: src/libide/gui/ide-preferences-builtin.c:197
 msgid "Visible Whitespace Characters"
-msgstr "Karakter Whitespace Terlihat"
+msgstr "Karakter Bukan Spasi Terlihat"
 
 #: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
@@ -1707,12 +1709,11 @@ msgstr "Penyedia Pelengkapan"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
-#: src/plugins/editorui/tweaks.ui:177
+#: src/plugins/editorui/tweaks.ui:194
 msgid "Snippets"
 msgstr "Potongan"
 
 #: src/libide/gui/ide-preferences-builtin.c:280
-#: src/plugins/editorui/tweaks.ui:201
 msgid "Programming Languages"
 msgstr "Bahasa Pemrograman"
 
@@ -1723,12 +1724,13 @@ msgstr "Cari bahasa…"
 
 #: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Trim trailing whitespace"
-msgstr "Pangkas trailing whitespace"
+msgstr "Pangkas trailing bukan spasi"
 
 #: src/libide/gui/ide-preferences-builtin.c:351
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgstr ""
-"Setelah menyimpan, trailing spasi dari baris yang diubah akan dipangkas."
+"Setelah menyimpan, trailing bukan spasi dari baris yang diubah akan "
+"dipangkas."
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
@@ -1814,18 +1816,22 @@ msgid "Spacing"
 msgstr "Spasi"
 
 #: src/libide/gui/ide-preferences-builtin.c:366
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:91
 msgid "Space before opening parentheses"
 msgstr "Spasi sebelum membuka tanda kurung lengkung"
 
 #: src/libide/gui/ide-preferences-builtin.c:367
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:92
 msgid "Space before opening brackets"
 msgstr "Spasi sebelum membuka tanda kurung siku/tegak"
 
 #: src/libide/gui/ide-preferences-builtin.c:368
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:93
 msgid "Space before opening braces"
 msgstr "Spasi sebelum membuka tanda kurung kurawal"
 
 #: src/libide/gui/ide-preferences-builtin.c:369
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:94
 msgid "Space before opening angles"
 msgstr "Spasi sebelum membuka tanda kurung sudut"
 
@@ -1834,10 +1840,12 @@ msgid "Prefer a space before colons"
 msgstr "Lebih suka spasi sebelum tanda titik dua"
 
 #: src/libide/gui/ide-preferences-builtin.c:371
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:96
 msgid "Prefer a space before commas"
 msgstr "Lebih suka spasi sebelum tanda koma"
 
 #: src/libide/gui/ide-preferences-builtin.c:372
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:97
 msgid "Prefer a space before semicolons"
 msgstr "Lebih suka spasi sebelum tanda titik koma"
 
@@ -2055,6 +2063,7 @@ msgid "Additional"
 msgstr "Tambahan"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
+#: src/plugins/editorui/tweaks.ui:153
 msgid "Behavior"
 msgstr "Perilaku"
 
@@ -4048,12 +4057,12 @@ msgid "Automatically select the first completion when displayed"
 msgstr "Secara otomatis memilih penyelesaian pertama saat ditampilkan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
-#: src/plugins/editorui/tweaks.ui:183
+#: src/plugins/editorui/tweaks.ui:197
 msgid "Expand Snippets"
 msgstr "Perluas Cuplikan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
-#: src/plugins/editorui/tweaks.ui:184
+#: src/plugins/editorui/tweaks.ui:198
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Gunakan \"Tab\" untuk memperluas cuplikan yang dikonfigurasi di penyunting"
@@ -4088,6 +4097,18 @@ msgstr "Indentasi Otomatis"
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:160
 msgid "Format source code as you type"
 msgstr "Memformat kode sumber saat Anda mengetik"
+
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:77
+msgid ""
+"Settings provided .editorconfig and modelines specified within files take "
+"precedence over those below."
+msgstr ""
+"Pengaturan yang disediakan .editorconfig dan modelines yang ditentukan dalam "
+"berkas lebih diutamakan daripada yang ada di bawah ini."
+
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:95
+msgid "Prefer a space before colon"
+msgstr "Lebih suka spasi sebelum tanda titik dua"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
@@ -4238,23 +4259,31 @@ msgstr "Selalu Aktif"
 msgid "Automatic"
 msgstr "Otomatis"
 
-#: src/plugins/editorui/tweaks.ui:153
+#: src/plugins/editorui/tweaks.ui:166
+msgid "Smart Home/End"
+msgstr "Home/End Cerdas"
+
+#: src/plugins/editorui/tweaks.ui:167
+msgid "Moves to first non-whitespace character before line edges"
+msgstr "Bergerak ke karakter bukan spasi pertama sebelum tepi garis"
+
+#: src/plugins/editorui/tweaks.ui:175
 msgid "Code Completion"
 msgstr "Penyelesaian Kode"
 
-#: src/plugins/editorui/tweaks.ui:159
+#: src/plugins/editorui/tweaks.ui:178
 msgid "Suggest Code Completions"
 msgstr "Sarankan Penyelesaian Kode"
 
-#: src/plugins/editorui/tweaks.ui:160
+#: src/plugins/editorui/tweaks.ui:179
 msgid "Automatically suggest code completions while typing"
 msgstr "Secara otomatis menyarankan penyelesaian kode saat mengetik"
 
-#: src/plugins/editorui/tweaks.ui:166
-msgid "Select First Proposal"
-msgstr "Pilih Proposal Pertama"
+#: src/plugins/editorui/tweaks.ui:185
+msgid "Select First Completion Proposal"
+msgstr "Pilih Proposal Penyelesaian Pertama"
 
-#: src/plugins/editorui/tweaks.ui:167
+#: src/plugins/editorui/tweaks.ui:186
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Secara otomatis memilih proposal penyelesaian pertama saat ditampilkan"
 
@@ -5955,6 +5984,9 @@ msgstr "Gagal membuat pohon XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
+
+#~ msgid "Select First Proposal"
+#~ msgstr "Pilih Proposal Pertama"
 
 #~ msgid "Use Tabs"
 #~ msgstr "Gunakan Tab"
