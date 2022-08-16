@@ -77,7 +77,8 @@ create_language_caption (IdeTweaks       *tweaks,
 {
   return g_object_new (GTK_TYPE_LABEL,
                        "css-classes", IDE_STRV_INIT ("caption", "dim-label"),
-                       "label", _("Settings provided .editorconfig and modelines specified within files take precedence over those below."),
+                       /* translators: .editorconfig is a file used in programming projects and modelines are tweaks specified within a file header or footer */
+                       "label", _("Settings provided by .editorconfig and modelines take precedence over those below."),
                        "xalign", .0f,
                        "wrap", TRUE,
                        NULL);
