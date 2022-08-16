@@ -80,6 +80,64 @@ create_language_caption (IdeTweaks       *tweaks,
                        NULL);
 }
 
+static GtkWidget *
+create_spaces_style (IdeTweaksSettings *settings,
+                     IdeTweaksWidget   *widget)
+{
+  static const struct {
+    const char *nick;
+    const char *title;
+  } flags[] = {
+    { "before-left-paren", N_("Space before opening parentheses") },
+    { "before-left-bracket", N_("Space before opening brackets") },
+    { "before-left-brace", N_("Space before opening braces") },
+    { "before-left-angle", N_("Space before opening angles") },
+    { "before-colon", N_("Prefer a space before colon") },
+    { "before-comma", N_("Prefer a space before commas") },
+    { "before-semicolon", N_("Prefer a space before semicolons") },
+  };
+  g_autoptr(GSimpleActionGroup) group = NULL;
+  GtkListBox *list_box;
+
+  list_box = g_object_new (GTK_TYPE_LIST_BOX,
+                           "css-classes", IDE_STRV_INIT ("boxed-list"),
+                           "selection-mode", GTK_SELECTION_NONE,
+                           NULL);
+  group = g_simple_action_group_new ();
+  gtk_widget_insert_action_group (GTK_WIDGET (list_box),
+                                  "spaces-style",
+                                  G_ACTION_GROUP (group));
+
+  for (guint i = 0; i < G_N_ELEMENTS (flags); i++)
+    {
+      g_autoptr(IdeSettingsFlagAction) action = NULL;
+      const char *schema_id = ide_tweaks_settings_get_schema_id (settings);
+      const char *schema_path = ide_tweaks_settings_get_schema_path (settings);
+      g_autofree char *action_name = g_strdup_printf ("spaces-style.%s", flags[i].nick);
+      GtkCheckButton *button = NULL;
+      AdwActionRow *row;
+
+      action = ide_settings_flag_action_new (schema_id, "spaces-style", schema_path, flags[i].nick);
+      g_action_map_add_action (G_ACTION_MAP (group), G_ACTION (action));
+
+      button = g_object_new (GTK_TYPE_CHECK_BUTTON,
+                             "action-name", action_name,
+                             "can-target", FALSE,
+                             "valign", GTK_ALIGN_CENTER,
+                             NULL);
+      gtk_widget_add_css_class (GTK_WIDGET (button), "checkimage");
+
+      row = g_object_new (ADW_TYPE_ACTION_ROW,
+                          "title", g_dgettext (GETTEXT_PACKAGE, flags[i].title),
+                          "activatable-widget", button,
+                          NULL);
+      adw_action_row_add_suffix (row, GTK_WIDGET (button));
+      gtk_list_box_append (list_box, GTK_WIDGET (row));
+    }
+
+  return GTK_WIDGET (list_box);
+}
+
 static void
 gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
                                 IdeTweaks      *tweaks)
@@ -109,6 +167,7 @@ gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), editorui_create_style_scheme_preview);
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), editorui_create_style_scheme_selector);
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_language_caption);
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_spaces_style);
   ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (store));
 
   IDE_TWEAKS_ADDIN_CLASS (gbp_editorui_tweaks_addin_parent_class)->load (addin, tweaks);

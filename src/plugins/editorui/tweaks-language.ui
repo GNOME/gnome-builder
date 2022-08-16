@@ -144,6 +144,16 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="language_spaces_style_group">
+                        <property name="title" translatable="yes">Spaces</property>
+                        <child>
+                          <object class="IdeTweaksWidget">
+                            <signal name="create" handler="create_spaces_style" swapped="true" object="language_page_settings"/>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
