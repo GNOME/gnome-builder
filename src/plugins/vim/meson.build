@@ -2,6 +2,7 @@ plugins_sources += files([
   'vim-plugin.c',
   'gbp-vim-editor-page-addin.c',
   'gbp-vim-preferences-addin.c',
+  'gbp-vim-tweaks-addin.c',
   'gbp-vim-workspace-addin.c',
 ])
 

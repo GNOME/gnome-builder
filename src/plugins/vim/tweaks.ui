@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="visual_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="shortcuts_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="shorcut_theme_group">
+              <object class="IdeTweaksGroup">
+                <child internal-child="shortcut_theme_combo">
+                  <object class="IdeTweaksCombo">
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Vim</property>
+                        <property name="action-target">'vim'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

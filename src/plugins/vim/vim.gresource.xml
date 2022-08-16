@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/vim">
     <file>vim.plugin</file>
+    <file preprocess="xml-stripblanks">tweaks.ui</file>
   </gresource>
 </gresources>
