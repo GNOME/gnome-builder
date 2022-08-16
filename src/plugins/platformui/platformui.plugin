@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2022 Christian Hergert
-Depends=project-tree;
 Embedded=_gbp_platformui_register_types
 Hidden=true
 Module=platformui
