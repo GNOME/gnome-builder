@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-tweaks-settings.h"
 #include "ide-tweaks-widget-private.h"
 
 typedef struct
@@ -38,18 +39,55 @@ enum {
 
 static guint signals[N_SIGNALS];
 
+static void
+clone_item_property (IdeTweaksItem *item,
+                     IdeTweaksItem *copy,
+                     const char    *name)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+
+  g_value_init (&value, IDE_TYPE_TWEAKS_ITEM);
+  g_object_get_property (G_OBJECT (item), name, &value);
+
+  if (g_value_get_object (&value))
+    g_value_set_object (&value, ide_tweaks_item_copy (g_value_get_object (&value)));
+
+  g_object_set_property (G_OBJECT (copy), name, &value);
+}
+
 static IdeTweaksItem *
 ide_tweaks_widget_copy (IdeTweaksItem *item)
 {
   IdeTweaksWidget *self = (IdeTweaksWidget *)item;
   IdeTweaksWidgetPrivate *copy_priv;
+  g_autofree GParamSpec **pspecs = NULL;
   IdeTweaksItem *copy;
+  guint n_pspecs;
 
   g_assert (IDE_IS_TWEAKS_WIDGET (self));
 
+  /* Keep a pointer to the cloned widget so we can resolve <signal/>
+   * through the original object.
+   */
   copy = IDE_TWEAKS_ITEM_CLASS (ide_tweaks_widget_parent_class)->copy (item);
   copy_priv = ide_tweaks_widget_get_instance_private (IDE_TWEAKS_WIDGET (copy));
   g_set_weak_pointer (&copy_priv->cloned, self);
+
+  /* Also keep a copy of any property we find that is an IdeTweaksSettings
+   * since those need to be snapshotted.
+   */
+  pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (item), &n_pspecs);
+  for (guint i = 0; i < n_pspecs; i++)
+    {
+      GParamSpec *pspec = pspecs[i];
+
+      if ((pspec->flags & G_PARAM_READWRITE) != G_PARAM_READWRITE ||
+          (pspec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
+        continue;
+
+      if (g_type_is_a (pspec->value_type, IDE_TYPE_TWEAKS_SETTINGS))
+        clone_item_property (item, copy, pspec->name);
+    }
 
   return copy;
 }
