@@ -131,8 +131,15 @@ ide_tweaks_item_real_copy (IdeTweaksItem *self)
        child = ide_tweaks_item_get_next_sibling (child))
     {
       g_autoptr(IdeTweaksItem) new_child = ide_tweaks_item_copy (child);
+      IdeTweaksItemPrivate *new_child_priv = ide_tweaks_item_get_instance_private (new_child);
 
       ide_tweaks_item_insert_after (new_child, IDE_TWEAKS_ITEM (copy), NULL);
+
+      /* Clear the "original" parent from the child because we want it to
+       * resolve parents through this clone (and then to the alternate
+       * ancestors.
+       */
+      g_clear_weak_pointer (&new_child_priv->parent_before_copy_wr);
     }
 
   g_assert (ide_tweaks_item_get_parent (self) == ide_tweaks_item_get_parent (IDE_TWEAKS_ITEM (copy)));
