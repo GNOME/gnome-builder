@@ -49,13 +49,14 @@ G_DEFINE_FINAL_TYPE (IdeTweaksRadio, ide_tweaks_radio, IDE_TYPE_TWEAKS_WIDGET)
 static GParamSpec *properties [N_PROPS];
 
 static GtkWidget *
-ide_tweaks_radio_create (IdeTweaksWidget *widget)
+ide_tweaks_radio_create_for_item (IdeTweaksWidget *instance,
+                                  IdeTweaksItem   *widget)
 {
   IdeTweaksRadio *self = (IdeTweaksRadio *)widget;
   AdwActionRow *row;
   GtkWidget *radio;
 
-  g_assert (IDE_IS_TWEAKS_WIDGET (widget));
+  g_assert (IDE_IS_TWEAKS_RADIO (self));
 
   radio = g_object_new (GTK_TYPE_CHECK_BUTTON,
                         "action-name", self->action_name,
@@ -160,7 +161,7 @@ ide_tweaks_radio_class_init (IdeTweaksRadioClass *klass)
   object_class->get_property = ide_tweaks_radio_get_property;
   object_class->set_property = ide_tweaks_radio_set_property;
 
-  widget_class->create = ide_tweaks_radio_create;
+  widget_class->create_for_item = ide_tweaks_radio_create_for_item;
 
   properties[PROP_ACTION_NAME] =
     g_param_spec_string ("action-name", NULL, NULL,

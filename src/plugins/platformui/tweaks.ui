@@ -16,7 +16,7 @@
                 <property name="title" translatable="yes">Interface</property>
                 <child>
                   <object class="IdeTweaksWidget" id="style_selector">
-                    <signal name="create" handler="platformui_create_style_selector" object="IdeTweaks" swapped="true"/>
+                    <signal name="create-for-item" handler="platformui_create_style_selector" object="IdeTweaks" swapped="true"/>
                   </object>
                 </child>
               </object>

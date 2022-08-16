@@ -49,7 +49,8 @@ static const struct {
 
 static GtkWidget *
 platformui_create_style_selector (IdeTweaks       *tweaks,
-                                  IdeTweaksWidget *widget)
+                                  IdeTweaksWidget *widget,
+                                  IdeTweaksWidget *instance)
 {
   GtkBox *box;
   GtkBox *options;

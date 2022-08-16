@@ -49,7 +49,8 @@ G_DEFINE_FINAL_TYPE (IdeTweaksSwitch, ide_tweaks_switch, IDE_TYPE_TWEAKS_WIDGET)
 static GParamSpec *properties [N_PROPS];
 
 static GtkWidget *
-ide_tweaks_switch_create (IdeTweaksWidget *widget)
+ide_tweaks_switch_create_for_item (IdeTweaksWidget *instance,
+                                   IdeTweaksItem   *widget)
 {
   IdeTweaksSwitch *self = (IdeTweaksSwitch *)widget;
   AdwActionRow *row;
@@ -157,7 +158,7 @@ ide_tweaks_switch_class_init (IdeTweaksSwitchClass *klass)
   object_class->get_property = ide_tweaks_switch_get_property;
   object_class->set_property = ide_tweaks_switch_set_property;
 
-  widget_class->create = ide_tweaks_switch_create;
+  widget_class->create_for_item = ide_tweaks_switch_create_for_item;
 
   properties[PROP_ACTION_NAME] =
     g_param_spec_string ("action-name", NULL, NULL,

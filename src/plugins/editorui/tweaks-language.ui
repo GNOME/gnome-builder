@@ -34,7 +34,7 @@
                       <object class="IdeTweaksGroup" id="language_top_group">
                         <child>
                           <object class="IdeTweaksWidget" id="language_caption">
-                            <signal name="create" handler="create_language_caption" swapped="true" object="IdeTweaks"/>
+                            <signal name="create-for-item" handler="create_language_caption" swapped="true" object="IdeTweaks"/>
                           </object>
                         </child>
                       </object>

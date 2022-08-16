@@ -145,7 +145,8 @@ cleanup:
 }
 
 static GtkWidget *
-ide_tweaks_spin_create (IdeTweaksWidget *widget)
+ide_tweaks_spin_create_for_item (IdeTweaksWidget *instance,
+                                 IdeTweaksItem   *widget)
 {
   IdeTweaksSpin *self = (IdeTweaksSpin *)widget;
   GtkAdjustment *adjustment;
@@ -265,7 +266,7 @@ ide_tweaks_spin_class_init (IdeTweaksSpinClass *klass)
   object_class->get_property = ide_tweaks_spin_get_property;
   object_class->set_property = ide_tweaks_spin_set_property;
 
-  widget_class->create = ide_tweaks_spin_create;
+  widget_class->create_for_item = ide_tweaks_spin_create_for_item;
 
   properties[PROP_KEY] =
     g_param_spec_string ("key", NULL, NULL,

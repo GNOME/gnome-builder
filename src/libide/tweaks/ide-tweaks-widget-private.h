@@ -25,6 +25,7 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *_ide_tweaks_widget_create (IdeTweaksWidget *self);
+GtkWidget *_ide_tweaks_widget_create_for_item (IdeTweaksWidget *self,
+                                               IdeTweaksItem   *item);
 
 G_END_DECLS

@@ -116,7 +116,7 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
     }
   else if (IDE_IS_TWEAKS_WIDGET (item))
     {
-      GtkWidget *child = _ide_tweaks_widget_create (IDE_TWEAKS_WIDGET (item));
+      GtkWidget *child = _ide_tweaks_widget_create_for_item (IDE_TWEAKS_WIDGET (item), item);
 
       if (child == NULL)
         {

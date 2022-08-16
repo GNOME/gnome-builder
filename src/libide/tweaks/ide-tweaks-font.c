@@ -112,7 +112,8 @@ ide_tweaks_font_button_clicked_cb (IdeTweaksFont *self,
 }
 
 static GtkWidget *
-ide_tweaks_font_create (IdeTweaksWidget *widget)
+ide_tweaks_font_create_for_item (IdeTweaksWidget *instance,
+                                 IdeTweaksItem   *widget)
 {
   IdeTweaksFont *self = (IdeTweaksFont *)widget;
   g_autoptr(IdeSettings) settings = NULL;
@@ -249,7 +250,7 @@ ide_tweaks_font_class_init (IdeTweaksFontClass *klass)
   object_class->get_property = ide_tweaks_font_get_property;
   object_class->set_property = ide_tweaks_font_set_property;
 
-  widget_class->create = ide_tweaks_font_create;
+  widget_class->create_for_item = ide_tweaks_font_create_for_item;
 
   properties[PROP_KEY] =
     g_param_spec_string ("key", NULL, NULL,

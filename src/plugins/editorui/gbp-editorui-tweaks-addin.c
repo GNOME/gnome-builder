@@ -39,7 +39,8 @@ G_DEFINE_FINAL_TYPE (GbpEditoruiTweaksAddin, gbp_editorui_tweaks_addin, IDE_TYPE
 
 static GtkWidget *
 editorui_create_style_scheme_preview (GbpEditoruiTweaksAddin *self,
-                                      IdeTweaksWidget        *widget)
+                                      IdeTweaksWidget        *widget,
+                                      IdeTweaksWidget        *instance)
 {
   g_assert (GBP_IS_EDITORUI_TWEAKS_ADDIN (self));
   g_assert (IDE_IS_TWEAKS_WIDGET (widget));
@@ -58,7 +59,8 @@ editorui_create_style_scheme_preview (GbpEditoruiTweaksAddin *self,
 
 static GtkWidget *
 editorui_create_style_scheme_selector (GbpEditoruiTweaksAddin *self,
-                                       IdeTweaksWidget        *widget)
+                                       IdeTweaksWidget        *widget,
+                                       IdeTweaksWidget        *instance)
 {
   g_assert (GBP_IS_EDITORUI_TWEAKS_ADDIN (self));
   g_assert (IDE_IS_TWEAKS_WIDGET (widget));
@@ -70,7 +72,8 @@ editorui_create_style_scheme_selector (GbpEditoruiTweaksAddin *self,
 
 static GtkWidget *
 create_language_caption (IdeTweaks       *tweaks,
-                         IdeTweaksWidget *widget)
+                         IdeTweaksWidget *widget,
+                         IdeTweaksWidget *instance)
 {
   return g_object_new (GTK_TYPE_LABEL,
                        "css-classes", IDE_STRV_INIT ("caption", "dim-label"),
@@ -83,7 +86,7 @@ create_language_caption (IdeTweaks       *tweaks,
 static GtkWidget *
 create_spaces_style (IdeTweaks       *tweaks,
                      IdeTweaksWidget *widget,
-                     IdeTweaksWidget *self)
+                     IdeTweaksWidget *instance)
 {
   static const struct {
     const char *nick;

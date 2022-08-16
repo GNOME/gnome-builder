@@ -52,7 +52,8 @@ G_DEFINE_FINAL_TYPE (IdeTweaksCombo, ide_tweaks_combo, IDE_TYPE_TWEAKS_WIDGET)
 static GParamSpec *properties [N_PROPS];
 
 static GtkWidget *
-ide_tweaks_combo_create (IdeTweaksWidget *widget)
+ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
+                                  IdeTweaksItem   *widget)
 {
   IdeTweaksCombo *self = (IdeTweaksCombo *)widget;
   g_autoptr(IdeSettings) settings = NULL;
@@ -192,7 +193,7 @@ ide_tweaks_combo_class_init (IdeTweaksComboClass *klass)
 
   item_class->accepts = ide_tweaks_combo_accepts;
 
-  widget_class->create = ide_tweaks_combo_create;
+  widget_class->create_for_item = ide_tweaks_combo_create_for_item;
 
   properties[PROP_SETTINGS] =
     g_param_spec_object ("settings", NULL, NULL,

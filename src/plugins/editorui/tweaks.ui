@@ -16,12 +16,12 @@
                 <property name="title" translatable="yes">Color</property>
                 <child>
                   <object class="IdeTweaksWidget" id="appearance_page_preview_widget">
-                    <signal name="create" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
+                    <signal name="create-for-item" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
                   </object>
                 </child>
                 <child>
                   <object class="IdeTweaksWidget" id="style_scheme_selector">
-                    <signal name="create" handler="editorui_create_style_scheme_selector" object="GbpEditoruiTweaksAddin" swapped="true"/>
+                    <signal name="create-for-item" handler="editorui_create_style_scheme_selector" object="GbpEditoruiTweaksAddin" swapped="true"/>
                   </object>
                 </child>
               </object>
@@ -38,7 +38,7 @@
                     <property name="title" translatable="yes">Preview</property>
                     <child>
                       <object class="IdeTweaksWidget" id="editor_page_preview_widget">
-                        <signal name="create" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
+                        <signal name="create-for-item" handler="editorui_create_style_scheme_preview" object="GbpEditoruiTweaksAddin" swapped="true"/>
                       </object>
                     </child>
                   </object>
