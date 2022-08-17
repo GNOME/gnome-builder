@@ -242,22 +242,26 @@ ide_tweaks_page_get_section (IdeTweaksPage *self)
 gboolean
 ide_tweaks_page_get_has_subpage (IdeTweaksPage *self)
 {
-  static GType page_type;
+  static GType types[] = { G_TYPE_INVALID, G_TYPE_INVALID };
 
   g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (self), FALSE);
 
-  if G_UNLIKELY (page_type == G_TYPE_INVALID)
-    page_type = IDE_TYPE_TWEAKS_PAGE;
+  if G_UNLIKELY (types[0] == G_TYPE_INVALID)
+    {
+      types[0] = IDE_TYPE_TWEAKS_PAGE;
+      types[1] = IDE_TYPE_TWEAKS_SECTION;
+    }
 
   for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (self));
        child != NULL;
        child = ide_tweaks_item_get_next_sibling (child))
     {
-      if (G_TYPE_CHECK_INSTANCE_TYPE (child, page_type))
-        return TRUE;
+      for (guint i = 0; i < G_N_ELEMENTS (types); i++)
+        if (G_TYPE_CHECK_INSTANCE_TYPE (child, types[i]))
+          return TRUE;
 
       if (IDE_IS_TWEAKS_FACTORY (child) &&
-          _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (child), &page_type, 1))
+          _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (child), types, G_N_ELEMENTS (types)))
         return TRUE;
     }
 

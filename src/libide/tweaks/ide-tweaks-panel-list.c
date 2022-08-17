@@ -62,13 +62,16 @@ static IdeTweaksItemVisitResult
 panel_list_visitor (IdeTweaksItem *item,
                     gpointer       user_data)
 {
-  static GType page_type;
+  static GType types[] = { G_TYPE_INVALID, G_TYPE_INVALID };
+
+  if G_UNLIKELY (types[0] == G_TYPE_INVALID)
+    {
+      types[0] = IDE_TYPE_TWEAKS_PAGE;
+      types[1] = IDE_TYPE_TWEAKS_SECTION;
+    }
 
   if (item == user_data)
     return IDE_TWEAKS_ITEM_VISIT_RECURSE;
-
-  if (!page_type)
-    page_type = IDE_TYPE_TWEAKS_PAGE;
 
   if (IDE_IS_TWEAKS_SECTION (item))
     return IDE_TWEAKS_ITEM_VISIT_RECURSE;
@@ -77,7 +80,7 @@ panel_list_visitor (IdeTweaksItem *item,
     return IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE;
 
   if (IDE_IS_TWEAKS_FACTORY (item) &&
-      _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (item), &page_type, 1))
+      _ide_tweaks_factory_is_one_of (IDE_TWEAKS_FACTORY (item), types, G_N_ELEMENTS (types)))
     return IDE_TWEAKS_ITEM_VISIT_RECURSE;
 
   return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
