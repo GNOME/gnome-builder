@@ -11,145 +11,154 @@
               <object class="IdeTweaksFactory" id="language_page_factory">
                 <property name="model">GtkSourceLanguages</property>
                 <child>
-                  <object class="IdeTweaksPage" id="language_page">
+                  <object class="IdeTweaksSection">
                     <binding name="title">
-                      <lookup name="name" type="GtkSourceLanguage">
+                      <lookup name="section" type="GtkSourceLanguage">
                         <lookup name="item">language_page_factory</lookup>
                       </lookup>
                     </binding>
                     <child>
-                      <object class="IdeTweaksSettings" id="language_page_settings">
-                        <property name="schema-id">org.gnome.builder.editor.language</property>
-                        <binding name="schema-path">
-                          <closure type="gchararray" function="format">
-                            <constant type="gchararray">/org/gnome/builder/editor/language/%s/</constant>
-                            <lookup name="id" type="GtkSourceLanguage">
-                              <lookup name="item">language_page_factory</lookup>
-                            </lookup>
-                          </closure>
+                      <object class="IdeTweaksPage" id="language_page">
+                        <binding name="title">
+                          <lookup name="name" type="GtkSourceLanguage">
+                            <lookup name="item">language_page_factory</lookup>
+                          </lookup>
                         </binding>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="language_top_group">
                         <child>
-                          <object class="IdeTweaksWidget" id="language_caption">
-                            <signal name="create-for-item" handler="create_language_caption" swapped="true" object="IdeTweaks"/>
+                          <object class="IdeTweaksSettings" id="language_page_settings">
+                            <property name="schema-id">org.gnome.builder.editor.language</property>
+                            <binding name="schema-path">
+                              <closure type="gchararray" function="format">
+                                <constant type="gchararray">/org/gnome/builder/editor/language/%s/</constant>
+                                <lookup name="id" type="GtkSourceLanguage">
+                                  <lookup name="item">language_page_factory</lookup>
+                                </lookup>
+                              </closure>
+                            </binding>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="language_formatting_group">
-                        <property name="title" translatable="yes">Indentation &amp; Formatting</property>
                         <child>
-                          <object class="IdeTweaksCombo" id="insert_spaces_instead_of_tabs">
-                            <property name="title" translatable="yes">Tab Character</property>
-                            <property name="subtitle" translatable="yes">The character to be inserted for Tab</property>
-                            <property name="settings">language_page_settings</property>
-                            <property name="key">insert-spaces-instead-of-tabs</property>
+                          <object class="IdeTweaksGroup" id="language_top_group">
                             <child>
-                              <object class="IdeTweaksChoice" id="tab_choice">
-                                <property name="title" translatable="yes">Tab</property>
-                                <property name="action-target">false</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="IdeTweaksChoice" id="space_choice">
-                                <property name="title" translatable="yes">Spaces</property>
-                                <property name="action-target">true</property>
+                              <object class="IdeTweaksWidget" id="language_caption">
+                                <signal name="create-for-item" handler="create_language_caption" swapped="true" object="IdeTweaks"/>
                               </object>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="IdeTweaksSwitch" id="insert_trailing_newline">
-                            <property name="title" translatable="yes">Insert Trailing Newline</property>
-                            <property name="subtitle" translatable="yes">Ensure files end with a newline</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.language.insert-trailing-newline</property>
+                          <object class="IdeTweaksGroup" id="language_formatting_group">
+                            <property name="title" translatable="yes">Indentation &amp; Formatting</property>
+                            <child>
+                              <object class="IdeTweaksCombo" id="insert_spaces_instead_of_tabs">
+                                <property name="title" translatable="yes">Tab Character</property>
+                                <property name="subtitle" translatable="yes">The character to be inserted for Tab</property>
+                                <property name="settings">language_page_settings</property>
+                                <property name="key">insert-spaces-instead-of-tabs</property>
+                                <child>
+                                  <object class="IdeTweaksChoice" id="tab_choice">
+                                    <property name="title" translatable="yes">Tab</property>
+                                    <property name="action-target">false</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="IdeTweaksChoice" id="space_choice">
+                                    <property name="title" translatable="yes">Spaces</property>
+                                    <property name="action-target">true</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksSwitch" id="insert_trailing_newline">
+                                <property name="title" translatable="yes">Insert Trailing Newline</property>
+                                <property name="subtitle" translatable="yes">Ensure files end with a newline</property>
+                                <property name="action-name">settings.org.gnome.builder.editor.language.insert-trailing-newline</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksSwitch" id="trim_whitespace">
+                                <property name="title" translatable="yes">Trim Trailing Space</property>
+                                <property name="subtitle" translatable="yes">Upon saving, trailing whitepsace from modified lines will be trimmed</property>
+                                <property name="action-name">settings.org.gnome.builder.editor.language.trim-trailing-whitespace</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="IdeTweaksSwitch" id="trim_whitespace">
-                            <property name="title" translatable="yes">Trim Trailing Space</property>
-                            <property name="subtitle" translatable="yes">Upon saving, trailing whitepsace from modified lines will be trimmed</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.language.trim-trailing-whitespace</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="language_indentation_group">
-                        <child>
-                          <object class="IdeTweaksSwitch" id="auto_indent">
-                            <property name="title" translatable="yes">Auto Indent</property>
-                            <property name="subtitle" translatable="yes">Automatically indent source code as you type</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.language.auto-indent</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksSpin" id="tab_width">
-                            <property name="title" translatable="yes">Tab Size</property>
-                            <property name="subtitle" translatable="yes">The number of characters to indent for Tab</property>
-                            <property name="settings">language_page_settings</property>
-                            <property name="key">tab-width</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksSpin" id="indent_width">
-                            <property name="title" translatable="yes">Indentation Size</property>
-                            <property name="subtitle" translatable="yes">The number of characters to indent, or -1 to use tab size</property>
-                            <property name="settings">language_page_settings</property>
-                            <property name="key">indent-width</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="language_margin_group">
-                        <property name="title" translatable="yes">Margin</property>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="show_right_margin">
-                            <property name="title" translatable="yes">Show Right Margin</property>
-                            <property name="subtitle" translatable="yes">Display a margin in the editor to indicate maximium desired width</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.language.show-right-margin</property>
+                          <object class="IdeTweaksGroup" id="language_indentation_group">
+                            <child>
+                              <object class="IdeTweaksSwitch" id="auto_indent">
+                                <property name="title" translatable="yes">Auto Indent</property>
+                                <property name="subtitle" translatable="yes">Automatically indent source code as you type</property>
+                                <property name="action-name">settings.org.gnome.builder.editor.language.auto-indent</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksSpin" id="tab_width">
+                                <property name="title" translatable="yes">Tab Size</property>
+                                <property name="subtitle" translatable="yes">The number of characters to indent for Tab</property>
+                                <property name="settings">language_page_settings</property>
+                                <property name="key">tab-width</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksSpin" id="indent_width">
+                                <property name="title" translatable="yes">Indentation Size</property>
+                                <property name="subtitle" translatable="yes">The number of characters to indent, or -1 to use tab size</property>
+                                <property name="settings">language_page_settings</property>
+                                <property name="key">indent-width</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="IdeTweaksSpin" id="right_margin_position">
-                            <property name="title" translatable="yes">Right Margin Position</property>
-                            <property name="subtitle" translatable="yes">The desired maximum line length</property>
-                            <property name="settings">language_page_settings</property>
-                            <property name="key">right-margin-position</property>
+                          <object class="IdeTweaksGroup" id="language_margin_group">
+                            <property name="title" translatable="yes">Margin</property>
+                            <child>
+                              <object class="IdeTweaksSwitch" id="show_right_margin">
+                                <property name="title" translatable="yes">Show Right Margin</property>
+                                <property name="subtitle" translatable="yes">Display a margin in the editor to indicate maximium desired width</property>
+                                <property name="action-name">settings.org.gnome.builder.editor.language.show-right-margin</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksSpin" id="right_margin_position">
+                                <property name="title" translatable="yes">Right Margin Position</property>
+                                <property name="subtitle" translatable="yes">The desired maximum line length</property>
+                                <property name="settings">language_page_settings</property>
+                                <property name="key">right-margin-position</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="language_behavior_group">
-                        <property name="title" translatable="yes">Behavior</property>
                         <child>
-                          <object class="IdeTweaksSwitch" id="overwrite_braces">
-                            <property name="title" translatable="yes">Overwrite Braces</property>
-                            <property name="subtitle" translatable="yes">Overwrite closing braces, brackets, parenthesis, and quotes</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.language.overwrite-braces</property>
+                          <object class="IdeTweaksGroup" id="language_behavior_group">
+                            <property name="title" translatable="yes">Behavior</property>
+                            <child>
+                              <object class="IdeTweaksSwitch" id="overwrite_braces">
+                                <property name="title" translatable="yes">Overwrite Braces</property>
+                                <property name="subtitle" translatable="yes">Overwrite closing braces, brackets, parenthesis, and quotes</property>
+                                <property name="action-name">settings.org.gnome.builder.editor.language.overwrite-braces</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksSwitch" id="insert_matching_braces">
+                                <property name="title" translatable="yes">Insert Matching Brace</property>
+                                <property name="subtitle" translatable="yes">Insert matching character for braces, brackets, parenthesis, and quotes</property>
+                                <property name="action-name">settings.org.gnome.builder.editor.language.insert-matching-brace</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                         <child>
-                          <object class="IdeTweaksSwitch" id="insert_matching_braces">
-                            <property name="title" translatable="yes">Insert Matching Brace</property>
-                            <property name="subtitle" translatable="yes">Insert matching character for braces, brackets, parenthesis, and quotes</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.language.insert-matching-brace</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="language_spaces_style_group">
-                        <property name="title" translatable="yes">Spaces</property>
-                        <child>
-                          <object class="IdeTweaksWidget">
-                            <signal name="create-for-item" handler="create_spaces_style" swapped="true" object="IdeTweaks"/>
+                          <object class="IdeTweaksGroup" id="language_spaces_style_group">
+                            <property name="title" translatable="yes">Spaces</property>
+                            <child>
+                              <object class="IdeTweaksWidget">
+                                <signal name="create-for-item" handler="create_spaces_style" swapped="true" object="IdeTweaks"/>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
