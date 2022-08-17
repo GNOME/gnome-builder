@@ -163,6 +163,18 @@ create_spaces_style (IdeTweaks       *tweaks,
   return GTK_WIDGET (list_box);
 }
 
+static int
+compare_by_section (gconstpointer a,
+                    gconstpointer b,
+                    gpointer      user_data)
+{
+  GtkSourceLanguage *l_a = (GtkSourceLanguage *)a;
+  GtkSourceLanguage *l_b = (GtkSourceLanguage *)b;
+
+  return g_strcmp0 (gtk_source_language_get_section (l_a),
+                    gtk_source_language_get_section (l_b));
+}
+
 static void
 gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
                                 IdeTweaks      *tweaks)
@@ -185,6 +197,8 @@ gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
       if (!gtk_source_language_get_hidden (l))
         g_list_store_append (store, l);
     }
+
+  g_list_store_sort (store, compare_by_section, NULL);
 
   ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
                                        IDE_STRV_INIT ("/plugins/editorui/tweaks.ui",
