@@ -61,15 +61,13 @@ ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
   g_autoptr(GVariant) value = NULL;
   IdeTweaksItem *root;
   AdwComboRow *row;
-  const char *project_id;
   int selected = -1;
   guint i = 0;
 
   g_assert (IDE_IS_TWEAKS_COMBO (self));
 
   root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (widget));
-  project_id = ide_tweaks_get_project_id (IDE_TWEAKS (root));
-  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self->settings, project_id));
+  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self->settings, IDE_TWEAKS (root)));
 
   store = g_list_store_new (IDE_TYPE_TWEAKS_CHOICE);
   value = ide_settings_get_value (settings, self->key);

@@ -252,14 +252,11 @@ ide_tweaks_window_addin_removed_cb (PeasExtensionSet *set,
 static void
 ide_tweaks_window_rebuild (IdeTweaksWindow *self)
 {
-  const char *project_id;
   GtkWidget *list;
 
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (IDE_IS_TWEAKS (self->tweaks));
   g_assert (self->addins == NULL);
-
-  project_id = ide_tweaks_get_project_id (self->tweaks);
 
   /* Allow addins to extend the tweaks instance */
   self->addins = peas_extension_set_new (peas_engine_get_default (),
@@ -306,7 +303,7 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
           if (schema_id == NULL)
             continue;
 
-          group = ide_tweaks_settings_create_action_group (settings, project_id);
+          group = ide_tweaks_settings_create_action_group (settings, self->tweaks);
           ide_action_muxer_insert_action_group (self->muxer, schema_id, group);
           g_clear_object (&group);
         }

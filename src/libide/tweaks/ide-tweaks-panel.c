@@ -101,14 +101,13 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
     }
   else if (IDE_IS_TWEAKS_SETTINGS (item))
     {
+      IdeTweaks *tweaks = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (self->page), IDE_TYPE_TWEAKS);
       IdeTweaksSettings *settings = IDE_TWEAKS_SETTINGS (item);
       const char *schema_id = ide_tweaks_settings_get_schema_id (settings);
-      IdeTweaks *tweaks = ide_tweaks_item_get_ancestor (item, IDE_TYPE_TWEAKS);
-      const char *project_id = ide_tweaks_get_project_id (tweaks);
 
       if (ide_action_muxer_get_action_group (self->muxer, schema_id) == NULL)
         {
-          GActionGroup *group = ide_tweaks_settings_create_action_group (settings, project_id);
+          GActionGroup *group = ide_tweaks_settings_create_action_group (settings, tweaks);
 
           if (group != NULL)
             ide_action_muxer_insert_action_group (self->muxer, schema_id, G_ACTION_GROUP (group));

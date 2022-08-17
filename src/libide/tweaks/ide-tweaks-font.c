@@ -117,7 +117,6 @@ ide_tweaks_font_create_for_item (IdeTweaksWidget *instance,
 {
   IdeTweaksFont *self = (IdeTweaksFont *)widget;
   g_autoptr(IdeSettings) settings = NULL;
-  const char *project_id = NULL;
   IdeTweaksItem *root;
   AdwActionRow *row;
   GtkButton *button;
@@ -131,8 +130,7 @@ ide_tweaks_font_create_for_item (IdeTweaksWidget *instance,
   if (!root || !IDE_IS_TWEAKS (root))
     return NULL;
 
-  project_id = ide_tweaks_get_project_id (IDE_TWEAKS (root));
-  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self->settings, project_id));
+  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self->settings, IDE_TWEAKS (root)));
 
   button = g_object_new (GTK_TYPE_BUTTON,
                          "css-classes", IDE_STRV_INIT ("flat"),

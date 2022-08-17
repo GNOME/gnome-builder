@@ -20,6 +20,7 @@
 
 #pragma once
 
+#include "ide-tweaks.h"
 #include "ide-tweaks-item.h"
 
 G_BEGIN_DECLS
@@ -48,7 +49,7 @@ void               ide_tweaks_settings_set_application_only (IdeTweaksSettings  
                                                              gboolean            application_only);
 IDE_AVAILABLE_IN_ALL
 GActionGroup      *ide_tweaks_settings_create_action_group  (IdeTweaksSettings  *self,
-                                                             const char         *project_id);
+                                                             IdeTweaks          *tweaks);
 IDE_AVAILABLE_IN_ALL
 void               ide_tweaks_settings_bind                 (IdeTweaksSettings  *self,
                                                              const char         *key,

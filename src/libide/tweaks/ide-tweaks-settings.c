@@ -218,7 +218,7 @@ ide_tweaks_settings_set_application_only (IdeTweaksSettings *self,
 /**
  * ide_tweaks_settings_create_action_group:
  * @self: a #IdeTweaksSettings
- * @project_id: the project identifier
+ * @tweaks: the #IdeTweaks
  *
  * Creates an action group containing the settings.
  *
@@ -230,26 +230,27 @@ ide_tweaks_settings_set_application_only (IdeTweaksSettings *self,
  */
 GActionGroup *
 ide_tweaks_settings_create_action_group (IdeTweaksSettings *self,
-                                         const char        *project_id)
+                                         IdeTweaks         *tweaks)
 {
-  IdeTweaksItem *root;
   GActionGroup *cached;
   IdeSettings *settings;
   g_autofree char *hash_key = NULL;
+  const char *project_id;
 
   g_return_val_if_fail (IDE_IS_TWEAKS_SETTINGS (self), NULL);
+  g_return_val_if_fail (IDE_IS_TWEAKS (tweaks), NULL);
 
   if (self->schema_id == NULL)
     return NULL;
+
+  project_id = ide_tweaks_get_project_id (tweaks);
 
   hash_key = g_strdup_printf ("IdeSettings<%s|%s|%s>",
                               self->schema_id,
                               self->schema_path ? self->schema_path : (project_id ? project_id : "__app__"),
                               self->application_only ? "app" : "project");
 
-  root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self));
-
-  if ((cached = g_object_get_data (G_OBJECT (root), hash_key)))
+  if ((cached = g_object_get_data (G_OBJECT (tweaks), hash_key)))
     {
       g_assert (G_IS_ACTION_GROUP (cached));
       return g_object_ref (cached);
@@ -262,7 +263,7 @@ ide_tweaks_settings_create_action_group (IdeTweaksSettings *self,
   else
     settings = ide_settings_new_with_path (project_id, self->schema_id, self->schema_path);
 
-  g_object_set_data_full (G_OBJECT (root),
+  g_object_set_data_full (G_OBJECT (tweaks),
                           hash_key,
                           g_object_ref (settings),
                           g_object_unref);
@@ -278,7 +279,6 @@ ide_tweaks_settings_bind (IdeTweaksSettings  *self,
                           GSettingsBindFlags  bind_flags)
 {
   g_autoptr(IdeSettings) settings = NULL;
-  const char *project_id = NULL;
   IdeTweaksItem *root;
 
   g_return_if_fail (IDE_IS_TWEAKS_SETTINGS (self));
@@ -286,9 +286,7 @@ ide_tweaks_settings_bind (IdeTweaksSettings  *self,
   g_return_if_fail (G_IS_OBJECT (instance));
   g_return_if_fail (property != NULL);
 
-  if ((root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self))) && IDE_IS_TWEAKS (root))
-    project_id = ide_tweaks_get_project_id (IDE_TWEAKS (root));
-
-  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self, project_id));
+  root = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (self), IDE_TYPE_TWEAKS);
+  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self, IDE_TWEAKS (root)));
   ide_settings_bind (settings, key, instance, property, bind_flags);
 }
