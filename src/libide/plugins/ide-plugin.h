@@ -1,6 +1,6 @@
-/* libide-plugins.h
+/* ide-plugin.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,28 @@
 
 #pragma once
 
+#if !defined (IDE_PLUGINS_INSIDE) && !defined (IDE_PLUGINS_COMPILATION)
+# error "Only <libide-plugins.h> can be included directly."
+#endif
+
+#include <libpeas/peas.h>
+
 #include <libide-core.h>
 
 G_BEGIN_DECLS
 
-#define IDE_PLUGINS_INSIDE
-# include "ide-extension-adapter.h"
-# include "ide-extension-set-adapter.h"
-# include "ide-plugin.h"
-#undef IDE_PLUGINS_INSIDE
+#define IDE_TYPE_PLUGIN (ide_plugin_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdePlugin, ide_plugin, IDE, PLUGIN, GObject)
+
+IDE_AVAILABLE_IN_ALL
+PeasPluginInfo *ide_plugin_get_info        (IdePlugin *self);
+IDE_AVAILABLE_IN_ALL
+const char     *ide_plugin_get_name        (IdePlugin *self);
+IDE_AVAILABLE_IN_ALL
+const char     *ide_plugin_get_description (IdePlugin *self);
+IDE_AVAILABLE_IN_ALL
+const char     *ide_plugin_get_section     (IdePlugin *self);
 
 G_END_DECLS

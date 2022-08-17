@@ -8,6 +8,7 @@ libide_include_directories += include_directories('.')
 libide_plugins_public_headers = [
   'ide-extension-adapter.h',
   'ide-extension-set-adapter.h',
+  'ide-plugin.h',
   'libide-plugins.h',
 ]
 
@@ -24,6 +25,7 @@ install_headers(libide_plugins_public_headers, subdir: libide_plugins_header_sub
 libide_plugins_public_sources = [
   'ide-extension-adapter.c',
   'ide-extension-set-adapter.c',
+  'ide-plugin.c',
 ]
 
 libide_plugins_private_sources = [
