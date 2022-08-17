@@ -500,3 +500,42 @@ _ide_application_unload_addins (IdeApplication *self)
 
   g_clear_object (&self->addins);
 }
+
+/**
+ * ide_application_list_plugins:
+ * @self: a #IdeApplication
+ *
+ * Gets a list of plugins.
+ *
+ * The result contains instances of #IdePlugin as #PeasPluginInfo is a boxed
+ * type which cannot be used with #GListModel.
+ *
+ * Returns: (transfer full): a #GListModel of IdePlugin
+ */
+GListModel *
+_ide_application_list_plugins (IdeApplication *self)
+{
+  GListStore *store;
+  const GList *plugins;
+
+  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+
+  store = g_list_store_new (IDE_TYPE_PLUGIN);
+  plugins = peas_engine_get_plugin_list (peas_engine_get_default ());
+
+  for (const GList *iter = plugins; iter; iter = iter->next)
+    {
+      const PeasPluginInfo *plugin_info = iter->data;
+      g_autoptr(IdePlugin) plugin = NULL;
+
+      if (peas_plugin_info_is_hidden (plugin_info))
+        continue;
+
+      plugin = g_object_new (IDE_TYPE_PLUGIN,
+                             "info", plugin_info,
+                             NULL);
+      g_list_store_append (store, plugin);
+    }
+
+  return G_LIST_MODEL (store);
+}

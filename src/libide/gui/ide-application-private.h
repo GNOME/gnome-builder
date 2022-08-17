@@ -119,5 +119,6 @@ void            _ide_application_add_resources            (IdeApplication       
                                                            const char              *path);
 void            _ide_application_remove_resources         (IdeApplication          *self,
                                                            const char              *path);
+GListModel     *_ide_application_list_plugins             (IdeApplication          *self);
 
 G_END_DECLS
