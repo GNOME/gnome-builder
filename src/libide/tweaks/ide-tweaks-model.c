@@ -31,6 +31,7 @@ struct _IdeTweaksModel
   GObject               parent_instance;
   IdeTweaksItem        *item;
   GPtrArray            *items;
+  GPtrArray            *branches;
   IdeTweaksItemVisitor  visitor;
   gpointer              visitor_data;
   GDestroyNotify        visitor_data_destroy;
@@ -101,6 +102,20 @@ ide_tweaks_model_populate_cb (IdeTweaksItem *item,
     {
     case IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE:
       g_ptr_array_add (self->items, g_object_ref (item));
+
+      /* We might need to keep the parents around up to our factory so
+       * that they are not disposed after visiting.
+       */
+      for (IdeTweaksItem *iter = ide_tweaks_item_get_parent (item);
+           iter != NULL && iter != self->item;
+           iter = ide_tweaks_item_get_parent (iter))
+        {
+          guint pos;
+
+          if (!g_ptr_array_find (self->branches, iter, &pos))
+            g_ptr_array_add (self->branches, g_object_ref (iter));
+        }
+
       return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
 
     case IDE_TWEAKS_ITEM_VISIT_RECURSE:
@@ -153,6 +168,7 @@ ide_tweaks_model_dispose (GObject *object)
   IdeTweaksModel *self = (IdeTweaksModel *)object;
 
   g_clear_object (&self->item);
+  g_clear_pointer (&self->branches, g_ptr_array_unref);
 
   if (self->visitor_data_destroy)
     {
@@ -202,6 +218,7 @@ ide_tweaks_model_class_init (IdeTweaksModelClass *klass)
 static void
 ide_tweaks_model_init (IdeTweaksModel *self)
 {
+  self->branches = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
 /**
