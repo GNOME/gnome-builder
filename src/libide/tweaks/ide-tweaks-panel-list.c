@@ -152,6 +152,8 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
   GtkWidget *header = NULL;
   IdeTweaksItem *before_item = NULL;
   IdeTweaksItem *row_item;
+  IdeTweaksItem *before_section = NULL;
+  IdeTweaksItem *row_section = NULL;
 
   g_assert (!before || IDE_IS_TWEAKS_PANEL_LIST_ROW (before));
   g_assert (IDE_IS_TWEAKS_PANEL_LIST_ROW (row));
@@ -160,12 +162,43 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
     before_item = ide_tweaks_panel_list_row_get_item (before);
   row_item = ide_tweaks_panel_list_row_get_item (row);
 
-  if (IDE_IS_TWEAKS_PAGE (before_item) &&
-      IDE_IS_TWEAKS_PAGE (row_item) &&
-      !section_equal (ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (before_item)),
-                      ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (row_item))))
-    header = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  g_assert (IDE_IS_TWEAKS_PAGE (row_item));
+  g_assert (!before_item || IDE_IS_TWEAKS_PAGE (before_item));
 
+  if (before_item != NULL)
+    before_section = ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (before_item));
+  row_section = ide_tweaks_page_get_section (IDE_TWEAKS_PAGE (row_item));
+
+  if (before_section == NULL ||
+      (row_section != NULL && !section_equal (before_section, row_section)))
+    {
+      if (row_section != NULL)
+        {
+          const char *title = ide_tweaks_section_get_title (IDE_TWEAKS_SECTION (row_section));
+          gboolean show_header = ide_tweaks_section_get_show_header (IDE_TWEAKS_SECTION (row_section));
+
+          if (show_header && title != NULL)
+            {
+              header = g_object_new (GTK_TYPE_LABEL,
+                                     "css-classes", IDE_STRV_INIT ("dim-label", "heading"),
+                                     "margin-bottom", 6,
+                                     "margin-top", 6,
+                                     "margin-start", 12,
+                                     "label", title,
+                                     "xalign", .0f,
+                                     NULL);
+              goto finish;
+            }
+        }
+
+      if (before_section != NULL)
+        {
+          header = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+          goto finish;
+        }
+    }
+
+finish:
   gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), header);
 }
 
