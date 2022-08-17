@@ -48,6 +48,7 @@ ide_application_actions_tweaks (GSimpleAction *action,
     "resource:///org/gnome/libide-gui/tweaks-plugins.ui",
   };
   IdeApplication *self = user_data;
+  g_autoptr(GListModel) plugins = NULL;
   g_autoptr(IdeTweaks) tweaks = NULL;
   IdeTweaksWindow *window;
   GtkWindow *toplevel = NULL;
@@ -75,6 +76,10 @@ ide_application_actions_tweaks (GSimpleAction *action,
     }
 
   tweaks = ide_tweaks_new ();
+
+  /* Give access to all the known plugins */
+  plugins = _ide_application_list_plugins (self);
+  ide_tweaks_expose_object (tweaks, "Plugins", G_OBJECT (plugins));
 
   /* Load our base tweaks scaffolding */
   for (guint i = 0; i < G_N_ELEMENTS (tweaks_resources); i++)
