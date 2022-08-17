@@ -149,11 +149,13 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
                                    IdeTweaksPanelListRow *before,
                                    gpointer               user_data)
 {
-  GtkWidget *header = NULL;
   IdeTweaksItem *before_item = NULL;
   IdeTweaksItem *row_item;
   IdeTweaksItem *before_section = NULL;
   IdeTweaksItem *row_section = NULL;
+  GtkSeparator *separator = NULL;
+  GtkLabel *label = NULL;
+  GtkBox *box = NULL;
 
   g_assert (!before || IDE_IS_TWEAKS_PANEL_LIST_ROW (before));
   g_assert (IDE_IS_TWEAKS_PANEL_LIST_ROW (row));
@@ -179,27 +181,39 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
 
           if (show_header && title != NULL)
             {
-              header = g_object_new (GTK_TYPE_LABEL,
-                                     "css-classes", IDE_STRV_INIT ("dim-label"),
-                                     "margin-bottom", 6,
-                                     "margin-top", 12,
-                                     "margin-start", 18,
-                                     "label", title,
-                                     "xalign", .0f,
-                                     NULL);
-              goto finish;
+              label = g_object_new (GTK_TYPE_LABEL,
+                                    "css-classes", IDE_STRV_INIT ("dim-label", "heading"),
+                                    "label", title,
+                                    "margin-bottom", 6,
+                                    "margin-start", 18,
+                                    "margin-top", 12,
+                                    "xalign", .0f,
+                                    NULL);
             }
         }
 
       if (before_section != NULL)
-        {
-          header = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-          goto finish;
-        }
+        separator = g_object_new (GTK_TYPE_SEPARATOR,
+                                  "orientation", GTK_ORIENTATION_HORIZONTAL,
+                                  NULL);
     }
 
-finish:
-  gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), header);
+  if (label == NULL)
+    {
+      gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), GTK_WIDGET (separator));
+      return;
+    }
+
+  g_assert (label != NULL);
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_VERTICAL,
+                      NULL);
+  if (separator != NULL)
+    gtk_box_append (box, GTK_WIDGET (separator));
+  gtk_box_append (box, GTK_WIDGET (label));
+
+  gtk_list_box_row_set_header (GTK_LIST_BOX_ROW (row), GTK_WIDGET (box));
 }
 
 static void
