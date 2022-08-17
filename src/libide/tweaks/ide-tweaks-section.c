@@ -29,12 +29,14 @@ struct _IdeTweaksSection
 {
   IdeTweaksItem parent_instance;
   char *title;
+  guint show_header : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeTweaksSection, ide_tweaks_section, IDE_TYPE_TWEAKS_ITEM)
 
 enum {
   PROP_0,
+  PROP_SHOW_HEADER,
   PROP_TITLE,
   N_PROPS
 };
@@ -71,6 +73,10 @@ ide_tweaks_section_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_SHOW_HEADER:
+      g_value_set_boolean (value, ide_tweaks_section_get_show_header (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, ide_tweaks_section_get_title (self));
       break;
@@ -90,6 +96,10 @@ ide_tweaks_section_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_SHOW_HEADER:
+      ide_tweaks_section_set_show_header (self, g_value_get_boolean (value));
+      break;
+
     case PROP_TITLE:
       ide_tweaks_section_set_title (self, g_value_get_string (value));
       break;
@@ -110,6 +120,11 @@ ide_tweaks_section_class_init (IdeTweaksSectionClass *klass)
   object_class->dispose = ide_tweaks_section_dispose;
   object_class->get_property = ide_tweaks_section_get_property;
   object_class->set_property = ide_tweaks_section_set_property;
+
+  properties[PROP_SHOW_HEADER] =
+    g_param_spec_boolean ("show-header", NULL, NULL,
+                         FALSE,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
@@ -140,4 +155,27 @@ ide_tweaks_section_set_title (IdeTweaksSection *self,
 
   if (ide_set_string (&self->title, title))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TITLE]);
+}
+
+gboolean
+ide_tweaks_section_get_show_header (IdeTweaksSection *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_SECTION (self), FALSE);
+
+  return self->show_header;
+}
+
+void
+ide_tweaks_section_set_show_header (IdeTweaksSection *self,
+                                    gboolean          show_header)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_SECTION (self));
+
+  show_header = !!show_header;
+
+  if (show_header != self->show_header)
+    {
+      self->show_header = show_header;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_HEADER]);
+    }
 }

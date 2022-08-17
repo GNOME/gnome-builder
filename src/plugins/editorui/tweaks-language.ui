@@ -12,6 +12,7 @@
                 <property name="model">GtkSourceLanguages</property>
                 <child>
                   <object class="IdeTweaksSection">
+                    <property name="show-header">true</property>
                     <binding name="title">
                       <lookup name="section" type="GtkSourceLanguage">
                         <lookup name="item">language_page_factory</lookup>
