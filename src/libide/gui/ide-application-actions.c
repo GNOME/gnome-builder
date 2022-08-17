@@ -43,10 +43,12 @@ ide_application_actions_tweaks (GSimpleAction *action,
                                 GVariant      *parameter,
                                 gpointer       user_data)
 {
+  static const char *tweaks_resources[] = {
+    "resource:///org/gnome/libide-gui/tweaks.ui",
+    "resource:///org/gnome/libide-gui/tweaks-plugins.ui",
+  };
   IdeApplication *self = user_data;
   g_autoptr(IdeTweaks) tweaks = NULL;
-  g_autoptr(GError) error = NULL;
-  g_autoptr(GFile) tweaks_file = NULL;
   IdeTweaksWindow *window;
   GtkWindow *toplevel = NULL;
   const GList *windows;
@@ -75,9 +77,16 @@ ide_application_actions_tweaks (GSimpleAction *action,
   tweaks = ide_tweaks_new ();
 
   /* Load our base tweaks scaffolding */
-  tweaks_file = g_file_new_for_uri ("resource:///org/gnome/libide-gui/tweaks.ui");
-  ide_tweaks_load_from_file (tweaks, tweaks_file, NULL, &error);
-  g_assert_no_error (error);
+  for (guint i = 0; i < G_N_ELEMENTS (tweaks_resources); i++)
+    {
+      g_autoptr(GFile) tweaks_file = g_file_new_for_uri (tweaks_resources[i]);
+      g_autoptr(GError) error = NULL;
+
+      ide_tweaks_load_from_file (tweaks, tweaks_file, NULL, &error);
+
+      if (error != NULL)
+        g_critical ("Failed to load tweaks: %s", error->message);
+    }
 
   /* Now display window */
   window = g_object_new (IDE_TYPE_TWEAKS_WINDOW,

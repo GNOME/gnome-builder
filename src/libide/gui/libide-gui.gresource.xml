@@ -9,6 +9,7 @@
     <file>images/style-preview-light.png</file>
     <file>style.css</file>
     <file preprocess="xml-stripblanks">tweaks.ui</file>
+    <file preprocess="xml-stripblanks">tweaks-plugins.ui</file>
   </gresource>
   <gresource prefix="/org/gnome/libide-gui/ui">
     <file preprocess="xml-stripblanks">ide-environment-editor-row.ui</file>

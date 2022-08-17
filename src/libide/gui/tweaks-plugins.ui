@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="plugins_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="plugins_page">
+          <object class="IdeTweaksPage">
+            <child>
+              <object class="IdeTweaksPage" id="lsps_page">
+                <property name="title" translatable="yes">Language Servers</property>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksPage" id="vcs_page">
+                <property name="title" translatable="yes">Version Control</property>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksPage" id="sdks_page">
+                <property name="title" translatable="yes">SDKs</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
