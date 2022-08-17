@@ -20,6 +20,7 @@
                     </binding>
                     <child>
                       <object class="IdeTweaksPage" id="language_page">
+                        <property name="show-icon">false</property>
                         <binding name="title">
                           <lookup name="name" type="GtkSourceLanguage">
                             <lookup name="item">language_page_factory</lookup>
