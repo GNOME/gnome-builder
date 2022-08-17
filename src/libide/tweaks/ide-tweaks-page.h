@@ -45,6 +45,11 @@ IDE_AVAILABLE_IN_ALL
 void           ide_tweaks_page_set_title       (IdeTweaksPage *self,
                                                 const char    *title);
 IDE_AVAILABLE_IN_ALL
+gboolean       ide_tweaks_page_get_show_icon   (IdeTweaksPage *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_tweaks_page_set_show_icon   (IdeTweaksPage *self,
+                                                gboolean       show_icon);
+IDE_AVAILABLE_IN_ALL
 gboolean       ide_tweaks_page_get_has_subpage (IdeTweaksPage *self);
 
 G_END_DECLS

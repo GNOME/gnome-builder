@@ -16,6 +16,11 @@
                 <lookup name="item">IdeTweaksPanelListRow</lookup>
               </lookup>
             </binding>
+            <binding name="visible">
+              <lookup name="show-icon" type="IdeTweaksPage">
+                <lookup name="item">IdeTweaksPanelListRow</lookup>
+              </lookup>
+            </binding>
           </object>
         </child>
         <child>

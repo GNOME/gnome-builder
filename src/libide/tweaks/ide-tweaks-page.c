@@ -34,6 +34,7 @@ struct _IdeTweaksPage
   IdeTweaksItem parent_instance;
   char *icon_name;
   char *title;
+  guint show_icon : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeTweaksPage, ide_tweaks_page, IDE_TYPE_TWEAKS_ITEM)
@@ -43,6 +44,7 @@ enum {
   PROP_HAS_SUBPAGE,
   PROP_ICON_NAME,
   PROP_SECTION,
+  PROP_SHOW_ICON,
   PROP_TITLE,
   N_PROPS
 };
@@ -98,6 +100,10 @@ ide_tweaks_page_get_property (GObject    *object,
       g_value_set_object (value, ide_tweaks_page_get_section (self));
       break;
 
+    case PROP_SHOW_ICON:
+      g_value_set_boolean (value, ide_tweaks_page_get_show_icon (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, ide_tweaks_page_get_title (self));
       break;
@@ -119,6 +125,10 @@ ide_tweaks_page_set_property (GObject      *object,
     {
     case PROP_ICON_NAME:
       ide_tweaks_page_set_icon_name (self, g_value_get_string (value));
+      break;
+
+    case PROP_SHOW_ICON:
+      ide_tweaks_page_set_show_icon (self, g_value_get_boolean (value));
       break;
 
     case PROP_TITLE:
@@ -156,6 +166,11 @@ ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
                          IDE_TYPE_TWEAKS_SECTION,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties[PROP_SHOW_ICON] =
+    g_param_spec_boolean ("show-icon", NULL, NULL,
+                          TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL, NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
@@ -166,6 +181,7 @@ ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
 static void
 ide_tweaks_page_init (IdeTweaksPage *self)
 {
+  self->show_icon = TRUE;
 }
 
 const char *
@@ -184,6 +200,29 @@ ide_tweaks_page_set_icon_name (IdeTweaksPage *self,
 
   if (ide_set_string (&self->icon_name, icon_name))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON_NAME]);
+}
+
+gboolean
+ide_tweaks_page_get_show_icon (IdeTweaksPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (self), FALSE);
+
+  return self->show_icon;
+}
+
+void
+ide_tweaks_page_set_show_icon (IdeTweaksPage *self,
+                               gboolean       show_icon)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PAGE (self));
+
+  show_icon = !!show_icon;
+
+  if (show_icon != self->show_icon)
+    {
+      self->show_icon = show_icon;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_ICON]);
+    }
 }
 
 const char *
