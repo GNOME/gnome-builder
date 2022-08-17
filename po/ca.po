@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-14 19:35+0000\n"
-"PO-Revision-Date: 2022-08-15 20:35+0200\n"
+"POT-Creation-Date: 2022-08-16 21:52+0000\n"
+"PO-Revision-Date: 2022-08-17 20:35+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -31,6 +31,7 @@ msgstr ""
 #: src/libide/gui/ide-application-actions.c:206
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
+#: src/plugins/editorui/tweaks.ui:220
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Constructor"
@@ -52,8 +53,8 @@ msgid ""
 "appreciate, like syntax highlighting and snippets."
 msgstr ""
 "El Constructor és un entorn integrat de desenvolupament per a GNOME "
-"desenvolupat activament. Combina el suport integrat per a tecnologies GNOME "
-"essencials, com ara GTK+, GLib i les API del GNOME amb característiques que "
+"desenvolupat activament. Combina el suport integrat per a tecnologies essencials del "
+"GNOME, com ara GTK+, GLib i les API del GNOME amb característiques que "
 "qualsevol desenvolupador apreciarà, com el ressaltat de sintaxi i els "
 "fragments."
 
@@ -749,7 +750,7 @@ msgstr "Sense títol"
 #: src/libide/greeter/ide-greeter-workspace.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1453
+#: src/libide/gui/ide-workbench.c:1459
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
@@ -763,7 +764,7 @@ msgid "A suitable debugger could not be found."
 msgstr "No s'ha pogut trobar un depurador adequat."
 
 #: src/libide/editor/gtk/menus.ui:16 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1449
+#: src/libide/gui/ide-workbench.c:1455
 msgid "Open File…"
 msgstr "Obre un fitxer…"
 
@@ -780,7 +781,7 @@ msgstr "Preferències"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:21
+#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:22
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 msgid "Keyboard Shortcuts"
 msgstr "Dreceres del teclat"
@@ -1126,8 +1127,8 @@ msgid "Directory"
 msgstr "Directori"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:340 src/libide/gui/ide-workbench.c:843
-#: src/libide/gui/ide-workbench.c:2731
+#: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
+#: src/libide/gui/ide-workbench.c:2778
 #, c-format
 msgid "Builder — %s"
 msgstr "Constructor — %s"
@@ -1165,7 +1166,7 @@ msgid "Select Project File"
 msgstr "Selecciona el fitxer del projecte"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1452
+#: src/libide/gui/ide-workbench.c:1458
 msgid "_Open"
 msgstr "_Obre"
 
@@ -1408,7 +1409,7 @@ msgstr "No es pot carregar l'HTML. Manca el suport de WebKit."
 
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:9
+#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:10
 #: src/plugins/buildui/gtk/menus.ui:141
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1524,8 +1525,6 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
-#: src/plugins/editorui/tweaks.ui:180 src/plugins/editorui/tweaks.ui:204
-#: src/plugins/editorui/tweaks.ui:251
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
 msgstr "General"
@@ -1746,12 +1745,11 @@ msgstr "Proveïdors de compleció"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
-#: src/plugins/editorui/tweaks.ui:201
+#: src/plugins/editorui/tweaks.ui:194
 msgid "Snippets"
 msgstr "Fragments"
 
 #: src/libide/gui/ide-preferences-builtin.c:280
-#: src/plugins/editorui/tweaks.ui:225
 msgid "Programming Languages"
 msgstr "Llenguatges de programació"
 
@@ -1773,7 +1771,6 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-#: src/plugins/editorui/tweaks.ui:261
 msgid "Overwrite Braces"
 msgstr "Sobreescriu els claudàtors"
 
@@ -1784,7 +1781,6 @@ msgstr "Sobreescriu els claudàtors tancats"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-#: src/plugins/editorui/tweaks.ui:268
 msgid "Insert Matching Brace"
 msgstr "Insereix claudàtors concordants"
 
@@ -1857,18 +1853,22 @@ msgid "Spacing"
 msgstr "Espaiat"
 
 #: src/libide/gui/ide-preferences-builtin.c:366
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:96
 msgid "Space before opening parentheses"
 msgstr "Espai abans d'obrir parèntesis"
 
 #: src/libide/gui/ide-preferences-builtin.c:367
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:97
 msgid "Space before opening brackets"
 msgstr "Espai abans d'obrir claudàtors"
 
 #: src/libide/gui/ide-preferences-builtin.c:368
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:98
 msgid "Space before opening braces"
 msgstr "Espai abans d'obrir claus"
 
 #: src/libide/gui/ide-preferences-builtin.c:369
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:99
 msgid "Space before opening angles"
 msgstr "Espai abans d'obrir angles"
 
@@ -1877,10 +1877,12 @@ msgid "Prefer a space before colons"
 msgstr "Prefereix un espai abans dels dos punts"
 
 #: src/libide/gui/ide-preferences-builtin.c:371
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:101
 msgid "Prefer a space before commas"
 msgstr "Prefereix un espai abans de les comes"
 
 #: src/libide/gui/ide-preferences-builtin.c:372
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:102
 msgid "Prefer a space before semicolons"
 msgstr "Prefereix un espai abans dels punts i comes"
 
@@ -1963,7 +1965,7 @@ msgstr ""
 "aplicacions"
 
 #: src/libide/gui/ide-preferences-builtin.c:445
-#: src/libide/gui/ide-preferences-builtin.c:653
+#: src/libide/gui/ide-preferences-builtin.c:653 src/libide/gui/tweaks.ui:38
 #: src/libide/projects/ide-projects-global.c:103
 msgid "Projects"
 msgstr "Projectes"
@@ -2026,7 +2028,8 @@ msgstr "Ordres"
 msgid "SDKs"
 msgstr "SDKs"
 
-#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:47
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:53
+#: src/libide/gui/tweaks.ui:57
 msgid "Plugins"
 msgstr "Complements"
 
@@ -2235,9 +2238,25 @@ msgstr "Executa el projecte"
 msgid "Custom Font"
 msgstr "Tipus de lletra personalitzat"
 
-#: src/libide/gui/tweaks.ui:15
+#: src/libide/gui/tweaks.ui:6
+msgid "Visual"
+msgstr "Visual"
+
+#: src/libide/gui/tweaks.ui:16
 msgid "Text Editor"
 msgstr "Editor de text"
+
+#: src/libide/gui/tweaks.ui:33
+msgid "Code"
+msgstr "Codi"
+
+#: src/libide/gui/tweaks.ui:43
+msgid "Foundry"
+msgstr "Fundació"
+
+#: src/libide/gui/tweaks.ui:48
+msgid "External"
+msgstr "Extern"
 
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
@@ -4118,12 +4137,12 @@ msgid "Automatically select the first completion when displayed"
 msgstr "Selecciona automàticament la primera compleció quan es mostri"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
-#: src/plugins/editorui/tweaks.ui:207
+#: src/plugins/editorui/tweaks.ui:197
 msgid "Expand Snippets"
 msgstr "Ampliar fragments"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
-#: src/plugins/editorui/tweaks.ui:208
+#: src/plugins/editorui/tweaks.ui:198
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Utilitza «tabulador» per a ampliar els fragments configurats a l'editor"
@@ -4133,7 +4152,6 @@ msgid "Trim Trailing Whitespace"
 msgstr "Retalla l'espai en blanc final"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-#: src/plugins/editorui/tweaks.ui:255
 msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
 msgstr ""
 "En desar, es retallaran els espais en blanc finals de les línies modificades"
@@ -4157,6 +4175,20 @@ msgstr "Sagna automàticament"
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:160
 msgid "Format source code as you type"
 msgstr "Formateu el codi font mentre escriviu"
+
+#. translators: .editorconfig is a file used in programming projects and
+#. modelines are tweaks specified within a file header or footer
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:81
+msgid ""
+"Settings provided by .editorconfig and modelines take precedence over those "
+"below."
+msgstr ""
+"Els paràmetres proporcionats per .editorconfig i els modes de línia tenen "
+"prioritat sobre els de sota."
+
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:100
+msgid "Prefer a space before colon"
+msgstr "Prefereix un espai abans dels dos punts"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
@@ -4315,41 +4347,38 @@ msgstr "Inici i final intel·ligents"
 msgid "Moves to first non-whitespace character before line edges"
 msgstr "Mou al primer caràcter no en blanc abans de les vores de la línia"
 
-#: src/plugins/editorui/tweaks.ui:177
+#: src/plugins/editorui/tweaks.ui:175
 msgid "Code Completion"
 msgstr "Compleció de codi"
 
-#: src/plugins/editorui/tweaks.ui:183
+#: src/plugins/editorui/tweaks.ui:178
 msgid "Suggest Code Completions"
 msgstr "Suggereix complecions de codi"
 
-#: src/plugins/editorui/tweaks.ui:184
+#: src/plugins/editorui/tweaks.ui:179
 msgid "Automatically suggest code completions while typing"
 msgstr "Suggereix complecions automàticament mentre s'escriu"
 
-#: src/plugins/editorui/tweaks.ui:190
-msgid "Select First Proposal"
-msgstr "Selecciona la primera proposta"
+#: src/plugins/editorui/tweaks.ui:185
+msgid "Select First Completion Proposal"
+msgstr "Selecciona la primera proposta de compleció"
 
-#: src/plugins/editorui/tweaks.ui:191
+#: src/plugins/editorui/tweaks.ui:186
 msgid "Automatically select the first completion proposal when displayed"
 msgstr ""
 "Selecciona automàticament la primera proposta de compleció quan es mostri"
 
-#: src/plugins/editorui/tweaks.ui:254
-msgid "Trim Trailing Space"
-msgstr "Retalla l'espai final"
+#: src/plugins/editorui/tweaks.ui:214
+msgid "Keyboard Theme"
+msgstr "Tema del teclat"
 
-#: src/plugins/editorui/tweaks.ui:262
-msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
-msgstr "Sobreescriu les claus de tancament, parèntesis i cometes"
-
-#: src/plugins/editorui/tweaks.ui:269
+#: src/plugins/editorui/tweaks.ui:215
 msgid ""
-"Insert matching character for braces, brackets, parenthesis, and quotes"
+"Shortcut themes provide a keyboard experience similar to other IDEs and "
+"editors"
 msgstr ""
-"Insereix un caràcter coincident per als claudàtors, parèntesis i"
-" cometes"
+"Els temes de dreceres proporcionen una experiència de teclat similar a "
+"altres IDE i editors"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4942,44 +4971,44 @@ msgstr "Suprimeix la toolchain"
 msgid "Delete Tool"
 msgstr "Suprimeix l'eina"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
 msgid "GNOME Application"
 msgstr "Aplicació GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 "Un projecte basat en Meson per al GNOME utilitzant el GTK 4 i la libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
 msgid "GTK 4 Application"
 msgstr "Aplicació GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "A Meson-based project using GTK 4"
 msgstr "Un projecte basat en Meson utilitzant el GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
 msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "A Meson-based project for a shared library"
 msgstr "Un projecte basat en Meson per a una biblioteca compartida"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
 msgid "Command Line Tool"
 msgstr "Eina de línia d'ordres"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "An Meson-based project for a command-line program"
 msgstr "Un projecte basat en Meson per a un programa de línia d'ordres"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
 msgid "Empty Meson Project"
 msgstr "Projecte Meson buit"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:220
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "An empty Meson project skeleton"
 msgstr "Un esquelet de projecte Meson buit"
 
@@ -6083,3 +6112,4 @@ msgstr "Ha fallat crear l'arbre XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "El fitxer ha d'estar desat localment per a analitzar-lo."
+
