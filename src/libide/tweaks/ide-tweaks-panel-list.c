@@ -180,10 +180,10 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
           if (show_header && title != NULL)
             {
               header = g_object_new (GTK_TYPE_LABEL,
-                                     "css-classes", IDE_STRV_INIT ("dim-label", "heading"),
+                                     "css-classes", IDE_STRV_INIT ("dim-label"),
                                      "margin-bottom", 6,
-                                     "margin-top", 6,
-                                     "margin-start", 12,
+                                     "margin-top", 12,
+                                     "margin-start", 18,
                                      "label", title,
                                      "xalign", .0f,
                                      NULL);
