@@ -152,6 +152,17 @@
               <object class="IdeTweaksPage" id="editor_behavior_page">
                 <property name="title" translatable="yes">Behavior</property>
                 <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksSwitch">
+                        <property name="title" translatable="yes">Format on Save</property>
+                        <property name="subtitle" translatable="yes">Reformat sources when saving to disk</property>
+                        <property name="action-name">settings.org.gnome.builder.format-on-save</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="IdeTweaksGroup" id="editor_behavior_keyboard_group">
                     <property name="title" translatable="yes">Keyboard</property>
                     <child>
