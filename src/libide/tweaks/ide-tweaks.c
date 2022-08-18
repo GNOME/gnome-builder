@@ -237,3 +237,21 @@ ide_tweaks_set_project_id (IdeTweaks  *self,
   if (ide_set_string (&self->project_id, project_id))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PROJECT_ID]);
 }
+
+/**
+ * ide_tweaks_get_object:
+ * @self: a #IdeTweaks
+ *
+ * Gets the object with @name.
+ *
+ * Returns: (transfer none) (nullable): a #GObject or %NULL
+ */
+GObject *
+ide_tweaks_get_object (IdeTweaks  *self,
+                       const char *name)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS (self), NULL);
+  g_return_val_if_fail (name != NULL, NULL);
+
+  return gtk_builder_get_object (self->builder, name);
+}

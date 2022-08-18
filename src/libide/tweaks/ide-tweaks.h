@@ -45,6 +45,9 @@ void       ide_tweaks_expose_object   (IdeTweaks     *self,
                                        const char    *name,
                                        GObject       *object);
 IDE_AVAILABLE_IN_ALL
+GObject   *ide_tweaks_get_object      (IdeTweaks     *self,
+                                       const char    *name);
+IDE_AVAILABLE_IN_ALL
 void       ide_tweaks_add_callback    (IdeTweaks     *self,
                                        const char    *name,
                                        GCallback      callback);
