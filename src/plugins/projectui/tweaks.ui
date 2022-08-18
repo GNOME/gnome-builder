@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTweaks">
-    <child>
-      <object class="IdeTweaksSettings" id="settings_org_gnome_builder">
-        <property name="schema-id">org.gnome.builder</property>
-        <property name="application-only">true</property>
-      </object>
-    </child>
     <child internal-child="projects_section">
       <object class="IdeTweaksSection">
         <child>
@@ -15,6 +9,67 @@
             <property name="title" translatable="yes">Projects</property>
             <child>
               <object class="IdeTweaksGroup">
+                <child>
+                  <object class="IdeTweaksSwitch">
+                    <property name="title" translatable="yes">Restore Previous Session</property>
+                    <property name="subtitle" translatable="yes">Open previously opened files when loading a project</property>
+                    <property name="action-name">settings.org.gnome.builder.restore-previous-files</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <child>
+                  <object class="IdeTweaksCombo">
+                    <property name="title" translatable="yes">Default License</property>
+                    <property name="subtitle" translatable="yes">The default license when creating new projects</property>
+                    <property name="settings">settings_org_gnome_builder</property>
+                    <property name="key">default-license</property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">AGPL-3.0-or-later</property>
+                        <property name="action-target">'AGPL-3.0-or-later'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">Apache-2.0</property>
+                        <property name="action-target">'Apache-2.0'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">GPL-2.0-or-later</property>
+                        <property name="action-target">'GPL-2.0-or-later'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">GPL-3.0-or-later</property>
+                        <property name="action-target">'GPL-3.0-or-later'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">LGPL-2.1-or-later</property>
+                        <property name="action-target">'LGPL-2.1-or-later'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">LGPL-3.0-or-later</property>
+                        <property name="action-target">'LGPL-3.0-or-later'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">No License</property>
+                        <property name="action-target">'No License'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
