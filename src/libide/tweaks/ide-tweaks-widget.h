@@ -43,4 +43,7 @@ struct _IdeTweaksWidgetClass
                                  IdeTweaksItem   *item);
 };
 
+IDE_AVAILABLE_IN_ALL
+IdeTweaksWidget *ide_tweaks_widget_new (void);
+
 G_END_DECLS

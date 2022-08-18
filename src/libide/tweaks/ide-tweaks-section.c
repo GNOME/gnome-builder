@@ -179,3 +179,9 @@ ide_tweaks_section_set_show_header (IdeTweaksSection *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_HEADER]);
     }
 }
+
+IdeTweaksSection *
+ide_tweaks_section_new (void)
+{
+  return g_object_new (IDE_TYPE_TWEAKS_SECTION, NULL);
+}

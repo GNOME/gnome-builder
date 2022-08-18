@@ -164,3 +164,9 @@ _ide_tweaks_widget_create_for_item (IdeTweaksWidget *self,
 
   return ret;
 }
+
+IdeTweaksWidget *
+ide_tweaks_widget_new (void)
+{
+  return g_object_new (IDE_TYPE_TWEAKS_WIDGET, NULL);
+}
