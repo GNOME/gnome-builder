@@ -35,13 +35,17 @@ struct _IdePlugin
 
 enum {
   PROP_0,
+  PROP_AUTHORS,
   PROP_CATEGORY,
   PROP_CATEGORY_ID,
+  PROP_COPYRIGHT,
   PROP_DESCRIPTION,
   PROP_ID,
   PROP_INFO,
   PROP_NAME,
   PROP_SECTION,
+  PROP_VERSION,
+  PROP_WEBSITE,
   N_PROPS
 };
 
@@ -74,6 +78,29 @@ ide_plugin_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_COPYRIGHT:
+      g_value_set_string (value, peas_plugin_info_get_copyright (self->info));
+      break;
+
+    case PROP_WEBSITE:
+      {
+        const char *str = peas_plugin_info_get_website (self->info);
+        g_value_set_string (value, str ? str : "https://gitlab.gnome.org/GNOME/gnome-builder");
+      }
+      break;
+
+    case PROP_VERSION:
+      {
+        const char *str = peas_plugin_info_get_version (self->info);
+        g_value_set_string (value, str ? str : PACKAGE_VERSION);
+      }
+      break;
+
+    case PROP_AUTHORS:
+      g_value_take_string (value,
+                           g_strjoinv (", ", (char **)peas_plugin_info_get_authors (self->info)));
+      break;
+
     case PROP_ID:
       g_value_set_string (value, ide_plugin_get_id (self));
       break;
@@ -134,6 +161,26 @@ ide_plugin_class_init (IdePluginClass *klass)
   object_class->dispose = ide_plugin_dispose;
   object_class->get_property = ide_plugin_get_property;
   object_class->set_property = ide_plugin_set_property;
+
+  properties[PROP_AUTHORS] =
+    g_param_spec_string ("authors", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_COPYRIGHT] =
+    g_param_spec_string ("copyright", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_WEBSITE] =
+    g_param_spec_string ("website", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_VERSION] =
+    g_param_spec_string ("version", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_INFO] =
     g_param_spec_boxed ("info", NULL, NULL,

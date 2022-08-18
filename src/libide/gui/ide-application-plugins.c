@@ -29,6 +29,7 @@
 #include "ide-application-private.h"
 
 #include "ide-plugin-section-private.h"
+#include "ide-plugin-view.h"
 
 static void
 ide_application_changed_plugin_cb (GSettings      *settings,
@@ -510,7 +511,8 @@ create_plugin_toggle (IdeTweaksWidget *instance,
 {
   g_autofree char *schema_path = NULL;
   g_autoptr(GSettings) settings = NULL;
-  AdwActionRow *row;
+  AdwExpanderRow *row;
+  GtkWidget *view;
   GtkSwitch *toggle;
   const char *id;
 
@@ -523,12 +525,17 @@ create_plugin_toggle (IdeTweaksWidget *instance,
   toggle = g_object_new (GTK_TYPE_SWITCH,
                          "valign", GTK_ALIGN_CENTER,
                          NULL);
-  row = g_object_new (ADW_TYPE_ACTION_ROW,
+  row = g_object_new (ADW_TYPE_EXPANDER_ROW,
                       "title", ide_plugin_get_name (plugin),
                       "subtitle", ide_plugin_get_description (plugin),
-                      "activatable-widget", toggle,
+                      "show-enable-switch", FALSE,
                       NULL);
-  adw_action_row_add_suffix (row, GTK_WIDGET (toggle));
+  adw_expander_row_add_action (row, GTK_WIDGET (toggle));
+
+  view = g_object_new (IDE_TYPE_PLUGIN_VIEW,
+                       "plugin", plugin,
+                       NULL);
+  adw_expander_row_add_row (row, GTK_WIDGET (view));
 
   schema_path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", id);
   settings = g_settings_new_with_path ("org.gnome.builder.plugin", schema_path);

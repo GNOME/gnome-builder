@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdePluginView" parent="GtkWidget">
+    <child>
+      <object class="GtkGrid">
+        <property name="margin-top">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-end">6</property>
+        <property name="column-spacing">12</property>
+        <property name="row-spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="hexpand">true</property>
+            <property name="margin-top">6</property>
+            <property name="margin-bottom">6</property>
+            <property name="selectable">true</property>
+            <binding name="label">
+              <lookup name="copyright" type="IdePlugin">
+                <lookup name="plugin">IdePluginView</lookup>
+              </lookup>
+            </binding>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+              <property name="column-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Authors</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="hexpand">true</property>
+            <property name="selectable">true</property>
+            <binding name="label">
+              <lookup name="authors" type="IdePlugin">
+                <lookup name="plugin">IdePluginView</lookup>
+              </lookup>
+            </binding>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Version</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="hexpand">true</property>
+            <property name="selectable">true</property>
+            <binding name="label">
+              <lookup name="version" type="IdePlugin">
+                <lookup name="plugin">IdePluginView</lookup>
+              </lookup>
+            </binding>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Website</property>
+            <style>
+              <class name="dim-label"/>
+            </style>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="xalign">0</property>
+            <property name="hexpand">true</property>
+            <property name="selectable">true</property>
+            <binding name="label">
+              <lookup name="website" type="IdePlugin">
+                <lookup name="plugin">IdePluginView</lookup>
+              </lookup>
+            </binding>
+            <layout>
+              <property name="row">3</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

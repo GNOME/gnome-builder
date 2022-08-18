@@ -15,6 +15,9 @@ libide_plugins_public_headers = [
 
 libide_plugins_private_headers = [
   'ide-extension-util-private.h',
+  'ide-plugin-private.h',
+  'ide-plugin-section-private.h',
+  'ide-plugin-view.h',
 ]
 
 install_headers(libide_plugins_public_headers, subdir: libide_plugins_header_subdir)
@@ -32,7 +35,18 @@ libide_plugins_public_sources = [
 
 libide_plugins_private_sources = [
   'ide-extension-util.c',
+  'ide-plugin-view.c',
 ]
+
+#
+# Generated Resource Files
+#
+
+libide_plugins_resources = gnome.compile_resources(
+  'ide-plugins-resources',
+  'libide-plugins.gresource.xml',
+  c_name: 'ide_plugins',
+)
 
 #
 # Library Definitions
@@ -47,7 +61,7 @@ libide_plugins_deps = [
 ]
 
 libide_plugins = static_library('ide-plugins-' + libide_api_version,
-  libide_plugins_public_sources, libide_plugins_private_sources,
+  libide_plugins_public_sources + libide_plugins_private_sources + libide_plugins_resources,
    dependencies: libide_plugins_deps,
          c_args: libide_args + release_args + ['-DIDE_PLUGINS_COMPILATION'],
 )
