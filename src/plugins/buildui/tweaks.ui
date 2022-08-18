@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTweaks">
+    <child>
+      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_build">
+        <property name="schema-id">org.gnome.builder.build</property>
+        <property name="application-only">true</property>
+      </object>
+    </child>
     <child internal-child="foundry_section">
       <object class="IdeTweaksSection">
         <child>
@@ -14,6 +20,13 @@
                     <property name="title" translatable="yes">Clear Expired Artifacts</property>
                     <property name="subtitle" translatable="yes">Artifacts which have expired will be deleted when Builder is started</property>
                     <property name="action-name">settings.org.gnome.builder.clear-cache-at-startup</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksSwitch">
+                    <property name="title" translatable="yes">Clear Build Logs</property>
+                    <property name="subtitle" translatable="yes">Clear the build log history when a new build begins</property>
+                    <property name="action-name">settings.org.gnome.builder.build.clear-build-log-pane</property>
                   </object>
                 </child>
               </object>
