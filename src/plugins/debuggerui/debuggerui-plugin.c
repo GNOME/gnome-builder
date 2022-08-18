@@ -28,6 +28,7 @@
 #include <libide-gui.h>
 
 #include "gbp-debugger-tool.h"
+#include "gbp-debuggerui-tweaks-addin.h"
 #include "ide-debugger-hover-provider.h"
 #include "ide-debugger-workspace-addin.h"
 
@@ -40,6 +41,9 @@ _gbp_debuggerui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               GTK_SOURCE_TYPE_HOVER_PROVIDER,
                                               IDE_TYPE_DEBUGGER_HOVER_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_DEBUGGERUI_TWEAKS_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
                                               IDE_TYPE_DEBUGGER_WORKSPACE_ADDIN);
