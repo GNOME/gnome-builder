@@ -22,7 +22,10 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include "ide-plugin.h"
+#include "ide-plugin-private.h"
 
 struct _IdePlugin
 {
@@ -32,7 +35,10 @@ struct _IdePlugin
 
 enum {
   PROP_0,
+  PROP_CATEGORY,
+  PROP_CATEGORY_ID,
   PROP_DESCRIPTION,
+  PROP_ID,
   PROP_INFO,
   PROP_NAME,
   PROP_SECTION,
@@ -42,6 +48,7 @@ enum {
 G_DEFINE_FINAL_TYPE (IdePlugin, ide_plugin, G_TYPE_OBJECT)
 
 static GParamSpec *properties [N_PROPS];
+static GHashTable *sections;
 
 static void
 ide_plugin_dispose (GObject *object)
@@ -67,12 +74,24 @@ ide_plugin_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ID:
+      g_value_set_string (value, ide_plugin_get_id (self));
+      break;
+
     case PROP_INFO:
       g_value_set_boxed (value, self->info);
       break;
 
     case PROP_NAME:
       g_value_set_string (value, ide_plugin_get_name (self));
+      break;
+
+    case PROP_CATEGORY:
+      g_value_set_string (value, ide_plugin_get_category (self));
+      break;
+
+    case PROP_CATEGORY_ID:
+      g_value_set_string (value, ide_plugin_get_category_id (self));
       break;
 
     case PROP_DESCRIPTION:
@@ -121,8 +140,23 @@ ide_plugin_class_init (IdePluginClass *klass)
                          PEAS_TYPE_PLUGIN_INFO,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
+  properties[PROP_ID] =
+    g_param_spec_string ("id", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
   properties[PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_CATEGORY] =
+    g_param_spec_string ("category", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_CATEGORY_ID] =
+    g_param_spec_string ("category-id", NULL, NULL,
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
@@ -176,10 +210,156 @@ ide_plugin_get_description (IdePlugin *self)
   return peas_plugin_info_get_description (self->info);
 }
 
+static void
+ide_plugin_init_sections (void)
+{
+#define ADD_SECTION(category_id, section) \
+  g_hash_table_insert (sections, (char *)category_id, (char *)section)
+
+  if G_UNLIKELY (sections == NULL)
+    {
+      sections = g_hash_table_new (g_str_hash, g_str_equal);
+      ADD_SECTION ("vcs", "history");
+      ADD_SECTION ("sdks", "platforms");
+      ADD_SECTION ("lsps", "tooling");
+      ADD_SECTION ("devices", "platforms");
+      ADD_SECTION ("diagnostics", "tooling");
+      ADD_SECTION ("buildsystems", "projects");
+      ADD_SECTION ("compilers", "tooling");
+      ADD_SECTION ("debuggers", "projects");
+      ADD_SECTION ("templates", "projects");
+      ADD_SECTION ("editing", "editing");
+      ADD_SECTION ("keybindings", "integration");
+      ADD_SECTION ("search", "history");
+      ADD_SECTION ("web", "integration");
+      ADD_SECTION ("language", "tooling");
+      ADD_SECTION ("desktop", "integration");
+      ADD_SECTION ("other", "other");
+    }
+
+#undef ADD_SECTION
+}
+
 const char *
 ide_plugin_get_section (IdePlugin *self)
 {
+  const char *category_id;
+
   g_return_val_if_fail (IDE_IS_PLUGIN (self), NULL);
 
-  return peas_plugin_info_get_external_data (self->info, "Section");
+  ide_plugin_init_sections ();
+
+  if (!(category_id = peas_plugin_info_get_external_data (self->info, "Category")))
+    category_id = "other";
+
+  return g_hash_table_lookup (sections, category_id);
+}
+
+const char *
+ide_plugin_get_category_id (IdePlugin *self)
+{
+  const char *category_id;
+
+  g_return_val_if_fail (IDE_IS_PLUGIN (self), NULL);
+
+  if (!(category_id = peas_plugin_info_get_external_data (self->info, "Category")))
+    category_id = "other";
+
+  return category_id;
+}
+
+const char *
+ide_plugin_get_id (IdePlugin *self)
+{
+  g_return_val_if_fail (IDE_IS_PLUGIN (self), NULL);
+
+  return peas_plugin_info_get_module_name (self->info);
+}
+
+const char *
+ide_plugin_get_category (IdePlugin *self)
+{
+  static GHashTable *titles;
+  const char *category_id;
+
+  g_return_val_if_fail (IDE_IS_PLUGIN (self), NULL);
+
+  if G_UNLIKELY (titles == NULL)
+    {
+      titles = g_hash_table_new (g_str_hash, g_str_equal);
+
+#define ADD_TITLE(category, name) \
+      g_hash_table_insert (titles, (char *)category, (char *)name)
+      ADD_TITLE ("vcs", _("Version Control"));
+      ADD_TITLE ("sdks", _("SDKs"));
+      ADD_TITLE ("lsps", _("Language Servers"));
+      ADD_TITLE ("devices", _("Devices & Simulators"));
+      ADD_TITLE ("diagnostics", _("Diagnostics"));
+      ADD_TITLE ("buildsystems", _("Build Systems"));
+      ADD_TITLE ("compilers", _("Compilers"));
+      ADD_TITLE ("debuggers", _("Debuggers"));
+      ADD_TITLE ("templates", _("Templates"));
+      ADD_TITLE ("editing", _("Editing & Formatting"));
+      ADD_TITLE ("keybindings", _("Keyboard Shortcuts"));
+      ADD_TITLE ("search", _("Search"));
+      ADD_TITLE ("web", _("Web"));
+      ADD_TITLE ("language", _("Language Enablement"));
+      ADD_TITLE ("desktop", _("Desktop Integration"));
+      ADD_TITLE ("other", _("Additional"));
+#undef ADD_TITLE
+    }
+
+  category_id = ide_plugin_get_category_id (self);
+
+  return g_hash_table_lookup (titles, category_id);
+}
+
+static void
+plugin_list_changed_cb (PeasEngine *engine,
+                        GParamSpec *pspec,
+                        GListStore *store)
+{
+  const GList *plugins;
+
+  g_assert (PEAS_IS_ENGINE (engine));
+  g_assert (G_IS_LIST_STORE (store));
+
+  g_list_store_remove_all (store);
+
+  plugins = peas_engine_get_plugin_list (peas_engine_get_default ());
+
+  for (const GList *iter = plugins; iter; iter = iter->next)
+    {
+      const PeasPluginInfo *plugin_info = iter->data;
+      g_autoptr(IdePlugin) plugin = NULL;
+
+      if (peas_plugin_info_is_hidden (plugin_info))
+        continue;
+
+      plugin = g_object_new (IDE_TYPE_PLUGIN,
+                             "info", plugin_info,
+                             NULL);
+      g_list_store_append (store, plugin);
+    }
+}
+
+GListModel *
+_ide_plugin_get_all (void)
+{
+  static GListStore *store;
+
+  if (store == NULL)
+    {
+      PeasEngine *engine = peas_engine_get_default ();
+
+      store = g_list_store_new (IDE_TYPE_PLUGIN);
+      g_signal_connect_object (engine,
+                               "notify::plugin-list",
+                               G_CALLBACK (plugin_list_changed_cb),
+                               store,
+                               0);
+      plugin_list_changed_cb (engine, NULL, store);
+    }
+
+  return G_LIST_MODEL (store);
 }

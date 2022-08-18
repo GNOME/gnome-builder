@@ -9,6 +9,7 @@ libide_plugins_public_headers = [
   'ide-extension-adapter.h',
   'ide-extension-set-adapter.h',
   'ide-plugin.h',
+  'ide-plugin-section.h',
   'libide-plugins.h',
 ]
 
@@ -26,6 +27,7 @@ libide_plugins_public_sources = [
   'ide-extension-adapter.c',
   'ide-extension-set-adapter.c',
   'ide-plugin.c',
+  'ide-plugin-section.c',
 ]
 
 libide_plugins_private_sources = [
@@ -39,6 +41,8 @@ libide_plugins_private_sources = [
 libide_plugins_deps = [
   libgio_dep,
   libpeas_dep,
+  libgtk_dep,
+
   libide_core_dep,
 ]
 

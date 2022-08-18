@@ -1,4 +1,4 @@
-/* ide-plugin.h
+/* ide-plugin-section.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -24,30 +24,20 @@
 # error "Only <libide-plugins.h> can be included directly."
 #endif
 
-#include <libpeas/peas.h>
-
 #include <libide-core.h>
+
+#include "ide-plugin.h"
 
 G_BEGIN_DECLS
 
-#define IDE_TYPE_PLUGIN (ide_plugin_get_type())
+#define IDE_TYPE_PLUGIN_SECTION (ide_plugin_section_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdePlugin, ide_plugin, IDE, PLUGIN, GObject)
+G_DECLARE_FINAL_TYPE (IdePluginSection, ide_plugin_section, IDE, PLUGIN_SECTION, GObject)
 
 IDE_AVAILABLE_IN_ALL
-const char     *ide_plugin_get_id          (IdePlugin *self);
+const char *ide_plugin_section_get_id      (IdePluginSection *self);
 IDE_AVAILABLE_IN_ALL
-const char     *ide_plugin_get_category    (IdePlugin *self);
-IDE_AVAILABLE_IN_ALL
-const char     *ide_plugin_get_category_id (IdePlugin *self);
-IDE_AVAILABLE_IN_ALL
-const char     *ide_plugin_get_description (IdePlugin *self);
-IDE_AVAILABLE_IN_ALL
-PeasPluginInfo *ide_plugin_get_info        (IdePlugin *self);
-IDE_AVAILABLE_IN_ALL
-const char     *ide_plugin_get_name        (IdePlugin *self);
-IDE_AVAILABLE_IN_ALL
-const char     *ide_plugin_get_section     (IdePlugin *self);
+GListModel *ide_plugin_section_get_plugins (IdePluginSection *self);
 
 G_END_DECLS

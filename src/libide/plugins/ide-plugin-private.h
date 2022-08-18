@@ -1,6 +1,6 @@
-/* libide-plugins.h
+/* ide-plugin-private.h
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,15 +20,10 @@
 
 #pragma once
 
-#include <libide-core.h>
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
-#define IDE_PLUGINS_INSIDE
-# include "ide-extension-adapter.h"
-# include "ide-extension-set-adapter.h"
-# include "ide-plugin.h"
-# include "ide-plugin-section.h"
-#undef IDE_PLUGINS_INSIDE
+GListModel *_ide_plugin_get_all (void);
 
 G_END_DECLS
