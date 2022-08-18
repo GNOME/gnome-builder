@@ -13,5 +13,6 @@
     <file preprocess="xml-stripblanks">gbp-buildui-status-popover-row.ui</file>
     <file preprocess="xml-stripblanks">gbp-buildui-targets-dialog.ui</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">tweaks.ui</file>
   </gresource>
 </gresources>
