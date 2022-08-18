@@ -2,6 +2,7 @@
 Authors=Anoop Chandu <anoopchandu96@gmail.com>, Christian Hergert <chergert@redhat.com>
 Builtin=true
 Copyright=Copyright © 2017 Anoop Chandu, 2017-2019 Christian Hergert
+Depends=editorui;
 Description=Manages Code Index and does Global Search and Jump to Definition using Code Index.
 Embedded=_ide_code_index_register_types
 Module=code-index

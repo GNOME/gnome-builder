@@ -2,6 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2022 Christian Hergert
+Depends=platformui;
 Embedded=_gbp_projectui_register_types
 Hidden=true
 Module=projectui

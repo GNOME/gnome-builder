@@ -2,7 +2,6 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2014-2018 Christian Hergert
-Depends=
 Description=Builder's terminal support
 Embedded=_gbp_terminal_register_types
 Hidden=true
