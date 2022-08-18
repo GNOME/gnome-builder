@@ -12,3 +12,7 @@
 .IdeTweaksWindow .checkimage check:checked {
   -gtk-icon-source: -gtk-icontheme('object-select-symbolic');
 }
+.IdeTweaksWindow button.link {
+  padding: 0;
+  margin: 0;
+}
