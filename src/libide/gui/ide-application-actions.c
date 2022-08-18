@@ -27,6 +27,7 @@
 
 #include <ide-build-ident.h>
 
+#include <libide-plugins.h>
 #include <libide-projects.h>
 #include <libide-tweaks.h>
 
@@ -38,6 +39,8 @@
 #include "ide-primary-workspace.h"
 #include "ide-support-private.h"
 
+#include "ide-plugin-section-private.h"
+
 static void
 ide_application_actions_tweaks (GSimpleAction *action,
                                 GVariant      *parameter,
@@ -48,11 +51,11 @@ ide_application_actions_tweaks (GSimpleAction *action,
     "resource:///org/gnome/libide-gui/tweaks-plugins.ui",
   };
   IdeApplication *self = user_data;
-  g_autoptr(GListModel) plugins = NULL;
   g_autoptr(IdeTweaks) tweaks = NULL;
   IdeTweaksWindow *window;
-  GtkWindow *toplevel = NULL;
+  IdeTweaksPage *plugins_page;
   const GList *windows;
+  GtkWindow *toplevel = NULL;
 
   IDE_ENTRY;
 
@@ -77,10 +80,6 @@ ide_application_actions_tweaks (GSimpleAction *action,
 
   tweaks = ide_tweaks_new ();
 
-  /* Give access to all the known plugins */
-  plugins = _ide_application_list_plugins (self);
-  ide_tweaks_expose_object (tweaks, "Plugins", G_OBJECT (plugins));
-
   /* Load our base tweaks scaffolding */
   for (guint i = 0; i < G_N_ELEMENTS (tweaks_resources); i++)
     {
@@ -92,6 +91,10 @@ ide_application_actions_tweaks (GSimpleAction *action,
       if (error != NULL)
         g_critical ("Failed to load tweaks: %s", error->message);
     }
+
+  /* Expose Plugin Toggles */
+  plugins_page = IDE_TWEAKS_PAGE (ide_tweaks_get_object (tweaks, "plugins_page"));
+  _ide_application_add_plugin_tweaks (self, plugins_page);
 
   /* Now display window */
   window = g_object_new (IDE_TYPE_TWEAKS_WINDOW,

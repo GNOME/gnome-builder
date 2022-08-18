@@ -22,6 +22,7 @@
 
 #include <libide-core.h>
 #include <libide-gtk.h>
+#include <libide-tweaks.h>
 
 #include <libpeas/peas.h>
 
@@ -119,6 +120,7 @@ void            _ide_application_add_resources            (IdeApplication       
                                                            const char              *path);
 void            _ide_application_remove_resources         (IdeApplication          *self,
                                                            const char              *path);
-GListModel     *_ide_application_list_plugins             (IdeApplication          *self);
+void            _ide_application_add_plugin_tweaks        (IdeApplication          *self,
+                                                           IdeTweaksPage           *page);
 
 G_END_DECLS

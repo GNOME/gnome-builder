@@ -28,6 +28,8 @@
 #include "ide-application-addin.h"
 #include "ide-application-private.h"
 
+#include "ide-plugin-section-private.h"
+
 static void
 ide_application_changed_plugin_cb (GSettings      *settings,
                                    const gchar    *key,
@@ -501,41 +503,113 @@ _ide_application_unload_addins (IdeApplication *self)
   g_clear_object (&self->addins);
 }
 
-/**
- * ide_application_list_plugins:
- * @self: a #IdeApplication
- *
- * Gets a list of plugins.
- *
- * The result contains instances of #IdePlugin as #PeasPluginInfo is a boxed
- * type which cannot be used with #GListModel.
- *
- * Returns: (transfer full): a #GListModel of IdePlugin
- */
-GListModel *
-_ide_application_list_plugins (IdeApplication *self)
+static GtkWidget *
+create_plugin_toggle (IdeTweaksWidget *instance,
+                      IdeTweaksWidget *widget,
+                      IdePlugin       *plugin)
 {
-  GListStore *store;
-  const GList *plugins;
+  g_autofree char *schema_path = NULL;
+  g_autoptr(GSettings) settings = NULL;
+  AdwActionRow *row;
+  GtkSwitch *toggle;
+  const char *id;
 
-  g_return_val_if_fail (IDE_IS_APPLICATION (self), NULL);
+  g_assert (IDE_IS_TWEAKS_WIDGET (instance));
+  g_assert (IDE_IS_TWEAKS_WIDGET (widget));
+  g_assert (IDE_IS_PLUGIN (plugin));
 
-  store = g_list_store_new (IDE_TYPE_PLUGIN);
-  plugins = peas_engine_get_plugin_list (peas_engine_get_default ());
+  id = ide_plugin_get_id (plugin);
 
-  for (const GList *iter = plugins; iter; iter = iter->next)
+  toggle = g_object_new (GTK_TYPE_SWITCH,
+                         "valign", GTK_ALIGN_CENTER,
+                         NULL);
+  row = g_object_new (ADW_TYPE_ACTION_ROW,
+                      "title", ide_plugin_get_name (plugin),
+                      "subtitle", ide_plugin_get_description (plugin),
+                      "activatable-widget", toggle,
+                      NULL);
+  adw_action_row_add_suffix (row, GTK_WIDGET (toggle));
+
+  schema_path = g_strdup_printf ("/org/gnome/builder/plugins/%s/", id);
+  settings = g_settings_new_with_path ("org.gnome.builder.plugin", schema_path);
+  g_object_set_data_full (G_OBJECT (row),
+                          "SETTINGS",
+                          g_object_ref (settings),
+                          g_object_unref);
+
+  g_settings_bind (settings, "enabled", toggle, "active", G_SETTINGS_BIND_DEFAULT);
+
+  return GTK_WIDGET (row);
+}
+
+void
+_ide_application_add_plugin_tweaks (IdeApplication *self,
+                                    IdeTweaksPage  *page)
+{
+  g_autoptr(GHashTable) categories = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_object_unref);
+  IdeTweaksPage *category_page;
+  GListModel *sections;
+  guint n_sections;
+
+  g_return_if_fail (IDE_IS_APPLICATION (self));
+  g_return_if_fail (IDE_IS_TWEAKS_PAGE (page));
+
+  sections = _ide_plugin_section_get_all ();
+  n_sections = g_list_model_get_n_items (sections);
+
+  for (guint i = 0; i < n_sections; i++)
     {
-      const PeasPluginInfo *plugin_info = iter->data;
-      g_autoptr(IdePlugin) plugin = NULL;
+      g_autoptr(IdeTweaksSection) t_section = ide_tweaks_section_new ();
+      g_autoptr(IdePluginSection) section = g_list_model_get_item (sections, i);
+      GListModel *plugins = ide_plugin_section_get_plugins (section);
+      guint n_plugins;
 
-      if (peas_plugin_info_is_hidden (plugin_info))
-        continue;
+      ide_tweaks_section_set_title (t_section,
+                                    ide_plugin_section_get_id (section));
+      ide_tweaks_item_insert_after (IDE_TWEAKS_ITEM (t_section),
+                                    IDE_TWEAKS_ITEM (page),
+                                    NULL);
 
-      plugin = g_object_new (IDE_TYPE_PLUGIN,
-                             "info", plugin_info,
-                             NULL);
-      g_list_store_append (store, plugin);
+      n_plugins = g_list_model_get_n_items (plugins);
+
+      for (guint j = 0; j < n_plugins; j++)
+        {
+          g_autoptr(IdePlugin) plugin = g_list_model_get_item (plugins, j);
+          const char *category_id = ide_plugin_get_category_id (plugin);
+          const char *category = ide_plugin_get_category (plugin);
+          g_autoptr(IdeTweaksSettings) settings = NULL;
+          g_autoptr(IdeTweaksWidget) widget = NULL;
+          IdeTweaksGroup *group;
+
+          if (!(category_page = g_hash_table_lookup (categories, category)))
+            {
+              g_autofree char *page_id = g_strdup_printf ("plugin_%s_page", category_id);
+              g_autoptr(IdeTweaksGroup) first_group = ide_tweaks_group_new ();
+
+              category_page = ide_tweaks_page_new ();
+              GTK_BUILDABLE_GET_IFACE (category_page)->set_id (GTK_BUILDABLE (category_page), page_id);
+              ide_tweaks_page_set_title (category_page, category);
+              ide_tweaks_page_set_show_icon (category_page, FALSE);
+              ide_tweaks_item_insert_after (IDE_TWEAKS_ITEM (category_page),
+                                            IDE_TWEAKS_ITEM (t_section),
+                                            NULL);
+              ide_tweaks_item_insert_after (IDE_TWEAKS_ITEM (first_group),
+                                            IDE_TWEAKS_ITEM (category_page),
+                                            NULL);
+              g_hash_table_insert (categories, (char *)category, category_page);
+            }
+
+          group = IDE_TWEAKS_GROUP (ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (category_page)));
+          widget = ide_tweaks_widget_new ();
+          g_signal_connect_object (widget,
+                                   "create-for-item",
+                                   G_CALLBACK (create_plugin_toggle),
+                                   plugin,
+                                   0);
+
+          ide_tweaks_item_insert_after (IDE_TWEAKS_ITEM (widget),
+                                        IDE_TWEAKS_ITEM (group),
+                                        NULL);
+        }
     }
-
-  return G_LIST_MODEL (store);
 }
