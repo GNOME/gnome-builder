@@ -33,11 +33,6 @@
       <summary>Restore Previous Files</summary>
       <description>Restore previously opened files when loading a project.</description>
     </key>
-    <key name="show-open-files" type="b">
-      <default>true</default>
-      <summary>Show Open Files</summary>
-      <description>Display the open files list in the project sidebar.</description>
-    </key>
     <key name="clear-cache-at-startup" type="b">
       <default>true</default>
       <summary>Clear build caches at startup</summary>
