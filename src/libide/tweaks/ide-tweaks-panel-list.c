@@ -180,16 +180,14 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
           gboolean show_header = ide_tweaks_section_get_show_header (IDE_TWEAKS_SECTION (row_section));
 
           if (show_header && title != NULL)
-            {
-              label = g_object_new (GTK_TYPE_LABEL,
-                                    "css-classes", IDE_STRV_INIT ("dim-label", "heading"),
-                                    "label", title,
-                                    "margin-bottom", 6,
-                                    "margin-start", 18,
-                                    "margin-top", 12,
-                                    "xalign", .0f,
-                                    NULL);
-            }
+            label = g_object_new (GTK_TYPE_LABEL,
+                                  "css-classes", IDE_STRV_INIT ("dim-label", "heading"),
+                                  "label", title,
+                                  "margin-bottom", 6,
+                                  "margin-start", 18,
+                                  "margin-top", 12,
+                                  "xalign", .0f,
+                                  NULL);
         }
 
       if (before_section != NULL)
