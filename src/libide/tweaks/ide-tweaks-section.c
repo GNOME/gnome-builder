@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "ide-tweaks-factory.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-section.h"
 
@@ -50,7 +51,8 @@ ide_tweaks_section_accepts (IdeTweaksItem *item,
   g_assert (IDE_IS_TWEAKS_ITEM (item));
   g_assert (IDE_IS_TWEAKS_ITEM (child));
 
-  return IDE_IS_TWEAKS_PAGE (child);
+  return IDE_IS_TWEAKS_PAGE (child) ||
+         IDE_IS_TWEAKS_FACTORY (child);
 }
 
 static void
