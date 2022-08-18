@@ -15,6 +15,7 @@
             <property name="title" translatable="yes">Build</property>
             <child>
               <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">History</property>
                 <child>
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Clear Expired Artifacts</property>
