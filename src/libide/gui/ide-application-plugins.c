@@ -334,6 +334,9 @@ _ide_application_load_plugins_for_startup (IdeApplication *self)
                                  "/app/extensions/lib/gnome-builder/plugins",
                                  "/app/extensions/lib/gnome-builder/plugins");
 
+  /* Ensure we've rescanned to take the plugins into account */
+  peas_engine_rescan_plugins (engine);
+
   /* Our first step is to load our "At-Startup" plugins, which may
    * contain things like command-line handlers. For example, the
    * greeter may handle command-line options and then show the
