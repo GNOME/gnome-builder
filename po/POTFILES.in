@@ -114,6 +114,7 @@ src/plugins/buildui/gbp-buildui-targets-dialog.ui
 src/plugins/buildui/gbp-buildui-workspace-addin.c
 src/plugins/buildui/gtk/menus.ui
 src/plugins/buildui/gtk/preferences.ui
+src/plugins/buildui/tweaks.ui
 src/plugins/cargo/gbp-cargo-pipeline-addin.c
 src/plugins/cargo/gbp-cargo-run-command-provider.c
 src/plugins/clang/ide-clang-preferences-addin.c
@@ -249,6 +250,7 @@ src/plugins/project-tree/gbp-project-tree-workspace-addin.c
 src/plugins/project-tree/gbp-rename-file-popover.c
 src/plugins/project-tree/gbp-rename-file-popover.ui
 src/plugins/project-tree/gtk/menus.ui
+src/plugins/projectui/tweaks.ui
 src/plugins/qemu/gbp-qemu-device-provider.c
 src/plugins/quick-highlight/gbp-quick-highlight-preferences.c
 src/plugins/recent/gbp-recent-section.c
