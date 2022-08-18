@@ -2,6 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2015 Christian Hergert
+Depends=editorui;
 Description=Provides integration with Clang
 Embedded=_ide_clang_register_types
 Module=clang

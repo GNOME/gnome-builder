@@ -40,6 +40,7 @@
 #include "ide-clang-symbol-node.h"
 #include "ide-clang-symbol-resolver.h"
 #include "ide-clang-symbol-tree.h"
+#include "gbp-clang-tweaks-addin.h"
 
 _IDE_EXTERN void
 _ide_clang_register_types (PeasObjectModule *module)
@@ -65,4 +66,7 @@ _ide_clang_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RENAME_PROVIDER,
                                               IDE_TYPE_CLANG_RENAME_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_CLANG_TWEAKS_ADDIN);
 }

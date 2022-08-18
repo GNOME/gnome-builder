@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="visual_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="editor_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="editor_plugins_section">
+              <object class="IdeTweaksSection">
+                <child>
+                  <object class="IdeTweaksPage" id="editor_plugins_clang_page">
+                    <property name="title" translatable="yes">Clang</property>
+                    <child>
+                      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_clang">
+                        <property name="schema-id">org.gnome.builder.clang</property>
+                        <property name="application-only">true</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Code Completion</property>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Complete Parentheses</property>
+                            <property name="subtitle" translatable="yes">Include parentheses when completing clang proposals</property>
+                            <property name="action-name">settings.org.gnome.builder.clang.complete-parens</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Complete Parameters</property>
+                            <property name="subtitle" translatable="yes">Include parameters and type information when completing clang proposals</property>
+                            <property name="action-name">settings.org.gnome.builder.clang.complete-params</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

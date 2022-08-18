@@ -15,6 +15,7 @@ plugins_sources += files([
   'ide-clang-symbol-node.c',
   'ide-clang-symbol-resolver.c',
   'ide-clang-symbol-tree.c',
+  'gbp-clang-tweaks-addin.c',
 ])
 
 gnome_builder_clang_sources = [
