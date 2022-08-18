@@ -48,7 +48,6 @@ ide_application_actions_tweaks (GSimpleAction *action,
 {
   static const char *tweaks_resources[] = {
     "resource:///org/gnome/libide-gui/tweaks.ui",
-    "resource:///org/gnome/libide-gui/tweaks-plugins.ui",
   };
   IdeApplication *self = user_data;
   g_autoptr(IdeTweaks) tweaks = NULL;
