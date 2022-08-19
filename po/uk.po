@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-16 00:31+0000\n"
-"PO-Revision-Date: 2022-08-16 21:20+0300\n"
+"POT-Creation-Date: 2022-08-19 19:56+0000\n"
+"PO-Revision-Date: 2022-08-19 23:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -22,9 +22,10 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:206
+#: src/libide/gui/ide-application-actions.c:222
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
+#: src/plugins/editorui/tweaks.ui:316
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Будівник"
@@ -34,7 +35,7 @@ msgid "An IDE for GNOME"
 msgstr "Середовище розробляння для GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:207
+#: src/libide/gui/ide-application-actions.c:223
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert та інші"
 
@@ -172,6 +173,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Використання мінікарти для повнішого перегляду вмісту файла"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
+#: src/plugins/buildui/tweaks.ui:40
 msgid "Build Parallelism"
 msgstr "Паралельне збирання"
 
@@ -333,7 +335,7 @@ msgstr "Якщо увімкнено, редактор показуватиме �
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:115
-#: src/plugins/editorui/tweaks.ui:159
+#: src/plugins/editorui/tweaks.ui:329
 msgid "Smart Backspace"
 msgstr "Розумне вилучення"
 
@@ -365,73 +367,74 @@ msgstr "Показувати лінії ґратки"
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Якщо увімкнено, редактор показуватиме лінії ґратки у документі."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
 msgid "Overview Map Policy"
 msgstr "Правила мапи огляду"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:81
 msgid "When the overview map should be displayed."
 msgstr "Умови показу мапи огляду."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
 msgid "Draw Spaces"
 msgstr "Малювати пробіли"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "The various types of space to draw in the editor."
 msgstr "Різноманітні типи пробілів, які слід малювати у редакторі."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+#: src/plugins/editorui/tweaks.ui:86
 msgid "Wrap Text"
 msgstr "Переносити рядки тексту"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "Спосіб перенесення довгих рядків тексту для полегшення читання."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
 #: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Autosave Enabled"
 msgstr "Увімкнено автозбереження"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 msgid "Enable or disable autosave feature."
 msgstr "Увімкнути або вимкнути можливість автоматичного збереження."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/libide/gui/ide-preferences-builtin.c:208
 msgid "Autosave Frequency"
 msgstr "Частота автозбереження"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 "Кількість секунд після внесення змін до автоматичного збереження даних."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Completion Row Count"
 msgstr "Кількість рядків доповнення"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
 msgid "The number of completion rows to display to the user."
 msgstr "Кількість рядків доповнення, які слід показувати користувачеві."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
-#: src/plugins/editorui/tweaks.ui:58
+#: src/plugins/editorui/tweaks.ui:74
 msgid "Line Height"
 msgstr "Висота рядка"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
 msgid "The line height to use for the selected font."
 msgstr "Висота рядка, яку слід використати для вибраного шрифту."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:127
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
 #: src/libide/gui/ide-preferences-builtin.c:229
 msgid "Interactive Completion"
 msgstr "Інтерактивне доповнення"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -439,22 +442,22 @@ msgstr ""
 "Якщо увімкнено, «Будівник» автоматично показувати пропозиції доповнення під "
 "час введення тексту."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:133
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "Minimum characters for matching selection."
 msgstr ""
 "Мінімальна кількість символів для встановлення відповідності позначеного."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
 "Вказати мінімальну кількість символів для встановлення відповідності "
 "позначеного."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:138
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
 msgid "Enable Snippets"
 msgstr "Увімкнути фрагменти"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -462,12 +465,12 @@ msgstr ""
 "Дозволити розгортання фрагментів з редактора натисканням Tab після "
 "перемикача фрагмента."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
 msgid "Select First Completion"
 msgstr "Вибирати перше доповнення"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Automatically select the first auto-completion entry."
 msgstr "Автоматично вибирати перший запис автоматичного доповнення."
 
@@ -540,32 +543,24 @@ msgid "Restore previously opened files when loading a project."
 msgstr "Відновлювати попередні відкриті файли під час завантаження проєкту."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
-msgid "Show Open Files"
-msgstr "Показати відкриті файли"
-
-#: data/gsettings/org.gnome.builder.gschema.xml:39
-msgid "Display the open files list in the project sidebar."
-msgstr "показувати список відкритих файлів на бічній панелі проєкту."
-
-#: data/gsettings/org.gnome.builder.gschema.xml:43
 msgid "Clear build caches at startup"
 msgstr "Очищувати кеші збирання при запуску"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:44
+#: data/gsettings/org.gnome.builder.gschema.xml:39
 msgid "If enabled, Builder will clear build caches upon startup."
 msgstr ""
 "Якщо увімкнено, «Будівник» очищуватиме кеші збирання під час запуску "
 "програми."
 
-#: data/gsettings/org.gnome.builder.gschema.xml:55
+#: data/gsettings/org.gnome.builder.gschema.xml:50
 msgid "The interface style to change pages"
 msgstr "Стиль інтерфейсу для зміни сторінок"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:69
+#: data/gsettings/org.gnome.builder.gschema.xml:64
 msgid "Default License"
 msgstr "Типова ліцензія"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:70
+#: data/gsettings/org.gnome.builder.gschema.xml:65
 msgid "The default license to use for new projects"
 msgstr "Типові умови ліцензування для нових проєктів"
 
@@ -661,6 +656,7 @@ msgstr ""
 "звичайні файли."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
+#: src/plugins/editorui/tweaks.ui:230
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 #: src/plugins/spellcheck/gbp-spell-preferences-addin.c:42
 msgid "Check Spelling"
@@ -775,8 +771,9 @@ msgstr "Параметри"
 
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:21
+#: src/libide/gui/ide-preferences-builtin.c:700
 #: src/libide/tweaks/ide-tweaks-window.ui:139
+#: src/plugins/editorui/tweaks.ui:303
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
@@ -1114,7 +1111,7 @@ msgstr "Створити проєкт клонуванням сховища"
 msgid "Select a _Folder…"
 msgstr "Вибрати _теку…"
 
-#: src/libide/greeter/ide-greeter-row.c:251
+#: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:26
 msgid "Directory"
 msgstr "Каталог"
 
@@ -1308,15 +1305,15 @@ msgstr "Пошук клавіатурних скорочень"
 msgid "Show information about Builder"
 msgstr "Показати відомості щодо «Будівника»"
 
-#: src/libide/gui/ide-application-actions.c:145
+#: src/libide/gui/ide-application-actions.c:161
 msgid "Builder — Preferences"
 msgstr "Будівник – Налаштування"
 
-#: src/libide/gui/ide-application-actions.c:214
+#: src/libide/gui/ide-application-actions.c:230
 msgid "translator-credits"
 msgstr "Daniel Korostil <ted.korostiled@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:221
+#: src/libide/gui/ide-application-actions.c:237
 msgid "Funded By"
 msgstr "Фінансували"
 
@@ -1398,7 +1395,7 @@ msgstr "Не вдалося завантажити HTML. Не передбаче
 
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:9
+#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:10
 #: src/plugins/buildui/gtk/menus.ui:141
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1448,7 +1445,7 @@ msgid "Display a grid pattern underneath source code"
 msgstr "Показати шаблон сітки за кодом "
 
 #: src/libide/gui/ide-preferences-builtin.c:127
-#: src/plugins/editorui/tweaks.ui:50
+#: src/plugins/editorui/tweaks.ui:66 src/plugins/terminal/tweaks.ui:19
 msgid "Font"
 msgstr "Шрифт"
 
@@ -1475,7 +1472,6 @@ msgid "Color Scheme"
 msgstr "Схема кольорів"
 
 #: src/libide/gui/ide-preferences-builtin.c:159
-#: src/plugins/editorui/tweaks.ui:156
 msgid "Keyboard"
 msgstr "Клавіатура"
 
@@ -1498,7 +1494,7 @@ msgstr "Клавіша «Home» переміщає до першого симв�
 
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:116
-#: src/plugins/editorui/tweaks.ui:160
+#: src/plugins/editorui/tweaks.ui:330
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
@@ -1559,7 +1555,7 @@ msgid "Text Wrapping"
 msgstr "Перенесення рядків"
 
 #: src/libide/gui/ide-preferences-builtin.c:183
-#: src/plugins/buildui/gtk/preferences.ui:92
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:92
 msgid "Never"
 msgstr "Ніколи"
 
@@ -1690,6 +1686,7 @@ msgid "Highlighting"
 msgstr "Підсвічування"
 
 #: src/libide/gui/ide-preferences-builtin.c:217
+#: src/plugins/editorui/tweaks.ui:212
 msgid "Semantic Highlighting"
 msgstr "Семантичне підсвічування"
 
@@ -1730,7 +1727,7 @@ msgstr "Засоби автодоповнення"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
-#: src/plugins/editorui/tweaks.ui:194
+#: src/plugins/editorui/tweaks.ui:252
 msgid "Snippets"
 msgstr "Фрагменти"
 
@@ -1836,22 +1833,22 @@ msgid "Spacing"
 msgstr "Інтервал"
 
 #: src/libide/gui/ide-preferences-builtin.c:366
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:91
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:96
 msgid "Space before opening parentheses"
 msgstr "Пробіл перед початковими круглими дужками"
 
 #: src/libide/gui/ide-preferences-builtin.c:367
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:92
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:97
 msgid "Space before opening brackets"
 msgstr "Пробіл перед початковими квадратними дужками"
 
 #: src/libide/gui/ide-preferences-builtin.c:368
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:93
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:98
 msgid "Space before opening braces"
 msgstr "Пробіл перед початковими фігурними дужками"
 
 #: src/libide/gui/ide-preferences-builtin.c:369
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:94
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:99
 msgid "Space before opening angles"
 msgstr "Пробіл перед початковою кутовою дужкою"
 
@@ -1860,17 +1857,18 @@ msgid "Prefer a space before colons"
 msgstr "Ставити пробіл перед двокрапкою"
 
 #: src/libide/gui/ide-preferences-builtin.c:371
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:96
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:101
 msgid "Prefer a space before commas"
 msgstr "Ставити пробіл перед комою"
 
 #: src/libide/gui/ide-preferences-builtin.c:372
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:97
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:102
 msgid "Prefer a space before semicolons"
 msgstr "Ставити пробіл перед крапкою з комою"
 
 #: src/libide/gui/ide-preferences-builtin.c:382
 #: src/libide/gui/ide-preferences-builtin.c:400
+#: src/plugins/buildui/tweaks.ui:46
 msgid "Default"
 msgstr "Типовий"
 
@@ -1881,6 +1879,7 @@ msgstr "Кількість процесорів"
 
 #: src/libide/gui/ide-preferences-builtin.c:420
 #: src/libide/gui/ide-preferences-builtin.c:654
+#: src/plugins/buildui/tweaks.ui:15
 msgid "Build"
 msgstr "Зібрати"
 
@@ -1906,6 +1905,7 @@ msgstr "Застарілі кеші буде витерто під час зап
 
 #: src/libide/gui/ide-preferences-builtin.c:434
 #: src/libide/gui/ide-preferences-builtin.c:658
+#: src/plugins/platformui/tweaks.ui:62
 msgid "Network"
 msgstr "Мережа"
 
@@ -1946,8 +1946,9 @@ msgid ""
 msgstr "Автоматично зупиняти виконання на початку головної функції програм"
 
 #: src/libide/gui/ide-preferences-builtin.c:445
-#: src/libide/gui/ide-preferences-builtin.c:653
+#: src/libide/gui/ide-preferences-builtin.c:653 src/libide/gui/tweaks.ui:34
 #: src/libide/projects/ide-projects-global.c:103
+#: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
 msgstr "Проєкти"
 
@@ -1965,6 +1966,7 @@ msgstr "Відновлювати раніше відкриті файли"
 
 #: src/libide/gui/ide-preferences-builtin.c:449
 #: src/libide/gui/ide-preferences-builtin.c:731
+#: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
 msgstr "Відкривати раніше відкриті файли під час завантаження проєкту"
 
@@ -2009,7 +2011,8 @@ msgstr "Команди"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:47
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:49
+#: src/libide/gui/tweaks.ui:53
 msgid "Plugins"
 msgstr "Додатки"
 
@@ -2029,7 +2032,7 @@ msgstr "Програма"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:16
+#: src/plugins/platformui/tweaks.ui:22
 msgid "Interface"
 msgstr "Інтерфейс"
 
@@ -2083,7 +2086,7 @@ msgid "Additional"
 msgstr "Додатково"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks.ui:153
+#: src/plugins/editorui/tweaks.ui:223
 msgid "Behavior"
 msgstr "Поведінка"
 
@@ -2109,15 +2112,18 @@ msgid "Switch documents using a tabbed interface"
 msgstr "Перемикання документів за допомогою інтерфейсу із вкладками"
 
 #: src/libide/gui/ide-preferences-builtin.c:730
+#: src/plugins/projectui/tweaks.ui:14
 msgid "Restore Previous Session"
 msgstr "Відновлювати попередній сеанс"
 
 #: src/libide/gui/ide-preferences-builtin.c:735
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
+#: src/plugins/projectui/tweaks.ui:38
 msgid "License"
 msgstr "Ліцензування"
 
 #: src/libide/gui/ide-preferences-builtin.c:736
+#: src/plugins/projectui/tweaks.ui:39
 msgid "The default license when creating new projects"
 msgstr "Типові умови ліцензування при створенні проєктів"
 
@@ -2130,6 +2136,7 @@ msgid "Automatically insert a breakpoint at the start of the application"
 msgstr "Автоматично вставляти точку зупинення на початку програми"
 
 #: src/libide/gui/ide-preferences-builtin.c:745
+#: src/plugins/buildui/tweaks.ui:28
 msgid "Clear Build Logs"
 msgstr "Спорожняти журнал збирання"
 
@@ -2138,10 +2145,12 @@ msgid "Upon rebuilding the project the build log will be cleared"
 msgstr "Перед повторним збиранням проєкту журнал збирання буде спорожнено"
 
 #: src/libide/gui/ide-preferences-builtin.c:750
+#: src/plugins/buildui/tweaks.ui:21
 msgid "Clear Expired Artifacts"
 msgstr "Вилучити застарілі дані"
 
 #: src/libide/gui/ide-preferences-builtin.c:751
+#: src/plugins/buildui/tweaks.ui:22
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Застарілі дані буде вилучено під час запуску «Будівника»"
 
@@ -2161,6 +2170,7 @@ msgid "Terminal Font"
 msgstr "Шрифт термінала"
 
 #: src/libide/gui/ide-preferences-builtin.c:767
+#: src/plugins/terminal/tweaks.ui:20
 msgid "The font used within terminals"
 msgstr "Шрифт, який буде використано у терміналах"
 
@@ -2217,9 +2227,32 @@ msgstr "Запустити проєкт"
 msgid "Custom Font"
 msgstr "Нетиповий шрифт"
 
-#: src/libide/gui/tweaks.ui:15
+#: src/libide/gui/tweaks.ui:6
+msgid "Visual"
+msgstr "Візуальний"
+
+#: src/libide/gui/tweaks.ui:16
 msgid "Text Editor"
 msgstr "Текстовий редактор"
+
+#: src/libide/gui/tweaks.ui:22
+#: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gtk/menus.ui:33
+msgid "Terminal"
+msgstr "Термінал"
+
+#: src/libide/gui/tweaks.ui:29
+msgid "Code"
+msgstr "Код"
+
+#: src/libide/gui/tweaks.ui:39
+msgid "Foundry"
+msgstr "Колекція"
+
+#: src/libide/gui/tweaks.ui:44
+msgid "External"
+msgstr "Зовнішній"
 
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
@@ -3132,6 +3165,73 @@ msgstr "Навігація за допомогою накладки"
 msgid "Switch documents using a popover"
 msgstr "Перемикання документів за допомогою накладки"
 
+#: src/plugins/buildui/tweaks.ui:18 src/plugins/terminal/tweaks.ui:66
+msgid "History"
+msgstr "Журнал"
+
+#: src/plugins/buildui/tweaks.ui:29
+msgid "Clear the build log history when a new build begins"
+msgstr "Спорожняти журнал збирання, якщо розпочинається нове збирання"
+
+#: src/plugins/buildui/tweaks.ui:37
+msgid "Workers"
+msgstr "Обробники"
+
+#: src/plugins/buildui/tweaks.ui:41
+msgid "Number of workers to use when performing builds"
+msgstr "Кількість обробників, які слід використовувати для виконання збирання"
+
+#: src/plugins/buildui/tweaks.ui:52
+msgid "1 per CPU"
+msgstr "1 на процесор"
+
+#: src/plugins/buildui/tweaks.ui:58
+msgid "1"
+msgstr "1"
+
+#: src/plugins/buildui/tweaks.ui:64 src/plugins/editorui/gtk/menus.ui:15
+#: src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
+#: src/plugins/buildui/tweaks.ui:70 src/plugins/editorui/gtk/menus.ui:25
+#: src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
+#: src/plugins/buildui/tweaks.ui:76
+msgid "6"
+msgstr "6"
+
+#: src/plugins/buildui/tweaks.ui:82 src/plugins/editorui/gtk/menus.ui:35
+#: src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
+
+#: src/plugins/buildui/tweaks.ui:88
+msgid "16"
+msgstr "16"
+
+#: src/plugins/buildui/tweaks.ui:94
+msgid "32"
+msgstr "32"
+
+#: src/plugins/buildui/tweaks.ui:100
+msgid "64"
+msgstr "64"
+
+#: src/plugins/buildui/tweaks.ui:106
+msgid "128"
+msgstr "128"
+
+#: src/plugins/buildui/tweaks.ui:112
+msgid "256"
+msgstr "256"
+
+#: src/plugins/buildui/tweaks.ui:118
+msgid "512"
+msgstr "512"
+
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 msgid "Fetch dependencies"
 msgstr "Отримати залежності"
@@ -4033,11 +4133,12 @@ msgid "Use minimal editorui interface"
 msgstr "Використовувати мінімальний інтерфейс редактора"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:48
+#: src/plugins/editorui/tweaks.ui:326
 msgid "Movements"
 msgstr "Рухи"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:61
-#: src/plugins/editorui/tweaks.ui:51
+#: src/plugins/editorui/tweaks.ui:67
 msgid "The font used within the source code editor"
 msgstr "Шрифт, який використано у редакторі коду"
 
@@ -4050,7 +4151,7 @@ msgid "Use an overview map instead of a scrollbar"
 msgstr "Використовувати карту перегляду замість смужки гортання"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
-#: src/plugins/editorui/tweaks.ui:70
+#: src/plugins/editorui/tweaks.ui:172
 msgid "Show Line Numbers"
 msgstr "Показувати номери рядків"
 
@@ -4063,17 +4164,17 @@ msgid "Adjust line-height of the configured font"
 msgstr "Коригувати висоту рядка налаштованого шрифту"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
-#: src/plugins/editorui/tweaks.ui:81
+#: src/plugins/editorui/tweaks.ui:198
 msgid "Highlight Current Line"
 msgstr "Підсвічувати поточний рядок"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:90
-#: src/plugins/editorui/tweaks.ui:88
+#: src/plugins/editorui/tweaks.ui:205
 msgid "Highlight Matching Brackets"
 msgstr "Підсвічувати відповідні дужки"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:91
-#: src/plugins/editorui/tweaks.ui:89
+#: src/plugins/editorui/tweaks.ui:206
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4094,12 +4195,12 @@ msgid "Automatically select the first completion when displayed"
 msgstr "Автоматично вибирати перше доповнення при показу"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
-#: src/plugins/editorui/tweaks.ui:197
+#: src/plugins/editorui/tweaks.ui:255
 msgid "Expand Snippets"
 msgstr "Розгортати фрагменти"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
-#: src/plugins/editorui/tweaks.ui:198
+#: src/plugins/editorui/tweaks.ui:256
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Використовувати клавішу «Tab» для розгортання налаштованих фрагментів у "
@@ -4134,16 +4235,16 @@ msgstr "Автоматичний відступ"
 msgid "Format source code as you type"
 msgstr "Форматувати початковий код під час писання"
 
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:77
+#. translators: .editorconfig is a file used in programming projects and modelines are tweaks specified within a file header or footer
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:81
 msgid ""
-"Settings provided .editorconfig and modelines specified within files take "
-"precedence over those below."
+"Settings provided by .editorconfig and modelines take precedence over those "
+"below."
 msgstr ""
-"Параметри, які вказано у файлі .editorconfig і рядки режимів у самих файлах"
-" мають вищий пріоритет за наведене нижче."
+"Параметри, які вказано у файлі .editorconfig, і рядки режимів у самих файлах "
+"мають вищий пріоритет за наведене нижче."
 
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:95
-#| msgid "Prefer a space before colons"
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:100
 msgid "Prefer a space before colon"
 msgstr "Ставити пробіл перед двокрапкою"
 
@@ -4168,25 +4269,13 @@ msgstr "Відступ за допомогою пробілів"
 msgid "Spaces per Tab"
 msgstr "Пробіли на табуляцію"
 
-#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
 
-#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
-
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
 msgstr "5"
-
-#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 msgid "Indentation Size"
@@ -4236,95 +4325,239 @@ msgstr "Надрукувати…"
 msgid "Format Selection"
 msgstr "Форматувати позначене"
 
-#: src/plugins/editorui/tweaks.ui:16
+#: src/plugins/editorui/tweaks.ui:28
 msgid "Color"
 msgstr "Колір"
 
-#: src/plugins/editorui/tweaks.ui:35
+#: src/plugins/editorui/tweaks.ui:50 src/plugins/terminal/tweaks.ui:16
 msgid "Fonts & Styling"
 msgstr "Шрифти та стилі"
 
-#: src/plugins/editorui/tweaks.ui:38
+#: src/plugins/editorui/tweaks.ui:54
 msgid "Preview"
 msgstr "Перегляд"
 
-#: src/plugins/editorui/tweaks.ui:59
+#: src/plugins/editorui/tweaks.ui:75
 msgid "Adjust spacing between lines"
 msgstr "Коригувати інтервал між рядками"
 
-#: src/plugins/editorui/tweaks.ui:71
-msgid "Display line numbers next to each line of code"
-msgstr "Показувати номери рядків поряд із кожним рядком коду"
+#: src/plugins/editorui/tweaks.ui:87
+msgid "How text should be wrapped when wider than the frame"
+msgstr "Як переносити рядки тексту, які є ширшими за рамку"
 
-#: src/plugins/editorui/tweaks.ui:82
-msgid "Make the current line stand out with highlights"
-msgstr "Підсвічувати поточний рядок"
+#: src/plugins/editorui/tweaks.ui:98
+msgid "At Spaces"
+msgstr "На пробілах"
 
-#: src/plugins/editorui/tweaks.ui:99
+#: src/plugins/editorui/tweaks.ui:104
+msgid "Anywhere"
+msgstr "Будь-де"
+
+#: src/plugins/editorui/tweaks.ui:116
 msgid "Background Pattern"
 msgstr "Фоновий візерунок"
 
-#: src/plugins/editorui/tweaks.ui:100
+#: src/plugins/editorui/tweaks.ui:117
 msgid "Show a background pattern underneath source code"
 msgstr "Показувати фоновий візерунок під початковим кодом"
 
-#: src/plugins/editorui/tweaks.ui:105
+#: src/plugins/editorui/tweaks.ui:122
 msgid "No Pattern"
 msgstr "Без візерунка"
 
-#: src/plugins/editorui/tweaks.ui:111
+#: src/plugins/editorui/tweaks.ui:128
 msgid "Grid Lines"
 msgstr "Лінії сітки"
 
-#: src/plugins/editorui/tweaks.ui:123
+#: src/plugins/editorui/tweaks.ui:138
+#| msgid "Scrollback"
+msgid "Scrollbars"
+msgstr "Смужки гортання"
+
+#: src/plugins/editorui/tweaks.ui:141
 msgid "Source Code Overview"
 msgstr "Огляд початкового коду"
 
-#: src/plugins/editorui/tweaks.ui:124
+#: src/plugins/editorui/tweaks.ui:142
 msgid "Display an overview of source code next to the editor"
 msgstr "Показувати оглядову схему початкового коду поруч із вікном редактора."
 
-#: src/plugins/editorui/tweaks.ui:129
+#: src/plugins/editorui/tweaks.ui:147
 msgid "Prefer Scrollbars"
 msgstr "Пріоритет смужок гортання"
 
-#: src/plugins/editorui/tweaks.ui:135
+#: src/plugins/editorui/tweaks.ui:153
 msgid "Always On"
 msgstr "Завжди ввімкнено"
 
-#: src/plugins/editorui/tweaks.ui:141
+#: src/plugins/editorui/tweaks.ui:159
 msgid "Automatic"
 msgstr "Автоматично"
 
-#: src/plugins/editorui/tweaks.ui:166
+#: src/plugins/editorui/tweaks.ui:169
+#| msgid "Line numbers"
+msgid "Line Numbers"
+msgstr "Номери рядків"
+
+#: src/plugins/editorui/tweaks.ui:173
+msgid "Display line numbers next to each line of code"
+msgstr "Показувати номери рядків поряд із кожним рядком коду"
+
+#: src/plugins/editorui/tweaks.ui:179
+msgid "Use Relative Line Numbers"
+msgstr "Використовувати відносні номери рядків"
+
+#: src/plugins/editorui/tweaks.ui:180
+msgid "Show line numbers relative to the current line"
+msgstr "Показувати номери рядків відносного поточного рядка"
+
+#: src/plugins/editorui/tweaks.ui:186
+#| msgid "Show Line Diagnostics"
+msgid "Show Diagnostics"
+msgstr "Показувати діагностику"
+
+#: src/plugins/editorui/tweaks.ui:187
+msgid "Display diagnostics next to the line number"
+msgstr "Показувати діагностику поряд із номером рядка"
+
+#: src/plugins/editorui/tweaks.ui:195
+#| msgid "Semantic Highlighting"
+msgid "Syntax Highlighting"
+msgstr "Підсвічування синтаксису"
+
+#: src/plugins/editorui/tweaks.ui:199
+msgid "Make the current line stand out with highlights"
+msgstr "Підсвічувати поточний рядок"
+
+#: src/plugins/editorui/tweaks.ui:213
+msgid ""
+"Use symbol information to highlight namespaces, functions, and variables "
+"within source code"
+msgstr ""
+"Використовувати дані для підсвічування просторів назв, функцій та змінних у "
+"початковому коді"
+
+#: src/plugins/editorui/tweaks.ui:227
+#: src/plugins/spellcheck/gbp-spell-preferences-addin.c:37
+msgid "Spelling"
+msgstr "Правопис"
+
+#: src/plugins/editorui/tweaks.ui:231
+msgid "Underline potential spelling mistakes as you type"
+msgstr "Підкреслювати потенційні помилки правопису при введенні"
+
+#: src/plugins/editorui/tweaks.ui:239
+msgid "Selections"
+msgstr "Вибір"
+
+#: src/plugins/editorui/tweaks.ui:242
+msgid "Minimum Characters to Highlight"
+msgstr "Мінімальна кількість символів для підсвічування"
+
+#: src/plugins/editorui/tweaks.ui:243
+msgid "The mininum selection length before highlighting matches"
+msgstr "Мінімальна довжина позначення, перш ніж буде підсвічено відповідники"
+
+#: src/plugins/editorui/tweaks.ui:266
+msgid "Code Completion"
+msgstr "Доповнення коду"
+
+#: src/plugins/editorui/tweaks.ui:267
+#| msgid "panel-left-symbolic"
+msgid "lang-function-symbolic"
+msgstr "lang-function-symbolic"
+
+#: src/plugins/editorui/tweaks.ui:270
+#| msgid "Maximum Completion Proposals"
+msgid "Completion Proposals"
+msgstr "Пропозиції доповнення"
+
+#: src/plugins/editorui/tweaks.ui:273
+msgid "Suggest Code Completions"
+msgstr "Пропонувати доповнення коду"
+
+#: src/plugins/editorui/tweaks.ui:274
+msgid "Automatically suggest code completions while typing"
+msgstr "Автоматично пропонувати варіанти доповнення коду під час введення"
+
+#: src/plugins/editorui/tweaks.ui:280
+msgid "Select First Completion Proposal"
+msgstr "Вибирати першу пропозицію доповнення"
+
+#: src/plugins/editorui/tweaks.ui:281
+msgid "Automatically select the first completion proposal when displayed"
+msgstr "Автоматично вибирати першу пропозицію доповнення при показу"
+
+#: src/plugins/editorui/tweaks.ui:291
+msgid "Maximum Completion Proposals"
+msgstr "Максимальна кількість пропозицій доповнення"
+
+#: src/plugins/editorui/tweaks.ui:292
+msgid "The maximum number of completion rows that will be displayed at once"
+msgstr "Максимальна кількість рядків доповнень, які слід показувати одночасно"
+
+#: src/plugins/editorui/tweaks.ui:307 src/plugins/editorui/tweaks.ui:310
+msgid "Keyboard Theme"
+msgstr "Тема клавіатури"
+
+#: src/plugins/editorui/tweaks.ui:311
+msgid ""
+"Shortcut themes provide a keyboard experience similar to other IDEs and "
+"editors"
+msgstr ""
+"Теми скорочень забезпечують роботу за допомогою клавіатури, яка є подібною "
+"до інших середовищ розробки та редакторів"
+
+#: src/plugins/editorui/tweaks.ui:336
 msgid "Smart Home/End"
 msgstr "Кмітливі клавіші «Home» та «End»"
 
-#: src/plugins/editorui/tweaks.ui:167
+#: src/plugins/editorui/tweaks.ui:337
 msgid "Moves to first non-whitespace character before line edges"
 msgstr ""
 "Перехід до першого символу, який не є пропуском, у напрямку до країв рядка"
 
-#: src/plugins/editorui/tweaks.ui:175
-msgid "Code Completion"
-msgstr "Доповнення коду"
+#: src/plugins/editorui/tweaks.ui:347
+#| msgid "Palette management"
+msgid "Session Management"
+msgstr "Керування сеансами"
 
-#: src/plugins/editorui/tweaks.ui:178
-msgid "Suggest Code Completions"
-msgstr "Пропонувати доповнення коду"
+#: src/plugins/editorui/tweaks.ui:351
+msgid "Save & Restore"
+msgstr "Збереження і відновлення"
 
-#: src/plugins/editorui/tweaks.ui:179
-msgid "Automatically suggest code completions while typing"
-msgstr "Автоматично пропонувати варіанти доповнення коду під час введення"
+#: src/plugins/editorui/tweaks.ui:354
+msgid "Auto-Save"
+msgstr "Автозбереження"
 
-#: src/plugins/editorui/tweaks.ui:185
-#| msgid "Select First Completion"
-msgid "Select First Completion Proposal"
-msgstr "Вибирати першу пропозицію доповнення"
+#: src/plugins/editorui/tweaks.ui:355
+msgid "Regularly save the document as you type"
+msgstr "Регулярно зберігати документ при введенні"
 
-#: src/plugins/editorui/tweaks.ui:186
-msgid "Automatically select the first completion proposal when displayed"
-msgstr "Автоматично вибирати першу пропозицію доповнення при показу"
+#: src/plugins/editorui/tweaks.ui:361
+msgid "Auto-Save Delay"
+msgstr "Затримка автозбереження"
+
+#: src/plugins/editorui/tweaks.ui:362
+msgid "The delay in seconds to wait before auto-saving the document"
+msgstr ""
+"Кількість секунд після внесення змін до автоматичного збереження документа"
+
+#: src/plugins/editorui/tweaks.ui:373
+msgid "Format on Save"
+msgstr "Форматувати при збереженні"
+
+#: src/plugins/editorui/tweaks.ui:374
+msgid "Reformat sources when saving to disk"
+msgstr "Переформатовувати початковий код при збереженні на диск"
+
+#: src/plugins/editorui/tweaks.ui:384
+msgid "Restore Cursor Position"
+msgstr "Відновлювати положення вказівника"
+
+#: src/plugins/editorui/tweaks.ui:385
+msgid "Jump to the last position when re-opening a file"
+msgstr "Перейти до останньої позиції при повторному відкритті файла"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4910,43 +5143,43 @@ msgstr "Вилучити набір інструментів"
 msgid "Delete Tool"
 msgstr "Вилучити інструмент"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
 msgid "GNOME Application"
 msgstr "Програма GNOME"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Проєкт на основі Meson для GNOME з використанням GTK 4 і libadwaita"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
 msgid "GTK 4 Application"
 msgstr "Програма GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "A Meson-based project using GTK 4"
 msgstr "Заснований на Meson проєкт із використанням GTK 4"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
 msgid "Shared Library"
 msgstr "Спільні бібліотеки"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "A Meson-based project for a shared library"
 msgstr "Заснований на Meson проєкт бібліотеки спільного використання"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
 msgid "Command Line Tool"
 msgstr "Засіб командного рядка"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "An Meson-based project for a command-line program"
 msgstr "Проєкт на основі Meson для програми командного рядка"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
 msgid "Empty Meson Project"
 msgstr "Порожній проєкт Meson"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:220
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "An empty Meson project skeleton"
 msgstr "Порожній каркас проєкту Meson"
 
@@ -5082,17 +5315,29 @@ msgstr "Отримуємо залежності npm"
 msgid "_External Program…"
 msgstr "_Зовнішньої програми…"
 
-#: src/plugins/platformui/tweaks.ui:30
+#: src/plugins/platformui/tweaks.ui:36
 msgid "Document Navigation"
 msgstr "Навігація документом"
 
-#: src/plugins/platformui/tweaks.ui:33
+#: src/plugins/platformui/tweaks.ui:39
 msgid "Tab Bar"
 msgstr "Панель вкладок"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:45
 msgid "Drop Down"
 msgstr "Спадний список"
+
+#: src/plugins/platformui/tweaks.ui:67
+msgid "Allow Downloads when Metered"
+msgstr "Дозволити отримання даних з мережі, якщо ведеться облік"
+
+#: src/plugins/platformui/tweaks.ui:68
+msgid ""
+"Allow the download of SDKs and dependencies when on metered internet "
+"connections"
+msgstr ""
+"Дозволити отримання наборів інструментів та залежностей при вимірюваних "
+"з'єднаннях"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
@@ -5228,6 +5473,18 @@ msgstr "Розкрити в ієрархії проєкту"
 #: src/plugins/project-tree/gtk/menus.ui:102
 msgid "Reveal in Project _Tree"
 msgstr "Розкрити в і_єрархії проєкту"
+
+#: src/plugins/projectui/tweaks.ui:23
+msgid "Project Creation"
+msgstr "Створення проєкту"
+
+#: src/plugins/projectui/tweaks.ui:27
+msgid "Projects created with Builder will be placed within this directory"
+msgstr "Проєкти, які створено «Будівником», буде розташовано у цьому каталозі"
+
+#: src/plugins/projectui/tweaks.ui:80
+msgid "No License"
+msgstr "Без ліцензування"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5489,10 +5746,6 @@ msgstr "Додати до словника"
 msgid "Ignore"
 msgstr "Ігнорувати"
 
-#: src/plugins/spellcheck/gbp-spell-preferences-addin.c:37
-msgid "Spelling"
-msgstr "Правопис"
-
 #: src/plugins/spellcheck/gbp-spell-preferences-addin.c:43
 msgid "Automatically check spelling as you type"
 msgstr "Автоматично перевіряти правопис під час введення"
@@ -5656,12 +5909,6 @@ msgstr ""
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
-#: src/plugins/terminal/gtk/menus.ui:33
-msgid "Terminal"
-msgstr "Термінал"
-
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
 msgid "Scrollback"
 msgstr "Буфер гортання"
@@ -5733,6 +5980,7 @@ msgid "scroll on keystroke"
 msgstr "гортати при натисканні клавіші"
 
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:115
+#: src/plugins/terminal/tweaks.ui:69
 msgid "Limit Scrollback"
 msgstr "Обмежити буфер гортання"
 
@@ -5803,6 +6051,59 @@ msgstr "Відкрити новий термінал у середовищі в�
 #: src/plugins/terminal/gtk/menus.ui:41
 msgid "Split"
 msgstr "Розділити"
+
+#: src/plugins/terminal/tweaks.ui:31
+msgid "Allow Bold"
+msgstr "Дозволити напівжирний"
+
+#: src/plugins/terminal/tweaks.ui:32
+msgid "Allows the use of bold escape sequences"
+msgstr "Дозволити використання послідовностей екранування напівжирного"
+
+#: src/plugins/terminal/tweaks.ui:38
+msgid "Allow Hyperlinks"
+msgstr "Дозволити гіперпосилання"
+
+#: src/plugins/terminal/tweaks.ui:39
+msgid "Allows the use of hyperlink escape sequences"
+msgstr "Дозволити використання послідовностей екранування гіперпосилань"
+
+#: src/plugins/terminal/tweaks.ui:47
+msgid "Scrolling"
+msgstr "Гортання"
+
+#: src/plugins/terminal/tweaks.ui:50
+msgid "Scroll On Output"
+msgstr "Гортання виведених даних"
+
+#: src/plugins/terminal/tweaks.ui:51
+msgid "Automatically scroll when applications within the terminal output text"
+msgstr "Автоматично гортати при виведенні програмами тексту до термінала"
+
+#: src/plugins/terminal/tweaks.ui:57
+msgid "Scroll On Keyboard Input"
+msgstr "Гортати при введенні з клавіатури"
+
+#: src/plugins/terminal/tweaks.ui:58
+msgid "Automatically scroll when typing to insert text"
+msgstr "Автоматично гортати вміст при введенні тексту"
+
+#: src/plugins/terminal/tweaks.ui:70
+msgid ""
+"Limit the number of lines that are stored in memory for terminal scrollback"
+msgstr ""
+"Обмежити кількість рядків, які зберігатимуться у пам'яті для буфера гортання "
+"термінала"
+
+#: src/plugins/terminal/tweaks.ui:76
+msgid "Maximum Lines in Scrollback"
+msgstr "Максимальна к-ть рядків у буфері гортання"
+
+#: src/plugins/terminal/tweaks.ui:77
+msgid "The maximum number of lines stored in history when limiting scrollback"
+msgstr ""
+"Максимальна кількість рядків, які зберігатимуться у журналі при обмеженні "
+"буфера гортання"
 
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
@@ -6040,6 +6341,12 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Show Open Files"
+#~ msgstr "Показати відкриті файли"
+
+#~ msgid "Display the open files list in the project sidebar."
+#~ msgstr "показувати список відкритих файлів на бічній панелі проєкту."
 
 #~| msgid "Select First Completion"
 #~ msgid "Select First Proposal"
@@ -6390,10 +6697,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgctxt "shortcut window"
 #~ msgid "Move to matching bracket"
 #~ msgstr "Перейти до парної дужки"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Selections"
-#~ msgstr "Вибір"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Select all"
@@ -7002,9 +7305,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "LGPLv2.1+"
 #~ msgstr "LGPLv2.1+"
 
-#~ msgid "No license"
-#~ msgstr "Без ліцензування"
-
 #~ msgid "Uses the Git version control system"
 #~ msgstr "Використовує систему керування версіями Git"
 
@@ -7443,9 +7743,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Click + to add an external command"
 #~ msgstr "Натисніть «+», щоб додати зовнішню команду"
-
-#~ msgid "External Commands"
-#~ msgstr "Зовнішні команди"
 
 #, c-format
 #~ msgid "Failed to parse snippet “%s”"
