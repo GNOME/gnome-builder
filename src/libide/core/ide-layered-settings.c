@@ -159,6 +159,8 @@ ide_layered_settings_finalize (GObject *object)
   g_clear_pointer (&self->schema_id, g_free);
   g_clear_pointer (&self->path, g_free);
 
+  g_clear_object (&self->memory_settings);
+
   G_OBJECT_CLASS (ide_layered_settings_parent_class)->finalize (object);
 }
 
