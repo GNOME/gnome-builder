@@ -282,6 +282,7 @@ src/plugins/sysroot/gbp-sysroot-toolchain-provider.c
 src/plugins/terminal/gbp-terminal-preferences-addin.c
 src/plugins/terminal/gbp-terminal-workspace-addin.c
 src/plugins/terminal/gtk/menus.ui
+src/plugins/terminal/tweaks.ui
 src/plugins/testui/gbp-testui-item.c
 src/plugins/testui/gbp-testui-output-panel.c
 src/plugins/testui/gbp-testui-output-panel.ui

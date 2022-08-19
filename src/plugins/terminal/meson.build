@@ -1,5 +1,5 @@
 plugins_sources += files([
-  # 'gbp-terminal-preferences-addin.c',
+  'gbp-terminal-tweaks-addin.c',
   'gbp-terminal-workspace-addin.c',
   'terminal-plugin.c',
 ])

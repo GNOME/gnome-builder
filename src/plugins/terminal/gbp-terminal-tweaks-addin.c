@@ -1,6 +1,6 @@
-/* terminal-plugin.c
+/* gbp-terminal-tweaks-addin.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,24 +18,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "terminal-plugin"
+#define G_LOG_DOMAIN "gbp-terminal-tweaks-addin"
 
 #include "config.h"
 
-#include <libpeas/peas.h>
-#include <libide-gui.h>
-#include <libide-terminal.h>
-
 #include "gbp-terminal-tweaks-addin.h"
-#include "gbp-terminal-workspace-addin.h"
 
-_IDE_EXTERN void
-_gbp_terminal_register_types (PeasObjectModule *module)
+struct _GbpTerminalTweaksAddin
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_TWEAKS_ADDIN,
-                                              GBP_TYPE_TERMINAL_TWEAKS_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKSPACE_ADDIN,
-                                              GBP_TYPE_TERMINAL_WORKSPACE_ADDIN);
+  IdeTweaksAddin parent_instance;
+};
+
+G_DEFINE_FINAL_TYPE (GbpTerminalTweaksAddin, gbp_terminal_tweaks_addin, IDE_TYPE_TWEAKS_ADDIN)
+
+static void
+gbp_terminal_tweaks_addin_class_init (GbpTerminalTweaksAddinClass *klass)
+{
+}
+
+static void
+gbp_terminal_tweaks_addin_init (GbpTerminalTweaksAddin *self)
+{
+  ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
+                                       IDE_STRV_INIT ("/plugins/terminal/tweaks.ui"));
 }

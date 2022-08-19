@@ -17,6 +17,12 @@
           </object>
         </child>
         <child>
+          <object class="IdeTweaksPage" id="terminal_page">
+            <property name="icon-name">utilities-terminal-symbolic</property>
+            <property name="title" translatable="yes">Terminal</property>
+          </object>
+        </child>
+        <child>
           <object class="IdeTweaksPage" id="shortcuts_page">
             <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
             <property name="title" translatable="yes">Keyboard Shortcuts</property>
