@@ -7,6 +7,12 @@
         <property name="application-only">true</property>
       </object>
     </child>
+    <child>
+      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_code_insight">
+        <property name="schema-id">org.gnome.builder.code-insight</property>
+        <property name="application-only">true</property>
+      </object>
+    </child>
     <child internal-child="visual_section">
       <object class="IdeTweaksSection">
         <child internal-child="appearance_page">
@@ -135,6 +141,13 @@
                             <property name="title" translatable="yes">Highlight Matching Brackets</property>
                             <property name="subtitle" translatable="yes">Use cursor position to highlight matching brackets, braces, parenthesis, and more</property>
                             <property name="action-name">settings.org.gnome.builder.editor.highlight-matching-brackets</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_semantic_highlight">
+                            <property name="title" translatable="yes">Semantic Highlighting</property>
+                            <property name="subtitle" translatable="yes">Use symbol information to highlight namespaces, functions, and variables within source code</property>
+                            <property name="action-name">settings.org.gnome.builder.code-insight.semantic-highlighting</property>
                           </object>
                         </child>
                       </object>
