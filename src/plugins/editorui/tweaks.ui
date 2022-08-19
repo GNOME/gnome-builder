@@ -279,6 +279,18 @@
                       </object>
                     </child>
                     <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksSpin" id="max_completion_rows">
+                            <property name="title" translatable="yes">Maximum Completion Proposals</property>
+                            <property name="subtitle" translatable="yes">The maximum number of completion rows that will be displayed at once</property>
+                            <property name="settings">settings_org_gnome_builder_editor</property>
+                            <property name="key">completion-n-rows</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="IdeTweaksGroup" id="editor_snippets_general_group">
                         <property name="title" translatable="yes">Snippets</property>
                         <child>
