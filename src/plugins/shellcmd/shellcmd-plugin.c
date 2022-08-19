@@ -30,6 +30,7 @@
 #include "gbp-shellcmd-run-command-provider.h"
 #include "gbp-shellcmd-search-provider.h"
 #include "gbp-shellcmd-shortcut-provider.h"
+#include "gbp-shellcmd-tweaks-addin.h"
 
 _IDE_EXTERN void
 _gbp_shellcmd_register_types (PeasObjectModule *module)
@@ -46,4 +47,7 @@ _gbp_shellcmd_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SHORTCUT_PROVIDER,
                                               GBP_TYPE_SHELLCMD_SHORTCUT_PROVIDER);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_SHELLCMD_TWEAKS_ADDIN);
 }

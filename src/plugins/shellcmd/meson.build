@@ -10,6 +10,7 @@ plugins_sources += files([
   'gbp-shellcmd-search-provider.c',
   'gbp-shellcmd-search-result.c',
   'gbp-shellcmd-shortcut-provider.c',
+  'gbp-shellcmd-tweaks-addin.c',
 ])
 
 plugin_shellcmd_enum_headers = [

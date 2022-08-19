@@ -2,6 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2019-2022 Christian Hergert
+Depends=buildui;
 Description=Use custom commands to run your project
 Embedded=_gbp_shellcmd_register_types
 Hidden=true

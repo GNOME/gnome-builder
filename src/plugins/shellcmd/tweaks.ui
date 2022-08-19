@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="foundry_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="commands_page">
+            <property name="title" translatable="yes">Commands</property>
+            <property name="icon-name">text-x-script-symbolic</property>
+            <child>
+              <object class="IdeTweaksGroup" id="command_create_group">
+                <property name="title" translatable="yes">Commands</property>
+                <child>
+                  <object class="IdeTweaksWidget" id="create_command_widget">
+                    <signal name="create-for-item" handler="create_creation_row_cb" swapped="true" object="GbpShellcmdTweaksAddin"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup" id="command_list_group">
+                <child>
+                  <object class="IdeTweaksWidget" id="command_list_widget">
+                    <signal name="create-for-item" handler="create_command_list_cb" swapped="true" object="GbpShellcmdTweaksAddin"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

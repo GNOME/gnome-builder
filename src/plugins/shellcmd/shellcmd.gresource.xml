@@ -3,5 +3,6 @@
   <gresource prefix="/plugins/shellcmd">
     <file>shellcmd.plugin</file>
     <file preprocess="xml-stripblanks">gbp-shellcmd-command-dialog.ui</file>
+    <file preprocess="xml-stripblanks">tweaks.ui</file>
   </gresource>
 </gresources>
