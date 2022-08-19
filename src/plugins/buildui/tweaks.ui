@@ -32,6 +32,97 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Workers</property>
+                <child>
+                  <object class="IdeTweaksCombo">
+                    <property name="title" translatable="yes">Build Parallelism</property>
+                    <property name="subtitle" translatable="yes">Number of workers to use when performing builds</property>
+                    <property name="settings">settings_org_gnome_builder_build</property>
+                    <property name="key">parallel</property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Default</property>
+                        <property name="action-target">-1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">1 per CPU</property>
+                        <property name="action-target">0</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">1</property>
+                        <property name="action-target">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">2</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">4</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">6</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">8</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">16</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">32</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">64</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">128</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">256</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">512</property>
+                        <property name="action-target">2</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
