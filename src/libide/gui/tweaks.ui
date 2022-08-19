@@ -22,16 +22,6 @@
             <property name="title" translatable="yes">Terminal</property>
           </object>
         </child>
-        <child>
-          <object class="IdeTweaksPage" id="shortcuts_page">
-            <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
-            <property name="title" translatable="yes">Keyboard Shortcuts</property>
-            <child>
-              <object class="IdeTweaksGroup" id="shorcut_theme_group">
-              </object>
-            </child>
-          </object>
-        </child>
       </object>
     </child>
     <child>

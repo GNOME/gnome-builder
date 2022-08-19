@@ -5,17 +5,16 @@
       <object class="IdeTweaksSection">
         <child internal-child="editor_page">
           <object class="IdeTweaksPage">
-            <child internal-child="editor_plugins_section">
+            <child internal-child="editor_page_internal_section">
               <object class="IdeTweaksSection">
-                <child>
-                  <object class="IdeTweaksPage" id="editor_plugins_ctags_page">
-                    <property name="title" translatable="yes">CTags</property>
+                <child internal-child="editor_code_completion_page">
+                  <object class="IdeTweaksPage">
                     <child>
                       <object class="IdeTweaksGroup">
-                        <property name="title" translatable="yes">Code Completion</property>
+                        <property name="title" translatable="yes">CTags</property>
                         <child>
                           <object class="IdeTweaksSwitch">
-                            <property name="title" translatable="yes">CTags Proposals</property>
+                            <property name="title" translatable="yes">Suggest Completions</property>
                             <property name="subtitle" translatable="yes">Use CTags to suggest code completion proposals</property>
                             <property name="action-name">settings.org.gnome.builder.code-insight.ctags-autocompletion</property>
                           </object>

@@ -48,6 +48,7 @@
                 <child>
                   <object class="IdeTweaksPage" id="editor_fonts_and_styling_page">
                     <property name="title" translatable="yes">Fonts &amp; Styling</property>
+                    <property name="icon-name">font-select-symbolic</property>
                     <child>
                       <object class="IdeTweaksGroup" id="editor_page_preview">
                         <property name="title" translatable="yes">Preview</property>
@@ -74,31 +75,6 @@
                             <property name="subtitle" translatable="yes">Adjust spacing between lines</property>
                             <property name="settings">settings_org_gnome_builder_editor</property>
                             <property name="key">line-height</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="editor_page_lines_group">
-                        <child>
-                          <object class="IdeTweaksSwitch" id="editor_show_lines">
-                            <property name="title" translatable="yes">Show Line Numbers</property>
-                            <property name="subtitle" translatable="yes">Display line numbers next to each line of code</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.show-line-numbers</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="editor_show_relative_lines">
-                            <property name="title" translatable="yes">Use Relative Line Numbers</property>
-                            <property name="subtitle" translatable="yes">Show line numbers relative to the current line</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.show-relative-line-numbers</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="editor_show_diagnostics">
-                            <property name="title" translatable="yes">Show Line Diagnostics</property>
-                            <property name="subtitle" translatable="yes">Display diagnostics next to the line number</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.show-line-diagnostics</property>
                           </object>
                         </child>
                       </object>
@@ -134,31 +110,6 @@
                       </object>
                     </child>
                     <child>
-                      <object class="IdeTweaksGroup" id="editor_page_highlight_group">
-                        <child>
-                          <object class="IdeTweaksSwitch" id="editor_highlight_line">
-                            <property name="title" translatable="yes">Highlight Current Line</property>
-                            <property name="subtitle" translatable="yes">Make the current line stand out with highlights</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.highlight-current-line</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="editor_highlight_brackets">
-                            <property name="title" translatable="yes">Highlight Matching Brackets</property>
-                            <property name="subtitle" translatable="yes">Use cursor position to highlight matching brackets, braces, parenthesis, and more</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.highlight-matching-brackets</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="editor_semantic_highlight">
-                            <property name="title" translatable="yes">Semantic Highlighting</property>
-                            <property name="subtitle" translatable="yes">Use symbol information to highlight namespaces, functions, and variables within source code</property>
-                            <property name="action-name">settings.org.gnome.builder.code-insight.semantic-highlighting</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
                       <object class="IdeTweaksGroup" id="editor_page_style_group">
                         <child>
                           <object class="IdeTweaksCombo" id="editor_grid_lines">
@@ -184,6 +135,7 @@
                     </child>
                     <child>
                       <object class="IdeTweaksGroup" id="editor_page_map_group">
+                        <property name="title" translatable="yes">Scrollbars</property>
                         <child>
                           <object class="IdeTweaksCombo" id="editor_map">
                             <property name="title" translatable="yes">Source Code Overview</property>
@@ -212,11 +164,188 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="editor_page_lines_group">
+                        <property name="title" translatable="yes">Line Numbers</property>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_show_lines">
+                            <property name="title" translatable="yes">Show Line Numbers</property>
+                            <property name="subtitle" translatable="yes">Display line numbers next to each line of code</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.show-line-numbers</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_show_relative_lines">
+                            <property name="title" translatable="yes">Use Relative Line Numbers</property>
+                            <property name="subtitle" translatable="yes">Show line numbers relative to the current line</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.show-relative-line-numbers</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_show_diagnostics">
+                            <property name="title" translatable="yes">Show Diagnostics</property>
+                            <property name="subtitle" translatable="yes">Display diagnostics next to the line number</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.show-line-diagnostics</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="editor_page_highlight_group">
+                        <property name="title" translatable="yes">Syntax Highlighting</property>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_highlight_line">
+                            <property name="title" translatable="yes">Highlight Current Line</property>
+                            <property name="subtitle" translatable="yes">Make the current line stand out with highlights</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.highlight-current-line</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_highlight_brackets">
+                            <property name="title" translatable="yes">Highlight Matching Brackets</property>
+                            <property name="subtitle" translatable="yes">Use cursor position to highlight matching brackets, braces, parenthesis, and more</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.highlight-matching-brackets</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_semantic_highlight">
+                            <property name="title" translatable="yes">Semantic Highlighting</property>
+                            <property name="subtitle" translatable="yes">Use symbol information to highlight namespaces, functions, and variables within source code</property>
+                            <property name="action-name">settings.org.gnome.builder.code-insight.semantic-highlighting</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
                   <object class="IdeTweaksPage" id="editor_behavior_page">
                     <property name="title" translatable="yes">Behavior</property>
+                    <property name="icon-name">tools-check-spelling-symbolic</property>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Spelling</property>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Check Spelling</property>
+                            <property name="subtitle" translatable="yes">Underline potential spelling mistakes as you type</property>
+                            <property name="action-name">settings.org.gnome.builder.spelling.check-spelling</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="editor_selections_group">
+                        <property name="title" translatable="yes">Selections</property>
+                        <child>
+                          <object class="IdeTweaksSpin">
+                            <property name="title" translatable="yes">Minimum Characters to Highlight</property>
+                            <property name="subtitle" translatable="yes">The mininum selection length before highlighting matches</property>
+                            <property name="settings">settings_org_gnome_builder_editor</property>
+                            <property name="key">min-char-selected</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="editor_snippets_general_group">
+                        <property name="title" translatable="yes">Snippets</property>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="enable_snippets">
+                            <property name="title" translatable="yes">Expand Snippets</property>
+                            <property name="subtitle" translatable="yes">Use “Tab” to expand configured snippets in the editor</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.enable-snippets</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksPage" id="editor_code_completion_page">
+                    <property name="title" translatable="yes">Code Completion</property>
+                    <property name="icon-name" translatable="yes">lang-function-symbolic</property>
+                    <child>
+                      <object class="IdeTweaksGroup" id="editor_completion_general_group">
+                        <property name="title" translatable="yes">Completion Proposals</property>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="suggest_code_completions">
+                            <property name="title" translatable="yes">Suggest Code Completions</property>
+                            <property name="subtitle" translatable="yes">Automatically suggest code completions while typing</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.interactive-completion</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="select_first_completion">
+                            <property name="title" translatable="yes">Select First Completion Proposal</property>
+                            <property name="subtitle" translatable="yes">Automatically select the first completion proposal when displayed</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.select-first-completion</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksSpin" id="max_completion_rows">
+                            <property name="title" translatable="yes">Maximum Completion Proposals</property>
+                            <property name="subtitle" translatable="yes">The maximum number of completion rows that will be displayed at once</property>
+                            <property name="settings">settings_org_gnome_builder_editor</property>
+                            <property name="key">completion-n-rows</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksPage" id="editor_keyboard_page">
+                    <property name="title" translatable="yes">Keyboard Shortcuts</property>
+                    <property name="icon-name">preferences-desktop-keyboard-shortcuts-symbolic</property>
+                    <child>
+                      <object class="IdeTweaksGroup" id="shortcut_theme_group">
+                        <property name="title" translatable="yes">Keyboard Theme</property>
+                        <child>
+                          <object class="IdeTweaksCombo" id="shortcut_theme_combo">
+                            <property name="title" translatable="yes">Keyboard Theme</property>
+                            <property name="subtitle" translatable="yes">Shortcut themes provide a keyboard experience similar to other IDEs and editors</property>
+                            <property name="settings">settings_org_gnome_builder_editor</property>
+                            <property name="key">keybindings</property>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">Builder</property>
+                                <property name="action-target">'default'</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="editor_keyboard_smart_group">
+                        <property name="title" translatable="yes">Movements</property>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="smart_backspace">
+                            <property name="title" translatable="yes">Smart Backspace</property>
+                            <property name="subtitle" translatable="yes">Backspace will remove extra space to keep you aligned with your indentation</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.smart-backspace</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="smart_home_end">
+                            <property name="title" translatable="yes">Smart Home/End</property>
+                            <property name="subtitle" translatable="yes">Moves to first non-whitespace character before line edges</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.smart-home-end</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksPage" id="editor_session_page">
+                    <property name="title" translatable="yes">Session Management</property>
+                    <property name="icon-name">folder-symbolic</property>
                     <child>
                       <object class="IdeTweaksGroup">
                         <property name="title" translatable="yes">Save &amp; Restore</property>
@@ -259,93 +388,6 @@
                         </child>
                       </object>
                     </child>
-                    <child>
-                      <object class="IdeTweaksGroup">
-                        <property name="title" translatable="yes">Spelling</property>
-                        <child>
-                          <object class="IdeTweaksSwitch">
-                            <property name="title" translatable="yes">Check Spelling</property>
-                            <property name="subtitle" translatable="yes">Underline potential spelling mistakes as you type</property>
-                            <property name="action-name">settings.org.gnome.builder.spelling.check-spelling</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="editor_behavior_keyboard_group">
-                        <property name="title" translatable="yes">Keyboard</property>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="smart_backspace">
-                            <property name="title" translatable="yes">Smart Backspace</property>
-                            <property name="subtitle" translatable="yes">Backspace will remove extra space to keep you aligned with your indentation</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.smart-backspace</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="smart_home_end">
-                            <property name="title" translatable="yes">Smart Home/End</property>
-                            <property name="subtitle" translatable="yes">Moves to first non-whitespace character before line edges</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.smart-home-end</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="editor_completion_general_group">
-                        <property name="title" translatable="yes">Code Completion</property>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="suggest_code_completions">
-                            <property name="title" translatable="yes">Suggest Code Completions</property>
-                            <property name="subtitle" translatable="yes">Automatically suggest code completions while typing</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.interactive-completion</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="select_first_completion">
-                            <property name="title" translatable="yes">Select First Completion Proposal</property>
-                            <property name="subtitle" translatable="yes">Automatically select the first completion proposal when displayed</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.select-first-completion</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup">
-                        <child>
-                          <object class="IdeTweaksSpin" id="max_completion_rows">
-                            <property name="title" translatable="yes">Maximum Completion Proposals</property>
-                            <property name="subtitle" translatable="yes">The maximum number of completion rows that will be displayed at once</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">completion-n-rows</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="editor_selections_group">
-                        <property name="title" translatable="yes">Selections</property>
-                        <child>
-                          <object class="IdeTweaksSpin">
-                            <property name="title" translatable="yes">Minimum Characters to Highlight</property>
-                            <property name="subtitle" translatable="yes">The mininum selection length before highlighting matches</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">min-char-selected</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksGroup" id="editor_snippets_general_group">
-                        <property name="title" translatable="yes">Snippets</property>
-                        <child>
-                          <object class="IdeTweaksSwitch" id="enable_snippets">
-                            <property name="title" translatable="yes">Expand Snippets</property>
-                            <property name="subtitle" translatable="yes">Use “Tab” to expand configured snippets in the editor</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.enable-snippets</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>
@@ -353,28 +395,6 @@
             <child>
               <object class="IdeTweaksSection" id="editor_plugins_section">
                 <property name="title">plugins</property>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child internal-child="shortcuts_page">
-          <object class="IdeTweaksPage">
-            <child internal-child="shorcut_theme_group">
-              <object class="IdeTweaksGroup">
-                <child>
-                  <object class="IdeTweaksCombo" id="shortcut_theme_combo">
-                    <property name="title" translatable="yes">Keyboard Theme</property>
-                    <property name="subtitle" translatable="yes">Shortcut themes provide a keyboard experience similar to other IDEs and editors</property>
-                    <property name="settings">settings_org_gnome_builder_editor</property>
-                    <property name="key">keybindings</property>
-                    <child>
-                      <object class="IdeTweaksChoice">
-                        <property name="title" translatable="yes">Builder</property>
-                        <property name="action-target">'default'</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
               </object>
             </child>
           </object>

@@ -5,11 +5,10 @@
       <object class="IdeTweaksSection">
         <child internal-child="editor_page">
           <object class="IdeTweaksPage">
-            <child internal-child="editor_plugins_section">
+            <child internal-child="editor_page_internal_section">
               <object class="IdeTweaksSection">
-                <child>
-                  <object class="IdeTweaksPage" id="editor_plugins_clang_page">
-                    <property name="title" translatable="yes">Clang</property>
+                <child internal-child="editor_code_completion_page">
+                  <object class="IdeTweaksPage">
                     <child>
                       <object class="IdeTweaksSettings" id="settings_org_gnome_builder_clang">
                         <property name="schema-id">org.gnome.builder.clang</property>
@@ -18,7 +17,7 @@
                     </child>
                     <child>
                       <object class="IdeTweaksGroup">
-                        <property name="title" translatable="yes">Code Completion</property>
+                        <property name="title" translatable="yes">Clang</property>
                         <child>
                           <object class="IdeTweaksSwitch">
                             <property name="title" translatable="yes">Complete Parentheses</property>
