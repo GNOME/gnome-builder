@@ -7,6 +7,12 @@
         <property name="application-only">true</property>
       </object>
     </child>
+    <child>
+      <object class="IdeTweaksSettings">
+        <property name="schema-id">org.gnome.builder.build</property>
+        <property name="application-only">true</property>
+      </object>
+    </child>
     <child internal-child="visual_section">
       <object class="IdeTweaksSection">
         <child internal-child="appearance_page">
@@ -40,6 +46,27 @@
                         <property name="action-target">'drop-down'</property>
                       </object>
                     </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="external_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="network_page">
+            <property name="icon-name">network-transmit-receive-symbolic</property>
+            <property name="title" translatable="yes">Network</property>
+            <child>
+              <object class="IdeTweaksGroup">
+                <child>
+                  <object class="IdeTweaksSwitch">
+                    <property name="title" translatable="yes">Allow Downloads when Metered</property>
+                    <property name="subtitle" translatable="yes">Allow the download of SDKs and dependencies when on metered internet connections</property>
+                    <property name="action-name">settings.org.gnome.builder.build.allow-network-when-metered</property>
                   </object>
                 </child>
               </object>
