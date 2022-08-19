@@ -200,18 +200,42 @@
                     <property name="title" translatable="yes">Behavior</property>
                     <child>
                       <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Save &amp; Restore</property>
                         <child>
                           <object class="IdeTweaksSwitch">
-                            <property name="title" translatable="yes">Restore Cursor Position</property>
-                            <property name="subtitle" translatable="yes">Jump to the last position when re-opening a file</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.restore-insert-mark</property>
+                            <property name="title" translatable="yes">Auto-Save</property>
+                            <property name="subtitle" translatable="yes">Regularly save the document as you type</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.auto-save</property>
                           </object>
                         </child>
+                        <child>
+                          <object class="IdeTweaksSpin">
+                            <property name="title" translatable="yes">Auto-Save Delay</property>
+                            <property name="subtitle" translatable="yes">The delay in seconds to wait before auto-saving the document</property>
+                            <property name="settings">settings_org_gnome_builder_editor</property>
+                            <property name="key">auto-save-timeout</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
                         <child>
                           <object class="IdeTweaksSwitch">
                             <property name="title" translatable="yes">Format on Save</property>
                             <property name="subtitle" translatable="yes">Reformat sources when saving to disk</property>
                             <property name="action-name">settings.org.gnome.builder.format-on-save</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Restore Cursor Position</property>
+                            <property name="subtitle" translatable="yes">Jump to the last position when re-opening a file</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.restore-insert-mark</property>
                           </object>
                         </child>
                       </object>
