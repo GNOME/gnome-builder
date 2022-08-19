@@ -8,6 +8,12 @@
       </object>
     </child>
     <child>
+      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_spelling">
+        <property name="schema-id">org.gnome.builder.spelling</property>
+        <property name="application-only">true</property>
+      </object>
+    </child>
+    <child>
       <object class="IdeTweaksSettings" id="settings_org_gnome_builder_code_insight">
         <property name="schema-id">org.gnome.builder.code-insight</property>
         <property name="application-only">true</property>
@@ -249,6 +255,18 @@
                             <property name="title" translatable="yes">Restore Cursor Position</property>
                             <property name="subtitle" translatable="yes">Jump to the last position when re-opening a file</property>
                             <property name="action-name">settings.org.gnome.builder.editor.restore-insert-mark</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Spelling</property>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Check Spelling</property>
+                            <property name="subtitle" translatable="yes">Underline potential spelling mistakes as you type</property>
+                            <property name="action-name">settings.org.gnome.builder.spelling.check-spelling</property>
                           </object>
                         </child>
                       </object>
