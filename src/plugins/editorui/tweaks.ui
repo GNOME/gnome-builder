@@ -240,7 +240,7 @@
                         <child>
                           <object class="IdeTweaksSpin">
                             <property name="title" translatable="yes">Minimum Characters to Highlight</property>
-                            <property name="subtitle" translatable="yes">The mininum selection length before highlighting matches</property>
+                            <property name="subtitle" translatable="yes">The minimum selection length before highlighting matches</property>
                             <property name="settings">settings_org_gnome_builder_editor</property>
                             <property name="key">min-char-selected</property>
                           </object>
