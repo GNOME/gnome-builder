@@ -35,26 +35,31 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksDirectory, ide_tweaks_directory, IDE, TWEAKS_DIRECTORY, IdeTweaksWidget)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksDirectory *ide_tweaks_directory_new          (void);
+IdeTweaksDirectory *ide_tweaks_directory_new              (void);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_tweaks_directory_get_title    (IdeTweaksDirectory *self);
+const char         *ide_tweaks_directory_get_title        (IdeTweaksDirectory *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_directory_set_title    (IdeTweaksDirectory *self,
-                                                       const char         *title);
+void                ide_tweaks_directory_set_title        (IdeTweaksDirectory *self,
+                                                           const char         *title);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_tweaks_directory_get_subtitle (IdeTweaksDirectory *self);
+const char         *ide_tweaks_directory_get_subtitle     (IdeTweaksDirectory *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_directory_set_subtitle (IdeTweaksDirectory *self,
-                                                       const char         *subtitle);
+void                ide_tweaks_directory_set_subtitle     (IdeTweaksDirectory *self,
+                                                           const char         *subtitle);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_tweaks_directory_get_key      (IdeTweaksDirectory *self);
+const char         *ide_tweaks_directory_get_key          (IdeTweaksDirectory *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_directory_set_key      (IdeTweaksDirectory *self,
-                                                       const char         *key);
+void                ide_tweaks_directory_set_key          (IdeTweaksDirectory *self,
+                                                           const char         *key);
 IDE_AVAILABLE_IN_ALL
-IdeTweaksSettings  *ide_tweaks_directory_get_settings (IdeTweaksDirectory *self);
+IdeTweaksSettings  *ide_tweaks_directory_get_settings     (IdeTweaksDirectory *self);
 IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_directory_set_settings (IdeTweaksDirectory *self,
-                                                       IdeTweaksSettings  *settings);
+void                ide_tweaks_directory_set_settings     (IdeTweaksDirectory *self,
+                                                           IdeTweaksSettings  *settings);
+IDE_AVAILABLE_IN_ALL
+gboolean            ide_tweaks_directory_get_is_directory (IdeTweaksDirectory *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_tweaks_directory_set_is_directory (IdeTweaksDirectory *self,
+                                                           gboolean            is_directory);
 
 G_END_DECLS
