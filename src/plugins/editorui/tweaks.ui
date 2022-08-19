@@ -75,6 +75,20 @@
                             <property name="action-name">settings.org.gnome.builder.editor.show-line-numbers</property>
                           </object>
                         </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_show_relative_lines">
+                            <property name="title" translatable="yes">Use Relative Line Numbers</property>
+                            <property name="subtitle" translatable="yes">Show line numbers relative to the current line</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.show-relative-line-numbers</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch" id="editor_show_diagnostics">
+                            <property name="title" translatable="yes">Show Line Diagnostics</property>
+                            <property name="subtitle" translatable="yes">Display diagnostics next to the line number</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.show-line-diagnostics</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
@@ -156,6 +170,13 @@
                     <property name="title" translatable="yes">Behavior</property>
                     <child>
                       <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Restore Cursor Position</property>
+                            <property name="subtitle" translatable="yes">Jump to the last position when re-opening a file</property>
+                            <property name="action-name">settings.org.gnome.builder.editor.restore-insert-mark</property>
+                          </object>
+                        </child>
                         <child>
                           <object class="IdeTweaksSwitch">
                             <property name="title" translatable="yes">Format on Save</property>
