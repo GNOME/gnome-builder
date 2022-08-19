@@ -336,6 +336,8 @@ ide_layered_settings_set_value (IdeLayeredSettings *self,
   g_return_if_fail (key != NULL);
 
   g_settings_set_value (ide_layered_settings_get_primary_settings (self), key, value);
+
+  ide_layered_settings_cache_key (self, key);
 }
 
 #define DEFINE_GETTER(name, ret_type, func, ...)                        \
