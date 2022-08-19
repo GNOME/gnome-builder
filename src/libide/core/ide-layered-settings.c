@@ -88,7 +88,7 @@ ide_layered_settings_cache_key (IdeLayeredSettings *self,
       if (value != NULL)
         {
           g_settings_set_value (self->memory_settings, key, value);
-          return;
+          goto emit_changed;
         }
     }
 
@@ -96,6 +96,7 @@ ide_layered_settings_cache_key (IdeLayeredSettings *self,
   value = g_settings_get_value (settings, key);
   g_settings_set_value (self->memory_settings, key, value);
 
+emit_changed:
   g_signal_emit (self, signals[CHANGED], g_quark_from_string (key), key);
 }
 
