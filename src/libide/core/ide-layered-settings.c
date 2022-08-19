@@ -477,6 +477,8 @@ ide_layered_settings_bind_with_mapping (IdeLayeredSettings      *self,
                                         GDestroyNotify           destroy)
 {
   static const GSettingsBindFlags default_flags = G_SETTINGS_BIND_GET|G_SETTINGS_BIND_SET;
+  GDestroyNotify get_destroy = destroy;
+  GDestroyNotify set_destroy = destroy;
 
   g_return_if_fail (IDE_IS_LAYERED_SETTINGS (self));
   g_return_if_fail (key != NULL);
@@ -487,6 +489,14 @@ ide_layered_settings_bind_with_mapping (IdeLayeredSettings      *self,
   if ((flags & default_flags) == 0)
     flags |= default_flags;
 
+  /* Ensure @destroy is only called once, on the longer living
+   * setting binding (potential for longer living that is).
+   */
+  if ((flags & G_SETTINGS_BIND_SET) != 0)
+    get_destroy = NULL;
+  else
+    set_destroy = NULL;
+
   /*
    * Our memory backend/settings are compiling the values from all of the
    * layers. Therefore, we only want to map reads from the memory backend. We
@@ -495,13 +505,13 @@ ide_layered_settings_bind_with_mapping (IdeLayeredSettings      *self,
   if ((flags & G_SETTINGS_BIND_GET) != 0)
     g_settings_bind_with_mapping (self->memory_settings, key, object, property,
                                   (flags & ~G_SETTINGS_BIND_SET),
-                                  get_mapping, set_mapping, user_data, destroy);
+                                  get_mapping, NULL, user_data, get_destroy);
 
-  /* We bind writability directly to our toplevel layer */
+  /* We bind writability directly to our toplevel layer. */
   if ((flags & G_SETTINGS_BIND_SET) != 0)
     g_settings_bind_with_mapping (ide_layered_settings_get_primary_settings (self),
                                   key, object, property, (flags & ~G_SETTINGS_BIND_GET),
-                                  get_mapping, set_mapping, user_data, destroy);
+                                  NULL, set_mapping, user_data, set_destroy);
 
   /* Get initial value in case our memory settings doesn't have it */
   if ((flags & G_SETTINGS_BIND_GET) != 0)
