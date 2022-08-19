@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="visual_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="editor_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="editor_plugins_section">
+              <object class="IdeTweaksSection">
+                <child>
+                  <object class="IdeTweaksPage" id="editor_plugins_ctags_page">
+                    <property name="title" translatable="yes">CTags</property>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Code Completion</property>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">CTags Proposals</property>
+                            <property name="subtitle" translatable="yes">Use CTags to suggest code completion proposals</property>
+                            <property name="action-name">settings.org.gnome.builder.code-insight.ctags-autocompletion</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksDirectory">
+                            <property name="is-directory">false</property>
+                            <property name="title" translatable="yes">CTags Path</property>
+                            <property name="subtitle" translatable="yes">The path to the ctags executable</property>
+                            <property name="settings">settings_org_gnome_builder_code_insight</property>
+                            <property name="key">ctags-path</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

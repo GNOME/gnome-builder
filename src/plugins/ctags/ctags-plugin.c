@@ -28,6 +28,7 @@
 #include <libide-sourceview.h>
 #include <libide-io.h>
 
+#include "gbp-ctags-tweaks-addin.h"
 #include "gbp-ctags-workbench-addin.h"
 #include "ide-ctags-builder.h"
 #include "ide-ctags-completion-item.h"
@@ -51,6 +52,9 @@ _ide_ctags_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_CTAGS_WORKBENCH_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_CTAGS_TWEAKS_ADDIN);
 
   ide_g_file_add_ignored_pattern ("tags.??????");
 }

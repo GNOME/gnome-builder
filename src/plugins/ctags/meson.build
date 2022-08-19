@@ -14,6 +14,7 @@ plugins_sources += files([
   'ide-ctags-symbol-tree.c',
   'ide-ctags-util.c',
   'ide-tags-builder.c',
+  'gbp-ctags-tweaks-addin.c',
   'gbp-ctags-workbench-addin.c',
 ])
 
