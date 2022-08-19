@@ -92,6 +92,36 @@
                       </object>
                     </child>
                     <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksCombo">
+                            <property name="title" translatable="yes">Wrap Text</property>
+                            <property name="subtitle" translatable="yes">How text should be wrapped when wider than the frame</property>
+                            <property name="settings">settings_org_gnome_builder_editor</property>
+                            <property name="key">wrap-text</property>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">Never</property>
+                                <property name="action-target">'never'</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">At Spaces</property>
+                                <property name="action-target">'whitespace'</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">Anywhere</property>
+                                <property name="action-target">'always'</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="IdeTweaksGroup" id="editor_page_highlight_group">
                         <child>
                           <object class="IdeTweaksSwitch" id="editor_highlight_line">
