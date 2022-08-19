@@ -36,6 +36,7 @@ _ide_tweaks_init (void)
   g_type_ensure (IDE_TYPE_TWEAKS_ADDIN);
   g_type_ensure (IDE_TYPE_TWEAKS_CHOICE);
   g_type_ensure (IDE_TYPE_TWEAKS_COMBO);
+  g_type_ensure (IDE_TYPE_TWEAKS_DIRECTORY);
   g_type_ensure (IDE_TYPE_TWEAKS_FACTORY);
   g_type_ensure (IDE_TYPE_TWEAKS_FONT);
   g_type_ensure (IDE_TYPE_TWEAKS_GROUP);

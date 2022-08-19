@@ -12,6 +12,7 @@ libide_tweaks_public_headers = [
   'ide-tweaks-addin.h',
   'ide-tweaks-choice.h',
   'ide-tweaks-combo.h',
+  'ide-tweaks-directory.h',
   'ide-tweaks-factory.h',
   'ide-tweaks-font.h',
   'ide-tweaks-group.h',
@@ -38,6 +39,7 @@ libide_tweaks_public_sources = [
   'ide-tweaks-addin.c',
   'ide-tweaks-choice.c',
   'ide-tweaks-combo.c',
+  'ide-tweaks-directory.c',
   'ide-tweaks-factory.c',
   'ide-tweaks-font.c',
   'ide-tweaks-group.c',
@@ -82,6 +84,7 @@ libide_tweaks_deps = [
   libadwaita_dep,
 
   libide_core_dep,
+  libide_io_dep,
 ]
 
 #
