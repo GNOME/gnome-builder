@@ -28,6 +28,7 @@
 
 #include "gbp-project-tree-addin.h"
 #include "gbp-project-tree-frame-addin.h"
+#include "gbp-project-tree-tweaks-addin.h"
 #include "gbp-project-tree-workspace-addin.h"
 
 void
@@ -39,6 +40,9 @@ _gbp_project_tree_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_FRAME_ADDIN,
                                               GBP_TYPE_PROJECT_TREE_FRAME_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_PROJECT_TREE_TWEAKS_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
                                               GBP_TYPE_PROJECT_TREE_WORKSPACE_ADDIN);

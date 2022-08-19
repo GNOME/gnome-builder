@@ -5,6 +5,7 @@ plugins_sources += files([
   'gbp-project-tree-frame-addin.c',
   'gbp-project-tree-pane.c',
   'gbp-project-tree-pane-actions.c',
+  'gbp-project-tree-tweaks-addin.c',
   'gbp-project-tree-workspace-addin.c',
   'gbp-new-file-popover.c',
   'gbp-rename-file-popover.c',

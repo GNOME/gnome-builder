@@ -2,6 +2,7 @@
 Authors=Christian Hergert <christian@hergert.me>
 Builtin=true
 Copyright=Copyright © 2014-2018 Christian Hergert
+Depends=projectui;editorui;
 Description=Builder's project creation wizard
 Embedded=_gbp_project_tree_register_types
 Hidden=true
