@@ -100,7 +100,7 @@ gbp_find_other_file_browser_reload (GbpFindOtherFileBrowser *self)
              (g_file_has_prefix (parent, self->root) ||
               g_file_equal (parent, self->root)))
         {
-          g_ptr_array_insert (self->items, 0, parent);
+          g_ptr_array_add (self->items, parent);
           parent = g_file_get_parent (parent);
         }
 

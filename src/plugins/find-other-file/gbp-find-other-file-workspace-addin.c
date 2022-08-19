@@ -115,7 +115,7 @@ gbp_find_other_file_workspace_addin_list_similar_cb (GObject      *object,
   g_assert (GBP_IS_FIND_OTHER_FILE_BROWSER (self->browser));
   g_assert (G_IS_LIST_MODEL (model));
 
-  joined = join_models (G_LIST_MODEL (self->browser), model);
+  joined = join_models (model, G_LIST_MODEL (self->browser));
   gbp_find_other_file_popover_set_model (self->popover, joined);
   gtk_widget_show (GTK_WIDGET (self->menu_button));
 
