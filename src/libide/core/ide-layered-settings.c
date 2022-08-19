@@ -387,12 +387,22 @@ DEFINE_SETTER (uint,    guint,         new_uint32)
 
 void
 ide_layered_settings_append (IdeLayeredSettings *self,
-                              GSettings           *settings)
+                             GSettings          *settings)
 {
+  g_auto(GStrv) keys = NULL;
+
   g_return_if_fail (IDE_IS_LAYERED_SETTINGS (self));
   g_return_if_fail (G_IS_SETTINGS (settings));
 
   g_ptr_array_add (self->settings, g_object_ref (settings));
+
+  /* Query all keys to ensure we get change notifications */
+  keys = ide_layered_settings_list_keys (self);
+  for (guint i = 0; keys[i]; i++)
+    {
+      GVariant *value = g_settings_get_value (settings, keys[i]);
+      g_variant_unref (value);
+    }
 
   g_signal_connect_object (settings,
                            "changed",
