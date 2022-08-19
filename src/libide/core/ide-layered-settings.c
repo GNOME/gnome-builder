@@ -35,7 +35,6 @@ struct _IdeLayeredSettings
 {
   GObject           parent_instance;
   GPtrArray        *settings;
-  GSettingsBackend *memory_backend;
   GSettings        *memory_settings;
   char             *schema_id;
   char             *path;
@@ -57,6 +56,7 @@ enum {
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+static GSettingsBackend *memory_backend;
 
 static GSettings *
 ide_layered_settings_get_primary_settings (IdeLayeredSettings *self)
@@ -143,7 +143,7 @@ ide_layered_settings_constructed (GObject *object)
   g_assert (self->path != NULL);
 
   self->memory_settings = g_settings_new_with_backend_and_path (self->schema_id,
-                                                                self->memory_backend,
+                                                                memory_backend,
                                                                 self->path);
 
   G_OBJECT_CLASS (ide_layered_settings_parent_class)->constructed (object);
@@ -157,7 +157,6 @@ ide_layered_settings_finalize (GObject *object)
   g_clear_pointer (&self->settings, g_ptr_array_unref);
   g_clear_pointer (&self->schema_id, g_free);
   g_clear_pointer (&self->path, g_free);
-  g_clear_object (&self->memory_backend);
 
   G_OBJECT_CLASS (ide_layered_settings_parent_class)->finalize (object);
 }
@@ -249,8 +248,10 @@ ide_layered_settings_class_init (IdeLayeredSettingsClass *klass)
 static void
 ide_layered_settings_init (IdeLayeredSettings *self)
 {
+  if G_UNLIKELY (memory_backend == NULL)
+    memory_backend = g_memory_settings_backend_new ();
+
   self->settings = g_ptr_array_new_with_free_func (g_object_unref);
-  self->memory_backend = g_memory_settings_backend_new ();
 }
 
 IdeLayeredSettings *
@@ -535,7 +536,7 @@ ide_layered_settings_unbind (IdeLayeredSettings *self,
   g_return_if_fail (property != NULL);
 
   g_settings_unbind (ide_layered_settings_get_primary_settings (self), property);
-  g_settings_unbind (self->memory_backend, property);
+  g_settings_unbind (memory_backend, property);
 }
 
 /**
