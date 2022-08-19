@@ -278,15 +278,82 @@ ide_tweaks_settings_bind (IdeTweaksSettings  *self,
                           const char         *property,
                           GSettingsBindFlags  bind_flags)
 {
-  g_autoptr(IdeSettings) settings = NULL;
-  IdeTweaksItem *root;
-
   g_return_if_fail (IDE_IS_TWEAKS_SETTINGS (self));
   g_return_if_fail (key != NULL);
   g_return_if_fail (G_IS_OBJECT (instance));
   g_return_if_fail (property != NULL);
 
+  ide_tweaks_settings_bind_with_mapping (self, key, instance, property, bind_flags,
+                                         NULL, NULL, NULL, NULL);
+}
+
+/**
+ * ide_tweaks_settings_bind_with_mapping: (skip)
+ * @self: a #IdeTweaksSettings
+ * @key: the key
+ * @instance: the instance to bind to
+ * @property: the property of @instance
+ * @bind_flags: the flags for binding
+ * @get_mapping: a function that gets called to convert values
+ *    from @settings to @object, or %NULL to use the default GIO mapping
+ * @set_mapping: a function that gets called to convert values
+ *    from @object to @settings, or %NULL to use the default GIO mapping
+ * @user_data: data that gets passed to @get_mapping and @set_mapping
+ * @destroy: #GDestroyNotify function for @user_data
+ *
+ */
+void
+ide_tweaks_settings_bind_with_mapping (IdeTweaksSettings       *self,
+                                       const char              *key,
+                                       gpointer                 instance,
+                                       const char              *property,
+                                       GSettingsBindFlags       bind_flags,
+                                       GSettingsBindGetMapping  get_mapping,
+                                       GSettingsBindSetMapping  set_mapping,
+                                       gpointer                 user_data,
+                                       GDestroyNotify           destroy)
+{
+  g_autoptr(IdeSettings) settings = NULL;
+  IdeTweaksItem *root;
+
+  g_return_if_fail (IDE_IS_TWEAKS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+
   root = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (self), IDE_TYPE_TWEAKS);
   settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self, IDE_TWEAKS (root)));
-  ide_settings_bind (settings, key, instance, property, bind_flags);
+  ide_settings_bind_with_mapping (settings, key, instance, property, bind_flags,
+                                  get_mapping, set_mapping, user_data, destroy);
+}
+
+char *
+ide_tweaks_settings_get_string (IdeTweaksSettings *self,
+                                const char        *key)
+{
+  g_autoptr(IdeSettings) settings = NULL;
+  IdeTweaksItem *root;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_SETTINGS (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  root = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (self), IDE_TYPE_TWEAKS);
+  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self, IDE_TWEAKS (root)));
+
+  return ide_settings_get_string (settings, key);
+}
+
+void
+ide_tweaks_settings_set_string (IdeTweaksSettings *self,
+                                const char        *key,
+                                const char        *value)
+{
+  g_autoptr(IdeSettings) settings = NULL;
+  IdeTweaksItem *root;
+
+  g_return_if_fail (IDE_IS_TWEAKS_SETTINGS (self));
+  g_return_if_fail (key != NULL);
+
+  root = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (self), IDE_TYPE_TWEAKS);
+  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self, IDE_TWEAKS (root)));
+
+  ide_settings_set_string (settings, key, value);
 }
