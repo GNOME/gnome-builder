@@ -55,11 +55,15 @@ ide_application_actions_tweaks (GSimpleAction *action,
   IdeTweaksPage *plugins_page;
   const GList *windows;
   GtkWindow *toplevel = NULL;
+  const char *page = NULL;
 
   IDE_ENTRY;
 
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_APPLICATION (self));
+
+  if (parameter && g_variant_is_of_type (parameter, G_VARIANT_TYPE_STRING))
+    page = g_variant_get_string (parameter, NULL);
 
   /* Locate a toplevel for a transient-for property, or a previous
    * tweaks window to display.
@@ -95,76 +99,23 @@ ide_application_actions_tweaks (GSimpleAction *action,
   plugins_page = IDE_TWEAKS_PAGE (ide_tweaks_get_object (tweaks, "plugins_page"));
   _ide_application_add_plugin_tweaks (self, plugins_page);
 
-  /* Now display window */
+  /* Prepare window and setup :application */
   window = g_object_new (IDE_TYPE_TWEAKS_WINDOW,
                          "tweaks", tweaks,
                          NULL);
   gtk_application_add_window (GTK_APPLICATION (self), GTK_WINDOW (window));
-  gtk_window_present (GTK_WINDOW (window));
 
-  IDE_EXIT;
-}
-
-static void
-ide_application_actions_preferences (GSimpleAction *action,
-                                     GVariant      *parameter,
-                                     gpointer       user_data)
-{
-  IdeApplication *self = user_data;
-  const char *page = NULL;
-  IdeContext *context = NULL;
-  GtkWindow *toplevel = NULL;
-  GtkWindow *window;
-  GList *windows;
-
-  IDE_ENTRY;
-
-  g_assert (G_IS_SIMPLE_ACTION (action));
-  g_assert (IDE_IS_APPLICATION (self));
-
-  if (parameter != NULL &&
-      g_variant_is_of_type (parameter, G_VARIANT_TYPE_STRING))
-    page = g_variant_get_string (parameter, NULL);
-
-  /* Locate a toplevel for a transient-for property, or a previous
-   * preferences window to display.
-   */
-  windows = gtk_application_get_windows (GTK_APPLICATION (self));
-  for (; windows != NULL; windows = windows->next)
+  /* Switch pages before we display if necessary */
+  if (page != NULL)
     {
-      GtkWindow *win = windows->data;
+      GObject *object;
 
-      if (IDE_IS_PREFERENCES_WINDOW (win))
-        {
-          ide_gtk_window_present (win);
-          return;
-        }
-
-      if (toplevel == NULL && IDE_IS_PRIMARY_WORKSPACE (win))
-        toplevel = win;
+      if ((object = ide_tweaks_get_object (tweaks, page)) && IDE_IS_TWEAKS_ITEM (object))
+        ide_tweaks_window_navigate_to (window, IDE_TWEAKS_ITEM (object));
     }
 
-  /* We want to make a context available if necessary */
-  if (IDE_IS_WORKSPACE (toplevel))
-    context = ide_workspace_get_context (IDE_WORKSPACE (toplevel));
-
-  /* Create a new window for preferences, with enough space for
-   * 2 columns of preferences. The window manager will automatically
-   * maximize the window if necessary.
-   */
-  window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
-                         "context", context,
-                         "mode", IDE_PREFERENCES_MODE_APPLICATION,
-                         "transient-for", toplevel,
-                         "default-width", 1080,
-                         "default-height", 720,
-                         "title", _("Builder — Preferences"),
-                         NULL);
-  gtk_application_add_window (GTK_APPLICATION (self), window);
-  ide_gtk_window_present (window);
-
-  if (page != NULL)
-    ide_preferences_window_set_page (IDE_PREFERENCES_WINDOW (window), page);
+  /* Now we can display */
+  gtk_window_present (GTK_WINDOW (window));
 
   IDE_EXIT;
 }
@@ -452,9 +403,8 @@ static const GActionEntry IdeApplicationActions[] = {
   { "about:types", ide_application_actions_stats },
   { "about", ide_application_actions_about },
   { "load-project", ide_application_actions_load_project, "s"},
-  { "preferences", ide_application_actions_preferences },
-  { "preferences-page", ide_application_actions_preferences, "s" },
-  { "tweaks", ide_application_actions_tweaks },
+  { "preferences", ide_application_actions_tweaks },
+  { "preferences-page", ide_application_actions_tweaks, "s" },
   { "quit", ide_application_actions_quit },
   { "help", ide_application_actions_help },
   { "dark", ide_application_actions_dark },
