@@ -72,6 +72,8 @@ src/libide/gui/tests/test-preferences.c
 src/libide/gui/tweaks.ui
 src/libide/io/ide-pkcon-transfer.c
 src/libide/lsp/ide-lsp-client.c
+src/libide/plugins/ide-plugin.c
+src/libide/plugins/ide-plugin-view.ui
 src/libide/projects/ide-project.c
 src/libide/projects/ide-projects-global.c
 src/libide/projects/xml-reader.c
@@ -84,6 +86,7 @@ src/libide/terminal/ide-terminal-page.ui
 src/libide/terminal/ide-terminal-popover.ui
 src/libide/terminal/ide-terminal-search.ui
 src/libide/tree/ide-tree-node.c
+src/libide/tweaks/ide-tweaks-directory.c
 src/libide/tweaks/ide-tweaks-font.c
 src/libide/tweaks/ide-tweaks-window.ui
 src/libide/vcs/ide-directory-vcs.c
@@ -120,6 +123,7 @@ src/plugins/cargo/gbp-cargo-run-command-provider.c
 src/plugins/clang/ide-clang-preferences-addin.c
 src/plugins/clang/ide-clang-symbol-node.c
 src/plugins/clang/org.gnome.builder.clang.gschema.xml
+src/plugins/clang/tweaks.ui
 src/plugins/cmake/gbp-cmake-build-system.c
 src/plugins/cmake/gbp-cmake-pipeline-addin.c
 src/plugins/cmake/gbp-cmake-toolchain.c
@@ -147,13 +151,15 @@ src/plugins/color-picker/gtk/color-picker.ui
 src/plugins/color-picker/gtk/menus.ui
 src/plugins/comment-code/gtk/menus.ui
 src/plugins/copyright/gbp-copyright-preferences-addin.c
-src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml
+src/plugins/copyright/org.gnome.builder.copyright.gschema.xml
+src/plugins/copyright/tweaks.ui
 src/plugins/create-project/gbp-create-project-application-addin.c
 src/plugins/create-project/gbp-create-project-widget.c
 src/plugins/create-project/gbp-create-project-widget.ui
 src/plugins/create-project/gbp-create-project-workspace-addin.c
 src/plugins/create-project/gtk/menus.ui
 src/plugins/ctags/ide-ctags-service.c
+src/plugins/ctags/tweaks.ui
 src/plugins/debuggerui/gtk/menus.ui
 src/plugins/debuggerui/ide-debugger-breakpoints-view.ui
 src/plugins/debuggerui/ide-debugger-controls.ui
@@ -165,6 +171,7 @@ src/plugins/debuggerui/ide-debugger-locals-view.ui
 src/plugins/debuggerui/ide-debugger-registers-view.ui
 src/plugins/debuggerui/ide-debugger-threads-view.ui
 src/plugins/debuggerui/ide-debugger-workspace-addin.c
+src/plugins/debuggerui/tweaks.ui
 src/plugins/deviced/gnome-builder-deviced.c
 src/plugins/dspy/gbp-dspy-application-addin.c
 src/plugins/dspy/gbp-dspy-workspace.ui
@@ -176,6 +183,7 @@ src/plugins/editorui/gbp-editorui-preferences-addin.c
 src/plugins/editorui/gbp-editorui-tweaks-addin.c
 src/plugins/editorui/gbp-editorui-workspace-addin.c
 src/plugins/editorui/gtk/menus.ui
+src/plugins/editorui/tweaks-language.ui
 src/plugins/editorui/tweaks.ui
 src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c
 src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c
@@ -250,6 +258,7 @@ src/plugins/project-tree/gbp-project-tree-workspace-addin.c
 src/plugins/project-tree/gbp-rename-file-popover.c
 src/plugins/project-tree/gbp-rename-file-popover.ui
 src/plugins/project-tree/gtk/menus.ui
+src/plugins/project-tree/tweaks.ui
 src/plugins/projectui/tweaks.ui
 src/plugins/qemu/gbp-qemu-device-provider.c
 src/plugins/quick-highlight/gbp-quick-highlight-preferences.c
@@ -258,13 +267,16 @@ src/plugins/recent/gbp-recent-section.ui
 src/plugins/retab/gtk/menus.ui
 src/plugins/rust-analyzer/org.gnome.builder.rust-analyzer.gschema.xml
 src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c
+src/plugins/rust-analyzer/tweaks.ui
 src/plugins/shellcmd/gbp-shellcmd-command-dialog.c
 src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui
 src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c
 src/plugins/shellcmd/gbp-shellcmd-search-result.c
 src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c
+src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c
 src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml
 src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml
+src/plugins/shellcmd/tweaks.ui
 src/plugins/spellcheck/editor-enchant-spell-provider.c
 src/plugins/spellcheck/editor-spell-menu.c
 src/plugins/spellcheck/gbp-spell-preferences-addin.c
@@ -276,6 +288,7 @@ src/plugins/symbol-tree/gbp-symbol-workspace-addin.c
 src/plugins/symbol-tree/gtk/menus.ui
 src/plugins/sysprof/gbp-sysprof-workbench-addin.c
 src/plugins/sysprof/gtk/menus.ui
+src/plugins/sysprof/tweaks.ui
 src/plugins/sysroot/gbp-sysroot-preferences-addin.c
 src/plugins/sysroot/gbp-sysroot-preferences-row.ui
 src/plugins/sysroot/gbp-sysroot-toolchain-provider.c
@@ -298,6 +311,7 @@ src/plugins/update-dependencies/gtk/menus.ui
 src/plugins/update-manager/gbp-update-manager-app-addin.c
 src/plugins/valgrind/gtk/menus.ui
 src/plugins/valgrind/org.gnome.builder.valgrind.gschema.xml
+src/plugins/valgrind/tweaks.ui
 src/plugins/vcsui/gbp-vcsui-application-addin.c
 src/plugins/vcsui/gbp-vcsui-clone-page.c
 src/plugins/vcsui/gbp-vcsui-clone-page.ui
@@ -305,6 +319,7 @@ src/plugins/vcsui/gbp-vcsui-switcher-popover.ui
 src/plugins/vcsui/gbp-vcsui-workspace-addin.c
 src/plugins/vcsui/gtk/menus.ui
 src/plugins/vim/gbp-vim-preferences-addin.c
+src/plugins/vim/tweaks.ui
 src/plugins/waf/gbp-waf-pipeline-addin.c
 src/plugins/web-browser/gtk/menus.ui
 src/plugins/xml-pack/ide-xml-parser.c
