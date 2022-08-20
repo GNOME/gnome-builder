@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child>
+      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_sysprof">
+        <property name="schema-id">org.gnome.builder.sysprof</property>
+        <property name="application-only">true</property>
+      </object>
+    </child>
+    <child internal-child="foundry_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="build_page">
+          <object class="IdeTweaksPage">
+            <child>
+              <object class="IdeTweaksPage" id="build_sysprof_page">
+                <property name="icon-name">builder-profiler-symbolic</property>
+                <property name="title" translatable="yes">Profiler</property>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <property name="title" translatable="yes">Instruments</property>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">CPU Usage</property>
+                        <property name="subtitle" translatable="yes">Records CPU usage and CPU frequency statistics</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.cpu-aid</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Sample Callstacks</property>
+                        <property name="subtitle" translatable="yes">Record stacktraces on a regular interval and build a callgraph</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.perf-aid</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksCombo">
+                        <property name="title" translatable="yes">CPU Governor</property>
+                        <property name="subtitle" translatable="yes">Force performance mode while profiling</property>
+                        <property name="settings">settings_org_gnome_builder_sysprof</property>
+                        <property name="key">allow-throttle</property>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Don't Change Governer</property>
+                            <property name="action-target">true</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title" translatable="yes">Force Performance Mode</property>
+                            <property name="action-target">false</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Memory Usage</property>
+                        <property name="subtitle" translatable="yes">Simple memory statistics about the process such as total memory used</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.memory-aid</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Memory Profiling</property>
+                        <property name="subtitle" translatable="yes">Record stacktraces of memory allocations and releases</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.memprof-aid</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Energy Usage</property>
+                        <property name="subtitle" translatable="yes">Record statistics about energy usage using RAPL</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.energy-aid</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Battery Usage</property>
+                        <property name="subtitle" translatable="yes">Record statistics about battery charge and discharge rates</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.battery-aid</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Network Usage</property>
+                        <property name="subtitle" translatable="yes">Record statistics about network usage</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.netdev-aid</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Disk Usage</property>
+                        <property name="subtitle" translatable="yes">Record statistics about battery charge and discharge rates</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.diskstat-aid</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">GNOME Shell Performance</property>
+                        <property name="subtitle" translatable="yes">Collect performance and timing information from GNOME Shell</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.compositor-aid</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <property name="title" translatable="yes">Integration</property>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">JavaScript</property>
+                        <property name="subtitle" translatable="yes">Collect infomration from GJS-based applications</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.gjs-aid</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Application Tracing</property>
+                        <property name="subtitle" translatable="yes">Provide TRACE_FD environment variable for applications to deliver custom events</property>
+                        <property name="action-name">settings.org.gnome.builder.sysprof.allow-tracefd</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -23,6 +23,7 @@ plugins_sources += files([
   'sysprof-plugin.c',
   'gbp-sysprof-page.c',
   'gbp-sysprof-tool.c',
+  'gbp-sysprof-tweaks-addin.c',
   'gbp-sysprof-workbench-addin.c',
 ])
 

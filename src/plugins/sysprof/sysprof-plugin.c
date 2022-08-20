@@ -28,6 +28,7 @@
 #include <libide-gui.h>
 
 #include "gbp-sysprof-tool.h"
+#include "gbp-sysprof-tweaks-addin.h"
 #include "gbp-sysprof-workbench-addin.h"
 
 _IDE_EXTERN void
@@ -38,6 +39,9 @@ _gbp_sysprof_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUN_TOOL,
                                               GBP_TYPE_SYSPROF_TOOL);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_SYSPROF_TWEAKS_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_SYSPROF_WORKBENCH_ADDIN);
