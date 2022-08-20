@@ -2,6 +2,7 @@
 Authors=Christian Hergert <chergert@redhat.com>
 Builtin=true
 Copyright=Copyright © 2020 Christian Hergert
+Depends=editorui;
 Description=Update copyright when files are saved
 Embedded=_gbp_copyright_register_types
 Module=copyright_plugin

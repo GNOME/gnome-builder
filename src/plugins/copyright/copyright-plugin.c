@@ -26,14 +26,18 @@
 
 #include "gbp-copyright-buffer-addin.h"
 #include "gbp-copyright-preferences-addin.h"
+#include "gbp-copyright-tweaks-addin.h"
 
 _IDE_EXTERN void
 _gbp_copyright_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_BUFFER_ADDIN,
+                                              GBP_TYPE_COPYRIGHT_BUFFER_ADDIN);
+  peas_object_module_register_extension_type (module,
                                               IDE_TYPE_PREFERENCES_ADDIN,
                                               GBP_TYPE_COPYRIGHT_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_BUFFER_ADDIN,
-                                              GBP_TYPE_COPYRIGHT_BUFFER_ADDIN);
+                                              IDE_TYPE_TWEAKS_ADDIN,
+                                              GBP_TYPE_COPYRIGHT_TWEAKS_ADDIN);
 }
