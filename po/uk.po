@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-19 19:56+0000\n"
-"PO-Revision-Date: 2022-08-19 23:02+0300\n"
+"POT-Creation-Date: 2022-08-20 05:30+0000\n"
+"PO-Revision-Date: 2022-08-20 08:34+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -173,7 +173,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Використання мінікарти для повнішого перегляду вмісту файла"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:40
+#: src/plugins/buildui/tweaks.ui:44
 msgid "Build Parallelism"
 msgstr "Паралельне збирання"
 
@@ -1509,6 +1509,7 @@ msgstr ""
 #: src/libide/gui/ide-preferences-builtin.c:707
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
+#: src/plugins/buildui/tweaks.ui:19
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
@@ -1868,7 +1869,7 @@ msgstr "Ставити пробіл перед крапкою з комою"
 
 #: src/libide/gui/ide-preferences-builtin.c:382
 #: src/libide/gui/ide-preferences-builtin.c:400
-#: src/plugins/buildui/tweaks.ui:46
+#: src/plugins/buildui/tweaks.ui:50
 msgid "Default"
 msgstr "Типовий"
 
@@ -1879,7 +1880,6 @@ msgstr "Кількість процесорів"
 
 #: src/libide/gui/ide-preferences-builtin.c:420
 #: src/libide/gui/ide-preferences-builtin.c:654
-#: src/plugins/buildui/tweaks.ui:15
 msgid "Build"
 msgstr "Зібрати"
 
@@ -2136,7 +2136,7 @@ msgid "Automatically insert a breakpoint at the start of the application"
 msgstr "Автоматично вставляти точку зупинення на початку програми"
 
 #: src/libide/gui/ide-preferences-builtin.c:745
-#: src/plugins/buildui/tweaks.ui:28
+#: src/plugins/buildui/tweaks.ui:32
 msgid "Clear Build Logs"
 msgstr "Спорожняти журнал збирання"
 
@@ -2145,12 +2145,12 @@ msgid "Upon rebuilding the project the build log will be cleared"
 msgstr "Перед повторним збиранням проєкту журнал збирання буде спорожнено"
 
 #: src/libide/gui/ide-preferences-builtin.c:750
-#: src/plugins/buildui/tweaks.ui:21
+#: src/plugins/buildui/tweaks.ui:25
 msgid "Clear Expired Artifacts"
 msgstr "Вилучити застарілі дані"
 
 #: src/libide/gui/ide-preferences-builtin.c:751
-#: src/plugins/buildui/tweaks.ui:22
+#: src/plugins/buildui/tweaks.ui:26
 msgid "Artifacts which have expired will be deleted when Builder is started"
 msgstr "Застарілі дані буде вилучено під час запуску «Будівника»"
 
@@ -3165,70 +3165,75 @@ msgstr "Навігація за допомогою накладки"
 msgid "Switch documents using a popover"
 msgstr "Перемикання документів за допомогою накладки"
 
-#: src/plugins/buildui/tweaks.ui:18 src/plugins/terminal/tweaks.ui:66
+#: src/plugins/buildui/tweaks.ui:15
+#| msgid "Build and Run"
+msgid "Build & Run"
+msgstr "Зібрати і запустити"
+
+#: src/plugins/buildui/tweaks.ui:22 src/plugins/terminal/tweaks.ui:66
 msgid "History"
 msgstr "Журнал"
 
-#: src/plugins/buildui/tweaks.ui:29
+#: src/plugins/buildui/tweaks.ui:33
 msgid "Clear the build log history when a new build begins"
 msgstr "Спорожняти журнал збирання, якщо розпочинається нове збирання"
 
-#: src/plugins/buildui/tweaks.ui:37
+#: src/plugins/buildui/tweaks.ui:41
 msgid "Workers"
 msgstr "Обробники"
 
-#: src/plugins/buildui/tweaks.ui:41
+#: src/plugins/buildui/tweaks.ui:45
 msgid "Number of workers to use when performing builds"
 msgstr "Кількість обробників, які слід використовувати для виконання збирання"
 
-#: src/plugins/buildui/tweaks.ui:52
+#: src/plugins/buildui/tweaks.ui:56
 msgid "1 per CPU"
 msgstr "1 на процесор"
 
-#: src/plugins/buildui/tweaks.ui:58
+#: src/plugins/buildui/tweaks.ui:62
 msgid "1"
 msgstr "1"
 
-#: src/plugins/buildui/tweaks.ui:64 src/plugins/editorui/gtk/menus.ui:15
+#: src/plugins/buildui/tweaks.ui:68 src/plugins/editorui/gtk/menus.ui:15
 #: src/plugins/editorui/gtk/menus.ui:51
 msgid "2"
 msgstr "2"
 
-#: src/plugins/buildui/tweaks.ui:70 src/plugins/editorui/gtk/menus.ui:25
+#: src/plugins/buildui/tweaks.ui:74 src/plugins/editorui/gtk/menus.ui:25
 #: src/plugins/editorui/gtk/menus.ui:61
 msgid "4"
 msgstr "4"
 
-#: src/plugins/buildui/tweaks.ui:76
+#: src/plugins/buildui/tweaks.ui:80
 msgid "6"
 msgstr "6"
 
-#: src/plugins/buildui/tweaks.ui:82 src/plugins/editorui/gtk/menus.ui:35
+#: src/plugins/buildui/tweaks.ui:86 src/plugins/editorui/gtk/menus.ui:35
 #: src/plugins/editorui/gtk/menus.ui:71
 msgid "8"
 msgstr "8"
 
-#: src/plugins/buildui/tweaks.ui:88
+#: src/plugins/buildui/tweaks.ui:92
 msgid "16"
 msgstr "16"
 
-#: src/plugins/buildui/tweaks.ui:94
+#: src/plugins/buildui/tweaks.ui:98
 msgid "32"
 msgstr "32"
 
-#: src/plugins/buildui/tweaks.ui:100
+#: src/plugins/buildui/tweaks.ui:104
 msgid "64"
 msgstr "64"
 
-#: src/plugins/buildui/tweaks.ui:106
+#: src/plugins/buildui/tweaks.ui:110
 msgid "128"
 msgstr "128"
 
-#: src/plugins/buildui/tweaks.ui:112
+#: src/plugins/buildui/tweaks.ui:116
 msgid "256"
 msgstr "256"
 
-#: src/plugins/buildui/tweaks.ui:118
+#: src/plugins/buildui/tweaks.ui:122
 msgid "512"
 msgstr "512"
 
@@ -4370,7 +4375,6 @@ msgid "Grid Lines"
 msgstr "Лінії сітки"
 
 #: src/plugins/editorui/tweaks.ui:138
-#| msgid "Scrollback"
 msgid "Scrollbars"
 msgstr "Смужки гортання"
 
@@ -4395,7 +4399,6 @@ msgid "Automatic"
 msgstr "Автоматично"
 
 #: src/plugins/editorui/tweaks.ui:169
-#| msgid "Line numbers"
 msgid "Line Numbers"
 msgstr "Номери рядків"
 
@@ -4412,7 +4415,6 @@ msgid "Show line numbers relative to the current line"
 msgstr "Показувати номери рядків відносного поточного рядка"
 
 #: src/plugins/editorui/tweaks.ui:186
-#| msgid "Show Line Diagnostics"
 msgid "Show Diagnostics"
 msgstr "Показувати діагностику"
 
@@ -4421,7 +4423,6 @@ msgid "Display diagnostics next to the line number"
 msgstr "Показувати діагностику поряд із номером рядка"
 
 #: src/plugins/editorui/tweaks.ui:195
-#| msgid "Semantic Highlighting"
 msgid "Syntax Highlighting"
 msgstr "Підсвічування синтаксису"
 
@@ -4455,7 +4456,8 @@ msgid "Minimum Characters to Highlight"
 msgstr "Мінімальна кількість символів для підсвічування"
 
 #: src/plugins/editorui/tweaks.ui:243
-msgid "The mininum selection length before highlighting matches"
+#| msgid "The mininum selection length before highlighting matches"
+msgid "The minimum selection length before highlighting matches"
 msgstr "Мінімальна довжина позначення, перш ніж буде підсвічено відповідники"
 
 #: src/plugins/editorui/tweaks.ui:266
@@ -4463,12 +4465,10 @@ msgid "Code Completion"
 msgstr "Доповнення коду"
 
 #: src/plugins/editorui/tweaks.ui:267
-#| msgid "panel-left-symbolic"
 msgid "lang-function-symbolic"
 msgstr "lang-function-symbolic"
 
 #: src/plugins/editorui/tweaks.ui:270
-#| msgid "Maximum Completion Proposals"
 msgid "Completion Proposals"
 msgstr "Пропозиції доповнення"
 
@@ -4518,7 +4518,6 @@ msgstr ""
 "Перехід до першого символу, який не є пропуском, у напрямку до країв рядка"
 
 #: src/plugins/editorui/tweaks.ui:347
-#| msgid "Palette management"
 msgid "Session Management"
 msgstr "Керування сеансами"
 
@@ -7023,9 +7022,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Workbench shortcuts"
 #~ msgstr "Скорочення майстерні"
-
-#~ msgid "Build and Run"
-#~ msgstr "Зібрати і запустити"
 
 #~ msgid "Process quit unexpectedly"
 #~ msgstr "Неочікуване завершення роботи процесу"
