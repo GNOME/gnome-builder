@@ -2,6 +2,7 @@
 Authors=Günther Wagner <info@gunibert.de>
 Builtin=true
 Copyright=Copyright © 2020 Günther Wagner
+Depends=buildui;
 Description=Provides integration with the rust-analyzer language server
 Module=rust-analyzer
 Embedded=_rust_analyzer_register_types

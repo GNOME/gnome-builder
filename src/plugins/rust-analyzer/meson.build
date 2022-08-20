@@ -14,6 +14,7 @@ plugins_sources += files([
   'rust-analyzer-search-provider.c',
   'rust-analyzer-service.c',
   'rust-analyzer-symbol-resolver.c',
+  'rust-analyzer-tweaks-addin.c',
 ])
 
 plugin_rust_analyzer_resources = gnome.compile_resources(

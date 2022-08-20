@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/rust-analyzer">
     <file>rust-analyzer.plugin</file>
+    <file preprocess="xml-stripblanks">tweaks.ui</file>
   </gresource>
 </gresources>
