@@ -40,7 +40,7 @@
                         <property name="key">allow-throttle</property>
                         <child>
                           <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">Don't Change Governer</property>
+                            <property name="title" translatable="yes">Don't Change Governor</property>
                             <property name="action-target">true</property>
                           </object>
                         </child>
@@ -125,7 +125,7 @@
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">JavaScript</property>
-                        <property name="subtitle" translatable="yes">Collect infomration from GJS-based applications</property>
+                        <property name="subtitle" translatable="yes">Collect information from GJS-based applications</property>
                         <property name="action-name">settings.org.gnome.builder.sysprof.gjs-aid</property>
                       </object>
                     </child>
