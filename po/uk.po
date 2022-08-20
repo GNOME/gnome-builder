@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-20 05:30+0000\n"
-"PO-Revision-Date: 2022-08-20 08:34+0300\n"
+"POT-Creation-Date: 2022-08-20 12:29+0000\n"
+"PO-Revision-Date: 2022-08-20 21:57+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -626,6 +626,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Яке середовище слід використати для виконання перевірки модулів"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/tweaks.ui:19
 msgid "Show Icons"
 msgstr "Показувати піктограми"
 
@@ -634,6 +635,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Цей параметр вважається застарілим і більше не використовується."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/tweaks.ui:26
 msgid "Show Ignored Files"
 msgstr "Показувати нехтувані файли"
 
@@ -645,6 +647,7 @@ msgstr ""
 "системою керування версіями."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/tweaks.ui:33
 msgid "Sort Directories First"
 msgstr "Впорядковувати спочатку каталоги"
 
@@ -772,6 +775,7 @@ msgstr "Параметри"
 #: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
 #: src/libide/gui/ide-preferences-builtin.c:700
+#: src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:303
 msgid "Keyboard Shortcuts"
@@ -831,6 +835,7 @@ msgstr "Зберегти"
 #: src/libide/editor/ide-editor-page.c:874
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
+#: src/libide/tweaks/ide-tweaks-directory.c:127
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
@@ -1212,6 +1217,7 @@ msgid "Open"
 msgstr "Відкрити"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
+#: src/libide/tweaks/ide-tweaks-directory.c:128
 #: src/plugins/create-project/gbp-create-project-widget.c:222
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
@@ -1272,6 +1278,7 @@ msgstr "%u з %u"
 
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
 #: src/libide/gui/ide-preferences-builtin.c:694
+#: src/libide/plugins/ide-plugin.c:351
 msgid "Search"
 msgstr "Пошук"
 
@@ -1635,6 +1642,8 @@ msgstr "Видимі пробіли"
 #: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/tweaks-language.ui:68
+#: src/plugins/editorui/tweaks-language.ui:158
 msgid "Spaces"
 msgstr "Пробіли"
 
@@ -1701,6 +1710,7 @@ msgstr ""
 #: src/libide/gui/ide-preferences-builtin.c:219
 #: src/libide/gui/ide-preferences-builtin.c:681
 #: src/libide/gui/ide-preferences-builtin.c:687
+#: src/libide/plugins/ide-plugin.c:344
 msgid "Diagnostics"
 msgstr "Діагностика"
 
@@ -1733,6 +1743,7 @@ msgid "Snippets"
 msgstr "Фрагменти"
 
 #: src/libide/gui/ide-preferences-builtin.c:280
+#: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
 msgstr "Мови програмування"
 
@@ -1752,6 +1763,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
+#: src/plugins/editorui/tweaks-language.ui:142
 msgid "Overwrite Braces"
 msgstr "Перезаписувати дужки"
 
@@ -1762,6 +1774,7 @@ msgstr "Перезаписувати завершальні дужки"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
+#: src/plugins/editorui/tweaks-language.ui:149
 msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
@@ -1771,11 +1784,13 @@ msgstr "Вставляти завершальні символи для блок
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
+#: src/plugins/editorui/tweaks-language.ui:76
 msgid "Insert Trailing Newline"
 msgstr "Вставляти кінцевий символ нового рядка"
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
+#: src/plugins/editorui/tweaks-language.ui:77
 msgid "Ensure files end with a newline"
 msgstr "Забезпечувати завершення файлів символом нового рядка"
 
@@ -1926,6 +1941,7 @@ msgstr ""
 #: src/libide/gui/ide-preferences-builtin.c:655
 #: src/plugins/debuggerui/gtk/menus.ui:21
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/tweaks.ui:10
 msgid "Debugger"
 msgstr "Засіб діагностики"
 
@@ -1933,6 +1949,7 @@ msgstr "Засіб діагностики"
 #: src/libide/gui/ide-preferences-builtin.c:705
 #: src/plugins/debuggerui/gtk/menus.ui:23
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/tweaks.ui:19
 msgid "Breakpoints"
 msgstr "Точки зупинки"
 
@@ -1972,6 +1989,7 @@ msgstr "Відкривати раніше відкриті файли під ч�
 
 #: src/libide/gui/ide-preferences-builtin.c:571
 #: src/libide/gui/ide-preferences-builtin.c:683
+#: src/libide/plugins/ide-plugin.c:340
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:111
 #: src/plugins/create-project/gbp-create-project-widget.ui:115
 #: src/plugins/git/gbp-git-preferences-addin.c:184
@@ -2003,11 +2021,13 @@ msgstr "Натхнення"
 
 #: src/libide/gui/ide-preferences-builtin.c:656
 #: src/libide/gui/ide-preferences-builtin.c:667
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:12
 msgid "Commands"
 msgstr "Команди"
 
 #: src/libide/gui/ide-preferences-builtin.c:657
 #: src/libide/gui/ide-preferences-builtin.c:684
+#: src/libide/plugins/ide-plugin.c:341
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2041,51 +2061,63 @@ msgid "Formatting"
 msgstr "Форматування"
 
 #: src/libide/gui/ide-preferences-builtin.c:685
+#: src/libide/plugins/ide-plugin.c:342
 msgid "Language Servers"
 msgstr "Сервери мов"
 
 #: src/libide/gui/ide-preferences-builtin.c:686
+#: src/libide/plugins/ide-plugin.c:343
 msgid "Devices & Simulators"
 msgstr "Пристрої та симулятори"
 
 #: src/libide/gui/ide-preferences-builtin.c:688
+#: src/libide/plugins/ide-plugin.c:345
 msgid "Build Systems"
 msgstr "Системи збирання"
 
 #: src/libide/gui/ide-preferences-builtin.c:689
+#: src/libide/plugins/ide-plugin.c:346
 msgid "Compilers"
 msgstr "Компілятори"
 
 #: src/libide/gui/ide-preferences-builtin.c:690
+#: src/libide/plugins/ide-plugin.c:347
 msgid "Debuggers"
 msgstr "Засоби діагностики"
 
 #: src/libide/gui/ide-preferences-builtin.c:691
 #: src/libide/gui/ide-preferences-builtin.c:703
+#: src/libide/plugins/ide-plugin.c:348
 msgid "Templates"
 msgstr "Шаблони"
 
 #: src/libide/gui/ide-preferences-builtin.c:692
+#: src/libide/plugins/ide-plugin.c:349
 msgid "Editing & Formatting"
 msgstr "Редагування і форматування"
 
 #: src/libide/gui/ide-preferences-builtin.c:695
+#: src/libide/plugins/ide-plugin.c:352
 msgid "Web"
 msgstr "Інтернет"
 
 #: src/libide/gui/ide-preferences-builtin.c:696
+#: src/libide/plugins/ide-plugin.c:353
 msgid "Language Enablement"
 msgstr "Вмикання перекладів"
 
 #: src/libide/gui/ide-preferences-builtin.c:697
+#: src/libide/plugins/ide-plugin.c:354
 msgid "Desktop Integration"
 msgstr "Інтеграція до стільниці"
 
 #: src/libide/gui/ide-preferences-builtin.c:698
+#: src/libide/plugins/ide-plugin.c:355
 msgid "Additional"
 msgstr "Додатково"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
+#: src/plugins/editorui/tweaks-language.ui:139
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Behavior"
 msgstr "Поведінка"
@@ -2128,10 +2160,12 @@ msgid "The default license when creating new projects"
 msgstr "Типові умови ліцензування при створенні проєктів"
 
 #: src/libide/gui/ide-preferences-builtin.c:740
+#: src/plugins/debuggerui/tweaks.ui:22
 msgid "Stop After Launching Program"
 msgstr "Зупинятися після запуску програми"
 
 #: src/libide/gui/ide-preferences-builtin.c:741
+#: src/plugins/debuggerui/tweaks.ui:23
 msgid "Automatically insert a breakpoint at the start of the application"
 msgstr "Автоматично вставляти точку зупинення на початку програми"
 
@@ -2268,6 +2302,21 @@ msgstr[3] "Встановлюємо %u пакунок"
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Не вдалося ініціалізувати сервер мови: %s"
+
+#: src/libide/plugins/ide-plugin-view.ui:35
+#| msgid "Author"
+msgid "Authors"
+msgstr "Автори"
+
+#: src/libide/plugins/ide-plugin-view.ui:66
+#| msgid "Session"
+msgid "Version"
+msgstr "Версія"
+
+#: src/libide/plugins/ide-plugin-view.ui:97
+#| msgid "Websafe"
+msgid "Website"
+msgstr "Сайт"
 
 #: src/libide/projects/ide-project.c:198
 msgid "Destination file must be within the project tree."
@@ -2442,6 +2491,11 @@ msgstr "(Порожньо)"
 #: src/libide/tree/ide-tree-node.c:1468
 msgid "Loading…"
 msgstr "Завантаження…"
+
+#: src/libide/tweaks/ide-tweaks-directory.c:124
+#| msgid "Projects directory"
+msgid "Projects Directory"
+msgstr "Каталог проєктів"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:36
 msgid "All Preferences"
@@ -3166,7 +3220,6 @@ msgid "Switch documents using a popover"
 msgstr "Перемикання документів за допомогою накладки"
 
 #: src/plugins/buildui/tweaks.ui:15
-#| msgid "Build and Run"
 msgid "Build & Run"
 msgstr "Зібрати і запустити"
 
@@ -3251,6 +3304,7 @@ msgid "Cargo Run"
 msgstr "Запустити Cargo"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:42
+#: src/plugins/clang/tweaks.ui:20
 msgid "Clang"
 msgstr "Clang"
 
@@ -3285,6 +3339,7 @@ msgid "Include parenthesis when completing clang proposals"
 msgstr "Додавати круглу дужку у записах пропозицій clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:66
+#: src/plugins/clang/tweaks.ui:30
 msgid "Complete Parameters"
 msgstr "Доповнювати параметри"
 
@@ -3315,6 +3370,23 @@ msgid ""
 msgstr ""
 "Визначає, чи слід включати параметри до доповнення. Потребує ключа complete-"
 "parentheses."
+
+#: src/plugins/clang/tweaks.ui:23
+#| msgid "Complete Parenthesis"
+msgid "Complete Parentheses"
+msgstr "Доповнювати дужки"
+
+#: src/plugins/clang/tweaks.ui:24
+#| msgid "Include parenthesis when completing clang proposals"
+msgid "Include parentheses when completing clang proposals"
+msgstr "Додавати круглі дужки у записах пропозицій clang"
+
+#: src/plugins/clang/tweaks.ui:31
+#| msgid "Include parameters and types when completing clang proposals"
+msgid ""
+"Include parameters and type information when completing clang proposals"
+msgstr ""
+"Включати параметри і дані типів при формуванні пропозицій доповнення clang"
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3835,6 +3907,7 @@ msgid "Unco_mment code"
 msgstr "_Розкоментувати код"
 
 #: src/plugins/copyright/gbp-copyright-preferences-addin.c:43
+#: src/plugins/copyright/tweaks.ui:22
 msgid "Update Copyright"
 msgstr "Оновлення авторських прав"
 
@@ -3843,13 +3916,18 @@ msgid "Automatically update copyright headers when saving a file"
 msgstr ""
 "Автоматично оновлювати заголовки щодо авторських прав при збереженні файла"
 
-#: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
+#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
 msgstr "Оновити авторські права до зберігання"
 
-#: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:6
+#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
 msgstr "Оновлює авторські права користувача до зберігання на диск."
+
+#: src/plugins/copyright/tweaks.ui:23
+#| msgid "Automatically update copyright headers when saving a file"
+msgid "Update copyright headers when saving documents"
+msgstr "Оновлювати заголовки щодо авторських прав при збереженні документів"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
@@ -3945,6 +4023,30 @@ msgstr ""
 #: src/plugins/ctags/ide-ctags-service.c:953
 msgid "Indexing Source Code (Paused)"
 msgstr "Індексування початкового коду (призупинено)"
+
+#: src/plugins/ctags/tweaks.ui:14
+#| msgid "Tags"
+msgid "CTags"
+msgstr "CTags"
+
+#: src/plugins/ctags/tweaks.ui:17
+#| msgid "Suggest Code Completions"
+msgid "Suggest Completions"
+msgstr "Пропонувати доповнення"
+
+#: src/plugins/ctags/tweaks.ui:18
+#| msgid "Use registered snippets to suggest completion proposals"
+msgid "Use CTags to suggest code completion proposals"
+msgstr "Використовувати CTags для пропозицій завершення коду"
+
+#: src/plugins/ctags/tweaks.ui:29
+msgid "CTags Path"
+msgstr "Шлях CTags"
+
+#: src/plugins/ctags/tweaks.ui:30
+#| msgid "Path to ctags executable"
+msgid "The path to the ctags executable"
+msgstr "Шлях до виконуваного файла ctags"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 msgid "Run with Debugger"
@@ -4101,6 +4203,26 @@ msgstr "Регістри"
 msgid "Console"
 msgstr "Консоль"
 
+#: src/plugins/debuggerui/tweaks.ui:29
+#| msgid "Stop running"
+msgid "Stop at Warnings"
+msgstr "Зупиняти на попередженнях"
+
+#: src/plugins/debuggerui/tweaks.ui:30
+#| msgid "Automatically insert a breakpoint at the start of the application"
+msgid "Automatically insert a breakpoint on warning logs"
+msgstr "Автоматично вставляти точку зупинення на попередженнях журналу"
+
+#: src/plugins/debuggerui/tweaks.ui:36
+#| msgid "Automatically Break at Criticals"
+msgid "Stop at Criticals"
+msgstr "Зупинятися на критичних"
+
+#: src/plugins/debuggerui/tweaks.ui:37
+#| msgid "Automatically insert a breakpoint at the start of the application"
+msgid "Automatically insert a breakpoint on critical logs"
+msgstr "Автоматично вставляти точку зупинення на критичних записах журналу."
+
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
 msgstr "Адреса пристрою"
@@ -4216,6 +4338,7 @@ msgid "Trim Trailing Whitespace"
 msgstr "Обрізати кінцевий пробіл"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
+#: src/plugins/editorui/tweaks-language.ui:84
 msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
 msgstr "При зберіганні програма обрізатиме кінцеві пробіли зі змінених рядків"
 
@@ -4283,6 +4406,7 @@ msgid "5"
 msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
+#: src/plugins/editorui/tweaks-language.ui:109
 msgid "Indentation Size"
 msgstr "Розмір відступу"
 
@@ -4329,6 +4453,89 @@ msgstr "Надрукувати…"
 #: src/plugins/editorui/gtk/menus.ui:186
 msgid "Format Selection"
 msgstr "Форматувати позначене"
+
+#: src/plugins/editorui/tweaks-language.ui:53
+#| msgid "Editing & Formatting"
+msgid "Indentation & Formatting"
+msgstr "Відступи і форматування"
+
+#: src/plugins/editorui/tweaks-language.ui:56
+#| msgid "Tab Bar"
+msgid "Tab Character"
+msgstr "Символ табуляції"
+
+#: src/plugins/editorui/tweaks-language.ui:57
+msgid "The character to be inserted for Tab"
+msgstr "Символ, який слід вставити для Tab"
+
+#: src/plugins/editorui/tweaks-language.ui:62
+#| msgid "Tabs"
+msgid "Tab"
+msgstr "Tab"
+
+#: src/plugins/editorui/tweaks-language.ui:83
+msgid "Trim Trailing Space"
+msgstr "Обрізати кінцевий пробіл"
+
+#: src/plugins/editorui/tweaks-language.ui:94
+#| msgid "Automatically Indent"
+msgid "Auto Indent"
+msgstr "Автовідступ"
+
+#: src/plugins/editorui/tweaks-language.ui:95
+#| msgid "Indent source code as you type"
+msgid "Automatically indent source code as you type"
+msgstr "Автоматичний відступ у коді під час введення"
+
+#: src/plugins/editorui/tweaks-language.ui:101
+#| msgid "Size"
+msgid "Tab Size"
+msgstr "Розмір табуляції"
+
+#: src/plugins/editorui/tweaks-language.ui:102
+msgid "The number of characters to indent for Tab"
+msgstr "Кількість символів для відступу у відповідь на Tab"
+
+#: src/plugins/editorui/tweaks-language.ui:110
+msgid "The number of characters to indent, or -1 to use tab size"
+msgstr ""
+"Кількість символів відступу або -1, якщо слід використати розмір табуляції"
+
+#: src/plugins/editorui/tweaks-language.ui:119
+#| msgid "Margins"
+msgid "Margin"
+msgstr "Поле"
+
+#: src/plugins/editorui/tweaks-language.ui:122
+#| msgid "Show right margin"
+msgid "Show Right Margin"
+msgstr "Показувати праве поле"
+
+#: src/plugins/editorui/tweaks-language.ui:123
+#| msgid "Display a margin in the editor to indicate maximum desired width"
+msgid "Display a margin in the editor to indicate maximium desired width"
+msgstr ""
+"Показувати поле у редакторі для позначення максимальної бажаної ширини"
+
+#: src/plugins/editorui/tweaks-language.ui:129
+#| msgid "Right margin position"
+msgid "Right Margin Position"
+msgstr "Позиція правого поля"
+
+#: src/plugins/editorui/tweaks-language.ui:130
+msgid "The desired maximum line length"
+msgstr "Бажана максимальна довжина рядка"
+
+#: src/plugins/editorui/tweaks-language.ui:143
+msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
+msgstr "Перезаписувати завершальні квадратні, фігурні та круглі дужки і лапки"
+
+#: src/plugins/editorui/tweaks-language.ui:150
+msgid ""
+"Insert matching character for braces, brackets, parenthesis, and quotes"
+msgstr ""
+"Вставляти відповідні символи для квадратних, фігурних та круглих дужок, а "
+"також лапок"
 
 #: src/plugins/editorui/tweaks.ui:28
 msgid "Color"
@@ -4456,7 +4663,6 @@ msgid "Minimum Characters to Highlight"
 msgstr "Мінімальна кількість символів для підсвічування"
 
 #: src/plugins/editorui/tweaks.ui:243
-#| msgid "The mininum selection length before highlighting matches"
 msgid "The minimum selection length before highlighting matches"
 msgstr "Мінімальна довжина позначення, перш ніж буде підсвічено відповідники"
 
@@ -5413,6 +5619,7 @@ msgid "Files will be copied in a moment"
 msgstr "Невдовзі файли буде скопійовано"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
+#: src/plugins/project-tree/tweaks.ui:16
 msgid "Project Tree"
 msgstr "Ієрархія проєкту"
 
@@ -5472,6 +5679,19 @@ msgstr "Розкрити в ієрархії проєкту"
 #: src/plugins/project-tree/gtk/menus.ui:102
 msgid "Reveal in Project _Tree"
 msgstr "Розкрити в і_єрархії проєкту"
+
+#: src/plugins/project-tree/tweaks.ui:20
+#| msgid "Destination file must be within the project tree."
+msgid "Display icons next to files within the project tree"
+msgstr "Показувати піктограми поряд із файлами у дереві проєкту"
+
+#: src/plugins/project-tree/tweaks.ui:27
+msgid "Show files which are typically ignored"
+msgstr "Показувати файли, які типово буде проігноровано"
+
+#: src/plugins/project-tree/tweaks.ui:34
+msgid "Sort directories before files in the same directory"
+msgstr "Показувати каталоги перед файлами у тому самому каталозі"
 
 #: src/plugins/projectui/tweaks.ui:23
 msgid "Project Creation"
@@ -5542,6 +5762,7 @@ msgid "_Reformat tabs"
 msgstr "Пере_форматування табуляцій"
 
 #: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:37
+#: src/plugins/rust-analyzer/tweaks.ui:17
 msgid "Rust Analyzer"
 msgstr "Rust Analyzer"
 
@@ -5561,6 +5782,20 @@ msgstr "Clippy з Cargo"
 msgid "Run “cargo clippy” as the default cargo command"
 msgstr "Запустити «cargo clippy» як типову команду cargo"
 
+#: src/plugins/rust-analyzer/tweaks.ui:20
+#| msgid "Cargo Run"
+msgid "Cargo"
+msgstr "Cargo"
+
+#: src/plugins/rust-analyzer/tweaks.ui:23
+#| msgid "Create Command"
+msgid "Cargo Command"
+msgstr "Команда cargo"
+
+#: src/plugins/rust-analyzer/tweaks.ui:24
+msgid "The default cargo command to run with rust-analyzer"
+msgstr "Типова команда cargo, яку слід запускати з rust-analyzer"
+
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
 msgid "Untitled Command"
 msgstr "Команда без назви"
@@ -5575,6 +5810,7 @@ msgstr "Виберіть робочий каталог"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
 msgid "Create Command"
 msgstr "Створити команду"
 
@@ -5680,6 +5916,7 @@ msgid "Shared Commands"
 msgstr "Спільні команди"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:159
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:92
 msgid "Commands can be used to build, run, or modify your projects"
 msgstr ""
 "Командами можна скористатися для збирання і запуску проєктів або внесення "
@@ -5698,6 +5935,11 @@ msgstr ""
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
 msgid "Untitled command"
 msgstr "Команда без назви"
+
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
+#| msgid "These commands may be shared across any project in Builder."
+msgid "These commands are shared across all projects."
+msgstr "Ці команди є спільними для усіх проєктів."
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
@@ -5801,7 +6043,7 @@ msgstr "Запустити з Profiler"
 msgid "Run the project with profiler"
 msgstr "Запустити з проєкт із засобом профілювання"
 
-#: src/plugins/sysprof/gtk/menus.ui:30
+#: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:17
 msgid "Profiler"
 msgstr "Profiler"
 
@@ -5833,11 +6075,11 @@ msgstr "Показати часові параметри"
 msgid "Counters"
 msgstr "Лічильники"
 
-#: src/plugins/sysprof/gtk/menus.ui:60
+#: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:23
 msgid "CPU Usage"
 msgstr "Вжиток процесора"
 
-#: src/plugins/sysprof/gtk/menus.ui:65
+#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:61
 msgid "Memory Usage"
 msgstr "Використання пам'яті"
 
@@ -5876,6 +6118,126 @@ msgstr "Зап_устити з Profiler"
 #: src/plugins/sysprof/gtk/menus.ui:128
 msgid "Record Again…"
 msgstr "Записати ще раз…"
+
+#: src/plugins/sysprof/tweaks.ui:20
+#| msgid "Arguments"
+msgid "Instruments"
+msgstr "Інструменти"
+
+#: src/plugins/sysprof/tweaks.ui:24
+msgid "Records CPU usage and CPU frequency statistics"
+msgstr ""
+"Записує дані щодо використання процесора і статистику частоти процесора"
+
+#: src/plugins/sysprof/tweaks.ui:30
+#| msgid "Sample JavaScript Stacks"
+msgid "Sample Callstacks"
+msgstr "Вибірка стосів викликів"
+
+#: src/plugins/sysprof/tweaks.ui:31
+msgid "Record stacktraces on a regular interval and build a callgraph"
+msgstr ""
+"Записувати трасування стеку з регулярним інтервалом і будувати граф викликів"
+
+#: src/plugins/sysprof/tweaks.ui:37
+msgid "CPU Governor"
+msgstr "Керування процесором"
+
+#: src/plugins/sysprof/tweaks.ui:38
+msgid "Force performance mode while profiling"
+msgstr "Примусовий режим швидкодії під час профілювання"
+
+#: src/plugins/sysprof/tweaks.ui:43
+msgid "Don't Change Governer"
+msgstr "Не змінювати керування"
+
+#: src/plugins/sysprof/tweaks.ui:49
+#| msgid "CPU Performance"
+msgid "Force Performance Mode"
+msgstr "Примусовий режим швидкодії"
+
+#: src/plugins/sysprof/tweaks.ui:62
+msgid "Simple memory statistics about the process such as total memory used"
+msgstr ""
+"Проста статистика щодо використання пам'яті для процесу, зокрема загальний"
+" використаний об'єм"
+
+#: src/plugins/sysprof/tweaks.ui:68
+msgid "Memory Profiling"
+msgstr "Профілювання пам'яті"
+
+#: src/plugins/sysprof/tweaks.ui:69
+msgid "Record stacktraces of memory allocations and releases"
+msgstr ""
+"Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
+
+#: src/plugins/sysprof/tweaks.ui:79
+#| msgid "Memory Usage"
+msgid "Energy Usage"
+msgstr "Споживання енергії"
+
+#: src/plugins/sysprof/tweaks.ui:80
+msgid "Record statistics about energy usage using RAPL"
+msgstr "Записувати статистику щодо енергоспоживання за допомогою RAPL"
+
+#: src/plugins/sysprof/tweaks.ui:86
+#| msgid "Battery Charge"
+msgid "Battery Usage"
+msgstr "Використання акумулятора"
+
+#: src/plugins/sysprof/tweaks.ui:87 src/plugins/sysprof/tweaks.ui:105
+msgid "Record statistics about battery charge and discharge rates"
+msgstr "Записувати статистику щодо швидкості заряджання і розряджання батареї"
+
+#: src/plugins/sysprof/tweaks.ui:97
+#| msgid "Memory Usage"
+msgid "Network Usage"
+msgstr "Використання мережі"
+
+#: src/plugins/sysprof/tweaks.ui:98
+msgid "Record statistics about network usage"
+msgstr "Записувати статистику щодо використання мережі"
+
+#: src/plugins/sysprof/tweaks.ui:104
+#| msgid "CPU Usage"
+msgid "Disk Usage"
+msgstr "Використання диска"
+
+#: src/plugins/sysprof/tweaks.ui:115
+#| msgid "CPU Performance"
+msgid "GNOME Shell Performance"
+msgstr "Швидкодія GNOME Shell"
+
+#: src/plugins/sysprof/tweaks.ui:116
+msgid "Collect performance and timing information from GNOME Shell"
+msgstr "Збирати дані щодо швидкодії і часу від GNOME Shell"
+
+#: src/plugins/sysprof/tweaks.ui:124
+#| msgid "Desktop Integration"
+msgid "Integration"
+msgstr "Інтеграція"
+
+#: src/plugins/sysprof/tweaks.ui:127
+#| msgid "Allow JavaScript"
+msgid "JavaScript"
+msgstr "JavaScript"
+
+#: src/plugins/sysprof/tweaks.ui:128
+msgid "Collect infomration from GJS-based applications"
+msgstr "Збирати відомості від заснованих на GJS програм"
+
+#: src/plugins/sysprof/tweaks.ui:134
+#| msgid "Application"
+msgid "Application Tracing"
+msgstr "Трасування програми"
+
+#: src/plugins/sysprof/tweaks.ui:135
+msgid ""
+"Provide TRACE_FD environment variable for applications to deliver custom "
+"events"
+msgstr ""
+"Надати змінну середовища TRACE_FD для програм для повідомлень про нетипові"
+" події"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
 msgid "Add sysroot"
@@ -6217,7 +6579,7 @@ msgstr "Запустити із засобом виявлення витоків
 msgid "Run the project with valgrind"
 msgstr "Запустити проєкт з valgrind"
 
-#: src/plugins/valgrind/gtk/menus.ui:21
+#: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:17
 msgid "Leak Detector"
 msgstr "Детектор витоків"
 
@@ -6241,25 +6603,60 @@ msgstr "Повне"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: src/plugins/valgrind/gtk/menus.ui:51
+#: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:20
 msgid "Leak Kinds"
 msgstr "Типи витоків"
 
-#: src/plugins/valgrind/gtk/menus.ui:53
+#: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:23
 msgid "Definite"
 msgstr "Визначений"
 
-#: src/plugins/valgrind/gtk/menus.ui:58
+#: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:37
 msgid "Indirect"
 msgstr "Опосередкований"
 
-#: src/plugins/valgrind/gtk/menus.ui:63
+#: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:30
 msgid "Possible"
 msgstr "Можливий"
 
-#: src/plugins/valgrind/gtk/menus.ui:68
+#: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:44
 msgid "Reachable"
 msgstr "Досяжний"
+
+#: src/plugins/valgrind/tweaks.ui:24
+msgid "Include definite leaks in report summary"
+msgstr "Включати визначені витоки до звіту-резюме"
+
+#: src/plugins/valgrind/tweaks.ui:31
+msgid "Include possible leaks in report summary"
+msgstr "Включати можливі витоки до звіту-резюме"
+
+#: src/plugins/valgrind/tweaks.ui:38
+msgid "Include indirect leaks in report summary"
+msgstr "Включати опосередковані витоки до звіту-резюме"
+
+#: src/plugins/valgrind/tweaks.ui:45
+msgid "Include reachable leaks in report summary"
+msgstr "Включати досяжні витоки до звіту-резюме"
+
+#: src/plugins/valgrind/tweaks.ui:55
+#| msgid "Track Origin of Leaks"
+msgid "Track Origins"
+msgstr "Стежити за походженням"
+
+#: src/plugins/valgrind/tweaks.ui:56
+#| msgid "Show modified lines"
+msgid "Show origin of undefined values"
+msgstr "Показувати походження невизначених значень"
+
+#: src/plugins/valgrind/tweaks.ui:66
+#| msgid "Cargo Check"
+msgid "Leak Check"
+msgstr "Перевірка на витоки"
+
+#: src/plugins/valgrind/tweaks.ui:67
+msgid "Search for memory leaks at exit"
+msgstr "Шукати витоки пам'яті при виході"
 
 #: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
 msgid "Begin cloning project from URI"
@@ -6320,7 +6717,7 @@ msgstr "Пере_мкнутись на гілку"
 msgid "_Push to origin"
 msgstr "З_аписати до сховища"
 
-#: src/plugins/vim/gbp-vim-preferences-addin.c:38
+#: src/plugins/vim/gbp-vim-preferences-addin.c:38 src/plugins/vim/tweaks.ui:18
 msgid "Vim"
 msgstr "Vim"
 
@@ -6350,26 +6747,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~| msgid "Select First Completion"
 #~ msgid "Select First Proposal"
 #~ msgstr "Вибирати першу пропозицію"
-
-#~| msgid "Trim Trailing Whitespace"
-#~ msgid "Trim Trailing Space"
-#~ msgstr "Обрізати кінцевий пробіл"
-
-#~| msgid ""
-#~| "Use cursor position to highlight matching brackets, braces, parenthesis, "
-#~| "and more"
-#~ msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
-#~ msgstr ""
-#~ "Перезаписувати завершальні квадратні, фігурні та круглі дужки і лапки"
-
-#~| msgid ""
-#~| "Use cursor position to highlight matching brackets, braces, parenthesis, "
-#~| "and more"
-#~ msgid ""
-#~ "Insert matching character for braces, brackets, parenthesis, and quotes"
-#~ msgstr ""
-#~ "Вставляти відповідні символи для квадратних, фігурних та круглих дужок, а "
-#~ "також лапок"
 
 #~| msgid "Completion"
 #~ msgid "Auto-Completion"
@@ -6854,9 +7231,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Build Targets"
 #~ msgstr "Цілі збирання"
 
-#~ msgid "Tags"
-#~ msgstr "Мітки"
-
 #, c-format
 #~ msgid "%s <b>%s</b>"
 #~ msgstr "%s <b>%s</b>"
@@ -7331,9 +7705,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Connected to “%s”"
 #~ msgstr "З'єднано з «%s»"
 
-#~ msgid "Session"
-#~ msgstr "Сеанс"
-
 #~ msgid "Other"
 #~ msgstr "Інше"
 
@@ -7746,10 +8117,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Suggest Completions from Snippets"
 #~ msgstr "Пропозиції завершення для фрагментів"
-
-#~ msgid "Use registered snippets to suggest completion proposals"
-#~ msgstr ""
-#~ "Використання зареєстрованих фрагментів для пропозицій завершення коду"
 
 #~ msgid "Show the spellchecker panel"
 #~ msgstr "Показати панель перевірки правопису"
