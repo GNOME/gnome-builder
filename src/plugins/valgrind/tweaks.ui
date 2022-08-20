@@ -14,7 +14,7 @@
             <child>
               <object class="IdeTweaksPage" id="build_valgrind_page">
                 <property name="icon-name">system-run-symbolic</property>
-                <property name="title" translatable="yes">Valgrind</property>
+                <property name="title" translatable="yes">Leak Detector</property>
                 <child>
                   <object class="IdeTweaksGroup">
                     <property name="title" translatable="yes">Leak Kinds</property>
