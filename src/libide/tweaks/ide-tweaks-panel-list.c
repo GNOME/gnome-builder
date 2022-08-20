@@ -388,6 +388,32 @@ ide_tweaks_panel_list_select_first (IdeTweaksPanelList *self)
     }
 }
 
+void
+ide_tweaks_panel_list_select_item (IdeTweaksPanelList *self,
+                                   IdeTweaksItem      *item)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PANEL_LIST (self));
+  g_return_if_fail (IDE_IS_TWEAKS_ITEM (item));
+
+  for (GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self->list_box));
+       child != NULL;
+       child = gtk_widget_get_next_sibling (child))
+    {
+      IdeTweaksPanelListRow *row;
+
+      if (!IDE_IS_TWEAKS_PANEL_LIST_ROW (child))
+        continue;
+
+      row = IDE_TWEAKS_PANEL_LIST_ROW (child);
+
+      if (item == ide_tweaks_panel_list_row_get_item (row))
+        {
+          gtk_widget_activate (child);
+          break;
+        }
+    }
+}
+
 gboolean
 ide_tweaks_panel_list_get_search_mode (IdeTweaksPanelList *self)
 {

@@ -648,15 +648,25 @@ void
 ide_tweaks_window_navigate_to (IdeTweaksWindow *self,
                                IdeTweaksItem   *item)
 {
+  IdeTweaksPanelList *list;
+
   g_return_if_fail (IDE_IS_TWEAKS_WINDOW (self));
   g_return_if_fail (!item || IDE_IS_TWEAKS_ITEM (item));
 
   if (item == NULL)
     item = IDE_TWEAKS_ITEM (self->tweaks);
 
-  if (item == NULL)
+  if (!IDE_IS_TWEAKS_PAGE (item))
     return;
 
+  /* We can only navigate to this page if it's in the current stack. To
+   * support beyond that would require walking up the stack and pushing
+   * each page into new panel lists.
+   */
+  if (!(list = ide_tweaks_window_get_current_list (self)))
+    return;
+
+  ide_tweaks_panel_list_select_item (list, item);
 }
 
 static IdeTweaksPanelList *

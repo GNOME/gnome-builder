@@ -33,6 +33,8 @@ G_DECLARE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, IDE, TWEAKS_PAN
 GtkWidget        *ide_tweaks_panel_list_new                (IdeTweaksItem      *item);
 IdeTweaksItem    *ide_tweaks_panel_list_get_item           (IdeTweaksPanelList *self);
 void              ide_tweaks_panel_list_select_first       (IdeTweaksPanelList *self);
+void              ide_tweaks_panel_list_select_item        (IdeTweaksPanelList *self,
+                                                            IdeTweaksItem      *item);
 gboolean          ide_tweaks_panel_list_get_search_mode    (IdeTweaksPanelList *self);
 void              ide_tweaks_panel_list_set_search_mode    (IdeTweaksPanelList *self,
                                                             gboolean            search_mode);
