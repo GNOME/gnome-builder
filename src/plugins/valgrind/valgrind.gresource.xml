@@ -3,6 +3,7 @@
   <gresource prefix="/plugins/valgrind">
     <file>valgrind.plugin</file>
     <file preprocess="xml-stripblanks">gtk/menus.ui</file>
+    <file preprocess="xml-stripblanks">tweaks.ui</file>
     <file>gtk/keybindings.json</file>
   </gresource>
 </gresources>

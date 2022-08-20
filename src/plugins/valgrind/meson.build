@@ -3,6 +3,7 @@ if get_option('plugin_valgrind')
 plugins_sources += files([
   'valgrind-plugin.c',
   'gbp-valgrind-tool.c',
+  'gbp-valgrind-tweaks-addin.c',
 ])
 
 plugin_valgrind_resources = gnome.compile_resources(

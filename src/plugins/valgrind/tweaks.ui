@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child>
+      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_valgrind">
+        <property name="schema-id">org.gnome.builder.valgrind</property>
+        <property name="application-only">true</property>
+      </object>
+    </child>
+    <child internal-child="foundry_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="build_page">
+          <object class="IdeTweaksPage">
+            <child>
+              <object class="IdeTweaksPage" id="build_valgrind_page">
+                <property name="icon-name">system-run-symbolic</property>
+                <property name="title" translatable="yes">Valgrind</property>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <property name="title" translatable="yes">Leak Kinds</property>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Definite</property>
+                        <property name="subtitle" translatable="yes">Include definite leaks in report summary</property>
+                        <property name="action-name">settings.org.gnome.builder.valgrind.leak-kind-definite</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Possible</property>
+                        <property name="subtitle" translatable="yes">Include possible leaks in report summary</property>
+                        <property name="action-name">settings.org.gnome.builder.valgrind.leak-kind-possible</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Indirect</property>
+                        <property name="subtitle" translatable="yes">Include indirect leaks in report summary</property>
+                        <property name="action-name">settings.org.gnome.builder.valgrind.leak-kind-indirect</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksRadio">
+                        <property name="title" translatable="yes">Reachable</property>
+                        <property name="subtitle" translatable="yes">Include reachable leaks in report summary</property>
+                        <property name="action-name">settings.org.gnome.builder.valgrind.leak-kind-reachable</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksSwitch">
+                        <property name="title" translatable="yes">Track Origins</property>
+                        <property name="subtitle" translatable="yes">Show origin of undefined values</property>
+                        <property name="action-name">settings.org.gnome.builder.valgrind.track-origins</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksCombo">
+                        <property name="title" translatable="yes">Leak Check</property>
+                        <property name="subtitle" translatable="yes">Search for memory leaks at exit</property>
+                        <property name="settings">settings_org_gnome_builder_valgrind</property>
+                        <property name="key">leak-check</property>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title">No</property>
+                            <property name="action-target">'no'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title">Summary</property>
+                            <property name="action-target">'summary'</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <property name="title">Full</property>
+                            <property name="action-target">'full'</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

@@ -1,4 +1,4 @@
-/* valgrind-plugin.c
+/* gbp-valgrind-tweaks-addin.c
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -18,24 +18,27 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "valgrind-plugin"
+#define G_LOG_DOMAIN "gbp-valgrind-tweaks-addin"
 
 #include "config.h"
 
-#include <libpeas/peas.h>
-
-#include <libide-gui.h>
-
-#include "gbp-valgrind-tool.h"
 #include "gbp-valgrind-tweaks-addin.h"
 
-_IDE_EXTERN void
-_gbp_valgrind_register_types (PeasObjectModule *module)
+struct _GbpValgrindTweaksAddin
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_RUN_TOOL,
-                                              GBP_TYPE_VALGRIND_TOOL);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_TWEAKS_ADDIN,
-                                              GBP_TYPE_VALGRIND_TWEAKS_ADDIN);
+  IdeTweaksAddin parent_instance;
+};
+
+G_DEFINE_FINAL_TYPE (GbpValgrindTweaksAddin, gbp_valgrind_tweaks_addin, IDE_TYPE_TWEAKS_ADDIN)
+
+static void
+gbp_valgrind_tweaks_addin_class_init (GbpValgrindTweaksAddinClass *klass)
+{
+}
+
+static void
+gbp_valgrind_tweaks_addin_init (GbpValgrindTweaksAddin *self)
+{
+  ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
+                                       IDE_STRV_INIT ("/plugins/valgrind/tweaks.ui"));
 }
