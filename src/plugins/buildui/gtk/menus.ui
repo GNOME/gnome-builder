@@ -111,7 +111,7 @@
         <attribute name="id">manage-sdks</attribute>
         <attribute name="label" translatable="yes">Manage SDKs…</attribute>
         <attribute name="action">app.preferences-page</attribute>
-        <attribute name="target" type="s">'sdks'</attribute>
+        <attribute name="target" type="s">'network_page'</attribute>
       </item>
     </section>
   </menu>
