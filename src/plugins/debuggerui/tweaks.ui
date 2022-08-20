@@ -3,37 +3,41 @@
   <template class="IdeTweaks">
     <child internal-child="foundry_section">
       <object class="IdeTweaksSection">
-        <child>
-          <object class="IdeTweaksPage" id="debugger_page">
-            <property name="title" translatable="yes">Debugger</property>
-            <property name="icon-name">builder-debugger-symbolic</property>
+        <child internal-child="build_page">
+          <object class="IdeTweaksPage">
             <child>
-              <object class="IdeTweaksSettings">
-                <property name="schema-id">org.gnome.builder.debug</property>
-              </object>
-            </child>
-            <child>
-              <object class="IdeTweaksGroup" id="breakpoints_group">
-                <property name="title" translatable="yes">Breakpoints</property>
+              <object class="IdeTweaksPage" id="debugger_page">
+                <property name="title" translatable="yes">Debugger</property>
+                <property name="icon-name">builder-debugger-symbolic</property>
                 <child>
-                  <object class="IdeTweaksSwitch">
-                    <property name="title" translatable="yes">Stop After Launching Program</property>
-                    <property name="subtitle" translatable="yes">Automatically insert a breakpoint at the start of the application</property>
-                    <property name="action-name">settings.org.gnome.builder.debug.insert-breakpoint-at-main</property>
+                  <object class="IdeTweaksSettings">
+                    <property name="schema-id">org.gnome.builder.debug</property>
                   </object>
                 </child>
                 <child>
-                  <object class="IdeTweaksSwitch">
-                    <property name="title" translatable="yes">Stop at Warnings</property>
-                    <property name="subtitle" translatable="yes">Automatically insert a breakpoint on warning logs</property>
-                    <property name="action-name">settings.org.gnome.builder.debug.insert-breakpoint-at-warnings</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="IdeTweaksSwitch">
-                    <property name="title" translatable="yes">Stop at Criticals</property>
-                    <property name="subtitle" translatable="yes">Automatically insert a breakpoint on critical logs</property>
-                    <property name="action-name">settings.org.gnome.builder.debug.insert-breakpoint-at-criticals</property>
+                  <object class="IdeTweaksGroup" id="breakpoints_group">
+                    <property name="title" translatable="yes">Breakpoints</property>
+                    <child>
+                      <object class="IdeTweaksSwitch">
+                        <property name="title" translatable="yes">Stop After Launching Program</property>
+                        <property name="subtitle" translatable="yes">Automatically insert a breakpoint at the start of the application</property>
+                        <property name="action-name">settings.org.gnome.builder.debug.insert-breakpoint-at-main</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksSwitch">
+                        <property name="title" translatable="yes">Stop at Warnings</property>
+                        <property name="subtitle" translatable="yes">Automatically insert a breakpoint on warning logs</property>
+                        <property name="action-name">settings.org.gnome.builder.debug.insert-breakpoint-at-warnings</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksSwitch">
+                        <property name="title" translatable="yes">Stop at Criticals</property>
+                        <property name="subtitle" translatable="yes">Automatically insert a breakpoint on critical logs</property>
+                        <property name="action-name">settings.org.gnome.builder.debug.insert-breakpoint-at-criticals</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
