@@ -17,7 +17,6 @@
                     </binding>
                     <child internal-child="language_general_group">
                       <object class="IdeTweaksGroup">
-                        <property name="sort-key">test-key</property>
                       </object>
                     </child>
                   </object>

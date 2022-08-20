@@ -72,11 +72,6 @@ IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_item_set_keywords         (IdeTweaksItem        *self,
                                                           const char * const   *keywords);
 IDE_AVAILABLE_IN_ALL
-const char         *ide_tweaks_item_get_sort_key         (IdeTweaksItem        *self);
-IDE_AVAILABLE_IN_ALL
-void                ide_tweaks_item_set_sort_key         (IdeTweaksItem        *self,
-                                                          const char           *sort_key);
-IDE_AVAILABLE_IN_ALL
 gboolean            ide_tweaks_item_is_ancestor          (IdeTweaksItem        *self,
                                                           IdeTweaksItem        *ancestor);
 IDE_AVAILABLE_IN_ALL

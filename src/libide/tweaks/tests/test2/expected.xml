@@ -1,9 +1,9 @@
-<IdeTweaks id="IdeTweaks" project-id="" sort-key="">
-  <IdeTweaksSection id="programming_section" show-header="FALSE" sort-key="" title="">
-    <IdeTweaksPage id="languages_page" has-subpage="TRUE" icon-name="preferences-desktop-appearance-symbolic" section="#programming_section" show-icon="TRUE" sort-key="" title="Appearance">
-      <IdeTweaksFactory id="language_subpage_factory" model="GListStore<GtkSourceLanguage>" sort-key="">
-        <IdeTweaksPage id="language_subpage" has-subpage="FALSE" icon-name="" show-icon="TRUE" sort-key="" title="">
-          <IdeTweaksGroup id="language_general_group" sort-key="test-key" title="General"/>
+<IdeTweaks id="IdeTweaks" project-id="">
+  <IdeTweaksSection id="programming_section" show-header="FALSE" title="">
+    <IdeTweaksPage id="languages_page" has-subpage="TRUE" icon-name="preferences-desktop-appearance-symbolic" section="#programming_section" show-icon="TRUE" title="Appearance">
+      <IdeTweaksFactory id="language_subpage_factory" model="GListStore<GtkSourceLanguage>">
+        <IdeTweaksPage id="language_subpage" has-subpage="FALSE" icon-name="" show-icon="TRUE" title="">
+          <IdeTweaksGroup id="language_general_group" title="General"/>
         </IdeTweaksPage>
       </IdeTweaksFactory>
     </IdeTweaksPage>

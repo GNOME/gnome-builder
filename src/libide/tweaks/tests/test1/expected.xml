@@ -1,11 +1,11 @@
-<IdeTweaks id="IdeTweaks" project-id="" sort-key="">
-  <IdeTweaksSection id="visual_section" show-header="FALSE" sort-key="" title="">
-    <IdeTweaksPage id="appearance_page" has-subpage="FALSE" icon-name="" section="#visual_section" show-icon="TRUE" sort-key="" title="Appearance">
-      <IdeTweaksGroup id="appearance_group" sort-key="" title="Appearance"/>
+<IdeTweaks id="IdeTweaks" project-id="">
+  <IdeTweaksSection id="visual_section" show-header="FALSE" title="">
+    <IdeTweaksPage id="appearance_page" has-subpage="FALSE" icon-name="" section="#visual_section" show-icon="TRUE" title="Appearance">
+      <IdeTweaksGroup id="appearance_group" title="Appearance"/>
     </IdeTweaksPage>
   </IdeTweaksSection>
-  <IdeTweaksSection id="foundry_section" show-header="FALSE" sort-key="" title="">
-    <IdeTweaksPage id="build_page" has-subpage="FALSE" icon-name="" section="#foundry_section" show-icon="TRUE" sort-key="" title="Build"/>
-    <IdeTweaksPage id="debugger_page" has-subpage="FALSE" icon-name="builder-debugger-symbolic" section="#foundry_section" show-icon="TRUE" sort-key="" title="Debugger"/>
+  <IdeTweaksSection id="foundry_section" show-header="FALSE" title="">
+    <IdeTweaksPage id="build_page" has-subpage="FALSE" icon-name="" section="#foundry_section" show-icon="TRUE" title="Build"/>
+    <IdeTweaksPage id="debugger_page" has-subpage="FALSE" icon-name="builder-debugger-symbolic" section="#foundry_section" show-icon="TRUE" title="Debugger"/>
   </IdeTweaksSection>
 </IdeTweaks>
