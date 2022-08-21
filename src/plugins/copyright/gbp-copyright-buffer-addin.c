@@ -118,7 +118,7 @@ G_DEFINE_TYPE_WITH_CODE (GbpCopyrightBufferAddin, gbp_copyright_buffer_addin, G_
 static void
 gbp_copyright_buffer_addin_class_init (GbpCopyrightBufferAddinClass *klass)
 {
-  copyright_settings = g_settings_new("org.gnome.builder.plugins.copyright");
+  copyright_settings = g_settings_new("org.gnome.builder.copyright");
 }
 
 static void

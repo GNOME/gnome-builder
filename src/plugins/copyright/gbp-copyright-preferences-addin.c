@@ -31,7 +31,7 @@
 
 #include "gbp-copyright-preferences-addin.h"
 
-#define SCHEMA_ID "org.gnome.builder.plugins.copyright"
+#define SCHEMA_ID "org.gnome.builder.copyright"
 
 struct _GbpCopyrightPreferencesAddin
 {
