@@ -37,7 +37,8 @@ struct _GbpShellcmdRunCommand
   char                *accelerator;
   char                *keywords;
 
-  GbpShellcmdLocality  locality;
+  GbpShellcmdLocality  locality : 3;
+  guint                use_shell : 1;
 };
 
 enum {
@@ -47,6 +48,7 @@ enum {
   PROP_LOCALITY,
   PROP_SETTINGS_PATH,
   PROP_SUBTITLE,
+  PROP_USE_SHELL,
   N_PROPS
 };
 
@@ -120,6 +122,9 @@ gbp_shellcmd_run_command_prepare_to_run (IdeRunCommand *run_command,
       g_assert_not_reached ();
     }
 
+  if (self->use_shell)
+    ide_run_context_push_shell (run_context, FALSE);
+
   IDE_RUN_COMMAND_CLASS (gbp_shellcmd_run_command_parent_class)->prepare_to_run (run_command, run_context, context);
 
   IDE_EXIT;
@@ -153,6 +158,7 @@ gbp_shellcmd_run_command_constructed (GObject *object)
   g_settings_bind (self->settings, "cwd", self, "cwd", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (self->settings, "accelerator", self, "accelerator", G_SETTINGS_BIND_DEFAULT);
   g_settings_bind (self->settings, "locality", self, "locality", G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (self->settings, "use-shell", self, "use-shell", G_SETTINGS_BIND_DEFAULT);
 }
 
 static void
@@ -240,6 +246,10 @@ gbp_shellcmd_run_command_get_property (GObject    *object,
       g_value_take_string (value, gbp_shellcmd_run_command_dup_subtitle (self));
       break;
 
+    case PROP_USE_SHELL:
+      g_value_set_boolean (value, gbp_shellcmd_run_command_get_use_shell (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -265,6 +275,10 @@ gbp_shellcmd_run_command_set_property (GObject      *object,
 
     case PROP_SETTINGS_PATH:
       self->settings_path = g_value_dup_string (value);
+      break;
+
+    case PROP_USE_SHELL:
+      gbp_shellcmd_run_command_set_use_shell (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -306,6 +320,10 @@ gbp_shellcmd_run_command_class_init (GbpShellcmdRunCommandClass *klass)
   properties [PROP_SUBTITLE] =
     g_param_spec_string ("subtitle", NULL, NULL, NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_USE_SHELL] =
+    g_param_spec_boolean ("use-shell", NULL, NULL, FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -442,4 +460,27 @@ gbp_shellcmd_run_command_get_keywords (GbpShellcmdRunCommand *self)
     }
 
   return self->keywords;
+}
+
+gboolean
+gbp_shellcmd_run_command_get_use_shell (GbpShellcmdRunCommand *self)
+{
+  g_return_val_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self), FALSE);
+
+  return self->use_shell;
+}
+
+void
+gbp_shellcmd_run_command_set_use_shell (GbpShellcmdRunCommand *self,
+                                        gboolean               use_shell)
+{
+  g_return_if_fail (GBP_IS_SHELLCMD_RUN_COMMAND (self));
+
+  use_shell = !!use_shell;
+
+  if (use_shell != self->use_shell)
+    {
+      self->use_shell = use_shell;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_USE_SHELL]);
+    }
 }

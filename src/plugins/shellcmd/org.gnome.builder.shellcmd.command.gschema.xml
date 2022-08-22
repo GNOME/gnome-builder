@@ -31,5 +31,9 @@
       <default>'pipeline'</default>
       <summary>Command Locality</summary>
     </key>
+    <key name="use-shell" type="b">
+      <default>false</default>
+      <summary>Use Shell</summary>
+    </key>
   </schema>
 </schemalist>

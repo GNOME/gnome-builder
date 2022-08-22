@@ -55,5 +55,8 @@ void                   gbp_shellcmd_run_command_set_locality    (GbpShellcmdRunC
                                                                  GbpShellcmdLocality    locality);
 const char            *gbp_shellcmd_run_command_get_keywords    (GbpShellcmdRunCommand *self);
 char                  *gbp_shellcmd_run_command_dup_subtitle    (GbpShellcmdRunCommand *self);
+gboolean               gbp_shellcmd_run_command_get_use_shell   (GbpShellcmdRunCommand *self);
+void                   gbp_shellcmd_run_command_set_use_shell   (GbpShellcmdRunCommand *self,
+                                                                 gboolean               use_shell);
 
 G_END_DECLS
