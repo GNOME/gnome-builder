@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-20 12:29+0000\n"
-"PO-Revision-Date: 2022-08-21 18:35+0200\n"
+"POT-Creation-Date: 2022-08-22 20:00+0000\n"
+"PO-Revision-Date: 2022-08-22 23:56+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: gl\n"
 "X-DL-Module: gnome-builder\n"
@@ -29,7 +29,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:222
+#: src/libide/gui/ide-application-actions.c:173
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
 #: src/plugins/editorui/tweaks.ui:316
@@ -42,7 +42,7 @@ msgid "An IDE for GNOME"
 msgstr "Un IDE para GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:223
+#: src/libide/gui/ide-application-actions.c:174
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, e outros."
 
@@ -592,12 +592,10 @@ msgid ""
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
-#| msgid "Delete Command"
 msgid "Default Run Command"
 msgstr "Orde execución por omisión"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:20
-#| msgid "the default cargo command"
 msgid "The id of the default run command"
 msgstr "O id da orde de execución predeterminada"
 
@@ -611,6 +609,9 @@ msgid ""
 "application. That might be useful when you want to gracefully shutdown a "
 "server process."
 msgstr ""
+"Isto permmítelle enviar algunha outra sigkill para deter a aplicación "
+"obxectivo. Iso pode ser útil cando quere pechar gracilmente un proceso "
+"servidor."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
@@ -836,7 +837,7 @@ msgstr "Gardar"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
@@ -847,22 +848,18 @@ msgid "Replace"
 msgstr "Substituír"
 
 #: src/libide/editor/ide-editor-search-bar.ui:46
-#| msgid "Previous search result (Ctrl+Shift+G)"
 msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Ir á anterior coincidencia (Ctrl+Maiús+G)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:57
-#| msgid "Move to the next match"
 msgid "Move to next match (Ctrl+G)"
 msgstr "Ir á seguinte coincidencia  (Ctrl+G)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:72
-#| msgid "Next search result (Ctrl+G)"
 msgid "Search & Replace (Ctrl+H)"
 msgstr "Buscar e reemprazar (Ctrl+H)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:103
-#| msgid "Close Project"
 msgid "Close search"
 msgstr "Pechar a busca"
 
@@ -875,17 +872,14 @@ msgid "Replace _All"
 msgstr "Substituír _todo"
 
 #: src/libide/editor/ide-editor-search-bar.ui:146
-#| msgid "Regular E_xpressions"
 msgid "Use Re_gular Expressions"
 msgstr "Usar _expresións regulares"
 
 #: src/libide/editor/ide-editor-search-bar.ui:150
-#| msgid "_Case sensitive"
 msgid "_Case Sensitive"
 msgstr "_Coincidir maiúsculas e minúsculas"
 
 #: src/libide/editor/ide-editor-search-bar.ui:154
-#| msgid "Match _whole words"
 msgid "Match Whole Words"
 msgstr "Coincidir coa palabra enteira"
 
@@ -902,7 +896,6 @@ msgid "Windows (CR+LF)"
 msgstr "Windows (CR+LF)"
 
 #: src/libide/editor/ide-editor-utils.c:141
-#| msgid "Automatically indent"
 msgid "Automatically Detected"
 msgstr "Detectada automaticamente"
 
@@ -911,7 +904,6 @@ msgid "Character Encoding:"
 msgstr "Codificación de caracteres:"
 
 #: src/libide/editor/ide-editor-utils.c:192
-#| msgid "Line Spacing"
 msgid "Line Ending:"
 msgstr "Finalización de liña:"
 
@@ -931,7 +923,6 @@ msgid "Failed to get device information: %s"
 msgstr "Produciuse un fallo ao obter a información do dispositivo: %s"
 
 #: src/libide/foundry/ide-config-manager.c:529
-#| msgid "Build Configurations"
 msgid "Active Configuration"
 msgstr "Configuración activa"
 
@@ -979,14 +970,12 @@ msgstr "A configuración de construción ten erros"
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1096
 #, c-format
-#| msgid "Builder — %s"
 msgid "Build (%s)"
 msgstr "Construtor (%s)"
 
 #. translators: %s is replaced with the post-install shell command
 #: src/libide/foundry/ide-pipeline.c:1138
 #, c-format
-#| msgid "Installed %s"
 msgid "Post-install (%s)"
 msgstr "Postinstalación (%s)"
 
@@ -1057,12 +1046,10 @@ msgstr "Preparando…"
 #. translators: %s is replaced with the name of the file being removed
 #: src/libide/foundry/ide-pipeline.c:3649
 #, c-format
-#| msgid "Removing %s\n"
 msgid "Removing %s"
 msgstr "Eliminando %s"
 
 #: src/libide/foundry/ide-pipeline.c:3708
-#| msgid "Preparing build directory"
 msgid "Removing build directories…"
 msgstr "Eliminando os cartafoles de construción…"
 
@@ -1071,7 +1058,6 @@ msgid "Cannot build transfer while on metered connection"
 msgstr "Non se pode  a transferencia mentres está en conexións medidas"
 
 #: src/libide/foundry/ide-run-command.c:220
-#| msgid "Unit Tests"
 msgid "Unit Test"
 msgstr "Proba unitaria"
 
@@ -1092,7 +1078,7 @@ msgstr "Despregando ao dispositivo…"
 #: src/libide/foundry/ide-runtime.c:403
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:253
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
 msgstr "Sistema do anfitrión"
 
@@ -1116,15 +1102,13 @@ msgid "Open a _Project…"
 msgstr "Abrir un _proxecto…"
 
 #: src/libide/greeter/gtk/menus.ui:57
-#| msgid "Create a new empty project"
 msgid "Open a new or existing project"
 msgstr "Abrir un proxecto novo ou existente"
 
 #: src/libide/greeter/gtk/menus.ui:64
-#, fuzzy
 #| msgid "Create a new project with a shared library"
 msgid "Create a new project by cloning a repository"
-msgstr "Crea un novo proxecto con unha biblioteca compartida"
+msgstr "Crea un novo proxecto clonando un repositorio"
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
@@ -1152,7 +1136,6 @@ msgid "_Close"
 msgstr "_Pechar"
 
 #: src/libide/greeter/ide-greeter-workspace.c:542
-#| msgid "Delete Project Sources"
 msgid "Delete Project Sources?"
 msgstr "Desexa eliminar as fontes do proxecto?"
 
@@ -1242,12 +1225,10 @@ msgstr "Abrir"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:128
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
-#, fuzzy
-#| msgid "Selection"
 msgid "Select"
-msgstr "Selección"
+msgstr "Seleccionar"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:448
 msgid "Browse…"
@@ -1290,7 +1271,6 @@ msgstr "Hai 1 ano"
 
 #: src/libide/gtk/ide-gtk.c:467
 #, c-format
-#| msgid "About Builder"
 msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Hai %u ano"
@@ -1342,15 +1322,11 @@ msgstr "Atallos de teclado"
 msgid "Show information about Builder"
 msgstr "Mostrar información sobre Construtor"
 
-#: src/libide/gui/ide-application-actions.c:161
-msgid "Builder — Preferences"
-msgstr "Construtor — Preferencias"
-
-#: src/libide/gui/ide-application-actions.c:230
+#: src/libide/gui/ide-application-actions.c:181
 msgid "translator-credits"
-msgstr "Fran Diéguez <frandieguez@gnome.org>, 2015-2021"
+msgstr "Fran Diéguez <frandieguez@gnome.org>, 2015-2022"
 
-#: src/libide/gui/ide-application-actions.c:237
+#: src/libide/gui/ide-application-actions.c:188
 msgid "Funded By"
 msgstr "Fundado por"
 
@@ -1419,7 +1395,6 @@ msgid "Ctrl+O"
 msgstr "Ctrl+O"
 
 #: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:110
-#| msgid "_New Terminal"
 msgid "New Terminal"
 msgstr "Nova Terminal"
 
@@ -2037,7 +2012,6 @@ msgstr "Control de versións"
 
 #: src/libide/gui/ide-preferences-builtin.c:592
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
-#| msgid "Host System"
 msgid "Follow System"
 msgstr "Sistema o sistema"
 
@@ -2046,19 +2020,14 @@ msgid "Editing"
 msgstr "Editando"
 
 #: src/libide/gui/ide-preferences-builtin.c:650
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Editor Shortcuts"
 msgid "Shortcuts"
-msgstr "Editor de atallos"
+msgstr "Atallos de teclado"
 
 #: src/libide/gui/ide-preferences-builtin.c:651
 #: src/libide/gui/ide-preferences-builtin.c:665
 #: src/plugins/spellcheck/editor-spell-menu.c:259
-#, fuzzy
-#| msgid "Language"
 msgid "Languages"
-msgstr "Idioma"
+msgstr "Idiomas"
 
 #: src/libide/gui/ide-preferences-builtin.c:652
 #, fuzzy
@@ -2068,11 +2037,9 @@ msgstr "Percepción do código"
 
 #: src/libide/gui/ide-preferences-builtin.c:656
 #: src/libide/gui/ide-preferences-builtin.c:667
-#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:12
-#, fuzzy
-#| msgid "Command"
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
-msgstr "Orde"
+msgstr "Ordes"
 
 #: src/libide/gui/ide-preferences-builtin.c:657
 #: src/libide/gui/ide-preferences-builtin.c:684
@@ -2092,16 +2059,12 @@ msgid "Overview"
 msgstr "Vista xeral"
 
 #: src/libide/gui/ide-preferences-builtin.c:664
-#, fuzzy
-#| msgid "Configure Options"
 msgid "Configurations"
-msgstr "Configurar opcións"
+msgstr "Configuracións"
 
 #: src/libide/gui/ide-preferences-builtin.c:666
-#, fuzzy
-#| msgid "Application ID"
 msgid "Application"
-msgstr "ID de aplicación"
+msgstr "Aplicación"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
@@ -2110,17 +2073,13 @@ msgid "Interface"
 msgstr "Interface"
 
 #: src/libide/gui/ide-preferences-builtin.c:675
-#, fuzzy
-#| msgid "Committing…"
 msgid "Formatting"
-msgstr "Remitindo…"
+msgstr "Formatado"
 
 #: src/libide/gui/ide-preferences-builtin.c:685
 #: src/libide/plugins/ide-plugin.c:342
-#, fuzzy
-#| msgid "Install Language Server"
 msgid "Language Servers"
-msgstr "Instalar Servidor de Linguaxe"
+msgstr "Servidor de Linguaxe"
 
 #: src/libide/gui/ide-preferences-builtin.c:686
 #: src/libide/plugins/ide-plugin.c:343
@@ -2129,32 +2088,24 @@ msgstr "Dispositivos e simuladores"
 
 #: src/libide/gui/ide-preferences-builtin.c:688
 #: src/libide/plugins/ide-plugin.c:345
-#, fuzzy
-#| msgid "Build System"
 msgid "Build Systems"
 msgstr "Sistema de construción"
 
 #: src/libide/gui/ide-preferences-builtin.c:689
 #: src/libide/plugins/ide-plugin.c:346
-#, fuzzy
-#| msgid "Compiler"
 msgid "Compilers"
-msgstr "Compilador"
+msgstr "Compiladores"
 
 #: src/libide/gui/ide-preferences-builtin.c:690
 #: src/libide/plugins/ide-plugin.c:347
-#, fuzzy
-#| msgid "Debugger"
 msgid "Debuggers"
-msgstr "Depurador"
+msgstr "Depuradores"
 
 #: src/libide/gui/ide-preferences-builtin.c:691
 #: src/libide/gui/ide-preferences-builtin.c:703
 #: src/libide/plugins/ide-plugin.c:348
-#, fuzzy
-#| msgid "Select a Template"
 msgid "Templates"
-msgstr "Seleccione un Modelo"
+msgstr "Modelos"
 
 #: src/libide/gui/ide-preferences-builtin.c:692
 #: src/libide/plugins/ide-plugin.c:349
@@ -2163,10 +2114,8 @@ msgstr "Editar e formatar"
 
 #: src/libide/gui/ide-preferences-builtin.c:695
 #: src/libide/plugins/ide-plugin.c:352
-#, fuzzy
-#| msgid "Websafe"
 msgid "Web"
-msgstr "Web seguro"
+msgstr "Web"
 
 #: src/libide/gui/ide-preferences-builtin.c:696
 #: src/libide/plugins/ide-plugin.c:353
@@ -2180,10 +2129,8 @@ msgstr "Integración co escritorio"
 
 #: src/libide/gui/ide-preferences-builtin.c:698
 #: src/libide/plugins/ide-plugin.c:355
-#, fuzzy
-#| msgid "Dictionary"
 msgid "Additional"
-msgstr "Dicionario"
+msgstr "Adicional"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
 #: src/plugins/editorui/tweaks-language.ui:139
@@ -2192,16 +2139,12 @@ msgid "Behavior"
 msgstr "Comportamento"
 
 #: src/libide/gui/ide-preferences-builtin.c:709
-#, fuzzy
-#| msgid "Downloading "
 msgid "Downloads"
-msgstr "Descargando "
+msgstr "Descargas"
 
 #: src/libide/gui/ide-preferences-builtin.c:713
-#, fuzzy
-#| msgid "Running %s…"
 msgid "Running"
-msgstr "Executando %s…"
+msgstr "Executando"
 
 #: src/libide/gui/ide-preferences-builtin.c:714
 msgid "Starting & Stopping"
@@ -2218,8 +2161,6 @@ msgstr "Trocar entre documentos usando a interface de lapelas"
 
 #: src/libide/gui/ide-preferences-builtin.c:730
 #: src/plugins/projectui/tweaks.ui:14
-#, fuzzy
-#| msgid "Restoring previous session"
 msgid "Restore Previous Session"
 msgstr "Restaurando anterior sesión"
 
@@ -2362,7 +2303,6 @@ msgid "Visual"
 msgstr "Visual"
 
 #: src/libide/gui/tweaks.ui:16
-#| msgid "Editor"
 msgid "Text Editor"
 msgstr "Editor de texto"
 
@@ -2407,16 +2347,12 @@ msgid "Authors"
 msgstr "Nome do autor"
 
 #: src/libide/plugins/ide-plugin-view.ui:66
-#, fuzzy
-#| msgid "Session"
 msgid "Version"
-msgstr "Sesión"
+msgstr "Versión"
 
 #: src/libide/plugins/ide-plugin-view.ui:97
-#, fuzzy
-#| msgid "Websafe"
 msgid "Website"
-msgstr "Web seguro"
+msgstr "Sitio web"
 
 #: src/libide/projects/ide-project.c:198
 msgid "Destination file must be within the project tree."
@@ -2452,30 +2388,18 @@ msgid "Redo"
 msgstr "Refacer"
 
 #: src/libide/sourceview/gtk/menus.ui:37
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Zoom"
 msgid "Zoom"
 msgstr "Ampliación"
 
 #: src/libide/sourceview/gtk/menus.ui:40
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Zoom Out"
 msgid "Zoom Out"
 msgstr "Reducir"
 
 #: src/libide/sourceview/gtk/menus.ui:46
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Reset Zoom"
 msgid "Reset Zoom"
 msgstr "Restabelecer ampliación"
 
 #: src/libide/sourceview/gtk/menus.ui:52
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Zoom In"
 msgid "Zoom In"
 msgstr "Ampliar"
 
@@ -2524,17 +2448,15 @@ msgstr "_Buscar preferencias"
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
-msgstr ""
+msgstr "Li %u, Col %u"
 
 #: src/libide/terminal/gtk/menus.ui:25
 msgid "_Open Link"
 msgstr "_Abrir ligazón"
 
 #: src/libide/terminal/gtk/menus.ui:38
-#, fuzzy
-#| msgid "_Copy Link Address"
 msgid "_Copy Link"
-msgstr "_Copiar o enderezo da ligazón"
+msgstr "_Copiar ligazón"
 
 #: src/libide/terminal/gtk/menus.ui:56
 msgid "Select _None"
@@ -2604,10 +2526,8 @@ msgid "Loading…"
 msgstr "Cargando…"
 
 #: src/libide/tweaks/ide-tweaks-directory.c:124
-#, fuzzy
-#| msgid "Projects directory"
 msgid "Projects Directory"
-msgstr "Cartafol de proxectos"
+msgstr "Cartafol dos proxectos"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:36
 #, fuzzy
@@ -3039,9 +2959,8 @@ msgstr "Avisos"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:345
 #: src/plugins/buildui/gbp-buildui-pane.ui:81
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 #: src/plugins/testui/gbp-testui-preferences-addin.c:50
-#| msgid "Build Profile"
 msgid "Build Pipeline"
 msgstr ""
 
@@ -3312,6 +3231,22 @@ msgstr "Executar"
 msgid "Run the project"
 msgstr "Construír o proxecto"
 
+#: src/plugins/buildui/gtk/menus.ui:143
+#, fuzzy
+#| msgid "Follow System"
+msgid "Follow System Style"
+msgstr "Sistema o sistema"
+
+#: src/plugins/buildui/gtk/menus.ui:149
+#, fuzzy
+#| msgid "Light"
+msgid "Force Light"
+msgstr "Claro"
+
+#: src/plugins/buildui/gtk/menus.ui:155
+msgid "Force Dark"
+msgstr "Forzar escuro"
+
 #: src/plugins/buildui/gtk/menus.ui:162
 #, fuzzy
 #| msgid "Accessibility properties"
@@ -3374,11 +3309,11 @@ msgstr "Patrón da grella"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
-msgstr ""
+msgstr "O mapa de vista xeral nunca se mostra"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
-msgstr ""
+msgstr "O mapa de vista xeral sempre se mostra"
 
 #: src/plugins/buildui/gtk/preferences.ui:104
 #, fuzzy
@@ -3392,11 +3327,11 @@ msgstr ""
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
-msgstr ""
+msgstr "Navegar con lapelas"
 
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
-msgstr ""
+msgstr "Navegar con xanelas emerxentes"
 
 #: src/plugins/buildui/gtk/preferences.ui:120
 msgid "Switch documents using a popover"
@@ -4631,6 +4566,7 @@ msgid "Insert matching character for [[(\"'"
 msgstr "Inserir os caracteres coincidentes para { [ ( ou \""
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
+#: src/plugins/editorui/tweaks-language.ui:123
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr ""
 
@@ -4715,6 +4651,24 @@ msgstr "Sangrado"
 msgid "Same as Tab Width"
 msgstr "Ancho do tabulador"
 
+#: src/plugins/editorui/gtk/menus.ui:81
+#, fuzzy
+#| msgid "Line Ending:"
+msgid "Line Ending"
+msgstr "Finalización de liña:"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+#, fuzzy
+#| msgid "Windows (CR+LF)"
+msgid "Windows (CR/LF)"
+msgstr "Windows (CR+LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+#, fuzzy
+#| msgid "Mac OS Classic (CR)"
+msgid "Mac Classic (CR)"
+msgstr "Mac OS Classic (CR)"
+
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
 msgstr "Novo espazo de traballo do editor…"
@@ -4771,7 +4725,7 @@ msgstr "Sangrado"
 
 #: src/plugins/editorui/tweaks-language.ui:56
 msgid "Tab Character"
-msgstr ""
+msgstr "Carácter Tabulador"
 
 #: src/plugins/editorui/tweaks-language.ui:57
 msgid "The character to be inserted for Tab"
@@ -4826,10 +4780,6 @@ msgstr "Marxes"
 #| msgid "Show right margin"
 msgid "Show Right Margin"
 msgstr "Mostrar marxe da dereita"
-
-#: src/plugins/editorui/tweaks-language.ui:123
-msgid "Display a margin in the editor to indicate maximium desired width"
-msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:129
 #, fuzzy
@@ -5039,7 +4989,7 @@ msgstr "Completado"
 
 #: src/plugins/editorui/tweaks.ui:267
 msgid "lang-function-symbolic"
-msgstr ""
+msgstr "lang-function-symbolic"
 
 #: src/plugins/editorui/tweaks.ui:270
 #, fuzzy
@@ -5613,7 +5563,7 @@ msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:18
 msgid "panel-right-symbolic"
-msgstr ""
+msgstr "panel-right-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:23
 #, fuzzy
@@ -5660,7 +5610,7 @@ msgstr "Opcións de Meson"
 
 #: src/plugins/meson/gbp-meson-introspection.c:584
 msgid "Load Meson Introspection"
-msgstr ""
+msgstr "Cargar introspección de Meson"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:274
 msgid "Install project"
@@ -6274,25 +6224,25 @@ msgstr "Eliminar orde"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 #, fuzzy
 #| msgid "Untitled Terminal"
 msgid "Untitled Command"
 msgstr "Terminal sen título"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:339
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 #, fuzzy
 #| msgid "Change Shortcut"
 msgid "Set Shortcut"
 msgstr "Cambiar atallo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
 #, fuzzy
 #| msgid "Select Project Directory"
 msgid "Select Working Directory"
 msgstr "Seleccionar o cartafol do proxecto"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
 #, fuzzy
@@ -6300,7 +6250,7 @@ msgstr "Seleccionar o cartafol do proxecto"
 msgid "Create Command"
 msgstr "Eliminar orde"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:542
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
 msgstr "Cre_ar"
 
@@ -6343,66 +6293,74 @@ msgid ""
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+msgid "Use Subshell"
+msgstr "Usar subshell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 #, fuzzy
 #| msgid "Locals"
 msgid "Locality"
 msgstr "Locais"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:192
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
 #, fuzzy
 #| msgid "Variable"
 msgid "Add _Variable"
 msgstr "Variábeis"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:198
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
 #, fuzzy
 #| msgid "Variable"
 msgid "Add Variable"
 msgstr "Variábeis"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:199
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
 msgid "_Add"
 msgstr "_Engadir"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:218
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 #, fuzzy
 #| msgid "Delete Command"
 msgid "_Delete Command"
 msgstr "Eliminar orde"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:246
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 #, fuzzy
 #| msgid "Success"
 msgid "Subprocess"
 msgstr "Éxito"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:247
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 #, fuzzy
 #| msgid "Run a new instance of Builder"
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Executar unha nova instancia de Builder"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:254
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:261
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 #, fuzzy
 #| msgid "GTK Application"
 msgid "As Target Application"
 msgstr "Aplicación de GTK"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:268
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
 msgstr ""
 
@@ -6474,6 +6432,10 @@ msgstr "Ambiente"
 msgid "Command Locality"
 msgstr "Localidade da orde"
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr "Usar shell"
+
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 #, fuzzy
 #| msgid "Command"
@@ -6482,6 +6444,13 @@ msgstr "Orde"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
+msgstr ""
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
 msgstr ""
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
@@ -6495,10 +6464,8 @@ msgid "Add to Dictionary"
 msgstr "Dicionario"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:249
-#, fuzzy
-#| msgid "_Ignore"
 msgid "Ignore"
-msgstr "_Ignorar"
+msgstr "Ignorar"
 
 #: src/plugins/spellcheck/gbp-spell-preferences-addin.c:43
 #, fuzzy
@@ -6518,18 +6485,14 @@ msgstr "_Seleccionar símbolo…"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
-#, fuzzy
-#| msgid "Open Pages"
 msgid "In Page"
-msgstr "Páxinas abertas"
+msgstr "Na páxina"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
 #: src/plugins/symbol-tree/gtk/menus.ui:5
-#, fuzzy
-#| msgid "_Select Symbol…"
 msgid "Select Symbol…"
-msgstr "_Seleccionar símbolo…"
+msgstr "Seleccionar símbolo…"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
 msgid "Select Symbol (Ctrl+Shift+K)"
@@ -6595,10 +6558,8 @@ msgid "Graphics"
 msgstr "Gráficos"
 
 #: src/plugins/sysprof/gtk/menus.ui:52
-#, fuzzy
-#| msgid "_Display Options"
 msgid "Display Timings"
-msgstr "_Opcións de visualización"
+msgstr "Mostrar tempos"
 
 #: src/plugins/sysprof/gtk/menus.ui:58
 msgid "Counters"
@@ -6646,7 +6607,7 @@ msgstr "Runtime da aplicación"
 
 #: src/plugins/sysprof/gtk/menus.ui:100
 msgid "Allow CPU Throttling"
-msgstr ""
+msgstr "Permitir a limitación de CPU"
 
 #: src/plugins/sysprof/gtk/menus.ui:112
 msgid "Run with _Profiler"
@@ -6668,7 +6629,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:30
 msgid "Sample Callstacks"
-msgstr ""
+msgstr "Pilas de chamadas de exemplo"
 
 #: src/plugins/sysprof/tweaks.ui:31
 msgid "Record stacktraces on a regular interval and build a callgraph"
@@ -6683,8 +6644,10 @@ msgid "Force performance mode while profiling"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:43
-msgid "Don't Change Governer"
-msgstr ""
+#, fuzzy
+#| msgid "CPU Governor"
+msgid "Don't Change Governor"
+msgstr "Governador de CPU"
 
 #: src/plugins/sysprof/tweaks.ui:49
 msgid "Force Performance Mode"
@@ -6755,7 +6718,7 @@ msgid "JavaScript"
 msgstr "JavaScript"
 
 #: src/plugins/sysprof/tweaks.ui:128
-msgid "Collect infomration from GJS-based applications"
+msgid "Collect information from GJS-based applications"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:134
@@ -6953,7 +6916,7 @@ msgstr "Dividir"
 
 #: src/plugins/terminal/tweaks.ui:31
 msgid "Allow Bold"
-msgstr ""
+msgstr "Permitir negriña"
 
 #: src/plugins/terminal/tweaks.ui:32
 msgid "Allows the use of bold escape sequences"
@@ -7051,7 +7014,7 @@ msgstr ""
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
 #, c-format
 msgid "Running all unit tests at %s"
-msgstr ""
+msgstr "Executando todos as probas unitarias en %s"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
 #, c-format
@@ -7138,7 +7101,7 @@ msgstr "Executar con Valgrind"
 
 #: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:17
 msgid "Leak Detector"
-msgstr ""
+msgstr "Detector de fugas"
 
 #: src/plugins/valgrind/gtk/menus.ui:24
 msgid "Track Origin of Leaks"
@@ -7156,7 +7119,7 @@ msgstr "Resumo"
 
 #: src/plugins/valgrind/gtk/menus.ui:38
 msgid "Full"
-msgstr ""
+msgstr "Completo"
 
 #: src/plugins/valgrind/gtk/menus.ui:44
 #, fuzzy
@@ -7166,11 +7129,11 @@ msgstr "Activado"
 
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:20
 msgid "Leak Kinds"
-msgstr ""
+msgstr "Tipos de fugs"
 
 #: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:23
 msgid "Definite"
-msgstr ""
+msgstr "Definitiva"
 
 #: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:37
 msgid "Indirect"
@@ -7186,19 +7149,19 @@ msgstr "Alcanzábel"
 
 #: src/plugins/valgrind/tweaks.ui:24
 msgid "Include definite leaks in report summary"
-msgstr ""
+msgstr "Incluír fugas definitivas no informe resumo"
 
 #: src/plugins/valgrind/tweaks.ui:31
 msgid "Include possible leaks in report summary"
-msgstr ""
+msgstr "Incluír fugas posíbeis no informe resumo"
 
 #: src/plugins/valgrind/tweaks.ui:38
 msgid "Include indirect leaks in report summary"
-msgstr ""
+msgstr "Incluír fugas indirectas no informe resumo"
 
 #: src/plugins/valgrind/tweaks.ui:45
 msgid "Include reachable leaks in report summary"
-msgstr ""
+msgstr "Incluír fugas alcanzábeis no informe resumo"
 
 #: src/plugins/valgrind/tweaks.ui:55
 #, fuzzy
@@ -7312,6 +7275,9 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
+
+#~ msgid "Builder — Preferences"
+#~ msgstr "Construtor — Preferencias"
 
 #~ msgid "Automatically Hide Overview Map"
 #~ msgstr "Ocultar a Mapa de Vista previa automaticamente"
