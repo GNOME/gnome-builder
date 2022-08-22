@@ -8,6 +8,15 @@
             <property name="title" translatable="yes">Commands</property>
             <property name="icon-name">text-x-script-symbolic</property>
             <child>
+              <object class="IdeTweaksGroup">
+                <child>
+                  <object class="IdeTweaksCaption">
+                    <property name="text" translatable="yes">Use commands to run build tooling, applications, or shell scripts and map them to a keyboard shortcut. They can run from various environments such as the build pipeline, runtime environment, or host operating system.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="IdeTweaksGroup" id="command_create_group">
                 <property name="title" translatable="yes">Commands</property>
                 <child>
