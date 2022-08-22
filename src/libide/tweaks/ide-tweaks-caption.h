@@ -1,4 +1,4 @@
-/* libide-tweaks.h
+/* ide-tweaks-caption.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,24 +20,21 @@
 
 #pragma once
 
-#define IDE_TWEAKS_INSIDE
-# include "ide-tweaks.h"
-# include "ide-tweaks-addin.h"
-# include "ide-tweaks-caption.h"
-# include "ide-tweaks-choice.h"
-# include "ide-tweaks-combo.h"
-# include "ide-tweaks-directory.h"
-# include "ide-tweaks-factory.h"
-# include "ide-tweaks-font.h"
-# include "ide-tweaks-group.h"
-# include "ide-tweaks-item.h"
-# include "ide-tweaks-page.h"
-# include "ide-tweaks-radio.h"
-# include "ide-tweaks-section.h"
-# include "ide-tweaks-settings.h"
-# include "ide-tweaks-spin.h"
-# include "ide-tweaks-switch.h"
-# include "ide-tweaks-variable.h"
-# include "ide-tweaks-widget.h"
-# include "ide-tweaks-window.h"
-#undef IDE_TWEAKS_INSIDE
+#include "ide-tweaks-widget.h"
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_TWEAKS_CAPTION (ide_tweaks_caption_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeTweaksCaption, ide_tweaks_caption, IDE, TWEAKS_CAPTION, IdeTweaksWidget)
+
+IDE_AVAILABLE_IN_ALL
+IdeTweaksCaption *ide_tweaks_caption_new      (void);
+IDE_AVAILABLE_IN_ALL
+const char       *ide_tweaks_caption_get_text (IdeTweaksCaption *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_tweaks_caption_set_text (IdeTweaksCaption *self,
+                                               const char       *text);
+
+G_END_DECLS
