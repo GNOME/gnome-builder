@@ -297,7 +297,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
 }
 
 static void
-on_shortcut_dialog_respnose (GbpShellcmdCommandDialog *self,
+on_shortcut_dialog_response (GbpShellcmdCommandDialog *self,
                              int                       response_id,
                              IdeShortcutAccelDialog   *dialog)
 {
@@ -345,7 +345,7 @@ on_shortcut_activated_cb (GbpShellcmdCommandDialog *self,
                          NULL);
   g_signal_connect_object (dialog,
                            "response",
-                           G_CALLBACK (on_shortcut_dialog_respnose),
+                           G_CALLBACK (on_shortcut_dialog_response),
                            self,
                            G_CONNECT_SWAPPED);
   gtk_window_present (GTK_WINDOW (dialog));
