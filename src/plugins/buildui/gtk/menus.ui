@@ -140,19 +140,19 @@
       <submenu id="run-menu-appearance">
         <attribute name="label" translatable="yes">Appearance</attribute>
         <item>
-          <attribute name="label">Follow System Style</attribute>
+          <attribute name="label" translatable="yes">Follow System Style</attribute>
           <attribute name="role">radio</attribute>
           <attribute name="action">context.run-manager.color-scheme</attribute>
           <attribute name="target" type="s">'follow'</attribute>
         </item>
         <item>
-          <attribute name="label">Force Light</attribute>
+          <attribute name="label" translatable="yes">Force Light</attribute>
           <attribute name="role">radio</attribute>
           <attribute name="action">context.run-manager.color-scheme</attribute>
           <attribute name="target" type="s">'force-light'</attribute>
         </item>
         <item>
-          <attribute name="label">Force Dark</attribute>
+          <attribute name="label" translatable="yes">Force Dark</attribute>
           <attribute name="role">radio</attribute>
           <attribute name="action">context.run-manager.color-scheme</attribute>
           <attribute name="target" type="s">'force-dark'</attribute>

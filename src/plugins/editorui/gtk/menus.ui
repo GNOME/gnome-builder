@@ -78,7 +78,7 @@
   </menu>
   <menu id="editorui-line-ends-menu">
     <section id="editorui-line-ends-section">
-      <attribute name="label">Line Ending</attribute>
+      <attribute name="label" translatable="yes">Line Ending</attribute>
       <!--item>
         This item is inserted automatically when the application starts
         so that we can alter what label is shown.
@@ -87,12 +87,12 @@
         <attribute name="target" type="s">'lf'</attribute>
       </item-->
       <item>
-        <attribute name="label">Windows (CR/LF)</attribute>
+        <attribute name="label" translatable="yes">Windows (CR/LF)</attribute>
         <attribute name="action">workspace.editorui.buffer.newline-type</attribute>
         <attribute name="target" type="s">'cr-lf'</attribute>
       </item>
       <item>
-        <attribute name="label">Mac Classic (CR)</attribute>
+        <attribute name="label" translatable="yes">Mac Classic (CR)</attribute>
         <attribute name="action">workspace.editorui.buffer.newline-type</attribute>
         <attribute name="target" type="s">'cr'</attribute>
       </item>
