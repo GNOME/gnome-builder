@@ -44,6 +44,7 @@ struct _GbpShellcmdCommandDialog
   GtkLabel              *shortcut_label;
   GtkButton             *save;
   GtkButton             *delete_button;
+  GtkSwitch             *use_shell;
 
   char                  *accel;
 
@@ -257,6 +258,7 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   const char *accel;
   const char *name;
   const char *cwd;
+  gboolean use_shell;
 
   IDE_ENTRY;
 
@@ -272,12 +274,14 @@ gbp_shellcmd_command_dialog_set_command (GbpShellcmdCommandDialog *self,
   cwd = ide_run_command_get_cwd (IDE_RUN_COMMAND (command));
   accel = gbp_shellcmd_run_command_get_accelerator (command);
   locality = gbp_shellcmd_run_command_get_locality (command);
+  use_shell = gbp_shellcmd_run_command_get_use_shell (command);
 
   argvstr = normalize_argv (argv);
 
   gtk_editable_set_text (GTK_EDITABLE (self->argv), argvstr);
   gtk_editable_set_text (GTK_EDITABLE (self->location), cwd);
   gtk_editable_set_text (GTK_EDITABLE (self->name), name);
+  gtk_switch_set_active (self->use_shell, use_shell);
   set_accel (self, accel);
 
   /* locality value equates to position in list model for simplicity */
@@ -416,6 +420,8 @@ command_save_action (GtkWidget  *widget,
   ide_run_command_set_cwd (IDE_RUN_COMMAND (self->command),
                            gtk_editable_get_text (GTK_EDITABLE (self->location)));
   gbp_shellcmd_run_command_set_accelerator (self->command, self->accel);
+  gbp_shellcmd_run_command_set_use_shell (self->command,
+                                          gtk_switch_get_active (self->use_shell));
 
   env = string_list_to_strv (self->envvars);
   ide_run_command_set_environ (IDE_RUN_COMMAND (self->command),
@@ -591,6 +597,7 @@ gbp_shellcmd_command_dialog_class_init (GbpShellcmdCommandDialogClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, name);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, save);
   gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, shortcut_label);
+  gtk_widget_class_bind_template_child (widget_class, GbpShellcmdCommandDialog, use_shell);
   gtk_widget_class_bind_template_callback (widget_class, on_env_entry_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_env_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_shortcut_activated_cb);
