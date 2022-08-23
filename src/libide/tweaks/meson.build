@@ -87,6 +87,7 @@ libide_tweaks_deps = [
 
   libide_core_dep,
   libide_io_dep,
+  libide_search_dep,
 ]
 
 #
