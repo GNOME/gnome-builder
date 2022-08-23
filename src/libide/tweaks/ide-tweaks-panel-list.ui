@@ -6,6 +6,7 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkSearchEntry" id="search_entry">
+            <signal name="changed" handler="on_search_changed_cb" swapped="true" object="IdeTweaksPanelList"/>
             <property name="margin-start">12</property>
             <property name="margin-end">12</property>
             <property name="margin-top">12</property>

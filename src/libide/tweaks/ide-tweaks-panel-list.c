@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libide-search.h>
+
 #include "ide-tweaks-factory-private.h"
 #include "ide-tweaks-model-private.h"
 #include "ide-tweaks-page.h"
@@ -29,15 +31,26 @@
 #include "ide-tweaks-panel-list-row-private.h"
 #include "ide-tweaks-section.h"
 
+typedef struct
+{
+  IdePatternSpec *spec;
+} SearchInfo;
+
 struct _IdeTweaksPanelList
 {
-  AdwBin          parent_instance;
+  AdwBin              parent_instance;
 
-  IdeTweaksItem  *item;
-  IdeTweaksItem  *selected;
+  IdeTweaksItem      *item;
+  IdeTweaksItem      *selected;
 
-  GtkListBox     *list_box;
-  GtkSearchEntry *search_entry;
+  GtkListBox         *list_box;
+  GtkSearchEntry     *search_entry;
+
+  char               *last_search;
+  GListModel         *model;
+  GtkFilterListModel *filtered;
+
+  SearchInfo         *info;
 };
 
 enum {
@@ -53,10 +66,36 @@ enum {
   N_SIGNALS
 };
 
+static void ide_tweaks_panel_list_reset_search (IdeTweaksPanelList *self);
+
 G_DEFINE_FINAL_TYPE (IdeTweaksPanelList, ide_tweaks_panel_list, ADW_TYPE_BIN)
 
 static GParamSpec *properties [N_PROPS];
 static guint signals [N_SIGNALS];
+
+static void
+search_info_finalize (gpointer data)
+{
+  SearchInfo *si = data;
+
+  g_clear_pointer (&si->spec, ide_pattern_spec_unref);
+}
+
+static void
+search_info_unref (SearchInfo *si)
+{
+  g_rc_box_release_full (si, search_info_finalize);
+}
+
+static gboolean
+search_filter_func (gpointer itemptr,
+                    gpointer user_data)
+{
+  IdeTweaksItem *item = itemptr;
+  SearchInfo *si = user_data;
+
+  return ide_tweaks_item_match (item, si->spec);
+}
 
 static IdeTweaksItemVisitResult
 panel_list_visitor (IdeTweaksItem *item,
@@ -104,17 +143,7 @@ ide_tweaks_panel_list_set_item (IdeTweaksPanelList *self,
 
   if (g_set_object (&self->item, item))
     {
-      g_autoptr(IdeTweaksModel) model = NULL;
-
-      if (item != NULL)
-        {
-          model = ide_tweaks_model_new (item, panel_list_visitor, item, NULL);
-          gtk_list_box_bind_model (self->list_box,
-                                   G_LIST_MODEL (model),
-                                   ide_tweaks_panel_list_create_row_cb,
-                                   NULL, NULL);
-        }
-
+      ide_tweaks_panel_list_reset_search (self);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
     }
 }
@@ -236,9 +265,85 @@ ide_tweaks_panel_list_row_activated_cb (IdeTweaksPanelList    *self,
 }
 
 static void
+ide_tweaks_panel_list_reset_search (IdeTweaksPanelList *self)
+{
+  g_autoptr(IdeTweaksModel) model = NULL;
+
+  g_assert (IDE_IS_TWEAKS_PANEL_LIST (self));
+
+  g_clear_object (&self->filtered);
+  g_clear_pointer (&self->last_search, g_free);
+
+  if (self->item != NULL)
+    model = ide_tweaks_model_new (self->item, panel_list_visitor, self->item, NULL);
+
+  g_set_object (&self->model, G_LIST_MODEL (model));
+
+  gtk_list_box_bind_model (self->list_box,
+                           G_LIST_MODEL (model),
+                           ide_tweaks_panel_list_create_row_cb,
+                           NULL, NULL);
+}
+
+static void
+on_search_changed_cb (IdeTweaksPanelList *self,
+                      GtkEditable        *entry)
+{
+  const char *text;
+
+  g_assert (IDE_IS_TWEAKS_PANEL_LIST (self));
+  g_assert (GTK_IS_EDITABLE (entry));
+
+  text = gtk_editable_get_text (entry);
+
+  if (ide_str_empty0 (text))
+    {
+      ide_tweaks_panel_list_reset_search (self);
+      return;
+    }
+
+  g_clear_pointer (&self->info->spec, ide_pattern_spec_unref);
+  self->info->spec = ide_pattern_spec_new (text);
+
+  if (self->filtered)
+    {
+      GtkFilter *filter = gtk_filter_list_model_get_filter (GTK_FILTER_LIST_MODEL (self->filtered));
+
+      if (g_str_has_prefix (text, self->last_search))
+        gtk_filter_changed (filter, GTK_FILTER_CHANGE_MORE_STRICT);
+      else if (g_str_has_prefix (self->last_search, text))
+        gtk_filter_changed (filter, GTK_FILTER_CHANGE_LESS_STRICT);
+      else
+        gtk_filter_changed (filter, GTK_FILTER_CHANGE_DIFFERENT);
+    }
+  else
+    {
+      GtkCustomFilter *filter;
+
+      filter = gtk_custom_filter_new (search_filter_func,
+                                      g_rc_box_acquire (self->info),
+                                      (GDestroyNotify)search_info_unref);
+      self->filtered = gtk_filter_list_model_new (g_object_ref (self->model), GTK_FILTER (filter));
+    }
+
+  ide_set_string (&self->last_search, text);
+
+  gtk_list_box_bind_model (self->list_box,
+                           G_LIST_MODEL (self->filtered),
+                           ide_tweaks_panel_list_create_row_cb,
+                           NULL, NULL);
+}
+
+static void
 ide_tweaks_panel_list_dispose (GObject *object)
 {
   IdeTweaksPanelList *self = (IdeTweaksPanelList *)object;
+
+  g_clear_pointer (&self->info, search_info_unref);
+
+  g_clear_object (&self->model);
+  g_clear_object (&self->filtered);
+  g_clear_pointer (&self->last_search, g_free);
 
   g_clear_object (&self->item);
   g_clear_object (&self->selected);
@@ -324,6 +429,7 @@ ide_tweaks_panel_list_class_init (IdeTweaksPanelListClass *klass)
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, list_box);
   gtk_widget_class_bind_template_child (widget_class, IdeTweaksPanelList, search_entry);
   gtk_widget_class_bind_template_callback (widget_class, ide_tweaks_panel_list_row_activated_cb);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_changed_cb);
 
   signals [PAGE_ACTIVATED] =
     g_signal_new ("page-activated",
@@ -339,6 +445,8 @@ static void
 ide_tweaks_panel_list_init (IdeTweaksPanelList *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
+
+  self->info = g_rc_box_new0 (SearchInfo);
 
   gtk_list_box_set_header_func (self->list_box,
                                 (GtkListBoxUpdateHeaderFunc)ide_tweaks_panel_list_header_func,
