@@ -27,13 +27,12 @@
 
 #include <ide-build-ident.h>
 
-#include <libide-plugins.h>
 #include <libide-projects.h>
-#include <libide-tweaks.h>
 
 #include "ide-application.h"
 #include "ide-application-credits.h"
 #include "ide-application-private.h"
+#include "ide-application-tweaks.h"
 #include "ide-gui-global.h"
 #include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
@@ -46,76 +45,19 @@ ide_application_actions_tweaks (GSimpleAction *action,
                                 GVariant      *parameter,
                                 gpointer       user_data)
 {
-  static const char *tweaks_resources[] = {
-    "resource:///org/gnome/libide-gui/tweaks.ui",
-  };
   IdeApplication *self = user_data;
-  g_autoptr(IdeTweaks) tweaks = NULL;
-  IdeTweaksWindow *window;
-  IdeTweaksPage *plugins_page;
-  const GList *windows;
-  GtkWindow *toplevel = NULL;
   const char *page = NULL;
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (G_IS_SIMPLE_ACTION (action));
   g_assert (IDE_IS_APPLICATION (self));
 
   if (parameter && g_variant_is_of_type (parameter, G_VARIANT_TYPE_STRING))
     page = g_variant_get_string (parameter, NULL);
 
-  /* Locate a toplevel for a transient-for property, or a previous
-   * tweaks window to display.
-   */
-  windows = gtk_application_get_windows (GTK_APPLICATION (self));
-  for (; windows; windows = windows->next)
-    {
-      if (IDE_IS_TWEAKS_WINDOW (windows->data))
-        {
-          gtk_window_present (windows->data);
-          return;
-        }
-
-      if (toplevel == NULL && IDE_IS_PRIMARY_WORKSPACE (windows->data))
-        toplevel = windows->data;
-    }
-
-  tweaks = ide_tweaks_new ();
-
-  /* Load our base tweaks scaffolding */
-  for (guint i = 0; i < G_N_ELEMENTS (tweaks_resources); i++)
-    {
-      g_autoptr(GFile) tweaks_file = g_file_new_for_uri (tweaks_resources[i]);
-      g_autoptr(GError) error = NULL;
-
-      ide_tweaks_load_from_file (tweaks, tweaks_file, NULL, &error);
-
-      if (error != NULL)
-        g_critical ("Failed to load tweaks: %s", error->message);
-    }
-
-  /* Expose Plugin Toggles */
-  plugins_page = IDE_TWEAKS_PAGE (ide_tweaks_get_object (tweaks, "plugins_page"));
-  _ide_application_add_plugin_tweaks (self, plugins_page);
-
-  /* Prepare window and setup :application */
-  window = g_object_new (IDE_TYPE_TWEAKS_WINDOW,
-                         "tweaks", tweaks,
-                         NULL);
-  gtk_application_add_window (GTK_APPLICATION (self), GTK_WINDOW (window));
-
-  /* Switch pages before we display if necessary */
-  if (page != NULL)
-    {
-      GObject *object;
-
-      if ((object = ide_tweaks_get_object (tweaks, page)) && IDE_IS_TWEAKS_ITEM (object))
-        ide_tweaks_window_navigate_to (window, IDE_TWEAKS_ITEM (object));
-    }
-
-  /* Now we can display */
-  gtk_window_present (GTK_WINDOW (window));
+  ide_show_tweaks (NULL, page);
 
   IDE_EXIT;
 }

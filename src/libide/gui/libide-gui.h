@@ -31,6 +31,7 @@
 #define IDE_GUI_INSIDE
 # include "ide-application.h"
 # include "ide-application-addin.h"
+# include "ide-application-tweaks.h"
 # include "ide-config-view-addin.h"
 # include "ide-environment-editor.h"
 # include "ide-frame.h"
