@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTweaks">
-    <child internal-child="external_section">
+    <child internal-child="foundry_section">
       <object class="IdeTweaksSection">
         <child>
           <object class="IdeTweaksPage" id="sdk_page">
