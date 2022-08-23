@@ -181,8 +181,10 @@ ide_search_results_refilter (IdeSearchResults *self,
   /* Notify of changes, and only update the portion not matched */
   if (g_str_has_prefix (query, old_query))
     gtk_filter_changed (GTK_FILTER (self->filter), GTK_FILTER_CHANGE_MORE_STRICT);
-  else
+  else if (g_str_has_prefix (old_query, query))
     gtk_filter_changed (GTK_FILTER (self->filter), GTK_FILTER_CHANGE_LESS_STRICT);
+  else
+    gtk_filter_changed (GTK_FILTER (self->filter), GTK_FILTER_CHANGE_DIFFERENT);
 
   /* Attach filter if we haven't yet */
   if (gtk_filter_list_model_get_filter (self->filter_model) == NULL)
