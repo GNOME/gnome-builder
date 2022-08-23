@@ -140,6 +140,27 @@ ide_tweaks_item_real_copy (IdeTweaksItem *self)
   return IDE_TWEAKS_ITEM (copy);
 }
 
+static gboolean
+ide_tweaks_item_real_match (IdeTweaksItem  *self,
+                            IdePatternSpec *spec)
+{
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+
+  g_assert (IDE_IS_TWEAKS_ITEM (self));
+  g_assert (spec != NULL);
+
+  if (priv->keywords != NULL)
+    {
+      for (guint i = 0; priv->keywords[i]; i++)
+        {
+          if (ide_pattern_spec_match (spec, priv->keywords[i]))
+            return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 ide_tweaks_item_dispose (GObject *object)
 {
@@ -219,6 +240,7 @@ ide_tweaks_item_class_init (IdeTweaksItemClass *klass)
   object_class->set_property = ide_tweaks_item_set_property;
 
   klass->copy = ide_tweaks_item_real_copy;
+  klass->match = ide_tweaks_item_real_match;
 
   properties[PROP_ID] =
     g_param_spec_string ("id", NULL, NULL,
@@ -786,4 +808,16 @@ ide_tweaks_item_get_root (IdeTweaksItem *self)
     parent = ide_tweaks_item_get_parent (parent);
 
   return parent;
+}
+
+gboolean
+ide_tweaks_item_match (IdeTweaksItem  *self,
+                       IdePatternSpec *spec)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), FALSE);
+
+  if (spec == NULL)
+    return TRUE;
+
+  return IDE_TWEAKS_ITEM_GET_CLASS (self)->match (self, spec);
 }

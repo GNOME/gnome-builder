@@ -68,6 +68,16 @@ ide_tweaks_page_accepts (IdeTweaksItem *item,
          IDE_IS_TWEAKS_SECTION (child);
 }
 
+static gboolean
+ide_tweaks_page_match (IdeTweaksItem  *item,
+                       IdePatternSpec *spec)
+{
+  IdeTweaksPage *self = IDE_TWEAKS_PAGE (item);
+
+  return ide_pattern_spec_match (spec, self->title) ||
+         IDE_TWEAKS_ITEM_CLASS (ide_tweaks_page_parent_class)->match (item, spec);
+}
+
 static void
 ide_tweaks_page_dispose (GObject *object)
 {
@@ -152,6 +162,7 @@ ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
   object_class->set_property = ide_tweaks_page_set_property;
 
   item_class->accepts = ide_tweaks_page_accepts;
+  item_class->match = ide_tweaks_page_match;
 
   properties [PROP_HAS_SUBPAGE] =
     g_param_spec_boolean ("has-subpage", NULL, NULL,

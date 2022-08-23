@@ -25,6 +25,7 @@
 #endif
 
 #include <libide-core.h>
+#include <libide-search.h>
 
 G_BEGIN_DECLS
 
@@ -57,9 +58,11 @@ struct _IdeTweaksItemClass
 {
   GObjectClass parent_class;
 
-  gboolean       (*accepts) (IdeTweaksItem *self,
-                             IdeTweaksItem *child);
-  IdeTweaksItem *(*copy)    (IdeTweaksItem *self);
+  gboolean       (*accepts) (IdeTweaksItem  *self,
+                             IdeTweaksItem  *child);
+  IdeTweaksItem *(*copy)    (IdeTweaksItem  *self);
+  gboolean       (*match)   (IdeTweaksItem  *self,
+                             IdePatternSpec *spec);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -71,6 +74,9 @@ const char * const *ide_tweaks_item_get_keywords         (IdeTweaksItem        *
 IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_item_set_keywords         (IdeTweaksItem        *self,
                                                           const char * const   *keywords);
+IDE_AVAILABLE_IN_ALL
+gboolean            ide_tweaks_item_match                (IdeTweaksItem        *self,
+                                                          IdePatternSpec       *spec);
 IDE_AVAILABLE_IN_ALL
 gboolean            ide_tweaks_item_is_ancestor          (IdeTweaksItem        *self,
                                                           IdeTweaksItem        *ancestor);
