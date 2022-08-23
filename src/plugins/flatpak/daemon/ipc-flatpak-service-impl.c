@@ -887,7 +887,7 @@ install_worker (GTask        *task,
         }
     }
 
-  g_message ("Installation complete");
+  g_debug ("Installation complete");
 
   ipc_flatpak_transfer_set_fraction (state->transfer, 1.0);
   ipc_flatpak_transfer_set_message (state->transfer, _("Installation complete"));
