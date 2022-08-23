@@ -27,6 +27,8 @@ plugins_sources += files([
   'gbp-flatpak-run-command-provider.c',
   'gbp-flatpak-runtime-provider.c',
   'gbp-flatpak-runtime.c',
+  'gbp-flatpak-sdk.c',
+  'gbp-flatpak-sdk-provider.c',
   'gbp-flatpak-sdk-stage.c',
   'gbp-flatpak-sources.c',
   'gbp-flatpak-util.c',

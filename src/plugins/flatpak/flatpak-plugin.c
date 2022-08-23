@@ -35,6 +35,7 @@
 #include "gbp-flatpak-pipeline-addin.h"
 #include "gbp-flatpak-run-command-provider.h"
 #include "gbp-flatpak-runtime-provider.h"
+#include "gbp-flatpak-sdk-provider.h"
 #include "gbp-flatpak-workbench-addin.h"
 
 _IDE_EXTERN void
@@ -46,20 +47,23 @@ _gbp_flatpak_register_types (PeasObjectModule *module)
                                               IDE_TYPE_BUILD_SYSTEM_DISCOVERY,
                                               GBP_TYPE_FLATPAK_BUILD_SYSTEM_DISCOVERY);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_RUN_COMMAND_PROVIDER,
-                                              GBP_TYPE_FLATPAK_RUN_COMMAND_PROVIDER);
-  peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CONFIG_PROVIDER,
                                               GBP_TYPE_FLATPAK_CONFIG_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DEPENDENCY_UPDATER,
                                               GBP_TYPE_FLATPAK_DEPENDENCY_UPDATER);
   peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_PIPELINE_ADDIN,
+                                              GBP_TYPE_FLATPAK_PIPELINE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_RUN_COMMAND_PROVIDER,
+                                              GBP_TYPE_FLATPAK_RUN_COMMAND_PROVIDER);
+  peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RUNTIME_PROVIDER,
                                               GBP_TYPE_FLATPAK_RUNTIME_PROVIDER);
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PIPELINE_ADDIN,
-                                              GBP_TYPE_FLATPAK_PIPELINE_ADDIN);
+                                              IDE_TYPE_SDK_PROVIDER,
+                                              GBP_TYPE_FLATPAK_SDK_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_FLATPAK_WORKBENCH_ADDIN);
