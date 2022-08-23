@@ -89,5 +89,14 @@
         </child>
       </object>
     </child>
+    <child internal-child="overview_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="overview_page">
+            <property name="title" translatable="yes">Overview</property>
+          </object>
+        </child>
+      </object>
+    </child>
   </template>
 </interface>
