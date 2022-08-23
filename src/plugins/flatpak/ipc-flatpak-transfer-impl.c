@@ -30,14 +30,14 @@
 
 struct _IpcFlatpakTransferImpl
 {
-  IpcFlatpakTransferSkeleton parent_instance;
-  IdeContext *context;
+  IpcFlatpakTransferSkeleton  parent_instance;
+  GtkWindow                  *toplevel;
 };
 
 static void transfer_iface_init (IpcFlatpakTransferIface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IpcFlatpakTransferImpl, ipc_flatpak_transfer_impl, IPC_TYPE_FLATPAK_TRANSFER_SKELETON,
-                         G_IMPLEMENT_INTERFACE (IPC_TYPE_FLATPAK_TRANSFER, transfer_iface_init))
+                               G_IMPLEMENT_INTERFACE (IPC_TYPE_FLATPAK_TRANSFER, transfer_iface_init))
 
 typedef struct
 {
@@ -81,17 +81,13 @@ ipc_flatpak_transfer_impl_handle_confirm (IpcFlatpakTransfer    *transfer,
 {
   IpcFlatpakTransferImpl *self = (IpcFlatpakTransferImpl *)transfer;
   GbpFlatpakInstallDialog *dialog;
-  IdeWorkbench *workbench;
-  IdeWorkspace *workspace;
   Confirm *state;
 
   g_assert (IPC_IS_FLATPAK_TRANSFER_IMPL (self));
   g_assert (G_IS_DBUS_METHOD_INVOCATION (invocation));
   g_assert (refs != NULL);
 
-  workbench = ide_workbench_from_context (self->context);
-  workspace = ide_workbench_get_current_workspace (workbench);
-  dialog = gbp_flatpak_install_dialog_new (GTK_WINDOW (workspace));
+  dialog = gbp_flatpak_install_dialog_new (self->toplevel);
 
   for (guint i = 0; refs[i]; i++)
     gbp_flatpak_install_dialog_add_runtime (dialog, refs[i]);
@@ -116,13 +112,13 @@ ipc_flatpak_transfer_impl_handle_confirm (IpcFlatpakTransfer    *transfer,
 }
 
 static void
-ipc_flatpak_transfer_impl_finalize (GObject *object)
+ipc_flatpak_transfer_impl_dispose (GObject *object)
 {
   IpcFlatpakTransferImpl *self = (IpcFlatpakTransferImpl *)object;
 
-  g_clear_object (&self->context);
+  g_clear_object (&self->toplevel);
 
-  G_OBJECT_CLASS (ipc_flatpak_transfer_impl_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ipc_flatpak_transfer_impl_parent_class)->dispose (object);
 }
 
 static void
@@ -130,7 +126,7 @@ ipc_flatpak_transfer_impl_class_init (IpcFlatpakTransferImplClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = ipc_flatpak_transfer_impl_finalize;
+  object_class->dispose = ipc_flatpak_transfer_impl_dispose;
 }
 
 static void
@@ -142,7 +138,21 @@ IpcFlatpakTransfer *
 ipc_flatpak_transfer_impl_new (IdeContext *context)
 {
   IpcFlatpakTransferImpl *self = g_object_new (IPC_TYPE_FLATPAK_TRANSFER_IMPL, NULL);
-  g_set_object (&self->context, context);
+  IdeWorkbench *workbench = ide_workbench_from_context (context);
+  IdeWorkspace *workspace = ide_workbench_get_current_workspace (workbench);
+
+  g_set_object (&self->toplevel, GTK_WINDOW (workspace));
+
+  return IPC_FLATPAK_TRANSFER (self);
+}
+
+IpcFlatpakTransfer *
+ipc_flatpak_transfer_impl_new_simple (GtkWindow *toplevel)
+{
+  IpcFlatpakTransferImpl *self = g_object_new (IPC_TYPE_FLATPAK_TRANSFER_IMPL, NULL);
+
+  g_set_object (&self->toplevel, toplevel);
+
   return IPC_FLATPAK_TRANSFER (self);
 }
 

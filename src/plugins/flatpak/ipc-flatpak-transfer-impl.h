@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <gtk/gtk.h>
+
 #include <libide-core.h>
 
 #include "daemon/ipc-flatpak-transfer.h"
@@ -30,6 +32,7 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IpcFlatpakTransferImpl, ipc_flatpak_transfer_impl, IPC, FLATPAK_TRANSFER_IMPL, IpcFlatpakTransferSkeleton)
 
-IpcFlatpakTransfer *ipc_flatpak_transfer_impl_new (IdeContext *context);
+IpcFlatpakTransfer *ipc_flatpak_transfer_impl_new        (IdeContext *context);
+IpcFlatpakTransfer *ipc_flatpak_transfer_impl_new_simple (GtkWindow  *toplevel);
 
 G_END_DECLS
