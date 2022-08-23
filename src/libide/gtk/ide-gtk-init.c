@@ -29,6 +29,7 @@
 #include "ide-file-chooser-entry.h"
 #include "ide-gtk-private.h"
 #include "ide-enum-object.h"
+#include "ide-install-button.h"
 #include "ide-progress-icon.h"
 #include "ide-radio-box.h"
 #include "ide-scrubber-revealer.h"
@@ -44,6 +45,7 @@ _ide_gtk_init (void)
   g_type_ensure (IDE_TYPE_ENUM_OBJECT);
   g_type_ensure (IDE_TYPE_ENTRY_POPOVER);
   g_type_ensure (IDE_TYPE_FILE_CHOOSER_ENTRY);
+  g_type_ensure (IDE_TYPE_INSTALL_BUTTON);
   g_type_ensure (IDE_TYPE_PROGRESS_ICON);
   g_type_ensure (IDE_TYPE_RADIO_BOX);
   g_type_ensure (IDE_TYPE_SCRUBBER_REVEALER);

@@ -567,6 +567,7 @@ ide_application_init (IdeApplication *self)
   ide_application_load_typelibs (self);
 
   /* Ensure our core data is loaded early. */
+  _ide_application_add_resources (self, "resource:///org/gnome/libide-gtk/");
   _ide_application_add_resources (self, "resource:///org/gnome/libide-tweaks/");
   _ide_application_add_resources (self, "resource:///org/gnome/libide-sourceview/");
   _ide_application_add_resources (self, "resource:///org/gnome/libide-gui/");

@@ -1,4 +1,4 @@
-/* libide-gtk.h
+/* ide-install-button.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,23 +20,25 @@
 
 #pragma once
 
-#define IDE_GTK_INSIDE
-# include "ide-animation.h"
-# include "ide-entry-popover.h"
-# include "ide-enum-object.h"
-# include "ide-file-chooser-entry.h"
-# include "ide-file-manager.h"
-# include "ide-font-description.h"
-# include "ide-gtk.h"
-# include "ide-gtk-enums.h"
-# include "ide-install-button.h"
-# include "ide-joined-menu.h"
-# include "ide-menu-manager.h"
-# include "ide-progress-icon.h"
-# include "ide-radio-box.h"
-# include "ide-scrubber-revealer.h"
-# include "ide-search-entry.h"
-# include "ide-shortcut-accel-dialog.h"
-# include "ide-tree-expander.h"
-# include "ide-truncate-model.h"
-#undef IDE_GTK_INSIDE
+#include <gtk/gtk.h>
+
+#include <libide-core.h>
+
+G_BEGIN_DECLS
+
+#define IDE_TYPE_INSTALL_BUTTON (ide_install_button_get_type())
+
+IDE_AVAILABLE_IN_ALL
+G_DECLARE_FINAL_TYPE (IdeInstallButton, ide_install_button, IDE, INSTALL_BUTTON, GtkWidget)
+
+IDE_AVAILABLE_IN_ALL
+GtkWidget  *ide_install_button_new       (void);
+IDE_AVAILABLE_IN_ALL
+void        ide_install_button_cancel    (IdeInstallButton *self);
+IDE_AVAILABLE_IN_ALL
+const char *ide_install_button_get_label (IdeInstallButton *self);
+IDE_AVAILABLE_IN_ALL
+void        ide_install_button_set_label (IdeInstallButton *self,
+                                          const char       *label);
+
+G_END_DECLS

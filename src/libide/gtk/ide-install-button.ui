@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeInstallButton" parent="GtkWidget">
+    <child>
+      <object class="GtkStack" id="stack">
+        <property name="hhomogeneous">true</property>
+        <property name="vhomogeneous">true</property>
+        <property name="transition-type">crossfade</property>
+        <child>
+          <object class="GtkStackPage" id="install_page">
+            <property name="child">
+              <object class="GtkButton" id="install">
+                <style>
+                  <class name="text-button"/>
+                </style>
+                <property name="label" translatable="yes">_Install</property>
+                <property name="use-underline">true</property>
+                <signal name="clicked" handler="install_clicked_cb" swapped="true" object="IdeInstallButton"/>
+              </object>
+            </property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkStackPage" id="cancel_page">
+            <property name="child">
+              <object class="GtkButton" id="cancel">
+                <style>
+                  <class name="text-button"/>
+                  <class name="install-progress"/>
+                </style>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">true</property>
+                <signal name="clicked" handler="cancel_clicked_cb" swapped="true" object="IdeInstallButton"/>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkCssProvider" id="css">
+  </object>
+</interface>
