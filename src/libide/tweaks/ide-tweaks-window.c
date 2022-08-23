@@ -104,6 +104,42 @@ ide_tweaks_window_get_current_list_item (IdeTweaksWindow *self)
 }
 
 static void
+ide_tweaks_window_update_title (IdeTweaksWindow *self)
+{
+  g_autofree char *window_title = NULL;
+  g_autofree char *project_title = NULL;
+  IdeTweaksPanelList *list;
+  IdeTweaksItem *item;
+  IdeContext *context;
+  const char *title;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+
+  if (!(list = ide_tweaks_window_get_current_list (self)))
+    return;
+
+  if ((context = ide_tweaks_get_context (self->tweaks)))
+    project_title = ide_context_dup_title (context);
+
+  if ((item = ide_tweaks_panel_list_get_item (list)) && IDE_IS_TWEAKS_PAGE (item))
+    title = ide_tweaks_page_get_title (IDE_TWEAKS_PAGE (item));
+  else if (project_title != NULL)
+    title = project_title;
+  else
+    title = _("Preferences");
+
+  adw_window_title_set_title (self->sidebar_title, title);
+
+  if (project_title != NULL)
+    window_title = g_strdup_printf (_("Builder — %s — Preferences"), project_title);
+
+  gtk_window_set_title (GTK_WINDOW (self),
+                        window_title ? window_title
+                                     : _("Builder — Preferences"));
+}
+
+static void
 ide_tweaks_window_update_actions (IdeTweaksWindow *self)
 {
   IdeTweaksPanelList *list;
@@ -314,7 +350,7 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
         }
     }
 
-  /* Ensure action state visibility */
+  ide_tweaks_window_update_title (self);
   ide_tweaks_window_update_actions (self);
 }
 
@@ -394,23 +430,10 @@ panel_list_stack_notify_visible_child_cb (IdeTweaksWindow *self,
                                           GParamSpec      *pspec,
                                           GtkStack        *stack)
 {
-  IdeTweaksPanelList *list;
-  IdeTweaksItem *item;
-  const char *title;
-
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (GTK_IS_STACK (stack));
 
-  if (!(list = IDE_TWEAKS_PANEL_LIST (gtk_stack_get_visible_child (stack))))
-    return;
-
-  if ((item = ide_tweaks_panel_list_get_item (list)) && IDE_IS_TWEAKS_PAGE (item))
-    title = ide_tweaks_page_get_title (IDE_TWEAKS_PAGE (item));
-  else
-    title = gtk_window_get_title (GTK_WINDOW (self));
-
-  adw_window_title_set_title (self->sidebar_title, title);
-
+  ide_tweaks_window_update_title (self);
   ide_tweaks_window_update_actions (self);
 }
 
@@ -636,17 +659,7 @@ ide_tweaks_window_set_tweaks (IdeTweaksWindow *self,
 
   if (tweaks != NULL)
     {
-      IdeContext *context;
-      g_autofree char *title = NULL;
-
       g_set_object (&self->tweaks, tweaks);
-
-      /* Update window title to include project */
-      if ((context = ide_tweaks_get_context (tweaks)))
-        title = ide_context_dup_title (context);
-      gtk_window_set_title (GTK_WINDOW (self),
-                            title ? title : _("Preferences"));
-
       ide_tweaks_window_rebuild (self);
     }
 
