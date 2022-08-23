@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libpeas/peas.h>
 
 #include "ide-tweaks-addin.h"
@@ -634,7 +636,17 @@ ide_tweaks_window_set_tweaks (IdeTweaksWindow *self,
 
   if (tweaks != NULL)
     {
+      IdeContext *context;
+      g_autofree char *title = NULL;
+
       g_set_object (&self->tweaks, tweaks);
+
+      /* Update window title to include project */
+      if ((context = ide_tweaks_get_context (tweaks)))
+        title = ide_context_dup_title (context);
+      gtk_window_set_title (GTK_WINDOW (self),
+                            title ? title : _("Preferences"));
+
       ide_tweaks_window_rebuild (self);
     }
 
