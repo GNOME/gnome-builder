@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-21 17:39+0000\n"
-"PO-Revision-Date: 2022-08-21 22:22+0300\n"
+"POT-Creation-Date: 2022-08-23 04:08+0000\n"
+"PO-Revision-Date: 2022-08-23 17:45+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -776,13 +776,13 @@ msgstr "Параметри"
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
 #: src/libide/gui/ide-preferences-builtin.c:700
 #: src/libide/plugins/ide-plugin.c:350
-#: src/libide/tweaks/ide-tweaks-window.ui:139
+#: src/libide/tweaks/ide-tweaks-window.ui:140
 #: src/plugins/editorui/tweaks.ui:303
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
 #: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:144
 msgid "Help"
 msgstr "Довідка"
 
@@ -840,7 +840,7 @@ msgstr "Зберегти"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
@@ -1081,7 +1081,7 @@ msgstr "Розгортаємо на пристрої…"
 #: src/libide/foundry/ide-runtime.c:403
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:253
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
 msgstr "Основна система"
 
@@ -1219,7 +1219,7 @@ msgstr "Відкрити"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:128
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
 msgid "Select"
 msgstr "Вибрати"
@@ -1638,8 +1638,8 @@ msgstr "Видимі пробіли"
 #: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-#: src/plugins/editorui/tweaks-language.ui:68
-#: src/plugins/editorui/tweaks-language.ui:158
+#: src/plugins/editorui/tweaks-language.ui:69
+#: src/plugins/editorui/tweaks-language.ui:159
 msgid "Spaces"
 msgstr "Пробіли"
 
@@ -1759,7 +1759,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-#: src/plugins/editorui/tweaks-language.ui:142
+#: src/plugins/editorui/tweaks-language.ui:143
 msgid "Overwrite Braces"
 msgstr "Перезаписувати дужки"
 
@@ -1770,7 +1770,7 @@ msgstr "Перезаписувати завершальні дужки"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-#: src/plugins/editorui/tweaks-language.ui:149
+#: src/plugins/editorui/tweaks-language.ui:150
 msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
@@ -1780,13 +1780,13 @@ msgstr "Вставляти завершальні символи для блок
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
-#: src/plugins/editorui/tweaks-language.ui:76
+#: src/plugins/editorui/tweaks-language.ui:77
 msgid "Insert Trailing Newline"
 msgstr "Вставляти кінцевий символ нового рядка"
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
-#: src/plugins/editorui/tweaks-language.ui:77
+#: src/plugins/editorui/tweaks-language.ui:78
 msgid "Ensure files end with a newline"
 msgstr "Забезпечувати завершення файлів символом нового рядка"
 
@@ -1916,7 +1916,6 @@ msgstr "Застарілі кеші буде витерто під час зап
 
 #: src/libide/gui/ide-preferences-builtin.c:434
 #: src/libide/gui/ide-preferences-builtin.c:658
-#: src/plugins/platformui/tweaks.ui:62
 msgid "Network"
 msgstr "Мережа"
 
@@ -2017,7 +2016,7 @@ msgstr "Натхнення"
 
 #: src/libide/gui/ide-preferences-builtin.c:656
 #: src/libide/gui/ide-preferences-builtin.c:667
-#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:12
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
 msgstr "Команди"
 
@@ -2048,7 +2047,7 @@ msgstr "Програма"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:22
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Інтерфейс"
 
@@ -2113,7 +2112,7 @@ msgid "Additional"
 msgstr "Додатково"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks-language.ui:139
+#: src/plugins/editorui/tweaks-language.ui:140
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Behavior"
 msgstr "Поведінка"
@@ -2493,11 +2492,7 @@ msgstr "Каталог проєктів"
 msgid "All Preferences"
 msgstr "Усі налаштування"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:48
-msgid "Search Preferences"
-msgstr "Параметри пошуку"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:61
+#: src/libide/tweaks/ide-tweaks-window.ui:62
 msgid "Primary Menu"
 msgstr "Основне меню"
 
@@ -2912,7 +2907,7 @@ msgstr "Попередження"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:345
 #: src/plugins/buildui/gbp-buildui-pane.ui:81
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 #: src/plugins/testui/gbp-testui-preferences-addin.c:50
 msgid "Build Pipeline"
 msgstr "Конвеєр збирання"
@@ -3135,6 +3130,20 @@ msgstr "Запустити"
 #: src/plugins/buildui/gtk/menus.ui:134
 msgid "Run the project"
 msgstr "Запустити проєкт"
+
+#: src/plugins/buildui/gtk/menus.ui:143
+#| msgid "Follow System"
+msgid "Follow System Style"
+msgstr "Використовувати стиль системи"
+
+#: src/plugins/buildui/gtk/menus.ui:149
+#| msgid "Light"
+msgid "Force Light"
+msgstr "Примусово світла"
+
+#: src/plugins/buildui/gtk/menus.ui:155
+msgid "Force Dark"
+msgstr "Примусово темний"
 
 #: src/plugins/buildui/gtk/menus.ui:162
 msgid "Accessibility"
@@ -4318,7 +4327,7 @@ msgid "Trim Trailing Whitespace"
 msgstr "Обрізати кінцевий пробіл"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-#: src/plugins/editorui/tweaks-language.ui:84
+#: src/plugins/editorui/tweaks-language.ui:85
 msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
 msgstr "При зберіганні програма обрізатиме кінцеві пробіли зі змінених рядків"
 
@@ -4327,7 +4336,7 @@ msgid "Insert matching character for [[(\"'"
 msgstr "Вставляти завершальні символи для блоків [[(\"'"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
-#: src/plugins/editorui/tweaks-language.ui:123
+#: src/plugins/editorui/tweaks-language.ui:124
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr ""
 "Показувати поле у редакторі для позначення максимальної бажаної ширини"
@@ -4387,13 +4396,28 @@ msgid "5"
 msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:109
+#: src/plugins/editorui/tweaks-language.ui:110
 msgid "Indentation Size"
 msgstr "Розмір відступу"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
 msgstr "Такий самий, як і ширина табуляції"
+
+#: src/plugins/editorui/gtk/menus.ui:81
+#| msgid "Line Ending:"
+msgid "Line Ending"
+msgstr "Кінець рядка"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+#| msgid "Windows (CR+LF)"
+msgid "Windows (CR/LF)"
+msgstr "Windows (CR/LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+#| msgid "Mac OS Classic (CR)"
+msgid "Mac Classic (CR)"
+msgstr "Класична Mac (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -4435,68 +4459,68 @@ msgstr "Надрукувати…"
 msgid "Format Selection"
 msgstr "Форматувати позначене"
 
-#: src/plugins/editorui/tweaks-language.ui:53
+#: src/plugins/editorui/tweaks-language.ui:54
 msgid "Indentation & Formatting"
 msgstr "Відступи і форматування"
 
-#: src/plugins/editorui/tweaks-language.ui:56
+#: src/plugins/editorui/tweaks-language.ui:57
 msgid "Tab Character"
 msgstr "Символ табуляції"
 
-#: src/plugins/editorui/tweaks-language.ui:57
+#: src/plugins/editorui/tweaks-language.ui:58
 msgid "The character to be inserted for Tab"
 msgstr "Символ, який слід вставити для Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:62
+#: src/plugins/editorui/tweaks-language.ui:63
 msgid "Tab"
 msgstr "Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:83
+#: src/plugins/editorui/tweaks-language.ui:84
 msgid "Trim Trailing Space"
 msgstr "Обрізати кінцевий пробіл"
 
-#: src/plugins/editorui/tweaks-language.ui:94
+#: src/plugins/editorui/tweaks-language.ui:95
 msgid "Auto Indent"
 msgstr "Автовідступ"
 
-#: src/plugins/editorui/tweaks-language.ui:95
+#: src/plugins/editorui/tweaks-language.ui:96
 msgid "Automatically indent source code as you type"
 msgstr "Автоматичний відступ у коді під час введення"
 
-#: src/plugins/editorui/tweaks-language.ui:101
+#: src/plugins/editorui/tweaks-language.ui:102
 msgid "Tab Size"
 msgstr "Розмір табуляції"
 
-#: src/plugins/editorui/tweaks-language.ui:102
+#: src/plugins/editorui/tweaks-language.ui:103
 msgid "The number of characters to indent for Tab"
 msgstr "Кількість символів для відступу у відповідь на Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:110
+#: src/plugins/editorui/tweaks-language.ui:111
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
 "Кількість символів відступу або -1, якщо слід використати розмір табуляції"
 
-#: src/plugins/editorui/tweaks-language.ui:119
+#: src/plugins/editorui/tweaks-language.ui:120
 msgid "Margin"
 msgstr "Поле"
 
-#: src/plugins/editorui/tweaks-language.ui:122
+#: src/plugins/editorui/tweaks-language.ui:123
 msgid "Show Right Margin"
 msgstr "Показувати праве поле"
 
-#: src/plugins/editorui/tweaks-language.ui:129
+#: src/plugins/editorui/tweaks-language.ui:130
 msgid "Right Margin Position"
 msgstr "Позиція правого поля"
 
-#: src/plugins/editorui/tweaks-language.ui:130
+#: src/plugins/editorui/tweaks-language.ui:131
 msgid "The desired maximum line length"
 msgstr "Бажана максимальна довжина рядка"
 
-#: src/plugins/editorui/tweaks-language.ui:143
+#: src/plugins/editorui/tweaks-language.ui:144
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr "Перезаписувати завершальні квадратні, фігурні та круглі дужки і лапки"
 
-#: src/plugins/editorui/tweaks-language.ui:150
+#: src/plugins/editorui/tweaks-language.ui:151
 msgid ""
 "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
@@ -5486,29 +5510,17 @@ msgstr "Отримуємо залежності npm"
 msgid "_External Program…"
 msgstr "_Зовнішньої програми…"
 
-#: src/plugins/platformui/tweaks.ui:36
+#: src/plugins/platformui/tweaks.ui:30
 msgid "Document Navigation"
 msgstr "Навігація документом"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:33
 msgid "Tab Bar"
 msgstr "Панель вкладок"
 
-#: src/plugins/platformui/tweaks.ui:45
+#: src/plugins/platformui/tweaks.ui:39
 msgid "Drop Down"
 msgstr "Спадний список"
-
-#: src/plugins/platformui/tweaks.ui:67
-msgid "Allow Downloads when Metered"
-msgstr "Дозволити отримання даних з мережі, якщо ведеться облік"
-
-#: src/plugins/platformui/tweaks.ui:68
-msgid ""
-"Allow the download of SDKs and dependencies when on metered internet "
-"connections"
-msgstr ""
-"Дозволити отримання наборів інструментів та залежностей при вимірюваних "
-"з'єднаннях"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
@@ -5759,25 +5771,25 @@ msgstr "Команда cargo"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr "Типова команда cargo, яку слід запускати з rust-analyzer"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 msgid "Untitled Command"
 msgstr "Команда без назви"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:339
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 msgid "Set Shortcut"
 msgstr "Встановити скорочення"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
 msgid "Select Working Directory"
 msgstr "Виберіть робочий каталог"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
 msgid "Create Command"
 msgstr "Створити команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:542
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
 msgstr "С_творити"
 
@@ -5819,10 +5831,19 @@ msgstr ""
 "$SRCDIR</tt> або <tt>$HOME</tt> для визначення відносного шляху."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+#| msgid "Use Tabs"
+msgid "Use Subshell"
+msgstr "Використовувати підоболонку"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr "Запустити програму у підоболонці, зокрема <tt>sh -c ''</tt>"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "Локальність"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
@@ -5830,43 +5851,43 @@ msgstr ""
 "«Будівник» може запускати вашу команду із різних середовищ, зокрема основної "
 "системи або контейнерів збирання."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:192
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
 msgid "Add _Variable"
 msgstr "Додати з_мінну"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:198
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
 msgid "Add Variable"
 msgstr "Додати змінну"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:199
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
 msgid "_Add"
 msgstr "_Додати"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:218
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
 msgstr "Ви_лучити команду"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:246
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Subprocess"
 msgstr "Підпроцес"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:247
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Запустити команду як підпроцес «Будівника»"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:254
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
 msgstr "Запускає команду в основній системі."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:261
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
 msgstr "Запускає команду у конвеєрі збирання."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 msgid "As Target Application"
 msgstr "Як програму-ціль"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:268
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
 msgstr "Запускає команду так, наче вона є цільовою програмою."
 
@@ -5927,6 +5948,10 @@ msgstr "Середовище команди"
 msgid "Command Locality"
 msgstr "Локалізація команди"
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr "Використати оболонку"
+
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 msgid "Run Commands"
 msgstr "Виконання команд"
@@ -5936,6 +5961,17 @@ msgid "A list of run-command ids to load for the application or project."
 msgstr ""
 "Список завантажуваних ідентифікаторів команд запуску для програми або "
 "проєкту."
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
+msgstr ""
+"Використати команди для запуску систем збирання, програм або скриптів"
+" оболонки і пов'язати їх із клавіатурними скороченнями. Їх можна запускати з"
+" різноманітних середовищ, зокрема каналу збирання, середовища запуску або"
+" основної операційної системи."
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
@@ -6108,7 +6144,6 @@ msgid "Force performance mode while profiling"
 msgstr "Примусовий режим швидкодії під час профілювання"
 
 #: src/plugins/sysprof/tweaks.ui:43
-#| msgid "Don't Change Governer"
 msgid "Don't Change Governor"
 msgstr "Не змінювати керування"
 
@@ -6176,7 +6211,6 @@ msgid "JavaScript"
 msgstr "JavaScript"
 
 #: src/plugins/sysprof/tweaks.ui:128
-#| msgid "Collect infomration from GJS-based applications"
 msgid "Collect information from GJS-based applications"
 msgstr "Збирати відомості від заснованих на GJS програм"
 
@@ -6688,6 +6722,19 @@ msgstr "Не вдалося створити ієрархію XML."
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
 
+#~ msgid "Search Preferences"
+#~ msgstr "Параметри пошуку"
+
+#~ msgid "Allow Downloads when Metered"
+#~ msgstr "Дозволити отримання даних з мережі, якщо ведеться облік"
+
+#~ msgid ""
+#~ "Allow the download of SDKs and dependencies when on metered internet "
+#~ "connections"
+#~ msgstr ""
+#~ "Дозволити отримання наборів інструментів та залежностей при вимірюваних "
+#~ "з'єднаннях"
+
 #~ msgid "Builder — Preferences"
 #~ msgstr "Будівник – Налаштування"
 
@@ -6709,9 +6756,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~| msgid "Completion"
 #~ msgid "Auto-Completion"
 #~ msgstr "Автозавершення"
-
-#~ msgid "Use Tabs"
-#~ msgstr "Використовувати вкладки"
 
 #~ msgid "Use the tabbar within the page grid."
 #~ msgstr "Чи слід використовувати панель вкладок у таблиці сторінок"
