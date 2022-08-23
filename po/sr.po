@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-20 19:03+0000\n"
-"PO-Revision-Date: 2022-08-21 13:21+0200\n"
+"POT-Creation-Date: 2022-08-23 16:15+0000\n"
+"PO-Revision-Date: 2022-08-23 22:20+0200\n"
 "Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
 "Language-Team: српски <gnome-sr@googlegroups.org>\n"
 "Language: sr\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:222
+#: src/libide/gui/ide-application-actions.c:173
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
 #: src/plugins/editorui/tweaks.ui:316
@@ -39,7 +39,7 @@ msgid "An IDE for GNOME"
 msgstr "ИДЕ (интегрисано развојно окружење) за Гном"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:223
+#: src/libide/gui/ide-application-actions.c:174
 msgid "Christian Hergert, et al."
 msgstr "Кристијан Хергерт (Christian Hergert) и други."
 
@@ -796,13 +796,13 @@ msgstr "Поставке"
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
 #: src/libide/gui/ide-preferences-builtin.c:700
 #: src/libide/plugins/ide-plugin.c:350
-#: src/libide/tweaks/ide-tweaks-window.ui:139
+#: src/libide/tweaks/ide-tweaks-window.ui:140
 #: src/plugins/editorui/tweaks.ui:303
 msgid "Keyboard Shortcuts"
 msgstr "Пречице на тастатури"
 
 #: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:144
 msgid "Help"
 msgstr "Помоћ"
 
@@ -860,7 +860,7 @@ msgstr "Сачувај"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
@@ -875,7 +875,6 @@ msgid "Move to previous match (Ctrl+Shift+G)"
 msgstr "Иди на претходни погодак (Ctrl+Shift+G)"
 
 #: src/libide/editor/ide-editor-search-bar.ui:57
-#| msgid "Move to the next match"
 msgid "Move to next match (Ctrl+G)"
 msgstr "Иди на следећи погодак (Ctrl+G)"
 
@@ -1104,7 +1103,7 @@ msgstr "Пуштам на уређај…"
 #: src/libide/foundry/ide-runtime.c:403
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:253
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
 msgstr "Систем домаћина"
 
@@ -1141,7 +1140,7 @@ msgstr "Направи нови пројекат са дељеном библи�
 
 #: src/libide/greeter/ide-greeter-buttons-section.c:78
 msgid "Select a _Folder…"
-msgstr "Изабери _ффасциклу…"
+msgstr "Изабери _фасциклу…"
 
 #: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:26
 msgid "Directory"
@@ -1254,7 +1253,7 @@ msgstr "Отвори"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:128
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
 msgid "Select"
 msgstr "Изабери"
@@ -1349,11 +1348,7 @@ msgstr "Нађо пречице на тастатури"
 msgid "Show information about Builder"
 msgstr "Прикажи податке о Градитељу"
 
-#: src/libide/gui/ide-application-actions.c:161
-msgid "Builder — Preferences"
-msgstr "Градитељ — поставке"
-
-#: src/libide/gui/ide-application-actions.c:230
+#: src/libide/gui/ide-application-actions.c:181
 msgid "translator-credits"
 msgstr ""
 "Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
@@ -1362,7 +1357,7 @@ msgstr ""
 "\n"
 "https://гном.срб — превод Гнома на српски језик"
 
-#: src/libide/gui/ide-application-actions.c:237
+#: src/libide/gui/ide-application-actions.c:188
 msgid "Funded By"
 msgstr "Новчано помогли"
 
@@ -1686,8 +1681,8 @@ msgstr "Видљиви знакови празнине"
 #: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-#: src/plugins/editorui/tweaks-language.ui:68
-#: src/plugins/editorui/tweaks-language.ui:158
+#: src/plugins/editorui/tweaks-language.ui:69
+#: src/plugins/editorui/tweaks-language.ui:159
 msgid "Spaces"
 msgstr "Размаци"
 
@@ -1807,7 +1802,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-#: src/plugins/editorui/tweaks-language.ui:142
+#: src/plugins/editorui/tweaks-language.ui:143
 msgid "Overwrite Braces"
 msgstr "Преписује заграде"
 
@@ -1818,7 +1813,7 @@ msgstr "Препиши затворене витичасте заграде"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-#: src/plugins/editorui/tweaks-language.ui:149
+#: src/plugins/editorui/tweaks-language.ui:150
 msgid "Insert Matching Brace"
 msgstr "Умеће одговарајућу заграду"
 
@@ -1828,13 +1823,13 @@ msgstr "Уметни одговарајући знак за { [ ( или \\\""
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
-#: src/plugins/editorui/tweaks-language.ui:76
+#: src/plugins/editorui/tweaks-language.ui:77
 msgid "Insert Trailing Newline"
 msgstr "Унеси пратећу нову линију"
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
-#: src/plugins/editorui/tweaks-language.ui:77
+#: src/plugins/editorui/tweaks-language.ui:78
 msgid "Ensure files end with a newline"
 msgstr "Постарај се да се датотеке завршавају новом линијом"
 
@@ -1964,7 +1959,6 @@ msgstr "Истекли кешеви ће бити очишћени када се
 
 #: src/libide/gui/ide-preferences-builtin.c:434
 #: src/libide/gui/ide-preferences-builtin.c:658
-#: src/plugins/platformui/tweaks.ui:62
 msgid "Network"
 msgstr "Мрежа"
 
@@ -2065,7 +2059,7 @@ msgstr "Увид"
 
 #: src/libide/gui/ide-preferences-builtin.c:656
 #: src/libide/gui/ide-preferences-builtin.c:667
-#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:12
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
 msgstr "Наредбе"
 
@@ -2096,7 +2090,7 @@ msgstr "Програм"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:22
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Интерфејс"
 
@@ -2162,7 +2156,7 @@ msgid "Additional"
 msgstr "Додатно"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks-language.ui:139
+#: src/plugins/editorui/tweaks-language.ui:140
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Behavior"
 msgstr "Понашање"
@@ -2555,11 +2549,7 @@ msgstr "Директоријум са пројектима"
 msgid "All Preferences"
 msgstr "Све поставке"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:48
-msgid "Search Preferences"
-msgstr "Поставке претраге"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:61
+#: src/libide/tweaks/ide-tweaks-window.ui:62
 #, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle primary menu"
@@ -2977,7 +2967,7 @@ msgstr "Упозорења"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:345
 #: src/plugins/buildui/gbp-buildui-pane.ui:81
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 #: src/plugins/testui/gbp-testui-preferences-addin.c:50
 #, fuzzy
 #| msgid "Build Profile"
@@ -3215,6 +3205,22 @@ msgstr "Покрени"
 msgid "Run the project"
 msgstr "Покрени пројекат"
 
+#: src/plugins/buildui/gtk/menus.ui:143
+#, fuzzy
+#| msgid "Follow System"
+msgid "Follow System Style"
+msgstr "Прати систем"
+
+#: src/plugins/buildui/gtk/menus.ui:149
+#, fuzzy
+#| msgid "Light"
+msgid "Force Light"
+msgstr "Светили"
+
+#: src/plugins/buildui/gtk/menus.ui:155
+msgid "Force Dark"
+msgstr ""
+
 #: src/plugins/buildui/gtk/menus.ui:162
 msgid "Accessibility"
 msgstr "Приступачност"
@@ -3349,12 +3355,10 @@ msgid "16"
 msgstr "16"
 
 #: src/plugins/buildui/tweaks.ui:98
-#| msgid "2"
 msgid "32"
 msgstr "32"
 
 #: src/plugins/buildui/tweaks.ui:104
-#| msgid "4"
 msgid "64"
 msgstr "64"
 
@@ -4446,7 +4450,7 @@ msgid "Trim Trailing Whitespace"
 msgstr "Крати пратећу празнину"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-#: src/plugins/editorui/tweaks-language.ui:84
+#: src/plugins/editorui/tweaks-language.ui:85
 #, fuzzy
 #| msgid ""
 #| "Upon saving, trailing whitespace from modified lines will be trimmed."
@@ -4461,6 +4465,7 @@ msgid "Insert matching character for [[(\"'"
 msgstr "Уметни одговарајући знак за { [ ( или \\\""
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
+#: src/plugins/editorui/tweaks-language.ui:124
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr ""
 
@@ -4517,13 +4522,31 @@ msgid "5"
 msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:109
+#: src/plugins/editorui/tweaks-language.ui:110
 msgid "Indentation Size"
 msgstr "Величина увлачења"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
 msgstr "Иста као и ширина табулатора"
+
+#: src/plugins/editorui/gtk/menus.ui:81
+#, fuzzy
+#| msgid "Line Ending:"
+msgid "Line Ending"
+msgstr "Завршетак реда:"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+#, fuzzy
+#| msgid "Windows (CR+LF)"
+msgid "Windows (CR/LF)"
+msgstr "Виндоус (CR+LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+#, fuzzy
+#| msgid "Mac OS Classic (CR)"
+msgid "Mac Classic (CR)"
+msgstr "Мек ОС класични (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -4565,77 +4588,73 @@ msgstr "Штампај…"
 msgid "Format Selection"
 msgstr "Форматирај изабрано"
 
-#: src/plugins/editorui/tweaks-language.ui:53
+#: src/plugins/editorui/tweaks-language.ui:54
 msgid "Indentation & Formatting"
 msgstr "Увлачење и форматирање"
 
-#: src/plugins/editorui/tweaks-language.ui:56
+#: src/plugins/editorui/tweaks-language.ui:57
 msgid "Tab Character"
 msgstr "Знак табулатора"
 
-#: src/plugins/editorui/tweaks-language.ui:57
+#: src/plugins/editorui/tweaks-language.ui:58
 #, fuzzy
 #| msgid "The width in characters to represent a tab."
 msgid "The character to be inserted for Tab"
 msgstr "Подешава величину табулатора, у карактерима"
 
-#: src/plugins/editorui/tweaks-language.ui:62
+#: src/plugins/editorui/tweaks-language.ui:63
 msgid "Tab"
 msgstr "Језичци"
 
-#: src/plugins/editorui/tweaks-language.ui:83
+#: src/plugins/editorui/tweaks-language.ui:84
 msgid "Trim Trailing Space"
 msgstr "Крати пратећу празнину"
 
-#: src/plugins/editorui/tweaks-language.ui:94
+#: src/plugins/editorui/tweaks-language.ui:95
 msgid "Auto Indent"
 msgstr "Самоувлачење"
 
-#: src/plugins/editorui/tweaks-language.ui:95
+#: src/plugins/editorui/tweaks-language.ui:96
 msgid "Automatically indent source code as you type"
 msgstr "Самостално увлачи изворни код приликом куцања"
 
-#: src/plugins/editorui/tweaks-language.ui:101
+#: src/plugins/editorui/tweaks-language.ui:102
 msgid "Tab Size"
 msgstr "Величина табулатора"
 
-#: src/plugins/editorui/tweaks-language.ui:102
+#: src/plugins/editorui/tweaks-language.ui:103
 #, fuzzy
 #| msgid "The width in characters to represent a tab."
 msgid "The number of characters to indent for Tab"
 msgstr "Подешава величину табулатора, у карактерима"
 
-#: src/plugins/editorui/tweaks-language.ui:110
+#: src/plugins/editorui/tweaks-language.ui:111
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
 
-#: src/plugins/editorui/tweaks-language.ui:119
+#: src/plugins/editorui/tweaks-language.ui:120
 msgid "Margin"
 msgstr "Маргина"
 
-#: src/plugins/editorui/tweaks-language.ui:122
+#: src/plugins/editorui/tweaks-language.ui:123
 msgid "Show Right Margin"
 msgstr "Прикажи десну маргину"
 
-#: src/plugins/editorui/tweaks-language.ui:123
-msgid "Display a margin in the editor to indicate maximium desired width"
-msgstr ""
-
-#: src/plugins/editorui/tweaks-language.ui:129
+#: src/plugins/editorui/tweaks-language.ui:130
 msgid "Right Margin Position"
 msgstr "Положај десне маргине"
 
-#: src/plugins/editorui/tweaks-language.ui:130
+#: src/plugins/editorui/tweaks-language.ui:131
 msgid "The desired maximum line length"
 msgstr "Жељена највећа дужина линије"
 
-#: src/plugins/editorui/tweaks-language.ui:143
+#: src/plugins/editorui/tweaks-language.ui:144
 #, fuzzy
 #| msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr "Да ли треба преписати велике, средње, мале заграде и наводнике."
 
-#: src/plugins/editorui/tweaks-language.ui:150
+#: src/plugins/editorui/tweaks-language.ui:151
 #, fuzzy
 #| msgid "If we should overwrite braces, brackets, parenthesis and quotes."
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
@@ -5690,35 +5709,21 @@ msgstr "Преузимам npm зависности"
 msgid "_External Program…"
 msgstr "Спољ_ни програм…"
 
-#: src/plugins/platformui/tweaks.ui:36
+#: src/plugins/platformui/tweaks.ui:30
 #, fuzzy
 #| msgid "Documentation"
 msgid "Document Navigation"
 msgstr "Документација"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:33
 msgid "Tab Bar"
 msgstr "Површ језичака"
 
-#: src/plugins/platformui/tweaks.ui:45
+#: src/plugins/platformui/tweaks.ui:39
 #, fuzzy
 #| msgid "Split Down"
 msgid "Drop Down"
 msgstr "Подели на доле"
-
-#: src/plugins/platformui/tweaks.ui:67
-#, fuzzy
-#| msgid "Allow network when metered"
-msgid "Allow Downloads when Metered"
-msgstr "Допушта мрежу када је ограничена"
-
-#: src/plugins/platformui/tweaks.ui:68
-#, fuzzy
-#| msgid "Allow downloads over metered connections"
-msgid ""
-"Allow the download of SDKs and dependencies when on metered internet "
-"connections"
-msgstr "Допусти преузимања преко ограничених веза"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
@@ -5991,19 +5996,19 @@ msgstr "Наредба"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr "подразумевана cargo наредба"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 msgid "Untitled Command"
 msgstr "Неименована наредба"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:339
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 msgid "Set Shortcut"
 msgstr "Постави пречицу"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
 msgid "Select Working Directory"
 msgstr "Изабери радни директоријум"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
 #, fuzzy
@@ -6011,7 +6016,7 @@ msgstr "Изабери радни директоријум"
 msgid "Create Command"
 msgstr "Наредба брисања"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:542
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
 msgstr "_Направи"
 
@@ -6050,62 +6055,70 @@ msgid ""
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+msgid "Use Subshell"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "Локалитет"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:192
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
 msgid "Add _Variable"
 msgstr "Додај п_роменљиву"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:198
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
 msgid "Add Variable"
 msgstr "Додај променљиву"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:199
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
 msgid "_Add"
 msgstr "Дод_ај"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:218
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 #, fuzzy
 #| msgid "Delete Command"
 msgid "_Delete Command"
 msgstr "Наредба брисања"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:246
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Subprocess"
 msgstr "Подпроцес"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:247
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 #, fuzzy
 #| msgid "Run a new instance of Builder"
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Покрени нови примерак Градитеља"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:254
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 #, fuzzy
 #| msgid "- List devices found on the system."
 msgid "Runs the command on the host system."
 msgstr "— Прикажи списак са препознатим уређајима на систему."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:261
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 #, fuzzy
 #| msgid "The column within the line."
 msgid "Runs the command within the build pipeline."
 msgstr "Колона у реду."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 #, fuzzy
 #| msgid "GTK Application"
 msgid "As Target Application"
 msgstr "ГТК програм"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:268
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
 msgstr ""
 
@@ -6179,6 +6192,10 @@ msgstr "Окружење"
 msgid "Command Locality"
 msgstr "Локалитет наредбе"
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr ""
+
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 #, fuzzy
 #| msgid "Command"
@@ -6187,6 +6204,13 @@ msgstr "Наредба"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
+msgstr ""
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
 msgstr ""
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
@@ -6388,8 +6412,10 @@ msgid "Force performance mode while profiling"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:43
-msgid "Don't Change Governer"
-msgstr ""
+#, fuzzy
+#| msgid "CPU Governor"
+msgid "Don't Change Governor"
+msgstr "Процесорски намесник"
 
 #: src/plugins/sysprof/tweaks.ui:49
 msgid "Force Performance Mode"
@@ -6456,7 +6482,7 @@ msgid "JavaScript"
 msgstr "Јаваскрипт"
 
 #: src/plugins/sysprof/tweaks.ui:128
-msgid "Collect infomration from GJS-based applications"
+msgid "Collect information from GJS-based applications"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:134
@@ -7014,6 +7040,24 @@ msgstr "Нисам успео да направим ИксМЛ стабло."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Датотека мора бити сачувана локално да бих је обрадио."
+
+#~ msgid "Builder — Preferences"
+#~ msgstr "Градитељ — поставке"
+
+#~ msgid "Search Preferences"
+#~ msgstr "Поставке претраге"
+
+#, fuzzy
+#~| msgid "Allow network when metered"
+#~ msgid "Allow Downloads when Metered"
+#~ msgstr "Допушта мрежу када је ограничена"
+
+#, fuzzy
+#~| msgid "Allow downloads over metered connections"
+#~ msgid ""
+#~ "Allow the download of SDKs and dependencies when on metered internet "
+#~ "connections"
+#~ msgstr "Допусти преузимања преко ограничених веза"
 
 #~ msgid "Show overview map"
 #~ msgstr "Прикажи минијатурни преглед кода"
