@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="IdeTweaks">
+    <child internal-child="external_section">
+      <object class="IdeTweaksSection">
+        <child>
+          <object class="IdeTweaksPage" id="sdk_page">
+            <property name="icon-name">builder-sdk-symbolic</property>
+            <property name="title" translatable="yes">SDKs</property>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Downloads</property>
+                <child>
+                  <object class="IdeTweaksSwitch">
+                    <property name="title" translatable="yes">Download on Metered Connections</property>
+                    <property name="subtitle" translatable="yes">Allow the download of SDKs and dependencies when on metered internet connections</property>
+                    <property name="action-name">settings.org.gnome.builder.build.allow-network-when-metered</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Available SDKs</property>
+                <child>
+                  <object class="IdeTweaksWidget" id="sdk_list">
+                    <signal name="create-for-item" handler="create_sdk_list_cb" swapped="true" object="GbpSdkuiTweaksAddin"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
