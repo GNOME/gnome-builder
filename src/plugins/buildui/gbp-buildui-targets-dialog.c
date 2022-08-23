@@ -153,6 +153,7 @@ static void
 gbp_buildui_targets_dialog_set_context (GbpBuilduiTargetsDialog *self,
                                         IdeContext              *context)
 {
+  g_autoptr(IdeActionMuxer) muxer = NULL;
   IdeBuildManager *build_manager;
 
   IDE_ENTRY;
@@ -165,10 +166,11 @@ gbp_buildui_targets_dialog_set_context (GbpBuilduiTargetsDialog *self,
 
   self->busy = TRUE;
 
+  muxer = ide_context_ref_action_muxer (context);
   build_manager = ide_build_manager_from_context (context);
   gtk_widget_insert_action_group (GTK_WIDGET (self),
-                                  "build-manager",
-                                  G_ACTION_GROUP (build_manager));
+                                  "context",
+                                  G_ACTION_GROUP (muxer));
   ide_build_manager_list_targets_async (build_manager,
                                         NULL,
                                         gbp_buildui_targets_dialog_list_targets_cb,
