@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-21 17:39+0000\n"
-"PO-Revision-Date: 2022-08-22 17:32+0700\n"
+"POT-Creation-Date: 2022-08-23 04:08+0000\n"
+"PO-Revision-Date: 2022-08-23 16:12+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -761,13 +761,13 @@ msgstr "Preferensi"
 #: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
 #: src/libide/gui/ide-preferences-builtin.c:700
 #: src/libide/plugins/ide-plugin.c:350
-#: src/libide/tweaks/ide-tweaks-window.ui:139
+#: src/libide/tweaks/ide-tweaks-window.ui:140
 #: src/plugins/editorui/tweaks.ui:303
 msgid "Keyboard Shortcuts"
 msgstr "Pintasan Papan Tik"
 
 #: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:144
 msgid "Help"
 msgstr "Bantuan"
 
@@ -825,7 +825,7 @@ msgstr "Simpan"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
@@ -1062,7 +1062,7 @@ msgstr "Deploy ke perangkat…"
 #: src/libide/foundry/ide-runtime.c:403
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:253
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
 msgstr "Sistem host"
 
@@ -1199,7 +1199,7 @@ msgstr "Buka"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:128
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
 msgid "Select"
 msgstr "Pilih"
@@ -1617,8 +1617,8 @@ msgstr "Karakter Bukan Spasi Terlihat"
 #: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-#: src/plugins/editorui/tweaks-language.ui:68
-#: src/plugins/editorui/tweaks-language.ui:158
+#: src/plugins/editorui/tweaks-language.ui:69
+#: src/plugins/editorui/tweaks-language.ui:159
 msgid "Spaces"
 msgstr "Spasi"
 
@@ -1739,7 +1739,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-#: src/plugins/editorui/tweaks-language.ui:142
+#: src/plugins/editorui/tweaks-language.ui:143
 msgid "Overwrite Braces"
 msgstr "Timpa Tanda Kurung"
 
@@ -1750,7 +1750,7 @@ msgstr "Timpa tanda kurung penutup"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-#: src/plugins/editorui/tweaks-language.ui:149
+#: src/plugins/editorui/tweaks-language.ui:150
 msgid "Insert Matching Brace"
 msgstr "Sisipkan kurung pasangan"
 
@@ -1760,13 +1760,13 @@ msgstr "Sisipkan karakter yang sesuai untuk { [ ( atau \""
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
-#: src/plugins/editorui/tweaks-language.ui:76
+#: src/plugins/editorui/tweaks-language.ui:77
 msgid "Insert Trailing Newline"
 msgstr "Sisipkan Baris Baru di Ekor"
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
-#: src/plugins/editorui/tweaks-language.ui:77
+#: src/plugins/editorui/tweaks-language.ui:78
 msgid "Ensure files end with a newline"
 msgstr "Pastikan berkas diakhiri dengan baris baru"
 
@@ -1896,7 +1896,6 @@ msgstr "Tembolok yang kedaluwarsa akan dihapus saat Builder dimulai"
 
 #: src/libide/gui/ide-preferences-builtin.c:434
 #: src/libide/gui/ide-preferences-builtin.c:658
-#: src/plugins/platformui/tweaks.ui:62
 msgid "Network"
 msgstr "Jaringan"
 
@@ -1997,7 +1996,7 @@ msgstr "Wawasan"
 
 #: src/libide/gui/ide-preferences-builtin.c:656
 #: src/libide/gui/ide-preferences-builtin.c:667
-#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:12
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
 msgstr "Perintah"
 
@@ -2028,7 +2027,7 @@ msgstr "Aplikasi"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:22
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Antarmuka"
 
@@ -2093,7 +2092,7 @@ msgid "Additional"
 msgstr "Tambahan"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks-language.ui:139
+#: src/plugins/editorui/tweaks-language.ui:140
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Behavior"
 msgstr "Perilaku"
@@ -2465,11 +2464,7 @@ msgstr "Direktori Proyek"
 msgid "All Preferences"
 msgstr "Semua Preferensi"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:48
-msgid "Search Preferences"
-msgstr "Preferensi Pencarian"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:61
+#: src/libide/tweaks/ide-tweaks-window.ui:62
 msgid "Primary Menu"
 msgstr "Menu Utama"
 
@@ -2883,7 +2878,7 @@ msgstr "Peringatan"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:345
 #: src/plugins/buildui/gbp-buildui-pane.ui:81
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 #: src/plugins/testui/gbp-testui-preferences-addin.c:50
 msgid "Build Pipeline"
 msgstr "Pipa Bangun"
@@ -3103,6 +3098,18 @@ msgstr "Jalankan"
 #: src/plugins/buildui/gtk/menus.ui:134
 msgid "Run the project"
 msgstr "Jalankan proyek"
+
+#: src/plugins/buildui/gtk/menus.ui:143
+msgid "Follow System Style"
+msgstr "Ikuti Gaya Sistem"
+
+#: src/plugins/buildui/gtk/menus.ui:149
+msgid "Force Light"
+msgstr "Paksa Terang"
+
+#: src/plugins/buildui/gtk/menus.ui:155
+msgid "Force Dark"
+msgstr "Paksa Gelap"
 
 #: src/plugins/buildui/gtk/menus.ui:162
 msgid "Accessibility"
@@ -4279,7 +4286,7 @@ msgid "Trim Trailing Whitespace"
 msgstr "Pangkas Trailing Whitespace"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-#: src/plugins/editorui/tweaks-language.ui:84
+#: src/plugins/editorui/tweaks-language.ui:85
 msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
 msgstr ""
 "Setelah menyimpan, trailing whitepsace dari baris yang diubah akan dipangkas"
@@ -4289,7 +4296,7 @@ msgid "Insert matching character for [[(\"'"
 msgstr "Sisipkan karakter yang sesuai untuk [[(\"'"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
-#: src/plugins/editorui/tweaks-language.ui:123
+#: src/plugins/editorui/tweaks-language.ui:124
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr ""
 "Tampilkan margin di penyunting untuk menunjukkan lebar maksimum yang "
@@ -4350,13 +4357,25 @@ msgid "5"
 msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:109
+#: src/plugins/editorui/tweaks-language.ui:110
 msgid "Indentation Size"
 msgstr "Ukuran Indentasi"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
 msgstr "Sama seperti Lebar Tab"
+
+#: src/plugins/editorui/gtk/menus.ui:81
+msgid "Line Ending"
+msgstr "Akhir Baris"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+msgid "Windows (CR/LF)"
+msgstr "Windows (CR/LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+msgid "Mac Classic (CR)"
+msgstr "Mac Klasik (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -4398,68 +4417,68 @@ msgstr "Cetak…"
 msgid "Format Selection"
 msgstr "Pemilihan Format"
 
-#: src/plugins/editorui/tweaks-language.ui:53
+#: src/plugins/editorui/tweaks-language.ui:54
 msgid "Indentation & Formatting"
 msgstr "Indentasi & Pemformatan"
 
-#: src/plugins/editorui/tweaks-language.ui:56
+#: src/plugins/editorui/tweaks-language.ui:57
 msgid "Tab Character"
 msgstr "Karakter Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:57
+#: src/plugins/editorui/tweaks-language.ui:58
 msgid "The character to be inserted for Tab"
 msgstr "Karakter yang akan disisipkan untuk Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:62
+#: src/plugins/editorui/tweaks-language.ui:63
 msgid "Tab"
 msgstr "Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:83
+#: src/plugins/editorui/tweaks-language.ui:84
 msgid "Trim Trailing Space"
 msgstr "Pangkas Trailing Spasi"
 
-#: src/plugins/editorui/tweaks-language.ui:94
+#: src/plugins/editorui/tweaks-language.ui:95
 msgid "Auto Indent"
 msgstr "Indentasi Otomatis"
 
-#: src/plugins/editorui/tweaks-language.ui:95
+#: src/plugins/editorui/tweaks-language.ui:96
 msgid "Automatically indent source code as you type"
 msgstr "Secara otomatis mengindentasi kode sumber saat Anda mengetik"
 
-#: src/plugins/editorui/tweaks-language.ui:101
+#: src/plugins/editorui/tweaks-language.ui:102
 msgid "Tab Size"
 msgstr "Ukuran Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:102
+#: src/plugins/editorui/tweaks-language.ui:103
 msgid "The number of characters to indent for Tab"
 msgstr "Jumlah karakter yang akan diindentasi untuk Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:110
+#: src/plugins/editorui/tweaks-language.ui:111
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
 "Jumlah karakter yang akan diindentasi, atau -1 untuk menggunakan ukuran tab"
 
-#: src/plugins/editorui/tweaks-language.ui:119
+#: src/plugins/editorui/tweaks-language.ui:120
 msgid "Margin"
 msgstr "Marjin"
 
-#: src/plugins/editorui/tweaks-language.ui:122
+#: src/plugins/editorui/tweaks-language.ui:123
 msgid "Show Right Margin"
 msgstr "Tampilkan Marjin Kanan"
 
-#: src/plugins/editorui/tweaks-language.ui:129
+#: src/plugins/editorui/tweaks-language.ui:130
 msgid "Right Margin Position"
 msgstr "Posisi Marjin Kanan"
 
-#: src/plugins/editorui/tweaks-language.ui:130
+#: src/plugins/editorui/tweaks-language.ui:131
 msgid "The desired maximum line length"
 msgstr "Panjang garis maksimum yang diinginkan"
 
-#: src/plugins/editorui/tweaks-language.ui:143
+#: src/plugins/editorui/tweaks-language.ui:144
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr "Timpa kurung kurawal, tanda kurung, tanda kurung, dan tanda kutip"
 
-#: src/plugins/editorui/tweaks-language.ui:150
+#: src/plugins/editorui/tweaks-language.ui:151
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
 "Sisipkan karakter yang cocok untuk kurung kurawal, tanda kurung, tanda "
@@ -5444,29 +5463,17 @@ msgstr "Mengunduh dependensi npm"
 msgid "_External Program…"
 msgstr "Program _Eksternal…"
 
-#: src/plugins/platformui/tweaks.ui:36
+#: src/plugins/platformui/tweaks.ui:30
 msgid "Document Navigation"
 msgstr "Navigasi Dokumen"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:33
 msgid "Tab Bar"
 msgstr "Bilah Tab"
 
-#: src/plugins/platformui/tweaks.ui:45
+#: src/plugins/platformui/tweaks.ui:39
 msgid "Drop Down"
 msgstr "Drop Down"
-
-#: src/plugins/platformui/tweaks.ui:67
-msgid "Allow Downloads when Metered"
-msgstr "Izinkan Unduhan ketika memakai kuota"
-
-#: src/plugins/platformui/tweaks.ui:68
-msgid ""
-"Allow the download of SDKs and dependencies when on metered internet "
-"connections"
-msgstr ""
-"Izinkan pengunduhan SDK dan dependensi saat menggunakan koneksi internet "
-"berkuota"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
@@ -5712,25 +5719,25 @@ msgstr "Perintah Cargo"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr "Perintah cargo bawaan untuk dijalankan dengan rust-analyzer"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 msgid "Untitled Command"
 msgstr "Perintah Tanpa Judul"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:339
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 msgid "Set Shortcut"
 msgstr "Atur Pintasan"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
 msgid "Select Working Directory"
 msgstr "Pilih Direktori Kerja"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
 msgid "Create Command"
 msgstr "Buat Perintah"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:542
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
 msgstr "Bu_at"
 
@@ -5771,10 +5778,18 @@ msgstr ""
 "$SRCDIR</tt>, atau <tt>$HOME</tt> untuk menentukan path relatif."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+msgid "Use Subshell"
+msgstr "Gunakan Subshell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr "Jalankan program dari subshell seperti <tt>sh -c ''</tt>"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "Lokalitas"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
@@ -5782,43 +5797,43 @@ msgstr ""
 "Builder dapat menjalankan perintah Anda dari sejumlah lokalitas termasuk "
 "sistem host atau membangun kontainer."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:192
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
 msgid "Add _Variable"
 msgstr "Tambah _Variabel"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:198
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
 msgid "Add Variable"
 msgstr "Tambah Variabel"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:199
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
 msgid "_Add"
 msgstr "T_ambah"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:218
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
 msgstr "Hapus _Perintah"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:246
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Subprocess"
 msgstr "Subproses"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:247
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Jalankan perintah sebagai subproses Builder."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:254
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
 msgstr "Jalankan perintah pada sistem host."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:261
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
 msgstr "Jalankan perintah di dalam pipa bangun."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 msgid "As Target Application"
 msgstr "Sebagai Aplikasi Target"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:268
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
 msgstr "Jalankan perintah seolah-olah itu adalah aplikasi target."
 
@@ -5878,6 +5893,10 @@ msgstr "Lingkungan Perintah"
 msgid "Command Locality"
 msgstr "Perintah Lokalitas"
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr "Gunakan Shell"
+
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 msgid "Run Commands"
 msgstr "Jalankan Perintah"
@@ -5885,6 +5904,17 @@ msgstr "Jalankan Perintah"
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
 msgstr "Daftar id run-command untuk dimuat untuk aplikasi atau proyek."
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
+msgstr ""
+"Gunakan perintah untuk menjalankan perkakas bangun, aplikasi, atau skrip "
+"shell dan memetakannya ke pintasan papan tik. Mereka dapat berjalan dari "
+"berbagai lingkungan seperti pipa bangun, lingkungan runtime, atau sistem "
+"operasi host."
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
@@ -6625,6 +6655,19 @@ msgstr "Gagal membuat pohon XML."
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
+#~ msgid "Search Preferences"
+#~ msgstr "Preferensi Pencarian"
+
+#~ msgid "Allow Downloads when Metered"
+#~ msgstr "Izinkan Unduhan ketika memakai kuota"
+
+#~ msgid ""
+#~ "Allow the download of SDKs and dependencies when on metered internet "
+#~ "connections"
+#~ msgstr ""
+#~ "Izinkan pengunduhan SDK dan dependensi saat menggunakan koneksi internet "
+#~ "berkuota"
+
 #~ msgid "Show Open Files"
 #~ msgstr "Tampilkan Berkas Terbuka"
 
@@ -6636,9 +6679,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Select First Proposal"
 #~ msgstr "Pilih Proposal Pertama"
-
-#~ msgid "Use Tabs"
-#~ msgstr "Gunakan Tab"
 
 #~ msgid "Use the tabbar within the page grid."
 #~ msgstr "Gunakan bilah tab di dalam kisi halaman."
