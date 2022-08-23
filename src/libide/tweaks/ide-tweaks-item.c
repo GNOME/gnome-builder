@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-tweaks.h"
 #include "ide-tweaks-item.h"
 #include "ide-tweaks-item-private.h"
 
@@ -35,11 +36,13 @@ typedef struct
   GQueue          children;
   char           *id;
   char          **keywords;
+  char           *hidden_when;
   guint           id_sequence;
 } IdeTweaksItemPrivate;
 
 enum {
   PROP_0,
+  PROP_HIDDEN_WHEN,
   PROP_ID,
   PROP_KEYWORDS,
   N_PROPS
@@ -198,14 +201,12 @@ ide_tweaks_item_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ID:
-      g_value_set_string (value, gtk_buildable_get_buildable_id (GTK_BUILDABLE (self)));
-      break;
-
     case PROP_KEYWORDS:
       g_value_set_boxed (value, ide_tweaks_item_get_keywords (self));
       break;
 
+    IDE_GET_PROPERTY_STRING (ide_tweaks_item, hidden_when, HIDDEN_WHEN);
+    IDE_GET_PROPERTY_STRING (ide_tweaks_item, id, ID);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -225,6 +226,7 @@ ide_tweaks_item_set_property (GObject      *object,
       ide_tweaks_item_set_keywords (self, g_value_get_boxed (value));
       break;
 
+    IDE_SET_PROPERTY_STRING (ide_tweaks_item, hidden_when, HIDDEN_WHEN);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -242,10 +244,8 @@ ide_tweaks_item_class_init (IdeTweaksItemClass *klass)
   klass->copy = ide_tweaks_item_real_copy;
   klass->match = ide_tweaks_item_real_match;
 
-  properties[PROP_ID] =
-    g_param_spec_string ("id", NULL, NULL,
-                         NULL,
-                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  IDE_DEFINE_STRING_PROPERTY ("hidden-when", NULL, G_PARAM_READWRITE, HIDDEN_WHEN);
+  IDE_DEFINE_STRING_PROPERTY ("id", NULL, G_PARAM_READABLE, ID);
 
   properties [PROP_KEYWORDS] =
     g_param_spec_boxed ("keywords", NULL, NULL,
@@ -273,15 +273,28 @@ ide_tweaks_item_accepts (IdeTweaksItem *self,
   return FALSE;
 }
 
-const char *
-ide_tweaks_item_get_id (IdeTweaksItem *self)
-{
-  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+IDE_DEFINE_STRING_GETTER_PRIVATE (ide_tweaks_item, IdeTweaksItem, IDE_TYPE_TWEAKS_ITEM, id)
+IDE_DEFINE_STRING_GETTER_PRIVATE (ide_tweaks_item, IdeTweaksItem, IDE_TYPE_TWEAKS_ITEM, hidden_when)
 
-  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), NULL);
-
-  return priv->id;
-}
+/**
+ * ide_tweaks_item_set_hidden_when:
+ * @self: an #IdeTweaksItem
+ * @hidden_when: (nullable): the value for when the item is hidden
+ *
+ * Sets the "hidden-when" property.
+ *
+ * Use this to hide #IdeTweaksItem in situations where they should
+ * not be visible. Generally this is used to hide items when the
+ * #IdeTweaksWindow is in project or application mode.
+ *
+ * Currently supported values include:
+ *
+ *  - "application" to hide when in application-mode
+ *  - "project" to hide when in project-mode
+ *
+ * Items that are hidden will not be visited by ide_tweaks_item_visit_children().
+ */
+IDE_DEFINE_STRING_SETTER_PRIVATE (ide_tweaks_item, IdeTweaksItem, IDE_TYPE_TWEAKS_ITEM, hidden_when, HIDDEN_WHEN)
 
 const char * const *
 ide_tweaks_item_get_keywords (IdeTweaksItem *self)
@@ -769,14 +782,23 @@ ide_tweaks_item_visit_children (IdeTweaksItem        *self,
                                 IdeTweaksItemVisitor  visitor,
                                 gpointer              visitor_data)
 {
+  IdeTweaksItem *root = NULL;
+  IdeTweaksItem *child;
+
   g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), FALSE);
   g_return_val_if_fail (visitor != NULL, FALSE);
 
-  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (self);
-       child != NULL;
-       child = ide_tweaks_item_get_next_sibling (child))
+  if ((child = ide_tweaks_item_get_first_child (self)))
+    root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self));
+
+  for (; child; child = ide_tweaks_item_get_next_sibling (child))
     {
-      IdeTweaksItemVisitResult res = visitor (child, visitor_data);
+      IdeTweaksItemVisitResult res;
+
+      if (_ide_tweaks_item_is_hidden (child, root))
+        continue;
+
+      res = visitor (child, visitor_data);
 
       if (res == IDE_TWEAKS_ITEM_VISIT_STOP)
         return TRUE;
@@ -820,4 +842,31 @@ ide_tweaks_item_match (IdeTweaksItem  *self,
     return TRUE;
 
   return IDE_TWEAKS_ITEM_GET_CLASS (self)->match (self, spec);
+}
+
+gboolean
+_ide_tweaks_item_is_hidden (IdeTweaksItem *self,
+                            IdeTweaksItem *root)
+{
+  IdeTweaksItemPrivate *priv = ide_tweaks_item_get_instance_private (self);
+  const char *project_id = NULL;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_ITEM (self), FALSE);
+  g_return_val_if_fail (!root || IDE_IS_TWEAKS_ITEM (root), FALSE);
+
+  if (priv->hidden_when == NULL)
+    return FALSE;
+
+  if (root == NULL)
+    root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self));
+
+  if (IDE_IS_TWEAKS (root))
+    project_id = ide_tweaks_get_project_id (IDE_TWEAKS (root));
+
+  if (priv->hidden_when[0] == 'a') /* application */
+    return ide_str_empty0 (project_id);
+  else if (priv->hidden_when[0] == 'p') /* project */
+    return !ide_str_empty0 (project_id);
+  else
+    return FALSE;
 }

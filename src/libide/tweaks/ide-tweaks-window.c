@@ -25,6 +25,7 @@
 #include <libpeas/peas.h>
 
 #include "ide-tweaks-addin.h"
+#include "ide-tweaks-item-private.h"
 #include "ide-tweaks-panel-private.h"
 #include "ide-tweaks-panel-list-private.h"
 #include "ide-tweaks-settings.h"
@@ -295,7 +296,8 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
        child != NULL;
        child = ide_tweaks_item_get_next_sibling (child))
     {
-      if (IDE_IS_TWEAKS_SETTINGS (child))
+      if (IDE_IS_TWEAKS_SETTINGS (child) &&
+          !_ide_tweaks_item_is_hidden (child, IDE_TWEAKS_ITEM (self->tweaks)))
         {
           IdeTweaksSettings *settings = IDE_TWEAKS_SETTINGS (child);
           const char *schema_id = ide_tweaks_settings_get_schema_id (settings);

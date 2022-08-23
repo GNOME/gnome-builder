@@ -70,6 +70,11 @@ const char         *ide_tweaks_item_get_id               (IdeTweaksItem        *
 IDE_AVAILABLE_IN_ALL
 IdeTweaksItem      *ide_tweaks_item_copy                 (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
+const char         *ide_tweaks_item_get_hidden_when      (IdeTweaksItem        *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_tweaks_item_set_hidden_when      (IdeTweaksItem        *self,
+                                                          const char           *hidden_when);
+IDE_AVAILABLE_IN_ALL
 const char * const *ide_tweaks_item_get_keywords         (IdeTweaksItem        *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_item_set_keywords         (IdeTweaksItem        *self,

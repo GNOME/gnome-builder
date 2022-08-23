@@ -28,6 +28,7 @@
 #include "ide-tweaks-choice.h"
 #include "ide-tweaks-combo.h"
 #include "ide-tweaks-combo-row.h"
+#include "ide-tweaks-item-private.h"
 
 struct _IdeTweaksCombo
 {
@@ -76,13 +77,16 @@ ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
        child != NULL;
        child = ide_tweaks_item_get_next_sibling (child))
     {
-      GVariant *target = ide_tweaks_choice_get_action_target (IDE_TWEAKS_CHOICE (child));
+      if (!_ide_tweaks_item_is_hidden (child, root))
+        {
+          GVariant *target = ide_tweaks_choice_get_action_target (IDE_TWEAKS_CHOICE (child));
 
-      if (g_variant_equal (value, target))
-        selected = i;
+          if (g_variant_equal (value, target))
+            selected = i;
 
-      g_list_store_append (store, child);
-      i++;
+          g_list_store_append (store, child);
+          i++;
+        }
     }
 
   row = g_object_new (IDE_TYPE_TWEAKS_COMBO_ROW,

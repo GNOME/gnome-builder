@@ -24,8 +24,10 @@
 
 G_BEGIN_DECLS
 
-void _ide_tweaks_item_printf (IdeTweaksItem *self,
-                              GString       *string,
-                              guint          level);
+void     _ide_tweaks_item_printf    (IdeTweaksItem *self,
+                                     GString       *string,
+                                     guint          level);
+gboolean _ide_tweaks_item_is_hidden (IdeTweaksItem *self,
+                                     IdeTweaksItem *root);
 
 G_END_DECLS
