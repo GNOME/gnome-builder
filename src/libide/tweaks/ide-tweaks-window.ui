@@ -57,6 +57,7 @@
                     <property name="icon-name">open-menu-symbolic</property>
                     <property name="menu-model">primary_menu</property>
                     <property name="primary">true</property>
+                    <property name="visible">false</property>
                     <accessibility>
                       <property name="label" translatable="yes">Primary Menu</property>
                     </accessibility>
