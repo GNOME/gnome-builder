@@ -332,10 +332,35 @@
                           </object>
                         </child>
                         <child>
-                          <object class="IdeTweaksSwitch" id="smart_home_end">
+                          <object class="IdeTweaksCombo" id="smart_home_end">
                             <property name="title" translatable="yes">Smart Home/End</property>
-                            <property name="subtitle" translatable="yes">Moves to first non-whitespace character before line edges</property>
-                            <property name="action-name">settings.org.gnome.builder.editor.smart-home-end</property>
+                            <property name="subtitle" translatable="yes">Navigate to non-space characters</property>
+                            <property name="settings">settings_org_gnome_builder_editor</property>
+                            <property name="key">smart-home-end</property>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">Before line boundaries</property>
+                                <property name="action-target">'before'</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">After line boundaries</property>
+                                <property name="action-target">'after'</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">Instead of line boundaries</property>
+                                <property name="action-target">'always'</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">Disabled</property>
+                                <property name="action-target">'disabled'</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

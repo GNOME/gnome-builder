@@ -54,10 +54,16 @@
       <summary>Smart Backspace</summary>
       <description>Backspace will remove additional spaces to keep you aligned to the indentation size.</description>
     </key>
-    <key name="smart-home-end" type="b">
-      <default>true</default>
-      <summary>Smart Home and End</summary>
-      <description>Whether or not Home moves to first non-space character.</description>
+    <key name="smart-home-end" type="s">
+      <choices>
+        <choice value="disabled"/>
+        <choice value="before"/>
+        <choice value="after"/>
+        <choice value="always"/>
+      </choices>
+      <default>'before'</default>
+      <summary>Smart Home/End</summary>
+      <description>Modifies the behavior of Home/End keys.</description>
     </key>
     <key name="show-grid-lines" type="b">
       <default>false</default>

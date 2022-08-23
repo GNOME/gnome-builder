@@ -208,6 +208,9 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
   g_settings_bind (editor_settings, "line-height",
                    self->view, "line-height",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind (editor_settings, "smart-home-end",
+                   self->view, "smart-home-end",
+                   G_SETTINGS_BIND_GET);
 
   g_settings_bind_with_mapping (editor_settings, "font-name",
                                 self->view, "font-desc",
