@@ -3,5 +3,6 @@
   <gresource prefix="/plugins/sdkui">
     <file>sdkui.plugin</file>
     <file preprocess="xml-stripblanks">tweaks.ui</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
   </gresource>
 </gresources>

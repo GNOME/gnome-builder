@@ -106,14 +106,7 @@
         <attribute name="verb-icon">builder-terminal-symbolic</attribute>
       </item>
     </section>
-    <section id="build-deps">
-      <item>
-        <attribute name="id">manage-sdks</attribute>
-        <attribute name="label" translatable="yes">Manage SDKs…</attribute>
-        <attribute name="action">app.preferences-page</attribute>
-        <attribute name="target" type="s">'sdk_page'</attribute>
-      </item>
-    </section>
+    <section id="build-deps"/>
   </menu>
   <menu id="run-menu">
     <section id="run-command-section">
