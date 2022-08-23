@@ -49,5 +49,7 @@ void       ide_tweaks_window_navigate_to           (IdeTweaksWindow *self,
                                                     IdeTweaksItem   *item);
 IDE_AVAILABLE_IN_ALL
 void       ide_tweaks_window_navigate_back         (IdeTweaksWindow *self);
+IDE_AVAILABLE_IN_ALL
+void       ide_tweaks_window_navigate_initial      (IdeTweaksWindow *self);
 
 G_END_DECLS

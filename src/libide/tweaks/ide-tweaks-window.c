@@ -470,6 +470,10 @@ ide_tweaks_window_dispose (GObject *object)
       g_clear_object (&self->tweaks);
     }
 
+  g_assert (self->addins == NULL);
+  g_assert (self->tweaks == NULL);
+  g_assert (self->muxer == NULL);
+
   G_OBJECT_CLASS (ide_tweaks_window_parent_class)->dispose (object);
 }
 
@@ -736,4 +740,17 @@ ide_tweaks_window_get_can_navigate_back (IdeTweaksWindow *self)
   g_return_val_if_fail (IDE_IS_TWEAKS_WINDOW (self), FALSE);
 
   return self->can_navigate_back;
+}
+
+void
+ide_tweaks_window_navigate_initial (IdeTweaksWindow *self)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_WINDOW (self));
+
+  if (self->tweaks != NULL)
+    {
+      ide_tweaks_window_clear (self);
+      ide_action_muxer_remove_all (self->muxer);
+      ide_tweaks_window_rebuild (self);
+    }
 }
