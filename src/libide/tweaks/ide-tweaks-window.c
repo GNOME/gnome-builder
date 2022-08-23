@@ -182,7 +182,8 @@ ide_tweaks_window_page_activated_cb (IdeTweaksWindow    *self,
                            sublist,
                            ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (page)));
       gtk_stack_set_visible_child (self->panel_list_stack, sublist);
-      ide_tweaks_panel_list_set_search_mode (IDE_TWEAKS_PANEL_LIST (sublist), TRUE);
+      ide_tweaks_panel_list_set_search_mode (IDE_TWEAKS_PANEL_LIST (sublist),
+                                             ide_tweaks_page_get_show_search (page));
 
       if (self->folded)
         ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (sublist),

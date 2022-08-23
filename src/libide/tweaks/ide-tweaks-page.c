@@ -35,6 +35,7 @@ struct _IdeTweaksPage
   char *icon_name;
   char *title;
   guint show_icon : 1;
+  guint show_search : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeTweaksPage, ide_tweaks_page, IDE_TYPE_TWEAKS_ITEM)
@@ -45,6 +46,7 @@ enum {
   PROP_ICON_NAME,
   PROP_SECTION,
   PROP_SHOW_ICON,
+  PROP_SHOW_SEARCH,
   PROP_TITLE,
   N_PROPS
 };
@@ -115,6 +117,10 @@ ide_tweaks_page_get_property (GObject    *object,
       g_value_set_boolean (value, ide_tweaks_page_get_show_icon (self));
       break;
 
+    case PROP_SHOW_SEARCH:
+      g_value_set_boolean (value, ide_tweaks_page_get_show_search (self));
+      break;
+
     case PROP_TITLE:
       g_value_set_string (value, ide_tweaks_page_get_title (self));
       break;
@@ -140,6 +146,10 @@ ide_tweaks_page_set_property (GObject      *object,
 
     case PROP_SHOW_ICON:
       ide_tweaks_page_set_show_icon (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_SHOW_SEARCH:
+      ide_tweaks_page_set_show_search (self, g_value_get_boolean (value));
       break;
 
     case PROP_TITLE:
@@ -181,6 +191,11 @@ ide_tweaks_page_class_init (IdeTweaksPageClass *klass)
   properties[PROP_SHOW_ICON] =
     g_param_spec_boolean ("show-icon", NULL, NULL,
                           TRUE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties[PROP_SHOW_SEARCH] =
+    g_param_spec_boolean ("show-search", NULL, NULL,
+                          FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_TITLE] =
@@ -234,6 +249,29 @@ ide_tweaks_page_set_show_icon (IdeTweaksPage *self,
     {
       self->show_icon = show_icon;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_ICON]);
+    }
+}
+
+gboolean
+ide_tweaks_page_get_show_search (IdeTweaksPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_PAGE (self), FALSE);
+
+  return self->show_search;
+}
+
+void
+ide_tweaks_page_set_show_search (IdeTweaksPage *self,
+                                 gboolean       show_search)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_PAGE (self));
+
+  show_search = !!show_search;
+
+  if (show_search != self->show_search)
+    {
+      self->show_search = show_search;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SHOW_SEARCH]);
     }
 }
 

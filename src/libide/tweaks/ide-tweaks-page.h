@@ -51,5 +51,10 @@ void           ide_tweaks_page_set_show_icon   (IdeTweaksPage *self,
                                                 gboolean       show_icon);
 IDE_AVAILABLE_IN_ALL
 gboolean       ide_tweaks_page_get_has_subpage (IdeTweaksPage *self);
+IDE_AVAILABLE_IN_ALL
+gboolean       ide_tweaks_page_get_show_search (IdeTweaksPage *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_tweaks_page_set_show_search (IdeTweaksPage *self,
+                                                gboolean       show_search);
 
 G_END_DECLS
