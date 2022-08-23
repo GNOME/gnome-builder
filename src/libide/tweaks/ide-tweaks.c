@@ -31,6 +31,7 @@
 struct _IdeTweaks
 {
   IdeTweaksItem    parent_instance;
+  IdeContext      *context;
   GtkBuilder      *builder;
   GtkBuilderScope *scope;
   char            *project_id;
@@ -40,6 +41,7 @@ G_DEFINE_FINAL_TYPE (IdeTweaks, ide_tweaks, IDE_TYPE_TWEAKS_ITEM)
 
 enum {
   PROP_0,
+  PROP_CONTEXT,
   PROP_PROJECT_ID,
   N_PROPS
 };
@@ -76,6 +78,21 @@ ide_tweaks_accepts (IdeTweaksItem *item,
 }
 
 static void
+ide_tweaks_constructed (GObject *object)
+{
+  IdeTweaks *self = (IdeTweaks *)object;
+
+  G_OBJECT_CLASS (ide_tweaks_parent_class)->constructed (object);
+
+  if (self->context != NULL)
+    {
+      if (self->project_id == NULL)
+        self->project_id = ide_context_dup_project_id (self->context);
+      ide_tweaks_expose_object (self, "IdeContext", G_OBJECT (self->context));
+    }
+}
+
+static void
 ide_tweaks_dispose (GObject *object)
 {
   IdeTweaks *self = (IdeTweaks *)object;
@@ -97,6 +114,10 @@ ide_tweaks_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_CONTEXT:
+      g_value_set_object (value, ide_tweaks_get_context (self));
+      break;
+
     case PROP_PROJECT_ID:
       g_value_set_string (value, ide_tweaks_get_project_id (self));
       break;
@@ -116,6 +137,10 @@ ide_tweaks_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_CONTEXT:
+      self->context = g_value_dup_object (value);
+      break;
+
     case PROP_PROJECT_ID:
       ide_tweaks_set_project_id (self, g_value_get_string (value));
       break;
@@ -131,11 +156,17 @@ ide_tweaks_class_init (IdeTweaksClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   IdeTweaksItemClass *item_class = IDE_TWEAKS_ITEM_CLASS (klass);
 
+  object_class->constructed = ide_tweaks_constructed;
   object_class->dispose = ide_tweaks_dispose;
   object_class->get_property = ide_tweaks_get_property;
   object_class->set_property = ide_tweaks_set_property;
 
   item_class->accepts = ide_tweaks_accepts;
+
+  properties[PROP_CONTEXT] =
+    g_param_spec_object ("context", NULL, NULL,
+                         IDE_TYPE_CONTEXT,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_PROJECT_ID] =
     g_param_spec_string ("project-id", NULL, NULL,
@@ -254,4 +285,46 @@ ide_tweaks_get_object (IdeTweaks  *self,
   g_return_val_if_fail (name != NULL, NULL);
 
   return gtk_builder_get_object (self->builder, name);
+}
+
+/**
+ * ide_tweaks_new_for_context:
+ * @context: (nullable): an #IdeContext or %NULL
+ *
+ * Creates a new #IdeTweaks for @context.
+ *
+ * If @context is %NULL, this function acts the same as ide_tweaks_new().
+ *
+ * If @context is non-%NULL, this function will expose @context as
+ * "IdeContext" to the templates as well as with the #IdeTweaks:context
+ * property to make property bindings easier with lookup.
+ *
+ * #IdeTweaks:project-id is also set when @context is non-%NULL.
+ *
+ * Returns: (transfer full): a new #IdeTweaks
+ */
+IdeTweaks *
+ide_tweaks_new_for_context (IdeContext *context)
+{
+  g_return_val_if_fail (!context || IDE_IS_CONTEXT (context), NULL);
+
+  return g_object_new (IDE_TYPE_TWEAKS,
+                       "context", context,
+                       NULL);
+}
+
+/**
+ * ide_tweaks_get_context:
+ * @self: a #IdeTweaks
+ *
+ * Gets the #IdeContext if any.
+ *
+ * Returns: (nullable) (transfer none): an #IdeContext or %NULL
+ */
+IdeContext *
+ide_tweaks_get_context (IdeTweaks *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS (self), NULL);
+
+  return self->context;
 }

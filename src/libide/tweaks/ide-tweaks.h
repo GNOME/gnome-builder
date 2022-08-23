@@ -36,6 +36,10 @@ G_DECLARE_FINAL_TYPE (IdeTweaks, ide_tweaks, IDE, TWEAKS, IdeTweaksItem)
 IDE_AVAILABLE_IN_ALL
 IdeTweaks *ide_tweaks_new             (void);
 IDE_AVAILABLE_IN_ALL
+IdeTweaks *ide_tweaks_new_for_context (IdeContext    *context);
+IDE_AVAILABLE_IN_ALL
+IdeContext *ide_tweaks_get_context    (IdeTweaks     *self);
+IDE_AVAILABLE_IN_ALL
 const char *ide_tweaks_get_project_id (IdeTweaks     *self);
 IDE_AVAILABLE_IN_ALL
 void        ide_tweaks_set_project_id (IdeTweaks     *self,
