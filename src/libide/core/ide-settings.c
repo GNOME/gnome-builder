@@ -157,7 +157,7 @@ ide_settings_resolve_schema_path (const char *schema_id,
   if (project_id == NULL)
     {
       g_autofree char *escaped = g_strdelimit (g_strdup (schema_id), ".", '/');
-      return g_strconcat ("/", escaped, "/", NULL);
+      return g_strconcat ("/", escaped, "/", path_suffix, NULL);
     }
   else
     {
