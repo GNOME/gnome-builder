@@ -36,6 +36,10 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeSettings, ide_settings, IDE, SETTINGS, GObject)
 
 IDE_AVAILABLE_IN_ALL
+char        *ide_settings_resolve_schema_path         (const char              *schema_id,
+                                                       const char              *project_id,
+                                                       const char              *path_suffix);
+IDE_AVAILABLE_IN_ALL
 IdeSettings *ide_settings_new                         (const char              *project_id,
                                                        const char              *schema_id);
 IDE_AVAILABLE_IN_ALL

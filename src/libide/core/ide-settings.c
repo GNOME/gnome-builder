@@ -116,6 +116,54 @@ ide_settings_layered_settings_changed_cb (IdeSettings        *self,
   g_action_group_action_state_changed (G_ACTION_GROUP (self), key, value);
 }
 
+char *
+ide_settings_resolve_schema_path (const char *schema_id,
+                                  const char *project_id,
+                                  const char *path_suffix)
+{
+  g_autoptr(GSettingsSchema) schema = NULL;
+  GSettingsSchemaSource *source;
+  const char *schema_path;
+
+  g_return_val_if_fail (schema_id != NULL, NULL);
+  g_return_val_if_fail (!path_suffix || g_str_has_suffix (path_suffix, "/"), NULL);
+
+  source = g_settings_schema_source_get_default ();
+
+  if (!(schema = g_settings_schema_source_lookup (source, schema_id, TRUE)))
+    {
+      g_critical ("Failed to locate schema %s", schema_id);
+      return NULL;
+    }
+
+  if ((schema_path = g_settings_schema_get_path (schema)))
+    {
+      if (project_id != NULL)
+        g_critical ("Attempt to resolve non-relocatable schema %s with project-id %s",
+                    schema_id, project_id);
+      return g_strdup (schema_path);
+    }
+
+  if (!g_str_has_prefix (schema_id, "org.gnome.builder."))
+    {
+      g_critical ("Relocatable schemas must be prefixed with org.gnome.builder.");
+      return NULL;
+    }
+
+  if (project_id == NULL)
+    {
+      g_autofree char *escaped = g_strdelimit (g_strdup (schema_id), ".", '/');
+      return g_strconcat ("/", escaped, "/", NULL);
+    }
+  else
+    {
+      const char *suffix = schema_id + strlen ("org.gnome.builder.");
+      g_autofree char *escaped = g_strdelimit (g_strdup (suffix), ".", '/');
+
+      return g_strconcat ("/org/gnome/builder/projects/", project_id, "/", escaped, "/", path_suffix, NULL);
+    }
+}
+
 static void
 ide_settings_constructed (GObject *object)
 {
