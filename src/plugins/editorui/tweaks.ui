@@ -90,19 +90,19 @@
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Never</property>
-                                <property name="action-target">'never'</property>
+                                <property name="value">'never'</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">At Spaces</property>
-                                <property name="action-target">'whitespace'</property>
+                                <property name="value">'whitespace'</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Anywhere</property>
-                                <property name="action-target">'always'</property>
+                                <property name="value">'always'</property>
                               </object>
                             </child>
                           </object>
@@ -120,13 +120,13 @@
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">No Pattern</property>
-                                <property name="action-target">false</property>
+                                <property name="value">false</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Grid Lines</property>
-                                <property name="action-target">true</property>
+                                <property name="value">true</property>
                               </object>
                             </child>
                           </object>
@@ -145,19 +145,19 @@
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Prefer Scrollbars</property>
-                                <property name="action-target">'never'</property>
+                                <property name="value">'never'</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Always On</property>
-                                <property name="action-target">'always'</property>
+                                <property name="value">'always'</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Automatic</property>
-                                <property name="action-target">'auto'</property>
+                                <property name="value">'auto'</property>
                               </object>
                             </child>
                           </object>
@@ -314,7 +314,7 @@
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Builder</property>
-                                <property name="action-target">'default'</property>
+                                <property name="value">'default'</property>
                               </object>
                             </child>
                           </object>
@@ -340,25 +340,25 @@
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Before line boundaries</property>
-                                <property name="action-target">'before'</property>
+                                <property name="value">'before'</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">After line boundaries</property>
-                                <property name="action-target">'after'</property>
+                                <property name="value">'after'</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Instead of line boundaries</property>
-                                <property name="action-target">'always'</property>
+                                <property name="value">'always'</property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Disabled</property>
-                                <property name="action-target">'disabled'</property>
+                                <property name="value">'disabled'</property>
                               </object>
                             </child>
                           </object>

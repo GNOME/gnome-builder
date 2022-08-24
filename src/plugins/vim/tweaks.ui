@@ -16,7 +16,7 @@
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Vim</property>
-                                <property name="action-target">'vim'</property>
+                                <property name="value">'vim'</property>
                               </object>
                             </child>
                           </object>

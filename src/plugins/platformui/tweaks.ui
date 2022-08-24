@@ -31,13 +31,13 @@
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title" translatable="yes">Tab Bar</property>
-                        <property name="action-target">'tab-bar'</property>
+                        <property name="value">'tab-bar'</property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title" translatable="yes">Drop Down</property>
-                        <property name="action-target">'drop-down'</property>
+                        <property name="value">'drop-down'</property>
                       </object>
                     </child>
                   </object>

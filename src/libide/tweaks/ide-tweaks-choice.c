@@ -29,14 +29,14 @@ struct _IdeTweaksChoice
   IdeTweaksItem parent_instance;
   char *title;
   char *subtitle;
-  GVariant *action_target;
+  GVariant *value;
 };
 
 enum {
   PROP_0,
-  PROP_ACTION_TARGET,
   PROP_SUBTITLE,
   PROP_TITLE,
+  PROP_VALUE,
   N_PROPS
 };
 
@@ -51,7 +51,7 @@ ide_tweaks_choice_dispose (GObject *object)
 
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->subtitle, g_free);
-  g_clear_pointer (&self->action_target, g_variant_unref);
+  g_clear_pointer (&self->value, g_variant_unref);
 
   G_OBJECT_CLASS (ide_tweaks_choice_parent_class)->dispose (object);
 }
@@ -74,8 +74,8 @@ ide_tweaks_choice_get_property (GObject    *object,
       g_value_set_string (value, ide_tweaks_choice_get_subtitle (self));
       break;
 
-    case PROP_ACTION_TARGET:
-      g_value_set_variant (value, ide_tweaks_choice_get_action_target (self));
+    case PROP_VALUE:
+      g_value_set_variant (value, ide_tweaks_choice_get_value (self));
       break;
 
     default:
@@ -101,8 +101,8 @@ ide_tweaks_choice_set_property (GObject      *object,
       ide_tweaks_choice_set_subtitle (self, g_value_get_string (value));
       break;
 
-    case PROP_ACTION_TARGET:
-      ide_tweaks_choice_set_action_target (self, g_value_get_variant (value));
+    case PROP_VALUE:
+      ide_tweaks_choice_set_value (self, g_value_get_variant (value));
       break;
 
     default:
@@ -129,8 +129,8 @@ ide_tweaks_choice_class_init (IdeTweaksChoiceClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_ACTION_TARGET] =
-    g_param_spec_variant ("action-target", NULL, NULL,
+  properties[PROP_VALUE] =
+    g_param_spec_variant ("value", NULL, NULL,
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
@@ -160,34 +160,34 @@ ide_tweaks_choice_get_subtitle (IdeTweaksChoice *self)
 }
 
 /**
- * ide_tweaks_choice_get_action_target:
+ * ide_tweaks_choice_get_value:
  * @self: a #IdeTweaksChoice
  *
  * Returns: (transfer none) (nullable): A #GVariant or %NULL
  */
 GVariant *
-ide_tweaks_choice_get_action_target (IdeTweaksChoice *self)
+ide_tweaks_choice_get_value (IdeTweaksChoice *self)
 {
   g_return_val_if_fail (IDE_IS_TWEAKS_CHOICE (self), NULL);
 
-  return self->action_target;
+  return self->value;
 }
 
 void
-ide_tweaks_choice_set_action_target (IdeTweaksChoice *self,
-                                     GVariant        *action_target)
+ide_tweaks_choice_set_value (IdeTweaksChoice *self,
+                             GVariant        *value)
 {
   g_return_if_fail (IDE_IS_TWEAKS_CHOICE (self));
 
-  if (action_target == self->action_target)
+  if (value == self->value)
     return;
 
-  if (action_target != NULL)
-    g_variant_ref (action_target);
+  if (value != NULL)
+    g_variant_ref_sink (value);
 
-  g_clear_pointer (&self->action_target, g_variant_unref);
-  self->action_target = action_target;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTION_TARGET]);
+  g_clear_pointer (&self->value, g_variant_unref);
+  self->value = value;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
 }
 
 void

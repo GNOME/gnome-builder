@@ -34,21 +34,21 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksChoice, ide_tweaks_choice, IDE, TWEAKS_CHOICE, IdeTweaksItem)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksChoice *ide_tweaks_choice_new               (void);
+IdeTweaksChoice *ide_tweaks_choice_new          (void);
 IDE_AVAILABLE_IN_ALL
-const char      *ide_tweaks_choice_get_title         (IdeTweaksChoice *self);
+const char      *ide_tweaks_choice_get_title    (IdeTweaksChoice *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_tweaks_choice_set_title         (IdeTweaksChoice *self,
-                                                      const char      *title);
+void             ide_tweaks_choice_set_title    (IdeTweaksChoice *self,
+                                                 const char      *title);
 IDE_AVAILABLE_IN_ALL
-const char      *ide_tweaks_choice_get_subtitle      (IdeTweaksChoice *self);
+const char      *ide_tweaks_choice_get_subtitle (IdeTweaksChoice *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_tweaks_choice_set_subtitle      (IdeTweaksChoice *self,
-                                                      const char      *subtitle);
+void             ide_tweaks_choice_set_subtitle (IdeTweaksChoice *self,
+                                                 const char      *subtitle);
 IDE_AVAILABLE_IN_ALL
-GVariant        *ide_tweaks_choice_get_action_target (IdeTweaksChoice *self);
+GVariant        *ide_tweaks_choice_get_value    (IdeTweaksChoice *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_tweaks_choice_set_action_target (IdeTweaksChoice *self,
-                                                      GVariant        *action_target);
+void             ide_tweaks_choice_set_value    (IdeTweaksChoice *self,
+                                                 GVariant        *value);
 
 G_END_DECLS

@@ -32,7 +32,7 @@ struct _IdeTweaksRadio
   char *title;
   char *subtitle;
   char *action_name;
-  GVariant *action_target;
+  GVariant *value;
 };
 
 enum {
@@ -40,7 +40,7 @@ enum {
   PROP_TITLE,
   PROP_SUBTITLE,
   PROP_ACTION_NAME,
-  PROP_ACTION_TARGET,
+  PROP_VALUE,
   N_PROPS
 };
 
@@ -60,7 +60,7 @@ ide_tweaks_radio_create_for_item (IdeTweaksWidget *instance,
 
   radio = g_object_new (GTK_TYPE_CHECK_BUTTON,
                         "action-name", self->action_name,
-                        "action-target", self->action_target,
+                        "action-target", self->value,
                         "can-target", FALSE,
                         "valign", GTK_ALIGN_CENTER,
                         NULL);
@@ -84,7 +84,7 @@ ide_tweaks_radio_dispose (GObject *object)
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->subtitle, g_free);
   g_clear_pointer (&self->action_name, g_free);
-  g_clear_pointer (&self->action_target, g_variant_unref);
+  g_clear_pointer (&self->value, g_variant_unref);
 
   G_OBJECT_CLASS (ide_tweaks_radio_parent_class)->dispose (object);
 }
@@ -103,8 +103,8 @@ ide_tweaks_radio_get_property (GObject    *object,
       g_value_set_string (value, ide_tweaks_radio_get_action_name (self));
       break;
 
-    case PROP_ACTION_TARGET:
-      g_value_set_variant (value, ide_tweaks_radio_get_action_target (self));
+    case PROP_VALUE:
+      g_value_set_variant (value, ide_tweaks_radio_get_value (self));
       break;
 
     case PROP_SUBTITLE:
@@ -134,8 +134,8 @@ ide_tweaks_radio_set_property (GObject      *object,
       ide_tweaks_radio_set_action_name (self, g_value_get_string (value));
       break;
 
-    case PROP_ACTION_TARGET:
-      ide_tweaks_radio_set_action_target (self, g_value_get_variant (value));
+    case PROP_VALUE:
+      ide_tweaks_radio_set_value (self, g_value_get_variant (value));
       break;
 
     case PROP_SUBTITLE:
@@ -168,8 +168,8 @@ ide_tweaks_radio_class_init (IdeTweaksRadioClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
-  properties[PROP_ACTION_TARGET] =
-    g_param_spec_variant ("action-target", NULL, NULL,
+  properties[PROP_VALUE] =
+    g_param_spec_variant ("value", NULL, NULL,
                           G_VARIANT_TYPE_ANY,
                           NULL,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
@@ -201,17 +201,17 @@ ide_tweaks_radio_get_action_name (IdeTweaksRadio *self)
 }
 
 /**
- * ide_tweaks_radio_get_action_target:
+ * ide_tweaks_radio_get_value:
  * @self: a #IdeTweaksRadio
  *
  * Returns: (transfer none) (nullable): a #GVariant or %NULL
  */
 GVariant *
-ide_tweaks_radio_get_action_target (IdeTweaksRadio *self)
+ide_tweaks_radio_get_value (IdeTweaksRadio *self)
 {
   g_return_val_if_fail (IDE_IS_TWEAKS_RADIO (self), NULL);
 
-  return self->action_target;
+  return self->value;
 }
 
 const char *
@@ -241,17 +241,17 @@ ide_tweaks_radio_set_action_name (IdeTweaksRadio *self,
 }
 
 void
-ide_tweaks_radio_set_action_target (IdeTweaksRadio *self,
-                                    GVariant       *action_target)
+ide_tweaks_radio_set_value (IdeTweaksRadio *self,
+                            GVariant       *value)
 {
   g_return_if_fail (IDE_IS_TWEAKS_RADIO (self));
 
-  if (action_target == self->action_target)
+  if (value == self->value)
     return;
 
-  g_clear_pointer (&self->action_target, g_variant_unref);
-  self->action_target = action_target ? g_variant_ref_sink (action_target) : NULL;
-  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTION_TARGET]);
+  g_clear_pointer (&self->value, g_variant_unref);
+  self->value = value ? g_variant_ref_sink (value) : NULL;
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_VALUE]);
 }
 
 void

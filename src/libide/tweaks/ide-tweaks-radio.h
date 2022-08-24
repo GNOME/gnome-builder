@@ -30,26 +30,26 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksRadio, ide_tweaks_radio, IDE, TWEAKS_RADIO, IdeTweaksWidget)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksRadio *ide_tweaks_radio_new               (void);
+IdeTweaksRadio *ide_tweaks_radio_new             (void);
 IDE_AVAILABLE_IN_ALL
-const char     *ide_tweaks_radio_get_title         (IdeTweaksRadio *self);
+const char     *ide_tweaks_radio_get_title       (IdeTweaksRadio *self);
 IDE_AVAILABLE_IN_ALL
-void            ide_tweaks_radio_set_title         (IdeTweaksRadio *self,
-                                                    const char     *title);
+void            ide_tweaks_radio_set_title       (IdeTweaksRadio *self,
+                                                  const char     *title);
 IDE_AVAILABLE_IN_ALL
-const char     *ide_tweaks_radio_get_subtitle      (IdeTweaksRadio *self);
+const char     *ide_tweaks_radio_get_subtitle    (IdeTweaksRadio *self);
 IDE_AVAILABLE_IN_ALL
-void            ide_tweaks_radio_set_subtitle      (IdeTweaksRadio *self,
-                                                    const char     *subtitle);
+void            ide_tweaks_radio_set_subtitle    (IdeTweaksRadio *self,
+                                                  const char     *subtitle);
 IDE_AVAILABLE_IN_ALL
-const char     *ide_tweaks_radio_get_action_name   (IdeTweaksRadio *self);
+const char     *ide_tweaks_radio_get_action_name (IdeTweaksRadio *self);
 IDE_AVAILABLE_IN_ALL
-void            ide_tweaks_radio_set_action_name   (IdeTweaksRadio *self,
-                                                    const char     *action_name);
+void            ide_tweaks_radio_set_action_name (IdeTweaksRadio *self,
+                                                  const char     *action_name);
 IDE_AVAILABLE_IN_ALL
-GVariant       *ide_tweaks_radio_get_action_target (IdeTweaksRadio *self);
+GVariant       *ide_tweaks_radio_get_value       (IdeTweaksRadio *self);
 IDE_AVAILABLE_IN_ALL
-void            ide_tweaks_radio_set_action_target (IdeTweaksRadio *self,
-                                                    GVariant       *action_target);
+void            ide_tweaks_radio_set_value       (IdeTweaksRadio *self,
+                                                  GVariant       *value);
 
 G_END_DECLS

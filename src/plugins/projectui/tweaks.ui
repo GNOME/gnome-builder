@@ -46,43 +46,43 @@
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title">AGPL-3.0-or-later</property>
-                        <property name="action-target">'AGPL-3.0-or-later'</property>
+                        <property name="value">'AGPL-3.0-or-later'</property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title">Apache-2.0</property>
-                        <property name="action-target">'Apache-2.0'</property>
+                        <property name="value">'Apache-2.0'</property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title">GPL-2.0-or-later</property>
-                        <property name="action-target">'GPL-2.0-or-later'</property>
+                        <property name="value">'GPL-2.0-or-later'</property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title">GPL-3.0-or-later</property>
-                        <property name="action-target">'GPL-3.0-or-later'</property>
+                        <property name="value">'GPL-3.0-or-later'</property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title">LGPL-2.1-or-later</property>
-                        <property name="action-target">'LGPL-2.1-or-later'</property>
+                        <property name="value">'LGPL-2.1-or-later'</property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title">LGPL-3.0-or-later</property>
-                        <property name="action-target">'LGPL-3.0-or-later'</property>
+                        <property name="value">'LGPL-3.0-or-later'</property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title" translatable="yes">No License</property>
-                        <property name="action-target">'No License'</property>
+                        <property name="value">'No License'</property>
                       </object>
                     </child>
                   </object>

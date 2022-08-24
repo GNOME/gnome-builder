@@ -58,7 +58,7 @@ ide_tweaks_combo_row_notify_selected_item (IdeTweaksComboRow *self,
 
   if ((choice = adw_combo_row_get_selected_item (ADW_COMBO_ROW (self))))
     {
-      GVariant *action_target = ide_tweaks_choice_get_action_target (choice);
+      GVariant *action_target = ide_tweaks_choice_get_value (choice);
 
       ide_settings_set_value (self->settings, self->key, action_target);
     }

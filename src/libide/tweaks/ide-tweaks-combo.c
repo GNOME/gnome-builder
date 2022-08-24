@@ -79,7 +79,7 @@ ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
     {
       if (!_ide_tweaks_item_is_hidden (child, root))
         {
-          GVariant *target = ide_tweaks_choice_get_action_target (IDE_TWEAKS_CHOICE (child));
+          GVariant *target = ide_tweaks_choice_get_value (IDE_TWEAKS_CHOICE (child));
 
           if (g_variant_equal (value, target))
             selected = i;

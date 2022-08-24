@@ -27,13 +27,13 @@
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title">check</property>
-                            <property name="action-target">'check'</property>
+                            <property name="value">'check'</property>
                           </object>
                         </child>
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title">clippy</property>
-                            <property name="action-target">'clippy'</property>
+                            <property name="value">'clippy'</property>
                           </object>
                         </child>
                       </object>

@@ -41,13 +41,13 @@
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title" translatable="yes">Don't Change Governor</property>
-                            <property name="action-target">true</property>
+                            <property name="value">true</property>
                           </object>
                         </child>
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title" translatable="yes">Force Performance Mode</property>
-                            <property name="action-target">false</property>
+                            <property name="value">false</property>
                           </object>
                         </child>
                       </object>

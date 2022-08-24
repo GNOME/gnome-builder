@@ -70,19 +70,19 @@
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title">No</property>
-                            <property name="action-target">'no'</property>
+                            <property name="value">'no'</property>
                           </object>
                         </child>
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title">Summary</property>
-                            <property name="action-target">'summary'</property>
+                            <property name="value">'summary'</property>
                           </object>
                         </child>
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title">Full</property>
-                            <property name="action-target">'full'</property>
+                            <property name="value">'full'</property>
                           </object>
                         </child>
                       </object>

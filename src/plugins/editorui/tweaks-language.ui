@@ -61,13 +61,13 @@
                                 <child>
                                   <object class="IdeTweaksChoice" id="tab_choice">
                                     <property name="title" translatable="yes">Tab</property>
-                                    <property name="action-target">false</property>
+                                    <property name="value">false</property>
                                   </object>
                                 </child>
                                 <child>
                                   <object class="IdeTweaksChoice" id="space_choice">
                                     <property name="title" translatable="yes">Spaces</property>
-                                    <property name="action-target">true</property>
+                                    <property name="value">true</property>
                                   </object>
                                 </child>
                               </object>
