@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-20 12:29+0000\n"
-"PO-Revision-Date: 2022-08-23 20:35+0200\n"
+"POT-Creation-Date: 2022-08-24 03:58+0000\n"
+"PO-Revision-Date: 2022-08-24 20:35+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:222
+#: src/libide/gui/ide-application-actions.c:115
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
 #: src/plugins/editorui/tweaks.ui:316
@@ -41,7 +41,7 @@ msgid "An IDE for GNOME"
 msgstr "Un IDE per al GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:223
+#: src/libide/gui/ide-application-actions.c:116
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, et al."
 
@@ -347,97 +347,94 @@ msgstr ""
 "La tecla de retrocés suprimirà els espais extres per a mantenir-vos alineats"
 " amb l'amplada del sagnat."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/libide/gui/ide-preferences-builtin.c:165
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:110
-msgid "Smart Home and End"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: src/plugins/editorui/tweaks.ui:336
+msgid "Smart Home/End"
 msgstr "Inici i final intel·ligents"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
-msgid "Whether or not Home moves to first non-space character."
-msgstr ""
-"Si Inici mou o no el cursor al primer caràcter que no sigui un espai en "
-"blanc."
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+msgid "Modifies the behavior of Home/End keys."
+msgstr "Modifica el comportament de les tecles Inici/Final."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
 msgstr "Mostra les línies de graella"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr ""
 "Si està habilitat, l'editor mostrarà les línies de graella al document."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "Overview Map Policy"
 msgstr "Política del mapa general"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:81
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
 msgid "When the overview map should be displayed."
 msgstr "Quan s'ha de mostrar el mapa general."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Draw Spaces"
 msgstr "Dibuixa espais"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
 msgstr "Els diferents tipus d'espais que pot dibuixar l'editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/plugins/editorui/tweaks.ui:86
 msgid "Wrap Text"
 msgstr "Ajusta el text"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr ""
 "La manera d'ajustar una llarga línia de text per a una millor visibilitat."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Autosave Enabled"
 msgstr "Habilita el desat automàtic"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "Enable or disable autosave feature."
 msgstr "Habilita o deshabilita el desat automàtic."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 #: src/libide/gui/ide-preferences-builtin.c:208
 msgid "Autosave Frequency"
 msgstr "Freqüència del desat automàtic"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 "El nombre de segons després d'una modificació abans de desar automàticament."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "Completion Row Count"
 msgstr "Nombre de files de compleció"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
 msgid "The number of completion rows to display to the user."
 msgstr "El nombre de línies de compleció a mostrar a l'usuari."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
 #: src/plugins/editorui/tweaks.ui:74
 msgid "Line Height"
 msgstr "Alçada de línia"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
 msgid "The line height to use for the selected font."
 msgstr ""
 "L'alçada de la línia que s'utilitzarà per al tipus de lletra seleccionat."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/libide/gui/ide-preferences-builtin.c:229
 msgid "Interactive Completion"
 msgstr "Compleció interactiva"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -445,21 +442,21 @@ msgstr ""
 "Si està habilitat, el Constructor ajustarà el text automàticament de forma "
 "que tota la línia de text sigui visible."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "Minimum characters for matching selection."
 msgstr "Caràcters mínims per a la selecció coincident."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
 "Especifiqueu el nombre mínim de caràcters per a la coincidència de la "
 "selecció."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Enable Snippets"
 msgstr "Habilita els fragments"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -467,12 +464,12 @@ msgstr ""
 "Permet ampliar fragments de l'editor prement la pestanya després de "
 "l'activador de fragments."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
 msgid "Select First Completion"
 msgstr "Selecciona la primera compleció"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
 msgstr "Selecciona automàticament la primera entrada de compleció automàtica."
 
@@ -773,7 +770,7 @@ msgstr "Obre un fitxer a l'espai de treball"
 #: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
 #: src/libide/gui/ide-preferences-window.c:894
-#: src/libide/tweaks/ide-tweaks-window.ui:4
+#: src/libide/tweaks/ide-tweaks-window.c:130
 msgid "Preferences"
 msgstr "Preferències"
 
@@ -845,7 +842,7 @@ msgstr "Desa"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
@@ -1085,10 +1082,10 @@ msgstr "S'està executant %s…"
 msgid "Deploying to device…"
 msgstr "Desplegament a dispositiu…"
 
-#: src/libide/foundry/ide-runtime.c:403
+#: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:253
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
 msgstr "Sistema amfitrió"
 
@@ -1225,7 +1222,7 @@ msgstr "Obre"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:128
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
 msgid "Select"
 msgstr "Selecciona"
@@ -1318,11 +1315,7 @@ msgstr "Cerca dreceres de teclat"
 msgid "Show information about Builder"
 msgstr "Mostra la informació sobre el Constructor"
 
-#: src/libide/gui/ide-application-actions.c:161
-msgid "Builder — Preferences"
-msgstr "Preferències del Constructor"
-
-#: src/libide/gui/ide-application-actions.c:230
+#: src/libide/gui/ide-application-actions.c:123
 msgid "translator-credits"
 msgstr ""
 "Carles Ferrando Garcia <carles.ferrando@gmail.com>, 2018\n"
@@ -1330,7 +1323,7 @@ msgstr ""
 "Miquel-Àngel Burgos i Fradeja <miquel.angel.burgos@gmail.com>, 2020\n"
 "Maite Guix i Ribé <maite.guix@gmail.com>, 2022"
 
-#: src/libide/gui/ide-application-actions.c:237
+#: src/libide/gui/ide-application-actions.c:130
 msgid "Funded By"
 msgstr "Finançat per"
 
@@ -1412,8 +1405,8 @@ msgstr "No es pot carregar l'HTML. Manca el suport de WebKit."
 
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:10
-#: src/plugins/buildui/gtk/menus.ui:141
+#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:16
+#: src/plugins/buildui/gtk/menus.ui:134
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1503,6 +1496,11 @@ msgstr "Mode de vinculació predeterminada que imita gedit"
 #: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Movement"
 msgstr "Moviment"
+
+#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/plugins/editorui/gbp-editorui-preferences-addin.c:110
+msgid "Smart Home and End"
+msgstr "Inici i final intel·ligents"
 
 #: src/libide/gui/ide-preferences-builtin.c:165
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:111
@@ -1655,8 +1653,8 @@ msgstr "Caràcters d'espai en blanc visibles"
 #: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-#: src/plugins/editorui/tweaks-language.ui:68
-#: src/plugins/editorui/tweaks-language.ui:158
+#: src/plugins/editorui/tweaks-language.ui:69
+#: src/plugins/editorui/tweaks-language.ui:159
 msgid "Spaces"
 msgstr "Espais"
 
@@ -1779,7 +1777,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-#: src/plugins/editorui/tweaks-language.ui:142
+#: src/plugins/editorui/tweaks-language.ui:143
 msgid "Overwrite Braces"
 msgstr "Sobreescriu els claudàtors"
 
@@ -1790,7 +1788,7 @@ msgstr "Sobreescriu els claudàtors tancats"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-#: src/plugins/editorui/tweaks-language.ui:149
+#: src/plugins/editorui/tweaks-language.ui:150
 msgid "Insert Matching Brace"
 msgstr "Insereix claudàtors concordants"
 
@@ -1800,13 +1798,13 @@ msgstr "Insereix claudàtors concordants per a { [ ( o «"
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
-#: src/plugins/editorui/tweaks-language.ui:76
+#: src/plugins/editorui/tweaks-language.ui:77
 msgid "Insert Trailing Newline"
 msgstr "Insereix línia nova al final"
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
-#: src/plugins/editorui/tweaks-language.ui:77
+#: src/plugins/editorui/tweaks-language.ui:78
 msgid "Ensure files end with a newline"
 msgstr "Assegureu-vos que els fitxers finalitzin amb una línia nova"
 
@@ -1936,7 +1934,6 @@ msgstr "Les memòries cau expirades es depuraran quan s'iniciï el Constructor"
 
 #: src/libide/gui/ide-preferences-builtin.c:434
 #: src/libide/gui/ide-preferences-builtin.c:658
-#: src/plugins/platformui/tweaks.ui:62
 msgid "Network"
 msgstr "Xarxa"
 
@@ -1981,7 +1978,7 @@ msgstr ""
 "aplicacions"
 
 #: src/libide/gui/ide-preferences-builtin.c:445
-#: src/libide/gui/ide-preferences-builtin.c:653 src/libide/gui/tweaks.ui:34
+#: src/libide/gui/ide-preferences-builtin.c:653 src/libide/gui/tweaks.ui:40
 #: src/libide/projects/ide-projects-global.c:103
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
@@ -2011,6 +2008,7 @@ msgstr "Obre els fitxers oberts prèviament quan es carregui un projecte"
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:111
 #: src/plugins/create-project/gbp-create-project-widget.ui:115
 #: src/plugins/git/gbp-git-preferences-addin.c:184
+#: src/plugins/projectui/tweaks.ui:140
 msgid "Version Control"
 msgstr "Control de versions"
 
@@ -2039,7 +2037,7 @@ msgstr "Insight"
 
 #: src/libide/gui/ide-preferences-builtin.c:656
 #: src/libide/gui/ide-preferences-builtin.c:667
-#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:12
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
 msgstr "Ordres"
 
@@ -2049,18 +2047,20 @@ msgstr "Ordres"
 msgid "SDKs"
 msgstr "SDKs"
 
-#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:49
-#: src/libide/gui/tweaks.ui:53
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:56
+#: src/libide/gui/tweaks.ui:61
 msgid "Plugins"
 msgstr "Complements"
 
 #. Add groups to pages
 #: src/libide/gui/ide-preferences-builtin.c:663
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
+#: src/plugins/projectui/tweaks.ui:96
 msgid "Overview"
 msgstr "Descripció general"
 
 #: src/libide/gui/ide-preferences-builtin.c:664
+#: src/plugins/projectui/tweaks.ui:166
 msgid "Configurations"
 msgstr "Configuració"
 
@@ -2070,7 +2070,7 @@ msgstr "Aplicació"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:22
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Interfície"
 
@@ -2135,7 +2135,7 @@ msgid "Additional"
 msgstr "Addicional"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks-language.ui:139
+#: src/plugins/editorui/tweaks-language.ui:140
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Behavior"
 msgstr "Comportament"
@@ -2280,30 +2280,30 @@ msgstr "Executa el projecte"
 msgid "Custom Font"
 msgstr "Tipus de lletra personalitzat"
 
-#: src/libide/gui/tweaks.ui:6
+#: src/libide/gui/tweaks.ui:11
 msgid "Visual"
 msgstr "Visual"
 
-#: src/libide/gui/tweaks.ui:16
+#: src/libide/gui/tweaks.ui:22
 msgid "Text Editor"
 msgstr "Editor de text"
 
-#: src/libide/gui/tweaks.ui:22
+#: src/libide/gui/tweaks.ui:28
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
 
-#: src/libide/gui/tweaks.ui:29
+#: src/libide/gui/tweaks.ui:35
 msgid "Code"
 msgstr "Codi"
 
-#: src/libide/gui/tweaks.ui:39
+#: src/libide/gui/tweaks.ui:46
 msgid "Foundry"
 msgstr "Fundació"
 
-#: src/libide/gui/tweaks.ui:44
+#: src/libide/gui/tweaks.ui:51
 msgid "External"
 msgstr "Extern"
 
@@ -2510,13 +2510,18 @@ msgstr "S'està carregant…"
 msgid "Projects Directory"
 msgstr "Directori dels projectes"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:36
+#: src/libide/tweaks/ide-tweaks-window.c:135
+#, c-format
+msgid "Builder — %s — Preferences"
+msgstr "Constructor — %s — Preferències"
+
+#: src/libide/tweaks/ide-tweaks-window.c:139
+msgid "Builder — Preferences"
+msgstr "Preferències del Constructor"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:35
 msgid "All Preferences"
 msgstr "Totes les preferències"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:48
-msgid "Search Preferences"
-msgstr "Cerca les preferències"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:61
 msgid "Primary Menu"
@@ -2537,7 +2542,7 @@ msgid "Blank page"
 msgstr "Pàgina en blanc"
 
 #: src/libide/webkit/ide-webkit-page.ui:96
-#: src/plugins/buildui/gtk/menus.ui:139
+#: src/plugins/buildui/gtk/menus.ui:132
 msgid "Settings"
 msgstr "Configuració"
 
@@ -2763,7 +2768,7 @@ msgstr "%s (copia)"
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
 msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
-"Projecte BuildStream en ús però el «bst» executable no s'ha pogut trobar."
+"Projecte BuildStream en ús però l'executable «bst» no s'ha pogut trobar."
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
 msgid "All Runtimes"
@@ -2831,12 +2836,14 @@ msgstr "Nom"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:110
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:404
+#: src/plugins/projectui/tweaks.ui:132
 msgid "Source Directory"
 msgstr "Directori del codi font"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:109
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:405
+#: src/plugins/projectui/tweaks.ui:124
 msgid "Build System"
 msgstr "Sistema de construcció"
 
@@ -2941,7 +2948,7 @@ msgstr "Avisos"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:345
 #: src/plugins/buildui/gbp-buildui-pane.ui:81
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 #: src/plugins/testui/gbp-testui-preferences-addin.c:50
 msgid "Build Pipeline"
 msgstr "Canonada de construcció"
@@ -3148,47 +3155,55 @@ msgstr "Mostra el _registre de construcció"
 msgid "Display panel containing the build log"
 msgstr "Mostra el quadre que conté el registre de construcció"
 
-#: src/plugins/buildui/gtk/menus.ui:112
-msgid "Manage SDKs…"
-msgstr "Gestiona els SDK…"
-
-#: src/plugins/buildui/gtk/menus.ui:121
+#: src/plugins/buildui/gtk/menus.ui:114
 msgid "Select Run Command…"
 msgstr "Selecciona ordre d'execució…"
 
-#: src/plugins/buildui/gtk/menus.ui:131
+#: src/plugins/buildui/gtk/menus.ui:124
 msgid "Run"
 msgstr "Executa"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:127
 msgid "Run the project"
 msgstr "Executa el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:136
+msgid "Follow System Style"
+msgstr "Segueix l'estil del sistema"
+
+#: src/plugins/buildui/gtk/menus.ui:142
+msgid "Force Light"
+msgstr "Força el clar"
+
+#: src/plugins/buildui/gtk/menus.ui:148
+msgid "Force Dark"
+msgstr "Força el fosc"
+
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Accessibility"
 msgstr "Accessibilitat"
 
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:157
 msgid "High Contrast"
 msgstr "Contrast alt"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Text Direction"
 msgstr "Direcció del text"
 
-#: src/plugins/buildui/gtk/menus.ui:171
+#: src/plugins/buildui/gtk/menus.ui:164
 msgid "Left-to-Right"
 msgstr "D'esquerra a dreta"
 
-#: src/plugins/buildui/gtk/menus.ui:177
+#: src/plugins/buildui/gtk/menus.ui:170
 msgid "Right-to-Left"
 msgstr "De dreta a esquerra"
 
-#: src/plugins/buildui/gtk/menus.ui:186
+#: src/plugins/buildui/gtk/menus.ui:179
 msgid "Verbose Logging"
 msgstr "Registre loquaç"
 
-#: src/plugins/buildui/gtk/menus.ui:192
+#: src/plugins/buildui/gtk/menus.ui:185
 msgid "Tools"
 msgstr "Eines"
 
@@ -4349,7 +4364,7 @@ msgid "Trim Trailing Whitespace"
 msgstr "Retalla l'espai en blanc final"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-#: src/plugins/editorui/tweaks-language.ui:84
+#: src/plugins/editorui/tweaks-language.ui:85
 msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
 msgstr ""
 "En desar, es retallaran els espais en blanc finals de les línies modificades"
@@ -4359,6 +4374,7 @@ msgid "Insert matching character for [[(\"'"
 msgstr "Insereix claudàtors concordants per a [[(\"'"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
+#: src/plugins/editorui/tweaks-language.ui:124
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr "Mostra un marge a l'editor per a indicar l'amplada màxima desitjada"
 
@@ -4418,13 +4434,25 @@ msgid "5"
 msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:109
+#: src/plugins/editorui/tweaks-language.ui:110
 msgid "Indentation Size"
 msgstr "Mida del sagnat"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
 msgstr "Igual que l'amplada de la tabulació"
+
+#: src/plugins/editorui/gtk/menus.ui:81
+msgid "Line Ending"
+msgstr "Final de línia"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+msgid "Windows (CR/LF)"
+msgstr "Windows (CR+LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+msgid "Mac Classic (CR)"
+msgstr "Mac OS Classic (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -4466,80 +4494,72 @@ msgstr "Imprimeix…"
 msgid "Format Selection"
 msgstr "Formata la selecció"
 
-#: src/plugins/editorui/tweaks-language.ui:53
+#: src/plugins/editorui/tweaks-language.ui:54
 msgid "Indentation & Formatting"
 msgstr "Sagnat i formatació"
 
-#: src/plugins/editorui/tweaks-language.ui:56
+#: src/plugins/editorui/tweaks-language.ui:57
 msgid "Tab Character"
 msgstr "Caràcter de tabulació"
 
-#: src/plugins/editorui/tweaks-language.ui:57
+#: src/plugins/editorui/tweaks-language.ui:58
 msgid "The character to be inserted for Tab"
 msgstr "El caràcter a inserir per al tabulador"
 
-#: src/plugins/editorui/tweaks-language.ui:62
+#: src/plugins/editorui/tweaks-language.ui:63
 msgid "Tab"
 msgstr "Tabuladors"
 
-#: src/plugins/editorui/tweaks-language.ui:83
-#, fuzzy
-#| msgid "Trim Trailing Whitespace"
+#: src/plugins/editorui/tweaks-language.ui:84
 msgid "Trim Trailing Space"
-msgstr "Retalla l'espai de seguiment"
+msgstr "Retalla l'espai en blanc final"
 
-#: src/plugins/editorui/tweaks-language.ui:94
+#: src/plugins/editorui/tweaks-language.ui:95
 msgid "Auto Indent"
 msgstr "Sagnat automàtic"
 
-#: src/plugins/editorui/tweaks-language.ui:95
+#: src/plugins/editorui/tweaks-language.ui:96
 msgid "Automatically indent source code as you type"
 msgstr "Sagna automàticament el codi font mentre s'escriu"
 
-#: src/plugins/editorui/tweaks-language.ui:101
+#: src/plugins/editorui/tweaks-language.ui:102
 msgid "Tab Size"
 msgstr "Mida del tabulador"
 
-#: src/plugins/editorui/tweaks-language.ui:102
+#: src/plugins/editorui/tweaks-language.ui:103
 msgid "The number of characters to indent for Tab"
 msgstr "El nombre de caràcters a sagnar per al tabulador"
 
-#: src/plugins/editorui/tweaks-language.ui:110
+#: src/plugins/editorui/tweaks-language.ui:111
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
 "El nombre de caràcters a sagnar, o -1 per a utilitzar la mida del tabulador"
 
-#: src/plugins/editorui/tweaks-language.ui:119
+#: src/plugins/editorui/tweaks-language.ui:120
 msgid "Margin"
 msgstr "Marge"
 
-#: src/plugins/editorui/tweaks-language.ui:122
+#: src/plugins/editorui/tweaks-language.ui:123
 msgid "Show Right Margin"
 msgstr "Mostra el marge dret"
 
-#: src/plugins/editorui/tweaks-language.ui:123
-msgid "Display a margin in the editor to indicate maximium desired width"
-msgstr ""
-"Mostra un marge a l'editor per a indicar l'amplada màxima desitjada"
-
-#: src/plugins/editorui/tweaks-language.ui:129
+#: src/plugins/editorui/tweaks-language.ui:130
 msgid "Right Margin Position"
 msgstr "Posició del marge dret"
 
-#: src/plugins/editorui/tweaks-language.ui:130
+#: src/plugins/editorui/tweaks-language.ui:131
 msgid "The desired maximum line length"
 msgstr "La longitud màxima de línia desitjada"
 
-#: src/plugins/editorui/tweaks-language.ui:143
+#: src/plugins/editorui/tweaks-language.ui:144
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr "Sobreescriu les claus de tancament, parèntesis i cometes"
 
-#: src/plugins/editorui/tweaks-language.ui:150
+#: src/plugins/editorui/tweaks-language.ui:151
 msgid ""
 "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
-"Insereix un caràcter coincident per als claudàtors, parèntesis i"
-" cometes"
+"Insereix un caràcter coincident per als claudàtors, parèntesis i cometes"
 
 #: src/plugins/editorui/tweaks.ui:28
 msgid "Color"
@@ -4720,52 +4740,64 @@ msgstr ""
 "Els temes de dreceres proporcionen una experiència de teclat similar a "
 "altres IDE i editors"
 
-#: src/plugins/editorui/tweaks.ui:336
-msgid "Smart Home/End"
-msgstr "Inici i final intel·ligents"
-
 #: src/plugins/editorui/tweaks.ui:337
-msgid "Moves to first non-whitespace character before line edges"
-msgstr "Mou al primer caràcter no en blanc abans de les vores de la línia"
+msgid "Navigate to non-space characters"
+msgstr "Navega pels caràcters que no són espais"
 
-#: src/plugins/editorui/tweaks.ui:347
+#: src/plugins/editorui/tweaks.ui:342
+msgid "Before line boundaries"
+msgstr "Abans dels límits de la línia"
+
+#: src/plugins/editorui/tweaks.ui:348
+msgid "After line boundaries"
+msgstr "Després dels límits de la línia"
+
+#: src/plugins/editorui/tweaks.ui:354
+msgid "Instead of line boundaries"
+msgstr "En lloc dels límits de la línia"
+
+#: src/plugins/editorui/tweaks.ui:360 src/plugins/valgrind/gtk/menus.ui:44
+msgid "Disabled"
+msgstr "Deshabilitat"
+
+#: src/plugins/editorui/tweaks.ui:372
 msgid "Session Management"
 msgstr "Gestió de la sessió"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:376
 msgid "Save & Restore"
 msgstr "Desa i restaura"
 
-#: src/plugins/editorui/tweaks.ui:354
+#: src/plugins/editorui/tweaks.ui:379
 msgid "Auto-Save"
 msgstr "Desat automàtic"
 
-#: src/plugins/editorui/tweaks.ui:355
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Regularly save the document as you type"
 msgstr "Desa regularment el document mentre escriviu"
 
-#: src/plugins/editorui/tweaks.ui:361
+#: src/plugins/editorui/tweaks.ui:386
 msgid "Auto-Save Delay"
 msgstr "Retard de desat automàtic"
 
-#: src/plugins/editorui/tweaks.ui:362
+#: src/plugins/editorui/tweaks.ui:387
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 "El retard en segons a esperar abans de desar automàticament el document"
 
-#: src/plugins/editorui/tweaks.ui:373
+#: src/plugins/editorui/tweaks.ui:398
 msgid "Format on Save"
 msgstr "Formata en desar"
 
-#: src/plugins/editorui/tweaks.ui:374
+#: src/plugins/editorui/tweaks.ui:399
 msgid "Reformat sources when saving to disk"
 msgstr "Torna a donar format a les fonts en desar al disc"
 
-#: src/plugins/editorui/tweaks.ui:384
+#: src/plugins/editorui/tweaks.ui:409
 msgid "Restore Cursor Position"
 msgstr "Restaura la posició del cursor"
 
-#: src/plugins/editorui/tweaks.ui:385
+#: src/plugins/editorui/tweaks.ui:410
 msgid "Jump to the last position when re-opening a file"
 msgstr "Salta a l'última posició en tornar a obrir un fitxer"
 
@@ -5532,29 +5564,17 @@ msgstr "S'estan descarregant les dependències npm"
 msgid "_External Program…"
 msgstr "_Programa extern…"
 
-#: src/plugins/platformui/tweaks.ui:36
+#: src/plugins/platformui/tweaks.ui:30
 msgid "Document Navigation"
 msgstr "Navegació de documents"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:33
 msgid "Tab Bar"
 msgstr "Barra de pestanyes"
 
-#: src/plugins/platformui/tweaks.ui:45
+#: src/plugins/platformui/tweaks.ui:39
 msgid "Drop Down"
 msgstr "Deixa anar"
-
-#: src/plugins/platformui/tweaks.ui:67
-msgid "Allow Downloads when Metered"
-msgstr "Permet les baixades amb connexió limitada"
-
-#: src/plugins/platformui/tweaks.ui:68
-msgid ""
-"Allow the download of SDKs and dependencies when on metered internet "
-"connections"
-msgstr ""
-"Permet la baixada de SDKs i dependències quan es troben en connexions "
-"d'Internet mesurades"
 
 #. translators: this is a path to browse to the runtime, likely only
 #. "containers" should be translated
@@ -5694,27 +5714,26 @@ msgid "Reveal in Project _Tree"
 msgstr "Mostra-ho a l'_arbre del projecte"
 
 #: src/plugins/project-tree/tweaks.ui:20
-#, fuzzy
-#| msgid "Destination file must be within the project tree."
 msgid "Display icons next to files within the project tree"
 msgstr "Mostra les icones al costat dels fitxers dins de l'arbre del projecte"
 
 #: src/plugins/project-tree/tweaks.ui:27
-#, fuzzy
 msgid "Show files which are typically ignored"
 msgstr "Mostra els fitxers que normalment s'ignoren"
 
 #: src/plugins/project-tree/tweaks.ui:34
-#, fuzzy
 msgid "Sort directories before files in the same directory"
 msgstr "Ordena els directoris abans dels fitxers en el mateix directori"
+
+#: src/plugins/projectui/gbp-projectui-tweaks-addin.c:106
+msgid "No version control"
+msgstr "Sense control de versions"
 
 #: src/plugins/projectui/tweaks.ui:23
 msgid "Project Creation"
 msgstr "Creació del projecte"
 
 #: src/plugins/projectui/tweaks.ui:27
-#, fuzzy
 msgid "Projects created with Builder will be placed within this directory"
 msgstr ""
 "Els projectes creats amb el Constructor es col·locaran dins d'aquest "
@@ -5723,6 +5742,30 @@ msgstr ""
 #: src/plugins/projectui/tweaks.ui:80
 msgid "No License"
 msgstr "Sense llicència"
+
+#: src/plugins/projectui/tweaks.ui:97
+msgid "info-symbolic"
+msgstr "info-symbolic"
+
+#: src/plugins/projectui/tweaks.ui:107
+msgid "Project Identifier"
+msgstr "Identificador del projecte"
+
+#: src/plugins/projectui/tweaks.ui:115
+msgid ""
+"This identifier is used when referencing your project's settings, build "
+"directories, and cached information."
+msgstr ""
+"Aquest identificador s'utilitza quan es fa referència a la configuració del "
+"projecte, directoris de construcció i informació de la memòria cau."
+
+#: src/plugins/projectui/tweaks.ui:152
+msgid "Current Configuration"
+msgstr "Configuració actual"
+
+#: src/plugins/projectui/tweaks.ui:167
+msgid "builder-build-configure-symbolic"
+msgstr "builder-build-configure-symbolic"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5814,30 +5857,28 @@ msgid "Cargo Command"
 msgstr "Ordre del Cargo"
 
 #: src/plugins/rust-analyzer/tweaks.ui:24
-#, fuzzy
 msgid "The default cargo command to run with rust-analyzer"
-msgstr ""
-"L'ordre de càrrega predeterminada a executar amb l'analitzador de rovell"
+msgstr "L'ordre de cargo predeterminada a executar amb rust-analyzer"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 msgid "Untitled Command"
 msgstr "Ordre sense títol"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:339
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 msgid "Set Shortcut"
 msgstr "Estableix la drecera"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
 msgid "Select Working Directory"
 msgstr "Selecciona el directori de treball"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
 msgid "Create Command"
 msgstr "Crea una ordre"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:542
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
 msgstr "_Crea"
 
@@ -5878,10 +5919,18 @@ msgstr ""
 "<tt>$SRCDIR</tt> o <tt>$HOME</tt> per a definir un camí relatiu."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+msgid "Use Subshell"
+msgstr "Utilitza subintèrpret"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr "Executa el programa des d'un subintèrpret com ara <tt>sh -c ''</tt>"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "Localització"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
@@ -5889,43 +5938,43 @@ msgstr ""
 "El Constructor pot executar la vostra ordre des de diverses ubicacions, "
 "inclòs el sistema amfitrió o contenidors construïts."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:192
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
 msgid "Add _Variable"
 msgstr "Afegeix _variable"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:198
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
 msgid "Add Variable"
 msgstr "Afegeix una variable"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:199
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
 msgid "_Add"
 msgstr "_Afegir"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:218
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
 msgstr "_Suprimeix l'ordre"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:246
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Subprocess"
 msgstr "Subprocés"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:247
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Executa l'ordre com un subprocés del Constructor."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:254
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
 msgstr "Executa l'ordre al sistema amfitrió."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:261
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
 msgstr "Executa l'ordre dins de la canonada de construcció."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 msgid "As Target Application"
 msgstr "Com a aplicació objectiu"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:268
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
 msgstr "Executa l'ordre com si fos l'aplicació de destinació."
 
@@ -5959,8 +6008,6 @@ msgid "Untitled command"
 msgstr "Ordre sense títol"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
-#, fuzzy
-#| msgid "These commands may be shared across any project in Builder."
 msgid "These commands are shared across all projects."
 msgstr "Aquestes ordres es comparteixen en tots els projectes."
 
@@ -5988,6 +6035,10 @@ msgstr "Entorn d'ordres"
 msgid "Command Locality"
 msgstr "Localització de l'ordre"
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr "Usa Shell"
+
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 msgid "Run Commands"
 msgstr "Ordres d'execució"
@@ -5997,6 +6048,17 @@ msgid "A list of run-command ids to load for the application or project."
 msgstr ""
 "Una llista d'identificadors d'ordres d'execució a carregar per a l'aplicació"
 " o el projecte."
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
+msgstr ""
+"Utilitzeu ordres per a executar eines de construcció, aplicacions o scripts "
+"de l'intèrpret d'ordres i mapar-los a una drecera de teclat. Poden funcionar"
+" des de diversos entorns com el canonada de construcció, l'entorn en temps "
+"d'execució o el sistema operatiu amfitrió."
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
@@ -6148,79 +6210,64 @@ msgid "Instruments"
 msgstr "Instruments"
 
 #: src/plugins/sysprof/tweaks.ui:24
-#, fuzzy
 msgid "Records CPU usage and CPU frequency statistics"
 msgstr ""
 "Registra l'ús de la CPU i les estadístiques de la freqüència de la CPU"
 
 #: src/plugins/sysprof/tweaks.ui:30
-#, fuzzy
-#| msgid "Sample JavaScript Stacks"
 msgid "Sample Callstacks"
-msgstr "Piles de crides de mostra"
+msgstr "Exemple de pila de crides"
 
 #: src/plugins/sysprof/tweaks.ui:31
-#, fuzzy
 msgid "Record stacktraces on a regular interval and build a callgraph"
 msgstr ""
-"Enregistra les traces de pila en un interval regular i construeix un gràfic "
-"de trucada"
+"Enregistra la pila de traces en un interval regular i construeix un gràfic "
+"de crides"
 
 #: src/plugins/sysprof/tweaks.ui:37
-#, fuzzy
 msgid "CPU Governor"
 msgstr "Governador de la CPU"
 
 #: src/plugins/sysprof/tweaks.ui:38
-#, fuzzy
 msgid "Force performance mode while profiling"
-msgstr "Força el mode de rendiment mentre s'està perfilant"
+msgstr "Força el mode de rendiment mentre s'usa l'analitzador de rendiment"
 
 #: src/plugins/sysprof/tweaks.ui:43
-#, fuzzy
-msgid "Don't Change Governer"
-msgstr "No canviïs el govern"
+msgid "Don't Change Governor"
+msgstr "No canviïs el governador"
 
 #: src/plugins/sysprof/tweaks.ui:49
-#, fuzzy
-#| msgid "CPU Performance"
 msgid "Force Performance Mode"
 msgstr "Força el mode de rendiment"
 
 #: src/plugins/sysprof/tweaks.ui:62
-#, fuzzy
 msgid "Simple memory statistics about the process such as total memory used"
 msgstr ""
 "Estadístiques simples de memòria sobre el procés, com ara memòria total "
 "utilitzada"
 
 #: src/plugins/sysprof/tweaks.ui:68
-#, fuzzy
 msgid "Memory Profiling"
 msgstr "Anàlisi de memòria"
 
 #: src/plugins/sysprof/tweaks.ui:69
-#, fuzzy
 msgid "Record stacktraces of memory allocations and releases"
-msgstr "Enregistra traces de pila d'assignacions i llançaments de memòria"
+msgstr ""
+"Enregistra la pila de traces d'assignacions i alliberaments de memòria"
 
 #: src/plugins/sysprof/tweaks.ui:79
 msgid "Energy Usage"
 msgstr "Ús d'energia"
 
 #: src/plugins/sysprof/tweaks.ui:80
-#, fuzzy
 msgid "Record statistics about energy usage using RAPL"
 msgstr "Enregistra estadístiques sobre l'ús de l'energia usant RAPL"
 
 #: src/plugins/sysprof/tweaks.ui:86
-#, fuzzy
-#| msgid "Battery Charge"
 msgid "Battery Usage"
 msgstr "Ús de la bateria"
 
 #: src/plugins/sysprof/tweaks.ui:87 src/plugins/sysprof/tweaks.ui:105
-#, fuzzy
 msgid "Record statistics about battery charge and discharge rates"
 msgstr ""
 "Enregistra estadístiques sobre la càrrega de la bateria i les taxes de "
@@ -6231,7 +6278,6 @@ msgid "Network Usage"
 msgstr "Ús de la xarxa"
 
 #: src/plugins/sysprof/tweaks.ui:98
-#, fuzzy
 msgid "Record statistics about network usage"
 msgstr "Enregistra estadístiques sobre l'ús de la xarxa"
 
@@ -6240,46 +6286,35 @@ msgid "Disk Usage"
 msgstr "Ús del disc"
 
 #: src/plugins/sysprof/tweaks.ui:115
-#, fuzzy
-#| msgid "CPU Performance"
 msgid "GNOME Shell Performance"
 msgstr "Rendiment del GNOME Shell"
 
 #: src/plugins/sysprof/tweaks.ui:116
-#, fuzzy
 msgid "Collect performance and timing information from GNOME Shell"
-msgstr "Recolliu la informació de rendiment i temps del GNOME Shell"
+msgstr "Recoll la informació de rendiment i temps del GNOME Shell"
 
 #: src/plugins/sysprof/tweaks.ui:124
-#, fuzzy
-#| msgid "Desktop Integration"
 msgid "Integration"
 msgstr "Integració"
 
 #: src/plugins/sysprof/tweaks.ui:127
-#, fuzzy
-#| msgid "Allow JavaScript"
 msgid "JavaScript"
 msgstr "JavaScript"
 
 #: src/plugins/sysprof/tweaks.ui:128
-#, fuzzy
-msgid "Collect infomration from GJS-based applications"
-msgstr "Recull informaciómration des d'aplicacions basades en GJS"
+msgid "Collect information from GJS-based applications"
+msgstr "Recull informació des d'aplicacions basades en GJS"
 
 #: src/plugins/sysprof/tweaks.ui:134
-#, fuzzy
-#| msgid "Application"
 msgid "Application Tracing"
 msgstr "Traçat d'aplicacions"
 
 #: src/plugins/sysprof/tweaks.ui:135
-#, fuzzy
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
 msgstr ""
-"Proporciona la variable d'entorn TRACEFD perquè les aplicacions presentin "
+"Proporciona la variable d'entorn TRACE_FD perquè les aplicacions presentin "
 "esdeveniments personalitzats"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
@@ -6470,46 +6505,32 @@ msgid "Allow Hyperlinks"
 msgstr "Permet els enllaços"
 
 #: src/plugins/terminal/tweaks.ui:39
-#, fuzzy
 msgid "Allows the use of hyperlink escape sequences"
 msgstr "Permet l'ús de seqüències d'escapada d'enllaços"
 
 #: src/plugins/terminal/tweaks.ui:47
-#, fuzzy
-#| msgid "Spelling"
 msgid "Scrolling"
 msgstr "Desplaçament"
 
 #: src/plugins/terminal/tweaks.ui:50
-#, fuzzy
-#| msgid "Scroll on output"
 msgid "Scroll On Output"
 msgstr "Desplaçament en sortida"
 
 #: src/plugins/terminal/tweaks.ui:51
-#, fuzzy
-#| msgid ""
-#| "Automatically suggest completions while typing within the file"
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
 "Desplaçament automàtic quan les aplicacions dins del text de sortida del "
 "terminal"
 
 #: src/plugins/terminal/tweaks.ui:57
-#, fuzzy
-#| msgid "Scroll on output"
 msgid "Scroll On Keyboard Input"
 msgstr "Desplaçament en l'entrada del teclat"
 
 #: src/plugins/terminal/tweaks.ui:58
-#, fuzzy
-#| msgid ""
-#| "Automatically suggest completions while typing within the file"
 msgid "Automatically scroll when typing to insert text"
 msgstr "Desplaçament automàtic en escriure per a inserir text"
 
 #: src/plugins/terminal/tweaks.ui:70
-#, fuzzy
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr ""
@@ -6517,13 +6538,10 @@ msgstr ""
 "desplaçament del terminal"
 
 #: src/plugins/terminal/tweaks.ui:76
-#, fuzzy
-#| msgid "Limit Scrollback"
 msgid "Maximum Lines in Scrollback"
 msgstr "Línies màximes a l'historial"
 
 #: src/plugins/terminal/tweaks.ui:77
-#, fuzzy
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
 "El nombre màxim de línies emmagatzemades a l'historial en limitar el "
@@ -6665,10 +6683,6 @@ msgstr "Resum"
 msgid "Full"
 msgstr "Tot"
 
-#: src/plugins/valgrind/gtk/menus.ui:44
-msgid "Disabled"
-msgstr "Deshabilitat"
-
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:20
 msgid "Leak Kinds"
 msgstr "Tipus de fuites"
@@ -6702,7 +6716,6 @@ msgid "Include indirect leaks in report summary"
 msgstr "Inclou fuites indirectes al resum de l'informe"
 
 #: src/plugins/valgrind/tweaks.ui:45
-#, fuzzy
 msgid "Include reachable leaks in report summary"
 msgstr "Inclou fuites accessibles al resum de l'informe"
 
@@ -6711,19 +6724,14 @@ msgid "Track Origins"
 msgstr "Seguiment de l'origen"
 
 #: src/plugins/valgrind/tweaks.ui:56
-#, fuzzy
-#| msgid "Show modified lines"
 msgid "Show origin of undefined values"
 msgstr "Mostra l'origen dels valors no definits"
 
 #: src/plugins/valgrind/tweaks.ui:66
-#, fuzzy
-#| msgid "Cargo Check"
 msgid "Leak Check"
-msgstr "Comprovació del full"
+msgstr "Comprovació de fuites"
 
 #: src/plugins/valgrind/tweaks.ui:67
-#, fuzzy
 msgid "Search for memory leaks at exit"
 msgstr "Cerca fuites de memòria en sortir"
 
