@@ -65,7 +65,7 @@ static const IdePreferenceItemEntry items[] = {
 };
 
 static const IdePreferenceItemEntry lang_items[] = {
-  { "languages/*", "general", "trim", 0, toggle_cb, "Trim Trailing Whitespace", "Upon saving, trailing whitepsace from modified lines will be trimmed." },
+  { "languages/*", "general", "trim", 0, toggle_cb, "Trim Trailing Whitespace", "Upon saving, trailing whitespace from modified lines will be trimmed." },
   { "languages/*", "general", "overwrite", 0, toggle_cb, "Overwrite Braces", "Overwrite closing braces" },
   { "languages/*", "general", "insert-matching", 0, toggle_cb, "Insert Matching Brace", "Insert matching character for [[(\"'" },
   { "languages/*", "general", "insert-trailing", 0, toggle_cb, "Insert Trailing Newline", "Ensure files end with a newline" },

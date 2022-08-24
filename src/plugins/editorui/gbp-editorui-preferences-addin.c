@@ -120,7 +120,7 @@ static const IdePreferenceItemEntry items[] = {
 static const IdePreferenceItemEntry lang_items[] = {
   { "languages/*", "general", "trim", 0, ide_preferences_window_toggle,
     N_("Trim Trailing Whitespace"),
-    N_("Upon saving, trailing whitepsace from modified lines will be trimmed"),
+    N_("Upon saving, trailing whitespace from modified lines will be trimmed"),
     "org.gnome.builder.editor.language", LANG_PATH, "trim-trailing-whitespace" },
 
   { "languages/*", "general", "overwrite", 0, ide_preferences_window_toggle,

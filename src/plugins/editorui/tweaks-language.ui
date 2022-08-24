@@ -82,7 +82,7 @@
                             <child>
                               <object class="IdeTweaksSwitch" id="trim_whitespace">
                                 <property name="title" translatable="yes">Trim Trailing Space</property>
-                                <property name="subtitle" translatable="yes">Upon saving, trailing whitepsace from modified lines will be trimmed</property>
+                                <property name="subtitle" translatable="yes">Upon saving, trailing whitespace from modified lines will be trimmed</property>
                                 <property name="action-name">settings.org.gnome.builder.editor.language.trim-trailing-whitespace</property>
                               </object>
                             </child>
