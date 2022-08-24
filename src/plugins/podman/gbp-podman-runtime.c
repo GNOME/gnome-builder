@@ -645,6 +645,7 @@ gbp_podman_runtime_new (JsonObject *object)
                        "id", full_id,
                        "category", category,
                        "display-name", names,
+                       "icon-name", is_toolbox ? "ui-container-toolbx-symbolic" : "ui-container-podman-symbolic",
                        NULL);
   self->object = json_object_ref (object);
   self->id = g_strdup (id);
