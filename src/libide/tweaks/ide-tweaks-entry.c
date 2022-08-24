@@ -30,14 +30,10 @@ struct _IdeTweaksEntry
 {
   IdeTweaksWidget parent_instance;
   char *title;
-  char *property_name;
-  GObject *object;
 };
 
 enum {
   PROP_0,
-  PROP_OBJECT,
-  PROP_PROPERTY_NAME,
   PROP_TITLE,
   N_PROPS
 };
@@ -51,6 +47,7 @@ ide_tweaks_entry_create_for_item (IdeTweaksWidget *widget,
                                   IdeTweaksItem   *item)
 {
   IdeTweaksEntry *info = (IdeTweaksEntry *)item;
+  IdeTweaksBinding *binding;
   AdwEntryRow *row;
 
   g_assert (IDE_IS_TWEAKS_ENTRY (widget));
@@ -60,9 +57,8 @@ ide_tweaks_entry_create_for_item (IdeTweaksWidget *widget,
                       "title", info->title,
                       NULL);
 
-  if (info->object && info->property_name)
-    g_object_bind_property (info->object, info->property_name, row, "text",
-                            G_BINDING_SYNC_CREATE);
+  if ((binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (info))))
+    ide_tweaks_binding_bind (binding, row, "text");
 
   return GTK_WIDGET (row);
 }
@@ -72,8 +68,6 @@ ide_tweaks_entry_dispose (GObject *object)
 {
   IdeTweaksEntry *self = (IdeTweaksEntry *)object;
 
-  g_clear_object (&self->object);
-  g_clear_pointer (&self->property_name, g_free);
   g_clear_pointer (&self->title, g_free);
 
   G_OBJECT_CLASS (ide_tweaks_entry_parent_class)->dispose (object);
@@ -89,12 +83,7 @@ ide_tweaks_entry_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_OBJECT:
-      g_value_set_object (value, ide_tweaks_entry_get_object (self));
-      break;
-
     IDE_GET_PROPERTY_STRING (ide_tweaks_entry, title, TITLE);
-    IDE_GET_PROPERTY_STRING (ide_tweaks_entry, property_name, PROPERTY_NAME);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -110,12 +99,7 @@ ide_tweaks_entry_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_OBJECT:
-      ide_tweaks_entry_set_object (self, g_value_get_object (value));
-      break;
-
     IDE_SET_PROPERTY_STRING (ide_tweaks_entry, title, TITLE);
-    IDE_SET_PROPERTY_STRING (ide_tweaks_entry, property_name, PROPERTY_NAME);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -133,13 +117,7 @@ ide_tweaks_entry_class_init (IdeTweaksEntryClass *klass)
 
   tweaks_widget_class->create_for_item = ide_tweaks_entry_create_for_item;
 
-  properties[PROP_OBJECT] =
-    g_param_spec_object ("object", NULL, NULL,
-                         G_TYPE_OBJECT,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   IDE_DEFINE_STRING_PROPERTY ("title", NULL, G_PARAM_READWRITE, TITLE);
-  IDE_DEFINE_STRING_PROPERTY ("property-name", NULL, G_PARAM_READWRITE, PROPERTY_NAME);
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
@@ -157,31 +135,3 @@ ide_tweaks_entry_new (void)
 
 IDE_DEFINE_STRING_GETTER (ide_tweaks_entry, IdeTweaksEntry, IDE_TYPE_TWEAKS_ENTRY, title)
 IDE_DEFINE_STRING_SETTER (ide_tweaks_entry, IdeTweaksEntry, IDE_TYPE_TWEAKS_ENTRY, title, TITLE)
-
-IDE_DEFINE_STRING_GETTER (ide_tweaks_entry, IdeTweaksEntry, IDE_TYPE_TWEAKS_ENTRY, property_name)
-IDE_DEFINE_STRING_SETTER (ide_tweaks_entry, IdeTweaksEntry, IDE_TYPE_TWEAKS_ENTRY, property_name, PROPERTY_NAME)
-
-/**
- * ide_tweaks_entry_get_object:
- * @self: a #IdeTweaksEntry
- *
- * Returns: (transfer none) (nullable): a #GObject or %NULL
- */
-GObject *
-ide_tweaks_entry_get_object (IdeTweaksEntry *self)
-{
-  g_return_val_if_fail (IDE_IS_TWEAKS_ENTRY (self), NULL);
-
-  return self->object;
-}
-
-void
-ide_tweaks_entry_set_object (IdeTweaksEntry *self,
-                             GObject        *object)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_ENTRY (self));
-  g_return_if_fail (!object || G_IS_OBJECT (object));
-
-  if (g_set_object (&self->object, object))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_OBJECT]);
-}

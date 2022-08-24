@@ -34,21 +34,11 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksEntry, ide_tweaks_entry, IDE, TWEAKS_ENTRY, IdeTweaksWidget)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksEntry *ide_tweaks_entry_new               (void);
+IdeTweaksEntry *ide_tweaks_entry_new       (void);
 IDE_AVAILABLE_IN_ALL
-const char     *ide_tweaks_entry_get_title         (IdeTweaksEntry *self);
+const char     *ide_tweaks_entry_get_title (IdeTweaksEntry *self);
 IDE_AVAILABLE_IN_ALL
-void            ide_tweaks_entry_set_title         (IdeTweaksEntry *self,
-                                                    const char     *title);
-IDE_AVAILABLE_IN_ALL
-GObject        *ide_tweaks_entry_get_object        (IdeTweaksEntry *self);
-IDE_AVAILABLE_IN_ALL
-void            ide_tweaks_entry_set_object        (IdeTweaksEntry *self,
-                                                    GObject        *object);
-IDE_AVAILABLE_IN_ALL
-const char     *ide_tweaks_entry_get_property_name (IdeTweaksEntry *self);
-IDE_AVAILABLE_IN_ALL
-void            ide_tweaks_entry_set_property_name (IdeTweaksEntry *self,
-                                                    const char     *property_name);
+void            ide_tweaks_entry_set_title (IdeTweaksEntry *self,
+                                            const char     *title);
 
 G_END_DECLS

@@ -162,10 +162,14 @@
                         <child>
                           <object class="IdeTweaksEntry" id="config_opts_entry">
                             <property name="title" translatable="yes">Configure Options</property>
-                            <property name="property-name">config-opts</property>
-                            <binding name="object">
-                              <lookup name="item">config_factory</lookup>
-                            </binding>
+                            <property name="binding">
+                              <object class="IdeTweaksProperty">
+                                <property name="name">config-opts</property>
+                                <binding name="object">
+                                  <lookup name="item">config_factory</lookup>
+                                </binding>
+                              </object>
+                            </property>
                           </object>
                         </child>
                         <child>
