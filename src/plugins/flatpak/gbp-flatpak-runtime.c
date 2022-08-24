@@ -872,6 +872,8 @@ static void
 gbp_flatpak_runtime_init (GbpFlatpakRuntime *self)
 {
   self->program_paths_cache = g_hash_table_new (g_str_hash, g_str_equal);
+
+  ide_runtime_set_icon_name (IDE_RUNTIME (self), "ui-container-flatpak-symbolic");
 }
 
 GbpFlatpakRuntime *
