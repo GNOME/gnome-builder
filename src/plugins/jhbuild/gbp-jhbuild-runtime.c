@@ -253,4 +253,5 @@ gbp_jhbuild_runtime_class_init (GbpJhbuildRuntimeClass *klass)
 static void
 gbp_jhbuild_runtime_init (GbpJhbuildRuntime *self)
 {
+  ide_runtime_set_icon_name (IDE_RUNTIME (self), "ui-container-jhbuild-symbolic");
 }
