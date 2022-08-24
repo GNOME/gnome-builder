@@ -28,6 +28,7 @@ struct _IdeTweaksProperty
 {
   IdeTweaksBinding parent_instance;
   GWeakRef instance;
+  GParamSpec *pspec;
   const char *name;
   gulong notify_handler;
 };
@@ -70,16 +71,37 @@ ide_tweaks_property_acquire (IdeTweaksProperty *self)
         {
           g_autofree char *signal_name = g_strdup_printf ("notify::%s", self->name);
 
-          self->notify_handler =
-            g_signal_connect_object (instance,
-                                     signal_name,
-                                     G_CALLBACK (ide_tweaks_property_object_notify_cb),
-                                     self,
-                                     G_CONNECT_SWAPPED);
+          self->pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (instance), self->name);
+
+          if (self->pspec == NULL)
+            g_critical ("Object %s has no property named %s",
+                        G_OBJECT_TYPE_NAME (instance), self->name);
+          else
+            self->notify_handler =
+              g_signal_connect_object (instance,
+                                       signal_name,
+                                       G_CALLBACK (ide_tweaks_property_object_notify_cb),
+                                       self,
+                                       G_CONNECT_SWAPPED);
         }
     }
 
   return g_steal_pointer (&instance);
+}
+
+static void
+ide_tweaks_property_release (IdeTweaksProperty *self)
+{
+  g_autoptr(GObject) instance = NULL;
+
+  g_assert (IDE_IS_TWEAKS_PROPERTY (self));
+
+  if ((instance = g_weak_ref_get (&self->instance)))
+    g_clear_signal_handler (&self->notify_handler, instance);
+
+  self->pspec = NULL;
+  self->notify_handler = 0;
+  g_weak_ref_set (&self->instance, NULL);
 }
 
 static gboolean
@@ -127,10 +149,25 @@ ide_tweaks_property_set_object_internal (IdeTweaksProperty *self,
   if (previous == object)
     return FALSE;
 
-  g_clear_signal_handler (&self->notify_handler, previous);
+  ide_tweaks_property_release (self);
+
   g_weak_ref_set (&self->instance, object);
 
   return TRUE;
+}
+
+static GType
+ide_tweaks_property_get_expected_type (IdeTweaksBinding *binding)
+{
+  IdeTweaksProperty *self = (IdeTweaksProperty *)binding;
+  g_autoptr(GObject) instance = NULL;
+
+  g_assert (IDE_IS_TWEAKS_PROPERTY (self));
+
+  if ((instance = ide_tweaks_property_acquire (self)))
+    return self->pspec->value_type;
+
+  return G_TYPE_INVALID;
 }
 
 static void
@@ -138,10 +175,12 @@ ide_tweaks_property_dispose (GObject *object)
 {
   IdeTweaksProperty *self = (IdeTweaksProperty *)object;
 
-  ide_tweaks_property_set_object_internal (self, NULL);
+  ide_tweaks_property_release (self);
+
   self->name = NULL;
 
   g_assert (self->name == NULL);
+  g_assert (self->pspec == NULL);
   g_assert (self->notify_handler == 0);
   g_assert (g_weak_ref_get (&self->instance) == NULL);
 
@@ -217,6 +256,7 @@ ide_tweaks_property_class_init (IdeTweaksPropertyClass *klass)
 
   tweaks_binding_class->get_value = ide_tweaks_property_get_value;
   tweaks_binding_class->set_value = ide_tweaks_property_set_value;
+  tweaks_binding_class->get_expected_type = ide_tweaks_property_get_expected_type;
 
   properties[PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL,

@@ -149,7 +149,10 @@ ide_tweaks_setting_get_value (IdeTweaksBinding *binding,
       g_autoptr(GVariant) variant = g_settings_get_value (settings, key);
 
       if (variant != NULL)
-        return g_settings_get_mapping (value, variant, NULL);
+        {
+          g_variant_ref_sink (variant);
+          return g_settings_get_mapping (value, variant, NULL);
+        }
     }
 
   return FALSE;
@@ -169,11 +172,47 @@ ide_tweaks_setting_set_value (IdeTweaksBinding *binding,
 
   if ((settings = ide_tweaks_setting_acquire (self, &key, &expected_type)))
     {
-      g_autoptr(GVariant) variant = g_settings_set_mapping (value, expected_type, NULL);
+      g_autoptr(GVariant) new_value = g_settings_set_mapping (value, expected_type, NULL);
+      g_autoptr(GVariant) old_value = g_settings_get_value (settings, key);
 
-      if (variant != NULL)
-        g_settings_set_value (settings, key, variant);
+      if (new_value)
+        g_variant_take_ref (new_value);
+
+      if (new_value && old_value && !g_variant_equal (new_value, old_value))
+        g_settings_set_value (settings, key, new_value);
     }
+}
+
+static GType
+ide_tweaks_setting_get_expected_type (IdeTweaksBinding *binding)
+{
+  IdeTweaksSetting *self = IDE_TWEAKS_SETTING (binding);
+
+  if (self->expected_type == NULL)
+    return G_TYPE_INVALID;
+
+#define MAP_VARIANT_TYPE_TO_GTYPE(variant_type, gtype)            \
+  G_STMT_START {                                                  \
+    if (g_variant_type_equal (self->expected_type, variant_type)) \
+      return gtype;                                               \
+  } G_STMT_END
+
+  /* Just the basics really for GSettings */
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_BYTE, G_TYPE_UCHAR);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_BYTESTRING, G_TYPE_STRING);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_DOUBLE, G_TYPE_DOUBLE);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_INT32, G_TYPE_INT);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_INT64, G_TYPE_INT64);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_STRING, G_TYPE_STRING);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_STRING_ARRAY, G_TYPE_STRV);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_UINT32, G_TYPE_UINT);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_UINT64, G_TYPE_UINT64);
+  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_VARIANT, G_TYPE_VARIANT);
+
+#undef MAP_VARIANT_TYPE_TO_GTYPE
+
+  return G_TYPE_INVALID;
 }
 
 static void
@@ -253,6 +292,7 @@ ide_tweaks_setting_class_init (IdeTweaksSettingClass *klass)
 
   tweaks_binding_class->get_value = ide_tweaks_setting_get_value;
   tweaks_binding_class->set_value = ide_tweaks_setting_set_value;
+  tweaks_binding_class->get_expected_type = ide_tweaks_setting_get_expected_type;
 
   properties[PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id", NULL, NULL,

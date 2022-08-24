@@ -26,9 +26,18 @@
 
 typedef struct
 {
+  IdeTweaksBindingTransform get_transform;
+  IdeTweaksBindingTransform set_transform;
+  gpointer user_data;
+  GDestroyNotify notify;
+} Binding;
+
+typedef struct
+{
   GWeakRef    instance;
   GParamSpec *pspec;
   int         inhibit;
+  Binding    *binding;
 } IdeTweaksBindingPrivate;
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (IdeTweaksBinding, ide_tweaks_binding, IDE_TYPE_TWEAKS_ITEM)
@@ -39,6 +48,80 @@ enum {
 };
 
 static guint signals [N_SIGNALS];
+
+static void
+binding_finalize (gpointer data)
+{
+  Binding *binding = data;
+
+  if (binding->notify)
+    binding->notify (binding->user_data);
+
+  binding->get_transform = NULL;
+  binding->set_transform = NULL;
+  binding->user_data = NULL;
+  binding->notify = NULL;
+}
+
+static void
+binding_unref (Binding *binding)
+{
+  g_atomic_rc_box_release_full (binding, binding_finalize);
+}
+
+static Binding *
+binding_new (IdeTweaksBindingTransform get_transform,
+             IdeTweaksBindingTransform set_transform,
+             gpointer                  user_data,
+             GDestroyNotify            notify)
+{
+  Binding *binding;
+
+  binding = g_atomic_rc_box_new0 (Binding);
+  binding->get_transform = get_transform;
+  binding->set_transform = set_transform;
+  binding->user_data = user_data;
+  binding->notify = notify;
+
+  return binding;
+}
+
+static gboolean
+binding_get (Binding      *binding,
+             const GValue *from_value,
+             GValue       *to_value)
+{
+  if (binding->get_transform)
+    return binding->get_transform (from_value, to_value, binding->user_data);
+  g_value_copy (from_value, to_value);
+  return TRUE;
+}
+
+static gboolean
+binding_set (Binding      *binding,
+             const GValue *from_value,
+             GValue       *to_value)
+{
+  if (binding->set_transform)
+    return binding->set_transform (from_value, to_value, binding->user_data);
+  g_value_copy (from_value, to_value);
+  return TRUE;
+}
+
+static gboolean
+ide_tweaks_binding_get_expected_type (IdeTweaksBinding *self,
+                                      GType            *type)
+{
+  g_assert (IDE_IS_TWEAKS_BINDING (self));
+  g_assert (type != NULL);
+
+  if (IDE_TWEAKS_BINDING_GET_CLASS (self)->get_expected_type)
+    *type = IDE_TWEAKS_BINDING_GET_CLASS (self)->get_expected_type (self);
+  else
+    *type = G_TYPE_INVALID;
+
+  return *type != G_TYPE_INVALID;
+}
 
 static void
 ide_tweaks_binding_inhibit (IdeTweaksBinding *self)
@@ -89,6 +172,7 @@ ide_tweaks_binding_dispose (GObject *object)
   IdeTweaksBinding *self = (IdeTweaksBinding *)object;
   IdeTweaksBindingPrivate *priv = ide_tweaks_binding_get_instance_private (self);
 
+  g_clear_pointer (&priv->binding, binding_unref);
   g_weak_ref_set (&priv->instance, NULL);
   priv->pspec = NULL;
 
@@ -148,22 +232,46 @@ gboolean
 ide_tweaks_binding_get_value (IdeTweaksBinding *self,
                               GValue           *value)
 {
+  IdeTweaksBindingPrivate *priv = ide_tweaks_binding_get_instance_private (self);
+  g_auto(GValue) from_value = G_VALUE_INIT;
+
   g_return_val_if_fail (IDE_IS_TWEAKS_BINDING (self), FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
   g_return_val_if_fail (G_VALUE_TYPE (value) != G_TYPE_INVALID, FALSE);
 
-  return IDE_TWEAKS_BINDING_GET_CLASS (self)->get_value (self, value);
+  if (priv->binding == NULL || priv->pspec == NULL)
+    return IDE_TWEAKS_BINDING_GET_CLASS (self)->get_value (self, value);
+
+  /* TODO: You could optimize an extra GValue copy out here */
+  g_value_init (&from_value, priv->pspec->value_type);
+  if (IDE_TWEAKS_BINDING_GET_CLASS (self)->get_value (self, &from_value))
+    return binding_get (priv->binding, &from_value, value);
+
+  return FALSE;
 }
 
 void
 ide_tweaks_binding_set_value (IdeTweaksBinding *self,
                               const GValue     *value)
 {
+  IdeTweaksBindingPrivate *priv = ide_tweaks_binding_get_instance_private (self);
+  g_auto(GValue) to_value = G_VALUE_INIT;
+  GType type;
+
   g_return_if_fail (IDE_IS_TWEAKS_BINDING (self));
   g_return_if_fail (value != NULL);
   g_return_if_fail (G_IS_VALUE (value));
 
-  IDE_TWEAKS_BINDING_GET_CLASS (self)->set_value (self, value);
+  if (priv->binding == NULL || !ide_tweaks_binding_get_expected_type (self, &type))
+    {
+      IDE_TWEAKS_BINDING_GET_CLASS (self)->set_value (self, value);
+      return;
+    }
+
+  /* TODO: You could optimize an extra GValue copy out here */
+  g_value_init (&to_value, type);
+  if (binding_set (priv->binding, value, &to_value))
+    IDE_TWEAKS_BINDING_GET_CLASS (self)->set_value (self, &to_value);
 }
 
 static void
@@ -194,6 +302,8 @@ ide_tweaks_binding_unbind (IdeTweaksBinding *self)
 
   g_return_if_fail (IDE_IS_TWEAKS_BINDING (self));
 
+  g_clear_pointer (&priv->binding, binding_unref);
+
   if ((instance = g_weak_ref_get (&priv->instance)))
     {
       g_weak_ref_set (&priv->instance, NULL);
@@ -205,10 +315,28 @@ ide_tweaks_binding_unbind (IdeTweaksBinding *self)
     }
 }
 
+static gboolean dummy_cb (gpointer data) { return FALSE; };
+
+/**
+ * ide_tweaks_binding_bind_with_transform:
+ * @self: a #IdeTweaksBinding
+ * @instance: a #GObject
+ * @property_name: a property of @instance
+ * @get_transform: (nullable) (scope async): an #IdeTweaksBindingTransform or %NULL
+ * @set_transform: (nullable) (scope async): an #IdeTweaksBindingTransform or %NULL
+ * @user_data: closure data for @get_transform and @set_transform
+ * @notify: closure notify for @user_data
+ *
+ * Binds the value with an optional transform.
+ */
 void
-ide_tweaks_binding_bind (IdeTweaksBinding *self,
-                         gpointer          instance,
-                         const char       *property_name)
+ide_tweaks_binding_bind_with_transform (IdeTweaksBinding          *self,
+                                        gpointer                   instance,
+                                        const char                *property_name,
+                                        IdeTweaksBindingTransform  get_transform,
+                                        IdeTweaksBindingTransform  set_transform,
+                                        gpointer                   user_data,
+                                        GDestroyNotify             notify)
 {
   IdeTweaksBindingPrivate *priv = ide_tweaks_binding_get_instance_private (self);
   g_autofree char *signal_name = NULL;
@@ -224,10 +352,12 @@ ide_tweaks_binding_bind (IdeTweaksBinding *self,
     {
       g_critical ("Object of type %s does not have a property named %s",
                   G_OBJECT_TYPE_NAME (instance), property_name);
+      g_idle_add_full (G_PRIORITY_LOW, dummy_cb, user_data, notify);
       return;
     }
 
   g_weak_ref_set (&priv->instance, instance);
+  priv->binding = binding_new (get_transform, set_transform, user_data, notify);
 
   /* Get notifications on property changes */
   signal_name = g_strdup_printf ("notify::%s", property_name);
@@ -239,4 +369,34 @@ ide_tweaks_binding_bind (IdeTweaksBinding *self,
 
   /* Copy state to the widget */
   ide_tweaks_binding_changed (self);
+}
+
+void
+ide_tweaks_binding_bind (IdeTweaksBinding *self,
+                         gpointer          instance,
+                         const char       *property_name)
+{
+  ide_tweaks_binding_bind_with_transform (self, instance, property_name, NULL, NULL, NULL, NULL);
+}
+
+/**
+ * ide_tweaks_binding_dup_string:
+ * @self: a #IdeTweaksBinding
+ *
+ * Gets the current value as a newly allocated string.
+ *
+ * Returns: (transfer full) (nullable): a string or %NULL
+ */
+char *
+ide_tweaks_binding_dup_string (IdeTweaksBinding *self)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_BINDING (self), NULL);
+
+  g_value_init (&value, G_TYPE_STRING);
+  if (ide_tweaks_binding_get_value (self, &value))
+    return g_value_dup_string (&value);
+
+  return NULL;
 }
