@@ -112,7 +112,7 @@
                 </child>
                 <child>
                   <object class="IdeTweaksCaption">
-                    <property name="text" translatable="yes">The project identifier is used to reference your projects settings, build directories, and cached information.</property>
+                    <property name="text" translatable="yes">This identifier is used when referencing your project's settings, build directories, and cached information.</property>
                   </object>
                 </child>
               </object>
