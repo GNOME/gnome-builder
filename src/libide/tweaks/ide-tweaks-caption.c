@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "ide-tweaks-caption.h"
+#include "ide-tweaks-item-private.h"
 
 struct _IdeTweaksCaption
 {
@@ -44,12 +45,26 @@ static GtkWidget *
 ide_tweaks_caption_create_for_item (IdeTweaksWidget *widget,
                                     IdeTweaksItem   *item)
 {
+  int margin_top = 0;
+
   g_assert (IDE_IS_TWEAKS_CAPTION (widget));
   g_assert (IDE_IS_TWEAKS_CAPTION (item));
+
+  for (IdeTweaksItem *iter = ide_tweaks_item_get_previous_sibling (item);
+       iter;
+       iter = ide_tweaks_item_get_previous_sibling (iter))
+    {
+      if (!IDE_IS_TWEAKS_WIDGET (iter) || _ide_tweaks_item_is_hidden (iter, NULL))
+        continue;
+
+      margin_top = 12;
+      break;
+    }
 
   return g_object_new (GTK_TYPE_LABEL,
                        "css-classes", IDE_STRV_INIT ("caption", "dim-label"),
                        "label", IDE_TWEAKS_CAPTION (item)->text,
+                       "margin-top", margin_top,
                        "use-markup", TRUE,
                        "xalign", .0f,
                        "wrap", TRUE,
