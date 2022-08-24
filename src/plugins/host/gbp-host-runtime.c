@@ -164,4 +164,5 @@ gbp_host_runtime_class_init (GbpHostRuntimeClass *klass)
 static void
 gbp_host_runtime_init (GbpHostRuntime *self)
 {
+  ide_runtime_set_icon_name (IDE_RUNTIME (self), "ui-container-host-symbolic");
 }
