@@ -28,8 +28,12 @@
                             <property name="is-directory">false</property>
                             <property name="title" translatable="yes">CTags Path</property>
                             <property name="subtitle" translatable="yes">The path to the ctags executable</property>
-                            <property name="settings">settings_org_gnome_builder_code_insight</property>
-                            <property name="key">ctags-path</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.code-insight</property>
+                                <property name="schema-key">ctags-path</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>

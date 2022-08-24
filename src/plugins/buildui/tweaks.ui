@@ -149,10 +149,14 @@
                             <property name="title" translatable="yes">Installation Prefix</property>
                             <property name="subtitle" translatable="yes">The project will be installed to this directory during the installation phase of the build pipeline.</property>
                             <property name="is-directory">true</property>
-                            <property name="key">prefix</property>
-                            <binding name="object">
-                              <lookup name="item">config_factory</lookup>
-                            </binding>
+                            <property name="binding">
+                              <object class="IdeTweaksProperty">
+                                <property name="name">prefix</property>
+                                <binding name="object">
+                                  <lookup name="item">config_factory</lookup>
+                                </binding>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>

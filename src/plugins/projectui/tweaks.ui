@@ -25,8 +25,12 @@
                   <object class="IdeTweaksDirectory">
                     <property name="title" translatable="yes">Directory</property>
                     <property name="subtitle" translatable="yes">Projects created with Builder will be placed within this directory</property>
-                    <property name="key">projects-directory</property>
-                    <property name="settings">settings_org_gnome_builder</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-key">projects-directory</property>
+                        <property name="schema-id">org.gnome.builder</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>
