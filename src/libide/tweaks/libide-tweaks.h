@@ -27,6 +27,7 @@
 # include "ide-tweaks-choice.h"
 # include "ide-tweaks-combo.h"
 # include "ide-tweaks-directory.h"
+# include "ide-tweaks-entry.h"
 # include "ide-tweaks-factory.h"
 # include "ide-tweaks-font.h"
 # include "ide-tweaks-group.h"
