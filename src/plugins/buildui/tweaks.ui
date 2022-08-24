@@ -133,5 +133,55 @@
         </child>
       </object>
     </child>
+    <child internal-child="overview_section">
+      <object class="IdeTweaksSection">
+        <child internal-child="configs_page">
+          <object class="IdeTweaksPage">
+            <child internal-child="config_factory">
+              <object class="IdeTweaksFactory">
+                <child internal-child="config_page">
+                  <object class="IdeTweaksPage">
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">General</property>
+                        <child>
+                          <object class="IdeTweaksDirectory" id="config_prefix_entry">
+                            <property name="title" translatable="yes">Installation Prefix</property>
+                            <property name="subtitle" translatable="yes">The project will be installed to this directory during the installation phase of the build pipeline.</property>
+                            <property name="is-directory">true</property>
+                            <property name="key">prefix</property>
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksEntry" id="config_opts_entry">
+                            <property name="title" translatable="yes">Configure Options</property>
+                            <property name="property-name">config-opts</property>
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksCaption">
+                            <property name="text" translatable="yes">These options are used by the build system to configure the project during the configure phase of the build pipeline.</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
   </template>
 </interface>
