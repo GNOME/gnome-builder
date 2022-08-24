@@ -104,6 +104,22 @@
             <child>
               <object class="IdeTweaksFactory" id="config_factory">
                 <property name="model">Configurations</property>
+                <child>
+                  <object class="IdeTweaksPage" id="config_page">
+                    <binding name="icon-name">
+                      <lookup name="icon-name" type="IdeRuntime">
+                        <lookup name="runtime" type="IdeConfig">
+                          <lookup name="item">config_factory</lookup>
+                        </lookup>
+                      </lookup>
+                    </binding>
+                    <binding name="title">
+                      <lookup name="display-name" type="IdeConfig">
+                        <lookup name="item">config_factory</lookup>
+                      </lookup>
+                    </binding>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
