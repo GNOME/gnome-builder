@@ -128,5 +128,10 @@ IdeTriplet             *ide_runtime_get_triplet              (IdeRuntime      *s
 IDE_AVAILABLE_IN_ALL
 gboolean                ide_runtime_supports_toolchain       (IdeRuntime      *self,
                                                               IdeToolchain    *toolchain);
+IDE_AVAILABLE_IN_ALL
+const char             *ide_runtime_get_icon_name            (IdeRuntime      *self);
+IDE_AVAILABLE_IN_ALL
+void                    ide_runtime_set_icon_name            (IdeRuntime      *self,
+                                                              const char      *icon_name);
 
 G_END_DECLS

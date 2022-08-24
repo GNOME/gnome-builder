@@ -44,17 +44,19 @@
 
 typedef struct
 {
-  gchar *id;
-  gchar *short_id;
-  gchar *category;
-  gchar *name;
-  gchar *display_name;
+  char *id;
+  char *short_id;
+  char *category;
+  char *name;
+  char *display_name;
+  char *icon_name;
 } IdeRuntimePrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeRuntime, ide_runtime, IDE_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_ICON_NAME,
   PROP_ID,
   PROP_SHORT_ID,
   PROP_CATEGORY,
@@ -185,6 +187,7 @@ ide_runtime_finalize (GObject *object)
   IdeRuntime *self = (IdeRuntime *)object;
   IdeRuntimePrivate *priv = ide_runtime_get_instance_private (self);
 
+  g_clear_pointer (&priv->icon_name, g_free);
   g_clear_pointer (&priv->id, g_free);
   g_clear_pointer (&priv->short_id, g_free);
   g_clear_pointer (&priv->display_name, g_free);
@@ -223,6 +226,7 @@ ide_runtime_get_property (GObject    *object,
       g_value_set_string (value, ide_runtime_get_name (self));
       break;
 
+    IDE_GET_PROPERTY_STRING (ide_runtime, icon_name, ICON_NAME);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -258,6 +262,7 @@ ide_runtime_set_property (GObject      *object,
       ide_runtime_set_name (self, g_value_get_string (value));
       break;
 
+    IDE_SET_PROPERTY_STRING (ide_runtime, icon_name, ICON_NAME);
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -318,6 +323,8 @@ ide_runtime_class_init (IdeRuntimeClass *klass)
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS));
 
+  IDE_DEFINE_STRING_PROPERTY ("icon-name", NULL, G_PARAM_READWRITE, ICON_NAME);
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
 
@@ -325,6 +332,9 @@ static void
 ide_runtime_init (IdeRuntime *self)
 {
 }
+
+IDE_DEFINE_STRING_GETTER_PRIVATE (ide_runtime, IdeRuntime, IDE_TYPE_RUNTIME, icon_name)
+IDE_DEFINE_STRING_SETTER_PRIVATE (ide_runtime, IdeRuntime, IDE_TYPE_RUNTIME, icon_name, ICON_NAME)
 
 const gchar *
 ide_runtime_get_id (IdeRuntime  *self)
