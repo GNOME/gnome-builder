@@ -123,10 +123,14 @@ ide_settings_resolve_schema_path (const char *schema_id,
 {
   g_autoptr(GSettingsSchema) schema = NULL;
   GSettingsSchemaSource *source;
+  g_autofree char *real_path_suffix = NULL;
   const char *schema_path;
 
   g_return_val_if_fail (schema_id != NULL, NULL);
-  g_return_val_if_fail (!path_suffix || g_str_has_suffix (path_suffix, "/"), NULL);
+
+  /* Normalize our path suffix if we were provided one */
+  if (path_suffix != NULL && !g_str_has_suffix (path_suffix, "/"))
+    path_suffix = real_path_suffix = g_strconcat (path_suffix, "/", NULL);
 
   source = g_settings_schema_source_get_default ();
 
