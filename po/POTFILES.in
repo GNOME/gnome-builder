@@ -260,6 +260,7 @@ src/plugins/project-tree/gbp-rename-file-popover.c
 src/plugins/project-tree/gbp-rename-file-popover.ui
 src/plugins/project-tree/gtk/menus.ui
 src/plugins/project-tree/tweaks.ui
+src/plugins/projectui/gbp-projectui-tweaks-addin.c
 src/plugins/projectui/tweaks.ui
 src/plugins/qemu/gbp-qemu-device-provider.c
 src/plugins/quick-highlight/gbp-quick-highlight-preferences.c

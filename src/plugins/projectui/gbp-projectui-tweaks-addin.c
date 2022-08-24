@@ -86,10 +86,11 @@ gbp_projectui_tweaks_addin_get_vcs (GbpProjectuiTweaksAddin *self)
   IdeVcs *vcs;
 
   if (self->context &&
-      (vcs = ide_vcs_from_context (self->context)))
+      (vcs = ide_vcs_from_context (self->context)) &&
+      !IDE_IS_DIRECTORY_VCS (vcs))
     return ide_vcs_get_display_name (vcs);
 
-  return NULL;
+  return g_strdup (_("No version control"));
 }
 
 static void
