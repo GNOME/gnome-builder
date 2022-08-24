@@ -170,7 +170,7 @@
                         </child>
                         <child>
                           <object class="IdeTweaksCaption">
-                            <property name="text" translatable="yes">These options are used by the build system to configure the project during the configure phase of the build pipeline.</property>
+                            <property name="text" translatable="yes">These options are used by the build system to configure the project during the configure phase of the build pipeline</property>
                           </object>
                         </child>
                       </object>
