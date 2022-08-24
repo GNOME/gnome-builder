@@ -95,6 +95,56 @@
           <object class="IdeTweaksPage" id="overview_page">
             <property name="title" translatable="yes">Overview</property>
             <property name="icon-name" translatable="yes">info-symbolic</property>
+            <child>
+              <object class="IdeTweaksGroup" id="overview_id_group">
+                <binding name="title">
+                  <lookup name="title" type="IdeContext">
+                    <lookup name="context">IdeTweaks</lookup>
+                  </lookup>
+                </binding>
+                <child>
+                  <object class="IdeTweaksInfo">
+                    <property name="title" translatable="yes">Project Identifier</property>
+                    <binding name="value">
+                      <lookup name="project-id">IdeTweaks</lookup>
+                    </binding>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksCaption">
+                    <property name="text" translatable="yes">The project identifier is used to reference your projects settings, build directories, and cached information.</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup" id="overview_info_group">
+                <child>
+                  <object class="IdeTweaksInfo">
+                    <property name="title" translatable="yes">Build System</property>
+                    <binding name="value">
+                      <lookup name="build-system">GbpProjectuiTweaksAddin</lookup>
+                    </binding>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksInfo">
+                    <property name="title" translatable="yes">Source Directory</property>
+                    <binding name="value">
+                      <lookup name="source-directory">GbpProjectuiTweaksAddin</lookup>
+                    </binding>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksInfo">
+                    <property name="title" translatable="yes">Version Control</property>
+                    <binding name="value">
+                      <lookup name="vcs">GbpProjectuiTweaksAddin</lookup>
+                    </binding>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <child>
