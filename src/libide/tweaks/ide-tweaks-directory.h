@@ -47,6 +47,11 @@ IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_directory_set_subtitle     (IdeTweaksDirectory *self,
                                                            const char         *subtitle);
 IDE_AVAILABLE_IN_ALL
+GObject            *ide_tweaks_directory_get_object       (IdeTweaksDirectory *self);
+IDE_AVAILABLE_IN_ALL
+void                ide_tweaks_directory_set_object       (IdeTweaksDirectory *self,
+                                                           GObject            *object);
+IDE_AVAILABLE_IN_ALL
 const char         *ide_tweaks_directory_get_key          (IdeTweaksDirectory *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_tweaks_directory_set_key          (IdeTweaksDirectory *self,

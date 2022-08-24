@@ -33,6 +33,7 @@
 struct _IdeTweaksDirectory
 {
   IdeTweaksWidget parent_instance;
+  GObject *object;
   char *title;
   char *subtitle;
   char *key;
@@ -44,11 +45,12 @@ G_DEFINE_FINAL_TYPE (IdeTweaksDirectory, ide_tweaks_directory, IDE_TYPE_TWEAKS_W
 
 enum {
   PROP_0,
-  PROP_TITLE,
-  PROP_SUBTITLE,
-  PROP_KEY,
-  PROP_SETTINGS,
   PROP_IS_DIRECTORY,
+  PROP_KEY,
+  PROP_OBJECT,
+  PROP_SETTINGS,
+  PROP_SUBTITLE,
+  PROP_TITLE,
   N_PROPS
 };
 
@@ -71,6 +73,38 @@ set_mapping (const GValue       *value,
 {
   g_autofree char *collapsed = ide_path_collapse (g_value_get_string (value));
   return g_variant_new_string (collapsed);
+}
+
+static gboolean
+property_get_mapping (GBinding     *binding,
+                      const GValue *from_value,
+                      GValue       *to_value,
+                      gpointer      user_data)
+{
+  const char *str = g_value_get_string (from_value);
+
+  if (str && g_path_is_absolute (str))
+    g_value_take_string (to_value, ide_path_collapse (str));
+  else
+    g_value_set_string (to_value, str);
+
+  return TRUE;
+}
+
+static gboolean
+property_set_mapping (GBinding     *binding,
+                      const GValue *from_value,
+                      GValue       *to_value,
+                      gpointer      user_data)
+{
+  const char *str = g_value_get_string (from_value);
+
+  if (str && !g_path_is_absolute (str))
+    g_value_take_string (to_value, ide_path_expand (str));
+  else
+    g_value_set_string (to_value, str);
+
+  return TRUE;
 }
 
 static void
@@ -115,7 +149,18 @@ on_button_clicked_cb (GtkButton          *button,
   g_assert (GTK_IS_BUTTON (button));
   g_assert (IDE_IS_TWEAKS_DIRECTORY (info));
 
-  path = ide_tweaks_settings_get_string (info->settings, info->key);
+  if (info->settings)
+    {
+      path = ide_tweaks_settings_get_string (info->settings, info->key);
+    }
+  else if (info->object)
+    {
+      g_auto(GValue) value = G_VALUE_INIT;
+      g_value_init (&value, G_TYPE_STRING);
+      g_object_get_property (info->object, info->key, &value);
+      path = g_value_dup_string (&value);
+    }
+
   expanded = ide_path_expand (path);
   folder = g_file_new_for_path (expanded);
 
@@ -151,7 +196,8 @@ ide_tweaks_directory_create_for_item (IdeTweaksWidget *widget,
 
   g_assert (IDE_IS_TWEAKS_DIRECTORY (info));
 
-  if (info->settings == NULL)
+  if (info->key == NULL ||
+      (info->settings == NULL && info->object == NULL))
     return NULL;
 
   box = g_object_new (GTK_TYPE_BOX,
@@ -193,10 +239,15 @@ ide_tweaks_directory_create_for_item (IdeTweaksWidget *widget,
       gtk_box_append (box, GTK_WIDGET (label));
     }
 
-  ide_tweaks_settings_bind_with_mapping (info->settings, info->key,
-                                         row, "text",
-                                         G_SETTINGS_BIND_DEFAULT,
-                                         get_mapping, set_mapping, NULL, NULL);
+  if (info->settings)
+    ide_tweaks_settings_bind_with_mapping (info->settings, info->key,
+                                           row, "text",
+                                           G_SETTINGS_BIND_DEFAULT,
+                                           get_mapping, set_mapping, NULL, NULL);
+  else if (info->object)
+    g_object_bind_property_full (G_OBJECT (info->object), info->key, row, "text",
+                                 G_BINDING_SYNC_CREATE,
+                                 property_get_mapping, property_set_mapping, NULL, NULL);
 
   return GTK_WIDGET (box);
 }
@@ -209,6 +260,7 @@ ide_tweaks_directory_dispose (GObject *object)
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->subtitle, g_free);
   g_clear_pointer (&self->key, g_free);
+  g_clear_object (&self->object);
   g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_tweaks_directory_parent_class)->dispose (object);
@@ -224,6 +276,10 @@ ide_tweaks_directory_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_OBJECT:
+      g_value_set_object (value, ide_tweaks_directory_get_object (self));
+      break;
+
     case PROP_IS_DIRECTORY:
       g_value_set_boolean (value, ide_tweaks_directory_get_is_directory (self));
       break;
@@ -259,6 +315,10 @@ ide_tweaks_directory_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_OBJECT:
+      ide_tweaks_directory_set_object (self, g_value_get_object (value));
+      break;
+
     case PROP_IS_DIRECTORY:
       ide_tweaks_directory_set_is_directory (self, g_value_get_boolean (value));
       break;
@@ -296,6 +356,11 @@ ide_tweaks_directory_class_init (IdeTweaksDirectoryClass *klass)
 
   widget_class->create_for_item = ide_tweaks_directory_create_for_item;
 
+  properties[PROP_OBJECT] =
+    g_param_spec_object ("object", NULL, NULL,
+                         G_TYPE_OBJECT,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   properties [PROP_IS_DIRECTORY] =
     g_param_spec_boolean ("is-directory", NULL, NULL,
                           TRUE,
@@ -331,6 +396,31 @@ IdeTweaksDirectory *
 ide_tweaks_directory_new (void)
 {
   return g_object_new (IDE_TYPE_TWEAKS_DIRECTORY, NULL);
+}
+
+/**
+ * ide_tweaks_directory_get_object:
+ * @self: a #IdeTweaksDirectory
+ *
+ * Returns: (transfer none) (nullable): a #GObject
+ */
+GObject *
+ide_tweaks_directory_get_object (IdeTweaksDirectory *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_DIRECTORY (self), NULL);
+
+  return self->object;
+}
+
+void
+ide_tweaks_directory_set_object (IdeTweaksDirectory *self,
+                                 GObject            *object)
+{
+  g_return_if_fail (IDE_IS_TWEAKS_DIRECTORY (self));
+  g_return_if_fail (!object || G_IS_OBJECT (object));
+
+  if (g_set_object (&self->object, object))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_OBJECT]);
 }
 
 gboolean
