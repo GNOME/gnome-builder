@@ -145,6 +145,20 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup" id="overview_config_group">
+                <child>
+                  <object class="IdeTweaksInfo">
+                    <property name="title" translatable="yes">Current Configuration</property>
+                    <binding name="value">
+                      <lookup name="display-name" type="IdeConfig">
+                        <lookup name="config">GbpProjectuiTweaksAddin</lookup>
+                      </lookup>
+                    </binding>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <child>

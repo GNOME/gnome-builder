@@ -42,12 +42,25 @@ G_DEFINE_FINAL_TYPE (GbpProjectuiTweaksAddin, gbp_projectui_tweaks_addin, IDE_TY
 enum {
   PROP_0,
   PROP_BUILD_SYSTEM,
+  PROP_CONFIG,
   PROP_SOURCE_DIRECTORY,
   PROP_VCS,
   N_PROPS
 };
 
 static GParamSpec *properties [N_PROPS];
+
+static IdeConfig *
+gbp_projectui_tweaks_addin_get_config (GbpProjectuiTweaksAddin *self)
+{
+  IdeConfigManager *config_manager;
+
+  if (self->context &&
+      (config_manager = ide_config_manager_from_context (self->context)))
+    return ide_config_manager_get_current (config_manager);
+
+  return NULL;
+}
 
 static char *
 gbp_projectui_tweaks_addin_get_build_system (GbpProjectuiTweaksAddin *self)
@@ -107,6 +120,10 @@ gbp_projectui_tweaks_addin_get_property (GObject    *object,
       g_value_take_string (value, gbp_projectui_tweaks_addin_get_build_system (self));
       break;
 
+    case PROP_CONFIG:
+      g_value_set_object (value, gbp_projectui_tweaks_addin_get_config (self));
+      break;
+
     case PROP_SOURCE_DIRECTORY:
       g_value_take_string (value, gbp_projectui_tweaks_addin_get_source_directory (self));
       break;
@@ -118,6 +135,17 @@ gbp_projectui_tweaks_addin_get_property (GObject    *object,
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
+}
+
+static void
+on_config_changed_cb (GbpProjectuiTweaksAddin *self,
+                      GParamSpec              *pspec,
+                      IdeConfigManager        *config_manager)
+{
+  g_assert (GBP_IS_PROJECTUI_TWEAKS_ADDIN (self));
+  g_assert (IDE_IS_CONFIG_MANAGER (config_manager));
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CONFIG]);
 }
 
 static void
@@ -144,7 +172,14 @@ gbp_projectui_tweaks_addin_load (IdeTweaksAddin *addin,
   if (self->context != NULL)
     {
       IdeConfigManager *config_manager = ide_config_manager_from_context (self->context);
+
       g_list_store_append (store, config_manager);
+
+      g_signal_connect_object (config_manager,
+                               "notify::current",
+                               G_CALLBACK (on_config_changed_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
     }
 
   IDE_TWEAKS_ADDIN_CLASS (gbp_projectui_tweaks_addin_parent_class)->load (addin, tweaks);
@@ -169,6 +204,11 @@ gbp_projectui_tweaks_addin_class_init (GbpProjectuiTweaksAddinClass *klass)
 
   tweaks_addin_class->load = gbp_projectui_tweaks_addin_load;
   tweaks_addin_class->unload = gbp_projectui_tweaks_addin_unload;
+
+  properties[PROP_CONFIG] =
+    g_param_spec_object ("config", NULL, NULL,
+                         IDE_TYPE_CONFIG,
+                         (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   IDE_DEFINE_STRING_PROPERTY ("build-system", NULL, G_PARAM_READABLE, BUILD_SYSTEM);
   IDE_DEFINE_STRING_PROPERTY ("source-directory", NULL, G_PARAM_READABLE, SOURCE_DIRECTORY);
