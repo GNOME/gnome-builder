@@ -23,6 +23,7 @@
 #define IDE_TWEAKS_INSIDE
 # include "ide-tweaks.h"
 # include "ide-tweaks-addin.h"
+# include "ide-tweaks-binding.h"
 # include "ide-tweaks-caption.h"
 # include "ide-tweaks-choice.h"
 # include "ide-tweaks-combo.h"
@@ -34,8 +35,10 @@
 # include "ide-tweaks-info.h"
 # include "ide-tweaks-item.h"
 # include "ide-tweaks-page.h"
+# include "ide-tweaks-property.h"
 # include "ide-tweaks-radio.h"
 # include "ide-tweaks-section.h"
+# include "ide-tweaks-setting.h"
 # include "ide-tweaks-settings.h"
 # include "ide-tweaks-spin.h"
 # include "ide-tweaks-switch.h"

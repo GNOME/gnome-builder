@@ -85,7 +85,8 @@ ide_tweaks_widget_copy (IdeTweaksItem *item)
           (pspec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
         continue;
 
-      if (g_type_is_a (pspec->value_type, IDE_TYPE_TWEAKS_SETTINGS))
+      if (g_type_is_a (pspec->value_type, IDE_TYPE_TWEAKS_SETTINGS) ||
+          g_type_is_a (pspec->value_type, IDE_TYPE_TWEAKS_BINDING))
         clone_item_property (item, copy, pspec->name);
     }
 

@@ -34,6 +34,7 @@ _ide_tweaks_init (void)
 
   g_type_ensure (IDE_TYPE_TWEAKS);
   g_type_ensure (IDE_TYPE_TWEAKS_ADDIN);
+  g_type_ensure (IDE_TYPE_TWEAKS_BINDING);
   g_type_ensure (IDE_TYPE_TWEAKS_CAPTION);
   g_type_ensure (IDE_TYPE_TWEAKS_CHOICE);
   g_type_ensure (IDE_TYPE_TWEAKS_COMBO);
@@ -45,8 +46,10 @@ _ide_tweaks_init (void)
   g_type_ensure (IDE_TYPE_TWEAKS_INFO);
   g_type_ensure (IDE_TYPE_TWEAKS_ITEM);
   g_type_ensure (IDE_TYPE_TWEAKS_PAGE);
+  g_type_ensure (IDE_TYPE_TWEAKS_PROPERTY);
   g_type_ensure (IDE_TYPE_TWEAKS_RADIO);
   g_type_ensure (IDE_TYPE_TWEAKS_SECTION);
+  g_type_ensure (IDE_TYPE_TWEAKS_SETTING);
   g_type_ensure (IDE_TYPE_TWEAKS_SETTINGS);
   g_type_ensure (IDE_TYPE_TWEAKS_SPIN);
   g_type_ensure (IDE_TYPE_TWEAKS_SWITCH);
