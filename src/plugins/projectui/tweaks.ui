@@ -182,6 +182,20 @@
                         <lookup name="item">config_factory</lookup>
                       </lookup>
                     </binding>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksInfo">
+                            <property name="title" translatable="yes">Configuration</property>
+                            <binding name="value">
+                              <lookup name="display-name" type="IdeConfig">
+                                <lookup name="item">config_factory</lookup>
+                              </lookup>
+                            </binding>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
