@@ -24,6 +24,10 @@
 
 #include <glib/gi18n.h>
 
+#include <gtk/gtk.h>
+
+#include <libide-foundry.h>
+
 #include "gbp-projectui-tweaks-addin.h"
 
 struct _GbpProjectuiTweaksAddin
@@ -34,13 +38,43 @@ struct _GbpProjectuiTweaksAddin
 G_DEFINE_FINAL_TYPE (GbpProjectuiTweaksAddin, gbp_projectui_tweaks_addin, IDE_TYPE_TWEAKS_ADDIN)
 
 static void
+gbp_projectui_tweaks_addin_load (IdeTweaksAddin *addin,
+                                 IdeTweaks      *tweaks)
+{
+  GbpProjectuiTweaksAddin *self = (GbpProjectuiTweaksAddin *)addin;
+  g_autoptr(GtkFlattenListModel) configs = NULL;
+  g_autoptr(GListStore) store = NULL;
+  IdeContext *context;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_PROJECTUI_TWEAKS_ADDIN (self));
+  g_assert (IDE_IS_TWEAKS (tweaks));
+
+  ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
+                                       IDE_STRV_INIT ("/plugins/projectui/tweaks.ui"));
+
+  store = g_list_store_new (G_TYPE_LIST_MODEL);
+  configs = gtk_flatten_list_model_new (G_LIST_MODEL (g_object_ref (store)));
+  ide_tweaks_expose_object (tweaks, "Configurations", G_OBJECT (configs));
+
+  if ((context = ide_tweaks_get_context (tweaks)))
+    {
+      IdeConfigManager *config_manager = ide_config_manager_from_context (context);
+      g_list_store_append (store, config_manager);
+    }
+
+  IDE_TWEAKS_ADDIN_CLASS (gbp_projectui_tweaks_addin_parent_class)->load (addin, tweaks);
+}
+
+static void
 gbp_projectui_tweaks_addin_class_init (GbpProjectuiTweaksAddinClass *klass)
 {
+  IdeTweaksAddinClass *tweaks_addin_class = IDE_TWEAKS_ADDIN_CLASS (klass);
+
+  tweaks_addin_class->load = gbp_projectui_tweaks_addin_load;
 }
 
 static void
 gbp_projectui_tweaks_addin_init (GbpProjectuiTweaksAddin *self)
 {
-  ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
-                                       IDE_STRV_INIT ("/plugins/projectui/tweaks.ui"));
 }

@@ -94,6 +94,18 @@
         <child>
           <object class="IdeTweaksPage" id="overview_page">
             <property name="title" translatable="yes">Overview</property>
+            <property name="icon-name" translatable="yes">info-symbolic</property>
+          </object>
+        </child>
+        <child>
+          <object class="IdeTweaksPage" id="configs_page">
+            <property name="title" translatable="yes">Configurations</property>
+            <property name="icon-name" translatable="yes">builder-build-configure-symbolic</property>
+            <child>
+              <object class="IdeTweaksFactory" id="config_factory">
+                <property name="model">Configurations</property>
+              </object>
+            </child>
           </object>
         </child>
       </object>
