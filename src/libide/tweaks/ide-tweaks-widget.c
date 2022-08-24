@@ -256,5 +256,12 @@ ide_tweaks_widget_set_binding (IdeTweaksWidget  *self,
   g_return_if_fail (!binding || IDE_IS_TWEAKS_BINDING (binding));
 
   if (g_set_object (&priv->binding, binding))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BINDING]);
+    {
+      /* Root the binding if necessary */
+      if (binding != NULL && ide_tweaks_item_get_parent (IDE_TWEAKS_ITEM (binding)))
+        ide_tweaks_item_insert_after (IDE_TWEAKS_ITEM (binding),
+                                      IDE_TWEAKS_ITEM (self),
+                                      NULL);
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BINDING]);
+    }
 }
