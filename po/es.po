@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-21 17:39+0000\n"
-"PO-Revision-Date: 2022-08-22 13:37+0200\n"
+"POT-Creation-Date: 2022-08-24 03:58+0000\n"
+"PO-Revision-Date: 2022-08-24 13:33+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -29,7 +29,7 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:173
+#: src/libide/gui/ide-application-actions.c:115
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
 #: src/plugins/editorui/tweaks.ui:316
@@ -42,7 +42,7 @@ msgid "An IDE for GNOME"
 msgstr "Un EID para GNOME"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:174
+#: src/libide/gui/ide-application-actions.c:116
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, y otros"
 
@@ -347,96 +347,93 @@ msgstr ""
 "Retroceso eliminará espacios adicionales para mantenerle alineado con el "
 "tamaño de la sangría."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/libide/gui/ide-preferences-builtin.c:165
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:110
-msgid "Smart Home and End"
-msgstr "Inicio y Fin inteligentes"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: src/plugins/editorui/tweaks.ui:336
+msgid "Smart Home/End"
+msgstr "Inicio/Fin inteligentes"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
-msgid "Whether or not Home moves to first non-space character."
-msgstr ""
-"Si la tecla Inicio mueve o no el cursor al primer carácter que no sea un "
-"espacio en blanco."
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+msgid "Modifies the behavior of Home/End keys."
+msgstr "Modifica el comportamiento de lsa techas Inicio/Fin."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
 msgstr "Mostrar las líneas de la rejilla"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Si se activa, el editor mostrará líneas de cuadrícula en el documento."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "Overview Map Policy"
 msgstr "Política de vista general del mapa"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:81
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
 msgid "When the overview map should be displayed."
 msgstr "Si se debe mostrar la vista general del mapa."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Draw Spaces"
 msgstr "Dibujar espacios"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
 msgstr "Los diferentes tipos de espacios que dibujar en el editor."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/plugins/editorui/tweaks.ui:86
 msgid "Wrap Text"
 msgstr "Ajustar texto"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr ""
 "La manera de ajustar una línea de texto larga para una mejor visualización."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 #: src/libide/gui/ide-preferences-builtin.c:207
 msgid "Autosave Enabled"
 msgstr "Guardado automático activado"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "Enable or disable autosave feature."
 msgstr "Activar o desactivar la característica de guardado automático."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 #: src/libide/gui/ide-preferences-builtin.c:208
 msgid "Autosave Frequency"
 msgstr "Frecuencia del guardado automático"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
 msgid "The number of seconds after modification before auto saving."
 msgstr ""
 "El número de segundos que transcurrir antes del guardado automático después "
 "de una modificación."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "Completion Row Count"
 msgstr "Conteo de filas de completado"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
 msgid "The number of completion rows to display to the user."
 msgstr "El número de filas de completado que mostrar al usuario."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
 #: src/plugins/editorui/tweaks.ui:74
 msgid "Line Height"
 msgstr "Altura de línea"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
 msgid "The line height to use for the selected font."
 msgstr "La altura de línea que usar para la fuente seleccionada."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 #: src/libide/gui/ide-preferences-builtin.c:229
 msgid "Interactive Completion"
 msgstr "Completado interactivo"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -444,20 +441,20 @@ msgstr ""
 "Si se activa, Builder completará automáticamente las propuestas a medida que "
 "escribe."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "Minimum characters for matching selection."
 msgstr "Número mínimo de caracteres que coinciden con la selección."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
 msgid "Specify the minimum number of characters for selection matching."
 msgstr ""
 "Especifique el úmero mínimo de caracteres que coinciden con la selección."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Enable Snippets"
 msgstr "Habilitar fragmentos"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -465,12 +462,12 @@ msgstr ""
 "Permitir expandir fragmentos del editor pulsando en la pestaña junto al "
 "disparador del fragmento."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
 msgid "Select First Completion"
 msgstr "Seleccionar primer completado"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
 msgstr ""
 "Seleccionar automáticamente la primera entrada de completado automático."
@@ -765,7 +762,7 @@ msgstr "Abrir un archivo en el área de trabajo"
 #: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
 #: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
 #: src/libide/gui/ide-preferences-window.c:894
-#: src/libide/tweaks/ide-tweaks-window.ui:4
+#: src/libide/tweaks/ide-tweaks-window.c:130
 msgid "Preferences"
 msgstr "Preferencias"
 
@@ -837,7 +834,7 @@ msgstr "Guardar"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
@@ -1075,10 +1072,10 @@ msgstr "Ejecutando %s…"
 msgid "Deploying to device…"
 msgstr "Desplegando en dispositivo…"
 
-#: src/libide/foundry/ide-runtime.c:403
+#: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:253
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
 msgstr "Equipo anfitrión"
 
@@ -1214,7 +1211,7 @@ msgstr "Abrir"
 #: src/libide/gtk/ide-file-chooser-entry.c:105
 #: src/libide/tweaks/ide-tweaks-directory.c:128
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
 msgid "Select"
 msgstr "Seleccionar"
@@ -1305,13 +1302,13 @@ msgstr "Buscar atajos del teclado"
 msgid "Show information about Builder"
 msgstr "Mostar información sobre Builder."
 
-#: src/libide/gui/ide-application-actions.c:181
+#: src/libide/gui/ide-application-actions.c:123
 msgid "translator-credits"
 msgstr ""
 "Daniel Mustieles <daniel.mustieles@gmail.com>, 2015, 2016\n"
 "Ian Hernandez <ihernandezs@openmailbox.org>, 2015"
 
-#: src/libide/gui/ide-application-actions.c:188
+#: src/libide/gui/ide-application-actions.c:130
 msgid "Funded By"
 msgstr "Financiado por"
 
@@ -1391,8 +1388,8 @@ msgstr "No se puede cargar el HTML. Falta el soporte de WebKit"
 
 #: src/libide/gui/ide-preferences-builtin.c:117
 #: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:10
-#: src/plugins/buildui/gtk/menus.ui:141
+#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:16
+#: src/plugins/buildui/gtk/menus.ui:134
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1482,6 +1479,11 @@ msgstr "Modo de asociación de teclas predeterminado que imita a Gedit"
 #: src/libide/gui/ide-preferences-builtin.c:164
 msgid "Movement"
 msgstr "Movimiento"
+
+#: src/libide/gui/ide-preferences-builtin.c:165
+#: src/plugins/editorui/gbp-editorui-preferences-addin.c:110
+msgid "Smart Home and End"
+msgstr "Inicio y Fin inteligentes"
 
 #: src/libide/gui/ide-preferences-builtin.c:165
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:111
@@ -1638,8 +1640,8 @@ msgstr "Caracteres de espacios en blanco visibles"
 #: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-#: src/plugins/editorui/tweaks-language.ui:68
-#: src/plugins/editorui/tweaks-language.ui:158
+#: src/plugins/editorui/tweaks-language.ui:69
+#: src/plugins/editorui/tweaks-language.ui:159
 msgid "Spaces"
 msgstr "Espacios"
 
@@ -1762,7 +1764,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-#: src/plugins/editorui/tweaks-language.ui:142
+#: src/plugins/editorui/tweaks-language.ui:143
 msgid "Overwrite Braces"
 msgstr "Sobrescribir llaves"
 
@@ -1773,7 +1775,7 @@ msgstr "Sobrescribir cierres de llaves"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-#: src/plugins/editorui/tweaks-language.ui:149
+#: src/plugins/editorui/tweaks-language.ui:150
 msgid "Insert Matching Brace"
 msgstr "Insertar llave coincidente"
 
@@ -1783,13 +1785,13 @@ msgstr "Insertar llave coincidente para { [ ( o \""
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
-#: src/plugins/editorui/tweaks-language.ui:76
+#: src/plugins/editorui/tweaks-language.ui:77
 msgid "Insert Trailing Newline"
 msgstr "Insertar nueva línea al final"
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
-#: src/plugins/editorui/tweaks-language.ui:77
+#: src/plugins/editorui/tweaks-language.ui:78
 msgid "Ensure files end with a newline"
 msgstr "Asegurar el final de los archivos con una línea nueva"
 
@@ -1919,7 +1921,6 @@ msgstr "Las cachés caducadas se limpiarán al iniciar Builder"
 
 #: src/libide/gui/ide-preferences-builtin.c:434
 #: src/libide/gui/ide-preferences-builtin.c:658
-#: src/plugins/platformui/tweaks.ui:62
 msgid "Network"
 msgstr "Red"
 
@@ -1964,7 +1965,7 @@ msgstr ""
 "aplicación"
 
 #: src/libide/gui/ide-preferences-builtin.c:445
-#: src/libide/gui/ide-preferences-builtin.c:653 src/libide/gui/tweaks.ui:34
+#: src/libide/gui/ide-preferences-builtin.c:653 src/libide/gui/tweaks.ui:40
 #: src/libide/projects/ide-projects-global.c:103
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
@@ -1994,6 +1995,7 @@ msgstr "Abrir archivos abiertos anteriormente al cargar un proyecto"
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:111
 #: src/plugins/create-project/gbp-create-project-widget.ui:115
 #: src/plugins/git/gbp-git-preferences-addin.c:184
+#: src/plugins/projectui/tweaks.ui:140
 msgid "Version Control"
 msgstr "Control de versiones"
 
@@ -2022,7 +2024,7 @@ msgstr "visión"
 
 #: src/libide/gui/ide-preferences-builtin.c:656
 #: src/libide/gui/ide-preferences-builtin.c:667
-#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:12
+#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
 msgstr "Comandos"
 
@@ -2032,18 +2034,20 @@ msgstr "Comandos"
 msgid "SDKs"
 msgstr "SDK"
 
-#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:49
-#: src/libide/gui/tweaks.ui:53
+#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:56
+#: src/libide/gui/tweaks.ui:61
 msgid "Plugins"
 msgstr "Complementos"
 
 #. Add groups to pages
 #: src/libide/gui/ide-preferences-builtin.c:663
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
+#: src/plugins/projectui/tweaks.ui:96
 msgid "Overview"
 msgstr "Vista general"
 
 #: src/libide/gui/ide-preferences-builtin.c:664
+#: src/plugins/projectui/tweaks.ui:166
 msgid "Configurations"
 msgstr "Opciones"
 
@@ -2053,7 +2057,7 @@ msgstr "Aplicación"
 
 #: src/libide/gui/ide-preferences-builtin.c:672
 #: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:22
+#: src/plugins/platformui/tweaks.ui:16
 msgid "Interface"
 msgstr "Interfaz"
 
@@ -2118,7 +2122,7 @@ msgid "Additional"
 msgstr "Adicional"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks-language.ui:139
+#: src/plugins/editorui/tweaks-language.ui:140
 #: src/plugins/editorui/tweaks.ui:223
 msgid "Behavior"
 msgstr "Comportamiento"
@@ -2142,7 +2146,7 @@ msgstr "Navegar con la barra de pestañas"
 #: src/libide/gui/ide-preferences-builtin.c:725
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
-msgstr ""
+msgstr "Cambiar entre documentos usando una interfaz con pestañas"
 
 #: src/libide/gui/ide-preferences-builtin.c:730
 #: src/plugins/projectui/tweaks.ui:14
@@ -2163,7 +2167,7 @@ msgstr "La licencia predeterminada que usar al crear proyectos nuevos"
 #: src/libide/gui/ide-preferences-builtin.c:740
 #: src/plugins/debuggerui/tweaks.ui:22
 msgid "Stop After Launching Program"
-msgstr ""
+msgstr "Detener después de lanzar el programa"
 
 #: src/libide/gui/ide-preferences-builtin.c:741
 #: src/plugins/debuggerui/tweaks.ui:23
@@ -2222,10 +2226,8 @@ msgid ""
 msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:778
-#, fuzzy
-#| msgid "Signals"
 msgid "Stop Signal"
-msgstr "Señales"
+msgstr "Señal de detención"
 
 #: src/libide/gui/ide-preferences-builtin.c:779
 msgid ""
@@ -2243,16 +2245,12 @@ msgid "Search (Ctrl+Enter)"
 msgstr "Buscar (Ctrl+Intro)"
 
 #: src/libide/gui/ide-run-button.c:62
-#, fuzzy
-#| msgid "Build project (Ctrl+F7)"
 msgid "Run Project (Shift+Ctrl+Space)"
-msgstr "Construir el proyecto (Ctrl+F7)"
+msgstr "Ejecutar proyecto (Shift+Ctrl+Space)"
 
 #: src/libide/gui/ide-run-button.c:68
-#, fuzzy
-#| msgid "Building project"
 msgid "Stop Running Project"
-msgstr "Construyendo proyecto"
+msgstr "Detener la ejecución del proyecto"
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
@@ -2266,30 +2264,30 @@ msgstr "Ejecutar proyecto"
 msgid "Custom Font"
 msgstr "Tipografía personalizada"
 
-#: src/libide/gui/tweaks.ui:6
+#: src/libide/gui/tweaks.ui:11
 msgid "Visual"
 msgstr "Visual"
 
-#: src/libide/gui/tweaks.ui:16
+#: src/libide/gui/tweaks.ui:22
 msgid "Text Editor"
 msgstr "Editor de texto"
 
-#: src/libide/gui/tweaks.ui:22
+#: src/libide/gui/tweaks.ui:28
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
 
-#: src/libide/gui/tweaks.ui:29
+#: src/libide/gui/tweaks.ui:35
 msgid "Code"
 msgstr "Código"
 
-#: src/libide/gui/tweaks.ui:39
+#: src/libide/gui/tweaks.ui:46
 msgid "Foundry"
 msgstr "Fundición"
 
-#: src/libide/gui/tweaks.ui:44
+#: src/libide/gui/tweaks.ui:51
 msgid "External"
 msgstr "Externa"
 
@@ -2494,13 +2492,18 @@ msgstr "Cargando…"
 msgid "Projects Directory"
 msgstr "%s — Carpeta"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:36
+#: src/libide/tweaks/ide-tweaks-window.c:135
+#, c-format
+msgid "Builder — %s — Preferences"
+msgstr "Builder — %s — Preferencias"
+
+#: src/libide/tweaks/ide-tweaks-window.c:139
+msgid "Builder — Preferences"
+msgstr "Builder — Preferencias"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:35
 msgid "All Preferences"
 msgstr "Todas las preferencias"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:48
-msgid "Search Preferences"
-msgstr "Buscar en las preferencias"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:61
 msgid "Primary Menu"
@@ -2520,7 +2523,7 @@ msgstr "Ninguno"
 msgid "Blank page"
 msgstr "Página en blanco"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:139
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:132
 msgid "Settings"
 msgstr "Configuración"
 
@@ -2812,12 +2815,14 @@ msgstr "Nombre"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:110
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:404
+#: src/plugins/projectui/tweaks.ui:132
 msgid "Source Directory"
 msgstr "Carpeta de fuentes"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:109
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:405
+#: src/plugins/projectui/tweaks.ui:124
 msgid "Build System"
 msgstr "Sistema de construcción"
 
@@ -2921,7 +2926,7 @@ msgstr "Advertencias"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:345
 #: src/plugins/buildui/gbp-buildui-pane.ui:81
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 #: src/plugins/testui/gbp-testui-preferences-addin.c:50
 msgid "Build Pipeline"
 msgstr "Construir tubería"
@@ -2965,10 +2970,8 @@ msgid "The run command is used to run your project"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:253
-#, fuzzy
-#| msgid "Delete Command"
 msgid "_Create Custom Command"
-msgstr "Eliminar comando"
+msgstr "_Crear comando personalizado"
 
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:359
 msgid "The runtime is the environment used to run your application."
@@ -3000,22 +3003,17 @@ msgstr "Ejecutable"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
-#, fuzzy, c-format
-#| msgid "Failed to locate a build target"
+#, c-format
 msgid "Failed to list build targets: %s"
-msgstr "Falló al buscar el objetivo de construcción"
+msgstr "Falló al listar los objetivos de construcción: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
-#, fuzzy
-#| msgid "Build Targets"
 msgid "Select Build Target"
-msgstr "Objetivos de la construcción"
+msgstr "Seleccionar objetivo de la construcción"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
-#, fuzzy
-#| msgid "Build Targets"
 msgid "Available Build Targets"
-msgstr "Objetivos de la construcción"
+msgstr "Objetivos de construcción disponibles"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
 msgid ""
@@ -3027,16 +3025,12 @@ msgid "This selection allows Builder to choose the best candidate."
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
-#, fuzzy
-#| msgid "Building project"
 msgid "Stop Building Project"
-msgstr "Construyendo proyecto"
+msgstr "Detener la construcción del proyecto"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
-#, fuzzy
-#| msgid "Build project (Ctrl+F7)"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
-msgstr "Construir el proyecto (Ctrl+F7)"
+msgstr "Construir el proyecto (Mayús+Ctrl+Alt+B)"
 
 #: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:48
 msgid "_Build"
@@ -3059,22 +3053,16 @@ msgid "Configure Project…"
 msgstr "Configurar proyecto…"
 
 #: src/plugins/buildui/gtk/menus.ui:36
-#, fuzzy
-#| msgid "Configuring project"
 msgid "Configure settings related to the project"
-msgstr "Configurando proyecto"
+msgstr "Configuración relativa al proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:41
-#, fuzzy
-#| msgid "Select Widget…"
 msgid "Select Build Target…"
-msgstr "Seleccionar widget…"
+msgstr "Seleccionar objetivo de construcción…"
 
 #: src/plugins/buildui/gtk/menus.ui:43
-#, fuzzy
-#| msgid "Failed to locate a build target"
 msgid "Change default build target"
-msgstr "Falló al buscar el objetivo de construcción"
+msgstr "Cambiar el objetivo de construcción predeterminado"
 
 #: src/plugins/buildui/gtk/menus.ui:49
 msgid "Build the project"
@@ -3110,10 +3098,8 @@ msgid "Deploy to Device…"
 msgstr ""
 
 #: src/plugins/buildui/gtk/menus.ui:77
-#, fuzzy
-#| msgid "If the project is currently building."
 msgid "Deploy project to current device"
-msgstr "Si el proyecto se está construyendo actualmente."
+msgstr "Desplegar proyecto en el dispositivo actual"
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
@@ -3128,72 +3114,72 @@ msgid "Export project"
 msgstr "Exportar proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:94
-#, fuzzy
-#| msgid "Build"
 msgid "Stop Build"
-msgstr "Construir"
+msgstr "Detener la construcción"
 
 #: src/plugins/buildui/gtk/menus.ui:96
-#, fuzzy
-#| msgid "Building project"
 msgid "Stop building project"
-msgstr "Construyendo proyecto"
+msgstr "Detener la construcción del proyecto"
 
 #: src/plugins/buildui/gtk/menus.ui:102
-#, fuzzy
-#| msgid "Save build log"
 msgid "Show Build _Log"
-msgstr "Guardar el registro de construcción"
+msgstr "Mostrar el _registro de construcción"
 
 #: src/plugins/buildui/gtk/menus.ui:105
 msgid "Display panel containing the build log"
 msgstr ""
 
-#: src/plugins/buildui/gtk/menus.ui:112
-msgid "Manage SDKs…"
-msgstr "Gestionar SDK…"
-
-#: src/plugins/buildui/gtk/menus.ui:121
+#: src/plugins/buildui/gtk/menus.ui:114
 #, fuzzy
 #| msgid "Delete Command"
 msgid "Select Run Command…"
 msgstr "Eliminar comando"
 
-#: src/plugins/buildui/gtk/menus.ui:131
+#: src/plugins/buildui/gtk/menus.ui:124
 msgid "Run"
 msgstr "Ejecutar"
 
-#: src/plugins/buildui/gtk/menus.ui:134
-#, fuzzy
-#| msgid "Build the project"
+#: src/plugins/buildui/gtk/menus.ui:127
 msgid "Run the project"
-msgstr "Construir el proyecto"
+msgstr "Ejecutar el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:136
+msgid "Follow System Style"
+msgstr "Seguir el estilo del sistema"
+
+#: src/plugins/buildui/gtk/menus.ui:142
+msgid "Force Light"
+msgstr "Forzar modo claro"
+
+#: src/plugins/buildui/gtk/menus.ui:148
+msgid "Force Dark"
+msgstr "Forzar modo oscuro"
+
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:157
 msgid "High Contrast"
 msgstr "Contraste alto"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:162
 msgid "Text Direction"
 msgstr "Dirección del texto"
 
-#: src/plugins/buildui/gtk/menus.ui:171
+#: src/plugins/buildui/gtk/menus.ui:164
 msgid "Left-to-Right"
 msgstr "Izquierda a derecha"
 
-#: src/plugins/buildui/gtk/menus.ui:177
+#: src/plugins/buildui/gtk/menus.ui:170
 msgid "Right-to-Left"
 msgstr "Derecha a izquierda"
 
-#: src/plugins/buildui/gtk/menus.ui:186
+#: src/plugins/buildui/gtk/menus.ui:179
 msgid "Verbose Logging"
 msgstr "Registro detallado"
 
-#: src/plugins/buildui/gtk/menus.ui:192
+#: src/plugins/buildui/gtk/menus.ui:185
 msgid "Tools"
 msgstr "Herramientas"
 
@@ -3203,10 +3189,8 @@ msgid "Editor Font"
 msgstr "Tipografía del editor"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
-#, fuzzy
-#| msgid "Switch to source code editor"
 msgid "The font used in the source code editor"
-msgstr "Cambiar al modo de editor de código fuente"
+msgstr "La tipografía usada en el editor de código fuente"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
 #, fuzzy
@@ -3217,10 +3201,8 @@ msgstr "Buscar texto en la terminal"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:65
-#, fuzzy
-#| msgid "Grid Pattern"
 msgid "Show Grid Pattern"
-msgstr "Patrón de cuadrícula"
+msgstr "Mostrar patrón de cuadrícula"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
@@ -3265,10 +3247,8 @@ msgid "Clear the build log history when a new build begins"
 msgstr "Limpiar el panel de registro de construcción al volver a construir"
 
 #: src/plugins/buildui/tweaks.ui:41
-#, fuzzy
-#| msgid "Build Workers"
 msgid "Workers"
-msgstr "Construir trabajadores"
+msgstr "Trabajadores"
 
 #: src/plugins/buildui/tweaks.ui:45
 #, fuzzy
@@ -3346,10 +3326,8 @@ msgid "Clang"
 msgstr "Clang"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:47
-#, fuzzy
-#| msgid "No Diagnostics"
 msgid "Use Clang for Diagnostics"
-msgstr "No hay diagnósticos"
+msgstr "Usar Clang diagnósticos"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:48
 msgid ""
@@ -3357,10 +3335,8 @@ msgid ""
 msgstr ""
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:54
-#, fuzzy
-#| msgid "Use Ctags for autocompletion."
 msgid "Use Clang for Completions"
-msgstr "Usar Ctags para el autocompletado."
+msgstr "Usar Clang para el completado"
 
 #: src/plugins/clang/ide-clang-preferences-addin.c:55
 msgid ""
@@ -4076,10 +4052,8 @@ msgid "CTags"
 msgstr "CTags"
 
 #: src/plugins/ctags/tweaks.ui:17
-#, fuzzy
-#| msgid "Suggest Python completions"
 msgid "Suggest Completions"
-msgstr "Sugerir completado en Python"
+msgstr "Sugerir completado"
 
 #: src/plugins/ctags/tweaks.ui:18
 #, fuzzy
@@ -4092,10 +4066,8 @@ msgid "CTags Path"
 msgstr "Ruta de CTags"
 
 #: src/plugins/ctags/tweaks.ui:30
-#, fuzzy
-#| msgid "Path to ctags executable"
 msgid "The path to the ctags executable"
-msgstr "Ruta al ejecutable ctags"
+msgstr "La ruta al ejecutable de ctags"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 msgid "Run with Debugger"
@@ -4325,8 +4297,6 @@ msgid "No file was provided."
 msgstr "No se ha proporcionado ningún archivo."
 
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
-#, fuzzy
-#| msgid "Use minimal editor interface"
 msgid "Use minimal editorui interface"
 msgstr "Usar interfaz de editor mínima"
 
@@ -4343,8 +4313,6 @@ msgid "The font used within the source code editor"
 msgstr "Cambiar al modo de editor de código fuente"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:70
-#, fuzzy
-#| msgid "Show overview map"
 msgid "Show Overview Map"
 msgstr "Mostrar la vista general del mapa"
 
@@ -4354,16 +4322,12 @@ msgstr ""
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
 #: src/plugins/editorui/tweaks.ui:172
-#, fuzzy
-#| msgid "Show line numbers"
 msgid "Show Line Numbers"
 msgstr "Mostrar números de línea"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:76
-#, fuzzy
-#| msgid "Display the line numbers next to each line of the document."
 msgid "Display line numbers next to each line of source code"
-msgstr "Mostrar los números de línea junto a cada línea del documento."
+msgstr "Mostrar los números de línea junto a cada línea del documento"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:81
 msgid "Adjust line-height of the configured font"
@@ -4404,10 +4368,8 @@ msgstr ""
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
 #: src/plugins/editorui/tweaks.ui:255
-#, fuzzy
-#| msgid "Snippets"
 msgid "Expand Snippets"
-msgstr "Fragmentos"
+msgstr "Expandir fragmentos"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
 #: src/plugins/editorui/tweaks.ui:256
@@ -4415,13 +4377,11 @@ msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:122
-#, fuzzy
-#| msgid "Trim trailing whitespace"
 msgid "Trim Trailing Whitespace"
 msgstr "Eliminar espacios en blanco al final"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-#: src/plugins/editorui/tweaks-language.ui:84
+#: src/plugins/editorui/tweaks-language.ui:85
 #, fuzzy
 #| msgid ""
 #| "Upon saving, trailing whitespace from modified lines will be trimmed."
@@ -4431,21 +4391,17 @@ msgstr ""
 "modificadas."
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:133
-#, fuzzy
-#| msgid "Insert matching character for { [ ( or \""
 msgid "Insert matching character for [[(\"'"
-msgstr "Insertar llave coincidente para { [ ( o \""
+msgstr "Insertar carácter coincidente para [[(\"'"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
-#: src/plugins/editorui/tweaks-language.ui:123
+#: src/plugins/editorui/tweaks-language.ui:124
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr ""
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:155
-#, fuzzy
-#| msgid "Prefer spaces over use of tabs"
 msgid "Prefer spaces over tabs"
-msgstr "Insertar espacios en lugar de tabuladores"
+msgstr "Preferir espacios en lugar de tabuladores"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:159
 msgid "Automatically Indent"
@@ -4500,7 +4456,7 @@ msgid "5"
 msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:109
+#: src/plugins/editorui/tweaks-language.ui:110
 msgid "Indentation Size"
 msgstr "Tamaño del sangrado"
 
@@ -4509,6 +4465,18 @@ msgstr "Tamaño del sangrado"
 #| msgid "Tab width"
 msgid "Same as Tab Width"
 msgstr "Anchura del tabulador"
+
+#: src/plugins/editorui/gtk/menus.ui:81
+msgid "Line Ending"
+msgstr "Final de línea"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+msgid "Windows (CR/LF)"
+msgstr "Windows (CR/LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+msgid "Mac Classic (CR)"
+msgstr "Mac clásico (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -4535,10 +4503,8 @@ msgid "Save _As"
 msgstr "Guardar _como"
 
 #: src/plugins/editorui/gtk/menus.ui:166
-#, fuzzy
-#| msgid "Find"
 msgid "Find…"
-msgstr "Buscar"
+msgstr "Buscar…"
 
 #: src/plugins/editorui/gtk/menus.ui:171
 msgid "Find/Replace…"
@@ -4549,102 +4515,88 @@ msgid "Print…"
 msgstr "Imprimir…"
 
 #: src/plugins/editorui/gtk/menus.ui:186
-#, fuzzy
-#| msgid "Print failed: %s"
 msgid "Format Selection"
-msgstr "Fallo al imprimir: %s"
+msgstr "Formatear selección"
 
-#: src/plugins/editorui/tweaks-language.ui:53
-#, fuzzy
-#| msgid "Editing & Formatting"
+#: src/plugins/editorui/tweaks-language.ui:54
 msgid "Indentation & Formatting"
-msgstr "Editar y formatear"
+msgstr "Sangrado y formato"
 
-#: src/plugins/editorui/tweaks-language.ui:56
+#: src/plugins/editorui/tweaks-language.ui:57
 msgid "Tab Character"
 msgstr ""
 
-#: src/plugins/editorui/tweaks-language.ui:57
+#: src/plugins/editorui/tweaks-language.ui:58
 msgid "The character to be inserted for Tab"
 msgstr ""
 
-#: src/plugins/editorui/tweaks-language.ui:62
+#: src/plugins/editorui/tweaks-language.ui:63
 msgid "Tab"
 msgstr "Tabulador"
 
-#: src/plugins/editorui/tweaks-language.ui:83
+#: src/plugins/editorui/tweaks-language.ui:84
 msgid "Trim Trailing Space"
 msgstr "Eliminar espacios en blanco al final"
 
-#: src/plugins/editorui/tweaks-language.ui:94
+#: src/plugins/editorui/tweaks-language.ui:95
 msgid "Auto Indent"
 msgstr "Sangrado automático"
 
-#: src/plugins/editorui/tweaks-language.ui:95
+#: src/plugins/editorui/tweaks-language.ui:96
 msgid "Automatically indent source code as you type"
 msgstr "Sangrar automáticamente el código fuente a medida que escribe"
 
-#: src/plugins/editorui/tweaks-language.ui:101
+#: src/plugins/editorui/tweaks-language.ui:102
 msgid "Tab Size"
 msgstr "Tamaño del tabulador"
 
-#: src/plugins/editorui/tweaks-language.ui:102
+#: src/plugins/editorui/tweaks-language.ui:103
 msgid "The number of characters to indent for Tab"
 msgstr ""
 
-#: src/plugins/editorui/tweaks-language.ui:110
+#: src/plugins/editorui/tweaks-language.ui:111
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
 
-#: src/plugins/editorui/tweaks-language.ui:119
-#, fuzzy
-#| msgid "Margins"
+#: src/plugins/editorui/tweaks-language.ui:120
 msgid "Margin"
-msgstr "Márgenes"
+msgstr "Margen"
 
-#: src/plugins/editorui/tweaks-language.ui:122
-#, fuzzy
-#| msgid "Show right margin"
+#: src/plugins/editorui/tweaks-language.ui:123
 msgid "Show Right Margin"
 msgstr "Mostrar margen derecho"
 
-#: src/plugins/editorui/tweaks-language.ui:129
-#, fuzzy
-#| msgid "Right margin position"
+#: src/plugins/editorui/tweaks-language.ui:130
 msgid "Right Margin Position"
 msgstr "Posición del margen derecho"
 
-#: src/plugins/editorui/tweaks-language.ui:130
+#: src/plugins/editorui/tweaks-language.ui:131
 msgid "The desired maximum line length"
 msgstr ""
 
-#: src/plugins/editorui/tweaks-language.ui:143
+#: src/plugins/editorui/tweaks-language.ui:144
 #, fuzzy
 #| msgid "Overwrite a matching brace/bracket/quotation/parenthesis."
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr "Sobrescribir una llave/corchete/cita/paréntesis coincidente."
 
-#: src/plugins/editorui/tweaks-language.ui:150
+#: src/plugins/editorui/tweaks-language.ui:151
 #, fuzzy
 #| msgid "Insert matching brace, bracket, quotation, and parenthesis"
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr "Insertar parejas de llaves, corchetes, comillas y paréntesis"
 
 #: src/plugins/editorui/tweaks.ui:28
-#, fuzzy
-#| msgid "Colors"
 msgid "Color"
-msgstr "Colores"
+msgstr "Color"
 
 #: src/plugins/editorui/tweaks.ui:50 src/plugins/terminal/tweaks.ui:16
 msgid "Fonts & Styling"
 msgstr "Tipografías y estilo"
 
 #: src/plugins/editorui/tweaks.ui:54
-#, fuzzy
-#| msgid "(Preview)"
 msgid "Preview"
-msgstr "(Vista previa)"
+msgstr "Vista previa"
 
 #: src/plugins/editorui/tweaks.ui:75
 #, fuzzy
@@ -4669,10 +4621,8 @@ msgid "Anywhere"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:116
-#, fuzzy
-#| msgid "Grid Pattern"
 msgid "Background Pattern"
-msgstr "Patrón de cuadrícula"
+msgstr "Patrón de fondo"
 
 #: src/plugins/editorui/tweaks.ui:117
 #, fuzzy
@@ -4709,20 +4659,14 @@ msgid "Prefer Scrollbars"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:153
-#, fuzzy
-#| msgid "Always"
 msgid "Always On"
-msgstr "Siempre"
+msgstr "Siempre activado"
 
 #: src/plugins/editorui/tweaks.ui:159
-#, fuzzy
-#| msgid "Static"
 msgid "Automatic"
-msgstr "Estático"
+msgstr "Automático"
 
 #: src/plugins/editorui/tweaks.ui:169
-#, fuzzy
-#| msgid "Line numbers"
 msgid "Line Numbers"
 msgstr "Números de línea"
 
@@ -4745,10 +4689,8 @@ msgid "Show line numbers relative to the current line"
 msgstr "Mostrar números de línea relativos a la línea del cursor"
 
 #: src/plugins/editorui/tweaks.ui:186
-#, fuzzy
-#| msgid "Diagnostics"
 msgid "Show Diagnostics"
-msgstr "Diagnósticos"
+msgstr "Mostrar diagnósticos"
 
 #: src/plugins/editorui/tweaks.ui:187
 #, fuzzy
@@ -4757,10 +4699,8 @@ msgid "Display diagnostics next to the line number"
 msgstr "Mostrar los diagnósticos junto al número de línea"
 
 #: src/plugins/editorui/tweaks.ui:195
-#, fuzzy
-#| msgid "Semantic Highlighting"
 msgid "Syntax Highlighting"
-msgstr "Resaltado semántico"
+msgstr "Resaltado de sintaxis"
 
 #: src/plugins/editorui/tweaks.ui:199
 #, fuzzy
@@ -4798,26 +4738,20 @@ msgid "The minimum selection length before highlighting matches"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:266
-#, fuzzy
-#| msgid "Completion"
 msgid "Code Completion"
-msgstr "Completado"
+msgstr "Completado de código"
 
 #: src/plugins/editorui/tweaks.ui:267
 msgid "lang-function-symbolic"
 msgstr "lang-function-symbolic"
 
 #: src/plugins/editorui/tweaks.ui:270
-#, fuzzy
-#| msgid "Completion Providers"
 msgid "Completion Proposals"
-msgstr "Proveedores de completado"
+msgstr "Propuestas de completado"
 
 #: src/plugins/editorui/tweaks.ui:273
-#, fuzzy
-#| msgid "Suggest Python completions"
 msgid "Suggest Code Completions"
-msgstr "Sugerir completado en Python"
+msgstr "Sugerir completado de código"
 
 #: src/plugins/editorui/tweaks.ui:274
 #, fuzzy
@@ -4851,10 +4785,8 @@ msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "El número de filas de completado que mostrar al usuario."
 
 #: src/plugins/editorui/tweaks.ui:307 src/plugins/editorui/tweaks.ui:310
-#, fuzzy
-#| msgid "Keyboard"
 msgid "Keyboard Theme"
-msgstr "Teclado"
+msgstr "Tema del teclado"
 
 #: src/plugins/editorui/tweaks.ui:311
 msgid ""
@@ -4862,45 +4794,51 @@ msgid ""
 "editors"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:336
-#, fuzzy
-#| msgid "Smart Home End"
-msgid "Smart Home/End"
-msgstr "Inicio/Fin inteligente"
-
 #: src/plugins/editorui/tweaks.ui:337
 #, fuzzy
 #| msgid "Home moves to first non-whitespace character"
-msgid "Moves to first non-whitespace character before line edges"
+msgid "Navigate to non-space characters"
 msgstr ""
 "La tecla Inicio mueve el cursor hacia el primer carácter que no sea un "
 "espacio en blanco"
 
-#: src/plugins/editorui/tweaks.ui:347
-#, fuzzy
-#| msgid "Palette management"
-msgid "Session Management"
-msgstr "Gestión de las paletas"
+#: src/plugins/editorui/tweaks.ui:342
+msgid "Before line boundaries"
+msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:348
+msgid "After line boundaries"
+msgstr ""
+
+#: src/plugins/editorui/tweaks.ui:354
+msgid "Instead of line boundaries"
+msgstr ""
+
+#: src/plugins/editorui/tweaks.ui:360 src/plugins/valgrind/gtk/menus.ui:44
+msgid "Disabled"
+msgstr "Desactivado"
+
+#: src/plugins/editorui/tweaks.ui:372
+msgid "Session Management"
+msgstr "Gestión de sesiones"
+
+#: src/plugins/editorui/tweaks.ui:376
 msgid "Save & Restore"
 msgstr "Guardar y restaurar"
 
-#: src/plugins/editorui/tweaks.ui:354
+#: src/plugins/editorui/tweaks.ui:379
 msgid "Auto-Save"
 msgstr "Autoguardado"
 
-#: src/plugins/editorui/tweaks.ui:355
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Regularly save the document as you type"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:361
-#, fuzzy
-#| msgid "Auto Save Timeout"
+#: src/plugins/editorui/tweaks.ui:386
 msgid "Auto-Save Delay"
-msgstr "Intervalo de guardado automático"
+msgstr "Retardo de guardado automático"
 
-#: src/plugins/editorui/tweaks.ui:362
+#: src/plugins/editorui/tweaks.ui:387
 #, fuzzy
 #| msgid "The number of seconds after modification before auto saving"
 msgid "The delay in seconds to wait before auto-saving the document"
@@ -4908,23 +4846,19 @@ msgstr ""
 "El número de segundos que deben transcurrir antes del guardado automático "
 "después de una modificación"
 
-#: src/plugins/editorui/tweaks.ui:373
-#, fuzzy
-#| msgid "Reformat code on save"
+#: src/plugins/editorui/tweaks.ui:398
 msgid "Format on Save"
-msgstr "Volver a formatear el código al guardar"
+msgstr "Formatear al guardar"
 
-#: src/plugins/editorui/tweaks.ui:374
+#: src/plugins/editorui/tweaks.ui:399
 msgid "Reformat sources when saving to disk"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:384
-#, fuzzy
-#| msgid "Restore cursor position"
+#: src/plugins/editorui/tweaks.ui:409
 msgid "Restore Cursor Position"
 msgstr "Restaurar la posición del cursor"
 
-#: src/plugins/editorui/tweaks.ui:385
+#: src/plugins/editorui/tweaks.ui:410
 #, fuzzy
 #| msgid "Jump to the last position when reopening a file"
 msgid "Jump to the last position when re-opening a file"
@@ -5302,10 +5236,8 @@ msgid "With _Folder Listing"
 msgstr ""
 
 #: src/plugins/ls/gtk/menus.ui:15
-#, fuzzy
-#| msgid "_Open Containing Folder"
 msgid "Open Containing Folder"
-msgstr "Abrir la carpeta c_ontenedora"
+msgstr "Abrir la carpeta contenedora"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
 #, fuzzy
@@ -5318,10 +5250,8 @@ msgid "Default Make Target"
 msgstr ""
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
-#, fuzzy
-#| msgid "CMake"
 msgid "Make Run"
-msgstr "CMake"
+msgstr "Make Run"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
@@ -5337,9 +5267,6 @@ msgstr ""
 
 #. translators: you may need to swap left/right in your language, as this refers to "start" (not "end")
 #: src/plugins/menu-search/gtk/menus.ui:8
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle Left Panel"
 msgstr "Conmutar panel izquierdo"
 
@@ -5353,9 +5280,6 @@ msgstr "panel-left-symbolic"
 
 #. translators: you may need to swap left/right in your language, as this refers to "end" (not "start")
 #: src/plugins/menu-search/gtk/menus.ui:16
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle right panel"
 msgid "Toggle Right Panel"
 msgstr "Conmutar panel derecho"
 
@@ -5415,7 +5339,7 @@ msgstr "Opciones de Meson"
 
 #: src/plugins/meson/gbp-meson-introspection.c:584
 msgid "Load Meson Introspection"
-msgstr ""
+msgstr "Cargar introspección de Meson"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:274
 msgid "Install project"
@@ -5545,10 +5469,8 @@ msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:186
-#, fuzzy
-#| msgid "GTK Application"
 msgid "GTK 4 Application"
-msgstr "Aplicación de GTK"
+msgstr "Aplicación de GTK4"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "A Meson-based project using GTK 4"
@@ -5721,35 +5643,17 @@ msgstr "Descargando dependencias npm"
 msgid "_External Program…"
 msgstr "Programa _externo…"
 
-#: src/plugins/platformui/tweaks.ui:36
-#, fuzzy
-#| msgid "Documentation"
+#: src/plugins/platformui/tweaks.ui:30
 msgid "Document Navigation"
-msgstr "Documentación"
+msgstr "Navegación por el documento"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:33
 msgid "Tab Bar"
 msgstr "Barra de pestañas"
 
-#: src/plugins/platformui/tweaks.ui:45
-#, fuzzy
-#| msgid "Split Down"
+#: src/plugins/platformui/tweaks.ui:39
 msgid "Drop Down"
-msgstr "Dividir por abajo"
-
-#: src/plugins/platformui/tweaks.ui:67
-#, fuzzy
-#| msgid "Allow network when metered"
-msgid "Allow Downloads when Metered"
-msgstr "Permitir red cuando se esté midiendo"
-
-#: src/plugins/platformui/tweaks.ui:68
-#, fuzzy
-#| msgid "Allow downloads over metered connections"
-msgid ""
-"Allow the download of SDKs and dependencies when on metered internet "
-"connections"
-msgstr "Permitir descargas el redes medidas"
+msgstr "Desplegar"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
@@ -5903,11 +5807,13 @@ msgstr ""
 msgid "Sort directories before files in the same directory"
 msgstr ""
 
+#: src/plugins/projectui/gbp-projectui-tweaks-addin.c:106
+msgid "No version control"
+msgstr "Sin control de versiones"
+
 #: src/plugins/projectui/tweaks.ui:23
-#, fuzzy
-#| msgid "Project Destination"
 msgid "Project Creation"
-msgstr "Destino del proyecto"
+msgstr "Creación del proyecto"
 
 #: src/plugins/projectui/tweaks.ui:27
 msgid "Projects created with Builder will be placed within this directory"
@@ -5916,6 +5822,28 @@ msgstr ""
 #: src/plugins/projectui/tweaks.ui:80
 msgid "No License"
 msgstr "Sin licencia"
+
+#: src/plugins/projectui/tweaks.ui:97
+msgid "info-symbolic"
+msgstr "info-symbolic"
+
+#: src/plugins/projectui/tweaks.ui:107
+msgid "Project Identifier"
+msgstr "Identificador del proyecto"
+
+#: src/plugins/projectui/tweaks.ui:115
+msgid ""
+"This identifier is used when referencing your project's settings, build "
+"directories, and cached information."
+msgstr ""
+
+#: src/plugins/projectui/tweaks.ui:152
+msgid "Current Configuration"
+msgstr "Configuración actual"
+
+#: src/plugins/projectui/tweaks.ui:167
+msgid "builder-build-configure-symbolic"
+msgstr "builder-build-configure-symbolic"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -6016,33 +5944,27 @@ msgstr "Eliminar comando"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
-#, fuzzy
-#| msgid "Untitled Terminal"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 msgid "Untitled Command"
-msgstr "Terminal sin título"
+msgstr "Comando sin título"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:339
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 msgid "Set Shortcut"
 msgstr "Establecer atajo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
-#, fuzzy
-#| msgid "Select Project Directory"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
 msgid "Select Working Directory"
-msgstr "Seleccionar la carpeta de proyectos"
+msgstr "Seleccionar la carpeta de trabajo"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
-#, fuzzy
-#| msgid "Delete Command"
 msgid "Create Command"
-msgstr "Eliminar comando"
+msgstr "Crear comando"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:542
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
-msgstr ""
+msgstr "Cre_ar"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
 msgid "Edit Command"
@@ -6050,7 +5972,7 @@ msgstr "Editar comando"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:23
 msgid "S_ave"
-msgstr ""
+msgstr "_Guardar"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:51
 msgid "Keyboard Shortcut"
@@ -6079,74 +6001,68 @@ msgid ""
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+msgid "Use Subshell"
+msgstr "Usar subshell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr ""
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "Localidad"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:192
-#, fuzzy
-#| msgid "Variable"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
 msgid "Add _Variable"
-msgstr "Variable"
+msgstr "Añadir _variable"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:198
-#, fuzzy
-#| msgid "Variable"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
 msgid "Add Variable"
-msgstr "Variable"
+msgstr "Añadir variable"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:199
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
 msgid "_Add"
 msgstr "_Añadir"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:218
-#, fuzzy
-#| msgid "Delete Command"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
-msgstr "Eliminar comando"
+msgstr "_Eliminar comando"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:246
-#, fuzzy
-#| msgid "Success"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Subprocess"
-msgstr "Correcto"
+msgstr "Subproceso"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:247
-#, fuzzy
-#| msgid "Run a new instance of Builder"
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command as a subprocess of Builder."
-msgstr "Ejecutar una instancia de Builder nueva"
+msgstr "Ejecuta el comando como un subproceso de Builder."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:254
-#, fuzzy
-#| msgid "- List devices found on the system."
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
-msgstr "- Listar los dispositivos encontrados en el sistema."
+msgstr "Ejecuta el comando en el equipo anfitrión."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:261
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
 msgstr ""
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 #, fuzzy
 #| msgid "GTK Application"
 msgid "As Target Application"
 msgstr "Aplicación de GTK"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:268
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:144
-#, fuzzy
-#| msgid "Project Location"
 msgid "Project Commands"
-msgstr "Ubicación del proyecto"
+msgstr "Comandos del proyecto"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:149
 msgid "Shared Commands"
@@ -6167,10 +6083,8 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
-#, fuzzy
-#| msgid "Untitled Terminal"
 msgid "Untitled command"
-msgstr "Terminal sin título"
+msgstr "Comando sin título"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "These commands are shared across all projects."
@@ -6181,41 +6095,42 @@ msgid "Display Name"
 msgstr "Mostrar nombre"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
-#, fuzzy
-#| msgid "Keyboard Movement"
 msgid "Keyboard Accelerator"
-msgstr "Movimiento con el teclado"
+msgstr "Acelerador del teclado"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
-#, fuzzy
-#| msgid "Source Directory"
 msgid "Current Working Directory"
-msgstr "Carpeta de fuentes"
+msgstr "Carpeta de trabajo actual"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
-#, fuzzy
-#| msgid "Arguments"
 msgid "Command Arguments"
-msgstr "Argumentos"
+msgstr "Argumentos del comando"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
-#, fuzzy
-#| msgid "Environment"
 msgid "Command Environment"
-msgstr "Entorno"
+msgstr "Entorno del comando"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
 msgid "Command Locality"
 msgstr "Ubicación del comando"
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr "Usar la shell"
+
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
-#, fuzzy
-#| msgid "Command"
 msgid "Run Commands"
-msgstr "Comando"
+msgstr "Ejecutar comandos"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
+msgstr ""
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
 msgstr ""
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
@@ -6223,10 +6138,8 @@ msgid "Enchant 2"
 msgstr "Enchant 2"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:248
-#, fuzzy
-#| msgid "Dictionary"
 msgid "Add to Dictionary"
-msgstr "Diccionario"
+msgstr "Añadir al diccionario"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:249
 msgid "Ignore"
@@ -6248,10 +6161,8 @@ msgstr "Filtrar símbolos…"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
-#, fuzzy
-#| msgid "Open Pages"
 msgid "In Page"
-msgstr "Páginas abiertas"
+msgstr "En la página"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
@@ -6264,10 +6175,8 @@ msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Seleccionar símbolo (Ctrl+Shift+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:6
-#, fuzzy
-#| msgid "Create a split page below the current page"
 msgid "Navigate to a symbol within the current page"
-msgstr "Crear una página dividida debajo de la página actual"
+msgstr "Navegar a un símbolo en la página actual"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
@@ -6291,10 +6200,8 @@ msgid "Run with Profiler"
 msgstr "Ejecutar con el perfilador"
 
 #: src/plugins/sysprof/gtk/menus.ui:22
-#, fuzzy
-#| msgid "Run with Profiler"
 msgid "Run the project with profiler"
-msgstr "Ejecutar con el perfilador"
+msgstr "Ejecutar el proyecto con el perfilador"
 
 #: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:17
 msgid "Profiler"
@@ -6384,7 +6291,7 @@ msgstr "Instrumentos"
 
 #: src/plugins/sysprof/tweaks.ui:24
 msgid "Records CPU usage and CPU frequency statistics"
-msgstr ""
+msgstr "Guardar estadísticas de uso y frecuencia de CPU"
 
 #: src/plugins/sysprof/tweaks.ui:30
 msgid "Sample Callstacks"
@@ -6396,19 +6303,19 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:37
 msgid "CPU Governor"
-msgstr ""
+msgstr "Gobierno de CPU"
 
 #: src/plugins/sysprof/tweaks.ui:38
 msgid "Force performance mode while profiling"
-msgstr ""
+msgstr "Forzar modo de rendimiento al perfilar"
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "Don't Change Governor"
-msgstr ""
+msgstr "No cambiar el gobierno"
 
 #: src/plugins/sysprof/tweaks.ui:49
 msgid "Force Performance Mode"
-msgstr ""
+msgstr "Forzar modo de rendimiento"
 
 #: src/plugins/sysprof/tweaks.ui:62
 msgid "Simple memory statistics about the process such as total memory used"
@@ -6428,7 +6335,7 @@ msgstr "Uso de energía"
 
 #: src/plugins/sysprof/tweaks.ui:80
 msgid "Record statistics about energy usage using RAPL"
-msgstr ""
+msgstr "Guardar estadísticas del uso de energia usando RAPL"
 
 #: src/plugins/sysprof/tweaks.ui:86
 msgid "Battery Usage"
@@ -6444,7 +6351,7 @@ msgstr "Uso de red"
 
 #: src/plugins/sysprof/tweaks.ui:98
 msgid "Record statistics about network usage"
-msgstr ""
+msgstr "Guardar estadísticas del uso de red"
 
 #: src/plugins/sysprof/tweaks.ui:104
 msgid "Disk Usage"
@@ -6452,7 +6359,7 @@ msgstr "Uso de disco"
 
 #: src/plugins/sysprof/tweaks.ui:115
 msgid "GNOME Shell Performance"
-msgstr ""
+msgstr "Rendimiento de GNOME Shell"
 
 #: src/plugins/sysprof/tweaks.ui:116
 msgid "Collect performance and timing information from GNOME Shell"
@@ -6658,7 +6565,7 @@ msgstr "Dividir"
 
 #: src/plugins/terminal/tweaks.ui:31
 msgid "Allow Bold"
-msgstr ""
+msgstr "Permitir negrita"
 
 #: src/plugins/terminal/tweaks.ui:32
 msgid "Allows the use of bold escape sequences"
@@ -6840,10 +6747,6 @@ msgstr "Resumen"
 msgid "Full"
 msgstr "Completo"
 
-#: src/plugins/valgrind/gtk/menus.ui:44
-msgid "Disabled"
-msgstr "Desactivado"
-
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:20
 msgid "Leak Kinds"
 msgstr "Tipos de fugas"
@@ -6980,6 +6883,36 @@ msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
 
+#~ msgid "Whether or not Home moves to first non-space character."
+#~ msgstr ""
+#~ "Si la tecla Inicio mueve o no el cursor al primer carácter que no sea un "
+#~ "espacio en blanco."
+
+#~ msgid "Search Preferences"
+#~ msgstr "Buscar en las preferencias"
+
+#~ msgid "Manage SDKs…"
+#~ msgstr "Gestionar SDK…"
+
+#, fuzzy
+#~| msgid "Home moves to first non-whitespace character"
+#~ msgid "Moves to first non-whitespace character before line edges"
+#~ msgstr ""
+#~ "La tecla Inicio mueve el cursor hacia el primer carácter que no sea un "
+#~ "espacio en blanco"
+
+#, fuzzy
+#~| msgid "Allow network when metered"
+#~ msgid "Allow Downloads when Metered"
+#~ msgstr "Permitir red cuando se esté midiendo"
+
+#, fuzzy
+#~| msgid "Allow downloads over metered connections"
+#~ msgid ""
+#~ "Allow the download of SDKs and dependencies when on metered internet "
+#~ "connections"
+#~ msgstr "Permitir descargas el redes medidas"
+
 #~ msgid "Show overview map"
 #~ msgstr "Mostrar la vista general del mapa"
 
@@ -7006,9 +6939,6 @@ msgstr ""
 
 #~ msgid "The number of lines to scroll beyond the end of the buffer."
 #~ msgstr "El número de líneas que desplazarse más allá del final del búfer."
-
-#~ msgid "Use Tabs"
-#~ msgstr "Usar pestañas"
 
 #~ msgid "Use the tabbar within the page grid."
 #~ msgstr "Usar la barra de pestañas en la página."
@@ -7408,9 +7338,6 @@ msgstr ""
 #~ msgctxt "shortcut window"
 #~ msgid "Find text within terminal"
 #~ msgstr "Buscar texto en la terminal"
-
-#~ msgid "Builder — Preferences"
-#~ msgstr "Builder — Preferencias"
 
 #~ msgid "Allow the editor to scroll past the end of the buffer"
 #~ msgstr "Permitir al editor desplazarse más allá del final del búfer"
@@ -10340,9 +10267,6 @@ msgstr ""
 
 #~ msgid "A short message for the progress."
 #~ msgstr "Un mensaje corto del progreso."
-
-#~ msgid "The unique project identifier."
-#~ msgstr "El identificador único del proyecto."
 
 #~ msgid "Root"
 #~ msgstr "Raíz"
