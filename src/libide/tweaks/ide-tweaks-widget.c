@@ -28,15 +28,23 @@
 typedef struct
 {
   IdeTweaksWidget *cloned;
+  IdeTweaksBinding *binding;
 } IdeTweaksWidgetPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (IdeTweaksWidget, ide_tweaks_widget, IDE_TYPE_TWEAKS_ITEM)
+
+enum {
+  PROP_0,
+  PROP_BINDING,
+  N_PROPS
+};
 
 enum {
   CREATE_FOR_ITEM,
   N_SIGNALS
 };
 
+static GParamSpec *properties[N_PROPS];
 static guint signals[N_SIGNALS];
 
 static void
@@ -100,8 +108,47 @@ ide_tweaks_widget_dispose (GObject *object)
   IdeTweaksWidgetPrivate *priv = ide_tweaks_widget_get_instance_private (self);
 
   g_clear_weak_pointer (&priv->cloned);
+  g_clear_object (&priv->binding);
 
   G_OBJECT_CLASS (ide_tweaks_widget_parent_class)->dispose (object);
+}
+
+static void
+ide_tweaks_widget_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
+{
+  IdeTweaksWidget *self = IDE_TWEAKS_WIDGET (object);
+
+  switch (prop_id)
+    {
+    case PROP_BINDING:
+      g_value_set_object (value, ide_tweaks_widget_get_binding (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_tweaks_widget_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
+{
+  IdeTweaksWidget *self = IDE_TWEAKS_WIDGET (object);
+
+  switch (prop_id)
+    {
+    case PROP_BINDING:
+      ide_tweaks_widget_set_binding (self, g_value_get_object (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
 }
 
 static void
@@ -113,6 +160,15 @@ ide_tweaks_widget_class_init (IdeTweaksWidgetClass *klass)
   item_class->copy = ide_tweaks_widget_copy;
 
   object_class->dispose = ide_tweaks_widget_dispose;
+  object_class->get_property = ide_tweaks_widget_get_property;
+  object_class->set_property = ide_tweaks_widget_set_property;
+
+  properties[PROP_BINDING] =
+    g_param_spec_object ("binding", NULL, NULL,
+                         IDE_TYPE_TWEAKS_BINDING,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_properties (object_class, N_PROPS, properties);
 
   /**
    * IdeTweaksWidget::create-for-item:
@@ -170,4 +226,35 @@ IdeTweaksWidget *
 ide_tweaks_widget_new (void)
 {
   return g_object_new (IDE_TYPE_TWEAKS_WIDGET, NULL);
+}
+
+/**
+ * ide_tweaks_widget_get_binding:
+ * @self: a #IdeTweaksWidget
+ *
+ * Gets the binding for the widget.
+ *
+ * Returns: (transfer none) (nullable): an #IdeTweaksBinding or %NULL
+ */
+IdeTweaksBinding *
+ide_tweaks_widget_get_binding (IdeTweaksWidget *self)
+{
+  IdeTweaksWidgetPrivate *priv = ide_tweaks_widget_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_WIDGET (self), NULL);
+
+  return priv->binding;
+}
+
+void
+ide_tweaks_widget_set_binding (IdeTweaksWidget  *self,
+                               IdeTweaksBinding *binding)
+{
+  IdeTweaksWidgetPrivate *priv = ide_tweaks_widget_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_TWEAKS_WIDGET (self));
+  g_return_if_fail (!binding || IDE_IS_TWEAKS_BINDING (binding));
+
+  if (g_set_object (&priv->binding, binding))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BINDING]);
 }

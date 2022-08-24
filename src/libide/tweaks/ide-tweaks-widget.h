@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 
+#include "ide-tweaks-binding.h"
 #include "ide-tweaks-item.h"
 
 G_BEGIN_DECLS
@@ -44,6 +45,11 @@ struct _IdeTweaksWidgetClass
 };
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksWidget *ide_tweaks_widget_new (void);
+IdeTweaksWidget  *ide_tweaks_widget_new (void);
+IDE_AVAILABLE_IN_ALL
+IdeTweaksBinding *ide_tweaks_widget_get_binding (IdeTweaksWidget  *self);
+IDE_AVAILABLE_IN_ALL
+void              ide_tweaks_widget_set_binding (IdeTweaksWidget  *self,
+                                                 IdeTweaksBinding *binding);
 
 G_END_DECLS
