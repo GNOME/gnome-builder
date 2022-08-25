@@ -24,6 +24,7 @@
 
 #include "ide-tweaks.h"
 #include "ide-tweaks-setting.h"
+#include "ide-tweaks-variant.h"
 
 #include "gsettings-mapping.h"
 
@@ -187,32 +188,14 @@ static GType
 ide_tweaks_setting_get_expected_type (IdeTweaksBinding *binding)
 {
   IdeTweaksSetting *self = IDE_TWEAKS_SETTING (binding);
+  g_autoptr(GSettings) settings = NULL;
+  const GVariantType *expected_type = NULL;
+  const char *key = NULL;
 
-  if (self->expected_type == NULL)
+  if (!(settings = ide_tweaks_setting_acquire (self, &key, &expected_type)))
     return G_TYPE_INVALID;
 
-#define MAP_VARIANT_TYPE_TO_GTYPE(variant_type, gtype)            \
-  G_STMT_START {                                                  \
-    if (g_variant_type_equal (self->expected_type, variant_type)) \
-      return gtype;                                               \
-  } G_STMT_END
-
-  /* Just the basics really for GSettings */
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_BYTE, G_TYPE_UCHAR);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_BYTESTRING, G_TYPE_STRING);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_DOUBLE, G_TYPE_DOUBLE);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_INT32, G_TYPE_INT);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_INT64, G_TYPE_INT64);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_STRING, G_TYPE_STRING);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_STRING_ARRAY, G_TYPE_STRV);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_UINT32, G_TYPE_UINT);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_UINT64, G_TYPE_UINT64);
-  MAP_VARIANT_TYPE_TO_GTYPE (G_VARIANT_TYPE_VARIANT, G_TYPE_VARIANT);
-
-#undef MAP_VARIANT_TYPE_TO_GTYPE
-
-  return G_TYPE_INVALID;
+  return _ide_tweaks_variant_type_to_gtype (expected_type);
 }
 
 static void

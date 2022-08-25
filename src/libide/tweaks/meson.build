@@ -29,6 +29,7 @@ libide_tweaks_public_headers = [
   'ide-tweaks-settings.h',
   'ide-tweaks-spin.h',
   'ide-tweaks-switch.h',
+  'ide-tweaks-variant.h',
   'ide-tweaks-widget.h',
   'ide-tweaks-window.h',
 ]
@@ -61,6 +62,7 @@ libide_tweaks_public_sources = [
   'ide-tweaks-settings.c',
   'ide-tweaks-spin.c',
   'ide-tweaks-switch.c',
+  'ide-tweaks-variant.c',
   'ide-tweaks-widget.c',
   'ide-tweaks-window.c',
 ]
