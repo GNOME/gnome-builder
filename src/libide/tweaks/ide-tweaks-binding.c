@@ -108,7 +108,20 @@ binding_set (Binding      *binding,
   return TRUE;
 }
 
-static gboolean
+/**
+ * ide_tweaks_binding_get_expected_type:
+ * @self: a #IdeTweaksBinding
+ * @type: (out): a #GType
+ *
+ * Gets the expected type for a binding.
+ *
+ * This is a best effort to determine the type and may end up being
+ * different based on how bindings are applied.
+ *
+ * Returns: %TRUE if succesful and @type is set, otherwise %FALSE and
+ *   @type is set to %G_TYPE_INVALID.
+ */
+gboolean
 ide_tweaks_binding_get_expected_type (IdeTweaksBinding *self,
                                       GType            *type)
 {

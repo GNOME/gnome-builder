@@ -50,19 +50,19 @@ struct _IdeTweaksBindingClass
 };
 
 IDE_AVAILABLE_IN_ALL
-void     ide_tweaks_binding_changed             (IdeTweaksBinding *self);
+void     ide_tweaks_binding_changed             (IdeTweaksBinding          *self);
 IDE_AVAILABLE_IN_ALL
-gboolean ide_tweaks_binding_get_value           (IdeTweaksBinding *self,
-                                                 GValue           *value);
+gboolean ide_tweaks_binding_get_value           (IdeTweaksBinding          *self,
+                                                 GValue                    *value);
 IDE_AVAILABLE_IN_ALL
-void     ide_tweaks_binding_set_value           (IdeTweaksBinding *self,
-                                                 const GValue     *value);
+void     ide_tweaks_binding_set_value           (IdeTweaksBinding          *self,
+                                                 const GValue              *value);
 IDE_AVAILABLE_IN_ALL
-char    *ide_tweaks_binding_dup_string          (IdeTweaksBinding *self);
+char    *ide_tweaks_binding_dup_string          (IdeTweaksBinding          *self);
 IDE_AVAILABLE_IN_ALL
-void     ide_tweaks_binding_bind                (IdeTweaksBinding *self,
-                                                 gpointer          instance,
-                                                 const char       *property_name);
+void     ide_tweaks_binding_bind                (IdeTweaksBinding          *self,
+                                                 gpointer                   instance,
+                                                 const char                *property_name);
 IDE_AVAILABLE_IN_ALL
 void     ide_tweaks_binding_bind_with_transform (IdeTweaksBinding          *self,
                                                  gpointer                   instance,
@@ -72,6 +72,9 @@ void     ide_tweaks_binding_bind_with_transform (IdeTweaksBinding          *self
                                                  gpointer                   user_data,
                                                  GDestroyNotify             notify);
 IDE_AVAILABLE_IN_ALL
-void     ide_tweaks_binding_unbind              (IdeTweaksBinding *self);
+void     ide_tweaks_binding_unbind              (IdeTweaksBinding          *self);
+IDE_AVAILABLE_IN_ALL
+gboolean ide_tweaks_binding_get_expected_type   (IdeTweaksBinding          *self,
+                                                 GType                     *type);
 
 G_END_DECLS
