@@ -24,7 +24,6 @@
 # error "Only <libide-tweaks.h> can be included directly."
 #endif
 
-#include "ide-tweaks-settings.h"
 #include "ide-tweaks-widget.h"
 
 G_BEGIN_DECLS
@@ -35,26 +34,16 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksCombo, ide_tweaks_combo, IDE, TWEAKS_COMBO, IdeTweaksWidget)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksCombo    *ide_tweaks_combo_new          (void);
+IdeTweaksCombo *ide_tweaks_combo_new          (void);
 IDE_AVAILABLE_IN_ALL
-const char        *ide_tweaks_combo_get_title    (IdeTweaksCombo    *self);
+const char     *ide_tweaks_combo_get_title    (IdeTweaksCombo    *self);
 IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_combo_set_title    (IdeTweaksCombo    *self,
-                                                  const char        *title);
+void            ide_tweaks_combo_set_title    (IdeTweaksCombo    *self,
+                                               const char        *title);
 IDE_AVAILABLE_IN_ALL
-const char        *ide_tweaks_combo_get_subtitle (IdeTweaksCombo    *self);
+const char     *ide_tweaks_combo_get_subtitle (IdeTweaksCombo    *self);
 IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_combo_set_subtitle (IdeTweaksCombo    *self,
-                                                  const char        *subtitle);
-IDE_AVAILABLE_IN_ALL
-const char        *ide_tweaks_combo_get_key      (IdeTweaksCombo    *self);
-IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_combo_set_key      (IdeTweaksCombo    *self,
-                                                  const char        *key);
-IDE_AVAILABLE_IN_ALL
-IdeTweaksSettings *ide_tweaks_combo_get_settings (IdeTweaksCombo    *self);
-IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_combo_set_settings (IdeTweaksCombo    *self,
-                                                  IdeTweaksSettings *setings);
+void            ide_tweaks_combo_set_subtitle (IdeTweaksCombo    *self,
+                                               const char        *subtitle);
 
 G_END_DECLS

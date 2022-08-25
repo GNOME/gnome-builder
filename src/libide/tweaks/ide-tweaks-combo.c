@@ -29,20 +29,19 @@
 #include "ide-tweaks-combo.h"
 #include "ide-tweaks-combo-row.h"
 #include "ide-tweaks-item-private.h"
+#include "ide-tweaks-variant.h"
+
+#include "gsettings-mapping.h"
 
 struct _IdeTweaksCombo
 {
   IdeTweaksWidget parent_instance;
-  IdeTweaksSettings *settings;
   char *title;
   char *subtitle;
-  char *key;
 };
 
 enum {
   PROP_0,
-  PROP_KEY,
-  PROP_SETTINGS,
   PROP_TITLE,
   PROP_SUBTITLE,
   N_PROPS
@@ -57,31 +56,43 @@ ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
                                   IdeTweaksItem   *widget)
 {
   IdeTweaksCombo *self = (IdeTweaksCombo *)widget;
-  g_autoptr(IdeSettings) settings = NULL;
   g_autoptr(GListStore) store = NULL;
-  g_autoptr(GVariant) value = NULL;
+  g_autoptr(GVariant) variant = NULL;
+  IdeTweaksBinding *binding = NULL;
   IdeTweaksItem *root;
   AdwComboRow *row;
-  int selected = -1;
+  GType type;
   guint i = 0;
+  int selected = -1;
 
   g_assert (IDE_IS_TWEAKS_COMBO (self));
 
-  root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (widget));
-  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self->settings, IDE_TWEAKS (root)));
+  if (!(binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (widget))))
+    return NULL;
 
+  root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (widget));
   store = g_list_store_new (IDE_TYPE_TWEAKS_CHOICE);
-  value = ide_settings_get_value (settings, self->key);
+
+  if (ide_tweaks_binding_get_expected_type (binding, &type))
+    {
+      const GVariantType *expected_type = _ide_tweaks_gtype_to_variant_type (type);
+      g_auto(GValue) value = G_VALUE_INIT;
+
+      g_value_init (&value, type);
+      if (ide_tweaks_binding_get_value (binding, &value))
+        variant = g_settings_set_mapping (&value, expected_type, NULL);
+    }
 
   for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (self));
        child != NULL;
        child = ide_tweaks_item_get_next_sibling (child))
     {
-      if (!_ide_tweaks_item_is_hidden (child, root))
+      if (IDE_IS_TWEAKS_CHOICE (child) &&
+          !_ide_tweaks_item_is_hidden (child, root))
         {
-          GVariant *target = ide_tweaks_choice_get_value (IDE_TWEAKS_CHOICE (child));
+          GVariant *choice_variant = ide_tweaks_choice_get_value (IDE_TWEAKS_CHOICE (child));
 
-          if (g_variant_equal (value, target))
+          if (variant && choice_variant && g_variant_equal (variant, choice_variant))
             selected = i;
 
           g_list_store_append (store, child);
@@ -90,11 +101,10 @@ ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
     }
 
   row = g_object_new (IDE_TYPE_TWEAKS_COMBO_ROW,
-                      "model", store,
-                      "settings", settings,
-                      "key", self->key,
                       "title", self->title,
                       "subtitle", self->subtitle,
+                      "binding", binding,
+                      "model", store,
                       "selected", selected > -1 ? selected : 0,
                       NULL);
 
@@ -113,7 +123,6 @@ ide_tweaks_combo_dispose (GObject *object)
 {
   IdeTweaksCombo *self = (IdeTweaksCombo *)object;
 
-  g_clear_object (&self->settings);
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->subtitle, g_free);
 
@@ -130,20 +139,12 @@ ide_tweaks_combo_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_SETTINGS:
-      g_value_set_object (value, ide_tweaks_combo_get_settings (self));
-      break;
-
     case PROP_TITLE:
       g_value_set_string (value, ide_tweaks_combo_get_title (self));
       break;
 
     case PROP_SUBTITLE:
       g_value_set_string (value, ide_tweaks_combo_get_subtitle (self));
-      break;
-
-    case PROP_KEY:
-      g_value_set_string (value, ide_tweaks_combo_get_key (self));
       break;
 
     default:
@@ -161,20 +162,12 @@ ide_tweaks_combo_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_SETTINGS:
-      ide_tweaks_combo_set_settings (self, g_value_get_object (value));
-      break;
-
     case PROP_TITLE:
       ide_tweaks_combo_set_title (self, g_value_get_string (value));
       break;
 
     case PROP_SUBTITLE:
       ide_tweaks_combo_set_subtitle (self, g_value_get_string (value));
-      break;
-
-    case PROP_KEY:
-      ide_tweaks_combo_set_key (self, g_value_get_string (value));
       break;
 
     default:
@@ -196,16 +189,6 @@ ide_tweaks_combo_class_init (IdeTweaksComboClass *klass)
   item_class->accepts = ide_tweaks_combo_accepts;
 
   widget_class->create_for_item = ide_tweaks_combo_create_for_item;
-
-  properties[PROP_SETTINGS] =
-    g_param_spec_object ("settings", NULL, NULL,
-                         IDE_TYPE_TWEAKS_SETTINGS,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties[PROP_KEY] =
-    g_param_spec_string ("key", NULL, NULL,
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
@@ -265,49 +248,4 @@ ide_tweaks_combo_set_subtitle (IdeTweaksCombo *self,
 
   if (ide_set_string (&self->subtitle, subtitle))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SUBTITLE]);
-}
-
-const char *
-ide_tweaks_combo_get_key (IdeTweaksCombo *self)
-{
-  g_return_val_if_fail (IDE_IS_TWEAKS_COMBO (self), NULL);
-
-  return self->key;
-}
-
-void
-ide_tweaks_combo_set_key (IdeTweaksCombo *self,
-                          const char     *key)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_COMBO (self));
-
-  if (ide_set_string (&self->key, key))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEY]);
-}
-
-/**
- * ide_tweaks_combo_get_settings:
- * @self: a #IdeTweaksCombo
- *
- * Gets the settings for the combo.
- *
- * Returns: (nullable) (transfer none): an #IdeTweaksSettings or %NULL
- */
-IdeTweaksSettings *
-ide_tweaks_combo_get_settings (IdeTweaksCombo *self)
-{
-  g_return_val_if_fail (IDE_IS_TWEAKS_COMBO (self), NULL);
-
-  return self->settings;
-}
-
-void
-ide_tweaks_combo_set_settings (IdeTweaksCombo    *self,
-                               IdeTweaksSettings *settings)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_COMBO (self));
-  g_return_if_fail (!settings || IDE_IS_TWEAKS_SETTINGS (settings));
-
-  if (g_set_object (&self->settings, settings))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTINGS]);
 }

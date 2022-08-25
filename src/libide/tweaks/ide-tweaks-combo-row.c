@@ -24,44 +24,115 @@
 
 #include <libide-core.h>
 
+#include "ide-tweaks-binding.h"
 #include "ide-tweaks-choice.h"
 #include "ide-tweaks-combo-row.h"
-#include "ide-tweaks-settings.h"
+#include "ide-tweaks-variant.h"
+
+#include "gsettings-mapping.h"
 
 struct _IdeTweaksComboRow
 {
-  AdwComboRow parent_instance;
-  IdeSettings *settings;
-  char *key;
+  AdwComboRow       parent_instance;
+  IdeTweaksBinding *binding;
+  guint             selecting_item : 1;
 };
 
 G_DEFINE_FINAL_TYPE (IdeTweaksComboRow, ide_tweaks_combo_row, ADW_TYPE_COMBO_ROW)
 
 enum {
   PROP_0,
-  PROP_KEY,
-  PROP_SETTINGS,
+  PROP_BINDING,
   N_PROPS
 };
 
 static GParamSpec *properties[N_PROPS];
 
 static void
-ide_tweaks_combo_row_notify_selected_item (IdeTweaksComboRow *self,
-                                           GParamSpec        *pspec)
+ide_tweaks_combo_row_notify_selected (IdeTweaksComboRow *self,
+                                      GParamSpec        *pspec)
 {
   IdeTweaksChoice *choice;
 
   g_assert (IDE_IS_TWEAKS_COMBO_ROW (self));
-  g_assert (self->settings != NULL);
-  g_assert (self->key != NULL);
+
+  if (self->binding == NULL || self->selecting_item)
+    return;
+
+  self->selecting_item = TRUE;
 
   if ((choice = adw_combo_row_get_selected_item (ADW_COMBO_ROW (self))))
     {
-      GVariant *action_target = ide_tweaks_choice_get_value (choice);
+      GVariant *variant = ide_tweaks_choice_get_value (choice);
+      GType type;
 
-      ide_settings_set_value (self->settings, self->key, action_target);
+      if (ide_tweaks_binding_get_expected_type (self->binding, &type))
+        {
+          g_auto(GValue) value = G_VALUE_INIT;
+
+          g_value_init (&value, type);
+
+          if (g_settings_get_mapping (&value, variant, NULL))
+            {
+              ide_tweaks_binding_set_value (self->binding, &value);
+              goto cleanup;
+            }
+        }
     }
+
+  g_warning ("Failed to update choice!");
+
+cleanup:
+  self->selecting_item = FALSE;
+}
+
+static void
+ide_tweaks_combo_row_binding_changed_cb (IdeTweaksComboRow *self,
+                                         IdeTweaksBinding  *binding)
+{
+  g_autoptr(GVariant) variant = NULL;
+  g_auto(GValue) value = G_VALUE_INIT;
+  const GVariantType *expected_type;
+  GListModel *model;
+  GType type;
+  guint n_items;
+  int selected = -1;
+
+  g_assert (IDE_IS_TWEAKS_COMBO_ROW (self));
+  g_assert (IDE_IS_TWEAKS_BINDING (binding));
+
+  if (self->selecting_item)
+    return;
+
+  model = adw_combo_row_get_model (ADW_COMBO_ROW (self));
+  n_items = g_list_model_get_n_items (model);
+
+  if (n_items == 0)
+    return;
+
+  if (!ide_tweaks_binding_get_expected_type (binding, &type))
+    return;
+
+  expected_type = _ide_tweaks_gtype_to_variant_type (type);
+
+  g_value_init (&value, type);
+  if (ide_tweaks_binding_get_value (binding, &value))
+    variant = g_settings_set_mapping (&value, expected_type, NULL);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeTweaksChoice) choice = g_list_model_get_item (model, i);
+      GVariant *choice_variant = ide_tweaks_choice_get_value (choice);
+
+      if (variant && choice_variant && g_variant_equal (variant, choice_variant))
+        {
+          selected = i;
+          break;
+        }
+    }
+
+  if (selected > -1)
+    adw_combo_row_set_selected (ADW_COMBO_ROW (self), selected);
 }
 
 static void
@@ -72,9 +143,16 @@ ide_tweaks_combo_row_constructed (GObject *object)
   G_OBJECT_CLASS (ide_tweaks_combo_row_parent_class)->constructed (object);
 
   g_signal_connect (self,
-                    "notify::selected-item",
-                    G_CALLBACK (ide_tweaks_combo_row_notify_selected_item),
+                    "notify::selected",
+                    G_CALLBACK (ide_tweaks_combo_row_notify_selected),
                     NULL);
+
+  if (self->binding)
+    g_signal_connect_object (self->binding,
+                             "changed",
+                             G_CALLBACK (ide_tweaks_combo_row_binding_changed_cb),
+                             self,
+                             G_CONNECT_SWAPPED);
 }
 
 static void
@@ -82,8 +160,7 @@ ide_tweaks_combo_row_dispose (GObject *object)
 {
   IdeTweaksComboRow *self = (IdeTweaksComboRow *)object;
 
-  g_clear_object (&self->settings);
-  g_clear_pointer (&self->key, g_free);
+  g_clear_object (&self->binding);
 
   G_OBJECT_CLASS (ide_tweaks_combo_row_parent_class)->dispose (object);
 }
@@ -98,12 +175,8 @@ ide_tweaks_combo_row_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_KEY:
-      g_value_set_string (value, self->key);
-      break;
-
-    case PROP_SETTINGS:
-      g_value_set_object (value, self->settings);
+    case PROP_BINDING:
+      g_value_set_object (value, self->binding);
       break;
 
     default:
@@ -121,14 +194,8 @@ ide_tweaks_combo_row_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_KEY:
-      if (ide_set_string (&self->key, g_value_get_string (value)))
-        g_object_notify_by_pspec (object, pspec);
-      break;
-
-    case PROP_SETTINGS:
-      if (g_set_object (&self->settings, g_value_get_object (value)))
-        g_object_notify_by_pspec (object, pspec);
+    case PROP_BINDING:
+      self->binding = g_value_dup_object (value);
       break;
 
     default:
@@ -147,14 +214,9 @@ ide_tweaks_combo_row_class_init (IdeTweaksComboRowClass *klass)
   object_class->get_property = ide_tweaks_combo_row_get_property;
   object_class->set_property = ide_tweaks_combo_row_set_property;
 
-  properties[PROP_KEY] =
-    g_param_spec_string ("key", NULL, NULL,
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
-
-  properties[PROP_SETTINGS] =
-    g_param_spec_object ("settings", NULL, NULL,
-                         IDE_TYPE_SETTINGS,
+  properties [PROP_BINDING] =
+    g_param_spec_object ("binding", NULL, NULL,
+                         IDE_TYPE_TWEAKS_BINDING,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
