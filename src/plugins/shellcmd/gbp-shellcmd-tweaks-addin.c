@@ -44,6 +44,7 @@ row_activated_cb (GbpShellcmdTweaksAddin *self,
   g_autoptr(GbpShellcmdRunCommand) new_command = NULL;
   GbpShellcmdCommandDialog *dialog;
   GbpShellcmdRunCommand *command;
+  IdeContext *context;
   GtkRoot *root;
 
   g_assert (GBP_IS_SHELLCMD_TWEAKS_ADDIN (self));
@@ -51,9 +52,13 @@ row_activated_cb (GbpShellcmdTweaksAddin *self,
   g_assert (GTK_IS_LIST_BOX (list));
 
   command = g_object_get_data (G_OBJECT (row), "COMMAND");
+  context = g_object_get_data (G_OBJECT (row), "CONTEXT");
+
+  g_assert (!command || GBP_IS_SHELLCMD_RUN_COMMAND (command));
+  g_assert (!context || IDE_IS_CONTEXT (context));
 
   if (command == NULL)
-    command = new_command = gbp_shellcmd_run_command_create (NULL);
+    command = new_command = gbp_shellcmd_run_command_create (context);
 
   dialog = gbp_shellcmd_command_dialog_new (command, !!new_command);
   root = gtk_widget_get_root (GTK_WIDGET (row));
@@ -68,8 +73,10 @@ create_creation_row_cb (GbpShellcmdTweaksAddin *self,
                         IdeTweaksWidget        *widget,
                         IdeTweaksWidget        *instance)
 {
+  IdeTweaksItem *root;
   AdwActionRow *row;
   GtkListBox *list;
+  IdeContext *context = NULL;
   GtkLabel *caption;
   GtkImage *image;
   GtkBox *box;
@@ -77,6 +84,9 @@ create_creation_row_cb (GbpShellcmdTweaksAddin *self,
   g_assert (GBP_IS_SHELLCMD_TWEAKS_ADDIN (self));
   g_assert (IDE_IS_TWEAKS_WIDGET (widget));
   g_assert (IDE_IS_TWEAKS_WIDGET (instance));
+
+  if ((root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (widget))) && IDE_IS_TWEAKS (root))
+    context = ide_tweaks_get_context (IDE_TWEAKS (root));
 
   box = g_object_new (GTK_TYPE_BOX,
                       "orientation", GTK_ORIENTATION_VERTICAL,
@@ -91,6 +101,11 @@ create_creation_row_cb (GbpShellcmdTweaksAddin *self,
                       "title", _("Create Command"),
                       "subtitle", _("Commands can be used to build, run, or modify your projects"),
                       NULL);
+  if (context != NULL)
+    g_object_set_data_full (G_OBJECT (row),
+                            "CONTEXT",
+                            g_object_ref (context),
+                            g_object_unref);
   image = g_object_new (GTK_TYPE_IMAGE,
                         "icon-name", "go-next-symbolic",
                         NULL);
@@ -98,7 +113,8 @@ create_creation_row_cb (GbpShellcmdTweaksAddin *self,
   gtk_list_box_append (list, GTK_WIDGET (row));
   caption = g_object_new (GTK_TYPE_LABEL,
                           "css-classes", IDE_STRV_INIT ("caption", "dim-label"),
-                          "label", _("These commands are shared across all projects."),
+                          "label", context ? _("These commands are specific to this project.")
+                                           : _("These commands are shared across all projects."),
                           "xalign", .0f,
                           NULL);
   gtk_box_append (box, GTK_WIDGET (list));
@@ -156,13 +172,21 @@ create_command_list_cb (GbpShellcmdTweaksAddin *self,
                         IdeTweaksWidget        *instance)
 {
   g_autoptr(GbpShellcmdCommandModel) model = NULL;
+  IdeTweaksItem *root;
   GtkListBox *list;
+  IdeContext *context;
 
   g_assert (GBP_IS_SHELLCMD_TWEAKS_ADDIN (self));
   g_assert (IDE_IS_TWEAKS_WIDGET (widget));
   g_assert (IDE_IS_TWEAKS_WIDGET (instance));
 
-  model = gbp_shellcmd_command_model_new_for_app ();
+  if ((root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (widget))) &&
+      IDE_IS_TWEAKS (root) &&
+      (context = ide_tweaks_get_context (IDE_TWEAKS (root))))
+    model = gbp_shellcmd_command_model_new_for_project (context);
+  else
+    model = gbp_shellcmd_command_model_new_for_app ();
+
   list = g_object_new (GTK_TYPE_LIST_BOX,
                        "css-classes", IDE_STRV_INIT ("boxed-list"),
                        "selection-mode", GTK_SELECTION_NONE,
