@@ -42,7 +42,6 @@
 # include "ide-tweaks-settings.h"
 # include "ide-tweaks-spin.h"
 # include "ide-tweaks-switch.h"
-# include "ide-tweaks-variable.h"
 # include "ide-tweaks-widget.h"
 # include "ide-tweaks-window.h"
 #undef IDE_TWEAKS_INSIDE

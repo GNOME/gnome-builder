@@ -53,7 +53,6 @@ _ide_tweaks_init (void)
   g_type_ensure (IDE_TYPE_TWEAKS_SETTINGS);
   g_type_ensure (IDE_TYPE_TWEAKS_SPIN);
   g_type_ensure (IDE_TYPE_TWEAKS_SWITCH);
-  g_type_ensure (IDE_TYPE_TWEAKS_VARIABLE);
   g_type_ensure (IDE_TYPE_TWEAKS_WIDGET);
   g_type_ensure (IDE_TYPE_TWEAKS_WINDOW);
 }
