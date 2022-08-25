@@ -24,7 +24,7 @@
                         <property name="subtitle" translatable="yes">The default cargo command to run with rust-analyzer</property>
                         <property name="binding">
                           <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.rust.analyzer</property>
+                            <property name="schema-id">org.gnome.builder.rust-analyzer</property>
                             <property name="schema-key">cargo-command</property>
                           </object>
                         </property>
