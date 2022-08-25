@@ -42,6 +42,30 @@ G_DEFINE_FINAL_TYPE (IdeTweaksEntry, ide_tweaks_entry, IDE_TYPE_TWEAKS_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 
+static gboolean
+get_transform (const GValue *from_value,
+               GValue       *to_value,
+               gpointer      user_data)
+{
+  if (g_value_get_string (from_value) == NULL)
+    g_value_set_static_string (to_value, "");
+  else
+    g_value_copy (from_value, to_value);
+
+  return TRUE;
+}
+
+static gboolean
+set_transform (const GValue *from_value,
+               GValue       *to_value,
+               gpointer      user_data)
+{
+  if (!ide_str_empty0 (g_value_get_string (from_value)))
+    g_value_copy (from_value, to_value);
+
+  return TRUE;
+}
+
 static GtkWidget *
 ide_tweaks_entry_create_for_item (IdeTweaksWidget *widget,
                                   IdeTweaksItem   *item)
@@ -58,7 +82,9 @@ ide_tweaks_entry_create_for_item (IdeTweaksWidget *widget,
                       NULL);
 
   if ((binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (info))))
-    ide_tweaks_binding_bind (binding, row, "text");
+    ide_tweaks_binding_bind_with_transform (binding, row, "text",
+                                            get_transform, set_transform,
+                                            NULL, NULL);
 
   return GTK_WIDGET (row);
 }
