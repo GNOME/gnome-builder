@@ -3,7 +3,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-07-22 06:50+0000\n"
 "Last-Translator: Нанба Наала <naala-nanba@rambler.ru>\n"
-"Language-Team: Abkhazian <ab@li.org>\n"
+"Language-Team: Abkhazian <daniel.abzakh@gmail.com>\n"
 "Language: ab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -438,7 +438,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 msgid "Enabled"
-msgstr ""
+msgstr "Иаҿакуп"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
 msgid "If the type within the extension is enabled."
@@ -462,7 +462,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:20
 msgid "Style Variant"
-msgstr ""
+msgstr "Астиль авариант"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
 msgid ""
@@ -1230,7 +1230,7 @@ msgstr ""
 
 #: src/libide/gtk/ide-gtk.c:457
 msgid "Yesterday"
-msgstr ""
+msgstr "Иацы"
 
 #: src/libide/gtk/ide-gtk.c:463
 msgid "About a year ago"
@@ -1821,7 +1821,7 @@ msgstr ""
 #: src/libide/gui/ide-preferences-builtin.c:676
 #: src/plugins/buildui/gtk/menus.ui:146
 msgid "Appearance"
-msgstr ""
+msgstr "Аԥшра"
 
 #: src/libide/gui/ide-preferences-builtin.c:119
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:40
@@ -1981,7 +1981,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:186
 msgid "Always"
-msgstr ""
+msgstr "Еснагь"
 
 #: src/libide/gui/ide-preferences-builtin.c:188
 msgid "Line Information"
@@ -2106,7 +2106,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:219
 msgid "Code Insight"
-msgstr ""
+msgstr "Акод анализ"
 
 #: src/libide/gui/ide-preferences-builtin.c:221
 #: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:35
@@ -2665,7 +2665,7 @@ msgstr ""
 
 #: src/libide/sourceview/gtk/menus.ui:30
 msgid "All _Upper Case"
-msgstr ""
+msgstr "Хыхьтәи_арегистр ахь"
 
 #: src/libide/sourceview/gtk/menus.ui:36
 msgid "All _Lower Case"
@@ -2800,7 +2800,7 @@ msgstr ""
 
 #: src/libide/vcs/ide-directory-vcs.c:57
 msgid "unversioned"
-msgstr ""
+msgstr "версиада"
 
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
@@ -3142,7 +3142,7 @@ msgstr ""
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
 msgid "Branch"
-msgstr ""
+msgstr "Амахә"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:60
 msgid "Build Profile"
@@ -3484,7 +3484,7 @@ msgstr ""
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
-msgstr ""
+msgstr "ихьӡыдоу"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
@@ -3606,7 +3606,7 @@ msgstr ""
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:706
 msgid "All files"
-msgstr ""
+msgstr "Афаилқәа зегьы"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:710
 msgid "All supported palettes formats"
@@ -3654,11 +3654,11 @@ msgstr ""
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
 msgid "RGB unit"
-msgstr ""
+msgstr "Аидкыла RGB"
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
 msgid "The unit used by RGB component and strings."
-msgstr ""
+msgstr "Аидкыла, ацәаҳәақәеи RGB ахәҭеи ахархәара азызуа."
 
 #: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
 msgid "Selected palette ID"
@@ -3918,11 +3918,11 @@ msgstr ""
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
 msgid "Achromatopsia (monochromacy)"
-msgstr ""
+msgstr "Ахроматопсиа (аԥштәы агәынкылара ацәыӡра)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
 msgid "Achromatomaly (blue cone monochromacy)"
-msgstr ""
+msgstr "Ахроматомалиа (аԥштәы агәынкылара ацәыӡра ииаҵәоу аколбахәыҷқәа рыла)"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
 msgid "Deuteranopia (green-blind)"
@@ -4216,7 +4216,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
 msgid "Library"
-msgstr ""
+msgstr "Абиблиотека"
 
 #: src/plugins/debuggerui/ide-debugger-libraries-view.ui:26
 msgid "Address Range"
@@ -4252,7 +4252,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:82
 msgid "Arguments"
-msgstr ""
+msgstr "Аҵаҵӷәқәа"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:106
 msgid "Binary"
@@ -4264,7 +4264,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
 msgid "Libraries"
-msgstr ""
+msgstr "Абиблиотекақәа"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:261
 msgid "Registers"
@@ -5106,7 +5106,7 @@ msgstr ""
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 msgid "Boxes"
-msgstr "Boxes"
+msgstr "Абоксқәа"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
 msgid "A GNOME application to access remote or virtual systems"
@@ -5653,7 +5653,7 @@ msgstr ""
 
 #: src/plugins/sysprof/gbp-sysprof-workspace-addin.c:125
 msgid "All Files"
-msgstr ""
+msgstr "Афаилқәа зегьы"
 
 #: src/plugins/sysprof/gtk/menus.ui:8
 msgctxt "menu label"
@@ -5981,7 +5981,7 @@ msgstr ""
 
 #: src/plugins/todo/gbp-todo-workspace-addin.c:139
 msgid "TODO/FIXMEs"
-msgstr ""
+msgstr "TODO/FIXME"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
@@ -6071,7 +6071,7 @@ msgstr ""
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:56
 msgid "Branches"
-msgstr ""
+msgstr "Амахәқәа"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:137
 msgid ""
