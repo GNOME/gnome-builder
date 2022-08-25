@@ -56,8 +56,17 @@
                               <object class="IdeTweaksCombo" id="insert_spaces_instead_of_tabs">
                                 <property name="title" translatable="yes">Tab Character</property>
                                 <property name="subtitle" translatable="yes">The character to be inserted for Tab</property>
-                                <property name="settings">language_page_settings</property>
-                                <property name="key">insert-spaces-instead-of-tabs</property>
+                                <property name="binding">
+                                  <object class="IdeTweaksSetting">
+                                    <property name="schema-id">org.gnome.builder.editor.language</property>
+                                    <property name="schema-key">insert-spaces-instead-of-tabs</property>
+                                    <binding name="path-suffix">
+                                      <lookup name="id" type="GtkSourceLanguage">
+                                        <lookup name="item">language_page_factory</lookup>
+                                      </lookup>
+                                    </binding>
+                                  </object>
+                                </property>
                                 <child>
                                   <object class="IdeTweaksChoice" id="tab_choice">
                                     <property name="title" translatable="yes">Tab</property>

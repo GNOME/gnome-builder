@@ -65,8 +65,12 @@
                       <object class="IdeTweaksCombo">
                         <property name="title" translatable="yes">Leak Check</property>
                         <property name="subtitle" translatable="yes">Search for memory leaks at exit</property>
-                        <property name="settings">settings_org_gnome_builder_valgrind</property>
-                        <property name="key">leak-check</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.valgrind</property>
+                            <property name="schema-key">leak-check</property>
+                          </object>
+                        </property>
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title">No</property>

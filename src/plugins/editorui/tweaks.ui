@@ -85,8 +85,12 @@
                           <object class="IdeTweaksCombo">
                             <property name="title" translatable="yes">Wrap Text</property>
                             <property name="subtitle" translatable="yes">How text should be wrapped when wider than the frame</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">wrap-text</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">wrap-text</property>
+                              </object>
+                            </property>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Never</property>
@@ -115,8 +119,12 @@
                           <object class="IdeTweaksCombo" id="editor_grid_lines">
                             <property name="title" translatable="yes">Background Pattern</property>
                             <property name="subtitle" translatable="yes">Show a background pattern underneath source code</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">show-grid-lines</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">show-grid-lines</property>
+                              </object>
+                            </property>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">No Pattern</property>
@@ -140,8 +148,12 @@
                           <object class="IdeTweaksCombo" id="editor_map">
                             <property name="title" translatable="yes">Source Code Overview</property>
                             <property name="subtitle" translatable="yes">Display an overview of source code next to the editor</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">map-policy</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">map-policy</property>
+                              </object>
+                            </property>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Prefer Scrollbars</property>
@@ -309,8 +321,12 @@
                           <object class="IdeTweaksCombo" id="shortcut_theme_combo">
                             <property name="title" translatable="yes">Keyboard Theme</property>
                             <property name="subtitle" translatable="yes">Shortcut themes provide a keyboard experience similar to other IDEs and editors</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">keybindings</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">keybindings</property>
+                              </object>
+                            </property>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Builder</property>
@@ -335,8 +351,12 @@
                           <object class="IdeTweaksCombo" id="smart_home_end">
                             <property name="title" translatable="yes">Smart Home/End</property>
                             <property name="subtitle" translatable="yes">Navigate to non-space characters</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">smart-home-end</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">smart-home-end</property>
+                              </object>
+                            </property>
                             <child>
                               <object class="IdeTweaksChoice">
                                 <property name="title" translatable="yes">Before line boundaries</property>

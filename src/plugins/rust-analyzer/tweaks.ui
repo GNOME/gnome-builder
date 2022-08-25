@@ -22,8 +22,12 @@
                       <object class="IdeTweaksCombo" id="rust_analyzer_clippy_combo">
                         <property name="title" translatable="yes">Cargo Command</property>
                         <property name="subtitle" translatable="yes">The default cargo command to run with rust-analyzer</property>
-                        <property name="settings">settings_org_gnome_builder_rust_analyzer</property>
-                        <property name="key">cargo-command</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.rust.analyzer</property>
+                            <property name="schema-key">cargo-command</property>
+                          </object>
+                        </property>
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title">check</property>

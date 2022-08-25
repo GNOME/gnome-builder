@@ -41,8 +41,12 @@
                   <object class="IdeTweaksCombo">
                     <property name="title" translatable="yes">License</property>
                     <property name="subtitle" translatable="yes">The default license when creating new projects</property>
-                    <property name="settings">settings_org_gnome_builder</property>
-                    <property name="key">default-license</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder</property>
+                        <property name="schema-key">default-license</property>
+                      </object>
+                    </property>
                     <child>
                       <object class="IdeTweaksChoice">
                         <property name="title">AGPL-3.0-or-later</property>

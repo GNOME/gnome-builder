@@ -36,8 +36,12 @@
                       <object class="IdeTweaksCombo">
                         <property name="title" translatable="yes">CPU Governor</property>
                         <property name="subtitle" translatable="yes">Force performance mode while profiling</property>
-                        <property name="settings">settings_org_gnome_builder_sysprof</property>
-                        <property name="key">allow-throttle</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">allow-throttle</property>
+                          </object>
+                        </property>
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title" translatable="yes">Don't Change Governor</property>

@@ -43,8 +43,12 @@
                       <object class="IdeTweaksCombo">
                         <property name="title" translatable="yes">Build Parallelism</property>
                         <property name="subtitle" translatable="yes">Number of workers to use when performing builds</property>
-                        <property name="settings">settings_org_gnome_builder_build</property>
-                        <property name="key">parallel</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.build</property>
+                            <property name="schema-key">parallel</property>
+                          </object>
+                        </property>
                         <child>
                           <object class="IdeTweaksChoice">
                             <property name="title" translatable="yes">Default</property>
