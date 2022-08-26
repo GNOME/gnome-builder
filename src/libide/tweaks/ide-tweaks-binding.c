@@ -438,3 +438,16 @@ ide_tweaks_binding_set_variant (IdeTweaksBinding *self,
 
   ide_tweaks_binding_set_value (self, &value);
 }
+
+void
+ide_tweaks_binding_set_string (IdeTweaksBinding *self,
+                               const char       *string)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+
+  g_return_if_fail (IDE_IS_TWEAKS_BINDING (self));
+
+  g_value_init (&value, G_TYPE_STRING);
+  g_value_set_static_string (&value, string);
+  ide_tweaks_binding_set_value (self, &value);
+}
