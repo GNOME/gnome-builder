@@ -594,6 +594,8 @@ ide_tweaks_window_class_init (IdeTweaksWindowClass *klass)
 
   gtk_widget_class_install_action (widget_class, "navigation.back", NULL, ide_tweaks_window_navigate_back_action);
 
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_w, GDK_CONTROL_MASK, "window.close", NULL);
+
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL);
   g_type_ensure (IDE_TYPE_TWEAKS_PANEL_LIST);
 }
