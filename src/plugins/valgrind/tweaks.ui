@@ -22,28 +22,48 @@
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Definite</property>
                         <property name="subtitle" translatable="yes">Include definite leaks in report summary</property>
-                        <property name="action-name">settings.org.gnome.builder.valgrind.leak-kind-definite</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.valgrind</property>
+                            <property name="schema-key">leak-kind-definite</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Possible</property>
                         <property name="subtitle" translatable="yes">Include possible leaks in report summary</property>
-                        <property name="action-name">settings.org.gnome.builder.valgrind.leak-kind-possible</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.valgrind</property>
+                            <property name="schema-key">leak-kind-possible</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Indirect</property>
                         <property name="subtitle" translatable="yes">Include indirect leaks in report summary</property>
-                        <property name="action-name">settings.org.gnome.builder.valgrind.leak-kind-indirect</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.valgrind</property>
+                            <property name="schema-key">leak-kind-indirect</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Reachable</property>
                         <property name="subtitle" translatable="yes">Include reachable leaks in report summary</property>
-                        <property name="action-name">settings.org.gnome.builder.valgrind.leak-kind-reachable</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.valgrind</property>
+                            <property name="schema-key">leak-kind-reachable</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>

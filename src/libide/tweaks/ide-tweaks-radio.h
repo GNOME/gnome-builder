@@ -42,11 +42,6 @@ IDE_AVAILABLE_IN_ALL
 void            ide_tweaks_radio_set_subtitle    (IdeTweaksRadio *self,
                                                   const char     *subtitle);
 IDE_AVAILABLE_IN_ALL
-const char     *ide_tweaks_radio_get_action_name (IdeTweaksRadio *self);
-IDE_AVAILABLE_IN_ALL
-void            ide_tweaks_radio_set_action_name (IdeTweaksRadio *self,
-                                                  const char     *action_name);
-IDE_AVAILABLE_IN_ALL
 GVariant       *ide_tweaks_radio_get_value       (IdeTweaksRadio *self);
 IDE_AVAILABLE_IN_ALL
 void            ide_tweaks_radio_set_value       (IdeTweaksRadio *self,

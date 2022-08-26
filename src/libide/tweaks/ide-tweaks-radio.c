@@ -26,12 +26,13 @@
 
 #include "ide-tweaks-radio.h"
 
+#include "gsettings-mapping.h"
+
 struct _IdeTweaksRadio
 {
   IdeTweaksWidget parent_instance;
   char *title;
   char *subtitle;
-  char *action_name;
   GVariant *value;
 };
 
@@ -39,7 +40,6 @@ enum {
   PROP_0,
   PROP_TITLE,
   PROP_SUBTITLE,
-  PROP_ACTION_NAME,
   PROP_VALUE,
   N_PROPS
 };
@@ -48,22 +48,92 @@ G_DEFINE_FINAL_TYPE (IdeTweaksRadio, ide_tweaks_radio, IDE_TYPE_TWEAKS_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 
+static void
+ide_tweaks_radio_notify_active_cb (GtkCheckButton   *button,
+                                   GParamSpec       *pspec,
+                                   IdeTweaksBinding *binding)
+{
+  GVariant *value;
+
+  g_assert (GTK_IS_CHECK_BUTTON (button));
+  g_assert (IDE_IS_TWEAKS_BINDING (binding));
+
+  value = g_object_get_data (G_OBJECT (button), "VALUE");
+
+  if (gtk_check_button_get_active (button))
+    ide_tweaks_binding_set_variant (binding, value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_BOOLEAN) &&
+           g_variant_get_boolean (value))
+    ide_tweaks_binding_set_variant (binding, g_variant_new_boolean (FALSE));
+}
+
+static void
+on_binding_changed_cb (GtkCheckButton   *button,
+                       IdeTweaksBinding *binding)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+  const GVariantType *variant_type;
+  GVariant *variant;
+  GVariant *to_compare;
+  gboolean active;
+  GType type;
+
+  g_assert (GTK_IS_CHECK_BUTTON (button));
+  g_assert (IDE_IS_TWEAKS_BINDING (binding));
+
+  if (!ide_tweaks_binding_get_expected_type (binding, &type))
+    return;
+
+  g_value_init (&value, type);
+  if (!ide_tweaks_binding_get_value (binding, &value))
+    return;
+
+  if (!(variant = g_object_get_data (G_OBJECT (button), "VALUE")))
+    return;
+
+  variant_type = g_variant_get_type (variant);
+  if (!(to_compare = g_settings_set_mapping (&value, variant_type, NULL)))
+    return;
+
+  active = g_variant_equal (variant, to_compare);
+
+  if (active != gtk_check_button_get_active (button))
+    gtk_check_button_set_active (button, active);
+}
+
 static GtkWidget *
 ide_tweaks_radio_create_for_item (IdeTweaksWidget *instance,
                                   IdeTweaksItem   *widget)
 {
   IdeTweaksRadio *self = (IdeTweaksRadio *)widget;
+  IdeTweaksBinding *binding;
   AdwActionRow *row;
   GtkWidget *radio;
 
   g_assert (IDE_IS_TWEAKS_RADIO (self));
 
+  if (!(binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (self))))
+    return NULL;
+
   radio = g_object_new (GTK_TYPE_CHECK_BUTTON,
-                        "action-name", self->action_name,
-                        "action-target", self->value,
                         "can-target", FALSE,
                         "valign", GTK_ALIGN_CENTER,
                         NULL);
+  if (self->value)
+    g_object_set_data_full (G_OBJECT (radio),
+                            "VALUE",
+                            g_variant_ref (self->value),
+                            (GDestroyNotify)g_variant_unref);
+  else
+    g_object_set_data_full (G_OBJECT (radio),
+                            "VALUE",
+                            g_variant_ref_sink (g_variant_new_boolean (TRUE)),
+                            (GDestroyNotify)g_variant_unref);
+  g_signal_connect_object (radio,
+                           "notify::active",
+                           G_CALLBACK (ide_tweaks_radio_notify_active_cb),
+                           binding,
+                           0);
   gtk_widget_add_css_class (radio, "checkimage");
 
   row = g_object_new (ADW_TYPE_ACTION_ROW,
@@ -72,6 +142,14 @@ ide_tweaks_radio_create_for_item (IdeTweaksWidget *instance,
                       "activatable-widget", radio,
                       NULL);
   adw_action_row_add_suffix (row, radio);
+
+  g_signal_connect_object (binding,
+                           "changed",
+                           G_CALLBACK (on_binding_changed_cb),
+                           radio,
+                           G_CONNECT_SWAPPED);
+
+  on_binding_changed_cb (GTK_CHECK_BUTTON (radio), binding);
 
   return GTK_WIDGET (row);
 }
@@ -83,7 +161,6 @@ ide_tweaks_radio_dispose (GObject *object)
 
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->subtitle, g_free);
-  g_clear_pointer (&self->action_name, g_free);
   g_clear_pointer (&self->value, g_variant_unref);
 
   G_OBJECT_CLASS (ide_tweaks_radio_parent_class)->dispose (object);
@@ -99,10 +176,6 @@ ide_tweaks_radio_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ACTION_NAME:
-      g_value_set_string (value, ide_tweaks_radio_get_action_name (self));
-      break;
-
     case PROP_VALUE:
       g_value_set_variant (value, ide_tweaks_radio_get_value (self));
       break;
@@ -130,10 +203,6 @@ ide_tweaks_radio_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACTION_NAME:
-      ide_tweaks_radio_set_action_name (self, g_value_get_string (value));
-      break;
-
     case PROP_VALUE:
       ide_tweaks_radio_set_value (self, g_value_get_variant (value));
       break;
@@ -163,11 +232,6 @@ ide_tweaks_radio_class_init (IdeTweaksRadioClass *klass)
 
   widget_class->create_for_item = ide_tweaks_radio_create_for_item;
 
-  properties[PROP_ACTION_NAME] =
-    g_param_spec_string ("action-name", NULL, NULL,
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   properties[PROP_VALUE] =
     g_param_spec_variant ("value", NULL, NULL,
                           G_VARIANT_TYPE_ANY,
@@ -190,14 +254,6 @@ ide_tweaks_radio_class_init (IdeTweaksRadioClass *klass)
 static void
 ide_tweaks_radio_init (IdeTweaksRadio *self)
 {
-}
-
-const char *
-ide_tweaks_radio_get_action_name (IdeTweaksRadio *self)
-{
-  g_return_val_if_fail (IDE_IS_TWEAKS_RADIO (self), NULL);
-
-  return self->action_name;
 }
 
 /**
@@ -228,16 +284,6 @@ ide_tweaks_radio_get_title (IdeTweaksRadio *self)
   g_return_val_if_fail (IDE_IS_TWEAKS_RADIO (self), NULL);
 
   return self->title;
-}
-
-void
-ide_tweaks_radio_set_action_name (IdeTweaksRadio *self,
-                                  const char     *action_name)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_RADIO (self));
-
-  if (ide_set_string (&self->action_name, action_name))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ACTION_NAME]);
 }
 
 void

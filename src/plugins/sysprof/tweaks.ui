@@ -22,14 +22,24 @@
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">CPU Usage</property>
                         <property name="subtitle" translatable="yes">Records CPU usage and CPU frequency statistics</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.cpu-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">cpu-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Sample Callstacks</property>
                         <property name="subtitle" translatable="yes">Record stacktraces on a regular interval and build a callgraph</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.perf-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">perf-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
@@ -64,14 +74,24 @@
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Memory Usage</property>
                         <property name="subtitle" translatable="yes">Simple memory statistics about the process such as total memory used</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.memory-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">memory-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Memory Profiling</property>
                         <property name="subtitle" translatable="yes">Record stacktraces of memory allocations and releases</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.memprof-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">memprof-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>
@@ -82,14 +102,24 @@
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Energy Usage</property>
                         <property name="subtitle" translatable="yes">Record statistics about energy usage using RAPL</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.energy-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">energy-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Battery Usage</property>
                         <property name="subtitle" translatable="yes">Record statistics about battery charge and discharge rates</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.battery-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">battery-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>
@@ -100,14 +130,24 @@
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Network Usage</property>
                         <property name="subtitle" translatable="yes">Record statistics about network usage</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.netdev-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">netdev-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Disk Usage</property>
                         <property name="subtitle" translatable="yes">Record statistics about battery charge and discharge rates</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.diskstat-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">diskstat-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>
@@ -118,7 +158,12 @@
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">GNOME Shell Performance</property>
                         <property name="subtitle" translatable="yes">Collect performance and timing information from GNOME Shell</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.compositor-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">compositor-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>
@@ -130,14 +175,24 @@
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">JavaScript</property>
                         <property name="subtitle" translatable="yes">Collect information from GJS-based applications</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.gjs-aid</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">gjs-aid</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksRadio">
                         <property name="title" translatable="yes">Application Tracing</property>
                         <property name="subtitle" translatable="yes">Provide TRACE_FD environment variable for applications to deliver custom events</property>
-                        <property name="action-name">settings.org.gnome.builder.sysprof.allow-tracefd</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.sysprof</property>
+                            <property name="schema-key">allow-tracefd</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>
