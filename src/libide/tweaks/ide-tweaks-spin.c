@@ -32,16 +32,14 @@
 struct _IdeTweaksSpin
 {
   IdeTweaksWidget parent_instance;
-  IdeTweaksSettings *settings;
-  char *key;
   char *title;
   char *subtitle;
+  guint digits;
 };
 
 enum {
   PROP_0,
-  PROP_KEY,
-  PROP_SETTINGS,
+  PROP_DIGITS,
   PROP_SUBTITLE,
   PROP_TITLE,
   N_PROPS
@@ -51,120 +49,25 @@ G_DEFINE_FINAL_TYPE (IdeTweaksSpin, ide_tweaks_spin, IDE_TYPE_TWEAKS_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 
-static void
-set_double_property (gpointer    instance,
-                     const char *property,
-                     GVariant   *value)
-{
-  GValue val = { 0 };
-  double v = 0;
-
-  g_assert (instance != NULL);
-  g_assert (property != NULL);
-  g_assert (value != NULL);
-
-  if (g_variant_is_of_type (value, G_VARIANT_TYPE_DOUBLE))
-    v = g_variant_get_double (value);
-
-  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT16))
-    v = g_variant_get_int16 (value);
-  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT16))
-    v = g_variant_get_uint16 (value);
-
-  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT32))
-    v = g_variant_get_int32 (value);
-  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT32))
-    v = g_variant_get_uint32 (value);
-
-  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT64))
-    v = g_variant_get_int64 (value);
-  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT64))
-    v = g_variant_get_uint64 (value);
-
-  else
-    g_warning ("Unknown variant type: %s\n", (gchar *)g_variant_get_type (value));
-
-  g_value_init (&val, G_TYPE_DOUBLE);
-  g_value_set_double (&val, v);
-  g_object_set_property (instance, property, &val);
-  g_value_unset (&val);
-}
-
-static GtkAdjustment *
-create_adjustment (const char *schema_id,
-                   const char *key,
-                   guint      *digits)
-{
-  GSettingsSchemaSource *source;
-  GSettingsSchemaKey *schema_key = NULL;
-  GSettingsSchema *schema = NULL;
-  GtkAdjustment *ret = NULL;
-  GVariant *range = NULL;
-  GVariant *values = NULL;
-  GVariant *lower = NULL;
-  GVariant *upper = NULL;
-  GVariantIter iter;
-  char *type = NULL;
-
-  g_assert (schema_id != NULL);
-
-  source = g_settings_schema_source_get_default ();
-  schema = g_settings_schema_source_lookup (source, schema_id, TRUE);
-  schema_key = g_settings_schema_get_key (schema, key);
-  range = g_settings_schema_key_get_range (schema_key);
-  g_variant_get (range, "(sv)", &type, &values);
-
-  if (!ide_str_equal0 (type, "range") ||
-      (2 != g_variant_iter_init (&iter, values)))
-    goto cleanup;
-
-  lower = g_variant_iter_next_value (&iter);
-  upper = g_variant_iter_next_value (&iter);
-
-  ret = gtk_adjustment_new (0, 0, 0, 1, 10, 0);
-  set_double_property (ret, "lower", lower);
-  set_double_property (ret, "upper", upper);
-
-  if (g_variant_is_of_type (lower, G_VARIANT_TYPE_DOUBLE) ||
-      g_variant_is_of_type (upper, G_VARIANT_TYPE_DOUBLE))
-    {
-      gtk_adjustment_set_step_increment (ret, 0.1);
-      *digits = 2;
-    }
-
-cleanup:
-  g_clear_pointer (&schema, g_settings_schema_unref);
-  g_clear_pointer (&schema_key, g_settings_schema_key_unref);
-  g_clear_pointer (&range, g_variant_unref);
-  g_clear_pointer (&lower, g_variant_unref);
-  g_clear_pointer (&upper, g_variant_unref);
-  g_clear_pointer (&values, g_variant_unref);
-  g_clear_pointer (&type, g_free);
-
-  return ret;
-}
-
 static GtkWidget *
 ide_tweaks_spin_create_for_item (IdeTweaksWidget *instance,
                                  IdeTweaksItem   *widget)
 {
   IdeTweaksSpin *self = (IdeTweaksSpin *)widget;
-  GtkAdjustment *adjustment;
+  IdeTweaksBinding *binding;
+  GtkAdjustment *adjustment = NULL;
   GtkSpinButton *button;
-  const char *schema_id;
   AdwActionRow *row;
-  guint digits = 0;
 
   g_assert (IDE_IS_TWEAKS_SPIN (self));
 
-  if (self->settings == NULL || self->key == NULL)
-    return NULL;
+  if ((binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (self))) &&
+      (adjustment = ide_tweaks_binding_create_adjustment (binding)))
+    ide_tweaks_binding_bind (binding, adjustment, "value");
 
-  schema_id = ide_tweaks_settings_get_schema_id (self->settings);
-  adjustment = create_adjustment (schema_id, self->key, &digits);
   button = g_object_new (GTK_TYPE_SPIN_BUTTON,
                          "adjustment", adjustment,
-                         "digits", digits,
+                         "digits", self->digits,
                          "valign", GTK_ALIGN_CENTER,
                          NULL);
   row = g_object_new (ADW_TYPE_ACTION_ROW,
@@ -174,10 +77,6 @@ ide_tweaks_spin_create_for_item (IdeTweaksWidget *instance,
                       NULL);
   adw_action_row_add_suffix (row, GTK_WIDGET (button));
 
-  ide_tweaks_settings_bind (self->settings, self->key,
-                            adjustment, "value",
-                            G_SETTINGS_BIND_DEFAULT);
-
   return GTK_WIDGET (row);
 }
 
@@ -186,10 +85,8 @@ ide_tweaks_spin_dispose (GObject *object)
 {
   IdeTweaksSpin *self = (IdeTweaksSpin *)object;
 
-  g_clear_pointer (&self->key, g_free);
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->subtitle, g_free);
-  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_tweaks_spin_parent_class)->dispose (object);
 }
@@ -204,12 +101,8 @@ ide_tweaks_spin_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_KEY:
-      g_value_set_string (value, ide_tweaks_spin_get_key (self));
-      break;
-
-    case PROP_SETTINGS:
-      g_value_set_object (value, ide_tweaks_spin_get_settings (self));
+    case PROP_DIGITS:
+      g_value_set_uint (value, ide_tweaks_spin_get_digits (self));
       break;
 
     case PROP_SUBTITLE:
@@ -235,12 +128,8 @@ ide_tweaks_spin_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_KEY:
-      ide_tweaks_spin_set_key (self, g_value_get_string (value));
-      break;
-
-    case PROP_SETTINGS:
-      ide_tweaks_spin_set_settings (self, g_value_get_object (value));
+    case PROP_DIGITS:
+      ide_tweaks_spin_set_digits (self, g_value_get_uint (value));
       break;
 
     case PROP_SUBTITLE:
@@ -268,15 +157,10 @@ ide_tweaks_spin_class_init (IdeTweaksSpinClass *klass)
 
   widget_class->create_for_item = ide_tweaks_spin_create_for_item;
 
-  properties[PROP_KEY] =
-    g_param_spec_string ("key", NULL, NULL,
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties[PROP_SETTINGS] =
-    g_param_spec_object ("settings", NULL, NULL,
-                         IDE_TYPE_TWEAKS_SETTINGS,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+  properties[PROP_DIGITS] =
+    g_param_spec_uint ("digits", NULL, NULL,
+                       0, 6, 0,
+                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_SUBTITLE] =
     g_param_spec_string ("subtitle", NULL, NULL,
@@ -296,28 +180,25 @@ ide_tweaks_spin_init (IdeTweaksSpin *self)
 {
 }
 
-/**
- * ide_tweaks_spin_get_settings:
- * @self: a #IdeTweaksSpin
- *
- * Gets the settings containing #IdeTweaksSpin:key.
- *
- * Returns: (transfer none) (nullable): an #IdeTweaksSettings or %NULL
- */
-IdeTweaksSettings *
-ide_tweaks_spin_get_settings (IdeTweaksSpin *self)
+guint
+ide_tweaks_spin_get_digits (IdeTweaksSpin *self)
 {
-  g_return_val_if_fail (IDE_IS_TWEAKS_SPIN (self), NULL);
+  g_return_val_if_fail (IDE_IS_TWEAKS_SPIN (self), 0);
 
-  return self->settings;
+  return self->digits;
 }
 
-const char *
-ide_tweaks_spin_get_key (IdeTweaksSpin *self)
+void
+ide_tweaks_spin_set_digits (IdeTweaksSpin *self,
+                            guint          digits)
 {
-  g_return_val_if_fail (IDE_IS_TWEAKS_SPIN (self), NULL);
+  g_return_if_fail (IDE_IS_TWEAKS_SPIN (self));
 
-  return self->key;
+  if (digits != self->digits)
+    {
+      self->digits = digits;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_DIGITS]);
+    }
 }
 
 const char *
@@ -334,26 +215,6 @@ ide_tweaks_spin_get_title (IdeTweaksSpin *self)
   g_return_val_if_fail (IDE_IS_TWEAKS_SPIN (self), NULL);
 
   return self->title;
-}
-
-void
-ide_tweaks_spin_set_settings (IdeTweaksSpin     *self,
-                              IdeTweaksSettings *settings)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_SPIN (self));
-
-  if (g_set_object (&self->settings, settings))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTINGS]);
-}
-
-void
-ide_tweaks_spin_set_key (IdeTweaksSpin *self,
-                           const char    *key)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_SPIN (self));
-
-  if (ide_set_string (&self->key, key))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEY]);
 }
 
 void

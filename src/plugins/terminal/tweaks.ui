@@ -79,8 +79,12 @@
                   <object class="IdeTweaksSpin">
                     <property name="title" translatable="yes">Maximum Lines in Scrollback</property>
                     <property name="subtitle" translatable="yes">The maximum number of lines stored in history when limiting scrollback</property>
-                    <property name="settings">settings_org_gnome_builder_terminal</property>
-                    <property name="key">scrollback-lines</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.editor.terminal</property>
+                        <property name="schema-key">scrollback-lines</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>

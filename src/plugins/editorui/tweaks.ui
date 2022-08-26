@@ -77,8 +77,13 @@
                           <object class="IdeTweaksSpin" id="editor_line_height">
                             <property name="title" translatable="yes">Line Height</property>
                             <property name="subtitle" translatable="yes">Adjust spacing between lines</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">line-height</property>
+                            <property name="digits">2</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">line-height</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>
@@ -257,8 +262,12 @@
                           <object class="IdeTweaksSpin">
                             <property name="title" translatable="yes">Minimum Characters to Highlight</property>
                             <property name="subtitle" translatable="yes">The minimum selection length before highlighting matches</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">min-char-selected</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">min-char-selected</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>
@@ -306,8 +315,12 @@
                           <object class="IdeTweaksSpin" id="max_completion_rows">
                             <property name="title" translatable="yes">Maximum Completion Proposals</property>
                             <property name="subtitle" translatable="yes">The maximum number of completion rows that will be displayed at once</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">completion-n-rows</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">completion-n-rows</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>
@@ -409,8 +422,12 @@
                           <object class="IdeTweaksSpin">
                             <property name="title" translatable="yes">Auto-Save Delay</property>
                             <property name="subtitle" translatable="yes">The delay in seconds to wait before auto-saving the document</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">auto-save-timeout</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">auto-save-timeout</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>

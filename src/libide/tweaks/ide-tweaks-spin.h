@@ -47,14 +47,9 @@ IDE_AVAILABLE_IN_ALL
 void               ide_tweaks_spin_set_subtitle (IdeTweaksSpin     *self,
                                                  const char        *subtitle);
 IDE_AVAILABLE_IN_ALL
-const char        *ide_tweaks_spin_get_key      (IdeTweaksSpin     *self);
+guint              ide_tweaks_spin_get_digits   (IdeTweaksSpin     *self);
 IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_spin_set_key      (IdeTweaksSpin     *self,
-                                                 const char        *key);
-IDE_AVAILABLE_IN_ALL
-IdeTweaksSettings *ide_tweaks_spin_get_settings (IdeTweaksSpin     *self);
-IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_spin_set_settings (IdeTweaksSpin     *self,
-                                                 IdeTweaksSettings *settings);
+void               ide_tweaks_spin_set_digits   (IdeTweaksSpin     *self,
+                                                 guint              digits);
 
 G_END_DECLS

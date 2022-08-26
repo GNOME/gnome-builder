@@ -110,16 +110,34 @@
                               <object class="IdeTweaksSpin" id="tab_width">
                                 <property name="title" translatable="yes">Tab Size</property>
                                 <property name="subtitle" translatable="yes">The number of characters to indent for Tab</property>
-                                <property name="settings">language_page_settings</property>
-                                <property name="key">tab-width</property>
+                                <property name="binding">
+                                  <object class="IdeTweaksSetting">
+                                    <property name="schema-id">org.gnome.builder.editor.language</property>
+                                    <property name="schema-key">tab-width</property>
+                                    <binding name="path-suffix">
+                                      <lookup name="id" type="GtkSourceLanguage">
+                                        <lookup name="item">language_page_factory</lookup>
+                                      </lookup>
+                                    </binding>
+                                  </object>
+                                </property>
                               </object>
                             </child>
                             <child>
                               <object class="IdeTweaksSpin" id="indent_width">
                                 <property name="title" translatable="yes">Indentation Size</property>
                                 <property name="subtitle" translatable="yes">The number of characters to indent, or -1 to use tab size</property>
-                                <property name="settings">language_page_settings</property>
-                                <property name="key">indent-width</property>
+                                <property name="binding">
+                                  <object class="IdeTweaksSetting">
+                                    <property name="schema-id">org.gnome.builder.editor.language</property>
+                                    <property name="schema-key">indent-width</property>
+                                    <binding name="path-suffix">
+                                      <lookup name="id" type="GtkSourceLanguage">
+                                        <lookup name="item">language_page_factory</lookup>
+                                      </lookup>
+                                    </binding>
+                                  </object>
+                                </property>
                               </object>
                             </child>
                           </object>
@@ -138,8 +156,17 @@
                               <object class="IdeTweaksSpin" id="right_margin_position">
                                 <property name="title" translatable="yes">Right Margin Position</property>
                                 <property name="subtitle" translatable="yes">The desired maximum line length</property>
-                                <property name="settings">language_page_settings</property>
-                                <property name="key">right-margin-position</property>
+                                <property name="binding">
+                                  <object class="IdeTweaksSetting">
+                                    <property name="schema-id">org.gnome.builder.editor.language</property>
+                                    <property name="schema-key">right-margin-position</property>
+                                    <binding name="path-suffix">
+                                      <lookup name="id" type="GtkSourceLanguage">
+                                        <lookup name="item">language_page_factory</lookup>
+                                      </lookup>
+                                    </binding>
+                                  </object>
+                                </property>
                               </object>
                             </child>
                           </object>
