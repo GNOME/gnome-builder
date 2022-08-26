@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-24 03:58+0000\n"
-"PO-Revision-Date: 2022-08-24 11:57+0700\n"
+"POT-Creation-Date: 2022-08-25 20:11+0000\n"
+"PO-Revision-Date: 2022-08-26 09:05+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: src/libide/gui/ide-application-actions.c:115
 #: src/libide/gui/ide-preferences-builtin.c:162
 #: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
-#: src/plugins/editorui/tweaks.ui:316
+#: src/plugins/editorui/tweaks.ui:332
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Builder"
@@ -325,7 +325,7 @@ msgstr "Bila difungsikan, penyunting akan menampilkan nomor baris relatif."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:115
-#: src/plugins/editorui/tweaks.ui:329
+#: src/plugins/editorui/tweaks.ui:345
 msgid "Smart Backspace"
 msgstr "Backspace Cerdas"
 
@@ -338,7 +338,7 @@ msgstr ""
 "Anda."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:336
+#: src/plugins/editorui/tweaks.ui:352
 msgid "Smart Home/End"
 msgstr "Home/End Cerdas"
 
@@ -643,7 +643,7 @@ msgstr ""
 "biasa."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:230
+#: src/plugins/editorui/tweaks.ui:242
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 #: src/plugins/spellcheck/gbp-spell-preferences-addin.c:42
 msgid "Check Spelling"
@@ -726,6 +726,7 @@ msgstr "Tanpa Judul"
 #: src/libide/core/ide-transfer.c:547
 #: src/libide/greeter/ide-greeter-workspace.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:682
+#: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1459
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
@@ -761,7 +762,7 @@ msgstr "Preferensi"
 #: src/libide/gui/ide-preferences-builtin.c:700
 #: src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:303
+#: src/plugins/editorui/tweaks.ui:315
 msgid "Keyboard Shortcuts"
 msgstr "Pintasan Papan Tik"
 
@@ -819,7 +820,7 @@ msgstr "Simpan"
 #: src/libide/editor/ide-editor-page.c:874
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
-#: src/libide/tweaks/ide-tweaks-directory.c:127
+#: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
@@ -1196,7 +1197,7 @@ msgid "Open"
 msgstr "Buka"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
-#: src/libide/tweaks/ide-tweaks-directory.c:128
+#: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
@@ -1245,6 +1246,11 @@ msgstr "Sekitar satu tahun yang lalu"
 msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Sekitar %u tahun yang lalu"
+
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+msgid "_Install"
+msgstr "_Pasang"
 
 #. translators: the first %u is replaced with the current position, the second with the number of search results
 #: src/libide/gtk/ide-search-entry.c:199
@@ -1480,7 +1486,7 @@ msgstr "Home bergerak ke karakter bukan spasi pertama"
 
 #: src/libide/gui/ide-preferences-builtin.c:166
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:116
-#: src/plugins/editorui/tweaks.ui:330
+#: src/plugins/editorui/tweaks.ui:346
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
@@ -1495,7 +1501,7 @@ msgstr ""
 #: src/libide/gui/ide-preferences-builtin.c:707
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
-#: src/plugins/buildui/tweaks.ui:19
+#: src/plugins/buildui/tweaks.ui:19 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
 #: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
 msgid "General"
@@ -1542,7 +1548,7 @@ msgid "Text Wrapping"
 msgstr "Pelipatan Teks"
 
 #: src/libide/gui/ide-preferences-builtin.c:183
-#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:92
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:96
 msgid "Never"
 msgstr "Jangan Pernah"
 
@@ -1621,8 +1627,8 @@ msgstr "Karakter Bukan Spasi Terlihat"
 #: src/libide/gui/ide-preferences-builtin.c:198
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-#: src/plugins/editorui/tweaks-language.ui:69
-#: src/plugins/editorui/tweaks-language.ui:159
+#: src/plugins/editorui/tweaks-language.ui:78
+#: src/plugins/editorui/tweaks-language.ui:168
 msgid "Spaces"
 msgstr "Spasi"
 
@@ -1674,7 +1680,7 @@ msgid "Highlighting"
 msgstr "Penyorotan"
 
 #: src/libide/gui/ide-preferences-builtin.c:217
-#: src/plugins/editorui/tweaks.ui:212
+#: src/plugins/editorui/tweaks.ui:224
 msgid "Semantic Highlighting"
 msgstr "Penyorotan Semantik"
 
@@ -1717,7 +1723,7 @@ msgstr "Penyedia Pelengkapan"
 
 #: src/libide/gui/ide-preferences-builtin.c:237
 #: src/libide/gui/ide-preferences-builtin.c:676
-#: src/plugins/editorui/tweaks.ui:252
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Snippets"
 msgstr "Potongan"
 
@@ -1743,7 +1749,7 @@ msgstr ""
 
 #: src/libide/gui/ide-preferences-builtin.c:352
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-#: src/plugins/editorui/tweaks-language.ui:143
+#: src/plugins/editorui/tweaks-language.ui:152
 msgid "Overwrite Braces"
 msgstr "Timpa Tanda Kurung"
 
@@ -1754,7 +1760,7 @@ msgstr "Timpa tanda kurung penutup"
 
 #: src/libide/gui/ide-preferences-builtin.c:353
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-#: src/plugins/editorui/tweaks-language.ui:150
+#: src/plugins/editorui/tweaks-language.ui:159
 msgid "Insert Matching Brace"
 msgstr "Sisipkan kurung pasangan"
 
@@ -1764,13 +1770,13 @@ msgstr "Sisipkan karakter yang sesuai untuk { [ ( atau \""
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
-#: src/plugins/editorui/tweaks-language.ui:77
+#: src/plugins/editorui/tweaks-language.ui:86
 msgid "Insert Trailing Newline"
 msgstr "Sisipkan Baris Baru di Ekor"
 
 #: src/libide/gui/ide-preferences-builtin.c:354
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
-#: src/plugins/editorui/tweaks-language.ui:78
+#: src/plugins/editorui/tweaks-language.ui:87
 msgid "Ensure files end with a newline"
 msgstr "Pastikan berkas diakhiri dengan baris baru"
 
@@ -1864,7 +1870,7 @@ msgstr "Lebih suka spasi sebelum tanda titik koma"
 
 #: src/libide/gui/ide-preferences-builtin.c:382
 #: src/libide/gui/ide-preferences-builtin.c:400
-#: src/plugins/buildui/tweaks.ui:50
+#: src/plugins/buildui/tweaks.ui:54
 msgid "Default"
 msgstr "Baku"
 
@@ -1972,7 +1978,7 @@ msgstr "Pulihkan berkas yang sebelumnya terbuka ketika memuat sebuah proyek"
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:111
 #: src/plugins/create-project/gbp-create-project-widget.ui:115
 #: src/plugins/git/gbp-git-preferences-addin.c:184
-#: src/plugins/projectui/tweaks.ui:140
+#: src/plugins/projectui/tweaks.ui:148
 msgid "Version Control"
 msgstr "Kendali Versi"
 
@@ -2007,7 +2013,7 @@ msgstr "Perintah"
 
 #: src/libide/gui/ide-preferences-builtin.c:657
 #: src/libide/gui/ide-preferences-builtin.c:684
-#: src/libide/plugins/ide-plugin.c:341
+#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
 msgstr "SDK"
 
@@ -2019,12 +2025,12 @@ msgstr "Pengaya"
 #. Add groups to pages
 #: src/libide/gui/ide-preferences-builtin.c:663
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
-#: src/plugins/projectui/tweaks.ui:96
+#: src/plugins/projectui/tweaks.ui:104
 msgid "Overview"
 msgstr "Ringkasan"
 
 #: src/libide/gui/ide-preferences-builtin.c:664
-#: src/plugins/projectui/tweaks.ui:166
+#: src/plugins/projectui/tweaks.ui:174
 msgid "Configurations"
 msgstr "Konfigurasi"
 
@@ -2099,12 +2105,12 @@ msgid "Additional"
 msgstr "Tambahan"
 
 #: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks-language.ui:140
-#: src/plugins/editorui/tweaks.ui:223
+#: src/plugins/editorui/tweaks-language.ui:149
+#: src/plugins/editorui/tweaks.ui:235
 msgid "Behavior"
 msgstr "Perilaku"
 
-#: src/libide/gui/ide-preferences-builtin.c:709
+#: src/libide/gui/ide-preferences-builtin.c:709 src/plugins/sdkui/tweaks.ui:12
 msgid "Downloads"
 msgstr "Unduhan"
 
@@ -2132,12 +2138,12 @@ msgstr "Kembalikan Sesi Sebelumnya"
 
 #: src/libide/gui/ide-preferences-builtin.c:735
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
-#: src/plugins/projectui/tweaks.ui:38
+#: src/plugins/projectui/tweaks.ui:42
 msgid "License"
 msgstr "Lisensi"
 
 #: src/libide/gui/ide-preferences-builtin.c:736
-#: src/plugins/projectui/tweaks.ui:39
+#: src/plugins/projectui/tweaks.ui:43
 msgid "The default license when creating new projects"
 msgstr "Lisensi bawaan saat membuat proyek baru"
 
@@ -2463,7 +2469,7 @@ msgstr "(Kosong)"
 msgid "Loading…"
 msgstr "Memuat…"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:124
+#: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
 msgstr "Direktori Proyek"
 
@@ -2785,14 +2791,14 @@ msgstr "Nama"
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:110
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:404
-#: src/plugins/projectui/tweaks.ui:132
+#: src/plugins/projectui/tweaks.ui:140
 msgid "Source Directory"
 msgstr "Direktori Sumber"
 
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:109
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:405
-#: src/plugins/projectui/tweaks.ui:124
+#: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
 msgstr "Bangun Sistem"
 
@@ -2805,6 +2811,7 @@ msgstr "Pasang Prefiks"
 #. Translators: "Configure" is a noun here
 #: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
 #: src/plugins/buildui/gbp-buildui-preferences-addin.c:450
+#: src/plugins/buildui/tweaks.ui:172
 msgid "Configure Options"
 msgstr "Opsi Konfigurasi"
 
@@ -3056,11 +3063,6 @@ msgstr "_Bersihkan"
 msgid "Clean the project"
 msgstr "Bangun proyekBersihkan proyek"
 
-#: src/plugins/buildui/gtk/menus.ui:69
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
-msgid "_Install"
-msgstr "_Pasang"
-
 #: src/plugins/buildui/gtk/menus.ui:71
 msgid "Install the project"
 msgstr "Pasang proyek"
@@ -3220,56 +3222,75 @@ msgstr "Pekerja"
 msgid "Number of workers to use when performing builds"
 msgstr "Jumlah pekerja yang akan digunakan saat membangun"
 
-#: src/plugins/buildui/tweaks.ui:56
+#: src/plugins/buildui/tweaks.ui:60
 msgid "1 per CPU"
 msgstr "1 per CPU"
 
-#: src/plugins/buildui/tweaks.ui:62
+#: src/plugins/buildui/tweaks.ui:66
 msgid "1"
 msgstr "1"
 
-#: src/plugins/buildui/tweaks.ui:68 src/plugins/editorui/gtk/menus.ui:15
+#: src/plugins/buildui/tweaks.ui:72 src/plugins/editorui/gtk/menus.ui:15
 #: src/plugins/editorui/gtk/menus.ui:51
 msgid "2"
 msgstr "2"
 
-#: src/plugins/buildui/tweaks.ui:74 src/plugins/editorui/gtk/menus.ui:25
+#: src/plugins/buildui/tweaks.ui:78 src/plugins/editorui/gtk/menus.ui:25
 #: src/plugins/editorui/gtk/menus.ui:61
 msgid "4"
 msgstr "4"
 
-#: src/plugins/buildui/tweaks.ui:80
+#: src/plugins/buildui/tweaks.ui:84
 msgid "6"
 msgstr "6"
 
-#: src/plugins/buildui/tweaks.ui:86 src/plugins/editorui/gtk/menus.ui:35
+#: src/plugins/buildui/tweaks.ui:90 src/plugins/editorui/gtk/menus.ui:35
 #: src/plugins/editorui/gtk/menus.ui:71
 msgid "8"
 msgstr "8"
 
-#: src/plugins/buildui/tweaks.ui:92
+#: src/plugins/buildui/tweaks.ui:96
 msgid "16"
 msgstr "16"
 
-#: src/plugins/buildui/tweaks.ui:98
+#: src/plugins/buildui/tweaks.ui:102
 msgid "32"
 msgstr "32"
 
-#: src/plugins/buildui/tweaks.ui:104
+#: src/plugins/buildui/tweaks.ui:108
 msgid "64"
 msgstr "64"
 
-#: src/plugins/buildui/tweaks.ui:110
+#: src/plugins/buildui/tweaks.ui:114
 msgid "128"
 msgstr "128"
 
-#: src/plugins/buildui/tweaks.ui:116
+#: src/plugins/buildui/tweaks.ui:120
 msgid "256"
 msgstr "256"
 
-#: src/plugins/buildui/tweaks.ui:122
+#: src/plugins/buildui/tweaks.ui:126
 msgid "512"
 msgstr "512"
+
+#: src/plugins/buildui/tweaks.ui:153
+msgid "Installation Prefix"
+msgstr "Prefiks Pemasangan"
+
+#: src/plugins/buildui/tweaks.ui:154
+msgid ""
+"The project will be installed to this directory during the installation "
+"phase of the build pipeline."
+msgstr ""
+"Proyek akan dipasang ke direktori ini selama fase pemasangan pipa bangun."
+
+#: src/plugins/buildui/tweaks.ui:185
+msgid ""
+"These options are used by the build system to configure the project during "
+"the configure phase of the build pipeline"
+msgstr ""
+"Opsi ini digunakan oleh sistem bangun untuk mengonfigurasi proyek selama "
+"fase konfigurasi pipa bangun"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 msgid "Fetch dependencies"
@@ -4223,7 +4244,7 @@ msgid "Use minimal editorui interface"
 msgstr "Gunakan antarmuka editorui minimal"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:48
-#: src/plugins/editorui/tweaks.ui:326
+#: src/plugins/editorui/tweaks.ui:342
 msgid "Movements"
 msgstr "Pergerakan"
 
@@ -4241,7 +4262,7 @@ msgid "Use an overview map instead of a scrollbar"
 msgstr "Gunakan peta gambaran umum alih-alih bilah gulir"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
-#: src/plugins/editorui/tweaks.ui:172
+#: src/plugins/editorui/tweaks.ui:184
 msgid "Show Line Numbers"
 msgstr "Tampilkan Nomor Baris"
 
@@ -4254,17 +4275,17 @@ msgid "Adjust line-height of the configured font"
 msgstr "Sesuaikan tinggi garis dari fonta yang dikonfigurasi"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
-#: src/plugins/editorui/tweaks.ui:198
+#: src/plugins/editorui/tweaks.ui:210
 msgid "Highlight Current Line"
 msgstr "Tandai Baris Kini"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:90
-#: src/plugins/editorui/tweaks.ui:205
+#: src/plugins/editorui/tweaks.ui:217
 msgid "Highlight Matching Brackets"
 msgstr "Sorot Tanda Kurung yang Berpasangan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:91
-#: src/plugins/editorui/tweaks.ui:206
+#: src/plugins/editorui/tweaks.ui:218
 msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
@@ -4285,12 +4306,12 @@ msgid "Automatically select the first completion when displayed"
 msgstr "Secara otomatis memilih penyelesaian pertama saat ditampilkan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
-#: src/plugins/editorui/tweaks.ui:255
+#: src/plugins/editorui/tweaks.ui:267
 msgid "Expand Snippets"
 msgstr "Perluas Cuplikan"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
-#: src/plugins/editorui/tweaks.ui:256
+#: src/plugins/editorui/tweaks.ui:268
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Gunakan \"Tab\" untuk memperluas cuplikan yang dikonfigurasi di penyunting"
@@ -4300,17 +4321,17 @@ msgid "Trim Trailing Whitespace"
 msgstr "Pangkas Trailing Whitespace"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-#: src/plugins/editorui/tweaks-language.ui:85
-msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
+#: src/plugins/editorui/tweaks-language.ui:94
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
 msgstr ""
-"Setelah menyimpan, trailing whitepsace dari baris yang diubah akan dipangkas"
+"Setelah menyimpan, trailing bukan spasi dari baris yang diubah akan dipangkas"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:133
 msgid "Insert matching character for [[(\"'"
 msgstr "Sisipkan karakter yang sesuai untuk [[(\"'"
 
 #: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
-#: src/plugins/editorui/tweaks-language.ui:124
+#: src/plugins/editorui/tweaks-language.ui:133
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr ""
 "Tampilkan margin di penyunting untuk menunjukkan lebar maksimum yang "
@@ -4371,7 +4392,7 @@ msgid "5"
 msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:110
+#: src/plugins/editorui/tweaks-language.ui:119
 msgid "Indentation Size"
 msgstr "Ukuran Indentasi"
 
@@ -4443,56 +4464,56 @@ msgstr "Karakter Tab"
 msgid "The character to be inserted for Tab"
 msgstr "Karakter yang akan disisipkan untuk Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:63
+#: src/plugins/editorui/tweaks-language.ui:72
 msgid "Tab"
 msgstr "Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:84
+#: src/plugins/editorui/tweaks-language.ui:93
 msgid "Trim Trailing Space"
 msgstr "Pangkas Trailing Spasi"
 
-#: src/plugins/editorui/tweaks-language.ui:95
+#: src/plugins/editorui/tweaks-language.ui:104
 msgid "Auto Indent"
 msgstr "Indentasi Otomatis"
 
-#: src/plugins/editorui/tweaks-language.ui:96
+#: src/plugins/editorui/tweaks-language.ui:105
 msgid "Automatically indent source code as you type"
 msgstr "Secara otomatis mengindentasi kode sumber saat Anda mengetik"
 
-#: src/plugins/editorui/tweaks-language.ui:102
+#: src/plugins/editorui/tweaks-language.ui:111
 msgid "Tab Size"
 msgstr "Ukuran Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:103
+#: src/plugins/editorui/tweaks-language.ui:112
 msgid "The number of characters to indent for Tab"
 msgstr "Jumlah karakter yang akan diindentasi untuk Tab"
 
-#: src/plugins/editorui/tweaks-language.ui:111
+#: src/plugins/editorui/tweaks-language.ui:120
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
 "Jumlah karakter yang akan diindentasi, atau -1 untuk menggunakan ukuran tab"
 
-#: src/plugins/editorui/tweaks-language.ui:120
+#: src/plugins/editorui/tweaks-language.ui:129
 msgid "Margin"
 msgstr "Marjin"
 
-#: src/plugins/editorui/tweaks-language.ui:123
+#: src/plugins/editorui/tweaks-language.ui:132
 msgid "Show Right Margin"
 msgstr "Tampilkan Marjin Kanan"
 
-#: src/plugins/editorui/tweaks-language.ui:130
+#: src/plugins/editorui/tweaks-language.ui:139
 msgid "Right Margin Position"
 msgstr "Posisi Marjin Kanan"
 
-#: src/plugins/editorui/tweaks-language.ui:131
+#: src/plugins/editorui/tweaks-language.ui:140
 msgid "The desired maximum line length"
 msgstr "Panjang garis maksimum yang diinginkan"
 
-#: src/plugins/editorui/tweaks-language.ui:144
+#: src/plugins/editorui/tweaks-language.ui:153
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr "Timpa kurung kurawal, tanda kurung, tanda kurung, dan tanda kutip"
 
-#: src/plugins/editorui/tweaks-language.ui:151
+#: src/plugins/editorui/tweaks-language.ui:160
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
 "Sisipkan karakter yang cocok untuk kurung kurawal, tanda kurung, tanda "
@@ -4518,87 +4539,87 @@ msgstr "Sesuaikan penspasian antar baris"
 msgid "How text should be wrapped when wider than the frame"
 msgstr "Bagaimana teks harus dibungkus saat lebih lebar dari bingkai"
 
-#: src/plugins/editorui/tweaks.ui:98
+#: src/plugins/editorui/tweaks.ui:102
 msgid "At Spaces"
 msgstr "Di Spasi"
 
-#: src/plugins/editorui/tweaks.ui:104
+#: src/plugins/editorui/tweaks.ui:108
 msgid "Anywhere"
 msgstr "Dimanapun"
 
-#: src/plugins/editorui/tweaks.ui:116
+#: src/plugins/editorui/tweaks.ui:120
 msgid "Background Pattern"
 msgstr "Pola Latar Belakang"
 
-#: src/plugins/editorui/tweaks.ui:117
+#: src/plugins/editorui/tweaks.ui:121
 msgid "Show a background pattern underneath source code"
 msgstr "Tampilkan pola latar belakang di bawah kode sumber"
 
-#: src/plugins/editorui/tweaks.ui:122
+#: src/plugins/editorui/tweaks.ui:130
 msgid "No Pattern"
 msgstr "Tidak Ada Pola"
 
-#: src/plugins/editorui/tweaks.ui:128
+#: src/plugins/editorui/tweaks.ui:136
 msgid "Grid Lines"
 msgstr "Garis Kisi"
 
-#: src/plugins/editorui/tweaks.ui:138
+#: src/plugins/editorui/tweaks.ui:146
 msgid "Scrollbars"
 msgstr "Bilah Gulir"
 
-#: src/plugins/editorui/tweaks.ui:141
+#: src/plugins/editorui/tweaks.ui:149
 msgid "Source Code Overview"
 msgstr "Gambaran Umum Kode Sumber"
 
-#: src/plugins/editorui/tweaks.ui:142
+#: src/plugins/editorui/tweaks.ui:150
 msgid "Display an overview of source code next to the editor"
 msgstr "Menampilkan gambaran umum kode sumber di samping penyunting"
 
-#: src/plugins/editorui/tweaks.ui:147
+#: src/plugins/editorui/tweaks.ui:159
 msgid "Prefer Scrollbars"
 msgstr "Lebih suka Bilah gulir"
 
-#: src/plugins/editorui/tweaks.ui:153
+#: src/plugins/editorui/tweaks.ui:165
 msgid "Always On"
 msgstr "Selalu Aktif"
 
-#: src/plugins/editorui/tweaks.ui:159
+#: src/plugins/editorui/tweaks.ui:171
 msgid "Automatic"
 msgstr "Otomatis"
 
-#: src/plugins/editorui/tweaks.ui:169
+#: src/plugins/editorui/tweaks.ui:181
 msgid "Line Numbers"
 msgstr "Nomor Baris"
 
-#: src/plugins/editorui/tweaks.ui:173
+#: src/plugins/editorui/tweaks.ui:185
 msgid "Display line numbers next to each line of code"
 msgstr "Tampilkan nomor baris di samping setiap baris kode"
 
-#: src/plugins/editorui/tweaks.ui:179
+#: src/plugins/editorui/tweaks.ui:191
 msgid "Use Relative Line Numbers"
 msgstr "Gunakan Nomor Baris Relatif"
 
-#: src/plugins/editorui/tweaks.ui:180
+#: src/plugins/editorui/tweaks.ui:192
 msgid "Show line numbers relative to the current line"
 msgstr "Tampilkan nomor baris relatif terhadap baris saat ini"
 
-#: src/plugins/editorui/tweaks.ui:186
+#: src/plugins/editorui/tweaks.ui:198
 msgid "Show Diagnostics"
 msgstr "Tampilkan Diagnostik"
 
-#: src/plugins/editorui/tweaks.ui:187
+#: src/plugins/editorui/tweaks.ui:199
 msgid "Display diagnostics next to the line number"
 msgstr "Tampilkan diagnostik di samping nomor baris"
 
-#: src/plugins/editorui/tweaks.ui:195
+#: src/plugins/editorui/tweaks.ui:207
 msgid "Syntax Highlighting"
 msgstr "Penyorotan Sintaks"
 
-#: src/plugins/editorui/tweaks.ui:199
+#: src/plugins/editorui/tweaks.ui:211
 msgid "Make the current line stand out with highlights"
 msgstr "Buat garis saat ini menonjol dengan sorotan"
 
-#: src/plugins/editorui/tweaks.ui:213
+#: src/plugins/editorui/tweaks.ui:225
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4606,68 +4627,68 @@ msgstr ""
 "Gunakan informasi simbol untuk menyorot ruang nama, fungsi, dan variabel "
 "dalam kode sumber"
 
-#: src/plugins/editorui/tweaks.ui:227
+#: src/plugins/editorui/tweaks.ui:239
 #: src/plugins/spellcheck/gbp-spell-preferences-addin.c:37
 msgid "Spelling"
 msgstr "Ejaan"
 
-#: src/plugins/editorui/tweaks.ui:231
+#: src/plugins/editorui/tweaks.ui:243
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Menggarisbawahi potensi kesalahan ejaan saat Anda mengetik"
 
-#: src/plugins/editorui/tweaks.ui:239
+#: src/plugins/editorui/tweaks.ui:251
 msgid "Selections"
 msgstr "Pilihan"
 
-#: src/plugins/editorui/tweaks.ui:242
+#: src/plugins/editorui/tweaks.ui:254
 msgid "Minimum Characters to Highlight"
 msgstr "Karakter Minimum untuk Disorot"
 
-#: src/plugins/editorui/tweaks.ui:243
+#: src/plugins/editorui/tweaks.ui:255
 msgid "The minimum selection length before highlighting matches"
 msgstr "Panjang pilihan minimum sebelum menyorot kecocokan"
 
-#: src/plugins/editorui/tweaks.ui:266
+#: src/plugins/editorui/tweaks.ui:278
 msgid "Code Completion"
 msgstr "Penyelesaian Kode"
 
-#: src/plugins/editorui/tweaks.ui:267
+#: src/plugins/editorui/tweaks.ui:279
 msgid "lang-function-symbolic"
 msgstr "lang-function-symbolic"
 
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:282
 msgid "Completion Proposals"
 msgstr "Proposal Penyelesaian"
 
-#: src/plugins/editorui/tweaks.ui:273
+#: src/plugins/editorui/tweaks.ui:285
 msgid "Suggest Code Completions"
 msgstr "Sarankan Penyelesaian Kode"
 
-#: src/plugins/editorui/tweaks.ui:274
+#: src/plugins/editorui/tweaks.ui:286
 msgid "Automatically suggest code completions while typing"
 msgstr "Secara otomatis menyarankan penyelesaian kode saat mengetik"
 
-#: src/plugins/editorui/tweaks.ui:280
+#: src/plugins/editorui/tweaks.ui:292
 msgid "Select First Completion Proposal"
 msgstr "Pilih Proposal Penyelesaian Pertama"
 
-#: src/plugins/editorui/tweaks.ui:281
+#: src/plugins/editorui/tweaks.ui:293
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Secara otomatis memilih proposal penyelesaian pertama saat ditampilkan"
 
-#: src/plugins/editorui/tweaks.ui:291
+#: src/plugins/editorui/tweaks.ui:303
 msgid "Maximum Completion Proposals"
 msgstr "Proposal Penyelesaian Maksimum"
 
-#: src/plugins/editorui/tweaks.ui:292
+#: src/plugins/editorui/tweaks.ui:304
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Jumlah maksimum baris penyelesaian yang akan ditampilkan sekaligus"
 
-#: src/plugins/editorui/tweaks.ui:307 src/plugins/editorui/tweaks.ui:310
+#: src/plugins/editorui/tweaks.ui:319 src/plugins/editorui/tweaks.ui:322
 msgid "Keyboard Theme"
 msgstr "Tema Papan Tik"
 
-#: src/plugins/editorui/tweaks.ui:311
+#: src/plugins/editorui/tweaks.ui:323
 msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
@@ -4675,65 +4696,65 @@ msgstr ""
 "Tema pintasan memberikan pengalaman papan tik yang mirip dengan IDE dan "
 "penyunting lain"
 
-#: src/plugins/editorui/tweaks.ui:337
+#: src/plugins/editorui/tweaks.ui:353
 msgid "Navigate to non-space characters"
 msgstr "Menavigasi ke karakter non-spasi"
 
-#: src/plugins/editorui/tweaks.ui:342
+#: src/plugins/editorui/tweaks.ui:362
 msgid "Before line boundaries"
 msgstr "Sebelum batas garis"
 
-#: src/plugins/editorui/tweaks.ui:348
+#: src/plugins/editorui/tweaks.ui:368
 msgid "After line boundaries"
 msgstr "Batas setelah garis"
 
-#: src/plugins/editorui/tweaks.ui:354
+#: src/plugins/editorui/tweaks.ui:374
 msgid "Instead of line boundaries"
 msgstr "Alih-alih batas garis"
 
-#: src/plugins/editorui/tweaks.ui:360 src/plugins/valgrind/gtk/menus.ui:44
+#: src/plugins/editorui/tweaks.ui:380 src/plugins/valgrind/gtk/menus.ui:44
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:392
 msgid "Session Management"
 msgstr "Manajemen Sesi"
 
-#: src/plugins/editorui/tweaks.ui:376
+#: src/plugins/editorui/tweaks.ui:396
 msgid "Save & Restore"
 msgstr "Simpan & Pulihkan"
 
-#: src/plugins/editorui/tweaks.ui:379
+#: src/plugins/editorui/tweaks.ui:399
 msgid "Auto-Save"
 msgstr "Simpan Otomatis"
 
-#: src/plugins/editorui/tweaks.ui:380
+#: src/plugins/editorui/tweaks.ui:400
 msgid "Regularly save the document as you type"
 msgstr "Simpan dokumen secara teratur saat Anda mengetik"
 
-#: src/plugins/editorui/tweaks.ui:386
+#: src/plugins/editorui/tweaks.ui:406
 msgid "Auto-Save Delay"
 msgstr "Penundaan Simpan Otomatis"
 
-#: src/plugins/editorui/tweaks.ui:387
+#: src/plugins/editorui/tweaks.ui:407
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 "Penundaan dalam hitungan detik untuk menunggu sebelum menyimpan dokumen "
 "secara otomatis"
 
-#: src/plugins/editorui/tweaks.ui:398
+#: src/plugins/editorui/tweaks.ui:418
 msgid "Format on Save"
 msgstr "Format pada Simpan"
 
-#: src/plugins/editorui/tweaks.ui:399
+#: src/plugins/editorui/tweaks.ui:419
 msgid "Reformat sources when saving to disk"
 msgstr "Memformat ulang sumber saat menyimpan ke diska"
 
-#: src/plugins/editorui/tweaks.ui:409
+#: src/plugins/editorui/tweaks.ui:429
 msgid "Restore Cursor Position"
 msgstr "Pulihkan Posisi Kursor"
 
-#: src/plugins/editorui/tweaks.ui:410
+#: src/plugins/editorui/tweaks.ui:430
 msgid "Jump to the last position when re-opening a file"
 msgstr "Melompat ke posisi terakhir saat membuka kembali berkas"
 
@@ -5489,15 +5510,15 @@ msgstr "Mengunduh dependensi npm"
 msgid "_External Program…"
 msgstr "Program _Eksternal…"
 
-#: src/plugins/platformui/tweaks.ui:30
+#: src/plugins/platformui/tweaks.ui:28
 msgid "Document Navigation"
 msgstr "Navigasi Dokumen"
 
-#: src/plugins/platformui/tweaks.ui:33
+#: src/plugins/platformui/tweaks.ui:37
 msgid "Tab Bar"
 msgstr "Bilah Tab"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:43
 msgid "Drop Down"
 msgstr "Drop Down"
 
@@ -5658,19 +5679,19 @@ msgstr "Pembuatan Proyek"
 msgid "Projects created with Builder will be placed within this directory"
 msgstr "Proyek yang dibuat dengan Builder akan ditempatkan dalam direktori ini"
 
-#: src/plugins/projectui/tweaks.ui:80
+#: src/plugins/projectui/tweaks.ui:88
 msgid "No License"
 msgstr "Tidak Ada Lisensi"
 
-#: src/plugins/projectui/tweaks.ui:97
+#: src/plugins/projectui/tweaks.ui:105
 msgid "info-symbolic"
 msgstr "info-symbolic"
 
-#: src/plugins/projectui/tweaks.ui:107
+#: src/plugins/projectui/tweaks.ui:115
 msgid "Project Identifier"
 msgstr "Pengidentifikasi Proyek"
 
-#: src/plugins/projectui/tweaks.ui:115
+#: src/plugins/projectui/tweaks.ui:123
 msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
@@ -5678,13 +5699,17 @@ msgstr ""
 "Pengidentifikasi ini digunakan saat mereferensikan pengaturan proyek Anda, "
 "direktori bangun, dan informasi singgahan."
 
-#: src/plugins/projectui/tweaks.ui:152
+#: src/plugins/projectui/tweaks.ui:160
 msgid "Current Configuration"
 msgstr "Konfigurasi Saat Ini"
 
-#: src/plugins/projectui/tweaks.ui:167
+#: src/plugins/projectui/tweaks.ui:175
 msgid "builder-build-configure-symbolic"
 msgstr "builder-build-configure-symbolic"
+
+#: src/plugins/projectui/tweaks.ui:197
+msgid "Configuration"
+msgstr "Konfigurasi"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5773,6 +5798,30 @@ msgstr "Perintah Cargo"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr "Perintah cargo bawaan untuk dijalankan dengan rust-analyzer"
 
+#: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
+msgid "Update"
+msgstr "Pemutakhiran"
+
+#: src/plugins/sdkui/gtk/menus.ui:6
+msgid "Manage SDKs…"
+msgstr "Kelola SDK…"
+
+#: src/plugins/sdkui/tweaks.ui:15
+msgid "Download on Metered Connections"
+msgstr "Unduh melalui Koneksi Berkuota"
+
+#: src/plugins/sdkui/tweaks.ui:16
+msgid ""
+"Allow the download of SDKs and dependencies when on metered internet "
+"connections"
+msgstr ""
+"Izinkan pengunduhan SDK dan dependensi saat menggunakan koneksi internet "
+"berkuota"
+
+#: src/plugins/sdkui/tweaks.ui:24
+msgid "Available SDKs"
+msgstr "SDK yang Tersedia"
+
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 msgid "Untitled Command"
 msgstr "Perintah Tanpa Judul"
@@ -5787,7 +5836,7 @@ msgstr "Pilih Direktori Kerja"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
-#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Buat Perintah"
 
@@ -5900,7 +5949,7 @@ msgid "Shared Commands"
 msgstr "Perintah Bersama"
 
 #: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:159
-#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:92
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
 msgstr ""
 "Perintah dapat digunakan untuk membangun, menjalankan, atau memodifikasi "
@@ -5919,7 +5968,11 @@ msgstr "Perintah ini dapat dibagikan di seluruh proyek apa pun di Builder."
 msgid "Untitled command"
 msgstr "Perintah tanpa judul"
 
-#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:116
+msgid "These commands are specific to this project."
+msgstr "Perintah ini khusus untuk proyek ini."
+
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
 msgid "These commands are shared across all projects."
 msgstr "Perintah ini dibagikan di semua proyek."
 
@@ -6074,7 +6127,7 @@ msgstr "Pencacah"
 msgid "CPU Usage"
 msgstr "Penggunaan CPU"
 
-#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:61
+#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:65
 msgid "Memory Usage"
 msgstr "Penggunaan Memori"
 
@@ -6138,80 +6191,80 @@ msgstr "Governor CPU"
 msgid "Force performance mode while profiling"
 msgstr "Paksa mode performa saat membuat profil"
 
-#: src/plugins/sysprof/tweaks.ui:43
+#: src/plugins/sysprof/tweaks.ui:47
 msgid "Don't Change Governor"
 msgstr "Jangan Ubah Governor"
 
-#: src/plugins/sysprof/tweaks.ui:49
+#: src/plugins/sysprof/tweaks.ui:53
 msgid "Force Performance Mode"
 msgstr "Mode Performa Paksa"
 
-#: src/plugins/sysprof/tweaks.ui:62
+#: src/plugins/sysprof/tweaks.ui:66
 msgid "Simple memory statistics about the process such as total memory used"
 msgstr ""
 "Statistik memori sederhana tentang proses seperti total memori yang digunakan"
 
-#: src/plugins/sysprof/tweaks.ui:68
+#: src/plugins/sysprof/tweaks.ui:72
 msgid "Memory Profiling"
 msgstr "Profil Memori"
 
-#: src/plugins/sysprof/tweaks.ui:69
+#: src/plugins/sysprof/tweaks.ui:73
 msgid "Record stacktraces of memory allocations and releases"
 msgstr "Rekam stacktrace alokasi dan rilis memori"
 
-#: src/plugins/sysprof/tweaks.ui:79
+#: src/plugins/sysprof/tweaks.ui:83
 msgid "Energy Usage"
 msgstr "Penggunaan Energi"
 
-#: src/plugins/sysprof/tweaks.ui:80
+#: src/plugins/sysprof/tweaks.ui:84
 msgid "Record statistics about energy usage using RAPL"
 msgstr "Catat statistik tentang penggunaan energi menggunakan RAPL"
 
-#: src/plugins/sysprof/tweaks.ui:86
+#: src/plugins/sysprof/tweaks.ui:90
 msgid "Battery Usage"
 msgstr "Penggunaan Baterai"
 
-#: src/plugins/sysprof/tweaks.ui:87 src/plugins/sysprof/tweaks.ui:105
+#: src/plugins/sysprof/tweaks.ui:91 src/plugins/sysprof/tweaks.ui:109
 msgid "Record statistics about battery charge and discharge rates"
 msgstr "Catat statistik tentang tingkat pengisian dan pengosongan baterai"
 
-#: src/plugins/sysprof/tweaks.ui:97
+#: src/plugins/sysprof/tweaks.ui:101
 msgid "Network Usage"
 msgstr "Penggunaan Jaringan"
 
-#: src/plugins/sysprof/tweaks.ui:98
+#: src/plugins/sysprof/tweaks.ui:102
 msgid "Record statistics about network usage"
 msgstr "Catat statistik tentang penggunaan jaringan"
 
-#: src/plugins/sysprof/tweaks.ui:104
+#: src/plugins/sysprof/tweaks.ui:108
 msgid "Disk Usage"
 msgstr "Penggunaan Diska"
 
-#: src/plugins/sysprof/tweaks.ui:115
+#: src/plugins/sysprof/tweaks.ui:119
 msgid "GNOME Shell Performance"
 msgstr "Performa GNOME Shell"
 
-#: src/plugins/sysprof/tweaks.ui:116
+#: src/plugins/sysprof/tweaks.ui:120
 msgid "Collect performance and timing information from GNOME Shell"
 msgstr "Kumpulkan informasi kinerja dan waktu dari GNOME Shell"
 
-#: src/plugins/sysprof/tweaks.ui:124
+#: src/plugins/sysprof/tweaks.ui:128
 msgid "Integration"
 msgstr "Integrasi"
 
-#: src/plugins/sysprof/tweaks.ui:127
+#: src/plugins/sysprof/tweaks.ui:131
 msgid "JavaScript"
 msgstr "JavaScript"
 
-#: src/plugins/sysprof/tweaks.ui:128
+#: src/plugins/sysprof/tweaks.ui:132
 msgid "Collect information from GJS-based applications"
 msgstr "Kumpulkan informasi dari aplikasi berbasis GJS"
 
-#: src/plugins/sysprof/tweaks.ui:134
+#: src/plugins/sysprof/tweaks.ui:138
 msgid "Application Tracing"
 msgstr "Penelusuran Aplikasi"
 
-#: src/plugins/sysprof/tweaks.ui:135
+#: src/plugins/sysprof/tweaks.ui:139
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
@@ -6705,11 +6758,13 @@ msgstr "Gagal membuat pohon XML."
 msgid "File must be saved locally to parse."
 msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
+#~ msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
+#~ msgstr ""
+#~ "Setelah menyimpan, trailing whitepsace dari baris yang diubah akan "
+#~ "dipangkas"
+
 #~ msgid "Whether or not Home moves to first non-space character."
 #~ msgstr "Apakah tombol Home memindah ke karakter bukan spasi pertama."
-
-#~ msgid "Manage SDKs…"
-#~ msgstr "Kelola SDK…"
 
 #~ msgid "Moves to first non-whitespace character before line edges"
 #~ msgstr "Bergerak ke karakter bukan spasi pertama sebelum tepi garis"
@@ -6719,13 +6774,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Allow Downloads when Metered"
 #~ msgstr "Izinkan Unduhan ketika memakai kuota"
-
-#~ msgid ""
-#~ "Allow the download of SDKs and dependencies when on metered internet "
-#~ "connections"
-#~ msgstr ""
-#~ "Izinkan pengunduhan SDK dan dependensi saat menggunakan koneksi internet "
-#~ "berkuota"
 
 #~ msgid "Show Open Files"
 #~ msgstr "Tampilkan Berkas Terbuka"
