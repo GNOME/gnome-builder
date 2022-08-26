@@ -451,3 +451,23 @@ ide_tweaks_binding_set_string (IdeTweaksBinding *self,
   g_value_set_static_string (&value, string);
   ide_tweaks_binding_set_value (self, &value);
 }
+
+/**
+ * ide_tweaks_binding_create_adjustment:
+ * @self: a #IdeTweaksBinding
+ *
+ * Creates a new adjustment for the setting.
+ *
+ * Returns: (transfer full) (nullable): A #GtkAdjustment, or %NULL if
+ *   an adjustment is not supported for the binding.
+ */
+GtkAdjustment *
+ide_tweaks_binding_create_adjustment (IdeTweaksBinding *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_BINDING (self), NULL);
+
+  if (IDE_TWEAKS_BINDING_GET_CLASS (self)->create_adjustment)
+    return IDE_TWEAKS_BINDING_GET_CLASS (self)->create_adjustment (self);
+
+  return NULL;
+}

@@ -170,6 +170,90 @@ ide_tweaks_property_get_expected_type (IdeTweaksBinding *binding)
   return G_TYPE_INVALID;
 }
 
+static GtkAdjustment *
+ide_tweaks_property_create_adjustment (IdeTweaksBinding *binding)
+{
+  IdeTweaksProperty *self = (IdeTweaksProperty *)binding;
+  g_autoptr(GObject) object = NULL;
+  double lower = .0;
+  double upper = .0;
+  double page_increment = 10.;
+  double step_increment = 1.;
+
+  g_assert (IDE_IS_TWEAKS_PROPERTY (self));
+
+  if (!(ide_tweaks_property_acquire (self)))
+    return NULL;
+
+  g_assert (self->pspec != NULL);
+
+  if (G_IS_PARAM_SPEC_DOUBLE (self->pspec))
+    {
+      GParamSpecDouble *pspec = G_PARAM_SPEC_DOUBLE (self->pspec);
+
+      lower = pspec->minimum;
+      upper = pspec->maximum;
+    }
+  else if (G_IS_PARAM_SPEC_FLOAT (self->pspec))
+    {
+      GParamSpecFloat *pspec = G_PARAM_SPEC_FLOAT (self->pspec);
+
+      lower = pspec->minimum;
+      upper = pspec->maximum;
+    }
+  else if (G_IS_PARAM_SPEC_INT (self->pspec))
+    {
+      GParamSpecInt *pspec = G_PARAM_SPEC_INT (self->pspec);
+
+      lower = pspec->minimum;
+      upper = pspec->maximum;
+    }
+  else if (G_IS_PARAM_SPEC_UINT (self->pspec))
+    {
+      GParamSpecUInt *pspec = G_PARAM_SPEC_UINT (self->pspec);
+
+      lower = pspec->minimum;
+      upper = pspec->maximum;
+    }
+  else if (G_IS_PARAM_SPEC_INT64 (self->pspec))
+    {
+      GParamSpecInt64 *pspec = G_PARAM_SPEC_INT64 (self->pspec);
+
+      lower = pspec->minimum;
+      upper = pspec->maximum;
+    }
+  else if (G_IS_PARAM_SPEC_UINT64 (self->pspec))
+    {
+      GParamSpecUInt64 *pspec = G_PARAM_SPEC_UINT64 (self->pspec);
+
+      lower = pspec->minimum;
+      upper = pspec->maximum;
+    }
+  else
+    {
+      return NULL;
+    }
+
+  if (G_IS_PARAM_SPEC_DOUBLE (self->pspec) ||
+      G_IS_PARAM_SPEC_FLOAT (self->pspec))
+    {
+      double distance = ABS (upper - lower);
+
+      if (distance <= 1.)
+        {
+          step_increment = .05;
+          page_increment = .2;
+        }
+      else if (distance <= 50.)
+        {
+          step_increment = .1;
+          page_increment = 1;
+        }
+    }
+
+  return gtk_adjustment_new (0, lower, upper, step_increment, page_increment, 0);
+}
+
 static void
 ide_tweaks_property_dispose (GObject *object)
 {
@@ -257,6 +341,7 @@ ide_tweaks_property_class_init (IdeTweaksPropertyClass *klass)
   tweaks_binding_class->get_value = ide_tweaks_property_get_value;
   tweaks_binding_class->set_value = ide_tweaks_property_set_value;
   tweaks_binding_class->get_expected_type = ide_tweaks_property_get_expected_type;
+  tweaks_binding_class->create_adjustment = ide_tweaks_property_create_adjustment;
 
   properties[PROP_NAME] =
     g_param_spec_string ("name", NULL, NULL,

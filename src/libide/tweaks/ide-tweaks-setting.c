@@ -198,6 +198,95 @@ ide_tweaks_setting_get_expected_type (IdeTweaksBinding *binding)
   return _ide_tweaks_variant_type_to_gtype (expected_type);
 }
 
+static double
+get_value_as_double (GVariant *value)
+{
+  if (g_variant_is_of_type (value, G_VARIANT_TYPE_DOUBLE))
+    return g_variant_get_double (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT16))
+    return g_variant_get_int16 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT16))
+    return g_variant_get_uint16 (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT32))
+    return g_variant_get_int32 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT32))
+    return g_variant_get_uint32 (value);
+
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_INT64))
+    return g_variant_get_int64 (value);
+  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_UINT64))
+    return g_variant_get_uint64 (value);
+
+  return 0;
+}
+
+static GtkAdjustment *
+ide_tweaks_setting_create_adjustment (IdeTweaksBinding *binding)
+{
+  IdeTweaksSetting *self = (IdeTweaksSetting *)binding;
+  GSettingsSchemaSource *source;
+  GSettingsSchemaKey *schema_key = NULL;
+  GSettingsSchema *schema = NULL;
+  g_autofree char *type = NULL;
+  g_autoptr(GVariant) lval = NULL;
+  g_autoptr(GVariant) uval = NULL;
+  g_autoptr(GVariant) range = NULL;
+  g_autoptr(GVariant) values = NULL;
+  double step_increment = 1;
+  double page_increment = 10;
+  double lower = .0;
+  double upper = .0;
+  GVariantIter iter;
+  GtkAdjustment *ret = NULL;
+
+  g_assert (IDE_IS_TWEAKS_SETTING (self));
+
+  if (self->schema_id == NULL || self->schema_key == NULL)
+    return NULL;
+
+  source = g_settings_schema_source_get_default ();
+  schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE);
+  schema_key = g_settings_schema_get_key (schema, self->schema_key);
+  range = g_settings_schema_key_get_range (schema_key);
+  g_variant_get (range, "(sv)", &type, &values);
+
+  if (!ide_str_equal0 (type, "range") ||
+      (2 != g_variant_iter_init (&iter, values)))
+    goto cleanup;
+
+  lval = g_variant_iter_next_value (&iter);
+  uval = g_variant_iter_next_value (&iter);
+
+  lower = get_value_as_double (lval);
+  upper = get_value_as_double (uval);
+
+  if (g_variant_is_of_type (lval, G_VARIANT_TYPE_DOUBLE))
+    {
+      double distance = ABS (upper - lower);
+
+      if (distance <= 1.)
+        {
+          step_increment = .05;
+          page_increment = .2;
+        }
+      else if (distance <= 50.)
+        {
+          step_increment = .1;
+          page_increment = 1;
+        }
+    }
+
+  ret = gtk_adjustment_new (0, lower, upper, step_increment, page_increment, 0);
+
+cleanup:
+  g_clear_pointer (&schema, g_settings_schema_unref);
+  g_clear_pointer (&schema_key, g_settings_schema_key_unref);
+
+  return ret;
+}
+
 static void
 ide_tweaks_setting_dispose (GObject *object)
 {
@@ -276,6 +365,7 @@ ide_tweaks_setting_class_init (IdeTweaksSettingClass *klass)
   tweaks_binding_class->get_value = ide_tweaks_setting_get_value;
   tweaks_binding_class->set_value = ide_tweaks_setting_set_value;
   tweaks_binding_class->get_expected_type = ide_tweaks_setting_get_expected_type;
+  tweaks_binding_class->create_adjustment = ide_tweaks_setting_create_adjustment;
 
   properties[PROP_SCHEMA_ID] =
     g_param_spec_string ("schema-id", NULL, NULL,
