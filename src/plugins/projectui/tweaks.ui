@@ -102,7 +102,7 @@
         <child>
           <object class="IdeTweaksPage" id="overview_page">
             <property name="title" translatable="yes">Overview</property>
-            <property name="icon-name" translatable="yes">info-symbolic</property>
+            <property name="icon-name">info-symbolic</property>
             <child>
               <object class="IdeTweaksGroup" id="overview_id_group">
                 <binding name="title">
@@ -172,7 +172,7 @@
         <child>
           <object class="IdeTweaksPage" id="configs_page">
             <property name="title" translatable="yes">Configurations</property>
-            <property name="icon-name" translatable="yes">builder-build-configure-symbolic</property>
+            <property name="icon-name">builder-build-configure-symbolic</property>
             <child>
               <object class="IdeTweaksFactory" id="config_factory">
                 <property name="model">Configurations</property>

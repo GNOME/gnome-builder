@@ -289,7 +289,7 @@
                 <child>
                   <object class="IdeTweaksPage" id="editor_code_completion_page">
                     <property name="title" translatable="yes">Code Completion</property>
-                    <property name="icon-name" translatable="yes">lang-function-symbolic</property>
+                    <property name="icon-name">lang-function-symbolic</property>
                     <child>
                       <object class="IdeTweaksGroup" id="editor_completion_general_group">
                         <property name="title" translatable="yes">Completion Proposals</property>
