@@ -48,23 +48,96 @@ G_DEFINE_FINAL_TYPE (IdeTweaksRadio, ide_tweaks_radio, IDE_TYPE_TWEAKS_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 
+static char **
+add_to_set (const char * const *strv,
+            const char         *value)
+{
+  g_autoptr(GStrvBuilder) builder = NULL;
+
+  if (value == NULL || (strv != NULL && g_strv_contains (strv, value)))
+    return g_strdupv ((char **)strv);
+
+  builder = g_strv_builder_new ();
+  g_strv_builder_addv (builder, (const char **)strv);
+  g_strv_builder_add (builder, value);
+
+  return g_strv_builder_end (builder);
+}
+
+static char **
+remove_from_set (const char * const *strv,
+                 const char         *value)
+{
+  g_autoptr(GStrvBuilder) builder = NULL;
+
+  if (value == NULL || strv == NULL || !g_strv_contains (strv, value))
+    return g_strdupv ((char **)strv);
+
+  builder = g_strv_builder_new ();
+
+  for (guint i = 0; strv[i]; i++)
+    {
+      if (!ide_str_equal0 (strv[i], value))
+        g_strv_builder_add (builder, strv[i]);
+    }
+
+  return g_strv_builder_end (builder);
+}
+
 static void
 ide_tweaks_radio_notify_active_cb (GtkCheckButton   *button,
                                    GParamSpec       *pspec,
                                    IdeTweaksBinding *binding)
 {
   GVariant *value;
+  GType type;
 
   g_assert (GTK_IS_CHECK_BUTTON (button));
   g_assert (IDE_IS_TWEAKS_BINDING (binding));
 
+  if (!ide_tweaks_binding_get_expected_type (binding, &type))
+    return;
+
   value = g_object_get_data (G_OBJECT (button), "VALUE");
 
   if (gtk_check_button_get_active (button))
-    ide_tweaks_binding_set_variant (binding, value);
-  else if (g_variant_is_of_type (value, G_VARIANT_TYPE_BOOLEAN) &&
-           g_variant_get_boolean (value))
-    ide_tweaks_binding_set_variant (binding, g_variant_new_boolean (FALSE));
+    {
+      if (type == G_TYPE_STRV && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+        {
+          const char *str = g_variant_get_string (value, NULL);
+          g_auto(GStrv) old_strv = ide_tweaks_binding_get_strv (binding);
+          g_auto(GStrv) new_strv = add_to_set ((const char * const *)old_strv, str);
+
+          if (!old_strv ||
+              !g_strv_equal ((const char * const *)old_strv,
+                             (const char * const *)new_strv))
+            ide_tweaks_binding_set_strv (binding, (const char * const *)new_strv);
+        }
+      else
+        {
+          ide_tweaks_binding_set_variant (binding, value);
+        }
+    }
+  else
+    {
+      if (type == G_TYPE_STRV && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+        {
+          const char *str = g_variant_get_string (value, NULL);
+          g_auto(GStrv) old_strv = ide_tweaks_binding_get_strv (binding);
+          g_auto(GStrv) new_strv = remove_from_set ((const char * const *)old_strv, str);
+
+          if (old_strv &&
+              !g_strv_equal ((const char * const *)old_strv,
+                             (const char * const *)new_strv))
+            ide_tweaks_binding_set_strv (binding, (const char * const *)new_strv);
+        }
+      else if (g_variant_is_of_type (value, G_VARIANT_TYPE_BOOLEAN) &&
+               g_variant_get_boolean (value))
+        {
+          /* If boolean, unchecking might require we swap the state */
+          ide_tweaks_binding_set_variant (binding, g_variant_new_boolean (FALSE));
+        }
+    }
 }
 
 static void
@@ -72,10 +145,8 @@ on_binding_changed_cb (GtkCheckButton   *button,
                        IdeTweaksBinding *binding)
 {
   g_auto(GValue) value = G_VALUE_INIT;
-  const GVariantType *variant_type;
   GVariant *variant;
-  GVariant *to_compare;
-  gboolean active;
+  gboolean active = FALSE;
   GType type;
 
   g_assert (GTK_IS_CHECK_BUTTON (button));
@@ -91,11 +162,26 @@ on_binding_changed_cb (GtkCheckButton   *button,
   if (!(variant = g_object_get_data (G_OBJECT (button), "VALUE")))
     return;
 
-  variant_type = g_variant_get_type (variant);
-  if (!(to_compare = g_settings_set_mapping (&value, variant_type, NULL)))
-    return;
 
-  active = g_variant_equal (variant, to_compare);
+  if (type == G_TYPE_STRV && g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING))
+    {
+      g_auto(GStrv) strv = ide_tweaks_binding_get_strv (binding);
+
+      if (strv != NULL)
+        active = g_strv_contains ((const char * const *)strv,
+                                  g_variant_get_string (variant, NULL));
+    }
+  else
+    {
+      const GVariantType *variant_type = g_variant_get_type (variant);
+      g_autoptr(GVariant) to_compare = NULL;
+
+      if ((to_compare = g_settings_set_mapping (&value, variant_type, NULL)))
+        {
+          g_variant_take_ref (to_compare);
+          active = g_variant_equal (variant, to_compare);
+        }
+    }
 
   if (active != gtk_check_button_get_active (button))
     gtk_check_button_set_active (button, active);
