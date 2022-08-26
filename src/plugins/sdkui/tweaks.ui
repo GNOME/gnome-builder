@@ -14,7 +14,12 @@
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Download on Metered Connections</property>
                     <property name="subtitle" translatable="yes">Allow the download of SDKs and dependencies when on metered internet connections</property>
-                    <property name="action-name">settings.org.gnome.builder.build.allow-network-when-metered</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.build</property>
+                        <property name="schema-key">allow-network-when-metered</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>

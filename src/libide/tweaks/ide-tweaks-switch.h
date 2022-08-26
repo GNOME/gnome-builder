@@ -30,26 +30,16 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksSwitch, ide_tweaks_switch, IDE, TWEAKS_SWITCH, IdeTweaksWidget)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksSwitch *ide_tweaks_switch_new               (void);
+IdeTweaksSwitch *ide_tweaks_switch_new          (void);
 IDE_AVAILABLE_IN_ALL
-const char      *ide_tweaks_switch_get_title         (IdeTweaksSwitch *self);
+const char      *ide_tweaks_switch_get_title    (IdeTweaksSwitch *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_tweaks_switch_set_title         (IdeTweaksSwitch *self,
-                                                      const char      *title);
+void             ide_tweaks_switch_set_title    (IdeTweaksSwitch *self,
+                                                 const char      *title);
 IDE_AVAILABLE_IN_ALL
-const char      *ide_tweaks_switch_get_subtitle      (IdeTweaksSwitch *self);
+const char      *ide_tweaks_switch_get_subtitle (IdeTweaksSwitch *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_tweaks_switch_set_subtitle      (IdeTweaksSwitch *self,
-                                                      const char      *subtitle);
-IDE_AVAILABLE_IN_ALL
-const char      *ide_tweaks_switch_get_action_name   (IdeTweaksSwitch *self);
-IDE_AVAILABLE_IN_ALL
-void             ide_tweaks_switch_set_action_name   (IdeTweaksSwitch *self,
-                                                      const char      *action_name);
-IDE_AVAILABLE_IN_ALL
-GVariant        *ide_tweaks_switch_get_action_target (IdeTweaksSwitch *self);
-IDE_AVAILABLE_IN_ALL
-void             ide_tweaks_switch_set_action_target (IdeTweaksSwitch *self,
-                                                      GVariant        *action_target);
+void             ide_tweaks_switch_set_subtitle (IdeTweaksSwitch *self,
+                                                 const char      *subtitle);
 
 G_END_DECLS

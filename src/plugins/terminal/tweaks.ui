@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTweaks">
-    <child>
-      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_terminal">
-        <property name="schema-id">org.gnome.builder.terminal</property>
-        <property name="application-only">true</property>
-      </object>
-    </child>
     <child internal-child="visual_section">
       <object class="IdeTweaksSection">
         <child internal-child="terminal_page">
@@ -34,14 +28,24 @@
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Allow Bold</property>
                     <property name="subtitle" translatable="yes">Allows the use of bold escape sequences</property>
-                    <property name="action-name">settings.org.gnome.builder.terminal.allow-bold</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.terminal</property>
+                        <property name="schema-key">allow-bold</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
                 <child>
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Allow Hyperlinks</property>
                     <property name="subtitle" translatable="yes">Allows the use of hyperlink escape sequences</property>
-                    <property name="action-name">settings.org.gnome.builder.terminal.allow-hyperlink</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.terminal</property>
+                        <property name="schema-key">allow-hyperlink</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>
@@ -53,14 +57,24 @@
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Scroll On Output</property>
                     <property name="subtitle" translatable="yes">Automatically scroll when applications within the terminal output text</property>
-                    <property name="action-name">settings.org.gnome.builder.terminal.scroll-on-output</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.terminal</property>
+                        <property name="schema-key">scroll-on-output</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
                 <child>
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Scroll On Keyboard Input</property>
                     <property name="subtitle" translatable="yes">Automatically scroll when typing to insert text</property>
-                    <property name="action-name">settings.org.gnome.builder.terminal.scroll-on-keystroke</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.terminal</property>
+                        <property name="schema-key">scroll-on-keystroke</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>
@@ -72,7 +86,12 @@
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Limit Scrollback</property>
                     <property name="subtitle" translatable="yes">Limit the number of lines that are stored in memory for terminal scrollback</property>
-                    <property name="action-name">settings.org.gnome.builder.terminal.limit-scrollback</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.terminal</property>
+                        <property name="schema-key">limit-scrollback</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
                 <child>
@@ -81,7 +100,7 @@
                     <property name="subtitle" translatable="yes">The maximum number of lines stored in history when limiting scrollback</property>
                     <property name="binding">
                       <object class="IdeTweaksSetting">
-                        <property name="schema-id">org.gnome.builder.editor.terminal</property>
+                        <property name="schema-id">org.gnome.builder.terminal</property>
                         <property name="schema-key">scrollback-lines</property>
                       </object>
                     </property>

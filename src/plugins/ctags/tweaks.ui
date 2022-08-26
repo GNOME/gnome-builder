@@ -16,7 +16,12 @@
                           <object class="IdeTweaksSwitch">
                             <property name="title" translatable="yes">Suggest Completions</property>
                             <property name="subtitle" translatable="yes">Use CTags to suggest code completion proposals</property>
-                            <property name="action-name">settings.org.gnome.builder.code-insight.ctags-autocompletion</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.code-insight</property>
+                                <property name="schema-key">ctags-autocompletion</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>

@@ -29,9 +29,14 @@
                 <property name="title" translatable="yes">Color</property>
                 <child>
                   <object class="IdeTweaksSwitch">
-                    <property name="action-name">settings.org.gnome.builder.editor.show-grid-lines</property>
                     <property name="title" translatable="yes">Grid Pattern</property>
                     <property name="subtitle" translatable="yes">Display a grid pattern underneath source code</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.editor</property>
+                        <property name="schema-key">show-grid-lines</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>

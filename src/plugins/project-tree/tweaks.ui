@@ -18,21 +18,36 @@
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Show Icons</property>
                     <property name="subtitle" translatable="yes">Display icons next to files within the project tree</property>
-                    <property name="action-name">settings.org.gnome.builder.project-tree.show-icons</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.project-tree</property>
+                        <property name="schema-key">show-icons</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
                 <child>
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Show Ignored Files</property>
                     <property name="subtitle" translatable="yes">Show files which are typically ignored</property>
-                    <property name="action-name">settings.org.gnome.builder.project-tree.show-ignored-files</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.project-tree</property>
+                        <property name="schema-key">show-ignored-files</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
                 <child>
                   <object class="IdeTweaksSwitch">
                     <property name="title" translatable="yes">Sort Directories First</property>
                     <property name="subtitle" translatable="yes">Sort directories before files in the same directory</property>
-                    <property name="action-name">settings.org.gnome.builder.project-tree.sort-directories-first</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.project-tree</property>
+                        <property name="schema-key">sort-directories-first</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>

@@ -10,18 +10,17 @@
                 <child internal-child="editor_session_page">
                   <object class="IdeTweaksPage">
                     <child>
-                      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_copyright">
-                        <property name="schema-id">org.gnome.builder.copyright</property>
-                        <property name="application-only">true</property>
-                      </object>
-                    </child>
-                    <child>
                       <object class="IdeTweaksGroup">
                         <child>
                           <object class="IdeTweaksSwitch">
                             <property name="title" translatable="yes">Update Copyright</property>
                             <property name="subtitle" translatable="yes">Update copyright headers when saving documents</property>
-                            <property name="action-name">settings.org.gnome.builder.copyright.update-on-save</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.copyright</property>
+                                <property name="schema-key">update-on-save</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                       </object>

@@ -24,14 +24,24 @@
                       <object class="IdeTweaksSwitch">
                         <property name="title" translatable="yes">Clear Expired Artifacts</property>
                         <property name="subtitle" translatable="yes">Artifacts which have expired will be deleted when Builder is started</property>
-                        <property name="action-name">settings.org.gnome.builder.clear-cache-at-startup</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder</property>
+                            <property name="schema-key">clear-cache-at-startup</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="IdeTweaksSwitch">
                         <property name="title" translatable="yes">Clear Build Logs</property>
                         <property name="subtitle" translatable="yes">Clear the build log history when a new build begins</property>
-                        <property name="action-name">settings.org.gnome.builder.build.clear-build-log-pane</property>
+                        <property name="binding">
+                          <object class="IdeTweaksSetting">
+                            <property name="schema-id">org.gnome.builder.build</property>
+                            <property name="schema-key">clear-build-log-pane</property>
+                          </object>
+                        </property>
                       </object>
                     </child>
                   </object>
