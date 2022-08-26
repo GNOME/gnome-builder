@@ -6,7 +6,7 @@
     <item>
       <!-- translators: you may need to swap left/right in your language, as this refers to "start" (not "end") -->
       <attribute name="label" translatable="yes">Toggle Left Panel</attribute>
-      <attribute name="description" translatable="yes">Toggle the left panel in our out of view</attribute>
+      <attribute name="description" translatable="yes">Toggle the left panel in or out of view</attribute>
       <!-- translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL -->
       <attribute name="verb-icon" translatable="yes">panel-left-symbolic</attribute>
       <attribute name="action">workspace.panel.toggle-start</attribute>
@@ -15,7 +15,7 @@
     <item>
       <!-- translators: you may need to swap left/right in your language, as this refers to "end" (not "start") -->
       <attribute name="label" translatable="yes">Toggle Right Panel</attribute>
-      <attribute name="description" translatable="yes">Toggle the right panel in our out of view</attribute>
+      <attribute name="description" translatable="yes">Toggle the right panel in or out of view</attribute>
       <!-- translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL -->
       <attribute name="verb-icon" translatable="yes">panel-right-symbolic</attribute>
       <attribute name="action">workspace.panel.toggle-end</attribute>
@@ -23,7 +23,7 @@
 
     <item>
       <attribute name="label" translatable="yes">Toggle Bottom Panel</attribute>
-      <attribute name="description" translatable="yes">Toggle the bottom panel in our out of view</attribute>
+      <attribute name="description" translatable="yes">Toggle the bottom panel in or out of view</attribute>
       <attribute name="verb-icon">panel-bottom-symbolic</attribute>
       <attribute name="action">workspace.panel.toggle-bottom</attribute>
     </item>
