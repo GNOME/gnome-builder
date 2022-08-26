@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTweaks">
-    <child>
-      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_project_tree">
-        <property name="schema-id">org.gnome.builder.project-tree</property>
-        <property name="application-only">true</property>
-      </object>
-    </child>
     <child internal-child="projects_section">
       <object class="IdeTweaksSection">
         <child internal-child="projects_page">

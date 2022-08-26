@@ -26,7 +26,6 @@
 
 #include "ide-tweaks.h"
 #include "ide-tweaks-section.h"
-#include "ide-tweaks-settings.h"
 
 struct _IdeTweaks
 {
@@ -73,8 +72,7 @@ ide_tweaks_accepts (IdeTweaksItem *item,
   g_assert (IDE_IS_TWEAKS_ITEM (item));
   g_assert (IDE_IS_TWEAKS_ITEM (child));
 
-  return IDE_IS_TWEAKS_SECTION (child) ||
-         IDE_IS_TWEAKS_SETTINGS (child);
+  return IDE_IS_TWEAKS_SECTION (child);
 }
 
 static void

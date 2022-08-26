@@ -17,19 +17,6 @@
                         <lookup name="item">language_page_factory</lookup>
                       </lookup>
                     </binding>
-                    <child>
-                      <object class="IdeTweaksSettings" id="language_page_settings">
-                        <property name="schema-id">org.gnome.builder.editor.language</property>
-                        <binding name="schema-path">
-                          <closure type="gchararray" function="format">
-                            <constant type="gchararray">/org/gnome/builder/editor/languages/%s/</constant>
-                            <lookup name="id" type="GtkSourceLanguage">
-                              <lookup name="item">language_page_factory</lookup>
-                            </lookup>
-                          </closure>
-                        </binding>
-                      </object>
-                    </child>
                   </object>
                 </child>
               </object>

@@ -24,7 +24,6 @@
 # error "Only <libide-tweaks.h> can be included directly."
 #endif
 
-#include "ide-tweaks-settings.h"
 #include "ide-tweaks-widget.h"
 
 G_BEGIN_DECLS

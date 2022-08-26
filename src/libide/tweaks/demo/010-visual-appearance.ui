@@ -8,18 +8,6 @@
             <property name="icon-name">preferences-desktop-appearance-symbolic</property>
             <property name="title" translatable="yes">Appearance</property>
             <child>
-              <object class="IdeTweaksSettings">
-                <property name="schema-id">org.gnome.builder</property>
-                <property name="application-only">true</property>
-              </object>
-            </child>
-            <child>
-              <object class="IdeTweaksSettings">
-                <property name="schema-id">org.gnome.builder.editor</property>
-                <property name="application-only">true</property>
-              </object>
-            </child>
-            <child>
               <object class="IdeTweaksGroup" id="appearance_page_style_group">
                 <property name="title" translatable="yes">Style</property>
               </object>

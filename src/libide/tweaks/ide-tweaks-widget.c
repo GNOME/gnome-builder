@@ -22,7 +22,6 @@
 
 #include "config.h"
 
-#include "ide-tweaks-settings.h"
 #include "ide-tweaks-widget-private.h"
 
 typedef struct
@@ -81,7 +80,7 @@ ide_tweaks_widget_copy (IdeTweaksItem *item)
   copy_priv = ide_tweaks_widget_get_instance_private (IDE_TWEAKS_WIDGET (copy));
   g_set_weak_pointer (&copy_priv->cloned, self);
 
-  /* Also keep a copy of any property we find that is an IdeTweaksSettings
+  /* Also keep a copy of any property we find that is a binding
    * since those need to be snapshotted.
    */
   pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (item), &n_pspecs);
@@ -93,8 +92,7 @@ ide_tweaks_widget_copy (IdeTweaksItem *item)
           (pspec->flags & G_PARAM_CONSTRUCT_ONLY) != 0)
         continue;
 
-      if (g_type_is_a (pspec->value_type, IDE_TYPE_TWEAKS_SETTINGS) ||
-          g_type_is_a (pspec->value_type, IDE_TYPE_TWEAKS_BINDING))
+      if (g_type_is_a (pspec->value_type, IDE_TYPE_TWEAKS_BINDING))
         clone_item_property (item, copy, pspec->name);
     }
 

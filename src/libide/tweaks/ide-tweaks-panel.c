@@ -26,7 +26,6 @@
 #include "ide-tweaks-group.h"
 #include "ide-tweaks-page.h"
 #include "ide-tweaks-panel-private.h"
-#include "ide-tweaks-settings.h"
 #include "ide-tweaks-widget-private.h"
 
 struct _IdeTweaksPanel
@@ -98,20 +97,6 @@ ide_tweaks_panel_visitor_cb (IdeTweaksItem *item,
       adw_preferences_page_add (self->prefs_page, self->current_group);
 
       return IDE_TWEAKS_ITEM_VISIT_RECURSE;
-    }
-  else if (IDE_IS_TWEAKS_SETTINGS (item))
-    {
-      IdeTweaks *tweaks = ide_tweaks_item_get_ancestor (IDE_TWEAKS_ITEM (self->page), IDE_TYPE_TWEAKS);
-      IdeTweaksSettings *settings = IDE_TWEAKS_SETTINGS (item);
-      const char *schema_id = ide_tweaks_settings_get_schema_id (settings);
-
-      if (ide_action_muxer_get_action_group (self->muxer, schema_id) == NULL)
-        {
-          GActionGroup *group = ide_tweaks_settings_create_action_group (settings, tweaks);
-
-          if (group != NULL)
-            ide_action_muxer_insert_action_group (self->muxer, schema_id, G_ACTION_GROUP (group));
-        }
     }
   else if (IDE_IS_TWEAKS_WIDGET (item))
     {

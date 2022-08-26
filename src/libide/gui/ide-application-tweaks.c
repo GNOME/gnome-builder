@@ -114,7 +114,6 @@ add_plugin_tweaks (IdeTweaksPage *page)
           g_autoptr(IdePlugin) plugin = g_list_model_get_item (plugins, j);
           const char *category_id = ide_plugin_get_category_id (plugin);
           const char *category = ide_plugin_get_category (plugin);
-          g_autoptr(IdeTweaksSettings) settings = NULL;
           g_autoptr(IdeTweaksWidget) widget = NULL;
           IdeTweaksGroup *group;
 

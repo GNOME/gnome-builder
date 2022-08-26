@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="IdeTweaks">
-    <child>
-      <object class="IdeTweaksSettings" id="settings_org_gnome_builder_sysprof">
-        <property name="schema-id">org.gnome.builder.sysprof</property>
-        <property name="application-only">true</property>
-      </object>
-    </child>
     <child internal-child="foundry_section">
       <object class="IdeTweaksSection">
         <child internal-child="build_page">
