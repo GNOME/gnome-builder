@@ -194,8 +194,62 @@
                           <object class="IdeTweaksGroup" id="language_spaces_style_group">
                             <property name="title" translatable="yes">Spaces</property>
                             <child>
-                              <object class="IdeTweaksWidget">
-                                <signal name="create-for-item" handler="create_spaces_style" swapped="true" object="IdeTweaks"/>
+                              <object class="IdeTweaksRadio">
+                                <property name="title" translatable="yes">Space before opening parentheses</property>
+                                <property name="value">'before-left-paren'</property>
+                                <property name="binding">
+                                  <object class="IdeTweaksSetting" id="language_spaces_style_setting">
+                                    <property name="schema-id">org.gnome.builder.editor.language</property>
+                                    <property name="schema-key">spaces-style</property>
+                                    <binding name="path-suffix">
+                                      <lookup name="id" type="GtkSourceLanguage">
+                                        <lookup name="item">language_page_factory</lookup>
+                                      </lookup>
+                                    </binding>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksRadio">
+                                <property name="title" translatable="yes">Space before opening brackets</property>
+                                <property name="value">'before-left-bracket'</property>
+                                <property name="binding">language_spaces_style_setting</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksRadio">
+                                <property name="title" translatable="yes">Space before opening braces</property>
+                                <property name="value">'before-left-brace'</property>
+                                <property name="binding">language_spaces_style_setting</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksRadio">
+                                <property name="title" translatable="yes">Space before opening angles</property>
+                                <property name="value">'before-left-angle'</property>
+                                <property name="binding">language_spaces_style_setting</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksRadio">
+                                <property name="title" translatable="yes">Prefer a space before colon</property>
+                                <property name="value">'before-colon'</property>
+                                <property name="binding">language_spaces_style_setting</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksRadio">
+                                <property name="title" translatable="yes">Prefer a space before commas</property>
+                                <property name="value">'before-comma'</property>
+                                <property name="binding">language_spaces_style_setting</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksRadio">
+                                <property name="title" translatable="yes">Prefer a space before simicolons</property>
+                                <property name="value">'before-semicolon'</property>
+                                <property name="binding">language_spaces_style_setting</property>
                               </object>
                             </child>
                           </object>
