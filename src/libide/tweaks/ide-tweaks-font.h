@@ -35,26 +35,16 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksFont, ide_tweaks_font, IDE, TWEAKS_FONT, IdeTweaksWidget)
 
 IDE_AVAILABLE_IN_ALL
-IdeTweaksFont     *ide_tweaks_font_new          (void);
+IdeTweaksFont *ide_tweaks_font_new          (void);
 IDE_AVAILABLE_IN_ALL
-const char        *ide_tweaks_font_get_title    (IdeTweaksFont     *self);
+const char    *ide_tweaks_font_get_title    (IdeTweaksFont *self);
 IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_font_set_title    (IdeTweaksFont     *self,
-                                                 const char        *title);
+void           ide_tweaks_font_set_title    (IdeTweaksFont *self,
+                                             const char    *title);
 IDE_AVAILABLE_IN_ALL
-const char        *ide_tweaks_font_get_subtitle (IdeTweaksFont     *self);
+const char    *ide_tweaks_font_get_subtitle (IdeTweaksFont *self);
 IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_font_set_subtitle (IdeTweaksFont     *self,
-                                                 const char        *subtitle);
-IDE_AVAILABLE_IN_ALL
-const char        *ide_tweaks_font_get_key      (IdeTweaksFont     *self);
-IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_font_set_key      (IdeTweaksFont     *self,
-                                                 const char        *key);
-IDE_AVAILABLE_IN_ALL
-IdeTweaksSettings *ide_tweaks_font_get_settings (IdeTweaksFont     *self);
-IDE_AVAILABLE_IN_ALL
-void               ide_tweaks_font_set_settings (IdeTweaksFont     *self,
-                                                 IdeTweaksSettings *settings);
+void           ide_tweaks_font_set_subtitle (IdeTweaksFont *self,
+                                             const char    *subtitle);
 
 G_END_DECLS

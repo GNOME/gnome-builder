@@ -32,16 +32,12 @@
 struct _IdeTweaksFont
 {
   IdeTweaksWidget parent_instance;
-  IdeTweaksSettings *settings;
-  char *key;
   char *title;
   char *subtitle;
 };
 
 enum {
   PROP_0,
-  PROP_KEY,
-  PROP_SETTINGS,
   PROP_SUBTITLE,
   PROP_TITLE,
   N_PROPS
@@ -54,49 +50,33 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_tweaks_font_dialog_response_cb (GtkFontChooserDialog *dialog,
                                     int                   response_id,
-                                    GtkButton            *button)
+                                    IdeTweaksBinding     *binding)
 {
   g_autofree char *font_name = NULL;
-  IdeSettings *settings;
-  const char *key;
 
   g_assert (GTK_IS_FONT_CHOOSER_DIALOG (dialog));
-  g_assert (GTK_IS_BUTTON (button));
-
-  settings = g_object_get_data (G_OBJECT (button), "SETTINGS");
-  key = g_object_get_data (G_OBJECT (button), "KEY");
-
-  g_assert (IDE_IS_SETTINGS (settings));
-  g_assert (key != NULL);
+  g_assert (IDE_IS_TWEAKS_BINDING (binding));
 
   font_name = gtk_font_chooser_get_font (GTK_FONT_CHOOSER (dialog));
 
   if (response_id == GTK_RESPONSE_OK)
-    ide_settings_set_string (settings, key, font_name);
+    ide_tweaks_binding_set_string (binding, font_name);
 
   gtk_window_destroy (GTK_WINDOW (dialog));
 }
 
 static void
-ide_tweaks_font_button_clicked_cb (IdeTweaksFont *self,
-                                   GtkButton     *button)
+ide_tweaks_font_button_clicked_cb (GtkButton        *button,
+                                   IdeTweaksBinding *binding)
 {
   g_autofree char *font_name = NULL;
-  IdeSettings *settings;
-  const char *key;
   GtkWidget *dialog;
   GtkRoot *root;
 
-  g_assert (IDE_IS_TWEAKS_FONT (self));
   g_assert (GTK_IS_BUTTON (button));
+  g_assert (IDE_IS_TWEAKS_BINDING (binding));
 
-  settings = g_object_get_data (G_OBJECT (button), "SETTINGS");
-  key = g_object_get_data (G_OBJECT (button), "KEY");
-
-  g_assert (IDE_IS_SETTINGS (settings));
-  g_assert (key != NULL);
-
-  font_name = ide_settings_get_string (settings, key);
+  font_name = ide_tweaks_binding_dup_string (binding);
   root = gtk_widget_get_root (GTK_WIDGET (button));
   dialog = gtk_font_chooser_dialog_new (_("Select Font"), GTK_WINDOW (root));
 
@@ -105,7 +85,7 @@ ide_tweaks_font_button_clicked_cb (IdeTweaksFont *self,
   g_signal_connect_object (dialog,
                            "response",
                            G_CALLBACK (ide_tweaks_font_dialog_response_cb),
-                           button,
+                           binding,
                            0);
 
   gtk_window_present (GTK_WINDOW (dialog));
@@ -116,21 +96,14 @@ ide_tweaks_font_create_for_item (IdeTweaksWidget *instance,
                                  IdeTweaksItem   *widget)
 {
   IdeTweaksFont *self = (IdeTweaksFont *)widget;
-  g_autoptr(IdeSettings) settings = NULL;
-  IdeTweaksItem *root;
+  IdeTweaksBinding *binding;
   AdwActionRow *row;
   GtkButton *button;
 
   g_assert (IDE_IS_TWEAKS_FONT (self));
 
-  if (self->settings == NULL || self->key == NULL)
-    return NULL;
-
-  root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (widget));
-  if (!root || !IDE_IS_TWEAKS (root))
-    return NULL;
-
-  settings = IDE_SETTINGS (ide_tweaks_settings_create_action_group (self->settings, IDE_TWEAKS (root)));
+  if (!(binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (self))))
+      return NULL;
 
   button = g_object_new (GTK_TYPE_BUTTON,
                          "css-classes", IDE_STRV_INIT ("flat"),
@@ -146,19 +119,10 @@ ide_tweaks_font_create_for_item (IdeTweaksWidget *instance,
   g_signal_connect_object (button,
                            "clicked",
                            G_CALLBACK (ide_tweaks_font_button_clicked_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
+                           binding,
+                           0);
 
-  ide_settings_bind (settings, self->key, button, "label", G_SETTINGS_BIND_GET);
-
-  g_object_set_data_full (G_OBJECT (button),
-                          "SETTINGS",
-                          g_steal_pointer (&settings),
-                          g_object_unref);
-  g_object_set_data_full (G_OBJECT (button),
-                          "KEY",
-                          g_strdup (self->key),
-                          g_free);
+  ide_tweaks_binding_bind (binding, button, "label");
 
   return GTK_WIDGET (row);
 }
@@ -168,10 +132,8 @@ ide_tweaks_font_dispose (GObject *object)
 {
   IdeTweaksFont *self = (IdeTweaksFont *)object;
 
-  g_clear_pointer (&self->key, g_free);
   g_clear_pointer (&self->title, g_free);
   g_clear_pointer (&self->subtitle, g_free);
-  g_clear_object (&self->settings);
 
   G_OBJECT_CLASS (ide_tweaks_font_parent_class)->dispose (object);
 }
@@ -186,14 +148,6 @@ ide_tweaks_font_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_KEY:
-      g_value_set_string (value, ide_tweaks_font_get_key (self));
-      break;
-
-    case PROP_SETTINGS:
-      g_value_set_object (value, ide_tweaks_font_get_settings (self));
-      break;
-
     case PROP_SUBTITLE:
       g_value_set_string (value, ide_tweaks_font_get_subtitle (self));
       break;
@@ -217,14 +171,6 @@ ide_tweaks_font_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_KEY:
-      ide_tweaks_font_set_key (self, g_value_get_string (value));
-      break;
-
-    case PROP_SETTINGS:
-      ide_tweaks_font_set_settings (self, g_value_get_object (value));
-      break;
-
     case PROP_SUBTITLE:
       ide_tweaks_font_set_subtitle (self, g_value_get_string (value));
       break;
@@ -250,16 +196,6 @@ ide_tweaks_font_class_init (IdeTweaksFontClass *klass)
 
   widget_class->create_for_item = ide_tweaks_font_create_for_item;
 
-  properties[PROP_KEY] =
-    g_param_spec_string ("key", NULL, NULL,
-                         NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
-  properties[PROP_SETTINGS] =
-    g_param_spec_object ("settings", NULL, NULL,
-                         IDE_TYPE_TWEAKS_SETTINGS,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
-
   properties[PROP_SUBTITLE] =
     g_param_spec_string ("subtitle", NULL, NULL,
                          NULL,
@@ -278,30 +214,6 @@ ide_tweaks_font_init (IdeTweaksFont *self)
 {
 }
 
-/**
- * ide_tweaks_font_get_settings:
- * @self: a #IdeTweaksFont
- *
- * Gets the settings containing #IdeTweaksFont:key.
- *
- * Returns: (transfer none) (nullable): an #IdeTweaksSettings or %NULL
- */
-IdeTweaksSettings *
-ide_tweaks_font_get_settings (IdeTweaksFont *self)
-{
-  g_return_val_if_fail (IDE_IS_TWEAKS_FONT (self), NULL);
-
-  return self->settings;
-}
-
-const char *
-ide_tweaks_font_get_key (IdeTweaksFont *self)
-{
-  g_return_val_if_fail (IDE_IS_TWEAKS_FONT (self), NULL);
-
-  return self->key;
-}
-
 const char *
 ide_tweaks_font_get_subtitle (IdeTweaksFont *self)
 {
@@ -316,26 +228,6 @@ ide_tweaks_font_get_title (IdeTweaksFont *self)
   g_return_val_if_fail (IDE_IS_TWEAKS_FONT (self), NULL);
 
   return self->title;
-}
-
-void
-ide_tweaks_font_set_settings (IdeTweaksFont     *self,
-                              IdeTweaksSettings *settings)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_FONT (self));
-
-  if (g_set_object (&self->settings, settings))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_SETTINGS]);
-}
-
-void
-ide_tweaks_font_set_key (IdeTweaksFont *self,
-                           const char    *key)
-{
-  g_return_if_fail (IDE_IS_TWEAKS_FONT (self));
-
-  if (ide_set_string (&self->key, key))
-    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_KEY]);
 }
 
 void

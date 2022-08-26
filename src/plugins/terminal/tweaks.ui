@@ -18,8 +18,12 @@
                   <object class="IdeTweaksFont" id="terminal_font">
                     <property name="title" translatable="yes">Font</property>
                     <property name="subtitle" translatable="yes">The font used within terminals</property>
-                    <property name="settings">settings_org_gnome_builder_terminal</property>
-                    <property name="key">font-name</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.terminal</property>
+                        <property name="schema-key">font-name</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>

@@ -65,8 +65,12 @@
                           <object class="IdeTweaksFont" id="editor_font">
                             <property name="title" translatable="yes">Font</property>
                             <property name="subtitle" translatable="yes">The font used within the source code editor</property>
-                            <property name="settings">settings_org_gnome_builder_editor</property>
-                            <property name="key">font-name</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">font-name</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                         <child>
