@@ -67,6 +67,11 @@ IDE_AVAILABLE_IN_ALL
 void           ide_tweaks_binding_set_string          (IdeTweaksBinding          *self,
                                                        const char                *string);
 IDE_AVAILABLE_IN_ALL
+char         **ide_tweaks_binding_get_strv            (IdeTweaksBinding          *self);
+IDE_AVAILABLE_IN_ALL
+void           ide_tweaks_binding_set_strv            (IdeTweaksBinding          *self,
+                                                       const char * const        *strv);
+IDE_AVAILABLE_IN_ALL
 void           ide_tweaks_binding_bind                (IdeTweaksBinding          *self,
                                                        gpointer                   instance,
                                                        const char                *property_name);

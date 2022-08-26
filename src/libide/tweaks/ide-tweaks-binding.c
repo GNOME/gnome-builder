@@ -471,3 +471,39 @@ ide_tweaks_binding_create_adjustment (IdeTweaksBinding *self)
 
   return NULL;
 }
+
+/**
+ * ide_tweaks_binding_get_strv:
+ * @self: a #IdeTweaksBinding
+ *
+ * Gets the value as a #GStrv.
+ *
+ * Returns: (transfer full) (nullable) (array zero-terminated=1) (element-type utf8): A
+ *   newly allocated string array, or %NULL
+ */
+char **
+ide_tweaks_binding_get_strv (IdeTweaksBinding *self)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+
+  g_return_val_if_fail (IDE_IS_TWEAKS_BINDING (self), NULL);
+
+  g_value_init (&value, G_TYPE_STRV);
+  if (!ide_tweaks_binding_get_value (self, &value))
+    return NULL;
+
+  return g_value_dup_boxed (&value);
+}
+
+void
+ide_tweaks_binding_set_strv (IdeTweaksBinding   *self,
+                             const char * const *strv)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+
+  g_return_if_fail (IDE_IS_TWEAKS_BINDING (self));
+
+  g_value_init (&value, G_TYPE_STRV);
+  g_value_set_static_boxed (&value, strv);
+  ide_tweaks_binding_set_value (self, &value);
+}
