@@ -24,6 +24,8 @@
 
 #include "ide-tweaks-binding.h"
 
+#include "gsettings-mapping.h"
+
 typedef struct
 {
   IdeTweaksBindingTransform get_transform;
@@ -412,4 +414,27 @@ ide_tweaks_binding_dup_string (IdeTweaksBinding *self)
     return g_value_dup_string (&value);
 
   return NULL;
+}
+
+void
+ide_tweaks_binding_set_variant (IdeTweaksBinding *self,
+                                GVariant         *variant)
+{
+  g_auto(GValue) value = G_VALUE_INIT;
+  g_autoptr(GVariant) hold = NULL;
+  GType type;
+
+  g_return_if_fail (IDE_IS_TWEAKS_BINDING (self));
+  g_return_if_fail (variant != NULL);
+
+  hold = g_variant_ref_sink (variant);
+
+  if (!ide_tweaks_binding_get_expected_type (self, &type))
+    return;
+
+  g_value_init (&value, type);
+  if (!g_settings_get_mapping (&value, variant, NULL))
+    return;
+
+  ide_tweaks_binding_set_value (self, &value);
 }

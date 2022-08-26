@@ -58,6 +58,9 @@ IDE_AVAILABLE_IN_ALL
 void     ide_tweaks_binding_set_value           (IdeTweaksBinding          *self,
                                                  const GValue              *value);
 IDE_AVAILABLE_IN_ALL
+void     ide_tweaks_binding_set_variant         (IdeTweaksBinding          *self,
+                                                 GVariant                  *variant);
+IDE_AVAILABLE_IN_ALL
 char    *ide_tweaks_binding_dup_string          (IdeTweaksBinding          *self);
 IDE_AVAILABLE_IN_ALL
 void     ide_tweaks_binding_bind                (IdeTweaksBinding          *self,
