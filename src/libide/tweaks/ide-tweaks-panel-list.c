@@ -234,6 +234,7 @@ ide_tweaks_panel_list_header_func (IdeTweaksPanelListRow *row,
   g_assert (label != NULL);
 
   box = g_object_new (GTK_TYPE_BOX,
+                      "margin-top", before_section ? 4 : 0,
                       "orientation", GTK_ORIENTATION_VERTICAL,
                       NULL);
   if (separator != NULL)
