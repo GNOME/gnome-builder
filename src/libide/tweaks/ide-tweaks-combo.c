@@ -28,7 +28,9 @@
 #include "ide-tweaks-choice.h"
 #include "ide-tweaks-combo.h"
 #include "ide-tweaks-combo-row.h"
+#include "ide-tweaks-factory.h"
 #include "ide-tweaks-item-private.h"
+#include "ide-tweaks-model-private.h"
 #include "ide-tweaks-variant.h"
 
 #include "gsettings-mapping.h"
@@ -39,6 +41,14 @@ struct _IdeTweaksCombo
   char *title;
   char *subtitle;
 };
+
+typedef struct
+{
+  IdeTweaksItem *root;
+  GVariant *variant;
+  guint pos;
+  int selected;
+} VisitState;
 
 enum {
   PROP_0,
@@ -51,27 +61,61 @@ G_DEFINE_FINAL_TYPE (IdeTweaksCombo, ide_tweaks_combo, IDE_TYPE_TWEAKS_WIDGET)
 
 static GParamSpec *properties [N_PROPS];
 
+static IdeTweaksItemVisitResult
+ide_tweaks_combo_visit_children_cb (IdeTweaksItem *item,
+                                    gpointer       user_data)
+{
+  VisitState *state = user_data;
+
+  if (IDE_IS_TWEAKS_FACTORY (item))
+    return IDE_TWEAKS_ITEM_VISIT_RECURSE;
+
+  if (IDE_IS_TWEAKS_CHOICE (item) &&
+      !_ide_tweaks_item_is_hidden (item, state->root))
+    {
+      if (state->variant)
+        {
+          GVariant *choice_variant = ide_tweaks_choice_get_value (IDE_TWEAKS_CHOICE (item));
+
+          if (choice_variant && g_variant_equal (state->variant, choice_variant))
+            state->selected = state->pos;
+        }
+
+      state->pos++;
+    }
+
+  return IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE;
+}
+
+static void
+visit_state_finalize (VisitState *state)
+{
+  g_clear_pointer (&state->variant, g_variant_unref);
+  g_clear_weak_pointer (&state->root);
+}
+
+static void
+visit_state_unref (gpointer data)
+{
+  g_rc_box_release_full (data, (GDestroyNotify)visit_state_finalize);
+}
+
 static GtkWidget *
 ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
                                   IdeTweaksItem   *widget)
 {
   IdeTweaksCombo *self = (IdeTweaksCombo *)widget;
-  g_autoptr(GListStore) store = NULL;
+  g_autoptr(IdeTweaksModel) model = NULL;
   g_autoptr(GVariant) variant = NULL;
   IdeTweaksBinding *binding = NULL;
-  IdeTweaksItem *root;
   AdwComboRow *row;
+  VisitState *state;
   GType type;
-  guint i = 0;
-  int selected = -1;
 
   g_assert (IDE_IS_TWEAKS_COMBO (self));
 
   if (!(binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (widget))))
     return NULL;
-
-  root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (widget));
-  store = g_list_store_new (IDE_TYPE_TWEAKS_CHOICE);
 
   if (ide_tweaks_binding_get_expected_type (binding, &type))
     {
@@ -80,32 +124,27 @@ ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
 
       g_value_init (&value, type);
       if (ide_tweaks_binding_get_value (binding, &value))
-        variant = g_settings_set_mapping (&value, expected_type, NULL);
-    }
-
-  for (IdeTweaksItem *child = ide_tweaks_item_get_first_child (IDE_TWEAKS_ITEM (self));
-       child != NULL;
-       child = ide_tweaks_item_get_next_sibling (child))
-    {
-      if (IDE_IS_TWEAKS_CHOICE (child) &&
-          !_ide_tweaks_item_is_hidden (child, root))
         {
-          GVariant *choice_variant = ide_tweaks_choice_get_value (IDE_TWEAKS_CHOICE (child));
-
-          if (variant && choice_variant && g_variant_equal (variant, choice_variant))
-            selected = i;
-
-          g_list_store_append (store, child);
-          i++;
+          if ((variant = g_settings_set_mapping (&value, expected_type, NULL)))
+            g_variant_take_ref (variant);
         }
     }
+
+  state = g_rc_box_new0 (VisitState);
+  g_set_weak_pointer (&state->root, ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self)));
+  state->selected = -1;
+  state->variant = variant ? g_variant_ref (variant) : NULL;
+
+  model = ide_tweaks_model_new (IDE_TWEAKS_ITEM (self),
+                                ide_tweaks_combo_visit_children_cb,
+                                state, visit_state_unref);
 
   row = g_object_new (IDE_TYPE_TWEAKS_COMBO_ROW,
                       "title", self->title,
                       "subtitle", self->subtitle,
                       "binding", binding,
-                      "model", store,
-                      "selected", selected > -1 ? selected : 0,
+                      "model", model,
+                      "selected", state->selected > -1 ? state->selected : 0,
                       NULL);
 
   return GTK_WIDGET (row);
@@ -115,7 +154,8 @@ static gboolean
 ide_tweaks_combo_accepts (IdeTweaksItem *item,
                           IdeTweaksItem *child)
 {
-  return IDE_IS_TWEAKS_CHOICE (child);
+  return IDE_IS_TWEAKS_CHOICE (child) ||
+         IDE_IS_TWEAKS_FACTORY (child);
 }
 
 static void
