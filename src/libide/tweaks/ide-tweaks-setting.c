@@ -66,6 +66,25 @@ ide_tweaks_setting_settings_changed_cb (IdeTweaksSetting *self,
   ide_tweaks_binding_changed (IDE_TWEAKS_BINDING (self));
 }
 
+static gboolean
+schema_is_relocatable (const char *schema_id)
+{
+  GSettingsSchemaSource *source;
+  g_autoptr(GSettingsSchema) schema = NULL;
+
+  g_assert (schema_id != NULL);
+
+  source = g_settings_schema_source_get_default ();
+
+  if (!(schema = g_settings_schema_source_lookup (source, schema_id, TRUE)))
+    {
+      g_critical ("No such schema: %s", schema_id);
+      return FALSE;
+    }
+
+  return g_settings_schema_get_path (schema) == NULL;
+}
+
 static GSettings *
 ide_tweaks_setting_acquire (IdeTweaksSetting    *self,
                             const char         **key,
@@ -89,11 +108,15 @@ ide_tweaks_setting_acquire (IdeTweaksSetting    *self,
       g_autofree char *path = NULL;
       g_autofree char *signal_name = NULL;
       g_autoptr(GVariant) value = NULL;
-      IdeTweaksItem *root;
       const char *project_id = NULL;
 
-      if ((root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self))) && IDE_IS_TWEAKS (root))
-        project_id = ide_tweaks_get_project_id (IDE_TWEAKS (root));
+      if (schema_is_relocatable (self->schema_id))
+        {
+          IdeTweaksItem *root;
+
+          if ((root = ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (self))) && IDE_IS_TWEAKS (root))
+            project_id = ide_tweaks_get_project_id (IDE_TWEAKS (root));
+        }
 
       if (!(path = ide_settings_resolve_schema_path (self->schema_id, project_id, self->path_suffix)))
         return NULL;
