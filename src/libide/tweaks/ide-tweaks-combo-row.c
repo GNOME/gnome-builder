@@ -66,6 +66,9 @@ ide_tweaks_combo_row_notify_selected (IdeTweaksComboRow *self,
       GVariant *variant = ide_tweaks_choice_get_value (choice);
       GType type;
 
+      if (variant == NULL)
+        goto cleanup;
+
       if (ide_tweaks_binding_get_expected_type (self->binding, &type))
         {
           g_auto(GValue) value = G_VALUE_INIT;
