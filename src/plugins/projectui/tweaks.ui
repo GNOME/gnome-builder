@@ -228,6 +228,16 @@
                         </binding>
                       </object>
                     </child>
+                    <child>
+                      <object class="IdeTweaksInfo">
+                        <property name="title" translatable="yes">Provided By</property>
+                        <binding name="value">
+                          <lookup name="description" type="IdeConfig">
+                            <lookup name="item">config_factory</lookup>
+                          </lookup>
+                        </binding>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
