@@ -3,12 +3,13 @@
   <template class="IdeTweaks">
     <child>
       <object class="IdeTweaksSection" id="overview_section">
+        <property name="title">overview</property>
         <property name="hidden-when">application</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="visual_section">
-        <property name="title" translatable="yes">Visual</property>
+        <property name="title">visual</property>
         <property name="hidden-when">project</property>
         <child>
           <object class="IdeTweaksPage" id="appearance_page">
@@ -32,28 +33,28 @@
     </child>
     <child>
       <object class="IdeTweaksSection" id="code_section">
-        <property name="title" translatable="yes">Code</property>
+        <property name="title">code</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="projects_section">
-        <property name="title" translatable="yes">Projects</property>
+        <property name="title">projects</property>
         <property name="hidden-when">project</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="foundry_section">
-        <property name="title" translatable="yes">Foundry</property>
+        <property name="title">foundry</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="external_section">
-        <property name="title" translatable="yes">External</property>
+        <property name="title">external</property>
       </object>
     </child>
     <child>
       <object class="IdeTweaksSection" id="plugins_section">
-        <property name="title" translatable="yes">Plugins</property>
+        <property name="title">plugins</property>
         <property name="hidden-when">project</property>
         <child>
           <object class="IdeTweaksPage" id="plugins_page">
