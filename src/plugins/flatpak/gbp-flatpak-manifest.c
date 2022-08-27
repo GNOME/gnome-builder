@@ -21,6 +21,10 @@
 
 #define G_LOG_DOMAIN "gbp-flatpak-manifest"
 
+#include "config.h"
+
+#include <glib/gi18n.h>
+
 #include <json-glib/json-glib.h>
 
 #include "gbp-flatpak-client.h"
@@ -674,6 +678,12 @@ gbp_flatpak_manifest_get_extensions (IdeConfig *config)
   return g_steal_pointer (&ret);
 }
 
+static char *
+gbp_flatpak_manifest_get_description (IdeConfig *config)
+{
+  return g_strdup (_("Flatpak"));
+}
+
 static void
 gbp_flatpak_manifest_finalize (GObject *object)
 {
@@ -751,6 +761,7 @@ gbp_flatpak_manifest_class_init (GbpFlatpakManifestClass *klass)
 
   config_class->get_extensions = gbp_flatpak_manifest_get_extensions;
   config_class->supports_runtime = gbp_flatpak_manifest_supports_runtime;
+  config_class->get_description = gbp_flatpak_manifest_get_description;
 
   properties [PROP_FILE] =
     g_param_spec_object ("file",

@@ -106,6 +106,7 @@ enum {
   PROP_TOOLCHAIN,
   PROP_RUN_OPTS,
   PROP_SUPPORTED_RUNTIMES,
+  PROP_DESCRIPTION,
   N_PROPS
 };
 
@@ -363,6 +364,10 @@ ide_config_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_DESCRIPTION:
+      g_value_take_string (value, ide_config_get_description (self));
+      break;
+
     case PROP_CONFIG_OPTS:
       g_value_set_string (value, ide_config_get_config_opts (self));
       break;
@@ -565,6 +570,11 @@ ide_config_class_init (IdeConfigClass *klass)
 
   klass->get_runtime = ide_config_real_get_runtime;
   klass->set_runtime = ide_config_real_set_runtime;
+
+  properties[PROP_DESCRIPTION] =
+    g_param_spec_string ("description", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PREPEND_PATH] =
     g_param_spec_string ("prepend-path",
@@ -1940,4 +1950,30 @@ ide_config_set_args_for_phase (IdeConfig           *self,
   g_return_if_fail (IDE_IS_CONFIG (self));
 
   g_hash_table_insert (priv->pipeline_args, GINT_TO_POINTER (phase), g_strdupv ((gchar **)args));
+}
+
+/**
+ * ide_config_get_description:
+ * @self: a #IdeConfig
+ *
+ * Describes the type of config this is.
+ *
+ * Examples might include ".buildconfig" or "Flatpak".
+ *
+ * Returns: (transfer full): a string describing the configuration.
+ */
+char *
+ide_config_get_description (IdeConfig *self)
+{
+  char *ret = NULL;
+
+  g_return_val_if_fail (IDE_IS_CONFIG (self), NULL);
+
+  if (IDE_CONFIG_GET_CLASS (self)->get_description)
+    ret = IDE_CONFIG_GET_CLASS (self)->get_description (self);
+
+  if (ret == NULL)
+    ret = g_strdup (G_OBJECT_TYPE_NAME (self));
+
+  return ret;
 }

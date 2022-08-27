@@ -54,11 +54,14 @@ struct _IdeConfigClass
   gboolean    (*supports_runtime) (IdeConfig  *self,
                                    IdeRuntime *runtime);
   GPtrArray  *(*get_extensions)   (IdeConfig  *self);
+  char       *(*get_description)  (IdeConfig  *self);
 
   /*< private >*/
   gpointer _reserved[15];
 };
 
+IDE_AVAILABLE_IN_ALL
+char                 *ide_config_get_description           (IdeConfig             *self);
 IDE_AVAILABLE_IN_ALL
 const gchar          *ide_config_get_prepend_path          (IdeConfig             *self);
 IDE_AVAILABLE_IN_ALL

@@ -45,6 +45,12 @@ G_DEFINE_FINAL_TYPE (IdeBuildconfigConfig, ide_buildconfig_config, IDE_TYPE_CONF
 
 static GParamSpec *properties [N_PROPS];
 
+static char *
+ide_buildconfig_config_get_description (IdeConfig *config)
+{
+  return g_strdup (".buildconfig");
+}
+
 static void
 ide_buildconfig_config_finalize (GObject *object)
 {
@@ -115,10 +121,13 @@ static void
 ide_buildconfig_config_class_init (IdeBuildconfigConfigClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  IdeConfigClass *config_class = IDE_CONFIG_CLASS (klass);
 
   object_class->finalize = ide_buildconfig_config_finalize;
   object_class->get_property = ide_buildconfig_config_get_property;
   object_class->set_property = ide_buildconfig_config_set_property;
+
+  config_class->get_description = ide_buildconfig_config_get_description;
 
   properties [PROP_PREBUILD] =
     g_param_spec_boxed ("prebuild", NULL, NULL,
