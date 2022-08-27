@@ -55,7 +55,7 @@
         <child>
           <object class="IdeTweaksPage" id="build_page">
             <property name="icon-name">builder-build-symbolic</property>
-            <property name="title" translatable="yes">Build &amp; Run</property>
+            <property name="title" translatable="yes">Build &amp; Tooling</property>
             <child>
               <object class="IdeTweaksPage" id="build_general_page">
                 <property name="icon-name">builder-build-symbolic</property>
