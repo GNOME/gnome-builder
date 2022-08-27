@@ -55,6 +55,7 @@ enum {
   PROP_KIND,
   PROP_LANGUAGES,
   PROP_PRIORITY,
+  PROP_TITLE,
 
   /* Just for making listview's easier */
   PROP_CATEGORY,
@@ -160,6 +161,22 @@ ide_run_command_real_prepare_to_run (IdeRunCommand *self,
   IDE_EXIT;
 }
 
+static const char *
+ide_run_command_get_title (IdeRunCommand *self)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_assert (IDE_IS_RUN_COMMAND (self));
+
+  if (!ide_str_empty0 (priv->display_name))
+    return priv->display_name;
+
+  if (priv->argv && !ide_str_empty0 (priv->argv[0]))
+    return priv->argv[0];
+
+  return _("Untitled command");
+}
+
 static void
 ide_run_command_finalize (GObject *object)
 {
@@ -246,6 +263,10 @@ ide_run_command_get_property (GObject    *object,
 
     case PROP_SHELL_COMMAND:
       g_value_take_string (value, ide_run_command_get_shell_command (self));
+      break;
+
+    case PROP_TITLE:
+      g_value_set_string (value, ide_run_command_get_title (self));
       break;
 
     default:
@@ -391,8 +412,15 @@ ide_run_command_class_init (IdeRunCommandClass *klass)
                       G_MININT, G_MAXINT, 0,
                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  /* Read-only helper for property bindings */
   properties [PROP_SHELL_COMMAND] =
     g_param_spec_string ("shell-command", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  /* Read-only helper for binding to a non-empty title string in UI */
+  properties [PROP_TITLE] =
+    g_param_spec_string ("title", NULL, NULL,
                          NULL,
                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
