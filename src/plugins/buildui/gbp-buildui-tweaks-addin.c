@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libide-foundry.h>
 
 #include "gbp-buildui-tweaks-addin.h"
@@ -33,6 +35,72 @@ struct _GbpBuilduiTweaksAddin
 };
 
 G_DEFINE_FINAL_TYPE (GbpBuilduiTweaksAddin, gbp_buildui_tweaks_addin, IDE_TYPE_TWEAKS_ADDIN)
+
+static gpointer
+map_item_cb (gpointer item,
+             gpointer user_data)
+{
+  g_autoptr(IdeRuntime) runtime = item;
+
+  return g_object_new (IDE_TYPE_TWEAKS_CHOICE,
+                       "title", ide_runtime_get_display_name (runtime),
+                       "value", g_variant_new_string (ide_runtime_get_id (runtime)),
+                       NULL);
+}
+
+static GtkWidget *
+create_runtime_list_cb (GbpBuilduiTweaksAddin *self,
+                        IdeTweaksItem         *item,
+                        IdeTweaksWidget       *instance)
+{
+  g_autoptr(GtkMapListModel) mapped = NULL;
+  g_autoptr(GListModel) model = NULL;
+  g_autoptr(IdeConfig) config = NULL;
+  IdeTweaksComboRow *row;
+  IdeTweaksBinding *binding;
+  const char *runtime_id;
+  guint selected = 0;
+  guint n_items;
+
+  g_assert (GBP_IS_BUILDUI_TWEAKS_ADDIN (self));
+  g_assert (IDE_IS_TWEAKS_WIDGET (item));
+  g_assert (IDE_IS_TWEAKS_WIDGET (instance));
+
+  if (!(binding = ide_tweaks_widget_get_binding (IDE_TWEAKS_WIDGET (item))))
+    return NULL;
+
+  config = IDE_CONFIG (ide_tweaks_property_dup_object (IDE_TWEAKS_PROPERTY (binding)));
+  g_object_get (config, "supported-runtimes", &model, NULL);
+  mapped = gtk_map_list_model_new (g_object_ref (model), map_item_cb, NULL, NULL);
+  n_items = g_list_model_get_n_items (model);
+  runtime_id = ide_config_get_runtime_id (config);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      g_autoptr(IdeRuntime) runtime = g_list_model_get_item (model, i);
+
+      if (ide_str_equal0 (runtime_id, ide_runtime_get_id (runtime)))
+        {
+          selected = i;
+          break;
+        }
+    }
+
+  /* TODO: It would be nice to show an error here if we don't find
+   * the runtime. Currently, we would just select the first item which
+   * would modify the existing configuration.
+   */
+
+  row = g_object_new (IDE_TYPE_TWEAKS_COMBO_ROW,
+                      "title", _("Runtime"),
+                      "subtitle", _("The container used to build and run your application"),
+                      "binding", binding,
+                      "model", mapped,
+                      "selected", selected,
+                      NULL);
+
+  return GTK_WIDGET (row);
+}
 
 static void
 gbp_buildui_tweaks_addin_load (IdeTweaksAddin *addin,
@@ -59,6 +127,7 @@ gbp_buildui_tweaks_addin_load (IdeTweaksAddin *addin,
       ide_tweaks_expose_object (tweaks, "RunCommands", G_OBJECT (store));
     }
 
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_runtime_list_cb);
   ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
                                        IDE_STRV_INIT ("/plugins/buildui/tweaks.ui"));
 

@@ -357,6 +357,29 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">SDK</property>
+                        <child>
+                          <object class="IdeTweaksWidget">
+                            <signal name="create-for-item" handler="create_runtime_list_cb" swapped="true" object="GbpBuilduiTweaksAddin"/>
+                            <property name="binding">
+                              <object class="IdeTweaksProperty">
+                                <property name="name">runtime-id</property>
+                                <binding name="object">
+                                  <lookup name="item">config_factory</lookup>
+                                </binding>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksCaption">
+                            <property name="text" translatable="yes">The SDK used to build your application is automatically determined from the runtime.</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
