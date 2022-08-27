@@ -14,6 +14,7 @@ libide_tweaks_public_headers = [
   'ide-tweaks-caption.h',
   'ide-tweaks-choice.h',
   'ide-tweaks-combo.h',
+  'ide-tweaks-combo-row.h',
   'ide-tweaks-directory.h',
   'ide-tweaks-entry.h',
   'ide-tweaks-factory.h',
@@ -46,6 +47,7 @@ libide_tweaks_public_sources = [
   'ide-tweaks-caption.c',
   'ide-tweaks-choice.c',
   'ide-tweaks-combo.c',
+  'ide-tweaks-combo-row.c',
   'ide-tweaks-directory.c',
   'ide-tweaks-entry.c',
   'ide-tweaks-factory.c',
@@ -66,7 +68,6 @@ libide_tweaks_public_sources = [
 ]
 
 libide_tweaks_private_sources = [
-  'ide-tweaks-combo-row.c',
   'ide-tweaks-init.c',
   'ide-tweaks-model.c',
   'ide-tweaks-panel.c',

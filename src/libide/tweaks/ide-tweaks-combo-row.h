@@ -26,6 +26,7 @@ G_BEGIN_DECLS
 
 #define IDE_TYPE_TWEAKS_COMBO_ROW (ide_tweaks_combo_row_get_type())
 
+IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTweaksComboRow, ide_tweaks_combo_row, IDE, TWEAKS_COMBO_ROW, AdwComboRow)
 
 G_END_DECLS
