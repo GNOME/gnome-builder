@@ -37,6 +37,8 @@ IDE_AVAILABLE_IN_ALL
 void              ide_tweaks_factory_set_model (IdeTweaksFactory     *self,
                                                 GListModel           *model);
 IDE_AVAILABLE_IN_ALL
+gpointer          ide_tweaks_factory_get_item  (IdeTweaksFactory     *self);
+IDE_AVAILABLE_IN_ALL
 gboolean          ide_tweaks_factory_visit     (IdeTweaksFactory     *self,
                                                 IdeTweaksItemVisitor  visitor,
                                                 gpointer              visitor_data);

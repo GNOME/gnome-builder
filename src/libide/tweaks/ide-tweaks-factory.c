@@ -76,7 +76,7 @@ ide_tweaks_factory_get_property (GObject    *object,
       break;
 
     case PROP_ITEM:
-      g_value_set_object (value, self->item);
+      g_value_set_object (value, ide_tweaks_factory_get_item (self));
       break;
 
     default:
@@ -297,4 +297,20 @@ ide_tweaks_factory_visit (IdeTweaksFactory     *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ITEM]);
 
   return ret;
+}
+
+/**
+ * ide_tweaks_factory_get_item:
+ * @self: a #IdeTweaksFactory
+ *
+ * Gets the item for the factory while it is being built.
+ *
+ * Returns: (transfer none) (nullable) (type GObject): a #GObject or %NULL
+ */
+gpointer
+ide_tweaks_factory_get_item (IdeTweaksFactory *self)
+{
+  g_return_val_if_fail (IDE_IS_TWEAKS_FACTORY (self), NULL);
+
+  return self->item;
 }
