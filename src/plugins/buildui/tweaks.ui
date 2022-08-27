@@ -125,6 +125,32 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Unit Tests</property>
+                <child>
+                  <object class="IdeTweaksRadio">
+                    <property name="title" translatable="yes">Build Pipeline</property>
+                    <property name="subtitle" translatable="yes">Run unit tests from within the build environment.</property>
+                    <property name="value">'pipeline'</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting" id="binding_unit_test_locality">
+                        <property name="schema-id">org.gnome.builder.project</property>
+                        <property name="schema-key">unit-test-locality</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksRadio">
+                    <property name="title" translatable="yes">As Application</property>
+                    <property name="subtitle" translatable="yes">Run unit with access to display and other runtime environment features.</property>
+                    <property name="value">'runtime'</property>
+                    <property name="binding">binding_unit_test_locality</property>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <child>
