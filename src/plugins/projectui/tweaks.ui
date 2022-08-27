@@ -195,39 +195,37 @@
             </child>
           </object>
         </child>
+      </object>
+    </child>
+    <child internal-child="configs_section">
+      <object class="IdeTweaksSection">
         <child>
-          <object class="IdeTweaksPage" id="configs_page">
-            <property name="title" translatable="yes">Configurations</property>
-            <property name="icon-name">builder-build-configure-symbolic</property>
+          <object class="IdeTweaksFactory" id="config_factory">
+            <property name="model">Configurations</property>
             <child>
-              <object class="IdeTweaksFactory" id="config_factory">
-                <property name="model">Configurations</property>
+              <object class="IdeTweaksPage" id="config_page">
+                <binding name="icon-name">
+                  <lookup name="icon-name" type="IdeRuntime">
+                    <lookup name="runtime" type="IdeConfig">
+                      <lookup name="item">config_factory</lookup>
+                    </lookup>
+                  </lookup>
+                </binding>
+                <binding name="title">
+                  <lookup name="display-name" type="IdeConfig">
+                    <lookup name="item">config_factory</lookup>
+                  </lookup>
+                </binding>
                 <child>
-                  <object class="IdeTweaksPage" id="config_page">
-                    <binding name="icon-name">
-                      <lookup name="icon-name" type="IdeRuntime">
-                        <lookup name="runtime" type="IdeConfig">
-                          <lookup name="item">config_factory</lookup>
-                        </lookup>
-                      </lookup>
-                    </binding>
-                    <binding name="title">
-                      <lookup name="display-name" type="IdeConfig">
-                        <lookup name="item">config_factory</lookup>
-                      </lookup>
-                    </binding>
+                  <object class="IdeTweaksGroup">
                     <child>
-                      <object class="IdeTweaksGroup">
-                        <child>
-                          <object class="IdeTweaksInfo">
-                            <property name="title" translatable="yes">Configuration</property>
-                            <binding name="value">
-                              <lookup name="display-name" type="IdeConfig">
-                                <lookup name="item">config_factory</lookup>
-                              </lookup>
-                            </binding>
-                          </object>
-                        </child>
+                      <object class="IdeTweaksInfo">
+                        <property name="title" translatable="yes">Configuration</property>
+                        <binding name="value">
+                          <lookup name="display-name" type="IdeConfig">
+                            <lookup name="item">config_factory</lookup>
+                          </lookup>
+                        </binding>
                       </object>
                     </child>
                   </object>

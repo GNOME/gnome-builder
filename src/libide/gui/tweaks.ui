@@ -43,19 +43,26 @@
       </object>
     </child>
     <child>
+      <object class="IdeTweaksSection" id="foundry_section">
+        <property name="title">foundry</property>
+      </object>
+    </child>
+    <child>
       <object class="IdeTweaksSection" id="vcs_section">
         <property name="title">vcs</property>
         <property name="hidden-when">app</property>
       </object>
     </child>
     <child>
-      <object class="IdeTweaksSection" id="foundry_section">
-        <property name="title">foundry</property>
+      <object class="IdeTweaksSection" id="external_section">
+        <property name="title">external</property>
       </object>
     </child>
     <child>
-      <object class="IdeTweaksSection" id="external_section">
-        <property name="title">external</property>
+      <object class="IdeTweaksSection" id="configs_section">
+        <property name="title" translatable="yes">Configurations</property>
+        <property name="hidden-when">application</property>
+        <property name="show-header">true</property>
       </object>
     </child>
     <child>
