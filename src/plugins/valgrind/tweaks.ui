@@ -5,107 +5,111 @@
       <object class="IdeTweaksSection">
         <child internal-child="build_page">
           <object class="IdeTweaksPage">
-            <child>
-              <object class="IdeTweaksPage" id="build_valgrind_page">
-                <property name="icon-name">system-run-symbolic</property>
-                <property name="title" translatable="yes">Leak Detector</property>
+            <child internal-child="build_tooling_section">
+              <object class="IdeTweaksSection">
                 <child>
-                  <object class="IdeTweaksGroup">
-                    <property name="title" translatable="yes">Leak Kinds</property>
+                  <object class="IdeTweaksPage" id="build_valgrind_page">
+                    <property name="icon-name">system-run-symbolic</property>
+                    <property name="title" translatable="yes">Leak Detector</property>
                     <child>
-                      <object class="IdeTweaksRadio">
-                        <property name="title" translatable="yes">Definite</property>
-                        <property name="subtitle" translatable="yes">Include definite leaks in report summary</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.valgrind</property>
-                            <property name="schema-key">leak-kind-definite</property>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksRadio">
-                        <property name="title" translatable="yes">Possible</property>
-                        <property name="subtitle" translatable="yes">Include possible leaks in report summary</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.valgrind</property>
-                            <property name="schema-key">leak-kind-possible</property>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksRadio">
-                        <property name="title" translatable="yes">Indirect</property>
-                        <property name="subtitle" translatable="yes">Include indirect leaks in report summary</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.valgrind</property>
-                            <property name="schema-key">leak-kind-indirect</property>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="IdeTweaksRadio">
-                        <property name="title" translatable="yes">Reachable</property>
-                        <property name="subtitle" translatable="yes">Include reachable leaks in report summary</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.valgrind</property>
-                            <property name="schema-key">leak-kind-reachable</property>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="IdeTweaksGroup">
-                    <child>
-                      <object class="IdeTweaksSwitch">
-                        <property name="title" translatable="yes">Track Origins</property>
-                        <property name="subtitle" translatable="yes">Show origin of undefined values</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.valgrind</property>
-                            <property name="schema-key">track-origins</property>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="IdeTweaksGroup">
-                    <child>
-                      <object class="IdeTweaksCombo">
-                        <property name="title" translatable="yes">Leak Check</property>
-                        <property name="subtitle" translatable="yes">Search for memory leaks at exit</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.valgrind</property>
-                            <property name="schema-key">leak-check</property>
-                          </object>
-                        </property>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Leak Kinds</property>
                         <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title">No</property>
-                            <property name="value">'no'</property>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Definite</property>
+                            <property name="subtitle" translatable="yes">Include definite leaks in report summary</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.valgrind</property>
+                                <property name="schema-key">leak-kind-definite</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                         <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title">Summary</property>
-                            <property name="value">'summary'</property>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Possible</property>
+                            <property name="subtitle" translatable="yes">Include possible leaks in report summary</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.valgrind</property>
+                                <property name="schema-key">leak-kind-possible</property>
+                              </object>
+                            </property>
                           </object>
                         </child>
                         <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title">Full</property>
-                            <property name="value">'full'</property>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Indirect</property>
+                            <property name="subtitle" translatable="yes">Include indirect leaks in report summary</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.valgrind</property>
+                                <property name="schema-key">leak-kind-indirect</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Reachable</property>
+                            <property name="subtitle" translatable="yes">Include reachable leaks in report summary</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.valgrind</property>
+                                <property name="schema-key">leak-kind-reachable</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Track Origins</property>
+                            <property name="subtitle" translatable="yes">Show origin of undefined values</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.valgrind</property>
+                                <property name="schema-key">track-origins</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksCombo">
+                            <property name="title" translatable="yes">Leak Check</property>
+                            <property name="subtitle" translatable="yes">Search for memory leaks at exit</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.valgrind</property>
+                                <property name="schema-key">leak-check</property>
+                              </object>
+                            </property>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title">No</property>
+                                <property name="value">'no'</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title">Summary</property>
+                                <property name="value">'summary'</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title">Full</property>
+                                <property name="value">'full'</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

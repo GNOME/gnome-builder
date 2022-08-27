@@ -174,133 +174,143 @@
             <property name="icon-name">builder-build-symbolic</property>
             <property name="title" translatable="yes">Build &amp; Tooling</property>
             <child>
-              <object class="IdeTweaksPage" id="build_general_page">
-                <property name="icon-name">builder-build-symbolic</property>
-                <property name="title" translatable="yes">General</property>
+              <object class="IdeTweaksSection" id="build_general_section">
                 <child>
-                  <object class="IdeTweaksGroup">
-                    <property name="title" translatable="yes">History</property>
+                  <object class="IdeTweaksPage" id="build_general_page">
+                    <property name="icon-name">builder-build-symbolic</property>
+                    <property name="title" translatable="yes">General</property>
                     <child>
-                      <object class="IdeTweaksSwitch">
-                        <property name="title" translatable="yes">Clear Expired Artifacts</property>
-                        <property name="subtitle" translatable="yes">Artifacts which have expired will be deleted when Builder is started</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder</property>
-                            <property name="schema-key">clear-cache-at-startup</property>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">History</property>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Clear Expired Artifacts</property>
+                            <property name="subtitle" translatable="yes">Artifacts which have expired will be deleted when Builder is started</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder</property>
+                                <property name="schema-key">clear-cache-at-startup</property>
+                              </object>
+                            </property>
                           </object>
-                        </property>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksSwitch">
+                            <property name="title" translatable="yes">Clear Build Logs</property>
+                            <property name="subtitle" translatable="yes">Clear the build log history when a new build begins</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.build</property>
+                                <property name="schema-key">clear-build-log-pane</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
-                      <object class="IdeTweaksSwitch">
-                        <property name="title" translatable="yes">Clear Build Logs</property>
-                        <property name="subtitle" translatable="yes">Clear the build log history when a new build begins</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.build</property>
-                            <property name="schema-key">clear-build-log-pane</property>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Workers</property>
+                        <child>
+                          <object class="IdeTweaksCombo">
+                            <property name="title" translatable="yes">Build Parallelism</property>
+                            <property name="subtitle" translatable="yes">Number of workers to use when performing builds</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.build</property>
+                                <property name="schema-key">parallel</property>
+                              </object>
+                            </property>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">Default</property>
+                                <property name="value">-1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">1 per CPU</property>
+                                <property name="value">0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">1</property>
+                                <property name="value">1</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">2</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">4</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">6</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">8</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">16</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">32</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">64</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">128</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">256</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="IdeTweaksChoice">
+                                <property name="title" translatable="yes">512</property>
+                                <property name="value">2</property>
+                              </object>
+                            </child>
                           </object>
-                        </property>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
-                <child>
-                  <object class="IdeTweaksGroup">
-                    <property name="title" translatable="yes">Workers</property>
-                    <child>
-                      <object class="IdeTweaksCombo">
-                        <property name="title" translatable="yes">Build Parallelism</property>
-                        <property name="subtitle" translatable="yes">Number of workers to use when performing builds</property>
-                        <property name="binding">
-                          <object class="IdeTweaksSetting">
-                            <property name="schema-id">org.gnome.builder.build</property>
-                            <property name="schema-key">parallel</property>
-                          </object>
-                        </property>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">Default</property>
-                            <property name="value">-1</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">1 per CPU</property>
-                            <property name="value">0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">1</property>
-                            <property name="value">1</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">2</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">4</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">6</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">8</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">16</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">32</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">64</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">128</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">256</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="IdeTweaksChoice">
-                            <property name="title" translatable="yes">512</property>
-                            <property name="value">2</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksSection" id="build_tooling_section">
+                <property name="title" translatable="yes">Tooling</property>
+                <property name="show-header">true</property>
               </object>
             </child>
           </object>
