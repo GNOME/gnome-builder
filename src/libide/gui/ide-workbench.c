@@ -38,8 +38,8 @@
 #include "ide-transfer-manager-private.h"
 
 #include "ide-application.h"
+#include "ide-application-tweaks.h"
 #include "ide-gui-global.h"
-#include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
 #include "ide-shortcut-manager-private.h"
 #include "ide-workbench-addin.h"
@@ -2743,53 +2743,14 @@ ide_workbench_action_configure (gpointer    instance,
 {
   IdeWorkbench *self = instance;
   const char *page = NULL;
-  GtkWindow *window;
-  GList *windows;
-  gboolean found = FALSE;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_WORKBENCH (self));
 
   if (param && g_variant_is_of_type (param, G_VARIANT_TYPE_STRING))
     page = g_variant_get_string (param, NULL);
 
-  windows = gtk_window_group_list_windows (GTK_WINDOW_GROUP (self));
-
-  for (const GList *iter = windows; iter; iter = iter->next)
-    {
-      window = iter->data;
-
-      if (IDE_IS_PREFERENCES_WINDOW (window) &&
-          ide_preferences_window_get_mode (IDE_PREFERENCES_WINDOW (window)) == IDE_PREFERENCES_MODE_PROJECT)
-        {
-          gtk_window_present (window);
-          found = TRUE;
-          break;
-        }
-    }
-
-  g_list_free (windows);
-
-  if (!found)
-    {
-      g_autofree char *title = NULL;
-      g_autofree char *window_title = NULL;
-
-      title = ide_context_dup_title (self->context);
-      window_title = g_strdup_printf (_("Builder — %s"), title);
-
-      window = g_object_new (IDE_TYPE_PREFERENCES_WINDOW,
-                             "mode", IDE_PREFERENCES_MODE_PROJECT,
-                             "context", self->context,
-                             "default-width", 1050,
-                             "default-height", 700,
-                             "title", window_title,
-                             NULL);
-      gtk_window_group_add_window (GTK_WINDOW_GROUP (self), window);
-      gtk_window_present (window);
-    }
-
-  if (page != NULL)
-    ide_preferences_window_set_page (IDE_PREFERENCES_WINDOW (window), page);
+  ide_show_tweaks (self->context, page);
 }
 
 IdeWorkspace *
