@@ -24,9 +24,9 @@
 
 G_BEGIN_DECLS
 
-void        _ide_run_manager_drop_caches    (IdeRunManager *self);
-const char *_ide_run_manager_get_default_id (IdeRunManager *self);
-void        _ide_run_manager_set_default_id (IdeRunManager *self,
-                                             const char    *run_command_id);
+void  _ide_run_manager_drop_caches    (IdeRunManager *self);
+char *_ide_run_manager_get_default_id (IdeRunManager *self);
+void  _ide_run_manager_set_default_id (IdeRunManager *self,
+                                       const char    *run_command_id);
 
 G_END_DECLS

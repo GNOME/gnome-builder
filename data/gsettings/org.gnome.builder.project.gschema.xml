@@ -45,5 +45,11 @@
       <description>What environment to use when running unit tests</description>
     </key>
 
+    <key name="verbose-logging" type="b">
+      <default>false</default>
+      <summary>Verbose Logging</summary>
+      <description>If G_MESSAGES_DEBUG=all should be used when running the target application</description>
+    </key>
+
   </schema>
 </schemalist>

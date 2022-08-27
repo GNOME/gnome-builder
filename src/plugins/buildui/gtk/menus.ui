@@ -177,7 +177,7 @@
       <item>
         <attribute name="id">run-menu-verbose-logging</attribute>
         <attribute name="label" translatable="yes">Verbose Logging</attribute>
-        <attribute name="action">context.run-manager.messages-debug-all</attribute>
+        <attribute name="action">context.settings.project:org.gnome.builder.project.verbose-logging</attribute>
         <attribute name="role">check</attribute>
       </item>
     </section>

@@ -42,7 +42,7 @@ struct _IdeConfigManager
   GArray           *configs;
   IdeConfig        *current;
   PeasExtensionSet *providers;
-  GSettings        *project_settings;
+  IdeSettings      *project_settings;
 
   GMenu            *menu;
   GMenu            *config_menu;
@@ -806,7 +806,7 @@ notify_providers_loaded (IdeConfigManager *self,
     return;
 
   /*
-   * At this point, all of our configuratin providers have returned from
+   * At this point, all of our configuration providers have returned from
    * their asynchronous loading. So we should have all of the configs we
    * can know about at this point.
    *
@@ -814,7 +814,7 @@ notify_providers_loaded (IdeConfigManager *self,
    * a match, make that our active configuration.
    *
    * We want to avoid applying the value if the value is unchanged
-   * according to g_settings_get_user_value() so that we don't override
+   * according to ide_settings_get_user_value() so that we don't override
    * any provider that set_current() during it's load, unless the user
    * has manually set this config in the past.
    *
@@ -822,7 +822,7 @@ notify_providers_loaded (IdeConfigManager *self,
    * new values to the settings when set_current() is called.
    */
 
-  user_value = g_settings_get_user_value (self->project_settings, "config-id");
+  user_value = ide_settings_get_user_value (self->project_settings, "config-id");
 
   if (user_value != NULL)
     {
@@ -903,7 +903,7 @@ ide_config_manager_init_async (GAsyncInitable      *initable,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  self->project_settings = ide_context_ref_project_settings (context);
+  self->project_settings = ide_context_ref_settings (context, "org.gnome.builder.project");
 
   self->providers = peas_extension_set_new (peas_engine_get_default (),
                                             IDE_TYPE_CONFIG_PROVIDER,
@@ -1010,7 +1010,7 @@ ide_config_manager_set_current (IdeConfigManager *self,
           if (self->propagate_to_settings && self->project_settings != NULL)
             {
               g_autofree gchar *new_id = g_strdup (ide_config_get_id (current));
-              g_settings_set_string (self->project_settings, "config-id", new_id);
+              ide_settings_set_string (self->project_settings, "config-id", new_id);
             }
 
           id = ide_config_get_id (self->current);

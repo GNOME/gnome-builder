@@ -54,6 +54,8 @@ struct _IdeRunManager
 {
   IdeObject                parent_instance;
 
+  IdeSettings             *project_settings;
+
   GCancellable            *cancellable;
   IdeNotification         *notif;
   IdeExtensionSetAdapter  *run_command_providers;
@@ -70,11 +72,8 @@ struct _IdeRunManager
   guint64                  last_change_seq;
   guint64                  pending_last_change_seq;
 
-  char                    *default_run_command;
-
   guint                    busy;
 
-  guint                    messages_debug_all : 1;
   guint                    has_installed_once : 1;
   guint                    sent_signal : 1;
 };
@@ -85,10 +84,6 @@ static void ide_run_manager_actions_run                 (IdeRunManager  *self,
 static void ide_run_manager_actions_run_with_handler    (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_stop                (IdeRunManager  *self,
-                                                         GVariant       *param);
-static void ide_run_manager_actions_messages_debug_all  (IdeRunManager  *self,
-                                                         GVariant       *param);
-static void ide_run_manager_actions_default_run_command (IdeRunManager  *self,
                                                          GVariant       *param);
 static void ide_run_manager_actions_color_scheme        (IdeRunManager  *self,
                                                          GVariant       *param);
@@ -101,8 +96,6 @@ IDE_DEFINE_ACTION_GROUP (IdeRunManager, ide_run_manager, {
   { "run", ide_run_manager_actions_run },
   { "run-with-handler", ide_run_manager_actions_run_with_handler, "s" },
   { "stop", ide_run_manager_actions_stop },
-  { "messages-debug-all", ide_run_manager_actions_messages_debug_all, NULL, "false" },
-  { "default-run-command", ide_run_manager_actions_default_run_command, "s", "''" },
   { "color-scheme", ide_run_manager_actions_color_scheme, "s", "'follow'" },
   { "high-contrast", ide_run_manager_actions_high_contrast, NULL, "false" },
   { "text-direction", ide_run_manager_actions_text_direction, "s", "''" },
@@ -235,23 +228,6 @@ ide_run_manager_actions_color_scheme (IdeRunManager *self,
 }
 
 static void
-ide_run_manager_actions_default_run_command (IdeRunManager *self,
-                                             GVariant      *param)
-{
-  const char *str;
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-  g_assert (param != NULL);
-  g_assert (g_variant_is_of_type (param, G_VARIANT_TYPE_STRING));
-
-  str = g_variant_get_string (param, NULL);
-  if (ide_str_empty0 (str))
-    str = NULL;
-
-  _ide_run_manager_set_default_id (self, str);
-}
-
-static void
 ide_run_manager_update_action_enabled (IdeRunManager *self)
 {
   IdeBuildManager *build_manager;
@@ -313,8 +289,7 @@ ide_run_manager_dispose (GObject *object)
 {
   IdeRunManager *self = (IdeRunManager *)object;
 
-  g_clear_pointer (&self->default_run_command, g_free);
-
+  g_clear_object (&self->project_settings);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->current_run_command);
   g_clear_object (&self->current_subprocess);
@@ -359,7 +334,6 @@ initable_init (GInitable     *initable,
                GError       **error)
 {
   IdeRunManager *self = (IdeRunManager *)initable;
-  g_autoptr(GSettings) settings = NULL;
   IdeBuildManager *build_manager;
   IdeContext *context;
 
@@ -370,13 +344,9 @@ initable_init (GInitable     *initable,
 
   context = ide_object_get_context (IDE_OBJECT (self));
   build_manager = ide_build_manager_from_context (context);
-  settings = ide_context_ref_project_settings (context);
 
-  g_clear_pointer (&self->default_run_command, g_free);
-  self->default_run_command = g_settings_get_string (settings, "default-run-command");
-  ide_run_manager_set_action_state (self,
-                                    "default-run-command",
-                                    g_variant_new_string (self->default_run_command));
+  self->project_settings = ide_context_ref_settings (context,
+                                                     "org.gnome.builder.project");
 
   g_signal_connect_object (build_manager,
                            "notify::can-build",
@@ -680,7 +650,6 @@ ide_run_manager_install_async (IdeRunManager       *self,
                                gpointer             user_data)
 {
   g_autoptr(IdeContext) context = NULL;
-  g_autoptr(GSettings) project_settings = NULL;
   g_autoptr(IdeTask) task = NULL;
   IdeBuildManager *build_manager;
   IdeVcsMonitor *monitor;
@@ -696,8 +665,7 @@ ide_run_manager_install_async (IdeRunManager       *self,
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_run_manager_install_async);
 
-  project_settings = ide_context_ref_project_settings (context);
-  if (!g_settings_get_boolean (project_settings, "install-before-run"))
+  if (!ide_settings_get_boolean (self->project_settings, "install-before-run"))
     {
       ide_task_return_boolean (task, TRUE);
       IDE_EXIT;
@@ -855,7 +823,7 @@ ide_run_manager_prepare_run_context (IdeRunManager *self,
   apply_color_scheme (run_context, get_action_state_string (self, "color-scheme"));
   apply_high_contrast (run_context, get_action_state_bool (self, "high-contrast"));
   apply_text_direction (run_context, get_action_state_string (self, "text-direction"));
-  apply_messages_debug (run_context, self->messages_debug_all);
+  apply_messages_debug (run_context, ide_settings_get_boolean (self->project_settings, "verbose-logging"));
 
 #if 0
 /* TODO: Probably want to inherit these when running, but we should have
@@ -1178,16 +1146,12 @@ do_cancel_in_timeout (gpointer user_data)
 static int
 ide_run_manager_get_exit_signal (IdeRunManager *self)
 {
-  g_autoptr(GSettings) settings = NULL;
   g_autofree char *stop_signal = NULL;
-  IdeContext *context;
   int signum;
 
   g_assert (IDE_IS_RUN_MANAGER (self));
 
-  context = ide_object_get_context (IDE_OBJECT (self));
-  settings = ide_context_ref_project_settings (context);
-  stop_signal = g_settings_get_string (settings, "stop-signal");
+  stop_signal = ide_settings_get_string (self->project_settings, "stop-signal");
 
   if (0) {}
   else if (ide_str_equal0 (stop_signal, "SIGKILL")) signum = SIGKILL;
@@ -1305,7 +1269,6 @@ ide_run_manager_init (IdeRunManager *self)
 
   self->cancellable = g_cancellable_new ();
   self->run_tool = ide_no_tool_new ();
-  self->default_run_command = g_strdup ("");
 
   /* Setup initial text direction state */
   text_dir = gtk_widget_get_default_direction ();
@@ -1323,22 +1286,6 @@ _ide_run_manager_drop_caches (IdeRunManager *self)
   g_return_if_fail (IDE_IS_RUN_MANAGER (self));
 
   self->last_change_seq = 0;
-}
-
-static void
-ide_run_manager_actions_messages_debug_all (IdeRunManager *self,
-                                            GVariant      *param)
-{
-  IDE_ENTRY;
-
-  g_assert (IDE_IS_RUN_MANAGER (self));
-
-  self->messages_debug_all = !self->messages_debug_all;
-  ide_run_manager_set_action_state (self,
-                                    "messages-debug-all",
-                                    g_variant_new_boolean (self->messages_debug_all));
-
-  IDE_EXIT;
 }
 
 typedef struct
@@ -1581,7 +1528,10 @@ ide_run_manager_discover_run_command_async (IdeRunManager       *self,
 
   task = ide_task_new (self, cancellable, callback, user_data);
   ide_task_set_source_tag (task, ide_run_manager_discover_run_command_async);
-  ide_task_set_task_data (task, g_strdup (self->default_run_command), g_free);
+  ide_task_set_task_data (task,
+                          ide_settings_get_string (self->project_settings,
+                                                   "default-run-command"),
+                          g_free);
 
   ide_run_manager_list_commands_async (self,
                                        cancellable,
@@ -1619,12 +1569,12 @@ ide_run_manager_discover_run_command_finish (IdeRunManager  *self,
   IDE_RETURN (run_command);
 }
 
-const char *
+char *
 _ide_run_manager_get_default_id (IdeRunManager *self)
 {
   g_return_val_if_fail (IDE_IS_RUN_MANAGER (self), NULL);
 
-  return self->default_run_command;
+  return ide_settings_get_string (self->project_settings, "default-run-command");
 }
 
 void
@@ -1636,23 +1586,8 @@ _ide_run_manager_set_default_id (IdeRunManager *self,
   if (run_command_id == NULL)
     run_command_id = "";
 
-  if (g_strcmp0 (run_command_id, self->default_run_command) != 0)
-    {
-      IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
-      g_autoptr(GSettings) settings = ide_context_ref_project_settings (context);
-
-      g_debug ("Setting default run command to \"%s\"",
-               run_command_id);
-
-      g_free (self->default_run_command);
-      self->default_run_command = g_strdup (run_command_id);
-
-      g_settings_set_string (settings,
-                             "default-run-command",
-                             run_command_id);
-
-      ide_run_manager_set_action_state (self,
-                                        "default-run-command",
-                                        g_variant_new_string (run_command_id));
-    }
+  g_debug ("Settinging default run command to \"%s\"", run_command_id);
+  ide_settings_set_string (self->project_settings,
+                           "default-run-command",
+                           run_command_id);
 }

@@ -293,7 +293,7 @@ ide_test_run_async (IdeTest             *self,
 {
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(IdeSettings) settings = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree char *locality = NULL;
@@ -314,8 +314,8 @@ ide_test_run_async (IdeTest             *self,
 
   context = ide_object_get_context (IDE_OBJECT (pipeline));
   runtime = ide_pipeline_get_runtime (pipeline);
-  settings = ide_context_ref_project_settings (context);
-  locality = g_settings_get_string (settings, "unit-test-locality");
+  settings = ide_context_ref_settings (context, "org.gnome.builder.project");
+  locality = ide_settings_get_string (settings, "unit-test-locality");
 
   if (ide_str_equal0 (locality, "runtime"))
     {

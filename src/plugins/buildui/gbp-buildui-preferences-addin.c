@@ -153,7 +153,7 @@ list_run_commands_cb (GObject      *object,
     }
   else
     {
-      const char *id = _ide_run_manager_get_default_id (run_manager);
+      g_autofree char *id = _ide_run_manager_get_default_id (run_manager);
       guint n_items = g_list_model_get_n_items (model);
 
       for (guint i = 0; i < n_items; i++)
