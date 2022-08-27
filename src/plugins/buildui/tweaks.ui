@@ -70,22 +70,6 @@
             <child>
               <object class="IdeTweaksGroup">
                 <child>
-                  <object class="IdeTweaksSwitch">
-                    <property name="title" translatable="yes">Verbose Logging</property>
-                    <property name="subtitle" translatable="yes">Runs with &lt;tt&gt;G_MESSAGES_DEBUG=all&lt;/tt&gt; environment variable for troubleshooting</property>
-                    <property name="binding">
-                      <object class="IdeTweaksSetting">
-                        <property name="schema-id">org.gnome.builder.project</property>
-                        <property name="schema-key">verbose-logging</property>
-                      </object>
-                    </property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="IdeTweaksGroup">
-                <child>
                   <object class="IdeTweaksCombo">
                     <property name="title" translatable="yes">Stop Signal</property>
                     <property name="subtitle" translatable="yes">Send the signal to the target application when requesting the application stop.</property>
@@ -137,6 +121,23 @@
                         <property name="value">'SIGQUIT'</property>
                       </object>
                     </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Logging</property>
+                <child>
+                  <object class="IdeTweaksSwitch">
+                    <property name="title" translatable="yes">Verbose Logging</property>
+                    <property name="subtitle" translatable="yes">Runs with &lt;tt&gt;G_MESSAGES_DEBUG=all&lt;/tt&gt; environment variable for troubleshooting</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.project</property>
+                        <property name="schema-key">verbose-logging</property>
+                      </object>
+                    </property>
                   </object>
                 </child>
               </object>
