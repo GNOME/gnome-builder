@@ -14,6 +14,7 @@ plugins_sources += files([
   'gbp-git-progress.c',
   'gbp-git-submodule-stage.c',
   'gbp-git-tag.c',
+  'gbp-git-tweaks-addin.c',
   'gbp-git-vcs-cloner.c',
   'gbp-git-vcs-config.c',
   'gbp-git-vcs-initializer.c',

@@ -43,6 +43,12 @@
       </object>
     </child>
     <child>
+      <object class="IdeTweaksSection" id="vcs_section">
+        <property name="title">vcs</property>
+        <property name="hidden-when">app</property>
+      </object>
+    </child>
+    <child>
       <object class="IdeTweaksSection" id="foundry_section">
         <property name="title">foundry</property>
       </object>
