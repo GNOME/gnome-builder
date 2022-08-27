@@ -24,6 +24,8 @@
 
 #include <string.h>
 
+#include <gtk/gtk.h>
+
 #include "ide-config-manager.h"
 #include "ide-config-private.h"
 #include "ide-config.h"
@@ -103,6 +105,7 @@ enum {
   PROP_TOOLCHAIN_ID,
   PROP_TOOLCHAIN,
   PROP_RUN_OPTS,
+  PROP_SUPPORTED_RUNTIMES,
   N_PROPS
 };
 
@@ -289,6 +292,23 @@ ide_config_real_set_runtime (IdeConfig  *self,
   ide_config_set_runtime_id (self, runtime_id);
 }
 
+static gboolean
+filter_supported_runtime_cb (gpointer item,
+                             gpointer user_data)
+{
+  return ide_config_supports_runtime (user_data, item);
+}
+
+static GListModel *
+ide_config_get_supported_runtimes (IdeConfig *self)
+{
+  IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
+  GListModel *runtimes = G_LIST_MODEL (ide_runtime_manager_from_context (context));
+  GtkCustomFilter *filter = gtk_custom_filter_new (filter_supported_runtime_cb, g_object_ref (self), g_object_unref);
+
+  return G_LIST_MODEL (gtk_filter_list_model_new (g_object_ref (runtimes), GTK_FILTER (filter)));
+}
+
 static gchar *
 ide_config_repr (IdeObject *object)
 {
@@ -425,6 +445,10 @@ ide_config_get_property (GObject    *object,
 
     case PROP_LOCALITY:
       g_value_set_flags (value, ide_config_get_locality (self));
+      break;
+
+    case PROP_SUPPORTED_RUNTIMES:
+      g_value_take_object (value, ide_config_get_supported_runtimes (self));
       break;
 
     default:
@@ -698,6 +722,11 @@ ide_config_class_init (IdeConfigClass *klass)
                         IDE_TYPE_BUILD_LOCALITY,
                         IDE_BUILD_LOCALITY_DEFAULT,
                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_SUPPORTED_RUNTIMES] =
+    g_param_spec_object ("supported-runtimes", NULL, NULL,
+                         G_TYPE_LIST_MODEL,
+                         (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
