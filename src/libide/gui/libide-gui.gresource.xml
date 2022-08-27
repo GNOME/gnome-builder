@@ -19,7 +19,6 @@
     <file preprocess="xml-stripblanks">ide-notifications-button.ui</file>
     <file preprocess="xml-stripblanks">ide-omni-bar.ui</file>
     <file preprocess="xml-stripblanks">ide-page.ui</file>
-    <file preprocess="xml-stripblanks">ide-preferences-window.ui</file>
     <file preprocess="xml-stripblanks">ide-primary-workspace.ui</file>
     <file preprocess="xml-stripblanks">ide-run-button.ui</file>
     <file preprocess="xml-stripblanks">ide-search-popover.ui</file>

@@ -26,15 +26,11 @@
 
 #include <libide-gui.h>
 
-#include "gbp-testui-preferences-addin.h"
 #include "gbp-testui-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_testui_register_types (PeasObjectModule *module)
 {
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              GBP_TYPE_TESTUI_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKSPACE_ADDIN,
                                               GBP_TYPE_TESTUI_WORKSPACE_ADDIN);

@@ -30,7 +30,6 @@
 #include <libide-tweaks.h>
 
 #include "gbp-vim-editor-page-addin.h"
-#include "gbp-vim-preferences-addin.h"
 #include "gbp-vim-tweaks-addin.h"
 #include "gbp-vim-workspace-addin.h"
 
@@ -40,9 +39,6 @@ _gbp_vim_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_PAGE_ADDIN,
                                               GBP_TYPE_VIM_EDITOR_PAGE_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              GBP_TYPE_VIM_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TWEAKS_ADDIN,
                                               GBP_TYPE_VIM_TWEAKS_ADDIN);

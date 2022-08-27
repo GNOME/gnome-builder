@@ -3,7 +3,6 @@ if get_option('plugin_copyright')
 plugins_sources += files(
   'copyright-plugin.c',
   'gbp-copyright-buffer-addin.c',
-  'gbp-copyright-preferences-addin.c',
   'gbp-copyright-tweaks-addin.c',
   'gbp-copyright-util.c',
 )

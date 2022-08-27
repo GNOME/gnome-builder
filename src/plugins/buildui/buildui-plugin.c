@@ -26,26 +26,16 @@
 #include <libide-editor.h>
 #include <libide-gui.h>
 
-//#include "gbp-buildui-config-view-addin.h"
 #include "gbp-buildui-editor-page-addin.h"
-#include "gbp-buildui-preferences-addin.h"
 #include "gbp-buildui-tweaks-addin.h"
 #include "gbp-buildui-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_buildui_register_types (PeasObjectModule *module)
 {
-#if 0
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_CONFIG_VIEW_ADDIN,
-                                              GBP_TYPE_BUILDUI_CONFIG_VIEW_ADDIN);
-#endif
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_PAGE_ADDIN,
                                               GBP_TYPE_BUILDUI_EDITOR_PAGE_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              GBP_TYPE_BUILDUI_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TWEAKS_ADDIN,
                                               GBP_TYPE_BUILDUI_TWEAKS_ADDIN);

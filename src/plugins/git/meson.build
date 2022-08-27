@@ -10,7 +10,6 @@ plugins_sources += files([
   'gbp-git-client.c',
   'gbp-git-dependency-updater.c',
   'gbp-git-pipeline-addin.c',
-  'gbp-git-preferences-addin.c',
   'gbp-git-progress.c',
   'gbp-git-submodule-stage.c',
   'gbp-git-tag.c',

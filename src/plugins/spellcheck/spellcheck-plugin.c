@@ -27,7 +27,6 @@
 
 #include "gbp-spell-buffer-addin.h"
 #include "gbp-spell-editor-page-addin.h"
-#include "gbp-spell-preferences-addin.h"
 
 _IDE_EXTERN void
 _gbp_spellcheck_register_types (PeasObjectModule *module)
@@ -38,7 +37,4 @@ _gbp_spellcheck_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_PAGE_ADDIN,
                                               GBP_TYPE_SPELL_EDITOR_PAGE_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              GBP_TYPE_SPELL_PREFERENCES_ADDIN);
 }

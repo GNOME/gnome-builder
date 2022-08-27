@@ -30,14 +30,9 @@
 #include "gbp-meson-build-system.h"
 #include "gbp-meson-build-system-discovery.h"
 #include "gbp-meson-build-target-provider.h"
-#include "gbp-meson-config-view-addin.h"
 #include "gbp-meson-pipeline-addin.h"
 #include "gbp-meson-run-command-provider.h"
 #include "gbp-meson-toolchain-provider.h"
-
-#if 0
-#include "gbp-meson-toolchain-edition-preferences-addin.h"
-#endif
 
 _IDE_EXTERN void
 _gbp_meson_register_types (PeasObjectModule *module)
@@ -63,13 +58,4 @@ _gbp_meson_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TOOLCHAIN_PROVIDER,
                                               GBP_TYPE_MESON_TOOLCHAIN_PROVIDER);
-
-#if 0
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              GBP_TYPE_MESON_TOOLCHAIN_EDITION_PREFERENCES_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_CONFIG_VIEW_ADDIN,
-                                              GBP_TYPE_MESON_CONFIG_VIEW_ADDIN);
-#endif
 }

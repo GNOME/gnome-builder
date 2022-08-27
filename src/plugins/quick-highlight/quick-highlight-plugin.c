@@ -21,10 +21,10 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-editor.h>
 
 #include "gbp-quick-highlight-editor-page-addin.h"
-#include "gbp-quick-highlight-preferences.h"
 
 _IDE_EXTERN void
 _gbp_quick_highlight_register_types (PeasObjectModule *module)
@@ -32,7 +32,4 @@ _gbp_quick_highlight_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_PAGE_ADDIN,
                                               GBP_TYPE_QUICK_HIGHLIGHT_EDITOR_PAGE_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              GBP_TYPE_QUICK_HIGHLIGHT_PREFERENCES);
 }

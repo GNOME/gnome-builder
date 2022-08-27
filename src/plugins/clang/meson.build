@@ -9,7 +9,6 @@ plugins_sources += files([
   'ide-clang-completion-provider.c',
   'ide-clang-diagnostic-provider.c',
   'ide-clang-highlighter.c',
-  'ide-clang-preferences-addin.c',
   'ide-clang-proposals.c',
   'ide-clang-rename-provider.c',
   'ide-clang-symbol-node.c',

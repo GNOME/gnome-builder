@@ -4,7 +4,6 @@ plugins_sources += files([
   'shellcmd-plugin.c',
   'gbp-shellcmd-command-dialog.c',
   'gbp-shellcmd-command-model.c',
-  'gbp-shellcmd-preferences-addin.c',
   'gbp-shellcmd-run-command.c',
   'gbp-shellcmd-run-command-provider.c',
   'gbp-shellcmd-search-provider.c',

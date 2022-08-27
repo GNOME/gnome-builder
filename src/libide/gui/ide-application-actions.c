@@ -34,7 +34,6 @@
 #include "ide-application-private.h"
 #include "ide-application-tweaks.h"
 #include "ide-gui-global.h"
-#include "ide-preferences-window.h"
 #include "ide-primary-workspace.h"
 #include "ide-support-private.h"
 

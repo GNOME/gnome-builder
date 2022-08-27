@@ -31,7 +31,6 @@
 #include "rust-analyzer-highlighter.h"
 #include "rust-analyzer-hover-provider.h"
 #include "rust-analyzer-pipeline-addin.h"
-#include "rust-analyzer-preferences-addin.h"
 #include "rust-analyzer-rename-provider.h"
 #include "rust-analyzer-search-provider.h"
 #include "rust-analyzer-service.h"
@@ -74,9 +73,6 @@ _rust_analyzer_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CODE_ACTION_PROVIDER,
                                               RUST_TYPE_ANALYZER_CODE_ACTION_PROVIDER);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PREFERENCES_ADDIN,
-                                              RUST_TYPE_ANALYZER_PREFERENCES_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TWEAKS_ADDIN,
                                               RUST_TYPE_ANALYZER_TWEAKS_ADDIN);

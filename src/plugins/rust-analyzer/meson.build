@@ -9,7 +9,6 @@ plugins_sources += files([
   'rust-analyzer-hover-provider.c',
   'rust-analyzer-pipeline-addin.c',
   'rust-analyzer-plugin.c',
-  'rust-analyzer-preferences-addin.c',
   'rust-analyzer-rename-provider.c',
   'rust-analyzer-search-provider.c',
   'rust-analyzer-service.c',

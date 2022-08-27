@@ -11,7 +11,6 @@ libide_gui_generated_headers = []
 libide_gui_public_headers = [
   'ide-application.h',
   'ide-application-addin.h',
-  'ide-config-view-addin.h',
   'ide-environment-editor.h',
   'ide-frame.h',
   'ide-frame-addin.h',
@@ -25,9 +24,6 @@ libide_gui_public_headers = [
   'ide-page.h',
   'ide-pane.h',
   'ide-panel-position.h',
-  'ide-preferences-addin.h',
-  'ide-preferences-choice-row.h',
-  'ide-preferences-window.h',
   'ide-primary-workspace.h',
   'ide-run-button.h',
   'ide-search-popover.h',
@@ -53,7 +49,6 @@ libide_gui_private_headers = [
   'ide-notification-stack-private.h',
   'ide-notification-view-private.h',
   'ide-page-private.h',
-  'ide-preferences-builtin-private.h',
   'ide-recoloring-private.h',
   'ide-search-popover-private.h',
   'ide-session-private.h',
@@ -73,7 +68,6 @@ libide_gui_private_sources = [
   'ide-notification-list-box-row.c',
   'ide-notification-stack.c',
   'ide-notification-view.c',
-  'ide-preferences-builtin.c',
   'ide-recoloring.c',
   'ide-search-popover.c',
   'ide-session.c',
@@ -88,7 +82,6 @@ libide_gui_public_sources = [
   'ide-application-addin.c',
   'ide-application-command-line.c',
   'ide-application-open.c',
-  'ide-config-view-addin.c',
   'ide-environment-editor.c',
   'ide-frame-addin.c',
   'ide-frame.c',
@@ -103,9 +96,6 @@ libide_gui_public_sources = [
   'ide-pane.c',
   'ide-panel-position.c',
   'ide-primary-workspace.c',
-  'ide-preferences-addin.c',
-  'ide-preferences-choice-row.c',
-  'ide-preferences-window.c',
   'ide-run-button.c',
   'ide-session-addin.c',
   'ide-shortcut-provider.c',
@@ -128,25 +118,6 @@ libide_gui_resources = gnome.compile_resources(
 )
 libide_gui_generated_headers += [libide_gui_resources[1]]
 libide_gui_sources += libide_gui_resources
-
-#
-# Enum generation
-#
-
-libide_gui_enum_headers = [
-  'ide-preferences-window.h',
-]
-
-libide_gui_enums = gnome.mkenums_simple('ide-gui-enums',
-     body_prefix: '#include "config.h"',
-   header_prefix: '#include <libide-core.h>',
-       decorator: '_IDE_EXTERN',
-         sources: libide_gui_enum_headers,
-  install_header: true,
-     install_dir: libide_gui_header_dir,
-)
-libide_gui_generated_headers += [libide_gui_enums[1]]
-libide_gui_sources += libide_gui_enums
 
 
 #
@@ -204,5 +175,3 @@ gnome_builder_private_sources += files(libide_gui_private_sources)
 gnome_builder_private_headers += files(libide_gui_private_headers)
 gnome_builder_include_subdirs += libide_gui_header_subdir
 gnome_builder_gir_extra_args += ['--c-include=libide-gui.h', '-DIDE_GUI_COMPILATION']
-
-subdir('tests')
