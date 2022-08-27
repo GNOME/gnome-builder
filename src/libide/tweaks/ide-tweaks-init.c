@@ -27,6 +27,16 @@
 #include "ide-tweaks-init.h"
 #include "ide-tweaks-resources.h"
 
+static void
+gchararray_to_variant (const GValue *src,
+                       GValue       *dest)
+{
+  const char *str;
+
+  if ((str = g_value_get_string (src)))
+    g_value_take_variant (dest, g_variant_take_ref (g_variant_new_string (str)));
+}
+
 void
 _ide_tweaks_init (void)
 {
@@ -54,4 +64,7 @@ _ide_tweaks_init (void)
   g_type_ensure (IDE_TYPE_TWEAKS_SWITCH);
   g_type_ensure (IDE_TYPE_TWEAKS_WIDGET);
   g_type_ensure (IDE_TYPE_TWEAKS_WINDOW);
+
+  if (!g_value_type_transformable (G_TYPE_STRING, G_TYPE_VARIANT))
+    g_value_register_transform_func (G_TYPE_STRING, G_TYPE_VARIANT, gchararray_to_variant);
 }
