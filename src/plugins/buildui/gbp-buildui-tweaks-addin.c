@@ -46,7 +46,17 @@ gbp_buildui_tweaks_addin_load (IdeTweaksAddin *addin,
   if ((self->context = ide_tweaks_get_context (tweaks)))
     {
       IdeRuntimeManager *runtime_manager = ide_runtime_manager_from_context (self->context);
+      IdeRunCommands *run_commands = ide_run_commands_from_context (self->context);
+
       ide_tweaks_expose_object (tweaks, "Runtimes", G_OBJECT (runtime_manager));
+      ide_tweaks_expose_object (tweaks, "RunCommands", G_OBJECT (run_commands));
+    }
+  else
+    {
+      g_autoptr(GListStore) store = g_list_store_new (G_TYPE_OBJECT);
+
+      ide_tweaks_expose_object (tweaks, "Runtimes", G_OBJECT (store));
+      ide_tweaks_expose_object (tweaks, "RunCommands", G_OBJECT (store));
     }
 
   ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),

@@ -4,6 +4,55 @@
     <child internal-child="foundry_section">
       <object class="IdeTweaksSection">
         <child>
+          <object class="IdeTweaksPage" id="application_page">
+            <property name="icon-name">application-x-executable-symbolic</property>
+            <property name="title" translatable="yes">Application</property>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Commands</property>
+                <property name="hidden-when">application</property>
+                <child>
+                  <object class="IdeTweaksCombo">
+                    <property name="title" translatable="yes">Run Command</property>
+                    <property name="subtitle" translatable="yes">This command is used to run your project</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.project</property>
+                        <property name="schema-key">default-run-command</property>
+                      </object>
+                    </property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title" translatable="yes">Automatically Discover</property>
+                        <property name="value">''</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksFactory" id="run_commands_factory">
+                        <property name="model">RunCommands</property>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <binding name="title">
+                              <lookup name="display-name" type="IdeRunCommand">
+                                <lookup name="item">run_commands_factory</lookup>
+                              </lookup>
+                            </binding>
+                            <binding name="value">
+                              <lookup name="id" type="IdeRunCommand">
+                                <lookup name="item">run_commands_factory</lookup>
+                              </lookup>
+                            </binding>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
           <object class="IdeTweaksPage" id="build_page">
             <property name="icon-name">builder-build-symbolic</property>
             <property name="title" translatable="yes">Build &amp; Run</property>
