@@ -50,6 +50,81 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <property name="title" translatable="yes">Starting &amp; Stopping</property>
+                <child>
+                  <object class="IdeTweaksSwitch">
+                    <property name="title" translatable="yes">Install Before Running</property>
+                    <property name="subtitle" translatable="yes">Installs the application before running. This is necessary for most projects unless custom run commands are used.</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.project</property>
+                        <property name="schema-key">install-before-run</property>
+                      </object>
+                    </property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="IdeTweaksGroup">
+                <child>
+                  <object class="IdeTweaksCombo">
+                    <property name="title" translatable="yes">Stop Signal</property>
+                    <property name="subtitle" translatable="yes">Send the signal to the target application when requesting the application stop.</property>
+                    <property name="binding">
+                      <object class="IdeTweaksSetting">
+                        <property name="schema-id">org.gnome.builder.project</property>
+                        <property name="schema-key">stop-signal</property>
+                      </object>
+                    </property>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">SIGKILL</property>
+                        <property name="value">'SIGKILL'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">SIGINT</property>
+                        <property name="value">'SIGINT'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">SIGHUP</property>
+                        <property name="value">'SIGHUP'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">SIGUSR1</property>
+                        <property name="value">'SIGUSR1'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">SIGUSR2</property>
+                        <property name="value">'SIGUSR2'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">SIGABRT</property>
+                        <property name="value">'SIGABRT'</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksChoice">
+                        <property name="title">SIGQUIT</property>
+                        <property name="value">'SIGQUIT'</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
         <child>
