@@ -161,13 +161,34 @@
             <child>
               <object class="IdeTweaksGroup" id="overview_config_group">
                 <child>
-                  <object class="IdeTweaksInfo">
+                  <object class="IdeTweaksCombo">
                     <property name="title" translatable="yes">Current Configuration</property>
-                    <binding name="value">
-                      <lookup name="display-name" type="IdeConfig">
-                        <lookup name="config">GbpProjectuiTweaksAddin</lookup>
-                      </lookup>
-                    </binding>
+                    <property name="subtitle" translatable="yes">The configuration is used to setup build pipelines, configure your build system, and run your project.</property>
+                    <property name="binding">
+                      <object class="IdeTweaksProperty">
+                        <property name="object">GbpProjectuiTweaksAddin</property>
+                        <property name="name">config-id</property>
+                      </object>
+                    </property>
+                    <child>
+                      <object class="IdeTweaksFactory" id="config_choice_factory">
+                        <property name="model">Configurations</property>
+                        <child>
+                          <object class="IdeTweaksChoice">
+                            <binding name="title">
+                              <lookup name="display-name" type="IdeConfig">
+                                <lookup name="item">config_choice_factory</lookup>
+                              </lookup>
+                            </binding>
+                            <binding name="value">
+                              <lookup name="id" type="IdeConfig">
+                                <lookup name="item">config_choice_factory</lookup>
+                              </lookup>
+                            </binding>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
