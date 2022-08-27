@@ -108,6 +108,7 @@ ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
 {
   IdeTweaksCombo *self = (IdeTweaksCombo *)widget;
   g_autoptr(IdeTweaksModel) model = NULL;
+  g_autoptr(GtkExpression) expression = NULL;
   g_autoptr(GVariant) variant = NULL;
   IdeTweaksBinding *binding = NULL;
   AdwComboRow *row;
@@ -141,7 +142,10 @@ ide_tweaks_combo_create_for_item (IdeTweaksWidget *instance,
                                 ide_tweaks_combo_visit_children_cb,
                                 state, visit_state_unref);
 
+  expression = gtk_property_expression_new (IDE_TYPE_TWEAKS_CHOICE, NULL, "title");
+
   row = g_object_new (IDE_TYPE_TWEAKS_COMBO_ROW,
+                      "expression", expression,
                       "title", self->title,
                       "subtitle", self->subtitle,
                       "binding", binding,
