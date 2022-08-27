@@ -153,18 +153,22 @@ ide_settings_resolve_schema_path (const char *schema_id,
       g_critical ("Relocatable schemas must be prefixed with org.gnome.builder.");
       return NULL;
     }
-
-  if (project_id == NULL)
+  else if (g_str_equal (schema_id, "org.gnome.builder.project"))
     {
-      g_autofree char *escaped = g_strdelimit (g_strdup (schema_id), ".", '/');
-      return g_strconcat ("/", escaped, "/", path_suffix, NULL);
+      if (project_id != NULL)
+        return g_strconcat ("/org/gnome/builder/projects/", project_id, "/", path_suffix, NULL);
+      else
+        return g_strconcat ("/org/gnome/builder/projects/", path_suffix, NULL);
     }
   else
     {
       const char *suffix = schema_id + strlen ("org.gnome.builder.");
       g_autofree char *escaped = g_strdelimit (g_strdup (suffix), ".", '/');
 
-      return g_strconcat ("/org/gnome/builder/projects/", project_id, "/", escaped, "/", path_suffix, NULL);
+      if (project_id != NULL)
+        return g_strconcat ("/org/gnome/builder/projects/", project_id, "/", escaped, "/", path_suffix, NULL);
+      else
+        return g_strconcat ("/org/gnome/builder/projects/", escaped, "/", path_suffix, NULL);
     }
 }
 
@@ -174,10 +178,7 @@ ide_settings_constructed (GObject *object)
   IdeSettings *self = (IdeSettings *)object;
   g_autoptr(GSettingsSchema) schema = NULL;
   g_autoptr(GSettings) app_settings = NULL;
-  GSettingsSchemaSource *source;
-  g_autofree char *app_path = NULL;
-  g_autofree char *project_path = NULL;
-  const char *schema_path;
+  gboolean relocatable;
 
   IDE_ENTRY;
 
@@ -198,51 +199,18 @@ ide_settings_constructed (GObject *object)
       else if (!g_str_has_suffix (self->path, "/"))
         g_error ("Settings paths must end in /");
     }
-
-  source = g_settings_schema_source_get_default ();
-  if (!(schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE)))
-    g_error ("Could not locate schema %s", self->schema_id);
-
-  if ((schema_path = g_settings_schema_get_path (schema)))
-    app_path = g_strdup (schema_path);
-  else if (self->path != NULL)
-    app_path = g_strdup (self->path);
-
-  if (schema_path == NULL)
+  else
     {
-      if (!g_str_has_prefix (self->schema_id, "org.gnome.builder."))
-        g_error ("Project schemes must have a prefix of org.gnome.builder.");
+      if (!(self->path = ide_settings_resolve_schema_path (self->schema_id, NULL, NULL)))
+        g_error ("Failed to generate application path for %s", self->schema_id);
     }
 
-  if (app_path == NULL)
-    {
-      g_autofree char *suffix = g_strdelimit (g_strdup (self->schema_id), ".", '/');
-      app_path = g_strconcat ("/", suffix, "/", NULL);
-    }
+  /* Create settings for the app-level layer, we'll append it last */
+  app_settings = g_settings_new_with_path (self->schema_id, self->path);
+  g_object_get (app_settings, "settings-schema", &schema, NULL);
+  relocatable = g_settings_schema_get_path (schema) == NULL;
 
-  if (schema_path == NULL && self->project_id != NULL)
-    {
-      if (self->path != NULL)
-        {
-          project_path = g_strdup_printf ("/org/gnome/builder/projects/%s/%s",
-                                          self->project_id,
-                                          self->path + strlen ("/org/gnome/builder/"));
-        }
-      else
-        {
-          g_autofree char *suffix = g_strdup (self->schema_id + strlen ("org.gnome.builder."));
-          GString *str = g_string_new ("/org/gnome/builder/projects/");
-
-          g_string_append (str, self->project_id);
-          g_string_append_c (str, '/');
-          g_string_append (str, g_strdelimit (suffix, ".", '/'));
-          g_string_append_c (str, '/');
-
-          project_path = g_string_free (str, FALSE);
-        }
-    }
-
-  self->layered_settings = ide_layered_settings_new (self->schema_id, app_path);
+  self->layered_settings = ide_layered_settings_new (self->schema_id, self->path);
 
   g_signal_connect_object (self->layered_settings,
                            "changed",
@@ -251,14 +219,15 @@ ide_settings_constructed (GObject *object)
                            G_CONNECT_SWAPPED);
 
   /* Add project layer if we need one */
-  if (project_path != NULL)
+  if (relocatable && self->project_id != NULL)
     {
+      g_autofree char *project_path = ide_settings_resolve_schema_path (self->schema_id, self->project_id, NULL);
       g_autoptr(GSettings) project_settings = g_settings_new_with_path (self->schema_id, project_path);
+
       ide_layered_settings_append (self->layered_settings, project_settings);
     }
 
-  /* Add our application global (user defaults) settings */
-  app_settings = g_settings_new_with_path (self->schema_id, app_path);
+  /* Add our application global (user defaults) settings as fallbacks */
   ide_layered_settings_append (self->layered_settings, app_settings);
 
   IDE_EXIT;
