@@ -82,9 +82,11 @@ ide_tweaks_combo_visit_children_cb (IdeTweaksItem *item,
         }
 
       state->pos++;
+
+      return IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE;
     }
 
-  return IDE_TWEAKS_ITEM_VISIT_ACCEPT_AND_CONTINUE;
+  return IDE_TWEAKS_ITEM_VISIT_CONTINUE;
 }
 
 static void
