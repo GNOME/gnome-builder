@@ -664,7 +664,7 @@ ide_config_manager_config_removed (IdeConfigManager  *self,
                                                 self);
           g_array_remove_index (self->configs, i);
           g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
-          break;
+          IDE_EXIT;
         }
     }
 
