@@ -326,6 +326,22 @@
               <object class="IdeTweaksPage">
                 <child>
                   <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksWidget">
+                        <signal name="create-for-item" handler="create_config_buttons_cb" swapped="true" object="GbpBuilduiTweaksAddin"/>
+                        <property name="binding">
+                          <object class="IdeTweaksProperty">
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="IdeTweaksGroup">
                     <property name="title" translatable="yes">General</property>
                     <child>
                       <object class="IdeTweaksDirectory" id="config_prefix_entry">

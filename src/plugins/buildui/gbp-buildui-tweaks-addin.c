@@ -119,6 +119,129 @@ create_environ_editor_cb (GbpBuilduiTweaksAddin *self,
 }
 
 static void
+on_duplicate_cb (GtkButton *button,
+                 IdeConfig *config)
+{
+  IdeConfigManager *config_manager;
+  IdeTweaksWindow *window;
+  IdeContext *context;
+
+  g_assert (GTK_IS_BUTTON (button));
+  g_assert (IDE_IS_CONFIG (config));
+
+  window = IDE_TWEAKS_WINDOW (gtk_widget_get_root (GTK_WIDGET (button)));
+
+  context = ide_object_get_context (IDE_OBJECT (config));
+  config_manager = ide_config_manager_from_context (context);
+  ide_config_manager_duplicate (config_manager, config);
+
+  ide_tweaks_window_navigate_initial (window);
+}
+
+static void
+on_delete_cb (GtkButton *button,
+              IdeConfig *config)
+{
+  IdeConfigManager *config_manager;
+  IdeTweaksWindow *window;
+  IdeContext *context;
+
+  g_assert (GTK_IS_BUTTON (button));
+  g_assert (IDE_IS_CONFIG (config));
+
+  window = IDE_TWEAKS_WINDOW (gtk_widget_get_root (GTK_WIDGET (button)));
+
+  context = ide_object_get_context (IDE_OBJECT (config));
+  config_manager = ide_config_manager_from_context (context);
+  ide_config_manager_delete (config_manager, config);
+
+  ide_tweaks_window_navigate_initial (window);
+}
+
+static void
+on_make_active_cb (GtkButton *button,
+                   IdeConfig *config)
+{
+  IdeConfigManager *config_manager;
+  IdeContext *context;
+
+  g_assert (GTK_IS_BUTTON (button));
+  g_assert (IDE_IS_CONFIG (config));
+
+  context = ide_object_get_context (IDE_OBJECT (config));
+  config_manager = ide_config_manager_from_context (context);
+  ide_config_manager_set_current (config_manager, config);
+}
+
+static GtkWidget *
+create_config_buttons_cb (GbpBuilduiTweaksAddin *self,
+                          IdeTweaksWidget       *widget,
+                          IdeTweaksWidget       *instance)
+{
+  g_autoptr(IdeConfig) config = NULL;
+  IdeTweaksBinding *binding;
+  GtkButton *duplicate;
+  GtkButton *delete;
+  GtkButton *make_active;
+  GtkBox *box;
+
+  g_assert (GBP_IS_BUILDUI_TWEAKS_ADDIN (self));
+  g_assert (IDE_IS_TWEAKS_WIDGET (widget));
+  g_assert (IDE_IS_TWEAKS_WIDGET (instance));
+
+  if (!(binding = ide_tweaks_widget_get_binding (widget)))
+    return NULL;
+
+  if (!(config = IDE_CONFIG (ide_tweaks_property_dup_object (IDE_TWEAKS_PROPERTY (binding)))))
+    return NULL;
+
+  box = g_object_new (GTK_TYPE_BOX,
+                      "orientation", GTK_ORIENTATION_HORIZONTAL,
+                      "spacing", 12,
+                      "homogeneous", TRUE,
+                      NULL);
+
+  duplicate = g_object_new (GTK_TYPE_BUTTON,
+                            "label", _("Duplicate"),
+                            "tooltip-text", _("Duplicate into new configuration"),
+                            "hexpand", TRUE,
+                            NULL);
+  g_signal_connect_object (duplicate,
+                           "clicked",
+                           G_CALLBACK (on_duplicate_cb),
+                           config,
+                           0);
+  gtk_box_append (GTK_BOX (box), GTK_WIDGET (duplicate));
+
+  make_active = g_object_new (GTK_TYPE_BUTTON,
+                              "label", _("Make Active"),
+                              "tooltip-text", _("Make configuration active and reload build pipeline"),
+                              "hexpand", TRUE,
+                              NULL);
+  g_signal_connect_object (make_active,
+                           "clicked",
+                           G_CALLBACK (on_make_active_cb),
+                           config,
+                           0);
+  gtk_box_append (GTK_BOX (box), GTK_WIDGET (make_active));
+
+  delete = g_object_new (GTK_TYPE_BUTTON,
+                         "css-classes", IDE_STRV_INIT ("destructive-action"),
+                         "label", _("Delete"),
+                         "tooltip-text", _("Delete configuration"),
+                         "hexpand", TRUE,
+                         NULL);
+  g_signal_connect_object (delete,
+                           "clicked",
+                           G_CALLBACK (on_delete_cb),
+                           config,
+                           0);
+  gtk_box_append (GTK_BOX (box), GTK_WIDGET (delete));
+
+  return GTK_WIDGET (box);
+}
+
+static void
 gbp_buildui_tweaks_addin_load (IdeTweaksAddin *addin,
                                IdeTweaks      *tweaks)
 {
@@ -145,6 +268,7 @@ gbp_buildui_tweaks_addin_load (IdeTweaksAddin *addin,
 
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_runtime_list_cb);
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_environ_editor_cb);
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_config_buttons_cb);
   ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
                                        IDE_STRV_INIT ("/plugins/buildui/tweaks.ui"));
 
