@@ -107,7 +107,6 @@ static void
 ide_gsettings_file_settings_apply (IdeGsettingsFileSettings *self)
 {
   g_autofree char *project_id = NULL;
-  g_autofree char *path = NULL;
   const char *lang_id;
   IdeContext *context;
 
@@ -122,10 +121,9 @@ ide_gsettings_file_settings_apply (IdeGsettingsFileSettings *self)
 
   context = ide_object_get_context (IDE_OBJECT (self));
   project_id = ide_context_dup_project_id (context);
-  path = g_strdup_printf ("/org/gnome/builder/editor/language/%s/", lang_id);
-  self->language_settings = ide_settings_new_with_path (project_id,
-                                                        "org.gnome.builder.editor.language",
-                                                        path);
+  self->language_settings = ide_settings_new_relocatable_with_suffix (project_id,
+                                                                      "org.gnome.builder.editor.language",
+                                                                      lang_id);
 
   for (guint i = 0; i < G_N_ELEMENTS (language_mappings); i++)
     {
