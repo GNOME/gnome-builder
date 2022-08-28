@@ -354,7 +354,7 @@ ide_entry_popover_class_init (IdeEntryPopoverClass *klass)
     g_signal_new ("changed",
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (IdeEntryPopoverClass, insert_text),
+                  G_STRUCT_OFFSET (IdeEntryPopoverClass, changed),
                   NULL, NULL, NULL,
                   G_TYPE_NONE,
                   0);
