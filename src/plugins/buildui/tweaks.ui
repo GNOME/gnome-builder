@@ -368,7 +368,7 @@
                 </child>
                 <child>
                   <object class="IdeTweaksGroup">
-                    <property name="title" translatable="yes">SDK</property>
+                    <property name="title" translatable="yes">Build Environment</property>
                     <child>
                       <object class="IdeTweaksWidget">
                         <signal name="create-for-item" handler="create_runtime_list_cb" swapped="true" object="GbpBuilduiTweaksAddin"/>
