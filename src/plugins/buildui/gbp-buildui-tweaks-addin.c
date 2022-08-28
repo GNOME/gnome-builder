@@ -26,6 +26,7 @@
 
 #include <libide-foundry.h>
 
+#include "gbp-buildui-environment-editor.h"
 #include "gbp-buildui-tweaks-addin.h"
 
 struct _GbpBuilduiTweaksAddin
@@ -102,6 +103,21 @@ create_runtime_list_cb (GbpBuilduiTweaksAddin *self,
   return GTK_WIDGET (row);
 }
 
+static GtkWidget *
+create_environ_editor_cb (GbpBuilduiTweaksAddin *self,
+                          IdeTweaksWidget       *widget,
+                          IdeTweaksWidget       *instance)
+{
+  IdeTweaksBinding *binding;
+
+  g_assert (GBP_IS_BUILDUI_TWEAKS_ADDIN (self));
+
+  if (!(binding = ide_tweaks_widget_get_binding (widget)))
+    return NULL;
+
+  return gbp_buildui_environment_editor_new (binding);
+}
+
 static void
 gbp_buildui_tweaks_addin_load (IdeTweaksAddin *addin,
                                IdeTweaks      *tweaks)
@@ -128,6 +144,7 @@ gbp_buildui_tweaks_addin_load (IdeTweaksAddin *addin,
     }
 
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_runtime_list_cb);
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_environ_editor_cb);
   ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
                                        IDE_STRV_INIT ("/plugins/buildui/tweaks.ui"));
 

@@ -389,6 +389,23 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="IdeTweaksGroup">
+                    <child>
+                      <object class="IdeTweaksWidget">
+                        <signal name="create-for-item" handler="create_environ_editor_cb" swapped="true" object="GbpBuilduiTweaksAddin"/>
+                        <property name="binding">
+                          <object class="IdeTweaksProperty">
+                            <property name="name">environ</property>
+                            <binding name="object">
+                              <lookup name="item">config_factory</lookup>
+                            </binding>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

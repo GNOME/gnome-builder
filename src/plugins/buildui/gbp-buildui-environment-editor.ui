@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="GbpBuilduiEnvironmentEditor">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkListBox" id="list_box">
+            <property name="selection-mode">none</property>
+            <property name="visible">false</property>
+            <style>
+              <class name="boxed-list"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkMenuButton">
+            <property name="direction">left</property>
+            <property name="halign">end</property>
+            <property name="child">
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Add _Variable</property>
+                <property name="use-underline">true</property>
+              </object>
+            </property>
+            <property name="popover">
+              <object class="IdeEntryPopover">
+                <property name="title" translatable="yes">Add Variable</property>
+                <property name="button-text" translatable="yes">_Add</property>
+                <signal name="activate" handler="on_entry_activate_cb" swapped="true" object="GbpBuilduiEnvironmentEditor"/>
+                <signal name="changed" handler="on_entry_changed_cb" swapped="true" object="GbpBuilduiEnvironmentEditor"/>
+              </object>
+            </property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
