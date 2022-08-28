@@ -51,6 +51,37 @@ enum {
 
 static guint signals [N_SIGNALS];
 
+static gboolean
+generic_transform (const GValue *from_value,
+                   GValue       *to_value)
+{
+  if (G_VALUE_HOLDS_DOUBLE (from_value) && !G_VALUE_HOLDS_DOUBLE (to_value))
+    {
+      if (G_VALUE_HOLDS_INT (to_value))
+        g_value_set_int (to_value, g_value_get_double (from_value));
+      else if (G_VALUE_HOLDS_UINT (to_value))
+        g_value_set_uint (to_value, g_value_get_double (from_value));
+      else if (G_VALUE_HOLDS_INT64 (to_value))
+        g_value_set_int64 (to_value, g_value_get_double (from_value));
+      else if (G_VALUE_HOLDS_UINT64 (to_value))
+        g_value_set_uint64 (to_value, g_value_get_double (from_value));
+      else
+        goto fallback;
+
+      return TRUE;
+    }
+
+fallback:
+  if (G_VALUE_TYPE (from_value) == G_VALUE_TYPE (to_value) ||
+      g_value_type_transformable (G_VALUE_TYPE (from_value), G_VALUE_TYPE (to_value)))
+    {
+      g_value_copy (from_value, to_value);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 binding_finalize (gpointer data)
 {
@@ -95,8 +126,8 @@ binding_get (Binding      *binding,
 {
   if (binding->get_transform)
     return binding->get_transform (from_value, to_value, binding->user_data);
-  g_value_copy (from_value, to_value);
-  return TRUE;
+  else
+    return generic_transform (from_value, to_value);
 }
 
 static gboolean
@@ -106,8 +137,8 @@ binding_set (Binding      *binding,
 {
   if (binding->set_transform)
     return binding->set_transform (from_value, to_value, binding->user_data);
-  g_value_copy (from_value, to_value);
-  return TRUE;
+  else
+    return generic_transform (from_value, to_value);
 }
 
 /**
