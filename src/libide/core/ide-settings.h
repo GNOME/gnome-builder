@@ -47,6 +47,10 @@ IdeSettings *ide_settings_new_with_path               (const char              *
                                                        const char              *schema_id,
                                                        const char              *path);
 IDE_AVAILABLE_IN_ALL
+IdeSettings *ide_settings_new_relocatable_with_suffix (const char              *project_id,
+                                                       const char              *schema_id,
+                                                       const char              *path_suffix);
+IDE_AVAILABLE_IN_ALL
 const char  *ide_settings_get_schema_id               (IdeSettings             *self);
 IDE_AVAILABLE_IN_ALL
 GVariant    *ide_settings_get_default_value           (IdeSettings             *self,

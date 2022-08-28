@@ -53,6 +53,7 @@ struct _IdeSettings
   char               *schema_id;
   char               *project_id;
   char               *path;
+  char               *path_suffix;
 };
 
 static void action_group_iface_init (GActionGroupInterface *iface);
@@ -63,6 +64,7 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeSettings, ide_settings, G_TYPE_OBJECT,
 enum {
   PROP_0,
   PROP_PATH,
+  PROP_PATH_SUFFIX,
   PROP_PROJECT_ID,
   PROP_SCHEMA_ID,
   N_PROPS
@@ -201,7 +203,7 @@ ide_settings_constructed (GObject *object)
     }
   else
     {
-      if (!(self->path = ide_settings_resolve_schema_path (self->schema_id, NULL, NULL)))
+      if (!(self->path = ide_settings_resolve_schema_path (self->schema_id, NULL, self->path_suffix)))
         g_error ("Failed to generate application path for %s", self->schema_id);
     }
 
@@ -221,7 +223,7 @@ ide_settings_constructed (GObject *object)
   /* Add project layer if we need one */
   if (relocatable && self->project_id != NULL)
     {
-      g_autofree char *project_path = ide_settings_resolve_schema_path (self->schema_id, self->project_id, NULL);
+      g_autofree char *project_path = ide_settings_resolve_schema_path (self->schema_id, self->project_id, self->path_suffix);
       g_autoptr(GSettings) project_settings = g_settings_new_with_path (self->schema_id, project_path);
 
       ide_layered_settings_append (self->layered_settings, project_settings);
@@ -243,6 +245,7 @@ ide_settings_finalize (GObject *object)
   g_clear_pointer (&self->schema_id, g_free);
   g_clear_pointer (&self->project_id, g_free);
   g_clear_pointer (&self->path, g_free);
+  g_clear_pointer (&self->path_suffix, g_free);
 
   G_OBJECT_CLASS (ide_settings_parent_class)->finalize (object);
 }
@@ -259,6 +262,10 @@ ide_settings_get_property (GObject    *object,
     {
     case PROP_PATH:
       g_value_set_string (value, self->path);
+      break;
+
+    case PROP_PATH_SUFFIX:
+      g_value_set_string (value, self->path_suffix);
       break;
 
     case PROP_PROJECT_ID:
@@ -288,6 +295,10 @@ ide_settings_set_property (GObject      *object,
       self->path = g_value_dup_string (value);
       break;
 
+    case PROP_PATH_SUFFIX:
+      self->path_suffix = g_value_dup_string (value);
+      break;
+
     case PROP_PROJECT_ID:
       self->project_id = g_value_dup_string (value);
       break;
@@ -315,6 +326,13 @@ ide_settings_class_init (IdeSettingsClass *klass)
     g_param_spec_string ("path",
                          "Path",
                          "The path to use for for app settings",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_PATH_SUFFIX] =
+    g_param_spec_string ("path-suffix",
+                         "Path Suffix",
+                         "A path suffix to append when generating schema paths",
                          NULL,
                          (G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
@@ -727,4 +745,16 @@ action_group_iface_init (GActionGroupInterface *iface)
   iface->get_action_state_type = ide_settings_get_action_state_type;
   iface->change_action_state = ide_settings_change_action_state;
   iface->activate_action = ide_settings_activate_action;
+}
+
+IdeSettings *
+ide_settings_new_relocatable_with_suffix (const char *project_id,
+                                          const char *schema_id,
+                                          const char *path_suffix)
+{
+  return g_object_new (IDE_TYPE_SETTINGS,
+                       "project-id", project_id,
+                       "schema-id", schema_id,
+                       "path-suffix", path_suffix,
+                       NULL);
 }
