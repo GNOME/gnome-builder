@@ -67,7 +67,7 @@ IDE_AVAILABLE_IN_ALL
 void           ide_tweaks_binding_set_string          (IdeTweaksBinding          *self,
                                                        const char                *string);
 IDE_AVAILABLE_IN_ALL
-char         **ide_tweaks_binding_get_strv            (IdeTweaksBinding          *self);
+char         **ide_tweaks_binding_dup_strv            (IdeTweaksBinding          *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_tweaks_binding_set_strv            (IdeTweaksBinding          *self,
                                                        const char * const        *strv);

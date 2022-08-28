@@ -105,7 +105,7 @@ ide_tweaks_radio_notify_active_cb (GtkCheckButton   *button,
       if (type == G_TYPE_STRV && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         {
           const char *str = g_variant_get_string (value, NULL);
-          g_auto(GStrv) old_strv = ide_tweaks_binding_get_strv (binding);
+          g_auto(GStrv) old_strv = ide_tweaks_binding_dup_strv (binding);
           g_auto(GStrv) new_strv = add_to_set ((const char * const *)old_strv, str);
 
           if (!old_strv ||
@@ -123,7 +123,7 @@ ide_tweaks_radio_notify_active_cb (GtkCheckButton   *button,
       if (type == G_TYPE_STRV && g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
         {
           const char *str = g_variant_get_string (value, NULL);
-          g_auto(GStrv) old_strv = ide_tweaks_binding_get_strv (binding);
+          g_auto(GStrv) old_strv = ide_tweaks_binding_dup_strv (binding);
           g_auto(GStrv) new_strv = remove_from_set ((const char * const *)old_strv, str);
 
           if (old_strv &&
@@ -165,7 +165,7 @@ on_binding_changed_cb (GtkCheckButton   *button,
 
   if (type == G_TYPE_STRV && g_variant_is_of_type (variant, G_VARIANT_TYPE_STRING))
     {
-      g_auto(GStrv) strv = ide_tweaks_binding_get_strv (binding);
+      g_auto(GStrv) strv = ide_tweaks_binding_dup_strv (binding);
 
       if (strv != NULL)
         active = g_strv_contains ((const char * const *)strv,

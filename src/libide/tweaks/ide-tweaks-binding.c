@@ -473,7 +473,7 @@ ide_tweaks_binding_create_adjustment (IdeTweaksBinding *self)
 }
 
 /**
- * ide_tweaks_binding_get_strv:
+ * ide_tweaks_binding_dup_strv:
  * @self: a #IdeTweaksBinding
  *
  * Gets the value as a #GStrv.
@@ -482,7 +482,7 @@ ide_tweaks_binding_create_adjustment (IdeTweaksBinding *self)
  *   newly allocated string array, or %NULL
  */
 char **
-ide_tweaks_binding_get_strv (IdeTweaksBinding *self)
+ide_tweaks_binding_dup_strv (IdeTweaksBinding *self)
 {
   g_auto(GValue) value = G_VALUE_INIT;
 
