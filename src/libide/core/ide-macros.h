@@ -301,6 +301,58 @@ ide_strv_sort (char   **strv,
                      NULL);
 }
 
+static inline gboolean
+ide_strv_add_to_set (char ***strv,
+                     char   *value)
+{
+  gsize len;
+
+  if (value == NULL)
+    return FALSE;
+
+  if (*strv != NULL && g_strv_contains ((const char * const *)*strv, value))
+    {
+      g_free (value);
+      return FALSE;
+    }
+
+  len = *strv ? g_strv_length (*strv) : 0;
+  *strv = g_renew (char *, *strv, len + 2);
+  (*strv)[len++] = value;
+  (*strv)[len] = NULL;
+
+  return TRUE;
+}
+
+static inline gboolean
+ide_strv_remove_from_set (char       **strv,
+                          const char  *value)
+{
+  if (value == NULL)
+    return FALSE;
+
+  if (strv == NULL)
+    return FALSE;
+
+  for (guint i = 0; strv[i]; i++)
+    {
+      if (strcmp (value, strv[i]) == 0)
+        {
+          g_free (strv[i]);
+
+          while (TRUE)
+            {
+              strv[i] = strv[i+1];
+              if (strv[i] == NULL)
+                return TRUE;
+              i++;
+            }
+        }
+    }
+
+  return FALSE;
+}
+
 static inline int
 ide_steal_fd (int *fd)
 {
