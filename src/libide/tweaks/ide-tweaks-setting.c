@@ -34,7 +34,7 @@ struct _IdeTweaksSetting
   const char *schema_id;
   const char *schema_key;
   char *path_suffix;
-  GSettings *settings;
+  IdeSettings *settings;
   const GVariantType *expected_type;
   gulong changed_handler;
 };
@@ -54,11 +54,11 @@ static GParamSpec *properties [N_PROPS];
 static void
 ide_tweaks_setting_settings_changed_cb (IdeTweaksSetting *self,
                                         const char       *key,
-                                        GSettings        *settings)
+                                        IdeSettings      *settings)
 {
   g_assert (IDE_IS_TWEAKS_SETTING (self));
   g_assert (key != NULL);
-  g_assert (G_IS_SETTINGS (settings));
+  g_assert (IDE_IS_SETTINGS (settings));
 
   if (settings != self->settings)
     return;
@@ -66,26 +66,7 @@ ide_tweaks_setting_settings_changed_cb (IdeTweaksSetting *self,
   ide_tweaks_binding_changed (IDE_TWEAKS_BINDING (self));
 }
 
-static gboolean
-schema_is_relocatable (const char *schema_id)
-{
-  GSettingsSchemaSource *source;
-  g_autoptr(GSettingsSchema) schema = NULL;
-
-  g_assert (schema_id != NULL);
-
-  source = g_settings_schema_source_get_default ();
-
-  if (!(schema = g_settings_schema_source_lookup (source, schema_id, TRUE)))
-    {
-      g_critical ("No such schema: %s", schema_id);
-      return FALSE;
-    }
-
-  return g_settings_schema_get_path (schema) == NULL;
-}
-
-static GSettings *
+static IdeSettings *
 ide_tweaks_setting_acquire (IdeTweaksSetting    *self,
                             const char         **key,
                             const GVariantType **expected_type)
@@ -103,6 +84,7 @@ ide_tweaks_setting_acquire (IdeTweaksSetting    *self,
 
   if (self->settings == NULL)
     {
+      GSettingsSchemaSource *source = g_settings_schema_source_get_default ();
       g_autoptr(GSettingsSchema) schema = NULL;
       g_autoptr(GSettingsSchemaKey) schema_key = NULL;
       g_autofree char *path = NULL;
@@ -110,7 +92,10 @@ ide_tweaks_setting_acquire (IdeTweaksSetting    *self,
       g_autoptr(GVariant) value = NULL;
       const char *project_id = NULL;
 
-      if (schema_is_relocatable (self->schema_id))
+      if (!(schema = g_settings_schema_source_lookup (source, self->schema_id, TRUE)))
+        return NULL;
+
+      if (g_settings_schema_get_path (schema) == NULL)
         {
           IdeTweaksItem *root;
 
@@ -118,19 +103,13 @@ ide_tweaks_setting_acquire (IdeTweaksSetting    *self,
             project_id = ide_tweaks_get_project_id (IDE_TWEAKS (root));
         }
 
-      if (!(path = ide_settings_resolve_schema_path (self->schema_id, project_id, self->path_suffix)))
+      if (!(self->settings = ide_settings_new_relocatable_with_suffix (project_id, self->schema_id, self->path_suffix)))
         return NULL;
 
-      if (!(self->settings = g_settings_new_with_path (self->schema_id, path)))
-        return NULL;
-
-      g_object_get (self->settings,
-                    "settings-schema", &schema,
-                    NULL);
       schema_key = g_settings_schema_get_key (schema, self->schema_key);
       self->expected_type = g_settings_schema_key_get_value_type (schema_key);
 
-      value = g_settings_get_value (self->settings, self->schema_key);
+      value = ide_settings_get_value (self->settings, self->schema_key);
       signal_name = g_strdup_printf ("changed::%s", self->schema_key);
 
       self->changed_handler =
@@ -162,7 +141,7 @@ ide_tweaks_setting_get_value (IdeTweaksBinding *binding,
                               GValue           *value)
 {
   IdeTweaksSetting *self = (IdeTweaksSetting *)binding;
-  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(IdeSettings) settings = NULL;
   const char *key = NULL;
 
   g_assert (IDE_IS_TWEAKS_SETTING (self));
@@ -170,7 +149,7 @@ ide_tweaks_setting_get_value (IdeTweaksBinding *binding,
 
   if ((settings = ide_tweaks_setting_acquire (self, &key, NULL)))
     {
-      g_autoptr(GVariant) variant = g_settings_get_value (settings, key);
+      g_autoptr(GVariant) variant = ide_settings_get_value (settings, key);
 
       if (variant != NULL)
         {
@@ -187,7 +166,7 @@ ide_tweaks_setting_set_value (IdeTweaksBinding *binding,
                               const GValue     *value)
 {
   IdeTweaksSetting *self = (IdeTweaksSetting *)binding;
-  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(IdeSettings) settings = NULL;
   const GVariantType *expected_type = NULL;
   const char *key = NULL;
 
@@ -197,13 +176,13 @@ ide_tweaks_setting_set_value (IdeTweaksBinding *binding,
   if ((settings = ide_tweaks_setting_acquire (self, &key, &expected_type)))
     {
       g_autoptr(GVariant) new_value = g_settings_set_mapping (value, expected_type, NULL);
-      g_autoptr(GVariant) old_value = g_settings_get_value (settings, key);
+      g_autoptr(GVariant) old_value = ide_settings_get_value (settings, key);
 
       if (new_value)
         g_variant_take_ref (new_value);
 
       if (new_value && old_value && !g_variant_equal (new_value, old_value))
-        g_settings_set_value (settings, key, new_value);
+        ide_settings_set_value (settings, key, new_value);
     }
 }
 
@@ -211,7 +190,7 @@ static GType
 ide_tweaks_setting_get_expected_type (IdeTweaksBinding *binding)
 {
   IdeTweaksSetting *self = IDE_TWEAKS_SETTING (binding);
-  g_autoptr(GSettings) settings = NULL;
+  g_autoptr(IdeSettings) settings = NULL;
   const GVariantType *expected_type = NULL;
   const char *key = NULL;
 
@@ -250,8 +229,8 @@ ide_tweaks_setting_create_adjustment (IdeTweaksBinding *binding)
 {
   IdeTweaksSetting *self = (IdeTweaksSetting *)binding;
   GSettingsSchemaSource *source;
-  GSettingsSchemaKey *schema_key = NULL;
-  GSettingsSchema *schema = NULL;
+  g_autoptr(GSettingsSchemaKey) schema_key = NULL;
+  g_autoptr(GSettingsSchema) schema = NULL;
   g_autofree char *type = NULL;
   g_autoptr(GVariant) lval = NULL;
   g_autoptr(GVariant) uval = NULL;
@@ -262,7 +241,6 @@ ide_tweaks_setting_create_adjustment (IdeTweaksBinding *binding)
   double lower = .0;
   double upper = .0;
   GVariantIter iter;
-  GtkAdjustment *ret = NULL;
 
   g_assert (IDE_IS_TWEAKS_SETTING (self));
 
@@ -277,7 +255,7 @@ ide_tweaks_setting_create_adjustment (IdeTweaksBinding *binding)
 
   if (!ide_str_equal0 (type, "range") ||
       (2 != g_variant_iter_init (&iter, values)))
-    goto cleanup;
+    return NULL;
 
   lval = g_variant_iter_next_value (&iter);
   uval = g_variant_iter_next_value (&iter);
@@ -301,13 +279,7 @@ ide_tweaks_setting_create_adjustment (IdeTweaksBinding *binding)
         }
     }
 
-  ret = gtk_adjustment_new (0, lower, upper, step_increment, page_increment, 0);
-
-cleanup:
-  g_clear_pointer (&schema, g_settings_schema_unref);
-  g_clear_pointer (&schema_key, g_settings_schema_key_unref);
-
-  return ret;
+  return gtk_adjustment_new (0, lower, upper, step_increment, page_increment, 0);
 }
 
 static void
