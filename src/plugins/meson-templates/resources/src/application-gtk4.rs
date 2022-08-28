@@ -2,11 +2,12 @@
 
 use glib::clone;
 use gtk::prelude::*;
-use gtk::subclass::prelude::*;
-use gtk::{gio, glib};
 {{if is_adwaita}}
 use adw::subclass::prelude::*;
+{{else}}
+use gtk::subclass::prelude::*;
 {{end}}
+use gtk::{gio, glib};
 
 use crate::config::VERSION;
 use crate::{{PreFix}}Window;

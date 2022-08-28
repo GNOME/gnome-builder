@@ -1,10 +1,11 @@
 {{include "license.rs"}}
 
+use gtk::prelude::*;
 {{if is_adwaita}}
 use adw::subclass::prelude::*;
-{{end}}
-use gtk::prelude::*;
+{{else}}
 use gtk::subclass::prelude::*;
+{{end}}
 use gtk::{gio, glib, CompositeTemplate};
 
 mod imp {
