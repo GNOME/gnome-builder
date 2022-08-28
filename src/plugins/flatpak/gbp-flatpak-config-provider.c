@@ -256,14 +256,14 @@ reload_manifest_cb (GObject      *object,
   is_active = current == IDE_CONFIG (old_manifest);
 
   ide_config_provider_emit_added (IDE_CONFIG_PROVIDER (self),
-                                         IDE_CONFIG (new_manifest));
+                                  IDE_CONFIG (new_manifest));
 
   if (is_active)
     ide_config_manager_set_current (manager,
-                                           IDE_CONFIG (new_manifest));
+                                    IDE_CONFIG (new_manifest));
 
   ide_config_provider_emit_removed (IDE_CONFIG_PROVIDER (self),
-                                           IDE_CONFIG (old_manifest));
+                                    IDE_CONFIG (old_manifest));
 }
 
 static void
