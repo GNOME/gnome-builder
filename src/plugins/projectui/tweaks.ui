@@ -110,11 +110,6 @@
             <property name="icon-name">info-symbolic</property>
             <child>
               <object class="IdeTweaksGroup" id="overview_id_group">
-                <binding name="title">
-                  <lookup name="title" type="IdeContext">
-                    <lookup name="context">IdeTweaks</lookup>
-                  </lookup>
-                </binding>
                 <child>
                   <object class="IdeTweaksInfo">
                     <property name="title" translatable="yes">Project Identifier</property>
