@@ -289,10 +289,33 @@ ide_tweaks_window_addin_removed_cb (PeasExtensionSet *set,
 }
 
 static void
-ide_tweaks_window_rebuild (IdeTweaksWindow *self)
+ide_tweaks_window_add_initial_list (IdeTweaksWindow *self)
 {
   GtkWidget *list;
 
+  g_assert (IDE_IS_TWEAKS_WINDOW (self));
+
+  /* Now create our list for toplevel pages */
+  list = ide_tweaks_panel_list_new (IDE_TWEAKS_ITEM (self->tweaks));
+  g_signal_connect_object (list,
+                           "page-activated",
+                           G_CALLBACK (ide_tweaks_window_page_activated_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_stack_add_named (self->panel_list_stack,
+                       list,
+                       ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));
+
+  /* Setup initial selection state */
+  if (self->folded)
+    ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (list), GTK_SELECTION_NONE);
+  else
+    ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (list));
+}
+
+static void
+ide_tweaks_window_rebuild (IdeTweaksWindow *self)
+{
   g_assert (IDE_IS_TWEAKS_WINDOW (self));
   g_assert (IDE_IS_TWEAKS (self->tweaks));
   g_assert (self->addins == NULL);
@@ -311,22 +334,7 @@ ide_tweaks_window_rebuild (IdeTweaksWindow *self)
                     self);
   peas_extension_set_foreach (self->addins, ide_tweaks_window_addin_added_cb, self);
 
-  /* Now create our list for toplevel pages */
-  list = ide_tweaks_panel_list_new (IDE_TWEAKS_ITEM (self->tweaks));
-  g_signal_connect_object (list,
-                           "page-activated",
-                           G_CALLBACK (ide_tweaks_window_page_activated_cb),
-                           self,
-                           G_CONNECT_SWAPPED);
-  gtk_stack_add_named (self->panel_list_stack,
-                       list,
-                       ide_tweaks_item_get_id (IDE_TWEAKS_ITEM (self->tweaks)));
-
-  /* Setup initial selection state */
-  if (self->folded)
-    ide_tweaks_panel_list_set_selection_mode (IDE_TWEAKS_PANEL_LIST (list), GTK_SELECTION_NONE);
-  else
-    ide_tweaks_panel_list_select_first (IDE_TWEAKS_PANEL_LIST (list));
+  ide_tweaks_window_add_initial_list (self);
 
   ide_tweaks_window_update_title (self);
   ide_tweaks_window_update_actions (self);
@@ -754,8 +762,17 @@ ide_tweaks_window_navigate_initial (IdeTweaksWindow *self)
 
   if (self->tweaks != NULL)
     {
-      ide_tweaks_window_clear (self);
-      ide_action_muxer_remove_all (self->muxer);
-      ide_tweaks_window_rebuild (self);
+      GtkWidget *child;
+
+      while (ide_tweaks_window_get_can_navigate_back (self))
+        ide_tweaks_window_navigate_back (self);
+
+      while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->panel_list_stack))))
+        gtk_stack_remove (self->panel_list_stack, child);
+
+      ide_tweaks_window_add_initial_list (self);
+
+      ide_tweaks_window_update_title (self);
+      ide_tweaks_window_update_actions (self);
     }
 }
