@@ -199,6 +199,8 @@ gbp_editorui_preview_init (GbpEditoruiPreview *self)
 
   self->editor_settings = g_settings_new ("org.gnome.builder.editor");
 
+  gtk_text_view_set_editable (GTK_TEXT_VIEW (self), FALSE);
+
   self->css_provider = gtk_css_provider_new ();
   gtk_style_context_add_provider (gtk_widget_get_style_context (GTK_WIDGET (self)),
                                   GTK_STYLE_PROVIDER (self->css_provider),
