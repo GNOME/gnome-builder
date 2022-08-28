@@ -310,6 +310,19 @@ ide_config_get_supported_runtimes (IdeConfig *self)
   return G_LIST_MODEL (gtk_filter_list_model_new (g_object_ref (runtimes), GTK_FILTER (filter)));
 }
 
+static void
+ide_config_set_environ (IdeConfig          *self,
+                        const char * const *environ)
+{
+  IdeEnvironment *env;
+
+  g_assert (IDE_IS_CONFIG (self));
+
+  env = ide_config_get_environment (self);
+  ide_environment_set_environ (env, environ);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ENVIRON]);
+}
+
 static gchar *
 ide_config_repr (IdeObject *object)
 {
@@ -495,6 +508,10 @@ ide_config_set_property (GObject      *object,
       ide_config_set_display_name (self, g_value_get_string (value));
       break;
 
+    case PROP_ENVIRON:
+      ide_config_set_environ (self, g_value_get_boxed (value));
+      break;
+
     case PROP_ID:
       ide_config_set_id (self, g_value_get_string (value));
       break;
@@ -637,7 +654,7 @@ ide_config_class_init (IdeConfigClass *klass)
                         "Environ",
                         "Environ",
                         G_TYPE_STRV,
-                        (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                        (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ID] =
     g_param_spec_string ("id",
