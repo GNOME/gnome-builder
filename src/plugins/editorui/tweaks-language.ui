@@ -28,10 +28,10 @@
                           </lookup>
                         </binding>
                         <child>
-                          <object class="IdeTweaksGroup" id="language_top_group">
+                          <object class="IdeTweaksGroup">
                             <child>
-                              <object class="IdeTweaksWidget" id="language_caption">
-                                <signal name="create-for-item" handler="create_language_caption" swapped="true" object="IdeTweaks"/>
+                              <object class="IdeTweaksCaption">
+                                <property name="text" translatable="yes">Settings provided by .editorconfig and modelines take precedence over those below.</property>
                               </object>
                             </child>
                           </object>

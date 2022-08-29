@@ -70,20 +70,6 @@ editorui_create_style_scheme_selector (GbpEditoruiTweaksAddin *self,
                        NULL);
 }
 
-static GtkWidget *
-create_language_caption (IdeTweaks       *tweaks,
-                         IdeTweaksWidget *widget,
-                         IdeTweaksWidget *instance)
-{
-  return g_object_new (GTK_TYPE_LABEL,
-                       "css-classes", IDE_STRV_INIT ("caption", "dim-label"),
-                       /* translators: .editorconfig is a file used in programming projects and modelines are tweaks specified within a file header or footer */
-                       "label", _("Settings provided by .editorconfig and modelines take precedence over those below."),
-                       "xalign", .0f,
-                       "wrap", TRUE,
-                       NULL);
-}
-
 static int
 compare_by_section (gconstpointer a,
                     gconstpointer b,
@@ -126,7 +112,6 @@ gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
                                                       "/plugins/editorui/tweaks-language.ui"));
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), editorui_create_style_scheme_preview);
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), editorui_create_style_scheme_selector);
-  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_language_caption);
   ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (store));
 
   IDE_TWEAKS_ADDIN_CLASS (gbp_editorui_tweaks_addin_parent_class)->load (addin, tweaks);
