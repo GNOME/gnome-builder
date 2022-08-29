@@ -117,6 +117,8 @@
   </menu>
   <menu id="gbp-sysprof-page-menu">
     <section id="gbp-sysprof-page-file-section">
+      <attribute name="page">ignore</attribute>
+      <attribute name="group">ignore</attribute>
       <item>
         <attribute name="label" translatable="yes">Save</attribute>
         <attribute name="action">sysprof.save-as</attribute>
@@ -130,6 +132,8 @@
       </item>
     </section>
     <section id="gbp-sysprof-page-close-section">
+      <attribute name="page">ignore</attribute>
+      <attribute name="group">ignore</attribute>
       <item>
         <attribute name="label" translatable="yes">Close</attribute>
         <attribute name="action">frame.close-page-or-frame</attribute>

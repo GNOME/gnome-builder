@@ -3,25 +3,32 @@
   <menu id="ide-source-view-popup-menu">
     <section id="ide-source-view-popup-menu-clipboard-section">
       <attribute name="display-hint">inline-buttons</attribute>
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Clipboard</attribute>
       <item>
         <attribute name="verb-icon" type="s">'edit-cut-symbolic'</attribute>
         <attribute name="label" translatable="yes">C_ut</attribute>
         <attribute name="action">clipboard.cut</attribute>
+        <attribute name="accel">&lt;control&gt;x</attribute>
       </item>
       <item>
         <attribute name="verb-icon" type="s">'edit-copy-symbolic'</attribute>
         <attribute name="label" translatable="yes">_Copy</attribute>
         <attribute name="action">clipboard.copy</attribute>
+        <attribute name="accel">&lt;control&gt;c</attribute>
       </item>
       <item>
         <attribute name="verb-icon" type="s">'edit-paste-symbolic'</attribute>
         <attribute name="label" translatable="yes">_Paste</attribute>
         <attribute name="action">clipboard.paste</attribute>
+        <attribute name="accel">&lt;control&gt;v</attribute>
       </item>
     </section>
     <section id="ide-source-view-popup-menu-undo-section">
       <attribute name="display-hint">inline-buttons</attribute>
       <attribute name="label" translatable="yes">Undo</attribute>
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Undo &amp; Redo</attribute>
       <item>
         <attribute name="label" translatable="yes">Undo</attribute>
         <attribute name="action">text.undo</attribute>
@@ -36,6 +43,8 @@
     <section id="ide-source-view-popup-menu-zoom-section">
       <attribute name="label" translatable="yes">Zoom</attribute>
       <attribute name="display-hint">inline-buttons</attribute>
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Zoom</attribute>
       <item>
         <attribute name="label" translatable="yes">Zoom Out</attribute>
         <attribute name="verb-icon">zoom-out-symbolic</attribute>
@@ -58,37 +67,47 @@
     <section id="ide-source-view-popup-menu-selection-section">
       <submenu id="ide-source-view-popup-menu-selection-submenu">
         <attribute name="label" translatable="yes">_Selection</attribute>
+        <attribute name="page" translatable="yes">Text Editor</attribute>
+        <attribute name="group" translatable="yes">Selection</attribute>
         <item>
           <attribute name="label" translatable="yes">Select _All</attribute>
           <attribute name="action">selection.select-all</attribute>
           <attribute name="accel">&lt;control&gt;a</attribute>
         </item>
         <section id="ide-source-view-popup-menu-case-section">
+          <attribute name="page" translatable="yes">Text Editor</attribute>
+          <attribute name="group" translatable="yes">Formatting</attribute>
           <item>
             <attribute name="label" translatable="yes">All _Upper Case</attribute>
+            <attribute name="description" translatable="yes">Convert the text selection to upper case</attribute>
             <attribute name="action">source.change-case</attribute>
             <attribute name="target" type="s">'upper'</attribute>
             <attribute name="accel">&lt;control&gt;u</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">All _Lower Case</attribute>
+            <attribute name="description" translatable="yes">Convert the text selection to lower case</attribute>
             <attribute name="action">source.change-case</attribute>
             <attribute name="target" type="s">'lower'</attribute>
             <attribute name="accel">&lt;control&gt;l</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">In_vert Case</attribute>
+            <attribute name="description" translatable="yes">Invert case of the text selection</attribute>
             <attribute name="action">source.change-case</attribute>
             <attribute name="target" type="s">'toggle'</attribute>
             <attribute name="accel">&lt;control&gt;asciitilde</attribute>
           </item>
           <item>
             <attribute name="label" translatable="yes">_Title Case</attribute>
+            <attribute name="description" translatable="yes">Convert the text selection to title case</attribute>
             <attribute name="action">source.change-case</attribute>
             <attribute name="target" type="s">'title'</attribute>
           </item>
         </section>
         <section id="ide-source-view-popup-menu-line-section">
+          <attribute name="page" translatable="yes">Text Editor</attribute>
+          <attribute name="group" translatable="yes">Selection</attribute>
           <item>
             <attribute name="label" translatable="yes">_Join Lines</attribute>
             <attribute name="action">selection.join</attribute>
@@ -101,19 +120,25 @@
             <attribute name="accel">&lt;shift&gt;&lt;control&gt;j</attribute>
           </item>
         </section>
-        <section id="ide-source-view-popup-menu-format-section"/>
+        <section id="ide-source-view-popup-menu-format-section">
+          <attribute name="page" translatable="yes">Text Editor</attribute>
+          <attribute name="group" translatable="yes">Formatting</attribute>
+        </section>
       </submenu>
     </section>
     <section id="ide-source-view-popup-menu-jump-section">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Code Navigation</attribute>
       <item>
         <attribute name="id">source-view-goto-def</attribute>
         <attribute name="label" translatable="yes">_Go to Definition</attribute>
+        <attribute name="description" translatable="yes">Jump to file and location where item is defined</attribute>
         <attribute name="action">sourceview.goto-definition</attribute>
         <attribute name="accel">&lt;alt&gt;period</attribute>
       </item>
       <item>
         <attribute name="id">source-view-find-references</attribute>
-        <attribute name="label" translatable="yes">_Find references</attribute>
+        <attribute name="label" translatable="yes">_Find References</attribute>
         <attribute name="action">sourceview.find-references</attribute>
       </item>
     </section>

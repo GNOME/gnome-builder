@@ -150,6 +150,8 @@
       </item>
     </section>
     <section id="ide-editor-page-save-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Documents</attribute>
       <item>
         <attribute name="label" translatable="yes">Save</attribute>
         <attribute name="action">page.save</attribute>
@@ -185,6 +187,7 @@
     <item>
       <attribute name="label" translatable="yes">Format Selection</attribute>
       <attribute name="action">page.editor.format</attribute>
+      <attribute name="accel">&lt;shift&gt;&lt;alt&gt;f</attribute>
     </item>
   </menu>
 </interface>

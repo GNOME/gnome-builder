@@ -9,4 +9,29 @@
       </item>
     </section>
   </menu>
+
+  <menu id="menu-search-web-browser">
+    <section id="menu-search-web-browser-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Web Browsing</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Reload Page</attribute>
+        <attribute name="description" translatable="yes">Reload the current page</attribute>
+        <attribute name="action">workspace.web-browser.page.reload</attribute>
+        <attribute name="accel">&lt;ctrl&gt;r</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Reload Page</attribute>
+        <attribute name="description" translatable="yes">Reload the current page ignoring cache</attribute>
+        <attribute name="action">workspace.web-browser.page.reload</attribute>
+        <attribute name="accel">&lt;ctrl&gt;&lt;shift&gt;r</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Focus Location</attribute>
+        <attribute name="description" translatable="yes">Focus the current page's location</attribute>
+        <attribute name="action">workspace.web-browser.page.location.focus</attribute>
+        <attribute name="accel">&lt;ctrl&gt;l</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>

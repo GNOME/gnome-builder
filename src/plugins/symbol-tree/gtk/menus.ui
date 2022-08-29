@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <menu id="gbp-symbol-tree-menu">
-    <item>
-      <attribute name="label" translatable="yes">Select Symbol…</attribute>
-      <attribute name="description" translatable="yes">Navigate to a symbol within the current page</attribute>
-      <attribute name="verb-icon">lang-function-symbolic</attribute>
-      <attribute name="action">workspace.symbol-tree.focus</attribute>
-      <attribute name="accel">&lt;control&gt;&lt;shift&gt;k</attribute>
-    </item>
+    <section id="gbp-symbol-tree-symbol-section">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Code Navigation</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Select Symbol…</attribute>
+        <attribute name="description" translatable="yes">Navigate to a symbol within the current page</attribute>
+        <attribute name="verb-icon">lang-function-symbolic</attribute>
+        <attribute name="action">workspace.symbol-tree.focus</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;shift&gt;k</attribute>
+      </item>
+    </section>
   </menu>
 </interface>

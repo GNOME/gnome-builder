@@ -1,44 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="menu-search">
-    <!-- This menu is just used to add extra search items -->
+  <!--
+    These menus are used to add extra search items and keyboard shortcut entries.
+    The are not displayed in a particular menu in the application.
+  -->
 
-    <item>
-      <!-- translators: you may need to swap left/right in your language, as this refers to "start" (not "end") -->
-      <attribute name="label" translatable="yes">Toggle Left Panel</attribute>
-      <attribute name="description" translatable="yes">Toggle the left panel in or out of view</attribute>
-      <!-- translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL -->
-      <attribute name="verb-icon" translatable="yes">panel-left-symbolic</attribute>
-      <attribute name="action">workspace.panel.toggle-start</attribute>
-    </item>
+  <menu id="menu-search-search">
+    <section id="menu-search-search-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Search</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Global Search</attribute>
+        <attribute name="description" translatable="yes">Display the global search</attribute>
+        <attribute name="action">context.workbench.global-search</attribute>
+        <attribute name="accel">&lt;control&gt;Return</attribute>
+      </item>
+    </section>
+  </menu>
 
-    <item>
-      <!-- translators: you may need to swap left/right in your language, as this refers to "end" (not "start") -->
-      <attribute name="label" translatable="yes">Toggle Right Panel</attribute>
-      <attribute name="description" translatable="yes">Toggle the right panel in or out of view</attribute>
-      <!-- translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL -->
-      <attribute name="verb-icon" translatable="yes">panel-right-symbolic</attribute>
-      <attribute name="action">workspace.panel.toggle-end</attribute>
-    </item>
+  <menu id="menu-search-panels">
+    <section id="menu-search-panels-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Panels</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Toggle Left Panel</attribute>
+        <attribute name="description" translatable="yes">Toggle the left panel in or out of view</attribute>
+        <!-- translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL -->
+        <attribute name="verb-icon" translatable="yes">panel-left-symbolic</attribute>
+        <attribute name="action">workspace.panel.toggle-start</attribute>
+        <attribute name="accel">F9</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Toggle Right Panel</attribute>
+        <attribute name="description" translatable="yes">Toggle the right panel in or out of view</attribute>
+        <!-- translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL -->
+        <attribute name="verb-icon" translatable="yes">panel-right-symbolic</attribute>
+        <attribute name="action">workspace.panel.toggle-end</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Toggle Bottom Panel</attribute>
+        <attribute name="description" translatable="yes">Toggle the bottom panel in or out of view</attribute>
+        <attribute name="verb-icon">panel-bottom-symbolic</attribute>
+        <attribute name="action">workspace.panel.toggle-bottom</attribute>
+        <attribute name="accel">&lt;control&gt;F9</attribute>
+      </item>
+    </section>
+  </menu>
 
-    <item>
-      <attribute name="label" translatable="yes">Toggle Bottom Panel</attribute>
-      <attribute name="description" translatable="yes">Toggle the bottom panel in or out of view</attribute>
-      <attribute name="verb-icon">panel-bottom-symbolic</attribute>
-      <attribute name="action">workspace.panel.toggle-bottom</attribute>
-    </item>
-
-    <item>
-      <attribute name="label" translatable="yes">Switch to Dark Mode</attribute>
-      <attribute name="description" translatable="yes">Change style-scheme to dark variant</attribute>
-      <attribute name="action">app.dark</attribute>
-    </item>
-
-    <item>
-      <attribute name="label" translatable="yes">Switch to Light Mode</attribute>
-      <attribute name="description" translatable="yes">Change style-scheme to light variant</attribute>
-      <attribute name="action">app.light</attribute>
-    </item>
-
+  <menu id="menu-search-color">
+    <section id="menu-search-color-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Style</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Switch to Dark Mode</attribute>
+        <attribute name="description" translatable="yes">Change style-scheme to dark variant</attribute>
+        <attribute name="action">app.dark</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Switch to Light Mode</attribute>
+        <attribute name="description" translatable="yes">Change style-scheme to light variant</attribute>
+        <attribute name="action">app.light</attribute>
+      </item>
+    </section>
   </menu>
 </interface>

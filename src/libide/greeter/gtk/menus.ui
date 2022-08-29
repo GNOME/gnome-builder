@@ -22,6 +22,8 @@
       </item>
     </section>
     <section id="ide-greeter-workspace-menu-app">
+      <attribute name="page">ignore</attribute>
+      <attribute name="group">ignore</attribute>
       <item>
         <attribute name="id">ide-greeter-workspace-menu-preferences</attribute>
         <attribute name="label" translatable="yes">Preferences</attribute>

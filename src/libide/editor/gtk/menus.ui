@@ -11,6 +11,8 @@
     <section id="ide-editor-workspace-menu-placeholder2"/>
     <section id="ide-editor-workspace-menu-open-section">
       <attribute name="id">ide-editor-workspace-menu-open-section</attribute>
+      <attribute name="page">ignore</attribute>
+      <attribute name="group">ignore</attribute>
       <item>
         <attribute name="id">ide-editor-workspace-menu-open</attribute>
         <attribute name="label" translatable="yes">Open File…</attribute>
@@ -22,6 +24,8 @@
     </section>
     <section id="ide-editor-workspace-menu-app-section">
       <attribute name="id">ide-editor-workspace-menu-app-section</attribute>
+      <attribute name="page">ignore</attribute>
+      <attribute name="group">ignore</attribute>
       <item>
         <attribute name="id">ide-editor-workspace-menu-preferences</attribute>
         <attribute name="label" translatable="yes">Preferences</attribute>
@@ -48,6 +52,8 @@
     </section>
     <section id="ide-editor-workspace-menu-quit-section">
       <attribute name="id">ide-editor-workspace-menu-quit-section</attribute>
+      <attribute name="page">ignore</attribute>
+      <attribute name="group">ignore</attribute>
       <item>
         <attribute name="id">ide-editor-workspace-menu-quit</attribute>
         <attribute name="label" translatable="yes">_Quit</attribute>
@@ -58,12 +64,29 @@
   <menu id="ide-editor-page-menu">
     <section id="ide-editor-page-document-section">
       <attribute name="label" translatable="yes">Document</attribute>
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Pages</attribute>
     </section>
-    <section id="ide-editor-page-preview-section"/>
+    <section id="ide-editor-page-preview-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Pages</attribute>
+    </section>
     <section id="ide-editor-page-reveal-section"/>
-    <section id="ide-editor-page-search-section"/>
-    <section id="ide-editor-page-save-section"/>
-    <section id="ide-editor-page-format-section"/>
-    <section id="ide-editor-page-print-section"/>
+    <section id="ide-editor-page-search-section">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Search &amp; Replace</attribute>
+    </section>
+    <section id="ide-editor-page-save-section">
+      <attribute name="page" translatable="yes">Application</attribute>
+      <attribute name="group" translatable="yes">Documents</attribute>
+    </section>
+    <section id="ide-editor-page-format-section">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Selection</attribute>
+    </section>
+    <section id="ide-editor-page-print-section">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Printing</attribute>
+    </section>
   </menu>
 </interface>
