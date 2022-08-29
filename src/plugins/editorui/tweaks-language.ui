@@ -301,6 +301,23 @@
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="IdeTweaksGroup">
+                            <property name="hidden-when">app</property>
+                            <child>
+                              <object class="IdeTweaksWidget">
+                                <signal name="create-for-item" handler="create_language_reset_cb" swapped="true" object="GbpEditoruiTweaksAddin"/>
+                                <property name="binding">
+                                  <object class="IdeTweaksProperty">
+                                    <binding name="object">
+                                      <lookup name="item">language_page_factory</lookup>
+                                    </binding>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>

@@ -70,6 +70,77 @@ editorui_create_style_scheme_selector (GbpEditoruiTweaksAddin *self,
                        NULL);
 }
 
+static void
+reset_language_overrides_cb (GtkButton  *button,
+                             IdeContext *context)
+{
+  GSettingsSchemaSource *source;
+  g_autofree char *project_id = NULL;
+  g_autofree char *schema_path = NULL;
+  g_autoptr(GSettingsSchema) schema = NULL;
+  g_autoptr(GSettings) settings = NULL;
+  g_auto(GStrv) keys = NULL;
+  const char *lang_id;
+
+  g_assert (GTK_IS_BUTTON (button));
+  g_assert (IDE_IS_CONTEXT (context));
+
+  if (!(lang_id = g_object_get_data (G_OBJECT (button), "LANGUAGE")) ||
+      !(project_id = ide_context_dup_project_id (context)) ||
+      !(schema_path = ide_settings_resolve_schema_path ("org.gnome.builder.editor.language", project_id, lang_id)))
+    return;
+
+  source = g_settings_schema_source_get_default ();
+  schema = g_settings_schema_source_lookup (source, "org.gnome.builder.editor.language", TRUE);
+  keys = g_settings_schema_list_keys (schema);
+  settings = g_settings_new_with_path ("org.gnome.builder.editor.language", schema_path);
+
+  for (guint i = 0; keys[i]; i++)
+    g_settings_reset (settings, keys[i]);
+}
+
+static GtkWidget *
+create_language_reset_cb (GbpEditoruiTweaksAddin *self,
+                          IdeTweaksWidget        *widget,
+                          IdeTweaksWidget        *instance)
+{
+  g_autoptr(GObject) language = NULL;
+  IdeTweaksBinding *binding;
+  const char *lang_id;
+  IdeContext *context;
+  IdeTweaks *tweaks;
+  GtkButton *button;
+
+  g_assert (GBP_IS_EDITORUI_TWEAKS_ADDIN (self));
+  g_assert (IDE_IS_TWEAKS_WIDGET (widget));
+  g_assert (IDE_IS_TWEAKS_WIDGET (instance));
+
+  if (!(binding = ide_tweaks_widget_get_binding (widget)) ||
+      !(language = ide_tweaks_property_dup_object (IDE_TWEAKS_PROPERTY (binding))) ||
+      !(lang_id = gtk_source_language_get_id (GTK_SOURCE_LANGUAGE (language))) ||
+      !(tweaks = IDE_TWEAKS (ide_tweaks_item_get_root (IDE_TWEAKS_ITEM (widget)))) ||
+      !(context = ide_tweaks_get_context (tweaks)))
+    return NULL;
+
+  button = g_object_new (GTK_TYPE_BUTTON,
+                         "css-classes", IDE_STRV_INIT ("destructive-action"),
+                         "label", _("Reset"),
+                         "tooltip-text", _("Reverts language preferences to application defaults"),
+                         "halign", GTK_ALIGN_END,
+                         "width-request", 120,
+                         NULL);
+  g_object_set_data (G_OBJECT (button),
+                     "LANGUAGE",
+                     (gpointer)g_intern_string (lang_id));
+  g_signal_connect_object (button,
+                           "clicked",
+                           G_CALLBACK (reset_language_overrides_cb),
+                           context,
+                           0);
+
+  return GTK_WIDGET (button);
+}
+
 static int
 compare_by_section (gconstpointer a,
                     gconstpointer b,
@@ -112,6 +183,7 @@ gbp_editorui_tweaks_addin_load (IdeTweaksAddin *addin,
                                                       "/plugins/editorui/tweaks-language.ui"));
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), editorui_create_style_scheme_preview);
   ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), editorui_create_style_scheme_selector);
+  ide_tweaks_addin_bind_callback (IDE_TWEAKS_ADDIN (self), create_language_reset_cb);
   ide_tweaks_expose_object (tweaks, "GtkSourceLanguages", G_OBJECT (store));
 
   IDE_TWEAKS_ADDIN_CLASS (gbp_editorui_tweaks_addin_parent_class)->load (addin, tweaks);
