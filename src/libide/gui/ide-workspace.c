@@ -560,6 +560,9 @@ ide_workspace_dispose (GObject *object)
   /* Unload addins immediately */
   ide_clear_and_destroy_object (&priv->addins);
 
+  /* Unload shortcut models */
+  g_clear_object (&priv->shortcut_model_bubble);
+  g_clear_object (&priv->shortcut_model_capture);
   /* Remove the workspace from the workbench MRU/etc */
   group = gtk_window_get_group (GTK_WINDOW (self));
   if (IDE_IS_WORKBENCH (group))
