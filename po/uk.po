@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-28 12:37+0000\n"
-"PO-Revision-Date: 2022-08-28 21:11+0300\n"
+"POT-Creation-Date: 2022-08-29 19:20+0000\n"
+"PO-Revision-Date: 2022-08-29 22:24+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2143,18 +2143,14 @@ msgid "The container used to build and run your application"
 msgstr "Контейнер, який використано для збирання і запуску вашої програми"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
-#| msgid "_Duplicate"
 msgid "Duplicate"
 msgstr "Дублювати"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
-#| msgctxt "shortcut window"
-#| msgid "Duplicate current line or selection"
 msgid "Duplicate into new configuration"
 msgstr "Дублювати до нових налаштувань"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
-#| msgid "Make _Active"
 msgid "Make Active"
 msgstr "Зробити активними"
 
@@ -2169,7 +2165,6 @@ msgid "Delete"
 msgstr "Вилучити"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
-#| msgid "Active Configuration"
 msgid "Delete configuration"
 msgstr "Вилучити налаштування"
 
@@ -3537,14 +3532,14 @@ msgstr "Не надано жодного файла."
 msgid "Use minimal editorui interface"
 msgstr "Використовувати мінімальний інтерфейс редактора"
 
-#. translators: .editorconfig is a file used in programming projects and modelines are tweaks specified within a file header or footer
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:81
-msgid ""
-"Settings provided by .editorconfig and modelines take precedence over those "
-"below."
-msgstr ""
-"Параметри, які вказано у файлі .editorconfig, і рядки режимів у самих файлах "
-"мають вищий пріоритет за наведене нижче."
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
+#| msgid "_Reset"
+msgid "Reset"
+msgstr "Скинути"
+
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
+msgid "Reverts language preferences to application defaults"
+msgstr "Повертає типові для програми налаштування мови"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
@@ -3655,6 +3650,14 @@ msgstr "Форматувати позначене"
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
 msgstr "Мови програмування"
+
+#: src/plugins/editorui/tweaks-language.ui:34
+msgid ""
+"Settings provided by .editorconfig and modelines take precedence over those "
+"below."
+msgstr ""
+"Параметри, які вказано у файлі .editorconfig, і рядки режимів у самих файлах "
+"мають вищий пріоритет за наведене нижче."
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -5039,7 +5042,6 @@ msgid "Configuration"
 msgstr "Налаштування"
 
 #: src/plugins/projectui/tweaks.ui:228
-#| msgid "No Provided Tool"
 msgid "Provided By"
 msgstr "Надано"
 
@@ -7361,9 +7363,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Zoom _Out"
 #~ msgstr "Ві_ддалити"
-
-#~ msgid "_Reset"
-#~ msgstr "С_кинути"
 
 #, c-format
 #~ msgid "Insert “%s”"
