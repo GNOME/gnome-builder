@@ -72,6 +72,7 @@ typedef struct
   /* GListModel of GtkShortcut w/ capture/bubble filters */
   GtkFilterListModel *shortcut_model_bubble;
   GtkFilterListModel *shortcut_model_capture;
+  GListModel *shortcuts;
 
   /* A MRU that is updated as pages are focused. It allows us to move through
    * the pages in the order they've been most-recently focused.
@@ -563,6 +564,8 @@ ide_workspace_dispose (GObject *object)
   /* Unload shortcut models */
   g_clear_object (&priv->shortcut_model_bubble);
   g_clear_object (&priv->shortcut_model_capture);
+  g_clear_object (&priv->shortcuts);
+
   /* Remove the workspace from the workbench MRU/etc */
   group = gtk_window_get_group (GTK_WINDOW (self));
   if (IDE_IS_WORKBENCH (group))
@@ -1429,6 +1432,8 @@ _ide_workspace_set_shortcut_model (IdeWorkspace *self,
 
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (G_IS_LIST_MODEL (model));
+
+  g_set_object (&priv->shortcuts, model);
 
   if (bubble_filter == NULL)
     bubble_filter = gtk_custom_filter_new (shortcut_phase_filter, GINT_TO_POINTER (GTK_PHASE_BUBBLE), NULL);
