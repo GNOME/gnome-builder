@@ -29,6 +29,7 @@
 #include "ide-page-private.h"
 #include "ide-search-popover-private.h"
 #include "ide-shortcut-bundle-private.h"
+#include "ide-shortcut-window-private.h"
 #include "ide-workspace-addin.h"
 #include "ide-workspace-private.h"
 #include "ide-workbench-private.h"
@@ -527,9 +528,13 @@ ide_workspace_action_help_overlay (gpointer    instance,
                                    GVariant   *param)
 {
   IdeWorkspace *self = instance;
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+  GtkWidget *window;
 
   g_assert (IDE_IS_WORKSPACE (self));
 
+  if ((window = ide_shortcut_window_new (priv->shortcuts)))
+    gtk_window_present (GTK_WINDOW (window));
 }
 
 static void
