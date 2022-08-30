@@ -166,10 +166,10 @@ static const gchar *ide_application_credits_documenters[] = {
 
 static const gchar *ide_application_credits_funders[] = {
   "曾政嘉",
-  "Aaron Hergert",
   "Abdul Kadri Gündoğdu",
   "Abimael Martinez Carrete",
   "Adam grunden",
+  "Adora River Rose",
   "Adrian Bradshaw",
   "Adrian Rocha",
   "Adrià Arrufat",
