@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-29 19:20+0000\n"
-"PO-Revision-Date: 2022-08-29 22:24+0300\n"
+"POT-Creation-Date: 2022-08-30 00:29+0000\n"
+"PO-Revision-Date: 2022-08-30 22:41+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -612,7 +612,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Яке середовище слід використати для виконання перевірки модулів"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:179 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Докладний журнал"
 
@@ -754,44 +754,97 @@ msgstr "_Скасувати"
 msgid "A suitable debugger could not be found."
 msgstr "Не знайдено придатного засобу діагностики."
 
-#: src/libide/editor/gtk/menus.ui:16 src/libide/gui/ide-frame.ui:104
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
 #: src/libide/gui/ide-workbench.c:1455
 msgid "Open File…"
 msgstr "Відкрити файл…"
 
-#: src/libide/editor/gtk/menus.ui:20
+#: src/libide/editor/gtk/menus.ui:22
 msgid "Open a file in the workspace"
 msgstr "Відкрити файл у новому робочому просторі"
 
-#: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
-#: src/libide/gui/gtk/menus.ui:24 src/libide/tweaks/ide-tweaks-window.c:129
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
+#: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
 msgid "Preferences"
 msgstr "Параметри"
 
-#: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
-#: src/libide/gui/gtk/menus.ui:32 src/libide/plugins/ide-plugin.c:350
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
+#: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
 #: src/plugins/editorui/tweaks.ui:364
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
-#: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:41
+#: src/libide/gui/gtk/menus.ui:39 src/libide/gui/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:46 src/libide/gui/gtk/menus.ui:53
+#: src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Довідка"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/greeter/gtk/menus.ui:45
-#: src/libide/gui/gtk/menus.ui:46
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
+#: src/libide/gui/gtk/menus.ui:50
 msgid "About Builder"
 msgstr "Про «Будівник»"
 
-#: src/libide/editor/gtk/menus.ui:53 src/libide/gui/gtk/menus.ui:54
+#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:61
 msgid "_Quit"
 msgstr "Ви_йти"
 
-#: src/libide/editor/gtk/menus.ui:60
+#: src/libide/editor/gtk/menus.ui:66
 msgid "Document"
 msgstr "Документ"
+
+#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
+#: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
+#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:57
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:69
+#: src/libide/gui/gtk/menus.ui:73 src/libide/gui/gtk/menus.ui:77
+#: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
+#: src/plugins/menu-search/gtk/menus.ui:10
+#: src/plugins/menu-search/gtk/menus.ui:23
+#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/web-browser/gtk/menus.ui:15
+msgid "Application"
+msgstr "Програма"
+
+#: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+#| msgid "In Page"
+msgid "Pages"
+msgstr "Сторінки"
+
+#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
+#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:23
+#: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
+#: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
+#: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
+#: src/libide/sourceview/gtk/menus.ui:124
+#: src/libide/sourceview/gtk/menus.ui:130
+#: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/symbol-tree/gtk/menus.ui:5
+msgid "Text Editor"
+msgstr "Текстовий редактор"
+
+#: src/libide/editor/gtk/menus.ui:77
+#| msgid "Search & Replace (Ctrl+H)"
+msgid "Search & Replace"
+msgstr "Пошук і заміна"
+
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:70
+#: src/libide/gui/gtk/menus.ui:74 src/plugins/editorui/gtk/menus.ui:154
+#| msgid "Document"
+msgid "Documents"
+msgstr "Документи"
+
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
+#: src/libide/sourceview/gtk/menus.ui:110
+msgid "Selection"
+msgstr "Вибір"
+
+#: src/libide/editor/gtk/menus.ui:89
+#| msgid "Editing"
+msgid "Printing"
+msgstr "Друк"
 
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
@@ -822,7 +875,7 @@ msgstr "Зберегти файл"
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: src/plugins/editorui/gtk/menus.ui:154 src/plugins/sysprof/gtk/menus.ui:121
+#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "Зберегти"
 
@@ -1089,26 +1142,26 @@ msgstr "Основна система"
 msgid "Default (Host operating system)"
 msgstr "Типова (основна операційна система)"
 
-#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:61
-#: src/libide/greeter/gtk/menus.ui:80
+#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:63
+#: src/libide/greeter/gtk/menus.ui:82
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
 msgstr "_Клонувати сховище…"
 
-#: src/libide/greeter/gtk/menus.ui:20 src/libide/terminal/gtk/menus.ui:17
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:134
+#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
+#: src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "Закрити"
 
-#: src/libide/greeter/gtk/menus.ui:54 src/libide/greeter/gtk/menus.ui:74
+#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:76
 msgid "Open a _Project…"
 msgstr "_Відкрити проєкт…"
 
-#: src/libide/greeter/gtk/menus.ui:57
+#: src/libide/greeter/gtk/menus.ui:59
 msgid "Open a new or existing project"
 msgstr "Відкрити новий або наявний проєкт"
 
-#: src/libide/greeter/gtk/menus.ui:64
+#: src/libide/greeter/gtk/menus.ui:66
 msgid "Create a new project by cloning a repository"
 msgstr "Створити проєкт клонуванням сховища"
 
@@ -1172,24 +1225,29 @@ msgstr "усі типи проєктів"
 msgid "Go back"
 msgstr "Назад"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:57
+#: src/libide/greeter/ide-greeter-workspace.ui:37
+#| msgid "Switch to selection mode"
+msgid "Toggle selection mode"
+msgstr "Перемкнути режим позначення"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:51
 msgctxt "title"
 msgid "Open a Project"
 msgstr "Відкрити проєкт"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:81
+#: src/libide/greeter/ide-greeter-workspace.ui:75
 msgid "Search all Builder projects…"
 msgstr "Шукати усі проєкти «Будівника»…"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:103
+#: src/libide/greeter/ide-greeter-workspace.ui:97
 msgid "No Projects Found"
 msgstr "Не знайдено жодного проєкту"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:136
+#: src/libide/greeter/ide-greeter-workspace.ui:130
 msgid "_Remove Projects"
 msgstr "Ви_лучити проєкти"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:147
+#: src/libide/greeter/ide-greeter-workspace.ui:141
 msgid "Remove Projects and Sources…"
 msgstr "Вилучити проєкти і початкові коди…"
 
@@ -1269,7 +1327,7 @@ msgstr[1] "Близько %u років тому"
 msgstr[2] "Близько %u років тому"
 msgstr[3] "Близько року тому"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:69
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:79
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Встановити"
@@ -1281,7 +1339,7 @@ msgid "%u of %u"
 msgstr "%u з %u"
 
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/plugins/ide-plugin.c:351
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Пошук"
 
@@ -1303,17 +1361,33 @@ msgstr "Натисніть Escape, щоб скасувати, або Backspace, 
 msgid "Close Project"
 msgstr "Закрити проєкт"
 
-#: src/libide/gui/gtk/menus.ui:25
+#: src/libide/gui/gtk/menus.ui:27
 msgid "Change application preferences"
 msgstr "Змінити налаштування програми"
 
-#: src/libide/gui/gtk/menus.ui:33
+#: src/libide/gui/gtk/menus.ui:35
 msgid "Find keyboard shortcuts"
 msgstr "Пошук клавіатурних скорочень"
 
-#: src/libide/gui/gtk/menus.ui:48
+#: src/libide/gui/gtk/menus.ui:52
 msgid "Show information about Builder"
 msgstr "Показати відомості щодо «Будівника»"
+
+#: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
+msgid "Web Browsing"
+msgstr "Навігація інтернетом"
+
+#: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
+#: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gtk/menus.ui:33
+msgid "Terminal"
+msgstr "Термінал"
+
+#: src/libide/gui/gtk/menus.ui:82
+#| msgid "New Terminal"
+msgid "New Terminals"
+msgstr "Нові термінали"
 
 #: src/libide/gui/ide-application-actions.c:122
 msgid "translator-credits"
@@ -1399,9 +1473,24 @@ msgstr "Ctrl+Shift+T"
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Не вдалося завантажити HTML. Не передбачено підтримки WebKit."
 
-#: src/libide/gui/ide-primary-workspace.ui:57
+#: src/libide/gui/ide-primary-workspace.ui:17
+#| msgid "Toggle Left Panel"
+msgid "Toggle Left Panel (F9)"
+msgstr "Перемкнути ліву панель (F9)"
+
+#: src/libide/gui/ide-primary-workspace.ui:51
+#: src/plugins/menu-search/gtk/menus.ui:34
+msgid "Toggle Right Panel"
+msgstr "Перемкнути праву панель"
+
+#: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
 msgstr "Шукати (Ctrl+Enter)"
+
+#: src/libide/gui/ide-primary-workspace.ui:105
+#| msgid "Toggle Bottom Panel"
+msgid "Toggle Bottom Panel (Ctrl+F9)"
+msgstr "Перемкнути нижню панель (Ctrl+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1419,21 +1508,11 @@ msgstr "Припинити запуск"
 msgid "Run project"
 msgstr "Запустити проєкт"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:134
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
 msgstr "Вигляд"
-
-#: src/libide/gui/tweaks.ui:23
-msgid "Text Editor"
-msgstr "Текстовий редактор"
-
-#: src/libide/gui/tweaks.ui:29
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
-#: src/plugins/terminal/gtk/menus.ui:33
-msgid "Terminal"
-msgstr "Термінал"
 
 #: src/libide/gui/tweaks.ui:63
 msgid "Configurations"
@@ -1546,80 +1625,131 @@ msgstr "Проєкти"
 msgid "Could not parse XML from stream"
 msgstr "Неможливо розібрати XML з потоку"
 
-#: src/libide/sourceview/gtk/menus.ui:8
+#: src/libide/sourceview/gtk/menus.ui:7 src/libide/terminal/gtk/menus.ui:13
+#: src/libide/terminal/gtk/menus.ui:35
+msgid "Clipboard"
+msgstr "Буфер обміну"
+
+#: src/libide/sourceview/gtk/menus.ui:10
 msgid "C_ut"
 msgstr "Ви_різати"
 
-#: src/libide/sourceview/gtk/menus.ui:13 src/libide/terminal/gtk/menus.ui:33
+#: src/libide/sourceview/gtk/menus.ui:16 src/libide/terminal/gtk/menus.ui:16
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: src/libide/sourceview/gtk/menus.ui:18 src/libide/terminal/gtk/menus.ui:43
+#: src/libide/sourceview/gtk/menus.ui:22 src/libide/terminal/gtk/menus.ui:27
 msgid "_Paste"
 msgstr "В_ставити"
 
-#: src/libide/sourceview/gtk/menus.ui:24 src/libide/sourceview/gtk/menus.ui:26
+#: src/libide/sourceview/gtk/menus.ui:29 src/libide/sourceview/gtk/menus.ui:33
 msgid "Undo"
 msgstr "Скасувати"
 
 #: src/libide/sourceview/gtk/menus.ui:31
+#| msgctxt "shortcut window"
+#| msgid "Undo and Redo"
+msgid "Undo & Redo"
+msgstr "Скасування/Повторення"
+
+#: src/libide/sourceview/gtk/menus.ui:38
 msgid "Redo"
 msgstr "Повторити"
 
-#: src/libide/sourceview/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:44 src/libide/sourceview/gtk/menus.ui:47
 msgid "Zoom"
 msgstr "Масштаб"
 
-#: src/libide/sourceview/gtk/menus.ui:40
+#: src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom Out"
 msgstr "Зменшити"
 
-#: src/libide/sourceview/gtk/menus.ui:46
+#: src/libide/sourceview/gtk/menus.ui:55
 msgid "Reset Zoom"
 msgstr "Відновити масштаб"
 
-#: src/libide/sourceview/gtk/menus.ui:52
+#: src/libide/sourceview/gtk/menus.ui:61
 msgid "Zoom In"
 msgstr "Збільшити"
 
-#: src/libide/sourceview/gtk/menus.ui:60
+#: src/libide/sourceview/gtk/menus.ui:69
 msgid "_Selection"
 msgstr "Ви_бір"
 
-#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:50
+#: src/libide/sourceview/gtk/menus.ui:73 src/libide/terminal/gtk/menus.ui:37
 msgid "Select _All"
 msgstr "Вибрати _все"
 
-#: src/libide/sourceview/gtk/menus.ui:68
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:125
+msgid "Formatting"
+msgstr "Форматування"
+
+#: src/libide/sourceview/gtk/menus.ui:81
 msgid "All _Upper Case"
 msgstr "Все _великими буквами"
 
-#: src/libide/sourceview/gtk/menus.ui:74
+#: src/libide/sourceview/gtk/menus.ui:82
+#| msgctxt "shortcut window"
+#| msgid "Make selection upper case"
+msgid "Convert the text selection to upper case"
+msgstr "Перетворити літери позначеного фрагмента до верхнього регістру"
+
+#: src/libide/sourceview/gtk/menus.ui:88
 msgid "All _Lower Case"
 msgstr "Все _малими буквами"
 
-#: src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:89
+#| msgctxt "shortcut window"
+#| msgid "Make selection lower case"
+msgid "Convert the text selection to lower case"
+msgstr "Перетворити літери позначеного фрагмента до нижнього регістру"
+
+#: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
 msgstr "_Інвертувати регістр"
 
-#: src/libide/sourceview/gtk/menus.ui:86
+#: src/libide/sourceview/gtk/menus.ui:96
+msgid "Invert case of the text selection"
+msgstr "Інвертувати регістр позначеного тексту"
+
+#: src/libide/sourceview/gtk/menus.ui:102
 msgid "_Title Case"
 msgstr "Зробити _першу букву велику"
 
-#: src/libide/sourceview/gtk/menus.ui:93
+#: src/libide/sourceview/gtk/menus.ui:103
+#| msgctxt "shortcut window"
+#| msgid "Invert selection case"
+msgid "Convert the text selection to title case"
+msgstr ""
+"Перетворити перші літери слів позначеного фрагмента до верхнього регістру"
+
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Join Lines"
 msgstr "_Об'єднати рядки"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:117
 msgid "S_ort Lines"
 msgstr "В_порядкувати рядки"
 
-#: src/libide/sourceview/gtk/menus.ui:110
+#: src/libide/sourceview/gtk/menus.ui:131
+#: src/plugins/symbol-tree/gtk/menus.ui:6
+#| msgctxt "shortcut window"
+#| msgid "Navigation"
+msgid "Code Navigation"
+msgstr "Навігація кодом"
+
+#: src/libide/sourceview/gtk/menus.ui:134
 msgid "_Go to Definition"
 msgstr "_Перейти до означення"
 
-#: src/libide/sourceview/gtk/menus.ui:116
-msgid "_Find references"
+#: src/libide/sourceview/gtk/menus.ui:135
+#| msgid "Jump to the last position when reopening a file"
+msgid "Jump to file and location where item is defined"
+msgstr "Перейти до файла і місця, де визначено запис"
+
+#: src/libide/sourceview/gtk/menus.ui:141
+#| msgid "_Find references"
+msgid "_Find References"
 msgstr "З_найти посилання"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
@@ -1629,15 +1759,30 @@ msgstr "З_найти посилання"
 msgid "Ln %u, Col %u"
 msgstr "Рд %u, Поз %u"
 
-#: src/libide/terminal/gtk/menus.ui:25
+#: src/libide/terminal/gtk/menus.ui:6
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: src/libide/terminal/gtk/menus.ui:38
+#: src/libide/terminal/gtk/menus.ui:17
+#| msgctxt "shortcut window"
+#| msgid "Copy selected text to clipboard"
+msgid "Copy selection from terminal to clipboard"
+msgstr "Копіювати позначений текст з термінала до буфера"
+
+#: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
 msgstr "_Копіювати посилання"
 
-#: src/libide/terminal/gtk/menus.ui:56
+#: src/libide/terminal/gtk/menus.ui:28
+#| msgid "The font used in the terminal"
+msgid "Paste from clipboard into the terminal"
+msgstr "Вставити з буфера обміну даними до термінала"
+
+#: src/libide/terminal/gtk/menus.ui:38
+msgid "Selection all text from terminal including scrollback"
+msgstr "Позначити увесь текст у терміналі, разом із буфером гортання"
+
+#: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
 msgstr "За_брати вибір"
 
@@ -1746,7 +1891,7 @@ msgstr "Немає"
 msgid "Blank page"
 msgstr "Порожня сторінка"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:132
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:153
 msgid "Settings"
 msgstr "Параметри"
 
@@ -2176,7 +2321,7 @@ msgstr "Зупинити збирання проєкту"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Зібрати проєкт (Shift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:48
+#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:56
 msgid "_Build"
 msgstr "З_ібрати"
 
@@ -2192,51 +2337,76 @@ msgstr "З_апустити"
 msgid "R_un With…"
 msgstr "Зап_устити за допомогою…"
 
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:53 src/plugins/buildui/gtk/menus.ui:76
+#: src/plugins/buildui/gtk/menus.ui:103 src/plugins/buildui/gtk/menus.ui:113
+#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
+#: src/plugins/buildui/gtk/menus.ui:149
+#| msgid "Foundry"
+msgid "Code Foundry"
+msgstr "Колекція коду"
+
+#: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/projectui/tweaks.ui:218
+msgid "Configuration"
+msgstr "Налаштування"
+
+#: src/plugins/buildui/gtk/menus.ui:36
 msgid "Configure Project…"
 msgstr "Налаштувати проєкт…"
 
-#: src/plugins/buildui/gtk/menus.ui:36
+#: src/plugins/buildui/gtk/menus.ui:39
 msgid "Configure settings related to the project"
 msgstr "Налаштувати параметри, які пов'язано із проєктом"
 
-#: src/plugins/buildui/gtk/menus.ui:41
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Select Build Target…"
 msgstr "Вибрати ціль збирання…"
 
-#: src/plugins/buildui/gtk/menus.ui:43
+#: src/plugins/buildui/gtk/menus.ui:49
 msgid "Change default build target"
 msgstr "Змінити типову ціль збирання"
 
-#: src/plugins/buildui/gtk/menus.ui:49
+#: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
+#: src/plugins/buildui/gtk/menus.ui:114
+#| msgid "Building…"
+msgid "Building"
+msgstr "Збирання"
+
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Build the project"
 msgstr "Зібрати проєкт"
 
-#: src/plugins/buildui/gtk/menus.ui:55
+#: src/plugins/buildui/gtk/menus.ui:63
 msgid "_Rebuild"
 msgstr "П_еребудувати"
 
-#: src/plugins/buildui/gtk/menus.ui:56
+#: src/plugins/buildui/gtk/menus.ui:64
 msgid "Rebuild the project"
 msgstr "Повторно зібрати проєкт"
 
-#: src/plugins/buildui/gtk/menus.ui:61
+#: src/plugins/buildui/gtk/menus.ui:69
 msgid "_Clean"
 msgstr "О_чистити"
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:70
 msgid "Clean the project"
 msgstr "Очистити проєкт"
 
-#: src/plugins/buildui/gtk/menus.ui:71
+#: src/plugins/buildui/gtk/menus.ui:77
+#| msgid "Install project"
+msgid "Install & Deployment"
+msgstr "Встановлення і розгортання"
+
+#: src/plugins/buildui/gtk/menus.ui:81
 msgid "Install the project"
 msgstr "Встановити проєкт"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy to Device…"
 msgstr "Розгорнути на пристрій…"
 
-#: src/plugins/buildui/gtk/menus.ui:77
+#: src/plugins/buildui/gtk/menus.ui:87
 msgid "Deploy project to current device"
 msgstr "Розгорнути проєкт на поточному пристрої"
 
@@ -2244,79 +2414,90 @@ msgstr "Розгорнути проєкт на поточному пристро
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:86
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "_Export"
 msgstr "_Експорт"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Export project"
 msgstr "Експортувати проєкт"
 
-#: src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Stop Build"
 msgstr "Зупинити збирання"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Stop building project"
 msgstr "Зупинити збирання проєкту"
 
-#: src/plugins/buildui/gtk/menus.ui:102
+#: src/plugins/buildui/gtk/menus.ui:116
 msgid "Show Build _Log"
 msgstr "Показати _журнал збирання"
 
-#: src/plugins/buildui/gtk/menus.ui:105
+#: src/plugins/buildui/gtk/menus.ui:119
 msgid "Display panel containing the build log"
 msgstr "Показати панель із вмістом журналу збирання"
 
-#: src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
+msgid "Running"
+msgstr "Виконання"
+
+#: src/plugins/buildui/gtk/menus.ui:130
 msgid "Select Run Command…"
 msgstr "Вибрати команду запуску…"
 
-#: src/plugins/buildui/gtk/menus.ui:124
+#: src/plugins/buildui/gtk/menus.ui:142
 msgid "Run"
 msgstr "Запустити"
 
-#: src/plugins/buildui/gtk/menus.ui:127
+#: src/plugins/buildui/gtk/menus.ui:145
 msgid "Run the project"
 msgstr "Запустити проєкт"
 
-#: src/plugins/buildui/gtk/menus.ui:136
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/testui/gbp-testui-item.c:84
+#: src/plugins/testui/gbp-testui-panel.ui:4
+msgid "Unit Tests"
+msgstr "Перевірка модулів"
+
+#: src/plugins/buildui/gtk/menus.ui:157
 msgid "Follow System Style"
 msgstr "Використовувати стиль системи"
 
-#: src/plugins/buildui/gtk/menus.ui:142
+#: src/plugins/buildui/gtk/menus.ui:163
 msgid "Force Light"
 msgstr "Примусово світла"
 
-#: src/plugins/buildui/gtk/menus.ui:148
+#: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Dark"
 msgstr "Примусово темний"
 
-#: src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Accessibility"
 msgstr "Доступність"
 
-#: src/plugins/buildui/gtk/menus.ui:157
+#: src/plugins/buildui/gtk/menus.ui:178
 msgid "High Contrast"
 msgstr "Висока контрастність"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "Text Direction"
 msgstr "Напрям тексту"
 
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:185
 msgid "Left-to-Right"
 msgstr "Зліва праворуч"
 
-#: src/plugins/buildui/gtk/menus.ui:170
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "Right-to-Left"
 msgstr "Справа ліворуч"
 
-#: src/plugins/buildui/gtk/menus.ui:185
+#: src/plugins/buildui/gtk/menus.ui:206
 msgid "Tools"
 msgstr "Інструменти"
 
 #: src/plugins/buildui/gtk/preferences.ui:36
+#: src/plugins/menu-search/gtk/menus.ui:53
 msgid "Style"
 msgstr "Стиль"
 
@@ -2390,10 +2571,6 @@ msgstr "Навігація за допомогою накладки"
 msgid "Switch documents using a popover"
 msgstr "Перемикання документів за допомогою накладки"
 
-#: src/plugins/buildui/tweaks.ui:9
-msgid "Application"
-msgstr "Програма"
-
 #: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
 #: src/plugins/shellcmd/tweaks.ui:21
 msgid "Commands"
@@ -2445,11 +2622,6 @@ msgid ""
 "troubleshooting"
 msgstr ""
 "Запуск із змінною середовища <tt>G_MESSAGES_DEBUG=all</tt> для діагностики"
-
-#: src/plugins/buildui/tweaks.ui:147 src/plugins/testui/gbp-testui-item.c:84
-#: src/plugins/testui/gbp-testui-panel.ui:4
-msgid "Unit Tests"
-msgstr "Перевірка модулів"
 
 #: src/plugins/buildui/tweaks.ui:151
 msgid "Run unit tests from within the build environment."
@@ -3162,12 +3334,29 @@ msgid "Highlight _colors"
 msgstr "Кольори підсвіч_ування"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
-msgid "_Comment code"
+#| msgid "Code Completion"
+msgid "Code Comments"
+msgstr "Коментарі у коді"
+
+#: src/plugins/comment-code/gtk/menus.ui:9
+#| msgid "_Comment code"
+msgid "_Comment Code"
 msgstr "_Коментувати код"
 
-#: src/plugins/comment-code/gtk/menus.ui:13
-msgid "Unco_mment code"
+#: src/plugins/comment-code/gtk/menus.ui:10
+#| msgid "The font used in the source code editor"
+msgid "Add comments surrounding the source code selection"
+msgstr "Додати позначки коментування навколо позначеного коду"
+
+#: src/plugins/comment-code/gtk/menus.ui:16
+#| msgid "Unco_mment code"
+msgid "Unco_mment Code"
 msgstr "_Розкоментувати код"
+
+#: src/plugins/comment-code/gtk/menus.ui:17
+#| msgid "The font used in the source code editor"
+msgid "Remove comments from the source code selection"
+msgstr "Вилучити позначки коментування навколо позначеного коду"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -3533,7 +3722,6 @@ msgid "Use minimal editorui interface"
 msgstr "Використовувати мінімальний інтерфейс редактора"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
-#| msgid "_Reset"
 msgid "Reset"
 msgstr "Скинути"
 
@@ -3627,23 +3815,23 @@ msgstr "Відкрити у новій рамці"
 msgid "Open in New Workspace…"
 msgstr "Відкрити у новому робочому просторі…"
 
-#: src/plugins/editorui/gtk/menus.ui:159
+#: src/plugins/editorui/gtk/menus.ui:161
 msgid "Save _As"
 msgstr "Зберегти _як"
 
-#: src/plugins/editorui/gtk/menus.ui:166
+#: src/plugins/editorui/gtk/menus.ui:168
 msgid "Find…"
 msgstr "Знайти…"
 
-#: src/plugins/editorui/gtk/menus.ui:171
+#: src/plugins/editorui/gtk/menus.ui:173
 msgid "Find/Replace…"
 msgstr "Знайти і замінити…"
 
-#: src/plugins/editorui/gtk/menus.ui:178
+#: src/plugins/editorui/gtk/menus.ui:180
 msgid "Print…"
 msgstr "Надрукувати…"
 
-#: src/plugins/editorui/gtk/menus.ui:186
+#: src/plugins/editorui/gtk/menus.ui:188
 msgid "Format Selection"
 msgstr "Форматувати позначене"
 
@@ -4467,55 +4655,64 @@ msgstr "Створити порожній проєкт з використанн
 msgid "Maven Run"
 msgstr "Запуск Maven"
 
-#. translators: you may need to swap left/right in your language, as this refers to "start" (not "end")
-#: src/plugins/menu-search/gtk/menus.ui:8
+#: src/plugins/menu-search/gtk/menus.ui:13
+#| msgctxt "shortcut window"
+#| msgid "Global Search"
+msgid "Global Search"
+msgstr "Загальний пошук"
+
+#: src/plugins/menu-search/gtk/menus.ui:14
+#| msgid "Focus to the global search entry"
+msgid "Display the global search"
+msgstr "Показати загальний пошук"
+
+#: src/plugins/menu-search/gtk/menus.ui:24
+msgid "Panels"
+msgstr "Панелі"
+
+#: src/plugins/menu-search/gtk/menus.ui:26
 msgid "Toggle Left Panel"
 msgstr "Перемкнутися на ліву панель"
 
-#: src/plugins/menu-search/gtk/menus.ui:9
+#: src/plugins/menu-search/gtk/menus.ui:27
 msgid "Toggle the left panel in or out of view"
 msgstr "Перемкнутися між лівою панеллю у межах панелі перегляду та поза нею"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:11
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#. translators: you may need to swap left/right in your language, as this refers to "end" (not "start")
-#: src/plugins/menu-search/gtk/menus.ui:17
-msgid "Toggle Right Panel"
-msgstr "Перемкнутися на праву панель"
-
-#: src/plugins/menu-search/gtk/menus.ui:18
+#: src/plugins/menu-search/gtk/menus.ui:35
 msgid "Toggle the right panel in or out of view"
 msgstr "Перемкнутися між правою панеллю у межах панелі перегляду та поза нею"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
-#: src/plugins/menu-search/gtk/menus.ui:20
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:25
+#: src/plugins/menu-search/gtk/menus.ui:41
 msgid "Toggle Bottom Panel"
 msgstr "Перемкнутись на нижню панель"
 
-#: src/plugins/menu-search/gtk/menus.ui:26
+#: src/plugins/menu-search/gtk/menus.ui:42
 msgid "Toggle the bottom panel in or out of view"
 msgstr "Перемкнутися між нижньою панеллю у межах панелі перегляду та поза нею"
 
-#: src/plugins/menu-search/gtk/menus.ui:32
+#: src/plugins/menu-search/gtk/menus.ui:55
 msgid "Switch to Dark Mode"
 msgstr "Перемкнутися на темний режим"
 
-#: src/plugins/menu-search/gtk/menus.ui:33
+#: src/plugins/menu-search/gtk/menus.ui:56
 msgid "Change style-scheme to dark variant"
 msgstr "Змінити стиль на темний"
 
-#: src/plugins/menu-search/gtk/menus.ui:38
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Light Mode"
 msgstr "Перемкнутися на світлий режим"
 
-#: src/plugins/menu-search/gtk/menus.ui:39
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to light variant"
 msgstr "Змінити стиль на світлий"
 
@@ -5037,10 +5234,6 @@ msgstr ""
 "Налаштування використовують для визначення конвеєрів збирання, системи "
 "збирання та запуску вашого проєкту."
 
-#: src/plugins/projectui/tweaks.ui:218
-msgid "Configuration"
-msgstr "Налаштування"
-
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
 msgstr "Надано"
@@ -5331,7 +5524,7 @@ msgstr "На сторінці"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
-#: src/plugins/symbol-tree/gtk/menus.ui:5
+#: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Вибрати символ…"
 
@@ -5339,7 +5532,7 @@ msgstr "Вибрати символ…"
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Вибрати символ (Ctrl+Shift+K)"
 
-#: src/plugins/symbol-tree/gtk/menus.ui:6
+#: src/plugins/symbol-tree/gtk/menus.ui:9
 msgid "Navigate to a symbol within the current page"
 msgstr "Перейти до пункту на поточній сторінці"
 
@@ -5440,7 +5633,7 @@ msgstr "Дозволити дроселювання процесора"
 msgid "Run with _Profiler"
 msgstr "Зап_устити з Profiler"
 
-#: src/plugins/sysprof/gtk/menus.ui:128
+#: src/plugins/sysprof/gtk/menus.ui:130
 msgid "Record Again…"
 msgstr "Записати ще раз…"
 
@@ -5591,24 +5784,27 @@ msgid "New _Terminal"
 msgstr "_Новий термінал"
 
 #: src/plugins/terminal/gtk/menus.ui:11
-msgid "Open a new terminal"
-msgstr "Відкрити у новому терміналі"
+#| msgid "Open a new terminal in build pipeline"
+msgid "Open a new terminal on the host operating system"
+msgstr "Відкрити термінал у основній операційній системі"
 
 #: src/plugins/terminal/gtk/menus.ui:14
 msgid "New _Build Terminal"
 msgstr "Новий термінал з_бирання"
 
 #: src/plugins/terminal/gtk/menus.ui:19
-msgid "Open a new terminal in build pipeline"
-msgstr "Відкрити новий термінал у конвеєрі збирання"
+#| msgid "Open a new terminal in build pipeline"
+msgid "Open a new terminal in project's build pipeline"
+msgstr "Відкрити новий термінал у конвеєрі збирання проєкту"
 
 #: src/plugins/terminal/gtk/menus.ui:22
 msgid "New _Runtime Terminal"
 msgstr "Новий термінал _виконання"
 
 #: src/plugins/terminal/gtk/menus.ui:27
-msgid "Open a new terminal in runtime environment"
-msgstr "Відкрити новий термінал у середовищі виконання"
+#| msgid "Open a new terminal in runtime environment"
+msgid "Open a new terminal in project's runtime environment"
+msgstr "Відкрити новий термінал у середовищі виконання проєкту"
 
 #: src/plugins/terminal/gtk/menus.ui:41
 msgid "Split"
@@ -5906,6 +6102,32 @@ msgstr "Vim"
 msgid "New _Browser Page"
 msgstr "Нова сторінка н_авігатора"
 
+#: src/plugins/web-browser/gtk/menus.ui:18
+#: src/plugins/web-browser/gtk/menus.ui:24
+#| msgid "_Reload"
+msgid "Reload Page"
+msgstr "Перезавантажити сторінку"
+
+#: src/plugins/web-browser/gtk/menus.ui:19
+#| msgid "Save the current page"
+msgid "Reload the current page"
+msgstr "Перезавантажити поточну сторінку"
+
+#: src/plugins/web-browser/gtk/menus.ui:25
+#| msgid "Reformat current file on save"
+msgid "Reload the current page ignoring cache"
+msgstr "Перезавантажити поточну сторінку з ігноруванням кешу"
+
+#: src/plugins/web-browser/gtk/menus.ui:30
+#| msgid "Location"
+msgid "Focus Location"
+msgstr "Фокусувати місце"
+
+#: src/plugins/web-browser/gtk/menus.ui:31
+#| msgid "Save the current page"
+msgid "Focus the current page's location"
+msgstr "Фокусувати місце на поточній сторінці"
+
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
 msgid "Failed to create the XML tree."
@@ -5914,6 +6136,9 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Open a new terminal"
+#~ msgstr "Відкрити у новому терміналі"
 
 #~| msgid "SDKs"
 #~ msgid "SDK"
@@ -5974,9 +6199,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Reformat code on save"
 #~ msgstr "Переформатувати код при збереженні"
-
-#~ msgid "Reformat current file on save"
-#~ msgstr "Переформатувати поточний файл при збереженні"
 
 #~ msgid "Cursor"
 #~ msgstr "Вказівник"
@@ -6206,20 +6428,11 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Restore previously opened files"
 #~ msgstr "Відновлювати раніше відкриті файли"
 
-#~ msgid "Editing"
-#~ msgstr "Редагування"
-
 #~ msgid "Shortcuts"
 #~ msgstr "Скорочення"
 
 #~ msgid "Insight"
 #~ msgstr "Натхнення"
-
-#~ msgid "Formatting"
-#~ msgstr "Форматування"
-
-#~ msgid "Running"
-#~ msgstr "Виконання"
 
 #~ msgid "Navigate with Tab Bar"
 #~ msgstr "Навігація за допомогою панелі вкладок"
@@ -6536,9 +6749,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Code"
 #~ msgstr "Код"
 
-#~ msgid "Foundry"
-#~ msgstr "Колекція"
-
 #~ msgid "External"
 #~ msgstr "Зовнішній"
 
@@ -6619,10 +6829,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgctxt "shortcut window"
 #~ msgid "Show help"
 #~ msgstr "Показати довідку"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Global Search"
-#~ msgstr "Загальний пошук"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Preferences"
@@ -6745,20 +6951,12 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgstr "Копіювати та вставити"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Copy selected text to clipboard"
-#~ msgstr "Копіювати вибраний текст у буфер"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Cut selected text to clipboard"
 #~ msgstr "Вирізати вибраний текст у буфер"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Paste text from clipboard"
 #~ msgstr "Вставити текст з буферу"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Undo and Redo"
-#~ msgstr "Повернути та повторити"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Undo previous command"
@@ -6805,18 +7003,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgstr "Упорядкувати позначені рядки"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Make selection upper case"
-#~ msgstr "Зробити великими літери позначеного фрагмента"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Make selection lower case"
-#~ msgstr "Зробити малими літери позначеного фрагмента"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Invert selection case"
-#~ msgstr "Інвертувати регістр позначеного"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Show completion window"
 #~ msgstr "Показати вікно заповнення"
 
@@ -6859,10 +7045,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgctxt "shortcut window"
 #~ msgid "(LSP only) Format selected code or whole document"
 #~ msgstr "(Лише LSP) Форматувати позначений код або увесь документ"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Navigation"
-#~ msgstr "Пересування"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Move to next error in file"
@@ -7020,9 +7202,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Please wait while we scan your project"
 #~ msgstr "Будь ласка, зачекайте на завершення сканування вашого проєкту"
 
-#~ msgid "Selection"
-#~ msgstr "Вибір"
-
 #~ msgid "Test"
 #~ msgstr "Тест"
 
@@ -7131,9 +7310,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Move to the previous error"
 #~ msgstr "Перейти до попередньої помилки"
 
-#~ msgid "_Reload"
-#~ msgstr "_Оновити"
-
 #~ msgid ""
 #~ "Builder has discovered that this file has been modified externally. Would "
 #~ "you like to reload the file?"
@@ -7193,9 +7369,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Open a document"
 #~ msgstr "Відкрити документ"
-
-#~ msgid "Panels"
-#~ msgstr "Панелі"
 
 #~ msgid "Toggle navigation panel"
 #~ msgstr "Увімкнути або вимкнути панель навігації"
@@ -7339,9 +7512,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Workspace shortcuts"
 #~ msgstr "Скорочення робочого простору"
-
-#~ msgid "Focus to the global search entry"
-#~ msgstr "Фокусування поля введення загального пошуку"
 
 #~ msgid "_Undo"
 #~ msgstr "По_вернути"
@@ -7726,9 +7896,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Undo the last command"
 #~ msgstr "Скасувати останню команду"
-
-#~ msgid "Switch to selection mode"
-#~ msgstr "Перемкнутись на режим вибору"
 
 #~ msgid "Switch to drag-resize mode"
 #~ msgstr "Перемкнутися у режим перетягування для зміни розмірів"
@@ -8129,9 +8296,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Save and close the current page"
 #~ msgstr "Зберегти і закрити поточну сторінку"
-
-#~ msgid "Save the current page"
-#~ msgstr "Зберегти поточну сторінку"
 
 #, c-format
 #~ msgid "Not a command: %s"
