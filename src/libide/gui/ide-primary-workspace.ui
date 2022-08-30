@@ -14,6 +14,7 @@
           <object class="PanelDockSwitcher">
             <property name="dock">dock</property>
             <property name="position">start</property>
+            <property name="tooltip-text" translatable="yes">Toggle Left Panel (F9)</property>
           </object>
         </child>
         <child type="title">
@@ -47,6 +48,7 @@
           <object class="PanelDockSwitcher">
             <property name="dock">dock</property>
             <property name="position">end</property>
+            <property name="tooltip-text" translatable="yes">Toggle Right Panel</property>
           </object>
         </child>
         <child type="right">
@@ -100,6 +102,7 @@
           <object class="PanelDockSwitcher">
             <property name="dock">dock</property>
             <property name="position">bottom</property>
+            <property name="tooltip-text" translatable="yes">Toggle Bottom Panel (Ctrl+F9)</property>
           </object>
         </child>
       </object>
