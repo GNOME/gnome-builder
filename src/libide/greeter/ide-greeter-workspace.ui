@@ -34,7 +34,7 @@
           <object class="GtkToggleButton" id="select_button">
             <property name="action-name">win.selection-mode</property>
             <property name="icon-name">selection-mode-symbolic</property>
-            <property name="tooltip-text" translatable="yes">Toggle Selection Mode</property>
+            <property name="tooltip-text" translatable="yes">Toggle selection mode</property>
           </object>
         </child>
       </object>
