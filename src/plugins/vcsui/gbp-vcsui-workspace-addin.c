@@ -103,7 +103,9 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
     {
       PanelStatusbar *statusbar;
       IdeWorkbench *workbench;
+#if 0
       GtkWidget *popover;
+#endif
       GtkImage *image;
       GtkBox *box;
 
@@ -124,6 +126,7 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
       gtk_box_append (box, GTK_WIDGET (image));
       gtk_box_append (box, GTK_WIDGET (self->branch_label));
 
+#if 0
       popover = gbp_vcsui_switcher_popover_new ();
       g_object_bind_property (workbench, "vcs",
                               popover, "vcs",
@@ -135,6 +138,9 @@ gbp_vcsui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                           "popover", popover,
                                           NULL);
       panel_statusbar_add_prefix (statusbar, G_MININT, GTK_WIDGET (self->branch_button));
+#else
+      panel_statusbar_add_prefix (statusbar, G_MININT, GTK_WIDGET (box));
+#endif
 
       self->vcs_bindings = ide_binding_group_new ();
       ide_binding_group_bind (self->vcs_bindings, "branch-name",
