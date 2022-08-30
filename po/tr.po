@@ -13,16 +13,16 @@
 # Çağrı Dolaz <dolazcagri@gmail.com>, 2018.
 # Serdar Sağlam <teknomobil@yandex.com>, 2019.
 # Muhammet Kara <muhammetk@gmail.com>, 2015-2021.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2021.
 # Sabri Ünal <libreajans@gmail.com>, 2019, 2022.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2017-2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-21 19:23+0000\n"
-"PO-Revision-Date: 2022-08-22 21:45+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2022-08-30 19:42+0000\n"
+"PO-Revision-Date: 2022-08-31 00:43+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -34,10 +34,8 @@ msgstr ""
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:173
-#: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
-#: src/plugins/editorui/tweaks.ui:316
+#: src/libide/gui/ide-application-actions.c:114 src/main.c:242
+#: src/plugins/editorui/tweaks.ui:381
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Builder"
@@ -47,7 +45,7 @@ msgid "An IDE for GNOME"
 msgstr "GNOME için IDE"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:174
+#: src/libide/gui/ide-application-actions.c:115
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert ve arkadaşları."
 
@@ -176,7 +174,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Dosyanın daha çoğunu görmek için küçük haritayı kullan"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
-#: src/plugins/buildui/tweaks.ui:44
+#: src/plugins/buildui/tweaks.ui:217
 msgid "Build Parallelism"
 msgstr "İnşa Paralelliği"
 
@@ -189,7 +187,6 @@ msgstr ""
 "için 0."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
-#: src/libide/gui/ide-preferences-builtin.c:431
 msgid "Clear build logs"
 msgstr "İnşa günlüklerini temizle"
 
@@ -329,9 +326,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Etkinleştirilirse, düzenleyici bağıntılı satır numaralarını gösterir."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/libide/gui/ide-preferences-builtin.c:166
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:115
-#: src/plugins/editorui/tweaks.ui:329
+#: src/plugins/editorui/tweaks.ui:394
 msgid "Smart Backspace"
 msgstr "Akıllı Geri Tuşu"
 
@@ -341,91 +336,86 @@ msgid ""
 "indentation size."
 msgstr "Geri tuşu, girintileme boyutuyla hizalamak için ek boşlukları silecek."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/libide/gui/ide-preferences-builtin.c:165
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:110
-msgid "Smart Home and End"
-msgstr "Akıllı Home ve End"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: src/plugins/editorui/tweaks.ui:406
+msgid "Smart Home/End"
+msgstr "Akıllı Home/End"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
-msgid "Whether or not Home moves to first non-space character."
-msgstr "Home’un ilk boşluk olmayan karaktere gidip gitmeyeceği."
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+msgid "Modifies the behavior of Home/End keys."
+msgstr "Home/End tuşlarının davranışını değiştirir."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
 msgstr "Izgara çizgilerini göster"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Etkinleştirilirse, düzenleyici belgede ızgara çizgileri gösterir."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:80
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "Overview Map Policy"
 msgstr "Genel Görünüm Haritası İlkesi"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:81
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
 msgid "When the overview map should be displayed."
 msgstr "Genel görünüm haritası ne zaman görüntülensin."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Draw Spaces"
 msgstr "Boşlukları Çiz"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
 msgstr "Düzenleyicide çizilecek çeşitli boşluk türleri."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:95
-#: src/plugins/editorui/tweaks.ui:86
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "Metni Sar"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:96
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "Daha iyi görünürlük için uzun satırlı metni kaydırma yolu."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Autosave Enabled"
 msgstr "Kendiliğinden Kaydetme Etkin"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "Enable or disable autosave feature."
 msgstr "Kendiliğinden kaydetme özelliğini etkinleştir veya devre dışı bırak."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Autosave Frequency"
 msgstr "Kendiliğinden Kaydetme Sıklığı"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
 msgid "The number of seconds after modification before auto saving."
 msgstr "Kendiliğinden kaydetme için değiştirmeden sonra saniye sayısı."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "Completion Row Count"
 msgstr "Tamamlama Satır Sayısı"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
 msgid "The number of completion rows to display to the user."
 msgstr "Kullanıcıya gösterilecek tamamlama satırlarının sayısı."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
-#: src/plugins/editorui/tweaks.ui:74
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "Satır Yüksekliği"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
 msgid "The line height to use for the selected font."
 msgstr "Seçili yazı tipi için kullanılacak satır yüksekliği."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
-#: src/libide/gui/ide-preferences-builtin.c:229
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "Interactive Completion"
 msgstr "Etkileşimli Tamamlama"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
@@ -433,19 +423,19 @@ msgstr ""
 "Etkinleştirilirse, Builder, siz yazdıkça tamamlama önerilerini kendiliğinden "
 "gösterilir."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "Minimum characters for matching selection."
 msgstr "Seçimi eşleme için asgari karakter."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "Seçim eşleme için asgari karakter sayısını belirtin."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Enable Snippets"
 msgstr "Parçacıkları Etkinleştir"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
@@ -453,12 +443,11 @@ msgstr ""
 "Parçacık tetikleyicisinden sonra sekmeye basarak düzenleyiciden kod "
 "parçacıklarının genişletilmesine izin ver."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Select First Completion"
 msgstr "İlk Tamamlamayı Seç"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
 msgstr "İlk kendiliğinden tamamlama girdisini kendiliğinden seç."
 
@@ -514,7 +503,6 @@ msgid "\"Projects\""
 msgstr "\"Projeler\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:28
-#: src/libide/gui/ide-preferences-builtin.c:448
 msgid "Projects directory"
 msgstr "Projeler dizini"
 
@@ -610,8 +598,19 @@ msgstr "Birim Sınama Yerelliği"
 msgid "What environment to use when running unit tests"
 msgstr "Birim sınamaları çalıştırırken hangi ortamın kullanılacağı"
 
+#: data/gsettings/org.gnome.builder.project.gschema.xml:50
+#: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
+msgid "Verbose Logging"
+msgstr "Ayrıntılı Günlük Kaydı"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:51
+msgid ""
+"If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgstr ""
+"Hedef uygulama çalıştırırken G_MESSAGES_DEBUG=all kullanılma durumu"
+
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
-#: src/plugins/project-tree/tweaks.ui:19
+#: src/plugins/project-tree/tweaks.ui:13
 msgid "Show Icons"
 msgstr "Simgeleri Göster"
 
@@ -620,7 +619,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Bu ayar terk edilmiştir ve artık kullanımda değildir."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
-#: src/plugins/project-tree/tweaks.ui:26
+#: src/plugins/project-tree/tweaks.ui:25
 msgid "Show Ignored Files"
 msgstr "Yok Sayılan Dosyaları Göster"
 
@@ -632,7 +631,7 @@ msgstr ""
 "gösterir."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
-#: src/plugins/project-tree/tweaks.ui:33
+#: src/plugins/project-tree/tweaks.ui:37
 msgid "Sort Directories First"
 msgstr "Önce Dizinleri Sırala"
 
@@ -643,9 +642,8 @@ msgstr ""
 "Etkinleştirilirse, proje ağacı, dizinleri normal dosyalardan önce sıralar."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:230
+#: src/plugins/editorui/tweaks.ui:263
 #: src/plugins/spellcheck/editor-spell-menu.c:250
-#: src/plugins/spellcheck/gbp-spell-preferences-addin.c:42
 msgid "Check Spelling"
 msgstr "Yazımı Denetle"
 
@@ -726,6 +724,7 @@ msgstr "Başlıksız"
 #: src/libide/core/ide-transfer.c:547
 #: src/libide/greeter/ide-greeter-workspace.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:682
+#: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1459
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
@@ -740,48 +739,93 @@ msgstr "_İptal Et"
 msgid "A suitable debugger could not be found."
 msgstr "Uygun hata ayıklayıcı bulunamadı."
 
-#: src/libide/editor/gtk/menus.ui:16 src/libide/gui/ide-frame.ui:104
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
 #: src/libide/gui/ide-workbench.c:1455
 msgid "Open File…"
 msgstr "Dosya Aç…"
 
-#: src/libide/editor/gtk/menus.ui:20
+#: src/libide/editor/gtk/menus.ui:22
 msgid "Open a file in the workspace"
 msgstr "Çalışma alanında dosya aç"
 
-#: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
-#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
-#: src/libide/gui/ide-preferences-window.c:894
-#: src/libide/tweaks/ide-tweaks-window.ui:4
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
+#: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
 msgid "Preferences"
 msgstr "Tercihler"
 
-#: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
-#: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700
-#: src/libide/plugins/ide-plugin.c:350
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
+#: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:303
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Keyboard Shortcuts"
 msgstr "Klavye Kısayolları"
 
-#: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:41
+#: src/libide/gui/gtk/menus.ui:39 src/libide/gui/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:46 src/libide/gui/gtk/menus.ui:53
+#: src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Yardım"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/greeter/gtk/menus.ui:45
-#: src/libide/gui/gtk/menus.ui:46
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
+#: src/libide/gui/gtk/menus.ui:50
 msgid "About Builder"
 msgstr "Builder Hakkında"
 
-#: src/libide/editor/gtk/menus.ui:53 src/libide/gui/gtk/menus.ui:54
+#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:61
 msgid "_Quit"
 msgstr "_Çık"
 
-#: src/libide/editor/gtk/menus.ui:60
+#: src/libide/editor/gtk/menus.ui:66
 msgid "Document"
 msgstr "Belge"
+
+#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
+#: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
+#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:57
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:69
+#: src/libide/gui/gtk/menus.ui:73 src/libide/gui/gtk/menus.ui:77
+#: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
+#: src/plugins/menu-search/gtk/menus.ui:10
+#: src/plugins/menu-search/gtk/menus.ui:23
+#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/web-browser/gtk/menus.ui:15
+msgid "Application"
+msgstr "Uygulama"
+
+#: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+msgid "Pages"
+msgstr "Sayfalar"
+
+#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
+#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:23
+#: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
+#: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
+#: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
+#: src/libide/sourceview/gtk/menus.ui:124
+#: src/libide/sourceview/gtk/menus.ui:130
+#: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/symbol-tree/gtk/menus.ui:5
+msgid "Text Editor"
+msgstr "Metin Düzenleyici"
+
+#: src/libide/editor/gtk/menus.ui:77
+msgid "Search & Replace"
+msgstr "Ara ve Değiştir"
+
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:70
+#: src/libide/gui/gtk/menus.ui:74 src/plugins/editorui/gtk/menus.ui:154
+msgid "Documents"
+msgstr "Belgeler"
+
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
+#: src/libide/sourceview/gtk/menus.ui:110
+msgid "Selection"
+msgstr "Seçim"
+
+#: src/libide/editor/gtk/menus.ui:89
+msgid "Printing"
+msgstr "Yazdırma"
 
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
@@ -812,19 +856,19 @@ msgstr "Dosyayı Kaydet"
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: src/plugins/editorui/gtk/menus.ui:154 src/plugins/sysprof/gtk/menus.ui:121
+#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "Kaydet"
 
 #: src/libide/editor/ide-editor-page.c:874
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
-#: src/libide/tweaks/ide-tweaks-directory.c:127
+#: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
@@ -1040,28 +1084,34 @@ msgstr "İnşa dizinleri kaldırılıyor…"
 msgid "Cannot build transfer while on metered connection"
 msgstr "Ölçülen bağlantıdayken aktarım inşa edilemez"
 
-#: src/libide/foundry/ide-run-command.c:220
+#: src/libide/foundry/ide-run-command.c:177
+#: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
+#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
+msgid "Untitled command"
+msgstr "Başlıksız komut"
+
+#: src/libide/foundry/ide-run-command.c:237
 msgid "Unit Test"
 msgstr "Birim Sınama"
 
-#: src/libide/foundry/ide-run-manager.c:535
+#: src/libide/foundry/ide-run-manager.c:505
 msgid "Cannot run target, another target is running"
 msgstr "Hedef çalıştırılamıyor, başka hedef çalışıyor"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:961
+#: src/libide/foundry/ide-run-manager.c:929
 #, c-format
 msgid "Running %s…"
 msgstr "%s çalışıyor…"
 
-#: src/libide/foundry/ide-run-manager.c:1028
+#: src/libide/foundry/ide-run-manager.c:996
 msgid "Deploying to device…"
 msgstr "Aygıta konuşlandırılıyor…"
 
-#: src/libide/foundry/ide-runtime.c:403
+#: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:253
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
 msgstr "Ev Sahibi Sistem"
 
@@ -1070,26 +1120,26 @@ msgid "Default (Host operating system)"
 msgstr "Öntanımlı (Ev sahibi işletim sistemi)"
 
 # Belirsiz bir depo kopyalamaktan bahsediyor
-#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:61
-#: src/libide/greeter/gtk/menus.ui:80
+#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:63
+#: src/libide/greeter/gtk/menus.ui:82
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
 msgstr "Depo _Klonla…"
 
-#: src/libide/greeter/gtk/menus.ui:20 src/libide/terminal/gtk/menus.ui:17
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:134
+#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
+#: src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "Kapat"
 
-#: src/libide/greeter/gtk/menus.ui:54 src/libide/greeter/gtk/menus.ui:74
+#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:76
 msgid "Open a _Project…"
 msgstr "_Proje Aç…"
 
-#: src/libide/greeter/gtk/menus.ui:57
+#: src/libide/greeter/gtk/menus.ui:59
 msgid "Open a new or existing project"
 msgstr "Yeni veya var olan bir proje aç"
 
-#: src/libide/greeter/gtk/menus.ui:64
+#: src/libide/greeter/gtk/menus.ui:66
 msgid "Create a new project by cloning a repository"
 msgstr "Depo klonlayarak yeni proje oluştur"
 
@@ -1097,13 +1147,12 @@ msgstr "Depo klonlayarak yeni proje oluştur"
 msgid "Select a _Folder…"
 msgstr "_Klasör Seç…"
 
-#: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:26
+#: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
 msgstr "Dizin"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
 #: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
-#: src/libide/gui/ide-workbench.c:2778
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1152,24 +1201,28 @@ msgstr "Tüm Proje Türleri"
 msgid "Go back"
 msgstr "Geri git"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:57
+#: src/libide/greeter/ide-greeter-workspace.ui:37
+msgid "Toggle selection mode"
+msgstr "Seçim kipini aç/kapat"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:51
 msgctxt "title"
 msgid "Open a Project"
 msgstr "Proje Aç"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:81
+#: src/libide/greeter/ide-greeter-workspace.ui:75
 msgid "Search all Builder projects…"
 msgstr "Tüm Builder projelerini ara…"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:103
+#: src/libide/greeter/ide-greeter-workspace.ui:97
 msgid "No Projects Found"
 msgstr "Proje Bulunamadı"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:136
+#: src/libide/greeter/ide-greeter-workspace.ui:130
 msgid "_Remove Projects"
 msgstr "Projele_ri Kaldır"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:147
+#: src/libide/greeter/ide-greeter-workspace.ui:141
 msgid "Remove Projects and Sources…"
 msgstr "Proje ve Kaynaklarını Kaldır…"
 
@@ -1196,9 +1249,9 @@ msgid "Open"
 msgstr "Aç"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
-#: src/libide/tweaks/ide-tweaks-directory.c:128
+#: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
 msgid "Select"
 msgstr "Seç"
@@ -1246,6 +1299,11 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Yaklaşık %u yıl önce"
 
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:79
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+msgid "_Install"
+msgstr "_Kur"
+
 #. translators: the first %u is replaced with the current position, the second with the number of search results
 #: src/libide/gtk/ide-search-entry.c:199
 #, c-format
@@ -1253,8 +1311,7 @@ msgid "%u of %u"
 msgstr "%u / %u"
 
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/gui/ide-preferences-builtin.c:694
-#: src/libide/plugins/ide-plugin.c:351
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Ara"
 
@@ -1278,26 +1335,41 @@ msgstr ""
 msgid "Close Project"
 msgstr "Projeyi Kapat"
 
-#: src/libide/gui/gtk/menus.ui:25
+#: src/libide/gui/gtk/menus.ui:27
 msgid "Change application preferences"
 msgstr "Uygulama tercihlerini değiştir"
 
-#: src/libide/gui/gtk/menus.ui:33
+#: src/libide/gui/gtk/menus.ui:35
 msgid "Find keyboard shortcuts"
 msgstr "Klavye kısayollarını bul"
 
-#: src/libide/gui/gtk/menus.ui:48
+#: src/libide/gui/gtk/menus.ui:52
 msgid "Show information about Builder"
 msgstr "Builder ile ilgili bilgi göster"
 
-#: src/libide/gui/ide-application-actions.c:181
+#: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
+msgid "Web Browsing"
+msgstr "Web Tarama"
+
+#: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
+#: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gtk/menus.ui:33
+msgid "Terminal"
+msgstr "Uçbirim"
+
+#: src/libide/gui/gtk/menus.ui:82
+msgid "New Terminals"
+msgstr "Yeni Uçbirimler"
+
+#: src/libide/gui/ide-application-actions.c:122
 msgid "translator-credits"
 msgstr ""
 "Muhammet Kara <muhammetk@gmail.com>\n"
 "Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Sabri Ünal <libreajans@gmail.com>"
 
-#: src/libide/gui/ide-application-actions.c:188
+#: src/libide/gui/ide-application-actions.c:129
 msgid "Funded By"
 msgstr "Maddi Destekçiler"
 
@@ -1375,842 +1447,22 @@ msgstr "Ctrl+Shift+T"
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "HTML yüklenemedi. WebKit desteği eksik."
 
-#: src/libide/gui/ide-preferences-builtin.c:117
-#: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:10
-#: src/plugins/buildui/gtk/menus.ui:141
-#: src/plugins/buildui/gtk/preferences.ui:25
-#: src/plugins/buildui/gtk/preferences.ui:32
-msgid "Appearance"
-msgstr "Görünüm"
-
-#: src/libide/gui/ide-preferences-builtin.c:119
-#: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:40
-msgid "Style"
-msgstr "Biçem"
-
-#: src/libide/gui/ide-preferences-builtin.c:120
-msgid "System"
-msgstr "Sistem"
-
-#: src/libide/gui/ide-preferences-builtin.c:120
-msgid "follow"
-msgstr "izle"
-
-#: src/libide/gui/ide-preferences-builtin.c:121
-#: src/libide/gui/ide-preferences-builtin.c:593
-#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
-msgid "Light"
-msgstr "Aydınlık"
-
-#: src/libide/gui/ide-preferences-builtin.c:122
-#: src/libide/gui/ide-preferences-builtin.c:594
-#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
-msgid "Dark"
-msgstr "Karanlık"
-
-#: src/libide/gui/ide-preferences-builtin.c:124
-#: src/libide/gui/ide-preferences-builtin.c:128
-#: src/libide/gui/ide-preferences-builtin.c:172
-msgid "Editor"
-msgstr "Düzenleyici"
-
-#: src/libide/gui/ide-preferences-builtin.c:125
-msgid "Grid Pattern"
-msgstr "Izgara Deseni"
-
-#: src/libide/gui/ide-preferences-builtin.c:125
-#: src/plugins/buildui/gtk/preferences.ui:81
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:66
-msgid "Display a grid pattern underneath source code"
-msgstr "Kaynak kodun altında ızgara deseni göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:127
-#: src/plugins/editorui/tweaks.ui:66 src/plugins/terminal/tweaks.ui:19
-msgid "Font"
-msgstr "Yazı Tipi"
-
-#: src/libide/gui/ide-preferences-builtin.c:128
-msgctxt "Keywords"
-msgid "editor font monospace"
-msgstr "editör düzenleyici yazı tipi eşaralıklı"
-
-# Neden Satır Aralığı diye kullanmadığımızı merak ettim?
-#: src/libide/gui/ide-preferences-builtin.c:129
-msgid "Line Spacing"
-msgstr "Satır Boşluklama"
-
-#: src/libide/gui/ide-preferences-builtin.c:129
-msgid "Number of pixels above and below editor lines"
-msgstr "Düzenleyici satırlarının üstünde ve altındaki piksel sayısı"
-
-#: src/libide/gui/ide-preferences-builtin.c:129
-msgctxt "Keywords"
-msgid "editor line spacing font monospace"
-msgstr "editör düzenleyici satır boşluklama yazı tipi eşaralıklı"
-
-#: src/libide/gui/ide-preferences-builtin.c:134
-msgid "Color Scheme"
-msgstr "Renk Düzeni"
-
-#: src/libide/gui/ide-preferences-builtin.c:159
-msgid "Keyboard"
-msgstr "Klavye"
-
-#: src/libide/gui/ide-preferences-builtin.c:161
-msgid "Emulation"
-msgstr "Öykünme"
-
-#: src/libide/gui/ide-preferences-builtin.c:162
-msgid "Default keybinding mode which mimics gedit"
-msgstr "Gedit’e öykünen öntanımlı tuş kısayolu kipi"
-
-#: src/libide/gui/ide-preferences-builtin.c:164
-msgid "Movement"
-msgstr "Hareket"
-
-#: src/libide/gui/ide-preferences-builtin.c:165
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:111
-msgid "Home moves to first non-whitespace character"
-msgstr "Home tuşu, boşluk dışındaki ilk karaktere gider"
-
-#: src/libide/gui/ide-preferences-builtin.c:166
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:116
-#: src/plugins/editorui/tweaks.ui:330
-msgid ""
-"Backspace will remove extra space to keep you aligned with your indentation"
-msgstr "Geri tuşu, girintileme boyutuyla hizalamak için ek boşlukları silecek"
-
-#. Add our pages
-#: src/libide/gui/ide-preferences-builtin.c:174
-#: src/libide/gui/ide-preferences-builtin.c:227
-#: src/libide/gui/ide-preferences-builtin.c:350
-#: src/libide/gui/ide-preferences-builtin.c:422
-#: src/libide/gui/ide-preferences-builtin.c:707
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
-#: src/plugins/buildui/tweaks.ui:19
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
-msgid "General"
-msgstr "Genel"
-
-#: src/libide/gui/ide-preferences-builtin.c:175
-msgid "Display list of open files"
-msgstr "Açık dosyaların listesini göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:175
-msgid "Display the list of all open files in the project sidebar"
-msgstr "Tüm açık dosyaların listesini proje kenar çubuğunda göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:176
-msgid "Reformat code on save"
-msgstr "Kaydederken kodu yeniden biçimlendir"
-
-#: src/libide/gui/ide-preferences-builtin.c:176
-msgid "Reformat current file on save"
-msgstr "Kaydederken geçerli dosyayı yeniden biçimlendir"
-
-#: src/libide/gui/ide-preferences-builtin.c:178
-msgid "Cursor"
-msgstr "İmleç"
-
-#: src/libide/gui/ide-preferences-builtin.c:179
-msgid "Restore cursor position"
-msgstr "İmleç konumunu geri yükle"
-
-#: src/libide/gui/ide-preferences-builtin.c:179
-msgid "Restore cursor position when a file is reopened"
-msgstr "Dosya yeniden açıldığında imleç konumunu geri yükle"
-
-#: src/libide/gui/ide-preferences-builtin.c:180
-msgid "Scroll Offset"
-msgstr "Kaydırma Uzantısı"
-
-# Normalde Minumum kelimesini kullanmamayı tercih ediyoruz
-#: src/libide/gui/ide-preferences-builtin.c:180
-msgid "Minimum number of lines to keep above and below the cursor"
-msgstr "İmlecin üstünde ve altında tutulacak asgari satır sayısı"
-
-#: src/libide/gui/ide-preferences-builtin.c:182
-msgid "Text Wrapping"
-msgstr "Metin Kaydır"
-
-#: src/libide/gui/ide-preferences-builtin.c:183
-#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:92
-msgid "Never"
-msgstr "Asla"
-
-#: src/libide/gui/ide-preferences-builtin.c:184
-msgid "In Between Words"
-msgstr "Sözcükler Arasında"
-
-#: src/libide/gui/ide-preferences-builtin.c:185
-#: src/plugins/buildui/gtk/preferences.ui:98
-msgid "Always"
-msgstr "Her Zaman"
-
-#: src/libide/gui/ide-preferences-builtin.c:187
-msgid "Line Information"
-msgstr "Satır Bilgisi"
-
-#: src/libide/gui/ide-preferences-builtin.c:188
-msgid "Line numbers"
-msgstr "Satır numaraları"
-
-#: src/libide/gui/ide-preferences-builtin.c:188
-msgid "Show line number at beginning of each line"
-msgstr "Her satırın başında satır numarasını göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:189
-msgid "Relative line numbers"
-msgstr "Bağıntılı satır numaraları"
-
-#: src/libide/gui/ide-preferences-builtin.c:189
-msgid "Show line numbers relative to the cursor line"
-msgstr "İmleç satırına bağıntılı satır numalarını göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:190
-msgid "Line changes"
-msgstr "Satır değişiklikleri"
-
-#: src/libide/gui/ide-preferences-builtin.c:190
-msgid "Show if a line was added or modified next to line number"
-msgstr ""
-"Eğer satır eklenmiş veya değiştirilmişse satır numarasının yanında göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:191
-msgid "Line diagnostics"
-msgstr "Satır tanılamaları"
-
-#: src/libide/gui/ide-preferences-builtin.c:191
-msgid "Show an icon next to line numbers indicating type of diagnostic"
-msgstr "Satır numaralarının yanında tanılama türünü belirten simge göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:193
-msgid "Highlight"
-msgstr "Vurgula"
-
-#: src/libide/gui/ide-preferences-builtin.c:194
-msgid "Current line"
-msgstr "Geçerli satır"
-
-#: src/libide/gui/ide-preferences-builtin.c:194
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:86
-msgid "Make current line stand out with highlights"
-msgstr "Geçerli satırı vurgulayarak belli et"
-
-#: src/libide/gui/ide-preferences-builtin.c:195
-msgid "Matching brackets"
-msgstr "Eşleşen parantezler"
-
-#: src/libide/gui/ide-preferences-builtin.c:195
-msgid "Highlight matching brackets based on cursor position"
-msgstr "Eşleşen parantezleri imleç konumuna göre vurgula"
-
-#: src/libide/gui/ide-preferences-builtin.c:197
-msgid "Visible Whitespace Characters"
-msgstr "Görünür Boşluk Karakterleri"
-
-#: src/libide/gui/ide-preferences-builtin.c:198
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-#: src/plugins/editorui/tweaks-language.ui:68
-#: src/plugins/editorui/tweaks-language.ui:158
-msgid "Spaces"
-msgstr "Boşluklar"
-
-#: src/libide/gui/ide-preferences-builtin.c:199
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-msgid "Tabs"
-msgstr "Sekmeler"
-
-#: src/libide/gui/ide-preferences-builtin.c:200
-msgid "New line and carriage return"
-msgstr "Yeni satır ve satırbaşı"
-
-#: src/libide/gui/ide-preferences-builtin.c:201
-msgid "Non-breaking spaces"
-msgstr "Bölünemez boşluklar"
-
-#: src/libide/gui/ide-preferences-builtin.c:202
-msgid "Spaces inside of text"
-msgstr "Metin içindeki boşluklar"
-
-#: src/libide/gui/ide-preferences-builtin.c:203
-msgid "Trailing Only"
-msgstr "Yalnızca Satır Sonundakiler"
-
-#: src/libide/gui/ide-preferences-builtin.c:204
-msgid "Leading Only"
-msgstr "Yalnızca Satır Başındakiler"
-
-#: src/libide/gui/ide-preferences-builtin.c:206
-msgid "Autosave"
-msgstr "Kendiliğinden kaydet"
-
-#: src/libide/gui/ide-preferences-builtin.c:207
-msgid "Enable or disable autosave feature"
-msgstr "Kendiliğinden kaydetme özelliğini etkinleştir veya devre dışı bırak"
-
-#: src/libide/gui/ide-preferences-builtin.c:208
-msgid "The number of seconds after modification before auto saving"
-msgstr "Kendiliğinden kaydetme için değiştirmeden sonra saniye sayısı"
-
-#: src/libide/gui/ide-preferences-builtin.c:214
-msgid "Code Insight"
-msgstr "Kod Sezme"
-
-#: src/libide/gui/ide-preferences-builtin.c:216
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:35
-msgid "Highlighting"
-msgstr "Vurgulama"
-
-#: src/libide/gui/ide-preferences-builtin.c:217
-#: src/plugins/editorui/tweaks.ui:212
-msgid "Semantic Highlighting"
-msgstr "Anlamsal Vurgulama"
-
-#: src/libide/gui/ide-preferences-builtin.c:217
-msgid ""
-"Use code insight to highlight additional information discovered in source "
-"file"
-msgstr ""
-"Kaynak dosyada keşfedilen ek bilgiyi vurgulamak için kod sezgisini kullan"
-
-#: src/libide/gui/ide-preferences-builtin.c:219
-#: src/libide/gui/ide-preferences-builtin.c:681
-#: src/libide/gui/ide-preferences-builtin.c:687
-#: src/libide/plugins/ide-plugin.c:344
-msgid "Diagnostics"
-msgstr "Tanılama"
-
-#: src/libide/gui/ide-preferences-builtin.c:225
-#: src/libide/gui/ide-preferences-builtin.c:674
-#: src/libide/gui/ide-preferences-builtin.c:679
-msgid "Completion"
-msgstr "Tamamlama"
-
-#: src/libide/gui/ide-preferences-builtin.c:228
-msgid "Completions Display Size"
-msgstr "Tamamlama Gösterim Boyutu"
-
-#: src/libide/gui/ide-preferences-builtin.c:228
-msgid "Number of completions to display"
-msgstr "Gösterilecek tamamlama sayısı"
-
-#: src/libide/gui/ide-preferences-builtin.c:229
-msgid "Display code suggestions interactively as you type"
-msgstr "Yazdıkça kod önerilerini etkileşimli göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:231
-msgid "Completion Providers"
-msgstr "Tamamlama Sağlayıcıları"
-
-#: src/libide/gui/ide-preferences-builtin.c:237
-#: src/libide/gui/ide-preferences-builtin.c:676
-#: src/plugins/editorui/tweaks.ui:252
-msgid "Snippets"
-msgstr "Parçacıklar"
-
-#: src/libide/gui/ide-preferences-builtin.c:280
-#: src/plugins/editorui/tweaks-language.ui:9
-msgid "Programming Languages"
-msgstr "Programlama Dilleri"
-
-#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:291
-msgid "Search languages…"
-msgstr "Dilleri ara…"
-
-#: src/libide/gui/ide-preferences-builtin.c:351
-msgid "Trim trailing whitespace"
-msgstr "Satır sonundaki boşlukları sil"
-
-#: src/libide/gui/ide-preferences-builtin.c:351
-msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
-msgstr "Kaydederken değiştirilen satırların sonundaki boşluklar silinir."
-
-#: src/libide/gui/ide-preferences-builtin.c:352
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-#: src/plugins/editorui/tweaks-language.ui:142
-msgid "Overwrite Braces"
-msgstr "Küme Ayraçlarının Üstüne Yaz"
-
-#: src/libide/gui/ide-preferences-builtin.c:352
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:128
-msgid "Overwrite closing braces"
-msgstr "Kapayan küme ayraçlarının üstüne yaz"
-
-#: src/libide/gui/ide-preferences-builtin.c:353
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-#: src/plugins/editorui/tweaks-language.ui:149
-msgid "Insert Matching Brace"
-msgstr "Eşleşen Ayraç Ekle"
-
-#: src/libide/gui/ide-preferences-builtin.c:353
-msgid "Insert matching character for { [ ( or \""
-msgstr "{ [ ( veya \" için eşleşen karakter ekle"
-
-#: src/libide/gui/ide-preferences-builtin.c:354
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
-#: src/plugins/editorui/tweaks-language.ui:76
-msgid "Insert Trailing Newline"
-msgstr "İzleyen Yeni Satır Ekle"
-
-#: src/libide/gui/ide-preferences-builtin.c:354
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
-#: src/plugins/editorui/tweaks-language.ui:77
-msgid "Ensure files end with a newline"
-msgstr "Dosyaların yeni satırla bittiğine emin ol"
-
-# Bulunduğu konum sebebiyle Başlık Düzeni tercih edildi
-#: src/libide/gui/ide-preferences-builtin.c:356
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:53
-msgid "Margins"
-msgstr "Kenar Boşlukları"
-
-#: src/libide/gui/ide-preferences-builtin.c:357
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:142
-msgid "Show right margin"
-msgstr "Sağ kenar boşluğunu göster"
-
-#: src/libide/gui/ide-preferences-builtin.c:358
-msgid "Right margin position"
-msgstr "Sağ kenar boşluğu konumu"
-
-#: src/libide/gui/ide-preferences-builtin.c:358
-msgid "Position in spaces for the right margin"
-msgstr "Sağ kenar için boşluklarla konum"
-
-#: src/libide/gui/ide-preferences-builtin.c:360
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:55
-#: src/plugins/editorui/gtk/menus.ui:5
-msgid "Indentation"
-msgstr "Girinti"
-
-#: src/libide/gui/ide-preferences-builtin.c:361
-msgid "Tab width"
-msgstr "Sekme genişliği"
-
-#: src/libide/gui/ide-preferences-builtin.c:361
-msgid "Width of a tab character in spaces"
-msgstr "Sekme karakterinin boşluk olarak genişliği"
-
-#: src/libide/gui/ide-preferences-builtin.c:362
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:154
-msgid "Insert spaces instead of tabs"
-msgstr "Sekmeler yerine boşluklar ekle"
-
-#: src/libide/gui/ide-preferences-builtin.c:362
-msgid "Prefer spaces over use of tabs"
-msgstr "Sekme kullanımı yerine boşluğu yeğle"
-
-#: src/libide/gui/ide-preferences-builtin.c:363
-msgid "Automatically indent"
-msgstr "Kendiliğinden girintile"
-
-#: src/libide/gui/ide-preferences-builtin.c:363
-msgid "Indent source code as you type"
-msgstr "Kaynak kodunu yazarken girintile"
-
-#: src/libide/gui/ide-preferences-builtin.c:365
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:54
-msgid "Spacing"
-msgstr "Boşluklama"
-
-#: src/libide/gui/ide-preferences-builtin.c:366
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:96
-msgid "Space before opening parentheses"
-msgstr "Parantez açmadan önce boşluk"
-
-#: src/libide/gui/ide-preferences-builtin.c:367
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:97
-msgid "Space before opening brackets"
-msgstr "Köşeli parantez açmadan önce boşluk"
-
-#: src/libide/gui/ide-preferences-builtin.c:368
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:98
-msgid "Space before opening braces"
-msgstr "Süslü parantez açmadan önce boşluk"
-
-#: src/libide/gui/ide-preferences-builtin.c:369
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:99
-msgid "Space before opening angles"
-msgstr "Eşitsizlik imi açmadan önce boşluk"
-
-#: src/libide/gui/ide-preferences-builtin.c:370
-msgid "Prefer a space before colons"
-msgstr "İki noktadan önce boşluk yeğle"
-
-#: src/libide/gui/ide-preferences-builtin.c:371
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:101
-msgid "Prefer a space before commas"
-msgstr "Virgül öncesinde boşluk yeğle"
-
-#: src/libide/gui/ide-preferences-builtin.c:372
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:102
-msgid "Prefer a space before semicolons"
-msgstr "Noktalı virgül öncesinde boşluk yeğle"
-
-#: src/libide/gui/ide-preferences-builtin.c:382
-#: src/libide/gui/ide-preferences-builtin.c:400
-#: src/plugins/buildui/tweaks.ui:50
-msgid "Default"
-msgstr "Öntanımlı"
-
-#: src/libide/gui/ide-preferences-builtin.c:387
-#: src/libide/gui/ide-preferences-builtin.c:405
-msgid "Number of CPU"
-msgstr "CPU Sayısı"
-
-#: src/libide/gui/ide-preferences-builtin.c:420
-#: src/libide/gui/ide-preferences-builtin.c:654
-msgid "Build"
-msgstr "İnşa Et"
-
-#: src/libide/gui/ide-preferences-builtin.c:423
-msgid "Build Workers"
-msgstr "İnşa İşçileri"
-
-#: src/libide/gui/ide-preferences-builtin.c:423
-msgid "Number of parallel build workers"
-msgstr "Aynı anda çalışacak inşa işçileri"
-
-#: src/libide/gui/ide-preferences-builtin.c:431
-msgid "Clear build log pane on rebuild"
-msgstr "Yeniden inşada inşa günlüğü bölmesini temizle"
-
-#: src/libide/gui/ide-preferences-builtin.c:432
-msgid "Clear build cache at startup"
-msgstr "Başlangıçta inşa önbelleğini temizle"
-
-#: src/libide/gui/ide-preferences-builtin.c:432
-msgid "Expired caches will be purged when Builder is started"
-msgstr "Builder başladığında süresi geçmiş önbellekler temizlenecek"
-
-#: src/libide/gui/ide-preferences-builtin.c:434
-#: src/libide/gui/ide-preferences-builtin.c:658
-#: src/plugins/platformui/tweaks.ui:62
-msgid "Network"
-msgstr "Ağ"
-
-#: src/libide/gui/ide-preferences-builtin.c:435
-msgid "Allow downloads over metered connections"
-msgstr "Ölçülen bağlantılarda indirmelere izin ver"
-
-#: src/libide/gui/ide-preferences-builtin.c:435
-#: src/libide/gui/ide-preferences-builtin.c:756
-msgid ""
-"Allow the use of metered network connections when automatically downloading "
-"dependencies"
-msgstr ""
-"Bağımlılıklar kendiliğinden indirilirken ölçülen ağ bağlantılarının "
-"kullanımına izin ver"
-
-#: src/libide/gui/ide-preferences-builtin.c:437
-#: src/libide/gui/ide-preferences-builtin.c:655
-#: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
-#: src/plugins/debuggerui/tweaks.ui:10
-msgid "Debugger"
-msgstr "Hata Ayıklayıcı"
-
-#: src/libide/gui/ide-preferences-builtin.c:438
-#: src/libide/gui/ide-preferences-builtin.c:705
-#: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
-#: src/plugins/debuggerui/tweaks.ui:19
-msgid "Breakpoints"
-msgstr "Kesme Noktaları"
-
-#: src/libide/gui/ide-preferences-builtin.c:439
-msgid "Insert Breakpoint at Start of Application"
-msgstr "Uygulama Başlangıcına Kesme Noktası Ekle"
-
-#: src/libide/gui/ide-preferences-builtin.c:439
-msgid ""
-"Automatically stop execution at the start of the applications main function"
-msgstr ""
-"Uygulamaların başlangıcında ana işlevin yürütülmesini kendiliğinden durdur"
-
-#: src/libide/gui/ide-preferences-builtin.c:445
-#: src/libide/gui/ide-preferences-builtin.c:653 src/libide/gui/tweaks.ui:34
-#: src/libide/projects/ide-projects-global.c:103
-#: src/plugins/projectui/tweaks.ui:9
-msgid "Projects"
-msgstr "Projeler"
-
-#: src/libide/gui/ide-preferences-builtin.c:447
-msgid "Workspace"
-msgstr "Çalışma Alanı"
-
-#: src/libide/gui/ide-preferences-builtin.c:448
-msgid "A place for all your projects"
-msgstr "Tüm projeleriniz için bir yer"
-
-#: src/libide/gui/ide-preferences-builtin.c:449
-msgid "Restore previously opened files"
-msgstr "Önceden açılan dosyaları geri yükle"
-
-#: src/libide/gui/ide-preferences-builtin.c:449
-#: src/libide/gui/ide-preferences-builtin.c:731
-#: src/plugins/projectui/tweaks.ui:15
-msgid "Open previously opened files when loading a project"
-msgstr "Projeyi yüklerken daha önce açılmış dosyaları aç"
-
-#: src/libide/gui/ide-preferences-builtin.c:571
-#: src/libide/gui/ide-preferences-builtin.c:683
-#: src/libide/plugins/ide-plugin.c:340
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:111
-#: src/plugins/create-project/gbp-create-project-widget.ui:115
-#: src/plugins/git/gbp-git-preferences-addin.c:184
-msgid "Version Control"
-msgstr "Sürüm Denetimi"
-
-#: src/libide/gui/ide-preferences-builtin.c:592
-#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
-msgid "Follow System"
-msgstr "Sistemi İzle"
-
-#: src/libide/gui/ide-preferences-builtin.c:649
-msgid "Editing"
-msgstr "Düzenleme"
-
-#: src/libide/gui/ide-preferences-builtin.c:650
-msgid "Shortcuts"
-msgstr "Kısayollar"
-
-#: src/libide/gui/ide-preferences-builtin.c:651
-#: src/libide/gui/ide-preferences-builtin.c:665
-#: src/plugins/spellcheck/editor-spell-menu.c:259
-msgid "Languages"
-msgstr "Diller"
-
-#: src/libide/gui/ide-preferences-builtin.c:652
-msgid "Insight"
-msgstr "Sezme"
-
-#: src/libide/gui/ide-preferences-builtin.c:656
-#: src/libide/gui/ide-preferences-builtin.c:667
-#: src/plugins/shellcmd/tweaks.ui:8 src/plugins/shellcmd/tweaks.ui:12
-msgid "Commands"
-msgstr "Komutlar"
-
-#: src/libide/gui/ide-preferences-builtin.c:657
-#: src/libide/gui/ide-preferences-builtin.c:684
-#: src/libide/plugins/ide-plugin.c:341
-msgid "SDKs"
-msgstr "Yazılım Geliştirme Kitleri"
-
-#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:49
-#: src/libide/gui/tweaks.ui:53
-msgid "Plugins"
-msgstr "Eklentiler"
-
-#. Add groups to pages
-#: src/libide/gui/ide-preferences-builtin.c:663
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
-msgid "Overview"
-msgstr "Genel Görünüm"
-
-#: src/libide/gui/ide-preferences-builtin.c:664
-msgid "Configurations"
-msgstr "Yapılandırmalar"
-
-#: src/libide/gui/ide-preferences-builtin.c:666
-msgid "Application"
-msgstr "Uygulama"
-
-#: src/libide/gui/ide-preferences-builtin.c:672
-#: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:22
-msgid "Interface"
-msgstr "Arayüz"
-
-#: src/libide/gui/ide-preferences-builtin.c:675
-msgid "Formatting"
-msgstr "Biçimlendirme"
-
-#: src/libide/gui/ide-preferences-builtin.c:685
-#: src/libide/plugins/ide-plugin.c:342
-msgid "Language Servers"
-msgstr "Dil Sunucuları"
-
-#: src/libide/gui/ide-preferences-builtin.c:686
-#: src/libide/plugins/ide-plugin.c:343
-msgid "Devices & Simulators"
-msgstr "Aygıtlar ve Simülatörler"
-
-#: src/libide/gui/ide-preferences-builtin.c:688
-#: src/libide/plugins/ide-plugin.c:345
-msgid "Build Systems"
-msgstr "İnşa Sistemleri"
-
-#: src/libide/gui/ide-preferences-builtin.c:689
-#: src/libide/plugins/ide-plugin.c:346
-msgid "Compilers"
-msgstr "Derleyiciler"
-
-#: src/libide/gui/ide-preferences-builtin.c:690
-#: src/libide/plugins/ide-plugin.c:347
-msgid "Debuggers"
-msgstr "Hata Ayıklayıcılar"
-
-#: src/libide/gui/ide-preferences-builtin.c:691
-#: src/libide/gui/ide-preferences-builtin.c:703
-#: src/libide/plugins/ide-plugin.c:348
-msgid "Templates"
-msgstr "Şablonlar"
-
-#: src/libide/gui/ide-preferences-builtin.c:692
-#: src/libide/plugins/ide-plugin.c:349
-msgid "Editing & Formatting"
-msgstr "Düzenleme ve Biçimlendirme"
-
-#: src/libide/gui/ide-preferences-builtin.c:695
-#: src/libide/plugins/ide-plugin.c:352
-msgid "Web"
-msgstr "Web Sitesi"
-
-#: src/libide/gui/ide-preferences-builtin.c:696
-#: src/libide/plugins/ide-plugin.c:353
-msgid "Language Enablement"
-msgstr "Dil Etkinleştirme"
-
-#: src/libide/gui/ide-preferences-builtin.c:697
-#: src/libide/plugins/ide-plugin.c:354
-msgid "Desktop Integration"
-msgstr "Masaüstü Tümleşimi"
-
-#: src/libide/gui/ide-preferences-builtin.c:698
-#: src/libide/plugins/ide-plugin.c:355
-msgid "Additional"
-msgstr "Ek"
-
-#: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks-language.ui:139
-#: src/plugins/editorui/tweaks.ui:223
-msgid "Behavior"
-msgstr "Davranış"
-
-#: src/libide/gui/ide-preferences-builtin.c:709
-msgid "Downloads"
-msgstr "İndirilenler"
-
-#: src/libide/gui/ide-preferences-builtin.c:713
-msgid "Running"
-msgstr "Çalışıyor"
-
-#: src/libide/gui/ide-preferences-builtin.c:714
-msgid "Starting & Stopping"
-msgstr "Başlatma ve Durdurma"
-
-#: src/libide/gui/ide-preferences-builtin.c:724
-msgid "Navigate with Tab Bar"
-msgstr "Sekme Çubuğuyla Gezin"
-
-#: src/libide/gui/ide-preferences-builtin.c:725
-#: src/plugins/buildui/gtk/preferences.ui:113
-msgid "Switch documents using a tabbed interface"
-msgstr "Sekmeli arayüz kullanarak belge değiştir"
-
-#: src/libide/gui/ide-preferences-builtin.c:730
-#: src/plugins/projectui/tweaks.ui:14
-msgid "Restore Previous Session"
-msgstr "Önceki Oturumu Geri Yükle"
-
-#: src/libide/gui/ide-preferences-builtin.c:735
-#: src/plugins/create-project/gbp-create-project-widget.ui:108
-#: src/plugins/projectui/tweaks.ui:38
-msgid "License"
-msgstr "Lisans"
-
-#: src/libide/gui/ide-preferences-builtin.c:736
-#: src/plugins/projectui/tweaks.ui:39
-msgid "The default license when creating new projects"
-msgstr "Yeni projeler oluştururken kullanılacak öntanımlı lisans"
-
-#: src/libide/gui/ide-preferences-builtin.c:740
-#: src/plugins/debuggerui/tweaks.ui:22
-msgid "Stop After Launching Program"
-msgstr "Program Başlatıldıktan Sonra Dur"
-
-#: src/libide/gui/ide-preferences-builtin.c:741
-#: src/plugins/debuggerui/tweaks.ui:23
-msgid "Automatically insert a breakpoint at the start of the application"
-msgstr "Uygulamanın başlangıcına kendiliğinden kesme noktası ekle"
-
-#: src/libide/gui/ide-preferences-builtin.c:745
-#: src/plugins/buildui/tweaks.ui:32
-msgid "Clear Build Logs"
-msgstr "İnşa Günlüklerini Temizle"
-
-#: src/libide/gui/ide-preferences-builtin.c:746
-msgid "Upon rebuilding the project the build log will be cleared"
-msgstr "Projeyi yeniden inşa edildikten sonra inşa günlüğü temizlenir"
-
-#: src/libide/gui/ide-preferences-builtin.c:750
-#: src/plugins/buildui/tweaks.ui:25
-msgid "Clear Expired Artifacts"
-msgstr "Süresi Geçmiş Yapıtları Temizle"
-
-#: src/libide/gui/ide-preferences-builtin.c:751
-#: src/plugins/buildui/tweaks.ui:26
-msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr "Builder başlatıldığında süresi geçmiş yapıtlar silinecek"
-
-#: src/libide/gui/ide-preferences-builtin.c:755
-msgid "Allow Downloads over Metered Connections"
-msgstr "Ölçülen Bağlantılarda İndirmelere İzin Ver"
-
-#: src/libide/gui/ide-preferences-builtin.c:761
-msgid "Keyboard shortcuts similar to GNOME Text Editor"
-msgstr "GNOME Metin Düzenleyici’ye benzer klavye kısayolları"
-
-#: src/libide/gui/ide-preferences-builtin.c:766
-#: src/plugins/buildui/gtk/preferences.ui:72
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
-msgid "Terminal Font"
-msgstr "Uçbirim Yazı Tipi"
-
-#: src/libide/gui/ide-preferences-builtin.c:767
-#: src/plugins/terminal/tweaks.ui:20
-msgid "The font used within terminals"
-msgstr "Uçbirimlerde kullanılacak yazı tipi"
-
-#: src/libide/gui/ide-preferences-builtin.c:773
-msgid "Install Before Running"
-msgstr "Çalıştırmadan Önce Kur"
-
-#: src/libide/gui/ide-preferences-builtin.c:774
-msgid ""
-"Installs the application before running. This is necessary for most projects "
-"unless run commands are used."
-msgstr ""
-"Çalıştırmadan önce uygulamayı kurar. Bu, çalıştır komutlar kullanılmadıkça "
-"çoğu proje için gereklidir."
-
-#: src/libide/gui/ide-preferences-builtin.c:778
-msgid "Stop Signal"
-msgstr "Dur Sinyali"
-
-#: src/libide/gui/ide-preferences-builtin.c:779
-msgid ""
-"Send the signal to the target application when requesting the application "
-"stop."
-msgstr "Uygulamanın durmasını isterken sinyali hedef uygulamaya gönder."
-
-#: src/libide/gui/ide-preferences-window.c:1516
-#: src/libide/tweaks/ide-tweaks-font.c:101
-msgid "Select Font"
-msgstr "Yazı Tipi Seç"
-
-#: src/libide/gui/ide-primary-workspace.ui:57
+#: src/libide/gui/ide-primary-workspace.ui:17
+msgid "Toggle Left Panel (F9)"
+msgstr "Sol Paneli Aç/Kapat (F9)"
+
+#: src/libide/gui/ide-primary-workspace.ui:51
+#: src/plugins/menu-search/gtk/menus.ui:34
+msgid "Toggle Right Panel"
+msgstr "Sağ Paneli Aç/Kapat"
+
+#: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
 msgstr "Ara (Ctrl+Enter)"
+
+#: src/libide/gui/ide-primary-workspace.ui:105
+msgid "Toggle Bottom Panel (Ctrl+F9)"
+msgstr "Dip Paneli Aç/Kapat (Ctrl+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -2228,36 +1480,19 @@ msgstr "Çalıştırmayı durdur"
 msgid "Run project"
 msgstr "Projeyi çalıştır"
 
-#: src/libide/gui/tests/test-preferences.c:218
-msgid "Custom Font"
-msgstr "Özel Yazı Tipi"
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/preferences.ui:25
+#: src/plugins/buildui/gtk/preferences.ui:32
+msgid "Appearance"
+msgstr "Görünüm"
 
-#: src/libide/gui/tweaks.ui:6
-msgid "Visual"
-msgstr "Görsel"
+#: src/libide/gui/tweaks.ui:63
+msgid "Configurations"
+msgstr "Yapılandırmalar"
 
-#: src/libide/gui/tweaks.ui:16
-msgid "Text Editor"
-msgstr "Metin Düzenleyici"
-
-#: src/libide/gui/tweaks.ui:22
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
-#: src/plugins/terminal/gtk/menus.ui:33
-msgid "Terminal"
-msgstr "Uçbirim"
-
-#: src/libide/gui/tweaks.ui:29
-msgid "Code"
-msgstr "Kod"
-
-#: src/libide/gui/tweaks.ui:39
-msgid "Foundry"
-msgstr ""
-
-#: src/libide/gui/tweaks.ui:44
-msgid "External"
-msgstr "Dış"
+#: src/libide/gui/tweaks.ui:75
+msgid "Plugins"
+msgstr "Eklentiler"
 
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
@@ -2270,6 +1505,65 @@ msgstr[0] "%u paket kuruluyor"
 #, c-format
 msgid "Failed to initialize language server: %s"
 msgstr "Dil sunucusu ilklendirme başarısız oldu: %s"
+
+#: src/libide/plugins/ide-plugin.c:340
+#: src/plugins/create-project/gbp-create-project-widget.ui:115
+#: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
+msgid "Version Control"
+msgstr "Sürüm Denetimi"
+
+#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "Yazılım Geliştirme Kitleri"
+
+#: src/libide/plugins/ide-plugin.c:342
+msgid "Language Servers"
+msgstr "Dil Sunucuları"
+
+#: src/libide/plugins/ide-plugin.c:343
+msgid "Devices & Simulators"
+msgstr "Aygıtlar ve Simülatörler"
+
+#: src/libide/plugins/ide-plugin.c:344
+#: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+msgid "Diagnostics"
+msgstr "Tanılama"
+
+#: src/libide/plugins/ide-plugin.c:345
+msgid "Build Systems"
+msgstr "İnşa Sistemleri"
+
+#: src/libide/plugins/ide-plugin.c:346
+msgid "Compilers"
+msgstr "Derleyiciler"
+
+#: src/libide/plugins/ide-plugin.c:347
+msgid "Debuggers"
+msgstr "Hata Ayıklayıcılar"
+
+#: src/libide/plugins/ide-plugin.c:348
+msgid "Templates"
+msgstr "Şablonlar"
+
+#: src/libide/plugins/ide-plugin.c:349
+msgid "Editing & Formatting"
+msgstr "Düzenleme ve Biçimlendirme"
+
+#: src/libide/plugins/ide-plugin.c:352
+msgid "Web"
+msgstr "Web Sitesi"
+
+#: src/libide/plugins/ide-plugin.c:353
+msgid "Language Enablement"
+msgstr "Dil Etkinleştirme"
+
+#: src/libide/plugins/ide-plugin.c:354
+msgid "Desktop Integration"
+msgstr "Masaüstü Tümleşimi"
+
+#: src/libide/plugins/ide-plugin.c:355
+msgid "Additional"
+msgstr "Ek"
 
 #: src/libide/plugins/ide-plugin-view.ui:35
 msgid "Authors"
@@ -2291,86 +1585,129 @@ msgstr "Hedef dosya, proje ağacı içinde olmalıdır."
 msgid "File must be within the project tree."
 msgstr "Dosya, proje ağacı içinde olmalıdır."
 
+#: src/libide/projects/ide-projects-global.c:103
+#: src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "Projeler"
+
 #: src/libide/projects/xml-reader.c:329
 #, c-format
 msgid "Could not parse XML from stream"
 msgstr "Akıştan XML ayrıştırılamadı"
 
-#: src/libide/sourceview/gtk/menus.ui:8
+#: src/libide/sourceview/gtk/menus.ui:7 src/libide/terminal/gtk/menus.ui:13
+#: src/libide/terminal/gtk/menus.ui:35
+msgid "Clipboard"
+msgstr "Pano"
+
+#: src/libide/sourceview/gtk/menus.ui:10
 msgid "C_ut"
 msgstr "K_es"
 
-#: src/libide/sourceview/gtk/menus.ui:13 src/libide/terminal/gtk/menus.ui:33
+#: src/libide/sourceview/gtk/menus.ui:16 src/libide/terminal/gtk/menus.ui:16
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: src/libide/sourceview/gtk/menus.ui:18 src/libide/terminal/gtk/menus.ui:43
+#: src/libide/sourceview/gtk/menus.ui:22 src/libide/terminal/gtk/menus.ui:27
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: src/libide/sourceview/gtk/menus.ui:24 src/libide/sourceview/gtk/menus.ui:26
+#: src/libide/sourceview/gtk/menus.ui:29 src/libide/sourceview/gtk/menus.ui:33
 msgid "Undo"
 msgstr "Geri Al"
 
 #: src/libide/sourceview/gtk/menus.ui:31
+msgid "Undo & Redo"
+msgstr "Geri al ve Yinele"
+
+#: src/libide/sourceview/gtk/menus.ui:38
 msgid "Redo"
 msgstr "Yinele"
 
-#: src/libide/sourceview/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:44 src/libide/sourceview/gtk/menus.ui:47
 msgid "Zoom"
 msgstr "Yakınlaştır"
 
-#: src/libide/sourceview/gtk/menus.ui:40
+#: src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom Out"
 msgstr "Uzaklaştır"
 
-#: src/libide/sourceview/gtk/menus.ui:46
+#: src/libide/sourceview/gtk/menus.ui:55
 msgid "Reset Zoom"
 msgstr "Yakınlaştırmayı Sıfırla"
 
-#: src/libide/sourceview/gtk/menus.ui:52
+#: src/libide/sourceview/gtk/menus.ui:61
 msgid "Zoom In"
 msgstr "Yakınlaştır"
 
-#: src/libide/sourceview/gtk/menus.ui:60
+#: src/libide/sourceview/gtk/menus.ui:69
 msgid "_Selection"
 msgstr "_Seçim"
 
-#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:50
+#: src/libide/sourceview/gtk/menus.ui:73 src/libide/terminal/gtk/menus.ui:37
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
-#: src/libide/sourceview/gtk/menus.ui:68
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:125
+msgid "Formatting"
+msgstr "Biçimlendirme"
+
+#: src/libide/sourceview/gtk/menus.ui:81
 msgid "All _Upper Case"
 msgstr "Tümü _Büyük Harf"
 
-#: src/libide/sourceview/gtk/menus.ui:74
+#: src/libide/sourceview/gtk/menus.ui:82
+msgid "Convert the text selection to upper case"
+msgstr "Metin seçimini büyük harfe dönüştür"
+
+#: src/libide/sourceview/gtk/menus.ui:88
 msgid "All _Lower Case"
 msgstr "Tümü _Küçük Harf"
 
-#: src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:89
+msgid "Convert the text selection to lower case"
+msgstr "Metin seçimini küçük harfe dönüştür"
+
+#: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
 msgstr "Büyük/Küçük Harf Değ_iştir"
 
-#: src/libide/sourceview/gtk/menus.ui:86
+#: src/libide/sourceview/gtk/menus.ui:96
+msgid "Invert case of the text selection"
+msgstr "Metin seçiminin harf büyüklüklerini evirt"
+
+#: src/libide/sourceview/gtk/menus.ui:102
 msgid "_Title Case"
 msgstr "Başlık _Durumu"
 
-#: src/libide/sourceview/gtk/menus.ui:93
+#: src/libide/sourceview/gtk/menus.ui:103
+msgid "Convert the text selection to title case"
+msgstr "Metin seçimini başlık düzenine dönüştür"
+
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Join Lines"
 msgstr "Satırları _Birleştir"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:117
 msgid "S_ort Lines"
 msgstr "Satırları S_ırala"
 
-#: src/libide/sourceview/gtk/menus.ui:110
+#: src/libide/sourceview/gtk/menus.ui:131
+#: src/plugins/symbol-tree/gtk/menus.ui:6
+msgid "Code Navigation"
+msgstr "Kod Gezinme"
+
+#: src/libide/sourceview/gtk/menus.ui:134
 msgid "_Go to Definition"
 msgstr "Tanıma _Git"
 
-#: src/libide/sourceview/gtk/menus.ui:116
-msgid "_Find references"
-msgstr "_Tercihleri bul"
+#: src/libide/sourceview/gtk/menus.ui:135
+msgid "Jump to file and location where item is defined"
+msgstr "Ögenin tanımlandığı dosyaya ve konuma git"
+
+#: src/libide/sourceview/gtk/menus.ui:141
+msgid "_Find References"
+msgstr "Atıfları _Bul"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1002
@@ -2379,15 +1716,27 @@ msgstr "_Tercihleri bul"
 msgid "Ln %u, Col %u"
 msgstr "Satır %u, Sütun %u"
 
-#: src/libide/terminal/gtk/menus.ui:25
+#: src/libide/terminal/gtk/menus.ui:6
 msgid "_Open Link"
 msgstr "Bağlantıyı _Aç"
 
-#: src/libide/terminal/gtk/menus.ui:38
+#: src/libide/terminal/gtk/menus.ui:17
+msgid "Copy selection from terminal to clipboard"
+msgstr "Seçimi uçbirimden panoya kopyala"
+
+#: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
 msgstr "Bağlantı Adresini _Kopyala"
 
-#: src/libide/terminal/gtk/menus.ui:56
+#: src/libide/terminal/gtk/menus.ui:28
+msgid "Paste from clipboard into the terminal"
+msgstr "Panodan uçbirime yapıştır"
+
+#: src/libide/terminal/gtk/menus.ui:38
+msgid "Selection all text from terminal including scrollback"
+msgstr "Geri kaydırmayla birlikte uçbirimdeki tüm metni seç"
+
+#: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
 msgstr "_Hiçbirini Seçme"
 
@@ -2452,17 +1801,26 @@ msgstr "(Boş)"
 msgid "Loading…"
 msgstr "Yükleniyor…"
 
-#: src/libide/tweaks/ide-tweaks-directory.c:124
+#: src/libide/tweaks/ide-tweaks-directory.c:137
 msgid "Projects Directory"
 msgstr "Projeler Dizini"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:36
+#: src/libide/tweaks/ide-tweaks-font.c:81
+msgid "Select Font"
+msgstr "Yazı Tipi Seç"
+
+#: src/libide/tweaks/ide-tweaks-window.c:134
+#, c-format
+msgid "Builder — %s — Preferences"
+msgstr "Builder — %s — Tercihler"
+
+#: src/libide/tweaks/ide-tweaks-window.c:138
+msgid "Builder — Preferences"
+msgstr "Builder — Tercihler"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:35
 msgid "All Preferences"
 msgstr "Tüm Tercihler"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:48
-msgid "Search Preferences"
-msgstr "Tercihleri Ara"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:61
 msgid "Primary Menu"
@@ -2482,7 +1840,7 @@ msgstr "Hiçbiri"
 msgid "Blank page"
 msgstr "Boş sayfa"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:139
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:153
 msgid "Settings"
 msgstr "Ayarlar"
 
@@ -2702,110 +2060,30 @@ msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
 "BuildStream projesi kullanılıyor ancak “bst” yürütülebiliri bulunamadı."
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
-msgid "All Runtimes"
-msgstr "Tüm Çalışma Zamanları"
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
+msgid "Add _Variable"
+msgstr "_Değişken Ekle"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:426
-msgid "Make _Active"
-msgstr "_Aktif Yap"
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
+msgid "Add Variable"
+msgstr "Değişken Ekle"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:427
-msgid "Select this configuration as the active configuration."
-msgstr "Bu yapılandırmayı aktif yapılandırma olarak seç."
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
+msgid "_Add"
+msgstr "_Ekle"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:430
-msgid "_Duplicate"
-msgstr "_Çoğalt"
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+msgid "Copy"
+msgstr "Kopyala"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:431
-msgid ""
-"Duplicating the configuration allows making changes without modifying this "
-"configuration."
-msgstr ""
-"Yapılandırmayı çoğaltmak, bu yapılandırmayı değiştirmeden değişiklik "
-"yapılabilmesini sağlar."
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:434
-msgid "_Remove"
-msgstr "Kaldı_r"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:435
-msgid "Removes the configuration and cannot be undone."
-msgstr "Yapılandırma kaldırılır ve bu eylem geri alınamaz."
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
-msgid "Environment"
-msgstr "Ortam"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:429
-msgid "Build Environment"
-msgstr "İnşa Ortamı"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
-msgid "Runtime Environment"
-msgstr "Çalışma Zamanı Ortamı"
-
-#. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:403
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
-#: src/plugins/ls/gbp-ls-page.ui:17
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
-msgid "Name"
-msgstr "Ad"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:110
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:404
-msgid "Source Directory"
-msgstr "Kaynak Dizin"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:109
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:405
-msgid "Build System"
-msgstr "İnşa Sistemi"
-
-#. Translators: "Install" is a noun here
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:467
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:448
-msgid "Install Prefix"
-msgstr "Kurulum Öneki"
-
-#. Translators: "Configure" is a noun here
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:450
-msgid "Configure Options"
-msgstr "Yapılandırma Seçenekleri"
-
-#. Translators: "Run" is a noun here, this string is analogous to "Execution Options"
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:485
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:452
-msgid "Run Options"
-msgstr "Çalışma Seçenekleri"
-
-#. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:490
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:688
-msgid "Application Runtime"
-msgstr "Uygulama Çalışma Zamanı"
-
-#. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:494
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:687
-msgid "Build Toolchain"
-msgstr "İnşa Araç Takımı"
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "Kaldır"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:327
 #: src/plugins/testui/gbp-testui-output-panel.c:103
@@ -2842,8 +2120,7 @@ msgid "Build Profile"
 msgstr "İnşa Profili"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:105
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:358
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
 msgid "Runtime"
 msgstr "Çalışma Zamanı"
 
@@ -2876,9 +2153,8 @@ msgid "Warnings"
 msgstr "Uyarılar"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:345
-#: src/plugins/buildui/gbp-buildui-pane.ui:81
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
-#: src/plugins/testui/gbp-testui-preferences-addin.c:50
+#: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "Build Pipeline"
 msgstr "İnşa Boru Hattı"
 
@@ -2898,35 +2174,6 @@ msgstr "Tamamlama süresi:"
 #: src/plugins/buildui/gbp-buildui-pane.ui:67
 msgid "—"
 msgstr "—"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:97
-msgid "No Version Control"
-msgstr "Sürüm Denetimi Yok"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:104
-msgid "Project"
-msgstr "Proje"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:176
-#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
-msgid "Automatically Discover"
-msgstr "Kendiliğinden Keşfet"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:245
-msgid "Run Command"
-msgstr "Komut Çalıştır"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:246
-msgid "The run command is used to run your project"
-msgstr "Projenizi çalıştırmada kullanılacak çalıştır komutu"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:253
-msgid "_Create Custom Command"
-msgstr "Özel _Komut Oluştur"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:359
-msgid "The runtime is the environment used to run your application."
-msgstr "Çalışma zamanı, uygulamanızı çalıştırmada kullanılan ortamdır."
 
 #. translators: %u is replaced with the number of warnings
 #: src/plugins/buildui/gbp-buildui-status-popover.c:63
@@ -2971,9 +2218,44 @@ msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr "Proje yapılandırılana kadar bazı hedefler kullanılabilir olmayabilir."
 
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
+#: src/plugins/buildui/tweaks.ui:26
+msgid "Automatically Discover"
+msgstr "Kendiliğinden Keşfet"
+
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
 msgstr "Bu, Builderʼın en iyi adayı seçmesini sağlar."
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
+msgid "The container used to build and run your application"
+msgstr "Uygulamanızı inşa etme ve çalıştırmada kullanılan konteyner"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
+msgid "Duplicate"
+msgstr "Çoğalt"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
+msgid "Duplicate into new configuration"
+msgstr "Yeni yapılandırmaya çoğalt"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
+msgid "Make Active"
+msgstr "Etkinleştir"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
+msgid "Make configuration active and reload build pipeline"
+msgstr "Yapılandırmayı etkinleştir ve inşa boru hattını yeniden yükle"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
+msgid "Delete"
+msgstr "Sil"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
+msgid "Delete configuration"
+msgstr "Yapılandırmayı sil"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
 msgid "Stop Building Project"
@@ -2983,7 +2265,7 @@ msgstr "Proje İnşasını Durdur"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Projeyi İnşa Et (Shift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:48
+#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:56
 msgid "_Build"
 msgstr "_İnşa Et"
 
@@ -2999,56 +2281,73 @@ msgstr "_Çalıştır"
 msgid "R_un With…"
 msgstr "Birlikte Ç_alıştır…"
 
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:53 src/plugins/buildui/gtk/menus.ui:76
+#: src/plugins/buildui/gtk/menus.ui:103 src/plugins/buildui/gtk/menus.ui:113
+#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
+#: src/plugins/buildui/gtk/menus.ui:149
+msgid "Code Foundry"
+msgstr "Kod Dökümhanesi"
+
+#: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/projectui/tweaks.ui:218
+msgid "Configuration"
+msgstr "Yapılandırma"
+
+#: src/plugins/buildui/gtk/menus.ui:36
 msgid "Configure Project…"
 msgstr "Projeyi Yapılandır…"
 
-#: src/plugins/buildui/gtk/menus.ui:36
+#: src/plugins/buildui/gtk/menus.ui:39
 msgid "Configure settings related to the project"
 msgstr "Projeyle ilgili ayarları yapılandır"
 
-#: src/plugins/buildui/gtk/menus.ui:41
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Select Build Target…"
 msgstr "İnşa Hedefi Seç…"
 
-#: src/plugins/buildui/gtk/menus.ui:43
+#: src/plugins/buildui/gtk/menus.ui:49
 msgid "Change default build target"
 msgstr "Öntanımlı inşa hedefini değiştir"
 
-#: src/plugins/buildui/gtk/menus.ui:49
+#: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
+#: src/plugins/buildui/gtk/menus.ui:114
+msgid "Building"
+msgstr "İnşa"
+
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Build the project"
 msgstr "Projeyi inşa et"
 
-#: src/plugins/buildui/gtk/menus.ui:55
+#: src/plugins/buildui/gtk/menus.ui:63
 msgid "_Rebuild"
 msgstr "_Yeniden İnşa Et"
 
-#: src/plugins/buildui/gtk/menus.ui:56
+#: src/plugins/buildui/gtk/menus.ui:64
 msgid "Rebuild the project"
 msgstr "Projeyi yeniden inşa et"
 
-#: src/plugins/buildui/gtk/menus.ui:61
+#: src/plugins/buildui/gtk/menus.ui:69
 msgid "_Clean"
 msgstr "_Temizle"
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:70
 msgid "Clean the project"
 msgstr "Projeyi temizle"
 
-#: src/plugins/buildui/gtk/menus.ui:69
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
-msgid "_Install"
-msgstr "_Kur"
+#: src/plugins/buildui/gtk/menus.ui:77
+msgid "Install & Deployment"
+msgstr "Kurulum ve Dağıtım"
 
-#: src/plugins/buildui/gtk/menus.ui:71
+#: src/plugins/buildui/gtk/menus.ui:81
 msgid "Install the project"
 msgstr "Projeyi kur"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy to Device…"
 msgstr "Aygıta Konuşlandır…"
 
-#: src/plugins/buildui/gtk/menus.ui:77
+#: src/plugins/buildui/gtk/menus.ui:87
 msgid "Deploy project to current device"
 msgstr "Projeyi geçerli aygıta konuşlandır"
 
@@ -3056,76 +2355,99 @@ msgstr "Projeyi geçerli aygıta konuşlandır"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:86
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "_Export"
 msgstr "_Dışa Aktar"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Export project"
 msgstr "Projeyi dışa aktar"
 
-#: src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Stop Build"
 msgstr "İnşayı Durdur"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Stop building project"
 msgstr "Proje inşasını durdur"
 
-#: src/plugins/buildui/gtk/menus.ui:102
+#: src/plugins/buildui/gtk/menus.ui:116
 msgid "Show Build _Log"
 msgstr "İnşa _Günlüğünü Göster"
 
-#: src/plugins/buildui/gtk/menus.ui:105
+#: src/plugins/buildui/gtk/menus.ui:119
 msgid "Display panel containing the build log"
 msgstr "İnşa günlüğünü içeren paneli göster"
 
-#: src/plugins/buildui/gtk/menus.ui:112
-msgid "Manage SDKs…"
-msgstr "Yazılım Geliştirme Kitlerini Yönet…"
+#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
+msgid "Running"
+msgstr "Çalıştırma"
 
-#: src/plugins/buildui/gtk/menus.ui:121
+#: src/plugins/buildui/gtk/menus.ui:130
 msgid "Select Run Command…"
 msgstr "Çalıştır Komutu Seç…"
 
-#: src/plugins/buildui/gtk/menus.ui:131
+#: src/plugins/buildui/gtk/menus.ui:142
 msgid "Run"
 msgstr "Çalıştır"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:145
 msgid "Run the project"
 msgstr "Projeyi çalıştır"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/testui/gbp-testui-item.c:84
+#: src/plugins/testui/gbp-testui-panel.ui:4
+msgid "Unit Tests"
+msgstr "Birim Sınamaları"
+
+#: src/plugins/buildui/gtk/menus.ui:157
+msgid "Follow System Style"
+msgstr "Sistem Biçemini İzle"
+
+#: src/plugins/buildui/gtk/menus.ui:163
+msgid "Force Light"
+msgstr "Aydınlığa Zorla"
+
+#: src/plugins/buildui/gtk/menus.ui:169
+msgid "Force Dark"
+msgstr "Karanlığa Zorla"
+
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Accessibility"
 msgstr "Erişilebilirlik"
 
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:178
 msgid "High Contrast"
 msgstr "Yüksek Karşıtlık"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "Text Direction"
 msgstr "Metin Yönü"
 
-#: src/plugins/buildui/gtk/menus.ui:171
+#: src/plugins/buildui/gtk/menus.ui:185
 msgid "Left-to-Right"
 msgstr "Soldan Sağa"
 
-#: src/plugins/buildui/gtk/menus.ui:177
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "Right-to-Left"
 msgstr "Sağdan Sola"
 
-#: src/plugins/buildui/gtk/menus.ui:186
-msgid "Verbose Logging"
-msgstr "Ayrıntılı Günlük Kaydı"
-
-#: src/plugins/buildui/gtk/menus.ui:192
+#: src/plugins/buildui/gtk/menus.ui:206
 msgid "Tools"
 msgstr "Araçlar"
 
+#: src/plugins/buildui/gtk/preferences.ui:36
+#: src/plugins/menu-search/gtk/menus.ui:53
+msgid "Style"
+msgstr "Biçem"
+
+#: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:10
+msgid "Interface"
+msgstr "Arayüz"
+
 #: src/plugins/buildui/gtk/preferences.ui:66
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:60
 msgid "Editor Font"
 msgstr "Düzenleyici Yazı Tipi"
 
@@ -3133,18 +2455,33 @@ msgstr "Düzenleyici Yazı Tipi"
 msgid "The font used in the source code editor"
 msgstr "Kaynak kod düzenleyicide kullanılacak yazı tipi"
 
+#: src/plugins/buildui/gtk/preferences.ui:72
+msgid "Terminal Font"
+msgstr "Uçbirim Yazı Tipi"
+
 #: src/plugins/buildui/gtk/preferences.ui:73
 msgid "The font used in the terminal"
 msgstr "Uçbirimlerde kullanılacak yazı tipi"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:65
 msgid "Show Grid Pattern"
 msgstr "Izgara Deseni Göster"
+
+#: src/plugins/buildui/gtk/preferences.ui:81
+msgid "Display a grid pattern underneath source code"
+msgstr "Kaynak kodun altında ızgara deseni göster"
+
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
+msgid "Never"
+msgstr "Asla"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
 msgstr "Genel görünüm haritası asla görüntülenmesin"
+
+#: src/plugins/buildui/gtk/preferences.ui:98
+msgid "Always"
+msgstr "Her Zaman"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
@@ -3163,6 +2500,10 @@ msgstr ""
 msgid "Navigate with Tabs"
 msgstr "Sekmelerle Gezin"
 
+#: src/plugins/buildui/gtk/preferences.ui:113
+msgid "Switch documents using a tabbed interface"
+msgstr "Sekmeli arayüz kullanarak belge değiştir"
+
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
 msgstr "Açılan Kutucuklarla Gezin"
@@ -3171,76 +2512,197 @@ msgstr "Açılan Kutucuklarla Gezin"
 msgid "Switch documents using a popover"
 msgstr "Açılan kutucuk kullanarak belge değiştir"
 
-#: src/plugins/buildui/tweaks.ui:15
-msgid "Build & Run"
-msgstr "İnşa Et ve Çalıştır"
+#: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
+#: src/plugins/shellcmd/tweaks.ui:21
+msgid "Commands"
+msgstr "Komutlar"
 
-#: src/plugins/buildui/tweaks.ui:22 src/plugins/terminal/tweaks.ui:66
+# Arayüzde Genel Görünüm altında kullanılıyor.
+#: src/plugins/buildui/tweaks.ui:16
+msgid "Run Command"
+msgstr "Çalıştırma Komutu"
+
+#: src/plugins/buildui/tweaks.ui:17
+msgid "This command is used to run your project"
+msgstr "Bu komut projenizi çalıştırmak için kullanılır"
+
+#: src/plugins/buildui/tweaks.ui:55
+msgid "Starting & Stopping"
+msgstr "Başlatma ve Durdurma"
+
+#: src/plugins/buildui/tweaks.ui:58
+msgid "Install Before Running"
+msgstr "Çalıştırmadan Önce Kur"
+
+#: src/plugins/buildui/tweaks.ui:59
+msgid ""
+"Installs the application before running. This is necessary for most projects "
+"unless custom run commands are used."
+msgstr ""
+"Çalıştırmadan önce uygulamayı kurar. Bu, özel çalıştır komutları "
+"kullanılmadıkça çoğu proje için gereklidir."
+
+#: src/plugins/buildui/tweaks.ui:74
+msgid "Stop Signal"
+msgstr "Dur Sinyali"
+
+#: src/plugins/buildui/tweaks.ui:75
+msgid ""
+"Send the signal to the target application when requesting the application "
+"stop."
+msgstr "Uygulamanın durmasını isterken sinyali hedef uygulamaya gönder."
+
+#: src/plugins/buildui/tweaks.ui:130
+msgid "Logging"
+msgstr "Günlükleme"
+
+#: src/plugins/buildui/tweaks.ui:134
+msgid ""
+"Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
+"troubleshooting"
+msgstr ""
+"Sorun giderme için <tt>G_MESSAGES_DEBUG=all</tt> ortam değişkeni ile çalışır"
+
+#: src/plugins/buildui/tweaks.ui:151
+msgid "Run unit tests from within the build environment."
+msgstr "Birim sınamalarını inşa ortamından çalıştır."
+
+#: src/plugins/buildui/tweaks.ui:163
+msgid "As Application"
+msgstr "Uygulama Olarak"
+
+#: src/plugins/buildui/tweaks.ui:164
+msgid "Run unit with access to display and other runtime environment features."
+msgstr "Birimi ekran ve diğer çalışma zamanı özelliklerine erişimle çalıştır."
+
+#: src/plugins/buildui/tweaks.ui:176
+msgid "Build & Tooling"
+msgstr "İnşa ve İşleme"
+
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
+msgid "General"
+msgstr "Genel"
+
+#: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
 msgid "History"
 msgstr "Geçmiş"
 
-#: src/plugins/buildui/tweaks.ui:33
+#: src/plugins/buildui/tweaks.ui:188
+msgid "Clear Expired Artifacts"
+msgstr "Süresi Geçmiş Yapıtları Temizle"
+
+#: src/plugins/buildui/tweaks.ui:189
+msgid "Artifacts which have expired will be deleted when Builder is started"
+msgstr "Builder başlatıldığında süresi geçmiş yapıtlar silinecek"
+
+#: src/plugins/buildui/tweaks.ui:200
+msgid "Clear Build Logs"
+msgstr "İnşa Günlüklerini Temizle"
+
+#: src/plugins/buildui/tweaks.ui:201
 msgid "Clear the build log history when a new build begins"
 msgstr "Yeni inşa başladığında inşa günlüğü geçmişini temizle"
 
-#: src/plugins/buildui/tweaks.ui:41
+#: src/plugins/buildui/tweaks.ui:214
 msgid "Workers"
 msgstr "İşçiler"
 
-#: src/plugins/buildui/tweaks.ui:45
+#: src/plugins/buildui/tweaks.ui:218
 msgid "Number of workers to use when performing builds"
 msgstr "İnşa ederken kullanılacak işçi sayısı"
 
-#: src/plugins/buildui/tweaks.ui:56
+#: src/plugins/buildui/tweaks.ui:227
+msgid "Default"
+msgstr "Öntanımlı"
+
+#: src/plugins/buildui/tweaks.ui:233
 msgid "1 per CPU"
 msgstr "İşlemci başına 1"
 
-#: src/plugins/buildui/tweaks.ui:62
+#: src/plugins/buildui/tweaks.ui:239
 msgid "1"
 msgstr "1"
 
-#: src/plugins/buildui/tweaks.ui:68 src/plugins/editorui/gtk/menus.ui:15
+#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
 #: src/plugins/editorui/gtk/menus.ui:51
 msgid "2"
 msgstr "2"
 
-#: src/plugins/buildui/tweaks.ui:74 src/plugins/editorui/gtk/menus.ui:25
+#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
 #: src/plugins/editorui/gtk/menus.ui:61
 msgid "4"
 msgstr "4"
 
-#: src/plugins/buildui/tweaks.ui:80
+#: src/plugins/buildui/tweaks.ui:257
 msgid "6"
 msgstr "6"
 
-#: src/plugins/buildui/tweaks.ui:86 src/plugins/editorui/gtk/menus.ui:35
+#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
 #: src/plugins/editorui/gtk/menus.ui:71
 msgid "8"
 msgstr "8"
 
-#: src/plugins/buildui/tweaks.ui:92
+#: src/plugins/buildui/tweaks.ui:269
 msgid "16"
 msgstr "16"
 
-#: src/plugins/buildui/tweaks.ui:98
+#: src/plugins/buildui/tweaks.ui:275
 msgid "32"
 msgstr "32"
 
-#: src/plugins/buildui/tweaks.ui:104
+#: src/plugins/buildui/tweaks.ui:281
 msgid "64"
 msgstr "64"
 
-#: src/plugins/buildui/tweaks.ui:110
+#: src/plugins/buildui/tweaks.ui:287
 msgid "128"
 msgstr "128"
 
-#: src/plugins/buildui/tweaks.ui:116
+#: src/plugins/buildui/tweaks.ui:293
 msgid "256"
 msgstr "256"
 
-#: src/plugins/buildui/tweaks.ui:122
+#: src/plugins/buildui/tweaks.ui:299
 msgid "512"
 msgstr "512"
+
+#: src/plugins/buildui/tweaks.ui:313
+msgid "Tooling"
+msgstr "İşleme"
+
+#: src/plugins/buildui/tweaks.ui:348
+msgid "Installation Prefix"
+msgstr "Kurulum Öneki"
+
+#: src/plugins/buildui/tweaks.ui:349
+msgid ""
+"The project will be installed to this directory during the installation "
+"phase of the build pipeline."
+msgstr "Proje, inşa boru hattı kurulumu sırasında bu dizine kurulacak."
+
+#: src/plugins/buildui/tweaks.ui:367
+msgid "Configure Options"
+msgstr "Yapılandırma Seçenekleri"
+
+#: src/plugins/buildui/tweaks.ui:380
+msgid ""
+"These options are used by the build system to configure the project during "
+"the configure phase of the build pipeline"
+msgstr ""
+"Bu seçenekler, inşa sistemince inşa boru hattı yapılandırması "
+"sırasında projeyi yapılandırmada kullanılır."
+
+#: src/plugins/buildui/tweaks.ui:387
+msgid "Build Environment"
+msgstr "İnşa Ortamı"
+
+#: src/plugins/buildui/tweaks.ui:403
+msgid ""
+"The SDK used to build your application is automatically determined from the "
+"runtime."
+msgstr ""
+"Uygulamanızı inşa etmede kullanılan SDK, çalışma zamanından "
+"kendiliğinden belirlenir."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 msgid "Fetch dependencies"
@@ -3254,50 +2716,6 @@ msgstr "Projeyi inşa et"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Cargo Çalıştır"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:42
-#: src/plugins/clang/tweaks.ui:20
-msgid "Clang"
-msgstr "Clang"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:47
-msgid "Use Clang for Diagnostics"
-msgstr "Tanılamalar İçin Clang Kullan"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:48
-msgid ""
-"Clang will be queried for diagnostics within C, C++, and Objective-C sources"
-msgstr ""
-"Clang; C, C++ ve Objective-C kaynakları içindeki tanılamalar için "
-"sorgulanacak"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:54
-msgid "Use Clang for Completions"
-msgstr "Kendiliğinden Tamamlamalar İçin Clang Kullan"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:55
-msgid ""
-"Clang will be queried for completions within C, C++, and Objective-C sources"
-msgstr ""
-"Clang; C, C++ ve Objective-C kaynakları içindeki tamamlamalar için "
-"sorgulanacak"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:61
-msgid "Complete Parenthesis"
-msgstr "Parantezleri Tamamla"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:62
-msgid "Include parenthesis when completing clang proposals"
-msgstr "Clang önerilerini tamamlarken parantezleri içer"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:66
-#: src/plugins/clang/tweaks.ui:30
-msgid "Complete Parameters"
-msgstr "Parametreleri Tamamla"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:67
-msgid "Include parameters and types when completing clang proposals"
-msgstr "Clang önerileri tamamlanırken parametreleri ve türleri içer"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -3323,15 +2741,23 @@ msgstr ""
 "Tamamlama sırasında parantezlerin içerilip içerilmeyeceği. complete-"
 "parentheses gerektirir."
 
-#: src/plugins/clang/tweaks.ui:23
+#: src/plugins/clang/tweaks.ui:14
+msgid "Clang"
+msgstr "Clang"
+
+#: src/plugins/clang/tweaks.ui:17
 msgid "Complete Parentheses"
 msgstr "Parantezleri Tamamla"
 
-#: src/plugins/clang/tweaks.ui:24
+#: src/plugins/clang/tweaks.ui:18
 msgid "Include parentheses when completing clang proposals"
 msgstr "Clang önerilerini tamamlarken parantezleri içer"
 
-#: src/plugins/clang/tweaks.ui:31
+#: src/plugins/clang/tweaks.ui:29
+msgid "Complete Parameters"
+msgstr "Parametreleri Tamamla"
+
+#: src/plugins/clang/tweaks.ui:30
 msgid "Include parameters and type information when completing clang proposals"
 msgstr "Clang önerilerini tamamlanırken parametreleri ve tür bilgilerini içer"
 
@@ -3676,11 +3102,6 @@ msgstr "Tercihleri kullanarak palet yükle veya üret"
 msgid "Rename"
 msgstr "Yeniden Adlandır"
 
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
-msgid "Remove"
-msgstr "Kaldır"
-
 #: src/plugins/color-picker/gstyle/ui/gstyle-rename-popover.ui:35
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
 #: src/plugins/project-tree/gtk/menus.ui:60
@@ -3843,21 +3264,24 @@ msgid "Highlight _colors"
 msgstr "_Renkleri vurgula"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
-msgid "_Comment code"
-msgstr "Kodu _yoruma al"
+msgid "Code Comments"
+msgstr "Kod Yorumları"
 
-#: src/plugins/comment-code/gtk/menus.ui:13
-msgid "Unco_mment code"
-msgstr "Kodu yorumdan _çıkar"
+#: src/plugins/comment-code/gtk/menus.ui:9
+msgid "_Comment Code"
+msgstr "Kodu _Yoruma Al"
 
-#: src/plugins/copyright/gbp-copyright-preferences-addin.c:43
-#: src/plugins/copyright/tweaks.ui:22
-msgid "Update Copyright"
-msgstr "Telif Haklarını Güncelle"
+#: src/plugins/comment-code/gtk/menus.ui:10
+msgid "Add comments surrounding the source code selection"
+msgstr "Kaynak kodu seçimini çevreleyen yorumlar ekle"
 
-#: src/plugins/copyright/gbp-copyright-preferences-addin.c:44
-msgid "Automatically update copyright headers when saving a file"
-msgstr "Dosyayı kaydederken telif hakkı başlıklarını kendiliğinden güncelle"
+#: src/plugins/comment-code/gtk/menus.ui:16
+msgid "Unco_mment Code"
+msgstr "Kodu Yorumdan _Çıkar"
+
+#: src/plugins/comment-code/gtk/menus.ui:17
+msgid "Remove comments from the source code selection"
+msgstr "Kaynak kodu seçiminden yorumları kaldır"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -3867,7 +3291,11 @@ msgstr "Kaydetmeden önce Telif Hakkını güncelle"
 msgid "Updates the copyright for the user before saving to disk."
 msgstr "Diske kaydetmeden önce kullanıcı için telif hakkını günceller."
 
-#: src/plugins/copyright/tweaks.ui:23
+#: src/plugins/copyright/tweaks.ui:16
+msgid "Update Copyright"
+msgstr "Telif Haklarını Güncelle"
+
+#: src/plugins/copyright/tweaks.ui:17
 msgid "Update copyright headers when saving documents"
 msgstr "Belgeleri kaydederken telif hakkı başlıklarını güncelle"
 
@@ -3926,6 +3354,11 @@ msgstr "Konum"
 msgid "The project will be created in a new subdirectory."
 msgstr "Proje yeni bir alt dizinde oluşturulacak."
 
+#: src/plugins/create-project/gbp-create-project-widget.ui:108
+#: src/plugins/projectui/tweaks.ui:47
+msgid "License"
+msgstr "Lisans"
+
 #: src/plugins/create-project/gbp-create-project-widget.ui:127
 msgid "Template"
 msgstr "Şablon"
@@ -3976,11 +3409,11 @@ msgstr "Tamamlama Öner"
 msgid "Use CTags to suggest code completion proposals"
 msgstr "Kod tamamlama önerileri için Ctags kullan"
 
-#: src/plugins/ctags/tweaks.ui:29
+#: src/plugins/ctags/tweaks.ui:34
 msgid "CTags Path"
 msgstr "CTags Yolu"
 
-#: src/plugins/ctags/tweaks.ui:30
+#: src/plugins/ctags/tweaks.ui:35
 msgid "The path to the ctags executable"
 msgstr "Ctags yürütülebilirinin yolu"
 
@@ -3991,6 +3424,18 @@ msgstr "Hata Ayıklayıcı ile Çalıştır"
 #: src/plugins/debuggerui/gtk/menus.ui:13
 msgid "Run the project with debugger"
 msgstr "Projeyi hata ayıklayıcı ile çalıştır"
+
+#: src/plugins/debuggerui/gtk/menus.ui:21
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/tweaks.ui:12
+msgid "Debugger"
+msgstr "Hata Ayıklayıcı"
+
+#: src/plugins/debuggerui/gtk/menus.ui:23
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/tweaks.ui:16
+msgid "Breakpoints"
+msgstr "Kesme Noktaları"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
 msgid "Automatically Break at Program Start"
@@ -4109,9 +3554,8 @@ msgstr "Grup"
 
 # İş parçacığı olması daha yüksek
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:38
-#, fuzzy
 msgid "Thread"
-msgstr "Kanal"
+msgstr "İş Parçağı"
 
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:58
 msgid "Frame"
@@ -4127,9 +3571,8 @@ msgstr "İkilik"
 
 # İş parçacığı olması daha yüksek
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:232
-#, fuzzy
 msgid "Threads"
-msgstr "Kanallar"
+msgstr "İş Parçacıkları"
 
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
 msgid "Libraries"
@@ -4143,19 +3586,27 @@ msgstr "Yazmaçlar"
 msgid "Console"
 msgstr "Uçbirim"
 
-#: src/plugins/debuggerui/tweaks.ui:29
+#: src/plugins/debuggerui/tweaks.ui:19
+msgid "Stop After Launching Program"
+msgstr "Program Başlatıldıktan Sonra Dur"
+
+#: src/plugins/debuggerui/tweaks.ui:20
+msgid "Automatically insert a breakpoint at the start of the application"
+msgstr "Uygulamanın başlangıcına kendiliğinden kesme noktası ekle"
+
+#: src/plugins/debuggerui/tweaks.ui:31
 msgid "Stop at Warnings"
 msgstr "Uyarılarda Dur"
 
-#: src/plugins/debuggerui/tweaks.ui:30
+#: src/plugins/debuggerui/tweaks.ui:32
 msgid "Automatically insert a breakpoint on warning logs"
 msgstr "Uyarı günlüklerine kendiliğinden kesme noktası ekle"
 
-#: src/plugins/debuggerui/tweaks.ui:36
+#: src/plugins/debuggerui/tweaks.ui:43
 msgid "Stop at Criticals"
 msgstr "Kritik Noktalarda Dur"
 
-#: src/plugins/debuggerui/tweaks.ui:37
+#: src/plugins/debuggerui/tweaks.ui:44
 msgid "Automatically insert a breakpoint on critical logs"
 msgstr "Kritik günlüklere kendiliğinden kesme noktası ekle"
 
@@ -4195,127 +3646,30 @@ msgstr "Hiçbir dosya sağlanmadı."
 msgid "Use minimal editorui interface"
 msgstr "En küçük düzenleyici arayüzünü kullan"
 
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:48
-#: src/plugins/editorui/tweaks.ui:326
-msgid "Movements"
-msgstr "Hareketler"
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
+msgid "Reset"
+msgstr "Sıfırla"
 
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:61
-#: src/plugins/editorui/tweaks.ui:67
-msgid "The font used within the source code editor"
-msgstr "Kaynak kod düzenleyicide kullanılacak yazı tipi"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:70
-msgid "Show Overview Map"
-msgstr "Genel Görünüm Haritasını Göster"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:71
-msgid "Use an overview map instead of a scrollbar"
-msgstr "Kaydırma çubuğu yerine genel görünüm haritası kullan"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
-#: src/plugins/editorui/tweaks.ui:172
-msgid "Show Line Numbers"
-msgstr "Satır Numaralarını Göster"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:76
-msgid "Display line numbers next to each line of source code"
-msgstr "Kaynak kod satırının yanında satır numarasını göster"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:81
-msgid "Adjust line-height of the configured font"
-msgstr "Yapılandırılan yazı tipinin satır yüksekliğini ayarla"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
-#: src/plugins/editorui/tweaks.ui:198
-msgid "Highlight Current Line"
-msgstr "Geçerli Satırı Vurgula"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:90
-#: src/plugins/editorui/tweaks.ui:205
-msgid "Highlight Matching Brackets"
-msgstr "Eşleşen Parantezleri Vurgula"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:91
-#: src/plugins/editorui/tweaks.ui:206
-msgid ""
-"Use cursor position to highlight matching brackets, braces, parenthesis, and "
-"more"
-msgstr ""
-"Eşleşen ayraçları, küme parantezlerini, parentezleri ve daha çoğunu "
-"vurgulamak için imleç konumunu kullan"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:95
-msgid "Suggest Completions While Typing"
-msgstr "Yazarken Tamamlama Öner"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:96
-msgid "Automatically suggest completions while typing within the file"
-msgstr "Dosyaya yazarken tamamlamaları kendiliğinden öner"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:101
-msgid "Automatically select the first completion when displayed"
-msgstr "Görüntülendiğinde ilk tamamlamayı kendiliğinden seç"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
-#: src/plugins/editorui/tweaks.ui:255
-msgid "Expand Snippets"
-msgstr "Parçacıkları Genişlet"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
-#: src/plugins/editorui/tweaks.ui:256
-msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr ""
-"Düzenleyicideki yapılandırılmış parçacıkları genişletmek için “Sekme” kullan"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:122
-msgid "Trim Trailing Whitespace"
-msgstr "Satır Sonundaki Boşlukları Kırp"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-#: src/plugins/editorui/tweaks-language.ui:84
-msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
-msgstr "Kaydederken değiştirilen satırların sonundaki boşluklar silinir"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:133
-msgid "Insert matching character for [[(\"'"
-msgstr "[[(\"' için eşleşen karakter ekle"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
-#: src/plugins/editorui/tweaks-language.ui:123
-msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr ""
-"İstenen azami genişliği belirtmek için düzenleyicide kenar boşluğu göster"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:155
-msgid "Prefer spaces over tabs"
-msgstr "Sekme yerine boşluğu yeğle"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:159
-msgid "Automatically Indent"
-msgstr "Kendiliğinden Girintile"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:160
-msgid "Format source code as you type"
-msgstr "Kaynak kodunu yazarken biçimlendir"
-
-#. translators: .editorconfig is a file used in programming projects and modelines are tweaks specified within a file header or footer
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:81
-msgid ""
-"Settings provided by .editorconfig and modelines take precedence over those "
-"below."
-msgstr ""
-".editorconfig ve modelines tarafından sağlanan ayarlar aşağıdakilere göre "
-"önceliklidir."
-
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:100
-msgid "Prefer a space before colon"
-msgstr "İki noktadan önce boşluk yeğle"
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
+msgid "Reverts language preferences to application defaults"
+msgstr "Dil yeğlerini uygulama öntanımlılarına döndürür"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
 msgid "Text"
 msgstr "Metin"
+
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/tweaks-language.ui:65
+#: src/plugins/editorui/tweaks-language.ui:242
+msgid "Spaces"
+msgstr "Boşluklar"
+
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+msgid "Tabs"
+msgstr "Sekmeler"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:516
 msgid "Go"
@@ -4324,6 +3678,10 @@ msgstr "Git"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
 msgid "Go to Line"
 msgstr "Satıra Git"
+
+#: src/plugins/editorui/gtk/menus.ui:5
+msgid "Indentation"
+msgstr "Girinti"
 
 #: src/plugins/editorui/gtk/menus.ui:7
 msgid "Indent Using Spaces"
@@ -4342,13 +3700,25 @@ msgid "5"
 msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
-#: src/plugins/editorui/tweaks-language.ui:109
+#: src/plugins/editorui/tweaks-language.ui:145
 msgid "Indentation Size"
 msgstr "Girinti Boyutu"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
 msgstr "Sekme Genişliği ile Aynı"
+
+#: src/plugins/editorui/gtk/menus.ui:81
+msgid "Line Ending"
+msgstr "Satır Sonu"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+msgid "Windows (CR/LF)"
+msgstr "Windows (CR/LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+msgid "Mac Classic (CR)"
+msgstr "Mac Classic (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -4370,196 +3740,298 @@ msgstr "Yeni Çerçevede Aç"
 msgid "Open in New Workspace…"
 msgstr "Yeni Çalışma Alanında Aç…"
 
-#: src/plugins/editorui/gtk/menus.ui:159
+#: src/plugins/editorui/gtk/menus.ui:161
 msgid "Save _As"
 msgstr "Farklı _Kaydet"
 
-#: src/plugins/editorui/gtk/menus.ui:166
+#: src/plugins/editorui/gtk/menus.ui:168
 msgid "Find…"
 msgstr "Bul…"
 
-#: src/plugins/editorui/gtk/menus.ui:171
+#: src/plugins/editorui/gtk/menus.ui:173
 msgid "Find/Replace…"
 msgstr "Bul/Değiştir…"
 
-#: src/plugins/editorui/gtk/menus.ui:178
+#: src/plugins/editorui/gtk/menus.ui:180
 msgid "Print…"
 msgstr "Yazdır…"
 
-#: src/plugins/editorui/gtk/menus.ui:186
+#: src/plugins/editorui/gtk/menus.ui:188
 msgid "Format Selection"
 msgstr "Biçim Seçimi"
 
-#: src/plugins/editorui/tweaks-language.ui:53
+#: src/plugins/editorui/tweaks-language.ui:9
+msgid "Programming Languages"
+msgstr "Programlama Dilleri"
+
+#: src/plugins/editorui/tweaks-language.ui:34
+msgid ""
+"Settings provided by .editorconfig and modelines take precedence over those "
+"below."
+msgstr ""
+".editorconfig ve modelines tarafından sağlanan ayarlar aşağıdakilere göre "
+"önceliklidir."
+
+#: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
 msgstr "Girintileme ve Biçimlendirme"
 
-#: src/plugins/editorui/tweaks-language.ui:56
+#: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
 msgstr "Sekme Karakteri"
 
-#: src/plugins/editorui/tweaks-language.ui:57
+#: src/plugins/editorui/tweaks-language.ui:45
 msgid "The character to be inserted for Tab"
 msgstr "Sekme için eklenecek karakter"
 
-#: src/plugins/editorui/tweaks-language.ui:62
+#: src/plugins/editorui/tweaks-language.ui:59
 msgid "Tab"
 msgstr "Sekme"
 
-#: src/plugins/editorui/tweaks-language.ui:83
+#: src/plugins/editorui/tweaks-language.ui:73
+msgid "Insert Trailing Newline"
+msgstr "İzleyen Yeni Satır Ekle"
+
+#: src/plugins/editorui/tweaks-language.ui:74
+msgid "Ensure files end with a newline"
+msgstr "Dosyaların yeni satırla bittiğine emin ol"
+
+#: src/plugins/editorui/tweaks-language.ui:90
 msgid "Trim Trailing Space"
 msgstr "Satır Sonundaki Boşlukları Kırp"
 
-#: src/plugins/editorui/tweaks-language.ui:94
+#: src/plugins/editorui/tweaks-language.ui:91
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
+msgstr "Kaydederken değiştirilen satırların sonundaki boşluklar silinir"
+
+#: src/plugins/editorui/tweaks-language.ui:111
 msgid "Auto Indent"
 msgstr "Kendiliğinden Girintile"
 
-#: src/plugins/editorui/tweaks-language.ui:95
+#: src/plugins/editorui/tweaks-language.ui:112
 msgid "Automatically indent source code as you type"
 msgstr "Kaynak kodunu yazarken kendiliğinden girintile"
 
-#: src/plugins/editorui/tweaks-language.ui:101
+#: src/plugins/editorui/tweaks-language.ui:128
 msgid "Tab Size"
 msgstr "Sekme Boyutu"
 
-#: src/plugins/editorui/tweaks-language.ui:102
+#: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
 msgstr "Sekme girintileme karakter sayısı"
 
-#: src/plugins/editorui/tweaks-language.ui:110
+#: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr "Girintilenecek karakter sayısı, ya da sekme boyutunu kullanmak için -1"
 
 # Bulunduğu konum sebebiyle Başlık Düzeni tercih edildi
-#: src/plugins/editorui/tweaks-language.ui:119
+#: src/plugins/editorui/tweaks-language.ui:164
 msgid "Margin"
 msgstr "Kenar Boşluğu"
 
-#: src/plugins/editorui/tweaks-language.ui:122
+#: src/plugins/editorui/tweaks-language.ui:167
 msgid "Show Right Margin"
 msgstr "Sağ Kenar Boşluğunu Göster"
 
-#: src/plugins/editorui/tweaks-language.ui:129
+#: src/plugins/editorui/tweaks-language.ui:168
+msgid "Display a margin in the editor to indicate maximum desired width"
+msgstr ""
+"İstenen azami genişliği belirtmek için düzenleyicide kenar boşluğu göster"
+
+#: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
 msgstr "Sağ Kenar Boşluğu Konumu"
 
-#: src/plugins/editorui/tweaks-language.ui:130
+#: src/plugins/editorui/tweaks-language.ui:185
 msgid "The desired maximum line length"
 msgstr "İstenen azami satır uzunluğu"
 
-#: src/plugins/editorui/tweaks-language.ui:143
+#: src/plugins/editorui/tweaks-language.ui:203
+#: src/plugins/editorui/tweaks.ui:256
+msgid "Behavior"
+msgstr "Davranış"
+
+#: src/plugins/editorui/tweaks-language.ui:206
+msgid "Overwrite Braces"
+msgstr "Küme Ayraçlarının Üstüne Yaz"
+
+#: src/plugins/editorui/tweaks-language.ui:207
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
 msgstr ""
 "Eşleşen parantezleri, küme ayraçlarını, süslü parantezleri ve daha çoğunu "
 "vurgulamak için imleç konumunu kullan"
 
-#: src/plugins/editorui/tweaks-language.ui:150
+#: src/plugins/editorui/tweaks-language.ui:223
+msgid "Insert Matching Brace"
+msgstr "Eşleşen Ayraç Ekle"
+
+#: src/plugins/editorui/tweaks-language.ui:224
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
 "Parantezler, küme ayraçları, süslü parantezler ve çift tırnaklar için "
 "eşleşen karakterleri ekle"
 
-#: src/plugins/editorui/tweaks.ui:28
+#: src/plugins/editorui/tweaks-language.ui:245
+msgid "Space before opening parentheses"
+msgstr "Parantez açmadan önce boşluk"
+
+#: src/plugins/editorui/tweaks-language.ui:262
+msgid "Space before opening brackets"
+msgstr "Köşeli parantez açmadan önce boşluk"
+
+#: src/plugins/editorui/tweaks-language.ui:269
+msgid "Space before opening braces"
+msgstr "Süslü parantez açmadan önce boşluk"
+
+#: src/plugins/editorui/tweaks-language.ui:276
+msgid "Space before opening angles"
+msgstr "Eşitsizlik imi açmadan önce boşluk"
+
+#: src/plugins/editorui/tweaks-language.ui:283
+msgid "Prefer a space before colon"
+msgstr "İki noktadan önce boşluk yeğle"
+
+#: src/plugins/editorui/tweaks-language.ui:290
+msgid "Prefer a space before commas"
+msgstr "Virgül öncesinde boşluk yeğle"
+
+#: src/plugins/editorui/tweaks-language.ui:297
+msgid "Prefer a space before simicolons"
+msgstr "Noktalı virgül öncesinde boşluk yeğle"
+
+#: src/plugins/editorui/tweaks.ui:10
 msgid "Color"
 msgstr "Renk"
 
-#: src/plugins/editorui/tweaks.ui:50 src/plugins/terminal/tweaks.ui:16
+#: src/plugins/editorui/tweaks.ui:32 src/plugins/terminal/tweaks.ui:10
 msgid "Fonts & Styling"
 msgstr "Yazı Tipleri ve Biçem"
 
-#: src/plugins/editorui/tweaks.ui:54
+#: src/plugins/editorui/tweaks.ui:36
 msgid "Preview"
 msgstr "Ön izleme"
 
-#: src/plugins/editorui/tweaks.ui:75
+#: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
+msgid "Font"
+msgstr "Yazı Tipi"
+
+#: src/plugins/editorui/tweaks.ui:49
+msgid "The font used within the source code editor"
+msgstr "Kaynak kod düzenleyicide kullanılacak yazı tipi"
+
+#: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
 msgstr "Satırlar arasındaki boşluğu ayarla"
 
-#: src/plugins/editorui/tweaks.ui:87
+#: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
 msgstr "Çerçeveden daha geniş olduğunda metin nasıl sarılmalı"
 
-#: src/plugins/editorui/tweaks.ui:98
+#: src/plugins/editorui/tweaks.ui:93
 msgid "At Spaces"
 msgstr "Boşluklarda"
 
-#: src/plugins/editorui/tweaks.ui:104
+#: src/plugins/editorui/tweaks.ui:99
 msgid "Anywhere"
 msgstr "Herhangi bir yerde"
 
-#: src/plugins/editorui/tweaks.ui:116
+#: src/plugins/editorui/tweaks.ui:111
 msgid "Background Pattern"
 msgstr "Arka Plan Deseni"
 
-#: src/plugins/editorui/tweaks.ui:117
+#: src/plugins/editorui/tweaks.ui:112
 msgid "Show a background pattern underneath source code"
 msgstr "Kaynak kodun altında arka plan deseni göster"
 
-#: src/plugins/editorui/tweaks.ui:122
+#: src/plugins/editorui/tweaks.ui:121
 msgid "No Pattern"
 msgstr "Desen Yok"
 
-#: src/plugins/editorui/tweaks.ui:128
+#: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
 msgstr "Izgara Çizgileri"
 
-#: src/plugins/editorui/tweaks.ui:138
+#: src/plugins/editorui/tweaks.ui:137
 msgid "Scrollbars"
 msgstr "Kaydırma Çubukları"
 
-#: src/plugins/editorui/tweaks.ui:141
+#: src/plugins/editorui/tweaks.ui:140
 msgid "Source Code Overview"
 msgstr "Kaynak Kod Genel Görünümü"
 
-#: src/plugins/editorui/tweaks.ui:142
+#: src/plugins/editorui/tweaks.ui:141
 msgid "Display an overview of source code next to the editor"
 msgstr "Düzenleyicinin yanında kaynak kodu genel görünümünü görüntüle"
 
-#: src/plugins/editorui/tweaks.ui:147
+#: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
 msgstr "Kaydırma Çubuklarını Yeğle"
 
-#: src/plugins/editorui/tweaks.ui:153
+#: src/plugins/editorui/tweaks.ui:156
 msgid "Always On"
 msgstr "Her Zaman Açık"
 
-#: src/plugins/editorui/tweaks.ui:159
+#: src/plugins/editorui/tweaks.ui:162
 msgid "Automatic"
 msgstr "Kendiliğinden"
 
-#: src/plugins/editorui/tweaks.ui:169
+#: src/plugins/editorui/tweaks.ui:172
 msgid "Line Numbers"
 msgstr "Satır Numaraları"
 
-#: src/plugins/editorui/tweaks.ui:173
+#: src/plugins/editorui/tweaks.ui:175
+msgid "Show Line Numbers"
+msgstr "Satır Numaralarını Göster"
+
+#: src/plugins/editorui/tweaks.ui:176
 msgid "Display line numbers next to each line of code"
 msgstr "Her kod satırının yanında satır numarasını görüntüle"
 
-#: src/plugins/editorui/tweaks.ui:179
+#: src/plugins/editorui/tweaks.ui:187
 msgid "Use Relative Line Numbers"
 msgstr "Bağıntılı Satır Numaraları Kullan"
 
-#: src/plugins/editorui/tweaks.ui:180
+#: src/plugins/editorui/tweaks.ui:188
 msgid "Show line numbers relative to the current line"
 msgstr "Satır numaralarını geçerli satıra bağıntılı göster"
 
-#: src/plugins/editorui/tweaks.ui:186
+#: src/plugins/editorui/tweaks.ui:199
 msgid "Show Diagnostics"
 msgstr "Tanılamaları Göster"
 
-#: src/plugins/editorui/tweaks.ui:187
+#: src/plugins/editorui/tweaks.ui:200
 msgid "Display diagnostics next to the line number"
 msgstr "Tanılamayı satır numarasının yanında göster"
 
-#: src/plugins/editorui/tweaks.ui:195
+#: src/plugins/editorui/tweaks.ui:213
 msgid "Syntax Highlighting"
 msgstr "Söz Dizimi Vurgulaması"
 
-#: src/plugins/editorui/tweaks.ui:199
+#: src/plugins/editorui/tweaks.ui:216
+msgid "Highlight Current Line"
+msgstr "Geçerli Satırı Vurgula"
+
+#: src/plugins/editorui/tweaks.ui:217
 msgid "Make the current line stand out with highlights"
 msgstr "Geçerli satırı vurgulayarak belli et"
 
-#: src/plugins/editorui/tweaks.ui:213
+#: src/plugins/editorui/tweaks.ui:228
+msgid "Highlight Matching Brackets"
+msgstr "Eşleşen Parantezleri Vurgula"
+
+#: src/plugins/editorui/tweaks.ui:229
+msgid ""
+"Use cursor position to highlight matching brackets, braces, parenthesis, and "
+"more"
+msgstr ""
+"Eşleşen ayraçları, küme parantezlerini, parentezleri ve daha çoğunu "
+"vurgulamak için imleç konumunu kullan"
+
+#: src/plugins/editorui/tweaks.ui:240
+msgid "Semantic Highlighting"
+msgstr "Anlamsal Vurgulama"
+
+#: src/plugins/editorui/tweaks.ui:241
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
@@ -4567,68 +4039,76 @@ msgstr ""
 "Kaynak kodundaki ad uzaylarını, işlevleri ve değişkenleri vurgulamak için "
 "simge bilgilerini kullan"
 
-#: src/plugins/editorui/tweaks.ui:227
-#: src/plugins/spellcheck/gbp-spell-preferences-addin.c:37
+#: src/plugins/editorui/tweaks.ui:260
 msgid "Spelling"
 msgstr "Yazım"
 
-#: src/plugins/editorui/tweaks.ui:231
+#: src/plugins/editorui/tweaks.ui:264
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Yazarken olası yazım hatalarının altını çiz"
 
-#: src/plugins/editorui/tweaks.ui:239
+#: src/plugins/editorui/tweaks.ui:277
 msgid "Selections"
 msgstr "Seçimler"
 
-#: src/plugins/editorui/tweaks.ui:242
+#: src/plugins/editorui/tweaks.ui:280
 msgid "Minimum Characters to Highlight"
 msgstr "Vurgu İçin Asgari Karakter"
 
-#: src/plugins/editorui/tweaks.ui:243
+#: src/plugins/editorui/tweaks.ui:281
 msgid "The minimum selection length before highlighting matches"
 msgstr "Eşleşmeleri vurgulamadan önce asgari seçim uzunluğu"
 
-#: src/plugins/editorui/tweaks.ui:266
+#: src/plugins/editorui/tweaks.ui:294
+msgid "Snippets"
+msgstr "Parçacıklar"
+
+#: src/plugins/editorui/tweaks.ui:297
+msgid "Expand Snippets"
+msgstr "Parçacıkları Genişlet"
+
+#: src/plugins/editorui/tweaks.ui:298
+msgid "Use “Tab” to expand configured snippets in the editor"
+msgstr ""
+"Düzenleyicideki yapılandırılmış parçacıkları genişletmek için “Sekme” kullan"
+
+#: src/plugins/editorui/tweaks.ui:313
 msgid "Code Completion"
 msgstr "Kod Tamamlama"
 
-#: src/plugins/editorui/tweaks.ui:267
-msgid "lang-function-symbolic"
-msgstr "lang-function-symbolic"
-
-#: src/plugins/editorui/tweaks.ui:270
+#: src/plugins/editorui/tweaks.ui:317
 msgid "Completion Proposals"
 msgstr "Tamamlama Önerileri"
 
-#: src/plugins/editorui/tweaks.ui:273
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Suggest Code Completions"
 msgstr "Kod Tamamlama Öner"
 
-#: src/plugins/editorui/tweaks.ui:274
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Automatically suggest code completions while typing"
 msgstr "Yazarken kod tamamlamaları kendiliğinden öner"
 
-#: src/plugins/editorui/tweaks.ui:280
+#: src/plugins/editorui/tweaks.ui:332
 msgid "Select First Completion Proposal"
 msgstr "İlk Tamamlama Önerisini Seç"
 
-#: src/plugins/editorui/tweaks.ui:281
+#: src/plugins/editorui/tweaks.ui:333
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Görüntülendiğinde ilk tamamlama önerisini kendiliğinden seç"
 
-#: src/plugins/editorui/tweaks.ui:291
+#: src/plugins/editorui/tweaks.ui:348
 msgid "Maximum Completion Proposals"
 msgstr "Azami Tamamlama Önerisi"
 
-#: src/plugins/editorui/tweaks.ui:292
+#: src/plugins/editorui/tweaks.ui:349
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Tek seferde görüntülenecek azami tamamlama satırı sayısı"
 
-#: src/plugins/editorui/tweaks.ui:307 src/plugins/editorui/tweaks.ui:310
+#: src/plugins/editorui/tweaks.ui:368 src/plugins/editorui/tweaks.ui:371
 msgid "Keyboard Theme"
 msgstr "Klavye Teması"
 
-#: src/plugins/editorui/tweaks.ui:311
+#: src/plugins/editorui/tweaks.ui:372
 msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
@@ -4636,52 +4116,73 @@ msgstr ""
 "Kısayol temaları, diğer IDE’lere ve düzenleyicilere benzer klavye deneyimi "
 "sağlar"
 
-#: src/plugins/editorui/tweaks.ui:336
-msgid "Smart Home/End"
-msgstr "Akıllı Home/End"
+#: src/plugins/editorui/tweaks.ui:391
+msgid "Movements"
+msgstr "Hareketler"
 
-#: src/plugins/editorui/tweaks.ui:337
-msgid "Moves to first non-whitespace character before line edges"
-msgstr "Satır kenarlarından önceki boşluk olmayan ilk karaktere gider"
+#: src/plugins/editorui/tweaks.ui:395
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr "Geri tuşu, girintileme boyutuyla hizalamak için ek boşlukları silecek"
 
-#: src/plugins/editorui/tweaks.ui:347
+#: src/plugins/editorui/tweaks.ui:407
+msgid "Navigate to non-space characters"
+msgstr "Boşluk dışındaki karakterlere git"
+
+#: src/plugins/editorui/tweaks.ui:416
+msgid "Before line boundaries"
+msgstr "Satır sınırlarından önce"
+
+#: src/plugins/editorui/tweaks.ui:422
+msgid "After line boundaries"
+msgstr "Satır sınırlarından sonra"
+
+#: src/plugins/editorui/tweaks.ui:428
+msgid "Instead of line boundaries"
+msgstr "Satır sınırları yerine"
+
+#: src/plugins/editorui/tweaks.ui:434 src/plugins/valgrind/gtk/menus.ui:44
+msgid "Disabled"
+msgstr "Devre dışı"
+
+#: src/plugins/editorui/tweaks.ui:446
 msgid "Session Management"
 msgstr "Oturum Yönetimi"
 
-#: src/plugins/editorui/tweaks.ui:351
+#: src/plugins/editorui/tweaks.ui:450
 msgid "Save & Restore"
 msgstr "Kaydet ve Geri Yükle"
 
-#: src/plugins/editorui/tweaks.ui:354
+#: src/plugins/editorui/tweaks.ui:453
 msgid "Auto-Save"
 msgstr "Kendiliğinden Kayıt"
 
-#: src/plugins/editorui/tweaks.ui:355
+#: src/plugins/editorui/tweaks.ui:454
 msgid "Regularly save the document as you type"
 msgstr "Yazarken belgeyi düzenli olarak kaydet"
 
-#: src/plugins/editorui/tweaks.ui:361
+#: src/plugins/editorui/tweaks.ui:465
 msgid "Auto-Save Delay"
 msgstr "Kendiliğinden Kayıt Gecikmesi"
 
-#: src/plugins/editorui/tweaks.ui:362
+#: src/plugins/editorui/tweaks.ui:466
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 "Belgeyi kendiliğinden kaydetmeden önce beklenecek saniye türünden gecikme"
 
-#: src/plugins/editorui/tweaks.ui:373
+#: src/plugins/editorui/tweaks.ui:481
 msgid "Format on Save"
 msgstr "Kaydederken Biçimlendir"
 
-#: src/plugins/editorui/tweaks.ui:374
+#: src/plugins/editorui/tweaks.ui:482
 msgid "Reformat sources when saving to disk"
 msgstr "Diske kaydederken kaynakları yeniden biçimlendir"
 
-#: src/plugins/editorui/tweaks.ui:384
+#: src/plugins/editorui/tweaks.ui:497
 msgid "Restore Cursor Position"
 msgstr "İmleç Konumunu Geri Yükle"
 
-#: src/plugins/editorui/tweaks.ui:385
+#: src/plugins/editorui/tweaks.ui:498
 msgid "Jump to the last position when re-opening a file"
 msgstr "Dosyayı yeniden açarken son konuma git"
 
@@ -4723,11 +4224,24 @@ msgstr ""
 "Builder, projenizi inşa etmek için belirtilen yazılım geliştirme kitlerinin "
 "kurulmasına gereksiniyor."
 
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
+#: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+msgid "Name"
+msgstr "Ad"
+
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
 msgid "Architecture"
 msgstr "Mimari"
+
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+msgid "Flatpak"
+msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
 msgid "Creating flatpak workspace"
@@ -4852,36 +4366,6 @@ msgstr "Git sürüm denetimi kullanımda değil"
 msgid "Updating Git Submodules"
 msgstr "Git Altmodülleri Güncelleniyor"
 
-#: src/plugins/git/gbp-git-preferences-addin.c:151
-msgid "Author"
-msgstr "Yazar"
-
-#: src/plugins/git/gbp-git-preferences-addin.c:160
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
-msgid "Email"
-msgstr "E-posta"
-
-#: src/plugins/git/gbp-git-preferences-addin.c:166
-msgid "The Git configuration options above effect current project only."
-msgstr ""
-"Yukarıdaki Git yapılandırma seçenekleri yalnızca geçerli projeyi etkiler."
-
-#: src/plugins/git/gbp-git-preferences-addin.c:168
-msgid "The Git configuration options above effect global defaults."
-msgstr "Yukarıdaki Git yapılandırma seçenekleri, genel öntanımlıları etkiler."
-
-#: src/plugins/git/gbp-git-preferences-addin.c:188
-msgid "Authorship"
-msgstr "Yazarlık"
-
-#: src/plugins/git/gbp-git-preferences-addin.c:192
-msgid "Full Name"
-msgstr "Tam Ad"
-
-#: src/plugins/git/gbp-git-preferences-addin.c:193
-msgid "Email Address"
-msgstr "E-posta Adresi"
-
 #: src/plugins/git/gbp-git-submodule-stage.c:136
 msgid "Network is not available, skipping submodule update"
 msgstr "Ağ kullanılabilir değil, altmodül güncelleme atlanıyor"
@@ -4924,6 +4408,14 @@ msgstr "Depo klonlanıyor"
 #: src/plugins/git/gbp-git-vcs-cloner.c:256
 msgid "A valid Git URL is required"
 msgstr "Geçerli Git URL adresi gerekir"
+
+#: src/plugins/git/tweaks.ui:13
+msgid "Authorship"
+msgstr "Yazarlık"
+
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+msgid "Email"
+msgstr "E-posta"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:84
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -5087,66 +4579,69 @@ msgstr "Basit bir Makefile kullanarak yeni boş proje oluştur"
 msgid "Maven Run"
 msgstr "Maven Çalıştır"
 
-#. translators: you may need to swap left/right in your language, as this refers to "start" (not "end")
-#: src/plugins/menu-search/gtk/menus.ui:8
+#: src/plugins/menu-search/gtk/menus.ui:13
+msgid "Global Search"
+msgstr "Genel Arama"
+
+#: src/plugins/menu-search/gtk/menus.ui:14
+msgid "Display the global search"
+msgstr "Genel aramayı göster"
+
+#: src/plugins/menu-search/gtk/menus.ui:24
+msgid "Panels"
+msgstr "Paneller"
+
+#: src/plugins/menu-search/gtk/menus.ui:26
 msgid "Toggle Left Panel"
 msgstr "Sol Paneli Aç/Kapat"
 
-#: src/plugins/menu-search/gtk/menus.ui:9
-msgid "Toggle the left panel in our out of view"
+#: src/plugins/menu-search/gtk/menus.ui:27
+msgid "Toggle the left panel in or out of view"
 msgstr "Sol panel görünümünü aç/kapat"
 
-# Çevirmeyin: https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/1722
-#: src/plugins/menu-search/gtk/menus.ui:10
+# Simge adı, çevirmeyin
+#. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#. translators: you may need to swap left/right in your language, as this refers to "end" (not "start")
-#: src/plugins/menu-search/gtk/menus.ui:16
-msgid "Toggle Right Panel"
-msgstr "Sağ Paneli Aç/Kapat"
-
-#: src/plugins/menu-search/gtk/menus.ui:17
-msgid "Toggle the right panel in our out of view"
+#: src/plugins/menu-search/gtk/menus.ui:35
+msgid "Toggle the right panel in or out of view"
 msgstr "Sağ panel görünümünü aç/kapat"
 
-# Çevirmeyin: https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/1722
-#: src/plugins/menu-search/gtk/menus.ui:18
+# Simge adı, çevirmeyin
+#. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:23
+#: src/plugins/menu-search/gtk/menus.ui:41
 msgid "Toggle Bottom Panel"
 msgstr "Dip Paneli Aç/Kapat"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
-msgid "Toggle the bottom panel in our out of view"
+#: src/plugins/menu-search/gtk/menus.ui:42
+msgid "Toggle the bottom panel in or out of view"
 msgstr "Dip panel görünümünü aç/kapat"
 
-#: src/plugins/menu-search/gtk/menus.ui:30
+#: src/plugins/menu-search/gtk/menus.ui:55
 msgid "Switch to Dark Mode"
 msgstr "Karanlık Kipe Geç"
 
-#: src/plugins/menu-search/gtk/menus.ui:31
+#: src/plugins/menu-search/gtk/menus.ui:56
 msgid "Change style-scheme to dark variant"
 msgstr "Biçem şemasını koyu türevine değiştir"
 
-#: src/plugins/menu-search/gtk/menus.ui:36
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Light Mode"
 msgstr "Aydınlık Kipe Geç"
 
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to light variant"
 msgstr "Biçem şemasını açık türevine değiştir"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
-#: src/plugins/meson/gbp-meson-config-view-addin.c:57
 msgid "Meson"
 msgstr "Meson"
-
-#: src/plugins/meson/gbp-meson-config-view-addin.c:58
-msgid "Meson Options"
-msgstr "Meson Seçenekleri"
 
 #: src/plugins/meson/gbp-meson-introspection.c:584
 msgid "Load Meson Introspection"
@@ -5161,18 +4656,6 @@ msgstr "Projeyi kur"
 #, c-format
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:106
-msgid "Add toolchain"
-msgstr "Araç takımı ekle"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:113
-msgid "Define a new custom toolchain targeting a specific platform"
-msgstr "Belirli platformu hedef alan yeni bir özel araç takımı tanımla"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:204
-msgid "Toolchain"
-msgstr "Araç Takımı"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
 msgid "No Provided Tool"
@@ -5259,11 +4742,6 @@ msgstr "D"
 msgid "Add Tool"
 msgstr "Araç Ekle"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
-msgid "Delete"
-msgstr "Sil"
-
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
 msgid "Delete Toolchain"
 msgstr "Araç Takımını Sil"
@@ -5318,7 +4796,7 @@ msgstr "İletiler"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
-msgstr "Önerilen GNOME projeleri"
+msgstr "Önerilen GNOME Projeleri"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 msgid "Boxes"
@@ -5443,29 +4921,29 @@ msgstr "npm bağımlılıkları indiriliyor"
 msgid "_External Program…"
 msgstr "_Dış Program…"
 
-#: src/plugins/platformui/tweaks.ui:36
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
+msgid "Follow System"
+msgstr "Sistemi İzle"
+
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
+msgid "Light"
+msgstr "Aydınlık"
+
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
+msgid "Dark"
+msgstr "Karanlık"
+
+#: src/plugins/platformui/tweaks.ui:22
 msgid "Document Navigation"
 msgstr "Belgelerde Gezinme"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:31
 msgid "Tab Bar"
 msgstr "Sekme Çubuğu"
 
-#: src/plugins/platformui/tweaks.ui:45
+#: src/plugins/platformui/tweaks.ui:37
 msgid "Drop Down"
 msgstr "Açılır"
-
-#: src/plugins/platformui/tweaks.ui:67
-msgid "Allow Downloads when Metered"
-msgstr "Ölçülen Bağlantıda İndirmelere İzin Ver"
-
-#: src/plugins/platformui/tweaks.ui:68
-msgid ""
-"Allow the download of SDKs and dependencies when on metered internet "
-"connections"
-msgstr ""
-"Ölçülen internet bağlantılarında SDK'lerin ve bağımlılıkların indirilmesine "
-"izin ver"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
 #: src/plugins/podman/gbp-podman-runtime.c:632
@@ -5539,7 +5017,7 @@ msgid "Files will be copied in a moment"
 msgstr "Dosyalar birazdan kopyalanmış olacak"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
-#: src/plugins/project-tree/tweaks.ui:16
+#: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
 msgstr "Proje Ağacı"
 
@@ -5600,29 +5078,85 @@ msgstr "Proje Ağacında Göster"
 msgid "Reveal in Project _Tree"
 msgstr "Proje _Ağacında Göster"
 
-#: src/plugins/project-tree/tweaks.ui:20
+#: src/plugins/project-tree/tweaks.ui:14
 msgid "Display icons next to files within the project tree"
 msgstr "Proje ağacındaki dosyaların yanında simgeler göster"
 
-#: src/plugins/project-tree/tweaks.ui:27
+#: src/plugins/project-tree/tweaks.ui:26
 msgid "Show files which are typically ignored"
 msgstr "Genellikle yok sayılan dosyaları göster"
 
-#: src/plugins/project-tree/tweaks.ui:34
+#: src/plugins/project-tree/tweaks.ui:38
 msgid "Sort directories before files in the same directory"
 msgstr "Aynı dizinde, dizinleri dosyalardan önce sırala"
 
-#: src/plugins/projectui/tweaks.ui:23
+#: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
+msgid "No version control"
+msgstr "Sürüm denetimi yok"
+
+#: src/plugins/projectui/tweaks.ui:14
+msgid "Restore Previous Session"
+msgstr "Önceki Oturumu Geri Yükle"
+
+#: src/plugins/projectui/tweaks.ui:15
+msgid "Open previously opened files when loading a project"
+msgstr "Projeyi yüklerken daha önce açılmış dosyaları aç"
+
+#: src/plugins/projectui/tweaks.ui:28
 msgid "Project Creation"
 msgstr "Proje Oluşturma"
 
-#: src/plugins/projectui/tweaks.ui:27
+#: src/plugins/projectui/tweaks.ui:32
 msgid "Projects created with Builder will be placed within this directory"
 msgstr "Builder ile oluşturulan projeler bu dizine yerleştirilir"
 
-#: src/plugins/projectui/tweaks.ui:80
+#: src/plugins/projectui/tweaks.ui:48
+msgid "The default license when creating new projects"
+msgstr "Yeni projeler oluştururken kullanılacak öntanımlı lisans"
+
+#: src/plugins/projectui/tweaks.ui:93
 msgid "No License"
 msgstr "Lisans Yok"
+
+#: src/plugins/projectui/tweaks.ui:109
+msgid "Overview"
+msgstr "Genel Görünüm"
+
+#: src/plugins/projectui/tweaks.ui:115
+msgid "Project Identifier"
+msgstr "Proje Tanımlayıcı"
+
+#: src/plugins/projectui/tweaks.ui:123
+msgid ""
+"This identifier is used when referencing your project's settings, build "
+"directories, and cached information."
+msgstr ""
+"Bu tanımlayıcı; proje ayarlarına, inşa dizinlerine ve önbelleğe alınmış "
+"bilgilere atıf yapılırken kullanılır."
+
+#: src/plugins/projectui/tweaks.ui:132
+msgid "Build System"
+msgstr "İnşa Sistemi"
+
+#: src/plugins/projectui/tweaks.ui:140
+msgid "Source Directory"
+msgstr "Kaynak Dizin"
+
+#: src/plugins/projectui/tweaks.ui:160
+msgid "Current Configuration"
+msgstr "Geçerli Yapılandırma"
+
+#: src/plugins/projectui/tweaks.ui:161
+msgid ""
+"The configuration is used to setup build pipelines, configure your build "
+"system, and run your project."
+msgstr ""
+"İnşa boru hattını ayarlama, inşa sistemini yapılandırma ve projenizi "
+"çalıştırmada kullanılacak yapılandırma."
+
+#: src/plugins/projectui/tweaks.ui:228
+msgid "Provided By"
+msgstr "Sağlayıcı"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5638,22 +5172,6 @@ msgstr "Arm Öykünme"
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Bilgisayarım (%s) %s"
-
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:40
-msgid "Highlight Words Matching Selection"
-msgstr "Seçimle Eşleşen Sözcükleri Vurgula"
-
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:41
-msgid "Highlight all occurrences of words matching the current selection"
-msgstr "Geçerli seçimle eşleşen tüm sözcük varlıklarını vurgula"
-
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:47
-msgid "Minimum Length for Highlight"
-msgstr "Vurgu İçin Asgari Uzunluk"
-
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
-msgid "Highlight words matching at least this number of characters"
-msgstr "En az bu sayıda karakterle eşleşen sözcükleri vurgula"
 
 #: src/plugins/recent/gbp-recent-section.c:254
 msgid "Removed Files"
@@ -5678,59 +5196,68 @@ msgstr "Son Projeler"
 msgid "_Reformat tabs"
 msgstr "Sekmeleri _yeniden biçimlendir"
 
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:37
-#: src/plugins/rust-analyzer/tweaks.ui:17
+#: src/plugins/rust-analyzer/tweaks.ui:13
 msgid "Rust Analyzer"
 msgstr "Rust Analyzer"
 
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:42
-msgid "Cargo Check"
-msgstr "Cargo Denetimi"
-
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:43
-msgid "Run “cargo check” as the default cargo command"
-msgstr "Öntanımlı kargo komutu olarak “cargo check” çalıştır"
-
-# Hem Cargo hem de Clippy birer program adı
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:47
-msgid "Cargo Clippy"
-msgstr "Cargo Clippy"
-
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:48
-msgid "Run “cargo clippy” as the default cargo command"
-msgstr "Öntanımlı kargo komutu olarak “cargo clippy” çalıştır"
-
-#: src/plugins/rust-analyzer/tweaks.ui:20
+#: src/plugins/rust-analyzer/tweaks.ui:16
 msgid "Cargo"
 msgstr "Cargo"
 
-#: src/plugins/rust-analyzer/tweaks.ui:23
+#: src/plugins/rust-analyzer/tweaks.ui:19
 msgid "Cargo Command"
-msgstr "Komut Komutu"
+msgstr "Cargo Komutu"
 
-#: src/plugins/rust-analyzer/tweaks.ui:24
+#: src/plugins/rust-analyzer/tweaks.ui:20
 msgid "The default cargo command to run with rust-analyzer"
 msgstr "rust-analyzer ile çalıştırılacak öntanımlı cargo komutu"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
+#: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
+msgid "Update"
+msgstr "Güncelle"
+
+#: src/plugins/sdkui/gtk/menus.ui:6
+msgid "Manage SDKs…"
+msgstr "Yazılım Geliştirme Kitlerini Yönet…"
+
+#: src/plugins/sdkui/tweaks.ui:12
+msgid "Downloads"
+msgstr "İndirmeler"
+
+#: src/plugins/sdkui/tweaks.ui:15
+msgid "Download on Metered Connections"
+msgstr "Ölçülen Bağlantılarda İndir"
+
+#: src/plugins/sdkui/tweaks.ui:16
+msgid ""
+"Allow the download of SDKs and dependencies when on metered internet "
+"connections"
+msgstr ""
+"Ölçülen internet bağlantılarında SDK’lerin ve bağımlılıkların indirilmesine "
+"izin ver"
+
+#: src/plugins/sdkui/tweaks.ui:29
+msgid "Available SDKs"
+msgstr "Kullanılabilir SDK’ler"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 msgid "Untitled Command"
 msgstr "Başlıksız Komut"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:339
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 msgid "Set Shortcut"
 msgstr "Kısayol Belirle"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
 msgid "Select Working Directory"
 msgstr "Çalışma Dizini Seç"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
-#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:91
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Komut Oluştur"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:542
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
 msgstr "_Oluştur"
 
@@ -5758,21 +5285,35 @@ msgstr "Kabuk Komutu"
 msgid "You may use single or double quotes for parameters."
 msgstr "Parametreler için tek veya çift tırnak kullanabilirsiniz."
 
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
+msgid "Environment"
+msgstr "Ortam"
+
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
 msgid "Working Directory"
 msgstr "Çalışma Dizini"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
+"Komut, bu konumdan çalıştırılacaktır. Göreli yol tanımlamak için <tt>"
+"$BUILDDIR</tt>, <tt>$SRCDIR</tt> ya da <tt>$HOME</tt> kullanın."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+msgid "Use Subshell"
+msgstr "Alt Kabuk Kullan"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr "Programı, <tt>sh -c ''</tt> gibi alt kabuktan çalıştır"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "Yerellik"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
@@ -5780,74 +5321,44 @@ msgstr ""
 "Builder, komutunuzu ev sahibi sistemde veya inşa konteynerı gibi birçok "
 "konumdan çalıştırabilir."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:192
-msgid "Add _Variable"
-msgstr "_Değişken Ekle"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:198
-msgid "Add Variable"
-msgstr "Değişken Ekle"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:199
-msgid "_Add"
-msgstr "_Ekle"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:218
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
 msgstr "Komut _Sil"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:246
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Subprocess"
 msgstr "Alt süreç"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:247
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Komutu Builder alt süreci olarak çalıştırır."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:254
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
 msgstr "Komutu ev sahibi sistemde çalıştırır."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:261
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
 msgstr "Komutu inşa boru hattı içinde çalıştırır."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 msgid "As Target Application"
 msgstr "Hedef Uygulama Olarak"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:268
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
 msgstr "Komutu hedef uygulamaymış gibi çalıştırır."
 
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:144
-msgid "Project Commands"
-msgstr "Proje Komutları"
-
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:149
-msgid "Shared Commands"
-msgstr "Paylaşılan Komutlar"
-
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:159
-#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:92
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
 msgstr ""
 "Komutlar projelerinizi inşa etme, çalıştırma veya düzenlemede kullanılabilir"
 
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:180
-msgid "These commands may be run from this project only."
-msgstr "Bu komutlar yalnızca bu projeden çalıştırılabilir."
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:116
+msgid "These commands are specific to this project."
+msgstr "Bu komutlar bu projeye özeldir."
 
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:183
-msgid "These commands may be shared across any project in Builder."
-msgstr "Bu komutlar Builder’daki herhangi bir proje ile paylaşılabilir."
-
-#: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
-#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
-msgid "Untitled command"
-msgstr "Başlıksız komut"
-
-#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
 msgid "These commands are shared across all projects."
 msgstr "Bu komutlar tüm projelerde paylaşılır."
 
@@ -5875,6 +5386,10 @@ msgstr "Komut Ortamı"
 msgid "Command Locality"
 msgstr "Komut Yerelliği"
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr "Kabuk Kullan"
+
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 msgid "Run Commands"
 msgstr "Komutlar Çalıştır"
@@ -5883,6 +5398,17 @@ msgstr "Komutlar Çalıştır"
 msgid "A list of run-command ids to load for the application or project."
 msgstr ""
 "Uygulama veya proje için yüklenecek çalıştırma komutu kimliklerinin listesi."
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
+msgstr ""
+"İnşa araçları, uygulamalar veya kabuk komut betiklerini çalıştırmak için "
+"komutları kullanın ve bunları klavye kısayoluyla eşleyin. İnşa boru hattı, "
+"çalışma zamanı ortamı veya bilgisayarın işletim sistemi gibi türlü "
+"ortamlardan çalışabilirler."
 
 # Enchant 2 bir program adı.
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
@@ -5897,9 +5423,9 @@ msgstr "Dizine Ekle"
 msgid "Ignore"
 msgstr "Yok Say"
 
-#: src/plugins/spellcheck/gbp-spell-preferences-addin.c:43
-msgid "Automatically check spelling as you type"
-msgstr "Yazarken kendiliğinden yazım denetimi yap"
+#: src/plugins/spellcheck/editor-spell-menu.c:259
+msgid "Languages"
+msgstr "Diller"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -5916,7 +5442,7 @@ msgstr "Sayfada"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
-#: src/plugins/symbol-tree/gtk/menus.ui:5
+#: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Simge Seç…"
 
@@ -5924,7 +5450,7 @@ msgstr "Simge Seç…"
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Simge Seç (Ctrl+Shift+K)"
 
-#: src/plugins/symbol-tree/gtk/menus.ui:6
+#: src/plugins/symbol-tree/gtk/menus.ui:9
 msgid "Navigate to a symbol within the current page"
 msgstr "Geçerli sayfadaki simgeye git"
 
@@ -5953,7 +5479,7 @@ msgstr "Profilleyici ile Çalıştır"
 msgid "Run the project with profiler"
 msgstr "Projeyi profilleyici ile çalıştır"
 
-#: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:17
+#: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
 msgstr "Profilleyici"
 
@@ -5985,11 +5511,11 @@ msgstr "Görüntüleme Zamanlamaları"
 msgid "Counters"
 msgstr "Sayaçlar"
 
-#: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:23
+#: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr "İşlemci Kullanımı"
 
-#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:61
+#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
 msgid "Memory Usage"
 msgstr "Bellek Kullanımı"
 
@@ -6025,125 +5551,112 @@ msgstr "İşlemci Kısıtlamasına İzin Ver"
 msgid "Run with _Profiler"
 msgstr "_Profilleyici ile Çalıştır"
 
-#: src/plugins/sysprof/gtk/menus.ui:128
+#: src/plugins/sysprof/gtk/menus.ui:130
 msgid "Record Again…"
 msgstr "Yeniden Kaydet…"
 
-#: src/plugins/sysprof/tweaks.ui:20
-#, fuzzy
+#: src/plugins/sysprof/tweaks.ui:16
 msgid "Instruments"
-msgstr "Gereçler"
+msgstr "Araç Gereçler"
 
-#: src/plugins/sysprof/tweaks.ui:24
+#: src/plugins/sysprof/tweaks.ui:20
 msgid "Records CPU usage and CPU frequency statistics"
 msgstr "İşlemci kullanımını ve işlemci frekans istatistiklerini kaydeder"
 
-#: src/plugins/sysprof/tweaks.ui:30
+#: src/plugins/sysprof/tweaks.ui:31
 msgid "Sample Callstacks"
 msgstr "Örnek Çağrı Yığınları"
 
-#: src/plugins/sysprof/tweaks.ui:31
+#: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
 msgstr "Yığın izlerini düzenli aralıklarla kaydet ve çağrı grafiği oluştur"
 
-#: src/plugins/sysprof/tweaks.ui:37
+#: src/plugins/sysprof/tweaks.ui:43
 msgid "CPU Governor"
 msgstr "İşlemci Yöneticisi"
 
-#: src/plugins/sysprof/tweaks.ui:38
+#: src/plugins/sysprof/tweaks.ui:44
 msgid "Force performance mode while profiling"
 msgstr "Profillerken başarım kipine zorla"
 
-#: src/plugins/sysprof/tweaks.ui:43
+#: src/plugins/sysprof/tweaks.ui:53
 msgid "Don't Change Governor"
 msgstr "Yöneticiyi Değiştirme"
 
-#: src/plugins/sysprof/tweaks.ui:49
+#: src/plugins/sysprof/tweaks.ui:59
 msgid "Force Performance Mode"
 msgstr "Başarım Kipine Zorla"
 
-#: src/plugins/sysprof/tweaks.ui:62
+#: src/plugins/sysprof/tweaks.ui:72
 msgid "Simple memory statistics about the process such as total memory used"
 msgstr ""
 "İşlemle ilgili, kullanılan toplam bellek gibi basit bellek istatistikleri"
 
-#: src/plugins/sysprof/tweaks.ui:68
+#: src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Profiling"
 msgstr "Bellek Profilleme"
 
-#: src/plugins/sysprof/tweaks.ui:69
+#: src/plugins/sysprof/tweaks.ui:84
 msgid "Record stacktraces of memory allocations and releases"
 msgstr "Bellek ayırmaların ve sürümlerin yığın izlerini kaydet"
 
-#: src/plugins/sysprof/tweaks.ui:79
+#: src/plugins/sysprof/tweaks.ui:99
 msgid "Energy Usage"
 msgstr "Enerji Kullanımı"
 
-#: src/plugins/sysprof/tweaks.ui:80
+#: src/plugins/sysprof/tweaks.ui:100
 msgid "Record statistics about energy usage using RAPL"
 msgstr "RAPL kullanarak enerji kullanımıyla ilgili istatistikleri kaydet"
 
-#: src/plugins/sysprof/tweaks.ui:86
+#: src/plugins/sysprof/tweaks.ui:111
 msgid "Battery Usage"
 msgstr "Pil Kullanımı"
 
-#: src/plugins/sysprof/tweaks.ui:87 src/plugins/sysprof/tweaks.ui:105
+#: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about battery charge and discharge rates"
 msgstr "Pil şarjı ve şarj boşanma oranlarıyla ilgili istatistikleri kaydet"
 
-#: src/plugins/sysprof/tweaks.ui:97
+#: src/plugins/sysprof/tweaks.ui:127
 msgid "Network Usage"
 msgstr "Ağ Kullanımı"
 
-#: src/plugins/sysprof/tweaks.ui:98
+#: src/plugins/sysprof/tweaks.ui:128
 msgid "Record statistics about network usage"
 msgstr "Ağ kullanımıyla ilgili istatistikleri kaydet"
 
-#: src/plugins/sysprof/tweaks.ui:104
+#: src/plugins/sysprof/tweaks.ui:139
 msgid "Disk Usage"
 msgstr "Disk Kullanımı"
 
-#: src/plugins/sysprof/tweaks.ui:115
+#: src/plugins/sysprof/tweaks.ui:155
 msgid "GNOME Shell Performance"
 msgstr "GNOME Shell Performansı"
 
-#: src/plugins/sysprof/tweaks.ui:116
+#: src/plugins/sysprof/tweaks.ui:156
 msgid "Collect performance and timing information from GNOME Shell"
 msgstr "GNOME Shell’den başarım ve zamanlama bilgilerini topla"
 
-#: src/plugins/sysprof/tweaks.ui:124
+#: src/plugins/sysprof/tweaks.ui:169
 msgid "Integration"
 msgstr "Tümleşim"
 
-#: src/plugins/sysprof/tweaks.ui:127
+#: src/plugins/sysprof/tweaks.ui:172
 msgid "JavaScript"
 msgstr "JavaScript"
 
-#: src/plugins/sysprof/tweaks.ui:128
+#: src/plugins/sysprof/tweaks.ui:173
 msgid "Collect information from GJS-based applications"
 msgstr "GJS tabanlı uygulamalardan bilgi topla"
 
-#: src/plugins/sysprof/tweaks.ui:134
+#: src/plugins/sysprof/tweaks.ui:184
 msgid "Application Tracing"
 msgstr "Uygulama İzleme"
 
-#: src/plugins/sysprof/tweaks.ui:135
+#: src/plugins/sysprof/tweaks.ui:185
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
 msgstr "Uygulamaların özel olaylar sunması için TRACE_FD ortam değişkeni sağla"
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
-msgid "Add sysroot"
-msgstr "Sysroot ekle"
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:90
-msgid "Define a new sysroot target to build against a different target"
-msgstr "Başka mimariye doğru inşa için yeni sysroot hedefi tanımlayın"
-
-#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:138
-msgid "Sysroots"
-msgstr "Sysrootʼlar"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
@@ -6161,106 +5674,6 @@ msgstr "PKG_CONFIG_PATH tanımlamak için isteğe bağlı virgülle ayrılmış 
 #, c-format
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
-msgid "Scrollback"
-msgstr "Geri Kaydır"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:60
-msgctxt "Keywords"
-msgid "terminal font monospace"
-msgstr "uçbirim yazı tipi eşaralıklı"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:70
-msgid "Bold text in terminals"
-msgstr "Uçbirimlerde kalın metin"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:71
-msgid "If terminals are allowed to display bold text"
-msgstr "Eğer uçbirimler kalın metin gösterebiliyorsa"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:72
-msgctxt "Keywords"
-msgid "terminal allow bold"
-msgstr "uçbirim izin ver kalın bold"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:81
-msgid "Show hyperlinks"
-msgstr "Hiper bağları göster"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:82
-msgid ""
-"When enabled hyperlinks (OSC 8 escape sequences) are recognized and displayed"
-msgstr ""
-"Etkinleştirildiğinde hiper bağlar (OSC 8 kaçış dizileri) tanınır ve "
-"gösterilir"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:83
-msgctxt "Keywords"
-msgid "terminal show hyperlinks links urls"
-msgstr ""
-"uçbirim terminal göster gör hiper bağlar hiperbağlar bağlantılar url urller"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:93
-msgid "Scroll on output"
-msgstr "Çıktıda kaydır"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:94
-msgid ""
-"When enabled the terminal will scroll to the bottom when new output is "
-"displayed"
-msgstr ""
-"Etkinleştirildiğinde, yeni çıktı gösterilince uçbirimin en altına kaydırılır"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:95
-msgctxt "Keywords"
-msgid "scroll on output"
-msgstr "çıktıda kaydır"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:104
-msgid "Scroll on keystroke"
-msgstr "Tuş basımında kaydır"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:105
-msgid "When enabled the terminal will scroll to the bottom when typing"
-msgstr "Etkinleştirildiğinde, yazıldıkça uçbirimin en altına kaydırılır"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:106
-msgctxt "Keywords"
-msgid "scroll on keystroke"
-msgstr "tuş basımında kaydır"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:115
-#: src/plugins/terminal/tweaks.ui:69
-msgid "Limit Scrollback"
-msgstr "Geri Kaydırmayı Sınırla"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:116
-msgid ""
-"When enabled terminal scrollback will be limited to the number of lines "
-"specified below"
-msgstr ""
-"Etkinleştirildiğinde, uçbirim geriye kaydırması aşağıda belirtilen satır "
-"sayısına sınırlanacak"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:117
-msgctxt "Keywords"
-msgid "scrollback limit"
-msgstr "geri kaydırma sınırı"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:125
-msgid "Scrollback Lines"
-msgstr "Geri Kaydırma Satırları"
-
-# Normalde Minumum kelimesini kullanmamayı tercih ediyoruz
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:126
-msgid "The number of lines to keep available for scrolling"
-msgstr "Kaydırmak için tutulacak satır sayısı"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:127
-msgctxt "Keywords"
-msgid "scrollback lines"
-msgstr "geri kaydırma satırları"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
@@ -6283,83 +5696,85 @@ msgid "New _Terminal"
 msgstr "Ye_ni Uçbirim"
 
 #: src/plugins/terminal/gtk/menus.ui:11
-msgid "Open a new terminal"
-msgstr "Yeni uçbirim aç"
+msgid "Open a new terminal on the host operating system"
+msgstr "Ev sahibi işletim sisteminde yeni uçbirim aç"
 
 #: src/plugins/terminal/gtk/menus.ui:14
 msgid "New _Build Terminal"
 msgstr "Yeni _İnşa Uçbirimi"
 
 #: src/plugins/terminal/gtk/menus.ui:19
-msgid "Open a new terminal in build pipeline"
-msgstr "İnşa boru hattında yeni uçbirim aç"
+msgid "Open a new terminal in project's build pipeline"
+msgstr "Proje inşa boru hattında yeni uçbirim aç"
 
 #: src/plugins/terminal/gtk/menus.ui:22
 msgid "New _Runtime Terminal"
 msgstr "Yeni _Çalışma Zamanı Uçbirimi"
 
 #: src/plugins/terminal/gtk/menus.ui:27
-msgid "Open a new terminal in runtime environment"
-msgstr "Çalışma zamanı ortamında yeni uçbirim aç"
+msgid "Open a new terminal in project's runtime environment"
+msgstr "Proje çalışma zamanı ortamında yeni uçbirim aç"
 
 #: src/plugins/terminal/gtk/menus.ui:41
 msgid "Split"
 msgstr "Ayır"
 
-#: src/plugins/terminal/tweaks.ui:31
+#: src/plugins/terminal/tweaks.ui:14
+msgid "The font used within terminals"
+msgstr "Uçbirimlerde kullanılacak yazı tipi"
+
+#: src/plugins/terminal/tweaks.ui:29
 msgid "Allow Bold"
 msgstr "Kalına İzin Ver"
 
-#: src/plugins/terminal/tweaks.ui:32
+#: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
 msgstr "Kalın kaçış dizilerinin kullanımına izin verir"
 
-#: src/plugins/terminal/tweaks.ui:38
+#: src/plugins/terminal/tweaks.ui:41
 msgid "Allow Hyperlinks"
 msgstr "Hiper Bağlara İzin Ver"
 
-#: src/plugins/terminal/tweaks.ui:39
+#: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
 msgstr "Hiper bağ kaçış dizilerinin kullanımına izin verir"
 
-#: src/plugins/terminal/tweaks.ui:47
+#: src/plugins/terminal/tweaks.ui:55
 msgid "Scrolling"
 msgstr "Kaydırma"
 
-#: src/plugins/terminal/tweaks.ui:50
+#: src/plugins/terminal/tweaks.ui:58
 msgid "Scroll On Output"
 msgstr "Çıktıda Kaydır"
 
-#: src/plugins/terminal/tweaks.ui:51
+#: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr "Uçbirim çıktı metni içindeki uygulamalarda kendiliğinden kaydır"
 
-#: src/plugins/terminal/tweaks.ui:57
+#: src/plugins/terminal/tweaks.ui:70
 msgid "Scroll On Keyboard Input"
 msgstr "Klavye Girdisinde Kaydır"
 
-#: src/plugins/terminal/tweaks.ui:58
+#: src/plugins/terminal/tweaks.ui:71
 msgid "Automatically scroll when typing to insert text"
 msgstr "Metin eklemek için yazarken kendiliğinden kaydır"
 
-#: src/plugins/terminal/tweaks.ui:70
+#: src/plugins/terminal/tweaks.ui:87
+msgid "Limit Scrollback"
+msgstr "Geri Kaydırmayı Sınırla"
+
+#: src/plugins/terminal/tweaks.ui:88
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr "Uçbirim geri kaydırma için bellekte depolanan satır sayısını sınırla"
 
-#: src/plugins/terminal/tweaks.ui:76
+#: src/plugins/terminal/tweaks.ui:99
 msgid "Maximum Lines in Scrollback"
 msgstr "Geri Kaydırmadaki Azami Satır"
 
-#: src/plugins/terminal/tweaks.ui:77
+#: src/plugins/terminal/tweaks.ui:100
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr "Geri kaydırmayı sınırlarken geçmişte depolanacak azami satır sayısı"
-
-#: src/plugins/testui/gbp-testui-item.c:84
-#: src/plugins/testui/gbp-testui-panel.ui:4
-#: src/plugins/testui/gbp-testui-preferences-addin.c:37
-msgid "Unit Tests"
-msgstr "Birim Sınamaları"
 
 #: src/plugins/testui/gbp-testui-output-panel.c:147
 msgid "Unit Test Output"
@@ -6376,21 +5791,6 @@ msgstr "Sınamaları iptal et"
 #: src/plugins/testui/gbp-testui-output-panel.ui:59
 msgid "Save test output"
 msgstr "Sınama çıktısını kaydet"
-
-#: src/plugins/testui/gbp-testui-preferences-addin.c:51
-msgid "Run unit tests from within the build pipeline environment."
-msgstr "Birim sınamalarını inşa boru hattı ortamından çalıştır."
-
-#: src/plugins/testui/gbp-testui-preferences-addin.c:55
-msgid "As Application"
-msgstr "Uygulama Olarak"
-
-#: src/plugins/testui/gbp-testui-preferences-addin.c:56
-msgid ""
-"Run unit tests with access to display and other runtime environment features."
-msgstr ""
-"Ekrana ve diğer çalışma zamanı özelliklerine erişim ile birim sınamaları "
-"çalıştır."
 
 #. Translators: %s is replaced with the time in the current locale
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
@@ -6468,7 +5868,7 @@ msgstr "Sızıntı Algılayıcı ile çalıştır"
 msgid "Run the project with valgrind"
 msgstr "Projeyi Valgrind ile çalıştır"
 
-#: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:17
+#: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:13
 msgid "Leak Detector"
 msgstr "Sızıntı Algılayıcı"
 
@@ -6488,59 +5888,55 @@ msgstr "Özet"
 msgid "Full"
 msgstr "Tümü"
 
-#: src/plugins/valgrind/gtk/menus.ui:44
-msgid "Disabled"
-msgstr "Devre dışı"
-
-#: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:20
+#: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
 msgstr "Sızıntı Türleri"
 
-#: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:23
+#: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
 msgstr "Kesin"
 
-#: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:37
+#: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
 msgstr "Dolaylı"
 
-#: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:30
+#: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
 msgstr "Olası"
 
-#: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:44
+#: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
 msgstr "Erişilebilir"
 
-#: src/plugins/valgrind/tweaks.ui:24
+#: src/plugins/valgrind/tweaks.ui:20
 msgid "Include definite leaks in report summary"
 msgstr "Kesin sızıntıları rapor özetinde içer"
 
-#: src/plugins/valgrind/tweaks.ui:31
+#: src/plugins/valgrind/tweaks.ui:32
 msgid "Include possible leaks in report summary"
 msgstr "Olası sızıntıları rapor özetinde içer"
 
-#: src/plugins/valgrind/tweaks.ui:38
+#: src/plugins/valgrind/tweaks.ui:44
 msgid "Include indirect leaks in report summary"
 msgstr "Dolaylı sızıntıları rapor özetinde içer"
 
-#: src/plugins/valgrind/tweaks.ui:45
+#: src/plugins/valgrind/tweaks.ui:56
 msgid "Include reachable leaks in report summary"
 msgstr "Ulaşılabilir sızıntıları rapor özetinde içer"
 
-#: src/plugins/valgrind/tweaks.ui:55
+#: src/plugins/valgrind/tweaks.ui:71
 msgid "Track Origins"
 msgstr "Kökenleri İzle"
 
-#: src/plugins/valgrind/tweaks.ui:56
+#: src/plugins/valgrind/tweaks.ui:72
 msgid "Show origin of undefined values"
 msgstr "Tanımsız değerlerin kaynağını göster"
 
-#: src/plugins/valgrind/tweaks.ui:66
+#: src/plugins/valgrind/tweaks.ui:87
 msgid "Leak Check"
 msgstr "Sızıntı Denetimi"
 
-#: src/plugins/valgrind/tweaks.ui:67
+#: src/plugins/valgrind/tweaks.ui:88
 msgid "Search for memory leaks at exit"
 msgstr "Çıkışta bellek sızıntılarını ara"
 
@@ -6591,7 +5987,7 @@ msgstr "Durum"
 msgid "_Branches"
 msgstr "_Dallar"
 
-#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:88
+#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:93
 msgid "_Tags"
 msgstr "_Etiketler"
 
@@ -6603,17 +5999,34 @@ msgstr "Dala _geç"
 msgid "_Push to origin"
 msgstr "Başnoktaya _it"
 
-#: src/plugins/vim/gbp-vim-preferences-addin.c:38 src/plugins/vim/tweaks.ui:18
+#: src/plugins/vim/tweaks.ui:18
 msgid "Vim"
 msgstr "Vim"
-
-#: src/plugins/vim/gbp-vim-preferences-addin.c:39
-msgid "Emulate keyboard shortcuts from Vim"
-msgstr "Vim klavye kısayollarına öykün"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
 msgid "New _Browser Page"
 msgstr "Yeni _Tarayıcı Sayfası"
+
+#: src/plugins/web-browser/gtk/menus.ui:18
+#: src/plugins/web-browser/gtk/menus.ui:24
+msgid "Reload Page"
+msgstr "Sayfayı Yeniden Yükle"
+
+#: src/plugins/web-browser/gtk/menus.ui:19
+msgid "Reload the current page"
+msgstr "Geçerli sayfayı yeniden yükle"
+
+#: src/plugins/web-browser/gtk/menus.ui:25
+msgid "Reload the current page ignoring cache"
+msgstr "Önbelleği yok sayarak geçerli sayfayı yeniden yükle"
+
+#: src/plugins/web-browser/gtk/menus.ui:30
+msgid "Focus Location"
+msgstr "Konuma Odaklan"
+
+#: src/plugins/web-browser/gtk/menus.ui:31
+msgid "Focus the current page's location"
+msgstr "Geçerli sayfanın konumuna odaklan"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
