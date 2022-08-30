@@ -129,6 +129,7 @@ src/plugins/code-index/gbp-code-index-application-addin.c
 src/plugins/code-index/gbp-code-index-service.c
 src/plugins/code-index/ide-code-index-index.c
 src/plugins/codespell/ide-codespell-diagnostic-provider.c
+src/plugins/codeui/gbp-codeui-hover-provider.c
 src/plugins/color-picker/gb-color-picker-editor-addin.c
 src/plugins/color-picker/gb-color-picker-prefs.c
 src/plugins/color-picker/gb-color-picker-prefs-palette-row.c
