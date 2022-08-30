@@ -31,6 +31,7 @@
           <object class="GtkMenuButton" id="menu_button">
             <property name="icon-name">open-menu-symbolic</property>
             <property name="primary">true</property>
+            <property name="tooltip-text" translatable="yes">Open application menu (F10)</property>
           </object>
         </child>
         <child type="end">
