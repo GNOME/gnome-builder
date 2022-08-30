@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-08-29 09:01+0000\n"
-"PO-Revision-Date: 2022-08-29 18:48+0200\n"
+"PO-Revision-Date: 2022-08-30 16:02+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -54,6 +54,8 @@ msgid ""
 "You can rely on predictable releases of Builder with each new release of "
 "GNOME every six months."
 msgstr ""
+"Možete se osloniti na redovita izdanja Graditelja svakim novim izdanjem "
+"GNOMA, svakih šest mjeseci."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
 msgid "Features:"
@@ -61,106 +63,110 @@ msgstr "Značajke:"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:24
 msgid "Built in syntax highlighting for many languages"
-msgstr ""
+msgstr "Ugrađeno isticanje sintakse za mnoge jezike"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:25
 msgid "Side-by-side code editors"
-msgstr ""
+msgstr "Usporedni uređivači kôda"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
 msgid "Multi-monitor support"
-msgstr ""
+msgstr "Podrška za više monitora"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:27
 msgid "Code overview mini-map"
-msgstr ""
+msgstr "Panel pregleda kôda"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
 msgid "Integration with Git"
-msgstr ""
+msgstr "Git integracija"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
 msgid ""
 "Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
 "PHPize, and Waf"
 msgstr ""
+"Integracija s Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize i "
+"Waf"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
 msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
+"Clang temeljeno automatsko dovršavanje, semantičko isticanje i diajagnostika"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
 msgid "Python based auto-completion, semantic highlighting, and diagnostics"
 msgstr ""
+"Python temeljeno automatsko dovršavanje, semantičko isticanje i diajagnostika"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
 msgid "Vala based auto-completion and diagnostics"
-msgstr ""
+msgstr "Vala temeljeno automatsko dovršavanje i diajagnostika"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
 msgid "Auto indentation support for C, Python, Vala, and XML"
-msgstr ""
+msgstr "Automatsko uvlačenje za C, Python, Vala i XML"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
 msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
-msgstr ""
+msgstr "HTML, Markdown i reStructuredText, i Sphinx pregled u stvarnom vremenu"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
 msgid "Optional Vim, Emacs, and SublimeText style editing"
-msgstr ""
+msgstr "Neobavezni Vim, Emacs i SublimeText uređivači"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "An integrated software profiler for native applications"
-msgstr ""
+msgstr "Integrirani profiler softvera za izvorne aplikacije"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
 msgid "An integrated debugger for native applications"
-msgstr ""
+msgstr "Integrirani otklanjatelj grešaka za izvorne aplikacije"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
 msgid "Support for building with jhbuild and flatpak runtimes"
-msgstr ""
+msgstr "Podrška za izgradnju s jhbuild i flatpak radnim procesima"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
 msgid "Support for viewing TODOs found within your code base"
-msgstr ""
+msgstr "Podrška za pregled TODO datoteka pronađenih u vašoj bazi kôda"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
 msgid "Fast fuzzy text search across files and symbols"
-msgstr ""
+msgstr "Brza pretraga nejasnog teksta kroz datoteke i simbole"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:46
 msgid "Quickly access your projects"
-msgstr ""
+msgstr "Brzo pristupite svojim projektima"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
 msgid "Create new projects from a variety of templates"
-msgstr ""
+msgstr "Stvorite nove projekte iz raznih predložaka"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
 msgid "Integration with Git to clone your projects"
-msgstr ""
+msgstr "Git integracija kako bi mogli klonirati svoje projekte"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
 msgid "The source code editor"
-msgstr ""
+msgstr "Uređivač izvornog kôda"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
 msgid "Fast global fuzzy search"
-msgstr ""
+msgstr "Brza globalna pretraga nejasnog teksta"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
 msgid "Debug with the GNU debugger"
-msgstr ""
+msgstr "Otklanjanje grešaka s GNU otklanjateljem grešaka"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
 msgid "Use the minimap to see more of the file"
-msgstr ""
+msgstr "Mogućnost korištenja panela pregleda kako bi vidjeli više datoteka"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 #: src/plugins/buildui/tweaks.ui:217
 msgid "Build Parallelism"
-msgstr ""
+msgstr "Paralelizam izgradnje"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:7
 msgid ""
