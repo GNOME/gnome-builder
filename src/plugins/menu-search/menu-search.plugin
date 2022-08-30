@@ -6,4 +6,4 @@ Embedded=_gbp_menu_search_register_types
 Hidden=true
 Module=menu-search
 Name=Menu Search
-X-Search-Provider-Priority=-50
+X-Search-Provider-Priority=-200
