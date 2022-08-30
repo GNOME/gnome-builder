@@ -66,6 +66,11 @@
                 <lookup name="item">GtkListItem</lookup>
               </lookup>
             </binding>
+            <binding name="tooltip-text">
+              <lookup name="name" type="IdeVcsBranch">
+                <lookup name="item">GtkListItem</lookup>
+              </lookup>
+            </binding>
           </object>
         </child>
       </object>
