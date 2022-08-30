@@ -483,6 +483,41 @@ ide_tree_click_pressed_cb (IdeTree         *self,
   gtk_gesture_set_state (GTK_GESTURE (gesture),  GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
+static void
+show_context_menu_action (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *param)
+{
+  IdeTree *self = (IdeTree *)widget;
+  g_autoptr(GtkTreePath) path = NULL;
+  IdeTreeModel *model;
+  IdeTreeNode *node;
+  GtkAllocation alloc;
+  GdkRectangle cell_area;
+
+  g_assert (IDE_IS_TREE (self));
+
+  if (!(model = ide_tree_get_model (self)))
+    return;
+
+  if (!gtk_widget_has_focus (GTK_WIDGET (self)))
+    gtk_widget_grab_focus (GTK_WIDGET (self));
+
+  if (!(node = ide_tree_get_selected_node (self)))
+    return;
+
+  if (!(path = ide_tree_node_get_path (node)))
+    return;
+
+  gtk_widget_get_allocation (GTK_WIDGET (self), &alloc);
+  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (self),
+                               path,
+                               NULL,
+                               &cell_area);
+
+  ide_tree_popup (self, node, alloc.x + alloc.width, cell_area.y + (cell_area.height/2));
+}
+
 static gboolean
 ide_tree_query_tooltip (GtkWidget  *widget,
                         gint        x,
@@ -562,6 +597,10 @@ ide_tree_class_init (IdeTreeClass *klass)
   tree_view_class->row_activated = ide_tree_row_activated;
   tree_view_class->row_expanded = ide_tree_row_expanded;
   tree_view_class->row_collapsed = ide_tree_row_collapsed;
+
+  gtk_widget_class_install_action (widget_class, "tree.popup-context-menu", NULL, show_context_menu_action);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_F10, GDK_SHIFT_MASK, "tree.popup-context-menu", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_Menu, 0, "tree.popup-context-menu", NULL);
 }
 
 static void
