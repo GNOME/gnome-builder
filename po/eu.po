@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-16 00:31+0000\n"
-"PO-Revision-Date: 2022-08-16 10:00+0100\n"
+"POT-Creation-Date: 2022-08-30 00:29+0000\n"
+"PO-Revision-Date: 2022-08-30 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -19,9 +19,8 @@ msgstr "Project-Id-Version: gnome-builder master\n"
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
-#: src/libide/gui/ide-application-actions.c:206
-#: src/libide/gui/ide-preferences-builtin.c:162
-#: src/libide/gui/ide-preferences-builtin.c:760 src/main.c:242
+#: src/libide/gui/ide-application-actions.c:114 src/main.c:242
+#: src/plugins/editorui/tweaks.ui:381
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Builder"
@@ -31,7 +30,7 @@ msgid "An IDE for GNOME"
 msgstr "IDE bat GNOMErako"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
-#: src/libide/gui/ide-application-actions.c:207
+#: src/libide/gui/ide-application-actions.c:115
 msgid "Christian Hergert, et al."
 msgstr "Christian Hergert, et al."
 
@@ -152,6 +151,7 @@ msgid "Use the minimap to see more of the file"
 msgstr "Erabili minimapa fitxategiko gehiago ikusteko"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
+#: src/plugins/buildui/tweaks.ui:217
 msgid "Build Parallelism"
 msgstr "Eraikitze-paralelismoa"
 
@@ -162,7 +162,6 @@ msgid ""
 msgstr "Eraikitzeak gauzatzean erabiliko den langile kopurua. Balio lehenetsi zentzuduna -1 da, PUZ kopuruaren baioa 0 da."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
-#: src/libide/gui/ide-preferences-builtin.c:431
 msgid "Clear build logs"
 msgstr "Garbitu eraikuntza-egunkariak"
 
@@ -292,9 +291,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Gaituta badago, editoreak lerro-zenbaki erlatiboak erakutsiko ditu."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/libide/gui/ide-preferences-builtin.c:166
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:115
-#: src/plugins/editorui/tweaks.ui:159
+#: src/plugins/editorui/tweaks.ui:394
 msgid "Smart Backspace"
 msgstr "Atzera-tekla adimentsua"
 
@@ -304,119 +301,114 @@ msgid ""
 "indentation size."
 msgstr "Atzera-teklak zuriune gehigarriak kenduko ditu, kodea koskaren tamainarekin lerrokatuta mantentzeko."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:59
-#: src/libide/gui/ide-preferences-builtin.c:165
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:110
-msgid "Smart Home and End"
-msgstr "Hasiera eta amaiera adimetsua"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: src/plugins/editorui/tweaks.ui:406
+msgid "Smart Home/End"
+msgstr "Hasiera/Amaiera azkarra"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:60
-msgid "Whether or not Home moves to first non-space character."
-msgstr "Hasiera zuriunerik gabeko lehen karakterera mugituko den ala ez"
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+msgid "Modifies the behavior of Home/End keys."
+msgstr "Hasiera/Amaiera teklek portaera aldatzen du."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:64
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
 msgstr "Erakutsi sareta-marrak"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
 msgstr "Gaituta badago, editoreak dokumentuko sareta-marrak erakutsiko ditu."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:84
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "Overview Map Policy"
 msgstr "Ikuspegi orokorraren maparen politika"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:85
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
 msgid "When the overview map should be displayed."
 msgstr "Ikuspegi orokorraren mapa noiz bistaratu behar den."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:89
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 msgid "Draw Spaces"
 msgstr "Marraztu zuriuneak"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:90
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
 msgstr "Editorean marraztuko diren zuriune motak."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:99
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
 msgstr "Egokitu testua"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The way to wrap a long line of text for a better visibility."
 msgstr "Testu-lerro luze bat egokitzeko modua, hobeto irakurria izan dadin."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:104
-#: src/libide/gui/ide-preferences-builtin.c:207
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "Autosave Enabled"
 msgstr "Gordetze automatikoa gaituta"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:105
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
 msgid "Enable or disable autosave feature."
 msgstr "Gaitu edo desgaitu gordetze automatikoa."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:110
-#: src/libide/gui/ide-preferences-builtin.c:208
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
 msgid "Autosave Frequency"
 msgstr "Gordetze automatikoaren maiztasuna"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:111
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
 msgid "The number of seconds after modification before auto saving."
 msgstr "Aldaketaren ondoren igaroko den segundo kopurua automatikoki gorde baino lehen."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:116
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
 msgid "Completion Row Count"
 msgstr "Osatze-errenkaden kopurua"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:117
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
 msgid "The number of completion rows to display to the user."
 msgstr "Erabiltzaileari erakutsiko zaion osatze-errenkaden kopurua."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:122
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:80
-#: src/plugins/editorui/tweaks.ui:58
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
 msgstr "Lerro-altuera"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:123
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
 msgid "The line height to use for the selected font."
 msgstr "Hautatutako letra-tiporako erabiliko den lerro-altuera."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:127
-#: src/libide/gui/ide-preferences-builtin.c:229
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "Interactive Completion"
 msgstr "Osatze dinamikoa"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:128
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
 msgid ""
 "If enabled, Builder will automatically display completion proposals as you "
 "type."
 msgstr "Gaituta badago, osatze-proposamenak automatikoki bistaratuko dira idazten ari zaren heinean."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:133
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "Minimum characters for matching selection."
 msgstr "Hautapenak bat egiteko behar den gutxieneko karaktere kopurua."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:134
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
 msgid "Specify the minimum number of characters for selection matching."
 msgstr "Zehaztu gutxieneko karaktere kopuru bat hautapenak bat egiteko."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:138
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
 msgid "Enable Snippets"
 msgstr "Gaitu kode-zatiak"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:139
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr "Onartu editoreko kode-zatiak hedatzea, kode-zatiaren abiarazlearen ondoren tabulazioa sakatuz."
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:143
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:100
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Select First Completion"
 msgstr "Hautatu lehen osatzea"
 
-#: data/gsettings/org.gnome.builder.editor.gschema.xml:144
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
 msgstr "Automatikoki hautatu osatze automatikoko lehen sarrera."
 
@@ -470,7 +462,6 @@ msgid "\"Projects\""
 msgstr "\"Proiektuak\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:28
-#: src/libide/gui/ide-preferences-builtin.c:448
 msgid "Projects directory"
 msgstr "Proiektuen direktorioa"
 
@@ -487,30 +478,22 @@ msgid "Restore previously opened files when loading a project."
 msgstr "Proiektua kargatzen denean, leheneratu lehenago ireki diren fitxategiak."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:38
-msgid "Show Open Files"
-msgstr "Erakutsi fitxategi irekiak"
-
-#: data/gsettings/org.gnome.builder.gschema.xml:39
-msgid "Display the open files list in the project sidebar."
-msgstr "Bistaratu fitxategi irekien zerrenda proiektuaren alboko barran."
-
-#: data/gsettings/org.gnome.builder.gschema.xml:43
 msgid "Clear build caches at startup"
 msgstr "Garbitu eraikuntzen cacheak abioan"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:44
+#: data/gsettings/org.gnome.builder.gschema.xml:39
 msgid "If enabled, Builder will clear build caches upon startup."
 msgstr "Gaituta badago, Builder aplikazioak eraikuntzen cacheak garbituko ditu abioan."
 
-#: data/gsettings/org.gnome.builder.gschema.xml:55
+#: data/gsettings/org.gnome.builder.gschema.xml:50
 msgid "The interface style to change pages"
 msgstr "Orriak aldatzeko interfaze-estiloa"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:69
+#: data/gsettings/org.gnome.builder.gschema.xml:64
 msgid "Default License"
 msgstr "Lizentzia lehenetsia"
 
-#: data/gsettings/org.gnome.builder.gschema.xml:70
+#: data/gsettings/org.gnome.builder.gschema.xml:65
 msgid "The default license to use for new projects"
 msgstr "Proiektu berrietan erabiliko den lizentzia lehenetsia"
 
@@ -569,7 +552,18 @@ msgstr "Proba-unitatearen kokapena"
 msgid "What environment to use when running unit tests"
 msgstr "Zein ingurune erabiliko den proba-unitateak exekutatzean"
 
+#: data/gsettings/org.gnome.builder.project.gschema.xml:50
+#: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
+msgid "Verbose Logging"
+msgstr "Egunkari xehea"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:51
+msgid ""
+"If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgstr "G_MESSAGES_DEBUG=all erabili behar den ala ez helburuko aplikazioa exekutatean"
+
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/tweaks.ui:13
 msgid "Show Icons"
 msgstr "Erakutsi ikonoak"
 
@@ -578,6 +572,7 @@ msgid "This setting is deprecated and no longer in use."
 msgstr "Ezarpen hau zaharkituta dago eta ez da jadanik erabiltzen."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/tweaks.ui:25
 msgid "Show Ignored Files"
 msgstr "Erakutsi ez ikusitako fitxategiak"
 
@@ -587,6 +582,7 @@ msgid ""
 msgstr "Gaituta badago, proiektuaren zuhaitzak VCSak ez ikusi dituen fitxategiak bistaratuko ditu."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/tweaks.ui:37
 msgid "Sort Directories First"
 msgstr "Ordenatu direktorioak lehenengo"
 
@@ -596,8 +592,8 @@ msgid ""
 msgstr "Gaituta badago, proiektuaren zuhaitzean direktorioak fitxategi arruntak baino lehenago agertuko dira."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
+#: src/plugins/editorui/tweaks.ui:263
 #: src/plugins/spellcheck/editor-spell-menu.c:250
-#: src/plugins/spellcheck/gbp-spell-preferences-addin.c:42
 msgid "Check Spelling"
 msgstr "Egiaztatu ortografia"
 
@@ -678,6 +674,7 @@ msgstr "Izengabea"
 #: src/libide/core/ide-transfer.c:547
 #: src/libide/greeter/ide-greeter-workspace.c:545
 #: src/libide/greeter/ide-greeter-workspace.c:682
+#: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1459
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
@@ -692,46 +689,93 @@ msgstr "_Utzi"
 msgid "A suitable debugger could not be found."
 msgstr "Ez da araztaile egokirik aurkitu."
 
-#: src/libide/editor/gtk/menus.ui:16 src/libide/gui/ide-frame.ui:104
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
 #: src/libide/gui/ide-workbench.c:1455
 msgid "Open File…"
 msgstr "Ireki fitxategia…"
 
-#: src/libide/editor/gtk/menus.ui:20
+#: src/libide/editor/gtk/menus.ui:22
 msgid "Open a file in the workspace"
 msgstr "Ireki fitxategi bat laneko arean"
 
-#: src/libide/editor/gtk/menus.ui:27 src/libide/greeter/gtk/menus.ui:27
-#: src/libide/gui/gtk/menus.ui:24 src/libide/gui/ide-preferences-window.c:730
-#: src/libide/gui/ide-preferences-window.c:894
-#: src/libide/tweaks/ide-tweaks-window.ui:4
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
+#: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
 msgid "Preferences"
 msgstr "Hobespenak"
 
-#: src/libide/editor/gtk/menus.ui:33 src/libide/greeter/gtk/menus.ui:33
-#: src/libide/gui/gtk/menus.ui:32 src/libide/gui/ide-preferences-builtin.c:693
-#: src/libide/gui/ide-preferences-builtin.c:700 src/libide/gui/tweaks.ui:21
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
+#: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Keyboard Shortcuts"
 msgstr "Laster-teklak"
 
-#: src/libide/editor/gtk/menus.ui:39 src/libide/greeter/gtk/menus.ui:39
-#: src/libide/gui/gtk/menus.ui:40 src/libide/tweaks/ide-tweaks-window.ui:143
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:41
+#: src/libide/gui/gtk/menus.ui:39 src/libide/gui/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:46 src/libide/gui/gtk/menus.ui:53
+#: src/libide/tweaks/ide-tweaks-window.ui:143
 msgid "Help"
 msgstr "Laguntza"
 
-#: src/libide/editor/gtk/menus.ui:45 src/libide/greeter/gtk/menus.ui:45
-#: src/libide/gui/gtk/menus.ui:46
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
+#: src/libide/gui/gtk/menus.ui:50
 msgid "About Builder"
 msgstr "Builder aplikazioari buruz"
 
-#: src/libide/editor/gtk/menus.ui:53 src/libide/gui/gtk/menus.ui:54
+#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:61
 msgid "_Quit"
 msgstr "I_rten"
 
-#: src/libide/editor/gtk/menus.ui:60
+#: src/libide/editor/gtk/menus.ui:66
 msgid "Document"
 msgstr "Dokumentua"
+
+#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
+#: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
+#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:57
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:69
+#: src/libide/gui/gtk/menus.ui:73 src/libide/gui/gtk/menus.ui:77
+#: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
+#: src/plugins/menu-search/gtk/menus.ui:10
+#: src/plugins/menu-search/gtk/menus.ui:23
+#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/web-browser/gtk/menus.ui:15
+msgid "Application"
+msgstr "Aplikazioa"
+
+#: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+msgid "Pages"
+msgstr "Orriak"
+
+#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
+#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:23
+#: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
+#: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
+#: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
+#: src/libide/sourceview/gtk/menus.ui:124
+#: src/libide/sourceview/gtk/menus.ui:130
+#: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/symbol-tree/gtk/menus.ui:5
+msgid "Text Editor"
+msgstr "Testu-editorea"
+
+#: src/libide/editor/gtk/menus.ui:77
+msgid "Search & Replace"
+msgstr "Bilatu eta ordeztu"
+
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:70
+#: src/libide/gui/gtk/menus.ui:74 src/plugins/editorui/gtk/menus.ui:154
+msgid "Documents"
+msgstr "Dokumentuak"
+
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
+#: src/libide/sourceview/gtk/menus.ui:110
+msgid "Selection"
+msgstr "Hautapena"
+
+#: src/libide/editor/gtk/menus.ui:89
+msgid "Printing"
+msgstr "Inprimatzea"
 
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
@@ -762,18 +806,19 @@ msgstr "Gorde fitxategia"
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
-#: src/plugins/editorui/gtk/menus.ui:154 src/plugins/sysprof/gtk/menus.ui:121
+#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "Gorde"
 
 #: src/libide/editor/ide-editor-page.c:874
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
+#: src/libide/tweaks/ide-tweaks-directory.c:140
 #: src/plugins/color-picker/gb-color-picker-prefs.c:97
 #: src/plugins/color-picker/gb-color-picker-prefs.c:213
 #: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:479
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
 msgid "Cancel"
@@ -989,28 +1034,34 @@ msgstr "Eraikuntza-direktorioak kentzen…"
 msgid "Cannot build transfer while on metered connection"
 msgstr "Ezin da eraiki transferentzia neurtutako konexio batean"
 
-#: src/libide/foundry/ide-run-command.c:220
+#: src/libide/foundry/ide-run-command.c:177
+#: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
+#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
+msgid "Untitled command"
+msgstr "Izenik gabeko komandoa"
+
+#: src/libide/foundry/ide-run-command.c:237
 msgid "Unit Test"
 msgstr "Proba-unitatea"
 
-#: src/libide/foundry/ide-run-manager.c:535
+#: src/libide/foundry/ide-run-manager.c:505
 msgid "Cannot run target, another target is running"
 msgstr "Ezin da helburua exekutatu, beste helburu bat exekutatzen ari da"
 
 #. translators: %s is replaced with the name of the users run command
-#: src/libide/foundry/ide-run-manager.c:961
+#: src/libide/foundry/ide-run-manager.c:929
 #, c-format
 msgid "Running %s…"
 msgstr "%s exekutatzen…"
 
-#: src/libide/foundry/ide-run-manager.c:1028
+#: src/libide/foundry/ide-run-manager.c:996
 msgid "Deploying to device…"
 msgstr "Gailuan instalatzen…"
 
-#: src/libide/foundry/ide-runtime.c:403
+#: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:253
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
 msgstr "Ostalari-sistema"
 
@@ -1018,26 +1069,26 @@ msgstr "Ostalari-sistema"
 msgid "Default (Host operating system)"
 msgstr "Lehenetsia (ostalari-sistema eragilea)"
 
-#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:61
-#: src/libide/greeter/gtk/menus.ui:80
+#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:63
+#: src/libide/greeter/gtk/menus.ui:82
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
 msgstr "_Klonatu biltegia…"
 
-#: src/libide/greeter/gtk/menus.ui:20 src/libide/terminal/gtk/menus.ui:17
-#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:134
+#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
+#: src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "Itxi"
 
-#: src/libide/greeter/gtk/menus.ui:54 src/libide/greeter/gtk/menus.ui:74
+#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:76
 msgid "Open a _Project…"
 msgstr "Ireki _proiektu bat…"
 
-#: src/libide/greeter/gtk/menus.ui:57
+#: src/libide/greeter/gtk/menus.ui:59
 msgid "Open a new or existing project"
 msgstr "Ireki proiektu berria edo lehendik dagoena"
 
-#: src/libide/greeter/gtk/menus.ui:64
+#: src/libide/greeter/gtk/menus.ui:66
 msgid "Create a new project by cloning a repository"
 msgstr "SOrtu proiektu berria biltegi bat klonatuz"
 
@@ -1045,13 +1096,12 @@ msgstr "SOrtu proiektu berria biltegi bat klonatuz"
 msgid "Select a _Folder…"
 msgstr "Hautatu ka_rpeta bat…"
 
-#: src/libide/greeter/ide-greeter-row.c:251
+#: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
 msgid "Directory"
 msgstr "Direktorioa"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
 #: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
-#: src/libide/gui/ide-workbench.c:2778
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1100,24 +1150,28 @@ msgstr "Proiektu mota guztiak"
 msgid "Go back"
 msgstr "Joan atzera"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:57
+#: src/libide/greeter/ide-greeter-workspace.ui:37
+msgid "Toggle selection mode"
+msgstr "Txandakatu hautapen modua"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:51
 msgctxt "title"
 msgid "Open a Project"
 msgstr "Ireki proiektua"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:81
+#: src/libide/greeter/ide-greeter-workspace.ui:75
 msgid "Search all Builder projects…"
 msgstr "Bilatu Builder proiektu guztiak…"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:103
+#: src/libide/greeter/ide-greeter-workspace.ui:97
 msgid "No Projects Found"
 msgstr "Ez da proiekturik aurkitu"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:136
+#: src/libide/greeter/ide-greeter-workspace.ui:130
 msgid "_Remove Projects"
 msgstr "_Kendu proiektuak"
 
-#: src/libide/greeter/ide-greeter-workspace.ui:147
+#: src/libide/greeter/ide-greeter-workspace.ui:141
 msgid "Remove Projects and Sources…"
 msgstr "Kendu proiektuak eta iturburuak…"
 
@@ -1144,8 +1198,9 @@ msgid "Open"
 msgstr "Ireki"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:105
+#: src/libide/tweaks/ide-tweaks-directory.c:141
 #: src/plugins/create-project/gbp-create-project-widget.c:222
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:478
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
 msgid "Select"
 msgstr "Hautatu"
@@ -1194,6 +1249,11 @@ msgid_plural "About %u years ago"
 msgstr[0] "Duela urte %u inguru"
 msgstr[1] "Duela %u urte inguru"
 
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:79
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+msgid "_Install"
+msgstr "_Instalatu"
+
 #. translators: the first %u is replaced with the current position, the second with the number of search results
 #: src/libide/gtk/ide-search-entry.c:199
 #, c-format
@@ -1201,7 +1261,7 @@ msgid "%u of %u"
 msgstr "%u / %u"
 
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
-#: src/libide/gui/ide-preferences-builtin.c:694
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
 msgstr "Bilatu"
 
@@ -1223,27 +1283,38 @@ msgstr "Sakatu Esc tekla bertan behera uzteko edo atzera-tekla desgaitzeko."
 msgid "Close Project"
 msgstr "Itxi proiektua"
 
-#: src/libide/gui/gtk/menus.ui:25
+#: src/libide/gui/gtk/menus.ui:27
 msgid "Change application preferences"
 msgstr "Aldatu aplikazioaren hobespenak"
 
-#: src/libide/gui/gtk/menus.ui:33
+#: src/libide/gui/gtk/menus.ui:35
 msgid "Find keyboard shortcuts"
 msgstr "Aurkitu lasterbideak"
 
-#: src/libide/gui/gtk/menus.ui:48
+#: src/libide/gui/gtk/menus.ui:52
 msgid "Show information about Builder"
 msgstr "Erakutsi Builder aplikazioari buruzko informazioa"
 
-#: src/libide/gui/ide-application-actions.c:145
-msgid "Builder — Preferences"
-msgstr "Builder — Hobespenak"
+#: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
+msgid "Web Browsing"
+msgstr "Web arakatzea"
 
-#: src/libide/gui/ide-application-actions.c:214
+#: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
+#: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gtk/menus.ui:33
+msgid "Terminal"
+msgstr "Terminala"
+
+#: src/libide/gui/gtk/menus.ui:82
+msgid "New Terminals"
+msgstr "Terminal berriak"
+
+#: src/libide/gui/ide-application-actions.c:122
 msgid "translator-credits"
 msgstr "translator-credits"
 
-#: src/libide/gui/ide-application-actions.c:221
+#: src/libide/gui/ide-application-actions.c:129
 msgid "Funded By"
 msgstr "Diruz lagundu dutenak"
 
@@ -1321,792 +1392,22 @@ msgstr "Ctrl+Shift+T"
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Ezin da HTMLa kargatu. WebKit euskarria falta da."
 
-#: src/libide/gui/ide-preferences-builtin.c:117
-#: src/libide/gui/ide-preferences-builtin.c:648
-#: src/libide/gui/ide-preferences-builtin.c:671 src/libide/gui/tweaks.ui:9
-#: src/plugins/buildui/gtk/menus.ui:141
-#: src/plugins/buildui/gtk/preferences.ui:25
-#: src/plugins/buildui/gtk/preferences.ui:32
-msgid "Appearance"
-msgstr "Itxura"
-
-#: src/libide/gui/ide-preferences-builtin.c:119
-#: src/plugins/buildui/gtk/preferences.ui:36
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:40
-msgid "Style"
-msgstr "Estiloa"
-
-#: src/libide/gui/ide-preferences-builtin.c:120
-msgid "System"
-msgstr "Sistema"
-
-#: src/libide/gui/ide-preferences-builtin.c:120
-msgid "follow"
-msgstr "jarraitu"
-
-#: src/libide/gui/ide-preferences-builtin.c:121
-#: src/libide/gui/ide-preferences-builtin.c:593
-#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
-msgid "Light"
-msgstr "Argia"
-
-#: src/libide/gui/ide-preferences-builtin.c:122
-#: src/libide/gui/ide-preferences-builtin.c:594
-#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
-msgid "Dark"
-msgstr "Iluna"
-
-#: src/libide/gui/ide-preferences-builtin.c:124
-#: src/libide/gui/ide-preferences-builtin.c:128
-#: src/libide/gui/ide-preferences-builtin.c:172
-msgid "Editor"
-msgstr "Editorea"
-
-#: src/libide/gui/ide-preferences-builtin.c:125
-msgid "Grid Pattern"
-msgstr "Sareta-eredua"
-
-#: src/libide/gui/ide-preferences-builtin.c:125
-#: src/plugins/buildui/gtk/preferences.ui:81
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:66
-msgid "Display a grid pattern underneath source code"
-msgstr "Erakutsi sareta-eredu bat iturburu-kodearen azpian"
-
-#: src/libide/gui/ide-preferences-builtin.c:127
-#: src/plugins/editorui/tweaks.ui:50
-msgid "Font"
-msgstr "Letra-tipoa"
-
-#: src/libide/gui/ide-preferences-builtin.c:128
-msgctxt "Keywords"
-msgid "editor font monospace"
-msgstr "editorearen tarte bakarreko letra-tipoa"
-
-#: src/libide/gui/ide-preferences-builtin.c:129
-msgid "Line Spacing"
-msgstr "Lerroartea"
-
-#: src/libide/gui/ide-preferences-builtin.c:129
-msgid "Number of pixels above and below editor lines"
-msgstr "Pixel kopurua editore-lerroen gainean eta azpian"
-
-#: src/libide/gui/ide-preferences-builtin.c:129
-msgctxt "Keywords"
-msgid "editor line spacing font monospace"
-msgstr "editorearen tarte bakarra letra-tipoa lerroen tartean"
-
-#: src/libide/gui/ide-preferences-builtin.c:134
-msgid "Color Scheme"
-msgstr "Kolore-eskema"
-
-#: src/libide/gui/ide-preferences-builtin.c:159
-#: src/plugins/editorui/tweaks.ui:156
-msgid "Keyboard"
-msgstr "Teklatua"
-
-#: src/libide/gui/ide-preferences-builtin.c:161
-msgid "Emulation"
-msgstr "Emulazioa"
-
-#: src/libide/gui/ide-preferences-builtin.c:162
-msgid "Default keybinding mode which mimics gedit"
-msgstr "Gedit imitatzen duen laster-teklen modu lehenetsia"
-
-#: src/libide/gui/ide-preferences-builtin.c:164
-msgid "Movement"
-msgstr "Mugimendua"
-
-#: src/libide/gui/ide-preferences-builtin.c:165
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:111
-msgid "Home moves to first non-whitespace character"
-msgstr "Hasiera zuriunerik gabeko lehen karakterera mugitzen da"
-
-#: src/libide/gui/ide-preferences-builtin.c:166
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:116
-#: src/plugins/editorui/tweaks.ui:160
-msgid ""
-"Backspace will remove extra space to keep you aligned with your indentation"
-msgstr "Atzera-teklak espazio gehigarria kenduko du, kodea koskaren tamainarekin lerrokatuta mantentzeko."
-
-#. Add our pages
-#: src/libide/gui/ide-preferences-builtin.c:174
-#: src/libide/gui/ide-preferences-builtin.c:227
-#: src/libide/gui/ide-preferences-builtin.c:350
-#: src/libide/gui/ide-preferences-builtin.c:422
-#: src/libide/gui/ide-preferences-builtin.c:707
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:423
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:686
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:52
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:52
-msgid "General"
-msgstr "Orokorra"
-
-#: src/libide/gui/ide-preferences-builtin.c:175
-msgid "Display list of open files"
-msgstr "Bistaratu fitxategi irekien zerrenda"
-
-#: src/libide/gui/ide-preferences-builtin.c:175
-msgid "Display the list of all open files in the project sidebar"
-msgstr "Bistaratu irekita dauden fitxategi guztien zerrenda proiektuaren alboko barran"
-
-#: src/libide/gui/ide-preferences-builtin.c:176
-msgid "Reformat code on save"
-msgstr "Berregin kodearen formatua gordetzean"
-
-#: src/libide/gui/ide-preferences-builtin.c:176
-msgid "Reformat current file on save"
-msgstr "Berregin uneko fitxategiaren formatua gordetzean"
-
-#: src/libide/gui/ide-preferences-builtin.c:178
-msgid "Cursor"
-msgstr "Kurtsorea"
-
-#: src/libide/gui/ide-preferences-builtin.c:179
-msgid "Restore cursor position"
-msgstr "Leheneratu kurtsorearen posizioa"
-
-#: src/libide/gui/ide-preferences-builtin.c:179
-msgid "Restore cursor position when a file is reopened"
-msgstr "Leheneratu kurtsorearen posizioa fitxategi bat berriro irekitzen denean"
-
-#: src/libide/gui/ide-preferences-builtin.c:180
-msgid "Scroll Offset"
-msgstr "Korritze-desplazamendua"
-
-#: src/libide/gui/ide-preferences-builtin.c:180
-msgid "Minimum number of lines to keep above and below the cursor"
-msgstr "Kurtsorearen gainean eta azpian mantenduko den gutxieneko lerro kopurua"
-
-#: src/libide/gui/ide-preferences-builtin.c:182
-msgid "Text Wrapping"
-msgstr "Testua egokitzea"
-
-#: src/libide/gui/ide-preferences-builtin.c:183
-#: src/plugins/buildui/gtk/preferences.ui:92
-msgid "Never"
-msgstr "Inoiz ere ez"
-
-#: src/libide/gui/ide-preferences-builtin.c:184
-msgid "In Between Words"
-msgstr "Hitzen artean"
-
-#: src/libide/gui/ide-preferences-builtin.c:185
-#: src/plugins/buildui/gtk/preferences.ui:98
-msgid "Always"
-msgstr "Beti"
-
-#: src/libide/gui/ide-preferences-builtin.c:187
-msgid "Line Information"
-msgstr "Lerro-informazioa"
-
-#: src/libide/gui/ide-preferences-builtin.c:188
-msgid "Line numbers"
-msgstr "Lerro-zenbakiak"
-
-#: src/libide/gui/ide-preferences-builtin.c:188
-msgid "Show line number at beginning of each line"
-msgstr "Erakutsi lerro-zenbakia lerro bakoitzaren hasieran"
-
-#: src/libide/gui/ide-preferences-builtin.c:189
-msgid "Relative line numbers"
-msgstr "Lerro-zenbaki erlatiboak"
-
-#: src/libide/gui/ide-preferences-builtin.c:189
-msgid "Show line numbers relative to the cursor line"
-msgstr "Erakutsi lerro-zenbakiak kurtsore-lerroarekiko modu erlatiboan"
-
-#: src/libide/gui/ide-preferences-builtin.c:190
-msgid "Line changes"
-msgstr "Lerro-aldaketak"
-
-#: src/libide/gui/ide-preferences-builtin.c:190
-msgid "Show if a line was added or modified next to line number"
-msgstr "Erakutsi, lerro-zenbakiaren alboan, lerro bat gehitu edo aldatu den"
-
-#: src/libide/gui/ide-preferences-builtin.c:191
-msgid "Line diagnostics"
-msgstr "Lerro-diagnostikoak"
-
-#: src/libide/gui/ide-preferences-builtin.c:191
-msgid "Show an icon next to line numbers indicating type of diagnostic"
-msgstr "Erakutsi ikono bat lerro-zenbakien alboan diagnostiko mota adierazteko"
-
-#: src/libide/gui/ide-preferences-builtin.c:193
-msgid "Highlight"
-msgstr "Nabarmendu"
-
-#: src/libide/gui/ide-preferences-builtin.c:194
-msgid "Current line"
-msgstr "Uneko lerroa"
-
-#: src/libide/gui/ide-preferences-builtin.c:194
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:86
-msgid "Make current line stand out with highlights"
-msgstr "Nabarmendu uneko lerroa"
-
-#: src/libide/gui/ide-preferences-builtin.c:195
-msgid "Matching brackets"
-msgstr "Bat datozen parentesiak"
-
-#: src/libide/gui/ide-preferences-builtin.c:195
-msgid "Highlight matching brackets based on cursor position"
-msgstr "Nabarmendu bat datozen parentesiak kurtsorearen posizioaren arabera"
-
-#: src/libide/gui/ide-preferences-builtin.c:197
-msgid "Visible Whitespace Characters"
-msgstr "Zuriune-karaktere ikusgaiak"
-
-#: src/libide/gui/ide-preferences-builtin.c:198
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-msgid "Spaces"
-msgstr "Zuriuneak"
-
-#: src/libide/gui/ide-preferences-builtin.c:199
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
-msgid "Tabs"
-msgstr "Tabulazioak"
-
-#: src/libide/gui/ide-preferences-builtin.c:200
-msgid "New line and carriage return"
-msgstr "Lerro berria eta orga-itzulera"
-
-#: src/libide/gui/ide-preferences-builtin.c:201
-msgid "Non-breaking spaces"
-msgstr "Zuriune zatiezinak"
-
-#: src/libide/gui/ide-preferences-builtin.c:202
-msgid "Spaces inside of text"
-msgstr "Testu barruko zuriuneak"
-
-#: src/libide/gui/ide-preferences-builtin.c:203
-msgid "Trailing Only"
-msgstr "Amaierakoak soilik"
-
-#: src/libide/gui/ide-preferences-builtin.c:204
-msgid "Leading Only"
-msgstr "Hasierakoak soilik"
-
-#: src/libide/gui/ide-preferences-builtin.c:206
-msgid "Autosave"
-msgstr "Gorde automatikoki"
-
-#: src/libide/gui/ide-preferences-builtin.c:207
-msgid "Enable or disable autosave feature"
-msgstr "Gaitu edo desgaitu gordetze automatikoa"
-
-#: src/libide/gui/ide-preferences-builtin.c:208
-msgid "The number of seconds after modification before auto saving"
-msgstr "Aldaketaren ondoren igaroko den segundo kopurua automatikoki gorde baino lehen"
-
-#: src/libide/gui/ide-preferences-builtin.c:214
-msgid "Code Insight"
-msgstr "Kode-ezagutza"
-
-#: src/libide/gui/ide-preferences-builtin.c:216
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:35
-msgid "Highlighting"
-msgstr "Nabarmentzea"
-
-#: src/libide/gui/ide-preferences-builtin.c:217
-msgid "Semantic Highlighting"
-msgstr "Nabarmentze semantikoa"
-
-#: src/libide/gui/ide-preferences-builtin.c:217
-msgid ""
-"Use code insight to highlight additional information discovered in source "
-"file"
-msgstr "Erabili kode-ezagutza iturburu-fitxategian aurkitutako informazio gehigarria nabarmentzeko"
-
-#: src/libide/gui/ide-preferences-builtin.c:219
-#: src/libide/gui/ide-preferences-builtin.c:681
-#: src/libide/gui/ide-preferences-builtin.c:687
-msgid "Diagnostics"
-msgstr "Diagnostikoa"
-
-#: src/libide/gui/ide-preferences-builtin.c:225
-#: src/libide/gui/ide-preferences-builtin.c:674
-#: src/libide/gui/ide-preferences-builtin.c:679
-msgid "Completion"
-msgstr "Osatzea"
-
-#: src/libide/gui/ide-preferences-builtin.c:228
-msgid "Completions Display Size"
-msgstr "Osatzeen bistaratze-tamaina"
-
-#: src/libide/gui/ide-preferences-builtin.c:228
-msgid "Number of completions to display"
-msgstr "Bistaratuko den osatze kopurua"
-
-#: src/libide/gui/ide-preferences-builtin.c:229
-msgid "Display code suggestions interactively as you type"
-msgstr "Bistaratu kode-iradokizunak dinamikoki idatzi ahala"
-
-#: src/libide/gui/ide-preferences-builtin.c:231
-msgid "Completion Providers"
-msgstr "Osatze-hornitzaileak"
-
-#: src/libide/gui/ide-preferences-builtin.c:237
-#: src/libide/gui/ide-preferences-builtin.c:676
-#: src/plugins/editorui/tweaks.ui:194
-msgid "Snippets"
-msgstr "Kode-zatiak"
-
-#: src/libide/gui/ide-preferences-builtin.c:280
-msgid "Programming Languages"
-msgstr "Programazio-lengoaiak"
-
-#. translators: placeholder string for the entry used to filter the languages in Preferences/Programming languages
-#: src/libide/gui/ide-preferences-builtin.c:291
-msgid "Search languages…"
-msgstr "Bilatu lengoaiak…"
-
-#: src/libide/gui/ide-preferences-builtin.c:351
-msgid "Trim trailing whitespace"
-msgstr "Moztu amaierako zuriunea"
-
-#: src/libide/gui/ide-preferences-builtin.c:351
-msgid "Upon saving, trailing whitespace from modified lines will be trimmed."
-msgstr "Gordetzean, aldatutako lerroen amaierako zuriunea moztu egingo da."
-
-#: src/libide/gui/ide-preferences-builtin.c:352
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:127
-msgid "Overwrite Braces"
-msgstr "Gainidatzi giltzak"
-
-#: src/libide/gui/ide-preferences-builtin.c:352
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:128
-msgid "Overwrite closing braces"
-msgstr "Gainidatzi itxierako giltzak"
-
-#: src/libide/gui/ide-preferences-builtin.c:353
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:132
-msgid "Insert Matching Brace"
-msgstr "Txertatu bat datorren giltza"
-
-#: src/libide/gui/ide-preferences-builtin.c:353
-msgid "Insert matching character for { [ ( or \""
-msgstr "Txertatu bat datorren karakterea { [ ( edo \" karaktereetarako"
-
-#: src/libide/gui/ide-preferences-builtin.c:354
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:137
-msgid "Insert Trailing Newline"
-msgstr "Txertatu lerro amaierako lerro berria"
-
-#: src/libide/gui/ide-preferences-builtin.c:354
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:138
-msgid "Ensure files end with a newline"
-msgstr "Ziurtatu fitxategiak lerro berriarekin amaitzen direla"
-
-#: src/libide/gui/ide-preferences-builtin.c:356
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:53
-msgid "Margins"
-msgstr "Marjinak"
-
-#: src/libide/gui/ide-preferences-builtin.c:357
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:142
-msgid "Show right margin"
-msgstr "Erakutsi eskuineko marjina"
-
-#: src/libide/gui/ide-preferences-builtin.c:358
-msgid "Right margin position"
-msgstr "Eskuineko marjinaren kokalekua"
-
-#: src/libide/gui/ide-preferences-builtin.c:358
-msgid "Position in spaces for the right margin"
-msgstr "Kokalekua zuriunetan eskuineko marjinerako"
-
-#: src/libide/gui/ide-preferences-builtin.c:360
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:55
-#: src/plugins/editorui/gtk/menus.ui:5
-msgid "Indentation"
-msgstr "Koskak"
-
-#: src/libide/gui/ide-preferences-builtin.c:361
-msgid "Tab width"
-msgstr "Tabulazio-zabalera"
-
-#: src/libide/gui/ide-preferences-builtin.c:361
-msgid "Width of a tab character in spaces"
-msgstr "Tabulazio-karaktere baten zabalera zuriunetan"
-
-#: src/libide/gui/ide-preferences-builtin.c:362
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:154
-msgid "Insert spaces instead of tabs"
-msgstr "Txertatu zuriuneak tabuladoreen ordez"
-
-#: src/libide/gui/ide-preferences-builtin.c:362
-msgid "Prefer spaces over use of tabs"
-msgstr "Hobetsi zuriuneak tabuladoreen ordez"
-
-#: src/libide/gui/ide-preferences-builtin.c:363
-msgid "Automatically indent"
-msgstr "Koskatu automatikoki"
-
-#: src/libide/gui/ide-preferences-builtin.c:363
-msgid "Indent source code as you type"
-msgstr "Koskatu iturburu-kodea idatzi ahala"
-
-#: src/libide/gui/ide-preferences-builtin.c:365
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:54
-msgid "Spacing"
-msgstr "Tartea"
-
-#: src/libide/gui/ide-preferences-builtin.c:366
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:91
-msgid "Space before opening parentheses"
-msgstr "Irekierako parentesien aurreko zuriunea"
-
-#: src/libide/gui/ide-preferences-builtin.c:367
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:92
-msgid "Space before opening brackets"
-msgstr "Irekierako kortxeteen aurreko zuriunea"
-
-#: src/libide/gui/ide-preferences-builtin.c:368
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:93
-msgid "Space before opening braces"
-msgstr "Irekierako giltzen aurreko zuriunea"
-
-#: src/libide/gui/ide-preferences-builtin.c:369
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:94
-msgid "Space before opening angles"
-msgstr "Irekierako angeluen aurreko zuriunea"
-
-#: src/libide/gui/ide-preferences-builtin.c:370
-msgid "Prefer a space before colons"
-msgstr "Hobetsi zuriuneak bi puntuen ordez"
-
-#: src/libide/gui/ide-preferences-builtin.c:371
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:96
-msgid "Prefer a space before commas"
-msgstr "Hobetsi zuriuneak komen ordez"
-
-#: src/libide/gui/ide-preferences-builtin.c:372
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:97
-msgid "Prefer a space before semicolons"
-msgstr "Hobetsi zuriuneak puntu eta komen ordez"
-
-#: src/libide/gui/ide-preferences-builtin.c:382
-#: src/libide/gui/ide-preferences-builtin.c:400
-msgid "Default"
-msgstr "Lehenetsia"
-
-#: src/libide/gui/ide-preferences-builtin.c:387
-#: src/libide/gui/ide-preferences-builtin.c:405
-msgid "Number of CPU"
-msgstr "PUZ kopurua"
-
-#: src/libide/gui/ide-preferences-builtin.c:420
-#: src/libide/gui/ide-preferences-builtin.c:654
-msgid "Build"
-msgstr "Eraiki"
-
-#: src/libide/gui/ide-preferences-builtin.c:423
-msgid "Build Workers"
-msgstr "Eraikuntza-langileak"
-
-#: src/libide/gui/ide-preferences-builtin.c:423
-msgid "Number of parallel build workers"
-msgstr "Eraikuntza-langile paraleloen kopurua"
-
-#: src/libide/gui/ide-preferences-builtin.c:431
-msgid "Clear build log pane on rebuild"
-msgstr "Garbitu eraikuntza-egunkariaren panela berreraikuntzan"
-
-#: src/libide/gui/ide-preferences-builtin.c:432
-msgid "Clear build cache at startup"
-msgstr "Garbitu eraikuntzen cachea abioan"
-
-#: src/libide/gui/ide-preferences-builtin.c:432
-msgid "Expired caches will be purged when Builder is started"
-msgstr "Iraungitako cacheak betiko ezabatuko dira Builder abiarazten denean"
-
-#: src/libide/gui/ide-preferences-builtin.c:434
-#: src/libide/gui/ide-preferences-builtin.c:658
-msgid "Network"
-msgstr "Sarea"
-
-#: src/libide/gui/ide-preferences-builtin.c:435
-msgid "Allow downloads over metered connections"
-msgstr "Onartu deskargak neurtutako konexioetan"
-
-#: src/libide/gui/ide-preferences-builtin.c:435
-#: src/libide/gui/ide-preferences-builtin.c:756
-msgid ""
-"Allow the use of metered network connections when automatically downloading "
-"dependencies"
-msgstr "Onartu neurtutako sare-konexioak erabiltzea mendekotasunak automatikoki deskargatzean"
-
-#: src/libide/gui/ide-preferences-builtin.c:437
-#: src/libide/gui/ide-preferences-builtin.c:655
-#: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
-msgid "Debugger"
-msgstr "Araztailea"
-
-#: src/libide/gui/ide-preferences-builtin.c:438
-#: src/libide/gui/ide-preferences-builtin.c:705
-#: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
-msgid "Breakpoints"
-msgstr "Jauzi-puntuak"
-
-#: src/libide/gui/ide-preferences-builtin.c:439
-msgid "Insert Breakpoint at Start of Application"
-msgstr "Txertatu eten-puntua aplikazioaren hasieran"
-
-#: src/libide/gui/ide-preferences-builtin.c:439
-msgid ""
-"Automatically stop execution at the start of the applications main function"
-msgstr "Automatikoki gelditu exekuzioa aplikazioaren funtzio nagusiaren hasieran"
-
-#: src/libide/gui/ide-preferences-builtin.c:445
-#: src/libide/gui/ide-preferences-builtin.c:653
-#: src/libide/projects/ide-projects-global.c:103
-msgid "Projects"
-msgstr "Proiektuak"
-
-#: src/libide/gui/ide-preferences-builtin.c:447
-msgid "Workspace"
-msgstr "Laneko area"
-
-#: src/libide/gui/ide-preferences-builtin.c:448
-msgid "A place for all your projects"
-msgstr "Zure proiektu guztietarako gunea"
-
-#: src/libide/gui/ide-preferences-builtin.c:449
-msgid "Restore previously opened files"
-msgstr "Leheneratu aurretik irekitako fitxategiak"
-
-#: src/libide/gui/ide-preferences-builtin.c:449
-#: src/libide/gui/ide-preferences-builtin.c:731
-msgid "Open previously opened files when loading a project"
-msgstr "Ireki aurretik irekitako fitxategiak proiektua kargatzen denean"
-
-#: src/libide/gui/ide-preferences-builtin.c:571
-#: src/libide/gui/ide-preferences-builtin.c:683
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:111
-#: src/plugins/create-project/gbp-create-project-widget.ui:115
-#: src/plugins/git/gbp-git-preferences-addin.c:184
-msgid "Version Control"
-msgstr "Bertsio-kontrola"
-
-#: src/libide/gui/ide-preferences-builtin.c:592
-#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
-msgid "Follow System"
-msgstr "Jarraitu sistemari"
-
-#: src/libide/gui/ide-preferences-builtin.c:649
-msgid "Editing"
-msgstr "Edizioa"
-
-#: src/libide/gui/ide-preferences-builtin.c:650
-msgid "Shortcuts"
-msgstr "Lasterbideak"
-
-#: src/libide/gui/ide-preferences-builtin.c:651
-#: src/libide/gui/ide-preferences-builtin.c:665
-#: src/plugins/spellcheck/editor-spell-menu.c:259
-msgid "Languages"
-msgstr "Hizkuntzak"
-
-#: src/libide/gui/ide-preferences-builtin.c:652
-msgid "Insight"
-msgstr "Ezagutza"
-
-#: src/libide/gui/ide-preferences-builtin.c:656
-#: src/libide/gui/ide-preferences-builtin.c:667
-msgid "Commands"
-msgstr "Komandoak"
-
-#: src/libide/gui/ide-preferences-builtin.c:657
-#: src/libide/gui/ide-preferences-builtin.c:684
-msgid "SDKs"
-msgstr "SDKak"
-
-#: src/libide/gui/ide-preferences-builtin.c:659 src/libide/gui/tweaks.ui:47
-msgid "Plugins"
-msgstr "Pluginak"
-
-#. Add groups to pages
-#: src/libide/gui/ide-preferences-builtin.c:663
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:427
-msgid "Overview"
-msgstr "Aurkezpen orokorra"
-
-#: src/libide/gui/ide-preferences-builtin.c:664
-msgid "Configurations"
-msgstr "Konfigurazioak"
-
-#: src/libide/gui/ide-preferences-builtin.c:666
-msgid "Application"
-msgstr "Aplikazioa"
-
-#: src/libide/gui/ide-preferences-builtin.c:672
-#: src/plugins/buildui/gtk/preferences.ui:40
-#: src/plugins/platformui/tweaks.ui:16
-msgid "Interface"
-msgstr "Interfazea"
-
-#: src/libide/gui/ide-preferences-builtin.c:675
-msgid "Formatting"
-msgstr "Formateatzea"
-
-#: src/libide/gui/ide-preferences-builtin.c:685
-msgid "Language Servers"
-msgstr "Hizkuntza-zerbitzariak"
-
-#: src/libide/gui/ide-preferences-builtin.c:686
-msgid "Devices & Simulators"
-msgstr "Gailuak eta simulatzaileak"
-
-#: src/libide/gui/ide-preferences-builtin.c:688
-msgid "Build Systems"
-msgstr "Eraikuntza-sistemak"
-
-#: src/libide/gui/ide-preferences-builtin.c:689
-msgid "Compilers"
-msgstr "Konpilatzaileak"
-
-#: src/libide/gui/ide-preferences-builtin.c:690
-msgid "Debuggers"
-msgstr "Araztaileak"
-
-#: src/libide/gui/ide-preferences-builtin.c:691
-#: src/libide/gui/ide-preferences-builtin.c:703
-msgid "Templates"
-msgstr "Txantiloiak"
-
-#: src/libide/gui/ide-preferences-builtin.c:692
-msgid "Editing & Formatting"
-msgstr "Edizioa eta formateatzea"
-
-#: src/libide/gui/ide-preferences-builtin.c:695
-msgid "Web"
-msgstr "Weba"
-
-#: src/libide/gui/ide-preferences-builtin.c:696
-msgid "Language Enablement"
-msgstr "Hizkuntza gaitzea"
-
-#: src/libide/gui/ide-preferences-builtin.c:697
-msgid "Desktop Integration"
-msgstr "Mahaigaineko integrazioa"
-
-#: src/libide/gui/ide-preferences-builtin.c:698
-msgid "Additional"
-msgstr "Gehigarria"
-
-#: src/libide/gui/ide-preferences-builtin.c:702
-#: src/plugins/editorui/tweaks.ui:153
-msgid "Behavior"
-msgstr "Portaera"
-
-#: src/libide/gui/ide-preferences-builtin.c:709
-msgid "Downloads"
-msgstr "Deskargak"
-
-#: src/libide/gui/ide-preferences-builtin.c:713
-msgid "Running"
-msgstr "Exekutatzen"
-
-#: src/libide/gui/ide-preferences-builtin.c:714
-msgid "Starting & Stopping"
-msgstr "Abiaraztea eta gelditzea"
-
-#: src/libide/gui/ide-preferences-builtin.c:724
-msgid "Navigate with Tab Bar"
-msgstr "Nabigatu fitxa-barrarekin"
-
-#: src/libide/gui/ide-preferences-builtin.c:725
-#: src/plugins/buildui/gtk/preferences.ui:113
-msgid "Switch documents using a tabbed interface"
-msgstr "Aldatu dokumentuz fitxadun interfaze bat erabiliz"
-
-#: src/libide/gui/ide-preferences-builtin.c:730
-msgid "Restore Previous Session"
-msgstr "Leheneratu aurreko saioa"
-
-#: src/libide/gui/ide-preferences-builtin.c:735
-#: src/plugins/create-project/gbp-create-project-widget.ui:108
-msgid "License"
-msgstr "Lizentzia"
-
-#: src/libide/gui/ide-preferences-builtin.c:736
-msgid "The default license when creating new projects"
-msgstr "Proiektu berrietan erabiliko den lizentzia lehenetsia"
-
-#: src/libide/gui/ide-preferences-builtin.c:740
-msgid "Stop After Launching Program"
-msgstr "Gelditu programa abiarazi ondoren"
-
-#: src/libide/gui/ide-preferences-builtin.c:741
-msgid "Automatically insert a breakpoint at the start of the application"
-msgstr "Automatikoki txertatu eten-puntua aplikazioaren hasieran"
-
-#: src/libide/gui/ide-preferences-builtin.c:745
-msgid "Clear Build Logs"
-msgstr "Garbitu eraikuntza-egunkariak"
-
-#: src/libide/gui/ide-preferences-builtin.c:746
-msgid "Upon rebuilding the project the build log will be cleared"
-msgstr "Proiektua berreraikitzean, eraikuntza-egunkaria garbitu egingo da"
-
-#: src/libide/gui/ide-preferences-builtin.c:750
-msgid "Clear Expired Artifacts"
-msgstr "Garbitu iraungitako artefaktuak"
-
-#: src/libide/gui/ide-preferences-builtin.c:751
-msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr "Iraungi diren artefaktuak ezabatu egingo dira eraikuntza hasten denean"
-
-#: src/libide/gui/ide-preferences-builtin.c:755
-msgid "Allow Downloads over Metered Connections"
-msgstr "Onartu deskargak neurtutako konexioetan"
-
-#: src/libide/gui/ide-preferences-builtin.c:761
-msgid "Keyboard shortcuts similar to GNOME Text Editor"
-msgstr "GNOME testu-editorearen antzeko lasterbideak"
-
-#: src/libide/gui/ide-preferences-builtin.c:766
-#: src/plugins/buildui/gtk/preferences.ui:72
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:59
-msgid "Terminal Font"
-msgstr "Terminaleko letra-tipoa"
-
-#: src/libide/gui/ide-preferences-builtin.c:767
-msgid "The font used within terminals"
-msgstr "Terminaletan erabilitako letra-tipoa"
-
-#: src/libide/gui/ide-preferences-builtin.c:773
-msgid "Install Before Running"
-msgstr "Instalatu exekutatu baino lehen"
-
-#: src/libide/gui/ide-preferences-builtin.c:774
-msgid ""
-"Installs the application before running. This is necessary for most projects "
-"unless run commands are used."
-msgstr "Aplikazioa exekutatu baino lehen instalatzen du. Hori beharrezkoa da proiektu gehienetarako, exekuzio-komandoak erabiltzen badira salbu."
-
-#: src/libide/gui/ide-preferences-builtin.c:778
-msgid "Stop Signal"
-msgstr "Gelditu seinalea"
-
-#: src/libide/gui/ide-preferences-builtin.c:779
-msgid ""
-"Send the signal to the target application when requesting the application "
-"stop."
-msgstr "Bidali seinalea helburuko aplikazioari hura gelditzeko eskatzean."
-
-#: src/libide/gui/ide-preferences-window.c:1516
-#: src/libide/tweaks/ide-tweaks-font.c:101
-msgid "Select Font"
-msgstr "Hautatu letra-tipoa"
-
-#: src/libide/gui/ide-primary-workspace.ui:57
+#: src/libide/gui/ide-primary-workspace.ui:17
+msgid "Toggle Left Panel (F9)"
+msgstr "Txandakatu ezkerreko panela (F9)"
+
+#: src/libide/gui/ide-primary-workspace.ui:51
+#: src/plugins/menu-search/gtk/menus.ui:34
+msgid "Toggle Right Panel"
+msgstr "Txandakatu eskuineko panela"
+
+#: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
 msgstr "Bilatu (Ctrl+Enter)"
+
+#: src/libide/gui/ide-primary-workspace.ui:105
+msgid "Toggle Bottom Panel (Ctrl+F9)"
+msgstr "Txandakatu beheko panela (Ctrl+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -2124,13 +1425,19 @@ msgstr "Gelditu exekuzioa"
 msgid "Run project"
 msgstr "Exekutatu proiektua"
 
-#: src/libide/gui/tests/test-preferences.c:218
-msgid "Custom Font"
-msgstr "Letra-tipo pertsonalizatua"
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/preferences.ui:25
+#: src/plugins/buildui/gtk/preferences.ui:32
+msgid "Appearance"
+msgstr "Itxura"
 
-#: src/libide/gui/tweaks.ui:15
-msgid "Text Editor"
-msgstr "Testu-editorea"
+#: src/libide/gui/tweaks.ui:63
+msgid "Configurations"
+msgstr "Konfigurazioak"
+
+#: src/libide/gui/tweaks.ui:75
+msgid "Plugins"
+msgstr "Pluginak"
 
 #: src/libide/io/ide-pkcon-transfer.c:56
 #, c-format
@@ -2145,6 +1452,76 @@ msgstr[1] "%u paketa instalatzen"
 msgid "Failed to initialize language server: %s"
 msgstr "Huts egin du lengoaia-zerbitzariak hasieratzeak: %s"
 
+#: src/libide/plugins/ide-plugin.c:340
+#: src/plugins/create-project/gbp-create-project-widget.ui:115
+#: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
+msgid "Version Control"
+msgstr "Bertsio-kontrola"
+
+#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDKak"
+
+#: src/libide/plugins/ide-plugin.c:342
+msgid "Language Servers"
+msgstr "Hizkuntza-zerbitzariak"
+
+#: src/libide/plugins/ide-plugin.c:343
+msgid "Devices & Simulators"
+msgstr "Gailuak eta simulatzaileak"
+
+#: src/libide/plugins/ide-plugin.c:344
+msgid "Diagnostics"
+msgstr "Diagnostikoa"
+
+#: src/libide/plugins/ide-plugin.c:345
+msgid "Build Systems"
+msgstr "Eraikuntza-sistemak"
+
+#: src/libide/plugins/ide-plugin.c:346
+msgid "Compilers"
+msgstr "Konpilatzaileak"
+
+#: src/libide/plugins/ide-plugin.c:347
+msgid "Debuggers"
+msgstr "Araztaileak"
+
+#: src/libide/plugins/ide-plugin.c:348
+msgid "Templates"
+msgstr "Txantiloiak"
+
+#: src/libide/plugins/ide-plugin.c:349
+msgid "Editing & Formatting"
+msgstr "Edizioa eta formateatzea"
+
+#: src/libide/plugins/ide-plugin.c:352
+msgid "Web"
+msgstr "Weba"
+
+#: src/libide/plugins/ide-plugin.c:353
+msgid "Language Enablement"
+msgstr "Hizkuntza gaitzea"
+
+#: src/libide/plugins/ide-plugin.c:354
+msgid "Desktop Integration"
+msgstr "Mahaigaineko integrazioa"
+
+#: src/libide/plugins/ide-plugin.c:355
+msgid "Additional"
+msgstr "Gehigarria"
+
+#: src/libide/plugins/ide-plugin-view.ui:35
+msgid "Authors"
+msgstr "Egileak"
+
+#: src/libide/plugins/ide-plugin-view.ui:66
+msgid "Version"
+msgstr "Bertsioa"
+
+#: src/libide/plugins/ide-plugin-view.ui:97
+msgid "Website"
+msgstr "Webgunea"
+
 #: src/libide/projects/ide-project.c:198
 msgid "Destination file must be within the project tree."
 msgstr "Helburuko fitxategiak proiektuaren zuhaitzean egon behar du."
@@ -2153,85 +1530,128 @@ msgstr "Helburuko fitxategiak proiektuaren zuhaitzean egon behar du."
 msgid "File must be within the project tree."
 msgstr "Fitxategiak proiektuaren zuhaitzean egon behar du."
 
+#: src/libide/projects/ide-projects-global.c:103
+#: src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "Proiektuak"
+
 #: src/libide/projects/xml-reader.c:329
 #, c-format
 msgid "Could not parse XML from stream"
 msgstr "Ezin izan da korronteko XMLa analizatu"
 
-#: src/libide/sourceview/gtk/menus.ui:8
+#: src/libide/sourceview/gtk/menus.ui:7 src/libide/terminal/gtk/menus.ui:13
+#: src/libide/terminal/gtk/menus.ui:35
+msgid "Clipboard"
+msgstr "Arbela"
+
+#: src/libide/sourceview/gtk/menus.ui:10
 msgid "C_ut"
 msgstr "E_baki"
 
-#: src/libide/sourceview/gtk/menus.ui:13 src/libide/terminal/gtk/menus.ui:33
+#: src/libide/sourceview/gtk/menus.ui:16 src/libide/terminal/gtk/menus.ui:16
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: src/libide/sourceview/gtk/menus.ui:18 src/libide/terminal/gtk/menus.ui:43
+#: src/libide/sourceview/gtk/menus.ui:22 src/libide/terminal/gtk/menus.ui:27
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: src/libide/sourceview/gtk/menus.ui:24 src/libide/sourceview/gtk/menus.ui:26
+#: src/libide/sourceview/gtk/menus.ui:29 src/libide/sourceview/gtk/menus.ui:33
 msgid "Undo"
 msgstr "Desegin"
 
 #: src/libide/sourceview/gtk/menus.ui:31
+msgid "Undo & Redo"
+msgstr "Desegin eta berregin"
+
+#: src/libide/sourceview/gtk/menus.ui:38
 msgid "Redo"
 msgstr "Berregin"
 
-#: src/libide/sourceview/gtk/menus.ui:37
+#: src/libide/sourceview/gtk/menus.ui:44 src/libide/sourceview/gtk/menus.ui:47
 msgid "Zoom"
 msgstr "Zooma"
 
-#: src/libide/sourceview/gtk/menus.ui:40
+#: src/libide/sourceview/gtk/menus.ui:49
 msgid "Zoom Out"
 msgstr "Txikiagotu"
 
-#: src/libide/sourceview/gtk/menus.ui:46
+#: src/libide/sourceview/gtk/menus.ui:55
 msgid "Reset Zoom"
 msgstr "Berrezarri zooma"
 
-#: src/libide/sourceview/gtk/menus.ui:52
+#: src/libide/sourceview/gtk/menus.ui:61
 msgid "Zoom In"
 msgstr "Handiagotu"
 
-#: src/libide/sourceview/gtk/menus.ui:60
+#: src/libide/sourceview/gtk/menus.ui:69
 msgid "_Selection"
 msgstr "_Hautapena"
 
-#: src/libide/sourceview/gtk/menus.ui:62 src/libide/terminal/gtk/menus.ui:50
+#: src/libide/sourceview/gtk/menus.ui:73 src/libide/terminal/gtk/menus.ui:37
 msgid "Select _All"
 msgstr "Hautatu _dena"
 
-#: src/libide/sourceview/gtk/menus.ui:68
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:125
+msgid "Formatting"
+msgstr "Formateatzea"
+
+#: src/libide/sourceview/gtk/menus.ui:81
 msgid "All _Upper Case"
 msgstr "Guztiak m_aiuskuletan"
 
-#: src/libide/sourceview/gtk/menus.ui:74
+#: src/libide/sourceview/gtk/menus.ui:82
+msgid "Convert the text selection to upper case"
+msgstr "Bihurtu testu-hautapena maiuskuletara"
+
+#: src/libide/sourceview/gtk/menus.ui:88
 msgid "All _Lower Case"
 msgstr "Guztiak m_inuskuletan"
 
-#: src/libide/sourceview/gtk/menus.ui:80
+#: src/libide/sourceview/gtk/menus.ui:89
+msgid "Convert the text selection to lower case"
+msgstr "Bihurtu testu-hautapena minuskuletara"
+
+#: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
 msgstr "Aldera_ntzikatu maiuskulak/minuskulak"
 
-#: src/libide/sourceview/gtk/menus.ui:86
+#: src/libide/sourceview/gtk/menus.ui:96
+msgid "Invert case of the text selection"
+msgstr "Alderantzikatu testu-hautapenaren maiuskulak/minuskulak"
+
+#: src/libide/sourceview/gtk/menus.ui:102
 msgid "_Title Case"
 msgstr "_Izenburua maiuskuletan"
 
-#: src/libide/sourceview/gtk/menus.ui:93
+#: src/libide/sourceview/gtk/menus.ui:103
+msgid "Convert the text selection to title case"
+msgstr "Bihurtu testu-hautapena izenburuetara"
+
+#: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Join Lines"
 msgstr "Elkartu _marrak"
 
-#: src/libide/sourceview/gtk/menus.ui:98
+#: src/libide/sourceview/gtk/menus.ui:117
 msgid "S_ort Lines"
 msgstr "_Ordenatu marrak"
 
-#: src/libide/sourceview/gtk/menus.ui:110
+#: src/libide/sourceview/gtk/menus.ui:131
+#: src/plugins/symbol-tree/gtk/menus.ui:6
+msgid "Code Navigation"
+msgstr "Kode-nabigazioa"
+
+#: src/libide/sourceview/gtk/menus.ui:134
 msgid "_Go to Definition"
 msgstr "_Joan definiziora"
 
-#: src/libide/sourceview/gtk/menus.ui:116
-msgid "_Find references"
+#: src/libide/sourceview/gtk/menus.ui:135
+msgid "Jump to file and location where item is defined"
+msgstr "Joan elementua definitua den fitxategira eta kokalekura"
+
+#: src/libide/sourceview/gtk/menus.ui:141
+msgid "_Find References"
 msgstr "_Bilatu erreferentziak"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
@@ -2241,15 +1661,27 @@ msgstr "_Bilatu erreferentziak"
 msgid "Ln %u, Col %u"
 msgstr "%u lerr., %u zut."
 
-#: src/libide/terminal/gtk/menus.ui:25
+#: src/libide/terminal/gtk/menus.ui:6
 msgid "_Open Link"
 msgstr "_Ireki esteka"
 
-#: src/libide/terminal/gtk/menus.ui:38
+#: src/libide/terminal/gtk/menus.ui:17
+msgid "Copy selection from terminal to clipboard"
+msgstr "Kopiatu hautapena terminaletik arbelean"
+
+#: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
 msgstr "_Kopiatu esteka"
 
-#: src/libide/terminal/gtk/menus.ui:56
+#: src/libide/terminal/gtk/menus.ui:28
+msgid "Paste from clipboard into the terminal"
+msgstr "Itsatsi arbeletik terminalean"
+
+#: src/libide/terminal/gtk/menus.ui:38
+msgid "Selection all text from terminal including scrollback"
+msgstr "Terminaleko testu guztiaren hautapena, atzeranzko korritzea barne"
+
+#: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
 msgstr "Ez hautatu e_zer"
 
@@ -2313,13 +1745,26 @@ msgstr "(Hutsa)"
 msgid "Loading…"
 msgstr "Kargatzen…"
 
-#: src/libide/tweaks/ide-tweaks-window.ui:36
+#: src/libide/tweaks/ide-tweaks-directory.c:137
+msgid "Projects Directory"
+msgstr "Proiektuen direktorioa"
+
+#: src/libide/tweaks/ide-tweaks-font.c:81
+msgid "Select Font"
+msgstr "Hautatu letra-tipoa"
+
+#: src/libide/tweaks/ide-tweaks-window.c:134
+#, c-format
+msgid "Builder — %s — Preferences"
+msgstr "Builder — %s — Hobespenak"
+
+#: src/libide/tweaks/ide-tweaks-window.c:138
+msgid "Builder — Preferences"
+msgstr "Builder — Hobespenak"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:35
 msgid "All Preferences"
 msgstr "Hobespen guztiak"
-
-#: src/libide/tweaks/ide-tweaks-window.ui:48
-msgid "Search Preferences"
-msgstr "Bilatu hobespenetan"
 
 #: src/libide/tweaks/ide-tweaks-window.ui:61
 msgid "Primary Menu"
@@ -2339,7 +1784,7 @@ msgstr "Bat ere ez"
 msgid "Blank page"
 msgstr "Orri hutsa"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:139
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:153
 msgid "Settings"
 msgstr "Ezarpenak"
 
@@ -2539,108 +1984,30 @@ msgstr "%s (Kopia)"
 msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr "BuildStream proiektua erabiltzen, baina ezin da “bst” exekutagarria aurkitu."
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:209
-msgid "All Runtimes"
-msgstr "Exekuzio-denbora guztiak"
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
+msgid "Add _Variable"
+msgstr "Gehitu a_ldagaia"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:426
-msgid "Make _Active"
-msgstr "_Aktibatu"
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
+msgid "Add Variable"
+msgstr "Gehitu aldagaia"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:405
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:427
-msgid "Select this configuration as the active configuration."
-msgstr "Hautatu konfigurazio hau konfigurazio aktibo gisa"
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
+msgid "_Add"
+msgstr "_Gehitu"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:430
-msgid "_Duplicate"
-msgstr "_Bikoiztu"
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+msgid "Copy"
+msgstr "Kopiatu"
 
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:406
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:431
-msgid ""
-"Duplicating the configuration allows making changes without modifying this "
-"configuration."
-msgstr "Konfigurazioa bikoizten bada, aldaketak konfigurazio hau aldatu gabe egin daitezke."
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:434
-msgid "_Remove"
-msgstr "_Kendu"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:407
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:435
-msgid "Removes the configuration and cannot be undone."
-msgstr "Konfigurazioa kentzen du eta ezin da desegin."
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:424
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
-msgid "Environment"
-msgstr "Ingurunea"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:429
-msgid "Build Environment"
-msgstr "Eraikuntza-ingurunea"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:430
-msgid "Runtime Environment"
-msgstr "Exekuzio-ingurunea"
-
-#. Add description info
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:456
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:403
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
-#: src/plugins/ls/gbp-ls-page.ui:17
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
-msgid "Name"
-msgstr "Izena"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:457
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:110
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:404
-msgid "Source Directory"
-msgstr "Iturburuko direktorioa"
-
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:458
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:109
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:405
-msgid "Build System"
-msgstr "Eraikuntza-sistema"
-
-#. Translators: "Install" is a noun here
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:467
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:448
-msgid "Install Prefix"
-msgstr "Instalazio-aurrizkia"
-
-#. Translators: "Configure" is a noun here
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:476
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:450
-msgid "Configure Options"
-msgstr "Konfigurazio-aukerak"
-
-#. Translators: "Run" is a noun here, this string is analogous to "Execution Options"
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:485
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:452
-msgid "Run Options"
-msgstr "Exekuzio-aukerak"
-
-#. Setup runtime selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:490
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:688
-msgid "Application Runtime"
-msgstr "Aplikazioaren exekuzio-denbora"
-
-#. Setup toolchain selection
-#: src/plugins/buildui/gbp-buildui-config-view-addin.c:494
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:687
-msgid "Build Toolchain"
-msgstr "Eraikuntzaren tresna-katea"
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "Kendu"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:327
 #: src/plugins/testui/gbp-testui-output-panel.c:103
@@ -2677,8 +2044,7 @@ msgid "Build Profile"
 msgstr "Eraikuntza-profila"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:105
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:358
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
 msgid "Runtime"
 msgstr "Exekuzio-denbora"
 
@@ -2711,9 +2077,8 @@ msgid "Warnings"
 msgstr "Abisuak"
 
 #: src/plugins/buildui/gbp-buildui-pane.c:345
-#: src/plugins/buildui/gbp-buildui-pane.ui:81
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:260
-#: src/plugins/testui/gbp-testui-preferences-addin.c:50
+#: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "Build Pipeline"
 msgstr "Eraiki kanalizazioa"
 
@@ -2733,35 +2098,6 @@ msgstr "Osatze-denbora:"
 #: src/plugins/buildui/gbp-buildui-pane.ui:67
 msgid "—"
 msgstr "—"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:97
-msgid "No Version Control"
-msgstr "Bertsio-kontrolik ez"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:104
-msgid "Project"
-msgstr "Proiektua"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:176
-#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
-msgid "Automatically Discover"
-msgstr "Automatikoki aurkitu"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:245
-msgid "Run Command"
-msgstr "Exekuzio-komandoa"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:246
-msgid "The run command is used to run your project"
-msgstr "Exekuzio-komandoa proiektua exekutatzeko erabiltzen da"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:253
-msgid "_Create Custom Command"
-msgstr "_Sortu komando pertsonalizatua"
-
-#: src/plugins/buildui/gbp-buildui-preferences-addin.c:359
-msgid "The runtime is the environment used to run your application."
-msgstr "Inguruneak zure aplikazioa exekutatzeko erabili duen exekuzio-denbora."
 
 #. translators: %u is replaced with the number of warnings
 #: src/plugins/buildui/gbp-buildui-status-popover.c:63
@@ -2806,9 +2142,44 @@ msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr "Zenbait helburu ez dira erabilgarri egongo proiektua konfiguratuta egon arte."
 
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
+#: src/plugins/buildui/tweaks.ui:26
+msgid "Automatically Discover"
+msgstr "Automatikoki aurkitu"
+
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
 msgstr "Hautapen honi esker, Builder aplikazioak hautagairik onena aukeratu dezake."
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
+msgid "The container used to build and run your application"
+msgstr "Aplikazioa eraiki eta exekutatzeko edukiontzia"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
+msgid "Duplicate"
+msgstr "Bikoiztu"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
+msgid "Duplicate into new configuration"
+msgstr "Bikoiztu konfigurazio berrian"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
+msgid "Make Active"
+msgstr "Aktibatu"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
+msgid "Make configuration active and reload build pipeline"
+msgstr "Aktibatu konfigurazioa eta birkargatu eraikuntza-kanalizazioa"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
+msgid "Delete"
+msgstr "Ezabatu"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
+msgid "Delete configuration"
+msgstr "Ezabatu konfigurazioa"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
 msgid "Stop Building Project"
@@ -2818,7 +2189,7 @@ msgstr "Gelditu proiektuaren eraikuntza"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Eraiki Project (⇧+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:48
+#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:56
 msgid "_Build"
 msgstr "E_raiki"
 
@@ -2834,56 +2205,73 @@ msgstr "E_xekutatu"
 msgid "R_un With…"
 msgstr "Exe_kutatu honekin…"
 
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:44
+#: src/plugins/buildui/gtk/menus.ui:53 src/plugins/buildui/gtk/menus.ui:76
+#: src/plugins/buildui/gtk/menus.ui:103 src/plugins/buildui/gtk/menus.ui:113
+#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
+#: src/plugins/buildui/gtk/menus.ui:149
+msgid "Code Foundry"
+msgstr "Kode-galdategia"
+
+#: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/projectui/tweaks.ui:218
+msgid "Configuration"
+msgstr "Konfigurazioa"
+
+#: src/plugins/buildui/gtk/menus.ui:36
 msgid "Configure Project…"
 msgstr "Konfiguratu proiektua…"
 
-#: src/plugins/buildui/gtk/menus.ui:36
+#: src/plugins/buildui/gtk/menus.ui:39
 msgid "Configure settings related to the project"
 msgstr "Konfiguratu proiektuaren ezarpenak"
 
-#: src/plugins/buildui/gtk/menus.ui:41
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Select Build Target…"
 msgstr "Hautatu eraikuntza-helburua…"
 
-#: src/plugins/buildui/gtk/menus.ui:43
+#: src/plugins/buildui/gtk/menus.ui:49
 msgid "Change default build target"
 msgstr "Aldatu eraikuntza-helburu lehenetsia"
 
-#: src/plugins/buildui/gtk/menus.ui:49
+#: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
+#: src/plugins/buildui/gtk/menus.ui:114
+msgid "Building"
+msgstr "Eraikitzea"
+
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Build the project"
 msgstr "Eraiki proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:55
+#: src/plugins/buildui/gtk/menus.ui:63
 msgid "_Rebuild"
 msgstr "_Berreraiki"
 
-#: src/plugins/buildui/gtk/menus.ui:56
+#: src/plugins/buildui/gtk/menus.ui:64
 msgid "Rebuild the project"
 msgstr "Berreraiki proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:61
+#: src/plugins/buildui/gtk/menus.ui:69
 msgid "_Clean"
 msgstr "_Garbitu"
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:70
 msgid "Clean the project"
 msgstr "Garbitu proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:69
-#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
-msgid "_Install"
-msgstr "_Instalatu"
+#: src/plugins/buildui/gtk/menus.ui:77
+msgid "Install & Deployment"
+msgstr "Instalatu eta banatu"
 
-#: src/plugins/buildui/gtk/menus.ui:71
+#: src/plugins/buildui/gtk/menus.ui:81
 msgid "Install the project"
 msgstr "Instalatu proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy to Device…"
 msgstr "Instalatu gailuan…"
 
-#: src/plugins/buildui/gtk/menus.ui:77
+#: src/plugins/buildui/gtk/menus.ui:87
 msgid "Deploy project to current device"
 msgstr "Instalatu proiektua uneko gailuan"
 
@@ -2891,76 +2279,99 @@ msgstr "Instalatu proiektua uneko gailuan"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:86
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "_Export"
 msgstr "_Esportatu"
 
-#: src/plugins/buildui/gtk/menus.ui:88
+#: src/plugins/buildui/gtk/menus.ui:98
 msgid "Export project"
 msgstr "Esportatu proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Stop Build"
 msgstr "Gelditu eraikuntza"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:108
 msgid "Stop building project"
 msgstr "Gelditu proiektuaren eraikuntza"
 
-#: src/plugins/buildui/gtk/menus.ui:102
+#: src/plugins/buildui/gtk/menus.ui:116
 msgid "Show Build _Log"
 msgstr "Erakutsi eraikuntzaren _egunkaria"
 
-#: src/plugins/buildui/gtk/menus.ui:105
+#: src/plugins/buildui/gtk/menus.ui:119
 msgid "Display panel containing the build log"
 msgstr "Bistaratu eraikuntza-egunkaria duen panela"
 
-#: src/plugins/buildui/gtk/menus.ui:112
-msgid "Manage SDKs…"
-msgstr "Kudeatu SDKak…"
+#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
+msgid "Running"
+msgstr "Exekutatzen"
 
-#: src/plugins/buildui/gtk/menus.ui:121
+#: src/plugins/buildui/gtk/menus.ui:130
 msgid "Select Run Command…"
 msgstr "Hautatu exekuzio-komandoa…"
 
-#: src/plugins/buildui/gtk/menus.ui:131
+#: src/plugins/buildui/gtk/menus.ui:142
 msgid "Run"
 msgstr "Exekutatu"
 
-#: src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:145
 msgid "Run the project"
 msgstr "Exekutatu proiektua"
 
-#: src/plugins/buildui/gtk/menus.ui:162
+#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/testui/gbp-testui-item.c:84
+#: src/plugins/testui/gbp-testui-panel.ui:4
+msgid "Unit Tests"
+msgstr "Proba-unitateak"
+
+#: src/plugins/buildui/gtk/menus.ui:157
+msgid "Follow System Style"
+msgstr "Jarraitu sistemaren estiloa"
+
+#: src/plugins/buildui/gtk/menus.ui:163
+msgid "Force Light"
+msgstr "Behartu argia"
+
+#: src/plugins/buildui/gtk/menus.ui:169
+msgid "Force Dark"
+msgstr "Behartu iluna"
+
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Accessibility"
 msgstr "Erabilerraztasuna"
 
-#: src/plugins/buildui/gtk/menus.ui:164
+#: src/plugins/buildui/gtk/menus.ui:178
 msgid "High Contrast"
 msgstr "Kontraste handia"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "Text Direction"
 msgstr "Testuaren norabidea"
 
-#: src/plugins/buildui/gtk/menus.ui:171
+#: src/plugins/buildui/gtk/menus.ui:185
 msgid "Left-to-Right"
 msgstr "Ezkerretik eskuinera"
 
-#: src/plugins/buildui/gtk/menus.ui:177
+#: src/plugins/buildui/gtk/menus.ui:191
 msgid "Right-to-Left"
 msgstr "Eskuinetik ezkerrera"
 
-#: src/plugins/buildui/gtk/menus.ui:186
-msgid "Verbose Logging"
-msgstr "Egunkari xehea"
-
-#: src/plugins/buildui/gtk/menus.ui:192
+#: src/plugins/buildui/gtk/menus.ui:206
 msgid "Tools"
 msgstr "Tresnak"
 
+#: src/plugins/buildui/gtk/preferences.ui:36
+#: src/plugins/menu-search/gtk/menus.ui:53
+msgid "Style"
+msgstr "Estiloa"
+
+#: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:10
+msgid "Interface"
+msgstr "Interfazea"
+
 #: src/plugins/buildui/gtk/preferences.ui:66
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:60
 msgid "Editor Font"
 msgstr "Editorearen letra-tipoa"
 
@@ -2968,18 +2379,33 @@ msgstr "Editorearen letra-tipoa"
 msgid "The font used in the source code editor"
 msgstr "Iturburu-kodearen editorean erabilitako letra-tipoa"
 
+#: src/plugins/buildui/gtk/preferences.ui:72
+msgid "Terminal Font"
+msgstr "Terminaleko letra-tipoa"
+
 #: src/plugins/buildui/gtk/preferences.ui:73
 msgid "The font used in the terminal"
 msgstr "Terminalean erabilitako letra-tipoa"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:65
 msgid "Show Grid Pattern"
 msgstr "Erakutsi sareta-eredua"
+
+#: src/plugins/buildui/gtk/preferences.ui:81
+msgid "Display a grid pattern underneath source code"
+msgstr "Erakutsi sareta-eredu bat iturburu-kodearen azpian"
+
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
+msgid "Never"
+msgstr "Inoiz ere ez"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
 msgstr "Ikuspegi orokorraren mapa ez da inoiz bistaratuko"
+
+#: src/plugins/buildui/gtk/preferences.ui:98
+msgid "Always"
+msgstr "Beti"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
@@ -2997,6 +2423,10 @@ msgstr "Ikuspegi orokorraren mapa automatikoki bistaratuko da erabiltzaileraren 
 msgid "Navigate with Tabs"
 msgstr "Nabigatu fitxekin"
 
+#: src/plugins/buildui/gtk/preferences.ui:113
+msgid "Switch documents using a tabbed interface"
+msgstr "Aldatu dokumentuz fitxadun interfaze bat erabiliz"
+
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
 msgstr "Nabigatu bunbuiloekin"
@@ -3004,6 +2434,190 @@ msgstr "Nabigatu bunbuiloekin"
 #: src/plugins/buildui/gtk/preferences.ui:120
 msgid "Switch documents using a popover"
 msgstr "Aldatu dokumentuz bunbuilo baten bidez"
+
+#: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
+#: src/plugins/shellcmd/tweaks.ui:21
+msgid "Commands"
+msgstr "Komandoak"
+
+#: src/plugins/buildui/tweaks.ui:16
+msgid "Run Command"
+msgstr "Exekuzio-komandoa"
+
+#: src/plugins/buildui/tweaks.ui:17
+msgid "This command is used to run your project"
+msgstr "Komando hau proiektua exekutatzeko erabiltzen da"
+
+#: src/plugins/buildui/tweaks.ui:55
+msgid "Starting & Stopping"
+msgstr "Abiaraztea eta gelditzea"
+
+#: src/plugins/buildui/tweaks.ui:58
+msgid "Install Before Running"
+msgstr "Instalatu exekutatu baino lehen"
+
+#: src/plugins/buildui/tweaks.ui:59
+msgid ""
+"Installs the application before running. This is necessary for most projects "
+"unless custom run commands are used."
+msgstr "Aplikazioa exekutatu baino lehen instalatzen du. Hori beharrezkoa da proiektu gehienetarako, exekuzio-komando pertsonalizatuak erabiltzen badira salbu."
+
+#: src/plugins/buildui/tweaks.ui:74
+msgid "Stop Signal"
+msgstr "Gelditu seinalea"
+
+#: src/plugins/buildui/tweaks.ui:75
+msgid ""
+"Send the signal to the target application when requesting the application "
+"stop."
+msgstr "Bidali seinalea helburuko aplikazioari hura gelditzeko eskatzean."
+
+#: src/plugins/buildui/tweaks.ui:130
+msgid "Logging"
+msgstr "Egunkaria"
+
+#: src/plugins/buildui/tweaks.ui:134
+msgid ""
+"Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
+"troubleshooting"
+msgstr "<tt>G_MESSAGES_DEBUG=all</tt> ingurumen-aldagaiarekin exekutatzen du, arazoak ebazteko"
+
+#: src/plugins/buildui/tweaks.ui:151
+msgid "Run unit tests from within the build environment."
+msgstr "Exekutatu proba-unitateak eraikuntza-ingurunean"
+
+#: src/plugins/buildui/tweaks.ui:163
+msgid "As Application"
+msgstr "Aplikazio gisa"
+
+#: src/plugins/buildui/tweaks.ui:164
+msgid "Run unit with access to display and other runtime environment features."
+msgstr "Exekutatu unitatea bistaratzera eta exekuzio-denborako ingurunearen beste eginbide batzuetara sartzeko aukerarekin."
+
+#: src/plugins/buildui/tweaks.ui:176
+msgid "Build & Tooling"
+msgstr "Eraikitzea eta tresnak"
+
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
+msgid "General"
+msgstr "Orokorra"
+
+#: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
+msgid "History"
+msgstr "Historia"
+
+#: src/plugins/buildui/tweaks.ui:188
+msgid "Clear Expired Artifacts"
+msgstr "Garbitu iraungitako artefaktuak"
+
+#: src/plugins/buildui/tweaks.ui:189
+msgid "Artifacts which have expired will be deleted when Builder is started"
+msgstr "Iraungi diren artefaktuak ezabatu egingo dira eraikuntza hasten denean"
+
+#: src/plugins/buildui/tweaks.ui:200
+msgid "Clear Build Logs"
+msgstr "Garbitu eraikuntza-egunkariak"
+
+#: src/plugins/buildui/tweaks.ui:201
+msgid "Clear the build log history when a new build begins"
+msgstr "Garbitu eraikuntza-egunkariaren historia eraikuntza berriari ekiten zaionean"
+
+#: src/plugins/buildui/tweaks.ui:214
+msgid "Workers"
+msgstr "Langileak"
+
+#: src/plugins/buildui/tweaks.ui:218
+msgid "Number of workers to use when performing builds"
+msgstr "Eraikuntza gauzatzean erabiliko den langile kopurua"
+
+#: src/plugins/buildui/tweaks.ui:227
+msgid "Default"
+msgstr "Lehenetsia"
+
+#: src/plugins/buildui/tweaks.ui:233
+msgid "1 per CPU"
+msgstr "1 PUZ bakoitzeako"
+
+#: src/plugins/buildui/tweaks.ui:239
+msgid "1"
+msgstr "1"
+
+#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
+#: src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
+#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
+#: src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
+#: src/plugins/buildui/tweaks.ui:257
+msgid "6"
+msgstr "6"
+
+#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
+#: src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
+
+#: src/plugins/buildui/tweaks.ui:269
+msgid "16"
+msgstr "16"
+
+#: src/plugins/buildui/tweaks.ui:275
+msgid "32"
+msgstr "32"
+
+#: src/plugins/buildui/tweaks.ui:281
+msgid "64"
+msgstr "64"
+
+#: src/plugins/buildui/tweaks.ui:287
+msgid "128"
+msgstr "128"
+
+#: src/plugins/buildui/tweaks.ui:293
+msgid "256"
+msgstr "256"
+
+#: src/plugins/buildui/tweaks.ui:299
+msgid "512"
+msgstr "512"
+
+#: src/plugins/buildui/tweaks.ui:313
+msgid "Tooling"
+msgstr "Tresnak"
+
+#: src/plugins/buildui/tweaks.ui:348
+msgid "Installation Prefix"
+msgstr "Instalazio-aurrizkia"
+
+#: src/plugins/buildui/tweaks.ui:349
+msgid ""
+"The project will be installed to this directory during the installation "
+"phase of the build pipeline."
+msgstr "Proiektua direktorio honetan instalatuko da eraikuntza-kanalizazioaren instalazio-fasean."
+
+#: src/plugins/buildui/tweaks.ui:367
+msgid "Configure Options"
+msgstr "Konfigurazio-aukerak"
+
+#: src/plugins/buildui/tweaks.ui:380
+msgid ""
+"These options are used by the build system to configure the project during "
+"the configure phase of the build pipeline"
+msgstr "Eraikuntza-sistemak aukera hauek erabiltzen ditu eraikuntza-kanalizazioaren konfigurazio-fasean proiektua konfiguratzeko"
+
+#: src/plugins/buildui/tweaks.ui:387
+msgid "Build Environment"
+msgstr "Eraikuntza-ingurunea"
+
+#: src/plugins/buildui/tweaks.ui:403
+msgid ""
+"The SDK used to build your application is automatically determined from the "
+"runtime."
+msgstr "Aplikazioa eraikitzeko erabiliko den SDKa automatikoki zehaztuko da exekuzio-denboratik."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 msgid "Fetch dependencies"
@@ -3017,44 +2631,6 @@ msgstr "Eraiki proiektua"
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
 msgstr "Cargo exekuzioa"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:42
-msgid "Clang"
-msgstr "Clang"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:47
-msgid "Use Clang for Diagnostics"
-msgstr "Erabili Clang diagnostikorako"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:48
-msgid ""
-"Clang will be queried for diagnostics within C, C++, and Objective-C sources"
-msgstr "Clang kontsultatuko da C, C++ eta Objective-C iturburuetako diagnostikoak egiteko"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:54
-msgid "Use Clang for Completions"
-msgstr "Erabili Clang osatzeetarako"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:55
-msgid ""
-"Clang will be queried for completions within C, C++, and Objective-C sources"
-msgstr "Clang kontsultatuko da C, C++ eta Objective-C iturburuetako osatzeak egiaztatzeko"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:61
-msgid "Complete Parenthesis"
-msgstr "Osatu parentesiak"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:62
-msgid "Include parenthesis when completing clang proposals"
-msgstr "Sartu parentesiak clang proposamenak osatzean"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:66
-msgid "Complete Parameters"
-msgstr "Osatu parametroak"
-
-#: src/plugins/clang/ide-clang-preferences-addin.c:67
-msgid "Include parameters and types when completing clang proposals"
-msgstr "Sartu parametroak eta motak clang proposamenak osatzean"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
@@ -3077,6 +2653,26 @@ msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
 msgstr "Parametroak sartuko diren ala ez osatzean. Parentesiak osatzea behar du."
+
+#: src/plugins/clang/tweaks.ui:14
+msgid "Clang"
+msgstr "Clang"
+
+#: src/plugins/clang/tweaks.ui:17
+msgid "Complete Parentheses"
+msgstr "Osatu parentesiak"
+
+#: src/plugins/clang/tweaks.ui:18
+msgid "Include parentheses when completing clang proposals"
+msgstr "Sartu parentesiak clang proposamenak osatzean"
+
+#: src/plugins/clang/tweaks.ui:29
+msgid "Complete Parameters"
+msgstr "Osatu parametroak"
+
+#: src/plugins/clang/tweaks.ui:30
+msgid "Include parameters and type information when completing clang proposals"
+msgstr "Sartu parametroak eta motare informazioa clang proposamenak osatzean"
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3418,11 +3014,6 @@ msgstr "Kargatu edo sortu paleta bat hobespenak erabilita"
 msgid "Rename"
 msgstr "Aldatu izena"
 
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
-msgid "Remove"
-msgstr "Kendu"
-
 #: src/plugins/color-picker/gstyle/ui/gstyle-rename-popover.ui:35
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
 #: src/plugins/project-tree/gtk/menus.ui:60
@@ -3583,28 +3174,40 @@ msgid "Highlight _colors"
 msgstr "Nabarmentze-kolo_reak"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
-msgid "_Comment code"
+msgid "Code Comments"
+msgstr "Kodearen iruzkinak"
+
+#: src/plugins/comment-code/gtk/menus.ui:9
+msgid "_Comment Code"
 msgstr "Ir_uzkindu kodea"
 
-#: src/plugins/comment-code/gtk/menus.ui:13
-msgid "Unco_mment code"
+#: src/plugins/comment-code/gtk/menus.ui:10
+msgid "Add comments surrounding the source code selection"
+msgstr "Gehitu iturburu-kodearen hautapenaren inguruko iruzkinak"
+
+#: src/plugins/comment-code/gtk/menus.ui:16
+msgid "Unco_mment Code"
 msgstr "_Kendu kodearen iruzkinak"
 
-#: src/plugins/copyright/gbp-copyright-preferences-addin.c:43
-msgid "Update Copyright"
-msgstr "Eguneratu copyright-a"
+#: src/plugins/comment-code/gtk/menus.ui:17
+msgid "Remove comments from the source code selection"
+msgstr "Kendu iruzkinak iturburu-kodearen hautapenetik"
 
-#: src/plugins/copyright/gbp-copyright-preferences-addin.c:44
-msgid "Automatically update copyright headers when saving a file"
-msgstr "Automatikoki eguneratu copyright goiburuak fitxategi bat gordetzean"
-
-#: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:5
+#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
 msgstr "Eguneratu copyright-a fitxategia gorde baino lehen"
 
-#: src/plugins/copyright/org.gnome.builder.plugins.copyright.gschema.xml:6
+#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
 msgstr "Erabiltzailearen copyright-a eguneratzen du diskoan gorde baino lehen"
+
+#: src/plugins/copyright/tweaks.ui:16
+msgid "Update Copyright"
+msgstr "Eguneratu copyright-a"
+
+#: src/plugins/copyright/tweaks.ui:17
+msgid "Update copyright headers when saving documents"
+msgstr "Eguneratu copyright goiburuak dokumentuak gordetzean"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
@@ -3657,6 +3260,11 @@ msgstr "Kokalekua"
 msgid "The project will be created in a new subdirectory."
 msgstr "Proiektua azpidirektorio berri batean sortuko da."
 
+#: src/plugins/create-project/gbp-create-project-widget.ui:108
+#: src/plugins/projectui/tweaks.ui:47
+msgid "License"
+msgstr "Lizentzia"
+
 #: src/plugins/create-project/gbp-create-project-widget.ui:127
 msgid "Template"
 msgstr "Txantiloia"
@@ -3693,6 +3301,26 @@ msgstr "Bilaketak, osatze automatikoa eta ikurren informazioa mugatuta egon dait
 msgid "Indexing Source Code (Paused)"
 msgstr "Iturburu-kodea indexatzen (pausatua)"
 
+#: src/plugins/ctags/tweaks.ui:14
+msgid "CTags"
+msgstr "CTags"
+
+#: src/plugins/ctags/tweaks.ui:17
+msgid "Suggest Completions"
+msgstr "Iradoki osatzeak"
+
+#: src/plugins/ctags/tweaks.ui:18
+msgid "Use CTags to suggest code completion proposals"
+msgstr "Erabili CTags kodea osatzeko iradokizunak egiteko"
+
+#: src/plugins/ctags/tweaks.ui:34
+msgid "CTags Path"
+msgstr "CTags bide-izena"
+
+#: src/plugins/ctags/tweaks.ui:35
+msgid "The path to the ctags executable"
+msgstr "ctags exekutagarriaren bide-izena"
+
 #: src/plugins/debuggerui/gtk/menus.ui:10
 msgid "Run with Debugger"
 msgstr "Exekutatu araztailearekin"
@@ -3700,6 +3328,18 @@ msgstr "Exekutatu araztailearekin"
 #: src/plugins/debuggerui/gtk/menus.ui:13
 msgid "Run the project with debugger"
 msgstr "Exekutatu proiektua araztailearekin"
+
+#: src/plugins/debuggerui/gtk/menus.ui:21
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/tweaks.ui:12
+msgid "Debugger"
+msgstr "Araztailea"
+
+#: src/plugins/debuggerui/gtk/menus.ui:23
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/tweaks.ui:16
+msgid "Breakpoints"
+msgstr "Jauzi-puntuak"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
 msgid "Automatically Break at Program Start"
@@ -3848,6 +3488,30 @@ msgstr "Erregistroak"
 msgid "Console"
 msgstr "Kontsola"
 
+#: src/plugins/debuggerui/tweaks.ui:19
+msgid "Stop After Launching Program"
+msgstr "Gelditu programa abiarazi ondoren"
+
+#: src/plugins/debuggerui/tweaks.ui:20
+msgid "Automatically insert a breakpoint at the start of the application"
+msgstr "Automatikoki txertatu eten-puntua aplikazioaren hasieran"
+
+#: src/plugins/debuggerui/tweaks.ui:31
+msgid "Stop at Warnings"
+msgstr "Gelditu abisuetan"
+
+#: src/plugins/debuggerui/tweaks.ui:32
+msgid "Automatically insert a breakpoint on warning logs"
+msgstr "Automatikoki txertatu eten-puntua abisu-erregistroetan"
+
+#: src/plugins/debuggerui/tweaks.ui:43
+msgid "Stop at Criticals"
+msgstr "Gelditu kritikoetan"
+
+#: src/plugins/debuggerui/tweaks.ui:44
+msgid "Automatically insert a breakpoint on critical logs"
+msgstr "Automatikoki txertatu eten-puntua erregistro kritikoetan"
+
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
 msgstr "Gailuaren helbidea"
@@ -3884,117 +3548,30 @@ msgstr "Ez da fitxategirik eman."
 msgid "Use minimal editorui interface"
 msgstr "Erabili editorearen interfaze minimoa"
 
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:48
-msgid "Movements"
-msgstr "Mugimenduak"
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
+msgid "Reset"
+msgstr "Berrezarri"
 
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:61
-#: src/plugins/editorui/tweaks.ui:51
-msgid "The font used within the source code editor"
-msgstr "Iturburu-kodearen editorean erabilitako letra-tipoa"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:70
-msgid "Show Overview Map"
-msgstr "Erakutsi ikuspegi orokorra"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:71
-msgid "Use an overview map instead of a scrollbar"
-msgstr "Erakutsi ikuspegi orokorra korritze-barraren ordez"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:75
-#: src/plugins/editorui/tweaks.ui:70
-msgid "Show Line Numbers"
-msgstr "Erakutsi lerro-zenbakiak"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:76
-msgid "Display line numbers next to each line of source code"
-msgstr "Erakutsi iturburu-kodearen lerro bakoitzaren alboko lerro-zenbakiak"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:81
-msgid "Adjust line-height of the configured font"
-msgstr "Doitu konfiguratutako letra-tipoaren lerro-altuera"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:85
-#: src/plugins/editorui/tweaks.ui:81
-msgid "Highlight Current Line"
-msgstr "Nabarmendu uneko lerroa"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:90
-#: src/plugins/editorui/tweaks.ui:88
-msgid "Highlight Matching Brackets"
-msgstr "Nabarmendu bat datozen parentesiak"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:91
-#: src/plugins/editorui/tweaks.ui:89
-msgid ""
-"Use cursor position to highlight matching brackets, braces, parenthesis, and "
-"more"
-msgstr "Erabili kurtsorearen posizioa bat datozen kortxeteak, giltzak, parentesiak eta abar nabarmentzeko"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:95
-msgid "Suggest Completions While Typing"
-msgstr "Iradoki osatzeak idatzi ahala"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:96
-msgid "Automatically suggest completions while typing within the file"
-msgstr "Automatikoki iradoki osatzeak fitxategiaren barruan idatzi ahala"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:101
-msgid "Automatically select the first completion when displayed"
-msgstr "Automatikoki hautatu lehen osatzea hura bistaratzen denean"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:105
-#: src/plugins/editorui/tweaks.ui:197
-msgid "Expand Snippets"
-msgstr "Zabaldu kode-zatiak"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:106
-#: src/plugins/editorui/tweaks.ui:198
-msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr "Erabili \"Tab\" konfiguratutako kdoe-zatiak editorean zabaltzeko"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:122
-msgid "Trim Trailing Whitespace"
-msgstr "Moztu amaierako zuriunea"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:123
-msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
-msgstr "Gordetzean, aldatutako lerroen amaierako zuriunea moztu egingo da"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:133
-msgid "Insert matching character for [[(\"'"
-msgstr "Txertatu bat datorren karakterea { [ ( edo \" karaktereetarako"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:143
-msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr "Bistaratu marjina bat editorean, nahi den gehieneko zabalera adierazteko"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:155
-msgid "Prefer spaces over tabs"
-msgstr "Hobetsi zuriuneak, ez tabulazioak"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:159
-msgid "Automatically Indent"
-msgstr "Koskatu automatikoki"
-
-#: src/plugins/editorui/gbp-editorui-preferences-addin.c:160
-msgid "Format source code as you type"
-msgstr "Eman formatua iturburu-kodeari idatzi ahala"
-
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:77
-msgid ""
-"Settings provided .editorconfig and modelines specified within files take "
-"precedence over those below."
-msgstr ".editordonfig-ek hornitutako ezarpenek eta fitxategien barruan zehaztutako lerro-moduek lehentasuna dute behekoen aldean."
-
-#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:95
-msgid "Prefer a space before colon"
-msgstr "Hobetsi zuriuneak bi puntuen ordez"
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
+msgid "Reverts language preferences to application defaults"
+msgstr "Hizkuntza-hobespenak leheneratzen ditu eta aplikazioaren lehenespenak ezartzen ditu"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
 msgid "Text"
 msgstr "Testua"
+
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/tweaks-language.ui:65
+#: src/plugins/editorui/tweaks-language.ui:242
+msgid "Spaces"
+msgstr "Zuriuneak"
+
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+msgid "Tabs"
+msgstr "Tabulazioak"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:516
 msgid "Go"
@@ -4004,6 +3581,10 @@ msgstr "Joan"
 msgid "Go to Line"
 msgstr "Joan lerrora"
 
+#: src/plugins/editorui/gtk/menus.ui:5
+msgid "Indentation"
+msgstr "Koskak"
+
 #: src/plugins/editorui/gtk/menus.ui:7
 msgid "Indent Using Spaces"
 msgstr "Koskatu zuriuneak erabiliz"
@@ -4012,33 +3593,34 @@ msgstr "Koskatu zuriuneak erabiliz"
 msgid "Spaces per Tab"
 msgstr "Zuriuneak tabulazioko"
 
-#: src/plugins/editorui/gtk/menus.ui:15 src/plugins/editorui/gtk/menus.ui:51
-msgid "2"
-msgstr "2"
-
 #: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
 msgid "3"
 msgstr "3"
-
-#: src/plugins/editorui/gtk/menus.ui:25 src/plugins/editorui/gtk/menus.ui:61
-msgid "4"
-msgstr "4"
 
 #: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
 msgid "5"
 msgstr "5"
 
-#: src/plugins/editorui/gtk/menus.ui:35 src/plugins/editorui/gtk/menus.ui:71
-msgid "8"
-msgstr "8"
-
 #: src/plugins/editorui/gtk/menus.ui:41
+#: src/plugins/editorui/tweaks-language.ui:145
 msgid "Indentation Size"
 msgstr "Koska-tamaina"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
 msgstr "Tabulazioen zabalera bera"
+
+#: src/plugins/editorui/gtk/menus.ui:81
+msgid "Line Ending"
+msgstr "Lerroaren amaiera"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+msgid "Windows (CR/LF)"
+msgstr "Windows (CR/LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+msgid "Mac Classic (CR)"
+msgstr "Mac klasikoa (CR)"
 
 #: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
 msgid "New Editor Workspace…"
@@ -4060,113 +3642,435 @@ msgstr "Ireki marko berrian"
 msgid "Open in New Workspace…"
 msgstr "Ireki laneko area berrian…"
 
-#: src/plugins/editorui/gtk/menus.ui:159
+#: src/plugins/editorui/gtk/menus.ui:161
 msgid "Save _As"
 msgstr "Gorde _honela"
 
-#: src/plugins/editorui/gtk/menus.ui:166
+#: src/plugins/editorui/gtk/menus.ui:168
 msgid "Find…"
 msgstr "Bilatu…"
 
-#: src/plugins/editorui/gtk/menus.ui:171
+#: src/plugins/editorui/gtk/menus.ui:173
 msgid "Find/Replace…"
 msgstr "Bilatu/ordeztu…"
 
-#: src/plugins/editorui/gtk/menus.ui:178
+#: src/plugins/editorui/gtk/menus.ui:180
 msgid "Print…"
 msgstr "Inprimatu…"
 
-#: src/plugins/editorui/gtk/menus.ui:186
+#: src/plugins/editorui/gtk/menus.ui:188
 msgid "Format Selection"
 msgstr "Formatuaren hautapena"
 
-#: src/plugins/editorui/tweaks.ui:16
+#: src/plugins/editorui/tweaks-language.ui:9
+msgid "Programming Languages"
+msgstr "Programazio-lengoaiak"
+
+#: src/plugins/editorui/tweaks-language.ui:34
+msgid ""
+"Settings provided by .editorconfig and modelines take precedence over those "
+"below."
+msgstr ".editordonfig-ek hornitutako ezarpenek eta lerro-moduek lehentasuna dute behekoen aldean."
+
+#: src/plugins/editorui/tweaks-language.ui:41
+msgid "Indentation & Formatting"
+msgstr "Koskatzea eta formateatzea"
+
+#: src/plugins/editorui/tweaks-language.ui:44
+msgid "Tab Character"
+msgstr "Tabulazio-karakterea"
+
+#: src/plugins/editorui/tweaks-language.ui:45
+msgid "The character to be inserted for Tab"
+msgstr "Tabulaziorako txertatuko den karakterea"
+
+#: src/plugins/editorui/tweaks-language.ui:59
+msgid "Tab"
+msgstr "Tab"
+
+#: src/plugins/editorui/tweaks-language.ui:73
+msgid "Insert Trailing Newline"
+msgstr "Txertatu lerro amaierako lerro berria"
+
+#: src/plugins/editorui/tweaks-language.ui:74
+msgid "Ensure files end with a newline"
+msgstr "Ziurtatu fitxategiak lerro berriarekin amaitzen direla"
+
+#: src/plugins/editorui/tweaks-language.ui:90
+msgid "Trim Trailing Space"
+msgstr "Moztu amaierako zuriunea"
+
+#: src/plugins/editorui/tweaks-language.ui:91
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
+msgstr "Gordetzean, aldatutako lerroen amaierako zuriunea moztu egingo da"
+
+#: src/plugins/editorui/tweaks-language.ui:111
+msgid "Auto Indent"
+msgstr "Koskatze automatikoa"
+
+#: src/plugins/editorui/tweaks-language.ui:112
+msgid "Automatically indent source code as you type"
+msgstr "Koskatu automatikoki iturburu-kodea idatzi ahala"
+
+#: src/plugins/editorui/tweaks-language.ui:128
+msgid "Tab Size"
+msgstr "Tabulazioaren tamaina"
+
+#: src/plugins/editorui/tweaks-language.ui:129
+msgid "The number of characters to indent for Tab"
+msgstr "Tabulaziorako koskatuko den karaktere kopurua"
+
+#: src/plugins/editorui/tweaks-language.ui:146
+msgid "The number of characters to indent, or -1 to use tab size"
+msgstr "Koskatzeko erabiliko den karaktere kopurua, edo -1 tabulazioaren tamaina erabiltzeko"
+
+#: src/plugins/editorui/tweaks-language.ui:164
+msgid "Margin"
+msgstr "Marjina"
+
+#: src/plugins/editorui/tweaks-language.ui:167
+msgid "Show Right Margin"
+msgstr "Erakutsi eskuineko marjina"
+
+#: src/plugins/editorui/tweaks-language.ui:168
+msgid "Display a margin in the editor to indicate maximum desired width"
+msgstr "Bistaratu marjina bat editorean, nahi den gehieneko zabalera adierazteko"
+
+#: src/plugins/editorui/tweaks-language.ui:184
+msgid "Right Margin Position"
+msgstr "Eskuineko marjinaren kokalekua"
+
+#: src/plugins/editorui/tweaks-language.ui:185
+msgid "The desired maximum line length"
+msgstr "Nahi den gehieneko lerro-luzera"
+
+#: src/plugins/editorui/tweaks-language.ui:203
+#: src/plugins/editorui/tweaks.ui:256
+msgid "Behavior"
+msgstr "Portaera"
+
+#: src/plugins/editorui/tweaks-language.ui:206
+msgid "Overwrite Braces"
+msgstr "Gainidatzi giltzak"
+
+#: src/plugins/editorui/tweaks-language.ui:207
+msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
+msgstr "Gainidatzi itxierako giltzak, kortxeteak, parentesiak eta komatxoak"
+
+#: src/plugins/editorui/tweaks-language.ui:223
+msgid "Insert Matching Brace"
+msgstr "Txertatu bat datorren giltza"
+
+#: src/plugins/editorui/tweaks-language.ui:224
+msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
+msgstr "Txertatu bat datorren karakterea giltza, kortxete, parentesi eta komatxoetarako"
+
+#: src/plugins/editorui/tweaks-language.ui:245
+msgid "Space before opening parentheses"
+msgstr "Irekierako parentesien aurreko zuriunea"
+
+#: src/plugins/editorui/tweaks-language.ui:262
+msgid "Space before opening brackets"
+msgstr "Irekierako kortxeteen aurreko zuriunea"
+
+#: src/plugins/editorui/tweaks-language.ui:269
+msgid "Space before opening braces"
+msgstr "Irekierako giltzen aurreko zuriunea"
+
+#: src/plugins/editorui/tweaks-language.ui:276
+msgid "Space before opening angles"
+msgstr "Irekierako angeluen aurreko zuriunea"
+
+#: src/plugins/editorui/tweaks-language.ui:283
+msgid "Prefer a space before colon"
+msgstr "Hobetsi zuriuneak bi puntuen ordez"
+
+#: src/plugins/editorui/tweaks-language.ui:290
+msgid "Prefer a space before commas"
+msgstr "Hobetsi zuriuneak komen ordez"
+
+#: src/plugins/editorui/tweaks-language.ui:297
+msgid "Prefer a space before simicolons"
+msgstr "Hobetsi zuriune bat puntu eta komen ordez"
+
+#: src/plugins/editorui/tweaks.ui:10
 msgid "Color"
 msgstr "Kolorea"
 
-#: src/plugins/editorui/tweaks.ui:35
+#: src/plugins/editorui/tweaks.ui:32 src/plugins/terminal/tweaks.ui:10
 msgid "Fonts & Styling"
 msgstr "Letra-tipoak eta estiloa"
 
-#: src/plugins/editorui/tweaks.ui:38
+#: src/plugins/editorui/tweaks.ui:36
 msgid "Preview"
 msgstr "Aurrebista"
 
-#: src/plugins/editorui/tweaks.ui:59
+#: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
+msgid "Font"
+msgstr "Letra-tipoa"
+
+#: src/plugins/editorui/tweaks.ui:49
+msgid "The font used within the source code editor"
+msgstr "Iturburu-kodearen editorean erabilitako letra-tipoa"
+
+#: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
 msgstr "Doitu lerroen arteko tartea"
 
-#: src/plugins/editorui/tweaks.ui:71
-msgid "Display line numbers next to each line of code"
-msgstr "Erakutsi kodearen lerro bakoitzaren alboko lerro-zenbakiak"
+#: src/plugins/editorui/tweaks.ui:78
+msgid "How text should be wrapped when wider than the frame"
+msgstr "Nola egokituko den testua markoa baino zabalagoa denean"
 
-#: src/plugins/editorui/tweaks.ui:82
-msgid "Make the current line stand out with highlights"
-msgstr "Nabarmendu uneko lerroa"
+#: src/plugins/editorui/tweaks.ui:93
+msgid "At Spaces"
+msgstr "Zuriuneetan"
 
 #: src/plugins/editorui/tweaks.ui:99
+msgid "Anywhere"
+msgstr "Edonon"
+
+#: src/plugins/editorui/tweaks.ui:111
 msgid "Background Pattern"
 msgstr "Atzeko planoaren eredua"
 
-#: src/plugins/editorui/tweaks.ui:100
+#: src/plugins/editorui/tweaks.ui:112
 msgid "Show a background pattern underneath source code"
 msgstr "Erakutsi eredu bat atzeko planoan, iturburu-kodearen azpian"
 
-#: src/plugins/editorui/tweaks.ui:105
+#: src/plugins/editorui/tweaks.ui:121
 msgid "No Pattern"
 msgstr "Eredurik ez"
 
-#: src/plugins/editorui/tweaks.ui:111
+#: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
 msgstr "Sareta-marrak"
 
-#: src/plugins/editorui/tweaks.ui:123
+#: src/plugins/editorui/tweaks.ui:137
+msgid "Scrollbars"
+msgstr "Korritze-barrak"
+
+#: src/plugins/editorui/tweaks.ui:140
 msgid "Source Code Overview"
 msgstr "Iturburu-kodearen ikuspegi orokorra"
 
-#: src/plugins/editorui/tweaks.ui:124
+#: src/plugins/editorui/tweaks.ui:141
 msgid "Display an overview of source code next to the editor"
 msgstr "Erakutsi iturburu-kodearen ikuspegi orokorra editorearen alboan"
 
-#: src/plugins/editorui/tweaks.ui:129
+#: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
 msgstr "Hobetsi korritze-barrak"
 
-#: src/plugins/editorui/tweaks.ui:135
+#: src/plugins/editorui/tweaks.ui:156
 msgid "Always On"
 msgstr "Beti aktibatuta"
 
-#: src/plugins/editorui/tweaks.ui:141
+#: src/plugins/editorui/tweaks.ui:162
 msgid "Automatic"
 msgstr "Automatikoa"
 
-#: src/plugins/editorui/tweaks.ui:166
-msgid "Smart Home/End"
-msgstr "Hasiera/Amaiera azkarra"
-
-#: src/plugins/editorui/tweaks.ui:167
-msgid "Moves to first non-whitespace character before line edges"
-msgstr "Lerro-ertzen aurreko zuriunerik gabeko lehen karakterera mugitzen da"
+#: src/plugins/editorui/tweaks.ui:172
+msgid "Line Numbers"
+msgstr "Lerro-zenbakiak"
 
 #: src/plugins/editorui/tweaks.ui:175
+msgid "Show Line Numbers"
+msgstr "Erakutsi lerro-zenbakiak"
+
+#: src/plugins/editorui/tweaks.ui:176
+msgid "Display line numbers next to each line of code"
+msgstr "Erakutsi kodearen lerro bakoitzaren alboko lerro-zenbakiak"
+
+#: src/plugins/editorui/tweaks.ui:187
+msgid "Use Relative Line Numbers"
+msgstr "Erabili lerro-zenbaki erlatiboak"
+
+#: src/plugins/editorui/tweaks.ui:188
+msgid "Show line numbers relative to the current line"
+msgstr "Erakutsi lerro-zenbakiak uneko lerroarekiko modu erlatiboan"
+
+#: src/plugins/editorui/tweaks.ui:199
+msgid "Show Diagnostics"
+msgstr "Erakutsi diagnostikoak"
+
+#: src/plugins/editorui/tweaks.ui:200
+msgid "Display diagnostics next to the line number"
+msgstr "Bistaratu diagnostikoak lerro-zenbakiaren alboan"
+
+#: src/plugins/editorui/tweaks.ui:213
+msgid "Syntax Highlighting"
+msgstr "Sintaxiaren nabarmentzea"
+
+#: src/plugins/editorui/tweaks.ui:216
+msgid "Highlight Current Line"
+msgstr "Nabarmendu uneko lerroa"
+
+#: src/plugins/editorui/tweaks.ui:217
+msgid "Make the current line stand out with highlights"
+msgstr "Nabarmendu uneko lerroa"
+
+#: src/plugins/editorui/tweaks.ui:228
+msgid "Highlight Matching Brackets"
+msgstr "Nabarmendu bat datozen parentesiak"
+
+#: src/plugins/editorui/tweaks.ui:229
+msgid ""
+"Use cursor position to highlight matching brackets, braces, parenthesis, and "
+"more"
+msgstr "Erabili kurtsorearen posizioa bat datozen kortxeteak, giltzak, parentesiak eta abar nabarmentzeko"
+
+#: src/plugins/editorui/tweaks.ui:240
+msgid "Semantic Highlighting"
+msgstr "Nabarmentze semantikoa"
+
+#: src/plugins/editorui/tweaks.ui:241
+msgid ""
+"Use symbol information to highlight namespaces, functions, and variables "
+"within source code"
+msgstr "Erabili informazio sinbolikoa izen-espazioak, funtzioak eta aldagaiak nabarmentzeko iturburu-kodean"
+
+#: src/plugins/editorui/tweaks.ui:260
+msgid "Spelling"
+msgstr "Ortografia"
+
+#: src/plugins/editorui/tweaks.ui:264
+msgid "Underline potential spelling mistakes as you type"
+msgstr "Azpimarratu balizko ortografia-akatsak idatzi ahala"
+
+#: src/plugins/editorui/tweaks.ui:277
+msgid "Selections"
+msgstr "Hautapenak"
+
+#: src/plugins/editorui/tweaks.ui:280
+msgid "Minimum Characters to Highlight"
+msgstr "Nabarmenduko den gehieneko karaktere kopurua"
+
+#: src/plugins/editorui/tweaks.ui:281
+msgid "The minimum selection length before highlighting matches"
+msgstr "Gutxieneko hautapen-luzera nabarmentzearen bat etortzeak baino lehen"
+
+#: src/plugins/editorui/tweaks.ui:294
+msgid "Snippets"
+msgstr "Kode-zatiak"
+
+#: src/plugins/editorui/tweaks.ui:297
+msgid "Expand Snippets"
+msgstr "Zabaldu kode-zatiak"
+
+#: src/plugins/editorui/tweaks.ui:298
+msgid "Use “Tab” to expand configured snippets in the editor"
+msgstr "Erabili \"Tab\" konfiguratutako kdoe-zatiak editorean zabaltzeko"
+
+#: src/plugins/editorui/tweaks.ui:313
 msgid "Code Completion"
 msgstr "Kode-osaketa"
 
-#: src/plugins/editorui/tweaks.ui:178
+#: src/plugins/editorui/tweaks.ui:317
+msgid "Completion Proposals"
+msgstr "Osatze-proposamenak"
+
+#: src/plugins/editorui/tweaks.ui:320
 msgid "Suggest Code Completions"
 msgstr "Kode-osaketa iradokitzen du"
 
-#: src/plugins/editorui/tweaks.ui:179
+#: src/plugins/editorui/tweaks.ui:321
 msgid "Automatically suggest code completions while typing"
 msgstr "Automatikoki iradoki kode-osaketa idatzi ahala"
 
-#: src/plugins/editorui/tweaks.ui:185
+#: src/plugins/editorui/tweaks.ui:332
 msgid "Select First Completion Proposal"
 msgstr "Hautatu lehen osaketa-proposamena"
 
-#: src/plugins/editorui/tweaks.ui:186
+#: src/plugins/editorui/tweaks.ui:333
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Automatikoki hautatu lehen osaketa-proposamena hura bistaratzen denean"
+
+#: src/plugins/editorui/tweaks.ui:348
+msgid "Maximum Completion Proposals"
+msgstr "Gehieneko osatze-proposamen kopurua"
+
+#: src/plugins/editorui/tweaks.ui:349
+msgid "The maximum number of completion rows that will be displayed at once"
+msgstr "Aldi berean bistaratuko den gehieneko osatze-errenkada kopurua"
+
+#: src/plugins/editorui/tweaks.ui:368 src/plugins/editorui/tweaks.ui:371
+msgid "Keyboard Theme"
+msgstr "Teklatuaren gaia"
+
+#: src/plugins/editorui/tweaks.ui:372
+msgid ""
+"Shortcut themes provide a keyboard experience similar to other IDEs and "
+"editors"
+msgstr "Lasterbideen gaiek beste IDE eta editore batzuen teklatu-esperientzia eskaintzen dute"
+
+#: src/plugins/editorui/tweaks.ui:391
+msgid "Movements"
+msgstr "Mugimenduak"
+
+#: src/plugins/editorui/tweaks.ui:395
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr "Atzera-teklak espazio gehigarria kenduko du, kodea koskaren tamainarekin lerrokatuta mantentzeko."
+
+#: src/plugins/editorui/tweaks.ui:407
+msgid "Navigate to non-space characters"
+msgstr "Nabigatu zuriunerik gabeko karaktereetara"
+
+#: src/plugins/editorui/tweaks.ui:416
+msgid "Before line boundaries"
+msgstr "Lerro-mugen aurretik"
+
+#: src/plugins/editorui/tweaks.ui:422
+msgid "After line boundaries"
+msgstr "Lerro-mugen ondoren"
+
+#: src/plugins/editorui/tweaks.ui:428
+msgid "Instead of line boundaries"
+msgstr "Lerro-mugen ordez"
+
+#: src/plugins/editorui/tweaks.ui:434 src/plugins/valgrind/gtk/menus.ui:44
+msgid "Disabled"
+msgstr "Desgaituta"
+
+#: src/plugins/editorui/tweaks.ui:446
+msgid "Session Management"
+msgstr "Saioen kudeaketa"
+
+#: src/plugins/editorui/tweaks.ui:450
+msgid "Save & Restore"
+msgstr "Gorde eta leheneratu"
+
+#: src/plugins/editorui/tweaks.ui:453
+msgid "Auto-Save"
+msgstr "Gorde automatikoki"
+
+#: src/plugins/editorui/tweaks.ui:454
+msgid "Regularly save the document as you type"
+msgstr "Gorde dokumentua aldian behin, idatzi ahala"
+
+#: src/plugins/editorui/tweaks.ui:465
+msgid "Auto-Save Delay"
+msgstr "Gordetze automatikoaren atzerapena"
+
+#: src/plugins/editorui/tweaks.ui:466
+msgid "The delay in seconds to wait before auto-saving the document"
+msgstr "Dokumentua automatikoki gorde ondoren itxarongo den denbora, segundotan."
+
+#: src/plugins/editorui/tweaks.ui:481
+msgid "Format on Save"
+msgstr "Formatua gordetzean"
+
+#: src/plugins/editorui/tweaks.ui:482
+msgid "Reformat sources when saving to disk"
+msgstr "Aldatu iturburuen formatua diskoan gordetzean"
+
+#: src/plugins/editorui/tweaks.ui:497
+msgid "Restore Cursor Position"
+msgstr "Leheneratu kurtsorearen posizioa"
+
+#: src/plugins/editorui/tweaks.ui:498
+msgid "Jump to the last position when re-opening a file"
+msgstr "Joan azken posiziora fitxategia berriro irekitzen denean"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4204,11 +4108,24 @@ msgid ""
 "your project."
 msgstr "Builder-ek softwarea garatzeko honako kit-ak instalatu behar ditu proiektua eraikitzeko."
 
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
+#: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+msgid "Name"
+msgstr "Izena"
+
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
 msgid "Architecture"
 msgstr "Arkitektura"
+
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+msgid "Flatpak"
+msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
 msgid "Creating flatpak workspace"
@@ -4327,35 +4244,6 @@ msgstr "Git bertsio-kontrola ez da erabili"
 msgid "Updating Git Submodules"
 msgstr "Git azpimoduluak eguneratzen"
 
-#: src/plugins/git/gbp-git-preferences-addin.c:151
-msgid "Author"
-msgstr "Egilea"
-
-#: src/plugins/git/gbp-git-preferences-addin.c:160
-#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
-msgid "Email"
-msgstr "Posta elektronikoa"
-
-#: src/plugins/git/gbp-git-preferences-addin.c:166
-msgid "The Git configuration options above effect current project only."
-msgstr "Goian ezarritako Git konfigurazioko aukerek uneko proiektuan soilik dute eragina."
-
-#: src/plugins/git/gbp-git-preferences-addin.c:168
-msgid "The Git configuration options above effect global defaults."
-msgstr "Goian ezarritako Git konfigurazioko aukerek modu globalean dute eragina."
-
-#: src/plugins/git/gbp-git-preferences-addin.c:188
-msgid "Authorship"
-msgstr "Egiletza"
-
-#: src/plugins/git/gbp-git-preferences-addin.c:192
-msgid "Full Name"
-msgstr "Izen-abizenak"
-
-#: src/plugins/git/gbp-git-preferences-addin.c:193
-msgid "Email Address"
-msgstr "Helbide elektronikoa"
-
 #: src/plugins/git/gbp-git-submodule-stage.c:136
 msgid "Network is not available, skipping submodule update"
 msgstr "Sarea ez dago erabilgarri, azpimoduluaren eguneratzea saltatzen"
@@ -4398,6 +4286,14 @@ msgstr "Biltegia klonatzen"
 #: src/plugins/git/gbp-git-vcs-cloner.c:256
 msgid "A valid Git URL is required"
 msgstr "Baliozko Git URLa behar da"
+
+#: src/plugins/git/tweaks.ui:13
+msgid "Authorship"
+msgstr "Egiletza"
+
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+msgid "Email"
+msgstr "Posta elektronikoa"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:84
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4559,64 +4455,67 @@ msgstr "Sortu proiektu hutsa Makefile sinple bat erabilita"
 msgid "Maven Run"
 msgstr "Maven exekuzioa"
 
-#. translators: you may need to swap left/right in your language, as this refers to "start" (not "end")
-#: src/plugins/menu-search/gtk/menus.ui:8
+#: src/plugins/menu-search/gtk/menus.ui:13
+msgid "Global Search"
+msgstr "Bilaketa globala"
+
+#: src/plugins/menu-search/gtk/menus.ui:14
+msgid "Display the global search"
+msgstr "Erakutsi bilaketa globala"
+
+#: src/plugins/menu-search/gtk/menus.ui:24
+msgid "Panels"
+msgstr "Panelak"
+
+#: src/plugins/menu-search/gtk/menus.ui:26
 msgid "Toggle Left Panel"
 msgstr "Txandakatu ezkerreko panela"
 
-#: src/plugins/menu-search/gtk/menus.ui:9
-msgid "Toggle the left panel in our out of view"
+#: src/plugins/menu-search/gtk/menus.ui:27
+msgid "Toggle the left panel in or out of view"
 msgstr "Erakutsi/ezkutatu ezkerreko panela"
 
-#: src/plugins/menu-search/gtk/menus.ui:10
+#. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
+#: src/plugins/menu-search/gtk/menus.ui:29
 msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
-#. translators: you may need to swap left/right in your language, as this refers to "end" (not "start")
-#: src/plugins/menu-search/gtk/menus.ui:16
-msgid "Toggle Right Panel"
-msgstr "Txandakatu eskuineko panela"
-
-#: src/plugins/menu-search/gtk/menus.ui:17
-msgid "Toggle the right panel in our out of view"
+#: src/plugins/menu-search/gtk/menus.ui:35
+msgid "Toggle the right panel in or out of view"
 msgstr "Erakutsi/ezkutatu eskuineko panela"
 
-#: src/plugins/menu-search/gtk/menus.ui:18
+#. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
+#: src/plugins/menu-search/gtk/menus.ui:37
 msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
-#: src/plugins/menu-search/gtk/menus.ui:23
+#: src/plugins/menu-search/gtk/menus.ui:41
 msgid "Toggle Bottom Panel"
 msgstr "Txandakatu beheko panela"
 
-#: src/plugins/menu-search/gtk/menus.ui:24
-msgid "Toggle the bottom panel in our out of view"
+#: src/plugins/menu-search/gtk/menus.ui:42
+msgid "Toggle the bottom panel in or out of view"
 msgstr "Erakutsi/ezkutatu beheko panela"
 
-#: src/plugins/menu-search/gtk/menus.ui:30
+#: src/plugins/menu-search/gtk/menus.ui:55
 msgid "Switch to Dark Mode"
 msgstr "Aldatu modu ilunera"
 
-#: src/plugins/menu-search/gtk/menus.ui:31
+#: src/plugins/menu-search/gtk/menus.ui:56
 msgid "Change style-scheme to dark variant"
 msgstr "Aldatu estilo-eskema aldagai ilunera"
 
-#: src/plugins/menu-search/gtk/menus.ui:36
+#: src/plugins/menu-search/gtk/menus.ui:60
 msgid "Switch to Light Mode"
 msgstr "Aldatu modu argira"
 
-#: src/plugins/menu-search/gtk/menus.ui:37
+#: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to light variant"
 msgstr "Aldatu estilo-eskema aldagai argira"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
-#: src/plugins/meson/gbp-meson-config-view-addin.c:57
 msgid "Meson"
 msgstr "Meson"
-
-#: src/plugins/meson/gbp-meson-config-view-addin.c:58
-msgid "Meson Options"
-msgstr "Meson aukerak"
 
 #: src/plugins/meson/gbp-meson-introspection.c:584
 msgid "Load Meson Introspection"
@@ -4630,18 +4529,6 @@ msgstr "Instalatu proiektua"
 #, c-format
 msgid "%s (Meson)"
 msgstr "%s (Meson)"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:106
-msgid "Add toolchain"
-msgstr "Gehitu tresna-katea"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:113
-msgid "Define a new custom toolchain targeting a specific platform"
-msgstr "Definitu tresna-kate berria plataforma zehatz baterako"
-
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-addin.c:204
-msgid "Toolchain"
-msgstr "Tresna-katea"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
 msgid "No Provided Tool"
@@ -4728,11 +4615,6 @@ msgstr "D"
 msgid "Add Tool"
 msgstr "Gehitu tresna"
 
-#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
-#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
-msgid "Delete"
-msgstr "Ezabatu"
-
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
 msgid "Delete Toolchain"
 msgstr "Ezabatu tresna-katea"
@@ -4741,43 +4623,43 @@ msgstr "Ezabatu tresna-katea"
 msgid "Delete Tool"
 msgstr "Ezabatu tresna"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:173
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
 msgid "GNOME Application"
 msgstr "GNOME aplikazioa"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:174
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr "Meson-en oinarritutako proiektu bat GNOMErako, GTK 4 eta libadwaita erabiliz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:188
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
 msgid "GTK 4 Application"
 msgstr "GTK 4 aplikazioa"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:189
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "A Meson-based project using GTK 4"
 msgstr "Meson-en oinarritutako proiektua GTK 4 erabiliz"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:203
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
 msgid "Shared Library"
 msgstr "Liburutegi partekatua"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:204
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "A Meson-based project for a shared library"
 msgstr "Meson-en oinarritutako proiektua partekatutako liburutegi baterako"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:211
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
 msgid "Command Line Tool"
 msgstr "Komando-lerroko tresna"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:212
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "An Meson-based project for a command-line program"
 msgstr "Meson-en oinarritutako proiektua komando-lerroko programa baterako"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:219
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
 msgid "Empty Meson Project"
 msgstr "Meson proiektu hutsa"
 
-#: src/plugins/meson-templates/gbp-meson-template-provider.c:220
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "An empty Meson project skeleton"
 msgstr "Meson proiektu baten eskeleto hutsa"
 
@@ -4912,15 +4794,27 @@ msgstr "npm mendekotasunak deskargatzen"
 msgid "_External Program…"
 msgstr "_Kanpoko programa…"
 
-#: src/plugins/platformui/tweaks.ui:30
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
+msgid "Follow System"
+msgstr "Jarraitu sistemari"
+
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
+msgid "Light"
+msgstr "Argia"
+
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
+msgid "Dark"
+msgstr "Iluna"
+
+#: src/plugins/platformui/tweaks.ui:22
 msgid "Document Navigation"
 msgstr "Dokumentu-nabigazioa"
 
-#: src/plugins/platformui/tweaks.ui:33
+#: src/plugins/platformui/tweaks.ui:31
 msgid "Tab Bar"
 msgstr "Fitxa-barra"
 
-#: src/plugins/platformui/tweaks.ui:39
+#: src/plugins/platformui/tweaks.ui:37
 msgid "Drop Down"
 msgstr "Goitibeherakoa"
 
@@ -4997,6 +4891,7 @@ msgid "Files will be copied in a moment"
 msgstr "Fitxategiak berehalako batean kopiatuko dira"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
+#: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
 msgstr "Proiektuaren zuhaitza"
 
@@ -5057,6 +4952,82 @@ msgstr "Nabarmendu proiektuaren zuhaitzean"
 msgid "Reveal in Project _Tree"
 msgstr "Nabarmendu proiektuaren _zuhaitzean"
 
+#: src/plugins/project-tree/tweaks.ui:14
+msgid "Display icons next to files within the project tree"
+msgstr "Ikonoak erakusten ditu fitxategien alboan, proiektuaren zuhaitzean"
+
+#: src/plugins/project-tree/tweaks.ui:26
+msgid "Show files which are typically ignored"
+msgstr "Erakutsi normalean ez ikusiarena egiten zaien fitxategiak"
+
+#: src/plugins/project-tree/tweaks.ui:38
+msgid "Sort directories before files in the same directory"
+msgstr "Ordenatu direktorioak fitxategien aurretik direktorio berean"
+
+#: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
+msgid "No version control"
+msgstr "Bertsio-kontrolik ez"
+
+#: src/plugins/projectui/tweaks.ui:14
+msgid "Restore Previous Session"
+msgstr "Leheneratu aurreko saioa"
+
+#: src/plugins/projectui/tweaks.ui:15
+msgid "Open previously opened files when loading a project"
+msgstr "Ireki aurretik irekitako fitxategiak proiektua kargatzen denean"
+
+#: src/plugins/projectui/tweaks.ui:28
+msgid "Project Creation"
+msgstr "Proiektuen sorrera"
+
+#: src/plugins/projectui/tweaks.ui:32
+msgid "Projects created with Builder will be placed within this directory"
+msgstr "Builder aplikazioarekin sortutako proiektuak direktorio honetan kokatuko dira"
+
+#: src/plugins/projectui/tweaks.ui:48
+msgid "The default license when creating new projects"
+msgstr "Proiektu berrietan erabiliko den lizentzia lehenetsia"
+
+#: src/plugins/projectui/tweaks.ui:93
+msgid "No License"
+msgstr "Lizentziarik ez"
+
+#: src/plugins/projectui/tweaks.ui:109
+msgid "Overview"
+msgstr "Aurkezpen orokorra"
+
+#: src/plugins/projectui/tweaks.ui:115
+msgid "Project Identifier"
+msgstr "Proiektuaren identifikatzailea"
+
+#: src/plugins/projectui/tweaks.ui:123
+msgid ""
+"This identifier is used when referencing your project's settings, build "
+"directories, and cached information."
+msgstr "Identifikatzaile hau erabiltzen da proiektuaren ezarpenei, eraikuntza-direktorioei eta cacheko informazioari erreferentzia egitean."
+
+#: src/plugins/projectui/tweaks.ui:132
+msgid "Build System"
+msgstr "Eraikuntza-sistema"
+
+#: src/plugins/projectui/tweaks.ui:140
+msgid "Source Directory"
+msgstr "Iturburuko direktorioa"
+
+#: src/plugins/projectui/tweaks.ui:160
+msgid "Current Configuration"
+msgstr "Uneko konfigurazioa"
+
+#: src/plugins/projectui/tweaks.ui:161
+msgid ""
+"The configuration is used to setup build pipelines, configure your build "
+"system, and run your project."
+msgstr "Konfigurazioa eraikuntza-kanalizazioak konfiguratzeko, eraikuntza-sistemarako eta proiektua exekutatzeko erabiltzen da."
+
+#: src/plugins/projectui/tweaks.ui:228
+msgid "Provided By"
+msgstr "Hornitzailea:"
+
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Aarch64 Emulation"
@@ -5071,22 +5042,6 @@ msgstr "Arm emulazioa"
 #, c-format
 msgid "My Computer (%s) %s"
 msgstr "Nire ordenagailua (%s) %s"
-
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:40
-msgid "Highlight Words Matching Selection"
-msgstr "Nabarmendu hautapenarekin bat datozen hitzak"
-
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:41
-msgid "Highlight all occurrences of words matching the current selection"
-msgstr "Nabarmendu hautapenarekin bat datozen hitzen agerraldi guztiak"
-
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:47
-msgid "Minimum Length for Highlight"
-msgstr "Nabarmentzeko gutxieneko luzera"
-
-#: src/plugins/quick-highlight/gbp-quick-highlight-preferences.c:48
-msgid "Highlight words matching at least this number of characters"
-msgstr "Nabarmendu karaktere kopuru hau gutxienez duten hitzak"
 
 #: src/plugins/recent/gbp-recent-section.c:254
 msgid "Removed Files"
@@ -5111,44 +5066,66 @@ msgstr "Azken aldiko proiektuak"
 msgid "_Reformat tabs"
 msgstr "Aldatu _tabulazioen formatua"
 
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:37
+#: src/plugins/rust-analyzer/tweaks.ui:13
 msgid "Rust Analyzer"
 msgstr "Rust analizatzailea"
 
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:42
-msgid "Cargo Check"
-msgstr "Cargo Check"
+#: src/plugins/rust-analyzer/tweaks.ui:16
+msgid "Cargo"
+msgstr "Cargo"
 
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:43
-msgid "Run “cargo check” as the default cargo command"
-msgstr "Exekutatu “cargo check” cargo komando lehenetsi gisa"
+#: src/plugins/rust-analyzer/tweaks.ui:19
+msgid "Cargo Command"
+msgstr "Cargo komandoa"
 
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:47
-msgid "Cargo Clippy"
-msgstr "Cargo Clippy"
+#: src/plugins/rust-analyzer/tweaks.ui:20
+msgid "The default cargo command to run with rust-analyzer"
+msgstr "rust-analyzer aplikazioarekin erabiliko den cargo komando lehenetsia"
 
-#: src/plugins/rust-analyzer/rust-analyzer-preferences-addin.c:48
-msgid "Run “cargo clippy” as the default cargo command"
-msgstr "Exekutatu “cargo clippy” cargo komando lehenetsi gisa"
+#: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
+msgid "Update"
+msgstr "Eguneratu"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:332
+#: src/plugins/sdkui/gtk/menus.ui:6
+msgid "Manage SDKs…"
+msgstr "Kudeatu SDKak…"
+
+#: src/plugins/sdkui/tweaks.ui:12
+msgid "Downloads"
+msgstr "Deskargak"
+
+#: src/plugins/sdkui/tweaks.ui:15
+msgid "Download on Metered Connections"
+msgstr "Deskargatu neurtutako konexioetan"
+
+#: src/plugins/sdkui/tweaks.ui:16
+msgid ""
+"Allow the download of SDKs and dependencies when on metered internet "
+"connections"
+msgstr "Onartu SDKak eta mendekotasunak desgargatzea neurtutako konexioetan"
+
+#: src/plugins/sdkui/tweaks.ui:29
+msgid "Available SDKs"
+msgstr "Eskuragarri dauden SDKak"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
 msgid "Untitled Command"
 msgstr "Izenik gabeko komandoa"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:339
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 msgid "Set Shortcut"
 msgstr "Ezarri laster-tekla"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:475
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
 msgid "Select Working Directory"
 msgstr "Hautatu laneko direktorioa"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:541
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:158
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
 msgid "Create Command"
 msgstr "Sortu komandoa"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:542
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
 msgstr "_Sortu"
 
@@ -5176,6 +5153,10 @@ msgstr "Shell komandoa"
 msgid "You may use single or double quotes for parameters."
 msgstr "Komatxo bakunak edo bikoitzak erabili daitezke paremetroetarako."
 
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
+msgid "Environment"
+msgstr "Ingurunea"
+
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
 msgid "Working Directory"
 msgstr "Laneko direktorioa"
@@ -5187,79 +5168,62 @@ msgid ""
 msgstr "Komandoa kokaleku honetatik exekutatuko da. Erabili <tt>$BUILDDIR</tt>, <tt>$SRCDIR</tt> edo <tt>$HOME</tt> bide-izen erlatibo bat definitzeko."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+msgid "Use Subshell"
+msgstr "Erabili Subshell"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr "Exekutatu programa subshell batetik, adibidez <tt>sh -c ''</tt>"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
 msgstr "Kokalekua"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr "Builder aplikazioak toki anitzetatik exekutatu dezake komandoa, baita ostalari-sistematik edo eraikuntza-edukiontzietatik ere."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:192
-msgid "Add _Variable"
-msgstr "Gehitu a_ldagaia"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:198
-msgid "Add Variable"
-msgstr "Gehitu aldagaia"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:199
-msgid "_Add"
-msgstr "_Gehitu"
-
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:218
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
 msgstr "E_zabatu komandoa"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:246
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Subprocess"
 msgstr "Azpiprozesua"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:247
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command as a subprocess of Builder."
 msgstr "Komandoa Builder-en azpiprozesu gisa exekutatzen du."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:254
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
 msgstr "Komandoa ostalari-sisteman exekutatzen du."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:261
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
 msgstr "Komandoa eraikuntzak-kanalizazioan exekutatzen du."
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:267
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 msgid "As Target Application"
 msgstr "Helburuko aplikazio gisa"
 
-#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:268
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
 msgstr "Komandoa helburuko aplikazioa balitz bezala exekutatzen du."
 
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:144
-msgid "Project Commands"
-msgstr "Proiektu-komandoak"
-
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:149
-msgid "Shared Commands"
-msgstr "Partekatutako komandoak"
-
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:159
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
 msgstr "Komandoak proiektua eraiki, exekutatu edo aldatzeko erabili daitezke"
 
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:180
-msgid "These commands may be run from this project only."
-msgstr "Honako komandoak proiektu honetan soilik exekutatu daitezke."
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:116
+msgid "These commands are specific to this project."
+msgstr "Komando hauek proiektu honenak soilik dira."
 
-#: src/plugins/shellcmd/gbp-shellcmd-preferences-addin.c:183
-msgid "These commands may be shared across any project in Builder."
-msgstr "Honako komandoak Builder-eko edozein proiektu partekatutan exekutatu daitezke."
-
-#: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
-#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
-msgid "Untitled command"
-msgstr "Izenik gabeko komandoa"
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
+msgid "These commands are shared across all projects."
+msgstr "Komando hauek proiektu guztiak partekatzen dituzte."
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
@@ -5285,6 +5249,10 @@ msgstr "Komando-ingurunea"
 msgid "Command Locality"
 msgstr "Komandoaren kokalekua"
 
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr "Erabili shell-a"
+
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 msgid "Run Commands"
 msgstr "Exekutatu komandoak"
@@ -5292,6 +5260,13 @@ msgstr "Exekutatu komandoak"
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
 msgstr "Aplikaziorako edo proiekturako kargatuko diren exekuzio-komandoen IDen zerrenda bat."
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
+msgstr "Erabili komandoak eraikuntza-tresnak, aplikazioak edo shell scriptak exekutatzeko eta haiek lasterbide batekin mapatzeko. Hainbat ingurunetatik exekutatu daitezke, adibidez eraikuntza-kanalizaziotik, exekuzio-denborako ingurunetik edo sistema eragile ostalaritik."
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
@@ -5305,13 +5280,9 @@ msgstr "Gehitu hiztegiari"
 msgid "Ignore"
 msgstr "Ez ikusi egin"
 
-#: src/plugins/spellcheck/gbp-spell-preferences-addin.c:37
-msgid "Spelling"
-msgstr "Ortografia"
-
-#: src/plugins/spellcheck/gbp-spell-preferences-addin.c:43
-msgid "Automatically check spelling as you type"
-msgstr "Automatikoki egiaztatu ortografia idatzi ahala"
+#: src/plugins/spellcheck/editor-spell-menu.c:259
+msgid "Languages"
+msgstr "Hizkuntzak"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
@@ -5328,7 +5299,7 @@ msgstr "Orrian"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
-#: src/plugins/symbol-tree/gtk/menus.ui:5
+#: src/plugins/symbol-tree/gtk/menus.ui:8
 msgid "Select Symbol…"
 msgstr "Hautatu ikurra…"
 
@@ -5336,7 +5307,7 @@ msgstr "Hautatu ikurra…"
 msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Hautatu ikurra (Ctrl+Shift+K)"
 
-#: src/plugins/symbol-tree/gtk/menus.ui:6
+#: src/plugins/symbol-tree/gtk/menus.ui:9
 msgid "Navigate to a symbol within the current page"
 msgstr "Joan uneko orriko ikur batera"
 
@@ -5365,7 +5336,7 @@ msgstr "Exekutatu profilatzailearekin"
 msgid "Run the project with profiler"
 msgstr "Exekutatu proiektua profilatzailearekin"
 
-#: src/plugins/sysprof/gtk/menus.ui:30
+#: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
 msgstr "Profilatzailea"
 
@@ -5397,11 +5368,11 @@ msgstr "Bistaratu denbora"
 msgid "Counters"
 msgstr "Zenbatzaileak"
 
-#: src/plugins/sysprof/gtk/menus.ui:60
+#: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
 msgstr "PUZ erabilera"
 
-#: src/plugins/sysprof/gtk/menus.ui:65
+#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
 msgid "Memory Usage"
 msgstr "Memoria-erabilera"
 
@@ -5437,21 +5408,111 @@ msgstr "Onartu PUZa bizkortzea"
 msgid "Run with _Profiler"
 msgstr "Exekutatu _profilatzailearekin"
 
-#: src/plugins/sysprof/gtk/menus.ui:128
+#: src/plugins/sysprof/gtk/menus.ui:130
 msgid "Record Again…"
 msgstr "Grabatu berriro…"
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:83
-msgid "Add sysroot"
-msgstr "Gehitu sysroot-a"
+#: src/plugins/sysprof/tweaks.ui:16
+msgid "Instruments"
+msgstr "Tresnak"
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:90
-msgid "Define a new sysroot target to build against a different target"
-msgstr "Definitu sysroot helburu berria beste helburu baten arabera eraikitzeko"
+#: src/plugins/sysprof/tweaks.ui:20
+msgid "Records CPU usage and CPU frequency statistics"
+msgstr "PUZ erabilera eta PUZ maiztasunaren estatistikak grabatzen ditu"
 
-#: src/plugins/sysroot/gbp-sysroot-preferences-addin.c:138
-msgid "Sysroots"
-msgstr "Sysroot-ak"
+#: src/plugins/sysprof/tweaks.ui:31
+msgid "Sample Callstacks"
+msgstr "Adibideko dei-pilak"
+
+#: src/plugins/sysprof/tweaks.ui:32
+msgid "Record stacktraces on a regular interval and build a callgraph"
+msgstr "Grabatu pila-aztarnak tarte erregularretan eta eraiki dei-grafo bat"
+
+#: src/plugins/sysprof/tweaks.ui:43
+msgid "CPU Governor"
+msgstr "PUZ gobernatzailea"
+
+#: src/plugins/sysprof/tweaks.ui:44
+msgid "Force performance mode while profiling"
+msgstr "Behartu errendimendu modua profilatzean"
+
+#: src/plugins/sysprof/tweaks.ui:53
+msgid "Don't Change Governor"
+msgstr "Ez aldatu gobernatzailea"
+
+#: src/plugins/sysprof/tweaks.ui:59
+msgid "Force Performance Mode"
+msgstr "Behartu errendimendu modua"
+
+#: src/plugins/sysprof/tweaks.ui:72
+msgid "Simple memory statistics about the process such as total memory used"
+msgstr "Prozesuari buruzko memoria-estatistika sinpleak, adibidez erabilitako memoria osoa"
+
+#: src/plugins/sysprof/tweaks.ui:83
+msgid "Memory Profiling"
+msgstr "Memoria-profilatzea"
+
+#: src/plugins/sysprof/tweaks.ui:84
+msgid "Record stacktraces of memory allocations and releases"
+msgstr "Grabatu memoria-esleipenen eta bertsioen pila-aztarnak"
+
+#: src/plugins/sysprof/tweaks.ui:99
+msgid "Energy Usage"
+msgstr "Energia-erabilera"
+
+#: src/plugins/sysprof/tweaks.ui:100
+msgid "Record statistics about energy usage using RAPL"
+msgstr "Grabatu energia-erabilerari buruzko estatistikak RAPL bidez"
+
+#: src/plugins/sysprof/tweaks.ui:111
+msgid "Battery Usage"
+msgstr "Bateria-erabilera"
+
+#: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
+msgid "Record statistics about battery charge and discharge rates"
+msgstr "Grabatu bateriaren karga- eta deskarga-tasei buruzko estatistikak"
+
+#: src/plugins/sysprof/tweaks.ui:127
+msgid "Network Usage"
+msgstr "Sarearen erabilera"
+
+#: src/plugins/sysprof/tweaks.ui:128
+msgid "Record statistics about network usage"
+msgstr "Grabatu sarearen erabilerari buruzko estatistikak"
+
+#: src/plugins/sysprof/tweaks.ui:139
+msgid "Disk Usage"
+msgstr "Diskoaren erabilera"
+
+#: src/plugins/sysprof/tweaks.ui:155
+msgid "GNOME Shell Performance"
+msgstr "GNOME Shell errendimendua"
+
+#: src/plugins/sysprof/tweaks.ui:156
+msgid "Collect performance and timing information from GNOME Shell"
+msgstr "Bildu GNOME Shell aplikazioaren errendimenduari eta denborei buruzko informazioa"
+
+#: src/plugins/sysprof/tweaks.ui:169
+msgid "Integration"
+msgstr "Integrazioa"
+
+#: src/plugins/sysprof/tweaks.ui:172
+msgid "JavaScript"
+msgstr "JavaScript"
+
+#: src/plugins/sysprof/tweaks.ui:173
+msgid "Collect information from GJS-based applications"
+msgstr "Bildu GJSn oinarritutako aplikazioei buruzko informazioa"
+
+#: src/plugins/sysprof/tweaks.ui:184
+msgid "Application Tracing"
+msgstr "Aplikazioen aztarnak"
+
+#: src/plugins/sysprof/tweaks.ui:185
+msgid ""
+"Provide TRACE_FD environment variable for applications to deliver custom "
+"events"
+msgstr "Hornitu TRACE_FD ingurumen-aldagaia aplikazioek gertaera pertsonalizatuak eskaini ditzaten"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
@@ -5469,104 +5530,6 @@ msgstr "Komaz banandutako aukerako bide-izen bat, PKG_CONFIG_PATH zehazteko."
 #, c-format
 msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:50
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
-#: src/plugins/terminal/gtk/menus.ui:33
-msgid "Terminal"
-msgstr "Terminala"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:51
-msgid "Scrollback"
-msgstr "Atzeranzko korritzea"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:60
-msgctxt "Keywords"
-msgid "terminal font monospace"
-msgstr "terminalaren tarte bakarreko letra-tipoa"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:70
-msgid "Bold text in terminals"
-msgstr "Testu lodia terminaletan"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:71
-msgid "If terminals are allowed to display bold text"
-msgstr "Terminaletan testu lodia erakutsi ahal izango den ala ez"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:72
-msgctxt "Keywords"
-msgid "terminal allow bold"
-msgstr "terminalak lodia onartzen du"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:81
-msgid "Show hyperlinks"
-msgstr "Erakutsi hiperestekak"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:82
-msgid ""
-"When enabled hyperlinks (OSC 8 escape sequences) are recognized and displayed"
-msgstr "Gaituta dagoenean, hiperestekak (OSC 8 ihes-sekuentziak) ezagutu eta bistaratu egiten dira"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:83
-msgctxt "Keywords"
-msgid "terminal show hyperlinks links urls"
-msgstr "terminala erakutsi hiperestekak estekak urlak"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:93
-msgid "Scroll on output"
-msgstr "Korritu irteeran"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:94
-msgid ""
-"When enabled the terminal will scroll to the bottom when new output is "
-"displayed"
-msgstr "Gaituta dagoenean, terminala beheraino korrituko da irteera berria bistaratzen denean"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:95
-msgctxt "Keywords"
-msgid "scroll on output"
-msgstr "korritu irteeran"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:104
-msgid "Scroll on keystroke"
-msgstr "Korritu tekla sakatutakoan"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:105
-msgid "When enabled the terminal will scroll to the bottom when typing"
-msgstr "Gaituta dagoenean, terminala beheraino korrituko da idaztean"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:106
-msgctxt "Keywords"
-msgid "scroll on keystroke"
-msgstr "korritu tekla sakatutakoan"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:115
-msgid "Limit Scrollback"
-msgstr "Mugatu atzeranzko korritzea"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:116
-msgid ""
-"When enabled terminal scrollback will be limited to the number of lines "
-"specified below"
-msgstr "Gaituta dagoenean, atzeranzko korritzea mugatu egingo da eta behean adierazitako lerro kopurua soilik korrituko da"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:117
-msgctxt "Keywords"
-msgid "scrollback limit"
-msgstr "atzeranzko korritzaren muga"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:125
-msgid "Scrollback Lines"
-msgstr "Atzeranzko korritzearen lerroak"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:126
-msgid "The number of lines to keep available for scrolling"
-msgstr "Korritzerako erabilgarri egongo den lerro kopurua"
-
-#: src/plugins/terminal/gbp-terminal-preferences-addin.c:127
-msgctxt "Keywords"
-msgid "scrollback lines"
-msgstr "atzeranzko korritzearen lerroak"
 
 #. translators: %s is replaced with the current local time of day
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
@@ -5587,34 +5550,85 @@ msgid "New _Terminal"
 msgstr "_Terminal berria"
 
 #: src/plugins/terminal/gtk/menus.ui:11
-msgid "Open a new terminal"
-msgstr "Ireki terminal berria"
+msgid "Open a new terminal on the host operating system"
+msgstr "Ireki terminal berria sistema eragile ostalarian"
 
 #: src/plugins/terminal/gtk/menus.ui:14
 msgid "New _Build Terminal"
 msgstr "_Eraikuntza-terminal berria"
 
 #: src/plugins/terminal/gtk/menus.ui:19
-msgid "Open a new terminal in build pipeline"
-msgstr "Ireki terminal berria eraikuntza-kanalizazioan"
+msgid "Open a new terminal in project's build pipeline"
+msgstr "Ireki terminal berria proiektuaren eraikuntza-kanalizazioan"
 
 #: src/plugins/terminal/gtk/menus.ui:22
 msgid "New _Runtime Terminal"
 msgstr "E_xekuzio-terminal berria"
 
 #: src/plugins/terminal/gtk/menus.ui:27
-msgid "Open a new terminal in runtime environment"
-msgstr "Ireki terminal berria exekuzio-denborako ingurunean"
+msgid "Open a new terminal in project's runtime environment"
+msgstr "Ireki terminal berria proiektuaren exekuzio-denborako ingurunean"
 
 #: src/plugins/terminal/gtk/menus.ui:41
 msgid "Split"
 msgstr "Banandu"
 
-#: src/plugins/testui/gbp-testui-item.c:84
-#: src/plugins/testui/gbp-testui-panel.ui:4
-#: src/plugins/testui/gbp-testui-preferences-addin.c:37
-msgid "Unit Tests"
-msgstr "Proba-unitateak"
+#: src/plugins/terminal/tweaks.ui:14
+msgid "The font used within terminals"
+msgstr "Terminaletan erabilitako letra-tipoa"
+
+#: src/plugins/terminal/tweaks.ui:29
+msgid "Allow Bold"
+msgstr "Onartu lodia"
+
+#: src/plugins/terminal/tweaks.ui:30
+msgid "Allows the use of bold escape sequences"
+msgstr "Ihes-sekuentzia lodien erabilera onartzen du"
+
+#: src/plugins/terminal/tweaks.ui:41
+msgid "Allow Hyperlinks"
+msgstr "Onartu hiperestekak"
+
+#: src/plugins/terminal/tweaks.ui:42
+msgid "Allows the use of hyperlink escape sequences"
+msgstr "Hiperesteka motako ihes-sekuentzien erabilera onartzen du"
+
+#: src/plugins/terminal/tweaks.ui:55
+msgid "Scrolling"
+msgstr "Korritzea"
+
+#: src/plugins/terminal/tweaks.ui:58
+msgid "Scroll On Output"
+msgstr "Korritu irteeran"
+
+#: src/plugins/terminal/tweaks.ui:59
+msgid "Automatically scroll when applications within the terminal output text"
+msgstr "Automatikoki korritu terminaleko aplikazioen irteera testua denean"
+
+#: src/plugins/terminal/tweaks.ui:70
+msgid "Scroll On Keyboard Input"
+msgstr "Korritu teklatuaren sarreran"
+
+#: src/plugins/terminal/tweaks.ui:71
+msgid "Automatically scroll when typing to insert text"
+msgstr "Automatikoki korritu testua txertatzean"
+
+#: src/plugins/terminal/tweaks.ui:87
+msgid "Limit Scrollback"
+msgstr "Mugatu atzeranzko korritzea"
+
+#: src/plugins/terminal/tweaks.ui:88
+msgid ""
+"Limit the number of lines that are stored in memory for terminal scrollback"
+msgstr "Mugatu terminalaren korritzerako memorian biltegiratuko den lerro kopurua"
+
+#: src/plugins/terminal/tweaks.ui:99
+msgid "Maximum Lines in Scrollback"
+msgstr "Atzeranzko korritzearen gehieneko lerro kopurua"
+
+#: src/plugins/terminal/tweaks.ui:100
+msgid "The maximum number of lines stored in history when limiting scrollback"
+msgstr "Historian biltegiratuko den gehieneko lerro kopurua atzeranzko korritzea mugatzean"
 
 #: src/plugins/testui/gbp-testui-output-panel.c:147
 msgid "Unit Test Output"
@@ -5631,19 +5645,6 @@ msgstr "Utzi probak"
 #: src/plugins/testui/gbp-testui-output-panel.ui:59
 msgid "Save test output"
 msgstr "Gorde probaren irteera"
-
-#: src/plugins/testui/gbp-testui-preferences-addin.c:51
-msgid "Run unit tests from within the build pipeline environment."
-msgstr "Exekutatu proba-unitateak eraikuntza-kanalizazioko inguruean."
-
-#: src/plugins/testui/gbp-testui-preferences-addin.c:55
-msgid "As Application"
-msgstr "Aplikazio gisa"
-
-#: src/plugins/testui/gbp-testui-preferences-addin.c:56
-msgid ""
-"Run unit tests with access to display and other runtime environment features."
-msgstr "Exekutatu proba-unitateak bistaratzera eta exekuzio-denborako ingurunearen beste eginbide batzuetara sartzeko aukerarekin."
 
 #. Translators: %s is replaced with the time in the current locale
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
@@ -5719,7 +5720,7 @@ msgstr "Exekutatu galeren detektagailuarekin"
 msgid "Run the project with valgrind"
 msgstr "Exekutatu valgrind bidez"
 
-#: src/plugins/valgrind/gtk/menus.ui:21
+#: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:13
 msgid "Leak Detector"
 msgstr "Galeren detektagailua"
 
@@ -5739,29 +5740,57 @@ msgstr "Laburpena"
 msgid "Full"
 msgstr "Osoa"
 
-#: src/plugins/valgrind/gtk/menus.ui:44
-msgid "Disabled"
-msgstr "Desgaituta"
-
-#: src/plugins/valgrind/gtk/menus.ui:51
+#: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
 msgstr "Galera klaseak"
 
-#: src/plugins/valgrind/gtk/menus.ui:53
+#: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
 msgstr "Definitua"
 
-#: src/plugins/valgrind/gtk/menus.ui:58
+#: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
 msgstr "Zeharkakoa"
 
-#: src/plugins/valgrind/gtk/menus.ui:63
+#: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
 msgstr "Balizkoa"
 
-#: src/plugins/valgrind/gtk/menus.ui:68
+#: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
 msgstr "Irisgarria"
+
+#: src/plugins/valgrind/tweaks.ui:20
+msgid "Include definite leaks in report summary"
+msgstr "Sartu galera definituak txosten-laburpenean"
+
+#: src/plugins/valgrind/tweaks.ui:32
+msgid "Include possible leaks in report summary"
+msgstr "Sartu balizko galerak txosten-laburpenean"
+
+#: src/plugins/valgrind/tweaks.ui:44
+msgid "Include indirect leaks in report summary"
+msgstr "Sartu zeharkako galerak txosten-laburpenean"
+
+#: src/plugins/valgrind/tweaks.ui:56
+msgid "Include reachable leaks in report summary"
+msgstr "Sartu galera atzigarriak txosten-laburpenean"
+
+#: src/plugins/valgrind/tweaks.ui:71
+msgid "Track Origins"
+msgstr "Jarraitu jatorriak"
+
+#: src/plugins/valgrind/tweaks.ui:72
+msgid "Show origin of undefined values"
+msgstr "Erakutsi definitu gabeko balioen jatorria"
+
+#: src/plugins/valgrind/tweaks.ui:87
+msgid "Leak Check"
+msgstr "Galeren egiaztatzea"
+
+#: src/plugins/valgrind/tweaks.ui:88
+msgid "Search for memory leaks at exit"
+msgstr "Bilatu memoria-galerak irtetean"
 
 #: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
 msgid "Begin cloning project from URI"
@@ -5821,17 +5850,34 @@ msgstr "Aldatu _adarrera"
 msgid "_Push to origin"
 msgstr "Bultzatu _jatorrira"
 
-#: src/plugins/vim/gbp-vim-preferences-addin.c:38
+#: src/plugins/vim/tweaks.ui:18
 msgid "Vim"
 msgstr "Vim"
-
-#: src/plugins/vim/gbp-vim-preferences-addin.c:39
-msgid "Emulate keyboard shortcuts from Vim"
-msgstr "Emulatu Vim aplikazioaren lasterbideak"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
 msgid "New _Browser Page"
 msgstr "A_rakatzaile-orri berria"
+
+#: src/plugins/web-browser/gtk/menus.ui:18
+#: src/plugins/web-browser/gtk/menus.ui:24
+msgid "Reload Page"
+msgstr "Birkargatu orria"
+
+#: src/plugins/web-browser/gtk/menus.ui:19
+msgid "Reload the current page"
+msgstr "Kargatu berriro uneko orria"
+
+#: src/plugins/web-browser/gtk/menus.ui:25
+msgid "Reload the current page ignoring cache"
+msgstr "Kargatu berriro uneko orria cacheari ez ikusiarena eginda"
+
+#: src/plugins/web-browser/gtk/menus.ui:30
+msgid "Focus Location"
+msgstr "Fokuratu kokalekua"
+
+#: src/plugins/web-browser/gtk/menus.ui:31
+msgid "Focus the current page's location"
+msgstr "Fokuratu uneko orriaren kokalekua"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
@@ -5842,8 +5888,485 @@ msgstr "Huts egin du XML zuhaitza sortzeak."
 msgid "File must be saved locally to parse."
 msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
-#~ msgid "Use Tabs"
-#~ msgstr "Erabili tabulazioak"
+#~ msgid "Smart Home and End"
+#~ msgstr "Hasiera eta amaiera adimetsua"
+
+#~ msgid "Whether or not Home moves to first non-space character."
+#~ msgstr "Hasiera zuriunerik gabeko lehen karakterera mugituko den ala ez"
+
+#~ msgid "Show Open Files"
+#~ msgstr "Erakutsi fitxategi irekiak"
+
+#~ msgid "Display the open files list in the project sidebar."
+#~ msgstr "Bistaratu fitxategi irekien zerrenda proiektuaren alboko barran."
+
+#~ msgid "System"
+#~ msgstr "Sistema"
+
+#~ msgid "follow"
+#~ msgstr "jarraitu"
+
+#~ msgid "Editor"
+#~ msgstr "Editorea"
+
+#~ msgid "Grid Pattern"
+#~ msgstr "Sareta-eredua"
+
+#~ msgctxt "Keywords"
+#~ msgid "editor font monospace"
+#~ msgstr "editorearen tarte bakarreko letra-tipoa"
+
+#~ msgid "Line Spacing"
+#~ msgstr "Lerroartea"
+
+#~ msgid "Number of pixels above and below editor lines"
+#~ msgstr "Pixel kopurua editore-lerroen gainean eta azpian"
+
+#~ msgctxt "Keywords"
+#~ msgid "editor line spacing font monospace"
+#~ msgstr "editorearen tarte bakarra letra-tipoa lerroen tartean"
+
+#~ msgid "Color Scheme"
+#~ msgstr "Kolore-eskema"
+
+#~ msgid "Emulation"
+#~ msgstr "Emulazioa"
+
+#~ msgid "Default keybinding mode which mimics gedit"
+#~ msgstr "Gedit imitatzen duen laster-teklen modu lehenetsia"
+
+#~ msgid "Movement"
+#~ msgstr "Mugimendua"
+
+#~ msgid "Display list of open files"
+#~ msgstr "Bistaratu fitxategi irekien zerrenda"
+
+#~ msgid "Display the list of all open files in the project sidebar"
+#~ msgstr ""
+#~ "Bistaratu irekita dauden fitxategi guztien zerrenda proiektuaren alboko "
+#~ "barran"
+
+#~ msgid "Cursor"
+#~ msgstr "Kurtsorea"
+
+#~ msgid "Restore cursor position when a file is reopened"
+#~ msgstr ""
+#~ "Leheneratu kurtsorearen posizioa fitxategi bat berriro irekitzen denean"
+
+#~ msgid "Scroll Offset"
+#~ msgstr "Korritze-desplazamendua"
+
+#~ msgid "Minimum number of lines to keep above and below the cursor"
+#~ msgstr ""
+#~ "Kurtsorearen gainean eta azpian mantenduko den gutxieneko lerro kopurua"
+
+#~ msgid "Text Wrapping"
+#~ msgstr "Testua egokitzea"
+
+#~ msgid "In Between Words"
+#~ msgstr "Hitzen artean"
+
+#~ msgid "Line Information"
+#~ msgstr "Lerro-informazioa"
+
+#~ msgid "Show line number at beginning of each line"
+#~ msgstr "Erakutsi lerro-zenbakia lerro bakoitzaren hasieran"
+
+#~ msgid "Line changes"
+#~ msgstr "Lerro-aldaketak"
+
+#~ msgid "Show if a line was added or modified next to line number"
+#~ msgstr "Erakutsi, lerro-zenbakiaren alboan, lerro bat gehitu edo aldatu den"
+
+#~ msgid "Line diagnostics"
+#~ msgstr "Lerro-diagnostikoak"
+
+#~ msgid "Show an icon next to line numbers indicating type of diagnostic"
+#~ msgstr ""
+#~ "Erakutsi ikono bat lerro-zenbakien alboan diagnostiko mota adierazteko"
+
+#~ msgid "Highlight"
+#~ msgstr "Nabarmendu"
+
+#~ msgid "Current line"
+#~ msgstr "Uneko lerroa"
+
+#~ msgid "Make current line stand out with highlights"
+#~ msgstr "Nabarmendu uneko lerroa"
+
+#~ msgid "Matching brackets"
+#~ msgstr "Bat datozen parentesiak"
+
+#~ msgid "Highlight matching brackets based on cursor position"
+#~ msgstr "Nabarmendu bat datozen parentesiak kurtsorearen posizioaren arabera"
+
+#~ msgid "Visible Whitespace Characters"
+#~ msgstr "Zuriune-karaktere ikusgaiak"
+
+#~ msgid "New line and carriage return"
+#~ msgstr "Lerro berria eta orga-itzulera"
+
+#~ msgid "Non-breaking spaces"
+#~ msgstr "Zuriune zatiezinak"
+
+#~ msgid "Spaces inside of text"
+#~ msgstr "Testu barruko zuriuneak"
+
+#~ msgid "Trailing Only"
+#~ msgstr "Amaierakoak soilik"
+
+#~ msgid "Leading Only"
+#~ msgstr "Hasierakoak soilik"
+
+#~ msgid "Enable or disable autosave feature"
+#~ msgstr "Gaitu edo desgaitu gordetze automatikoa"
+
+#~ msgid "Code Insight"
+#~ msgstr "Kode-ezagutza"
+
+#~ msgid "Highlighting"
+#~ msgstr "Nabarmentzea"
+
+#~ msgid ""
+#~ "Use code insight to highlight additional information discovered in source "
+#~ "file"
+#~ msgstr ""
+#~ "Erabili kode-ezagutza iturburu-fitxategian aurkitutako informazio "
+#~ "gehigarria nabarmentzeko"
+
+#~ msgid "Completion"
+#~ msgstr "Osatzea"
+
+#~ msgid "Completions Display Size"
+#~ msgstr "Osatzeen bistaratze-tamaina"
+
+#~ msgid "Number of completions to display"
+#~ msgstr "Bistaratuko den osatze kopurua"
+
+#~ msgid "Display code suggestions interactively as you type"
+#~ msgstr "Bistaratu kode-iradokizunak dinamikoki idatzi ahala"
+
+#~ msgid "Search languages…"
+#~ msgstr "Bilatu lengoaiak…"
+
+#~ msgid "Trim trailing whitespace"
+#~ msgstr "Moztu amaierako zuriunea"
+
+#~ msgid "Overwrite closing braces"
+#~ msgstr "Gainidatzi itxierako giltzak"
+
+#~ msgid "Insert matching character for { [ ( or \""
+#~ msgstr "Txertatu bat datorren karakterea { [ ( edo \" karaktereetarako"
+
+#~ msgid "Position in spaces for the right margin"
+#~ msgstr "Kokalekua zuriunetan eskuineko marjinerako"
+
+#~ msgid "Tab width"
+#~ msgstr "Tabulazio-zabalera"
+
+#~ msgid "Width of a tab character in spaces"
+#~ msgstr "Tabulazio-karaktere baten zabalera zuriunetan"
+
+#~ msgid "Insert spaces instead of tabs"
+#~ msgstr "Txertatu zuriuneak tabuladoreen ordez"
+
+#~ msgid "Prefer spaces over use of tabs"
+#~ msgstr "Hobetsi zuriuneak tabuladoreen ordez"
+
+#~ msgid "Automatically indent"
+#~ msgstr "Koskatu automatikoki"
+
+#~ msgid "Spacing"
+#~ msgstr "Tartea"
+
+#~ msgid "Prefer a space before colons"
+#~ msgstr "Hobetsi zuriuneak bi puntuen ordez"
+
+#~ msgid "Number of CPU"
+#~ msgstr "PUZ kopurua"
+
+#~ msgid "Build"
+#~ msgstr "Eraiki"
+
+#~ msgid "Number of parallel build workers"
+#~ msgstr "Eraikuntza-langile paraleloen kopurua"
+
+#~ msgid "Clear build cache at startup"
+#~ msgstr "Garbitu eraikuntzen cachea abioan"
+
+#~ msgid "Expired caches will be purged when Builder is started"
+#~ msgstr "Iraungitako cacheak betiko ezabatuko dira Builder abiarazten denean"
+
+#~ msgid "Network"
+#~ msgstr "Sarea"
+
+#~ msgid ""
+#~ "Allow the use of metered network connections when automatically "
+#~ "downloading dependencies"
+#~ msgstr ""
+#~ "Onartu neurtutako sare-konexioak erabiltzea mendekotasunak automatikoki "
+#~ "deskargatzean"
+
+#~ msgid "Insert Breakpoint at Start of Application"
+#~ msgstr "Txertatu eten-puntua aplikazioaren hasieran"
+
+#~ msgid ""
+#~ "Automatically stop execution at the start of the applications main "
+#~ "function"
+#~ msgstr ""
+#~ "Automatikoki gelditu exekuzioa aplikazioaren funtzio nagusiaren hasieran"
+
+#~ msgid "Workspace"
+#~ msgstr "Laneko area"
+
+#~ msgid "A place for all your projects"
+#~ msgstr "Zure proiektu guztietarako gunea"
+
+#~ msgid "Restore previously opened files"
+#~ msgstr "Leheneratu aurretik irekitako fitxategiak"
+
+#~ msgid "Shortcuts"
+#~ msgstr "Lasterbideak"
+
+#~ msgid "Insight"
+#~ msgstr "Ezagutza"
+
+#~ msgid "Navigate with Tab Bar"
+#~ msgstr "Nabigatu fitxa-barrarekin"
+
+#~ msgid "Upon rebuilding the project the build log will be cleared"
+#~ msgstr "Proiektua berreraikitzean, eraikuntza-egunkaria garbitu egingo da"
+
+#~ msgid "Keyboard shortcuts similar to GNOME Text Editor"
+#~ msgstr "GNOME testu-editorearen antzeko lasterbideak"
+
+#~ msgid "Custom Font"
+#~ msgstr "Letra-tipo pertsonalizatua"
+
+#~ msgid "Search Preferences"
+#~ msgstr "Bilatu hobespenetan"
+
+#~ msgid "All Runtimes"
+#~ msgstr "Exekuzio-denbora guztiak"
+
+#~ msgid "Select this configuration as the active configuration."
+#~ msgstr "Hautatu konfigurazio hau konfigurazio aktibo gisa"
+
+#~ msgid ""
+#~ "Duplicating the configuration allows making changes without modifying "
+#~ "this configuration."
+#~ msgstr ""
+#~ "Konfigurazioa bikoizten bada, aldaketak konfigurazio hau aldatu gabe egin "
+#~ "daitezke."
+
+#~ msgid "_Remove"
+#~ msgstr "_Kendu"
+
+#~ msgid "Removes the configuration and cannot be undone."
+#~ msgstr "Konfigurazioa kentzen du eta ezin da desegin."
+
+#~ msgid "Runtime Environment"
+#~ msgstr "Exekuzio-ingurunea"
+
+#~ msgid "Run Options"
+#~ msgstr "Exekuzio-aukerak"
+
+#~ msgid "Application Runtime"
+#~ msgstr "Aplikazioaren exekuzio-denbora"
+
+#~ msgid "Project"
+#~ msgstr "Proiektua"
+
+#~ msgid "_Create Custom Command"
+#~ msgstr "_Sortu komando pertsonalizatua"
+
+#~ msgid "Use Clang for Diagnostics"
+#~ msgstr "Erabili Clang diagnostikorako"
+
+#~ msgid ""
+#~ "Clang will be queried for diagnostics within C, C++, and Objective-C "
+#~ "sources"
+#~ msgstr ""
+#~ "Clang kontsultatuko da C, C++ eta Objective-C iturburuetako diagnostikoak "
+#~ "egiteko"
+
+#~ msgid "Use Clang for Completions"
+#~ msgstr "Erabili Clang osatzeetarako"
+
+#~ msgid ""
+#~ "Clang will be queried for completions within C, C++, and Objective-C "
+#~ "sources"
+#~ msgstr ""
+#~ "Clang kontsultatuko da C, C++ eta Objective-C iturburuetako osatzeak "
+#~ "egiaztatzeko"
+
+#~ msgid "Show Overview Map"
+#~ msgstr "Erakutsi ikuspegi orokorra"
+
+#~ msgid "Use an overview map instead of a scrollbar"
+#~ msgstr "Erakutsi ikuspegi orokorra korritze-barraren ordez"
+
+#~ msgid "Display line numbers next to each line of source code"
+#~ msgstr "Erakutsi iturburu-kodearen lerro bakoitzaren alboko lerro-zenbakiak"
+
+#~ msgid "Adjust line-height of the configured font"
+#~ msgstr "Doitu konfiguratutako letra-tipoaren lerro-altuera"
+
+#~ msgid "Suggest Completions While Typing"
+#~ msgstr "Iradoki osatzeak idatzi ahala"
+
+#~ msgid "Automatically select the first completion when displayed"
+#~ msgstr "Automatikoki hautatu lehen osatzea hura bistaratzen denean"
+
+#~ msgid "Upon saving, trailing whitepsace from modified lines will be trimmed"
+#~ msgstr "Gordetzean, aldatutako lerroen amaierako zuriunea moztu egingo da"
+
+#~ msgid "Insert matching character for [[(\"'"
+#~ msgstr "Txertatu bat datorren karakterea { [ ( edo \" karaktereetarako"
+
+#~ msgid "Prefer spaces over tabs"
+#~ msgstr "Hobetsi zuriuneak, ez tabulazioak"
+
+#~ msgid "Format source code as you type"
+#~ msgstr "Eman formatua iturburu-kodeari idatzi ahala"
+
+#~ msgid "Moves to first non-whitespace character before line edges"
+#~ msgstr ""
+#~ "Lerro-ertzen aurreko zuriunerik gabeko lehen karakterera mugitzen da"
+
+#~ msgid "The Git configuration options above effect current project only."
+#~ msgstr ""
+#~ "Goian ezarritako Git konfigurazioko aukerek uneko proiektuan soilik dute "
+#~ "eragina."
+
+#~ msgid "The Git configuration options above effect global defaults."
+#~ msgstr ""
+#~ "Goian ezarritako Git konfigurazioko aukerek modu globalean dute eragina."
+
+#~ msgid "Full Name"
+#~ msgstr "Izen-abizenak"
+
+#~ msgid "Email Address"
+#~ msgstr "Helbide elektronikoa"
+
+#~ msgid "Meson Options"
+#~ msgstr "Meson aukerak"
+
+#~ msgid "Add toolchain"
+#~ msgstr "Gehitu tresna-katea"
+
+#~ msgid "Define a new custom toolchain targeting a specific platform"
+#~ msgstr "Definitu tresna-kate berria plataforma zehatz baterako"
+
+#~ msgid "Highlight Words Matching Selection"
+#~ msgstr "Nabarmendu hautapenarekin bat datozen hitzak"
+
+#~ msgid "Highlight all occurrences of words matching the current selection"
+#~ msgstr "Nabarmendu hautapenarekin bat datozen hitzen agerraldi guztiak"
+
+#~ msgid "Highlight words matching at least this number of characters"
+#~ msgstr "Nabarmendu karaktere kopuru hau gutxienez duten hitzak"
+
+#~ msgid "Run “cargo check” as the default cargo command"
+#~ msgstr "Exekutatu “cargo check” cargo komando lehenetsi gisa"
+
+#~ msgid "Cargo Clippy"
+#~ msgstr "Cargo Clippy"
+
+#~ msgid "Run “cargo clippy” as the default cargo command"
+#~ msgstr "Exekutatu “cargo clippy” cargo komando lehenetsi gisa"
+
+#~ msgid "Project Commands"
+#~ msgstr "Proiektu-komandoak"
+
+#~ msgid "Shared Commands"
+#~ msgstr "Partekatutako komandoak"
+
+#~ msgid "Automatically check spelling as you type"
+#~ msgstr "Automatikoki egiaztatu ortografia idatzi ahala"
+
+#~ msgid "Add sysroot"
+#~ msgstr "Gehitu sysroot-a"
+
+#~ msgid "Define a new sysroot target to build against a different target"
+#~ msgstr ""
+#~ "Definitu sysroot helburu berria beste helburu baten arabera eraikitzeko"
+
+#~ msgid "Sysroots"
+#~ msgstr "Sysroot-ak"
+
+#~ msgctxt "Keywords"
+#~ msgid "terminal font monospace"
+#~ msgstr "terminalaren tarte bakarreko letra-tipoa"
+
+#~ msgid "Bold text in terminals"
+#~ msgstr "Testu lodia terminaletan"
+
+#~ msgid "If terminals are allowed to display bold text"
+#~ msgstr "Terminaletan testu lodia erakutsi ahal izango den ala ez"
+
+#~ msgctxt "Keywords"
+#~ msgid "terminal allow bold"
+#~ msgstr "terminalak lodia onartzen du"
+
+#~ msgid ""
+#~ "When enabled hyperlinks (OSC 8 escape sequences) are recognized and "
+#~ "displayed"
+#~ msgstr ""
+#~ "Gaituta dagoenean, hiperestekak (OSC 8 ihes-sekuentziak) ezagutu eta "
+#~ "bistaratu egiten dira"
+
+#~ msgctxt "Keywords"
+#~ msgid "terminal show hyperlinks links urls"
+#~ msgstr "terminala erakutsi hiperestekak estekak urlak"
+
+#~ msgid ""
+#~ "When enabled the terminal will scroll to the bottom when new output is "
+#~ "displayed"
+#~ msgstr ""
+#~ "Gaituta dagoenean, terminala beheraino korrituko da irteera berria "
+#~ "bistaratzen denean"
+
+#~ msgctxt "Keywords"
+#~ msgid "scroll on output"
+#~ msgstr "korritu irteeran"
+
+#~ msgid "Scroll on keystroke"
+#~ msgstr "Korritu tekla sakatutakoan"
+
+#~ msgid "When enabled the terminal will scroll to the bottom when typing"
+#~ msgstr "Gaituta dagoenean, terminala beheraino korrituko da idaztean"
+
+#~ msgctxt "Keywords"
+#~ msgid "scroll on keystroke"
+#~ msgstr "korritu tekla sakatutakoan"
+
+#~ msgid ""
+#~ "When enabled terminal scrollback will be limited to the number of lines "
+#~ "specified below"
+#~ msgstr ""
+#~ "Gaituta dagoenean, atzeranzko korritzea mugatu egingo da eta behean "
+#~ "adierazitako lerro kopurua soilik korrituko da"
+
+#~ msgctxt "Keywords"
+#~ msgid "scrollback limit"
+#~ msgstr "atzeranzko korritzaren muga"
+
+#~ msgid "Scrollback Lines"
+#~ msgstr "Atzeranzko korritzearen lerroak"
+
+#~ msgid "The number of lines to keep available for scrolling"
+#~ msgstr "Korritzerako erabilgarri egongo den lerro kopurua"
+
+#~ msgctxt "Keywords"
+#~ msgid "scrollback lines"
+#~ msgstr "atzeranzko korritzearen lerroak"
+
+#~ msgid "Open a new terminal"
+#~ msgstr "Ireki terminal berria"
+
+#~ msgid "Emulate keyboard shortcuts from Vim"
+#~ msgstr "Emulatu Vim aplikazioaren lasterbideak"
 
 #~ msgid "Use the tabbar within the page grid."
 #~ msgstr "Erabili tabulazio-barra orri-saretan."
@@ -5919,10 +6442,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgctxt "shortcut window"
 #~ msgid "Show help"
 #~ msgstr "Erakutsi laguntza"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Global Search"
-#~ msgstr "Bilaketa globala"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Preferences"
@@ -6045,24 +6564,12 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgstr "Kopiatu eta itsatsi"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Copy selected text to clipboard"
-#~ msgstr "Kopiatu hautatutako testua arbelean"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Cut selected text to clipboard"
 #~ msgstr "Ebaki hautatutako testua arbelera"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Paste text from clipboard"
 #~ msgstr "Itsatsi testua arbeletik"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Duplicate current line or selection"
-#~ msgstr "Bikoiztu uneko lerroa edo hautapena"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Undo and Redo"
-#~ msgstr "Desegin eta berregin"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Undo previous command"
@@ -6109,18 +6616,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgstr "Ordenatu hautatutako lerroak"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Make selection upper case"
-#~ msgstr "Jarri hautapena maiuskulaz"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Make selection lower case"
-#~ msgstr "Jarri hautapena minuskulaz"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Invert selection case"
-#~ msgstr "Alderantzikatu hautapenaren maiuskulak/minuskulak"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Show completion window"
 #~ msgstr "Erakutsi osaketaren leihoa"
 
@@ -6165,10 +6660,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgstr "(LSP soilik) Eman formatua hautatutako kodeari edo dokumentu osoari"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Navigation"
-#~ msgstr "Nabigazioa"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Move to next error in file"
 #~ msgstr "Joan fitxategiko hurrengo errorera"
 
@@ -6211,10 +6702,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgctxt "shortcut window"
 #~ msgid "Move to matching bracket"
 #~ msgstr "Mugitu bat datorren kortxetera"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Selections"
-#~ msgstr "Hautapenak"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Select all"
@@ -6274,18 +6761,12 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgid "Please wait while we scan your project"
 #~ msgstr "Itxaron zure proiektua eskaneatzen den bitartean"
 
-#~ msgid "Selection"
-#~ msgstr "Hautapena"
-
 #~ msgid "Test"
 #~ msgstr "Probatu"
 
 #, c-format
 #~ msgid "Failed to list run commands: %s"
 #~ msgstr "Huts egin du exekuzio-komandoak zerrendatzeak: %s"
-
-#~ msgid "Available Run Commands"
-#~ msgstr "Exekuzio-komando erabilgarriak"
 
 #~ msgid ""
 #~ "Some run commands may not be available until the project has been "
@@ -6326,12 +6807,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #, c-format
 #~ msgid "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
 #~ msgstr "%s <b>%s</b> <span fgalpha='36044'>%s</span>"
-
-#~ msgid "Flatpak"
-#~ msgstr "Flatpak"
-
-#~ msgid "Tags"
-#~ msgstr "Etiketak"
 
 #~ msgid "The number of pixels to include above and below lines in the editor."
 #~ msgstr "Editorean lerroen gainean eta azpian sarturko den pixel kopurua."
@@ -6393,9 +6868,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgid "Move to the previous error"
 #~ msgstr "Joan aurreko errorera"
 
-#~ msgid "_Reload"
-#~ msgstr "Bir_kargatu"
-
 #~ msgid ""
 #~ "Builder has discovered that this file has been modified externally. Would "
 #~ "you like to reload the file?"
@@ -6455,9 +6927,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Open a document"
 #~ msgstr "Ireki dokumentua"
-
-#~ msgid "Panels"
-#~ msgstr "Panelak"
 
 #~ msgid "Toggle navigation panel"
 #~ msgstr "Txandaatu nabigazio-panela"
@@ -6605,9 +7074,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgid "Workspace shortcuts"
 #~ msgstr "Laneko areen lasterbideak"
 
-#~ msgid "Focus to the global search entry"
-#~ msgstr "Fokua bilaketa globalaren sarreran"
-
 #~ msgid "_Undo"
 #~ msgstr "_Desegin"
 
@@ -6628,9 +7094,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Zoom _Out"
 #~ msgstr "_Txikiagotu"
-
-#~ msgid "_Reset"
-#~ msgstr "_Berrezarri"
 
 #, c-format
 #~ msgid "Insert “%s”"
@@ -6768,9 +7231,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgid "LGPLv2.1+"
 #~ msgstr "LGPLv2.1+"
 
-#~ msgid "No license"
-#~ msgstr "Lizentziarik ez"
-
 #~ msgid "Uses the Git version control system"
 #~ msgstr "Bertsioen kontrolerako Git sistema darabil"
 
@@ -6799,9 +7259,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgid "Connected to “%s”"
 #~ msgstr "“%s”(e)ra konektatuta"
 
-#~ msgid "Session"
-#~ msgstr "Saioa"
-
 #~ msgid "Other"
 #~ msgstr "Bestelakoa"
 
@@ -6813,9 +7270,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Result"
 #~ msgstr "Emaitza"
-
-#~ msgid "Copy"
-#~ msgstr "Kopiatu"
 
 #~ msgid "Elapsed Time"
 #~ msgstr "Igarotako denbora"
@@ -6999,9 +7453,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Undo the last command"
 #~ msgstr "Desegin azken komandoa"
-
-#~ msgid "Switch to selection mode"
-#~ msgstr "Aldatu hautapen-modura"
 
 #~ msgid "Switch to drag-resize mode"
 #~ msgstr "Aldatu arrastatu eta tamaina aldatzeko modura"
@@ -7211,9 +7662,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #~ msgid "Suggest Completions from Snippets"
 #~ msgstr "Iradoki osatzeak mozkinetatik"
 
-#~ msgid "Use registered snippets to suggest completion proposals"
-#~ msgstr "Erabili erregistratutako mozkinak osatze-proposamenak iradokitzeko"
-
 #~ msgid "Show the spellchecker panel"
 #~ msgstr "Erakutsi ortografia-egiaztatzailearen panela"
 
@@ -7403,9 +7851,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Save and close the current page"
 #~ msgstr "Gorde eta itxi uneko orria"
-
-#~ msgid "Save the current page"
-#~ msgstr "Gorde uneko orria"
 
 #, c-format
 #~ msgid "Not a command: %s"
