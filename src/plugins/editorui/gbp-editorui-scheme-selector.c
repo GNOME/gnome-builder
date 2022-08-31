@@ -24,6 +24,7 @@
 
 #include <libide-gui.h>
 #include <libide-sourceview.h>
+#include <libide-threading.h>
 
 #include "gbp-editorui-scheme-selector.h"
 
@@ -33,6 +34,8 @@ struct _GbpEditoruiSchemeSelector
 
   GtkFlowBox *flow_box;
   GSettings  *settings;
+
+  guint       disposed : 1;
 };
 
 enum {
@@ -201,6 +204,118 @@ style_scheme_activated_cb (GbpEditoruiSchemeSelector *self,
     gtk_widget_activate (preview);
 }
 
+static gboolean
+can_install_scheme (GtkSourceStyleSchemeManager *manager,
+                    const char * const          *scheme_ids,
+                    GFile                       *file)
+{
+  g_autofree char *uri = NULL;
+  const char *path;
+
+  g_assert (GTK_SOURCE_IS_STYLE_SCHEME_MANAGER (manager));
+  g_assert (G_IS_FILE (file));
+
+  uri = g_file_get_uri (file);
+
+  /* Don't allow resources, which would be weird anyway */
+  if (g_str_has_prefix (uri, "resource://"))
+    return FALSE;
+
+  /* Make sure it's in the form of name.xml as we will require
+   * that elsewhere anyway.
+   */
+  if (!g_str_has_suffix (uri, ".xml"))
+    return FALSE;
+
+  /* Not a native file, so likely not already installed */
+  if (!g_file_is_native (file))
+    return TRUE;
+
+  path = g_file_peek_path (file);
+  scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+  for (guint i = 0; scheme_ids[i] != NULL; i++)
+    {
+      GtkSourceStyleScheme *scheme = gtk_source_style_scheme_manager_get_scheme (manager, scheme_ids[i]);
+      const char *filename = gtk_source_style_scheme_get_filename (scheme);
+
+      /* If we have already loaded this scheme, then ignore it */
+      if (g_strcmp0 (filename, path) == 0)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+schemes_installed_cb (GObject      *object,
+                      GAsyncResult *result,
+                      gpointer      user_data)
+{
+  g_autoptr(GbpEditoruiSchemeSelector) self = user_data;
+  GtkSourceStyleSchemeManager *manager;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (GBP_IS_EDITORUI_SCHEME_SELECTOR (self));
+  g_assert (G_IS_ASYNC_RESULT (result));
+
+  if (!ide_application_install_schemes_finish (IDE_APPLICATION_DEFAULT, result, &error))
+    g_critical ("Failed to install schemes: %s", error->message);
+
+  manager = gtk_source_style_scheme_manager_get_default ();
+  gtk_source_style_scheme_manager_force_rescan (manager);
+
+  if (!self->disposed)
+    update_style_schemes (self->flow_box);
+}
+
+static gboolean
+gbp_editorui_scheme_selector_drop_scheme_cb (GbpEditoruiSchemeSelector *self,
+                                             const GValue              *value,
+                                             double                     x,
+                                             double                     y,
+                                             GtkDropTarget             *drop_target)
+{
+  g_assert (GBP_IS_EDITORUI_SCHEME_SELECTOR (self));
+  g_assert (GTK_IS_DROP_TARGET (drop_target));
+
+  if (G_VALUE_HOLDS (value, GDK_TYPE_FILE_LIST))
+    {
+      GSList *list = g_value_get_boxed (value);
+      g_autoptr(GPtrArray) to_install = NULL;
+      GtkSourceStyleSchemeManager *manager;
+      const char * const *scheme_ids;
+
+      if (list == NULL)
+        return FALSE;
+
+      manager = gtk_source_style_scheme_manager_get_default ();
+      scheme_ids = gtk_source_style_scheme_manager_get_scheme_ids (manager);
+      to_install = g_ptr_array_new_with_free_func (g_object_unref);
+
+      for (const GSList *iter = list; iter; iter = iter->next)
+        {
+          GFile *file = iter->data;
+
+          if (can_install_scheme (manager, scheme_ids, file))
+            g_ptr_array_add (to_install, g_object_ref (file));
+        }
+
+      if (to_install->len == 0)
+        return FALSE;
+
+      ide_application_install_schemes_async (IDE_APPLICATION_DEFAULT,
+                                             (GFile **)(gpointer)to_install->pdata,
+                                             to_install->len,
+                                             NULL,
+                                             schemes_installed_cb,
+                                             g_object_ref (self));
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gbp_editorui_scheme_selector_constructed (GObject *object)
 {
@@ -215,6 +330,8 @@ static void
 gbp_editorui_scheme_selector_dispose (GObject *object)
 {
   GbpEditoruiSchemeSelector *self = (GbpEditoruiSchemeSelector *)object;
+
+  self->disposed = TRUE;
 
   g_clear_pointer ((GtkWidget **)&self->flow_box, gtk_widget_unparent);
 
@@ -241,6 +358,8 @@ gbp_editorui_scheme_selector_class_init (GbpEditoruiSchemeSelectorClass *klass)
 static void
 gbp_editorui_scheme_selector_init (GbpEditoruiSchemeSelector *self)
 {
+  GtkDropTarget *drop_target;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   g_signal_connect_object (IDE_APPLICATION_DEFAULT,
@@ -257,4 +376,13 @@ gbp_editorui_scheme_selector_init (GbpEditoruiSchemeSelector *self)
 
   /* Ensure we've queried style-scheme-name once */
   g_variant_unref (g_settings_get_value (self->settings, "style-scheme-name"));
+
+  /* Setup Drag-n-Drop onto the selector to install schemes */
+  drop_target = gtk_drop_target_new (GDK_TYPE_FILE_LIST, GDK_ACTION_COPY);
+  g_signal_connect_object (drop_target,
+                           "drop",
+                           G_CALLBACK (gbp_editorui_scheme_selector_drop_scheme_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (drop_target));
 }
