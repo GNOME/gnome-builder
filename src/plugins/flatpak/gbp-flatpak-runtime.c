@@ -263,6 +263,9 @@ gbp_flatpak_runtime_handle_run_context_cb (IdeRunContext       *run_context,
   ide_run_context_append_argv (run_context, "--talk-name=org.freedesktop.portal.*");
   ide_run_context_append_argv (run_context, "--talk-name=org.a11y.Bus");
 
+  /* Layering violation, but always give access to profiler */
+  ide_run_context_append_argv (run_context, "--system-talk-name=org.gnome.Sysprof3");
+
   /* And last, before our child command, is the staging directory */
   ide_run_context_append_argv (run_context, staging_dir);
 
