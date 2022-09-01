@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-30 19:42+0000\n"
-"PO-Revision-Date: 2022-08-31 00:43+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2022-08-30 22:13+0000\n"
+"PO-Revision-Date: 2022-08-31 10:35+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -606,8 +606,7 @@ msgstr "Ayrıntılı Günlük Kaydı"
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
-msgstr ""
-"Hedef uygulama çalıştırırken G_MESSAGES_DEBUG=all kullanılma durumu"
+msgstr "Hedef uygulama çalıştırırken G_MESSAGES_DEBUG=all kullanılma durumu"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -2689,8 +2688,8 @@ msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
-"Bu seçenekler, inşa sistemince inşa boru hattı yapılandırması "
-"sırasında projeyi yapılandırmada kullanılır."
+"Bu seçenekler, inşa sistemince inşa boru hattı yapılandırması sırasında "
+"projeyi yapılandırmada kullanılır."
 
 #: src/plugins/buildui/tweaks.ui:387
 msgid "Build Environment"
@@ -2701,8 +2700,8 @@ msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
-"Uygulamanızı inşa etmede kullanılan SDK, çalışma zamanından "
-"kendiliğinden belirlenir."
+"Uygulamanızı inşa etmede kullanılan SDK, çalışma zamanından kendiliğinden "
+"belirlenir."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 msgid "Fetch dependencies"
@@ -5859,9 +5858,10 @@ msgstr ""
 msgid "_Update"
 msgstr "_Güncelle"
 
+# Menü ögesi olduğu için başlık düzeninde olmalı.
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
 msgid "Run with Leak Detector"
-msgstr "Sızıntı Algılayıcı ile çalıştır"
+msgstr "Sızıntı Algılayıcı ile Çalıştır"
 
 # Valgrind program adı olduğu için büyük harfle yazılmalı
 #: src/plugins/valgrind/gtk/menus.ui:13
