@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-08-29 09:01+0000\n"
-"PO-Revision-Date: 2022-08-30 17:03+0200\n"
+"PO-Revision-Date: 2022-09-02 14:12+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -615,40 +615,39 @@ msgstr "Provjera pravopisa"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
 msgid "Automatically check spelling within documents"
-msgstr ""
+msgstr "Automatska provjera pravopisa u dokumentima"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
-msgstr ""
+msgstr "Softver izgradnje za GNOME"
 
 #. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
 #: data/org.gnome.Builder.desktop.in.in:14
 msgid "Build;Develop;"
-msgstr ""
+msgstr "Izgradi;Razvoj;"
 
 #: data/org.gnome.Builder.desktop.in.in:20
-#, fuzzy
 msgid "Open a Project"
 msgstr "Otvori projekt"
 
 #: data/org.gnome.Builder.desktop.in.in:24
 msgid "Start New Project"
-msgstr ""
+msgstr "Pokreni novi projekt"
 
 #: data/org.gnome.Builder.desktop.in.in:28
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:279
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:92
 msgid "Clone Repository"
-msgstr ""
+msgstr "Kloniraj repozitorij"
 
 #: data/org.gnome.Builder.desktop.in.in:32
 msgid "New Editor Workspace"
-msgstr ""
+msgstr "Novi radni prostor uređivača"
 
 #: data/org.gnome.Builder.desktop.in.in:36
 #: src/plugins/dspy/gbp-dspy-workspace.ui:11
 msgid "D-Bus Inspector"
-msgstr ""
+msgstr "D-Bus inspektor"
 
 #: src/libide/code/ide-buffer.c:3673
 msgid "The current language lacks a symbol resolver."
@@ -658,12 +657,12 @@ msgstr ""
 #: src/libide/code/ide-buffer-manager.c:381
 #, c-format
 msgid "unsaved file %u"
-msgstr ""
+msgstr "nespremljena datoteka %u"
 
 #: src/libide/code/ide-language-defaults.c:219
 #, c-format
 msgid "%s contained invalid ASCII"
-msgstr ""
+msgstr "%s sadrži nevaljali ASCII"
 
 #: src/libide/code/ide-language-defaults.c:234
 #, c-format
@@ -704,7 +703,7 @@ msgstr "_Odustani"
 
 #: src/libide/debugger/ide-debug-manager.c:977
 msgid "A suitable debugger could not be found."
-msgstr ""
+msgstr "Prikladan otklanjatelj grešaka nije pronađen."
 
 #: src/libide/editor/gtk/menus.ui:16 src/libide/gui/ide-frame.ui:104
 #: src/libide/gui/ide-workbench.c:1455
@@ -755,7 +754,7 @@ msgstr "Neuspjelo otvaranje datoteke: %s"
 #: src/libide/editor/ide-editor-page.c:407
 #, c-format
 msgid "Print failed: %s"
-msgstr ""
+msgstr "Neuspjeli ispis: %s"
 
 #. translators: %s contains the error message
 #: src/libide/editor/ide-editor-page.c:483
@@ -864,12 +863,12 @@ msgstr "Jezik"
 #: src/libide/foundry/ide-build-manager.c:470
 #, c-format
 msgid "Failed to initialize build pipeline: %s"
-msgstr ""
+msgstr "Neuspjelo pokretanje slivnika izgradnje: %s"
 
 #: src/libide/foundry/ide-build-manager.c:611
 #, c-format
 msgid "Failed to get device information: %s"
-msgstr ""
+msgstr "Neuspjelo dobivanje informacija uređaja: %s"
 
 #: src/libide/foundry/ide-config-manager.c:529
 msgid "Active Configuration"
@@ -893,7 +892,7 @@ msgstr ""
 #: src/libide/greeter/ide-greeter-row.c:252
 #, fuzzy
 msgid "Fallback"
-msgstr "Pričuvno"
+msgstr "Pričuvni"
 
 #. translators: %s is replaced with the host name
 #: src/libide/foundry/ide-local-device.c:140
@@ -909,11 +908,11 @@ msgstr "Moje računalo (%s) — %s"
 
 #: src/libide/foundry/ide-pipeline.c:834
 msgid "The build pipeline is in a failed state"
-msgstr ""
+msgstr "Slivnika izgradnje je u neuspjelom stanju"
 
 #: src/libide/foundry/ide-pipeline.c:844
 msgid "The build configuration has errors"
-msgstr ""
+msgstr "Podešavanje izgradnje sadrži greške"
 
 #. translators: %s is replaced with the build shell command
 #: src/libide/foundry/ide-pipeline.c:1096
@@ -1043,7 +1042,7 @@ msgstr "Zadano (Operativni sustav računala)"
 #: src/libide/greeter/gtk/menus.ui:80
 #: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
 msgid "_Clone Repository…"
-msgstr "_Kloniranje repozitorija…"
+msgstr "_Kloniraj repozitorij…"
 
 #: src/libide/greeter/gtk/menus.ui:20 src/libide/terminal/gtk/menus.ui:17
 #: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:134
@@ -1277,9 +1276,8 @@ msgid "Show the application preferences"
 msgstr "Prikaži osobitosti aplikacije"
 
 #: src/libide/gui/ide-application-command-line.c:63
-#, fuzzy
 msgid "Open project in new workbench"
-msgstr "Otvori novi projekt na novom radnom stolu"
+msgstr "Otvori projekt na novom radnom stolu"
 
 #: src/libide/gui/ide-application-command-line.c:63
 msgid "FILE"
@@ -1413,7 +1411,7 @@ msgstr "Upravljanje inačicom"
 
 #: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
 msgid "SDKs"
-msgstr "SDK-ovi"
+msgstr "SDK"
 
 #: src/libide/plugins/ide-plugin.c:342
 msgid "Language Servers"
@@ -1477,21 +1475,21 @@ msgstr "Web stranica"
 
 #: src/libide/projects/ide-project.c:198
 msgid "Destination file must be within the project tree."
-msgstr ""
+msgstr "Odredišna datoteka mora biti u stablu projekta."
 
 #: src/libide/projects/ide-project.c:435
 msgid "File must be within the project tree."
-msgstr ""
+msgstr "Datoteka mora biti u stablu projekta."
 
 #: src/libide/projects/ide-projects-global.c:103
 #: src/plugins/projectui/tweaks.ui:9
 msgid "Projects"
-msgstr ""
+msgstr "Projekti"
 
 #: src/libide/projects/xml-reader.c:329
 #, c-format
 msgid "Could not parse XML from stream"
-msgstr ""
+msgstr "Nemoguća XML obrada iz strujanja"
 
 #: src/libide/sourceview/gtk/menus.ui:8
 msgid "C_ut"
@@ -1984,30 +1982,30 @@ msgstr "Upozorenja"
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "Build Pipeline"
-msgstr ""
+msgstr "Slivnik izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:4
 msgid "Build Issues"
-msgstr ""
+msgstr "Problemi izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:21
 msgid "Build status:"
-msgstr ""
+msgstr "Stanje izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:37
 msgid "Time completed:"
-msgstr ""
+msgstr "Vrijeme završetka:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:53
 #: src/plugins/buildui/gbp-buildui-pane.ui:67
 msgid "—"
-msgstr ""
+msgstr "—"
 
 #. translators: %u is replaced with the number of warnings
 #: src/plugins/buildui/gbp-buildui-status-popover.c:63
 #, c-format
 msgid "Warnings (%u)"
-msgstr ""
+msgstr "Upozorenja (%u)"
 
 #. translators: %u is replaced with the number of errors
 #: src/plugins/buildui/gbp-buildui-status-popover.c:76
@@ -2024,7 +2022,6 @@ msgid "Static"
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
-#, fuzzy
 msgid "Executable"
 msgstr "Izvršna datoteka"
 
@@ -2168,7 +2165,7 @@ msgstr "_Izvezi"
 
 #: src/plugins/buildui/gtk/menus.ui:88
 msgid "Export project"
-msgstr ""
+msgstr "Izvezi projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:94
 msgid "Stop Build"
@@ -2176,19 +2173,19 @@ msgstr "Zaustavi izgradnju"
 
 #: src/plugins/buildui/gtk/menus.ui:96
 msgid "Stop building project"
-msgstr ""
+msgstr "Zaustavi izgradnju projekta"
 
 #: src/plugins/buildui/gtk/menus.ui:102
 msgid "Show Build _Log"
-msgstr ""
+msgstr "Prikaži zapis _izgradnje"
 
 #: src/plugins/buildui/gtk/menus.ui:105
 msgid "Display panel containing the build log"
-msgstr ""
+msgstr "Prikazuje panel koji sadrži zapis izgradnje"
 
 #: src/plugins/buildui/gtk/menus.ui:114
 msgid "Select Run Command…"
-msgstr ""
+msgstr "Odaberi naredbu pokretanja…"
 
 #: src/plugins/buildui/gtk/menus.ui:124
 msgid "Run"
@@ -2196,7 +2193,7 @@ msgstr "Pokreni"
 
 #: src/plugins/buildui/gtk/menus.ui:127
 msgid "Run the project"
-msgstr ""
+msgstr "Pokreni projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:136
 msgid "Follow System Style"
@@ -2318,25 +2315,27 @@ msgstr "Naredbe"
 
 #: src/plugins/buildui/tweaks.ui:16
 msgid "Run Command"
-msgstr ""
+msgstr "Pokreni naredbu"
 
 #: src/plugins/buildui/tweaks.ui:17
 msgid "This command is used to run your project"
-msgstr ""
+msgstr "Ova naredba se koristi za pokretanje vašeg projekta"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
-msgstr ""
+msgstr "Pokretanje i zaustavljanje"
 
 #: src/plugins/buildui/tweaks.ui:58
 msgid "Install Before Running"
-msgstr ""
+msgstr "Instaliraj prije pokretanja"
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
+"Instaliraj aplikaciju prije pokretanja. Ovo je potrebno za većinu projekta "
+"osim ako se ne koriste prilagođene naredbe."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -2347,6 +2346,8 @@ msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
 msgstr ""
+"Pošalji signal u odredišnu aplikaciju kada se zatraži zaustavljanje "
+"aplikacije."
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
@@ -2357,27 +2358,31 @@ msgid ""
 "Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
 "troubleshooting"
 msgstr ""
+"Pokreće se s <tt>G_MESSAGES_DEBUG=all</tt> varijablom okruženja za "
+"rješavanje problema"
 
 #: src/plugins/buildui/tweaks.ui:147 src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
-msgstr ""
+msgstr "Testiranje jedinice"
 
 #: src/plugins/buildui/tweaks.ui:151
 msgid "Run unit tests from within the build environment."
-msgstr ""
+msgstr "Pokreni test jedinice iz okruženja izgradnje."
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
-msgstr ""
+msgstr "Kao aplikacija"
 
 #: src/plugins/buildui/tweaks.ui:164
 msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
+"Pokreni jedinicu s pristupom zaslonu i ostalim značajkama okruženja radnog "
+"procesa"
 
 #: src/plugins/buildui/tweaks.ui:176
 msgid "Build & Tooling"
-msgstr ""
+msgstr "Izgradnja i alati"
 
 #: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
 msgid "General"
@@ -3110,16 +3115,20 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
+"Jedinstveni naziv koji se koristi za mapu projekta i druge resurse. Naziv "
+"mora sadržavati mala slova bez razmaka i ne smije započeti brojem."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID…"
-msgstr "Id aplikacije…"
+msgstr "ID aplikacije…"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:53
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
+"Obrnuti identifikator naziva domene korišten za identifikaciju aplikacije, "
+"poput \"org.gnome.Builder\". Ne smije sadržavati crtice."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:69
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3537,24 +3546,23 @@ msgstr "Odabir formata"
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
-msgstr ""
+msgstr "Programski jezici"
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
-msgstr ""
+msgstr "Uvlačenje i oblikovanjw"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
-msgstr ""
+msgstr "Znak tabulatora"
 
 #: src/plugins/editorui/tweaks-language.ui:45
 msgid "The character to be inserted for Tab"
-msgstr ""
+msgstr "Znak koji se umeće za tabulator"
 
 #: src/plugins/editorui/tweaks-language.ui:59
-#, fuzzy
 msgid "Tab"
-msgstr "Tab"
+msgstr "Tabulator"
 
 #: src/plugins/editorui/tweaks-language.ui:73
 msgid "Insert Trailing Newline"
@@ -4326,11 +4334,11 @@ msgstr ""
 #. translators: you may need to swap left/right in your language, as this refers to "start" (not "end")
 #: src/plugins/menu-search/gtk/menus.ui:8
 msgid "Toggle Left Panel"
-msgstr ""
+msgstr "Uklj/Isklj lijevi panel"
 
 #: src/plugins/menu-search/gtk/menus.ui:9
 msgid "Toggle the left panel in or out of view"
-msgstr ""
+msgstr "Uključi ili isključi lijevi panel"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:11
@@ -4340,11 +4348,11 @@ msgstr ""
 #. translators: you may need to swap left/right in your language, as this refers to "end" (not "start")
 #: src/plugins/menu-search/gtk/menus.ui:17
 msgid "Toggle Right Panel"
-msgstr ""
+msgstr "Uklj/Isklj desni panel"
 
 #: src/plugins/menu-search/gtk/menus.ui:18
 msgid "Toggle the right panel in or out of view"
-msgstr ""
+msgstr "Uključi ili isključi desni panel"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:20
@@ -4353,48 +4361,48 @@ msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:25
 msgid "Toggle Bottom Panel"
-msgstr ""
+msgstr "Uklj/Isklj donji panel"
 
 #: src/plugins/menu-search/gtk/menus.ui:26
 msgid "Toggle the bottom panel in or out of view"
-msgstr ""
+msgstr "Uključi ili isključi donji panel"
 
 #: src/plugins/menu-search/gtk/menus.ui:32
 msgid "Switch to Dark Mode"
-msgstr ""
+msgstr "Prebaci u tamni način"
 
 #: src/plugins/menu-search/gtk/menus.ui:33
 msgid "Change style-scheme to dark variant"
-msgstr ""
+msgstr "Promijeni shemu izgleda u tamnu varijatu"
 
 #: src/plugins/menu-search/gtk/menus.ui:38
 msgid "Switch to Light Mode"
-msgstr ""
+msgstr "Prebaci u svjetli način"
 
 #: src/plugins/menu-search/gtk/menus.ui:39
 msgid "Change style-scheme to light variant"
-msgstr ""
+msgstr "Promijeni shemu izgleda u svijetlu varijatu"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
-msgstr ""
+msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-introspection.c:584
 msgid "Load Meson Introspection"
-msgstr ""
+msgstr "Učitaj Meson samoispitivanje"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:274
 msgid "Install project"
-msgstr ""
+msgstr "Instaliraj projekt"
 
 #: src/plugins/meson/gbp-meson-toolchain.c:61
 #, c-format
 msgid "%s (Meson)"
-msgstr ""
+msgstr "%s (Meson)"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
 msgid "No Provided Tool"
-msgstr ""
+msgstr "Nema priloženog alata"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
@@ -4408,12 +4416,12 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
 msgid "Add Tool:"
-msgstr ""
+msgstr "Dodaj alat:"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
 #: src/plugins/meson/gbp-meson-utils.c:98
 msgid "Compiler"
-msgstr ""
+msgstr "Kompilator"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
 #: src/plugins/meson/gbp-meson-utils.c:100
@@ -4423,7 +4431,7 @@ msgstr ""
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
 #: src/plugins/meson/gbp-meson-utils.c:102
 msgid "Archiver"
-msgstr ""
+msgstr "Arhivator"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
 #: src/plugins/meson/gbp-meson-utils.c:104
@@ -4451,26 +4459,25 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
 msgid "C"
-msgstr ""
+msgstr "C"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
 msgid "C++"
-msgstr ""
+msgstr "C++"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
 msgid "Python"
-msgstr ""
+msgstr "Python"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
 msgid "Vala"
-msgstr ""
+msgstr "Vala"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
 msgid "Fortran"
-msgstr ""
+msgstr "Fortran"
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
-#, fuzzy
 msgid "D"
 msgstr "D"
 
@@ -4484,47 +4491,47 @@ msgstr ""
 
 #: src/plugins/meson/gbp-meson-tool-row.ui:25
 msgid "Delete Tool"
-msgstr ""
+msgstr "Obriši alat"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:171
 msgid "GNOME Application"
-msgstr ""
+msgstr "GNOME aplikacija"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
-msgstr ""
+msgstr "Meson temeljen projekt za GNOME koji koristi GTK 4 i libadwaita"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:186
 msgid "GTK 4 Application"
-msgstr ""
+msgstr "GTK 4 aplikacija"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "A Meson-based project using GTK 4"
-msgstr ""
+msgstr "Meson temeljen projekt koji koristi GTK 4"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:201
 msgid "Shared Library"
-msgstr ""
+msgstr "Dijeljena biblioteka"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:202
 msgid "A Meson-based project for a shared library"
-msgstr ""
+msgstr "Meson temeljen projekt za dijeljenu datoteku"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:209
 msgid "Command Line Tool"
-msgstr ""
+msgstr "Alat naredbenog retka"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:210
 msgid "An Meson-based project for a command-line program"
-msgstr ""
+msgstr "Meson temeljen projekt za program naredbenog retka"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:217
 msgid "Empty Meson Project"
-msgstr ""
+msgstr "Prazan Meson projekt"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "An empty Meson project skeleton"
-msgstr ""
+msgstr "Prazan predložak Meson projekt"
 
 #: src/plugins/messages/gbp-messages-panel.ui:5
 msgid "Messages"
@@ -4532,7 +4539,7 @@ msgstr "Poruke"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:15
 msgid "Suggested GNOME Projects"
-msgstr ""
+msgstr "Predloženi GNOME projekti"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:30
 msgid "Boxes"
@@ -4544,7 +4551,7 @@ msgstr "GNOME aplikacija za pristup udaljenim i virtualnim računalima"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
-msgstr ""
+msgstr "IDE za pisanje GNOME temeljenog softvera"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:49
 msgid "Calendar"
@@ -4552,7 +4559,7 @@ msgstr "Kalendar"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A calendar application for GNOME"
-msgstr ""
+msgstr "GNOME aplikacija za kalendar"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Clocks"
@@ -4560,15 +4567,15 @@ msgstr "Satovi"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
 msgid "A clock application for GNOME"
-msgstr ""
+msgstr "GNOME aplikacija za sat"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
 msgid "Gitg"
-msgstr ""
+msgstr "Gitg"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:68
 msgid "Gitg is a graphical Git client"
-msgstr ""
+msgstr "Gitg je grafički Git klijent"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:76
 msgid "Maps"
@@ -4576,7 +4583,7 @@ msgstr "Karte"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
 msgid "A GNOME maps application"
-msgstr ""
+msgstr "GNOME aplikacija za karte"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "Music"
@@ -4584,15 +4591,15 @@ msgstr "Glazba"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:87
 msgid "Music player and management application"
-msgstr ""
+msgstr "Glazbeni reproduktor i aplikacija za upravljanje"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Nautilus"
-msgstr ""
+msgstr "Nautilus"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Default file manager for GNOME"
-msgstr ""
+msgstr "GNOME zadani upravitelj datoteka"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:104
 msgid "Photos"
@@ -4608,7 +4615,7 @@ msgstr "Polari"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:114
 msgid "An IRC Client for GNOME"
-msgstr ""
+msgstr "GNOME IRC klijent"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:123
 msgid "Sound Recorder"
@@ -4616,34 +4623,34 @@ msgstr "Snimatelj zvuka"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:124
 msgid "A modern sound recorder for GNOME"
-msgstr ""
+msgstr "GNOME meoderan snimač zvuka"
 
 #: src/plugins/notification/ide-notification-addin.c:107
 msgid "Build successful"
-msgstr ""
+msgstr "Izgradnja je uspješna"
 
 #: src/plugins/notification/ide-notification-addin.c:108
 #, c-format
 msgid "Project “%s” has completed building"
-msgstr ""
+msgstr "Projekt “%s” je završio izgradnju"
 
 #: src/plugins/notification/ide-notification-addin.c:112
 #: src/plugins/notification/ide-notification-addin.c:198
 msgid "Build failed"
-msgstr ""
+msgstr "Izgradnja je neuspješna"
 
 #: src/plugins/notification/ide-notification-addin.c:113
 #, c-format
 msgid "Project “%s” failed to build"
-msgstr ""
+msgstr "Projekt “%s” je neuspješno izgrađen"
 
 #: src/plugins/notification/ide-notification-addin.c:189
 msgid "Build succeeded"
-msgstr ""
+msgstr "Izgradnja je uspjela"
 
 #: src/plugins/notification/ide-notification-addin.c:191
 msgid "Build configured"
-msgstr ""
+msgstr "Izgradnja je podešena"
 
 #: src/plugins/notification/ide-notification-addin.c:193
 msgid "Build bootstrapped"
@@ -4651,11 +4658,11 @@ msgstr ""
 
 #: src/plugins/npm/gbp-npm-pipeline-addin.c:91
 msgid "Downloading npm dependencies"
-msgstr ""
+msgstr "preuzimanje npm zavisnosti"
 
 #: src/plugins/open-with-external/gtk/menus.ui:9
 msgid "_External Program…"
-msgstr ""
+msgstr "_Vanjski program…"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
@@ -4722,59 +4729,59 @@ msgstr "Datoteke"
 #: src/plugins/project-tree/gbp-project-tree-addin.c:682
 #, c-format
 msgid "Copying 1 file"
-msgstr ""
+msgstr "Kopiranje 1 datoteke"
 
 #. translators: first %s is replaced with completed number of files, second %s with total number of files
 #: src/plugins/project-tree/gbp-project-tree-addin.c:685
 #, c-format
 msgid "Copying %s of %s files"
-msgstr ""
+msgstr "Kopiranje %s od %s datoteka"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:721
 msgid "Failed to copy files"
-msgstr ""
+msgstr "Neuspjelo kopiranje datoteka"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:731
 msgid "Files copied"
-msgstr ""
+msgstr "Datoteke su kopirane"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:735
 #, c-format
 msgid "Copied %s file"
 msgid_plural "Copied %s files"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "Kopirana je %s datoteka"
+msgstr[1] "Kopirane su %s datoteke"
+msgstr[2] "Kopirano je %s datoteka"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:928
 msgid "Copying files…"
-msgstr ""
+msgstr "Kopiranje datoteka…"
 
 #: src/plugins/project-tree/gbp-project-tree-addin.c:929
 msgid "Files will be copied in a moment"
-msgstr ""
+msgstr "Datoteke će se kopirati za trenutak"
 
 #: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
 #: src/plugins/project-tree/tweaks.ui:10
 msgid "Project Tree"
-msgstr ""
+msgstr "Stablo projekta"
 
 #: src/plugins/project-tree/gbp-rename-file-popover.c:85
 #, c-format
 msgid "Rename %s"
-msgstr ""
+msgstr "Preimenuj %s"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
-msgstr ""
+msgstr "Nova dat_oteka…"
 
 #: src/plugins/project-tree/gtk/menus.ui:14
 msgid "New F_older…"
-msgstr ""
+msgstr "Nova m_apa…"
 
 #: src/plugins/project-tree/gtk/menus.ui:22
 msgid "O_pen"
-msgstr ""
+msgstr "O_tvori"
 
 #: src/plugins/project-tree/gtk/menus.ui:26
 msgid "Open _With…"
@@ -4782,15 +4789,15 @@ msgstr "Otvori _s(a)…"
 
 #: src/plugins/project-tree/gtk/menus.ui:30
 msgid "_Source Code Editor"
-msgstr ""
+msgstr "_Uređivač izvornog kôda"
 
 #: src/plugins/project-tree/gtk/menus.ui:37
 msgid "Open _Containing Folder"
-msgstr ""
+msgstr "Otvori _sadržajnu mapu"
 
 #: src/plugins/project-tree/gtk/menus.ui:47
 msgid "With _Terminal…"
-msgstr ""
+msgstr "S _terminalom…"
 
 #: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Move to Trash"
@@ -4798,23 +4805,23 @@ msgstr "_Premjesti u smeće"
 
 #: src/plugins/project-tree/gtk/menus.ui:72
 msgid "_Display Options"
-msgstr ""
+msgstr "_Mogućnosti prikaza"
 
 #: src/plugins/project-tree/gtk/menus.ui:76
 msgid "S_how Ignored Files"
-msgstr ""
+msgstr "P_rikaži zanemarene datoteke"
 
 #: src/plugins/project-tree/gtk/menus.ui:81
 msgid "S_ort Directories First"
-msgstr ""
+msgstr "Prvo _poredaj direktorije"
 
 #: src/plugins/project-tree/gtk/menus.ui:93
 msgid "Reveal in Project Tree"
-msgstr ""
+msgstr "Otkrij u stablu projekta"
 
 #: src/plugins/project-tree/gtk/menus.ui:102
 msgid "Reveal in Project _Tree"
-msgstr ""
+msgstr "Otkrij u stablu _projekta"
 
 #: src/plugins/project-tree/tweaks.ui:14
 msgid "Display icons next to files within the project tree"
@@ -4830,7 +4837,7 @@ msgstr ""
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
 msgid "No version control"
-msgstr ""
+msgstr "Nema upravljanja inačicom"
 
 #: src/plugins/projectui/tweaks.ui:14
 msgid "Restore Previous Session"
@@ -4842,7 +4849,7 @@ msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:28
 msgid "Project Creation"
-msgstr ""
+msgstr "Stvaranje projekta"
 
 #: src/plugins/projectui/tweaks.ui:32
 msgid "Projects created with Builder will be placed within this directory"
@@ -4854,7 +4861,7 @@ msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:93
 msgid "No License"
-msgstr ""
+msgstr "Bez licence"
 
 #: src/plugins/projectui/tweaks.ui:109
 msgid "Overview"
@@ -4872,15 +4879,15 @@ msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
-msgstr ""
+msgstr "Sustav izgradnje"
 
 #: src/plugins/projectui/tweaks.ui:140
 msgid "Source Directory"
-msgstr ""
+msgstr "Direktorij izvora"
 
 #: src/plugins/projectui/tweaks.ui:160
 msgid "Current Configuration"
-msgstr ""
+msgstr "Trenutno podešavanje"
 
 #: src/plugins/projectui/tweaks.ui:161
 msgid ""
@@ -4899,36 +4906,36 @@ msgstr ""
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
 msgid "Aarch64 Emulation"
-msgstr ""
+msgstr "Aarch64 emulacija"
 
 #: src/plugins/qemu/gbp-qemu-device-provider.c:43
 msgid "Arm Emulation"
-msgstr ""
+msgstr "Arm emulacija"
 
 #. translators: first %s is replaced with hostname, second %s with the CPU architecture
 #: src/plugins/qemu/gbp-qemu-device-provider.c:160
 #, c-format
 msgid "My Computer (%s) %s"
-msgstr ""
+msgstr "Moje računalo (%s) %s"
 
 #: src/plugins/recent/gbp-recent-section.c:254
 msgid "Removed Files"
-msgstr ""
+msgstr "Uklonjene datoteke"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:289
 #: src/plugins/recent/gbp-recent-section.c:296
 #, c-format
 msgid "Removing %s\n"
-msgstr ""
+msgstr "Uklanjam %s\n"
 
 #: src/plugins/recent/gbp-recent-section.c:424
 msgid "Removing Files…"
-msgstr ""
+msgstr "Uklanjanje datoteka…"
 
 #: src/plugins/recent/gbp-recent-section.ui:6
 msgid "Recent Projects"
-msgstr ""
+msgstr "Nedavni projekti"
 
 #: src/plugins/retab/gtk/menus.ui:5
 msgid "_Reformat tabs"
@@ -4936,15 +4943,15 @@ msgstr ""
 
 #: src/plugins/rust-analyzer/tweaks.ui:13
 msgid "Rust Analyzer"
-msgstr ""
+msgstr "Rust analizator"
 
 #: src/plugins/rust-analyzer/tweaks.ui:16
 msgid "Cargo"
-msgstr ""
+msgstr "Cargo"
 
 #: src/plugins/rust-analyzer/tweaks.ui:19
 msgid "Cargo Command"
-msgstr ""
+msgstr "Cargo naredba"
 
 #: src/plugins/rust-analyzer/tweaks.ui:20
 msgid "The default cargo command to run with rust-analyzer"
@@ -5015,7 +5022,7 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:67
 msgid "Shell Command"
-msgstr ""
+msgstr "Naredba ljuske"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
 msgid "You may use single or double quotes for parameters."
@@ -5023,11 +5030,11 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
 msgid "Environment"
-msgstr ""
+msgstr "Okruženje"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
 msgid "Working Directory"
-msgstr ""
+msgstr "Radni direktorij"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
@@ -5037,7 +5044,7 @@ msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
-msgstr ""
+msgstr "Koristi podljusku"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
@@ -5059,7 +5066,7 @@ msgstr "_Obriši naredbu"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
 msgid "Subprocess"
-msgstr ""
+msgstr "Podproces"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command as a subprocess of Builder."
@@ -5099,31 +5106,31 @@ msgstr "Naziv prikaza"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
 msgid "Keyboard Accelerator"
-msgstr ""
+msgstr "Prečac tipkovnice"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
 msgid "Current Working Directory"
-msgstr ""
+msgstr "Trenutni radni direktorij"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
 msgid "Command Arguments"
-msgstr ""
+msgstr "Argumenti naredbe"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
 msgid "Command Environment"
-msgstr ""
+msgstr "Naredba okruženja"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
 msgid "Command Locality"
-msgstr ""
+msgstr "Lokacija naredbe"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
 msgid "Use Shell"
-msgstr ""
+msgstr "Koristi ljusku"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 msgid "Run Commands"
-msgstr ""
+msgstr "Pokreni naredbu"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
@@ -5159,7 +5166,7 @@ msgstr "Bezimeni simbol"
 
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
 msgid "Filter Symbols…"
-msgstr ""
+msgstr "Filtriraj simbole…"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
@@ -5170,11 +5177,11 @@ msgstr ""
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Select Symbol…"
-msgstr ""
+msgstr "Odabir simbola…"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
 msgid "Select Symbol (Ctrl+Shift+K)"
-msgstr ""
+msgstr "Odaberi simbol (Ctrl+Shift+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Navigate to a symbol within the current page"
@@ -5215,7 +5222,7 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:34
 msgid "CPU Performance"
-msgstr ""
+msgstr "CPU performanse"
 
 #: src/plugins/sysprof/gtk/menus.ui:39
 msgid "Memory Allocations"
@@ -5239,35 +5246,35 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
-msgstr ""
+msgstr "CPU upotreba"
 
 #: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
 msgid "Memory Usage"
-msgstr ""
+msgstr "Upotreba memorije"
 
 #: src/plugins/sysprof/gtk/menus.ui:70
 msgid "Storage I/O"
-msgstr ""
+msgstr "U/I pohrane"
 
 #: src/plugins/sysprof/gtk/menus.ui:75
 msgid "Network I/O"
-msgstr ""
+msgstr "U/I mreže"
 
 #: src/plugins/sysprof/gtk/menus.ui:81
 msgid "Energy"
-msgstr ""
+msgstr "Energija"
 
 #: src/plugins/sysprof/gtk/menus.ui:83
 msgid "Consumption"
-msgstr ""
+msgstr "Potrošnja"
 
 #: src/plugins/sysprof/gtk/menus.ui:88
 msgid "Battery Charge"
-msgstr ""
+msgstr "Napunjenost baterije"
 
 #: src/plugins/sysprof/gtk/menus.ui:95
 msgid "Allow Application Integration"
-msgstr ""
+msgstr "Dopusti integraciju aplikacije"
 
 #: src/plugins/sysprof/gtk/menus.ui:100
 msgid "Allow CPU Throttling"
@@ -5420,23 +5427,23 @@ msgstr "Novi _terminal"
 
 #: src/plugins/terminal/gtk/menus.ui:11
 msgid "Open a new terminal"
-msgstr ""
+msgstr "Otvori novi terminal"
 
 #: src/plugins/terminal/gtk/menus.ui:14
 msgid "New _Build Terminal"
-msgstr ""
+msgstr "Novi _terminal izgradnje"
 
 #: src/plugins/terminal/gtk/menus.ui:19
 msgid "Open a new terminal in build pipeline"
-msgstr ""
+msgstr "Otvori novi terminal u slivniku izgradnje"
 
 #: src/plugins/terminal/gtk/menus.ui:22
 msgid "New _Runtime Terminal"
-msgstr ""
+msgstr "Novi _terminal radnog procesa"
 
 #: src/plugins/terminal/gtk/menus.ui:27
 msgid "Open a new terminal in runtime environment"
-msgstr ""
+msgstr "Otvori novi terminal u okruženju radnog procesa"
 
 #: src/plugins/terminal/gtk/menus.ui:41
 msgid "Split"
@@ -5549,33 +5556,35 @@ msgstr ""
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
 msgid "Updating Dependencies…"
-msgstr ""
+msgstr "Nadopuna zavisnosti…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
 msgid "Builder is updating your projects configured dependencies."
-msgstr ""
+msgstr "Graditelj nadopunjuje podešene zavisnosti vašeg projekta"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
-msgstr ""
+msgstr "Nadopuni zavisnosti…"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:8
 msgid "Download updates to project dependencies"
-msgstr ""
+msgstr "Preuzmi nadopune u zavisnosti projekta"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
-msgstr ""
+msgstr "Nadopuna Graditelja"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:166
 msgid "Update Available"
-msgstr ""
+msgstr "Nadopuna je dostupna"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
 msgid ""
 "An update to Builder is available. Builder can download and install it for "
 "you."
 msgstr ""
+"Nadopuna za Graditelja je dostupna. Graditelj ju može preuzeti i instalirati "
+"ju."
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "_Update"
@@ -5608,7 +5617,7 @@ msgstr "Sažetak"
 #: src/plugins/valgrind/gtk/menus.ui:38
 #, fuzzy
 msgid "Full"
-msgstr "Potpuna"
+msgstr "Puno"
 
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
@@ -5665,45 +5674,46 @@ msgstr ""
 
 #: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
 msgid "Begin cloning project from URI"
-msgstr ""
+msgstr "Započni klonirati projekt iz URI-a"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:149
 msgid "A failure occurred while cloning the repository."
-msgstr ""
+msgstr "Došlo je do greške pri kloniranju repozitorija."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
 msgid "Repository URL"
-msgstr ""
+msgstr "URL reporzitorija"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
 msgid "Choose an alternate branch"
-msgstr ""
+msgstr "Odaberi zamjenski ogranak"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
 msgid "Branches"
-msgstr ""
+msgstr "Ogranci"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
 msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
+"Upišite URL repozitorija izvornog kôda za projekt koji želite klonirati."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
-msgstr ""
+msgstr "Repozitorij će se klonirati u novom poddirektoriju."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
 msgid "Author Details"
-msgstr ""
+msgstr "Pojedinosti autora"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
 msgid "You may specify authorship information to override defaults."
-msgstr ""
+msgstr "Možete navesti dodatne podatke o autorstvu."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
 msgid "Status"
-msgstr ""
+msgstr "Stanje"
 
 #: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:27
 msgid "_Branches"
@@ -5727,7 +5737,7 @@ msgstr "Vim"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
 msgid "New _Browser Page"
-msgstr "Nova stranica _preglednika"
+msgstr "Nova _stranica preglednika"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
