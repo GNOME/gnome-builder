@@ -408,6 +408,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->buffer_actions = ide_property_action_group_new (IDE_TYPE_BUFFER);
   ide_property_action_group_add_string (self->buffer_actions, "encoding", "charset", TRUE);
   ide_property_action_group_add (self->buffer_actions, "newline-type", "newline-type");
+  ide_property_action_group_add (self->buffer_actions, "language", "language-id");
 
   self->view_actions = ide_property_action_group_new (IDE_TYPE_SOURCE_VIEW);
   ide_property_action_group_add (self->view_actions, "indent-width", "indent-width");
@@ -471,7 +472,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    G_CONNECT_SWAPPED);
 
   /* Language Syntax */
-  syntax_menu = ide_editor_syntax_menu_new ("editorui.language");
+  syntax_menu = ide_editor_syntax_menu_new ("workspace.editorui.buffer.language");
   self->syntax = g_object_new (GTK_TYPE_MENU_BUTTON,
                                "menu-model", syntax_menu,
                                "direction", GTK_ARROW_UP,
@@ -491,7 +492,7 @@ gbp_editorui_workspace_addin_load (IdeWorkspaceAddin *addin,
   panel_statusbar_add_suffix (self->statusbar, 1002, GTK_WIDGET (self->line_ends));
 
   /* Encoding */
-  encoding_menu = ide_editor_encoding_menu_new ("editorui.encoding");
+  encoding_menu = ide_editor_encoding_menu_new ("workspace.editorui.buffer.encoding");
   self->encoding = g_object_new (GTK_TYPE_MENU_BUTTON,
                                  "menu-model", encoding_menu,
                                  "direction", GTK_ARROW_UP,
