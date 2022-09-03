@@ -134,8 +134,6 @@ typedef struct
   ProposalRef ref;
   const char *keyword;
   guint priority;
-  int kind : 8;
-  int padding : 24;
 } Item;
 
 enum {
@@ -304,28 +302,13 @@ sort_by_priority (gconstpointer a,
 {
   const Item *ai = a;
   const Item *bi = b;
-  gint ret;
 
-  if (!(ret = (gint)ai->kind - (gint)bi->kind))
-    ret = (gint)ai->priority - (gint)bi->priority;
-
-  return ret;
-}
-
-static gint
-kind_priority (enum CXCursorKind kind)
-{
-  switch ((gint)kind)
-    {
-    case CXCursor_FieldDecl:
-      return -2;
-
-    case CXCursor_VarDecl:
-      return -1;
-
-    default:
-      return 0;
-    }
+  if (ai->priority < bi->priority)
+    return -1;
+  else if (ai->priority > bi->priority)
+    return 1;
+  else
+    return 0;
 }
 
 static void
@@ -387,11 +370,6 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
             item->keyword = variant_get_string (v);
           else
             item->keyword = "";
-
-          if (proposal_lookup (item->ref, "kind", NULL, &v))
-            item->kind = kind_priority (variant_get_uint32 (v));
-          else
-            item->kind = 0;
         }
     }
   else if (self->results != NULL)
@@ -413,11 +391,6 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
 
           if (!gtk_source_completion_fuzzy_match (item->keyword, folded, &item->priority))
             continue;
-
-          if (proposal_lookup (item->ref, "kind", NULL, &v))
-            item->kind = kind_priority (variant_get_uint32 (v));
-          else
-            item->kind = 0;
 
           pos++;
         }
