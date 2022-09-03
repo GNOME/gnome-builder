@@ -28,10 +28,22 @@
 #include "ide-ctags-index.h"
 #include "ide-ctags-results.h"
 
+static char *
+ide_ctags_completion_item_get_typed_text (GtkSourceCompletionProposal *proposal)
+{
+  return g_strdup (IDE_CTAGS_COMPLETION_ITEM (proposal)->entry->name);
+}
+
+static void
+proposal_iface_init (GtkSourceCompletionProposalInterface *iface)
+{
+  iface->get_typed_text = ide_ctags_completion_item_get_typed_text;
+}
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeCtagsCompletionItem,
                                ide_ctags_completion_item,
                                G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
 IdeCtagsCompletionItem *
 ide_ctags_completion_item_new (IdeCtagsResults          *results,
