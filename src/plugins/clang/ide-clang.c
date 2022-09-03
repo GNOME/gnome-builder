@@ -1300,14 +1300,40 @@ ide_clang_build_completion (GVariantBuilder    *builder,
   for (guint i = 0; i < n_chunks; i++)
     {
       g_auto(CXString) str = clang_getCompletionChunkText (result->CompletionString, i);
+      g_autofree char *rewritten = NULL;
       const gchar *text = clang_getCString (str);
       guint kind = clang_getCompletionChunkKind (result->CompletionString, i);
 
-      if (kind == CXCompletionChunk_TypedText && typed_text == NULL)
-        typed_text = g_utf8_casefold (text, -1);
-
       g_variant_builder_open (&chunks_builder, G_VARIANT_TYPE_VARDICT);
-      g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", text);
+
+      if (kind == CXCompletionChunk_TypedText && typed_text == NULL)
+        {
+          const char *bar = strrchr (text, '_');
+
+          typed_text = g_utf8_casefold (text, -1);
+
+          /* Convert Foo_autoptr into g_autoptr(Foo) */
+          if (bar &&
+              (g_str_equal (bar, "_autoptr") || g_str_equal (bar, "_auto")))
+            {
+              GString *string = g_string_new ("g");
+              g_string_append (string, bar);
+              g_string_append_c (string, '(');
+              g_string_append_len (string, text, strlen (text) - strlen (bar));
+              g_string_append_c (string, ')');
+              g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", string->str);
+              g_string_free (string, FALSE);
+            }
+          else
+            {
+              g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", text);
+            }
+        }
+      else
+        {
+          g_variant_builder_add_parsed (&chunks_builder, "{%s,<%s>}", "text", text);
+        }
+
       g_variant_builder_add_parsed (&chunks_builder, "{%s,<%u>}", "kind", kind);
       g_variant_builder_close (&chunks_builder);
     }
