@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-30 22:13+0000\n"
-"PO-Revision-Date: 2022-08-31 10:35+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2022-09-02 16:36+0000\n"
+"PO-Revision-Date: 2022-09-03 09:43+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -1442,6 +1442,10 @@ msgstr "Yeni Uçbirim"
 msgid "Ctrl+Shift+T"
 msgstr "Ctrl+Shift+T"
 
+#: src/libide/gui/ide-header-bar.ui:34
+msgid "Open application menu (F10)"
+msgstr "Uygulama menüsünü aç (F10)"
+
 #: src/libide/gui/ide-marked-view.c:414
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "HTML yüklenemedi. WebKit desteği eksik."
@@ -1478,6 +1482,11 @@ msgstr "Çalıştırmayı durdur"
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
 msgstr "Projeyi çalıştır"
+
+#: src/libide/gui/ide-shortcut-window.c:239
+#: src/libide/gui/ide-shortcut-window.c:265
+msgid "Other"
+msgstr "Diğer"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
 #: src/plugins/buildui/gtk/preferences.ui:25
