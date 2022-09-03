@@ -38,8 +38,20 @@ struct _IdeLspCompletionItem
   guint kind;
 };
 
+static char *
+ide_lsp_completion_item_get_typed_text (GtkSourceCompletionProposal *proposal)
+{
+  return g_strdup (IDE_LSP_COMPLETION_ITEM (proposal)->label);
+}
+
+static void
+proposal_iface_init (GtkSourceCompletionProposalInterface *iface)
+{
+  iface->get_typed_text = ide_lsp_completion_item_get_typed_text;
+}
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeLspCompletionItem, ide_lsp_completion_item, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
 static void
 ide_lsp_completion_item_finalize (GObject *object)
