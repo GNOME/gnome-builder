@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-30 00:29+0000\n"
-"PO-Revision-Date: 2022-09-01 20:35+0200\n"
+"POT-Creation-Date: 2022-09-02 16:36+0000\n"
+"PO-Revision-Date: 2022-09-02 20:35+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -513,7 +513,7 @@ msgstr ""
 #. language’s convention, e.g. do not use “” or »«.
 #: data/gsettings/org.gnome.builder.gschema.xml:27
 msgid "\"Projects\""
-msgstr "«Projectes»"
+msgstr "\"Projectes\""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:28
 msgid "Projects directory"
@@ -1475,6 +1475,10 @@ msgstr "Terminal nou"
 msgid "Ctrl+Shift+T"
 msgstr "Ctrl+Maj+T"
 
+#: src/libide/gui/ide-header-bar.ui:34
+msgid "Open application menu (F10)"
+msgstr "Obre el menú d'aplicacions (F10)"
+
 #: src/libide/gui/ide-marked-view.c:414
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "No es pot carregar l'HTML. Manca el suport de WebKit."
@@ -1511,6 +1515,11 @@ msgstr "Atura l'execució"
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
 msgstr "Executa el projecte"
+
+#: src/libide/gui/ide-shortcut-window.c:239
+#: src/libide/gui/ide-shortcut-window.c:265
+msgid "Other"
+msgstr "Altres"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -1558,6 +1567,7 @@ msgid "Devices & Simulators"
 msgstr "Dispositius i simuladors"
 
 #: src/libide/plugins/ide-plugin.c:344
+#: src/plugins/codeui/gbp-codeui-hover-provider.c:82
 msgid "Diagnostics"
 msgstr "Diagnòstics"
 
@@ -6092,7 +6102,7 @@ msgstr "Estat"
 msgid "_Branches"
 msgstr "_Branques"
 
-#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:88
+#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:93
 msgid "_Tags"
 msgstr "_Etiquetes"
 
