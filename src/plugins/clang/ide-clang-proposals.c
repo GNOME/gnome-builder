@@ -382,12 +382,16 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
 
           item->ref = results_get_at (self->results_ref, i);
           item->priority = i;
-          item->kind = 0;
 
           if (proposal_lookup (item->ref, "keyword", NULL, &v))
             item->keyword = variant_get_string (v);
           else
             item->keyword = "";
+
+          if (proposal_lookup (item->ref, "kind", NULL, &v))
+            item->kind = kind_priority (variant_get_uint32 (v));
+          else
+            item->kind = 0;
         }
     }
   else if (self->results != NULL)
