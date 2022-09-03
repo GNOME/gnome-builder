@@ -36,8 +36,20 @@
 # pragma GCC diagnostic pop
 #endif
 
+static char *
+ide_clang_completion_item_get_typed_text (GtkSourceCompletionProposal *proposal)
+{
+  return g_strdup (IDE_CLANG_COMPLETION_ITEM (proposal)->typed_text);
+}
+
+static void
+proposal_iface_init (GtkSourceCompletionProposalInterface *iface)
+{
+  iface->get_typed_text = ide_clang_completion_item_get_typed_text;
+}
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangCompletionItem, ide_clang_completion_item, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
 static void
 ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
