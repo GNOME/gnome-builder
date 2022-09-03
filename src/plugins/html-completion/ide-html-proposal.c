@@ -31,8 +31,20 @@ struct _IdeHtmlProposal
   IdeHtmlProposalKind kind;
 };
 
+static char *
+ide_html_proposal_get_typed_text (GtkSourceCompletionProposal *proposal)
+{
+  return g_strdup (IDE_HTML_PROPOSAL (proposal)->word);
+}
+
+static void
+proposal_iface_init (GtkSourceCompletionProposalInterface *iface)
+{
+  iface->get_typed_text = ide_html_proposal_get_typed_text;
+}
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeHtmlProposal, ide_html_proposal, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
+                         G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
 static void
 ide_html_proposal_class_init (IdeHtmlProposalClass *klass)
