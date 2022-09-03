@@ -1,0 +1,9 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Description=Promotes exact matches to the top of completion results
+Embedded=_gbp_top_match_register_types
+Hidden=true
+Module=top-match
+Name=Top Match
