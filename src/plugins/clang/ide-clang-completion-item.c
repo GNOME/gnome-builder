@@ -505,7 +505,11 @@ ide_clang_completion_item_display (IdeClangCompletionItem  *self,
   switch (column)
     {
     case GTK_SOURCE_COMPLETION_COLUMN_ICON:
-      gtk_source_completion_cell_set_icon_name (cell, self->icon_name);
+      if (self->icon_name)
+        gtk_source_completion_cell_set_icon_name (cell, self->icon_name);
+      else
+        gtk_source_completion_cell_set_icon_name (cell, "text-x-csrc-symbolic");
+
       break;
 
     case GTK_SOURCE_COMPLETION_COLUMN_TYPED_TEXT:
