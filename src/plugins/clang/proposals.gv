@@ -1,0 +1,6 @@
+// ../../../build-aux/variant-schema-compiler --outfile=proposals.c --outfile-header=proposals.h proposals.gv
+
+type Proposal [string]variant;
+type Results []Proposal;
+type Chunk [string]variant;
+type Chunks []Chunk;

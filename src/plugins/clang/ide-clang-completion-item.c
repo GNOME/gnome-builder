@@ -27,24 +27,33 @@
 
 #include "ide-clang-completion-item.h"
 
+#if G_GNUC_CHECK_VERSION(4,0)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
+#endif
+#include "proposals.c"
+#if G_GNUC_CHECK_VERSION(4,0)
+# pragma GCC diagnostic pop
+#endif
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeClangCompletionItem, ide_clang_completion_item, G_TYPE_OBJECT,
                                G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
 
 static void
 ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
 {
-  g_autoptr(GVariant) result = NULL;
-  g_autoptr(GVariant) chunks = NULL;
   g_autoptr(GString) markup = NULL;
   enum CXCursorKind kind;
-  GVariantIter iter;
-  GVariant *chunk;
+  ChunksRef chunks;
+  VariantRef v;
+  gsize n_chunks;
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
+  g_assert (self->params == NULL);
 
-  result = ide_clang_completion_item_get_result (self);
-
-  if (!g_variant_lookup (result, "kind", "u", &kind))
+  if (proposal_lookup (self->ref, "kind", NULL, &v))
+    kind = variant_get_uint32 (v);
+  else
     kind = 0;
 
   switch ((int)kind)
@@ -142,22 +151,27 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
       break;
     }
 
-  if (!(chunks = g_variant_lookup_value (result, "chunks", NULL)))
+  if (!proposal_lookup (self->ref, "chunks", NULL, &v))
     return;
 
+  chunks = chunks_from_variant (v);
+  n_chunks = chunks_get_length (chunks);
   markup = g_string_new (NULL);
 
-  g_variant_iter_init (&iter, chunks);
-
-  while ((chunk = g_variant_iter_next_value (&iter)))
+  for (gsize i = 0; i < n_chunks; i++)
     {
-      const gchar *text;
+      ChunkRef chunk = chunks_get_at (chunks, i);
+      const char *text;
       enum CXCompletionChunkKind ckind;
 
-      if (!g_variant_lookup (chunk, "kind", "u", &ckind))
+      if (chunk_lookup (chunk, "kind", NULL, &v))
+        ckind = variant_get_uint32 (v);
+      else
         ckind = 0;
 
-      if (!g_variant_lookup (chunk, "text", "&s", &text))
+      if (chunk_lookup (chunk, "text", NULL, &v))
+        text = variant_get_string (v);
+      else
         text = NULL;
 
       switch ((int)ckind)
@@ -202,8 +216,6 @@ ide_clang_completion_item_do_init (IdeClangCompletionItem *self)
         default:
           break;
         }
-
-      g_variant_unref (chunk);
     }
 
   self->params = g_string_free (g_steal_pointer (&markup), FALSE);
@@ -259,40 +271,44 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
                                           IdeFileSettings        *file_settings)
 {
   g_autoptr(GtkSourceSnippet) snippet = NULL;
-  g_autoptr(GVariant) result = NULL;
-  g_autoptr(GVariant) chunks = NULL;
   g_autoptr(GSettings) settings = NULL;
-  GVariantIter iter;
-  GVariant *vchunk;
   IdeSpacesStyle spaces = 0;
   guint tab_stop = 0;
+  ChunksRef chunks;
+  VariantRef v;
+  gsize n_chunks;
 
   g_assert (IDE_IS_CLANG_COMPLETION_ITEM (self));
   g_assert (!file_settings || IDE_IS_FILE_SETTINGS (file_settings));
 
   settings = g_settings_new ("org.gnome.builder.clang");
 
-  result = ide_clang_completion_item_get_result (self);
   snippet = gtk_source_snippet_new (NULL, NULL);
 
   if (file_settings != NULL)
     spaces = ide_file_settings_get_spaces_style (file_settings);
 
-  if (!(chunks = g_variant_lookup_value (result, "chunks", NULL)))
+  if (!proposal_lookup (self->ref, "chunks", NULL, &v))
     return NULL;
 
-  g_variant_iter_init (&iter, chunks);
+  chunks = chunks_from_variant (v);
+  n_chunks = chunks_get_length (chunks);
 
-  while ((vchunk = g_variant_iter_next_value (&iter)))
+  for (gsize i = 0; i < n_chunks; i++)
     {
+      ChunkRef chunk_ref = chunks_get_at (chunks, i);
       enum CXCompletionChunkKind kind;
       GtkSourceSnippetChunk *chunk;
-      const gchar *text;
+      const char *text;
 
-      if (!g_variant_lookup (vchunk, "kind", "u", &kind))
+      if (chunk_lookup (chunk_ref, "kind", NULL, &v))
+        kind = variant_get_uint32 (v);
+      else
         kind = 0;
 
-      if (!g_variant_lookup (vchunk, "text", "&s", &text))
+      if (chunk_lookup (chunk_ref, "text", NULL, &v))
+        text = variant_get_string (v);
+      else
         text = NULL;
 
       if (!g_settings_get_boolean (settings, "complete-parens"))
@@ -397,8 +413,6 @@ ide_clang_completion_item_create_snippet (IdeClangCompletionItem *self,
         default:
           break;
         }
-
-      g_variant_unref (vchunk);
     }
 
   return g_steal_pointer (&snippet);
@@ -449,30 +463,15 @@ ide_clang_completion_item_get_snippet (IdeClangCompletionItem *self,
   return ide_clang_completion_item_create_snippet (self, file_settings);
 }
 
-/**
- * ide_clang_completion_item_new:
- * @variant: the toplevel variant of all results
- * @index: the index of the item
- * @keyword: pointer to folded form of the text
- *
- * The @keyword parameter is not copied, it is expected to be valid
- * string found within @variant (and therefore associated with its
- * life-cycle).
- */
 IdeClangCompletionItem *
-ide_clang_completion_item_new (GVariant    *variant,
-                               guint        index,
-                               const gchar *keyword)
+ide_clang_completion_item_new (GVariant    *results,
+                               ProposalRef  ref)
 {
   IdeClangCompletionItem *ret;
 
-  g_assert (variant != NULL);
-  g_assert (keyword != NULL);
-
   ret = g_object_new (IDE_TYPE_CLANG_COMPLETION_ITEM, NULL);
-  ret->results = g_variant_ref (variant);
-  ret->index = index;
-  ret->typed_text = keyword;
+  ret->results = g_variant_ref (results);
+  ret->ref = ref;
 
   ide_clang_completion_item_do_init (ret);
 
@@ -515,11 +514,12 @@ ide_clang_completion_item_display (IdeClangCompletionItem  *self,
 
     case GTK_SOURCE_COMPLETION_COLUMN_COMMENT:
       {
-        g_autoptr(GVariant) result = ide_clang_completion_item_get_result (self);
-        const char *comment;
+        VariantRef v;
 
-        if (g_variant_lookup (result, "command", "&s", &comment))
-          gtk_source_completion_cell_set_text (cell, comment);
+        if (proposal_lookup (self->ref, "comment", NULL, &v))
+          gtk_source_completion_cell_set_text (cell, variant_get_string (v));
+        else
+          gtk_source_completion_cell_set_text (cell, NULL);
 
         break;
       }

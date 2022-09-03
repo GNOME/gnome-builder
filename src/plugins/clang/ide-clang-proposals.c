@@ -33,6 +33,16 @@
 #include "ide-clang-completion-item.h"
 #include "ide-clang-proposals.h"
 
+#if G_GNUC_CHECK_VERSION(4,0)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wdeclaration-after-statement"
+#endif
+#include "proposals.h"
+#include "proposals.c"
+#if G_GNUC_CHECK_VERSION(4,0)
+# pragma GCC diagnostic pop
+#endif
+
 struct _IdeClangProposals
 {
   GObject parent_instance;
@@ -57,6 +67,7 @@ struct _IdeClangProposals
    * The most recent GVariant we received from the peer.
    */
   GVariant *results;
+  ResultsRef results_ref;
 
   /*
    * Instead of inflating GObjects for each of our matches, we instead keep
@@ -120,10 +131,11 @@ typedef struct
 
 typedef struct
 {
-  guint index;
-  guint priority : 24;
-  gint kind : 8;
-  const gchar *keyword;
+  ProposalRef ref;
+  const char *keyword;
+  guint priority;
+  int kind : 8;
+  int padding : 24;
 } Item;
 
 enum {
@@ -163,6 +175,7 @@ ide_clang_proposals_finalize (GObject *object)
   g_clear_pointer (&self->filter, g_free);
   g_clear_pointer (&self->match_indexes, g_array_unref);
   g_clear_pointer (&self->results, g_variant_unref);
+  self->results_ref = (ResultsRef) { NULL, 0 };
 
   G_OBJECT_CLASS (ide_clang_proposals_parent_class)->finalize (object);
 }
@@ -320,6 +333,7 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
                                  gboolean           fast_refilter)
 {
   g_autofree gchar *folded = NULL;
+  VariantRef v;
   guint old_len = 0;
   guint n_items;
 
@@ -335,17 +349,9 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
       for (guint i = old_len; i > 0; i--)
         {
           Item *item = &g_array_index (self->match_indexes, Item, i - 1);
-          const gchar *keyword = item->keyword;
           guint priority;
 
-          if G_UNLIKELY (keyword == NULL)
-            {
-              g_autoptr(GVariant) child = g_variant_get_child_value (self->results, item->index);
-              if (!g_variant_lookup (child, "keyword", "&s", &keyword))
-                keyword = NULL;
-            }
-
-          if (keyword == NULL || !gtk_source_completion_fuzzy_match (keyword, folded, &priority))
+          if (item->keyword == NULL || !gtk_source_completion_fuzzy_match (item->keyword, folded, &priority))
             g_array_remove_index_fast (self->match_indexes, i - 1);
           else
             item->priority = priority;
@@ -361,56 +367,58 @@ ide_clang_proposals_do_refilter (IdeClangProposals *self,
   if (old_len > 0)
     g_array_remove_range (self->match_indexes, 0, old_len);
 
-  n_items = self->results ? g_variant_n_children (self->results) : 0;
+  if (self->results != NULL)
+    n_items = (guint)results_get_length (self->results_ref);
+  else
+    n_items = 0;
 
   if (self->filter == NULL || self->filter[0] == 0)
     {
+      g_array_set_size (self->match_indexes, n_items);
+
       for (guint i = 0; i < n_items; i++)
         {
-          Item item = { i, i, 0 };
-          g_array_append_val (self->match_indexes, item);
+          Item *item = &g_array_index (self->match_indexes, Item, i);
+
+          item->ref = results_get_at (self->results_ref, i);
+          item->priority = i;
+          item->kind = 0;
+
+          if (proposal_lookup (item->ref, "keyword", NULL, &v))
+            item->keyword = variant_get_string (v);
+          else
+            item->keyword = "";
         }
     }
   else if (self->results != NULL)
     {
-      GVariantIter iter;
-      GVariant *value;
-      guint index = 0;
+      guint pos = 0;
 
-      g_variant_iter_init (&iter, self->results);
+      g_array_set_size (self->match_indexes, n_items);
 
-      while ((value = g_variant_iter_next_value (&iter)))
+      for (guint i = 0; i < n_items; i++)
         {
-          const gchar *typed_text;
+          Item *item = &g_array_index (self->match_indexes, Item, pos);
 
-          /*
-           * We get a typed_text pointer into the larger buffer, which is
-           * kept around for the lifetime of @variant (so that we don't need
-           * to copy more strings.
-           */
+          item->ref = results_get_at (self->results_ref, i);
 
-          if (g_variant_lookup (value, "keyword", "&s", &typed_text))
-            {
-              Item item = { index, 0, 0, typed_text };
-              guint priority;
+          if (proposal_lookup (item->ref, "keyword", NULL, &v))
+            item->keyword = variant_get_string (v);
+          else
+            continue;
 
-              if (gtk_source_completion_fuzzy_match (typed_text, folded, &priority))
-                {
-                  enum CXCursorKind kind = 0;
+          if (!gtk_source_completion_fuzzy_match (item->keyword, folded, &item->priority))
+            continue;
 
-                  g_variant_lookup (value, "kind", "u", &kind);
+          if (proposal_lookup (item->ref, "kind", NULL, &v))
+            item->kind = kind_priority (variant_get_uint32 (v));
+          else
+            item->kind = 0;
 
-                  item.priority = priority;
-                  item.kind = kind_priority (kind);
-                  g_array_append_val (self->match_indexes, item);
-                }
-            }
-
-          g_variant_unref (value);
-
-          index++;
+          pos++;
         }
 
+      g_array_set_size (self->match_indexes, pos);
       g_array_sort (self->match_indexes, sort_by_priority);
     }
 
@@ -427,11 +435,18 @@ ide_clang_proposals_flush (IdeClangProposals *self,
   g_assert (IDE_IS_CLANG_PROPOSALS (self));
   g_assert (results != NULL || error != NULL);
 
-  if (results != self->results)
-    {
-      g_clear_pointer (&self->results, g_variant_unref);
-      self->results = results ? g_variant_ref (results) : NULL;
-    }
+  if (results != NULL)
+    g_variant_ref_sink (results);
+  g_clear_pointer (&self->results, g_variant_unref);
+  self->results = results;
+
+  if (results != NULL)
+    self->results_ref = results_from_gvariant (results);
+  else
+    self->results_ref = (ResultsRef) { NULL, 0 };
+
+  if (self->match_indexes->len > 0)
+    g_array_remove_range (self->match_indexes, 0, self->match_indexes->len);
 
   ide_clang_proposals_do_refilter (self, FALSE);
 
@@ -764,15 +779,14 @@ ide_clang_proposals_get_item (GListModel *model,
                               guint       position)
 {
   IdeClangProposals *self = IDE_CLANG_PROPOSALS (model);
-  Item *item = &g_array_index (self->match_indexes, Item, position);
-  g_autoptr(GVariant) child = g_variant_get_child_value (self->results, item->index);
-  const gchar *keyword = NULL;
 
-  /* Very unlikely, but I've seen it once from libclang, so protect against it */
-  if (!g_variant_lookup (child, "keyword", "&s", &keyword))
-    keyword = "";
+  if G_LIKELY (position < self->match_indexes->len)
+    {
+      Item *item = &g_array_index (self->match_indexes, Item, position);
+      return ide_clang_completion_item_new (self->results, item->ref);
+    }
 
-  return ide_clang_completion_item_new (self->results, item->index, keyword);
+  return NULL;
 }
 
 static void

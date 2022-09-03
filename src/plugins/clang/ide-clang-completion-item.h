@@ -23,6 +23,8 @@
 #include <libide-code.h>
 #include <libide-sourceview.h>
 
+#include "proposals.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_CLANG_COMPLETION_ITEM (ide_clang_completion_item_get_type())
@@ -31,37 +33,32 @@ G_DECLARE_FINAL_TYPE (IdeClangCompletionItem, ide_clang_completion_item, IDE, CL
 
 struct _IdeClangCompletionItem
 {
-  GObject           parent_instance;
+  GObject        parent_instance;
 
-  guint             index;
-  guint             priority;
-  IdeSymbolKind     kind;
+  /* Owned reference to ensure @ref validity */
+  GVariant      *results;
 
-  /* Owned references */
-  gchar            *params;
-  GVariant         *results;
+  /* Updated during search/filter */
+  guint          priority;
+
+  /* Extracted from @ref */
+  IdeSymbolKind  kind;
+
+  /* Raw access into @results */
+  ProposalRef    ref;
+
+  /* Cached on first generation */
+  char          *params;
 
   /* Unowned references */
-  const gchar      *keyword;
-  const gchar      *return_type;
-  const gchar      *icon_name;
-  const gchar      *typed_text;
+  const char    *keyword;
+  const char    *return_type;
+  const char    *icon_name;
+  const char    *typed_text;
 };
 
-static inline GVariant *
-ide_clang_completion_item_get_result (const IdeClangCompletionItem *self)
-{
-  g_autoptr(GVariant) child = g_variant_get_child_value (self->results, self->index);
-
-  if (g_variant_is_of_type (child, G_VARIANT_TYPE_VARIANT))
-    return g_variant_get_variant (child);
-
-  return g_steal_pointer (&child);
-}
-
 IdeClangCompletionItem *ide_clang_completion_item_new         (GVariant                *results,
-                                                               guint                    index,
-                                                               const gchar             *keyword);
+                                                               ProposalRef              ref);
 GtkSourceSnippet       *ide_clang_completion_item_get_snippet (IdeClangCompletionItem  *self,
                                                                IdeFileSettings         *file_settings);
 void                    ide_clang_completion_item_display     (IdeClangCompletionItem  *self,
