@@ -10,23 +10,24 @@
 # Mario Blättermann <mario.blaettermann@gmail.com>, 2016-2020, 2021.
 # Tim Sabsch <tim@sabsch.com>, 2017-2019, 2021.
 # Philipp Kiemle <philipp.kiemle@gmail.com>, 2020, 2021.
+# Jürgen Benvenuti <gastornis@posteo.org>, 2022.
 #
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-05-26 20:31+0000\n"
-"PO-Revision-Date: 2022-07-27 22:00+0200\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2022-07-27 20:02+0000\n"
+"PO-Revision-Date: 2022-08-02 19:41+0200\n"
+"Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1.1\n"
 "X-DamnedLies-Scope: partial\n"
-"X-Generator: Poedit 2.3\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -83,7 +84,7 @@ msgstr "Unterstützung für mehrere Bildschirme"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:27
 msgid "Code overview mini-map"
-msgstr "Übersichtskarte des Code"
+msgstr "Übersichtskarte des Codes"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:28
 msgid "Integration with Git"
@@ -172,7 +173,7 @@ msgstr "Fehlerdiagnose mit dem GNU Debugger"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in:70
 msgid "Use the minimap to see more of the file"
-msgstr "Nutzen Sie die Minimap, um mehr von der Datei zu sehen"
+msgstr "Nutzen Sie die Übersichtskarte, um mehr von der Datei zu sehen"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:6
 msgid "Build Parallelism"
@@ -393,7 +394,7 @@ msgstr "Text umbrechen"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:106
 msgid "The way to wrap a long line of text for a better visibility."
-msgstr ""
+msgstr "So wird eine lange Textzeile für bessere Lesbarkeit umgebrochen."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:110
 #: src/libide/gui/ide-preferences-builtin.c:194
@@ -452,10 +453,9 @@ msgid "Minimum characters for matching selection."
 msgstr "Minimale Zeichenanzahl für Übereinstimmungsauswahl."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
-#, fuzzy
-#| msgid "Minimum characters for matching selection."
 msgid "Specify the minimum number of characters for selection matching."
-msgstr "Minimale Zeichenanzahl für Übereinstimmungsauswahl."
+msgstr ""
+"Geben Sie die minimale Zeichenanzahl für die Übereinstimmungsauswahl an."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -506,6 +506,8 @@ msgid ""
 "Use the light or dark variant of the GTK theme and/or GtkSourceView style "
 "scheme."
 msgstr ""
+"Die helle oder dunkle Variante des GTK-Themas und/oder des GtkSourceView-"
+"Stil-Schemas verwenden."
 
 #. Translators: This is the default directory name for user’s
 #. projects. Do NOT change the ASCII double quotes ("") to your
@@ -1683,7 +1685,8 @@ msgstr ""
 "Florian Bäuerle <florian.bae@gmail.com>\n"
 "Mario Blättermann <mario.blaettermann@gmail.com>\n"
 "Tim Sabsch <tim@sabsch.com>\n"
-"Philipp Kiemle <philipp.kiemle@gmail.com>"
+"Philipp Kiemle <philipp.kiemle@gmail.com>\n"
+"Jürgen Benvenuti <gastornis@posteo.org>"
 
 #: src/libide/gui/ide-application-actions.c:154
 msgid "Learn more about GNOME Builder"
@@ -1860,7 +1863,7 @@ msgstr "System"
 
 #: src/libide/gui/ide-preferences-builtin.c:102
 msgid "follow"
-msgstr ""
+msgstr "Folgen"
 
 #: src/libide/gui/ide-preferences-builtin.c:103
 msgid "Light"
@@ -1910,7 +1913,7 @@ msgstr "Emulation"
 
 #: src/libide/gui/ide-preferences-builtin.c:144
 msgid "Default keybinding mode which mimics gedit"
-msgstr "Voreingestellter Tastenkürzel-Modus, der Gedit nachahmt"
+msgstr "Voreingestellter Tastenkürzel-Modus, der gedit nachahmt"
 
 #: src/libide/gui/ide-preferences-builtin.c:146
 msgid "Movement"
@@ -2738,7 +2741,7 @@ msgstr "Den ausgewählten Code verschönern"
 #: src/libide/gui/ide-shortcuts-window.ui:447
 msgctxt "shortcut window"
 msgid "(LSP only) Format selected code or whole document"
-msgstr ""
+msgstr "(Nur LSP) Ausgewählten Code oder das gesamte Dokument formatieren"
 
 #: src/libide/gui/ide-shortcuts-window.ui:455
 msgctxt "shortcut window"
@@ -4086,10 +4089,6 @@ msgstr "Anwendungskennung"
 
 # Ich konnte nach kurzem Googlen keine entsprechende dt. Übersetzung finden.
 #: src/plugins/create-project/gbp-create-project-surface.ui:100
-#, fuzzy
-#| msgid ""
-#| "The Application ID is a reverse domain-name identifier used to uniquely "
-#| "identify your application such as “org.gnome.Builder”."
 msgid ""
 "The Application ID is a reverse domain-name identifier used to uniquely "
 "identify your application such as “org.gnome.Builder” and may not contain "
@@ -4097,7 +4096,8 @@ msgid ""
 msgstr ""
 "Die Anwendungskennung ist ein »Reverse domain name identifier« (dt.: "
 "»Inverser Domänennamen-Identifikator«) wie zum Beispiel »org.gnome.Builder«, "
-"über den Ihre Anwendung eindeutig identifiziert werden kann."
+"über den Ihre Anwendung eindeutig identifiziert werden kann. Sie darf keine "
+"Bindestriche enthalten."
 
 #: src/plugins/create-project/gbp-create-project-surface.ui:118
 msgid "Project Location"
@@ -6870,8 +6870,8 @@ msgstr "Die Datei muss zum Einlesen lokal gespeichert sein."
 #~ "Select <a href=\"action://run-manager.run-with-handler::profiler\">Run "
 #~ "with profiler</a> from the run menu to begin"
 #~ msgstr ""
-#~ "Wählen Sie <a href=\"action://run-manager.run-with-handler::profiler"
-#~ "\">Mit Profiler ausführen</a> im Menü aus, um zu beginnen"
+#~ "Wählen Sie <a href=\"action://run-manager.run-with-handler::"
+#~ "profiler\">Mit Profiler ausführen</a> im Menü aus, um zu beginnen"
 
 #~ msgid "Abstract"
 #~ msgstr "Abstrakt"
