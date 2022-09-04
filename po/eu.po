@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-30 00:29+0000\n"
-"PO-Revision-Date: 2022-08-30 10:00+0100\n"
+"POT-Creation-Date: 2022-09-03 21:57+0000\n"
+"PO-Revision-Date: 2022-09-04 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -1388,6 +1388,10 @@ msgstr "Terminal berria"
 msgid "Ctrl+Shift+T"
 msgstr "Ctrl+Shift+T"
 
+#: src/libide/gui/ide-header-bar.ui:34
+msgid "Open application menu (F10)"
+msgstr "Ireki aplikazioaren menua (F10)"
+
 #: src/libide/gui/ide-marked-view.c:414
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Ezin da HTMLa kargatu. WebKit euskarria falta da."
@@ -1424,6 +1428,11 @@ msgstr "Gelditu exekuzioa"
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
 msgstr "Exekutatu proiektua"
+
+#: src/libide/gui/ide-shortcut-window.c:239
+#: src/libide/gui/ide-shortcut-window.c:265
+msgid "Other"
+msgstr "Bestelakoa"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -1471,6 +1480,7 @@ msgid "Devices & Simulators"
 msgstr "Gailuak eta simulatzaileak"
 
 #: src/libide/plugins/ide-plugin.c:344
+#: src/plugins/codeui/gbp-codeui-hover-provider.c:82
 msgid "Diagnostics"
 msgstr "Diagnostikoa"
 
@@ -3573,11 +3583,11 @@ msgstr "Zuriuneak"
 msgid "Tabs"
 msgstr "Tabulazioak"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:516
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
 msgid "Go"
 msgstr "Joan"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
 msgid "Go to Line"
 msgstr "Joan lerrora"
 
@@ -5838,7 +5848,7 @@ msgstr "Egoera"
 msgid "_Branches"
 msgstr "_Adarrak"
 
-#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:88
+#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:93
 msgid "_Tags"
 msgstr "_Etiketak"
 
@@ -7258,9 +7268,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 #, c-format
 #~ msgid "Connected to “%s”"
 #~ msgstr "“%s”(e)ra konektatuta"
-
-#~ msgid "Other"
-#~ msgstr "Bestelakoa"
 
 #~ msgid "Object Path"
 #~ msgstr "Objektuaren bidea"
