@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-08-29 09:01+0000\n"
-"PO-Revision-Date: 2022-09-02 14:12+0200\n"
+"PO-Revision-Date: 2022-09-04 16:59+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -173,50 +173,56 @@ msgid ""
 "Number of workers to use when performing builds. -1 for sensible default. 0 "
 "for number of CPU."
 msgstr ""
+"Broj radnika koji se koriste pri izgradnji. -1 za razumno zadano. 0 za broj "
+"CPU-a."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:11
 msgid "Clear build logs"
-msgstr ""
+msgstr "Obriši zapise izgradnje"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:12
 msgid "If enabled, build log pane will be cleared on rebuild."
-msgstr ""
+msgstr "Ako je omogućeno, panle zapisa izgradnje će se obristi."
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:16
 msgid "Allow network when metered"
-msgstr ""
+msgstr "Dopusti mrežu ograničenu podacima"
 
 #: data/gsettings/org.gnome.builder.build.gschema.xml:17
 msgid ""
 "Enable automated transfers upon building such as SDK downloads and "
 "dependencies when connection is metered."
 msgstr ""
+"Omogući automatski prijenos nakon izgradnje poput SDK preuzimanja i "
+"zavisnosti kada je povezivanje ograničeno podacima."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
 msgid "Ctags based autocompletion"
-msgstr ""
+msgstr "Ctags temeljeno automatsko dovršavanje"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
 msgid "Use Ctags for autocompletion."
-msgstr ""
+msgstr "Koristi Ctags za automatsko dovršavanje."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
 msgid "Enable semantic highlighting"
-msgstr ""
+msgstr "Omogući semantičko isticanje"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
 msgid ""
 "If enabled, additional highlighting will be provided in supported languages "
 "based on information extracted from the source code."
 msgstr ""
+"Ako je omogućeno, dodatno naglašavanje biti će omogućeno u podržanim "
+"jezicima temeljeno na informaciji izdvojenoj iz izvornog kôda."
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
 msgid "Path to ctags executable"
-msgstr ""
+msgstr "Putanja do ctags izvršne datoteke"
 
 #: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
 msgid "The path to the ctags executable on the system."
-msgstr ""
+msgstr "Putanja do ctags izvršne datoteke na sustavu."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:5
 msgid "Debugger Breakpoint at Main"
@@ -246,15 +252,15 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
-msgstr ""
+msgstr "Vrati zadnji položaj"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:20
 msgid "Jump to the last position when reopening a file"
-msgstr ""
+msgstr "Idi u zadnji položaj kada se datoteka ponovno otvarala"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:24
 msgid "Show modified lines"
-msgstr ""
+msgstr "Prikaži promijenjene retke"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:25
 msgid ""
@@ -280,8 +286,9 @@ msgid "If enabled, the editor will highlight the line containing the cursor."
 msgstr ""
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+#, fuzzy
 msgid "Highlight matching brackets"
-msgstr ""
+msgstr "Istakni odgovarajuće zagrade"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
@@ -462,7 +469,6 @@ msgid "Style Variant"
 msgstr "Varijanta izgleda"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:21
-#, fuzzy
 msgid ""
 "Use the light or dark variant of the GTK theme and/or GtkSourceView style "
 "scheme."
@@ -651,7 +657,7 @@ msgstr "D-Bus inspektor"
 
 #: src/libide/code/ide-buffer.c:3673
 msgid "The current language lacks a symbol resolver."
-msgstr ""
+msgstr "Trenutnom jeziku nedostaje razrješitelj simbola."
 
 #. translators: %u is replaced with an incrementing number
 #: src/libide/code/ide-buffer-manager.c:381
@@ -681,7 +687,7 @@ msgstr ""
 #: src/libide/code/ide-unsaved-files.c:253
 #, c-format
 msgid "Failed to save draft: %s"
-msgstr ""
+msgstr "Neuspjelo spremanje kao predloška: %s"
 
 #: src/libide/core/ide-context.c:380 src/libide/core/ide-context.c:843
 msgid "Untitled"
@@ -886,11 +892,10 @@ msgstr "Uređaji"
 
 #: src/libide/foundry/ide-device-manager.c:710
 msgid "Cannot deploy to device, build pipeline is not initialized"
-msgstr ""
+msgstr "Nemoguća implementacija na uređaj, slivnik izgradnje nije pokrenut"
 
 #: src/libide/foundry/ide-fallback-build-system.c:143
 #: src/libide/greeter/ide-greeter-row.c:252
-#, fuzzy
 msgid "Fallback"
 msgstr "Pričuvni"
 
@@ -1001,7 +1006,7 @@ msgstr "Uklanjanje zavisnosti izgradnje…"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
-msgstr ""
+msgstr "Nemoguća izgradnja prijenosa na povezivanju ograničenom podacima"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
@@ -1011,11 +1016,11 @@ msgstr "Bezimena naredba"
 
 #: src/libide/foundry/ide-run-command.c:237
 msgid "Unit Test"
-msgstr ""
+msgstr "Testiranje jedinice"
 
 #: src/libide/foundry/ide-run-manager.c:505
 msgid "Cannot run target, another target is running"
-msgstr ""
+msgstr "Nemoguće pokretanje odredišta, drugo odredište je pokrenuto"
 
 #. translators: %s is replaced with the name of the users run command
 #: src/libide/foundry/ide-run-manager.c:929
@@ -1025,14 +1030,14 @@ msgstr "Pokrećem %s…"
 
 #: src/libide/foundry/ide-run-manager.c:996
 msgid "Deploying to device…"
-msgstr ""
+msgstr "Implementacija na uređaj…"
 
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
 #: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
 msgid "Host System"
-msgstr ""
+msgstr "Sustav računala"
 
 #: src/libide/foundry/ide-toolchain-manager.c:329
 msgid "Default (Host operating system)"
@@ -1290,28 +1295,28 @@ msgstr "Prikaži informaciju inačice i izađi"
 #. Verbose is handled in main(), but we need to add to --help here
 #: src/libide/gui/ide-application-command-line.c:66
 msgid "Increase log verbosity (may be repeated)"
-msgstr ""
+msgstr "Povećaj opširnost zapisivanja (može se ponoviti)"
 
 #: src/libide/gui/ide-application-command-line.c:116
 #, c-format
 msgid "Failed to open project: %s"
-msgstr ""
+msgstr "Neuspjelo otvaranje projekta: %s"
 
 #: src/libide/gui/ide-environment-editor.c:73
 msgid "New variable…"
-msgstr ""
+msgstr "Nova varijabla…"
 
 #: src/libide/gui/ide-environment-editor-row.ui:33
 msgid "Remove environment variable"
-msgstr ""
+msgstr "Ukloni varijablu okruženja"
 
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
-msgstr ""
+msgstr "Otvori datoteku u terminalu"
 
 #: src/libide/gui/ide-frame.ui:7
 msgid "Use the page switcher above or use one of the following:"
-msgstr ""
+msgstr "Koristite prebacivača stranice iznad ili koristite jedno od sljedećg:"
 
 #: src/libide/gui/ide-frame.ui:26
 msgid "Ctrl+Enter"
@@ -1565,7 +1570,7 @@ msgstr "_Idi u definiciju"
 
 #: src/libide/sourceview/gtk/menus.ui:116
 msgid "_Find references"
-msgstr ""
+msgstr "_Pretraži reference"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1002
@@ -1593,6 +1598,8 @@ msgstr "Spremi sadržaj terminala kao"
 #: src/libide/terminal/ide-terminal-page.c:117
 msgid "Failed to launch subprocess. You may need to rebuild your project."
 msgstr ""
+"Neuspjelo pokretanje podprocesa. Možda trebate ponovno izgraditi svoj "
+"projekt."
 
 #: src/libide/terminal/ide-terminal-page.c:122
 #: src/libide/terminal/ide-terminal-page.c:157
@@ -1602,21 +1609,20 @@ msgstr "Bezimeni terminal"
 
 #. translators: exited describes that the terminal shell process has exited
 #: src/libide/terminal/ide-terminal-page.c:124
-#, fuzzy
 msgid "Exited"
-msgstr "Izlaz"
+msgstr "Izašao"
 
 #: src/libide/terminal/ide-terminal-page.c:144
 msgid "Subprocess launcher failed too quickly, will not respawn."
-msgstr ""
+msgstr "Pokretač podprocesa je prebrzo neuspio, neće se ponovo pokrenuti."
 
 #: src/libide/terminal/ide-terminal-page.ui:7
 msgid "Untitled Terminal"
-msgstr ""
+msgstr "Bezimeni terminal"
 
 #: src/libide/terminal/ide-terminal-popover.ui:12
 msgid "Search runtimes"
-msgstr ""
+msgstr "Pretraži vremena izvođenja"
 
 #: src/libide/terminal/ide-terminal-search.ui:66
 msgid "Show or hide search options such as case sensitivity"
@@ -1635,9 +1641,8 @@ msgid "Match whole word"
 msgstr "Podudaraj cijelu riječ"
 
 #: src/libide/terminal/ide-terminal-search.ui:133
-#, fuzzy
 msgid "Wrap around"
-msgstr "Beskonačno"
+msgstr "Prelomi oko"
 
 #: src/libide/tree/ide-tree-node.c:1107 src/libide/tree/ide-tree-node.c:1470
 #: src/libide/tree/ide-tree-node.c:1499
@@ -1711,7 +1716,7 @@ msgstr ""
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
-msgstr ""
+msgstr "Podešavanje projekta"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:85
@@ -1722,11 +1727,11 @@ msgstr ""
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:125
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
-msgstr ""
+msgstr "Izgradnja projekta"
 
 #: src/plugins/autotools/ide-autotools-pipeline-addin.c:365
 msgid "Caching build commands"
-msgstr ""
+msgstr "Predmemoriranje naredbi izgradnje"
 
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:157
@@ -1885,6 +1890,7 @@ msgstr "%s (Kopiraj)"
 #: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
 msgid "BuildStream project in use but “bst” executable could not be found."
 msgstr ""
+"BuildStream projekt se koristi ali “bst” izvršna datoteka se ne može pronaći."
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
@@ -1918,19 +1924,19 @@ msgstr "_Spremi"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:359
 msgid "Build Output"
-msgstr ""
+msgstr "Izlaz izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:40
 msgid "Clear build log"
-msgstr ""
+msgstr "Obriši zapise izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:56
 msgid "Cancel build"
-msgstr ""
+msgstr "Prekini izgradnju"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:72
 msgid "Save build log"
-msgstr ""
+msgstr "Spremi zapis izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:113
 msgid "Missing"
@@ -1956,23 +1962,23 @@ msgstr "Uređaj"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:136
 msgid "There is a problem with the current build configuration."
-msgstr ""
+msgstr "Postoji problem s trenutnim podešavanjem izgradnje."
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:162
 msgid "Build status"
-msgstr ""
+msgstr "Stanje izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:186
 msgid "Last build"
-msgstr ""
+msgstr "Posljednja izgradnja"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:211
 msgid "Build result"
-msgstr ""
+msgstr "Rezultat izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:236
 msgid "Errors"
-msgstr ""
+msgstr "Greške"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:262
 msgid "Warnings"
@@ -1990,7 +1996,7 @@ msgstr "Problemi izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:21
 msgid "Build status:"
-msgstr "Stanje izgradnje"
+msgstr "Stanje izgradnje:"
 
 #: src/plugins/buildui/gbp-buildui-pane.ui:37
 msgid "Time completed:"
@@ -2019,7 +2025,7 @@ msgstr "Dijeljeno"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
 msgid "Static"
-msgstr ""
+msgstr "Nepromjenjivo"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
 msgid "Executable"
@@ -2029,33 +2035,33 @@ msgstr "Izvršna datoteka"
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
 #, c-format
 msgid "Failed to list build targets: %s"
-msgstr ""
+msgstr "Neuspjeli prikaz odredišta izgradnje: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
 msgid "Select Build Target"
-msgstr ""
+msgstr "Odabir odredišta izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
 msgid "Available Build Targets"
-msgstr ""
+msgstr "Dostupna odredišta izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
 msgid ""
 "Some targets may not be available until the project has been configured."
-msgstr ""
+msgstr "Pojedina odredišta možda neće biti dostupna dok se projekt ne podesi."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
 msgid "Automatically Discover"
-msgstr ""
+msgstr "Automatsko otkrivanje"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "Odabir omogućuje Graditelju odabir najboljeg kandidata."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr ""
+msgstr "Spremnik koji se koristi za izgradnju i pokretanje vaše aplikacije"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2063,7 +2069,7 @@ msgstr "Duplikat"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
 msgid "Duplicate into new configuration"
-msgstr ""
+msgstr "Stvori duplikat u novo podešavanje"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
 msgid "Make Active"
@@ -2071,7 +2077,7 @@ msgstr "Učini aktivno"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
 msgid "Make configuration active and reload build pipeline"
-msgstr ""
+msgstr "Učini podešavanje aktivnim i ponovno učitaj slivnik izgradnje"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
@@ -2081,15 +2087,15 @@ msgstr "Obriši"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
 msgid "Delete configuration"
-msgstr ""
+msgstr "Obriši podešavanje"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
 msgid "Stop Building Project"
-msgstr ""
+msgstr "Zaustavljanje izgradnje projekta"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
 msgid "Build Project (Shift+Ctrl+Alt+B)"
-msgstr ""
+msgstr "Izgradnja projekta (Shift+Ctrl+Alt+B)"
 
 #: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:48
 msgid "_Build"
@@ -2113,19 +2119,19 @@ msgstr "Podesi projekt…"
 
 #: src/plugins/buildui/gtk/menus.ui:36
 msgid "Configure settings related to the project"
-msgstr ""
+msgstr "Podesi postavke povezane s projektom"
 
 #: src/plugins/buildui/gtk/menus.ui:41
 msgid "Select Build Target…"
-msgstr ""
+msgstr "Odabir odredišta izgradnje…"
 
 #: src/plugins/buildui/gtk/menus.ui:43
 msgid "Change default build target"
-msgstr ""
+msgstr "Promjena zadanog odredišta izgradnje"
 
 #: src/plugins/buildui/gtk/menus.ui:49
 msgid "Build the project"
-msgstr ""
+msgstr "Izgradi projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:55
 msgid "_Rebuild"
@@ -2133,7 +2139,7 @@ msgstr "Ponovno _izgradi"
 
 #: src/plugins/buildui/gtk/menus.ui:56
 msgid "Rebuild the project"
-msgstr ""
+msgstr "Ponovno izgradi projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:61
 msgid "_Clean"
@@ -2141,19 +2147,19 @@ msgstr "_Ukloni"
 
 #: src/plugins/buildui/gtk/menus.ui:62
 msgid "Clean the project"
-msgstr ""
+msgstr "Ukloni projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:71
 msgid "Install the project"
-msgstr ""
+msgstr "Instaliraj projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:75
 msgid "Deploy to Device…"
-msgstr ""
+msgstr "Implementiraj na uređaj…"
 
 #: src/plugins/buildui/gtk/menus.ui:77
 msgid "Deploy project to current device"
-msgstr ""
+msgstr "Implementiraj projekt na trenutni uređaj"
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
@@ -2197,15 +2203,15 @@ msgstr "Pokreni projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:136
 msgid "Follow System Style"
-msgstr ""
+msgstr "Izgled sustava"
 
 #: src/plugins/buildui/gtk/menus.ui:142
 msgid "Force Light"
-msgstr ""
+msgstr "Prisili svjetli"
 
 #: src/plugins/buildui/gtk/menus.ui:148
 msgid "Force Dark"
-msgstr ""
+msgstr "Prisili tamni"
 
 #: src/plugins/buildui/gtk/menus.ui:155
 msgid "Accessibility"
@@ -2246,23 +2252,23 @@ msgstr "Slova uređivača"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
 msgid "The font used in the source code editor"
-msgstr ""
+msgstr "Slova korištena u uređivaču izvornog kôa"
 
 #: src/plugins/buildui/gtk/preferences.ui:72
 msgid "Terminal Font"
-msgstr ""
+msgstr "Slova terminala"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
 msgid "The font used in the terminal"
-msgstr ""
+msgstr "Slova korištena u terminalu"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 msgid "Show Grid Pattern"
-msgstr ""
+msgstr "Prikaži rešetkasi uzorak"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
-msgstr ""
+msgstr "Prikaži rešetkasti uzorak ispod izvornog kôda"
 
 #: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
 msgid "Never"
@@ -2286,23 +2292,23 @@ msgstr "Automatski"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr ""
+msgstr "Panel prikaza se automatski prikazuje na temelju unosa korisnika"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
-msgstr ""
+msgstr "Navigacija s karticama"
 
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
-msgstr ""
+msgstr "Prebacuj dokumente pomoću sučelja s karticama"
 
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
-msgstr ""
+msgstr "Navigacija s prekrivnim prozorom"
 
 #: src/plugins/buildui/gtk/preferences.ui:120
 msgid "Switch documents using a popover"
-msgstr ""
+msgstr "Prebacuj dokumente pomoću prekrivnog prozora"
 
 #: src/plugins/buildui/tweaks.ui:9
 msgid "Application"
@@ -2378,7 +2384,7 @@ msgstr "Kao aplikacija"
 msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
 "Pokreni jedinicu s pristupom zaslonu i ostalim značajkama okruženja radnog "
-"procesa"
+"procesa."
 
 #: src/plugins/buildui/tweaks.ui:176
 msgid "Build & Tooling"
@@ -2394,27 +2400,27 @@ msgstr "Povijest"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Clear Expired Artifacts"
-msgstr ""
+msgstr "Obriši istekle artefakte"
 
 #: src/plugins/buildui/tweaks.ui:189
 msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr ""
+msgstr "Artefakti koji su istekli biti će obrisani kada se Graditelj pokrene"
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
-msgstr ""
+msgstr "Brisanje zapisa izgradnje"
 
 #: src/plugins/buildui/tweaks.ui:201
 msgid "Clear the build log history when a new build begins"
-msgstr ""
+msgstr "Obriši povijest zapisa izgradnje kada se nova izgradnja pokrene"
 
 #: src/plugins/buildui/tweaks.ui:214
 msgid "Workers"
-msgstr ""
+msgstr "Radnici"
 
 #: src/plugins/buildui/tweaks.ui:218
 msgid "Number of workers to use when performing builds"
-msgstr ""
+msgstr "Broj radnika koji se koriste pri izgradnji"
 
 #: src/plugins/buildui/tweaks.ui:227
 msgid "Default"
@@ -2473,11 +2479,11 @@ msgstr "512"
 
 #: src/plugins/buildui/tweaks.ui:313
 msgid "Tooling"
-msgstr ""
+msgstr "Alati"
 
 #: src/plugins/buildui/tweaks.ui:348
 msgid "Installation Prefix"
-msgstr ""
+msgstr "Prefiks instalacije"
 
 #: src/plugins/buildui/tweaks.ui:349
 msgid ""
@@ -4658,7 +4664,7 @@ msgstr ""
 
 #: src/plugins/npm/gbp-npm-pipeline-addin.c:91
 msgid "Downloading npm dependencies"
-msgstr "preuzimanje npm zavisnosti"
+msgstr "Preuzimanje npm zavisnosti"
 
 #: src/plugins/open-with-external/gtk/menus.ui:9
 msgid "_External Program…"
@@ -5560,7 +5566,7 @@ msgstr "Nadopuna zavisnosti…"
 
 #: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
 msgid "Builder is updating your projects configured dependencies."
-msgstr "Graditelj nadopunjuje podešene zavisnosti vašeg projekta"
+msgstr "Graditelj nadopunjuje podešene zavisnosti vašeg projekta."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
 msgid "Update Dependencies…"
@@ -5617,7 +5623,7 @@ msgstr "Sažetak"
 #: src/plugins/valgrind/gtk/menus.ui:38
 #, fuzzy
 msgid "Full"
-msgstr "Puno"
+msgstr "Potpuna"
 
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
