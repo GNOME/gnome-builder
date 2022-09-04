@@ -27,6 +27,7 @@
 #include <libide-code.h>
 #include <libide-threading.h>
 
+#include "ide-editor-info-bar-private.h"
 #include "ide-editor-page-addin.h"
 #include "ide-editor-page-private.h"
 #include "ide-editor-print-operation.h"
@@ -680,6 +681,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "editor.print", NULL, print_action);
   panel_widget_class_install_action (panel_widget_class, "editor.format", NULL, format_action);
 
+  g_type_ensure (IDE_TYPE_EDITOR_INFO_BAR);
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
 }
 

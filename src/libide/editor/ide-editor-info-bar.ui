@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <template class="IdeEditorInfoBar" parent="GtkWidget">
+    <child>
+      <object class="GtkBox" id="box">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkInfoBar" id="access_infobar">
+            <property name="message-type">error</property>
+            <property name="show-close-button">false</property>
+            <property name="revealed">false</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="access_title">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Could Not Open File</property>
+                    <property name="wrap">True</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="access_subtitle">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">You do not have permission to open the file.</property>
+                    <property name="wrap">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkButton" id="access_try_again">
+                <property name="label" translatable="yes">_Retry</property>
+                <property name="use-underline">True</property>
+                <signal name="clicked" handler="on_try_again_cb" swapped="true"/>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkButton" id="access_try_admin">
+                <property name="label" translatable="yes">Open As _Administrator</property>
+                <property name="use-underline">True</property>
+                <property name="visible">false</property>
+                <signal name="clicked" handler="on_try_admin_cb" swapped="true"/>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkInfoBar" id="discard_infobar">
+            <property name="message-type">warning</property>
+            <property name="show-close-button">True</property>
+            <property name="revealed">False</property>
+            <child>
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="title">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Document Restored</property>
+                    <property name="wrap">True</property>
+                    <attributes>
+                      <attribute name="weight" value="bold"/>
+                    </attributes>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="subtitle">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Unsaved document has been restored.</property>
+                    <property name="wrap">True</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkButton" id="discard">
+                <property name="label" translatable="yes">_Discard…</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+            <child type="action">
+              <object class="GtkButton" id="save">
+                <property name="margin-start">6</property>
+                <property name="use-underline">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="discard"/>
+      <widget name="save"/>
+    </widgets>
+  </object>
+</interface>

@@ -3,6 +3,13 @@
   <template class="IdeEditorPage" parent="IdePage">
     <property name="can-maximize">true</property>
     <child type="content">
+      <object class="IdeEditorInfoBar" id="info_bar">
+        <binding name="buffer">
+          <lookup name="buffer">IdeEditorPage</lookup>
+        </binding>
+      </object>
+    </child>
+    <child type="content">
       <object class="IdeScrubberRevealer" id="scrubber_revealer">
         <property name="hexpand">true</property>
         <property name="vexpand">true</property>
