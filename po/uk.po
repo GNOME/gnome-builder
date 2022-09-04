@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-02 16:36+0000\n"
-"PO-Revision-Date: 2022-09-02 22:37+0300\n"
+"POT-Creation-Date: 2022-09-04 16:19+0000\n"
+"PO-Revision-Date: 2022-09-04 20:21+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -848,25 +848,97 @@ msgstr "Друк"
 msgid "Failed to open file: %s"
 msgstr "Не вдалося відкрити файл: %s"
 
+#: src/libide/editor/ide-editor-info-bar.c:85
+msgid "_Discard Changes and Reload"
+msgstr "Від_кинути зміни і перезавантажити"
+
+#: src/libide/editor/ide-editor-info-bar.c:88
+msgid "File Has Changed on Disk"
+msgstr "Файл змінено на диску"
+
+#: src/libide/editor/ide-editor-info-bar.c:89
+msgid "The file has been changed by another program."
+msgstr "Сторонньою програмою було внесено зміни до файла."
+
+#: src/libide/editor/ide-editor-info-bar.c:100
+#| msgid "Save As…"
+msgid "Save _As…"
+msgstr "Зберегти _як…"
+
+#: src/libide/editor/ide-editor-info-bar.c:102
+#| msgid "Save & Restore"
+msgid "Buffer Restored"
+msgstr "Буфер відновлено"
+
+#: src/libide/editor/ide-editor-info-bar.c:103
+msgid "Unsaved buffer has been restored."
+msgstr "Відновлено незбережені дані з буфера."
+
+#: src/libide/editor/ide-editor-info-bar.c:109
+#| msgid "Save As…"
+msgid "_Save…"
+msgstr "З_берегти…"
+
+#: src/libide/editor/ide-editor-info-bar.c:111
+#: src/libide/editor/ide-editor-info-bar.ui:81
+msgid "_Discard…"
+msgstr "_Відкинути…"
+
+#: src/libide/editor/ide-editor-info-bar.c:113
+#| msgid "Don't Change Governor"
+msgid "Draft Changes Restored"
+msgstr "Відновлено зміни з чернетки"
+
+#: src/libide/editor/ide-editor-info-bar.c:114
+msgid "Unsaved changes to the buffer have been restored."
+msgstr "Відновлено незбережені зміни, які було внесено до буфера."
+
+#: src/libide/editor/ide-editor-info-bar.ui:19
+#| msgid "Show Open Files"
+msgid "Could Not Open File"
+msgstr "Не вдалося відкрити файл"
+
+#: src/libide/editor/ide-editor-info-bar.ui:29
+msgid "You do not have permission to open the file."
+msgstr "У вашого користувача недостатньо прав для відкриття цього файла."
+
+#: src/libide/editor/ide-editor-info-bar.ui:37
+msgid "_Retry"
+msgstr "_Повторити"
+
+#: src/libide/editor/ide-editor-info-bar.ui:44
+msgid "Open As _Administrator"
+msgstr "Відкрити від імені _адміністратора"
+
+#: src/libide/editor/ide-editor-info-bar.ui:63
+#| msgid "Documents"
+msgid "Document Restored"
+msgstr "Відновлено документ"
+
+#: src/libide/editor/ide-editor-info-bar.ui:73
+#| msgid "The client has been closed"
+msgid "Unsaved document has been restored."
+msgstr "Відновлено незбережений документ."
+
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:407
+#: src/libide/editor/ide-editor-page.c:408
 #, c-format
 msgid "Print failed: %s"
 msgstr "Не вдалося надрукувати: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:483
+#: src/libide/editor/ide-editor-page.c:484
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Не вдалося форматувати позначене: %s"
 
-#: src/libide/editor/ide-editor-page.c:871
+#: src/libide/editor/ide-editor-page.c:900
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Зберегти файл"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -875,7 +947,7 @@ msgstr "Зберегти файл"
 msgid "Save"
 msgstr "Зберегти"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1464,7 +1536,6 @@ msgid "Ctrl+Shift+T"
 msgstr "Ctrl+Shift+T"
 
 #: src/libide/gui/ide-header-bar.ui:34
-#| msgid "The application to run"
 msgid "Open application menu (F10)"
 msgstr "Відкрити меню програми (F10)"
 
@@ -3726,11 +3797,11 @@ msgstr "Пробіли"
 msgid "Tabs"
 msgstr "Табуляції"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:516
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
 msgid "Go"
 msgstr "Перейти"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
 msgid "Go to Line"
 msgstr "Перейти до рядка"
 
@@ -6757,9 +6828,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "Display a margin in the editor to indicate maximium desired width"
 #~ msgstr ""
 #~ "Показувати поле у редакторі для позначення максимальної бажаної ширини"
-
-#~ msgid "Show Open Files"
-#~ msgstr "Показати відкриті файли"
 
 #~ msgid "Display the open files list in the project sidebar."
 #~ msgstr "показувати список відкритих файлів на бічній панелі проєкту."
