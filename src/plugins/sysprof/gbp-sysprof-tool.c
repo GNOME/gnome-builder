@@ -130,6 +130,8 @@ gbp_sysprof_tool_handler (IdeRunContext       *run_context,
   capture_file = gbp_sysprof_tool_get_capture_file (self);
   ide_run_context_append_formatted (run_context, "--capture=%s", capture_file);
 
+  ide_run_context_append_argv (run_context, "--decode");
+
   if (ide_settings_get_boolean (settings, "cpu-aid"))
     ide_run_context_append_argv (run_context, "--cpu");
 
