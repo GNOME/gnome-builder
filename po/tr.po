@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-02 16:36+0000\n"
-"PO-Revision-Date: 2022-09-03 09:43+0300\n"
+"POT-Creation-Date: 2022-09-04 18:11+0000\n"
+"PO-Revision-Date: 2022-09-04 22:42+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -682,7 +682,7 @@ msgstr "Yeni Düzenleyici Çalışma Alanı"
 msgid "D-Bus Inspector"
 msgstr "D-Bus İnceleyici"
 
-#: src/libide/code/ide-buffer.c:3673
+#: src/libide/code/ide-buffer.c:3674
 msgid "The current language lacks a symbol resolver."
 msgstr "Geçerli dilin simge çözümleyicisi yok."
 
@@ -832,25 +832,90 @@ msgstr "Yazdırma"
 msgid "Failed to open file: %s"
 msgstr "Dosya açılamadı: %s"
 
+#: src/libide/editor/ide-editor-info-bar.c:85
+msgid "_Discard Changes and Reload"
+msgstr "Değişikliklerden _Vazgeç ve Yeniden Yükle"
+
+#: src/libide/editor/ide-editor-info-bar.c:88
+msgid "File Has Changed on Disk"
+msgstr "Dosya Diskte Değiştirildi"
+
+#: src/libide/editor/ide-editor-info-bar.c:89
+msgid "The file has been changed by another program."
+msgstr "Dosya başka yazılımca değiştirildi."
+
+#: src/libide/editor/ide-editor-info-bar.c:100
+msgid "Save _As…"
+msgstr "_Farklı Kaydet…"
+
+#: src/libide/editor/ide-editor-info-bar.c:102
+msgid "Buffer Restored"
+msgstr "Arabellek Geri Yüklendi"
+
+#: src/libide/editor/ide-editor-info-bar.c:103
+msgid "Unsaved buffer has been restored."
+msgstr "Kaydedilmemiş arabellek geri yüklendi."
+
+#: src/libide/editor/ide-editor-info-bar.c:109
+msgid "_Save…"
+msgstr "_Kaydet…"
+
+#: src/libide/editor/ide-editor-info-bar.c:111
+#: src/libide/editor/ide-editor-info-bar.ui:81
+msgid "_Discard…"
+msgstr "_Vazgeç…"
+
+#: src/libide/editor/ide-editor-info-bar.c:113
+msgid "Draft Changes Restored"
+msgstr "Taslak Değişiklikler Geri Yüklendi"
+
+#: src/libide/editor/ide-editor-info-bar.c:114
+msgid "Unsaved changes to the buffer have been restored."
+msgstr "Arabelleğe kaydedilmemiş değişiklikler geri yüklendi."
+
+#: src/libide/editor/ide-editor-info-bar.ui:19
+msgid "Could Not Open File"
+msgstr "Dosya Açılamadı"
+
+#: src/libide/editor/ide-editor-info-bar.ui:29
+msgid "You do not have permission to open the file."
+msgstr "Dosyayı açacak izniniz yok."
+
+#: src/libide/editor/ide-editor-info-bar.ui:37
+msgid "_Retry"
+msgstr "_Yeniden Dene"
+
+#: src/libide/editor/ide-editor-info-bar.ui:44
+msgid "Open As _Administrator"
+msgstr "_Yönetici Olarak Aç"
+
+#: src/libide/editor/ide-editor-info-bar.ui:63
+msgid "Document Restored"
+msgstr "Belge Geri Yüklendi"
+
+#: src/libide/editor/ide-editor-info-bar.ui:73
+msgid "Unsaved document has been restored."
+msgstr "Kaydedilmemiş belge geri yüklendi."
+
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:407
+#: src/libide/editor/ide-editor-page.c:408
 #, c-format
 msgid "Print failed: %s"
 msgstr "Yazdırılamadı: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:483
+#: src/libide/editor/ide-editor-page.c:484
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Biçim seçimi başarısız: %s"
 
-#: src/libide/editor/ide-editor-page.c:871
+#: src/libide/editor/ide-editor-page.c:900
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Dosyayı Kaydet"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -859,7 +924,7 @@ msgstr "Dosyayı Kaydet"
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -3679,11 +3744,11 @@ msgstr "Boşluklar"
 msgid "Tabs"
 msgstr "Sekmeler"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:516
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
 msgid "Go"
 msgstr "Git"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
 msgid "Go to Line"
 msgstr "Satıra Git"
 
