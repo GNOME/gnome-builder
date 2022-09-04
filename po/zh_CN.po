@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-02 22:16+0000\n"
-"PO-Revision-Date: 2022-09-03 17:12-0400\n"
-"Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
+"POT-Creation-Date: 2022-09-03 21:57+0000\n"
+"PO-Revision-Date: 2022-09-04 13:59+0800\n"
+"Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -758,10 +758,8 @@ msgid "Application"
 msgstr "应用程序"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
-#, fuzzy
-#| msgid "In Page"
 msgid "Pages"
-msgstr "页面内"
+msgstr "页面"
 
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:23
@@ -786,16 +784,12 @@ msgstr "文档"
 
 #: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
 #: src/libide/sourceview/gtk/menus.ui:110
-#, fuzzy
-#| msgid "_Selection"
 msgid "Selection"
-msgstr "选择(_S)"
+msgstr "选区"
 
 #: src/libide/editor/gtk/menus.ui:89
-#, fuzzy
-#| msgid "_Print"
 msgid "Printing"
-msgstr "打印(_P)"
+msgstr "打印"
 
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
@@ -1636,22 +1630,16 @@ msgid "All _Upper Case"
 msgstr "全部大写字母(_U)"
 
 #: src/libide/sourceview/gtk/menus.ui:82
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Make selection upper case"
 msgid "Convert the text selection to upper case"
-msgstr "使选区上标"
+msgstr "将文本选区转换为大写"
 
 #: src/libide/sourceview/gtk/menus.ui:88
 msgid "All _Lower Case"
 msgstr "全部小写字母(_L)"
 
 #: src/libide/sourceview/gtk/menus.ui:89
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Make selection lower case"
 msgid "Convert the text selection to lower case"
-msgstr "使选区下标"
+msgstr "将文本选区转换为小写"
 
 #: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
@@ -1659,18 +1647,15 @@ msgstr "反转大小写(_V)"
 
 #: src/libide/sourceview/gtk/menus.ui:96
 msgid "Invert case of the text selection"
-msgstr ""
+msgstr "反转文本选区的大小写"
 
 #: src/libide/sourceview/gtk/menus.ui:102
 msgid "_Title Case"
 msgstr "标题大小写(_T)"
 
 #: src/libide/sourceview/gtk/menus.ui:103
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Invert selection case"
 msgid "Convert the text selection to title case"
-msgstr "反转选区大小写"
+msgstr "将文本选区转换为首字大写"
 
 #: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Join Lines"
@@ -1690,14 +1675,10 @@ msgid "_Go to Definition"
 msgstr "跳转至定义(_G)"
 
 #: src/libide/sourceview/gtk/menus.ui:135
-#, fuzzy
-#| msgid "Jump to the last position when reopening a file"
 msgid "Jump to file and location where item is defined"
-msgstr "重新打开一个文件时跳转到上次位置"
+msgstr "跳转至项目定义的文件和位置"
 
 #: src/libide/sourceview/gtk/menus.ui:141
-#, fuzzy
-#| msgid "_Find references"
 msgid "_Find References"
 msgstr "查找参考(_F)"
 
@@ -1713,11 +1694,8 @@ msgid "_Open Link"
 msgstr "打开链接(_O)"
 
 #: src/libide/terminal/gtk/menus.ui:17
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Copy selected text to clipboard"
 msgid "Copy selection from terminal to clipboard"
-msgstr "复制选中文本到剪贴板"
+msgstr "从终端复制选区到剪贴板"
 
 #: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
@@ -1729,7 +1707,7 @@ msgstr "从剪贴板中复制至终端"
 
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
-msgstr ""
+msgstr "选择终端中包括回滚在内的全部文本"
 
 #: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
@@ -2263,7 +2241,7 @@ msgstr "运行于(_U)…"
 #: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
 #: src/plugins/buildui/gtk/menus.ui:149
 msgid "Code Foundry"
-msgstr ""
+msgstr "代码铸造"
 
 #: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
 #: src/plugins/projectui/tweaks.ui:218
@@ -3235,20 +3213,16 @@ msgid "_Comment Code"
 msgstr "注释代码(_C)"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
-#, fuzzy
-#| msgid "The font used in the source code editor"
 msgid "Add comments surrounding the source code selection"
-msgstr "源代码编辑器中使用的字体"
+msgstr "在源代码选区周围添加注释"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
 msgid "Unco_mment Code"
 msgstr "取消注释代码(_M)"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
-#, fuzzy
-#| msgid "The font used in the source code editor"
 msgid "Remove comments from the source code selection"
-msgstr "源代码编辑器中使用的字体"
+msgstr "从源代码选区移除注释"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -5223,8 +5197,8 @@ msgstr "工作目录"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "命令将从该位置运行。使用 <tt>$BUILDDIR</tt>、<tt>$SRCDIR</tt> 或 <tt>$HOME</"
 "tt> 来定义关联路径。"
@@ -5622,20 +5596,16 @@ msgid "New _Build Terminal"
 msgstr "新建构建终端(_B)"
 
 #: src/plugins/terminal/gtk/menus.ui:19
-#, fuzzy
-#| msgid "Open a new terminal in build pipeline"
 msgid "Open a new terminal in project's build pipeline"
-msgstr "在构建管道中打开新终端"
+msgstr "在工程构建管道中打开新终端"
 
 #: src/plugins/terminal/gtk/menus.ui:22
 msgid "New _Runtime Terminal"
 msgstr "新建运行时终端(_R)"
 
 #: src/plugins/terminal/gtk/menus.ui:27
-#, fuzzy
-#| msgid "Open a new terminal in runtime environment"
 msgid "Open a new terminal in project's runtime environment"
-msgstr "在运行时环境中打开新终端"
+msgstr "在工程运行时环境中打开新终端"
 
 #: src/plugins/terminal/gtk/menus.ui:41
 msgid "Split"
@@ -5940,15 +5910,12 @@ msgid "Reload the current page ignoring cache"
 msgstr "重载当前页面并忽视缓存"
 
 #: src/plugins/web-browser/gtk/menus.ui:30
-#, fuzzy
 msgid "Focus Location"
 msgstr "焦点位置"
 
 #: src/plugins/web-browser/gtk/menus.ui:31
-#, fuzzy
-#| msgid "Save the current page"
 msgid "Focus the current page's location"
-msgstr "保存当前页面"
+msgstr "聚焦当前页面的位置"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
