@@ -29,11 +29,23 @@
 struct _GbpWordProposal
 {
   GObject parent_instance;
-  gchar *word;
+  char *word;
 };
 
+static char *
+gbp_word_proposal_get_typed_text (GtkSourceCompletionProposal *proposal)
+{
+  return g_strdup (GBP_WORD_PROPOSAL (proposal)->word);
+}
+
+static void
+proposal_iface_init (GtkSourceCompletionProposalInterface *iface)
+{
+  iface->get_typed_text = gbp_word_proposal_get_typed_text;
+}
+
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWordProposal, gbp_word_proposal, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, NULL))
+                               G_IMPLEMENT_INTERFACE (GTK_SOURCE_TYPE_COMPLETION_PROPOSAL, proposal_iface_init))
 
 static void
 gbp_word_proposal_finalize (GObject *object)
@@ -69,7 +81,7 @@ gbp_word_proposal_new (const gchar *word)
   return self;
 }
 
-const gchar *
+const char *
 gbp_word_proposal_get_word (GbpWordProposal *self)
 {
   g_return_val_if_fail (GBP_IS_WORD_PROPOSAL (self), NULL);
