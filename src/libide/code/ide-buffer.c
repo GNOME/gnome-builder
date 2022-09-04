@@ -1438,6 +1438,7 @@ ide_buffer_load_file_cb (GObject      *object,
   gtk_text_buffer_select_range (GTK_TEXT_BUFFER (self), &iter, &iter);
 
   /* Assume we are at newest state at end of file-load operation */
+  gtk_text_buffer_set_modified (GTK_TEXT_BUFFER (self), FALSE);
   _ide_buffer_set_changed_on_volume (self, FALSE);
 
   ide_highlight_engine_unpause (self->highlight_engine);
