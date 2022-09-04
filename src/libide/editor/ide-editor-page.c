@@ -525,6 +525,32 @@ format_action (GtkWidget  *widget,
 }
 
 static void
+reload_action (GtkWidget  *widget,
+               const char *action_name,
+               GVariant   *param)
+{
+  IdeEditorPage *self = (IdeEditorPage *)widget;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  context = ide_widget_get_context (widget);
+  buffer_manager = ide_buffer_manager_from_context (context);
+
+  ide_buffer_manager_load_file_async (buffer_manager,
+                                      ide_buffer_get_file (self->buffer),
+                                      IDE_BUFFER_OPEN_FLAGS_FORCE_RELOAD,
+                                      NULL, /* TODO: Progress */
+                                      NULL, NULL, NULL);
+
+  IDE_EXIT;
+}
+
+static void
 ide_editor_page_constructed (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
@@ -680,6 +706,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
   panel_widget_class_install_action (panel_widget_class, "search.begin-replace", NULL, search_begin_replace_action);
   panel_widget_class_install_action (panel_widget_class, "editor.print", NULL, print_action);
   panel_widget_class_install_action (panel_widget_class, "editor.format", NULL, format_action);
+  panel_widget_class_install_action (panel_widget_class, "editor.reload", NULL, reload_action);
 
   g_type_ensure (IDE_TYPE_EDITOR_INFO_BAR);
   g_type_ensure (IDE_TYPE_EDITOR_SEARCH_BAR);
