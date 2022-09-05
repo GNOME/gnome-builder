@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-03 21:57+0000\n"
-"PO-Revision-Date: 2022-09-04 10:00+0100\n"
+"POT-Creation-Date: 2022-09-04 16:19+0000\n"
+"PO-Revision-Date: 2022-09-05 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -783,25 +783,90 @@ msgstr "Inprimatzea"
 msgid "Failed to open file: %s"
 msgstr "Huts egin du fitxategia irekitzeak: %s"
 
+#: src/libide/editor/ide-editor-info-bar.c:85
+msgid "_Discard Changes and Reload"
+msgstr "_Baztertu aldaketak eta birkargatu"
+
+#: src/libide/editor/ide-editor-info-bar.c:88
+msgid "File Has Changed on Disk"
+msgstr "Fitxategia diskoan aldatu da"
+
+#: src/libide/editor/ide-editor-info-bar.c:89
+msgid "The file has been changed by another program."
+msgstr "Fitxategia beste programa batek aldatu du."
+
+#: src/libide/editor/ide-editor-info-bar.c:100
+msgid "Save _As…"
+msgstr "Gorde _honela..."
+
+#: src/libide/editor/ide-editor-info-bar.c:102
+msgid "Buffer Restored"
+msgstr "Bufferra leheneratu da"
+
+#: src/libide/editor/ide-editor-info-bar.c:103
+msgid "Unsaved buffer has been restored."
+msgstr "Gorde gabeko bufferra leheneratu da."
+
+#: src/libide/editor/ide-editor-info-bar.c:109
+msgid "_Save…"
+msgstr "_Gorde…"
+
+#: src/libide/editor/ide-editor-info-bar.c:111
+#: src/libide/editor/ide-editor-info-bar.ui:81
+msgid "_Discard…"
+msgstr "_Baztertu…"
+
+#: src/libide/editor/ide-editor-info-bar.c:113
+msgid "Draft Changes Restored"
+msgstr "Zirriborro-aldaketak leheneratu dira"
+
+#: src/libide/editor/ide-editor-info-bar.c:114
+msgid "Unsaved changes to the buffer have been restored."
+msgstr "Bufferrean gode gabe zeuden aldaketak leheneratu egin dira."
+
+#: src/libide/editor/ide-editor-info-bar.ui:19
+msgid "Could Not Open File"
+msgstr "Ezin da fitxategia ireki"
+
+#: src/libide/editor/ide-editor-info-bar.ui:29
+msgid "You do not have permission to open the file."
+msgstr "Ez duzu fitxategia irekitzeko baimenik."
+
+#: src/libide/editor/ide-editor-info-bar.ui:37
+msgid "_Retry"
+msgstr "_Saiatu berriro"
+
+#: src/libide/editor/ide-editor-info-bar.ui:44
+msgid "Open As _Administrator"
+msgstr "Ireki _administrazaile gisa"
+
+#: src/libide/editor/ide-editor-info-bar.ui:63
+msgid "Document Restored"
+msgstr "Dokumentua leheneratu da"
+
+#: src/libide/editor/ide-editor-info-bar.ui:73
+msgid "Unsaved document has been restored."
+msgstr "Gorde gabeko dokumentua leheneratu da."
+
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:407
+#: src/libide/editor/ide-editor-page.c:408
 #, c-format
 msgid "Print failed: %s"
 msgstr "Inprimatzeak huts egin du: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:483
+#: src/libide/editor/ide-editor-page.c:484
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Huts egin du hautapenaren formatuak: %s"
 
-#: src/libide/editor/ide-editor-page.c:871
+#: src/libide/editor/ide-editor-page.c:900
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Gorde fitxategia"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -810,7 +875,7 @@ msgstr "Gorde fitxategia"
 msgid "Save"
 msgstr "Gorde"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -5903,9 +5968,6 @@ msgstr "Fitxategia lokalean gorde behar da analizatua ahal izateko."
 
 #~ msgid "Whether or not Home moves to first non-space character."
 #~ msgstr "Hasiera zuriunerik gabeko lehen karakterera mugituko den ala ez"
-
-#~ msgid "Show Open Files"
-#~ msgstr "Erakutsi fitxategi irekiak"
 
 #~ msgid "Display the open files list in the project sidebar."
 #~ msgstr "Bistaratu fitxategi irekien zerrenda proiektuaren alboko barran."
