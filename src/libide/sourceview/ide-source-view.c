@@ -709,6 +709,84 @@ ide_source_view_push_snippet (GtkSourceView    *source_view,
 }
 
 static void
+ide_source_view_action_select_line (GtkWidget  *widget,
+                                    const char *action_name,
+                                    GVariant   *param)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin, end;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  gtk_text_iter_order (&begin, &end);
+
+  /* Move beginning of selection/cursor to position 0 of first */
+  if (!gtk_text_iter_starts_line (&begin))
+    gtk_text_iter_set_line_offset (&begin, 0);
+
+  /* Move end of selection/cursor to end of line */
+  if (!gtk_text_iter_ends_line (&end))
+    gtk_text_iter_forward_to_line_end (&end);
+
+  /* Swallow the \n with the selection */
+  if (!gtk_text_iter_is_end (&end))
+    gtk_text_iter_forward_char (&end);
+
+  gtk_text_buffer_select_range (buffer, &begin, &end);
+
+  /* NOTE: This shouldn't be needed, but due to some invalidation issues in
+   *       the line display cache, seems to improve chances we get proper
+   *       invalidation lines within cache.
+   */
+  gtk_widget_queue_draw (widget);
+}
+
+static void
+ide_source_view_action_delete_line (GtkWidget  *widget,
+                                    const char *action_name,
+                                    GVariant   *param)
+{
+  IdeSourceView *self = (IdeSourceView *)widget;
+  GtkTextBuffer *buffer;
+  GtkTextIter begin, end;
+  g_autofree char *text = NULL;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  ide_source_view_action_select_line (widget, NULL, NULL);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+
+  /* If we're at the end of the buffer, then we need to remove the
+   * leading \n instead of the trailing \n to make it appear to the
+   * user that a line was removed.
+   */
+  gtk_text_buffer_begin_user_action (buffer);
+  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  gtk_text_iter_order (&begin, &end);
+  if (gtk_text_iter_is_end (&end) &&
+      gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&end))
+    gtk_text_iter_backward_char (&begin);
+  text = gtk_text_iter_get_slice (&begin, &end);
+  gtk_text_buffer_delete (buffer, &begin, &end);
+  gtk_text_buffer_end_user_action (buffer);
+
+  /* now move the cursor to the beginning of the new line */
+  gtk_text_iter_set_line_offset (&begin, 0);
+  while (!gtk_text_iter_ends_line (&begin) &&
+         g_unichar_isspace (gtk_text_iter_get_char (&begin)))
+    gtk_text_iter_forward_char (&begin);
+  gtk_text_buffer_select_range (buffer, &begin, &begin);
+
+  /* it's nice to place the text into the primary selection so that
+   * the user can paste it in other places.
+   */
+  gdk_clipboard_set_text (gtk_widget_get_primary_clipboard (widget), text);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -875,10 +953,14 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gtk_widget_class_install_action (widget_class, "zoom.one", NULL, ide_source_view_zoom_one_action);
   gtk_widget_class_install_action (widget_class, "selection.sort", "(bb)", ide_source_view_selection_sort);
   gtk_widget_class_install_action (widget_class, "selection.join", NULL, ide_source_view_selection_join);
+  gtk_widget_class_install_action (widget_class, "buffer.select-line", NULL, ide_source_view_action_select_line);
+  gtk_widget_class_install_action (widget_class, "buffer.delete-line", NULL, ide_source_view_action_delete_line);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_plus, GDK_CONTROL_MASK, "zoom.in", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, GDK_CONTROL_MASK, "zoom.out", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_0, GDK_CONTROL_MASK, "zoom.one", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_l, GDK_CONTROL_MASK, "buffer.select-line", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_d, GDK_CONTROL_MASK, "buffer.delete-line", NULL);
 }
 
 static void

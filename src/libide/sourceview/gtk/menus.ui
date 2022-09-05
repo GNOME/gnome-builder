@@ -109,6 +109,16 @@
           <attribute name="page" translatable="yes">Text Editor</attribute>
           <attribute name="group" translatable="yes">Selection</attribute>
           <item>
+            <attribute name="label" translatable="yes">Select _Line</attribute>
+            <attribute name="action">buffer.select-line</attribute>
+            <attribute name="accel">&lt;control&gt;l</attribute>
+          </item>
+          <item>
+            <attribute name="label" translatable="yes">_Delete Line</attribute>
+            <attribute name="action">buffer.delete-line</attribute>
+            <attribute name="accel">&lt;control&gt;d</attribute>
+          </item>
+          <item>
             <attribute name="label" translatable="yes">_Join Lines</attribute>
             <attribute name="action">selection.join</attribute>
             <attribute name="accel">&lt;control&gt;j</attribute>
