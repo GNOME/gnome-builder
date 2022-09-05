@@ -129,6 +129,11 @@
             <attribute name="target" type="(bb)">(false, false)</attribute>
             <attribute name="accel">&lt;shift&gt;&lt;control&gt;j</attribute>
           </item>
+          <item>
+            <attribute name="label" translatable="yes">D_uplicate Line</attribute>
+            <attribute name="action">buffer.duplicate-line</attribute>
+            <attribute name="accel">&lt;control&gt;&lt;alt&gt;d</attribute>
+          </item>
         </section>
         <section id="ide-source-view-popup-menu-format-section">
           <attribute name="page" translatable="yes">Text Editor</attribute>

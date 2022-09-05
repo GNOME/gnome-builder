@@ -787,6 +787,54 @@ ide_source_view_action_delete_line (GtkWidget  *widget,
 }
 
 static void
+ide_source_view_action_duplicate_line (GtkWidget  *widget,
+                                       const char *action_name,
+                                       GVariant   *param)
+{
+  g_autofree char *text = NULL;
+  g_autofree char *duplicate_line = NULL;
+  GtkTextIter begin, end;
+  GtkTextMark *cursor;
+  GtkTextBuffer *buffer;
+  gboolean selected;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SOURCE_VIEW (widget));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
+  cursor = gtk_text_buffer_get_insert (buffer);
+
+  gtk_text_buffer_begin_user_action (buffer);
+
+  selected = gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+
+  if (selected)
+    {
+      duplicate_line = gtk_text_iter_get_text (&begin, &end);
+      gtk_text_buffer_insert (buffer, &begin, duplicate_line, -1);
+    }
+  else
+    {
+      gtk_text_buffer_get_iter_at_mark (buffer, &begin, cursor);
+      end = begin;
+
+      gtk_text_iter_set_line_offset (&begin, 0);
+
+      if (!gtk_text_iter_ends_line (&end))
+        gtk_text_iter_forward_to_line_end (&end);
+
+      if (gtk_text_iter_get_line (&begin) == gtk_text_iter_get_line (&end))
+        {
+          text = gtk_text_iter_get_text (&begin, &end);
+          duplicate_line = g_strconcat (text, "\n", NULL);
+          gtk_text_buffer_insert (buffer, &begin, duplicate_line, -1);
+        }
+    }
+
+  gtk_text_buffer_end_user_action (buffer);
+}
+
+static void
 ide_source_view_dispose (GObject *object)
 {
   IdeSourceView *self = (IdeSourceView *)object;
@@ -955,12 +1003,14 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
   gtk_widget_class_install_action (widget_class, "selection.join", NULL, ide_source_view_selection_join);
   gtk_widget_class_install_action (widget_class, "buffer.select-line", NULL, ide_source_view_action_select_line);
   gtk_widget_class_install_action (widget_class, "buffer.delete-line", NULL, ide_source_view_action_delete_line);
+  gtk_widget_class_install_action (widget_class, "buffer.duplicate-line", NULL, ide_source_view_action_duplicate_line);
 
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_plus, GDK_CONTROL_MASK, "zoom.in", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, GDK_CONTROL_MASK, "zoom.out", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_0, GDK_CONTROL_MASK, "zoom.one", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_l, GDK_CONTROL_MASK, "buffer.select-line", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_d, GDK_CONTROL_MASK, "buffer.delete-line", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_d, GDK_CONTROL_MASK|GDK_ALT_MASK, "buffer.duplicate-line", NULL);
 }
 
 static void
