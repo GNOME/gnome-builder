@@ -66,6 +66,8 @@
                         <property name="hexpand">true</property>
                         <property name="enable-emoji-completion">false</property>
                         <property name="input-purpose">url</property>
+                        <property name="width-chars">10</property>
+                        <property name="max-width-chars">10</property>
                         <signal name="activate" handler="on_editable_activate_cb" swapped="true" object="IdeUrlBar"/>
                         <child>
                           <object class="GtkEventControllerFocus">
