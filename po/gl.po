@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-04 22:34+0000\n"
-"PO-Revision-Date: 2022-09-05 12:32+0200\n"
+"PO-Revision-Date: 2022-09-05 13:14+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -577,6 +577,8 @@ msgid ""
 "Run the pipelines install phase before running the project. Only use this if "
 "you know what you're doing with your project."
 msgstr ""
+"Executar a fase de instalación do cano antes de executar o proxecto. Use "
+"isto só se sabe o que está facendo co seu proxecto."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -617,6 +619,7 @@ msgstr "Rexistro detallado"
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
 msgstr ""
+"Se se debería usar G_MESSAGES_DEBUG=all ao executar o obxectivo da aplicación"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -1859,6 +1862,8 @@ msgstr "Pegar desde o portapapeis no terminal"
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
 msgstr ""
+"Selección de todo o texto desde a terminal incluíndo o desprazamento cara "
+"atrás"
 
 #: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
@@ -2344,6 +2349,8 @@ msgstr "Obxectivos de construción dispoñíbeis"
 msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr ""
+"Algúns obxectivos poderían non estar dispoñíbeis ate que o proxecto foi "
+"configurado."
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
@@ -2352,7 +2359,7 @@ msgstr "Descubrir automaticamente"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "Esta selección permítelle a Builder escoller o mellor candidato."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 #| msgid "The runtime is the environment used to run your application."
@@ -2420,7 +2427,7 @@ msgstr "E_xecutar con…"
 #: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
 #: src/plugins/buildui/gtk/menus.ui:149
 msgid "Code Foundry"
-msgstr ""
+msgstr "Code Foundry"
 
 #: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
 #: src/plugins/projectui/tweaks.ui:218
@@ -2711,6 +2718,8 @@ msgid ""
 "Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
 "troubleshooting"
 msgstr ""
+"Executa coa variábel de ambiente <tt>G_MESSAGES_DEBUG=all</tt> para "
+"resolución de erros"
 
 #: src/plugins/buildui/tweaks.ui:151
 #| msgid "Run in build environment"
@@ -2724,6 +2733,8 @@ msgstr "Como aplicación"
 #: src/plugins/buildui/tweaks.ui:164
 msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
+"Executar unidade con acceso á pantalla e outras características de ambiente "
+"de «runtime»."
 
 #: src/plugins/buildui/tweaks.ui:176
 #| msgid "Build Toolchain"
@@ -2833,6 +2844,8 @@ msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
+"O proxecto instalarase neste cartafol durante a fase de instalación no cano "
+"de construción."
 
 #: src/plugins/buildui/tweaks.ui:367
 msgid "Configure Options"
@@ -2843,6 +2856,8 @@ msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
+"Estas opcións úsanse no sistema construción para configurar o proxecto "
+"durante a fase de configuración do cano de construción"
 
 #: src/plugins/buildui/tweaks.ui:387
 msgid "Build Environment"
@@ -2853,6 +2868,8 @@ msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
+"O SDK usado para construír a súa aplicación determínase automaticamente "
+"desde o «runtime»."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 msgid "Fetch dependencies"
@@ -3829,6 +3846,7 @@ msgstr "Restabelecer"
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
 msgstr ""
+"Revirte as preferencias de idioma para as predeterminadas da aplicación"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
@@ -3945,6 +3963,8 @@ msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
 msgstr ""
+"As preferencias fornecidas polo .editorconfig e os modelines teñen "
+"preferencias sobre as de embaixo."
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -3998,7 +4018,7 @@ msgstr "Tamaño da tabulación"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
-msgstr ""
+msgstr "O número de caracteres a sangrar para o tabulador"
 
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
@@ -4015,7 +4035,7 @@ msgstr "Mostrar marxe da dereita"
 
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr ""
+msgstr "Mostra unha marxe no editor para indicar o ancho máximo desexado"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -4107,7 +4127,7 @@ msgstr "Axustar o espazado entre liñas"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
-msgstr ""
+msgstr "Como se debería envolver o texto cando sexa máis ancho que o marco"
 
 #: src/plugins/editorui/tweaks.ui:93
 msgid "At Spaces"
@@ -4219,6 +4239,8 @@ msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
+"Usar a posición do cursor para realzar as chaves, corchetes, parénteses e "
+"máis coincidentes"
 
 #: src/plugins/editorui/tweaks.ui:240
 msgid "Semantic Highlighting"
@@ -4229,6 +4251,8 @@ msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
+"Usar a información do símbolo para realzar os espazos de nomes, funcións e "
+"variábeis no código fonte"
 
 #: src/plugins/editorui/tweaks.ui:260
 msgid "Spelling"
@@ -4236,7 +4260,7 @@ msgstr "Verificación ortográfica"
 
 #: src/plugins/editorui/tweaks.ui:264
 msgid "Underline potential spelling mistakes as you type"
-msgstr ""
+msgstr "Subliñar os fallos potenciais de fallos ortográficos mentres escribe"
 
 #: src/plugins/editorui/tweaks.ui:277
 msgid "Selections"
@@ -4262,7 +4286,7 @@ msgstr "Expandir Fragmentos"
 
 #: src/plugins/editorui/tweaks.ui:298
 msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr ""
+msgstr "Usar «Tabulador» para expandir os fragmentos configurados no editor"
 
 #: src/plugins/editorui/tweaks.ui:313
 msgid "Code Completion"
@@ -4279,7 +4303,7 @@ msgstr "Suxerir completados de código"
 
 #: src/plugins/editorui/tweaks.ui:321
 msgid "Automatically suggest code completions while typing"
-msgstr ""
+msgstr "Suxerir automaticamente completados de código mentres se escribe"
 
 #: src/plugins/editorui/tweaks.ui:332
 #| msgid "Suggest Completions from Snippets"
@@ -4289,6 +4313,7 @@ msgstr "Seleccionar a primeira proposta de completado"
 #: src/plugins/editorui/tweaks.ui:333
 msgid "Automatically select the first completion proposal when displayed"
 msgstr ""
+"Seleccionar automaticamente a primeira proposta de completado cando se mostre"
 
 #: src/plugins/editorui/tweaks.ui:348
 #| msgid "Completion Providers"
@@ -4309,6 +4334,8 @@ msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
 msgstr ""
+"Os temas de atallos fornecen unha experiencia de teclado similar a outros "
+"IDEs e editores"
 
 #: src/plugins/editorui/tweaks.ui:391
 msgid "Movements"
@@ -4964,7 +4991,7 @@ msgstr "Aplicación de GNOME"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:172
 msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
-msgstr ""
+msgstr "Un proxecto Meson para GNOME usando GTK 4 e libadwaita"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:186
 msgid "GTK 4 Application"
@@ -5345,6 +5372,8 @@ msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
+"Este identificador úsase ao referenciar as súas preferencias do proxecto, "
+"cartafoles de construción e información en caché."
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5364,6 +5393,8 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
+"Esta configuración úsase para configurar os canos de construción, configurar "
+"o seu sistema de construción e executar o seu proxecto."
 
 #: src/plugins/projectui/tweaks.ui:228
 #| msgid "No Provided Tool"
@@ -5487,7 +5518,7 @@ msgstr "Atallo de teclado"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:52
 msgid "An optional shortcut to run the command"
-msgstr ""
+msgstr "Un atallo opcional para executar a orde"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:67
 msgid "Shell Command"
@@ -5495,7 +5526,7 @@ msgstr "Orde da shell"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
 msgid "You may use single or double quotes for parameters."
-msgstr ""
+msgstr "Pode usar vírgulas sinxelas ou dobres para os parénteses."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
 msgid "Environment"
@@ -5511,6 +5542,8 @@ msgid ""
 "The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
 "<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
+"A orde executarase desde esta localización. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, ou <tt>$HOME</tt> para definir unha ruta relativa."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -5518,7 +5551,7 @@ msgstr "Usar subshell"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
-msgstr ""
+msgstr "Executar esta orde desde unha subshell como  <tt>sh -c ''</tt>"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
@@ -5529,6 +5562,8 @@ msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
+"Construtor pode executar a súa orde desde varias localizacións incluíndo o "
+"sistema anfitrión ou contedores de construción."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
@@ -5549,7 +5584,7 @@ msgstr "Executa a orde no sistema anfitrión."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
-msgstr ""
+msgstr "Executa a orde dentro do cano de construción.\t"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 msgid "As Target Application"
@@ -5557,19 +5592,19 @@ msgstr "Como aplicación obxectivo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
-msgstr ""
+msgstr "Executa a orde como se fora un obxectivo da aplicación."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
-msgstr ""
+msgstr "As ores poden usarse construír, executar e modificar o seu proxectos"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:116
 msgid "These commands are specific to this project."
-msgstr ""
+msgstr "Estas ordes son específicas deste proxecto."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
 msgid "These commands are shared across all projects."
-msgstr ""
+msgstr "Estas ordes están compartidas entre todos os proxectos."
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
@@ -5605,7 +5640,7 @@ msgstr "Executar ordes"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
-msgstr ""
+msgstr "Unha lista de ids run-command para cargar a aplicación ou proxectos."
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
@@ -5613,6 +5648,10 @@ msgid ""
 "them to a keyboard shortcut. They can run from various environments such as "
 "the build pipeline, runtime environment, or host operating system."
 msgstr ""
+"Use as ordes para executar ferramentas de construción, aplicacións ou "
+"scripts de shell e asígneos a atallos de teclado. poden executarse desde "
+"varios ambientes como o cano de construción, ambiente de «runtime» ou "
+"sistema operativo anfitrión."
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
@@ -5863,6 +5902,8 @@ msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
 msgstr ""
+"Fornecer a variable de ambiente TRACE_D para que as aplicacións envíen "
+"eventos personalizados"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
@@ -5937,7 +5978,7 @@ msgstr "Permitir negriña"
 
 #: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
-msgstr ""
+msgstr "Permite o uso de secuencias de escape con negriñas"
 
 #: src/plugins/terminal/tweaks.ui:41
 msgid "Allow Hyperlinks"
@@ -5945,7 +5986,7 @@ msgstr "Permitir hiperligazóns"
 
 #: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
-msgstr ""
+msgstr "Permite o uso das secuencias de escape con ligazóns"
 
 #: src/plugins/terminal/tweaks.ui:55
 msgid "Scrolling"
@@ -5958,6 +5999,8 @@ msgstr "Desprazar coa saída"
 #: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
+"Desprazar automaticamente cando as aplicacións mostran texto dentro dunha "
+"terminal"
 
 #: src/plugins/terminal/tweaks.ui:70
 #| msgid "Scroll on output"
@@ -5966,7 +6009,7 @@ msgstr "Desprazar coa entrada do teclado"
 
 #: src/plugins/terminal/tweaks.ui:71
 msgid "Automatically scroll when typing to insert text"
-msgstr ""
+msgstr "Desprazar automaticamente ao escribir para inserir texto"
 
 #: src/plugins/terminal/tweaks.ui:87
 msgid "Limit Scrollback"
@@ -5976,6 +6019,8 @@ msgstr "Limitar o desprazamento cara atrás"
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr ""
+"Limita o número de liñas que se almacenan en memoria para o desprazamento "
+"cara atrás da terminal"
 
 #: src/plugins/terminal/tweaks.ui:99
 #| msgid "Limit Scrollback"
@@ -5985,6 +6030,8 @@ msgstr "Liñas máximas no desprazamento cara atrás"
 #: src/plugins/terminal/tweaks.ui:100
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
+"O número máximo de liñas almacenadas no historial cando se limita o "
+"desprazamento cara atrás"
 
 #: src/plugins/testui/gbp-testui-output-panel.c:147
 msgid "Unit Test Output"
@@ -6180,6 +6227,8 @@ msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
+"Escriba a URL do repositorio do código fonte para o proxecto que quere "
+"clonar."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 #| msgid "Your project will be created within a new child directory."
@@ -6194,6 +6243,7 @@ msgstr "Información do autor"
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
 msgid "You may specify authorship information to override defaults."
 msgstr ""
+"Debe especificar a información do autor para sobrescribir a predeterminada."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
 msgid "Status"
