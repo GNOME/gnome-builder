@@ -301,8 +301,6 @@ copy_link_address_action (GtkWidget  *widget,
   g_assert (IDE_IS_TERMINAL (self));
   g_assert (priv->url != NULL);
 
-  g_print ("COPY: %s\n", priv->url);
-
   if (!ide_str_empty0 (priv->url))
     gdk_clipboard_set_text (gtk_widget_get_clipboard (GTK_WIDGET (self)), priv->url);
 }
