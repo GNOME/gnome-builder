@@ -275,7 +275,10 @@ ide_terminal_click_pressed_cb (IdeTerminal     *self,
   if (button == 1)
     {
       if (priv->url != NULL)
-        gtk_widget_activate_action (GTK_WIDGET (self), "terminal.open-link", NULL);
+        {
+          gtk_widget_activate_action (GTK_WIDGET (self), "terminal.open-link", NULL);
+          gtk_gesture_set_state (GTK_GESTURE (click), GTK_EVENT_SEQUENCE_CLAIMED);
+        }
     }
   else if (button == 3)
     {
