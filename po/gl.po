@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-04 16:19+0000\n"
-"PO-Revision-Date: 2022-09-05 00:33+0200\n"
+"POT-Creation-Date: 2022-09-04 22:34+0000\n"
+"PO-Revision-Date: 2022-09-05 12:32+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -693,7 +693,7 @@ msgstr "Novo espazo de traballo do editor"
 msgid "D-Bus Inspector"
 msgstr "Inspector de D-Bus"
 
-#: src/libide/code/ide-buffer.c:3673
+#: src/libide/code/ide-buffer.c:3674
 msgid "The current language lacks a symbol resolver."
 msgstr "Ao linguaxe actual fáltalle un resolvedor de símbolos."
 
@@ -805,10 +805,9 @@ msgid "Application"
 msgstr "Aplicación"
 
 #: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
-#, fuzzy
 #| msgid "In Page"
 msgid "Pages"
-msgstr "Na páxina"
+msgstr "Páxinas"
 
 #: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
 #: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:23
@@ -823,30 +822,26 @@ msgid "Text Editor"
 msgstr "Editor de texto"
 
 #: src/libide/editor/gtk/menus.ui:77
-#, fuzzy
 #| msgid "Search & Replace (Ctrl+H)"
 msgid "Search & Replace"
-msgstr "Buscar e reemprazar (Ctrl+H)"
+msgstr "Buscar e substituír"
 
 #: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:70
 #: src/libide/gui/gtk/menus.ui:74 src/plugins/editorui/gtk/menus.ui:154
-#, fuzzy
 #| msgid "Document"
 msgid "Documents"
-msgstr "Documento"
+msgstr "Documentos"
 
 #: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
 #: src/libide/sourceview/gtk/menus.ui:110
-#, fuzzy
 #| msgid "_Selection"
 msgid "Selection"
-msgstr "_Selección"
+msgstr "Selección"
 
 #: src/libide/editor/gtk/menus.ui:89
-#, fuzzy
 #| msgid "Editing"
 msgid "Printing"
-msgstr "Editando"
+msgstr "Imprimindo"
 
 #. translators: %s is replaced with the error message
 #: src/libide/editor/ide-editor.c:121
@@ -864,29 +859,26 @@ msgstr "O ficheiro cambiou no discoo"
 
 #: src/libide/editor/ide-editor-info-bar.c:89
 msgid "The file has been changed by another program."
-msgstr ""
+msgstr "O ficheiro foi cambiado por outro programa."
 
 #: src/libide/editor/ide-editor-info-bar.c:100
-#, fuzzy
 #| msgid "Save As…"
 msgid "Save _As…"
-msgstr "Gardar como…"
+msgstr "Gardar _como…"
 
 #: src/libide/editor/ide-editor-info-bar.c:102
-#, fuzzy
 #| msgid "Save & Restore"
 msgid "Buffer Restored"
-msgstr "Gardar e restaurar"
+msgstr "Búfer restaurado"
 
 #: src/libide/editor/ide-editor-info-bar.c:103
 msgid "Unsaved buffer has been restored."
 msgstr "Restaurouse o búfer non gardado."
 
 #: src/libide/editor/ide-editor-info-bar.c:109
-#, fuzzy
 #| msgid "Save As…"
 msgid "_Save…"
-msgstr "Gardar como…"
+msgstr "_Gardar…"
 
 #: src/libide/editor/ide-editor-info-bar.c:111
 #: src/libide/editor/ide-editor-info-bar.ui:81
@@ -894,20 +886,18 @@ msgid "_Discard…"
 msgstr "_Rexeitar…"
 
 #: src/libide/editor/ide-editor-info-bar.c:113
-#, fuzzy
 #| msgid "Don't Change Governor"
 msgid "Draft Changes Restored"
-msgstr "Non cambiar o governador"
+msgstr "Restauráronse os cambios no borrador"
 
 #: src/libide/editor/ide-editor-info-bar.c:114
 msgid "Unsaved changes to the buffer have been restored."
-msgstr ""
+msgstr "Restauraronse os cambios non gardados no búfer."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
-#, fuzzy
 #| msgid "Show Open Files"
 msgid "Could Not Open File"
-msgstr "Mostrar ficheiros abertos"
+msgstr "Non foi posíbel abrir o ficheiro"
 
 #: src/libide/editor/ide-editor-info-bar.ui:29
 msgid "You do not have permission to open the file."
@@ -922,16 +912,14 @@ msgid "Open As _Administrator"
 msgstr "Abrir como _administrador"
 
 #: src/libide/editor/ide-editor-info-bar.ui:63
-#, fuzzy
 #| msgid "Document Properties"
 msgid "Document Restored"
-msgstr "Preferencias do documento"
+msgstr "Documento restaurado"
 
 #: src/libide/editor/ide-editor-info-bar.ui:73
-#, fuzzy
 #| msgid "The client has been closed"
 msgid "Unsaved document has been restored."
-msgstr "O cliente foi pechado"
+msgstr "Restaurouse o documento non gardado."
 
 #. translators: %s is the error message
 #: src/libide/editor/ide-editor-page.c:408
@@ -1307,7 +1295,6 @@ msgid "Go back"
 msgstr "Ir atrás"
 
 #: src/libide/greeter/ide-greeter-workspace.ui:37
-#, fuzzy
 #| msgid "Switch to selection mode"
 msgid "Toggle selection mode"
 msgstr "Trocar ao modo selección"
@@ -1467,10 +1454,9 @@ msgid "Terminal"
 msgstr "Terminal"
 
 #: src/libide/gui/gtk/menus.ui:82
-#, fuzzy
 #| msgid "New Terminal"
 msgid "New Terminals"
-msgstr "Nova Terminal"
+msgstr "Novas Terminais"
 
 #: src/libide/gui/ide-application-actions.c:122
 msgid "translator-credits"
@@ -1551,39 +1537,35 @@ msgid "Ctrl+Shift+T"
 msgstr "Ctrl+Maiús+T"
 
 #: src/libide/gui/ide-header-bar.ui:34
-#, fuzzy
 #| msgid "The application to run"
 msgid "Open application menu (F10)"
-msgstr "A aplicación a executar"
+msgstr "Abrir o menú da aplicación (F10)"
 
 #: src/libide/gui/ide-marked-view.c:414
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Non foi posíbel cargar o HTML. Falta a compatibilidade de WebKit."
 
 #: src/libide/gui/ide-primary-workspace.ui:17
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle left panel"
 msgid "Toggle Left Panel (F9)"
-msgstr "Trocar panel esquerdo"
+msgstr "Trocar panel esquerdo (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
 #: src/plugins/menu-search/gtk/menus.ui:34
-#, fuzzy
 #| msgid "Show Right Panel"
 msgid "Toggle Right Panel"
-msgstr "Mostrar panel da dereita"
+msgstr "Trocar panel dereito"
 
 #: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
 msgstr "Buscar (Ctrl+Intro)"
 
 #: src/libide/gui/ide-primary-workspace.ui:105
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle bottom panel"
 msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr "Trocar panel inferior"
+msgstr "Trocar panel inferior (Ctrl+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1744,11 +1726,10 @@ msgid "Undo"
 msgstr "Desfacer"
 
 #: src/libide/sourceview/gtk/menus.ui:31
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Undo and Redo"
 msgid "Undo & Redo"
-msgstr "Desfacer e refacer ou selección"
+msgstr "Desfacer e refacer"
 
 #: src/libide/sourceview/gtk/menus.ui:38
 msgid "Redo"
@@ -1787,22 +1768,20 @@ msgid "All _Upper Case"
 msgstr "Todo en _maiúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:82
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Make selection upper case"
 msgid "Convert the text selection to upper case"
-msgstr "Facer a selección maiúsculas"
+msgstr "Converter a selección do texto a maiúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:88
 msgid "All _Lower Case"
 msgstr "Todo en _maiúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:89
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Make selection lower case"
 msgid "Convert the text selection to lower case"
-msgstr "Facer a selección minúsculas"
+msgstr "Converter a selección do texto a minúsculas"
 
 #: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
@@ -1817,11 +1796,10 @@ msgid "_Title Case"
 msgstr "Capitalización como _título"
 
 #: src/libide/sourceview/gtk/menus.ui:103
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Invert selection case"
 msgid "Convert the text selection to title case"
-msgstr "Inverter capitalización"
+msgstr "Converter a selección de texto en capitalización de título"
 
 #: src/libide/sourceview/gtk/menus.ui:112
 msgid "_Join Lines"
@@ -1833,27 +1811,24 @@ msgstr "_Ordenar liñas"
 
 #: src/libide/sourceview/gtk/menus.ui:131
 #: src/plugins/symbol-tree/gtk/menus.ui:6
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Navigation"
 msgid "Code Navigation"
-msgstr "Navegación"
+msgstr "Navegación de código"
 
 #: src/libide/sourceview/gtk/menus.ui:134
 msgid "_Go to Definition"
 msgstr "_Ir á definición"
 
 #: src/libide/sourceview/gtk/menus.ui:135
-#, fuzzy
 #| msgid "Jump to the last position when reopening a file"
 msgid "Jump to file and location where item is defined"
-msgstr "Saltar á última posición ao abrir un ficheiro"
+msgstr "Saltar ao ficheiro e localización onde está definido o elemento"
 
 #: src/libide/sourceview/gtk/menus.ui:141
-#, fuzzy
 #| msgid "_Find references"
 msgid "_Find References"
-msgstr "_Buscar preferencias"
+msgstr "_Buscar referencias"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1002
@@ -1867,21 +1842,19 @@ msgid "_Open Link"
 msgstr "_Abrir ligazón"
 
 #: src/libide/terminal/gtk/menus.ui:17
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Copy selected text to clipboard"
 msgid "Copy selection from terminal to clipboard"
-msgstr "Copiar o texto seleccionado ao portapapeis"
+msgstr "Copiar a selección do terminal ao portapapeis"
 
 #: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
 msgstr "_Copiar ligazón"
 
 #: src/libide/terminal/gtk/menus.ui:28
-#, fuzzy
 #| msgid "The word is not in the dictionary"
 msgid "Paste from clipboard into the terminal"
-msgstr "A palabra non está no dicionario"
+msgstr "Pegar desde o portapapeis no terminal"
 
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
@@ -2382,29 +2355,25 @@ msgid "This selection allows Builder to choose the best candidate."
 msgstr ""
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
-#, fuzzy
 #| msgid "The runtime is the environment used to run your application."
 msgid "The container used to build and run your application"
-msgstr "O «runtime» é un ambiente usado para executar a súa aplicación."
+msgstr "O container usado para construír e executar a súa aplicación"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
-#, fuzzy
 #| msgid "_Duplicate"
 msgid "Duplicate"
-msgstr "_Duplicar"
+msgstr "Duplicar"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Duplicate current line or selection"
 msgid "Duplicate into new configuration"
-msgstr "Duplicar a liña actual"
+msgstr "Duplicar nunha nova configuración"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
-#, fuzzy
 #| msgid "Make _Active"
 msgid "Make Active"
-msgstr "Facer _activo"
+msgstr "Facer activo"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
 msgid "Make configuration active and reload build pipeline"
@@ -2417,10 +2386,9 @@ msgid "Delete"
 msgstr "Eliminar"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
-#, fuzzy
 #| msgid "Active Configuration"
 msgid "Delete configuration"
-msgstr "Configuración activa"
+msgstr "Eliminar configuración"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
 msgid "Stop Building Project"
@@ -2464,27 +2432,24 @@ msgid "Configure Project…"
 msgstr "Configurar proxecto…"
 
 #: src/plugins/buildui/gtk/menus.ui:39
-#, fuzzy
 #| msgid "Configuring project"
 msgid "Configure settings related to the project"
-msgstr "Configurando o proxecto"
+msgstr "Configurando as preferencias relacionadas co proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:47
 msgid "Select Build Target…"
 msgstr "Seleccionar obxectivo de construción…"
 
 #: src/plugins/buildui/gtk/menus.ui:49
-#, fuzzy
 #| msgid "Failed to locate a build target"
 msgid "Change default build target"
-msgstr "Produciuse un fallo ao localizar o obxectivo de construción"
+msgstr "Cambiar o obxectivo de construción predeterminado"
 
 #: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
 #: src/plugins/buildui/gtk/menus.ui:114
-#, fuzzy
 #| msgid "Building…"
 msgid "Building"
-msgstr "Construíndo…"
+msgstr "Construíndo"
 
 #: src/plugins/buildui/gtk/menus.ui:57
 msgid "Build the project"
@@ -2507,26 +2472,23 @@ msgid "Clean the project"
 msgstr "Limpar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:77
-#, fuzzy
 #| msgid "Install project"
 msgid "Install & Deployment"
-msgstr "Instalando o proxecto"
+msgstr "Instalar e despregue"
 
 #: src/plugins/buildui/gtk/menus.ui:81
-#, fuzzy
 #| msgid "Install project"
 msgid "Install the project"
-msgstr "Instalando o proxecto"
+msgstr "Instalar o proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy to Device…"
 msgstr "Despregar ao dispositivo…"
 
 #: src/plugins/buildui/gtk/menus.ui:87
-#, fuzzy
 #| msgid "Display the project creation guide"
 msgid "Deploy project to current device"
-msgstr "Mostrar a guía da creación do proxecto"
+msgstr "Despregar o proxecto no dispositivo actual"
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
@@ -2545,10 +2507,9 @@ msgid "Stop Build"
 msgstr "Deter construción"
 
 #: src/plugins/buildui/gtk/menus.ui:108
-#, fuzzy
 #| msgid "Building project"
 msgid "Stop building project"
-msgstr "Construíndo o proxecto"
+msgstr "Deter a construción do proxecto"
 
 #: src/plugins/buildui/gtk/menus.ui:116
 msgid "Show Build _Log"
@@ -2631,26 +2592,23 @@ msgid "Editor Font"
 msgstr "Tipo de letra do editor"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
-#, fuzzy
 #| msgid "The source code editor"
 msgid "The font used in the source code editor"
-msgstr "O editor de código fonte"
+msgstr "O tipo de letra usado no editor de código fonte"
 
 #: src/plugins/buildui/gtk/preferences.ui:72
 msgid "Terminal Font"
 msgstr "Tipo de letra do Terminal"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
-#, fuzzy
 #| msgid "The word is not in the dictionary"
 msgid "The font used in the terminal"
-msgstr "A palabra non está no dicionario"
+msgstr "O tipo de letra usado no terminal"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
-#, fuzzy
 #| msgid "Grid Pattern"
 msgid "Show Grid Pattern"
-msgstr "Patrón da grella"
+msgstr "Mostrar o patrón da grella"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
@@ -2708,10 +2666,9 @@ msgid "Run Command"
 msgstr "Executar orde"
 
 #: src/plugins/buildui/tweaks.ui:17
-#, fuzzy
 #| msgid "This command requires a view to be focused"
 msgid "This command is used to run your project"
-msgstr "Esta orde require unha vista para enfocala"
+msgstr "Esta orde úsase para executar o seu proxecto"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
@@ -2722,7 +2679,6 @@ msgid "Install Before Running"
 msgstr "Instalar antes de executar"
 
 #: src/plugins/buildui/tweaks.ui:59
-#, fuzzy
 #| msgid ""
 #| "Installs the application before running. This is necessary for most "
 #| "projects unless run commands are used."
@@ -2731,7 +2687,7 @@ msgid ""
 "unless custom run commands are used."
 msgstr ""
 "Instala a aplicación antes de executala. Isto é preciso para a maioría dos "
-"proxectos salvo que se executen ordes de execución."
+"proxectos salvo que se executen ordes de execución personalizadas."
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
@@ -2746,10 +2702,9 @@ msgstr ""
 "deteña."
 
 #: src/plugins/buildui/tweaks.ui:130
-#, fuzzy
 #| msgid "Verbose Logging"
 msgid "Logging"
-msgstr "Rexistro detallado"
+msgstr "Rexistros"
 
 #: src/plugins/buildui/tweaks.ui:134
 msgid ""
@@ -2758,10 +2713,9 @@ msgid ""
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:151
-#, fuzzy
 #| msgid "Run in build environment"
 msgid "Run unit tests from within the build environment."
-msgstr "Executar no ambiente de construción"
+msgstr "Executar as probas unitarias no ambiente de construción."
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
@@ -2772,10 +2726,9 @@ msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:176
-#, fuzzy
 #| msgid "Build Toolchain"
 msgid "Build & Tooling"
-msgstr "Conxunto de ferramentas de construción"
+msgstr "Construción e ferramentas"
 
 #: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
 msgid "General"
@@ -2790,10 +2743,9 @@ msgid "Clear Expired Artifacts"
 msgstr "Limpar os artefactos expirados"
 
 #: src/plugins/buildui/tweaks.ui:189
-#, fuzzy
 #| msgid "Expired caches will be purged when Builder is started"
 msgid "Artifacts which have expired will be deleted when Builder is started"
-msgstr "As cachés expiradas eliminaranse ao iniciar Construtor"
+msgstr "Os artefactos que expiraron eliminaranse ao iniciar Construtor"
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
@@ -2868,10 +2820,9 @@ msgid "512"
 msgstr "512"
 
 #: src/plugins/buildui/tweaks.ui:313
-#, fuzzy
 #| msgid "Toolchain"
 msgid "Tooling"
-msgstr "Conxunto de ferramentas"
+msgstr "Ferramentas"
 
 #: src/plugins/buildui/tweaks.ui:348
 msgid "Installation Prefix"
@@ -2949,7 +2900,6 @@ msgid "Complete Parentheses"
 msgstr "Completar parénteses"
 
 #: src/plugins/clang/tweaks.ui:18
-#, fuzzy
 #| msgid "Include parenthesis when completing clang proposals"
 msgid "Include parentheses when completing clang proposals"
 msgstr "Incluír os parénteses ao completar as propostas de clang"
@@ -2959,10 +2909,11 @@ msgid "Complete Parameters"
 msgstr "Parámetros de completado"
 
 #: src/plugins/clang/tweaks.ui:30
-#, fuzzy
 #| msgid "Include parameters and types when completing clang proposals"
 msgid "Include parameters and type information when completing clang proposals"
-msgstr "Incluír os parénteses e tipos ao completar as propostas de clang"
+msgstr ""
+"Incluír os parénteses e a información de tipos ao completar as propostas de "
+"clang"
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
@@ -3467,34 +3418,29 @@ msgid "Highlight _colors"
 msgstr "Cores de _realce"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
-#, fuzzy
 #| msgid "Code Completion"
 msgid "Code Comments"
-msgstr "Completado de código"
+msgstr "Comentarios de código"
 
 #: src/plugins/comment-code/gtk/menus.ui:9
-#, fuzzy
 #| msgid "_Comment code"
 msgid "_Comment Code"
 msgstr "_Comentar código"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
-#, fuzzy
 #| msgid "The source code editor"
 msgid "Add comments surrounding the source code selection"
-msgstr "O editor de código fonte"
+msgstr "Engadir comentarios envolvendo o código fonte seleccionado"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
-#, fuzzy
 #| msgid "Unco_mment code"
 msgid "Unco_mment Code"
 msgstr "_Descomentar código"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
-#, fuzzy
 #| msgid "The source code editor"
 msgid "Remove comments from the source code selection"
-msgstr "O editor de código fonte"
+msgstr "Eliminar os comentarios do código fonte seleccionado"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -3509,10 +3455,9 @@ msgid "Update Copyright"
 msgstr "Actualizar o Copyright"
 
 #: src/plugins/copyright/tweaks.ui:17
-#, fuzzy
 #| msgid "Update Copyright before Saving"
 msgid "Update copyright headers when saving documents"
-msgstr "Actualizar o copyright antes de gardar"
+msgstr "Actualizar as cabeceiras do copyright ao gardar os documentos"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
@@ -3532,13 +3477,11 @@ msgid "Project Name"
 msgstr "Nome do proxecto"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:24
-#, fuzzy
 #| msgid "A folder with that name already exists."
 msgid "A subdirectory with this name already exists"
-msgstr "Xa existe un cartafol con ese nome."
+msgstr "Xa existe un subcartafol con ese nome"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
-#, fuzzy
 #| msgid ""
 #| "Unique name that is used for your project’s folder and other technical "
 #| "resources. Should be in lower case without spaces and may not start with "
@@ -3548,16 +3491,15 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
-"Nome único que será usado no seu cartafol do proxecto e noutros recursos "
-"técnicos. Debería estar en minúsculas, sen espazos e non debe conter un "
-"número."
+"Nome único que será usado no seu cartafol do proxecto e noutros recursos. O "
+"nome debería estar en minúsculas, sen espazos e non debe conter un número ao "
+"inicio."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID…"
 msgstr "ID de aplicación…"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:53
-#, fuzzy
 #| msgid ""
 #| "The Application ID is a reverse domain-name identifier used to uniquely "
 #| "identify your application such as “org.gnome.Builder” and may not contain "
@@ -3566,9 +3508,8 @@ msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
-"O ID de aplicación é o identificador de nome de dominio ao revés para "
-"identificar univocamente a súa aplicación como «org.gnome.Builder» non debe "
-"conter guións."
+"O identificador de nome de domimio invertido usado para identificar a "
+"aplicación, como «org.gnome.Builder». Non debe conter guións."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:69
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3819,13 +3760,12 @@ msgid "Stop After Launching Program"
 msgstr "Deter despois de iniciar o programa"
 
 #: src/plugins/debuggerui/tweaks.ui:20
-#, fuzzy
 #| msgid ""
 #| "Automatically stop execution at the start of the applications main "
 #| "function"
 msgid "Automatically insert a breakpoint at the start of the application"
 msgstr ""
-"Deter a execución automaticametne ao inicio da función «main» das aplicacións"
+"Inserir automaticamente un punto de interrupción ao inicio da aplicación"
 
 #: src/plugins/debuggerui/tweaks.ui:31
 msgid "Stop at Warnings"
@@ -3858,7 +3798,7 @@ msgstr "A aplicación a executar"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
-msgstr ""
+msgstr "Unha PTY para facer e proxi bidireccional ao dispositivo"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:52
 #, fuzzy
@@ -3882,10 +3822,9 @@ msgid "Use minimal editorui interface"
 msgstr "Usar interface mínima no editor"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
-#, fuzzy
 #| msgid "_Reset"
 msgid "Reset"
-msgstr "_Restabelecer"
+msgstr "Restabelecer"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
@@ -4032,29 +3971,26 @@ msgid "Ensure files end with a newline"
 msgstr "Asegura que os ficheiros rematan con unha nova liña"
 
 #: src/plugins/editorui/tweaks-language.ui:90
-#, fuzzy
 #| msgid "Trim trailing whitespace"
 msgid "Trim Trailing Space"
-msgstr "Eliminar espazos en branco ao final de liña"
+msgstr "Eliminar espazos en branco"
 
 #: src/plugins/editorui/tweaks-language.ui:91
-#, fuzzy
 #| msgid ""
 #| "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
 msgstr ""
 "Despois de gardar, os espazos en branco ao final de liña das liñas "
-"modificadas eliminaranse."
+"modificadas eliminaranse"
 
 #: src/plugins/editorui/tweaks-language.ui:111
 msgid "Auto Indent"
 msgstr "Autosangrado"
 
 #: src/plugins/editorui/tweaks-language.ui:112
-#, fuzzy
 #| msgid "Indent source code as you type"
 msgid "Automatically indent source code as you type"
-msgstr "Sangrar o código fonte mentres se escribir"
+msgstr "Sangrar automaticamente o código fonte mentres se escribir"
 
 #: src/plugins/editorui/tweaks-language.ui:128
 msgid "Tab Size"
@@ -4067,6 +4003,7 @@ msgstr ""
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
+"O número de caracteres a sangrar, ou -1 para usar o tamaño do tabulador"
 
 #: src/plugins/editorui/tweaks-language.ui:164
 msgid "Margin"
@@ -4098,20 +4035,20 @@ msgid "Overwrite Braces"
 msgstr "Sobrescribir chaves"
 
 #: src/plugins/editorui/tweaks-language.ui:207
-#, fuzzy
 #| msgid "Overwrite trailing braces and quotations"
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
-msgstr "Sobrescribir peches de chaves e comiñas"
+msgstr "Sobrescribir peches de chaves, corchetes, parénteses e vírgulas"
 
 #: src/plugins/editorui/tweaks-language.ui:223
 msgid "Insert Matching Brace"
 msgstr "Inserir chaves coincidentes"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-#, fuzzy
 #| msgid "Insert matching character for { [ ( or \""
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
-msgstr "Inserir os caracteres coincidentes para { [ ( ou \""
+msgstr ""
+"Inserir os caracteres coincidentes para chaves, corchetes, parénteses e "
+"vírgulas"
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
@@ -4130,20 +4067,18 @@ msgid "Space before opening angles"
 msgstr "Espazo antes de abrir ángulos"
 
 #: src/plugins/editorui/tweaks-language.ui:283
-#, fuzzy
 #| msgid "Prefer a space before colons"
 msgid "Prefer a space before colon"
-msgstr "Preferir o uso de espazos antes dos dous puntos"
+msgstr "Preferir un espazo antes dos dous puntos"
 
 #: src/plugins/editorui/tweaks-language.ui:290
 msgid "Prefer a space before commas"
 msgstr "Preferir o uso de espazos antes das comas"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-#, fuzzy
 #| msgid "Prefer a space before semicolons"
 msgid "Prefer a space before simicolons"
-msgstr "Preferir o uso de espazos antes do punto e coma"
+msgstr "Preferir un espazo antes do punto e coma"
 
 #: src/plugins/editorui/tweaks.ui:10
 msgid "Color"
@@ -4162,10 +4097,9 @@ msgid "Font"
 msgstr "Tipo de letra"
 
 #: src/plugins/editorui/tweaks.ui:49
-#, fuzzy
 #| msgid "Switch to source code editor"
 msgid "The font used within the source code editor"
-msgstr "Trocar ao editor de código fonte"
+msgstr "O tipo de letra usado dentro do editor de código fonte"
 
 #: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
@@ -4184,22 +4118,19 @@ msgid "Anywhere"
 msgstr "En calquera lugar"
 
 #: src/plugins/editorui/tweaks.ui:111
-#, fuzzy
 #| msgid "Grid Pattern"
 msgid "Background Pattern"
 msgstr "Patrón da grella"
 
 #: src/plugins/editorui/tweaks.ui:112
-#, fuzzy
 #| msgid "Display a grid pattern underneath source code"
 msgid "Show a background pattern underneath source code"
-msgstr "Mostrar un patrón de grella debaixo do código fonte"
+msgstr "Mostrar un patrón de fono debaixo do código fonte"
 
 #: src/plugins/editorui/tweaks.ui:121
-#, fuzzy
 #| msgid "Grid Pattern"
 msgid "No Pattern"
-msgstr "Patrón da grella"
+msgstr "Sen patrón"
 
 #: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
@@ -4214,14 +4145,11 @@ msgid "Source Code Overview"
 msgstr "Vista previa do código fonte"
 
 #: src/plugins/editorui/tweaks.ui:141
-#, fuzzy
 #| msgid ""
 #| "If enabled, Builder will display an overview map of the source file next "
 #| "to the editor."
 msgid "Display an overview of source code next to the editor"
-msgstr ""
-"Se está activado, Builder mostrará o mapa de vista previa do ficheiro fonte "
-"ao carón do editor."
+msgstr "Mostra un mapa de vista previa do ficheiro fonte ao carón do editor"
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
@@ -4244,51 +4172,44 @@ msgid "Show Line Numbers"
 msgstr "Mostrar números de liña"
 
 #: src/plugins/editorui/tweaks.ui:176
-#, fuzzy
 #| msgid "Display line numbers"
 msgid "Display line numbers next to each line of code"
-msgstr "Mostrar números de liña"
+msgstr "Mostrar números de liña ao carón de cada liña de código"
 
 #: src/plugins/editorui/tweaks.ui:187
 msgid "Use Relative Line Numbers"
 msgstr "Usar números de liña relativos"
 
 #: src/plugins/editorui/tweaks.ui:188
-#, fuzzy
 #| msgid "Show line numbers relative to the cursor line"
 msgid "Show line numbers relative to the current line"
-msgstr "Mostrar o número de liña relativos ao inicio de cada liña"
+msgstr "Mostrar o número de liña relativos na liña actual"
 
 #: src/plugins/editorui/tweaks.ui:199
-#, fuzzy
 #| msgid "Diagnostics"
 msgid "Show Diagnostics"
-msgstr "Diagnósticos"
+msgstr "Mostrar diagnose"
 
 #: src/plugins/editorui/tweaks.ui:200
-#, fuzzy
 #| msgid "Show diagnostics next to line number"
 msgid "Display diagnostics next to the line number"
-msgstr "Mostrar diagnósticos ao lado do número de liña"
+msgstr "Mostrar diagnose ao carón do número de liña"
 
 #: src/plugins/editorui/tweaks.ui:213
 msgid "Syntax Highlighting"
 msgstr "Realzado de sintaxe"
 
 #: src/plugins/editorui/tweaks.ui:216
-#, fuzzy
 #| msgid "Highlight current line"
 msgid "Highlight Current Line"
-msgstr "Realzar liña actual"
+msgstr "Realzar a liña actual"
 
 #: src/plugins/editorui/tweaks.ui:217
-#, fuzzy
 #| msgid "Make current line stand out with highlights"
 msgid "Make the current line stand out with highlights"
 msgstr "Facer que a liña actual se realce"
 
 #: src/plugins/editorui/tweaks.ui:228
-#, fuzzy
 #| msgid "Highlight matching brackets"
 msgid "Highlight Matching Brackets"
 msgstr "Realzar os corchetes coincidentes"
@@ -4322,16 +4243,14 @@ msgid "Selections"
 msgstr "Seleccións"
 
 #: src/plugins/editorui/tweaks.ui:280
-#, fuzzy
 #| msgid "Minimum length for highlight"
 msgid "Minimum Characters to Highlight"
-msgstr "Largo mínimo para realzar"
+msgstr "Caracteres mínimos para realzar"
 
 #: src/plugins/editorui/tweaks.ui:281
-#, fuzzy
 #| msgid "Minimum length for highlight"
 msgid "The minimum selection length before highlighting matches"
-msgstr "Largo mínimo para realzar"
+msgstr "Largo de selección mínimo antes das coincidencias de realzado"
 
 #: src/plugins/editorui/tweaks.ui:294
 msgid "Snippets"
@@ -4350,10 +4269,9 @@ msgid "Code Completion"
 msgstr "Completado de código"
 
 #: src/plugins/editorui/tweaks.ui:317
-#, fuzzy
 #| msgid "Completion Providers"
 msgid "Completion Proposals"
-msgstr "Fornecedores de completado"
+msgstr "Propostas de completado"
 
 #: src/plugins/editorui/tweaks.ui:320
 msgid "Suggest Code Completions"
@@ -4364,26 +4282,23 @@ msgid "Automatically suggest code completions while typing"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:332
-#, fuzzy
 #| msgid "Suggest Completions from Snippets"
 msgid "Select First Completion Proposal"
-msgstr "Suxerir completado usando Fragmentos"
+msgstr "Seleccionar a primeira proposta de completado"
 
 #: src/plugins/editorui/tweaks.ui:333
 msgid "Automatically select the first completion proposal when displayed"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:348
-#, fuzzy
 #| msgid "Completion Providers"
 msgid "Maximum Completion Proposals"
-msgstr "Fornecedores de completado"
+msgstr "Propostas de completado máximas"
 
 #: src/plugins/editorui/tweaks.ui:349
-#, fuzzy
 #| msgid "The number of completion rows to display to the user."
 msgid "The maximum number of completion rows that will be displayed at once"
-msgstr "O número de filas de completado a mostrarlle ao usuario."
+msgstr "O número máximo de filas de completado que se mostrará unha vez"
 
 #: src/plugins/editorui/tweaks.ui:368 src/plugins/editorui/tweaks.ui:371
 msgid "Keyboard Theme"
@@ -4407,12 +4322,9 @@ msgstr ""
 "sangrado"
 
 #: src/plugins/editorui/tweaks.ui:407
-#, fuzzy
 #| msgid "Home moves to first non-whitespace character"
 msgid "Navigate to non-space characters"
-msgstr ""
-"A tecla Inicio move o cursor cara o primeiro carácter que non sexa un espazo "
-"en branco"
+msgstr "Navegar a caracteres que non son espazos"
 
 #: src/plugins/editorui/tweaks.ui:416
 msgid "Before line boundaries"
@@ -4451,12 +4363,10 @@ msgid "Auto-Save Delay"
 msgstr "Atraso do gardado automático"
 
 #: src/plugins/editorui/tweaks.ui:466
-#, fuzzy
 #| msgid "The number of seconds after modification before auto saving"
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
-"O número de segundos que deben pasar antes do gardado automático despois "
-"dunha modificación"
+"O número de segundos a agardar antes de gardar automaticamente o documento"
 
 #: src/plugins/editorui/tweaks.ui:481
 msgid "Format on Save"
@@ -4471,10 +4381,9 @@ msgid "Restore Cursor Position"
 msgstr "Restaurar a posición do cursor"
 
 #: src/plugins/editorui/tweaks.ui:498
-#, fuzzy
 #| msgid "Jump to the last position when reopening a file"
 msgid "Jump to the last position when re-opening a file"
-msgstr "Saltar á última posición ao abrir un ficheiro"
+msgstr "Saltar á última posición ao reabrir un ficheiro"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4852,10 +4761,9 @@ msgid "Default Make Target"
 msgstr "Obxectivo de Make predeterminado"
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
-#, fuzzy
 #| msgid "CMake"
 msgid "Make Run"
-msgstr "CMake"
+msgstr "Make Run"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
@@ -4870,35 +4778,31 @@ msgid "Maven Run"
 msgstr "Execución de Maven"
 
 #: src/plugins/menu-search/gtk/menus.ui:13
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Global Search"
 msgid "Global Search"
 msgstr "Busca global"
 
 #: src/plugins/menu-search/gtk/menus.ui:14
-#, fuzzy
 #| msgid "Focus to the global search entry"
 msgid "Display the global search"
-msgstr "Enfoca o campo de busca global"
+msgstr "Mostra a busca global"
 
 #: src/plugins/menu-search/gtk/menus.ui:24
 msgid "Panels"
 msgstr "Paneis"
 
 #: src/plugins/menu-search/gtk/menus.ui:26
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle left panel"
 msgid "Toggle Left Panel"
 msgstr "Trocar panel esquerdo"
 
 #: src/plugins/menu-search/gtk/menus.ui:27
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle bottom panel"
 msgid "Toggle the left panel in or out of view"
-msgstr "Trocar panel inferior"
+msgstr "Trocar panel esquerdo cara dentro ou fóra da vista"
 
 #. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:29
@@ -4906,11 +4810,10 @@ msgid "panel-left-symbolic"
 msgstr "panel-left-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:35
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle bottom panel"
 msgid "Toggle the right panel in or out of view"
-msgstr "Trocar panel inferior"
+msgstr "Trocar panel dereito cara dentro ou fóra da vista"
 
 #. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
 #: src/plugins/menu-search/gtk/menus.ui:37
@@ -4918,18 +4821,16 @@ msgid "panel-right-symbolic"
 msgstr "panel-right-symbolic"
 
 #: src/plugins/menu-search/gtk/menus.ui:41
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle bottom panel"
 msgid "Toggle Bottom Panel"
 msgstr "Trocar panel inferior"
 
 #: src/plugins/menu-search/gtk/menus.ui:42
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Toggle bottom panel"
 msgid "Toggle the bottom panel in or out of view"
-msgstr "Trocar panel inferior"
+msgstr "Trocar panel inferior cara dentro ou fóra da vista"
 
 #: src/plugins/menu-search/gtk/menus.ui:55
 msgid "Switch to Dark Mode"
@@ -5078,26 +4979,23 @@ msgid "Shared Library"
 msgstr "Biblioteca compartida"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:202
-#, fuzzy
 #| msgid "Create a new project with a shared library"
 msgid "A Meson-based project for a shared library"
-msgstr "Crea un novo proxecto con unha biblioteca compartida"
+msgstr "Un proxecto baseado en Meson para unha biblioteca compartida"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:209
 msgid "Command Line Tool"
 msgstr "Ferramenta de liña de ordes"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:210
-#, fuzzy
 #| msgid "A Meson-based project is loaded but Ninja could not be found."
 msgid "An Meson-based project for a command-line program"
-msgstr "Cargouse un proxecto baseado en Meson pero Ninja non se atopou."
+msgstr "Un proxecto baseado en Meson para un programa de liña de ordes"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:217
-#, fuzzy
 #| msgid "Empty Project"
 msgid "Empty Meson Project"
-msgstr "Proxecto baleiro"
+msgstr "Proxecto Meson baleiro"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:218
 msgid "An empty Meson project skeleton"
@@ -5393,18 +5291,17 @@ msgid "Reveal in Project _Tree"
 msgstr "Revelar no _árbore do proxecto"
 
 #: src/plugins/project-tree/tweaks.ui:14
-#, fuzzy
 #| msgid "Destination file must be within the project tree."
 msgid "Display icons next to files within the project tree"
-msgstr "O ficheiro de destino debe estar na árbore do proxecto."
+msgstr "Mostrar iconas ao carón dos ficheiros na árbore do proxecto"
 
 #: src/plugins/project-tree/tweaks.ui:26
 msgid "Show files which are typically ignored"
-msgstr ""
+msgstr "Mostrar ficheiros que son ignorados normalmente"
 
 #: src/plugins/project-tree/tweaks.ui:38
 msgid "Sort directories before files in the same directory"
-msgstr ""
+msgstr "Ordenar os cartafoles antes dos ficheiros no mesmo cartafol"
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
 msgid "No version control"
@@ -5423,10 +5320,9 @@ msgid "Project Creation"
 msgstr "Creación de proxecto"
 
 #: src/plugins/projectui/tweaks.ui:32
-#, fuzzy
 #| msgid "Your project will be created within a new child directory."
 msgid "Projects created with Builder will be placed within this directory"
-msgstr "O seu proxecto será creado nun cartafol fillo novo."
+msgstr "Os proxectos creados con Construtor poñeranse neste cartafol"
 
 #: src/plugins/projectui/tweaks.ui:48
 msgid "The default license when creating new projects"
@@ -5459,10 +5355,9 @@ msgid "Source Directory"
 msgstr "Cartafol raíz"
 
 #: src/plugins/projectui/tweaks.ui:160
-#, fuzzy
 #| msgid "Configurations"
 msgid "Current Configuration"
-msgstr "Configuracións"
+msgstr "Configuración actual"
 
 #: src/plugins/projectui/tweaks.ui:161
 msgid ""
@@ -5471,10 +5366,9 @@ msgid ""
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:228
-#, fuzzy
 #| msgid "No Provided Tool"
 msgid "Provided By"
-msgstr "Non se forneceu ningunha ferramenta"
+msgstr "Fornecidor por"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5547,12 +5441,12 @@ msgid "Download on Metered Connections"
 msgstr "Descargar en conexións medidas"
 
 #: src/plugins/sdkui/tweaks.ui:16
-#, fuzzy
 #| msgid "Allow downloads over metered connections"
 msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
-msgstr "Permitir descargas en conexións medidas"
+msgstr ""
+"Permitir a descarga dos SDKs e dependencias en conexións a internet medidas"
 
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Available SDKs"
@@ -5608,10 +5502,9 @@ msgid "Environment"
 msgstr "Ambiente"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
-#, fuzzy
 #| msgid "Source Directory"
 msgid "Working Directory"
-msgstr "Cartafol raíz"
+msgstr "Cartafol de traballo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
@@ -5646,10 +5539,9 @@ msgid "Subprocess"
 msgstr "Subproceso"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
-#, fuzzy
 #| msgid "Run a new instance of Builder"
 msgid "Runs the command as a subprocess of Builder."
-msgstr "Executar unha nova instancia de Builder"
+msgstr "Executar a orde como un subproceso de Builder."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
@@ -5762,10 +5654,9 @@ msgid "Select Symbol (Ctrl+Shift+K)"
 msgstr "Seleccionar símbolo (Ctrl+Maiús+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:9
-#, fuzzy
 #| msgid "Create a split page below the current page"
 msgid "Navigate to a symbol within the current page"
-msgstr "Crear unha división da páxina baixo a páxina actual"
+msgstr "Navegar ao símbolo na páxina actual"
 
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
@@ -5797,10 +5688,9 @@ msgid "Profiler"
 msgstr "Perfilador"
 
 #: src/plugins/sysprof/gtk/menus.ui:32
-#, fuzzy
 #| msgid "Check _Spelling"
 msgid "Thread Sampling"
-msgstr "Verificar _ortografía"
+msgstr "Mostraxe de fíos"
 
 #: src/plugins/sysprof/gtk/menus.ui:34
 msgid "CPU Performance"
@@ -6011,30 +5901,27 @@ msgid "New _Terminal"
 msgstr "_Novo Terminal"
 
 #: src/plugins/terminal/gtk/menus.ui:11
-#, fuzzy
 #| msgid "Failed to initialize build pipeline: %s"
 msgid "Open a new terminal on the host operating system"
-msgstr "Produciuse un fallo ao iniciar a tubería de construción: %s"
+msgstr "Abrir unha nova terminal no sistema operativo anfitrión"
 
 #: src/plugins/terminal/gtk/menus.ui:14
 msgid "New _Build Terminal"
 msgstr "_Novo Terminal de construción"
 
 #: src/plugins/terminal/gtk/menus.ui:19
-#, fuzzy
 #| msgid "Failed to initialize build pipeline: %s"
 msgid "Open a new terminal in project's build pipeline"
-msgstr "Produciuse un fallo ao iniciar a tubería de construción: %s"
+msgstr "Abrir unha nova termina no cano de construción do proxecto"
 
 #: src/plugins/terminal/gtk/menus.ui:22
 msgid "New _Runtime Terminal"
 msgstr "_Novo Terminal de construción"
 
 #: src/plugins/terminal/gtk/menus.ui:27
-#, fuzzy
 #| msgid "Run in runtime environment"
 msgid "Open a new terminal in project's runtime environment"
-msgstr "Executar no ambiente de execución"
+msgstr "Abrir unha nova terminal no ambiente de execución do proxecto"
 
 #: src/plugins/terminal/gtk/menus.ui:41
 msgid "Split"
@@ -6073,10 +5960,9 @@ msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:70
-#, fuzzy
 #| msgid "Scroll on output"
 msgid "Scroll On Keyboard Input"
-msgstr "Desprazar a saída"
+msgstr "Desprazar coa entrada do teclado"
 
 #: src/plugins/terminal/tweaks.ui:71
 msgid "Automatically scroll when typing to insert text"
@@ -6092,10 +5978,9 @@ msgid ""
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:99
-#, fuzzy
 #| msgid "Limit Scrollback"
 msgid "Maximum Lines in Scrollback"
-msgstr "Limitar o desprazamento cara atrás"
+msgstr "Liñas máximas no desprazamento cara atrás"
 
 #: src/plugins/terminal/tweaks.ui:100
 msgid "The maximum number of lines stored in history when limiting scrollback"
@@ -6163,10 +6048,9 @@ msgid "Update Dependencies…"
 msgstr "Actualizar dependencias…"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:8
-#, fuzzy
 #| msgid "Update project dependencies"
 msgid "Download updates to project dependencies"
-msgstr "Actualizar as dependencias do proxecto"
+msgstr "Descargar actualizacións das dependencias do proxecto"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
@@ -6253,16 +6137,14 @@ msgid "Include reachable leaks in report summary"
 msgstr "Incluír fugas alcanzábeis no informe resumo"
 
 #: src/plugins/valgrind/tweaks.ui:71
-#, fuzzy
 #| msgid "Margins"
 msgid "Track Origins"
-msgstr "Marxes"
+msgstr "Seguir fontes"
 
 #: src/plugins/valgrind/tweaks.ui:72
-#, fuzzy
 #| msgid "Show modified lines"
 msgid "Show origin of undefined values"
-msgstr "Mostrar as liñas modificadas"
+msgstr "Mostrar a orixe dos valores non definios"
 
 #: src/plugins/valgrind/tweaks.ui:87
 msgid "Leak Check"
@@ -6277,10 +6159,9 @@ msgid "Begin cloning project from URI"
 msgstr "Comezar o clonado do proxecto desde unha URI"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:149
-#, fuzzy
 #| msgid "A failure occurred while initializing version control"
 msgid "A failure occurred while cloning the repository."
-msgstr "Produciuse un fallo ao inicializar o control de versións"
+msgstr "Produciuse un fallo ao clonar o repositorio."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
 msgid "Repository URL"
@@ -6301,16 +6182,14 @@ msgid ""
 msgstr ""
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
-#, fuzzy
 #| msgid "Your project will be created within a new child directory."
 msgid "The repository will be cloned into a new subdirectory."
-msgstr "O seu proxecto será creado nun cartafol fillo novo."
+msgstr "O repositorio clonarase nun novo subcartafol."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
-#, fuzzy
 #| msgid "Author Email"
 msgid "Author Details"
-msgstr "Correo electrónico do autor"
+msgstr "Información do autor"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
 msgid "You may specify authorship information to override defaults."
@@ -6341,41 +6220,35 @@ msgid "Vim"
 msgstr "Vim"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
-#, fuzzy
 #| msgid "New _Documentation Page"
 msgid "New _Browser Page"
-msgstr "Nova páxina de _documentación"
+msgstr "Nova páxina do _navegador"
 
 #: src/plugins/web-browser/gtk/menus.ui:18
 #: src/plugins/web-browser/gtk/menus.ui:24
-#, fuzzy
 #| msgid "_Reload"
 msgid "Reload Page"
-msgstr "_Recargar"
+msgstr "Recargar páxina"
 
 #: src/plugins/web-browser/gtk/menus.ui:19
-#, fuzzy
 #| msgid "Save the current page"
 msgid "Reload the current page"
-msgstr "Gardar a páxina actual"
+msgstr "Recargar a páxina actual"
 
 #: src/plugins/web-browser/gtk/menus.ui:25
-#, fuzzy
 #| msgid "Reformat current file on save"
 msgid "Reload the current page ignoring cache"
-msgstr "Reformatar o ficheiro actual ao gardar"
+msgstr "Recargar a páxina actual ignorando a caché"
 
 #: src/plugins/web-browser/gtk/menus.ui:30
-#, fuzzy
 #| msgid "Location"
 msgid "Focus Location"
-msgstr "Localización"
+msgstr "Localización do enfoque"
 
 #: src/plugins/web-browser/gtk/menus.ui:31
-#, fuzzy
 #| msgid "Save the current page"
 msgid "Focus the current page's location"
-msgstr "Gardar a páxina actual"
+msgstr "Enfocar a localización da páxina actual"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
