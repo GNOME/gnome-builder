@@ -109,6 +109,27 @@ font_name_to_font_desc (GValue   *value,
   return TRUE;
 }
 
+static gboolean
+wrap_text_to_wrap_mode (GValue   *value,
+                        GVariant *variant,
+                        gpointer  user_data)
+{
+  GtkWrapMode mode = GTK_WRAP_NONE;
+  const char *str;
+
+  if ((str = g_variant_get_string (variant, NULL)))
+    {
+      if (ide_str_equal0 (str, "whitespace"))
+        mode = GTK_WRAP_WORD;
+      else if (ide_str_equal0 (str, "always"))
+        mode = GTK_WRAP_CHAR;
+    }
+
+  g_value_set_enum (value, mode);
+
+  return TRUE;
+}
+
 static void
 notify_interactive_completion_cb (IdeEditorPage *self,
                                   const char    *key,
@@ -278,6 +299,11 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                    gtk_source_view_get_completion (GTK_SOURCE_VIEW (self->view)),
                    "page-size",
                    G_SETTINGS_BIND_GET);
+  g_settings_bind_with_mapping (editor_settings, "wrap-text",
+                                self->view, "wrap-mode",
+                                G_SETTINGS_BIND_GET,
+                               wrap_text_to_wrap_mode,
+                               NULL, NULL, NULL);
 
   g_settings_bind_with_mapping (editor_settings, "font-name",
                                 self->view, "font-desc",
