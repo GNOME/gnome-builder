@@ -293,11 +293,9 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
   ide_binding_group_bind (self->view_file_settings,
                           "insert-matching-brace", self->view, "insert-matching-brace",
                           G_BINDING_SYNC_CREATE);
-#if 0
   ide_binding_group_bind (self->view_file_settings,
                           "overwrite-braces", self->view, "overwrite-braces",
                           G_BINDING_SYNC_CREATE);
-#endif
 
   g_signal_connect_object (editor_settings,
                            "changed::interactive-completion",
