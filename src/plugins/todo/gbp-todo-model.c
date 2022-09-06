@@ -60,6 +60,7 @@ typedef struct
   GbpTodoModel *self;
   GSequence    *items;
   GFile        *file;
+  GFile        *workdir;
   guint         single_file : 1;
 } ResultInfo;
 
@@ -154,6 +155,7 @@ result_info_free (gpointer data)
 
   g_clear_object (&info->self);
   g_clear_object (&info->file);
+  g_clear_object (&info->workdir);
   g_clear_pointer (&info->items, g_sequence_free);
   g_slice_free (ResultInfo, info);
 }
@@ -257,10 +259,23 @@ gbp_todo_model_new (IdeVcs *vcs)
 }
 
 static int
-gbp_todo_model_compare_func (const GbpTodoItem *a,
-                             const GbpTodoItem *b)
+gbp_todo_model_compare_func (GbpTodoItem *a,
+                             GbpTodoItem *b)
 {
+  g_assert (GBP_IS_TODO_ITEM (a));
+  g_assert (GBP_IS_TODO_ITEM (b));
+
   return g_strcmp0 (a->path, b->path);
+}
+
+static int
+gbp_todo_model_compare_file (GbpTodoItem *a,
+                             const char  *path)
+{
+  g_assert (GBP_IS_TODO_ITEM (a));
+  g_assert (path != NULL);
+
+  return g_strcmp0 (a->path, path);
 }
 
 static gboolean
@@ -294,7 +309,7 @@ result_info_merge (gpointer user_data)
     }
   else
     {
-      GbpTodoItem *first = g_sequence_get (g_sequence_get_begin_iter (r->items));
+      g_autofree char *path = NULL;
       GSequenceIter *iter;
       GSequenceIter *prev;
       GSequenceIter *next;
@@ -308,9 +323,10 @@ result_info_merge (gpointer user_data)
        * iter is removed, we can start inserting our sorted result set.
        */
 
+      path = g_file_get_relative_path (r->workdir, r->file);
       iter = g_sequence_search (r->self->items,
-                                first,
-                                (GCompareDataFunc)gbp_todo_model_compare_func,
+                                path,
+                                (GCompareDataFunc)gbp_todo_model_compare_file,
                                 NULL);
 
       g_assert (iter != NULL);
@@ -321,24 +337,27 @@ result_info_merge (gpointer user_data)
        */
       while ((prev = g_sequence_iter_prev (iter)) &&
              (prev != iter) &&
-             gbp_todo_model_compare_func (g_sequence_get (prev), first) == 0)
+             gbp_todo_model_compare_file (g_sequence_get (prev), path) == 0)
         iter = prev;
 
       position = g_sequence_iter_get_position (iter);
 
       while ((next = g_sequence_iter_next (iter)) &&
              (next != iter) &&
-             gbp_todo_model_compare_func (g_sequence_get (iter), first) == 0)
+             gbp_todo_model_compare_file (g_sequence_get (iter), path) == 0)
         {
           g_sequence_remove (iter);
           iter = next;
           removed++;
         }
 
+      if (removed > 0)
+        iter = g_sequence_iter_prev (iter);
+
       if (added > 0)
         g_sequence_move_range (iter,
                                g_sequence_get_begin_iter (r->items),
-                               g_sequence_iter_prev (g_sequence_get_end_iter (r->items)));
+                               g_sequence_get_end_iter (r->items));
 
       g_list_model_items_changed (G_LIST_MODEL (r->self), position, removed, added);
 
@@ -648,6 +667,7 @@ gbp_todo_model_mine_worker (IdeTask      *task,
   info->items = g_steal_pointer (&items);
   info->file = g_object_ref (m->file);
   info->single_file = single_file;
+  info->workdir = g_object_ref (m->workdir);
 
   /* Sort our result set to help reduce how much sorting
    * needs to be done on the main thread later.
