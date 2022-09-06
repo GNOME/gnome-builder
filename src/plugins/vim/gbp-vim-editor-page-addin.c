@@ -124,7 +124,7 @@ gbp_vim_editor_page_addin_update (GbpVimEditorPageAddin *self)
     {
       self->enabled = TRUE;
       gtk_im_context_set_client_widget (im_context, GTK_WIDGET (view));
-      gtk_widget_add_controller (GTK_WIDGET (view), g_object_ref (self->key_controller));
+      ide_source_view_add_controller (view, -100, g_object_ref (self->key_controller));
     }
 
   IDE_EXIT;
@@ -134,7 +134,7 @@ disabled:
     {
       self->enabled = FALSE;
       gtk_im_context_set_client_widget (im_context, NULL);
-      gtk_widget_remove_controller (GTK_WIDGET (view), self->key_controller);
+      ide_source_view_remove_controller (view, self->key_controller);
       gtk_event_controller_reset (self->key_controller);
     }
 
