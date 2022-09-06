@@ -124,7 +124,7 @@ ide_source_view_hover_provider_removed_cb (IdeExtensionSetAdapter *adapter,
   g_assert (GTK_SOURCE_IS_HOVER_PROVIDER (provider));
   g_assert (IDE_IS_SOURCE_VIEW (self));
 
-  g_debug ("Removing hover provider %s from module %s\n",
+  g_debug ("Removing hover provider %s from module %s",
            G_OBJECT_TYPE_NAME (provider),
            peas_plugin_info_get_module_name (plugin_info));
 
