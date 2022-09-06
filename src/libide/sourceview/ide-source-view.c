@@ -33,6 +33,7 @@ enum {
   PROP_0,
   PROP_FONT_DESC,
   PROP_FONT_SCALE,
+  PROP_INSERT_MATCHING_BRACE,
   PROP_LINE_HEIGHT,
   PROP_ZOOM_LEVEL,
   N_PROPS,
@@ -258,6 +259,122 @@ ide_source_view_click_pressed_cb (IdeSourceView   *self,
                    g_object_unref);
 
   IDE_EXIT;
+}
+
+static gboolean
+ide_source_view_maybe_delete_match (IdeSourceView *self)
+{
+  GtkTextBuffer *buffer;
+  GtkTextMark *insert;
+  GtkTextIter iter;
+  GtkTextIter prev;
+  gunichar ch;
+  gunichar match;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
+  insert = gtk_text_buffer_get_insert (buffer);
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, insert);
+  prev = iter;
+  if (!gtk_text_iter_backward_char (&prev))
+    return FALSE;
+
+  ch = gtk_text_iter_get_char (&prev);
+
+  switch (ch)
+    {
+    case '[':  match = ']';  break;
+    case '{':  match = '}';  break;
+    case '(':  match = ')';  break;
+    case '"':  match = '"';  break;
+    case '\'': match = '\''; break;
+    case '<':  match = '>';  break;
+    default:   match = 0;    break;
+    }
+
+  if (match && (gtk_text_iter_get_char (&iter) == match))
+    {
+      gtk_text_iter_forward_char (&iter);
+      gtk_text_buffer_delete (buffer, &prev, &iter);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+ide_source_view_key_pressed_cb (IdeSourceView         *self,
+                                guint                  keyval,
+                                guint                  keycode,
+                                GdkModifierType        state,
+                                GtkEventControllerKey *key)
+{
+  GtkTextBuffer *buffer;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_EVENT_CONTROLLER_KEY (key));
+
+  buffer = GTK_TEXT_BUFFER (self->buffer);
+
+  if (self->insert_matching_brace &&
+      !gtk_text_buffer_get_has_selection (buffer))
+    {
+      const char *insert = NULL;
+      GtkTextIter iter;
+
+      if (keyval == GDK_KEY_BackSpace)
+        {
+          if (ide_source_view_maybe_delete_match (self))
+            return TRUE;
+        }
+
+      gtk_text_buffer_get_selection_bounds (buffer, &iter, NULL);
+
+      switch (keyval)
+        {
+        case GDK_KEY_bracketleft:
+          insert = "[]";
+          break;
+
+        case GDK_KEY_braceleft:
+          insert = "{}";
+          break;
+
+        case GDK_KEY_apostrophe:
+          insert = "''";
+          break;
+
+        case GDK_KEY_parenleft:
+          insert = "()";
+          break;
+
+        case GDK_KEY_quotedbl:
+          insert = "\"\"";
+          break;
+
+        case GDK_KEY_less:
+          insert = "<>";
+          break;
+
+        default:
+          break;
+        }
+
+      if (insert)
+        {
+          gtk_text_buffer_begin_user_action (buffer);
+          gtk_text_buffer_insert (buffer, &iter, insert, -1);
+          gtk_text_iter_backward_char (&iter);
+          gtk_text_buffer_select_range (buffer, &iter, &iter);
+          gtk_text_buffer_end_user_action (buffer);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 static void
@@ -881,6 +998,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_boolean (value, ide_source_view_get_highlight_current_line (self));
       break;
 
+    case PROP_INSERT_MATCHING_BRACE:
+      g_value_set_boolean (value, ide_source_view_get_insert_matching_brace (self));
+      break;
+
     case PROP_LINE_HEIGHT:
       g_value_set_double (value, self->line_height);
       break;
@@ -916,6 +1037,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_HIGHLIGHT_CURRENT_LINE:
       ide_source_view_set_highlight_current_line (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_INSERT_MATCHING_BRACE:
+      ide_source_view_set_insert_matching_brace (self, g_value_get_boolean (value));
       break;
 
     case PROP_LINE_HEIGHT:
@@ -967,6 +1092,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
                       "The font scale",
                       G_MININT, G_MAXINT, 0,
                       (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_INSERT_MATCHING_BRACE] =
+    g_param_spec_boolean ("insert-matching-brace",
+                          "Insert Matching Brace",
+                          "Insert a matching brace/bracket/quotation/parenthesis",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_ZOOM_LEVEL] =
     g_param_spec_double ("zoom-level",
@@ -1020,6 +1152,7 @@ ide_source_view_init (IdeSourceView *self)
   GtkEventController *click;
   GtkEventController *focus;
   GtkEventController *scroll;
+  GtkEventController *key;
 
   g_signal_connect (self,
                     "notify::buffer",
@@ -1035,6 +1168,7 @@ ide_source_view_init (IdeSourceView *self)
 
   /* Setup a handler to emit ::populate-menu */
   click = GTK_EVENT_CONTROLLER (gtk_gesture_click_new ());
+  gtk_event_controller_set_name (click, "ide-source-view-click");
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (click), 0);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (click),
                                               GTK_PHASE_CAPTURE);
@@ -1044,8 +1178,19 @@ ide_source_view_init (IdeSourceView *self)
                             self);
   gtk_widget_add_controller (GTK_WIDGET (self), click);
 
+  /* Key handler for internal features like insert-matching-braces */
+  key = gtk_event_controller_key_new ();
+  gtk_event_controller_set_name (key, "ide-source-view-key");
+  gtk_event_controller_set_propagation_phase (key, GTK_PHASE_CAPTURE);
+  g_signal_connect_swapped (key,
+                            "key-pressed",
+                            G_CALLBACK (ide_source_view_key_pressed_cb),
+                            self);
+  gtk_widget_add_controller (GTK_WIDGET (self), key);
+
   /* Setup focus tracking */
   focus = gtk_event_controller_focus_new ();
+  gtk_event_controller_set_name (focus, "ide-source-view-focus");
   g_signal_connect_swapped (focus,
                             "enter",
                             G_CALLBACK (ide_source_view_focus_enter_cb),
@@ -1058,6 +1203,7 @@ ide_source_view_init (IdeSourceView *self)
 
   /* Setup ctrl+scroll zoom */
   scroll = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
+  gtk_event_controller_set_name (scroll, "ide-source-view-zoom");
   gtk_event_controller_set_propagation_phase (scroll, GTK_PHASE_CAPTURE);
   g_signal_connect (scroll,
                     "scroll",
@@ -1419,5 +1565,28 @@ ide_source_view_get_iter_at_visual_position (IdeSourceView *self,
         }
 
       gtk_text_iter_forward_char (iter);
+    }
+}
+
+gboolean
+ide_source_view_get_insert_matching_brace (IdeSourceView *self)
+{
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return self->insert_matching_brace;
+}
+
+void
+ide_source_view_set_insert_matching_brace (IdeSourceView *self,
+                                           gboolean       insert_matching_brace)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  insert_matching_brace = !!insert_matching_brace;
+
+  if (insert_matching_brace != self->insert_matching_brace)
+    {
+      self->insert_matching_brace = insert_matching_brace;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INSERT_MATCHING_BRACE]);
     }
 }
