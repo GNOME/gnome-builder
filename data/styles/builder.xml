@@ -25,6 +25,8 @@
     <property name="variant">light</property>
     <property name="dark-variant">builder-dark</property>
     <property name="accent_bg_color">#0077aa</property>
+    <property name="accent_fg_color">#eeeeec</property>
+    <property name="window_fg_color">#2a2a2a</property>
   </metadata>
 
   <!-- Named Colors -->
