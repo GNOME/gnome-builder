@@ -32,6 +32,7 @@
     <property name="light-variant">builder</property>
     <property name="accent_bg_color">#4186A8</property>
     <property name="accent_fg_color">#eeeeec</property>
+    <property name="window_fg_color">#eeeeec</property>
   </metadata>
 
   <!-- Tango Palette -->
