@@ -83,5 +83,10 @@ gboolean                    ide_source_view_get_insert_matching_brace   (IdeSour
 IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_set_insert_matching_brace   (IdeSourceView              *self,
                                                                          gboolean                    insert_matching_brace);
+IDE_AVAILABLE_IN_ALL
+gboolean                    ide_source_view_get_overwrite_braces        (IdeSourceView              *self);
+IDE_AVAILABLE_IN_ALL
+void                        ide_source_view_set_overwrite_braces        (IdeSourceView              *self,
+                                                                         gboolean                    overwrite_braces);
 
 G_END_DECLS

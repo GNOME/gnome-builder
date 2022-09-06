@@ -35,6 +35,7 @@ enum {
   PROP_FONT_SCALE,
   PROP_INSERT_MATCHING_BRACE,
   PROP_LINE_HEIGHT,
+  PROP_OVERWRITE_BRACES,
   PROP_ZOOM_LEVEL,
   N_PROPS,
 
@@ -317,6 +318,64 @@ ide_source_view_key_pressed_cb (IdeSourceView         *self,
   g_assert (GTK_IS_EVENT_CONTROLLER_KEY (key));
 
   buffer = GTK_TEXT_BUFFER (self->buffer);
+
+  if (self->overwrite_braces &&
+      !gtk_text_buffer_get_has_selection (buffer))
+    {
+      GtkTextIter iter;
+      gunichar ch;
+      gboolean overwrite;
+
+      gtk_text_buffer_get_selection_bounds (buffer, &iter, NULL);
+      ch = gtk_text_iter_get_char (&iter);
+
+      switch (keyval)
+        {
+        case GDK_KEY_quotedbl:
+          overwrite = ch == '"';
+          break;
+
+        case GDK_KEY_parenright:
+          overwrite = ch == ')';
+          break;
+
+        case GDK_KEY_apostrophe:
+          overwrite = ch == '\'';
+          break;
+
+        case GDK_KEY_greater:
+          overwrite = ch == '>';
+          break;
+
+        case GDK_KEY_bracketright:
+          overwrite = ch == ']';
+          break;
+
+        case GDK_KEY_braceright:
+          overwrite = ch == '}';
+          break;
+
+        default:
+          overwrite = FALSE;
+          break;
+        }
+
+      if (overwrite)
+        {
+          GtkTextIter next = iter;
+          g_autofree char *text = NULL;
+
+          gtk_text_iter_forward_char (&next);
+          gtk_text_buffer_begin_user_action (buffer);
+          gtk_text_buffer_select_range (buffer, &iter, &next);
+          text = gtk_text_iter_get_slice (&iter, &next);
+          gtk_text_buffer_delete (buffer, &iter, &next);
+          gtk_text_buffer_insert (buffer, &iter, text, -1);
+          gtk_text_buffer_end_user_action (buffer);
+
+          return TRUE;
+        }
+    }
 
   if (self->insert_matching_brace &&
       !gtk_text_buffer_get_has_selection (buffer))
@@ -1006,6 +1065,10 @@ ide_source_view_get_property (GObject    *object,
       g_value_set_double (value, self->line_height);
       break;
 
+    case PROP_OVERWRITE_BRACES:
+      g_value_set_boolean (value, ide_source_view_get_overwrite_braces (self));
+      break;
+
     case PROP_ZOOM_LEVEL:
       g_value_set_double (value, ide_source_view_get_zoom_level (self));
       break;
@@ -1045,6 +1108,10 @@ ide_source_view_set_property (GObject      *object,
 
     case PROP_LINE_HEIGHT:
       ide_source_view_set_line_height (self, g_value_get_double (value));
+      break;
+
+    case PROP_OVERWRITE_BRACES:
+      ide_source_view_set_overwrite_braces (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -1097,6 +1164,13 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
     g_param_spec_boolean ("insert-matching-brace",
                           "Insert Matching Brace",
                           "Insert a matching brace/bracket/quotation/parenthesis",
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_OVERWRITE_BRACES] =
+    g_param_spec_boolean ("overwrite-braces",
+                          "Overwrite Braces",
+                          "Overwrite a matching brace/bracket/quotation/parenthesis",
                           FALSE,
                           (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
@@ -1588,5 +1662,28 @@ ide_source_view_set_insert_matching_brace (IdeSourceView *self,
     {
       self->insert_matching_brace = insert_matching_brace;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_INSERT_MATCHING_BRACE]);
+    }
+}
+
+gboolean
+ide_source_view_get_overwrite_braces (IdeSourceView *self)
+{
+  g_return_val_if_fail (IDE_IS_SOURCE_VIEW (self), FALSE);
+
+  return self->overwrite_braces;
+}
+
+void
+ide_source_view_set_overwrite_braces (IdeSourceView *self,
+                                      gboolean       overwrite_braces)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+
+  overwrite_braces = !!overwrite_braces;
+
+  if (overwrite_braces != self->overwrite_braces)
+    {
+      self->overwrite_braces = overwrite_braces;
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_OVERWRITE_BRACES]);
     }
 }

@@ -73,6 +73,7 @@ struct _IdeSourceView
   /* Bitfield values go here */
   guint highlight_current_line : 1;
   guint insert_matching_brace : 1;
+  guint overwrite_braces : 1;
 };
 
 
