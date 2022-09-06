@@ -249,6 +249,106 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <property name="title" translatable="yes">Draw Spaces</property>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Spaces</property>
+                            <property name="subtitle" translatable="yes">Draw a mark representing normal spaces</property>
+                            <property name="value">'space'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">draw-spaces</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Tabs</property>
+                            <property name="subtitle" translatable="yes">Draw a mark representing tabs</property>
+                            <property name="value">'tab'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">draw-spaces</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Newlines</property>
+                            <property name="subtitle" translatable="yes">Draw a mark at the end of lines</property>
+                            <property name="value">'newline'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">draw-spaces</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Non-breaking spaces</property>
+                            <property name="subtitle" translatable="yes">Draw a mark at non-breaking space characters</property>
+                            <property name="value">'nbsp'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">draw-spaces</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="IdeTweaksGroup">
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Leading</property>
+                            <property name="subtitle" translatable="yes">Draw marks for leading spaces only</property>
+                            <property name="value">'leading'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">draw-spaces</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Inside Text</property>
+                            <property name="subtitle" translatable="yes">Draw marks inside a line of text only</property>
+                            <property name="value">'text'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">draw-spaces</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Trailing</property>
+                            <property name="subtitle" translatable="yes">Draw marks for trailing spaces only</property>
+                            <property name="value">'trailing'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.editor</property>
+                                <property name="schema-key">draw-spaces</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>

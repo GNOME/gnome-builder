@@ -139,6 +139,65 @@ notify_interactive_completion_cb (IdeEditorPage *self,
     }
 }
 
+static void
+on_draw_spaces_changed (IdeEditorPage *self,
+                        const char    *key,
+                        GSettings     *settings)
+{
+  GtkSourceSpaceDrawer *drawer;
+  GtkSourceView *source_view;
+  GtkSourceSpaceLocationFlags location_flags = GTK_SOURCE_SPACE_LOCATION_NONE;
+  GtkSourceSpaceTypeFlags type_flags = GTK_SOURCE_SPACE_TYPE_NONE;
+  guint flags;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (g_strcmp0 (key, "draw-spaces") == 0);
+  g_assert (G_IS_SETTINGS (settings));
+
+  source_view = GTK_SOURCE_VIEW (ide_editor_page_get_view (self));
+  drawer = gtk_source_view_get_space_drawer (source_view);
+  flags = g_settings_get_flags (settings, "draw-spaces");
+
+  if (flags == 0)
+    {
+      gtk_source_space_drawer_set_enable_matrix (drawer, FALSE);
+      return;
+    }
+
+  /* Reset the matrix before setting it */
+  gtk_source_space_drawer_set_types_for_locations (drawer, GTK_SOURCE_SPACE_LOCATION_ALL, GTK_SOURCE_SPACE_TYPE_NONE);
+
+  if (flags & 1)
+    type_flags |= GTK_SOURCE_SPACE_TYPE_SPACE;
+
+  if (flags & 2)
+    type_flags |= GTK_SOURCE_SPACE_TYPE_TAB;
+
+  if (flags & 4)
+    {
+      gtk_source_space_drawer_set_types_for_locations (drawer, GTK_SOURCE_SPACE_LOCATION_ALL, GTK_SOURCE_SPACE_TYPE_NEWLINE);
+      type_flags |= GTK_SOURCE_SPACE_TYPE_NEWLINE;
+    }
+
+  if (flags & 8)
+    type_flags |= GTK_SOURCE_SPACE_TYPE_NBSP;
+
+  if (flags & 16)
+    location_flags |= GTK_SOURCE_SPACE_LOCATION_LEADING;
+
+  if (flags & 32)
+    location_flags |= GTK_SOURCE_SPACE_LOCATION_INSIDE_TEXT;
+
+  if (flags & 64)
+    location_flags |= GTK_SOURCE_SPACE_LOCATION_TRAILING;
+
+  if (type_flags > 0 && location_flags == 0)
+    location_flags |= GTK_SOURCE_SPACE_LOCATION_ALL;
+
+  gtk_source_space_drawer_set_enable_matrix (drawer, TRUE);
+  gtk_source_space_drawer_set_types_for_locations (drawer, location_flags, type_flags);
+}
+
 void
 _ide_editor_page_settings_init (IdeEditorPage *self)
 {
@@ -246,6 +305,13 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                            self,
                            G_CONNECT_SWAPPED);
   notify_interactive_completion_cb (self, NULL, editor_settings);
+
+  g_signal_connect_object (editor_settings,
+                           "changed::draw-spaces",
+                           G_CALLBACK (on_draw_spaces_changed),
+                           self,
+                           G_CONNECT_SWAPPED);
+  on_draw_spaces_changed (self, "draw-spaces", editor_settings);
 
   _ide_editor_page_settings_reload (self);
 
