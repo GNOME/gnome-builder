@@ -61,6 +61,20 @@ ide_run_context_new (void)
   return g_object_new (IDE_TYPE_RUN_CONTEXT, NULL);
 }
 
+static void
+copy_envvar_with_fallback (IdeRunContext      *run_context,
+                           const char * const *environ,
+                           const char         *key,
+                           const char         *fallback)
+{
+  const char *val;
+
+  if ((val = g_environ_getenv ((char **)environ, key)))
+    ide_run_context_setenv (run_context, key, val);
+  else if (fallback != NULL)
+    ide_run_context_setenv (run_context, key, fallback);
+}
+
 /**
  * ide_run_context_add_minimal_environment:
  * @self: a #IdeRunContext
@@ -76,7 +90,6 @@ ide_run_context_add_minimal_environment (IdeRunContext *self)
   const gchar * const *host_environ = _ide_host_environ ();
   static const char *copy_env[] = {
     "AT_SPI_BUS_ADDRESS",
-    "COLORTERM",
     "DBUS_SESSION_BUS_ADDRESS",
     "DBUS_SYSTEM_BUS_ADDRESS",
     "DESKTOP_SESSION",
@@ -96,6 +109,7 @@ ide_run_context_add_minimal_environment (IdeRunContext *self)
     "XDG_SESSION_TYPE",
     "XDG_VTNR",
   };
+  const char *val;
 
   IDE_ENTRY;
 
@@ -104,11 +118,13 @@ ide_run_context_add_minimal_environment (IdeRunContext *self)
   for (guint i = 0; i < G_N_ELEMENTS (copy_env); i++)
     {
       const char *key = copy_env[i];
-      const char *val = g_environ_getenv ((char **)host_environ, key);
 
-      if (val != NULL)
+      if ((val = g_environ_getenv ((char **)host_environ, key)))
         ide_run_context_setenv (self, key, val);
     }
+
+  copy_envvar_with_fallback (self, host_environ, "TERM", "xterm-256color");
+  copy_envvar_with_fallback (self, host_environ, "COLORTERM", "truecolor");
 
   IDE_EXIT;
 }
