@@ -83,7 +83,7 @@ gbp_copyright_buffer_addin_save_file (IdeBufferAddin *addin,
       g_autofree char *replace = NULL;
 
       if (!gtk_text_iter_forward_search (&iter, name, GTK_TEXT_SEARCH_TEXT_ONLY, &match_begin, &match_end, &limit))
-        continue;
+        break;
 
       gtk_text_iter_set_line_offset (&match_begin, 0);
       if (!gtk_text_iter_ends_line (&match_end))
