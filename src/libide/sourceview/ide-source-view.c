@@ -27,6 +27,12 @@
 
 #include "ide-source-view-private.h"
 
+typedef struct
+{
+  GtkEventController *controller;
+  int priority;
+} Controller;
+
 G_DEFINE_TYPE (IdeSourceView, ide_source_view, GTK_SOURCE_TYPE_VIEW)
 
 enum {
@@ -50,6 +56,13 @@ enum {
 
 static GParamSpec *properties[N_PROPS];
 static guint signals[N_SIGNALS];
+
+static void
+controller_clear (gpointer data)
+{
+  Controller *c = data;
+  g_clear_object (&c->controller);
+}
 
 char *
 _ide_source_view_generate_css (GtkSourceView              *view,
@@ -1024,6 +1037,7 @@ ide_source_view_dispose (GObject *object)
   g_clear_object (&self->joined_menu);
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->font_desc, pango_font_description_free);
+  g_clear_pointer (&self->controllers, g_array_unref);
   g_clear_pointer ((GtkWidget **)&self->popup_menu, gtk_widget_unparent);
 
   g_assert (self->completion_providers == NULL);
@@ -1228,6 +1242,9 @@ ide_source_view_init (IdeSourceView *self)
   GtkEventController *scroll;
   GtkEventController *key;
 
+  self->controllers = g_array_new (FALSE, FALSE, sizeof (Controller));
+  g_array_set_clear_func (self->controllers, controller_clear);
+
   g_signal_connect (self,
                     "notify::buffer",
                     G_CALLBACK (ide_source_view_notify_buffer_cb),
@@ -1250,7 +1267,7 @@ ide_source_view_init (IdeSourceView *self)
                             "pressed",
                             G_CALLBACK (ide_source_view_click_pressed_cb),
                             self);
-  gtk_widget_add_controller (GTK_WIDGET (self), click);
+  ide_source_view_add_controller (self, 0, click);
 
   /* Key handler for internal features like insert-matching-braces */
   key = gtk_event_controller_key_new ();
@@ -1260,7 +1277,7 @@ ide_source_view_init (IdeSourceView *self)
                             "key-pressed",
                             G_CALLBACK (ide_source_view_key_pressed_cb),
                             self);
-  gtk_widget_add_controller (GTK_WIDGET (self), key);
+  ide_source_view_add_controller (self, 0, key);
 
   /* Setup focus tracking */
   focus = gtk_event_controller_focus_new ();
@@ -1273,7 +1290,7 @@ ide_source_view_init (IdeSourceView *self)
                             "leave",
                             G_CALLBACK (ide_source_view_focus_leave_cb),
                             self);
-  gtk_widget_add_controller (GTK_WIDGET (self), focus);
+  ide_source_view_add_controller (self, 0, focus);
 
   /* Setup ctrl+scroll zoom */
   scroll = gtk_event_controller_scroll_new (GTK_EVENT_CONTROLLER_SCROLL_VERTICAL);
@@ -1283,7 +1300,7 @@ ide_source_view_init (IdeSourceView *self)
                     "scroll",
                     G_CALLBACK (on_scroll_scrolled_cb),
                     self);
-  gtk_widget_add_controller (GTK_WIDGET (self), scroll);
+  ide_source_view_add_controller (self, 0, scroll);
 
   /* This is sort of a layer vioaltion, but it's helpful for us to
    * get the system font name and manage it invisibly.
@@ -1685,5 +1702,79 @@ ide_source_view_set_overwrite_braces (IdeSourceView *self,
     {
       self->overwrite_braces = overwrite_braces;
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_OVERWRITE_BRACES]);
+    }
+}
+
+static int
+sort_by_priority (gconstpointer a,
+                  gconstpointer b)
+{
+  const Controller *ca = a;
+  const Controller *cb = b;
+
+  if (ca->priority < cb->priority)
+    return -1;
+  else if (ca->priority > cb->priority)
+    return 1;
+  else
+    return 0;
+}
+
+/**
+ * ide_source_view_add_controller:
+ * @self: a #IdeSourceView
+ * @priority: the sort priority
+ * @controller: (transfer full): a #GtkEventController
+ *
+ * Adds a controller with a priority so that capture/bubble can be
+ * applied in a known order.
+ */
+void
+ide_source_view_add_controller (IdeSourceView      *self,
+                                int                 priority,
+                                GtkEventController *controller)
+{
+  Controller to_add = { controller, priority };
+
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  for (guint i = 0; i < self->controllers->len; i++)
+    {
+      const Controller *c = &g_array_index (self->controllers, Controller, i);
+      gtk_widget_remove_controller (GTK_WIDGET (self), c->controller);
+    }
+
+  g_array_append_val (self->controllers, to_add);
+  g_array_sort (self->controllers, sort_by_priority);
+
+  for (guint i = 0; i < self->controllers->len; i++)
+    {
+      const Controller *c = &g_array_index (self->controllers, Controller, i);
+      gtk_widget_add_controller (GTK_WIDGET (self), g_object_ref (c->controller));
+    }
+}
+
+void
+ide_source_view_remove_controller (IdeSourceView      *self,
+                                   GtkEventController *controller)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
+
+  gtk_widget_remove_controller (GTK_WIDGET (self), controller);
+
+  if (self->controllers == NULL)
+    return;
+
+  for (guint i = 0; i < self->controllers->len; i++)
+    {
+      const Controller *c = &g_array_index (self->controllers, Controller, i);
+
+      if (c->controller == controller)
+        {
+          g_array_remove_index (self->controllers, i);
+          break;
+        }
     }
 }

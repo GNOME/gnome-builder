@@ -63,6 +63,9 @@ struct _IdeSourceView
   IdeExtensionSetAdapter *hover_providers;
   IdeExtensionAdapter *indenter;
 
+  /* Prioritized controllers to be reapplied as necessary */
+  GArray *controllers;
+
   /* GSource used to update bottom margin */
   guint overscroll_source;
 

@@ -38,6 +38,13 @@ G_DECLARE_FINAL_TYPE (IdeSourceView, ide_source_view, IDE, SOURCE_VIEW, GtkSourc
 IDE_AVAILABLE_IN_ALL
 GtkWidget                  *ide_source_view_new                         (void);
 IDE_AVAILABLE_IN_ALL
+void                        ide_source_view_add_controller              (IdeSourceView              *self,
+                                                                         int                         priority,
+                                                                         GtkEventController         *controller);
+IDE_AVAILABLE_IN_ALL
+void                        ide_source_view_remove_controller           (IdeSourceView              *self,
+                                                                         GtkEventController         *controller);
+IDE_AVAILABLE_IN_ALL
 void                        ide_source_view_scroll_to_insert            (IdeSourceView              *self);
 IDE_AVAILABLE_IN_ALL
 char                       *ide_source_view_dup_position_label          (IdeSourceView              *self);
