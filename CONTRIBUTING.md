@@ -11,8 +11,17 @@ that do this for fun. Be respectful and assume the best of each other.
 
 ## Filing a bug
 
-Please file bugs for issues, enhancements and features on
-[our bug tracker](https://gitlab.gnome.org/GNOME/gnome-builder/issues).
+Please file issues for bugs on our
+[our issue tracker](https://gitlab.gnome.org/GNOME/gnome-builder/issues)
+after you have tested a Nightly release to verify the bug has not already
+been fixed.
+
+You can install Nightly from Flatpak using `flatpak --user install gnome-nightly org.gnome.TextEditor.Devel`.
+
+__Please do not file issues for feature requests.__
+Features must go through the design process first.
+File an issue at [Teams/Design/Whiteboards](https://gitlab.gnome.org/Teams/Design/whiteboards/) to begin that process.
+In the end you should have a mockup, implementation specification, and breakdown of how that will change the existing code-base.
 
 Create a
 [Merge Request](https://gitlab.gnome.org/GNOME/gnome-builder/merge_requests)
