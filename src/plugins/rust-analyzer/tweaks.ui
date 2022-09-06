@@ -46,7 +46,7 @@
                         <child>
                           <object class="IdeTweaksRadio">
                             <property name="title" translatable="yes">Proc Macros</property>
-                            <property name="subtitle" translatable="yes">Enables the expirimental Proc Macros feature of rust-analyzer</property>
+                            <property name="subtitle" translatable="yes">Enables the experimental Proc Macros feature of rust-analyzer</property>
                             <property name="value">'procMacro'</property>
                             <property name="binding">
                               <object class="IdeTweaksSetting">
