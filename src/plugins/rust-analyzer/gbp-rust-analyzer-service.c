@@ -110,6 +110,10 @@ gbp_rust_analyzer_service_configure_client (IdeLspService *service,
 {
   GbpRustAnalyzerService *self = (GbpRustAnalyzerService *)service;
   g_autoptr(GVariant) params = NULL;
+  g_auto(GStrv) features = NULL;
+  struct {
+    guint proc_macro : 1;
+  } feat;
 
   IDE_ENTRY;
 
@@ -120,6 +124,9 @@ gbp_rust_analyzer_service_configure_client (IdeLspService *service,
 
   ide_lsp_client_add_language (client, "rust");
 
+  features = g_settings_get_strv (self->settings, "features");
+  feat.proc_macro = g_strv_contains ((const char * const *)features, "procMacro");
+
   /* Opt-in for experimental proc-macro feature to make gtk-rs more
    * useful for GNOME developers.
    *
@@ -127,7 +134,7 @@ gbp_rust_analyzer_service_configure_client (IdeLspService *service,
    */
   params = JSONRPC_MESSAGE_NEW (
     "procMacro", "{",
-      "enable", JSONRPC_MESSAGE_PUT_BOOLEAN (TRUE),
+      "enable", JSONRPC_MESSAGE_PUT_BOOLEAN (feat.proc_macro),
     "}"
   );
 

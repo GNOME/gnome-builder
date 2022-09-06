@@ -8,5 +8,8 @@
       </choices>
       <default>'check'</default>
     </key>
+    <key name="features" type="as">
+      <default>['procMacro']</default>
+    </key>
   </schema>
 </schemalist>

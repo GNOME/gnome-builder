@@ -40,6 +40,24 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="IdeTweaksGroup" id="rust_analyzer_features_group">
+                        <property name="title" translatable="yes">Features</property>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Proc Macros</property>
+                            <property name="subtitle" translatable="yes">Enables the expirimental Proc Macros feature of rust-analyzer</property>
+                            <property name="value">'procMacro'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.rust-analyzer</property>
+                                <property name="schema-key">features</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
