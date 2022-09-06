@@ -1,7 +1,6 @@
-/* rust-analyzer-service.h
+/* gbp-rust_analyzer-code-action-provider.h
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
- * Copyright 2021 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,18 +20,12 @@
 
 #pragma once
 
-#include <libide-foundry.h>
-#include <libide-gui.h>
 #include <libide-lsp.h>
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_SERVICE (rust_analyzer_service_get_type())
+#define GBP_TYPE_RUST_ANALYZER_CODE_ACTION_PROVIDER (gbp_rust_analyzer_code_action_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerService, rust_analyzer_service, RUST, ANALYZER_SERVICE, GObject)
-
-RustAnalyzerService *rust_analyzer_service_from_context   (IdeContext          *context);
-IdeLspClient        *rust_analyzer_service_get_client     (RustAnalyzerService *self);
-void                 rust_analyzer_service_ensure_started (RustAnalyzerService *self);
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerCodeActionProvider, gbp_rust_analyzer_code_action_provider, GBP, RUST_ANALYZER_CODE_ACTION_PROVIDER, IdeLspCodeActionProvider)
 
 G_END_DECLS

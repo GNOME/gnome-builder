@@ -1,4 +1,4 @@
-/* rust-analyzer-tweaks-addin.h
+/* gbp-rust_analyzer-hover-provider.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -20,12 +20,12 @@
 
 #pragma once
 
-#include <libide-tweaks.h>
+#include <libide-lsp.h>
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_TWEAKS_ADDIN (rust_analyzer_tweaks_addin_get_type())
+#define GBP_TYPE_RUST_ANALYZER_HOVER_PROVIDER (gbp_rust_analyzer_hover_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerTweaksAddin, rust_analyzer_tweaks_addin, RUST, ANALYZER_TWEAKS_ADDIN, IdeTweaksAddin)
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerHoverProvider, gbp_rust_analyzer_hover_provider, GBP, RUST_ANALYZER_HOVER_PROVIDER, IdeLspHoverProvider)
 
 G_END_DECLS

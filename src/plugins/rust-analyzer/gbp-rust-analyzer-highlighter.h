@@ -1,6 +1,6 @@
-/* rust-analyzer-search-provider.h
+/* gbp-rust_analyzer-highlighter.h
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_SEARCH_PROVIDER (rust_analyzer_search_provider_get_type())
+#define GBP_TYPE_RUST_ANALYZER_HIGHLIGHTER (gbp_rust_analyzer_highlighter_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerSearchProvider, rust_analyzer_search_provider, RUST, ANALYZER_SEARCH_PROVIDER, IdeLspSearchProvider)
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerHighlighter, gbp_rust_analyzer_highlighter, GBP, RUST_ANALYZER_HIGHLIGHTER, IdeLspHighlighter)
 
 G_END_DECLS

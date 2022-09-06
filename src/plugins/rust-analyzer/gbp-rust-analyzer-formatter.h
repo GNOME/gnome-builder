@@ -1,6 +1,6 @@
-/* rust-analyzer-hover-provider.h
+/* gbp-rust_analyzer-formatter.h
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_HOVER_PROVIDER (rust_analyzer_hover_provider_get_type())
+#define GBP_TYPE_RUST_ANALYZER_FORMATTER (gbp_rust_analyzer_formatter_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerHoverProvider, rust_analyzer_hover_provider, RUST, ANALYZER_HOVER_PROVIDER, IdeLspHoverProvider)
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerFormatter, gbp_rust_analyzer_formatter, GBP, RUST_ANALYZER_FORMATTER, IdeLspFormatter)
 
 G_END_DECLS

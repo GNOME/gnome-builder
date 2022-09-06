@@ -1,6 +1,6 @@
-/* rust-analyzer-pipeline-addin.h
+/* gbp-rust-analyzer-tweaks-addin.h
  *
- * Copyright 2021 Christian Hergert <chergert@redhat.com>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,14 +20,12 @@
 
 #pragma once
 
-#include <libide-foundry.h>
+#include <libide-tweaks.h>
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_PIPELINE_ADDIN (rust_analyzer_pipeline_addin_get_type())
+#define GBP_TYPE_RUST_ANALYZER_TWEAKS_ADDIN (gbp_rust_analyzer_tweaks_addin_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerPipelineAddin, rust_analyzer_pipeline_addin, RUST, ANALYZER_PIPELINE_ADDIN, IdeObject)
-
-IdeSubprocessLauncher *rust_analyzer_pipeline_addin_create_launcher (RustAnalyzerPipelineAddin *self);
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerTweaksAddin, gbp_rust_analyzer_tweaks_addin, GBP, RUST_ANALYZER_TWEAKS_ADDIN, IdeTweaksAddin)
 
 G_END_DECLS

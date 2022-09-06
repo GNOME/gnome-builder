@@ -1,6 +1,6 @@
-/* rust-analyzer-formatter.h
+/* gbp-rust_analyzer-completion-provider.h
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_FORMATTER (rust_analyzer_formatter_get_type())
+#define GBP_TYPE_RUST_ANALYZER_COMPLETION_PROVIDER (gbp_rust_analyzer_completion_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerFormatter, rust_analyzer_formatter, RUST, ANALYZER_FORMATTER, IdeLspFormatter)
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerCompletionProvider, gbp_rust_analyzer_completion_provider, GBP, RUST_ANALYZER_COMPLETION_PROVIDER, IdeLspCompletionProvider)
 
 G_END_DECLS

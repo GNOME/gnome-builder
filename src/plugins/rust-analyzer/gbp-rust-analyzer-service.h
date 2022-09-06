@@ -1,6 +1,6 @@
-/* rust-analyzer-diagnostic-provider.h
+/* gbp-rust_analyzer-service.h
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_DIAGNOSTIC_PROVIDER (rust_analyzer_diagnostic_provider_get_type())
+#define GBP_TYPE_RUST_ANALYZER_SERVICE (gbp_rust_analyzer_service_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerDiagnosticProvider, rust_analyzer_diagnostic_provider, RUST, ANALYZER_DIAGNOSTIC_PROVIDER, IdeLspDiagnosticProvider)
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerService, gbp_rust_analyzer_service, GBP, RUST_ANALYZER_SERVICE, IdeLspService)
 
 G_END_DECLS

@@ -1,19 +1,18 @@
 if get_option('plugin_rust_analyzer')
 
 plugins_sources += files([
-  'rust-analyzer-code-action-provider.c',
-  'rust-analyzer-completion-provider.c',
-  'rust-analyzer-diagnostic-provider.c',
-  'rust-analyzer-formatter.c',
-  'rust-analyzer-highlighter.c',
-  'rust-analyzer-hover-provider.c',
-  'rust-analyzer-pipeline-addin.c',
+  'gbp-rust-analyzer-code-action-provider.c',
+  'gbp-rust-analyzer-completion-provider.c',
+  'gbp-rust-analyzer-diagnostic-provider.c',
+  'gbp-rust-analyzer-formatter.c',
+  'gbp-rust-analyzer-highlighter.c',
+  'gbp-rust-analyzer-hover-provider.c',
+  'gbp-rust-analyzer-rename-provider.c',
+  'gbp-rust-analyzer-search-provider.c',
+  'gbp-rust-analyzer-service.c',
+  'gbp-rust-analyzer-symbol-resolver.c',
+  'gbp-rust-analyzer-tweaks-addin.c',
   'rust-analyzer-plugin.c',
-  'rust-analyzer-rename-provider.c',
-  'rust-analyzer-search-provider.c',
-  'rust-analyzer-service.c',
-  'rust-analyzer-symbol-resolver.c',
-  'rust-analyzer-tweaks-addin.c',
 ])
 
 plugin_rust_analyzer_resources = gnome.compile_resources(

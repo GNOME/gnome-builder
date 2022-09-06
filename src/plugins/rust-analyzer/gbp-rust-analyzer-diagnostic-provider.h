@@ -1,6 +1,6 @@
-/* rust-analyzer-symbol-resolver.h
+/* gbp-rust_analyzer-diagnostic-provider.h
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_SYMBOL_RESOLVER (rust_analyzer_symbol_resolver_get_type())
+#define GBP_TYPE_RUST_ANALYZER_DIAGNOSTIC_PROVIDER (gbp_rust_analyzer_diagnostic_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerSymbolResolver, rust_analyzer_symbol_resolver, RUST, ANALYZER_SYMBOL_RESOLVER, IdeLspSymbolResolver)
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerDiagnosticProvider, gbp_rust_analyzer_diagnostic_provider, GBP, RUST_ANALYZER_DIAGNOSTIC_PROVIDER, IdeLspDiagnosticProvider)
 
 G_END_DECLS

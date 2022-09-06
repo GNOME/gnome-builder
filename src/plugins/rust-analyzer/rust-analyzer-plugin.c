@@ -24,56 +24,49 @@
 #include <libide-lsp.h>
 #include <libide-gui.h>
 
-#include "rust-analyzer-code-action-provider.h"
-#include "rust-analyzer-completion-provider.h"
-#include "rust-analyzer-diagnostic-provider.h"
-#include "rust-analyzer-formatter.h"
-#include "rust-analyzer-highlighter.h"
-#include "rust-analyzer-hover-provider.h"
-#include "rust-analyzer-pipeline-addin.h"
-#include "rust-analyzer-rename-provider.h"
-#include "rust-analyzer-search-provider.h"
-#include "rust-analyzer-service.h"
-#include "rust-analyzer-symbol-resolver.h"
-#include "rust-analyzer-tweaks-addin.h"
+#include "gbp-rust-analyzer-code-action-provider.h"
+#include "gbp-rust-analyzer-completion-provider.h"
+#include "gbp-rust-analyzer-diagnostic-provider.h"
+#include "gbp-rust-analyzer-formatter.h"
+#include "gbp-rust-analyzer-highlighter.h"
+#include "gbp-rust-analyzer-hover-provider.h"
+#include "gbp-rust-analyzer-rename-provider.h"
+#include "gbp-rust-analyzer-search-provider.h"
+#include "gbp-rust-analyzer-service.h"
+#include "gbp-rust-analyzer-symbol-resolver.h"
+#include "gbp-rust-analyzer-tweaks-addin.h"
 
 _IDE_EXTERN void
-_rust_analyzer_register_types (PeasObjectModule *module)
+_gbp_rust_analyzer_register_types (PeasObjectModule *module)
 {
   peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              RUST_TYPE_ANALYZER_SERVICE);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_PIPELINE_ADDIN,
-                                              RUST_TYPE_ANALYZER_PIPELINE_ADDIN);
-  peas_object_module_register_extension_type (module,
                                               GTK_SOURCE_TYPE_COMPLETION_PROVIDER,
-                                              RUST_TYPE_ANALYZER_COMPLETION_PROVIDER);
+                                              GBP_TYPE_RUST_ANALYZER_COMPLETION_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SYMBOL_RESOLVER,
-                                              RUST_TYPE_ANALYZER_SYMBOL_RESOLVER);
+                                              GBP_TYPE_RUST_ANALYZER_SYMBOL_RESOLVER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_DIAGNOSTIC_PROVIDER,
-                                              RUST_TYPE_ANALYZER_DIAGNOSTIC_PROVIDER);
+                                              GBP_TYPE_RUST_ANALYZER_DIAGNOSTIC_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_FORMATTER,
-                                              RUST_TYPE_ANALYZER_FORMATTER);
+                                              GBP_TYPE_RUST_ANALYZER_FORMATTER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_HIGHLIGHTER,
-                                              RUST_TYPE_ANALYZER_HIGHLIGHTER);
+                                              GBP_TYPE_RUST_ANALYZER_HIGHLIGHTER);
   peas_object_module_register_extension_type (module,
                                               GTK_SOURCE_TYPE_HOVER_PROVIDER,
-                                              RUST_TYPE_ANALYZER_HOVER_PROVIDER);
+                                              GBP_TYPE_RUST_ANALYZER_HOVER_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_RENAME_PROVIDER,
-                                              RUST_TYPE_ANALYZER_RENAME_PROVIDER);
+                                              GBP_TYPE_RUST_ANALYZER_RENAME_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_SEARCH_PROVIDER,
-                                              RUST_TYPE_ANALYZER_SEARCH_PROVIDER);
+                                              GBP_TYPE_RUST_ANALYZER_SEARCH_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_CODE_ACTION_PROVIDER,
-                                              RUST_TYPE_ANALYZER_CODE_ACTION_PROVIDER);
+                                              GBP_TYPE_RUST_ANALYZER_CODE_ACTION_PROVIDER);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_TWEAKS_ADDIN,
-                                              RUST_TYPE_ANALYZER_TWEAKS_ADDIN);
+                                              GBP_TYPE_RUST_ANALYZER_TWEAKS_ADDIN);
 }

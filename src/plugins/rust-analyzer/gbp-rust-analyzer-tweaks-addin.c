@@ -1,4 +1,4 @@
-/* rust-analyzer-tweaks-addin.c
+/* gbp-rust-analyzer-tweaks-addin.c
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -18,26 +18,26 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "rust-analyzer-tweaks-addin"
+#define G_LOG_DOMAIN "gbp-rust-analyzer-tweaks-addin"
 
 #include "config.h"
 
-#include "rust-analyzer-tweaks-addin.h"
+#include "gbp-rust-analyzer-tweaks-addin.h"
 
-struct _RustAnalyzerTweaksAddin
+struct _GbpRustAnalyzerTweaksAddin
 {
   IdeTweaksAddin parent_instance;
 };
 
-G_DEFINE_FINAL_TYPE (RustAnalyzerTweaksAddin, rust_analyzer_tweaks_addin, IDE_TYPE_TWEAKS_ADDIN)
+G_DEFINE_FINAL_TYPE (GbpRustAnalyzerTweaksAddin, gbp_rust_analyzer_tweaks_addin, IDE_TYPE_TWEAKS_ADDIN)
 
 static void
-rust_analyzer_tweaks_addin_class_init (RustAnalyzerTweaksAddinClass *klass)
+gbp_rust_analyzer_tweaks_addin_class_init (GbpRustAnalyzerTweaksAddinClass *klass)
 {
 }
 
 static void
-rust_analyzer_tweaks_addin_init (RustAnalyzerTweaksAddin *self)
+gbp_rust_analyzer_tweaks_addin_init (GbpRustAnalyzerTweaksAddin *self)
 {
   ide_tweaks_addin_set_resource_paths (IDE_TWEAKS_ADDIN (self),
                                        IDE_STRV_INIT ("/plugins/rust-analyzer/tweaks.ui"));

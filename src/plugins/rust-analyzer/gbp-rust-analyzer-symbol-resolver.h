@@ -1,6 +1,6 @@
-/* rust-analyzer-highlighter.h
+/* gbp-rust_analyzer-symbol-resolver.h
  *
- * Copyright 2020 Günther Wagner <info@gunibert.de>
+ * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,8 +24,8 @@
 
 G_BEGIN_DECLS
 
-#define RUST_TYPE_ANALYZER_HIGHLIGHTER (rust_analyzer_highlighter_get_type())
+#define GBP_TYPE_RUST_ANALYZER_SYMBOL_RESOLVER (gbp_rust_analyzer_symbol_provider_get_type())
 
-G_DECLARE_FINAL_TYPE (RustAnalyzerHighlighter, rust_analyzer_highlighter, RUST, ANALYZER_HIGHLIGHTER, IdeLspHighlighter)
+G_DECLARE_FINAL_TYPE (GbpRustAnalyzerSymbolResolver, gbp_rust_analyzer_symbol_provider, GBP, RUST_ANALYZER_SYMBOL_RESOLVER, IdeLspSymbolResolver)
 
 G_END_DECLS
