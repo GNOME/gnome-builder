@@ -4191,20 +4191,16 @@ msgid "Overwrite Braces"
 msgstr "Přepisovat závorky"
 
 #: src/plugins/editorui/tweaks-language.ui:207
-#, fuzzy
-#| msgid "Overwrite trailing braces and quotations"
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
-msgstr "Přepisovat koncové závorky a uvozovky"
+msgstr "Přepisovat zavírací závorky (kulaté, hranaté, složené) a uvozovky"
 
 #: src/plugins/editorui/tweaks-language.ui:223
 msgid "Insert Matching Brace"
 msgstr "Vkládat odpovídající závorku"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-#, fuzzy
-#| msgid "Insert matching character for { [ ( or \""
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
-msgstr "Vkládat odpovídající znak pro { [ ( nebo \""
+msgstr "Vkládat odpovídající znak pro závorky (kulaté, hranaté, složené) a uvozovky"
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
@@ -4223,190 +4219,134 @@ msgid "Space before opening angles"
 msgstr "Mezera před otevírací lomenou závorkou"
 
 #: src/plugins/editorui/tweaks-language.ui:283
-#, fuzzy
-#| msgid "Prefer a space before colons"
 msgid "Prefer a space before colon"
-msgstr "Dávat přednost mezerám před dvojtečkami"
+msgstr "Dávat přednost mezeře před dvojtečkou"
 
 #: src/plugins/editorui/tweaks-language.ui:290
 msgid "Prefer a space before commas"
-msgstr "Dávat přednost mezerám před čárkami"
+msgstr "Dávat přednost mezeře před čárkou"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-#, fuzzy
-#| msgid "Prefer a space before semicolons"
 msgid "Prefer a space before simicolons"
-msgstr "Dávat přednost mezerám před středníky"
+msgstr "Dávat přednost mezeře před středníkem"
 
 #: src/plugins/editorui/tweaks.ui:10
-#, fuzzy
-#| msgid "Colors"
 msgid "Color"
-msgstr "Barvy"
+msgstr "Barva"
 
 #: src/plugins/editorui/tweaks.ui:32 src/plugins/terminal/tweaks.ui:10
 msgid "Fonts & Styling"
-msgstr ""
+msgstr "Fonty a styl"
 
 #: src/plugins/editorui/tweaks.ui:36
-#, fuzzy
-#| msgid "(Preview)"
 msgid "Preview"
-msgstr "(náhled)"
+msgstr "Náhled"
 
 #: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
 msgid "Font"
 msgstr "Font"
 
 #: src/plugins/editorui/tweaks.ui:49
-#, fuzzy
-#| msgid "Switch to source code editor"
 msgid "The font used within the source code editor"
-msgstr "Přepnout do editoru zdrojového kódu"
+msgstr "Font používaný v editoru zdrojového kódu"
 
 #: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
-msgstr ""
+msgstr "Přizpůsobit rozestupy mezi řádky"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
-msgstr ""
+msgstr "Jak by měl být zalamován text, když se nevleze do rámce"
 
 #: src/plugins/editorui/tweaks.ui:93
-#, fuzzy
-#| msgid "Spaces"
 msgid "At Spaces"
-msgstr "Mezery"
+msgstr "na mezerách"
 
 #: src/plugins/editorui/tweaks.ui:99
 msgid "Anywhere"
-msgstr ""
+msgstr "kdekoliv"
 
 #: src/plugins/editorui/tweaks.ui:111
-#, fuzzy
-#| msgid "Grid Pattern"
 msgid "Background Pattern"
-msgstr "Vzor mřížky"
+msgstr "Vzor na pozadí"
 
 #: src/plugins/editorui/tweaks.ui:112
-#, fuzzy
-#| msgid "Display a grid pattern underneath source code"
 msgid "Show a background pattern underneath source code"
-msgstr "Na pozadí zdrojového kódu zobrazovat vzor mřížky"
+msgstr "Za zdrojovým kódem zobrazovat vzor pozadí"
 
 #: src/plugins/editorui/tweaks.ui:121
-#, fuzzy
-#| msgid "Grid Pattern"
 msgid "No Pattern"
-msgstr "Vzor mřížky"
+msgstr "žádný vzor"
 
 #: src/plugins/editorui/tweaks.ui:127
-#, fuzzy
-#| msgid "_Join Lines"
 msgid "Grid Lines"
-msgstr "_Spojit řádky"
+msgstr "čáry mřížky"
 
 #: src/plugins/editorui/tweaks.ui:137
-#, fuzzy
-#| msgid "Scrollback"
 msgid "Scrollbars"
-msgstr "Posouvat na konec"
+msgstr "Posuvníky"
 
 #: src/plugins/editorui/tweaks.ui:140
-#, fuzzy
-#| msgid "Code Overview"
 msgid "Source Code Overview"
 msgstr "Přehledová mapa"
 
 #: src/plugins/editorui/tweaks.ui:141
-#, fuzzy
-#| msgid ""
-#| "If enabled, Builder will display an overview map of the source file next "
-#| "to the editor."
 msgid "Display an overview of source code next to the editor"
-msgstr ""
-"Když je zapnuto, bude Builder vedle editoru zobrazovat přehledovou mapu "
-"souboru se zdrojovým kódem."
+msgstr "Vedle editoru zobrazovat přehledovou mapu zdrojového kódu"
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
-msgstr ""
+msgstr "Dávat přednost posuvníkům"
 
 #: src/plugins/editorui/tweaks.ui:156
-#, fuzzy
-#| msgid "Always"
 msgid "Always On"
 msgstr "vždy"
 
 #: src/plugins/editorui/tweaks.ui:162
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Automatic"
-msgstr "Automaticky odsazovat"
+msgstr "automaticky"
 
 #: src/plugins/editorui/tweaks.ui:172
-#, fuzzy
-#| msgid "Line numbers"
 msgid "Line Numbers"
 msgstr "Čísla řádků"
 
 #: src/plugins/editorui/tweaks.ui:175
-#, fuzzy
-#| msgid "Show line numbers"
 msgid "Show Line Numbers"
 msgstr "Zobrazovat čísla řádků"
 
 #: src/plugins/editorui/tweaks.ui:176
-#, fuzzy
-#| msgid "Display line numbers"
 msgid "Display line numbers next to each line of code"
-msgstr "Zobrazovat čísla řádků"
+msgstr "Zobrazovat čísla řádků vedle jednotlivých řádků kódu"
 
 #: src/plugins/editorui/tweaks.ui:187
-#, fuzzy
-#| msgid "Relative line numbers"
 msgid "Use Relative Line Numbers"
-msgstr "Relativní čísla řádků"
+msgstr "Používat relativní čísla řádků"
 
 #: src/plugins/editorui/tweaks.ui:188
-#, fuzzy
-#| msgid "Show line numbers relative to the cursor line"
 msgid "Show line numbers relative to the current line"
-msgstr "Zobrazovat čísla řádků relativně vůči řádku s kurzorem"
+msgstr "Zobrazovat čísla řádků relativně vůči aktuálnímu řádku"
 
 #: src/plugins/editorui/tweaks.ui:199
-#, fuzzy
-#| msgid "Diagnostics"
 msgid "Show Diagnostics"
-msgstr "Diagnostika"
+msgstr "Zobrazovat diagnostiku"
 
 #: src/plugins/editorui/tweaks.ui:200
-#, fuzzy
-#| msgid "Show diagnostics next to line number"
 msgid "Display diagnostics next to the line number"
 msgstr "Zobrazovat diagnostiku vedle čísla řádku"
 
 #: src/plugins/editorui/tweaks.ui:213
-#, fuzzy
-#| msgid "Semantic Highlighting"
 msgid "Syntax Highlighting"
-msgstr "Zvýrazňování sémantiky"
+msgstr "Zvýrazňovat syntax"
 
 #: src/plugins/editorui/tweaks.ui:216
-#, fuzzy
-#| msgid "Highlight current line"
 msgid "Highlight Current Line"
 msgstr "Zvýrazňovat aktuální řádek"
 
 #: src/plugins/editorui/tweaks.ui:217
-#, fuzzy
-#| msgid "Make current line stand out with highlights"
 msgid "Make the current line stand out with highlights"
 msgstr "Aktuální řádek odlišit pomocí zvýraznění"
 
 #: src/plugins/editorui/tweaks.ui:228
-#, fuzzy
-#| msgid "Highlight matching brackets"
 msgid "Highlight Matching Brackets"
 msgstr "Zvýrazňovat související závorky"
 
@@ -4415,16 +4355,20 @@ msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
+"Používat pozici kurzoru ke zvýraznění souvisejících závorek (kulatých, "
+"hranatých, složených) a dalších věcí"
 
 #: src/plugins/editorui/tweaks.ui:240
 msgid "Semantic Highlighting"
-msgstr "Zvýrazňování sémantiky"
+msgstr "Zvýrazňovat sémantiku"
 
 #: src/plugins/editorui/tweaks.ui:241
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
+"Používat informace o symbolech ke zvýrazňování jmenných prostorů, funkcí a "
+"proměnných ve zdrojovém kódu"
 
 #: src/plugins/editorui/tweaks.ui:260
 msgid "Spelling"
@@ -4432,91 +4376,68 @@ msgstr "Pravopis"
 
 #: src/plugins/editorui/tweaks.ui:264
 msgid "Underline potential spelling mistakes as you type"
-msgstr ""
+msgstr "Podtrhávat během psaní možné pravopisné chyby"
 
 #: src/plugins/editorui/tweaks.ui:277
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Selections"
 msgid "Selections"
-msgstr "Výběr"
+msgstr "Výběry"
 
 #: src/plugins/editorui/tweaks.ui:280
-#, fuzzy
-#| msgid "Minimum length for highlight"
 msgid "Minimum Characters to Highlight"
-msgstr "Minimální délka pro zvýrazňování"
+msgstr "Minimální počet znaků pro zvýrazňování"
 
 #: src/plugins/editorui/tweaks.ui:281
-#, fuzzy
-#| msgid "Minimum length for highlight"
 msgid "The minimum selection length before highlighting matches"
-msgstr "Minimální délka pro zvýrazňování"
+msgstr "Minimální délka výběru než se začne zvýrazňovat shoda"
 
 #: src/plugins/editorui/tweaks.ui:294
 msgid "Snippets"
 msgstr "Úryvky"
 
 #: src/plugins/editorui/tweaks.ui:297
-#, fuzzy
-#| msgid "Snippets"
 msgid "Expand Snippets"
-msgstr "Úryvky"
+msgstr "Rozbalovat úryvky"
 
 #: src/plugins/editorui/tweaks.ui:298
 msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr ""
+msgstr "Používat „Tab“ v editoru k rozbalování nastavených úryvků"
 
 #: src/plugins/editorui/tweaks.ui:313
-#, fuzzy
-#| msgid "Completion"
 msgid "Code Completion"
-msgstr "Dokončování slov"
+msgstr "Dokončování kódu"
 
 #: src/plugins/editorui/tweaks.ui:317
-#, fuzzy
-#| msgid "Completion Providers"
 msgid "Completion Proposals"
-msgstr "Poskytovatelé dokončování"
+msgstr "Návrhy pro dokončování"
 
 #: src/plugins/editorui/tweaks.ui:320
-#, fuzzy
-#| msgid "Suggest Completions from Snippets"
 msgid "Suggest Code Completions"
-msgstr "Navrhovat dokončení z úryvků"
+msgstr "Navrhovat dokončení kódu"
 
 #: src/plugins/editorui/tweaks.ui:321
 msgid "Automatically suggest code completions while typing"
-msgstr ""
+msgstr "Během psaní automaticky navrhovat dokončení kódu"
 
 #: src/plugins/editorui/tweaks.ui:332
-#, fuzzy
-#| msgid "Suggest Completions from Snippets"
 msgid "Select First Completion Proposal"
-msgstr "Navrhovat dokončení z úryvků"
+msgstr "Vybírat první z návrhovaných dokončení"
 
 #: src/plugins/editorui/tweaks.ui:333
 msgid "Automatically select the first completion proposal when displayed"
-msgstr ""
+msgstr "Po zobrazení automaticky vybrat první z navrhovaných dokončení"
 
 #: src/plugins/editorui/tweaks.ui:348
-#, fuzzy
-#| msgid "Completion Providers"
 msgid "Maximum Completion Proposals"
-msgstr "Poskytovatelé dokončování"
+msgstr "Maximum navrhovaných dokončení"
 
 #: src/plugins/editorui/tweaks.ui:349
-#, fuzzy
-#| msgid "The number of completion rows to display to the user."
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr ""
-"Počet řádků, které je možné nabídnou uživateli ve funkci dokončování slov."
+"Maximální počet řádků s návrhy pro dokončení, které je možné zobrazit naráz"
 
 #: src/plugins/editorui/tweaks.ui:368 src/plugins/editorui/tweaks.ui:371
-#, fuzzy
-#| msgid "Keyboard"
 msgid "Keyboard Theme"
-msgstr "Klávesnice"
+msgstr "Motiv klávesnice"
 
 #: src/plugins/editorui/tweaks.ui:372
 msgid ""
@@ -4525,8 +4446,6 @@ msgid ""
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:391
-#, fuzzy
-#| msgid "Movement"
 msgid "Movements"
 msgstr "Pohyb"
 
@@ -4538,10 +4457,8 @@ msgstr ""
 "zarovnání podle vašeho odsazení."
 
 #: src/plugins/editorui/tweaks.ui:407
-#, fuzzy
-#| msgid "Home moves to first non-whitespace character"
 msgid "Navigate to non-space characters"
-msgstr "Klávesa Home přesouvá na první nebílý znak"
+msgstr "Přesun na první nebílý znak"
 
 #: src/plugins/editorui/tweaks.ui:416
 msgid "Before line boundaries"
@@ -4562,10 +4479,8 @@ msgid "Disabled"
 msgstr "Povoleno"
 
 #: src/plugins/editorui/tweaks.ui:446
-#, fuzzy
-#| msgid "Palette management"
 msgid "Session Management"
-msgstr "Správa palet"
+msgstr "Správa sezení"
 
 #: src/plugins/editorui/tweaks.ui:450
 #, fuzzy
@@ -4574,55 +4489,40 @@ msgid "Save & Restore"
 msgstr "Uložení palety"
 
 #: src/plugins/editorui/tweaks.ui:453
-#, fuzzy
-#| msgid "Autosave"
 msgid "Auto-Save"
 msgstr "Automatické ukládání"
 
 #: src/plugins/editorui/tweaks.ui:454
 msgid "Regularly save the document as you type"
-msgstr ""
+msgstr "Během psaní dokument pravidelně ukládat"
 
 #: src/plugins/editorui/tweaks.ui:465
-#, fuzzy
-#| msgid "Autosave"
 msgid "Auto-Save Delay"
-msgstr "Automatické ukládání"
+msgstr "Četnost automatického ukládání"
 
 #: src/plugins/editorui/tweaks.ui:466
-#, fuzzy
-#| msgid "The number of seconds after modification before auto saving"
 msgid "The delay in seconds to wait before auto-saving the document"
-msgstr ""
-"Počet sekund od provedení nějaké změny, než dojde k automatickému uložení"
+msgstr "Doba v sekundách, po kterou se čeká, než se provede automatické uložení"
 
 #: src/plugins/editorui/tweaks.ui:481
-#, fuzzy
-#| msgid "Reformat code on save"
 msgid "Format on Save"
-msgstr "Při úkládání přeformátovat kód"
+msgstr "Přeformátovat při ukládání"
 
 #: src/plugins/editorui/tweaks.ui:482
 msgid "Reformat sources when saving to disk"
-msgstr ""
+msgstr "Při ukládání na disk přeformátovat zdrojový kód"
 
 #: src/plugins/editorui/tweaks.ui:497
-#, fuzzy
-#| msgid "Restore cursor position"
 msgid "Restore Cursor Position"
 msgstr "Obnovovat umístění kurzoru"
 
 #: src/plugins/editorui/tweaks.ui:498
-#, fuzzy
-#| msgid "Jump to the last position when reopening a file"
 msgid "Jump to the last position when re-opening a file"
-msgstr "Při opětovném otevření souboru skočit na poslední pozici."
+msgstr "Při opětovném otevření souboru skočit na poslední pozici"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
-#, fuzzy
-#| msgid "Previous search result (Ctrl+Shift+G)"
 msgid "Similar Files (Ctrl+Shift+O)"
-msgstr "Předchozí výsledek hledání (Ctrl+Shift+G)"
+msgstr "Podobné soubory (Ctrl+Shift+O)"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
 msgid "Installation failed"
@@ -4706,10 +4606,8 @@ msgid "Creating flatpak bundle"
 msgstr "Vytváří se balíček flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-run-command-provider.c:102
-#, fuzzy
-#| msgid "GTK Application"
 msgid "Flatpak Application"
-msgstr "Aplikace GTK"
+msgstr "Aplikace Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
 msgid "Installing Necessary SDKs"
@@ -4822,10 +4720,8 @@ msgid "Directory is not within repository"
 msgstr "Složka není součástí repozitáře"
 
 #: src/plugins/git/gbp-git-vcs.c:536
-#, fuzzy
-#| msgid "Gitg"
 msgid "Git"
-msgstr "Gitg"
+msgstr "Git"
 
 #: src/plugins/git/gbp-git-vcs-cloner.c:149
 #, c-format
@@ -4853,7 +4749,7 @@ msgstr "E-mail autora"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
 msgid "Email"
-msgstr ""
+msgstr "E-mail"
 
 #: src/plugins/gradle/gbp-gradle-pipeline-addin.c:84
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
@@ -4890,7 +4786,7 @@ msgstr "Nah_radit v %s"
 
 #: src/plugins/grep/gbp-grep-panel.ui:5
 msgid "Find in Files (Ctrl+Alt+Shift+F)"
-msgstr ""
+msgstr "Hledat v souborech (Ctrl+Alt+Shift+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:46
 msgid "Find and Replace"
@@ -4963,10 +4859,8 @@ msgstr "Hostitelský operační systém"
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
 #: src/plugins/sphinx-preview/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Open Preview"
 msgid "Open Preview…"
-msgstr "Otevřít náhled"
+msgstr "Otevřít náhled…"
 
 #: src/plugins/intelephense/gbp-intelephense-service.c:100
 #, fuzzy
@@ -5041,9 +4935,6 @@ msgid "Panels"
 msgstr "Panely"
 
 #: src/plugins/menu-search/gtk/menus.ui:26
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle Left Panel"
 msgstr "Přepnout levý panel"
 
@@ -5069,9 +4960,6 @@ msgid "panel-right-symbolic"
 msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:41
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
 msgid "Toggle Bottom Panel"
 msgstr "Přepnout spodní panel"
 
@@ -5083,24 +4971,20 @@ msgid "Toggle the bottom panel in or out of view"
 msgstr "Přepnout spodní panel"
 
 #: src/plugins/menu-search/gtk/menus.ui:55
-#, fuzzy
-#| msgid "S_witch to Folder"
 msgid "Switch to Dark Mode"
-msgstr "Přep_nout do složky"
+msgstr "Přepnout do tmavého režimu"
 
 #: src/plugins/menu-search/gtk/menus.ui:56
 msgid "Change style-scheme to dark variant"
-msgstr ""
+msgstr "Změnit schéma stylu na tmavou variantu"
 
 #: src/plugins/menu-search/gtk/menus.ui:60
-#, fuzzy
-#| msgid "S_witch to Folder"
 msgid "Switch to Light Mode"
-msgstr "Přep_nout do složky"
+msgstr "Přepnout do světlého režimu"
 
 #: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to light variant"
-msgstr ""
+msgstr "Přepnout schéma stylu do světlé varianty"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -5221,10 +5105,8 @@ msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:186
-#, fuzzy
-#| msgid "GTK Application"
 msgid "GTK 4 Application"
-msgstr "Aplikace GTK"
+msgstr "Aplikace GTK 4"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "A Meson-based project using GTK 4"
@@ -5275,12 +5157,9 @@ msgid "Boxes"
 msgstr "Boxy"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
-#, fuzzy
-#| msgid "A simple GNOME 3 application to access remote or virtual systems"
 msgid "A GNOME application to access remote or virtual systems"
 msgstr ""
-"Jednoduchá aplikace pro GNOME 3 sloužící k přístupu do vzdálených nebo "
-"virtuálních systémů"
+"Aplikace pro GNOME sloužící k přístupu do vzdálených nebo virtuálních systémů"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
@@ -5291,8 +5170,6 @@ msgid "Calendar"
 msgstr "Kalendář"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:50
-#, fuzzy
-#| msgid "Calendar application for GNOME"
 msgid "A calendar application for GNOME"
 msgstr "Kalendářová aplikace pro GNOME"
 
@@ -5301,10 +5178,8 @@ msgid "Clocks"
 msgstr "Hodiny"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
-#, fuzzy
-#| msgid "A simple clock application for GNOME"
 msgid "A clock application for GNOME"
-msgstr "Jednoduchá časová aplikace pro GNOME"
+msgstr "Časová aplikace pro GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
 msgid "Gitg"
@@ -5319,10 +5194,8 @@ msgid "Maps"
 msgstr "Mapy"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
-#, fuzzy
-#| msgid "A simple GNOME 3 maps application"
 msgid "A GNOME maps application"
-msgstr "Jednoduchá mapová aplikace pro GNOME 3"
+msgstr "Mapová aplikace pro GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "Music"
@@ -5334,7 +5207,7 @@ msgstr "Aplikace pro přehrávání a správu hudby"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:95
 msgid "Nautilus"
-msgstr "Soubory"
+msgstr "Nautilus"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:96
 msgid "Default file manager for GNOME"
@@ -5361,10 +5234,8 @@ msgid "Sound Recorder"
 msgstr "Nahrávání zvuku"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:124
-#, fuzzy
-#| msgid "A simple and modern sound recorder"
 msgid "A modern sound recorder for GNOME"
-msgstr "Jednoduché a moderní nahrávání zvuku"
+msgstr "Moderní nahrávání zvuku pro GNOME"
 
 #: src/plugins/notification/ide-notification-addin.c:107
 msgid "Build successful"
@@ -5406,10 +5277,8 @@ msgid "_External Program…"
 msgstr "_Externí program…"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
-#, fuzzy
-#| msgid "Host System"
 msgid "Follow System"
-msgstr "Hostitelský systém"
+msgstr "Řidit se systémem"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
@@ -5541,10 +5410,8 @@ msgid "Open _Containing Folder"
 msgstr "Otevřít ro_dičovskou složku"
 
 #: src/plugins/project-tree/gtk/menus.ui:47
-#, fuzzy
-#| msgid "New _Terminal"
 msgid "With _Terminal…"
-msgstr "Nový _terminál"
+msgstr "V _terminálu…"
 
 #: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Move to Trash"
@@ -5567,10 +5434,8 @@ msgid "Reveal in Project Tree"
 msgstr "Ukázat ve stromu projektu"
 
 #: src/plugins/project-tree/gtk/menus.ui:102
-#, fuzzy
-#| msgid "Reveal in Project Tree"
 msgid "Reveal in Project _Tree"
-msgstr "Ukázat ve stromu projektu"
+msgstr "Ukázat ve s_tromu projektu"
 
 #: src/plugins/project-tree/tweaks.ui:14
 #, fuzzy
@@ -5587,10 +5452,8 @@ msgid "Sort directories before files in the same directory"
 msgstr ""
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
-#, fuzzy
-#| msgid "Version Control"
 msgid "No version control"
-msgstr "Systém správy verzí"
+msgstr "Žádná správa verzí"
 
 #: src/plugins/projectui/tweaks.ui:14
 #, fuzzy
