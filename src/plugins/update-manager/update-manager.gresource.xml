@@ -2,5 +2,6 @@
 <gresources>
   <gresource prefix="/plugins/update-manager">
     <file>update-manager.plugin</file>
+    <file preprocess="xml-stripblanks">gtk/menus.ui</file>
   </gresource>
 </gresources>

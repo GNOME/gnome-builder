@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="ide-primary-workspace-menu">
+    <section id="ide-primary-workspace-menu-app-section">
+      <item>
+        <attribute name="id">ide-primary-workspace-menu-update</attribute>
+        <attribute name="label" translatable="yes">Install Updates…</attribute>
+        <attribute name="description" translatable="yes">Install pending updates for Builder</attribute>
+        <attribute name="action">app.update-builder</attribute>
+        <attribute name="verb-icon">software-update-available-symbolic</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>
