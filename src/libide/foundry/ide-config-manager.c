@@ -42,7 +42,7 @@ struct _IdeConfigManager
   GArray           *configs;
   IdeConfig        *current;
   PeasExtensionSet *providers;
-  IdeSettings      *project_settings;
+  GSettings        *project_settings;
 
   GMenu            *menu;
   GMenu            *config_menu;
@@ -814,7 +814,7 @@ notify_providers_loaded (IdeConfigManager *self,
    * a match, make that our active configuration.
    *
    * We want to avoid applying the value if the value is unchanged
-   * according to ide_settings_get_user_value() so that we don't override
+   * according to g_settings_get_user_value() so that we don't override
    * any provider that set_current() during it's load, unless the user
    * has manually set this config in the past.
    *
@@ -822,7 +822,7 @@ notify_providers_loaded (IdeConfigManager *self,
    * new values to the settings when set_current() is called.
    */
 
-  user_value = ide_settings_get_user_value (self->project_settings, "config-id");
+  user_value = g_settings_get_user_value (self->project_settings, "config-id");
 
   if (user_value != NULL)
     {
@@ -886,6 +886,8 @@ ide_config_manager_init_async (GAsyncInitable      *initable,
   IdeConfigManager *self = (IdeConfigManager *)initable;
   g_autoptr(GPtrArray) providers = NULL;
   g_autoptr(IdeTask) task = NULL;
+  g_autofree char *settings_path = NULL;
+  g_autofree char *project_id = NULL;
   IdeContext *context;
 
   g_assert (G_IS_ASYNC_INITABLE (self));
@@ -903,7 +905,12 @@ ide_config_manager_init_async (GAsyncInitable      *initable,
   context = ide_object_get_context (IDE_OBJECT (self));
   g_assert (IDE_IS_CONTEXT (context));
 
-  self->project_settings = ide_context_ref_settings (context, "org.gnome.builder.project");
+  /* Use GSettings directly because we don't want to inherit a value for
+   * "config-id" from the app-wide settings here.
+   */
+  project_id = ide_context_dup_project_id (context);
+  settings_path = ide_settings_resolve_schema_path ("org.gnome.builder.project", project_id, NULL);
+  self->project_settings = g_settings_new_with_path ("org.gnome.builder.project", settings_path);
 
   self->providers = peas_extension_set_new (peas_engine_get_default (),
                                             IDE_TYPE_CONFIG_PROVIDER,
@@ -1010,7 +1017,7 @@ ide_config_manager_set_current (IdeConfigManager *self,
           if (self->propagate_to_settings && self->project_settings != NULL)
             {
               g_autofree gchar *new_id = g_strdup (ide_config_get_id (current));
-              ide_settings_set_string (self->project_settings, "config-id", new_id);
+              g_settings_set_string (self->project_settings, "config-id", new_id);
             }
 
           id = ide_config_get_id (self->current);
