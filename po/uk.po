@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-04 16:19+0000\n"
-"PO-Revision-Date: 2022-09-04 20:21+0300\n"
+"POT-Creation-Date: 2022-09-06 04:50+0000\n"
+"PO-Revision-Date: 2022-09-06 17:03+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
 #: src/libide/gui/ide-application-actions.c:114 src/main.c:242
-#: src/plugins/editorui/tweaks.ui:381
+#: src/plugins/editorui/tweaks.ui:481
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Будівник"
@@ -330,7 +330,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Якщо увімкнено, редактор показуватиме відносні номери рядків."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:394
+#: src/plugins/editorui/tweaks.ui:494
 msgid "Smart Backspace"
 msgstr "Розумне вилучення"
 
@@ -343,7 +343,7 @@ msgstr ""
 "за визначеним розміром відступу."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:506
 msgid "Smart Home/End"
 msgstr "Кмітливі клавіші «Home» та «End»"
 
@@ -368,6 +368,7 @@ msgid "When the overview map should be displayed."
 msgstr "Умови показу мапи огляду."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: src/plugins/editorui/tweaks.ui:254
 msgid "Draw Spaces"
 msgstr "Малювати пробіли"
 
@@ -657,7 +658,7 @@ msgstr ""
 "звичайні файли."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:263
+#: src/plugins/editorui/tweaks.ui:363
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "Перевірка правопису"
@@ -698,7 +699,7 @@ msgstr "Новий робочий простір редактора"
 msgid "D-Bus Inspector"
 msgstr "Інспектор D-Bus"
 
-#: src/libide/code/ide-buffer.c:3673
+#: src/libide/code/ide-buffer.c:3674
 msgid "The current language lacks a symbol resolver."
 msgstr "Цій мові бракує розпізнавання символів."
 
@@ -771,7 +772,7 @@ msgstr "Параметри"
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:464
 msgid "Keyboard Shortcuts"
 msgstr "Клавіатурні скорочення"
 
@@ -817,8 +818,8 @@ msgstr "Сторінки"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
 #: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
-#: src/libide/sourceview/gtk/menus.ui:124
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:139
+#: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
@@ -861,12 +862,10 @@ msgid "The file has been changed by another program."
 msgstr "Сторонньою програмою було внесено зміни до файла."
 
 #: src/libide/editor/ide-editor-info-bar.c:100
-#| msgid "Save As…"
 msgid "Save _As…"
 msgstr "Зберегти _як…"
 
 #: src/libide/editor/ide-editor-info-bar.c:102
-#| msgid "Save & Restore"
 msgid "Buffer Restored"
 msgstr "Буфер відновлено"
 
@@ -875,7 +874,6 @@ msgid "Unsaved buffer has been restored."
 msgstr "Відновлено незбережені дані з буфера."
 
 #: src/libide/editor/ide-editor-info-bar.c:109
-#| msgid "Save As…"
 msgid "_Save…"
 msgstr "З_берегти…"
 
@@ -885,7 +883,6 @@ msgid "_Discard…"
 msgstr "_Відкинути…"
 
 #: src/libide/editor/ide-editor-info-bar.c:113
-#| msgid "Don't Change Governor"
 msgid "Draft Changes Restored"
 msgstr "Відновлено зміни з чернетки"
 
@@ -894,7 +891,6 @@ msgid "Unsaved changes to the buffer have been restored."
 msgstr "Відновлено незбережені зміни, які було внесено до буфера."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
-#| msgid "Show Open Files"
 msgid "Could Not Open File"
 msgstr "Не вдалося відкрити файл"
 
@@ -911,12 +907,10 @@ msgid "Open As _Administrator"
 msgstr "Відкрити від імені _адміністратора"
 
 #: src/libide/editor/ide-editor-info-bar.ui:63
-#| msgid "Documents"
 msgid "Document Restored"
 msgstr "Відновлено документ"
 
 #: src/libide/editor/ide-editor-info-bar.ui:73
-#| msgid "The client has been closed"
 msgid "Unsaved document has been restored."
 msgstr "Відновлено незбережений документ."
 
@@ -1752,7 +1746,7 @@ msgstr "Ви_бір"
 msgid "Select _All"
 msgstr "Вибрати _все"
 
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:125
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
 msgstr "Форматування"
 
@@ -1790,32 +1784,48 @@ msgstr ""
 "Перетворити перші літери слів позначеного фрагмента до верхнього регістру"
 
 #: src/libide/sourceview/gtk/menus.ui:112
+#| msgid "Select _None"
+msgid "Select _Line"
+msgstr "Позначити _рядок"
+
+#: src/libide/sourceview/gtk/menus.ui:117
+#| msgctxt "shortcut window"
+#| msgid "Delete line"
+msgid "_Delete Line"
+msgstr "Ви_лучити рядок"
+
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "_Join Lines"
 msgstr "_Об'єднати рядки"
 
-#: src/libide/sourceview/gtk/menus.ui:117
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "S_ort Lines"
 msgstr "В_порядкувати рядки"
 
-#: src/libide/sourceview/gtk/menus.ui:131
+#: src/libide/sourceview/gtk/menus.ui:133
+#| msgid "Duplicate"
+msgid "D_uplicate Line"
+msgstr "Д_ублювати рядок"
+
+#: src/libide/sourceview/gtk/menus.ui:146
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Навігація кодом"
 
-#: src/libide/sourceview/gtk/menus.ui:134
+#: src/libide/sourceview/gtk/menus.ui:149
 msgid "_Go to Definition"
 msgstr "_Перейти до означення"
 
-#: src/libide/sourceview/gtk/menus.ui:135
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "Jump to file and location where item is defined"
 msgstr "Перейти до файла і місця, де визначено запис"
 
-#: src/libide/sourceview/gtk/menus.ui:141
+#: src/libide/sourceview/gtk/menus.ui:156
 msgid "_Find References"
 msgstr "З_найти посилання"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1002
+#: src/libide/sourceview/ide-source-view.c:1134
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -3789,11 +3799,13 @@ msgstr "Текст"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
+#: src/plugins/editorui/tweaks.ui:257
 msgid "Spaces"
 msgstr "Пробіли"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
 msgstr "Табуляції"
 
@@ -3974,7 +3986,7 @@ msgid "The desired maximum line length"
 msgstr "Бажана максимальна довжина рядка"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:256
+#: src/plugins/editorui/tweaks.ui:356
 msgid "Behavior"
 msgstr "Поведінка"
 
@@ -4165,77 +4177,129 @@ msgstr ""
 "Використовувати дані для підсвічування просторів назв, функцій та змінних у "
 "початковому коді"
 
-#: src/plugins/editorui/tweaks.ui:260
+#: src/plugins/editorui/tweaks.ui:258
+msgid "Draw a mark representing normal spaces"
+msgstr "Малювати позначку для звичайних пробілів"
+
+#: src/plugins/editorui/tweaks.ui:271
+msgid "Draw a mark representing tabs"
+msgstr "Малювати позначку для табуляцій"
+
+#: src/plugins/editorui/tweaks.ui:283
+msgid "Newlines"
+msgstr "Нові рядки"
+
+#: src/plugins/editorui/tweaks.ui:284
+msgid "Draw a mark at the end of lines"
+msgstr "Малювати позначку для кінця рядків"
+
+#: src/plugins/editorui/tweaks.ui:296
+msgid "Non-breaking spaces"
+msgstr "Нерозривний пропуск"
+
+#: src/plugins/editorui/tweaks.ui:297
+#| msgid "Navigate to non-space characters"
+msgid "Draw a mark at non-breaking space characters"
+msgstr "Малювати позначки для символів нерозривних пробілів"
+
+#: src/plugins/editorui/tweaks.ui:313
+#| msgid "Leading Only"
+msgid "Leading"
+msgstr "Початкові"
+
+#: src/plugins/editorui/tweaks.ui:314
+msgid "Draw marks for leading spaces only"
+msgstr "Малювати позначки лише для початкових пробілів"
+
+#: src/plugins/editorui/tweaks.ui:326
+#| msgid "Sublime Text"
+msgid "Inside Text"
+msgstr "У тексті"
+
+#: src/plugins/editorui/tweaks.ui:327
+msgid "Draw marks inside a line of text only"
+msgstr "Малювати позначки лише всередині рядка тексту"
+
+#: src/plugins/editorui/tweaks.ui:339
+#| msgid "Trailing Only"
+msgid "Trailing"
+msgstr "Кінцеві"
+
+#: src/plugins/editorui/tweaks.ui:340
+msgid "Draw marks for trailing spaces only"
+msgstr "Малювати позначки лише для кінцевих пробілів"
+
+#: src/plugins/editorui/tweaks.ui:360
 msgid "Spelling"
 msgstr "Правопис"
 
-#: src/plugins/editorui/tweaks.ui:264
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Підкреслювати потенційні помилки правопису при введенні"
 
-#: src/plugins/editorui/tweaks.ui:277
+#: src/plugins/editorui/tweaks.ui:377
 msgid "Selections"
 msgstr "Вибір"
 
-#: src/plugins/editorui/tweaks.ui:280
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Minimum Characters to Highlight"
 msgstr "Мінімальна кількість символів для підсвічування"
 
-#: src/plugins/editorui/tweaks.ui:281
+#: src/plugins/editorui/tweaks.ui:381
 msgid "The minimum selection length before highlighting matches"
 msgstr "Мінімальна довжина позначення, перш ніж буде підсвічено відповідники"
 
-#: src/plugins/editorui/tweaks.ui:294
+#: src/plugins/editorui/tweaks.ui:394
 msgid "Snippets"
 msgstr "Фрагменти"
 
-#: src/plugins/editorui/tweaks.ui:297
+#: src/plugins/editorui/tweaks.ui:397
 msgid "Expand Snippets"
 msgstr "Розгортати фрагменти"
 
-#: src/plugins/editorui/tweaks.ui:298
+#: src/plugins/editorui/tweaks.ui:398
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
 "Використовувати клавішу «Tab» для розгортання налаштованих фрагментів у "
 "редакторі"
 
-#: src/plugins/editorui/tweaks.ui:313
+#: src/plugins/editorui/tweaks.ui:413
 msgid "Code Completion"
 msgstr "Доповнення коду"
 
-#: src/plugins/editorui/tweaks.ui:317
+#: src/plugins/editorui/tweaks.ui:417
 msgid "Completion Proposals"
 msgstr "Пропозиції доповнення"
 
-#: src/plugins/editorui/tweaks.ui:320
+#: src/plugins/editorui/tweaks.ui:420
 msgid "Suggest Code Completions"
 msgstr "Пропонувати доповнення коду"
 
-#: src/plugins/editorui/tweaks.ui:321
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Automatically suggest code completions while typing"
 msgstr "Автоматично пропонувати варіанти доповнення коду під час введення"
 
-#: src/plugins/editorui/tweaks.ui:332
+#: src/plugins/editorui/tweaks.ui:432
 msgid "Select First Completion Proposal"
 msgstr "Вибирати першу пропозицію доповнення"
 
-#: src/plugins/editorui/tweaks.ui:333
+#: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Автоматично вибирати першу пропозицію доповнення при показу"
 
-#: src/plugins/editorui/tweaks.ui:348
+#: src/plugins/editorui/tweaks.ui:448
 msgid "Maximum Completion Proposals"
 msgstr "Максимальна кількість пропозицій доповнення"
 
-#: src/plugins/editorui/tweaks.ui:349
+#: src/plugins/editorui/tweaks.ui:449
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Максимальна кількість рядків доповнень, які слід показувати одночасно"
 
-#: src/plugins/editorui/tweaks.ui:368 src/plugins/editorui/tweaks.ui:371
+#: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
 msgid "Keyboard Theme"
 msgstr "Тема клавіатури"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:472
 msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
@@ -4243,75 +4307,75 @@ msgstr ""
 "Теми скорочень забезпечують роботу за допомогою клавіатури, яка є подібною "
 "до інших середовищ розробки та редакторів"
 
-#: src/plugins/editorui/tweaks.ui:391
+#: src/plugins/editorui/tweaks.ui:491
 msgid "Movements"
 msgstr "Рухи"
 
-#: src/plugins/editorui/tweaks.ui:395
+#: src/plugins/editorui/tweaks.ui:495
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Клавіша «Backspace» вилучить зайвий пропуск, щоб зберегти вирівнювання з "
 "відступом"
 
-#: src/plugins/editorui/tweaks.ui:407
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Navigate to non-space characters"
 msgstr "Перейти до непробільних символів"
 
-#: src/plugins/editorui/tweaks.ui:416
+#: src/plugins/editorui/tweaks.ui:516
 msgid "Before line boundaries"
 msgstr "До меж рядка"
 
-#: src/plugins/editorui/tweaks.ui:422
+#: src/plugins/editorui/tweaks.ui:522
 msgid "After line boundaries"
 msgstr "Після меж рядка"
 
-#: src/plugins/editorui/tweaks.ui:428
+#: src/plugins/editorui/tweaks.ui:528
 msgid "Instead of line boundaries"
 msgstr "Замість меж рядка"
 
-#: src/plugins/editorui/tweaks.ui:434 src/plugins/valgrind/gtk/menus.ui:44
+#: src/plugins/editorui/tweaks.ui:534 src/plugins/valgrind/gtk/menus.ui:44
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: src/plugins/editorui/tweaks.ui:446
+#: src/plugins/editorui/tweaks.ui:546
 msgid "Session Management"
 msgstr "Керування сеансами"
 
-#: src/plugins/editorui/tweaks.ui:450
+#: src/plugins/editorui/tweaks.ui:550
 msgid "Save & Restore"
 msgstr "Збереження і відновлення"
 
-#: src/plugins/editorui/tweaks.ui:453
+#: src/plugins/editorui/tweaks.ui:553
 msgid "Auto-Save"
 msgstr "Автозбереження"
 
-#: src/plugins/editorui/tweaks.ui:454
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Regularly save the document as you type"
 msgstr "Регулярно зберігати документ при введенні"
 
-#: src/plugins/editorui/tweaks.ui:465
+#: src/plugins/editorui/tweaks.ui:565
 msgid "Auto-Save Delay"
 msgstr "Затримка автозбереження"
 
-#: src/plugins/editorui/tweaks.ui:466
+#: src/plugins/editorui/tweaks.ui:566
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr ""
 "Кількість секунд після внесення змін до автоматичного збереження документа"
 
-#: src/plugins/editorui/tweaks.ui:481
+#: src/plugins/editorui/tweaks.ui:581
 msgid "Format on Save"
 msgstr "Форматувати при збереженні"
 
-#: src/plugins/editorui/tweaks.ui:482
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Reformat sources when saving to disk"
 msgstr "Переформатовувати початковий код при збереженні на диск"
 
-#: src/plugins/editorui/tweaks.ui:497
+#: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
 msgstr "Відновлювати положення вказівника"
 
-#: src/plugins/editorui/tweaks.ui:498
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Jump to the last position when re-opening a file"
 msgstr "Перейти до останньої позиції при повторному відкритті файла"
 
@@ -5340,6 +5404,19 @@ msgstr "Команда cargo"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr "Типова команда cargo, яку слід запускати з rust-analyzer"
 
+#: src/plugins/rust-analyzer/tweaks.ui:45
+#| msgid "Features:"
+msgid "Features"
+msgstr "Можливості"
+
+#: src/plugins/rust-analyzer/tweaks.ui:48
+msgid "Proc Macros"
+msgstr "Процедурні макроси"
+
+#: src/plugins/rust-analyzer/tweaks.ui:49
+msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
+msgstr "Вмикає експериментальну можливість процедурних макросів rust-analyzer"
+
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
 msgstr "Оновити"
@@ -6312,17 +6389,8 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "New line and carriage return"
 #~ msgstr "Новий рядок і переведення каретки"
 
-#~ msgid "Non-breaking spaces"
-#~ msgstr "Нерозривний пропуск"
-
 #~ msgid "Spaces inside of text"
 #~ msgstr "Пропуск всередині тексту"
-
-#~ msgid "Trailing Only"
-#~ msgstr "Тільки початкові"
-
-#~ msgid "Leading Only"
-#~ msgstr "Тільки кінцеві"
 
 #~ msgid "Autosave"
 #~ msgstr "Автозбереження"
@@ -7054,10 +7122,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgctxt "shortcut window"
 #~ msgid "Reindent line"
 #~ msgstr "Повторний відступ рядка"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Delete line"
-#~ msgstr "Вилучити рядок"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Rename symbol"
@@ -8218,9 +8282,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "stylelint stylesheet lint code execute execution"
 #~ msgstr "stylelint таблиця стилів lint перевірка код виконання виконати"
-
-#~ msgid "Sublime Text"
-#~ msgstr "Sublime Text"
 
 #~ msgid "Emulates the Sublime Text editor"
 #~ msgstr "Імітує редактор Sublime Text"
