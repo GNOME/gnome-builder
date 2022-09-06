@@ -390,13 +390,18 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
       if (build_args != NULL)
         ide_run_context_append_args (run_context, build_args);
     }
-  else
-    {
-      /* Somehow got here w/o a manifest, give network access to be nice so
-       * things like meson subprojects work and git submodules work.
-       */
-      ide_run_context_append_argv (run_context, "--share=network");
-    }
+
+  /* Always include `--share=network` because incremental building tends
+   * to be different than one-shot building for a Flatpak build as developers
+   * are likely to not have all the deps fetched via submodules they just
+   * changed or even additional sources within the app's manifest module.
+   *
+   * See https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/1775 for
+   * more information. Having flatpak-builder as a library could allow us
+   * to not require these sorts of workarounds.
+   */
+  if (!g_strv_contains (ide_run_context_get_argv (run_context), "--share=network"))
+    ide_run_context_append_argv (run_context, "--share=network");
 
   /* Prepare an alternate PATH */
   if (!(path = g_environ_getenv ((char **)env, "PATH")))
