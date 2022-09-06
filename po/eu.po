@@ -547,11 +547,11 @@ msgstr "Honen bidez, sigkill ez den beste zenbait agindu bidali daitezke helburu
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
-msgstr "Proba-unitatearen kokapena"
+msgstr "Unitate-probaren kokapena"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:45
 msgid "What environment to use when running unit tests"
-msgstr "Zein ingurune erabiliko den proba-unitateak exekutatzean"
+msgstr "Zein ingurune erabiliko den unitate-probak exekutatzean"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
 #: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
@@ -1108,7 +1108,7 @@ msgstr "Izenik gabeko komandoa"
 
 #: src/libide/foundry/ide-run-command.c:237
 msgid "Unit Test"
-msgstr "Proba-unitatea"
+msgstr "Unitate-proba"
 
 #: src/libide/foundry/ide-run-manager.c:505
 msgid "Cannot run target, another target is running"
@@ -2411,7 +2411,7 @@ msgstr "Exekutatu proiektua"
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
-msgstr "Proba-unitateak"
+msgstr "Unitate-probak"
 
 #: src/plugins/buildui/gtk/menus.ui:157
 msgid "Follow System Style"
@@ -2572,7 +2572,7 @@ msgstr "<tt>G_MESSAGES_DEBUG=all</tt> ingurumen-aldagaiarekin exekutatzen du, ar
 
 #: src/plugins/buildui/tweaks.ui:151
 msgid "Run unit tests from within the build environment."
-msgstr "Exekutatu proba-unitateak eraikuntza-ingurunean"
+msgstr "Exekutatu unitate-probak eraikuntza-ingurunean"
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
@@ -5782,7 +5782,7 @@ msgstr "Historian biltegiratuko den gehieneko lerro kopurua atzeranzko korritzea
 
 #: src/plugins/testui/gbp-testui-output-panel.c:147
 msgid "Unit Test Output"
-msgstr "Proba-unitatearen irteera"
+msgstr "Unitate-probaren irteera"
 
 #: src/plugins/testui/gbp-testui-output-panel.ui:39
 msgid "Clear test output"
@@ -5800,24 +5800,24 @@ msgstr "Gorde probaren irteera"
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
 #, c-format
 msgid "Running all unit tests at %s"
-msgstr "%s kokalekuko proba-unitate guztiak exekutatzen"
+msgstr "%s kokalekuko unitate-proba guztiak exekutatzen"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
 #, c-format
 msgid "Unit tests completed in %lf seconds"
-msgstr "Proba-unitateak %lf segundotan osatu dira"
+msgstr "Unitate-probak %lf segundotan osatu dira"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:121
 msgid "Unit tests completed"
-msgstr "Proba-unitateak osatu dira"
+msgstr "Unitate-probak osatu dira"
 
 #: src/plugins/testui/gtk/menus.ui:8
 msgid "Run all Unit Tests"
-msgstr "Exekutatu proba-unitate guztiak"
+msgstr "Exekutatu unitate-proba guztiak"
 
 #: src/plugins/testui/gtk/menus.ui:11
 msgid "Request that all unit tests are run"
-msgstr "Eskatu proba-unitate guztiak exekutatu daitezen"
+msgstr "Eskatu unitate-proba guztiak exekutatu daitezen"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:139
