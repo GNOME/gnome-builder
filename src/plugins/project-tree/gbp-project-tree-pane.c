@@ -27,10 +27,18 @@
 
 G_DEFINE_FINAL_TYPE (GbpProjectTreePane, gbp_project_tree_pane, IDE_TYPE_PANE)
 
+static gboolean
+gbp_project_tree_pane_grab_focus (GtkWidget *widget)
+{
+  return gtk_widget_grab_focus (GTK_WIDGET (GBP_PROJECT_TREE_PANE (widget)->tree));
+}
+
 static void
 gbp_project_tree_pane_class_init (GbpProjectTreePaneClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  widget_class->grab_focus = gbp_project_tree_pane_grab_focus;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/plugins/project-tree/gbp-project-tree-pane.ui");
   gtk_widget_class_bind_template_child (widget_class, GbpProjectTreePane, tree);
