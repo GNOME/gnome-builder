@@ -290,10 +290,10 @@ _ide_editor_page_settings_init (IdeEditorPage *self)
                    completion, "select-on-show",
                    G_SETTINGS_BIND_GET);
 
-#if 0
   ide_binding_group_bind (self->view_file_settings,
                           "insert-matching-brace", self->view, "insert-matching-brace",
                           G_BINDING_SYNC_CREATE);
+#if 0
   ide_binding_group_bind (self->view_file_settings,
                           "overwrite-braces", self->view, "overwrite-braces",
                           G_BINDING_SYNC_CREATE);
