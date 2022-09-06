@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder gnome-3-28\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-08-30 00:29+0000\n"
-"PO-Revision-Date: 2022-08-31 16:13+0700\n"
+"POT-Creation-Date: 2022-09-05 22:17+0000\n"
+"PO-Revision-Date: 2022-09-06 10:32+0700\n"
 "Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -684,7 +684,7 @@ msgstr "Area Kerja Penyunting Baru"
 msgid "D-Bus Inspector"
 msgstr "Pemeriksa D-Bus"
 
-#: src/libide/code/ide-buffer.c:3673
+#: src/libide/code/ide-buffer.c:3674
 msgid "The current language lacks a symbol resolver."
 msgstr "Bahasa saat ini kekurangan pengurai simbol."
 
@@ -803,8 +803,8 @@ msgstr "Halaman"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
 #: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
-#: src/libide/sourceview/gtk/menus.ui:124
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:139
+#: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
@@ -834,25 +834,90 @@ msgstr "Pencetakan"
 msgid "Failed to open file: %s"
 msgstr "Gagal membuka berkas: %s"
 
+#: src/libide/editor/ide-editor-info-bar.c:85
+msgid "_Discard Changes and Reload"
+msgstr "_Buang Perubahan dan Muat Ulang"
+
+#: src/libide/editor/ide-editor-info-bar.c:88
+msgid "File Has Changed on Disk"
+msgstr "Berkas Telah Berubah pada Diska"
+
+#: src/libide/editor/ide-editor-info-bar.c:89
+msgid "The file has been changed by another program."
+msgstr "Berkas telah diubah oleh program lain."
+
+#: src/libide/editor/ide-editor-info-bar.c:100
+msgid "Save _As…"
+msgstr "Simpan Seb_agai…"
+
+#: src/libide/editor/ide-editor-info-bar.c:102
+msgid "Buffer Restored"
+msgstr "Penyangga Dipulihkan"
+
+#: src/libide/editor/ide-editor-info-bar.c:103
+msgid "Unsaved buffer has been restored."
+msgstr "Penyangga yang belum disimpan telah dipulihkan."
+
+#: src/libide/editor/ide-editor-info-bar.c:109
+msgid "_Save…"
+msgstr "_Simpan…"
+
+#: src/libide/editor/ide-editor-info-bar.c:111
+#: src/libide/editor/ide-editor-info-bar.ui:81
+msgid "_Discard…"
+msgstr "_Buang…"
+
+#: src/libide/editor/ide-editor-info-bar.c:113
+msgid "Draft Changes Restored"
+msgstr "Perubahan Draf Dipulihkan"
+
+#: src/libide/editor/ide-editor-info-bar.c:114
+msgid "Unsaved changes to the buffer have been restored."
+msgstr "Perubahan yang belum disimpan pada penyangga telah dipulihkan."
+
+#: src/libide/editor/ide-editor-info-bar.ui:19
+msgid "Could Not Open File"
+msgstr "Tak Bisa Membuka Berkas"
+
+#: src/libide/editor/ide-editor-info-bar.ui:29
+msgid "You do not have permission to open the file."
+msgstr "Anda tidak memiliki izin untuk membuka berkas."
+
+#: src/libide/editor/ide-editor-info-bar.ui:37
+msgid "_Retry"
+msgstr "_Ulangi"
+
+#: src/libide/editor/ide-editor-info-bar.ui:44
+msgid "Open As _Administrator"
+msgstr "Buka sebagai _Administrator"
+
+#: src/libide/editor/ide-editor-info-bar.ui:63
+msgid "Document Restored"
+msgstr "Dokumen Dipulihkan"
+
+#: src/libide/editor/ide-editor-info-bar.ui:73
+msgid "Unsaved document has been restored."
+msgstr "Dokumen yang belum disimpan telah dipulihkan."
+
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:407
+#: src/libide/editor/ide-editor-page.c:408
 #, c-format
 msgid "Print failed: %s"
 msgstr "Gagal mencetak: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:483
+#: src/libide/editor/ide-editor-page.c:484
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Gagal memformat pilihan: %s"
 
-#: src/libide/editor/ide-editor-page.c:871
+#: src/libide/editor/ide-editor-page.c:900
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Simpan Berkas"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -861,7 +926,7 @@ msgstr "Simpan Berkas"
 msgid "Save"
 msgstr "Simpan"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1443,6 +1508,10 @@ msgstr "Terminal Baru"
 msgid "Ctrl+Shift+T"
 msgstr "Ctrl+Shift+T"
 
+#: src/libide/gui/ide-header-bar.ui:34
+msgid "Open application menu (F10)"
+msgstr "Buka menu aplikasi (F10)"
+
 #: src/libide/gui/ide-marked-view.c:414
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Tidak dapat memuat HTML. Kehilangan dukungan WebKit."
@@ -1479,6 +1548,11 @@ msgstr "Berhenti jalankan"
 #: src/libide/gui/ide-run-button.c:151
 msgid "Run project"
 msgstr "Jalankan proyek"
+
+#: src/libide/gui/ide-shortcut-window.c:239
+#: src/libide/gui/ide-shortcut-window.c:265
+msgid "Other"
+msgstr "Lainnya"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -1525,6 +1599,7 @@ msgid "Devices & Simulators"
 msgstr "Perangkat & Simulator"
 
 #: src/libide/plugins/ide-plugin.c:344
+#: src/plugins/codeui/gbp-codeui-hover-provider.c:82
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
@@ -1647,7 +1722,7 @@ msgstr "_Pilihan"
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:125
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
 msgstr "Pemformatan"
 
@@ -1684,32 +1759,44 @@ msgid "Convert the text selection to title case"
 msgstr "Konversi pilihan teks menjadi kapitalisasi huruf judul"
 
 #: src/libide/sourceview/gtk/menus.ui:112
+msgid "Select _Line"
+msgstr "_Pilih Baris"
+
+#: src/libide/sourceview/gtk/menus.ui:117
+msgid "_Delete Line"
+msgstr "_Hapus Baris"
+
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "_Join Lines"
 msgstr "_Gabung Baris"
 
-#: src/libide/sourceview/gtk/menus.ui:117
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "S_ort Lines"
 msgstr "_Urutkan Baris"
 
-#: src/libide/sourceview/gtk/menus.ui:131
+#: src/libide/sourceview/gtk/menus.ui:133
+msgid "D_uplicate Line"
+msgstr "D_uplikat Baris"
+
+#: src/libide/sourceview/gtk/menus.ui:146
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Navigasi Kode"
 
-#: src/libide/sourceview/gtk/menus.ui:134
+#: src/libide/sourceview/gtk/menus.ui:149
 msgid "_Go to Definition"
 msgstr "_Ke Definisi"
 
-#: src/libide/sourceview/gtk/menus.ui:135
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "Jump to file and location where item is defined"
 msgstr "Loncat ke berkas dan lokasi di mana butir ditentukanitem"
 
-#: src/libide/sourceview/gtk/menus.ui:141
+#: src/libide/sourceview/gtk/menus.ui:156
 msgid "_Find References"
 msgstr "Temukan Re_ferensi"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1002
+#: src/libide/sourceview/ide-source-view.c:1134
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -3679,11 +3766,11 @@ msgstr "Spasi"
 msgid "Tabs"
 msgstr "Tab"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:516
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
 msgid "Go"
 msgstr "Pergi"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
 msgid "Go to Line"
 msgstr "Ke Baris"
 
@@ -5996,7 +6083,7 @@ msgstr "Status"
 msgid "_Branches"
 msgstr "Ca_bang"
 
-#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:88
+#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:93
 msgid "_Tags"
 msgstr "_Tanda"
 
@@ -6648,9 +6735,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgid "Allow Downloads when Metered"
 #~ msgstr "Izinkan Unduhan ketika memakai kuota"
 
-#~ msgid "Show Open Files"
-#~ msgstr "Tampilkan Berkas Terbuka"
-
 #~ msgid "Display the open files list in the project sidebar."
 #~ msgstr "Tampilkan daftar berkas yang terbuka di bilah samping proyek."
 
@@ -7160,10 +7244,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 #~ msgstr "Indentasi ulang baris"
 
 #~ msgctxt "shortcut window"
-#~ msgid "Delete line"
-#~ msgstr "Hapus baris"
-
-#~ msgctxt "shortcut window"
 #~ msgid "Rename symbol"
 #~ msgstr "Ubah nama simbol"
 
@@ -7445,9 +7525,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Connected to “%s”"
 #~ msgstr "Tersambung ke \"%s\""
-
-#~ msgid "Other"
-#~ msgstr "Lainnya"
 
 #~ msgid "Object Path"
 #~ msgstr "Path Objek"
@@ -8507,9 +8584,6 @@ msgstr "Berkas mesti disimpan secara lokal untuk mengurai."
 
 #~ msgid "Context already unloading, cannot restore."
 #~ msgstr "Konteks sudah terbongkar, tidak bisa mengembalikan."
-
-#~ msgid "Context has already been restored."
-#~ msgstr "Konteks telah pernah dipulihkan."
 
 #~ msgid "No implementations of extension point “%s”."
 #~ msgstr "Tidak ada implementasi titik ekstensi \"%s\"."
