@@ -370,6 +370,12 @@ gbp_flatpak_runtime_handle_build_context_cb (IdeRunContext       *run_context,
   /* We can pass the CWD directory down just fine */
   ide_run_context_set_cwd (run_context, cwd);
 
+  /* We want some environment available to the `flatpak build` environment
+   * so that we can have working termcolor support.
+   */
+  ide_run_context_setenv (run_context, "TERM", "xterm-256color");
+  ide_run_context_setenv (run_context, "COLORTERM", "truecolor");
+
   /* Now setup our basic arguments for the application */
   ide_run_context_append_argv (run_context, "flatpak");
   ide_run_context_append_argv (run_context, "build");
