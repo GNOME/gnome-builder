@@ -129,7 +129,7 @@
       <item>
         <attribute name="label" translatable="yes">Select Run Command…</attribute>
         <attribute name="action">context.workbench.configure-page</attribute>
-        <attribute name="target" type="s">'application'</attribute>
+        <attribute name="target" type="s">'application_page'</attribute>
       </item>
     </section>
     <section id="run-menu-observation-section">
