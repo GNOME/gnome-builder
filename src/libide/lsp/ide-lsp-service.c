@@ -210,11 +210,16 @@ ide_lsp_service_real_create_launcher (IdeLspService    *self,
   /* First try in the build environment */
   if (ide_pipeline_contains_program_in_path (pipeline, priv->program, NULL))
     {
-      if ((launcher = ide_pipeline_create_launcher (pipeline, NULL)))
+      g_autoptr(IdeRunContext) run_context = ide_run_context_new ();
+      IdeRuntime *runtime = ide_pipeline_get_runtime (pipeline);
+
+      ide_runtime_prepare_to_build (runtime, pipeline, run_context);
+      ide_run_context_append_argv (run_context, priv->program);
+      ide_run_context_set_cwd (run_context, srcdir);
+
+      if ((launcher = ide_run_context_end (run_context, NULL)))
         {
           ide_subprocess_launcher_set_flags (launcher, flags);
-          ide_subprocess_launcher_push_argv (launcher, priv->program);
-          ide_subprocess_launcher_set_cwd (launcher, srcdir);
           IDE_RETURN (g_steal_pointer (&launcher));
         }
     }
