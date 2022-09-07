@@ -1,17 +1,17 @@
 # Portuguese translation for gnome-builder.
-# Copyright (C) 2015 gnome-builder's COPYRIGHT HOLDER
+# Copyright (C) 2022 gnome-builder's COPYRIGHT HOLDER
 # This file is distributed under the same license as the gnome-builder package.
 # Tiago Santos <tiagofsantos81@sapo.pt>, 2015, 2016.
 # Pedro Albuquerque <palbuquerque73@gmail.com>, 2015.
 # Bruno Ramalhete <bram.512@gmail.com>, 2016.
-# Hugo Carvalho <hugokarvalho@hotmail.com>, 2021, 2022.
+# Hugo Carvalho <hugokarvalho@hotmail.com>, 2020, 2021, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-06 04:50+0000\n"
-"PO-Revision-Date: 2022-09-06 23:22+0100\n"
+"POT-Creation-Date: 2022-09-06 23:26+0000\n"
+"PO-Revision-Date: 2022-09-07 14:43+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-DamnedLies-Scope: partial\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -571,7 +571,7 @@ msgid ""
 "you know what you're doing with your project."
 msgstr ""
 "Execute a fase de instalação de pipelines antes de executar o projeto. Use "
-"isso apenas se você souber o que está fazendo com seu projeto."
+"isto apenas se souber o que está a fazer com seu projeto."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:19
 msgid "Default Run Command"
@@ -583,7 +583,7 @@ msgstr "O id do comando de execução predefinido"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:34
 msgid "The signal to send the app to stop"
-msgstr "O sinal para enviar o aplicativo para parar"
+msgstr "O sinal para enviar a aplicação para parar"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:35
 msgid ""
@@ -591,9 +591,9 @@ msgid ""
 "application. That might be useful when you want to gracefully shutdown a "
 "server process."
 msgstr ""
-"Isso permite enviar algo diferente de sigkill para interromper o aplicativo "
-"de destino. Isso pode ser útil quando você deseja encerrar normalmente um "
-"processo do servidor."
+"Isto permite enviar algo diferente de sigkill para interromper a aplicação "
+"de destino. Isto pode ser útil quando quer encerrar normalmente um processo "
+"do servidor."
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:44
 msgid "Unit Test Locality"
@@ -844,30 +844,26 @@ msgstr "_Descartar alterações e recarregar"
 
 #: src/libide/editor/ide-editor-info-bar.c:88
 msgid "File Has Changed on Disk"
-msgstr ""
+msgstr "Ficheiro foi alterado no disco"
 
 #: src/libide/editor/ide-editor-info-bar.c:89
 msgid "The file has been changed by another program."
-msgstr ""
+msgstr "O ficheiro foi alterado por outro programa."
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid "Save _As…"
 msgstr "Guardar _como…"
 
 #: src/libide/editor/ide-editor-info-bar.c:102
-#, fuzzy
 #| msgid "Save palette"
 msgid "Buffer Restored"
-msgstr "Plug-in embelezador: o buffer não pode ser escrito"
+msgstr "Buffer restaurado"
 
 #: src/libide/editor/ide-editor-info-bar.c:103
-#, fuzzy
-#| msgid "Context has already been restored."
 msgid "Unsaved buffer has been restored."
-msgstr "O contexto já foi restaurado."
+msgstr "O buffer não guardado foi restaurado."
 
 #: src/libide/editor/ide-editor-info-bar.c:109
-#| msgid "Save As…"
 msgid "_Save…"
 msgstr "_Guardar…"
 
@@ -877,13 +873,12 @@ msgid "_Discard…"
 msgstr "_Descartar…"
 
 #: src/libide/editor/ide-editor-info-bar.c:113
-#, fuzzy
 msgid "Draft Changes Restored"
-msgstr "Falha ao guardar rascunho: %s"
+msgstr "Alterações do rascunho restauradas"
 
 #: src/libide/editor/ide-editor-info-bar.c:114
 msgid "Unsaved changes to the buffer have been restored."
-msgstr ""
+msgstr "As alterações não guardadas ao buffer foram restauradas."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -891,7 +886,7 @@ msgstr "Não foi possível abrir o ficheiro"
 
 #: src/libide/editor/ide-editor-info-bar.ui:29
 msgid "You do not have permission to open the file."
-msgstr ""
+msgstr "Não tem permissão para abrir o ficheiro."
 
 #: src/libide/editor/ide-editor-info-bar.ui:37
 msgid "_Retry"
@@ -1416,7 +1411,7 @@ msgstr "Fechar Projeto"
 
 #: src/libide/gui/gtk/menus.ui:27
 msgid "Change application preferences"
-msgstr "Alterar as preferências do aplicativo"
+msgstr "Alterar as preferências da aplicação"
 
 #: src/libide/gui/gtk/menus.ui:35
 msgid "Find keyboard shortcuts"
@@ -1444,11 +1439,11 @@ msgstr "Novos terminais"
 #: src/libide/gui/ide-application-actions.c:122
 msgid "translator-credits"
 msgstr ""
+"Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Bruno Ramalhete <bram.512@gmail.com>\n"
 "Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Tiago Santos <tiagofsantos81@sapo.pt>\n"
-"Manuela Silva <mmsrs@sky.com>\n"
-"Hugo Carvalho <hugokarvalho@hotmail.com>"
+"Manuela Silva <mmsrs@sky.com>"
 
 #: src/libide/gui/ide-application-actions.c:129
 msgid "Funded By"
@@ -1526,7 +1521,7 @@ msgstr "Ctrl+Shift+T"
 
 #: src/libide/gui/ide-header-bar.ui:34
 msgid "Open application menu (F10)"
-msgstr "Abre o menu de aplicativo (F10)"
+msgstr "Abrir o menu de aplicações (F10)"
 
 #: src/libide/gui/ide-marked-view.c:414
 msgid "Cannot load HTML. Missing WebKit support."
@@ -1813,7 +1808,7 @@ msgid "_Find References"
 msgstr "_Localizar referências"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1134
+#: src/libide/sourceview/ide-source-view.c:1371
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -2099,7 +2094,7 @@ msgstr "Plugin embelezador: nenhum embelezador padrão localizado"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
 msgid "Beautifier Plugin: the buffer is not writable"
-msgstr "Plug-in embelezador: o buffer não pode ser escrito"
+msgstr "Plug-in embelezador: o buffer não é gravável"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
 msgid "Beautifier Plugin: Nothing selected"
@@ -2337,7 +2332,7 @@ msgstr "Esta seleção permite que o Builder escolha o melhor candidato."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
-msgstr "O contêiner usado para compilar e executar seu aplicativo"
+msgstr "O contentor usado para compilar e executar a sua aplicação"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
 msgid "Duplicate"
@@ -2481,11 +2476,11 @@ msgstr "Para a compilação do projeto"
 
 #: src/plugins/buildui/gtk/menus.ui:116
 msgid "Show Build _Log"
-msgstr "Mostrar _log de compilação"
+msgstr "Mostrar _registo de compilação"
 
 #: src/plugins/buildui/gtk/menus.ui:119
 msgid "Display panel containing the build log"
-msgstr "Exibe um painel contendo o log de compilação"
+msgstr "Exibe um painel contendo o registo de compilação"
 
 #: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
 msgid "Running"
@@ -2573,7 +2568,7 @@ msgstr "A fonte usada no terminal"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 msgid "Show Grid Pattern"
-msgstr "Mostrar o padrão de grade"
+msgstr "Mostrar o padrão de grelha"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
@@ -2603,7 +2598,7 @@ msgstr "Auto"
 msgid "Overview map is automatically displayed based on user input"
 msgstr ""
 "O mapa de visão geral é exibido automaticamente com base na entrada do "
-"usuário"
+"utilizador"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
@@ -2647,7 +2642,7 @@ msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
-"Instala o aplicativo antes de executá-lo. Isso é necessário para a maioria "
+"Instala a aplicação antes de executá-la. Isto é necessário para a maioria "
 "dos projetos, a menos que comandos de execução personalizados sejam usados."
 
 #: src/plugins/buildui/tweaks.ui:74
@@ -2664,7 +2659,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
-msgstr "Logs"
+msgstr "Registos"
 
 #: src/plugins/buildui/tweaks.ui:134
 msgid ""
@@ -2680,7 +2675,7 @@ msgstr "Executa testes de unidade dentro do ambiente de compilação."
 
 #: src/plugins/buildui/tweaks.ui:163
 msgid "As Application"
-msgstr "Como aplicativo"
+msgstr "Como aplicação"
 
 #: src/plugins/buildui/tweaks.ui:164
 msgid "Run unit with access to display and other runtime environment features."
@@ -2710,11 +2705,11 @@ msgstr "Caches expirados serão apagados quando Builder foi iniciado"
 
 #: src/plugins/buildui/tweaks.ui:200
 msgid "Clear Build Logs"
-msgstr "Limpar registros de compilação"
+msgstr "Limpar registos de compilação"
 
 #: src/plugins/buildui/tweaks.ui:201
 msgid "Clear the build log history when a new build begins"
-msgstr "Limpa o histórico de log de compilação ao iniciar nova compilação"
+msgstr "Limpa o histórico de registo de compilação ao iniciar nova compilação"
 
 #: src/plugins/buildui/tweaks.ui:214
 msgid "Workers"
@@ -2816,7 +2811,7 @@ msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
-"O SDK usado para compilar seu aplicativo é determinado automaticamente a "
+"O SDK usado para compilar a sua aplicação é determinado automaticamente a "
 "partir do runtime."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
@@ -3448,15 +3443,15 @@ msgstr ""
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID…"
-msgstr "ID do aplicativo…"
+msgstr "ID da aplicação…"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:53
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
-"Um identificador de nome de domínio reverso usado para identificar seu "
-"aplicativo, como “org.gnome.Builder”. Não pode conter traços."
+"Um identificador de nome de domínio reverso usado para identificar a sua "
+"aplicação, como “org.gnome.Builder”. Não pode conter travessões."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:69
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3708,7 +3703,7 @@ msgstr "Parar depois de iniciar o programa"
 
 #: src/plugins/debuggerui/tweaks.ui:20
 msgid "Automatically insert a breakpoint at the start of the application"
-msgstr "Inserir automaticamente um breakpoint no início do aplicativo"
+msgstr "Inserir automaticamente um breakpoint no início da aplicação"
 
 #: src/plugins/debuggerui/tweaks.ui:31
 msgid "Stop at Warnings"
@@ -3716,7 +3711,7 @@ msgstr "Parar nos avisos"
 
 #: src/plugins/debuggerui/tweaks.ui:32
 msgid "Automatically insert a breakpoint on warning logs"
-msgstr "Insere automaticamente um ponto de interrupção nos logs de aviso"
+msgstr "Insere automaticamente um ponto de interrupção nos registos de aviso"
 
 #: src/plugins/debuggerui/tweaks.ui:43
 msgid "Stop at Criticals"
@@ -3724,7 +3719,7 @@ msgstr "Parar nos críticos"
 
 #: src/plugins/debuggerui/tweaks.ui:44
 msgid "Automatically insert a breakpoint on critical logs"
-msgstr "Insere automaticamente um ponto de interrupção em logs críticos"
+msgstr "Insere automaticamente um ponto de interrupção em registos críticos"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
@@ -3736,7 +3731,7 @@ msgstr "O número da entrada do dispositivo"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:50
 msgid "The application to run"
-msgstr "O aplicativo a ser executado"
+msgstr "A aplicação a ser executado"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
@@ -3768,7 +3763,7 @@ msgstr "Restaurar"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
-msgstr "Reverte as preferências de idioma para o padrão do aplicativo"
+msgstr "Reverte as preferências de idioma para o padrão da aplicação"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
@@ -3930,7 +3925,7 @@ msgstr "Recuo automático"
 
 #: src/plugins/editorui/tweaks-language.ui:112
 msgid "Automatically indent source code as you type"
-msgstr "Recua automaticamente o código-fonte conforme você digita"
+msgstr "Recua automaticamente o código-fonte conforme escreve"
 
 #: src/plugins/editorui/tweaks-language.ui:128
 msgid "Tab Size"
@@ -4065,7 +4060,7 @@ msgstr "Nenhum padrão"
 
 #: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
-msgstr "Linhas de grade"
+msgstr "Linhas de grelha"
 
 #: src/plugins/editorui/tweaks.ui:137
 msgid "Scrollbars"
@@ -4145,7 +4140,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:240
 msgid "Semantic Highlighting"
-msgstr "Realce Semântico"
+msgstr "Realce semântico"
 
 #: src/plugins/editorui/tweaks.ui:241
 msgid ""
@@ -4157,19 +4152,19 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:258
 msgid "Draw a mark representing normal spaces"
-msgstr ""
+msgstr "Desenha uma marca representando espaços normais"
 
 #: src/plugins/editorui/tweaks.ui:271
 msgid "Draw a mark representing tabs"
-msgstr ""
+msgstr "Desenha uma marca representando separadores"
 
 #: src/plugins/editorui/tweaks.ui:283
 msgid "Newlines"
-msgstr ""
+msgstr "Novas linhas"
 
 #: src/plugins/editorui/tweaks.ui:284
 msgid "Draw a mark at the end of lines"
-msgstr ""
+msgstr "Desenha uma marca no fim das linhas"
 
 #: src/plugins/editorui/tweaks.ui:296
 msgid "Non-breaking spaces"
@@ -4177,7 +4172,7 @@ msgstr "Espaços inquebráveis"
 
 #: src/plugins/editorui/tweaks.ui:297
 msgid "Draw a mark at non-breaking space characters"
-msgstr ""
+msgstr "Desenha uma marca em caracteres de espaços não-quebrados"
 
 #: src/plugins/editorui/tweaks.ui:313
 msgid "Leading"
@@ -4185,7 +4180,7 @@ msgstr "Inicial"
 
 #: src/plugins/editorui/tweaks.ui:314
 msgid "Draw marks for leading spaces only"
-msgstr ""
+msgstr "Desenha marcas apenas para espaços iniciais"
 
 #: src/plugins/editorui/tweaks.ui:326
 msgid "Inside Text"
@@ -4193,7 +4188,7 @@ msgstr "Texto interior"
 
 #: src/plugins/editorui/tweaks.ui:327
 msgid "Draw marks inside a line of text only"
-msgstr ""
+msgstr "Desenha marcas apenas dentro de uma linha de texto"
 
 #: src/plugins/editorui/tweaks.ui:339
 msgid "Trailing"
@@ -4201,7 +4196,7 @@ msgstr "Espaços à direita"
 
 #: src/plugins/editorui/tweaks.ui:340
 msgid "Draw marks for trailing spaces only"
-msgstr ""
+msgstr "Desenha marcas apenas para os espaços à direita"
 
 #: src/plugins/editorui/tweaks.ui:360
 msgid "Spelling"
@@ -4321,15 +4316,15 @@ msgstr "Guardar e restaurar"
 
 #: src/plugins/editorui/tweaks.ui:553
 msgid "Auto-Save"
-msgstr "Salvamento automático"
+msgstr "Gravação automática"
 
 #: src/plugins/editorui/tweaks.ui:554
 msgid "Regularly save the document as you type"
-msgstr "Salva regularmente o documento enquanto você digita"
+msgstr "Guarda regularmente o documento enquanto escreve"
 
 #: src/plugins/editorui/tweaks.ui:565
 msgid "Auto-Save Delay"
-msgstr "Atraso no salvamento automático"
+msgstr "Atraso na gravação automática"
 
 #: src/plugins/editorui/tweaks.ui:566
 msgid "The delay in seconds to wait before auto-saving the document"
@@ -4654,7 +4649,7 @@ msgstr "Substituir no projeto"
 
 #: src/plugins/grep/gbp-grep-popover.ui:12
 msgid "Find in Files"
-msgstr "Localizar no Ficheiros"
+msgstr "Localizar em Ficheiros"
 
 #: src/plugins/grep/gbp-grep-popover.ui:28
 msgid "Search for…"
@@ -4686,7 +4681,7 @@ msgstr "Localizar no _Ficheiros"
 
 #: src/plugins/host/gbp-host-runtime-provider.c:52
 msgid "Host Operating System"
-msgstr "Sistema Operativo Anfitrião"
+msgstr "Sistema operativo anfitrião"
 
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
@@ -4717,7 +4712,7 @@ msgstr "Com _listagem de pastas"
 
 #: src/plugins/ls/gtk/menus.ui:15
 msgid "Open Containing Folder"
-msgstr "Abrir pasta raiz do projeto"
+msgstr "Abrir pasta do conteúdo"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
 msgid "With File _Browser…"
@@ -4965,7 +4960,7 @@ msgstr "Caixas"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:31
 msgid "A GNOME application to access remote or virtual systems"
-msgstr "Um aplicativo do GNOME para acessar sistemas remotos ou virtuais"
+msgstr "Uma aplicação do GNOME para aceder a sistemas remotos ou virtuais"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:40
 msgid "An IDE for writing GNOME-based software"
@@ -4977,7 +4972,7 @@ msgstr "Agenda"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:50
 msgid "A calendar application for GNOME"
-msgstr "Um aplicativo de calendário para o GNOME"
+msgstr "Uma aplicação de calendário para o GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:58
 msgid "Clocks"
@@ -4985,7 +4980,7 @@ msgstr "Relógios"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:59
 msgid "A clock application for GNOME"
-msgstr "Um aplicativo de relógio para GNOME"
+msgstr "Uma aplicação de relógio para GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:67
 msgid "Gitg"
@@ -5001,7 +4996,7 @@ msgstr "Mapas"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
 msgid "A GNOME maps application"
-msgstr "Um aplicativo de mapas do GNOME"
+msgstr "Uma aplicação de mapas do GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "Music"
@@ -5383,8 +5378,8 @@ msgid "Proc Macros"
 msgstr "Proc Macros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
-msgstr ""
+msgid "Enables the experimental Proc Macros feature of rust-analyzer"
+msgstr "Ativa a funcionalidade experimental Proc Macros do rust-analyzer"
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -5457,7 +5452,7 @@ msgstr "Comando de shell"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
 msgid "You may use single or double quotes for parameters."
-msgstr "Você pode usar aspas simples ou duplas para parâmetros."
+msgstr "Pode usar aspas simples ou duplas para parâmetros."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
 msgid "Environment"
@@ -5493,7 +5488,7 @@ msgid ""
 "system or build containers."
 msgstr ""
 "O Builder pode executar seu comando de várias locais, incluindo o sistema "
-"hospedeiro ou contêineres de compilação."
+"hospedeiro ou contentores de compilação."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
@@ -5517,11 +5512,11 @@ msgstr "Executa o comando dentro do pipeline de compilação."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 msgid "As Target Application"
-msgstr "Como aplicativo de destino"
+msgstr "Como aplicação de destino"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
-msgstr "Executa o comando como se fosse o aplicativo alvo."
+msgstr "Executa o comando como se fosse a aplicação alvo."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
@@ -5572,6 +5567,8 @@ msgstr "Executar comandos"
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
 msgstr ""
+"Uma lista de ids de comando de execução a carregar para a aplicação ou "
+"projeto."
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
@@ -5579,7 +5576,7 @@ msgid ""
 "them to a keyboard shortcut. They can run from various environments such as "
 "the build pipeline, runtime environment, or host operating system."
 msgstr ""
-"Use comandos para executar ferramentas de construção, aplicativos ou scripts "
+"Use comandos para executar ferramentas de construção, aplicações ou scripts "
 "de shell e mapeá-los para um atalho de teclado. Eles podem ser executados em "
 "vários ambientes, como pipeline de compilação, ambiente de tempo de execução "
 "ou sistema operacional do hospedeiro."
@@ -5822,18 +5819,18 @@ msgstr "JavaScript"
 
 #: src/plugins/sysprof/tweaks.ui:173
 msgid "Collect information from GJS-based applications"
-msgstr "Coleta informações de aplicativos baseados em GJS"
+msgstr "Recolhe informações de aplicações baseados em GJS"
 
 #: src/plugins/sysprof/tweaks.ui:184
 msgid "Application Tracing"
-msgstr "Rastreamento de aplicativos"
+msgstr "Rastreio de aplicações"
 
 #: src/plugins/sysprof/tweaks.ui:185
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
 msgstr ""
-"Forneça a variável de ambiente TRACE_FD para que os aplicativos forneçam "
+"Forneça a variável de ambiente TRACE_FD para que as aplicações forneçam "
 "eventos personalizados"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
@@ -5928,7 +5925,7 @@ msgstr "Rolar na saída"
 #: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
-"Rola automaticamente quando os aplicativos dentro do texto de saída do "
+"Deslocamento automático quando as aplicações dentro do texto de saída do "
 "terminal"
 
 #: src/plugins/terminal/tweaks.ui:70
@@ -6150,8 +6147,7 @@ msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
-"Insira a URL do repositório de código-fonte do projeto que você deseja "
-"clonar."
+"Insira a URL do repositório de código-fonte do projeto que quer clonar."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
 msgid "The repository will be cloned into a new subdirectory."
@@ -6163,7 +6159,7 @@ msgstr "Detalhes do autor"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
 msgid "You may specify authorship information to override defaults."
-msgstr "Você pode informar informações da autoria para substituir o padrão."
+msgstr "Pode especificar informações de autoria para substitui o padrão."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
 msgid "Status"
