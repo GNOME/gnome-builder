@@ -95,7 +95,7 @@ gbp_top_match_completion_provider_display (GtkSourceCompletionProvider *provider
   g_assert (GTK_SOURCE_IS_COMPLETION_CELL (cell));
 
   if (gtk_source_completion_cell_get_column (cell) == GTK_SOURCE_COMPLETION_COLUMN_ICON)
-    gtk_source_completion_cell_set_icon_name (cell, "edit-find-symbolic");
+    gtk_source_completion_cell_set_icon_name (cell, "completion-top-match-symbolic");
   else
     gtk_source_completion_provider_display (proposal->provider, context, proposal->proposal, cell);
 }
