@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-04 16:19+0000\n"
-"PO-Revision-Date: 2022-09-05 15:28+0200\n"
+"PO-Revision-Date: 2022-09-07 20:10+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -749,10 +749,8 @@ msgid "Open File…"
 msgstr "Otevřít soubor…"
 
 #: src/libide/editor/gtk/menus.ui:22
-#, fuzzy
-#| msgid "Open in New Workspace"
 msgid "Open a file in the workspace"
-msgstr "Otevřít v nové pracovní ploše"
+msgstr "Otevřít soubor v pracovní ploše"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
 #: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
@@ -861,7 +859,7 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.c:103
 msgid "Unsaved buffer has been restored."
-msgstr ""
+msgstr "Neuložená vyrovnávací paměť byla obnovena."
 
 #: src/libide/editor/ide-editor-info-bar.c:109
 msgid "_Save…"
@@ -1159,10 +1157,8 @@ msgstr "Na měřeném připojení nelze provádět přenosy"
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
 #: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
-#, fuzzy
-#| msgid "Untitled Terminal"
 msgid "Untitled command"
-msgstr "Nepojmenovaný terminál"
+msgstr "Nepojmenovaný příkaz"
 
 #: src/libide/foundry/ide-run-command.c:237
 msgid "Unit Test"
@@ -1338,11 +1334,11 @@ msgstr "Procházet…"
 
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
-msgstr ""
+msgstr "Cesta k souboru neexistuje"
 
 #: src/libide/gtk/ide-file-manager.c:108 src/libide/gtk/ide-file-manager.c:119
 msgid "Error converting UTF-8 filename to wide char"
-msgstr ""
+msgstr "Chyba při převodu názvu souboru z UTF-8 na wide char"
 
 #: src/libide/gtk/ide-file-manager.c:127
 msgid "ILCreateFromPath() failed"
@@ -1397,7 +1393,7 @@ msgstr "Hledat"
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:394
 #, c-format
 msgid "Enter new shortcut to change <b>%s</b>."
-msgstr ""
+msgstr "Zadejte novou klávesovou zkratku pro <b>%s</b>."
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:27
 msgid "_Set"
@@ -1405,31 +1401,27 @@ msgstr "Na_stavit"
 
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:68
 msgid "Press Escape to cancel or Backspace to disable."
-msgstr ""
+msgstr "Zmáčkněte Esc pro zrušení nebo BackSpace pro zakázání."
 
 #: src/libide/gui/gtk/menus.ui:14
 msgid "Close Project"
 msgstr "Klonovat projekt"
 
 #: src/libide/gui/gtk/menus.ui:27
-#, fuzzy
-#| msgid "Show the application preferences"
 msgid "Change application preferences"
-msgstr "Zobrazit předvolby aplikace"
+msgstr "Změnit předvolby aplikace"
 
 #: src/libide/gui/gtk/menus.ui:35
-#, fuzzy
-#| msgid "Keyboard Shortcuts"
 msgid "Find keyboard shortcuts"
-msgstr "Klávesové zkratky"
+msgstr "Najít klávesové zkratky"
 
 #: src/libide/gui/gtk/menus.ui:52
 msgid "Show information about Builder"
-msgstr ""
+msgstr "Zobrazit informace o Builderu"
 
 #: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
 msgid "Web Browsing"
-msgstr ""
+msgstr "Procházení webů"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
@@ -1486,7 +1478,7 @@ msgstr "Odstranit proměnnou prostředí"
 
 #: src/libide/gui/ide-frame.ui:6
 msgid "Open a File or Terminal"
-msgstr "Otevřít soubor nebo terminál"
+msgstr "Otevřete soubor nebo terminál"
 
 #: src/libide/gui/ide-frame.ui:7
 msgid "Use the page switcher above or use one of the following:"
@@ -1506,7 +1498,7 @@ msgstr "F9"
 
 #: src/libide/gui/ide-frame.ui:56
 msgid "Open File"
-msgstr "Otevření souboru"
+msgstr "Otevřít soubor"
 
 #: src/libide/gui/ide-frame.ui:66
 msgid "Ctrl+O"
@@ -1529,29 +1521,21 @@ msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Nezdařilo se načíst HTML. Schází podpora knihovny WebKit."
 
 #: src/libide/gui/ide-primary-workspace.ui:17
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle left panel"
 msgid "Toggle Left Panel (F9)"
-msgstr "Přepnout levý panel"
+msgstr "Přepnout levý panel (F9)"
 
 #: src/libide/gui/ide-primary-workspace.ui:51
 #: src/plugins/menu-search/gtk/menus.ui:34
-#, fuzzy
-#| msgid "Show Right Panel"
 msgid "Toggle Right Panel"
-msgstr "Zobrazovat pravý panel"
+msgstr "Přepnout pravý panel"
 
 #: src/libide/gui/ide-primary-workspace.ui:59
 msgid "Search (Ctrl+Enter)"
 msgstr "Hledat (Ctrl+Enter)"
 
 #: src/libide/gui/ide-primary-workspace.ui:105
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
 msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr "Přepnout spodní panel"
+msgstr "Přepnout spodní panel (Ctrl+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
@@ -1581,10 +1565,8 @@ msgid "Appearance"
 msgstr "Vzhled"
 
 #: src/libide/gui/tweaks.ui:63
-#, fuzzy
-#| msgid "Configure Options"
 msgid "Configurations"
-msgstr "Volby konfigurace"
+msgstr "Konfigurace"
 
 #: src/libide/gui/tweaks.ui:75
 msgid "Plugins"
@@ -2192,10 +2174,8 @@ msgstr "Přidat _proměnnou"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
-#, fuzzy
-#| msgid "Variable"
 msgid "Add Variable"
-msgstr "Proměnná"
+msgstr "Přidat proměnnou"
 
 #: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
@@ -2613,10 +2593,8 @@ msgid "High Contrast"
 msgstr "Vysoký kontrast"
 
 #: src/plugins/buildui/gtk/menus.ui:183
-#, fuzzy
-#| msgid "Directory"
 msgid "Text Direction"
-msgstr "Složka"
+msgstr "Směr textu"
 
 #: src/plugins/buildui/gtk/menus.ui:185
 msgid "Left-to-Right"
@@ -2641,32 +2619,26 @@ msgid "Interface"
 msgstr "Rozhraní"
 
 #: src/plugins/buildui/gtk/preferences.ui:66
-#, fuzzy
-#| msgid "Editor"
 msgid "Editor Font"
-msgstr "Editor"
+msgstr "Font editoru"
 
 #: src/plugins/buildui/gtk/preferences.ui:67
-#, fuzzy
-#| msgid "The source code editor"
 msgid "The font used in the source code editor"
-msgstr "Editor zdrojového kódu"
+msgstr "Font používaný v editoru zdrojového kódu"
 
 #: src/plugins/buildui/gtk/preferences.ui:72
 msgid "Terminal Font"
 msgstr "Font terminálu"
 
 #: src/plugins/buildui/gtk/preferences.ui:73
-#, fuzzy
-#| msgid "The word is not in the dictionary"
 msgid "The font used in the terminal"
-msgstr "Slovo není ve slovníku"
+msgstr "Font používaný v terminálu"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
 #, fuzzy
 #| msgid "Grid Pattern"
 msgid "Show Grid Pattern"
-msgstr "Vzor mřížky"
+msgstr "Zobrazovat vzor mřížky"
 
 #: src/plugins/buildui/gtk/preferences.ui:81
 msgid "Display a grid pattern underneath source code"
@@ -2678,7 +2650,7 @@ msgstr "nikdy"
 
 #: src/plugins/buildui/gtk/preferences.ui:93
 msgid "Overview map is never displayed"
-msgstr ""
+msgstr "Přehledová mapa nebude zobrazena nikdy"
 
 #: src/plugins/buildui/gtk/preferences.ui:98
 msgid "Always"
@@ -2686,25 +2658,23 @@ msgstr "vždy"
 
 #: src/plugins/buildui/gtk/preferences.ui:99
 msgid "Overview map is always displayed"
-msgstr ""
+msgstr "Přehledová mapa bude zobrazena vždy"
 
 #: src/plugins/buildui/gtk/preferences.ui:104
-#, fuzzy
-#| msgid "Autosave"
 msgid "Auto"
-msgstr "Automatické ukládání"
+msgstr "automaticky"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr ""
+msgstr "Přehledová mapa bude zobrazena automaticky podle uživatelského vstupu"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
-msgstr ""
+msgstr "Navigace pomocí karet"
 
 #: src/plugins/buildui/gtk/preferences.ui:113
 msgid "Switch documents using a tabbed interface"
-msgstr ""
+msgstr "Přepínat dokumenty pomocí uživatelského rozhraní s kartami"
 
 #: src/plugins/buildui/gtk/preferences.ui:119
 msgid "Navigate with Popover"
@@ -2716,10 +2686,8 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
 #: src/plugins/shellcmd/tweaks.ui:21
-#, fuzzy
-#| msgid "Command"
 msgid "Commands"
-msgstr "Příkaz"
+msgstr "Příkazy"
 
 #: src/plugins/buildui/tweaks.ui:16
 #, fuzzy
@@ -2735,19 +2703,19 @@ msgstr "Tento příkaz vyžaduje, aby bylo zaměřeno zobrazení"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
-msgstr ""
+msgstr "Spouštění a zastavování"
 
 #: src/plugins/buildui/tweaks.ui:58
-#, fuzzy
-#| msgid "Install Prefix"
 msgid "Install Before Running"
-msgstr "Prefix instalace"
+msgstr "Před spuštěním nainstalovat"
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
+"Před spuštěním aplikaci nainstalovat. Pro většinu projektů je to nutné, pokud "
+"není ke spouštění používán vlastní příkaz."
 
 #: src/plugins/buildui/tweaks.ui:74
 #, fuzzy
@@ -2760,6 +2728,7 @@ msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
 msgstr ""
+""
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
@@ -2798,10 +2767,8 @@ msgid "General"
 msgstr "Obecné"
 
 #: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
-#, fuzzy
-#| msgid "Directory"
 msgid "History"
-msgstr "Složka"
+msgstr "Historie"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Clear Expired Artifacts"
@@ -2852,7 +2819,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:239
 msgid "1"
-msgstr ""
+msgstr "1"
 
 #: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
 #: src/plugins/editorui/gtk/menus.ui:51
@@ -2866,7 +2833,7 @@ msgstr "4"
 
 #: src/plugins/buildui/tweaks.ui:257
 msgid "6"
-msgstr ""
+msgstr "6"
 
 #: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
 #: src/plugins/editorui/gtk/menus.ui:71
@@ -2904,10 +2871,8 @@ msgid "Tooling"
 msgstr "Sada nástrojů"
 
 #: src/plugins/buildui/tweaks.ui:348
-#, fuzzy
-#| msgid "Install Prefix"
 msgid "Installation Prefix"
-msgstr "Prefix instalace"
+msgstr "Instalační prefix"
 
 #: src/plugins/buildui/tweaks.ui:349
 msgid ""
@@ -3577,39 +3542,26 @@ msgid "A subdirectory with this name already exists"
 msgstr "Složka s tímto názvem již existuje."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
-#, fuzzy
-#| msgid ""
-#| "Unique name that is used for your project’s folder and other technical "
-#| "resources. Should be in lower case without spaces and may not start with "
-#| "a number."
 msgid ""
 "A unique name that is used for the project folder and other resources. The "
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
-"Jedinečný název, který se použije pro složku s vaším projektem a další "
-"technické prostředky. Měl by se skládat jen z malých písmen bez mezer a "
-"nesmí začínat číslicí."
+"Jedinečný název, který se použije pro složku a další prostředky. Písmena v "
+"názvu by měla být jen malá a bez diakritiy, neměl by obsahova mezery a neměl "
+"by začínat číslicí."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
-#, fuzzy
-#| msgid "Application ID"
 msgid "Application ID…"
-msgstr "ID aplikace"
+msgstr "ID aplikace…"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:53
-#, fuzzy
-#| msgid ""
-#| "The Application ID is a reverse domain-name identifier used to uniquely "
-#| "identify your application such as “org.gnome.Builder” and may not contain "
-#| "dashes."
 msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
-"ID aplikace je identifikátor v podobě reverzního doménového názvu, který se "
-"používá k jednoznačnému určení aplikace, kupříkladu „org.gnome.Builder“. "
-"Nesmí obsahovat pomlčky."
+"Reverzní doménový název, který se použije k identifikaci aplikace, např. „org."
+"gnome.Builder“. Nesmí obsahovat pomlčky."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:69
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3621,10 +3573,8 @@ msgid "Location"
 msgstr "Umístění"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:85
-#, fuzzy
-#| msgid "Your project will be created within a new child directory."
 msgid "The project will be created in a new subdirectory."
-msgstr "Váš projekt bude vytvořen v nové podsložce."
+msgstr "Projekt bude vytvořen v nové podsložce."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
 #: src/plugins/projectui/tweaks.ui:47
@@ -3636,28 +3586,22 @@ msgid "Template"
 msgstr "Šablona"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:183
-#, fuzzy
-#| msgid "_Create Project"
 msgid "Create Project"
-msgstr "_Vytvořit projekt"
+msgstr "Vytvořit projekt"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
 msgid "Create _New Project…"
 msgstr "Vytvořit _nový projekt…"
 
 #: src/plugins/create-project/gbp-create-project-workspace-addin.c:63
-#, fuzzy
-#| msgid "_Create Project"
 msgid "Create New Project"
-msgstr "_Vytvořit projekt"
+msgstr "Vytvoření nového projektu"
 
 #: src/plugins/create-project/gtk/menus.ui:7
 #: src/plugins/create-project/gtk/menus.ui:18
 #: src/plugins/create-project/gtk/menus.ui:30
-#, fuzzy
-#| msgid "_Start New Project…"
 msgid "Create New Project…"
-msgstr "Z_ačít nový projekt…"
+msgstr "Vytvořit nový projekt…"
 
 #: src/plugins/create-project/gtk/menus.ui:22
 #, fuzzy
@@ -5438,70 +5382,60 @@ msgid "Reveal in Project _Tree"
 msgstr "Ukázat ve s_tromu projektu"
 
 #: src/plugins/project-tree/tweaks.ui:14
-#, fuzzy
-#| msgid "Destination file must be within the project tree."
 msgid "Display icons next to files within the project tree"
-msgstr "Cílový soubor musí být součástí projektového stromu."
+msgstr "Zobrazovat ikony před soubory v projektovém stromu."
 
 #: src/plugins/project-tree/tweaks.ui:26
 msgid "Show files which are typically ignored"
-msgstr ""
+msgstr "Zobrazovat soubory, které jsou typicky ignorovány"
 
 #: src/plugins/project-tree/tweaks.ui:38
 msgid "Sort directories before files in the same directory"
-msgstr ""
+msgstr "V rámci složky řadit podsložky před soubory"
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
 msgid "No version control"
 msgstr "Žádná správa verzí"
 
 #: src/plugins/projectui/tweaks.ui:14
-#, fuzzy
-#| msgid "Restoring previous session"
 msgid "Restore Previous Session"
-msgstr "Obnovuje se předchozí sezení"
+msgstr "Obnovovat předchozí sezení"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
 msgstr "Po načtení projektu otevřít naposledy otevřené soubory"
 
 #: src/plugins/projectui/tweaks.ui:28
-#, fuzzy
-#| msgid "Project Location"
 msgid "Project Creation"
-msgstr "Umístění projektu"
+msgstr "Vytváření projektu"
 
 #: src/plugins/projectui/tweaks.ui:32
-#, fuzzy
-#| msgid "Your project will be created within a new child directory."
 msgid "Projects created with Builder will be placed within this directory"
-msgstr "Váš projekt bude vytvořen v nové podsložce."
+msgstr "Projekty vytvořené v Builderu budou umístěné v této složce"
 
 #: src/plugins/projectui/tweaks.ui:48
 msgid "The default license when creating new projects"
-msgstr ""
+msgstr "Výchozí licence pro nově vytvářené projekty"
 
 #: src/plugins/projectui/tweaks.ui:93
-#, fuzzy
-#| msgid "No license"
 msgid "No License"
-msgstr "Žádná licence"
+msgstr "žádná licence"
 
 #: src/plugins/projectui/tweaks.ui:109
 msgid "Overview"
 msgstr "Přehled"
 
 #: src/plugins/projectui/tweaks.ui:115
-#, fuzzy
-#| msgid "Project sidebar"
 msgid "Project Identifier"
-msgstr "Postranní panel projektu."
+msgstr "Identifikátor projektu"
 
 #: src/plugins/projectui/tweaks.ui:123
 msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
+"Tento identifikátor se používá, když se odkazuje na nastavení vašeho "
+"projektu, složku pro sestavení a informace v mezipaměti."
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5512,10 +5446,8 @@ msgid "Source Directory"
 msgstr "Složka se zdrojovými kódy"
 
 #: src/plugins/projectui/tweaks.ui:160
-#, fuzzy
-#| msgid "Build Configurations"
 msgid "Current Configuration"
-msgstr "Konfigurace sestavení"
+msgstr "Aktuální konfigurace"
 
 #: src/plugins/projectui/tweaks.ui:161
 msgid ""
@@ -5524,10 +5456,8 @@ msgid ""
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:228
-#, fuzzy
-#| msgid "No Provided Tool"
 msgid "Provided By"
-msgstr "Není poskytován žádný nástroj"
+msgstr "Poskytl"
 
 #. translators: format is "CPU emulation". Only translate "emulation"
 #: src/plugins/qemu/gbp-qemu-device-provider.c:42
@@ -5545,10 +5475,8 @@ msgid "My Computer (%s) %s"
 msgstr "Můj počítač (%s) %s"
 
 #: src/plugins/recent/gbp-recent-section.c:254
-#, fuzzy
-#| msgid "Removing Files…"
 msgid "Removed Files"
-msgstr "Odstraňují se soubory…"
+msgstr "Odstraněné soubory"
 
 #. translators: %s is replaced with the path of the file to be deleted and \n for a new line
 #: src/plugins/recent/gbp-recent-section.c:289
@@ -5571,98 +5499,76 @@ msgstr "Přefo_rmátovat tabulátory"
 
 #: src/plugins/rust-analyzer/tweaks.ui:13
 msgid "Rust Analyzer"
-msgstr ""
+msgstr "Analyzátor jazyka Rust"
 
 #: src/plugins/rust-analyzer/tweaks.ui:16
 msgid "Cargo"
-msgstr ""
+msgstr "Cargo"
 
 #: src/plugins/rust-analyzer/tweaks.ui:19
-#, fuzzy
-#| msgid "Command"
 msgid "Cargo Command"
-msgstr "Příkaz"
+msgstr "Příkaz Cargo"
 
 #: src/plugins/rust-analyzer/tweaks.ui:20
-#, fuzzy
-#| msgid "the default cargo command"
 msgid "The default cargo command to run with rust-analyzer"
-msgstr "výchozí příkaz cargo"
+msgstr "Výchozí příkaz cargo, který se má spustit v nástroji rust-analyzer"
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
-#, fuzzy
-#| msgid "_Update"
 msgid "Update"
-msgstr "Akt_ualizovat"
+msgstr "Aktualizovat"
 
 #: src/plugins/sdkui/gtk/menus.ui:6
 msgid "Manage SDKs…"
-msgstr ""
+msgstr "Spravovat SDK…"
 
 #: src/plugins/sdkui/tweaks.ui:12
-#, fuzzy
-#| msgid "Downloading…"
 msgid "Downloads"
-msgstr "Stahuje se…"
+msgstr "Stahování"
 
 #: src/plugins/sdkui/tweaks.ui:15
-#, fuzzy
-#| msgid "Allow downloads over metered connections"
 msgid "Download on Metered Connections"
-msgstr "Povolit stahování přes měřená připojení"
+msgstr "Stahovat přes měřená připojení"
 
 #: src/plugins/sdkui/tweaks.ui:16
-#, fuzzy
-#| msgid "Allow downloads over metered connections"
 msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
-msgstr "Povolit stahování přes měřená připojení"
+msgstr ""
+"Povolit stahování SDK a závislostí, když se používá měřené připojení k "
+"Internetu"
 
 #: src/plugins/sdkui/tweaks.ui:29
-#, fuzzy
-#| msgid "Update Available"
 msgid "Available SDKs"
-msgstr "Je k dispozici aktualizace"
+msgstr "Dostupná SDK"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
-#, fuzzy
-#| msgid "Untitled Terminal"
 msgid "Untitled Command"
-msgstr "Nepojmenovaný terminál"
+msgstr "Nepojmenovaný příkaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
-#, fuzzy
-#| msgid "Change Shortcut"
 msgid "Set Shortcut"
-msgstr "Změna klávesové zkratky"
+msgstr "Nastavení klávesové zkratky"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
-#, fuzzy
-#| msgid "Select Project Directory"
 msgid "Select Working Directory"
-msgstr "Výběr složky projektu"
+msgstr "Výběr pracovní složky"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
-#, fuzzy
-#| msgid "Delete Command"
 msgid "Create Command"
-msgstr "Smazat příkaz"
+msgstr "Vytváření příkazu"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
-msgstr ""
+msgstr "_Vytvořit"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
-#, fuzzy
-#| msgid "Command"
 msgid "Edit Command"
-msgstr "Příkaz"
+msgstr "Úprava příkazu"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:23
 msgid "S_ave"
-msgstr ""
+msgstr "_Uložit"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:51
 msgid "Keyboard Shortcut"
@@ -5670,7 +5576,7 @@ msgstr "Klávesová zkratka"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:52
 msgid "An optional shortcut to run the command"
-msgstr ""
+msgstr "Volitelná klávesová zkratka pro spuštění příkazu"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:67
 msgid "Shell Command"
@@ -5678,119 +5584,104 @@ msgstr "Příkaz shellu"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
 msgid "You may use single or double quotes for parameters."
-msgstr ""
+msgstr "Pro parametry můžete použít jednoduché nebo dvojité uvozovky."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
 msgid "Environment"
 msgstr "Proměnné prostředí"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
-#, fuzzy
-#| msgid "Source Directory"
 msgid "Working Directory"
-msgstr "Složka se zdrojovými kódy"
+msgstr "Pracovní složka"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
 "The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
 "$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
+"Příkaz bude spuštěn z tohoto umístění. K definici relativní cesty použijte "
+"<tt>$BUILDDIR</tt> (složka sestavení), <tt>$SRCDIR</tt> (složka se zdrojovými "
+"kódy) nebo <tt>$HOME</tt> (domovská složka)."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
-msgstr ""
+msgstr "Používat subshell"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
-msgstr ""
+msgstr "Spouštět program z podřízeného shellu, jako třeba <tt>sh -c ''</tt>"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
-#, fuzzy
-#| msgid "Locals"
 msgid "Locality"
-msgstr "Lokální"
+msgstr "Místo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
 msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
+"Builder může spustit příkaz z různých míst, včetně hostitelského systému nebo "
+"sestavovacích kontejnerů."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
-#, fuzzy
-#| msgid "Delete Command"
 msgid "_Delete Command"
-msgstr "Smazat příkaz"
+msgstr "_Smazat příkaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
-#, fuzzy
-#| msgid "Success"
 msgid "Subprocess"
-msgstr "Úspěšné"
+msgstr "Podproces"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
-#, fuzzy
-#| msgid "Run a new instance of Builder"
 msgid "Runs the command as a subprocess of Builder."
-msgstr "Spustit novou instanci aplikace Builder"
+msgstr "Spouštět příkaz jako podproces Builderu."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
-msgstr ""
+msgstr "Spouštět příkaz na hostitelském systému."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
 msgstr ""
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
-#, fuzzy
-#| msgid "GTK Application"
 msgid "As Target Application"
-msgstr "Aplikace GTK"
+msgstr "Jako cílová aplikace"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
-msgstr ""
+msgstr "Spouštět příkaz, jako by byl cílovou aplikací."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
-msgstr ""
+msgstr "Příkazy mohou být použity k sestavení, běhu a změně vašeho projektu"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:116
 msgid "These commands are specific to this project."
-msgstr ""
+msgstr "Tyto příkzay jsou specifické pro tento projekt."
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
 msgid "These commands are shared across all projects."
-msgstr ""
+msgstr "Tyto příkazy jsou sdílené napříč všemi projekty."
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
-#, fuzzy
-#| msgid "File Name"
 msgid "Display Name"
-msgstr "Název souboru"
+msgstr "Název displeje"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
 msgid "Keyboard Accelerator"
 msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
-#, fuzzy
-#| msgid "Source Directory"
 msgid "Current Working Directory"
-msgstr "Složka se zdrojovými kódy"
+msgstr "Aktuální pracovní složka"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
-#, fuzzy
-#| msgid "Arguments"
 msgid "Command Arguments"
-msgstr "Argumenty"
+msgstr "Argumenty příkazu"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
-#, fuzzy
-#| msgid "Environment"
 msgid "Command Environment"
-msgstr "Proměnné prostředí"
+msgstr "Prostředí příkazu"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
 msgid "Command Locality"
@@ -5798,7 +5689,7 @@ msgstr "Umístění příkazu"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
 msgid "Use Shell"
-msgstr ""
+msgstr "Používat Shell"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
 #, fuzzy
@@ -5819,35 +5710,27 @@ msgstr ""
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
-msgstr ""
+msgstr "Enchant 2"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:248
-#, fuzzy
-#| msgid "Dictionary"
 msgid "Add to Dictionary"
-msgstr "Slovník"
+msgstr "Přidat do slovníku"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:249
-#, fuzzy
-#| msgid "_Ignore"
 msgid "Ignore"
-msgstr "_Ignorovat"
+msgstr "Ignorovat"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:259
-#, fuzzy
-#| msgid "Language"
 msgid "Languages"
-msgstr "Jazyk"
+msgstr "Jazyky"
 
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
 msgid "Unnamed Symbol"
 msgstr "Nepojmenovaný symbol"
 
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-#, fuzzy
-#| msgid "_Select Symbol…"
 msgid "Filter Symbols…"
-msgstr "Vybrat _symbol…"
+msgstr "filtrovat symboly…"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
@@ -5859,14 +5742,12 @@ msgstr "Otevřené stránky"
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
 #: src/plugins/symbol-tree/gtk/menus.ui:8
-#, fuzzy
-#| msgid "_Select Symbol…"
 msgid "Select Symbol…"
-msgstr "Vybrat _symbol…"
+msgstr "Vybrat symbol…"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
 msgid "Select Symbol (Ctrl+Shift+K)"
-msgstr ""
+msgstr "Vybrat symbol (Ctrl+Shift+K)"
 
 #: src/plugins/symbol-tree/gtk/menus.ui:9
 #, fuzzy
@@ -5896,28 +5777,24 @@ msgid "Run with Profiler"
 msgstr "Spustit s profilerem"
 
 #: src/plugins/sysprof/gtk/menus.ui:22
-#, fuzzy
-#| msgid "Run with Profiler"
 msgid "Run the project with profiler"
-msgstr "Spustit s profilerem"
+msgstr "Spustit projekt s profilerem"
 
 #: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:13
 msgid "Profiler"
 msgstr "Profiler"
 
 #: src/plugins/sysprof/gtk/menus.ui:32
-#, fuzzy
-#| msgid "Check _Spelling"
 msgid "Thread Sampling"
-msgstr "Zkontrolovat pravopi_s"
+msgstr "Vzorkování vláken"
 
 #: src/plugins/sysprof/gtk/menus.ui:34
 msgid "CPU Performance"
-msgstr ""
+msgstr "Výkon CPU"
 
 #: src/plugins/sysprof/gtk/menus.ui:39
 msgid "Memory Allocations"
-msgstr ""
+msgstr "Alokace paměti"
 
 #: src/plugins/sysprof/gtk/menus.ui:44
 msgid "Sample JavaScript Stacks"
@@ -5925,7 +5802,7 @@ msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:50
 msgid "Graphics"
-msgstr ""
+msgstr "Grafika"
 
 #: src/plugins/sysprof/gtk/menus.ui:52
 #, fuzzy
@@ -5935,37 +5812,31 @@ msgstr "Volby zo_brazení"
 
 #: src/plugins/sysprof/gtk/menus.ui:58
 msgid "Counters"
-msgstr ""
+msgstr "Počitadla"
 
 #: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:19
 msgid "CPU Usage"
-msgstr ""
+msgstr "Využití CPU"
 
 #: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
-#, fuzzy
-#| msgid "Messages"
 msgid "Memory Usage"
-msgstr "Zprávy"
+msgstr "Využití paměti"
 
 #: src/plugins/sysprof/gtk/menus.ui:70
 msgid "Storage I/O"
-msgstr ""
+msgstr "V/V úložiště"
 
 #: src/plugins/sysprof/gtk/menus.ui:75
-#, fuzzy
-#| msgid "Network"
 msgid "Network I/O"
-msgstr "Síť"
+msgstr "V/V sítě"
 
 #: src/plugins/sysprof/gtk/menus.ui:81
 msgid "Energy"
 msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:83
-#, fuzzy
-#| msgid "Completion"
 msgid "Consumption"
-msgstr "Dokončování slov"
+msgstr "Spotřeba"
 
 #: src/plugins/sysprof/gtk/menus.ui:88
 msgid "Battery Charge"
@@ -6029,7 +5900,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Profiling"
-msgstr ""
+msgstr "Profilování paměti"
 
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Record stacktraces of memory allocations and releases"
@@ -6037,7 +5908,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:99
 msgid "Energy Usage"
-msgstr ""
+msgstr "Využití energie"
 
 #: src/plugins/sysprof/tweaks.ui:100
 msgid "Record statistics about energy usage using RAPL"
@@ -6045,17 +5916,15 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:111
 msgid "Battery Usage"
-msgstr ""
+msgstr "Využití baterie"
 
 #: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about battery charge and discharge rates"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:127
-#, fuzzy
-#| msgid "Network"
 msgid "Network Usage"
-msgstr "Síť"
+msgstr "Využití sítě"
 
 #: src/plugins/sysprof/tweaks.ui:128
 msgid "Record statistics about network usage"
@@ -6063,35 +5932,31 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:139
 msgid "Disk Usage"
-msgstr ""
+msgstr "Využití disku"
 
 #: src/plugins/sysprof/tweaks.ui:155
 msgid "GNOME Shell Performance"
-msgstr ""
+msgstr "Výkon GNOME Shellu"
 
 #: src/plugins/sysprof/tweaks.ui:156
 msgid "Collect performance and timing information from GNOME Shell"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:169
-#, fuzzy
-#| msgid "Indentation"
 msgid "Integration"
-msgstr "Odsazení"
+msgstr "Integrace"
 
 #: src/plugins/sysprof/tweaks.ui:172
 msgid "JavaScript"
-msgstr ""
+msgstr "JavaScript"
 
 #: src/plugins/sysprof/tweaks.ui:173
 msgid "Collect information from GJS-based applications"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:184
-#, fuzzy
-#| msgid "Application ID"
 msgid "Application Tracing"
-msgstr "ID aplikace"
+msgstr "Sledování aplikace"
 
 #: src/plugins/sysprof/tweaks.ui:185
 msgid ""
@@ -6123,10 +5988,8 @@ msgid "Application started at %s\r\n"
 msgstr "Aplikace spuštěna v %s\r\n"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
-#, fuzzy
-#| msgid "Application exited\r\n"
 msgid "Application exited"
-msgstr "Aplikace skončila\r\n"
+msgstr "Aplikace skončila"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
 msgid "Application Output"
@@ -6259,13 +6122,11 @@ msgstr ""
 #: src/plugins/testui/gbp-testui-workspace-addin.c:119
 #, c-format
 msgid "Unit tests completed in %lf seconds"
-msgstr ""
+msgstr "Jednotkové testy dokončeny během %lf sekund"
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:121
-#, fuzzy
-#| msgid "Time completed:"
 msgid "Unit tests completed"
-msgstr "Doba zpracování:"
+msgstr "Jednotkové testy dokončeny"
 
 #: src/plugins/testui/gtk/menus.ui:8
 #, fuzzy
@@ -6327,34 +6188,28 @@ msgid "_Update"
 msgstr "Akt_ualizovat"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
-#, fuzzy
-#| msgid "Run with Debugger"
 msgid "Run with Leak Detector"
-msgstr "Spustit s ladicím programem"
+msgstr "Spustit s detektorem úniků"
 
 #: src/plugins/valgrind/gtk/menus.ui:13
-#, fuzzy
-#| msgid "Run with Valgrind"
 msgid "Run the project with valgrind"
-msgstr "Spustit s nástrojem Valgrind"
+msgstr "Spustit projekt s nástrojem Valgrind"
 
 #: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:13
 msgid "Leak Detector"
-msgstr ""
+msgstr "Detektor úniků"
 
 #: src/plugins/valgrind/gtk/menus.ui:24
 msgid "Track Origin of Leaks"
-msgstr ""
+msgstr "Sledovat původ úniků"
 
 #: src/plugins/valgrind/gtk/menus.ui:30
-#, fuzzy
-#| msgid "S_ort Lines"
 msgid "Report Leaks"
-msgstr "S_eřadit řádky"
+msgstr "Hlásit úniky"
 
 #: src/plugins/valgrind/gtk/menus.ui:32
 msgid "Summary"
-msgstr ""
+msgstr "Souhrnně"
 
 #: src/plugins/valgrind/gtk/menus.ui:38
 msgid "Full"
@@ -6362,39 +6217,39 @@ msgstr ""
 
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
-msgstr ""
+msgstr "Druhy úniků"
 
 #: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
-msgstr ""
+msgstr "Jednoznačné"
 
 #: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
-msgstr ""
+msgstr "Nepřímé"
 
 #: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
-msgstr ""
+msgstr "Možné"
 
 #: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
-msgstr ""
+msgstr "Dosažitelné"
 
 #: src/plugins/valgrind/tweaks.ui:20
 msgid "Include definite leaks in report summary"
-msgstr ""
+msgstr "Zahrnout do souhrnného hlášení jednoznačné úniky"
 
 #: src/plugins/valgrind/tweaks.ui:32
 msgid "Include possible leaks in report summary"
-msgstr ""
+msgstr "Zahrnout do souhrnného hlášení možné úniky"
 
 #: src/plugins/valgrind/tweaks.ui:44
 msgid "Include indirect leaks in report summary"
-msgstr ""
+msgstr "Zahrnout do souhrnného hlášení nepřímé úniky"
 
 #: src/plugins/valgrind/tweaks.ui:56
 msgid "Include reachable leaks in report summary"
-msgstr ""
+msgstr "Zahrnout do souhrnného hlášení dosažitelné úniky"
 
 #: src/plugins/valgrind/tweaks.ui:71
 #, fuzzy
@@ -6421,10 +6276,8 @@ msgid "Begin cloning project from URI"
 msgstr "Začít klonovat projekt z URI"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:149
-#, fuzzy
-#| msgid "A failure occurred while initializing version control"
 msgid "A failure occurred while cloning the repository."
-msgstr "Během inicializace systému správy verzí došlo k chybě"
+msgstr "Došlo k selhání během klonování repozitáře."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
 msgid "Repository URL"
@@ -6432,7 +6285,7 @@ msgstr "Adresa URL repozitáře"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
 msgid "Choose an alternate branch"
-msgstr ""
+msgstr "Zvolit alternativní větev"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
 msgid "Branches"
@@ -6443,38 +6296,32 @@ msgid ""
 "Enter the URL of the source code repository for the project you would like "
 "to clone."
 msgstr ""
+"Zadajte adresu URL k repozitáři se zdrojovými kód projektu, který si přejete "
+"naklonovat."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
-#, fuzzy
-#| msgid "Your project will be created within a new child directory."
 msgid "The repository will be cloned into a new subdirectory."
-msgstr "Váš projekt bude vytvořen v nové podsložce."
+msgstr "Repozitář bude naklonován do nové podsložky."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
-#, fuzzy
-#| msgid "Author Email"
 msgid "Author Details"
-msgstr "E-mail autora"
+msgstr "Údaje o autorovi"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
 msgid "You may specify authorship information to override defaults."
-msgstr ""
+msgstr "Můžete uvést údaje o autorství, které přepíšou výchozí."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
 msgid "Status"
-msgstr ""
+msgstr "Stav"
 
 #: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:27
-#, fuzzy
-#| msgid "Branches"
 msgid "_Branches"
-msgstr "Větve"
+msgstr "_Větve"
 
 #: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:93
-#, fuzzy
-#| msgid "Tags"
 msgid "_Tags"
-msgstr "Štítky"
+msgstr "Š_títky"
 
 #: src/plugins/vcsui/gtk/menus.ui:7
 msgid "_Switch to branch"
@@ -6492,20 +6339,16 @@ msgstr "Vim"
 #, fuzzy
 #| msgid "New _Documentation Page"
 msgid "New _Browser Page"
-msgstr "Nová stránka s _dokumentací"
+msgstr "Nová _stránka v prohlížeči"
 
 #: src/plugins/web-browser/gtk/menus.ui:18
 #: src/plugins/web-browser/gtk/menus.ui:24
-#, fuzzy
-#| msgid "_Reload"
 msgid "Reload Page"
-msgstr "Z_novu načíst"
+msgstr "Znovu načíst stránku"
 
 #: src/plugins/web-browser/gtk/menus.ui:19
-#, fuzzy
-#| msgid "Save the current page"
 msgid "Reload the current page"
-msgstr "Uložit aktuální stránku"
+msgstr "Znovu načíst aktuální stránku"
 
 #: src/plugins/web-browser/gtk/menus.ui:25
 #, fuzzy
