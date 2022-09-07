@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-06 04:50+0000\n"
-"PO-Revision-Date: 2022-09-06 12:40+0200\n"
+"PO-Revision-Date: 2022-09-07 15:18+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -349,7 +349,7 @@ msgstr ""
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 #: src/plugins/editorui/tweaks.ui:254
 msgid "Draw Spaces"
-msgstr "Umetni razmak"
+msgstr "Umetanje razmaka"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
@@ -1353,7 +1353,7 @@ msgstr "%u od %u"
 #: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
 #: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
 msgid "Search"
-msgstr "Pretraži"
+msgstr "Pretraga"
 
 #. Translators: <b>%s</b> is used to show the provided text in bold
 #: src/libide/gtk/ide-shortcut-accel-dialog.c:394
@@ -2422,7 +2422,7 @@ msgstr "Prikazuje panel koji sadrži zapis izgradnje"
 
 #: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
 msgid "Running"
-msgstr "Pokrenuto"
+msgstr "Pokretanje"
 
 #: src/plugins/buildui/gtk/menus.ui:130
 msgid "Select Run Command…"
@@ -2763,7 +2763,7 @@ msgstr ""
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
-msgstr ""
+msgstr "Dovrši zagrade"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
@@ -2771,7 +2771,7 @@ msgstr ""
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
 msgid "Complete parameters"
-msgstr ""
+msgstr "Dovrši parametre"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
 msgid ""
@@ -3304,50 +3304,44 @@ msgid "Highlight _colors"
 msgstr ""
 
 #: src/plugins/comment-code/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Movements"
 msgid "Code Comments"
-msgstr "Pomicanje"
+msgstr "Komentari kôa"
 
 #: src/plugins/comment-code/gtk/menus.ui:9
 msgid "_Comment Code"
-msgstr ""
+msgstr "_Komentiraj kôd"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
-#, fuzzy
-#| msgid "The font used in the source code editor"
 msgid "Add comments surrounding the source code selection"
-msgstr "Slova korištena u uređivaču izvornog kôa"
+msgstr "Dodaj komentar u pripadajući odabir izvornog kôda"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
 msgid "Unco_mment Code"
-msgstr ""
+msgstr "Ukl_oni komentar iz kôda"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
-#, fuzzy
-#| msgid "The font used in the source code editor"
 msgid "Remove comments from the source code selection"
-msgstr "Slova korištena u uređivaču izvornog kôa"
+msgstr "Ukloni komentar iz pripadajućeg odabira izvornog kôda"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
-msgstr ""
+msgstr "Nadopuni autorska prava prije spremanja"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
 msgid "Updates the copyright for the user before saving to disk."
-msgstr ""
+msgstr "Nadopuni autorska prava korisnika prije spremanja na disk."
 
 #: src/plugins/copyright/tweaks.ui:16
 msgid "Update Copyright"
-msgstr ""
+msgstr "Nadopuni autorska prava"
 
 #: src/plugins/copyright/tweaks.ui:17
 msgid "Update copyright headers when saving documents"
-msgstr ""
+msgstr "Nadopuni zaglavlja autorskog prava pri spremanju dokumenta"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
-msgstr ""
+msgstr "Prikaži vodič stvaranja projekta"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:219
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:107
@@ -3356,7 +3350,7 @@ msgstr "Odaberi lokaciju"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:259
 msgid "Failed to Create Project"
-msgstr ""
+msgstr "Neuspjelo stvaranje projekta"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:18
 msgid "Project Name"
@@ -3364,7 +3358,7 @@ msgstr "Naziv projekta"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:24
 msgid "A subdirectory with this name already exists"
-msgstr ""
+msgstr "Poddirektorij tog naziva već postoji"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
@@ -3443,11 +3437,11 @@ msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:14
 msgid "CTags"
-msgstr ""
+msgstr "CTags"
 
 #: src/plugins/ctags/tweaks.ui:17
 msgid "Suggest Completions"
-msgstr ""
+msgstr "Predloži dovršetke"
 
 #: src/plugins/ctags/tweaks.ui:18
 msgid "Use CTags to suggest code completion proposals"
@@ -3455,7 +3449,7 @@ msgstr ""
 
 #: src/plugins/ctags/tweaks.ui:34
 msgid "CTags Path"
-msgstr ""
+msgstr "CTags putanja"
 
 #: src/plugins/ctags/tweaks.ui:35
 msgid "The path to the ctags executable"
@@ -3463,7 +3457,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 msgid "Run with Debugger"
-msgstr ""
+msgstr "Pokreni s otklanjateljem grešaka"
 
 #: src/plugins/debuggerui/gtk/menus.ui:13
 msgid "Run the project with debugger"
@@ -3473,7 +3467,7 @@ msgstr ""
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
-msgstr ""
+msgstr "Otklanjatelj grešaka"
 
 #: src/plugins/debuggerui/gtk/menus.ui:23
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
@@ -3495,7 +3489,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/gtk/menus.ui:49
 msgid "Run with _Debugger"
-msgstr ""
+msgstr "Pokreni s _otklanjateljem grešaka"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -3752,11 +3746,11 @@ msgstr "Veličina uvlačenja"
 
 #: src/plugins/editorui/gtk/menus.ui:44
 msgid "Same as Tab Width"
-msgstr ""
+msgstr "Isto kao širina tabulatora"
 
 #: src/plugins/editorui/gtk/menus.ui:81
 msgid "Line Ending"
-msgstr ""
+msgstr "Završetak retka"
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
@@ -3776,7 +3770,7 @@ msgstr "Nova _datoteka"
 
 #: src/plugins/editorui/gtk/menus.ui:133
 msgid "_Open File…"
-msgstr "_Otvori datoteku..."
+msgstr "_Otvori datoteku…"
 
 #: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
 msgid "Open in New Frame"
@@ -3943,7 +3937,7 @@ msgstr "Boja"
 
 #: src/plugins/editorui/tweaks.ui:32 src/plugins/terminal/tweaks.ui:10
 msgid "Fonts & Styling"
-msgstr ""
+msgstr "Slova i izgled"
 
 #: src/plugins/editorui/tweaks.ui:36
 msgid "Preview"
@@ -3967,15 +3961,15 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:93
 msgid "At Spaces"
-msgstr ""
+msgstr "Na razmaku"
 
 #: src/plugins/editorui/tweaks.ui:99
 msgid "Anywhere"
-msgstr "Od svuda"
+msgstr "Bilo gdje"
 
 #: src/plugins/editorui/tweaks.ui:111
 msgid "Background Pattern"
-msgstr ""
+msgstr "Uzorak pozadine"
 
 #: src/plugins/editorui/tweaks.ui:112
 msgid "Show a background pattern underneath source code"
@@ -3983,19 +3977,19 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:121
 msgid "No Pattern"
-msgstr ""
+msgstr "Bez uzorka"
 
 #: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
-msgstr ""
+msgstr "Rešetkaste linije"
 
 #: src/plugins/editorui/tweaks.ui:137
 msgid "Scrollbars"
-msgstr ""
+msgstr "Trake pomicanja"
 
 #: src/plugins/editorui/tweaks.ui:140
 msgid "Source Code Overview"
-msgstr ""
+msgstr "Pregled izvornog kôda"
 
 #: src/plugins/editorui/tweaks.ui:141
 msgid "Display an overview of source code next to the editor"
@@ -4003,11 +3997,11 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
-msgstr ""
+msgstr "Preferiraj trake pomicanja"
 
 #: src/plugins/editorui/tweaks.ui:156
 msgid "Always On"
-msgstr ""
+msgstr "Uvijek uključen"
 
 #: src/plugins/editorui/tweaks.ui:162
 msgid "Automatic"
@@ -4027,7 +4021,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:187
 msgid "Use Relative Line Numbers"
-msgstr ""
+msgstr "Koristi relativne brojeve redaka"
 
 #: src/plugins/editorui/tweaks.ui:188
 msgid "Show line numbers relative to the current line"
@@ -4035,7 +4029,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:199
 msgid "Show Diagnostics"
-msgstr ""
+msgstr "Prikaži dijagnostiku"
 
 #: src/plugins/editorui/tweaks.ui:200
 msgid "Display diagnostics next to the line number"
@@ -4065,7 +4059,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:240
 msgid "Semantic Highlighting"
-msgstr ""
+msgstr "Semantičko isticanje"
 
 #: src/plugins/editorui/tweaks.ui:241
 msgid ""
@@ -4083,7 +4077,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:283
 msgid "Newlines"
-msgstr ""
+msgstr "Novi redak"
 
 #: src/plugins/editorui/tweaks.ui:284
 msgid "Draw a mark at the end of lines"
@@ -4091,17 +4085,15 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:296
 msgid "Non-breaking spaces"
-msgstr ""
+msgstr "Neprekidajući razmak"
 
 #: src/plugins/editorui/tweaks.ui:297
 msgid "Draw a mark at non-breaking space characters"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:313
-#, fuzzy
-#| msgid "Loading…"
 msgid "Leading"
-msgstr "Učitavanje…"
+msgstr "Vodeći razmak"
 
 #: src/plugins/editorui/tweaks.ui:314
 msgid "Draw marks for leading spaces only"
@@ -4109,17 +4101,15 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:326
 msgid "Inside Text"
-msgstr ""
+msgstr "Unutar teksta"
 
 #: src/plugins/editorui/tweaks.ui:327
 msgid "Draw marks inside a line of text only"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:339
-#, fuzzy
-#| msgid "Tooling"
 msgid "Trailing"
-msgstr "Alati"
+msgstr "Prateći razmak"
 
 #: src/plugins/editorui/tweaks.ui:340
 msgid "Draw marks for trailing spaces only"
@@ -4127,7 +4117,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:360
 msgid "Spelling"
-msgstr ""
+msgstr "Pravopis"
 
 #: src/plugins/editorui/tweaks.ui:364
 msgid "Underline potential spelling mistakes as you type"
@@ -4159,15 +4149,15 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:413
 msgid "Code Completion"
-msgstr ""
+msgstr "Dovršavanje kôda"
 
 #: src/plugins/editorui/tweaks.ui:417
 msgid "Completion Proposals"
-msgstr ""
+msgstr "Prijedlozi dovršetka"
 
 #: src/plugins/editorui/tweaks.ui:420
 msgid "Suggest Code Completions"
-msgstr ""
+msgstr "Predloži dovršavanje kôda"
 
 #: src/plugins/editorui/tweaks.ui:421
 msgid "Automatically suggest code completions while typing"
@@ -4175,7 +4165,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:432
 msgid "Select First Completion Proposal"
-msgstr ""
+msgstr "Odaberi prvi prijedlog dovršetka"
 
 #: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically select the first completion proposal when displayed"
@@ -4183,7 +4173,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:448
 msgid "Maximum Completion Proposals"
-msgstr ""
+msgstr "Najviše prijedloga dovršetka"
 
 #: src/plugins/editorui/tweaks.ui:449
 msgid "The maximum number of completion rows that will be displayed at once"
@@ -4191,7 +4181,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
 msgid "Keyboard Theme"
-msgstr ""
+msgstr "Tema tipkovnice"
 
 #: src/plugins/editorui/tweaks.ui:472
 msgid ""
@@ -4230,15 +4220,15 @@ msgstr "Onemogućen"
 
 #: src/plugins/editorui/tweaks.ui:546
 msgid "Session Management"
-msgstr ""
+msgstr "Upravljanje sesijom"
 
 #: src/plugins/editorui/tweaks.ui:550
 msgid "Save & Restore"
-msgstr ""
+msgstr "Spremanje i obnova"
 
 #: src/plugins/editorui/tweaks.ui:553
 msgid "Auto-Save"
-msgstr ""
+msgstr "Automatsko spremanje"
 
 #: src/plugins/editorui/tweaks.ui:554
 msgid "Regularly save the document as you type"
@@ -4246,7 +4236,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:565
 msgid "Auto-Save Delay"
-msgstr ""
+msgstr "Odgoda automatskog spremanja"
 
 #: src/plugins/editorui/tweaks.ui:566
 msgid "The delay in seconds to wait before auto-saving the document"
@@ -4254,15 +4244,15 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:581
 msgid "Format on Save"
-msgstr ""
+msgstr "Formatiraj pri spremanju"
 
 #: src/plugins/editorui/tweaks.ui:582
 msgid "Reformat sources when saving to disk"
-msgstr ""
+msgstr "Preformatiraj izvor pri spremanju na disk"
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
-msgstr ""
+msgstr "Obnovi položaj pokazivača"
 
 #: src/plugins/editorui/tweaks.ui:598
 msgid "Jump to the last position when re-opening a file"
@@ -4311,7 +4301,7 @@ msgstr ""
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
 msgid "Name"
-msgstr "Naziv "
+msgstr "Naziv"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
@@ -4530,7 +4520,7 @@ msgstr "Pretraži datoteke (Ctrl+Alt+Shift+F)"
 
 #: src/plugins/grep/gbp-grep-panel.ui:46
 msgid "Find and Replace"
-msgstr "Pretraži i zamijeni"
+msgstr "Pretraga i zamjena"
 
 #: src/plugins/grep/gbp-grep-panel.ui:65
 msgid "R_ecursive"
