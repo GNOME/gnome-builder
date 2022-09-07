@@ -1352,6 +1352,7 @@ ide_c_indenter_is_trigger (GtkSourceIndenter *indenter,
                            guint              keyval)
 {
   IdeCIndenter *c = (IdeCIndenter *)indenter;
+  gboolean maybe_accel = (state & (GDK_CONTROL_MASK|GDK_ALT_MASK)) != 0;
 
   switch (keyval)
     {
@@ -1364,27 +1365,27 @@ ide_c_indenter_is_trigger (GtkSourceIndenter *indenter,
 
     case GDK_KEY_braceleft:
       c->indent_action = IDE_C_INDENT_ACTION_UNINDENT_OPENING_BRACE;
-      return TRUE;
+      return !maybe_accel;
 
     case GDK_KEY_braceright:
       c->indent_action = IDE_C_INDENT_ACTION_UNINDENT_CLOSING_BRACE;
-      return TRUE;
+      return !maybe_accel;
 
     case GDK_KEY_colon:
       c->indent_action = IDE_C_INDENT_ACTION_UNINDENT_CASE_OR_LABEL;
-      return TRUE;
+      return !maybe_accel;
 
     case GDK_KEY_numbersign:
       c->indent_action = IDE_C_INDENT_ACTION_UNINDENT_HASH;
-      return TRUE;
+      return !maybe_accel;
 
     case GDK_KEY_parenright:
       c->indent_action = IDE_C_INDENT_ACTION_ALIGN_PARAMETERS;
-      return TRUE;
+      return !maybe_accel;
 
     case GDK_KEY_slash:
       c->indent_action = IDE_C_INDENT_ACTION_CLOSE_COMMENT;
-      return TRUE;
+      return !maybe_accel;
 
     default:
       return FALSE;
