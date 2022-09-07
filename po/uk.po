@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-06 04:50+0000\n"
-"PO-Revision-Date: 2022-09-06 17:03+0300\n"
+"POT-Creation-Date: 2022-09-06 23:26+0000\n"
+"PO-Revision-Date: 2022-09-07 17:51+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1784,13 +1784,10 @@ msgstr ""
 "Перетворити перші літери слів позначеного фрагмента до верхнього регістру"
 
 #: src/libide/sourceview/gtk/menus.ui:112
-#| msgid "Select _None"
 msgid "Select _Line"
 msgstr "Позначити _рядок"
 
 #: src/libide/sourceview/gtk/menus.ui:117
-#| msgctxt "shortcut window"
-#| msgid "Delete line"
 msgid "_Delete Line"
 msgstr "Ви_лучити рядок"
 
@@ -1803,7 +1800,6 @@ msgid "S_ort Lines"
 msgstr "В_порядкувати рядки"
 
 #: src/libide/sourceview/gtk/menus.ui:133
-#| msgid "Duplicate"
 msgid "D_uplicate Line"
 msgstr "Д_ублювати рядок"
 
@@ -1825,7 +1821,7 @@ msgid "_Find References"
 msgstr "З_найти посилання"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1134
+#: src/libide/sourceview/ide-source-view.c:1371
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -4198,12 +4194,10 @@ msgid "Non-breaking spaces"
 msgstr "Нерозривний пропуск"
 
 #: src/plugins/editorui/tweaks.ui:297
-#| msgid "Navigate to non-space characters"
 msgid "Draw a mark at non-breaking space characters"
 msgstr "Малювати позначки для символів нерозривних пробілів"
 
 #: src/plugins/editorui/tweaks.ui:313
-#| msgid "Leading Only"
 msgid "Leading"
 msgstr "Початкові"
 
@@ -4212,7 +4206,6 @@ msgid "Draw marks for leading spaces only"
 msgstr "Малювати позначки лише для початкових пробілів"
 
 #: src/plugins/editorui/tweaks.ui:326
-#| msgid "Sublime Text"
 msgid "Inside Text"
 msgstr "У тексті"
 
@@ -4221,7 +4214,6 @@ msgid "Draw marks inside a line of text only"
 msgstr "Малювати позначки лише всередині рядка тексту"
 
 #: src/plugins/editorui/tweaks.ui:339
-#| msgid "Trailing Only"
 msgid "Trailing"
 msgstr "Кінцеві"
 
@@ -5405,7 +5397,6 @@ msgid "The default cargo command to run with rust-analyzer"
 msgstr "Типова команда cargo, яку слід запускати з rust-analyzer"
 
 #: src/plugins/rust-analyzer/tweaks.ui:45
-#| msgid "Features:"
 msgid "Features"
 msgstr "Можливості"
 
@@ -5414,7 +5405,8 @@ msgid "Proc Macros"
 msgstr "Процедурні макроси"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
+#| msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
+msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr "Вмикає експериментальну можливість процедурних макросів rust-analyzer"
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
