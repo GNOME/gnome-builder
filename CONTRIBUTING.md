@@ -16,7 +16,7 @@ Please file issues for bugs on our
 after you have tested a Nightly release to verify the bug has not already
 been fixed.
 
-You can install Nightly from Flatpak using `flatpak --user install gnome-nightly org.gnome.TextEditor.Devel`.
+You can install Nightly from Flatpak using `flatpak --user install gnome-nightly org.gnome.Builder.Devel`.
 
 __Please do not file issues for feature requests.__
 Features must go through the design process first.
