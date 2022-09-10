@@ -29,17 +29,15 @@
     </section>
   </menu>
   <menu id="build-menu">
-    <section id="build-configure-section">
+    <item>
+      <attribute name="label" translatable="yes">Configure Project…</attribute>
+      <attribute name="action">context.workbench.configure</attribute>
+      <attribute name="accel">&lt;alt&gt;comma</attribute>
+      <attribute name="description" translatable="yes">Configure settings related to the project</attribute>
+      <attribute name="verb-icon">preferences-system-symbolic</attribute>
       <attribute name="page" translatable="yes">Code Foundry</attribute>
       <attribute name="group" translatable="yes">Configuration</attribute>
-      <item>
-        <attribute name="label" translatable="yes">Configure Project…</attribute>
-        <attribute name="action">context.workbench.configure</attribute>
-        <attribute name="accel">&lt;alt&gt;comma</attribute>
-        <attribute name="description" translatable="yes">Configure settings related to the project</attribute>
-        <attribute name="verb-icon">preferences-system-symbolic</attribute>
-      </item>
-    </section>
+    </item>
     <section id="build-menu-target">
       <attribute name="page" translatable="yes">Code Foundry</attribute>
       <attribute name="group" translatable="yes">Configuration</attribute>
