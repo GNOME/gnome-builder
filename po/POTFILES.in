@@ -306,6 +306,7 @@ src/plugins/todo/gbp-todo-workspace-addin.c
 src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c
 src/plugins/update-dependencies/gtk/menus.ui
 src/plugins/update-manager/gbp-update-manager-app-addin.c
+src/plugins/update-manager/gtk/menus.ui
 src/plugins/valgrind/gtk/menus.ui
 src/plugins/valgrind/org.gnome.builder.valgrind.gschema.xml
 src/plugins/valgrind/tweaks.ui
