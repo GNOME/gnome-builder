@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-04 16:19+0000\n"
+"POT-Creation-Date: 2022-09-07 18:11+0000\n"
 "PO-Revision-Date: 2022-09-07 20:10+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
 #: src/libide/gui/ide-application-actions.c:114 src/main.c:242
-#: src/plugins/editorui/tweaks.ui:381
+#: src/plugins/editorui/tweaks.ui:481
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "Builder"
@@ -243,7 +243,8 @@ msgstr "Ladicí bod přerušení na funkci g_critical()"
 msgid ""
 "Debugger should automatically insert breakpoint at g_critical() function."
 msgstr ""
-"Ladicí program by měl automaticky vložit bod přerušení na funkci g_critical()."
+"Ladicí program by měl automaticky vložit bod přerušení na funkci "
+"g_critical()."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
 msgid "Debugger Breakpoint at g_warning()"
@@ -319,7 +320,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "Když je zapnuto, bude editor zobrazovat relativní čísla řádků."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:394
+#: src/plugins/editorui/tweaks.ui:494
 msgid "Smart Backspace"
 msgstr "Chytrý Backspace"
 
@@ -332,7 +333,7 @@ msgstr ""
 "zarovnání podle velikosti odsazení."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:506
 msgid "Smart Home/End"
 msgstr "Chytrý Home/End"
 
@@ -358,6 +359,7 @@ msgid "When the overview map should be displayed."
 msgstr "Kdy by měla být zobrazena přehledová mapa."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: src/plugins/editorui/tweaks.ui:254
 msgid "Draw Spaces"
 msgstr "Vykreslovat bílé znaky"
 
@@ -610,8 +612,7 @@ msgstr "Podrobné záznamy"
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
 msgid ""
 "If G_MESSAGES_DEBUG=all should be used when running the target application"
-msgstr ""
-"Zda se má při spouštění cílové aplikace používat G_MESSAGES_DEBUG=all."
+msgstr "Zda se má při spouštění cílové aplikace používat G_MESSAGES_DEBUG=all."
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
 #: src/plugins/project-tree/tweaks.ui:13
@@ -646,7 +647,7 @@ msgstr ""
 "Když je zapnuto, budou se v projektovém stromě řadit složky před soubory."
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:263
+#: src/plugins/editorui/tweaks.ui:363
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "Zkontrolovat pravopis"
@@ -687,7 +688,7 @@ msgstr "Nová pracovní plocha editoru"
 msgid "D-Bus Inspector"
 msgstr "Inspektor sběrnice D-Bus"
 
-#: src/libide/code/ide-buffer.c:3673
+#: src/libide/code/ide-buffer.c:3674
 msgid "The current language lacks a symbol resolver."
 msgstr "Pro aktuální programovací jazyk není k dispozici rozpoznávání symbolů."
 
@@ -760,7 +761,7 @@ msgstr "Předvolby"
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:464
 msgid "Keyboard Shortcuts"
 msgstr "Klávesové zkratky"
 
@@ -806,8 +807,8 @@ msgstr "Stránky"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
 #: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
-#: src/libide/sourceview/gtk/menus.ui:124
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:139
+#: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
@@ -1639,7 +1640,7 @@ msgstr ""
 
 #: src/libide/plugins/ide-plugin.c:354
 msgid "Desktop Integration"
-msgstr ""
+msgstr "Integrace do uživatelského prostředí"
 
 #: src/libide/plugins/ide-plugin.c:355
 #, fuzzy
@@ -1730,11 +1731,9 @@ msgstr "_Výběr"
 msgid "Select _All"
 msgstr "Vybrat vš_e"
 
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:125
-#, fuzzy
-#| msgid "Committing…"
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
-msgstr "Zařazuje se…"
+msgstr "Formátování"
 
 #: src/libide/sourceview/gtk/menus.ui:81
 msgid "All _Upper Case"
@@ -1769,60 +1768,64 @@ msgid "Convert the text selection to title case"
 msgstr "Převést ve vybraném textu první písmena na velká"
 
 #: src/libide/sourceview/gtk/menus.ui:112
+msgid "Select _Line"
+msgstr "Vybrat řá_dek"
+
+#: src/libide/sourceview/gtk/menus.ui:117
+msgid "_Delete Line"
+msgstr "_Smazat řádek"
+
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "_Join Lines"
 msgstr "_Spojit řádky"
 
-#: src/libide/sourceview/gtk/menus.ui:117
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "S_ort Lines"
 msgstr "S_eřadit řádky"
 
-#: src/libide/sourceview/gtk/menus.ui:131
+#: src/libide/sourceview/gtk/menus.ui:133
+msgid "D_uplicate Line"
+msgstr "D_uplikovat řádek"
+
+#: src/libide/sourceview/gtk/menus.ui:146
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Pohyb v kódu"
 
-#: src/libide/sourceview/gtk/menus.ui:134
+#: src/libide/sourceview/gtk/menus.ui:149
 msgid "_Go to Definition"
 msgstr "Pře_jít na definici"
 
-#: src/libide/sourceview/gtk/menus.ui:135
-#, fuzzy
-#| msgid "Jump to the last position when reopening a file"
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "Jump to file and location where item is defined"
-msgstr "Při opětovném otevření souboru skočit na poslední pozici."
+msgstr "Přejít do souboru a na místo v něm, kde je položka definována"
 
-#: src/libide/sourceview/gtk/menus.ui:141
+#: src/libide/sourceview/gtk/menus.ui:156
 msgid "_Find References"
 msgstr "_Hledat odkazy"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1002
+#: src/libide/sourceview/ide-source-view.c:1371
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
-msgstr ""
+msgstr "Ř %u, S %u"
 
 #: src/libide/terminal/gtk/menus.ui:6
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
 #: src/libide/terminal/gtk/menus.ui:17
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Copy selected text to clipboard"
 msgid "Copy selection from terminal to clipboard"
-msgstr "Zkopírovat vybraný text do schránky"
+msgstr "Zkopírovat výběr z terminálu do schránky"
 
 #: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
 msgstr "Z_kopírovat odkaz"
 
 #: src/libide/terminal/gtk/menus.ui:28
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Paste text from clipboard"
 msgid "Paste from clipboard into the terminal"
-msgstr "Vložit vybraný text ze schránky"
+msgstr "Vložit ze schránky do terminálu"
 
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
@@ -1902,10 +1905,8 @@ msgid "Projects Directory"
 msgstr "Složka s projekty"
 
 #: src/libide/tweaks/ide-tweaks-font.c:81
-#, fuzzy
-#| msgid "Selection"
 msgid "Select Font"
-msgstr "Výběr"
+msgstr "Výběr fontu"
 
 #: src/libide/tweaks/ide-tweaks-window.c:134
 #, c-format
@@ -2314,27 +2315,23 @@ msgstr "Spustit"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
-#, fuzzy, c-format
-#| msgid "Failed to locate a build target"
+#, c-format
 msgid "Failed to list build targets: %s"
-msgstr "Selhalo vyhledání cíle sestavení"
+msgstr "Selhalo vypsání cílů sestavení: %s"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
-#, fuzzy
-#| msgid "Build Targets"
 msgid "Select Build Target"
-msgstr "Stavit cíle"
+msgstr "Výběr cíle stastavení"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
-#, fuzzy
-#| msgid "Build Targets"
 msgid "Available Build Targets"
-msgstr "Stavit cíle"
+msgstr "Dostupné cíle stastavení"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
 msgid ""
 "Some targets may not be available until the project has been configured."
 msgstr ""
+"Některé cíle nemusí být dostupné, dokud nebude projekt nakonfigurován"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
 #: src/plugins/buildui/tweaks.ui:26
@@ -2345,30 +2342,23 @@ msgstr "Automaticky odsazovat"
 
 #: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
 msgid "This selection allows Builder to choose the best candidate."
-msgstr ""
+msgstr "Tato volba umožňuje Builderu zvolit nejlepšího kandidáta."
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
 msgid "The container used to build and run your application"
 msgstr "Kontejner používaný k sestavení a běhu aplikace"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
-#, fuzzy
-#| msgid "_Duplicate"
 msgid "Duplicate"
-msgstr "_Duplikovat"
+msgstr "Duplikovat"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Duplicate current line or selection"
 msgid "Duplicate into new configuration"
-msgstr "Duplikovat aktuální řádek nebo výběr"
+msgstr "Duplikovat do nové konfigurace"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
-#, fuzzy
-#| msgid "Make _Active"
 msgid "Make Active"
-msgstr "Natavit jako _aktivní"
+msgstr "Aktivovat"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
 msgid "Make configuration active and reload build pipeline"
@@ -2381,16 +2371,12 @@ msgid "Delete"
 msgstr "Smazat"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
-#, fuzzy
-#| msgid "No build configuration"
 msgid "Delete configuration"
-msgstr "Žádná konfigurace sestavení"
+msgstr "Smazat konfiguraci"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
-#, fuzzy
-#| msgid "Building project"
 msgid "Stop Building Project"
-msgstr "Sestavuje se projekt"
+msgstr "Zastavit sestavování projektu"
 
 #: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
 msgid "Build Project (Shift+Ctrl+Alt+B)"
@@ -2426,28 +2412,20 @@ msgid "Configuration"
 msgstr "Konfigurace"
 
 #: src/plugins/buildui/gtk/menus.ui:36
-#, fuzzy
-#| msgid "Configure project"
 msgid "Configure Project…"
-msgstr "Konfiguruje se projekt"
+msgstr "Nakonfigurovat projekt…"
 
 #: src/plugins/buildui/gtk/menus.ui:39
-#, fuzzy
-#| msgid "Configuring project"
 msgid "Configure settings related to the project"
-msgstr "Konfiguruje se projekt"
+msgstr "Nakonfigurovat nastavení vztahující se k projektu"
 
 #: src/plugins/buildui/gtk/menus.ui:47
-#, fuzzy
-#| msgid "Select Widget…"
 msgid "Select Build Target…"
-msgstr "Vybrat widget…"
+msgstr "Vybrat cíl sestavení…"
 
 #: src/plugins/buildui/gtk/menus.ui:49
-#, fuzzy
-#| msgid "Failed to locate a build target"
 msgid "Change default build target"
-msgstr "Selhalo vyhledání cíle sestavení"
+msgstr "Změnit výchozí cíl sestavení"
 
 #: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
 #: src/plugins/buildui/gtk/menus.ui:114
@@ -2465,80 +2443,60 @@ msgid "_Rebuild"
 msgstr "Sestavit _znovu"
 
 #: src/plugins/buildui/gtk/menus.ui:64
-#, fuzzy
-#| msgid "Build the project"
 msgid "Rebuild the project"
-msgstr "Sestavit projekt"
+msgstr "Znovu sestavit projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:69
 msgid "_Clean"
 msgstr "_Vyčistit"
 
 #: src/plugins/buildui/gtk/menus.ui:70
-#, fuzzy
-#| msgid "Build the project"
 msgid "Clean the project"
-msgstr "Sestavit projekt"
+msgstr "Promazat projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:77
-#, fuzzy
-#| msgid "Install project"
 msgid "Install & Deployment"
-msgstr "Instaluje se projekt"
+msgstr "Instalace a nasazení"
 
 #: src/plugins/buildui/gtk/menus.ui:81
-#, fuzzy
-#| msgid "Install project"
 msgid "Install the project"
-msgstr "Instaluje se projekt"
+msgstr "Nainstalovat projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy to Device…"
-msgstr ""
+msgstr "Nasadit do zařízení…"
 
 #: src/plugins/buildui/gtk/menus.ui:87
-#, fuzzy
-#| msgid "Display the project creation guide"
 msgid "Deploy project to current device"
-msgstr "Zobrazit průvodce vytvořením projektu"
+msgstr "Nasadit projekt do aktuálního zařízení"
 
 #. TODO: Instead of having a generic Export via the build-manager,
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
 #: src/plugins/buildui/gtk/menus.ui:96
-#, fuzzy
-#| msgid "_Export Bundle"
 msgid "_Export"
-msgstr "_Exportovat balík"
+msgstr "_Export"
 
 #: src/plugins/buildui/gtk/menus.ui:98
-#, fuzzy
-#| msgid "Empty Project"
 msgid "Export project"
-msgstr "Prázdný projekt"
+msgstr "Vyexportovat projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:106
-#, fuzzy
-#| msgid "Build"
 msgid "Stop Build"
-msgstr "Sestavení"
+msgstr "Zastavit sestavování"
 
 #: src/plugins/buildui/gtk/menus.ui:108
-#, fuzzy
-#| msgid "Building project"
 msgid "Stop building project"
-msgstr "Sestavuje se projekt"
+msgstr "Zastavit sestavování projektu"
 
 #: src/plugins/buildui/gtk/menus.ui:116
-#, fuzzy
-#| msgid "Save build log"
 msgid "Show Build _Log"
-msgstr "Uložit záznam o sestavení"
+msgstr "Zo_brazit záznam o sestavení"
 
 #: src/plugins/buildui/gtk/menus.ui:119
 msgid "Display panel containing the build log"
-msgstr ""
+msgstr "Zobrazit panel obsahující záznam o sestavování"
 
 #: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
 #, fuzzy
@@ -2557,10 +2515,8 @@ msgid "Run"
 msgstr "Spustit"
 
 #: src/plugins/buildui/gtk/menus.ui:145
-#, fuzzy
-#| msgid "Build the project"
 msgid "Run the project"
-msgstr "Sestavit projekt"
+msgstr "Spustit projekt"
 
 #: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
@@ -2570,23 +2526,19 @@ msgstr "Jednotkové testy"
 
 #: src/plugins/buildui/gtk/menus.ui:157
 msgid "Follow System Style"
-msgstr ""
+msgstr "Řídit se stylem systému"
 
 #: src/plugins/buildui/gtk/menus.ui:163
-#, fuzzy
-#| msgid "Light"
 msgid "Force Light"
-msgstr "Světlý"
+msgstr "Vynutit světlý"
 
 #: src/plugins/buildui/gtk/menus.ui:169
 msgid "Force Dark"
-msgstr ""
+msgstr "Vynutit tmavý"
 
 #: src/plugins/buildui/gtk/menus.ui:176
-#, fuzzy
-#| msgid "Accessibility properties"
 msgid "Accessibility"
-msgstr "Vlastnosti zpřístupnění"
+msgstr "Zpřístupnění"
 
 #: src/plugins/buildui/gtk/menus.ui:178
 msgid "High Contrast"
@@ -2635,8 +2587,6 @@ msgid "The font used in the terminal"
 msgstr "Font používaný v terminálu"
 
 #: src/plugins/buildui/gtk/preferences.ui:80
-#, fuzzy
-#| msgid "Grid Pattern"
 msgid "Show Grid Pattern"
 msgstr "Zobrazovat vzor mřížky"
 
@@ -2714,8 +2664,8 @@ msgid ""
 "Installs the application before running. This is necessary for most projects "
 "unless custom run commands are used."
 msgstr ""
-"Před spuštěním aplikaci nainstalovat. Pro většinu projektů je to nutné, pokud "
-"není ke spouštění používán vlastní příkaz."
+"Před spuštěním aplikaci nainstalovat. Pro většinu projektů je to nutné, "
+"pokud není ke spouštění používán vlastní příkaz."
 
 #: src/plugins/buildui/tweaks.ui:74
 #, fuzzy
@@ -2727,8 +2677,7 @@ msgstr "Signály"
 msgid ""
 "Send the signal to the target application when requesting the application "
 "stop."
-msgstr ""
-""
+msgstr "Poslat cílové aplikaci signál, když je požadováno její zastavení."
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
@@ -2757,10 +2706,8 @@ msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:176
-#, fuzzy
-#| msgid "Build Toolchain"
 msgid "Build & Tooling"
-msgstr "Sada nástrojů pro sestavení"
+msgstr "Sestavování a nástroje"
 
 #: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
 msgid "General"
@@ -2815,7 +2762,7 @@ msgstr "Výchozí"
 
 #: src/plugins/buildui/tweaks.ui:233
 msgid "1 per CPU"
-msgstr ""
+msgstr "1 na CPU"
 
 #: src/plugins/buildui/tweaks.ui:239
 msgid "1"
@@ -2899,6 +2846,8 @@ msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
+"SDK používané k sestavení vaší aplikace je automaticky určeno podle běhového "
+"prostředí."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 #, fuzzy
@@ -3039,7 +2988,7 @@ msgstr "Deklarace"
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
-msgstr ""
+msgstr "Pravděpodobně překlep v „%s“. Máte na mysli „%s“?"
 
 #: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
 msgid "Colors"
@@ -3469,30 +3418,24 @@ msgid "Highlight _colors"
 msgstr "Zvýrazňovat _barvy"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Color Components"
 msgid "Code Comments"
-msgstr "Komponenty barvy"
+msgstr "Komentování kódu"
 
 #: src/plugins/comment-code/gtk/menus.ui:9
-#, fuzzy
-#| msgid "_Comment code"
 msgid "_Comment Code"
 msgstr "Za_komentovat kód"
 
 #: src/plugins/comment-code/gtk/menus.ui:10
 msgid "Add comments surrounding the source code selection"
-msgstr ""
+msgstr "Přidat komentářové značky obklopující vybraný zdrojový kód"
 
 #: src/plugins/comment-code/gtk/menus.ui:16
-#, fuzzy
-#| msgid "Unco_mment code"
 msgid "Unco_mment Code"
 msgstr "Odko_mentovat kód"
 
 #: src/plugins/comment-code/gtk/menus.ui:17
 msgid "Remove comments from the source code selection"
-msgstr ""
+msgstr "Zrušit komentářové značky ve vybraném zdrojovém kódu"
 
 #: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
 msgid "Update Copyright before Saving"
@@ -3509,10 +3452,8 @@ msgid "Update Copyright"
 msgstr "Aktualizovat autorská práva"
 
 #: src/plugins/copyright/tweaks.ui:17
-#, fuzzy
-#| msgid "Update Copyright before Saving"
 msgid "Update copyright headers when saving documents"
-msgstr "Pře uložením aktualizovat autorská práva"
+msgstr "Při ukládání dokumentu aktualizovat hlavičky s autorskými právy"
 
 #: src/plugins/create-project/gbp-create-project-application-addin.c:49
 msgid "Display the project creation guide"
@@ -3520,26 +3461,20 @@ msgstr "Zobrazit průvodce vytvořením projektu"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:219
 #: src/plugins/vcsui/gbp-vcsui-clone-page.c:107
-#, fuzzy
-#| msgid "Project Location"
 msgid "Select Location"
-msgstr "Umístění projektu"
+msgstr "Výběr umístění"
 
 #: src/plugins/create-project/gbp-create-project-widget.c:259
-#, fuzzy
-#| msgid "Failed to load the project"
 msgid "Failed to Create Project"
-msgstr "Selhalo načtení projektu"
+msgstr "Selhalo vytvoření projektu"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:18
 msgid "Project Name"
 msgstr "Název projektu"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:24
-#, fuzzy
-#| msgid "A folder with that name already exists."
 msgid "A subdirectory with this name already exists"
-msgstr "Složka s tímto názvem již existuje."
+msgstr "Podsložka s tímto názvem již existuje"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:31
 msgid ""
@@ -3560,8 +3495,8 @@ msgid ""
 "A reverse domain-name identifier used to identify the application, such as "
 "\"org.gnome.Builder\". It may not contain dashes."
 msgstr ""
-"Reverzní doménový název, který se použije k identifikaci aplikace, např. „org."
-"gnome.Builder“. Nesmí obsahovat pomlčky."
+"Reverzní doménový název, který se použije k identifikaci aplikace, např. "
+"„org.gnome.Builder“. Nesmí obsahovat pomlčky."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:69
 #: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
@@ -3604,10 +3539,8 @@ msgid "Create New Project…"
 msgstr "Vytvořit nový projekt…"
 
 #: src/plugins/create-project/gtk/menus.ui:22
-#, fuzzy
-#| msgid "Create new projects from a variety of templates"
 msgid "Create a new project from template"
-msgstr "Vytváření nových projektů z různorodých šablon"
+msgstr "Vytvořit nový projekt z šablony"
 
 #: src/plugins/ctags/ide-ctags-service.c:132
 msgid ""
@@ -3622,42 +3555,32 @@ msgid "Indexing Source Code (Paused)"
 msgstr "Indexuje se zdrojový kód (pozastaveno)"
 
 #: src/plugins/ctags/tweaks.ui:14
-#, fuzzy
-#| msgid "Tags"
 msgid "CTags"
-msgstr "Štítky"
+msgstr "CTags"
 
 #: src/plugins/ctags/tweaks.ui:17
-#, fuzzy
-#| msgid "Suggest Completions from Snippets"
 msgid "Suggest Completions"
-msgstr "Navrhovat dokončení z úryvků"
+msgstr "Navrhovat dokončení"
 
 #: src/plugins/ctags/tweaks.ui:18
-#, fuzzy
-#| msgid "Use registered snippets to suggest completion proposals"
 msgid "Use CTags to suggest code completion proposals"
-msgstr "Používat registrované úryvky k návrhům pro dokončování slov"
+msgstr "Používat CTags k návrhům pro dokončení kódu"
 
 #: src/plugins/ctags/tweaks.ui:34
 msgid "CTags Path"
-msgstr ""
+msgstr "Cesta k CTags"
 
 #: src/plugins/ctags/tweaks.ui:35
-#, fuzzy
-#| msgid "Path to ctags executable"
 msgid "The path to the ctags executable"
-msgstr "Cesta ke spustitelnému souboru ctags"
+msgstr "Cesta ke spustitelnému programu ctags"
 
 #: src/plugins/debuggerui/gtk/menus.ui:10
 msgid "Run with Debugger"
 msgstr "Spustit s ladicím programem"
 
 #: src/plugins/debuggerui/gtk/menus.ui:13
-#, fuzzy
-#| msgid "Run with Debugger"
 msgid "Run the project with debugger"
-msgstr "Spustit s ladicím programem"
+msgstr "Spustit projekt s ladicím programem"
 
 #: src/plugins/debuggerui/gtk/menus.ui:21
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
@@ -3673,19 +3596,15 @@ msgstr "Body přerušení"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
 msgid "Automatically Break at Program Start"
-msgstr ""
+msgstr "Automaticky přerušit na začátku programu"
 
 #: src/plugins/debuggerui/gtk/menus.ui:30
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Automatically Break at Warnings"
-msgstr "Automaticky odsazovat"
+msgstr "Automaticky přerušit na varováních"
 
 #: src/plugins/debuggerui/gtk/menus.ui:35
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Automatically Break at Criticals"
-msgstr "Automaticky odsazovat"
+msgstr "Automaticky přerušit na kritických"
 
 #: src/plugins/debuggerui/gtk/menus.ui:49
 msgid "Run with _Debugger"
@@ -3824,37 +3743,27 @@ msgstr "Konzola"
 
 #: src/plugins/debuggerui/tweaks.ui:19
 msgid "Stop After Launching Program"
-msgstr ""
+msgstr "Zasavit po spuštění porgramu"
 
 #: src/plugins/debuggerui/tweaks.ui:20
-#, fuzzy
-#| msgid ""
-#| "Automatically stop execution at the start of the applications main "
-#| "function"
 msgid "Automatically insert a breakpoint at the start of the application"
-msgstr "Automaticky zastavit provádění hned na začátku aplikace ve funkci main"
+msgstr "Automaticky vkládat bod přerušení na začátek aplikace"
 
 #: src/plugins/debuggerui/tweaks.ui:31
 msgid "Stop at Warnings"
 msgstr "Zastavovat na varováních"
 
 #: src/plugins/debuggerui/tweaks.ui:32
-#, fuzzy
-#| msgid "Debugger should automatically insert breakpoint on main function."
 msgid "Automatically insert a breakpoint on warning logs"
-msgstr ""
-"Ladicí program by měl automaticky vložit bod přerušení na hlavní funkci."
+msgstr "Automaticky vkládat bod přerušené na zápisy varovných záznamů"
 
 #: src/plugins/debuggerui/tweaks.ui:43
 msgid "Stop at Criticals"
 msgstr "Zastavovat na kritických"
 
 #: src/plugins/debuggerui/tweaks.ui:44
-#, fuzzy
-#| msgid "Debugger should automatically insert breakpoint on main function."
 msgid "Automatically insert a breakpoint on critical logs"
-msgstr ""
-"Ladicí program by měl automaticky vložit bod přerušení na hlavní funkci."
+msgstr "Automaticky vkládat bod přerušené na zápisy kritických záznamů"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
@@ -3865,10 +3774,8 @@ msgid "The device port number"
 msgstr "Číslo portu zařízení"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:50
-#, fuzzy
-#| msgid "Application Output"
 msgid "The application to run"
-msgstr "Výstup aplikace"
+msgstr "Aplikace ke spuštění"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:51
 msgid "A PTY to bidirectionally proxy to the device"
@@ -3876,7 +3783,7 @@ msgstr ""
 
 #: src/plugins/deviced/gnome-builder-deviced.c:52
 msgid "Number of seconds to wait for the deviced peer to appear"
-msgstr ""
+msgstr "Počet sekund čekání, než se objeví protější zařízení"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
@@ -3891,20 +3798,16 @@ msgid "No file was provided."
 msgstr "Nebyl poskytnut žádný soubor."
 
 #: src/plugins/editorui/gbp-editorui-application-addin.c:137
-#, fuzzy
-#| msgid "Use minimal editor interface"
 msgid "Use minimal editorui interface"
 msgstr "Používat minimální rozhraní editoru"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
-#, fuzzy
-#| msgid "_Reset"
 msgid "Reset"
-msgstr "_Výchozí"
+msgstr "Výchozí"
 
 #: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
 msgid "Reverts language preferences to application defaults"
-msgstr ""
+msgstr "Vrátit předvolby jazyka na výchozí hodnoty aplikace"
 
 #. translators: "Text" means plaintext or text/plain
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
@@ -3915,19 +3818,19 @@ msgstr "Text"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
+#: src/plugins/editorui/tweaks.ui:257
 msgid "Spaces"
 msgstr "Mezery"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
 msgstr "Tabulátory"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
-#, fuzzy
-#| msgid "_Go"
 msgid "Go"
-msgstr "Pře_jít"
+msgstr "Přejít"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
 msgid "Go to Line"
@@ -3938,14 +3841,10 @@ msgid "Indentation"
 msgstr "Odsazení"
 
 #: src/plugins/editorui/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Insert Matching Brace"
 msgid "Indent Using Spaces"
-msgstr "Vkládat odpovídající závorku"
+msgstr "Odsadit pomocí mezer"
 
 #: src/plugins/editorui/gtk/menus.ui:13
-#, fuzzy
-#| msgid "Spaces per tab"
 msgid "Spaces per Tab"
 msgstr "Počet mezer na tabulátor"
 
@@ -3959,16 +3858,12 @@ msgstr "5"
 
 #: src/plugins/editorui/gtk/menus.ui:41
 #: src/plugins/editorui/tweaks-language.ui:145
-#, fuzzy
-#| msgid "Indentation"
 msgid "Indentation Size"
-msgstr "Odsazení"
+msgstr "Velikost odsazení"
 
 #: src/plugins/editorui/gtk/menus.ui:44
-#, fuzzy
-#| msgid "Tab width"
 msgid "Same as Tab Width"
-msgstr "Šířka tabulátoru"
+msgstr "Stejné jako šířka tabulátoru"
 
 #: src/plugins/editorui/gtk/menus.ui:81
 msgid "Line Ending"
@@ -3999,36 +3894,28 @@ msgid "Open in New Frame"
 msgstr "Otevřít v novém rámu"
 
 #: src/plugins/editorui/gtk/menus.ui:147
-#, fuzzy
-#| msgid "Open in New Workspace"
 msgid "Open in New Workspace…"
-msgstr "Otevřít v nové pracovní ploše"
+msgstr "Otevřít v nové pracovní ploše…"
 
 #: src/plugins/editorui/gtk/menus.ui:161
 msgid "Save _As"
 msgstr "Uložit j_ako"
 
 #: src/plugins/editorui/gtk/menus.ui:168
-#, fuzzy
-#| msgid "Find"
 msgid "Find…"
-msgstr "Najít"
+msgstr "Najít…"
 
 #: src/plugins/editorui/gtk/menus.ui:173
-#, fuzzy
-#| msgid "Find and Replace"
 msgid "Find/Replace…"
-msgstr "Hledání a nahrazování"
+msgstr "Najít / nahradit"
 
 #: src/plugins/editorui/gtk/menus.ui:180
 msgid "Print…"
 msgstr "Tisk…"
 
 #: src/plugins/editorui/gtk/menus.ui:188
-#, fuzzy
-#| msgid "Selection"
 msgid "Format Selection"
-msgstr "Výběr"
+msgstr "Naformátovat výběr"
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
@@ -4041,24 +3928,20 @@ msgid ""
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:41
-#, fuzzy
-#| msgid "Indentation"
 msgid "Indentation & Formatting"
-msgstr "Odsazení"
+msgstr "Odsazení a formátování"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
-msgstr ""
+msgstr "Znak tabulátor"
 
 #: src/plugins/editorui/tweaks-language.ui:45
 msgid "The character to be inserted for Tab"
-msgstr ""
+msgstr "Znak pro vložení klávesou Tab"
 
 #: src/plugins/editorui/tweaks-language.ui:59
-#, fuzzy
-#| msgid "Tabs"
 msgid "Tab"
-msgstr "Tabulátory"
+msgstr "Tabulátor"
 
 #: src/plugins/editorui/tweaks-language.ui:73
 msgid "Insert Trailing Newline"
@@ -4069,33 +3952,24 @@ msgid "Ensure files end with a newline"
 msgstr "Zajistí, že soubory budou končit novým řádkem"
 
 #: src/plugins/editorui/tweaks-language.ui:90
-#, fuzzy
-#| msgid "Trim trailing whitespace"
 msgid "Trim Trailing Space"
 msgstr "Odstraňovat koncové mezery"
 
 #: src/plugins/editorui/tweaks-language.ui:91
-#, fuzzy
-#| msgid ""
-#| "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
-msgstr "Při ukládání u změněných řádků odstranit koncové bílé znaky."
+msgstr "Při ukládání u změněných řádků odstranit koncové bílé znaky"
 
 #: src/plugins/editorui/tweaks-language.ui:111
-#, fuzzy
-#| msgid "Automatically indent"
 msgid "Auto Indent"
 msgstr "Automaticky odsazovat"
 
 #: src/plugins/editorui/tweaks-language.ui:112
-#, fuzzy
-#| msgid "Indent source code as you type"
 msgid "Automatically indent source code as you type"
-msgstr "Odsazovat zdrojový kód podle toho, jak píšete"
+msgstr "Automaticky odsazovat zdrojový během psaní"
 
 #: src/plugins/editorui/tweaks-language.ui:128
 msgid "Tab Size"
-msgstr "Velikost tabulátoru"
+msgstr "Šířka tabulátoru"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
@@ -4104,6 +3978,7 @@ msgstr "Počet znaků pro odsazení na tabulátor"
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
 msgstr ""
+"Počet znaků, na které se má odsazovat, nebo -1 pro použití šířky tabulátoru"
 
 #: src/plugins/editorui/tweaks-language.ui:164
 msgid "Margin"
@@ -4116,6 +3991,7 @@ msgstr "Zobrazovat pravý okraj"
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr ""
+"Zobrazovat v editoru okraj, aby se dala najevo maximální požadovaná šířka"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -4126,7 +4002,7 @@ msgid "The desired maximum line length"
 msgstr "Požadovaná maximální délka řádku"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:256
+#: src/plugins/editorui/tweaks.ui:356
 msgid "Behavior"
 msgstr "Chování"
 
@@ -4144,7 +4020,8 @@ msgstr "Vkládat odpovídající závorku"
 
 #: src/plugins/editorui/tweaks-language.ui:224
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
-msgstr "Vkládat odpovídající znak pro závorky (kulaté, hranaté, složené) a uvozovky"
+msgstr ""
+"Vkládat odpovídající znak pro závorky (kulaté, hranaté, složené) a uvozovky"
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
@@ -4314,153 +4191,198 @@ msgstr ""
 "Používat informace o symbolech ke zvýrazňování jmenných prostorů, funkcí a "
 "proměnných ve zdrojovém kódu"
 
-#: src/plugins/editorui/tweaks.ui:260
+#: src/plugins/editorui/tweaks.ui:258
+msgid "Draw a mark representing normal spaces"
+msgstr "Vykreslovat značky představující normální mezery"
+
+#: src/plugins/editorui/tweaks.ui:271
+msgid "Draw a mark representing tabs"
+msgstr "Vykreslovat značky představující tabulátory"
+
+#: src/plugins/editorui/tweaks.ui:283
+msgid "Newlines"
+msgstr "Odřádkování"
+
+#: src/plugins/editorui/tweaks.ui:284
+msgid "Draw a mark at the end of lines"
+msgstr "Vykreslovat značky představující konce řádků"
+
+#: src/plugins/editorui/tweaks.ui:296
+msgid "Non-breaking spaces"
+msgstr "Nezalomitelné mezery"
+
+#: src/plugins/editorui/tweaks.ui:297
+msgid "Draw a mark at non-breaking space characters"
+msgstr "Vykreslovat značky představující nezalomitelné mezery"
+
+#: src/plugins/editorui/tweaks.ui:313
+msgid "Leading"
+msgstr "Úvodní"
+
+#: src/plugins/editorui/tweaks.ui:314
+msgid "Draw marks for leading spaces only"
+msgstr "Vykreslovat značky jen pro úvodní mezery"
+
+#: src/plugins/editorui/tweaks.ui:326
+msgid "Inside Text"
+msgstr "Uvnitř textu"
+
+#: src/plugins/editorui/tweaks.ui:327
+msgid "Draw marks inside a line of text only"
+msgstr "Vykreslovat značky jen uvnitř řádků s textem"
+
+#: src/plugins/editorui/tweaks.ui:339
+msgid "Trailing"
+msgstr "Koncové"
+
+#: src/plugins/editorui/tweaks.ui:340
+msgid "Draw marks for trailing spaces only"
+msgstr "Vykreslovat značky jen pro koncové mezery"
+
+#: src/plugins/editorui/tweaks.ui:360
 msgid "Spelling"
 msgstr "Pravopis"
 
-#: src/plugins/editorui/tweaks.ui:264
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Underline potential spelling mistakes as you type"
 msgstr "Podtrhávat během psaní možné pravopisné chyby"
 
-#: src/plugins/editorui/tweaks.ui:277
+#: src/plugins/editorui/tweaks.ui:377
 msgid "Selections"
 msgstr "Výběry"
 
-#: src/plugins/editorui/tweaks.ui:280
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Minimum Characters to Highlight"
 msgstr "Minimální počet znaků pro zvýrazňování"
 
-#: src/plugins/editorui/tweaks.ui:281
+#: src/plugins/editorui/tweaks.ui:381
 msgid "The minimum selection length before highlighting matches"
 msgstr "Minimální délka výběru než se začne zvýrazňovat shoda"
 
-#: src/plugins/editorui/tweaks.ui:294
+#: src/plugins/editorui/tweaks.ui:394
 msgid "Snippets"
 msgstr "Úryvky"
 
-#: src/plugins/editorui/tweaks.ui:297
+#: src/plugins/editorui/tweaks.ui:397
 msgid "Expand Snippets"
 msgstr "Rozbalovat úryvky"
 
-#: src/plugins/editorui/tweaks.ui:298
+#: src/plugins/editorui/tweaks.ui:398
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "Používat „Tab“ v editoru k rozbalování nastavených úryvků"
 
-#: src/plugins/editorui/tweaks.ui:313
+#: src/plugins/editorui/tweaks.ui:413
 msgid "Code Completion"
 msgstr "Dokončování kódu"
 
-#: src/plugins/editorui/tweaks.ui:317
+#: src/plugins/editorui/tweaks.ui:417
 msgid "Completion Proposals"
 msgstr "Návrhy pro dokončování"
 
-#: src/plugins/editorui/tweaks.ui:320
+#: src/plugins/editorui/tweaks.ui:420
 msgid "Suggest Code Completions"
 msgstr "Navrhovat dokončení kódu"
 
-#: src/plugins/editorui/tweaks.ui:321
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Automatically suggest code completions while typing"
 msgstr "Během psaní automaticky navrhovat dokončení kódu"
 
-#: src/plugins/editorui/tweaks.ui:332
+#: src/plugins/editorui/tweaks.ui:432
 msgid "Select First Completion Proposal"
 msgstr "Vybírat první z návrhovaných dokončení"
 
-#: src/plugins/editorui/tweaks.ui:333
+#: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "Po zobrazení automaticky vybrat první z navrhovaných dokončení"
 
-#: src/plugins/editorui/tweaks.ui:348
+#: src/plugins/editorui/tweaks.ui:448
 msgid "Maximum Completion Proposals"
 msgstr "Maximum navrhovaných dokončení"
 
-#: src/plugins/editorui/tweaks.ui:349
+#: src/plugins/editorui/tweaks.ui:449
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr ""
 "Maximální počet řádků s návrhy pro dokončení, které je možné zobrazit naráz"
 
-#: src/plugins/editorui/tweaks.ui:368 src/plugins/editorui/tweaks.ui:371
+#: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
 msgid "Keyboard Theme"
 msgstr "Motiv klávesnice"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:472
 msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
 msgstr ""
 
-#: src/plugins/editorui/tweaks.ui:391
+#: src/plugins/editorui/tweaks.ui:491
 msgid "Movements"
 msgstr "Pohyb"
 
-#: src/plugins/editorui/tweaks.ui:395
+#: src/plugins/editorui/tweaks.ui:495
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr ""
 "Backspace bude odstraňovat nadbytečnou mezeru, aby zůstalo zachováno "
 "zarovnání podle vašeho odsazení."
 
-#: src/plugins/editorui/tweaks.ui:407
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Navigate to non-space characters"
 msgstr "Přesun na první nebílý znak"
 
-#: src/plugins/editorui/tweaks.ui:416
+#: src/plugins/editorui/tweaks.ui:516
 msgid "Before line boundaries"
-msgstr ""
+msgstr "Před hranicí řádku"
 
-#: src/plugins/editorui/tweaks.ui:422
+#: src/plugins/editorui/tweaks.ui:522
 msgid "After line boundaries"
-msgstr ""
+msgstr "Za hranicí řádku"
 
-#: src/plugins/editorui/tweaks.ui:428
+#: src/plugins/editorui/tweaks.ui:528
 msgid "Instead of line boundaries"
-msgstr ""
+msgstr "Místo hranice řádku"
 
-#: src/plugins/editorui/tweaks.ui:434 src/plugins/valgrind/gtk/menus.ui:44
-#, fuzzy
-#| msgid "Enabled"
+#: src/plugins/editorui/tweaks.ui:534 src/plugins/valgrind/gtk/menus.ui:44
 msgid "Disabled"
-msgstr "Povoleno"
+msgstr "Zakázáno"
 
-#: src/plugins/editorui/tweaks.ui:446
+#: src/plugins/editorui/tweaks.ui:546
 msgid "Session Management"
 msgstr "Správa sezení"
 
-#: src/plugins/editorui/tweaks.ui:450
-#, fuzzy
-#| msgid "Save palette"
+#: src/plugins/editorui/tweaks.ui:550
 msgid "Save & Restore"
-msgstr "Uložení palety"
+msgstr "Ukládání a obnovování"
 
-#: src/plugins/editorui/tweaks.ui:453
+#: src/plugins/editorui/tweaks.ui:553
 msgid "Auto-Save"
 msgstr "Automatické ukládání"
 
-#: src/plugins/editorui/tweaks.ui:454
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Regularly save the document as you type"
 msgstr "Během psaní dokument pravidelně ukládat"
 
-#: src/plugins/editorui/tweaks.ui:465
+#: src/plugins/editorui/tweaks.ui:565
 msgid "Auto-Save Delay"
 msgstr "Četnost automatického ukládání"
 
-#: src/plugins/editorui/tweaks.ui:466
+#: src/plugins/editorui/tweaks.ui:566
 msgid "The delay in seconds to wait before auto-saving the document"
-msgstr "Doba v sekundách, po kterou se čeká, než se provede automatické uložení"
+msgstr ""
+"Doba v sekundách, po kterou se čeká, než se provede automatické uložení"
 
-#: src/plugins/editorui/tweaks.ui:481
+#: src/plugins/editorui/tweaks.ui:581
 msgid "Format on Save"
 msgstr "Přeformátovat při ukládání"
 
-#: src/plugins/editorui/tweaks.ui:482
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Reformat sources when saving to disk"
 msgstr "Při ukládání na disk přeformátovat zdrojový kód"
 
-#: src/plugins/editorui/tweaks.ui:497
+#: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
 msgstr "Obnovovat umístění kurzoru"
 
-#: src/plugins/editorui/tweaks.ui:498
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Jump to the last position when re-opening a file"
 msgstr "Při opětovném otevření souboru skočit na poslední pozici"
 
@@ -4686,10 +4608,8 @@ msgid "A valid Git URL is required"
 msgstr "Je vyžadována platná adresa URL pro Git"
 
 #: src/plugins/git/tweaks.ui:13
-#, fuzzy
-#| msgid "Author Email"
 msgid "Authorship"
-msgstr "E-mail autora"
+msgstr "Autorství"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
 msgid "Email"
@@ -4936,7 +4856,7 @@ msgstr "Meson"
 
 #: src/plugins/meson/gbp-meson-introspection.c:584
 msgid "Load Meson Introspection"
-msgstr ""
+msgstr "Načíst introspekci Meson"
 
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:274
 msgid "Install project"
@@ -5233,14 +5153,12 @@ msgid "Dark"
 msgstr "Tmavý"
 
 #: src/plugins/platformui/tweaks.ui:22
-#, fuzzy
-#| msgid "Documentation"
 msgid "Document Navigation"
-msgstr "Dokumentace"
+msgstr "Pohyb v dokumentu"
 
 #: src/plugins/platformui/tweaks.ui:31
 msgid "Tab Bar"
-msgstr ""
+msgstr "Horní lišta"
 
 #: src/plugins/platformui/tweaks.ui:37
 msgid "Drop Down"
@@ -5513,6 +5431,18 @@ msgstr "Příkaz Cargo"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr "Výchozí příkaz cargo, který se má spustit v nástroji rust-analyzer"
 
+#: src/plugins/rust-analyzer/tweaks.ui:45
+msgid "Features"
+msgstr "Funkce"
+
+#: src/plugins/rust-analyzer/tweaks.ui:48
+msgid "Proc Macros"
+msgstr "Proc Macros"
+
+#: src/plugins/rust-analyzer/tweaks.ui:49
+msgid "Enables the experimental Proc Macros feature of rust-analyzer"
+msgstr "Povolit experimentální funkci Proc Macros v programu rust-analyzer"
+
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
 msgstr "Aktualizovat"
@@ -5600,8 +5530,8 @@ msgid ""
 "$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
 "Příkaz bude spuštěn z tohoto umístění. K definici relativní cesty použijte "
-"<tt>$BUILDDIR</tt> (složka sestavení), <tt>$SRCDIR</tt> (složka se zdrojovými "
-"kódy) nebo <tt>$HOME</tt> (domovská složka)."
+"<tt>$BUILDDIR</tt> (složka sestavení), <tt>$SRCDIR</tt> (složka se "
+"zdrojovými kódy) nebo <tt>$HOME</tt> (domovská složka)."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -5620,8 +5550,8 @@ msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
-"Builder může spustit příkaz z různých míst, včetně hostitelského systému nebo "
-"sestavovacích kontejnerů."
+"Builder může spustit příkaz z různých míst, včetně hostitelského systému "
+"nebo sestavovacích kontejnerů."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
@@ -5669,7 +5599,7 @@ msgstr "Název displeje"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
 msgid "Keyboard Accelerator"
-msgstr ""
+msgstr "Klávesová zkratka"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
 msgid "Current Working Directory"
@@ -5798,7 +5728,7 @@ msgstr "Alokace paměti"
 
 #: src/plugins/sysprof/gtk/menus.ui:44
 msgid "Sample JavaScript Stacks"
-msgstr ""
+msgstr "Vzorkovat zásobníky JavaScriptu"
 
 #: src/plugins/sysprof/gtk/menus.ui:50
 msgid "Graphics"
@@ -5832,7 +5762,7 @@ msgstr "V/V sítě"
 
 #: src/plugins/sysprof/gtk/menus.ui:81
 msgid "Energy"
-msgstr ""
+msgstr "Energie"
 
 #: src/plugins/sysprof/gtk/menus.ui:83
 msgid "Consumption"
@@ -5840,17 +5770,15 @@ msgstr "Spotřeba"
 
 #: src/plugins/sysprof/gtk/menus.ui:88
 msgid "Battery Charge"
-msgstr ""
+msgstr "Nabití baterie"
 
 #: src/plugins/sysprof/gtk/menus.ui:95
-#, fuzzy
-#| msgid "Application Runtime"
 msgid "Allow Application Integration"
-msgstr "Běhové prostředí aplikace"
+msgstr "Povolit integraci aplikace"
 
 #: src/plugins/sysprof/gtk/menus.ui:100
 msgid "Allow CPU Throttling"
-msgstr ""
+msgstr "Povolit dynamické škálování CPU"
 
 #: src/plugins/sysprof/gtk/menus.ui:112
 msgid "Run with _Profiler"
@@ -5868,11 +5796,11 @@ msgstr "Argumenty"
 
 #: src/plugins/sysprof/tweaks.ui:20
 msgid "Records CPU usage and CPU frequency statistics"
-msgstr ""
+msgstr "Zaznamenává využití CPU a statistiky frekvence CPU"
 
 #: src/plugins/sysprof/tweaks.ui:31
 msgid "Sample Callstacks"
-msgstr ""
+msgstr "Vzorkovat zásobníky volání"
 
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
@@ -5884,7 +5812,7 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:44
 msgid "Force performance mode while profiling"
-msgstr ""
+msgstr "Během profilování vynutit výkonný režim"
 
 #: src/plugins/sysprof/tweaks.ui:53
 msgid "Don't Change Governor"
@@ -5892,11 +5820,11 @@ msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:59
 msgid "Force Performance Mode"
-msgstr ""
+msgstr "Vynutit výkonný režim"
 
 #: src/plugins/sysprof/tweaks.ui:72
 msgid "Simple memory statistics about the process such as total memory used"
-msgstr ""
+msgstr "Jednoduché paměťové statistiky procesu, např. celkové využití paměti"
 
 #: src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Profiling"
@@ -5912,7 +5840,7 @@ msgstr "Využití energie"
 
 #: src/plugins/sysprof/tweaks.ui:100
 msgid "Record statistics about energy usage using RAPL"
-msgstr ""
+msgstr "Zaznamenávat pomocí RAPL statistiky o využití energie"
 
 #: src/plugins/sysprof/tweaks.ui:111
 msgid "Battery Usage"
@@ -6000,14 +5928,12 @@ msgid "New _Terminal"
 msgstr "Nový _terminál"
 
 #: src/plugins/terminal/gtk/menus.ui:11
-#, fuzzy
-#| msgid "Default (Host operating system)"
 msgid "Open a new terminal on the host operating system"
-msgstr "Výchozí (hostitelský operační systém)"
+msgstr "Otevřít nový terminál v hostitelském operačním systému"
 
 #: src/plugins/terminal/gtk/menus.ui:14
 msgid "New _Build Terminal"
-msgstr "_Nový terminál pro sestavování"
+msgstr "_Nový terminál sestavování"
 
 #: src/plugins/terminal/gtk/menus.ui:19
 msgid "Open a new terminal in project's build pipeline"
@@ -6018,65 +5944,52 @@ msgid "New _Runtime Terminal"
 msgstr "_Nový terminál běhového prostředí"
 
 #: src/plugins/terminal/gtk/menus.ui:27
-#, fuzzy
-#| msgid "Run in runtime environment"
 msgid "Open a new terminal in project's runtime environment"
-msgstr "Spustit v běhovém prostředí"
+msgstr "Otevřít nový terminál v běhovém prostředí projektu"
 
 #: src/plugins/terminal/gtk/menus.ui:41
 msgid "Split"
 msgstr "Rozdělit"
 
 #: src/plugins/terminal/tweaks.ui:14
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Find text within terminal"
 msgid "The font used within terminals"
-msgstr "Hledat text v terminálu"
+msgstr "Font používaný v terminálu"
 
 #: src/plugins/terminal/tweaks.ui:29
 msgid "Allow Bold"
-msgstr ""
+msgstr "Povolit tučné"
 
 #: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
-msgstr ""
+msgstr "Povolit používání unikové sekvence pro tučné písmo"
 
 #: src/plugins/terminal/tweaks.ui:41
-#, fuzzy
-#| msgid "Show hyperlinks"
 msgid "Allow Hyperlinks"
-msgstr "Zobrazovat hypertextové odkazy"
+msgstr "Povolit hypertextové odkazy"
 
 #: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
-msgstr ""
+msgstr "Povolit používání unikové sekvence pro hypertextové odkazy"
 
 #: src/plugins/terminal/tweaks.ui:55
-#, fuzzy
-#| msgid "Spelling"
 msgid "Scrolling"
-msgstr "Pravopis"
+msgstr "Posouvání"
 
 #: src/plugins/terminal/tweaks.ui:58
-#, fuzzy
-#| msgid "Scroll on output"
 msgid "Scroll On Output"
 msgstr "Posunout při výstupu"
 
 #: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
-msgstr ""
+msgstr "Automaticky posouvat při výpisu nového textu v terminálovém výstupu"
 
 #: src/plugins/terminal/tweaks.ui:70
-#, fuzzy
-#| msgid "Scroll on output"
 msgid "Scroll On Keyboard Input"
-msgstr "Posunout při výstupu"
+msgstr "Posunout při klávesnicovém vstupu"
 
 #: src/plugins/terminal/tweaks.ui:71
 msgid "Automatically scroll when typing to insert text"
-msgstr ""
+msgstr "Automaticky posouvat při psaní nového textu"
 
 #: src/plugins/terminal/tweaks.ui:87
 msgid "Limit Scrollback"
@@ -6085,17 +5998,16 @@ msgstr "Omezení posunu zpět"
 #: src/plugins/terminal/tweaks.ui:88
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
-msgstr ""
+msgstr "Omezit počet řádků uchovávaných v paměti pro posun zpět v terminálu"
 
 #: src/plugins/terminal/tweaks.ui:99
-#, fuzzy
-#| msgid "Limit Scrollback"
 msgid "Maximum Lines in Scrollback"
-msgstr "Omezení posunu zpět"
+msgstr "Maximum řádků pro posun zpět"
 
 #: src/plugins/terminal/tweaks.ui:100
 msgid "The maximum number of lines stored in history when limiting scrollback"
 msgstr ""
+"Maximální počet řádků uchovávaných v historii, když je posun zpět omezen"
 
 #: src/plugins/testui/gbp-testui-output-panel.c:147
 msgid "Unit Test Output"
@@ -6129,14 +6041,12 @@ msgid "Unit tests completed"
 msgstr "Jednotkové testy dokončeny"
 
 #: src/plugins/testui/gtk/menus.ui:8
-#, fuzzy
-#| msgid "Unit Tests"
 msgid "Run all Unit Tests"
-msgstr "Jednotkové testy"
+msgstr "Spustit všechny jednotkové testy"
 
 #: src/plugins/testui/gtk/menus.ui:11
 msgid "Request that all unit tests are run"
-msgstr ""
+msgstr "Požádat o spuštění všech jednotkových testů"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
 #: src/plugins/todo/gbp-todo-workspace-addin.c:139
@@ -6156,16 +6066,12 @@ msgid "Builder is updating your projects configured dependencies."
 msgstr "Builder aktualizuje nastavené závislosti vašeho projektu."
 
 #: src/plugins/update-dependencies/gtk/menus.ui:6
-#, fuzzy
-#| msgid "Updating Dependencies…"
 msgid "Update Dependencies…"
-msgstr "Aktualizují se závislosti…"
+msgstr "Aktualizovat závislosti…"
 
 #: src/plugins/update-dependencies/gtk/menus.ui:8
-#, fuzzy
-#| msgid "Update project dependencies"
 msgid "Download updates to project dependencies"
-msgstr "Aktualizovat závislosti projektu"
+msgstr "Stáhnout aktualizace do závislostí projektu"
 
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
 msgid "Updating Builder"
@@ -6213,7 +6119,7 @@ msgstr "Souhrnně"
 
 #: src/plugins/valgrind/gtk/menus.ui:38
 msgid "Full"
-msgstr ""
+msgstr "Úplně"
 
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
@@ -6252,24 +6158,20 @@ msgid "Include reachable leaks in report summary"
 msgstr "Zahrnout do souhrnného hlášení dosažitelné úniky"
 
 #: src/plugins/valgrind/tweaks.ui:71
-#, fuzzy
-#| msgid "Margins"
 msgid "Track Origins"
-msgstr "Okraje"
+msgstr "Sledovat původy"
 
 #: src/plugins/valgrind/tweaks.ui:72
-#, fuzzy
-#| msgid "Show modified lines"
 msgid "Show origin of undefined values"
-msgstr "Zobrazovat změněné řádky"
+msgstr "Zobrazovat původ nedefinovaných hodnot"
 
 #: src/plugins/valgrind/tweaks.ui:87
 msgid "Leak Check"
-msgstr ""
+msgstr "Kontrolovat úniky"
 
 #: src/plugins/valgrind/tweaks.ui:88
 msgid "Search for memory leaks at exit"
-msgstr ""
+msgstr "Při ukončení hledat úniky paměti"
 
 #: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
 msgid "Begin cloning project from URI"
@@ -6336,8 +6238,6 @@ msgid "Vim"
 msgstr "Vim"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
-#, fuzzy
-#| msgid "New _Documentation Page"
 msgid "New _Browser Page"
 msgstr "Nová _stránka v prohlížeči"
 
@@ -6351,10 +6251,8 @@ msgid "Reload the current page"
 msgstr "Znovu načíst aktuální stránku"
 
 #: src/plugins/web-browser/gtk/menus.ui:25
-#, fuzzy
-#| msgid "Reformat current file on save"
 msgid "Reload the current page ignoring cache"
-msgstr "Při ukládání aktuální soubor přeformátovat."
+msgstr "Znovu načíst aktuální stránku bez použití mezipaměti"
 
 #: src/plugins/web-browser/gtk/menus.ui:30
 #, fuzzy
@@ -6783,17 +6681,8 @@ msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
 #~ msgid "New line and carriage return"
 #~ msgstr "Zalomení řádku a návrat kurzoru"
 
-#~ msgid "Non-breaking spaces"
-#~ msgstr "Nezalomitelné mezery"
-
 #~ msgid "Spaces inside of text"
 #~ msgstr "Mezery v textu"
-
-#~ msgid "Trailing Only"
-#~ msgstr "Jen úvodní"
-
-#~ msgid "Leading Only"
-#~ msgstr "Jen koncové"
 
 #~ msgid "Enable or disable autosave feature"
 #~ msgstr "Zapnout nebo vypnout funkci automatického ukládání"
@@ -7050,10 +6939,6 @@ msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
 #~ msgctxt "shortcut window"
 #~ msgid "Reindent line"
 #~ msgstr "Znovu odsadit řádek"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Delete line"
-#~ msgstr "Smazat řádek"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Rename symbol"
@@ -7862,9 +7747,6 @@ msgstr "Soubor musí být uložen místně, aby jej bylo možné zpracovat."
 #~ msgstr ""
 #~ "stylelint stylopis styl lint programový kód spustit spuštění provést "
 #~ "provádění"
-
-#~ msgid "Sublime Text"
-#~ msgstr "Sublime Text"
 
 #~ msgid "Emulates the Sublime Text editor"
 #~ msgstr "Emulovat textový editor Sublime Text"
