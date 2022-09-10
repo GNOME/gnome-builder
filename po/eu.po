@@ -6,8 +6,8 @@
 msgid ""
 msgstr "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-06 04:50+0000\n"
-"PO-Revision-Date: 2022-09-06 10:00+0100\n"
+"POT-Creation-Date: 2022-09-06 23:26+0000\n"
+"PO-Revision-Date: 2022-09-10 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -1743,7 +1743,7 @@ msgid "_Find References"
 msgstr "_Bilatu erreferentziak"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1134
+#: src/libide/sourceview/ide-source-view.c:1371
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -5229,7 +5229,7 @@ msgid "Proc Macros"
 msgstr "Proc Macros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
+msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr "rust-analyzer aplikazioaren Proc Macros eginbide esperimentala gaitzen du"
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
