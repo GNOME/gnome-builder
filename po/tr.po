@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-06 23:26+0000\n"
-"PO-Revision-Date: 2022-09-08 02:14+0300\n"
+"POT-Creation-Date: 2022-09-10 11:21+0000\n"
+"PO-Revision-Date: 2022-09-10 14:36+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -600,7 +600,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Birim sınamaları çalıştırırken hangi ortamın kullanılacağı"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Ayrıntılı Günlük Kaydı"
 
@@ -1364,7 +1364,7 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "Yaklaşık %u yıl önce"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:79
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Kur"
@@ -1554,7 +1554,7 @@ msgstr "Projeyi çalıştır"
 msgid "Other"
 msgstr "Diğer"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1926,7 +1926,7 @@ msgstr "Hiçbiri"
 msgid "Blank page"
 msgstr "Boş sayfa"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:151
 msgid "Settings"
 msgstr "Ayarlar"
 
@@ -2351,7 +2351,7 @@ msgstr "Proje İnşasını Durdur"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Projeyi İnşa Et (Shift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:56
+#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
 msgid "_Build"
 msgstr "_İnşa Et"
 
@@ -2367,73 +2367,73 @@ msgstr "_Çalıştır"
 msgid "R_un With…"
 msgstr "Birlikte Ç_alıştır…"
 
-#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:44
-#: src/plugins/buildui/gtk/menus.ui:53 src/plugins/buildui/gtk/menus.ui:76
-#: src/plugins/buildui/gtk/menus.ui:103 src/plugins/buildui/gtk/menus.ui:113
-#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
-#: src/plugins/buildui/gtk/menus.ui:149
+#: src/plugins/buildui/gtk/menus.ui:33
+msgid "Configure Project…"
+msgstr "Projeyi Yapılandır…"
+
+#: src/plugins/buildui/gtk/menus.ui:36
+msgid "Configure settings related to the project"
+msgstr "Projeyle ilgili ayarları yapılandır"
+
+#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
+#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:147
 msgid "Code Foundry"
 msgstr "Kod Dökümhanesi"
 
-#: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Yapılandırma"
 
-#: src/plugins/buildui/gtk/menus.ui:36
-msgid "Configure Project…"
-msgstr "Projeyi Yapılandır…"
-
-#: src/plugins/buildui/gtk/menus.ui:39
-msgid "Configure settings related to the project"
-msgstr "Projeyle ilgili ayarları yapılandır"
-
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Select Build Target…"
 msgstr "İnşa Hedefi Seç…"
 
-#: src/plugins/buildui/gtk/menus.ui:49
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Change default build target"
 msgstr "Öntanımlı inşa hedefini değiştir"
 
-#: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
-#: src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Building"
 msgstr "İnşa"
 
-#: src/plugins/buildui/gtk/menus.ui:57
+#: src/plugins/buildui/gtk/menus.ui:55
 msgid "Build the project"
 msgstr "Projeyi inşa et"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:61
 msgid "_Rebuild"
 msgstr "_Yeniden İnşa Et"
 
-#: src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:62
 msgid "Rebuild the project"
 msgstr "Projeyi yeniden inşa et"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "_Clean"
 msgstr "_Temizle"
 
-#: src/plugins/buildui/gtk/menus.ui:70
+#: src/plugins/buildui/gtk/menus.ui:68
 msgid "Clean the project"
 msgstr "Projeyi temizle"
 
-#: src/plugins/buildui/gtk/menus.ui:77
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Install & Deployment"
 msgstr "Kurulum ve Dağıtım"
 
-#: src/plugins/buildui/gtk/menus.ui:81
+#: src/plugins/buildui/gtk/menus.ui:79
 msgid "Install the project"
 msgstr "Projeyi kur"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:83
 msgid "Deploy to Device…"
 msgstr "Aygıta Konuşlandır…"
 
-#: src/plugins/buildui/gtk/menus.ui:87
+#: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy project to current device"
 msgstr "Projeyi geçerli aygıta konuşlandır"
 
@@ -2441,85 +2441,85 @@ msgstr "Projeyi geçerli aygıta konuşlandır"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:94
 msgid "_Export"
 msgstr "_Dışa Aktar"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Export project"
 msgstr "Projeyi dışa aktar"
 
-#: src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:104
 msgid "Stop Build"
 msgstr "İnşayı Durdur"
 
-#: src/plugins/buildui/gtk/menus.ui:108
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Stop building project"
 msgstr "Proje inşasını durdur"
 
-#: src/plugins/buildui/gtk/menus.ui:116
+#: src/plugins/buildui/gtk/menus.ui:114
 msgid "Show Build _Log"
 msgstr "İnşa _Günlüğünü Göster"
 
-#: src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:117
 msgid "Display panel containing the build log"
 msgstr "İnşa günlüğünü içeren paneli göster"
 
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
 msgid "Running"
 msgstr "Çalıştırma"
 
-#: src/plugins/buildui/gtk/menus.ui:130
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Select Run Command…"
 msgstr "Çalıştır Komutu Seç…"
 
-#: src/plugins/buildui/gtk/menus.ui:142
+#: src/plugins/buildui/gtk/menus.ui:140
 msgid "Run"
 msgstr "Çalıştır"
 
-#: src/plugins/buildui/gtk/menus.ui:145
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Run the project"
 msgstr "Projeyi çalıştır"
 
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Birim Sınamaları"
 
-#: src/plugins/buildui/gtk/menus.ui:157
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Follow System Style"
 msgstr "Sistem Biçemini İzle"
 
-#: src/plugins/buildui/gtk/menus.ui:163
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Force Light"
 msgstr "Aydınlığa Zorla"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:167
 msgid "Force Dark"
 msgstr "Karanlığa Zorla"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:174
 msgid "Accessibility"
 msgstr "Erişilebilirlik"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "High Contrast"
 msgstr "Yüksek Karşıtlık"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:181
 msgid "Text Direction"
 msgstr "Metin Yönü"
 
-#: src/plugins/buildui/gtk/menus.ui:185
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "Left-to-Right"
 msgstr "Soldan Sağa"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:189
 msgid "Right-to-Left"
 msgstr "Sağdan Sola"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "Tools"
 msgstr "Araçlar"
 
@@ -6006,6 +6006,15 @@ msgstr ""
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "_Update"
 msgstr "_Güncelle"
+
+#: src/plugins/update-manager/gtk/menus.ui:7
+#| msgid "Install or Update SDK?"
+msgid "Install Updates…"
+msgstr "Güncellemeleri Kur…"
+
+#: src/plugins/update-manager/gtk/menus.ui:8
+msgid "Install pending updates for Builder"
+msgstr "Builder için bekleyen güncellemeleri kur"
 
 # Menü ögesi olduğu için başlık düzeninde olmalı.
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
