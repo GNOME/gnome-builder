@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-03 21:57+0000\n"
-"PO-Revision-Date: 2022-09-04 13:59+0800\n"
+"POT-Creation-Date: 2022-09-10 11:21+0000\n"
+"PO-Revision-Date: 2022-09-11 07:48+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -26,7 +26,7 @@ msgstr ""
 #: data/org.gnome.Builder.desktop.in.in:3
 #: src/libide/editor/ide-editor-workspace.ui:21
 #: src/libide/gui/ide-application-actions.c:114 src/main.c:242
-#: src/plugins/editorui/tweaks.ui:381
+#: src/plugins/editorui/tweaks.ui:481
 #: src/plugins/newcomers/gbp-newcomers-section.ui:39
 msgid "Builder"
 msgstr "构建器"
@@ -301,7 +301,7 @@ msgid "If enabled, the editor will show relative line numbers."
 msgstr "如果启用，编辑器将显示相关的行号。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
-#: src/plugins/editorui/tweaks.ui:394
+#: src/plugins/editorui/tweaks.ui:494
 msgid "Smart Backspace"
 msgstr "智能退格"
 
@@ -312,7 +312,7 @@ msgid ""
 msgstr "退格键将会移除多余的空格来保持对齐到缩进尺寸。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
-#: src/plugins/editorui/tweaks.ui:406
+#: src/plugins/editorui/tweaks.ui:506
 msgid "Smart Home/End"
 msgstr "智能 Home/End 键"
 
@@ -337,6 +337,7 @@ msgid "When the overview map should be displayed."
 msgstr "何时应显示概览图。"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: src/plugins/editorui/tweaks.ui:254
 msgid "Draw Spaces"
 msgstr "绘制空格"
 
@@ -567,7 +568,7 @@ msgid "What environment to use when running unit tests"
 msgstr "运行单元测试时使用的环境"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "详细日志"
 
@@ -606,7 +607,7 @@ msgid ""
 msgstr "如果启用，工程树将把文件夹排列在普通文件前面。"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
-#: src/plugins/editorui/tweaks.ui:263
+#: src/plugins/editorui/tweaks.ui:363
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
 msgstr "拼写检查"
@@ -647,7 +648,7 @@ msgstr "新建编辑器工作区"
 msgid "D-Bus Inspector"
 msgstr "D-Bus 检测"
 
-#: src/libide/code/ide-buffer.c:3673
+#: src/libide/code/ide-buffer.c:3674
 msgid "The current language lacks a symbol resolver."
 msgstr "当前语言缺少符号解析器。"
 
@@ -720,7 +721,7 @@ msgstr "首选项"
 #: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
 #: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
 #: src/libide/tweaks/ide-tweaks-window.ui:139
-#: src/plugins/editorui/tweaks.ui:364
+#: src/plugins/editorui/tweaks.ui:464
 msgid "Keyboard Shortcuts"
 msgstr "键盘快捷键"
 
@@ -766,8 +767,8 @@ msgstr "页面"
 #: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
 #: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
 #: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
-#: src/libide/sourceview/gtk/menus.ui:124
-#: src/libide/sourceview/gtk/menus.ui:130
+#: src/libide/sourceview/gtk/menus.ui:139
+#: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
@@ -797,25 +798,90 @@ msgstr "打印"
 msgid "Failed to open file: %s"
 msgstr "打开文件失败：%s"
 
+#: src/libide/editor/ide-editor-info-bar.c:85
+msgid "_Discard Changes and Reload"
+msgstr "放弃修改并重新加载(_D)"
+
+#: src/libide/editor/ide-editor-info-bar.c:88
+msgid "File Has Changed on Disk"
+msgstr "文件在磁盘上已修改"
+
+#: src/libide/editor/ide-editor-info-bar.c:89
+msgid "The file has been changed by another program."
+msgstr "该文件已被另一个程序修改。"
+
+#: src/libide/editor/ide-editor-info-bar.c:100
+msgid "Save _As…"
+msgstr "另存为(_A)…"
+
+#: src/libide/editor/ide-editor-info-bar.c:102
+msgid "Buffer Restored"
+msgstr "缓冲区已恢复"
+
+#: src/libide/editor/ide-editor-info-bar.c:103
+msgid "Unsaved buffer has been restored."
+msgstr "未保存的缓冲区已恢复。"
+
+#: src/libide/editor/ide-editor-info-bar.c:109
+msgid "_Save…"
+msgstr "保存(_S)…"
+
+#: src/libide/editor/ide-editor-info-bar.c:111
+#: src/libide/editor/ide-editor-info-bar.ui:81
+msgid "_Discard…"
+msgstr "放弃(_D)…"
+
+#: src/libide/editor/ide-editor-info-bar.c:113
+msgid "Draft Changes Restored"
+msgstr "草稿修改已恢复"
+
+#: src/libide/editor/ide-editor-info-bar.c:114
+msgid "Unsaved changes to the buffer have been restored."
+msgstr "未保存的缓冲区修改已恢复。"
+
+#: src/libide/editor/ide-editor-info-bar.ui:19
+msgid "Could Not Open File"
+msgstr "无法打开文件"
+
+#: src/libide/editor/ide-editor-info-bar.ui:29
+msgid "You do not have permission to open the file."
+msgstr "您没有打开该文件的权限。"
+
+#: src/libide/editor/ide-editor-info-bar.ui:37
+msgid "_Retry"
+msgstr "重试(_R)"
+
+#: src/libide/editor/ide-editor-info-bar.ui:44
+msgid "Open As _Administrator"
+msgstr "作为管理员打开(_A)"
+
+#: src/libide/editor/ide-editor-info-bar.ui:63
+msgid "Document Restored"
+msgstr "文档已恢复"
+
+#: src/libide/editor/ide-editor-info-bar.ui:73
+msgid "Unsaved document has been restored."
+msgstr "未保存的文档已恢复。"
+
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:407
+#: src/libide/editor/ide-editor-page.c:408
 #, c-format
 msgid "Print failed: %s"
 msgstr "无法打印：%s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:483
+#: src/libide/editor/ide-editor-page.c:484
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "格式化选区失败：%s"
 
-#: src/libide/editor/ide-editor-page.c:871
+#: src/libide/editor/ide-editor-page.c:900
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "保存文件"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -824,7 +890,7 @@ msgstr "保存文件"
 msgid "Save"
 msgstr "保存"
 
-#: src/libide/editor/ide-editor-page.c:874
+#: src/libide/editor/ide-editor-page.c:903
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1262,7 +1328,7 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "大约 %u 年前"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:79
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "安装(_I)"
@@ -1453,7 +1519,7 @@ msgstr "运行工程"
 msgid "Other"
 msgstr "其它"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1621,7 +1687,7 @@ msgstr "选择(_S)"
 msgid "Select _All"
 msgstr "全选(_A)"
 
-#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:125
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
 msgstr "格式化"
 
@@ -1658,32 +1724,44 @@ msgid "Convert the text selection to title case"
 msgstr "将文本选区转换为首字大写"
 
 #: src/libide/sourceview/gtk/menus.ui:112
+msgid "Select _Line"
+msgstr "选择行(_L)"
+
+#: src/libide/sourceview/gtk/menus.ui:117
+msgid "_Delete Line"
+msgstr "删除行(_D)"
+
+#: src/libide/sourceview/gtk/menus.ui:122
 msgid "_Join Lines"
 msgstr "合并行(_J)"
 
-#: src/libide/sourceview/gtk/menus.ui:117
+#: src/libide/sourceview/gtk/menus.ui:127
 msgid "S_ort Lines"
 msgstr "行排序(_O)"
 
-#: src/libide/sourceview/gtk/menus.ui:131
+#: src/libide/sourceview/gtk/menus.ui:133
+msgid "D_uplicate Line"
+msgstr "再制行(_U)"
+
+#: src/libide/sourceview/gtk/menus.ui:146
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "代码导航"
 
-#: src/libide/sourceview/gtk/menus.ui:134
+#: src/libide/sourceview/gtk/menus.ui:149
 msgid "_Go to Definition"
 msgstr "跳转至定义(_G)"
 
-#: src/libide/sourceview/gtk/menus.ui:135
+#: src/libide/sourceview/gtk/menus.ui:150
 msgid "Jump to file and location where item is defined"
 msgstr "跳转至项目定义的文件和位置"
 
-#: src/libide/sourceview/gtk/menus.ui:141
+#: src/libide/sourceview/gtk/menus.ui:156
 msgid "_Find References"
 msgstr "查找参考(_F)"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1002
+#: src/libide/sourceview/ide-source-view.c:1371
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1812,7 +1890,7 @@ msgstr "无"
 msgid "Blank page"
 msgstr "空白页面"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:151
 msgid "Settings"
 msgstr "设置"
 
@@ -2219,7 +2297,7 @@ msgstr "停止构建中的工程"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "构建工程（Shift+Ctrl+Alt+B）"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:56
+#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
 msgid "_Build"
 msgstr "构建(_B)"
 
@@ -2235,73 +2313,73 @@ msgstr "运行(_R)"
 msgid "R_un With…"
 msgstr "运行于(_U)…"
 
-#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:44
-#: src/plugins/buildui/gtk/menus.ui:53 src/plugins/buildui/gtk/menus.ui:76
-#: src/plugins/buildui/gtk/menus.ui:103 src/plugins/buildui/gtk/menus.ui:113
-#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
-#: src/plugins/buildui/gtk/menus.ui:149
+#: src/plugins/buildui/gtk/menus.ui:33
+msgid "Configure Project…"
+msgstr "配置工程…"
+
+#: src/plugins/buildui/gtk/menus.ui:36
+msgid "Configure settings related to the project"
+msgstr "配置与工程相关的设置"
+
+#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
+#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:147
 msgid "Code Foundry"
 msgstr "代码铸造"
 
-#: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "配置"
 
-#: src/plugins/buildui/gtk/menus.ui:36
-msgid "Configure Project…"
-msgstr "配置工程…"
-
-#: src/plugins/buildui/gtk/menus.ui:39
-msgid "Configure settings related to the project"
-msgstr "配置与工程相关的设置"
-
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Select Build Target…"
 msgstr "选择构建目标…"
 
-#: src/plugins/buildui/gtk/menus.ui:49
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Change default build target"
 msgstr "更改默认构建目标"
 
-#: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
-#: src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Building"
 msgstr "构建"
 
-#: src/plugins/buildui/gtk/menus.ui:57
+#: src/plugins/buildui/gtk/menus.ui:55
 msgid "Build the project"
 msgstr "构建工程"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:61
 msgid "_Rebuild"
 msgstr "重新构建(_R)"
 
-#: src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:62
 msgid "Rebuild the project"
 msgstr "重新构建工程"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "_Clean"
 msgstr "清理(_C)"
 
-#: src/plugins/buildui/gtk/menus.ui:70
+#: src/plugins/buildui/gtk/menus.ui:68
 msgid "Clean the project"
 msgstr "清理工程"
 
-#: src/plugins/buildui/gtk/menus.ui:77
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Install & Deployment"
 msgstr "安装和部署"
 
-#: src/plugins/buildui/gtk/menus.ui:81
+#: src/plugins/buildui/gtk/menus.ui:79
 msgid "Install the project"
 msgstr "安装工程"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:83
 msgid "Deploy to Device…"
 msgstr "部署至设备…"
 
-#: src/plugins/buildui/gtk/menus.ui:87
+#: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy project to current device"
 msgstr "部署工程至当前设备"
 
@@ -2309,85 +2387,85 @@ msgstr "部署工程至当前设备"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:94
 msgid "_Export"
 msgstr "导出(_E)"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Export project"
 msgstr "导出工程"
 
-#: src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:104
 msgid "Stop Build"
 msgstr "停止构建"
 
-#: src/plugins/buildui/gtk/menus.ui:108
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Stop building project"
 msgstr "停止构建中的工程"
 
-#: src/plugins/buildui/gtk/menus.ui:116
+#: src/plugins/buildui/gtk/menus.ui:114
 msgid "Show Build _Log"
 msgstr "显示构建日志(_L)"
 
-#: src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:117
 msgid "Display panel containing the build log"
 msgstr "显示包含构建日志的面板"
 
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
 msgid "Running"
 msgstr "运行"
 
-#: src/plugins/buildui/gtk/menus.ui:130
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Select Run Command…"
 msgstr "选择运行命令…"
 
-#: src/plugins/buildui/gtk/menus.ui:142
+#: src/plugins/buildui/gtk/menus.ui:140
 msgid "Run"
 msgstr "运行"
 
-#: src/plugins/buildui/gtk/menus.ui:145
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Run the project"
 msgstr "运行工程"
 
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "单元测试"
 
-#: src/plugins/buildui/gtk/menus.ui:157
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Follow System Style"
 msgstr "跟随系统样式"
 
-#: src/plugins/buildui/gtk/menus.ui:163
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Force Light"
 msgstr "强制亮色"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:167
 msgid "Force Dark"
 msgstr "强制暗色"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:174
 msgid "Accessibility"
 msgstr "辅助功能"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "High Contrast"
 msgstr "高对比度"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:181
 msgid "Text Direction"
 msgstr "文本方向"
 
-#: src/plugins/buildui/gtk/menus.ui:185
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "Left-to-Right"
 msgstr "左至右"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:189
 msgid "Right-to-Left"
 msgstr "右至左"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "Tools"
 msgstr "工具"
 
@@ -3600,11 +3678,13 @@ msgstr "文本"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
+#: src/plugins/editorui/tweaks.ui:257
 msgid "Spaces"
 msgstr "空格"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
 msgstr "制表符"
 
@@ -3780,7 +3860,7 @@ msgid "The desired maximum line length"
 msgstr "最大行长度"
 
 #: src/plugins/editorui/tweaks-language.ui:203
-#: src/plugins/editorui/tweaks.ui:256
+#: src/plugins/editorui/tweaks.ui:356
 msgid "Behavior"
 msgstr "行为"
 
@@ -3964,146 +4044,194 @@ msgid ""
 "within source code"
 msgstr "使用符号信息来高亮源代码中的命名空间、函数和变量"
 
-#: src/plugins/editorui/tweaks.ui:260
+#: src/plugins/editorui/tweaks.ui:258
+msgid "Draw a mark representing normal spaces"
+msgstr "绘制一个表现正常空格的标记"
+
+#: src/plugins/editorui/tweaks.ui:271
+msgid "Draw a mark representing tabs"
+msgstr "绘制一个表现制表符的标记"
+
+#: src/plugins/editorui/tweaks.ui:283
+msgid "Newlines"
+msgstr "新行"
+
+#: src/plugins/editorui/tweaks.ui:284
+msgid "Draw a mark at the end of lines"
+msgstr "在行尾绘制一个标记"
+
+#: src/plugins/editorui/tweaks.ui:296
+msgid "Non-breaking spaces"
+msgstr "连续空格"
+
+#: src/plugins/editorui/tweaks.ui:297
+msgid "Draw a mark at non-breaking space characters"
+msgstr "在非换行空白字符处绘制标记"
+
+#: src/plugins/editorui/tweaks.ui:313
+msgid "Leading"
+msgstr "行首"
+
+#: src/plugins/editorui/tweaks.ui:314
+msgid "Draw marks for leading spaces only"
+msgstr "仅为行首空格绘制标记"
+
+#: src/plugins/editorui/tweaks.ui:326
+msgid "Inside Text"
+msgstr "行内"
+
+#: src/plugins/editorui/tweaks.ui:327
+msgid "Draw marks inside a line of text only"
+msgstr "仅在文本行内部绘制标记"
+
+#: src/plugins/editorui/tweaks.ui:339
+msgid "Trailing"
+msgstr "行尾"
+
+#: src/plugins/editorui/tweaks.ui:340
+msgid "Draw marks for trailing spaces only"
+msgstr "仅为行尾空格绘制标记"
+
+#: src/plugins/editorui/tweaks.ui:360
 msgid "Spelling"
 msgstr "拼写"
 
-#: src/plugins/editorui/tweaks.ui:264
+#: src/plugins/editorui/tweaks.ui:364
 msgid "Underline potential spelling mistakes as you type"
 msgstr "随着您的键入用下划线标注可能的拼写错误"
 
-#: src/plugins/editorui/tweaks.ui:277
+#: src/plugins/editorui/tweaks.ui:377
 msgid "Selections"
 msgstr "选区"
 
-#: src/plugins/editorui/tweaks.ui:280
+#: src/plugins/editorui/tweaks.ui:380
 msgid "Minimum Characters to Highlight"
 msgstr "高亮的最少字符"
 
-#: src/plugins/editorui/tweaks.ui:281
+#: src/plugins/editorui/tweaks.ui:381
 msgid "The minimum selection length before highlighting matches"
 msgstr "在高亮匹配项前的最小选区长度"
 
-#: src/plugins/editorui/tweaks.ui:294
+#: src/plugins/editorui/tweaks.ui:394
 msgid "Snippets"
 msgstr "片段"
 
-#: src/plugins/editorui/tweaks.ui:297
+#: src/plugins/editorui/tweaks.ui:397
 msgid "Expand Snippets"
 msgstr "扩展片段"
 
-#: src/plugins/editorui/tweaks.ui:298
+#: src/plugins/editorui/tweaks.ui:398
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr "在编辑器中使用“Tab”键展开已配置片段"
 
-#: src/plugins/editorui/tweaks.ui:313
+#: src/plugins/editorui/tweaks.ui:413
 msgid "Code Completion"
 msgstr "代码补全"
 
-#: src/plugins/editorui/tweaks.ui:317
+#: src/plugins/editorui/tweaks.ui:417
 msgid "Completion Proposals"
 msgstr "补全建议"
 
-#: src/plugins/editorui/tweaks.ui:320
+#: src/plugins/editorui/tweaks.ui:420
 msgid "Suggest Code Completions"
 msgstr "提示代码补全"
 
-#: src/plugins/editorui/tweaks.ui:321
+#: src/plugins/editorui/tweaks.ui:421
 msgid "Automatically suggest code completions while typing"
 msgstr "在键入时自动提示代码补全"
 
-#: src/plugins/editorui/tweaks.ui:332
+#: src/plugins/editorui/tweaks.ui:432
 msgid "Select First Completion Proposal"
 msgstr "选择首个补全建议"
 
-#: src/plugins/editorui/tweaks.ui:333
+#: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically select the first completion proposal when displayed"
 msgstr "显示时自动选择首个补全建议"
 
-#: src/plugins/editorui/tweaks.ui:348
+#: src/plugins/editorui/tweaks.ui:448
 msgid "Maximum Completion Proposals"
 msgstr "最大补全建议数量"
 
-#: src/plugins/editorui/tweaks.ui:349
+#: src/plugins/editorui/tweaks.ui:449
 msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "一次显示的最大补全行数"
 
-#: src/plugins/editorui/tweaks.ui:368 src/plugins/editorui/tweaks.ui:371
+#: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
 msgid "Keyboard Theme"
 msgstr "键盘主题"
 
-#: src/plugins/editorui/tweaks.ui:372
+#: src/plugins/editorui/tweaks.ui:472
 msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
 msgstr "快捷键主题提供了类似其它 IDE 和编辑器的键盘体验"
 
-#: src/plugins/editorui/tweaks.ui:391
+#: src/plugins/editorui/tweaks.ui:491
 msgid "Movements"
 msgstr "动作"
 
-#: src/plugins/editorui/tweaks.ui:395
+#: src/plugins/editorui/tweaks.ui:495
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
 msgstr "退格键将会移除多余的空格来保持对齐到您的缩进宽度"
 
-#: src/plugins/editorui/tweaks.ui:407
+#: src/plugins/editorui/tweaks.ui:507
 msgid "Navigate to non-space characters"
 msgstr "导航至非空格字符"
 
-#: src/plugins/editorui/tweaks.ui:416
+#: src/plugins/editorui/tweaks.ui:516
 msgid "Before line boundaries"
 msgstr "行边界前"
 
-#: src/plugins/editorui/tweaks.ui:422
+#: src/plugins/editorui/tweaks.ui:522
 msgid "After line boundaries"
 msgstr "行边界后"
 
-#: src/plugins/editorui/tweaks.ui:428
+#: src/plugins/editorui/tweaks.ui:528
 msgid "Instead of line boundaries"
 msgstr "替代行边界"
 
-#: src/plugins/editorui/tweaks.ui:434 src/plugins/valgrind/gtk/menus.ui:44
+#: src/plugins/editorui/tweaks.ui:534 src/plugins/valgrind/gtk/menus.ui:44
 msgid "Disabled"
 msgstr "已禁用"
 
-#: src/plugins/editorui/tweaks.ui:446
+#: src/plugins/editorui/tweaks.ui:546
 msgid "Session Management"
 msgstr "会话管理"
 
-#: src/plugins/editorui/tweaks.ui:450
+#: src/plugins/editorui/tweaks.ui:550
 msgid "Save & Restore"
 msgstr "保存和恢复"
 
-#: src/plugins/editorui/tweaks.ui:453
+#: src/plugins/editorui/tweaks.ui:553
 msgid "Auto-Save"
 msgstr "自动保存"
 
-#: src/plugins/editorui/tweaks.ui:454
+#: src/plugins/editorui/tweaks.ui:554
 msgid "Regularly save the document as you type"
 msgstr "随着您的键入常规地保存文档"
 
-#: src/plugins/editorui/tweaks.ui:465
+#: src/plugins/editorui/tweaks.ui:565
 msgid "Auto-Save Delay"
 msgstr "自动保存延时"
 
-#: src/plugins/editorui/tweaks.ui:466
+#: src/plugins/editorui/tweaks.ui:566
 msgid "The delay in seconds to wait before auto-saving the document"
 msgstr "自动保存文档前等待的按秒计的延时"
 
-#: src/plugins/editorui/tweaks.ui:481
+#: src/plugins/editorui/tweaks.ui:581
 msgid "Format on Save"
 msgstr "保存时格式化"
 
-#: src/plugins/editorui/tweaks.ui:482
+#: src/plugins/editorui/tweaks.ui:582
 msgid "Reformat sources when saving to disk"
 msgstr "保存到磁盘时重新格式化源代码"
 
-#: src/plugins/editorui/tweaks.ui:497
+#: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
 msgstr "恢复光标位置"
 
-#: src/plugins/editorui/tweaks.ui:498
+#: src/plugins/editorui/tweaks.ui:598
 msgid "Jump to the last position when re-opening a file"
 msgstr "重新打开文件时跳转到上次位置"
 
@@ -5116,6 +5244,18 @@ msgstr "Cargo 命令"
 msgid "The default cargo command to run with rust-analyzer"
 msgstr "带 rust-analyzer 运行的默认 cargo 命令"
 
+#: src/plugins/rust-analyzer/tweaks.ui:45
+msgid "Features"
+msgstr "特性"
+
+#: src/plugins/rust-analyzer/tweaks.ui:48
+msgid "Proc Macros"
+msgstr "过程宏"
+
+#: src/plugins/rust-analyzer/tweaks.ui:49
+msgid "Enables the experimental Proc Macros feature of rust-analyzer"
+msgstr "启用 rust-analyzer 的实验性过程宏特性"
+
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
 msgstr "更新"
@@ -5750,6 +5890,14 @@ msgstr "构建器有更新可用。构建器可以为您下载并安装它。"
 msgid "_Update"
 msgstr "更新(_U)"
 
+#: src/plugins/update-manager/gtk/menus.ui:7
+msgid "Install Updates…"
+msgstr "安装更新…"
+
+#: src/plugins/update-manager/gtk/menus.ui:8
+msgid "Install pending updates for Builder"
+msgstr "为构建器安装等待的更新"
+
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
 msgid "Run with Leak Detector"
 msgstr "带泄漏检测器运行"
@@ -6057,17 +6205,8 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgid "New line and carriage return"
 #~ msgstr "新行和回车符"
 
-#~ msgid "Non-breaking spaces"
-#~ msgstr "连续空格"
-
 #~ msgid "Spaces inside of text"
 #~ msgstr "文本中的空格"
-
-#~ msgid "Trailing Only"
-#~ msgstr "右对齐"
-
-#~ msgid "Leading Only"
-#~ msgstr "左对齐"
 
 #~ msgid "Autosave"
 #~ msgstr "自动保存"
@@ -6493,9 +6632,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Emulate keyboard shortcuts from Vim"
 #~ msgstr "模拟来自 Vim 的键盘快捷键"
-
-#~ msgid "Show Open Files"
-#~ msgstr "显示打开的文件"
 
 #~ msgid "Display the open files list in the project sidebar."
 #~ msgstr "在工程侧边栏中显示打开的文件列表。"
@@ -7000,10 +7136,6 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgctxt "shortcut window"
 #~ msgid "Reindent line"
 #~ msgstr "重新缩进行"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Delete line"
-#~ msgstr "删除行"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Rename symbol"
@@ -7755,9 +7887,6 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgid "stylelint stylesheet lint code execute execution"
 #~ msgstr "stylelint stylesheet lint code execute execution 代码 执行 运行"
 
-#~ msgid "Sublime Text"
-#~ msgstr "Sublime Text"
-
 #~ msgid "Emulates the Sublime Text editor"
 #~ msgstr "模拟 Sublime Text 编辑器"
 
@@ -8351,9 +8480,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Context already unloading, cannot restore."
 #~ msgstr "上下文环境已卸载，无法恢复。"
-
-#~ msgid "Context has already been restored."
-#~ msgstr "上下文环境已恢复。"
 
 #~ msgid "No implementations of extension point “%s”."
 #~ msgstr "未实现扩展点“%s”。"
@@ -9061,12 +9187,6 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgid "Draw an arrow over tab characters"
 #~ msgstr "在制表符显示一个箭头"
 
-#~ msgid "Draw leading space only"
-#~ msgstr "只显示开头的空格"
-
-#~ msgid "Draw trailing space only"
-#~ msgstr "只显示尾部的空格"
-
 #~ msgid "Drops down a list of file operations"
 #~ msgstr "放下一个文件操作列表"
 
@@ -9118,9 +9238,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Search for files. Shortcut: Ctrl + ."
 #~ msgstr "搜索文件。快捷键：Ctrl + ."
-
-#~ msgid "The default keybindings for Builder."
-#~ msgstr "Builder 默认快捷键。"
 
 #~ msgid "Whether or not matching brackets should be highlighted."
 #~ msgstr "是否高亮显示匹配的括号。"
