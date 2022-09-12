@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-06 04:50+0000\n"
-"PO-Revision-Date: 2022-09-09 12:50+0200\n"
+"POT-Creation-Date: 2022-09-10 11:21+0000\n"
+"PO-Revision-Date: 2022-09-13 01:40+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -226,29 +226,35 @@ msgstr "Putanja do ctags izvršne datoteke na sustavu."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:5
 msgid "Debugger Breakpoint at Main"
-msgstr ""
+msgstr "Točka prijeloma otklanjatelja grešaka u Main"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:6
 msgid "Debugger should automatically insert breakpoint at main() function."
 msgstr ""
+"Otklanjatelj grešaka trebao bi automatski umetnuti točku prijeloma umain() "
+"funkciju."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
 msgid "Debugger Breakpoint at g_critical()"
-msgstr ""
+msgstr "Točka prijeloma otklanjatelja grešaka u g_critical()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
 msgid ""
 "Debugger should automatically insert breakpoint at g_critical() function."
 msgstr ""
+"Otklanjatelj grešaka trebao bi automatski umetnuti točku prijeloma u "
+"g_critical() funkciju."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
 msgid "Debugger Breakpoint at g_warning()"
-msgstr ""
+msgstr "Točka prijeloma otklanjatelja grešaka u g_warning()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
 msgid ""
 "Debugger should automatically insert breakpoint at g_warning() function."
 msgstr ""
+"Otklanjatelj grešaka trebao bi automatski umetnuti točku prijeloma u "
+"g_warning() funkciju."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -267,15 +273,19 @@ msgid ""
 "If enabled, the editor will show line additions and changes next to the "
 "source code."
 msgstr ""
+"Ako je omogućeno, uređivač će prikazati dodatke i promjene redaka pokraj "
+"izvornog kôda."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:29
 msgid "Show diagnostics next to line number"
-msgstr ""
+msgstr "Prikaži dijagnostiku pokraj broja redka"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:30
 msgid ""
 "If enabled, the editor will show diagnostics to the left to the line numbers."
 msgstr ""
+"Ako je omogućeno, uređivač će prikazati dijagnostiku lijevo od brojeva "
+"redaka."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:34
 msgid "Highlight current line"
@@ -283,7 +293,7 @@ msgstr "Istakni trenutni redak"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:35
 msgid "If enabled, the editor will highlight the line containing the cursor."
-msgstr ""
+msgstr "Ako je omogućeno, uređivač će istaknuti redak koji sadrži pokazivač."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:39
 msgid "Highlight matching brackets"
@@ -291,59 +301,61 @@ msgstr "Istakni odgovarajuće zagrade"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:40
 msgid "If enabled, the editor will highlight matching brackets."
-msgstr ""
+msgstr "Ako je omogućeno, uređivač će istaknuti odgovarajuće zagrade."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:44
 msgid "Show line numbers"
-msgstr ""
+msgstr "Prikaži brojeve redaka"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:45
 msgid "If enabled, the editor will show line numbers."
-msgstr ""
+msgstr "Ako je omogućeno, uređivač će prikazati brojeva redaka."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:49
 msgid "Show relative line numbers"
-msgstr ""
+msgstr "Prikaži relativne brojeve redaka"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:50
 msgid "If enabled, the editor will show relative line numbers."
-msgstr ""
+msgstr "Ako je omogućeno, uređivač će prikazati relativne brojeva redaka."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:54
 #: src/plugins/editorui/tweaks.ui:494
 msgid "Smart Backspace"
-msgstr ""
+msgstr "Pametan Backspace"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:55
 msgid ""
 "Backspace will remove additional spaces to keep you aligned to the "
 "indentation size."
 msgstr ""
+"Backspace će ukloniti dodatne razmake kako bi bili poravnati s veličinom "
+"uvlake."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:65
 #: src/plugins/editorui/tweaks.ui:506
 msgid "Smart Home/End"
-msgstr ""
+msgstr "Pametan Home/End"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:66
 msgid "Modifies the behavior of Home/End keys."
-msgstr ""
+msgstr "Mijenja ponašanje Home/End."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
-msgstr ""
+msgstr "Omogući rešetkaste linije"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:71
 msgid "If enabled, the editor will show grid lines in the document."
-msgstr ""
+msgstr "Ako je omogućeno, uređivač će prikazati rešetkaste linije u dokumentu."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:86
 msgid "Overview Map Policy"
-msgstr ""
+msgstr "Pravilo panela pregleda"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:87
 msgid "When the overview map should be displayed."
-msgstr ""
+msgstr "Kada se prikazuje panel pregleda."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 #: src/plugins/editorui/tweaks.ui:254
@@ -352,7 +364,7 @@ msgstr "Umetanje razmaka"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
-msgstr ""
+msgstr "Različite vrste razmaka za iscrtavanje u uređivaču."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/plugins/editorui/tweaks.ui:77
@@ -450,7 +462,7 @@ msgstr "Omogućen"
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
 msgid "If the type within the extension is enabled."
-msgstr ""
+msgstr "Ako je vrsta unutar proširenja omogućena."
 
 #: data/gsettings/org.gnome.builder.gschema.xml:5
 msgid "Window size"
@@ -588,7 +600,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Koje okruženje treba koristiti kada se izvode testovi jedinice"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Opširnije zapisivanje"
 
@@ -1356,7 +1368,7 @@ msgstr[0] "Oko %u godine"
 msgstr[1] "Oko %u godine"
 msgstr[2] "Oko %u godina"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:79
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Instaliraj"
@@ -1543,7 +1555,7 @@ msgstr "Pokreni projekt"
 msgid "Other"
 msgstr "Ostalo"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1787,7 +1799,7 @@ msgid "_Find References"
 msgstr "_Pretraži reference"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1134
+#: src/libide/sourceview/ide-source-view.c:1371
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1811,7 +1823,7 @@ msgstr "Zalijepi iz međuspremnika u terminal"
 
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
-msgstr ""
+msgstr "Odabir cijelog teksta iz terminala uključujući pomicanje unatrag"
 
 #: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
@@ -1918,7 +1930,7 @@ msgstr "NIjedan"
 msgid "Blank page"
 msgstr "Prazna stranica"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:151
 msgid "Settings"
 msgstr "Postavke"
 
@@ -1964,18 +1976,22 @@ msgstr "Predmemoriranje naredbi izgradnje"
 #, c-format
 msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
+"Beautifier priključak: greška kopiranja datoteke podešavanja gresource za "
+"“%s”: %s"
 
 #. translators: %s is replaced with the source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:165
 #, c-format
 msgid "Beautifier plugin: error creating temporary config file for “%s”"
 msgstr ""
+"Beautifier priključak: greška stvaranja privremene datoteke podešavanja za "
+"“%s”"
 
 #. translators: %s is replaced with the .ini source file path
 #: src/plugins/beautifier/gb-beautifier-config.c:209
 #, c-format
 msgid "Beautifier plugin: Can’t read .ini file: %s"
-msgstr ""
+msgstr "Beautifier priključak: Nemoguće čitanje .ini datoteke: %s"
 
 #. translators: %s is replaced with the config entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:257
@@ -1984,6 +2000,8 @@ msgid ""
 "Beautifier plugin: neither command nor command-pattern keys found: entry "
 "“%s” disabled"
 msgstr ""
+"Beautifier priključak: nisu pronađeni ključevi ni command ni command-"
+"pattern: onemogućen je “%s” unos"
 
 #. translators: %s is replaced with the config entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:267
@@ -1992,12 +2010,16 @@ msgid ""
 "Beautifier plugin: both command and command-pattern keys found: entry “%s” "
 "disabled"
 msgstr ""
+"Beautifier priključak: nisu pronađeni ključevi oba command i command-"
+"pattern: onemogućen je “%s” unos"
 
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:291
 #, c-format
 msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
 msgstr ""
+"Beautifier priključak: putanja podešavanja “%s” ne postoji, onemogućen je "
+"“%s” unos"
 
 #. translators: %s is replaced with the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:308
@@ -2005,6 +2027,8 @@ msgstr ""
 msgid ""
 "Beautifier plugin: command key out of possible values: entry “%s” disabled"
 msgstr ""
+"Beautifier priključak: ključ command je izvan mogućih vrijednosti: "
+"onemogućen je“%s” unos"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:333
@@ -2013,6 +2037,8 @@ msgid ""
 "Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
 "entry “%s” disabled"
 msgstr ""
+"Beautifier priključak: @c@ u “%s” command-pattern ključ ali nije "
+"podstavljena datoteka podešavanja: onemogućen je “%s” unos"
 
 #. translators: %s and %s are replaced with the profile name and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:365
@@ -2020,61 +2046,63 @@ msgstr ""
 msgid ""
 "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
 msgstr ""
+"Beautifier priključak: nemoguće stvaranje privremene datoteke za “%s”: "
+"onemogućen je “%s” unos"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:407
 #, c-format
 msgid "Beautifier plugin: “%s”"
-msgstr ""
+msgstr "Beautifier priključak: “%s”"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:508
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
 #, c-format
 msgid "Beautifier plugin: %s"
-msgstr ""
+msgstr "Beautifier priključak: %s"
 
 #. translators: %s is replaced with a path name
 #: src/plugins/beautifier/gb-beautifier-config.c:547
 #, c-format
 msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-msgstr ""
+msgstr "Beautifier priključak: nemoguće čitanje datoteke resursa: “%s”"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
 msgid "beautifier program missing, you must install it: "
-msgstr ""
+msgstr "beautifier program nedostaje, morate ga instalirati: "
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
-msgstr ""
+msgstr "Beautifier priključak: prikaz nije GtkSourceView"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
 msgid "Beautifier Plugin: no default beautifier found"
-msgstr ""
+msgstr "Beautifier priključak: nema pronađenog zadanog beautifiera"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
 msgid "Beautifier Plugin: the buffer is not writable"
-msgstr ""
+msgstr "Beautifier priključak: međuspremnik nije zapisiv"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
 msgid "Beautifier Plugin: Nothing selected"
-msgstr ""
+msgstr "Beautifier priključak: ništa nije odabrano"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:243
 #, c-format
 msgid "No beautifier available for “%s”"
-msgstr ""
+msgstr "Nema dostupnog beautifiera za “%s”"
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:245
 #, c-format
 msgid "No beautifier available"
-msgstr ""
+msgstr "Nema dostupnog beautifiera"
 
 #. translators: %s is replaced with the error message
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:356
 #, c-format
 msgid "Beautifier plugin: no valid entries, disabling: %s"
-msgstr ""
+msgstr "Beautifier priključak: nema valjanih unosa, onemogućujem: %s"
 
 #. translators: %s and %s are replaced with the temporary dir and the file path
 #: src/plugins/beautifier/gb-beautifier-helper.c:63
@@ -2086,6 +2114,8 @@ msgid ""
 "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
 "temporary directory: “%s”"
 msgstr ""
+"Beautifier priključak: blokiran je pokušaj uklanjanja datoteke izvan “%s” "
+"privremenog direktorija: “%s”"
 
 #. translators: %s is replaced with the command error message
 #: src/plugins/beautifier/gb-beautifier-process.c:285
@@ -2094,18 +2124,20 @@ msgid ""
 "Beautifier plugin: command error output:\n"
 "%s"
 msgstr ""
+"Beautifier priključak: greška izlaza naredbe:\n"
+"%s"
 
 #: src/plugins/beautifier/gb-beautifier-process.c:295
 msgid "Beautifier plugin: the command output is empty"
-msgstr ""
+msgstr "Beautifier priključak: izlaz naredbe je prazan"
 
 #: src/plugins/beautifier/gb-beautifier-process.c:322
 msgid "Beautify plugin: the output is not a valid UTF-8 text"
-msgstr ""
+msgstr "Beautify priključak: izlaz nije valjan UTF-8 tekst"
 
 #: src/plugins/beautifier/gtk/menus.ui:7
 msgid "_Beautify"
-msgstr ""
+msgstr "_Beautify"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:704
@@ -2323,7 +2355,7 @@ msgstr "Zaustavljanje izgradnje projekta"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Izgradnja projekta (Shift+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:56
+#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
 msgid "_Build"
 msgstr "_Izgradi"
 
@@ -2339,73 +2371,73 @@ msgstr "_Pokreni"
 msgid "R_un With…"
 msgstr "P_okreni s(a)…"
 
-#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:44
-#: src/plugins/buildui/gtk/menus.ui:53 src/plugins/buildui/gtk/menus.ui:76
-#: src/plugins/buildui/gtk/menus.ui:103 src/plugins/buildui/gtk/menus.ui:113
-#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
-#: src/plugins/buildui/gtk/menus.ui:149
+#: src/plugins/buildui/gtk/menus.ui:33
+msgid "Configure Project…"
+msgstr "Podešavanje projekta…"
+
+#: src/plugins/buildui/gtk/menus.ui:36
+msgid "Configure settings related to the project"
+msgstr "Podesi postavke povezane s projektom"
+
+#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
+#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:147
 msgid "Code Foundry"
 msgstr "Tvornica kôda"
 
-#: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Podešavanje"
 
-#: src/plugins/buildui/gtk/menus.ui:36
-msgid "Configure Project…"
-msgstr "Podešavanje projekta…"
-
-#: src/plugins/buildui/gtk/menus.ui:39
-msgid "Configure settings related to the project"
-msgstr "Podesi postavke povezane s projektom"
-
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Select Build Target…"
 msgstr "Odabir odredišta izgradnje…"
 
-#: src/plugins/buildui/gtk/menus.ui:49
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Change default build target"
 msgstr "Promjena zadanog odredišta izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
-#: src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Building"
 msgstr "Izgradnja"
 
-#: src/plugins/buildui/gtk/menus.ui:57
+#: src/plugins/buildui/gtk/menus.ui:55
 msgid "Build the project"
 msgstr "Izgradi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:61
 msgid "_Rebuild"
 msgstr "Ponovno _izgradi"
 
-#: src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:62
 msgid "Rebuild the project"
 msgstr "Ponovno izgradi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "_Clean"
 msgstr "_Ukloni"
 
-#: src/plugins/buildui/gtk/menus.ui:70
+#: src/plugins/buildui/gtk/menus.ui:68
 msgid "Clean the project"
 msgstr "Ukloni projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:77
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Install & Deployment"
 msgstr "Instalacija i implementacija"
 
-#: src/plugins/buildui/gtk/menus.ui:81
+#: src/plugins/buildui/gtk/menus.ui:79
 msgid "Install the project"
 msgstr "Instaliraj projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:83
 msgid "Deploy to Device…"
 msgstr "Implementiraj na uređaj…"
 
-#: src/plugins/buildui/gtk/menus.ui:87
+#: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy project to current device"
 msgstr "Implementiraj projekt na trenutni uređaj"
 
@@ -2413,85 +2445,85 @@ msgstr "Implementiraj projekt na trenutni uređaj"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:94
 msgid "_Export"
 msgstr "_Izvezi"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Export project"
 msgstr "Izvezi projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:104
 msgid "Stop Build"
 msgstr "Zaustavi izgradnju"
 
-#: src/plugins/buildui/gtk/menus.ui:108
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Stop building project"
 msgstr "Zaustavi izgradnju projekta"
 
-#: src/plugins/buildui/gtk/menus.ui:116
+#: src/plugins/buildui/gtk/menus.ui:114
 msgid "Show Build _Log"
 msgstr "Prikaži zapis _izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:117
 msgid "Display panel containing the build log"
 msgstr "Prikazuje panel koji sadrži zapis izgradnje"
 
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
 msgid "Running"
 msgstr "Pokretanje"
 
-#: src/plugins/buildui/gtk/menus.ui:130
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Select Run Command…"
 msgstr "Odaberi naredbu pokretanja…"
 
-#: src/plugins/buildui/gtk/menus.ui:142
+#: src/plugins/buildui/gtk/menus.ui:140
 msgid "Run"
 msgstr "Pokreni"
 
-#: src/plugins/buildui/gtk/menus.ui:145
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Run the project"
 msgstr "Pokreni projekt"
 
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Testiranje jedinice"
 
-#: src/plugins/buildui/gtk/menus.ui:157
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Follow System Style"
 msgstr "Izgled sustava"
 
-#: src/plugins/buildui/gtk/menus.ui:163
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Force Light"
 msgstr "Prisili svjetli"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:167
 msgid "Force Dark"
 msgstr "Prisili tamni"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:174
 msgid "Accessibility"
 msgstr "Pristupačnost"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "High Contrast"
 msgstr "Visok kontrast"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:181
 msgid "Text Direction"
 msgstr "Smjer teksta"
 
-#: src/plugins/buildui/gtk/menus.ui:185
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "Left-to-Right"
 msgstr "S lijeva na desno"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:189
 msgid "Right-to-Left"
 msgstr "S desna na lijevo"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "Tools"
 msgstr "Alati"
 
@@ -2740,43 +2772,49 @@ msgid ""
 "The project will be installed to this directory during the installation "
 "phase of the build pipeline."
 msgstr ""
+"Projekt će biti instaliran u ovaj direktorij tijekom faze instalacije "
+"slivnika izgradnje."
 
 #: src/plugins/buildui/tweaks.ui:367
 msgid "Configure Options"
-msgstr ""
+msgstr "Mogućnosti podešavanja"
 
 #: src/plugins/buildui/tweaks.ui:380
 msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
+"Ove mogućnosti koristi sustav izgradnje za podešavanje projekta tijekom faze "
+"podešavanja slivnika izgradnje"
 
 #: src/plugins/buildui/tweaks.ui:387
 msgid "Build Environment"
-msgstr ""
+msgstr "Okruženje izgradnje"
 
 #: src/plugins/buildui/tweaks.ui:403
 msgid ""
 "The SDK used to build your application is automatically determined from the "
 "runtime."
 msgstr ""
+"SDK korišten za izgradnju vaše aplikacije je automatski otkriven iz tijeka "
+"izvođenja."
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
 msgid "Fetch dependencies"
-msgstr ""
+msgstr "Preuzmi zavisnosti"
 
 #: src/plugins/cargo/gbp-cargo-pipeline-addin.c:204
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 msgid "Build project"
-msgstr ""
+msgstr "Izgradi projekt"
 
 #: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
 msgid "Cargo Run"
-msgstr ""
+msgstr "Cargo pokretanje"
 
 #: src/plugins/clang/ide-clang-symbol-node.c:55
 msgid "anonymous"
-msgstr ""
+msgstr "anonimno"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
 msgid "Complete parentheses"
@@ -2784,7 +2822,7 @@ msgstr "Dovrši zagrade"
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
 msgid "If parentheses should be included when completing."
-msgstr ""
+msgstr "Trebaju li zagrade biti uključene pri završetku."
 
 #: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
 msgid "Complete parameters"
@@ -2795,35 +2833,37 @@ msgid ""
 "If parameters should be included when completing. Requires complete-"
 "parentheses."
 msgstr ""
+"Trebaju li parametri biti uključeni pri završetku. Zahtijeva dovršavanje "
+"zagrada."
 
 #: src/plugins/clang/tweaks.ui:14
 msgid "Clang"
-msgstr ""
+msgstr "Clang"
 
 #: src/plugins/clang/tweaks.ui:17
 msgid "Complete Parentheses"
-msgstr ""
+msgstr "Dovršavanje zagrada"
 
 #: src/plugins/clang/tweaks.ui:18
 msgid "Include parentheses when completing clang proposals"
-msgstr ""
+msgstr "Uključi zagrade pri dovršetku clang prijedloga"
 
 #: src/plugins/clang/tweaks.ui:29
 msgid "Complete Parameters"
-msgstr ""
+msgstr "Dovršavanje parametara"
 
 #: src/plugins/clang/tweaks.ui:30
 msgid "Include parameters and type information when completing clang proposals"
-msgstr ""
+msgstr "Uključi parametre i informacije o vrsti pri dovršetka clang prijedloga"
 
 #: src/plugins/cmake/gbp-cmake-build-system.c:423
 msgid "CMake"
-msgstr ""
+msgstr "CMake"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:206
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 msgid "Configure project"
-msgstr ""
+msgstr "Podesi projekt"
 
 #: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
 #: src/plugins/make/gbp-make-pipeline-addin.c:136
@@ -2831,20 +2871,20 @@ msgstr ""
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:133
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:143
 msgid "Installing project"
-msgstr ""
+msgstr "Instalacija projekta"
 
 #: src/plugins/cmake/gbp-cmake-toolchain.c:218
 #, c-format
 msgid "%s (CMake)"
-msgstr ""
+msgstr "%s (CMake)"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:53
 msgid "Create or update code-index for project file"
-msgstr ""
+msgstr "Stvori ili nadopuni code-index za datoteku projekta"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:54
 msgid "PROJECT_FILE"
-msgstr ""
+msgstr "DATOTEKA_PROJEKTA"
 
 #: src/plugins/code-index/gbp-code-index-application-addin.c:152
 #, c-format
@@ -3492,7 +3532,7 @@ msgstr "Otklanjatelj grešaka"
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
-msgstr "Točke slamanja"
+msgstr "Točke prijeloma"
 
 #: src/plugins/debuggerui/gtk/menus.ui:25
 msgid "Automatically Break at Program Start"
@@ -3572,11 +3612,11 @@ msgstr ""
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
 msgid "No break"
-msgstr "Bez slamanja"
+msgstr "Bez prijeloma"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
 msgid "Breakpoint"
-msgstr "Točka slamanja"
+msgstr "Točka prijeloma"
 
 #: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
 msgid "Countpoint"
@@ -5303,7 +5343,7 @@ msgid "Proc Macros"
 msgstr ""
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
+msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr ""
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
@@ -5941,6 +5981,16 @@ msgstr ""
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "_Update"
 msgstr "_Nadopuni"
+
+#: src/plugins/update-manager/gtk/menus.ui:7
+#, fuzzy
+#| msgid "Installing…"
+msgid "Install Updates…"
+msgstr "Instalacija…"
+
+#: src/plugins/update-manager/gtk/menus.ui:8
+msgid "Install pending updates for Builder"
+msgstr ""
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
 msgid "Run with Leak Detector"
