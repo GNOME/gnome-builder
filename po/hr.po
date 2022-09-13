@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-10 11:21+0000\n"
-"PO-Revision-Date: 2022-09-13 18:19+0200\n"
+"PO-Revision-Date: 2022-09-14 00:37+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -402,7 +402,7 @@ msgstr "Broj redka dovršavanja koji se prikazuje korisniku."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 #: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
-msgstr "Visinu retka"
+msgstr "Visina retka"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:125
 msgid "The line height to use for the selected font."
@@ -634,7 +634,7 @@ msgstr ""
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: src/plugins/project-tree/tweaks.ui:37
 msgid "Sort Directories First"
-msgstr "Prvo poredaj direktorije"
+msgstr "Prvo razvrstaj direktorije"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
 msgid ""
@@ -1775,7 +1775,7 @@ msgstr "_Spoji redke"
 
 #: src/libide/sourceview/gtk/menus.ui:127
 msgid "S_ort Lines"
-msgstr "Poredaj _redke"
+msgstr "Razvrstaj _redke"
 
 #: src/libide/sourceview/gtk/menus.ui:133
 msgid "D_uplicate Line"
@@ -2644,7 +2644,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
-msgstr "Prijavljivanje"
+msgstr "Zapisivanje"
 
 #: src/plugins/buildui/tweaks.ui:134
 msgid ""
@@ -3504,7 +3504,7 @@ msgstr "Predloži dovršetke"
 
 #: src/plugins/ctags/tweaks.ui:18
 msgid "Use CTags to suggest code completion proposals"
-msgstr "Koristi CTags za prijedlog zahtjev dovršetka kôda"
+msgstr "Koristi CTags za prijedlog zahtjeva dovršetka kôda"
 
 #: src/plugins/ctags/tweaks.ui:34
 msgid "CTags Path"
@@ -3766,7 +3766,7 @@ msgstr "Razmaci"
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
 #: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
-msgstr "Kartice"
+msgstr "Tabulatori"
 
 #: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
 msgid "Go"
@@ -3916,7 +3916,7 @@ msgstr "Veličina tabulatora"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
-msgstr "Broj znakova uvlačenja za tabulatora"
+msgstr "Broj znakova uvlačenja za tabulator"
 
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
@@ -3957,7 +3957,7 @@ msgstr "Prebriši zatvorene vitičaste, uglate, oble zagrade i navodnike"
 
 #: src/plugins/editorui/tweaks-language.ui:223
 msgid "Insert Matching Brace"
-msgstr "Umetni odgovarajuću vitičastu zagradu"
+msgstr "Umetni odgovarajuću zagradu"
 
 #: src/plugins/editorui/tweaks-language.ui:224
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
@@ -4234,7 +4234,7 @@ msgstr "Odaberi prvi prijedlog dovršetka"
 
 #: src/plugins/editorui/tweaks.ui:433
 msgid "Automatically select the first completion proposal when displayed"
-msgstr "Automatski odaberi prvi prijedlog završetka kada se prikaže"
+msgstr "Automatski odaberi prvi prijedlog dovršetka kada se prikaže"
 
 #: src/plugins/editorui/tweaks.ui:448
 msgid "Maximum Completion Proposals"
@@ -4284,7 +4284,7 @@ msgstr "Umjesto granica linija"
 
 #: src/plugins/editorui/tweaks.ui:534 src/plugins/valgrind/gtk/menus.ui:44
 msgid "Disabled"
-msgstr "Onemogućen"
+msgstr "Onemogućeno"
 
 #: src/plugins/editorui/tweaks.ui:546
 msgid "Session Management"
@@ -4312,11 +4312,11 @@ msgstr "Odgoda u sekundama prije automatskog spremanja dokumenta"
 
 #: src/plugins/editorui/tweaks.ui:581
 msgid "Format on Save"
-msgstr "Formatiraj pri spremanju"
+msgstr "Preoblikuj pri spremanju"
 
 #: src/plugins/editorui/tweaks.ui:582
 msgid "Reformat sources when saving to disk"
-msgstr "Preformatiraj izvor pri spremanju na disk"
+msgstr "Preoblikuj izvor pri spremanju na disk"
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -5204,7 +5204,7 @@ msgstr "P_rikaži zanemarene datoteke"
 
 #: src/plugins/project-tree/gtk/menus.ui:81
 msgid "S_ort Directories First"
-msgstr "Prvo _poredaj direktorije"
+msgstr "Prvo _razvrstaj direktorije"
 
 #: src/plugins/project-tree/gtk/menus.ui:93
 msgid "Reveal in Project Tree"
@@ -5232,7 +5232,7 @@ msgstr "Nema upravljanja inačicom"
 
 #: src/plugins/projectui/tweaks.ui:14
 msgid "Restore Previous Session"
-msgstr "Vrati prijašnju sesiju"
+msgstr "Obnovi prijašnju sesiju"
 
 #: src/plugins/projectui/tweaks.ui:15
 msgid "Open previously opened files when loading a project"
@@ -5467,7 +5467,7 @@ msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
-"Builder može pokrenuti vašu naredbu s brojnih lokacija uključujući sustav "
+"Graditelj može pokrenuti vašu naredbu s brojnih lokacija uključujući sustav "
 "računala ili spremnike izgradnje."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
@@ -5480,7 +5480,7 @@ msgstr "Podproces"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 msgid "Runs the command as a subprocess of Builder."
-msgstr "Pokreće naredbu kao podproces Buildera."
+msgstr "Pokreće naredbu kao podproces Graditelja."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
 msgid "Runs the command on the host system."
@@ -5665,7 +5665,7 @@ msgstr "CPU upotreba"
 
 #: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
 msgid "Memory Usage"
-msgstr "Upotreba memorije"
+msgstr "Korištenje memorije"
 
 #: src/plugins/sysprof/gtk/menus.ui:70
 msgid "Storage I/O"
@@ -5725,7 +5725,7 @@ msgstr "CPU guverner"
 
 #: src/plugins/sysprof/tweaks.ui:44
 msgid "Force performance mode while profiling"
-msgstr "Prisilni performanse način rada tijekom profiliranja"
+msgstr "Prisili performanse način rada tijekom profiliranja"
 
 #: src/plugins/sysprof/tweaks.ui:53
 msgid "Don't Change Governor"
@@ -5733,7 +5733,7 @@ msgstr "Ne mijenjaj guvernera"
 
 #: src/plugins/sysprof/tweaks.ui:59
 msgid "Force Performance Mode"
-msgstr "Prisilni performanse način rada"
+msgstr "Prisili performanse način rada"
 
 #: src/plugins/sysprof/tweaks.ui:72
 msgid "Simple memory statistics about the process such as total memory used"
@@ -5758,7 +5758,7 @@ msgstr "Bilježi statistiku potrošnje energije koristeći RAPL"
 
 #: src/plugins/sysprof/tweaks.ui:111
 msgid "Battery Usage"
-msgstr "Korištenje energije"
+msgstr "Korištenje baterije"
 
 #: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about battery charge and discharge rates"
@@ -6046,7 +6046,7 @@ msgstr "Sažetak"
 
 #: src/plugins/valgrind/gtk/menus.ui:38
 msgid "Full"
-msgstr "Potpun"
+msgstr "Potpuno"
 
 #: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
 msgid "Leak Kinds"
@@ -6054,19 +6054,19 @@ msgstr "Vrsta curenja"
 
 #: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:19
 msgid "Definite"
-msgstr "Određena"
+msgstr "Određeno"
 
 #: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:43
 msgid "Indirect"
-msgstr "Neizravna"
+msgstr "Neizravno"
 
 #: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:31
 msgid "Possible"
-msgstr "Moguća"
+msgstr "Moguće"
 
 #: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:55
 msgid "Reachable"
-msgstr "Dohvatljiva"
+msgstr "Dohvatljivo"
 
 #: src/plugins/valgrind/tweaks.ui:20
 msgid "Include definite leaks in report summary"
