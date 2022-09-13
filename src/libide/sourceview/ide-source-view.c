@@ -27,6 +27,11 @@
 
 #include "ide-source-view-private.h"
 
+#define MIN_BUBBLE_SCALE -2
+#define MAX_BUBBLE_SCALE 3
+#define X_PAD 5
+#define Y_PAD 3
+
 typedef struct
 {
   GtkEventController *controller;
@@ -164,6 +169,169 @@ ide_source_view_update_css (IdeSourceView *self)
 
   if ((css = _ide_source_view_generate_css (GTK_SOURCE_VIEW (self), self->font_desc, self->font_scale, self->line_height)))
     gtk_css_provider_load_from_data (self->css_provider, css, -1);
+}
+
+static inline void
+add_match (GtkTextView       *text_view,
+           cairo_region_t    *region,
+           const GtkTextIter *begin,
+           const GtkTextIter *end)
+{
+  GdkRectangle begin_rect;
+  GdkRectangle end_rect;
+  cairo_rectangle_int_t rect;
+
+  /* NOTE: @end is not inclusive of the match. */
+  if (gtk_text_iter_get_line (begin) == gtk_text_iter_get_line (end))
+    {
+      gtk_text_view_get_iter_location (text_view, begin, &begin_rect);
+      gtk_text_view_get_iter_location (text_view, end, &end_rect);
+      rect.x = begin_rect.x;
+      rect.y = begin_rect.y;
+      rect.width = end_rect.x - begin_rect.x;
+      rect.height = MAX (begin_rect.height, end_rect.height);
+
+      cairo_region_union_rectangle (region, &rect);
+
+      return;
+    }
+
+  /*
+   * TODO: Add support for multi-line matches. When @begin and @end are not
+   *       on the same line, we need to add the match region to @region so
+   *       ide_source_view_draw_search_bubbles() can draw search bubbles
+   *       around it.
+   */
+}
+
+static guint
+add_matches (GtkTextView            *text_view,
+             cairo_region_t         *region,
+             GtkSourceSearchContext *search_context,
+             const GtkTextIter      *begin,
+             const GtkTextIter      *end)
+{
+  GtkTextIter first_begin;
+  GtkTextIter new_begin;
+  GtkTextIter match_begin;
+  GtkTextIter match_end;
+  gboolean has_wrapped;
+  guint count = 1;
+
+  g_assert (GTK_IS_TEXT_VIEW (text_view));
+  g_assert (region != NULL);
+  g_assert (GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+
+  if (!gtk_source_search_context_forward (search_context,
+                                          begin,
+                                          &first_begin,
+                                          &match_end,
+                                          &has_wrapped))
+    return 0;
+
+  add_match (text_view, region, &first_begin, &match_end);
+
+  for (;;)
+    {
+      new_begin = match_end;
+
+      if (gtk_source_search_context_forward (search_context,
+                                             &new_begin,
+                                             &match_begin,
+                                             &match_end,
+                                             &has_wrapped) &&
+          (gtk_text_iter_compare (&match_begin, end) < 0) &&
+          (gtk_text_iter_compare (&first_begin, &match_begin) != 0))
+        {
+          add_match (text_view, region, &match_begin, &match_end);
+          count++;
+          continue;
+        }
+
+      break;
+    }
+
+  return count;
+}
+
+static void
+ide_source_view_draw_search_bubbles (IdeSourceView *self,
+                                     GtkSnapshot   *snapshot)
+{
+  GtkStyleContext *style_context;
+  cairo_region_t *clip_region;
+  cairo_region_t *match_region;
+  GtkSourceSearchContext *context;
+  GdkRectangle area;
+  GtkTextIter begin, end;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_SNAPSHOT (snapshot));
+
+  if (self->font_scale < MIN_BUBBLE_SCALE ||
+      self->font_scale > MAX_BUBBLE_SCALE ||
+      !(context = self->search_context))
+    return;
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
+
+  gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (self), &area);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self), &begin,
+                                      area.x, area.y);
+  gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (self), &end,
+                                      area.x + area.width,
+                                      area.y + area.height);
+
+  clip_region = cairo_region_create_rectangle (&area);
+  match_region = cairo_region_create ();
+
+  if (add_matches (GTK_TEXT_VIEW (self), match_region, context, &begin, &end))
+    {
+      int n_rects;
+
+      cairo_region_subtract (clip_region, match_region);
+
+      n_rects = cairo_region_num_rectangles (match_region);
+
+      gtk_style_context_save (style_context);
+      gtk_style_context_add_class (style_context, "search-match");
+      for (guint i = 0; i < n_rects; i++)
+        {
+          cairo_rectangle_int_t r;
+
+          cairo_region_get_rectangle (match_region, i, &r);
+
+          r.x -= X_PAD;
+          r.width += 2*X_PAD;
+          r.y -= Y_PAD;
+          r.height += 2*Y_PAD;
+
+          gtk_snapshot_render_background (snapshot, style_context, r.x, r.y, r.width, r.height);
+          gtk_snapshot_render_frame (snapshot, style_context, r.x, r.y, r.width, r.height);
+        }
+      gtk_style_context_restore (style_context);
+    }
+
+  cairo_region_destroy (clip_region);
+  cairo_region_destroy (match_region);
+}
+
+static void
+ide_source_view_snapshot_layer (GtkTextView      *text_view,
+                                GtkTextViewLayer  layer,
+                                GtkSnapshot      *snapshot)
+{
+  IdeSourceView *self = (IdeSourceView *)text_view;
+
+  g_assert (IDE_IS_SOURCE_VIEW (self));
+  g_assert (GTK_IS_SNAPSHOT (snapshot));
+
+  GTK_TEXT_VIEW_CLASS (ide_source_view_parent_class)->snapshot_layer (text_view, layer, snapshot);
+
+  if (layer == GTK_TEXT_VIEW_LAYER_BELOW_TEXT)
+    ide_source_view_draw_search_bubbles (self, snapshot);
 }
 
 static void
@@ -513,6 +681,13 @@ ide_source_view_connect_buffer (IdeSourceView *self,
   g_signal_connect_object (buffer,
                            "notify::language",
                            G_CALLBACK (ide_source_view_buffer_notify_language_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+
+  /* Update CSS when style changes */
+  g_signal_connect_object (buffer,
+                           "notify::style-scheme",
+                           G_CALLBACK (ide_source_view_update_css),
                            self,
                            G_CONNECT_SWAPPED);
 
@@ -1034,6 +1209,7 @@ ide_source_view_dispose (GObject *object)
 
   ide_source_view_disconnect_buffer (self);
 
+  g_clear_object (&self->search_context);
   g_clear_object (&self->joined_menu);
   g_clear_object (&self->css_provider);
   g_clear_pointer (&self->font_desc, pango_font_description_free);
@@ -1138,6 +1314,7 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GtkTextViewClass *text_view_class = GTK_TEXT_VIEW_CLASS (klass);
   GtkSourceViewClass *source_view_class = GTK_SOURCE_VIEW_CLASS (klass);
 
   object_class->dispose = ide_source_view_dispose;
@@ -1146,6 +1323,8 @@ ide_source_view_class_init (IdeSourceViewClass *klass)
 
   widget_class->root = ide_source_view_root;
   widget_class->size_allocate = ide_source_view_size_allocate;
+
+  text_view_class->snapshot_layer = ide_source_view_snapshot_layer;
 
   source_view_class->push_snippet = ide_source_view_push_snippet;
 
@@ -1380,8 +1559,8 @@ ide_source_view_get_font_desc (IdeSourceView *self)
 }
 
 void
-ide_source_view_set_font_desc (IdeSourceView           *self,
-                                  const PangoFontDescription *font_desc)
+ide_source_view_set_font_desc (IdeSourceView              *self,
+                               const PangoFontDescription *font_desc)
 {
   g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
 
@@ -1777,4 +1956,15 @@ ide_source_view_remove_controller (IdeSourceView      *self,
           break;
         }
     }
+}
+
+void
+_ide_source_view_set_search_context (IdeSourceView          *self,
+                                     GtkSourceSearchContext *search_context)
+{
+  g_return_if_fail (IDE_IS_SOURCE_VIEW (self));
+  g_return_if_fail (!search_context || GTK_SOURCE_IS_SEARCH_CONTEXT (search_context));
+
+  if (g_set_object (&self->search_context, search_context))
+    gtk_widget_queue_draw (GTK_WIDGET (self));
 }

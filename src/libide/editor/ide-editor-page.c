@@ -25,7 +25,10 @@
 #include <glib/gi18n.h>
 
 #include <libide-code.h>
+#include <libide-sourceview.h>
 #include <libide-threading.h>
+
+#include "ide-source-view-private.h"
 
 #include "ide-editor-info-bar-private.h"
 #include "ide-editor-page-addin.h"
@@ -357,6 +360,8 @@ set_search_visible (IdeEditorPage          *self,
 
   if (search_visible)
     _ide_editor_search_bar_grab_focus (self->search_bar);
+
+  _ide_source_view_set_search_context (self->view, self->search_bar->context);
 }
 
 static void

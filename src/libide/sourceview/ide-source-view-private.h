@@ -48,6 +48,9 @@ struct _IdeSourceView
   double line_height;
   int font_scale;
 
+  /* Search context used to draw bubbles */
+  GtkSourceSearchContext *search_context;
+
   /* This is a joined menu used to extend the GtkTextView
    * "extra-menu" property. We join things here and allow
    * addins to extend it.
@@ -89,5 +92,7 @@ char *_ide_source_view_generate_css        (GtkSourceView              *view,
                                             const PangoFontDescription *font_desc,
                                             int                         font_scale,
                                             double                      line_height);
+void  _ide_source_view_set_search_context  (IdeSourceView              *self,
+                                            GtkSourceSearchContext     *search_context);
 
 G_END_DECLS
