@@ -346,14 +346,14 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   gbp_buildui_omni_bar_section_set_context (self->omni_bar_section, context);
 
   log_position = ide_panel_position_new ();
-  ide_panel_position_set_edge (log_position, PANEL_DOCK_POSITION_BOTTOM);
+  ide_panel_position_set_area (log_position, PANEL_AREA_BOTTOM);
   ide_panel_position_set_depth (log_position, 2);
 
   self->log_pane = g_object_new (GBP_TYPE_BUILDUI_LOG_PANE, NULL);
   ide_workspace_add_pane (workspace, IDE_PANE (self->log_pane), log_position);
 
   pane_position = ide_panel_position_new ();
-  ide_panel_position_set_edge (pane_position, PANEL_DOCK_POSITION_START);
+  ide_panel_position_set_area (pane_position, PANEL_AREA_START);
   ide_panel_position_set_depth (pane_position, 1);
 
   self->pane = g_object_new (GBP_TYPE_BUILDUI_PANE, NULL);

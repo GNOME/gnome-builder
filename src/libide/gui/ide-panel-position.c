@@ -29,11 +29,11 @@ struct _IdePanelPosition
   guint column : 8;
   guint row : 8;
   guint depth : 9;
-  PanelDockPosition edge : 3;
+  PanelArea area : 3;
   guint column_set : 1;
   guint row_set : 1;
   guint depth_set : 1;
-  guint edge_set : 1;
+  guint area_set : 1;
 };
 
 G_DEFINE_BOXED_TYPE (IdePanelPosition, ide_panel_position, ide_panel_position_ref, ide_panel_position_unref)
@@ -57,25 +57,26 @@ ide_panel_position_unref (IdePanelPosition *self)
 }
 
 gboolean
-ide_panel_position_get_edge (IdePanelPosition  *self,
-                             PanelDockPosition *edge)
+ide_panel_position_get_area (IdePanelPosition *self,
+                             PanelArea        *area)
 {
   g_return_val_if_fail (self != NULL, FALSE);
 
-  if (edge != NULL)
-    *edge = self->edge;
+  if (area != NULL)
+    *area = self->area;
 
-  return self->edge_set;
+  return self->area_set;
 }
 
 void
-ide_panel_position_set_edge (IdePanelPosition  *self,
-                             PanelDockPosition  edge)
+ide_panel_position_set_area (IdePanelPosition *self,
+                             PanelArea         area)
 {
   g_return_if_fail (self != NULL);
+  g_return_if_fail (area <= PANEL_AREA_CENTER);
 
-  self->edge = edge;
-  self->edge_set = TRUE;
+  self->area = area;
+  self->area_set = TRUE;
 }
 
 /**
@@ -170,5 +171,5 @@ ide_panel_position_is_indeterminate (IdePanelPosition *self)
 {
   g_return_val_if_fail (self != NULL, TRUE);
 
-  return !self->column_set || !self->row_set || !self->edge_set;
+  return !self->column_set || !self->row_set || !self->area_set;
 }

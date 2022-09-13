@@ -265,7 +265,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
 
   /* Always add the terminal panel to primary/editor workspaces */
   position = ide_panel_position_new ();
-  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
+  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
                        "respawn-on-exit", TRUE,
                        "visible", TRUE,

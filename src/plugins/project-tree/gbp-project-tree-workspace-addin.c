@@ -51,7 +51,7 @@ gbp_project_tree_workspace_addin_load (IdeWorkspaceAddin *addin,
                     (IdePane **)&self->pane);
 
   position = ide_panel_position_new ();
-  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_START);
+  ide_panel_position_set_area (position, PANEL_AREA_START);
   ide_panel_position_set_row (position, 0);
   ide_panel_position_set_depth (position, 0);
 

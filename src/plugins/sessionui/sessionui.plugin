@@ -1,0 +1,8 @@
+[Plugin]
+Authors=Christian Hergert <christian@hergert.me>
+Builtin=true
+Copyright=Copyright © 2022 Christian Hergert
+Embedded=_gbp_sessionui_register_types
+Hidden=true
+Module=sessionui
+Name=Session Integration
