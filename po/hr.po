@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-10 11:21+0000\n"
-"PO-Revision-Date: 2022-09-13 18:03+0200\n"
+"PO-Revision-Date: 2022-09-13 18:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -4162,7 +4162,7 @@ msgstr "Vodeći razmak"
 
 #: src/plugins/editorui/tweaks.ui:314
 msgid "Draw marks for leading spaces only"
-msgstr "Nacrtaj oznake samo za vodeća mjesta"
+msgstr "Nacrtaj oznake samo za vodeće razmake"
 
 #: src/plugins/editorui/tweaks.ui:326
 msgid "Inside Text"
@@ -5220,7 +5220,7 @@ msgstr "Prikaži ikonu pokraj datoteka unutar stabla projekta"
 
 #: src/plugins/project-tree/tweaks.ui:26
 msgid "Show files which are typically ignored"
-msgstr "Prikaži datoteke koje se obično zanemaruju"
+msgstr "Prikaži datoteke koje se uobičajeno zanemaruju"
 
 #: src/plugins/project-tree/tweaks.ui:38
 msgid "Sort directories before files in the same directory"
@@ -5288,8 +5288,8 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
-"Podešavanje se koristi za postavljanje slivnika za izgradnju, podešavanje "
-"vašeg sustava izgradnje i pokretanje vašeg projekta."
+"Podešavanje se koristi za postavljanje slivnika izgradnje, podešavanje vašeg "
+"sustava izgradnje i pokretanje vašeg projekta."
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -5885,7 +5885,7 @@ msgstr "Dopusti hiperpoveznice"
 
 #: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
-msgstr "Omogućuje korištenje izlaznih nizova hiperveze"
+msgstr "Omogućuje korištenje izlaznih nizova hiperpoveznice"
 
 #: src/plugins/terminal/tweaks.ui:55
 msgid "Scrolling"
@@ -5915,7 +5915,7 @@ msgstr "Ograniči pomicanje unatrag"
 msgid ""
 "Limit the number of lines that are stored in memory for terminal scrollback"
 msgstr ""
-"Ograničite broj redaka koji su pohranjeni u memoriji za pomicanje terminala "
+"Ograniči broj redaka koji su pohranjeni u memoriji za pomicanje terminala "
 "unatrag"
 
 #: src/plugins/terminal/tweaks.ui:99
