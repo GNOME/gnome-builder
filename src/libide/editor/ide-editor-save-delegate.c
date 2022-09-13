@@ -124,6 +124,18 @@ ide_editor_save_delegate_save_finish (PanelSaveDelegate  *delegate,
 }
 
 static void
+ide_editor_save_delegate_close (PanelSaveDelegate *delegate)
+{
+  IdeEditorSaveDelegate *self = (IdeEditorSaveDelegate *)delegate;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_EDITOR_SAVE_DELEGATE (self));
+
+  if (self->page != NULL)
+    panel_widget_force_close (PANEL_WIDGET (self->page));
+}
+
+static void
 ide_editor_save_delegate_discard (PanelSaveDelegate *delegate)
 {
   IdeEditorSaveDelegate *self = (IdeEditorSaveDelegate *)delegate;
@@ -194,6 +206,7 @@ ide_editor_save_delegate_class_init (IdeEditorSaveDelegateClass *klass)
   object_class->get_property = ide_editor_save_delegate_get_property;
   object_class->set_property = ide_editor_save_delegate_set_property;
 
+  save_delegate_class->close = ide_editor_save_delegate_close;
   save_delegate_class->discard = ide_editor_save_delegate_discard;
   save_delegate_class->save_async = ide_editor_save_delegate_save_async;
   save_delegate_class->save_finish = ide_editor_save_delegate_save_finish;
