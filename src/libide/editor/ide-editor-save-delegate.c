@@ -43,6 +43,71 @@ G_DEFINE_FINAL_TYPE (IdeEditorSaveDelegate, ide_editor_save_delegate, PANEL_TYPE
 
 static GParamSpec *properties [N_PROPS];
 
+static gboolean
+map_file_to_subtitle (GBinding     *binding,
+                      const GValue *from_value,
+                      GValue       *to_value,
+                      gpointer      user_data)
+{
+  IdeEditorSaveDelegate *self = user_data;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GFile) dir = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  g_autoptr(GFile) workdir_parent = NULL;
+  GFile *file;
+
+  g_assert (G_IS_BINDING (binding));
+  g_assert (G_VALUE_HOLDS (from_value, G_TYPE_FILE));
+  g_assert (G_VALUE_HOLDS (to_value, G_TYPE_STRING));
+  g_assert (IDE_IS_EDITOR_SAVE_DELEGATE (self));
+
+  if (self->buffer == NULL || !(file = g_value_get_object (from_value)))
+    return FALSE;
+
+  context = ide_buffer_ref_context (self->buffer);
+  workdir = ide_context_ref_workdir (context);
+  workdir_parent = g_file_get_parent (workdir);
+  dir = g_file_get_parent (file);
+
+  if (g_file_has_prefix (dir, workdir_parent))
+    {
+      g_autofree char *path = g_file_get_relative_path (workdir_parent, dir);
+      g_value_take_string (to_value, g_strconcat (path, G_DIR_SEPARATOR_S, NULL));
+    }
+  else if (g_file_is_native (file))
+    {
+      g_value_take_string (to_value, ide_path_collapse (g_file_peek_path (dir)));
+    }
+  else
+    {
+      g_value_take_string (to_value, g_file_get_uri (dir));
+    }
+
+  return TRUE;
+}
+
+static gboolean
+map_file_to_title (GBinding     *binding,
+                   const GValue *from_value,
+                   GValue       *to_value,
+                   gpointer      user_data)
+{
+  IdeEditorSaveDelegate *self = user_data;
+  GFile *file;
+
+  g_assert (G_IS_BINDING (binding));
+  g_assert (G_VALUE_HOLDS (from_value, G_TYPE_FILE));
+  g_assert (G_VALUE_HOLDS (to_value, G_TYPE_STRING));
+  g_assert (IDE_IS_EDITOR_SAVE_DELEGATE (self));
+
+  if (self->buffer == NULL || !(file = g_value_get_object (from_value)))
+    return FALSE;
+
+  g_value_take_string (to_value, g_file_get_basename (file));
+
+  return TRUE;
+}
+
 static void
 ide_editor_save_delegate_save_cb (GObject      *object,
                                   GAsyncResult *result,
@@ -240,7 +305,14 @@ ide_editor_save_delegate_new (IdeEditorPage *page)
 
   g_set_weak_pointer (&ret->page, page);
 
-  g_object_bind_property (page, "title", ret, "title", G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (buffer, "file",
+                               ret, "title",
+                               G_BINDING_SYNC_CREATE,
+                               map_file_to_title, NULL, ret, NULL);
+  g_object_bind_property_full (buffer, "file",
+                               ret, "subtitle",
+                               G_BINDING_SYNC_CREATE,
+                               map_file_to_subtitle, NULL, ret, NULL);
   g_object_bind_property (page, "icon", ret, "icon", G_BINDING_SYNC_CREATE);
 
   return PANEL_SAVE_DELEGATE (ret);
