@@ -245,6 +245,27 @@ toggle_panel_action (gpointer    instance,
 }
 
 static void
+ide_primary_workspace_agree_to_close_async (IdeWorkspace        *workspace,
+                                            GCancellable        *cancellable,
+                                            GAsyncReadyCallback  callback,
+                                            gpointer             user_data)
+{
+  _ide_workspace_agree_to_close_async (workspace,
+                                       IDE_PRIMARY_WORKSPACE (workspace)->grid,
+                                       cancellable,
+                                       callback,
+                                       user_data);
+}
+
+static gboolean
+ide_primary_workspace_agree_to_close_finish (IdeWorkspace  *workspace,
+                                             GAsyncResult  *result,
+                                             GError       **error)
+{
+  return _ide_workspace_agree_to_close_finish (workspace, result, error);
+}
+
+static void
 ide_primary_workspace_dispose (GObject *object)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)object;
@@ -272,6 +293,8 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->add_overlay = ide_primary_workspace_add_overlay;
   workspace_class->add_page = ide_primary_workspace_add_page;
   workspace_class->add_pane = ide_primary_workspace_add_pane;
+  workspace_class->agree_to_close_async = ide_primary_workspace_agree_to_close_async;
+  workspace_class->agree_to_close_finish = ide_primary_workspace_agree_to_close_finish;
   workspace_class->can_search = ide_primary_workspace_can_search;
   workspace_class->context_set = ide_primary_workspace_context_set;
   workspace_class->foreach_page = ide_primary_workspace_foreach_page;

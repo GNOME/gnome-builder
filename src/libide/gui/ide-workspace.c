@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libpanel.h>
+
 #include <libide-search.h>
 #include <libide-plugins.h>
 
@@ -1527,4 +1529,94 @@ ide_workspace_action_set_enabled (IdeWorkspace *self,
                                   gboolean      enabled)
 {
   ide_action_mixin_set_enabled (self, action_name, enabled);
+}
+
+static void
+_ide_workspace_agree_to_close_run_cb (GObject      *object,
+                                      GAsyncResult *result,
+                                      gpointer      user_data)
+{
+  PanelSaveDialog *dialog = (PanelSaveDialog *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (PANEL_IS_SAVE_DIALOG (dialog));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!panel_save_dialog_run_finish (dialog, result, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+_ide_workspace_agree_to_close_page_cb (IdePage  *page,
+                                       gpointer  user_data)
+{
+  PanelSaveDialog *dialog = user_data;
+  PanelSaveDelegate *delegate;
+
+  g_assert (IDE_IS_PAGE (page));
+  g_assert (PANEL_IS_SAVE_DIALOG (dialog));
+
+  if ((delegate = panel_widget_get_save_delegate (PANEL_WIDGET (page))) &&
+      panel_widget_get_modified (PANEL_WIDGET (page)))
+    panel_save_dialog_add_delegate (dialog, delegate);
+}
+
+void
+_ide_workspace_agree_to_close_async (IdeWorkspace        *self,
+                                     IdeGrid             *grid,
+                                     GCancellable        *cancellable,
+                                     GAsyncReadyCallback  callback,
+                                     gpointer             user_data)
+{
+  g_autoptr(IdeTask) task = NULL;
+  PanelSaveDialog *dialog;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_GRID (grid));
+  g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, _ide_workspace_agree_to_close_async);
+
+  dialog = PANEL_SAVE_DIALOG (panel_save_dialog_new ());
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (self));
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
+
+  ide_grid_foreach_page (grid, _ide_workspace_agree_to_close_page_cb, dialog);
+
+  panel_save_dialog_run_async (dialog,
+                               cancellable,
+                               _ide_workspace_agree_to_close_run_cb,
+                               g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+gboolean
+_ide_workspace_agree_to_close_finish (IdeWorkspace  *self,
+                                      GAsyncResult  *result,
+                                      GError       **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), FALSE);
+  g_return_val_if_fail (IDE_IS_TASK (result), FALSE);
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
 }

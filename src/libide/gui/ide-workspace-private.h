@@ -26,31 +26,39 @@
 
 G_BEGIN_DECLS
 
-GList      *_ide_workspace_get_mru_link        (IdeWorkspace        *self);
-void        _ide_workspace_add_page_mru        (IdeWorkspace        *self,
-                                                GList               *mru_link);
-void        _ide_workspace_remove_page_mru     (IdeWorkspace        *self,
-                                                GList               *mru_link);
-void        _ide_workspace_move_front_page_mru (IdeWorkspace        *workspace,
-                                                GList               *mru_link);
-void        _ide_workspace_set_context         (IdeWorkspace        *workspace,
-                                                IdeContext          *context);
-gboolean    _ide_workspace_can_search          (IdeWorkspace        *self);
-void        _ide_workspace_begin_global_search (IdeWorkspace        *self);
-void        _ide_workspace_add_widget          (IdeWorkspace        *workspace,
-                                                PanelWidget         *widget,
-                                                IdePanelPosition    *position,
-                                                PanelPaned          *dock_start,
-                                                PanelPaned          *dock_end,
-                                                PanelPaned          *dock_bottom,
-                                                IdeGrid             *grid);
-PanelFrame *_ide_workspace_find_frame          (IdeWorkspace        *workspace,
-                                                IdePanelPosition    *position,
-                                                PanelPaned          *dock_start,
-                                                PanelPaned          *dock_end,
-                                                PanelPaned          *dock_bottom,
-                                                IdeGrid             *grid);
-void        _ide_workspace_set_shortcut_model  (IdeWorkspace        *self,
-                                                GListModel          *shortcuts);
+GList      *_ide_workspace_get_mru_link          (IdeWorkspace         *self);
+void        _ide_workspace_add_page_mru          (IdeWorkspace         *self,
+                                                  GList                *mru_link);
+void        _ide_workspace_remove_page_mru       (IdeWorkspace         *self,
+                                                  GList                *mru_link);
+void        _ide_workspace_move_front_page_mru   (IdeWorkspace         *workspace,
+                                                  GList                *mru_link);
+void        _ide_workspace_set_context           (IdeWorkspace         *workspace,
+                                                  IdeContext           *context);
+gboolean    _ide_workspace_can_search            (IdeWorkspace         *self);
+void        _ide_workspace_begin_global_search   (IdeWorkspace         *self);
+void        _ide_workspace_add_widget            (IdeWorkspace         *workspace,
+                                                  PanelWidget          *widget,
+                                                  IdePanelPosition     *position,
+                                                  PanelPaned           *dock_start,
+                                                  PanelPaned           *dock_end,
+                                                  PanelPaned           *dock_bottom,
+                                                  IdeGrid              *grid);
+PanelFrame *_ide_workspace_find_frame            (IdeWorkspace         *workspace,
+                                                  IdePanelPosition     *position,
+                                                  PanelPaned           *dock_start,
+                                                  PanelPaned           *dock_end,
+                                                  PanelPaned           *dock_bottom,
+                                                  IdeGrid              *grid);
+void        _ide_workspace_set_shortcut_model    (IdeWorkspace         *self,
+                                                  GListModel           *shortcuts);
+void        _ide_workspace_agree_to_close_async  (IdeWorkspace         *self,
+                                                  IdeGrid              *grid,
+                                                  GCancellable         *cancellable,
+                                                  GAsyncReadyCallback   callback,
+                                                  gpointer              user_data);
+gboolean    _ide_workspace_agree_to_close_finish (IdeWorkspace         *self,
+                                                  GAsyncResult         *result,
+                                                  GError              **error);
 
 G_END_DECLS
