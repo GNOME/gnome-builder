@@ -99,6 +99,23 @@ ide_editor_page_notify_file_cb (IdeEditorPage *self,
 }
 
 static void
+ide_editor_page_notify_formatter_cb (IdeEditorPage *self,
+                                     GParamSpec    *pspec,
+                                     IdeBuffer     *buffer)
+{
+  IdeFormatter *formatter;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  formatter = ide_buffer_get_formatter (buffer);
+
+  panel_widget_action_set_enabled (PANEL_WIDGET (self),
+                                   "editor.format",
+                                   formatter != NULL);
+}
+
+static void
 ide_editor_page_modified_changed_cb (IdeEditorPage *self,
                                      IdeBuffer     *buffer)
 {
@@ -153,6 +170,12 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
                                G_CONNECT_SWAPPED);
 
       g_signal_connect_object (buffer,
+                               "notify::formatter",
+                               G_CALLBACK (ide_editor_page_notify_formatter_cb),
+                               self,
+                               G_CONNECT_SWAPPED);
+
+      g_signal_connect_object (buffer,
                                "notify::file-settings",
                                G_CALLBACK (_ide_editor_page_settings_reload),
                                self,
@@ -169,6 +192,7 @@ ide_editor_page_set_buffer (IdeEditorPage *self,
                               G_BINDING_SYNC_CREATE);
 
       ide_editor_page_notify_file_cb (self, NULL, buffer);
+      ide_editor_page_notify_formatter_cb (self, NULL, buffer);
       ide_editor_page_modified_changed_cb (self, buffer);
       _ide_editor_page_settings_init (self);
     }
