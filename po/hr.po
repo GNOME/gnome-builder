@@ -1,0 +1,6201 @@
+# Croatian translation for gnome-builder.
+# Copyright (C) 2022 gnome-builder's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gnome-builder package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gnome-builder main\n"
+"Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
+"POT-Creation-Date: 2022-09-10 11:21+0000\n"
+"PO-Revision-Date: 2022-09-13 18:19+0200\n"
+"Last-Translator: \n"
+"Language-Team: Croatian <hr@li.org>\n"
+"Language: hr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
+#: data/org.gnome.Builder.desktop.in.in:3
+#: src/libide/editor/ide-editor-workspace.ui:21
+#: src/libide/gui/ide-application-actions.c:114 src/main.c:242
+#: src/plugins/editorui/tweaks.ui:481
+#: src/plugins/newcomers/gbp-newcomers-section.ui:39
+msgid "Builder"
+msgstr "Graditelj"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:8
+msgid "An IDE for GNOME"
+msgstr "Integrirano razvojno okruženje (IDE) za GNOME"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:9
+#: src/libide/gui/ide-application-actions.c:115
+msgid "Christian Hergert, et al."
+msgstr "Christian Hergert i sur."
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:12
+msgid ""
+"Builder is an actively developed Integrated Development Environment for "
+"GNOME. It combines integrated support for essential GNOME technologies such "
+"as GTK+, GLib, and GNOME APIs with features that any developer will "
+"appreciate, like syntax highlighting and snippets."
+msgstr ""
+"Graditelj je aktivno razvijano integrirano razvojno okruženje za GNOME. "
+"Kombinira integriranu podršku za osnovne GNOME tehnologije poput GTK+, GLib "
+"i GNOME API-je sa značajkama koje će svaki razvijatelj cijeniti, poput "
+"isticanja sintaksa i isječaka."
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
+msgid ""
+"You can rely on predictable releases of Builder with each new release of "
+"GNOME every six months."
+msgstr ""
+"Možete se osloniti na redovita izdanja Graditelja svakim novim izdanjem "
+"GNOMA, svakih šest mjeseci."
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:22
+msgid "Features:"
+msgstr "Značajke:"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:24
+msgid "Built in syntax highlighting for many languages"
+msgstr "Ugrađeno isticanje sintakse za mnoge jezike"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:25
+msgid "Side-by-side code editors"
+msgstr "Usporedni uređivači kôda"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:26
+msgid "Multi-monitor support"
+msgstr "Podrška za više monitora"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:27
+msgid "Code overview mini-map"
+msgstr "Panel pregleda kôda"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:28
+msgid "Integration with Git"
+msgstr "Git integracija"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:29
+msgid ""
+"Integration with Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, "
+"PHPize, and Waf"
+msgstr ""
+"Integracija s Autotools, Cargo, CMake, Gradle, Meson, Maven, Make, PHPize i "
+"Waf"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:30
+msgid "Clang based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Clang temeljeno automatsko dovršavanje, semantičko isticanje i diajagnostika"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:31
+msgid "Python based auto-completion, semantic highlighting, and diagnostics"
+msgstr ""
+"Python temeljeno automatsko dovršavanje, semantičko isticanje i diajagnostika"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:32
+msgid "Vala based auto-completion and diagnostics"
+msgstr "Vala temeljeno automatsko dovršavanje i diajagnostika"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:33
+msgid "Auto indentation support for C, Python, Vala, and XML"
+msgstr "Automatsko uvlačenje za C, Python, Vala i XML"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:34
+msgid "HTML, Markdown, and reStructuredText, and Sphinx live preview"
+msgstr "HTML, Markdown i reStructuredText, i Sphinx pregled u stvarnom vremenu"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:35
+msgid "Optional Vim, Emacs, and SublimeText style editing"
+msgstr "Neobavezni Vim, Emacs i SublimeText uređivači"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
+msgid "An integrated software profiler for native applications"
+msgstr "Integrirani profiler softvera za izvorne aplikacije"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
+msgid "An integrated debugger for native applications"
+msgstr "Integrirani otklanjatelj grešaka za izvorne aplikacije"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:38
+msgid "Support for building with jhbuild and flatpak runtimes"
+msgstr "Podrška za izgradnju s jhbuild i flatpak radnim procesima"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:39
+msgid "Support for viewing TODOs found within your code base"
+msgstr "Podrška za pregled TODO datoteka pronađenih u vašoj bazi kôda"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:40
+msgid "Fast fuzzy text search across files and symbols"
+msgstr "Brza pretraga nejasnog teksta kroz datoteke i simbole"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:46
+msgid "Quickly access your projects"
+msgstr "Brzo pristupite svojim projektima"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:50
+msgid "Create new projects from a variety of templates"
+msgstr "Stvaranje novih projekata iz raznih predložaka"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:54
+msgid "Integration with Git to clone your projects"
+msgstr "Git integracija kako bi mogli klonirati svoje projekte"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
+msgid "The source code editor"
+msgstr "Uređivač izvornog kôda"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
+msgid "Fast global fuzzy search"
+msgstr "Brza globalna pretraga nejasnog teksta"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:66
+msgid "Debug with the GNU debugger"
+msgstr "Otklanjanje grešaka s GNU otklanjateljem grešaka"
+
+#: data/appdata/org.gnome.Builder.appdata.xml.in.in:70
+msgid "Use the minimap to see more of the file"
+msgstr "Mogućnost korištenja panela pregleda kako bi vidjeli više datoteka"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:6
+#: src/plugins/buildui/tweaks.ui:217
+msgid "Build Parallelism"
+msgstr "Paralelizam izgradnje"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:7
+msgid ""
+"Number of workers to use when performing builds. -1 for sensible default. 0 "
+"for number of CPU."
+msgstr ""
+"Broj radnika koji se koriste pri izgradnji. -1 za razumno zadano. 0 za broj "
+"CPU-a."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:11
+msgid "Clear build logs"
+msgstr "Obriši zapise izgradnje"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:12
+msgid "If enabled, build log pane will be cleared on rebuild."
+msgstr "Ako je omogućeno, panle zapisa izgradnje će se obristi."
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:16
+msgid "Allow network when metered"
+msgstr "Dopusti mrežu ograničenu podacima"
+
+#: data/gsettings/org.gnome.builder.build.gschema.xml:17
+msgid ""
+"Enable automated transfers upon building such as SDK downloads and "
+"dependencies when connection is metered."
+msgstr ""
+"Omogući automatski prijenos nakon izgradnje poput SDK preuzimanja i "
+"zavisnosti kada je povezivanje ograničeno podacima."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:5
+msgid "Ctags based autocompletion"
+msgstr "Ctags temeljeno automatsko dovršavanje"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:6
+msgid "Use Ctags for autocompletion."
+msgstr "Koristi Ctags za automatsko dovršavanje."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:10
+msgid "Enable semantic highlighting"
+msgstr "Omogući semantičko isticanje"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:11
+msgid ""
+"If enabled, additional highlighting will be provided in supported languages "
+"based on information extracted from the source code."
+msgstr ""
+"Ako je omogućeno, dodatno naglašavanje biti će omogućeno u podržanim "
+"jezicima temeljeno na informaciji izdvojenoj iz izvornog kôda."
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:15
+msgid "Path to ctags executable"
+msgstr "Putanja do ctags izvršne datoteke"
+
+#: data/gsettings/org.gnome.builder.code-insight.gschema.xml.in:16
+msgid "The path to the ctags executable on the system."
+msgstr "Putanja do ctags izvršne datoteke na sustavu."
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:5
+msgid "Debugger Breakpoint at Main"
+msgstr "Točka prijeloma otklanjatelja grešaka u Main"
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:6
+msgid "Debugger should automatically insert breakpoint at main() function."
+msgstr ""
+"Otklanjatelj grešaka trebao bi automatski umetnuti točku prijeloma umain() "
+"funkciju."
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:10
+msgid "Debugger Breakpoint at g_critical()"
+msgstr "Točka prijeloma otklanjatelja grešaka u g_critical()"
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:11
+msgid ""
+"Debugger should automatically insert breakpoint at g_critical() function."
+msgstr ""
+"Otklanjatelj grešaka trebao bi automatski umetnuti točku prijeloma u "
+"g_critical() funkciju."
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:15
+msgid "Debugger Breakpoint at g_warning()"
+msgstr "Točka prijeloma otklanjatelja grešaka u g_warning()"
+
+#: data/gsettings/org.gnome.builder.debug.gschema.xml:16
+msgid ""
+"Debugger should automatically insert breakpoint at g_warning() function."
+msgstr ""
+"Otklanjatelj grešaka trebao bi automatski umetnuti točku prijeloma u "
+"g_warning() funkciju."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:19
+msgid "Restore last position"
+msgstr "Vrati zadnji položaj"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:20
+msgid "Jump to the last position when reopening a file"
+msgstr "Idi u zadnji položaj kada se datoteka ponovno otvarala"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:24
+msgid "Show modified lines"
+msgstr "Prikaži promijenjene retke"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:25
+msgid ""
+"If enabled, the editor will show line additions and changes next to the "
+"source code."
+msgstr ""
+"Ako je omogućeno, uređivač će prikazati dodatke i promjene redaka pokraj "
+"izvornog kôda."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:29
+msgid "Show diagnostics next to line number"
+msgstr "Prikaži dijagnostiku pokraj broja redka"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:30
+msgid ""
+"If enabled, the editor will show diagnostics to the left to the line numbers."
+msgstr ""
+"Ako je omogućeno, uređivač će prikazati dijagnostiku lijevo od brojeva "
+"redaka."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:34
+msgid "Highlight current line"
+msgstr "Istakni trenutni redak"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:35
+msgid "If enabled, the editor will highlight the line containing the cursor."
+msgstr "Ako je omogućeno, uređivač će istaknuti redak koji sadrži pokazivač."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:39
+msgid "Highlight matching brackets"
+msgstr "Istakni odgovarajuće zagrade"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:40
+msgid "If enabled, the editor will highlight matching brackets."
+msgstr "Ako je omogućeno, uređivač će istaknuti odgovarajuće zagrade."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:44
+msgid "Show line numbers"
+msgstr "Prikaži brojeve redaka"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:45
+msgid "If enabled, the editor will show line numbers."
+msgstr "Ako je omogućeno, uređivač će prikazati brojeva redaka."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:49
+msgid "Show relative line numbers"
+msgstr "Prikaži relativne brojeve redaka"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:50
+msgid "If enabled, the editor will show relative line numbers."
+msgstr "Ako je omogućeno, uređivač će prikazati relativne brojeva redaka."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:54
+#: src/plugins/editorui/tweaks.ui:494
+msgid "Smart Backspace"
+msgstr "Pametan Backspace"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:55
+msgid ""
+"Backspace will remove additional spaces to keep you aligned to the "
+"indentation size."
+msgstr ""
+"Backspace će ukloniti dodatne razmake kako bi bili poravnati s veličinom "
+"uvlake."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:65
+#: src/plugins/editorui/tweaks.ui:506
+msgid "Smart Home/End"
+msgstr "Pametan Home/End"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:66
+msgid "Modifies the behavior of Home/End keys."
+msgstr "Mijenja ponašanje Home/End."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:70
+msgid "Show grid lines"
+msgstr "Omogući rešetkaste linije"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:71
+msgid "If enabled, the editor will show grid lines in the document."
+msgstr "Ako je omogućeno, uređivač će prikazati rešetkaste linije u dokumentu."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:86
+msgid "Overview Map Policy"
+msgstr "Pravilo panela pregleda"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:87
+msgid "When the overview map should be displayed."
+msgstr "Kada se prikazuje panel pregleda."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:91
+#: src/plugins/editorui/tweaks.ui:254
+msgid "Draw Spaces"
+msgstr "Umetanje razmaka"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:92
+msgid "The various types of space to draw in the editor."
+msgstr "Različite vrste razmaka za iscrtavanje u uređivaču."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:101
+#: src/plugins/editorui/tweaks.ui:77
+msgid "Wrap Text"
+msgstr "Prijelom teksta"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:102
+msgid "The way to wrap a long line of text for a better visibility."
+msgstr "Način prelamanja dugih redaka teksta u svrhu bolje vidljivosti."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:106
+msgid "Autosave Enabled"
+msgstr "Automatsko spremanje omogućeno"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:107
+msgid "Enable or disable autosave feature."
+msgstr "Omogući ili onemogući značajku automatskog spremanja."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:112
+msgid "Autosave Frequency"
+msgstr "Učestalost automatskog spremanja"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:113
+msgid "The number of seconds after modification before auto saving."
+msgstr "Broj sekundi nakon promjene a prije automatskog spremanja."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:118
+msgid "Completion Row Count"
+msgstr "Broj redka dovršavanja"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:119
+msgid "The number of completion rows to display to the user."
+msgstr "Broj redka dovršavanja koji se prikazuje korisniku."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:124
+#: src/plugins/editorui/tweaks.ui:60
+msgid "Line Height"
+msgstr "Visinu retka"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:125
+msgid "The line height to use for the selected font."
+msgstr "Visina retka koja se koristi za odabrana slova."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:129
+msgid "Interactive Completion"
+msgstr "Interaktivno dovršavanje"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:130
+msgid ""
+"If enabled, Builder will automatically display completion proposals as you "
+"type."
+msgstr ""
+"Ako je omogućeno, Graditelj će automatski prikazati prijedloge dovršetka dok "
+"upisujete."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:135
+msgid "Minimum characters for matching selection."
+msgstr "Najmanje znakova za podudaranje odabira."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:136
+msgid "Specify the minimum number of characters for selection matching."
+msgstr "Odredite najmanji broj znakova za podudaranje odabira."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:140
+msgid "Enable Snippets"
+msgstr "Omogući isječke"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:141
+msgid ""
+"Allow expanding snippets from the editor by pressing tab after the snippet "
+"trigger."
+msgstr ""
+"Omogući proširivanje isječaka iz uređivača pritiskom Tab tipke nakon "
+"pokretanja isječka."
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:145
+msgid "Select First Completion"
+msgstr "Odaberi prvi prijedlog dovršetka"
+
+#: data/gsettings/org.gnome.builder.editor.gschema.xml:146
+msgid "Automatically select the first auto-completion entry."
+msgstr "Automatski odaberi prvi unos automatskog prijedloga dovršetka."
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
+msgid "Spaces Style"
+msgstr "Izgled razmaka"
+
+#: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
+msgid "How to apply spaces when reformatting text."
+msgstr "Kako primijeniti razmake pri preoblikovanju teksta."
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
+msgid "Enabled"
+msgstr "Omogućen"
+
+#: data/gsettings/org.gnome.builder.extension-type.gschema.xml:6
+msgid "If the type within the extension is enabled."
+msgstr "Ako je vrsta unutar proširenja omogućena."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:5
+msgid "Window size"
+msgstr "Veličina prozora"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:6
+msgid "Window size (width and height)."
+msgstr "Veličina prozora (širina i visina)."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:10
+msgid "Window maximized"
+msgstr "Prozor uvećan"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:11
+msgid "Window maximized state"
+msgstr "Stanje uvećanog prozora"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:20
+msgid "Style Variant"
+msgstr "Varijanta izgleda"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:21
+msgid ""
+"Use the light or dark variant of the GTK theme and/or GtkSourceView style "
+"scheme."
+msgstr ""
+"Koristite svijetlu ili tamnu varijantu GTK teme i/ili GtkSourceView shemu "
+"izgleda."
+
+#. Translators: This is the default directory name for user’s
+#. projects. Do NOT change the ASCII double quotes ("") to your
+#. language’s convention, e.g. do not use “” or »«.
+#: data/gsettings/org.gnome.builder.gschema.xml:27
+msgid "\"Projects\""
+msgstr "\"Projekti\""
+
+#: data/gsettings/org.gnome.builder.gschema.xml:28
+msgid "Projects directory"
+msgstr "Direktorij projekata"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:29
+msgid "Directory for all Builder projects."
+msgstr "Direktorij za sve projekte Graditeja."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:33
+msgid "Restore Previous Files"
+msgstr "Vrati prijašnje datoteke"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:34
+msgid "Restore previously opened files when loading a project."
+msgstr "Vrati prije otvorene datoteke pri učitavanju projekta."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:38
+msgid "Clear build caches at startup"
+msgstr "Obriši predmemorije izgradnje pri pokretanju"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:39
+msgid "If enabled, Builder will clear build caches upon startup."
+msgstr ""
+"Ako je omogućeno, Graditelj će obrisati predmemorije izgradnje pri "
+"pokretanju."
+
+#: data/gsettings/org.gnome.builder.gschema.xml:50
+msgid "The interface style to change pages"
+msgstr "Izgled sučelja za promejnu stranica"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:64
+msgid "Default License"
+msgstr "Zadana licenca"
+
+#: data/gsettings/org.gnome.builder.gschema.xml:65
+msgid "The default license to use for new projects"
+msgstr "Zadana licenca koja se koristi za nove projekte"
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:5
+msgid "Plugin enabled"
+msgstr "Priključak je omogućen"
+
+#: data/gsettings/org.gnome.builder.plugin.gschema.xml:6
+msgid "If the plugin should be enabled"
+msgstr "Treba li priključak biti omogućen"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:7
+msgid "Selected configuration for building"
+msgstr "Odabrano podešavanje za izgradnju"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:8
+msgid ""
+"The configuration that has been selected and will be restored the next time "
+"the project loads."
+msgstr ""
+"Podešavanje koje je odabrano i biti će obnovljeno sljedeći puta kada se "
+"projekt učita."
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:13
+msgid "Install Project Before Running"
+msgstr "Instalacija projekta prije pokretanja"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:14
+msgid ""
+"Run the pipelines install phase before running the project. Only use this if "
+"you know what you're doing with your project."
+msgstr ""
+"Pokreni fazu instalacije slivnika prije pokretanja projekta. Ovo koristite "
+"samo ako znate što radite s projektom."
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:19
+msgid "Default Run Command"
+msgstr "Zadana naredba pokretanja"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:20
+msgid "The id of the default run command"
+msgstr "ID zadane naredbe pokretanja"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:34
+msgid "The signal to send the app to stop"
+msgstr "Signal za slanje zaustavljanja aplikacije"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:35
+msgid ""
+"This allows sending something other than sigkill to stop the target "
+"application. That might be useful when you want to gracefully shutdown a "
+"server process."
+msgstr ""
+"Ovo omogućuje slanje nečeg drugog od sigkill za zaustavljanje ciljane "
+"aplikacije. To može biti korisno kada želite elegantno isključiti proces "
+"poslužitelja."
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:44
+msgid "Unit Test Locality"
+msgstr "Test lokaliteta jedinice"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:45
+msgid "What environment to use when running unit tests"
+msgstr "Koje okruženje treba koristiti kada se izvode testovi jedinice"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:50
+#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
+msgid "Verbose Logging"
+msgstr "Opširnije zapisivanje"
+
+#: data/gsettings/org.gnome.builder.project.gschema.xml:51
+msgid ""
+"If G_MESSAGES_DEBUG=all should be used when running the target application"
+msgstr ""
+"Treba li se G_MESSAGES_DEBUG=all koristiti kada se pokreće ciljana aplikacija"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:5
+#: src/plugins/project-tree/tweaks.ui:13
+msgid "Show Icons"
+msgstr "Prikaz ikona"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:6
+msgid "This setting is deprecated and no longer in use."
+msgstr "Ova postavka je zastarjela i više se ne koristi."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
+#: src/plugins/project-tree/tweaks.ui:25
+msgid "Show Ignored Files"
+msgstr "Prikaži zanemarene datoteke"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
+msgid ""
+"If enabled, the project tree will display files that are ignored by the VCS."
+msgstr ""
+"Ako je omogućeno, stablo projekta će prikazati datoteke koje je VCS "
+"zanemario."
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
+#: src/plugins/project-tree/tweaks.ui:37
+msgid "Sort Directories First"
+msgstr "Prvo poredaj direktorije"
+
+#: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
+msgid ""
+"If enabled, the project tree will sort directories before regular files."
+msgstr ""
+"Ako je omogućeno, stablo projekta će poredati direktorije prije uobičajenih "
+"datoteka."
+
+#: data/gsettings/org.gnome.builder.spelling.gschema.xml:5
+#: src/plugins/editorui/tweaks.ui:363
+#: src/plugins/spellcheck/editor-spell-menu.c:250
+msgid "Check Spelling"
+msgstr "Provjera pravopisa"
+
+#: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
+msgid "Automatically check spelling within documents"
+msgstr "Automatska provjera pravopisa u dokumentima"
+
+#: data/org.gnome.Builder.desktop.in.in:4
+msgid "Build software for GNOME"
+msgstr "Softver izgradnje za GNOME"
+
+#. Translators: Search terms to find this application. Do NOT translate or localize the semicolons! The list MUST also end with a semicolon!
+#: data/org.gnome.Builder.desktop.in.in:14
+msgid "Build;Develop;"
+msgstr "Izgradi;Razvoj;"
+
+#: data/org.gnome.Builder.desktop.in.in:20
+msgid "Open a Project"
+msgstr "Otvori projekt"
+
+#: data/org.gnome.Builder.desktop.in.in:24
+msgid "Start New Project"
+msgstr "Pokreni novi projekt"
+
+#: data/org.gnome.Builder.desktop.in.in:28
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:279
+#: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:92
+msgid "Clone Repository"
+msgstr "Kloniraj repozitorij"
+
+#: data/org.gnome.Builder.desktop.in.in:32
+msgid "New Editor Workspace"
+msgstr "Novi radni prostor uređivača"
+
+#: data/org.gnome.Builder.desktop.in.in:36
+#: src/plugins/dspy/gbp-dspy-workspace.ui:11
+msgid "D-Bus Inspector"
+msgstr "D-Bus inspektor"
+
+#: src/libide/code/ide-buffer.c:3674
+msgid "The current language lacks a symbol resolver."
+msgstr "Trenutnom jeziku nedostaje razrješitelj simbola."
+
+#. translators: %u is replaced with an incrementing number
+#: src/libide/code/ide-buffer-manager.c:381
+#, c-format
+msgid "unsaved file %u"
+msgstr "nespremljena datoteka %u"
+
+#: src/libide/code/ide-language-defaults.c:219
+#, c-format
+msgid "%s contained invalid ASCII"
+msgstr "%s sadrži nevaljali ASCII"
+
+#: src/libide/code/ide-language-defaults.c:234
+#, c-format
+msgid "Failed to parse integer from “%s”"
+msgstr "Neuspjela analiza cijelog broja iz “%s”"
+
+#: src/libide/code/ide-language-defaults.c:309
+msgid "language defaults missing version in [global] group."
+msgstr "nedostaje inačica zadanog jezika u [global] grupi."
+
+#: src/libide/code/ide-language-defaults.c:403
+msgid "Failed to initialize defaults."
+msgstr "Neuspjelo pokretanje zadanoga."
+
+#. translators: %s is replaced with the error message
+#: src/libide/code/ide-unsaved-files.c:253
+#, c-format
+msgid "Failed to save draft: %s"
+msgstr "Neuspjelo spremanje kao predloška: %s"
+
+#: src/libide/core/ide-context.c:380 src/libide/core/ide-context.c:843
+msgid "Untitled"
+msgstr "Bezimeno"
+
+#: src/libide/core/ide-transfer.c:547
+#: src/libide/greeter/ide-greeter-workspace.c:545
+#: src/libide/greeter/ide-greeter-workspace.c:682
+#: src/libide/gtk/ide-install-button.ui:31
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
+#: src/libide/gui/ide-workbench.c:1459
+#: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
+#: src/plugins/testui/gbp-testui-output-panel.c:104
+msgid "_Cancel"
+msgstr "_Odustani"
+
+#: src/libide/debugger/ide-debug-manager.c:977
+msgid "A suitable debugger could not be found."
+msgstr "Prikladan otklanjatelj grešaka nije pronađen."
+
+#: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
+#: src/libide/gui/ide-workbench.c:1455
+msgid "Open File…"
+msgstr "Otvori datoteku…"
+
+#: src/libide/editor/gtk/menus.ui:22
+msgid "Open a file in the workspace"
+msgstr "Otvori datoteku u radnom prostoru"
+
+#: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
+#: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
+msgid "Preferences"
+msgstr "Osobitosti"
+
+#: src/libide/editor/gtk/menus.ui:37 src/libide/greeter/gtk/menus.ui:35
+#: src/libide/gui/gtk/menus.ui:34 src/libide/plugins/ide-plugin.c:350
+#: src/libide/tweaks/ide-tweaks-window.ui:139
+#: src/plugins/editorui/tweaks.ui:464
+msgid "Keyboard Shortcuts"
+msgstr "Prečaci tipkovnice"
+
+#: src/libide/editor/gtk/menus.ui:43 src/libide/greeter/gtk/menus.ui:41
+#: src/libide/gui/gtk/menus.ui:39 src/libide/gui/gtk/menus.ui:43
+#: src/libide/gui/gtk/menus.ui:46 src/libide/gui/gtk/menus.ui:53
+#: src/libide/tweaks/ide-tweaks-window.ui:143
+msgid "Help"
+msgstr "Priručnik"
+
+#: src/libide/editor/gtk/menus.ui:49 src/libide/greeter/gtk/menus.ui:47
+#: src/libide/gui/gtk/menus.ui:50
+msgid "About Builder"
+msgstr "O Graditelju"
+
+#: src/libide/editor/gtk/menus.ui:59 src/libide/gui/gtk/menus.ui:61
+msgid "_Quit"
+msgstr "_Zatvori"
+
+#: src/libide/editor/gtk/menus.ui:66
+msgid "Document"
+msgstr "Dokument"
+
+#: src/libide/editor/gtk/menus.ui:67 src/libide/editor/gtk/menus.ui:71
+#: src/libide/editor/gtk/menus.ui:80 src/libide/gui/gtk/menus.ui:22
+#: src/libide/gui/gtk/menus.ui:23 src/libide/gui/gtk/menus.ui:57
+#: src/libide/gui/gtk/menus.ui:58 src/libide/gui/gtk/menus.ui:69
+#: src/libide/gui/gtk/menus.ui:73 src/libide/gui/gtk/menus.ui:77
+#: src/plugins/buildui/tweaks.ui:9 src/plugins/editorui/gtk/menus.ui:153
+#: src/plugins/menu-search/gtk/menus.ui:10
+#: src/plugins/menu-search/gtk/menus.ui:23
+#: src/plugins/menu-search/gtk/menus.ui:52
+#: src/plugins/web-browser/gtk/menus.ui:15
+msgid "Application"
+msgstr "Aplikacija"
+
+#: src/libide/editor/gtk/menus.ui:68 src/libide/editor/gtk/menus.ui:72
+msgid "Pages"
+msgstr "Stranice"
+
+#: src/libide/editor/gtk/menus.ui:76 src/libide/editor/gtk/menus.ui:84
+#: src/libide/editor/gtk/menus.ui:88 src/libide/gui/tweaks.ui:23
+#: src/libide/sourceview/gtk/menus.ui:6 src/libide/sourceview/gtk/menus.ui:30
+#: src/libide/sourceview/gtk/menus.ui:46 src/libide/sourceview/gtk/menus.ui:70
+#: src/libide/sourceview/gtk/menus.ui:78 src/libide/sourceview/gtk/menus.ui:109
+#: src/libide/sourceview/gtk/menus.ui:139
+#: src/libide/sourceview/gtk/menus.ui:145
+#: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/symbol-tree/gtk/menus.ui:5
+msgid "Text Editor"
+msgstr "Uređivač teksta"
+
+#: src/libide/editor/gtk/menus.ui:77
+msgid "Search & Replace"
+msgstr "Pretraži i zamijeni"
+
+#: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:70
+#: src/libide/gui/gtk/menus.ui:74 src/plugins/editorui/gtk/menus.ui:154
+msgid "Documents"
+msgstr "Dokumenti"
+
+#: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
+#: src/libide/sourceview/gtk/menus.ui:110
+msgid "Selection"
+msgstr "Odabir"
+
+#: src/libide/editor/gtk/menus.ui:89
+msgid "Printing"
+msgstr "Ispisivanje"
+
+#. translators: %s is replaced with the error message
+#: src/libide/editor/ide-editor.c:121
+#, c-format
+msgid "Failed to open file: %s"
+msgstr "Neuspjelo otvaranje datoteke: %s"
+
+#: src/libide/editor/ide-editor-info-bar.c:85
+msgid "_Discard Changes and Reload"
+msgstr "_Odbaci promjene i ponovno učitaj"
+
+#: src/libide/editor/ide-editor-info-bar.c:88
+msgid "File Has Changed on Disk"
+msgstr "Datoteka je promijenjena na disku"
+
+#: src/libide/editor/ide-editor-info-bar.c:89
+msgid "The file has been changed by another program."
+msgstr "Datoteka je promijenjena od strane drugog programa."
+
+#: src/libide/editor/ide-editor-info-bar.c:100
+msgid "Save _As…"
+msgstr "Spremi _kao…"
+
+#: src/libide/editor/ide-editor-info-bar.c:102
+msgid "Buffer Restored"
+msgstr "Međuspremnik je obnocljen"
+
+#: src/libide/editor/ide-editor-info-bar.c:103
+msgid "Unsaved buffer has been restored."
+msgstr "Nespremljeni međuspremnik je obnovljen."
+
+#: src/libide/editor/ide-editor-info-bar.c:109
+msgid "_Save…"
+msgstr "_Spremi…"
+
+#: src/libide/editor/ide-editor-info-bar.c:111
+#: src/libide/editor/ide-editor-info-bar.ui:81
+msgid "_Discard…"
+msgstr "_Odbaci…"
+
+#: src/libide/editor/ide-editor-info-bar.c:113
+msgid "Draft Changes Restored"
+msgstr "Promjene skice su obnovljene"
+
+#: src/libide/editor/ide-editor-info-bar.c:114
+msgid "Unsaved changes to the buffer have been restored."
+msgstr "Nespremljene promjene u međuspremniku su obnovljene."
+
+#: src/libide/editor/ide-editor-info-bar.ui:19
+msgid "Could Not Open File"
+msgstr "Nemoguće otvaranje datoteke"
+
+#: src/libide/editor/ide-editor-info-bar.ui:29
+msgid "You do not have permission to open the file."
+msgstr "Nemate dozvolu za otvaranje datoteke."
+
+#: src/libide/editor/ide-editor-info-bar.ui:37
+msgid "_Retry"
+msgstr "_Pokušaj ponovno"
+
+#: src/libide/editor/ide-editor-info-bar.ui:44
+msgid "Open As _Administrator"
+msgstr "Otvori kao _administrator"
+
+#: src/libide/editor/ide-editor-info-bar.ui:63
+msgid "Document Restored"
+msgstr "Dokument je obnovljen"
+
+#: src/libide/editor/ide-editor-info-bar.ui:73
+msgid "Unsaved document has been restored."
+msgstr "Nespremljeni dokument je obnovljen."
+
+#. translators: %s is the error message
+#: src/libide/editor/ide-editor-page.c:408
+#, c-format
+msgid "Print failed: %s"
+msgstr "Neuspjeli ispis: %s"
+
+#. translators: %s contains the error message
+#: src/libide/editor/ide-editor-page.c:484
+#, c-format
+msgid "Failed to format selection: %s"
+msgstr "Neuspjeli format odabira: %s"
+
+#: src/libide/editor/ide-editor-page.c:900
+#: src/plugins/buildui/gbp-buildui-log-pane.c:324
+#: src/plugins/testui/gbp-testui-output-panel.c:100
+msgid "Save File"
+msgstr "Spremi datoteku"
+
+#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/gtk/ide-file-chooser-entry.c:109
+#: src/libide/terminal/ide-terminal-page-actions.c:281
+#: src/plugins/color-picker/gb-color-picker-prefs.c:236
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
+#: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
+msgid "Save"
+msgstr "Spremi"
+
+#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/gtk/ide-file-chooser-entry.c:156
+#: src/libide/terminal/ide-terminal-page-actions.c:280
+#: src/libide/tweaks/ide-tweaks-directory.c:140
+#: src/plugins/color-picker/gb-color-picker-prefs.c:97
+#: src/plugins/color-picker/gb-color-picker-prefs.c:213
+#: src/plugins/color-picker/gb-color-picker-prefs.c:240
+#: src/plugins/create-project/gbp-create-project-widget.c:223
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:111
+msgid "Cancel"
+msgstr "Odustani"
+
+#: src/libide/editor/ide-editor-search-bar.ui:30
+msgid "Replace"
+msgstr "Zamijeni"
+
+#: src/libide/editor/ide-editor-search-bar.ui:46
+msgid "Move to previous match (Ctrl+Shift+G)"
+msgstr "Idi na prijašnje podudaranje (Ctrl+Shift+G)"
+
+#: src/libide/editor/ide-editor-search-bar.ui:57
+msgid "Move to next match (Ctrl+G)"
+msgstr "Idi na sljedeće podudaranje (Ctrl+G)"
+
+#: src/libide/editor/ide-editor-search-bar.ui:72
+msgid "Search & Replace (Ctrl+H)"
+msgstr "Pretraži i zamijeni (Ctrl+H)"
+
+#: src/libide/editor/ide-editor-search-bar.ui:103
+msgid "Close search"
+msgstr "Zatvori pretragu"
+
+#: src/libide/editor/ide-editor-search-bar.ui:120
+msgid "_Replace"
+msgstr "_Zamijeni"
+
+#: src/libide/editor/ide-editor-search-bar.ui:132
+msgid "Replace _All"
+msgstr "Zamijeni _sve"
+
+#: src/libide/editor/ide-editor-search-bar.ui:146
+msgid "Use Re_gular Expressions"
+msgstr "Koristi ob_ičan izraz"
+
+#: src/libide/editor/ide-editor-search-bar.ui:150
+msgid "_Case Sensitive"
+msgstr "_Velika/Mala slova"
+
+#: src/libide/editor/ide-editor-search-bar.ui:154
+msgid "Match Whole Words"
+msgstr "Podudaraj cijele riječ"
+
+#: src/libide/editor/ide-editor-utils.c:40
+msgid "Unix/Linux (LF)"
+msgstr "Unix/Linux (LF)"
+
+#: src/libide/editor/ide-editor-utils.c:41
+msgid "Mac OS Classic (CR)"
+msgstr "Mac OS Classic (CR)"
+
+#: src/libide/editor/ide-editor-utils.c:42
+msgid "Windows (CR+LF)"
+msgstr "Windows (CR+LF)"
+
+#: src/libide/editor/ide-editor-utils.c:141
+msgid "Automatically Detected"
+msgstr "Automatski otkriveno"
+
+#: src/libide/editor/ide-editor-utils.c:157
+msgid "Character Encoding:"
+msgstr "Kôdne stranice:"
+
+#: src/libide/editor/ide-editor-utils.c:192
+msgid "Line Ending:"
+msgstr "Završetak retka:"
+
+#: src/libide/editor/ide-editor-utils.c:270
+#: src/plugins/create-project/gbp-create-project-widget.ui:101
+msgid "Language"
+msgstr "Jezik"
+
+#: src/libide/foundry/ide-build-manager.c:470
+#, c-format
+msgid "Failed to initialize build pipeline: %s"
+msgstr "Neuspjelo pokretanje slivnika izgradnje: %s"
+
+#: src/libide/foundry/ide-build-manager.c:611
+#, c-format
+msgid "Failed to get device information: %s"
+msgstr "Neuspjelo dobivanje informacija uređaja: %s"
+
+#: src/libide/foundry/ide-config-manager.c:529
+msgid "Active Configuration"
+msgstr "Aktivno podešavanje"
+
+#. translators: %s is replaced with the external device name
+#: src/libide/foundry/ide-device-manager.c:149
+#, c-format
+msgid "Discovered device “%s”"
+msgstr "Otkriveni uređaji “%s”"
+
+#: src/libide/foundry/ide-device-manager.c:536
+msgid "Devices"
+msgstr "Uređaji"
+
+#: src/libide/foundry/ide-device-manager.c:710
+msgid "Cannot deploy to device, build pipeline is not initialized"
+msgstr "Nemoguća implementacija na uređaj, slivnik izgradnje nije pokrenut"
+
+#: src/libide/foundry/ide-fallback-build-system.c:143
+#: src/libide/greeter/ide-greeter-row.c:252
+msgid "Fallback"
+msgstr "Pričuvni"
+
+#. translators: %s is replaced with the host name
+#: src/libide/foundry/ide-local-device.c:140
+#, c-format
+msgid "My Computer (%s)"
+msgstr "Moje računalo (%s)"
+
+#. translators: first %s is replaced with the host name, second with CPU architecture
+#: src/libide/foundry/ide-local-device.c:150
+#, c-format
+msgid "My Computer (%s) — %s"
+msgstr "Moje računalo (%s) — %s"
+
+#: src/libide/foundry/ide-pipeline.c:834
+msgid "The build pipeline is in a failed state"
+msgstr "Slivnika izgradnje je u neuspjelom stanju"
+
+#: src/libide/foundry/ide-pipeline.c:844
+msgid "The build configuration has errors"
+msgstr "Podešavanje izgradnje sadrži greške"
+
+#. translators: %s is replaced with the build shell command
+#: src/libide/foundry/ide-pipeline.c:1096
+#, c-format
+msgid "Build (%s)"
+msgstr "Izgradnja (%s)"
+
+#. translators: %s is replaced with the post-install shell command
+#: src/libide/foundry/ide-pipeline.c:1138
+#, c-format
+msgid "Post-install (%s)"
+msgstr "Naknadna instalacija (%s)"
+
+#: src/libide/foundry/ide-pipeline.c:3031
+msgid "Pseudo terminal creation failed. Terminal features will be limited."
+msgstr ""
+"Neuspjelo stvaranje pseudo terminala. Značajke terminala će biti ograničene."
+
+#: src/libide/foundry/ide-pipeline.c:3228
+msgid "Cleaning…"
+msgstr "Uklanjanje…"
+
+#: src/libide/foundry/ide-pipeline.c:3232
+#: src/libide/foundry/ide-pipeline.c:3289
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
+msgid "Failed"
+msgstr "Neuspjelo"
+
+#: src/libide/foundry/ide-pipeline.c:3234
+#: src/libide/foundry/ide-pipeline.c:3297
+msgid "Ready"
+msgstr "Spremno"
+
+#: src/libide/foundry/ide-pipeline.c:3249
+msgid "Downloading…"
+msgstr "Preuzimanje…"
+
+#: src/libide/foundry/ide-pipeline.c:3253
+msgid "Building dependencies…"
+msgstr "Izgradnja zavisnosti…"
+
+#: src/libide/foundry/ide-pipeline.c:3257
+msgid "Bootstrapping…"
+msgstr "Samopokretanje…"
+
+#: src/libide/foundry/ide-pipeline.c:3261
+msgid "Configuring…"
+msgstr "Podešavanje…"
+
+#: src/libide/foundry/ide-pipeline.c:3265
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+msgid "Building…"
+msgstr "Izgradnja…"
+
+#: src/libide/foundry/ide-pipeline.c:3269
+msgid "Installing…"
+msgstr "Instalacija…"
+
+#: src/libide/foundry/ide-pipeline.c:3273
+msgid "Committing…"
+msgstr "Slanje…"
+
+#: src/libide/foundry/ide-pipeline.c:3277
+msgid "Exporting…"
+msgstr "Izvažanje…"
+
+#: src/libide/foundry/ide-pipeline.c:3281
+#: src/libide/foundry/ide-pipeline.c:3285
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
+msgid "Success"
+msgstr "Uspješno"
+
+#: src/libide/foundry/ide-pipeline.c:3293
+msgid "Preparing…"
+msgstr "Pripremanje…"
+
+#. translators: %s is replaced with the name of the file being removed
+#: src/libide/foundry/ide-pipeline.c:3649
+#, c-format
+msgid "Removing %s"
+msgstr "Uklanjam %s"
+
+#: src/libide/foundry/ide-pipeline.c:3708
+msgid "Removing build directories…"
+msgstr "Uklanjanje zavisnosti izgradnje…"
+
+#: src/libide/foundry/ide-pipeline-stage-transfer.c:136
+msgid "Cannot build transfer while on metered connection"
+msgstr "Nemoguća izgradnja prijenosa na povezivanju ograničenom podacima"
+
+#: src/libide/foundry/ide-run-command.c:177
+#: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
+#: src/plugins/shellcmd/gbp-shellcmd-shortcut-provider.c:73
+msgid "Untitled command"
+msgstr "Bezimena naredba"
+
+#: src/libide/foundry/ide-run-command.c:237
+msgid "Unit Test"
+msgstr "Testiranje jedinice"
+
+#: src/libide/foundry/ide-run-manager.c:505
+msgid "Cannot run target, another target is running"
+msgstr "Nemoguće pokretanje odredišta, drugo odredište je pokrenuto"
+
+#. translators: %s is replaced with the name of the users run command
+#: src/libide/foundry/ide-run-manager.c:929
+#, c-format
+msgid "Running %s…"
+msgstr "Pokrećem %s…"
+
+#: src/libide/foundry/ide-run-manager.c:996
+msgid "Deploying to device…"
+msgstr "Implementacija na uređaj…"
+
+#: src/libide/foundry/ide-runtime.c:413
+#: src/plugins/host/gbp-host-runtime-provider.c:53
+#: src/plugins/jhbuild/gbp-jhbuild-runtime-provider.c:122
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:265
+msgid "Host System"
+msgstr "Sustav računala"
+
+#: src/libide/foundry/ide-toolchain-manager.c:329
+msgid "Default (Host operating system)"
+msgstr "Zadano (Operativni sustav računala)"
+
+#: src/libide/greeter/gtk/menus.ui:12 src/libide/greeter/gtk/menus.ui:63
+#: src/libide/greeter/gtk/menus.ui:82
+#: src/plugins/vcsui/gbp-vcsui-workspace-addin.c:95
+msgid "_Clone Repository…"
+msgstr "_Kloniraj repozitorij…"
+
+#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
+#: src/plugins/sysprof/gtk/menus.ui:138
+msgid "Close"
+msgstr "Zatvori"
+
+#: src/libide/greeter/gtk/menus.ui:56 src/libide/greeter/gtk/menus.ui:76
+msgid "Open a _Project…"
+msgstr "Otvori _projekt…"
+
+#: src/libide/greeter/gtk/menus.ui:59
+msgid "Open a new or existing project"
+msgstr "Otvori novi projekt ili postojeći projekt"
+
+#: src/libide/greeter/gtk/menus.ui:66
+msgid "Create a new project by cloning a repository"
+msgstr "Stvori novi projekt kloniranjem repozitorija"
+
+#: src/libide/greeter/ide-greeter-buttons-section.c:78
+msgid "Select a _Folder…"
+msgstr "Odaberi _mapu…"
+
+#: src/libide/greeter/ide-greeter-row.c:251 src/plugins/projectui/tweaks.ui:31
+msgid "Directory"
+msgstr "Direktorij"
+
+#: src/libide/greeter/ide-greeter-workspace.c:227
+#: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
+#, c-format
+msgid "Builder — %s"
+msgstr "Graditelj — %s"
+
+#: src/libide/greeter/ide-greeter-workspace.c:346
+msgid "Failed to load the project"
+msgstr "Neuspjelo učitavanje projekta"
+
+#: src/libide/greeter/ide-greeter-workspace.c:348
+#: src/plugins/create-project/gbp-create-project-widget.c:261
+#: src/plugins/recent/gbp-recent-section.c:433
+msgid "_Close"
+msgstr "_Zatvori"
+
+#: src/libide/greeter/ide-greeter-workspace.c:542
+msgid "Delete Project Sources?"
+msgstr "Obriši izvore projekta?"
+
+#: src/libide/greeter/ide-greeter-workspace.c:543
+msgid "Deleting the project source code from your computer cannot be undone."
+msgstr "Brisanje izvornog kôda projekta s vašeg računala se ne može poništiti."
+
+#: src/libide/greeter/ide-greeter-workspace.c:546
+msgid "_Delete Project Sources"
+msgstr "_Obriši izvore projekta"
+
+#: src/libide/greeter/ide-greeter-workspace.c:641
+#: src/libide/greeter/ide-greeter-workspace.c:678
+msgid "Select Project Folder"
+msgstr "Odaberi mapu projekta"
+
+#: src/libide/greeter/ide-greeter-workspace.c:646
+msgid "Select Project File"
+msgstr "Odaberi datoteku projekta"
+
+#: src/libide/greeter/ide-greeter-workspace.c:683
+#: src/libide/gui/ide-workbench.c:1458
+msgid "_Open"
+msgstr "_Otvori"
+
+#: src/libide/greeter/ide-greeter-workspace.c:694
+msgid "All Project Types"
+msgstr "Sve vrste projekta"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:21
+msgid "Go back"
+msgstr "Idi natrag"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:37
+msgid "Toggle selection mode"
+msgstr "Uklj/Isklj način odabira"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:51
+msgctxt "title"
+msgid "Open a Project"
+msgstr "Otvori projekt"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:75
+msgid "Search all Builder projects…"
+msgstr "Pretraži sve projekte graditeja…"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:97
+msgid "No Projects Found"
+msgstr "Nema pronađenih projekata"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:130
+msgid "_Remove Projects"
+msgstr "_Ukloni projekte"
+
+#: src/libide/greeter/ide-greeter-workspace.ui:141
+msgid "Remove Projects and Sources…"
+msgstr "Uklanjanje projekta i izvora…"
+
+#: src/libide/gtk/ide-animation.c:685
+#, c-format
+msgid "Cannot locate property %s in class %s"
+msgstr "Neuspjelo lociranje svojstva %s u klasi %s"
+
+#: src/libide/gtk/ide-animation.c:997
+#, c-format
+msgid "Failed to find property %s in %s"
+msgstr "Neuspjeli pronalazak svojstva %s u %s"
+
+#: src/libide/gtk/ide-animation.c:1006
+#, c-format
+msgid "Failed to retrieve va_list value: %s"
+msgstr "Neuspjelo primanje va_list vrijednosti: %s"
+
+#: src/libide/gtk/ide-file-chooser-entry.c:101
+#: src/libide/gtk/ide-file-chooser-entry.c:157
+#: src/plugins/color-picker/gb-color-picker-prefs.c:209
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
+msgid "Open"
+msgstr "Otvori"
+
+#: src/libide/gtk/ide-file-chooser-entry.c:105
+#: src/libide/tweaks/ide-tweaks-directory.c:141
+#: src/plugins/create-project/gbp-create-project-widget.c:222
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:484
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:110
+msgid "Select"
+msgstr "Odaberi"
+
+#: src/libide/gtk/ide-file-chooser-entry.c:448
+msgid "Browse…"
+msgstr "Pregledaj…"
+
+#: src/libide/gtk/ide-file-manager.c:99
+msgid "File path is NULL"
+msgstr "Putanja datoteke je NULA"
+
+#: src/libide/gtk/ide-file-manager.c:108 src/libide/gtk/ide-file-manager.c:119
+msgid "Error converting UTF-8 filename to wide char"
+msgstr "Greška pretvaranja UTF-8 naziva datoteke u široki znak"
+
+#: src/libide/gtk/ide-file-manager.c:127
+msgid "ILCreateFromPath() failed"
+msgstr "ILCreateFromPath() je neuspjelo"
+
+#: src/libide/gtk/ide-file-manager.c:164
+#, c-format
+msgid "Cannot convert “%s” into a valid NSURL."
+msgstr "Nemoguća pretvorba “%s” u valjan NSURL."
+
+#: src/libide/gtk/ide-gtk.c:453
+msgid "Just now"
+msgstr "Upravo sada"
+
+#: src/libide/gtk/ide-gtk.c:455
+msgid "An hour ago"
+msgstr "Prije jednog sata"
+
+#: src/libide/gtk/ide-gtk.c:457
+msgid "Yesterday"
+msgstr "Jučer"
+
+#: src/libide/gtk/ide-gtk.c:463
+msgid "About a year ago"
+msgstr "Oko jedne godine"
+
+#: src/libide/gtk/ide-gtk.c:467
+#, c-format
+msgid "About %u year ago"
+msgid_plural "About %u years ago"
+msgstr[0] "Oko %u godine"
+msgstr[1] "Oko %u godine"
+msgstr[2] "Oko %u godina"
+
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
+msgid "_Install"
+msgstr "_Instaliraj"
+
+#. translators: the first %u is replaced with the current position, the second with the number of search results
+#: src/libide/gtk/ide-search-entry.c:199
+#, c-format
+msgid "%u of %u"
+msgstr "%u od %u"
+
+#: src/libide/gtk/ide-search-entry.ui:17 src/libide/gui/ide-frame.ui:16
+#: src/libide/plugins/ide-plugin.c:351 src/plugins/menu-search/gtk/menus.ui:11
+msgid "Search"
+msgstr "Pretraga"
+
+#. Translators: <b>%s</b> is used to show the provided text in bold
+#: src/libide/gtk/ide-shortcut-accel-dialog.c:394
+#, c-format
+msgid "Enter new shortcut to change <b>%s</b>."
+msgstr "Upišite novi prečac za promjenu <b>%s</b>."
+
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:27
+msgid "_Set"
+msgstr "_Postavi"
+
+#: src/libide/gtk/ide-shortcut-accel-dialog.ui:68
+msgid "Press Escape to cancel or Backspace to disable."
+msgstr "Pritisnite Escape za prekidanje ili Backspace za onemogućavanje."
+
+#: src/libide/gui/gtk/menus.ui:14
+msgid "Close Project"
+msgstr "Zatvori projekt"
+
+#: src/libide/gui/gtk/menus.ui:27
+msgid "Change application preferences"
+msgstr "Promijeni osobitosti aplikacije"
+
+#: src/libide/gui/gtk/menus.ui:35
+msgid "Find keyboard shortcuts"
+msgstr "Potraži prečace tipkovnice"
+
+#: src/libide/gui/gtk/menus.ui:52
+msgid "Show information about Builder"
+msgstr "Prikaži informacije o Graditelju"
+
+#: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
+msgid "Web Browsing"
+msgstr "Web pregledavanje"
+
+#: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
+#: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gtk/menus.ui:33
+msgid "Terminal"
+msgstr "Terminal"
+
+#: src/libide/gui/gtk/menus.ui:82
+msgid "New Terminals"
+msgstr "Novi terminali"
+
+#: src/libide/gui/ide-application-actions.c:122
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  gogo https://launchpad.net/~trebelnik-stefina"
+
+#: src/libide/gui/ide-application-actions.c:129
+msgid "Funded By"
+msgstr "Osnovao"
+
+#: src/libide/gui/ide-application-command-line.c:62
+msgid "Show the application preferences"
+msgstr "Prikaži osobitosti aplikacije"
+
+#: src/libide/gui/ide-application-command-line.c:63
+msgid "Open project in new workbench"
+msgstr "Otvori projekt na novom radnom stolu"
+
+#: src/libide/gui/ide-application-command-line.c:63
+msgid "FILE"
+msgstr "DATOTEKA"
+
+#: src/libide/gui/ide-application-command-line.c:64
+msgid "Print version information and exit"
+msgstr "Prikaži informaciju inačice i izađi"
+
+#. Verbose is handled in main(), but we need to add to --help here
+#: src/libide/gui/ide-application-command-line.c:66
+msgid "Increase log verbosity (may be repeated)"
+msgstr "Povećaj opširnost zapisivanja (može se ponoviti)"
+
+#: src/libide/gui/ide-application-command-line.c:116
+#, c-format
+msgid "Failed to open project: %s"
+msgstr "Neuspjelo otvaranje projekta: %s"
+
+#: src/libide/gui/ide-environment-editor.c:73
+msgid "New variable…"
+msgstr "Nova varijabla…"
+
+#: src/libide/gui/ide-environment-editor-row.ui:33
+msgid "Remove environment variable"
+msgstr "Ukloni varijablu okruženja"
+
+#: src/libide/gui/ide-frame.ui:6
+msgid "Open a File or Terminal"
+msgstr "Otvori datoteku u terminalu"
+
+#: src/libide/gui/ide-frame.ui:7
+msgid "Use the page switcher above or use one of the following:"
+msgstr "Koristite prebacivača stranice iznad ili koristite jedno od sljedećg:"
+
+#: src/libide/gui/ide-frame.ui:26
+msgid "Ctrl+Enter"
+msgstr "Ctrl+Enter"
+
+#: src/libide/gui/ide-frame.ui:36
+msgid "Project Sidebar"
+msgstr "Bočna traka projekta"
+
+#: src/libide/gui/ide-frame.ui:46
+msgid "F9"
+msgstr "F9"
+
+#: src/libide/gui/ide-frame.ui:56
+msgid "Open File"
+msgstr "Otvori datoteku"
+
+#: src/libide/gui/ide-frame.ui:66
+msgid "Ctrl+O"
+msgstr "Ctrl+O"
+
+#: src/libide/gui/ide-frame.ui:76 src/libide/gui/ide-frame.ui:110
+msgid "New Terminal"
+msgstr "Novi terminal"
+
+#: src/libide/gui/ide-frame.ui:86
+msgid "Ctrl+Shift+T"
+msgstr "Ctrl+Shift+T"
+
+#: src/libide/gui/ide-header-bar.ui:34
+msgid "Open application menu (F10)"
+msgstr "Otvori izbornik aplikacija (F10)"
+
+#: src/libide/gui/ide-marked-view.c:414
+msgid "Cannot load HTML. Missing WebKit support."
+msgstr "Nemoguće učitavanje HTML. Nedostaje WebKit podrška."
+
+#: src/libide/gui/ide-primary-workspace.ui:17
+msgid "Toggle Left Panel (F9)"
+msgstr "Uklj/Isklj lijevi panel (F9)"
+
+#: src/libide/gui/ide-primary-workspace.ui:51
+#: src/plugins/menu-search/gtk/menus.ui:34
+msgid "Toggle Right Panel"
+msgstr "Uklj/Isklj desni panel"
+
+#: src/libide/gui/ide-primary-workspace.ui:59
+msgid "Search (Ctrl+Enter)"
+msgstr "Pretraga (Ctrl+Enter)"
+
+#: src/libide/gui/ide-primary-workspace.ui:105
+msgid "Toggle Bottom Panel (Ctrl+F9)"
+msgstr "Uklj/Isklj donji panel (Ctrl+F9)"
+
+#: src/libide/gui/ide-run-button.c:62
+msgid "Run Project (Shift+Ctrl+Space)"
+msgstr "Pokreni projekt (Shift+Ctrl+Space)"
+
+#: src/libide/gui/ide-run-button.c:68
+msgid "Stop Running Project"
+msgstr "Zaustavi pokrenuti projekt"
+
+#: src/libide/gui/ide-run-button.c:149
+msgid "Stop running"
+msgstr "Zaustavi pokretanje"
+
+#: src/libide/gui/ide-run-button.c:151
+msgid "Run project"
+msgstr "Pokreni projekt"
+
+#: src/libide/gui/ide-shortcut-window.c:239
+#: src/libide/gui/ide-shortcut-window.c:265
+msgid "Other"
+msgstr "Ostalo"
+
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
+#: src/plugins/buildui/gtk/preferences.ui:25
+#: src/plugins/buildui/gtk/preferences.ui:32
+msgid "Appearance"
+msgstr "Izgled"
+
+#: src/libide/gui/tweaks.ui:63
+msgid "Configurations"
+msgstr "Podešavanja"
+
+#: src/libide/gui/tweaks.ui:75
+msgid "Plugins"
+msgstr "Priključci"
+
+#: src/libide/io/ide-pkcon-transfer.c:56
+#, c-format
+msgid "Installing %u package"
+msgid_plural "Installing %u packages"
+msgstr[0] "Instalacija %u paketa"
+msgstr[1] "Instalacija %u paketa"
+msgstr[2] "Instalacija %u paketa"
+
+#. translators: %s is replaced with the error message
+#: src/libide/lsp/ide-lsp-client.c:1522
+#, c-format
+msgid "Failed to initialize language server: %s"
+msgstr "Neupjelo pokretanje poslužitelja jezika: %s"
+
+#: src/libide/plugins/ide-plugin.c:340
+#: src/plugins/create-project/gbp-create-project-widget.ui:115
+#: src/plugins/git/tweaks.ui:10 src/plugins/projectui/tweaks.ui:148
+msgid "Version Control"
+msgstr "Upravljanje inačicom"
+
+#: src/libide/plugins/ide-plugin.c:341 src/plugins/sdkui/tweaks.ui:9
+msgid "SDKs"
+msgstr "SDK"
+
+#: src/libide/plugins/ide-plugin.c:342
+msgid "Language Servers"
+msgstr "Poslužitelji jezika"
+
+#: src/libide/plugins/ide-plugin.c:343
+msgid "Devices & Simulators"
+msgstr "Uređaji i simulatori"
+
+#: src/libide/plugins/ide-plugin.c:344
+#: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+msgid "Diagnostics"
+msgstr "Dijagnostika"
+
+#: src/libide/plugins/ide-plugin.c:345
+msgid "Build Systems"
+msgstr "Sustav izgradnje"
+
+#: src/libide/plugins/ide-plugin.c:346
+msgid "Compilers"
+msgstr "Kompilatori"
+
+#: src/libide/plugins/ide-plugin.c:347
+msgid "Debuggers"
+msgstr "Otklanjatelji grešaka"
+
+#: src/libide/plugins/ide-plugin.c:348
+msgid "Templates"
+msgstr "Predlošci"
+
+#: src/libide/plugins/ide-plugin.c:349
+msgid "Editing & Formatting"
+msgstr "Uređivanje i oblikovanje"
+
+#: src/libide/plugins/ide-plugin.c:352
+msgid "Web"
+msgstr "Web"
+
+#: src/libide/plugins/ide-plugin.c:353
+msgid "Language Enablement"
+msgstr "Omogućavanje jezika"
+
+#: src/libide/plugins/ide-plugin.c:354
+msgid "Desktop Integration"
+msgstr "Integracije radne površine"
+
+#: src/libide/plugins/ide-plugin.c:355
+msgid "Additional"
+msgstr "Dodatno"
+
+#: src/libide/plugins/ide-plugin-view.ui:35
+msgid "Authors"
+msgstr "Autori"
+
+#: src/libide/plugins/ide-plugin-view.ui:66
+msgid "Version"
+msgstr "Inačica"
+
+#: src/libide/plugins/ide-plugin-view.ui:97
+msgid "Website"
+msgstr "Web stranica"
+
+#: src/libide/projects/ide-project.c:198
+msgid "Destination file must be within the project tree."
+msgstr "Odredišna datoteka mora biti u stablu projekta."
+
+#: src/libide/projects/ide-project.c:435
+msgid "File must be within the project tree."
+msgstr "Datoteka mora biti u stablu projekta."
+
+#: src/libide/projects/ide-projects-global.c:103
+#: src/plugins/projectui/tweaks.ui:9
+msgid "Projects"
+msgstr "Projekti"
+
+#: src/libide/projects/xml-reader.c:329
+#, c-format
+msgid "Could not parse XML from stream"
+msgstr "Nemoguća XML obrada iz strujanja"
+
+#: src/libide/sourceview/gtk/menus.ui:7 src/libide/terminal/gtk/menus.ui:13
+#: src/libide/terminal/gtk/menus.ui:35
+msgid "Clipboard"
+msgstr "Međuspremnik"
+
+#: src/libide/sourceview/gtk/menus.ui:10
+msgid "C_ut"
+msgstr "I_zreži"
+
+#: src/libide/sourceview/gtk/menus.ui:16 src/libide/terminal/gtk/menus.ui:16
+msgid "_Copy"
+msgstr "_Kopiraj"
+
+#: src/libide/sourceview/gtk/menus.ui:22 src/libide/terminal/gtk/menus.ui:27
+msgid "_Paste"
+msgstr "_Zalijepi"
+
+#: src/libide/sourceview/gtk/menus.ui:29 src/libide/sourceview/gtk/menus.ui:33
+msgid "Undo"
+msgstr "Poništi"
+
+#: src/libide/sourceview/gtk/menus.ui:31
+msgid "Undo & Redo"
+msgstr "Poništenje i ponavljanje"
+
+#: src/libide/sourceview/gtk/menus.ui:38
+msgid "Redo"
+msgstr "Ponovi"
+
+#: src/libide/sourceview/gtk/menus.ui:44 src/libide/sourceview/gtk/menus.ui:47
+msgid "Zoom"
+msgstr "Uvećanje"
+
+#: src/libide/sourceview/gtk/menus.ui:49
+msgid "Zoom Out"
+msgstr "Udalji"
+
+#: src/libide/sourceview/gtk/menus.ui:55
+msgid "Reset Zoom"
+msgstr "Izvorno uvećanje"
+
+#: src/libide/sourceview/gtk/menus.ui:61
+msgid "Zoom In"
+msgstr "Uvećaj"
+
+#: src/libide/sourceview/gtk/menus.ui:69
+msgid "_Selection"
+msgstr "_Odabir"
+
+#: src/libide/sourceview/gtk/menus.ui:73 src/libide/terminal/gtk/menus.ui:37
+msgid "Select _All"
+msgstr "Odaberi _sve"
+
+#: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
+msgid "Formatting"
+msgstr "Formatiranje"
+
+#: src/libide/sourceview/gtk/menus.ui:81
+msgid "All _Upper Case"
+msgstr "Sva _velika slova"
+
+#: src/libide/sourceview/gtk/menus.ui:82
+msgid "Convert the text selection to upper case"
+msgstr "Pretvori odabir teksta u velika slova"
+
+#: src/libide/sourceview/gtk/menus.ui:88
+msgid "All _Lower Case"
+msgstr "Sva _mala slova"
+
+#: src/libide/sourceview/gtk/menus.ui:89
+msgid "Convert the text selection to lower case"
+msgstr "Pretvori odabir teksta u mala slova"
+
+#: src/libide/sourceview/gtk/menus.ui:95
+msgid "In_vert Case"
+msgstr "Ob_rni slova"
+
+#: src/libide/sourceview/gtk/menus.ui:96
+msgid "Invert case of the text selection"
+msgstr "Obrni slova odabira teksta"
+
+#: src/libide/sourceview/gtk/menus.ui:102
+msgid "_Title Case"
+msgstr "_Velika/Mala slova naslova"
+
+#: src/libide/sourceview/gtk/menus.ui:103
+msgid "Convert the text selection to title case"
+msgstr "Pretvori odabir tekstau naslovna slova"
+
+#: src/libide/sourceview/gtk/menus.ui:112
+msgid "Select _Line"
+msgstr "Ukloni _redak"
+
+#: src/libide/sourceview/gtk/menus.ui:117
+msgid "_Delete Line"
+msgstr "_Obriši redak"
+
+#: src/libide/sourceview/gtk/menus.ui:122
+msgid "_Join Lines"
+msgstr "_Spoji redke"
+
+#: src/libide/sourceview/gtk/menus.ui:127
+msgid "S_ort Lines"
+msgstr "Poredaj _redke"
+
+#: src/libide/sourceview/gtk/menus.ui:133
+msgid "D_uplicate Line"
+msgstr "D_upliciraj redak"
+
+#: src/libide/sourceview/gtk/menus.ui:146
+#: src/plugins/symbol-tree/gtk/menus.ui:6
+msgid "Code Navigation"
+msgstr "Navigacija kôda"
+
+#: src/libide/sourceview/gtk/menus.ui:149
+msgid "_Go to Definition"
+msgstr "_Idi u definiciju"
+
+#: src/libide/sourceview/gtk/menus.ui:150
+msgid "Jump to file and location where item is defined"
+msgstr "Idi u datoteku i lokaciju gdje je stavka definirana"
+
+#: src/libide/sourceview/gtk/menus.ui:156
+msgid "_Find References"
+msgstr "_Pretraži reference"
+
+#. translators: the first %u is replaced with the line number and the second with the column.
+#: src/libide/sourceview/ide-source-view.c:1371
+#: src/plugins/editorui/gbp-editorui-position-label.c:77
+#, c-format
+msgid "Ln %u, Col %u"
+msgstr "Redak %u, Stupac %u"
+
+#: src/libide/terminal/gtk/menus.ui:6
+msgid "_Open Link"
+msgstr "_Otvori poveznicu"
+
+#: src/libide/terminal/gtk/menus.ui:17
+msgid "Copy selection from terminal to clipboard"
+msgstr "Kopiraj odabir iz terminala u međuspremnik"
+
+#: src/libide/terminal/gtk/menus.ui:22
+msgid "_Copy Link"
+msgstr "_Kopiraj poveznicu"
+
+#: src/libide/terminal/gtk/menus.ui:28
+msgid "Paste from clipboard into the terminal"
+msgstr "Zalijepi iz međuspremnika u terminal"
+
+#: src/libide/terminal/gtk/menus.ui:38
+msgid "Selection all text from terminal including scrollback"
+msgstr "Odabir cijelog teksta iz terminala uključujući pomicanje unatrag"
+
+#: src/libide/terminal/gtk/menus.ui:44
+msgid "Select _None"
+msgstr "Ukloni _odabir"
+
+#: src/libide/terminal/ide-terminal-page-actions.c:272
+msgid "Save Terminal Content As"
+msgstr "Spremi sadržaj terminala kao"
+
+#: src/libide/terminal/ide-terminal-page.c:117
+msgid "Failed to launch subprocess. You may need to rebuild your project."
+msgstr ""
+"Neuspjelo pokretanje podprocesa. Možda trebate ponovno izgraditi svoj "
+"projekt."
+
+#: src/libide/terminal/ide-terminal-page.c:122
+#: src/libide/terminal/ide-terminal-page.c:157
+#: src/libide/terminal/ide-terminal-page.c:271
+msgid "Untitled terminal"
+msgstr "Bezimeni terminal"
+
+#. translators: exited describes that the terminal shell process has exited
+#: src/libide/terminal/ide-terminal-page.c:124
+msgid "Exited"
+msgstr "Izašao"
+
+#: src/libide/terminal/ide-terminal-page.c:144
+msgid "Subprocess launcher failed too quickly, will not respawn."
+msgstr "Pokretač podprocesa je prebrzo neuspio, neće se ponovo pokrenuti."
+
+#: src/libide/terminal/ide-terminal-page.ui:7
+msgid "Untitled Terminal"
+msgstr "Bezimeni terminal"
+
+#: src/libide/terminal/ide-terminal-popover.ui:12
+msgid "Search runtimes"
+msgstr "Pretraži vremena izvođenja"
+
+#: src/libide/terminal/ide-terminal-search.ui:66
+msgid "Show or hide search options such as case sensitivity"
+msgstr "Prikaži ili sakrij mogućnosti pretrage poput velikih/malih slova"
+
+#: src/libide/terminal/ide-terminal-search.ui:106
+msgid "Regex"
+msgstr "Obično podudaranje"
+
+#: src/libide/terminal/ide-terminal-search.ui:115
+msgid "Case sensitive"
+msgstr "Velika/Mala slova"
+
+#: src/libide/terminal/ide-terminal-search.ui:124
+msgid "Match whole word"
+msgstr "Podudaraj cijelu riječ"
+
+#: src/libide/terminal/ide-terminal-search.ui:133
+msgid "Wrap around"
+msgstr "Prelomi oko"
+
+#: src/libide/tree/ide-tree-node.c:1107 src/libide/tree/ide-tree-node.c:1470
+#: src/libide/tree/ide-tree-node.c:1499
+msgid "(Empty)"
+msgstr "(Prazno)"
+
+#: src/libide/tree/ide-tree-node.c:1468
+msgid "Loading…"
+msgstr "Učitavanje…"
+
+#: src/libide/tweaks/ide-tweaks-directory.c:137
+msgid "Projects Directory"
+msgstr "Direktorij projekata"
+
+#: src/libide/tweaks/ide-tweaks-font.c:81
+msgid "Select Font"
+msgstr "Odaberi slova"
+
+#: src/libide/tweaks/ide-tweaks-window.c:134
+#, c-format
+msgid "Builder — %s — Preferences"
+msgstr "Graditelj — %s — Osobitosti"
+
+#: src/libide/tweaks/ide-tweaks-window.c:138
+msgid "Builder — Preferences"
+msgstr "Graditelj — Osobitosti"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:35
+msgid "All Preferences"
+msgstr "Sve osobitosti"
+
+#: src/libide/tweaks/ide-tweaks-window.ui:61
+msgid "Primary Menu"
+msgstr "Glavni izbornik"
+
+#: src/libide/vcs/ide-directory-vcs.c:57
+msgid "unversioned"
+msgstr "bez inačice"
+
+#. translators: None means "no version control system"
+#: src/libide/vcs/ide-vcs.c:665
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
+msgid "None"
+msgstr "NIjedan"
+
+#: src/libide/webkit/ide-webkit-page.ui:5
+msgid "Blank page"
+msgstr "Prazna stranica"
+
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:151
+msgid "Settings"
+msgstr "Postavke"
+
+#: src/libide/webkit/ide-webkit-page.ui:98
+msgid "Allow JavaScript"
+msgstr "Dopusti JavaScript"
+
+#: src/main.c:154
+msgid "Run a new instance of Builder"
+msgstr "Pokreni novi primjerak Graditelja"
+
+#: src/plugins/autotools/ide-autotools-makecache-stage.c:204
+msgid "Building cache…"
+msgstr "Izgradnja predmemorije…"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:50
+msgid "Bootstrapping build system"
+msgstr "Samopokretanje sustava izgradnje"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:116
+msgid "Configuring project"
+msgstr "Podešavanje projekta"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
+#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:85
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:97
+#: src/plugins/make/gbp-make-pipeline-addin.c:124
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:89
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:125
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:131
+msgid "Building project"
+msgstr "Izgradnja projekta"
+
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:365
+msgid "Caching build commands"
+msgstr "Predmemoriranje naredbi izgradnje"
+
+#. translators: %s and %s are replaced with source file path and the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:157
+#, c-format
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgstr ""
+"Beautifier priključak: greška kopiranja datoteke podešavanja gresource za "
+"“%s”: %s"
+
+#. translators: %s is replaced with the source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:165
+#, c-format
+msgid "Beautifier plugin: error creating temporary config file for “%s”"
+msgstr ""
+"Beautifier priključak: greška stvaranja privremene datoteke podešavanja za "
+"“%s”"
+
+#. translators: %s is replaced with the .ini source file path
+#: src/plugins/beautifier/gb-beautifier-config.c:209
+#, c-format
+msgid "Beautifier plugin: Can’t read .ini file: %s"
+msgstr "Beautifier priključak: Nemoguće čitanje .ini datoteke: %s"
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:257
+#, c-format
+msgid ""
+"Beautifier plugin: neither command nor command-pattern keys found: entry "
+"“%s” disabled"
+msgstr ""
+"Beautifier priključak: nisu pronađeni ključevi ni command ni command-"
+"pattern: onemogućen je “%s” unos"
+
+#. translators: %s is replaced with the config entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:267
+#, c-format
+msgid ""
+"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
+"disabled"
+msgstr ""
+"Beautifier priključak: nisu pronađeni ključevi oba command i command-"
+"pattern: onemogućen je “%s” unos"
+
+#. translators: %s and %s are replaced with the config path and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:291
+#, c-format
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgstr ""
+"Beautifier priključak: putanja podešavanja “%s” ne postoji, onemogućen je "
+"“%s” unos"
+
+#. translators: %s is replaced with the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:308
+#, c-format
+msgid ""
+"Beautifier plugin: command key out of possible values: entry “%s” disabled"
+msgstr ""
+"Beautifier priključak: ključ command je izvan mogućih vrijednosti: "
+"onemogućen je“%s” unos"
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:333
+#, c-format
+msgid ""
+"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
+"entry “%s” disabled"
+msgstr ""
+"Beautifier priključak: @c@ u “%s” command-pattern ključ ali nije "
+"podstavljena datoteka podešavanja: onemogućen je “%s” unos"
+
+#. translators: %s and %s are replaced with the profile name and the entry name
+#: src/plugins/beautifier/gb-beautifier-config.c:365
+#, c-format
+msgid ""
+"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
+msgstr ""
+"Beautifier priključak: nemoguće stvaranje privremene datoteke za “%s”: "
+"onemogućen je “%s” unos"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:407
+#, c-format
+msgid "Beautifier plugin: “%s”"
+msgstr "Beautifier priključak: “%s”"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-config.c:508
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
+#, c-format
+msgid "Beautifier plugin: %s"
+msgstr "Beautifier priključak: %s"
+
+#. translators: %s is replaced with a path name
+#: src/plugins/beautifier/gb-beautifier-config.c:547
+#, c-format
+msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+msgstr "Beautifier priključak: nemoguće čitanje datoteke resursa: “%s”"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
+msgid "beautifier program missing, you must install it: "
+msgstr "beautifier program nedostaje, morate ga instalirati: "
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
+msgid "Beautifier Plugin: the view is not a GtkSourceView"
+msgstr "Beautifier priključak: prikaz nije GtkSourceView"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
+msgid "Beautifier Plugin: no default beautifier found"
+msgstr "Beautifier priključak: nema pronađenog zadanog beautifiera"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
+msgid "Beautifier Plugin: the buffer is not writable"
+msgstr "Beautifier priključak: međuspremnik nije zapisiv"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
+msgid "Beautifier Plugin: Nothing selected"
+msgstr "Beautifier priključak: ništa nije odabrano"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:243
+#, c-format
+msgid "No beautifier available for “%s”"
+msgstr "Nema dostupnog beautifiera za “%s”"
+
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:245
+#, c-format
+msgid "No beautifier available"
+msgstr "Nema dostupnog beautifiera"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/beautifier/gb-beautifier-editor-addin.c:356
+#, c-format
+msgid "Beautifier plugin: no valid entries, disabling: %s"
+msgstr "Beautifier priključak: nema valjanih unosa, onemogućujem: %s"
+
+#. translators: %s and %s are replaced with the temporary dir and the file path
+#: src/plugins/beautifier/gb-beautifier-helper.c:63
+#: src/plugins/beautifier/gb-beautifier-helper.c:88
+#: src/plugins/beautifier/gb-beautifier-helper.c:114
+#: src/plugins/beautifier/gb-beautifier-helper.c:135
+#, c-format
+msgid ""
+"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+"temporary directory: “%s”"
+msgstr ""
+"Beautifier priključak: blokiran je pokušaj uklanjanja datoteke izvan “%s” "
+"privremenog direktorija: “%s”"
+
+#. translators: %s is replaced with the command error message
+#: src/plugins/beautifier/gb-beautifier-process.c:285
+#, c-format
+msgid ""
+"Beautifier plugin: command error output:\n"
+"%s"
+msgstr ""
+"Beautifier priključak: greška izlaza naredbe:\n"
+"%s"
+
+#: src/plugins/beautifier/gb-beautifier-process.c:295
+msgid "Beautifier plugin: the command output is empty"
+msgstr "Beautifier priključak: izlaz naredbe je prazan"
+
+#: src/plugins/beautifier/gb-beautifier-process.c:322
+msgid "Beautify plugin: the output is not a valid UTF-8 text"
+msgstr "Beautify priključak: izlaz nije valjan UTF-8 tekst"
+
+#: src/plugins/beautifier/gtk/menus.ui:7
+msgid "_Beautify"
+msgstr "_Beautify"
+
+#. translators: %s is replaced with the name of the configuration
+#: src/plugins/buildconfig/ide-buildconfig-config-provider.c:704
+#, c-format
+msgid "%s (Copy)"
+msgstr "%s (Kopiraj)"
+
+#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:76
+msgid "BuildStream project in use but “bst” executable could not be found."
+msgstr ""
+"BuildStream projekt se koristi ali “bst” izvršna datoteka se ne može pronaći."
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:23
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:204
+msgid "Add _Variable"
+msgstr "Dodaj _varijablu"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:29
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:210
+msgid "Add Variable"
+msgstr "Dodaj varijablu"
+
+#: src/plugins/buildui/gbp-buildui-environment-editor.ui:30
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:211
+msgid "_Add"
+msgstr "_Dodaj"
+
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:29
+msgid "Copy"
+msgstr "Kopiraj"
+
+#: src/plugins/buildui/gbp-buildui-environment-row.ui:42
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
+msgid "Remove"
+msgstr "Ukloni"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.c:327
+#: src/plugins/testui/gbp-testui-output-panel.c:103
+msgid "_Save"
+msgstr "_Spremi"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.c:359
+msgid "Build Output"
+msgstr "Izlaz izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:40
+msgid "Clear build log"
+msgstr "Obriši zapise izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:56
+msgid "Cancel build"
+msgstr "Prekini izgradnju"
+
+#: src/plugins/buildui/gbp-buildui-log-pane.ui:72
+msgid "Save build log"
+msgstr "Spremi zapis izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.c:113
+msgid "Missing"
+msgstr "Nedostaje"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:37
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:81
+msgid "Branch"
+msgstr "Ogranak"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:60
+msgid "Build Profile"
+msgstr "Profil izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:83
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:96
+msgid "Runtime"
+msgstr "Vrijeme pokretanja"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:107
+msgid "Device"
+msgstr "Uređaj"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:136
+msgid "There is a problem with the current build configuration."
+msgstr "Postoji problem s trenutnim podešavanjem izgradnje."
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:162
+msgid "Build status"
+msgstr "Stanje izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:186
+msgid "Last build"
+msgstr "Posljednja izgradnja"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:211
+msgid "Build result"
+msgstr "Rezultat izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:236
+msgid "Errors"
+msgstr "Greške"
+
+#: src/plugins/buildui/gbp-buildui-omni-bar-section.ui:262
+msgid "Warnings"
+msgstr "Upozorenja"
+
+#: src/plugins/buildui/gbp-buildui-pane.c:345
+#: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
+msgid "Build Pipeline"
+msgstr "Slivnik izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:4
+msgid "Build Issues"
+msgstr "Problemi izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:21
+msgid "Build status:"
+msgstr "Stanje izgradnje:"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:37
+msgid "Time completed:"
+msgstr "Vrijeme završetka:"
+
+#: src/plugins/buildui/gbp-buildui-pane.ui:53
+#: src/plugins/buildui/gbp-buildui-pane.ui:67
+msgid "—"
+msgstr "—"
+
+#. translators: %u is replaced with the number of warnings
+#: src/plugins/buildui/gbp-buildui-status-popover.c:63
+#, c-format
+msgid "Warnings (%u)"
+msgstr "Upozorenja (%u)"
+
+#. translators: %u is replaced with the number of errors
+#: src/plugins/buildui/gbp-buildui-status-popover.c:76
+#, c-format
+msgid "Errors (%u)"
+msgstr "Greške (%u)"
+
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:87
+msgid "Shared"
+msgstr "Dijeljeno"
+
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:91
+msgid "Static"
+msgstr "Nepromjenjivo"
+
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:95
+msgid "Executable"
+msgstr "Izvršna datoteka"
+
+#. translators: %s is replaced with the error message
+#: src/plugins/buildui/gbp-buildui-targets-dialog.c:142
+#, c-format
+msgid "Failed to list build targets: %s"
+msgstr "Neuspjeli prikaz odredišta izgradnje: %s"
+
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:4
+msgid "Select Build Target"
+msgstr "Odabir odredišta izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:18
+msgid "Available Build Targets"
+msgstr "Dostupna odredišta izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:19
+msgid ""
+"Some targets may not be available until the project has been configured."
+msgstr "Pojedina odredišta možda neće biti dostupna dok se projekt ne podesi."
+
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:27
+#: src/plugins/buildui/tweaks.ui:26
+msgid "Automatically Discover"
+msgstr "Automatsko otkrivanje"
+
+#: src/plugins/buildui/gbp-buildui-targets-dialog.ui:28
+msgid "This selection allows Builder to choose the best candidate."
+msgstr "Odabir omogućuje Graditelju odabir najboljeg kandidata."
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:97
+msgid "The container used to build and run your application"
+msgstr "Spremnik koji se koristi za izgradnju i pokretanje vaše aplikacije"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:205
+msgid "Duplicate"
+msgstr "Duplikat"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:206
+msgid "Duplicate into new configuration"
+msgstr "Stvori duplikat u novo podešavanje"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:217
+msgid "Make Active"
+msgstr "Učini aktivno"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
+msgid "Make configuration active and reload build pipeline"
+msgstr "Učini podešavanje aktivnim i ponovno učitaj slivnik izgradnje"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:172
+msgid "Delete"
+msgstr "Obriši"
+
+#: src/plugins/buildui/gbp-buildui-tweaks-addin.c:231
+msgid "Delete configuration"
+msgstr "Obriši podešavanje"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+msgid "Stop Building Project"
+msgstr "Zaustavljanje izgradnje projekta"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+msgid "Build Project (Shift+Ctrl+Alt+B)"
+msgstr "Izgradnja projekta (Shift+Ctrl+Alt+B)"
+
+#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
+msgid "_Build"
+msgstr "_Izgradi"
+
+#: src/plugins/buildui/gtk/menus.ui:14
+msgid "R_ebuild"
+msgstr "Ponovno _izgradi"
+
+#: src/plugins/buildui/gtk/menus.ui:20
+msgid "_Run"
+msgstr "_Pokreni"
+
+#: src/plugins/buildui/gtk/menus.ui:25
+msgid "R_un With…"
+msgstr "P_okreni s(a)…"
+
+#: src/plugins/buildui/gtk/menus.ui:33
+msgid "Configure Project…"
+msgstr "Podešavanje projekta…"
+
+#: src/plugins/buildui/gtk/menus.ui:36
+msgid "Configure settings related to the project"
+msgstr "Podesi postavke povezane s projektom"
+
+#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
+#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:147
+msgid "Code Foundry"
+msgstr "Tvornica kôda"
+
+#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
+#: src/plugins/projectui/tweaks.ui:218
+msgid "Configuration"
+msgstr "Podešavanje"
+
+#: src/plugins/buildui/gtk/menus.ui:45
+msgid "Select Build Target…"
+msgstr "Odabir odredišta izgradnje…"
+
+#: src/plugins/buildui/gtk/menus.ui:47
+msgid "Change default build target"
+msgstr "Promjena zadanog odredišta izgradnje"
+
+#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
+#: src/plugins/buildui/gtk/menus.ui:112
+msgid "Building"
+msgstr "Izgradnja"
+
+#: src/plugins/buildui/gtk/menus.ui:55
+msgid "Build the project"
+msgstr "Izgradi projekt"
+
+#: src/plugins/buildui/gtk/menus.ui:61
+msgid "_Rebuild"
+msgstr "Ponovno _izgradi"
+
+#: src/plugins/buildui/gtk/menus.ui:62
+msgid "Rebuild the project"
+msgstr "Ponovno izgradi projekt"
+
+#: src/plugins/buildui/gtk/menus.ui:67
+msgid "_Clean"
+msgstr "_Ukloni"
+
+#: src/plugins/buildui/gtk/menus.ui:68
+msgid "Clean the project"
+msgstr "Ukloni projekt"
+
+#: src/plugins/buildui/gtk/menus.ui:75
+msgid "Install & Deployment"
+msgstr "Instalacija i implementacija"
+
+#: src/plugins/buildui/gtk/menus.ui:79
+msgid "Install the project"
+msgstr "Instaliraj projekt"
+
+#: src/plugins/buildui/gtk/menus.ui:83
+msgid "Deploy to Device…"
+msgstr "Implementiraj na uređaj…"
+
+#: src/plugins/buildui/gtk/menus.ui:85
+msgid "Deploy project to current device"
+msgstr "Implementiraj projekt na trenutni uređaj"
+
+#. TODO: Instead of having a generic Export via the build-manager,
+#. this should move into the Flatpak plugin and have it use
+#. flatpak-builder directly (reusing our cachepoints) so that
+#. the output is the same as using flatpak-builder from Flathub, etc.
+#: src/plugins/buildui/gtk/menus.ui:94
+msgid "_Export"
+msgstr "_Izvezi"
+
+#: src/plugins/buildui/gtk/menus.ui:96
+msgid "Export project"
+msgstr "Izvezi projekt"
+
+#: src/plugins/buildui/gtk/menus.ui:104
+msgid "Stop Build"
+msgstr "Zaustavi izgradnju"
+
+#: src/plugins/buildui/gtk/menus.ui:106
+msgid "Stop building project"
+msgstr "Zaustavi izgradnju projekta"
+
+#: src/plugins/buildui/gtk/menus.ui:114
+msgid "Show Build _Log"
+msgstr "Prikaži zapis _izgradnje"
+
+#: src/plugins/buildui/gtk/menus.ui:117
+msgid "Display panel containing the build log"
+msgstr "Prikazuje panel koji sadrži zapis izgradnje"
+
+#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
+msgid "Running"
+msgstr "Pokretanje"
+
+#: src/plugins/buildui/gtk/menus.ui:128
+msgid "Select Run Command…"
+msgstr "Odaberi naredbu pokretanja…"
+
+#: src/plugins/buildui/gtk/menus.ui:140
+msgid "Run"
+msgstr "Pokreni"
+
+#: src/plugins/buildui/gtk/menus.ui:143
+msgid "Run the project"
+msgstr "Pokreni projekt"
+
+#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/testui/gbp-testui-item.c:84
+#: src/plugins/testui/gbp-testui-panel.ui:4
+msgid "Unit Tests"
+msgstr "Testiranje jedinice"
+
+#: src/plugins/buildui/gtk/menus.ui:155
+msgid "Follow System Style"
+msgstr "Izgled sustava"
+
+#: src/plugins/buildui/gtk/menus.ui:161
+msgid "Force Light"
+msgstr "Prisili svjetli"
+
+#: src/plugins/buildui/gtk/menus.ui:167
+msgid "Force Dark"
+msgstr "Prisili tamni"
+
+#: src/plugins/buildui/gtk/menus.ui:174
+msgid "Accessibility"
+msgstr "Pristupačnost"
+
+#: src/plugins/buildui/gtk/menus.ui:176
+msgid "High Contrast"
+msgstr "Visok kontrast"
+
+#: src/plugins/buildui/gtk/menus.ui:181
+msgid "Text Direction"
+msgstr "Smjer teksta"
+
+#: src/plugins/buildui/gtk/menus.ui:183
+msgid "Left-to-Right"
+msgstr "S lijeva na desno"
+
+#: src/plugins/buildui/gtk/menus.ui:189
+msgid "Right-to-Left"
+msgstr "S desna na lijevo"
+
+#: src/plugins/buildui/gtk/menus.ui:204
+msgid "Tools"
+msgstr "Alati"
+
+#: src/plugins/buildui/gtk/preferences.ui:36
+#: src/plugins/menu-search/gtk/menus.ui:53
+msgid "Style"
+msgstr "Izgled"
+
+#: src/plugins/buildui/gtk/preferences.ui:40
+#: src/plugins/platformui/tweaks.ui:10
+msgid "Interface"
+msgstr "Sučelje"
+
+#: src/plugins/buildui/gtk/preferences.ui:66
+msgid "Editor Font"
+msgstr "Slova uređivača"
+
+#: src/plugins/buildui/gtk/preferences.ui:67
+msgid "The font used in the source code editor"
+msgstr "Slova korištena u uređivaču izvornog kôa"
+
+#: src/plugins/buildui/gtk/preferences.ui:72
+msgid "Terminal Font"
+msgstr "Slova terminala"
+
+#: src/plugins/buildui/gtk/preferences.ui:73
+msgid "The font used in the terminal"
+msgstr "Slova korištena u terminalu"
+
+#: src/plugins/buildui/gtk/preferences.ui:80
+msgid "Show Grid Pattern"
+msgstr "Prikaži rešetkasi uzorak"
+
+#: src/plugins/buildui/gtk/preferences.ui:81
+msgid "Display a grid pattern underneath source code"
+msgstr "Prikaži rešetkasti uzorak ispod izvornog kôda"
+
+#: src/plugins/buildui/gtk/preferences.ui:92 src/plugins/editorui/tweaks.ui:87
+msgid "Never"
+msgstr "Nikada"
+
+#: src/plugins/buildui/gtk/preferences.ui:93
+msgid "Overview map is never displayed"
+msgstr "Panel prikaza se nikada prikazuje"
+
+#: src/plugins/buildui/gtk/preferences.ui:98
+msgid "Always"
+msgstr "Uvijek"
+
+#: src/plugins/buildui/gtk/preferences.ui:99
+msgid "Overview map is always displayed"
+msgstr "Panel prikaza se uvijek prikazuje"
+
+#: src/plugins/buildui/gtk/preferences.ui:104
+msgid "Auto"
+msgstr "Automatski"
+
+#: src/plugins/buildui/gtk/preferences.ui:105
+msgid "Overview map is automatically displayed based on user input"
+msgstr "Panel prikaza se automatski prikazuje na temelju unosa korisnika"
+
+#: src/plugins/buildui/gtk/preferences.ui:112
+msgid "Navigate with Tabs"
+msgstr "Navigacija s karticama"
+
+#: src/plugins/buildui/gtk/preferences.ui:113
+msgid "Switch documents using a tabbed interface"
+msgstr "Prebacuj dokumente pomoću sučelja s karticama"
+
+#: src/plugins/buildui/gtk/preferences.ui:119
+msgid "Navigate with Popover"
+msgstr "Navigacija s prekrivnim prozorom"
+
+#: src/plugins/buildui/gtk/preferences.ui:120
+msgid "Switch documents using a popover"
+msgstr "Prebacuj dokumente pomoću prekrivnog prozora"
+
+#: src/plugins/buildui/tweaks.ui:12 src/plugins/shellcmd/tweaks.ui:8
+#: src/plugins/shellcmd/tweaks.ui:21
+msgid "Commands"
+msgstr "Naredbe"
+
+#: src/plugins/buildui/tweaks.ui:16
+msgid "Run Command"
+msgstr "Pokreni naredbu"
+
+#: src/plugins/buildui/tweaks.ui:17
+msgid "This command is used to run your project"
+msgstr "Ova naredba se koristi za pokretanje vašeg projekta"
+
+#: src/plugins/buildui/tweaks.ui:55
+msgid "Starting & Stopping"
+msgstr "Pokretanje i zaustavljanje"
+
+#: src/plugins/buildui/tweaks.ui:58
+msgid "Install Before Running"
+msgstr "Instaliraj prije pokretanja"
+
+#: src/plugins/buildui/tweaks.ui:59
+msgid ""
+"Installs the application before running. This is necessary for most projects "
+"unless custom run commands are used."
+msgstr ""
+"Instaliraj aplikaciju prije pokretanja. Ovo je potrebno za većinu projekta "
+"osim ako se ne koriste prilagođene naredbe."
+
+#: src/plugins/buildui/tweaks.ui:74
+msgid "Stop Signal"
+msgstr "Zaustavi signal"
+
+#: src/plugins/buildui/tweaks.ui:75
+msgid ""
+"Send the signal to the target application when requesting the application "
+"stop."
+msgstr ""
+"Pošalji signal u odredišnu aplikaciju kada se zatraži zaustavljanje "
+"aplikacije."
+
+#: src/plugins/buildui/tweaks.ui:130
+msgid "Logging"
+msgstr "Prijavljivanje"
+
+#: src/plugins/buildui/tweaks.ui:134
+msgid ""
+"Runs with <tt>G_MESSAGES_DEBUG=all</tt> environment variable for "
+"troubleshooting"
+msgstr ""
+"Pokreće se s <tt>G_MESSAGES_DEBUG=all</tt> varijablom okruženja za "
+"rješavanje problema"
+
+#: src/plugins/buildui/tweaks.ui:151
+msgid "Run unit tests from within the build environment."
+msgstr "Pokreni test jedinice iz okruženja izgradnje."
+
+#: src/plugins/buildui/tweaks.ui:163
+msgid "As Application"
+msgstr "Kao aplikacija"
+
+#: src/plugins/buildui/tweaks.ui:164
+msgid "Run unit with access to display and other runtime environment features."
+msgstr ""
+"Pokreni jedinicu s pristupom zaslonu i ostalim značajkama okruženja radnog "
+"procesa."
+
+#: src/plugins/buildui/tweaks.ui:176
+msgid "Build & Tooling"
+msgstr "Izgradnja i alati"
+
+#: src/plugins/buildui/tweaks.ui:182 src/plugins/buildui/tweaks.ui:345
+msgid "General"
+msgstr "Općenito"
+
+#: src/plugins/buildui/tweaks.ui:185 src/plugins/terminal/tweaks.ui:84
+msgid "History"
+msgstr "Povijest"
+
+#: src/plugins/buildui/tweaks.ui:188
+msgid "Clear Expired Artifacts"
+msgstr "Obriši istekle artefakte"
+
+#: src/plugins/buildui/tweaks.ui:189
+msgid "Artifacts which have expired will be deleted when Builder is started"
+msgstr "Artefakti koji su istekli biti će obrisani kada se Graditelj pokrene"
+
+#: src/plugins/buildui/tweaks.ui:200
+msgid "Clear Build Logs"
+msgstr "Brisanje zapisa izgradnje"
+
+#: src/plugins/buildui/tweaks.ui:201
+msgid "Clear the build log history when a new build begins"
+msgstr "Obriši povijest zapisa izgradnje kada se nova izgradnja pokrene"
+
+#: src/plugins/buildui/tweaks.ui:214
+msgid "Workers"
+msgstr "Radnici"
+
+#: src/plugins/buildui/tweaks.ui:218
+msgid "Number of workers to use when performing builds"
+msgstr "Broj radnika koji se koriste pri izgradnji"
+
+#: src/plugins/buildui/tweaks.ui:227
+msgid "Default"
+msgstr "Zadano"
+
+#: src/plugins/buildui/tweaks.ui:233
+msgid "1 per CPU"
+msgstr "1 po CPU"
+
+#: src/plugins/buildui/tweaks.ui:239
+msgid "1"
+msgstr "1"
+
+#: src/plugins/buildui/tweaks.ui:245 src/plugins/editorui/gtk/menus.ui:15
+#: src/plugins/editorui/gtk/menus.ui:51
+msgid "2"
+msgstr "2"
+
+#: src/plugins/buildui/tweaks.ui:251 src/plugins/editorui/gtk/menus.ui:25
+#: src/plugins/editorui/gtk/menus.ui:61
+msgid "4"
+msgstr "4"
+
+#: src/plugins/buildui/tweaks.ui:257
+msgid "6"
+msgstr "6"
+
+#: src/plugins/buildui/tweaks.ui:263 src/plugins/editorui/gtk/menus.ui:35
+#: src/plugins/editorui/gtk/menus.ui:71
+msgid "8"
+msgstr "8"
+
+#: src/plugins/buildui/tweaks.ui:269
+msgid "16"
+msgstr "16"
+
+#: src/plugins/buildui/tweaks.ui:275
+msgid "32"
+msgstr "32"
+
+#: src/plugins/buildui/tweaks.ui:281
+msgid "64"
+msgstr "64"
+
+#: src/plugins/buildui/tweaks.ui:287
+msgid "128"
+msgstr "128"
+
+#: src/plugins/buildui/tweaks.ui:293
+msgid "256"
+msgstr "256"
+
+#: src/plugins/buildui/tweaks.ui:299
+msgid "512"
+msgstr "512"
+
+#: src/plugins/buildui/tweaks.ui:313
+msgid "Tooling"
+msgstr "Alati"
+
+#: src/plugins/buildui/tweaks.ui:348
+msgid "Installation Prefix"
+msgstr "Prefiks instalacije"
+
+#: src/plugins/buildui/tweaks.ui:349
+msgid ""
+"The project will be installed to this directory during the installation "
+"phase of the build pipeline."
+msgstr ""
+"Projekt će biti instaliran u ovaj direktorij tijekom faze instalacije "
+"slivnika izgradnje."
+
+#: src/plugins/buildui/tweaks.ui:367
+msgid "Configure Options"
+msgstr "Mogućnosti podešavanja"
+
+#: src/plugins/buildui/tweaks.ui:380
+msgid ""
+"These options are used by the build system to configure the project during "
+"the configure phase of the build pipeline"
+msgstr ""
+"Ove mogućnosti koristi sustav izgradnje za podešavanje projekta tijekom faze "
+"podešavanja slivnika izgradnje"
+
+#: src/plugins/buildui/tweaks.ui:387
+msgid "Build Environment"
+msgstr "Okruženje izgradnje"
+
+#: src/plugins/buildui/tweaks.ui:403
+msgid ""
+"The SDK used to build your application is automatically determined from the "
+"runtime."
+msgstr ""
+"SDK korišten za izgradnju vaše aplikacije je automatski otkriven iz tijeka "
+"izvođenja."
+
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+msgid "Fetch dependencies"
+msgstr "Preuzmi zavisnosti"
+
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:204
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:267
+msgid "Build project"
+msgstr "Izgradi projekt"
+
+#: src/plugins/cargo/gbp-cargo-run-command-provider.c:77
+msgid "Cargo Run"
+msgstr "Cargo pokretanje"
+
+#: src/plugins/clang/ide-clang-symbol-node.c:55
+msgid "anonymous"
+msgstr "anonimno"
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:6
+msgid "Complete parentheses"
+msgstr "Dovrši zagrade"
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:7
+msgid "If parentheses should be included when completing."
+msgstr "Trebaju li zagrade biti uključene pri završetku."
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:11
+msgid "Complete parameters"
+msgstr "Dovrši parametre"
+
+#: src/plugins/clang/org.gnome.builder.clang.gschema.xml:12
+msgid ""
+"If parameters should be included when completing. Requires complete-"
+"parentheses."
+msgstr ""
+"Trebaju li parametri biti uključeni pri završetku. Zahtijeva dovršavanje "
+"zagrada."
+
+#: src/plugins/clang/tweaks.ui:14
+msgid "Clang"
+msgstr "Clang"
+
+#: src/plugins/clang/tweaks.ui:17
+msgid "Complete Parentheses"
+msgstr "Dovršavanje zagrada"
+
+#: src/plugins/clang/tweaks.ui:18
+msgid "Include parentheses when completing clang proposals"
+msgstr "Uključi zagrade pri dovršetku clang prijedloga"
+
+#: src/plugins/clang/tweaks.ui:29
+msgid "Complete Parameters"
+msgstr "Dovršavanje parametara"
+
+#: src/plugins/clang/tweaks.ui:30
+msgid "Include parameters and type information when completing clang proposals"
+msgstr "Uključi parametre i informacije o vrsti pri dovršetka clang prijedloga"
+
+#: src/plugins/cmake/gbp-cmake-build-system.c:423
+msgid "CMake"
+msgstr "CMake"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:206
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:257
+msgid "Configure project"
+msgstr "Podesi projekt"
+
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
+#: src/plugins/make/gbp-make-pipeline-addin.c:136
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:99
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:133
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:143
+msgid "Installing project"
+msgstr "Instalacija projekta"
+
+#: src/plugins/cmake/gbp-cmake-toolchain.c:218
+#, c-format
+msgid "%s (CMake)"
+msgstr "%s (CMake)"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:53
+msgid "Create or update code-index for project file"
+msgstr "Stvori ili nadopuni code-index za datoteku projekta"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:54
+msgid "PROJECT_FILE"
+msgstr "DATOTEKA_PROJEKTA"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:152
+#, c-format
+msgid "Failed to load flags for plan: %s"
+msgstr "Neuspjelo učitavanje oznaka za plan: %s"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:195
+#, c-format
+msgid "Failed to cull index plan: %s"
+msgstr "Neuspjelo izdvajanje plana sadržaja: %s"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:230
+#, c-format
+msgid "Failed to populate index plan: %s"
+msgstr "Neuspjelo popunjavanje plana sadržaja: %s"
+
+#: src/plugins/code-index/gbp-code-index-application-addin.c:265
+#, c-format
+msgid "Failed to load project: %s"
+msgstr "Neuspjelo učitavanje projekta: %s"
+
+#. Now we can drop our paused state
+#: src/plugins/code-index/gbp-code-index-service.c:209
+#: src/plugins/ctags/ide-ctags-service.c:131
+#: src/plugins/ctags/ide-ctags-service.c:996
+msgid "Indexing Source Code"
+msgstr "Popisivanje izvornog kôda"
+
+#: src/plugins/code-index/gbp-code-index-service.c:210
+msgid "Search, diagnostics, and autocompletion may be limited until complete."
+msgstr ""
+"Pretraga, dijagnostika i automatsko dovršavanje mogu biti ograničeni do "
+"završetka."
+
+#. translators: "Declaration" is describing a function that is defined in a header
+#. *              file (.h) rather than a source file (.c).
+#.
+#: src/plugins/code-index/ide-code-index-index.c:338
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
+msgid "Declaration"
+msgstr "Izjava"
+
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#, c-format
+msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr "Moguća pravopisna greška “%s”. jeste li mislili “%s”?"
+
+#: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
+msgid "Colors"
+msgstr "Boje"
+
+#. translators: %s is replaced with the name of the color palette.
+#: src/plugins/color-picker/gb-color-picker-prefs.c:88
+#, c-format
+msgid "Save changes to palette “%s” before closing?"
+msgstr "Spremi promjene u paletu “%s” prije zatvaranja?"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:96
+msgid "Close without Saving"
+msgstr "Zatvori bez spremanja"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:98
+msgid "Save As…"
+msgstr "Spremi kao…"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:206
+msgid "Load palette"
+msgstr "Učitaj paletu"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:233
+msgid "Save palette"
+msgstr "Spremi paletu"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:706
+msgid "All files"
+msgstr "Sve datoteke"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:710
+msgid "All supported palettes formats"
+msgstr "Svi podržani formati paleta"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:715
+msgid "GIMP palette"
+msgstr "GIMP paleta"
+
+#: src/plugins/color-picker/gb-color-picker-prefs.c:719
+msgid "GNOME Builder palette"
+msgstr "Paleta GNOME Graditelja"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
+msgid "Palette name"
+msgstr "Naziv palete"
+
+#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
+msgid "Enter a new name for the palette"
+msgstr "Upišite novi naziv palete"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
+msgid "HSV visibility"
+msgstr "HSV vidljivost"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
+msgid "If the HSV components are visible."
+msgstr "Trebaju li HSV komponente biti vidljive."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
+msgid "LAB visibility"
+msgstr "LAB vidljivost"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
+msgid "If the LAB components are visible."
+msgstr "Trebaju li LAB komponente biti vidljive."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
+msgid "RGB visibility"
+msgstr "RGB vidljivost"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
+msgid "If the RGB components are visible."
+msgstr "Trebaju li RGB komponente biti vidljive."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
+msgid "RGB unit"
+msgstr "RGB jedinica"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
+msgid "The unit used by RGB component and strings."
+msgstr "Jedinica koju koristi RGB komponenta i izrazi."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
+msgid "Selected palette ID"
+msgstr "ID odabrane palete"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
+msgid "The selected palette ID among the loaded ones."
+msgstr "ID odabrane palete među učitanim paletama."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
+msgid "Color strings visibility"
+msgstr "Vidljivosti nizova boja"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
+msgid "The visible color strings."
+msgstr "Vidljivi nizovi boja."
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
+msgid "Color filter"
+msgstr "Filter boje"
+
+#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
+msgid "The filter used on the color scales and color plane."
+msgstr "Filter koji se koristi na ljestvicama boja i ravnini boja."
+
+#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:959
+msgid "Palette: "
+msgstr "Paleta: "
+
+#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:961
+msgid "Palette"
+msgstr "Paleta"
+
+#: src/plugins/color-picker/gstyle/gstyle-color-plane.c:1612
+msgid "Color Plane"
+msgstr "Raspon boja"
+
+#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:68
+msgid "Color name"
+msgstr "Naziv boje"
+
+#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:70
+msgid "Enter a new name for the color"
+msgstr "Upišite novi naziv boje"
+
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:494
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:560
+#, c-format
+msgid "failed to parse line %i\n"
+msgstr "neuspjela obrada retka %i\n"
+
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:615
+#, c-format
+msgid "%s: palette is empty\n"
+msgstr "%s: paleta je prazna\n"
+
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:721
+#, c-format
+msgid "%s: failed to parse\n"
+msgstr "%s: neuspjela obrada\n"
+
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:729
+#, c-format
+msgid "Unable to open %s\n"
+msgstr "Nemoguće je otvoriti %s\n"
+
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:767
+#, c-format
+msgid "%s: This file format is not supported\n"
+msgstr "%s: Ovaj datotečni format nije podržan\n"
+
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:824
+#, c-format
+msgid "failed to parse\n"
+msgstr "neuspjela obrada\n"
+
+#. To translators: always in singular form like in: generated palette number <generated_count>
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:831
+msgid "Generated"
+msgstr "Stvoreno"
+
+#: src/plugins/color-picker/gstyle/gstyle-palette.c:935
+#, c-format
+msgid "Unable to save %s\n"
+msgstr "Nemoguće spremanje %s:\n"
+
+#: src/plugins/color-picker/gstyle/gstyle-palette-widget.c:981
+#, c-format
+msgid "Unsaved palette %u"
+msgstr "Nespremljena paleta %u"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:157
+msgid "Color Components"
+msgstr "Komponente boja"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:206
+msgid "H"
+msgstr "H"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:216
+msgid "S"
+msgstr "S"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:226
+msgid "V"
+msgstr "V"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:322
+msgid "L*"
+msgstr "L*"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:332
+msgid "a*"
+msgstr "a*"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:342
+msgid "b*"
+msgstr "b*"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:441
+msgid "R"
+msgstr "R"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:451
+msgid "G"
+msgstr "G"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:461
+msgid "B"
+msgstr "B"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:573
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:433
+msgid "Color strings"
+msgstr "Nizovi boja"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:634
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:490
+msgid "HEX3"
+msgstr "HEX3"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:645
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:507
+msgid "HEX6"
+msgstr "HEX6"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:656
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:122
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:524
+msgid "RGB"
+msgstr "RGB"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:667
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:541
+msgid "RGBA"
+msgstr "Xft RGBA"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:678
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:558
+msgid "HSL"
+msgstr "HSL"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:689
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:575
+msgid "HSLA"
+msgstr "HSLA"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:818
+msgid "Palettes"
+msgstr "Palete"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:946
+#: src/plugins/color-picker/gtk/color-picker.ui:49
+msgid "No open palettes"
+msgstr "Nema otvorenih paleta"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:959
+msgid "Load or generate a palette using the preferences"
+msgstr "Učitaj ili stvori palete koristeći osobitosti"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:13
+#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
+msgid "Rename"
+msgstr "Preimenuj"
+
+#: src/plugins/color-picker/gstyle/ui/gstyle-rename-popover.ui:35
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:60
+msgid "_Rename"
+msgstr "_Preimenuj"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
+msgid "Color components"
+msgstr "Komponente boja"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
+msgid "Visibility:"
+msgstr "Vidljivost:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
+msgid "Select the color spaces for which you want to see sliders in the panel."
+msgstr ""
+"Odaberite prostore boja za koje želite vidjeti trake pomicanja na panelu."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
+msgid "HSV"
+msgstr "HSV"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
+msgid "Hue Saturation Value"
+msgstr "Vrijednost zasićenja nijanse"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
+msgid "L*a*b*"
+msgstr "L*a*b*"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:105
+msgid "CIE L*a*b* 1976"
+msgstr "CIE L*a*b* 1976"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:123
+msgid "Red Green Blue"
+msgstr "Crveno Zeleno Plavo (RGB)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:140
+msgid "Units:"
+msgstr "Jedinice:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:156
+msgid ""
+"Select the type of unit you want to use for RGB components and strings in "
+"the panel."
+msgstr ""
+"Odaberite vrstu jedinice koju želite koristiti za RGB komponente i izraze na "
+"panelu."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:179
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
+msgid "Value"
+msgstr "Vrijednost"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
+msgid "Percent"
+msgstr "Posto"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:213
+msgid "Filters:"
+msgstr "Filtri:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
+msgid "Select a filter that act on the colors or “None”."
+msgstr "Odaberite filtar koji djeluje na boje ili \"Nijedan\"."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
+msgid "Achromatopsia (monochromacy)"
+msgstr "Akromatopsija (monokromatija)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
+msgid "Achromatomaly (blue cone monochromacy)"
+msgstr "Akromatomalija (monokromatija plavog stošca)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
+msgid "Deuteranopia (green-blind)"
+msgstr "Deuteranopija (zeleno slijepa)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
+msgid "Deuteranomaly (green-weak)"
+msgstr "Deuteranomalija (zeleno slaba)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
+msgid "Protanopia (red-blind)"
+msgstr "Protanopija (crveno slijepa)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
+msgid "Protanomaly (red-weak)"
+msgstr "Protanomalija (crveno slaba)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
+msgid "Tritanopia (blue-blind)"
+msgstr "Tritanopija (plavo slijepa)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
+msgid "Tritanomaly (blue-weak)"
+msgstr "Tritanomalija (plavo slaba)"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
+msgid "Websafe"
+msgstr "Sigurano na webu"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:467
+msgid "Select the color strings you want to see in the panel."
+msgstr "Odaberite nizove boja koje želite vidjeti na panelu."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:597
+msgid "Palettes options"
+msgstr "Mogućnosti paleta"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:615
+msgid "Palette view mode:"
+msgstr "Način prikaza paleta:"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:638
+msgid "List"
+msgstr "Popis"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
+msgid "Swatches"
+msgstr "Uzorci"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
+msgid "Palette management"
+msgstr "Upravljanje paletom"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:762
+msgid "Load"
+msgstr "Učitaj"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:836
+msgid "From current document"
+msgstr "Iz trenutnog dokumenta"
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
+msgid "Select the palette you want to see in the panel or close one."
+msgstr "Odaberite paletu koju želite vidjeti na panelu ili je zatvorite."
+
+#: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
+msgid "No loaded palettes"
+msgstr "Nema učitanih paleta"
+
+#: src/plugins/color-picker/gtk/color-picker-preview.ui:45
+msgid "No selected palettes"
+msgstr "Nema odabranih paleta"
+
+#: src/plugins/color-picker/gtk/color-picker-preview.ui:58
+msgid "Select a palette file"
+msgstr "Odaberi datoteku palete"
+
+#: src/plugins/color-picker/gtk/color-picker.ui:62
+msgid "Try loading or generating a palette using the menu"
+msgstr "Pokušajte učitati ili stvoriti paletu pomoću izbornika"
+
+#: src/plugins/color-picker/gtk/menus.ui:7
+msgid "Highlight _colors"
+msgstr "Boje _isticanja"
+
+#: src/plugins/comment-code/gtk/menus.ui:7
+msgid "Code Comments"
+msgstr "Komentari kôda"
+
+#: src/plugins/comment-code/gtk/menus.ui:9
+msgid "_Comment Code"
+msgstr "_Komentiraj kôd"
+
+#: src/plugins/comment-code/gtk/menus.ui:10
+msgid "Add comments surrounding the source code selection"
+msgstr "Dodaj komentar u pripadajući odabir izvornog kôda"
+
+#: src/plugins/comment-code/gtk/menus.ui:16
+msgid "Unco_mment Code"
+msgstr "Ukl_oni komentar iz kôda"
+
+#: src/plugins/comment-code/gtk/menus.ui:17
+msgid "Remove comments from the source code selection"
+msgstr "Ukloni komentar iz pripadajućeg odabira izvornog kôda"
+
+#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:5
+msgid "Update Copyright before Saving"
+msgstr "Nadopuni autorska prava prije spremanja"
+
+#: src/plugins/copyright/org.gnome.builder.copyright.gschema.xml:6
+msgid "Updates the copyright for the user before saving to disk."
+msgstr "Nadopuni autorska prava korisnika prije spremanja na disk."
+
+#: src/plugins/copyright/tweaks.ui:16
+msgid "Update Copyright"
+msgstr "Nadopuni autorska prava"
+
+#: src/plugins/copyright/tweaks.ui:17
+msgid "Update copyright headers when saving documents"
+msgstr "Nadopuni zaglavlja autorskog prava pri spremanju dokumenta"
+
+#: src/plugins/create-project/gbp-create-project-application-addin.c:49
+msgid "Display the project creation guide"
+msgstr "Prikaži vodič stvaranja projekta"
+
+#: src/plugins/create-project/gbp-create-project-widget.c:219
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:107
+msgid "Select Location"
+msgstr "Odaberi lokaciju"
+
+#: src/plugins/create-project/gbp-create-project-widget.c:259
+msgid "Failed to Create Project"
+msgstr "Neuspjelo stvaranje projekta"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:18
+msgid "Project Name"
+msgstr "Naziv projekta"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:24
+msgid "A subdirectory with this name already exists"
+msgstr "Poddirektorij tog naziva već postoji"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:31
+msgid ""
+"A unique name that is used for the project folder and other resources. The "
+"name should be in lower case without spaces and should not start with a "
+"number."
+msgstr ""
+"Jedinstveni naziv koji se koristi za mapu projekta i druge resurse. Naziv "
+"mora sadržavati mala slova bez razmaka i ne smije započeti brojem."
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:47
+msgid "Application ID…"
+msgstr "ID aplikacije…"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:53
+msgid ""
+"A reverse domain-name identifier used to identify the application, such as "
+"\"org.gnome.Builder\". It may not contain dashes."
+msgstr ""
+"Obrnuti identifikator naziva domene korišten za identifikaciju aplikacije, "
+"poput \"org.gnome.Builder\". Ne smije sadržavati crtice."
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:69
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:95
+#: src/plugins/grep/gbp-grep-panel.c:744
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:78
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:120
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:154
+msgid "Location"
+msgstr "Lokacija"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:85
+msgid "The project will be created in a new subdirectory."
+msgstr "Projekt će biti stvoren u novom poddirektoriju."
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:108
+#: src/plugins/projectui/tweaks.ui:47
+msgid "License"
+msgstr "Licenca"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:127
+msgid "Template"
+msgstr "Predložak"
+
+#: src/plugins/create-project/gbp-create-project-widget.ui:183
+msgid "Create Project"
+msgstr "Stvori projekt"
+
+#: src/plugins/create-project/gbp-create-project-workspace-addin.c:53
+msgid "Create _New Project…"
+msgstr "Stvori _novi projekt…"
+
+#: src/plugins/create-project/gbp-create-project-workspace-addin.c:63
+msgid "Create New Project"
+msgstr "Stvori novi projekk"
+
+#: src/plugins/create-project/gtk/menus.ui:7
+#: src/plugins/create-project/gtk/menus.ui:18
+#: src/plugins/create-project/gtk/menus.ui:30
+msgid "Create New Project…"
+msgstr "Stvori novi projekt…"
+
+#: src/plugins/create-project/gtk/menus.ui:22
+msgid "Create a new project from template"
+msgstr "Stvori novi projekt iz predloška"
+
+#: src/plugins/ctags/ide-ctags-service.c:132
+msgid ""
+"Search, autocompletion, and symbol information may be limited until Ctags "
+"indexing is complete."
+msgstr ""
+"Pretraga,automatsko dovršavanje i simboli informacije mogu biti ograničeni "
+"dok se Ctag popisivanje ne završi."
+
+#: src/plugins/ctags/ide-ctags-service.c:953
+msgid "Indexing Source Code (Paused)"
+msgstr "Popisivanje izvornog kôda (Pauzirano)"
+
+#: src/plugins/ctags/tweaks.ui:14
+msgid "CTags"
+msgstr "CTags"
+
+#: src/plugins/ctags/tweaks.ui:17
+msgid "Suggest Completions"
+msgstr "Predloži dovršetke"
+
+#: src/plugins/ctags/tweaks.ui:18
+msgid "Use CTags to suggest code completion proposals"
+msgstr "Koristi CTags za prijedlog zahtjev dovršetka kôda"
+
+#: src/plugins/ctags/tweaks.ui:34
+msgid "CTags Path"
+msgstr "CTags putanja"
+
+#: src/plugins/ctags/tweaks.ui:35
+msgid "The path to the ctags executable"
+msgstr "Putanja do ctags izvršne datoteke"
+
+#: src/plugins/debuggerui/gtk/menus.ui:10
+msgid "Run with Debugger"
+msgstr "Pokreni s otklanjateljem grešaka"
+
+#: src/plugins/debuggerui/gtk/menus.ui:13
+msgid "Run the project with debugger"
+msgstr "Pokreni projekt s otklanjateljem grešaka"
+
+#: src/plugins/debuggerui/gtk/menus.ui:21
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/tweaks.ui:12
+msgid "Debugger"
+msgstr "Otklanjatelj grešaka"
+
+#: src/plugins/debuggerui/gtk/menus.ui:23
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/tweaks.ui:16
+msgid "Breakpoints"
+msgstr "Točke prijeloma"
+
+#: src/plugins/debuggerui/gtk/menus.ui:25
+msgid "Automatically Break at Program Start"
+msgstr "Automatski prelomi pri pokretanju programa"
+
+#: src/plugins/debuggerui/gtk/menus.ui:30
+msgid "Automatically Break at Warnings"
+msgstr "Automatski prelomi pri upozorenju"
+
+#: src/plugins/debuggerui/gtk/menus.ui:35
+msgid "Automatically Break at Criticals"
+msgstr "Automatski prelomi kad je kritično"
+
+#: src/plugins/debuggerui/gtk/menus.ui:49
+msgid "Run with _Debugger"
+msgstr "Pokreni s _otklanjateljem grešaka"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
+msgid "ID"
+msgstr "ID"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:34
+msgid "File"
+msgstr "Datoteka"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:46
+msgid "Line"
+msgstr "Redak"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:58
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:70
+msgid "Function"
+msgstr "Funkcija"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:70
+msgid "Address"
+msgstr "Adresa"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:81
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:28
+msgid "Type"
+msgstr "Vrsta"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:91
+msgid "Hits"
+msgstr "Pogodaka"
+
+#: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:102
+msgid "Expression"
+msgstr "Izraz"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:17
+msgid "Interrupt the program"
+msgstr "Prekini program"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:27
+msgid "Continue running the program"
+msgstr "Nastavi izvoditi program"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:59
+msgid "Execute the current line, stepping into any function calls"
+msgstr "Izvrši trenutni redak, ulazeći u bilo koji poziv funkcije"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:69
+msgid "Execute the current line, stepping over any function calls"
+msgstr "Izvrši trenutni redak, prelazeći preko svih poziva funkcija"
+
+#: src/plugins/debuggerui/ide-debugger-controls.ui:79
+msgid "Run until the end of the function"
+msgstr "Izvodi do kraja funkcije"
+
+#: src/plugins/debuggerui/ide-debugger-disassembly-view.ui:5
+msgid "Disassembly"
+msgstr "Rastavljanje"
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:16
+msgid "No break"
+msgstr "Bez prijeloma"
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:22
+msgid "Breakpoint"
+msgstr "Točka prijeloma"
+
+#: src/plugins/debuggerui/ide-debugger-hover-controls.ui:28
+msgid "Countpoint"
+msgstr "Točka brojenja"
+
+#: src/plugins/debuggerui/ide-debugger-libraries-view.ui:14
+msgid "Library"
+msgstr "Biblioteka"
+
+#: src/plugins/debuggerui/ide-debugger-libraries-view.ui:26
+msgid "Address Range"
+msgstr "Raspon adrese"
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.c:312
+msgid "Locals"
+msgstr "Lokalno"
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.c:367
+msgid "Parameters"
+msgstr "Parametri"
+
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:16
+msgid "Variable"
+msgstr "Varijabla"
+
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
+msgid "Register"
+msgstr "Registracija"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:17
+msgid "Group"
+msgstr "Grupa"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:38
+msgid "Thread"
+msgstr "Nit"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:58
+msgid "Frame"
+msgstr "Okvir"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:82
+msgid "Arguments"
+msgstr "Argumenti"
+
+#: src/plugins/debuggerui/ide-debugger-threads-view.ui:106
+msgid "Binary"
+msgstr "Binarno"
+
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:232
+msgid "Threads"
+msgstr "Niti"
+
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
+msgid "Libraries"
+msgstr "Biblioteke"
+
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:261
+msgid "Registers"
+msgstr "Registri"
+
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:266
+msgid "Console"
+msgstr "Konzola"
+
+#: src/plugins/debuggerui/tweaks.ui:19
+msgid "Stop After Launching Program"
+msgstr "Zaustavi nakon pokretanja programa"
+
+#: src/plugins/debuggerui/tweaks.ui:20
+msgid "Automatically insert a breakpoint at the start of the application"
+msgstr "Automatski umetni točku prijeloma na početku aplikacije"
+
+#: src/plugins/debuggerui/tweaks.ui:31
+msgid "Stop at Warnings"
+msgstr "Zaustavi pri upozorenju"
+
+#: src/plugins/debuggerui/tweaks.ui:32
+msgid "Automatically insert a breakpoint on warning logs"
+msgstr "Automatski umetni točku prijeloma pri zapisu upozorenja"
+
+#: src/plugins/debuggerui/tweaks.ui:43
+msgid "Stop at Criticals"
+msgstr "Zaustavi kada je kritično"
+
+#: src/plugins/debuggerui/tweaks.ui:44
+msgid "Automatically insert a breakpoint on critical logs"
+msgstr "Automatski umetni točku prijeloma pri kritičnom zapisu"
+
+#: src/plugins/deviced/gnome-builder-deviced.c:48
+msgid "The device address"
+msgstr "Adresa uređaja"
+
+#: src/plugins/deviced/gnome-builder-deviced.c:49
+msgid "The device port number"
+msgstr "Broj ulaza uređaja"
+
+#: src/plugins/deviced/gnome-builder-deviced.c:50
+msgid "The application to run"
+msgstr "Aplikacija za pokretanje"
+
+#: src/plugins/deviced/gnome-builder-deviced.c:51
+msgid "A PTY to bidirectionally proxy to the device"
+msgstr "PTY za dvosmjerni proxy prema uređaju"
+
+#: src/plugins/deviced/gnome-builder-deviced.c:52
+msgid "Number of seconds to wait for the deviced peer to appear"
+msgstr "Broj sekundi za čekanje da se pojavi točka uređaja"
+
+#: src/plugins/dspy/gbp-dspy-application-addin.c:47
+msgid "Display D-Bus inspector"
+msgstr "Prikaži D-Bus inspektora"
+
+#: src/plugins/dspy/gtk/menus.ui:6 src/plugins/dspy/gtk/menus.ui:14
+msgid "D-Bus Inspector…"
+msgstr "D-Bus inspektor…"
+
+#: src/plugins/editorconfig/gbp-editorconfig-file-settings.c:164
+msgid "No file was provided."
+msgstr "Datoteka nije navedena."
+
+#: src/plugins/editorui/gbp-editorui-application-addin.c:137
+msgid "Use minimal editorui interface"
+msgstr "Koristite minimalno editorui sučelje"
+
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:127
+msgid "Reset"
+msgstr "Vrati izvorno"
+
+#: src/plugins/editorui/gbp-editorui-tweaks-addin.c:128
+msgid "Reverts language preferences to application defaults"
+msgstr "Vraća izvorne osobitosti jezika aplikacije"
+
+#. translators: "Text" means plaintext or text/plain
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
+msgid "Text"
+msgstr "Tekst"
+
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/tweaks-language.ui:65
+#: src/plugins/editorui/tweaks-language.ui:242
+#: src/plugins/editorui/tweaks.ui:257
+msgid "Spaces"
+msgstr "Razmaci"
+
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/tweaks.ui:270
+msgid "Tabs"
+msgstr "Kartice"
+
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+msgid "Go"
+msgstr "Idi"
+
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
+msgid "Go to Line"
+msgstr "Idi na redak"
+
+#: src/plugins/editorui/gtk/menus.ui:5
+msgid "Indentation"
+msgstr "Uvlačenje"
+
+#: src/plugins/editorui/gtk/menus.ui:7
+msgid "Indent Using Spaces"
+msgstr "Uvuci koristeći razmake"
+
+#: src/plugins/editorui/gtk/menus.ui:13
+msgid "Spaces per Tab"
+msgstr "Razmaka po tabulatoru"
+
+#: src/plugins/editorui/gtk/menus.ui:20 src/plugins/editorui/gtk/menus.ui:56
+msgid "3"
+msgstr "3"
+
+#: src/plugins/editorui/gtk/menus.ui:30 src/plugins/editorui/gtk/menus.ui:66
+msgid "5"
+msgstr "5"
+
+#: src/plugins/editorui/gtk/menus.ui:41
+#: src/plugins/editorui/tweaks-language.ui:145
+msgid "Indentation Size"
+msgstr "Veličina uvlačenja"
+
+#: src/plugins/editorui/gtk/menus.ui:44
+msgid "Same as Tab Width"
+msgstr "Isto kao širina tabulatora"
+
+#: src/plugins/editorui/gtk/menus.ui:81
+msgid "Line Ending"
+msgstr "Završetak retka"
+
+#: src/plugins/editorui/gtk/menus.ui:90
+msgid "Windows (CR/LF)"
+msgstr "Windows (CR/LF)"
+
+#: src/plugins/editorui/gtk/menus.ui:95
+msgid "Mac Classic (CR)"
+msgstr "Mac Classic (CR)"
+
+#: src/plugins/editorui/gtk/menus.ui:104 src/plugins/editorui/gtk/menus.ui:113
+msgid "New Editor Workspace…"
+msgstr "Novi radni prostor uređivača…"
+
+#: src/plugins/editorui/gtk/menus.ui:124
+msgid "New _File"
+msgstr "Nova _datoteka"
+
+#: src/plugins/editorui/gtk/menus.ui:133
+msgid "_Open File…"
+msgstr "_Otvori datoteku…"
+
+#: src/plugins/editorui/gtk/menus.ui:142 src/plugins/terminal/gtk/menus.ui:36
+msgid "Open in New Frame"
+msgstr "Otvori u novom okviru"
+
+#: src/plugins/editorui/gtk/menus.ui:147
+msgid "Open in New Workspace…"
+msgstr "Otvori u novom radnom prostoru…"
+
+#: src/plugins/editorui/gtk/menus.ui:161
+msgid "Save _As"
+msgstr "Spremi _kao"
+
+#: src/plugins/editorui/gtk/menus.ui:168
+msgid "Find…"
+msgstr "Pretraga…"
+
+#: src/plugins/editorui/gtk/menus.ui:173
+msgid "Find/Replace…"
+msgstr "Pretraži/Zamijeni…"
+
+#: src/plugins/editorui/gtk/menus.ui:180
+msgid "Print…"
+msgstr "Ispis…"
+
+#: src/plugins/editorui/gtk/menus.ui:188
+msgid "Format Selection"
+msgstr "Odabir formata"
+
+#: src/plugins/editorui/tweaks-language.ui:9
+msgid "Programming Languages"
+msgstr "Programski jezici"
+
+#: src/plugins/editorui/tweaks-language.ui:34
+msgid ""
+"Settings provided by .editorconfig and modelines take precedence over those "
+"below."
+msgstr ""
+"Postavke koje pružaju .editorconfig i modelines imaju prednost nad onima "
+"ispod."
+
+#: src/plugins/editorui/tweaks-language.ui:41
+msgid "Indentation & Formatting"
+msgstr "Uvlačenje i oblikovanjw"
+
+#: src/plugins/editorui/tweaks-language.ui:44
+msgid "Tab Character"
+msgstr "Znak tabulatora"
+
+#: src/plugins/editorui/tweaks-language.ui:45
+msgid "The character to be inserted for Tab"
+msgstr "Znak koji se umeće za tabulator"
+
+#: src/plugins/editorui/tweaks-language.ui:59
+msgid "Tab"
+msgstr "Tabulator"
+
+#: src/plugins/editorui/tweaks-language.ui:73
+msgid "Insert Trailing Newline"
+msgstr "Umetni novi redak na kraju"
+
+#: src/plugins/editorui/tweaks-language.ui:74
+msgid "Ensure files end with a newline"
+msgstr "Osiguraj da datoteke završavaju novim retkom"
+
+#: src/plugins/editorui/tweaks-language.ui:90
+msgid "Trim Trailing Space"
+msgstr "Izreži razmak na kraju"
+
+#: src/plugins/editorui/tweaks-language.ui:91
+msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
+msgstr ""
+"Nakon spremanja, razmaci na kraju iz promijenjenih redaka bit će izrezani"
+
+#: src/plugins/editorui/tweaks-language.ui:111
+msgid "Auto Indent"
+msgstr "Automatsko uvlačenje"
+
+#: src/plugins/editorui/tweaks-language.ui:112
+msgid "Automatically indent source code as you type"
+msgstr "Automatsko uvlačenje izvornog kôda pri upisu"
+
+#: src/plugins/editorui/tweaks-language.ui:128
+msgid "Tab Size"
+msgstr "Veličina tabulatora"
+
+#: src/plugins/editorui/tweaks-language.ui:129
+msgid "The number of characters to indent for Tab"
+msgstr "Broj znakova uvlačenja za tabulatora"
+
+#: src/plugins/editorui/tweaks-language.ui:146
+msgid "The number of characters to indent, or -1 to use tab size"
+msgstr "Broj znakova uvlačenja ili -1 za korištenje veličine tabulatora"
+
+#: src/plugins/editorui/tweaks-language.ui:164
+msgid "Margin"
+msgstr "Rub"
+
+#: src/plugins/editorui/tweaks-language.ui:167
+msgid "Show Right Margin"
+msgstr "Prikaži desni rub"
+
+#: src/plugins/editorui/tweaks-language.ui:168
+msgid "Display a margin in the editor to indicate maximum desired width"
+msgstr "Prikaži rub u uređivaču za označavanje najveće željene širine"
+
+#: src/plugins/editorui/tweaks-language.ui:184
+msgid "Right Margin Position"
+msgstr "Položaj desnog ruba"
+
+#: src/plugins/editorui/tweaks-language.ui:185
+msgid "The desired maximum line length"
+msgstr "Željena najveća duljina linije"
+
+#: src/plugins/editorui/tweaks-language.ui:203
+#: src/plugins/editorui/tweaks.ui:356
+msgid "Behavior"
+msgstr "Ponašanje"
+
+#: src/plugins/editorui/tweaks-language.ui:206
+msgid "Overwrite Braces"
+msgstr "Prebriši zagrade"
+
+#: src/plugins/editorui/tweaks-language.ui:207
+msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
+msgstr "Prebriši zatvorene vitičaste, uglate, oble zagrade i navodnike"
+
+#: src/plugins/editorui/tweaks-language.ui:223
+msgid "Insert Matching Brace"
+msgstr "Umetni odgovarajuću vitičastu zagradu"
+
+#: src/plugins/editorui/tweaks-language.ui:224
+msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
+msgstr ""
+"Umetni odgovarajući znak za vitičaste, uglate, oble zagrade i navodnike"
+
+#: src/plugins/editorui/tweaks-language.ui:245
+msgid "Space before opening parentheses"
+msgstr "Razmak prije otvaranja oble zagrade"
+
+#: src/plugins/editorui/tweaks-language.ui:262
+msgid "Space before opening brackets"
+msgstr "Razmak prije otvaranja uglate zagrade"
+
+#: src/plugins/editorui/tweaks-language.ui:269
+msgid "Space before opening braces"
+msgstr "Razmak prije otvaranja vitičaste zagrade"
+
+#: src/plugins/editorui/tweaks-language.ui:276
+msgid "Space before opening angles"
+msgstr "Razmak prije otvaranja izlomljene zagrade"
+
+#: src/plugins/editorui/tweaks-language.ui:283
+msgid "Prefer a space before colon"
+msgstr "Prednost razmaku ispred dvotočke"
+
+#: src/plugins/editorui/tweaks-language.ui:290
+msgid "Prefer a space before commas"
+msgstr "Prednost razmaku prije zareza"
+
+#: src/plugins/editorui/tweaks-language.ui:297
+msgid "Prefer a space before simicolons"
+msgstr "Prednost razmaku ispred točke sa zarezom"
+
+#: src/plugins/editorui/tweaks.ui:10
+msgid "Color"
+msgstr "Boja"
+
+#: src/plugins/editorui/tweaks.ui:32 src/plugins/terminal/tweaks.ui:10
+msgid "Fonts & Styling"
+msgstr "Slova i izgled"
+
+#: src/plugins/editorui/tweaks.ui:36
+msgid "Preview"
+msgstr "Pregled"
+
+#: src/plugins/editorui/tweaks.ui:48 src/plugins/terminal/tweaks.ui:13
+msgid "Font"
+msgstr "Slova"
+
+#: src/plugins/editorui/tweaks.ui:49
+msgid "The font used within the source code editor"
+msgstr "Slova koja se koriste u uređivaču izvornog kôda"
+
+#: src/plugins/editorui/tweaks.ui:61
+msgid "Adjust spacing between lines"
+msgstr "Prilagodi razmak između redaka"
+
+#: src/plugins/editorui/tweaks.ui:78
+msgid "How text should be wrapped when wider than the frame"
+msgstr "Kako tekst treba prelamati kada je širi od okvira"
+
+#: src/plugins/editorui/tweaks.ui:93
+msgid "At Spaces"
+msgstr "Na razmaku"
+
+#: src/plugins/editorui/tweaks.ui:99
+msgid "Anywhere"
+msgstr "Bilo gdje"
+
+#: src/plugins/editorui/tweaks.ui:111
+msgid "Background Pattern"
+msgstr "Uzorak pozadine"
+
+#: src/plugins/editorui/tweaks.ui:112
+msgid "Show a background pattern underneath source code"
+msgstr "Prikaži pozadinksi uzorak ispod izvornog kôda"
+
+#: src/plugins/editorui/tweaks.ui:121
+msgid "No Pattern"
+msgstr "Bez uzorka"
+
+#: src/plugins/editorui/tweaks.ui:127
+msgid "Grid Lines"
+msgstr "Rešetkaste linije"
+
+#: src/plugins/editorui/tweaks.ui:137
+msgid "Scrollbars"
+msgstr "Trake pomicanja"
+
+#: src/plugins/editorui/tweaks.ui:140
+msgid "Source Code Overview"
+msgstr "Pregled izvornog kôda"
+
+#: src/plugins/editorui/tweaks.ui:141
+msgid "Display an overview of source code next to the editor"
+msgstr "Prikaži pregled izvornog kôda pokraj uređivača"
+
+#: src/plugins/editorui/tweaks.ui:150
+msgid "Prefer Scrollbars"
+msgstr "Preferiraj trake pomicanja"
+
+#: src/plugins/editorui/tweaks.ui:156
+msgid "Always On"
+msgstr "Uvijek uključen"
+
+#: src/plugins/editorui/tweaks.ui:162
+msgid "Automatic"
+msgstr "Automatski"
+
+#: src/plugins/editorui/tweaks.ui:172
+msgid "Line Numbers"
+msgstr "Brojevi redaka"
+
+#: src/plugins/editorui/tweaks.ui:175
+msgid "Show Line Numbers"
+msgstr "Prikaži brojeve redaka"
+
+#: src/plugins/editorui/tweaks.ui:176
+msgid "Display line numbers next to each line of code"
+msgstr "Prikaži brojeve redaka pokraj svakog retka kôda"
+
+#: src/plugins/editorui/tweaks.ui:187
+msgid "Use Relative Line Numbers"
+msgstr "Koristi relativne brojeve redaka"
+
+#: src/plugins/editorui/tweaks.ui:188
+msgid "Show line numbers relative to the current line"
+msgstr "Prikaži brojeve redaka u odnosu na trenutni redak"
+
+#: src/plugins/editorui/tweaks.ui:199
+msgid "Show Diagnostics"
+msgstr "Prikaži dijagnostiku"
+
+#: src/plugins/editorui/tweaks.ui:200
+msgid "Display diagnostics next to the line number"
+msgstr "Prikaži dijagnostiku pokraj broja retka"
+
+#: src/plugins/editorui/tweaks.ui:213
+msgid "Syntax Highlighting"
+msgstr "Isticanje sintakse"
+
+#: src/plugins/editorui/tweaks.ui:216
+msgid "Highlight Current Line"
+msgstr "Istakni trenutni redak"
+
+#: src/plugins/editorui/tweaks.ui:217
+msgid "Make the current line stand out with highlights"
+msgstr "Neka se trenutni redak naglasi isticanjem"
+
+#: src/plugins/editorui/tweaks.ui:228
+msgid "Highlight Matching Brackets"
+msgstr "Istakni odgovarajuće zagrade"
+
+#: src/plugins/editorui/tweaks.ui:229
+msgid ""
+"Use cursor position to highlight matching brackets, braces, parenthesis, and "
+"more"
+msgstr ""
+"Koristi položaj pokazivača za isticanje odgovarajućih vitičastih, uglatih, "
+"oblih zagrada i još mnogo toga"
+
+#: src/plugins/editorui/tweaks.ui:240
+msgid "Semantic Highlighting"
+msgstr "Semantičko isticanje"
+
+#: src/plugins/editorui/tweaks.ui:241
+msgid ""
+"Use symbol information to highlight namespaces, functions, and variables "
+"within source code"
+msgstr ""
+"Koristi informacije simbola za isticanje prostora naziva, funkcija i "
+"varijabla unutar izvornog kôda"
+
+#: src/plugins/editorui/tweaks.ui:258
+msgid "Draw a mark representing normal spaces"
+msgstr "Nacrtaj oznaku koja predstavlja normalne razmake"
+
+#: src/plugins/editorui/tweaks.ui:271
+msgid "Draw a mark representing tabs"
+msgstr "Nacrtaj oznaku koja predstavlja tabulatore"
+
+#: src/plugins/editorui/tweaks.ui:283
+msgid "Newlines"
+msgstr "Novi redak"
+
+#: src/plugins/editorui/tweaks.ui:284
+msgid "Draw a mark at the end of lines"
+msgstr "Nacrtaj oznaku na kraju retka"
+
+#: src/plugins/editorui/tweaks.ui:296
+msgid "Non-breaking spaces"
+msgstr "Neprekidajući razmak"
+
+#: src/plugins/editorui/tweaks.ui:297
+msgid "Draw a mark at non-breaking space characters"
+msgstr "Nacrtaj oznaku na neprekinutim razmacima"
+
+#: src/plugins/editorui/tweaks.ui:313
+msgid "Leading"
+msgstr "Vodeći razmak"
+
+#: src/plugins/editorui/tweaks.ui:314
+msgid "Draw marks for leading spaces only"
+msgstr "Nacrtaj oznake samo za vodeće razmake"
+
+#: src/plugins/editorui/tweaks.ui:326
+msgid "Inside Text"
+msgstr "Unutar teksta"
+
+#: src/plugins/editorui/tweaks.ui:327
+msgid "Draw marks inside a line of text only"
+msgstr "Nacrtaj oznake samo unutar retka teksta"
+
+#: src/plugins/editorui/tweaks.ui:339
+msgid "Trailing"
+msgstr "Prateći razmak"
+
+#: src/plugins/editorui/tweaks.ui:340
+msgid "Draw marks for trailing spaces only"
+msgstr "Nacrtaj oznake samo za razmake na kraju"
+
+#: src/plugins/editorui/tweaks.ui:360
+msgid "Spelling"
+msgstr "Pravopis"
+
+#: src/plugins/editorui/tweaks.ui:364
+msgid "Underline potential spelling mistakes as you type"
+msgstr "Podcrtaj potencijalne pravopisne greške pri upisu"
+
+#: src/plugins/editorui/tweaks.ui:377
+msgid "Selections"
+msgstr "Odabiri"
+
+#: src/plugins/editorui/tweaks.ui:380
+msgid "Minimum Characters to Highlight"
+msgstr "Najmanji broj znakova za isticanje"
+
+#: src/plugins/editorui/tweaks.ui:381
+msgid "The minimum selection length before highlighting matches"
+msgstr "Najmanja duljina odabira prije isticanja podudaranja"
+
+#: src/plugins/editorui/tweaks.ui:394
+msgid "Snippets"
+msgstr "Isječci"
+
+#: src/plugins/editorui/tweaks.ui:397
+msgid "Expand Snippets"
+msgstr "Proširi isječke"
+
+#: src/plugins/editorui/tweaks.ui:398
+msgid "Use “Tab” to expand configured snippets in the editor"
+msgstr "Koristi \"Tab\" za proširenje podešenih isječaka u uređivaču"
+
+#: src/plugins/editorui/tweaks.ui:413
+msgid "Code Completion"
+msgstr "Dovršavanje kôda"
+
+#: src/plugins/editorui/tweaks.ui:417
+msgid "Completion Proposals"
+msgstr "Prijedlozi dovršetka"
+
+#: src/plugins/editorui/tweaks.ui:420
+msgid "Suggest Code Completions"
+msgstr "Predloži dovršavanje kôda"
+
+#: src/plugins/editorui/tweaks.ui:421
+msgid "Automatically suggest code completions while typing"
+msgstr "Automatski predlaži dovršetak kôda tijekom tipkanja"
+
+#: src/plugins/editorui/tweaks.ui:432
+msgid "Select First Completion Proposal"
+msgstr "Odaberi prvi prijedlog dovršetka"
+
+#: src/plugins/editorui/tweaks.ui:433
+msgid "Automatically select the first completion proposal when displayed"
+msgstr "Automatski odaberi prvi prijedlog završetka kada se prikaže"
+
+#: src/plugins/editorui/tweaks.ui:448
+msgid "Maximum Completion Proposals"
+msgstr "Najviše prijedloga dovršetka"
+
+#: src/plugins/editorui/tweaks.ui:449
+msgid "The maximum number of completion rows that will be displayed at once"
+msgstr "Najveći broj redaka dovršetka koji će biti prikazani odjednom"
+
+#: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
+msgid "Keyboard Theme"
+msgstr "Tema tipkovnice"
+
+#: src/plugins/editorui/tweaks.ui:472
+msgid ""
+"Shortcut themes provide a keyboard experience similar to other IDEs and "
+"editors"
+msgstr ""
+"Teme prečaca pružaju iskustvo tipkovnicom slično drugim IDE-ovima i "
+"uređivačima"
+
+#: src/plugins/editorui/tweaks.ui:491
+msgid "Movements"
+msgstr "Pomicanje"
+
+#: src/plugins/editorui/tweaks.ui:495
+msgid ""
+"Backspace will remove extra space to keep you aligned with your indentation"
+msgstr ""
+"Backspace će ukloniti dodatne razmake kako bi ostali poravnati s uvlakom"
+
+#: src/plugins/editorui/tweaks.ui:507
+msgid "Navigate to non-space characters"
+msgstr "Idi na znakove koji nisu razmaci"
+
+#: src/plugins/editorui/tweaks.ui:516
+msgid "Before line boundaries"
+msgstr "Prije granica linija"
+
+#: src/plugins/editorui/tweaks.ui:522
+msgid "After line boundaries"
+msgstr "Nakon granica linija"
+
+#: src/plugins/editorui/tweaks.ui:528
+msgid "Instead of line boundaries"
+msgstr "Umjesto granica linija"
+
+#: src/plugins/editorui/tweaks.ui:534 src/plugins/valgrind/gtk/menus.ui:44
+msgid "Disabled"
+msgstr "Onemogućen"
+
+#: src/plugins/editorui/tweaks.ui:546
+msgid "Session Management"
+msgstr "Upravljanje sesijom"
+
+#: src/plugins/editorui/tweaks.ui:550
+msgid "Save & Restore"
+msgstr "Spremanje i obnova"
+
+#: src/plugins/editorui/tweaks.ui:553
+msgid "Auto-Save"
+msgstr "Automatsko spremanje"
+
+#: src/plugins/editorui/tweaks.ui:554
+msgid "Regularly save the document as you type"
+msgstr "Redovito spremaj dokument pri upisu"
+
+#: src/plugins/editorui/tweaks.ui:565
+msgid "Auto-Save Delay"
+msgstr "Odgoda automatskog spremanja"
+
+#: src/plugins/editorui/tweaks.ui:566
+msgid "The delay in seconds to wait before auto-saving the document"
+msgstr "Odgoda u sekundama prije automatskog spremanja dokumenta"
+
+#: src/plugins/editorui/tweaks.ui:581
+msgid "Format on Save"
+msgstr "Formatiraj pri spremanju"
+
+#: src/plugins/editorui/tweaks.ui:582
+msgid "Reformat sources when saving to disk"
+msgstr "Preformatiraj izvor pri spremanju na disk"
+
+#: src/plugins/editorui/tweaks.ui:597
+msgid "Restore Cursor Position"
+msgstr "Obnovi položaj pokazivača"
+
+#: src/plugins/editorui/tweaks.ui:598
+msgid "Jump to the last position when re-opening a file"
+msgstr "Idi na posljednji položaj pri ponovnom otvaranju datoteke"
+
+#: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
+msgid "Similar Files (Ctrl+Shift+O)"
+msgstr "Slične datoteke (Ctrl+Shift+O)"
+
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
+msgid "Installation failed"
+msgstr "Instalacija nije uspjela"
+
+#: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:893
+msgid "Installation complete"
+msgstr "Instalacija je završila"
+
+#: src/plugins/flatpak/gbp-flatpak-client.c:454
+#: src/plugins/git/gbp-git-client.c:328
+msgid "The client has been closed"
+msgstr "Klijent je zatvoren"
+
+#: src/plugins/flatpak/gbp-flatpak-config-provider.c:680
+#, c-format
+msgid "Failed to remove flatpak manifest: %s"
+msgstr "Neuspjelo uklanjanje flatpak manifesta %s"
+
+#: src/plugins/flatpak/gbp-flatpak-download-stage.c:73
+msgid "Network is not available, skipping downloads"
+msgstr "Mreža je nedostupna, preskakanje preuzimanja"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.c:113
+msgid "Install or Update SDK?"
+msgstr "Instaliraj ili nadopuni SDK?"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:33
+msgid ""
+"Builder needs to install the following software development kits to build "
+"your project."
+msgstr ""
+"Graditelj mora instalirati sljedeće pakete razvoja softvera kako bi izgradio "
+"vaš projekt."
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:58
+#: src/plugins/git/tweaks.ui:16 src/plugins/ls/gbp-ls-page.ui:17
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:69
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:40
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
+msgid "Name"
+msgstr "Naziv"
+
+#: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:90
+msgid "Architecture"
+msgstr "Arhitektura"
+
+#: src/plugins/flatpak/gbp-flatpak-manifest.c:684
+msgid "Flatpak"
+msgstr "Flatpak"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
+msgid "Creating flatpak workspace"
+msgstr "Stvaranje flatpak radnog prostora"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:383
+msgid "Preparing build directory"
+msgstr "Pripremanje direktorija izgradnje"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:433
+msgid "Downloading dependencies"
+msgstr "Preuzimanje zavisnosti"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
+msgid "Building dependencies"
+msgstr "Izgradnja zavisnosti"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
+msgid "Finalizing flatpak build"
+msgstr "Završavanje flatpak izgradnje"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
+msgid "Exporting staging directory"
+msgstr "Izvoz probnog direktorija"
+
+#: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
+msgid "Creating flatpak bundle"
+msgstr "Stvaranje flatpak paketa"
+
+#: src/plugins/flatpak/gbp-flatpak-run-command-provider.c:102
+msgid "Flatpak Application"
+msgstr "Flatpak aplikacija"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
+msgid "Installing Necessary SDKs"
+msgstr "Instalacija potrebnih SDK-ova"
+
+#: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
+msgid ""
+"Builder is installing Software Development Kits necessary for building your "
+"application."
+msgstr ""
+"Graditelj instalira Paket razvojnog softvera (SDK) potrebnog za izgradnju "
+"vaše aplikacije."
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:59
+#, c-format
+msgid "Failed to update SDKs: %s"
+msgstr "Neuspjela SDK nadopuna: %s"
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
+msgid "Updating Necessary SDKs"
+msgstr "Nadopuna potrebnih SDK-ova"
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
+msgid ""
+"Builder is updating Software Development Kits necessary for building your "
+"application."
+msgstr ""
+"Graditelj nadopunjuje Paket razvojnog softvera (SDK) potrebnog za izgradnju "
+"vašeg aplikacije."
+
+#: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
+msgid "Updating SDK Runtime"
+msgstr "Nadopuna SDK tijeka izvođenja"
+
+#: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
+#, c-format
+msgid "GCC %s Cross-Compiler (System)"
+msgstr "GCC %s Unakrsni-Kompilator (Sustav)"
+
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
+#, c-format
+msgid "No repository to access file contents"
+msgstr "Nema repozitorija za pristup sadržaju datoteke"
+
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:187
+#, c-format
+msgid "No contents have been set to diff"
+msgstr "Nijedan sadržaj nije postavljen na diff"
+
+#: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:264
+#: src/plugins/git/daemon/ipc-git-util.h:33
+#, c-format
+msgid "The operation failed. The original error was \"%s\""
+msgstr "Neuspjela radnja. Izvorna greška je \"%s\""
+
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:105
+#, c-format
+msgid "The operation has been canceled"
+msgstr "Radnja je prekinuta"
+
+#: src/plugins/git/daemon/ipc-git-remote-callbacks.c:138
+#, c-format
+msgid ""
+"Builder failed to provide appropriate credentials when cloning the "
+"repository."
+msgstr ""
+"Graditelj nije uspio pružiti prikladnu ovjeru pri kloniranju repozitorija."
+
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:619
+#, c-format
+msgid "Cannot set AMEND and GPG_SIGN flags"
+msgstr "Nemoguće postavljanje AMEND i GPG_SIGN oznaka"
+
+#: src/plugins/git/daemon/ipc-git-repository-impl.c:628
+#, c-format
+msgid "Cannot sign commit without GPG_KEY_ID"
+msgstr "Nemoguće potpisati sadržaj slanja bez GPG_KEY_ID"
+
+#: src/plugins/git/gbp-git-buffer-change-monitor.c:402
+#, c-format
+msgid "Cannot monitor files outside the working directory"
+msgstr "Nemoguće nadgledanje datoteka izvan radnog direktorija"
+
+#: src/plugins/git/gbp-git-dependency-updater.c:92
+msgid "Git version control is not in use"
+msgstr "Kontrola git inačice se ne koristi"
+
+#: src/plugins/git/gbp-git-dependency-updater.c:100
+msgid "Updating Git Submodules"
+msgstr "Nadopuna Git podmodula"
+
+#: src/plugins/git/gbp-git-submodule-stage.c:136
+msgid "Network is not available, skipping submodule update"
+msgstr "Mreža je nedostupna, preskakanje nadopune podmodula"
+
+#: src/plugins/git/gbp-git-submodule-stage.c:208
+msgid "Initialize git submodules"
+msgstr "Pokretanje git submodula"
+
+#: src/plugins/git/gbp-git-vcs.c:206
+msgid "Pushed."
+msgstr "Poslano."
+
+#: src/plugins/git/gbp-git-vcs.c:244
+#, c-format
+msgid "Pushing ref “%s”"
+msgstr "Slanje reference “%s”"
+
+#: src/plugins/git/gbp-git-vcs.c:508
+msgid "Directory is not within repository"
+msgstr "Direktorij nije unutar repozitorija"
+
+#: src/plugins/git/gbp-git-vcs.c:536
+msgid "Git"
+msgstr "Git"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:149
+#, c-format
+msgid "A repository could not be found at “%s”."
+msgstr "Repozitorij se ne može pronaći u “%s”."
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:165
+#, c-format
+msgid "The protocol “%s” is not supported."
+msgstr "Protokol “%s” još nije podržan."
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:240
+msgid "Cloning repository"
+msgstr "Kloniranje repozitorija"
+
+#: src/plugins/git/gbp-git-vcs-cloner.c:256
+msgid "A valid Git URL is required"
+msgstr "Potreban je valjan Git URL"
+
+#: src/plugins/git/tweaks.ui:13
+msgid "Authorship"
+msgstr "Autorstvo"
+
+#: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
+msgid "Email"
+msgstr "E-pošta"
+
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:84
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
+msgid "Bootstrapping project"
+msgstr "Samopokretanje projekta"
+
+#: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
+msgid "Gradle Run"
+msgstr "Pokreni Gradle"
+
+#: src/plugins/greeter/gbp-greeter-application-addin.c:134
+msgid "Display a new greeter window"
+msgstr "Prikaži novi zaslon dobrodošlice"
+
+#: src/plugins/grep/gbp-grep-panel.c:756
+msgid "Match"
+msgstr "Podudaranje"
+
+#: src/plugins/grep/gbp-grep-panel.c:768
+msgid "Path"
+msgstr "Putanja"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:832
+#, c-format
+msgid "_Find in %s"
+msgstr "_Pretraži u %s"
+
+#. TRANSLATORS: %s is the directory or file from where the search was started from the project tree.
+#: src/plugins/grep/gbp-grep-panel.c:834
+#, c-format
+msgid "_Replace in %s"
+msgstr "Zamijeni u %s"
+
+#: src/plugins/grep/gbp-grep-panel.ui:5
+msgid "Find in Files (Ctrl+Alt+Shift+F)"
+msgstr "Pretraži datoteke (Ctrl+Alt+Shift+F)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:46
+msgid "Find and Replace"
+msgstr "Pretraga i zamjena"
+
+#: src/plugins/grep/gbp-grep-panel.ui:65
+msgid "R_ecursive"
+msgstr "R_ekruzivno"
+
+#: src/plugins/grep/gbp-grep-panel.ui:72
+msgid "Match _Case"
+msgstr "Uspoređuj _mala i velika slova"
+
+#: src/plugins/grep/gbp-grep-panel.ui:78
+msgid "Match _Words"
+msgstr "Podudaraj _cijele riječ"
+
+#: src/plugins/grep/gbp-grep-panel.ui:84
+msgid "Regular E_xpressions"
+msgstr "Uobičajeni _izrazi"
+
+#: src/plugins/grep/gbp-grep-panel.ui:93
+msgid "Close the panel (Escape key)"
+msgstr "Zatvori panel (Escape tipka)"
+
+#: src/plugins/grep/gbp-grep-panel.ui:124
+msgid "_Find in Project"
+msgstr "_Pretraži uprojektu"
+
+#: src/plugins/grep/gbp-grep-panel.ui:144
+msgid "_Replace in Project"
+msgstr "_Zamijeni u projektu"
+
+#: src/plugins/grep/gbp-grep-popover.ui:12
+msgid "Find in Files"
+msgstr "Pretraži u datotekama"
+
+#: src/plugins/grep/gbp-grep-popover.ui:28
+msgid "Search for…"
+msgstr "Pretraži…"
+
+#: src/plugins/grep/gbp-grep-popover.ui:38
+msgid "_Find"
+msgstr "_Pretraži"
+
+#: src/plugins/grep/gbp-grep-popover.ui:55
+msgid "Search _recursively through folders"
+msgstr "Pretraži _rekruzivno u mapama"
+
+#: src/plugins/grep/gbp-grep-popover.ui:62
+msgid "Match _case when searching"
+msgstr "Uspoređuj _mala i velika slova pri pretrazi"
+
+#: src/plugins/grep/gbp-grep-popover.ui:70
+msgid "Match _whole words"
+msgstr "Podudaraj _cijele riječ pri pretrazi"
+
+#: src/plugins/grep/gbp-grep-popover.ui:77
+msgid "Allow regular _expressions"
+msgstr "Dopusti _uobičajene izraze"
+
+#: src/plugins/grep/gtk/menus.ui:7
+msgid "_Find in Files"
+msgstr "_Pretraži u datotekama"
+
+#: src/plugins/host/gbp-host-runtime-provider.c:52
+msgid "Host Operating System"
+msgstr "Operativni sustav računala"
+
+#: src/plugins/html-preview/gtk/menus.ui:7
+#: src/plugins/markdown-preview/gtk/menus.ui:7
+#: src/plugins/sphinx-preview/gtk/menus.ui:7
+msgid "Open Preview…"
+msgstr "Otvori pregled…"
+
+#: src/plugins/intelephense/gbp-intelephense-service.c:100
+msgid "Indexing PHP code"
+msgstr "Popisivanje PHP kôda"
+
+#: src/plugins/ls/gbp-ls-page.c:291
+#, c-format
+msgid "Failed to load directory: %s"
+msgstr "Neuspjelo učitavanje direktorija: %s"
+
+#: src/plugins/ls/gbp-ls-page.ui:49
+msgid "Size"
+msgstr "Veličina"
+
+#: src/plugins/ls/gbp-ls-page.ui:63
+msgid "Modified"
+msgstr "Mijenjano"
+
+#: src/plugins/ls/gtk/menus.ui:7 src/plugins/ls/gtk/menus.ui:18
+msgid "With _Folder Listing"
+msgstr "S _prikazom sadržaja mape"
+
+#: src/plugins/ls/gtk/menus.ui:15
+msgid "Open Containing Folder"
+msgstr "Otvori sadržajnu mapu"
+
+#: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
+msgid "With File _Browser…"
+msgstr "S preglednikom _datoteka…"
+
+#: src/plugins/make/gbp-make-build-target.c:55
+msgid "Default Make Target"
+msgstr "Zadano Make odredište"
+
+#: src/plugins/make/gbp-make-run-command-provider.c:83
+msgid "Make Run"
+msgstr "Pokreni make"
+
+#: src/plugins/make-templates/gbp-make-template-provider.c:48
+msgid "Empty Makefile Project"
+msgstr "Prazan Makefile projekt"
+
+#: src/plugins/make-templates/gbp-make-template-provider.c:49
+msgid "Create a new empty project using a simple Makefile"
+msgstr "Stvori novi prazan projekt koristeći jednostavan Makefile"
+
+#: src/plugins/maven/gbp-maven-run-command-provider.c:198
+msgid "Maven Run"
+msgstr "Pokreni Maven"
+
+#: src/plugins/menu-search/gtk/menus.ui:13
+msgid "Global Search"
+msgstr "Globalna pretraga"
+
+#: src/plugins/menu-search/gtk/menus.ui:14
+msgid "Display the global search"
+msgstr "Prikaži globalnu pretragu"
+
+#: src/plugins/menu-search/gtk/menus.ui:24
+msgid "Panels"
+msgstr "Paneli"
+
+#: src/plugins/menu-search/gtk/menus.ui:26
+msgid "Toggle Left Panel"
+msgstr "Uklj/Isklj lijevi panel"
+
+#: src/plugins/menu-search/gtk/menus.ui:27
+msgid "Toggle the left panel in or out of view"
+msgstr "Uključi ili isključi lijevi panel"
+
+#. translators: valid values are "panel-left-symbolic" and "panel-right-symbolic". Choose "panel-right-symbolic" for RTL
+#: src/plugins/menu-search/gtk/menus.ui:29
+msgid "panel-left-symbolic"
+msgstr "panel-left-symbolic"
+
+#: src/plugins/menu-search/gtk/menus.ui:35
+msgid "Toggle the right panel in or out of view"
+msgstr "Uključi ili isključi desni panel"
+
+#. translators: valid values are "panel-right-symbolic" and "panel-left-symbolic". Choose "panel-left-symbolic" for RTL
+#: src/plugins/menu-search/gtk/menus.ui:37
+msgid "panel-right-symbolic"
+msgstr "panel-right-symbolic"
+
+#: src/plugins/menu-search/gtk/menus.ui:41
+msgid "Toggle Bottom Panel"
+msgstr "Uklj/Isklj donji panel"
+
+#: src/plugins/menu-search/gtk/menus.ui:42
+msgid "Toggle the bottom panel in or out of view"
+msgstr "Uključi ili isključi donji panel"
+
+#: src/plugins/menu-search/gtk/menus.ui:55
+msgid "Switch to Dark Mode"
+msgstr "Prebaci u tamni način"
+
+#: src/plugins/menu-search/gtk/menus.ui:56
+msgid "Change style-scheme to dark variant"
+msgstr "Promijeni shemu izgleda u tamnu varijatu"
+
+#: src/plugins/menu-search/gtk/menus.ui:60
+msgid "Switch to Light Mode"
+msgstr "Prebaci u svjetli način"
+
+#: src/plugins/menu-search/gtk/menus.ui:61
+msgid "Change style-scheme to light variant"
+msgstr "Promijeni shemu izgleda u svijetlu varijatu"
+
+#: src/plugins/meson/gbp-meson-build-system.c:473
+msgid "Meson"
+msgstr "Meson"
+
+#: src/plugins/meson/gbp-meson-introspection.c:584
+msgid "Load Meson Introspection"
+msgstr "Učitaj Meson samoispitivanje"
+
+#: src/plugins/meson/gbp-meson-pipeline-addin.c:274
+msgid "Install project"
+msgstr "Instaliraj projekt"
+
+#: src/plugins/meson/gbp-meson-toolchain.c:61
+#, c-format
+msgid "%s (Meson)"
+msgstr "%s (Meson)"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.c:408
+msgid "No Provided Tool"
+msgstr "Nema priloženog alata"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
+msgid "A name to identify the sysroot."
+msgstr "Naziv za sysroot identifikaciju."
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
+msgid "The system architecture of the sysroot."
+msgstr "Arhitektura sysroot sustava."
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
+msgid "Add Tool:"
+msgstr "Dodaj alat:"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:169
+#: src/plugins/meson/gbp-meson-utils.c:98
+msgid "Compiler"
+msgstr "Kompilator"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:170
+#: src/plugins/meson/gbp-meson-utils.c:100
+msgid "Preprocessor"
+msgstr "Pretprocesor"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:171
+#: src/plugins/meson/gbp-meson-utils.c:102
+msgid "Archiver"
+msgstr "Arhivator"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:172
+#: src/plugins/meson/gbp-meson-utils.c:104
+msgid "Linker"
+msgstr "Povezivač"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:173
+#: src/plugins/meson/gbp-meson-utils.c:106
+msgid "Strip"
+msgstr "Skidač"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:174
+#: src/plugins/meson/gbp-meson-utils.c:108
+msgid "Executable wrapper"
+msgstr "Izvršni wrapper"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:175
+#: src/plugins/meson/gbp-meson-utils.c:110
+msgid "Package Config"
+msgstr "Podešavanje paketa"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:187
+msgid "Any language"
+msgstr "Bilo koji jezik"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:188
+msgid "C"
+msgstr "C"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:189
+msgid "C++"
+msgstr "C++"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:190
+msgid "Python"
+msgstr "Python"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:191
+msgid "Vala"
+msgstr "Vala"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:192
+msgid "Fortran"
+msgstr "Fortran"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:193
+msgid "D"
+msgstr "D"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:226
+msgid "Add Tool"
+msgstr "Dodaj alat"
+
+#: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:247
+msgid "Delete Toolchain"
+msgstr "Obriši Toolchain"
+
+#: src/plugins/meson/gbp-meson-tool-row.ui:25
+msgid "Delete Tool"
+msgstr "Obriši alat"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:171
+msgid "GNOME Application"
+msgstr "GNOME aplikacija"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:172
+msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
+msgstr "Meson temeljen projekt za GNOME koji koristi GTK 4 i libadwaita"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:186
+msgid "GTK 4 Application"
+msgstr "GTK 4 aplikacija"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:187
+msgid "A Meson-based project using GTK 4"
+msgstr "Meson temeljen projekt koji koristi GTK 4"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:201
+msgid "Shared Library"
+msgstr "Dijeljena biblioteka"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:202
+msgid "A Meson-based project for a shared library"
+msgstr "Meson temeljen projekt za dijeljenu datoteku"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:209
+msgid "Command Line Tool"
+msgstr "Alat naredbenog retka"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:210
+msgid "An Meson-based project for a command-line program"
+msgstr "Meson temeljen projekt za program naredbenog retka"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:217
+msgid "Empty Meson Project"
+msgstr "Prazan Meson projekt"
+
+#: src/plugins/meson-templates/gbp-meson-template-provider.c:218
+msgid "An empty Meson project skeleton"
+msgstr "Prazan predložak Meson projekt"
+
+#: src/plugins/messages/gbp-messages-panel.ui:5
+msgid "Messages"
+msgstr "Poruke"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:15
+msgid "Suggested GNOME Projects"
+msgstr "Predloženi GNOME projekti"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:30
+msgid "Boxes"
+msgstr "Boksevi"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:31
+msgid "A GNOME application to access remote or virtual systems"
+msgstr "GNOME aplikacija za pristup udaljenim i virtualnim računalima"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:40
+msgid "An IDE for writing GNOME-based software"
+msgstr "IDE za pisanje GNOME temeljenog softvera"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:49
+msgid "Calendar"
+msgstr "Kalendar"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:50
+msgid "A calendar application for GNOME"
+msgstr "GNOME aplikacija za kalendar"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:58
+msgid "Clocks"
+msgstr "Satovi"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:59
+msgid "A clock application for GNOME"
+msgstr "GNOME aplikacija za sat"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:67
+msgid "Gitg"
+msgstr "Gitg"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:68
+msgid "Gitg is a graphical Git client"
+msgstr "Gitg je grafički Git klijent"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:76
+msgid "Maps"
+msgstr "Karte"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:77
+msgid "A GNOME maps application"
+msgstr "GNOME aplikacija za karte"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:86
+msgid "Music"
+msgstr "Glazba"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:87
+msgid "Music player and management application"
+msgstr "Glazbeni reproduktor i aplikacija za upravljanje"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:95
+msgid "Nautilus"
+msgstr "Nautilus"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:96
+msgid "Default file manager for GNOME"
+msgstr "GNOME zadani upravitelj datoteka"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:104
+msgid "Photos"
+msgstr "Fotografije"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:105
+msgid "Access, organize and share your photos on GNOME"
+msgstr "Pristupite, organizirajte i dijelite svoje fotografije na GNOMU"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:113
+msgid "Polari"
+msgstr "Polari"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:114
+msgid "An IRC Client for GNOME"
+msgstr "GNOME IRC klijent"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:123
+msgid "Sound Recorder"
+msgstr "Snimatelj zvuka"
+
+#: src/plugins/newcomers/gbp-newcomers-section.ui:124
+msgid "A modern sound recorder for GNOME"
+msgstr "GNOME meoderan snimač zvuka"
+
+#: src/plugins/notification/ide-notification-addin.c:107
+msgid "Build successful"
+msgstr "Izgradnja je uspješna"
+
+#: src/plugins/notification/ide-notification-addin.c:108
+#, c-format
+msgid "Project “%s” has completed building"
+msgstr "Projekt “%s” je završio izgradnju"
+
+#: src/plugins/notification/ide-notification-addin.c:112
+#: src/plugins/notification/ide-notification-addin.c:198
+msgid "Build failed"
+msgstr "Izgradnja je neuspješna"
+
+#: src/plugins/notification/ide-notification-addin.c:113
+#, c-format
+msgid "Project “%s” failed to build"
+msgstr "Projekt “%s” je neuspješno izgrađen"
+
+#: src/plugins/notification/ide-notification-addin.c:189
+msgid "Build succeeded"
+msgstr "Izgradnja je uspjela"
+
+#: src/plugins/notification/ide-notification-addin.c:191
+msgid "Build configured"
+msgstr "Izgradnja je podešena"
+
+#: src/plugins/notification/ide-notification-addin.c:193
+msgid "Build bootstrapped"
+msgstr "Izgradnja je samopokrenuta"
+
+#: src/plugins/npm/gbp-npm-pipeline-addin.c:91
+msgid "Downloading npm dependencies"
+msgstr "Preuzimanje npm zavisnosti"
+
+#: src/plugins/open-with-external/gtk/menus.ui:9
+msgid "_External Program…"
+msgstr "_Vanjski program…"
+
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
+msgid "Follow System"
+msgstr "Izgled sustava"
+
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
+msgid "Light"
+msgstr "Svjetli"
+
+#: src/plugins/platformui/gbp-platformui-tweaks-addin.c:47
+msgid "Dark"
+msgstr "Tamna"
+
+#: src/plugins/platformui/tweaks.ui:22
+msgid "Document Navigation"
+msgstr "Navigacija dokumentima"
+
+#: src/plugins/platformui/tweaks.ui:31
+msgid "Tab Bar"
+msgstr "Traka kartica"
+
+#: src/plugins/platformui/tweaks.ui:37
+msgid "Drop Down"
+msgstr "Padajuća"
+
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:632
+msgid "Containers/Toolbox"
+msgstr "Spremnici/Alati"
+
+#. translators: this is a path to browse to the runtime, likely only "containers" should be translated
+#: src/plugins/podman/gbp-podman-runtime.c:638
+msgid "Containers/Podman"
+msgstr "Spremnici/Podman"
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:127
+#: src/plugins/project-tree/gbp-rename-file-popover.c:145
+msgid "A folder with that name already exists."
+msgstr "Mapa s tim nazivom već postoji."
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:130
+#: src/plugins/project-tree/gbp-rename-file-popover.c:148
+msgid "A file with that name already exists."
+msgstr "Datoteka s tim nazivom već postoji."
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:354
+#: src/plugins/project-tree/gbp-new-file-popover.ui:16
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:15
+msgid "File Name"
+msgstr "Naziv datoteke"
+
+#: src/plugins/project-tree/gbp-new-file-popover.c:356
+msgid "Folder Name"
+msgstr "Naziv mape"
+
+#: src/plugins/project-tree/gbp-new-file-popover.ui:38
+msgid "_Create"
+msgstr "_Stvori"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:208
+msgid "Files"
+msgstr "Datoteke"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:682
+#, c-format
+msgid "Copying 1 file"
+msgstr "Kopiranje 1 datoteke"
+
+#. translators: first %s is replaced with completed number of files, second %s with total number of files
+#: src/plugins/project-tree/gbp-project-tree-addin.c:685
+#, c-format
+msgid "Copying %s of %s files"
+msgstr "Kopiranje %s od %s datoteka"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:721
+msgid "Failed to copy files"
+msgstr "Neuspjelo kopiranje datoteka"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:731
+msgid "Files copied"
+msgstr "Datoteke su kopirane"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:735
+#, c-format
+msgid "Copied %s file"
+msgid_plural "Copied %s files"
+msgstr[0] "Kopirana je %s datoteka"
+msgstr[1] "Kopirane su %s datoteke"
+msgstr[2] "Kopirano je %s datoteka"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:928
+msgid "Copying files…"
+msgstr "Kopiranje datoteka…"
+
+#: src/plugins/project-tree/gbp-project-tree-addin.c:929
+msgid "Files will be copied in a moment"
+msgstr "Datoteke će se kopirati za trenutak"
+
+#: src/plugins/project-tree/gbp-project-tree-workspace-addin.c:48
+#: src/plugins/project-tree/tweaks.ui:10
+msgid "Project Tree"
+msgstr "Stablo projekta"
+
+#: src/plugins/project-tree/gbp-rename-file-popover.c:85
+#, c-format
+msgid "Rename %s"
+msgstr "Preimenuj %s"
+
+#: src/plugins/project-tree/gtk/menus.ui:8
+msgid "New Fil_e…"
+msgstr "Nova dat_oteka…"
+
+#: src/plugins/project-tree/gtk/menus.ui:14
+msgid "New F_older…"
+msgstr "Nova m_apa…"
+
+#: src/plugins/project-tree/gtk/menus.ui:22
+msgid "O_pen"
+msgstr "O_tvori"
+
+#: src/plugins/project-tree/gtk/menus.ui:26
+msgid "Open _With…"
+msgstr "Otvori _s(a)…"
+
+#: src/plugins/project-tree/gtk/menus.ui:30
+msgid "_Source Code Editor"
+msgstr "_Uređivač izvornog kôda"
+
+#: src/plugins/project-tree/gtk/menus.ui:37
+msgid "Open _Containing Folder"
+msgstr "Otvori _sadržajnu mapu"
+
+#: src/plugins/project-tree/gtk/menus.ui:47
+msgid "With _Terminal…"
+msgstr "S _terminalom…"
+
+#: src/plugins/project-tree/gtk/menus.ui:66
+msgid "_Move to Trash"
+msgstr "_Premjesti u smeće"
+
+#: src/plugins/project-tree/gtk/menus.ui:72
+msgid "_Display Options"
+msgstr "_Mogućnosti prikaza"
+
+#: src/plugins/project-tree/gtk/menus.ui:76
+msgid "S_how Ignored Files"
+msgstr "P_rikaži zanemarene datoteke"
+
+#: src/plugins/project-tree/gtk/menus.ui:81
+msgid "S_ort Directories First"
+msgstr "Prvo _poredaj direktorije"
+
+#: src/plugins/project-tree/gtk/menus.ui:93
+msgid "Reveal in Project Tree"
+msgstr "Otkrij u stablu projekta"
+
+#: src/plugins/project-tree/gtk/menus.ui:102
+msgid "Reveal in Project _Tree"
+msgstr "Otkrij u stablu _projekta"
+
+#: src/plugins/project-tree/tweaks.ui:14
+msgid "Display icons next to files within the project tree"
+msgstr "Prikaži ikonu pokraj datoteka unutar stabla projekta"
+
+#: src/plugins/project-tree/tweaks.ui:26
+msgid "Show files which are typically ignored"
+msgstr "Prikaži datoteke koje se uobičajeno zanemaruju"
+
+#: src/plugins/project-tree/tweaks.ui:38
+msgid "Sort directories before files in the same directory"
+msgstr "Razvrstaj direktorije prije datoteka u istom direktoriju"
+
+#: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
+msgid "No version control"
+msgstr "Nema upravljanja inačicom"
+
+#: src/plugins/projectui/tweaks.ui:14
+msgid "Restore Previous Session"
+msgstr "Vrati prijašnju sesiju"
+
+#: src/plugins/projectui/tweaks.ui:15
+msgid "Open previously opened files when loading a project"
+msgstr "Otvori prije otvorene datoteke pri učitavanju projekta"
+
+#: src/plugins/projectui/tweaks.ui:28
+msgid "Project Creation"
+msgstr "Stvaranje projekta"
+
+#: src/plugins/projectui/tweaks.ui:32
+msgid "Projects created with Builder will be placed within this directory"
+msgstr ""
+"Projekti stvoreni s Graditeljem bit će smješteni unutar ovog direktorija"
+
+#: src/plugins/projectui/tweaks.ui:48
+msgid "The default license when creating new projects"
+msgstr "Zadana licenca pri stvaranju novih projekata"
+
+#: src/plugins/projectui/tweaks.ui:93
+msgid "No License"
+msgstr "Bez licence"
+
+#: src/plugins/projectui/tweaks.ui:109
+msgid "Overview"
+msgstr "Pregled"
+
+#: src/plugins/projectui/tweaks.ui:115
+msgid "Project Identifier"
+msgstr "Identifikator projekta"
+
+#: src/plugins/projectui/tweaks.ui:123
+msgid ""
+"This identifier is used when referencing your project's settings, build "
+"directories, and cached information."
+msgstr ""
+"Ovaj se identifikator koristi pri pozivanju postavki vašeg projekta, "
+"direktorija izgradnje i predmemorije."
+
+#: src/plugins/projectui/tweaks.ui:132
+msgid "Build System"
+msgstr "Sustav izgradnje"
+
+#: src/plugins/projectui/tweaks.ui:140
+msgid "Source Directory"
+msgstr "Direktorij izvora"
+
+#: src/plugins/projectui/tweaks.ui:160
+msgid "Current Configuration"
+msgstr "Trenutno podešavanje"
+
+#: src/plugins/projectui/tweaks.ui:161
+msgid ""
+"The configuration is used to setup build pipelines, configure your build "
+"system, and run your project."
+msgstr ""
+"Podešavanje se koristi za postavljanje slivnika izgradnje, podešavanje vašeg "
+"sustava izgradnje i pokretanje vašeg projekta."
+
+#: src/plugins/projectui/tweaks.ui:228
+msgid "Provided By"
+msgstr "Ustupio"
+
+#. translators: format is "CPU emulation". Only translate "emulation"
+#: src/plugins/qemu/gbp-qemu-device-provider.c:42
+msgid "Aarch64 Emulation"
+msgstr "Aarch64 emulacija"
+
+#: src/plugins/qemu/gbp-qemu-device-provider.c:43
+msgid "Arm Emulation"
+msgstr "Arm emulacija"
+
+#. translators: first %s is replaced with hostname, second %s with the CPU architecture
+#: src/plugins/qemu/gbp-qemu-device-provider.c:160
+#, c-format
+msgid "My Computer (%s) %s"
+msgstr "Moje računalo (%s) %s"
+
+#: src/plugins/recent/gbp-recent-section.c:254
+msgid "Removed Files"
+msgstr "Uklonjene datoteke"
+
+#. translators: %s is replaced with the path of the file to be deleted and \n for a new line
+#: src/plugins/recent/gbp-recent-section.c:289
+#: src/plugins/recent/gbp-recent-section.c:296
+#, c-format
+msgid "Removing %s\n"
+msgstr "Uklanjam %s\n"
+
+#: src/plugins/recent/gbp-recent-section.c:424
+msgid "Removing Files…"
+msgstr "Uklanjanje datoteka…"
+
+#: src/plugins/recent/gbp-recent-section.ui:6
+msgid "Recent Projects"
+msgstr "Nedavni projekti"
+
+#: src/plugins/retab/gtk/menus.ui:5
+msgid "_Reformat tabs"
+msgstr "_Preoblikuj kartice"
+
+#: src/plugins/rust-analyzer/tweaks.ui:13
+msgid "Rust Analyzer"
+msgstr "Rust analizator"
+
+#: src/plugins/rust-analyzer/tweaks.ui:16
+msgid "Cargo"
+msgstr "Cargo"
+
+#: src/plugins/rust-analyzer/tweaks.ui:19
+msgid "Cargo Command"
+msgstr "Cargo naredba"
+
+#: src/plugins/rust-analyzer/tweaks.ui:20
+msgid "The default cargo command to run with rust-analyzer"
+msgstr "Zadana cargo naredba koja se pokreće s rust analizatorom"
+
+#: src/plugins/rust-analyzer/tweaks.ui:45
+msgid "Features"
+msgstr "Značajke"
+
+#: src/plugins/rust-analyzer/tweaks.ui:48
+msgid "Proc Macros"
+msgstr "Proc Macros"
+
+#: src/plugins/rust-analyzer/tweaks.ui:49
+msgid "Enables the experimental Proc Macros feature of rust-analyzer"
+msgstr "Omogućuje eksperimentalne Proc Macros značajke rust analizatora"
+
+#: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
+msgid "Update"
+msgstr "Nadopuni"
+
+#: src/plugins/sdkui/gtk/menus.ui:6
+msgid "Manage SDKs…"
+msgstr "SDK upravljanje…"
+
+#: src/plugins/sdkui/tweaks.ui:12
+msgid "Downloads"
+msgstr "Preuzimanja"
+
+#: src/plugins/sdkui/tweaks.ui:15
+msgid "Download on Metered Connections"
+msgstr "Preuzmi na povezivanjima ograničenim podacima"
+
+#: src/plugins/sdkui/tweaks.ui:16
+msgid ""
+"Allow the download of SDKs and dependencies when on metered internet "
+"connections"
+msgstr ""
+"Dopusti preuzimanje SDK-ova i zavisnosti kada ste na internetskim "
+"povezivanjima ograničenim podacima"
+
+#: src/plugins/sdkui/tweaks.ui:29
+msgid "Available SDKs"
+msgstr "Dostupni SDK-ovi"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
+msgid "Untitled Command"
+msgstr "Bezimena naredba"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
+msgid "Set Shortcut"
+msgstr "Postavi prečac"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:481
+msgid "Select Working Directory"
+msgstr "Odaberi radni direktorij"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
+msgid "Create Command"
+msgstr "Stvori naredbu"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
+msgid "Cre_ate"
+msgstr "Stv_ori"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:6
+msgid "Edit Command"
+msgstr "Uredi naredbu"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:23
+msgid "S_ave"
+msgstr "S_premi"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:51
+msgid "Keyboard Shortcut"
+msgstr "Prečaci tipkovnice"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:52
+msgid "An optional shortcut to run the command"
+msgstr "Neobavezni prečac za pokretanje naredbe"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:67
+msgid "Shell Command"
+msgstr "Naredba ljuske"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
+msgid "You may use single or double quotes for parameters."
+msgstr "Za parametre možete koristiti jednostruke ili dvostruke navodnike."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
+msgid "Environment"
+msgstr "Okruženje"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:90
+msgid "Working Directory"
+msgstr "Radni direktorij"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
+msgid ""
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+msgstr ""
+"Naredba će se pokrenuti iz ove lokacije. Koristite <tt>$BUILDDIR</tt>, "
+"<tt>$SRCDIR</tt>, ili <tt>$HOME</tt> za određivanje relativne putanje."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
+msgid "Use Subshell"
+msgstr "Koristi podljusku"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
+msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
+msgstr "Pokreni program iz podljuske poput <tt>sh -c ''</tt>"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
+msgid "Locality"
+msgstr "Lokacija"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:135
+msgid ""
+"Builder can run your command from a number of localities including the host "
+"system or build containers."
+msgstr ""
+"Builder može pokrenuti vašu naredbu s brojnih lokacija uključujući sustav "
+"računala ili spremnike izgradnje."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
+msgid "_Delete Command"
+msgstr "_Obriši naredbu"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
+msgid "Subprocess"
+msgstr "Podproces"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
+msgid "Runs the command as a subprocess of Builder."
+msgstr "Pokreće naredbu kao podproces Buildera."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:266
+msgid "Runs the command on the host system."
+msgstr "Pokreće naredbu na sustavu računala."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
+msgid "Runs the command within the build pipeline."
+msgstr "Pokreće naredbu unutar slivnika izgradnje."
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
+msgid "As Target Application"
+msgstr "Kao odredišnu aplikaciju"
+
+#: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
+msgid "Runs the command as if it were the target application."
+msgstr "Pokreće naredbu kao da je odredišna aplikacija."
+
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
+msgid "Commands can be used to build, run, or modify your projects"
+msgstr ""
+"Naredbe se mogu koristiti za izgradnju, pokretanje ili promjenu vaših "
+"projekata"
+
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:116
+msgid "These commands are specific to this project."
+msgstr "Ove su naredbe specifične za ovaj projekt."
+
+#: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:117
+msgid "These commands are shared across all projects."
+msgstr "Ove naredbe dijele svi projekti."
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
+msgid "Display Name"
+msgstr "Naziv prikaza"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
+msgid "Keyboard Accelerator"
+msgstr "Prečac tipkovnice"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:14
+msgid "Current Working Directory"
+msgstr "Trenutni radni direktorij"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
+msgid "Command Arguments"
+msgstr "Argumenti naredbe"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
+msgid "Command Environment"
+msgstr "Naredba okruženja"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
+msgid "Command Locality"
+msgstr "Lokacija naredbe"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:36
+msgid "Use Shell"
+msgstr "Koristi ljusku"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
+msgid "Run Commands"
+msgstr "Pokreni naredbu"
+
+#: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
+msgid "A list of run-command ids to load for the application or project."
+msgstr "Popis ID-ova naredbi pokretanja za učitavanje aplikacije ili projekta."
+
+#: src/plugins/shellcmd/tweaks.ui:14
+msgid ""
+"Use commands to run build tooling, applications, or shell scripts and map "
+"them to a keyboard shortcut. They can run from various environments such as "
+"the build pipeline, runtime environment, or host operating system."
+msgstr ""
+"Koristite naredbe za pokretanje alata izgradnje, aplikacija ili skripti "
+"ljuske i mapiranje na prečac tipkovnice. Mogu se pokretati iz različitih "
+"okruženja, poput slivnika izgradnje, okruženja za izvođenje ili operativnih "
+"sustava računala."
+
+#: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
+msgid "Enchant 2"
+msgstr "Enchant 2"
+
+#: src/plugins/spellcheck/editor-spell-menu.c:248
+msgid "Add to Dictionary"
+msgstr "Dodaj u rječnik"
+
+#: src/plugins/spellcheck/editor-spell-menu.c:249
+msgid "Ignore"
+msgstr "Zanemari"
+
+#: src/plugins/spellcheck/editor-spell-menu.c:259
+msgid "Languages"
+msgstr "Jezici"
+
+#: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:115
+msgid "Unnamed Symbol"
+msgstr "Bezimeni simbol"
+
+#: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
+msgid "Filter Symbols…"
+msgstr "Filtriraj simbole…"
+
+#. translators: "In Page" refers to the title of the page which contains the search result
+#: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
+msgid "In Page"
+msgstr "U stranici"
+
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
+#: src/plugins/symbol-tree/gtk/menus.ui:8
+msgid "Select Symbol…"
+msgstr "Odabir simbola…"
+
+#: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
+msgid "Select Symbol (Ctrl+Shift+K)"
+msgstr "Odaberi simbol (Ctrl+Shift+K)"
+
+#: src/plugins/symbol-tree/gtk/menus.ui:9
+msgid "Navigate to a symbol within the current page"
+msgstr "Idi do simbola na trenutnoj stranici"
+
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
+msgid "Open Sysprof Capture…"
+msgstr "Otvori Sysprof bilježenje…"
+
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:352
+msgid "Sysprof Capture (*.syscap)"
+msgstr "Sysprof bilježenje (*.syscap)"
+
+#: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:358
+msgid "All Files"
+msgstr "Sve datoteke"
+
+#: src/plugins/sysprof/gtk/menus.ui:8
+msgctxt "menu label"
+msgid "Open _Sysprof Capture…"
+msgstr "Otvori _Sysprof bilježenje…"
+
+#: src/plugins/sysprof/gtk/menus.ui:19
+msgid "Run with Profiler"
+msgstr "Pokreni s profilerom"
+
+#: src/plugins/sysprof/gtk/menus.ui:22
+msgid "Run the project with profiler"
+msgstr "Pokreni projekt s profilerom"
+
+#: src/plugins/sysprof/gtk/menus.ui:30 src/plugins/sysprof/tweaks.ui:13
+msgid "Profiler"
+msgstr "Profiler"
+
+#: src/plugins/sysprof/gtk/menus.ui:32
+msgid "Thread Sampling"
+msgstr "Uzorkovanje niti"
+
+#: src/plugins/sysprof/gtk/menus.ui:34
+msgid "CPU Performance"
+msgstr "CPU performanse"
+
+#: src/plugins/sysprof/gtk/menus.ui:39
+msgid "Memory Allocations"
+msgstr "Alokacija memorije"
+
+#: src/plugins/sysprof/gtk/menus.ui:44
+msgid "Sample JavaScript Stacks"
+msgstr "Primjeri JavaScript nizova"
+
+#: src/plugins/sysprof/gtk/menus.ui:50
+msgid "Graphics"
+msgstr "Grafika"
+
+#: src/plugins/sysprof/gtk/menus.ui:52
+msgid "Display Timings"
+msgstr "Prikaz vremena"
+
+#: src/plugins/sysprof/gtk/menus.ui:58
+msgid "Counters"
+msgstr "Brojači"
+
+#: src/plugins/sysprof/gtk/menus.ui:60 src/plugins/sysprof/tweaks.ui:19
+msgid "CPU Usage"
+msgstr "CPU upotreba"
+
+#: src/plugins/sysprof/gtk/menus.ui:65 src/plugins/sysprof/tweaks.ui:71
+msgid "Memory Usage"
+msgstr "Upotreba memorije"
+
+#: src/plugins/sysprof/gtk/menus.ui:70
+msgid "Storage I/O"
+msgstr "U/I pohrane"
+
+#: src/plugins/sysprof/gtk/menus.ui:75
+msgid "Network I/O"
+msgstr "U/I mreže"
+
+#: src/plugins/sysprof/gtk/menus.ui:81
+msgid "Energy"
+msgstr "Energija"
+
+#: src/plugins/sysprof/gtk/menus.ui:83
+msgid "Consumption"
+msgstr "Potrošnja"
+
+#: src/plugins/sysprof/gtk/menus.ui:88
+msgid "Battery Charge"
+msgstr "Napunjenost baterije"
+
+#: src/plugins/sysprof/gtk/menus.ui:95
+msgid "Allow Application Integration"
+msgstr "Dopusti integraciju aplikacije"
+
+#: src/plugins/sysprof/gtk/menus.ui:100
+msgid "Allow CPU Throttling"
+msgstr "Dopusti CPU prigušivanje"
+
+#: src/plugins/sysprof/gtk/menus.ui:112
+msgid "Run with _Profiler"
+msgstr "Pokreni s _profilerom"
+
+#: src/plugins/sysprof/gtk/menus.ui:130
+msgid "Record Again…"
+msgstr "Ponovno bilježenje…"
+
+#: src/plugins/sysprof/tweaks.ui:16
+msgid "Instruments"
+msgstr "Instrumenti"
+
+#: src/plugins/sysprof/tweaks.ui:20
+msgid "Records CPU usage and CPU frequency statistics"
+msgstr "Bilježi CPU upotrebu i statistiku CPU frekvencije"
+
+#: src/plugins/sysprof/tweaks.ui:31
+msgid "Sample Callstacks"
+msgstr "Callstacks primjeri"
+
+#: src/plugins/sysprof/tweaks.ui:32
+msgid "Record stacktraces on a regular interval and build a callgraph"
+msgstr "Zabilježi stacktraces u pravilnim intervalima i izgradi callgraph"
+
+#: src/plugins/sysprof/tweaks.ui:43
+msgid "CPU Governor"
+msgstr "CPU guverner"
+
+#: src/plugins/sysprof/tweaks.ui:44
+msgid "Force performance mode while profiling"
+msgstr "Prisilni performanse način rada tijekom profiliranja"
+
+#: src/plugins/sysprof/tweaks.ui:53
+msgid "Don't Change Governor"
+msgstr "Ne mijenjaj guvernera"
+
+#: src/plugins/sysprof/tweaks.ui:59
+msgid "Force Performance Mode"
+msgstr "Prisilni performanse način rada"
+
+#: src/plugins/sysprof/tweaks.ui:72
+msgid "Simple memory statistics about the process such as total memory used"
+msgstr ""
+"Jednostavna statistika memorije o procesima poput ukupno korištene memorije"
+
+#: src/plugins/sysprof/tweaks.ui:83
+msgid "Memory Profiling"
+msgstr "Profiliranje memorije"
+
+#: src/plugins/sysprof/tweaks.ui:84
+msgid "Record stacktraces of memory allocations and releases"
+msgstr "Zabilježi stacktraces dodjele i oslobađanja memorije"
+
+#: src/plugins/sysprof/tweaks.ui:99
+msgid "Energy Usage"
+msgstr "Korištenje energije"
+
+#: src/plugins/sysprof/tweaks.ui:100
+msgid "Record statistics about energy usage using RAPL"
+msgstr "Bilježi statistiku potrošnje energije koristeći RAPL"
+
+#: src/plugins/sysprof/tweaks.ui:111
+msgid "Battery Usage"
+msgstr "Korištenje energije"
+
+#: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
+msgid "Record statistics about battery charge and discharge rates"
+msgstr "Bilježi statistiku napunjenosti i pražnjenja baterije"
+
+#: src/plugins/sysprof/tweaks.ui:127
+msgid "Network Usage"
+msgstr "Korištenje mreže"
+
+#: src/plugins/sysprof/tweaks.ui:128
+msgid "Record statistics about network usage"
+msgstr "Bilježi statistiku korištenja mreže"
+
+#: src/plugins/sysprof/tweaks.ui:139
+msgid "Disk Usage"
+msgstr "Korištenje diska"
+
+#: src/plugins/sysprof/tweaks.ui:155
+msgid "GNOME Shell Performance"
+msgstr "Performanse GNOME ljuske"
+
+#: src/plugins/sysprof/tweaks.ui:156
+msgid "Collect performance and timing information from GNOME Shell"
+msgstr "Prikupljanje informacija performansa i vremena iz GNOME ljuske"
+
+#: src/plugins/sysprof/tweaks.ui:169
+msgid "Integration"
+msgstr "Integracija"
+
+#: src/plugins/sysprof/tweaks.ui:172
+msgid "JavaScript"
+msgstr "JavaScript"
+
+#: src/plugins/sysprof/tweaks.ui:173
+msgid "Collect information from GJS-based applications"
+msgstr "Prikupljanje informacija iz GJS-temeljenih aplikacija"
+
+#: src/plugins/sysprof/tweaks.ui:184
+msgid "Application Tracing"
+msgstr "Praćenje aplikacije"
+
+#: src/plugins/sysprof/tweaks.ui:185
+msgid ""
+"Provide TRACE_FD environment variable for applications to deliver custom "
+"events"
+msgstr ""
+"Omogućuje TRACE_FD varijabu okruženja za aplikacije u svrhu dostave "
+"prilagođenih događaja"
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
+msgid "An absolute file-system path to the sysroot."
+msgstr "Apsolutna putanja datotečnog sustava do sysroot."
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:148
+msgid "Package Config Path"
+msgstr "Prilagođena putanja paketa"
+
+#: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:149
+msgid "An optional comma-separated path to specify PKG_CONFIG_PATH."
+msgstr "Neobavezna, zarezom odvojena putanja za određivanje PKG_CONFIG_PATH."
+
+#: src/plugins/sysroot/gbp-sysroot-toolchain-provider.c:148
+#, c-format
+msgid "%s (Sysroot SDK)"
+msgstr "%s (Sysroot SDK)"
+
+#. translators: %s is replaced with the current local time of day
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
+#, c-format
+msgid "Application started at %s\r\n"
+msgstr "Aplikacija je pokrenuta u %s\r\n"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
+msgid "Application exited"
+msgstr "Aplikacija je zatvorena"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
+msgid "Application Output"
+msgstr "Izlaz aplikacije"
+
+#: src/plugins/terminal/gtk/menus.ui:6
+msgid "New _Terminal"
+msgstr "Novi _terminal"
+
+#: src/plugins/terminal/gtk/menus.ui:11
+msgid "Open a new terminal on the host operating system"
+msgstr "Otvori novi terminal na operativnom sustavu računala"
+
+#: src/plugins/terminal/gtk/menus.ui:14
+msgid "New _Build Terminal"
+msgstr "Novi _terminal izgradnje"
+
+#: src/plugins/terminal/gtk/menus.ui:19
+msgid "Open a new terminal in project's build pipeline"
+msgstr "Otvori novi terminal u slivniku izgradnje projekta"
+
+#: src/plugins/terminal/gtk/menus.ui:22
+msgid "New _Runtime Terminal"
+msgstr "Novi _terminal radnog procesa"
+
+#: src/plugins/terminal/gtk/menus.ui:27
+msgid "Open a new terminal in project's runtime environment"
+msgstr "Otvori novi terminal u okruženju radnog procesa projekta"
+
+#: src/plugins/terminal/gtk/menus.ui:41
+msgid "Split"
+msgstr "Razdvoji"
+
+#: src/plugins/terminal/tweaks.ui:14
+msgid "The font used within terminals"
+msgstr "Slova korištena u terminalu"
+
+#: src/plugins/terminal/tweaks.ui:29
+msgid "Allow Bold"
+msgstr "Dopusti podebljani tekst"
+
+#: src/plugins/terminal/tweaks.ui:30
+msgid "Allows the use of bold escape sequences"
+msgstr "Omogućuje korištenje podebljanih izlaznih nizova"
+
+#: src/plugins/terminal/tweaks.ui:41
+msgid "Allow Hyperlinks"
+msgstr "Dopusti hiperpoveznice"
+
+#: src/plugins/terminal/tweaks.ui:42
+msgid "Allows the use of hyperlink escape sequences"
+msgstr "Omogućuje korištenje izlaznih nizova hiperpoveznice"
+
+#: src/plugins/terminal/tweaks.ui:55
+msgid "Scrolling"
+msgstr "Pomicanje"
+
+#: src/plugins/terminal/tweaks.ui:58
+msgid "Scroll On Output"
+msgstr "Pomicanje na izlazu"
+
+#: src/plugins/terminal/tweaks.ui:59
+msgid "Automatically scroll when applications within the terminal output text"
+msgstr "Automatsko pomicanje kada aplikacije unutar terminala ispišu tekst"
+
+#: src/plugins/terminal/tweaks.ui:70
+msgid "Scroll On Keyboard Input"
+msgstr "Pomicanje pri unosu tipkovnice"
+
+#: src/plugins/terminal/tweaks.ui:71
+msgid "Automatically scroll when typing to insert text"
+msgstr "Automatsko pomicanje pri upisivanju teksta"
+
+#: src/plugins/terminal/tweaks.ui:87
+msgid "Limit Scrollback"
+msgstr "Ograniči pomicanje unatrag"
+
+#: src/plugins/terminal/tweaks.ui:88
+msgid ""
+"Limit the number of lines that are stored in memory for terminal scrollback"
+msgstr ""
+"Ograniči broj redaka koji su pohranjeni u memoriji za pomicanje terminala "
+"unatrag"
+
+#: src/plugins/terminal/tweaks.ui:99
+msgid "Maximum Lines in Scrollback"
+msgstr "Najveći broj redaka pri pomicanju natrag"
+
+#: src/plugins/terminal/tweaks.ui:100
+msgid "The maximum number of lines stored in history when limiting scrollback"
+msgstr ""
+"Najveći broj redaka pohranjenih u povijesti kada se ograničava pomicanje "
+"unatrag"
+
+#: src/plugins/testui/gbp-testui-output-panel.c:147
+msgid "Unit Test Output"
+msgstr "Izlaz testa jedinice"
+
+#: src/plugins/testui/gbp-testui-output-panel.ui:39
+msgid "Clear test output"
+msgstr "Obriši izlaz testa"
+
+#: src/plugins/testui/gbp-testui-output-panel.ui:49
+msgid "Cancel tests"
+msgstr "Prekini test"
+
+#: src/plugins/testui/gbp-testui-output-panel.ui:59
+msgid "Save test output"
+msgstr "Spremi izlaz testa"
+
+#. Translators: %s is replaced with the time in the current locale
+#: src/plugins/testui/gbp-testui-workspace-addin.c:86
+#, c-format
+msgid "Running all unit tests at %s"
+msgstr "Izvođenje svih testova jedinice u %s"
+
+#: src/plugins/testui/gbp-testui-workspace-addin.c:119
+#, c-format
+msgid "Unit tests completed in %lf seconds"
+msgstr "Testovi jedinice su završeni za %lf sekundi"
+
+#: src/plugins/testui/gbp-testui-workspace-addin.c:121
+msgid "Unit tests completed"
+msgstr "Testovi jedinice su završeni"
+
+#: src/plugins/testui/gtk/menus.ui:8
+msgid "Run all Unit Tests"
+msgstr "Pokreni sve testove jedinice"
+
+#: src/plugins/testui/gtk/menus.ui:11
+msgid "Request that all unit tests are run"
+msgstr "Zahtjev za pokretanje svih testova jedinice"
+
+#: src/plugins/todo/gbp-todo-panel.ui:4
+#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+msgid "TODO/FIXMEs"
+msgstr "TODO/FIXME"
+
+#: src/plugins/todo/gbp-todo-panel.ui:14
+msgid "Loading TODOs…"
+msgstr "TODO učitavanje…"
+
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:133
+msgid "Updating Dependencies…"
+msgstr "Nadopuna zavisnosti…"
+
+#: src/plugins/update-dependencies/gbp-update-dependencies-workbench-addin.c:134
+msgid "Builder is updating your projects configured dependencies."
+msgstr "Graditelj nadopunjuje podešene zavisnosti vašeg projekta."
+
+#: src/plugins/update-dependencies/gtk/menus.ui:6
+msgid "Update Dependencies…"
+msgstr "Nadopuni zavisnosti…"
+
+#: src/plugins/update-dependencies/gtk/menus.ui:8
+msgid "Download updates to project dependencies"
+msgstr "Preuzmi nadopune u zavisnosti projekta"
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:106
+msgid "Updating Builder"
+msgstr "Nadopuna Graditelja"
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:166
+msgid "Update Available"
+msgstr "Nadopuna je dostupna"
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:167
+msgid ""
+"An update to Builder is available. Builder can download and install it for "
+"you."
+msgstr ""
+"Nadopuna za Graditelja je dostupna. Graditelj ju može preuzeti i instalirati "
+"ju."
+
+#: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
+msgid "_Update"
+msgstr "_Nadopuni"
+
+#: src/plugins/update-manager/gtk/menus.ui:7
+msgid "Install Updates…"
+msgstr "Instalacija nadopuna…"
+
+#: src/plugins/update-manager/gtk/menus.ui:8
+msgid "Install pending updates for Builder"
+msgstr "Instaliraj dostupne nadopune za Graditelja"
+
+#: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
+msgid "Run with Leak Detector"
+msgstr "Pokreni s detektorom curenja"
+
+#: src/plugins/valgrind/gtk/menus.ui:13
+msgid "Run the project with valgrind"
+msgstr "Pokreni projekt s valgrind"
+
+#: src/plugins/valgrind/gtk/menus.ui:21 src/plugins/valgrind/tweaks.ui:13
+msgid "Leak Detector"
+msgstr "Detektor curenja"
+
+#: src/plugins/valgrind/gtk/menus.ui:24
+msgid "Track Origin of Leaks"
+msgstr "Praćenje izvora curenja"
+
+#: src/plugins/valgrind/gtk/menus.ui:30
+msgid "Report Leaks"
+msgstr "Izvještaj curenja"
+
+#: src/plugins/valgrind/gtk/menus.ui:32
+msgid "Summary"
+msgstr "Sažetak"
+
+#: src/plugins/valgrind/gtk/menus.ui:38
+msgid "Full"
+msgstr "Potpun"
+
+#: src/plugins/valgrind/gtk/menus.ui:51 src/plugins/valgrind/tweaks.ui:16
+msgid "Leak Kinds"
+msgstr "Vrsta curenja"
+
+#: src/plugins/valgrind/gtk/menus.ui:53 src/plugins/valgrind/tweaks.ui:19
+msgid "Definite"
+msgstr "Određena"
+
+#: src/plugins/valgrind/gtk/menus.ui:58 src/plugins/valgrind/tweaks.ui:43
+msgid "Indirect"
+msgstr "Neizravna"
+
+#: src/plugins/valgrind/gtk/menus.ui:63 src/plugins/valgrind/tweaks.ui:31
+msgid "Possible"
+msgstr "Moguća"
+
+#: src/plugins/valgrind/gtk/menus.ui:68 src/plugins/valgrind/tweaks.ui:55
+msgid "Reachable"
+msgstr "Dohvatljiva"
+
+#: src/plugins/valgrind/tweaks.ui:20
+msgid "Include definite leaks in report summary"
+msgstr "Uključi određeno curenje u izvještaj"
+
+#: src/plugins/valgrind/tweaks.ui:32
+msgid "Include possible leaks in report summary"
+msgstr "Uključi moguće curenje u izvještaj"
+
+#: src/plugins/valgrind/tweaks.ui:44
+msgid "Include indirect leaks in report summary"
+msgstr "Uključi neizravno curenje u izvještaj"
+
+#: src/plugins/valgrind/tweaks.ui:56
+msgid "Include reachable leaks in report summary"
+msgstr "Uključi dohvatljivo curenje u izvještaj"
+
+#: src/plugins/valgrind/tweaks.ui:71
+msgid "Track Origins"
+msgstr "Praćenje izvora"
+
+#: src/plugins/valgrind/tweaks.ui:72
+msgid "Show origin of undefined values"
+msgstr "Prikaži porijeklo neodređenih vrijednosti"
+
+#: src/plugins/valgrind/tweaks.ui:87
+msgid "Leak Check"
+msgstr "Provjera curenja"
+
+#: src/plugins/valgrind/tweaks.ui:88
+msgid "Search for memory leaks at exit"
+msgstr "Pretraži curenje memorije pri izlazu"
+
+#: src/plugins/vcsui/gbp-vcsui-application-addin.c:95
+msgid "Begin cloning project from URI"
+msgstr "Započni klonirati projekt iz URI-a"
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.c:149
+msgid "A failure occurred while cloning the repository."
+msgstr "Došlo je do greške pri kloniranju repozitorija."
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:19
+msgid "Repository URL"
+msgstr "URL reporzitorija"
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:38
+msgid "Choose an alternate branch"
+msgstr "Odaberi zamjenski ogranak"
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:57
+msgid "Branches"
+msgstr "Ogranci"
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:141
+msgid ""
+"Enter the URL of the source code repository for the project you would like "
+"to clone."
+msgstr ""
+"Upišite URL repozitorija izvornog kôda za projekt koji želite klonirati."
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:170
+msgid "The repository will be cloned into a new subdirectory."
+msgstr "Repozitorij će se klonirati u novom poddirektoriju."
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:194
+msgid "Author Details"
+msgstr "Pojedinosti autora"
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
+msgid "You may specify authorship information to override defaults."
+msgstr "Možete navesti dodatne podatke o autorstvu."
+
+#: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
+msgid "Status"
+msgstr "Stanje"
+
+#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:27
+msgid "_Branches"
+msgstr "_Ogranci"
+
+#: src/plugins/vcsui/gbp-vcsui-switcher-popover.ui:93
+msgid "_Tags"
+msgstr "_Oznake"
+
+#: src/plugins/vcsui/gtk/menus.ui:7
+msgid "_Switch to branch"
+msgstr "_Prebaci na ogranak"
+
+#: src/plugins/vcsui/gtk/menus.ui:12
+msgid "_Push to origin"
+msgstr "_Pošalji na origin"
+
+#: src/plugins/vim/tweaks.ui:18
+msgid "Vim"
+msgstr "Vim"
+
+#: src/plugins/web-browser/gtk/menus.ui:6
+msgid "New _Browser Page"
+msgstr "Nova _stranica preglednika"
+
+#: src/plugins/web-browser/gtk/menus.ui:18
+#: src/plugins/web-browser/gtk/menus.ui:24
+msgid "Reload Page"
+msgstr "Ponovno učitaj stranicu"
+
+#: src/plugins/web-browser/gtk/menus.ui:19
+msgid "Reload the current page"
+msgstr "Ponovno učitaj trenutnu stranicu"
+
+#: src/plugins/web-browser/gtk/menus.ui:25
+msgid "Reload the current page ignoring cache"
+msgstr "Ponovno učitaj trenutnu stranicu zanemarujući predmemoriju"
+
+#: src/plugins/web-browser/gtk/menus.ui:30
+msgid "Focus Location"
+msgstr "Fokusiraj lokaciju"
+
+#: src/plugins/web-browser/gtk/menus.ui:31
+msgid "Focus the current page's location"
+msgstr "Fokusiraj lokaciju trenutne stranice"
+
+#: src/plugins/xml-pack/ide-xml-parser.c:604
+#: src/plugins/xml-pack/ide-xml-tree-builder.c:522
+msgid "Failed to create the XML tree."
+msgstr "Nemoguće stvaranje XML stabla."
+
+#: src/plugins/xml-pack/ide-xml-service.c:91
+msgid "File must be saved locally to parse."
+msgstr "Datoteka mora biti spremljena lokalno kako bi se mogla obraditi."
+
+#~ msgid "Open a new terminal"
+#~ msgstr "Otvori novi terminal"
