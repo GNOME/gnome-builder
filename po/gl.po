@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-13 19:35+0000\n"
-"PO-Revision-Date: 2022-09-13 22:10+0200\n"
+"PO-Revision-Date: 2022-09-13 22:16+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -3751,9 +3751,8 @@ msgid "A PTY to bidirectionally proxy to the device"
 msgstr "Unha PTY para facer e proxi bidireccional ao dispositivo"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:52
-#, fuzzy
 msgid "Number of seconds to wait for the deviced peer to appear"
-msgstr "Número de segundos a agardar para que o par deviced apareza"
+msgstr "Número de segundos a agardar para que o par de deviced apareza"
 
 #: src/plugins/dspy/gbp-dspy-application-addin.c:47
 msgid "Display D-Bus inspector"
@@ -5394,7 +5393,6 @@ msgid "Proc Macros"
 msgstr "Proc Macros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-#, fuzzy
 #| msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr "Permite a característica de Proc Macros experimentais do rust-analyzer"
@@ -6053,14 +6051,13 @@ msgid "_Update"
 msgstr "_Actualizar"
 
 #: src/plugins/update-manager/gtk/menus.ui:7
-#, fuzzy
 #| msgid "Install or Update SDK?"
 msgid "Install Updates…"
-msgstr "Instalar ou actualizar o SDK?"
+msgstr "Instalar actualizacións…"
 
 #: src/plugins/update-manager/gtk/menus.ui:8
 msgid "Install pending updates for Builder"
-msgstr ""
+msgstr "Instalar as actualizacións pendentes para o Construtor"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
 msgid "Run with Leak Detector"
