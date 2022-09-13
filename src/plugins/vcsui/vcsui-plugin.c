@@ -30,6 +30,7 @@
 
 #include "gbp-vcsui-application-addin.h"
 #include "gbp-vcsui-editor-page-addin.h"
+#include "gbp-vcsui-tree-addin.h"
 #include "gbp-vcsui-workbench-addin.h"
 #include "gbp-vcsui-workspace-addin.h"
 
@@ -42,6 +43,9 @@ _gbp_vcsui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_EDITOR_PAGE_ADDIN,
                                               GBP_TYPE_VCSUI_EDITOR_PAGE_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_TREE_ADDIN,
+                                              GBP_TYPE_VCSUI_TREE_ADDIN);
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_VCSUI_WORKBENCH_ADDIN);
