@@ -11,9 +11,9 @@
           </object>
         </child>
         <child type="left">
-          <object class="PanelDockSwitcher">
+          <object class="PanelToggleButton">
             <property name="dock">dock</property>
-            <property name="position">start</property>
+            <property name="area">start</property>
           </object>
         </child>
         <child type="title">
@@ -30,9 +30,9 @@
           </object>
         </child>
         <child type="right">
-          <object class="PanelDockSwitcher">
+          <object class="PanelToggleButton">
             <property name="dock">dock</property>
-            <property name="position">end</property>
+            <property name="area">end</property>
           </object>
         </child>
       </object>
@@ -70,9 +70,9 @@
     <child internal-child="statusbar">
       <object class="PanelStatusbar">
         <child type="suffix">
-          <object class="PanelDockSwitcher">
+          <object class="PanelToggleButton">
             <property name="dock">dock</property>
-            <property name="position">bottom</property>
+            <property name="area">bottom</property>
           </object>
         </child>
       </object>

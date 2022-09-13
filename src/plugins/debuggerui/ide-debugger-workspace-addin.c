@@ -266,7 +266,7 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
                             gtk_label_new (_("Console")));
 
   position = ide_panel_position_new ();
-  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
+  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
 
   ide_workspace_add_pane (self->workspace, IDE_PANE (self->panel), position);
 }

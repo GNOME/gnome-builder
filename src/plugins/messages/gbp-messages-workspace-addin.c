@@ -42,7 +42,7 @@ gbp_messages_workspace_addin_load (IdeWorkspaceAddin *addin,
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   position = ide_panel_position_new ();
-  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
+  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
 
   self->panel = g_object_new (GBP_TYPE_MESSAGES_PANEL, NULL);
   ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);

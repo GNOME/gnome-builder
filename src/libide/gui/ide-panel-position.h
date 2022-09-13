@@ -43,11 +43,11 @@ IdePanelPosition *ide_panel_position_ref              (IdePanelPosition  *self);
 IDE_AVAILABLE_IN_ALL
 void              ide_panel_position_unref            (IdePanelPosition  *self);
 IDE_AVAILABLE_IN_ALL
-gboolean          ide_panel_position_get_edge         (IdePanelPosition  *self,
-                                                       PanelDockPosition *edge);
+gboolean          ide_panel_position_get_area         (IdePanelPosition  *self,
+                                                       PanelArea         *area);
 IDE_AVAILABLE_IN_ALL
-void              ide_panel_position_set_edge         (IdePanelPosition  *self,
-                                                       PanelDockPosition  edge);
+void              ide_panel_position_set_area         (IdePanelPosition  *self,
+                                                       PanelArea          area);
 IDE_AVAILABLE_IN_ALL
 gboolean          ide_panel_position_get_row          (IdePanelPosition  *self,
                                                        guint             *row);

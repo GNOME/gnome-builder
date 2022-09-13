@@ -1254,7 +1254,7 @@ _ide_workspace_find_frame (IdeWorkspace     *self,
                            PanelPaned       *dock_bottom,
                            IdeGrid          *grid)
 {
-  PanelDockPosition edge;
+  PanelArea area;
   PanelPaned *paned = NULL;
   PanelFrame *ret;
   GtkWidget *parent;
@@ -1270,10 +1270,10 @@ _ide_workspace_find_frame (IdeWorkspace     *self,
   g_return_val_if_fail (!dock_end || PANEL_IS_PANED (dock_end), NULL);
   g_return_val_if_fail (!dock_bottom || PANEL_IS_PANED (dock_bottom), NULL);
 
-  if (!ide_panel_position_get_edge (position, &edge))
-    edge = PANEL_DOCK_POSITION_CENTER;
+  if (!ide_panel_position_get_area (position, &area))
+    area = PANEL_AREA_CENTER;
 
-  if (edge == PANEL_DOCK_POSITION_CENTER)
+  if (area == PANEL_AREA_CENTER)
     {
       gboolean has_column = ide_panel_position_get_column (position, &column);
       gboolean has_row = ide_panel_position_get_row (position, &row);
@@ -1293,28 +1293,28 @@ _ide_workspace_find_frame (IdeWorkspace     *self,
       IDE_RETURN (ret);
     }
 
-  switch (edge)
+  switch (area)
     {
-    case PANEL_DOCK_POSITION_START:
+    case PANEL_AREA_START:
       paned = dock_start;
       ide_panel_position_get_row (position, &nth);
       break;
 
-    case PANEL_DOCK_POSITION_END:
+    case PANEL_AREA_END:
       paned = dock_end;
       ide_panel_position_get_row (position, &nth);
       break;
 
-    case PANEL_DOCK_POSITION_BOTTOM:
+    case PANEL_AREA_BOTTOM:
       paned = dock_bottom;
       ide_panel_position_get_column (position, &nth);
       break;
 
-    case PANEL_DOCK_POSITION_TOP:
+    case PANEL_AREA_TOP:
       g_warning ("Top panel is not supported");
       return NULL;
 
-    case PANEL_DOCK_POSITION_CENTER:
+    case PANEL_AREA_CENTER:
     default:
       return NULL;
     }
@@ -1323,8 +1323,8 @@ _ide_workspace_find_frame (IdeWorkspace     *self,
     {
       parent = panel_frame_new ();
 
-      if (edge == PANEL_DOCK_POSITION_START ||
-          edge == PANEL_DOCK_POSITION_END)
+      if (area == PANEL_AREA_START ||
+          area == PANEL_AREA_END)
         gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_VERTICAL);
       else
         gtk_orientable_set_orientation (GTK_ORIENTABLE (parent), GTK_ORIENTATION_HORIZONTAL);

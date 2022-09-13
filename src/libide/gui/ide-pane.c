@@ -94,7 +94,7 @@ ide_pane_popover_positioner_present (IdePopoverPositioner *positioner,
   IdePane *self = (IdePane *)positioner;
   IdePanePrivate *priv = ide_pane_get_instance_private (self);
   g_autoptr(IdePanelPosition) position = NULL;
-  PanelDockPosition edge = 0;
+  PanelArea area = 0;
   GdkRectangle translated;
   double x, y;
 
@@ -104,9 +104,9 @@ ide_pane_popover_positioner_present (IdePopoverPositioner *positioner,
   g_assert (pointing_to != NULL);
 
   if ((position = ide_pane_get_position (self)) &&
-      ide_panel_position_get_edge (position, &edge))
+      ide_panel_position_get_area (position, &area))
     {
-      if (edge == PANEL_DOCK_POSITION_START)
+      if (area == PANEL_AREA_START)
         gtk_popover_set_position (popover, GTK_POS_RIGHT);
       else
         gtk_popover_set_position (popover, GTK_POS_LEFT);
@@ -249,11 +249,11 @@ IdePanelPosition *
 ide_pane_get_position (IdePane *self)
 {
   static GType dock_child_type = G_TYPE_INVALID;
-  PanelDockPosition position;
+  PanelArea area;
   IdePanelPosition *ret;
   GtkWidget *frame;
   GtkWidget *paned;
-  GtkWidget *edge;
+  GtkWidget *child;
   guint n_pages;
   int depth = 0;
   int row_or_column = 0;
@@ -283,24 +283,23 @@ ide_pane_get_position (IdePane *self)
   if (!(paned = gtk_widget_get_ancestor (frame, PANEL_TYPE_PANED)))
     g_return_val_if_reached (NULL);
 
-  for (GtkWidget *child = gtk_widget_get_first_child (paned);
-       child != NULL && !gtk_widget_is_ancestor (frame, child);
-       child = gtk_widget_get_next_sibling (child))
+  for (GtkWidget *iter = gtk_widget_get_first_child (paned);
+       iter != NULL && !gtk_widget_is_ancestor (frame, iter);
+       iter = gtk_widget_get_next_sibling (iter))
     row_or_column++;
 
-  if (!(edge = gtk_widget_get_ancestor (paned, dock_child_type)))
+  if (!(child = gtk_widget_get_ancestor (paned, dock_child_type)))
     g_return_val_if_reached (NULL);
 
-  g_object_get (edge,
-                "position", &position,
+  g_object_get (child,
+                "area", &area,
                 NULL);
 
   ret = ide_panel_position_new ();
-  ide_panel_position_set_edge (ret, position);
+  ide_panel_position_set_area (ret, area);
   ide_panel_position_set_depth (ret, depth);
 
-  if (position == PANEL_DOCK_POSITION_START ||
-      position == PANEL_DOCK_POSITION_END)
+  if (area == PANEL_AREA_START || area == PANEL_AREA_END)
     ide_panel_position_set_row (ret, row_or_column);
   else
     ide_panel_position_set_column (ret, row_or_column);

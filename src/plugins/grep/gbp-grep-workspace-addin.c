@@ -66,7 +66,7 @@ gbp_grep_workspace_addin_load (IdeWorkspaceAddin *addin,
   self->panel = g_object_new (GBP_TYPE_GREP_PANEL, NULL);
 
   position = ide_panel_position_new ();
-  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_BOTTOM);
+  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
   ide_workspace_add_pane (workspace, self->panel, position);
 }
 

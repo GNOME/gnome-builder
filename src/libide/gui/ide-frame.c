@@ -358,7 +358,7 @@ ide_frame_get_position (IdeFrame *self)
 
   /* Frames are always in the center grid */
   ret = ide_panel_position_new ();
-  ide_panel_position_set_edge (ret, PANEL_DOCK_POSITION_CENTER);
+  ide_panel_position_set_area (ret, PANEL_AREA_CENTER);
 
   /* Implausible but handle it anyway */
   grid = PANEL_GRID (gtk_widget_get_ancestor (GTK_WIDGET (self), PANEL_TYPE_GRID));

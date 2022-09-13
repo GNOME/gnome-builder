@@ -169,14 +169,14 @@ gbp_testui_workspace_addin_load (IdeWorkspaceAddin *addin,
                            self,
                            G_CONNECT_SWAPPED);
   position = ide_panel_position_new ();
-  ide_panel_position_set_edge (position, PANEL_DOCK_POSITION_START);
+  ide_panel_position_set_area (position, PANEL_AREA_START);
   ide_panel_position_set_row (position, 0);
   ide_panel_position_set_depth (position, 2);
   ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);
 
   self->output_panel = gbp_testui_output_panel_new (pty);
   output_position = ide_panel_position_new ();
-  ide_panel_position_set_edge (output_position, PANEL_DOCK_POSITION_BOTTOM);
+  ide_panel_position_set_area (output_position, PANEL_AREA_BOTTOM);
   ide_workspace_add_pane (workspace, IDE_PANE (self->output_panel), output_position);
 
   IDE_EXIT;
