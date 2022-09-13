@@ -87,7 +87,7 @@ gbp_sysprof_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
                                         int                  at_line,
                                         int                  at_line_offset,
                                         IdeBufferOpenFlags   flags,
-                                        IdePanelPosition    *position,
+                                        PanelPosition       *position,
                                         GCancellable        *cancellable,
                                         GAsyncReadyCallback  callback,
                                         gpointer             user_data)
@@ -310,7 +310,7 @@ on_native_dialog_response_cb (GbpSysprofWorkbenchAddin *self,
   if (response_id == GTK_RESPONSE_ACCEPT)
     {
       g_autoptr(GFile) file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (native));
-      g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
+      g_autoptr(PanelPosition) position = panel_position_new ();
 
       if (G_IS_FILE (file))
         gbp_sysprof_workbench_addin_open_async (IDE_WORKBENCH_ADDIN (self),

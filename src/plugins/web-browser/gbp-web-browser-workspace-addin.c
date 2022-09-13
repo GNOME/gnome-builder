@@ -85,7 +85,7 @@ static void
 web_browser_new_page_action (GbpWebBrowserWorkspaceAddin *self,
                              GVariant                    *param)
 {
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   IdeWebkitPage *page;
 
   IDE_ENTRY;
@@ -94,7 +94,7 @@ web_browser_new_page_action (GbpWebBrowserWorkspaceAddin *self,
   g_assert (IDE_IS_WORKSPACE (self->workspace));
 
   page = ide_webkit_page_new ();
-  position = ide_panel_position_new ();
+  position = panel_position_new ();
 
   ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
   panel_widget_raise (PANEL_WIDGET (page));

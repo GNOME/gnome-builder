@@ -48,14 +48,14 @@ ide_code_index_search_result_activate (IdeSearchResult *result,
                                        GtkWidget       *last_focus)
 {
   IdeCodeIndexSearchResult *self = (IdeCodeIndexSearchResult *)result;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   IdeWorkspace *workspace;
 
   g_assert (IDE_IS_CODE_INDEX_SEARCH_RESULT (self));
   g_assert (GTK_IS_WIDGET (last_focus));
 
   workspace = ide_widget_get_workspace (last_focus);
-  position = ide_panel_position_new ();
+  position = panel_position_new ();
 
   ide_editor_focus_location (workspace, position, self->location);
 }

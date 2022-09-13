@@ -104,7 +104,7 @@ void             ide_workbench_open_async            (IdeWorkbench         *self
                                                       GFile                *file,
                                                       const gchar          *hint,
                                                       IdeBufferOpenFlags    flags,
-                                                      IdePanelPosition     *position,
+                                                      PanelPosition        *position,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);
@@ -115,7 +115,7 @@ void             ide_workbench_open_at_async         (IdeWorkbench         *self
                                                       gint                  at_line,
                                                       gint                  at_line_offset,
                                                       IdeBufferOpenFlags    flags,
-                                                      IdePanelPosition     *position,
+                                                      PanelPosition        *position,
                                                       GCancellable         *cancellable,
                                                       GAsyncReadyCallback   callback,
                                                       gpointer              user_data);

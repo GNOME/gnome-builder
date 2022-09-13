@@ -93,7 +93,7 @@ ide_pane_popover_positioner_present (IdePopoverPositioner *positioner,
 {
   IdePane *self = (IdePane *)positioner;
   IdePanePrivate *priv = ide_pane_get_instance_private (self);
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   PanelArea area = 0;
   GdkRectangle translated;
   double x, y;
@@ -243,14 +243,14 @@ ide_clear_pane (IdePane **location)
  *
  * Gets the position of the panel or %NULL
  *
- * Returns: (transfer full) (nullable): an #IdePanelPosition or %NULL
+ * Returns: (transfer full) (nullable): an #PanelPosition or %NULL
  */
-IdePanelPosition *
+PanelPosition *
 ide_pane_get_position (IdePane *self)
 {
   static GType dock_child_type = G_TYPE_INVALID;
   PanelArea area;
-  IdePanelPosition *ret;
+  PanelPosition *ret;
   GtkWidget *frame;
   GtkWidget *paned;
   GtkWidget *child;
@@ -295,14 +295,14 @@ ide_pane_get_position (IdePane *self)
                 "area", &area,
                 NULL);
 
-  ret = ide_panel_position_new ();
-  ide_panel_position_set_area (ret, area);
-  ide_panel_position_set_depth (ret, depth);
+  ret = panel_position_new ();
+  panel_position_set_area (ret, area);
+  panel_position_set_depth (ret, depth);
 
   if (area == PANEL_AREA_START || area == PANEL_AREA_END)
-    ide_panel_position_set_row (ret, row_or_column);
+    panel_position_set_row (ret, row_or_column);
   else
-    ide_panel_position_set_column (ret, row_or_column);
+    panel_position_set_column (ret, row_or_column);
 
   return ret;
 }

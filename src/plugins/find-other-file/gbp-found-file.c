@@ -222,7 +222,7 @@ void
 gbp_found_file_open (GbpFoundFile *self,
                      IdeWorkspace *workspace)
 {
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   IdeWorkbench *workbench;
 
   IDE_ENTRY;
@@ -231,7 +231,7 @@ gbp_found_file_open (GbpFoundFile *self,
   g_return_if_fail (IDE_IS_WORKSPACE (workspace));
 
   workbench = ide_workspace_get_workbench (workspace);
-  position = ide_panel_position_new ();
+  position = panel_position_new ();
 
   ide_workbench_open_async (workbench,
                             self->file,

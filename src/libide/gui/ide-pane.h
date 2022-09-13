@@ -43,18 +43,18 @@ struct _IdePaneClass
 };
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget *ide_pane_new       (void);
+GtkWidget     *ide_pane_new          (void);
 IDE_AVAILABLE_IN_ALL
-void       ide_pane_destroy   (IdePane *self);
+void           ide_pane_destroy      (IdePane  *self);
 IDE_AVAILABLE_IN_ALL
-void       ide_pane_observe   (IdePane  *self,
-                               IdePane **location);
+void           ide_pane_observe      (IdePane  *self,
+                                      IdePane **location);
 IDE_AVAILABLE_IN_ALL
-void       ide_pane_unobserve (IdePane  *self,
-                               IdePane **location);
+void           ide_pane_unobserve    (IdePane  *self,
+                                      IdePane **location);
 IDE_AVAILABLE_IN_ALL
-void       ide_clear_pane     (IdePane **location);
+void           ide_clear_pane        (IdePane **location);
 IDE_AVAILABLE_IN_ALL
-IdePanelPosition *ide_pane_get_position (IdePane *self);
+PanelPosition *ide_pane_get_position (IdePane  *self);
 
 G_END_DECLS

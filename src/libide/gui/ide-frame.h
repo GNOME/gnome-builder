@@ -37,13 +37,13 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeFrame, ide_frame, IDE, FRAME, PanelFrame)
 
 IDE_AVAILABLE_IN_ALL
-GtkWidget        *ide_frame_new            (void);
+GtkWidget     *ide_frame_new            (void);
 IDE_AVAILABLE_IN_ALL
-IdePanelPosition *ide_frame_get_position   (IdeFrame *self);
+PanelPosition *ide_frame_get_position   (IdeFrame *self);
 IDE_AVAILABLE_IN_ALL
-gboolean          ide_frame_get_use_tabbar (IdeFrame *self);
+gboolean       ide_frame_get_use_tabbar (IdeFrame *self);
 IDE_AVAILABLE_IN_ALL
-void              ide_frame_set_use_tabbar (IdeFrame *self,
-                                            gboolean  use_tabbar);
+void           ide_frame_set_use_tabbar (IdeFrame *self,
+                                         gboolean  use_tabbar);
 
 G_END_DECLS

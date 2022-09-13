@@ -90,7 +90,7 @@ typedef struct
   GFile              *file;
   gchar              *hint;
   gchar              *content_type;
-  IdePanelPosition   *position;
+  PanelPosition      *position;
   IdeBufferOpenFlags  flags;
   gint                at_line;
   gint                at_line_offset;
@@ -1885,7 +1885,7 @@ ide_workbench_open_async (IdeWorkbench        *self,
                           GFile               *file,
                           const gchar         *hint,
                           IdeBufferOpenFlags   flags,
-                          IdePanelPosition    *position,
+                          PanelPosition       *position,
                           GCancellable        *cancellable,
                           GAsyncReadyCallback  callback,
                           gpointer             user_data)
@@ -2118,12 +2118,12 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
                              gint                 at_line,
                              gint                 at_line_offset,
                              IdeBufferOpenFlags   flags,
-                             IdePanelPosition    *position,
+                             PanelPosition       *position,
                              GCancellable        *cancellable,
                              GAsyncReadyCallback  callback,
                              gpointer             user_data)
 {
-  g_autoptr(IdePanelPosition) local_position = NULL;
+  g_autoptr(PanelPosition) local_position = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) addins = NULL;
   IdeWorkbench *other;
@@ -2135,7 +2135,7 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
   g_return_if_fail (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   if (position == NULL)
-    position = local_position = ide_panel_position_new ();
+    position = local_position = panel_position_new ();
 
   /* Possibly re-route opening the file to another workbench if we
    * discover the file is a better fit over there.
@@ -2188,7 +2188,7 @@ ide_workbench_open_at_async (IdeWorkbench        *self,
   o->flags = flags;
   o->at_line = at_line;
   o->at_line_offset = at_line_offset;
-  o->position = ide_panel_position_ref (position);
+  o->position = g_object_ref (position);
   ide_task_set_task_data (task, o, open_free);
 
   g_file_query_info_async (file,

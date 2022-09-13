@@ -36,13 +36,13 @@ gbp_messages_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   GbpMessagesWorkspaceAddin *self = (GbpMessagesWorkspaceAddin *)addin;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
 
   g_assert (GBP_IS_MESSAGES_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  position = ide_panel_position_new ();
-  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
+  position = panel_position_new ();
+  panel_position_set_area (position, PANEL_AREA_BOTTOM);
 
   self->panel = g_object_new (GBP_TYPE_MESSAGES_PANEL, NULL);
   ide_workspace_add_pane (workspace, IDE_PANE (self->panel), position);

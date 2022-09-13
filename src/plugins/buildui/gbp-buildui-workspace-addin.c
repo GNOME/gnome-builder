@@ -257,8 +257,8 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   IdeWorkspace      *workspace)
 {
   GbpBuilduiWorkspaceAddin *self = (GbpBuilduiWorkspaceAddin *)addin;
-  g_autoptr(IdePanelPosition) pane_position = NULL;
-  g_autoptr(IdePanelPosition) log_position = NULL;
+  g_autoptr(PanelPosition) pane_position = NULL;
+  g_autoptr(PanelPosition) log_position = NULL;
   PangoAttrList *small_attrs = NULL;
   IdeBuildManager *build_manager;
   PanelStatusbar *statusbar;
@@ -345,16 +345,16 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
   ide_omni_bar_add_popover_section (omnibar, GTK_WIDGET (self->omni_bar_section), 0);
   gbp_buildui_omni_bar_section_set_context (self->omni_bar_section, context);
 
-  log_position = ide_panel_position_new ();
-  ide_panel_position_set_area (log_position, PANEL_AREA_BOTTOM);
-  ide_panel_position_set_depth (log_position, 2);
+  log_position = panel_position_new ();
+  panel_position_set_area (log_position, PANEL_AREA_BOTTOM);
+  panel_position_set_depth (log_position, 2);
 
   self->log_pane = g_object_new (GBP_TYPE_BUILDUI_LOG_PANE, NULL);
   ide_workspace_add_pane (workspace, IDE_PANE (self->log_pane), log_position);
 
-  pane_position = ide_panel_position_new ();
-  ide_panel_position_set_area (pane_position, PANEL_AREA_START);
-  ide_panel_position_set_depth (pane_position, 1);
+  pane_position = panel_position_new ();
+  panel_position_set_area (pane_position, PANEL_AREA_START);
+  panel_position_set_depth (pane_position, 1);
 
   self->pane = g_object_new (GBP_TYPE_BUILDUI_PANE, NULL);
   ide_workspace_add_pane (workspace, IDE_PANE (self->pane), pane_position);

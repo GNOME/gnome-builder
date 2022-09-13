@@ -29,18 +29,18 @@
 
 typedef struct _Focus
 {
-  IdeWorkspace     *workspace;
-  IdePanelPosition *position;
-  IdeLocation      *location;
-  IdeBuffer        *buffer;
-  GFile            *file;
+  IdeWorkspace  *workspace;
+  PanelPosition *position;
+  IdeLocation   *location;
+  IdeBuffer     *buffer;
+  GFile         *file;
 } Focus;
 
 static Focus *
-focus_new (IdeWorkspace     *workspace,
-           IdePanelPosition *position,
-           IdeBuffer        *buffer,
-           IdeLocation      *location)
+focus_new (IdeWorkspace  *workspace,
+           PanelPosition *position,
+           IdeBuffer     *buffer,
+           IdeLocation   *location)
 {
   IdeBufferManager *bufmgr;
   IdeContext *context;
@@ -70,7 +70,7 @@ focus_new (IdeWorkspace     *workspace,
     buffer = ide_buffer_manager_find_buffer (bufmgr, file);
 
   focus = g_atomic_rc_box_alloc0 (sizeof *focus);
-  focus->position = ide_panel_position_ref (position);
+  focus->position = g_object_ref (position);
   g_set_object (&focus->workspace, workspace);
   g_set_object (&focus->buffer, buffer);
   g_set_object (&focus->location, location);
@@ -199,12 +199,12 @@ ide_editor_load_file_cb (GObject      *object,
 }
 
 static void
-do_focus (IdeWorkspace     *workspace,
-          IdePanelPosition *position,
-          IdeBuffer        *buffer,
-          IdeLocation      *location)
+do_focus (IdeWorkspace  *workspace,
+          PanelPosition *position,
+          IdeBuffer     *buffer,
+          IdeLocation   *location)
 {
-  g_autoptr(IdePanelPosition) local_position = NULL;
+  g_autoptr(PanelPosition) local_position = NULL;
   IdeBufferManager *bufmgr;
   IdeContext *context;
   Focus *focus;
@@ -221,7 +221,7 @@ do_focus (IdeWorkspace     *workspace,
   g_assert (IDE_IS_BUFFER_MANAGER (bufmgr));
 
   if (position == NULL)
-    position = local_position = ide_panel_position_new ();
+    position = local_position = panel_position_new ();
 
   focus = focus_new (workspace, position, buffer, location);
 
@@ -238,9 +238,9 @@ do_focus (IdeWorkspace     *workspace,
 }
 
 void
-ide_editor_focus_location (IdeWorkspace     *workspace,
-                           IdePanelPosition *position,
-                           IdeLocation      *location)
+ide_editor_focus_location (IdeWorkspace  *workspace,
+                           PanelPosition *position,
+                           IdeLocation   *location)
 {
   g_return_if_fail (IDE_IS_WORKSPACE (workspace));
   g_return_if_fail (IDE_IS_LOCATION (location));
@@ -249,9 +249,9 @@ ide_editor_focus_location (IdeWorkspace     *workspace,
 }
 
 void
-ide_editor_focus_buffer (IdeWorkspace     *workspace,
-                         IdePanelPosition *position,
-                         IdeBuffer        *buffer)
+ide_editor_focus_buffer (IdeWorkspace  *workspace,
+                         PanelPosition *position,
+                         IdeBuffer     *buffer)
 {
   g_return_if_fail (IDE_IS_WORKSPACE (workspace));
   g_return_if_fail (IDE_IS_BUFFER (buffer));

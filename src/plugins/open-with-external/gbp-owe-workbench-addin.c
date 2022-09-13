@@ -88,16 +88,16 @@ on_file_opened_cb (GObject      *source_object,
 }
 
 static void
-gbp_owe_workbench_addin_open_async (IdeWorkbenchAddin     *addin,
-                                    GFile                 *file,
-                                    const gchar           *content_type,
-                                    int                    line,
-                                    int                    line_offset,
-                                    IdeBufferOpenFlags     flags,
-                                    IdePanelPosition      *position,
-                                    GCancellable          *cancellable,
-                                    GAsyncReadyCallback    callback,
-                                    gpointer               user_data)
+gbp_owe_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
+                                    GFile               *file,
+                                    const gchar         *content_type,
+                                    int                  line,
+                                    int                  line_offset,
+                                    IdeBufferOpenFlags   flags,
+                                    PanelPosition       *position,
+                                    GCancellable        *cancellable,
+                                    GAsyncReadyCallback  callback,
+                                    gpointer             user_data)
 {
   GbpOweWorkbenchAddin *self = (GbpOweWorkbenchAddin *)addin;
   g_autoptr(IdeTask) task = NULL;

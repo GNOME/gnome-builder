@@ -337,7 +337,7 @@ gbp_sysprof_tool_stopped (IdeRunTool *run_tool)
       IdeContext *context = ide_object_get_context (IDE_OBJECT (self));
       IdeWorkbench *workbench = ide_workbench_from_context (context);
       IdeWorkspace *workspace = ide_workbench_get_current_workspace (workbench);
-      g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
+      g_autoptr(PanelPosition) position = panel_position_new ();
 
       ide_workspace_add_page (workspace, IDE_PAGE (page), position);
 

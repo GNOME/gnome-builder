@@ -196,7 +196,7 @@ live_preview_action (GbpMarkdownPreviewWorkspaceAddin *self,
                      GVariant                     *params)
 {
   g_autoptr(IdeHtmlGenerator) generator = NULL;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   g_autoptr(IdeBuffer) buffer = NULL;
   IdeWebkitPage *page;
   guint column = 0;
@@ -218,8 +218,8 @@ live_preview_action (GbpMarkdownPreviewWorkspaceAddin *self,
   if (!ide_panel_position_get_column (position, &column))
     column = 0;
 
-  ide_panel_position_set_column (position, column + 1);
-  ide_panel_position_set_depth (position, 0);
+  panel_position_set_column (position, column + 1);
+  panel_position_set_depth (position, 0);
 
   ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
   panel_widget_raise (PANEL_WIDGET (page));

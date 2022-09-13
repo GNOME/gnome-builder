@@ -110,7 +110,7 @@ record_again_action (GSimpleAction *action,
                      gpointer       user_data)
 {
   GbpSysprofPage *self = user_data;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   GbpSysprofPage *new_page;
   SysprofDisplay *display;
   IdeWorkspace *workspace;
@@ -129,7 +129,7 @@ record_again_action (GSimpleAction *action,
 
   workspace = ide_widget_get_workspace (GTK_WIDGET (self));
   position = ide_page_get_position (IDE_PAGE (self));
-  ide_panel_position_set_depth (position, 0);
+  panel_position_set_depth (position, 0);
   ide_workspace_add_page (workspace, IDE_PAGE (new_page), position);
 }
 

@@ -104,9 +104,9 @@ ide_editor_workspace_context_set (IdeWorkspace *workspace,
 }
 
 static void
-ide_editor_workspace_add_page (IdeWorkspace     *workspace,
-                               IdePage          *page,
-                               IdePanelPosition *position)
+ide_editor_workspace_add_page (IdeWorkspace  *workspace,
+                               IdePage       *page,
+                               PanelPosition *position)
 {
   IdeEditorWorkspace *self = (IdeEditorWorkspace *)workspace;
 
@@ -122,9 +122,9 @@ ide_editor_workspace_add_page (IdeWorkspace     *workspace,
 }
 
 static void
-ide_editor_workspace_add_pane (IdeWorkspace     *workspace,
-                               IdePane          *pane,
-                               IdePanelPosition *position)
+ide_editor_workspace_add_pane (IdeWorkspace  *workspace,
+                               IdePane       *pane,
+                               PanelPosition *position)
 {
   IdeEditorWorkspace *self = (IdeEditorWorkspace *)workspace;
 
@@ -157,8 +157,8 @@ ide_editor_workspace_get_most_recent_frame (IdeWorkspace *workspace)
 }
 
 static PanelFrame *
-ide_editor_workspace_get_frame_at_position (IdeWorkspace     *workspace,
-                                            IdePanelPosition *position)
+ide_editor_workspace_get_frame_at_position (IdeWorkspace  *workspace,
+                                            PanelPosition *position)
 {
   IdeEditorWorkspace *self = (IdeEditorWorkspace *)workspace;
 

@@ -60,7 +60,7 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
                                     GtkButton      *button)
 {
   g_autoptr(GbpGrepModel) model = NULL;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   IdeWorkspace *workspace;
   IdeContext *context;
   GtkWidget *panel;
@@ -75,8 +75,8 @@ gbp_grep_popover_button_clicked_cb (GbpGrepPopover *self,
   workspace = ide_widget_get_workspace (GTK_WIDGET (self));
   context = ide_widget_get_context (GTK_WIDGET (workspace));
 
-  position = ide_panel_position_new ();
-  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
+  position = panel_position_new ();
+  panel_position_set_area (position, PANEL_AREA_BOTTOM);
 
   use_regex = gtk_check_button_get_active (GTK_CHECK_BUTTON (self->regex_button));
   at_word_boundaries = gtk_check_button_get_active (GTK_CHECK_BUTTON (self->whole_button));

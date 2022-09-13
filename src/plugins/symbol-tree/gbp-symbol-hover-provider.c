@@ -42,7 +42,7 @@ on_activate_link (GtkLabel    *label,
                   const gchar *uristr,
                   IdeLocation *location)
 {
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   IdeWorkspace *workspace;
 
   g_assert (uristr != NULL);
@@ -52,7 +52,7 @@ on_activate_link (GtkLabel    *label,
   if (!(workspace = ide_widget_get_workspace (GTK_WIDGET (label))))
     return FALSE;
 
-  position = ide_panel_position_new ();
+  position = panel_position_new ();
   ide_editor_focus_location (workspace, position, location);
 
   return TRUE;

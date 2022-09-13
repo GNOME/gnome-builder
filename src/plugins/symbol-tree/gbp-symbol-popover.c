@@ -70,7 +70,7 @@ gbp_symbol_popover_get_location_cb (GObject      *object,
   if ((location = ide_symbol_node_get_location_finish (node, result, &error)))
     {
       IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (self));
-      g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
+      g_autoptr(PanelPosition) position = panel_position_new ();
 
       ide_editor_focus_location (workspace, position, location);
 

@@ -39,13 +39,13 @@ gboolean    _ide_workspace_can_search            (IdeWorkspace         *self);
 void        _ide_workspace_begin_global_search   (IdeWorkspace         *self);
 void        _ide_workspace_add_widget            (IdeWorkspace         *workspace,
                                                   PanelWidget          *widget,
-                                                  IdePanelPosition     *position,
+                                                  PanelPosition        *position,
                                                   PanelPaned           *dock_start,
                                                   PanelPaned           *dock_end,
                                                   PanelPaned           *dock_bottom,
                                                   IdeGrid              *grid);
 PanelFrame *_ide_workspace_find_frame            (IdeWorkspace         *workspace,
-                                                  IdePanelPosition     *position,
+                                                  PanelPosition        *position,
                                                   PanelPaned           *dock_start,
                                                   PanelPaned           *dock_end,
                                                   PanelPaned           *dock_bottom,

@@ -58,15 +58,15 @@ gbp_grep_workspace_addin_load (IdeWorkspaceAddin *addin,
 {
   GbpGrepWorkspaceAddin *self = (GbpGrepWorkspaceAddin *)addin;
   g_autoptr(GSimpleActionGroup) group = NULL;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
 
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
 
   self->panel = g_object_new (GBP_TYPE_GREP_PANEL, NULL);
 
-  position = ide_panel_position_new ();
-  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
+  position = panel_position_new ();
+  panel_position_set_area (position, PANEL_AREA_BOTTOM);
   ide_workspace_add_pane (workspace, self->panel, position);
 }
 

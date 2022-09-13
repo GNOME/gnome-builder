@@ -141,7 +141,7 @@ gbp_buildui_status_popover_activate_cb (GbpBuilduiStatusPopover *self,
                                         guint                    item_position,
                                         GtkListView             *list_view)
 {
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   g_autoptr(IdeDiagnostic) diagnostic = NULL;
   IdeWorkspace *workspace;
   IdeLocation *location;
@@ -159,7 +159,7 @@ gbp_buildui_status_popover_activate_cb (GbpBuilduiStatusPopover *self,
     IDE_EXIT;
 
   workspace = ide_widget_get_workspace (GTK_WIDGET (self));
-  position = ide_panel_position_new ();
+  position = panel_position_new ();
   ide_editor_focus_location (workspace, position, location);
 
   gtk_popover_popdown (GTK_POPOVER (self));

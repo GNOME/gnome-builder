@@ -963,9 +963,9 @@ ide_workspace_addin_find_by_module_name (IdeWorkspace *workspace,
  * position in which @page was added.
  */
 void
-ide_workspace_add_page (IdeWorkspace     *self,
-                        IdePage          *page,
-                        IdePanelPosition *position)
+ide_workspace_add_page (IdeWorkspace  *self,
+                        IdePage       *page,
+                        PanelPosition *position)
 {
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (IDE_IS_PAGE (page));
@@ -990,9 +990,9 @@ ide_workspace_add_page (IdeWorkspace     *self,
  * position in which @pane was added.
  */
 void
-ide_workspace_add_pane (IdeWorkspace     *self,
-                        IdePane          *pane,
-                        IdePanelPosition *position)
+ide_workspace_add_pane (IdeWorkspace  *self,
+                        IdePane       *pane,
+                        PanelPosition *position)
 {
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (IDE_IS_PANE (pane));
@@ -1208,13 +1208,13 @@ dummy_cb (gpointer data)
 }
 
 void
-_ide_workspace_add_widget (IdeWorkspace     *self,
-                           PanelWidget      *widget,
-                           IdePanelPosition *position,
-                           PanelPaned       *dock_start,
-                           PanelPaned       *dock_end,
-                           PanelPaned       *dock_bottom,
-                           IdeGrid          *grid)
+_ide_workspace_add_widget (IdeWorkspace  *self,
+                           PanelWidget   *widget,
+                           PanelPosition *position,
+                           PanelPaned    *dock_start,
+                           PanelPaned    *dock_end,
+                           PanelPaned    *dock_bottom,
+                           IdeGrid       *grid)
 {
   PanelFrame *frame;
   gboolean depth_set;
@@ -1249,12 +1249,12 @@ _ide_workspace_add_widget (IdeWorkspace     *self,
 }
 
 PanelFrame *
-_ide_workspace_find_frame (IdeWorkspace     *self,
-                           IdePanelPosition *position,
-                           PanelPaned       *dock_start,
-                           PanelPaned       *dock_end,
-                           PanelPaned       *dock_bottom,
-                           IdeGrid          *grid)
+_ide_workspace_find_frame (IdeWorkspace  *self,
+                           PanelPosition *position,
+                           PanelPaned    *dock_start,
+                           PanelPaned    *dock_end,
+                           PanelPaned    *dock_bottom,
+                           IdeGrid       *grid)
 {
   PanelArea area;
   PanelPaned *paned = NULL;
@@ -1340,15 +1340,15 @@ _ide_workspace_find_frame (IdeWorkspace     *self,
 /**
  * ide_workspace_get_frame_at_position:
  * @self: an #IdeWorkspace
- * @position: an #IdePanelPosition
+ * @position: an #PanelPosition
  *
  * Attempts to locate the #PanelFrame at a given position.
  *
  * Returns: (transfer none) (nullable): a #PaneFrame or %NULL
  */
 PanelFrame *
-ide_workspace_get_frame_at_position (IdeWorkspace     *self,
-                                     IdePanelPosition *position)
+ide_workspace_get_frame_at_position (IdeWorkspace  *self,
+                                     PanelPosition *position)
 {
   g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
   g_return_val_if_fail (position != NULL, NULL);

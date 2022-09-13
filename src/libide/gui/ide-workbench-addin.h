@@ -75,7 +75,7 @@ struct _IdeWorkbenchAddinInterface
                                           int                    at_line,
                                           int                    at_line_offset,
                                           IdeBufferOpenFlags     flags,
-                                          IdePanelPosition      *position,
+                                          PanelPosition         *position,
                                           GCancellable          *cancellable,
                                           GAsyncReadyCallback    callback,
                                           gpointer               user_data);
@@ -134,7 +134,7 @@ void               ide_workbench_addin_open_async            (IdeWorkbenchAddin 
                                                               int                   at_line,
                                                               int                   at_line_offset,
                                                               IdeBufferOpenFlags    flags,
-                                                              IdePanelPosition     *position,
+                                                              PanelPosition        *position,
                                                               GCancellable         *cancellable,
                                                               GAsyncReadyCallback   callback,
                                                               gpointer              user_data);

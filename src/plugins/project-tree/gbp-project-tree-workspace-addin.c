@@ -39,7 +39,7 @@ gbp_project_tree_workspace_addin_load (IdeWorkspaceAddin *addin,
                                        IdeWorkspace      *workspace)
 {
   GbpProjectTreeWorkspaceAddin *self = (GbpProjectTreeWorkspaceAddin *)addin;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
 
   g_assert (GBP_IS_PROJECT_TREE_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (workspace));
@@ -50,10 +50,10 @@ gbp_project_tree_workspace_addin_load (IdeWorkspaceAddin *addin,
                                   NULL),
                     (IdePane **)&self->pane);
 
-  position = ide_panel_position_new ();
-  ide_panel_position_set_area (position, PANEL_AREA_START);
-  ide_panel_position_set_row (position, 0);
-  ide_panel_position_set_depth (position, 0);
+  position = panel_position_new ();
+  panel_position_set_area (position, PANEL_AREA_START);
+  panel_position_set_row (position, 0);
+  panel_position_set_depth (position, 0);
 
   ide_workspace_add_pane (workspace, IDE_PANE (self->pane), position);
 

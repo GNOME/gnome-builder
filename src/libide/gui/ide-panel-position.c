@@ -24,152 +24,78 @@
 
 #include "ide-panel-position.h"
 
-struct _IdePanelPosition
-{
-  guint column : 8;
-  guint row : 8;
-  guint depth : 9;
-  PanelArea area : 3;
-  guint column_set : 1;
-  guint row_set : 1;
-  guint depth_set : 1;
-  guint area_set : 1;
-};
-
-G_DEFINE_BOXED_TYPE (IdePanelPosition, ide_panel_position, ide_panel_position_ref, ide_panel_position_unref)
-
-IdePanelPosition *
-ide_panel_position_new (void)
-{
-  return g_rc_box_alloc0 (sizeof (IdePanelPosition));
-}
-
-IdePanelPosition *
-ide_panel_position_ref (IdePanelPosition *self)
-{
-  return g_rc_box_acquire (self);
-}
-
-void
-ide_panel_position_unref (IdePanelPosition *self)
-{
-  g_rc_box_release (self);
-}
-
+/**
+ * ide_panel_position_get_area:
+ * @self: a #PanelPosition
+ * @area: (out) (nullable): a location for the area
+ *
+ * Returns: %TRUE if the area was set
+ */
 gboolean
-ide_panel_position_get_area (IdePanelPosition *self,
-                             PanelArea        *area)
+ide_panel_position_get_area (PanelPosition *self,
+                             PanelArea     *area)
 {
-  g_return_val_if_fail (self != NULL, FALSE);
+  g_return_val_if_fail (PANEL_IS_POSITION (self), FALSE);
 
   if (area != NULL)
-    *area = self->area;
+    *area = panel_position_get_area (self);
 
-  return self->area_set;
-}
-
-void
-ide_panel_position_set_area (IdePanelPosition *self,
-                             PanelArea         area)
-{
-  g_return_if_fail (self != NULL);
-  g_return_if_fail (area <= PANEL_AREA_CENTER);
-
-  self->area = area;
-  self->area_set = TRUE;
+  return panel_position_get_area_set (self);
 }
 
 /**
  * ide_panel_position_get_column:
- * @self: a #IdePanelPosition
- * @column: (out): a location for a column
+ * @self: a #PanelPosition
+ * @column: (out) (nullable): a location for a column
  *
- * Returns: %TRUE if the column is set
+ * Returns: %TRUE if the column was set
  */
 gboolean
-ide_panel_position_get_column (IdePanelPosition *self,
-                               guint            *column)
+ide_panel_position_get_column (PanelPosition *self,
+                               guint         *column)
 {
   g_return_val_if_fail (self != NULL, FALSE);
 
   if (column != NULL)
-    *column = self->column;
+    *column = panel_position_get_column (self);
 
-  return self->column_set;
-}
-
-void
-ide_panel_position_set_column (IdePanelPosition *self,
-                               guint             column)
-{
-  g_return_if_fail (self != NULL);
-
-  self->column = column;
-  self->column_set = TRUE;
+  return panel_position_get_column_set (self);
 }
 
 /**
  * ide_panel_position_get_row:
- * @self: a #IdePanelPosition
- * @row: (out): a location for the row
+ * @self: a #PanelPosition
+ * @row: (out) (nullable): a location for the row
  *
- * Returns: %TRUE if the row is set
+ * Returns: %TRUE if the row was set
  */
 gboolean
-ide_panel_position_get_row (IdePanelPosition *self,
-                            guint            *row)
+ide_panel_position_get_row (PanelPosition *self,
+                            guint         *row)
 {
   g_return_val_if_fail (self != NULL, FALSE);
 
   if (row != NULL)
-    *row = self->row;
+    *row = panel_position_get_row (self);
 
-  return self->row_set;
-}
-
-void
-ide_panel_position_set_row (IdePanelPosition *self,
-                            guint             row)
-{
-  g_return_if_fail (self != NULL);
-
-  self->row = row;
-  self->row_set = TRUE;
+  return panel_position_get_row_set (self);
 }
 
 /**
  * ide_panel_position_get_depth:
- * @self: a #IdePanelPosition
- * @depth: (out): a location for the depth
+ * @self: a #PanelPosition
+ * @depth: (out) (nullable): a location for the depth
  *
- * Returns: %TRUE if the depth is set
+ * Returns: %TRUE if the depth was set
  */
 gboolean
-ide_panel_position_get_depth (IdePanelPosition *self,
-                              guint            *depth)
+ide_panel_position_get_depth (PanelPosition *self,
+                              guint         *depth)
 {
   g_return_val_if_fail (self != NULL, FALSE);
 
   if (depth != NULL)
-    *depth = self->depth;
+    *depth = panel_position_get_depth (self);
 
-  return self->depth_set;
-}
-
-void
-ide_panel_position_set_depth (IdePanelPosition *self,
-                              guint             depth)
-{
-  g_return_if_fail (self != NULL);
-
-  self->depth = depth;
-  self->depth_set = TRUE;
-}
-
-gboolean
-ide_panel_position_is_indeterminate (IdePanelPosition *self)
-{
-  g_return_val_if_fail (self != NULL, TRUE);
-
-  return !self->column_set || !self->row_set || !self->area_set;
+  return panel_position_get_depth_set (self);
 }

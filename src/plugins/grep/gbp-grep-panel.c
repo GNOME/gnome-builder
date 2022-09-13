@@ -242,7 +242,7 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
       if G_LIKELY (line != NULL)
         {
           g_autoptr(IdeLocation) location = NULL;
-          g_autoptr(IdePanelPosition) position = NULL;
+          g_autoptr(PanelPosition) position = NULL;
           g_autoptr(GFile) child = NULL;
           IdeWorkspace *workspace;
           guint lineno = line->line;
@@ -255,7 +255,7 @@ gbp_grep_panel_row_activated_cb (GbpGrepPanel      *self,
           child = gbp_grep_model_get_file (GBP_GREP_MODEL (model), line->path);
           location = ide_location_new (child, lineno, -1);
 
-          position = ide_panel_position_new ();
+          position = panel_position_new ();
           ide_editor_focus_location (workspace, position, location);
         }
     }

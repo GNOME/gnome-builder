@@ -227,7 +227,7 @@ new_file_cb (GObject      *object,
 {
   IdeBufferManager *bufmgr = (IdeBufferManager *)object;
   g_autoptr(IdeWorkspace) workspace = user_data;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GError) error = NULL;
   GtkWidget *page;
@@ -245,7 +245,7 @@ new_file_cb (GObject      *object,
     }
 
   page = ide_editor_page_new (buffer);
-  position = ide_panel_position_new ();
+  position = panel_position_new ();
   ide_workspace_add_page (workspace, IDE_PAGE (page), position);
   panel_widget_raise (PANEL_WIDGET (page));
   gtk_widget_grab_focus (GTK_WIDGET (page));

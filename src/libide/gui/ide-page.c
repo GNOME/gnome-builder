@@ -168,7 +168,7 @@ open_in_new_workspace_action (GtkWidget  *widget,
                               GVariant   *param)
 {
   IdePage *self = (IdePage *)widget;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   IdeWorkspace *workspace;
   IdeWorkbench *workbench;
   IdePage *split;
@@ -625,13 +625,13 @@ ide_page_set_progress (IdePage         *self,
  *
  * Gets the position of a page within the workspace.
  *
- * Returns: (transfer full) (nullable): an #IdePanelPosition or %NULL
+ * Returns: (transfer full) (nullable): an #PanelPosition or %NULL
  *   if the page is not rooted.
  */
-IdePanelPosition *
+PanelPosition *
 ide_page_get_position (IdePage *self)
 {
-  IdePanelPosition *position;
+  PanelPosition *position;
   GtkWidget *frame;
   guint n_pages;
 
@@ -649,7 +649,7 @@ ide_page_get_position (IdePage *self)
     {
       if (panel_frame_get_page (PANEL_FRAME (frame), i) == PANEL_WIDGET (self))
         {
-          ide_panel_position_set_depth (position, i);
+          panel_position_set_depth (position, i);
           return position;
         }
     }

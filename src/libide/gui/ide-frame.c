@@ -345,20 +345,20 @@ ide_frame_addin_find_by_module_name (IdeFrame    *frame,
  *
  * Gets the position in the grid of a frame.
  *
- * Returns: (transfer full): a new #IdePanelPosition
+ * Returns: (transfer full): a new #PanelPosition
  */
-IdePanelPosition *
+PanelPosition *
 ide_frame_get_position (IdeFrame *self)
 {
-  IdePanelPosition *ret;
+  PanelPosition *ret;
   PanelGrid *grid;
   guint n_columns;
 
   g_return_val_if_fail (IDE_IS_FRAME (self), NULL);
 
   /* Frames are always in the center grid */
-  ret = ide_panel_position_new ();
-  ide_panel_position_set_area (ret, PANEL_AREA_CENTER);
+  ret = panel_position_new ();
+  panel_position_set_area (ret, PANEL_AREA_CENTER);
 
   /* Implausible but handle it anyway */
   grid = PANEL_GRID (gtk_widget_get_ancestor (GTK_WIDGET (self), PANEL_TYPE_GRID));
@@ -378,8 +378,8 @@ ide_frame_get_position (IdeFrame *self)
 
           if (frame == PANEL_FRAME (self))
             {
-              ide_panel_position_set_column (ret, c);
-              ide_panel_position_set_row (ret, r);
+              panel_position_set_column (ret, c);
+              panel_position_set_row (ret, r);
               return ret;
             }
         }

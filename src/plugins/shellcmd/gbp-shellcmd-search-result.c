@@ -44,7 +44,7 @@ gbp_shellcmd_search_result_activate (IdeSearchResult *result,
 {
   GbpShellcmdSearchResult *self = (GbpShellcmdSearchResult *)result;
   g_autoptr(IdeTerminalLauncher) launcher = NULL;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   IdeWorkspace *workspace;
   IdeContext *context;
   const char *title;
@@ -77,7 +77,7 @@ gbp_shellcmd_search_result_activate (IdeSearchResult *result,
                        "title", title,
                        NULL);
 
-  position = ide_panel_position_new ();
+  position = panel_position_new ();
 
   ide_workspace_add_page (workspace, page, position);
   panel_widget_raise (PANEL_WIDGET (page));

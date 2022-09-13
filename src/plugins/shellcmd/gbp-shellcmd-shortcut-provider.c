@@ -44,7 +44,7 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
                             gpointer   user_data)
 {
   GbpShellcmdRunCommand *run_command = user_data;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   g_autoptr(IdeTerminalLauncher) launcher = NULL;
   IdeWorkspace *workspace;
   IdeContext *context;
@@ -83,7 +83,7 @@ gbp_shellcmd_shortcut_func (GtkWidget *widget,
                        "title", title,
                        NULL);
 
-  position = ide_panel_position_new ();
+  position = panel_position_new ();
 
   ide_workspace_add_page (workspace, page, position);
   panel_widget_raise (PANEL_WIDGET (page));

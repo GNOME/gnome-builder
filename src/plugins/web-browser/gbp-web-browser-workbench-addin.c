@@ -89,7 +89,7 @@ gbp_web_browser_workbench_addin_open_async (IdeWorkbenchAddin   *addin,
                                             int                  at_line,
                                             int                  at_line_offset,
                                             IdeBufferOpenFlags   flags,
-                                            IdePanelPosition    *position,
+                                            PanelPosition       *position,
                                             GCancellable        *cancellable,
                                             GAsyncReadyCallback  callback,
                                             gpointer             user_data)

@@ -177,7 +177,7 @@ on_frame_activated (IdeDebuggerWorkspaceAddin *self,
       IdeContext *context = ide_widget_get_context (GTK_WIDGET (threads_view));
       g_autofree gchar *project_path = ide_context_build_filename (context, path, NULL);
       g_autoptr(GFile) file = g_file_new_for_path (project_path);
-      g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
+      g_autoptr(PanelPosition) position = panel_position_new ();
       g_autoptr(IdeLocation) location = NULL;
 
       location = ide_location_new (file, line, -1);
@@ -202,7 +202,7 @@ on_frame_activated (IdeDebuggerWorkspaceAddin *self,
 static void
 ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
 {
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   GtkNotebook *notebook;
   PanelPaned *hpaned;
 
@@ -265,8 +265,8 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
                             GTK_WIDGET (self->log_view),
                             gtk_label_new (_("Console")));
 
-  position = ide_panel_position_new ();
-  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
+  position = panel_position_new ();
+  panel_position_set_area (position, PANEL_AREA_BOTTOM);
 
   ide_workspace_add_pane (self->workspace, IDE_PANE (self->panel), position);
 }
@@ -417,7 +417,7 @@ ide_debugger_workspace_addin_disassemble_cb (GObject      *object,
 
   if (self->disassembly_view == NULL)
     {
-      g_autoptr(IdePanelPosition) position = ide_panel_position_new ();
+      g_autoptr(PanelPosition) position = panel_position_new ();
 
       ide_page_observe (g_object_new (IDE_TYPE_DEBUGGER_DISASSEMBLY_VIEW, NULL),
                         (IdePage **)&self->disassembly_view);

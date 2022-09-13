@@ -266,7 +266,7 @@ static void
 live_preview_action (GbpSphinxPreviewWorkspaceAddin *self,
                      GVariant                       *params)
 {
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   g_autoptr(IdeBuffer) buffer = NULL;
   g_autoptr(GFile) workdir = NULL;
   g_autoptr(GFile) parent = NULL;
@@ -292,8 +292,8 @@ live_preview_action (GbpSphinxPreviewWorkspaceAddin *self,
   if (!ide_panel_position_get_column (position, &column))
     column = 0;
 
-  ide_panel_position_set_column (position, column + 1);
-  ide_panel_position_set_depth (position, 0);
+  panel_position_set_column (position, column + 1);
+  panel_position_set_depth (position, 0);
 
   while (parent != NULL &&
          (g_file_equal (workdir, parent) || g_file_has_prefix (parent, workdir)))

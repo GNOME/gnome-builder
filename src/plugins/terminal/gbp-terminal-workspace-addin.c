@@ -68,7 +68,7 @@ gbp_terminal_workspace_addin_add_page (GbpTerminalWorkspaceAddin *self,
                                        const char                *cwd)
 {
   g_autoptr(IdeTerminalLauncher) launcher = NULL;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   g_autoptr(IdeRunCommand) run_command = NULL;
   IdeContext *context;
   IdePage *current_page;
@@ -94,7 +94,7 @@ gbp_terminal_workspace_addin_add_page (GbpTerminalWorkspaceAddin *self,
     position = ide_page_get_position (current_page);
 
   if (position == NULL)
-    position = ide_panel_position_new ();
+    position = panel_position_new ();
 
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
                        "respawn-on-exit", FALSE,
@@ -241,7 +241,7 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
                                    IdeWorkspace      *workspace)
 {
   GbpTerminalWorkspaceAddin *self = (GbpTerminalWorkspaceAddin *)addin;
-  g_autoptr(IdePanelPosition) position = NULL;
+  g_autoptr(PanelPosition) position = NULL;
   IdeContext *context;
   IdePage *page;
   IdePane *pane;
@@ -264,8 +264,8 @@ gbp_terminal_workspace_addin_load (IdeWorkspaceAddin *addin,
     }
 
   /* Always add the terminal panel to primary/editor workspaces */
-  position = ide_panel_position_new ();
-  ide_panel_position_set_area (position, PANEL_AREA_BOTTOM);
+  position = panel_position_new ();
+  panel_position_set_area (position, PANEL_AREA_BOTTOM);
   page = g_object_new (IDE_TYPE_TERMINAL_PAGE,
                        "respawn-on-exit", TRUE,
                        "visible", TRUE,
