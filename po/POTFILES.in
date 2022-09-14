@@ -70,6 +70,7 @@ src/libide/gui/ide-primary-workspace.ui
 src/libide/gui/ide-run-button.c
 src/libide/gui/ide-shortcut-window.c
 src/libide/gui/ide-workbench.c
+src/libide/gui/ide-workspace.c
 src/libide/gui/tweaks.ui
 src/libide/io/ide-pkcon-transfer.c
 src/libide/lsp/ide-lsp-client.c
