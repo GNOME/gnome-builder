@@ -96,7 +96,7 @@ _##prefix##_get_action_info (GActionGroup *group,                               
   return info;                                                                    \
 }                                                                                 \
                                                                                   \
-static inline GVariant *                                                          \
+G_GNUC_UNUSED static inline GVariant *                                            \
 prefix##_get_action_state (Type *self,                                            \
                            const gchar *name)                                     \
 {                                                                                 \
@@ -105,7 +105,7 @@ prefix##_get_action_state (Type *self,                                          
   return info->state;                                                             \
 }                                                                                 \
                                                                                   \
-static inline void                                                                \
+G_GNUC_UNUSED static inline void                                                  \
 prefix##_set_action_state (Type *self,                                            \
                            const gchar *name,                                     \
                            GVariant *state)                                       \
@@ -120,7 +120,7 @@ prefix##_set_action_state (Type *self,                                          
     }                                                                             \
 }                                                                                 \
                                                                                   \
-static inline void                                                                \
+G_GNUC_UNUSED static inline void                                                  \
 prefix##_set_action_enabled (Type *self,                                          \
                              const gchar *name,                                   \
                              gboolean enabled)                                    \
