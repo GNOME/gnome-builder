@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-14 02:52+0000\n"
-"PO-Revision-Date: 2022-09-14 14:17+0300\n"
+"POT-Creation-Date: 2022-09-14 13:48+0000\n"
+"PO-Revision-Date: 2022-09-14 16:49+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1575,6 +1575,12 @@ msgstr "Запустити проєкт"
 msgid "Other"
 msgstr "Інше"
 
+#: src/libide/gui/ide-workspace.c:1646
+#| msgctxt "shortcut window"
+#| msgid "Create new document"
+msgid "There are unsaved documents"
+msgstr "Маємо незбережені документи"
+
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -2000,8 +2006,7 @@ msgstr "Кешування команд збирання"
 #. translators: %s and %s are replaced with source file path and the error message
 #: src/plugins/beautifier/gb-beautifier-config.c:157
 #, c-format
-msgid ""
-"Beautifier plugin: error copying the gresource config file for “%s”: %s"
+msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
 msgstr ""
 "Додаток форматування: сталася помилка під час копіювання файла налаштувань "
 "gresource для «%s»: %s"
@@ -2043,8 +2048,7 @@ msgstr ""
 #. translators: %s and %s are replaced with the config path and the entry name
 #: src/plugins/beautifier/gb-beautifier-config.c:291
 #, c-format
-msgid ""
-"Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
 msgstr ""
 "Додаток форматування: шляху налаштувань «%s» не існує, запис «%s» вимкнено"
 
@@ -2614,8 +2618,7 @@ msgstr "Авто"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr ""
-"Мапу огляду автоматично показано на основі введених користувачем даних"
+msgstr "Мапу огляду автоматично показано на основі введених користувачем даних"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
@@ -2694,8 +2697,7 @@ msgid "As Application"
 msgstr "Як програму"
 
 #: src/plugins/buildui/tweaks.ui:164
-msgid ""
-"Run unit with access to display and other runtime environment features."
+msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
 "Запустити модуль із доступом до дисплея та інших можливостей середовища "
 "виконання."
@@ -2885,8 +2887,7 @@ msgid "Complete Parameters"
 msgstr "Доповнювати параметри"
 
 #: src/plugins/clang/tweaks.ui:30
-msgid ""
-"Include parameters and type information when completing clang proposals"
+msgid "Include parameters and type information when completing clang proposals"
 msgstr ""
 "Включати параметри і дані типів при формуванні пропозицій доповнення clang"
 
@@ -3247,8 +3248,7 @@ msgid "Visibility:"
 msgstr "Видимість:"
 
 #: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid ""
-"Select the color spaces for which you want to see sliders in the panel."
+msgid "Select the color spaces for which you want to see sliders in the panel."
 msgstr ""
 "Виберіть простори кольорів, для яких ви хочете бачити повзунки на панелі."
 
@@ -3970,8 +3970,7 @@ msgstr "Показувати праве поле"
 
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr ""
-"Показувати поле у редакторі для позначення максимальної бажаної ширини"
+msgstr "Показувати поле у редакторі для позначення максимальної бажаної ширини"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -3999,8 +3998,7 @@ msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-msgid ""
-"Insert matching character for braces, brackets, parenthesis, and quotes"
+msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
 "Вставляти відповідні символи для квадратних, фігурних та круглих дужок, а "
 "також лапок"
@@ -4364,8 +4362,8 @@ msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr ""
-"Виконати переформатування початкового коду при збереженні на диск. Потребує"
-" зареєстрованого засобу форматування для мови програмування початкового коду."
+"Виконати переформатування початкового коду при збереженні на диск. Потребує "
+"зареєстрованого засобу форматування для мови програмування початкового коду."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -5803,8 +5801,7 @@ msgstr "Профілювання пам'яті"
 
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Record stacktraces of memory allocations and releases"
-msgstr ""
-"Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
+msgstr "Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
 
 #: src/plugins/sysprof/tweaks.ui:99
 msgid "Energy Usage"
@@ -6984,10 +6981,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgctxt "shortcut window"
 #~ msgid "Files"
 #~ msgstr "Файли"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Create new document"
-#~ msgstr "Створити новий документ"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Open a document"
