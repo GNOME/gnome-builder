@@ -38,9 +38,21 @@ ide_shell_supports_dash_c (const char *shell)
   return strcmp (shell, "bash") == 0 || g_str_has_suffix (shell, "/bash") ||
          strcmp (shell, "fish") == 0 || g_str_has_suffix (shell, "/fish") ||
          strcmp (shell, "zsh") == 0 || g_str_has_suffix (shell, "/zsh") ||
+         strcmp (shell, "dash") == 0 || g_str_has_suffix (shell, "/dash") ||
+         strcmp (shell, "tcsh") == 0 || g_str_has_suffix (shell, "/tcsh") ||
          strcmp (shell, "sh") == 0 || g_str_has_suffix (shell, "/sh");
 }
 
+/**
+ * ide_shell_supports_dash_login:
+ * @shell: the name of the shell, such as `sh` or `/bin/sh`
+ *
+ * Checks if the shell is known to support login semantics. Originally,
+ * this meant `--login`, but now is meant to mean `-l` as more shells
+ * support `-l` than `--login` (notably dash).
+ *
+ * Returns: %TRUE if @shell likely supports `-l`.
+ */
 gboolean
 ide_shell_supports_dash_login (const char *shell)
 {
@@ -50,6 +62,14 @@ ide_shell_supports_dash_login (const char *shell)
   return strcmp (shell, "bash") == 0 || g_str_has_suffix (shell, "/bash") ||
          strcmp (shell, "fish") == 0 || g_str_has_suffix (shell, "/fish") ||
          strcmp (shell, "zsh") == 0 || g_str_has_suffix (shell, "/zsh") ||
+         strcmp (shell, "dash") == 0 || g_str_has_suffix (shell, "/dash") ||
+#if 0
+         /* tcsh supports -l and -c but not combined! To do that, you'd have
+          * to instead launch the login shell like `-tcsh -c 'command'`, which
+          * is possible, but we lack the abstractions for that currently.
+          */
+         strcmp (shell, "tcsh") == 0 || g_str_has_suffix (shell, "/tcsh") ||
+#endif
          strcmp (shell, "sh") == 0 || g_str_has_suffix (shell, "/sh");
 }
 

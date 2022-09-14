@@ -366,7 +366,7 @@ ide_run_context_shell_handler (IdeRunContext       *self,
 
   ide_run_context_append_argv (self, "/bin/sh");
   if (login)
-    ide_run_context_append_argv (self, "--login");
+    ide_run_context_append_argv (self, "-l");
   ide_run_context_append_argv (self, "-c");
 
   str = g_string_new (NULL);

@@ -63,7 +63,7 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
       ide_run_context_add_minimal_environment (run_context);
       ide_run_context_append_argv (run_context, user_shell);
       if (ide_shell_supports_dash_login (user_shell))
-        ide_run_context_append_argv (run_context, "--login");
+        ide_run_context_append_argv (run_context, "-l");
       break;
 
     case IDE_TERMINAL_RUN_AS_SUBPROCESS:
@@ -72,12 +72,12 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
         {
           ide_run_context_append_argv (run_context, user_shell);
           if (ide_shell_supports_dash_login (user_shell))
-            ide_run_context_append_argv (run_context, "--login");
+            ide_run_context_append_argv (run_context, "-l");
         }
       else
         {
           ide_run_context_append_argv (run_context, "/bin/sh");
-          ide_run_context_append_argv (run_context, "--login");
+          ide_run_context_append_argv (run_context, "-l");
         }
       break;
 
@@ -110,7 +110,7 @@ ide_terminal_run_command_prepare_to_run (IdeRunCommand *run_command,
 
         ide_run_context_append_argv (run_context, user_shell);
         if (ide_shell_supports_dash_login (user_shell))
-          ide_run_context_append_argv (run_context, "--login");
+          ide_run_context_append_argv (run_context, "-l");
       }
       break;
 

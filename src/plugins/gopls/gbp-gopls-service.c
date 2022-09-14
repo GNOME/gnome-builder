@@ -90,7 +90,7 @@ gbp_gopls_service_configure_launcher (IdeLspService         *service,
 
       quoted = g_strjoinv (" ", (char **)(gpointer)ar->pdata);
       ide_subprocess_launcher_set_argv (launcher,
-                                        IDE_STRV_INIT (user_shell, "--login", "-c", quoted));
+                                        IDE_STRV_INIT (user_shell, "-l", "-c", quoted));
     }
 
   IDE_EXIT;
