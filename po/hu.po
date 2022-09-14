@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-14 00:26+0000\n"
-"PO-Revision-Date: 2022-09-14 02:31+0200\n"
+"POT-Creation-Date: 2022-09-14 00:39+0000\n"
+"PO-Revision-Date: 2022-09-14 02:40+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -905,25 +905,29 @@ msgstr "Dokumentum helyreállítva"
 msgid "Unsaved document has been restored."
 msgstr "A mentetlen dokumentum helyre lett állítva."
 
+#: src/libide/editor/ide-editor-page.c:81
+msgid "There are unsaved documents"
+msgstr "Mentetlen dokumentumok vannak"
+
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:437
+#: src/libide/editor/ide-editor-page.c:469
 #, c-format
 msgid "Print failed: %s"
 msgstr "Nyomtatás sikertelen: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:513
+#: src/libide/editor/ide-editor-page.c:545
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "A kijelölés formázása sikertelen: %s"
 
-#: src/libide/editor/ide-editor-page.c:929
+#: src/libide/editor/ide-editor-page.c:963
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Fájl mentése"
 
-#: src/libide/editor/ide-editor-page.c:932
+#: src/libide/editor/ide-editor-page.c:966
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -932,7 +936,7 @@ msgstr "Fájl mentése"
 msgid "Save"
 msgstr "Mentés"
 
-#: src/libide/editor/ide-editor-page.c:932
+#: src/libide/editor/ide-editor-page.c:966
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
