@@ -1,5 +1,6 @@
 plugins_sources += files([
   'sessionui-plugin.c',
+  'gbp-sessionui-editor-page-addin.c',
   'gbp-sessionui-workbench-addin.c',
 ])
 

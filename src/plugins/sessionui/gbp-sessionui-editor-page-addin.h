@@ -1,4 +1,4 @@
-/* sessionui-plugin.c
+/* gbp-sessionui-editor-page-addin.h
  *
  * Copyright 2022 Christian Hergert <chergert@redhat.com>
  *
@@ -18,25 +18,14 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-#define G_LOG_DOMAIN "sessionui-plugin"
+#pragma once
 
-#include "config.h"
+#include <glib-object.h>
 
-#include <libpeas/peas.h>
+G_BEGIN_DECLS
 
-#include <libide-editor.h>
-#include <libide-gui.h>
+#define GBP_TYPE_SESSIONUI_EDITOR_PAGE_ADDIN (gbp_sessionui_editor_page_addin_get_type())
 
-#include "gbp-sessionui-editor-page-addin.h"
-#include "gbp-sessionui-workbench-addin.h"
+G_DECLARE_FINAL_TYPE (GbpSessionuiEditorPageAddin, gbp_sessionui_editor_page_addin, GBP, SESSIONUI_EDITOR_PAGE_ADDIN, GObject)
 
-_IDE_EXTERN void
-_gbp_sessionui_register_types (PeasObjectModule *module)
-{
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_EDITOR_PAGE_ADDIN,
-                                              GBP_TYPE_SESSIONUI_EDITOR_PAGE_ADDIN);
-  peas_object_module_register_extension_type (module,
-                                              IDE_TYPE_WORKBENCH_ADDIN,
-                                              GBP_TYPE_SESSIONUI_WORKBENCH_ADDIN);
-}
+G_END_DECLS
