@@ -30,6 +30,7 @@ G_DEFINE_INTERFACE (IdeHighlighter, ide_highlighter, IDE_TYPE_OBJECT)
 
 static void
 ide_highlighter_real_update (IdeHighlighter       *self,
+                             const GSList         *tags_to_remove,
                              IdeHighlightCallback  callback,
                              const GtkTextIter    *range_begin,
                              const GtkTextIter    *range_end,
@@ -53,6 +54,7 @@ ide_highlighter_default_init (IdeHighlighterInterface *iface)
 /**
  * ide_highlighter_update:
  * @self: an #IdeHighlighter.
+ * @tags_to_remove: (element-type GtkTextTag): a #GSList of tags to be removed
  * @callback: (scope call): A callback to apply a given style.
  * @range_begin: The beginning of the range to update.
  * @range_end: The end of the range to update.
@@ -67,6 +69,7 @@ ide_highlighter_default_init (IdeHighlighterInterface *iface)
  */
 void
 ide_highlighter_update (IdeHighlighter       *self,
+                        const GSList         *tags_to_remove,
                         IdeHighlightCallback  callback,
                         const GtkTextIter    *range_begin,
                         const GtkTextIter    *range_end,
@@ -78,7 +81,7 @@ ide_highlighter_update (IdeHighlighter       *self,
   g_return_if_fail (range_end != NULL);
   g_return_if_fail (location != NULL);
 
-  IDE_HIGHLIGHTER_GET_IFACE (self)->update (self, callback, range_begin, range_end, location);
+  IDE_HIGHLIGHTER_GET_IFACE (self)->update (self, tags_to_remove, callback, range_begin, range_end, location);
 }
 
 void

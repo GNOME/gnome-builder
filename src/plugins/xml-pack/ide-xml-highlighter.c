@@ -190,6 +190,7 @@ ide_xml_highlighter_real_set_engine (IdeHighlighter     *highlighter,
 
 static void
 ide_xml_highlighter_real_update (IdeHighlighter       *highlighter,
+                                 const GSList         *tags_to_remove,
                                  IdeHighlightCallback  callback,
                                  const GtkTextIter    *range_begin,
                                  const GtkTextIter    *range_end,

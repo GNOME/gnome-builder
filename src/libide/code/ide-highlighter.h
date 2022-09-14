@@ -62,8 +62,13 @@ struct _IdeHighlighterInterface
    *
    * @location should be set to the position that the highlighter got to
    * before yielding back to the engine.
+   *
+   * @tags_to_remove are the #GtkTextTag that should be removed for the region
+   * and it is left up to the highlighter to do so (generally on a line by
+   * line basis).
    */
   void (*update)     (IdeHighlighter       *self,
+                      const GSList         *tags_to_remove,
                       IdeHighlightCallback  callback,
                       const GtkTextIter    *range_begin,
                       const GtkTextIter    *range_end,
@@ -79,11 +84,10 @@ IDE_AVAILABLE_IN_ALL
 void ide_highlighter_load   (IdeHighlighter       *self);
 IDE_AVAILABLE_IN_ALL
 void ide_highlighter_update (IdeHighlighter       *self,
+                             const GSList         *tags_to_remove,
                              IdeHighlightCallback  callback,
                              const GtkTextIter    *range_begin,
                              const GtkTextIter    *range_end,
                              GtkTextIter          *location);
-void _ide_highlighter_set_highlighter_engine (IdeHighlighter       *self,
-                                              IdeHighlightEngine   *highlight_engine) G_GNUC_INTERNAL;
 
 G_END_DECLS

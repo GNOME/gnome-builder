@@ -324,7 +324,6 @@ ide_highlight_engine_tick (IdeHighlightEngine *self,
   GtkTextIter iter;
   GtkTextIter invalid_begin;
   GtkTextIter invalid_end;
-  GSList *tags_iter;
 
   IDE_PROBE;
 
@@ -349,13 +348,6 @@ again:
                  gtk_text_iter_get_line_offset (&invalid_end) + 1,
                  G_OBJECT_TYPE_NAME (self->highlighter));
 
-  /* Clear all our tags */
-  for (tags_iter = self->private_tags; tags_iter; tags_iter = tags_iter->next)
-    gtk_text_buffer_remove_tag (buffer,
-                                GTK_TEXT_TAG (tags_iter->data),
-                                &invalid_begin,
-                                &invalid_end);
-
   iter = invalid_begin;
 
   while (gtk_text_iter_ends_line (&iter))
@@ -366,6 +358,7 @@ again:
 
   if (gtk_text_iter_compare (&iter, &invalid_end) < 0)
     ide_highlighter_update (self->highlighter,
+                            self->private_tags,
                             ide_highlight_engine_apply_style,
                             &invalid_begin,
                             &invalid_end,

@@ -204,9 +204,27 @@ finish:
   return g_steal_pointer (&index);
 }
 
+static void
+remove_tags (const GtkTextIter *begin,
+             const GtkTextIter *end,
+             const GSList      *tags_to_remove)
+{
+  GtkTextBuffer *buffer;
+
+  g_assert (begin != NULL);
+  g_assert (end != NULL);
+
+  if (tags_to_remove == NULL)
+    return;
+
+  buffer = gtk_text_iter_get_buffer (begin);
+  for (const GSList *iter = tags_to_remove; iter; iter = iter->next)
+    gtk_text_buffer_remove_tag (buffer, iter->data, begin, end);
+}
 
 static void
 ide_clang_highlighter_real_update (IdeHighlighter       *highlighter,
+                                   const GSList         *tags_to_remove,
                                    IdeHighlightCallback  callback,
                                    const GtkTextIter    *range_begin,
                                    const GtkTextIter    *range_end,
@@ -239,8 +257,15 @@ ide_clang_highlighter_real_update (IdeHighlighter       *highlighter,
 
   while (gtk_text_iter_compare (&begin, range_end) < 0)
     {
+      GtkTextIter last = begin;
+
       if (!select_next_word (&begin, &end))
-        goto completed;
+        {
+          remove_tags (&last, range_end, tags_to_remove);
+          goto completed;
+        }
+
+      remove_tags (&last, &end, tags_to_remove);
 
       if (gtk_text_iter_compare (&begin, range_end) >= 0)
         goto completed;
