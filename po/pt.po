@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-14 13:48+0000\n"
-"PO-Revision-Date: 2022-09-14 15:01+0100\n"
+"PO-Revision-Date: 2022-09-14 15:06+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -1843,7 +1843,7 @@ msgstr "_Não selecionar nada"
 
 #: src/libide/terminal/ide-terminal-page-actions.c:272
 msgid "Save Terminal Content As"
-msgstr "Gravar conteúdo do terminal como"
+msgstr "Guardar conteúdo do terminal como"
 
 #: src/libide/terminal/ide-terminal-page.c:117
 msgid "Failed to launch subprocess. You may need to rebuild your project."
@@ -2192,7 +2192,7 @@ msgstr "Remover"
 #: src/plugins/buildui/gbp-buildui-log-pane.c:327
 #: src/plugins/testui/gbp-testui-output-panel.c:103
 msgid "_Save"
-msgstr "_Gravar"
+msgstr "_Guardar"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.c:359
 msgid "Build Output"
@@ -2208,7 +2208,7 @@ msgstr "Cancelar compilação"
 
 #: src/plugins/buildui/gbp-buildui-log-pane.ui:72
 msgid "Save build log"
-msgstr "Gravar ficheiro de compilação"
+msgstr "Guardar ficheiro de compilação"
 
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:113
 msgid "Missing"
@@ -2957,7 +2957,7 @@ msgstr "Cores"
 #: src/plugins/color-picker/gb-color-picker-prefs.c:88
 #, c-format
 msgid "Save changes to palette “%s” before closing?"
-msgstr "Gravar as alterações para a paleta “%s” antes de fechar?"
+msgstr "Guardar as alterações para a paleta “%s” antes de fechar?"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:96
 msgid "Close without Saving"
@@ -2965,7 +2965,7 @@ msgstr "Fechar sem gravar"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:98
 msgid "Save As…"
-msgstr "Guardar Como…"
+msgstr "Guardar como…"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:206
 msgid "Load palette"
@@ -2973,7 +2973,7 @@ msgstr "Carregar paleta"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:233
 msgid "Save palette"
-msgstr "Gravar paleta"
+msgstr "Guardar paleta"
 
 #: src/plugins/color-picker/gb-color-picker-prefs.c:706
 msgid "All files"
@@ -3114,7 +3114,7 @@ msgstr "Gerado"
 #: src/plugins/color-picker/gstyle/gstyle-palette.c:935
 #, c-format
 msgid "Unable to save %s\n"
-msgstr "Não é possível guardar %s\n"
+msgstr "Não foi possível guardar %s\n"
 
 #: src/plugins/color-picker/gstyle/gstyle-palette-widget.c:981
 #, c-format
@@ -3858,7 +3858,7 @@ msgstr "Abrir em um novo espaço de trabalho…"
 
 #: src/plugins/editorui/gtk/menus.ui:161
 msgid "Save _As"
-msgstr "Grav_ar como"
+msgstr "Gu_ardar como"
 
 #: src/plugins/editorui/gtk/menus.ui:168
 msgid "Find…"
@@ -5978,7 +5978,7 @@ msgstr "Cancelar testes"
 
 #: src/plugins/testui/gbp-testui-output-panel.ui:59
 msgid "Save test output"
-msgstr "Gravar saída de teste"
+msgstr "Guardar saída de teste"
 
 #. Translators: %s is replaced with the time in the current locale
 #: src/plugins/testui/gbp-testui-workspace-addin.c:86
