@@ -37,6 +37,9 @@ struct _IdeEditorPage
   IdeBuffer               *buffer;
   IdeGutter               *gutter;
 
+  /* Inhibit logout from */
+  guint                    inhibit_cookie;
+
   /* Settings Management */
   IdeBindingGroup         *buffer_file_settings;
   IdeBindingGroup         *view_file_settings;
