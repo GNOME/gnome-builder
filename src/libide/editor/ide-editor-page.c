@@ -363,6 +363,21 @@ ide_editor_page_root (GtkWidget *widget)
   IDE_EXIT;
 }
 
+static void
+ide_editor_page_unroot (GtkWidget *widget)
+{
+  IdeEditorPage *self = (IdeEditorPage *)widget;
+
+  g_assert (IDE_IS_EDITOR_PAGE (self));
+
+  /* Unload addins before disconnecting from the widget tree so that
+   * the addins can find the workspace/workbench/etc.
+   */
+  ide_clear_and_destroy_object (&self->addins);
+
+  GTK_WIDGET_CLASS (ide_editor_page_parent_class)->unroot (widget);
+}
+
 static IdePage *
 ide_editor_page_create_split (IdePage *page)
 {
@@ -632,8 +647,6 @@ ide_editor_page_dispose (GObject *object)
 
   ide_editor_page_set_gutter (self, NULL);
 
-  ide_clear_and_destroy_object (&self->addins);
-
   g_clear_object (&self->buffer_file_settings);
   g_clear_object (&self->view_file_settings);
 
@@ -711,6 +724,7 @@ ide_editor_page_class_init (IdeEditorPageClass *klass)
 
   widget_class->grab_focus = ide_editor_page_grab_focus;
   widget_class->root = ide_editor_page_root;
+  widget_class->unroot = ide_editor_page_unroot;
 
   page_class->get_file_or_directory = ide_editor_page_get_file_or_directory;
   page_class->create_split = ide_editor_page_create_split;
