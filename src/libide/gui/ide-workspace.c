@@ -22,11 +22,14 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
+
 #include <libpanel.h>
 
 #include <libide-search.h>
 #include <libide-plugins.h>
 
+#include "ide-application.h"
 #include "ide-gui-global.h"
 #include "ide-page-private.h"
 #include "ide-search-popover-private.h"
@@ -90,6 +93,10 @@ typedef struct
 
   /* Weak pointer to the current page. */
   gpointer current_page_ptr;
+
+  /* Inhibit desktop session logout */
+  guint inhibit_logout_count;
+  guint inhibit_logout_cookie;
 } IdeWorkspacePrivate;
 
 typedef struct
@@ -1619,4 +1626,40 @@ _ide_workspace_agree_to_close_finish (IdeWorkspace  *self,
   ret = ide_task_propagate_boolean (IDE_TASK (result), error);
 
   IDE_RETURN (ret);
+}
+
+void
+ide_workspace_inhibit_logout (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+
+  priv->inhibit_logout_count++;
+
+  if (priv->inhibit_logout_count == 1)
+    {
+      priv->inhibit_logout_cookie =
+        gtk_application_inhibit (GTK_APPLICATION (IDE_APPLICATION_DEFAULT),
+                                 GTK_WINDOW (self),
+                                 GTK_APPLICATION_INHIBIT_LOGOUT,
+                                 _("There are unsaved documents"));
+    }
+}
+
+void
+ide_workspace_uninhibit_logout (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+
+  if (priv->inhibit_logout_count == 1)
+    {
+      gtk_application_uninhibit (GTK_APPLICATION (IDE_APPLICATION_DEFAULT),
+                                 priv->inhibit_logout_cookie);
+      priv->inhibit_logout_cookie = 0;
+    }
+
+  priv->inhibit_logout_count--;
 }

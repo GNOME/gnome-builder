@@ -146,5 +146,9 @@ void            ide_workspace_add_overlay                   (IdeWorkspace       
 IDE_AVAILABLE_IN_ALL
 void            ide_workspace_remove_overlay                (IdeWorkspace          *self,
                                                              GtkWidget             *widget);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_inhibit_logout                (IdeWorkspace          *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_uninhibit_logout              (IdeWorkspace          *self);
 
 G_END_DECLS
