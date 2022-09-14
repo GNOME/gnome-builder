@@ -1650,6 +1650,25 @@ ide_workbench_unload_project_cb (GObject      *object,
   IDE_EXIT;
 }
 
+static void
+ide_workbench_addin_save_state_cb (PeasExtensionSet *set,
+                                   PeasPluginInfo   *plugin_info,
+                                   PeasExtension    *exten,
+                                   gpointer          user_data)
+{
+  IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
+  IdeSession *session = user_data;
+
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (plugin_info != NULL);
+  g_assert (PEAS_IS_EXTENSION (exten));
+  g_assert (IDE_IS_SESSION (session));
+
+  g_debug ("Requesting session state from %s", G_OBJECT_TYPE_NAME (addin));
+
+  ide_workbench_addin_save_session (addin, session);
+}
+
 /**
  * ide_workbench_unload_async:
  * @self: an #IdeWorkbench
@@ -1670,6 +1689,7 @@ ide_workbench_unload_async (IdeWorkbench        *self,
 {
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GPtrArray) addins = NULL;
+  g_autoptr(IdeSession) session = NULL;
   GApplication *app;
 
   IDE_ENTRY;
@@ -1696,6 +1716,18 @@ ide_workbench_unload_async (IdeWorkbench        *self,
                            app,
                            G_CONNECT_SWAPPED);
   g_application_hold (app);
+
+  /* If we have a project open, we want to save session state that
+   * can be restored the next time Builder is started.
+   */
+  if (self->project_info != NULL)
+    {
+      session = ide_session_new ();
+
+      peas_extension_set_foreach (self->addins,
+                                  ide_workbench_addin_save_state_cb,
+                                  session);
+    }
 
   /* Release the search engine early to help it cleanup */
   ide_clear_and_destroy_object (&self->search_engine);
