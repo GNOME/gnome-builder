@@ -20,9 +20,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-10 11:21+0000\n"
-"PO-Revision-Date: 2022-09-10 14:36+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2022-09-14 02:52+0000\n"
+"PO-Revision-Date: 2022-09-14 10:54+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -899,24 +899,24 @@ msgid "Unsaved document has been restored."
 msgstr "Kaydedilmemiş belge geri yüklendi."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:408
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Yazdırılamadı: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:484
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Biçim seçimi başarısız: %s"
 
-#: src/libide/editor/ide-editor-page.c:900
+#: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Dosyayı Kaydet"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -925,7 +925,7 @@ msgstr "Dosyayı Kaydet"
 msgid "Save"
 msgstr "Kaydet"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1796,7 +1796,7 @@ msgid "_Find References"
 msgstr "Atıfları _Bul"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1371
+#: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -4311,8 +4311,12 @@ msgid "Format on Save"
 msgstr "Kaydederken Biçimlendir"
 
 #: src/plugins/editorui/tweaks.ui:582
-msgid "Reformat sources when saving to disk"
-msgstr "Diske kaydederken kaynakları yeniden biçimlendir"
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
+msgstr ""
+"Diske kaydederken kaynakları yeniden biçimlendir. Kaynak dil için kayıtlı "
+"biçimleyici gerektirir."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -5964,7 +5968,7 @@ msgid "Request that all unit tests are run"
 msgstr "Tüm birim sınamalarının çalıştırılmasını iste"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+#: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXME’ler"
 
@@ -6008,7 +6012,6 @@ msgid "_Update"
 msgstr "_Güncelle"
 
 #: src/plugins/update-manager/gtk/menus.ui:7
-#| msgid "Install or Update SDK?"
 msgid "Install Updates…"
 msgstr "Güncellemeleri Kur…"
 
@@ -6194,3 +6197,6 @@ msgstr "XML ağacı oluşturulamadı."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Dosya, ayrıştırma için yerel konuma kaydedilmelidir."
+
+#~ msgid "Reformat sources when saving to disk"
+#~ msgstr "Diske kaydederken kaynakları yeniden biçimlendir"
