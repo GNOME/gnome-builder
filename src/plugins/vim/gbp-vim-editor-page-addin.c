@@ -244,7 +244,7 @@ gbp_vim_editor_page_addin_unload (IdeEditorPageAddin *addin,
       IdeSourceView *view = ide_editor_page_get_view (page);
 
       self->enabled = FALSE;
-      gtk_widget_remove_controller (GTK_WIDGET (view), self->key_controller);
+      ide_source_view_remove_controller (view, self->key_controller);
     }
 
   g_clear_object (&self->key_controller);
