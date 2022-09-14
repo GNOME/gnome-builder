@@ -30,24 +30,19 @@ struct _GbpSessionuiEditorPageAddin
 {
   GObject        parent_instance;
   IdeEditorPage *page;
-  IdeBuffer     *buffer;
-  gulong         modified_changed_handler;
-  guint          logout_inhibited : 1;
+  GSignalGroup  *buffer_signals;
+  guint          inhibit_logout : 1;
 };
 
 static void
-gbp_sessionui_editor_page_addin_modified_changed_cb (GbpSessionuiEditorPageAddin *self,
-                                                     IdeBuffer                   *buffer)
+gbp_sessionui_editor_page_addin_set_inhibit_logout (GbpSessionuiEditorPageAddin *self,
+                                                    gboolean                     inhibit_logout)
 {
-  gboolean inhibit_logout;
-
-  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SESSIONUI_EDITOR_PAGE_ADDIN (self));
-  g_assert (IDE_IS_BUFFER (buffer));
 
-  inhibit_logout = gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer));
+  inhibit_logout = !!inhibit_logout;
 
-  if (inhibit_logout != self->logout_inhibited)
+  if (inhibit_logout != self->inhibit_logout)
     {
       IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (self->page));
 
@@ -56,8 +51,33 @@ gbp_sessionui_editor_page_addin_modified_changed_cb (GbpSessionuiEditorPageAddin
       else
         ide_workspace_uninhibit_logout (workspace);
 
-      self->logout_inhibited = inhibit_logout;
+      self->inhibit_logout = inhibit_logout;
     }
+}
+
+static void
+gbp_sessionui_editor_page_addin_modified_changed_cb (GbpSessionuiEditorPageAddin *self,
+                                                     IdeBuffer                   *buffer)
+{
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_SESSIONUI_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+
+  gbp_sessionui_editor_page_addin_set_inhibit_logout (self,
+                                                      gtk_text_buffer_get_modified (GTK_TEXT_BUFFER (buffer)));
+
+}
+
+static void
+gbp_sessionui_editor_page_addin_buffer_signals_bind_cb (GbpSessionuiEditorPageAddin *self,
+                                                        IdeBuffer                   *buffer,
+                                                        GSignalGroup                *buffer_signals)
+{
+  g_assert (GBP_IS_SESSIONUI_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_SIGNAL_GROUP (buffer_signals));
+
+  gbp_sessionui_editor_page_addin_modified_changed_cb (self, buffer);
 }
 
 static void
@@ -65,22 +85,13 @@ gbp_sessionui_editor_page_addin_load (IdeEditorPageAddin *addin,
                                       IdeEditorPage      *page)
 {
   GbpSessionuiEditorPageAddin *self = (GbpSessionuiEditorPageAddin *)addin;
-  IdeBuffer *buffer;
 
   g_assert (GBP_IS_SESSIONUI_EDITOR_PAGE_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PAGE (page));
 
-  buffer = ide_editor_page_get_buffer (page);
-
   self->page = page;
-  self->buffer = g_object_ref (buffer);
-  self->modified_changed_handler =
-    g_signal_connect_object (self->buffer,
-                             "modified-changed",
-                             G_CALLBACK (gbp_sessionui_editor_page_addin_modified_changed_cb),
-                             self,
-                             G_CONNECT_SWAPPED);
-  gbp_sessionui_editor_page_addin_modified_changed_cb (self, self->buffer);
+  g_signal_group_set_target (self->buffer_signals,
+                             ide_editor_page_get_buffer (page));
 }
 
 static void
@@ -92,8 +103,8 @@ gbp_sessionui_editor_page_addin_unload (IdeEditorPageAddin *addin,
   g_assert (GBP_IS_SESSIONUI_EDITOR_PAGE_ADDIN (self));
   g_assert (IDE_IS_EDITOR_PAGE (page));
 
-  g_clear_signal_handler (&self->modified_changed_handler, self->buffer);
-  g_clear_object (&self->buffer);
+  gbp_sessionui_editor_page_addin_set_inhibit_logout (self, FALSE);
+  g_signal_group_set_target (self->buffer_signals, NULL);
   self->page = NULL;
 }
 
@@ -108,11 +119,35 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSessionuiEditorPageAddin, gbp_sessionui_editor
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
 
 static void
+gbp_sessionui_editor_page_addin_finalize (GObject *object)
+{
+  GbpSessionuiEditorPageAddin *self = (GbpSessionuiEditorPageAddin *)object;
+
+  g_clear_object (&self->buffer_signals);
+
+  G_OBJECT_CLASS (gbp_sessionui_editor_page_addin_parent_class)->finalize (object);
+}
+
+static void
 gbp_sessionui_editor_page_addin_class_init (GbpSessionuiEditorPageAddinClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gbp_sessionui_editor_page_addin_finalize;
 }
 
 static void
 gbp_sessionui_editor_page_addin_init (GbpSessionuiEditorPageAddin *self)
 {
+  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
+  g_signal_connect_object (self->buffer_signals,
+                           "bind",
+                           G_CALLBACK (gbp_sessionui_editor_page_addin_buffer_signals_bind_cb),
+                           self,
+                           G_CONNECT_SWAPPED);
+  g_signal_group_connect_object (self->buffer_signals,
+                                 "modified-changed",
+                                 G_CALLBACK (gbp_sessionui_editor_page_addin_modified_changed_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
 }
