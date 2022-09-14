@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-14 02:52+0000\n"
-"PO-Revision-Date: 2022-09-14 10:54+0300\n"
+"POT-Creation-Date: 2022-09-14 13:48+0000\n"
+"PO-Revision-Date: 2022-09-14 22:03+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Turkish <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -1553,6 +1553,10 @@ msgstr "Projeyi çalıştır"
 #: src/libide/gui/ide-shortcut-window.c:265
 msgid "Other"
 msgstr "Diğer"
+
+#: src/libide/gui/ide-workspace.c:1646
+msgid "There are unsaved documents"
+msgstr "Kaydedilmemiş belgeler var"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
