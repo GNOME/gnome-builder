@@ -64,7 +64,6 @@ gbp_meson_run_command_provider_list_commands_async (IdeRunCommandProvider *provi
                                                     gpointer               user_data)
 {
   GbpMesonRunCommandProvider *self = (GbpMesonRunCommandProvider *)provider;
-  g_autoptr(GListModel) run_commands = NULL;
   GbpMesonIntrospection *introspection;
   g_autoptr(IdeTask) task = NULL;
   IdePipelineAddin *addin;

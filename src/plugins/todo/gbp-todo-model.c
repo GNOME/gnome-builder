@@ -378,7 +378,6 @@ gbp_todo_model_mine_worker (IdeTask      *task,
   g_autoptr(GError) error = NULL;
   g_autoptr(GSequence) items = NULL;
   g_autoptr(GbpTodoItem) item = NULL;
-  g_autoptr(GListStore) store = NULL;
   g_autoptr(GBytes) bytes = NULL;
   g_autoptr(GTimer) timer = g_timer_new ();
   g_autofree char *workpath = NULL;

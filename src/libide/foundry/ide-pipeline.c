@@ -1062,7 +1062,6 @@ static void
 register_build_commands_stage (IdePipeline *self,
                                IdeContext  *context)
 {
-  g_autoptr(GError) error = NULL;
   const gchar * const *build_commands;
   g_autofree gchar *rundir_path = NULL;
   GFile *rundir;
@@ -1114,7 +1113,6 @@ static void
 register_post_install_commands_stage (IdePipeline *self,
                                       IdeContext  *context)
 {
-  g_autoptr(GError) error = NULL;
   const gchar * const *post_install_commands;
 
   g_assert (IDE_IS_PIPELINE (self));

@@ -136,9 +136,6 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
   GbpCargoPipelineAddin *self = (GbpCargoPipelineAddin *)addin;
-  g_autoptr(IdeSubprocessLauncher) fetch_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
   g_autoptr(IdeRunContext) fetch_context = NULL;
   g_autoptr(IdeRunContext) build_context = NULL;
   g_autoptr(IdeRunContext) clean_context = NULL;

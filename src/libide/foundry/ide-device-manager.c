@@ -352,7 +352,6 @@ ide_device_manager_add_local (IdeDeviceManager *self)
 {
   g_autoptr(IdeDevice) device = NULL;
   g_autoptr(IdeTriplet) triplet = NULL;
-  g_autofree gchar *arch = NULL;
 
   g_return_if_fail (IDE_IS_DEVICE_MANAGER (self));
 

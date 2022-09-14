@@ -97,19 +97,6 @@ ide_run_command_provider_invalidate (IdeRunCommandProvider *self)
   g_signal_emit (self, signals[INVALIDATED], 0);
 }
 
-static inline gulong
-get_signal_handler (IdeRunCommandProvider *self)
-{
-  return GPOINTER_TO_SIZE (g_object_get_data (G_OBJECT (self), "INVALIDATES_AT_PHASE"));
-}
-
-static inline void
-set_signal_handler (IdeRunCommandProvider *self,
-                    gulong                 handler_id)
-{
-  g_object_set_data (G_OBJECT (self), "INVALIDATES_AT_PHASE", GSIZE_TO_POINTER (handler_id));
-}
-
 static void
 ide_run_command_provider_pipeline_notify_phase_cb (IdeRunCommandProvider *self,
                                                    GParamSpec            *pspec,

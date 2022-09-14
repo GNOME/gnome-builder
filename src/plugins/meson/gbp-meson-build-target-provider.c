@@ -61,8 +61,6 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
   g_autofree gchar *stdout_buf = NULL;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(JsonParser) parser = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocess) all_subprocess = NULL;
   g_autoptr(GError) error = NULL;
   g_autoptr(GPtrArray) ret = NULL;
   g_autoptr(GFile) builddir = NULL;
@@ -137,9 +135,7 @@ gbp_meson_build_target_provider_communicate_cb (GObject      *object,
           NULL != (type = json_node_get_string (member)))
         {
           g_autoptr(IdeBuildTarget) target = NULL;
-          g_autofree char *install_dir = NULL;
           g_autofree char *base = NULL;
-          g_autofree char *name_of_dir = NULL;
           g_autofree char *dir_path = NULL;
           g_autoptr(GFile) file = NULL;
           g_autoptr(GFile) dir = NULL;

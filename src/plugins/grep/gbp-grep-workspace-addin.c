@@ -57,7 +57,6 @@ gbp_grep_workspace_addin_load (IdeWorkspaceAddin *addin,
                                IdeWorkspace      *workspace)
 {
   GbpGrepWorkspaceAddin *self = (GbpGrepWorkspaceAddin *)addin;
-  g_autoptr(GSimpleActionGroup) group = NULL;
   g_autoptr(PanelPosition) position = NULL;
 
   g_assert (GBP_IS_GREP_WORKSPACE_ADDIN (self));

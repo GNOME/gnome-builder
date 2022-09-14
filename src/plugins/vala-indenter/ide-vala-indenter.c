@@ -390,7 +390,6 @@ vala_indent (GtkSourceIndenter *self,
 		gboolean found_closing_brace = FALSE;
 		g_autofree char *reference_indent = NULL;
 		g_autofree char *indent1 = NULL;
-		g_autofree char *extension = NULL;
 		g_autofree char *full = NULL;
 		GtkTextIter old = {0};
 
