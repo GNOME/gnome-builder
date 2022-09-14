@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-10 20:52+0000\n"
-"PO-Revision-Date: 2022-09-12 18:39+0200\n"
+"POT-Creation-Date: 2022-09-14 13:48+0000\n"
+"PO-Revision-Date: 2022-09-14 16:07+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -901,24 +901,24 @@ msgid "Unsaved document has been restored."
 msgstr "Neuložený dokument byl obnoven."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:408
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Selhal tisk: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:484
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Selhalo naformátování výběru: %s"
 
-#: src/libide/editor/ide-editor-page.c:900
+#: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Uložení souboru"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -927,7 +927,7 @@ msgstr "Uložení souboru"
 msgid "Save"
 msgstr "Uložit"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1554,6 +1554,10 @@ msgstr "Spustit projekt"
 msgid "Other"
 msgstr "Ostatní"
 
+#: src/libide/gui/ide-workspace.c:1646
+msgid "There are unsaved documents"
+msgstr "Existují neuložené dokumenty"
+
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1798,7 +1802,7 @@ msgid "_Find References"
 msgstr "_Hledat odkazy"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1371
+#: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1822,7 +1826,8 @@ msgstr "Vložit ze schránky do terminálu"
 
 #: src/libide/terminal/gtk/menus.ui:38
 msgid "Selection all text from terminal including scrollback"
-msgstr "Vybrat veškerý text v terminálu včetně zpětně dostupného přes posuvníky"
+msgstr ""
+"Vybrat veškerý text v terminálu včetně zpětně dostupného přes posuvníky"
 
 #: src/libide/terminal/gtk/menus.ui:44
 msgid "Select _None"
@@ -2792,8 +2797,8 @@ msgid ""
 "These options are used by the build system to configure the project during "
 "the configure phase of the build pipeline"
 msgstr ""
-"Tyto volby budou použity sestavovacím systém k nakonfigurování projektu během "
-"konfigurační fáze zřetězeného sestavování."
+"Tyto volby budou použity sestavovacím systém k nakonfigurování projektu "
+"během konfigurační fáze zřetězeného sestavování."
 
 #: src/plugins/buildui/tweaks.ui:387
 msgid "Build Environment"
@@ -4330,8 +4335,12 @@ msgid "Format on Save"
 msgstr "Přeformátovat při ukládání"
 
 #: src/plugins/editorui/tweaks.ui:582
-msgid "Reformat sources when saving to disk"
-msgstr "Při ukládání na disk přeformátovat zdrojový kód"
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
+msgstr ""
+"Při ukládání na disk přeformátovat zdrojový kód. Předpokladem je "
+"zaregistrovaný formátovací nástroj pro daný jazyk."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -5560,7 +5569,8 @@ msgstr "Spouštěcí příkazy"
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
 msgstr ""
-"Seznam ID spouštěcích příkazů, které se mají načíst pro aplikaci nebo projekt."
+"Seznam ID spouštěcích příkazů, které se mají načíst pro aplikaci nebo "
+"projekt."
 
 #: src/plugins/shellcmd/tweaks.ui:14
 msgid ""
@@ -5980,7 +5990,7 @@ msgid "Request that all unit tests are run"
 msgstr "Požádat o spuštění všech jednotkových testů"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+#: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXME"
 
