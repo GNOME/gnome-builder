@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-14 02:52+0000\n"
-"PO-Revision-Date: 2022-09-14 11:31+0100\n"
+"POT-Creation-Date: 2022-09-14 13:48+0000\n"
+"PO-Revision-Date: 2022-09-14 15:01+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -1563,6 +1563,10 @@ msgstr "Executar projeto"
 #: src/libide/gui/ide-shortcut-window.c:265
 msgid "Other"
 msgstr "Outro"
+
+#: src/libide/gui/ide-workspace.c:1646
+msgid "There are unsaved documents"
+msgstr "Existem documentos por guardar"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -8579,9 +8583,6 @@ msgstr "O ficheiro tem de ser gravado localmente para processar."
 
 #~ msgid "File too large to be opened."
 #~ msgstr "Ficheiro demasiado grande para ser aberto."
-
-#~ msgid "unsaved document %u"
-#~ msgstr "documento por gravar %u"
 
 #~ msgid "Failed to save buffer, ignoring reclamation."
 #~ msgstr "Falha ao gravar o buffer, a ignorar a reclamação."
