@@ -326,6 +326,48 @@ ide_workbench_addin_project_loaded (IdeWorkbenchAddin *self,
 }
 
 /**
+ * ide_workbench_addin_save_session:
+ * @self: an #IdeWorkbenchAddin
+ * @session: an #IdeSession
+ *
+ * Saves session state from @self into @session.
+ *
+ * This function is used for workbench addins that want to save state between
+ * application runs of Builder. You can add items to the session and then
+ * restore them when ide_workbench_addin_restore_session() is called as part
+ * of the project loading in a future Builder application instance.
+ */
+void
+ide_workbench_addin_save_session (IdeWorkbenchAddin *self,
+                                  IdeSession        *session)
+{
+  g_return_if_fail (IDE_IS_WORKBENCH_ADDIN (self));
+  g_return_if_fail (IDE_IS_SESSION (session));
+
+  if (IDE_WORKBENCH_ADDIN_GET_IFACE (self)->save_session)
+    IDE_WORKBENCH_ADDIN_GET_IFACE (self)->save_session (self, session);
+}
+
+/**
+ * ide_workbench_addin_restore_session:
+ * @self: an #IdeWorkbenchAddin
+ * @session: an #IdeSession
+ *
+ * Requests that the workbench restore any session state that was saved
+ * into the session object @session.
+ */
+void
+ide_workbench_addin_restore_session (IdeWorkbenchAddin *self,
+                                     IdeSession        *session)
+{
+  g_return_if_fail (IDE_IS_WORKBENCH_ADDIN (self));
+  g_return_if_fail (IDE_IS_SESSION (session));
+
+  if (IDE_WORKBENCH_ADDIN_GET_IFACE (self)->restore_session)
+    IDE_WORKBENCH_ADDIN_GET_IFACE (self)->restore_session (self, session);
+}
+
+/**
  * ide_workbench_addin_ref_action_group:
  * @self: a #IdeWorkbenchAddin
  *

@@ -24,7 +24,7 @@
 # error "Only <libide-gui.h> can be included directly."
 #endif
 
-#include "ide-panel-position.h"
+#include "ide-session.h"
 #include "ide-workbench.h"
 #include "ide-workspace.h"
 
@@ -85,6 +85,10 @@ struct _IdeWorkbenchAddinInterface
   void          (*vcs_changed)           (IdeWorkbenchAddin     *self,
                                           IdeVcs                *vcs);
   GActionGroup *(*ref_action_group)      (IdeWorkbenchAddin     *self);
+  void          (*save_session)          (IdeWorkbenchAddin     *self,
+                                          IdeSession            *session);
+  void          (*restore_session)       (IdeWorkbenchAddin     *self,
+                                          IdeSession            *session);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -147,6 +151,12 @@ void               ide_workbench_addin_vcs_changed           (IdeWorkbenchAddin 
                                                               IdeVcs               *vcs);
 IDE_AVAILABLE_IN_ALL
 GActionGroup      *ide_workbench_addin_ref_action_group      (IdeWorkbenchAddin    *self);
+IDE_AVAILABLE_IN_ALL
+void               ide_workbench_addin_save_session          (IdeWorkbenchAddin    *self,
+                                                              IdeSession           *session);
+IDE_AVAILABLE_IN_ALL
+void               ide_workbench_addin_restore_session       (IdeWorkbenchAddin    *self,
+                                                              IdeSession           *session);
 IDE_AVAILABLE_IN_ALL
 IdeWorkbenchAddin *ide_workbench_addin_find_by_module_name   (IdeWorkbench         *workbench,
                                                               const gchar          *module_name);
