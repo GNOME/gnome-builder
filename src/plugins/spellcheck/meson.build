@@ -1,7 +1,6 @@
 if get_option('plugin_spellcheck')
 
 plugins_sources += files([
-  'cjhtextregion.c',
   'editor-empty-spell-provider.c',
   'editor-enchant-spell-language.c',
   'editor-enchant-spell-provider.c',

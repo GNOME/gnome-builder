@@ -10,6 +10,8 @@ libide_include_directories += include_directories('.')
 #
 
 libide_code_private_headers = [
+  'cjhtextregionbtree.h',
+  'cjhtextregionprivate.h',
   'ide-buffer-private.h',
   'ide-doc-seq-private.h',
   'ide-gsettings-file-settings.h',
@@ -75,6 +77,7 @@ install_headers(libide_code_public_headers, subdir: libide_code_header_subdir)
 #
 
 libide_code_private_sources = [
+  'cjhtextregion.c',
   'ide-doc-seq.c',
   'ide-gsettings-file-settings.c',
   'ide-language-defaults.c',
