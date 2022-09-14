@@ -51,38 +51,6 @@ G_DEFINE_TYPE (IdeEditorPage, ide_editor_page, IDE_TYPE_PAGE)
 static GParamSpec *properties [N_PROPS];
 
 static void
-ide_editor_page_set_inhibit_logout (IdeEditorPage *self,
-                                    gboolean       inhibit_logout)
-{
-  GtkApplication *app;
-  GtkRoot *window;
-
-  g_assert (IDE_IS_EDITOR_PAGE (self));
-
-  inhibit_logout = !!inhibit_logout;
-
-  if (inhibit_logout == !!self->inhibit_cookie)
-    return;
-
-  app = GTK_APPLICATION (IDE_APPLICATION_DEFAULT);
-  window = gtk_widget_get_root (GTK_WIDGET (self));
-
-  if (self->inhibit_cookie)
-    {
-      gtk_application_uninhibit (app, self->inhibit_cookie);
-      self->inhibit_cookie = 0;
-    }
-  else if (GTK_IS_WINDOW (window))
-    {
-      self->inhibit_cookie =
-        gtk_application_inhibit (app,
-                                 GTK_WINDOW (window),
-                                 GTK_APPLICATION_INHIBIT_LOGOUT,
-                                 _("There are unsaved documents"));
-    }
-}
-
-static void
 ide_editor_page_query_file_info_cb (GObject      *object,
                                     GAsyncResult *result,
                                     gpointer      user_data)
@@ -642,8 +610,6 @@ static void
 ide_editor_page_dispose (GObject *object)
 {
   IdeEditorPage *self = (IdeEditorPage *)object;
-
-  ide_editor_page_set_inhibit_logout (self, FALSE);
 
   ide_editor_page_set_gutter (self, NULL);
 
