@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-10 11:21+0000\n"
-"PO-Revision-Date: 2022-09-11 15:01+0100\n"
+"POT-Creation-Date: 2022-09-14 02:52+0000\n"
+"PO-Revision-Date: 2022-09-14 11:31+0100\n"
 "Last-Translator: Hugo Carvalho <hugokarvalho@hotmail.com>\n"
 "Language-Team: Portuguese <https://l10n.gnome.org/teams/pt/>\n"
 "Language: pt\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-DamnedLies-Scope: partial\n"
-"X-Generator: Poedit 3.1\n"
+"X-Generator: Poedit 3.1.1\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -50,8 +50,8 @@ msgstr ""
 "O Builder é um 'Ambiente de Desenvolvimento Integrado' (IDE) de "
 "desenvolvimento ativo para o GNOME. Este combina suporte integrado para "
 "tecnologias GNOME essenciais, tais como GTK+, GLib, e GNOME APIs com "
-"funcionalidades que qualquer programador irá apreciar, tais como "
-"\"snippets\" e realce de sintaxe."
+"funcionalidades que qualquer programador irá apreciar, tais como \"snippets"
+"\" e realce de sintaxe."
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:18
 msgid ""
@@ -904,24 +904,24 @@ msgid "Unsaved document has been restored."
 msgstr "O documento não guardado foi restaurado."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:408
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Impressão falhou: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:484
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Falha ao formatar a seleção: %s"
 
-#: src/libide/editor/ide-editor-page.c:900
+#: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Guardar ficheiro"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -930,7 +930,7 @@ msgstr "Guardar ficheiro"
 msgid "Save"
 msgstr "Guardar"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1807,7 +1807,7 @@ msgid "_Find References"
 msgstr "_Localizar referências"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1371
+#: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -4307,7 +4307,7 @@ msgstr "Desativado"
 
 #: src/plugins/editorui/tweaks.ui:546
 msgid "Session Management"
-msgstr "Gerenciamento de sessão"
+msgstr "Gestão de sessão"
 
 #: src/plugins/editorui/tweaks.ui:550
 msgid "Save & Restore"
@@ -4336,8 +4336,12 @@ msgid "Format on Save"
 msgstr "Formatar ao guardar"
 
 #: src/plugins/editorui/tweaks.ui:582
-msgid "Reformat sources when saving to disk"
-msgstr "Reformata os ficheiros-fonte ao guardar no disco"
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
+msgstr ""
+"Reformatar fontes ao guardar no disco. Requer um formatador registado para a "
+"linguagem de origem."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -5463,11 +5467,11 @@ msgstr "Diretório de trabalho"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:105
 msgid ""
-"The command will be run from this location. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
+"The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
-"O comando será executado a partir deste local. Use <tt>$BUILDDIR</tt>, "
-"<tt>$SRCDIR</tt> ou <tt>$HOME</tt> para definir um caminho relativo."
+"O comando será executado a partir deste local. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt> ou <tt>$HOME</tt> para definir um caminho relativo."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -5996,7 +6000,7 @@ msgid "Request that all unit tests are run"
 msgstr "Solicita que todos os testes de unidade sejam executados"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+#: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXMEs"
 
@@ -6042,7 +6046,6 @@ msgid "_Update"
 msgstr "At_ualizar"
 
 #: src/plugins/update-manager/gtk/menus.ui:7
-#| msgid "Install or Update SDK?"
 msgid "Install Updates…"
 msgstr "Instalar atualizações…"
 
@@ -6226,6 +6229,9 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro tem de ser gravado localmente para processar."
+
+#~ msgid "Reformat sources when saving to disk"
+#~ msgstr "Reformata os ficheiros-fonte ao guardar no disco"
 
 #~ msgid "Smart Home and End"
 #~ msgstr "Home e End inteligentes"
