@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-10 11:21+0000\n"
-"PO-Revision-Date: 2022-09-10 13:34+0200\n"
+"POT-Creation-Date: 2022-09-14 13:48+0000\n"
+"PO-Revision-Date: 2022-09-14 17:39+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -899,24 +899,24 @@ msgid "Unsaved document has been restored."
 msgstr "Ett osparat dokument har återställts."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:408
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Utskrift misslyckades: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:484
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Misslyckades med att formatera markering: %s"
 
-#: src/libide/editor/ide-editor-page.c:900
+#: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Spara fil"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -925,7 +925,7 @@ msgstr "Spara fil"
 msgid "Save"
 msgstr "Spara"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1561,6 +1561,10 @@ msgstr "Kör projekt"
 msgid "Other"
 msgstr "Annan"
 
+#: src/libide/gui/ide-workspace.c:1646
+msgid "There are unsaved documents"
+msgstr "Det finns osparade dokument"
+
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1806,7 +1810,7 @@ msgid "_Find References"
 msgstr "_Hitta referenser"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1371
+#: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -4340,8 +4344,12 @@ msgid "Format on Save"
 msgstr "Formatera vid sparning"
 
 #: src/plugins/editorui/tweaks.ui:582
-msgid "Reformat sources when saving to disk"
-msgstr "Formatera källor på nytt vid sparande till disk"
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
+msgstr ""
+"Formatera källor på nytt vid sparande till disk. Kräver en registrerad "
+"formaterare för källspråket."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -5994,7 +6002,7 @@ msgid "Request that all unit tests are run"
 msgstr "Begär att alla enhetstester körs"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+#: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXME"
 
@@ -6222,6 +6230,9 @@ msgstr "Misslyckades med att skapa XML-trädet."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Fil måste vara lokalt sparad för att tolkas."
+
+#~ msgid "Reformat sources when saving to disk"
+#~ msgstr "Formatera källor på nytt vid sparande till disk"
 
 #~ msgid "Open a new terminal"
 #~ msgstr "Öppna en ny terminal"
@@ -7055,10 +7066,6 @@ msgstr "Fil måste vara lokalt sparad för att tolkas."
 #~ msgctxt "shortcut window"
 #~ msgid "Files"
 #~ msgstr "Filer"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Create new document"
-#~ msgstr "Skapa nytt dokument"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Open a document"
