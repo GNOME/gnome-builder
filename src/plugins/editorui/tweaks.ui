@@ -579,7 +579,7 @@
                         <child>
                           <object class="IdeTweaksSwitch">
                             <property name="title" translatable="yes">Format on Save</property>
-                            <property name="subtitle" translatable="yes">Reformat sources when saving to disk</property>
+                            <property name="subtitle" translatable="yes">Reformat sources when saving to disk. Requires a registered formatter for the source language.</property>
                             <property name="binding">
                               <object class="IdeTweaksSetting">
                                 <property name="schema-id">org.gnome.builder</property>
