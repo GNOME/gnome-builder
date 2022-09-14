@@ -55,7 +55,10 @@ gbp_todo_workspace_addin_mine_cb (GObject      *object,
   self->is_global_mining = FALSE;
 
   if (!gbp_todo_model_mine_finish (model, result, &error))
-    g_warning ("todo: %s", error->message);
+    {
+      if (!ide_error_ignore (error))
+        g_warning ("%s", error->message);
+    }
 
   if (self->panel != NULL)
     gbp_todo_panel_make_ready (self->panel);
