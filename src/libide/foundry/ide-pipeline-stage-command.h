@@ -37,7 +37,13 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdePipelineStageCommand, ide_pipeline_stage_command, IDE, PIPELINE_STAGE_COMMAND, IdePipelineStage)
 
 IDE_AVAILABLE_IN_ALL
-IdePipelineStage *ide_pipeline_stage_command_new (IdeRunCommand *build_command,
-                                                  IdeRunCommand *clean_command);
+IdePipelineStage *ide_pipeline_stage_command_new               (IdeRunCommand *build_command,
+                                                                IdeRunCommand *clean_command);
+IDE_AVAILABLE_IN_ALL
+void              ide_pipeline_stage_command_set_build_command (IdePipelineStageCommand *self,
+                                                                IdeRunCommand           *build_command);
+IDE_AVAILABLE_IN_ALL
+void              ide_pipeline_stage_command_set_clean_command (IdePipelineStageCommand *self,
+                                                                IdeRunCommand           *clean_command);
 
 G_END_DECLS

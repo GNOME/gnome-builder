@@ -315,3 +315,25 @@ ide_pipeline_stage_command_new (IdeRunCommand *build_command,
                        "clean-command", clean_command,
                        NULL);
 }
+
+void
+ide_pipeline_stage_command_set_build_command (IdePipelineStageCommand *self,
+                                              IdeRunCommand           *build_command)
+{
+  g_return_if_fail (IDE_IS_PIPELINE_STAGE_COMMAND (self));
+  g_return_if_fail (!build_command || IDE_IS_RUN_COMMAND (build_command));
+
+  if (g_set_object (&self->build_command, build_command))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_BUILD_COMMAND]);
+}
+
+void
+ide_pipeline_stage_command_set_clean_command (IdePipelineStageCommand *self,
+                                              IdeRunCommand           *clean_command)
+{
+  g_return_if_fail (IDE_IS_PIPELINE_STAGE_COMMAND (self));
+  g_return_if_fail (!clean_command || IDE_IS_RUN_COMMAND (clean_command));
+
+  if (g_set_object (&self->clean_command, clean_command))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CLEAN_COMMAND]);
+}
