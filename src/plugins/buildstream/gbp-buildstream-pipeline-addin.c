@@ -53,7 +53,7 @@ static void
 gbp_buildstream_pipeline_addin_load (IdePipelineAddin *addin,
                                      IdePipeline      *pipeline)
 {
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
+  g_autoptr(IdeRunCommand) build_command = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
   IdeBuildSystem *build_system;
   IdeContext *context;
@@ -77,12 +77,14 @@ gbp_buildstream_pipeline_addin_load (IdePipelineAddin *addin,
       IDE_EXIT;
     }
 
-  build_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (build_launcher, ide_pipeline_get_srcdir (pipeline));
-  ide_subprocess_launcher_push_args (build_launcher, IDE_STRV_INIT ("bst", "build"));
+  build_command = ide_run_command_new ();
+  ide_run_command_set_argv (build_command, IDE_STRV_INIT ("bst", "build"));
+  ide_run_command_set_cwd (build_command, ide_pipeline_get_srcdir (pipeline));
 
-  stage = ide_pipeline_stage_launcher_new (context, build_launcher);
-  ide_pipeline_stage_set_name (stage, _("Building project"));
+  stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                        "build-command", build_command,
+                        "name", _("Building project"),
+                        NULL);
   g_signal_connect (stage, "query", G_CALLBACK (query_cb), NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, stage);
   ide_pipeline_addin_track (addin, id);
