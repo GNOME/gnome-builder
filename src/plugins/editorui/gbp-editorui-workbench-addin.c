@@ -298,6 +298,8 @@ gbp_editorui_workbench_addin_save_session_page_cb (IdePage  *page,
       const char *language_id = ide_buffer_get_language_id (buffer);
       GtkTextIter insert, selection;
 
+      g_debug ("Saving session information for %s", uri);
+
       gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
                                         &insert,
                                         gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer)));
