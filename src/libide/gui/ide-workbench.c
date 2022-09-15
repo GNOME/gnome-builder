@@ -78,6 +78,7 @@ struct _IdeWorkbench
   IdeVcs              *vcs;
   IdeVcsMonitor       *vcs_monitor;
   IdeSearchEngine     *search_engine;
+  IdeSession          *session;
 
   /* Various flags */
   guint                unloaded : 1;
@@ -435,6 +436,7 @@ ide_workbench_finalize (GObject *object)
   g_clear_object (&self->project_info);
   g_clear_object (&self->cancellable);
   g_clear_object (&self->context);
+  g_clear_object (&self->session);
 
   G_OBJECT_CLASS (ide_workbench_parent_class)->finalize (object);
 }
@@ -957,6 +959,23 @@ ide_workbench_project_loaded_foreach_cb (PeasExtensionSet *set,
 }
 
 static void
+ide_workbench_addin_restore_session_cb (PeasExtensionSet *set,
+                                        PeasPluginInfo   *plugin_info,
+                                        PeasExtension    *exten,
+                                        gpointer          user_data)
+{
+  IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
+  IdeSession *session = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (PEAS_IS_EXTENSION_SET (set));
+  g_assert (IDE_IS_WORKBENCH_ADDIN (addin));
+  g_assert (IDE_IS_SESSION (session));
+
+  ide_workbench_addin_restore_session (addin, session);
+}
+
+static void
 ide_workbench_load_project_completed (IdeWorkbench *self,
                                       IdeTask      *task)
 {
@@ -987,6 +1006,17 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
   if (self->search_engine == NULL)
     self->search_engine = ide_object_ensure_child_typed (IDE_OBJECT (self->context),
                                                          IDE_TYPE_SEARCH_ENGINE);
+
+  /* Allow addins to restore session, which might bypass the need to create
+   * a workspace manually below.
+   */
+  if (self->session != NULL)
+    {
+      peas_extension_set_foreach (self->addins,
+                                  ide_workbench_addin_restore_session_cb,
+                                  self->session);
+      g_clear_object (&self->session);
+    }
 
   if (lp->workspace_type != G_TYPE_INVALID)
     {
@@ -2794,4 +2824,13 @@ _ide_workbench_create_secondary (IdeWorkbench *self)
   ide_workbench_add_workspace (self, IDE_WORKSPACE (workspace));
 
   return workspace;
+}
+
+void
+_ide_workbench_set_session (IdeWorkbench *self,
+                            IdeSession   *session)
+{
+  g_return_if_fail (IDE_IS_WORKBENCH (self));
+
+  g_set_object (&self->session, session);
 }
