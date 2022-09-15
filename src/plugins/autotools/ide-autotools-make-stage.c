@@ -78,12 +78,13 @@ static GParamSpec *properties [N_PROPS];
 
 static IdeSubprocessLauncher *
 create_launcher (IdeAutotoolsMakeStage  *self,
-                 IdePipeline       *pipeline,
+                 IdePipeline            *pipeline,
                  GCancellable           *cancellable,
                  const gchar            *make_target,
                  GError                **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
 
   g_assert (IDE_IS_AUTOTOOLS_MAKE_STAGE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
@@ -101,21 +102,16 @@ create_launcher (IdeAutotoolsMakeStage  *self,
         self->make = "make";
     }
 
-  if (NULL == (launcher = ide_pipeline_create_launcher (pipeline, error)))
-    return NULL;
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, run_context);
 
-  ide_subprocess_launcher_set_flags (launcher,
-                                     G_SUBPROCESS_FLAGS_STDIN_PIPE |
-                                     G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                     G_SUBPROCESS_FLAGS_STDERR_PIPE);
-
-  ide_subprocess_launcher_push_argv (launcher, self->make);
+  ide_run_context_append_argv (run_context, self->make);
 
   /* Force disable previous V=1 that might be set by environment
    * variables from things like flatpak. We really don't want to
    * show verbose output here, its just too much.
    */
-  ide_subprocess_launcher_push_argv (launcher, "V=0");
+  ide_run_context_append_argv (run_context, "V=0");
 
   if (!g_str_equal (make_target, "clean"))
     {
@@ -128,10 +124,10 @@ create_launcher (IdeAutotoolsMakeStage  *self,
       else
         parallel = g_strdup_printf ("-j%u", self->parallel);
 
-      ide_subprocess_launcher_push_argv (launcher, parallel);
+      ide_run_context_append_argv (run_context, parallel);
     }
 
-  ide_subprocess_launcher_push_argv (launcher, make_target);
+  ide_run_context_append_argv (run_context, make_target);
 
   /*
    * When doing the "make all" target, we need to force LANG=C so that
@@ -140,10 +136,13 @@ create_launcher (IdeAutotoolsMakeStage  *self,
    */
   if (ide_str_equal0 ("all", make_target))
     {
-      ide_subprocess_launcher_setenv (launcher, "LANG", "C.UTF-8", TRUE);
-      ide_subprocess_launcher_setenv (launcher, "LC_ALL", "C.UTF-8", TRUE);
-      ide_subprocess_launcher_setenv (launcher, "LC_MESSAGES", "C.UTF-8", TRUE);
+      ide_run_context_setenv (run_context, "LANG", "C.UTF-8");
+      ide_run_context_setenv (run_context, "LC_ALL", "C.UTF-8");
+      ide_run_context_setenv (run_context, "LC_MESSAGES", "C.UTF-8");
     }
+
+  if ((launcher = ide_run_context_end (run_context, error)))
+    ide_pipeline_attach_pty (pipeline, launcher);
 
   return g_steal_pointer (&launcher);
 }
@@ -171,11 +170,11 @@ ide_autotools_make_stage_wait_cb (GObject      *object,
 }
 
 static void
-ide_autotools_make_stage_build_async (IdePipelineStage       *stage,
-                                        IdePipeline    *pipeline,
-                                        GCancellable        *cancellable,
-                                        GAsyncReadyCallback  callback,
-                                        gpointer             user_data)
+ide_autotools_make_stage_build_async (IdePipelineStage    *stage,
+                                      IdePipeline         *pipeline,
+                                      GCancellable        *cancellable,
+                                      GAsyncReadyCallback  callback,
+                                      gpointer             user_data)
 {
   IdeAutotoolsMakeStage *self = (IdeAutotoolsMakeStage *)stage;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
@@ -260,8 +259,8 @@ ide_autotools_make_stage_build_finish (IdePipelineStage  *stage,
 }
 
 static void
-ide_autotools_make_stage_clean_async (IdePipelineStage       *stage,
-                                      IdePipeline    *pipeline,
+ide_autotools_make_stage_clean_async (IdePipelineStage    *stage,
+                                      IdePipeline         *pipeline,
                                       GCancellable        *cancellable,
                                       GAsyncReadyCallback  callback,
                                       gpointer             user_data)
@@ -338,8 +337,8 @@ ide_autotools_make_stage_clean_finish (IdePipelineStage  *stage,
 }
 
 static void
-ide_autotools_make_stage_query (IdePipelineStage    *stage,
-                                IdePipeline *pipeline,
+ide_autotools_make_stage_query (IdePipelineStage *stage,
+                                IdePipeline      *pipeline,
                                 GPtrArray        *targets,
                                 GCancellable     *cancellable)
 {

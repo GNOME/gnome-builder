@@ -28,9 +28,9 @@ struct _IdeAutotoolsMakecacheStage
 {
   IdePipelineStageLauncher  parent_instance;
 
-  IdeMakecache          *makecache;
-  IdeRuntime            *runtime;
-  GFile                 *cache_file;
+  IdeMakecache             *makecache;
+  IdeRuntime               *runtime;
+  GFile                    *cache_file;
 };
 
 G_DEFINE_FINAL_TYPE (IdeAutotoolsMakecacheStage, ide_autotools_makecache_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
@@ -211,6 +211,7 @@ ide_autotools_makecache_stage_new_for_pipeline (IdePipeline  *pipeline,
 {
   g_autoptr(IdeAutotoolsMakecacheStage) stage = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autofree gchar *cache_path = NULL;
   const gchar *make = "make";
   IdeConfig *config;
@@ -222,19 +223,20 @@ ide_autotools_makecache_stage_new_for_pipeline (IdePipeline  *pipeline,
 
   config = ide_pipeline_get_config (pipeline);
   runtime = ide_config_get_runtime (config);
-
   cache_path = ide_pipeline_build_builddir_path (pipeline, "Makecache", NULL);
+
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, run_context);
 
   if (ide_runtime_contains_program_in_path (runtime, "gmake", NULL))
     make = "gmake";
 
-  if (NULL == (launcher = ide_pipeline_create_launcher (pipeline, error)))
+  ide_run_context_append_args (run_context, IDE_STRV_INIT (make, "-p", "-n", "-s"));
+
+  if (!(launcher = ide_run_context_end (run_context, error)))
     IDE_RETURN (NULL);
 
-  ide_subprocess_launcher_push_argv (launcher, make);
-  ide_subprocess_launcher_push_argv (launcher, "-p");
-  ide_subprocess_launcher_push_argv (launcher, "-n");
-  ide_subprocess_launcher_push_argv (launcher, "-s");
+  ide_pipeline_attach_pty (pipeline, launcher);
 
   stage = g_object_new (IDE_TYPE_AUTOTOOLS_MAKECACHE_STAGE,
                         "launcher", launcher,

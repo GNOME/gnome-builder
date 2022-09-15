@@ -26,7 +26,7 @@ struct _IdeAutotoolsAutogenStage
 {
   IdePipelineStage parent_instance;
 
-  gchar *srcdir;
+  char *srcdir;
 };
 
 G_DEFINE_FINAL_TYPE (IdeAutotoolsAutogenStage, ide_autotools_autogen_stage, IDE_TYPE_PIPELINE_STAGE)
@@ -65,11 +65,14 @@ ide_autotools_autogen_stage_build_async (IdePipelineStage    *stage,
                                          gpointer             user_data)
 {
   IdeAutotoolsAutogenStage *self = (IdeAutotoolsAutogenStage *)stage;
-  g_autofree gchar *autogen_path = NULL;
+  g_autofree char *autogen_path = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_AUTOTOOLS_AUTOGEN_STAGE (self));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
@@ -79,34 +82,27 @@ ide_autotools_autogen_stage_build_async (IdePipelineStage    *stage,
 
   autogen_path = g_build_filename (self->srcdir, "autogen.sh", NULL);
 
-  launcher = ide_pipeline_create_launcher (pipeline, &error);
-
-  if (launcher == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
-
-  ide_subprocess_launcher_set_cwd (launcher, self->srcdir);
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, run_context);
+  ide_run_context_set_cwd (run_context, self->srcdir);
 
   if (g_file_test (autogen_path, G_FILE_TEST_IS_REGULAR))
     {
-      ide_subprocess_launcher_push_argv (launcher, autogen_path);
-      ide_subprocess_launcher_setenv (launcher, "NOCONFIGURE", "1", TRUE);
+      ide_run_context_append_argv (run_context, autogen_path);
+      ide_run_context_setenv (run_context, "NOCONFIGURE", "1");
     }
   else
     {
-      ide_subprocess_launcher_push_argv (launcher, "autoreconf");
-      ide_subprocess_launcher_push_argv (launcher, "-fiv");
+      ide_run_context_append_args (run_context, IDE_STRV_INIT ("autoreconf", "-fiv"));
     }
 
-  subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error);
+  if (!(launcher = ide_run_context_end (run_context, &error)))
+    IDE_GOTO (handle_error);
 
-  if (subprocess == NULL)
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      return;
-    }
+  ide_pipeline_attach_pty (pipeline, launcher);
+
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
+    IDE_GOTO (handle_error);
 
   ide_pipeline_stage_log_subprocess (stage, subprocess);
 
@@ -114,6 +110,13 @@ ide_autotools_autogen_stage_build_async (IdePipelineStage    *stage,
                                    cancellable,
                                    ide_autotools_autogen_stage_wait_check_cb,
                                    g_steal_pointer (&task));
+
+  IDE_EXIT;
+
+handle_error:
+  ide_task_return_error (task, g_steal_pointer (&error));
+
+  IDE_EXIT;
 }
 
 static gboolean
