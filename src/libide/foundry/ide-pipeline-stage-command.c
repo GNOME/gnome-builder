@@ -79,8 +79,9 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
                                         gpointer             user_data)
 {
   IdePipelineStageCommand *self = (IdePipelineStageCommand *)stage;
-  g_autoptr(IdeRunContext) run_context = NULL;
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
 
@@ -102,11 +103,13 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
 
   run_context = ide_pipeline_create_run_context (pipeline, self->build_command);
 
-  if (!(subprocess = ide_run_context_spawn (run_context, &error)))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
+  if (!(launcher = ide_run_context_end (run_context, &error)))
+    IDE_GOTO (handle_error);
+
+  ide_pipeline_attach_pty (pipeline, launcher);
+
+  if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
+    IDE_GOTO (handle_error);
 
   ide_subprocess_send_signal_upon_cancel (subprocess, cancellable, SIGKILL);
 
@@ -114,6 +117,11 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
                                    cancellable,
                                    ide_pipeline_stage_command_wait_check_cb,
                                    g_steal_pointer (&task));
+
+  IDE_EXIT;
+
+handle_error:
+  ide_task_return_error (task, g_steal_pointer (&error));
 
   IDE_EXIT;
 }
