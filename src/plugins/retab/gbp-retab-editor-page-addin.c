@@ -35,13 +35,13 @@ struct _GbpRetabEditorPageAddin
   IdeEditorPage *editor_view;
 };
 
-static gint
+static int
 get_buffer_range_indent (GtkTextBuffer *buffer,
-                         gint           line,
+                         int            line,
                          gboolean       to_spaces)
 {
   GtkTextIter iter;
-  gint indent = 0;
+  int indent = 0;
 
   gtk_text_buffer_get_iter_at_line (buffer, &iter, line);
 
@@ -58,17 +58,17 @@ get_buffer_range_indent (GtkTextBuffer *buffer,
  * tabs and/or spaces insted */
 static void
 gbp_retab_editor_page_addin_retab (GtkTextBuffer *buffer,
-                            gint           line,
-                            gint           tab_width,
-                            gint           indent,
-                            gboolean       to_spaces)
+                                   int            line,
+                                   int            tab_width,
+                                   int            indent,
+                                   gboolean       to_spaces)
 {
   g_autoptr(GString) new_indent = g_string_new (NULL);
   GtkTextIter iter;
   GtkTextIter begin;
   GtkTextIter end;
-  gint tab_num = 0;
-  gint space_num = 0;
+  int tab_num = 0;
+  int space_num = 0;
 
   g_assert (GTK_IS_TEXT_BUFFER (buffer));
   g_assert (line >= 0 && line < gtk_text_buffer_get_line_count(buffer));
@@ -90,18 +90,18 @@ gbp_retab_editor_page_addin_retab (GtkTextBuffer *buffer,
 
   if (to_spaces)
     {
-      for (gint tab = 0; tab < tab_num * tab_width; ++tab)
+      for (int tab = 0; tab < tab_num * tab_width; ++tab)
         g_string_append_c(new_indent, ' ');
 
-      for (gint space = 0; space < space_num; ++space)
+      for (int space = 0; space < space_num; ++space)
         g_string_append_c(new_indent, ' ');
     }
   else
     {
-      for (gint tab = 0; tab < tab_num + (space_num / tab_width); ++tab)
+      for (int tab = 0; tab < tab_num + (space_num / tab_width); ++tab)
         g_string_append_c(new_indent, '\t');
 
-      for (gint space = 0; space < space_num % tab_width; ++space)
+      for (int space = 0; space < space_num % tab_width; ++space)
         g_string_append_c(new_indent, ' ');
     }
 
@@ -122,14 +122,14 @@ gbp_retab_editor_page_addin_action (GSimpleAction *action,
   IdeSourceView *source_view;
   GtkTextBuffer *buffer;
   GtkSourceCompletion *completion;
-  guint tab_width;
-  gint start_line;
-  gint end_line;
-  gint indent;
   GtkTextIter begin;
   GtkTextIter end;
   gboolean editable;
   gboolean to_spaces;
+  guint tab_width;
+  int start_line;
+  int end_line;
+  int indent;
 
   g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (self));
   g_assert (G_IS_SIMPLE_ACTION (action));
@@ -161,7 +161,7 @@ gbp_retab_editor_page_addin_action (GSimpleAction *action,
   gtk_source_completion_block_interactive (completion);
   gtk_text_buffer_begin_user_action (buffer);
 
-  for (gint line = start_line; line <= end_line; ++line)
+  for (int line = start_line; line <= end_line; ++line)
     {
       indent = get_buffer_range_indent (buffer, line, to_spaces);
       if (indent > 0)
