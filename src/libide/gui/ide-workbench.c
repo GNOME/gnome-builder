@@ -1650,25 +1650,6 @@ ide_workbench_unload_project_cb (GObject      *object,
   IDE_EXIT;
 }
 
-static void
-ide_workbench_addin_save_state_cb (PeasExtensionSet *set,
-                                   PeasPluginInfo   *plugin_info,
-                                   PeasExtension    *exten,
-                                   gpointer          user_data)
-{
-  IdeWorkbenchAddin *addin = (IdeWorkbenchAddin *)exten;
-  IdeSession *session = user_data;
-
-  g_assert (PEAS_IS_EXTENSION_SET (set));
-  g_assert (plugin_info != NULL);
-  g_assert (PEAS_IS_EXTENSION (exten));
-  g_assert (IDE_IS_SESSION (session));
-
-  g_debug ("Requesting session state from %s", G_OBJECT_TYPE_NAME (addin));
-
-  ide_workbench_addin_save_session (addin, session);
-}
-
 /**
  * ide_workbench_unload_async:
  * @self: an #IdeWorkbench
