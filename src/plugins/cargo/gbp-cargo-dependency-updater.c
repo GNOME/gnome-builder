@@ -64,6 +64,7 @@ gbp_cargo_dependency_updater_update_async (IdeDependencyUpdater *updater,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeTask) task = NULL;
   g_autoptr(GError) error = NULL;
   g_autofree char *cargo_toml = NULL;
@@ -107,26 +108,30 @@ gbp_cargo_dependency_updater_update_async (IdeDependencyUpdater *updater,
   config = ide_pipeline_get_config (pipeline);
   cargo = gbp_cargo_build_system_locate_cargo (GBP_CARGO_BUILD_SYSTEM (build_system), pipeline, config);
   cargo_toml = gbp_cargo_build_system_get_cargo_toml_path (GBP_CARGO_BUILD_SYSTEM (build_system));
-
-  launcher = ide_pipeline_create_launcher (pipeline, NULL);
   builddir = ide_pipeline_get_builddir (pipeline);
-  ide_subprocess_launcher_setenv (launcher, "CARGO_TARGET_DIR", builddir, TRUE);
-  ide_subprocess_launcher_push_argv (launcher, cargo);
-  ide_subprocess_launcher_push_argv (launcher, "update");
-  ide_subprocess_launcher_push_argv (launcher, "--manifest-path");
-  ide_subprocess_launcher_push_argv (launcher, cargo_toml);
+
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, run_context);
+  ide_run_context_append_args (run_context, IDE_STRV_INIT (cargo, "update", "--manifest-path", cargo_toml));
+  ide_run_context_setenv (run_context, "CARGO_TARGET_DIR", builddir);
+
+  if (!(launcher = ide_run_context_end (run_context, &error)))
+    IDE_GOTO (handle_error);
+
   ide_pipeline_attach_pty (pipeline, launcher);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, NULL)))
-    {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
-    }
+    IDE_GOTO (handle_error);
 
   ide_subprocess_wait_check_async (subprocess,
                                    cancellable,
                                    gbp_cargo_dependency_updater_wait_check_cb,
                                    g_steal_pointer (&task));
+
+  IDE_EXIT;
+
+handle_error:
+  ide_task_return_error (task, g_steal_pointer (&error));
 
   IDE_EXIT;
 }
