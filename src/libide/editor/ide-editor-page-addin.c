@@ -29,9 +29,19 @@
 
 G_DEFINE_INTERFACE (IdeEditorPageAddin, ide_editor_page_addin, G_TYPE_OBJECT)
 
+static GActionGroup *
+ide_editor_page_addin_real_ref_action_group (IdeEditorPageAddin *addin)
+{
+  if (G_IS_ACTION_GROUP (addin))
+    return g_object_ref (G_ACTION_GROUP (addin));
+
+  return NULL;
+}
+
 static void
 ide_editor_page_addin_default_init (IdeEditorPageAddinInterface *iface)
 {
+  iface->ref_action_group = ide_editor_page_addin_real_ref_action_group;
 }
 
 void
