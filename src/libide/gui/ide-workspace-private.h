@@ -60,6 +60,10 @@ void        _ide_workspace_agree_to_close_async  (IdeWorkspace         *self,
 gboolean    _ide_workspace_agree_to_close_finish (IdeWorkspace         *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+void        _ide_workspace_save_session_simple   (IdeWorkspace         *self,
+                                                  IdeSession           *session,
+                                                  PanelDock            *dock,
+                                                  IdeGrid              *grid);
 void        _ide_workspace_save_session          (IdeWorkspace         *self,
                                                   IdeSession           *session);
 

@@ -1698,6 +1698,8 @@ _ide_workspace_save_session (IdeWorkspace *self,
 {
   IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
 
+  IDE_ENTRY;
+
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (IDE_IS_SESSION (session));
 
@@ -1707,4 +1709,39 @@ _ide_workspace_save_session (IdeWorkspace *self,
   ide_extension_set_adapter_foreach (priv->addins,
                                      ide_workspace_addin_save_session_cb,
                                      session);
+
+  IDE_EXIT;
+}
+
+void
+_ide_workspace_save_session_simple (IdeWorkspace *self,
+                                    IdeSession   *session,
+                                    PanelDock    *dock,
+                                    IdeGrid      *grid)
+{
+  g_autoptr(IdeSessionItem) item = NULL;
+  int width;
+  int height;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_SESSION (session));
+
+  gtk_window_get_default_size (GTK_WINDOW (self), &width, &height);
+
+  item = ide_session_item_new ();
+  ide_session_item_set_id (item, ide_workspace_get_id (self));
+  ide_session_item_set_module_name (item, "libide-gui");
+  ide_session_item_set_type_hint (item, G_OBJECT_TYPE_NAME (self));
+  ide_session_item_set_metadata (item, "size", "(ii)", width, height);
+  if (gtk_window_is_active (GTK_WINDOW (self)))
+    ide_session_item_set_metadata (item, "is-active", "b", TRUE);
+  if (gtk_window_is_maximized (GTK_WINDOW (self)))
+    ide_session_item_set_metadata (item, "is-maximized", "b", TRUE);
+  ide_session_prepend (session, item);
+
+  /* TODO: Save panel and grid frame size/positions */
+
+  IDE_EXIT;
 }

@@ -261,6 +261,18 @@ ide_editor_workspace_get_id (IdeWorkspace *workspace)
 }
 
 static void
+ide_editor_workspace_save_session (IdeWorkspace *workspace,
+                                   IdeSession   *session)
+{
+  IdeEditorWorkspace *self = (IdeEditorWorkspace *)workspace;
+
+  g_assert (IDE_IS_EDITOR_WORKSPACE (self));
+  g_assert (IDE_IS_SESSION (session));
+
+  _ide_workspace_save_session_simple (workspace, session, self->dock, self->grid);
+}
+
+static void
 ide_editor_workspace_dispose (GObject *object)
 {
   IdeEditorWorkspace *self = (IdeEditorWorkspace *)object;
@@ -298,6 +310,7 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
   workspace_class->get_header_bar = ide_editor_workspace_get_header_bar;
   workspace_class->get_id = ide_editor_workspace_get_id;
   workspace_class->get_most_recent_frame = ide_editor_workspace_get_most_recent_frame;
+  workspace_class->save_session = ide_editor_workspace_save_session;
 
   ide_workspace_class_set_kind (workspace_class, "editor");
 

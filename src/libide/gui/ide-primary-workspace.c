@@ -272,6 +272,18 @@ ide_primary_workspace_get_id (IdeWorkspace *workspace)
 }
 
 static void
+ide_primary_workspace_save_session (IdeWorkspace *workspace,
+                                    IdeSession   *session)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+  g_assert (IDE_IS_SESSION (session));
+
+  _ide_workspace_save_session_simple (workspace, session, self->dock, self->grid);
+}
+
+static void
 ide_primary_workspace_dispose (GObject *object)
 {
   IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)object;
@@ -309,6 +321,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->get_id = ide_primary_workspace_get_id;
   workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
   workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
+  workspace_class->save_session = ide_primary_workspace_save_session;
 
   ide_workspace_class_set_kind (workspace_class, "primary");
 
