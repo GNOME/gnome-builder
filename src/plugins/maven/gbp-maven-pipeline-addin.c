@@ -55,9 +55,9 @@ static void
 gbp_maven_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) install_launcher = NULL;
+  g_autoptr(IdeRunCommand) build_command = NULL;
+  g_autoptr(IdeRunCommand) clean_command = NULL;
+  g_autoptr(IdeRunCommand) install_command = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
   g_autoptr(IdePipelineStage) install_stage = NULL;
   IdeBuildSystem *build_system;
@@ -77,26 +77,31 @@ gbp_maven_pipeline_addin_load (IdePipelineAddin *addin,
   if (!GBP_IS_MAVEN_BUILD_SYSTEM (build_system))
     IDE_EXIT;
 
-  build_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (build_launcher, srcdir);
-  ide_subprocess_launcher_push_args (build_launcher, IDE_STRV_INIT ("mvn", "compile"));
+  build_command = ide_run_command_new ();
+  ide_run_command_set_cwd (build_command, srcdir);
+  ide_run_command_append_args (build_command, IDE_STRV_INIT ("mvn", "compile"));
 
-  clean_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (clean_launcher, srcdir);
-  ide_subprocess_launcher_push_args (clean_launcher, IDE_STRV_INIT ("mvn", "clean"));
+  clean_command = ide_run_command_new ();
+  ide_run_command_set_cwd (clean_command, srcdir);
+  ide_run_command_append_args (clean_command, IDE_STRV_INIT ("mvn", "clean"));
 
-  build_stage = ide_pipeline_stage_launcher_new (context, build_launcher);
-  ide_pipeline_stage_set_name (build_stage, _("Building project"));
-  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (build_stage), clean_launcher);
+  build_stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                              "build-command", build_command,
+                              "clean-command", clean_command,
+                              "name", _("Building project"),
+                              NULL);
   g_signal_connect (build_stage, "query", G_CALLBACK (query_cb), NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, build_stage);
   ide_pipeline_addin_track (addin, id);
 
-  install_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (install_launcher, srcdir);
-  ide_subprocess_launcher_push_args (install_launcher, IDE_STRV_INIT ("mvn", "install", "-Dmaven.test.skip=true"));
-  install_stage = ide_pipeline_stage_launcher_new (context, install_launcher);
-  ide_pipeline_stage_set_name (install_stage, _("Installing project"));
+  install_command = ide_run_command_new ();
+  ide_run_command_set_cwd (install_command, srcdir);
+  ide_run_command_append_args (install_command, IDE_STRV_INIT ("mvn", "install", "-Dmaven.test.skip=true"));
+
+  install_stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                                "build-command", install_command,
+                                "name", _("Installing project"),
+                                NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_INSTALL, 0, install_stage);
   ide_pipeline_addin_track (addin, id);
 
