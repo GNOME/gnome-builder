@@ -1714,6 +1714,13 @@ ide_workbench_unload_async (IdeWorkbench        *self,
       ide_workbench_addin_save_session (addin, session);
     }
 
+  /* Now let the workspaces capture themselves as that is a
+   * more convenient session API for some addins.
+   */
+  ide_workbench_foreach_workspace (self,
+                                   (IdeWorkspaceCallback)_ide_workspace_save_session,
+                                   session);
+
   /* Release the search engine early to help it cleanup */
   ide_clear_and_destroy_object (&self->search_engine);
 

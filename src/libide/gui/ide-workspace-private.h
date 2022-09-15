@@ -22,6 +22,7 @@
 
 #include "ide-grid.h"
 #include "ide-panel-position.h"
+#include "ide-session.h"
 #include "ide-workspace.h"
 
 G_BEGIN_DECLS
@@ -60,5 +61,7 @@ void        _ide_workspace_agree_to_close_async  (IdeWorkspace         *self,
 gboolean    _ide_workspace_agree_to_close_finish (IdeWorkspace         *self,
                                                   GAsyncResult         *result,
                                                   GError              **error);
+void        _ide_workspace_save_session          (IdeWorkspace         *self,
+                                                  IdeSession           *session);
 
 G_END_DECLS

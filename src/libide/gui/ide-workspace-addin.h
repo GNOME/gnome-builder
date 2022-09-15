@@ -27,6 +27,7 @@
 #include <libide-core.h>
 
 #include "ide-page.h"
+#include "ide-session.h"
 #include "ide-workspace.h"
 
 G_BEGIN_DECLS
@@ -47,6 +48,8 @@ struct _IdeWorkspaceAddinInterface
   void          (*page_changed)     (IdeWorkspaceAddin *self,
                                      IdePage           *page);
   GActionGroup *(*ref_action_group) (IdeWorkspaceAddin *self);
+  void          (*save_session)     (IdeWorkspaceAddin *self,
+                                     IdeSession        *session);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -58,6 +61,9 @@ void               ide_workspace_addin_unload              (IdeWorkspaceAddin *s
 IDE_AVAILABLE_IN_ALL
 void               ide_workspace_addin_page_changed        (IdeWorkspaceAddin *self,
                                                             IdePage           *page);
+IDE_AVAILABLE_IN_ALL
+void               ide_workspace_addin_save_session        (IdeWorkspaceAddin *self,
+                                                            IdeSession        *session);
 IDE_AVAILABLE_IN_ALL
 GActionGroup      *ide_workspace_addin_ref_action_group    (IdeWorkspaceAddin *self);
 IDE_AVAILABLE_IN_ALL

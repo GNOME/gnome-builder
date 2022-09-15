@@ -1674,3 +1674,34 @@ ide_workspace_uninhibit_logout (IdeWorkspace *self)
 
   priv->inhibit_logout_count--;
 }
+
+static void
+ide_workspace_addin_save_session_cb (IdeExtensionSetAdapter *adapter,
+                                     PeasPluginInfo         *plugin_info,
+                                     PeasExtension          *exten,
+                                     gpointer                user_data)
+{
+  IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
+  IdeSession *session = user_data;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
+  g_assert (IDE_IS_SESSION (session));
+
+  ide_workspace_addin_save_session (addin, session);
+}
+
+void
+_ide_workspace_save_session (IdeWorkspace *self,
+                             IdeSession   *session)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_SESSION (session));
+
+  ide_extension_set_adapter_foreach (priv->addins,
+                                     ide_workspace_addin_save_session_cb,
+                                     session);
+}
