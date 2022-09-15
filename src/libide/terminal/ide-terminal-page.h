@@ -24,10 +24,11 @@
 # error "Only <libide-terminal.h> can be included directly."
 #endif
 
-#include <libide-core.h>
-#include <libide-gui.h>
 #include <vte/vte.h>
 
+#include <libide-gui.h>
+
+#include "ide-terminal.h"
 #include "ide-terminal-launcher.h"
 
 G_BEGIN_DECLS
@@ -54,5 +55,7 @@ IDE_AVAILABLE_IN_ALL
 const gchar         *ide_terminal_page_get_current_directory_uri (IdeTerminalPage     *self);
 IDE_AVAILABLE_IN_ALL
 gboolean             ide_terminal_page_has_exited                (IdeTerminalPage     *self);
+IDE_AVAILABLE_IN_ALL
+IdeTerminal         *ide_terminal_page_get_terminal              (IdeTerminalPage     *self);
 
 G_END_DECLS

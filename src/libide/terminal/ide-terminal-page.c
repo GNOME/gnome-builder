@@ -640,3 +640,19 @@ ide_terminal_page_has_exited (IdeTerminalPage *self)
 
   return self->exited;
 }
+
+/**
+ * ide_terminal_page_get_terminal:
+ * @self: a #IdeTerminalPage
+ *
+ * Gets the underlying terminal widget.
+ *
+ * Returns: (transfer none): an #IdeTerminal
+ */
+IdeTerminal *
+ide_terminal_page_get_terminal (IdeTerminalPage *self)
+{
+  g_return_val_if_fail (IDE_IS_TERMINAL_PAGE (self), NULL);
+
+  return self->terminal;
+}
