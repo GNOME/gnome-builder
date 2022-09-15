@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <libide-gui.h>
+#include <libide-threading.h>
 
 #include "gbp-sessionui-workbench-addin.h"
 
@@ -30,6 +31,7 @@ struct _GbpSessionuiWorkbenchAddin
 {
   GObject       parent_instance;
   IdeWorkbench *workbench;
+  IdeSession   *session;
 };
 
 static void
@@ -53,6 +55,8 @@ gbp_sessionui_workbench_addin_unload (IdeWorkbenchAddin *addin,
   g_assert (GBP_IS_SESSIONUI_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_WORKBENCH (workbench));
 
+  g_clear_object (&self->session);
+
   self->workbench = NULL;
 }
 
@@ -64,6 +68,8 @@ gbp_sessionui_workbench_addin_save_session (IdeWorkbenchAddin *addin,
 
   g_assert (GBP_IS_SESSIONUI_WORKBENCH_ADDIN (self));
   g_assert (IDE_IS_SESSION (session));
+
+  g_set_object (&self->session, session);
 }
 
 static void
@@ -77,12 +83,97 @@ gbp_sessionui_workbench_addin_restore_session (IdeWorkbenchAddin *addin,
 }
 
 static void
+gbp_sessionui_workbench_addin_replace_state_cb (GObject      *object,
+                                                GAsyncResult *result,
+                                                gpointer      user_data)
+{
+  GFile *file = (GFile *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (G_IS_FILE (file));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  if (!g_file_replace_contents_finish (file, result, NULL, &error))
+    ide_task_return_error (task, g_steal_pointer (&error));
+  else
+    ide_task_return_boolean (task, TRUE);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_sessionui_workbench_addin_unload_project_async (IdeWorkbenchAddin   *addin,
+                                                    IdeProjectInfo      *project_info,
+                                                    GCancellable        *cancellable,
+                                                    GAsyncReadyCallback  callback,
+                                                    gpointer             user_data)
+{
+  GbpSessionuiWorkbenchAddin *self = (GbpSessionuiWorkbenchAddin *)addin;
+  g_autoptr(GVariant) sessionv = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+  g_autoptr(GFile) file = NULL;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SESSIONUI_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_PROJECT_INFO (project_info));
+  g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
+  g_assert (IDE_IS_SESSION (self->session));
+  g_assert (IDE_IS_WORKBENCH (self->workbench));
+
+  task = ide_task_new (self, cancellable, callback, user_data);
+  ide_task_set_source_tag (task, gbp_sessionui_workbench_addin_unload_project_async);
+
+  context = ide_workbench_get_context (self->workbench);
+  file = ide_context_cache_file (context, "session.gvariant", NULL);
+  sessionv = ide_session_to_variant (self->session);
+  bytes = g_variant_get_data_as_bytes (sessionv);
+
+  g_file_replace_contents_bytes_async (file,
+                                       bytes,
+                                       NULL,
+                                       FALSE,
+                                       G_FILE_CREATE_REPLACE_DESTINATION,
+                                       cancellable,
+                                       gbp_sessionui_workbench_addin_replace_state_cb,
+                                       g_steal_pointer (&task));
+
+  IDE_EXIT;
+}
+
+static gboolean
+gbp_sessionui_workbench_addin_unload_project_finish (IdeWorkbenchAddin  *addin,
+                                                     GAsyncResult       *result,
+                                                     GError            **error)
+{
+  gboolean ret;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_SESSIONUI_WORKBENCH_ADDIN (addin));
+  g_assert (IDE_IS_TASK (result));
+
+  ret = ide_task_propagate_boolean (IDE_TASK (result), error);
+
+  IDE_RETURN (ret);
+}
+
+static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_sessionui_workbench_addin_load;
   iface->unload = gbp_sessionui_workbench_addin_unload;
   iface->save_session = gbp_sessionui_workbench_addin_save_session;
   iface->restore_session = gbp_sessionui_workbench_addin_restore_session;
+  iface->unload_project_async = gbp_sessionui_workbench_addin_unload_project_async;
+  iface->unload_project_finish = gbp_sessionui_workbench_addin_unload_project_finish;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSessionuiWorkbenchAddin, gbp_sessionui_workbench_addin, G_TYPE_OBJECT,
