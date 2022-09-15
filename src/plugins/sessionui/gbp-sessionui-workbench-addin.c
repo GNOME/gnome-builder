@@ -57,10 +57,32 @@ gbp_sessionui_workbench_addin_unload (IdeWorkbenchAddin *addin,
 }
 
 static void
+gbp_sessionui_workbench_addin_save_session (IdeWorkbenchAddin *addin,
+                                            IdeSession        *session)
+{
+  GbpSessionuiWorkbenchAddin *self = (GbpSessionuiWorkbenchAddin *)addin;
+
+  g_assert (GBP_IS_SESSIONUI_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_SESSION (session));
+}
+
+static void
+gbp_sessionui_workbench_addin_restore_session (IdeWorkbenchAddin *addin,
+                                               IdeSession        *session)
+{
+  GbpSessionuiWorkbenchAddin *self = (GbpSessionuiWorkbenchAddin *)addin;
+
+  g_assert (GBP_IS_SESSIONUI_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_SESSION (session));
+}
+
+static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_sessionui_workbench_addin_load;
   iface->unload = gbp_sessionui_workbench_addin_unload;
+  iface->save_session = gbp_sessionui_workbench_addin_save_session;
+  iface->restore_session = gbp_sessionui_workbench_addin_restore_session;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpSessionuiWorkbenchAddin, gbp_sessionui_workbench_addin, G_TYPE_OBJECT,
