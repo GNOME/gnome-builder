@@ -32,7 +32,7 @@
 struct _GbpRetabEditorPageAddin
 {
   GObject        parent_instance;
-  IdeEditorPage *editor_view;
+  IdeEditorPage *page;
 };
 
 static int
@@ -114,11 +114,9 @@ gbp_retab_editor_page_addin_retab (GtkTextBuffer *buffer,
 }
 
 static void
-gbp_retab_editor_page_addin_action (GSimpleAction *action,
-                             GVariant      *variant,
-                             gpointer       user_data)
+gbp_retab_editor_page_addin_retab_action (GbpRetabEditorPageAddin *self,
+                                          GVariant                *params)
 {
-  GbpRetabEditorPageAddin *self = user_data;
   IdeSourceView *source_view;
   GtkTextBuffer *buffer;
   GtkSourceCompletion *completion;
@@ -131,11 +129,13 @@ gbp_retab_editor_page_addin_action (GSimpleAction *action,
   int end_line;
   int indent;
 
-  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (self));
-  g_assert (G_IS_SIMPLE_ACTION (action));
+  IDE_ENTRY;
 
-  buffer = GTK_TEXT_BUFFER (ide_editor_page_get_buffer (self->editor_view));
-  source_view = ide_editor_page_get_view (self->editor_view);
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (self));
+
+  buffer = GTK_TEXT_BUFFER (ide_editor_page_get_buffer (self->page));
+  source_view = ide_editor_page_get_view (self->page);
 
   g_assert (IDE_IS_SOURCE_VIEW (source_view));
 
@@ -145,7 +145,7 @@ gbp_retab_editor_page_addin_action (GSimpleAction *action,
   to_spaces = gtk_source_view_get_insert_spaces_instead_of_tabs(GTK_SOURCE_VIEW (source_view));
 
   if (!editable)
-    return;
+    IDE_EXIT;
 
   if (!gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
     gtk_text_buffer_get_bounds (buffer, &begin, &end);
@@ -170,49 +170,48 @@ gbp_retab_editor_page_addin_action (GSimpleAction *action,
 
   gtk_text_buffer_end_user_action (buffer);
   gtk_source_completion_unblock_interactive (completion);
-}
 
-static const GActionEntry actions[] = {
-  { "retab", gbp_retab_editor_page_addin_action },
-};
+  IDE_EXIT;
+}
 
 static void
 gbp_retab_editor_page_addin_load (IdeEditorPageAddin *addin,
-                           IdeEditorPage      *view)
+                                  IdeEditorPage      *page)
 {
   GbpRetabEditorPageAddin *self = (GbpRetabEditorPageAddin *)addin;
-  g_autoptr(GSimpleActionGroup) group = NULL;
 
-  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_PAGE (view));
+  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (page));
 
-  self->editor_view = view;
-
-  group = g_simple_action_group_new ();
-  g_action_map_add_action_entries (G_ACTION_MAP (group), actions, G_N_ELEMENTS (actions), self);
-  gtk_widget_insert_action_group (GTK_WIDGET (view), "retab", G_ACTION_GROUP (group));
+  self->page = page;
 }
 
 static void
 gbp_retab_editor_page_addin_unload (IdeEditorPageAddin *addin,
-                             IdeEditorPage      *view)
+                                    IdeEditorPage      *page)
 {
-  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (addin));
-  g_assert (IDE_IS_EDITOR_PAGE (view));
+  GbpRetabEditorPageAddin *self = (GbpRetabEditorPageAddin *)addin;
 
-  gtk_widget_insert_action_group (GTK_WIDGET (view), "retab", NULL);
+  g_assert (GBP_IS_RETAB_EDITOR_PAGE_ADDIN (self));
+  g_assert (IDE_IS_EDITOR_PAGE (page));
+
+  self->page = NULL;
 }
 
 static void
-editor_view_addin_iface_init (IdeEditorPageAddinInterface *iface)
+editor_page_addin_iface_init (IdeEditorPageAddinInterface *iface)
 {
   iface->load = gbp_retab_editor_page_addin_load;
   iface->unload = gbp_retab_editor_page_addin_unload;
 }
 
-G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRetabEditorPageAddin, gbp_retab_editor_page_addin, G_TYPE_OBJECT,
-                               G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_view_addin_iface_init))
+IDE_DEFINE_ACTION_GROUP (GbpRetabEditorPageAddin, gbp_retab_editor_page_addin, {
+  { "retab", gbp_retab_editor_page_addin_retab_action },
+})
 
+G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRetabEditorPageAddin, gbp_retab_editor_page_addin, G_TYPE_OBJECT,
+                               G_IMPLEMENT_INTERFACE (G_TYPE_ACTION_GROUP, gbp_retab_editor_page_addin_init_action_group)
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_EDITOR_PAGE_ADDIN, editor_page_addin_iface_init))
 
 static void
 gbp_retab_editor_page_addin_class_init (GbpRetabEditorPageAddinClass *klass)

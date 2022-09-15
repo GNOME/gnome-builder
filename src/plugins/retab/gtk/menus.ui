@@ -2,8 +2,8 @@
 <interface>
   <menu id="ide-source-view-popup-menu-format-section">
     <item>
-      <attribute name="label" translatable="yes">_Reformat tabs</attribute>
-      <attribute name="action">retab.retab</attribute>
+      <attribute name="label" translatable="yes">_Reformat Tabs</attribute>
+      <attribute name="action">page.retab.retab</attribute>
     </item>
   </menu>
 </interface>
