@@ -147,7 +147,9 @@ gbp_retab_editor_page_addin_action (GSimpleAction *action,
   if (!editable)
     return;
 
-  gtk_text_buffer_get_selection_bounds (buffer, &begin, &end);
+  if (!gtk_text_buffer_get_selection_bounds (buffer, &begin, &end))
+    gtk_text_buffer_get_bounds (buffer, &begin, &end);
+
   gtk_text_iter_order (&begin, &end);
 
   if (!gtk_text_iter_equal (&begin, &end) && gtk_text_iter_starts_line (&end))
