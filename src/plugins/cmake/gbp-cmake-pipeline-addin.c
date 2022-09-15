@@ -71,10 +71,10 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
 {
   GbpCMakePipelineAddin *self = (GbpCMakePipelineAddin *)addin;
   g_autoptr(GbpCmakeBuildStageCodemodel) codemodel_stage = NULL;
-  g_autoptr(IdeSubprocessLauncher) configure_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) install_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
+  g_autoptr(IdeRunCommand) configure_command = NULL;
+  g_autoptr(IdeRunCommand) build_command = NULL;
+  g_autoptr(IdeRunCommand) install_command = NULL;
+  g_autoptr(IdeRunCommand) clean_command = NULL;
   g_autoptr(IdePipelineStage) configure_stage = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
   g_autoptr(IdePipelineStage) install_stage = NULL;
@@ -142,11 +142,10 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
       IDE_EXIT;
     }
 
-  if (NULL == (configure_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (build_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (clean_launcher = ide_pipeline_create_launcher (pipeline, &error)) ||
-      NULL == (install_launcher = ide_pipeline_create_launcher (pipeline, &error)))
-    IDE_GOTO (failure);
+  configure_command = ide_run_command_new ();
+  build_command = ide_run_command_new ();
+  clean_command = ide_run_command_new ();
+  install_command = ide_run_command_new ();
 
   prefix = ide_config_get_prefix (configuration);
   config_opts = ide_config_get_config_opts (configuration);
@@ -175,20 +174,16 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
 
   prefix_option = g_strdup_printf ("-DCMAKE_INSTALL_PREFIX=%s", prefix);
 
-  ide_subprocess_launcher_push_argv (configure_launcher, cmake);
-  ide_subprocess_launcher_push_argv (configure_launcher, "-G");
-  ide_subprocess_launcher_push_argv (configure_launcher, "Ninja");
-  ide_subprocess_launcher_push_argv (configure_launcher, ".");
-  ide_subprocess_launcher_push_argv (configure_launcher, srcdir);
-  ide_subprocess_launcher_push_argv (configure_launcher, "-DCMAKE_EXPORT_COMPILE_COMMANDS=1");
+  ide_run_command_set_argv (configure_command, IDE_STRV_INIT (cmake, "-G", "Ninja", ".", srcdir));
+  ide_run_command_append_argv (configure_command, "-DCMAKE_EXPORT_COMPILE_COMMANDS=1");
   if (config_opts == NULL || strstr (config_opts, "-DCMAKE_BUILD_TYPE=") == NULL)
-    ide_subprocess_launcher_push_argv (configure_launcher, "-DCMAKE_BUILD_TYPE=RelWithDebInfo");
-  ide_subprocess_launcher_push_argv (configure_launcher, prefix_option);
+    ide_run_command_append_argv (configure_command, "-DCMAKE_BUILD_TYPE=RelWithDebInfo");
+  ide_run_command_append_argv (configure_command, prefix_option);
+
   if (crossbuild_file != NULL)
     {
       g_autofree gchar *toolchain_option = g_strdup_printf ("-DCMAKE_TOOLCHAIN_FILE=\"%s\"", crossbuild_file);
-
-      ide_subprocess_launcher_push_argv (configure_launcher, toolchain_option);
+      ide_run_command_append_argv (configure_command, toolchain_option);
     }
 
   if (!ide_str_empty0 (config_opts))
@@ -199,11 +194,13 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
       if (!g_shell_parse_argv (config_opts, &argc, &argv, &error))
         IDE_GOTO (failure);
 
-      ide_subprocess_launcher_push_args (configure_launcher, (const gchar * const *)argv);
+      ide_run_command_append_args (configure_command, (const gchar * const *)argv);
     }
 
-  configure_stage = ide_pipeline_stage_launcher_new (context, configure_launcher);
-  ide_pipeline_stage_set_name (configure_stage, _("Configure project"));
+  configure_stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                                  "build-command", configure_command,
+                                  "name", _("Configure project"),
+                                  NULL);
 
   build_ninja = ide_pipeline_build_builddir_path (pipeline, "build.ninja", NULL);
   if (g_file_test (build_ninja, G_FILE_TEST_IS_REGULAR))
@@ -214,46 +211,43 @@ gbp_cmake_pipeline_addin_load (IdePipelineAddin *addin,
 
   /* Setup our build stage */
 
-  ide_subprocess_launcher_push_argv (build_launcher, ninja);
-  ide_subprocess_launcher_push_argv (clean_launcher, ninja);
+  ide_run_command_append_argv (build_command, ninja);
+  ide_run_command_append_argv (clean_command, ninja);
 
   if (parallelism > 0)
     {
       g_autofree gchar *j = g_strdup_printf ("-j%u", parallelism);
 
-      ide_subprocess_launcher_push_argv (build_launcher, j);
-      ide_subprocess_launcher_push_argv (clean_launcher, j);
+      ide_run_command_append_argv (build_command, j);
+      ide_run_command_append_argv (clean_command, j);
     }
 
-  ide_subprocess_launcher_push_argv (clean_launcher, "clean");
+  ide_run_command_append_argv (clean_command, "clean");
 
-  build_stage = ide_pipeline_stage_launcher_new (context, build_launcher);
-  ide_pipeline_stage_set_name (build_stage, _("Building project"));
-
-  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (build_stage), clean_launcher);
-  ide_pipeline_stage_set_check_stdout (build_stage, TRUE);
-
+  build_stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                              "build-command", build_command,
+                              "clean-command", clean_command,
+                              "name", _("Building project"),
+                              "check-stdout", TRUE,
+                              NULL);
   g_signal_connect (build_stage,
                     "query",
                     G_CALLBACK (gbp_cmake_pipeline_addin_stage_query_cb),
                     NULL);
-
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, build_stage);
   ide_pipeline_addin_track (addin, id);
 
   /* Setup our install stage */
 
-  ide_subprocess_launcher_push_argv (install_launcher, ninja);
-  ide_subprocess_launcher_push_argv (install_launcher, "install");
-
-  install_stage = ide_pipeline_stage_launcher_new (context, install_launcher);
-  ide_pipeline_stage_set_name (install_stage, _("Installing project"));
-
+  ide_run_command_append_args (install_command, IDE_STRV_INIT (ninja, "install"));
+  install_stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                                "build-command", install_command,
+                                "name", _("Installing project"),
+                                NULL);
   g_signal_connect (install_stage,
                     "query",
                     G_CALLBACK (gbp_cmake_pipeline_addin_stage_query_cb),
                     NULL);
-
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_INSTALL, 0, install_stage);
   ide_pipeline_addin_track (addin, id);
 
@@ -269,4 +263,3 @@ pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
 {
   iface->load = gbp_cmake_pipeline_addin_load;
 }
-
