@@ -278,14 +278,78 @@ gbp_editorui_workbench_addin_open_finish (IdeWorkbenchAddin  *addin,
 }
 
 static void
+gbp_editorui_workbench_addin_save_session_page_cb (IdePage  *page,
+                                                   gpointer  user_data)
+{
+  IdeSession *session = user_data;
+
+  g_assert (IDE_IS_PAGE (page));
+  g_assert (IDE_IS_SESSION (session));
+
+  if (IDE_IS_EDITOR_PAGE (page))
+    {
+      g_autoptr(PanelPosition) position = ide_page_get_position (page);
+      g_autoptr(IdeSessionItem) item = ide_session_item_new ();
+      IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
+      GFile *file = ide_buffer_get_file (buffer);
+      g_autofree char *uri = g_file_get_uri (file);
+      IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (page));
+      const char *id = ide_workspace_get_id (workspace);
+      const char *language_id = ide_buffer_get_language_id (buffer);
+      GtkTextIter insert, selection;
+
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
+                                        &insert,
+                                        gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer)));
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
+                                        &selection,
+                                        gtk_text_buffer_get_selection_bound (GTK_TEXT_BUFFER (buffer)));
+
+      ide_session_item_set_module_name (item, "editorui");
+      ide_session_item_set_type_hint (item, "IdeEditorPage");
+      ide_session_item_set_position (item, position);
+      ide_session_item_set_metadata (item, "uri", "s", uri);
+      ide_session_item_set_metadata (item, "workspace", "s", id);
+      ide_session_item_set_metadata (item, "selection", "((uu)(uu))",
+                                     gtk_text_iter_get_line (&insert),
+                                     gtk_text_iter_get_line_offset (&insert),
+                                     gtk_text_iter_get_line (&selection),
+                                     gtk_text_iter_get_line_offset (&selection));
+
+      if (language_id != NULL && !ide_str_equal0 (language_id, "plain"))
+        ide_session_item_set_metadata (item, "language-id", "s", language_id);
+
+      if (page == ide_workspace_get_most_recent_page (workspace))
+        ide_session_item_set_metadata (item, "has-focus", "b", TRUE);
+
+      ide_session_append (session, item);
+    }
+}
+
+static void
+gbp_editorui_workbench_addin_save_session (IdeWorkbenchAddin *addin,
+                                           IdeSession        *session)
+{
+  GbpEditoruiWorkbenchAddin *self = (GbpEditoruiWorkbenchAddin *)addin;
+
+  g_assert (GBP_IS_EDITORUI_WORKBENCH_ADDIN (self));
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (IDE_IS_WORKBENCH (self->workbench));
+
+  ide_workbench_foreach_page (self->workbench,
+                              gbp_editorui_workbench_addin_save_session_page_cb,
+                              session);
+}
+
+static void
 workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 {
   iface->load = gbp_editorui_workbench_addin_load;
   iface->unload = gbp_editorui_workbench_addin_unload;
-
   iface->can_open = gbp_editorui_workbench_addin_can_open;
   iface->open_async = gbp_editorui_workbench_addin_open_async;
   iface->open_finish = gbp_editorui_workbench_addin_open_finish;
+  iface->save_session = gbp_editorui_workbench_addin_save_session;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpEditoruiWorkbenchAddin, gbp_editorui_workbench_addin, G_TYPE_OBJECT,
