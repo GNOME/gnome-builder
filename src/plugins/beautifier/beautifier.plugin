@@ -1,8 +1,0 @@
-[Plugin]
-Authors=Sébastien Lafargue <slafargue@gnome.org>
-Builtin=true
-Copyright=Copyright © 2016 Sébastien Lafargue
-Description=Beautify code according to profiles
-Embedded=_gb_beautifier_register_types
-Module=beautifier
-Name=Code Beautifier

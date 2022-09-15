@@ -18,7 +18,6 @@ option('webkit', type: 'feature', value: 'enabled', description: 'Enable feature
 
 option('plugin_autotools', type: 'boolean')
 option('plugin_bash_language_server', type: 'boolean')
-option('plugin_beautifier', type: 'boolean')
 option('plugin_blueprint', type: 'boolean')
 option('plugin_buildstream', type: 'boolean')
 option('plugin_c_pack', type: 'boolean')
