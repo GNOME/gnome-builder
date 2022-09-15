@@ -712,3 +712,39 @@ ide_run_command_set_can_default (IdeRunCommand *self,
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_CAN_DEFAULT]);
     }
 }
+
+const char *
+ide_run_command_getenv (IdeRunCommand *self,
+                        const char    *key)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), NULL);
+  g_return_val_if_fail (key != NULL, NULL);
+
+  if (priv->environ == NULL)
+    return NULL;
+
+  return g_environ_getenv (priv->environ, key);
+}
+
+void
+ide_run_command_setenv (IdeRunCommand *self,
+                        const char    *key,
+                        const char    *value)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+  g_return_if_fail (key != NULL);
+
+  if (value == NULL && priv->environ == NULL)
+    return;
+
+  if (value != NULL)
+    priv->environ = g_environ_setenv (priv->environ, key, value, TRUE);
+  else
+    priv->environ = g_environ_unsetenv (priv->environ, key);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENVIRON]);
+}

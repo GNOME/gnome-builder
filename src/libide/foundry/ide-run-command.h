@@ -82,6 +82,13 @@ IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_environ      (IdeRunCommand      *self,
                                                       const char * const *environ);
 IDE_AVAILABLE_IN_ALL
+const char         *ide_run_command_getenv           (IdeRunCommand      *self,
+                                                      const char         *key);
+IDE_AVAILABLE_IN_ALL
+void                ide_run_command_setenv           (IdeRunCommand      *self,
+                                                      const char         *key,
+                                                      const char         *value);
+IDE_AVAILABLE_IN_ALL
 int                 ide_run_command_get_priority     (IdeRunCommand      *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_priority     (IdeRunCommand      *self,
