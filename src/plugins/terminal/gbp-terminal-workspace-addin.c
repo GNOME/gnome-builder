@@ -336,10 +336,63 @@ gbp_terminal_workspace_addin_unload (IdeWorkspaceAddin *addin,
 }
 
 static void
+gbp_terminal_workspace_addin_save_session_page_cb (IdePage  *page,
+                                                   gpointer  user_data)
+{
+  IdeSession *session = user_data;
+
+  g_assert (IDE_IS_PAGE (page));
+  g_assert (IDE_IS_SESSION (session));
+
+  if (IDE_IS_TERMINAL_PAGE (page))
+    {
+      g_autoptr(PanelPosition) position = ide_page_get_position (page);
+      g_autoptr(IdeSessionItem) item = ide_session_item_new ();
+      IdeTerminal *terminal = ide_terminal_page_get_terminal (IDE_TERMINAL_PAGE (page));
+      const char *title = panel_widget_get_title (PANEL_WIDGET (page));
+      g_autofree char *text = vte_terminal_get_text (VTE_TERMINAL (terminal), NULL, NULL, NULL);
+      IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (page));
+      const char *id = ide_workspace_get_id (workspace);
+
+      ide_session_item_set_module_name (item, "terminal");
+      ide_session_item_set_type_hint (item, "IdeTerminalPage");
+      ide_session_item_set_position (item, position);
+      ide_session_item_set_metadata (item, "title", "s", title);
+      ide_session_item_set_metadata (item, "workspace", "s", id);
+      ide_session_item_set_metadata (item, "text", "s", text);
+
+      if (page == ide_workspace_get_most_recent_page (workspace))
+        ide_session_item_set_metadata (item, "has-focus", "b", TRUE);
+
+      ide_session_append (session, item);
+    }
+}
+
+static void
+gbp_terminal_workspace_addin_save_session (IdeWorkspaceAddin *addin,
+                                           IdeSession        *session)
+{
+  GbpTerminalWorkspaceAddin *self = (GbpTerminalWorkspaceAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+
+  ide_workspace_foreach_page (self->workspace,
+                              gbp_terminal_workspace_addin_save_session_page_cb,
+                              session);
+
+  IDE_EXIT;
+}
+
+static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_terminal_workspace_addin_load;
   iface->unload = gbp_terminal_workspace_addin_unload;
+  iface->save_session = gbp_terminal_workspace_addin_save_session;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTerminalWorkspaceAddin, gbp_terminal_workspace_addin, G_TYPE_OBJECT,
