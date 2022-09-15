@@ -22,7 +22,6 @@
 
 #include "ide-grid.h"
 #include "ide-panel-position.h"
-#include "ide-session.h"
 #include "ide-workspace.h"
 
 G_BEGIN_DECLS

@@ -34,6 +34,7 @@
 #include "ide-page.h"
 #include "ide-pane.h"
 #include "ide-panel-position.h"
+#include "ide-session.h"
 
 G_BEGIN_DECLS
 
@@ -93,6 +94,8 @@ struct _IdeWorkspaceClass
                                           int                  *width,
                                           int                  *height);
   gboolean      (*can_search)            (IdeWorkspace         *self);
+  void          (*save_session)          (IdeWorkspace         *self,
+                                          IdeSession           *session);
 };
 
 IDE_AVAILABLE_IN_ALL

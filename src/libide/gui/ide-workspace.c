@@ -1701,6 +1701,9 @@ _ide_workspace_save_session (IdeWorkspace *self,
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (IDE_IS_SESSION (session));
 
+  if (IDE_WORKSPACE_GET_CLASS (self)->save_session)
+    IDE_WORKSPACE_GET_CLASS (self)->save_session (self, session);
+
   ide_extension_set_adapter_foreach (priv->addins,
                                      ide_workspace_addin_save_session_cb,
                                      session);
