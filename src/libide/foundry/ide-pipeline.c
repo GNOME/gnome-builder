@@ -2982,8 +2982,10 @@ ide_pipeline_create_launcher (IdePipeline  *self,
   ide_runtime_prepare_to_build (runtime, self, run_context);
   ide_run_context_set_cwd (run_context, ide_pipeline_get_builddir (self));
   ide_run_context_add_environ (run_context, (const char * const *)environ);
+
   /* Always ignore V=1 from configurations */
-  ide_run_context_setenv (run_context, "V", "0");
+  if (ide_run_context_getenv (run_context, "V") != NULL)
+    ide_run_context_setenv (run_context, "V", "0");
 
   ret = ide_run_context_end (run_context, error);
 
