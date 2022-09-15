@@ -1717,16 +1717,20 @@ ide_workbench_unload_async (IdeWorkbench        *self,
                            G_CONNECT_SWAPPED);
   g_application_hold (app);
 
-  /* If we have a project open, we want to save session state that
-   * can be restored the next time Builder is started.
-   */
-  if (self->project_info != NULL)
-    {
-      session = ide_session_new ();
+  /* Collect addins up front, we'll need them a couple times */
+  addins = ide_workbench_collect_addins (self);
 
-      peas_extension_set_foreach (self->addins,
-                                  ide_workbench_addin_save_state_cb,
-                                  session);
+  /* Create a session object to store project state */
+  session = ide_session_new ();
+
+  /* We always request to save session state, but we only persist
+   * it to disk for projects. That may change in the future though
+   * so we always call that API for symmetry.
+   */
+  for (guint i = 0; i < addins->len; i++)
+    {
+      IdeWorkbenchAddin *addin = g_ptr_array_index (addins, i);
+      ide_workbench_addin_save_session (addin, session);
     }
 
   /* Release the search engine early to help it cleanup */
@@ -1749,8 +1753,10 @@ ide_workbench_unload_async (IdeWorkbench        *self,
       IDE_EXIT;
     }
 
-  addins = ide_workbench_collect_addins (self);
-  ide_task_set_task_data (task, g_ptr_array_ref (addins), g_ptr_array_unref);
+  /* Keep the addins around to call during stages of unload */
+  ide_task_set_task_data (task,
+                          g_ptr_array_ref (addins),
+                          g_ptr_array_unref);
 
   if (addins->len == 0)
     {
