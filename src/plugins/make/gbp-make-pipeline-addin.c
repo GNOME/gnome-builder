@@ -43,12 +43,12 @@ query_cb (IdePipelineStage *stage,
           GCancellable     *cancellable,
           gpointer          user_data)
 {
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
+  g_autoptr(IdeRunCommand) build_command = NULL;
   const char *make;
   IdeConfig *config;
   int j;
 
-  g_assert (IDE_IS_PIPELINE_STAGE_LAUNCHER (stage));
+  g_assert (IDE_IS_PIPELINE_STAGE_COMMAND (stage));
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
@@ -56,11 +56,16 @@ query_cb (IdePipelineStage *stage,
   if (!(make = ide_config_getenv (config, "MAKE")))
     make = "make";
 
-  build_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_argv (build_launcher, make);
+  build_command = ide_run_command_new ();
+  ide_run_command_append_argv (build_command, make);
+  ide_run_command_set_cwd (build_command, ide_pipeline_get_builddir (pipeline));
 
   if ((j = ide_config_get_parallelism (config)) > 0)
-    ide_subprocess_launcher_push_argv_format (build_launcher, "-j%d", j);
+    {
+      char arg[12];
+      g_snprintf (arg, sizeof arg, "-j%d", j);
+      ide_run_command_append_argv (build_command, arg);
+    }
 
   if (targets != NULL && targets->len > 0)
     {
@@ -73,15 +78,27 @@ query_cb (IdePipelineStage *stage,
             continue;
 
           if ((make_target = gbp_make_build_target_get_make_target (GBP_MAKE_BUILD_TARGET (build_target))))
-            ide_subprocess_launcher_push_argv (build_launcher, make_target);
+            ide_run_command_append_argv (build_command, make_target);
         }
     }
 
-  ide_subprocess_launcher_push_args (build_launcher,
-                                     ide_config_get_args_for_phase (config, IDE_PIPELINE_PHASE_BUILD));
+  ide_run_command_append_args (build_command,
+                               ide_config_get_args_for_phase (config, IDE_PIPELINE_PHASE_BUILD));
+
+  ide_pipeline_stage_command_set_build_command (IDE_PIPELINE_STAGE_COMMAND (stage), build_command);
 
   /* Always defer to make to check if build is needed */
-  ide_pipeline_stage_launcher_set_launcher (IDE_PIPELINE_STAGE_LAUNCHER (stage), build_launcher);
+  ide_pipeline_stage_set_completed (stage, FALSE);
+}
+
+static void
+always_run_query_cb (IdePipelineStage *stage,
+                     IdePipeline      *pipeline,
+                     GPtrArray        *targets,
+                     GCancellable     *cancellable,
+                     gpointer          user_data)
+{
+  /* Always defer to make to check if install is needed */
   ide_pipeline_stage_set_completed (stage, FALSE);
 }
 
@@ -89,8 +106,8 @@ static void
 gbp_make_pipeline_addin_load (IdePipelineAddin *addin,
                               IdePipeline      *pipeline)
 {
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) install_launcher = NULL;
+  g_autoptr(IdeRunCommand) clean_command = NULL;
+  g_autoptr(IdeRunCommand) install_command = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
   g_autoptr(IdePipelineStage) install_stage = NULL;
   IdeBuildSystem *build_system;
@@ -117,24 +134,27 @@ gbp_make_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (IDE_IS_CONFIG (config));
   g_assert (make != NULL);
 
-  clean_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_args (clean_launcher, IDE_STRV_INIT (make, "clean"));
+  clean_command = ide_run_command_new ();
+  ide_run_command_append_args (clean_command, IDE_STRV_INIT (make, "clean"));
 
-  build_stage = ide_pipeline_stage_launcher_new (context, NULL);
-  ide_pipeline_stage_set_name (build_stage, _("Building project"));
-  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (build_stage), clean_launcher);
+  build_stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                              "clean-command", clean_command,
+                              "name", _("Building project"),
+                              NULL);
   g_signal_connect (build_stage, "query", G_CALLBACK (query_cb), NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, build_stage);
   ide_pipeline_addin_track (addin, id);
 
-  install_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_args (install_launcher, IDE_STRV_INIT (make, "install"));
-  ide_subprocess_launcher_push_args (install_launcher,
-                                     ide_config_get_args_for_phase (config, IDE_PIPELINE_PHASE_INSTALL));
+  install_command = ide_run_command_new ();
+  ide_run_command_append_args (install_command, IDE_STRV_INIT (make, "install"));
+  ide_run_command_append_args (install_command,
+                               ide_config_get_args_for_phase (config, IDE_PIPELINE_PHASE_INSTALL));
 
-  install_stage = ide_pipeline_stage_launcher_new (context, install_launcher);
-  ide_pipeline_stage_set_name (install_stage, _("Installing project"));
-  g_signal_connect (install_stage, "query", G_CALLBACK (query_cb), NULL);
+  install_stage = g_object_new (IDE_TYPE_PIPELINE_STAGE_COMMAND,
+                                "build-command", install_command,
+                                "name", _("Installing project"),
+                                NULL);
+  g_signal_connect (install_stage, "query", G_CALLBACK (always_run_query_cb), NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_INSTALL, 0, install_stage);
   ide_pipeline_addin_track (addin, id);
 
