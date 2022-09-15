@@ -265,6 +265,12 @@ ide_primary_workspace_agree_to_close_finish (IdeWorkspace  *workspace,
   return _ide_workspace_agree_to_close_finish (workspace, result, error);
 }
 
+static const char *
+ide_primary_workspace_get_id (IdeWorkspace *workspace)
+{
+  return "primary";
+}
+
 static void
 ide_primary_workspace_dispose (GObject *object)
 {
@@ -300,6 +306,7 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->foreach_page = ide_primary_workspace_foreach_page;
   workspace_class->get_frame_at_position = ide_primary_workspace_get_frame_at_position;
   workspace_class->get_header_bar = ide_primary_workspace_get_header_bar;
+  workspace_class->get_id = ide_primary_workspace_get_id;
   workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
   workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
 

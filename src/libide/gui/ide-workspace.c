@@ -519,6 +519,17 @@ ide_workspace_real_get_header_bar (IdeWorkspace *workspace)
   return NULL;
 }
 
+const char *
+ide_workspace_get_id (IdeWorkspace *self)
+{
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->get_id)
+    return IDE_WORKSPACE_GET_CLASS (self)->get_id (self);
+
+  return G_OBJECT_TYPE_NAME (self);
+}
+
 static void
 ide_workspace_action_close (gpointer    instance,
                             const char *action_name,
