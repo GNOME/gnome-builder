@@ -33,17 +33,20 @@
             <property name="hscrollbar-policy">never</property>
             <property name="min-content-height">400</property>
             <child>
-              <object class="GtkListView" id="list_view">
-                <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
-                <property name="single-click-activate">True</property>
-                <property name="orientation">vertical</property>
-                <property name="model">
-                  <object class="GtkSingleSelection" id="selection">
-                  </object>
-                </property>
-                <property name="factory">
-                  <object class="GtkBuilderListItemFactory">
-                    <property name="bytes"><![CDATA[
+              <object class="GtkViewport">
+                <property name="scroll-to-focus">true</property>
+                <child>
+                  <object class="GtkListView" id="list_view">
+                    <signal name="activate" handler="ide_search_popover_activate_cb" swapped="true" object="IdeSearchPopover"/>
+                    <property name="single-click-activate">True</property>
+                    <property name="orientation">vertical</property>
+                    <property name="model">
+                      <object class="GtkSingleSelection" id="selection">
+                      </object>
+                    </property>
+                    <property name="factory">
+                      <object class="GtkBuilderListItemFactory">
+                        <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
 <template class="GtkListItem">
@@ -103,9 +106,11 @@
 </template>
 </interface>
 ]]>
+                        </property>
+                      </object>
                     </property>
                   </object>
-                </property>
+                </child>
               </object>
             </child>
           </object>
