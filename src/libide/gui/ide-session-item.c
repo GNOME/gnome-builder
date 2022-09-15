@@ -29,6 +29,7 @@ struct _IdeSessionItem
 {
   GObject parent_instance;
   PanelPosition *position;
+  char *module_name;
   char *id;
   char *type_hint;
   GHashTable *metadata;
@@ -37,6 +38,7 @@ struct _IdeSessionItem
 enum {
   PROP_0,
   PROP_ID,
+  PROP_MODULE_NAME,
   PROP_POSITION,
   PROP_TYPE_HINT,
   N_PROPS
@@ -54,6 +56,7 @@ ide_session_item_dispose (GObject *object)
   g_clear_object (&self->position);
 
   g_clear_pointer (&self->id, g_free);
+  g_clear_pointer (&self->module_name, g_free);
   g_clear_pointer (&self->type_hint, g_free);
   g_clear_pointer (&self->metadata, g_hash_table_unref);
 
@@ -72,6 +75,10 @@ ide_session_item_get_property (GObject    *object,
     {
     case PROP_ID:
       g_value_set_string (value, ide_session_item_get_id (self));
+      break;
+
+    case PROP_MODULE_NAME:
+      g_value_set_string (value, ide_session_item_get_module_name (self));
       break;
 
     case PROP_POSITION:
@@ -101,6 +108,10 @@ ide_session_item_set_property (GObject      *object,
       ide_session_item_set_id (self, g_value_get_string (value));
       break;
 
+    case PROP_MODULE_NAME:
+      ide_session_item_set_module_name (self, g_value_get_string (value));
+      break;
+
     case PROP_POSITION:
       ide_session_item_set_position (self, g_value_get_object (value));
       break;
@@ -128,6 +139,10 @@ ide_session_item_class_init (IdeSessionItemClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_EXPLICIT_NOTIFY |
                           G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_MODULE_NAME] =
+    g_param_spec_string ("module-name", NULL, NULL, NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_POSITION] =
     g_param_spec_object ("position", NULL, NULL,
@@ -184,6 +199,42 @@ ide_session_item_set_id (IdeSessionItem *self,
 
   if (ide_set_string (&self->id, id))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
+}
+
+/**
+ * ide_session_item_get_module_name:
+ * @self: a #IdeSessionItem
+ *
+ * Gets the module-name that created an item.
+ *
+ * Returns: (nullable): a module-name or %NULL
+ */
+const char *
+ide_session_item_get_module_name (IdeSessionItem *self)
+{
+  g_return_val_if_fail (IDE_IS_SESSION_ITEM (self), NULL);
+
+  return self->module_name;
+}
+
+/**
+ * ide_session_item_set_module_name:
+ * @self: a #IdeSessionItem
+ * @module_name: (nullable): the module name owning the item
+ *
+ * Sets the module-name for the session item.
+ *
+ * This is generally used to help determine which plugin created
+ * the item when decoding them at project load time.
+ */
+void
+ide_session_item_set_module_name (IdeSessionItem *self,
+                                  const char     *module_name)
+{
+  g_return_if_fail (IDE_IS_SESSION_ITEM (self));
+
+  if (ide_set_string (&self->module_name, module_name))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MODULE_NAME]);
 }
 
 /**
@@ -481,6 +532,9 @@ _ide_session_item_to_variant (IdeSessionItem  *self,
   if (self->id != NULL)
     g_variant_builder_add_parsed (builder, "{'id',<%s>}", self->id);
 
+  if (self->module_name != NULL)
+    g_variant_builder_add_parsed (builder, "{'module-name',<%s>}", self->module_name);
+
   if (self->type_hint != NULL)
     g_variant_builder_add_parsed (builder, "{'type-hint',<%s>}", self->type_hint);
 
@@ -528,6 +582,7 @@ _ide_session_item_new_from_variant (GVariant  *variant,
   self = g_object_new (IDE_TYPE_SESSION_ITEM, NULL);
 
   g_variant_lookup (variant, "id", "s", &self->id);
+  g_variant_lookup (variant, "module-name", "s", &self->module_name);
   g_variant_lookup (variant, "type-hint", "s", &self->type_hint);
 
   if ((positionv = g_variant_lookup_value (variant, "position", NULL)))

@@ -38,45 +38,50 @@ G_DECLARE_FINAL_TYPE (IdeSessionItem, ide_session_item, IDE, SESSION_ITEM, GObje
 IDE_AVAILABLE_IN_ALL
 IdeSessionItem *ide_session_item_new                    (void);
 IDE_AVAILABLE_IN_ALL
-PanelPosition   *ide_session_item_get_position           (IdeSessionItem     *self);
+PanelPosition  *ide_session_item_get_position           (IdeSessionItem      *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_item_set_position           (IdeSessionItem     *self,
-                                                           PanelPosition       *position);
+void            ide_session_item_set_position           (IdeSessionItem      *self,
+                                                         PanelPosition       *position);
 IDE_AVAILABLE_IN_ALL
-const char      *ide_session_item_get_id                 (IdeSessionItem     *self);
+const char     *ide_session_item_get_id                 (IdeSessionItem      *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_item_set_id                 (IdeSessionItem     *self,
-                                                           const char          *id);
+void            ide_session_item_set_id                 (IdeSessionItem      *self,
+                                                         const char          *id);
 IDE_AVAILABLE_IN_ALL
-const char      *ide_session_item_get_type_hint          (IdeSessionItem     *self);
+const char     *ide_session_item_get_module_name        (IdeSessionItem      *self);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_item_set_type_hint          (IdeSessionItem     *self,
-                                                           const char          *type_hint);
+void            ide_session_item_set_module_name        (IdeSessionItem      *self,
+                                                         const char          *module_name);
 IDE_AVAILABLE_IN_ALL
-gboolean         ide_session_item_has_metadata           (IdeSessionItem     *self,
-                                                           const char          *key,
-                                                           const GVariantType **value_type);
+const char     *ide_session_item_get_type_hint          (IdeSessionItem      *self);
 IDE_AVAILABLE_IN_ALL
-gboolean         ide_session_item_has_metadata_with_type (IdeSessionItem     *self,
-                                                           const char          *key,
-                                                           const GVariantType  *expected_type);
+void            ide_session_item_set_type_hint          (IdeSessionItem      *self,
+                                                         const char          *type_hint);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_item_get_metadata           (IdeSessionItem     *self,
-                                                           const char          *key,
-                                                           const char          *format,
-                                                           ...);
+gboolean        ide_session_item_has_metadata           (IdeSessionItem      *self,
+                                                         const char          *key,
+                                                         const GVariantType **value_type);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_item_set_metadata           (IdeSessionItem     *self,
-                                                           const char          *key,
-                                                           const char          *format,
-                                                           ...);
+gboolean        ide_session_item_has_metadata_with_type (IdeSessionItem      *self,
+                                                         const char          *key,
+                                                         const GVariantType  *expected_type);
 IDE_AVAILABLE_IN_ALL
-GVariant        *ide_session_item_get_metadata_value     (IdeSessionItem     *self,
-                                                           const char          *key,
-                                                           const GVariantType  *expected_type);
+void            ide_session_item_get_metadata           (IdeSessionItem      *self,
+                                                         const char          *key,
+                                                         const char          *format,
+                                                         ...);
 IDE_AVAILABLE_IN_ALL
-void             ide_session_item_set_metadata_value     (IdeSessionItem     *self,
-                                                           const char          *key,
-                                                           GVariant            *value);
+void            ide_session_item_set_metadata           (IdeSessionItem      *self,
+                                                         const char          *key,
+                                                         const char          *format,
+                                                         ...);
+IDE_AVAILABLE_IN_ALL
+GVariant       *ide_session_item_get_metadata_value     (IdeSessionItem      *self,
+                                                         const char          *key,
+                                                         const GVariantType  *expected_type);
+IDE_AVAILABLE_IN_ALL
+void            ide_session_item_set_metadata_value     (IdeSessionItem      *self,
+                                                         const char          *key,
+                                                         GVariant            *value);
 
 G_END_DECLS
