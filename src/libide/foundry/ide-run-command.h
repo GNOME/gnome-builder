@@ -77,6 +77,12 @@ IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_argv         (IdeRunCommand      *self,
                                                       const char * const *argv);
 IDE_AVAILABLE_IN_ALL
+void                ide_run_command_append_args      (IdeRunCommand      *self,
+                                                      const char * const *args);
+IDE_AVAILABLE_IN_ALL
+void                ide_run_command_append_argv      (IdeRunCommand      *self,
+                                                      const char         *arg);
+IDE_AVAILABLE_IN_ALL
 const char * const *ide_run_command_get_environ      (IdeRunCommand      *self);
 IDE_AVAILABLE_IN_ALL
 void                ide_run_command_set_environ      (IdeRunCommand      *self,

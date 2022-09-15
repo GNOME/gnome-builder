@@ -748,3 +748,61 @@ ide_run_command_setenv (IdeRunCommand *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ENVIRON]);
 }
+
+/**
+ * ide_run_command_append_argv:
+ * @self: a #IdeRunCommand
+ * @arg: the argument to append
+ *
+ * A convenience wrapper to append @arg to #IdeRunCommand:argv.
+ */
+void
+ide_run_command_append_argv (IdeRunCommand *self,
+                             const char    *arg)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+  g_autoptr(GStrvBuilder) builder = NULL;
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+
+  if (arg == NULL)
+    return;
+
+  builder = g_strv_builder_new ();
+  if (priv->argv != NULL && priv->argv[0] != NULL)
+    g_strv_builder_addv (builder, (const char **)priv->argv);
+  g_strv_builder_add (builder, arg);
+
+  g_clear_pointer (&priv->argv, g_strfreev);
+  priv->argv = g_strv_builder_end (builder);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARGV]);
+}
+
+/**
+ * ide_run_command_append_args:
+ * @self: a #IdeRunCommand
+ * @args: the arguments to append
+ *
+ * A convenience wrapper to append @args to #IdeRunCommand:argv.
+ */
+void
+ide_run_command_append_args (IdeRunCommand      *self,
+                             const char * const *args)
+{
+  IdeRunCommandPrivate *priv = ide_run_command_get_instance_private (self);
+  g_autoptr(GStrvBuilder) builder = NULL;
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+
+  if (args == NULL || args[0] == NULL)
+    return;
+
+  builder = g_strv_builder_new ();
+  if (priv->argv != NULL && priv->argv[0] != NULL)
+    g_strv_builder_addv (builder, (const char **)priv->argv);
+  g_strv_builder_addv (builder, (const char **)args);
+
+  g_clear_pointer (&priv->argv, g_strfreev);
+  priv->argv = g_strv_builder_end (builder);
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARGV]);
+}
