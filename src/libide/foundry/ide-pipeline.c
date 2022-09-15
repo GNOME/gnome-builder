@@ -2628,6 +2628,40 @@ ide_pipeline_attach_launcher (IdePipeline           *self,
 }
 
 /**
+ * ide_pipeline_attach_command:
+ * @self: an #IdePipeline
+ * @phase: An #IdePipelinePhase
+ * @priority: an optional priority for sorting within the phase
+ * @run_command: An #IdeRunCommand
+ *
+ * This creates a new stage that will spawn a process using @run_command and
+ * log the output of stdin/stdout.
+ *
+ * It is a programmer error to modify @run_command after passing it to this
+ * function.
+ *
+ * Returns: A stage_id that may be passed to ide_pipeline_remove().
+ */
+guint
+ide_pipeline_attach_command (IdePipeline      *self,
+                             IdePipelinePhase  phase,
+                             gint              priority,
+                             IdeRunCommand    *run_command)
+{
+  g_autoptr(IdePipelineStage) stage = NULL;
+
+  g_return_val_if_fail (IDE_IS_PIPELINE (self), 0);
+  g_return_val_if_fail ((phase & IDE_PIPELINE_PHASE_MASK) != IDE_PIPELINE_PHASE_NONE, 0);
+  g_return_val_if_fail ((phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == 0 ||
+                        (phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == IDE_PIPELINE_PHASE_BEFORE ||
+                        (phase & IDE_PIPELINE_PHASE_WHENCE_MASK) == IDE_PIPELINE_PHASE_AFTER, 0);
+
+  stage = ide_pipeline_stage_command_new (run_command, NULL);
+
+  return ide_pipeline_attach (self, phase, priority, stage);
+}
+
+/**
  * ide_pipeline_request_phase:
  * @self: An #IdePipeline
  * @phase: An #IdePipelinePhase

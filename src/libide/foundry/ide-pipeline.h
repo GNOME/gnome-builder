@@ -122,6 +122,11 @@ guint                  ide_pipeline_attach_launcher          (IdePipeline       
                                                               gint                    priority,
                                                               IdeSubprocessLauncher  *launcher);
 IDE_AVAILABLE_IN_ALL
+guint                  ide_pipeline_attach_command           (IdePipeline            *self,
+                                                              IdePipelinePhase        phase,
+                                                              gint                    priority,
+                                                              IdeRunCommand          *run_command);
+IDE_AVAILABLE_IN_ALL
 void                   ide_pipeline_detach                   (IdePipeline            *self,
                                                               guint                   stage_id);
 IDE_AVAILABLE_IN_ALL
