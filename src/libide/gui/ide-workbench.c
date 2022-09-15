@@ -1737,7 +1737,6 @@ ide_workbench_unload_async (IdeWorkbench        *self,
    * open-file requests can keep us alive while we're shutting
    * down.
    */
-
   ide_application_remove_workbench (IDE_APPLICATION (app), self);
 
   /* If we haven't loaded a project, then there is nothing to
@@ -1746,7 +1745,7 @@ ide_workbench_unload_async (IdeWorkbench        *self,
    */
   if (self->project_info == NULL)
     {
-      ide_workbench_unload_project_completed (self, g_steal_pointer (&task));
+      ide_workbench_unload_project_completed (self, task);
       IDE_EXIT;
     }
 
@@ -1769,11 +1768,6 @@ ide_workbench_unload_async (IdeWorkbench        *self,
                                                 ide_workbench_unload_project_cb,
                                                 g_object_ref (task));
     }
-
-  /* Since the g_steal_pointer() just before doesn't always run, ensure the
-   * task isn't freed while it hasn't yet finished running asynchronously.
-   */
-  task = NULL;
 
   IDE_EXIT;
 }
