@@ -29,18 +29,18 @@
 #include "ide-buildconfig-pipeline-addin.h"
 
 static void
-add_command (IdePipelineAddin  *addin,
-             IdePipeline       *pipeline,
-             IdePipelinePhase           phase,
-             gint                    priority,
-             const gchar            *command_text,
-             gchar                 **env)
+add_command (IdePipelineAddin   *addin,
+             IdePipeline        *pipeline,
+             IdePipelinePhase    phase,
+             int                 priority,
+             const char         *command_text,
+             const char * const *environ)
 {
+  g_autoptr(IdeRunCommand) run_command = NULL;
   g_autoptr(GError) error = NULL;
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_auto(GStrv) argv = NULL;
   guint stage_id;
-  gint argc = 0;
+  int argc = 0;
 
   if (!g_shell_parse_argv (command_text, &argc, &argv, &error))
     {
@@ -48,20 +48,11 @@ add_command (IdePipelineAddin  *addin,
       return;
     }
 
-  launcher = ide_pipeline_create_launcher (pipeline, NULL);
+  run_command = ide_run_command_new ();
+  ide_run_command_set_argv (run_command, (const char * const *)argv);
+  ide_run_command_set_environ (run_command, environ);
 
-  if (launcher == NULL)
-    {
-      g_warning ("Failed to create launcher for build command");
-      return;
-    }
-
-  for (guint i = 0; i < argc; i++)
-    ide_subprocess_launcher_push_argv (launcher, argv[i]);
-
-  ide_subprocess_launcher_set_environ (launcher, (const gchar * const *)env);
-
-  stage_id = ide_pipeline_attach_launcher (pipeline, phase, priority, launcher);
+  stage_id = ide_pipeline_attach_command (pipeline, phase, priority, run_command);
   ide_pipeline_addin_track (addin, stage_id);
 }
 
@@ -69,8 +60,8 @@ static void
 ide_buildconfig_pipeline_addin_load (IdePipelineAddin *addin,
                                      IdePipeline      *pipeline)
 {
-  const gchar * const *prebuild;
-  const gchar * const *postbuild;
+  const char * const *prebuild;
+  const char * const *postbuild;
   IdeConfig *config;
   g_auto(GStrv) env = NULL;
 
@@ -92,13 +83,13 @@ ide_buildconfig_pipeline_addin_load (IdePipelineAddin *addin,
   if (prebuild != NULL)
     {
       for (guint i = 0; prebuild[i]; i++)
-        add_command (addin, pipeline, IDE_PIPELINE_PHASE_BUILD|IDE_PIPELINE_PHASE_BEFORE, i, prebuild[i], env);
+        add_command (addin, pipeline, IDE_PIPELINE_PHASE_BUILD|IDE_PIPELINE_PHASE_BEFORE, i, prebuild[i], (const char * const *)env);
     }
 
   if (postbuild != NULL)
     {
       for (guint i = 0; postbuild[i]; i++)
-        add_command (addin, pipeline, IDE_PIPELINE_PHASE_BUILD|IDE_PIPELINE_PHASE_AFTER, i, postbuild[i], env);
+        add_command (addin, pipeline, IDE_PIPELINE_PHASE_BUILD|IDE_PIPELINE_PHASE_AFTER, i, postbuild[i], (const char * const *)env);
     }
 
   IDE_EXIT;
