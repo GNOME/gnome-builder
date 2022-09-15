@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-13 22:49+0000\n"
-"PO-Revision-Date: 2022-09-13 20:20-0300\n"
+"POT-Creation-Date: 2022-09-14 13:48+0000\n"
+"PO-Revision-Date: 2022-09-15 18:23-0300\n"
 "Last-Translator: Enrico Nicoletto <hiko@duck.com>\n"
 "Language-Team: Brazilian Portuguese <gnome-pt_br-list@gnome.org>\n"
 "Language: pt_BR\n"
@@ -915,24 +915,24 @@ msgid "Unsaved document has been restored."
 msgstr "O documento não salvo foi restaurado."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:413
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Impressão falhou: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:489
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Falha ao formatar a seleção: %s"
 
-#: src/libide/editor/ide-editor-page.c:905
+#: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Salvar arquivo"
 
-#: src/libide/editor/ide-editor-page.c:908
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -941,7 +941,7 @@ msgstr "Salvar arquivo"
 msgid "Save"
 msgstr "Salvar"
 
-#: src/libide/editor/ide-editor-page.c:908
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1575,6 +1575,10 @@ msgstr "Executar projeto"
 #: src/libide/gui/ide-shortcut-window.c:265
 msgid "Other"
 msgstr "Outro"
+
+#: src/libide/gui/ide-workspace.c:1646
+msgid "There are unsaved documents"
+msgstr "Há documentos não salvos"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -4365,8 +4369,12 @@ msgid "Format on Save"
 msgstr "Formatar ao salvar"
 
 #: src/plugins/editorui/tweaks.ui:582
-msgid "Reformat sources when saving to disk"
-msgstr "Reformata os arquivos-fonte ao salvar no disco"
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
+msgstr ""
+"Reformata fontes ao salvar no disco. Requer um formatador registado para a "
+"linguagem de origem."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -6025,7 +6033,7 @@ msgid "Request that all unit tests are run"
 msgstr "Solicita que todos os testes de unidade sejam executados"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+#: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXMEs"
 
@@ -6255,3 +6263,6 @@ msgstr "Falha ao criar a árvore XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O arquivo deve estar salvo localmente para análise."
+
+#~ msgid "Reformat sources when saving to disk"
+#~ msgstr "Reformata os arquivos-fonte ao salvar no disco"
