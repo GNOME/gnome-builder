@@ -55,15 +55,16 @@ static void
 gbp_gradle_pipeline_addin_load (IdePipelineAddin *addin,
                                 IdePipeline      *pipeline)
 {
-  g_autoptr(IdeSubprocessLauncher) wrapper_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
   g_autoptr(IdePipelineStage) wrapper_stage = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
   IdeBuildSystem *build_system;
   const char *srcdir;
   IdeContext *context;
   guint id;
+
+  g_autoptr(IdeRunCommand) build_command = NULL;
+  g_autoptr(IdeRunCommand) clean_command = NULL;
+  g_autoptr(IdeRunCommand) wrapper_command = NULL;
 
   IDE_ENTRY;
 
@@ -77,25 +78,22 @@ gbp_gradle_pipeline_addin_load (IdePipelineAddin *addin,
   if (!GBP_IS_GRADLE_BUILD_SYSTEM (build_system))
     IDE_EXIT;
 
-  wrapper_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (wrapper_launcher, srcdir);
-  ide_subprocess_launcher_push_args (wrapper_launcher, IDE_STRV_INIT ("gradle", "wrapper"));
-  wrapper_stage = ide_pipeline_stage_launcher_new (context, wrapper_launcher);
+  wrapper_command = ide_run_command_new ();
+  ide_run_command_set_argv (wrapper_command, IDE_STRV_INIT ("gradle", "wrapper"));
+  ide_run_command_set_cwd (wrapper_command, srcdir);
+  wrapper_stage = ide_pipeline_stage_command_new (wrapper_command, NULL);
   ide_pipeline_stage_set_name (wrapper_stage, _("Bootstrapping project"));
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_AUTOGEN, 0, wrapper_stage);
   ide_pipeline_addin_track (addin, id);
 
-  build_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (build_launcher, srcdir);
-  ide_subprocess_launcher_push_args (build_launcher, IDE_STRV_INIT ("./gradlew", "build"));
-
-  clean_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (clean_launcher, srcdir);
-  ide_subprocess_launcher_push_args (clean_launcher, IDE_STRV_INIT ("./gradlew", "clean"));
-
-  build_stage = ide_pipeline_stage_launcher_new (context, build_launcher);
+  build_command = ide_run_command_new ();
+  ide_run_command_set_argv (build_command, IDE_STRV_INIT ("./gradlew", "build"));
+  ide_run_command_set_cwd (build_command, srcdir);
+  clean_command = ide_run_command_new ();
+  ide_run_command_set_argv (clean_command, IDE_STRV_INIT ("./gradlew", "clean"));
+  ide_run_command_set_cwd (clean_command, srcdir);
+  build_stage = ide_pipeline_stage_command_new (build_command, clean_command);
   ide_pipeline_stage_set_name (build_stage, _("Building project"));
-  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (build_stage), clean_launcher);
   g_signal_connect (build_stage, "query", G_CALLBACK (query_cb), NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, build_stage);
   ide_pipeline_addin_track (addin, id);
