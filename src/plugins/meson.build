@@ -159,7 +159,6 @@ status += [
   'CMake ................................ : @0@'.format(get_option('plugin_cmake')),
   'Codespell ............................ : @0@'.format(get_option('plugin_codespell')),
   'Code Index ........................... : @0@'.format(get_option('plugin_code_index')),
-  'Color Pickr .......................... : @0@'.format(get_option('plugin_color_picker')),
   'CTags ................................ : @0@'.format(get_option('plugin_ctags')),
   'Copyright ............................ : @0@'.format(get_option('plugin_copyright')),
   'Deviced .............................. : @0@'.format(get_option('plugin_deviced')),

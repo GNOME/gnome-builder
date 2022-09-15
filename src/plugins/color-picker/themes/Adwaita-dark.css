@@ -1,8 +1,0 @@
-@import url("resource:///plugins/color-picker/themes/shared.css");
-
-/* palettew widget dnd indicator */
-gstylecolorpanel gstylepalettewidget.dnd {
-  border-color: #4e9a06;
-  background-color: #4e9a06;
-}
-

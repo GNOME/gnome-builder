@@ -1,2 +1,0 @@
-unit-percent-symbolic
-unit-degree-symbolic

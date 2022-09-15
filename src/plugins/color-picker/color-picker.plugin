@@ -1,8 +1,0 @@
-[Plugin]
-Authors=Sébastien Lafargue <slafargue@gnome.org>
-Builtin=true
-Copyright=Copyright © 2016 Sébastien Lafargue
-Description=Show a color picker to inspect or change text color codes
-Embedded=_gb_color_picker_register_types
-Module=color-picker
-Name=Color Picker

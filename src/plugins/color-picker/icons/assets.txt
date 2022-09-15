@@ -1,3 +1,0 @@
-save-palette
-load-palette
-palette-from-document
