@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-13 19:35+0000\n"
-"PO-Revision-Date: 2022-09-13 22:16+0200\n"
+"POT-Creation-Date: 2022-09-14 13:48+0000\n"
+"PO-Revision-Date: 2022-09-15 18:52+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"X-Generator: Gtranslator 40.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.1\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: gl\n"
 "X-DL-Module: gnome-builder\n"
@@ -364,7 +364,7 @@ msgstr "Normativa da vista previa de mapa"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:87
 msgid "When the overview map should be displayed."
-msgstr "Cando se debe mostrar a vista previa de mapa"
+msgstr "Cando se debe mostrar a vista previa de mapa."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 #: src/plugins/editorui/tweaks.ui:254
@@ -450,8 +450,8 @@ msgid ""
 "Allow expanding snippets from the editor by pressing tab after the snippet "
 "trigger."
 msgstr ""
-"Permite expandir fragmentos desde o editor presionando o tabulador despois "
-"do disparador de fragmento"
+"Permite expandir fragmentos desde o editor premendo o tabulador despois do "
+"disparador de fragmento."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:145
 msgid "Select First Completion"
@@ -459,7 +459,7 @@ msgstr "Seleccionar o primeiro completado"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
-msgstr "Seleccionar automaticamente a primeira entrada de autocompletado"
+msgstr "Seleccionar automaticamente a primeira entrada de autocompletado."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -914,24 +914,24 @@ msgid "Unsaved document has been restored."
 msgstr "Restaurouse o documento non gardado."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:408
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Fallou a impresión: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:484
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Produciuse un fallo ao formatar a selección: %s"
 
-#: src/libide/editor/ide-editor-page.c:900
+#: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Gardar ficheiro"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -940,7 +940,7 @@ msgstr "Gardar ficheiro"
 msgid "Save"
 msgstr "Gardar"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1572,6 +1572,10 @@ msgstr "Executar proxecto"
 msgid "Other"
 msgstr "Outro"
 
+#: src/libide/gui/ide-workspace.c:1646
+msgid "There are unsaved documents"
+msgstr "Hai documentos sen gardar"
+
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1815,7 +1819,7 @@ msgid "_Find References"
 msgstr "_Buscar referencias"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1371
+#: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -2090,7 +2094,7 @@ msgstr ""
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
 msgid "beautifier program missing, you must install it: "
-msgstr "Falta o programa beautifier, debe instalalo:"
+msgstr "Falta o programa beautifier, debe instalalo: "
 
 #: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
 msgid "Beautifier Plugin: the view is not a GtkSourceView"
@@ -4351,8 +4355,12 @@ msgid "Format on Save"
 msgstr "Formatar ao gardar"
 
 #: src/plugins/editorui/tweaks.ui:582
-msgid "Reformat sources when saving to disk"
-msgstr "Reformatar o código ao gardar ao disco"
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
+msgstr ""
+"Reformatar fontes ao gardar ao disco. Require un formatador rexistrado para "
+"o idioma de orixe."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -5393,7 +5401,6 @@ msgid "Proc Macros"
 msgstr "Proc Macros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-#| msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr "Permite a característica de Proc Macros experimentais do rust-analyzer"
 
@@ -5523,7 +5530,7 @@ msgstr "Executa a orde no sistema anfitrión."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:273
 msgid "Runs the command within the build pipeline."
-msgstr "Executa a orde dentro do cano de construción.\t"
+msgstr "Executa a orde dentro do cano de construción."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:279
 msgid "As Target Application"
@@ -6005,7 +6012,7 @@ msgid "Request that all unit tests are run"
 msgstr "Solicitar que todas as probas unitarias se executen"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+#: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXMEs"
 
@@ -6051,7 +6058,6 @@ msgid "_Update"
 msgstr "_Actualizar"
 
 #: src/plugins/update-manager/gtk/menus.ui:7
-#| msgid "Install or Update SDK?"
 msgid "Install Updates…"
 msgstr "Instalar actualizacións…"
 
@@ -6237,6 +6243,9 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
+
+#~ msgid "Reformat sources when saving to disk"
+#~ msgstr "Reformatar o código ao gardar ao disco"
 
 #~ msgid "System"
 #~ msgstr "Sistema"
@@ -7218,10 +7227,6 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 #~ msgctxt "shortcut window"
 #~ msgid "Files"
 #~ msgstr "Ficheiros"
-
-#~ msgctxt "shortcut window"
-#~ msgid "Create new document"
-#~ msgstr "Crear novo documento"
 
 #~ msgctxt "shortcut window"
 #~ msgid "Open a document"
