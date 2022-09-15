@@ -70,6 +70,13 @@ gbp_sessionui_workbench_addin_save_session (IdeWorkbenchAddin *addin,
   g_assert (IDE_IS_SESSION (session));
 
   g_set_object (&self->session, session);
+
+  /* TODO: Collect workspaces that are created (specifically secondary workspaces). */
+  /* TODO: Collect pages within workspace grids */
+  /* TODO: Collect panes and their position within workspace panels */
+  /* TODO: Add ide_page_save_state(IdePage*, IdeSession*) */
+  /* TODO: Add ide_pane_save_state(IdePage*, IdeSession*) */
+  /* TODO: Add hooks to move a PanelWidget upon adding to dock */
 }
 
 static void
