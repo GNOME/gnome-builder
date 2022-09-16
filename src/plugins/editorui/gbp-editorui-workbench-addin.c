@@ -309,9 +309,9 @@ gbp_editorui_workbench_addin_save_session_page_cb (IdePage  *page,
 
       ide_session_item_set_module_name (item, "editorui");
       ide_session_item_set_type_hint (item, "IdeEditorPage");
+      ide_session_item_set_workspace (item, id);
       ide_session_item_set_position (item, position);
       ide_session_item_set_metadata (item, "uri", "s", uri);
-      ide_session_item_set_metadata (item, "workspace", "s", id);
       ide_session_item_set_metadata (item, "selection", "((uu)(uu))",
                                      gtk_text_iter_get_line (&insert),
                                      gtk_text_iter_get_line_offset (&insert),
