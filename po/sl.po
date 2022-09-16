@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-11 18:43+0000\n"
-"PO-Revision-Date: 2022-09-11 21:32+0200\n"
+"PO-Revision-Date: 2022-09-16 22:46+0200\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -424,9 +424,8 @@ msgstr "Število vrstic, ki naj jih drsnik pokaže."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 #: src/plugins/editorui/tweaks.ui:60
-#, fuzzy
 msgid "Line Height"
-msgstr "Odmik gumba"
+msgstr "Višina vrstice"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:125
 #, fuzzy
@@ -454,10 +453,8 @@ msgid "Specify the minimum number of characters for selection matching."
 msgstr "Določi najmanjše število znakov za skladanje izbora."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:140
-#, fuzzy
-#| msgid "Enable ESLint"
 msgid "Enable Snippets"
-msgstr "Omogoči ESLint"
+msgstr "Omogoči izsečke"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:141
 msgid ""
@@ -851,10 +848,8 @@ msgstr "Poišči in zamenjaj"
 
 #: src/libide/editor/gtk/menus.ui:81 src/libide/gui/gtk/menus.ui:70
 #: src/libide/gui/gtk/menus.ui:74 src/plugins/editorui/gtk/menus.ui:154
-#, fuzzy
-#| msgid "Document"
 msgid "Documents"
-msgstr "Dokument"
+msgstr "Dokumenti"
 
 #: src/libide/editor/gtk/menus.ui:85 src/libide/sourceview/gtk/menus.ui:71
 #: src/libide/sourceview/gtk/menus.ui:110
@@ -930,7 +925,7 @@ msgstr "_Poskusi znova"
 
 #: src/libide/editor/ide-editor-info-bar.ui:44
 msgid "Open As _Administrator"
-msgstr ""
+msgstr "Odpri kot _skrbnik"
 
 #: src/libide/editor/ide-editor-info-bar.ui:63
 msgid "Document Restored"
@@ -1044,13 +1039,11 @@ msgstr "Samodejno zaznano"
 
 #: src/libide/editor/ide-editor-utils.c:157
 msgid "Character Encoding:"
-msgstr ""
+msgstr "Znakovni nabor:"
 
 #: src/libide/editor/ide-editor-utils.c:192
-#, fuzzy
-#| msgid "Line Spacing"
 msgid "Line Ending:"
-msgstr "Razmik med vrsticami"
+msgstr "Konec vrstice:"
 
 #: src/libide/editor/ide-editor-utils.c:270
 #: src/plugins/create-project/gbp-create-project-widget.ui:101
@@ -1191,10 +1184,9 @@ msgstr "Poteka priprava …"
 
 #. translators: %s is replaced with the name of the file being removed
 #: src/libide/foundry/ide-pipeline.c:3649
-#, fuzzy, c-format
-#| msgid "Removing %s\n"
+#, c-format
 msgid "Removing %s"
-msgstr "Poteka odstranjevanje %s\n"
+msgstr "Poteka odstranjevanje %s"
 
 #: src/libide/foundry/ide-pipeline.c:3708
 #, fuzzy
@@ -1397,7 +1389,7 @@ msgstr "Izberi"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:448
 msgid "Browse…"
-msgstr "Prebrskaj ..."
+msgstr "Prebrskaj …"
 
 #: src/libide/gtk/ide-file-manager.c:99
 msgid "File path is NULL"
@@ -3775,10 +3767,8 @@ msgid "CTags"
 msgstr "Oznake CTags"
 
 #: src/plugins/ctags/tweaks.ui:17
-#, fuzzy
-#| msgid "Suggest Python completions"
 msgid "Suggest Completions"
-msgstr "Predlagaj dopolnjevanje kode za Python"
+msgstr "Predlagaj dopolnjevanje"
 
 #: src/plugins/ctags/tweaks.ui:18
 #, fuzzy
@@ -3984,10 +3974,8 @@ msgid "Automatically insert a breakpoint at the start of the application"
 msgstr "Samodejno zaustavi izvajanje na začetku glavne funkcije programa"
 
 #: src/plugins/debuggerui/tweaks.ui:31
-#, fuzzy
-#| msgid "Stop running"
 msgid "Stop at Warnings"
-msgstr "Zaustavi izvajanje"
+msgstr "Zaustavi ob opozorilih"
 
 #: src/plugins/debuggerui/tweaks.ui:32
 #, fuzzy
@@ -4096,8 +4084,6 @@ msgid "Indent Using Spaces"
 msgstr "Uporabi presledke"
 
 #: src/plugins/editorui/gtk/menus.ui:13
-#, fuzzy
-#| msgid "Spaces per tab"
 msgid "Spaces per Tab"
 msgstr "Širina tabulatorja v presledkih"
 
@@ -4123,10 +4109,8 @@ msgid "Same as Tab Width"
 msgstr "Širina tabulatorja"
 
 #: src/plugins/editorui/gtk/menus.ui:81
-#, fuzzy
-#| msgid "Line Spacing"
 msgid "Line Ending"
-msgstr "Razmik med vrsticami"
+msgstr "Konec vrstice"
 
 #: src/plugins/editorui/gtk/menus.ui:90
 msgid "Windows (CR/LF)"
@@ -4153,10 +4137,8 @@ msgid "Open in New Frame"
 msgstr "Odpri v novem oknu"
 
 #: src/plugins/editorui/gtk/menus.ui:147
-#, fuzzy
-#| msgid "Open in New Workspace"
 msgid "Open in New Workspace…"
-msgstr "Odpri na novi delovni površini"
+msgstr "Odpri na novi delovni površini …"
 
 #: src/plugins/editorui/gtk/menus.ui:161
 msgid "Save _As"
@@ -4203,10 +4185,8 @@ msgid "The character to be inserted for Tab"
 msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:59
-#, fuzzy
-#| msgid "Tabs"
 msgid "Tab"
-msgstr "Zavihki"
+msgstr "Zavihek"
 
 #: src/plugins/editorui/tweaks-language.ui:73
 msgid "Insert Trailing Newline"
@@ -4356,10 +4336,8 @@ msgid "The font used within the source code editor"
 msgstr "Preklopi na urejevalnik izvorne kode"
 
 #: src/plugins/editorui/tweaks.ui:61
-#, fuzzy
-#| msgid "Auto indent new lines"
 msgid "Adjust spacing between lines"
-msgstr "Samodejno zamikanj nove vrstice"
+msgstr "Prilagodi razmik med vrsticami"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
@@ -4376,10 +4354,8 @@ msgid "Anywhere"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:111
-#, fuzzy
-#| msgid "Grid Pattern"
 msgid "Background Pattern"
-msgstr "Vzorec mreže"
+msgstr "Vzorec ozadja"
 
 #: src/plugins/editorui/tweaks.ui:112
 #, fuzzy
@@ -4436,14 +4412,10 @@ msgid "Automatic"
 msgstr "Samodejno zamakni"
 
 #: src/plugins/editorui/tweaks.ui:172
-#, fuzzy
-#| msgid "Line numbers"
 msgid "Line Numbers"
 msgstr "Številke vrstic"
 
 #: src/plugins/editorui/tweaks.ui:175
-#, fuzzy
-#| msgid "Show line numbers"
 msgid "Show Line Numbers"
 msgstr "Pokaži številke vrstic"
 
@@ -4453,34 +4425,24 @@ msgid "Display line numbers next to each line of code"
 msgstr "Oblika zapis prikazanih številk"
 
 #: src/plugins/editorui/tweaks.ui:187
-#, fuzzy
-#| msgid "Relative line numbers"
 msgid "Use Relative Line Numbers"
-msgstr "Relativne številke vrstic"
+msgstr "Uporabi relativne številke vrstic"
 
 #: src/plugins/editorui/tweaks.ui:188
-#, fuzzy
-#| msgid "Show line numbers relative to the cursor line"
 msgid "Show line numbers relative to the current line"
-msgstr "Pokaže številke vrstic relativno na vrstico kazalke"
+msgstr "Pokaže številke vrstic relativno na trenutno vrstico"
 
 #: src/plugins/editorui/tweaks.ui:199
-#, fuzzy
-#| msgid "No Diagnostics"
 msgid "Show Diagnostics"
-msgstr "Ni diagnostike"
+msgstr "Pokaži diagnostiko"
 
 #: src/plugins/editorui/tweaks.ui:200
-#, fuzzy
-#| msgid "Show diagnostics next to line number"
 msgid "Display diagnostics next to the line number"
 msgstr "Pokaži diagnostiko ob številki vrstice"
 
 #: src/plugins/editorui/tweaks.ui:213
-#, fuzzy
-#| msgid "Semantic Highlighting"
 msgid "Syntax Highlighting"
-msgstr "Skladenjsko poudarjanje"
+msgstr "Poudarjanje skladnje"
 
 #: src/plugins/editorui/tweaks.ui:216
 msgid "Highlight Current Line"
@@ -4552,10 +4514,8 @@ msgid "Draw marks for leading spaces only"
 msgstr "Izriši krožec prek preslednih znakov."
 
 #: src/plugins/editorui/tweaks.ui:326
-#, fuzzy
-#| msgid "Sublime Text"
 msgid "Inside Text"
-msgstr "Besedilo Sublime"
+msgstr "Znotraj besedila"
 
 #: src/plugins/editorui/tweaks.ui:327
 msgid "Draw marks inside a line of text only"
@@ -4581,11 +4541,8 @@ msgid "Underline potential spelling mistakes as you type"
 msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:377
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Selections"
 msgid "Selections"
-msgstr "Izbire"
+msgstr "Izbori"
 
 #: src/plugins/editorui/tweaks.ui:380
 #, fuzzy
@@ -4658,10 +4615,8 @@ msgid "The maximum number of completion rows that will be displayed at once"
 msgstr "Število vrstic, ki naj jih drsnik pokaže."
 
 #: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
-#, fuzzy
-#| msgid "Keyboard Movement"
 msgid "Keyboard Theme"
-msgstr "Premikanje s tipkovnico"
+msgstr "Tema tipkovnice"
 
 #: src/plugins/editorui/tweaks.ui:472
 msgid ""
@@ -4711,16 +4666,12 @@ msgid "Session Management"
 msgstr "Upravljanje palet"
 
 #: src/plugins/editorui/tweaks.ui:550
-#, fuzzy
-#| msgid "Save palette"
 msgid "Save & Restore"
-msgstr "Shrani paleto"
+msgstr "Shrani in obnovi"
 
 #: src/plugins/editorui/tweaks.ui:553
-#, fuzzy
-#| msgid "Autosave"
 msgid "Auto-Save"
-msgstr "Samodejno shranjevanje"
+msgstr "Samodejno shrani"
 
 #: src/plugins/editorui/tweaks.ui:554
 msgid "Regularly save the document as you type"
@@ -4761,10 +4712,8 @@ msgid "Jump to the last position when re-opening a file"
 msgstr "Skoči na konec med ponovnim odpiranjem datoteke"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
-#, fuzzy
-#| msgid "Previous search result (Ctrl+Shift+G)"
 msgid "Similar Files (Ctrl+Shift+O)"
-msgstr "Predhodni zadetek iskanja (Ctrl+Shift+G)"
+msgstr "Podobne datoteke (Ctrl+Shift+O)"
 
 #: src/plugins/flatpak/daemon/ipc-flatpak-service-impl.c:883
 msgid "Installation failed"
@@ -5104,10 +5053,8 @@ msgstr "Gostiteljski operacijski sistem"
 #: src/plugins/html-preview/gtk/menus.ui:7
 #: src/plugins/markdown-preview/gtk/menus.ui:7
 #: src/plugins/sphinx-preview/gtk/menus.ui:7
-#, fuzzy
-#| msgid "Open Preview"
 msgid "Open Preview…"
-msgstr "Odpri predogled"
+msgstr "Odpri predogled …"
 
 #: src/plugins/intelephense/gbp-intelephense-service.c:100
 #, fuzzy
@@ -5139,10 +5086,8 @@ msgid "Open Containing Folder"
 msgstr "Odpri _mapo z datoteko"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
-#, fuzzy
-#| msgid "Browse…"
 msgid "With File _Browser…"
-msgstr "Prebrskaj ..."
+msgstr "Z _brskalnikom datotek …"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
@@ -5167,9 +5112,6 @@ msgid "Maven Run"
 msgstr ""
 
 #: src/plugins/menu-search/gtk/menus.ui:13
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Global Search"
 msgid "Global Search"
 msgstr "Splošno iskanje"
 
@@ -5367,10 +5309,8 @@ msgid "A Meson-based project for GNOME using GTK 4 and libadwaita"
 msgstr ""
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:186
-#, fuzzy
-#| msgid "GTK Application"
 msgid "GTK 4 Application"
-msgstr "Program GTK"
+msgstr "Program GTK 4"
 
 #: src/plugins/meson-templates/gbp-meson-template-provider.c:187
 msgid "A Meson-based project using GTK 4"
@@ -5465,10 +5405,8 @@ msgid "Maps"
 msgstr "Zemljevidi"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:77
-#, fuzzy
-#| msgid "A simple GNOME 3 maps application"
 msgid "A GNOME maps application"
-msgstr "Enostaven program za pregled zemljevidov za GNOME"
+msgstr "Program zemljevidov za GNOME"
 
 #: src/plugins/newcomers/gbp-newcomers-section.ui:86
 msgid "Music"
@@ -5690,10 +5628,8 @@ msgid "Open _Containing Folder"
 msgstr "Odpri _mapo z datoteko"
 
 #: src/plugins/project-tree/gtk/menus.ui:47
-#, fuzzy
-#| msgid "New _Terminal"
 msgid "With _Terminal…"
-msgstr "Novo okno _terminala"
+msgstr "S _terminalom …"
 
 #: src/plugins/project-tree/gtk/menus.ui:66
 msgid "_Move to Trash"
@@ -5736,10 +5672,8 @@ msgid "Sort directories before files in the same directory"
 msgstr ""
 
 #: src/plugins/projectui/gbp-projectui-tweaks-addin.c:134
-#, fuzzy
-#| msgid "Version Control"
 msgid "No version control"
-msgstr "Nadzor različic"
+msgstr "Ni orodja za nadzor različic"
 
 #: src/plugins/projectui/tweaks.ui:14
 #, fuzzy
@@ -5796,10 +5730,8 @@ msgid "Source Directory"
 msgstr "Izvorna mapa"
 
 #: src/plugins/projectui/tweaks.ui:160
-#, fuzzy
-#| msgid "Build Configurations"
 msgid "Current Configuration"
-msgstr "Nastavitve izgradnje"
+msgstr "Trenutne nastavitve"
 
 #: src/plugins/projectui/tweaks.ui:161
 msgid ""
@@ -5808,7 +5740,6 @@ msgid ""
 msgstr ""
 
 #: src/plugins/projectui/tweaks.ui:228
-#, fuzzy
 msgid "Provided By"
 msgstr "Ponudnik"
 
@@ -5891,10 +5822,8 @@ msgid "Manage SDKs…"
 msgstr "Upravljanje zbirke SDK …"
 
 #: src/plugins/sdkui/tweaks.ui:12
-#, fuzzy
-#| msgid "Downloading "
 msgid "Downloads"
-msgstr "Poteka prejemanje … "
+msgstr "Prejemi"
 
 #: src/plugins/sdkui/tweaks.ui:15
 #, fuzzy
@@ -5911,16 +5840,12 @@ msgid ""
 msgstr "Dovoli prejeme prek povezave z merjeno porabo"
 
 #: src/plugins/sdkui/tweaks.ui:29
-#, fuzzy
-#| msgid "Update Available"
 msgid "Available SDKs"
-msgstr "Na voljo je posodobitev"
+msgstr "Razpoložljive zbirke SDK …"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:336
-#, fuzzy
-#| msgid "Untitled Terminal"
 msgid "Untitled Command"
-msgstr "Neimenovan terminal"
+msgstr "Neimenovan ukaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:343
 msgid "Set Shortcut"
@@ -5934,10 +5859,8 @@ msgstr "Izbor mape projekta"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:547
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:101
-#, fuzzy
-#| msgid "Delete Command"
 msgid "Create Command"
-msgstr "Izbriši ukaz"
+msgstr "Ustvari ukaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:548
 msgid "Cre_ate"
@@ -6006,10 +5929,8 @@ msgid "_Delete Command"
 msgstr "_Izbriši ukaz"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:258
-#, fuzzy
-#| msgid "Success"
 msgid "Subprocess"
-msgstr "Uspešno zaključeno"
+msgstr "Podrejeno opravilo"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:259
 #, fuzzy
@@ -6051,10 +5972,8 @@ msgid "These commands are shared across all projects."
 msgstr ""
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
-#, fuzzy
-#| msgid "Display"
 msgid "Display Name"
-msgstr "Pokaži"
+msgstr "Prikazano ime"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
 #, fuzzy
@@ -6069,16 +5988,12 @@ msgid "Current Working Directory"
 msgstr "Izvorna mapa"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:18
-#, fuzzy
-#| msgid "Arguments"
 msgid "Command Arguments"
-msgstr "Argumenti"
+msgstr "Argumenti ukaza"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:22
-#, fuzzy
-#| msgid "Environment"
 msgid "Command Environment"
-msgstr "Okolje"
+msgstr "Okolje ukazov"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:32
 msgid "Command Locality"
@@ -6089,10 +6004,8 @@ msgid "Use Shell"
 msgstr "Uporabi lupino"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:6
-#, fuzzy
-#| msgid "Command"
 msgid "Run Commands"
-msgstr "Ukaz"
+msgstr "Zaženi več ukazov"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.gschema.xml:7
 msgid "A list of run-command ids to load for the application or project."
@@ -6110,10 +6023,8 @@ msgid "Enchant 2"
 msgstr ""
 
 #: src/plugins/spellcheck/editor-spell-menu.c:248
-#, fuzzy
-#| msgid "Dictionary"
 msgid "Add to Dictionary"
-msgstr "Slovar"
+msgstr "Dodaj v slovar"
 
 #: src/plugins/spellcheck/editor-spell-menu.c:249
 msgid "Ignore"
@@ -6128,10 +6039,8 @@ msgid "Unnamed Symbol"
 msgstr "Neimenovan simbol"
 
 #: src/plugins/symbol-tree/gbp-symbol-popover.ui:38
-#, fuzzy
-#| msgid "_Select Symbol…"
 msgid "Filter Symbols…"
-msgstr "_Izbor simbola …"
+msgstr "FIltriraj simbole …"
 
 #. translators: "In Page" refers to the title of the page which contains the search result
 #: src/plugins/symbol-tree/gbp-symbol-search-result.c:198
@@ -6143,10 +6052,8 @@ msgstr "Odpri strani"
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:95
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:342
 #: src/plugins/symbol-tree/gtk/menus.ui:8
-#, fuzzy
-#| msgid "_Select Symbol…"
 msgid "Select Symbol…"
-msgstr "_Izbor simbola …"
+msgstr "Izbor simbola …"
 
 #: src/plugins/symbol-tree/gbp-symbol-workspace-addin.c:345
 msgid "Select Symbol (Ctrl+Shift+K)"
@@ -6234,20 +6141,16 @@ msgid "Storage I/O"
 msgstr ""
 
 #: src/plugins/sysprof/gtk/menus.ui:75
-#, fuzzy
-#| msgid "Network"
 msgid "Network I/O"
-msgstr "Omrežje"
+msgstr "Omrežni V/I"
 
 #: src/plugins/sysprof/gtk/menus.ui:81
 msgid "Energy"
 msgstr "Energija"
 
 #: src/plugins/sysprof/gtk/menus.ui:83
-#, fuzzy
-#| msgid "Completion"
 msgid "Consumption"
-msgstr "Dopolnjevanje"
+msgstr "Poraba virov"
 
 #: src/plugins/sysprof/gtk/menus.ui:88
 msgid "Battery Charge"
@@ -6334,10 +6237,8 @@ msgid "Record statistics about battery charge and discharge rates"
 msgstr ""
 
 #: src/plugins/sysprof/tweaks.ui:127
-#, fuzzy
-#| msgid "Network"
 msgid "Network Usage"
-msgstr "Omrežje"
+msgstr "Uporaba omrežja"
 
 #: src/plugins/sysprof/tweaks.ui:128
 msgid "Record statistics about network usage"
@@ -6462,10 +6363,8 @@ msgid "Allows the use of bold escape sequences"
 msgstr ""
 
 #: src/plugins/terminal/tweaks.ui:41
-#, fuzzy
-#| msgid "Show hyperlinks"
 msgid "Allow Hyperlinks"
-msgstr "Pokaži hiperpovezave"
+msgstr "Dovoli hiperpovezave"
 
 #: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
@@ -6545,14 +6444,10 @@ msgid "Unit tests completed in %lf seconds"
 msgstr ""
 
 #: src/plugins/testui/gbp-testui-workspace-addin.c:121
-#, fuzzy
-#| msgid "Time completed:"
 msgid "Unit tests completed"
-msgstr "Čas končanja:"
+msgstr "Preizkusi enot so končani"
 
 #: src/plugins/testui/gtk/menus.ui:8
-#, fuzzy
-#| msgid "Run _all tests"
 msgid "Run all Unit Tests"
 msgstr "Zaženi _vse preizkuse"
 
@@ -6639,10 +6534,8 @@ msgid "Track Origin of Leaks"
 msgstr ""
 
 #: src/plugins/valgrind/gtk/menus.ui:30
-#, fuzzy
-#| msgid "S_ort Lines"
 msgid "Report Leaks"
-msgstr "R_azvrsti vrstice"
+msgstr "Pošlji poročilo uhajanja pomnilnika"
 
 #: src/plugins/valgrind/gtk/menus.ui:32
 msgid "Summary"
@@ -6777,17 +6670,13 @@ msgid "Vim"
 msgstr "Vim"
 
 #: src/plugins/web-browser/gtk/menus.ui:6
-#, fuzzy
-#| msgid "New _Documentation Page"
 msgid "New _Browser Page"
-msgstr "Nova _stran dokumentacije"
+msgstr "Nova _stran brskalnika"
 
 #: src/plugins/web-browser/gtk/menus.ui:18
 #: src/plugins/web-browser/gtk/menus.ui:24
-#, fuzzy
-#| msgid "Reload tests"
 msgid "Reload Page"
-msgstr "Ponovno naloži preizkuse"
+msgstr "Ponovno naloži stran"
 
 #: src/plugins/web-browser/gtk/menus.ui:19
 #, fuzzy
