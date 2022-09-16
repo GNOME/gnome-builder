@@ -2641,6 +2641,10 @@ _ide_workbench_is_last_workspace (IdeWorkbench *self,
   g_return_val_if_fail (IDE_IS_MAIN_THREAD (), FALSE);
   g_return_val_if_fail (IDE_IS_WORKBENCH (self), FALSE);
 
+  /* Always close when primary workspace is closed */
+  if (IDE_IS_PRIMARY_WORKSPACE (workspace))
+    return TRUE;
+
   return self->mru_queue.length == 1 &&
          g_queue_peek_head (&self->mru_queue) == (gpointer)workspace;
 }
