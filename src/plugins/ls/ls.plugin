@@ -8,3 +8,4 @@ Embedded=_gbp_ls_register_types
 Hidden=true
 Module=ls
 Name=View Directory Listings
+X-Workspace-Kind=editor;primary;

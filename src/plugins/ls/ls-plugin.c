@@ -21,11 +21,13 @@
 #include "config.h"
 
 #include <libpeas/peas.h>
+
 #include <libide-editor.h>
 #include <libide-gui.h>
 
 #include "gbp-ls-editor-page-addin.h"
 #include "gbp-ls-workbench-addin.h"
+#include "gbp-ls-workspace-addin.h"
 
 _IDE_EXTERN void
 _gbp_ls_register_types (PeasObjectModule *module)
@@ -36,4 +38,7 @@ _gbp_ls_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_WORKBENCH_ADDIN,
                                               GBP_TYPE_LS_WORKBENCH_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_WORKSPACE_ADDIN,
+                                              GBP_TYPE_LS_WORKSPACE_ADDIN);
 }
