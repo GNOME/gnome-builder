@@ -1016,7 +1016,6 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
                                 "application", IDE_APPLICATION_DEFAULT,
                                 NULL);
       ide_workbench_add_workspace (self, workspace);
-      gtk_window_maximize (GTK_WINDOW (self));
       gtk_window_present_with_time (GTK_WINDOW (workspace), lp->present_time);
     }
 
