@@ -1834,6 +1834,12 @@ _ide_workspace_save_session_simple (IdeWorkspace     *self,
                                     IdeWorkspaceDock *dock)
 {
   g_autoptr(IdeSessionItem) item = NULL;
+  gboolean reveal_start;
+  gboolean reveal_end;
+  gboolean reveal_bottom;
+  int start_width;
+  int end_width;
+  int bottom_height;
   int width;
   int height;
 
@@ -1846,6 +1852,7 @@ _ide_workspace_save_session_simple (IdeWorkspace     *self,
 
   item = ide_session_item_new ();
   ide_session_item_set_id (item, ide_workspace_get_id (self));
+  ide_session_item_set_workspace (item, ide_workspace_get_id (self));
   ide_session_item_set_module_name (item, "libide-gui");
   ide_session_item_set_type_hint (item, G_OBJECT_TYPE_NAME (self));
   ide_session_item_set_metadata (item, "size", "(ii)", width, height);
@@ -1853,6 +1860,30 @@ _ide_workspace_save_session_simple (IdeWorkspace     *self,
     ide_session_item_set_metadata (item, "is-active", "b", TRUE);
   if (gtk_window_is_maximized (GTK_WINDOW (self)))
     ide_session_item_set_metadata (item, "is-maximized", "b", TRUE);
+
+  g_object_get (dock->dock,
+                "reveal-start", &reveal_start,
+                "reveal-end", &reveal_end,
+                "reveal-bottom", &reveal_bottom,
+                "start-width", &start_width,
+                "end-width", &end_width,
+                "bottom-height", &bottom_height,
+                NULL);
+
+  ide_session_item_set_metadata (item, "reveal-start", "b", reveal_start);
+  ide_session_item_set_metadata (item, "reveal-end", "b", reveal_end);
+  ide_session_item_set_metadata (item, "reveal-bottom", "b", reveal_bottom);
+
+  ide_session_item_set_metadata (item, "start-width", "i", start_width);
+  ide_session_item_set_metadata (item, "end-width", "i", end_width);
+  ide_session_item_set_metadata (item, "bottom-height", "i", bottom_height);
+
+#if 0
+  g_print ("Saving %d %d %d %d %d %d\n",
+           reveal_start, reveal_end, reveal_bottom,
+           start_width, end_width, bottom_height);
+#endif
+
   ide_session_prepend (session, item);
 
   panel_dock_foreach_frame (dock->dock,
@@ -1861,8 +1892,6 @@ _ide_workspace_save_session_simple (IdeWorkspace     *self,
   panel_grid_foreach_frame (PANEL_GRID (dock->grid),
                             ide_workspace_save_session_frame_cb,
                             session);
-
-  /* TODO: Save panel and grid frame size/positions */
 
   IDE_EXIT;
 }
@@ -1978,6 +2007,54 @@ ide_workspace_restore_frame (IdeWorkspace     *self,
     }
 }
 
+static void
+ide_workspace_restore_panels (IdeWorkspace     *self,
+                              IdeSessionItem   *item,
+                              IdeWorkspaceDock *dock)
+{
+  gboolean reveal_start = -1;
+  gboolean reveal_end = -1;
+  gboolean reveal_bottom = -1;
+  int start_width = -1;
+  int end_width = -1;
+  int bottom_height = -1;
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_SESSION_ITEM (item));
+  g_return_if_fail (dock != NULL);
+
+  ide_session_item_get_metadata (item, "reveal-start", "b", &reveal_start);
+  ide_session_item_get_metadata (item, "reveal-end", "b", &reveal_end);
+  ide_session_item_get_metadata (item, "reveal-bottom", "b", &reveal_bottom);
+  ide_session_item_get_metadata (item, "start-width", "i", &start_width);
+  ide_session_item_get_metadata (item, "end-width", "i", &end_width);
+  ide_session_item_get_metadata (item, "bottom-height", "i", &bottom_height);
+
+#if 0
+  g_print ("Restoring %d %d %d %d %d %d\n",
+           reveal_start, reveal_end, reveal_bottom,
+           start_width, end_width, bottom_height);
+#endif
+
+  if (reveal_start > -1)
+    panel_dock_set_reveal_start (dock->dock, reveal_start);
+
+  if (reveal_end > -1)
+    panel_dock_set_reveal_end (dock->dock, reveal_end);
+
+  if (reveal_bottom > -1)
+    panel_dock_set_reveal_bottom (dock->dock, reveal_bottom);
+
+  if (start_width > -1)
+    panel_dock_set_start_width (dock->dock, start_width);
+
+  if (end_width > -1)
+    panel_dock_set_end_width (dock->dock, end_width);
+
+  if (bottom_height > -1)
+    panel_dock_set_bottom_height (dock->dock, bottom_height);
+}
+
 void
 _ide_workspace_restore_session_simple (IdeWorkspace     *self,
                                        IdeSession       *session,
@@ -1989,6 +2066,7 @@ _ide_workspace_restore_session_simple (IdeWorkspace     *self,
 
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (IDE_IS_SESSION (session));
+  g_return_if_fail (dock != NULL);
 
   n_items = ide_session_get_n_items (session);
 
@@ -2011,6 +2089,9 @@ _ide_workspace_restore_session_simple (IdeWorkspace     *self,
 
           if (g_type_is_a (type, PANEL_TYPE_FRAME))
             ide_workspace_restore_frame (self, type, item, dock);
+          else if (g_type_is_a (type, IDE_TYPE_WORKSPACE) &&
+                   type == G_OBJECT_TYPE (self))
+            ide_workspace_restore_panels (self, item, dock);
         }
     }
 
