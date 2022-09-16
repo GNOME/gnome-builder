@@ -806,3 +806,40 @@ ide_run_command_append_args (IdeRunCommand      *self,
   priv->argv = g_strv_builder_end (builder);
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ARGV]);
 }
+
+void
+ide_run_command_append_formatted (IdeRunCommand *self,
+                                  const char    *format,
+                                  ...)
+{
+  g_autofree char *arg = NULL;
+  va_list args;
+
+  g_return_if_fail (IDE_IS_RUN_COMMAND (self));
+  g_return_if_fail (format != NULL);
+
+  va_start (args, format);
+  arg = g_strdup_vprintf (format, args);
+  va_end (args);
+
+  ide_run_command_append_argv (self, arg);
+}
+
+gboolean
+ide_run_command_append_parsed (IdeRunCommand  *self,
+                               const char     *args,
+                               GError        **error)
+{
+  g_auto(GStrv) argv = NULL;
+  int argc;
+
+  g_return_val_if_fail (IDE_IS_RUN_COMMAND (self), FALSE);
+  g_return_val_if_fail (args != NULL, FALSE);
+
+  if (!g_shell_parse_argv (args, &argc, &argv, error))
+    return FALSE;
+
+  ide_run_command_append_args (self, (const char * const *)argv);
+
+  return TRUE;
+}
