@@ -71,7 +71,7 @@ gboolean        ide_session_item_has_metadata_with_type (IdeSessionItem      *se
                                                          const char          *key,
                                                          const GVariantType  *expected_type);
 IDE_AVAILABLE_IN_ALL
-void            ide_session_item_get_metadata           (IdeSessionItem      *self,
+gboolean        ide_session_item_get_metadata           (IdeSessionItem      *self,
                                                          const char          *key,
                                                          const char          *format,
                                                          ...);

@@ -464,11 +464,12 @@ ide_session_item_has_metadata_with_type (IdeSessionItem    *self,
  *
  * Extract a metadata value matching @format.
  *
- * It is an error to use this function on untrusted data where you have not
- * checked the type of the value of @key using ide_session_item_has_metadata()
- * or ide_session_item_has_metadata_with_type().
+ * @format must not reference the #GVariant, which means you need to make
+ * copies of data, such as "s" instead of "&s".
+ *
+ * Returns: %TRUE if @key was found with @format and parameters were set.
  */
-void
+gboolean
 ide_session_item_get_metadata (IdeSessionItem *self,
                                const char      *key,
                                const char      *format,
@@ -477,21 +478,24 @@ ide_session_item_get_metadata (IdeSessionItem *self,
   GVariant *value;
   va_list args;
 
-  g_return_if_fail (IDE_IS_SESSION_ITEM (self));
-  g_return_if_fail (key != NULL);
-  g_return_if_fail (format != NULL);
-  g_return_if_fail (g_variant_type_string_is_valid (format));
-  g_return_if_fail (ide_session_item_has_metadata (self, key, NULL));
+  g_return_val_if_fail (IDE_IS_SESSION_ITEM (self), FALSE);
+  g_return_val_if_fail (key != NULL, FALSE);
+  g_return_val_if_fail (format != NULL, FALSE);
+  g_return_val_if_fail (g_variant_type_string_is_valid (format), FALSE);
 
-  value = ide_session_item_get_metadata_value (self, key, NULL);
+  if (!(value = ide_session_item_get_metadata_value (self, key, NULL)))
+    return FALSE;
 
-  g_return_if_fail (value != NULL);
+  if (!g_variant_check_format_string (value, format, TRUE))
+    return FALSE;
 
   va_start (args, format);
   g_variant_get_va (value, format, NULL, &args);
   va_end (args);
 
   g_variant_unref (value);
+
+  return TRUE;
 }
 
 /**
