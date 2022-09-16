@@ -48,6 +48,11 @@ IDE_AVAILABLE_IN_ALL
 void            ide_session_item_set_id                 (IdeSessionItem      *self,
                                                          const char          *id);
 IDE_AVAILABLE_IN_ALL
+const char     *ide_session_item_get_workspace          (IdeSessionItem      *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_session_item_set_workspace          (IdeSessionItem      *self,
+                                                         const char          *workspace);
+IDE_AVAILABLE_IN_ALL
 const char     *ide_session_item_get_module_name        (IdeSessionItem      *self);
 IDE_AVAILABLE_IN_ALL
 void            ide_session_item_set_module_name        (IdeSessionItem      *self,

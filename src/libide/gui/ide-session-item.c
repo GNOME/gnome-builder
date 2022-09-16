@@ -31,6 +31,7 @@ struct _IdeSessionItem
   PanelPosition *position;
   char *module_name;
   char *id;
+  char *workspace;
   char *type_hint;
   GHashTable *metadata;
 };
@@ -41,6 +42,7 @@ enum {
   PROP_MODULE_NAME,
   PROP_POSITION,
   PROP_TYPE_HINT,
+  PROP_WORKSPACE,
   N_PROPS
 };
 
@@ -58,6 +60,7 @@ ide_session_item_dispose (GObject *object)
   g_clear_pointer (&self->id, g_free);
   g_clear_pointer (&self->module_name, g_free);
   g_clear_pointer (&self->type_hint, g_free);
+  g_clear_pointer (&self->workspace, g_free);
   g_clear_pointer (&self->metadata, g_hash_table_unref);
 
   G_OBJECT_CLASS (ide_session_item_parent_class)->dispose (object);
@@ -89,6 +92,10 @@ ide_session_item_get_property (GObject    *object,
       g_value_set_string (value, ide_session_item_get_type_hint (self));
       break;
 
+    case PROP_WORKSPACE:
+      g_value_set_string (value, ide_session_item_get_workspace (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -118,6 +125,10 @@ ide_session_item_set_property (GObject      *object,
 
     case PROP_TYPE_HINT:
       ide_session_item_set_type_hint (self, g_value_get_string (value));
+      break;
+
+    case PROP_WORKSPACE:
+      ide_session_item_set_workspace (self, g_value_get_string (value));
       break;
 
     default:
@@ -153,6 +164,12 @@ ide_session_item_class_init (IdeSessionItemClass *klass)
 
   properties [PROP_TYPE_HINT] =
     g_param_spec_string ("type-hint", NULL, NULL, NULL,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_EXPLICIT_NOTIFY |
+                          G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_WORKSPACE] =
+    g_param_spec_string ("workspace", NULL, NULL, NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_EXPLICIT_NOTIFY |
                           G_PARAM_STATIC_STRINGS));
@@ -271,6 +288,41 @@ ide_session_item_set_type_hint (IdeSessionItem *self,
 
   if (ide_set_string (&self->type_hint, type_hint))
     g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TYPE_HINT]);
+}
+
+/**
+ * ide_session_item_get_workspace:
+ * @self: a #IdeSessionItem
+ *
+ * Gets the workspace id for the item.
+ *
+ * Returns: (nullable): a workspace or %NULL
+ */
+const char *
+ide_session_item_get_workspace (IdeSessionItem *self)
+{
+  g_return_val_if_fail (IDE_IS_SESSION_ITEM (self), NULL);
+
+  return self->workspace;
+}
+
+/**
+ * ide_session_item_set_workspace:
+ * @self: a #IdeSessionItem
+ * @workspace: (nullable): a workspace string for the item
+ *
+ * Sets the workspace id for the item.
+ *
+ * This is generally used to tie an item to a specific workspace.
+ */
+void
+ide_session_item_set_workspace (IdeSessionItem *self,
+                                const char     *workspace)
+{
+  g_return_if_fail (IDE_IS_SESSION_ITEM (self));
+
+  if (ide_set_string (&self->workspace, workspace))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_WORKSPACE]);
 }
 
 /**
@@ -538,6 +590,9 @@ _ide_session_item_to_variant (IdeSessionItem  *self,
   if (self->type_hint != NULL)
     g_variant_builder_add_parsed (builder, "{'type-hint',<%s>}", self->type_hint);
 
+  if (self->workspace != NULL)
+    g_variant_builder_add_parsed (builder, "{'workspace',<%s>}", self->workspace);
+
   if (self->metadata != NULL && g_hash_table_size (self->metadata) > 0)
     {
       GHashTableIter iter;
@@ -584,6 +639,7 @@ _ide_session_item_new_from_variant (GVariant  *variant,
   g_variant_lookup (variant, "id", "s", &self->id);
   g_variant_lookup (variant, "module-name", "s", &self->module_name);
   g_variant_lookup (variant, "type-hint", "s", &self->type_hint);
+  g_variant_lookup (variant, "workspace", "s", &self->workspace);
 
   if ((positionv = g_variant_lookup_value (variant, "position", NULL)))
     {
