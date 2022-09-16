@@ -356,9 +356,9 @@ gbp_terminal_workspace_addin_save_session_page_cb (IdePage  *page,
 
       ide_session_item_set_module_name (item, "terminal");
       ide_session_item_set_type_hint (item, "IdeTerminalPage");
+      ide_session_item_set_workspace (item, id);
       ide_session_item_set_position (item, position);
       ide_session_item_set_metadata (item, "title", "s", title);
-      ide_session_item_set_metadata (item, "workspace", "s", id);
       ide_session_item_set_metadata (item, "text", "s", text);
 
       if (page == ide_workspace_get_most_recent_page (workspace))
