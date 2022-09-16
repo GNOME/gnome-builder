@@ -8,5 +8,4 @@ Embedded=_gbp_copyright_register_types
 Module=copyright_plugin
 Name=Update Copyright
 X-Category=editing
-X-Preferences-Kind=application;
 

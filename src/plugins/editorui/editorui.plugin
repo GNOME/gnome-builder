@@ -9,4 +9,3 @@ Module=editorui
 Name=Editor UI
 X-At-Startup=true
 X-Workspace-Kind=primary;editor;
-X-Preferences-Kind=application;project;

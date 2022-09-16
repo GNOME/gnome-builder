@@ -9,4 +9,3 @@ Name=Meson
 X-Category=buildsystems
 X-Project-File-Filter-Name=Meson (meson.build)
 X-Project-File-Filter-Pattern=meson.build
-X-Preferences-Kind=application;project;

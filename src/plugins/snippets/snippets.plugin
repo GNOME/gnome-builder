@@ -8,4 +8,3 @@ Hidden=true
 Module=snippets
 Name=Snippets
 X-Completion-Provider-Languages=*
-X-Preferences-Kind=application;project;

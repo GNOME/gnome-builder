@@ -9,4 +9,3 @@ Module=vim
 Name=VIM Emulation
 X-Category=keybindings
 X-Workspace-Kind=editor;primary;
-X-Preferences-Kind=application;

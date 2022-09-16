@@ -7,4 +7,3 @@ Embedded=_gbp_spellcheck_register_types
 Module=spellcheck
 Name=Check Spelling
 X-Category=editing
-X-Preferences-Kind=application;
