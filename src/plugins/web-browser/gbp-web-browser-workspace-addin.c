@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <webkit2/webkit2.h>
+
 #include <libide-gui.h>
 #include <libide-webkit.h>
 
@@ -61,10 +63,138 @@ gbp_web_browser_workspace_addin_unload (IdeWorkspaceAddin *addin,
 }
 
 static void
+gbp_web_browser_workspace_addin_save_session_page_cb (IdePage  *page,
+                                                      gpointer  user_data)
+{
+  IdeSession *session = user_data;
+
+  g_assert (IDE_IS_PAGE (page));
+  g_assert (IDE_IS_SESSION (session));
+
+  if (IDE_IS_WEBKIT_PAGE (page) &&
+      !ide_webkit_page_has_generator (IDE_WEBKIT_PAGE (page)))
+    {
+      g_autoptr(PanelPosition) position = ide_page_get_position (page);
+      g_autoptr(IdeSessionItem) item = ide_session_item_new ();
+      GtkWidget *web_view = ide_webkit_page_get_view (IDE_WEBKIT_PAGE (page));
+      g_autoptr(WebKitWebViewSessionState) state = webkit_web_view_get_session_state (WEBKIT_WEB_VIEW (web_view));
+      IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (page));
+      const char *workspace_id = ide_workspace_get_id (workspace);
+      g_autoptr(GBytes) bytes = NULL;
+      GVariant *state_value = NULL;
+
+      if (state == NULL ||
+          !(bytes = webkit_web_view_session_state_serialize (state)) ||
+          !(state_value = g_variant_new_fixed_array (G_VARIANT_TYPE_BYTE,
+                                                     g_bytes_get_data (bytes, NULL),
+                                                     g_bytes_get_size (bytes),
+                                                     sizeof (guint8))))
+        return;
+
+      ide_session_item_set_module_name (item, "web-browser");
+      ide_session_item_set_type_hint (item, "IdeWebkitPage");
+      ide_session_item_set_workspace (item, workspace_id);
+      ide_session_item_set_position (item, position);
+      ide_session_item_set_metadata_value (item, "state", g_steal_pointer (&state_value));
+
+      if (page == ide_workspace_get_most_recent_page (workspace))
+        ide_session_item_set_metadata (item, "has-focus", "b", TRUE);
+
+      ide_session_append (session, item);
+    }
+}
+
+static void
+gbp_web_browser_workspace_addin_save_session (IdeWorkspaceAddin *addin,
+                                              IdeSession        *session)
+{
+  GbpWebBrowserWorkspaceAddin *self = (GbpWebBrowserWorkspaceAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_WEB_BROWSER_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+  g_assert (IDE_IS_SESSION (session));
+
+  ide_workspace_foreach_page (self->workspace,
+                              gbp_web_browser_workspace_addin_save_session_page_cb,
+                              session);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_web_browser_workspace_addin_restore_session_item (IdeWorkspaceAddin *addin,
+                                                      IdeSession        *session,
+                                                      IdeSessionItem    *item)
+{
+  GbpWebBrowserWorkspaceAddin *self = (GbpWebBrowserWorkspaceAddin *)addin;
+  g_autoptr(WebKitWebViewSessionState) state = NULL;
+  g_autoptr(GBytes) bytes = NULL;
+  WebKitBackForwardList *bf_list;
+  WebKitBackForwardListItem *current;
+  PanelPosition *position;
+  IdeWebkitPage *page;
+  GtkWidget *view;
+  GVariant *state_value;
+  const guint8 *data;
+  gboolean has_focus;
+  gsize n_elements = 0;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_WEB_BROWSER_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+  g_assert (IDE_IS_SESSION (session));
+
+  if (!ide_str_equal0 ("IdeWebkitPage", ide_session_item_get_type_hint (item)))
+    IDE_EXIT;
+
+  if (!(state_value = ide_session_item_get_metadata_value (item, "state", G_VARIANT_TYPE ("ay"))))
+    IDE_EXIT;
+
+  if (!(data = g_variant_get_fixed_array (state_value, &n_elements, sizeof (guint8))))
+    IDE_EXIT;
+
+  /* Make a copy of the bytes because we can't guarantee the lifetime of
+   * the bytes and we don't want to possibly keep state_value alive.
+   */
+  bytes = g_bytes_new (data, n_elements);
+
+  if (!(state = webkit_web_view_session_state_new (bytes)))
+    IDE_EXIT;
+
+  position = ide_session_item_get_position (item);
+  page = ide_webkit_page_new ();
+  view = ide_webkit_page_get_view (page);
+
+  webkit_web_view_restore_session_state (WEBKIT_WEB_VIEW (view), state);
+
+  bf_list = webkit_web_view_get_back_forward_list (WEBKIT_WEB_VIEW (view));
+
+  if ((current = webkit_back_forward_list_get_current_item (bf_list)))
+    webkit_web_view_go_to_back_forward_list_item (WEBKIT_WEB_VIEW (view), current);
+
+  ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
+
+  if (ide_session_item_get_metadata (item, "has-focus", "b", &has_focus) && has_focus)
+    {
+      panel_widget_raise (PANEL_WIDGET (page));
+      gtk_widget_grab_focus (GTK_WIDGET (page));
+    }
+
+  IDE_EXIT;
+}
+
+static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_web_browser_workspace_addin_load;
   iface->unload = gbp_web_browser_workspace_addin_unload;
+  iface->save_session = gbp_web_browser_workspace_addin_save_session;
+  iface->restore_session_item = gbp_web_browser_workspace_addin_restore_session_item;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpWebBrowserWorkspaceAddin, gbp_web_browser_workspace_addin, G_TYPE_OBJECT,
