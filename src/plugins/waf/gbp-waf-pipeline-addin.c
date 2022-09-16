@@ -56,10 +56,10 @@ static void
 gbp_waf_pipeline_addin_load (IdePipelineAddin *addin,
                              IdePipeline      *pipeline)
 {
-  g_autoptr(IdeSubprocessLauncher) config_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) install_launcher = NULL;
+  g_autoptr(IdeRunCommand) config_command = NULL;
+  g_autoptr(IdeRunCommand) build_command = NULL;
+  g_autoptr(IdeRunCommand) clean_command = NULL;
+  g_autoptr(IdeRunCommand) install_command = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
   g_autoptr(IdePipelineStage) install_stage = NULL;
   g_autoptr(IdePipelineStage) config_stage = NULL;
@@ -106,40 +106,39 @@ gbp_waf_pipeline_addin_load (IdePipelineAddin *addin,
   else
     waf_argv = g_strdupv ((char **)IDE_STRV_INIT (python, waf));
 
-  config_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (config_launcher, srcdir);
-  ide_subprocess_launcher_push_args (config_launcher, (const char * const *)waf_argv);
-  ide_subprocess_launcher_push_argv (config_launcher, "configure");
-  ide_subprocess_launcher_push_argv_format (config_launcher, "--prefix=%s", prefix);
-  ide_subprocess_launcher_push_argv_parsed (config_launcher, config_opts);
-  config_stage = ide_pipeline_stage_launcher_new (context, config_launcher);
+  config_command = ide_run_command_new ();
+  ide_run_command_set_cwd (config_command, srcdir);
+  ide_run_command_append_args (config_command, (const char * const *)waf_argv);
+  ide_run_command_append_argv (config_command, "configure");
+  ide_run_command_append_formatted (config_command, "--prefix=%s", prefix);
+  ide_run_command_append_parsed (config_command, config_opts, NULL);
+  config_stage = ide_pipeline_stage_command_new (config_command, NULL);
   ide_pipeline_stage_set_name (config_stage, _("Configuring project"));
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_CONFIGURE, 0, config_stage);
   ide_pipeline_addin_track (addin, id);
 
-  build_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (build_launcher, srcdir);
-  ide_subprocess_launcher_push_args (build_launcher, (const char * const *)waf_argv);
-  ide_subprocess_launcher_push_argv (build_launcher, "build");
+  build_command = ide_run_command_new ();
+  ide_run_command_set_cwd (build_command, srcdir);
+  ide_run_command_append_args (build_command, (const char * const *)waf_argv);
+  ide_run_command_append_argv (build_command, "build");
 
-  clean_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (clean_launcher, srcdir);
-  ide_subprocess_launcher_push_args (clean_launcher, (const char * const *)waf_argv);
-  ide_subprocess_launcher_push_argv (clean_launcher, "clean");
+  clean_command = ide_run_command_new ();
+  ide_run_command_set_cwd (clean_command, srcdir);
+  ide_run_command_append_args (clean_command, (const char * const *)waf_argv);
+  ide_run_command_append_argv (clean_command, "clean");
 
-  build_stage = ide_pipeline_stage_launcher_new (context, build_launcher);
+  build_stage = ide_pipeline_stage_command_new (build_command, clean_command);
   ide_pipeline_stage_set_name (build_stage, _("Building project"));
-  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (build_stage), clean_launcher);
   g_signal_connect (build_stage, "query", G_CALLBACK (query_cb), NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, build_stage);
   ide_pipeline_addin_track (addin, id);
 
-  install_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_set_cwd (install_launcher, srcdir);
-  ide_subprocess_launcher_push_args (install_launcher, (const char * const *)waf_argv);
-  ide_subprocess_launcher_push_argv (install_launcher, "install");
+  install_command = ide_run_command_new ();
+  ide_run_command_set_cwd (install_command, srcdir);
+  ide_run_command_append_args (install_command, (const char * const *)waf_argv);
+  ide_run_command_append_argv (install_command, "install");
 
-  install_stage = ide_pipeline_stage_launcher_new (context, install_launcher);
+  install_stage = ide_pipeline_stage_command_new (install_command, NULL);
   ide_pipeline_stage_set_name (install_stage, _("Installing project"));
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_INSTALL, 0, install_stage);
   ide_pipeline_addin_track (addin, id);

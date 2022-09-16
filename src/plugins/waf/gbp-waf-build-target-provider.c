@@ -96,6 +96,7 @@ gbp_waf_build_target_provider_get_targets_async (IdeBuildTargetProvider *provide
                                                  gpointer                user_data)
 {
   GbpWafBuildTargetProvider *self = (GbpWafBuildTargetProvider *)provider;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher  = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeTask) task = NULL;
@@ -147,8 +148,16 @@ gbp_waf_build_target_provider_get_targets_async (IdeBuildTargetProvider *provide
   else
     python = "python3";
 
-  launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT (python, waf, "list", "--color=no"));
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, run_context);
+  ide_run_context_append_args (run_context, IDE_STRV_INIT (python, waf, "list", "--color=no"));
+
+  if (!(launcher = ide_run_context_end (run_context, &error)))
+    {
+      ide_task_return_error (task, g_steal_pointer (&error));
+      IDE_EXIT;
+    }
+
   /* There appears to be some installations that will write to stderr instead of stdout */
   ide_subprocess_launcher_set_flags (launcher,
                                      (G_SUBPROCESS_FLAGS_STDOUT_PIPE |
