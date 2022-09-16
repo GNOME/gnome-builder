@@ -631,32 +631,7 @@ ide_page_set_progress (IdePage         *self,
 PanelPosition *
 ide_page_get_position (IdePage *self)
 {
-  PanelPosition *position;
-  GtkWidget *frame;
-  guint n_pages;
-
-  g_return_val_if_fail (IDE_IS_PAGE (self), NULL);
-
-  if (!(frame = gtk_widget_get_ancestor (GTK_WIDGET (self), IDE_TYPE_FRAME)))
-    return NULL;
-
-  if (!(position = ide_frame_get_position (IDE_FRAME (frame))))
-    return NULL;
-
-  n_pages = panel_frame_get_n_pages (PANEL_FRAME (frame));
-
-  for (guint i = 0; i < n_pages; i++)
-    {
-      if (panel_frame_get_page (PANEL_FRAME (frame), i) == PANEL_WIDGET (self))
-        {
-          panel_position_set_depth (position, i);
-          return position;
-        }
-    }
-
-  g_critical ("Failed to find page within frame");
-
-  return position;
+  return panel_widget_get_position (PANEL_WIDGET (self));
 }
 
 void
