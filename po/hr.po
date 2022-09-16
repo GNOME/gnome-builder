@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-14 13:48+0000\n"
-"PO-Revision-Date: 2022-09-14 15:49+0200\n"
+"POT-Creation-Date: 2022-09-16 19:01+0000\n"
+"PO-Revision-Date: 2022-09-16 23:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -728,7 +728,7 @@ msgstr "Bezimeno"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1459
+#: src/libide/gui/ide-workbench.c:1479
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
@@ -742,7 +742,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Prikladan otklanjatelj grešaka nije pronađen."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1455
+#: src/libide/gui/ide-workbench.c:1475
 msgid "Open File…"
 msgstr "Otvori datoteku…"
 
@@ -807,6 +807,7 @@ msgstr "Stranice"
 #: src/libide/sourceview/gtk/menus.ui:139
 #: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/menu-search/gtk/menus.ui:69
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Uređivač teksta"
@@ -921,8 +922,6 @@ msgstr "Spremi datoteku"
 #: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/color-picker/gb-color-picker-prefs.c:236
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "Spremi"
@@ -931,9 +930,6 @@ msgstr "Spremi"
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/color-picker/gb-color-picker-prefs.c:97
-#: src/plugins/color-picker/gb-color-picker-prefs.c:213
-#: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
@@ -1030,11 +1026,11 @@ msgstr "Aktivno podešavanje"
 msgid "Discovered device “%s”"
 msgstr "Otkriveni uređaji “%s”"
 
-#: src/libide/foundry/ide-device-manager.c:536
+#: src/libide/foundry/ide-device-manager.c:535
 msgid "Devices"
 msgstr "Uređaji"
 
-#: src/libide/foundry/ide-device-manager.c:710
+#: src/libide/foundry/ide-device-manager.c:709
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "Nemoguća implementacija na uređaj, slivnik izgradnje nije pokrenut"
 
@@ -1064,87 +1060,87 @@ msgid "The build configuration has errors"
 msgstr "Podešavanje izgradnje sadrži greške"
 
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1096
+#: src/libide/foundry/ide-pipeline.c:1095
 #, c-format
 msgid "Build (%s)"
 msgstr "Izgradnja (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1138
+#: src/libide/foundry/ide-pipeline.c:1136
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Naknadna instalacija (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3031
+#: src/libide/foundry/ide-pipeline.c:3065
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Neuspjelo stvaranje pseudo terminala. Značajke terminala će biti ograničene."
 
-#: src/libide/foundry/ide-pipeline.c:3228
+#: src/libide/foundry/ide-pipeline.c:3262
 msgid "Cleaning…"
 msgstr "Uklanjanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3266
+#: src/libide/foundry/ide-pipeline.c:3323
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Neuspjelo"
 
-#: src/libide/foundry/ide-pipeline.c:3234
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3268
+#: src/libide/foundry/ide-pipeline.c:3331
 msgid "Ready"
 msgstr "Spremno"
 
-#: src/libide/foundry/ide-pipeline.c:3249
+#: src/libide/foundry/ide-pipeline.c:3283
 msgid "Downloading…"
 msgstr "Preuzimanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3253
+#: src/libide/foundry/ide-pipeline.c:3287
 msgid "Building dependencies…"
 msgstr "Izgradnja zavisnosti…"
 
-#: src/libide/foundry/ide-pipeline.c:3257
+#: src/libide/foundry/ide-pipeline.c:3291
 msgid "Bootstrapping…"
 msgstr "Samopokretanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3261
+#: src/libide/foundry/ide-pipeline.c:3295
 msgid "Configuring…"
 msgstr "Podešavanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3265
+#: src/libide/foundry/ide-pipeline.c:3299
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 msgid "Building…"
 msgstr "Izgradnja…"
 
-#: src/libide/foundry/ide-pipeline.c:3269
+#: src/libide/foundry/ide-pipeline.c:3303
 msgid "Installing…"
 msgstr "Instalacija…"
 
-#: src/libide/foundry/ide-pipeline.c:3273
+#: src/libide/foundry/ide-pipeline.c:3307
 msgid "Committing…"
 msgstr "Slanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3277
+#: src/libide/foundry/ide-pipeline.c:3311
 msgid "Exporting…"
 msgstr "Izvažanje…"
 
-#: src/libide/foundry/ide-pipeline.c:3281
-#: src/libide/foundry/ide-pipeline.c:3285
+#: src/libide/foundry/ide-pipeline.c:3315
+#: src/libide/foundry/ide-pipeline.c:3319
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Uspješno"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3327
 msgid "Preparing…"
 msgstr "Pripremanje…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3649
+#: src/libide/foundry/ide-pipeline.c:3683
 #, c-format
 msgid "Removing %s"
 msgstr "Uklanjam %s"
 
-#: src/libide/foundry/ide-pipeline.c:3708
+#: src/libide/foundry/ide-pipeline.c:3742
 msgid "Removing build directories…"
 msgstr "Uklanjanje zavisnosti izgradnje…"
 
@@ -1219,7 +1215,7 @@ msgid "Directory"
 msgstr "Direktorij"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
+#: src/libide/gui/ide-workbench.c:346 src/libide/gui/ide-workbench.c:851
 #, c-format
 msgid "Builder — %s"
 msgstr "Graditelj — %s"
@@ -1256,7 +1252,7 @@ msgid "Select Project File"
 msgstr "Odaberi datoteku projekta"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1458
+#: src/libide/gui/ide-workbench.c:1478
 msgid "_Open"
 msgstr "_Otvori"
 
@@ -1310,7 +1306,6 @@ msgstr "Neuspjelo primanje va_list vrijednosti: %s"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
-#: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr "Otvori"
@@ -1555,7 +1550,7 @@ msgstr "Pokreni projekt"
 msgid "Other"
 msgstr "Ostalo"
 
-#: src/libide/gui/ide-workspace.c:1646
+#: src/libide/gui/ide-workspace.c:1735
 msgid "There are unsaved documents"
 msgstr "Postoje nespremljeni dokumenti"
 
@@ -1607,6 +1602,7 @@ msgstr "Uređaji i simulatori"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+#: src/plugins/menu-search/gtk/menus.ui:70
 msgid "Diagnostics"
 msgstr "Dijagnostika"
 
@@ -1926,7 +1922,6 @@ msgstr "bez inačice"
 
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
 msgstr "NIjedan"
 
@@ -1954,194 +1949,26 @@ msgstr "Izgradnja predmemorije…"
 msgid "Bootstrapping build system"
 msgstr "Samopokretanje sustava izgradnje"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
 msgstr "Podešavanje projekta"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:85
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:97
-#: src/plugins/make/gbp-make-pipeline-addin.c:124
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:89
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:125
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
+#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/make/gbp-make-pipeline-addin.c:142
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:91
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
 msgstr "Izgradnja projekta"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:365
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
 msgstr "Predmemoriranje naredbi izgradnje"
-
-#. translators: %s and %s are replaced with source file path and the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:157
-#, c-format
-msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
-msgstr ""
-"Beautifier priključak: greška kopiranja datoteke podešavanja gresource za "
-"“%s”: %s"
-
-#. translators: %s is replaced with the source file path
-#: src/plugins/beautifier/gb-beautifier-config.c:165
-#, c-format
-msgid "Beautifier plugin: error creating temporary config file for “%s”"
-msgstr ""
-"Beautifier priključak: greška stvaranja privremene datoteke podešavanja za "
-"“%s”"
-
-#. translators: %s is replaced with the .ini source file path
-#: src/plugins/beautifier/gb-beautifier-config.c:209
-#, c-format
-msgid "Beautifier plugin: Can’t read .ini file: %s"
-msgstr "Beautifier priključak: Nemoguće čitanje .ini datoteke: %s"
-
-#. translators: %s is replaced with the config entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:257
-#, c-format
-msgid ""
-"Beautifier plugin: neither command nor command-pattern keys found: entry "
-"“%s” disabled"
-msgstr ""
-"Beautifier priključak: nisu pronađeni ključevi ni command ni command-"
-"pattern: onemogućen je “%s” unos"
-
-#. translators: %s is replaced with the config entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:267
-#, c-format
-msgid ""
-"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
-"disabled"
-msgstr ""
-"Beautifier priključak: nisu pronađeni ključevi oba command i command-"
-"pattern: onemogućen je “%s” unos"
-
-#. translators: %s and %s are replaced with the config path and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:291
-#, c-format
-msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
-msgstr ""
-"Beautifier priključak: putanja podešavanja “%s” ne postoji, onemogućen je "
-"“%s” unos"
-
-#. translators: %s is replaced with the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:308
-#, c-format
-msgid ""
-"Beautifier plugin: command key out of possible values: entry “%s” disabled"
-msgstr ""
-"Beautifier priključak: ključ command je izvan mogućih vrijednosti: "
-"onemogućen je“%s” unos"
-
-#. translators: %s and %s are replaced with the profile name and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:333
-#, c-format
-msgid ""
-"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
-"entry “%s” disabled"
-msgstr ""
-"Beautifier priključak: @c@ u “%s” command-pattern ključ ali nije "
-"podstavljena datoteka podešavanja: onemogućen je “%s” unos"
-
-#. translators: %s and %s are replaced with the profile name and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:365
-#, c-format
-msgid ""
-"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
-msgstr ""
-"Beautifier priključak: nemoguće stvaranje privremene datoteke za “%s”: "
-"onemogućen je “%s” unos"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:407
-#, c-format
-msgid "Beautifier plugin: “%s”"
-msgstr "Beautifier priključak: “%s”"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:508
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
-#, c-format
-msgid "Beautifier plugin: %s"
-msgstr "Beautifier priključak: %s"
-
-#. translators: %s is replaced with a path name
-#: src/plugins/beautifier/gb-beautifier-config.c:547
-#, c-format
-msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-msgstr "Beautifier priključak: nemoguće čitanje datoteke resursa: “%s”"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
-msgid "beautifier program missing, you must install it: "
-msgstr "beautifier program nedostaje, morate ga instalirati: "
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
-msgid "Beautifier Plugin: the view is not a GtkSourceView"
-msgstr "Beautifier priključak: prikaz nije GtkSourceView"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
-msgid "Beautifier Plugin: no default beautifier found"
-msgstr "Beautifier priključak: nema pronađenog zadanog beautifiera"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
-msgid "Beautifier Plugin: the buffer is not writable"
-msgstr "Beautifier priključak: međuspremnik nije zapisiv"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
-msgid "Beautifier Plugin: Nothing selected"
-msgstr "Beautifier priključak: ništa nije odabrano"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:243
-#, c-format
-msgid "No beautifier available for “%s”"
-msgstr "Nema dostupnog beautifiera za “%s”"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:245
-#, c-format
-msgid "No beautifier available"
-msgstr "Nema dostupnog beautifiera"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:356
-#, c-format
-msgid "Beautifier plugin: no valid entries, disabling: %s"
-msgstr "Beautifier priključak: nema valjanih unosa, onemogućujem: %s"
-
-#. translators: %s and %s are replaced with the temporary dir and the file path
-#: src/plugins/beautifier/gb-beautifier-helper.c:63
-#: src/plugins/beautifier/gb-beautifier-helper.c:88
-#: src/plugins/beautifier/gb-beautifier-helper.c:114
-#: src/plugins/beautifier/gb-beautifier-helper.c:135
-#, c-format
-msgid ""
-"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
-"temporary directory: “%s”"
-msgstr ""
-"Beautifier priključak: blokiran je pokušaj uklanjanja datoteke izvan “%s” "
-"privremenog direktorija: “%s”"
-
-#. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:285
-#, c-format
-msgid ""
-"Beautifier plugin: command error output:\n"
-"%s"
-msgstr ""
-"Beautifier priključak: greška izlaza naredbe:\n"
-"%s"
-
-#: src/plugins/beautifier/gb-beautifier-process.c:295
-msgid "Beautifier plugin: the command output is empty"
-msgstr "Beautifier priključak: izlaz naredbe je prazan"
-
-#: src/plugins/beautifier/gb-beautifier-process.c:322
-msgid "Beautify plugin: the output is not a valid UTF-8 text"
-msgstr "Beautify priključak: izlaz nije valjan UTF-8 tekst"
-
-#: src/plugins/beautifier/gtk/menus.ui:7
-msgid "_Beautify"
-msgstr "_Beautify"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:704
@@ -2174,8 +2001,6 @@ msgid "Copy"
 msgstr "Kopiraj"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:42
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "Ukloni"
 
@@ -2351,13 +2176,17 @@ msgstr "Obriši"
 msgid "Delete configuration"
 msgstr "Obriši podešavanje"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project"
 msgstr "Zaustavljanje izgradnje projekta"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Izgradnja projekta (Shift+Ctrl+Alt+B)"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+msgid "Display Build Diagnostics (Ctrl+Alt+?)"
+msgstr "Prikaz dijagnostike izgradnje (Ctrl+Alt+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
 msgid "_Build"
@@ -2803,11 +2632,11 @@ msgstr ""
 "SDK korišten za izgradnju vaše aplikacije je automatski otkriven iz tijeka "
 "izvođenja."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:171
 msgid "Fetch dependencies"
 msgstr "Preuzmi zavisnosti"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:204
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:201
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 msgid "Build project"
 msgstr "Izgradi projekt"
@@ -2864,16 +2693,16 @@ msgstr "Uključi parametre i informacije o vrsti pri dovršetka clang prijedloga
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:206
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 msgid "Configure project"
 msgstr "Podesi projekt"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
-#: src/plugins/make/gbp-make-pipeline-addin.c:136
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:99
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:133
-#: src/plugins/waf/gbp-waf-pipeline-addin.c:143
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
+#: src/plugins/make/gbp-make-pipeline-addin.c:155
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:103
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
 msgstr "Instalacija projekta"
 
@@ -2935,434 +2764,6 @@ msgstr "Izjava"
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Moguća pravopisna greška “%s”. jeste li mislili “%s”?"
-
-#: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
-msgid "Colors"
-msgstr "Boje"
-
-#. translators: %s is replaced with the name of the color palette.
-#: src/plugins/color-picker/gb-color-picker-prefs.c:88
-#, c-format
-msgid "Save changes to palette “%s” before closing?"
-msgstr "Spremi promjene u paletu “%s” prije zatvaranja?"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:96
-msgid "Close without Saving"
-msgstr "Zatvori bez spremanja"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:98
-msgid "Save As…"
-msgstr "Spremi kao…"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:206
-msgid "Load palette"
-msgstr "Učitaj paletu"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:233
-msgid "Save palette"
-msgstr "Spremi paletu"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:706
-msgid "All files"
-msgstr "Sve datoteke"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:710
-msgid "All supported palettes formats"
-msgstr "Svi podržani formati paleta"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:715
-msgid "GIMP palette"
-msgstr "GIMP paleta"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:719
-msgid "GNOME Builder palette"
-msgstr "Paleta GNOME Graditelja"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
-msgid "Palette name"
-msgstr "Naziv palete"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
-msgid "Enter a new name for the palette"
-msgstr "Upišite novi naziv palete"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
-msgid "HSV visibility"
-msgstr "HSV vidljivost"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
-msgid "If the HSV components are visible."
-msgstr "Trebaju li HSV komponente biti vidljive."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-msgid "LAB visibility"
-msgstr "LAB vidljivost"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
-msgid "If the LAB components are visible."
-msgstr "Trebaju li LAB komponente biti vidljive."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-msgid "RGB visibility"
-msgstr "RGB vidljivost"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
-msgid "If the RGB components are visible."
-msgstr "Trebaju li RGB komponente biti vidljive."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
-msgid "RGB unit"
-msgstr "RGB jedinica"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
-msgid "The unit used by RGB component and strings."
-msgstr "Jedinica koju koristi RGB komponenta i izrazi."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-msgid "Selected palette ID"
-msgstr "ID odabrane palete"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
-msgid "The selected palette ID among the loaded ones."
-msgstr "ID odabrane palete među učitanim paletama."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
-msgid "Color strings visibility"
-msgstr "Vidljivosti nizova boja"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
-msgid "The visible color strings."
-msgstr "Vidljivi nizovi boja."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
-msgid "Color filter"
-msgstr "Filter boje"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
-msgid "The filter used on the color scales and color plane."
-msgstr "Filter koji se koristi na ljestvicama boja i ravnini boja."
-
-#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:959
-msgid "Palette: "
-msgstr "Paleta: "
-
-#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:961
-msgid "Palette"
-msgstr "Paleta"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-plane.c:1612
-msgid "Color Plane"
-msgstr "Raspon boja"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:68
-msgid "Color name"
-msgstr "Naziv boje"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:70
-msgid "Enter a new name for the color"
-msgstr "Upišite novi naziv boje"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:494
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:560
-#, c-format
-msgid "failed to parse line %i\n"
-msgstr "neuspjela obrada retka %i\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:615
-#, c-format
-msgid "%s: palette is empty\n"
-msgstr "%s: paleta je prazna\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:721
-#, c-format
-msgid "%s: failed to parse\n"
-msgstr "%s: neuspjela obrada\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:729
-#, c-format
-msgid "Unable to open %s\n"
-msgstr "Nemoguće je otvoriti %s\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:767
-#, c-format
-msgid "%s: This file format is not supported\n"
-msgstr "%s: Ovaj datotečni format nije podržan\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:824
-#, c-format
-msgid "failed to parse\n"
-msgstr "neuspjela obrada\n"
-
-#. To translators: always in singular form like in: generated palette number <generated_count>
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:831
-msgid "Generated"
-msgstr "Stvoreno"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:935
-#, c-format
-msgid "Unable to save %s\n"
-msgstr "Nemoguće spremanje %s:\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette-widget.c:981
-#, c-format
-msgid "Unsaved palette %u"
-msgstr "Nespremljena paleta %u"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:157
-msgid "Color Components"
-msgstr "Komponente boja"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:206
-msgid "H"
-msgstr "H"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:216
-msgid "S"
-msgstr "S"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:226
-msgid "V"
-msgstr "V"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:322
-msgid "L*"
-msgstr "L*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:332
-msgid "a*"
-msgstr "a*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:342
-msgid "b*"
-msgstr "b*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:441
-msgid "R"
-msgstr "R"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:451
-msgid "G"
-msgstr "G"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:461
-msgid "B"
-msgstr "B"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:573
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:433
-msgid "Color strings"
-msgstr "Nizovi boja"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:634
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:490
-msgid "HEX3"
-msgstr "HEX3"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:645
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:507
-msgid "HEX6"
-msgstr "HEX6"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:656
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:122
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:524
-msgid "RGB"
-msgstr "RGB"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:667
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:541
-msgid "RGBA"
-msgstr "Xft RGBA"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:678
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:558
-msgid "HSL"
-msgstr "HSL"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:689
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:575
-msgid "HSLA"
-msgstr "HSLA"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:818
-msgid "Palettes"
-msgstr "Palete"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:946
-#: src/plugins/color-picker/gtk/color-picker.ui:49
-msgid "No open palettes"
-msgstr "Nema otvorenih paleta"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:959
-msgid "Load or generate a palette using the preferences"
-msgstr "Učitaj ili stvori palete koristeći osobitosti"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:13
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-msgid "Rename"
-msgstr "Preimenuj"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-rename-popover.ui:35
-#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:60
-msgid "_Rename"
-msgstr "_Preimenuj"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
-msgid "Color components"
-msgstr "Komponente boja"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
-msgid "Visibility:"
-msgstr "Vidljivost:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid "Select the color spaces for which you want to see sliders in the panel."
-msgstr ""
-"Odaberite prostore boja za koje želite vidjeti trake pomicanja na panelu."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
-msgid "HSV"
-msgstr "HSV"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
-msgid "Hue Saturation Value"
-msgstr "Vrijednost zasićenja nijanse"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
-msgid "L*a*b*"
-msgstr "L*a*b*"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:105
-msgid "CIE L*a*b* 1976"
-msgstr "CIE L*a*b* 1976"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:123
-msgid "Red Green Blue"
-msgstr "Crveno Zeleno Plavo (RGB)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:140
-msgid "Units:"
-msgstr "Jedinice:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:156
-msgid ""
-"Select the type of unit you want to use for RGB components and strings in "
-"the panel."
-msgstr ""
-"Odaberite vrstu jedinice koju želite koristiti za RGB komponente i izraze na "
-"panelu."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:179
-#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
-#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
-msgid "Value"
-msgstr "Vrijednost"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
-msgid "Percent"
-msgstr "Posto"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:213
-msgid "Filters:"
-msgstr "Filtri:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
-msgid "Select a filter that act on the colors or “None”."
-msgstr "Odaberite filtar koji djeluje na boje ili \"Nijedan\"."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
-msgid "Achromatopsia (monochromacy)"
-msgstr "Akromatopsija (monokromatija)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
-msgid "Achromatomaly (blue cone monochromacy)"
-msgstr "Akromatomalija (monokromatija plavog stošca)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
-msgid "Deuteranopia (green-blind)"
-msgstr "Deuteranopija (zeleno slijepa)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
-msgid "Deuteranomaly (green-weak)"
-msgstr "Deuteranomalija (zeleno slaba)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
-msgid "Protanopia (red-blind)"
-msgstr "Protanopija (crveno slijepa)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
-msgid "Protanomaly (red-weak)"
-msgstr "Protanomalija (crveno slaba)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
-msgid "Tritanopia (blue-blind)"
-msgstr "Tritanopija (plavo slijepa)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
-msgid "Tritanomaly (blue-weak)"
-msgstr "Tritanomalija (plavo slaba)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
-msgid "Websafe"
-msgstr "Sigurano na webu"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:467
-msgid "Select the color strings you want to see in the panel."
-msgstr "Odaberite nizove boja koje želite vidjeti na panelu."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:597
-msgid "Palettes options"
-msgstr "Mogućnosti paleta"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:615
-msgid "Palette view mode:"
-msgstr "Način prikaza paleta:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:638
-msgid "List"
-msgstr "Popis"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
-msgid "Swatches"
-msgstr "Uzorci"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
-msgid "Palette management"
-msgstr "Upravljanje paletom"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:762
-msgid "Load"
-msgstr "Učitaj"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:836
-msgid "From current document"
-msgstr "Iz trenutnog dokumenta"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
-msgid "Select the palette you want to see in the panel or close one."
-msgstr "Odaberite paletu koju želite vidjeti na panelu ili je zatvorite."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
-msgid "No loaded palettes"
-msgstr "Nema učitanih paleta"
-
-#: src/plugins/color-picker/gtk/color-picker-preview.ui:45
-msgid "No selected palettes"
-msgstr "Nema odabranih paleta"
-
-#: src/plugins/color-picker/gtk/color-picker-preview.ui:58
-msgid "Select a palette file"
-msgstr "Odaberi datoteku palete"
-
-#: src/plugins/color-picker/gtk/color-picker.ui:62
-msgid "Try loading or generating a palette using the menu"
-msgstr "Pokušajte učitati ili stvoriti paletu pomoću izbornika"
-
-#: src/plugins/color-picker/gtk/menus.ui:7
-msgid "Highlight _colors"
-msgstr "Boje _isticanja"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
@@ -3645,6 +3046,11 @@ msgstr "Parametri"
 msgid "Variable"
 msgstr "Varijabla"
 
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
+msgid "Value"
+msgstr "Vrijednost"
+
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
 msgid "Register"
 msgstr "Registracija"
@@ -3754,29 +3160,29 @@ msgid "Reverts language preferences to application defaults"
 msgstr "Vraća izvorne osobitosti jezika aplikacije"
 
 #. translators: "Text" means plaintext or text/plain
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
 msgid "Text"
 msgstr "Tekst"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
 #: src/plugins/editorui/tweaks.ui:257
 msgid "Spaces"
 msgstr "Razmaci"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
 msgstr "Tabulatori"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
 msgid "Go"
 msgstr "Idi"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go to Line"
 msgstr "Idi na redak"
 
@@ -4564,7 +3970,7 @@ msgstr "Autorstvo"
 msgid "Email"
 msgstr "E-pošta"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:84
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Samopokretanje projekta"
@@ -4781,6 +4187,14 @@ msgstr "Prebaci u svjetli način"
 #: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to light variant"
 msgstr "Promijeni shemu izgleda u svijetlu varijatu"
+
+#: src/plugins/menu-search/gtk/menus.ui:72
+msgid "Display Build Diagnostics"
+msgstr "Prikaži D-Bus dijagnostiku"
+
+#: src/plugins/menu-search/gtk/menus.ui:73
+msgid "Display errors and warnings found during build"
+msgstr "Prikazuje greške i upozorenja pronađenih tijekom izgradnje"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -5170,6 +4584,11 @@ msgstr "Stablo projekta"
 msgid "Rename %s"
 msgstr "Preimenuj %s"
 
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:60
+msgid "_Rename"
+msgstr "_Preimenuj"
+
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
 msgstr "Nova dat_oteka…"
@@ -5338,7 +4757,9 @@ msgid "Recent Projects"
 msgstr "Nedavni projekti"
 
 #: src/plugins/retab/gtk/menus.ui:5
-msgid "_Reformat tabs"
+#, fuzzy
+#| msgid "_Reformat tabs"
+msgid "_Reformat Tabs"
 msgstr "_Preoblikuj kartice"
 
 #: src/plugins/rust-analyzer/tweaks.ui:13
@@ -6204,6 +5625,439 @@ msgstr "Nemoguće stvaranje XML stabla."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Datoteka mora biti spremljena lokalno kako bi se mogla obraditi."
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+#~ msgstr ""
+#~ "Beautifier priključak: greška kopiranja datoteke podešavanja gresource za "
+#~ "“%s”: %s"
+
+#, c-format
+#~ msgid "Beautifier plugin: error creating temporary config file for “%s”"
+#~ msgstr ""
+#~ "Beautifier priključak: greška stvaranja privremene datoteke podešavanja "
+#~ "za “%s”"
+
+#, c-format
+#~ msgid "Beautifier plugin: Can’t read .ini file: %s"
+#~ msgstr "Beautifier priključak: Nemoguće čitanje .ini datoteke: %s"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: neither command nor command-pattern keys found: entry "
+#~ "“%s” disabled"
+#~ msgstr ""
+#~ "Beautifier priključak: nisu pronađeni ključevi ni command ni command-"
+#~ "pattern: onemogućen je “%s” unos"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: both command and command-pattern keys found: entry "
+#~ "“%s” disabled"
+#~ msgstr ""
+#~ "Beautifier priključak: nisu pronađeni ključevi oba command i command-"
+#~ "pattern: onemogućen je “%s” unos"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+#~ msgstr ""
+#~ "Beautifier priključak: putanja podešavanja “%s” ne postoji, onemogućen je "
+#~ "“%s” unos"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: command key out of possible values: entry “%s” disabled"
+#~ msgstr ""
+#~ "Beautifier priključak: ključ command je izvan mogućih vrijednosti: "
+#~ "onemogućen je“%s” unos"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: @c@ in “%s” command-pattern key but no config file "
+#~ "set: entry “%s” disabled"
+#~ msgstr ""
+#~ "Beautifier priključak: @c@ u “%s” command-pattern ključ ali nije "
+#~ "podstavljena datoteka podešavanja: onemogućen je “%s” unos"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” "
+#~ "disabled"
+#~ msgstr ""
+#~ "Beautifier priključak: nemoguće stvaranje privremene datoteke za “%s”: "
+#~ "onemogućen je “%s” unos"
+
+#, c-format
+#~ msgid "Beautifier plugin: “%s”"
+#~ msgstr "Beautifier priključak: “%s”"
+
+#, c-format
+#~ msgid "Beautifier plugin: %s"
+#~ msgstr "Beautifier priključak: %s"
+
+#, c-format
+#~ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+#~ msgstr "Beautifier priključak: nemoguće čitanje datoteke resursa: “%s”"
+
+#~ msgid "beautifier program missing, you must install it: "
+#~ msgstr "beautifier program nedostaje, morate ga instalirati: "
+
+#~ msgid "Beautifier Plugin: the view is not a GtkSourceView"
+#~ msgstr "Beautifier priključak: prikaz nije GtkSourceView"
+
+#~ msgid "Beautifier Plugin: no default beautifier found"
+#~ msgstr "Beautifier priključak: nema pronađenog zadanog beautifiera"
+
+#~ msgid "Beautifier Plugin: the buffer is not writable"
+#~ msgstr "Beautifier priključak: međuspremnik nije zapisiv"
+
+#~ msgid "Beautifier Plugin: Nothing selected"
+#~ msgstr "Beautifier priključak: ništa nije odabrano"
+
+#, c-format
+#~ msgid "No beautifier available for “%s”"
+#~ msgstr "Nema dostupnog beautifiera za “%s”"
+
+#, c-format
+#~ msgid "No beautifier available"
+#~ msgstr "Nema dostupnog beautifiera"
+
+#, c-format
+#~ msgid "Beautifier plugin: no valid entries, disabling: %s"
+#~ msgstr "Beautifier priključak: nema valjanih unosa, onemogućujem: %s"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+#~ "temporary directory: “%s”"
+#~ msgstr ""
+#~ "Beautifier priključak: blokiran je pokušaj uklanjanja datoteke izvan “%s” "
+#~ "privremenog direktorija: “%s”"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: command error output:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Beautifier priključak: greška izlaza naredbe:\n"
+#~ "%s"
+
+#~ msgid "Beautifier plugin: the command output is empty"
+#~ msgstr "Beautifier priključak: izlaz naredbe je prazan"
+
+#~ msgid "Beautify plugin: the output is not a valid UTF-8 text"
+#~ msgstr "Beautify priključak: izlaz nije valjan UTF-8 tekst"
+
+#~ msgid "_Beautify"
+#~ msgstr "_Beautify"
+
+#~ msgid "Colors"
+#~ msgstr "Boje"
+
+#, c-format
+#~ msgid "Save changes to palette “%s” before closing?"
+#~ msgstr "Spremi promjene u paletu “%s” prije zatvaranja?"
+
+#~ msgid "Close without Saving"
+#~ msgstr "Zatvori bez spremanja"
+
+#~ msgid "Save As…"
+#~ msgstr "Spremi kao…"
+
+#~ msgid "Load palette"
+#~ msgstr "Učitaj paletu"
+
+#~ msgid "Save palette"
+#~ msgstr "Spremi paletu"
+
+#~ msgid "All files"
+#~ msgstr "Sve datoteke"
+
+#~ msgid "All supported palettes formats"
+#~ msgstr "Svi podržani formati paleta"
+
+#~ msgid "GIMP palette"
+#~ msgstr "GIMP paleta"
+
+#~ msgid "GNOME Builder palette"
+#~ msgstr "Paleta GNOME Graditelja"
+
+#~ msgid "Palette name"
+#~ msgstr "Naziv palete"
+
+#~ msgid "Enter a new name for the palette"
+#~ msgstr "Upišite novi naziv palete"
+
+#~ msgid "HSV visibility"
+#~ msgstr "HSV vidljivost"
+
+#~ msgid "If the HSV components are visible."
+#~ msgstr "Trebaju li HSV komponente biti vidljive."
+
+#~ msgid "LAB visibility"
+#~ msgstr "LAB vidljivost"
+
+#~ msgid "If the LAB components are visible."
+#~ msgstr "Trebaju li LAB komponente biti vidljive."
+
+#~ msgid "RGB visibility"
+#~ msgstr "RGB vidljivost"
+
+#~ msgid "If the RGB components are visible."
+#~ msgstr "Trebaju li RGB komponente biti vidljive."
+
+#~ msgid "RGB unit"
+#~ msgstr "RGB jedinica"
+
+#~ msgid "The unit used by RGB component and strings."
+#~ msgstr "Jedinica koju koristi RGB komponenta i izrazi."
+
+#~ msgid "Selected palette ID"
+#~ msgstr "ID odabrane palete"
+
+#~ msgid "The selected palette ID among the loaded ones."
+#~ msgstr "ID odabrane palete među učitanim paletama."
+
+#~ msgid "Color strings visibility"
+#~ msgstr "Vidljivosti nizova boja"
+
+#~ msgid "The visible color strings."
+#~ msgstr "Vidljivi nizovi boja."
+
+#~ msgid "Color filter"
+#~ msgstr "Filter boje"
+
+#~ msgid "The filter used on the color scales and color plane."
+#~ msgstr "Filter koji se koristi na ljestvicama boja i ravnini boja."
+
+#~ msgid "Palette: "
+#~ msgstr "Paleta: "
+
+#~ msgid "Palette"
+#~ msgstr "Paleta"
+
+#~ msgid "Color Plane"
+#~ msgstr "Raspon boja"
+
+#~ msgid "Color name"
+#~ msgstr "Naziv boje"
+
+#~ msgid "Enter a new name for the color"
+#~ msgstr "Upišite novi naziv boje"
+
+#, c-format
+#~ msgid "failed to parse line %i\n"
+#~ msgstr "neuspjela obrada retka %i\n"
+
+#, c-format
+#~ msgid "%s: palette is empty\n"
+#~ msgstr "%s: paleta je prazna\n"
+
+#, c-format
+#~ msgid "%s: failed to parse\n"
+#~ msgstr "%s: neuspjela obrada\n"
+
+#, c-format
+#~ msgid "Unable to open %s\n"
+#~ msgstr "Nemoguće je otvoriti %s\n"
+
+#, c-format
+#~ msgid "%s: This file format is not supported\n"
+#~ msgstr "%s: Ovaj datotečni format nije podržan\n"
+
+#, c-format
+#~ msgid "failed to parse\n"
+#~ msgstr "neuspjela obrada\n"
+
+#~ msgid "Generated"
+#~ msgstr "Stvoreno"
+
+#, c-format
+#~ msgid "Unable to save %s\n"
+#~ msgstr "Nemoguće spremanje %s:\n"
+
+#, c-format
+#~ msgid "Unsaved palette %u"
+#~ msgstr "Nespremljena paleta %u"
+
+#~ msgid "Color Components"
+#~ msgstr "Komponente boja"
+
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "L*"
+#~ msgstr "L*"
+
+#~ msgid "a*"
+#~ msgstr "a*"
+
+#~ msgid "b*"
+#~ msgstr "b*"
+
+#~ msgid "R"
+#~ msgstr "R"
+
+#~ msgid "G"
+#~ msgstr "G"
+
+#~ msgid "B"
+#~ msgstr "B"
+
+#~ msgid "Color strings"
+#~ msgstr "Nizovi boja"
+
+#~ msgid "HEX3"
+#~ msgstr "HEX3"
+
+#~ msgid "HEX6"
+#~ msgstr "HEX6"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "RGBA"
+#~ msgstr "Xft RGBA"
+
+#~ msgid "HSL"
+#~ msgstr "HSL"
+
+#~ msgid "HSLA"
+#~ msgstr "HSLA"
+
+#~ msgid "Palettes"
+#~ msgstr "Palete"
+
+#~ msgid "No open palettes"
+#~ msgstr "Nema otvorenih paleta"
+
+#~ msgid "Load or generate a palette using the preferences"
+#~ msgstr "Učitaj ili stvori palete koristeći osobitosti"
+
+#~ msgid "Rename"
+#~ msgstr "Preimenuj"
+
+#~ msgid "Color components"
+#~ msgstr "Komponente boja"
+
+#~ msgid "Visibility:"
+#~ msgstr "Vidljivost:"
+
+#~ msgid ""
+#~ "Select the color spaces for which you want to see sliders in the panel."
+#~ msgstr ""
+#~ "Odaberite prostore boja za koje želite vidjeti trake pomicanja na panelu."
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "Hue Saturation Value"
+#~ msgstr "Vrijednost zasićenja nijanse"
+
+#~ msgid "L*a*b*"
+#~ msgstr "L*a*b*"
+
+#~ msgid "CIE L*a*b* 1976"
+#~ msgstr "CIE L*a*b* 1976"
+
+#~ msgid "Red Green Blue"
+#~ msgstr "Crveno Zeleno Plavo (RGB)"
+
+#~ msgid "Units:"
+#~ msgstr "Jedinice:"
+
+#~ msgid ""
+#~ "Select the type of unit you want to use for RGB components and strings in "
+#~ "the panel."
+#~ msgstr ""
+#~ "Odaberite vrstu jedinice koju želite koristiti za RGB komponente i izraze "
+#~ "na panelu."
+
+#~ msgid "Percent"
+#~ msgstr "Posto"
+
+#~ msgid "Filters:"
+#~ msgstr "Filtri:"
+
+#~ msgid "Select a filter that act on the colors or “None”."
+#~ msgstr "Odaberite filtar koji djeluje na boje ili \"Nijedan\"."
+
+#~ msgid "Achromatopsia (monochromacy)"
+#~ msgstr "Akromatopsija (monokromatija)"
+
+#~ msgid "Achromatomaly (blue cone monochromacy)"
+#~ msgstr "Akromatomalija (monokromatija plavog stošca)"
+
+#~ msgid "Deuteranopia (green-blind)"
+#~ msgstr "Deuteranopija (zeleno slijepa)"
+
+#~ msgid "Deuteranomaly (green-weak)"
+#~ msgstr "Deuteranomalija (zeleno slaba)"
+
+#~ msgid "Protanopia (red-blind)"
+#~ msgstr "Protanopija (crveno slijepa)"
+
+#~ msgid "Protanomaly (red-weak)"
+#~ msgstr "Protanomalija (crveno slaba)"
+
+#~ msgid "Tritanopia (blue-blind)"
+#~ msgstr "Tritanopija (plavo slijepa)"
+
+#~ msgid "Tritanomaly (blue-weak)"
+#~ msgstr "Tritanomalija (plavo slaba)"
+
+#~ msgid "Websafe"
+#~ msgstr "Sigurano na webu"
+
+#~ msgid "Select the color strings you want to see in the panel."
+#~ msgstr "Odaberite nizove boja koje želite vidjeti na panelu."
+
+#~ msgid "Palettes options"
+#~ msgstr "Mogućnosti paleta"
+
+#~ msgid "Palette view mode:"
+#~ msgstr "Način prikaza paleta:"
+
+#~ msgid "List"
+#~ msgstr "Popis"
+
+#~ msgid "Swatches"
+#~ msgstr "Uzorci"
+
+#~ msgid "Palette management"
+#~ msgstr "Upravljanje paletom"
+
+#~ msgid "Load"
+#~ msgstr "Učitaj"
+
+#~ msgid "From current document"
+#~ msgstr "Iz trenutnog dokumenta"
+
+#~ msgid "Select the palette you want to see in the panel or close one."
+#~ msgstr "Odaberite paletu koju želite vidjeti na panelu ili je zatvorite."
+
+#~ msgid "No loaded palettes"
+#~ msgstr "Nema učitanih paleta"
+
+#~ msgid "No selected palettes"
+#~ msgstr "Nema odabranih paleta"
+
+#~ msgid "Select a palette file"
+#~ msgstr "Odaberi datoteku palete"
+
+#~ msgid "Try loading or generating a palette using the menu"
+#~ msgstr "Pokušajte učitati ili stvoriti paletu pomoću izbornika"
+
+#~ msgid "Highlight _colors"
+#~ msgstr "Boje _isticanja"
 
 #~ msgid "Reformat sources when saving to disk"
 #~ msgstr "Preoblikuj izvor pri spremanju na disk"
