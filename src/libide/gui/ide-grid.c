@@ -212,3 +212,32 @@ ide_grid_get_page_position (IdeGrid *self,
         }
     }
 }
+
+/**
+ * ide_grid_make_frame:
+ * @self: a #IdeGrid
+ * @column: the grid column index
+ * @row: the grid column row index
+ *
+ * Retrieves or creates a frame at the column/row position.
+ *
+ * Returns: (transfer none): an #IdeFrame
+ */
+IdeFrame *
+ide_grid_make_frame (IdeGrid *self,
+                     guint    column,
+                     guint    row)
+{
+  PanelGridColumn *grid_column;
+  PanelFrame *frame;
+
+  g_return_val_if_fail (IDE_IS_GRID (self), NULL);
+
+  grid_column = panel_grid_get_column (PANEL_GRID (self), column);
+  g_assert (PANEL_IS_GRID_COLUMN (grid_column));
+
+  frame = panel_grid_column_get_row (grid_column, row);
+  g_assert (IDE_IS_FRAME (frame));
+
+  return IDE_FRAME (frame);
+}

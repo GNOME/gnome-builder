@@ -51,5 +51,9 @@ IDE_AVAILABLE_IN_ALL
 void        ide_grid_foreach_page     (IdeGrid         *self,
                                        IdePageCallback  callback,
                                        gpointer         user_data);
+IDE_AVAILABLE_IN_ALL
+IdeFrame   *ide_grid_make_frame       (IdeGrid         *self,
+                                       guint            column,
+                                       guint            row);
 
 G_END_DECLS
