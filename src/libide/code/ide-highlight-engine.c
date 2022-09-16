@@ -702,8 +702,8 @@ ide_highlight_engine__unbind_buffer_cb (IdeHighlightEngine  *self,
 
   gtk_source_scheduler_clear (&self->work_scheduled);
 
-  length = _cjh_text_region_get_length (self->region);
-  _cjh_text_region_remove (self->region, 0, length - 1);
+  if ((length = _cjh_text_region_get_length (self->region)))
+    _cjh_text_region_remove (self->region, 0, length - 1);
 
   if (text_buffer != NULL)
     {
