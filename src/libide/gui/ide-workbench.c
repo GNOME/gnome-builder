@@ -975,6 +975,81 @@ ide_workbench_addin_restore_session_cb (PeasExtensionSet *set,
   ide_workbench_addin_restore_session (addin, session);
 }
 
+static gboolean
+ide_workbench_restore_workspaces (IdeWorkbench *self,
+                                  IdeSession   *session,
+                                  gint64        present_time,
+                                  GType         expected_workspace)
+{
+  IdeWorkspace *active_window = NULL;
+  gboolean ret = FALSE;
+  guint n_items;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SESSION (session));
+
+  n_items = ide_session_get_n_items (session);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      IdeSessionItem *item = ide_session_get_item (session, i);
+
+      if (g_strcmp0 (ide_session_item_get_module_name (item), "libide-gui") == 0)
+        {
+          const char *type_hint = ide_session_item_get_type_hint (item);
+          GType type = type_hint ? g_type_from_name (type_hint) : G_TYPE_INVALID;
+
+          if (type && g_type_is_a (type, IDE_TYPE_WORKSPACE))
+            {
+              IdeWorkspace *workspace;
+              const char *id;
+              gboolean is_active = FALSE;
+              gboolean is_maximized = FALSE;
+              int width = -1, height = -1;
+
+              if (type == expected_workspace)
+                ret = TRUE;
+
+              id = ide_session_item_get_id (item);
+
+              if (ide_session_item_has_metadata_with_type (item, "is-maximized", G_VARIANT_TYPE ("b")))
+                ide_session_item_get_metadata (item, "is-maximized", "b", &is_maximized);
+
+              if (ide_session_item_has_metadata_with_type (item, "is-active", G_VARIANT_TYPE ("b")))
+                ide_session_item_get_metadata (item, "is-active", "b", &is_active);
+
+              if (ide_session_item_has_metadata_with_type (item, "size", G_VARIANT_TYPE ("(ii)")))
+                ide_session_item_get_metadata (item, "size", "(ii)", &width, &height);
+
+              workspace = g_object_new (type,
+                                        "application", IDE_APPLICATION_DEFAULT,
+                                        "id", id,
+                                        NULL);
+              ide_workbench_add_workspace (self, workspace);
+
+              if (width > -1 && height > -1)
+                {
+                  gtk_window_set_default_size (GTK_WINDOW (workspace), width, height);
+                  _ide_workspace_set_ignore_size_setting (workspace, TRUE);
+                }
+
+              if (is_maximized)
+                gtk_window_maximize (GTK_WINDOW (workspace));
+
+              if (is_active)
+                active_window = workspace;
+              else
+                gtk_window_present_with_time (GTK_WINDOW (workspace), present_time);
+            }
+        }
+    }
+
+  if (active_window)
+    gtk_window_present_with_time (GTK_WINDOW (active_window), present_time);
+
+  return ret;
+}
+
 static void
 ide_workbench_load_project_completed (IdeWorkbench *self,
                                       IdeTask      *task)
@@ -1012,6 +1087,15 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
    */
   if (self->session != NULL)
     {
+      /* Restore workspaces, and cancel our request to create a new one
+       * if the workspace was likely created already.
+       */
+      if (ide_workbench_restore_workspaces (self,
+                                            self->session,
+                                            lp->present_time,
+                                            lp->workspace_type))
+        lp->workspace_type = G_TYPE_INVALID;
+
       peas_extension_set_foreach (self->addins,
                                   ide_workbench_addin_restore_session_cb,
                                   self->session);
@@ -1025,7 +1109,8 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
       workspace = g_object_new (lp->workspace_type,
                                 "application", IDE_APPLICATION_DEFAULT,
                                 NULL);
-      ide_workbench_add_workspace (self, IDE_WORKSPACE (workspace));
+      ide_workbench_add_workspace (self, workspace);
+      gtk_window_maximize (GTK_WINDOW (self));
       gtk_window_present_with_time (GTK_WINDOW (workspace), lp->present_time);
     }
 

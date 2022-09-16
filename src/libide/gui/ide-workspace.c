@@ -101,6 +101,8 @@ typedef struct
   /* The identifier for the workspace window */
   char *id;
 
+  /* If GSetting should be ignored for size */
+  guint ignore_size_setting : 1;
 } IdeWorkspacePrivate;
 
 typedef struct
@@ -450,14 +452,28 @@ ide_workspace_size_allocate (GtkWidget *widget,
     priv->queued_window_save = g_timeout_add_seconds (1, ide_workspace_save_settings, self);
 }
 
+void
+_ide_workspace_set_ignore_size_setting (IdeWorkspace *self,
+                                        gboolean      ignore_size_setting)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+
+  priv->ignore_size_setting = !!ignore_size_setting;
+}
+
 static void
 ide_workspace_restore_size (IdeWorkspace *workspace,
                             int           width,
                             int           height)
 {
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (workspace);
+
   g_assert (IDE_IS_WORKSPACE (workspace));
 
-  gtk_window_set_default_size (GTK_WINDOW (workspace), width, height);
+  if (!priv->ignore_size_setting)
+    gtk_window_set_default_size (GTK_WINDOW (workspace), width, height);
 }
 
 static gboolean
