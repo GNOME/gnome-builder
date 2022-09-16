@@ -706,3 +706,14 @@ ide_webkit_page_new_for_generator (IdeHtmlGenerator *generator)
 
   return self;
 }
+
+gboolean
+ide_webkit_page_has_generator (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WEBKIT_PAGE (self), FALSE);
+
+  return priv->generator != NULL;
+}
+
