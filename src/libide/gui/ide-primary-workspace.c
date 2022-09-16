@@ -54,14 +54,10 @@ struct _IdePrimaryWorkspace
   IdeRunButton       *run_button;
   GtkLabel           *project_title;
   GtkMenuButton      *add_button;
-  PanelDock          *dock;
-  PanelPaned         *edge_start;
-  PanelPaned         *edge_end;
-  PanelPaned         *edge_bottom;
-  IdeGrid            *grid;
   GtkOverlay         *overlay;
   IdeOmniBar         *omni_bar;
   IdeJoinedMenu      *build_menu;
+  IdeWorkspaceDock    dock;
 };
 
 G_DEFINE_FINAL_TYPE (IdePrimaryWorkspace, ide_primary_workspace, IDE_TYPE_WORKSPACE)
@@ -104,13 +100,7 @@ ide_primary_workspace_add_page (IdeWorkspace  *workspace,
 
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
 
-  _ide_workspace_add_widget (workspace,
-                             PANEL_WIDGET (page),
-                             position,
-                             self->edge_start,
-                             self->edge_end,
-                             self->edge_bottom,
-                             self->grid);
+  _ide_workspace_add_widget (workspace, PANEL_WIDGET (page), position, &self->dock);
 }
 
 static void
@@ -122,20 +112,14 @@ ide_primary_workspace_add_pane (IdeWorkspace  *workspace,
 
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
 
-  _ide_workspace_add_widget (workspace,
-                             PANEL_WIDGET (pane),
-                             position,
-                             self->edge_start,
-                             self->edge_end,
-                             self->edge_bottom,
-                             self->grid);
+  _ide_workspace_add_widget (workspace, PANEL_WIDGET (pane), position, &self->dock);
 }
 
 static void
 ide_primary_workspace_add_grid_column (IdeWorkspace *workspace,
                                        guint         position)
 {
-  panel_grid_insert_column (PANEL_GRID (IDE_PRIMARY_WORKSPACE (workspace)->grid), position);
+  panel_grid_insert_column (PANEL_GRID (IDE_PRIMARY_WORKSPACE (workspace)->dock.grid), position);
 }
 
 static void
@@ -167,7 +151,7 @@ ide_primary_workspace_get_most_recent_frame (IdeWorkspace *workspace)
 
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
 
-  return IDE_FRAME (panel_grid_get_most_recent_frame (PANEL_GRID (self->grid)));
+  return IDE_FRAME (panel_grid_get_most_recent_frame (PANEL_GRID (self->dock.grid)));
 }
 
 static PanelFrame *
@@ -179,12 +163,7 @@ ide_primary_workspace_get_frame_at_position (IdeWorkspace  *workspace,
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
   g_assert (position != NULL);
 
-  return _ide_workspace_find_frame (workspace,
-                                    position,
-                                    self->edge_start,
-                                    self->edge_end,
-                                    self->edge_bottom,
-                                    self->grid);
+  return _ide_workspace_find_frame (workspace, position, &self->dock);
 }
 
 static gboolean
@@ -204,7 +183,7 @@ ide_primary_workspace_foreach_page (IdeWorkspace    *workspace,
                                     IdePageCallback  callback,
                                     gpointer         user_data)
 {
-  ide_grid_foreach_page (IDE_PRIMARY_WORKSPACE (workspace)->grid, callback, user_data);
+  ide_grid_foreach_page (IDE_PRIMARY_WORKSPACE (workspace)->dock.grid, callback, user_data);
 }
 
 static void
@@ -231,7 +210,7 @@ toggle_panel_action (gpointer    instance,
 
   can_property = g_strconcat ("can-", property, NULL);
 
-  g_object_get (self->dock,
+  g_object_get (self->dock.dock,
                 can_property, &can_reveal,
                 property, &reveal,
                 NULL);
@@ -239,9 +218,9 @@ toggle_panel_action (gpointer    instance,
   reveal = !reveal;
 
   if (reveal && can_reveal)
-    g_object_set (self->dock, property, TRUE, NULL);
+    g_object_set (self->dock.dock, property, TRUE, NULL);
   else
-    g_object_set (self->dock, property, FALSE, NULL);
+    g_object_set (self->dock.dock, property, FALSE, NULL);
 }
 
 static void
@@ -251,7 +230,7 @@ ide_primary_workspace_agree_to_close_async (IdeWorkspace        *workspace,
                                             gpointer             user_data)
 {
   _ide_workspace_agree_to_close_async (workspace,
-                                       IDE_PRIMARY_WORKSPACE (workspace)->grid,
+                                       IDE_PRIMARY_WORKSPACE (workspace)->dock.grid,
                                        cancellable,
                                        callback,
                                        user_data);
@@ -274,7 +253,19 @@ ide_primary_workspace_save_session (IdeWorkspace *workspace,
   g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
   g_assert (IDE_IS_SESSION (session));
 
-  _ide_workspace_save_session_simple (workspace, session, self->dock, self->grid);
+  _ide_workspace_save_session_simple (workspace, session, &self->dock);
+}
+
+static void
+ide_primary_workspace_restore_session (IdeWorkspace *workspace,
+                                       IdeSession   *session)
+{
+  IdePrimaryWorkspace *self = (IdePrimaryWorkspace *)workspace;
+
+  g_assert (IDE_IS_PRIMARY_WORKSPACE (self));
+  g_assert (IDE_IS_SESSION (session));
+
+  _ide_workspace_restore_session_simple (workspace, session, &self->dock);
 }
 
 static void
@@ -286,8 +277,8 @@ ide_primary_workspace_dispose (GObject *object)
    * addins/pages/etc before we ever get to removing the workspace
    * addins as part of the parent class.
    */
-  panel_dock_remove (self->dock, GTK_WIDGET (self->grid));
-  self->grid = NULL;
+  panel_dock_remove (self->dock.dock, GTK_WIDGET (self->dock.grid));
+  self->dock.grid = NULL;
 
   G_OBJECT_CLASS (ide_primary_workspace_parent_class)->dispose (object);
 }
@@ -315,22 +306,20 @@ ide_primary_workspace_class_init (IdePrimaryWorkspaceClass *klass)
   workspace_class->get_most_recent_frame = ide_primary_workspace_get_most_recent_frame;
   workspace_class->remove_overlay = ide_primary_workspace_remove_overlay;
   workspace_class->save_session = ide_primary_workspace_save_session;
+  workspace_class->restore_session = ide_primary_workspace_restore_session;
 
   ide_workspace_class_set_kind (workspace_class, "primary");
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gnome/libide-gui/ui/ide-primary-workspace.ui");
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, add_button);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, build_menu);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, dock);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_bottom);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_end);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, edge_start);
-  gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, grid);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, header_bar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, omni_bar);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, overlay);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, project_title);
   gtk_widget_class_bind_template_child (widget_class, IdePrimaryWorkspace, run_button);
+
+  _ide_workspace_class_bind_template_dock (widget_class, G_STRUCT_OFFSET (IdePrimaryWorkspace, dock));
 
   ide_workspace_class_install_action (workspace_class, "panel.toggle-start", NULL, toggle_panel_action);
   ide_workspace_class_install_action (workspace_class, "panel.toggle-end", NULL, toggle_panel_action);

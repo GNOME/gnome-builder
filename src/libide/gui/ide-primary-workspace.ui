@@ -76,12 +76,12 @@
           </object>
         </child>
         <child type="start">
-          <object class="PanelPaned" id="edge_start">
+          <object class="PanelPaned" id="start_area">
             <property name="orientation">vertical</property>
           </object>
         </child>
         <child type="end">
-          <object class="PanelPaned" id="edge_end">
+          <object class="PanelPaned" id="end_area">
             <property name="orientation">vertical</property>
             <child>
               <object class="PanelFrame">
@@ -90,7 +90,7 @@
           </object>
         </child>
         <child type="bottom">
-          <object class="PanelPaned" id="edge_bottom">
+          <object class="PanelPaned" id="bottom_area">
             <property name="orientation">horizontal</property>
           </object>
         </child>

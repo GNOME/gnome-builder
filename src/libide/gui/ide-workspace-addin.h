@@ -50,6 +50,8 @@ struct _IdeWorkspaceAddinInterface
   GActionGroup *(*ref_action_group) (IdeWorkspaceAddin *self);
   void          (*save_session)     (IdeWorkspaceAddin *self,
                                      IdeSession        *session);
+  void          (*restore_session)  (IdeWorkspaceAddin *self,
+                                     IdeSession        *session);
 };
 
 IDE_AVAILABLE_IN_ALL
@@ -63,6 +65,9 @@ void               ide_workspace_addin_page_changed        (IdeWorkspaceAddin *s
                                                             IdePage           *page);
 IDE_AVAILABLE_IN_ALL
 void               ide_workspace_addin_save_session        (IdeWorkspaceAddin *self,
+                                                            IdeSession        *session);
+IDE_AVAILABLE_IN_ALL
+void               ide_workspace_addin_restore_session     (IdeWorkspaceAddin *self,
                                                             IdeSession        *session);
 IDE_AVAILABLE_IN_ALL
 GActionGroup      *ide_workspace_addin_ref_action_group    (IdeWorkspaceAddin *self);

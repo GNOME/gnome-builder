@@ -95,6 +95,8 @@ struct _IdeWorkspaceClass
   gboolean      (*can_search)            (IdeWorkspace         *self);
   void          (*save_session)          (IdeWorkspace         *self,
                                           IdeSession           *session);
+  void          (*restore_session)       (IdeWorkspace         *self,
+                                          IdeSession           *session);
 };
 
 IDE_AVAILABLE_IN_ALL

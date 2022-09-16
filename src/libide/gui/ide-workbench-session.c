@@ -128,6 +128,8 @@ _ide_workbench_restore_workspaces (IdeWorkbench *self,
               if (is_maximized)
                 gtk_window_maximize (GTK_WINDOW (workspace));
 
+              _ide_workspace_restore_session (workspace, session);
+
               if (is_active)
                 active_window = workspace;
               else

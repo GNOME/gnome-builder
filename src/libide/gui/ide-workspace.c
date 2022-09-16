@@ -127,6 +127,46 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICAT
 static GParamSpec *properties [N_PROPS];
 static GSettings *settings;
 
+G_GNUC_UNUSED static void
+dump_position (PanelPosition *position)
+{
+  GString *str = g_string_new (NULL);
+
+  if (panel_position_get_area_set (position))
+    {
+      PanelArea area = panel_position_get_area (position);
+      g_autoptr(GEnumClass) klass = g_type_class_ref (PANEL_TYPE_AREA);
+      GEnumValue *value = g_enum_get_value (klass, area);
+
+      g_string_append_printf (str, "area=%s ", value->value_nick);
+    }
+
+  if (panel_position_get_column_set (position))
+    {
+      guint column = panel_position_get_column (position);
+      g_string_append_printf (str, "column=%d ", column);
+    }
+
+  if (panel_position_get_row_set (position))
+    {
+      guint row = panel_position_get_row (position);
+      g_string_append_printf (str, "row=%d ", row);
+    }
+
+  if (panel_position_get_depth_set (position))
+    {
+      guint depth = panel_position_get_depth (position);
+      g_string_append_printf (str, "depth=%d ", depth);
+    }
+
+  if (str->len == 0)
+    g_print ("Empty Position\n");
+  else
+    g_print ("%s\n", str->str);
+
+  g_string_free (str, TRUE);
+}
+
 static void
 ide_workspace_attach_shortcuts (IdeWorkspace *self,
                                 GtkWidget    *widget)
@@ -1274,13 +1314,10 @@ dummy_cb (gpointer data)
 }
 
 void
-_ide_workspace_add_widget (IdeWorkspace  *self,
-                           PanelWidget   *widget,
-                           PanelPosition *position,
-                           PanelPaned    *dock_start,
-                           PanelPaned    *dock_end,
-                           PanelPaned    *dock_bottom,
-                           IdeGrid       *grid)
+_ide_workspace_add_widget (IdeWorkspace     *self,
+                           PanelWidget      *widget,
+                           PanelPosition    *position,
+                           IdeWorkspaceDock *dock)
 {
   PanelFrame *frame;
   gboolean depth_set;
@@ -1291,12 +1328,9 @@ _ide_workspace_add_widget (IdeWorkspace  *self,
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (PANEL_IS_WIDGET (widget));
   g_return_if_fail (position != NULL);
-  g_return_if_fail (!dock_start || PANEL_IS_PANED (dock_start));
-  g_return_if_fail (!dock_end || PANEL_IS_PANED (dock_end));
-  g_return_if_fail (!dock_bottom || PANEL_IS_PANED (dock_bottom));
-  g_return_if_fail (IDE_IS_GRID (grid));
+  g_return_if_fail (dock != NULL);
 
-  if (!(frame = _ide_workspace_find_frame (self, position, dock_start, dock_end, dock_bottom, grid)))
+  if (!(frame = _ide_workspace_find_frame (self, position, dock)))
     {
       /* Extreme failure case, try to be nice and wait until
        * end of the main loop to destroy
@@ -1315,12 +1349,9 @@ _ide_workspace_add_widget (IdeWorkspace  *self,
 }
 
 PanelFrame *
-_ide_workspace_find_frame (IdeWorkspace  *self,
-                           PanelPosition *position,
-                           PanelPaned    *dock_start,
-                           PanelPaned    *dock_end,
-                           PanelPaned    *dock_bottom,
-                           IdeGrid       *grid)
+_ide_workspace_find_frame (IdeWorkspace     *self,
+                           PanelPosition    *position,
+                           IdeWorkspaceDock *dock)
 {
   PanelArea area;
   PanelPaned *paned = NULL;
@@ -1334,9 +1365,7 @@ _ide_workspace_find_frame (IdeWorkspace  *self,
 
   g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
   g_return_val_if_fail (position != NULL, NULL);
-  g_return_val_if_fail (!dock_start || PANEL_IS_PANED (dock_start), NULL);
-  g_return_val_if_fail (!dock_end || PANEL_IS_PANED (dock_end), NULL);
-  g_return_val_if_fail (!dock_bottom || PANEL_IS_PANED (dock_bottom), NULL);
+  g_return_val_if_fail (dock != NULL, NULL);
 
   if (!ide_panel_position_get_area (position, &area))
     area = PANEL_AREA_CENTER;
@@ -1352,11 +1381,11 @@ _ide_workspace_find_frame (IdeWorkspace  *self,
        */
       if (!has_column && !has_row)
         {
-          if (!find_open_frame (grid, &column, &row))
-            find_most_recent_frame (self, grid, &column, &row);
+          if (!find_open_frame (dock->grid, &column, &row))
+            find_most_recent_frame (self, dock->grid, &column, &row);
         }
 
-      ret = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (grid), column), row);
+      ret = panel_grid_column_get_row (panel_grid_get_column (PANEL_GRID (dock->grid), column), row);
 
       IDE_RETURN (ret);
     }
@@ -1364,17 +1393,17 @@ _ide_workspace_find_frame (IdeWorkspace  *self,
   switch (area)
     {
     case PANEL_AREA_START:
-      paned = dock_start;
+      paned = dock->start_area;
       ide_panel_position_get_row (position, &nth);
       break;
 
     case PANEL_AREA_END:
-      paned = dock_end;
+      paned = dock->end_area;
       ide_panel_position_get_row (position, &nth);
       break;
 
     case PANEL_AREA_BOTTOM:
-      paned = dock_bottom;
+      paned = dock->bottom_area;
       ide_panel_position_get_column (position, &nth);
       break;
 
@@ -1761,11 +1790,48 @@ _ide_workspace_save_session (IdeWorkspace *self,
   IDE_EXIT;
 }
 
+static void
+ide_workspace_save_session_frame_cb (PanelFrame *frame,
+                                     gpointer    user_data)
+{
+  g_autoptr(PanelPosition) position = NULL;
+  g_autoptr(IdeSessionItem) item = NULL;
+  IdeSession *session = user_data;
+  IdeWorkspace *workspace;
+  int requested_size;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (PANEL_IS_FRAME (frame));
+  g_assert (IDE_IS_SESSION (session));
+
+  position = panel_frame_get_position (frame);
+  workspace = ide_widget_get_workspace (GTK_WIDGET (frame));
+  requested_size = panel_frame_get_requested_size (frame);
+
+#if 0
+  dump_position (position);
+#endif
+
+  item = ide_session_item_new ();
+  ide_session_item_set_module_name (item, "libide-gui");
+  ide_session_item_set_type_hint (item, G_OBJECT_TYPE_NAME (frame));
+  ide_session_item_set_position (item, position);
+  ide_session_item_set_workspace (item, ide_workspace_get_id (workspace));
+
+  if (requested_size > -1)
+    ide_session_item_set_metadata (item, "size", "i", requested_size);
+
+  ide_session_append (session, item);
+
+  IDE_EXIT;
+}
+
 void
-_ide_workspace_save_session_simple (IdeWorkspace *self,
-                                    IdeSession   *session,
-                                    PanelDock    *dock,
-                                    IdeGrid      *grid)
+_ide_workspace_save_session_simple (IdeWorkspace     *self,
+                                    IdeSession       *session,
+                                    IdeWorkspaceDock *dock)
 {
   g_autoptr(IdeSessionItem) item = NULL;
   int width;
@@ -1789,7 +1855,164 @@ _ide_workspace_save_session_simple (IdeWorkspace *self,
     ide_session_item_set_metadata (item, "is-maximized", "b", TRUE);
   ide_session_prepend (session, item);
 
+  panel_dock_foreach_frame (dock->dock,
+                            ide_workspace_save_session_frame_cb,
+                            session);
+  panel_grid_foreach_frame (PANEL_GRID (dock->grid),
+                            ide_workspace_save_session_frame_cb,
+                            session);
+
   /* TODO: Save panel and grid frame size/positions */
+
+  IDE_EXIT;
+}
+
+static void
+ide_workspace_addin_restore_session_cb (IdeExtensionSetAdapter *adapter,
+                                        PeasPluginInfo         *plugin_info,
+                                        PeasExtension          *exten,
+                                        gpointer                user_data)
+{
+  IdeWorkspaceAddin *addin = (IdeWorkspaceAddin *)exten;
+  IdeSession *session = user_data;
+
+  g_assert (IDE_IS_EXTENSION_SET_ADAPTER (adapter));
+  g_assert (plugin_info != NULL);
+  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
+  g_assert (IDE_IS_SESSION (session));
+
+  ide_workspace_addin_restore_session (addin, session);
+}
+
+void
+_ide_workspace_restore_session (IdeWorkspace *self,
+                                IdeSession   *session)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_SESSION (session));
+
+  if (IDE_WORKSPACE_GET_CLASS (self)->restore_session)
+    IDE_WORKSPACE_GET_CLASS (self)->restore_session (self, session);
+
+  ide_extension_set_adapter_foreach (priv->addins,
+                                     ide_workspace_addin_restore_session_cb,
+                                     session);
+
+  IDE_EXIT;
+}
+
+static void
+ide_workspace_restore_frame (IdeWorkspace     *self,
+                             GType             type,
+                             IdeSessionItem   *item,
+                             IdeWorkspaceDock *dock)
+{
+  PanelPosition *position;
+  GtkWidget *frame;
+  PanelArea area;
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (g_type_is_a (type, PANEL_TYPE_FRAME));
+  g_assert (IDE_IS_SESSION_ITEM (item));
+
+  if (!(position = ide_session_item_get_position (item)))
+    return;
+
+  if (!panel_position_get_area_set (position))
+    return;
+
+  area = panel_position_get_area (position);
+  if ((area == PANEL_AREA_CENTER && type != IDE_TYPE_FRAME) ||
+      (area != PANEL_AREA_CENTER && type != PANEL_TYPE_FRAME))
+    return;
+
+  if (area == PANEL_AREA_START || area == PANEL_AREA_END)
+    {
+      PanelPaned *paned = area == PANEL_AREA_START ? dock->start_area : dock->end_area;
+      int row = panel_position_get_row (position);
+
+      while (panel_paned_get_n_children (paned) <= row)
+        {
+          frame = panel_frame_new ();
+          panel_paned_append (paned, GTK_WIDGET (frame));
+        }
+
+      frame = panel_paned_get_nth_child (paned, row);
+    }
+  else if (area == PANEL_AREA_TOP)
+    {
+      /* Ignored */
+      return;
+    }
+  else if (area == PANEL_AREA_BOTTOM)
+    {
+      PanelPaned *paned = dock->bottom_area;
+      int column = panel_position_get_column (position);
+
+      while (panel_paned_get_n_children (paned) <= column)
+        {
+          frame = panel_frame_new ();
+          panel_paned_append (paned, GTK_WIDGET (frame));
+        }
+
+      frame = panel_paned_get_nth_child (paned, column);
+    }
+  else
+    {
+      int column = panel_position_get_column (position);
+      int row = panel_position_get_row (position);
+
+      frame = GTK_WIDGET (ide_grid_make_frame (dock->grid, column, row));
+    }
+
+  if (ide_session_item_has_metadata_with_type (item, "size", G_VARIANT_TYPE ("i")))
+    {
+      int size;
+
+      ide_session_item_get_metadata (item, "size", "i", &size);
+      panel_frame_set_requested_size (PANEL_FRAME (frame), size);
+    }
+}
+
+void
+_ide_workspace_restore_session_simple (IdeWorkspace     *self,
+                                       IdeSession       *session,
+                                       IdeWorkspaceDock *dock)
+{
+  guint n_items;
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+  g_return_if_fail (IDE_IS_SESSION (session));
+
+  n_items = ide_session_get_n_items (session);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      IdeSessionItem *item = ide_session_get_item (session, i);
+      const char *module_name = ide_session_item_get_module_name (item);
+
+      if (ide_str_equal0 (module_name, "libide-gui"))
+        {
+          const char *workspace_id = ide_session_item_get_workspace (item);
+          const char *type_hint = ide_session_item_get_type_hint (item);
+          GType type = type_hint ? g_type_from_name (type_hint) : G_TYPE_INVALID;
+
+          if (type == G_TYPE_INVALID)
+            continue;
+
+          if (!ide_str_equal0 (workspace_id, ide_workspace_get_id (self)))
+            continue;
+
+          if (g_type_is_a (type, PANEL_TYPE_FRAME))
+            ide_workspace_restore_frame (self, type, item, dock);
+        }
+    }
 
   IDE_EXIT;
 }
@@ -1814,4 +2037,24 @@ ide_workspace_get_id (IdeWorkspace *self)
   g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
 
   return priv->id;
+}
+
+void
+_ide_workspace_class_bind_template_dock (GtkWidgetClass *widget_class,
+                                         goffset         struct_offset)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE_CLASS (widget_class));
+  g_return_if_fail (struct_offset > 0);
+
+  /* TODO: We should just add an IdeDock class w/ the widgetry all defined. */
+
+#define BIND_CHILD(c, name) \
+  gtk_widget_class_bind_template_child_full (c, #name, FALSE, \
+                                             struct_offset + G_STRUCT_OFFSET (IdeWorkspaceDock, name))
+  BIND_CHILD (widget_class, dock);
+  BIND_CHILD (widget_class, grid);
+  BIND_CHILD (widget_class, start_area);
+  BIND_CHILD (widget_class, bottom_area);
+  BIND_CHILD (widget_class, end_area);
+#undef BIND_CHILD
 }

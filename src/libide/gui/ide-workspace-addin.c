@@ -143,3 +143,14 @@ ide_workspace_addin_save_session (IdeWorkspaceAddin *self,
   if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->save_session)
     IDE_WORKSPACE_ADDIN_GET_IFACE (self)->save_session (self, session);
 }
+
+void
+ide_workspace_addin_restore_session (IdeWorkspaceAddin *self,
+                                     IdeSession        *session)
+{
+  g_return_if_fail (IDE_IS_WORKSPACE_ADDIN (self));
+  g_return_if_fail (IDE_IS_SESSION (session));
+
+  if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->restore_session)
+    IDE_WORKSPACE_ADDIN_GET_IFACE (self)->restore_session (self, session);
+}
