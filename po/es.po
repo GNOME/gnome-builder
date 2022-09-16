@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-06 04:50+0000\n"
-"PO-Revision-Date: 2022-09-07 15:40+0200\n"
+"POT-Creation-Date: 2022-09-14 13:48+0000\n"
+"PO-Revision-Date: 2022-09-16 10:49+0200\n"
 "Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -614,7 +614,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Qué entorno usar al ejecutar pruebas unitarias"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:200 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Registro detallado"
 
@@ -916,24 +916,24 @@ msgid "Unsaved document has been restored."
 msgstr "Se ha restaurado un documento sin guardar."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:408
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Falló al imprimir: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:484
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Falló al formatear la selección : %s"
 
-#: src/libide/editor/ide-editor-page.c:900
+#: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Guardar archivo"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
 #: src/plugins/color-picker/gb-color-picker-prefs.c:236
@@ -942,7 +942,7 @@ msgstr "Guardar archivo"
 msgid "Save"
 msgstr "Guardar"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
@@ -1385,7 +1385,7 @@ msgid_plural "About %u years ago"
 msgstr[0] "Hace %u año aproximadamente"
 msgstr[1] "Hace %u años aproximadamente"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:79
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Instalar"
@@ -1572,7 +1572,11 @@ msgstr "Ejecutar proyecto"
 msgid "Other"
 msgstr "Otra"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:155
+#: src/libide/gui/ide-workspace.c:1646
+msgid "There are unsaved documents"
+msgstr "Hay documentos sin guardar"
+
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1815,7 +1819,7 @@ msgid "_Find References"
 msgstr "_Buscar referencias"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1134
+#: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1950,7 +1954,7 @@ msgstr "Ninguno"
 msgid "Blank page"
 msgstr "Página en blanco"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:151
 msgid "Settings"
 msgstr "Configuración"
 
@@ -2380,7 +2384,7 @@ msgstr "Detener la construcción del proyecto"
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Construir el proyecto (Mayús+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:56
+#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
 msgid "_Build"
 msgstr "_Construir"
 
@@ -2396,73 +2400,73 @@ msgstr "Ejecuta_r"
 msgid "R_un With…"
 msgstr "Ejec_utar con"
 
-#: src/plugins/buildui/gtk/menus.ui:33 src/plugins/buildui/gtk/menus.ui:44
-#: src/plugins/buildui/gtk/menus.ui:53 src/plugins/buildui/gtk/menus.ui:76
-#: src/plugins/buildui/gtk/menus.ui:103 src/plugins/buildui/gtk/menus.ui:113
-#: src/plugins/buildui/gtk/menus.ui:127 src/plugins/buildui/gtk/menus.ui:136
-#: src/plugins/buildui/gtk/menus.ui:149
+#: src/plugins/buildui/gtk/menus.ui:33
+msgid "Configure Project…"
+msgstr "Configurar proyecto…"
+
+#: src/plugins/buildui/gtk/menus.ui:36
+msgid "Configure settings related to the project"
+msgstr "Configuración relativa al proyecto"
+
+#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
+#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
+#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
+#: src/plugins/buildui/gtk/menus.ui:147
 msgid "Code Foundry"
 msgstr "Fundición de código"
 
-#: src/plugins/buildui/gtk/menus.ui:34 src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Configuración"
 
-#: src/plugins/buildui/gtk/menus.ui:36
-msgid "Configure Project…"
-msgstr "Configurar proyecto…"
-
-#: src/plugins/buildui/gtk/menus.ui:39
-msgid "Configure settings related to the project"
-msgstr "Configuración relativa al proyecto"
-
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:45
 msgid "Select Build Target…"
 msgstr "Seleccionar objetivo de construcción…"
 
-#: src/plugins/buildui/gtk/menus.ui:49
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Change default build target"
 msgstr "Cambiar el objetivo de construcción predeterminado"
 
-#: src/plugins/buildui/gtk/menus.ui:54 src/plugins/buildui/gtk/menus.ui:104
-#: src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Building"
 msgstr "Construyendo"
 
-#: src/plugins/buildui/gtk/menus.ui:57
+#: src/plugins/buildui/gtk/menus.ui:55
 msgid "Build the project"
 msgstr "Construir el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:63
+#: src/plugins/buildui/gtk/menus.ui:61
 msgid "_Rebuild"
 msgstr "_Reconstruir"
 
-#: src/plugins/buildui/gtk/menus.ui:64
+#: src/plugins/buildui/gtk/menus.ui:62
 msgid "Rebuild the project"
 msgstr "volver a construir el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:69
+#: src/plugins/buildui/gtk/menus.ui:67
 msgid "_Clean"
 msgstr "_Limpiar"
 
-#: src/plugins/buildui/gtk/menus.ui:70
+#: src/plugins/buildui/gtk/menus.ui:68
 msgid "Clean the project"
 msgstr "Limpiar el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:77
+#: src/plugins/buildui/gtk/menus.ui:75
 msgid "Install & Deployment"
 msgstr "Instalar y desplegar"
 
-#: src/plugins/buildui/gtk/menus.ui:81
+#: src/plugins/buildui/gtk/menus.ui:79
 msgid "Install the project"
 msgstr "Instalar el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:83
 msgid "Deploy to Device…"
 msgstr "Desplegar en dispositivo…"
 
-#: src/plugins/buildui/gtk/menus.ui:87
+#: src/plugins/buildui/gtk/menus.ui:85
 msgid "Deploy project to current device"
 msgstr "Desplegar proyecto en el dispositivo actual"
 
@@ -2470,85 +2474,85 @@ msgstr "Desplegar proyecto en el dispositivo actual"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:94
 msgid "_Export"
 msgstr "_Exportar"
 
-#: src/plugins/buildui/gtk/menus.ui:98
+#: src/plugins/buildui/gtk/menus.ui:96
 msgid "Export project"
 msgstr "Exportar proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:104
 msgid "Stop Build"
 msgstr "Detener la construcción"
 
-#: src/plugins/buildui/gtk/menus.ui:108
+#: src/plugins/buildui/gtk/menus.ui:106
 msgid "Stop building project"
 msgstr "Detener la construcción del proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:116
+#: src/plugins/buildui/gtk/menus.ui:114
 msgid "Show Build _Log"
 msgstr "Mostrar el _registro de construcción"
 
-#: src/plugins/buildui/gtk/menus.ui:119
+#: src/plugins/buildui/gtk/menus.ui:117
 msgid "Display panel containing the build log"
 msgstr "Mostrar el panel que contiene le registro de la construcción"
 
-#: src/plugins/buildui/gtk/menus.ui:128 src/plugins/buildui/gtk/menus.ui:137
+#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
 msgid "Running"
 msgstr "Ejecutándose"
 
-#: src/plugins/buildui/gtk/menus.ui:130
+#: src/plugins/buildui/gtk/menus.ui:128
 msgid "Select Run Command…"
 msgstr "Seleccionar comando de Run…"
 
-#: src/plugins/buildui/gtk/menus.ui:142
+#: src/plugins/buildui/gtk/menus.ui:140
 msgid "Run"
 msgstr "Ejecutar"
 
-#: src/plugins/buildui/gtk/menus.ui:145
+#: src/plugins/buildui/gtk/menus.ui:143
 msgid "Run the project"
 msgstr "Ejecutar el proyecto"
 
-#: src/plugins/buildui/gtk/menus.ui:150 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Pruebas unitarias"
 
-#: src/plugins/buildui/gtk/menus.ui:157
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Follow System Style"
 msgstr "Seguir el estilo del sistema"
 
-#: src/plugins/buildui/gtk/menus.ui:163
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Force Light"
 msgstr "Forzar modo claro"
 
-#: src/plugins/buildui/gtk/menus.ui:169
+#: src/plugins/buildui/gtk/menus.ui:167
 msgid "Force Dark"
 msgstr "Forzar modo oscuro"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:174
 msgid "Accessibility"
 msgstr "Accesibilidad"
 
-#: src/plugins/buildui/gtk/menus.ui:178
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "High Contrast"
 msgstr "Contraste alto"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:181
 msgid "Text Direction"
 msgstr "Dirección del texto"
 
-#: src/plugins/buildui/gtk/menus.ui:185
+#: src/plugins/buildui/gtk/menus.ui:183
 msgid "Left-to-Right"
 msgstr "Izquierda a derecha"
 
-#: src/plugins/buildui/gtk/menus.ui:191
+#: src/plugins/buildui/gtk/menus.ui:189
 msgid "Right-to-Left"
 msgstr "Derecha a izquierda"
 
-#: src/plugins/buildui/gtk/menus.ui:206
+#: src/plugins/buildui/gtk/menus.ui:204
 msgid "Tools"
 msgstr "Herramientas"
 
@@ -3898,6 +3902,8 @@ msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
 msgstr ""
+"Configuración proporcionada por .editorconfig y líneas de modo que "
+"prevalecen sobre las de abajo."
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
@@ -4164,6 +4170,8 @@ msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
+"Usar información de símbolos para resaltar espacios de nombres, funciones y "
+"variables dentro del código fuente"
 
 #: src/plugins/editorui/tweaks.ui:258
 msgid "Draw a mark representing normal spaces"
@@ -4289,6 +4297,8 @@ msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
 msgstr ""
+"Los temas de atajos brindan una experiencia de teclado similar a otros EID y "
+"editores"
 
 #: src/plugins/editorui/tweaks.ui:491
 msgid "Movements"
@@ -4352,8 +4362,12 @@ msgid "Format on Save"
 msgstr "Formatear al guardar"
 
 #: src/plugins/editorui/tweaks.ui:582
-msgid "Reformat sources when saving to disk"
-msgstr "Volver a formatear las fuentes al guardar en disco"
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
+msgstr ""
+"Volver a formatear las fuentes al guardarlas en el disco. Requiere un "
+"formateador registrado para el idioma de origen."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -4724,17 +4738,15 @@ msgstr "Modificado"
 
 #: src/plugins/ls/gtk/menus.ui:7 src/plugins/ls/gtk/menus.ui:18
 msgid "With _Folder Listing"
-msgstr ""
+msgstr "Con listado de car_petas"
 
 #: src/plugins/ls/gtk/menus.ui:15
 msgid "Open Containing Folder"
 msgstr "Abrir la carpeta contenedora"
 
 #: src/plugins/ls/gtk/menus.ui:23 src/plugins/project-tree/gtk/menus.ui:41
-#, fuzzy
-#| msgid "Browse…"
 msgid "With File _Browser…"
-msgstr "Explorar…"
+msgstr "Con _explorador de archivos…"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
@@ -5306,6 +5318,8 @@ msgid ""
 "This identifier is used when referencing your project's settings, build "
 "directories, and cached information."
 msgstr ""
+"Este identificador se usa cuando se hace referencia a la configuración de su "
+"proyecto, las carpetas de compilación y la información almacenada en caché."
 
 #: src/plugins/projectui/tweaks.ui:132
 msgid "Build System"
@@ -5324,6 +5338,8 @@ msgid ""
 "The configuration is used to setup build pipelines, configure your build "
 "system, and run your project."
 msgstr ""
+"La configuración se usa para configurar tuberías de compilación, configurar "
+"su sistema de construcción y ejecutar su proyecto."
 
 #: src/plugins/projectui/tweaks.ui:228
 msgid "Provided By"
@@ -5394,10 +5410,9 @@ msgid "Proc Macros"
 msgstr "Macros Proc"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the expirimental Proc Macros feature of rust-analyzer"
+msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr ""
-"Activa la característica de Macros Proc experimentales para el analizador "
-"Rust"
+"Activa la característica experimental de Macros Proc para el analizador Rust"
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -5416,12 +5431,10 @@ msgid "Download on Metered Connections"
 msgstr "Descargar en redes medidas"
 
 #: src/plugins/sdkui/tweaks.ui:16
-#, fuzzy
-#| msgid "Allow downloads over metered connections"
 msgid ""
 "Allow the download of SDKs and dependencies when on metered internet "
 "connections"
-msgstr "Permitir descargas el redes medidas"
+msgstr "Permite la descarga de SDK y dependencias en conexiones medidas"
 
 #: src/plugins/sdkui/tweaks.ui:29
 msgid "Available SDKs"
@@ -5470,7 +5483,7 @@ msgstr "Comando de shell"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
 msgid "You may use single or double quotes for parameters."
-msgstr ""
+msgstr "Debe usar comillas simples o dobles para los parámetros."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
 msgid "Environment"
@@ -5485,6 +5498,8 @@ msgid ""
 "The command will be run from this location. Use <tt>$BUILDDIR</tt>, <tt>"
 "$SRCDIR</tt>, or <tt>$HOME</tt> to define a relative path."
 msgstr ""
+"El comando se ejecutará desde esta ubicación. Use <tt>$BUILDDIR</tt>, <tt>"
+"$SRCDIR</tt>, o <tt>$HOME</tt> para definir una ruta relativa."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:122
 msgid "Use Subshell"
@@ -5492,7 +5507,7 @@ msgstr "Usar subshell"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:123
 msgid "Run the program from a subshell such as <tt>sh -c ''</tt>"
-msgstr ""
+msgstr "Ejecutar el programa en una subshell, tal como <tt>sh -c ''</tt>"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:134
 msgid "Locality"
@@ -5503,6 +5518,8 @@ msgid ""
 "Builder can run your command from a number of localities including the host "
 "system or build containers."
 msgstr ""
+"Builder puede ejecutar su comando desde varias ubicaciones, incluyendo el "
+"sistema anfitrión o los contenedores de construcción."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:230
 msgid "_Delete Command"
@@ -5590,6 +5607,10 @@ msgid ""
 "them to a keyboard shortcut. They can run from various environments such as "
 "the build pipeline, runtime environment, or host operating system."
 msgstr ""
+"Use comandos para ejecutar herramientas de construcción, aplicaciones o "
+"scripts de shell y asígnelos a un atajo del teclado. Pueden ejecutarse desde "
+"varios entornos, como la tubería de compilación, el entorno de tiempo de "
+"ejecución o el sistema operativo del equipo."
 
 #: src/plugins/spellcheck/editor-enchant-spell-provider.c:123
 msgid "Enchant 2"
@@ -5664,10 +5685,8 @@ msgid "Profiler"
 msgstr "Perfilador"
 
 #: src/plugins/sysprof/gtk/menus.ui:32
-#, fuzzy
-#| msgid "Check _Spelling"
 msgid "Thread Sampling"
-msgstr "Comprobar _ortografía"
+msgstr "Muestreo de hilos"
 
 #: src/plugins/sysprof/gtk/menus.ui:34
 msgid "CPU Performance"
@@ -5679,7 +5698,7 @@ msgstr "Reservas de memoria"
 
 #: src/plugins/sysprof/gtk/menus.ui:44
 msgid "Sample JavaScript Stacks"
-msgstr ""
+msgstr "Ejemplo de pilas de JavaScript"
 
 #: src/plugins/sysprof/gtk/menus.ui:50
 msgid "Graphics"
@@ -5747,11 +5766,13 @@ msgstr "Guardar estadísticas de uso y frecuencia de CPU"
 
 #: src/plugins/sysprof/tweaks.ui:31
 msgid "Sample Callstacks"
-msgstr ""
+msgstr "Ejemplo de pila de llamadas"
 
 #: src/plugins/sysprof/tweaks.ui:32
 msgid "Record stacktraces on a regular interval and build a callgraph"
 msgstr ""
+"Registre trazas de la pila en un intervalo regular y crear un gráfico de "
+"llamadas"
 
 #: src/plugins/sysprof/tweaks.ui:43
 msgid "CPU Governor"
@@ -5772,6 +5793,8 @@ msgstr "Forzar modo de rendimiento"
 #: src/plugins/sysprof/tweaks.ui:72
 msgid "Simple memory statistics about the process such as total memory used"
 msgstr ""
+"Estadísticas de memoria simples sobre el proceso, como la memoria total "
+"utilizada"
 
 #: src/plugins/sysprof/tweaks.ui:83
 msgid "Memory Profiling"
@@ -5779,7 +5802,7 @@ msgstr "Perfilado de memoria"
 
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Record stacktraces of memory allocations and releases"
-msgstr ""
+msgstr "Registre trazas de la pila de asignaciones y liberaciones de memoria"
 
 #: src/plugins/sysprof/tweaks.ui:99
 msgid "Energy Usage"
@@ -5795,7 +5818,7 @@ msgstr "Uso de batería"
 
 #: src/plugins/sysprof/tweaks.ui:112 src/plugins/sysprof/tweaks.ui:140
 msgid "Record statistics about battery charge and discharge rates"
-msgstr ""
+msgstr "Registre estadísticas de carga de batería y tasas de descarga"
 
 #: src/plugins/sysprof/tweaks.ui:127
 msgid "Network Usage"
@@ -5830,16 +5853,16 @@ msgid "Collect information from GJS-based applications"
 msgstr "Recolectar información de aplicaciones basadas en GJS"
 
 #: src/plugins/sysprof/tweaks.ui:184
-#, fuzzy
-#| msgid "Application"
 msgid "Application Tracing"
-msgstr "Aplicación"
+msgstr "Seguimiento de la aplicación"
 
 #: src/plugins/sysprof/tweaks.ui:185
 msgid ""
 "Provide TRACE_FD environment variable for applications to deliver custom "
 "events"
 msgstr ""
+"Proporciona la variable de entorno TRACE_FD para que las aplicaciones "
+"entreguen eventos personalizados"
 
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:121
 msgid "An absolute file-system path to the sysroot."
@@ -5918,7 +5941,7 @@ msgstr "Permitir hipervínculos"
 
 #: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
-msgstr ""
+msgstr "Permite el uso de secuencias de escape de hipervínculo"
 
 #: src/plugins/terminal/tweaks.ui:55
 msgid "Scrolling"
@@ -5931,6 +5954,8 @@ msgstr "Desplazar en la salida"
 #: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
 msgstr ""
+"Desplazar automáticamente cuando las aplicaciones devuelvan texto de salida "
+"en la terminal"
 
 #: src/plugins/terminal/tweaks.ui:70
 msgid "Scroll On Keyboard Input"
@@ -6001,7 +6026,7 @@ msgid "Request that all unit tests are run"
 msgstr "Solicitar que se ejecuten todas las pruebas unitarias"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+#: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr "POR HACER/CORREGIR"
 
@@ -6044,6 +6069,14 @@ msgstr ""
 #: src/plugins/update-manager/gbp-update-manager-app-addin.c:169
 msgid "_Update"
 msgstr "Act_ualizar"
+
+#: src/plugins/update-manager/gtk/menus.ui:7
+msgid "Install Updates…"
+msgstr "Instalar actualizaciones…"
+
+#: src/plugins/update-manager/gtk/menus.ui:8
+msgid "Install pending updates for Builder"
+msgstr "Instalar las actualizaciones pendientes para Builder"
 
 #: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
 msgid "Run with Leak Detector"
@@ -6225,6 +6258,9 @@ msgstr "Falló al crear el árbol XML."
 msgid "File must be saved locally to parse."
 msgstr ""
 "El archivo debe estar guardado localmente para analizarlo gramaticalmente."
+
+#~ msgid "Reformat sources when saving to disk"
+#~ msgstr "Volver a formatear las fuentes al guardar en disco"
 
 #~ msgid "System"
 #~ msgstr "Sistema"
@@ -8736,9 +8772,6 @@ msgstr ""
 #~ msgid "File too large to be opened."
 #~ msgstr "El archivo es demasiado grande para poder abrirlo."
 
-#~ msgid "unsaved document %u"
-#~ msgstr "Documento %u sin guardar"
-
 #~ msgid "Options to use when bootstrapping the project"
 #~ msgstr "Opciones que usar al inicializar el proyecto"
 
@@ -9686,9 +9719,6 @@ msgstr ""
 
 #~ msgid "Key Binding Emulation"
 #~ msgstr "Emulación de combinación de teclas"
-
-#~ msgid "The default keybindings for Builder."
-#~ msgstr "Las combinaciones de teclas predeterminadas para Builder."
 
 #~ msgid "Attempt to load a GJS script with no filename."
 #~ msgstr "Intentado cargar un script GJS sin nombre de archivo."
