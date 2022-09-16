@@ -112,16 +112,22 @@ ide_page_root (GtkWidget *widget)
 {
   IdePage *self = (IdePage *)widget;
   IdePagePrivate *priv = ide_page_get_instance_private (self);
+  g_autoptr(PanelPosition) position = NULL;
   GtkWidget *toplevel;
 
   g_assert (IDE_IS_PAGE (self));
 
   GTK_WIDGET_CLASS (ide_page_parent_class)->root (widget);
 
-  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
+  /* Ignore any IdePage placed into panels, such as the terminal */
+  if (!(toplevel = GTK_WIDGET (gtk_widget_get_root (widget))) ||
+      !IDE_IS_WORKSPACE (toplevel) ||
+      !(position = panel_widget_get_position (PANEL_WIDGET (widget))) ||
+      !panel_position_get_area_set (position) ||
+      panel_position_get_area (position) != PANEL_AREA_CENTER)
+    return;
 
-  if (IDE_IS_WORKSPACE (toplevel))
-    _ide_workspace_add_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
+  _ide_workspace_add_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
 }
 
 static void
