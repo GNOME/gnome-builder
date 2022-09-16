@@ -985,6 +985,7 @@ _ide_workspace_remove_page_mru (IdeWorkspace *self,
   g_return_if_fail (IDE_IS_WORKSPACE (self));
   g_return_if_fail (mru_link != NULL);
   g_return_if_fail (IDE_IS_PAGE (mru_link->data));
+  g_return_if_fail (g_queue_link_index (&priv->page_mru, mru_link) != -1);
 
   mru_page = mru_link->data;
 
