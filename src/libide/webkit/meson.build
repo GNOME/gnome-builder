@@ -55,6 +55,9 @@ libide_webkit_deps = [
   libide_gui_dep,
 ]
 
+gnome_builder_pkg_requires += ['webkit2gtk-5.0']
+gnome_builder_gir_includes += ['WebKit2-5.0']
+
 #
 # Library Definitions
 #

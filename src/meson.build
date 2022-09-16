@@ -50,6 +50,27 @@ test_cflags = [
   '-I' + join_paths(meson.project_source_root(), 'src'),
 ]
 
+gnome_builder_pkg_requires = [
+  'gio-2.0',
+  'gio-unix-2.0',
+  'gtk4',
+  'vte-2.91-gtk4',
+  'gtksourceview-5',
+  'template-glib-1.0',
+  'libpeas-1.0',
+]
+
+gnome_builder_gir_includes = [
+  'Gio-2.0',
+  'Gtk-4.0',
+  'Peas-1.0',
+  'Vte-3.91',
+  'GtkSource-5',
+  'Adw-1',
+  'Panel-1',
+  'Template-1.0',
+]
+
 subdir('libide')
 subdir('plugins')
 
@@ -129,7 +150,7 @@ pkgconfig.generate(
      filebase: 'gnome-builder-@0@.@1@'.format(MAJOR_VERSION, MINOR_VERSION),
   description: 'Contains the plugin container for Builder.',
   install_dir: join_paths(get_option('libdir'), 'pkgconfig'),
-     requires: [ 'gio-2.0', 'gio-unix-2.0', 'gtk4', 'vte-2.91-gtk4', 'gtksourceview-5', 'template-glib-1.0', 'libpeas-1.0' ],
+     requires: gnome_builder_pkg_requires,
 )
 
 libide_gir = gnome.generate_gir(gnome_builder,
@@ -141,7 +162,7 @@ libide_gir = gnome.generate_gir(gnome_builder,
             namespace: 'Ide',
         symbol_prefix: 'ide',
     identifier_prefix: 'Ide',
-             includes: [ 'Gio-2.0', 'Gtk-4.0', 'Peas-1.0', 'Vte-3.91', 'GtkSource-5', 'Adw-1', 'Panel-1', 'Template-1.0' ],
+             includes: gnome_builder_gir_includes,
               install: true,
       install_dir_gir: pkggirdir,
   install_dir_typelib: pkgtypelibdir,
