@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-editor.h>
 #include <libide-foundry.h>
 #include <libide-gui.h>
@@ -282,6 +283,7 @@ gbp_buildui_workspace_addin_load (IdeWorkspaceAddin *addin,
                                       "popover", gbp_buildui_status_popover_new (context),
                                       "direction", GTK_ARROW_UP,
                                       "focus-on-click", FALSE,
+                                      "tooltip-text", _("Display Build Diagnostics (Ctrl+Alt+?)"),
                                       NULL);
   panel_statusbar_add_prefix (statusbar, 1000, GTK_WIDGET (self->status_button));
 

@@ -6,6 +6,5 @@
 { "trigger" : "<Control><Shift>space", "action" : "context.run-manager.run", "when" : "hasProject()", "phase" : "capture" },
 
 /* Errors and Warnings Popover */
-{ "trigger" : "<Control><Shift>e", "action" : "workspace.buildui.status.show", "args" : "'errors'", "when" : "hasErrors() || hasWarnings()", "phase" : "capture" },
-{ "trigger" : "<Control><Shift>w", "action" : "workspace.buildui.status.show", "args" : "'warnings'", "when" : "hasErrors() || hasWarnings()", "phase" : "capture" },
+{ "trigger" : "<Control><Alt>question", "action" : "workspace.buildui.status.show", "args" : "'errors'", "when" : "hasProject()", "phase" : "capture" },
 

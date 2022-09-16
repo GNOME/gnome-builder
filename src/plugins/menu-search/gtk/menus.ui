@@ -63,4 +63,18 @@
       </item>
     </section>
   </menu>
+
+  <menu id="menu-search-projects">
+    <section id="menu-search-projects-section">
+      <attribute name="page" translatable="yes">Text Editor</attribute>
+      <attribute name="group" translatable="yes">Diagnostics</attribute>
+      <item>
+        <attribute name="label" translatable="yes">Display Build Diagnostics</attribute>
+        <attribute name="description" translatable="yes">Display errors and warnings found during build</attribute>
+        <attribute name="action">workspace.buildui.status.show</attribute>
+        <attribute name="target" type="s">'errors'</attribute>
+        <attribute name="accel">&lt;control&gt;&lt;alt&gt;question</attribute>
+      </item>
+    </section>
+  </menu>
 </interface>
