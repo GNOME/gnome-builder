@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <libpeas/peas.h>
+
 #include "ide-workspace.h"
 #include "ide-workspace-addin.h"
 
@@ -42,8 +44,52 @@
 G_DEFINE_INTERFACE (IdeWorkspaceAddin, ide_workspace_addin, G_TYPE_OBJECT)
 
 static void
+ide_workspace_addin_real_restore_sesion (IdeWorkspaceAddin *addin,
+                                         IdeSession        *session)
+{
+  PeasPluginInfo *plugin_info;
+  IdeWorkspace *workspace;
+  const char *module_name;
+  const char *workspace_id;
+  guint n_items;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKSPACE_ADDIN (addin));
+  g_assert (IDE_IS_SESSION (session));
+
+  if (IDE_WORKSPACE_ADDIN_GET_IFACE (addin)->restore_session_item == NULL)
+    return;
+
+  workspace = g_object_get_data (G_OBJECT (addin), "IDE_WORKSPACE");
+  g_assert (IDE_IS_WORKSPACE (workspace));
+
+  workspace_id = ide_workspace_get_id (workspace);
+  g_assert (workspace_id != NULL);
+
+  plugin_info = g_object_get_data (G_OBJECT (addin), "PEAS_PLUGIN_INFO");
+  g_assert (plugin_info != NULL);
+
+  module_name = peas_plugin_info_get_module_name (plugin_info);
+  g_assert (module_name != NULL);
+
+  n_items = ide_session_get_n_items (session);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      IdeSessionItem *item = ide_session_get_item (session, i);
+
+      if (!ide_str_equal0 (module_name, ide_session_item_get_module_name (item)) ||
+          !ide_str_equal0 (workspace_id, ide_session_item_get_workspace (item)))
+        continue;
+
+      IDE_WORKSPACE_ADDIN_GET_IFACE (addin)->restore_session_item (addin, session, item);
+    }
+}
+
+static void
 ide_workspace_addin_default_init (IdeWorkspaceAddinInterface *iface)
 {
+  iface->restore_session = ide_workspace_addin_real_restore_sesion;
 }
 
 /**
@@ -62,6 +108,8 @@ ide_workspace_addin_load (IdeWorkspaceAddin *self,
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_WORKSPACE_ADDIN (self));
   g_return_if_fail (IDE_IS_WORKSPACE (workspace));
+
+  g_object_set_data (G_OBJECT (self), "IDE_WORKSPACE", workspace);
 
   if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->load)
     IDE_WORKSPACE_ADDIN_GET_IFACE (self)->load (self, workspace);
@@ -86,6 +134,8 @@ ide_workspace_addin_unload (IdeWorkspaceAddin *self,
 
   if (IDE_WORKSPACE_ADDIN_GET_IFACE (self)->unload)
     IDE_WORKSPACE_ADDIN_GET_IFACE (self)->unload (self, workspace);
+
+  g_object_set_data (G_OBJECT (self), "IDE_WORKSPACE", NULL);
 }
 
 /**

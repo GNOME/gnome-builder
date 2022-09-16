@@ -41,17 +41,20 @@ struct _IdeWorkspaceAddinInterface
 {
   GTypeInterface parent_iface;
 
-  void          (*load)             (IdeWorkspaceAddin *self,
-                                     IdeWorkspace      *workspace);
-  void          (*unload)           (IdeWorkspaceAddin *self,
-                                     IdeWorkspace      *workspace);
-  void          (*page_changed)     (IdeWorkspaceAddin *self,
-                                     IdePage           *page);
-  GActionGroup *(*ref_action_group) (IdeWorkspaceAddin *self);
-  void          (*save_session)     (IdeWorkspaceAddin *self,
-                                     IdeSession        *session);
-  void          (*restore_session)  (IdeWorkspaceAddin *self,
-                                     IdeSession        *session);
+  void          (*load)                 (IdeWorkspaceAddin *self,
+                                         IdeWorkspace      *workspace);
+  void          (*unload)               (IdeWorkspaceAddin *self,
+                                         IdeWorkspace      *workspace);
+  void          (*page_changed)         (IdeWorkspaceAddin *self,
+                                         IdePage           *page);
+  GActionGroup *(*ref_action_group)     (IdeWorkspaceAddin *self);
+  void          (*save_session)         (IdeWorkspaceAddin *self,
+                                         IdeSession        *session);
+  void          (*restore_session)      (IdeWorkspaceAddin *self,
+                                         IdeSession        *session);
+  void          (*restore_session_item) (IdeWorkspaceAddin *self,
+                                         IdeSession        *session,
+                                         IdeSessionItem    *item);
 };
 
 IDE_AVAILABLE_IN_ALL

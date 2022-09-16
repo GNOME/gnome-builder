@@ -227,6 +227,8 @@ ide_workspace_addin_added_cb (IdeExtensionSetAdapter *set,
   g_debug ("Loading workspace addin from module %s",
            peas_plugin_info_get_module_name (plugin_info));
 
+  g_object_set_data (G_OBJECT (addin), "PEAS_PLUGIN_INFO", plugin_info);
+
   ide_workspace_addin_load (addin, self);
 
   if ((action_group = ide_workspace_addin_ref_action_group (addin)))
