@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-editor.h>
 #include <libide-foundry.h>
 #include <libide-terminal.h>
@@ -350,16 +351,27 @@ gbp_terminal_workspace_addin_save_session_page_cb (IdePage  *page,
       g_autoptr(IdeSessionItem) item = ide_session_item_new ();
       IdeTerminal *terminal = ide_terminal_page_get_terminal (IDE_TERMINAL_PAGE (page));
       const char *title = panel_widget_get_title (PANEL_WIDGET (page));
-      g_autofree char *text = vte_terminal_get_text (VTE_TERMINAL (terminal), NULL, NULL, NULL);
+      g_autofree char *text = g_strchomp (vte_terminal_get_text (VTE_TERMINAL (terminal), NULL, NULL, NULL));
       IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (page));
       const char *id = ide_workspace_get_id (workspace);
+      int columns = vte_terminal_get_column_count (VTE_TERMINAL (terminal));
+      int rows = vte_terminal_get_row_count (VTE_TERMINAL (terminal));
+      g_autoptr(GString) text_with_suffix = g_string_new (text);
+
+      if (!ide_terminal_page_has_exited (IDE_TERMINAL_PAGE (page)))
+        {
+          g_string_append (text_with_suffix, "\r\n");
+          g_string_append (text_with_suffix, "\r\n");
+          g_string_append_printf (text_with_suffix, "[%s]", _("Process completed"));
+        }
 
       ide_session_item_set_module_name (item, "terminal");
       ide_session_item_set_type_hint (item, "IdeTerminalPage");
       ide_session_item_set_workspace (item, id);
       ide_session_item_set_position (item, position);
       ide_session_item_set_metadata (item, "title", "s", title);
-      ide_session_item_set_metadata (item, "text", "s", text);
+      ide_session_item_set_metadata (item, "text", "s", text_with_suffix->str);
+      ide_session_item_set_metadata (item, "size", "(ii)", columns, rows);
 
       if (page == ide_workspace_get_most_recent_page (workspace))
         ide_session_item_set_metadata (item, "has-focus", "b", TRUE);
@@ -376,6 +388,7 @@ gbp_terminal_workspace_addin_save_session (IdeWorkspaceAddin *addin,
 
   IDE_ENTRY;
 
+  g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_SESSION (session));
   g_assert (IDE_IS_WORKSPACE (self->workspace));
@@ -388,11 +401,69 @@ gbp_terminal_workspace_addin_save_session (IdeWorkspaceAddin *addin,
 }
 
 static void
+gbp_terminal_workspace_addin_restore_page (GbpTerminalWorkspaceAddin *self,
+                                           IdeSessionItem            *item)
+{
+  g_autofree char *text = NULL;
+  g_autofree char *title = NULL;
+  IdeTerminalPage *page;
+  PanelPosition *position;
+  gboolean has_focus;
+  int columns;
+  int rows;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_SESSION_ITEM (item));
+
+  if (!(position = ide_session_item_get_position (item)) ||
+      !ide_session_item_get_metadata (item, "text", "s", &text) ||
+      !ide_session_item_get_metadata (item, "title", "s", &title))
+    return;
+
+  if (!ide_session_item_get_metadata (item, "size", "(ii)", &columns, &rows))
+    columns = rows = 0;
+
+  page = ide_terminal_page_new_completed (title, text, columns, rows);
+  ide_workspace_add_page (self->workspace, IDE_PAGE (page), position);
+
+  if (ide_session_item_get_metadata (item, "has-focus", "b", &has_focus) && has_focus)
+    {
+      panel_widget_raise (PANEL_WIDGET (page));
+      gtk_widget_grab_focus (GTK_WIDGET (page));
+    }
+}
+
+static void
+gbp_terminal_workspace_addin_restore_session_item (IdeWorkspaceAddin *addin,
+                                                   IdeSession        *session,
+                                                   IdeSessionItem    *item)
+{
+  GbpTerminalWorkspaceAddin *self = (GbpTerminalWorkspaceAddin *)addin;
+  const char *type_hint;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_TERMINAL_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_SESSION (session));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+
+  type_hint = ide_session_item_get_type_hint (item);
+
+  if (ide_str_equal0 (type_hint, "IdeTerminalPage"))
+    gbp_terminal_workspace_addin_restore_page (self, item);
+
+  IDE_EXIT;
+}
+
+static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_terminal_workspace_addin_load;
   iface->unload = gbp_terminal_workspace_addin_unload;
   iface->save_session = gbp_terminal_workspace_addin_save_session;
+  iface->restore_session_item = gbp_terminal_workspace_addin_restore_session_item;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpTerminalWorkspaceAddin, gbp_terminal_workspace_addin, G_TYPE_OBJECT,
