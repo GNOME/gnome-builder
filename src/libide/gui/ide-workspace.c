@@ -1018,6 +1018,10 @@ _ide_workspace_move_front_page_mru (IdeWorkspace *self,
   if (mru_link == priv->page_mru.head)
     return;
 
+  /* Ignore unless the page is already in the MRU */
+  if (g_queue_link_index (&priv->page_mru, mru_link) == -1)
+    return;
+
   g_debug ("Moving %s to front of page MRU",
            G_OBJECT_TYPE_NAME (mru_link->data));
 
