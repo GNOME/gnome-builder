@@ -856,36 +856,22 @@ failure:
 }
 
 static void
-gbp_editorui_workspace_addin_restore_session (IdeWorkspaceAddin *addin,
-                                              IdeSession        *session)
+gbp_editorui_workspace_addin_restore_session_item (IdeWorkspaceAddin *addin,
+                                                   IdeSession        *session,
+                                                   IdeSessionItem    *item)
 {
   GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
-  const char *our_workspace_id;
-  guint n_items;
+  const char *type_hint;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
   g_assert (IDE_IS_WORKSPACE (self->workspace));
   g_assert (IDE_IS_SESSION (session));
 
-  n_items = ide_session_get_n_items (session);
-  our_workspace_id = ide_workspace_get_id (self->workspace);
+  type_hint = ide_session_item_get_type_hint (item);
 
-  for (guint i = 0; i < n_items; i++)
-    {
-      IdeSessionItem *item = ide_session_get_item (session, i);
-      const char *module_name = ide_session_item_get_module_name (item);
-
-      if (ide_str_equal0 (module_name, "editorui"))
-        {
-          const char *type_hint = ide_session_item_get_type_hint (item);
-          const char *workspace_id = ide_session_item_get_workspace (item);
-
-          if (ide_str_equal0 (type_hint, "IdeEditorPage") &&
-              ide_str_equal0 (workspace_id, our_workspace_id))
-            gbp_editorui_workspace_addin_restore_page (self, item);
-        }
-    }
+  if (ide_str_equal0 (type_hint, "IdeEditorPage"))
+    gbp_editorui_workspace_addin_restore_page (self, item);
 }
 
 static void
@@ -896,7 +882,7 @@ workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
   iface->page_changed = gbp_editorui_workspace_addin_page_changed;
   iface->ref_action_group = gbp_editorui_workspace_addin_ref_action_group;
   iface->save_session = gbp_editorui_workspace_addin_save_session;
-  iface->restore_session = gbp_editorui_workspace_addin_restore_session;
+  iface->restore_session_item = gbp_editorui_workspace_addin_restore_session_item;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpEditoruiWorkspaceAddin, gbp_editorui_workspace_addin, G_TYPE_OBJECT,
