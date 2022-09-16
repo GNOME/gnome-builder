@@ -43,6 +43,7 @@ typedef struct
   GtkOverlay     *overlay;
   GtkProgressBar *progress_bar;
 
+  guint           in_mru : 1;
   guint           failed : 1;
   guint           modified : 1;
   guint           can_split : 1;
@@ -128,6 +129,8 @@ ide_page_root (GtkWidget *widget)
     return;
 
   _ide_workspace_add_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
+
+  priv->in_mru = TRUE;
 }
 
 static void
@@ -139,10 +142,13 @@ ide_page_unroot (GtkWidget *widget)
 
   g_assert (IDE_IS_PAGE (self));
 
-  toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-
-  if (IDE_IS_WORKSPACE (toplevel))
-    _ide_workspace_remove_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
+  if (priv->in_mru &&
+      (toplevel = GTK_WIDGET (gtk_widget_get_root (widget))) &&
+      IDE_IS_WORKSPACE (toplevel))
+    {
+      _ide_workspace_remove_page_mru (IDE_WORKSPACE (toplevel), &priv->mru_link);
+      priv->in_mru = FALSE;
+    }
 
   GTK_WIDGET_CLASS (ide_page_parent_class)->unroot (widget);
 }
