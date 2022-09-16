@@ -17,6 +17,7 @@
                   <object class="IdeTerminal" id="terminal">
                     <property name="audible-bell">false</property>
                     <property name="hexpand">true</property>
+                    <property name="scroll-unit-is-pixels">true</property>
                     <property name="vexpand">true</property>
                   </object>
                 </child>
