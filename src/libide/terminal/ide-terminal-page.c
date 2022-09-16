@@ -656,3 +656,45 @@ ide_terminal_page_get_terminal (IdeTerminalPage *self)
 
   return self->terminal;
 }
+
+IdeTerminalPage *
+ide_terminal_page_new_completed (const char *title,
+                                 const char *text,
+                                 int         columns,
+                                 int         rows)
+{
+  g_autofree char *copy = g_strdup (text);
+  IdeTerminalPage *self;
+  IdeLineReader reader;
+  char *line;
+  gsize line_len;
+
+  self = g_object_new (IDE_TYPE_TERMINAL_PAGE,
+                       "title", title,
+                       NULL);
+
+  vte_terminal_set_input_enabled (VTE_TERMINAL (self->terminal), FALSE);
+
+  self->close_on_exit = FALSE;
+  self->manage_spawn = FALSE;
+  g_clear_object (&self->launcher);
+  self->respawn_on_exit = FALSE;
+  self->exited = TRUE;
+
+  if (columns > 0 && rows > 0)
+    vte_terminal_set_size (VTE_TERMINAL (self->terminal), columns, rows);
+
+  ide_line_reader_init (&reader, copy, -1);
+  while ((line = ide_line_reader_next (&reader, &line_len)))
+    {
+      gboolean had_newline = line[line_len] != 0;
+
+      line[line_len] = 0;
+      ide_terminal_page_feed (self, line);
+
+      if (had_newline)
+        ide_terminal_page_feed (self, "\r\n");
+    }
+
+  return self;
+}

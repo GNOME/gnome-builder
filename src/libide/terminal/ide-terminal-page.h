@@ -39,6 +39,11 @@ IDE_AVAILABLE_IN_ALL
 G_DECLARE_FINAL_TYPE (IdeTerminalPage, ide_terminal_page, IDE, TERMINAL_PAGE, IdePage)
 
 IDE_AVAILABLE_IN_ALL
+IdeTerminalPage     *ide_terminal_page_new_completed             (const char          *title,
+                                                                  const char          *text,
+                                                                  int                  columns,
+                                                                  int                  rows);
+IDE_AVAILABLE_IN_ALL
 void                 ide_terminal_page_set_launcher              (IdeTerminalPage     *self,
                                                                   IdeTerminalLauncher *launcher);
 IDE_AVAILABLE_IN_ALL
