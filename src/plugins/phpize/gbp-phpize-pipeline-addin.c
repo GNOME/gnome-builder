@@ -53,11 +53,11 @@ static void
 gbp_phpize_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
-  g_autoptr(IdeSubprocessLauncher) bootstrap_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) config_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) install_launcher = NULL;
+  g_autoptr(IdeRunCommand) bootstrap_command = NULL;
+  g_autoptr(IdeRunCommand) config_command = NULL;
+  g_autoptr(IdeRunCommand) build_command = NULL;
+  g_autoptr(IdeRunCommand) clean_command = NULL;
+  g_autoptr(IdeRunCommand) install_command = NULL;
   g_autoptr(IdePipelineStage) bootstrap_stage = NULL;
   g_autoptr(IdePipelineStage) config_stage = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
@@ -96,40 +96,39 @@ gbp_phpize_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (builddir != NULL);
   g_assert (prefix != NULL);
 
-  bootstrap_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_argv (bootstrap_launcher, "phpize");
-  ide_subprocess_launcher_set_cwd (bootstrap_launcher, srcdir);
-  bootstrap_stage = ide_pipeline_stage_launcher_new (context, bootstrap_launcher);
+  bootstrap_command = ide_run_command_new ();
+  ide_run_command_append_argv (bootstrap_command, "phpize");
+  ide_run_command_set_cwd (bootstrap_command, srcdir);
+  bootstrap_stage = ide_pipeline_stage_command_new (bootstrap_command, NULL);
   ide_pipeline_stage_set_name (bootstrap_stage, _("Bootstrapping project"));
   ide_pipeline_stage_set_completed (bootstrap_stage, g_file_test (configure_path, G_FILE_TEST_EXISTS));
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_AUTOGEN, 0, bootstrap_stage);
   ide_pipeline_addin_track (addin, id);
 
-  config_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_argv (config_launcher, configure_path);
-  ide_subprocess_launcher_push_argv_format (config_launcher, "--prefix=%s", prefix);
-  ide_subprocess_launcher_push_argv_parsed (config_launcher, config_opts);
-  config_stage = ide_pipeline_stage_launcher_new (context, config_launcher);
+  config_command = ide_run_command_new ();
+  ide_run_command_append_argv (config_command, configure_path);
+  ide_run_command_append_formatted (config_command, "--prefix=%s", prefix);
+  ide_run_command_append_parsed (config_command, config_opts, NULL);
+  config_stage = ide_pipeline_stage_command_new (config_command, NULL);
   ide_pipeline_stage_set_name (config_stage, _("Configuring project"));
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_CONFIGURE, 0, config_stage);
   ide_pipeline_addin_track (addin, id);
 
-  build_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_argv (build_launcher, "make");
+  build_command = ide_run_command_new ();
+  ide_run_command_append_argv (build_command, "make");
   if ((j = ide_config_get_parallelism (config)) > 0)
-    ide_subprocess_launcher_push_argv_format (build_launcher, "-j=%d", j);
-  clean_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_args (clean_launcher, IDE_STRV_INIT ("make", "clean"));
-  build_stage = ide_pipeline_stage_launcher_new (context, build_launcher);
-  ide_pipeline_stage_launcher_set_clean_launcher (IDE_PIPELINE_STAGE_LAUNCHER (build_stage), clean_launcher);
+    ide_run_command_append_formatted (build_command, "-j=%d", j);
+  clean_command = ide_run_command_new ();
+  ide_run_command_append_args (clean_command, IDE_STRV_INIT ("make", "clean"));
+  build_stage = ide_pipeline_stage_command_new (build_command, clean_command);
   ide_pipeline_stage_set_name (build_stage, _("Building project"));
   g_signal_connect (build_stage, "query", G_CALLBACK (query_cb), NULL);
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_BUILD, 0, build_stage);
   ide_pipeline_addin_track (addin, id);
 
-  install_launcher = ide_pipeline_create_launcher (pipeline, NULL);
-  ide_subprocess_launcher_push_args (install_launcher, IDE_STRV_INIT ("make", "install"));
-  install_stage = ide_pipeline_stage_launcher_new (context, install_launcher);
+  install_command = ide_run_command_new ();
+  ide_run_command_append_args (install_command, IDE_STRV_INIT ("make", "install"));
+  install_stage = ide_pipeline_stage_command_new (install_command, NULL);
   ide_pipeline_stage_set_name (install_stage, _("Installing project"));
   ide_pipeline_stage_set_completed (install_stage, g_file_test (configure_path, G_FILE_TEST_EXISTS));
   id = ide_pipeline_attach (pipeline, IDE_PIPELINE_PHASE_INSTALL, 0, install_stage);

@@ -174,6 +174,7 @@ gbp_phpize_build_system_get_build_flags_async (IdeBuildSystem      *build_system
                                                gpointer             user_data)
 {
   GbpPhpizeBuildSystem *self = (GbpPhpizeBuildSystem *)build_system;
+  g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
   g_autoptr(IdeTask) task = NULL;
@@ -219,7 +220,12 @@ gbp_phpize_build_system_get_build_flags_async (IdeBuildSystem      *build_system
       IDE_EXIT;
     }
 
-  if (!(launcher = ide_pipeline_create_launcher (pipeline, &error)))
+  run_context = ide_run_context_new ();
+  ide_pipeline_prepare_run_context (pipeline, run_context);
+  ide_run_context_append_args (run_context, IDE_STRV_INIT ("make", "-f", "-", "print-CFLAGS", "print-CXXFLAGS", "print-INCLUDES"));
+  ide_run_context_setenv (run_context, "V", "0");
+
+  if (!(launcher = ide_run_context_end (run_context, &error)))
     {
       ide_task_return_error (task, g_steal_pointer (&error));
       IDE_EXIT;
@@ -229,8 +235,6 @@ gbp_phpize_build_system_get_build_flags_async (IdeBuildSystem      *build_system
                                      (G_SUBPROCESS_FLAGS_STDIN_PIPE |
                                       G_SUBPROCESS_FLAGS_STDOUT_PIPE |
                                       G_SUBPROCESS_FLAGS_STDERR_SILENCE));
-  ide_subprocess_launcher_setenv (launcher, "V", "0", TRUE);
-  ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT ("make", "-f", "-", "print-CFLAGS", "print-CXXFLAGS", "print-INCLUDES"));
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
