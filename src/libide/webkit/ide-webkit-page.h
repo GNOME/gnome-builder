@@ -45,6 +45,8 @@ IdeWebkitPage *ide_webkit_page_new                   (void);
 IDE_AVAILABLE_IN_ALL
 IdeWebkitPage *ide_webkit_page_new_for_generator     (IdeHtmlGenerator     *generator);
 IDE_AVAILABLE_IN_ALL
+GtkWidget     *ide_webkit_page_get_view              (IdeWebkitPage        *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_webkit_page_load_uri              (IdeWebkitPage        *self,
                                                       const char           *uri);
 IDE_AVAILABLE_IN_ALL

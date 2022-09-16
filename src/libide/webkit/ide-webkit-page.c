@@ -717,3 +717,20 @@ ide_webkit_page_has_generator (IdeWebkitPage *self)
   return priv->generator != NULL;
 }
 
+/**
+ * ide_webkit_page_get_view:
+ * @self: a #IdeWebkitPage
+ *
+ * Gets the underlying #WebKitWebView.
+ *
+ * Returns: (transfer none): a #WebKitWebView
+ */
+GtkWidget *
+ide_webkit_page_get_view (IdeWebkitPage *self)
+{
+  IdeWebkitPagePrivate *priv = ide_webkit_page_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WEBKIT_PAGE (self), NULL);
+
+  return GTK_WIDGET (priv->web_view);
+}
