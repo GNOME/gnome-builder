@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-16 18:46+0000\n"
-"PO-Revision-Date: 2022-09-16 21:49+0300\n"
+"POT-Creation-Date: 2022-09-16 19:01+0000\n"
+"PO-Revision-Date: 2022-09-16 22:17+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -821,6 +821,7 @@ msgstr "Сторінки"
 #: src/libide/sourceview/gtk/menus.ui:139
 #: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/menu-search/gtk/menus.ui:69
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Текстовий редактор"
@@ -1622,6 +1623,7 @@ msgstr "Пристрої та симулятори"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+#: src/plugins/menu-search/gtk/menus.ui:70
 msgid "Diagnostics"
 msgstr "Діагностика"
 
@@ -2204,13 +2206,17 @@ msgstr "Вилучити"
 msgid "Delete configuration"
 msgstr "Вилучити налаштування"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project"
 msgstr "Зупинити збирання проєкту"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Зібрати проєкт (Shift+Ctrl+Alt+B)"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+msgid "Display Build Diagnostics (Ctrl+Alt+?)"
+msgstr "Показати діагностику збирання (Ctrl+Alt+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
 msgid "_Build"
@@ -4225,6 +4231,16 @@ msgstr "Перемкнутися на світлий режим"
 msgid "Change style-scheme to light variant"
 msgstr "Змінити стиль на світлий"
 
+#: src/plugins/menu-search/gtk/menus.ui:72
+#| msgid "Use Clang for Diagnostics"
+msgid "Display Build Diagnostics"
+msgstr "Показати діагностику збирання"
+
+#: src/plugins/menu-search/gtk/menus.ui:73
+#| msgid "Show errors and warnings provided by Clang"
+msgid "Display errors and warnings found during build"
+msgstr "Показати помилки і попередження, які було виявлено під час збирання"
+
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
 msgstr "Meson"
@@ -4787,7 +4803,6 @@ msgid "Recent Projects"
 msgstr "Недавні проєкти"
 
 #: src/plugins/retab/gtk/menus.ui:5
-#| msgid "_Reformat tabs"
 msgid "_Reformat Tabs"
 msgstr "Пере_форматування табуляцій"
 
@@ -6457,9 +6472,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 #~ msgid "_Create Custom Command"
 #~ msgstr "С_творити нетипову команду"
 
-#~ msgid "Use Clang for Diagnostics"
-#~ msgstr "Скористатися Clang для діагностики"
-
 #~ msgid ""
 #~ "Clang will be queried for diagnostics within C, C++, and Objective-C "
 #~ "sources"
@@ -7534,9 +7546,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Build Preferences"
 #~ msgstr "Налаштування збирання"
-
-#~ msgid "Show errors and warnings provided by Clang"
-#~ msgstr "Показувати помилки і попередження від Clang"
 
 #~ msgid "clang diagnostics warnings errors"
 #~ msgstr "clang diagnostics warnings errors"
