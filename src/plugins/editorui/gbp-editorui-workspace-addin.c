@@ -70,6 +70,19 @@ struct _GbpEditoruiWorkspaceAddin
   IdeEditorPage            *page;
 };
 
+typedef struct
+{
+  IdeWorkspace *workspace;
+  PanelPosition *position;
+  char *uri;
+  char *language_id;
+  guint sel_insert_line;
+  guint sel_insert_line_offset;
+  guint sel_bounds_line;
+  guint sel_bounds_line_offset;
+  gboolean has_focus;
+} RestorePage;
+
 static IdeActionMixin action_mixin;
 
 #define clear_from_statusbar(s,w) clear_from_statusbar(s, (GtkWidget **)w)
@@ -83,6 +96,16 @@ static void
       panel_statusbar_remove (statusbar, *widget);
       *widget = NULL;
     }
+}
+
+static void
+restore_page_free (RestorePage *rp)
+{
+  g_clear_object (&rp->workspace);
+  g_clear_object (&rp->position);
+  g_clear_pointer (&rp->uri, g_free);
+  g_clear_pointer (&rp->language_id, g_free);
+  g_slice_free (RestorePage, rp);
 }
 
 static gboolean
@@ -651,12 +674,229 @@ gbp_editorui_workspace_addin_ref_action_group (IdeWorkspaceAddin *addin)
 }
 
 static void
+gbp_editorui_workspace_addin_save_session_page_cb (IdePage  *page,
+                                                   gpointer  user_data)
+{
+  IdeSession *session = user_data;
+
+  g_assert (IDE_IS_PAGE (page));
+  g_assert (IDE_IS_SESSION (session));
+
+  if (IDE_IS_EDITOR_PAGE (page))
+    {
+      g_autoptr(PanelPosition) position = ide_page_get_position (page);
+      g_autoptr(IdeSessionItem) item = ide_session_item_new ();
+      IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
+      GFile *file = ide_buffer_get_file (buffer);
+      g_autofree char *uri = g_file_get_uri (file);
+      IdeWorkspace *workspace = ide_widget_get_workspace (GTK_WIDGET (page));
+      const char *id = ide_workspace_get_id (workspace);
+      const char *language_id = ide_buffer_get_language_id (buffer);
+      GtkTextIter insert, selection;
+
+      g_debug ("Saving session information for %s", uri);
+
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
+                                        &insert,
+                                        gtk_text_buffer_get_insert (GTK_TEXT_BUFFER (buffer)));
+      gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer),
+                                        &selection,
+                                        gtk_text_buffer_get_selection_bound (GTK_TEXT_BUFFER (buffer)));
+
+      ide_session_item_set_module_name (item, "editorui");
+      ide_session_item_set_type_hint (item, "IdeEditorPage");
+      ide_session_item_set_workspace (item, id);
+      ide_session_item_set_position (item, position);
+      ide_session_item_set_metadata (item, "uri", "s", uri);
+      ide_session_item_set_metadata (item, "selection", "((uu)(uu))",
+                                     gtk_text_iter_get_line (&insert),
+                                     gtk_text_iter_get_line_offset (&insert),
+                                     gtk_text_iter_get_line (&selection),
+                                     gtk_text_iter_get_line_offset (&selection));
+
+      if (language_id != NULL && !ide_str_equal0 (language_id, "plain"))
+        ide_session_item_set_metadata (item, "language-id", "s", language_id);
+
+      if (page == ide_workspace_get_most_recent_page (workspace))
+        ide_session_item_set_metadata (item, "has-focus", "b", TRUE);
+
+      ide_session_append (session, item);
+    }
+}
+
+static void
+gbp_editorui_workspace_addin_save_session (IdeWorkspaceAddin *addin,
+                                           IdeSession        *session)
+{
+  GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+  g_assert (IDE_IS_SESSION (session));
+
+  ide_workspace_foreach_page (self->workspace,
+                              gbp_editorui_workspace_addin_save_session_page_cb,
+                              session);
+}
+
+static void
+restore_page_cb (GObject      *object,
+                 GAsyncResult *result,
+                 gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(IdeBuffer) buffer = NULL;
+  g_autoptr(GError) error = NULL;
+  RestorePage *rp = user_data;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (rp != NULL);
+
+  if ((buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
+    {
+      GtkWidget *page = ide_editor_page_new (buffer);
+
+      if (!ide_str_empty0 (rp->language_id))
+        ide_buffer_set_language_id (buffer, rp->language_id);
+
+      if (rp->sel_insert_line || rp->sel_insert_line_offset ||
+          rp->sel_bounds_line || rp->sel_bounds_line_offset)
+        {
+          GtkTextIter insert;
+          GtkTextIter bounds;
+
+          gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
+                                                   &insert,
+                                                   rp->sel_insert_line,
+                                                   rp->sel_insert_line_offset);
+          gtk_text_buffer_get_iter_at_line_offset (GTK_TEXT_BUFFER (buffer),
+                                                   &bounds,
+                                                   rp->sel_bounds_line,
+                                                   rp->sel_bounds_line_offset);
+          gtk_text_buffer_select_range (GTK_TEXT_BUFFER (buffer), &insert, &bounds);
+        }
+
+      ide_workspace_add_page (rp->workspace, IDE_PAGE (page), rp->position);
+
+      if (rp->has_focus)
+        {
+          panel_widget_raise (PANEL_WIDGET (page));
+          gtk_widget_grab_focus (GTK_WIDGET (page));
+        }
+    }
+
+  restore_page_free (rp);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_editorui_workspace_addin_restore_page (GbpEditoruiWorkspaceAddin *self,
+                                           IdeSessionItem            *item)
+{
+  IdeBufferManager *buffer_manager;
+  g_autoptr(IdeNotification) notif = NULL;
+  g_autoptr(GFile) file = NULL;
+  RestorePage *rp;
+  IdeContext *context;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_SESSION_ITEM (item));
+
+  context = ide_workspace_get_context (self->workspace);
+  buffer_manager = ide_buffer_manager_from_context (context);
+
+  rp = g_slice_new0 (RestorePage);
+  g_set_object (&rp->workspace, self->workspace);
+  g_set_object (&rp->position, ide_session_item_get_position (item));
+
+  if (ide_session_item_has_metadata_with_type (item, "uri", G_VARIANT_TYPE ("s")))
+    ide_session_item_get_metadata (item, "uri", "s", &rp->uri);
+
+  if (ide_session_item_has_metadata_with_type (item, "language-id", G_VARIANT_TYPE ("s")))
+    ide_session_item_get_metadata (item, "language-id", "s", &rp->language_id);
+
+  if (ide_session_item_has_metadata_with_type (item, "has-focus", G_VARIANT_TYPE ("b")))
+    ide_session_item_get_metadata (item, "has-focus", "b", &rp->has_focus);
+
+  if (ide_session_item_has_metadata_with_type (item, "selection", G_VARIANT_TYPE ("((uu)(uu))")))
+    ide_session_item_get_metadata (item, "selection", "((uu)(uu))",
+                                   &rp->sel_insert_line,
+                                   &rp->sel_insert_line_offset,
+                                   &rp->sel_bounds_line,
+                                   &rp->sel_bounds_line_offset);
+
+  if (!(file = g_file_new_for_uri (rp->uri)))
+    IDE_GOTO (failure);
+
+  notif = ide_notification_new ();
+
+  ide_buffer_manager_load_file_async (buffer_manager,
+                                      file,
+                                      IDE_BUFFER_OPEN_FLAGS_NONE,
+                                      notif,
+                                      NULL,
+                                      restore_page_cb,
+                                      g_steal_pointer (&rp));
+
+  IDE_EXIT;
+
+failure:
+  restore_page_free (rp);
+
+  IDE_EXIT;
+}
+
+static void
+gbp_editorui_workspace_addin_restore_session (IdeWorkspaceAddin *addin,
+                                              IdeSession        *session)
+{
+  GbpEditoruiWorkspaceAddin *self = (GbpEditoruiWorkspaceAddin *)addin;
+  const char *our_workspace_id;
+  guint n_items;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_EDITORUI_WORKSPACE_ADDIN (self));
+  g_assert (IDE_IS_WORKSPACE (self->workspace));
+  g_assert (IDE_IS_SESSION (session));
+
+  n_items = ide_session_get_n_items (session);
+  our_workspace_id = ide_workspace_get_id (self->workspace);
+
+  for (guint i = 0; i < n_items; i++)
+    {
+      IdeSessionItem *item = ide_session_get_item (session, i);
+      const char *module_name = ide_session_item_get_module_name (item);
+
+      if (ide_str_equal0 (module_name, "editorui"))
+        {
+          const char *type_hint = ide_session_item_get_type_hint (item);
+          const char *workspace_id = ide_session_item_get_workspace (item);
+
+          if (ide_str_equal0 (type_hint, "IdeEditorPage") &&
+              ide_str_equal0 (workspace_id, our_workspace_id))
+            gbp_editorui_workspace_addin_restore_page (self, item);
+        }
+    }
+}
+
+static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_editorui_workspace_addin_load;
   iface->unload = gbp_editorui_workspace_addin_unload;
   iface->page_changed = gbp_editorui_workspace_addin_page_changed;
   iface->ref_action_group = gbp_editorui_workspace_addin_ref_action_group;
+  iface->save_session = gbp_editorui_workspace_addin_save_session;
+  iface->restore_session = gbp_editorui_workspace_addin_restore_session;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GbpEditoruiWorkspaceAddin, gbp_editorui_workspace_addin, G_TYPE_OBJECT,
