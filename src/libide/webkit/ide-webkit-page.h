@@ -20,6 +20,10 @@
 
 #pragma once
 
+#if !defined (IDE_WEBKIT_INSIDE) && !defined (IDE_WEBKIT_COMPILATION)
+# error "Only <libide-webkit.h> can be included directly."
+#endif
+
 #include <libide-gui.h>
 
 #include "ide-html-generator.h"
