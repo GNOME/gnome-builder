@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-16 19:01+0000\n"
-"PO-Revision-Date: 2022-09-16 23:07+0200\n"
+"PO-Revision-Date: 2022-09-16 23:09+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -4757,10 +4757,8 @@ msgid "Recent Projects"
 msgstr "Nedavni projekti"
 
 #: src/plugins/retab/gtk/menus.ui:5
-#, fuzzy
-#| msgid "_Reformat tabs"
 msgid "_Reformat Tabs"
-msgstr "_Preoblikuj kartice"
+msgstr "_Preoblikuj tabulatore"
 
 #: src/plugins/rust-analyzer/tweaks.ui:13
 msgid "Rust Analyzer"
