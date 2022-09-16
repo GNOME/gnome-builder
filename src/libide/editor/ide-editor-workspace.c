@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include "ide-editor-workspace-private.h"
+#include "ide-editor-workspace.h"
 #include "ide-workspace-private.h"
 
 /**
@@ -48,9 +48,6 @@ struct _IdeEditorWorkspace
   PanelPaned         *edge_end;
   PanelPaned         *edge_bottom;
   IdeGrid            *grid;
-
-  /* Identifier for cross-session use */
-  char               *id;
 };
 
 G_DEFINE_FINAL_TYPE (IdeEditorWorkspace, ide_editor_workspace, IDE_TYPE_WORKSPACE)
@@ -254,12 +251,6 @@ ide_editor_workspace_agree_to_close_finish (IdeWorkspace  *workspace,
   return _ide_workspace_agree_to_close_finish (workspace, result, error);
 }
 
-static const char *
-ide_editor_workspace_get_id (IdeWorkspace *workspace)
-{
-  return IDE_EDITOR_WORKSPACE (workspace)->id;
-}
-
 static void
 ide_editor_workspace_save_session (IdeWorkspace *workspace,
                                    IdeSession   *session)
@@ -284,8 +275,6 @@ ide_editor_workspace_dispose (GObject *object)
   panel_dock_remove (self->dock, GTK_WIDGET (self->grid));
   self->grid = NULL;
 
-  g_clear_pointer (&self->id, g_free);
-
   G_OBJECT_CLASS (ide_editor_workspace_parent_class)->dispose (object);
 }
 
@@ -308,7 +297,6 @@ ide_editor_workspace_class_init (IdeEditorWorkspaceClass *klass)
   workspace_class->foreach_page = ide_editor_workspace_foreach_page;
   workspace_class->get_frame_at_position = ide_editor_workspace_get_frame_at_position;
   workspace_class->get_header_bar = ide_editor_workspace_get_header_bar;
-  workspace_class->get_id = ide_editor_workspace_get_id;
   workspace_class->get_most_recent_frame = ide_editor_workspace_get_most_recent_frame;
   workspace_class->save_session = ide_editor_workspace_save_session;
 
@@ -338,8 +326,6 @@ ide_editor_workspace_init (IdeEditorWorkspace *self)
 {
   GMenu *menu;
 
-  self->id = g_dbus_generate_guid ();
-
   gtk_widget_init_template (GTK_WIDGET (self));
 
   menu = ide_application_get_menu_by_id (IDE_APPLICATION_DEFAULT, "new-document-menu");
@@ -362,13 +348,4 @@ ide_editor_workspace_new (IdeApplication *application)
   return g_object_new (IDE_TYPE_EDITOR_WORKSPACE,
                        "application", application,
                        NULL);
-}
-
-void
-ide_editor_workspace_set_id (IdeEditorWorkspace *self,
-                             const char         *id)
-{
-  g_return_if_fail (IDE_IS_EDITOR_WORKSPACE (self));
-
-  ide_set_string (&self->id, id);
 }

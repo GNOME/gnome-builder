@@ -97,6 +97,10 @@ typedef struct
   /* Inhibit desktop session logout */
   guint inhibit_logout_count;
   guint inhibit_logout_cookie;
+
+  /* The identifier for the workspace window */
+  char *id;
+
 } IdeWorkspacePrivate;
 
 typedef struct
@@ -108,6 +112,7 @@ typedef struct
 enum {
   PROP_0,
   PROP_CONTEXT,
+  PROP_ID,
   N_PROPS
 };
 
@@ -519,17 +524,6 @@ ide_workspace_real_get_header_bar (IdeWorkspace *workspace)
   return NULL;
 }
 
-const char *
-ide_workspace_get_id (IdeWorkspace *self)
-{
-  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
-
-  if (IDE_WORKSPACE_GET_CLASS (self)->get_id)
-    return IDE_WORKSPACE_GET_CLASS (self)->get_id (self);
-
-  return G_OBJECT_TYPE_NAME (self);
-}
-
 static void
 ide_workspace_action_close (gpointer    instance,
                             const char *action_name,
@@ -635,6 +629,29 @@ ide_workspace_get_property (GObject    *object,
       g_value_set_object (value, ide_workspace_get_context (self));
       break;
 
+    case PROP_ID:
+      g_value_set_string (value, ide_workspace_get_id (self));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+ide_workspace_set_property (GObject      *object,
+                            guint         prop_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
+{
+  IdeWorkspace *self = IDE_WORKSPACE (object);
+
+  switch (prop_id)
+    {
+    case PROP_ID:
+      ide_workspace_set_id (self, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -651,6 +668,7 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
   object_class->dispose = ide_workspace_dispose;
   object_class->finalize = ide_workspace_finalize;
   object_class->get_property = ide_workspace_get_property;
+  object_class->set_property = ide_workspace_set_property;
 
   widget_class->realize = ide_workspace_realize;
   widget_class->size_allocate = ide_workspace_size_allocate;
@@ -680,6 +698,19 @@ ide_workspace_class_init (IdeWorkspaceClass *klass)
                          IDE_TYPE_CONTEXT,
                          (G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
+  /**
+   * IdeWorkspace:id:
+   *
+   * The "id" property is a unique identifier for the workspace
+   * within the project.
+   */
+  properties [PROP_ID] =
+    g_param_spec_string ("id",
+                         "Id",
+                         "Identifier for the workspace window",
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
   g_object_class_install_properties (object_class, N_PROPS, properties);
 
   ide_action_mixin_init (&klass->action_mixin, object_class);
@@ -697,6 +728,7 @@ ide_workspace_init (IdeWorkspace *self)
   gtk_widget_add_css_class (GTK_WIDGET (self), "devel");
 #endif
 
+  priv->id = g_dbus_generate_guid ();
   priv->mru_link.data = self;
 
   /* Add org-gnome-Builder style CSS identifier */
@@ -1744,4 +1776,26 @@ _ide_workspace_save_session_simple (IdeWorkspace *self,
   /* TODO: Save panel and grid frame size/positions */
 
   IDE_EXIT;
+}
+
+void
+ide_workspace_set_id (IdeWorkspace *self,
+                      const char   *id)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_if_fail (IDE_IS_WORKSPACE (self));
+
+  if (ide_set_string (&priv->id, id))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ID]);
+}
+
+const char *
+ide_workspace_get_id (IdeWorkspace *self)
+{
+  IdeWorkspacePrivate *priv = ide_workspace_get_instance_private (self);
+
+  g_return_val_if_fail (IDE_IS_WORKSPACE (self), NULL);
+
+  return priv->id;
 }

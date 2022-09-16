@@ -62,7 +62,6 @@ struct _IdeWorkspaceClass
   void          (*foreach_page)          (IdeWorkspace         *self,
                                           IdePageCallback       callback,
                                           gpointer              user_data);
-  const char   *(*get_id)                (IdeWorkspace         *self);
   IdeHeaderBar *(*get_header_bar)        (IdeWorkspace         *self);
   IdePage      *(*get_most_recent_page)  (IdeWorkspace         *self);
   IdeFrame     *(*get_most_recent_frame) (IdeWorkspace         *self);
@@ -116,6 +115,9 @@ void            ide_workspace_action_set_enabled            (IdeWorkspace       
                                                              gboolean               enabled);
 IDE_AVAILABLE_IN_ALL
 const char     *ide_workspace_get_id                        (IdeWorkspace          *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_workspace_set_id                        (IdeWorkspace          *self,
+                                                             const char            *id);
 IDE_AVAILABLE_IN_ALL
 IdeHeaderBar   *ide_workspace_get_header_bar                (IdeWorkspace          *self);
 IDE_AVAILABLE_IN_ALL
