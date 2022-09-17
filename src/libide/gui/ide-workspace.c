@@ -127,46 +127,6 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (IdeWorkspace, ide_workspace, ADW_TYPE_APPLICAT
 static GParamSpec *properties [N_PROPS];
 static GSettings *settings;
 
-G_GNUC_UNUSED static void
-dump_position (PanelPosition *position)
-{
-  GString *str = g_string_new (NULL);
-
-  if (panel_position_get_area_set (position))
-    {
-      PanelArea area = panel_position_get_area (position);
-      g_autoptr(GEnumClass) klass = g_type_class_ref (PANEL_TYPE_AREA);
-      GEnumValue *value = g_enum_get_value (klass, area);
-
-      g_string_append_printf (str, "area=%s ", value->value_nick);
-    }
-
-  if (panel_position_get_column_set (position))
-    {
-      guint column = panel_position_get_column (position);
-      g_string_append_printf (str, "column=%d ", column);
-    }
-
-  if (panel_position_get_row_set (position))
-    {
-      guint row = panel_position_get_row (position);
-      g_string_append_printf (str, "row=%d ", row);
-    }
-
-  if (panel_position_get_depth_set (position))
-    {
-      guint depth = panel_position_get_depth (position);
-      g_string_append_printf (str, "depth=%d ", depth);
-    }
-
-  if (str->len == 0)
-    g_print ("Empty Position\n");
-  else
-    g_print ("%s\n", str->str);
-
-  g_string_free (str, TRUE);
-}
-
 static void
 ide_workspace_attach_shortcuts (IdeWorkspace *self,
                                 GtkWidget    *widget)
