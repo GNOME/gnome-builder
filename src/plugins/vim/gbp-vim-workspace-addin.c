@@ -25,6 +25,7 @@
 #include <gtk/gtk.h>
 #include <libpanel.h>
 
+#include <libide-editor.h>
 #include <libide-gui.h>
 
 #include "gbp-vim-workspace-addin.h"
@@ -154,10 +155,32 @@ gbp_vim_workspace_addin_unload (IdeWorkspaceAddin *addin,
 }
 
 static void
+gbp_vim_workspace_addin_page_changed (IdeWorkspaceAddin *addin,
+                                      IdePage           *page)
+{
+  GbpVimWorkspaceAddin *self = (GbpVimWorkspaceAddin *)addin;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_VIM_WORKSPACE_ADDIN (self));
+  g_assert (!page || IDE_IS_PAGE (page));
+
+  if (!IDE_IS_EDITOR_PAGE (page))
+    {
+      gbp_vim_workspace_addin_set_command_bar (self, NULL);
+      gbp_vim_workspace_addin_set_command (self, NULL);
+    }
+
+  IDE_EXIT;
+}
+
+static void
 workspace_addin_iface_init (IdeWorkspaceAddinInterface *iface)
 {
   iface->load = gbp_vim_workspace_addin_load;
   iface->unload = gbp_vim_workspace_addin_unload;
+  iface->page_changed = gbp_vim_workspace_addin_page_changed;
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpVimWorkspaceAddin, gbp_vim_workspace_addin, G_TYPE_OBJECT,
