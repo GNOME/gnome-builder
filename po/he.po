@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-16 21:19+0000\n"
-"PO-Revision-Date: 2022-09-18 00:59+0300\n"
+"PO-Revision-Date: 2022-09-18 02:09+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: Hebrew <>\n"
 "Language: he\n"
@@ -114,7 +114,7 @@ msgstr "אפשרות עריכה בסגנון Vim, Emacs ו־SublimeText"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:36
 msgid "An integrated software profiler for native applications"
-msgstr ""
+msgstr "תכנת מאפיין משולבת עבור יישומים מקומיים"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:37
 msgid "An integrated debugger for native applications"
@@ -146,7 +146,7 @@ msgstr "שילוב עם Git לשיבוט המיזם שלך"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:58
 msgid "The source code editor"
-msgstr "עורך קוד מקור"
+msgstr "עורך קוד המקור"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:62
 msgid "Fast global fuzzy search"
@@ -223,42 +223,38 @@ msgid "The path to the ctags executable on the system."
 msgstr "The path to the ctags executable on the system."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:5
-#, fuzzy
 #| msgid "Debugger Breakpoint on Main"
 msgid "Debugger Breakpoint at Main"
-msgstr "Debugger Breakpoint on Main"
+msgstr "Debugger Breakpoint at Main"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:6
-#, fuzzy
 #| msgid "Debugger should automatically insert breakpoint on main function."
 msgid "Debugger should automatically insert breakpoint at main() function."
-msgstr "Debugger should automatically insert breakpoint on main function."
+msgstr "Debugger should automatically insert breakpoint at main() function."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:10
-#, fuzzy
 #| msgid "Debugger Breakpoint on Main"
 msgid "Debugger Breakpoint at g_critical()"
-msgstr "Debugger Breakpoint on Main"
+msgstr "Debugger Breakpoint at g_critical()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:11
-#, fuzzy
 #| msgid "Debugger should automatically insert breakpoint on main function."
 msgid ""
 "Debugger should automatically insert breakpoint at g_critical() function."
-msgstr "Debugger should automatically insert breakpoint on main function."
+msgstr ""
+"Debugger should automatically insert breakpoint at g_critical() function."
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:15
-#, fuzzy
 #| msgid "Debugger Breakpoint on Main"
 msgid "Debugger Breakpoint at g_warning()"
-msgstr "Debugger Breakpoint on Main"
+msgstr "Debugger Breakpoint at g_warning()"
 
 #: data/gsettings/org.gnome.builder.debug.gschema.xml:16
-#, fuzzy
 #| msgid "Debugger should automatically insert breakpoint on main function."
 msgid ""
 "Debugger should automatically insert breakpoint at g_warning() function."
-msgstr "Debugger should automatically insert breakpoint on main function."
+msgstr ""
+"Debugger should automatically insert breakpoint at g_warning() function."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:19
 msgid "Restore last position"
@@ -348,7 +344,7 @@ msgstr "מקשי Home ו־End חכמים"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:66
 msgid "Modifies the behavior of Home/End keys."
-msgstr ""
+msgstr "Modifies the behavior of Home/End keys."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
@@ -369,7 +365,7 @@ msgstr "When the overview map should be displayed."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:91
 #: src/plugins/editorui/tweaks.ui:254
 msgid "Draw Spaces"
-msgstr "Draw Spaces"
+msgstr "ציור רווחים"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:92
 msgid "The various types of space to draw in the editor."
@@ -378,7 +374,7 @@ msgstr "The various types of space to draw in the editor."
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:101
 #: src/plugins/editorui/tweaks.ui:77
 msgid "Wrap Text"
-msgstr "Wrap Text"
+msgstr "גלישת טקסט"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:102
 msgid "The way to wrap a long line of text for a better visibility."
@@ -610,7 +606,7 @@ msgstr "What environment to use when running unit tests"
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
 #: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
-msgstr ""
+msgstr "רישום יומנים מורחב"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:51
 msgid ""
@@ -630,7 +626,7 @@ msgstr "This setting is deprecated and no longer in use."
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:10
 #: src/plugins/project-tree/tweaks.ui:25
 msgid "Show Ignored Files"
-msgstr "הצגת קבצים מועלמים"
+msgstr "הצגת קבצים נסתרים"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:11
 msgid ""
@@ -641,7 +637,7 @@ msgstr ""
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:15
 #: src/plugins/project-tree/tweaks.ui:37
 msgid "Sort Directories First"
-msgstr "סידור תיקייות לפני קבצים"
+msgstr "סידור תיקיות לפני קבצים"
 
 #: data/gsettings/org.gnome.builder.project-tree.gschema.xml:16
 msgid ""
@@ -926,10 +922,10 @@ msgstr "ארע כשל בהדפסה: %s"
 
 #. translators: %s contains the error message
 #: src/libide/editor/ide-editor-page.c:528
-#, fuzzy, c-format
+#, c-format
 #| msgid "Failed to load directory: %s"
 msgid "Failed to format selection: %s"
-msgstr "נכשל בפתיחת התיקייה: %s"
+msgstr "נכשל בעיצוב הבחירה: %s"
 
 #: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
@@ -1165,7 +1161,7 @@ msgstr "מסיר תיקיות בנייה…"
 
 #: src/libide/foundry/ide-pipeline-stage-transfer.c:136
 msgid "Cannot build transfer while on metered connection"
-msgstr ""
+msgstr "לא ניתן לבנות העברה עם חיבור מדוד"
 
 #: src/libide/foundry/ide-run-command.c:177
 #: src/plugins/shellcmd/gbp-shellcmd-search-result.c:67
@@ -1762,10 +1758,9 @@ msgid "Select _All"
 msgstr "בחירת ה_כל"
 
 #: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
-#, fuzzy
 #| msgid "Committing…"
 msgid "Formatting"
-msgstr "בהגשה…"
+msgstr "עיצוב"
 
 #: src/libide/sourceview/gtk/menus.ui:81
 msgid "All _Upper Case"
@@ -2231,7 +2226,7 @@ msgstr "הפיכה לפעיל"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:218
 msgid "Make configuration active and reload build pipeline"
-msgstr ""
+msgstr "הפיכת התצורה לפעילה וטעינה מחדש של צינורית הבנייה"
 
 #: src/plugins/buildui/gbp-buildui-tweaks-addin.c:230
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:241
@@ -2959,7 +2954,7 @@ msgstr "המיזם שלך ייווצר בתת־תיקייה חדשה."
 #: src/plugins/create-project/gbp-create-project-widget.ui:108
 #: src/plugins/projectui/tweaks.ui:47
 msgid "License"
-msgstr "רשיון"
+msgstr "רישיון"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:127
 msgid "Template"
@@ -3202,7 +3197,7 @@ msgstr "עצירה לאחר שיגור יישום"
 
 #: src/plugins/debuggerui/tweaks.ui:20
 msgid "Automatically insert a breakpoint at the start of the application"
-msgstr "עצירה אוטומטית בתחילת ההרצה של היישום"
+msgstr "הכנסה אוטומטית של נקודת עצירה בתחילת ההרצה של היישום"
 
 #: src/plugins/debuggerui/tweaks.ui:31
 #| msgid "Stop running"
@@ -3393,12 +3388,13 @@ msgid ""
 "Settings provided by .editorconfig and modelines take precedence over those "
 "below."
 msgstr ""
+"הגדרות המסופקות על ידי ‎.editorconfig ומצבי שורה בקוד מקבלים עדיפות על פני "
+"אלה למטה."
 
 #: src/plugins/editorui/tweaks-language.ui:41
-#, fuzzy
 #| msgid "Editing & Formatting"
 msgid "Indentation & Formatting"
-msgstr "הזחה ותבניות"
+msgstr "הזחה ועיצוב"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 #| msgid "Tab Bar"
@@ -3423,52 +3419,45 @@ msgid "Ensure files end with a newline"
 msgstr "מבטיח שקבצים יסתיימו בשורה חדשה"
 
 #: src/plugins/editorui/tweaks-language.ui:90
-#, fuzzy
 #| msgid "Trim Trailing Whitespace"
 msgid "Trim Trailing Space"
 msgstr "תיקון רווח לבן נגרר"
 
 #: src/plugins/editorui/tweaks-language.ui:91
-#, fuzzy
 #| msgid ""
 #| "Upon saving, trailing whitespace from modified lines will be trimmed."
 msgid "Upon saving, trailing whitespace from modified lines will be trimmed"
-msgstr "בעת שמירה, יתוקנו הרווחים הלבנים הנגררים מהשורות שהשתנו."
+msgstr "בעת שמירה, יתוקנו הרווחים הלבנים הנגררים מהשורות שהשתנו"
 
 #: src/plugins/editorui/tweaks-language.ui:111
-#, fuzzy
 #| msgid "Auto indent"
 msgid "Auto Indent"
 msgstr "הזחה אוטומטית"
 
 #: src/plugins/editorui/tweaks-language.ui:112
-#, fuzzy
 #| msgid "Indent source code as you type"
 msgid "Automatically indent source code as you type"
-msgstr "הזחת קוד המקור בעת ההקלדה"
+msgstr "הזחה אוטומטית של קוד המקור בעת ההקלדה"
 
 #: src/plugins/editorui/tweaks-language.ui:128
-#, fuzzy
 #| msgid "Size"
 msgid "Tab Size"
-msgstr "גודל"
+msgstr "גודל טאב"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
-msgstr ""
+msgstr "מספר התווים להזחה עבורה טאב"
 
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
-msgstr ""
+msgstr "מספר התווים להזחה, או ‎-1 לשימוש בגודל טאב"
 
 #: src/plugins/editorui/tweaks-language.ui:164
-#, fuzzy
 #| msgid "Margins"
 msgid "Margin"
 msgstr "שוליים"
 
 #: src/plugins/editorui/tweaks-language.ui:167
-#, fuzzy
 #| msgid "Show right margin"
 msgid "Show Right Margin"
 msgstr "הצגת שוליים ימניים"
@@ -3478,14 +3467,13 @@ msgid "Display a margin in the editor to indicate maximum desired width"
 msgstr "הצגת השוליים בעורך על מנת לציין את הרוחב המרבי הרצוי"
 
 #: src/plugins/editorui/tweaks-language.ui:184
-#, fuzzy
 #| msgid "Right margin position"
 msgid "Right Margin Position"
 msgstr "מיקום שוליים ימניים"
 
 #: src/plugins/editorui/tweaks-language.ui:185
 msgid "The desired maximum line length"
-msgstr ""
+msgstr "אורך שורה מרבי רצוי"
 
 #: src/plugins/editorui/tweaks-language.ui:203
 #: src/plugins/editorui/tweaks.ui:356
@@ -3497,20 +3485,18 @@ msgid "Overwrite Braces"
 msgstr "דריסת סוגרים"
 
 #: src/plugins/editorui/tweaks-language.ui:207
-#, fuzzy
 #| msgid "Overwrite trailing braces and quotations"
 msgid "Overwrite closing braces, brackets, parenthesis, and quotes"
-msgstr "דריסת סוגרים נגררים וגרשיים"
+msgstr "דריסת סוגר מתאים עבור סוגריים מסולסלים, מרובעים, עגולים ומירכאות"
 
 #: src/plugins/editorui/tweaks-language.ui:223
 msgid "Insert Matching Brace"
 msgstr "הכנסת סוגר מתאים"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-#, fuzzy
 #| msgid "Insert matching character for { [ ( or \""
 msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
-msgstr "הכנסת סוגר מתאים עבור ‎{ [ ( או \""
+msgstr "הכנסת סוגר מתאים עבור סוגריים מסולסלים, מרובעים, עגולים ומירכאות"
 
 #: src/plugins/editorui/tweaks-language.ui:245
 msgid "Space before opening parentheses"
@@ -3537,7 +3523,6 @@ msgid "Prefer a space before commas"
 msgstr "העדפה לרווח לפני פסיק"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-#, fuzzy
 #| msgid "Prefer a space before semicolons"
 msgid "Prefer a space before simicolons"
 msgstr "העדפה לרווח לפני נקודה פסיק"
@@ -3564,49 +3549,44 @@ msgstr "הגופן המשמש לעורך קוד המקור"
 
 #: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
-msgstr "התאמת ריווח בין שורות"
+msgstr "התאמת הריווח בין שורות"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
-msgstr ""
+msgstr "כיצד יש לבצע גלישת טקסט כאשר הטקסט רחב יותר מהמסגרת"
 
 #: src/plugins/editorui/tweaks.ui:93
-#, fuzzy
 #| msgid "Spaces"
 msgid "At Spaces"
-msgstr "רווחים"
+msgstr "ברווחים"
 
 #: src/plugins/editorui/tweaks.ui:99
 msgid "Anywhere"
-msgstr ""
+msgstr "בכל מקום"
 
 #: src/plugins/editorui/tweaks.ui:111
-#, fuzzy
 #| msgid "Grid Pattern"
 msgid "Background Pattern"
-msgstr "הצגת תבנית רשת"
+msgstr "תבנית רקע"
 
 #: src/plugins/editorui/tweaks.ui:112
-#, fuzzy
 #| msgid "Display a grid pattern underneath source code"
 msgid "Show a background pattern underneath source code"
 msgstr "הצגת תבנית רשת תחת קוד המקור"
 
 #: src/plugins/editorui/tweaks.ui:121
-#, fuzzy
 #| msgid "Grid Pattern"
 msgid "No Pattern"
-msgstr "הצגת תבנית רשת"
+msgstr "ללא תבנית"
 
 #: src/plugins/editorui/tweaks.ui:127
 msgid "Grid Lines"
 msgstr "קווי רשת"
 
 #: src/plugins/editorui/tweaks.ui:137
-#, fuzzy
 #| msgid "Scrollback"
 msgid "Scrollbars"
-msgstr "גלילה לאחור"
+msgstr "פסי גלילה"
 
 #: src/plugins/editorui/tweaks.ui:140
 msgid "Source Code Overview"
@@ -3618,7 +3598,7 @@ msgstr "הצגת סקירה של קוד המקור לצד העורך"
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
-msgstr "העדפות פסי גלילה"
+msgstr "העדפת פסי גלילה"
 
 #: src/plugins/editorui/tweaks.ui:156
 msgid "Always On"
@@ -3629,7 +3609,6 @@ msgid "Automatic"
 msgstr "אוטומטי"
 
 #: src/plugins/editorui/tweaks.ui:172
-#, fuzzy
 #| msgid "Line numbers"
 msgid "Line Numbers"
 msgstr "מספרי שורות"
@@ -3646,34 +3625,29 @@ msgid "Display line numbers next to each line of code"
 msgstr "הצגת מספרי שורות לצד כל שורה בקוד המקור"
 
 #: src/plugins/editorui/tweaks.ui:187
-#, fuzzy
 #| msgid "Relative line numbers"
 msgid "Use Relative Line Numbers"
-msgstr "הצגת מספרי שורות יחסיים"
+msgstr "שימוש במספרי שורות יחסיים"
 
 #: src/plugins/editorui/tweaks.ui:188
-#, fuzzy
 #| msgid "Show line numbers relative to the cursor line"
 msgid "Show line numbers relative to the current line"
-msgstr "הצגת מספרי שורה ביחס לשורת הסמן"
+msgstr "הצגת מספרי שורה יחסיים לשורה הנוכחית"
 
 #: src/plugins/editorui/tweaks.ui:199
-#, fuzzy
 #| msgid "Diagnostics"
 msgid "Show Diagnostics"
-msgstr "אבחון"
+msgstr "הצגת אבחון"
 
 #: src/plugins/editorui/tweaks.ui:200
-#, fuzzy
 #| msgid "Show diagnostics next to line number"
 msgid "Display diagnostics next to the line number"
-msgstr "Show diagnostics next to line number"
+msgstr "הצגת אבחון לצד מספר השורה"
 
 #: src/plugins/editorui/tweaks.ui:213
-#, fuzzy
 #| msgid "Semantic Highlighting"
 msgid "Syntax Highlighting"
-msgstr "הדגשה תחבירית"
+msgstr "הדגשת תחביר"
 
 #: src/plugins/editorui/tweaks.ui:216
 msgid "Highlight Current Line"
@@ -3692,6 +3666,8 @@ msgid ""
 "Use cursor position to highlight matching brackets, braces, parenthesis, and "
 "more"
 msgstr ""
+"שימוש במיקום הזמן להדגשת הסוגר המתאים עבור סוגריים מסולסלים, מרובעים, עגולים "
+"ועוד "
 
 #: src/plugins/editorui/tweaks.ui:240
 msgid "Semantic Highlighting"
@@ -3701,23 +3677,23 @@ msgstr "הדגשה תחבירית"
 msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
-msgstr ""
+msgstr "שימוש במידע על סמלים להדגשת שמות מתחם, פונקציות ומשתנים בתוך קוד המקור"
 
 #: src/plugins/editorui/tweaks.ui:258
 msgid "Draw a mark representing normal spaces"
-msgstr ""
+msgstr "ציור סימן המייצג רווחים רגילים"
 
 #: src/plugins/editorui/tweaks.ui:271
 msgid "Draw a mark representing tabs"
-msgstr ""
+msgstr "ציור סימן המייצג טאבים"
 
 #: src/plugins/editorui/tweaks.ui:283
 msgid "Newlines"
-msgstr ""
+msgstr "שורות חדשות"
 
 #: src/plugins/editorui/tweaks.ui:284
 msgid "Draw a mark at the end of lines"
-msgstr ""
+msgstr "ציור סימן בסוף כל שורה"
 
 #: src/plugins/editorui/tweaks.ui:296
 msgid "Non-breaking spaces"
@@ -3725,37 +3701,34 @@ msgstr "רווחים קשיחים"
 
 #: src/plugins/editorui/tweaks.ui:297
 msgid "Draw a mark at non-breaking space characters"
-msgstr ""
+msgstr "ציור סימן בתווי רווחים קשיחים"
 
 #: src/plugins/editorui/tweaks.ui:313
-#, fuzzy
 #| msgid "Leading Only"
 msgid "Leading"
-msgstr "מובילים בלבד"
+msgstr "מובילים"
 
 #: src/plugins/editorui/tweaks.ui:314
 msgid "Draw marks for leading spaces only"
-msgstr ""
+msgstr "ציור סימן עבור רווחים מובילים בלבד"
 
 #: src/plugins/editorui/tweaks.ui:326
-#, fuzzy
 #| msgid "Sublime Text"
 msgid "Inside Text"
-msgstr "‏Snippet טקסט"
+msgstr "בתוך הטקסט"
 
 #: src/plugins/editorui/tweaks.ui:327
 msgid "Draw marks inside a line of text only"
-msgstr ""
+msgstr "ציור סימן בתוך שורת טקסט בלבד"
 
 #: src/plugins/editorui/tweaks.ui:339
-#, fuzzy
 #| msgid "Trailing Only"
 msgid "Trailing"
-msgstr "נגררים בלבד"
+msgstr "נגררים"
 
 #: src/plugins/editorui/tweaks.ui:340
 msgid "Draw marks for trailing spaces only"
-msgstr ""
+msgstr "ציור סימן עבור רווחים נגררים בלבד"
 
 #: src/plugins/editorui/tweaks.ui:360
 msgid "Spelling"
@@ -3763,24 +3736,22 @@ msgstr "בדיקת איות"
 
 #: src/plugins/editorui/tweaks.ui:364
 msgid "Underline potential spelling mistakes as you type"
-msgstr ""
+msgstr "סימון קו מתחת לטעויות איות אפשריות בזמן ההקלדה"
 
 #: src/plugins/editorui/tweaks.ui:377
-#, fuzzy
 #| msgctxt "shortcut window"
 #| msgid "Selections"
 msgid "Selections"
-msgstr "בחירה"
+msgstr "בחירות"
 
 #: src/plugins/editorui/tweaks.ui:380
-#, fuzzy
 #| msgid "Minimum Length for Highlight"
 msgid "Minimum Characters to Highlight"
 msgstr "מספר תווים מזערי להדגשה"
 
 #: src/plugins/editorui/tweaks.ui:381
 msgid "The minimum selection length before highlighting matches"
-msgstr ""
+msgstr "אורך הבחירה המזערי להדגשת התאמות"
 
 #: src/plugins/editorui/tweaks.ui:394
 msgid "Snippets"
@@ -3799,56 +3770,50 @@ msgid "Code Completion"
 msgstr "השלמת קוד"
 
 #: src/plugins/editorui/tweaks.ui:417
-#, fuzzy
 #| msgid "Completion Providers"
 msgid "Completion Proposals"
-msgstr "ספקי השלמה"
+msgstr "הצעות השלמה"
 
 #: src/plugins/editorui/tweaks.ui:420
 msgid "Suggest Code Completions"
 msgstr "הצעת השלמות קוד"
 
 #: src/plugins/editorui/tweaks.ui:421
-#, fuzzy
 #| msgid "Suggest Completions While Typing"
 msgid "Automatically suggest code completions while typing"
-msgstr "הצעת השלמות בזמן הקלדה"
+msgstr "הצעת השלמות באופן אוטומטי בזמן הקלדה"
 
 #: src/plugins/editorui/tweaks.ui:432
-#, fuzzy
 #| msgid "Select First Completion"
 msgid "Select First Completion Proposal"
-msgstr "בחירת השלמה ראשונה"
+msgstr "בחירת הצעת ההשלמה הראשונה"
 
 #: src/plugins/editorui/tweaks.ui:433
-#, fuzzy
 #| msgid "Automatically select the first auto-completion entry."
 msgid "Automatically select the first completion proposal when displayed"
-msgstr "Automatically select the first auto-completion entry."
+msgstr "בחירה אוטומטית של הצעת ההשלמה הראשונה בהצגה"
 
 #: src/plugins/editorui/tweaks.ui:448
-#, fuzzy
 #| msgid "Select First Completion"
 msgid "Maximum Completion Proposals"
-msgstr "בחירת השלמה ראשונה"
+msgstr "מספר הצעות השלמה מרבי"
 
 #: src/plugins/editorui/tweaks.ui:449
-#, fuzzy
 #| msgid "The number of completion rows to display to the user."
 msgid "The maximum number of completion rows that will be displayed at once"
-msgstr "The number of completion rows to display to the user."
+msgstr "המספר המרבי של שורות השלמה שיוצגו בבת אחת"
 
 #: src/plugins/editorui/tweaks.ui:468 src/plugins/editorui/tweaks.ui:471
-#, fuzzy
 #| msgid "Keyboard"
 msgid "Keyboard Theme"
-msgstr "מקלדת"
+msgstr "ערכת מקלדת"
 
 #: src/plugins/editorui/tweaks.ui:472
 msgid ""
 "Shortcut themes provide a keyboard experience similar to other IDEs and "
 "editors"
 msgstr ""
+"ערכת צירופי מקשים מספקת חוויית הקלדה דומה לסביבות פיתוח משולבות ועורכים אחרים"
 
 #: src/plugins/editorui/tweaks.ui:491
 msgid "Movements"
@@ -3857,63 +3822,57 @@ msgstr "מעברים"
 #: src/plugins/editorui/tweaks.ui:495
 msgid ""
 "Backspace will remove extra space to keep you aligned with your indentation"
-msgstr "‏Backspace ימחק רווחים מיותרים על מנת לשמור היישור עם רוחב ההזחה שלך"
+msgstr "‏Backspace ימחק רווחים מיותרים על מנת לשמור את היישור עם רוחב ההזחה שלך"
 
 #: src/plugins/editorui/tweaks.ui:507
-#, fuzzy
 #| msgid "Home moves to first non-whitespace character"
 msgid "Navigate to non-space characters"
-msgstr "בית (Home) מעביר לתו הראשון שאינו רווח"
+msgstr "ניווט לתו הראשון שאינו רווח"
 
 #: src/plugins/editorui/tweaks.ui:516
 msgid "Before line boundaries"
-msgstr ""
+msgstr "לפני גבולות השורה"
 
 #: src/plugins/editorui/tweaks.ui:522
 msgid "After line boundaries"
-msgstr ""
+msgstr "אחרי גבולות השורה"
 
 #: src/plugins/editorui/tweaks.ui:528
 msgid "Instead of line boundaries"
-msgstr ""
+msgstr "במקום גבולות השורה"
 
 #: src/plugins/editorui/tweaks.ui:534 src/plugins/valgrind/gtk/menus.ui:44
 msgid "Disabled"
 msgstr "מושבת"
 
 #: src/plugins/editorui/tweaks.ui:546
-#, fuzzy
 #| msgid "Palette management"
 msgid "Session Management"
-msgstr "ניהול לוח צבעים"
+msgstr "ניהול הפעלה"
 
 #: src/plugins/editorui/tweaks.ui:550
-#, fuzzy
 #| msgid "Save palette"
 msgid "Save & Restore"
-msgstr "שמירת לוח צבעים"
+msgstr "שמירה ושחזור"
 
 #: src/plugins/editorui/tweaks.ui:553
-#, fuzzy
 #| msgid "Autosave"
 msgid "Auto-Save"
 msgstr "שמירה אוטומטית"
 
 #: src/plugins/editorui/tweaks.ui:554
 msgid "Regularly save the document as you type"
-msgstr ""
+msgstr "שמירת המסמך באופן קבוע עם הקלדה שלך"
 
 #: src/plugins/editorui/tweaks.ui:565
-#, fuzzy
 #| msgid "Autosave"
 msgid "Auto-Save Delay"
-msgstr "שמירה אוטומטית"
+msgstr "השהייה לשמירה אוטומטית"
 
 #: src/plugins/editorui/tweaks.ui:566
-#, fuzzy
 #| msgid "The number of seconds after modification before auto saving"
 msgid "The delay in seconds to wait before auto-saving the document"
-msgstr "מספר השניות אחרי שינוי טרם שמירה אוטומטית"
+msgstr "זמן השהייה בשניות להמתנה לפני שמירה אוטומטית של המסמך"
 
 #: src/plugins/editorui/tweaks.ui:581
 msgid "Format on Save"
@@ -3923,19 +3882,17 @@ msgstr "סידור הקוד ברגע השמירה"
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
-msgstr ""
+msgstr "סידור הקוד מחדש בזמן השמירה לכונן. דורש רישום מעצב לקוד של השפה."
 
 #: src/plugins/editorui/tweaks.ui:597
-#, fuzzy
 #| msgid "Restore cursor position"
 msgid "Restore Cursor Position"
 msgstr "שחזור מיקום הסמן"
 
 #: src/plugins/editorui/tweaks.ui:598
-#, fuzzy
 #| msgid "Jump to the last position when reopening a file"
 msgid "Jump to the last position when re-opening a file"
-msgstr "Jump to the last position when reopening a file"
+msgstr "קפיצה למיקום האחרון עם פתיחה מחודשת של קובץ"
 
 #: src/plugins/find-other-file/gbp-find-other-file-workspace-addin.c:205
 msgid "Similar Files (Ctrl+Shift+O)"
@@ -4057,7 +4014,7 @@ msgstr "סביבת ריצת ה־SDK מתעדכנת"
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
 msgid "GCC %s Cross-Compiler (System)"
-msgstr ""
+msgstr "‏GCC‏ %s מהדר־חוצה (מערכת)"
 
 #: src/plugins/git/daemon/ipc-git-change-monitor-impl.c:119
 #, c-format
@@ -4155,10 +4112,9 @@ msgid "A valid Git URL is required"
 msgstr "דרושה כתובת Git תקפה"
 
 #: src/plugins/git/tweaks.ui:13
-#, fuzzy
 #| msgid "Author Email"
 msgid "Authorship"
-msgstr "דוא״ל המחבר"
+msgstr "מחבר"
 
 #: src/plugins/git/tweaks.ui:27 src/plugins/vcsui/gbp-vcsui-clone-page.ui:203
 msgid "Email"
@@ -4171,7 +4127,7 @@ msgstr "יסודות המיזם נבנים"
 
 #: src/plugins/gradle/gbp-gradle-run-command-provider.c:181
 msgid "Gradle Run"
-msgstr ""
+msgstr "הרצת Gradle"
 
 #: src/plugins/greeter/gbp-greeter-application-addin.c:134
 msgid "Display a new greeter window"
@@ -4314,13 +4270,12 @@ msgstr "עם _דפדפן קבצים…"
 
 #: src/plugins/make/gbp-make-build-target.c:55
 msgid "Default Make Target"
-msgstr ""
+msgstr "מטרת ברירת מחדל עבור Make"
 
 #: src/plugins/make/gbp-make-run-command-provider.c:83
-#, fuzzy
 #| msgid "CMake"
 msgid "Make Run"
-msgstr "CMake"
+msgstr "Make Run"
 
 #: src/plugins/make-templates/gbp-make-template-provider.c:48
 msgid "Empty Makefile Project"
@@ -4332,7 +4287,7 @@ msgstr "יצירת מיזם ריק חדש באמצעות Makefile פשוט"
 
 #: src/plugins/maven/gbp-maven-run-command-provider.c:198
 msgid "Maven Run"
-msgstr ""
+msgstr "Maven Run"
 
 #: src/plugins/menu-search/gtk/menus.ui:13
 #| msgctxt "shortcut window"
@@ -4847,11 +4802,11 @@ msgstr "אפשרויות ת_צוגה"
 
 #: src/plugins/project-tree/gtk/menus.ui:76
 msgid "S_how Ignored Files"
-msgstr "ה_צגת קבצים שזכו להתעלמות"
+msgstr "ה_צגת קבצים נסתרים"
 
 #: src/plugins/project-tree/gtk/menus.ui:81
 msgid "S_ort Directories First"
-msgstr "סידור תיקיות בה_תחלה"
+msgstr "_סידור תיקיות לפני קבצים"
 
 #: src/plugins/project-tree/gtk/menus.ui:93
 msgid "Reveal in Project Tree"
@@ -4868,7 +4823,7 @@ msgstr "הצגת צלמיות לצד הקבצים בעץ המיזם"
 
 #: src/plugins/project-tree/tweaks.ui:26
 msgid "Show files which are typically ignored"
-msgstr "הצגת קבצים מוסתרים"
+msgstr "הצגת קבצים שבדרך כלל מוסתרים"
 
 #: src/plugins/project-tree/tweaks.ui:38
 msgid "Sort directories before files in the same directory"
@@ -5009,11 +4964,11 @@ msgstr "תכונות"
 
 #: src/plugins/rust-analyzer/tweaks.ui:48
 msgid "Proc Macros"
-msgstr ""
+msgstr "Proc Macros"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
-msgstr ""
+msgstr "לאפשר את התכונה הניסיונית Proc Macros של מנתח rust"
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 #| msgid "_Update"
@@ -5089,7 +5044,7 @@ msgstr "מעטפת פקודה"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:72
 msgid "You may use single or double quotes for parameters."
-msgstr ""
+msgstr "ניתן להשתמש בגרש בודד או כפול עבור פרמטרים."
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:87
 msgid "Environment"
@@ -5154,7 +5109,7 @@ msgstr "כמטרת היישום"
 
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:280
 msgid "Runs the command as if it were the target application."
-msgstr "מריץ את הפקודה כאילו הוא מטרת היישום"
+msgstr "מריץ את הפקודה כאילו היא מטרת היישום"
 
 #: src/plugins/shellcmd/gbp-shellcmd-tweaks-addin.c:102
 msgid "Commands can be used to build, run, or modify your projects"
@@ -5353,10 +5308,9 @@ msgid "Battery Charge"
 msgstr "טעינת סוללה"
 
 #: src/plugins/sysprof/gtk/menus.ui:95
-#, fuzzy
 #| msgid "Application Runtime"
 msgid "Allow Application Integration"
-msgstr "יישום זמן ריצה"
+msgstr "לאפשר שילוב יישום"
 
 #: src/plugins/sysprof/gtk/menus.ui:100
 msgid "Allow CPU Throttling"
@@ -5572,17 +5526,16 @@ msgstr "לאפשר הדגשה"
 
 #: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
-msgstr ""
+msgstr "לאפשר הדגשת של רצפי בריחה"
 
 #: src/plugins/terminal/tweaks.ui:41
-#, fuzzy
 #| msgid "Show hyperlinks"
 msgid "Allow Hyperlinks"
-msgstr "להציג קישורים"
+msgstr "לאפשר קישורים"
 
 #: src/plugins/terminal/tweaks.ui:42
 msgid "Allows the use of hyperlink escape sequences"
-msgstr ""
+msgstr "לאפשר שימוש של רצפי בריחה בקישורים"
 
 #: src/plugins/terminal/tweaks.ui:55
 #| msgid "Spelling"
@@ -5596,12 +5549,12 @@ msgstr "גלילה לסוף עם קבלת פלט"
 
 #: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
-msgstr ""
+msgstr "גלילה אוטומטית כאשר יישום בתוך המסוף פולט טקסט"
 
 #: src/plugins/terminal/tweaks.ui:70
 #| msgid "Scroll on output"
 msgid "Scroll On Keyboard Input"
-msgstr "גלילה עם קליטת הקלדה"
+msgstr "גלילה עם הקלדה"
 
 #: src/plugins/terminal/tweaks.ui:71
 #| msgid "Automatically check spelling within documents"
@@ -5839,7 +5792,7 @@ msgstr "פרטי יוצר"
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:212
 msgid "You may specify authorship information to override defaults."
-msgstr ""
+msgstr "עליך לספק פרטי מחבר על מנת לדרוס את ברירת המחדל."
 
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:228
 msgid "Status"
@@ -5888,12 +5841,12 @@ msgstr "טעינה מחדש של הדף הנוכחי תוך התעלמות מה�
 #: src/plugins/web-browser/gtk/menus.ui:30
 #| msgid "Location"
 msgid "Focus Location"
-msgstr "התמקדות במיקום"
+msgstr "התמקדות בשורת הכתובות"
 
 #: src/plugins/web-browser/gtk/menus.ui:31
 #| msgid "Save the current page"
 msgid "Focus the current page's location"
-msgstr "התמקדות במיקום הדף הנוכחי"
+msgstr "התמקדות בשורת הכתובות של הדף הנוכחי"
 
 #: src/plugins/xml-pack/ide-xml-parser.c:604
 #: src/plugins/xml-pack/ide-xml-tree-builder.c:522
