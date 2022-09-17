@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-16 19:01+0000\n"
-"PO-Revision-Date: 2022-09-16 22:17+0300\n"
+"POT-Creation-Date: 2022-09-16 21:19+0000\n"
+"PO-Revision-Date: 2022-09-17 09:50+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1435,7 +1435,7 @@ msgstr "Навігація інтернетом"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:275
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Термінал"
@@ -1570,7 +1570,7 @@ msgstr "Запустити проєкт"
 msgid "Other"
 msgstr "Інше"
 
-#: src/libide/gui/ide-workspace.c:1735
+#: src/libide/gui/ide-workspace.c:1741
 msgid "There are unsaved documents"
 msgstr "Маємо незбережені документи"
 
@@ -4232,12 +4232,10 @@ msgid "Change style-scheme to light variant"
 msgstr "Змінити стиль на світлий"
 
 #: src/plugins/menu-search/gtk/menus.ui:72
-#| msgid "Use Clang for Diagnostics"
 msgid "Display Build Diagnostics"
 msgstr "Показати діагностику збирання"
 
 #: src/plugins/menu-search/gtk/menus.ui:73
-#| msgid "Show errors and warnings provided by Clang"
 msgid "Display errors and warnings found during build"
 msgstr "Показати помилки і попередження, які було виявлено під час збирання"
 
@@ -5308,18 +5306,23 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Програму запущено о %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Програма завершила роботу"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:293
 msgid "Application Output"
 msgstr "Виведені програмою дані"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+#| msgid "Unit tests completed"
+msgid "Process completed"
+msgstr "Процес завершено"
 
 #: src/plugins/terminal/gtk/menus.ui:6
 msgid "New _Terminal"
