@@ -25,10 +25,9 @@
           <object class="GtkLabel" id="label">
             <property name="label">Hello, World!</property>
             <property name="vexpand">true</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-              <attribute name="scale" value="2"/>
-            </attributes>
+            <style>
+              <class name="title-1"/>
+            </style>
           </object>
         </child>
       </object>
@@ -47,10 +46,9 @@
     <child>
       <object class="GtkLabel" id="label">
         <property name="label">Hello, World!</property>
-        <attributes>
-          <attribute name="weight" value="bold"/>
-          <attribute name="scale" value="2"/>
-        </attributes>
+        <style>
+          <class name="title-1"/>
+        </style>
       </object>
     </child>
 {{end}}
