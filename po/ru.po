@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-10 11:21+0000\n"
-"PO-Revision-Date: 2022-09-10 21:29+1000\n"
+"POT-Creation-Date: 2022-09-16 21:19+0000\n"
+"PO-Revision-Date: 2022-09-17 07:38+1000\n"
 "Last-Translator: Ser82-png <asvmail.as@gmail.com>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -409,11 +409,11 @@ msgstr "Количество строк автодополнения, котор
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:124
 #: src/plugins/editorui/tweaks.ui:60
 msgid "Line Height"
-msgstr "Высота линии"
+msgstr "Высота строки"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:125
 msgid "The line height to use for the selected font."
-msgstr "Высота линии для выбранного шрифта."
+msgstr "Высота строки для выбранного шрифта."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:129
 msgid "Interactive Completion"
@@ -425,7 +425,7 @@ msgid ""
 "type."
 msgstr ""
 "Если этот параметр включён, Builder будет автоматически показывать "
-"автодополнения в процессе написания."
+"автодополнения в процессе ввода текста."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:135
 msgid "Minimum characters for matching selection."
@@ -653,7 +653,7 @@ msgstr ""
 #: src/plugins/editorui/tweaks.ui:363
 #: src/plugins/spellcheck/editor-spell-menu.c:250
 msgid "Check Spelling"
-msgstr "Проверить правописание"
+msgstr "Проверять правописание"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
 msgid "Automatically check spelling within documents"
@@ -734,7 +734,7 @@ msgstr "Безымянный"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1459
+#: src/libide/gui/ide-workbench.c:1479
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
@@ -748,7 +748,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Не удалось найти подходящий отладчик."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1455
+#: src/libide/gui/ide-workbench.c:1475
 msgid "Open File…"
 msgstr "Открыть файл…"
 
@@ -813,6 +813,7 @@ msgstr "Страницы"
 #: src/libide/sourceview/gtk/menus.ui:139
 #: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/menu-search/gtk/menus.ui:69
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Текстовый редактор"
@@ -907,39 +908,34 @@ msgid "Unsaved document has been restored."
 msgstr "Несохраненный документ был восстановлен."
 
 #. translators: %s is the error message
-#: src/libide/editor/ide-editor-page.c:408
+#: src/libide/editor/ide-editor-page.c:452
 #, c-format
 msgid "Print failed: %s"
 msgstr "Ошибка печати: %s"
 
 #. translators: %s contains the error message
-#: src/libide/editor/ide-editor-page.c:484
+#: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
 msgstr "Не удалось форматировать выделение: %s"
 
-#: src/libide/editor/ide-editor-page.c:900
+#: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Сохранить файл"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/color-picker/gb-color-picker-prefs.c:236
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "Сохранить"
 
-#: src/libide/editor/ide-editor-page.c:903
+#: src/libide/editor/ide-editor-page.c:946
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/color-picker/gb-color-picker-prefs.c:97
-#: src/plugins/color-picker/gb-color-picker-prefs.c:213
-#: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
@@ -1036,11 +1032,11 @@ msgstr "Активная конфигурация"
 msgid "Discovered device “%s”"
 msgstr "Найдено устройство «%s»"
 
-#: src/libide/foundry/ide-device-manager.c:536
+#: src/libide/foundry/ide-device-manager.c:535
 msgid "Devices"
 msgstr "Устройства"
 
-#: src/libide/foundry/ide-device-manager.c:710
+#: src/libide/foundry/ide-device-manager.c:709
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Развёртывание на устройство невозможно: конвейер сборки не инициализирован"
@@ -1071,87 +1067,87 @@ msgid "The build configuration has errors"
 msgstr "Конфигурация сборки имеет ошибки"
 
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1096
+#: src/libide/foundry/ide-pipeline.c:1095
 #, c-format
 msgid "Build (%s)"
 msgstr "Собрать (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1138
+#: src/libide/foundry/ide-pipeline.c:1136
 #, c-format
 msgid "Post-install (%s)"
 msgstr "После установки (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3031
+#: src/libide/foundry/ide-pipeline.c:3065
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Ошибка создания псевдо-терминала. Возможности терминала будут ограничены."
 
-#: src/libide/foundry/ide-pipeline.c:3228
+#: src/libide/foundry/ide-pipeline.c:3262
 msgid "Cleaning…"
 msgstr "Очистка…"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3266
+#: src/libide/foundry/ide-pipeline.c:3323
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Неудачно"
 
-#: src/libide/foundry/ide-pipeline.c:3234
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3268
+#: src/libide/foundry/ide-pipeline.c:3331
 msgid "Ready"
 msgstr "Готово"
 
-#: src/libide/foundry/ide-pipeline.c:3249
+#: src/libide/foundry/ide-pipeline.c:3283
 msgid "Downloading…"
 msgstr "Скачивание…"
 
-#: src/libide/foundry/ide-pipeline.c:3253
+#: src/libide/foundry/ide-pipeline.c:3287
 msgid "Building dependencies…"
 msgstr "Построение зависимостей…"
 
-#: src/libide/foundry/ide-pipeline.c:3257
+#: src/libide/foundry/ide-pipeline.c:3291
 msgid "Bootstrapping…"
 msgstr "Начальная загрузка…"
 
-#: src/libide/foundry/ide-pipeline.c:3261
+#: src/libide/foundry/ide-pipeline.c:3295
 msgid "Configuring…"
 msgstr "Настройка…"
 
-#: src/libide/foundry/ide-pipeline.c:3265
+#: src/libide/foundry/ide-pipeline.c:3299
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 msgid "Building…"
 msgstr "Сборка…"
 
-#: src/libide/foundry/ide-pipeline.c:3269
+#: src/libide/foundry/ide-pipeline.c:3303
 msgid "Installing…"
 msgstr "Установка…"
 
-#: src/libide/foundry/ide-pipeline.c:3273
+#: src/libide/foundry/ide-pipeline.c:3307
 msgid "Committing…"
 msgstr "Создание коммита…"
 
-#: src/libide/foundry/ide-pipeline.c:3277
+#: src/libide/foundry/ide-pipeline.c:3311
 msgid "Exporting…"
 msgstr "Экпорт…"
 
-#: src/libide/foundry/ide-pipeline.c:3281
-#: src/libide/foundry/ide-pipeline.c:3285
+#: src/libide/foundry/ide-pipeline.c:3315
+#: src/libide/foundry/ide-pipeline.c:3319
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Успешно"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3327
 msgid "Preparing…"
 msgstr "Подготовка…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3649
+#: src/libide/foundry/ide-pipeline.c:3683
 #, c-format
 msgid "Removing %s"
 msgstr "Удаление %s"
 
-#: src/libide/foundry/ide-pipeline.c:3708
+#: src/libide/foundry/ide-pipeline.c:3742
 msgid "Removing build directories…"
 msgstr "Удаление каталога сборки…"
 
@@ -1226,7 +1222,7 @@ msgid "Directory"
 msgstr "Каталог"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
+#: src/libide/gui/ide-workbench.c:346 src/libide/gui/ide-workbench.c:851
 #, c-format
 msgid "Builder — %s"
 msgstr "Builder — %s"
@@ -1265,7 +1261,7 @@ msgid "Select Project File"
 msgstr "Выбрать файл проекта"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1458
+#: src/libide/gui/ide-workbench.c:1478
 msgid "_Open"
 msgstr "_Открыть"
 
@@ -1319,7 +1315,6 @@ msgstr "Не удалось получить значение va_list: %s"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
-#: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr "Открыть"
@@ -1429,7 +1424,7 @@ msgstr "Навигация по интернету"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:275
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Терминал"
@@ -1566,6 +1561,10 @@ msgstr "Запустить проект"
 msgid "Other"
 msgstr "Другое"
 
+#: src/libide/gui/ide-workspace.c:1741
+msgid "There are unsaved documents"
+msgstr "Имеются несохранённые документы"
+
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
@@ -1614,6 +1613,7 @@ msgstr "Устройства и симуляторы"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+#: src/plugins/menu-search/gtk/menus.ui:70
 msgid "Diagnostics"
 msgstr "Диагностика"
 
@@ -1810,7 +1810,7 @@ msgid "_Find References"
 msgstr "_Найти упоминания"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
-#: src/libide/sourceview/ide-source-view.c:1371
+#: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
 #, c-format
 msgid "Ln %u, Col %u"
@@ -1936,7 +1936,6 @@ msgstr "без версии"
 
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
 msgstr "Нет"
 
@@ -1964,198 +1963,26 @@ msgstr "Построение кэша…"
 msgid "Bootstrapping build system"
 msgstr "Операционная система хоста"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
 msgstr "Настройка проекта"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:85
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:97
-#: src/plugins/make/gbp-make-pipeline-addin.c:124
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:89
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:125
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
+#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/make/gbp-make-pipeline-addin.c:142
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:91
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
 msgstr "Проект собирается"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:365
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
 msgstr "Кэширование команд сборки"
-
-#. translators: %s and %s are replaced with source file path and the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:157
-#, c-format
-msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
-msgstr ""
-"Подключаемый модуль украшения: не удалось скопировать файл конфигурации "
-"gresource для «%s»: «%s»"
-
-#. translators: %s is replaced with the source file path
-#: src/plugins/beautifier/gb-beautifier-config.c:165
-#, c-format
-msgid "Beautifier plugin: error creating temporary config file for “%s”"
-msgstr ""
-"Подключаемый модуль украшения: не удалось создать временный файл "
-"конфигурации для «%s»"
-
-#. translators: %s is replaced with the .ini source file path
-#: src/plugins/beautifier/gb-beautifier-config.c:209
-#, c-format
-msgid "Beautifier plugin: Can’t read .ini file: %s"
-msgstr "Подключаемый модуль украшения: не удалось прочитать файл .ini: %s"
-
-#. translators: %s is replaced with the config entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:257
-#, c-format
-msgid ""
-"Beautifier plugin: neither command nor command-pattern keys found: entry "
-"“%s” disabled"
-msgstr ""
-"Подключаемый модуль украшения: не найден ни ключ команды, ни шаблона "
-"команды: запись «%s» отключена"
-
-#. translators: %s is replaced with the config entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:267
-#, c-format
-msgid ""
-"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
-"disabled"
-msgstr ""
-"Подключаемый модуль украшения: найден ключ и команды, и шаблона команды: "
-"запись «%s» отключена"
-
-#. translators: %s and %s are replaced with the config path and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:291
-#, c-format
-msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
-msgstr ""
-"Подключаемый модуль украшения: путь к конфигурационному файлу «%s» не "
-"существует, запись «%s» отключена"
-
-#. translators: %s is replaced with the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:308
-#, c-format
-msgid ""
-"Beautifier plugin: command key out of possible values: entry “%s” disabled"
-msgstr ""
-"Подключаемый модуль украшения: шаблон команды не является одним из "
-"допустимых значений: запись «%s» отключена"
-
-#. translators: %s and %s are replaced with the profile name and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:333
-#, c-format
-msgid ""
-"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
-"entry “%s” disabled"
-msgstr ""
-"Подключаемый модуль украшения: присутствует @c@ в шаблоне команды «%s», но "
-"конфигурационный файл не задан: запись «%s» отключена"
-
-#. translators: %s and %s are replaced with the profile name and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:365
-#, c-format
-msgid ""
-"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
-msgstr ""
-"Подключаемый модуль украшения: невозможно создать временный файл для «%s»: "
-"запись «%s» отключена"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:407
-#, c-format
-msgid "Beautifier plugin: “%s”"
-msgstr "Подключаемый модуль для украшения: «%s»"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:508
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
-#, c-format
-msgid "Beautifier plugin: %s"
-msgstr "Подключаемый модуль украшения: %s"
-
-#. translators: %s is replaced with a path name
-#: src/plugins/beautifier/gb-beautifier-config.c:547
-#, c-format
-msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-msgstr "Подключаемый модуль украшения: ошибка чтения файла ресурсов: «%s»"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
-msgid "beautifier program missing, you must install it: "
-msgstr "программа beautifier отсутствует, её необходимо установить: "
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
-msgid "Beautifier Plugin: the view is not a GtkSourceView"
-msgstr "Подключаемый модуль украшения: вид не является подтипом GtkSourceView"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
-msgid "Beautifier Plugin: no default beautifier found"
-msgstr ""
-"Подключаемый модуль украшения: не найдена стандартная программа для украшения"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
-msgid "Beautifier Plugin: the buffer is not writable"
-msgstr "Подключаемый модуль украшения: буфер не доступен для записи"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
-msgid "Beautifier Plugin: Nothing selected"
-msgstr "Подключаемый модуль украшения: выделение пусто"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:243
-#, c-format
-msgid "No beautifier available for “%s”"
-msgstr "Нет доступных украшений для «%s»"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:245
-#, c-format
-msgid "No beautifier available"
-msgstr "Нет доступных украшений"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:356
-#, c-format
-msgid "Beautifier plugin: no valid entries, disabling: %s"
-msgstr ""
-"Подключаемый модуль украшения: нет действительных записей, отключение: %s"
-
-#. translators: %s and %s are replaced with the temporary dir and the file path
-#: src/plugins/beautifier/gb-beautifier-helper.c:63
-#: src/plugins/beautifier/gb-beautifier-helper.c:88
-#: src/plugins/beautifier/gb-beautifier-helper.c:114
-#: src/plugins/beautifier/gb-beautifier-helper.c:135
-#, c-format
-msgid ""
-"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
-"temporary directory: “%s”"
-msgstr ""
-"Подключаемый модуль украшения: попытка удаления файла «%2$s» вне временного "
-"каталога «%1$s» заблокирована"
-
-#. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:285
-#, c-format
-msgid ""
-"Beautifier plugin: command error output:\n"
-"%s"
-msgstr ""
-"Подключаемый модуль украшения: ошибка выполнения команды:\n"
-"%s"
-
-#: src/plugins/beautifier/gb-beautifier-process.c:295
-msgid "Beautifier plugin: the command output is empty"
-msgstr "Подключаемый модуль украшения: вывод команды пустой"
-
-#: src/plugins/beautifier/gb-beautifier-process.c:322
-msgid "Beautify plugin: the output is not a valid UTF-8 text"
-msgstr ""
-"Подключаемый модуль украшения: вывод не является действительным текстом в "
-"кодировке UTF-8"
-
-#: src/plugins/beautifier/gtk/menus.ui:7
-msgid "_Beautify"
-msgstr "_Украсить"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:704
@@ -2189,8 +2016,6 @@ msgid "Copy"
 msgstr "Копировать"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:42
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "Удалить"
 
@@ -2367,13 +2192,17 @@ msgstr "Удалить"
 msgid "Delete configuration"
 msgstr "Удалить конфигурация"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project"
 msgstr "Остановить сборку проекта"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Собрать проект (Shift+Ctrl+Alt+B)"
+
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+msgid "Display Build Diagnostics (Ctrl+Alt+?)"
+msgstr "Показать диагностику сборки (Ctrl+Alt+?)"
 
 #: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
 msgid "_Build"
@@ -2652,7 +2481,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:74
 msgid "Stop Signal"
-msgstr "Остановить сигнал"
+msgstr "Сигнал остановки"
 
 #: src/plugins/buildui/tweaks.ui:75
 msgid ""
@@ -2815,11 +2644,11 @@ msgstr ""
 "SDK, используемый для создания вашего приложения, автоматически определяется "
 "во время выполнения."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:171
 msgid "Fetch dependencies"
 msgstr "Получить зависимости"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:204
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:201
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 msgid "Build project"
 msgstr "Собрать проект"
@@ -2874,16 +2703,16 @@ msgstr "Включать аргументы и типы при автодопо�
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:206
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 msgid "Configure project"
 msgstr "Конфигурация проекта"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
-#: src/plugins/make/gbp-make-pipeline-addin.c:136
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:99
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:133
-#: src/plugins/waf/gbp-waf-pipeline-addin.c:143
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
+#: src/plugins/make/gbp-make-pipeline-addin.c:155
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:103
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
 msgstr "Установка проекта"
 
@@ -2945,435 +2774,6 @@ msgstr "Объявление"
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Возможна опечатка в «%s». Вы, вероятно, имели в виду «%s»?"
 
-#: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
-msgid "Colors"
-msgstr "Цвета"
-
-#. translators: %s is replaced with the name of the color palette.
-#: src/plugins/color-picker/gb-color-picker-prefs.c:88
-#, c-format
-msgid "Save changes to palette “%s” before closing?"
-msgstr "Сохранить изменения в палитре «%s» перед закрытием?"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:96
-msgid "Close without Saving"
-msgstr "Закрыть без сохранения"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:98
-msgid "Save As…"
-msgstr "Сохранить как…"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:206
-msgid "Load palette"
-msgstr "Загрузить палитру"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:233
-msgid "Save palette"
-msgstr "Сохранить палитру"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:706
-msgid "All files"
-msgstr "Все файлы"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:710
-msgid "All supported palettes formats"
-msgstr "Все поддерживаемые форматы палитр"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:715
-msgid "GIMP palette"
-msgstr "Палитра GIMP"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:719
-msgid "GNOME Builder palette"
-msgstr "Палитра GNOME Builder"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
-msgid "Palette name"
-msgstr "Название палитры"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
-msgid "Enter a new name for the palette"
-msgstr "Введите новое имя палитры"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
-msgid "HSV visibility"
-msgstr "Видимость HSV"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
-msgid "If the HSV components are visible."
-msgstr "Если компоненты HSV видимые."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-msgid "LAB visibility"
-msgstr "Видимость LAB"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
-msgid "If the LAB components are visible."
-msgstr "Если компоненты LAB видимые."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-msgid "RGB visibility"
-msgstr "Видимость RGB"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
-msgid "If the RGB components are visible."
-msgstr "Если компоненты RGB видимые."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
-msgid "RGB unit"
-msgstr "Блок RGB"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
-msgid "The unit used by RGB component and strings."
-msgstr "Блок используемый рядами и компонентом RGB."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-msgid "Selected palette ID"
-msgstr "Выбранный ID палитры"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
-msgid "The selected palette ID among the loaded ones."
-msgstr "Выбранный ID палитры среди загруженных."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
-msgid "Color strings visibility"
-msgstr "Видимость цветных строк"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
-msgid "The visible color strings."
-msgstr "Видимые цветные строки."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
-msgid "Color filter"
-msgstr "Цветовой фильтр"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
-msgid "The filter used on the color scales and color plane."
-msgstr "Фильтр, используемый в цветовых шкалах и цветовом уровне."
-
-#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:959
-msgid "Palette: "
-msgstr "Палитра: "
-
-#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:961
-msgid "Palette"
-msgstr "Палитра"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-plane.c:1612
-msgid "Color Plane"
-msgstr "Цвет границы"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:68
-msgid "Color name"
-msgstr "Название цвета"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:70
-msgid "Enter a new name for the color"
-msgstr "Введите новое название цвета"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:494
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:560
-#, c-format
-msgid "failed to parse line %i\n"
-msgstr "не удалось разобрать строку %i\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:615
-#, c-format
-msgid "%s: palette is empty\n"
-msgstr "%s: палитра пуста\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:721
-#, c-format
-msgid "%s: failed to parse\n"
-msgstr "%s: не удалось проанализировать\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:729
-#, c-format
-msgid "Unable to open %s\n"
-msgstr "Невозможно открыть %s\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:767
-#, c-format
-msgid "%s: This file format is not supported\n"
-msgstr "%s: Данный формат файла не поддерживается\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:824
-#, c-format
-msgid "failed to parse\n"
-msgstr "не удалось обработать\n"
-
-#. To translators: always in singular form like in: generated palette number <generated_count>
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:831
-msgid "Generated"
-msgstr "Сформирован"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:935
-#, c-format
-msgid "Unable to save %s\n"
-msgstr "Невозможно сохранить %s\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette-widget.c:981
-#, c-format
-msgid "Unsaved palette %u"
-msgstr "Несохранённая палитра %u"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:157
-msgid "Color Components"
-msgstr "Компонеты цвета"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:206
-msgid "H"
-msgstr "H"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:216
-msgid "S"
-msgstr "S"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:226
-msgid "V"
-msgstr "V"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:322
-msgid "L*"
-msgstr "L*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:332
-msgid "a*"
-msgstr "a*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:342
-msgid "b*"
-msgstr "b*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:441
-msgid "R"
-msgstr "R"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:451
-msgid "G"
-msgstr "G"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:461
-msgid "B"
-msgstr "B"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:573
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:433
-msgid "Color strings"
-msgstr "Цвет строк"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:634
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:490
-msgid "HEX3"
-msgstr "HEX3"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:645
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:507
-msgid "HEX6"
-msgstr "HEX6"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:656
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:122
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:524
-msgid "RGB"
-msgstr "RGB"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:667
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:541
-msgid "RGBA"
-msgstr "RGBA"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:678
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:558
-msgid "HSL"
-msgstr "HSL"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:689
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:575
-msgid "HSLA"
-msgstr "HSLA"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:818
-msgid "Palettes"
-msgstr "Палитры"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:946
-#: src/plugins/color-picker/gtk/color-picker.ui:49
-msgid "No open palettes"
-msgstr "Нет открытых палитр"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:959
-msgid "Load or generate a palette using the preferences"
-msgstr "Загрузите или создайте палитру используя параметры"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:13
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-msgid "Rename"
-msgstr "Переименовать"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-rename-popover.ui:35
-#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:60
-msgid "_Rename"
-msgstr "_Переименовать"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
-msgid "Color components"
-msgstr "Компоненты цвета"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
-msgid "Visibility:"
-msgstr "Видимость:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid "Select the color spaces for which you want to see sliders in the panel."
-msgstr ""
-"Выберите цветовое пространство, для которого хотите видеть ползунки на "
-"панели."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
-msgid "HSV"
-msgstr "HSV"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
-msgid "Hue Saturation Value"
-msgstr "Оттенок Насыщенность Значение"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
-msgid "L*a*b*"
-msgstr "L*a*b*"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:105
-msgid "CIE L*a*b* 1976"
-msgstr "CIE L*a*b* 1976"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:123
-msgid "Red Green Blue"
-msgstr "Красный, Зелёный, Синий"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:140
-msgid "Units:"
-msgstr "Элементы:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:156
-msgid ""
-"Select the type of unit you want to use for RGB components and strings in "
-"the panel."
-msgstr ""
-"Выберите тип блока, который хотите использовать для рядов и компонентов RGB "
-"на панели."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:179
-#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
-#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
-msgid "Value"
-msgstr "Значение"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
-msgid "Percent"
-msgstr "Проценты"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:213
-msgid "Filters:"
-msgstr "Фильтры:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
-msgid "Select a filter that act on the colors or “None”."
-msgstr "Выберите фильтр, действующий на цвета или «None»."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
-msgid "Achromatopsia (monochromacy)"
-msgstr "Ахроматопсия (потеря восприятия цвета)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
-msgid "Achromatomaly (blue cone monochromacy)"
-msgstr "Ахроматомалия (потеря восприятия цвета синими колбочками)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
-msgid "Deuteranopia (green-blind)"
-msgstr "Дейтеранопия (слабое восприятие зелёного)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
-msgid "Deuteranomaly (green-weak)"
-msgstr "Дейтераномалия (слабое восприятие зелёного)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
-msgid "Protanopia (red-blind)"
-msgstr "Протанопия (нет восприятия красного)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
-msgid "Protanomaly (red-weak)"
-msgstr "Протаномалия (слабое восприятие красного)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
-msgid "Tritanopia (blue-blind)"
-msgstr "Тританопия (нет восприятия синего)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
-msgid "Tritanomaly (blue-weak)"
-msgstr "Тританомалия (слабое восприятие синего)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
-msgid "Websafe"
-msgstr "Безопасный для использования в сети"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:467
-msgid "Select the color strings you want to see in the panel."
-msgstr "Выберите цвета строк, которые хотите видеть на панели."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:597
-msgid "Palettes options"
-msgstr "Параметры палитр"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:615
-msgid "Palette view mode:"
-msgstr "Режим просмотра палитры:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:638
-msgid "List"
-msgstr "Список"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
-msgid "Swatches"
-msgstr "Образцы"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
-msgid "Palette management"
-msgstr "Управление палитрой"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:762
-msgid "Load"
-msgstr "Загрузить"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:836
-msgid "From current document"
-msgstr "Из текущего документа"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
-msgid "Select the palette you want to see in the panel or close one."
-msgstr "Выберите палитру, которую хотите видеть на панели или рядом с ней."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
-msgid "No loaded palettes"
-msgstr "Нет загруженных палитр"
-
-#: src/plugins/color-picker/gtk/color-picker-preview.ui:45
-msgid "No selected palettes"
-msgstr "Нет выбранных палитр"
-
-#: src/plugins/color-picker/gtk/color-picker-preview.ui:58
-msgid "Select a palette file"
-msgstr "Выберите файл палитры"
-
-#: src/plugins/color-picker/gtk/color-picker.ui:62
-msgid "Try loading or generating a palette using the menu"
-msgstr "Попробуйте загрузить или создать палитру с помощью меню"
-
-#: src/plugins/color-picker/gtk/menus.ui:7
-msgid "Highlight _colors"
-msgstr "Подсвечивать _цвета"
-
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
 msgstr "Комментирование кода"
@@ -3425,7 +2825,7 @@ msgstr "Не удалось создать проект"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:18
 msgid "Project Name"
-msgstr "Имя проекта"
+msgstr "Название проекта"
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:24
 msgid "A subdirectory with this name already exists"
@@ -3437,9 +2837,9 @@ msgid ""
 "name should be in lower case without spaces and should not start with a "
 "number."
 msgstr ""
-"Уникальное имя, которое используется для каталога вашего проекта и других "
-"ресурсах. Имя должно быть в нижнем регистре без пробелов и не может "
-"начинаться с цифры."
+"Уникальное название, которое используется для каталога вашего проекта и "
+"других ресурсах. Название должно состоять из строчных символов, не содержать "
+"пробелов и не начинаться с цифры."
 
 #: src/plugins/create-project/gbp-create-project-widget.ui:47
 msgid "Application ID…"
@@ -3656,6 +3056,11 @@ msgstr "Параметры"
 msgid "Variable"
 msgstr "Переменная"
 
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
+msgid "Value"
+msgstr "Значение"
+
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
 msgid "Register"
 msgstr "Регистр"
@@ -3768,29 +3173,29 @@ msgstr ""
 "умолчанию"
 
 #. translators: "Text" means plaintext or text/plain
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
 msgid "Text"
 msgstr "Текст"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
 #: src/plugins/editorui/tweaks.ui:257
 msgid "Spaces"
 msgstr "Пробелы"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
 msgstr "Табуляция"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
 msgid "Go"
 msgstr "Переход"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go to Line"
 msgstr "Перейти к строке"
 
@@ -4035,7 +3440,7 @@ msgstr "Шрифт, используемый в пределах редакто�
 
 #: src/plugins/editorui/tweaks.ui:61
 msgid "Adjust spacing between lines"
-msgstr "Настроить расстояние между линиями"
+msgstr "Настроить расстояние между строками"
 
 #: src/plugins/editorui/tweaks.ui:78
 msgid "How text should be wrapped when wider than the frame"
@@ -4218,7 +3623,7 @@ msgstr "Минимальное количество символов для по
 
 #: src/plugins/editorui/tweaks.ui:381
 msgid "The minimum selection length before highlighting matches"
-msgstr "Минимальная длина выделения для подсвечивания соответствий"
+msgstr "Минимальное количество символов для подсвечивания соответствий"
 
 #: src/plugins/editorui/tweaks.ui:394
 msgid "Snippets"
@@ -4230,7 +3635,7 @@ msgstr "Расширить фрагменты"
 
 #: src/plugins/editorui/tweaks.ui:398
 msgid "Use “Tab” to expand configured snippets in the editor"
-msgstr "Использовать «Tab» для расширения фрагментов в редакторе"
+msgstr "Использовать клавишу «Tab» для развёртывания фрагментов в редакторе"
 
 #: src/plugins/editorui/tweaks.ui:413
 msgid "Code Completion"
@@ -4338,8 +3743,12 @@ msgid "Format on Save"
 msgstr "Форматировать при сохранении"
 
 #: src/plugins/editorui/tweaks.ui:582
-msgid "Reformat sources when saving to disk"
-msgstr "Переформатировать исходный код при сохранении на диск"
+msgid ""
+"Reformat sources when saving to disk. Requires a registered formatter for "
+"the source language."
+msgstr ""
+"Переформатировать исходники при сохранении на диск. Требуется "
+"зарегистрированный плагин форматирования для исходного языка."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -4394,7 +3803,7 @@ msgstr ""
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:64
 #: src/plugins/vcsui/gbp-vcsui-clone-page.ui:197
 msgid "Name"
-msgstr "Имя"
+msgstr "Название"
 
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.ui:70
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:95
@@ -4580,7 +3989,7 @@ msgstr "Авторство"
 msgid "Email"
 msgstr "Email"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:84
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Начальная настройка проекта"
@@ -4798,6 +4207,14 @@ msgstr "Переключиться на светлый режим"
 msgid "Change style-scheme to light variant"
 msgstr "Изменить цветовую схему на светлую"
 
+#: src/plugins/menu-search/gtk/menus.ui:72
+msgid "Display Build Diagnostics"
+msgstr "Показать диагностику сборки"
+
+#: src/plugins/menu-search/gtk/menus.ui:73
+msgid "Display errors and warnings found during build"
+msgstr "Отобразить ошибки и предупреждения, обнаруженные во время сборки"
+
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
 msgstr "Meson"
@@ -4822,12 +4239,12 @@ msgstr "Нет инструментов"
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:70
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:65
 msgid "A name to identify the sysroot."
-msgstr "Имя для идентификации корневого каталога."
+msgstr "Название для идентификации sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:96
 #: src/plugins/sysroot/gbp-sysroot-preferences-row.ui:91
 msgid "The system architecture of the sysroot."
-msgstr "Системная архитектура корневого каталога."
+msgstr "Системная архитектура sysroot."
 
 #: src/plugins/meson/gbp-meson-toolchain-edition-preferences-row.ui:148
 msgid "Add Tool:"
@@ -5081,7 +4498,7 @@ msgstr "_Внешняя программа…"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:45
 msgid "Follow System"
-msgstr "Следовать системе"
+msgstr "Использовать системный"
 
 #: src/plugins/platformui/gbp-platformui-tweaks-addin.c:46
 msgid "Light"
@@ -5127,11 +4544,11 @@ msgstr "Файл с таким именем уже существует."
 #: src/plugins/project-tree/gbp-new-file-popover.ui:16
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:15
 msgid "File Name"
-msgstr "Имя файла"
+msgstr "Название файла"
 
 #: src/plugins/project-tree/gbp-new-file-popover.c:356
 msgid "Folder Name"
-msgstr "Имя папки"
+msgstr "Название папки"
 
 #: src/plugins/project-tree/gbp-new-file-popover.ui:38
 msgid "_Create"
@@ -5185,6 +4602,11 @@ msgstr "Дерево проекта"
 #, c-format
 msgid "Rename %s"
 msgstr "Переименовать %s"
+
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:60
+msgid "_Rename"
+msgstr "_Переименовать"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
@@ -5353,7 +4775,7 @@ msgid "Recent Projects"
 msgstr "Недавние проекты"
 
 #: src/plugins/retab/gtk/menus.ui:5
-msgid "_Reformat tabs"
+msgid "_Reformat Tabs"
 msgstr "_Переформатировать табуляции"
 
 #: src/plugins/rust-analyzer/tweaks.ui:13
@@ -5538,7 +4960,7 @@ msgstr "Эти команды являются общими для всех пр
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:6
 msgid "Display Name"
-msgstr "Отображать имя"
+msgstr "Отображать название"
 
 #: src/plugins/shellcmd/org.gnome.builder.shellcmd.command.gschema.xml:10
 msgid "Keyboard Accelerator"
@@ -5856,18 +5278,22 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (SDK из корневого каталога)"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Приложение запущено в %s\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Приложение завершилось"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:293
 msgid "Application Output"
 msgstr "Вывод приложения"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+msgid "Process completed"
+msgstr "Процесс завершён"
 
 #: src/plugins/terminal/gtk/menus.ui:6
 msgid "New _Terminal"
@@ -5998,7 +5424,7 @@ msgid "Request that all unit tests are run"
 msgstr "Запросить чтобы все модульные тесты были запущены"
 
 #: src/plugins/todo/gbp-todo-panel.ui:4
-#: src/plugins/todo/gbp-todo-workspace-addin.c:139
+#: src/plugins/todo/gbp-todo-workspace-addin.c:142
 msgid "TODO/FIXMEs"
 msgstr "TODO/FIXME"
 
@@ -6043,7 +5469,6 @@ msgid "_Update"
 msgstr "_Обновить"
 
 #: src/plugins/update-manager/gtk/menus.ui:7
-#| msgid "Install or Update SDK?"
 msgid "Install Updates…"
 msgstr "Установить обновления…"
 
@@ -6230,6 +5655,449 @@ msgstr "Не удалось создать дерево XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл должен быть сохранен локально для разбора."
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: не удалось скопировать файл конфигурации "
+#~ "gresource для «%s»: «%s»"
+
+#, c-format
+#~ msgid "Beautifier plugin: error creating temporary config file for “%s”"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: не удалось создать временный файл "
+#~ "конфигурации для «%s»"
+
+#, c-format
+#~ msgid "Beautifier plugin: Can’t read .ini file: %s"
+#~ msgstr "Подключаемый модуль украшения: не удалось прочитать файл .ini: %s"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: neither command nor command-pattern keys found: entry "
+#~ "“%s” disabled"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: не найден ни ключ команды, ни шаблона "
+#~ "команды: запись «%s» отключена"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: both command and command-pattern keys found: entry "
+#~ "“%s” disabled"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: найден ключ и команды, и шаблона команды: "
+#~ "запись «%s» отключена"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: путь к конфигурационному файлу «%s» не "
+#~ "существует, запись «%s» отключена"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: command key out of possible values: entry “%s” disabled"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: шаблон команды не является одним из "
+#~ "допустимых значений: запись «%s» отключена"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: @c@ in “%s” command-pattern key but no config file "
+#~ "set: entry “%s” disabled"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: присутствует @c@ в шаблоне команды «%s», "
+#~ "но конфигурационный файл не задан: запись «%s» отключена"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” "
+#~ "disabled"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: невозможно создать временный файл для "
+#~ "«%s»: запись «%s» отключена"
+
+#, c-format
+#~ msgid "Beautifier plugin: “%s”"
+#~ msgstr "Подключаемый модуль для украшения: «%s»"
+
+#, c-format
+#~ msgid "Beautifier plugin: %s"
+#~ msgstr "Подключаемый модуль украшения: %s"
+
+#, c-format
+#~ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+#~ msgstr "Подключаемый модуль украшения: ошибка чтения файла ресурсов: «%s»"
+
+#~ msgid "beautifier program missing, you must install it: "
+#~ msgstr "программа beautifier отсутствует, её необходимо установить: "
+
+#~ msgid "Beautifier Plugin: the view is not a GtkSourceView"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: вид не является подтипом GtkSourceView"
+
+#~ msgid "Beautifier Plugin: no default beautifier found"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: не найдена стандартная программа для "
+#~ "украшения"
+
+#~ msgid "Beautifier Plugin: the buffer is not writable"
+#~ msgstr "Подключаемый модуль украшения: буфер не доступен для записи"
+
+#~ msgid "Beautifier Plugin: Nothing selected"
+#~ msgstr "Подключаемый модуль украшения: выделение пусто"
+
+#, c-format
+#~ msgid "No beautifier available for “%s”"
+#~ msgstr "Нет доступных украшений для «%s»"
+
+#, c-format
+#~ msgid "No beautifier available"
+#~ msgstr "Нет доступных украшений"
+
+#, c-format
+#~ msgid "Beautifier plugin: no valid entries, disabling: %s"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: нет действительных записей, отключение: %s"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+#~ "temporary directory: “%s”"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: попытка удаления файла «%2$s» вне "
+#~ "временного каталога «%1$s» заблокирована"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: command error output:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: ошибка выполнения команды:\n"
+#~ "%s"
+
+#~ msgid "Beautifier plugin: the command output is empty"
+#~ msgstr "Подключаемый модуль украшения: вывод команды пустой"
+
+#~ msgid "Beautify plugin: the output is not a valid UTF-8 text"
+#~ msgstr ""
+#~ "Подключаемый модуль украшения: вывод не является действительным текстом в "
+#~ "кодировке UTF-8"
+
+#~ msgid "_Beautify"
+#~ msgstr "_Украсить"
+
+#~ msgid "Colors"
+#~ msgstr "Цвета"
+
+#, c-format
+#~ msgid "Save changes to palette “%s” before closing?"
+#~ msgstr "Сохранить изменения в палитре «%s» перед закрытием?"
+
+#~ msgid "Close without Saving"
+#~ msgstr "Закрыть без сохранения"
+
+#~ msgid "Save As…"
+#~ msgstr "Сохранить как…"
+
+#~ msgid "Load palette"
+#~ msgstr "Загрузить палитру"
+
+#~ msgid "Save palette"
+#~ msgstr "Сохранить палитру"
+
+#~ msgid "All files"
+#~ msgstr "Все файлы"
+
+#~ msgid "All supported palettes formats"
+#~ msgstr "Все поддерживаемые форматы палитр"
+
+#~ msgid "GIMP palette"
+#~ msgstr "Палитра GIMP"
+
+#~ msgid "GNOME Builder palette"
+#~ msgstr "Палитра GNOME Builder"
+
+#~ msgid "Palette name"
+#~ msgstr "Название палитры"
+
+#~ msgid "Enter a new name for the palette"
+#~ msgstr "Введите новое название палитры"
+
+#~ msgid "HSV visibility"
+#~ msgstr "Видимость HSV"
+
+#~ msgid "If the HSV components are visible."
+#~ msgstr "Если компоненты HSV видимые."
+
+#~ msgid "LAB visibility"
+#~ msgstr "Видимость LAB"
+
+#~ msgid "If the LAB components are visible."
+#~ msgstr "Если компоненты LAB видимые."
+
+#~ msgid "RGB visibility"
+#~ msgstr "Видимость RGB"
+
+#~ msgid "If the RGB components are visible."
+#~ msgstr "Если компоненты RGB видимые."
+
+#~ msgid "RGB unit"
+#~ msgstr "Блок RGB"
+
+#~ msgid "The unit used by RGB component and strings."
+#~ msgstr "Блок используемый рядами и компонентом RGB."
+
+#~ msgid "Selected palette ID"
+#~ msgstr "Выбранный ID палитры"
+
+#~ msgid "The selected palette ID among the loaded ones."
+#~ msgstr "Выбранный ID палитры среди загруженных."
+
+#~ msgid "Color strings visibility"
+#~ msgstr "Видимость цветных строк"
+
+#~ msgid "The visible color strings."
+#~ msgstr "Видимые цветные строки."
+
+#~ msgid "Color filter"
+#~ msgstr "Цветовой фильтр"
+
+#~ msgid "The filter used on the color scales and color plane."
+#~ msgstr "Фильтр, используемый в цветовых шкалах и цветовом уровне."
+
+#~ msgid "Palette: "
+#~ msgstr "Палитра: "
+
+#~ msgid "Palette"
+#~ msgstr "Палитра"
+
+#~ msgid "Color Plane"
+#~ msgstr "Цвет границы"
+
+#~ msgid "Color name"
+#~ msgstr "Название цвета"
+
+#~ msgid "Enter a new name for the color"
+#~ msgstr "Введите новое название цвета"
+
+#, c-format
+#~ msgid "failed to parse line %i\n"
+#~ msgstr "не удалось разобрать строку %i\n"
+
+#, c-format
+#~ msgid "%s: palette is empty\n"
+#~ msgstr "%s: палитра пуста\n"
+
+#, c-format
+#~ msgid "%s: failed to parse\n"
+#~ msgstr "%s: не удалось проанализировать\n"
+
+#, c-format
+#~ msgid "Unable to open %s\n"
+#~ msgstr "Невозможно открыть %s\n"
+
+#, c-format
+#~ msgid "%s: This file format is not supported\n"
+#~ msgstr "%s: Данный формат файла не поддерживается\n"
+
+#, c-format
+#~ msgid "failed to parse\n"
+#~ msgstr "не удалось обработать\n"
+
+#~ msgid "Generated"
+#~ msgstr "Сформирован"
+
+#, c-format
+#~ msgid "Unable to save %s\n"
+#~ msgstr "Невозможно сохранить %s\n"
+
+#, c-format
+#~ msgid "Unsaved palette %u"
+#~ msgstr "Несохранённая палитра %u"
+
+#~ msgid "Color Components"
+#~ msgstr "Компонеты цвета"
+
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "L*"
+#~ msgstr "L*"
+
+#~ msgid "a*"
+#~ msgstr "a*"
+
+#~ msgid "b*"
+#~ msgstr "b*"
+
+#~ msgid "R"
+#~ msgstr "R"
+
+#~ msgid "G"
+#~ msgstr "G"
+
+#~ msgid "B"
+#~ msgstr "B"
+
+#~ msgid "Color strings"
+#~ msgstr "Цвет строк"
+
+#~ msgid "HEX3"
+#~ msgstr "HEX3"
+
+#~ msgid "HEX6"
+#~ msgstr "HEX6"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "RGBA"
+#~ msgstr "RGBA"
+
+#~ msgid "HSL"
+#~ msgstr "HSL"
+
+#~ msgid "HSLA"
+#~ msgstr "HSLA"
+
+#~ msgid "Palettes"
+#~ msgstr "Палитры"
+
+#~ msgid "No open palettes"
+#~ msgstr "Нет открытых палитр"
+
+#~ msgid "Load or generate a palette using the preferences"
+#~ msgstr "Загрузите или создайте палитру используя параметры"
+
+#~ msgid "Rename"
+#~ msgstr "Переименовать"
+
+#~ msgid "Color components"
+#~ msgstr "Компоненты цвета"
+
+#~ msgid "Visibility:"
+#~ msgstr "Видимость:"
+
+#~ msgid ""
+#~ "Select the color spaces for which you want to see sliders in the panel."
+#~ msgstr ""
+#~ "Выберите цветовое пространство, для которого хотите видеть ползунки на "
+#~ "панели."
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "Hue Saturation Value"
+#~ msgstr "Оттенок Насыщенность Значение"
+
+#~ msgid "L*a*b*"
+#~ msgstr "L*a*b*"
+
+#~ msgid "CIE L*a*b* 1976"
+#~ msgstr "CIE L*a*b* 1976"
+
+#~ msgid "Red Green Blue"
+#~ msgstr "Красный, Зелёный, Синий"
+
+#~ msgid "Units:"
+#~ msgstr "Элементы:"
+
+#~ msgid ""
+#~ "Select the type of unit you want to use for RGB components and strings in "
+#~ "the panel."
+#~ msgstr ""
+#~ "Выберите тип блока, который хотите использовать для рядов и компонентов "
+#~ "RGB на панели."
+
+#~ msgid "Percent"
+#~ msgstr "Проценты"
+
+#~ msgid "Filters:"
+#~ msgstr "Фильтры:"
+
+#~ msgid "Select a filter that act on the colors or “None”."
+#~ msgstr "Выберите фильтр, действующий на цвета или «None»."
+
+#~ msgid "Achromatopsia (monochromacy)"
+#~ msgstr "Ахроматопсия (потеря восприятия цвета)"
+
+#~ msgid "Achromatomaly (blue cone monochromacy)"
+#~ msgstr "Ахроматомалия (потеря восприятия цвета синими колбочками)"
+
+#~ msgid "Deuteranopia (green-blind)"
+#~ msgstr "Дейтеранопия (слабое восприятие зелёного)"
+
+#~ msgid "Deuteranomaly (green-weak)"
+#~ msgstr "Дейтераномалия (слабое восприятие зелёного)"
+
+#~ msgid "Protanopia (red-blind)"
+#~ msgstr "Протанопия (нет восприятия красного)"
+
+#~ msgid "Protanomaly (red-weak)"
+#~ msgstr "Протаномалия (слабое восприятие красного)"
+
+#~ msgid "Tritanopia (blue-blind)"
+#~ msgstr "Тританопия (нет восприятия синего)"
+
+#~ msgid "Tritanomaly (blue-weak)"
+#~ msgstr "Тританомалия (слабое восприятие синего)"
+
+#~ msgid "Websafe"
+#~ msgstr "Безопасный для использования в сети"
+
+#~ msgid "Select the color strings you want to see in the panel."
+#~ msgstr "Выберите цвета строк, которые хотите видеть на панели."
+
+#~ msgid "Palettes options"
+#~ msgstr "Параметры палитр"
+
+#~ msgid "Palette view mode:"
+#~ msgstr "Режим просмотра палитры:"
+
+#~ msgid "List"
+#~ msgstr "Список"
+
+#~ msgid "Swatches"
+#~ msgstr "Образцы"
+
+#~ msgid "Palette management"
+#~ msgstr "Управление палитрой"
+
+#~ msgid "Load"
+#~ msgstr "Загрузить"
+
+#~ msgid "From current document"
+#~ msgstr "Из текущего документа"
+
+#~ msgid "Select the palette you want to see in the panel or close one."
+#~ msgstr "Выберите палитру, которую хотите видеть на панели или рядом с ней."
+
+#~ msgid "No loaded palettes"
+#~ msgstr "Нет загруженных палитр"
+
+#~ msgid "No selected palettes"
+#~ msgstr "Нет выбранных палитр"
+
+#~ msgid "Select a palette file"
+#~ msgstr "Выберите файл палитры"
+
+#~ msgid "Try loading or generating a palette using the menu"
+#~ msgstr "Попробуйте загрузить или создать палитру с помощью меню"
+
+#~ msgid "Highlight _colors"
+#~ msgstr "Подсвечивать _цвета"
+
+#~ msgid "Reformat sources when saving to disk"
+#~ msgstr "Переформатировать исходный код при сохранении на диск"
 
 #~ msgid "Whether or not Home moves to first non-space character."
 #~ msgstr ""
@@ -6506,9 +6374,6 @@ msgstr "Файл должен быть сохранен локально для 
 
 #~ msgid "_Create Custom Command"
 #~ msgstr "_Создать пользовательскую команду"
-
-#~ msgid "Use Clang for Diagnostics"
-#~ msgstr "Использовать Clang для диагностики"
 
 #~ msgid ""
 #~ "Clang will be queried for diagnostics within C, C++, and Objective-C "
