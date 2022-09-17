@@ -119,6 +119,7 @@ ide_workspace_save_session_frame_cb (PanelFrame *frame,
   IdeSession *session = user_data;
   IdeWorkspace *workspace;
   int requested_size;
+  guint n_pages;
 
   IDE_ENTRY;
 
@@ -144,6 +145,31 @@ ide_workspace_save_session_frame_cb (PanelFrame *frame,
     ide_session_item_set_metadata (item, "size", "i", requested_size);
 
   ide_session_append (session, item);
+
+  n_pages = panel_frame_get_n_pages (frame);
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      PanelWidget *widget = panel_frame_get_page (frame, i);
+
+      if (IDE_IS_PANE (widget))
+        {
+          const char *id = ide_pane_get_id (IDE_PANE (widget));
+          g_autoptr(PanelPosition) page_position = panel_widget_get_position (widget);
+          g_autoptr(IdeSessionItem) page_item = ide_session_item_new ();
+
+          if (id == NULL)
+            continue;
+
+          page_item = ide_session_item_new ();
+          ide_session_item_set_id (page_item, id);
+          ide_session_item_set_type_hint (page_item, "IdePane");
+          ide_session_item_set_module_name (page_item, "libide-gui");
+          ide_session_item_set_position (page_item, page_position);
+
+          ide_session_append (session, item);
+        }
+    }
 
   IDE_EXIT;
 }
@@ -373,6 +399,100 @@ ide_workspace_restore_panels (IdeWorkspace     *self,
     panel_dock_set_bottom_height (dock->dock, bottom_height);
 }
 
+typedef struct
+{
+  const char  *id;
+  PanelWidget *widget;
+} FindWidget;
+
+static void
+_ide_workspace_find_widget_cb (PanelFrame *frame,
+                               gpointer    user_data)
+{
+  FindWidget *find = user_data;
+  guint n_pages;
+
+  g_assert (PANEL_IS_FRAME (frame));
+  g_assert (find != NULL);
+
+  if (find->widget != NULL)
+    return;
+
+  n_pages = panel_frame_get_n_pages (frame);
+
+  for (guint i = 0; i < n_pages; i++)
+    {
+      PanelWidget *widget = panel_frame_get_page (frame, i);
+      const char *id = panel_widget_get_id (widget);
+
+      if (id == NULL && IDE_IS_PANE (widget))
+        id = ide_pane_get_id (IDE_PANE (widget));
+
+      if (ide_str_equal0 (find->id, id))
+        {
+          find->widget = widget;
+          return;
+        }
+    }
+}
+
+static PanelWidget *
+_ide_workspace_find_widget (IdeWorkspace     *self,
+                            IdeWorkspaceDock *dock,
+                            const char       *id)
+{
+  FindWidget find = {id, NULL};
+
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (dock != NULL);
+  g_assert (id != NULL);
+
+  panel_dock_foreach_frame (dock->dock,
+                            _ide_workspace_find_widget_cb,
+                            &find);
+
+  if (find.widget == NULL)
+    panel_grid_foreach_frame (PANEL_GRID (dock->grid),
+                              _ide_workspace_find_widget_cb,
+                              &find);
+
+  return find.widget;
+}
+
+static void
+ide_workspace_restore_pane (IdeWorkspace     *self,
+                            IdeSessionItem   *item,
+                            IdeWorkspaceDock *dock)
+{
+  g_autoptr(PanelPosition) current_position = NULL;
+  PanelPosition *position;
+  PanelWidget *widget;
+  const char *id;
+  GtkWidget *frame;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKSPACE (self));
+  g_assert (IDE_IS_SESSION_ITEM (item));
+  g_assert (dock != NULL);
+
+  if (!(id = ide_session_item_get_id (item)) ||
+      !(position = ide_session_item_get_position (item)) ||
+      !(widget = _ide_workspace_find_widget (self, dock, id)))
+    return;
+
+  if ((current_position = panel_widget_get_position (widget)) &&
+      panel_position_equal (current_position, position))
+    return;
+
+  if ((frame = gtk_widget_get_ancestor (GTK_WIDGET (widget), PANEL_TYPE_FRAME)))
+    {
+      g_object_ref (widget);
+      panel_frame_remove (PANEL_FRAME (frame), widget);
+      ide_workspace_add_pane (self, IDE_PANE (widget), position);
+      g_object_unref (widget);
+    }
+}
+
 void
 _ide_workspace_restore_session_simple (IdeWorkspace     *self,
                                        IdeSession       *session,
@@ -410,6 +530,8 @@ _ide_workspace_restore_session_simple (IdeWorkspace     *self,
           else if (g_type_is_a (type, IDE_TYPE_WORKSPACE) &&
                    type == G_OBJECT_TYPE (self))
             ide_workspace_restore_panels (self, item, dock);
+          else if (ide_str_equal0 (type_hint, "IdePane"))
+            ide_workspace_restore_pane (self, item, dock);
         }
     }
 
