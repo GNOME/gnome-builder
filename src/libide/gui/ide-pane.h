@@ -45,6 +45,8 @@ struct _IdePaneClass
 IDE_AVAILABLE_IN_ALL
 GtkWidget     *ide_pane_new          (void);
 IDE_AVAILABLE_IN_ALL
+const char    *ide_pane_get_id       (IdePane  *self);
+IDE_AVAILABLE_IN_ALL
 void           ide_pane_destroy      (IdePane  *self);
 IDE_AVAILABLE_IN_ALL
 void           ide_pane_observe      (IdePane  *self,

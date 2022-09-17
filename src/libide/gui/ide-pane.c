@@ -250,3 +250,19 @@ ide_pane_get_position (IdePane *self)
 {
   return panel_widget_get_position (PANEL_WIDGET (self));
 }
+
+const char *
+ide_pane_get_id (IdePane *self)
+{
+  const char *id;
+
+  g_return_val_if_fail (IDE_IS_PANE (self), NULL);
+
+  if (!(id = panel_widget_get_id (PANEL_WIDGET (self))))
+    {
+      if (G_OBJECT_TYPE (self) != IDE_TYPE_PANE)
+        id = G_OBJECT_TYPE_NAME (self);
+    }
+
+  return id;
+}
