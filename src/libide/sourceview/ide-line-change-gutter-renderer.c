@@ -38,10 +38,8 @@ struct _IdeLineChangeGutterRenderer
 
   GtkSourceBuffer        *buffer;
   gulong                  buffer_notify_style_scheme;
-  gulong                  buffer_notify_change_monitor;
 
-  IdeBufferChangeMonitor *change_monitor;
-  gulong                  change_monitor_changed;
+  GSignalGroup           *change_monitor_signals;
 
   struct {
     GdkRGBA add;
@@ -133,18 +131,12 @@ disconnect_buffer (IdeLineChangeGutterRenderer *self)
 {
   disconnect_style_scheme (self);
 
+  g_signal_group_set_target (self->change_monitor_signals, NULL);
+
   if (self->buffer)
     {
       g_clear_signal_handler (&self->buffer_notify_style_scheme, self->buffer);
-      g_clear_signal_handler (&self->buffer_notify_change_monitor, self->buffer);
-
       g_clear_weak_pointer (&self->buffer);
-    }
-
-  if (self->change_monitor)
-    {
-      g_clear_signal_handler (&self->change_monitor_changed, self->change_monitor);
-      g_clear_object (&self->change_monitor);
     }
 }
 
@@ -182,35 +174,6 @@ notify_style_scheme_cb (GtkTextBuffer               *buffer,
 }
 
 static void
-notify_change_monitor_cb (IdeBuffer                   *buffer,
-                          GParamSpec                  *pspec,
-                          IdeLineChangeGutterRenderer *self)
-{
-  IdeBufferChangeMonitor *change_monitor;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
-
-  change_monitor = ide_buffer_get_change_monitor (buffer);
-
-  if (change_monitor == self->change_monitor)
-    return;
-
-  if (self->change_monitor)
-    g_clear_signal_handler (&self->change_monitor_changed, self->change_monitor);
-
-  g_set_object (&self->change_monitor, change_monitor);
-
-  if (self->change_monitor)
-    self->change_monitor_changed =
-      g_signal_connect_object (self->change_monitor,
-                               "changed",
-                               G_CALLBACK (gtk_widget_queue_draw),
-                               self,
-                               G_CONNECT_SWAPPED);
-}
-
-static void
 connect_buffer (IdeLineChangeGutterRenderer *self)
 {
   GtkSourceBuffer *buffer;
@@ -227,14 +190,12 @@ connect_buffer (IdeLineChangeGutterRenderer *self)
                       "notify::style-scheme",
                       G_CALLBACK (notify_style_scheme_cb),
                       self);
-  self->buffer_notify_change_monitor =
-    g_signal_connect (buffer,
-                      "notify::change-monitor",
-                      G_CALLBACK (notify_change_monitor_cb),
-                      self);
+
+  g_object_bind_property (buffer, "change-monitor",
+                          self->change_monitor_signals, "target",
+                          G_BINDING_SYNC_CREATE);
 
   connect_style_scheme (self);
-  notify_change_monitor_cb (IDE_BUFFER (buffer), NULL, self);
 }
 
 static void
@@ -271,19 +232,20 @@ ide_line_change_gutter_renderer_begin (GtkSourceGutterRenderer *renderer,
                                        GtkSourceGutterLines    *lines)
 {
   IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)renderer;
+  g_autoptr(IdeBufferChangeMonitor) change_monitor = NULL;
   guint first;
   guint last;
 
   g_assert (IDE_IS_LINE_CHANGE_GUTTER_RENDERER (self));
   g_assert (lines != NULL);
 
-  if (self->change_monitor == NULL)
+  if (!(change_monitor = g_signal_group_dup_target (self->change_monitor_signals)))
     return;
 
   first = gtk_source_gutter_lines_get_first (lines);
   last = gtk_source_gutter_lines_get_last (lines);
 
-  ide_buffer_change_monitor_foreach_change (self->change_monitor,
+  ide_buffer_change_monitor_foreach_change (change_monitor,
                                             first,
                                             last,
                                             populate_changes_cb,
@@ -344,12 +306,23 @@ ide_line_change_gutter_renderer_dispose (GObject *object)
 }
 
 static void
+ide_line_change_gutter_renderer_finalize (GObject *object)
+{
+  IdeLineChangeGutterRenderer *self = (IdeLineChangeGutterRenderer *)object;
+
+  g_clear_object (&self->change_monitor_signals);
+
+  G_OBJECT_CLASS (ide_line_change_gutter_renderer_parent_class)->finalize (object);
+}
+
+static void
 ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *klass)
 {
   GtkSourceGutterRendererClass *renderer_class = GTK_SOURCE_GUTTER_RENDERER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = ide_line_change_gutter_renderer_dispose;
+  object_class->finalize = ide_line_change_gutter_renderer_finalize;
 
   renderer_class->begin = ide_line_change_gutter_renderer_begin;
   renderer_class->snapshot_line = ide_line_change_gutter_renderer_snapshot_line;
@@ -364,4 +337,11 @@ ide_line_change_gutter_renderer_class_init (IdeLineChangeGutterRendererClass *kl
 static void
 ide_line_change_gutter_renderer_init (IdeLineChangeGutterRenderer *self)
 {
+  self->change_monitor_signals = g_signal_group_new (IDE_TYPE_BUFFER_CHANGE_MONITOR);
+
+  g_signal_group_connect_object (self->change_monitor_signals,
+                                 "changed",
+                                 G_CALLBACK (gtk_widget_queue_draw),
+                                 self,
+                                 G_CONNECT_SWAPPED);
 }
