@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-16 19:01+0000\n"
-"PO-Revision-Date: 2022-09-16 23:09+0200\n"
+"POT-Creation-Date: 2022-09-16 21:19+0000\n"
+"PO-Revision-Date: 2022-09-17 02:20+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -1415,7 +1415,7 @@ msgstr "Web pregledavanje"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:275
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
@@ -1550,7 +1550,7 @@ msgstr "Pokreni projekt"
 msgid "Other"
 msgstr "Ostalo"
 
-#: src/libide/gui/ide-workspace.c:1735
+#: src/libide/gui/ide-workspace.c:1741
 msgid "There are unsaved documents"
 msgstr "Postoje nespremljeni dokumenti"
 
@@ -5253,18 +5253,22 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "Aplikacija je pokrenuta u %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "Aplikacija je zatvorena"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:293
 msgid "Application Output"
 msgstr "Izlaz aplikacije"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+msgid "Process completed"
+msgstr "Proces je završen"
 
 #: src/plugins/terminal/gtk/menus.ui:6
 msgid "New _Terminal"
