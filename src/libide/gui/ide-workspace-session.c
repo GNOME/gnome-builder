@@ -170,6 +170,9 @@ ide_workspace_save_session_frame_cb (PanelFrame *frame,
           ide_session_item_set_module_name (page_item, "libide-gui");
           ide_session_item_set_position (page_item, page_position);
 
+          if (panel_frame_get_visible_child (frame) == widget)
+            ide_session_item_set_metadata (page_item, "is-front", "b", TRUE);
+
           ide_session_append (session, page_item);
         }
     }
@@ -474,6 +477,7 @@ ide_workspace_restore_pane (IdeWorkspace     *self,
   PanelWidget *widget;
   const char *id;
   GtkWidget *frame;
+  gboolean is_front;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (IDE_IS_WORKSPACE (self));
@@ -485,17 +489,23 @@ ide_workspace_restore_pane (IdeWorkspace     *self,
       !(widget = _ide_workspace_find_widget (self, dock, id)))
     return;
 
+  g_object_ref (widget);
+
   if ((current_position = panel_widget_get_position (widget)) &&
       panel_position_equal (current_position, position))
-    return;
+    goto check_front;
 
   if ((frame = gtk_widget_get_ancestor (GTK_WIDGET (widget), PANEL_TYPE_FRAME)))
     {
-      g_object_ref (widget);
       panel_frame_remove (PANEL_FRAME (frame), widget);
       ide_workspace_add_pane (self, IDE_PANE (widget), position);
-      g_object_unref (widget);
     }
+
+check_front:
+  if (ide_session_item_get_metadata (item, "is-front", "b", &is_front) && is_front)
+    panel_widget_raise (widget);
+
+  g_object_unref (widget);
 }
 
 void
