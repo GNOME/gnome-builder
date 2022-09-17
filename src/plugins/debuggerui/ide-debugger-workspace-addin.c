@@ -214,6 +214,7 @@ ide_debugger_workspace_addin_add_ui (IdeDebuggerWorkspaceAddin *self)
                                  NULL);
 
   ide_pane_observe (g_object_new (IDE_TYPE_PANE,
+                                  "id", "debuggerui-panel",
                                   "title", _("Debugger"),
                                   "icon-name", "builder-debugger-symbolic",
                                   NULL),
