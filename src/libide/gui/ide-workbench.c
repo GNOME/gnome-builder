@@ -959,6 +959,19 @@ ide_workbench_project_loaded_foreach_cb (PeasExtensionSet *set,
 }
 
 static void
+ide_workbench_restore_workspace_session_cb (IdeWorkspace *workspace,
+                                            gpointer      user_data)
+{
+  IdeSession *session = user_data;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_WORKSPACE (workspace));
+  g_assert (IDE_IS_SESSION (session));
+
+  _ide_workspace_restore_session (workspace, session);
+}
+
+static void
 ide_workbench_load_project_completed (IdeWorkbench *self,
                                       IdeTask      *task)
 {
@@ -1005,7 +1018,6 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
         lp->workspace_type = G_TYPE_INVALID;
 
       _ide_workbench_addins_restore_session (self, self->addins, self->session);
-      g_clear_object (&self->session);
     }
 
   if (lp->workspace_type != G_TYPE_INVALID)
@@ -1033,6 +1045,15 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
   /* Enable actions that are available to projects */
   ide_action_mixin_set_enabled (self, "configure", TRUE);
   ide_action_mixin_set_enabled (self, "configure-page", TRUE);
+
+  /* Now restore the workspace sessions */
+  if (self->session)
+    {
+      ide_workbench_foreach_workspace (self,
+                                       ide_workbench_restore_workspace_session_cb,
+                                       self->session);
+      g_clear_object (&self->session);
+    }
 
   ide_task_return_boolean (task, TRUE);
 }

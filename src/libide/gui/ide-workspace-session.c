@@ -118,6 +118,7 @@ ide_workspace_save_session_frame_cb (PanelFrame *frame,
   g_autoptr(IdeSessionItem) item = NULL;
   IdeSession *session = user_data;
   IdeWorkspace *workspace;
+  const char *workspace_id;
   int requested_size;
   guint n_pages;
 
@@ -129,6 +130,7 @@ ide_workspace_save_session_frame_cb (PanelFrame *frame,
 
   position = panel_frame_get_position (frame);
   workspace = ide_widget_get_workspace (GTK_WIDGET (frame));
+  workspace_id = ide_workspace_get_id (workspace);
   requested_size = panel_frame_get_requested_size (frame);
 
 #if 0
@@ -139,7 +141,7 @@ ide_workspace_save_session_frame_cb (PanelFrame *frame,
   ide_session_item_set_module_name (item, "libide-gui");
   ide_session_item_set_type_hint (item, G_OBJECT_TYPE_NAME (frame));
   ide_session_item_set_position (item, position);
-  ide_session_item_set_workspace (item, ide_workspace_get_id (workspace));
+  ide_session_item_set_workspace (item, workspace_id);
 
   if (requested_size > -1)
     ide_session_item_set_metadata (item, "size", "i", requested_size);
@@ -163,11 +165,12 @@ ide_workspace_save_session_frame_cb (PanelFrame *frame,
 
           page_item = ide_session_item_new ();
           ide_session_item_set_id (page_item, id);
+          ide_session_item_set_workspace (page_item, workspace_id);
           ide_session_item_set_type_hint (page_item, "IdePane");
           ide_session_item_set_module_name (page_item, "libide-gui");
           ide_session_item_set_position (page_item, page_position);
 
-          ide_session_append (session, item);
+          ide_session_append (session, page_item);
         }
     }
 
@@ -329,6 +332,8 @@ ide_workspace_restore_frame (IdeWorkspace     *self,
       while (panel_paned_get_n_children (paned) <= column)
         {
           frame = panel_frame_new ();
+          gtk_orientable_set_orientation (GTK_ORIENTABLE (frame),
+                                          GTK_ORIENTATION_HORIZONTAL);
           panel_paned_append (paned, GTK_WIDGET (frame));
         }
 
