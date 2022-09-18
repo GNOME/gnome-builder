@@ -1,6 +1,6 @@
 if get_option('plugin_sysprof')
 
-sysprof_req_version = '3.45.1'
+sysprof_req_version = '3.46.0'
 sysprof_req = '>= @0@'.format(sysprof_req_version)
 
 libsysprof_dep = dependency('sysprof-4', version: sysprof_req)

@@ -1,6 +1,6 @@
 if get_option('plugin_dspy')
 
-libdspy_dep = dependency('dspy-1')
+libdspy_dep = dependency('dspy-1', version: '>= 1.4.0')
 
 plugins_sources += files([
   'dspy-plugin.c',

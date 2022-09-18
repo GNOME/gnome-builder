@@ -34,10 +34,10 @@ pkggirdir = join_paths(get_option('datadir'),'gnome-builder', 'gir-1.0')
 pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-1.0')
 
 # Check dependencies
-glib_req_version = '2.73.1'
-gtk_req_version = '4.7.1'
-gtksourceview_req_version = '5.5'
-libadwaita_req_version = '1.2.alpha'
+glib_req_version = '2.74'
+gtk_req_version = '4.8'
+gtksourceview_req_version = '5.6'
+libadwaita_req_version = '1.2.0'
 
 glib_req = '>= @0@'.format(glib_req_version)
 gtk_req = '>= @0@'.format(gtk_req_version)
@@ -182,7 +182,7 @@ test_c_args = [
   '-Werror=undef',
   '-Werror=write-strings',
   '-Wformat-nonliteral',
-  ['-Werror=format-security', '-Werror=format=2' ],
+  ['-Werror=format-security', '-Werror=format=2'],
   '-Wignored-qualifiers',
   '-Wimplicit-function-declaration',
   '-Wlogical-op',
@@ -297,15 +297,15 @@ libgio_dep = dependency('gio-2.0', version: glib_req)
 libgiounix_dep = dependency('gio-unix-2.0', version: glib_req)
 libgtk_dep = dependency('gtk4', version: gtk_req)
 libadwaita_dep = dependency('libadwaita-1', version: libadwaita_req)
-libpanel_dep = dependency('libpanel-1', version: '>= 1.0.alpha1')
+libpanel_dep = dependency('libpanel-1', version: '>= 1.0.0')
 libgtksource_dep = dependency('gtksourceview-5', version: gtksourceview_req)
 libjson_glib_dep = dependency('json-glib-1.0', version: '>= 1.2.0')
 libjsonrpc_glib_dep = dependency('jsonrpc-glib-1.0', version: '>= 3.42.0')
 libm_dep = cc.find_library('m', required: false)
-libpeas_dep = dependency('libpeas-1.0', version: '>= 1.33.0')
+libpeas_dep = dependency('libpeas-1.0', version: '>= 1.34.0')
 libportal_dep = dependency('libportal-gtk4', required: false)
-libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.35.0')
-libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.69.0')
+libtemplate_glib_dep = dependency('template-glib-1.0', version: '>= 3.36.0')
+libvte_dep = dependency('vte-2.91-gtk4', version: '>= 0.70.0')
 libxml2_dep = dependency('libxml-2.0', version: '>= 2.9.0')
 
 if get_option('webkit').enabled()
@@ -333,7 +333,7 @@ endforeach
 # to the SYSPROF_TRACE_FD. We use sysprof-4 instead since we will
 # already have to link against that for the plugin.
 #
-libsysprof_capture = dependency('sysprof-capture-4', version: '>= 3.42.0', static: true, required: false)
+libsysprof_capture = dependency('sysprof-capture-4', version: '>= 3.46.0', static: true, required: false)
 if libsysprof_capture.found()
   config_h.set10('ENABLE_TRACING_SYSCAP', true)
 endif
