@@ -83,7 +83,7 @@ preferences and configurations.
 
 ## Document Navigation
 
-Since the early versions of Builder, users have been requested tabs to
+Since the early versions of Builder, users have requested tabs to
 navigate documents. Now that we're on GTK 4 supporting that in a
 maintainable fashion is trivial and so you can choose between tabs or the
 legacy "drop down" selector. Navigation tabs are enabled by default.
@@ -112,8 +112,8 @@ have been rewritten to build upon this WebKit integration.
 
 Some features have been removed from Builder due to the complexity and
 time necessary for a proper redesign or port. The Glade plugin (which
-targets GTK 3 only) has been removed or obvious reasons. A new designer
-replace it and is expected as part of GNOME 44.
+targets GTK 3 only) has been removed for obvious reasons. A new designer
+will replace it and is expected as part of GNOME 44.
 
 Devhelp has also been removed but may return after it moves to supporting
 GTK 4. Additionally, other tooling may supersede this plugin in time.
