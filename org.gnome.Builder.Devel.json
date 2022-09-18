@@ -1,7 +1,7 @@
 {
     "app-id" : "org.gnome.Builder.Devel",
     "runtime" : "org.gnome.Sdk",
-    "runtime-version" : "master",
+    "runtime-version" : "43beta",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.llvm14",
@@ -296,7 +296,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/vte.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/vte.git",
+                    "tag" : "0.70.0"
                 }
             ]
         },
@@ -311,7 +312,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/libpeas.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/libpeas.git",
+                    "tag" : "libpeas-1.34.0"
                 }
             ]
         },
@@ -327,7 +329,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/template-glib.git",
-                    "branch" : "main"
+                    "tag" : "3.36.0"
                 }
             ]
         },
@@ -343,7 +345,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/jsonrpc-glib.git",
-                    "branch" : "main"
+                    "tag" : "3.42.0"
                 }
             ]
         },
@@ -368,7 +370,8 @@
             "sources" : [
                 {
                     "type" : "git",
-                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git"
+                    "url" : "https://gitlab.gnome.org/GNOME/sysprof.git",
+                    "tag" : "3.46.0"
                 }
             ]
         },
@@ -613,7 +616,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/libpanel.git",
-                    "branch" : "main"
+                    "tag" : "1.0.0"
                 }
             ]
         },
@@ -635,7 +638,7 @@
                 {
                     "type" : "git",
                     "url" : "https://gitlab.gnome.org/GNOME/d-spy.git",
-                    "branch" : "main"
+                    "tag" : "1.4.0"
                 }
             ]
         },
@@ -653,7 +656,8 @@
                 "-Dhelp=true",
                 "-Dchannel=flatpak-nightly",
                 "-Dnetwork_tests=false",
-                "-Dplugin_deviced=true"
+                "-Dplugin_deviced=true",
+                "-Dgnome_sdk_version=43beta"
             ],
             "cleanup" : [
                 "/share/gnome-builder/gir-1.0"
