@@ -1,4 +1,8 @@
-#!@GJS@
+#!@GJS@ -m
+
+import GLib from "gi://GLib";
+import { exit } from "system";
+
 imports.package.init({
   name: "@PACKAGE_NAME@",
   version: "@PACKAGE_VERSION@",
@@ -6,6 +10,16 @@ imports.package.init({
   libdir: "@libdir@",
   datadir: "@datadir@",
 });
+
+const loop = new GLib.MainLoop(null, false);
 import("resource://@resource_path@/js/main.js")
-  .then((main) => imports.package.run(main))
+  .then((main) => {
+    GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+      loop.quit();
+      const exitCode = imports.package.run(main);
+      exit(exitCode);
+      return GLib.SOURCE_REMOVE;
+    });
+  })
   .catch(logError);
+loop.run();
