@@ -486,12 +486,14 @@ end_block:
 	{
 		int saved_offset = 0;
 		int tmp_lineno = 0;
+		int normal_differing_length = 0;
 		g_autofree char *last_normal_indent = NULL;
 
 		saved_offset = gtk_text_iter_get_offset (location);
 		last_normal_indent = extract_indent (previous_line_str);
 		gtk_text_iter_set_line_offset (location, 0);
 		tmp_lineno = line_no;
+		normal_differing_length = gtk_source_view_get_insert_spaces_instead_of_tabs (view) ? gtk_source_view_get_tab_width (view) : 1;
 
 		while (tmp_lineno)
 		{
@@ -503,7 +505,8 @@ end_block:
 			gtk_text_iter_backward_line (location);
 			content = gtk_text_iter_get_text (location, &tmp_iter);
 			tmp_indent = extract_indent (content);
-			if (strlen (tmp_indent) < strlen (last_normal_indent))
+
+			if (strlen (tmp_indent) + normal_differing_length == strlen (last_normal_indent))
 			{
 				g_autofree char *additional_indent = NULL;
 				additional_indent = view_indent (view);
