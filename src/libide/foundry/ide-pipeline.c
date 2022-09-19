@@ -4431,6 +4431,7 @@ ide_pipeline_prepare_run_context (IdePipeline   *self,
                                   IdeRunContext *run_context)
 {
   IdeRuntime *runtime;
+  IdeEnvironment *env;
 
   g_return_if_fail (IDE_IS_MAIN_THREAD ());
   g_return_if_fail (IDE_IS_PIPELINE (self));
@@ -4444,9 +4445,24 @@ ide_pipeline_prepare_run_context (IdePipeline   *self,
 
   ide_runtime_prepare_to_build (runtime, self, run_context);
 
+  ide_run_context_set_cwd (run_context, ide_pipeline_get_builddir (self));
+
   ide_run_context_setenv (run_context, "BUILDDIR", ide_pipeline_get_builddir (self));
   ide_run_context_setenv (run_context, "SRCDIR", ide_pipeline_get_srcdir (self));
-  ide_run_context_set_cwd (run_context, ide_pipeline_get_builddir (self));
+
+  if ((env = ide_config_get_environment (self->config)))
+    {
+      guint n_items = g_list_model_get_n_items (G_LIST_MODEL (env));
+
+      for (guint i = 0; i < n_items; i++)
+        {
+          g_autoptr(IdeEnvironmentVariable) envvar = g_list_model_get_item (G_LIST_MODEL (env), i);
+
+          ide_run_context_setenv (run_context,
+                                  ide_environment_variable_get_key (envvar),
+                                  ide_environment_variable_get_value (envvar));
+        }
+    }
 }
 
 /**
