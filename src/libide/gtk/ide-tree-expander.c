@@ -45,6 +45,7 @@ struct _IdeTreeExpander
 
 enum {
   PROP_0,
+  PROP_EXPANDED,
   PROP_EXPANDED_ICON_NAME,
   PROP_ICON_NAME,
   PROP_ITEM,
@@ -137,6 +138,8 @@ ide_tree_expander_notify_expanded_cb (IdeTreeExpander *self,
   g_assert (GTK_IS_TREE_LIST_ROW (list_row));
 
   ide_tree_expander_update_icon (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXPANDED]);
 }
 
 static void
@@ -234,6 +237,10 @@ ide_tree_expander_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_EXPANDED:
+      g_value_set_boolean (value, gtk_tree_list_row_get_expanded (self->list_row));
+      break;
+
     case PROP_EXPANDED_ICON_NAME:
       g_value_set_string (value, ide_tree_expander_get_expanded_icon_name (self));
       break;
@@ -315,6 +322,11 @@ ide_tree_expander_class_init (IdeTreeExpanderClass *klass)
   object_class->dispose = ide_tree_expander_dispose;
   object_class->get_property = ide_tree_expander_get_property;
   object_class->set_property = ide_tree_expander_set_property;
+
+  properties [PROP_EXPANDED] =
+    g_param_spec_boolean ("expanded", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_EXPANDED_ICON_NAME] =
     g_param_spec_string ("expanded-icon-name", NULL, NULL,
