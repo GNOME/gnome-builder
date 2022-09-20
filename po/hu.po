@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-18 14:24+0000\n"
-"PO-Revision-Date: 2022-09-18 16:37+0200\n"
+"POT-Creation-Date: 2022-09-20 21:48+0000\n"
+"PO-Revision-Date: 2022-09-21 00:12+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -1117,6 +1117,7 @@ msgstr "Beállítás…"
 
 #: src/libide/foundry/ide-pipeline.c:3299
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Összeállítás…"
 
@@ -4213,7 +4214,6 @@ msgid "Change style-scheme to light variant"
 msgstr "A stílusséma átváltása a világos változatra"
 
 #: src/plugins/menu-search/gtk/menus.ui:72
-#| msgid "Display D-Bus inspector"
 msgid "Display Build Diagnostics"
 msgstr "Összeállítási diagnosztikák megjelenítése"
 
@@ -4463,34 +4463,34 @@ msgstr "Hangrögzítő"
 msgid "A modern sound recorder for GNOME"
 msgstr "Egy modern hangrögzítő a GNOME-hoz"
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
 msgstr "Összeállítás sikeres"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "A(z) „%s” projekt összeállítása sikeres"
 
-#: src/plugins/notification/ide-notification-addin.c:112
-#: src/plugins/notification/ide-notification-addin.c:198
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "Összeállítás sikertelen"
 
-#: src/plugins/notification/ide-notification-addin.c:113
+#: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "A(z) „%s” projekt összeállítása sikertelen"
 
-#: src/plugins/notification/ide-notification-addin.c:189
+#: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
 msgstr "Összeállítás sikeres"
 
-#: src/plugins/notification/ide-notification-addin.c:191
+#: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
 msgstr "Összeállítás beállítva"
 
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
 msgstr "Összeállítás előkészítve"
 
@@ -4781,7 +4781,6 @@ msgid "Recent Projects"
 msgstr "Legutóbbi projektek"
 
 #: src/plugins/retab/gtk/menus.ui:5
-#| msgid "_Reformat tabs"
 msgid "_Reformat Tabs"
 msgstr "Lapok ú_jraformázása"
 
@@ -4813,6 +4812,30 @@ msgstr "Procedurális makrók"
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr ""
 "Engedélyezi a kísérleti Procedurális makrók funkciót a rust-analyzerben"
+
+#: src/plugins/rust-analyzer/tweaks.ui:61
+#| msgid "Clear Build Logs"
+msgid "Cargo Build Scripts"
+msgstr "Cargo összeállítási parancsfájlok"
+
+#: src/plugins/rust-analyzer/tweaks.ui:62
+msgid "Run build scripts (build.rs) for more precise code analysis"
+msgstr ""
+"Összeállítási parancsfájlok (build.rs) futtatása a pontosabb kódelemzéshez"
+
+#: src/plugins/rust-analyzer/tweaks.ui:74
+#| msgid "Editing & Formatting"
+msgid "Rustfmt Range Formatting"
+msgstr "Rustfmt tartományformázás"
+
+#: src/plugins/rust-analyzer/tweaks.ui:75
+msgid ""
+"Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
+"option is unstable and only available on nightly builds of the Rust SDK."
+msgstr ""
+"Engedélyezi a rustfmt instabil tartományformázási parancsának használatát. A"
+" rustfmt kapcsoló instabil, és csak a Rust SDK napi összeállításaiban érhető"
+" el."
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -5300,7 +5323,6 @@ msgid "Application Output"
 msgstr "Alkalmazás kimenete"
 
 #: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
-#| msgid "Unit tests completed"
 msgid "Process completed"
 msgstr "Folyamat befejezve"
 
