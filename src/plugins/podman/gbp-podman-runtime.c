@@ -31,6 +31,9 @@
 struct _GbpPodmanRuntime
 {
   IdeRuntime  parent_instance;
+
+  GHashTable *program_paths_cache;
+
   JsonObject *object;
   gchar      *id;
   GMutex      mutex;
@@ -171,12 +174,17 @@ gbp_podman_runtime_contains_program_in_path (IdeRuntime   *runtime,
 {
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  GbpPodmanRuntime *self = (GbpPodmanRuntime *) runtime;
   gboolean ret;
+  gpointer val = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
   g_assert (program != NULL);
+
+  if (g_hash_table_lookup_extended (self->program_paths_cache, program, NULL, &val))
+    return GPOINTER_TO_UINT (val);
 
   run_context = ide_run_context_new ();
 
@@ -193,6 +201,11 @@ gbp_podman_runtime_contains_program_in_path (IdeRuntime   *runtime,
     IDE_RETURN (FALSE);
 
   ret = ide_subprocess_wait_check (subprocess, cancellable, NULL);
+
+  /* Cache both positive and negative lookups */
+  g_hash_table_insert (self->program_paths_cache,
+                       (char *) g_intern_string (program),
+                       GUINT_TO_POINTER (ret));
 
   IDE_RETURN (ret);
 }
@@ -552,6 +565,7 @@ gbp_podman_runtime_finalize (GObject *object)
   g_clear_pointer (&self->id, g_free);
   g_mutex_clear (&self->mutex);
   g_clear_list (&self->layers, g_free);
+  g_clear_pointer (&self->program_paths_cache, g_hash_table_unref);
 
   G_OBJECT_CLASS (gbp_podman_runtime_parent_class)->finalize (object);
 }
@@ -577,6 +591,7 @@ static void
 gbp_podman_runtime_init (GbpPodmanRuntime *self)
 {
   g_mutex_init (&self->mutex);
+  self->program_paths_cache = g_hash_table_new (g_str_hash, g_str_equal);
 }
 
 GbpPodmanRuntime *
