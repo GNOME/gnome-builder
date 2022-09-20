@@ -44,6 +44,36 @@ struct _GbpPodmanRuntime
 
 G_DEFINE_FINAL_TYPE (GbpPodmanRuntime, gbp_podman_runtime, IDE_TYPE_RUNTIME)
 
+G_LOCK_DEFINE_STATIC (program_cache);
+
+static gboolean
+cache_get (GHashTable *cache,
+           const char *program_name,
+           gboolean   *found)
+{
+  gpointer val;
+  gboolean ret;
+
+  G_LOCK (program_cache);
+  if ((ret = g_hash_table_lookup_extended (cache, program_name, NULL, &val)))
+    *found = GPOINTER_TO_INT (val);
+  G_UNLOCK (program_cache);
+
+  return ret;
+}
+
+static void
+cache_set (GHashTable *cache,
+           const char *program_name,
+           gboolean    found)
+{
+  G_LOCK (program_cache);
+  g_hash_table_insert (cache,
+                       (char *)g_intern_string (program_name),
+                       GINT_TO_POINTER (found));
+  G_UNLOCK (program_cache);
+}
+
 static void
 maybe_start (GbpPodmanRuntime *self)
 {
@@ -179,17 +209,18 @@ gbp_podman_runtime_contains_program_in_path (IdeRuntime   *runtime,
 {
   g_autoptr(IdeRunContext) run_context = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
+  g_autoptr(GMutexLocker) locker = NULL;
   GbpPodmanRuntime *self = (GbpPodmanRuntime *) runtime;
+  gboolean found;
   gboolean ret;
-  gpointer val = NULL;
 
   IDE_ENTRY;
 
   g_assert (GBP_IS_PODMAN_RUNTIME (runtime));
   g_assert (program != NULL);
 
-  if (g_hash_table_lookup_extended (self->program_paths_cache, program, NULL, &val))
-    return GPOINTER_TO_UINT (val);
+  if (cache_get (self->program_paths_cache, program, &found))
+    return found;
 
   run_context = ide_run_context_new ();
 
@@ -208,9 +239,7 @@ gbp_podman_runtime_contains_program_in_path (IdeRuntime   *runtime,
   ret = ide_subprocess_wait_check (subprocess, cancellable, NULL);
 
   /* Cache both positive and negative lookups */
-  g_hash_table_insert (self->program_paths_cache,
-                       (char *) g_intern_string (program),
-                       GUINT_TO_POINTER (ret));
+  cache_set (self->program_paths_cache, program, ret);
 
   IDE_RETURN (ret);
 }
