@@ -37,8 +37,9 @@ struct _GbpPodmanRuntime
   JsonObject *object;
   gchar      *id;
   GMutex      mutex;
-  guint       has_started : 1;
   GList      *layers;
+
+  gboolean    has_started;
 };
 
 G_DEFINE_FINAL_TYPE (GbpPodmanRuntime, gbp_podman_runtime, IDE_TYPE_RUNTIME)
@@ -57,6 +58,9 @@ maybe_start (GbpPodmanRuntime *self)
 
   g_mutex_lock (&self->mutex);
 
+  if (g_atomic_int_get (&self->has_started))
+    goto unlock;
+
   launcher = ide_subprocess_launcher_new (G_SUBPROCESS_FLAGS_STDERR_SILENCE |
                                           G_SUBPROCESS_FLAGS_STDOUT_SILENCE);
   ide_subprocess_launcher_set_run_on_host (launcher, TRUE);
@@ -70,6 +74,7 @@ maybe_start (GbpPodmanRuntime *self)
       self->has_started = TRUE;
     }
 
+unlock:
   g_mutex_unlock (&self->mutex);
 }
 
