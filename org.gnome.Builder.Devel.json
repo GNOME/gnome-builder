@@ -1,7 +1,7 @@
 {
     "app-id" : "org.gnome.Builder.Devel",
     "runtime" : "org.gnome.Sdk",
-    "runtime-version" : "43beta",
+    "runtime-version" : "43",
     "sdk" : "org.gnome.Sdk",
     "sdk-extensions" : [
         "org.freedesktop.Sdk.Extension.llvm14",
@@ -657,7 +657,7 @@
                 "-Dchannel=flatpak-nightly",
                 "-Dnetwork_tests=false",
                 "-Dplugin_deviced=true",
-                "-Dgnome_sdk_version=43beta"
+                "-Dgnome_sdk_version=43"
             ],
             "cleanup" : [
                 "/share/gnome-builder/gir-1.0"
