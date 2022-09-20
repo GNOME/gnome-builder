@@ -39,7 +39,6 @@ struct _IdeTreeExpander
   GIcon           *icon;
   GIcon           *expanded_icon;
 
-  gulong           list_row_notify_depth;
   gulong           list_row_notify_expanded;
 };
 
@@ -121,17 +120,6 @@ ide_tree_expander_update_icon (IdeTreeExpander *self)
     }
 
   gtk_image_set_from_gicon (GTK_IMAGE (self->image), icon);
-}
-
-static void
-ide_tree_expander_notify_depth_cb (IdeTreeExpander *self,
-                                   GParamSpec      *pspec,
-                                   GtkTreeListRow  *list_row)
-{
-  g_assert (IDE_IS_TREE_EXPANDER (self));
-  g_assert (GTK_IS_TREE_LIST_ROW (list_row));
-
-  ide_tree_expander_update_depth (self);
 }
 
 static void
@@ -657,7 +645,6 @@ ide_tree_expander_clear_list_row (IdeTreeExpander *self)
   if (self->list_row == NULL)
     return;
 
-  g_clear_signal_handler (&self->list_row_notify_depth, self->list_row);
   g_clear_signal_handler (&self->list_row_notify_expanded, self->list_row);
 
   g_clear_object (&self->list_row);
@@ -696,12 +683,6 @@ ide_tree_expander_set_list_row (IdeTreeExpander *self,
         g_signal_connect_object (self->list_row,
                                  "notify::expanded",
                                  G_CALLBACK (ide_tree_expander_notify_expanded_cb),
-                                 self,
-                                 G_CONNECT_SWAPPED);
-      self->list_row_notify_depth =
-        g_signal_connect_object (self->list_row,
-                                 "notify::depth",
-                                 G_CALLBACK (ide_tree_expander_notify_depth_cb),
                                  self,
                                  G_CONNECT_SWAPPED);
       ide_tree_expander_update_depth (self);
