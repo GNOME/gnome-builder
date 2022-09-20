@@ -407,6 +407,12 @@ ide_tree_expander_init (IdeTreeExpander *self)
   gtk_widget_add_controller (GTK_WIDGET (self), controller);
 }
 
+GtkWidget *
+ide_tree_expander_new (void)
+{
+  return g_object_new (IDE_TYPE_TREE_EXPANDER, NULL);
+}
+
 /**
  * ide_tree_expander_get_item:
  * @self: a #IdeTreeExpander
