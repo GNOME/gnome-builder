@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-16 21:19+0000\n"
-"PO-Revision-Date: 2022-09-18 07:41+0200\n"
+"POT-Creation-Date: 2022-09-20 22:01+0000\n"
+"PO-Revision-Date: 2022-09-21 00:37+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
 "Language: hu\n"
@@ -733,7 +733,7 @@ msgstr "Névtelen"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1479
+#: src/libide/gui/ide-workbench.c:1500
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
@@ -747,7 +747,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Nem található megfelelő hibakereső."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1475
+#: src/libide/gui/ide-workbench.c:1496
 msgid "Open File…"
 msgstr "Fájl megnyitása…"
 
@@ -1117,6 +1117,7 @@ msgstr "Beállítás…"
 
 #: src/libide/foundry/ide-pipeline.c:3299
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Összeállítás…"
 
@@ -1260,7 +1261,7 @@ msgid "Select Project File"
 msgstr "Válasszon projektfájlt"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1478
+#: src/libide/gui/ide-workbench.c:1499
 msgid "_Open"
 msgstr "_Megnyitás"
 
@@ -1424,7 +1425,7 @@ msgstr "Webböngészés"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:275
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminál"
@@ -1559,7 +1560,7 @@ msgstr "Projekt futtatása"
 msgid "Other"
 msgstr "Egyéb"
 
-#: src/libide/gui/ide-workspace.c:1741
+#: src/libide/gui/ide-workspace.c:1701
 msgid "There are unsaved documents"
 msgstr "Mentetlen dokumentumok vannak"
 
@@ -2948,13 +2949,13 @@ msgid "Run the project with debugger"
 msgstr "Projekt futtatása hibakeresővel"
 
 #: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:218
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "Hibakereső"
 
 #: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:252
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr "Töréspontok"
@@ -3095,19 +3096,19 @@ msgstr "Argumentumok"
 msgid "Binary"
 msgstr "Bináris"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:232
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:233
 msgid "Threads"
 msgstr "Szálak"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:257
 msgid "Libraries"
 msgstr "Programkönyvtárak"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:261
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:262
 msgid "Registers"
 msgstr "Regiszterek"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:266
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:267
 msgid "Console"
 msgstr "Konzol"
 
@@ -4213,7 +4214,6 @@ msgid "Change style-scheme to light variant"
 msgstr "A stílusséma átváltása a világos változatra"
 
 #: src/plugins/menu-search/gtk/menus.ui:72
-#| msgid "Display D-Bus inspector"
 msgid "Display Build Diagnostics"
 msgstr "Összeállítási diagnosztikák megjelenítése"
 
@@ -4463,34 +4463,34 @@ msgstr "Hangrögzítő"
 msgid "A modern sound recorder for GNOME"
 msgstr "Egy modern hangrögzítő a GNOME-hoz"
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
 msgstr "Összeállítás sikeres"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "A(z) „%s” projekt összeállítása sikeres"
 
-#: src/plugins/notification/ide-notification-addin.c:112
-#: src/plugins/notification/ide-notification-addin.c:198
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "Összeállítás sikertelen"
 
-#: src/plugins/notification/ide-notification-addin.c:113
+#: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "A(z) „%s” projekt összeállítása sikertelen"
 
-#: src/plugins/notification/ide-notification-addin.c:189
+#: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
 msgstr "Összeállítás sikeres"
 
-#: src/plugins/notification/ide-notification-addin.c:191
+#: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
 msgstr "Összeállítás beállítva"
 
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
 msgstr "Összeállítás előkészítve"
 
@@ -4527,12 +4527,12 @@ msgid "Drop Down"
 msgstr "Legördülő"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:632
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Toolbox"
 msgstr "Konténerek/Eszköztár"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:638
+#: src/plugins/podman/gbp-podman-runtime.c:687
 msgid "Containers/Podman"
 msgstr "Konténerek/Podman"
 
@@ -4781,7 +4781,6 @@ msgid "Recent Projects"
 msgstr "Legutóbbi projektek"
 
 #: src/plugins/retab/gtk/menus.ui:5
-#| msgid "_Reformat tabs"
 msgid "_Reformat Tabs"
 msgstr "Lapok ú_jraformázása"
 
@@ -4813,6 +4812,30 @@ msgstr "Procedurális makrók"
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr ""
 "Engedélyezi a kísérleti Procedurális makrók funkciót a rust-analyzerben"
+
+#: src/plugins/rust-analyzer/tweaks.ui:61
+#| msgid "Clear Build Logs"
+msgid "Cargo Build Scripts"
+msgstr "Cargo összeállítási parancsfájlok"
+
+#: src/plugins/rust-analyzer/tweaks.ui:62
+msgid "Run build scripts (build.rs) for more precise code analysis"
+msgstr ""
+"Összeállítási parancsfájlok (build.rs) futtatása a pontosabb kódelemzéshez"
+
+#: src/plugins/rust-analyzer/tweaks.ui:74
+#| msgid "Editing & Formatting"
+msgid "Rustfmt Range Formatting"
+msgstr "Rustfmt tartományformázás"
+
+#: src/plugins/rust-analyzer/tweaks.ui:75
+msgid ""
+"Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
+"option is unstable and only available on nightly builds of the Rust SDK."
+msgstr ""
+"Engedélyezi a rustfmt instabil tartományformázási parancsának használatát. A "
+"rustfmt kapcsoló instabil, és csak a Rust SDK napi összeállításaiban érhető "
+"el."
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -5295,12 +5318,11 @@ msgstr "Az alkalmazás elindult ekkor: %s\r\n"
 msgid "Application exited"
 msgstr "Az alkalmazás kilépett"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:293
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Alkalmazás kimenete"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
-#| msgid "Unit tests completed"
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
 msgid "Process completed"
 msgstr "Folyamat befejezve"
 
