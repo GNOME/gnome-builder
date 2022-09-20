@@ -22,6 +22,7 @@
               <object class="GtkLabel">
                 <property name="halign">start</property>
                 <property name="use-markup">true</property>
+                <property name="single-line-mode">true</property>
                 <binding name="label">
                   <lookup name="name" type="IdeSymbolNode">
                     <lookup name="item">expander</lookup>
