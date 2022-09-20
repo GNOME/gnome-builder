@@ -36,9 +36,9 @@ struct _IdeRecentProjects
 
   GSequence    *projects;
   GHashTable   *recent_uris;
-  gchar        *file_uri;
+  char         *file_uri;
 
-  guint         discovered : 1;
+  guint         reloading : 1;
 };
 
 #define MAX_PROJECT_INFOS 100
@@ -46,7 +46,7 @@ struct _IdeRecentProjects
 static void list_model_iface_init (GListModelInterface *iface);
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (IdeRecentProjects, ide_recent_projects, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
+                               G_IMPLEMENT_INTERFACE (G_TYPE_LIST_MODEL, list_model_iface_init))
 
 IdeRecentProjects *
 ide_recent_projects_new (void)
@@ -285,7 +285,7 @@ ide_recent_projects_constructed (GObject *object)
 }
 
 static void
-ide_recent_projects_finalize (GObject *object)
+ide_recent_projects_dispose (GObject *object)
 {
   IdeRecentProjects *self = (IdeRecentProjects *)object;
 
@@ -293,7 +293,7 @@ ide_recent_projects_finalize (GObject *object)
   g_clear_pointer (&self->recent_uris, g_hash_table_unref);
   g_clear_pointer (&self->file_uri, g_free);
 
-  G_OBJECT_CLASS (ide_recent_projects_parent_class)->finalize (object);
+  G_OBJECT_CLASS (ide_recent_projects_parent_class)->dispose (object);
 }
 
 static void
@@ -310,7 +310,7 @@ ide_recent_projects_class_init (IdeRecentProjectsClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructed = ide_recent_projects_constructed;
-  object_class->finalize = ide_recent_projects_finalize;
+  object_class->dispose = ide_recent_projects_dispose;
 }
 
 static void
@@ -434,4 +434,52 @@ ide_recent_projects_find_by_directory (IdeRecentProjects *self,
     }
 
   return NULL;
+}
+
+static gboolean
+ide_recent_projects_reload_in_idle_cb (gpointer user_data)
+{
+  IdeRecentProjects *self = user_data;
+
+  g_assert (IDE_IS_RECENT_PROJECTS (self));
+
+  ide_recent_projects_load_recent (self);
+  self->reloading = FALSE;
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+ide_recent_projects_invalidate (IdeRecentProjects *self)
+{
+  g_autoptr(GSequence) sequence = NULL;
+  g_autoptr(GHashTable) hashtable = NULL;
+  guint n_items;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_RECENT_PROJECTS (self));
+
+  if (self->reloading)
+    return;
+
+  sequence = g_steal_pointer (&self->projects);
+  self->projects = g_sequence_new (g_object_unref);
+
+  hashtable = g_steal_pointer (&self->recent_uris);
+  self->recent_uris = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  /* Notify of removals, so we can re-add new items next */
+  n_items = g_sequence_get_length (sequence);
+  g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, 0);
+
+  /* Reload from IDLE so higher priority operations can finish
+   * before yielding to main loop (since this is all currently
+   * done synchronously). In practice the file will still be hot
+   * in the page cache, so relatively fast regardless.
+   */
+  self->reloading = TRUE;
+  g_idle_add_full (G_PRIORITY_LOW + 1000,
+                   ide_recent_projects_reload_in_idle_cb,
+                   g_object_ref (self),
+                   g_object_unref);
 }
