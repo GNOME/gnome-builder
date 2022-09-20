@@ -39,12 +39,18 @@ IDE_AVAILABLE_IN_ALL
 void            ide_tree_expander_set_menu_model         (IdeTreeExpander *self,
                                                           GMenuModel      *menu_model);
 IDE_AVAILABLE_IN_ALL
-const char     *ide_tree_expander_get_icon_name          (IdeTreeExpander *self);
+GIcon          *ide_tree_expander_get_icon               (IdeTreeExpander *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_tree_expander_set_icon               (IdeTreeExpander *self,
+                                                          GIcon           *icon);
 IDE_AVAILABLE_IN_ALL
 void            ide_tree_expander_set_icon_name          (IdeTreeExpander *self,
                                                           const char      *icon_name);
 IDE_AVAILABLE_IN_ALL
-const char     *ide_tree_expander_get_expanded_icon_name (IdeTreeExpander *self);
+GIcon          *ide_tree_expander_get_expanded_icon      (IdeTreeExpander *self);
+IDE_AVAILABLE_IN_ALL
+void            ide_tree_expander_set_expanded_icon      (IdeTreeExpander *self,
+                                                          GIcon           *icon);
 IDE_AVAILABLE_IN_ALL
 void            ide_tree_expander_set_expanded_icon_name (IdeTreeExpander *self,
                                                           const char      *expanded_icon_name);
