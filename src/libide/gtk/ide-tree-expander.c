@@ -26,27 +26,29 @@
 
 struct _IdeTreeExpander
 {
-  GtkWidget       parent_instance;
+  GtkWidget        parent_instance;
 
-  GtkWidget      *image;
-  GtkWidget      *title;
-  GtkWidget      *suffix;
+  GtkWidget       *image;
+  GtkWidget       *title;
+  GtkWidget       *suffix;
 
-  GMenuModel     *menu_model;
+  GMenuModel      *menu_model;
 
-  GtkTreeListRow *list_row;
+  GtkTreeListRow  *list_row;
 
-  const char     *icon_name;
-  const char     *expanded_icon_name;
+  GIcon           *icon;
+  GIcon           *expanded_icon;
 
-  gulong          list_row_notify_depth;
-  gulong          list_row_notify_expanded;
+  gulong           list_row_notify_depth;
+  gulong           list_row_notify_expanded;
 };
 
 enum {
   PROP_0,
   PROP_EXPANDED,
+  PROP_EXPANDED_ICON,
   PROP_EXPANDED_ICON_NAME,
+  PROP_ICON,
   PROP_ICON_NAME,
   PROP_ITEM,
   PROP_LIST_ROW,
@@ -64,6 +66,7 @@ static void
 ide_tree_expander_update_depth (IdeTreeExpander *self)
 {
   static GType builtin_icon_type = G_TYPE_INVALID;
+  GtkWidget *child;
   guint depth;
 
   g_assert (IDE_IS_TREE_EXPANDER (self));
@@ -73,23 +76,21 @@ ide_tree_expander_update_depth (IdeTreeExpander *self)
   else
     depth = 0;
 
-  for (;;)
-    {
-      GtkWidget *child = gtk_widget_get_first_child (GTK_WIDGET (self));
-
-      if (child == self->image)
-        break;
-
-      gtk_widget_unparent (child);
-    }
-
-  if (builtin_icon_type == G_TYPE_INVALID)
+  if G_UNLIKELY (builtin_icon_type == G_TYPE_INVALID)
     builtin_icon_type = g_type_from_name ("GtkBuiltinIcon");
+
+  child = gtk_widget_get_prev_sibling (self->image);
+
+  while (child)
+    {
+      GtkWidget *prev = gtk_widget_get_prev_sibling (child);
+      g_assert (G_TYPE_CHECK_INSTANCE_TYPE (child, builtin_icon_type));
+      gtk_widget_unparent (child);
+      child = prev;
+    }
 
   for (guint i = 0; i < depth; i++)
     {
-      GtkWidget *child;
-
       child = g_object_new (builtin_icon_type,
                             "css-name", "indent",
                             "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
@@ -106,16 +107,20 @@ ide_tree_expander_update_depth (IdeTreeExpander *self)
 static void
 ide_tree_expander_update_icon (IdeTreeExpander *self)
 {
-  const char *icon_name;
+  GIcon *icon = NULL;
 
   g_assert (IDE_IS_TREE_EXPANDER (self));
+  g_assert (gtk_widget_get_parent (self->image) == GTK_WIDGET (self));
 
-  if (self->list_row != NULL && gtk_tree_list_row_get_expanded (self->list_row))
-    icon_name = self->expanded_icon_name ? self->expanded_icon_name : self->icon_name;
-  else
-    icon_name = self->icon_name;
+  if (self->list_row != NULL)
+    {
+      if (gtk_tree_list_row_get_expanded (self->list_row))
+        icon = self->expanded_icon ? self->expanded_icon : self->icon;
+      else
+        icon = self->icon;
+    }
 
-  gtk_image_set_from_icon_name (GTK_IMAGE (self->image), icon_name);
+  gtk_image_set_from_gicon (GTK_IMAGE (self->image), icon);
 }
 
 static void
@@ -241,12 +246,12 @@ ide_tree_expander_get_property (GObject    *object,
       g_value_set_boolean (value, gtk_tree_list_row_get_expanded (self->list_row));
       break;
 
-    case PROP_EXPANDED_ICON_NAME:
-      g_value_set_string (value, ide_tree_expander_get_expanded_icon_name (self));
+    case PROP_EXPANDED_ICON:
+      g_value_set_object (value, ide_tree_expander_get_expanded_icon (self));
       break;
 
-    case PROP_ICON_NAME:
-      g_value_set_string (value, ide_tree_expander_get_icon_name (self));
+    case PROP_ICON:
+      g_value_set_object (value, ide_tree_expander_get_icon (self));
       break;
 
     case PROP_ITEM:
@@ -284,8 +289,16 @@ ide_tree_expander_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_EXPANDED_ICON:
+      ide_tree_expander_set_expanded_icon (self, g_value_get_object (value));
+      break;
+
     case PROP_EXPANDED_ICON_NAME:
       ide_tree_expander_set_expanded_icon_name (self, g_value_get_string (value));
+      break;
+
+    case PROP_ICON:
+      ide_tree_expander_set_icon (self, g_value_get_object (value));
       break;
 
     case PROP_ICON_NAME:
@@ -328,15 +341,29 @@ ide_tree_expander_class_init (IdeTreeExpanderClass *klass)
                           FALSE,
                           (G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
 
+  properties [PROP_EXPANDED_ICON] =
+    g_param_spec_object ("expanded-icon", NULL, NULL,
+                         G_TYPE_ICON,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_EXPLICIT_NOTIFY |
+                          G_PARAM_STATIC_STRINGS));
+
   properties[PROP_EXPANDED_ICON_NAME] =
     g_param_spec_string ("expanded-icon-name", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_ICON] =
+    g_param_spec_object ("icon", NULL, NULL,
+                         G_TYPE_ICON,
+                         (G_PARAM_READWRITE |
+                          G_PARAM_EXPLICIT_NOTIFY |
+                          G_PARAM_STATIC_STRINGS));
 
   properties[PROP_ICON_NAME] =
     g_param_spec_string ("icon-name", NULL, NULL,
                          NULL,
-                         (G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
+                         (G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS));
 
   properties[PROP_ITEM] =
     g_param_spec_object ("item", NULL, NULL,
@@ -459,48 +486,92 @@ ide_tree_expander_set_menu_model (IdeTreeExpander *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MENU_MODEL]);
 }
 
-const char *
-ide_tree_expander_get_expanded_icon_name (IdeTreeExpander *self)
+/**
+ * ide_tree_expander_get_icon:
+ * @self: a #IdeTreeExpander
+ *
+ * Gets the icon for the row.
+ *
+ * Returns: (transfer none) (nullable): a #GIcon or %NULL
+ */
+GIcon *
+ide_tree_expander_get_icon (IdeTreeExpander *self)
 {
   g_return_val_if_fail (IDE_IS_TREE_EXPANDER (self), NULL);
 
-  return self->expanded_icon_name;
+  return self->icon;
+}
+
+/**
+ * ide_tree_expander_get_expanded_icon:
+ * @self: a #IdeTreeExpander
+ *
+ * Gets the icon for the row when expanded.
+ *
+ * Returns: (transfer none) (nullable): a #GIcon or %NULL
+ */
+GIcon *
+ide_tree_expander_get_expanded_icon (IdeTreeExpander *self)
+{
+  g_return_val_if_fail (IDE_IS_TREE_EXPANDER (self), NULL);
+
+  return self->expanded_icon;
+}
+
+void
+ide_tree_expander_set_icon (IdeTreeExpander *self,
+                            GIcon           *icon)
+{
+  g_return_if_fail (IDE_IS_TREE_EXPANDER (self));
+  g_return_if_fail (!icon || G_IS_ICON (icon));
+
+  if (g_set_object (&self->icon, icon))
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_ICON]);
+      ide_tree_expander_update_icon (self);
+    }
+}
+
+void
+ide_tree_expander_set_expanded_icon (IdeTreeExpander *self,
+                                     GIcon           *expanded_icon)
+{
+  g_return_if_fail (IDE_IS_TREE_EXPANDER (self));
+  g_return_if_fail (!expanded_icon || G_IS_ICON (expanded_icon));
+
+  if (g_set_object (&self->expanded_icon, expanded_icon))
+    {
+      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_EXPANDED_ICON]);
+      ide_tree_expander_update_icon (self);
+    }
 }
 
 void
 ide_tree_expander_set_expanded_icon_name (IdeTreeExpander *self,
                                           const char      *expanded_icon_name)
 {
+  g_autoptr(GIcon) expanded_icon = NULL;
+
   g_return_if_fail (IDE_IS_TREE_EXPANDER (self));
 
-  if (!ide_str_equal0 (self->expanded_icon_name, expanded_icon_name))
-    {
-      self->expanded_icon_name = g_intern_string (expanded_icon_name);
-      ide_tree_expander_update_icon (self);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EXPANDED_ICON_NAME]);
-    }
-}
+  if (expanded_icon_name != NULL)
+    expanded_icon = g_themed_icon_new (expanded_icon_name);
 
-const char *
-ide_tree_expander_get_icon_name (IdeTreeExpander *self)
-{
-  g_return_val_if_fail (IDE_IS_TREE_EXPANDER (self), NULL);
-
-  return self->icon_name;
+  ide_tree_expander_set_expanded_icon (self, expanded_icon);
 }
 
 void
 ide_tree_expander_set_icon_name (IdeTreeExpander *self,
                                  const char      *icon_name)
 {
+  g_autoptr(GIcon) icon = NULL;
+
   g_return_if_fail (IDE_IS_TREE_EXPANDER (self));
 
-  if (!ide_str_equal0 (self->icon_name, icon_name))
-    {
-      self->icon_name = g_intern_string (icon_name);
-      ide_tree_expander_update_icon (self);
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_NAME]);
-    }
+  if (icon_name != NULL)
+    icon = g_themed_icon_new (icon_name);
+
+  ide_tree_expander_set_icon (self, icon);
 }
 
 /**
