@@ -86,7 +86,7 @@ ide_xml_parser_generic_comment_sax_cb (ParserState   *state,
 
   g_assert (IDE_IS_XML_PARSER (self));
 
-  strip_name = g_strstrip (g_strdup ((const gchar *)name));
+  strip_name = g_strstrip (g_markup_escape_text ((const gchar *)name, -1));
   node = ide_xml_symbol_node_new (strip_name, NULL, NULL, IDE_SYMBOL_KIND_XML_COMMENT);
   ide_xml_parser_state_processing (self, state, "comment", node, IDE_XML_SAX_CALLBACK_TYPE_COMMENT, FALSE);
 }
