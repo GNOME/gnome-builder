@@ -51,6 +51,22 @@ G_DEFINE_FINAL_TYPE_WITH_CODE (IdeNotificationAddin,
                                G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, addin_iface_init))
 
 static gboolean
+title_with_default (GBinding     *binding,
+                    const GValue *from_value,
+                    GValue       *to_value,
+                    gpointer      user_data)
+{
+  g_autofree char *str = g_strstrip (g_value_dup_string (from_value));
+
+  if (ide_str_empty0 (str))
+    g_value_set_static_string (to_value, _("Building…"));
+  else
+    g_value_take_string (to_value, g_steal_pointer (&str));
+
+  return TRUE;
+}
+
+static gboolean
 should_supress_message (IdeNotificationAddin *self,
                         const gchar          *message)
 {
@@ -162,7 +178,9 @@ ide_notification_addin_pipeline_started (IdeNotificationAddin *self,
     {
       /* Setup new in-app notification */
       self->notif = ide_notification_new ();
-      g_object_bind_property (pipeline, "message", self->notif, "title", G_BINDING_SYNC_CREATE);
+      g_object_bind_property_full (pipeline, "message", self->notif, "title",
+                                   G_BINDING_SYNC_CREATE,
+                                   title_with_default, NULL, NULL, NULL);
       ide_notification_attach (self->notif, IDE_OBJECT (pipeline));
 
       /* Withdraw previous shell notification (it's now invalid) */
