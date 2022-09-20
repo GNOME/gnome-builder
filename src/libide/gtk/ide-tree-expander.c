@@ -647,6 +647,34 @@ ide_tree_expander_get_list_row (IdeTreeExpander *self)
   return self->list_row;
 }
 
+static void
+ide_tree_expander_clear_list_row (IdeTreeExpander *self)
+{
+  GtkWidget *child;
+
+  g_assert (IDE_IS_TREE_EXPANDER (self));
+
+  if (self->list_row == NULL)
+    return;
+
+  g_clear_signal_handler (&self->list_row_notify_depth, self->list_row);
+  g_clear_signal_handler (&self->list_row_notify_expanded, self->list_row);
+
+  g_clear_object (&self->list_row);
+
+  gtk_label_set_label (GTK_LABEL (self->title), NULL);
+  gtk_image_set_from_icon_name (GTK_IMAGE (self->image), NULL);
+
+  child = gtk_widget_get_prev_sibling (self->image);
+
+  while (child)
+    {
+      GtkWidget *prev = gtk_widget_get_prev_sibling (child);
+      gtk_widget_unparent (child);
+      child = prev;
+    }
+}
+
 void
 ide_tree_expander_set_list_row (IdeTreeExpander *self,
                                 GtkTreeListRow  *list_row)
@@ -657,31 +685,32 @@ ide_tree_expander_set_list_row (IdeTreeExpander *self,
   if (self->list_row == list_row)
     return;
 
-  if (self->list_row != NULL)
+  g_object_freeze_notify (G_OBJECT (self));
+
+  ide_tree_expander_clear_list_row (self);
+
+  if (list_row != NULL)
     {
-      g_clear_signal_handler (&self->list_row_notify_depth, self->list_row);
-      g_clear_signal_handler (&self->list_row_notify_expanded, self->list_row);
+      self->list_row = g_object_ref (list_row);
+      self->list_row_notify_expanded =
+        g_signal_connect_object (self->list_row,
+                                 "notify::expanded",
+                                 G_CALLBACK (ide_tree_expander_notify_expanded_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+      self->list_row_notify_depth =
+        g_signal_connect_object (self->list_row,
+                                 "notify::depth",
+                                 G_CALLBACK (ide_tree_expander_notify_depth_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+      ide_tree_expander_update_depth (self);
+      ide_tree_expander_update_icon (self);
     }
-
-  g_set_object (&self->list_row, list_row);
-
-  if (self->list_row != NULL)
-    {
-      self->list_row_notify_expanded = g_signal_connect_object (self->list_row,
-                                                                "notify::expanded",
-                                                                G_CALLBACK (ide_tree_expander_notify_expanded_cb),
-                                                                self,
-                                                                G_CONNECT_SWAPPED);
-      self->list_row_notify_depth = g_signal_connect_object (self->list_row,
-                                                             "notify::depth",
-                                                             G_CALLBACK (ide_tree_expander_notify_depth_cb),
-                                                             self,
-                                                             G_CONNECT_SWAPPED);
-    }
-
-  ide_tree_expander_update_depth (self);
-  ide_tree_expander_update_icon (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LIST_ROW]);
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ITEM]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_EXPANDED]);
+
+  g_object_thaw_notify (G_OBJECT (self));
 }
