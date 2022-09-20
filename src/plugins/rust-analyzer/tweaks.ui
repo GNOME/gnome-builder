@@ -47,7 +47,33 @@
                           <object class="IdeTweaksRadio">
                             <property name="title" translatable="yes">Proc Macros</property>
                             <property name="subtitle" translatable="yes">Enables the experimental Proc Macros feature of rust-analyzer</property>
-                            <property name="value">'procMacro'</property>
+                            <property name="value">'procMacro.enable'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.rust-analyzer</property>
+                                <property name="schema-key">features</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Cargo Build Scripts</property>
+                            <property name="subtitle" translatable="yes">Run build scripts (build.rs) for more precise code analysis</property>
+                            <property name="value">'cargo.buildScripts.enable'</property>
+                            <property name="binding">
+                              <object class="IdeTweaksSetting">
+                                <property name="schema-id">org.gnome.builder.rust-analyzer</property>
+                                <property name="schema-key">features</property>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="IdeTweaksRadio">
+                            <property name="title" translatable="yes">Rustfmt Range Formatting</property>
+                            <property name="subtitle" translatable="yes">Enables the use of rustfmt’s unstable range formatting command. The rustfmt option is unstable and only available on nightly builds of the Rust SDK.</property>
+                            <property name="value">'rustfmt.rangeFormatting.enable'</property>
                             <property name="binding">
                               <object class="IdeTweaksSetting">
                                 <property name="schema-id">org.gnome.builder.rust-analyzer</property>

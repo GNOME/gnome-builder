@@ -9,7 +9,7 @@
       <default>'check'</default>
     </key>
     <key name="features" type="as">
-      <default>['procMacro']</default>
+      <default>['procMacro.enable', 'cargo.buildScripts.enable']</default>
     </key>
   </schema>
 </schemalist>

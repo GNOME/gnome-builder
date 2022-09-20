@@ -112,7 +112,9 @@ gbp_rust_analyzer_service_configure_client (IdeLspService *service,
   g_autoptr(GVariant) params = NULL;
   g_auto(GStrv) features = NULL;
   struct {
+    guint build_scripts : 1;
     guint proc_macro : 1;
+    guint range_formatting : 1;
   } feat;
 
   IDE_ENTRY;
@@ -125,7 +127,9 @@ gbp_rust_analyzer_service_configure_client (IdeLspService *service,
   ide_lsp_client_add_language (client, "rust");
 
   features = g_settings_get_strv (self->settings, "features");
-  feat.proc_macro = g_strv_contains ((const char * const *)features, "procMacro");
+  feat.build_scripts = g_strv_contains ((const char * const *)features, "cargo.buildScripts.enable");
+  feat.proc_macro = g_strv_contains ((const char * const *)features, "procMacro.enable");
+  feat.range_formatting = g_strv_contains ((const char * const *)features, "rustfmt.rangeFormatting.enable");
 
   /* Opt-in for experimental proc-macro feature to make gtk-rs more
    * useful for GNOME developers.
@@ -133,8 +137,18 @@ gbp_rust_analyzer_service_configure_client (IdeLspService *service,
    * See: https://rust-analyzer.github.io/manual.html#configuration
    */
   params = JSONRPC_MESSAGE_NEW (
+    "cargo", "{",
+      "buildScripts", "{",
+        "enable", JSONRPC_MESSAGE_PUT_BOOLEAN (feat.build_scripts),
+      "}",
+    "}",
     "procMacro", "{",
       "enable", JSONRPC_MESSAGE_PUT_BOOLEAN (feat.proc_macro),
+    "}",
+    "rustfmt", "{",
+      "rangeFormatting", "{",
+        "enable", JSONRPC_MESSAGE_PUT_BOOLEAN (feat.range_formatting),
+      "}",
     "}"
   );
 
