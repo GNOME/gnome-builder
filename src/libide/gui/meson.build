@@ -11,6 +11,7 @@ libide_gui_generated_headers = []
 libide_gui_public_headers = [
   'ide-application.h',
   'ide-application-addin.h',
+  'ide-application-tweaks.h',
   'ide-environment-editor.h',
   'ide-frame.h',
   'ide-frame-addin.h',
