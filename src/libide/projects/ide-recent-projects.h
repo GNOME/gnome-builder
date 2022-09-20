@@ -42,6 +42,8 @@ IdeRecentProjects *ide_recent_projects_get_default       (void);
 IDE_AVAILABLE_IN_ALL
 IdeRecentProjects *ide_recent_projects_new               (void);
 IDE_AVAILABLE_IN_ALL
+void               ide_recent_projects_invalidate        (IdeRecentProjects *self);
+IDE_AVAILABLE_IN_ALL
 void               ide_recent_projects_remove            (IdeRecentProjects *self,
                                                           GList             *project_infos);
 IDE_AVAILABLE_IN_ALL
