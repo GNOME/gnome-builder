@@ -208,6 +208,9 @@ gbp_recent_workbench_addin_add_recent (GbpRecentWorkbenchAddin *self,
       g_clear_error (&error);
     }
 
+  /* Request that the recent projects be reloaded */
+  ide_recent_projects_invalidate (ide_recent_projects_get_default ());
+
   IDE_EXIT;
 }
 
@@ -248,7 +251,7 @@ workbench_addin_iface_init (IdeWorkbenchAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpRecentWorkbenchAddin, gbp_recent_workbench_addin, G_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_WORKBENCH_ADDIN, workbench_addin_iface_init))
 
 static void
 gbp_recent_workbench_addin_class_init (GbpRecentWorkbenchAddinClass *klass)
