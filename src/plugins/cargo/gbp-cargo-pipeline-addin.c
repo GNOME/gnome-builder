@@ -112,8 +112,7 @@ attach_run_context (GbpCargoPipelineAddin *self,
   id = ide_pipeline_attach (pipeline, phase, 0, stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), id);
 
-  /* return borrowed reference */
-  return stage;
+  return g_steal_pointer (&stage);
 }
 
 static void
@@ -139,7 +138,8 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   g_autoptr(IdeRunContext) fetch_context = NULL;
   g_autoptr(IdeRunContext) build_context = NULL;
   g_autoptr(IdeRunContext) clean_context = NULL;
-  g_autoptr(IdePipelineStage) stage = NULL;
+  g_autoptr(IdePipelineStage) fetch_stage = NULL;
+  g_autoptr(IdePipelineStage) build_stage = NULL;
   g_autofree char *project_dir = NULL;
   g_autofree char *cargo = NULL;
   IdeBuildSystem *build_system;
@@ -168,7 +168,7 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (cargo != NULL);
 
   fetch_context = create_run_context (pipeline, project_dir, cargo, "fetch", NULL);
-  attach_run_context (self, pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, fetch_context, NULL, _("Fetch dependencies"));
+  fetch_stage = attach_run_context (self, pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, fetch_context, NULL, _("Fetch dependencies"));
 
   build_context = create_run_context (pipeline, project_dir, cargo, "build", "--message-format", "human", NULL);
   clean_context = create_run_context (pipeline, project_dir, cargo, "clean", NULL);
@@ -196,10 +196,8 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   if (!ide_str_empty0 (config_opts))
     ide_run_context_append_args_parsed (build_context, config_opts, NULL);
 
-  stage = attach_run_context (self, pipeline, IDE_PIPELINE_PHASE_BUILD,
-                              build_context, clean_context,
-                              _("Build project"));
-  g_signal_connect (stage, "query", G_CALLBACK (query_cb), NULL);
+  build_stage = attach_run_context (self, pipeline, IDE_PIPELINE_PHASE_BUILD, build_context, clean_context, _("Build project"));
+  g_signal_connect (build_stage, "query", G_CALLBACK (query_cb), NULL);
 
   IDE_EXIT;
 }
