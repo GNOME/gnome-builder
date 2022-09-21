@@ -8,14 +8,14 @@
       <item>
         <attribute name="label" translatable="yes">_Comment Code</attribute>
         <attribute name="description" translatable="yes">Add comments surrounding the source code selection</attribute>
-        <attribute name="action">comment-code.comment-code</attribute>
+        <attribute name="action">page.comment-code.comment-code</attribute>
         <attribute name="target" type="s">'0'</attribute>
         <attribute name="accel">&lt;control&gt;m</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Unco_mment Code</attribute>
         <attribute name="description" translatable="yes">Remove comments from the source code selection</attribute>
-        <attribute name="action">comment-code.comment-code</attribute>
+        <attribute name="action">page.comment-code.comment-code</attribute>
         <attribute name="target" type="s">'1'</attribute>
         <attribute name="accel">&lt;control&gt;&lt;shift&gt;m</attribute>
       </item>
