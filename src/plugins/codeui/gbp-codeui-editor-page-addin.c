@@ -138,6 +138,7 @@ rename_symbol_action (GbpCodeuiEditorPageAddin *self,
   GtkTextIter begin, end;
   GtkWidget *dialog;
   g_autofree char *word = NULL;
+  GtkWindow *toplevel;
   gboolean failed = FALSE;
 
   IDE_ENTRY;
@@ -169,10 +170,10 @@ rename_symbol_action (GbpCodeuiEditorPageAddin *self,
         }
     }
 
+  toplevel = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self->page)));
+
   if (failed)
     {
-      GtkWindow *toplevel = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self->page)));
-
       dialog = adw_message_dialog_new (toplevel,
                                        _("Symbol Not Selected"),
                                        _("A symbol to rename must be selected"));
@@ -186,6 +187,8 @@ rename_symbol_action (GbpCodeuiEditorPageAddin *self,
   location = ide_buffer_get_iter_location (self->buffer, &begin);
 
   dialog = gbp_codeui_rename_dialog_new (provider, location, word);
+  gtk_window_set_transient_for (GTK_WINDOW (dialog), toplevel);
+  gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_window_present (GTK_WINDOW (dialog));
 
   IDE_EXIT;
