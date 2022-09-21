@@ -128,11 +128,7 @@ gbp_buildui_pane_unbind_pipeline (GbpBuilduiPane *self,
 
   if (!gtk_widget_in_destruction (GTK_WIDGET (self)))
     {
-      GtkWidget *child;
-
-      while ((child = gtk_widget_get_first_child (GTK_WIDGET (self->stages_list_box))) != NULL)
-        gtk_list_box_remove (self->stages_list_box, child);
-
+      gtk_list_box_bind_model (self->stages_list_box, NULL, NULL, NULL, NULL);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
     }
 }
