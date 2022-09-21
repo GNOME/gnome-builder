@@ -32,6 +32,12 @@ integrate with tooling such as the GNU debugger, Valgrind, Sysprof, and
 more. Controlling how the debugger was spawned has been a long requested
 feature by users.
 
+## Unit Testing
+
+In previous version of Builder, plugins were responsible for how Unit Tests
+were run. Now, they also use Run Commands which allows users to run their
+Unit Tests with the debugger or other tooling.
+
 ## Keyboard Shortcuts
 
 Keyboard shortcuts were always a sore spot in GTK 3. With the move to GTK 4
@@ -59,6 +65,11 @@ Additionally, Builder will try to save the state of various pages including
 editors, terminals, web browsers, directory listings, and more. When you re-open
 your project with Builder, you can expect to get back reasonably close to where
 you left off.
+
+Closing the primary workspace will now close the project. That means that
+the state of secondary workspaces (such as those created for an additional
+monitor) will be automatically saved and restored the next time the project
+is launched.
 
 ## GtkSourceView
 
@@ -155,6 +166,19 @@ vls (Vala), rust-analyzer (Rust), blueprint, and intelephense (PHP).
 
 Many language servers are easier to install and run given the new design
 for how cross-container processes are spawned.
+
+## Quick Settings
+
+From the Run Menu, many new quick settings are available to tweak how the
+application runs as well as well as configure tooling.
+
+For example, you can now toggle various Valgrind options from the Leak Detector
+submenu. Sysprof integration also follows suit here by allowing you to toggle
+what instruments will be used when recording system state.
+
+To make it easier for developers to ensure their software is inclusive, we've
+added options to toggle High Contrast themes, LTR vs RTL, and light vs dark
+styling.
 
 ## Plugins
 
