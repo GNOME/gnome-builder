@@ -140,8 +140,8 @@
     <section id="ide-editor-page-document-section">
       <item>
         <attribute name="label" translatable="yes">Open in New Frame</attribute>
-        <attribute name="id">editor-document-open-in-new-workspace</attribute>
-        <attribute name="action">editorui.open-in-new-frame</attribute>
+        <attribute name="id">editor-document-open-in-new-frame</attribute>
+        <attribute name="action">page.open-in-new-frame</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Open in New Workspace…</attribute>

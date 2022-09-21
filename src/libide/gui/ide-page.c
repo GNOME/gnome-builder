@@ -194,12 +194,41 @@ open_in_new_workspace_action (GtkWidget  *widget,
 
   workbench = ide_widget_get_workbench (GTK_WIDGET (self));
   workspace = _ide_workbench_create_secondary (workbench);
+  position = panel_position_new ();
+
   ide_workspace_add_page (IDE_WORKSPACE (workspace), IDE_PAGE (split), position);
 
   gtk_window_present (GTK_WINDOW (workspace));
 
   IDE_EXIT;
 }
+
+static void
+open_in_new_frame_action (GtkWidget  *widget,
+                          const char *action_name,
+                          GVariant   *param)
+{
+  IdePage *self = (IdePage *)widget;
+  g_autoptr(PanelPosition) position = NULL;
+  IdeWorkspace *workspace;
+  IdePage *split;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_PAGE (self));
+
+  if (!(split = ide_page_create_split (self)))
+    IDE_EXIT;
+
+  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+  position = panel_widget_get_position (PANEL_WIDGET (self));
+  panel_position_set_column (position, panel_position_get_column (position) + 1);
+
+  ide_workspace_add_page (IDE_WORKSPACE (workspace), IDE_PAGE (split), position);
+
+  IDE_EXIT;
+}
+
 
 static void
 ide_page_finalize (GObject *object)
@@ -330,6 +359,7 @@ ide_page_class_init (IdePageClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, IdePage, progress_bar);
 
   panel_widget_class_install_action (panel_widget_class, "open-in-new-workspace", NULL, open_in_new_workspace_action);
+  panel_widget_class_install_action (panel_widget_class, "open-in-new-frame", NULL, open_in_new_frame_action);
 }
 
 static void
