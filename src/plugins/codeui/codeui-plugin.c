@@ -23,10 +23,12 @@
 #include <libpeas/peas.h>
 
 #include <libide-code.h>
+#include <libide-editor.h>
 #include <libide-sourceview.h>
 #include <libide-tree.h>
 
 #include "gbp-codeui-buffer-addin.h"
+#include "gbp-codeui-editor-page-addin.h"
 #include "gbp-codeui-hover-provider.h"
 #include "gbp-codeui-tree-addin.h"
 
@@ -36,6 +38,9 @@ _gbp_codeui_register_types (PeasObjectModule *module)
   peas_object_module_register_extension_type (module,
                                               IDE_TYPE_BUFFER_ADDIN,
                                               GBP_TYPE_CODEUI_BUFFER_ADDIN);
+  peas_object_module_register_extension_type (module,
+                                              IDE_TYPE_EDITOR_PAGE_ADDIN,
+                                              GBP_TYPE_CODEUI_EDITOR_PAGE_ADDIN);
   peas_object_module_register_extension_type (module,
                                               GTK_SOURCE_TYPE_HOVER_PROVIDER,
                                               GBP_TYPE_CODEUI_HOVER_PROVIDER);

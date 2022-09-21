@@ -1,7 +1,9 @@
 plugins_sources += files([
   'codeui-plugin.c',
   'gbp-codeui-buffer-addin.c',
+  'gbp-codeui-editor-page-addin.c',
   'gbp-codeui-hover-provider.c',
+  'gbp-codeui-rename-dialog.c',
   'gbp-codeui-tree-addin.c',
 ])
 

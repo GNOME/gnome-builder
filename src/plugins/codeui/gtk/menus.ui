@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <menu id="ide-source-view-popup-menu-foundry-section">
+    <item>
+      <attribute name="id">codeui-rename-symbol</attribute>
+      <attribute name="label" translatable="yes">R_ename Symbol…</attribute>
+      <attribute name="action">page.codeui.rename-symbol</attribute>
+    </item>
+  </menu>
+</interface>
