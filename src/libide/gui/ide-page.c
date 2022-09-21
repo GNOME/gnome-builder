@@ -229,6 +229,31 @@ open_in_new_frame_action (GtkWidget  *widget,
   IDE_EXIT;
 }
 
+static void
+split_action (GtkWidget  *widget,
+              const char *action_name,
+              GVariant   *param)
+{
+  IdePage *self = (IdePage *)widget;
+  g_autoptr(PanelPosition) position = NULL;
+  IdeWorkspace *workspace;
+  IdePage *split;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_PAGE (self));
+
+  if (!(split = ide_page_create_split (self)))
+    IDE_EXIT;
+
+  workspace = ide_widget_get_workspace (GTK_WIDGET (self));
+  position = panel_widget_get_position (PANEL_WIDGET (self));
+  panel_position_set_row (position, panel_position_get_row (position) + 1);
+
+  ide_workspace_add_page (IDE_WORKSPACE (workspace), IDE_PAGE (split), position);
+
+  IDE_EXIT;
+}
 
 static void
 ide_page_finalize (GObject *object)
@@ -360,6 +385,7 @@ ide_page_class_init (IdePageClass *klass)
 
   panel_widget_class_install_action (panel_widget_class, "open-in-new-workspace", NULL, open_in_new_workspace_action);
   panel_widget_class_install_action (panel_widget_class, "open-in-new-frame", NULL, open_in_new_frame_action);
+  panel_widget_class_install_action (panel_widget_class, "split", NULL, split_action);
 }
 
 static void
