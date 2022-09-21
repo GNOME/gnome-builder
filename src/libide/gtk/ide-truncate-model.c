@@ -120,10 +120,11 @@ ide_truncate_model_items_changed_cb (IdeTruncateModel *self,
     {
       if (position < (self->max_items - 1))
         {
-          g_list_model_items_changed (G_LIST_MODEL (self),
-                                      0,
-                                      self->prev_n_items,
-                                      MIN (n_items, self->max_items));
+          guint truncate_removed = MIN (self->prev_n_items, self->max_items);
+          guint truncate_added = MIN (n_items, self->max_items);
+
+          if (truncate_removed || truncate_added)
+            g_list_model_items_changed (G_LIST_MODEL (self), 0, truncate_removed, truncate_added);
         }
     }
 
