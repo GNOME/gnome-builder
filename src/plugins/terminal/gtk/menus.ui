@@ -34,13 +34,11 @@
       <item>
         <attribute name="id">terminal-open-in-new-frame</attribute>
         <attribute name="label" translatable="yes">Open in New Frame</attribute>
-        <attribute name="action">frame.open-in-new-frame</attribute>
-        <attribute name="target" type="s">""</attribute>
+        <attribute name="action">page.open-in-new-frame</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Split</attribute>
-        <attribute name="action">frame.split-page</attribute>
-        <attribute name="target" type="s">""</attribute>
+        <attribute name="action">page.split</attribute>
         <attribute name="verb-icon-name">builder-split-tab-symbolic</attribute>
       </item>
     </section>
