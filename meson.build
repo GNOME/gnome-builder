@@ -35,7 +35,7 @@ pkgtypelibdir = join_paths(get_option('libdir'), 'gnome-builder', 'girepository-
 
 # Check dependencies
 glib_req_version = '2.73.3'
-gtk_req_version = '4.8'
+gtk_req_version = '4.7.1'
 gtksourceview_req_version = '5.5.2'
 libadwaita_req_version = '1.2.0'
 
