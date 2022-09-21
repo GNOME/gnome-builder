@@ -528,7 +528,9 @@ format_selection_cb (GObject      *object,
                            _("Failed to format selection: %s"),
                            error->message);
 
+#if 0
   gtk_text_view_set_editable (GTK_TEXT_VIEW (self->view), TRUE);
+#endif
 
   IDE_EXIT;
 }
@@ -556,8 +558,11 @@ format_action (GtkWidget  *widget,
   ide_formatter_options_set_tab_width (options, tab_width);
   ide_formatter_options_set_insert_spaces (options, insert_spaces_instead_of_tabs);
 
+#if 0
   /* Disable editing while we format */
+  /* BUG: we can't currently do this because it breaks input methods */
   gtk_text_view_set_editable (GTK_TEXT_VIEW (self->view), FALSE);
+#endif
 
   ide_buffer_format_selection_async (self->buffer,
                                      options,
