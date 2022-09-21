@@ -188,6 +188,8 @@ _ide_text_edit_apply (IdeTextEdit *self,
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &begin, priv->begin_mark);
   gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &end, priv->end_mark);
   gtk_text_buffer_delete (GTK_TEXT_BUFFER (buffer), &begin, &end);
+  /* Refetch insert mark incase signal handlers modified things */
+  gtk_text_buffer_get_iter_at_mark (GTK_TEXT_BUFFER (buffer), &begin, priv->begin_mark);
   gtk_text_buffer_insert (GTK_TEXT_BUFFER (buffer), &begin, priv->text, -1);
   gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER (buffer), priv->begin_mark);
   gtk_text_buffer_delete_mark (GTK_TEXT_BUFFER (buffer), priv->end_mark);
@@ -210,13 +212,12 @@ _ide_text_edit_prepare (IdeTextEdit *self,
   end = ide_range_get_end (priv->range);
 
   ide_buffer_get_iter_at_location (buffer, &begin_iter, begin);
-  ide_buffer_get_iter_at_location (buffer, &end_iter, end);
-
   priv->begin_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer),
                                                   NULL,
                                                   &begin_iter,
                                                   TRUE);
 
+  ide_buffer_get_iter_at_location (buffer, &end_iter, end);
   priv->end_mark = gtk_text_buffer_create_mark (GTK_TEXT_BUFFER (buffer),
                                                 NULL,
                                                 &end_iter,
@@ -318,12 +319,8 @@ ide_text_edit_set_text (IdeTextEdit *self,
 
   g_return_if_fail (IDE_IS_TEXT_EDIT (self));
 
-  if (!ide_str_equal0 (priv->text, text))
-    {
-      g_free (priv->text);
-      priv->text = g_strdup (text);
-      g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEXT]);
-    }
+  if (ide_set_string (&priv->text, text))
+    g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_TEXT]);
 }
 
 void
