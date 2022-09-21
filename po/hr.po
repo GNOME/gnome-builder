@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
 "POT-Creation-Date: 2022-09-21 06:00+0000\n"
-"PO-Revision-Date: 2022-09-21 13:19+0200\n"
+"PO-Revision-Date: 2022-09-21 13:28+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -454,7 +454,7 @@ msgstr "Izgled razmaka"
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:43
 msgid "How to apply spaces when reformatting text."
-msgstr "Kako primijeniti razmake pri preoblikovanju teksta."
+msgstr "Kako primijeniti razmake pri preformatiranju teksta."
 
 #: data/gsettings/org.gnome.builder.extension-type.gschema.xml:5
 msgid "Enabled"
@@ -913,7 +913,7 @@ msgstr "Neuspjeli ispis: %s"
 #: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
-msgstr "Neuspjelo preoblikovanje odabira: %s"
+msgstr "Neuspjelo preformatiranje odabira: %s"
 
 #: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
@@ -1629,7 +1629,7 @@ msgstr "Predlošci"
 
 #: src/libide/plugins/ide-plugin.c:349
 msgid "Editing & Formatting"
-msgstr "Uređivanje i oblikovanje"
+msgstr "Uređivanje i formatiranje"
 
 #: src/libide/plugins/ide-plugin.c:352
 msgid "Web"
@@ -1732,7 +1732,7 @@ msgstr "Odaberi _sve"
 
 #: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
-msgstr "Oblikovanje"
+msgstr "Formatiranje"
 
 #: src/libide/sourceview/gtk/menus.ui:81
 msgid "All _Upper Case"
@@ -3327,7 +3327,7 @@ msgstr "Ispis…"
 
 #: src/plugins/editorui/gtk/menus.ui:188
 msgid "Format Selection"
-msgstr "Odabir oblikovanja"
+msgstr "Odabir formata"
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
@@ -3343,7 +3343,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
-msgstr "Uvlačenje i oblikovanje"
+msgstr "Uvlačenje i formatiranje"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
@@ -3784,15 +3784,15 @@ msgstr "Odgoda u sekundama prije automatskog spremanja dokumenta"
 
 #: src/plugins/editorui/tweaks.ui:581
 msgid "Format on Save"
-msgstr "Preoblikuj pri spremanju"
+msgstr "Preformatiraj pri spremanju"
 
 #: src/plugins/editorui/tweaks.ui:582
 msgid ""
 "Reformat sources when saving to disk. Requires a registered formatter for "
 "the source language."
 msgstr ""
-"Preoblikuj izvore pri spremanju na disk. Zahtijeva registriranog "
-"preoblikovatelja za jezik izvora."
+"Preformatiraj izvore pri spremanju na disk. Zahtijeva registriranog "
+"preformatera za jezik izvora."
 
 #: src/plugins/editorui/tweaks.ui:597
 msgid "Restore Cursor Position"
@@ -4815,7 +4815,7 @@ msgstr "Nedavni projekti"
 
 #: src/plugins/retab/gtk/menus.ui:5
 msgid "_Reformat Tabs"
-msgstr "_Preoblikuj tabulatore"
+msgstr "_Preformatiraj tabulatore"
 
 #: src/plugins/rust-analyzer/tweaks.ui:13
 msgid "Rust Analyzer"
@@ -4855,14 +4855,14 @@ msgstr "Pokreni skripte izgradnje (build.rs) za precizniju analizu kôda"
 
 #: src/plugins/rust-analyzer/tweaks.ui:74
 msgid "Rustfmt Range Formatting"
-msgstr "Oblikovanje Rustfmt raspona"
+msgstr "Formatiranje Rustfmt raspona"
 
 #: src/plugins/rust-analyzer/tweaks.ui:75
 msgid ""
 "Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
 "option is unstable and only available on nightly builds of the Rust SDK."
 msgstr ""
-"Omogućuje korištenje naredbe oblikovanja rustfmt nestabilnog raspona. "
+"Omogućuje korištenje naredbe formatiranja rustfmt nestabilnog raspona. "
 "Mogućnost rustfmt je nestabilna i dostupna samo na noćnim Rust SDK "
 "izgradnjama izdanja."
 
