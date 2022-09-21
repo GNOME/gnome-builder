@@ -1,0 +1,2 @@
+{ "trigger" : "<Control>m", "action" : "page.comment-code.comment-code", "args" : "'0'", "when" : "canEdit()", "phase" : "capture" },
+{ "trigger" : "<Control><Shift>m", "action" : "page.comment-code.comment-code", "args" : "'1'", "when" : "canEdit()", "phase" : "capture" },
