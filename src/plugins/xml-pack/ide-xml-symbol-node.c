@@ -153,7 +153,8 @@ ide_xml_symbol_node_new (const gchar   *name,
   IdeSymbolFlags flags = IDE_SYMBOL_FLAGS_NONE;
 
   self = g_object_new (IDE_TYPE_XML_SYMBOL_NODE,
-                       "name", name,
+                       "name", ide_str_empty0 (element_name) ? "unknown" : element_name,
+                       "display-name", name,
                        "kind", kind,
                        "flags", flags,
                        NULL);

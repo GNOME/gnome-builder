@@ -31,7 +31,8 @@
 
 typedef struct
 {
-  gchar          *name;
+  char           *name;
+  char           *display_name;
   IdeSymbolFlags  flags;
   IdeSymbolKind   kind;
   guint           use_markup : 1;
@@ -41,6 +42,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (IdeSymbolNode, ide_symbol_node, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
+  PROP_DISPLAY_NAME,
   PROP_FLAGS,
   PROP_KIND,
   PROP_NAME,
@@ -104,6 +106,7 @@ ide_symbol_node_finalize (GObject *object)
   IdeSymbolNodePrivate *priv = ide_symbol_node_get_instance_private (self);
 
   g_clear_pointer (&priv->name, g_free);
+  g_clear_pointer (&priv->display_name, g_free);
 
   G_OBJECT_CLASS (ide_symbol_node_parent_class)->finalize (object);
 }
@@ -115,12 +118,22 @@ ide_symbol_node_get_property (GObject    *object,
                               GParamSpec *pspec)
 {
   IdeSymbolNode *self = IDE_SYMBOL_NODE (object);
+  IdeSymbolNodePrivate *priv = ide_symbol_node_get_instance_private (self);
 
   switch (prop_id)
     {
     case PROP_NAME:
       g_value_set_string (value, ide_symbol_node_get_name (self));
       break;
+
+    case PROP_DISPLAY_NAME:
+    {
+      if (priv->display_name)
+        g_value_set_string (value, priv->display_name);
+      else if (priv->name)
+        g_value_take_string (value, g_markup_escape_text (priv->name, -1));
+      break;
+    }
 
     case PROP_ICON_NAME:
       g_value_set_static_string (value, ide_symbol_node_get_icon_name (self));
@@ -159,6 +172,11 @@ ide_symbol_node_set_property (GObject      *object,
       priv->name = g_value_dup_string (value);
       break;
 
+    case PROP_DISPLAY_NAME:
+      g_free (priv->display_name);
+      priv->display_name = g_value_dup_string (value);
+      break;
+
     case PROP_KIND:
       priv->kind = g_value_get_enum (value);
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ICON_NAME]);
@@ -188,6 +206,11 @@ ide_symbol_node_class_init (IdeSymbolNodeClass *klass)
   object_class->finalize = ide_symbol_node_finalize;
   object_class->get_property = ide_symbol_node_get_property;
   object_class->set_property = ide_symbol_node_set_property;
+
+  properties [PROP_DISPLAY_NAME] =
+    g_param_spec_string ("display-name", NULL, NULL,
+                         NULL,
+                         (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   properties [PROP_NAME] =
     g_param_spec_string ("name",
