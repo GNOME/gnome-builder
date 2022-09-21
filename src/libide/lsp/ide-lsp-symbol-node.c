@@ -61,9 +61,9 @@ location_compare (const Location *a,
 
 static void
 ide_lsp_symbol_node_get_location_async (IdeSymbolNode       *node,
-                                             GCancellable        *cancellable,
-                                             GAsyncReadyCallback  callback,
-                                             gpointer             user_data)
+                                        GCancellable        *cancellable,
+                                        GAsyncReadyCallback  callback,
+                                        gpointer             user_data)
 {
   IdeLspSymbolNode *self = (IdeLspSymbolNode *)node;
   IdeLspSymbolNodePrivate *priv = ide_lsp_symbol_node_get_instance_private (self);
@@ -84,8 +84,8 @@ ide_lsp_symbol_node_get_location_async (IdeSymbolNode       *node,
 
 static IdeLocation *
 ide_lsp_symbol_node_get_location_finish (IdeSymbolNode  *node,
-                                              GAsyncResult   *result,
-                                              GError        **error)
+                                         GAsyncResult   *result,
+                                         GError        **error)
 {
   IdeLocation *ret;
 
@@ -180,7 +180,7 @@ ide_lsp_symbol_node_get_parent_name (IdeLspSymbolNode *self)
 
 gboolean
 ide_lsp_symbol_node_is_parent_of (IdeLspSymbolNode *self,
-                                       IdeLspSymbolNode *other)
+                                  IdeLspSymbolNode *other)
 {
   IdeLspSymbolNodePrivate *priv = ide_lsp_symbol_node_get_instance_private (self);
   IdeLspSymbolNodePrivate *opriv = ide_lsp_symbol_node_get_instance_private (other);
