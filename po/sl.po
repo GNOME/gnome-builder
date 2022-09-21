@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-18 14:24+0000\n"
-"PO-Revision-Date: 2022-09-20 22:06+0200\n"
+"POT-Creation-Date: 2022-09-21 13:32+0000\n"
+"PO-Revision-Date: 2022-09-21 17:26+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -357,7 +357,7 @@ msgstr "Pametni tipki HOME in END"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:66
 msgid "Modifies the behavior of Home/End keys."
-msgstr ""
+msgstr "Spremeni vedenje tipk Začetek/Konec (Home/End)."
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:70
 msgid "Show grid lines"
@@ -470,7 +470,7 @@ msgstr "Odzivno dopolnjevanje"
 
 #: data/gsettings/org.gnome.builder.editor.gschema.xml:146
 msgid "Automatically select the first auto-completion entry."
-msgstr ""
+msgstr "Samodejno izberite prvi vnos samodejnega dokončanja."
 
 #: data/gsettings/org.gnome.builder.editor.language.gschema.xml:42
 msgid "Spaces Style"
@@ -548,7 +548,7 @@ msgstr ""
 
 #: data/gsettings/org.gnome.builder.gschema.xml:50
 msgid "The interface style to change pages"
-msgstr ""
+msgstr "Slog vmesnika za spreminjanje strani"
 
 #: data/gsettings/org.gnome.builder.gschema.xml:64
 #, fuzzy
@@ -606,7 +606,7 @@ msgstr "privzeti ukaz cargo"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:34
 msgid "The signal to send the app to stop"
-msgstr ""
+msgstr "Aplikaciji poslani signal za zaustavitev"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:35
 msgid ""
@@ -674,10 +674,8 @@ msgid "Check Spelling"
 msgstr "Preveri črkovanje"
 
 #: data/gsettings/org.gnome.builder.spelling.gschema.xml:6
-#, fuzzy
-#| msgid "Automatically hide map when editor loses focus"
 msgid "Automatically check spelling within documents"
-msgstr "Samodejno skrij zemljevid, ko urejevalnik izgubi žarišče"
+msgstr "Samodejno preveri črkovanje v dokumentih"
 
 #: data/org.gnome.Builder.desktop.in.in:4
 msgid "Build software for GNOME"
@@ -756,6 +754,8 @@ msgstr "Neimenovano"
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
 #: src/libide/gui/ide-workbench.c:1500
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
@@ -776,9 +776,8 @@ msgstr "Odpri datoteko …"
 
 #: src/libide/editor/gtk/menus.ui:22
 #, fuzzy
-#| msgid "Open in New Workspace"
 msgid "Open a file in the workspace"
-msgstr "Odpri na novi delovni površini"
+msgstr "Odpri datoteko na delovni površini"
 
 #: src/libide/editor/gtk/menus.ui:31 src/libide/greeter/gtk/menus.ui:29
 #: src/libide/gui/gtk/menus.ui:26 src/libide/tweaks/ide-tweaks-window.c:129
@@ -868,7 +867,7 @@ msgstr "Odpiranje datoteke ni uspelo: %s"
 
 #: src/libide/editor/ide-editor-info-bar.c:85
 msgid "_Discard Changes and Reload"
-msgstr ""
+msgstr "_Opusti spremembe in ponovno naloži"
 
 #: src/libide/editor/ide-editor-info-bar.c:88
 msgid "File Has Changed on Disk"
@@ -876,7 +875,7 @@ msgstr "Datoteka se je spremenila na disku"
 
 #: src/libide/editor/ide-editor-info-bar.c:89
 msgid "The file has been changed by another program."
-msgstr ""
+msgstr "Datoteko je spremenil drug program."
 
 #: src/libide/editor/ide-editor-info-bar.c:100
 msgid "Save _As…"
@@ -884,7 +883,7 @@ msgstr "Shrani _kot …"
 
 #: src/libide/editor/ide-editor-info-bar.c:102
 msgid "Buffer Restored"
-msgstr ""
+msgstr "Medpomnilnik obnovljen"
 
 #: src/libide/editor/ide-editor-info-bar.c:103
 msgid "Unsaved buffer has been restored."
@@ -905,7 +904,7 @@ msgstr ""
 
 #: src/libide/editor/ide-editor-info-bar.c:114
 msgid "Unsaved changes to the buffer have been restored."
-msgstr ""
+msgstr "Neshranjene spremembe v medpomnilniku so bile obnovljene."
 
 #: src/libide/editor/ide-editor-info-bar.ui:19
 msgid "Could Not Open File"
@@ -913,7 +912,7 @@ msgstr "Datoteke ni mogoče odpreti"
 
 #: src/libide/editor/ide-editor-info-bar.ui:29
 msgid "You do not have permission to open the file."
-msgstr ""
+msgstr "Nimate ustreznih pravic za odpiranje datoteke."
 
 #: src/libide/editor/ide-editor-info-bar.ui:37
 msgid "_Retry"
@@ -1145,6 +1144,7 @@ msgstr "Poteka nastavljanje …"
 
 #: src/libide/foundry/ide-pipeline.c:3299
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Poteka izgradnja …"
 
@@ -1177,7 +1177,6 @@ msgid "Removing %s"
 msgstr "Poteka odstranjevanje %s"
 
 #: src/libide/foundry/ide-pipeline.c:3742
-#, fuzzy
 msgid "Removing build directories…"
 msgstr "Odstranjevanje map gradnje …"
 
@@ -1208,8 +1207,9 @@ msgid "Running %s…"
 msgstr "Poteka zaganjanje %s …"
 
 #: src/libide/foundry/ide-run-manager.c:996
+#, fuzzy
 msgid "Deploying to device…"
-msgstr ""
+msgstr "Uvajanje na napravo ..."
 
 #: src/libide/foundry/ide-runtime.c:413
 #: src/plugins/host/gbp-host-runtime-provider.c:53
@@ -1228,8 +1228,10 @@ msgstr "Privzeto (gostiteljski operacijski sistem)"
 msgid "_Clone Repository…"
 msgstr "_Kloniraj skladišče …"
 
-#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
-#: src/plugins/sysprof/gtk/menus.ui:138
+#: src/libide/greeter/gtk/menus.ui:20
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:195
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:405
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "Zapri"
 
@@ -1458,8 +1460,9 @@ msgid "Find keyboard shortcuts"
 msgstr "Tipkovne bližnjice"
 
 #: src/libide/gui/gtk/menus.ui:52
+#, fuzzy
 msgid "Show information about Builder"
-msgstr ""
+msgstr "Pokaži informacije o graditelju"
 
 #: src/libide/gui/gtk/menus.ui:78 src/plugins/web-browser/gtk/menus.ui:16
 msgid "Web Browsing"
@@ -1583,21 +1586,17 @@ msgid "Search (Ctrl+Enter)"
 msgstr "Iskanje (krmilka+vnašalka)"
 
 #: src/libide/gui/ide-primary-workspace.ui:105
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Toggle bottom panel"
 msgid "Toggle Bottom Panel (Ctrl+F9)"
-msgstr "Preklopi spodnji pladenj"
+msgstr "Preklopi spodnji pladenj (krmilka+F9)"
 
 #: src/libide/gui/ide-run-button.c:62
 msgid "Run Project (Shift+Ctrl+Space)"
-msgstr ""
+msgstr "Zaženi projekt (dvigalka+krmilka+preslednica)"
 
 #: src/libide/gui/ide-run-button.c:68
 #, fuzzy
-#| msgid "Stop running"
 msgid "Stop Running Project"
-msgstr "Zaustavi izvajanje"
+msgstr "Zaustavi izvajanje projekta"
 
 #: src/libide/gui/ide-run-button.c:149
 msgid "Stop running"
@@ -1614,9 +1613,8 @@ msgstr "Drugo"
 
 #: src/libide/gui/ide-workspace.c:1701
 #, fuzzy
-#| msgid "unsaved document %u"
 msgid "There are unsaved documents"
-msgstr "neshranjen dokument %u"
+msgstr "Obstajajo neshranjeni dokumenti"
 
 #: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
 #: src/plugins/buildui/gtk/preferences.ui:25
@@ -1663,7 +1661,7 @@ msgstr "Jezikovni strežniki"
 
 #: src/libide/plugins/ide-plugin.c:343
 msgid "Devices & Simulators"
-msgstr ""
+msgstr "Naprave in simulatorji"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
@@ -1673,9 +1671,8 @@ msgstr "Diagnostika"
 
 #: src/libide/plugins/ide-plugin.c:345
 #, fuzzy
-#| msgid "Build System"
 msgid "Build Systems"
-msgstr "Sistem izgradnje"
+msgstr "Sistemi izgradnje"
 
 #: src/libide/plugins/ide-plugin.c:346
 msgid "Compilers"
@@ -1691,7 +1688,7 @@ msgstr "Predloge"
 
 #: src/libide/plugins/ide-plugin.c:349
 msgid "Editing & Formatting"
-msgstr ""
+msgstr "Urejanje in oblikovanje"
 
 #: src/libide/plugins/ide-plugin.c:352
 msgid "Web"
@@ -1705,9 +1702,8 @@ msgstr "Skladnja jezika"
 
 #: src/libide/plugins/ide-plugin.c:354
 #, fuzzy
-#| msgid "Delete the configuration"
 msgid "Desktop Integration"
-msgstr "Izbriši nastavitve"
+msgstr "Integracija v namizje"
 
 #: src/libide/plugins/ide-plugin.c:355
 msgid "Additional"
@@ -1806,10 +1802,8 @@ msgstr "Vse _velike črke"
 
 #: src/libide/sourceview/gtk/menus.ui:82
 #, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Make selection upper case"
 msgid "Convert the text selection to upper case"
-msgstr "Pretvori izbor v velike črke"
+msgstr "Pretvori izbor besedila v velike črke"
 
 #: src/libide/sourceview/gtk/menus.ui:88
 msgid "All _Lower Case"
@@ -1817,10 +1811,8 @@ msgstr "Vse _male črke"
 
 #: src/libide/sourceview/gtk/menus.ui:89
 #, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Make selection lower case"
 msgid "Convert the text selection to lower case"
-msgstr "Pretvori izbor v male črke"
+msgstr "Pretvori izbor besedila v male črke"
 
 #: src/libide/sourceview/gtk/menus.ui:95
 msgid "In_vert Case"
@@ -1866,20 +1858,6 @@ msgstr "Po_dvoji vrstico"
 msgid "Code Navigation"
 msgstr "Krmarjenje po kodi"
 
-#: src/libide/sourceview/gtk/menus.ui:149
-msgid "_Go to Definition"
-msgstr "_Skoči na določilo"
-
-#: src/libide/sourceview/gtk/menus.ui:150
-#, fuzzy
-#| msgid "Jump to the last position when reopening a file"
-msgid "Jump to file and location where item is defined"
-msgstr "Skoči na konec med ponovnim odpiranjem datoteke"
-
-#: src/libide/sourceview/gtk/menus.ui:156
-msgid "_Find References"
-msgstr "_Najdi sklice"
-
 #. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
@@ -1892,11 +1870,8 @@ msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
 #: src/libide/terminal/gtk/menus.ui:17
-#, fuzzy
-#| msgctxt "shortcut window"
-#| msgid "Copy selected text to clipboard"
 msgid "Copy selection from terminal to clipboard"
-msgstr "Kopira izbrano besedilo na odložišče"
+msgstr "Kopira izbor iz terminala na odložišče"
 
 #: src/libide/terminal/gtk/menus.ui:22
 msgid "_Copy Link"
@@ -1976,6 +1951,7 @@ msgid "(Empty)"
 msgstr "(Prazno)"
 
 #: src/libide/tree/ide-tree-node.c:1468
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
 msgid "Loading…"
 msgstr "Poteka nalaganje …"
 
@@ -2453,10 +2429,8 @@ msgid "Unit Tests"
 msgstr "Preizkusi enot"
 
 #: src/plugins/buildui/gtk/menus.ui:155
-#, fuzzy
-#| msgid "Follow system night light"
 msgid "Follow System Style"
-msgstr "Upoštevaj sistemsko nočno osvetlitev"
+msgstr "Sledi slogu sistema"
 
 #: src/plugins/buildui/gtk/menus.ui:161
 #, fuzzy
@@ -2583,13 +2557,11 @@ msgstr "Ukaz zahteva dejaven pogled"
 
 #: src/plugins/buildui/tweaks.ui:55
 msgid "Starting & Stopping"
-msgstr ""
+msgstr "Zagon in ustavitev"
 
 #: src/plugins/buildui/tweaks.ui:58
-#, fuzzy
-#| msgid "Installing"
 msgid "Install Before Running"
-msgstr "Poteka nameščanje …"
+msgstr "Namesti pred zagonom"
 
 #: src/plugins/buildui/tweaks.ui:59
 msgid ""
@@ -2611,7 +2583,7 @@ msgstr ""
 
 #: src/plugins/buildui/tweaks.ui:130
 msgid "Logging"
-msgstr ""
+msgstr "Beleženje"
 
 #: src/plugins/buildui/tweaks.ui:134
 msgid ""
@@ -2649,7 +2621,7 @@ msgstr "Zgodovina"
 
 #: src/plugins/buildui/tweaks.ui:188
 msgid "Clear Expired Artifacts"
-msgstr ""
+msgstr "Počisti potekle artefakte"
 
 #: src/plugins/buildui/tweaks.ui:189
 #, fuzzy
@@ -2687,7 +2659,7 @@ msgstr "Privzeto"
 
 #: src/plugins/buildui/tweaks.ui:233
 msgid "1 per CPU"
-msgstr ""
+msgstr "1 na CPE"
 
 #: src/plugins/buildui/tweaks.ui:239
 msgid "1"
@@ -2909,7 +2881,84 @@ msgstr "Deklaracija"
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
+msgstr "Morebitna tipkarska napaka v »%s«. Ali ste mislili »%s«?"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
+msgid "Symbol Not Selected"
+msgstr "Simbol ni izbran"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:194
+msgid "A symbol to rename must be selected"
 msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
+#, fuzzy
+#| msgid "_Find References"
+msgid "Find References"
+msgstr "_Najdi sklice"
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:168
+#, fuzzy
+#| msgid "Preferences"
+msgid "No references found"
+msgstr "Možnosti"
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:169
+msgid "The programming language tooling may not support finding references"
+msgstr ""
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
+#, fuzzy, c-format
+#| msgid "Failed to open file: %s"
+msgid "Failed to rename symbol: %s"
+msgstr "Odpiranje datoteke ni uspelo: %s"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
+msgid "Rename Symbol"
+msgstr "Preimenuj simbol"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:60
+msgid "_Rename"
+msgstr "P_reimenuj"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
+msgid "Current Symbol name"
+msgstr "Trenutno ime simbola"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
+msgid "New Symbol name"
+msgstr "Novo ime simbola"
+
+#: src/plugins/codeui/gtk/menus.ui:7
+msgid "R_ename Symbol…"
+msgstr "Pr_eimenuj simbol …"
+
+#: src/plugins/codeui/gtk/menus.ui:13
+msgid "_Go to Declaration"
+msgstr "_Pojdi k deklaraciji"
+
+#: src/plugins/codeui/gtk/menus.ui:14
+#, fuzzy
+#| msgid "Jump to the last position when reopening a file"
+msgid "Jump to file and location where item is declared"
+msgstr "Skoči na konec med ponovnim odpiranjem datoteke"
+
+#: src/plugins/codeui/gtk/menus.ui:18
+msgid "_Go to Definition"
+msgstr "_Skoči na določilo"
+
+#: src/plugins/codeui/gtk/menus.ui:19
+#, fuzzy
+#| msgid "Jump to the last position when reopening a file"
+msgid "Jump to file and location where item is defined"
+msgstr "Skoči na konec med ponovnim odpiranjem datoteke"
+
+#: src/plugins/codeui/gtk/menus.ui:24
+msgid "_Find References"
+msgstr "_Najdi sklice"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
@@ -3075,11 +3124,9 @@ msgstr "Uporabi vpisane izrezke kode za predloge dopolnjevanja"
 
 #: src/plugins/ctags/tweaks.ui:34
 msgid "CTags Path"
-msgstr ""
+msgstr "Pot CTags"
 
 #: src/plugins/ctags/tweaks.ui:35
-#, fuzzy
-#| msgid "Path to ctags executable"
 msgid "The path to the ctags executable"
 msgstr "Pot do izvedljive datoteke ctags"
 
@@ -3088,10 +3135,8 @@ msgid "Run with Debugger"
 msgstr "Zaženi z razhroščevalnikom"
 
 #: src/plugins/debuggerui/gtk/menus.ui:13
-#, fuzzy
-#| msgid "Run with Debugger"
 msgid "Run the project with debugger"
-msgstr "Zaženi z razhroščevalnikom"
+msgstr "Zaženi projekt z razhroščevalnikom"
 
 #: src/plugins/debuggerui/gtk/menus.ui:21
 #: src/plugins/debuggerui/ide-debugger-workspace-addin.c:218
@@ -3265,7 +3310,7 @@ msgstr "Konzola"
 
 #: src/plugins/debuggerui/tweaks.ui:19
 msgid "Stop After Launching Program"
-msgstr ""
+msgstr "Ustavi po zagonu programa"
 
 #: src/plugins/debuggerui/tweaks.ui:20
 #, fuzzy
@@ -3288,7 +3333,7 @@ msgstr ""
 
 #: src/plugins/debuggerui/tweaks.ui:43
 msgid "Stop at Criticals"
-msgstr ""
+msgstr "Ustavi se pri kritičnih točkah"
 
 #: src/plugins/debuggerui/tweaks.ui:44
 #, fuzzy
@@ -3299,7 +3344,7 @@ msgstr ""
 
 #: src/plugins/deviced/gnome-builder-deviced.c:48
 msgid "The device address"
-msgstr ""
+msgstr "Naslov naprave"
 
 #: src/plugins/deviced/gnome-builder-deviced.c:49
 #, fuzzy
@@ -3478,11 +3523,11 @@ msgstr "Zamikanje in oblikovanje"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
-msgstr ""
+msgstr "Znak za tabulatorko"
 
 #: src/plugins/editorui/tweaks-language.ui:45
 msgid "The character to be inserted for Tab"
-msgstr ""
+msgstr "Znak, ki ga želite vstaviti ob pritisku tabulatorke (Tab)"
 
 #: src/plugins/editorui/tweaks-language.ui:59
 msgid "Tab"
@@ -3526,7 +3571,7 @@ msgstr "Velikost zamika"
 
 #: src/plugins/editorui/tweaks-language.ui:129
 msgid "The number of characters to indent for Tab"
-msgstr ""
+msgstr "Število znakov za zamik s tabulatorko (Tab)"
 
 #: src/plugins/editorui/tweaks-language.ui:146
 msgid "The number of characters to indent, or -1 to use tab size"
@@ -3554,7 +3599,7 @@ msgstr "Položaj desnega roba"
 
 #: src/plugins/editorui/tweaks-language.ui:185
 msgid "The desired maximum line length"
-msgstr ""
+msgstr "Želena največja dolžina vrstice"
 
 #: src/plugins/editorui/tweaks-language.ui:203
 #: src/plugins/editorui/tweaks.ui:356
@@ -3691,7 +3736,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks.ui:150
 msgid "Prefer Scrollbars"
-msgstr ""
+msgstr "Prednost imajo drsniki"
 
 #: src/plugins/editorui/tweaks.ui:156
 #, fuzzy
@@ -4744,34 +4789,34 @@ msgstr "Snemalnik zvoka"
 msgid "A modern sound recorder for GNOME"
 msgstr "Enostaven in sodoben snemalnik zvoka za GNOME"
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
 msgstr "Izgradnja je uspešno končana"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "Izgradnja projekta »%s« je končana"
 
-#: src/plugins/notification/ide-notification-addin.c:112
-#: src/plugins/notification/ide-notification-addin.c:198
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "Izgradnja je spodletela"
 
-#: src/plugins/notification/ide-notification-addin.c:113
+#: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "Izgradnja projekta »%s« je spodletela"
 
-#: src/plugins/notification/ide-notification-addin.c:189
+#: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
 msgstr "Izgradnja je uspela"
 
-#: src/plugins/notification/ide-notification-addin.c:191
+#: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
 msgstr "Izgradnja je nastavljena"
 
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
 msgstr "Izgradnja nalagalnega sistema"
 
@@ -4814,12 +4859,12 @@ msgid "Drop Down"
 msgstr "Razdeli navzdol"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:632
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Toolbox"
 msgstr "Zabojniki/Orodne vrstice"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:638
+#: src/plugins/podman/gbp-podman-runtime.c:687
 msgid "Containers/Podman"
 msgstr "Vsebniki/Podeman"
 
@@ -4896,11 +4941,6 @@ msgstr "Projektna drevesna zgradba"
 #, c-format
 msgid "Rename %s"
 msgstr "Preimenuj %s"
-
-#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:60
-msgid "_Rename"
-msgstr "P_reimenuj"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
@@ -5111,6 +5151,26 @@ msgstr ""
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
+msgstr ""
+
+#: src/plugins/rust-analyzer/tweaks.ui:61
+#, fuzzy
+#| msgid "Clear build logs"
+msgid "Cargo Build Scripts"
+msgstr "Počisti dnevnike izgradnje"
+
+#: src/plugins/rust-analyzer/tweaks.ui:62
+msgid "Run build scripts (build.rs) for more precise code analysis"
+msgstr ""
+
+#: src/plugins/rust-analyzer/tweaks.ui:74
+msgid "Rustfmt Range Formatting"
+msgstr ""
+
+#: src/plugins/rust-analyzer/tweaks.ui:75
+msgid ""
+"Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
+"option is unstable and only available on nightly builds of the Rust SDK."
 msgstr ""
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
