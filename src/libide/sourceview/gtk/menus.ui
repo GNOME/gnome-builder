@@ -157,6 +157,7 @@
         <attribute name="action">sourceview.find-references</attribute>
       </item>
     </section>
+    <section id="ide-source-view-popup-menu-foundry-section"/>
     <section id="ide-source-view-popup-menu-files-section"/>
   </menu>
 </interface>
