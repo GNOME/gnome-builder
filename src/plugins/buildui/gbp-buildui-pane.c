@@ -39,7 +39,7 @@ struct _GbpBuilduiPane
 
   /* Owned references */
   IdePipeline         *pipeline;
-  IdeSignalGroup      *pipeline_signals;
+  GSignalGroup        *pipeline_signals;
 
   /* Template widgets */
   GtkLabel            *build_status_label;
@@ -85,24 +85,19 @@ static GtkWidget *
 gbp_buildui_pane_create_stage_row_cb (gpointer data,
                                       gpointer user_data)
 {
-  IdePipelineStage *stage = data;
-
-  g_assert (IDE_IS_PIPELINE_STAGE (stage));
-  g_assert (GBP_IS_BUILDUI_PANE (user_data));
-
-  return gbp_buildui_stage_row_new (stage);
+  return gbp_buildui_stage_row_new (IDE_PIPELINE_STAGE (data));
 }
 
 static void
 gbp_buildui_pane_bind_pipeline (GbpBuilduiPane *self,
                                 IdePipeline    *pipeline,
-                                IdeSignalGroup *signals)
+                                GSignalGroup   *signals)
 {
   g_assert (GBP_IS_BUILDUI_PANE (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (G_IS_LIST_MODEL (pipeline));
   g_assert (self->pipeline == NULL);
-  g_assert (IDE_IS_SIGNAL_GROUP (signals));
+  g_assert (G_IS_SIGNAL_GROUP (signals));
 
   self->pipeline = g_object_ref (pipeline);
 
@@ -112,25 +107,29 @@ gbp_buildui_pane_bind_pipeline (GbpBuilduiPane *self,
   gtk_list_box_bind_model (self->stages_list_box,
                            G_LIST_MODEL (pipeline),
                            gbp_buildui_pane_create_stage_row_cb,
-                           self, NULL);
+                           NULL, NULL);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
 }
 
 static void
 gbp_buildui_pane_unbind_pipeline (GbpBuilduiPane *self,
-                                  IdeSignalGroup *signals)
+                                  GSignalGroup   *signals)
 {
+  IDE_ENTRY;
+
   g_return_if_fail (GBP_IS_BUILDUI_PANE (self));
   g_return_if_fail (!self->pipeline || IDE_IS_PIPELINE (self->pipeline));
-
-  g_clear_object (&self->pipeline);
 
   if (!gtk_widget_in_destruction (GTK_WIDGET (self)))
     {
       gtk_list_box_bind_model (self->stages_list_box, NULL, NULL, NULL, NULL);
       g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PIPELINE]);
     }
+
+  g_clear_object (&self->pipeline);
+
+  IDE_EXIT;
 }
 
 void
@@ -141,7 +140,7 @@ gbp_buildui_pane_set_pipeline (GbpBuilduiPane   *self,
   g_return_if_fail (!pipeline || IDE_IS_PIPELINE (pipeline));
 
   if (self->pipeline_signals != NULL)
-    ide_signal_group_set_target (self->pipeline_signals, pipeline);
+    g_signal_group_set_target (self->pipeline_signals, pipeline);
 }
 
 static void
@@ -246,13 +245,20 @@ gbp_buildui_pane_dispose (GObject *object)
 {
   GbpBuilduiPane *self = (GbpBuilduiPane *)object;
 
-  if (self->pipeline_signals != NULL)
-    ide_signal_group_set_target (self->pipeline_signals, NULL);
-
-  g_clear_object (&self->pipeline_signals);
+  g_signal_group_set_target (self->pipeline_signals, NULL);
   g_clear_object (&self->pipeline);
 
   G_OBJECT_CLASS (gbp_buildui_pane_parent_class)->dispose (object);
+}
+
+static void
+gbp_buildui_pane_finalize (GObject *object)
+{
+  GbpBuilduiPane *self = (GbpBuilduiPane *)object;
+
+  g_clear_object (&self->pipeline_signals);
+
+  G_OBJECT_CLASS (gbp_buildui_pane_parent_class)->finalize (object);
 }
 
 static void
@@ -300,6 +306,7 @@ gbp_buildui_pane_class_init (GbpBuilduiPaneClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = gbp_buildui_pane_dispose;
+  object_class->finalize = gbp_buildui_pane_finalize;
   object_class->get_property = gbp_buildui_pane_get_property;
   object_class->set_property = gbp_buildui_pane_set_property;
 
@@ -326,7 +333,7 @@ gbp_buildui_pane_init (GbpBuilduiPane *self)
 {
   gtk_widget_init_template (GTK_WIDGET (self));
 
-  self->pipeline_signals = ide_signal_group_new (IDE_TYPE_PIPELINE);
+  self->pipeline_signals = g_signal_group_new (IDE_TYPE_PIPELINE);
   g_signal_connect_object (self->pipeline_signals,
                            "bind",
                            G_CALLBACK (gbp_buildui_pane_bind_pipeline),
