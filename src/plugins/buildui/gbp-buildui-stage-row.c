@@ -26,7 +26,7 @@
 
 struct _GbpBuilduiStageRow
 {
-  GtkListBoxRow    parent_instance;
+  GtkListBoxRow       parent_instance;
 
   IdePipelineStage   *stage;
 
@@ -59,8 +59,8 @@ gbp_buildui_stage_row_notify_active (GbpBuilduiStageRow *row,
 
 static void
 gbp_buildui_stage_row_notify_completed (GbpBuilduiStageRow *row,
-                                      GParamSpec       *pspec,
-                                      IdePipelineStage    *stage)
+                                        GParamSpec         *pspec,
+                                        IdePipelineStage   *stage)
 {
   g_assert (GBP_IS_BUILDUI_STAGE_ROW (row));
   g_assert (IDE_IS_PIPELINE_STAGE (stage));
@@ -73,7 +73,7 @@ gbp_buildui_stage_row_notify_completed (GbpBuilduiStageRow *row,
 
 static void
 gbp_buildui_stage_row_set_stage (GbpBuilduiStageRow *self,
-                               IdePipelineStage    *stage)
+                                 IdePipelineStage   *stage)
 {
   const gchar *name;
 
@@ -121,9 +121,9 @@ gbp_buildui_stage_row_dispose (GObject *object)
 
 static void
 gbp_buildui_stage_row_get_property (GObject    *object,
-                                  guint       prop_id,
-                                  GValue     *value,
-                                  GParamSpec *pspec)
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
 {
   GbpBuilduiStageRow *self = GBP_BUILDUI_STAGE_ROW (object);
 
@@ -140,9 +140,9 @@ gbp_buildui_stage_row_get_property (GObject    *object,
 
 static void
 gbp_buildui_stage_row_set_property (GObject      *object,
-                                  guint         prop_id,
-                                  const GValue *value,
-                                  GParamSpec   *pspec)
+                                    guint         prop_id,
+                                    const GValue *value,
+                                    GParamSpec   *pspec)
 {
   GbpBuilduiStageRow *self = GBP_BUILDUI_STAGE_ROW (object);
 
