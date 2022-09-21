@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-16 21:19+0000\n"
-"PO-Revision-Date: 2022-09-17 02:20+0200\n"
+"POT-Creation-Date: 2022-09-21 06:00+0000\n"
+"PO-Revision-Date: 2022-09-21 13:19+0200\n"
 "Last-Translator: \n"
 "Language-Team: Croatian <hr@li.org>\n"
 "Language: hr\n"
@@ -728,8 +728,10 @@ msgstr "Bezimeno"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1479
+#: src/libide/gui/ide-workbench.c:1500
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
@@ -742,7 +744,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Prikladan otklanjatelj grešaka nije pronađen."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1475
+#: src/libide/gui/ide-workbench.c:1496
 msgid "Open File…"
 msgstr "Otvori datoteku…"
 
@@ -911,7 +913,7 @@ msgstr "Neuspjeli ispis: %s"
 #: src/libide/editor/ide-editor-page.c:528
 #, c-format
 msgid "Failed to format selection: %s"
-msgstr "Neuspjeli format odabira: %s"
+msgstr "Neuspjelo preoblikovanje odabira: %s"
 
 #: src/libide/editor/ide-editor-page.c:943
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
@@ -1109,6 +1111,7 @@ msgstr "Podešavanje…"
 
 #: src/libide/foundry/ide-pipeline.c:3299
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Izgradnja…"
 
@@ -1189,8 +1192,10 @@ msgstr "Zadano (Operativni sustav računala)"
 msgid "_Clone Repository…"
 msgstr "_Kloniraj repozitorij…"
 
-#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
-#: src/plugins/sysprof/gtk/menus.ui:138
+#: src/libide/greeter/gtk/menus.ui:20
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:195
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:405
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "Zatvori"
 
@@ -1252,7 +1257,7 @@ msgid "Select Project File"
 msgstr "Odaberi datoteku projekta"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1478
+#: src/libide/gui/ide-workbench.c:1499
 msgid "_Open"
 msgstr "_Otvori"
 
@@ -1415,7 +1420,7 @@ msgstr "Web pregledavanje"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:275
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
@@ -1550,7 +1555,7 @@ msgstr "Pokreni projekt"
 msgid "Other"
 msgstr "Ostalo"
 
-#: src/libide/gui/ide-workspace.c:1741
+#: src/libide/gui/ide-workspace.c:1701
 msgid "There are unsaved documents"
 msgstr "Postoje nespremljeni dokumenti"
 
@@ -1727,7 +1732,7 @@ msgstr "Odaberi _sve"
 
 #: src/libide/sourceview/gtk/menus.ui:79 src/libide/sourceview/gtk/menus.ui:140
 msgid "Formatting"
-msgstr "Formatiranje"
+msgstr "Oblikovanje"
 
 #: src/libide/sourceview/gtk/menus.ui:81
 msgid "All _Upper Case"
@@ -1785,18 +1790,6 @@ msgstr "D_upliciraj redak"
 #: src/plugins/symbol-tree/gtk/menus.ui:6
 msgid "Code Navigation"
 msgstr "Navigacija kôda"
-
-#: src/libide/sourceview/gtk/menus.ui:149
-msgid "_Go to Definition"
-msgstr "_Idi u definiciju"
-
-#: src/libide/sourceview/gtk/menus.ui:150
-msgid "Jump to file and location where item is defined"
-msgstr "Idi u datoteku i lokaciju gdje je stavka definirana"
-
-#: src/libide/sourceview/gtk/menus.ui:156
-msgid "_Find References"
-msgstr "_Pretraži reference"
 
 #. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1550
@@ -1888,6 +1881,7 @@ msgid "(Empty)"
 msgstr "(Prazno)"
 
 #: src/libide/tree/ide-tree-node.c:1468
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
 msgid "Loading…"
 msgstr "Učitavanje…"
 
@@ -2758,12 +2752,80 @@ msgstr ""
 #: src/plugins/code-index/ide-code-index-index.c:338
 #: src/plugins/symbol-tree/gbp-symbol-hover-provider.c:79
 msgid "Declaration"
-msgstr "Izjava"
+msgstr "Deklaracija"
 
 #: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Moguća pravopisna greška “%s”. jeste li mislili “%s”?"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
+msgid "Symbol Not Selected"
+msgstr "Simbol nije odabran"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:194
+msgid "A symbol to rename must be selected"
+msgstr "Simbol za preimenovanje mora biti odabran"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
+msgid "Find References"
+msgstr "Pretraži reference"
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:168
+msgid "No references found"
+msgstr "Nema pronađenih referenci"
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:169
+msgid "The programming language tooling may not support finding references"
+msgstr "Alat programskog jezika možda ne podržava pronalaženje referenci"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
+#, c-format
+msgid "Failed to rename symbol: %s"
+msgstr "Neuspjelo preimenovanje simbola: %s"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
+msgid "Rename Symbol"
+msgstr "Preimenuj simbol"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:60
+msgid "_Rename"
+msgstr "_Preimenuj"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
+msgid "Current Symbol name"
+msgstr "Trenutni naziv simbola"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
+msgid "New Symbol name"
+msgstr "Novi naziv simbola"
+
+#: src/plugins/codeui/gtk/menus.ui:7
+msgid "R_ename Symbol…"
+msgstr "P_reimenuj simbol…"
+
+#: src/plugins/codeui/gtk/menus.ui:13
+msgid "_Go to Declaration"
+msgstr "_Idi u deklaraciju"
+
+#: src/plugins/codeui/gtk/menus.ui:14
+msgid "Jump to file and location where item is declared"
+msgstr "Idi u datoteku i lokaciju gdje je stavka deklarirana"
+
+#: src/plugins/codeui/gtk/menus.ui:18
+msgid "_Go to Definition"
+msgstr "_Idi u definiciju"
+
+#: src/plugins/codeui/gtk/menus.ui:19
+msgid "Jump to file and location where item is defined"
+msgstr "Idi u datoteku i lokaciju gdje je stavka definirana"
+
+#: src/plugins/codeui/gtk/menus.ui:24
+msgid "_Find References"
+msgstr "_Pretraži reference"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
@@ -2928,13 +2990,13 @@ msgid "Run the project with debugger"
 msgstr "Pokreni projekt s otklanjateljem grešaka"
 
 #: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:218
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "Otklanjatelj grešaka"
 
 #: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:252
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr "Točke prijeloma"
@@ -3075,19 +3137,19 @@ msgstr "Argumenti"
 msgid "Binary"
 msgstr "Binarno"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:232
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:233
 msgid "Threads"
 msgstr "Niti"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:257
 msgid "Libraries"
 msgstr "Biblioteke"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:261
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:262
 msgid "Registers"
 msgstr "Registri"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:266
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:267
 msgid "Console"
 msgstr "Konzola"
 
@@ -3265,7 +3327,7 @@ msgstr "Ispis…"
 
 #: src/plugins/editorui/gtk/menus.ui:188
 msgid "Format Selection"
-msgstr "Odabir formata"
+msgstr "Odabir oblikovanja"
 
 #: src/plugins/editorui/tweaks-language.ui:9
 msgid "Programming Languages"
@@ -3281,7 +3343,7 @@ msgstr ""
 
 #: src/plugins/editorui/tweaks-language.ui:41
 msgid "Indentation & Formatting"
-msgstr "Uvlačenje i oblikovanjw"
+msgstr "Uvlačenje i oblikovanje"
 
 #: src/plugins/editorui/tweaks-language.ui:44
 msgid "Tab Character"
@@ -4438,34 +4500,34 @@ msgstr "Snimatelj zvuka"
 msgid "A modern sound recorder for GNOME"
 msgstr "GNOME meoderan snimač zvuka"
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
 msgstr "Izgradnja je uspješna"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "Projekt “%s” je završio izgradnju"
 
-#: src/plugins/notification/ide-notification-addin.c:112
-#: src/plugins/notification/ide-notification-addin.c:198
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "Izgradnja je neuspješna"
 
-#: src/plugins/notification/ide-notification-addin.c:113
+#: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "Projekt “%s” je neuspješno izgrađen"
 
-#: src/plugins/notification/ide-notification-addin.c:189
+#: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
 msgstr "Izgradnja je uspjela"
 
-#: src/plugins/notification/ide-notification-addin.c:191
+#: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
 msgstr "Izgradnja je podešena"
 
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
 msgstr "Izgradnja je samopokrenuta"
 
@@ -4502,12 +4564,12 @@ msgid "Drop Down"
 msgstr "Padajuća"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:632
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Toolbox"
 msgstr "Spremnici/Alati"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:638
+#: src/plugins/podman/gbp-podman-runtime.c:687
 msgid "Containers/Podman"
 msgstr "Spremnici/Podman"
 
@@ -4583,11 +4645,6 @@ msgstr "Stablo projekta"
 #, c-format
 msgid "Rename %s"
 msgstr "Preimenuj %s"
-
-#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:60
-msgid "_Rename"
-msgstr "_Preimenuj"
 
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
@@ -4787,6 +4844,27 @@ msgstr "Proc Macros"
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr "Omogućuje eksperimentalne Proc Macros značajke rust analizatora"
+
+#: src/plugins/rust-analyzer/tweaks.ui:61
+msgid "Cargo Build Scripts"
+msgstr "Skripte Cargo izgradnje"
+
+#: src/plugins/rust-analyzer/tweaks.ui:62
+msgid "Run build scripts (build.rs) for more precise code analysis"
+msgstr "Pokreni skripte izgradnje (build.rs) za precizniju analizu kôda"
+
+#: src/plugins/rust-analyzer/tweaks.ui:74
+msgid "Rustfmt Range Formatting"
+msgstr "Oblikovanje Rustfmt raspona"
+
+#: src/plugins/rust-analyzer/tweaks.ui:75
+msgid ""
+"Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
+"option is unstable and only available on nightly builds of the Rust SDK."
+msgstr ""
+"Omogućuje korištenje naredbe oblikovanja rustfmt nestabilnog raspona. "
+"Mogućnost rustfmt je nestabilna i dostupna samo na noćnim Rust SDK "
+"izgradnjama izdanja."
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -5262,11 +5340,11 @@ msgstr "Aplikacija je pokrenuta u %s\r\n"
 msgid "Application exited"
 msgstr "Aplikacija je zatvorena"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:293
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Izlaz aplikacije"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
 msgid "Process completed"
 msgstr "Proces je završen"
 
