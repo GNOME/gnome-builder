@@ -51,8 +51,6 @@
     </section>
     <section id="project-tree-menu-find-section">
     </section>
-    <section id="project-tree-menu-foundry-section">
-    </section>
     <section id="project-tree-menu-destructive-section">
       <item>
         <attribute name="id">project-tree-menu-rename</attribute>
