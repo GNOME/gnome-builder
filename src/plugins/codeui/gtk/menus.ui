@@ -1,10 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <menu id="ide-source-view-popup-menu-foundry-section">
-    <item>
-      <attribute name="id">codeui-rename-symbol</attribute>
-      <attribute name="label" translatable="yes">R_ename Symbol…</attribute>
-      <attribute name="action">page.codeui.rename-symbol</attribute>
-    </item>
+  <menu id="ide-source-view-popup-menu">
+    <section id="ide-source-view-popup-menu-foundry-section">
+      <item>
+        <attribute name="id">codeui-rename-symbol</attribute>
+        <attribute name="label" translatable="yes">R_ename Symbol…</attribute>
+        <attribute name="action">page.codeui.rename-symbol</attribute>
+      </item>
+    </section>
+    <section id="ide-source-view-popup-menu-jump-section">
+      <item>
+        <attribute name="label" translatable="yes">_Go to Declaration</attribute>
+        <attribute name="description" translatable="yes">Jump to file and location where item is declared</attribute>
+        <attribute name="action">page.codeui.goto-declaration</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Go to Definition</attribute>
+        <attribute name="description" translatable="yes">Jump to file and location where item is defined</attribute>
+        <attribute name="action">page.codeui.goto-definition</attribute>
+      </item>
+      <item>
+        <attribute name="id">source-view-find-references</attribute>
+        <attribute name="label" translatable="yes">_Find References</attribute>
+        <attribute name="action">sourceview.find-references</attribute>
+      </item>
+    </section>
   </menu>
 </interface>
