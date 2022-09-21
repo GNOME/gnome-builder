@@ -27,6 +27,7 @@
 #include <libide-editor.h>
 
 #include "gbp-codeui-editor-page-addin.h"
+#include "gbp-codeui-range-dialog.h"
 #include "gbp-codeui-rename-dialog.h"
 
 struct _GbpCodeuiEditorPageAddin
@@ -40,6 +41,8 @@ struct _GbpCodeuiEditorPageAddin
   gulong         notify_has_selection;
 };
 
+static void find_references_action  (GbpCodeuiEditorPageAddin *self,
+                                     GVariant                 *params);
 static void goto_declaration_action (GbpCodeuiEditorPageAddin *self,
                                      GVariant                 *params);
 static void goto_definition_action  (GbpCodeuiEditorPageAddin *self,
@@ -51,6 +54,7 @@ IDE_DEFINE_ACTION_GROUP (GbpCodeuiEditorPageAddin, gbp_codeui_editor_page_addin,
   { "rename-symbol", rename_symbol_action },
   { "goto-declaration", goto_declaration_action },
   { "goto-definition", goto_definition_action },
+  { "find-references", find_references_action },
 })
 
 static void
@@ -73,6 +77,7 @@ gbp_codeui_editor_page_addin_update_state (GbpCodeuiEditorPageAddin *self)
   gbp_codeui_editor_page_addin_set_action_enabled (self, "rename-symbol", has_selection && provider);
   gbp_codeui_editor_page_addin_set_action_enabled (self, "goto-declaration", has_resolvers);
   gbp_codeui_editor_page_addin_set_action_enabled (self, "goto-definition", has_resolvers);
+  gbp_codeui_editor_page_addin_set_action_enabled (self, "find-references", has_resolvers);
 
   IDE_EXIT;
 }
@@ -333,6 +338,132 @@ goto_definition_action (GbpCodeuiEditorPageAddin *self,
                                            NULL,
                                            goto_definition_cb,
                                            g_object_ref (self));
+
+  IDE_EXIT;
+}
+
+typedef struct
+{
+  IdeLocation          *location;
+  GPtrArray            *active;
+  GListStore           *references;
+  GbpCodeuiRangeDialog *dialog;
+} FindReferences;
+
+static void
+find_references_free (FindReferences *state)
+{
+  g_clear_object (&state->location);
+  g_clear_object (&state->references);
+  g_clear_object (&state->dialog);
+  g_clear_pointer (&state->active, g_ptr_array_unref);
+  g_slice_free (FindReferences, state);
+}
+
+static void
+find_references_append (FindReferences *state,
+                        GPtrArray      *ranges)
+{
+  g_assert (state != NULL);
+  g_assert (G_IS_LIST_STORE (state->references));
+  g_assert (ranges != NULL);
+
+  for (guint i = 0; i < ranges->len; i++)
+    g_list_store_append (state->references, g_ptr_array_index (ranges, i));
+}
+
+static void
+find_references_cb (GObject      *object,
+                    GAsyncResult *result,
+                    gpointer      user_data)
+{
+  IdeSymbolResolver *resolver = (IdeSymbolResolver *)object;
+  g_autoptr(IdeTask) task = user_data;
+  g_autoptr(GPtrArray) references = NULL;
+  g_autoptr(GError) error = NULL;
+  GbpCodeuiEditorPageAddin *self;
+  FindReferences *state;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_SYMBOL_RESOLVER (resolver));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_TASK (task));
+
+  self = ide_task_get_source_object (task);
+  state = ide_task_get_task_data (task);
+
+  if (!(references = ide_symbol_resolver_find_references_finish (resolver, result, &error)))
+    gbp_codeui_editor_page_addin_error (self, error);
+  else
+    find_references_append (state, references);
+
+  g_ptr_array_remove (state->active, resolver);
+
+  if (state->active->len == 0)
+    {
+      adw_message_dialog_set_response_label (ADW_MESSAGE_DIALOG (state->dialog),
+                                             "close", _("Close"));
+      gbp_codeui_range_dialog_done (state->dialog);
+      ide_task_return_boolean (task, TRUE);
+    }
+}
+
+static void
+find_references_action (GbpCodeuiEditorPageAddin *self,
+                        GVariant                 *params)
+{
+  g_autoptr(GPtrArray) resolvers = NULL;
+  g_autoptr(IdeTask) task = NULL;
+  FindReferences *state;
+  const char *language_id;
+  GtkWidget *dialog;
+  GtkRoot *toplevel;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_CODEUI_EDITOR_PAGE_ADDIN (self));
+
+  resolvers = ide_buffer_get_symbol_resolvers (self->buffer);
+  IDE_PTR_ARRAY_SET_FREE_FUNC (resolvers, g_object_unref);
+
+  if (resolvers == NULL || resolvers->len == 0)
+    return;
+
+  task = ide_task_new (self, NULL, NULL, NULL);
+  ide_task_set_source_tag (task, find_references_action);
+
+  state = g_slice_new0 (FindReferences);
+  state->location = ide_buffer_get_insert_location (self->buffer);
+  state->active = g_ptr_array_ref (resolvers);
+  state->references = g_list_store_new (IDE_TYPE_RANGE);
+  ide_task_set_task_data (task, state, find_references_free);
+
+  language_id = ide_buffer_get_language_id (self->buffer);
+
+  for (guint i = 0; i < resolvers->len; i++)
+    {
+      IdeSymbolResolver *resolver = g_ptr_array_index (resolvers, i);
+
+      ide_symbol_resolver_find_references_async (resolver,
+                                                 state->location,
+                                                 language_id,
+                                                 NULL,
+                                                 find_references_cb,
+                                                 g_object_ref (task));
+    }
+
+  toplevel = gtk_widget_get_root (GTK_WIDGET (self->page));
+  dialog = g_object_new (GBP_TYPE_CODEUI_RANGE_DIALOG,
+                         "transient-for", toplevel,
+                         "modal", FALSE,
+                         "model", state->references,
+                         "heading", _("Find References"),
+                         NULL);
+
+  state->dialog = g_object_ref_sink (GBP_CODEUI_RANGE_DIALOG (dialog));
+
+  gtk_window_present (GTK_WINDOW (dialog));
 
   IDE_EXIT;
 }

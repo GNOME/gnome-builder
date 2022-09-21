@@ -22,7 +22,7 @@
       <item>
         <attribute name="id">source-view-find-references</attribute>
         <attribute name="label" translatable="yes">_Find References</attribute>
-        <attribute name="action">sourceview.find-references</attribute>
+        <attribute name="action">page.codeui.find-references</attribute>
       </item>
     </section>
   </menu>
