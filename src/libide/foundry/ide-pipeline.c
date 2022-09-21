@@ -2066,11 +2066,11 @@ ide_pipeline_tick_build (IdePipeline *self,
           ide_pipeline_try_chain (self, entry->stage, self->position + 1);
 
           _ide_pipeline_stage_build_with_query_async (entry->stage,
-                                                     self,
-                                                     targets,
-                                                     cancellable,
-                                                     ide_pipeline_stage_build_cb,
-                                                     g_object_ref (task));
+                                                      self,
+                                                      targets,
+                                                      cancellable,
+                                                      ide_pipeline_stage_build_cb,
+                                                      g_object_ref (task));
 
           g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_MESSAGE]);
           g_object_notify_by_pspec (G_OBJECT (self), properties [PROP_PHASE]);
@@ -2881,9 +2881,15 @@ ide_pipeline_detach (IdePipeline *self,
 
       if (entry->id == stage_id)
         {
-          ide_object_destroy (IDE_OBJECT (entry->stage));
+          g_autoptr(IdePipelineStage) stage = g_object_ref (entry->stage);
+
+          /* Remove index and notify listmodel observers */
           g_array_remove_index (self->pipeline, i);
           g_list_model_items_changed (G_LIST_MODEL (self), i, 1, 0);
+
+          /* Wait until after notifying listmodel observers */
+          ide_object_destroy (IDE_OBJECT (stage));
+
           break;
         }
     }
