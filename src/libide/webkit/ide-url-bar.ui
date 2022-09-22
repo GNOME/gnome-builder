@@ -43,9 +43,15 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel" id="url_display">
+                      <object class="GtkInscription" id="url_display">
+                        <property name="wrap-mode">none</property>
+                        <property name="text-overflow">clip</property>
+                        <property name="nat-lines">1</property>
+                        <property name="min-lines">1</property>
                         <property name="hexpand">true</property>
-                        <property name="xalign">0</property>
+                        <property name="nat-chars">10</property>
+                        <property name="min-chars">10</property>
+                        <property name="valign">center</property>
                       </object>
                     </child>
                   </object>
