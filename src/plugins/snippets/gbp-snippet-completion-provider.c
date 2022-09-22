@@ -65,7 +65,7 @@ static int
 gbp_snippet_completion_provider_get_priority (GtkSourceCompletionProvider *provider,
                                               GtkSourceCompletionContext  *context)
 {
-  return 4000;
+  return 0;
 }
 
 static void
