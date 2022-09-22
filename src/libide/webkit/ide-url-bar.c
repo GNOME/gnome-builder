@@ -43,7 +43,7 @@ struct _IdeUrlBar
   /* Template references */
   GtkOverlay     *overlay;
   GtkStack       *stack;
-  GtkLabel       *url_display;
+  GtkInscription *url_display;
   GtkText        *url_editable;
   GtkProgressBar *load_progress;
   GtkImage       *security_image;
@@ -400,7 +400,7 @@ ide_url_bar_init (IdeUrlBar *self)
 
   self->web_view_bindings = g_binding_group_new ();
   g_binding_group_bind (self->web_view_bindings, "uri",
-                        self->url_display, "label",
+                        self->url_display, "text",
                         G_BINDING_SYNC_CREATE);
 
   gtk_widget_set_cursor_from_name (GTK_WIDGET (self->url_display), "text");
