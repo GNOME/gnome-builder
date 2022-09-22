@@ -478,25 +478,20 @@ ide_lsp_completion_provider_is_trigger (GtkSourceCompletionProvider *provider,
                                         const GtkTextIter           *iter,
                                         gunichar                     ch)
 {
+  static const char * const default_trigger_chars[] = IDE_STRV_INIT (".");
   IdeLspCompletionProvider *self = (IdeLspCompletionProvider *)provider;
   IdeLspCompletionProviderPrivate *priv = ide_lsp_completion_provider_get_instance_private (self);
+  const char * const *trigger_chars;
 
   g_assert (IDE_IS_LSP_COMPLETION_PROVIDER (self));
   g_assert (iter != NULL);
 
-  if (priv->trigger_chars != NULL)
-    {
-      for (guint i = 0; priv->trigger_chars[i]; i++)
-        {
-          const char *trigger = priv->trigger_chars[i];
+  trigger_chars = priv->trigger_chars ? (const char * const *)priv->trigger_chars : default_trigger_chars;
 
-          /* Technically, since these are strings they can be more than
-           * one character long. But I haven't seen anything actually
-           * do that in the wild yet.
-           */
-          if (ch == g_utf8_get_char (trigger))
-            return TRUE;
-        }
+  for (guint i = 0; trigger_chars[i]; i++)
+    {
+      if (ch == g_utf8_get_char (trigger_chars[i]))
+        return TRUE;
     }
 
   return FALSE;
