@@ -24,6 +24,8 @@
 #include <libide-core.h>
 #include <libide-threading.h>
 
+#include "ide-run-context.h"
+
 G_BEGIN_DECLS
 
 #define IDE_TYPE_DIAGNOSTIC_TOOL (ide_diagnostic_tool_get_type())
@@ -35,14 +37,7 @@ struct _IdeDiagnosticToolClass
 {
   IdeObjectClass parent_class;
 
-  IdeSubprocessLauncher *(*create_launcher)      (IdeDiagnosticTool      *self,
-                                                  const char             *program_name,
-                                                  GFile                  *file,
-                                                  GBytes                 *contents,
-                                                  const char             *language_id,
-                                                  GError                **error);
-  void                   (*configure_launcher)   (IdeDiagnosticTool      *self,
-                                                  IdeSubprocessLauncher  *launcher,
+  gboolean               (*can_diagnose)         (IdeDiagnosticTool      *self,
                                                   GFile                  *file,
                                                   GBytes                 *contents,
                                                   const char             *language_id);
@@ -55,7 +50,20 @@ struct _IdeDiagnosticToolClass
                                                   GFile                  *file,
                                                   const char             *stdout_buf,
                                                   const char             *stderr_buf);
-  gboolean               (*can_diagnose)         (IdeDiagnosticTool      *self,
+  gboolean               (*prepare_run_context)  (IdeDiagnosticTool      *self,
+                                                  IdeRunContext          *run_context,
+                                                  GFile                  *file,
+                                                  GBytes                 *contents,
+                                                  const char             *language_id,
+                                                  GError                **error);
+  IdeSubprocessLauncher *(*create_launcher)      (IdeDiagnosticTool      *self,
+                                                  const char             *program_name,
+                                                  GFile                  *file,
+                                                  GBytes                 *contents,
+                                                  const char             *language_id,
+                                                  GError                **error);
+  void                   (*configure_launcher)   (IdeDiagnosticTool      *self,
+                                                  IdeSubprocessLauncher  *launcher,
                                                   GFile                  *file,
                                                   GBytes                 *contents,
                                                   const char             *language_id);
