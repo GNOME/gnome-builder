@@ -2261,19 +2261,19 @@ msgstr "S'està construint"
 
 #: src/plugins/buildui/gtk/menus.ui:26
 msgid "_Build"
-msgstr "_Construcció"
+msgstr "_Construeix"
 
 #: src/plugins/buildui/gtk/menus.ui:27
 msgid "Build the project"
-msgstr "Construir el projecte"
+msgstr "Construeix el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:33
 msgid "_Rebuild"
-msgstr "_Construir de nou"
+msgstr "_Construeix de nou"
 
 #: src/plugins/buildui/gtk/menus.ui:34
 msgid "Rebuild the project"
-msgstr "Construir de nou el projecte"
+msgstr "Construeix de nou el projecte"
 
 #: src/plugins/buildui/gtk/menus.ui:39
 msgid "_Clean"
@@ -3910,27 +3910,27 @@ msgstr "Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:181
 msgid "Creating flatpak workspace"
-msgstr "S'estan creant espais de treball flatpak"
+msgstr "Creació d'espais de treball flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:383
 msgid "Preparing build directory"
-msgstr "S'està preparant el directori de construcció"
+msgstr "Preparació del directori de construcció"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:433
 msgid "Downloading dependencies"
-msgstr "S'estan descarregant dependències"
+msgstr "Descarrega de les dependències"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:512
 msgid "Building dependencies"
-msgstr "S'estan construint les dependències"
+msgstr "Construcció de les dependències"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:563
 msgid "Finalizing flatpak build"
-msgstr "S'està finalitzant la construcció de flatpak"
+msgstr "Finalització de la construcció de flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:608
 msgid "Exporting staging directory"
-msgstr "S'està exportant el directori"
+msgstr "Exportació del directori"
 
 #: src/plugins/flatpak/gbp-flatpak-pipeline-addin.c:693
 msgid "Creating flatpak bundle"
@@ -3942,7 +3942,7 @@ msgstr "Aplicació Flatpak"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:435
 msgid "Installing Necessary SDKs"
-msgstr "S'estan instal·lant els SDK necessaris"
+msgstr "Instal·lació dels SDK necessaris"
 
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:436
 msgid ""
@@ -3959,7 +3959,7 @@ msgstr "Ha fallat l'actualització del SDK: %s"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:130
 msgid "Updating Necessary SDKs"
-msgstr "S'estan actualitzant els SDK necessaris"
+msgstr "Actualització dels SDK necessaris"
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:131
 msgid ""
@@ -3971,7 +3971,7 @@ msgstr ""
 
 #: src/plugins/flatpak/gbp-flatpak-sdk-stage.c:222
 msgid "Updating SDK Runtime"
-msgstr "S'està actualitzant l'entorn d'execució SDK"
+msgstr "Actualització de l'entorn d'execució SDK"
 
 #: src/plugins/gcc/gbp-gcc-toolchain-provider.c:89
 #, c-format
@@ -4029,7 +4029,7 @@ msgstr "El control de versió del Git no està en ús"
 
 #: src/plugins/git/gbp-git-dependency-updater.c:100
 msgid "Updating Git Submodules"
-msgstr "S'estan actualitzant els submòduls del Git"
+msgstr "Actualització els submòduls del Git"
 
 #: src/plugins/git/gbp-git-submodule-stage.c:136
 msgid "Network is not available, skipping submodule update"
@@ -4152,7 +4152,7 @@ msgstr "_Cerca al projecte"
 
 #: src/plugins/grep/gbp-grep-panel.ui:144
 msgid "_Replace in Project"
-msgstr "_Reemplaça a projectes"
+msgstr "_Reemplaça al projecte"
 
 #: src/plugins/grep/gbp-grep-popover.ui:12
 msgid "Find in Files"
