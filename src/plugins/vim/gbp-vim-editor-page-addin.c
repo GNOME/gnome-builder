@@ -349,6 +349,7 @@ gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
                                               GtkSourceVimIMContext *im_context)
 {
   IdeBuffer *buffer;
+  IdeSourceView *view;
 
   IDE_ENTRY;
 
@@ -359,6 +360,7 @@ gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
   g_debug ("Request to execute command %s", command);
 
   buffer = ide_editor_page_get_buffer (self->page);
+  view = ide_editor_page_get_view (self->page);
 
   if (g_str_equal (command, ":q") ||
       g_str_equal (command, ":quit") ||
@@ -429,6 +431,8 @@ gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
 
       ide_workspace_add_grid_column (workspace, column+1);
       ide_workspace_add_page (workspace, new_page, position);
+
+      IDE_RETURN (TRUE);
     }
 
   if (g_str_equal (command, "^Ws") ||
@@ -443,6 +447,26 @@ gbp_vim_editor_page_addin_execute_command_cb (GbpVimEditorPageAddin *self,
       panel_position_set_row (position, row+1);
 
       ide_workspace_add_page (workspace, new_page, position);
+
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, "gd"))
+    {
+      gtk_widget_activate_action (GTK_WIDGET (view),
+                                  "page.codeui.goto-declaration",
+                                  NULL);
+
+      IDE_RETURN (TRUE);
+    }
+
+  if (g_str_equal (command, "gD"))
+    {
+      gtk_widget_activate_action (GTK_WIDGET (view),
+                                  "page.codeui.goto-definition",
+                                  NULL);
+
+      IDE_RETURN (TRUE);
     }
 
   IDE_RETURN (FALSE);
