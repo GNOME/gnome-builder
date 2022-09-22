@@ -129,6 +129,7 @@ on_editable_focus_leave_cb (IdeUrlBar               *self,
   g_assert (IDE_IS_URL_BAR (self));
   g_assert (GTK_IS_EVENT_CONTROLLER_FOCUS (focus));
 
+  gtk_stack_set_visible_child_name (self->stack, "display");
 }
 
 static void
