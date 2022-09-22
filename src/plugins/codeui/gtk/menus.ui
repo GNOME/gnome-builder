@@ -13,6 +13,7 @@
         <attribute name="label" translatable="yes">_Go to Declaration</attribute>
         <attribute name="description" translatable="yes">Jump to file and location where item is declared</attribute>
         <attribute name="action">page.codeui.goto-declaration</attribute>
+        <attribute name="accel">&lt;alt&gt;period</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Go to Definition</attribute>
