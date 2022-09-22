@@ -110,6 +110,123 @@ ide_diagnostic_tool_real_configure_launcher (IdeDiagnosticTool     *self,
   IDE_EXIT;
 }
 
+static gboolean
+ide_diagnostic_tool_real_prepare_run_context (IdeDiagnosticTool  *self,
+                                              IdeRunContext      *run_context,
+                                              GFile              *file,
+                                              GBytes             *contents,
+                                              const char         *language_id,
+                                              GError            **error)
+{
+  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
+  g_autoptr(IdeContext) context = NULL;
+  g_autoptr(GFile) workdir = NULL;
+  const char *srcdir = NULL;
+  const char *local_program_path;
+  const char *bundled_program_path;
+  const char *program_name;
+  g_autofree char *program_path = NULL;
+  IdeRuntimeManager *runtime_manager;
+  IdeRuntime *host = NULL;
+  IdePipeline *pipeline = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_DIAGNOSTIC_TOOL (self));
+
+  if (!(context = ide_object_ref_context (IDE_OBJECT (self))))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_CANCELLED,
+                   "Context lost, cancelling request");
+      IDE_RETURN (FALSE);
+    }
+
+  workdir = ide_context_ref_workdir (context);
+  srcdir = g_file_peek_path (workdir);
+
+  local_program_path = ide_diagnostic_tool_get_local_program_path (self);
+  bundled_program_path = ide_diagnostic_tool_get_bundled_program_path (self);
+  program_name = ide_diagnostic_tool_get_program_name (self);
+
+  if (program_name == NULL)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_CANCELLED,
+                   "No program-name provided for diagnostic tool");
+      IDE_RETURN (FALSE);
+    }
+
+  if (ide_context_has_project (context))
+    {
+      IdeBuildManager *build_manager = ide_build_manager_from_context (context);
+      pipeline = ide_build_manager_get_pipeline (build_manager);
+      runtime_manager = ide_runtime_manager_from_context (context);
+      host = ide_runtime_manager_get_runtime (runtime_manager, "host");
+    }
+
+  if (pipeline != NULL)
+    srcdir = ide_pipeline_get_srcdir (pipeline);
+
+  if (local_program_path != NULL)
+    {
+      g_autofree char *local_program = g_build_filename (srcdir, local_program_path, NULL);
+      if (g_file_test (local_program, G_FILE_TEST_IS_EXECUTABLE))
+        program_path = g_steal_pointer (&local_program);
+    }
+
+  if (pipeline != NULL &&
+      ((program_path != NULL && ide_pipeline_contains_program_in_path (pipeline, program_path, NULL)) ||
+      ide_pipeline_contains_program_in_path (pipeline, program_name, NULL)))
+    {
+      ide_pipeline_prepare_run_context (pipeline, run_context);
+      IDE_GOTO (setup_launcher);
+    }
+
+  if (host != NULL)
+    {
+      /* Now try on the host using the "host" runtime which can do
+       * a better job of discovering the program on the host and
+       * take into account if the user has something modifying the
+       * shell like .bashrc.
+       */
+      if (program_path != NULL ||
+          ide_runtime_contains_program_in_path (host, program_name, NULL))
+        {
+          ide_runtime_prepare_to_build (host, pipeline, run_context);
+          IDE_GOTO (setup_launcher);
+        }
+    }
+  else if (program_path != NULL)
+    {
+      ide_run_context_push_host (run_context);
+      IDE_GOTO (setup_launcher);
+    }
+
+  if (bundled_program_path != NULL && ide_is_flatpak ())
+    program_path = g_strdup (bundled_program_path);
+
+  /* See if Builder itself has bundled the program */
+  if (program_path || g_find_program_in_path (program_name))
+    IDE_GOTO (setup_launcher);
+
+  g_set_error (error,
+               G_IO_ERROR,
+               G_IO_ERROR_NOT_FOUND,
+               "Failed to locate program \"%s\"",
+               program_name);
+
+  IDE_RETURN (FALSE);
+
+setup_launcher:
+  ide_run_context_append_argv (run_context, program_path ? program_path : program_name);
+  ide_run_context_set_cwd (run_context, srcdir);
+
+  IDE_RETURN (TRUE);
+}
+
 static IdeSubprocessLauncher *
 ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
                                           const char         *program_name,
@@ -217,12 +334,6 @@ ide_diagnostic_tool_real_create_launcher (IdeDiagnosticTool  *self,
 setup_launcher:
   ide_subprocess_launcher_push_argv (launcher, program_path ? program_path : program_name);
   ide_subprocess_launcher_set_cwd (launcher, srcdir);
-  ide_subprocess_launcher_set_flags (launcher,
-                                     (G_SUBPROCESS_FLAGS_STDIN_PIPE |
-                                      G_SUBPROCESS_FLAGS_STDOUT_PIPE |
-                                      G_SUBPROCESS_FLAGS_STDERR_PIPE));
-
-  IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->configure_launcher (self, launcher, file, contents, language_id);
 
   g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
 
@@ -347,6 +458,7 @@ ide_diagnostic_tool_class_init (IdeDiagnosticToolClass *klass)
   klass->configure_launcher = ide_diagnostic_tool_real_configure_launcher;
   klass->get_stdin_bytes = ide_diagnostic_tool_real_get_stdin_bytes;
   klass->can_diagnose = ide_diagnostic_tool_real_can_diagnose;
+  klass->prepare_run_context = ide_diagnostic_tool_real_prepare_run_context;
 
   /**
    * IdeDiagnosticTool:program-name:
@@ -507,11 +619,32 @@ ide_diagnostic_tool_diagnose_async (IdeDiagnosticProvider *provider,
       IDE_EXIT;
     }
 
-  if (!(launcher = ide_diagnostic_tool_create_launcher (self, priv->program_name, file, contents, lang_id, &error)))
+  if (IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->prepare_run_context)
     {
-      ide_task_return_error (task, g_steal_pointer (&error));
-      IDE_EXIT;
+      g_autoptr(IdeRunContext) run_context = ide_run_context_new ();
+
+      if (!IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->prepare_run_context (self, run_context, file, contents, lang_id, &error) ||
+          !(launcher = ide_run_context_end (run_context, &error)))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
     }
+  else
+    {
+      if (!(launcher = ide_diagnostic_tool_create_launcher (self, priv->program_name, file, contents, lang_id, &error)))
+        {
+          ide_task_return_error (task, g_steal_pointer (&error));
+          IDE_EXIT;
+        }
+    }
+
+  ide_subprocess_launcher_set_flags (launcher,
+                                     (G_SUBPROCESS_FLAGS_STDIN_PIPE |
+                                      G_SUBPROCESS_FLAGS_STDOUT_PIPE |
+                                      G_SUBPROCESS_FLAGS_STDERR_PIPE));
+
+  IDE_DIAGNOSTIC_TOOL_GET_CLASS (self)->configure_launcher (self, launcher, file, contents, lang_id);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, cancellable, &error)))
     {
