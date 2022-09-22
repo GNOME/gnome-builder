@@ -97,7 +97,17 @@ ide_search_popover_hide_action (GtkWidget  *widget,
                                 const char *action_name,
                                 GVariant   *param)
 {
+  IdeWorkspace *workspace;
+  IdePage *page;
+
+  g_assert (IDE_IS_SEARCH_POPOVER (widget));
+
+  workspace = ide_widget_get_workspace (widget);
+  page = ide_workspace_get_most_recent_page (workspace);
+
   gtk_popover_popdown (GTK_POPOVER (widget));
+
+  gtk_widget_grab_focus (GTK_WIDGET (page));
 }
 
 static void
