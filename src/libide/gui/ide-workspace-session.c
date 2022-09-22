@@ -513,6 +513,7 @@ _ide_workspace_restore_session_simple (IdeWorkspace     *self,
                                        IdeSession       *session,
                                        IdeWorkspaceDock *dock)
 {
+  g_autoptr(IdeSessionItem) panels = NULL;
   guint n_items;
 
   IDE_ENTRY;
@@ -544,11 +545,15 @@ _ide_workspace_restore_session_simple (IdeWorkspace     *self,
             ide_workspace_restore_frame (self, type, item, dock);
           else if (g_type_is_a (type, IDE_TYPE_WORKSPACE) &&
                    type == G_OBJECT_TYPE (self))
-            ide_workspace_restore_panels (self, item, dock);
+            g_set_object (&panels, item);
           else if (ide_str_equal0 (type_hint, "IdePane"))
             ide_workspace_restore_pane (self, item, dock);
         }
     }
+
+  /* Restore panels last so their visibility remains intact */
+  if (panels != NULL)
+    ide_workspace_restore_panels (self, panels, dock);
 
   IDE_EXIT;
 }
