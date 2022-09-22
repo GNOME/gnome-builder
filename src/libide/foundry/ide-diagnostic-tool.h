@@ -56,12 +56,6 @@ struct _IdeDiagnosticToolClass
                                                   GBytes                 *contents,
                                                   const char             *language_id,
                                                   GError                **error);
-  IdeSubprocessLauncher *(*create_launcher)      (IdeDiagnosticTool      *self,
-                                                  const char             *program_name,
-                                                  GFile                  *file,
-                                                  GBytes                 *contents,
-                                                  const char             *language_id,
-                                                  GError                **error);
   void                   (*configure_launcher)   (IdeDiagnosticTool      *self,
                                                   IdeSubprocessLauncher  *launcher,
                                                   GFile                  *file,
