@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-16 21:19+0000\n"
-"PO-Revision-Date: 2022-09-17 20:35+0200\n"
+"POT-Creation-Date: 2022-09-21 18:37+0000\n"
+"PO-Revision-Date: 2022-09-22 20:35+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <info@softcatala.org>\n"
 "Language: ca\n"
@@ -617,7 +617,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Quin entorn s'ha d'utilitzar quan s'executen proves unitàries"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:170 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Registre loquaç"
 
@@ -748,8 +748,10 @@ msgstr "Sense títol"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1479
+#: src/libide/gui/ide-workbench.c:1500
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
@@ -762,7 +764,7 @@ msgid "A suitable debugger could not be found."
 msgstr "No s'ha pogut trobar un depurador adequat."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1475
+#: src/libide/gui/ide-workbench.c:1496
 msgid "Open File…"
 msgstr "Obre un fitxer…"
 
@@ -1134,6 +1136,7 @@ msgstr "S'està configurant…"
 
 #: src/libide/foundry/ide-pipeline.c:3299
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "S'està construint…"
 
@@ -1215,8 +1218,10 @@ msgstr "Per defecte (Sistema operatiu amfitrió)"
 msgid "_Clone Repository…"
 msgstr "_Clona un repositori…"
 
-#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
-#: src/plugins/sysprof/gtk/menus.ui:138
+#: src/libide/greeter/gtk/menus.ui:20
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:195
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:405
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "Tanca"
 
@@ -1279,7 +1284,7 @@ msgid "Select Project File"
 msgstr "Selecciona el fitxer del projecte"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1478
+#: src/libide/gui/ide-workbench.c:1499
 msgid "_Open"
 msgstr "_Obre"
 
@@ -1390,7 +1395,7 @@ msgid_plural "About %u years ago"
 msgstr[0] "Fa aproximadament %u any"
 msgstr[1] "Fa aproximadament %u anys"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:49
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Instal·la"
@@ -1443,7 +1448,7 @@ msgstr "Navegació web"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:275
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
@@ -1582,11 +1587,11 @@ msgstr "Executa el projecte"
 msgid "Other"
 msgstr "Altres"
 
-#: src/libide/gui/ide-workspace.c:1741
+#: src/libide/gui/ide-workspace.c:1701
 msgid "There are unsaved documents"
 msgstr "Hi ha documents sense desar"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:125
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1818,18 +1823,6 @@ msgstr "D_uplica la línia"
 msgid "Code Navigation"
 msgstr "Navegació del codi"
 
-#: src/libide/sourceview/gtk/menus.ui:149
-msgid "_Go to Definition"
-msgstr "_Ves a la definició"
-
-#: src/libide/sourceview/gtk/menus.ui:150
-msgid "Jump to file and location where item is defined"
-msgstr "Salta al fitxer i a la ubicació on es defineix l'element"
-
-#: src/libide/sourceview/gtk/menus.ui:156
-msgid "_Find References"
-msgstr "_Cerca les referències"
-
 #. translators: the first %u is replaced with the line number and the second
 #. with the column.
 #: src/libide/sourceview/ide-source-view.c:1550
@@ -1925,6 +1918,7 @@ msgid "(Empty)"
 msgstr "(Buit)"
 
 #: src/libide/tree/ide-tree-node.c:1468
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
 msgid "Loading…"
 msgstr "S'està carregant…"
 
@@ -1967,7 +1961,7 @@ msgid "Blank page"
 msgstr "Pàgina en blanc"
 
 #: src/libide/webkit/ide-webkit-page.ui:96
-#: src/plugins/buildui/gtk/menus.ui:151
+#: src/plugins/buildui/gtk/menus.ui:123
 msgid "Settings"
 msgstr "Configuració"
 
@@ -2231,89 +2225,77 @@ msgstr "Construeix el projecte (Maj+Ctrl+Alt+B)"
 msgid "Display Build Diagnostics (Ctrl+Alt+?)"
 msgstr "Mostra els diagnòstics de la construcció (Ctrl+Alt+?)"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
-msgid "_Build"
-msgstr "_Construcció"
-
-#: src/plugins/buildui/gtk/menus.ui:14
-msgid "R_ebuild"
-msgstr "Construir de _nou"
-
-#: src/plugins/buildui/gtk/menus.ui:20
-msgid "_Run"
-msgstr "_Executa"
-
-#: src/plugins/buildui/gtk/menus.ui:25
-msgid "R_un With…"
-msgstr "_Executa amb…"
-
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/plugins/buildui/gtk/menus.ui:5
 msgid "Configure Project…"
 msgstr "Configura el projecte…"
 
-#: src/plugins/buildui/gtk/menus.ui:36
+#: src/plugins/buildui/gtk/menus.ui:8
 msgid "Configure settings related to the project"
 msgstr "Configurar paràmetres relacionats amb el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
-#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
-#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
-#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:46
+#: src/plugins/buildui/gtk/menus.ui:73 src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:97 src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:119
 msgid "Code Foundry"
 msgstr "Fundació del codi"
 
-#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:15
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Configuració"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:17
 msgid "Select Build Target…"
 msgstr "Selecciona objectius de construcció…"
 
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:19
 msgid "Change default build target"
 msgstr "Canviar l'objectiu de construcció per defecte"
 
-#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:84
 msgid "Building"
 msgstr "S'està construint"
 
-#: src/plugins/buildui/gtk/menus.ui:55
+#: src/plugins/buildui/gtk/menus.ui:26
+msgid "_Build"
+msgstr "_Construcció"
+
+#: src/plugins/buildui/gtk/menus.ui:27
 msgid "Build the project"
 msgstr "Construir el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:61
+#: src/plugins/buildui/gtk/menus.ui:33
 msgid "_Rebuild"
 msgstr "_Construir de nou"
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:34
 msgid "Rebuild the project"
 msgstr "Construir de nou el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:39
 msgid "_Clean"
 msgstr "_Neteja"
 
-#: src/plugins/buildui/gtk/menus.ui:68
+#: src/plugins/buildui/gtk/menus.ui:40
 msgid "Clean the project"
 msgstr "Neteja el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Install & Deployment"
 msgstr "Instal·la i desplega"
 
-#: src/plugins/buildui/gtk/menus.ui:79
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "Install the project"
 msgstr "Instal·la el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:55
 msgid "Deploy to Device…"
 msgstr "Desplega-ho al dispositiu…"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Deploy project to current device"
 msgstr "Desplega el projecte al dispositiu actual"
 
@@ -2321,85 +2303,85 @@ msgstr "Desplega el projecte al dispositiu actual"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:66
 msgid "_Export"
 msgstr "_Exporta"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:68
 msgid "Export project"
 msgstr "Projecte d'exportació"
 
-#: src/plugins/buildui/gtk/menus.ui:104
+#: src/plugins/buildui/gtk/menus.ui:76
 msgid "Stop Build"
 msgstr "Atura la construcció"
 
-#: src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:78
 msgid "Stop building project"
 msgstr "Atura el projecte de construcció"
 
-#: src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:86
 msgid "Show Build _Log"
 msgstr "Mostra el _registre de construcció"
 
-#: src/plugins/buildui/gtk/menus.ui:117
+#: src/plugins/buildui/gtk/menus.ui:89
 msgid "Display panel containing the build log"
 msgstr "Mostra el quadre que conté el registre de construcció"
 
-#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
 msgid "Running"
 msgstr "S'està executant"
 
-#: src/plugins/buildui/gtk/menus.ui:128
+#: src/plugins/buildui/gtk/menus.ui:100
 msgid "Select Run Command…"
 msgstr "Selecciona ordre d'execució…"
 
-#: src/plugins/buildui/gtk/menus.ui:140
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Run"
 msgstr "Executa"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:115
 msgid "Run the project"
 msgstr "Executa el projecte"
 
-#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Proves unitàries"
 
-#: src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/menus.ui:127
 msgid "Follow System Style"
 msgstr "Segueix l'estil del sistema"
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Force Light"
 msgstr "Força el clar"
 
-#: src/plugins/buildui/gtk/menus.ui:167
+#: src/plugins/buildui/gtk/menus.ui:139
 msgid "Force Dark"
 msgstr "Força el fosc"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Accessibility"
 msgstr "Accessibilitat"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:148
 msgid "High Contrast"
 msgstr "Contrast alt"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:153
 msgid "Text Direction"
 msgstr "Direcció del text"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Left-to-Right"
 msgstr "D'esquerra a dreta"
 
-#: src/plugins/buildui/gtk/menus.ui:189
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Right-to-Left"
 msgstr "De dreta a esquerra"
 
-#: src/plugins/buildui/gtk/menus.ui:204
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Tools"
 msgstr "Eines"
 
@@ -2813,6 +2795,75 @@ msgstr "Declaració"
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Possible error tipogràfic a «%s». Volies dir «%s»?"
 
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
+msgid "Symbol Not Selected"
+msgstr "Símbol no seleccionat"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:194
+msgid "A symbol to rename must be selected"
+msgstr "Cal seleccionar un símbol per a canviar-li el nom"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
+msgid "Find References"
+msgstr "Cerca les referències"
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:168
+msgid "No references found"
+msgstr "No s'han trobat referències"
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:169
+msgid "The programming language tooling may not support finding references"
+msgstr ""
+"L'eina del llenguatge de programació pot no permetre cercar referències"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
+#, c-format
+msgid "Failed to rename symbol: %s"
+msgstr "No s'ha pogut canviar el nom del símbol: %s"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
+msgid "Rename Symbol"
+msgstr "Canvia el nom d'un símbol"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
+#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
+#: src/plugins/project-tree/gtk/menus.ui:58
+msgid "_Rename"
+msgstr "_Canvia el nom"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
+msgid "Current Symbol name"
+msgstr "Nom del símbol actual"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
+msgid "New Symbol name"
+msgstr "Nom nou del símbol"
+
+#: src/plugins/codeui/gtk/menus.ui:7
+msgid "R_ename Symbol…"
+msgstr "Canvia el nom d'un símbol…"
+
+#: src/plugins/codeui/gtk/menus.ui:13
+msgid "_Go to Declaration"
+msgstr "_Ves a la declaració"
+
+#: src/plugins/codeui/gtk/menus.ui:14
+msgid "Jump to file and location where item is declared"
+msgstr "Salta al fitxer i a la ubicació on es declara l'element"
+
+#: src/plugins/codeui/gtk/menus.ui:18
+msgid "_Go to Definition"
+msgstr "_Ves a la definició"
+
+#: src/plugins/codeui/gtk/menus.ui:19
+msgid "Jump to file and location where item is defined"
+msgstr "Salta al fitxer i a la ubicació on es defineix l'element"
+
+#: src/plugins/codeui/gtk/menus.ui:24
+msgid "_Find References"
+msgstr "_Cerca les referències"
+
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
 msgstr "Comentaris de codi"
@@ -2979,13 +3030,13 @@ msgid "Run the project with debugger"
 msgstr "Executa el projecte amb el depurador"
 
 #: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:218
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "Depurador"
 
 #: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:252
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr "Punts de ruptura"
@@ -3001,10 +3052,6 @@ msgstr "Interromp automàticament a advertències"
 #: src/plugins/debuggerui/gtk/menus.ui:35
 msgid "Automatically Break at Criticals"
 msgstr "Interrupció automàtica a crítics"
-
-#: src/plugins/debuggerui/gtk/menus.ui:49
-msgid "Run with _Debugger"
-msgstr "E_xecuta amb el depurador"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -3129,19 +3176,19 @@ msgstr "Arguments"
 msgid "Binary"
 msgstr "Binari"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:232
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:233
 msgid "Threads"
 msgstr "Fils"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:257
 msgid "Libraries"
 msgstr "Biblioteques"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:261
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:262
 msgid "Registers"
 msgstr "Registres"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:266
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:267
 msgid "Console"
 msgstr "Consola"
 
@@ -3306,7 +3353,7 @@ msgstr "Obre en un espai de treball nou…"
 
 #: src/plugins/editorui/gtk/menus.ui:161
 msgid "Save _As"
-msgstr "Desa com _a"
+msgstr "A_nomena i desa"
 
 #: src/plugins/editorui/gtk/menus.ui:168
 msgid "Find…"
@@ -3350,7 +3397,7 @@ msgstr "El caràcter a inserir per al tabulador"
 
 #: src/plugins/editorui/tweaks-language.ui:59
 msgid "Tab"
-msgstr "Tabuladors"
+msgstr "Tabulador"
 
 #: src/plugins/editorui/tweaks-language.ui:73
 msgid "Insert Trailing Newline"
@@ -3575,7 +3622,7 @@ msgstr "Ressalta la línia actual"
 
 #: src/plugins/editorui/tweaks.ui:217
 msgid "Make the current line stand out with highlights"
-msgstr "Fes destacar la línia actual amb ressalts"
+msgstr "Destaca la línia actual amb ressalts"
 
 #: src/plugins/editorui/tweaks.ui:228
 msgid "Highlight Matching Brackets"
@@ -3598,7 +3645,7 @@ msgid ""
 "Use symbol information to highlight namespaces, functions, and variables "
 "within source code"
 msgstr ""
-"Usa la informació del símbol per a ressaltar els espais de noms, les "
+"Usa la informació dels símbols per a ressaltar els espais de noms, les "
 "funcions i les variables dins del codi font"
 
 #: src/plugins/editorui/tweaks.ui:258
@@ -3607,7 +3654,7 @@ msgstr "Dibuixa una marca que representi espais normals"
 
 #: src/plugins/editorui/tweaks.ui:271
 msgid "Draw a mark representing tabs"
-msgstr "Dibuixa una marca que representa els tabuladors"
+msgstr "Dibuixa una marca que representi els tabuladors"
 
 #: src/plugins/editorui/tweaks.ui:283
 msgid "Newlines"
@@ -3627,7 +3674,7 @@ msgstr "Dibuixa una marca als caràcters d'espai no separables"
 
 #: src/plugins/editorui/tweaks.ui:313
 msgid "Leading"
-msgstr "Inicial"
+msgstr "A l'inici"
 
 #: src/plugins/editorui/tweaks.ui:314
 msgid "Draw marks for leading spaces only"
@@ -3643,7 +3690,7 @@ msgstr "Dibuixa les marques només dins d'una línia de text"
 
 #: src/plugins/editorui/tweaks.ui:339
 msgid "Trailing"
-msgstr "Final"
+msgstr "Al final"
 
 #: src/plugins/editorui/tweaks.ui:340
 msgid "Draw marks for trailing spaces only"
@@ -3681,7 +3728,7 @@ msgstr "Ampliar fragments"
 #: src/plugins/editorui/tweaks.ui:398
 msgid "Use “Tab” to expand configured snippets in the editor"
 msgstr ""
-"Utilitza «tabulador» per a ampliar els fragments configurats a l'editor"
+"Utilitza el «tabulador» per a ampliar els fragments configurats a l'editor"
 
 #: src/plugins/editorui/tweaks.ui:413
 msgid "Code Completion"
@@ -4509,34 +4556,34 @@ msgstr "Enregistradora de so"
 msgid "A modern sound recorder for GNOME"
 msgstr "Un gravador de so modern pel GNOME"
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
 msgstr "Construcció correcta"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "El projecte «%s» ha completat la construcció"
 
-#: src/plugins/notification/ide-notification-addin.c:112
-#: src/plugins/notification/ide-notification-addin.c:198
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "La construcció ha fallat"
 
-#: src/plugins/notification/ide-notification-addin.c:113
+#: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "El projecte «%s» ha fallat en la construcció"
 
-#: src/plugins/notification/ide-notification-addin.c:189
+#: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
 msgstr "Construcció correcta"
 
-#: src/plugins/notification/ide-notification-addin.c:191
+#: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
 msgstr "S'ha configurat la construcció"
 
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
 msgstr "La construcció ha començat"
 
@@ -4574,13 +4621,13 @@ msgstr "Deixa anar"
 
 #. translators: this is a path to browse to the runtime, likely only
 #. "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:632
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Toolbox"
 msgstr "Contenidors/Caixa d'eines"
 
 #. translators: this is a path to browse to the runtime, likely only
 #. "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:638
+#: src/plugins/podman/gbp-podman-runtime.c:687
 msgid "Containers/Podman"
 msgstr "Contenidors/Podman"
 
@@ -4657,11 +4704,6 @@ msgstr "Arbre del projecte"
 msgid "Rename %s"
 msgstr "Reanomena %s"
 
-#: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:60
-msgid "_Rename"
-msgstr "_Reanomena"
-
 #: src/plugins/project-tree/gtk/menus.ui:8
 msgid "New Fil_e…"
 msgstr "_Fitxer nou…"
@@ -4690,27 +4732,27 @@ msgstr "Obr_e la carpeta contenidora"
 msgid "With _Terminal…"
 msgstr "Amb _terminal…"
 
-#: src/plugins/project-tree/gtk/menus.ui:66
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "_Move to Trash"
 msgstr "_Mou a la paperera"
 
-#: src/plugins/project-tree/gtk/menus.ui:72
+#: src/plugins/project-tree/gtk/menus.ui:70
 msgid "_Display Options"
 msgstr "_Opcions de visualitzacions"
 
-#: src/plugins/project-tree/gtk/menus.ui:76
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "S_how Ignored Files"
 msgstr "_Mostra els fitxers ignorats"
 
-#: src/plugins/project-tree/gtk/menus.ui:81
+#: src/plugins/project-tree/gtk/menus.ui:79
 msgid "S_ort Directories First"
 msgstr "_Ordena primer els directoris"
 
-#: src/plugins/project-tree/gtk/menus.ui:93
+#: src/plugins/project-tree/gtk/menus.ui:91
 msgid "Reveal in Project Tree"
 msgstr "Mostra a l'arbre del projecte"
 
-#: src/plugins/project-tree/gtk/menus.ui:102
+#: src/plugins/project-tree/gtk/menus.ui:100
 msgid "Reveal in Project _Tree"
 msgstr "Mostra-ho a l'_arbre del projecte"
 
@@ -4865,6 +4907,29 @@ msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr ""
 "Activa la característica experimental de macros Proc de l'analitzador de "
 "rust-analyzer"
+
+#: src/plugins/rust-analyzer/tweaks.ui:61
+msgid "Cargo Build Scripts"
+msgstr "Scripts de construcció del Cargo"
+
+#: src/plugins/rust-analyzer/tweaks.ui:62
+msgid "Run build scripts (build.rs) for more precise code analysis"
+msgstr ""
+"Executa els scripts de construcció (build.rs) per a una anàlisi de codi més "
+"precís"
+
+#: src/plugins/rust-analyzer/tweaks.ui:74
+msgid "Rustfmt Range Formatting"
+msgstr "Rang del format del Rustfmf"
+
+#: src/plugins/rust-analyzer/tweaks.ui:75
+msgid ""
+"Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
+"option is unstable and only available on nightly builds of the Rust SDK."
+msgstr ""
+"Activa l'ús de l'ordre inestable de formatació d'interval de Rustfmt. "
+"L'opció rustfmt és inestable i només està disponible en construccions "
+"nocturnes del Rust SDK."
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -5350,11 +5415,11 @@ msgstr "L'aplicació ha començat a les %s\r\n"
 msgid "Application exited"
 msgstr "L'aplicació s'ha tancat"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:293
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Sortida de l'aplicació"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:365
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
 msgid "Process completed"
 msgstr "S'ha completat el procés"
 
@@ -5382,7 +5447,7 @@ msgstr "Nou t_erminal en l'entorn d'execució"
 msgid "Open a new terminal in project's runtime environment"
 msgstr "Obre un nou terminal a l'entorn d'execució del project"
 
-#: src/plugins/terminal/gtk/menus.ui:41
+#: src/plugins/terminal/gtk/menus.ui:40
 msgid "Split"
 msgstr "Divideix"
 
@@ -5392,7 +5457,7 @@ msgstr "El tipus de lletra utilitzat als terminals"
 
 #: src/plugins/terminal/tweaks.ui:29
 msgid "Allow Bold"
-msgstr "Permet negreta"
+msgstr "Permet la negreta"
 
 #: src/plugins/terminal/tweaks.ui:30
 msgid "Allows the use of bold escape sequences"
@@ -5412,7 +5477,7 @@ msgstr "Desplaçament"
 
 #: src/plugins/terminal/tweaks.ui:58
 msgid "Scroll On Output"
-msgstr "Desplaçament en sortida"
+msgstr "Desplaçament en la sortida"
 
 #: src/plugins/terminal/tweaks.ui:59
 msgid "Automatically scroll when applications within the terminal output text"
@@ -5543,7 +5608,7 @@ msgstr "Instal·la actualitzacions…"
 msgid "Install pending updates for Builder"
 msgstr "Instal·la les actualitzacions pendents per al Constructor"
 
-#: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
+#: src/plugins/valgrind/gtk/menus.ui:10
 msgid "Run with Leak Detector"
 msgstr "Executa amb detector de fuites"
 
@@ -5721,6 +5786,18 @@ msgstr "Ha fallat crear l'arbre XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "El fitxer ha d'estar desat localment per a analitzar-lo."
+
+#~ msgid "R_ebuild"
+#~ msgstr "Construir de _nou"
+
+#~ msgid "_Run"
+#~ msgstr "_Executa"
+
+#~ msgid "R_un With…"
+#~ msgstr "_Executa amb…"
+
+#~ msgid "Run with _Debugger"
+#~ msgstr "E_xecuta amb el depurador"
 
 #, c-format
 #~ msgid ""
