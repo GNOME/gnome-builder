@@ -34,24 +34,32 @@ struct _GbpRubocopDiagnosticProvider
   guint is_stdin : 1;
 };
 
-static void
-gbp_rubocop_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *tool,
-                                                    IdeSubprocessLauncher *launcher,
-                                                    GFile                 *file,
-                                                    GBytes                *contents,
-                                                    const char            *language_id)
+G_DEFINE_FINAL_TYPE (GbpRubocopDiagnosticProvider, gbp_rubocop_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
+
+static gboolean
+gbp_rubocop_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
+                                                     IdeRunContext      *run_context,
+                                                     GFile              *file,
+                                                     GBytes             *contents,
+                                                     const char         *language_id,
+                                                     GError            **error)
 {
   GbpRubocopDiagnosticProvider *self = (GbpRubocopDiagnosticProvider *)tool;
 
   g_assert (GBP_IS_RUBOCOP_DIAGNOSTIC_PROVIDER (self));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (G_IS_FILE (file));
 
-  ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT ("--format", "json"));
+  if (!IDE_DIAGNOSTIC_TOOL_CLASS (gbp_rubocop_diagnostic_provider_parent_class)->prepare_run_context (tool, run_context, file, contents, language_id, error))
+    return FALSE;
+
+  ide_run_context_append_args (run_context, IDE_STRV_INIT ("--format", "json"));
   self->is_stdin = contents != NULL;
   if (self->is_stdin)
-    ide_subprocess_launcher_push_argv (launcher, "--stdin");
-  ide_subprocess_launcher_push_argv (launcher, g_file_peek_path (file));
+    ide_run_context_append_argv (run_context, "--stdin");
+  ide_run_context_append_argv (run_context, g_file_peek_path (file));
+
+  return TRUE;
 }
 
 static IdeDiagnosticSeverity
@@ -176,14 +184,12 @@ gbp_rubocop_diagnostic_provider_populate_diagnostics (IdeDiagnosticTool *tool,
     }
 }
 
-G_DEFINE_FINAL_TYPE (GbpRubocopDiagnosticProvider, gbp_rubocop_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
-
 static void
 gbp_rubocop_diagnostic_provider_class_init (GbpRubocopDiagnosticProviderClass *klass)
 {
   IdeDiagnosticToolClass *diagnostic_tool_class = IDE_DIAGNOSTIC_TOOL_CLASS (klass);
 
-  diagnostic_tool_class->configure_launcher = gbp_rubocop_diagnostic_provider_configure_launcher;
+  diagnostic_tool_class->prepare_run_context = gbp_rubocop_diagnostic_provider_prepare_run_context;
   diagnostic_tool_class->populate_diagnostics = gbp_rubocop_diagnostic_provider_populate_diagnostics;
 }
 
