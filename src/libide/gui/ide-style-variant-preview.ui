@@ -13,7 +13,7 @@
         <property name="overflow">hidden</property>
         <child>
           <object class="GtkPicture" id="wallpaper">
-            <property name="keep-aspect-ratio">false</property>
+            <property name="content-fit">fill</property>
             <property name="width-request">164</property>
             <property name="height-request">90</property>
           </object>
