@@ -81,6 +81,10 @@ have been refined and performance improved greatly.
 Not all of our semantic auto-indenters have been ported to GtkSourceIndenter,
 but we expect them (and more) to come back in time.
 
+There is more work to be done here, paricularly around hover providers
+and what can be placed in hover popovers with expectation that it will
+not break input/grabs.
+
 ## Redesigned Preferences
 
 Preferences have been completely redesigned and integrated throughout
@@ -130,7 +134,8 @@ Devhelp has also been removed but may return after it moves to supporting
 GTK 4. Additionally, other tooling may supersede this plugin in time.
 
 The code beautifier and color-picker were also removed and will likely
-return in a different form in future releases.
+return in a different form in future releases. However, language servers
+providing format capabilities can be enabled in preferences to format-on-save.
 
 ## Project Templates
 
@@ -173,12 +178,28 @@ From the Run Menu, many new quick settings are available to tweak how the
 application runs as well as well as configure tooling.
 
 For example, you can now toggle various Valgrind options from the Leak Detector
-submenu. Sysprof integration also follows suit here by allowing you to toggle
+sub-menu. Sysprof integration also follows suit here by allowing you to toggle
 what instruments will be used when recording system state.
 
 To make it easier for developers to ensure their software is inclusive, we've
 added options to toggle High Contrast themes, LTR vs RTL, and light vs dark
 styling.
+
+## Vim Emulation
+
+In GTK 3, we were very much stuck with deep hacks to make something that looked
+like Vim work. Primarily because we wanted to share as much of the movements
+API with other keybinding systems.
+
+That changed with GtkSourceView 5. Part of my upstream maintainer work on
+GtkSourceView included writing a new Vim emulator. It's not perfect, by any
+means, but it does cover a majority of what I've used in more than two decades
+as a heavy Vim user. It handles registers, marks, and tries to follow some
+of the same pasteboard semantics as Vim ("+y for system clipboard, for example).
+
+I made this available in GNOME Text Editor for GNOME 42 as well. Those that
+wonder why we didn't an external engines to synchronize with, can read the
+code to find out.
 
 ## Plugins
 
