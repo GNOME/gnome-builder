@@ -6,13 +6,14 @@
 # Bin Li <binli@gnome.org>, 2015-2016.
 # Tong Hui <tonghuix@gmail.com>, 2017.
 # lumingzh <lumingzh@qq.com>, 2016-2022.
+# Boyuan Yang <073plan@gmail.com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-14 13:48+0000\n"
-"PO-Revision-Date: 2022-09-14 13:44-0400\n"
+"POT-Creation-Date: 2022-09-22 03:21+0000\n"
+"PO-Revision-Date: 2022-09-22 12:25+0800\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Gtranslator 40.0\n"
 
 #: data/appdata/org.gnome.Builder.appdata.xml.in.in:7
 #: data/org.gnome.Builder.desktop.in.in:3
@@ -568,7 +569,7 @@ msgid "What environment to use when running unit tests"
 msgstr "运行单元测试时使用的环境"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:170 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "详细日志"
 
@@ -691,8 +692,10 @@ msgstr "无标题"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1459
+#: src/libide/gui/ide-workbench.c:1500
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
@@ -705,7 +708,7 @@ msgid "A suitable debugger could not be found."
 msgstr "未发现适合的调试器。"
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1455
+#: src/libide/gui/ide-workbench.c:1496
 msgid "Open File…"
 msgstr "打开文件…"
 
@@ -770,6 +773,7 @@ msgstr "页面"
 #: src/libide/sourceview/gtk/menus.ui:139
 #: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/menu-search/gtk/menus.ui:69
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "文本编辑器"
@@ -875,28 +879,23 @@ msgstr "无法打印：%s"
 msgid "Failed to format selection: %s"
 msgstr "格式化选区失败：%s"
 
-#: src/libide/editor/ide-editor-page.c:943
+#: src/libide/editor/ide-editor-page.c:948
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "保存文件"
 
-#: src/libide/editor/ide-editor-page.c:946
+#: src/libide/editor/ide-editor-page.c:951
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/color-picker/gb-color-picker-prefs.c:236
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "保存"
 
-#: src/libide/editor/ide-editor-page.c:946
+#: src/libide/editor/ide-editor-page.c:951
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/color-picker/gb-color-picker-prefs.c:97
-#: src/plugins/color-picker/gb-color-picker-prefs.c:213
-#: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
@@ -993,11 +992,11 @@ msgstr "活动配置"
 msgid "Discovered device “%s”"
 msgstr "已发现设备“%s”"
 
-#: src/libide/foundry/ide-device-manager.c:536
+#: src/libide/foundry/ide-device-manager.c:535
 msgid "Devices"
 msgstr "设备"
 
-#: src/libide/foundry/ide-device-manager.c:710
+#: src/libide/foundry/ide-device-manager.c:709
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr "不能部署到设备，构建管道没有初始化"
 
@@ -1027,86 +1026,87 @@ msgid "The build configuration has errors"
 msgstr "构建配置存在错误"
 
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1096
+#: src/libide/foundry/ide-pipeline.c:1095
 #, c-format
 msgid "Build (%s)"
 msgstr "构建（%s）"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1138
+#: src/libide/foundry/ide-pipeline.c:1136
 #, c-format
 msgid "Post-install (%s)"
 msgstr "安装后（%s）"
 
-#: src/libide/foundry/ide-pipeline.c:3031
+#: src/libide/foundry/ide-pipeline.c:3071
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr "伪终端创建失败。终端特性将会被限制。"
 
-#: src/libide/foundry/ide-pipeline.c:3228
+#: src/libide/foundry/ide-pipeline.c:3268
 msgid "Cleaning…"
 msgstr "正在清理…"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3272
+#: src/libide/foundry/ide-pipeline.c:3329
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "失败"
 
-#: src/libide/foundry/ide-pipeline.c:3234
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3274
+#: src/libide/foundry/ide-pipeline.c:3337
 msgid "Ready"
 msgstr "就绪"
 
-#: src/libide/foundry/ide-pipeline.c:3249
+#: src/libide/foundry/ide-pipeline.c:3289
 msgid "Downloading…"
 msgstr "正在下载…"
 
-#: src/libide/foundry/ide-pipeline.c:3253
+#: src/libide/foundry/ide-pipeline.c:3293
 msgid "Building dependencies…"
 msgstr "正在构建依赖…"
 
-#: src/libide/foundry/ide-pipeline.c:3257
+#: src/libide/foundry/ide-pipeline.c:3297
 msgid "Bootstrapping…"
 msgstr "正在自举…"
 
-#: src/libide/foundry/ide-pipeline.c:3261
+#: src/libide/foundry/ide-pipeline.c:3301
 msgid "Configuring…"
 msgstr "正在配置…"
 
-#: src/libide/foundry/ide-pipeline.c:3265
+#: src/libide/foundry/ide-pipeline.c:3305
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "正在构建…"
 
-#: src/libide/foundry/ide-pipeline.c:3269
+#: src/libide/foundry/ide-pipeline.c:3309
 msgid "Installing…"
 msgstr "正在安装…"
 
-#: src/libide/foundry/ide-pipeline.c:3273
+#: src/libide/foundry/ide-pipeline.c:3313
 msgid "Committing…"
 msgstr "正在提交…"
 
-#: src/libide/foundry/ide-pipeline.c:3277
+#: src/libide/foundry/ide-pipeline.c:3317
 msgid "Exporting…"
 msgstr "正在导出…"
 
-#: src/libide/foundry/ide-pipeline.c:3281
-#: src/libide/foundry/ide-pipeline.c:3285
+#: src/libide/foundry/ide-pipeline.c:3321
+#: src/libide/foundry/ide-pipeline.c:3325
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "成功"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3333
 msgid "Preparing…"
 msgstr "正在准备…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3649
+#: src/libide/foundry/ide-pipeline.c:3689
 #, c-format
 msgid "Removing %s"
 msgstr "正在移除 %s"
 
-#: src/libide/foundry/ide-pipeline.c:3708
+#: src/libide/foundry/ide-pipeline.c:3748
 msgid "Removing build directories…"
 msgstr "正在移除构建目录…"
 
@@ -1155,8 +1155,10 @@ msgstr "默认（主机操作系统）"
 msgid "_Clone Repository…"
 msgstr "克隆仓库(_C)…"
 
-#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
-#: src/plugins/sysprof/gtk/menus.ui:138
+#: src/libide/greeter/gtk/menus.ui:20
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:195
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:405
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "关闭"
 
@@ -1181,7 +1183,7 @@ msgid "Directory"
 msgstr "目录"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
+#: src/libide/gui/ide-workbench.c:346 src/libide/gui/ide-workbench.c:851
 #, c-format
 msgid "Builder — %s"
 msgstr "构建器 — %s"
@@ -1218,7 +1220,7 @@ msgid "Select Project File"
 msgstr "选择工程文件"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1458
+#: src/libide/gui/ide-workbench.c:1499
 msgid "_Open"
 msgstr "打开(_O)"
 
@@ -1272,7 +1274,6 @@ msgstr "获取 va_list 值失败：%s"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
-#: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr "打开"
@@ -1328,7 +1329,7 @@ msgid "About %u year ago"
 msgid_plural "About %u years ago"
 msgstr[0] "大约 %u 年前"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:49
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "安装(_I)"
@@ -1380,7 +1381,7 @@ msgstr "网页浏览"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "终端"
@@ -1477,7 +1478,7 @@ msgstr "Ctrl+Shift+T"
 msgid "Open application menu (F10)"
 msgstr "打开应用程序菜单（F10）"
 
-#: src/libide/gui/ide-marked-view.c:414
+#: src/libide/gui/ide-marked-view.c:421
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "无法加载 HTML。缺少 WebKit 支持。"
 
@@ -1519,11 +1520,11 @@ msgstr "运行工程"
 msgid "Other"
 msgstr "其它"
 
-#: src/libide/gui/ide-workspace.c:1646
+#: src/libide/gui/ide-workspace.c:1701
 msgid "There are unsaved documents"
 msgstr "有未保存的文档"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:125
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1569,6 +1570,7 @@ msgstr "设备和模拟器"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+#: src/plugins/menu-search/gtk/menus.ui:70
 msgid "Diagnostics"
 msgstr "诊断"
 
@@ -1752,18 +1754,6 @@ msgstr "再制行(_U)"
 msgid "Code Navigation"
 msgstr "代码导航"
 
-#: src/libide/sourceview/gtk/menus.ui:149
-msgid "_Go to Definition"
-msgstr "跳转至定义(_G)"
-
-#: src/libide/sourceview/gtk/menus.ui:150
-msgid "Jump to file and location where item is defined"
-msgstr "跳转至项目定义的文件和位置"
-
-#: src/libide/sourceview/gtk/menus.ui:156
-msgid "_Find References"
-msgstr "查找参考(_F)"
-
 #. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
@@ -1852,6 +1842,7 @@ msgid "(Empty)"
 msgstr "（空）"
 
 #: src/libide/tree/ide-tree-node.c:1468
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
 msgid "Loading…"
 msgstr "正在加载…"
 
@@ -1886,7 +1877,6 @@ msgstr "未受版本控制的"
 
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
 msgstr "无"
 
@@ -1894,7 +1884,7 @@ msgstr "无"
 msgid "Blank page"
 msgstr "空白页面"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:151
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:123
 msgid "Settings"
 msgstr "设置"
 
@@ -1914,177 +1904,26 @@ msgstr "正在构建缓存…"
 msgid "Bootstrapping build system"
 msgstr "自举构建系统"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
 msgstr "正在配置工程"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:85
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:97
-#: src/plugins/make/gbp-make-pipeline-addin.c:124
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:89
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:125
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
+#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/make/gbp-make-pipeline-addin.c:142
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:91
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
 msgstr "正在构建工程"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:365
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
 msgstr "正在缓存构建命令"
-
-#. translators: %s and %s are replaced with source file path and the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:157
-#, c-format
-msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
-msgstr "美化器插件：为“%s”复制 gresource 配置文件出错：%s"
-
-#. translators: %s is replaced with the source file path
-#: src/plugins/beautifier/gb-beautifier-config.c:165
-#, c-format
-msgid "Beautifier plugin: error creating temporary config file for “%s”"
-msgstr "美化器插件：为“%s”创建临时配置文件出错"
-
-#. translators: %s is replaced with the .ini source file path
-#: src/plugins/beautifier/gb-beautifier-config.c:209
-#, c-format
-msgid "Beautifier plugin: Can’t read .ini file: %s"
-msgstr "美化器插件：无法读取 .ini 文件：%s"
-
-#. translators: %s is replaced with the config entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:257
-#, c-format
-msgid ""
-"Beautifier plugin: neither command nor command-pattern keys found: entry "
-"“%s” disabled"
-msgstr "美化器插件：未找到 command 或 command-pattern 键值：输入“%s”已禁用"
-
-#. translators: %s is replaced with the config entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:267
-#, c-format
-msgid ""
-"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
-"disabled"
-msgstr "美化器插件：command 和 command-pattern 键值都已找到：输入“%s”已禁用"
-
-#. translators: %s and %s are replaced with the config path and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:291
-#, c-format
-msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
-msgstr "美化器插件：配置路径“%s”不存在，输入“%s”已禁用"
-
-#. translators: %s is replaced with the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:308
-#, c-format
-msgid ""
-"Beautifier plugin: command key out of possible values: entry “%s” disabled"
-msgstr "美化器插件：command 键值超出可能数值：输入“%s”已禁用"
-
-#. translators: %s and %s are replaced with the profile name and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:333
-#, c-format
-msgid ""
-"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
-"entry “%s” disabled"
-msgstr ""
-"美化器插件：@c@ 在“%s” command-pattern 键值中但未设置配置文件：输入“%s”已禁用"
-
-#. translators: %s and %s are replaced with the profile name and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:365
-#, c-format
-msgid ""
-"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
-msgstr "美化器插件：无法为“%s”创建临时文件：输入“%s”已禁用"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:407
-#, c-format
-msgid "Beautifier plugin: “%s”"
-msgstr "美化器插件：“%s”"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:508
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
-#, c-format
-msgid "Beautifier plugin: %s"
-msgstr "美化器插件：%s"
-
-#. translators: %s is replaced with a path name
-#: src/plugins/beautifier/gb-beautifier-config.c:547
-#, c-format
-msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-msgstr "美化器插件：无法读取以下资源文件：“%s”"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
-msgid "beautifier program missing, you must install it: "
-msgstr "美化器程序缺失，您必须安装它："
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
-msgid "Beautifier Plugin: the view is not a GtkSourceView"
-msgstr "美化器插件：该视图不是 GtkSourceView"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
-msgid "Beautifier Plugin: no default beautifier found"
-msgstr "美化器插件：未找到默认美化器"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
-msgid "Beautifier Plugin: the buffer is not writable"
-msgstr "美化器插件：该缓冲区不可写入"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
-msgid "Beautifier Plugin: Nothing selected"
-msgstr "美化器插件：未选中任何内容"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:243
-#, c-format
-msgid "No beautifier available for “%s”"
-msgstr "对“%s”无可用美化器"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:245
-#, c-format
-msgid "No beautifier available"
-msgstr "无可用美化器"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:356
-#, c-format
-msgid "Beautifier plugin: no valid entries, disabling: %s"
-msgstr "美化器插件：无有效输入，正在禁用：%s"
-
-#. translators: %s and %s are replaced with the temporary dir and the file path
-#: src/plugins/beautifier/gb-beautifier-helper.c:63
-#: src/plugins/beautifier/gb-beautifier-helper.c:88
-#: src/plugins/beautifier/gb-beautifier-helper.c:114
-#: src/plugins/beautifier/gb-beautifier-helper.c:135
-#, c-format
-msgid ""
-"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
-"temporary directory: “%s”"
-msgstr "美化器插件：尝试移除临时文件夹“%s”外的文件已被封锁：“%s”"
-
-#. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:285
-#, c-format
-msgid ""
-"Beautifier plugin: command error output:\n"
-"%s"
-msgstr ""
-"美化器插件：命令错误输出：\n"
-"%s"
-
-#: src/plugins/beautifier/gb-beautifier-process.c:295
-msgid "Beautifier plugin: the command output is empty"
-msgstr "美化器插件：命令输出是空的"
-
-#: src/plugins/beautifier/gb-beautifier-process.c:322
-msgid "Beautify plugin: the output is not a valid UTF-8 text"
-msgstr "美化器插件：该输出不是有效的 UTF-8 文本"
-
-#: src/plugins/beautifier/gtk/menus.ui:7
-msgid "_Beautify"
-msgstr "美化(_B)"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:704
@@ -2116,8 +1955,6 @@ msgid "Copy"
 msgstr "复制"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:42
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "移除"
 
@@ -2188,7 +2025,7 @@ msgstr "错误"
 msgid "Warnings"
 msgstr "警告"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:345
+#: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "Build Pipeline"
@@ -2293,97 +2130,89 @@ msgstr "删除"
 msgid "Delete configuration"
 msgstr "删除配置"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project"
 msgstr "停止构建中的工程"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "构建工程（Shift+Ctrl+Alt+B）"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
-msgid "_Build"
-msgstr "构建(_B)"
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+msgid "Display Build Diagnostics (Ctrl+Alt+?)"
+msgstr "显示构建诊断（Ctrl+Alt+?）"
 
-#: src/plugins/buildui/gtk/menus.ui:14
-msgid "R_ebuild"
-msgstr "重新构建(_E)"
-
-#: src/plugins/buildui/gtk/menus.ui:20
-msgid "_Run"
-msgstr "运行(_R)"
-
-#: src/plugins/buildui/gtk/menus.ui:25
-msgid "R_un With…"
-msgstr "运行于(_U)…"
-
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/plugins/buildui/gtk/menus.ui:5
 msgid "Configure Project…"
 msgstr "配置工程…"
 
-#: src/plugins/buildui/gtk/menus.ui:36
+#: src/plugins/buildui/gtk/menus.ui:8
 msgid "Configure settings related to the project"
 msgstr "配置与工程相关的设置"
 
-#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
-#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
-#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
-#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:46
+#: src/plugins/buildui/gtk/menus.ui:73 src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:97 src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:119
 msgid "Code Foundry"
 msgstr "代码铸造"
 
-#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:15
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "配置"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:17
 msgid "Select Build Target…"
 msgstr "选择构建目标…"
 
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:19
 msgid "Change default build target"
 msgstr "更改默认构建目标"
 
-#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:84
 msgid "Building"
 msgstr "构建"
 
-#: src/plugins/buildui/gtk/menus.ui:55
+#: src/plugins/buildui/gtk/menus.ui:26
+msgid "_Build"
+msgstr "构建(_B)"
+
+#: src/plugins/buildui/gtk/menus.ui:27
 msgid "Build the project"
 msgstr "构建工程"
 
-#: src/plugins/buildui/gtk/menus.ui:61
+#: src/plugins/buildui/gtk/menus.ui:33
 msgid "_Rebuild"
 msgstr "重新构建(_R)"
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:34
 msgid "Rebuild the project"
 msgstr "重新构建工程"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:39
 msgid "_Clean"
 msgstr "清理(_C)"
 
-#: src/plugins/buildui/gtk/menus.ui:68
+#: src/plugins/buildui/gtk/menus.ui:40
 msgid "Clean the project"
 msgstr "清理工程"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Install & Deployment"
 msgstr "安装和部署"
 
-#: src/plugins/buildui/gtk/menus.ui:79
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "Install the project"
 msgstr "安装工程"
 
-#: src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:55
 msgid "Deploy to Device…"
 msgstr "部署至设备…"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Deploy project to current device"
 msgstr "部署工程至当前设备"
 
@@ -2391,85 +2220,85 @@ msgstr "部署工程至当前设备"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:66
 msgid "_Export"
 msgstr "导出(_E)"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:68
 msgid "Export project"
 msgstr "导出工程"
 
-#: src/plugins/buildui/gtk/menus.ui:104
+#: src/plugins/buildui/gtk/menus.ui:76
 msgid "Stop Build"
 msgstr "停止构建"
 
-#: src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:78
 msgid "Stop building project"
 msgstr "停止构建中的工程"
 
-#: src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:86
 msgid "Show Build _Log"
 msgstr "显示构建日志(_L)"
 
-#: src/plugins/buildui/gtk/menus.ui:117
+#: src/plugins/buildui/gtk/menus.ui:89
 msgid "Display panel containing the build log"
 msgstr "显示包含构建日志的面板"
 
-#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
 msgid "Running"
 msgstr "运行"
 
-#: src/plugins/buildui/gtk/menus.ui:128
+#: src/plugins/buildui/gtk/menus.ui:100
 msgid "Select Run Command…"
 msgstr "选择运行命令…"
 
-#: src/plugins/buildui/gtk/menus.ui:140
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Run"
 msgstr "运行"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:115
 msgid "Run the project"
 msgstr "运行工程"
 
-#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "单元测试"
 
-#: src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/menus.ui:127
 msgid "Follow System Style"
 msgstr "跟随系统样式"
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Force Light"
 msgstr "强制亮色"
 
-#: src/plugins/buildui/gtk/menus.ui:167
+#: src/plugins/buildui/gtk/menus.ui:139
 msgid "Force Dark"
 msgstr "强制暗色"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Accessibility"
 msgstr "辅助功能"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:148
 msgid "High Contrast"
 msgstr "高对比度"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:153
 msgid "Text Direction"
 msgstr "文本方向"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Left-to-Right"
 msgstr "左至右"
 
-#: src/plugins/buildui/gtk/menus.ui:189
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Right-to-Left"
 msgstr "右至左"
 
-#: src/plugins/buildui/gtk/menus.ui:204
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Tools"
 msgstr "工具"
 
@@ -2732,11 +2561,11 @@ msgid ""
 "runtime."
 msgstr "用来构建您应用程序的 SDK 会自动由运行时决定。"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:171
 msgid "Fetch dependencies"
 msgstr "获取依赖"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:204
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:199
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 msgid "Build project"
 msgstr "构建工程"
@@ -2791,16 +2620,16 @@ msgstr "补全 clang 建议时包括参数和类型信息"
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:206
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 msgid "Configure project"
 msgstr "配置工程"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
-#: src/plugins/make/gbp-make-pipeline-addin.c:136
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:99
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:133
-#: src/plugins/waf/gbp-waf-pipeline-addin.c:143
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
+#: src/plugins/make/gbp-make-pipeline-addin.c:155
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:103
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
 msgstr "正在安装工程"
 
@@ -2861,430 +2690,81 @@ msgstr "声明"
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "在“%s”中可能有拼写错误。是否为“%s”？"
 
-#: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
-msgid "Colors"
-msgstr "颜色"
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
+msgid "Symbol Not Selected"
+msgstr "未选中符号"
 
-#. translators: %s is replaced with the name of the color palette.
-#: src/plugins/color-picker/gb-color-picker-prefs.c:88
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:194
+msgid "A symbol to rename must be selected"
+msgstr "必须选中要重命名的符号"
+
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
+#| msgid "_Find References"
+msgid "Find References"
+msgstr "查找引用"
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:168
+#| msgid "No references were found"
+msgid "No references found"
+msgstr "没有发现引用"
+
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:169
+msgid "The programming language tooling may not support finding references"
+msgstr "编程语言工具可能不支持查找引用"
+
+#: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
-msgid "Save changes to palette “%s” before closing?"
-msgstr "关闭前保存对调色板“%s”的修改吗？"
+#| msgid "Failed to open file: %s"
+msgid "Failed to rename symbol: %s"
+msgstr "重命名符号失败：%s"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:96
-msgid "Close without Saving"
-msgstr "关闭而不保存"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
+#| msgid "Rename symbol"
+msgid "Rename Symbol"
+msgstr "重命名符号"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:98
-msgid "Save As…"
-msgstr "另存为…"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:206
-msgid "Load palette"
-msgstr "加载调色板"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:233
-msgid "Save palette"
-msgstr "保存调色板"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:706
-msgid "All files"
-msgstr "所有文件"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:710
-msgid "All supported palettes formats"
-msgstr "所有支持的调色板格式"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:715
-msgid "GIMP palette"
-msgstr "GIMP 调色板"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:719
-msgid "GNOME Builder palette"
-msgstr "GNOME 构建器调色板"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
-msgid "Palette name"
-msgstr "调色板名称"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
-msgid "Enter a new name for the palette"
-msgstr "请输入调色板的新名称"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
-msgid "HSV visibility"
-msgstr "HSV 可见性"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
-msgid "If the HSV components are visible."
-msgstr "HSV 组件是否可见。"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-msgid "LAB visibility"
-msgstr "LAB 可见性"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
-msgid "If the LAB components are visible."
-msgstr "LAB 组件是否可见。"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-msgid "RGB visibility"
-msgstr "RGB 可见性"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
-msgid "If the RGB components are visible."
-msgstr "RGB 组件是否可见。"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
-msgid "RGB unit"
-msgstr "RGB 单元"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
-msgid "The unit used by RGB component and strings."
-msgstr "由 RGB 组件和字符串所使用的单元。"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-msgid "Selected palette ID"
-msgstr "已选调色板 ID"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
-msgid "The selected palette ID among the loaded ones."
-msgstr "选择的调色板与载入的 ID。"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
-msgid "Color strings visibility"
-msgstr "颜色字符串可见性"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
-msgid "The visible color strings."
-msgstr "可见颜色字符串。"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
-msgid "Color filter"
-msgstr "滤色器"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
-msgid "The filter used on the color scales and color plane."
-msgstr "用于色标和颜色平面的过滤器。"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:959
-msgid "Palette: "
-msgstr "调色板："
-
-#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:961
-msgid "Palette"
-msgstr "调色板"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-plane.c:1612
-msgid "Color Plane"
-msgstr "色彩平面"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:68
-msgid "Color name"
-msgstr "颜色名称"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:70
-msgid "Enter a new name for the color"
-msgstr "请输入颜色的新名称"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:494
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:560
-#, c-format
-msgid "failed to parse line %i\n"
-msgstr "无法分析第 %i 行\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:615
-#, c-format
-msgid "%s: palette is empty\n"
-msgstr "%s：调色板为空\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:721
-#, c-format
-msgid "%s: failed to parse\n"
-msgstr "%s：无法解析\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:729
-#, c-format
-msgid "Unable to open %s\n"
-msgstr "无法打开 %s\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:767
-#, c-format
-msgid "%s: This file format is not supported\n"
-msgstr "%s：不被支持的文件格式\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:824
-#, c-format
-msgid "failed to parse\n"
-msgstr "无法解析\n"
-
-#. To translators: always in singular form like in: generated palette number <generated_count>
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:831
-msgid "Generated"
-msgstr "已生成"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:935
-#, c-format
-msgid "Unable to save %s\n"
-msgstr "无法保存 %s\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette-widget.c:981
-#, c-format
-msgid "Unsaved palette %u"
-msgstr "未保存调色板 %u"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:157
-msgid "Color Components"
-msgstr "颜色组件"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:206
-msgid "H"
-msgstr "H"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:216
-msgid "S"
-msgstr "S"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:226
-msgid "V"
-msgstr "V"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:322
-msgid "L*"
-msgstr "L*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:332
-msgid "a*"
-msgstr "a*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:342
-msgid "b*"
-msgstr "b*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:441
-msgid "R"
-msgstr "R"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:451
-msgid "G"
-msgstr "G"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:461
-msgid "B"
-msgstr "B"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:573
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:433
-msgid "Color strings"
-msgstr "颜色字符串"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:634
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:490
-msgid "HEX3"
-msgstr "HEX3"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:645
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:507
-msgid "HEX6"
-msgstr "HEX6"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:656
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:122
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:524
-msgid "RGB"
-msgstr "RGB"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:667
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:541
-msgid "RGBA"
-msgstr "RGBA"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:678
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:558
-msgid "HSL"
-msgstr "HSL"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:689
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:575
-msgid "HSLA"
-msgstr "HSLA"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:818
-msgid "Palettes"
-msgstr "调色板"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:946
-#: src/plugins/color-picker/gtk/color-picker.ui:49
-msgid "No open palettes"
-msgstr "没有打开的调色板"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:959
-msgid "Load or generate a palette using the preferences"
-msgstr "使用配置加载或生成调色板"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:13
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-msgid "Rename"
-msgstr "重命名"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-rename-popover.ui:35
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:60
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "_Rename"
 msgstr "重命名(_R)"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
-msgid "Color components"
-msgstr "颜色组件"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
+#| msgid "Current line"
+msgid "Current Symbol name"
+msgstr "当前符号名"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
-msgid "Visibility:"
-msgstr "可见性："
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
+msgid "New Symbol name"
+msgstr "新符号名"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid "Select the color spaces for which you want to see sliders in the panel."
-msgstr "选择要在面板中看到的滑块的色彩空间。"
+#: src/plugins/codeui/gtk/menus.ui:7
+#| msgid "Rename symbol"
+msgid "R_ename Symbol…"
+msgstr "重命名符号(_E)…"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
-msgid "HSV"
-msgstr "HSV"
+#: src/plugins/codeui/gtk/menus.ui:13
+#| msgid "Declaration"
+msgid "_Go to Declaration"
+msgstr "跳转至声明(_G)"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
-msgid "Hue Saturation Value"
-msgstr "色相 饱和度 明度"
+#: src/plugins/codeui/gtk/menus.ui:14
+#| msgid "Jump to file and location where item is defined"
+msgid "Jump to file and location where item is declared"
+msgstr "跳转至项目声明的文件和位置"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
-msgid "L*a*b*"
-msgstr "L*a*b*"
+#: src/plugins/codeui/gtk/menus.ui:18
+msgid "_Go to Definition"
+msgstr "跳转至定义(_G)"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:105
-msgid "CIE L*a*b* 1976"
-msgstr "CIE L*a*b* 1976"
+#: src/plugins/codeui/gtk/menus.ui:19
+msgid "Jump to file and location where item is defined"
+msgstr "跳转至项目定义的文件和位置"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:123
-msgid "Red Green Blue"
-msgstr "红 绿 蓝"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:140
-msgid "Units:"
-msgstr "单位："
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:156
-msgid ""
-"Select the type of unit you want to use for RGB components and strings in "
-"the panel."
-msgstr "请在面板中选择您想对 RGB 组件和字符串使用的单位类型。"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:179
-#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
-#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
-msgid "Value"
-msgstr "值"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
-msgid "Percent"
-msgstr "百分比"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:213
-msgid "Filters:"
-msgstr "滤镜："
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
-msgid "Select a filter that act on the colors or “None”."
-msgstr "选择作用于色彩上的滤镜，或者选择‘无 (None)’。"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
-msgid "Achromatopsia (monochromacy)"
-msgstr "全色盲"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
-msgid "Achromatomaly (blue cone monochromacy)"
-msgstr "蓝色单色视"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
-msgid "Deuteranopia (green-blind)"
-msgstr "绿色盲"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
-msgid "Deuteranomaly (green-weak)"
-msgstr "绿色弱"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
-msgid "Protanopia (red-blind)"
-msgstr "红色盲"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
-msgid "Protanomaly (red-weak)"
-msgstr "红色弱"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
-msgid "Tritanopia (blue-blind)"
-msgstr "蓝色盲"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
-msgid "Tritanomaly (blue-weak)"
-msgstr "蓝色弱"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
-msgid "Websafe"
-msgstr "网页安全色"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:467
-msgid "Select the color strings you want to see in the panel."
-msgstr "选择您想要在面板中看到的颜色字符串。"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:597
-msgid "Palettes options"
-msgstr "调色板选项"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:615
-msgid "Palette view mode:"
-msgstr "调色板查看模式："
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:638
-msgid "List"
-msgstr "列表"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
-msgid "Swatches"
-msgstr "色盘"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
-msgid "Palette management"
-msgstr "调色板管理"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:762
-msgid "Load"
-msgstr "载入"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:836
-msgid "From current document"
-msgstr "来自当前文档"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
-msgid "Select the palette you want to see in the panel or close one."
-msgstr "选择您想要在面板中看到的调色盘或关闭其中一个。"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
-msgid "No loaded palettes"
-msgstr "没有已加载的调色板"
-
-#: src/plugins/color-picker/gtk/color-picker-preview.ui:45
-msgid "No selected palettes"
-msgstr "没有已选中的调色板"
-
-#: src/plugins/color-picker/gtk/color-picker-preview.ui:58
-msgid "Select a palette file"
-msgstr "选择调色板文件"
-
-#: src/plugins/color-picker/gtk/color-picker.ui:62
-msgid "Try loading or generating a palette using the menu"
-msgstr "尝试使用菜单载入或生成调色板"
-
-#: src/plugins/color-picker/gtk/menus.ui:7
-msgid "Highlight _colors"
-msgstr "高亮颜色(_C)"
+#: src/plugins/codeui/gtk/menus.ui:24
+msgid "_Find References"
+msgstr "查找引用(_F)"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
@@ -3447,13 +2927,13 @@ msgid "Run the project with debugger"
 msgstr "带调试器运行该工程"
 
 #: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:218
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "调试器"
 
 #: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:252
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr "中断点"
@@ -3469,10 +2949,6 @@ msgstr "在警告处自动打断"
 #: src/plugins/debuggerui/gtk/menus.ui:35
 msgid "Automatically Break at Criticals"
 msgstr "在严重错误处自动打断"
-
-#: src/plugins/debuggerui/gtk/menus.ui:49
-msgid "Run with _Debugger"
-msgstr "带调试器运行(_D)"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -3565,6 +3041,11 @@ msgstr "参数"
 msgid "Variable"
 msgstr "变量"
 
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
+msgid "Value"
+msgstr "值"
+
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
 msgid "Register"
 msgstr "寄存器"
@@ -3589,19 +3070,19 @@ msgstr "参数"
 msgid "Binary"
 msgstr "二进制"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:232
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:233
 msgid "Threads"
 msgstr "线程"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:257
 msgid "Libraries"
 msgstr "库"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:261
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:262
 msgid "Registers"
 msgstr "寄存器"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:266
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:267
 msgid "Console"
 msgstr "控制台"
 
@@ -3674,29 +3155,29 @@ msgid "Reverts language preferences to application defaults"
 msgstr "将语言偏好恢复为应用程序默认值"
 
 #. translators: "Text" means plaintext or text/plain
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
 msgid "Text"
 msgstr "文本"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
 #: src/plugins/editorui/tweaks.ui:257
 msgid "Spaces"
 msgstr "空格"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
 msgstr "制表符"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
 msgid "Go"
 msgstr "前往"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go to Line"
 msgstr "前往指定行"
 
@@ -4464,7 +3945,7 @@ msgstr "身份"
 msgid "Email"
 msgstr "电子邮箱"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:84
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "自举工程"
@@ -4681,6 +4162,16 @@ msgstr "切换到亮色模式"
 #: src/plugins/menu-search/gtk/menus.ui:61
 msgid "Change style-scheme to light variant"
 msgstr "更改样式方案为亮色方案"
+
+#: src/plugins/menu-search/gtk/menus.ui:72
+#| msgid "Use Clang for Diagnostics"
+msgid "Display Build Diagnostics"
+msgstr "显示构建诊断"
+
+#: src/plugins/menu-search/gtk/menus.ui:73
+#| msgid "Show errors and warnings provided by Vala"
+msgid "Display errors and warnings found during build"
+msgstr "显示构建期间发现的错误和警告"
 
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
@@ -4924,34 +4415,34 @@ msgstr "录音器"
 msgid "A modern sound recorder for GNOME"
 msgstr "GNOME 的现代声音录制器"
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
 msgstr "构建成功"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "工程“%s”已完成构建"
 
-#: src/plugins/notification/ide-notification-addin.c:112
-#: src/plugins/notification/ide-notification-addin.c:198
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "构建失败"
 
-#: src/plugins/notification/ide-notification-addin.c:113
+#: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "工程“%s”构建失败"
 
-#: src/plugins/notification/ide-notification-addin.c:189
+#: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
 msgstr "构建已成功"
 
-#: src/plugins/notification/ide-notification-addin.c:191
+#: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
 msgstr "构建已配置"
 
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
 msgstr "构建已自举"
 
@@ -4988,12 +4479,12 @@ msgid "Drop Down"
 msgstr "下拉"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:632
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Toolbox"
 msgstr "容器/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:638
+#: src/plugins/podman/gbp-podman-runtime.c:687
 msgid "Containers/Podman"
 msgstr "容器/Podman"
 
@@ -5096,27 +4587,27 @@ msgstr "打开所在文件夹(_C)"
 msgid "With _Terminal…"
 msgstr "用终端(_T)…"
 
-#: src/plugins/project-tree/gtk/menus.ui:66
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "_Move to Trash"
 msgstr "移至回收站(_M)"
 
-#: src/plugins/project-tree/gtk/menus.ui:72
+#: src/plugins/project-tree/gtk/menus.ui:70
 msgid "_Display Options"
 msgstr "显示选项(_D)"
 
-#: src/plugins/project-tree/gtk/menus.ui:76
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "S_how Ignored Files"
 msgstr "显示忽略的文件(_H)"
 
-#: src/plugins/project-tree/gtk/menus.ui:81
+#: src/plugins/project-tree/gtk/menus.ui:79
 msgid "S_ort Directories First"
 msgstr "优先排列文件夹(_O)"
 
-#: src/plugins/project-tree/gtk/menus.ui:93
+#: src/plugins/project-tree/gtk/menus.ui:91
 msgid "Reveal in Project Tree"
 msgstr "在工程树中展示"
 
-#: src/plugins/project-tree/gtk/menus.ui:102
+#: src/plugins/project-tree/gtk/menus.ui:100
 msgid "Reveal in Project _Tree"
 msgstr "在工程树中显示(_T)"
 
@@ -5231,7 +4722,8 @@ msgid "Recent Projects"
 msgstr "最近的工程"
 
 #: src/plugins/retab/gtk/menus.ui:5
-msgid "_Reformat tabs"
+#| msgid "_Reformat tabs"
+msgid "_Reformat Tabs"
 msgstr "重新格式化制表符(_R)"
 
 #: src/plugins/rust-analyzer/tweaks.ui:13
@@ -5261,6 +4753,28 @@ msgstr "过程宏"
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr "启用 rust-analyzer 的实验性过程宏特性"
+
+#: src/plugins/rust-analyzer/tweaks.ui:61
+#| msgid "Clear Build Logs"
+msgid "Cargo Build Scripts"
+msgstr "Cargo 构建脚本"
+
+#: src/plugins/rust-analyzer/tweaks.ui:62
+msgid "Run build scripts (build.rs) for more precise code analysis"
+msgstr "运行构建脚本（build.rs）以进行更精确的代码分析"
+
+#: src/plugins/rust-analyzer/tweaks.ui:74
+#| msgid "Editing & Formatting"
+msgid "Rustfmt Range Formatting"
+msgstr "Rustfmt 范围格式化"
+
+#: src/plugins/rust-analyzer/tweaks.ui:75
+msgid ""
+"Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
+"option is unstable and only available on nightly builds of the Rust SDK."
+msgstr ""
+"启用 rustfmt 的不稳定范围格式化命令。该 rustfmt 选项不稳定，仅在 Rust SDK 的"
+"每夜构建中可用。"
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -5716,18 +5230,23 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s（系统根 SDK）"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "应用程序已启动在 %s\r\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "应用程序已退出"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "应用程序输出"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
+#| msgid "Unit tests completed"
+msgid "Process completed"
+msgstr "进程已完成"
 
 #: src/plugins/terminal/gtk/menus.ui:6
 msgid "New _Terminal"
@@ -5753,7 +5272,7 @@ msgstr "新建运行时终端(_R)"
 msgid "Open a new terminal in project's runtime environment"
 msgstr "在工程运行时环境中打开新终端"
 
-#: src/plugins/terminal/gtk/menus.ui:41
+#: src/plugins/terminal/gtk/menus.ui:40
 msgid "Split"
 msgstr "拆分"
 
@@ -5904,7 +5423,7 @@ msgstr "安装更新…"
 msgid "Install pending updates for Builder"
 msgstr "为构建器安装等待的更新"
 
-#: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
+#: src/plugins/valgrind/gtk/menus.ui:10
 msgid "Run with Leak Detector"
 msgstr "带泄漏检测器运行"
 
@@ -6080,6 +5599,432 @@ msgstr "无法创建 XML 树。"
 msgid "File must be saved locally to parse."
 msgstr "文件必须保存在本地来解析。"
 
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+#~ msgstr "美化器插件：为“%s”复制 gresource 配置文件出错：%s"
+
+#, c-format
+#~ msgid "Beautifier plugin: error creating temporary config file for “%s”"
+#~ msgstr "美化器插件：为“%s”创建临时配置文件出错"
+
+#, c-format
+#~ msgid "Beautifier plugin: Can’t read .ini file: %s"
+#~ msgstr "美化器插件：无法读取 .ini 文件：%s"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: neither command nor command-pattern keys found: entry "
+#~ "“%s” disabled"
+#~ msgstr "美化器插件：未找到 command 或 command-pattern 键值：输入“%s”已禁用"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: both command and command-pattern keys found: entry "
+#~ "“%s” disabled"
+#~ msgstr "美化器插件：command 和 command-pattern 键值都已找到：输入“%s”已禁用"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+#~ msgstr "美化器插件：配置路径“%s”不存在，输入“%s”已禁用"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: command key out of possible values: entry “%s” disabled"
+#~ msgstr "美化器插件：command 键值超出可能数值：输入“%s”已禁用"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: @c@ in “%s” command-pattern key but no config file "
+#~ "set: entry “%s” disabled"
+#~ msgstr ""
+#~ "美化器插件：@c@ 在“%s” command-pattern 键值中但未设置配置文件：输入“%s”已"
+#~ "禁用"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” "
+#~ "disabled"
+#~ msgstr "美化器插件：无法为“%s”创建临时文件：输入“%s”已禁用"
+
+#, c-format
+#~ msgid "Beautifier plugin: “%s”"
+#~ msgstr "美化器插件：“%s”"
+
+#, c-format
+#~ msgid "Beautifier plugin: %s"
+#~ msgstr "美化器插件：%s"
+
+#, c-format
+#~ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+#~ msgstr "美化器插件：无法读取以下资源文件：“%s”"
+
+#~ msgid "beautifier program missing, you must install it: "
+#~ msgstr "美化器程序缺失，您必须安装它："
+
+#~ msgid "Beautifier Plugin: the view is not a GtkSourceView"
+#~ msgstr "美化器插件：该视图不是 GtkSourceView"
+
+#~ msgid "Beautifier Plugin: no default beautifier found"
+#~ msgstr "美化器插件：未找到默认美化器"
+
+#~ msgid "Beautifier Plugin: the buffer is not writable"
+#~ msgstr "美化器插件：该缓冲区不可写入"
+
+#~ msgid "Beautifier Plugin: Nothing selected"
+#~ msgstr "美化器插件：未选中任何内容"
+
+#, c-format
+#~ msgid "No beautifier available for “%s”"
+#~ msgstr "对“%s”无可用美化器"
+
+#, c-format
+#~ msgid "No beautifier available"
+#~ msgstr "无可用美化器"
+
+#, c-format
+#~ msgid "Beautifier plugin: no valid entries, disabling: %s"
+#~ msgstr "美化器插件：无有效输入，正在禁用：%s"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+#~ "temporary directory: “%s”"
+#~ msgstr "美化器插件：尝试移除临时文件夹“%s”外的文件已被封锁：“%s”"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: command error output:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "美化器插件：命令错误输出：\n"
+#~ "%s"
+
+#~ msgid "Beautifier plugin: the command output is empty"
+#~ msgstr "美化器插件：命令输出是空的"
+
+#~ msgid "Beautify plugin: the output is not a valid UTF-8 text"
+#~ msgstr "美化器插件：该输出不是有效的 UTF-8 文本"
+
+#~ msgid "_Beautify"
+#~ msgstr "美化(_B)"
+
+#~ msgid "R_ebuild"
+#~ msgstr "重新构建(_E)"
+
+#~ msgid "_Run"
+#~ msgstr "运行(_R)"
+
+#~ msgid "R_un With…"
+#~ msgstr "运行于(_U)…"
+
+#~ msgid "Colors"
+#~ msgstr "颜色"
+
+#, c-format
+#~ msgid "Save changes to palette “%s” before closing?"
+#~ msgstr "关闭前保存对调色板“%s”的修改吗？"
+
+#~ msgid "Close without Saving"
+#~ msgstr "关闭而不保存"
+
+#~ msgid "Save As…"
+#~ msgstr "另存为…"
+
+#~ msgid "Load palette"
+#~ msgstr "加载调色板"
+
+#~ msgid "Save palette"
+#~ msgstr "保存调色板"
+
+#~ msgid "All files"
+#~ msgstr "所有文件"
+
+#~ msgid "All supported palettes formats"
+#~ msgstr "所有支持的调色板格式"
+
+#~ msgid "GIMP palette"
+#~ msgstr "GIMP 调色板"
+
+#~ msgid "GNOME Builder palette"
+#~ msgstr "GNOME 构建器调色板"
+
+#~ msgid "Palette name"
+#~ msgstr "调色板名称"
+
+#~ msgid "Enter a new name for the palette"
+#~ msgstr "请输入调色板的新名称"
+
+#~ msgid "HSV visibility"
+#~ msgstr "HSV 可见性"
+
+#~ msgid "If the HSV components are visible."
+#~ msgstr "HSV 组件是否可见。"
+
+#~ msgid "LAB visibility"
+#~ msgstr "LAB 可见性"
+
+#~ msgid "If the LAB components are visible."
+#~ msgstr "LAB 组件是否可见。"
+
+#~ msgid "RGB visibility"
+#~ msgstr "RGB 可见性"
+
+#~ msgid "If the RGB components are visible."
+#~ msgstr "RGB 组件是否可见。"
+
+#~ msgid "RGB unit"
+#~ msgstr "RGB 单元"
+
+#~ msgid "The unit used by RGB component and strings."
+#~ msgstr "由 RGB 组件和字符串所使用的单元。"
+
+#~ msgid "Selected palette ID"
+#~ msgstr "已选调色板 ID"
+
+#~ msgid "The selected palette ID among the loaded ones."
+#~ msgstr "选择的调色板与载入的 ID。"
+
+#~ msgid "Color strings visibility"
+#~ msgstr "颜色字符串可见性"
+
+#~ msgid "The visible color strings."
+#~ msgstr "可见颜色字符串。"
+
+#~ msgid "Color filter"
+#~ msgstr "滤色器"
+
+#~ msgid "The filter used on the color scales and color plane."
+#~ msgstr "用于色标和颜色平面的过滤器。"
+
+#~ msgid "Palette: "
+#~ msgstr "调色板："
+
+#~ msgid "Palette"
+#~ msgstr "调色板"
+
+#~ msgid "Color Plane"
+#~ msgstr "色彩平面"
+
+#~ msgid "Color name"
+#~ msgstr "颜色名称"
+
+#~ msgid "Enter a new name for the color"
+#~ msgstr "请输入颜色的新名称"
+
+#, c-format
+#~ msgid "failed to parse line %i\n"
+#~ msgstr "无法分析第 %i 行\n"
+
+#, c-format
+#~ msgid "%s: palette is empty\n"
+#~ msgstr "%s：调色板为空\n"
+
+#, c-format
+#~ msgid "%s: failed to parse\n"
+#~ msgstr "%s：无法解析\n"
+
+#, c-format
+#~ msgid "Unable to open %s\n"
+#~ msgstr "无法打开 %s\n"
+
+#, c-format
+#~ msgid "%s: This file format is not supported\n"
+#~ msgstr "%s：不被支持的文件格式\n"
+
+#, c-format
+#~ msgid "failed to parse\n"
+#~ msgstr "无法解析\n"
+
+#~ msgid "Generated"
+#~ msgstr "已生成"
+
+#, c-format
+#~ msgid "Unable to save %s\n"
+#~ msgstr "无法保存 %s\n"
+
+#, c-format
+#~ msgid "Unsaved palette %u"
+#~ msgstr "未保存调色板 %u"
+
+#~ msgid "Color Components"
+#~ msgstr "颜色组件"
+
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "L*"
+#~ msgstr "L*"
+
+#~ msgid "a*"
+#~ msgstr "a*"
+
+#~ msgid "b*"
+#~ msgstr "b*"
+
+#~ msgid "R"
+#~ msgstr "R"
+
+#~ msgid "G"
+#~ msgstr "G"
+
+#~ msgid "B"
+#~ msgstr "B"
+
+#~ msgid "Color strings"
+#~ msgstr "颜色字符串"
+
+#~ msgid "HEX3"
+#~ msgstr "HEX3"
+
+#~ msgid "HEX6"
+#~ msgstr "HEX6"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "RGBA"
+#~ msgstr "RGBA"
+
+#~ msgid "HSL"
+#~ msgstr "HSL"
+
+#~ msgid "HSLA"
+#~ msgstr "HSLA"
+
+#~ msgid "Palettes"
+#~ msgstr "调色板"
+
+#~ msgid "No open palettes"
+#~ msgstr "没有打开的调色板"
+
+#~ msgid "Load or generate a palette using the preferences"
+#~ msgstr "使用配置加载或生成调色板"
+
+#~ msgid "Rename"
+#~ msgstr "重命名"
+
+#~ msgid "Color components"
+#~ msgstr "颜色组件"
+
+#~ msgid "Visibility:"
+#~ msgstr "可见性："
+
+#~ msgid ""
+#~ "Select the color spaces for which you want to see sliders in the panel."
+#~ msgstr "选择要在面板中看到的滑块的色彩空间。"
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "Hue Saturation Value"
+#~ msgstr "色相 饱和度 明度"
+
+#~ msgid "L*a*b*"
+#~ msgstr "L*a*b*"
+
+#~ msgid "CIE L*a*b* 1976"
+#~ msgstr "CIE L*a*b* 1976"
+
+#~ msgid "Red Green Blue"
+#~ msgstr "红 绿 蓝"
+
+#~ msgid "Units:"
+#~ msgstr "单位："
+
+#~ msgid ""
+#~ "Select the type of unit you want to use for RGB components and strings in "
+#~ "the panel."
+#~ msgstr "请在面板中选择您想对 RGB 组件和字符串使用的单位类型。"
+
+#~ msgid "Percent"
+#~ msgstr "百分比"
+
+#~ msgid "Filters:"
+#~ msgstr "滤镜："
+
+#~ msgid "Select a filter that act on the colors or “None”."
+#~ msgstr "选择作用于色彩上的滤镜，或者选择‘无 (None)’。"
+
+#~ msgid "Achromatopsia (monochromacy)"
+#~ msgstr "全色盲"
+
+#~ msgid "Achromatomaly (blue cone monochromacy)"
+#~ msgstr "蓝色单色视"
+
+#~ msgid "Deuteranopia (green-blind)"
+#~ msgstr "绿色盲"
+
+#~ msgid "Deuteranomaly (green-weak)"
+#~ msgstr "绿色弱"
+
+#~ msgid "Protanopia (red-blind)"
+#~ msgstr "红色盲"
+
+#~ msgid "Protanomaly (red-weak)"
+#~ msgstr "红色弱"
+
+#~ msgid "Tritanopia (blue-blind)"
+#~ msgstr "蓝色盲"
+
+#~ msgid "Tritanomaly (blue-weak)"
+#~ msgstr "蓝色弱"
+
+#~ msgid "Websafe"
+#~ msgstr "网页安全色"
+
+#~ msgid "Select the color strings you want to see in the panel."
+#~ msgstr "选择您想要在面板中看到的颜色字符串。"
+
+#~ msgid "Palettes options"
+#~ msgstr "调色板选项"
+
+#~ msgid "Palette view mode:"
+#~ msgstr "调色板查看模式："
+
+#~ msgid "List"
+#~ msgstr "列表"
+
+#~ msgid "Swatches"
+#~ msgstr "色盘"
+
+#~ msgid "Palette management"
+#~ msgstr "调色板管理"
+
+#~ msgid "Load"
+#~ msgstr "载入"
+
+#~ msgid "From current document"
+#~ msgstr "来自当前文档"
+
+#~ msgid "Select the palette you want to see in the panel or close one."
+#~ msgstr "选择您想要在面板中看到的调色盘或关闭其中一个。"
+
+#~ msgid "No loaded palettes"
+#~ msgstr "没有已加载的调色板"
+
+#~ msgid "No selected palettes"
+#~ msgstr "没有已选中的调色板"
+
+#~ msgid "Select a palette file"
+#~ msgstr "选择调色板文件"
+
+#~ msgid "Try loading or generating a palette using the menu"
+#~ msgstr "尝试使用菜单载入或生成调色板"
+
+#~ msgid "Highlight _colors"
+#~ msgstr "高亮颜色(_C)"
+
+#~ msgid "Run with _Debugger"
+#~ msgstr "带调试器运行(_D)"
+
 #~ msgid "Reformat sources when saving to disk"
 #~ msgstr "保存到磁盘时重新格式化源代码"
 
@@ -6195,9 +6140,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Highlight"
 #~ msgstr "高亮"
-
-#~ msgid "Current line"
-#~ msgstr "当前行"
 
 #~ msgid "Make current line stand out with highlights"
 #~ msgstr "用高亮标记出当前行"
@@ -6416,9 +6358,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Build & Run"
 #~ msgstr "构建和运行"
-
-#~ msgid "Use Clang for Diagnostics"
-#~ msgstr "使用 Clang 进行诊断"
 
 #~ msgid ""
 #~ "Clang will be queried for diagnostics within C, C++, and Objective-C "
@@ -7282,15 +7221,9 @@ msgstr "文件必须保存在本地来解析。"
 #~ msgid "Apply Fix-It"
 #~ msgstr "应用 Fix-It"
 
-#~ msgid "Rename symbol"
-#~ msgstr "重命名符号"
-
 #, c-format
 #~ msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 #~ msgstr "<b>%s</b> — <small>行 %u, 列 %u</small>"
-
-#~ msgid "No references were found"
-#~ msgstr "没有发现引用"
 
 #~ msgid "Requested runtime is not installed"
 #~ msgstr "请求的运行时未安装"
@@ -8350,9 +8283,6 @@ msgstr "文件必须保存在本地来解析。"
 
 #~ msgid "Immutable"
 #~ msgstr "不变"
-
-#~ msgid "Show errors and warnings provided by Vala"
-#~ msgstr "显示由 Vala 提供的错误和警告"
 
 #~ msgid "vala diagnostics warnings errors"
 #~ msgstr "vala 诊断 警告 错误 diagnostics warnings errors"
