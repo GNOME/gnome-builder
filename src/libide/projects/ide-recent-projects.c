@@ -30,6 +30,8 @@
 #include "ide-project-info-private.h"
 #include "ide-recent-projects.h"
 
+#define INVALIDATE_DELAY_SECONDS 5
+
 struct _IdeRecentProjects
 {
   GObject       parent_instance;
@@ -440,27 +442,11 @@ static gboolean
 ide_recent_projects_reload_in_idle_cb (gpointer user_data)
 {
   IdeRecentProjects *self = user_data;
-
-  g_assert (IDE_IS_RECENT_PROJECTS (self));
-
-  ide_recent_projects_load_recent (self);
-  self->reloading = FALSE;
-
-  return G_SOURCE_REMOVE;
-}
-
-void
-ide_recent_projects_invalidate (IdeRecentProjects *self)
-{
   g_autoptr(GSequence) sequence = NULL;
   g_autoptr(GHashTable) hashtable = NULL;
   guint n_items;
 
-  g_return_if_fail (IDE_IS_MAIN_THREAD ());
-  g_return_if_fail (IDE_IS_RECENT_PROJECTS (self));
-
-  if (self->reloading)
-    return;
+  g_assert (IDE_IS_RECENT_PROJECTS (self));
 
   sequence = g_steal_pointer (&self->projects);
   self->projects = g_sequence_new (g_object_unref);
@@ -472,14 +458,36 @@ ide_recent_projects_invalidate (IdeRecentProjects *self)
   n_items = g_sequence_get_length (sequence);
   g_list_model_items_changed (G_LIST_MODEL (self), 0, n_items, 0);
 
-  /* Reload from IDLE so higher priority operations can finish
+  ide_recent_projects_load_recent (self);
+
+  self->reloading = FALSE;
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+ide_recent_projects_invalidate (IdeRecentProjects *self)
+{
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_RECENT_PROJECTS (self));
+
+  if (self->reloading)
+    return;
+
+  /* Reload from timeout so higher priority operations can finish
    * before yielding to main loop (since this is all currently
    * done synchronously). In practice the file will still be hot
    * in the page cache, so relatively fast regardless.
+   *
+   * The main reason for timeout over idle is to increase the chance
+   * that we are not going to mess with the GtkListView of projects
+   * by causing items-changed to occur.
    */
   self->reloading = TRUE;
-  g_idle_add_full (G_PRIORITY_LOW + 1000,
-                   ide_recent_projects_reload_in_idle_cb,
-                   g_object_ref (self),
-                   g_object_unref);
+  g_timeout_add_seconds_full (G_PRIORITY_LOW + 1000,
+                              INVALIDATE_DELAY_SECONDS,
+                              ide_recent_projects_reload_in_idle_cb,
+                              g_object_ref (self),
+                              g_object_unref);
 }
