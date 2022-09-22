@@ -98,6 +98,25 @@ ide_get_support_log (void)
                           gtk_get_major_version (),
                           gtk_get_minor_version (),
                           gtk_get_micro_version ());
+  g_string_append_printf (str, "libadwaita = \"%u.%u.%u\"\n",
+                          adw_get_major_version (),
+                          adw_get_minor_version (),
+                          adw_get_micro_version ());
+  g_string_append (str, "\n");
+
+  g_string_append (str, "[build.libraries]\n");
+  g_string_append_printf (str, "glib = \"%u.%u.%u\"\n",
+                          GLIB_MAJOR_VERSION,
+                          GLIB_MINOR_VERSION,
+                          GLIB_MICRO_VERSION);
+  g_string_append_printf (str, "gtk = \"%u.%u.%u\"\n",
+                          GTK_MAJOR_VERSION,
+                          GTK_MINOR_VERSION,
+                          GTK_MICRO_VERSION);
+  g_string_append_printf (str, "libadwaita = \"%u.%u.%u\"\n",
+                          ADW_MAJOR_VERSION,
+                          ADW_MINOR_VERSION,
+                          ADW_MICRO_VERSION);
   g_string_append (str, "\n");
 
   /*
