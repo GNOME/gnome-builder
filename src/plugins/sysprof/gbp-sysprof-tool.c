@@ -22,7 +22,9 @@
 
 #include "config.h"
 
+#include <glib/gi18n.h>
 #include <glib/gstdio.h>
+
 #include <unistd.h>
 
 #include <libide-gui.h>
@@ -50,6 +52,9 @@ struct _GbpSysprofTool
 
   /* IPC service on @connection */
   IpcAgent *sysprof;
+
+  /* Notification for status */
+  IdeNotification *notif;
 };
 
 G_DEFINE_FINAL_TYPE (GbpSysprofTool, gbp_sysprof_tool, IDE_TYPE_RUN_TOOL)
@@ -259,6 +264,25 @@ gbp_sysprof_tool_send_signal (IdeRunTool *run_tool,
 }
 
 static void
+proxy_log_to_notif (IpcAgent        *sysprof,
+                    const char      *message,
+                    IdeNotification *notif)
+{
+  g_autofree char *title = NULL;
+
+  g_assert (IPC_IS_AGENT (sysprof));
+  g_assert (IDE_IS_NOTIFICATION (notif));
+
+  if (ide_str_empty0 (message))
+    return;
+
+  title = g_strdup_printf ("Sysprof: %s", message);
+
+  ide_notification_set_title (notif, title);
+  ide_object_message (IDE_OBJECT (notif), "%s", title);
+}
+
+static void
 gbp_sysprof_tool_started (IdeRunTool    *run_tool,
                           IdeSubprocess *subprocess)
 {
@@ -272,6 +296,19 @@ gbp_sysprof_tool_started (IdeRunTool    *run_tool,
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_SYSPROF_TOOL (self));
   g_assert (IDE_IS_SUBPROCESS (subprocess));
+
+  if (self->notif)
+    {
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
+    }
+
+  self->notif = ide_notification_new ();
+  ide_notification_set_title (self->notif, _("Profiling Application…"));
+  ide_notification_set_body (self->notif, _("Symbol decoding will begin after application exits"));
+  ide_notification_set_icon_name (self->notif, "builder-profiler-symbolic");
+  ide_notification_set_urgent (self->notif, TRUE);
+  ide_notification_attach (self->notif, IDE_OBJECT (self));
 
   g_set_object (&self->subprocess, subprocess);
 
@@ -293,8 +330,8 @@ gbp_sysprof_tool_started (IdeRunTool    *run_tool,
     }
 
   sysprof = ipc_agent_proxy_new_sync (connection,
-                                        G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
-                                        NULL, "/", NULL, &error);
+                                      G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES,
+                                      NULL, "/", NULL, &error);
 
   if (sysprof == NULL)
     {
@@ -302,6 +339,12 @@ gbp_sysprof_tool_started (IdeRunTool    *run_tool,
                  error->message);
       IDE_EXIT;
     }
+
+  g_signal_connect_object (sysprof,
+                           "log",
+                           G_CALLBACK (proxy_log_to_notif),
+                           self->notif,
+                           0);
 
   g_debug ("Control proxy to subprocess created");
   g_set_object (&self->sysprof, sysprof);
@@ -352,6 +395,12 @@ gbp_sysprof_tool_stopped (IdeRunTool *run_tool)
   g_clear_object (&self->sysprof);
   g_clear_object (&self->connection);
   g_clear_object (&self->io_stream);
+
+  if (self->notif)
+    {
+      ide_notification_withdraw (self->notif);
+      g_clear_object (&self->notif);
+    }
 
   IDE_EXIT;
 }
