@@ -32,6 +32,8 @@ struct _IdeGettextDiagnosticProvider
   IdeDiagnosticTool parent_instance;
 };
 
+G_DEFINE_FINAL_TYPE (IdeGettextDiagnosticProvider, ide_gettext_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
+
 static const gchar *
 id_to_xgettext_language (const gchar *id)
 {
@@ -144,46 +146,57 @@ ide_gettext_diagnostic_provider_can_diagnose (IdeDiagnosticTool *tool,
   IDE_RETURN (TRUE);
 }
 
-static void
-ide_gettext_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *tool,
-                                                    IdeSubprocessLauncher *launcher,
-                                                    GFile                 *file,
-                                                    GBytes                *contents,
-                                                    const char            *language_id)
+static gboolean
+ide_gettext_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
+                                                     IdeRunContext      *run_context,
+                                                     GFile              *file,
+                                                     GBytes             *contents,
+                                                     const char         *language_id,
+                                                     GError            **error)
 {
   const char *xgettext_id;
 
   IDE_ENTRY;
 
   g_assert (IDE_IS_GETTEXT_DIAGNOSTIC_PROVIDER (tool));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (!file || G_IS_FILE (file));
   g_assert (file != NULL || contents != NULL);
 
   if (!(xgettext_id = id_to_xgettext_language (language_id)))
     g_assert_not_reached ();
 
+  if (!IDE_DIAGNOSTIC_TOOL_CLASS (ide_gettext_diagnostic_provider_parent_class)->prepare_run_context (tool, run_context, file, contents, language_id, error))
+    IDE_RETURN (FALSE);
+
+  ide_run_context_append_argv (run_context, "--check=ellipsis-unicode");
+  ide_run_context_append_argv (run_context, "--check=quote-unicode");
+  ide_run_context_append_argv (run_context, "--check=space-ellipsis");
+  ide_run_context_append_argv (run_context, "--from-code=UTF-8");
+  ide_run_context_append_argv (run_context, "-k_");
+  ide_run_context_append_argv (run_context, "-kN_");
+  ide_run_context_append_argv (run_context, "-L");
+  ide_run_context_append_argv (run_context, xgettext_id);
+  ide_run_context_append_argv (run_context, "-o");
+  ide_run_context_append_argv (run_context, "-");
+  ide_run_context_append_argv (run_context, "-");
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+ide_gettext_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *self,
+                                                    IdeSubprocessLauncher *launcher,
+                                                    GFile                 *file,
+                                                    GBytes                *contents,
+                                                    const char            *language_id)
+{
   ide_subprocess_launcher_set_flags (launcher,
                                      (G_SUBPROCESS_FLAGS_STDIN_PIPE |
                                       G_SUBPROCESS_FLAGS_STDOUT_SILENCE |
                                       G_SUBPROCESS_FLAGS_STDERR_PIPE));
 
-  ide_subprocess_launcher_push_argv (launcher, "--check=ellipsis-unicode");
-  ide_subprocess_launcher_push_argv (launcher, "--check=quote-unicode");
-  ide_subprocess_launcher_push_argv (launcher, "--check=space-ellipsis");
-  ide_subprocess_launcher_push_argv (launcher, "--from-code=UTF-8");
-  ide_subprocess_launcher_push_argv (launcher, "-k_");
-  ide_subprocess_launcher_push_argv (launcher, "-kN_");
-  ide_subprocess_launcher_push_argv (launcher, "-L");
-  ide_subprocess_launcher_push_argv (launcher, xgettext_id);
-  ide_subprocess_launcher_push_argv (launcher, "-o");
-  ide_subprocess_launcher_push_argv (launcher, "-");
-  ide_subprocess_launcher_push_argv (launcher, "-");
-
-  IDE_EXIT;
 }
-
-G_DEFINE_FINAL_TYPE (IdeGettextDiagnosticProvider, ide_gettext_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
 
 static void
 ide_gettext_diagnostic_provider_class_init (IdeGettextDiagnosticProviderClass *klass)
@@ -191,6 +204,7 @@ ide_gettext_diagnostic_provider_class_init (IdeGettextDiagnosticProviderClass *k
   IdeDiagnosticToolClass *tool_class = IDE_DIAGNOSTIC_TOOL_CLASS (klass);
 
   tool_class->can_diagnose = ide_gettext_diagnostic_provider_can_diagnose;
+  tool_class->prepare_run_context = ide_gettext_diagnostic_provider_prepare_run_context;
   tool_class->configure_launcher = ide_gettext_diagnostic_provider_configure_launcher;
   tool_class->populate_diagnostics = ide_gettext_diagnostic_provider_populate_diagnostics;
 }
