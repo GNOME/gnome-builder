@@ -41,7 +41,7 @@ ide_lsp_decode_symbol_kind (guint kind)
     case 12:  kind = IDE_SYMBOL_KIND_FUNCTION;     break;
     case 13:  kind = IDE_SYMBOL_KIND_VARIABLE;     break;
     case 14:  kind = IDE_SYMBOL_KIND_CONSTANT;     break;
-    case 15:  kind = IDE_SYMBOL_KIND_STRING;       break;
+    case 15:  kind = IDE_SYMBOL_KIND_STRING;       break; /* Snippet */
     case 16:  kind = IDE_SYMBOL_KIND_NUMBER;       break;
     case 17:  kind = IDE_SYMBOL_KIND_BOOLEAN;      break;
     case 18:  kind = IDE_SYMBOL_KIND_ARRAY;        break;

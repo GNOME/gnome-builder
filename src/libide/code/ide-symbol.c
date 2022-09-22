@@ -261,9 +261,12 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
   switch (kind)
     {
     case IDE_SYMBOL_KIND_ALIAS:
+    case IDE_SYMBOL_KIND_TYPE_PARAM:
       icon_name = "lang-typedef-symbolic";
       break;
 
+    case IDE_SYMBOL_KIND_INTERFACE:
+    case IDE_SYMBOL_KIND_OBJECT:
     case IDE_SYMBOL_KIND_CLASS:
       icon_name = "lang-class-symbolic";
       break;
@@ -276,11 +279,15 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
       icon_name = "lang-enum-value-symbolic";
       break;
 
+    case IDE_SYMBOL_KIND_CONSTRUCTOR:
     case IDE_SYMBOL_KIND_FUNCTION:
       icon_name = "lang-function-symbolic";
       break;
 
+    case IDE_SYMBOL_KIND_MODULE:
     case IDE_SYMBOL_KIND_PACKAGE:
+    case IDE_SYMBOL_KIND_HEADER:
+    case IDE_SYMBOL_KIND_FILE:
       icon_name = "lang-include-symbolic";
       break;
 
@@ -300,6 +307,7 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
       icon_name = "lang-struct-symbolic";
       break;
 
+    case IDE_SYMBOL_KIND_PROPERTY:
     case IDE_SYMBOL_KIND_FIELD:
       icon_name = "lang-struct-field-symbolic";
       break;
@@ -313,23 +321,18 @@ ide_symbol_kind_get_icon_name (IdeSymbolKind kind)
       icon_name = "lang-union-symbolic";
       break;
 
-    case IDE_SYMBOL_KIND_OBJECT:
+    case IDE_SYMBOL_KIND_TEMPLATE:
+    case IDE_SYMBOL_KIND_STRING:
+      icon_name = "completion-snippet-symbolic";
+      break;
+
     case IDE_SYMBOL_KIND_EVENT:
     case IDE_SYMBOL_KIND_OPERATOR:
-    case IDE_SYMBOL_KIND_TYPE_PARAM:
     case IDE_SYMBOL_KIND_ARRAY:
     case IDE_SYMBOL_KIND_BOOLEAN:
     case IDE_SYMBOL_KIND_CONSTANT:
-    case IDE_SYMBOL_KIND_CONSTRUCTOR:
-    case IDE_SYMBOL_KIND_FILE:
-    case IDE_SYMBOL_KIND_HEADER:
-    case IDE_SYMBOL_KIND_INTERFACE:
-    case IDE_SYMBOL_KIND_MODULE:
     case IDE_SYMBOL_KIND_NUMBER:
     case IDE_SYMBOL_KIND_NONE:
-    case IDE_SYMBOL_KIND_PROPERTY:
-    case IDE_SYMBOL_KIND_STRING:
-    case IDE_SYMBOL_KIND_TEMPLATE:
     case IDE_SYMBOL_KIND_KEYWORD:
     case IDE_SYMBOL_KIND_LAST:
       icon_name = NULL;
