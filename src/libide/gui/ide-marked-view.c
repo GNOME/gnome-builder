@@ -394,7 +394,14 @@ ide_marked_view_new (IdeMarkedContent *content)
         g_autofree char *markup_nul_terminated = g_strndup (markup, markup_len);
         child = g_object_new (GTK_TYPE_LABEL,
                               "max-width-chars", 80,
+#if 0
+                              /* This is causing issues if users right click to display
+                               * the popover which cannot be recovered from. We'll have
+                               * to figure out the right way to handle that if we want to
+                               * reenable this.
+                               */
                               "selectable", TRUE,
+#endif
                               "wrap", TRUE,
                               "xalign", 0.0f,
                               "visible", TRUE,
@@ -426,7 +433,10 @@ ide_marked_view_new (IdeMarkedContent *content)
         if (parsed != NULL)
           child = g_object_new (GTK_TYPE_LABEL,
                                 "max-width-chars", 80,
+#if 0
+                                /* See comment above */
                                 "selectable", TRUE,
+#endif
                                 "wrap", TRUE,
                                 "xalign", 0.0f,
                                 "visible", TRUE,
