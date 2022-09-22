@@ -31,7 +31,7 @@
 G_BEGIN_DECLS
 
 #define IDE_TYPE_LSP_COMPLETION_PROVIDER (ide_lsp_completion_provider_get_type())
-#define IDE_LSP_COMPLETION_PROVIDER_PRIORITY (-200)
+#define IDE_LSP_COMPLETION_PROVIDER_PRIORITY 1000
 
 IDE_AVAILABLE_IN_ALL
 G_DECLARE_DERIVABLE_TYPE (IdeLspCompletionProvider, ide_lsp_completion_provider, IDE, LSP_COMPLETION_PROVIDER, IdeObject)
