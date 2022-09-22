@@ -39,26 +39,35 @@ struct _GbpEslintDiagnosticProvider
   guint is_stdin : 1;
 };
 
-static void
-gbp_eslint_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *tool,
-                                                   IdeSubprocessLauncher *launcher,
-                                                   GFile                 *file,
-                                                   GBytes                *contents,
-                                                   const char            *language_id)
+G_DEFINE_FINAL_TYPE (GbpEslintDiagnosticProvider, gbp_eslint_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
+
+static gboolean
+gbp_eslint_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
+                                                    IdeRunContext      *run_context,
+                                                    GFile              *file,
+                                                    GBytes             *contents,
+                                                    const char         *language_id,
+                                                    GError            **error)
 {
   GbpEslintDiagnosticProvider *self = (GbpEslintDiagnosticProvider *)tool;
 
   g_assert (GBP_IS_ESLINT_DIAGNOSTIC_PROVIDER (self));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (G_IS_FILE (file));
 
-  ide_subprocess_launcher_push_args (launcher,
-                                     IDE_STRV_INIT ("-f", "json",
-                                                    "--ignore-pattern", "!node_modules/*",
-                                                    "--ignore-pattern", "!bower_components/*"));
-  if (contents != NULL)
-    ide_subprocess_launcher_push_args (launcher, IDE_STRV_INIT ("--stdin", "--stdin-filename"));
-  ide_subprocess_launcher_push_argv (launcher, g_file_peek_path (file));
+  if (IDE_DIAGNOSTIC_TOOL_CLASS (gbp_eslint_diagnostic_provider_parent_class)->prepare_run_context (tool, run_context, file, contents, language_id, error))
+    {
+      ide_run_context_append_args (run_context,
+                                   IDE_STRV_INIT ("-f", "json",
+                                                  "--ignore-pattern", "!node_modules/*",
+                                                  "--ignore-pattern", "!bower_components/*"));
+      if (contents != NULL)
+        ide_run_context_append_args (run_context, IDE_STRV_INIT ("--stdin", "--stdin-filename"));
+      ide_run_context_append_argv (run_context, g_file_peek_path (file));
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static inline IdeDiagnosticSeverity
@@ -166,14 +175,12 @@ gbp_eslint_diagnostic_provider_populate_diagnostics (IdeDiagnosticTool *tool,
     }
 }
 
-G_DEFINE_FINAL_TYPE (GbpEslintDiagnosticProvider, gbp_eslint_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
-
 static void
 gbp_eslint_diagnostic_provider_class_init (GbpEslintDiagnosticProviderClass *klass)
 {
   IdeDiagnosticToolClass *diagnostic_tool_class = IDE_DIAGNOSTIC_TOOL_CLASS (klass);
 
-  diagnostic_tool_class->configure_launcher = gbp_eslint_diagnostic_provider_configure_launcher;
+  diagnostic_tool_class->prepare_run_context = gbp_eslint_diagnostic_provider_prepare_run_context;
   diagnostic_tool_class->populate_diagnostics = gbp_eslint_diagnostic_provider_populate_diagnostics;
 }
 
