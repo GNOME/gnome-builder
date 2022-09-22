@@ -34,18 +34,24 @@ G_DEFINE_FINAL_TYPE (GbpRstcheckDiagnosticProvider, gbp_rstcheck_diagnostic_prov
 static GRegex *rstcheck_regex;
 static GHashTable *severities;
 
-static void
-gbp_rstcheck_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *tool,
-                                                     IdeSubprocessLauncher *launcher,
-                                                     GFile                 *file,
-                                                     GBytes                *contents,
-                                                     const char            *language_id)
+static gboolean
+gbp_rstcheck_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
+                                                      IdeRunContext      *run_context,
+                                                      GFile              *file,
+                                                      GBytes             *contents,
+                                                      const char         *language_id,
+                                                      GError            **error)
 {
   g_assert (GBP_IS_RSTCHECK_DIAGNOSTIC_PROVIDER (tool));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
   g_assert (G_IS_FILE (file));
 
-  ide_subprocess_launcher_push_argv (launcher, "-");
+  if (!IDE_DIAGNOSTIC_TOOL_CLASS (gbp_rstcheck_diagnostic_provider_parent_class)->prepare_run_context (tool, run_context, file, contents, language_id, error))
+    return FALSE;
+
+  ide_run_context_append_argv (run_context, "-");
+
+  return TRUE;
 }
 
 static void
@@ -98,7 +104,7 @@ gbp_rstcheck_diagnostic_provider_class_init (GbpRstcheckDiagnosticProviderClass 
 {
   IdeDiagnosticToolClass *diagnostic_tool_class = IDE_DIAGNOSTIC_TOOL_CLASS (klass);
 
-  diagnostic_tool_class->configure_launcher = gbp_rstcheck_diagnostic_provider_configure_launcher;
+  diagnostic_tool_class->prepare_run_context = gbp_rstcheck_diagnostic_provider_prepare_run_context;
   diagnostic_tool_class->populate_diagnostics = gbp_rstcheck_diagnostic_provider_populate_diagnostics;
 
   rstcheck_regex = g_regex_new ("\\:([0-9]+)\\:\\s\\(([A-Z]+)\\/([0-9]{1})\\)\\s", G_REGEX_OPTIMIZE, 0, NULL);
