@@ -30,23 +30,27 @@ struct _IdeCodespellDiagnosticProvider
 
 G_DEFINE_FINAL_TYPE (IdeCodespellDiagnosticProvider, ide_codespell_diagnostic_provider, IDE_TYPE_DIAGNOSTIC_TOOL)
 
-static void
-ide_codespell_diagnostic_provider_configure_launcher (IdeDiagnosticTool     *tool,
-                                                      IdeSubprocessLauncher *launcher,
-                                                      GFile                 *file,
-                                                      GBytes                *contents,
-                                                      const char            *language_id)
+static gboolean
+ide_codespell_diagnostic_provider_prepare_run_context (IdeDiagnosticTool  *tool,
+                                                       IdeRunContext      *run_context,
+                                                       GFile              *file,
+                                                       GBytes             *contents,
+                                                       const char         *language_id,
+                                                       GError            **error)
 {
   IDE_ENTRY;
 
   g_assert (IDE_IS_CODESPELL_DIAGNOSTIC_PROVIDER (tool));
-  g_assert (IDE_IS_SUBPROCESS_LAUNCHER (launcher));
   g_assert (!file || G_IS_FILE (file));
   g_assert (file != NULL || contents != NULL);
 
-  ide_subprocess_launcher_push_argv (launcher, "-");
+  if (IDE_DIAGNOSTIC_TOOL_CLASS (ide_codespell_diagnostic_provider_parent_class)->prepare_run_context (tool, run_context, file, contents, language_id, error))
+    {
+      ide_run_context_append_argv (run_context, "-");
+      IDE_RETURN (TRUE);
+    }
 
-  IDE_EXIT;
+  IDE_RETURN (FALSE);
 }
 
 static void
@@ -125,7 +129,7 @@ ide_codespell_diagnostic_provider_class_init (IdeCodespellDiagnosticProviderClas
 {
   IdeDiagnosticToolClass *tool_class = IDE_DIAGNOSTIC_TOOL_CLASS (klass);
 
-  tool_class->configure_launcher = ide_codespell_diagnostic_provider_configure_launcher;
+  tool_class->prepare_run_context = ide_codespell_diagnostic_provider_prepare_run_context;
   tool_class->populate_diagnostics = ide_codespell_diagnostic_provider_populate_diagnostics;
 }
 
