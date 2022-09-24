@@ -53,6 +53,30 @@ struct _GbpMesonIntrospection
 G_DEFINE_FINAL_TYPE (GbpMesonIntrospection, gbp_meson_introspection, IDE_TYPE_PIPELINE_STAGE)
 
 static gboolean
+get_bool_member (JsonObject *object,
+                 const char *member,
+                 gboolean   *location)
+{
+  JsonNode *node;
+
+  g_assert (object != NULL);
+  g_assert (member != NULL);
+  g_assert (location != NULL);
+
+  *location = FALSE;
+
+  if (json_object_has_member (object, member) &&
+      (node = json_object_get_member (object, member)) &&
+      JSON_NODE_HOLDS_VALUE (node))
+    {
+      *location = json_node_get_boolean (node);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 get_string_member (JsonObject  *object,
                    const char  *member,
                    char       **location)
@@ -218,6 +242,7 @@ gbp_meson_introspection_load_test (GbpMesonIntrospection *self,
   ide_run_command_set_environ (run_command, (const char * const *)env);
   ide_run_command_set_argv (run_command, (const char * const *)cmd);
   ide_run_command_set_cwd (run_command, workdir);
+  ide_run_command_set_can_default (run_command, FALSE);
 
   g_list_store_append (self->run_commands, run_command);
 
@@ -294,8 +319,10 @@ gbp_meson_introspection_load_targets (GbpMesonIntrospection *self,
       if (ide_str_equal0 (type, "executable"))
         {
           g_auto(GStrv) filename = NULL;
+          gboolean installed = FALSE;
 
           get_strv_member (obj, "filename", &filename);
+          get_bool_member (obj, "installed", &installed);
 
           if (filename != NULL && filename[0] != NULL)
             {
@@ -305,6 +332,7 @@ gbp_meson_introspection_load_targets (GbpMesonIntrospection *self,
               ide_run_command_set_id (run_command, id);
               ide_run_command_set_display_name (run_command, name);
               ide_run_command_set_argv (run_command, IDE_STRV_INIT (filename[0]));
+              ide_run_command_set_can_default (run_command, installed);
 
               g_list_store_append (self->run_commands, run_command);
             }
