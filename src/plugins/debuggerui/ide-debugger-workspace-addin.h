@@ -28,12 +28,13 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (IdeDebuggerWorkspaceAddin, ide_debugger_workspace_addin, IDE, DEBUGGER_WORKSPACE_ADDIN, GObject)
 
+void ide_debugger_workspace_addin_raise_panel            (IdeDebuggerWorkspaceAddin *self);
 void ide_debugger_workspace_addin_navigate_to_address    (IdeDebuggerWorkspaceAddin *self,
-                                                          IdeDebuggerAddress      address);
+                                                          IdeDebuggerAddress         address);
 void ide_debugger_workspace_addin_navigate_to_breakpoint (IdeDebuggerWorkspaceAddin *self,
-                                                          IdeDebuggerBreakpoint  *breakpoint);
+                                                          IdeDebuggerBreakpoint     *breakpoint);
 void ide_debugger_workspace_addin_navigate_to_file       (IdeDebuggerWorkspaceAddin *self,
-                                                          GFile                  *file,
-                                                          guint                   line);
+                                                          GFile                     *file,
+                                                          guint                      line);
 
 G_END_DECLS
