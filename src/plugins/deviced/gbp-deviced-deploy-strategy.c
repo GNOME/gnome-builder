@@ -1,6 +1,6 @@
 /* gbp-deviced-deploy-strategy.c
  *
- * Copyright 2018-2019 Christian Hergert <chergert@redhat.com>
+ * Copyright 2018-2022 Christian Hergert <chergert@redhat.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,6 +20,10 @@
 
 #define G_LOG_DOMAIN "gbp-deviced-deploy-strategy"
 
+#include "config.h"
+
+#include <libdeviced.h>
+
 #include "../flatpak/gbp-flatpak-manifest.h"
 #include "../flatpak/gbp-flatpak-util.h"
 
@@ -33,7 +37,7 @@ struct _GbpDevicedDeployStrategy
 
 typedef struct
 {
-  IdePipeline      *pipeline;
+  IdePipeline           *pipeline;
   GbpDevicedDevice      *device;
   gchar                 *app_id;
   gchar                 *flatpak_path;
@@ -58,7 +62,7 @@ deploy_state_free (DeployState *state)
 
 static void
 gbp_deviced_deploy_strategy_load_async (IdeDeployStrategy   *strategy,
-                                        IdePipeline    *pipeline,
+                                        IdePipeline         *pipeline,
                                         GCancellable        *cancellable,
                                         GAsyncReadyCallback  callback,
                                         gpointer             user_data)
@@ -308,7 +312,7 @@ deploy_commit_cb (GObject      *object,
 
 static void
 gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
-                                          IdePipeline      *pipeline,
+                                          IdePipeline           *pipeline,
                                           GFileProgressCallback  progress,
                                           gpointer               progress_data,
                                           GDestroyNotify         progress_data_destroy,
@@ -356,23 +360,164 @@ gbp_deviced_deploy_strategy_deploy_async (IdeDeployStrategy     *strategy,
    */
 
   ide_pipeline_build_async (pipeline,
-                                  IDE_PIPELINE_PHASE_COMMIT,
-                                  cancellable,
-                                  deploy_commit_cb,
-                                  g_steal_pointer (&task));
+                            IDE_PIPELINE_PHASE_COMMIT,
+                            cancellable,
+                            deploy_commit_cb,
+                            g_steal_pointer (&task));
 
   IDE_EXIT;
 }
 
 static gboolean
-gbp_deviced_deploy_strategy_deploy_finish (IdeDeployStrategy *self,
-                                           GAsyncResult *result,
-                                           GError **error)
+gbp_deviced_deploy_strategy_deploy_finish (IdeDeployStrategy  *self,
+                                           GAsyncResult       *result,
+                                           GError            **error)
 {
   g_return_val_if_fail (GBP_IS_DEVICED_DEPLOY_STRATEGY (self), FALSE);
   g_return_val_if_fail (ide_task_is_valid (result, self), FALSE);
 
   return ide_task_propagate_boolean (IDE_TASK (result), error);
+}
+
+static gboolean
+gbp_deviced_deploy_strategy_handle_cb (IdeRunContext       *run_context,
+                                       const char * const  *argv,
+                                       const char * const  *env,
+                                       const char          *cwd,
+                                       IdeUnixFDMap        *unix_fd_map,
+                                       gpointer             user_data,
+                                       GError             **error)
+{
+  IdePipeline *pipeline = user_data;
+  g_autofree char *address_string = NULL;
+  GInetSocketAddress *address;
+  DevdDevice *devd_device;
+  const char *app_id;
+  IdeConfig *config;
+  IdeDevice *device;
+  guint port;
+  guint length;
+  int pty_fd = -1;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+
+  if (!ide_unix_fd_map_stdin_isatty (unix_fd_map))
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "Cannot spawn application with additional tooling on remote host");
+      IDE_RETURN (FALSE);
+    }
+
+  if ((length = ide_unix_fd_map_get_length (unix_fd_map)))
+    {
+      for (guint i = 0; i < length; i++)
+        {
+          int source_fd;
+          int dest_fd;
+
+          source_fd = ide_unix_fd_map_peek (unix_fd_map, i, &dest_fd);
+
+          if (source_fd == -1 || dest_fd == -1)
+            continue;
+
+          if (dest_fd > STDERR_FILENO)
+            {
+              g_set_error (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           "Cannot connect file-descriptor (%d:%d) to remote process",
+                           source_fd, dest_fd);
+              IDE_RETURN (FALSE);
+            }
+
+          if (!isatty (source_fd))
+            {
+              g_set_error (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           "Only PTY can be connected to remove device (%d:%d)",
+                           source_fd, dest_fd);
+              IDE_RETURN (FALSE);
+            }
+
+          if (pty_fd == -1)
+            pty_fd = dest_fd;
+        }
+    }
+
+  if (pty_fd == -1)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "No PTY provided for application to use");
+      IDE_RETURN (FALSE);
+    }
+
+  if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
+    IDE_RETURN (FALSE);
+
+  config = ide_pipeline_get_config (pipeline);
+  device = ide_pipeline_get_device (pipeline);
+  app_id = ide_config_get_app_id (config);
+
+  if (app_id == NULL ||
+      !GBP_IS_DEVICED_DEVICE (device) ||
+      !(devd_device = gbp_deviced_device_get_device (GBP_DEVICED_DEVICE (device))) ||
+      !DEVD_IS_NETWORK_DEVICE (devd_device) ||
+      !(address = devd_network_device_get_address (DEVD_NETWORK_DEVICE (devd_device))))
+    {
+      g_set_error_literal (error,
+                           G_IO_ERROR,
+                           G_IO_ERROR_FAILED,
+                           "Not configured for deviced communication");
+      IDE_RETURN (FALSE);
+    }
+
+  port = g_inet_socket_address_get_port (address);
+  address_string = g_inet_address_to_string (g_inet_socket_address_get_address (address));
+
+  ide_run_context_append_argv (run_context, PACKAGE_LIBEXECDIR"/gnome-builder-deviced");
+  ide_run_context_append_argv (run_context, "--timeout=10");
+  ide_run_context_append_formatted (run_context, "--app-id=%s", app_id);
+  ide_run_context_append_formatted (run_context, "--port=%u", port);
+  ide_run_context_append_formatted (run_context, "--pty-fd=%d", pty_fd);
+  ide_run_context_append_formatted (run_context, "--address=%s", address_string);
+
+  /* TODO: We could possibly connect args to --command= with
+   * flatpak and allow proxying FDs between hosts, although
+   * that is probably better to implement using Bonsai instead.
+   * We would have to teach deviced to connect multiple FDs
+   * anyway so things like gdb work w/ stdin/out + pty on fd 3.
+   */
+
+  IDE_RETURN (TRUE);
+}
+
+static void
+gbp_deviced_deploy_strategy_prepare_run_context (IdeDeployStrategy *self,
+                                                 IdePipeline       *pipeline,
+                                                 IdeRunContext     *run_context)
+{
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (GBP_IS_DEVICED_DEPLOY_STRATEGY (self));
+  g_assert (IDE_IS_PIPELINE (pipeline));
+  g_assert (IDE_IS_RUN_CONTEXT (run_context));
+
+  ide_run_context_push (run_context,
+                        gbp_deviced_deploy_strategy_handle_cb,
+                        g_object_ref (pipeline),
+                        g_object_unref);
+
+  IDE_EXIT;
 }
 
 static void
@@ -384,6 +529,7 @@ gbp_deviced_deploy_strategy_class_init (GbpDevicedDeployStrategyClass *klass)
   strategy_class->load_finish = gbp_deviced_deploy_strategy_load_finish;
   strategy_class->deploy_async = gbp_deviced_deploy_strategy_deploy_async;
   strategy_class->deploy_finish = gbp_deviced_deploy_strategy_deploy_finish;
+  strategy_class->prepare_run_context = gbp_deviced_deploy_strategy_prepare_run_context;
 }
 
 static void
