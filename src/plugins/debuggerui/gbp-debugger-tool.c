@@ -23,10 +23,12 @@
 #include "config.h"
 
 #include <libide-debugger.h>
+#include <libide-gui.h>
 
 #include "ide-debug-manager-private.h"
 
 #include "gbp-debugger-tool.h"
+#include "ide-debugger-workspace-addin.h"
 
 struct _GbpDebuggerTool
 {
@@ -90,7 +92,10 @@ gbp_debugger_tool_started (IdeRunTool    *run_tool,
                            IdeSubprocess *subprocess)
 {
   GbpDebuggerTool *self = (GbpDebuggerTool *)run_tool;
+  IdeWorkspaceAddin *addin;
   IdeDebugManager *debug_manager;
+  IdeWorkbench *workbench;
+  IdeWorkspace *workspace;
   IdeContext *context;
 
   IDE_ENTRY;
@@ -100,8 +105,15 @@ gbp_debugger_tool_started (IdeRunTool    *run_tool,
   g_assert (IDE_IS_SUBPROCESS (subprocess));
 
   context = ide_object_get_context (IDE_OBJECT (self));
-  debug_manager = ide_debug_manager_from_context (context);
 
+  /* Make sure controls are visible to user */
+  workbench = ide_workbench_from_context (context);
+  workspace = ide_workbench_get_workspace_by_type (workbench, IDE_TYPE_PRIMARY_WORKSPACE);
+  addin = ide_workspace_addin_find_by_module_name (workspace, "debuggerui");
+  ide_debugger_workspace_addin_raise_panel (IDE_DEBUGGER_WORKSPACE_ADDIN (addin));
+
+  /* Notify debug manager we've started so it can sync breakpoints */
+  debug_manager = ide_debug_manager_from_context (context);
   _ide_debug_manager_started (debug_manager);
 
   IDE_EXIT;

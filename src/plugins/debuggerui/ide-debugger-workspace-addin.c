@@ -502,3 +502,17 @@ ide_debugger_workspace_addin_navigate_to_breakpoint (IdeDebuggerWorkspaceAddin *
 
   IDE_EXIT;
 }
+
+void
+ide_debugger_workspace_addin_raise_panel (IdeDebuggerWorkspaceAddin *self)
+{
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_DEBUGGER_WORKSPACE_ADDIN (self));
+  g_return_if_fail (IDE_IS_PANE (self->panel));
+
+  panel_widget_raise (PANEL_WIDGET (self->panel));
+
+  IDE_EXIT;
+}
