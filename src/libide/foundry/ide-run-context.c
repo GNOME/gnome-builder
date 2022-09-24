@@ -294,9 +294,6 @@ ide_run_context_host_handler (IdeRunContext       *self,
 
   if ((length = ide_unix_fd_map_get_length (unix_fd_map)))
     {
-      if (!ide_run_context_merge_unix_fd_map (self, unix_fd_map, error))
-        return FALSE;
-
       for (guint i = 0; i < length; i++)
         {
           int source_fd;
@@ -304,9 +301,18 @@ ide_run_context_host_handler (IdeRunContext       *self,
 
           source_fd = ide_unix_fd_map_peek (unix_fd_map, i, &dest_fd);
 
+          if (dest_fd < STDERR_FILENO)
+            continue;
+
+          g_debug ("Mapping Builder FD %d to target FD %d via flatpak-spawn",
+                   source_fd, dest_fd);
+
           if (source_fd != -1 && dest_fd != -1)
             ide_run_context_append_formatted (self, "--forward-fd=%d", dest_fd);
         }
+
+      if (!ide_run_context_merge_unix_fd_map (self, unix_fd_map, error))
+        return FALSE;
     }
 
   /* Now append the arguments */
