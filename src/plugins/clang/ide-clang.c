@@ -188,6 +188,26 @@ get_stdcpp_includes (void)
   return (const gchar * const *)stdcpp_includes;
 }
 
+static gboolean
+maybe_header (const char *path)
+{
+  const char *dot;
+
+  if (path == NULL)
+    return FALSE;
+
+  if (!(dot = strrchr (path, '.')))
+    return FALSE;
+
+  g_printerr ("%s\n", dot);
+
+  return strcmp (dot, ".h") == 0 ||
+         strcmp (dot, ".hh") == 0 ||
+         strcmp (dot, ".hpp") == 0 ||
+         strcmp (dot, ".h++") == 0 ||
+         strcmp (dot, ".hxx") == 0;
+}
+
 static gchar **
 ide_clang_cook_flags (const gchar         *path,
                       const gchar * const *flags)
@@ -208,13 +228,6 @@ ide_clang_cook_flags (const gchar         *path,
       g_autofree gchar *current = g_path_get_dirname (path);
       include = g_strdup_printf ("-I%s", current);
     }
-
-  /* Work around Clang/GCC inconsistency on -Wunused-function with regards
-   * to static inline usage.
-   *
-   * See https://gitlab.gnome.org/GNOME/gnome-builder/issues/961
-   */
-  g_ptr_array_add (cooked, g_strdup ("-Dinline=inline __attribute__((unused))"));
 
   if (flags != NULL)
     {
@@ -249,6 +262,15 @@ ide_clang_cook_flags (const gchar         *path,
       for (guint i = 0; stdcpp_includes[i] != NULL; i++)
         g_ptr_array_insert (cooked, pos++, g_strdup (stdcpp_includes[i]));
     }
+
+  /* If this looks like a header, set -Wno-unused-function so that we
+   * don't get warnings "static inline" not being used. Set it last so
+   * that it applies after -Wall, etc.
+   *
+   * https://gitlab.gnome.org/GNOME/gnome-builder/-/issues/961
+   */
+  if (maybe_header (path))
+    g_ptr_array_add (cooked, g_strdup ("-Wno-unused-function"));
 
   g_ptr_array_add (cooked, NULL);
 
