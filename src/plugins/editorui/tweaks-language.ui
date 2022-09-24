@@ -294,7 +294,7 @@
                             </child>
                             <child>
                               <object class="IdeTweaksRadio">
-                                <property name="title" translatable="yes">Prefer a space before simicolons</property>
+                                <property name="title" translatable="yes">Prefer a space before semicolons</property>
                                 <property name="value">'before-semicolon'</property>
                                 <property name="binding">language_spaces_style_setting</property>
                               </object>
