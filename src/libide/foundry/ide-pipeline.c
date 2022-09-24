@@ -1223,6 +1223,8 @@ ide_pipeline_deploy_strategy_added_cb (IdeExtensionSetAdapter *set,
 static gboolean
 ide_pipeline_load_cb (IdleLoadState *state)
 {
+  IDE_ENTRY;
+
   g_assert (state != NULL);
   g_assert (IDE_IS_PIPELINE (state->self));
   g_assert (state->addins != NULL);
@@ -1252,7 +1254,7 @@ ide_pipeline_load_cb (IdleLoadState *state)
       g_ptr_array_remove_index (state->addins, state->addins->len - 1);
 
       if (state->addins->len > 0)
-        return G_SOURCE_CONTINUE;
+        IDE_RETURN (G_SOURCE_CONTINUE);
     }
 
   /* Now setup deployment strategies */
@@ -1271,7 +1273,7 @@ ide_pipeline_load_cb (IdleLoadState *state)
 
   g_signal_emit (state->self, signals [LOADED], 0);
 
-  return G_SOURCE_REMOVE;
+  IDE_RETURN (G_SOURCE_REMOVE);
 }
 
 /**
@@ -1296,7 +1298,7 @@ ide_pipeline_load (IdePipeline *self)
 
   /* We might have already disposed if our pipeline got discarded */
   if (!(context = ide_object_get_context (IDE_OBJECT (self))))
-    return;
+    IDE_EXIT;
 
   register_build_commands_stage (self, context);
   register_post_install_commands_stage (self, context);
@@ -1361,7 +1363,9 @@ ide_pipeline_load_get_info_cb (GObject      *object,
 
   if (!(info = ide_device_get_info_finish (device, result, &error)))
     {
-      g_warning ("Failed to get device information: %s", error->message);
+      ide_object_warning (IDE_OBJECT (self),
+                          "Failed to load device information: %s",
+                          error->message);
       IDE_EXIT;
     }
 
