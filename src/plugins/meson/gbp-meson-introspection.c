@@ -327,12 +327,24 @@ gbp_meson_introspection_load_targets (GbpMesonIntrospection *self,
           if (filename != NULL && filename[0] != NULL)
             {
               g_autoptr(IdeRunCommand) run_command = ide_run_command_new ();
+              g_auto(GStrv) install_filename = NULL;
+              g_autofree char *install_dir = NULL;
 
               ide_run_command_set_kind (run_command, IDE_RUN_COMMAND_KIND_UTILITY);
               ide_run_command_set_id (run_command, id);
               ide_run_command_set_display_name (run_command, name);
               ide_run_command_set_argv (run_command, IDE_STRV_INIT (filename[0]));
               ide_run_command_set_can_default (run_command, installed);
+
+              /* Deprioritize any executable not installed to $prefix/bin/ */
+              if (get_strv_member (obj, "install_filename", &install_filename) &&
+                  install_filename != NULL &&
+                  install_filename[0] != NULL &&
+                  (install_dir = g_path_get_dirname (install_filename[0])) &&
+                  g_str_has_suffix (install_dir, "/bin"))
+                ide_run_command_set_priority (run_command, 0);
+              else
+                ide_run_command_set_priority (run_command, 1000);
 
               g_list_store_append (self->run_commands, run_command);
             }
