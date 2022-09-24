@@ -129,6 +129,7 @@ src/plugins/code-index/gbp-code-index-application-addin.c
 src/plugins/code-index/gbp-code-index-service.c
 src/plugins/code-index/ide-code-index-index.c
 src/plugins/codespell/ide-codespell-diagnostic-provider.c
+src/plugins/codeui/gbp-codeui-buffer-addin.c
 src/plugins/codeui/gbp-codeui-editor-page-addin.c
 src/plugins/codeui/gbp-codeui-hover-provider.c
 src/plugins/codeui/gbp-codeui-range-dialog.c
@@ -270,6 +271,7 @@ src/plugins/symbol-tree/gbp-symbol-popover.ui
 src/plugins/symbol-tree/gbp-symbol-search-result.c
 src/plugins/symbol-tree/gbp-symbol-workspace-addin.c
 src/plugins/symbol-tree/gtk/menus.ui
+src/plugins/sysprof/gbp-sysprof-tool.c
 src/plugins/sysprof/gbp-sysprof-workbench-addin.c
 src/plugins/sysprof/gtk/menus.ui
 src/plugins/sysprof/tweaks.ui
