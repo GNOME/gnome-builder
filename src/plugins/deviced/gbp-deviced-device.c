@@ -655,3 +655,10 @@ gbp_deviced_device_install_bundle_finish (GbpDevicedDevice  *self,
   IDE_RETURN (ret);
 }
 
+DevdDevice *
+gbp_deviced_device_get_device (GbpDevicedDevice *self)
+{
+  g_return_val_if_fail (GBP_IS_DEVICED_DEVICE (self), NULL);
+
+  return self->device;
+}
