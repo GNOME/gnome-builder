@@ -316,7 +316,7 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
 
   IDE_TRACE_MSG ("%s diagnosis completed (%s)",
                  G_OBJECT_TYPE_NAME (provider),
-                 error ? error->message : "no error");
+                 error ? error->message : "success");
 
   if (error != NULL &&
       !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
