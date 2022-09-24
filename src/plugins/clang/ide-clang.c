@@ -199,8 +199,6 @@ maybe_header (const char *path)
   if (!(dot = strrchr (path, '.')))
     return FALSE;
 
-  g_printerr ("%s\n", dot);
-
   return strcmp (dot, ".h") == 0 ||
          strcmp (dot, ".hh") == 0 ||
          strcmp (dot, ".hpp") == 0 ||
