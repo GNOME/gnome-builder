@@ -49,12 +49,16 @@ ide_lsp_search_result_new (const gchar *title,
                            IdeLocation *location,
                            const gchar *icon_name)
 {
+  g_autoptr(GIcon) gicon = NULL;
+
+  if (icon_name != NULL)
+    gicon = g_themed_icon_new (icon_name);
+
   return g_object_new (IDE_TYPE_LSP_SEARCH_RESULT,
                        "title", title,
                        "subtitle", subtitle,
                        "location", location,
-                       "icon-name", icon_name,
-                       // place search results before the other search providers
+                       "gicon", gicon,
                        "priority", -1,
                        NULL);
 }
