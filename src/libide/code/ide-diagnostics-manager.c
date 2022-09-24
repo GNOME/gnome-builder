@@ -312,9 +312,11 @@ ide_diagnostics_group_diagnose_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_DIAGNOSTICS_MANAGER (self));
 
-  IDE_TRACE_MSG ("%s diagnosis completed", G_OBJECT_TYPE_NAME (provider));
-
   diagnostics = ide_diagnostic_provider_diagnose_finish (provider, result, &error);
+
+  IDE_TRACE_MSG ("%s diagnosis completed (%s)",
+                 G_OBJECT_TYPE_NAME (provider),
+                 error ? error->message : "no error");
 
   if (error != NULL &&
       !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED) &&
