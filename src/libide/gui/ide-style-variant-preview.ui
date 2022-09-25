@@ -12,10 +12,16 @@
         <property name="margin-end">2</property>
         <property name="overflow">hidden</property>
         <child>
-          <object class="GtkPicture" id="wallpaper">
-            <property name="content-fit">fill</property>
-            <property name="width-request">164</property>
-            <property name="height-request">90</property>
+          <object class="AdwClamp">
+            <property name="orientation">vertical</property>
+            <property name="maximum-size">90</property>
+            <property name="child">
+              <object class="GtkPicture" id="wallpaper">
+                <property name="content-fit">fill</property>
+                <property name="width-request">164</property>
+                <property name="height-request">90</property>
+              </object>
+            </property>
           </object>
         </child>
       </object>
