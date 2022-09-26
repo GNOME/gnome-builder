@@ -24,18 +24,18 @@
 
 G_BEGIN_DECLS
 
-gboolean      _ide_pipeline_stage_has_query               (IdePipelineStage     *self);
+gboolean         _ide_pipeline_stage_has_query               (IdePipelineStage     *self);
 IdePipelinePhase _ide_pipeline_stage_get_phase               (IdePipelineStage     *self);
-void          _ide_pipeline_stage_set_phase               (IdePipelineStage     *self,
-                                                           IdePipelinePhase         phase);
-void          _ide_pipeline_stage_build_with_query_async  (IdePipelineStage     *self,
-                                                           IdePipeline          *pipeline,
-                                                           GPtrArray            *targets,
-                                                           GCancellable         *cancellable,
-                                                           GAsyncReadyCallback   callback,
-                                                           gpointer              user_data);
-gboolean      _ide_pipeline_stage_build_with_query_finish (IdePipelineStage     *self,
-                                                           GAsyncResult         *result,
-                                                           GError              **error);
+void             _ide_pipeline_stage_set_phase               (IdePipelineStage     *self,
+                                                              IdePipelinePhase      phase);
+void             _ide_pipeline_stage_build_with_query_async  (IdePipelineStage     *self,
+                                                              IdePipeline          *pipeline,
+                                                              GPtrArray            *targets,
+                                                              GCancellable         *cancellable,
+                                                              GAsyncReadyCallback   callback,
+                                                              gpointer              user_data);
+gboolean         _ide_pipeline_stage_build_with_query_finish (IdePipelineStage     *self,
+                                                              GAsyncResult         *result,
+                                                              GError              **error);
 
 G_END_DECLS
