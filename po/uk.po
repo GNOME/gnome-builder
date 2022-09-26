@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-24 11:30+0000\n"
-"PO-Revision-Date: 2022-09-24 14:40+0300\n"
+"POT-Creation-Date: 2022-09-26 16:14+0000\n"
+"PO-Revision-Date: 2022-09-26 19:24+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1087,78 +1087,78 @@ msgstr "Збирання (%s)"
 msgid "Post-install (%s)"
 msgstr "Завершення встановлення (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3071
+#: src/libide/foundry/ide-pipeline.c:3075
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Не вдалося створити псевдотермінал. Можливості роботи із терміналом буде "
 "обмежено."
 
-#: src/libide/foundry/ide-pipeline.c:3268
+#: src/libide/foundry/ide-pipeline.c:3272
 msgid "Cleaning…"
 msgstr "Очищення…"
 
-#: src/libide/foundry/ide-pipeline.c:3272
-#: src/libide/foundry/ide-pipeline.c:3329
+#: src/libide/foundry/ide-pipeline.c:3276
+#: src/libide/foundry/ide-pipeline.c:3333
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Помилка"
 
-#: src/libide/foundry/ide-pipeline.c:3274
-#: src/libide/foundry/ide-pipeline.c:3337
+#: src/libide/foundry/ide-pipeline.c:3278
+#: src/libide/foundry/ide-pipeline.c:3341
 msgid "Ready"
 msgstr "Виконано"
 
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3293
 msgid "Downloading…"
 msgstr "Отримання…"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3297
 msgid "Building dependencies…"
 msgstr "Збирання залежностей…"
 
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3301
 msgid "Bootstrapping…"
 msgstr "Самозбирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3301
+#: src/libide/foundry/ide-pipeline.c:3305
 msgid "Configuring…"
 msgstr "Налаштування…"
 
-#: src/libide/foundry/ide-pipeline.c:3305
+#: src/libide/foundry/ide-pipeline.c:3309
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
 #: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Збирання…"
 
-#: src/libide/foundry/ide-pipeline.c:3309
+#: src/libide/foundry/ide-pipeline.c:3313
 msgid "Installing…"
 msgstr "Встановлення…"
 
-#: src/libide/foundry/ide-pipeline.c:3313
+#: src/libide/foundry/ide-pipeline.c:3317
 msgid "Committing…"
 msgstr "Надсилання…"
 
-#: src/libide/foundry/ide-pipeline.c:3317
+#: src/libide/foundry/ide-pipeline.c:3321
 msgid "Exporting…"
 msgstr "Експортування…"
 
-#: src/libide/foundry/ide-pipeline.c:3321
 #: src/libide/foundry/ide-pipeline.c:3325
+#: src/libide/foundry/ide-pipeline.c:3329
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Зібрано"
 
-#: src/libide/foundry/ide-pipeline.c:3333
+#: src/libide/foundry/ide-pipeline.c:3337
 msgid "Preparing…"
 msgstr "приготування"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3689
+#: src/libide/foundry/ide-pipeline.c:3693
 #, c-format
 msgid "Removing %s"
 msgstr "Вилучення %s"
 
-#: src/libide/foundry/ide-pipeline.c:3748
+#: src/libide/foundry/ide-pipeline.c:3752
 msgid "Removing build directories…"
 msgstr "Вилучаємо каталоги збирання…"
 
@@ -2428,8 +2428,7 @@ msgstr "Авто"
 
 #: src/plugins/buildui/gtk/preferences.ui:105
 msgid "Overview map is automatically displayed based on user input"
-msgstr ""
-"Мапу огляду автоматично показано на основі введених користувачем даних"
+msgstr "Мапу огляду автоматично показано на основі введених користувачем даних"
 
 #: src/plugins/buildui/gtk/preferences.ui:112
 msgid "Navigate with Tabs"
@@ -2508,8 +2507,7 @@ msgid "As Application"
 msgstr "Як програму"
 
 #: src/plugins/buildui/tweaks.ui:164
-msgid ""
-"Run unit with access to display and other runtime environment features."
+msgid "Run unit with access to display and other runtime environment features."
 msgstr ""
 "Запустити модуль із доступом до дисплея та інших можливостей середовища "
 "виконання."
@@ -2699,8 +2697,7 @@ msgid "Complete Parameters"
 msgstr "Доповнювати параметри"
 
 #: src/plugins/clang/tweaks.ui:30
-msgid ""
-"Include parameters and type information when completing clang proposals"
+msgid "Include parameters and type information when completing clang proposals"
 msgstr ""
 "Включати параметри і дані типів при формуванні пропозицій доповнення clang"
 
@@ -2781,7 +2778,6 @@ msgstr "Можлива друкарська помилка у «%s». Ви ма�
 
 #: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
 #, c-format
-#| msgid "Failed to format selection: %s"
 msgid "Failed to format while saving document: %s"
 msgstr "Не вдалося виконати форматування при збереженні документа: %s"
 
@@ -3430,8 +3426,7 @@ msgstr "Показувати праве поле"
 
 #: src/plugins/editorui/tweaks-language.ui:168
 msgid "Display a margin in the editor to indicate maximum desired width"
-msgstr ""
-"Показувати поле у редакторі для позначення максимальної бажаної ширини"
+msgstr "Показувати поле у редакторі для позначення максимальної бажаної ширини"
 
 #: src/plugins/editorui/tweaks-language.ui:184
 msgid "Right Margin Position"
@@ -3459,8 +3454,7 @@ msgid "Insert Matching Brace"
 msgstr "Вставити відповідну дужку"
 
 #: src/plugins/editorui/tweaks-language.ui:224
-msgid ""
-"Insert matching character for braces, brackets, parenthesis, and quotes"
+msgid "Insert matching character for braces, brackets, parenthesis, and quotes"
 msgstr ""
 "Вставляти відповідні символи для квадратних, фігурних та круглих дужок, а "
 "також лапок"
@@ -3490,7 +3484,7 @@ msgid "Prefer a space before commas"
 msgstr "Ставити пробіл перед комою"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-msgid "Prefer a space before simicolons"
+msgid "Prefer a space before semicolons"
 msgstr "Ставити пробіл перед крапкою з комою"
 
 #: src/plugins/editorui/tweaks.ui:10
@@ -4296,7 +4290,7 @@ msgstr "Показати помилки і попередження, які бу
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:584
+#: src/plugins/meson/gbp-meson-introspection.c:624
 msgid "Load Meson Introspection"
 msgstr "Завантажити інтроспекцію Meson"
 
@@ -4599,12 +4593,12 @@ msgid "Drop Down"
 msgstr "Спадний список"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:681
+#: src/plugins/podman/gbp-podman-runtime.c:686
 msgid "Containers/Toolbox"
 msgstr "Контейнери/Toolbox"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:687
+#: src/plugins/podman/gbp-podman-runtime.c:692
 msgid "Containers/Podman"
 msgstr "Контейнери/Podman"
 
@@ -4877,8 +4871,9 @@ msgid "Proc Macros"
 msgstr "Процедурні макроси"
 
 #: src/plugins/rust-analyzer/tweaks.ui:49
-msgid "Enables the experimental Proc Macros feature of rust-analyzer"
-msgstr "Вмикає експериментальну можливість процедурних макросів rust-analyzer"
+#| msgid "Enables the experimental Proc Macros feature of rust-analyzer"
+msgid "Enables the Proc Macros feature of rust-analyzer"
+msgstr "Вмикає можливість процедурних макросів rust-analyzer"
 
 #: src/plugins/rust-analyzer/tweaks.ui:61
 msgid "Cargo Build Scripts"
@@ -5146,7 +5141,6 @@ msgid "Navigate to a symbol within the current page"
 msgstr "Перейти до пункту на поточній сторінці"
 
 #: src/plugins/sysprof/gbp-sysprof-tool.c:307
-#| msgid "Application ID…"
 msgid "Profiling Application…"
 msgstr "Профілювання програми…"
 
@@ -5301,8 +5295,7 @@ msgstr "Профілювання пам'яті"
 
 #: src/plugins/sysprof/tweaks.ui:84
 msgid "Record stacktraces of memory allocations and releases"
-msgstr ""
-"Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
+msgstr "Записувати трасування стеку розміщення у пам'яті і вивільнення пам'яті"
 
 #: src/plugins/sysprof/tweaks.ui:99
 msgid "Energy Usage"
@@ -5758,6 +5751,9 @@ msgstr "Не вдалося створити ієрархію XML."
 #: src/plugins/xml-pack/ide-xml-service.c:91
 msgid "File must be saved locally to parse."
 msgstr "Файл варто зберегти локально, щоб його проаналізувати."
+
+#~ msgid "Prefer a space before simicolons"
+#~ msgstr "Ставити пробіл перед крапкою з комою"
 
 #~ msgid "R_ebuild"
 #~ msgstr "П_еребудувати"
@@ -6431,9 +6427,6 @@ msgstr "Файл варто зберегти локально, щоб його �
 
 #~ msgid "Prefer a space before colons"
 #~ msgstr "Ставити пробіл перед двокрапкою"
-
-#~ msgid "Prefer a space before semicolons"
-#~ msgstr "Ставити пробіл перед крапкою з комою"
 
 #~ msgid "Number of CPU"
 #~ msgstr "Кількість процесорів"
