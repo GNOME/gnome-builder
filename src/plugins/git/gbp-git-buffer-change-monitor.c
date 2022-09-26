@@ -29,12 +29,14 @@
 #include "daemon/line-cache.h"
 
 #include "gbp-git-buffer-change-monitor.h"
+#include "gbp-git-vcs.h"
 
 struct _GbpGitBufferChangeMonitor
 {
   IdeBufferChangeMonitor  parent;
   IpcGitChangeMonitor    *proxy;
-  IdeSignalGroup         *buffer_signals;
+  GSignalGroup           *buffer_signals;
+  GSignalGroup           *vcs_signals;
   LineCache              *cache;
   guint                   last_change_count;
   guint                   queued_source;
@@ -93,8 +95,14 @@ gbp_git_buffer_change_monitor_destroy (IdeObject *object)
 
   if (self->buffer_signals)
     {
-      ide_signal_group_set_target (self->buffer_signals, NULL);
+      g_signal_group_set_target (self->buffer_signals, NULL);
       g_clear_object (&self->buffer_signals);
+    }
+
+  if (self->vcs_signals)
+    {
+      g_signal_group_set_target (self->vcs_signals, NULL);
+      g_clear_object (&self->vcs_signals);
     }
 
   if (self->proxy != NULL)
@@ -114,12 +122,19 @@ gbp_git_buffer_change_monitor_load (IdeBufferChangeMonitor *monitor,
                                     IdeBuffer              *buffer)
 {
   GbpGitBufferChangeMonitor *self = (GbpGitBufferChangeMonitor *)monitor;
+  g_autoptr(IdeContext) context = NULL;
+  IdeVcs *vcs;
 
   g_assert (IDE_IS_MAIN_THREAD ());
   g_assert (GBP_IS_GIT_BUFFER_CHANGE_MONITOR (self));
   g_assert (IDE_IS_BUFFER (buffer));
 
-  ide_signal_group_set_target (self->buffer_signals, buffer);
+  context = ide_buffer_ref_context (buffer);
+  vcs = ide_vcs_from_context (context);
+
+  g_signal_group_set_target (self->vcs_signals, vcs);
+  g_signal_group_set_target (self->buffer_signals, buffer);
+
   gbp_git_buffer_change_monitor_queue_update (self, FAST);
 }
 
@@ -331,6 +346,16 @@ gbp_git_buffer_change_monitor_get_change (IdeBufferChangeMonitor *monitor,
 }
 
 static void
+vcs_changed_cb (GbpGitBufferChangeMonitor *self,
+                IdeVcs                    *vcs)
+{
+  g_assert (IDE_IS_BUFFER_CHANGE_MONITOR (self));
+  g_assert (IDE_IS_VCS (vcs));
+
+  gbp_git_buffer_change_monitor_queue_update (self, FAST);
+}
+
+static void
 gbp_git_buffer_change_monitor_class_init (GbpGitBufferChangeMonitorClass *klass)
 {
   IdeObjectClass *i_object_class = IDE_OBJECT_CLASS (klass);
@@ -347,28 +372,34 @@ gbp_git_buffer_change_monitor_class_init (GbpGitBufferChangeMonitorClass *klass)
 static void
 gbp_git_buffer_change_monitor_init (GbpGitBufferChangeMonitor *self)
 {
-  self->buffer_signals = ide_signal_group_new (IDE_TYPE_BUFFER);
+  self->buffer_signals = g_signal_group_new (IDE_TYPE_BUFFER);
+  g_signal_group_connect_object (self->buffer_signals,
+                                 "insert-text",
+                                 G_CALLBACK (buffer_insert_text_after_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  g_signal_group_connect_object (self->buffer_signals,
+                                 "delete-range",
+                                 G_CALLBACK (buffer_delete_range_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED);
+  g_signal_group_connect_object (self->buffer_signals,
+                                 "delete-range",
+                                 G_CALLBACK (buffer_delete_range_after_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  g_signal_group_connect_object (self->buffer_signals,
+                                 "changed",
+                                 G_CALLBACK (buffer_changed_after_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 
-  ide_signal_group_connect_object (self->buffer_signals,
-                                   "insert-text",
-                                   G_CALLBACK (buffer_insert_text_after_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  ide_signal_group_connect_object (self->buffer_signals,
-                                   "delete-range",
-                                   G_CALLBACK (buffer_delete_range_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED);
-  ide_signal_group_connect_object (self->buffer_signals,
-                                   "delete-range",
-                                   G_CALLBACK (buffer_delete_range_after_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
-  ide_signal_group_connect_object (self->buffer_signals,
-                                   "changed",
-                                   G_CALLBACK (buffer_changed_after_cb),
-                                   self,
-                                   G_CONNECT_SWAPPED | G_CONNECT_AFTER);
+  self->vcs_signals = g_signal_group_new (IDE_TYPE_VCS);
+  g_signal_group_connect_object (self->vcs_signals,
+                                 "changed",
+                                 G_CALLBACK (vcs_changed_cb),
+                                 self,
+                                 G_CONNECT_SWAPPED | G_CONNECT_AFTER);
 }
 
 IdeBufferChangeMonitor *
