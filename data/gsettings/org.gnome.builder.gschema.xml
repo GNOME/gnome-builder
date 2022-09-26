@@ -30,8 +30,8 @@
     </key>
     <key name="restore-previous-files" type="b">
       <default>true</default>
-      <summary>Restore Previous Files</summary>
-      <description>Restore previously opened files when loading a project.</description>
+      <summary>Restore Session</summary>
+      <description>Restores the projects previous session when loading.</description>
     </key>
     <key name="clear-cache-at-startup" type="b">
       <default>true</default>
