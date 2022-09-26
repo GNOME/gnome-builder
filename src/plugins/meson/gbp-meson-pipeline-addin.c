@@ -46,20 +46,24 @@ on_build_stage_query (IdePipelineStage *stage,
                       GPtrArray        *targets,
                       GCancellable     *cancellable)
 {
-  IdeSubprocessLauncher *launcher;
+  g_autoptr(IdeRunCommand) command = NULL;
   g_autoptr(GPtrArray) replace = NULL;
   const gchar * const *argv;
 
-  g_assert (IDE_IS_PIPELINE_STAGE (stage));
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_PIPELINE_STAGE_COMMAND (stage));
   g_assert (IDE_IS_PIPELINE (pipeline));
   g_assert (!cancellable || G_IS_CANCELLABLE (cancellable));
 
   /* Defer to ninja to determine completed status */
   ide_pipeline_stage_set_completed (stage, FALSE);
 
-  /* Clear any previous argv items from a possible previous build */
-  launcher = ide_pipeline_stage_launcher_get_launcher (IDE_PIPELINE_STAGE_LAUNCHER (stage));
-  argv = ide_subprocess_launcher_get_argv (launcher);
+  /* Get the build command, as we might need to rewrite the argv */
+  g_object_get (stage, "build-command", &command, NULL);
+  if (command == NULL || !(argv = ide_run_command_get_argv (command)))
+    return;
+
+  /* Create new argv to start from */
   replace = g_ptr_array_new_with_free_func (g_free);
   for (guint i = 0; argv[i]; i++)
     {
@@ -68,7 +72,9 @@ on_build_stage_query (IdePipelineStage *stage,
         break;
     }
   g_ptr_array_add (replace, NULL);
-  ide_subprocess_launcher_set_argv (launcher, (const gchar * const *)replace->pdata);
+
+  /* Apply truncated argv */
+  ide_run_command_set_argv (command, (const gchar * const *)replace->pdata);
 
   /* If we have targets to build, specify them */
   if (targets != NULL)
@@ -83,7 +89,7 @@ on_build_stage_query (IdePipelineStage *stage,
               const char *filename = gbp_meson_build_target_get_filename (GBP_MESON_BUILD_TARGET (target));
 
               if (filename != NULL && g_str_has_prefix (filename, builddir))
-                ide_subprocess_launcher_push_argv (launcher, g_path_skip_root (filename + strlen (builddir)));
+                ide_run_command_append_argv (command, g_path_skip_root (filename + strlen (builddir)));
             }
         }
     }
@@ -104,80 +110,44 @@ on_install_stage_query (IdePipelineStage *stage,
 }
 
 G_GNUC_NULL_TERMINATED
-static IdeRunContext *
-create_run_context (GbpMesonPipelineAddin *self,
-                    IdePipeline           *pipeline,
-                    const char            *argv,
-                    ...)
+static IdeRunCommand *
+create_run_command (const char *argv, ...)
 {
-  IdeRunContext *run_context;
+  IdeRunCommand *run_command;
   va_list args;
 
-  g_assert (GBP_IS_MESON_PIPELINE_ADDIN (self));
-  g_assert (IDE_IS_PIPELINE (pipeline));
-
-  run_context = ide_run_context_new ();
-  ide_pipeline_prepare_run_context (pipeline, run_context);
+  run_command = ide_run_command_new ();
 
   va_start (args, argv);
   while (argv != NULL)
     {
-      ide_run_context_append_argv (run_context, argv);
+      ide_run_command_append_argv (run_command, argv);
       argv = va_arg (args, const char *);
     }
   va_end (args);
 
-  return run_context;
+  return g_steal_pointer (&run_command);
 }
 
 static IdePipelineStage *
-attach_run_context (GbpMesonPipelineAddin *self,
+attach_run_command (GbpMesonPipelineAddin *self,
                     IdePipeline           *pipeline,
-                    IdeRunContext         *build_context,
-                    IdeRunContext         *clean_context,
+                    IdeRunCommand         *build_command,
+                    IdeRunCommand         *clean_command,
                     const char            *title,
                     IdePipelinePhase       phase)
 {
-  g_autoptr(IdeSubprocessLauncher) build_launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
   g_autoptr(GError) error = NULL;
-  IdeContext *context;
   guint id;
 
   g_assert (GBP_IS_MESON_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (!build_context || IDE_IS_RUN_CONTEXT (build_context));
-  g_assert (!clean_context || IDE_IS_RUN_CONTEXT (clean_context));
+  g_assert (!build_command || IDE_IS_RUN_COMMAND (build_command));
+  g_assert (!clean_command || IDE_IS_RUN_COMMAND (clean_command));
 
-  context = ide_object_get_context (IDE_OBJECT (pipeline));
-  stage = ide_pipeline_stage_launcher_new (context, NULL);
-
-  if (build_context != NULL)
-    {
-      if (!(build_launcher = ide_run_context_end (build_context, &error)))
-        {
-          g_critical ("Failed to create launcher from run context: %s",
-                      error->message);
-          return NULL;
-        }
-    }
-
-  if (clean_context != NULL)
-    {
-      if (!(clean_launcher = ide_run_context_end (clean_context, &error)))
-        {
-          g_critical ("Failed to create launcher from run context: %s",
-                      error->message);
-          return NULL;
-        }
-    }
-
-  g_object_set (stage,
-                "launcher", build_launcher,
-                "clean-launcher", clean_launcher,
-                "name", title,
-                NULL);
+  stage = ide_pipeline_stage_command_new (build_command, clean_command);
+  ide_pipeline_stage_set_name (stage, title);
 
   id = ide_pipeline_attach (pipeline, phase, 0, stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), id);
@@ -191,10 +161,10 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
   GbpMesonPipelineAddin *self = (GbpMesonPipelineAddin *)addin;
-  g_autoptr(IdeRunContext) build_context = NULL;
-  g_autoptr(IdeRunContext) clean_context = NULL;
-  g_autoptr(IdeRunContext) config_context = NULL;
-  g_autoptr(IdeRunContext) install_context = NULL;
+  g_autoptr(IdeRunCommand) build_command = NULL;
+  g_autoptr(IdeRunCommand) clean_command = NULL;
+  g_autoptr(IdeRunCommand) config_command = NULL;
+  g_autoptr(IdeRunCommand) install_command = NULL;
   IdePipelineStage *stage;
   g_autofree char *build_dot_ninja = NULL;
   g_autofree char *crossbuild_file = NULL;
@@ -248,29 +218,29 @@ gbp_meson_pipeline_addin_load (IdePipelineAddin *addin,
     }
 
   /* Setup our configure stage */
-  config_context = create_run_context (self, pipeline, meson, srcdir, ".", "--prefix", prefix, NULL);
+  config_command = create_run_command (meson, srcdir, ".", "--prefix", prefix, NULL);
   if (crossbuild_file != NULL)
-    ide_run_context_append_formatted (config_context, "--cross-file=%s", crossbuild_file);
+    ide_run_command_append_formatted (config_command, "--cross-file=%s", crossbuild_file);
   if (!ide_str_empty0 (config_opts))
-    ide_run_context_append_args_parsed (config_context, config_opts, NULL);
-  stage = attach_run_context (self, pipeline, config_context, NULL,
+    ide_run_command_append_parsed (config_command, config_opts, NULL);
+  stage = attach_run_command (self, pipeline, config_command, NULL,
                               _("Configure project"), IDE_PIPELINE_PHASE_CONFIGURE);
   if (g_file_test (build_dot_ninja, G_FILE_TEST_EXISTS))
     ide_pipeline_stage_set_completed (stage, TRUE);
 
   /* Setup our Build/Clean stage */
-  clean_context = create_run_context (self, pipeline, ninja, "clean", NULL);
-  build_context = create_run_context (self, pipeline, ninja, NULL);
+  clean_command = create_run_command (ninja, "clean", NULL);
+  build_command = create_run_command (ninja, NULL);
   if (parallel > 0)
-    ide_run_context_append_formatted (build_context, "-j%u", parallel);
-  stage = attach_run_context (self, pipeline, build_context, clean_context,
+    ide_run_command_append_formatted (build_command, "-j%u", parallel);
+  stage = attach_run_command (self, pipeline, build_command, clean_command,
                               _("Build project"), IDE_PIPELINE_PHASE_BUILD);
   ide_pipeline_stage_set_check_stdout (stage, TRUE);
   g_signal_connect (stage, "query", G_CALLBACK (on_build_stage_query), NULL);
 
   /* Setup our Install stage */
-  install_context = create_run_context (self, pipeline, ninja, "install", NULL);
-  stage = attach_run_context (self, pipeline, install_context, NULL,
+  install_command = create_run_command (ninja, "install", NULL);
+  stage = attach_run_command (self, pipeline, install_command, NULL,
                               _("Install project"), IDE_PIPELINE_PHASE_INSTALL);
   g_signal_connect (stage, "query", G_CALLBACK (on_install_stage_query), NULL);
 
