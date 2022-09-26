@@ -150,6 +150,14 @@ ipc_git_index_monitor_dot_git_changed_cb (IpcGitIndexMonitor *self,
   if (g_hash_table_contains (index_changed_files, name))
     goto queue_changed_signal;
 
+  if (other_file != NULL)
+    {
+      g_autofree char *other_name = g_file_get_basename (other_file);
+
+      if (g_hash_table_contains (index_changed_files, other_name))
+        goto queue_changed_signal;
+    }
+
   return;
 
 queue_changed_signal:
@@ -209,7 +217,7 @@ ipc_git_index_monitor_new (GFile *location)
     }
 
   self->dot_git_monitor = g_file_monitor_directory (dot_git_dir,
-                                                    G_FILE_MONITOR_NONE,
+                                                    G_FILE_MONITOR_WATCH_MOVES,
                                                     NULL,
                                                     &error);
 
