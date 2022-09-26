@@ -41,12 +41,137 @@ typedef struct
   guint        needs_collapse : 1;
 } NewState;
 
+typedef struct
+{
+  IdeWorkspace  *workspace;
+  PanelPosition *position;
+} ClosedPosition;
+
+typedef struct
+{
+  GFile     *src;
+  GFile     *dst;
+  GPtrArray *positions;
+} RenameState;
+
+static void
+closed_position_free (ClosedPosition *state)
+{
+  g_clear_object (&state->workspace);
+  g_clear_object (&state->position);
+  g_slice_free (ClosedPosition, state);
+}
+
+static void
+rename_state_free (RenameState *state)
+{
+  g_clear_object (&state->dst);
+  g_clear_object (&state->src);
+  g_clear_pointer (&state->positions, g_ptr_array_unref);
+  g_slice_free (RenameState, state);
+}
+
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (RenameState, rename_state_free)
+
 static void
 new_state_free (NewState *state)
 {
   g_clear_object (&state->node);
   g_clear_object (&state->file);
   g_slice_free (NewState, state);
+}
+
+static void
+rename_save_cb (GObject      *object,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  IdeBuffer *buffer = (IdeBuffer *)object;
+  g_autoptr(IdePage) page = user_data;
+  g_autoptr(GError) error = NULL;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER (buffer));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (IDE_IS_PAGE (page));
+
+  if (!ide_buffer_save_file_finish (buffer, result, &error))
+    g_warning ("Failed to save file: %s", error->message);
+
+  panel_widget_close (PANEL_WIDGET (page));
+}
+
+static void
+rename_load_cb (GObject      *object,
+                GAsyncResult *result,
+                gpointer      user_data)
+{
+  IdeBufferManager *buffer_manager = (IdeBufferManager *)object;
+  g_autoptr(RenameState) state = user_data;
+  g_autoptr(IdeBuffer) buffer = NULL;
+  g_autoptr(GError) error = NULL;
+
+  IDE_ENTRY;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_BUFFER_MANAGER (buffer_manager));
+  g_assert (G_IS_ASYNC_RESULT (result));
+  g_assert (state != NULL);
+  g_assert (state->positions != NULL);
+
+  if ((buffer = ide_buffer_manager_load_file_finish (buffer_manager, result, &error)))
+    {
+      for (guint i = 0; i < state->positions->len; i++)
+        {
+          ClosedPosition *cp = g_ptr_array_index (state->positions, i);
+          GtkWidget *page = ide_editor_page_new (buffer);
+
+          g_assert (cp != NULL);
+          g_assert (IDE_IS_WORKSPACE (cp->workspace));
+          g_assert (PANEL_IS_POSITION (cp->position));
+
+          ide_workspace_add_page (cp->workspace, IDE_PAGE (page), cp->position);
+        }
+    }
+
+  IDE_EXIT;
+}
+
+static void
+rename_state_close_matching_and_save_position (IdePage *page,
+                                               gpointer user_data)
+{
+  RenameState *state = user_data;
+  GFile *this_file;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_PAGE (page));
+
+  if (!IDE_IS_EDITOR_PAGE (page))
+    return;
+
+  if (!(this_file = ide_editor_page_get_file (IDE_EDITOR_PAGE (page))))
+    return;
+
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->src));
+  g_assert (G_IS_FILE (state->dst));
+  g_assert (G_IS_FILE (this_file));
+
+  if (g_file_equal (this_file, state->src))
+    {
+      IdeBuffer *buffer = ide_editor_page_get_buffer (IDE_EDITOR_PAGE (page));
+      ClosedPosition *cp = g_slice_new0 (ClosedPosition);
+
+      cp->workspace = g_object_ref (ide_widget_get_workspace (GTK_WIDGET (page)));
+      cp->position = panel_widget_get_position (PANEL_WIDGET (page));
+      g_ptr_array_add (state->positions, cp);
+
+      ide_buffer_save_file_async (buffer, NULL, NULL,
+                                  NULL,
+                                  rename_save_cb,
+                                  g_object_ref (page));
+    }
 }
 
 static void
@@ -224,7 +349,6 @@ gbp_project_tree_pane_actions_new (GbpProjectTreePane *self,
                           "position", GTK_POS_RIGHT,
                           NULL);
 
-
   state = g_slice_new0 (NewState);
   state->needs_collapse = !ide_tree_node_expanded (self->tree, selected);
   state->file_type = file_type;
@@ -240,25 +364,6 @@ gbp_project_tree_pane_actions_new (GbpProjectTreePane *self,
                                       NULL,
                                       gbp_project_tree_pane_actions_new_cb,
                                       g_steal_pointer (&task));
-}
-
-static void
-rename_save_cb (GObject      *object,
-                GAsyncResult *result,
-                gpointer      user_data)
-{
-  IdeBuffer *buffer = (IdeBuffer *)object;
-  g_autoptr(IdePage) page = user_data;
-  g_autoptr(GError) error = NULL;
-
-  g_assert (IDE_IS_BUFFER (buffer));
-  g_assert (G_IS_ASYNC_RESULT (result));
-  g_assert (IDE_IS_PAGE (page));
-
-  if (!ide_buffer_save_file_finish (buffer, result, &error))
-    g_warning ("Failed to save file before rename: %s", error->message);
-
-  panel_widget_close (PANEL_WIDGET (page));
 }
 
 static void
@@ -351,14 +456,40 @@ gbp_project_tree_pane_actions_rename_cb (GObject      *object,
                                          gpointer      user_data)
 {
   IdeProject *project = (IdeProject *)object;
-  g_autoptr(GbpProjectTreePane) self = user_data;
+  g_autoptr(RenameState) state = user_data;
   g_autoptr(GError) error = NULL;
+  IdeBufferManager *buffer_manager;
+  IdeContext *context;
+  GFile *file;
+
+  IDE_ENTRY;
 
   g_assert (IDE_IS_MAIN_THREAD ());
-  g_assert (GBP_IS_PROJECT_TREE_PANE (self));
+  g_assert (state != NULL);
+  g_assert (G_IS_FILE (state->src));
+  g_assert (G_IS_FILE (state->dst));
+  g_assert (state->positions != NULL);
 
   if (!ide_project_rename_file_finish (project, result, &error))
     g_warning ("Failed to rename file: %s", error->message);
+
+  context = ide_object_get_context (IDE_OBJECT (project));
+  buffer_manager = ide_buffer_manager_from_context (context);
+
+  if (state->positions->len == 0)
+    IDE_EXIT;
+
+  file = state->dst;
+
+  ide_buffer_manager_load_file_async (buffer_manager,
+                                      file,
+                                      IDE_BUFFER_OPEN_FLAGS_NONE,
+                                      NULL,
+                                      NULL,
+                                      rename_load_cb,
+                                      g_steal_pointer (&state));
+
+  IDE_EXIT;
 }
 
 static void
@@ -370,6 +501,8 @@ gbp_project_tree_pane_actions_rename_display_cb (GObject      *object,
   g_autoptr(GbpProjectTreePane) self = user_data;
   g_autoptr(GError) error = NULL;
   g_autoptr(GFile) dst = NULL;
+  IdeWorkbench *workbench;
+  RenameState *state;
   IdeProject *project;
   IdeContext *context;
   GFile *src;
@@ -383,13 +516,23 @@ gbp_project_tree_pane_actions_rename_display_cb (GObject      *object,
   src = gbp_rename_file_popover_get_file (popover);
   context = ide_widget_get_context (GTK_WIDGET (self));
   project = ide_project_from_context (context);
+  workbench = ide_workbench_from_context (context);
+
+  state = g_slice_new0 (RenameState);
+  state->src = g_object_ref (src);
+  state->dst = g_object_ref (dst);
+  state->positions = g_ptr_array_new_with_free_func ((GDestroyNotify)closed_position_free);
+
+  ide_workbench_foreach_page (workbench,
+                              rename_state_close_matching_and_save_position,
+                              state);
 
   ide_project_rename_file_async (project,
                                  src,
                                  dst,
                                  NULL,
                                  gbp_project_tree_pane_actions_rename_cb,
-                                 g_object_ref (self));
+                                 g_steal_pointer (&state));
 
 done:
   gtk_popover_popdown (GTK_POPOVER (popover));
@@ -404,7 +547,6 @@ gbp_project_tree_pane_actions_rename (GSimpleAction *action,
   IdeProjectFile *project_file;
   g_autoptr(GFile) file = NULL;
   GbpRenameFilePopover *popover;
-  IdeWorkbench *workbench;
   IdeTreeNode *selected;
   gboolean is_dir;
 
@@ -418,8 +560,6 @@ gbp_project_tree_pane_actions_rename (GSimpleAction *action,
 
   is_dir = ide_project_file_is_directory (project_file);
   file = ide_project_file_ref_file (project_file);
-  workbench = ide_widget_get_workbench (GTK_WIDGET (self->tree));
-  ide_workbench_foreach_page (workbench, close_matching_pages, file);
 
   popover = g_object_new (GBP_TYPE_RENAME_FILE_POPOVER,
                           "position", GTK_POS_LEFT,
