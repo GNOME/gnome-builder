@@ -35,79 +35,54 @@ struct _GbpCargoPipelineAddin
 };
 
 G_GNUC_NULL_TERMINATED
-static IdeRunContext *
-create_run_context (IdePipeline *pipeline,
+static IdeRunCommand *
+create_run_command (IdePipeline *pipeline,
                     const char  *project_dir,
                     const char  *argv,
                     ...)
 {
-  IdeRunContext *ret;
+  IdeRunCommand *ret;
   const char *builddir;
   va_list args;
 
   g_assert (IDE_IS_PIPELINE (pipeline));
 
-  ret = ide_run_context_new ();
-  ide_pipeline_prepare_run_context (pipeline, ret);
+  ret = ide_run_command_new ();
 
   builddir = ide_pipeline_get_builddir (pipeline);
-  ide_run_context_setenv (ret, "CARGO_TARGET_DIR", builddir);
-  ide_run_context_set_cwd (ret, project_dir);
+  ide_run_command_setenv (ret, "CARGO_TARGET_DIR", builddir);
+  ide_run_command_set_cwd (ret, project_dir);
 
   va_start (args, argv);
   while (argv != NULL)
     {
-      ide_run_context_append_argv (ret, argv);
+      ide_run_command_append_argv (ret, argv);
       argv = va_arg (args, const char *);
     }
   va_end (args);
 
-  return ret;
+  return g_steal_pointer (&ret);
 }
 
 static IdePipelineStage *
-attach_run_context (GbpCargoPipelineAddin *self,
+attach_run_command (GbpCargoPipelineAddin *self,
                     IdePipeline           *pipeline,
                     IdePipelinePhase       phase,
-                    IdeRunContext         *build_context,
-                    IdeRunContext         *clean_context,
+                    IdeRunCommand         *build_command,
+                    IdeRunCommand         *clean_command,
                     const char            *title)
 {
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(IdeSubprocessLauncher) clean_launcher = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
   g_autoptr(GError) error = NULL;
-  IdeContext *context;
   guint id;
 
   g_assert (GBP_IS_CARGO_PIPELINE_ADDIN (self));
   g_assert (IDE_IS_PIPELINE (pipeline));
-  g_assert (IDE_IS_RUN_CONTEXT (build_context));
-  g_assert (!clean_context || IDE_IS_RUN_CONTEXT (clean_context));
+  g_assert (IDE_IS_RUN_COMMAND (build_command));
+  g_assert (!clean_command || IDE_IS_RUN_COMMAND (clean_command));
 
-  if (!(launcher = ide_run_context_end (build_context, &error)))
-    {
-      g_critical ("Failed to create launcher from run context: %s",
-                  error->message);
-      return NULL;
-    }
-
-  if (clean_context != NULL &&
-      !(clean_launcher = ide_run_context_end (clean_context, &error)))
-    {
-      g_critical ("Failed to create launcher from run context: %s",
-                  error->message);
-      return NULL;
-    }
-
-  context = ide_object_get_context (IDE_OBJECT (pipeline));
-  stage = ide_pipeline_stage_launcher_new (context, NULL);
-
-  g_object_set (stage,
-                "launcher", launcher,
-                "clean-launcher", clean_launcher,
-                "name", title,
-                NULL);
+  stage = ide_pipeline_stage_command_new (build_command, clean_command);
+  ide_pipeline_stage_set_name (stage, title);
 
   id = ide_pipeline_attach (pipeline, phase, 0, stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), id);
@@ -135,9 +110,9 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
                                IdePipeline      *pipeline)
 {
   GbpCargoPipelineAddin *self = (GbpCargoPipelineAddin *)addin;
-  g_autoptr(IdeRunContext) fetch_context = NULL;
-  g_autoptr(IdeRunContext) build_context = NULL;
-  g_autoptr(IdeRunContext) clean_context = NULL;
+  g_autoptr(IdeRunCommand) fetch_command = NULL;
+  g_autoptr(IdeRunCommand) build_command = NULL;
+  g_autoptr(IdeRunCommand) clean_command = NULL;
   g_autoptr(IdePipelineStage) fetch_stage = NULL;
   g_autoptr(IdePipelineStage) build_stage = NULL;
   g_autofree char *project_dir = NULL;
@@ -167,36 +142,36 @@ gbp_cargo_pipeline_addin_load (IdePipelineAddin *addin,
   g_assert (IDE_IS_CONFIG (config));
   g_assert (cargo != NULL);
 
-  fetch_context = create_run_context (pipeline, project_dir, cargo, "fetch", NULL);
-  fetch_stage = attach_run_context (self, pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, fetch_context, NULL, _("Fetch dependencies"));
+  fetch_command = create_run_command (pipeline, project_dir, cargo, "fetch", NULL);
+  fetch_stage = attach_run_command (self, pipeline, IDE_PIPELINE_PHASE_DOWNLOADS, fetch_command, NULL, _("Fetch dependencies"));
 
-  build_context = create_run_context (pipeline, project_dir, cargo, "build", "--message-format", "human", NULL);
-  clean_context = create_run_context (pipeline, project_dir, cargo, "clean", NULL);
+  build_command = create_run_command (pipeline, project_dir, cargo, "build", "--message-format", "human", NULL);
+  clean_command = create_run_command (pipeline, project_dir, cargo, "clean", NULL);
 
   if (!ide_pipeline_is_native (pipeline))
     {
       IdeTriplet *triplet = ide_pipeline_get_host_triplet (pipeline);
 
-      ide_run_context_append_argv (build_context, "--target");
-      ide_run_context_append_argv (build_context, ide_triplet_get_full_name (triplet));
+      ide_run_command_append_argv (build_command, "--target");
+      ide_run_command_append_argv (build_command, ide_triplet_get_full_name (triplet));
     }
 
   if (ide_config_get_parallelism (config) > 0)
     {
       int j = ide_config_get_parallelism (config);
-      ide_run_context_append_formatted (build_context, "-j%d", j);
+      ide_run_command_append_formatted (build_command, "-j%d", j);
     }
 
   if (!ide_config_get_debug (config))
-    ide_run_context_append_argv (build_context, "--release");
+    ide_run_command_append_argv (build_command, "--release");
 
   /* Configure Options get passed to "cargo build" because there is no
    * equivalent "configure stage" for cargo.
    */
   if (!ide_str_empty0 (config_opts))
-    ide_run_context_append_args_parsed (build_context, config_opts, NULL);
+    ide_run_command_append_parsed (build_command, config_opts, NULL);
 
-  build_stage = attach_run_context (self, pipeline, IDE_PIPELINE_PHASE_BUILD, build_context, clean_context, _("Build project"));
+  build_stage = attach_run_command (self, pipeline, IDE_PIPELINE_PHASE_BUILD, build_command, clean_command, _("Build project"));
   g_signal_connect (build_stage, "query", G_CALLBACK (query_cb), NULL);
 
   IDE_EXIT;
