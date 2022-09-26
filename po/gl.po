@@ -9,16 +9,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-builder\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gnome-builder/issues\n"
-"POT-Creation-Date: 2022-09-14 13:48+0000\n"
-"PO-Revision-Date: 2022-09-15 18:52+0200\n"
+"POT-Creation-Date: 2022-09-24 23:46+0000\n"
+"PO-Revision-Date: 2022-09-26 07:52+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
-"Language-Team: Galician <proxecto@trasno.gal>\n"
+"Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 40.0\n"
 "X-Project-Style: gnome\n"
 "X-DL-Team: gl\n"
 "X-DL-Module: gnome-builder\n"
@@ -612,7 +612,7 @@ msgid "What environment to use when running unit tests"
 msgstr "Que entorno a usar ao executar os tests unitarios"
 
 #: data/gsettings/org.gnome.builder.project.gschema.xml:50
-#: src/plugins/buildui/gtk/menus.ui:198 src/plugins/buildui/tweaks.ui:133
+#: src/plugins/buildui/gtk/menus.ui:170 src/plugins/buildui/tweaks.ui:133
 msgid "Verbose Logging"
 msgstr "Rexistro detallado"
 
@@ -741,8 +741,10 @@ msgstr "Sen título"
 #: src/libide/greeter/ide-greeter-workspace.c:682
 #: src/libide/gtk/ide-install-button.ui:31
 #: src/libide/gtk/ide-shortcut-accel-dialog.ui:21
-#: src/libide/gui/ide-workbench.c:1459
+#: src/libide/gui/ide-workbench.c:1500
 #: src/plugins/buildui/gbp-buildui-log-pane.c:328
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:7
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:9
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:117
 #: src/plugins/flatpak/gbp-flatpak-runtime-provider.c:325
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:16
@@ -755,7 +757,7 @@ msgid "A suitable debugger could not be found."
 msgstr "Non é posíbel atopar un depurador axeitado."
 
 #: src/libide/editor/gtk/menus.ui:18 src/libide/gui/ide-frame.ui:104
-#: src/libide/gui/ide-workbench.c:1455
+#: src/libide/gui/ide-workbench.c:1496
 msgid "Open File…"
 msgstr "Abrir ficheiro…"
 
@@ -820,6 +822,7 @@ msgstr "Páxinas"
 #: src/libide/sourceview/gtk/menus.ui:139
 #: src/libide/sourceview/gtk/menus.ui:145
 #: src/plugins/comment-code/gtk/menus.ui:6
+#: src/plugins/menu-search/gtk/menus.ui:69
 #: src/plugins/symbol-tree/gtk/menus.ui:5
 msgid "Text Editor"
 msgstr "Editor de texto"
@@ -925,28 +928,23 @@ msgstr "Fallou a impresión: %s"
 msgid "Failed to format selection: %s"
 msgstr "Produciuse un fallo ao formatar a selección: %s"
 
-#: src/libide/editor/ide-editor-page.c:943
+#: src/libide/editor/ide-editor-page.c:948
 #: src/plugins/buildui/gbp-buildui-log-pane.c:324
 #: src/plugins/testui/gbp-testui-output-panel.c:100
 msgid "Save File"
 msgstr "Gardar ficheiro"
 
-#: src/libide/editor/ide-editor-page.c:946
+#: src/libide/editor/ide-editor-page.c:951
 #: src/libide/gtk/ide-file-chooser-entry.c:109
 #: src/libide/terminal/ide-terminal-page-actions.c:281
-#: src/plugins/color-picker/gb-color-picker-prefs.c:236
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:799
 #: src/plugins/editorui/gtk/menus.ui:156 src/plugins/sysprof/gtk/menus.ui:123
 msgid "Save"
 msgstr "Gardar"
 
-#: src/libide/editor/ide-editor-page.c:946
+#: src/libide/editor/ide-editor-page.c:951
 #: src/libide/gtk/ide-file-chooser-entry.c:156
 #: src/libide/terminal/ide-terminal-page-actions.c:280
 #: src/libide/tweaks/ide-tweaks-directory.c:140
-#: src/plugins/color-picker/gb-color-picker-prefs.c:97
-#: src/plugins/color-picker/gb-color-picker-prefs.c:213
-#: src/plugins/color-picker/gb-color-picker-prefs.c:240
 #: src/plugins/create-project/gbp-create-project-widget.c:223
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.c:485
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:347
@@ -1043,11 +1041,11 @@ msgstr "Configuración activa"
 msgid "Discovered device “%s”"
 msgstr "Dispositivo «%s» descuberto"
 
-#: src/libide/foundry/ide-device-manager.c:536
+#: src/libide/foundry/ide-device-manager.c:535
 msgid "Devices"
 msgstr "Dispositivos"
 
-#: src/libide/foundry/ide-device-manager.c:710
+#: src/libide/foundry/ide-device-manager.c:709
 msgid "Cannot deploy to device, build pipeline is not initialized"
 msgstr ""
 "Non é posíbel despregar ao dispositivo, a liña de construción non está "
@@ -1079,88 +1077,89 @@ msgid "The build configuration has errors"
 msgstr "A configuración de construción ten erros"
 
 #. translators: %s is replaced with the build shell command
-#: src/libide/foundry/ide-pipeline.c:1096
+#: src/libide/foundry/ide-pipeline.c:1095
 #, c-format
 msgid "Build (%s)"
 msgstr "Construtor (%s)"
 
 #. translators: %s is replaced with the post-install shell command
-#: src/libide/foundry/ide-pipeline.c:1138
+#: src/libide/foundry/ide-pipeline.c:1136
 #, c-format
 msgid "Post-install (%s)"
 msgstr "Postinstalación (%s)"
 
-#: src/libide/foundry/ide-pipeline.c:3031
+#: src/libide/foundry/ide-pipeline.c:3075
 msgid "Pseudo terminal creation failed. Terminal features will be limited."
 msgstr ""
 "Fallou a creación do pseudoterminal-terminal. As características de terminal "
 "serán limitadas."
 
-#: src/libide/foundry/ide-pipeline.c:3228
+#: src/libide/foundry/ide-pipeline.c:3272
 msgid "Cleaning…"
 msgstr "Limpando…"
 
-#: src/libide/foundry/ide-pipeline.c:3232
-#: src/libide/foundry/ide-pipeline.c:3289
+#: src/libide/foundry/ide-pipeline.c:3276
+#: src/libide/foundry/ide-pipeline.c:3333
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:218
 msgid "Failed"
 msgstr "Fallado"
 
-#: src/libide/foundry/ide-pipeline.c:3234
-#: src/libide/foundry/ide-pipeline.c:3297
+#: src/libide/foundry/ide-pipeline.c:3278
+#: src/libide/foundry/ide-pipeline.c:3341
 msgid "Ready"
 msgstr "Listo"
 
-#: src/libide/foundry/ide-pipeline.c:3249
+#: src/libide/foundry/ide-pipeline.c:3293
 msgid "Downloading…"
 msgstr "Descargando…"
 
-#: src/libide/foundry/ide-pipeline.c:3253
+#: src/libide/foundry/ide-pipeline.c:3297
 msgid "Building dependencies…"
 msgstr "Construíndo dependencias…"
 
-#: src/libide/foundry/ide-pipeline.c:3257
+#: src/libide/foundry/ide-pipeline.c:3301
 msgid "Bootstrapping…"
 msgstr "Inicializando…"
 
-#: src/libide/foundry/ide-pipeline.c:3261
+#: src/libide/foundry/ide-pipeline.c:3305
 msgid "Configuring…"
 msgstr "Configurando…"
 
-#: src/libide/foundry/ide-pipeline.c:3265
+#: src/libide/foundry/ide-pipeline.c:3309
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:200
+#: src/plugins/notification/ide-notification-addin.c:62
 msgid "Building…"
 msgstr "Construíndo…"
 
-#: src/libide/foundry/ide-pipeline.c:3269
+#: src/libide/foundry/ide-pipeline.c:3313
 msgid "Installing…"
 msgstr "Instalando…"
 
-#: src/libide/foundry/ide-pipeline.c:3273
+#: src/libide/foundry/ide-pipeline.c:3317
 msgid "Committing…"
 msgstr "Remitindo…"
 
-#: src/libide/foundry/ide-pipeline.c:3277
+#: src/libide/foundry/ide-pipeline.c:3321
 msgid "Exporting…"
 msgstr "Exportando…"
 
-#: src/libide/foundry/ide-pipeline.c:3281
-#: src/libide/foundry/ide-pipeline.c:3285
+#: src/libide/foundry/ide-pipeline.c:3325
+#: src/libide/foundry/ide-pipeline.c:3329
 #: src/plugins/buildui/gbp-buildui-omni-bar-section.c:236
 msgid "Success"
 msgstr "Éxito"
 
-#: src/libide/foundry/ide-pipeline.c:3293
+#: src/libide/foundry/ide-pipeline.c:3337
 msgid "Preparing…"
 msgstr "Preparando…"
 
 #. translators: %s is replaced with the name of the file being removed
-#: src/libide/foundry/ide-pipeline.c:3649
+#: src/libide/foundry/ide-pipeline.c:3693
 #, c-format
 msgid "Removing %s"
 msgstr "Eliminando %s"
 
-#: src/libide/foundry/ide-pipeline.c:3708
+#: src/libide/foundry/ide-pipeline.c:3752
 msgid "Removing build directories…"
 msgstr "Eliminando os cartafoles de construción…"
 
@@ -1209,8 +1208,10 @@ msgstr "Por omisión (Sistema operativo do anfitrión)"
 msgid "_Clone Repository…"
 msgstr "_Clonar repositorio…"
 
-#: src/libide/greeter/gtk/menus.ui:20 src/plugins/dspy/gtk/menus.ui:21
-#: src/plugins/sysprof/gtk/menus.ui:138
+#: src/libide/greeter/gtk/menus.ui:20
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:195
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:405
+#: src/plugins/dspy/gtk/menus.ui:21 src/plugins/sysprof/gtk/menus.ui:138
 msgid "Close"
 msgstr "Pechar"
 
@@ -1235,7 +1236,7 @@ msgid "Directory"
 msgstr "Cartafol"
 
 #: src/libide/greeter/ide-greeter-workspace.c:227
-#: src/libide/gui/ide-workbench.c:345 src/libide/gui/ide-workbench.c:849
+#: src/libide/gui/ide-workbench.c:346 src/libide/gui/ide-workbench.c:851
 #, c-format
 msgid "Builder — %s"
 msgstr "Construtor — %s"
@@ -1274,7 +1275,7 @@ msgid "Select Project File"
 msgstr "Seleccionar ficheiro do proxecto"
 
 #: src/libide/greeter/ide-greeter-workspace.c:683
-#: src/libide/gui/ide-workbench.c:1458
+#: src/libide/gui/ide-workbench.c:1499
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -1328,7 +1329,6 @@ msgstr "Produciuse un fallo ao obter o valor va_list: %s"
 
 #: src/libide/gtk/ide-file-chooser-entry.c:101
 #: src/libide/gtk/ide-file-chooser-entry.c:157
-#: src/plugins/color-picker/gb-color-picker-prefs.c:209
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:346
 msgid "Open"
 msgstr "Abrir"
@@ -1387,7 +1387,7 @@ msgid_plural "About %u years ago"
 msgstr[0] "Hai %u ano"
 msgstr[1] "Hai %u anos"
 
-#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:77
+#: src/libide/gtk/ide-install-button.ui:16 src/plugins/buildui/gtk/menus.ui:49
 #: src/plugins/flatpak/gbp-flatpak-install-dialog.c:118
 msgid "_Install"
 msgstr "_Instalar"
@@ -1439,7 +1439,7 @@ msgstr "Navegando a web"
 
 #: src/libide/gui/gtk/menus.ui:81 src/libide/gui/tweaks.ui:29
 #: src/libide/terminal/gtk/menus.ui:12 src/libide/terminal/gtk/menus.ui:34
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:274
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:276
 #: src/plugins/terminal/gtk/menus.ui:33
 msgid "Terminal"
 msgstr "Terminal"
@@ -1530,7 +1530,7 @@ msgstr "Ctrl+Maiús+T"
 msgid "Open application menu (F10)"
 msgstr "Abrir o menú da aplicación (F10)"
 
-#: src/libide/gui/ide-marked-view.c:414
+#: src/libide/gui/ide-marked-view.c:421
 msgid "Cannot load HTML. Missing WebKit support."
 msgstr "Non foi posíbel cargar o HTML. Falta a compatibilidade de WebKit."
 
@@ -1572,11 +1572,11 @@ msgstr "Executar proxecto"
 msgid "Other"
 msgstr "Outro"
 
-#: src/libide/gui/ide-workspace.c:1646
+#: src/libide/gui/ide-workspace.c:1701
 msgid "There are unsaved documents"
 msgstr "Hai documentos sen gardar"
 
-#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:153
+#: src/libide/gui/tweaks.ui:17 src/plugins/buildui/gtk/menus.ui:125
 #: src/plugins/buildui/gtk/preferences.ui:25
 #: src/plugins/buildui/gtk/preferences.ui:32
 msgid "Appearance"
@@ -1623,6 +1623,7 @@ msgstr "Dispositivos e simuladores"
 
 #: src/libide/plugins/ide-plugin.c:344
 #: src/plugins/codeui/gbp-codeui-hover-provider.c:82
+#: src/plugins/menu-search/gtk/menus.ui:70
 msgid "Diagnostics"
 msgstr "Diagnósticos"
 
@@ -1806,18 +1807,6 @@ msgstr "D_uplicar liña"
 msgid "Code Navigation"
 msgstr "Navegación de código"
 
-#: src/libide/sourceview/gtk/menus.ui:149
-msgid "_Go to Definition"
-msgstr "_Ir á definición"
-
-#: src/libide/sourceview/gtk/menus.ui:150
-msgid "Jump to file and location where item is defined"
-msgstr "Saltar ao ficheiro e localización onde está definido o elemento"
-
-#: src/libide/sourceview/gtk/menus.ui:156
-msgid "_Find References"
-msgstr "_Buscar referencias"
-
 #. translators: the first %u is replaced with the line number and the second with the column.
 #: src/libide/sourceview/ide-source-view.c:1550
 #: src/plugins/editorui/gbp-editorui-position-label.c:77
@@ -1911,6 +1900,7 @@ msgid "(Empty)"
 msgstr "(Baleiro)"
 
 #: src/libide/tree/ide-tree-node.c:1468
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:17
 msgid "Loading…"
 msgstr "Cargando…"
 
@@ -1945,7 +1935,6 @@ msgstr "sen versión"
 
 #. translators: None means "no version control system"
 #: src/libide/vcs/ide-vcs.c:665
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:252
 msgid "None"
 msgstr "Ningún"
 
@@ -1953,7 +1942,7 @@ msgstr "Ningún"
 msgid "Blank page"
 msgstr "Páxina en branco"
 
-#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:151
+#: src/libide/webkit/ide-webkit-page.ui:96 src/plugins/buildui/gtk/menus.ui:123
 msgid "Settings"
 msgstr "Preferencias"
 
@@ -1973,195 +1962,26 @@ msgstr "Construíndo caché…"
 msgid "Bootstrapping build system"
 msgstr "Iniciando o sistema de construción"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:289
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:290
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:113
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:116
 msgid "Configuring project"
 msgstr "Configurando o proxecto"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:339
-#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:85
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:231
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:97
-#: src/plugins/make/gbp-make-pipeline-addin.c:124
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:89
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:125
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:340
+#: src/plugins/buildstream/gbp-buildstream-pipeline-addin.c:86
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:230
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:96
+#: src/plugins/make/gbp-make-pipeline-addin.c:142
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:91
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:124
 #: src/plugins/waf/gbp-waf-pipeline-addin.c:131
 msgid "Building project"
 msgstr "Construíndo o proxecto"
 
-#: src/plugins/autotools/ide-autotools-pipeline-addin.c:365
+#: src/plugins/autotools/ide-autotools-pipeline-addin.c:366
 msgid "Caching build commands"
 msgstr "Cacheando as ordes de construción"
-
-#. translators: %s and %s are replaced with source file path and the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:157
-#, c-format
-msgid "Beautifier plugin: error copying the gresource config file for “%s”: %s"
-msgstr ""
-"Engadido de Beautifier: erro ao copiar o ficheiro de configuración gresource "
-"para «%s»: %s"
-
-#. translators: %s is replaced with the source file path
-#: src/plugins/beautifier/gb-beautifier-config.c:165
-#, c-format
-msgid "Beautifier plugin: error creating temporary config file for “%s”"
-msgstr ""
-"Engadido Beautifier: produciuse un erro ao crear o ficheiro de configuración "
-"temporal para «%s»"
-
-#. translators: %s is replaced with the .ini source file path
-#: src/plugins/beautifier/gb-beautifier-config.c:209
-#, c-format
-msgid "Beautifier plugin: Can’t read .ini file: %s"
-msgstr "Engadido Beautifier: non é posíbel ler o ficheiro .ini: %s"
-
-#. translators: %s is replaced with the config entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:257
-#, c-format
-msgid ""
-"Beautifier plugin: neither command nor command-pattern keys found: entry "
-"“%s” disabled"
-msgstr ""
-"Engadido Beautifier: non hai unha orde ni chaves de patrón de comandos: "
-"entrada «%s» desactivada"
-
-#. translators: %s is replaced with the config entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:267
-#, c-format
-msgid ""
-"Beautifier plugin: both command and command-pattern keys found: entry “%s” "
-"disabled"
-msgstr ""
-"Engadido Beautifier: atopouse a orde e as chaves de patrón de ordes: entrada "
-"«%s» desactivada"
-
-#. translators: %s and %s are replaced with the config path and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:291
-#, c-format
-msgid "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
-msgstr ""
-"Engadido Beautifier: a ruta de configuración «%s» non existe, entrada «%s» "
-"desactivada"
-
-#. translators: %s is replaced with the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:308
-#, c-format
-msgid ""
-"Beautifier plugin: command key out of possible values: entry “%s” disabled"
-msgstr ""
-"Engadido Beautifier: tecla de comando dos posíbeis valores: entrada «%s» "
-"desactivada"
-
-#. translators: %s and %s are replaced with the profile name and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:333
-#, c-format
-msgid ""
-"Beautifier plugin: @c@ in “%s” command-pattern key but no config file set: "
-"entry “%s” disabled"
-msgstr ""
-"Engadido Beautifier: @c@ está na chave de patrón de ordes «%s» pero non "
-"estabelece un ficheiro de configuración: entrada «%s» desactivada"
-
-#. translators: %s and %s are replaced with the profile name and the entry name
-#: src/plugins/beautifier/gb-beautifier-config.c:365
-#, c-format
-msgid ""
-"Beautifier plugin: can’t create temporary file for “%s”: entry “%s” disabled"
-msgstr ""
-"Engadido Beautifier: non é posíbel crear o ficheiro temporal para «%s»: "
-"entrada «%s» desactivada"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:407
-#, c-format
-msgid "Beautifier plugin: “%s”"
-msgstr "Engadido Beautifier: «%s»"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-config.c:508
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:60
-#, c-format
-msgid "Beautifier plugin: %s"
-msgstr "Engadido Beautifier: %s"
-
-#. translators: %s is replaced with a path name
-#: src/plugins/beautifier/gb-beautifier-config.c:547
-#, c-format
-msgid "Beautifier plugin: can’t read the following resource file: “%s”"
-msgstr ""
-"Engadido Beautifier: non se pode ler o ficheiro de recursos seguinte: «%s»"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:57
-msgid "beautifier program missing, you must install it: "
-msgstr "Falta o programa beautifier, debe instalalo: "
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:91
-msgid "Beautifier Plugin: the view is not a GtkSourceView"
-msgstr "Engadido Beautifier: a vista non é unha GtkSourceView"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:98
-msgid "Beautifier Plugin: no default beautifier found"
-msgstr "Engadido Beautifier: non se atopou un beautifier por omisión"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:104
-msgid "Beautifier Plugin: the buffer is not writable"
-msgstr "Engadido Beautifier: non se pode escribir no búfer"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:112
-msgid "Beautifier Plugin: Nothing selected"
-msgstr "Engadido Beautifier: non se seleccionou nada"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:243
-#, c-format
-msgid "No beautifier available for “%s”"
-msgstr "Non hai un «beautifier» dispoñíbel para «%s»"
-
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:245
-#, c-format
-msgid "No beautifier available"
-msgstr "Non hai «beautifiers» dispoñíbeis"
-
-#. translators: %s is replaced with the error message
-#: src/plugins/beautifier/gb-beautifier-editor-addin.c:356
-#, c-format
-msgid "Beautifier plugin: no valid entries, disabling: %s"
-msgstr "Engadido Beautifier: non hai entradas válidas, desactivando: %s"
-
-#. translators: %s and %s are replaced with the temporary dir and the file path
-#: src/plugins/beautifier/gb-beautifier-helper.c:63
-#: src/plugins/beautifier/gb-beautifier-helper.c:88
-#: src/plugins/beautifier/gb-beautifier-helper.c:114
-#: src/plugins/beautifier/gb-beautifier-helper.c:135
-#, c-format
-msgid ""
-"Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
-"temporary directory: “%s”"
-msgstr ""
-"Engadido Beautifier: bloqueouse o intento de eliminar o ficheiro fora do "
-"cartafol temporal «%s»: «%s»"
-
-#. translators: %s is replaced with the command error message
-#: src/plugins/beautifier/gb-beautifier-process.c:285
-#, c-format
-msgid ""
-"Beautifier plugin: command error output:\n"
-"%s"
-msgstr ""
-"Engadido Beautifier: saída de erro da orde:\n"
-"%s"
-
-#: src/plugins/beautifier/gb-beautifier-process.c:295
-msgid "Beautifier plugin: the command output is empty"
-msgstr "Engadido Beautifier: a saída da orde está baleira"
-
-#: src/plugins/beautifier/gb-beautifier-process.c:322
-msgid "Beautify plugin: the output is not a valid UTF-8 text"
-msgstr "Engadido Beautifier: a aínda non é un texto UTF-8 válido"
-
-#: src/plugins/beautifier/gtk/menus.ui:7
-msgid "_Beautify"
-msgstr "_Embelecer"
 
 #. translators: %s is replaced with the name of the configuration
 #: src/plugins/buildconfig/ide-buildconfig-config-provider.c:704
@@ -2194,8 +2014,6 @@ msgid "Copy"
 msgstr "Copiar"
 
 #: src/plugins/buildui/gbp-buildui-environment-row.ui:42
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:19
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:19
 msgid "Remove"
 msgstr "Eliminar"
 
@@ -2266,7 +2084,7 @@ msgstr "Erros"
 msgid "Warnings"
 msgstr "Avisos"
 
-#: src/plugins/buildui/gbp-buildui-pane.c:345
+#: src/plugins/buildui/gbp-buildui-pane.c:348
 #: src/plugins/buildui/gbp-buildui-pane.ui:81 src/plugins/buildui/tweaks.ui:150
 #: src/plugins/shellcmd/gbp-shellcmd-command-dialog.ui:272
 msgid "Build Pipeline"
@@ -2373,97 +2191,89 @@ msgstr "Eliminar"
 msgid "Delete configuration"
 msgstr "Eliminar configuración"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Stop Building Project"
 msgstr "Deter a construción do proxecto"
 
-#: src/plugins/buildui/gbp-buildui-workspace-addin.c:151
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:152
 msgid "Build Project (Shift+Ctrl+Alt+B)"
 msgstr "Construír proxecto (Maiús+Ctrl+Alt+B)"
 
-#: src/plugins/buildui/gtk/menus.ui:8 src/plugins/buildui/gtk/menus.ui:54
-msgid "_Build"
-msgstr "_Construír"
+#: src/plugins/buildui/gbp-buildui-workspace-addin.c:286
+msgid "Display Build Diagnostics (Ctrl+Alt+?)"
+msgstr "Mostrar diagnóstico de construción (Ctrl+Alt+?)"
 
-#: src/plugins/buildui/gtk/menus.ui:14
-msgid "R_ebuild"
-msgstr "R_econstruír"
-
-#: src/plugins/buildui/gtk/menus.ui:20
-msgid "_Run"
-msgstr "_Executar"
-
-#: src/plugins/buildui/gtk/menus.ui:25
-msgid "R_un With…"
-msgstr "E_xecutar con…"
-
-#: src/plugins/buildui/gtk/menus.ui:33
+#: src/plugins/buildui/gtk/menus.ui:5
 msgid "Configure Project…"
 msgstr "Configurar proxecto…"
 
-#: src/plugins/buildui/gtk/menus.ui:36
+#: src/plugins/buildui/gtk/menus.ui:8
 msgid "Configure settings related to the project"
 msgstr "Configurando as preferencias relacionadas co proxecto"
 
-#: src/plugins/buildui/gtk/menus.ui:38 src/plugins/buildui/gtk/menus.ui:42
-#: src/plugins/buildui/gtk/menus.ui:51 src/plugins/buildui/gtk/menus.ui:74
-#: src/plugins/buildui/gtk/menus.ui:101 src/plugins/buildui/gtk/menus.ui:111
-#: src/plugins/buildui/gtk/menus.ui:125 src/plugins/buildui/gtk/menus.ui:134
-#: src/plugins/buildui/gtk/menus.ui:147
+#: src/plugins/buildui/gtk/menus.ui:10 src/plugins/buildui/gtk/menus.ui:14
+#: src/plugins/buildui/gtk/menus.ui:23 src/plugins/buildui/gtk/menus.ui:46
+#: src/plugins/buildui/gtk/menus.ui:73 src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:97 src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:119
 msgid "Code Foundry"
 msgstr "Code Foundry"
 
-#: src/plugins/buildui/gtk/menus.ui:39 src/plugins/buildui/gtk/menus.ui:43
+#: src/plugins/buildui/gtk/menus.ui:11 src/plugins/buildui/gtk/menus.ui:15
 #: src/plugins/projectui/tweaks.ui:218
 msgid "Configuration"
 msgstr "Configuración"
 
-#: src/plugins/buildui/gtk/menus.ui:45
+#: src/plugins/buildui/gtk/menus.ui:17
 msgid "Select Build Target…"
 msgstr "Seleccionar obxectivo de construción…"
 
-#: src/plugins/buildui/gtk/menus.ui:47
+#: src/plugins/buildui/gtk/menus.ui:19
 msgid "Change default build target"
 msgstr "Cambiar o obxectivo de construción predeterminado"
 
-#: src/plugins/buildui/gtk/menus.ui:52 src/plugins/buildui/gtk/menus.ui:102
-#: src/plugins/buildui/gtk/menus.ui:112
+#: src/plugins/buildui/gtk/menus.ui:24 src/plugins/buildui/gtk/menus.ui:74
+#: src/plugins/buildui/gtk/menus.ui:84
 msgid "Building"
 msgstr "Construíndo"
 
-#: src/plugins/buildui/gtk/menus.ui:55
+#: src/plugins/buildui/gtk/menus.ui:26
+msgid "_Build"
+msgstr "_Construír"
+
+#: src/plugins/buildui/gtk/menus.ui:27
 msgid "Build the project"
 msgstr "Construír o proxecto"
 
-#: src/plugins/buildui/gtk/menus.ui:61
+#: src/plugins/buildui/gtk/menus.ui:33
 msgid "_Rebuild"
 msgstr "_Reconstruír"
 
-#: src/plugins/buildui/gtk/menus.ui:62
+#: src/plugins/buildui/gtk/menus.ui:34
 msgid "Rebuild the project"
 msgstr "Reconstruír o proxecto"
 
-#: src/plugins/buildui/gtk/menus.ui:67
+#: src/plugins/buildui/gtk/menus.ui:39
 msgid "_Clean"
 msgstr "_Limpar"
 
-#: src/plugins/buildui/gtk/menus.ui:68
+#: src/plugins/buildui/gtk/menus.ui:40
 msgid "Clean the project"
 msgstr "Limpar o proxecto"
 
-#: src/plugins/buildui/gtk/menus.ui:75
+#: src/plugins/buildui/gtk/menus.ui:47
 msgid "Install & Deployment"
 msgstr "Instalar e despregue"
 
-#: src/plugins/buildui/gtk/menus.ui:79
+#: src/plugins/buildui/gtk/menus.ui:51
 msgid "Install the project"
 msgstr "Instalar o proxecto"
 
-#: src/plugins/buildui/gtk/menus.ui:83
+#: src/plugins/buildui/gtk/menus.ui:55
 msgid "Deploy to Device…"
 msgstr "Despregar ao dispositivo…"
 
-#: src/plugins/buildui/gtk/menus.ui:85
+#: src/plugins/buildui/gtk/menus.ui:57
 msgid "Deploy project to current device"
 msgstr "Despregar o proxecto no dispositivo actual"
 
@@ -2471,85 +2281,85 @@ msgstr "Despregar o proxecto no dispositivo actual"
 #. this should move into the Flatpak plugin and have it use
 #. flatpak-builder directly (reusing our cachepoints) so that
 #. the output is the same as using flatpak-builder from Flathub, etc.
-#: src/plugins/buildui/gtk/menus.ui:94
+#: src/plugins/buildui/gtk/menus.ui:66
 msgid "_Export"
 msgstr "_Exportar"
 
-#: src/plugins/buildui/gtk/menus.ui:96
+#: src/plugins/buildui/gtk/menus.ui:68
 msgid "Export project"
 msgstr "Exportar proxecto"
 
-#: src/plugins/buildui/gtk/menus.ui:104
+#: src/plugins/buildui/gtk/menus.ui:76
 msgid "Stop Build"
 msgstr "Deter construción"
 
-#: src/plugins/buildui/gtk/menus.ui:106
+#: src/plugins/buildui/gtk/menus.ui:78
 msgid "Stop building project"
 msgstr "Deter a construción do proxecto"
 
-#: src/plugins/buildui/gtk/menus.ui:114
+#: src/plugins/buildui/gtk/menus.ui:86
 msgid "Show Build _Log"
 msgstr "Mostrar _rexistro de construción"
 
-#: src/plugins/buildui/gtk/menus.ui:117
+#: src/plugins/buildui/gtk/menus.ui:89
 msgid "Display panel containing the build log"
 msgstr "Mostrar o panel que contén de rexistro da construción"
 
-#: src/plugins/buildui/gtk/menus.ui:126 src/plugins/buildui/gtk/menus.ui:135
+#: src/plugins/buildui/gtk/menus.ui:98 src/plugins/buildui/gtk/menus.ui:107
 msgid "Running"
 msgstr "Executando"
 
-#: src/plugins/buildui/gtk/menus.ui:128
+#: src/plugins/buildui/gtk/menus.ui:100
 msgid "Select Run Command…"
 msgstr "Seleccionar orde de execución…"
 
-#: src/plugins/buildui/gtk/menus.ui:140
+#: src/plugins/buildui/gtk/menus.ui:112
 msgid "Run"
 msgstr "Executar"
 
-#: src/plugins/buildui/gtk/menus.ui:143
+#: src/plugins/buildui/gtk/menus.ui:115
 msgid "Run the project"
 msgstr "Executar o proxecto"
 
-#: src/plugins/buildui/gtk/menus.ui:148 src/plugins/buildui/tweaks.ui:147
+#: src/plugins/buildui/gtk/menus.ui:120 src/plugins/buildui/tweaks.ui:147
 #: src/plugins/testui/gbp-testui-item.c:84
 #: src/plugins/testui/gbp-testui-panel.ui:4
 msgid "Unit Tests"
 msgstr "Probas unitarias"
 
-#: src/plugins/buildui/gtk/menus.ui:155
+#: src/plugins/buildui/gtk/menus.ui:127
 msgid "Follow System Style"
 msgstr "Seguir o estilo do sistema"
 
-#: src/plugins/buildui/gtk/menus.ui:161
+#: src/plugins/buildui/gtk/menus.ui:133
 msgid "Force Light"
 msgstr "Forzar claro"
 
-#: src/plugins/buildui/gtk/menus.ui:167
+#: src/plugins/buildui/gtk/menus.ui:139
 msgid "Force Dark"
 msgstr "Forzar escuro"
 
-#: src/plugins/buildui/gtk/menus.ui:174
+#: src/plugins/buildui/gtk/menus.ui:146
 msgid "Accessibility"
 msgstr "Accesibilidade"
 
-#: src/plugins/buildui/gtk/menus.ui:176
+#: src/plugins/buildui/gtk/menus.ui:148
 msgid "High Contrast"
 msgstr "Contraste alto"
 
-#: src/plugins/buildui/gtk/menus.ui:181
+#: src/plugins/buildui/gtk/menus.ui:153
 msgid "Text Direction"
 msgstr "Dirección do texto"
 
-#: src/plugins/buildui/gtk/menus.ui:183
+#: src/plugins/buildui/gtk/menus.ui:155
 msgid "Left-to-Right"
 msgstr "De esquerda a dereita"
 
-#: src/plugins/buildui/gtk/menus.ui:189
+#: src/plugins/buildui/gtk/menus.ui:161
 msgid "Right-to-Left"
 msgstr "De dereita a esquerda"
 
-#: src/plugins/buildui/gtk/menus.ui:204
+#: src/plugins/buildui/gtk/menus.ui:176
 msgid "Tools"
 msgstr "Ferramentas"
 
@@ -2828,11 +2638,11 @@ msgstr ""
 "O SDK usado para construír a súa aplicación determínase automaticamente "
 "desde o «runtime»."
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:174
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:171
 msgid "Fetch dependencies"
 msgstr "Obter as dependencias"
 
-#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:204
+#: src/plugins/cargo/gbp-cargo-pipeline-addin.c:199
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:267
 msgid "Build project"
 msgstr "Construír proxecto"
@@ -2891,16 +2701,16 @@ msgstr ""
 msgid "CMake"
 msgstr "CMake"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:206
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:202
 #: src/plugins/meson/gbp-meson-pipeline-addin.c:257
 msgid "Configure project"
 msgstr "Configurar proxecto"
 
-#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:250
-#: src/plugins/make/gbp-make-pipeline-addin.c:136
-#: src/plugins/maven/gbp-maven-pipeline-addin.c:99
-#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:133
-#: src/plugins/waf/gbp-waf-pipeline-addin.c:143
+#: src/plugins/cmake/gbp-cmake-pipeline-addin.c:245
+#: src/plugins/make/gbp-make-pipeline-addin.c:155
+#: src/plugins/maven/gbp-maven-pipeline-addin.c:103
+#: src/plugins/phpize/gbp-phpize-pipeline-addin.c:132
+#: src/plugins/waf/gbp-waf-pipeline-addin.c:142
 msgid "Installing project"
 msgstr "Instalando o proxecto"
 
@@ -2956,438 +2766,94 @@ msgstr "Buscar, diagnosticar e autocompletar pode estar limitado."
 msgid "Declaration"
 msgstr "Declaración"
 
-#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:103
+#: src/plugins/codespell/ide-codespell-diagnostic-provider.c:107
 #, c-format
 msgid "Possible typo in “%s”. Did you mean “%s”?"
 msgstr "Posíbel error de escrita en «%s». Quizais quixo dicir «%s»?"
 
-#: src/plugins/color-picker/gb-color-picker-editor-addin.c:290
-msgid "Colors"
-msgstr "Cores"
-
-#. translators: %s is replaced with the name of the color palette.
-#: src/plugins/color-picker/gb-color-picker-prefs.c:88
+#: src/plugins/codeui/gbp-codeui-buffer-addin.c:240
 #, c-format
-msgid "Save changes to palette “%s” before closing?"
-msgstr "Gardar os cambios na paleta «%s» antes de pechar?"
+#| msgid "Failed to format selection: %s"
+msgid "Failed to format while saving document: %s"
+msgstr "Produciuse un fallo ao gardar o documento: %s"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:96
-msgid "Close without Saving"
-msgstr "Pechar sen gardar"
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:193
+msgid "Symbol Not Selected"
+msgstr "Símbolo non seleccionado"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:98
-msgid "Save As…"
-msgstr "Gardar como…"
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:194
+msgid "A symbol to rename must be selected"
+msgstr "Deb seleccionar un símbolo para renomealo"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:206
-msgid "Load palette"
-msgstr "Cargar paleta"
+#: src/plugins/codeui/gbp-codeui-editor-page-addin.c:461
+#: src/plugins/codeui/gbp-codeui-range-dialog.ui:4
+#| msgid "_Find References"
+msgid "Find References"
+msgstr "Buscar referencias"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:233
-msgid "Save palette"
-msgstr "Gardar paleta"
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:168
+#| msgid "No references were found"
+msgid "No references found"
+msgstr "Non se atopou ningunha referencia"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:706
-msgid "All files"
-msgstr "Todos os ficheiros"
+#: src/plugins/codeui/gbp-codeui-range-dialog.c:169
+msgid "The programming language tooling may not support finding references"
+msgstr ""
+"As ferramentas da linguaxe de programación pode non admitir buscar "
+"referencias"
 
-#: src/plugins/color-picker/gb-color-picker-prefs.c:710
-msgid "All supported palettes formats"
-msgstr "Todos os formatos de paletas admitidos"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:715
-msgid "GIMP palette"
-msgstr "Paleta de GIMP"
-
-#: src/plugins/color-picker/gb-color-picker-prefs.c:719
-msgid "GNOME Builder palette"
-msgstr "Paleta de GNOME Builder"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:180
-msgid "Palette name"
-msgstr "Nome da paleta"
-
-#: src/plugins/color-picker/gb-color-picker-prefs-palette-row.c:182
-msgid "Enter a new name for the palette"
-msgstr "Escriba o novo nome para a paleta"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:13
-msgid "HSV visibility"
-msgstr "Visibilidade HSV"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:14
-msgid "If the HSV components are visible."
-msgstr "Se os compoñentes HSV son visíbeis."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:18
-msgid "LAB visibility"
-msgstr "Visibilidade LAB"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:19
-msgid "If the LAB components are visible."
-msgstr "Se os compoñentes LAB son visíbeis."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:23
-msgid "RGB visibility"
-msgstr "Visibilidade RGB"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:24
-msgid "If the RGB components are visible."
-msgstr "Se os compoñentes RGB son visíbeis."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:28
-msgid "RGB unit"
-msgstr "Unidade RGB"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:29
-msgid "The unit used by RGB component and strings."
-msgstr "A unidade usada polo compoñente e cadeas RGB."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:35
-msgid "Selected palette ID"
-msgstr "Seleccionar o ID de paleta"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:36
-msgid "The selected palette ID among the loaded ones."
-msgstr "O ID de paleta seleccionado entre os xa cargados."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:40
-msgid "Color strings visibility"
-msgstr "Visibilidade das cadeas de cor"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:41
-msgid "The visible color strings."
-msgstr "As cadeas de cor visíbeis."
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:45
-msgid "Color filter"
-msgstr "Filtro de cor"
-
-#: src/plugins/color-picker/gsettings/org.gnome.builder.plugins.color_picker_plugin.gschema.xml:46
-msgid "The filter used on the color scales and color plane."
-msgstr "O filtro usado nas escalas e planos de cor."
-
-#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:959
-msgid "Palette: "
-msgstr "Paleta: "
-
-#: src/plugins/color-picker/gstyle/gstyle-color-panel.c:961
-msgid "Palette"
-msgstr "Paleta"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-plane.c:1612
-msgid "Color Plane"
-msgstr "Panel de cor"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:68
-msgid "Color name"
-msgstr "Nome da cor"
-
-#: src/plugins/color-picker/gstyle/gstyle-color-widget-actions.c:70
-msgid "Enter a new name for the color"
-msgstr "Escriba un novo nome para a cor"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:494
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:560
+#: src/plugins/codeui/gbp-codeui-rename-dialog.c:97
 #, c-format
-msgid "failed to parse line %i\n"
-msgstr "produciuse un erro ao analizar a liña  %i\n"
+#| msgid "Failed to open file: %s"
+msgid "Failed to rename symbol: %s"
+msgstr "Produciuse un fallo ao renomear o símbolo: %s"
 
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:615
-#, c-format
-msgid "%s: palette is empty\n"
-msgstr "%s: a paleta está baleira\n"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:4
+#| msgid "Rename symbol"
+msgid "Rename Symbol"
+msgstr "Renomear símbolo"
 
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:721
-#, c-format
-msgid "%s: failed to parse\n"
-msgstr "%s: produciuse un fallo ao analizar\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:729
-#, c-format
-msgid "Unable to open %s\n"
-msgstr "Non foi posíbel abrir %s\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:767
-#, c-format
-msgid "%s: This file format is not supported\n"
-msgstr "%s: Este formato de ficheiro non é compatíbel\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:824
-#, c-format
-msgid "failed to parse\n"
-msgstr "produciuse un fallo ao analizar\n"
-
-#. To translators: always in singular form like in: generated palette number <generated_count>
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:831
-msgid "Generated"
-msgstr "Xerado"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette.c:935
-#, c-format
-msgid "Unable to save %s\n"
-msgstr "Produciuse un fallo ao gardar %s\n"
-
-#: src/plugins/color-picker/gstyle/gstyle-palette-widget.c:981
-#, c-format
-msgid "Unsaved palette %u"
-msgstr "Paleta %u sen gardar"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:157
-msgid "Color Components"
-msgstr "Compoñentes de cor"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:206
-msgid "H"
-msgstr "H"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:216
-msgid "S"
-msgstr "S"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:226
-msgid "V"
-msgstr "V"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:322
-msgid "L*"
-msgstr "L*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:332
-msgid "a*"
-msgstr "a*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:342
-msgid "b*"
-msgstr "b*"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:441
-msgid "R"
-msgstr "R"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:451
-msgid "G"
-msgstr "V"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:461
-msgid "B"
-msgstr "A"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:573
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:433
-msgid "Color strings"
-msgstr "Cadeas de cor"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:634
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:490
-msgid "HEX3"
-msgstr "HEX3"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:645
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:507
-msgid "HEX6"
-msgstr "HEX6"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:656
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:122
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:524
-msgid "RGB"
-msgstr "RGB"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:667
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:541
-msgid "RGBA"
-msgstr "RGBA"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:678
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:558
-msgid "HSL"
-msgstr "HSL"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:689
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:575
-msgid "HSLA"
-msgstr "HSLA"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:818
-msgid "Palettes"
-msgstr "Paletas"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:946
-#: src/plugins/color-picker/gtk/color-picker.ui:49
-msgid "No open palettes"
-msgstr "Non hai paletas abertas"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-panel.ui:959
-msgid "Load or generate a palette using the preferences"
-msgstr "Cargar ou xerar unha paleta usando as preferencias"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-color-widget.ui:13
-#: src/plugins/color-picker/gtk/color-picker-palette-menu.ui:13
-msgid "Rename"
-msgstr "Renomear"
-
-#: src/plugins/color-picker/gstyle/ui/gstyle-rename-popover.ui:35
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:10
 #: src/plugins/project-tree/gbp-rename-file-popover.ui:34
-#: src/plugins/project-tree/gtk/menus.ui:60
+#: src/plugins/project-tree/gtk/menus.ui:58
 msgid "_Rename"
 msgstr "_Renomear"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:13
-msgid "Color components"
-msgstr "Compoñentes de cor"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:22
+#| msgid "Current line"
+msgid "Current Symbol name"
+msgstr "Nome do símbolo actual"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:47
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:451
-msgid "Visibility:"
-msgstr "Visibilidade:"
+#: src/plugins/codeui/gbp-codeui-rename-dialog.ui:28
+msgid "New Symbol name"
+msgstr "Novo nome do símbolo"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:63
-msgid "Select the color spaces for which you want to see sliders in the panel."
-msgstr ""
-"Seleccione os espazos de cor para os que quere ver os desprazadores no panel."
+#: src/plugins/codeui/gtk/menus.ui:7
+#| msgid "Rename symbol"
+msgid "R_ename Symbol…"
+msgstr "R_enomear símbolo…"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:86
-msgid "HSV"
-msgstr "HSV"
+#: src/plugins/codeui/gtk/menus.ui:13
+#| msgid "Declaration"
+msgid "_Go to Declaration"
+msgstr "_Ir á declaración"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:87
-msgid "Hue Saturation Value"
-msgstr "Valor de saturación de cor"
+#: src/plugins/codeui/gtk/menus.ui:14
+#| msgid "Jump to file and location where item is defined"
+msgid "Jump to file and location where item is declared"
+msgstr "Saltar ao ficheiro e localización onde está declarado o elemento"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:104
-msgid "L*a*b*"
-msgstr "L*a*b*"
+#: src/plugins/codeui/gtk/menus.ui:19
+msgid "_Go to Definition"
+msgstr "_Ir á definición"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:105
-msgid "CIE L*a*b* 1976"
-msgstr "CIE L*a*b* 1976"
+#: src/plugins/codeui/gtk/menus.ui:20
+msgid "Jump to file and location where item is defined"
+msgstr "Saltar ao ficheiro e localización onde está definido o elemento"
 
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:123
-msgid "Red Green Blue"
-msgstr "Vermello Verde Azul"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:140
-msgid "Units:"
-msgstr "Unidades:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:156
-msgid ""
-"Select the type of unit you want to use for RGB components and strings in "
-"the panel."
-msgstr ""
-"Seleccione o tipo de unidade que quere usar para os compoñentes e cadeas RGB "
-"no panel."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:179
-#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
-#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
-msgid "Value"
-msgstr "Valor"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:196
-msgid "Percent"
-msgstr "Porcentaxe"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:213
-msgid "Filters:"
-msgstr "Filtros:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:229
-msgid "Select a filter that act on the colors or “None”."
-msgstr "Seleccione un filtro que actúe nas cores ou «Ningún»."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:269
-msgid "Achromatopsia (monochromacy)"
-msgstr "Acromatopsia (monocromía)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:286
-msgid "Achromatomaly (blue cone monochromacy)"
-msgstr "Acromatopsia (monocromía cónica azul)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:303
-msgid "Deuteranopia (green-blind)"
-msgstr "Deuteranopia (cegueira de verdes)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:320
-msgid "Deuteranomaly (green-weak)"
-msgstr "Deuteranomalía (verdes débiles)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:337
-msgid "Protanopia (red-blind)"
-msgstr "Protanopia (cegueira de vermello)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:354
-msgid "Protanomaly (red-weak)"
-msgstr "Protanomalía (vermellos débiles)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:371
-msgid "Tritanopia (blue-blind)"
-msgstr "Tritanopia (cegueira de azul)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:388
-msgid "Tritanomaly (blue-weak)"
-msgstr "Tritanomalía (azuis débiles)"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:405
-msgid "Websafe"
-msgstr "Web seguro"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:467
-msgid "Select the color strings you want to see in the panel."
-msgstr "Seleccione as cadeas de cor que quere ver no panel."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:597
-msgid "Palettes options"
-msgstr "Opcións de paletas"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:615
-msgid "Palette view mode:"
-msgstr "Modo de vista da paleta:"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:638
-msgid "List"
-msgstr "Lista"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:676
-msgid "Swatches"
-msgstr "Reloxos"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:717
-msgid "Palette management"
-msgstr "Xestión de paleta"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:762
-msgid "Load"
-msgstr "Cargar"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:836
-msgid "From current document"
-msgstr "Desde o documento actual"
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:854
-msgid "Select the palette you want to see in the panel or close one."
-msgstr "Seleccione a paleta que quere ver no panel ou peche un."
-
-#: src/plugins/color-picker/gtk/color-picker-prefs.ui:891
-msgid "No loaded palettes"
-msgstr "Non hai paletas cargadas"
-
-#: src/plugins/color-picker/gtk/color-picker-preview.ui:45
-msgid "No selected palettes"
-msgstr "Non hai paletas seleccionadas"
-
-#: src/plugins/color-picker/gtk/color-picker-preview.ui:58
-msgid "Select a palette file"
-msgstr "Seleccione un ficheiro de paleta"
-
-#: src/plugins/color-picker/gtk/color-picker.ui:62
-msgid "Try loading or generating a palette using the menu"
-msgstr "Tente cargar ou xerar unha paleta usando o menú"
-
-#: src/plugins/color-picker/gtk/menus.ui:7
-msgid "Highlight _colors"
-msgstr "Cores de _realce"
+#: src/plugins/codeui/gtk/menus.ui:25
+msgid "_Find References"
+msgstr "_Buscar referencias"
 
 #: src/plugins/comment-code/gtk/menus.ui:7
 msgid "Code Comments"
@@ -3553,13 +3019,13 @@ msgid "Run the project with debugger"
 msgstr "Executar o proxecto co depurador"
 
 #: src/plugins/debuggerui/gtk/menus.ui:21
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:217
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:218
 #: src/plugins/debuggerui/tweaks.ui:12
 msgid "Debugger"
 msgstr "Depurador"
 
 #: src/plugins/debuggerui/gtk/menus.ui:23
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:251
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:252
 #: src/plugins/debuggerui/tweaks.ui:16
 msgid "Breakpoints"
 msgstr "Puntos de corte"
@@ -3575,10 +3041,6 @@ msgstr "Deter automaticamente nos avisos"
 #: src/plugins/debuggerui/gtk/menus.ui:35
 msgid "Automatically Break at Criticals"
 msgstr "Deter automaticamente nos avisos críticos"
-
-#: src/plugins/debuggerui/gtk/menus.ui:49
-msgid "Run with _Debugger"
-msgstr "Executar co _depurador"
 
 #: src/plugins/debuggerui/ide-debugger-breakpoints-view.ui:22
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:13
@@ -3672,6 +3134,11 @@ msgstr "Parámetros"
 msgid "Variable"
 msgstr "Variábeis"
 
+#: src/plugins/debuggerui/ide-debugger-locals-view.ui:41
+#: src/plugins/debuggerui/ide-debugger-registers-view.ui:34
+msgid "Value"
+msgstr "Valor"
+
 #: src/plugins/debuggerui/ide-debugger-registers-view.ui:23
 msgid "Register"
 msgstr "Rexistro"
@@ -3696,19 +3163,19 @@ msgstr "Argumentos"
 msgid "Binary"
 msgstr "Binario"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:232
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:233
 msgid "Threads"
 msgstr "Fíos"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:256
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:257
 msgid "Libraries"
 msgstr "Bibliotecas"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:261
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:262
 msgid "Registers"
 msgstr "Rexistros"
 
-#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:266
+#: src/plugins/debuggerui/ide-debugger-workspace-addin.c:267
 msgid "Console"
 msgstr "Consola"
 
@@ -3784,29 +3251,29 @@ msgstr ""
 "Revirte as preferencias de idioma para as predeterminadas da aplicación"
 
 #. translators: "Text" means plaintext or text/plain
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:100
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:123
 msgid "Text"
 msgstr "Texto"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks-language.ui:65
 #: src/plugins/editorui/tweaks-language.ui:242
 #: src/plugins/editorui/tweaks.ui:257
 msgid "Spaces"
 msgstr "Espacio"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:173
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:177
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:196
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:200
 #: src/plugins/editorui/tweaks.ui:270
 msgid "Tabs"
 msgstr "Tabulacións"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:517
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:540
 msgid "Go"
 msgstr "Ir"
 
-#: src/plugins/editorui/gbp-editorui-workspace-addin.c:518
+#: src/plugins/editorui/gbp-editorui-workspace-addin.c:541
 msgid "Go to Line"
 msgstr "Ir á liña"
 
@@ -4026,7 +3493,8 @@ msgid "Prefer a space before commas"
 msgstr "Preferir o uso de espazos antes das comas"
 
 #: src/plugins/editorui/tweaks-language.ui:297
-msgid "Prefer a space before simicolons"
+#| msgid "Prefer a space before simicolons"
+msgid "Prefer a space before semicolons"
 msgstr "Preferir un espazo antes do punto e coma"
 
 #: src/plugins/editorui/tweaks.ui:10
@@ -4601,7 +4069,7 @@ msgstr "Autoría"
 msgid "Email"
 msgstr "Correo electrónico"
 
-#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:84
+#: src/plugins/gradle/gbp-gradle-pipeline-addin.c:85
 #: src/plugins/phpize/gbp-phpize-pipeline-addin.c:103
 msgid "Bootstrapping project"
 msgstr "Inicializando o proxecto"
@@ -4819,11 +4287,21 @@ msgstr "Trocar ao modo claro"
 msgid "Change style-scheme to light variant"
 msgstr "Cambiar o esquema de estilo á variante clara"
 
+#: src/plugins/menu-search/gtk/menus.ui:72
+#| msgid "Use Clang for Diagnostics"
+msgid "Display Build Diagnostics"
+msgstr "Mostrar diagnósticos da construción"
+
+#: src/plugins/menu-search/gtk/menus.ui:73
+#| msgid "Show errors and warnings provided by Vala"
+msgid "Display errors and warnings found during build"
+msgstr "Mostrar erros e avisos atopados durante a construción"
+
 #: src/plugins/meson/gbp-meson-build-system.c:473
 msgid "Meson"
 msgstr "Meson"
 
-#: src/plugins/meson/gbp-meson-introspection.c:584
+#: src/plugins/meson/gbp-meson-introspection.c:624
 msgid "Load Meson Introspection"
 msgstr "Cargar introspección de Meson"
 
@@ -5061,34 +4539,34 @@ msgstr "Gravadora de son"
 msgid "A modern sound recorder for GNOME"
 msgstr "Unha gravadora de son moderna para GNOME"
 
-#: src/plugins/notification/ide-notification-addin.c:107
+#: src/plugins/notification/ide-notification-addin.c:123
 msgid "Build successful"
 msgstr "Construción exitosa"
 
-#: src/plugins/notification/ide-notification-addin.c:108
+#: src/plugins/notification/ide-notification-addin.c:124
 #, c-format
 msgid "Project “%s” has completed building"
 msgstr "Completouse a construción do proxecto «%s»"
 
-#: src/plugins/notification/ide-notification-addin.c:112
-#: src/plugins/notification/ide-notification-addin.c:198
+#: src/plugins/notification/ide-notification-addin.c:128
+#: src/plugins/notification/ide-notification-addin.c:216
 msgid "Build failed"
 msgstr "Construción fallada"
 
-#: src/plugins/notification/ide-notification-addin.c:113
+#: src/plugins/notification/ide-notification-addin.c:129
 #, c-format
 msgid "Project “%s” failed to build"
 msgstr "Fallou a construción do proxecto «%s»"
 
-#: src/plugins/notification/ide-notification-addin.c:189
+#: src/plugins/notification/ide-notification-addin.c:207
 msgid "Build succeeded"
 msgstr "Construción exitosa"
 
-#: src/plugins/notification/ide-notification-addin.c:191
+#: src/plugins/notification/ide-notification-addin.c:209
 msgid "Build configured"
 msgstr "Construción configurada"
 
-#: src/plugins/notification/ide-notification-addin.c:193
+#: src/plugins/notification/ide-notification-addin.c:211
 msgid "Build bootstrapped"
 msgstr "Construción inicializada"
 
@@ -5125,12 +4603,12 @@ msgid "Drop Down"
 msgstr "Despregábel"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:632
+#: src/plugins/podman/gbp-podman-runtime.c:681
 msgid "Containers/Toolbox"
 msgstr "Contedores/Caixa de ferramentas"
 
 #. translators: this is a path to browse to the runtime, likely only "containers" should be translated
-#: src/plugins/podman/gbp-podman-runtime.c:638
+#: src/plugins/podman/gbp-podman-runtime.c:687
 msgid "Containers/Podman"
 msgstr "Contedores/Podman"
 
@@ -5234,27 +4712,27 @@ msgstr "Abrir cartafol _contedor"
 msgid "With _Terminal…"
 msgstr "Con _Terminal…"
 
-#: src/plugins/project-tree/gtk/menus.ui:66
+#: src/plugins/project-tree/gtk/menus.ui:64
 msgid "_Move to Trash"
 msgstr "_Mover ao lixo"
 
-#: src/plugins/project-tree/gtk/menus.ui:72
+#: src/plugins/project-tree/gtk/menus.ui:70
 msgid "_Display Options"
 msgstr "_Opcións de visualización"
 
-#: src/plugins/project-tree/gtk/menus.ui:76
+#: src/plugins/project-tree/gtk/menus.ui:74
 msgid "S_how Ignored Files"
 msgstr "_Mostrar ficheiros ignorados"
 
-#: src/plugins/project-tree/gtk/menus.ui:81
+#: src/plugins/project-tree/gtk/menus.ui:79
 msgid "S_ort Directories First"
 msgstr "_Ordenar cartafoles primeiro"
 
-#: src/plugins/project-tree/gtk/menus.ui:93
+#: src/plugins/project-tree/gtk/menus.ui:91
 msgid "Reveal in Project Tree"
 msgstr "Revelar no Árbore do proxecto"
 
-#: src/plugins/project-tree/gtk/menus.ui:102
+#: src/plugins/project-tree/gtk/menus.ui:100
 msgid "Reveal in Project _Tree"
 msgstr "Revelar no _árbore do proxecto"
 
@@ -5373,8 +4851,9 @@ msgid "Recent Projects"
 msgstr "Proxectos recentes"
 
 #: src/plugins/retab/gtk/menus.ui:5
-msgid "_Reformat tabs"
-msgstr "_Reformatar lapelas"
+#| msgid "_Reformat tabs"
+msgid "_Reformat Tabs"
+msgstr "_Reformatar tabulacións"
 
 #: src/plugins/rust-analyzer/tweaks.ui:13
 msgid "Rust Analyzer"
@@ -5403,6 +4882,30 @@ msgstr "Proc Macros"
 #: src/plugins/rust-analyzer/tweaks.ui:49
 msgid "Enables the experimental Proc Macros feature of rust-analyzer"
 msgstr "Permite a característica de Proc Macros experimentais do rust-analyzer"
+
+#: src/plugins/rust-analyzer/tweaks.ui:61
+#| msgid "Clear Build Logs"
+msgid "Cargo Build Scripts"
+msgstr "Scripts de construción de Cargo"
+
+#: src/plugins/rust-analyzer/tweaks.ui:62
+msgid "Run build scripts (build.rs) for more precise code analysis"
+msgstr ""
+"Executar scripts de construción (build.rs) para un análise de código preciso"
+
+#: src/plugins/rust-analyzer/tweaks.ui:74
+#| msgid "Editing & Formatting"
+msgid "Rustfmt Range Formatting"
+msgstr "Formatado de rango de rustfmt"
+
+#: src/plugins/rust-analyzer/tweaks.ui:75
+msgid ""
+"Enables the use of rustfmt’s unstable range formatting command. The rustfmt "
+"option is unstable and only available on nightly builds of the Rust SDK."
+msgstr ""
+"Activa o uso da orde de formatado non estábel de rustfmt. A opción de "
+"rustfmt é inestábel e só está dispoñíbel nas construcións nocturnas do SDK "
+"de Rust."
 
 #: src/plugins/sdkui/gbp-sdkui-tweaks-addin.c:100
 msgid "Update"
@@ -5642,6 +5145,15 @@ msgstr "Seleccionar símbolo (Ctrl+Maiús+K)"
 msgid "Navigate to a symbol within the current page"
 msgstr "Navegar ao símbolo na páxina actual"
 
+#: src/plugins/sysprof/gbp-sysprof-tool.c:307
+#| msgid "Application ID…"
+msgid "Profiling Application…"
+msgstr "Perfilando a aplicación…"
+
+#: src/plugins/sysprof/gbp-sysprof-tool.c:308
+msgid "Symbol decoding will begin after application exits"
+msgstr "A decodificación de símbolos comezará despois de que saia a aplicación"
+
 #: src/plugins/sysprof/gbp-sysprof-workbench-addin.c:343
 msgid "Open Sysprof Capture…"
 msgstr "Abrir a captura de sysprof…"
@@ -5868,18 +5380,23 @@ msgid "%s (Sysroot SDK)"
 msgstr "%s (Sysroot SDK)"
 
 #. translators: %s is replaced with the current local time of day
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:192
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:193
 #, c-format
 msgid "Application started at %s\r\n"
 msgstr "A aplicación iniciou ás %s\n"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:210
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:211
 msgid "Application exited"
 msgstr "A aplicación saíu"
 
-#: src/plugins/terminal/gbp-terminal-workspace-addin.c:292
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:295
 msgid "Application Output"
 msgstr "Saída da aplicación"
+
+#: src/plugins/terminal/gbp-terminal-workspace-addin.c:367
+#| msgid "Unit tests completed"
+msgid "Process completed"
+msgstr "Proceso completado"
 
 #: src/plugins/terminal/gtk/menus.ui:6
 msgid "New _Terminal"
@@ -5905,7 +5422,7 @@ msgstr "_Novo Terminal de construción"
 msgid "Open a new terminal in project's runtime environment"
 msgstr "Abrir unha nova terminal no ambiente de execución do proxecto"
 
-#: src/plugins/terminal/gtk/menus.ui:41
+#: src/plugins/terminal/gtk/menus.ui:40
 msgid "Split"
 msgstr "Dividir"
 
@@ -6065,7 +5582,7 @@ msgstr "Instalar actualizacións…"
 msgid "Install pending updates for Builder"
 msgstr "Instalar as actualizacións pendentes para o Construtor"
 
-#: src/plugins/valgrind/gtk/menus.ui:10 src/plugins/valgrind/gtk/menus.ui:82
+#: src/plugins/valgrind/gtk/menus.ui:10
 msgid "Run with Leak Detector"
 msgstr "Executar co detector de fugas"
 
@@ -6244,6 +5761,453 @@ msgstr "Produciuse un fallo ao crear a árbore de XML."
 msgid "File must be saved locally to parse."
 msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: error copying the gresource config file for “%s”: %s"
+#~ msgstr ""
+#~ "Engadido de Beautifier: erro ao copiar o ficheiro de configuración "
+#~ "gresource para «%s»: %s"
+
+#, c-format
+#~ msgid "Beautifier plugin: error creating temporary config file for “%s”"
+#~ msgstr ""
+#~ "Engadido Beautifier: produciuse un erro ao crear o ficheiro de "
+#~ "configuración temporal para «%s»"
+
+#, c-format
+#~ msgid "Beautifier plugin: Can’t read .ini file: %s"
+#~ msgstr "Engadido Beautifier: non é posíbel ler o ficheiro .ini: %s"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: neither command nor command-pattern keys found: entry "
+#~ "“%s” disabled"
+#~ msgstr ""
+#~ "Engadido Beautifier: non hai unha orde ni chaves de patrón de comandos: "
+#~ "entrada «%s» desactivada"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: both command and command-pattern keys found: entry "
+#~ "“%s” disabled"
+#~ msgstr ""
+#~ "Engadido Beautifier: atopouse a orde e as chaves de patrón de ordes: "
+#~ "entrada «%s» desactivada"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: config path “%s” does not exist, entry “%s” disabled"
+#~ msgstr ""
+#~ "Engadido Beautifier: a ruta de configuración «%s» non existe, entrada "
+#~ "«%s» desactivada"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: command key out of possible values: entry “%s” disabled"
+#~ msgstr ""
+#~ "Engadido Beautifier: tecla de comando dos posíbeis valores: entrada «%s» "
+#~ "desactivada"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: @c@ in “%s” command-pattern key but no config file "
+#~ "set: entry “%s” disabled"
+#~ msgstr ""
+#~ "Engadido Beautifier: @c@ está na chave de patrón de ordes «%s» pero non "
+#~ "estabelece un ficheiro de configuración: entrada «%s» desactivada"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: can’t create temporary file for “%s”: entry “%s” "
+#~ "disabled"
+#~ msgstr ""
+#~ "Engadido Beautifier: non é posíbel crear o ficheiro temporal para «%s»: "
+#~ "entrada «%s» desactivada"
+
+#, c-format
+#~ msgid "Beautifier plugin: “%s”"
+#~ msgstr "Engadido Beautifier: «%s»"
+
+#, c-format
+#~ msgid "Beautifier plugin: %s"
+#~ msgstr "Engadido Beautifier: %s"
+
+#, c-format
+#~ msgid "Beautifier plugin: can’t read the following resource file: “%s”"
+#~ msgstr ""
+#~ "Engadido Beautifier: non se pode ler o ficheiro de recursos seguinte: «%s»"
+
+#~ msgid "beautifier program missing, you must install it: "
+#~ msgstr "Falta o programa beautifier, debe instalalo: "
+
+#~ msgid "Beautifier Plugin: the view is not a GtkSourceView"
+#~ msgstr "Engadido Beautifier: a vista non é unha GtkSourceView"
+
+#~ msgid "Beautifier Plugin: no default beautifier found"
+#~ msgstr "Engadido Beautifier: non se atopou un beautifier por omisión"
+
+#~ msgid "Beautifier Plugin: the buffer is not writable"
+#~ msgstr "Engadido Beautifier: non se pode escribir no búfer"
+
+#~ msgid "Beautifier Plugin: Nothing selected"
+#~ msgstr "Engadido Beautifier: non se seleccionou nada"
+
+#, c-format
+#~ msgid "No beautifier available for “%s”"
+#~ msgstr "Non hai un «beautifier» dispoñíbel para «%s»"
+
+#, c-format
+#~ msgid "No beautifier available"
+#~ msgstr "Non hai «beautifiers» dispoñíbeis"
+
+#, c-format
+#~ msgid "Beautifier plugin: no valid entries, disabling: %s"
+#~ msgstr "Engadido Beautifier: non hai entradas válidas, desactivando: %s"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: blocked attempt to remove a file outside of the “%s” "
+#~ "temporary directory: “%s”"
+#~ msgstr ""
+#~ "Engadido Beautifier: bloqueouse o intento de eliminar o ficheiro fora do "
+#~ "cartafol temporal «%s»: «%s»"
+
+#, c-format
+#~ msgid ""
+#~ "Beautifier plugin: command error output:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Engadido Beautifier: saída de erro da orde:\n"
+#~ "%s"
+
+#~ msgid "Beautifier plugin: the command output is empty"
+#~ msgstr "Engadido Beautifier: a saída da orde está baleira"
+
+#~ msgid "Beautify plugin: the output is not a valid UTF-8 text"
+#~ msgstr "Engadido Beautifier: a aínda non é un texto UTF-8 válido"
+
+#~ msgid "_Beautify"
+#~ msgstr "_Embelecer"
+
+#~ msgid "R_ebuild"
+#~ msgstr "R_econstruír"
+
+#~ msgid "_Run"
+#~ msgstr "_Executar"
+
+#~ msgid "R_un With…"
+#~ msgstr "E_xecutar con…"
+
+#~ msgid "Colors"
+#~ msgstr "Cores"
+
+#, c-format
+#~ msgid "Save changes to palette “%s” before closing?"
+#~ msgstr "Gardar os cambios na paleta «%s» antes de pechar?"
+
+#~ msgid "Close without Saving"
+#~ msgstr "Pechar sen gardar"
+
+#~ msgid "Save As…"
+#~ msgstr "Gardar como…"
+
+#~ msgid "Load palette"
+#~ msgstr "Cargar paleta"
+
+#~ msgid "Save palette"
+#~ msgstr "Gardar paleta"
+
+#~ msgid "All files"
+#~ msgstr "Todos os ficheiros"
+
+#~ msgid "All supported palettes formats"
+#~ msgstr "Todos os formatos de paletas admitidos"
+
+#~ msgid "GIMP palette"
+#~ msgstr "Paleta de GIMP"
+
+#~ msgid "GNOME Builder palette"
+#~ msgstr "Paleta de GNOME Builder"
+
+#~ msgid "Palette name"
+#~ msgstr "Nome da paleta"
+
+#~ msgid "Enter a new name for the palette"
+#~ msgstr "Escriba o novo nome para a paleta"
+
+#~ msgid "HSV visibility"
+#~ msgstr "Visibilidade HSV"
+
+#~ msgid "If the HSV components are visible."
+#~ msgstr "Se os compoñentes HSV son visíbeis."
+
+#~ msgid "LAB visibility"
+#~ msgstr "Visibilidade LAB"
+
+#~ msgid "If the LAB components are visible."
+#~ msgstr "Se os compoñentes LAB son visíbeis."
+
+#~ msgid "RGB visibility"
+#~ msgstr "Visibilidade RGB"
+
+#~ msgid "If the RGB components are visible."
+#~ msgstr "Se os compoñentes RGB son visíbeis."
+
+#~ msgid "RGB unit"
+#~ msgstr "Unidade RGB"
+
+#~ msgid "The unit used by RGB component and strings."
+#~ msgstr "A unidade usada polo compoñente e cadeas RGB."
+
+#~ msgid "Selected palette ID"
+#~ msgstr "Seleccionar o ID de paleta"
+
+#~ msgid "The selected palette ID among the loaded ones."
+#~ msgstr "O ID de paleta seleccionado entre os xa cargados."
+
+#~ msgid "Color strings visibility"
+#~ msgstr "Visibilidade das cadeas de cor"
+
+#~ msgid "The visible color strings."
+#~ msgstr "As cadeas de cor visíbeis."
+
+#~ msgid "Color filter"
+#~ msgstr "Filtro de cor"
+
+#~ msgid "The filter used on the color scales and color plane."
+#~ msgstr "O filtro usado nas escalas e planos de cor."
+
+#~ msgid "Palette: "
+#~ msgstr "Paleta: "
+
+#~ msgid "Palette"
+#~ msgstr "Paleta"
+
+#~ msgid "Color Plane"
+#~ msgstr "Panel de cor"
+
+#~ msgid "Color name"
+#~ msgstr "Nome da cor"
+
+#~ msgid "Enter a new name for the color"
+#~ msgstr "Escriba un novo nome para a cor"
+
+#, c-format
+#~ msgid "failed to parse line %i\n"
+#~ msgstr "produciuse un erro ao analizar a liña  %i\n"
+
+#, c-format
+#~ msgid "%s: palette is empty\n"
+#~ msgstr "%s: a paleta está baleira\n"
+
+#, c-format
+#~ msgid "%s: failed to parse\n"
+#~ msgstr "%s: produciuse un fallo ao analizar\n"
+
+#, c-format
+#~ msgid "Unable to open %s\n"
+#~ msgstr "Non foi posíbel abrir %s\n"
+
+#, c-format
+#~ msgid "%s: This file format is not supported\n"
+#~ msgstr "%s: Este formato de ficheiro non é compatíbel\n"
+
+#, c-format
+#~ msgid "failed to parse\n"
+#~ msgstr "produciuse un fallo ao analizar\n"
+
+#~ msgid "Generated"
+#~ msgstr "Xerado"
+
+#, c-format
+#~ msgid "Unable to save %s\n"
+#~ msgstr "Produciuse un fallo ao gardar %s\n"
+
+#, c-format
+#~ msgid "Unsaved palette %u"
+#~ msgstr "Paleta %u sen gardar"
+
+#~ msgid "Color Components"
+#~ msgstr "Compoñentes de cor"
+
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "L*"
+#~ msgstr "L*"
+
+#~ msgid "a*"
+#~ msgstr "a*"
+
+#~ msgid "b*"
+#~ msgstr "b*"
+
+#~ msgid "R"
+#~ msgstr "R"
+
+#~ msgid "G"
+#~ msgstr "V"
+
+#~ msgid "B"
+#~ msgstr "A"
+
+#~ msgid "Color strings"
+#~ msgstr "Cadeas de cor"
+
+#~ msgid "HEX3"
+#~ msgstr "HEX3"
+
+#~ msgid "HEX6"
+#~ msgstr "HEX6"
+
+#~ msgid "RGB"
+#~ msgstr "RGB"
+
+#~ msgid "RGBA"
+#~ msgstr "RGBA"
+
+#~ msgid "HSL"
+#~ msgstr "HSL"
+
+#~ msgid "HSLA"
+#~ msgstr "HSLA"
+
+#~ msgid "Palettes"
+#~ msgstr "Paletas"
+
+#~ msgid "No open palettes"
+#~ msgstr "Non hai paletas abertas"
+
+#~ msgid "Load or generate a palette using the preferences"
+#~ msgstr "Cargar ou xerar unha paleta usando as preferencias"
+
+#~ msgid "Rename"
+#~ msgstr "Renomear"
+
+#~ msgid "Color components"
+#~ msgstr "Compoñentes de cor"
+
+#~ msgid "Visibility:"
+#~ msgstr "Visibilidade:"
+
+#~ msgid ""
+#~ "Select the color spaces for which you want to see sliders in the panel."
+#~ msgstr ""
+#~ "Seleccione os espazos de cor para os que quere ver os desprazadores no "
+#~ "panel."
+
+#~ msgid "HSV"
+#~ msgstr "HSV"
+
+#~ msgid "Hue Saturation Value"
+#~ msgstr "Valor de saturación de cor"
+
+#~ msgid "L*a*b*"
+#~ msgstr "L*a*b*"
+
+#~ msgid "CIE L*a*b* 1976"
+#~ msgstr "CIE L*a*b* 1976"
+
+#~ msgid "Red Green Blue"
+#~ msgstr "Vermello Verde Azul"
+
+#~ msgid "Units:"
+#~ msgstr "Unidades:"
+
+#~ msgid ""
+#~ "Select the type of unit you want to use for RGB components and strings in "
+#~ "the panel."
+#~ msgstr ""
+#~ "Seleccione o tipo de unidade que quere usar para os compoñentes e cadeas "
+#~ "RGB no panel."
+
+#~ msgid "Percent"
+#~ msgstr "Porcentaxe"
+
+#~ msgid "Filters:"
+#~ msgstr "Filtros:"
+
+#~ msgid "Select a filter that act on the colors or “None”."
+#~ msgstr "Seleccione un filtro que actúe nas cores ou «Ningún»."
+
+#~ msgid "Achromatopsia (monochromacy)"
+#~ msgstr "Acromatopsia (monocromía)"
+
+#~ msgid "Achromatomaly (blue cone monochromacy)"
+#~ msgstr "Acromatopsia (monocromía cónica azul)"
+
+#~ msgid "Deuteranopia (green-blind)"
+#~ msgstr "Deuteranopia (cegueira de verdes)"
+
+#~ msgid "Deuteranomaly (green-weak)"
+#~ msgstr "Deuteranomalía (verdes débiles)"
+
+#~ msgid "Protanopia (red-blind)"
+#~ msgstr "Protanopia (cegueira de vermello)"
+
+#~ msgid "Protanomaly (red-weak)"
+#~ msgstr "Protanomalía (vermellos débiles)"
+
+#~ msgid "Tritanopia (blue-blind)"
+#~ msgstr "Tritanopia (cegueira de azul)"
+
+#~ msgid "Tritanomaly (blue-weak)"
+#~ msgstr "Tritanomalía (azuis débiles)"
+
+#~ msgid "Websafe"
+#~ msgstr "Web seguro"
+
+#~ msgid "Select the color strings you want to see in the panel."
+#~ msgstr "Seleccione as cadeas de cor que quere ver no panel."
+
+#~ msgid "Palettes options"
+#~ msgstr "Opcións de paletas"
+
+#~ msgid "Palette view mode:"
+#~ msgstr "Modo de vista da paleta:"
+
+#~ msgid "List"
+#~ msgstr "Lista"
+
+#~ msgid "Swatches"
+#~ msgstr "Reloxos"
+
+#~ msgid "Palette management"
+#~ msgstr "Xestión de paleta"
+
+#~ msgid "Load"
+#~ msgstr "Cargar"
+
+#~ msgid "From current document"
+#~ msgstr "Desde o documento actual"
+
+#~ msgid "Select the palette you want to see in the panel or close one."
+#~ msgstr "Seleccione a paleta que quere ver no panel ou peche un."
+
+#~ msgid "No loaded palettes"
+#~ msgstr "Non hai paletas cargadas"
+
+#~ msgid "No selected palettes"
+#~ msgstr "Non hai paletas seleccionadas"
+
+#~ msgid "Select a palette file"
+#~ msgstr "Seleccione un ficheiro de paleta"
+
+#~ msgid "Try loading or generating a palette using the menu"
+#~ msgstr "Tente cargar ou xerar unha paleta usando o menú"
+
+#~ msgid "Highlight _colors"
+#~ msgstr "Cores de _realce"
+
+#~ msgid "Run with _Debugger"
+#~ msgstr "Executar co _depurador"
+
 #~ msgid "Reformat sources when saving to disk"
 #~ msgstr "Reformatar o código ao gardar ao disco"
 
@@ -6360,9 +6324,6 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 
 #~ msgid "Highlight"
 #~ msgstr "Realzar"
-
-#~ msgid "Current line"
-#~ msgstr "Liña actual"
 
 #~ msgid "Make current line stand out with highlights"
 #~ msgstr "Facer que a liña actual se realce"
@@ -6599,10 +6560,6 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 #~| msgid "Build and Run"
 #~ msgid "Build & Run"
 #~ msgstr "Construír e executar"
-
-#~| msgid "Diagnostics"
-#~ msgid "Use Clang for Diagnostics"
-#~ msgstr "Usar CLang para diagnósticos"
 
 #, fuzzy
 #~| msgid "Use Ctags for autocompletion."
@@ -7488,15 +7445,9 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 #~ msgid "Apply Fix-It"
 #~ msgstr "Aplicar corrección"
 
-#~ msgid "Rename symbol"
-#~ msgstr "Renomear símbolo"
-
 #, c-format
 #~ msgid "<b>%s</b> — <small>Line %u, Column %u</small>"
 #~ msgstr "<b>%s</b> — <small>Liña %u, Columna %u</small>"
-
-#~ msgid "No references were found"
-#~ msgstr "Non se atopou ningunha referencia"
 
 #~| msgid "Rustup not installed"
 #~ msgid "Requested runtime is not installed"
@@ -8527,9 +8478,6 @@ msgstr "O ficheiro debe estar gardado localmente para que se poida analizar."
 #~ msgctxt "shortcut window"
 #~ msgid "Help"
 #~ msgstr "Axuda"
-
-#~ msgid "Show errors and warnings provided by Vala"
-#~ msgstr "Mostrar erros e avisos fornecidos por Vala"
 
 #~ msgid "vala diagnostics warnings errors"
 #~ msgstr "avisos de erro de diagnóstico de vala"
