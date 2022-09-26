@@ -24,7 +24,7 @@
 
 #include <libide-threading.h>
 
-#include "ide-pipeline.h"
+#include "ide-pipeline-private.h"
 #include "ide-pipeline-stage-command.h"
 #include "ide-run-command.h"
 #include "ide-run-context.h"
@@ -103,10 +103,10 @@ ide_pipeline_stage_command_build_async (IdePipelineStage    *stage,
 
   run_context = ide_pipeline_create_run_context (pipeline, self->build_command);
 
+  _ide_pipeline_attach_pty_to_run_context (pipeline, run_context);
+
   if (!(launcher = ide_run_context_end (run_context, &error)))
     IDE_GOTO (handle_error);
-
-  ide_pipeline_attach_pty (pipeline, launcher);
 
   if (!(subprocess = ide_subprocess_launcher_spawn (launcher, NULL, &error)))
     IDE_GOTO (handle_error);
