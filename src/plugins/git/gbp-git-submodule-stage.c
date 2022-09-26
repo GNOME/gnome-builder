@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
+
 #include <libide-code.h>
 #include <libide-gui.h>
 #include <libide-vcs.h>
@@ -31,37 +32,33 @@
 
 struct _GbpGitSubmoduleStage
 {
-  IdePipelineStageLauncher parent_instance;
+  IdePipelineStageCommand parent_instance;
 
   guint has_run : 1;
   guint force_update : 1;
 };
 
-G_DEFINE_FINAL_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, IDE_TYPE_PIPELINE_STAGE_LAUNCHER)
+G_DEFINE_FINAL_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, IDE_TYPE_PIPELINE_STAGE_COMMAND)
 
 GbpGitSubmoduleStage *
 gbp_git_submodule_stage_new (IdeContext *context)
 {
-  g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autoptr(GbpGitSubmoduleStage) self = NULL;
+  g_autoptr(IdeRunCommand) command = NULL;
   g_autoptr(GFile) workdir = NULL;
 
   g_return_val_if_fail (IDE_IS_CONTEXT (context), NULL);
 
   workdir = ide_context_ref_workdir (context);
+  command = g_object_new (IDE_TYPE_RUN_COMMAND,
+                          "cwd", g_file_peek_path (workdir),
+                          "argv", IDE_STRV_INIT ("sh", "-c", "git submodule init && git submodule update --recursive"),
+                          NULL);
 
-  self = g_object_new (GBP_TYPE_GIT_SUBMODULE_STAGE, NULL);
-
-  launcher = ide_subprocess_launcher_new (0);
-  ide_subprocess_launcher_set_cwd (launcher, g_file_peek_path (workdir));
-  ide_subprocess_launcher_set_clear_env (launcher, FALSE);
-  ide_subprocess_launcher_push_argv (launcher, "sh");
-  ide_subprocess_launcher_push_argv (launcher, "-c");
-  ide_subprocess_launcher_push_argv (launcher, "git submodule init && git submodule update --recursive");
-
-  ide_pipeline_stage_launcher_set_launcher (IDE_PIPELINE_STAGE_LAUNCHER (self), launcher);
-
-  return g_steal_pointer (&self);
+  return g_object_new (GBP_TYPE_GIT_SUBMODULE_STAGE,
+                       "build-command", command,
+                       "ignore-exit-status", TRUE,
+                       "name", _("Initialize git submodules"),
+                       NULL);
 }
 
 static void
@@ -84,9 +81,9 @@ gbp_git_submodule_stage_query_cb (GObject      *object,
   if (!ide_subprocess_communicate_utf8_finish (subprocess, result, &stdout_buf, NULL, &error))
     {
       ide_pipeline_stage_log (IDE_PIPELINE_STAGE (self),
-                           IDE_BUILD_LOG_STDERR,
-                           error->message,
-                           -1);
+                              IDE_BUILD_LOG_STDERR,
+                              error->message,
+                              -1);
       goto failure;
     }
 
@@ -205,8 +202,6 @@ gbp_git_submodule_stage_class_init (GbpGitSubmoduleStageClass *klass)
 static void
 gbp_git_submodule_stage_init (GbpGitSubmoduleStage *self)
 {
-  ide_pipeline_stage_set_name (IDE_PIPELINE_STAGE (self), _("Initialize git submodules"));
-  ide_pipeline_stage_launcher_set_ignore_exit_status (IDE_PIPELINE_STAGE_LAUNCHER (self), TRUE);
 }
 
 void
