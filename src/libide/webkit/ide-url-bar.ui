@@ -44,7 +44,6 @@
                     </child>
                     <child>
                       <object class="GtkInscription" id="url_display">
-                        <property name="wrap-mode">none</property>
                         <property name="text-overflow">clip</property>
                         <property name="nat-lines">1</property>
                         <property name="min-lines">1</property>
