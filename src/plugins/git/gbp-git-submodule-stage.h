@@ -26,7 +26,7 @@ G_BEGIN_DECLS
 
 #define GBP_TYPE_GIT_SUBMODULE_STAGE (gbp_git_submodule_stage_get_type())
 
-G_DECLARE_FINAL_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, GBP, GIT_SUBMODULE_STAGE, IdePipelineStageLauncher)
+G_DECLARE_FINAL_TYPE (GbpGitSubmoduleStage, gbp_git_submodule_stage, GBP, GIT_SUBMODULE_STAGE, IdePipelineStageCommand)
 
 GbpGitSubmoduleStage *gbp_git_submodule_stage_new          (IdeContext           *context);
 void                  gbp_git_submodule_stage_force_update (GbpGitSubmoduleStage *self);
