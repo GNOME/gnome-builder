@@ -33,12 +33,14 @@ typedef struct
 {
   IdeRunCommand *build_command;
   IdeRunCommand *clean_command;
+  guint ignore_exit_status : 1;
 } IdePipelineStageCommandPrivate;
 
 enum {
   PROP_0,
   PROP_BUILD_COMMAND,
   PROP_CLEAN_COMMAND,
+  PROP_IGNORE_EXIT_STATUS,
   N_PROPS
 };
 
@@ -52,6 +54,8 @@ ide_pipeline_stage_command_wait_check_cb (GObject      *object,
                                           gpointer      user_data)
 {
   IdeSubprocess *subprocess = (IdeSubprocess *)object;
+  IdePipelineStageCommandPrivate *priv;
+  IdePipelineStageCommand *self;
   g_autoptr(IdeTask) task = user_data;
   g_autoptr(GError) error = NULL;
 
@@ -62,7 +66,13 @@ ide_pipeline_stage_command_wait_check_cb (GObject      *object,
   g_assert (G_IS_ASYNC_RESULT (result));
   g_assert (IDE_IS_TASK (task));
 
-  if (!ide_subprocess_wait_check_finish (subprocess, result, &error))
+  self = ide_task_get_source_object (task);
+  priv = ide_pipeline_stage_command_get_instance_private (self);
+
+  g_assert (IDE_IS_PIPELINE_STAGE_COMMAND (self));
+
+  if (!ide_subprocess_wait_check_finish (subprocess, result, &error) &&
+      priv->ignore_exit_status == FALSE)
     ide_task_return_error (task, g_steal_pointer (&error));
   else
     ide_task_return_boolean (task, TRUE);
@@ -241,6 +251,10 @@ ide_pipeline_stage_command_get_property (GObject    *object,
       g_value_set_object (value, priv->clean_command);
       break;
 
+    case PROP_IGNORE_EXIT_STATUS:
+      g_value_set_boolean (value, priv->ignore_exit_status);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -263,6 +277,10 @@ ide_pipeline_stage_command_set_property (GObject      *object,
 
     case PROP_CLEAN_COMMAND:
       g_set_object (&priv->clean_command, g_value_get_object (value));
+      break;
+
+    case PROP_IGNORE_EXIT_STATUS:
+      priv->ignore_exit_status = g_value_get_boolean (value);
       break;
 
     default:
@@ -298,6 +316,11 @@ ide_pipeline_stage_command_class_init (IdePipelineStageCommandClass *klass)
                          "The clean command to execute",
                          IDE_TYPE_RUN_COMMAND,
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  properties [PROP_IGNORE_EXIT_STATUS] =
+    g_param_spec_boolean ("ignore-exit-status", NULL, NULL,
+                          FALSE,
+                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_properties (object_class, N_PROPS, properties);
 }
