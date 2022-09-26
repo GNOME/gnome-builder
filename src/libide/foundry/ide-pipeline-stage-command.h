@@ -34,7 +34,12 @@ G_BEGIN_DECLS
 #define IDE_TYPE_PIPELINE_STAGE_COMMAND (ide_pipeline_stage_command_get_type())
 
 IDE_AVAILABLE_IN_ALL
-G_DECLARE_FINAL_TYPE (IdePipelineStageCommand, ide_pipeline_stage_command, IDE, PIPELINE_STAGE_COMMAND, IdePipelineStage)
+G_DECLARE_DERIVABLE_TYPE (IdePipelineStageCommand, ide_pipeline_stage_command, IDE, PIPELINE_STAGE_COMMAND, IdePipelineStage)
+
+struct _IdePipelineStageCommandClass
+{
+  IdePipelineStageClass parent_class;
+};
 
 IDE_AVAILABLE_IN_ALL
 IdePipelineStage *ide_pipeline_stage_command_new               (IdeRunCommand *build_command,
