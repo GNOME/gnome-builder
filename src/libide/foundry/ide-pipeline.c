@@ -39,6 +39,7 @@
 #include "ide-deploy-strategy.h"
 #include "ide-pipeline-addin.h"
 #include "ide-pipeline.h"
+#include "ide-pipeline-private.h"
 #include "ide-build-private.h"
 #include "ide-pipeline-stage-command.h"
 #include "ide-pipeline-stage-launcher.h"
@@ -3044,6 +3045,46 @@ ide_pipeline_create_launcher (IdePipeline  *self,
     }
 
   return g_steal_pointer (&ret);
+}
+
+void
+_ide_pipeline_attach_pty_to_run_context (IdePipeline   *self,
+                                         IdeRunContext *run_context)
+{
+  static const int fileno_mapping[] = { STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO };
+
+  IDE_ENTRY;
+
+  g_return_if_fail (IDE_IS_MAIN_THREAD ());
+  g_return_if_fail (IDE_IS_PIPELINE (self));
+  g_return_if_fail (IDE_IS_RUN_CONTEXT (run_context));
+
+  if (self->pty_producer == -1)
+    {
+      IdePtyFd consumer_fd = ide_pty_intercept_get_fd (&self->intercept);
+      self->pty_producer = ide_pty_intercept_create_producer (consumer_fd, TRUE);
+    }
+
+  for (guint i = 0; i < G_N_ELEMENTS (fileno_mapping); i++)
+    {
+      int fd = self->pty_producer > -1 ? dup (self->pty_producer) : -1;
+
+      if (fd == -1)
+        {
+          ide_run_context_push_error (run_context,
+                                      g_error_new_literal (G_IO_ERROR,
+                                                           G_IO_ERROR_FAILED,
+                                                           _("Pseudo terminal creation failed. Terminal features will be limited.")));
+          IDE_EXIT;
+        }
+
+      ide_run_context_take_fd (run_context, fd, fileno_mapping[i]);
+    }
+
+  ide_run_context_setenv (run_context, "TERM", "xterm-256color");
+  ide_run_context_setenv (run_context, "COLORTERM", "truecolor");
+
+  IDE_EXIT;
 }
 
 /**
