@@ -23,7 +23,6 @@
 #include "ipc-git-index-monitor.h"
 
 #define CHANGED_DELAY_MSEC 500
-#define str_equal0(str1, str2) (g_strcmp0 (str1, str2) == 0)
 
 struct _IpcGitIndexMonitor
 {
@@ -41,6 +40,18 @@ enum {
 };
 
 static guint signals [N_SIGNALS];
+static GHashTable *index_changed_files;
+static const char *index_changed_file_names[] = {
+  "index",
+  "index.lock",
+  "HEAD",
+  "HEAD.lock",
+  "ORIG_HEAD",
+  "FETCH_HEAD",
+  "COMMIT_EDITMSG",
+  "PREPARE_COMMIT_MSG",
+  "config",
+};
 
 static void
 ipc_git_index_monitor_dispose (GObject *object)
@@ -82,6 +93,10 @@ ipc_git_index_monitor_class_init (IpcGitIndexMonitorClass *klass)
   g_signal_set_va_marshaller (signals [CHANGED],
                               G_TYPE_FROM_CLASS (klass),
                               g_cclosure_marshal_VOID__VOIDv);
+
+  index_changed_files = g_hash_table_new (g_str_hash, g_str_equal);
+  for (guint i = 0; i < G_N_ELEMENTS (index_changed_file_names); i++)
+    g_hash_table_add (index_changed_files, (char *)index_changed_file_names[i]);
 }
 
 static void
@@ -123,7 +138,7 @@ ipc_git_index_monitor_dot_git_changed_cb (IpcGitIndexMonitor *self,
                                           GFileMonitorEvent   event,
                                           GFileMonitor       *monitor)
 {
-  g_autofree gchar *name = NULL;
+  g_autofree char *name = NULL;
 
   g_assert (IPC_IS_GIT_INDEX_MONITOR (self));
   g_assert (G_IS_FILE (file));
@@ -132,14 +147,13 @@ ipc_git_index_monitor_dot_git_changed_cb (IpcGitIndexMonitor *self,
 
   name = g_file_get_basename (file);
 
-  if (str_equal0 (name, "index") ||
-      str_equal0 (name, "HEAD") ||
-      str_equal0 (name, "HEAD.lock") ||
-      str_equal0 (name, "ORIG_HEAD") ||
-      str_equal0 (name, "FETCH_HEAD") ||
-      str_equal0 (name, "COMMIT_EDITMSG") ||
-      str_equal0 (name, "config"))
-    ipc_git_index_monitor_queue_changed (self);
+  if (g_hash_table_contains (index_changed_files, name))
+    goto queue_changed_signal;
+
+  return;
+
+queue_changed_signal:
+  ipc_git_index_monitor_queue_changed (self);
 }
 
 static void
@@ -173,8 +187,10 @@ ipc_git_index_monitor_new (GFile *location)
 
   name = g_file_get_basename (location);
 
-  if (str_equal0 (name, ".git"))
-    dot_git_dir = g_object_ref (location);
+  if (g_strcmp0 (name, ".git") == 0)
+    {
+      dot_git_dir = g_object_ref (location);
+    }
   else
     {
       const gchar *path = g_file_peek_path (location);
