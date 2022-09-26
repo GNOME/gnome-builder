@@ -118,6 +118,7 @@ gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
                                    GError             **error)
 {
   GbpPodmanRuntime *self = user_data;
+  gboolean has_tty = FALSE;
   int max_dest_fd;
 
   IDE_ENTRY;
@@ -127,6 +128,12 @@ gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
   g_assert (argv != NULL);
   g_assert (env != NULL);
   g_assert (IDE_IS_UNIX_FD_MAP (unix_fd_map));
+
+  /* Make sure that we request TTY ioctls if necessary */
+  if (ide_unix_fd_map_stdin_isatty (unix_fd_map) ||
+      ide_unix_fd_map_stdout_isatty (unix_fd_map) ||
+      ide_unix_fd_map_stderr_isatty (unix_fd_map))
+    has_tty = TRUE;
 
   /* Make sure we can pass the FDs down */
   if (!ide_run_context_merge_unix_fd_map (run_context, unix_fd_map, error))
@@ -139,9 +146,7 @@ gbp_podman_runtime_run_handler_cb (IdeRunContext       *run_context,
   ide_run_context_append_formatted (run_context, "--user=%s", g_get_user_name ());
 
   /* Make sure that we request TTY ioctls if necessary */
-  if (ide_unix_fd_map_stdin_isatty (unix_fd_map) ||
-      ide_unix_fd_map_stdout_isatty (unix_fd_map) ||
-      ide_unix_fd_map_stderr_isatty (unix_fd_map))
+  if (has_tty)
     ide_run_context_append_argv (run_context, "--tty");
 
   /* Specify working directory inside the container */
