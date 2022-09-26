@@ -516,6 +516,17 @@ ide_buffer_dispose (GObject *object)
 
   g_assert (IDE_IS_MAIN_THREAD ());
 
+  if (self->source_file != NULL)
+    {
+      GFile *file = gtk_source_file_get_location (self->source_file);
+
+      if (file != NULL)
+        {
+          g_autofree char *uri = g_file_get_uri (file);
+          g_debug ("Releasing IdeBuffer for URI \"%s\"", uri);
+        }
+    }
+
   g_clear_handle_id (&self->settling_source, g_source_remove);
   g_clear_handle_id (&self->release_in_idle, g_source_remove);
 
