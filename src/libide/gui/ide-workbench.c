@@ -38,6 +38,7 @@
 #include "ide-transfer-manager-private.h"
 
 #include "ide-application.h"
+#include "ide-application-private.h"
 #include "ide-application-tweaks.h"
 #include "ide-gui-global.h"
 #include "ide-primary-workspace.h"
@@ -971,6 +972,22 @@ ide_workbench_restore_workspace_session_cb (IdeWorkspace *workspace,
   _ide_workspace_restore_session (workspace, session);
 }
 
+static gboolean
+ide_workbench_can_restore_session (IdeWorkbench *self)
+{
+  IdeApplication *app = IDE_APPLICATION_DEFAULT;
+
+  g_assert (IDE_IS_MAIN_THREAD ());
+  g_assert (IDE_IS_APPLICATION (app));
+  g_assert (IDE_IS_WORKBENCH (self));
+
+  if (self->session == NULL)
+    return FALSE;
+
+  /* Wish we could rename this setting, maybe in 44 */
+  return g_settings_get_boolean (app->settings, "restore-previous-files");
+}
+
 static void
 ide_workbench_load_project_completed (IdeWorkbench *self,
                                       IdeTask      *task)
@@ -1006,7 +1023,7 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
   /* Allow addins to restore session, which might bypass the need to create
    * a workspace manually below.
    */
-  if (self->session != NULL)
+  if (ide_workbench_can_restore_session (self))
     {
       /* Restore workspaces, and cancel our request to create a new one
        * if the workspace was likely created already.
@@ -1047,7 +1064,7 @@ ide_workbench_load_project_completed (IdeWorkbench *self,
   ide_action_mixin_set_enabled (self, "configure-page", TRUE);
 
   /* Now restore the workspace sessions */
-  if (self->session)
+  if (ide_workbench_can_restore_session (self))
     {
       ide_workbench_foreach_workspace (self,
                                        ide_workbench_restore_workspace_session_cb,
