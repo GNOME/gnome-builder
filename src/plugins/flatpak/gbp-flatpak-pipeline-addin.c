@@ -39,7 +39,7 @@ struct _GbpFlatpakPipelineAddin
 {
   IdeObject parent_instance;
 
-  gchar *state_dir;
+  char *state_dir;
 
   struct {
     int major;
@@ -85,10 +85,10 @@ ensure_documents_portal (void)
                                        NULL);
 }
 
-static gchar *
+static char *
 get_arch_option (IdePipeline *pipeline)
 {
-  g_autofree gchar *arch = NULL;
+  g_autofree char *arch = NULL;
 
   g_assert (IDE_IS_PIPELINE (pipeline));
 
@@ -102,7 +102,7 @@ sniff_flatpak_builder_version (GbpFlatpakPipelineAddin *self)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdeSubprocess) subprocess = NULL;
-  g_autofree gchar *stdout_buf = NULL;
+  g_autofree char *stdout_buf = NULL;
   int major = 0;
   int minor = 0;
   int micro = 0;
@@ -164,13 +164,13 @@ create_subprocess_launcher (void)
 
 static gboolean
 register_mkdirs_stage (GbpFlatpakPipelineAddin  *self,
-                       IdePipeline         *pipeline,
+                       IdePipeline              *pipeline,
                        IdeContext               *context,
                        GError                  **error)
 {
   g_autoptr(IdePipelineStage) mkdirs = NULL;
-  g_autofree gchar *repo_dir = NULL;
-  g_autofree gchar *staging_dir = NULL;
+  g_autofree char *repo_dir = NULL;
+  g_autofree char *staging_dir = NULL;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
@@ -219,15 +219,15 @@ reap_staging_dir_cb (GObject      *object,
 }
 
 static void
-check_for_build_init_files (IdePipelineStage    *stage,
-                            IdePipeline *pipeline,
+check_for_build_init_files (IdePipelineStage *stage,
+                            IdePipeline      *pipeline,
                             GPtrArray        *targets,
                             GCancellable     *cancellable,
-                            const gchar      *staging_dir)
+                            const char       *staging_dir)
 {
-  g_autofree gchar *metadata = NULL;
-  g_autofree gchar *files = NULL;
-  g_autofree gchar *var = NULL;
+  g_autofree char *metadata = NULL;
+  g_autofree char *files = NULL;
+  g_autofree char *var = NULL;
   gboolean completed = FALSE;
   gboolean parent_exists;
 
@@ -275,9 +275,9 @@ check_for_build_init_files (IdePipelineStage    *stage,
 }
 
 static void
-reap_staging_dir (IdePipelineStage      *stage,
+reap_staging_dir (IdePipelineStage   *stage,
                   IdeDirectoryReaper *reaper,
-                  const gchar        *staging_dir)
+                  const char         *staging_dir)
 {
   g_autoptr(GFile) dir = NULL;
 
@@ -297,15 +297,15 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
-  g_autofree gchar *staging_dir = NULL;
-  g_autofree gchar *sdk = NULL;
-  g_autofree gchar *arch = NULL;
+  g_autofree char *staging_dir = NULL;
+  g_autofree char *sdk = NULL;
+  g_autofree char *arch = NULL;
   const char * const *sdk_extensions = NULL;
   IdeConfig *config;
   IdeRuntime *runtime;
-  const gchar *app_id;
-  const gchar *platform;
-  const gchar *branch;
+  const char *app_id;
+  const char *platform;
+  const char *branch;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
@@ -408,9 +408,9 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
                          0);
 
   stage_id = ide_pipeline_attach (pipeline,
-                                         IDE_PIPELINE_PHASE_PREPARE,
-                                         PREPARE_BUILD_INIT,
-                                         stage);
+                                  IDE_PIPELINE_PHASE_PREPARE,
+                                  PREPARE_BUILD_INIT,
+                                  stage);
   ide_pipeline_addin_track (IDE_PIPELINE_ADDIN (self), stage_id);
 
   return TRUE;
@@ -418,7 +418,7 @@ register_build_init_stage (GbpFlatpakPipelineAddin  *self,
 
 static gboolean
 register_downloads_stage (GbpFlatpakPipelineAddin  *self,
-                          IdePipeline         *pipeline,
+                          IdePipeline              *pipeline,
                           IdeContext               *context,
                           GError                  **error)
 {
@@ -441,19 +441,19 @@ register_downloads_stage (GbpFlatpakPipelineAddin  *self,
 
 static gboolean
 register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
-                             IdePipeline         *pipeline,
+                             IdePipeline              *pipeline,
                              IdeContext               *context,
                              GError                  **error)
 {
   g_autoptr(IdePipelineStage) stage = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autofree gchar *arch = NULL;
-  g_autofree gchar *manifest_path = NULL;
-  g_autofree gchar *staging_dir = NULL;
-  g_autofree gchar *stop_at_option = NULL;
+  g_autofree char *arch = NULL;
+  g_autofree char *manifest_path = NULL;
+  g_autofree char *staging_dir = NULL;
+  g_autofree char *stop_at_option = NULL;
   IdeConfig *config;
-  const gchar *primary_module;
-  const gchar *src_dir;
+  const char *primary_module;
+  const char *src_dir;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
@@ -483,7 +483,7 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 
   if (ide_is_flatpak ())
     {
-      g_autofree gchar *user_dir = NULL;
+      g_autofree char *user_dir = NULL;
 
       user_dir = g_build_filename (g_get_home_dir (), ".local", "share", "flatpak", NULL);
       ide_subprocess_launcher_setenv (launcher, "FLATPAK_USER_DIR", user_dir, TRUE);
@@ -521,15 +521,15 @@ register_dependencies_stage (GbpFlatpakPipelineAddin  *self,
 
 static gboolean
 register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
-                             IdePipeline         *pipeline,
+                             IdePipeline              *pipeline,
                              IdeContext               *context,
                              GError                  **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
-  g_autofree gchar *staging_dir = NULL;
-  const gchar * const *finish_args;
-  const gchar *command;
+  g_autofree char *staging_dir = NULL;
+  const char * const *finish_args;
+  const char *command;
   IdeConfig *config;
   guint stage_id;
 
@@ -572,15 +572,15 @@ register_build_finish_stage (GbpFlatpakPipelineAddin  *self,
 
 static gboolean
 register_build_export_stage (GbpFlatpakPipelineAddin  *self,
-                             IdePipeline         *pipeline,
+                             IdePipeline              *pipeline,
                              IdeContext               *context,
                              GError                  **error)
 {
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
   g_autoptr(IdePipelineStage) stage = NULL;
-  g_autofree gchar *arch = NULL;
-  g_autofree gchar *repo_dir = NULL;
-  g_autofree gchar *staging_dir = NULL;
+  g_autofree char *arch = NULL;
+  g_autofree char *repo_dir = NULL;
+  g_autofree char *staging_dir = NULL;
   IdeConfig *config;
   guint stage_id;
 
@@ -622,8 +622,8 @@ register_build_export_stage (GbpFlatpakPipelineAddin  *self,
 
 static void
 build_bundle_notify_completed (IdePipelineStage *stage,
-                               GParamSpec    *pspec,
-                               const gchar   *dest_path)
+                               GParamSpec       *pspec,
+                               const char       *dest_path)
 {
   g_assert (IDE_IS_PIPELINE_STAGE (stage));
   g_assert (dest_path != NULL);
@@ -642,19 +642,19 @@ build_bundle_notify_completed (IdePipelineStage *stage,
 
 static gboolean
 register_build_bundle_stage (GbpFlatpakPipelineAddin  *self,
-                             IdePipeline         *pipeline,
+                             IdePipeline              *pipeline,
                              IdeContext               *context,
                              GError                  **error)
 {
   g_autoptr(IdePipelineStage) stage = NULL;
   g_autoptr(IdeSubprocessLauncher) launcher = NULL;
-  g_autofree gchar *staging_dir = NULL;
-  g_autofree gchar *repo_dir = NULL;
-  g_autofree gchar *dest_path = NULL;
-  g_autofree gchar *arch = NULL;
-  g_autofree gchar *name = NULL;
+  g_autofree char *staging_dir = NULL;
+  g_autofree char *repo_dir = NULL;
+  g_autofree char *dest_path = NULL;
+  g_autofree char *arch = NULL;
+  g_autofree char *name = NULL;
   IdeConfig *config;
-  const gchar *app_id;
+  const char *app_id;
   guint stage_id;
 
   g_assert (GBP_IS_FLATPAK_PIPELINE_ADDIN (self));
@@ -782,8 +782,6 @@ gbp_flatpak_pipeline_addin_unload (IdePipelineAddin *addin,
   g_clear_pointer (&self->state_dir, g_free);
 }
 
-/* GObject boilerplate */
-
 static void
 pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
 {
@@ -792,8 +790,7 @@ pipeline_addin_iface_init (IdePipelineAddinInterface *iface)
 }
 
 G_DEFINE_FINAL_TYPE_WITH_CODE (GbpFlatpakPipelineAddin, gbp_flatpak_pipeline_addin, IDE_TYPE_OBJECT,
-                         G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN,
-                                                pipeline_addin_iface_init))
+                               G_IMPLEMENT_INTERFACE (IDE_TYPE_PIPELINE_ADDIN, pipeline_addin_iface_init))
 
 static void
 gbp_flatpak_pipeline_addin_class_init (GbpFlatpakPipelineAddinClass *klass)
