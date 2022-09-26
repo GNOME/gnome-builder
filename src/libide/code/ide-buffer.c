@@ -3995,7 +3995,7 @@ ide_buffer_release (IdeBuffer *self)
     {
       g_assert (self->release_in_idle == 0);
       self->release_in_idle =
-        g_idle_add_full (G_PRIORITY_DEFAULT,
+        g_idle_add_full (G_MAXINT,
                          ide_buffer_release_in_idle,
                          self,
                          g_object_unref);
